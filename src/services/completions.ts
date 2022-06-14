@@ -366,7 +366,7 @@ namespace ts.Completions {
         if (!previousResponse) return undefined;
 
         const lowerCaseTokenText = location.text.toLowerCase();
-        const exportMap = getExportInfoMap(file, host, program, cancellationToken);
+        const exportMap = getExportInfoMap(file, host, program, preferences, cancellationToken);
         const newEntries = resolvingModuleSpecifiers(
             "continuePreviousIncompleteResponse",
             host,
@@ -2725,7 +2725,7 @@ namespace ts.Completions {
                 "";
 
             const moduleSpecifierCache = host.getModuleSpecifierCache?.();
-            const exportInfo = getExportInfoMap(sourceFile, host, program, cancellationToken);
+            const exportInfo = getExportInfoMap(sourceFile, host, program, preferences, cancellationToken);
             const packageJsonAutoImportProvider = host.getPackageJsonAutoImportProvider?.();
             const packageJsonFilter = detailsEntryId ? undefined : createPackageJsonImportFilter(sourceFile, preferences, host);
             resolvingModuleSpecifiers(

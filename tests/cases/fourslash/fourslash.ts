@@ -660,6 +660,7 @@ declare namespace FourSlashInterface {
         readonly importModuleSpecifierPreference?: "shortest" | "project-relative" | "relative" | "non-relative";
         readonly importModuleSpecifierEnding?: "minimal" | "index" | "js";
         readonly jsxAttributeCompletionStyle?: "auto" | "braces" | "none";
+        readonly autoImportFileExcludePatterns?: readonly string[];
     }
     interface InlayHintsOptions extends UserPreferences {
         readonly includeInlayParameterNameHints?: "none" | "literals" | "all";

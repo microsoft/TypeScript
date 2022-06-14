@@ -336,10 +336,28 @@ namespace ts {
     export function forEachExternalModuleToImportFrom(
         program: Program,
         host: LanguageServiceHost,
+        preferences: UserPreferences,
         useAutoImportProvider: boolean,
         cb: (module: Symbol, moduleFile: SourceFile | undefined, program: Program, isFromPackageJson: boolean) => void,
     ) {
-        forEachExternalModule(program.getTypeChecker(), program.getSourceFiles(), (module, file) => cb(module, file, program, /*isFromPackageJson*/ false));
+        const useCaseSensitiveFileNames = hostUsesCaseSensitiveFileNames(host);
+        const excludePatterns = preferences.autoImportFileExcludePatterns && mapDefined(preferences.autoImportFileExcludePatterns, spec => {
+            const pattern = getPatternFromSpec(spec, "/", "exclude");
+            return pattern ? getRegexFromPattern(pattern, useCaseSensitiveFileNames) : undefined;
+        });
+
+        forEachExternalModule(program.getTypeChecker(), program.getSourceFiles(), (module, file) => {
+            if (excludePatterns) {
+                if (file && excludePatterns.some(p => p.test(file.fileName))) {
+                    return;
+                }
+                if (!file && module.declarations?.every(d => excludePatterns.some(p => p.test(d.getSourceFile().fileName)))) {
+                    return;
+                }
+            }
+            cb(module, file, program, /*isFromPackageJson*/ false);
+        });
+
         const autoImportProvider = useAutoImportProvider && host.getPackageJsonAutoImportProvider?.();
         if (autoImportProvider) {
             const start = timestamp();
@@ -361,7 +379,7 @@ namespace ts {
         }
     }
 
-    export function getExportInfoMap(importingFile: SourceFile, host: LanguageServiceHost, program: Program, cancellationToken: CancellationToken | undefined): ExportInfoMap {
+    export function getExportInfoMap(importingFile: SourceFile, host: LanguageServiceHost, program: Program, preferences: UserPreferences, cancellationToken: CancellationToken | undefined): ExportInfoMap {
         const start = timestamp();
         // Pulling the AutoImportProvider project will trigger its updateGraph if pending,
         // which will invalidate the export map cache if things change, so pull it before
@@ -382,7 +400,7 @@ namespace ts {
         const compilerOptions = program.getCompilerOptions();
         let moduleCount = 0;
         try {
-            forEachExternalModuleToImportFrom(program, host, /*useAutoImportProvider*/ true, (moduleSymbol, moduleFile, program, isFromPackageJson) => {
+            forEachExternalModuleToImportFrom(program, host, preferences, /*useAutoImportProvider*/ true, (moduleSymbol, moduleFile, program, isFromPackageJson) => {
                 if (++moduleCount % 100 === 0) cancellationToken?.throwIfCancellationRequested();
                 const seenExports = new Map<__String, true>();
                 const checker = program.getTypeChecker();
