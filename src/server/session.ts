@@ -696,7 +696,6 @@ namespace ts.server {
         CommandNames.OrganizeImportsFull,
         CommandNames.GetEditsForFileRename,
         CommandNames.GetEditsForFileRenameFull,
-        CommandNames.ConfigurePlugin,
         CommandNames.PrepareCallHierarchy,
         CommandNames.ProvideCallHierarchyIncomingCalls,
         CommandNames.ProvideCallHierarchyOutgoingCalls,
@@ -3344,7 +3343,9 @@ namespace ts.server {
         public executeCommand(request: protocol.Request): HandlerResponse {
             const handler = this.handlers.get(request.command);
             if (handler) {
-                return this.executeWithRequestId(request.seq, () => handler(request));
+                const response = this.executeWithRequestId(request.seq, () => handler(request));
+                this.projectService.enableRequestedPlugins();
+                return response;
             }
             else {
                 this.logger.msg(`Unrecognized JSON command:${stringifyIndented(request)}`, Msg.Err);
