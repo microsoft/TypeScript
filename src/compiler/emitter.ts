@@ -412,7 +412,7 @@ namespace ts {
             });
 
             Debug.assert(transform.transformed.length === 1, "Should only see one output from the transform");
-            printSourceFileOrBundle(jsFilePath, sourceMapFilePath, transform.transformed[0], printer, compilerOptions);
+            printSourceFileOrBundle(jsFilePath, sourceMapFilePath, transform, printer, compilerOptions);
 
             // Clean up emit nodes on parse tree
             transform.dispose();
@@ -476,7 +476,7 @@ namespace ts {
                 printSourceFileOrBundle(
                     declarationFilePath,
                     declarationMapPath,
-                    declarationTransform.transformed[0],
+                    declarationTransform,
                     declarationPrinter,
                     {
                         sourceMap: printerOptions.sourceMap,
@@ -505,7 +505,8 @@ namespace ts {
             forEachChild(node, collectLinkedAliases);
         }
 
-        function printSourceFileOrBundle(jsFilePath: string, sourceMapFilePath: string | undefined, sourceFileOrBundle: SourceFile | Bundle, printer: Printer, mapOptions: SourceMapOptions) {
+        function printSourceFileOrBundle(jsFilePath: string, sourceMapFilePath: string | undefined, transform: TransformationResult<SourceFile | Bundle>, printer: Printer, mapOptions: SourceMapOptions) {
+            const sourceFileOrBundle = transform.transformed[0];
             const bundle = sourceFileOrBundle.kind === SyntaxKind.Bundle ? sourceFileOrBundle : undefined;
             const sourceFile = sourceFileOrBundle.kind === SyntaxKind.SourceFile ? sourceFileOrBundle : undefined;
             const sourceFiles = bundle ? bundle.sourceFiles : [sourceFile!];
@@ -562,7 +563,7 @@ namespace ts {
 
             // Write the output file
             const text = writer.getText();
-            writeFile(host, emitterDiagnostics, jsFilePath, text, !!compilerOptions.emitBOM, sourceFiles, { sourceMapUrlPos });
+            writeFile(host, emitterDiagnostics, jsFilePath, text, !!compilerOptions.emitBOM, sourceFiles, { sourceMapUrlPos, diagnostics: transform.diagnostics });
             // We store the hash of the text written in the buildinfo to ensure that text of the referenced d.ts file is same as whats in the buildinfo
             // This is needed because incremental can be toggled between two runs and we might use stale file text to do text manipulation in prepend mode
             if (printer.bundleFileInfo) printer.bundleFileInfo.hash = computeSignature(text, maybeBind(host, host.createHash));

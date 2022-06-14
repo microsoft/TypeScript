@@ -4026,6 +4026,7 @@ namespace ts {
     export interface WriteFileCallbackData {
         /*@internal*/ sourceMapUrlPos?: number;
         /*@internal*/ buildInfo?: BuildInfo;
+        /*@internal*/ diagnostics?: readonly DiagnosticWithLocation[];
     }
     export type WriteFileCallback = (
         fileName: string,
