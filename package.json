@@ -33,6 +33,7 @@
         "@octokit/rest": "latest",
         "@types/chai": "latest",
         "@types/convert-source-map": "latest",
+        "@types/fs-extra": "^9.0.13",
         "@types/glob": "latest",
         "@types/gulp": "^4.0.9",
         "@types/gulp-concat": "latest",
