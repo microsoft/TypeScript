@@ -16,7 +16,6 @@ namespace ts.server {
     };
 
     function parseServerMode(): LanguageServiceMode | string | undefined {
-        if (hasArgument("--vfs")) return LanguageServiceMode.Semantic;
         const mode = findArgument("--serverMode");
         if (!mode) return undefined;
         switch (mode.toLowerCase()) {
@@ -24,6 +23,9 @@ namespace ts.server {
                 return LanguageServiceMode.PartialSemantic;
             case "syntactic":
                 return LanguageServiceMode.Syntactic;
+            case "semantic":
+                if (hasArgument("--vfs")) return LanguageServiceMode.Semantic;
+                // fallthrough
             default:
                 return mode;
         }
@@ -56,8 +58,8 @@ namespace ts.server {
             args,
             logger,
             cancellationToken: nullCancellationToken,
-            // Webserver defaults to partial semantic mode
-            serverMode: serverMode ?? LanguageServiceMode.PartialSemantic,
+            // Webserver defaults to partial semantic mode unless VFS is turned on
+            serverMode: serverMode ?? (hasArgument("--vfs") ? LanguageServiceMode.Semantic : LanguageServiceMode.PartialSemantic),
             unknownServerMode,
             startSession: startWebSession
         };

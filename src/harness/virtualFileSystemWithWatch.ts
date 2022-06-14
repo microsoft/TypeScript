@@ -507,7 +507,7 @@ interface Array<T> { length: number; [n: number]: T; }`
             throw new Error(this.exitMessage);
         }
 
-        override getEnvironmentVariable(name: string) {
+        getEnvironmentVariable(name: string) {
             return this.environmentVariables && this.environmentVariables.get(name) || "";
         }
     }

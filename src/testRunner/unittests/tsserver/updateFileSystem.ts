@@ -29,14 +29,28 @@ namespace ts.projectSystem {
             return `// some copy right notice
 ${file.fileContent}`;
         }
-        function baselineFileSystem(scenario: string, subScenario: string, requests: [string, (() => void) | Partial<protocol.Request>][], host: TestServerHost, fshost: VirtualFS.VirtualServerHost, session: TestSession) {
+        function verifyTsc(
+            scenario: string,
+            subScenario: string,
+            requests: [string, ((host: TestServerHost, fshost: VirtualFS.VirtualServerHost) => void) | Partial<protocol.Request>][],
+        ) {
+            const host = VirtualFS.createServerHost({ executingFilePath: "/host/tsc.js" });
+            const fshost = VirtualFS.createVirtualServerHost({ executingFilePath: "/fshost/tsc.js" });
+            const session = createSession(host, { fshost, logger: createLoggerWithInMemoryLogs(), canUseEvents: true });
             const history: string[] = [];
+            VirtualFS.createWatcher(fshost.fsWatches, "/host/b/app.ts" as Path, {
+                cb: (_, relativeFileName) => {
+                    assert.fail("The watcher for /host/b/app.ts should not be called at all. Called with " + relativeFileName);
+                },
+                directoryName: "/host/b",
+                inode: undefined,
+            });
 
             let prev = VirtualFS.snap(fshost);
             let prev2 = VirtualFS.snap(host);
             for (const [name, request] of requests) {
                 if (typeof request === "function") {
-                    request();
+                    request(host, fshost);
                 }
                 else {
                     session.executeCommandSeq(request);
@@ -58,10 +72,7 @@ ${file.fileContent}`;
         }
 
         it("with updateFileSystem request", () => {
-            const host = VirtualFS.createServerHost({ executingFilePath: "/host/tsc.js" });
-            const fshost = VirtualFS.createVirtualServerHost({ executingFilePath: "/fshost/tsc.js" });
-            const session = createSession(host, { fshost, logger: createLoggerWithInMemoryLogs(), canUseEvents: true });
-            const requests: [string, (() => void) | Partial<protocol.Request>][] = [
+            const requests: [string, ((host: TestServerHost, fshost: VirtualFS.VirtualServerHost) => void) | Partial<protocol.Request>][] = [
                 ["Initial updateFileSystem", {
                     command: protocol.CommandTypes.UpdateFileSystem,
                     arguments:{
@@ -100,19 +111,19 @@ ${file.fileContent}`;
                         deleted: [],
                     },
                 }],
-                ["ensure /host/app.ts exists", () => host.ensureFileOrFolder({
+                ["ensure /host/app.ts exists", (host) => host.ensureFileOrFolder({
                     path: "/host/b/app.ts",
                     content: 'console.log("hello")'
                 })],
-                ["modify /host/app.ts", () => host.modifyFile(
+                ["modify /host/app.ts", (host) => host.modifyFile(
                     "/host/b/app.ts",
                     "console.log('goodbye')"
                 )],
-                ["ensure /fshost/file4.ts exists", () => fshost.ensureFileOrFolder({
+                ["ensure /fshost/file4.ts exists", (_, fshost) => fshost.ensureFileOrFolder({
                     path:"/fshost/b/file4.ts",
                     content: "console.log('file4 exists')",
                 })],
-                ["modify /fshost/file4", () => fshost.modifyFile(
+                ["modify /fshost/file4", (_, fshost) => fshost.modifyFile(
                     "/fshost/b/file4.ts",
                     "console.log('file4 modified')"
                 )],
@@ -129,17 +140,10 @@ ${file.fileContent}`;
                     arguments: { file: app.file }
                 }],
             ];
-            VirtualFS.createWatcher(fshost.fsWatches, "/host/b/app.ts" as Path, {
-                cb: (_, relativeFileName) => {
-                    assert.fail("The watcher for /host/b/app.ts should not be called at all. Called with " + relativeFileName);
-                },
-                directoryName: "/host/b",
-                inode: undefined,
-            });
 
             const scenario = "updateFileSystem";
             const subScenario = "open and close files";
-            baselineFileSystem(scenario, subScenario, requests, host, fshost, session);
+            verifyTsc(scenario, subScenario, requests);
         });
     });
 }

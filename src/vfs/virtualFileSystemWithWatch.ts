@@ -649,10 +649,6 @@ namespace ts.VirtualFS {
             baseline.push("");
             return baseline;
         }
-
-        getEnvironmentVariable(_name: string) {
-            return "";
-        }
     }
 
     function serializeTestFsWatcher({ directoryName, inode }: VirtualFsWatcher) {
