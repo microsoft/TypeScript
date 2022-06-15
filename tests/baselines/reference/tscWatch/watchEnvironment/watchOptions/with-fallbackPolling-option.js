@@ -29,6 +29,7 @@ Output::
 
 [[90m12:00:22 AM[0m] Found 0 errors. Watching for file changes.
 
+sysLog:: /a/b:: Changing to watchFile
 
 
 Program root files: ["/a/b/commonFile1.ts","/a/b/commonFile2.ts"]

@@ -4,22 +4,9 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccess.ts(317,5): error TS232
     Type 'T[string]' is not assignable to type '{}'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccess.ts(318,5): error TS2322: Type 'T[K]' is not assignable to type '{}'.
   Type 'T[keyof T]' is not assignable to type '{}'.
-tests/cases/conformance/types/keyof/keyofAndIndexedAccess.ts(323,5): error TS2322: Type 'T' is not assignable to type '{} | null | undefined'.
-tests/cases/conformance/types/keyof/keyofAndIndexedAccess.ts(324,5): error TS2322: Type 'T[keyof T]' is not assignable to type '{} | null | undefined'.
-  Type 'T[string] | T[number] | T[symbol]' is not assignable to type '{} | null | undefined'.
-    Type 'T[string]' is not assignable to type '{} | null | undefined'.
-tests/cases/conformance/types/keyof/keyofAndIndexedAccess.ts(325,5): error TS2322: Type 'T[K]' is not assignable to type '{} | null | undefined'.
-  Type 'T[keyof T]' is not assignable to type '{} | null | undefined'.
-tests/cases/conformance/types/keyof/keyofAndIndexedAccess.ts(611,33): error TS2345: Argument of type 'T[K]' is not assignable to parameter of type '{} | null | undefined'.
-  Type 'T[keyof T]' is not assignable to type '{} | null | undefined'.
-    Type 'T[string] | T[number] | T[symbol]' is not assignable to type '{} | null | undefined'.
-      Type 'T[string]' is not assignable to type '{} | null | undefined'.
-tests/cases/conformance/types/keyof/keyofAndIndexedAccess.ts(619,13): error TS2322: Type 'T[keyof T]' is not assignable to type '{} | null | undefined'.
-  Type 'T[string] | T[number] | T[symbol]' is not assignable to type '{} | null | undefined'.
-    Type 'T[string]' is not assignable to type '{} | null | undefined'.
 
 
-==== tests/cases/conformance/types/keyof/keyofAndIndexedAccess.ts (8 errors) ====
+==== tests/cases/conformance/types/keyof/keyofAndIndexedAccess.ts (3 errors) ====
     class Shape {
         name: string;
         width: number;
@@ -353,18 +340,8 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccess.ts(619,13): error TS23
     function f92<T, K extends keyof T>(x: T, y: T[keyof T], z: T[K]) {
         let a: {} | null | undefined;
         a = x;
-        ~
-!!! error TS2322: Type 'T' is not assignable to type '{} | null | undefined'.
-!!! related TS2208 tests/cases/conformance/types/keyof/keyofAndIndexedAccess.ts:321:14: This type parameter probably needs an `extends object` constraint.
         a = y;
-        ~
-!!! error TS2322: Type 'T[keyof T]' is not assignable to type '{} | null | undefined'.
-!!! error TS2322:   Type 'T[string] | T[number] | T[symbol]' is not assignable to type '{} | null | undefined'.
-!!! error TS2322:     Type 'T[string]' is not assignable to type '{} | null | undefined'.
         a = z;
-        ~
-!!! error TS2322: Type 'T[K]' is not assignable to type '{} | null | undefined'.
-!!! error TS2322:   Type 'T[keyof T]' is not assignable to type '{} | null | undefined'.
     }
     
     // Repros from #12011
@@ -651,11 +628,6 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccess.ts(619,13): error TS23
     
     function fn<T extends I, K extends keyof T>(o: T, k: K) {
         take<{} | null | undefined>(o[k]);
-                                    ~~~~
-!!! error TS2345: Argument of type 'T[K]' is not assignable to parameter of type '{} | null | undefined'.
-!!! error TS2345:   Type 'T[keyof T]' is not assignable to type '{} | null | undefined'.
-!!! error TS2345:     Type 'T[string] | T[number] | T[symbol]' is not assignable to type '{} | null | undefined'.
-!!! error TS2345:       Type 'T[string]' is not assignable to type '{} | null | undefined'.
         take<any>(o[k]);
     }
     
@@ -664,10 +636,6 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccess.ts(619,13): error TS23
     class Unbounded<T> {
         foo(x: T[keyof T]) {
             let y: {} | undefined | null = x;
-                ~
-!!! error TS2322: Type 'T[keyof T]' is not assignable to type '{} | null | undefined'.
-!!! error TS2322:   Type 'T[string] | T[number] | T[symbol]' is not assignable to type '{} | null | undefined'.
-!!! error TS2322:     Type 'T[string]' is not assignable to type '{} | null | undefined'.
         }
     }
     

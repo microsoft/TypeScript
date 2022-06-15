@@ -10,10 +10,8 @@ namespace ts.tscWatch {
         function verifyWatch({ files, config, subScenario }: VerifyWatchInput, alreadyBuilt: boolean) {
             const { sys, baseline, oldSnap, cb, getPrograms } = createBaseline(
                 createWatchedSystem(files),
-                alreadyBuilt ? sys => {
-                    const solutionBuilder = createSolutionBuilder(sys, [config], {});
-                    solutionBuilder.build();
-                    solutionBuilder.close();
+                alreadyBuilt ? (sys, originalRead) => {
+                    solutionBuildWithBaseline(sys, [config], originalRead);
                     sys.clearOutput();
                 } : undefined
             );

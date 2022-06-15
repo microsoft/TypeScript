@@ -2,6 +2,6 @@
 x ? y => ({ y }) : z => ({ z })
 >y : Symbol(y, Decl(file.js, 0, 3))
 >y : Symbol(y, Decl(file.js, 0, 11))
->z : Symbol(z, Decl(file.js, 0, 18))
+>z : Symbol(z)
 >z : Symbol(z, Decl(file.js, 0, 26))
 

@@ -150,7 +150,7 @@ function f01(x: unknown) {
 >undefined : undefined
 >typeof x === "string" : boolean
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
->x : unknown
+>x : {} | null
 >"string" : "string"
 
         x;  // string | undefined
