@@ -1,5 +1,5 @@
 namespace ts.tscWatch {
-    import getFileFromProject = VirtualFS.getTsBuildProjectFile;
+    import getFileFromProject = TestFSWithWatch.getTsBuildProjectFile;
     describe("unittests:: tsc-watch:: watchAPI:: with sourceOfProjectReferenceRedirect", () => {
         interface VerifyWatchInput {
             files: readonly VirtualFS.FileOrFolderOrSymLink[];

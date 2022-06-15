@@ -60,7 +60,7 @@ namespace vfs {
         private _dirStack: string[] | undefined;
 
         constructor(ignoreCase: boolean, options: FileSystemOptions = {}) {
-            const { time = ts.VirtualFS.timeIncrements, files, meta } = options;
+            const { time = ts.TestFSWithWatch.timeIncrements, files, meta } = options;
             this.ignoreCase = ignoreCase;
             this.stringComparer = this.ignoreCase ? vpath.compareCaseInsensitive : vpath.compareCaseSensitive;
             this._time = time;
@@ -173,7 +173,7 @@ namespace vfs {
                 this._time = value;
             }
             else if (!this.isReadonly) {
-                this._time += ts.VirtualFS.timeIncrements;
+                this._time += ts.TestFSWithWatch.timeIncrements;
             }
             return this._time;
         }

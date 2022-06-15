@@ -3,13 +3,13 @@ namespace ts.projectSystem {
     export import protocol = server.protocol;
     export import CommandNames = server.CommandNames;
 
-    export import TestServerHost = VirtualFS.TestServerHost;
+    export import TestServerHost = TestFSWithWatch.TestServerHost;
     export type File = VirtualFS.File;
     export type SymLink = VirtualFS.SymLink;
     export type Folder = VirtualFS.Folder;
-    export import createServerHost = VirtualFS.createServerHost;
-    export import checkArray = VirtualFS.checkArray;
-    export import libFile = VirtualFS.libFile;
+    export import createServerHost = TestFSWithWatch.createServerHost;
+    export import checkArray = TestFSWithWatch.checkArray;
+    export import libFile = TestFSWithWatch.libFile;
 
     export import commonFile1 = tscWatch.commonFile1;
     export import commonFile2 = tscWatch.commonFile2;

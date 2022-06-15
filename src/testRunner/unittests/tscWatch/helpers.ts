@@ -1,14 +1,14 @@
 namespace ts.tscWatch {
     export const projects = `/user/username/projects`;
     export const projectRoot = `${projects}/myproject`;
-    export import WatchedSystem = VirtualFS.TestServerHost;
+    export import WatchedSystem = TestFSWithWatch.TestServerHost;
     export type File = VirtualFS.File;
     export type SymLink = VirtualFS.SymLink;
-    export import libFile = VirtualFS.libFile;
-    export import createWatchedSystem = VirtualFS.createWatchedSystem;
-    export import checkArray = VirtualFS.checkArray;
-    export import checkOutputContains = VirtualFS.checkOutputContains;
-    export import checkOutputDoesNotContain = VirtualFS.checkOutputDoesNotContain;
+    export import libFile = TestFSWithWatch.libFile;
+    export import createWatchedSystem = TestFSWithWatch.createWatchedSystem;
+    export import checkArray = TestFSWithWatch.checkArray;
+    export import checkOutputContains = TestFSWithWatch.checkOutputContains;
+    export import checkOutputDoesNotContain = TestFSWithWatch.checkOutputDoesNotContain;
 
     export const commonFile1: File = {
         path: "/a/b/commonFile1.ts",
@@ -98,9 +98,9 @@ namespace ts.tscWatch {
     export type WatchOrSolution<T extends BuilderProgram> = void | SolutionBuilder<T> | WatchOfConfigFile<T> | WatchOfFilesAndCompilerOptions<T>;
     export interface TscWatchCompileChange<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram> {
         caption: string;
-        change: (sys: VirtualFS.TestServerHostTrackingWrittenFiles) => void;
+        change: (sys: TestFSWithWatch.TestServerHostTrackingWrittenFiles) => void;
         timeouts: (
-            sys: VirtualFS.TestServerHostTrackingWrittenFiles,
+            sys: TestFSWithWatch.TestServerHostTrackingWrittenFiles,
             programs: readonly CommandLineProgram[],
             watchOrSolution: WatchOrSolution<T>
         ) => void;
@@ -125,7 +125,7 @@ namespace ts.tscWatch {
         timeouts: sys => sys.checkTimeoutQueueLength(0),
     };
 
-    export type SystemSnap = ReturnType<typeof VirtualFS.snap>;
+    export type SystemSnap = ReturnType<typeof TestFSWithWatch.snap>;
     function tscWatchCompile(input: TscWatchCompile) {
         it("tsc-watch:: Generates files matching the baseline", () => {
             const { sys, baseline, oldSnap } = createBaseline(input.sys());
@@ -160,7 +160,7 @@ namespace ts.tscWatch {
 
     export interface BaselineBase {
         baseline: string[];
-        sys: VirtualFS.TestServerHostTrackingWrittenFiles;
+        sys: TestFSWithWatch.TestServerHostTrackingWrittenFiles;
         oldSnap: SystemSnap;
     }
 
@@ -171,12 +171,12 @@ namespace ts.tscWatch {
         const originalRead = system.readFile;
         const initialSys = fakes.patchHostForBuildInfoReadWrite(system);
         modifySystem?.(initialSys, originalRead);
-        const sys = VirtualFS.changeToHostTrackingWrittenFiles(initialSys);
+        const sys = TestFSWithWatch.changeToHostTrackingWrittenFiles(initialSys);
         const baseline: string[] = [];
         baseline.push("Input::");
-        VirtualFS.diff(sys, baseline);
+        TestFSWithWatch.diff(sys, baseline);
         const { cb, getPrograms } = commandLineCallbacks(sys);
-        return { sys, baseline, oldSnap: VirtualFS.snap(sys), cb, getPrograms };
+        return { sys, baseline, oldSnap: TestFSWithWatch.snap(sys), cb, getPrograms };
     }
 
     export function createSolutionBuilderWithWatchHostForBaseline(sys: WatchedSystem, cb: ExecuteCommandLineCallbacks) {
@@ -234,16 +234,16 @@ namespace ts.tscWatch {
     }
 
     export function applyChange(sys: BaselineBase["sys"], baseline: BaselineBase["baseline"], change: TscWatchCompileChange["change"], caption?: TscWatchCompileChange["caption"]) {
-        const oldSnap = VirtualFS.snap(sys);
+        const oldSnap = TestFSWithWatch.snap(sys);
         baseline.push(`Change::${caption ? " " + caption : ""}`, "");
         change(sys);
         baseline.push("Input::");
-        VirtualFS.diff(sys, baseline, oldSnap);
-        return VirtualFS.snap(sys);
+        TestFSWithWatch.diff(sys, baseline, oldSnap);
+        return TestFSWithWatch.snap(sys);
     }
 
     export interface RunWatchBaseline<T extends BuilderProgram> extends BaselineBase, TscWatchCompileBase<T> {
-        sys: VirtualFS.TestServerHostTrackingWrittenFiles;
+        sys: TestFSWithWatch.TestServerHostTrackingWrittenFiles;
         getPrograms: () => readonly CommandLineProgram[];
         watchOrSolution: WatchOrSolution<T>;
     }
@@ -298,7 +298,7 @@ namespace ts.tscWatch {
         const programs = baselinePrograms(baseline, getPrograms, oldPrograms, baselineDependencies);
         sys.serializeWatches(baseline);
         baseline.push(`exitCode:: ExitStatus.${ExitStatus[sys.exitCode as ExitStatus]}`, "");
-        VirtualFS.diff(sys, baseline, oldSnap);
+        TestFSWithWatch.diff(sys, baseline, oldSnap);
         sys.writtenFiles.forEach((value, key) => {
             assert.equal(value, 1, `Expected to write file ${key} only once`);
         });
@@ -422,7 +422,7 @@ namespace ts.tscWatch {
         const originalReadFile = sys.readFile;
         const originalWrite = sys.write;
         const originalWriteFile = sys.writeFile;
-        const solutionBuilder = createSolutionBuilder(VirtualFS.changeToHostTrackingWrittenFiles(
+        const solutionBuilder = createSolutionBuilder(TestFSWithWatch.changeToHostTrackingWrittenFiles(
             fakes.patchHostForBuildInfoReadWrite(sys)
         ), solutionRoots, originalRead);
         solutionBuilder.build();
@@ -432,7 +432,7 @@ namespace ts.tscWatch {
         return sys;
     }
 
-    export function createSystemWithSolutionBuild(solutionRoots: readonly string[], files: VirtualFS.FileOrFolderOrSymLinkMap | readonly VirtualFS.FileOrFolderOrSymLink[], params?: VirtualFS.TestServerHostCreationParameters) {
+    export function createSystemWithSolutionBuild(solutionRoots: readonly string[], files: VirtualFS.FileOrFolderOrSymLinkMap | readonly VirtualFS.FileOrFolderOrSymLink[], params?: TestFSWithWatch.TestServerHostCreationParameters) {
         return solutionBuildWithBaseline(createWatchedSystem(files, params), solutionRoots);
     }
 }

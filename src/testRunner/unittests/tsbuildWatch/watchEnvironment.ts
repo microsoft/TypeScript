@@ -13,7 +13,7 @@ namespace ts.tscWatch {
 
         function verifyWatchFileOnMultipleProjects(singleWatchPerFile: boolean, environmentVariables?: ESMap<string, string>) {
             it("watchFile on same file multiple times because file is part of multiple projects", () => {
-                const project = `${VirtualFS.tsbuildProjectsLocation}/myproject`;
+                const project = `${TestFSWithWatch.tsbuildProjectsLocation}/myproject`;
                 let maxPkgs = 4;
                 const configPath = `${project}/tsconfig.json`;
                 const typing: File = {
@@ -111,7 +111,7 @@ namespace ts.tscWatch {
                         }
                     ];
                 }
-                function writePkgReferences(system: VirtualFS.TestServerHost) {
+                function writePkgReferences(system: TestFSWithWatch.TestServerHost) {
                     system.writeFile(configPath, JSON.stringify({
                         files: [],
                         include: [],

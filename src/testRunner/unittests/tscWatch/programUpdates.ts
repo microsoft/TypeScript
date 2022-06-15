@@ -545,7 +545,7 @@ export class A {
             });
 
             const {cb: cb2, getPrograms: getPrograms2 } = commandLineCallbacks(sys);
-            const oldSnap2 = VirtualFS.snap(sys);
+            const oldSnap2 = TestFSWithWatch.snap(sys);
             baseline.push("createing separate watcher");
             createWatchProgram(createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline({
                 rootFiles:[file1.path],

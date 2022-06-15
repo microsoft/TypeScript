@@ -1,5 +1,5 @@
 namespace ts.tscWatch {
-    import projectsLocation = VirtualFS.tsbuildProjectsLocation;
+    import projectsLocation = TestFSWithWatch.tsbuildProjectsLocation;
     describe("unittests:: tsbuildWatch:: watchMode:: program updates", () => {
         const enum SubProject {
             core = "core",
@@ -11,11 +11,11 @@ namespace ts.tscWatch {
         /** [tsconfig, index] | [tsconfig, index, anotherModule, someDecl] */
         type SubProjectFiles = [tsconfig: ReadonlyFile, index: ReadonlyFile] | [tsconfig: ReadonlyFile, index: ReadonlyFile, anotherModule: ReadonlyFile, someDecl: ReadonlyFile];
         function projectFilePath(subProject: SubProject, baseFileName: string) {
-            return `${VirtualFS.getTsBuildProjectFilePath("sample1", subProject)}/${baseFileName.toLowerCase()}`;
+            return `${TestFSWithWatch.getTsBuildProjectFilePath("sample1", subProject)}/${baseFileName.toLowerCase()}`;
         }
 
         function projectFile(subProject: SubProject, baseFileName: string): File {
-            return VirtualFS.getTsBuildProjectFile("sample1", `${subProject}/${baseFileName}`);
+            return TestFSWithWatch.getTsBuildProjectFile("sample1", `${subProject}/${baseFileName}`);
         }
 
         function subProjectFiles(subProject: SubProject, anotherModuleAndSomeDecl?: true): SubProjectFiles {

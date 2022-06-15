@@ -809,7 +809,7 @@ namespace ts.server {
             };
             this.errorCheck = new MultistepOperation(multistepOperationHost);
             const settings: ProjectServiceOptions = {
-                host: this.host,
+                host: opts.host,
                 fshost: opts.fshost,
                 logger: this.logger,
                 cancellationToken: this.cancellationToken,

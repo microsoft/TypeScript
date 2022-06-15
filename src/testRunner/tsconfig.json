@@ -19,10 +19,10 @@
         { "path": "../executeCommandLine", "prepend": true },
         { "path": "../services", "prepend": true },
         { "path": "../jsTyping", "prepend": true },
+        { "path": "../vfs", "prepend": true },
         { "path": "../server", "prepend": true },
         { "path": "../webServer", "prepend": true },
         { "path": "../typingsInstallerCore", "prepend": true },
-        { "path": "../vfs", "prepend": true },
         { "path": "../deprecatedCompat", "prepend": true },
         { "path": "../harness", "prepend": true },
         { "path": "../loggedIO", "prepend": true }

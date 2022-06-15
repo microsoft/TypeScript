@@ -41,7 +41,7 @@ namespace ts.projectSystem {
             let fshost: VirtualFS.VirtualServerHost | undefined;
             if (isVfs) {
                 serverMode = LanguageServiceMode.Semantic;
-                fshost = VirtualFS.createVirtualServerHost({ executingFilePath: "/a/lib/tsc.js" });
+                fshost = TestFSWithWatch.createVirtualServerHost({ executingFilePath: "/a/lib/tsc.js" });
                 fshost.ensureFileOrFolder(libFile);
             }
             const logger = logLevel !== undefined ? new server.MainProcessLogger(logLevel, webHost) : nullLogger();

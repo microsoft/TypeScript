@@ -12,7 +12,6 @@
         { "path": "../compiler" },
         { "path": "../jsTyping" },
         { "path": "../services" },
-        { "path": "../vfs" },
         { "path": "../server" }
     ],
     "files": [

@@ -3756,21 +3756,26 @@ namespace ts.server {
         updateFileSystem(updatedFiles: protocol.FileSystemRequestArgs[] | undefined, deletedFiles?: string[]) {
             if (!this.fshost) {
                 this.logger.msg("fshost not defined, skipping updateFileSystem", Msg.Err);
+                return;
             }
             if (updatedFiles) {
-                if (!this.fshost.ensureFileOrFolder) {
-                    this.logger.msg(`fshost missing ensureFileOrFolder, skipping update of ${JSON.stringify(updatedFiles.map(({ file }) => file))}`, Msg.Err);
+                if (this.fshost.ensureFileOrFolder) {
+                    for (const { file, fileContent } of updatedFiles) {
+                        this.fshost.ensureFileOrFolder({ path: file, content: fileContent });
+                    }
                 }
-                for (const { file, fileContent } of updatedFiles) {
-                    this.fshost.ensureFileOrFolder({ path: file, content: fileContent });
+                else {
+                    this.logger.msg(`fshost missing ensureFileOrFolder, skipping update of ${JSON.stringify(updatedFiles.map(({ file }) => file))}`, Msg.Err);
                 }
             }
             if (deletedFiles) {
-                if (!this.fshost.deleteFile) {
-                    this.logger.msg(`fshost missing deleteFile, skipping delete of ${JSON.stringify(deletedFiles)}`, Msg.Err);
+                if (this.fshost.deleteFile) {
+                    for (const file of deletedFiles) {
+                        this.fshost.deleteFile(file, /*deleteEmptyParentFolders*/ true);
+                    }
                 }
-                for (const file of deletedFiles) {
-                    this.fshost.deleteFile(file, /*deleteEmptyParentFolders*/ true);
+                else {
+                    this.logger.msg(`fshost missing deleteFile, skipping delete of ${JSON.stringify(deletedFiles)}`, Msg.Err);
                 }
             }
         }

@@ -337,22 +337,22 @@ export class Data2 {
             function change(caption: string, content: string): TscWatchCompileChange {
                 return {
                     caption,
-                    change: sys => sys.writeFile(`${VirtualFS.tsbuildProjectsLocation}/noEmitOnError/src/main.ts`, content),
+                    change: sys => sys.writeFile(`${TestFSWithWatch.tsbuildProjectsLocation}/noEmitOnError/src/main.ts`, content),
                     // build project
                     timeouts: checkSingleTimeoutQueueLengthAndRun
                 };
             }
             const noChange: TscWatchCompileChange = {
                 caption: "No change",
-                change: sys => sys.writeFile(`${VirtualFS.tsbuildProjectsLocation}/noEmitOnError/src/main.ts`, sys.readFile(`${VirtualFS.tsbuildProjectsLocation}/noEmitOnError/src/main.ts`)!),
+                change: sys => sys.writeFile(`${TestFSWithWatch.tsbuildProjectsLocation}/noEmitOnError/src/main.ts`, sys.readFile(`${TestFSWithWatch.tsbuildProjectsLocation}/noEmitOnError/src/main.ts`)!),
                 // build project
                 timeouts: checkSingleTimeoutQueueLengthAndRun,
             };
             verifyEmitAndErrorUpdates({
                 subScenario: "with noEmitOnError",
-                currentDirectory: `${VirtualFS.tsbuildProjectsLocation}/noEmitOnError`,
+                currentDirectory: `${TestFSWithWatch.tsbuildProjectsLocation}/noEmitOnError`,
                 files: () => ["shared/types/db.ts", "src/main.ts", "src/other.ts", "tsconfig.json"]
-                    .map(f => VirtualFS.getTsBuildProjectFile("noEmitOnError", f)).concat({ path: libFile.path, content: libContent }),
+                    .map(f => TestFSWithWatch.getTsBuildProjectFile("noEmitOnError", f)).concat({ path: libFile.path, content: libContent }),
                 changes: [
                     noChange,
                     change("Fix Syntax error", `import { A } from "../shared/types/db";

@@ -322,7 +322,7 @@ namespace ts.server {
             else if (host.trace) {
                 this.trace = s => host.trace!(s);
             }
-            this.realpath = maybeBind(this.projectService.host, this.projectService.host.realpath);
+            this.realpath = maybeBind(host, host.realpath);
 
             // Use the current directory as resolution root only if the project created using current directory string
             this.resolutionCache = createResolutionCache(

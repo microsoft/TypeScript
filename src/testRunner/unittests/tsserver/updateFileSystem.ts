@@ -34,8 +34,8 @@ ${file.fileContent}`;
             subScenario: string,
             requests: [string, ((host: TestServerHost, fshost: VirtualFS.VirtualServerHost) => void) | Partial<protocol.Request>][],
         ) {
-            const host = VirtualFS.createServerHost({ executingFilePath: "/host/tsc.js" });
-            const fshost = VirtualFS.createVirtualServerHost({ executingFilePath: "/fshost/tsc.js" });
+            const host = TestFSWithWatch.createServerHost({ executingFilePath: "/host/tsc.js" });
+            const fshost = TestFSWithWatch.createVirtualServerHost({ executingFilePath: "/fshost/tsc.js" });
             const session = createSession(host, { fshost, logger: createLoggerWithInMemoryLogs(), canUseEvents: true });
             const history: string[] = [];
             VirtualFS.createWatcher(fshost.fsWatches, "/host/b/app.ts" as Path, {
@@ -46,8 +46,8 @@ ${file.fileContent}`;
                 inode: undefined,
             });
 
-            let prev = VirtualFS.snap(fshost);
-            let prev2 = VirtualFS.snap(host);
+            let prev = TestFSWithWatch.snap(fshost);
+            let prev2 = TestFSWithWatch.snap(host);
             for (const [name, request] of requests) {
                 if (typeof request === "function") {
                     request(host, fshost);
@@ -57,16 +57,16 @@ ${file.fileContent}`;
                 }
                 history.push("");
                 history.push("#### " + name);
-                VirtualFS.diff(fshost, history, prev);
-                prev = VirtualFS.snap(fshost);
-                VirtualFS.diff(host, history, prev2);
-                prev2 = VirtualFS.snap(host);
-                host.serializeTimeout(history)
+                TestFSWithWatch.diff(fshost, history, prev);
+                prev = TestFSWithWatch.snap(fshost);
+                TestFSWithWatch.diff(host, history, prev2);
+                prev2 = TestFSWithWatch.snap(host);
+                host.serializeTimeout(history);
             }
-            history.push("### fshost watches")
-            fshost.serializeWatches(history)
-            history.push("### host watches")
-            host.serializeWatches(history)
+            history.push("### fshost watches");
+            fshost.serializeWatches(history);
+            history.push("### host watches");
+            host.serializeWatches(history);
             Harness.Baseline.runBaseline(`tsserver/${scenario}/${subScenario.split(" ").join("-")}.txt`, history.join("\r\n"));
             baselineTsserverLogs(scenario, subScenario, session);
         }

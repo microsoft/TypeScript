@@ -13,7 +13,7 @@ namespace ts {
 
         function getTsBuildProjectFile(project: string, file: string): tscWatch.File {
             return {
-                path: VirtualFS.getTsBuildProjectFilePath(project, file),
+                path: TestFSWithWatch.getTsBuildProjectFilePath(project, file),
                 content: projFs.readFileSync(`/src/${project}/${file}`, "utf8")!
             };
         }
@@ -250,8 +250,8 @@ namespace ts {
                 const testsConfig = getTsBuildProjectFile("tests", "tsconfig.json");
                 const testsIndex = getTsBuildProjectFile("tests", "index.ts");
                 const baseline: string[] = [];
-                let oldSnap: ReturnType<typeof VirtualFS.snap> | undefined;
-                const system = VirtualFS.changeToHostTrackingWrittenFiles(
+                let oldSnap: ReturnType<typeof TestFSWithWatch.snap> | undefined;
+                const system = TestFSWithWatch.changeToHostTrackingWrittenFiles(
                     fakes.patchHostForBuildInfoReadWrite(
                         tscWatch.createWatchedSystem([
                             coreConfig, coreIndex, coreDecl, coreAnotherModule,
@@ -281,9 +281,9 @@ namespace ts {
 
                 function baselineState() {
                     system.serializeOutput(baseline);
-                    VirtualFS.diff(system, baseline, oldSnap);
+                    TestFSWithWatch.diff(system, baseline, oldSnap);
                     system.writtenFiles.clear();
-                    oldSnap = VirtualFS.snap(system);
+                    oldSnap = TestFSWithWatch.snap(system);
                 }
             });
 
@@ -322,8 +322,8 @@ namespace ts {
                 const testsConfig = getTsBuildProjectFile("tests", "tsconfig.json");
                 const testsIndex = getTsBuildProjectFile("tests", "index.ts");
                 const baseline: string[] = [];
-                let oldSnap: ReturnType<typeof VirtualFS.snap> | undefined;
-                const system = VirtualFS.changeToHostTrackingWrittenFiles(
+                let oldSnap: ReturnType<typeof TestFSWithWatch.snap> | undefined;
+                const system = TestFSWithWatch.changeToHostTrackingWrittenFiles(
                     fakes.patchHostForBuildInfoReadWrite(
                         tscWatch.createWatchedSystem([
                             coreConfig, coreIndex, coreDecl, coreAnotherModule,
@@ -366,9 +366,9 @@ namespace ts {
                 function baselineState(heading: string) {
                     baseline.push(heading);
                     system.serializeOutput(baseline);
-                    VirtualFS.diff(system, baseline, oldSnap);
+                    TestFSWithWatch.diff(system, baseline, oldSnap);
                     system.writtenFiles.clear();
-                    oldSnap = VirtualFS.snap(system);
+                    oldSnap = TestFSWithWatch.snap(system);
                 }
             });
         });

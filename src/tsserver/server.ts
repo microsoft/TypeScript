@@ -58,7 +58,7 @@ namespace ts.server {
         console.warn = (...args) => logger.msg(args.length === 1 ? args[0] : args.join(", "), Msg.Err);
         console.error = (...args) => logger.msg(args.length === 1 ? args[0] : args.join(", "), Msg.Err);
 
-        const fshost = vfs ? new VirtualFS.VirtualServerHost({
+        const fshost = vfs ? new TestFSWithWatch.VirtualServerHost({
             useCaseSensitiveFileNames: sys.useCaseSensitiveFileNames,
             executingFilePath: directorySeparator, // Use same executingFilePath as webserver
             newLine: sys.newLine,

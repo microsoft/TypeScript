@@ -1,5 +1,5 @@
-namespace ts.VirtualFS {
-    export const libFile: File = {
+namespace ts.TestFSWithWatch {
+    export const libFile: VirtualFS.File = {
         path: "/a/lib/lib.d.ts",
         content: `/// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -27,23 +27,21 @@ interface Array<T> { length: number; [n: number]: T; }`
         environmentVariables?: ESMap<string, string>;
         runWithoutRecursiveWatches?: boolean;
         runWithFallbackPolling?: boolean;
-        // TODO: Not sure withSafeList is still needed
-        withSafeList?: boolean;
         inodeWatching?: boolean;
     }
 
-    export function createVirtualServerHost(params: VirtualServerHostCreationParameters): VirtualServerHost {
-        const host = new VirtualServerHost(params);
+    export function createVirtualServerHost(params: VirtualFS.VirtualServerHostCreationParameters): VirtualFS.VirtualServerHost {
+        const host = new VirtualFS.VirtualServerHost(params);
         // Just like sys, patch the host to use writeFile
         patchWriteFileEnsuringDirectory(host);
         return host;
     }
 
-    export function createWatchedSystem(fileOrFolderList: FileOrFolderOrSymLinkMap | readonly FileOrFolderOrSymLink[], params?: TestServerHostCreationParameters): TestServerHost {
+    export function createWatchedSystem(fileOrFolderList: VirtualFS.FileOrFolderOrSymLinkMap | readonly VirtualFS.FileOrFolderOrSymLink[], params?: TestServerHostCreationParameters): TestServerHost {
         return new TestServerHost(fileOrFolderList, params);
     }
 
-    export function createServerHost(fileOrFolderList: FileOrFolderOrSymLinkMap | readonly FileOrFolderOrSymLink[], params?: TestServerHostCreationParameters): TestServerHost {
+    export function createServerHost(fileOrFolderList: VirtualFS.FileOrFolderOrSymLinkMap | readonly VirtualFS.FileOrFolderOrSymLink[], params?: TestServerHostCreationParameters): TestServerHost {
         const host = new TestServerHost(fileOrFolderList, params);
         // Just like sys, patch the host to use writeFile
         patchWriteFileEnsuringDirectory(host);
@@ -116,7 +114,7 @@ interface Array<T> { length: number; [n: number]: T; }`
 
         serialize(baseline: string[]) {
             for (const id in this.map) {
-                baseline.push(`${id} at time ${this.map[id].time} in ${this.map[id].ms} ms: ${this.map[id].args[1]}`)
+                baseline.push(`${id} at time ${this.map[id].time} in ${this.map[id].ms} ms: ${this.map[id].args[1]}`);
             }
         }
     }
@@ -213,7 +211,7 @@ interface Array<T> { length: number; [n: number]: T; }`
 
     export const timeIncrements = 1000;
 
-    export class TestServerHost extends VirtualServerHost implements server.ServerHost {
+    export class TestServerHost extends VirtualFS.VirtualServerHost implements server.ServerHost {
         private readonly output: string[] = [];
         private time = timeIncrements;
         private timeoutCallbacks = new Callbacks(this);
@@ -226,7 +224,7 @@ interface Array<T> { length: number; [n: number]: T; }`
         private readonly inodes?: ESMap<Path, number>;
 
         constructor(
-            fileOrFolderOrSymLinkList: FileOrFolderOrSymLinkMap | readonly FileOrFolderOrSymLink[],
+            fileOrFolderOrSymLinkList: VirtualFS.FileOrFolderOrSymLinkMap | readonly VirtualFS.FileOrFolderOrSymLink[],
             options: TestServerHostCreationParameters = {}) {
             super({
                 ...options,
@@ -273,7 +271,7 @@ interface Array<T> { length: number; [n: number]: T; }`
             this.time = time;
         }
 
-        private reloadFS(fileOrFolderOrSymLinkList: FileOrFolderOrSymLinkMap | readonly FileOrFolderOrSymLink[]) {
+        private reloadFS(fileOrFolderOrSymLinkList: VirtualFS.FileOrFolderOrSymLinkMap | readonly VirtualFS.FileOrFolderOrSymLink[]) {
             Debug.assert(this.fs.size === 0);
             if (isArray(fileOrFolderOrSymLinkList)) {
                 fileOrFolderOrSymLinkList.forEach(f => this.ensureFileOrFolder(!this.windowsStyleRoot ?
@@ -300,7 +298,7 @@ interface Array<T> { length: number; [n: number]: T; }`
         renameFile(fileName: string, newFileName: string) {
             const fullPath = getNormalizedAbsolutePath(fileName, this.currentDirectory);
             const path = this.toPath(fullPath);
-            const file = this.fs.get(path) as FsFile;
+            const file = this.fs.get(path) as VirtualFS.FsFile;
             Debug.assert(!!file);
 
             // Only remove the file
@@ -313,14 +311,14 @@ interface Array<T> { length: number; [n: number]: T; }`
             const basePath = getDirectoryPath(path);
             Debug.assert(basePath !== path);
             Debug.assert(basePath === getDirectoryPath(newPath));
-            const baseFolder = this.fs.get(basePath) as FsFolder;
+            const baseFolder = this.fs.get(basePath) as VirtualFS.FsFolder;
             this.addFileOrFolderInFolder(baseFolder, newFile);
         }
 
         renameFolder(folderName: string, newFolderName: string) {
             const fullPath = getNormalizedAbsolutePath(folderName, this.currentDirectory);
             const path = this.toPath(fullPath);
-            const folder = this.fs.get(path) as FsFolder;
+            const folder = this.fs.get(path) as VirtualFS.FsFolder;
             Debug.assert(!!folder);
 
             // Only remove the folder
@@ -333,14 +331,14 @@ interface Array<T> { length: number; [n: number]: T; }`
             const basePath = getDirectoryPath(path);
             Debug.assert(basePath !== path);
             Debug.assert(basePath === getDirectoryPath(newPath));
-            const baseFolder = this.fs.get(basePath) as FsFolder;
+            const baseFolder = this.fs.get(basePath) as VirtualFS.FsFolder;
             this.addFileOrFolderInFolder(baseFolder, newFolder);
 
             // Invoke watches for files in the folder as deleted (from old path)
             this.renameFolderEntries(folder, newFolder);
         }
 
-        private renameFolderEntries(oldFolder: FsFolder, newFolder: FsFolder) {
+        private renameFolderEntries(oldFolder: VirtualFS.FsFolder, newFolder: VirtualFS.FsFolder) {
             for (const entry of oldFolder.entries) {
                 this.fs.delete(entry.path);
                 this.invokeFileAndFsWatches(entry.fullPath, FileWatcherEventKind.Deleted);
@@ -353,7 +351,7 @@ interface Array<T> { length: number; [n: number]: T; }`
                 this.fs.set(entry.path, entry);
                 this.setInode(entry.path);
                 this.invokeFileAndFsWatches(entry.fullPath, FileWatcherEventKind.Created);
-                if (isFsFolder(entry)) {
+                if (VirtualFS.isFsFolder(entry)) {
                     this.renameFolderEntries(entry, entry);
                 }
             }
@@ -361,12 +359,12 @@ interface Array<T> { length: number; [n: number]: T; }`
 
         deleteFolder(folderPath: string, recursive?: boolean) {
             const path = this.toFullPath(folderPath);
-            const currentEntry = this.fs.get(path) as FsFolder;
-            Debug.assert(isFsFolder(currentEntry));
+            const currentEntry = this.fs.get(path) as VirtualFS.FsFolder;
+            Debug.assert(VirtualFS.isFsFolder(currentEntry));
             if (recursive && currentEntry.entries.length) {
                 const subEntries = currentEntry.entries.slice();
                 subEntries.forEach(fsEntry => {
-                    if (isFsFolder(fsEntry)) {
+                    if (VirtualFS.isFsFolder(fsEntry)) {
                         this.deleteFolder(fsEntry.fullPath, recursive);
                     }
                     else {
@@ -386,7 +384,7 @@ interface Array<T> { length: number; [n: number]: T; }`
             const path = this.toFullPath(fileOrDirectory);
             // Error if the path does not exist
             if (this.inodeWatching && !this.inodes?.has(path)) throw new Error();
-            const result = createWatcher(
+            const result = VirtualFS.createWatcher(
                 recursive ? this.fsWatchesRecursive : this.fsWatches,
                 path,
                 {
@@ -421,7 +419,7 @@ interface Array<T> { length: number; [n: number]: T; }`
         }
 
         serializeTimeout(baseline: string[]) {
-            this.timeoutCallbacks.serialize(baseline)
+            this.timeoutCallbacks.serialize(baseline);
         }
 
         clearScreen(): void {
@@ -465,11 +463,11 @@ interface Array<T> { length: number; [n: number]: T; }`
             this.immediateCallbacks.unregister(timeoutId);
         }
 
-        prependFile(path: string, content: string, options?: Partial<WatchInvokeOptions>): void {
+        prependFile(path: string, content: string, options?: Partial<VirtualFS.WatchInvokeOptions>): void {
             this.modifyFile(path, content + this.readFile(path), options);
         }
 
-        appendFile(path: string, content: string, options?: Partial<WatchInvokeOptions>): void {
+        appendFile(path: string, content: string, options?: Partial<VirtualFS.WatchInvokeOptions>): void {
             this.modifyFile(path, this.readFile(path) + content, options);
         }
 
@@ -512,12 +510,12 @@ interface Array<T> { length: number; [n: number]: T; }`
         }
     }
 
-    export function snap(fshost: VirtualServerHost): ESMap<Path, FSEntry> {
-        const result = new Map<Path, FSEntry>();
+    export function snap(fshost: VirtualFS.VirtualServerHost): ESMap<Path, VirtualFS.FSEntry> {
+        const result = new Map<Path, VirtualFS.FSEntry>();
         fshost.fs.forEach((value, key) => {
             const cloneValue = clone(value);
-            if (isFsFolder(cloneValue)) {
-                cloneValue.entries = cloneValue.entries.map(clone) as SortedArray<FSEntry>;
+            if (VirtualFS.isFsFolder(cloneValue)) {
+                cloneValue.entries = cloneValue.entries.map(clone) as SortedArray<VirtualFS.FSEntry>;
             }
             result.set(key, cloneValue);
         });
@@ -525,7 +523,7 @@ interface Array<T> { length: number; [n: number]: T; }`
         return result;
     }
 
-    export function diff(fshost: VirtualServerHost, baseline: string[], base: ESMap<Path, FSEntry> = new Map()) {
+    export function diff(fshost: VirtualFS.VirtualServerHost, baseline: string[], base: ESMap<Path, VirtualFS.FSEntry> = new Map()) {
         fshost.fs.forEach((newFsEntry, path) => {
             diffFsEntry(baseline, base.get(path), newFsEntry, fshost.getInode(path), fshost.writtenFiles);
         });
@@ -538,19 +536,19 @@ interface Array<T> { length: number; [n: number]: T; }`
         baseline.push("");
     }
 
-    function diffFsFile(baseline: string[], fsEntry: FsFile, newInode: number | undefined) {
+    function diffFsFile(baseline: string[], fsEntry: VirtualFS.FsFile, newInode: number | undefined) {
         baseline.push(`//// [${fsEntry.fullPath}]${inodeString(newInode)}\r\n${fsEntry.content}`, "");
     }
-    function diffFsSymLink(baseline: string[], fsEntry: FsSymLink, newInode: number | undefined) {
+    function diffFsSymLink(baseline: string[], fsEntry: VirtualFS.FsSymLink, newInode: number | undefined) {
         baseline.push(`//// [${fsEntry.fullPath}] symlink(${fsEntry.symLink})${inodeString(newInode)}`);
     }
     function inodeString(inode: number | undefined) {
         return inode !== undefined ? ` Inode:: ${inode}` : "";
     }
-    function diffFsEntry(baseline: string[], oldFsEntry: FSEntry | undefined, newFsEntry: FSEntry | undefined, newInode: number | undefined, writtenFiles: ESMap<string, any> | undefined): void {
+    function diffFsEntry(baseline: string[], oldFsEntry: VirtualFS.FSEntry | undefined, newFsEntry: VirtualFS.FSEntry | undefined, newInode: number | undefined, writtenFiles: ESMap<string, any> | undefined): void {
         const file = newFsEntry && newFsEntry.fullPath;
-        if (isFsFile(oldFsEntry)) {
-            if (isFsFile(newFsEntry)) {
+        if (VirtualFS.isFsFile(oldFsEntry)) {
+            if (VirtualFS.isFsFile(newFsEntry)) {
                 if (oldFsEntry.content !== newFsEntry.content) {
                     diffFsFile(baseline, newFsEntry, newInode);
                 }
@@ -568,13 +566,13 @@ interface Array<T> { length: number; [n: number]: T; }`
             }
             else {
                 baseline.push(`//// [${oldFsEntry.fullPath}] deleted`);
-                if (isFsSymLink(newFsEntry)) {
+                if (VirtualFS.isFsSymLink(newFsEntry)) {
                     diffFsSymLink(baseline, newFsEntry, newInode);
                 }
             }
         }
-        else if (isFsSymLink(oldFsEntry)) {
-            if (isFsSymLink(newFsEntry)) {
+        else if (VirtualFS.isFsSymLink(oldFsEntry)) {
+            if (VirtualFS.isFsSymLink(newFsEntry)) {
                 if (oldFsEntry.symLink !== newFsEntry.symLink) {
                     diffFsSymLink(baseline, newFsEntry, newInode);
                 }
@@ -592,15 +590,15 @@ interface Array<T> { length: number; [n: number]: T; }`
             }
             else {
                 baseline.push(`//// [${oldFsEntry.fullPath}] deleted symlink`);
-                if (isFsFile(newFsEntry)) {
+                if (VirtualFS.isFsFile(newFsEntry)) {
                     diffFsFile(baseline, newFsEntry, newInode);
                 }
             }
         }
-        else if (isFsFile(newFsEntry)) {
+        else if (VirtualFS.isFsFile(newFsEntry)) {
             diffFsFile(baseline, newFsEntry, newInode);
         }
-        else if (isFsSymLink(newFsEntry)) {
+        else if (VirtualFS.isFsSymLink(newFsEntry)) {
             diffFsSymLink(baseline, newFsEntry, newInode);
         }
     }
@@ -631,7 +629,7 @@ interface Array<T> { length: number; [n: number]: T; }`
         return `${tsbuildProjectsLocation}/${project}/${file}`;
     }
 
-    export function getTsBuildProjectFile(project: string, file: string): File {
+    export function getTsBuildProjectFile(project: string, file: string): VirtualFS.File {
         return {
             path: getTsBuildProjectFilePath(project, file),
             content: Harness.IO.readFile(`${Harness.IO.getWorkspaceRoot()}/tests/projects/${project}/${file}`)!

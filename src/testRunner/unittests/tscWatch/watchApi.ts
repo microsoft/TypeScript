@@ -204,13 +204,13 @@ namespace ts.tscWatch {
         function createWatch<T extends BuilderProgram>(
             baseline: string[],
             config: File,
-            sys: VirtualFS.TestServerHostTrackingWrittenFiles,
+            sys: TestFSWithWatch.TestServerHostTrackingWrittenFiles,
             createProgram: CreateProgram<T>,
             optionsToExtend?: CompilerOptions,
         ) {
             const { cb, getPrograms } = commandLineCallbacks(sys);
             baseline.push(`tsc --w${optionsToExtend?.noEmit ? " --noEmit" : ""}`);
-            const oldSnap = VirtualFS.snap(sys);
+            const oldSnap = TestFSWithWatch.snap(sys);
             const host = createWatchCompilerHostOfConfigFileForBaseline<T>({
                 configFileName: config.path,
                 optionsToExtend,
@@ -246,9 +246,9 @@ namespace ts.tscWatch {
         function applyChangeForBuilderTest(
             baseline: string[],
             emitBaseline: string[],
-            sys: VirtualFS.TestServerHostTrackingWrittenFiles,
-            emitSys: VirtualFS.TestServerHostTrackingWrittenFiles,
-            change: (sys: VirtualFS.TestServerHostTrackingWrittenFiles) => void,
+            sys: TestFSWithWatch.TestServerHostTrackingWrittenFiles,
+            emitSys: TestFSWithWatch.TestServerHostTrackingWrittenFiles,
+            change: (sys: TestFSWithWatch.TestServerHostTrackingWrittenFiles) => void,
             caption: string
         ) {
             // Change file
@@ -260,8 +260,8 @@ namespace ts.tscWatch {
             baseline: string[],
             emitBaseline: string[],
             config: File,
-            sys: VirtualFS.TestServerHostTrackingWrittenFiles,
-            emitSys: VirtualFS.TestServerHostTrackingWrittenFiles,
+            sys: TestFSWithWatch.TestServerHostTrackingWrittenFiles,
+            emitSys: TestFSWithWatch.TestServerHostTrackingWrittenFiles,
             createProgram: CreateProgram<T>,
             optionsToExtend?: CompilerOptions) {
             createWatch(baseline, config, sys, createProgram, optionsToExtend);
@@ -385,7 +385,7 @@ namespace ts.tscWatch {
             applyChange(sys, baseline, sys => sys.writeFile(mainFile.path, "export const x = 10;"), "Fix error");
 
             const { cb, getPrograms } = commandLineCallbacks(sys);
-            const oldSnap = VirtualFS.snap(sys);
+            const oldSnap = TestFSWithWatch.snap(sys);
             const reportDiagnostic = createDiagnosticReporter(sys, /*pretty*/ true);
             const reportWatchStatus = createWatchStatusReporter(sys, /*pretty*/ true);
             const host = createWatchCompilerHostOfConfigFile({
