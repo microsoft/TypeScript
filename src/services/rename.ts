@@ -74,7 +74,10 @@ namespace ts.Rename {
 
     function wouldRenameAcrossExternalLibrary(originalFile: SourceFile, symbol: Symbol, checker: TypeChecker, preferences: UserPreferences): boolean {
         if (!preferences.providePrefixAndSuffixTextForRename && symbol.flags & SymbolFlags.Alias) {
-            symbol = checker.getAliasedSymbol(symbol);
+            const importSpecifier = find(symbol.declarations!, decl => isImportSpecifier(decl)) as ImportSpecifier;
+            if (importSpecifier && !importSpecifier.propertyName) {
+                symbol = checker.getAliasedSymbol(symbol);
+            }
         }
         const { declarations } = symbol;
         const originalPackage = getPackagePath(originalFile.path);
