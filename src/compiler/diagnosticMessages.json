@@ -6276,6 +6276,11 @@
         "category": "Error",
         "code": 8034
     },
+    "You cannot rename elements that are defined in an external library inside `node_modules/`.": {
+        "category": "Error",
+        "code": 8035
+    },
+
     "Declaration emit for this file requires using private name '{0}'. An explicit type annotation may unblock declaration emit.": {
         "category": "Error",
         "code": 9005
