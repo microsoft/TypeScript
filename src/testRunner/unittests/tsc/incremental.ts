@@ -524,5 +524,26 @@ console.log(a);`,
                 modifyFs: fs => fs.writeFileSync("/src/project/constants.ts", "export default 2;"),
             }],
         });
+
+        verifyTscWithEdits({
+            scenario: "incremental",
+            subScenario: "non-portable declaration does not issue error until `declaration` is set",
+            fs: () => loadProjectFromFiles({
+                "/src/project/src/node_modules/pkg/node_modules/inner/index.d.ts": "export interface A {}",
+                "/src/project/src/node_modules/pkg/index.d.ts": `import {A} from "inner";
+export function getA(): A;`,
+                "/src/project/src/index.ts": `import {getA} from "pkg";
+export const a = getA();`,
+                "/src/project/tsconfig.json": "{}",
+            }),
+            commandLineArgs: ["--incremental", "--p", "src/project"],
+            edits: [
+                noChangeRun,
+                {
+                    subScenario: "incremental-adds-portability-error-when-declaration-enabled",
+                    modifyFs: fs => replaceText(fs, "/src/project/tsconfig.json", "{}", JSON.stringify({compilerOptions: { declaration: true }}))
+                }
+            ]
+        });
     });
 }
