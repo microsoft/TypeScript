@@ -46,6 +46,53 @@ true;
 const x4 = f<true>
 if (true) {}
 
+const x5 = f<true>
+let yy = 0;
+
+const x6 = f<true>
+interface I {}
+
+let x10 = f<true>
+this.bar()
+
+let x11 = f<true>
+function bar() {}
+
+let x12 = f<true>
+class C {}
+
+let x13 = f<true>
+bar()
+
+let x14 = f<true>
+void bar()
+
+class C1 {
+    static specialFoo = f<string>
+    static bar = 123
+}
+
+class C2 {
+    public specialFoo = f<string>
+    public bar = 123
+}
+
+class C3 {
+    private specialFoo = f<string>
+    private bar = 123
+}
+
+class C4 {
+    protected specialFoo = f<string>
+    protected bar = 123
+}
+
+// Repro from #49551
+
+const enum MyVer { v1 = 1, v2 = 2 }
+let ver = 21
+const a = ver < (MyVer.v1 >= MyVer.v2 ? MyVer.v1 : MyVer.v2)
+
 
 //// [instantiationExpressionErrors.js]
 "use strict";
@@ -78,6 +125,57 @@ true;
 // Parsed as instantiation expression
 var x4 = (f);
 if (true) { }
+var x5 = f < true >
+    let, yy = 0;
+var x6 = f < true >
+    interface, I, _c = void 0;
+var x10 = f < true >
+    this.bar();
+var x11 = f < true >
+    function bar() { };
+var x12 = f < true > /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());
+var x13 = f < true >
+    bar();
+var x14 = f < true >
+    void bar();
+var C1 = /** @class */ (function () {
+    function C1() {
+        this.bar = 123;
+    }
+    C1.specialFoo = f < string >
+        static;
+    return C1;
+}());
+var C2 = /** @class */ (function () {
+    function C2() {
+        this.specialFoo = f < string >
+            public;
+        this.bar = 123;
+    }
+    return C2;
+}());
+var C3 = /** @class */ (function () {
+    function C3() {
+        this.specialFoo = f < string >
+            private;
+        this.bar = 123;
+    }
+    return C3;
+}());
+var C4 = /** @class */ (function () {
+    function C4() {
+        this.specialFoo = f < string >
+            protected;
+        this.bar = 123;
+    }
+    return C4;
+}());
+var ver = 21;
+var a = ver < (1 /* MyVer.v1 */ >= 2 /* MyVer.v2 */ ? 1 /* MyVer.v1 */ : 2 /* MyVer.v2 */);
 
 
 //// [instantiationExpressionErrors.d.ts]
@@ -113,3 +211,32 @@ declare const x4: {
     (): true;
     g<U>(): U;
 };
+declare const x5: boolean, yy = 0;
+declare const x6: boolean, I: any;
+declare let x10: boolean;
+declare let x11: boolean;
+declare let x12: boolean;
+declare let x13: boolean;
+declare let x14: boolean;
+declare class C1 {
+    static specialFoo: boolean;
+    bar: number;
+}
+declare class C2 {
+    specialFoo: boolean;
+    bar: number;
+}
+declare class C3 {
+    private specialFoo;
+    bar: number;
+}
+declare class C4 {
+    protected specialFoo: boolean;
+    bar: number;
+}
+declare const enum MyVer {
+    v1 = 1,
+    v2 = 2
+}
+declare let ver: number;
+declare const a: boolean;

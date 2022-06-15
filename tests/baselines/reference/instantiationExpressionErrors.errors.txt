@@ -8,9 +8,40 @@ tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpr
 tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(26,24): error TS2558: Expected 0 type arguments, but got 1.
 tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(31,2): error TS2554: Expected 0 arguments, but got 1.
 tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(35,12): error TS2365: Operator '<' cannot be applied to types '{ <T>(): T; g<U>(): U; }' and 'boolean'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(48,12): error TS2365: Operator '<' cannot be applied to types '{ <T>(): T; g<U>(): U; }' and 'boolean'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(49,1): error TS2304: Cannot find name 'let'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(49,5): error TS1005: ',' expected.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(51,12): error TS2365: Operator '<' cannot be applied to types '{ <T>(): T; g<U>(): U; }' and 'boolean'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(52,1): error TS2304: Cannot find name 'interface'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(52,11): error TS1005: ',' expected.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(52,11): error TS7005: Variable 'I' implicitly has an 'any' type.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(52,13): error TS1005: ',' expected.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(54,11): error TS2365: Operator '<' cannot be applied to types '{ <T>(): T; g<U>(): U; }' and 'boolean'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(55,6): error TS7017: Element implicitly has an 'any' type because type 'typeof globalThis' has no index signature.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(57,11): error TS2365: Operator '<' cannot be applied to types '{ <T>(): T; g<U>(): U; }' and 'boolean'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(57,11): error TS2365: Operator '>' cannot be applied to types 'boolean' and '() => void'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(60,11): error TS2365: Operator '<' cannot be applied to types '{ <T>(): T; g<U>(): U; }' and 'boolean'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(60,11): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'typeof C'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(63,11): error TS2365: Operator '<' cannot be applied to types '{ <T>(): T; g<U>(): U; }' and 'boolean'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(64,1): error TS2304: Cannot find name 'bar'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(66,11): error TS2365: Operator '<' cannot be applied to types '{ <T>(): T; g<U>(): U; }' and 'boolean'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(67,1): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(67,6): error TS2304: Cannot find name 'bar'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(70,27): error TS2693: 'string' only refers to a type, but is being used as a value here.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(71,5): error TS2304: Cannot find name 'static'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(71,12): error TS1005: ';' expected.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(75,27): error TS2693: 'string' only refers to a type, but is being used as a value here.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(76,5): error TS2304: Cannot find name 'public'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(76,12): error TS1005: ';' expected.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(80,28): error TS2693: 'string' only refers to a type, but is being used as a value here.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(81,5): error TS2304: Cannot find name 'private'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(81,13): error TS1005: ';' expected.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(85,30): error TS2693: 'string' only refers to a type, but is being used as a value here.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(86,5): error TS2304: Cannot find name 'protected'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(86,15): error TS1005: ';' expected.
 
 
-==== tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts (10 errors) ====
+==== tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts (41 errors) ====
     declare let f: { <T>(): T, g<U>(): U };
     
     // Type arguments in member expressions
@@ -77,4 +108,115 @@ tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpr
     
     const x4 = f<true>
     if (true) {}
+    
+    const x5 = f<true>
+               ~~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types '{ <T>(): T; g<U>(): U; }' and 'boolean'.
+    let yy = 0;
+    ~~~
+!!! error TS2304: Cannot find name 'let'.
+        ~~
+!!! error TS1005: ',' expected.
+    
+    const x6 = f<true>
+               ~~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types '{ <T>(): T; g<U>(): U; }' and 'boolean'.
+    interface I {}
+    ~~~~~~~~~
+!!! error TS2304: Cannot find name 'interface'.
+              ~
+!!! error TS1005: ',' expected.
+              ~
+!!! error TS7005: Variable 'I' implicitly has an 'any' type.
+                ~
+!!! error TS1005: ',' expected.
+    
+    let x10 = f<true>
+              ~~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types '{ <T>(): T; g<U>(): U; }' and 'boolean'.
+    this.bar()
+         ~~~
+!!! error TS7017: Element implicitly has an 'any' type because type 'typeof globalThis' has no index signature.
+    
+    let x11 = f<true>
+              ~~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types '{ <T>(): T; g<U>(): U; }' and 'boolean'.
+              ~~~~~~~
+    function bar() {}
+    ~~~~~~~~~~~~~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'boolean' and '() => void'.
+    
+    let x12 = f<true>
+              ~~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types '{ <T>(): T; g<U>(): U; }' and 'boolean'.
+              ~~~~~~~
+    class C {}
+    ~~~~~~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'boolean' and 'typeof C'.
+    
+    let x13 = f<true>
+              ~~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types '{ <T>(): T; g<U>(): U; }' and 'boolean'.
+    bar()
+    ~~~
+!!! error TS2304: Cannot find name 'bar'.
+    
+    let x14 = f<true>
+              ~~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types '{ <T>(): T; g<U>(): U; }' and 'boolean'.
+    void bar()
+    ~~~~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+         ~~~
+!!! error TS2304: Cannot find name 'bar'.
+    
+    class C1 {
+        static specialFoo = f<string>
+                              ~~~~~~
+!!! error TS2693: 'string' only refers to a type, but is being used as a value here.
+        static bar = 123
+        ~~~~~~
+!!! error TS2304: Cannot find name 'static'.
+               ~~~
+!!! error TS1005: ';' expected.
+    }
+    
+    class C2 {
+        public specialFoo = f<string>
+                              ~~~~~~
+!!! error TS2693: 'string' only refers to a type, but is being used as a value here.
+        public bar = 123
+        ~~~~~~
+!!! error TS2304: Cannot find name 'public'.
+               ~~~
+!!! error TS1005: ';' expected.
+    }
+    
+    class C3 {
+        private specialFoo = f<string>
+                               ~~~~~~
+!!! error TS2693: 'string' only refers to a type, but is being used as a value here.
+        private bar = 123
+        ~~~~~~~
+!!! error TS2304: Cannot find name 'private'.
+                ~~~
+!!! error TS1005: ';' expected.
+    }
+    
+    class C4 {
+        protected specialFoo = f<string>
+                                 ~~~~~~
+!!! error TS2693: 'string' only refers to a type, but is being used as a value here.
+        protected bar = 123
+        ~~~~~~~~~
+!!! error TS2304: Cannot find name 'protected'.
+                  ~~~
+!!! error TS1005: ';' expected.
+    }
+    
+    // Repro from #49551
+    
+    const enum MyVer { v1 = 1, v2 = 2 }
+    let ver = 21
+    const a = ver < (MyVer.v1 >= MyVer.v2 ? MyVer.v1 : MyVer.v2)
     

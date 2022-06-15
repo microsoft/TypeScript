@@ -132,3 +132,181 @@ const x4 = f<true>
 if (true) {}
 >true : true
 
+const x5 = f<true>
+>x5 : boolean
+>f<true>let : boolean
+>f<true : boolean
+>f : { <T>(): T; g<U>(): U; }
+>true : true
+
+let yy = 0;
+>let : any
+>yy : 0
+>0 : 0
+
+const x6 = f<true>
+>x6 : boolean
+>f<true>interface : boolean
+>f<true : boolean
+>f : { <T>(): T; g<U>(): U; }
+>true : true
+
+interface I {}
+>interface : any
+>I : any
+
+let x10 = f<true>
+>x10 : boolean
+>f<true>this.bar() : boolean
+>f<true : boolean
+>f : { <T>(): T; g<U>(): U; }
+>true : true
+
+this.bar()
+>this.bar() : any
+>this.bar : any
+>this : typeof globalThis
+>bar : any
+
+let x11 = f<true>
+>x11 : boolean
+>f<true>function bar() {} : boolean
+>f<true : boolean
+>f : { <T>(): T; g<U>(): U; }
+>true : true
+
+function bar() {}
+>function bar() {} : () => void
+>bar : () => void
+
+let x12 = f<true>
+>x12 : boolean
+>f<true>class C {} : boolean
+>f<true : boolean
+>f : { <T>(): T; g<U>(): U; }
+>true : true
+
+class C {}
+>class C {} : typeof C
+>C : typeof C
+
+let x13 = f<true>
+>x13 : boolean
+>f<true>bar() : boolean
+>f<true : boolean
+>f : { <T>(): T; g<U>(): U; }
+>true : true
+
+bar()
+>bar() : any
+>bar : any
+
+let x14 = f<true>
+>x14 : boolean
+>f<true>void bar() : boolean
+>f<true : boolean
+>f : { <T>(): T; g<U>(): U; }
+>true : true
+
+void bar()
+>void bar() : undefined
+>bar() : any
+>bar : any
+
+class C1 {
+>C1 : C1
+
+    static specialFoo = f<string>
+>specialFoo : boolean
+>f<string>    static : boolean
+>f<string : boolean
+>f : { <T>(): T; g<U>(): U; }
+>string : any
+
+    static bar = 123
+>static : any
+>bar : number
+>123 : 123
+}
+
+class C2 {
+>C2 : C2
+
+    public specialFoo = f<string>
+>specialFoo : boolean
+>f<string>    public : boolean
+>f<string : boolean
+>f : { <T>(): T; g<U>(): U; }
+>string : any
+
+    public bar = 123
+>public : any
+>bar : number
+>123 : 123
+}
+
+class C3 {
+>C3 : C3
+
+    private specialFoo = f<string>
+>specialFoo : boolean
+>f<string>    private : boolean
+>f<string : boolean
+>f : { <T>(): T; g<U>(): U; }
+>string : any
+
+    private bar = 123
+>private : any
+>bar : number
+>123 : 123
+}
+
+class C4 {
+>C4 : C4
+
+    protected specialFoo = f<string>
+>specialFoo : boolean
+>f<string>    protected : boolean
+>f<string : boolean
+>f : { <T>(): T; g<U>(): U; }
+>string : any
+
+    protected bar = 123
+>protected : any
+>bar : number
+>123 : 123
+}
+
+// Repro from #49551
+
+const enum MyVer { v1 = 1, v2 = 2 }
+>MyVer : MyVer
+>v1 : MyVer.v1
+>1 : 1
+>v2 : MyVer.v2
+>2 : 2
+
+let ver = 21
+>ver : number
+>21 : 21
+
+const a = ver < (MyVer.v1 >= MyVer.v2 ? MyVer.v1 : MyVer.v2)
+>a : boolean
+>ver < (MyVer.v1 >= MyVer.v2 ? MyVer.v1 : MyVer.v2) : boolean
+>ver : number
+>(MyVer.v1 >= MyVer.v2 ? MyVer.v1 : MyVer.v2) : MyVer
+>MyVer.v1 >= MyVer.v2 ? MyVer.v1 : MyVer.v2 : MyVer
+>MyVer.v1 >= MyVer.v2 : boolean
+>MyVer.v1 : MyVer.v1
+>MyVer : typeof MyVer
+>v1 : MyVer.v1
+>MyVer.v2 : MyVer.v2
+>MyVer : typeof MyVer
+>v2 : MyVer.v2
+>MyVer.v1 : MyVer.v1
+>MyVer : typeof MyVer
+>v1 : MyVer.v1
+>MyVer.v2 : MyVer.v2
+>MyVer : typeof MyVer
+>v2 : MyVer.v2
+

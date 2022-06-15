@@ -47,3 +47,50 @@ true;
 
 const x4 = f<true>
 if (true) {}
+
+const x5 = f<true>
+let yy = 0;
+
+const x6 = f<true>
+interface I {}
+
+let x10 = f<true>
+this.bar()
+
+let x11 = f<true>
+function bar() {}
+
+let x12 = f<true>
+class C {}
+
+let x13 = f<true>
+bar()
+
+let x14 = f<true>
+void bar()
+
+class C1 {
+    static specialFoo = f<string>
+    static bar = 123
+}
+
+class C2 {
+    public specialFoo = f<string>
+    public bar = 123
+}
+
+class C3 {
+    private specialFoo = f<string>
+    private bar = 123
+}
+
+class C4 {
+    protected specialFoo = f<string>
+    protected bar = 123
+}
+
+// Repro from #49551
+
+const enum MyVer { v1 = 1, v2 = 2 }
+let ver = 21
+const a = ver < (MyVer.v1 >= MyVer.v2 ? MyVer.v1 : MyVer.v2)
