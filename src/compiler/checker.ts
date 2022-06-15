@@ -4849,8 +4849,11 @@ namespace ts {
                         return method;
                     }
                     return (((...args) => {
-                        context.reportedDiagnostic = true;
-                        return method(...args);
+                        const result = method(...args);
+                        if (result) {
+                            context.reportedDiagnostic = true;
+                        }
+                        return result;
                     }) as T);
                 }
             }
@@ -4992,11 +4995,8 @@ namespace ts {
                 }
                 if (isThisTypeParameter(type)) {
                     if (context.flags & NodeBuilderFlags.InObjectTypeLiteral) {
-                        if (!context.encounteredError && !(context.flags & NodeBuilderFlags.AllowThisInObjectLiteral)) {
+                        if (!context.encounteredError && !(context.flags & NodeBuilderFlags.AllowThisInObjectLiteral) && (!context.tracker.reportInaccessibleThisError || context.tracker.reportInaccessibleThisError())) {
                             context.encounteredError = true;
-                        }
-                        if (context.tracker.reportInaccessibleThisError) {
-                            context.tracker.reportInaccessibleThisError();
                         }
                     }
                     context.approximateLength += 4;
@@ -5163,9 +5163,8 @@ namespace ts {
                 function typeToTypeNodeOrCircularityElision(type: Type) {
                     if (type.flags & TypeFlags.Union) {
                         if (context.visitedTypes?.has(getTypeId(type))) {
-                            if (!(context.flags & NodeBuilderFlags.AllowAnonymousIdentifier)) {
+                            if (!(context.flags & NodeBuilderFlags.AllowAnonymousIdentifier) && (!context.tracker.reportCyclicStructureError || context.tracker.reportCyclicStructureError())) {
                                 context.encounteredError = true;
-                                context.tracker?.reportCyclicStructureError?.();
                             }
                             return createElidedInformationPlaceholder(context);
                         }
@@ -6250,9 +6249,8 @@ namespace ts {
                         if (!assertion) {
                             // If ultimately we can only name the symbol with a reference that dives into a `node_modules` folder, we should error
                             // since declaration files with these kinds of references are liable to fail when published :(
-                            context.encounteredError = true;
-                            if (context.tracker.reportLikelyUnsafeImportRequiredError) {
-                                context.tracker.reportLikelyUnsafeImportRequiredError(oldSpecifier);
+                            if (!context.tracker.reportLikelyUnsafeImportRequiredError || context.tracker.reportLikelyUnsafeImportRequiredError(oldSpecifier)) {
+                                context.encounteredError = true;
                             }
                         }
                     }

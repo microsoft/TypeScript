@@ -2215,9 +2215,9 @@ namespace ts {
             decreaseIndent: () => { indent--; },
             clear: resetWriter,
             trackSymbol: () => false,
-            reportInaccessibleThisError: noop,
-            reportInaccessibleUniqueSymbolError: noop,
-            reportPrivateInBaseOfClassExpression: noop,
+            reportInaccessibleThisError: returnTrue,
+            reportInaccessibleUniqueSymbolError: returnTrue,
+            reportPrivateInBaseOfClassExpression: returnTrue,
         };
 
         function writeIndent() {

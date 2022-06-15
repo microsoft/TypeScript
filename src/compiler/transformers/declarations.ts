@@ -171,6 +171,7 @@ namespace ts {
                 context.addDiagnostic(
                     createDiagnosticForNode((errorNameNode || errorFallbackNode)!, Diagnostics.Property_0_of_exported_class_expression_may_not_be_private_or_protected, propertyName));
             }
+            return true;
         }
 
         function errorDeclarationNameWithFallback() {
@@ -186,6 +187,7 @@ namespace ts {
                     errorDeclarationNameWithFallback(),
                     "unique symbol"));
             }
+            return true;
         }
 
         function reportCyclicStructureError() {
@@ -193,6 +195,7 @@ namespace ts {
                 context.addDiagnostic(createDiagnosticForNode((errorNameNode || errorFallbackNode)!, Diagnostics.The_inferred_type_of_0_references_a_type_with_a_cyclic_structure_which_cannot_be_trivially_serialized_A_type_annotation_is_necessary,
                     errorDeclarationNameWithFallback()));
             }
+            return true;
         }
 
         function reportInaccessibleThisError() {
@@ -201,21 +204,24 @@ namespace ts {
                     errorDeclarationNameWithFallback(),
                     "this"));
             }
+            return true;
         }
 
         function reportLikelyUnsafeImportRequiredError(specifier: string) {
-            if (!options.declaration) return; // Don't emit portability errors when declarations are only enabled for `incremental` (the compiler should have no trouble ingesting these paths, even if they can't be shipped via npm)
+            if (!options.declaration) return false; // Don't emit portability errors when declarations are only enabled for `incremental` (the compiler should have no trouble ingesting these paths, even if they can't be shipped via npm)
             if (errorNameNode || errorFallbackNode) {
                 context.addDiagnostic(createDiagnosticForNode((errorNameNode || errorFallbackNode)!, Diagnostics.The_inferred_type_of_0_cannot_be_named_without_a_reference_to_1_This_is_likely_not_portable_A_type_annotation_is_necessary,
                     errorDeclarationNameWithFallback(),
                     specifier));
             }
+            return true;
         }
 
         function reportTruncationError() {
             if (errorNameNode || errorFallbackNode) {
                 context.addDiagnostic(createDiagnosticForNode((errorNameNode || errorFallbackNode)!, Diagnostics.The_inferred_type_of_this_node_exceeds_the_maximum_length_the_compiler_will_serialize_An_explicit_type_annotation_is_needed));
             }
+            return true;
         }
 
         function reportNonlocalAugmentation(containingFile: SourceFile, parentSymbol: Symbol, symbol: Symbol) {
@@ -229,18 +235,21 @@ namespace ts {
                     ));
                 }
             }
+            return true;
         }
 
         function reportNonSerializableProperty(propertyName: string) {
             if (errorNameNode || errorFallbackNode) {
                 context.addDiagnostic(createDiagnosticForNode((errorNameNode || errorFallbackNode)!, Diagnostics.The_type_of_this_node_cannot_be_serialized_because_its_property_0_cannot_be_serialized, propertyName));
             }
+            return true;
         }
 
         function reportImportTypeNodeResolutionModeOverride() {
             if (!isNightly() && (errorNameNode || errorFallbackNode)) {
                 context.addDiagnostic(createDiagnosticForNode((errorNameNode || errorFallbackNode)!, Diagnostics.The_type_of_this_expression_cannot_be_named_without_a_resolution_mode_assertion_which_is_an_unstable_feature_Use_nightly_TypeScript_to_silence_this_error_Try_updating_with_npm_install_D_typescript_next));
             }
+            return true;
         }
 
         function transformDeclarationsForJS(sourceFile: SourceFile, bundled?: boolean) {

@@ -73,9 +73,9 @@ namespace ts {
             decreaseIndent: noop,
             clear: () => str = "",
             trackSymbol: () => false,
-            reportInaccessibleThisError: noop,
-            reportInaccessibleUniqueSymbolError: noop,
-            reportPrivateInBaseOfClassExpression: noop,
+            reportInaccessibleThisError: returnTrue,
+            reportInaccessibleUniqueSymbolError: returnTrue,
+            reportPrivateInBaseOfClassExpression: returnTrue,
         };
     }
 
@@ -4216,9 +4216,9 @@ namespace ts {
             hasTrailingComment: () => hasTrailingComment,
             hasTrailingWhitespace: () => !!output.length && isWhiteSpaceLike(output.charCodeAt(output.length - 1)),
             clear: reset,
-            reportInaccessibleThisError: noop,
-            reportPrivateInBaseOfClassExpression: noop,
-            reportInaccessibleUniqueSymbolError: noop,
+            reportInaccessibleThisError: returnTrue,
+            reportPrivateInBaseOfClassExpression: returnTrue,
+            reportInaccessibleUniqueSymbolError: returnTrue,
             trackSymbol: () => false,
             writeKeyword: write,
             writeOperator: write,

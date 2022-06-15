@@ -541,7 +541,7 @@ export const a = getA();`,
                 noChangeRun,
                 {
                     subScenario: "incremental-adds-portability-error-when-declaration-enabled",
-                    modifyFs: fs => replaceText(fs, "/src/project/tsconfig.json", "{}", JSON.stringify({compilerOptions: { declaration: true }}))
+                    modifyFs: fs => replaceText(fs, "/src/project/tsconfig.json", "{}", JSON.stringify({ compilerOptions: { declaration: true } }))
                 }
             ]
         });

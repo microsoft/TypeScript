@@ -8680,18 +8680,18 @@ namespace ts {
         // declaration emitter to help determine if it should patch up the final declaration file
         // with import statements it previously saw (but chose not to emit).
         trackSymbol?(symbol: Symbol, enclosingDeclaration: Node | undefined, meaning: SymbolFlags): boolean;
-        reportInaccessibleThisError?(): void;
-        reportPrivateInBaseOfClassExpression?(propertyName: string): void;
-        reportInaccessibleUniqueSymbolError?(): void;
-        reportCyclicStructureError?(): void;
-        reportLikelyUnsafeImportRequiredError?(specifier: string): void;
-        reportTruncationError?(): void;
+        reportInaccessibleThisError?(): boolean;
+        reportPrivateInBaseOfClassExpression?(propertyName: string): boolean;
+        reportInaccessibleUniqueSymbolError?(): boolean;
+        reportCyclicStructureError?(): boolean;
+        reportLikelyUnsafeImportRequiredError?(specifier: string): boolean;
+        reportTruncationError?(): boolean;
         moduleResolverHost?: ModuleSpecifierResolutionHost & { getCommonSourceDirectory(): string };
         trackReferencedAmbientModule?(decl: ModuleDeclaration, symbol: Symbol): void;
         trackExternalModuleSymbolOfImportTypeNode?(symbol: Symbol): void;
-        reportNonlocalAugmentation?(containingFile: SourceFile, parentSymbol: Symbol, augmentingSymbol: Symbol): void;
-        reportNonSerializableProperty?(propertyName: string): void;
-        reportImportTypeNodeResolutionModeOverride?(): void;
+        reportNonlocalAugmentation?(containingFile: SourceFile, parentSymbol: Symbol, augmentingSymbol: Symbol): boolean;
+        reportNonSerializableProperty?(propertyName: string): boolean;
+        reportImportTypeNodeResolutionModeOverride?(): boolean;
     }
 
     export interface TextSpan {
