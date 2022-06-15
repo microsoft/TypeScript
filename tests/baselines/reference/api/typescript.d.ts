@@ -4124,6 +4124,7 @@ declare namespace ts {
         readonly includeInlayPropertyDeclarationTypeHints?: boolean;
         readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
         readonly includeInlayEnumMemberValueHints?: boolean;
+        readonly allowRenameOfImportPath?: boolean;
     }
     /** Represents a bigint literal value without requiring bigint support */
     export interface PseudoBigInt {
@@ -5875,7 +5876,7 @@ declare namespace ts {
         getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): TextSpan | undefined;
         getBreakpointStatementAtPosition(fileName: string, position: number): TextSpan | undefined;
         getSignatureHelpItems(fileName: string, position: number, options: SignatureHelpItemsOptions | undefined): SignatureHelpItems | undefined;
-        getRenameInfo(fileName: string, position: number, options?: RenameInfoOptions): RenameInfo;
+        getRenameInfo(fileName: string, position: number, preferences: UserPreferences): RenameInfo;
         findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, providePrefixAndSuffixTextForRename?: boolean): readonly RenameLocation[] | undefined;
         getSmartSelectionRange(fileName: string, position: number): SelectionRange;
         getDefinitionAtPosition(fileName: string, position: number): readonly DefinitionInfo[] | undefined;
@@ -6395,9 +6396,6 @@ declare namespace ts {
     interface RenameInfoFailure {
         canRename: false;
         localizedErrorMessage: string;
-    }
-    interface RenameInfoOptions {
-        readonly allowRenameOfImportPath?: boolean;
     }
     interface DocCommentTemplateOptions {
         readonly generateReturnInDocTemplate?: boolean;

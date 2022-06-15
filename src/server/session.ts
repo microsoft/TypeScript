@@ -1699,7 +1699,7 @@ namespace ts.server {
             const { file, project } = this.getFileAndProject(args);
             const position = this.getPositionInFile(args, file);
             const preferences = this.getPreferences(file);
-            return project.getLanguageService().getRenameInfo(file, position, preferences, { allowRenameOfImportPath: preferences.allowRenameOfImportPath });
+            return project.getLanguageService().getRenameInfo(file, position, preferences);
         }
 
         private getProjects(args: protocol.FileRequestArgs, getScriptInfoEnsuringProjectsUptoDate?: boolean, ignoreNoProjectError?: boolean): Projects {
@@ -1753,7 +1753,7 @@ namespace ts.server {
             const defaultProject = this.getDefaultProject(args);
             const preferences = this.getPreferences(file);
             const renameInfo: protocol.RenameInfo = this.mapRenameInfo(
-                defaultProject.getLanguageService().getRenameInfo(file, position, preferences, { allowRenameOfImportPath: preferences.allowRenameOfImportPath }), Debug.checkDefined(this.projectService.getScriptInfo(file)));
+                defaultProject.getLanguageService().getRenameInfo(file, position, preferences), Debug.checkDefined(this.projectService.getScriptInfo(file)));
 
             if (!renameInfo.canRename) return simplifiedResult ? { info: renameInfo, locs: [] } : [];
 

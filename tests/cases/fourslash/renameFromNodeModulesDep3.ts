@@ -23,7 +23,6 @@ verify.renameInfoSucceeded(
     undefined,
     undefined,
     okRange,
-    undefined,
     { providePrefixAndSuffixTextForRename: true });
 verify.renameInfoSucceeded(
     undefined,
@@ -32,7 +31,6 @@ verify.renameInfoSucceeded(
     undefined,
     undefined,
     okRange,
-    undefined,
     { providePrefixAndSuffixTextForRename: false });
 goTo.marker("ok2");
 verify.renameInfoSucceeded(

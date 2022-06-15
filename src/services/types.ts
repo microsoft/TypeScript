@@ -467,7 +467,7 @@ namespace ts {
 
         getSignatureHelpItems(fileName: string, position: number, options: SignatureHelpItemsOptions | undefined): SignatureHelpItems | undefined;
 
-        getRenameInfo(fileName: string, position: number, preferences: UserPreferences, options?: RenameInfoOptions): RenameInfo;
+        getRenameInfo(fileName: string, position: number, preferences: UserPreferences): RenameInfo;
         findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, providePrefixAndSuffixTextForRename?: boolean): readonly RenameLocation[] | undefined;
 
         getSmartSelectionRange(fileName: string, position: number): SelectionRange;
@@ -1133,10 +1133,6 @@ namespace ts {
     export interface RenameInfoFailure {
         canRename: false;
         localizedErrorMessage: string;
-    }
-
-    export interface RenameInfoOptions {
-        readonly allowRenameOfImportPath?: boolean;
     }
 
     export interface DocCommentTemplateOptions {

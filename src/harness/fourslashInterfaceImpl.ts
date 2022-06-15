@@ -563,13 +563,12 @@ namespace FourSlashInterface {
             kindModifiers?: string,
             fileToRename?: string,
             expectedRange?: FourSlash.Range,
-            options?: ts.RenameInfoOptions,
             preferences?: ts.UserPreferences) {
-            this.state.verifyRenameInfoSucceeded(displayName, fullDisplayName, kind, kindModifiers, fileToRename, expectedRange, options, preferences);
+            this.state.verifyRenameInfoSucceeded(displayName, fullDisplayName, kind, kindModifiers, fileToRename, expectedRange, preferences);
         }
 
-        public renameInfoFailed(message?: string, allowRenameOfImportPath?: boolean, preferences?: ts.UserPreferences) {
-            this.state.verifyRenameInfoFailed(message, allowRenameOfImportPath, preferences);
+        public renameInfoFailed(message?: string, preferences?: ts.UserPreferences) {
+            this.state.verifyRenameInfoFailed(message, preferences);
         }
 
         public renameLocations(startRanges: ArrayOrSingle<FourSlash.Range>, options: RenameLocationsOptions) {

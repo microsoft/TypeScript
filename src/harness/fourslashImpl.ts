@@ -1640,9 +1640,8 @@ namespace FourSlash {
             kindModifiers: string | undefined,
             fileToRename: string | undefined,
             expectedRange: Range | undefined,
-            renameInfoOptions: ts.RenameInfoOptions | undefined,
             preferences: ts.UserPreferences | undefined): void {
-            const renameInfo = this.languageService.getRenameInfo(this.activeFile.fileName, this.currentCaretPosition, preferences || {}, renameInfoOptions || { allowRenameOfImportPath: true });
+            const renameInfo = this.languageService.getRenameInfo(this.activeFile.fileName, this.currentCaretPosition, preferences || { allowRenameOfImportPath: true });
             if (!renameInfo.canRename) {
                 throw this.raiseError("Rename did not succeed");
             }
@@ -1667,9 +1666,9 @@ namespace FourSlash {
             }
         }
 
-        public verifyRenameInfoFailed(message?: string, allowRenameOfImportPath?: boolean, preferences?: ts.UserPreferences) {
-            allowRenameOfImportPath = allowRenameOfImportPath === undefined ? true : allowRenameOfImportPath;
-            const renameInfo = this.languageService.getRenameInfo(this.activeFile.fileName, this.currentCaretPosition, preferences || {}, { allowRenameOfImportPath });
+        public verifyRenameInfoFailed(message?: string, preferences?: ts.UserPreferences) {
+            const allowRenameOfImportPath = preferences?.allowRenameOfImportPath === undefined ? true : preferences.allowRenameOfImportPath;
+            const renameInfo = this.languageService.getRenameInfo(this.activeFile.fileName, this.currentCaretPosition, { ...preferences, allowRenameOfImportPath });
             if (renameInfo.canRename) {
                 throw this.raiseError("Rename was expected to fail");
             }

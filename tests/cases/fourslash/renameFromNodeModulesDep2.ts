@@ -25,10 +25,8 @@ verify.renameInfoSucceeded(
     undefined,
     undefined,
     okWithAliasRange,
-    undefined,
     { providePrefixAndSuffixTextForRename: true });
 verify.renameInfoFailed(
-    undefined,
     undefined,
     { providePrefixAndSuffixTextForRename: false });
 goTo.marker("notOk");

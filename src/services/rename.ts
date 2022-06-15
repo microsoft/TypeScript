@@ -1,9 +1,9 @@
 /* @internal */
 namespace ts.Rename {
-    export function getRenameInfo(program: Program, sourceFile: SourceFile, position: number, preferences: UserPreferences, options?: RenameInfoOptions): RenameInfo {
+    export function getRenameInfo(program: Program, sourceFile: SourceFile, position: number, preferences: UserPreferences): RenameInfo {
         const node = getAdjustedRenameLocation(getTouchingPropertyName(sourceFile, position));
         if (nodeIsEligibleForRename(node)) {
-            const renameInfo = getRenameInfoForNode(node, program.getTypeChecker(), sourceFile, program, preferences, options);
+            const renameInfo = getRenameInfoForNode(node, program.getTypeChecker(), sourceFile, program, preferences);
             if (renameInfo) {
                 return renameInfo;
             }
@@ -16,8 +16,7 @@ namespace ts.Rename {
         typeChecker: TypeChecker,
         sourceFile: SourceFile,
         program: Program,
-        preferences: UserPreferences,
-        options?: RenameInfoOptions): RenameInfo | undefined {
+        preferences: UserPreferences): RenameInfo | undefined {
         const symbol = typeChecker.getSymbolAtLocation(node);
         if (!symbol) {
             if (isStringLiteralLike(node)) {
@@ -49,7 +48,7 @@ namespace ts.Rename {
         }
 
         if (isStringLiteralLike(node) && tryGetImportFromModuleSpecifier(node)) {
-            return options && options.allowRenameOfImportPath ? getRenameInfoForModule(node, sourceFile, symbol) : undefined;
+            return preferences.allowRenameOfImportPath ? getRenameInfoForModule(node, sourceFile, symbol) : undefined;
         }
 
         // Disallow rename for elements that would rename across `*/node_modules/*` packages.
@@ -73,12 +72,6 @@ namespace ts.Rename {
         return program.isSourceFileDefaultLibrary(sourceFile) && fileExtensionIs(sourceFile.fileName, Extension.Dts);
     }
 
-    // >> TODO: remove this
-    // function isDefinedInExternalLibrary(program: Program, declaration: Node) {
-    //     const sourceFile = declaration.getSourceFile();
-    //     return program.isSourceFileFromExternalLibrary(sourceFile);
-    // }
-
     function wouldRenameAcrossExternalLibrary(originalFile: SourceFile, symbol: Symbol, checker: TypeChecker, preferences: UserPreferences): boolean {
         if (!preferences.providePrefixAndSuffixTextForRename && symbol.flags & SymbolFlags.Alias) {
             symbol = checker.getAliasedSymbol(symbol);
@@ -87,7 +80,6 @@ namespace ts.Rename {
         const originalPackage = getPackagePath(originalFile.path);
         if (originalPackage === undefined) { // original source file is not in node_modules
             return some(declarations, declaration => !!getPackagePath(declaration.getSourceFile().path));
-            // >> modified this to use a path-based detection instead of `isDefinedInExternalLibrary`??
         }
         // original source file is in node_modules
         return some(declarations, declaration => {

@@ -511,8 +511,8 @@ namespace Harness.LanguageService {
         getSignatureHelpItems(fileName: string, position: number, options: ts.SignatureHelpItemsOptions | undefined): ts.SignatureHelpItems {
             return unwrapJSONCallResult(this.shim.getSignatureHelpItems(fileName, position, options));
         }
-        getRenameInfo(fileName: string, position: number, preferences: ts.UserPreferences, options?: ts.RenameInfoOptions): ts.RenameInfo {
-            return unwrapJSONCallResult(this.shim.getRenameInfo(fileName, position, preferences, options));
+        getRenameInfo(fileName: string, position: number, preferences: ts.UserPreferences): ts.RenameInfo {
+            return unwrapJSONCallResult(this.shim.getRenameInfo(fileName, position, preferences));
         }
         getSmartSelectionRange(fileName: string, position: number): ts.SelectionRange {
             return unwrapJSONCallResult(this.shim.getSmartSelectionRange(fileName, position));
