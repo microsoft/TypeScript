@@ -11934,6 +11934,10 @@ namespace ts {
             });
         }
 
+        /**
+         * Caution: Do you _really_ mean to use this fucntion? It creates fresh property symbols in an uncached manner - if you, the caller,
+         * do not cache the result of this function, you may have very poor performance over large unions.
+         */
         function getAllPossiblePropertiesOfTypes(types: readonly Type[]): Symbol[] {
             const unionType = getUnionType(types);
             if (!(unionType.flags & TypeFlags.Union)) {
@@ -15671,7 +15675,8 @@ namespace ts {
         }
 
         function isUnionWithGenericDiscriminantProperty(type: UnionType) {
-            const props = getAllPossiblePropertiesOfTypes(type.types);
+            getPropertiesOfType(type); // initialize property cache (includes partial props)
+            const props = arrayFrom((type.propertyCache || emptySymbols).values());
             for (const prop of props) {
                 if (isDiscriminantProperty(type, prop.escapedName) === DiscriminantKind.Potential) {
                     return true;
