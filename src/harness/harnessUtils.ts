@@ -141,7 +141,7 @@ namespace Utils {
                     const child = (node as any)[childName];
                     if (isNodeOrArray(child)) {
                         assert.isFalse(childNodesAndArrays.indexOf(child) < 0,
-                            "Missing child when forEach'ing over node: " + (ts as any).SyntaxKind[node.kind] + "-" + childName);
+                            "Missing child when forEach'ing over node: " + ts.Debug.formatSyntaxKind(node.kind) + "-" + childName);
                     }
                 }
             }
@@ -169,54 +169,15 @@ namespace Utils {
     export function sourceFileToJSON(file: ts.Node): string {
         return JSON.stringify(file, (_, v) => isNodeOrArray(v) ? serializeNode(v) : v, "    ");
 
-        function getKindName(k: number | string): string {
-            if (ts.isString(k)) {
+        function getKindName(k: number | string | undefined): string | undefined {
+            if (k === undefined || ts.isString(k)) {
                 return k;
             }
-
-            // For some markers in SyntaxKind, we should print its original syntax name instead of
-            // the marker name in tests.
-            if (k === (ts as any).SyntaxKind.FirstJSDocNode ||
-                k === (ts as any).SyntaxKind.LastJSDocNode ||
-                k === (ts as any).SyntaxKind.FirstJSDocTagNode ||
-                k === (ts as any).SyntaxKind.LastJSDocTagNode) {
-                for (const kindName in (ts as any).SyntaxKind) {
-                    if ((ts as any).SyntaxKind[kindName] === k) {
-                        return kindName;
-                    }
-                }
-            }
-
-            return (ts as any).SyntaxKind[k];
-        }
-
-        function getFlagName(flags: any, f: number): any {
-            if (f === 0) {
-                return 0;
-            }
-
-            let result = "";
-            ts.forEach(Object.getOwnPropertyNames(flags), (v: any) => {
-                if (isFinite(v)) {
-                    v = +v;
-                    if (f === +v) {
-                        result = flags[v];
-                        return true;
-                    }
-                    else if ((f & v) > 0) {
-                        if (result.length) {
-                            result += " | ";
-                        }
-                        result += flags[v];
-                        return false;
-                    }
-                }
-            });
-            return result;
+            return ts.Debug.formatSyntaxKind(k);
         }
 
         function getNodeFlagName(f: number) {
-            return getFlagName((ts as any).NodeFlags, f);
+            return ts.Debug.formatNodeFlags(f);
         }
 
         function serializeNode(n: ts.Node): any {

@@ -682,7 +682,7 @@ namespace ts.textChanges {
             return {
                 indentation,
                 prefix: (insertLeadingComma ? "," : "") + this.newLineCharacter,
-                suffix: insertTrailingComma ? "," : ""
+                suffix: insertTrailingComma ? "," : isInterfaceDeclaration(node) && isEmpty ? ";" : ""
             };
         }
 

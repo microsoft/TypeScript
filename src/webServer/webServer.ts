@@ -1,4 +1,7 @@
 /*@internal*/
+/// <reference lib="dom" />
+/// <reference lib="webworker.importscripts" />
+
 namespace ts.server {
     export interface HostWithWriteMessage {
         writeMessage(s: any): void;
@@ -109,11 +112,34 @@ namespace ts.server {
         }
     }
 
+    export declare const dynamicImport: ((id: string) => Promise<any>) | undefined;
+
+    // Attempt to load `dynamicImport`
+    if (typeof importScripts === "function") {
+        try {
+            // NOTE: importScripts is synchronous
+            importScripts("dynamicImportCompat.js");
+        }
+        catch {
+            // ignored
+        }
+    }
+
     export function createWebSystem(host: WebHost, args: string[], getExecutingFilePath: () => string): ServerHost {
         const returnEmptyString = () => "";
         const getExecutingDirectoryPath = memoize(() => memoize(() => ensureTrailingDirectorySeparator(getDirectoryPath(getExecutingFilePath()))));
         // Later we could map ^memfs:/ to do something special if we want to enable more functionality like module resolution or something like that
         const getWebPath = (path: string) => startsWith(path, directorySeparator) ? path.replace(directorySeparator, getExecutingDirectoryPath()) : undefined;
+
+        const dynamicImport = async (id: string): Promise<any> => {
+            // Use syntactic dynamic import first, if available
+            if (server.dynamicImport) {
+                return server.dynamicImport(id);
+            }
+
+            throw new Error("Dynamic import not implemented");
+        };
+
         return {
             args,
             newLine: "\r\n", // This can be configured by clients
@@ -136,7 +162,32 @@ namespace ts.server {
             clearImmediate: handle => clearTimeout(handle),
             /* eslint-enable no-restricted-globals */
 
-            require: () => ({ module: undefined, error: new Error("Not implemented") }),
+            importServicePlugin: async (initialDir: string, moduleName: string): Promise<ModuleImportResult> => {
+                const packageRoot = combinePaths(initialDir, moduleName);
+
+                let packageJson: any | undefined;
+                try {
+                    const packageJsonResponse = await fetch(combinePaths(packageRoot, "package.json"));
+                    packageJson = await packageJsonResponse.json();
+                }
+                catch (e) {
+                    return { module: undefined, error: new Error("Could not load plugin. Could not load 'package.json'.") };
+                }
+
+                const browser = packageJson.browser;
+                if (!browser) {
+                    return { module: undefined, error: new Error("Could not load plugin. No 'browser' field found in package.json.") };
+                }
+
+                const scriptPath = combinePaths(packageRoot, browser);
+                try {
+                    const { default: module } = await dynamicImport(scriptPath);
+                    return { module, error: undefined };
+                }
+                catch (e) {
+                    return { module: undefined, error: e };
+                }
+            },
             exit: notImplemented,
 
             // Debugging related

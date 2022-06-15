@@ -453,7 +453,7 @@ namespace ts {
             return ret;
         }
 
-        function filterBindingPatternInitializers(name: BindingName) {
+        function filterBindingPatternInitializersAndRenamings(name: BindingName) {
             if (name.kind === SyntaxKind.Identifier) {
                 return name;
             }
@@ -471,7 +471,23 @@ namespace ts {
                 if (elem.kind === SyntaxKind.OmittedExpression) {
                     return elem;
                 }
-                return factory.updateBindingElement(elem, elem.dotDotDotToken, elem.propertyName, filterBindingPatternInitializers(elem.name), shouldPrintWithInitializer(elem) ? elem.initializer : undefined);
+                if (elem.propertyName && isIdentifier(elem.propertyName) && isIdentifier(elem.name) && !elem.symbol.isReferenced) {
+                   // Unnecessary property renaming is forbidden in types, so remove renaming
+                    return factory.updateBindingElement(
+                        elem,
+                        elem.dotDotDotToken,
+                        /* propertyName */ undefined,
+                        elem.propertyName,
+                        shouldPrintWithInitializer(elem) ? elem.initializer : undefined
+                    );
+                }
+                return factory.updateBindingElement(
+                    elem,
+                    elem.dotDotDotToken,
+                    elem.propertyName,
+                    filterBindingPatternInitializersAndRenamings(elem.name),
+                    shouldPrintWithInitializer(elem) ? elem.initializer : undefined
+                );
             }
         }
 
@@ -485,7 +501,7 @@ namespace ts {
                 p,
                 maskModifiers(p, modifierMask),
                 p.dotDotDotToken,
-                filterBindingPatternInitializers(p.name),
+                filterBindingPatternInitializersAndRenamings(p.name),
                 resolver.isOptionalParameter(p) ? (p.questionToken || factory.createToken(SyntaxKind.QuestionToken)) : undefined,
                 ensureType(p, type || p.type, /*ignorePrivate*/ true), // Ignore private param props, since this type is going straight back into a param
                 ensureNoInitializer(p)
@@ -817,7 +833,7 @@ namespace ts {
             while (length(lateMarkedStatements)) {
                 const i = lateMarkedStatements!.shift()!;
                 if (!isLateVisibilityPaintedStatement(i)) {
-                    return Debug.fail(`Late replaced statement was found which is not handled by the declaration transformer!: ${(ts as any).SyntaxKind ? (ts as any).SyntaxKind[(i as any).kind] : (i as any).kind}`);
+                    return Debug.fail(`Late replaced statement was found which is not handled by the declaration transformer!: ${Debug.formatSyntaxKind((i as Node).kind)}`);
                 }
                 const priorNeedsDeclare = needsDeclare;
                 needsDeclare = i.parent && isSourceFile(i.parent) && !(isExternalModule(i.parent) && isBundledEmit);
@@ -1067,7 +1083,7 @@ namespace ts {
                             input.isTypeOf
                         ));
                     }
-                    default: Debug.assertNever(input, `Attempted to process unhandled node kind: ${(ts as any).SyntaxKind[(input as any).kind]}`);
+                    default: Debug.assertNever(input, `Attempted to process unhandled node kind: ${Debug.formatSyntaxKind((input as Node).kind)}`);
                 }
             }
 
@@ -1481,7 +1497,7 @@ namespace ts {
                 }
             }
             // Anything left unhandled is an error, so this should be unreachable
-            return Debug.assertNever(input, `Unhandled top-level node in declaration emit: ${(ts as any).SyntaxKind[(input as any).kind]}`);
+            return Debug.assertNever(input, `Unhandled top-level node in declaration emit: ${Debug.formatSyntaxKind((input as Node).kind)}`);
 
             function cleanup<T extends Node>(node: T | undefined): T | undefined {
                 if (isEnclosingDeclaration(input)) {

@@ -332,7 +332,7 @@ namespace ts.codefix {
                     /*questionToken*/ undefined,
                     typeParameters,
                     parameters,
-                    type
+                    type === undefined ? factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword) : type
                 );
             case SyntaxKind.FunctionDeclaration:
                 return factory.createFunctionDeclaration(
