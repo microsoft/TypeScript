@@ -19269,6 +19269,21 @@ namespace ts {
                 return result;
             }
 
+            function removeIntersectionMembersWithoutKeys(type: Type) {
+                if (!(type.flags & TypeFlags.Intersection)) {
+                    return type;
+                }
+                return getIntersectionType(filter((type as IntersectionType).types, t => !isKeylessType(t)));
+            }
+
+            function isKeylessType(type: Type) {
+                return !!(getIndexType(type).flags & TypeFlags.Never);
+            }
+
+            function isConditionalFilteringKeylessTypes(type: Type) {
+                return !!(type.flags & TypeFlags.Conditional) && (type as ConditionalType).root.isDistributive && everyType((type as ConditionalType).extendsType, isKeylessType);
+            }
+
             function structuredTypeRelatedTo(source: Type, target: Type, reportErrors: boolean, intersectionState: IntersectionState): Ternary {
                 if (intersectionState & IntersectionState.PropertyCheck) {
                     return propertiesRelatedTo(source, target, reportErrors, /*excludedProperties*/ undefined, IntersectionState.None);
@@ -19411,8 +19426,33 @@ namespace ts {
                     const targetType = (target as IndexType).type;
                     // A keyof S is related to a keyof T if T is related to S.
                     if (sourceFlags & TypeFlags.Index) {
-                        if (result = isRelatedTo(targetType, (source as IndexType).type, RecursionFlags.Both, /*reportErrors*/ false)) {
+                        let sourceType = (source as IndexType).type;
+                        if (result = isRelatedTo(targetType, sourceType, RecursionFlags.Both, /*reportErrors*/ false)) {
                             return result;
+                        }
+                        // If the source is a filtering conditional that removes only keyless sources, eg, `NonNullable<T>`,
+                        // then it doesn't affect the `keyof` query, and we can unwrap the conditional and relate the unwrapped source and target.
+                        // There may be multiple stacked conditionals, such as `T extends null ? never : T extends undefined ? never : T : T`, so
+                        // we need to repeat the unwrapping process.
+                        while (isConditionalFilteringKeylessTypes(sourceType)) {
+                            const lastSource = sourceType;
+                            sourceType = getDefaultConstraintOfConditionalType(sourceType as ConditionalType);
+                            if (sourceType === lastSource) {
+                                break;
+                            }
+                            if (result = isRelatedTo(targetType, sourceType, RecursionFlags.Both, /*reportErrors*/ false)) {
+                                return result;
+                            }
+                            const simplifiedSource = sourceType;
+                            // In addition, `keyof (T & U)` is equivalent to `keyof T | keyof U`, so if `keyof U` is always `never`, we can omit
+                            // it from the relationship. This allows, eg, `keyof (T & object)` to be related to `keyof T`.
+                            sourceType = removeIntersectionMembersWithoutKeys(sourceType);
+                            if (sourceType === simplifiedSource) {
+                                continue;
+                            }
+                            if (result = isRelatedTo(targetType, sourceType, RecursionFlags.Both, /*reportErrors*/ false)) {
+                                return result;
+                            }
                         }
                     }
                     if (isTupleType(targetType)) {

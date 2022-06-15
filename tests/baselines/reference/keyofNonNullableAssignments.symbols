@@ -1,0 +1,63 @@
+=== tests/cases/compiler/keyofNonNullableAssignments.ts ===
+type MyNonNullable<T> = T extends null ? never : T extends undefined ? never : T;
+>MyNonNullable : Symbol(MyNonNullable, Decl(keyofNonNullableAssignments.ts, 0, 0))
+>T : Symbol(T, Decl(keyofNonNullableAssignments.ts, 0, 19))
+>T : Symbol(T, Decl(keyofNonNullableAssignments.ts, 0, 19))
+>T : Symbol(T, Decl(keyofNonNullableAssignments.ts, 0, 19))
+>T : Symbol(T, Decl(keyofNonNullableAssignments.ts, 0, 19))
+
+function f<T>(x: T) {
+>f : Symbol(f, Decl(keyofNonNullableAssignments.ts, 0, 81))
+>T : Symbol(T, Decl(keyofNonNullableAssignments.ts, 2, 11))
+>x : Symbol(x, Decl(keyofNonNullableAssignments.ts, 2, 14))
+>T : Symbol(T, Decl(keyofNonNullableAssignments.ts, 2, 11))
+
+    const a: keyof T = (null as any as keyof NonNullable<T>);
+>a : Symbol(a, Decl(keyofNonNullableAssignments.ts, 3, 9))
+>T : Symbol(T, Decl(keyofNonNullableAssignments.ts, 2, 11))
+>NonNullable : Symbol(NonNullable, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(keyofNonNullableAssignments.ts, 2, 11))
+
+    const b: keyof T = (null as any as keyof NonNullable<T & object>);
+>b : Symbol(b, Decl(keyofNonNullableAssignments.ts, 4, 9))
+>T : Symbol(T, Decl(keyofNonNullableAssignments.ts, 2, 11))
+>NonNullable : Symbol(NonNullable, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(keyofNonNullableAssignments.ts, 2, 11))
+
+    const c: keyof T = (null as any as keyof MyNonNullable<T>);
+>c : Symbol(c, Decl(keyofNonNullableAssignments.ts, 5, 9))
+>T : Symbol(T, Decl(keyofNonNullableAssignments.ts, 2, 11))
+>MyNonNullable : Symbol(MyNonNullable, Decl(keyofNonNullableAssignments.ts, 0, 0))
+>T : Symbol(T, Decl(keyofNonNullableAssignments.ts, 2, 11))
+
+    const d: keyof T = (null as any as keyof MyNonNullable<T & object>);
+>d : Symbol(d, Decl(keyofNonNullableAssignments.ts, 6, 9))
+>T : Symbol(T, Decl(keyofNonNullableAssignments.ts, 2, 11))
+>MyNonNullable : Symbol(MyNonNullable, Decl(keyofNonNullableAssignments.ts, 0, 0))
+>T : Symbol(T, Decl(keyofNonNullableAssignments.ts, 2, 11))
+
+    const e: keyof T = (null as any as keyof NonNullable<T | undefined>);
+>e : Symbol(e, Decl(keyofNonNullableAssignments.ts, 7, 9))
+>T : Symbol(T, Decl(keyofNonNullableAssignments.ts, 2, 11))
+>NonNullable : Symbol(NonNullable, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(keyofNonNullableAssignments.ts, 2, 11))
+
+    const f: keyof T = (null as any as keyof NonNullable<(T | undefined) & object>);
+>f : Symbol(f, Decl(keyofNonNullableAssignments.ts, 8, 9))
+>T : Symbol(T, Decl(keyofNonNullableAssignments.ts, 2, 11))
+>NonNullable : Symbol(NonNullable, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(keyofNonNullableAssignments.ts, 2, 11))
+
+    const g: keyof T = (null as any as keyof MyNonNullable<T | undefined>);
+>g : Symbol(g, Decl(keyofNonNullableAssignments.ts, 9, 9))
+>T : Symbol(T, Decl(keyofNonNullableAssignments.ts, 2, 11))
+>MyNonNullable : Symbol(MyNonNullable, Decl(keyofNonNullableAssignments.ts, 0, 0))
+>T : Symbol(T, Decl(keyofNonNullableAssignments.ts, 2, 11))
+
+    const h: keyof T = (null as any as keyof MyNonNullable<(T | undefined) & object>);
+>h : Symbol(h, Decl(keyofNonNullableAssignments.ts, 10, 9))
+>T : Symbol(T, Decl(keyofNonNullableAssignments.ts, 2, 11))
+>MyNonNullable : Symbol(MyNonNullable, Decl(keyofNonNullableAssignments.ts, 0, 0))
+>T : Symbol(T, Decl(keyofNonNullableAssignments.ts, 2, 11))
+}
+

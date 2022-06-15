@@ -1,0 +1,66 @@
+=== tests/cases/compiler/keyofNonNullableAssignments.ts ===
+type MyNonNullable<T> = T extends null ? never : T extends undefined ? never : T;
+>MyNonNullable : MyNonNullable<T>
+>null : null
+
+function f<T>(x: T) {
+>f : <T>(x: T) => void
+>x : T
+
+    const a: keyof T = (null as any as keyof NonNullable<T>);
+>a : keyof T
+>(null as any as keyof NonNullable<T>) : keyof T
+>null as any as keyof NonNullable<T> : keyof T
+>null as any : any
+>null : null
+
+    const b: keyof T = (null as any as keyof NonNullable<T & object>);
+>b : keyof T
+>(null as any as keyof NonNullable<T & object>) : keyof T
+>null as any as keyof NonNullable<T & object> : keyof T
+>null as any : any
+>null : null
+
+    const c: keyof T = (null as any as keyof MyNonNullable<T>);
+>c : keyof T
+>(null as any as keyof MyNonNullable<T>) : keyof MyNonNullable<T>
+>null as any as keyof MyNonNullable<T> : keyof MyNonNullable<T>
+>null as any : any
+>null : null
+
+    const d: keyof T = (null as any as keyof MyNonNullable<T & object>);
+>d : keyof T
+>(null as any as keyof MyNonNullable<T & object>) : keyof MyNonNullable<T & object>
+>null as any as keyof MyNonNullable<T & object> : keyof MyNonNullable<T & object>
+>null as any : any
+>null : null
+
+    const e: keyof T = (null as any as keyof NonNullable<T | undefined>);
+>e : keyof T
+>(null as any as keyof NonNullable<T | undefined>) : keyof T
+>null as any as keyof NonNullable<T | undefined> : keyof T
+>null as any : any
+>null : null
+
+    const f: keyof T = (null as any as keyof NonNullable<(T | undefined) & object>);
+>f : keyof T
+>(null as any as keyof NonNullable<(T | undefined) & object>) : keyof T
+>null as any as keyof NonNullable<(T | undefined) & object> : keyof T
+>null as any : any
+>null : null
+
+    const g: keyof T = (null as any as keyof MyNonNullable<T | undefined>);
+>g : keyof T
+>(null as any as keyof MyNonNullable<T | undefined>) : keyof MyNonNullable<T>
+>null as any as keyof MyNonNullable<T | undefined> : keyof MyNonNullable<T>
+>null as any : any
+>null : null
+
+    const h: keyof T = (null as any as keyof MyNonNullable<(T | undefined) & object>);
+>h : keyof T
+>(null as any as keyof MyNonNullable<(T | undefined) & object>) : keyof MyNonNullable<T & object>
+>null as any as keyof MyNonNullable<(T | undefined) & object> : keyof MyNonNullable<T & object>
+>null as any : any
+>null : null
+}
+
