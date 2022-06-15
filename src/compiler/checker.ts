@@ -971,6 +971,7 @@ namespace ts {
         let deferredGlobalAsyncIterableIteratorType: GenericType | undefined;
         let deferredGlobalAsyncGeneratorType: GenericType | undefined;
         let deferredGlobalTemplateStringsArrayType: ObjectType | undefined;
+        let deferredGlobalTemplateStringsArrayOfSymbol: Symbol | undefined;
         let deferredGlobalImportMetaType: ObjectType;
         let deferredGlobalImportMetaExpressionType: ObjectType;
         let deferredGlobalImportCallOptionsType: ObjectType | undefined;
@@ -14102,6 +14103,11 @@ namespace ts {
             return (deferredGlobalBigIntType ||= getGlobalType("BigInt" as __String, /*arity*/ 0, /*reportErrors*/ false)) || emptyObjectType;
         }
 
+        function getGlobalTemplateStringsArrayOfSymbol(): Symbol | undefined {
+            deferredGlobalTemplateStringsArrayOfSymbol ||= getGlobalTypeAliasSymbol("TemplateStringsArrayOf" as __String, /*arity*/ 2, /*reportErrors*/ true) || unknownSymbol;
+            return deferredGlobalTemplateStringsArrayOfSymbol === unknownSymbol ? undefined : deferredGlobalTemplateStringsArrayOfSymbol;
+        }
+
         /**
          * Instantiates a global type that is generic with some element type, and returns that instantiation.
          */
@@ -21171,6 +21177,43 @@ namespace ts {
             return isArrayType(type) || !(type.flags & TypeFlags.Nullable) && isTypeAssignableTo(type, anyReadonlyArrayType);
         }
 
+        /**
+         * Returns `type` if it is an array or tuple type. If `type` is an intersection type,
+         * returns the rightmost constituent that is an array or tuple type, but only if there are no
+         * other constituents to that contain properties that overlap with array- or tuple- specific
+         * members (i.e., index signatures, numeric string property names, or `length`).
+         */
+        function tryGetNonShadowedArrayOrTupleType(type: Type) {
+            if (isArrayOrTupleType(type)) {
+                return type;
+            }
+
+            if (!(type.flags & TypeFlags.Intersection)) {
+                return undefined;
+            }
+
+            let arrayOrTupleConstituent: TypeReference | undefined;
+            for (const constituent of (type as IntersectionType).types) {
+                if (isArrayOrTupleType(constituent)) {
+                    arrayOrTupleConstituent = constituent;
+                }
+                else {
+                    const properties = getPropertiesOfType(constituent);
+                    for (const property of properties) {
+                        if (isNumericLiteralName(property.escapedName) || property.escapedName === "length" as __String) {
+                            return undefined;
+                        }
+                    }
+
+                    if (some(getIndexInfosOfType(constituent))) {
+                        return undefined;
+                    }
+                }
+            }
+
+            return arrayOrTupleConstituent;
+        }
+
         function getSingleBaseForNonAugmentingSubtype(type: Type) {
             if (!(getObjectFlags(type) & ObjectFlags.Reference) || !(getObjectFlags((type as TypeReference).target) & ObjectFlags.ClassOrInterface)) {
                 return undefined;
@@ -22830,55 +22873,56 @@ namespace ts {
                 }
                 // Infer from the members of source and target only if the two types are possibly related
                 if (!typesDefinitelyUnrelated(source, target)) {
-                    if (isArrayOrTupleType(source)) {
+                    const sourceArrayOrTuple = tryGetNonShadowedArrayOrTupleType(source);
+                    if (sourceArrayOrTuple) {
                         if (isTupleType(target)) {
-                            const sourceArity = getTypeReferenceArity(source);
+                            const sourceArity = getTypeReferenceArity(sourceArrayOrTuple);
                             const targetArity = getTypeReferenceArity(target);
                             const elementTypes = getTypeArguments(target);
                             const elementFlags = target.target.elementFlags;
                             // When source and target are tuple types with the same structure (fixed, variadic, and rest are matched
                             // to the same kind in each position), simply infer between the element types.
-                            if (isTupleType(source) && isTupleTypeStructureMatching(source, target)) {
+                            if (isTupleType(sourceArrayOrTuple) && isTupleTypeStructureMatching(sourceArrayOrTuple, target)) {
                                 for (let i = 0; i < targetArity; i++) {
-                                    inferFromTypes(getTypeArguments(source)[i], elementTypes[i]);
+                                    inferFromTypes(getTypeArguments(sourceArrayOrTuple)[i], elementTypes[i]);
                                 }
                                 return;
                             }
-                            const startLength = isTupleType(source) ? Math.min(source.target.fixedLength, target.target.fixedLength) : 0;
-                            const endLength = Math.min(isTupleType(source) ? getEndElementCount(source.target, ElementFlags.Fixed) : 0,
+                            const startLength = isTupleType(sourceArrayOrTuple) ? Math.min(sourceArrayOrTuple.target.fixedLength, target.target.fixedLength) : 0;
+                            const endLength = Math.min(isTupleType(sourceArrayOrTuple) ? getEndElementCount(sourceArrayOrTuple.target, ElementFlags.Fixed) : 0,
                                 target.target.hasRestElement ? getEndElementCount(target.target, ElementFlags.Fixed) : 0);
                             // Infer between starting fixed elements.
                             for (let i = 0; i < startLength; i++) {
-                                inferFromTypes(getTypeArguments(source)[i], elementTypes[i]);
+                                inferFromTypes(getTypeArguments(sourceArrayOrTuple)[i], elementTypes[i]);
                             }
-                            if (!isTupleType(source) || sourceArity - startLength - endLength === 1 && source.target.elementFlags[startLength] & ElementFlags.Rest) {
+                            if (!isTupleType(sourceArrayOrTuple) || sourceArity - startLength - endLength === 1 && sourceArrayOrTuple.target.elementFlags[startLength] & ElementFlags.Rest) {
                                 // Single rest element remains in source, infer from that to every element in target
-                                const restType = getTypeArguments(source)[startLength];
+                                const restType = getTypeArguments(sourceArrayOrTuple)[startLength];
                                 for (let i = startLength; i < targetArity - endLength; i++) {
                                     inferFromTypes(elementFlags[i] & ElementFlags.Variadic ? createArrayType(restType) : restType, elementTypes[i]);
                                 }
                             }
                             else {
                                 const middleLength = targetArity - startLength - endLength;
-                                if (middleLength === 2 && elementFlags[startLength] & elementFlags[startLength + 1] & ElementFlags.Variadic && isTupleType(source)) {
+                                if (middleLength === 2 && elementFlags[startLength] & elementFlags[startLength + 1] & ElementFlags.Variadic && isTupleType(sourceArrayOrTuple)) {
                                     // Middle of target is [...T, ...U] and source is tuple type
                                     const targetInfo = getInferenceInfoForType(elementTypes[startLength]);
                                     if (targetInfo && targetInfo.impliedArity !== undefined) {
                                         // Infer slices from source based on implied arity of T.
-                                        inferFromTypes(sliceTupleType(source, startLength, endLength + sourceArity - targetInfo.impliedArity), elementTypes[startLength]);
-                                        inferFromTypes(sliceTupleType(source, startLength + targetInfo.impliedArity, endLength), elementTypes[startLength + 1]);
+                                        inferFromTypes(sliceTupleType(sourceArrayOrTuple, startLength, endLength + sourceArity - targetInfo.impliedArity), elementTypes[startLength]);
+                                        inferFromTypes(sliceTupleType(sourceArrayOrTuple, startLength + targetInfo.impliedArity, endLength), elementTypes[startLength + 1]);
                                     }
                                 }
                                 else if (middleLength === 1 && elementFlags[startLength] & ElementFlags.Variadic) {
                                     // Middle of target is exactly one variadic element. Infer the slice between the fixed parts in the source.
                                     // If target ends in optional element(s), make a lower priority a speculative inference.
                                     const endsInOptional = target.target.elementFlags[targetArity - 1] & ElementFlags.Optional;
-                                    const sourceSlice = isTupleType(source) ? sliceTupleType(source, startLength, endLength) : createArrayType(getTypeArguments(source)[0]);
+                                    const sourceSlice = isTupleType(sourceArrayOrTuple) ? sliceTupleType(sourceArrayOrTuple, startLength, endLength) : createArrayType(getTypeArguments(sourceArrayOrTuple)[0]);
                                     inferWithPriority(sourceSlice, elementTypes[startLength], endsInOptional ? InferencePriority.SpeculativeTuple : 0);
                                 }
                                 else if (middleLength === 1 && elementFlags[startLength] & ElementFlags.Rest) {
                                     // Middle of target is exactly one rest element. If middle of source is not empty, infer union of middle element types.
-                                    const restType = isTupleType(source) ? getElementTypeOfSliceOfTupleType(source, startLength, endLength) : getTypeArguments(source)[0];
+                                    const restType = isTupleType(sourceArrayOrTuple) ? getElementTypeOfSliceOfTupleType(sourceArrayOrTuple, startLength, endLength) : getTypeArguments(sourceArrayOrTuple)[0];
                                     if (restType) {
                                         inferFromTypes(restType, elementTypes[startLength]);
                                     }
@@ -22886,12 +22930,12 @@ namespace ts {
                             }
                             // Infer between ending fixed elements
                             for (let i = 0; i < endLength; i++) {
-                                inferFromTypes(getTypeArguments(source)[sourceArity - i - 1], elementTypes[targetArity - i - 1]);
+                                inferFromTypes(getTypeArguments(sourceArrayOrTuple)[sourceArity - i - 1], elementTypes[targetArity - i - 1]);
                             }
                             return;
                         }
                         if (isArrayType(target)) {
-                            inferFromIndexTypes(source, target);
+                            inferFromIndexTypes(sourceArrayOrTuple, target);
                             return;
                         }
                     }
@@ -27548,7 +27592,37 @@ namespace ts {
             return checkIteratedTypeOrElementType(IterationUse.Spread, arrayOrIterableType, undefinedType, node.expression);
         }
 
+        function getTemplateStringsArrayOf(cookedTypes: Type[], rawTypes: Type[]) {
+            const templateStringsArrayOfAlias = getGlobalTemplateStringsArrayOfSymbol();
+            if (!templateStringsArrayOfAlias) return getGlobalTemplateStringsArrayType();
+            const cookedType = createTupleType(cookedTypes, /*elementFlags*/ undefined, /*readonly*/ true);
+            const rawType = createTupleType(rawTypes, /*elementFlags*/ undefined, /*readonly*/ true);
+            return getTypeAliasInstantiation(templateStringsArrayOfAlias, [cookedType, rawType]);
+        }
+
+        function getRawLiteralType(node: TemplateLiteralLikeNode) {
+            const text = getRawTextOfTemplateLiteralLike(node, getSourceFileOfNode(node));
+            return getStringLiteralType(text);
+        }
+
         function checkSyntheticExpression(node: SyntheticExpression): Type {
+            if (isTemplateLiteral(node.parent) && node.type === getGlobalTemplateStringsArrayType()) {
+                const cookedStrings: Type[] = [];
+                const rawStrings: Type[] = [];
+                if (isNoSubstitutionTemplateLiteral(node.parent)) {
+                    cookedStrings.push(getStringLiteralType(node.parent.text));
+                    rawStrings.push(getRawLiteralType(node.parent));
+                }
+                else {
+                    cookedStrings.push(getStringLiteralType(node.parent.head.text));
+                    rawStrings.push(getRawLiteralType(node.parent.head));
+                    for (const templateSpan of node.parent.templateSpans) {
+                        cookedStrings.push(getStringLiteralType(templateSpan.literal.text));
+                        rawStrings.push(getRawLiteralType(templateSpan.literal));
+                    }
+                }
+                return getTemplateStringsArrayOf(cookedStrings, rawStrings);
+            }
             return node.isSpread ? getIndexedAccessType(node.type, numberType) : node.type;
         }
 
@@ -30587,10 +30661,10 @@ namespace ts {
             let typeArguments: NodeArray<TypeNode> | undefined;
 
             if (!isDecorator) {
-                typeArguments = (node as CallExpression).typeArguments;
+                typeArguments = node.typeArguments;
 
                 // We already perform checking on the type arguments on the class declaration itself.
-                if (isTaggedTemplate || isJsxOpeningOrSelfClosingElement || (node as CallExpression).expression.kind !== SyntaxKind.SuperKeyword) {
+                if (isTaggedTemplate || isJsxOpeningOrSelfClosingElement || node.expression.kind !== SyntaxKind.SuperKeyword) {
                     forEach(typeArguments, checkSourceElement);
                 }
             }

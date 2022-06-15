@@ -187,3 +187,7 @@ function invoker <K extends string | number | symbol, A extends any[]> (key: K, 
 const result = invoker('test', true)({ test: (a: boolean) => 123 })
 
 type Foo2<A extends any[]> = ReturnType<(...args: A) => string>;
+
+// Infer from an intersected tuple
+type Head<T extends string[]> = T extends [infer THead, ...infer _] ? THead : never;
+type T100 = Head<["a", "c"] & { foo: "bar" }>;

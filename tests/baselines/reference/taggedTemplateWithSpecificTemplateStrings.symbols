@@ -1,0 +1,160 @@
+=== tests/cases/conformance/es6/templates/taggedTemplateWithSpecificTemplateStrings.ts ===
+// overload resolution
+declare function f1(array: TemplateStringsArrayOf<readonly ["a", ...string[]]>, ...args: any): "A";
+>f1 : Symbol(f1, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 0, 0), Decl(taggedTemplateWithSpecificTemplateStrings.ts, 1, 99), Decl(taggedTemplateWithSpecificTemplateStrings.ts, 2, 99))
+>array : Symbol(array, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 1, 20))
+>TemplateStringsArrayOf : Symbol(TemplateStringsArrayOf, Decl(lib.es5.d.ts, --, --))
+>args : Symbol(args, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 1, 79))
+
+declare function f1(array: TemplateStringsArrayOf<readonly ["b", ...string[]]>, ...args: any): "B";
+>f1 : Symbol(f1, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 0, 0), Decl(taggedTemplateWithSpecificTemplateStrings.ts, 1, 99), Decl(taggedTemplateWithSpecificTemplateStrings.ts, 2, 99))
+>array : Symbol(array, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 2, 20))
+>TemplateStringsArrayOf : Symbol(TemplateStringsArrayOf, Decl(lib.es5.d.ts, --, --))
+>args : Symbol(args, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 2, 79))
+
+declare function f1(array: TemplateStringsArray, ...args: any): "C";
+>f1 : Symbol(f1, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 0, 0), Decl(taggedTemplateWithSpecificTemplateStrings.ts, 1, 99), Decl(taggedTemplateWithSpecificTemplateStrings.ts, 2, 99))
+>array : Symbol(array, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 3, 20))
+>TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es5.d.ts, --, --))
+>args : Symbol(args, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 3, 48))
+
+const f1_r0 = f1`a`;        // "A"
+>f1_r0 : Symbol(f1_r0, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 4, 5))
+>f1 : Symbol(f1, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 0, 0), Decl(taggedTemplateWithSpecificTemplateStrings.ts, 1, 99), Decl(taggedTemplateWithSpecificTemplateStrings.ts, 2, 99))
+
+const f1_r1 = f1`a${"b"}`;  // "A"
+>f1_r1 : Symbol(f1_r1, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 5, 5))
+>f1 : Symbol(f1, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 0, 0), Decl(taggedTemplateWithSpecificTemplateStrings.ts, 1, 99), Decl(taggedTemplateWithSpecificTemplateStrings.ts, 2, 99))
+
+const f1_r2 = f1`b`;        // "B"
+>f1_r2 : Symbol(f1_r2, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 6, 5))
+>f1 : Symbol(f1, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 0, 0), Decl(taggedTemplateWithSpecificTemplateStrings.ts, 1, 99), Decl(taggedTemplateWithSpecificTemplateStrings.ts, 2, 99))
+
+const f1_r3 = f1`b${"b"}`;  // "B"
+>f1_r3 : Symbol(f1_r3, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 7, 5))
+>f1 : Symbol(f1, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 0, 0), Decl(taggedTemplateWithSpecificTemplateStrings.ts, 1, 99), Decl(taggedTemplateWithSpecificTemplateStrings.ts, 2, 99))
+
+const f1_r4 = f1`c`;        // "C"
+>f1_r4 : Symbol(f1_r4, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 8, 5))
+>f1 : Symbol(f1, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 0, 0), Decl(taggedTemplateWithSpecificTemplateStrings.ts, 1, 99), Decl(taggedTemplateWithSpecificTemplateStrings.ts, 2, 99))
+
+const f1_r5 = f1`c${"b"}`;  // "C"
+>f1_r5 : Symbol(f1_r5, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 9, 5))
+>f1 : Symbol(f1, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 0, 0), Decl(taggedTemplateWithSpecificTemplateStrings.ts, 1, 99), Decl(taggedTemplateWithSpecificTemplateStrings.ts, 2, 99))
+
+// constrained type parameter
+declare function f0<T extends TemplateStringsArray, A extends string[]>(array: T, ...args: A): [T, A];
+>f0 : Symbol(f0, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 9, 26))
+>T : Symbol(T, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 12, 20))
+>TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es5.d.ts, --, --))
+>A : Symbol(A, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 12, 51))
+>array : Symbol(array, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 12, 72))
+>T : Symbol(T, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 12, 20))
+>args : Symbol(args, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 12, 81))
+>A : Symbol(A, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 12, 51))
+>T : Symbol(T, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 12, 20))
+>A : Symbol(A, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 12, 51))
+
+const f0_r0 = f0`a${"b"}c`; // [TemplateStringsArrayOf<readonly ["a", "c"], readonly ["a", "c"]>, ["b"]]
+>f0_r0 : Symbol(f0_r0, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 13, 5))
+>f0 : Symbol(f0, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 9, 26))
+
+// interpolation example
+type TemplatePrimitive = string | number | bigint | boolean | null | undefined;
+>TemplatePrimitive : Symbol(TemplatePrimitive, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 13, 27))
+
+type Interpolate<T extends readonly string[], A extends any[], R extends string = ''> =
+>Interpolate : Symbol(Interpolate, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 16, 79))
+>T : Symbol(T, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 18, 17))
+>A : Symbol(A, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 18, 45))
+>R : Symbol(R, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 18, 62))
+
+    T extends readonly [infer TH extends string, ...infer TT extends readonly string[]] ?
+>T : Symbol(T, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 18, 17))
+>TH : Symbol(TH, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 19, 29))
+>TT : Symbol(TT, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 19, 57))
+
+        A extends [infer AH extends TemplatePrimitive, ...infer AT extends TemplatePrimitive[]] ?
+>A : Symbol(A, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 18, 45))
+>AH : Symbol(AH, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 20, 24))
+>TemplatePrimitive : Symbol(TemplatePrimitive, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 13, 27))
+>AT : Symbol(AT, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 20, 63))
+>TemplatePrimitive : Symbol(TemplatePrimitive, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 13, 27))
+
+            Interpolate<TT, AT, `${R}${TH}${AH}`> :
+>Interpolate : Symbol(Interpolate, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 16, 79))
+>TT : Symbol(TT, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 19, 57))
+>AT : Symbol(AT, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 20, 63))
+>R : Symbol(R, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 18, 62))
+>TH : Symbol(TH, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 19, 29))
+>AH : Symbol(AH, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 20, 24))
+
+            Interpolate<TT, [], `${R}${TH}`> :
+>Interpolate : Symbol(Interpolate, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 16, 79))
+>TT : Symbol(TT, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 19, 57))
+>R : Symbol(R, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 18, 62))
+>TH : Symbol(TH, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 19, 29))
+
+        R;
+>R : Symbol(R, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 18, 62))
+
+// string interpolation
+declare function interp<T extends TemplateStringsArray, A extends TemplatePrimitive[]>(array: T, ...args: A): Interpolate<T, A>;
+>interp : Symbol(interp, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 23, 10))
+>T : Symbol(T, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 26, 24))
+>TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es5.d.ts, --, --))
+>A : Symbol(A, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 26, 55))
+>TemplatePrimitive : Symbol(TemplatePrimitive, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 13, 27))
+>array : Symbol(array, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 26, 87))
+>T : Symbol(T, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 26, 24))
+>args : Symbol(args, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 26, 96))
+>A : Symbol(A, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 26, 55))
+>Interpolate : Symbol(Interpolate, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 16, 79))
+>T : Symbol(T, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 26, 24))
+>A : Symbol(A, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 26, 55))
+
+const interp_r0 = interp`a${"b"}c`;    // "abc"
+>interp_r0 : Symbol(interp_r0, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 27, 5))
+>interp : Symbol(interp, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 23, 10))
+
+const interp_r1 = interp`a${1}c`;      // "a1c"
+>interp_r1 : Symbol(interp_r1, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 28, 5))
+>interp : Symbol(interp, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 23, 10))
+
+// "a\nb\nc"
+const interp_r2 = interp`a\n${"b"}
+>interp_r2 : Symbol(interp_r2, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 31, 5))
+>interp : Symbol(interp, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 23, 10))
+
+c`; 
+
+// raw string interpolation (i.e., 'String.raw')
+declare function raw<T extends TemplateStringsArray, A extends TemplatePrimitive[]>(array: T, ...args: A): Interpolate<T["raw"], A>;
+>raw : Symbol(raw, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 32, 3))
+>T : Symbol(T, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 35, 21))
+>TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es5.d.ts, --, --))
+>A : Symbol(A, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 35, 52))
+>TemplatePrimitive : Symbol(TemplatePrimitive, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 13, 27))
+>array : Symbol(array, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 35, 84))
+>T : Symbol(T, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 35, 21))
+>args : Symbol(args, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 35, 93))
+>A : Symbol(A, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 35, 52))
+>Interpolate : Symbol(Interpolate, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 16, 79))
+>T : Symbol(T, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 35, 21))
+>A : Symbol(A, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 35, 52))
+
+const raw_r0 = raw`a${"b"}c`;          // "abc"
+>raw_r0 : Symbol(raw_r0, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 36, 5))
+>raw : Symbol(raw, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 32, 3))
+
+const raw_r1 = raw`a${1}c`;            // "a1c"
+>raw_r1 : Symbol(raw_r1, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 37, 5))
+>raw : Symbol(raw, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 32, 3))
+
+// "a\\nb\nc"
+const raw_r2 = raw`a\n${"b"}
+>raw_r2 : Symbol(raw_r2, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 40, 5))
+>raw : Symbol(raw, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 32, 3))
+
+c`;
+

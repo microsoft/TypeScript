@@ -713,6 +713,30 @@ namespace ts {
         return Debug.fail(`Literal kind '${node.kind}' not accounted for.`);
     }
 
+    export function getRawTextOfTemplateLiteralLike(node: TemplateLiteralLikeNode, sourceFile: SourceFile) {
+        // Find original source text, since we need to emit the raw strings of the tagged template.
+        // The raw strings contain the (escaped) strings of what the user wrote.
+        // Examples: `\n` is converted to "\\n", a template string with a newline to "\n".
+        let text = node.rawText;
+        if (text === undefined) {
+            Debug.assertIsDefined(sourceFile,
+                                  "Template literal node is missing 'rawText' and does not have a source file. Possibly bad transform.");
+            text = getSourceTextOfNodeFromSourceFile(sourceFile, node);
+
+            // text contains the original source, it will also contain quotes ("`"), dolar signs and braces ("${" and "}"),
+            // thus we need to remove those characters.
+            // First template piece starts with "`", others with "}"
+            // Last template piece ends with "`", others with "${"
+            const isLast = node.kind === SyntaxKind.NoSubstitutionTemplateLiteral || node.kind === SyntaxKind.TemplateTail;
+            text = text.substring(1, text.length - (isLast ? 1 : 2));
+        }
+
+        // Newline normalization:
+        // ES6 Spec 11.8.6.1 - Static Semantics of TV's and TRV's
+        // <CR><LF> and <CR> LineTerminatorSequences are normalized to <LF> for both TV and TRV.
+        return text.replace(/\r\n?/g, "\n");
+    }
+
     function canUseOriginalText(node: LiteralLikeNode, flags: GetLiteralTextFlags): boolean {
         if (nodeIsSynthesized(node) || !node.parent || (flags & GetLiteralTextFlags.TerminateUnterminatedLiterals && node.isUnterminated)) {
             return false;

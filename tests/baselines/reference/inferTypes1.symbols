@@ -775,3 +775,17 @@ type Foo2<A extends any[]> = ReturnType<(...args: A) => string>;
 >args : Symbol(args, Decl(inferTypes1.ts, 185, 41))
 >A : Symbol(A, Decl(inferTypes1.ts, 185, 10))
 
+// Infer from an intersected tuple
+type Head<T extends string[]> = T extends [infer THead, ...infer _] ? THead : never;
+>Head : Symbol(Head, Decl(inferTypes1.ts, 185, 64))
+>T : Symbol(T, Decl(inferTypes1.ts, 188, 10))
+>T : Symbol(T, Decl(inferTypes1.ts, 188, 10))
+>THead : Symbol(THead, Decl(inferTypes1.ts, 188, 48))
+>_ : Symbol(_, Decl(inferTypes1.ts, 188, 64))
+>THead : Symbol(THead, Decl(inferTypes1.ts, 188, 48))
+
+type T100 = Head<["a", "c"] & { foo: "bar" }>;
+>T100 : Symbol(T100, Decl(inferTypes1.ts, 188, 84))
+>Head : Symbol(Head, Decl(inferTypes1.ts, 185, 64))
+>foo : Symbol(foo, Decl(inferTypes1.ts, 189, 31))
+

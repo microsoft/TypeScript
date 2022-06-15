@@ -1,0 +1,143 @@
+=== tests/cases/conformance/es6/templates/taggedTemplateWithSpecificTemplateStrings.ts ===
+// overload resolution
+declare function f1(array: TemplateStringsArrayOf<readonly ["a", ...string[]]>, ...args: any): "A";
+>f1 : { (array: TemplateStringsArrayOf<readonly ["a", ...string[]]>, ...args: any): "A"; (array: TemplateStringsArrayOf<readonly ["b", ...string[]], readonly ["b", ...string[]]>, ...args: any): "B"; (array: TemplateStringsArray, ...args: any): "C"; }
+>array : TemplateStringsArrayOf<readonly ["a", ...string[]], readonly ["a", ...string[]]>
+>args : any
+
+declare function f1(array: TemplateStringsArrayOf<readonly ["b", ...string[]]>, ...args: any): "B";
+>f1 : { (array: TemplateStringsArrayOf<readonly ["a", ...string[]], readonly ["a", ...string[]]>, ...args: any): "A"; (array: TemplateStringsArrayOf<readonly ["b", ...string[]]>, ...args: any): "B"; (array: TemplateStringsArray, ...args: any): "C"; }
+>array : TemplateStringsArrayOf<readonly ["b", ...string[]], readonly ["b", ...string[]]>
+>args : any
+
+declare function f1(array: TemplateStringsArray, ...args: any): "C";
+>f1 : { (array: TemplateStringsArrayOf<readonly ["a", ...string[]], readonly ["a", ...string[]]>, ...args: any): "A"; (array: TemplateStringsArrayOf<readonly ["b", ...string[]], readonly ["b", ...string[]]>, ...args: any): "B"; (array: TemplateStringsArray, ...args: any): "C"; }
+>array : TemplateStringsArray
+>args : any
+
+const f1_r0 = f1`a`;        // "A"
+>f1_r0 : "A"
+>f1`a` : "A"
+>f1 : { (array: TemplateStringsArrayOf<readonly ["a", ...string[]], readonly ["a", ...string[]]>, ...args: any): "A"; (array: TemplateStringsArrayOf<readonly ["b", ...string[]], readonly ["b", ...string[]]>, ...args: any): "B"; (array: TemplateStringsArray, ...args: any): "C"; }
+>`a` : "a"
+
+const f1_r1 = f1`a${"b"}`;  // "A"
+>f1_r1 : "A"
+>f1`a${"b"}` : "A"
+>f1 : { (array: TemplateStringsArrayOf<readonly ["a", ...string[]], readonly ["a", ...string[]]>, ...args: any): "A"; (array: TemplateStringsArrayOf<readonly ["b", ...string[]], readonly ["b", ...string[]]>, ...args: any): "B"; (array: TemplateStringsArray, ...args: any): "C"; }
+>`a${"b"}` : string
+>"b" : "b"
+
+const f1_r2 = f1`b`;        // "B"
+>f1_r2 : "B"
+>f1`b` : "B"
+>f1 : { (array: TemplateStringsArrayOf<readonly ["a", ...string[]], readonly ["a", ...string[]]>, ...args: any): "A"; (array: TemplateStringsArrayOf<readonly ["b", ...string[]], readonly ["b", ...string[]]>, ...args: any): "B"; (array: TemplateStringsArray, ...args: any): "C"; }
+>`b` : "b"
+
+const f1_r3 = f1`b${"b"}`;  // "B"
+>f1_r3 : "B"
+>f1`b${"b"}` : "B"
+>f1 : { (array: TemplateStringsArrayOf<readonly ["a", ...string[]], readonly ["a", ...string[]]>, ...args: any): "A"; (array: TemplateStringsArrayOf<readonly ["b", ...string[]], readonly ["b", ...string[]]>, ...args: any): "B"; (array: TemplateStringsArray, ...args: any): "C"; }
+>`b${"b"}` : string
+>"b" : "b"
+
+const f1_r4 = f1`c`;        // "C"
+>f1_r4 : "C"
+>f1`c` : "C"
+>f1 : { (array: TemplateStringsArrayOf<readonly ["a", ...string[]], readonly ["a", ...string[]]>, ...args: any): "A"; (array: TemplateStringsArrayOf<readonly ["b", ...string[]], readonly ["b", ...string[]]>, ...args: any): "B"; (array: TemplateStringsArray, ...args: any): "C"; }
+>`c` : "c"
+
+const f1_r5 = f1`c${"b"}`;  // "C"
+>f1_r5 : "C"
+>f1`c${"b"}` : "C"
+>f1 : { (array: TemplateStringsArrayOf<readonly ["a", ...string[]], readonly ["a", ...string[]]>, ...args: any): "A"; (array: TemplateStringsArrayOf<readonly ["b", ...string[]], readonly ["b", ...string[]]>, ...args: any): "B"; (array: TemplateStringsArray, ...args: any): "C"; }
+>`c${"b"}` : string
+>"b" : "b"
+
+// constrained type parameter
+declare function f0<T extends TemplateStringsArray, A extends string[]>(array: T, ...args: A): [T, A];
+>f0 : <T extends TemplateStringsArray, A extends string[]>(array: T, ...args: A) => [T, A]
+>array : T
+>args : A
+
+const f0_r0 = f0`a${"b"}c`; // [TemplateStringsArrayOf<readonly ["a", "c"], readonly ["a", "c"]>, ["b"]]
+>f0_r0 : [TemplateStringsArrayOf<readonly ["a", "c"], readonly ["a", "c"]>, ["b"]]
+>f0`a${"b"}c` : [TemplateStringsArrayOf<readonly ["a", "c"], readonly ["a", "c"]>, ["b"]]
+>f0 : <T extends TemplateStringsArray, A extends string[]>(array: T, ...args: A) => [T, A]
+>`a${"b"}c` : string
+>"b" : "b"
+
+// interpolation example
+type TemplatePrimitive = string | number | bigint | boolean | null | undefined;
+>TemplatePrimitive : string | number | bigint | boolean
+>null : null
+
+type Interpolate<T extends readonly string[], A extends any[], R extends string = ''> =
+>Interpolate : Interpolate<T, A, R>
+
+    T extends readonly [infer TH extends string, ...infer TT extends readonly string[]] ?
+        A extends [infer AH extends TemplatePrimitive, ...infer AT extends TemplatePrimitive[]] ?
+            Interpolate<TT, AT, `${R}${TH}${AH}`> :
+            Interpolate<TT, [], `${R}${TH}`> :
+        R;
+
+// string interpolation
+declare function interp<T extends TemplateStringsArray, A extends TemplatePrimitive[]>(array: T, ...args: A): Interpolate<T, A>;
+>interp : <T extends TemplateStringsArray, A extends TemplatePrimitive[]>(array: T, ...args: A) => Interpolate<T, A>
+>array : T
+>args : A
+
+const interp_r0 = interp`a${"b"}c`;    // "abc"
+>interp_r0 : "abc"
+>interp`a${"b"}c` : "abc"
+>interp : <T extends TemplateStringsArray, A extends TemplatePrimitive[]>(array: T, ...args: A) => Interpolate<T, A, "">
+>`a${"b"}c` : string
+>"b" : "b"
+
+const interp_r1 = interp`a${1}c`;      // "a1c"
+>interp_r1 : "a1c"
+>interp`a${1}c` : "a1c"
+>interp : <T extends TemplateStringsArray, A extends TemplatePrimitive[]>(array: T, ...args: A) => Interpolate<T, A, "">
+>`a${1}c` : string
+>1 : 1
+
+// "a\nb\nc"
+const interp_r2 = interp`a\n${"b"}
+>interp_r2 : "a\nb\nc"
+>interp`a\n${"b"}c` : "a\nb\nc"
+>interp : <T extends TemplateStringsArray, A extends TemplatePrimitive[]>(array: T, ...args: A) => Interpolate<T, A, "">
+>`a\n${"b"}c` : string
+>"b" : "b"
+
+c`; 
+
+// raw string interpolation (i.e., 'String.raw')
+declare function raw<T extends TemplateStringsArray, A extends TemplatePrimitive[]>(array: T, ...args: A): Interpolate<T["raw"], A>;
+>raw : <T extends TemplateStringsArray, A extends TemplatePrimitive[]>(array: T, ...args: A) => Interpolate<T["raw"], A>
+>array : T
+>args : A
+
+const raw_r0 = raw`a${"b"}c`;          // "abc"
+>raw_r0 : "abc"
+>raw`a${"b"}c` : "abc"
+>raw : <T extends TemplateStringsArray, A extends TemplatePrimitive[]>(array: T, ...args: A) => Interpolate<T["raw"], A, "">
+>`a${"b"}c` : string
+>"b" : "b"
+
+const raw_r1 = raw`a${1}c`;            // "a1c"
+>raw_r1 : "a1c"
+>raw`a${1}c` : "a1c"
+>raw : <T extends TemplateStringsArray, A extends TemplatePrimitive[]>(array: T, ...args: A) => Interpolate<T["raw"], A, "">
+>`a${1}c` : string
+>1 : 1
+
+// "a\\nb\nc"
+const raw_r2 = raw`a\n${"b"}
+>raw_r2 : "a\\nb\nc"
+>raw`a\n${"b"}c` : "a\\nb\nc"
+>raw : <T extends TemplateStringsArray, A extends TemplatePrimitive[]>(array: T, ...args: A) => Interpolate<T["raw"], A, "">
+>`a\n${"b"}c` : string
+>"b" : "b"
+
+c`;
+

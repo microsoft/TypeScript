@@ -76,27 +76,7 @@ namespace ts {
      * @param node The ES6 template literal.
      */
     function getRawLiteral(node: TemplateLiteralLikeNode, currentSourceFile: SourceFile) {
-        // Find original source text, since we need to emit the raw strings of the tagged template.
-        // The raw strings contain the (escaped) strings of what the user wrote.
-        // Examples: `\n` is converted to "\\n", a template string with a newline to "\n".
-        let text = node.rawText;
-        if (text === undefined) {
-            Debug.assertIsDefined(currentSourceFile,
-                                  "Template literal node is missing 'rawText' and does not have a source file. Possibly bad transform.");
-            text = getSourceTextOfNodeFromSourceFile(currentSourceFile, node);
-
-            // text contains the original source, it will also contain quotes ("`"), dolar signs and braces ("${" and "}"),
-            // thus we need to remove those characters.
-            // First template piece starts with "`", others with "}"
-            // Last template piece ends with "`", others with "${"
-            const isLast = node.kind === SyntaxKind.NoSubstitutionTemplateLiteral || node.kind === SyntaxKind.TemplateTail;
-            text = text.substring(1, text.length - (isLast ? 1 : 2));
-        }
-
-        // Newline normalization:
-        // ES6 Spec 11.8.6.1 - Static Semantics of TV's and TRV's
-        // <CR><LF> and <CR> LineTerminatorSequences are normalized to <LF> for both TV and TRV.
-        text = text.replace(/\r\n?/g, "\n");
+        const text = getRawTextOfTemplateLiteralLike(node, currentSourceFile);
         return setTextRange(factory.createStringLiteral(text), node);
     }
 }

@@ -1119,6 +1119,7 @@ namespace FourSlashInterface {
             varEntry("Number"),
             interfaceEntry("NumberConstructor"),
             interfaceEntry("TemplateStringsArray"),
+            typeEntry("TemplateStringsArrayOf"),
             interfaceEntry("ImportMeta"),
             interfaceEntry("ImportCallOptions"),
             interfaceEntry("ImportAssertions"),

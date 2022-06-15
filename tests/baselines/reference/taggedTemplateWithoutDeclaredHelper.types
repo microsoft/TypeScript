@@ -8,8 +8,8 @@ function id<T>(x: T) {
 }
 
 export const result = id `hello world`;
->result : TemplateStringsArray
->id `hello world` : TemplateStringsArray
+>result : TemplateStringsArrayOf<readonly ["hello world"], readonly ["hello world"]>
+>id `hello world` : TemplateStringsArrayOf<readonly ["hello world"], readonly ["hello world"]>
 >id : <T>(x: T) => T
 >`hello world` : "hello world"
 

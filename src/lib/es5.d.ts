@@ -594,6 +594,8 @@ interface TemplateStringsArray extends ReadonlyArray<string> {
     readonly raw: readonly string[];
 }
 
+type TemplateStringsArrayOf<Cooked extends readonly string[], Raw extends readonly string[] = Cooked> = Cooked & { readonly raw: Raw };
+
 /**
  * The type of `import.meta`.
  *

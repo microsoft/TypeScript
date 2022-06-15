@@ -11,20 +11,20 @@ namespace n {
     }
 
     function templateObjectFactory() {
->templateObjectFactory : () => TemplateStringsArray
+>templateObjectFactory : () => TemplateStringsArrayOf<readonly ["hello world"], readonly ["hello world"]>
 
         return id`hello world`;
->id`hello world` : TemplateStringsArray
+>id`hello world` : TemplateStringsArrayOf<readonly ["hello world"], readonly ["hello world"]>
 >id : <T>(x: T) => T
 >`hello world` : "hello world"
     }
     let result = templateObjectFactory() === templateObjectFactory();
 >result : boolean
 >templateObjectFactory() === templateObjectFactory() : boolean
->templateObjectFactory() : TemplateStringsArray
->templateObjectFactory : () => TemplateStringsArray
->templateObjectFactory() : TemplateStringsArray
->templateObjectFactory : () => TemplateStringsArray
+>templateObjectFactory() : TemplateStringsArrayOf<readonly ["hello world"], readonly ["hello world"]>
+>templateObjectFactory : () => TemplateStringsArrayOf<readonly ["hello world"], readonly ["hello world"]>
+>templateObjectFactory() : TemplateStringsArrayOf<readonly ["hello world"], readonly ["hello world"]>
+>templateObjectFactory : () => TemplateStringsArrayOf<readonly ["hello world"], readonly ["hello world"]>
 }
 === tests/cases/compiler/module.ts ===
 export { }
@@ -37,18 +37,18 @@ function id<T>(x: T): T {
 }
 
 function templateObjectFactory() {
->templateObjectFactory : () => TemplateStringsArray
+>templateObjectFactory : () => TemplateStringsArrayOf<readonly ["hello world"], readonly ["hello world"]>
 
     return id`hello world`;
->id`hello world` : TemplateStringsArray
+>id`hello world` : TemplateStringsArrayOf<readonly ["hello world"], readonly ["hello world"]>
 >id : <T>(x: T) => T
 >`hello world` : "hello world"
 }
 let result = templateObjectFactory() === templateObjectFactory();
 >result : boolean
 >templateObjectFactory() === templateObjectFactory() : boolean
->templateObjectFactory() : TemplateStringsArray
->templateObjectFactory : () => TemplateStringsArray
->templateObjectFactory() : TemplateStringsArray
->templateObjectFactory : () => TemplateStringsArray
+>templateObjectFactory() : TemplateStringsArrayOf<readonly ["hello world"], readonly ["hello world"]>
+>templateObjectFactory : () => TemplateStringsArrayOf<readonly ["hello world"], readonly ["hello world"]>
+>templateObjectFactory() : TemplateStringsArrayOf<readonly ["hello world"], readonly ["hello world"]>
+>templateObjectFactory : () => TemplateStringsArrayOf<readonly ["hello world"], readonly ["hello world"]>
 
