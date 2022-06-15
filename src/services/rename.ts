@@ -43,13 +43,6 @@ namespace ts.Rename {
             return getRenameInfoError(Diagnostics.You_cannot_rename_elements_that_are_defined_in_the_standard_TypeScript_library);
         }
 
-        // Disallow rename for elements that would rename across `*/node_modules/*` packages.
-        // if (declarations.some(declaration => isDefinedInExternalLibrary(program, declaration))) {
-        if (wouldRenameAcrossExternalLibrary(sourceFile, symbol, typeChecker, preferences)) {
-            return getRenameInfoError(Diagnostics.You_cannot_rename_elements_that_are_defined_in_an_external_library_inside_node_modules_Slash);
-            // >> TODO: improve diagnostics message
-        }
-
         // Cannot rename `default` as in `import { default as foo } from "./someModule";
         if (isIdentifier(node) && node.originalKeywordKind === SyntaxKind.DefaultKeyword && symbol.parent && symbol.parent.flags & SymbolFlags.Module) {
             return undefined;
@@ -57,6 +50,13 @@ namespace ts.Rename {
 
         if (isStringLiteralLike(node) && tryGetImportFromModuleSpecifier(node)) {
             return options && options.allowRenameOfImportPath ? getRenameInfoForModule(node, sourceFile, symbol) : undefined;
+        }
+
+        // Disallow rename for elements that would rename across `*/node_modules/*` packages.
+        // if (declarations.some(declaration => isDefinedInExternalLibrary(program, declaration))) {
+        if (wouldRenameAcrossExternalLibrary(sourceFile, symbol, typeChecker, preferences)) {
+            return getRenameInfoError(Diagnostics.You_cannot_rename_elements_that_are_defined_in_an_external_library_inside_node_modules_Slash);
+            // >> TODO: improve diagnostics message
         }
 
         const kind = SymbolDisplay.getSymbolKind(typeChecker, symbol, node);
