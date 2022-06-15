@@ -1530,7 +1530,7 @@
         "category": "Error",
         "code": 2207
     },
-    "This type parameter probably needs an `extends object` constraint.": {
+    "This type parameter might need an `extends {0}` constraint.": {
         "category": "Error",
         "code": 2208
     },
@@ -1542,6 +1542,14 @@
     "The project root is ambiguous, but is required to resolve import map entry '{0}' in file '{1}'. Supply the `rootDir` compiler option to disambiguate.": {
         "category": "Error",
         "code": 2210
+    },
+    "Add `extends` constraint.": {
+        "category": "Message",
+        "code": 2211
+    },
+    "Add `extends` constraint to all type parameters": {
+        "category": "Message",
+        "code": 2212
     },
 
     "Duplicate identifier '{0}'.": {
