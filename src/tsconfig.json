@@ -9,6 +9,7 @@
         { "path": "./watchGuard" },
         { "path": "./debug" },
         { "path": "./cancellationToken" },
+        { "path": "./dynamicImportCompat" },
         { "path": "./testRunner" }
     ]
 }

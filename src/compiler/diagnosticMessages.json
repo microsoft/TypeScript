@@ -1530,7 +1530,7 @@
         "category": "Error",
         "code": 2207
     },
-    "This type parameter probably needs an `extends object` constraint.": {
+    "This type parameter might need an `extends {0}` constraint.": {
         "category": "Error",
         "code": 2208
     },
@@ -1542,6 +1542,14 @@
     "The project root is ambiguous, but is required to resolve import map entry '{0}' in file '{1}'. Supply the `rootDir` compiler option to disambiguate.": {
         "category": "Error",
         "code": 2210
+    },
+    "Add `extends` constraint.": {
+        "category": "Message",
+        "code": 2211
+    },
+    "Add `extends` constraint to all type parameters": {
+        "category": "Message",
+        "code": 2212
     },
 
     "Duplicate identifier '{0}'.": {
@@ -3486,6 +3494,14 @@
     "The type of this expression cannot be named without a 'resolution-mode' assertion, which is an unstable feature. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.": {
         "category": "Error",
         "code": 2841
+    },
+    "'{0}' is an unused renaming of '{1}'. Did you intend to use it as a type annotation?": {
+        "category": "Error",
+        "code": 2842
+    }, 
+    "We can only write a type for '{0}' by adding a type for the entire parameter here.": {
+        "category": "Error",
+        "code": 2843
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {

@@ -12,6 +12,7 @@ tests/cases/compiler/typeParametersShouldNotBeEqual.ts(5,5): error TS2322: Type 
         ~
 !!! error TS2322: Type 'U' is not assignable to type 'T'.
 !!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
+!!! related TS2208 tests/cases/compiler/typeParametersShouldNotBeEqual.ts:1:16: This type parameter might need an `extends T` constraint.
         x = z;  // Error
         ~
 !!! error TS2322: Type 'Object' is not assignable to type 'T'.

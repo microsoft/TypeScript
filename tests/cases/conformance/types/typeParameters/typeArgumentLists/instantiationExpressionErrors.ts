@@ -98,3 +98,9 @@ class C4 {
     protected specialFoo = f<string>
     protected bar = 123
 }
+
+// Repro from #49551
+
+const enum MyVer { v1 = 1, v2 = 2 }
+let ver = 21
+const a = ver < (MyVer.v1 >= MyVer.v2 ? MyVer.v1 : MyVer.v2)

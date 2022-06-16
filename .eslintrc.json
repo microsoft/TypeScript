@@ -27,8 +27,8 @@
             { "selector": "variable", "format": ["camelCase", "PascalCase", "UPPER_CASE"], "leadingUnderscore": "allow", "filter": { "regex": "^(_{1,2}filename|_{1,2}dirname|_+|[A-Za-z]+_[A-Za-z]+)$", "match": false } },
             { "selector": "function", "format": ["camelCase", "PascalCase"], "leadingUnderscore": "allow", "filter": { "regex": "^[A-Za-z]+_[A-Za-z]+$", "match": false } },
             { "selector": "parameter", "format": ["camelCase"], "leadingUnderscore": "allow", "filter": { "regex": "^(_+|[A-Za-z]+_[A-Z][a-z]+)$", "match": false } },
-            { "selector": "method", "format": ["camelCase", "PascalCase"], "leadingUnderscore": "allow", "filter": { "regex": "^[A-Za-z]+_[A-Za-z]+$", "match": false } },
-            { "selector": "memberLike", "format": ["camelCase"], "leadingUnderscore": "allow", "filter": { "regex": "^[A-Za-z]+_[A-Za-z]+$", "match": false } },
+            { "selector": "method", "format": ["camelCase", "PascalCase"], "leadingUnderscore": "allow", "filter": { "regex": "^([0-9]+|[A-Za-z]+_[A-Za-z]+)$", "match": false } },
+            { "selector": "memberLike", "format": ["camelCase"], "leadingUnderscore": "allow", "filter": { "regex": "^([0-9]+|[A-Za-z]+_[A-Za-z]+)$", "match": false } },
             { "selector": "enumMember", "format": ["camelCase", "PascalCase"], "leadingUnderscore": "allow", "filter": { "regex": "^[A-Za-z]+_[A-Za-z]+$", "match": false } },
             { "selector": "property", "format": null }
         ],

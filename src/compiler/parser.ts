@@ -5764,10 +5764,11 @@ namespace ts {
             nextToken();
 
             const typeArguments = parseDelimitedList(ParsingContext.TypeArguments, parseType);
-            if (!parseExpected(SyntaxKind.GreaterThanToken)) {
+            if (reScanGreaterToken() !== SyntaxKind.GreaterThanToken) {
                 // If it doesn't have the closing `>` then it's definitely not an type argument list.
                 return undefined;
             }
+            nextToken();
 
             // We successfully parsed a type argument list. The next token determines whether we want to
             // treat it as such. If the type argument list is followed by `(` or a template literal, as in
