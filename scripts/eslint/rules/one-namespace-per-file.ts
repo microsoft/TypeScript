@@ -1,4 +1,4 @@
-import { AST_NODE_TYPES, TSESTree } from "@typescript-eslint/experimental-utils";
+import { AST_NODE_TYPES, TSESTree } from "@typescript-eslint/utils";
 import { createRule } from "./utils";
 
 export = createRule({
@@ -6,7 +6,6 @@ export = createRule({
     meta: {
         docs: {
             description: `Limits each file to having at most one top-level namespace declaration`,
-            category: "Possible Errors",
             recommended: "error",
         },
         messages: {
