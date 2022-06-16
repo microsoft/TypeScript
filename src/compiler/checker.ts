@@ -22202,6 +22202,13 @@ namespace ts {
                 return isTypeAssignableTo(source, target);
             }
             if (target.flags & TypeFlags.StringMapping) {
+                // We need to see whether applying the same mappings of the target
+                // onto the source would produce an identical type *and* that
+                // it's compatible with the inner-most non-string-mapped type.
+                //
+                // The intuition here is that if same mappings don't affect the source at all,
+                // and the source is compatible with the unmapped target, then they must
+                // still reside in the same domain.
                 const mappingStack = [];
                 while (target.flags & TypeFlags.StringMapping) {
                     mappingStack.unshift(target.symbol);
