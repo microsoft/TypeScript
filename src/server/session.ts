@@ -329,13 +329,11 @@ namespace ts.server {
         const seen = createDocumentSpanSet();
 
         perProjectResults.forEach((projectResults, project) => {
-            if (projectResults) {
-                for (const result of projectResults) {
-                    // If there's a mapped location, it'll appear in the results for another project
-                    if (!seen.has(result) && !getMappedLocationForProject(documentSpanLocation(result), project)) {
-                        results.push(result);
-                        seen.add(result);
-                    }
+            for (const result of projectResults) {
+                // If there's a mapped location, it'll appear in the results for another project
+                if (!seen.has(result) && !getMappedLocationForProject(documentSpanLocation(result), project)) {
+                    results.push(result);
+                    seen.add(result);
                 }
             }
         });
@@ -385,11 +383,9 @@ namespace ts.server {
         if (defaultProjectResults?.[0]?.references[0]?.isDefinition === undefined) {
             // Clear all isDefinition properties
             perProjectResults.forEach(projectResults => {
-                if (projectResults) {
-                    for (const referencedSymbol of projectResults) {
-                        for (const ref of referencedSymbol.references) {
-                            delete ref.isDefinition;
-                        }
+                for (const referencedSymbol of projectResults) {
+                    for (const ref of referencedSymbol.references) {
+                        delete ref.isDefinition;
                     }
                 }
             });
@@ -588,7 +584,8 @@ namespace ts.server {
         // it easier for the caller to skip post-processing.
         if (resultsMap.size === 1) {
             const it = resultsMap.values().next();
-            return it.done ? emptyArray : it.value; // There may not be any results at all
+            Debug.assert(!it.done);
+            return it.value;
         }
 
         return resultsMap;
