@@ -382,7 +382,7 @@ namespace ts.server {
         // correct results to all other projects.
 
         const defaultProjectResults = perProjectResults.get(defaultProject);
-        if (defaultProjectResults?.[0].references[0]?.isDefinition === undefined) {
+        if (defaultProjectResults?.[0]?.references[0]?.isDefinition === undefined) {
             // Clear all isDefinition properties
             perProjectResults.forEach(projectResults => {
                 if (projectResults) {
@@ -545,10 +545,9 @@ namespace ts.server {
                 if (cancellationToken.isCancellationRequested()) break onCancellation;
 
                 let skipCount = 0;
-                for (; skipCount < queue.length && resultsMap.has(queue[skipCount].project); skipCount++) {
-                }
+                for (; skipCount < queue.length && resultsMap.has(queue[skipCount].project); skipCount++);
 
-                if (skipCount == queue.length) {
+                if (skipCount === queue.length) {
                     queue.length = 0;
                     break;
                 }
