@@ -5877,6 +5877,8 @@ declare namespace ts {
         getBreakpointStatementAtPosition(fileName: string, position: number): TextSpan | undefined;
         getSignatureHelpItems(fileName: string, position: number, options: SignatureHelpItemsOptions | undefined): SignatureHelpItems | undefined;
         getRenameInfo(fileName: string, position: number, preferences: UserPreferences): RenameInfo;
+        /** @deprecated */
+        getRenameInfo(fileName: string, position: number, options?: RenameInfoOptions): RenameInfo;
         findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, providePrefixAndSuffixTextForRename?: boolean): readonly RenameLocation[] | undefined;
         getSmartSelectionRange(fileName: string, position: number): SelectionRange;
         getDefinitionAtPosition(fileName: string, position: number): readonly DefinitionInfo[] | undefined;
@@ -6255,6 +6257,7 @@ declare namespace ts {
         Insert = "insert",
         Remove = "remove"
     }
+    /** @deprecated - consider using EditorSettings instead */
     interface EditorOptions {
         BaseIndentSize?: number;
         IndentSize: number;
@@ -6396,6 +6399,12 @@ declare namespace ts {
     interface RenameInfoFailure {
         canRename: false;
         localizedErrorMessage: string;
+    }
+    /**
+     * @deprecated Use `UserPreferences` instead.
+     */
+    interface RenameInfoOptions {
+        readonly allowRenameOfImportPath?: boolean;
     }
     interface DocCommentTemplateOptions {
         readonly generateReturnInDocTemplate?: boolean;

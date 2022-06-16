@@ -55,7 +55,6 @@ namespace ts.Rename {
         const wouldRenameNodeModules = wouldRenameInOtherNodeModules(sourceFile, symbol, typeChecker, preferences);
         if (wouldRenameNodeModules) {
             return getRenameInfoError(wouldRenameNodeModules);
-            // >> TODO: improve diagnostics message
         }
 
         const kind = SymbolDisplay.getSymbolKind(typeChecker, symbol, node);
