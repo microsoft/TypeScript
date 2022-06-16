@@ -40779,7 +40779,8 @@ namespace ts {
                 // in order to prevent collisions with declarations that were exported from the current module (they still contribute to local names).
                 symbol = getMergedSymbol(symbol.exportSymbol || symbol);
 
-                if (isInJSFile(node) && !(target.flags & SymbolFlags.Value)) {
+                // A type-only import/export will already have a grammar error in a JS file, so no need to issue more errors within
+                if (isInJSFile(node) && !(target.flags & SymbolFlags.Value) && !isTypeOnlyImportOrExportDeclaration(node)) {
                     const errorNode =
                         isImportOrExportSpecifier(node) ? node.propertyName || node.name :
                         isNamedDeclaration(node) ? node.name :
