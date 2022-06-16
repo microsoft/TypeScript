@@ -329,11 +329,13 @@ namespace ts.server {
         const seen = createDocumentSpanSet();
 
         perProjectResults.forEach((projectResults, project) => {
-            for (const result of projectResults) {
-                // If there's a mapped location, it'll appear in the results for another project
-                if (!seen.has(result) && !getMappedLocationForProject(documentSpanLocation(result), project)) {
-                    results.push(result);
-                    seen.add(result);
+            if (projectResults) {
+                for (const result of projectResults) {
+                    // If there's a mapped location, it'll appear in the results for another project
+                    if (!seen.has(result) && !getMappedLocationForProject(documentSpanLocation(result), project)) {
+                        results.push(result);
+                        seen.add(result);
+                    }
                 }
             }
         });
@@ -383,9 +385,11 @@ namespace ts.server {
         if (defaultProjectResults?.[0].references[0]?.isDefinition === undefined) {
             // Clear all isDefinition properties
             perProjectResults.forEach(projectResults => {
-                for (const referencedSymbol of projectResults) {
-                    for (const ref of referencedSymbol.references) {
-                        delete ref.isDefinition;
+                if (projectResults) {
+                    for (const referencedSymbol of projectResults) {
+                        for (const ref of referencedSymbol.references) {
+                            delete ref.isDefinition;
+                        }
                     }
                 }
             });
