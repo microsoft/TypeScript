@@ -30,10 +30,10 @@ verify.completions({
   preferences: {
     allowIncompleteCompletions: true,
     includeCompletionsForModuleExports: true,
-    autoImportFileExcludePatterns: ["**/index.*"],
+    autoImportFileExcludePatterns: ["/**/index.*"],
   },
 });
 
 verify.importFixModuleSpecifiers("",
   ["./lib/main", "./lib/components/button/Button"],
-  { autoImportFileExcludePatterns: ["**/index.*"] });
+  { autoImportFileExcludePatterns: ["/**/index.*"] });

@@ -17,7 +17,7 @@
 // @Filename: /project/index.ts
 //// S3/**/
 
-const autoImportFileExcludePatterns = ["**/node_modules/aws-sdk"];
+const autoImportFileExcludePatterns = ["/**/node_modules/aws-sdk"];
 
 verify.completions({
   marker: "",
