@@ -54,10 +54,10 @@ verify.renameInfoSucceeded(
 
 goTo.marker("notOk");
 verify.renameInfoFailed(
-    undefined,
+    "You cannot rename elements that are defined in a 'node_modules' folder.",
     { providePrefixAndSuffixTextForRename: true });
 verify.renameInfoFailed(
-    undefined,
+    "You cannot rename elements that are defined in a 'node_modules' folder.",
     { providePrefixAndSuffixTextForRename: false });
 
 goTo.marker("okWithAlias");
@@ -70,5 +70,5 @@ verify.renameInfoSucceeded(
     h,
     { providePrefixAndSuffixTextForRename: true });
 verify.renameInfoFailed(
-    undefined,
+    "You cannot rename elements that are defined in a 'node_modules' folder.",
     { providePrefixAndSuffixTextForRename: false });

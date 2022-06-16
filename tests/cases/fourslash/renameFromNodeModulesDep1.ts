@@ -29,4 +29,4 @@ verify.renameInfoFailed(
     undefined,
     { providePrefixAndSuffixTextForRename: false });
 goTo.marker("notOk");
-verify.renameInfoFailed(); // >> TODO: update expected message
+verify.renameInfoFailed("You cannot rename elements that are defined in a 'node_modules' folder.");

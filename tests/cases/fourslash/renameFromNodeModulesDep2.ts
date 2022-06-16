@@ -27,10 +27,10 @@ verify.renameInfoSucceeded(
     okWithAliasRange,
     { providePrefixAndSuffixTextForRename: true });
 verify.renameInfoFailed(
-    undefined,
+    "You cannot rename elements that are defined in another 'node_modules' folder.",
     { providePrefixAndSuffixTextForRename: false });
 goTo.marker("notOk");
-verify.renameInfoFailed();
+verify.renameInfoFailed("You cannot rename elements that are defined in another 'node_modules' folder.");
 goTo.marker("ok2");
 verify.renameInfoSucceeded(
     undefined,

@@ -52,8 +52,9 @@ namespace ts.Rename {
         }
 
         // Disallow rename for elements that would rename across `*/node_modules/*` packages.
-        if (wouldRenameAcrossExternalLibrary(sourceFile, symbol, typeChecker, preferences)) {
-            return getRenameInfoError(Diagnostics.You_cannot_rename_elements_that_are_defined_in_an_external_library_inside_node_modules_Slash);
+        const wouldRenameNodeModules = wouldRenameInOtherNodeModules(sourceFile, symbol, typeChecker, preferences);
+        if (wouldRenameNodeModules) {
+            return getRenameInfoError(wouldRenameNodeModules);
             // >> TODO: improve diagnostics message
         }
 
@@ -71,7 +72,12 @@ namespace ts.Rename {
         return program.isSourceFileDefaultLibrary(sourceFile) && fileExtensionIs(sourceFile.fileName, Extension.Dts);
     }
 
-    function wouldRenameAcrossExternalLibrary(originalFile: SourceFile, symbol: Symbol, checker: TypeChecker, preferences: UserPreferences): boolean {
+    function wouldRenameInOtherNodeModules(
+        originalFile: SourceFile,
+        symbol: Symbol,
+        checker: TypeChecker,
+        preferences: UserPreferences
+    ): DiagnosticMessage | undefined {
         if (!preferences.providePrefixAndSuffixTextForRename && symbol.flags & SymbolFlags.Alias) {
             const importSpecifier = find(symbol.declarations!, decl => isImportSpecifier(decl));
             if (importSpecifier && !(importSpecifier as ImportSpecifier).propertyName) {
@@ -79,27 +85,40 @@ namespace ts.Rename {
             }
         }
         const { declarations } = symbol;
-        const originalPackage = getPackagePath(originalFile.path);
+        if (!declarations) {
+            return undefined;
+        }
+        const originalPackage = getPackagePathComponents(originalFile.path);
         if (originalPackage === undefined) { // original source file is not in node_modules
-            return some(declarations, declaration => !!getPackagePath(declaration.getSourceFile().path));
+            if (some(declarations, declaration => isInsideNodeModules(declaration.getSourceFile().path))) {
+                return Diagnostics.You_cannot_rename_elements_that_are_defined_in_a_node_modules_folder;
+            }
+            else {
+                return undefined;
+            }
         }
         // original source file is in node_modules
-        return some(declarations, declaration => {
-            const declPackage = getPackagePath(declaration.getSourceFile().path);
+        for (const declaration of declarations) {
+            const declPackage = getPackagePathComponents(declaration.getSourceFile().path);
             if (declPackage) {
-                return comparePaths(originalPackage, declPackage) !== Comparison.EqualTo;
+                const length = Math.min(originalPackage.length, declPackage.length);
+                for (let i = 0; i <= length; i++) {
+                    if (compareStringsCaseSensitive(originalPackage[i], declPackage[i]) !== Comparison.EqualTo) {
+                        return Diagnostics.You_cannot_rename_elements_that_are_defined_in_another_node_modules_folder;
+                    }
+                }
             }
-            return false;
-        });
+        }
+        return undefined;
     }
 
-    function getPackagePath(filePath: Path): string | undefined {
+    function getPackagePathComponents(filePath: Path): string[] | undefined {
         const components = getPathComponents(filePath);
         const nodeModulesIdx = components.lastIndexOf("node_modules");
         if (nodeModulesIdx === -1) {
             return undefined;
         }
-        return getPathFromPathComponents(components.slice(0, nodeModulesIdx + 2));
+        return components.slice(0, nodeModulesIdx + 2);
     }
 
     function getRenameInfoForModule(node: StringLiteralLike, sourceFile: SourceFile, moduleSymbol: Symbol): RenameInfo | undefined {
