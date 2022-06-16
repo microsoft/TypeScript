@@ -52,7 +52,6 @@ namespace ts.Rename {
         }
 
         // Disallow rename for elements that would rename across `*/node_modules/*` packages.
-        // if (declarations.some(declaration => isDefinedInExternalLibrary(program, declaration))) {
         if (wouldRenameAcrossExternalLibrary(sourceFile, symbol, typeChecker, preferences)) {
             return getRenameInfoError(Diagnostics.You_cannot_rename_elements_that_are_defined_in_an_external_library_inside_node_modules_Slash);
             // >> TODO: improve diagnostics message
@@ -74,8 +73,8 @@ namespace ts.Rename {
 
     function wouldRenameAcrossExternalLibrary(originalFile: SourceFile, symbol: Symbol, checker: TypeChecker, preferences: UserPreferences): boolean {
         if (!preferences.providePrefixAndSuffixTextForRename && symbol.flags & SymbolFlags.Alias) {
-            const importSpecifier = find(symbol.declarations!, decl => isImportSpecifier(decl)) as ImportSpecifier;
-            if (importSpecifier && !importSpecifier.propertyName) {
+            const importSpecifier = find(symbol.declarations!, decl => isImportSpecifier(decl));
+            if (importSpecifier && !(importSpecifier as ImportSpecifier).propertyName) {
                 symbol = checker.getAliasedSymbol(symbol);
             }
         }
