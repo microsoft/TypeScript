@@ -79,7 +79,7 @@ namespace ts.Rename {
         preferences: UserPreferences
     ): DiagnosticMessage | undefined {
         if (!preferences.providePrefixAndSuffixTextForRename && symbol.flags & SymbolFlags.Alias) {
-            const importSpecifier = find(symbol.declarations!, decl => isImportSpecifier(decl));
+            const importSpecifier = symbol.declarations && find(symbol.declarations, decl => isImportSpecifier(decl));
             if (importSpecifier && !(importSpecifier as ImportSpecifier).propertyName) {
                 symbol = checker.getAliasedSymbol(symbol);
             }
