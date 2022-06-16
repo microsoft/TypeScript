@@ -4137,6 +4137,7 @@ declare namespace ts {
         readonly includeInlayPropertyDeclarationTypeHints?: boolean;
         readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
         readonly includeInlayEnumMemberValueHints?: boolean;
+        readonly autoImportFileExcludePatterns?: string[];
     }
     /** Represents a bigint literal value without requiring bigint support */
     export interface PseudoBigInt {
@@ -9758,6 +9759,7 @@ declare namespace ts.server.protocol {
         readonly includeInlayPropertyDeclarationTypeHints?: boolean;
         readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
         readonly includeInlayEnumMemberValueHints?: boolean;
+        readonly autoImportFileExcludePatterns?: string[];
     }
     interface CompilerOptions {
         allowJs?: boolean;
