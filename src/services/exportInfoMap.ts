@@ -342,38 +342,30 @@ namespace ts {
     ) {
         const useCaseSensitiveFileNames = hostUsesCaseSensitiveFileNames(host);
         const excludePatterns = preferences.autoImportFileExcludePatterns && mapDefined(preferences.autoImportFileExcludePatterns, spec => {
-            const pattern = getPatternFromSpec(spec, "/", "exclude");
+            // The client is expected to send rooted path specs since we don't know
+            // what directory a relative path is relative to.
+            const pattern = getPatternFromSpec(spec, "", "exclude");
             return pattern ? getRegexFromPattern(pattern, useCaseSensitiveFileNames) : undefined;
         });
 
-        forEachExternalModule(program.getTypeChecker(), program.getSourceFiles(), (module, file) => {
-            if (excludePatterns) {
-                if (file && excludePatterns.some(p => p.test(file.fileName))) {
-                    return;
-                }
-                if (!file && module.declarations?.every(d => excludePatterns.some(p => p.test(d.getSourceFile().fileName)))) {
-                    return;
-                }
-            }
-            cb(module, file, program, /*isFromPackageJson*/ false);
-        });
-
+        forEachExternalModule(program.getTypeChecker(), program.getSourceFiles(), excludePatterns, (module, file) => cb(module, file, program, /*isFromPackageJson*/ false));
         const autoImportProvider = useAutoImportProvider && host.getPackageJsonAutoImportProvider?.();
         if (autoImportProvider) {
             const start = timestamp();
-            forEachExternalModule(autoImportProvider.getTypeChecker(), autoImportProvider.getSourceFiles(), (module, file) => cb(module, file, autoImportProvider, /*isFromPackageJson*/ true));
+            forEachExternalModule(autoImportProvider.getTypeChecker(), autoImportProvider.getSourceFiles(), excludePatterns, (module, file) => cb(module, file, autoImportProvider, /*isFromPackageJson*/ true));
             host.log?.(`forEachExternalModuleToImportFrom autoImportProvider: ${timestamp() - start}`);
         }
     }
 
-    function forEachExternalModule(checker: TypeChecker, allSourceFiles: readonly SourceFile[], cb: (module: Symbol, sourceFile: SourceFile | undefined) => void) {
+    function forEachExternalModule(checker: TypeChecker, allSourceFiles: readonly SourceFile[], excludePatterns: readonly RegExp[] | undefined, cb: (module: Symbol, sourceFile: SourceFile | undefined) => void) {
+        const isExcluded = (fileName: string) => excludePatterns?.some(p => p.test(fileName));
         for (const ambient of checker.getAmbientModules()) {
-            if (!stringContains(ambient.name, "*")) {
+            if (!stringContains(ambient.name, "*") && !(excludePatterns && ambient.declarations?.every(d => isExcluded(d.getSourceFile().fileName)))) {
                 cb(ambient, /*sourceFile*/ undefined);
             }
         }
         for (const sourceFile of allSourceFiles) {
-            if (isExternalOrCommonJsModule(sourceFile)) {
+            if (isExternalOrCommonJsModule(sourceFile) && !isExcluded(sourceFile.fileName)) {
                 cb(checker.getMergedSymbol(sourceFile.symbol), sourceFile);
             }
         }
