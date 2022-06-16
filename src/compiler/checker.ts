@@ -672,9 +672,9 @@ namespace ts {
                 return moduleSpecifier && resolveExternalModuleName(moduleSpecifier, moduleSpecifier, /*ignoreErrors*/ true);
             },
             resolveExternalModuleSymbol,
-            tryGetThisTypeAt: (nodeIn, includeGlobalThis) => {
+            tryGetThisTypeAt: (nodeIn, includeGlobalThis, container) => {
                 const node = getParseTreeNode(nodeIn);
-                return node && tryGetThisTypeAt(node, includeGlobalThis);
+                return node && tryGetThisTypeAt(node, includeGlobalThis, container);
             },
             getTypeArgumentConstraint: nodeIn => {
                 const node = getParseTreeNode(nodeIn, isTypeNode);
