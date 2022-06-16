@@ -21195,6 +21195,10 @@ namespace ts {
             let arrayOrTupleConstituent: TypeReference | undefined;
             for (const constituent of (type as IntersectionType).types) {
                 if (isArrayOrTupleType(constituent)) {
+                    // If this is an intersection of two array or tuple types, prefer neither.
+                    if (arrayOrTupleConstituent) {
+                        return undefined;
+                    }
                     arrayOrTupleConstituent = constituent;
                 }
                 else {

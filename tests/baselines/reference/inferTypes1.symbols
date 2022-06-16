@@ -784,8 +784,12 @@ type Head<T extends string[]> = T extends [infer THead, ...infer _] ? THead : ne
 >_ : Symbol(_, Decl(inferTypes1.ts, 188, 64))
 >THead : Symbol(THead, Decl(inferTypes1.ts, 188, 48))
 
-type T100 = Head<["a", "c"] & { foo: "bar" }>;
+type T100 = Head<["a", "c"] & { foo: "bar" }>; // "a"
 >T100 : Symbol(T100, Decl(inferTypes1.ts, 188, 84))
 >Head : Symbol(Head, Decl(inferTypes1.ts, 185, 64))
 >foo : Symbol(foo, Decl(inferTypes1.ts, 189, 31))
+
+type T101 = Head<["a", "c"] & readonly ["a", "c"]>; // "a" | "c"
+>T101 : Symbol(T101, Decl(inferTypes1.ts, 189, 46))
+>Head : Symbol(Head, Decl(inferTypes1.ts, 185, 64))
 

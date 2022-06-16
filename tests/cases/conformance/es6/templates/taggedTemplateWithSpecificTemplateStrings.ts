@@ -1,5 +1,6 @@
 // @target: esnext
 // @noEmit: true
+// @strict: true
 
 // overload resolution
 declare function f1(array: TemplateStringsArrayOf<readonly ["a", ...string[]]>, ...args: any): "A";
@@ -43,3 +44,49 @@ const raw_r1 = raw`a${1}c`;            // "a1c"
 // "a\\nb\nc"
 const raw_r2 = raw`a\n${"b"}
 c`;
+
+// Jest's `it.each`:
+type Whitespace = " " | "\t" | "\v"
+
+type Trim<S extends string, Chars extends string = Whitespace | "\n"> =
+    S extends `${Chars}${infer R}` ? Trim<R, Chars> :
+    S extends `${infer R}${Chars}` ? Trim<R, Chars> :
+    S;
+
+type Split<S extends string, D extends string> =
+    S extends D ? [] :
+    S extends `${infer H}${D}${infer T}` ? [H, ...Split<T, D>] :
+    [S];
+
+type ParseRows<A extends any[], S extends readonly string[], Row extends any[] = [], Rows extends any[][] = []> =
+    [A, S] extends [[infer AH, ...infer AT], readonly [infer TH extends string, ...infer TT extends string[]]] ?
+        Trim<TH, Whitespace> extends "|" ? ParseRows<AT, TT, [...Row, AH], Rows> :
+        Trim<TH, Whitespace> extends "\n" | "" ? ParseRows<AT, TT, [], [...Rows, [...Row, AH]]> :
+        never :
+    [A, S] extends [[], readonly []] ? Rows :
+    never;
+
+type JestEachArgument<Headers extends string[], Rows extends any[][]> = {
+    [P1 in keyof Rows]: {
+        [P2 in keyof Headers as P2 extends `${number}` ? Trim<Headers[P2]> : never]:
+            P2 extends keyof Rows[P1] ? Rows[P1][P2] : undefined;
+    };
+}[number];
+
+type JestEachFunction<Arg> = (name: string, cb: (arg: Arg) => void, timeout?: number) => void;
+
+type JestEach<T extends readonly string[], A extends any[]> =
+    T extends readonly [infer TH extends string, ...infer TT extends readonly string[]] ?
+        JestEachFunction<JestEachArgument<Split<Trim<TH>, "|">, ParseRows<A, TT>>> :
+        null;
+
+declare function each<T extends readonly string[], A extends unknown[]>(strs: T, ...args: A): JestEach<T, A>;
+
+each`
+    foo    | bar
+    ${"a"} | ${1}
+    ${"c"} | ${undefined}
+`("test", ({ foo, bar }) => {
+    foo;
+    bar;
+});

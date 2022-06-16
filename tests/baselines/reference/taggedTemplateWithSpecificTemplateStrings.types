@@ -69,7 +69,7 @@ const f0_r0 = f0`a${"b"}c`; // [TemplateStringsArrayOf<readonly ["a", "c"], read
 
 // interpolation example
 type TemplatePrimitive = string | number | bigint | boolean | null | undefined;
->TemplatePrimitive : string | number | bigint | boolean
+>TemplatePrimitive : string | number | bigint | boolean | null | undefined
 >null : null
 
 type Interpolate<T extends readonly string[], A extends any[], R extends string = ''> =
@@ -140,4 +140,90 @@ const raw_r2 = raw`a\n${"b"}
 >"b" : "b"
 
 c`;
+
+// Jest's `it.each`:
+type Whitespace = " " | "\t" | "\v"
+>Whitespace : " " | "\t" | "\v"
+
+type Trim<S extends string, Chars extends string = Whitespace | "\n"> =
+>Trim : Trim<S, Chars>
+
+    S extends `${Chars}${infer R}` ? Trim<R, Chars> :
+    S extends `${infer R}${Chars}` ? Trim<R, Chars> :
+    S;
+
+type Split<S extends string, D extends string> =
+>Split : Split<S, D>
+
+    S extends D ? [] :
+    S extends `${infer H}${D}${infer T}` ? [H, ...Split<T, D>] :
+    [S];
+
+type ParseRows<A extends any[], S extends readonly string[], Row extends any[] = [], Rows extends any[][] = []> =
+>ParseRows : ParseRows<A, S, Row, Rows>
+
+    [A, S] extends [[infer AH, ...infer AT], readonly [infer TH extends string, ...infer TT extends string[]]] ?
+        Trim<TH, Whitespace> extends "|" ? ParseRows<AT, TT, [...Row, AH], Rows> :
+        Trim<TH, Whitespace> extends "\n" | "" ? ParseRows<AT, TT, [], [...Rows, [...Row, AH]]> :
+        never :
+    [A, S] extends [[], readonly []] ? Rows :
+    never;
+
+type JestEachArgument<Headers extends string[], Rows extends any[][]> = {
+>JestEachArgument : JestEachArgument<Headers, Rows>
+
+    [P1 in keyof Rows]: {
+        [P2 in keyof Headers as P2 extends `${number}` ? Trim<Headers[P2]> : never]:
+            P2 extends keyof Rows[P1] ? Rows[P1][P2] : undefined;
+    };
+}[number];
+
+type JestEachFunction<Arg> = (name: string, cb: (arg: Arg) => void, timeout?: number) => void;
+>JestEachFunction : JestEachFunction<Arg>
+>name : string
+>cb : (arg: Arg) => void
+>arg : Arg
+>timeout : number | undefined
+
+type JestEach<T extends readonly string[], A extends any[]> =
+>JestEach : JestEach<T, A>
+
+    T extends readonly [infer TH extends string, ...infer TT extends readonly string[]] ?
+        JestEachFunction<JestEachArgument<Split<Trim<TH>, "|">, ParseRows<A, TT>>> :
+        null;
+>null : null
+
+declare function each<T extends readonly string[], A extends unknown[]>(strs: T, ...args: A): JestEach<T, A>;
+>each : <T extends readonly string[], A extends unknown[]>(strs: T, ...args: A) => JestEach<T, A>
+>strs : T
+>args : A
+
+each`
+>each`    foo    | bar    ${"a"} | ${1}    ${"c"} | ${undefined}`("test", ({ foo, bar }) => {    foo;    bar;}) : void
+>each`    foo    | bar    ${"a"} | ${1}    ${"c"} | ${undefined}` : JestEachFunction<{ foo: string; bar: number; } | { foo: string; bar: undefined; }>
+>each : <T extends readonly string[], A extends unknown[]>(strs: T, ...args: A) => JestEach<T, A>
+>`    foo    | bar    ${"a"} | ${1}    ${"c"} | ${undefined}` : string
+
+    foo    | bar
+    ${"a"} | ${1}
+>"a" : "a"
+>1 : 1
+
+    ${"c"} | ${undefined}
+>"c" : "c"
+>undefined : undefined
+
+`("test", ({ foo, bar }) => {
+>"test" : "test"
+>({ foo, bar }) => {    foo;    bar;} : ({ foo, bar }: { foo: string; bar: number; } | { foo: string; bar: undefined; }) => void
+>foo : string
+>bar : number | undefined
+
+    foo;
+>foo : string
+
+    bar;
+>bar : number | undefined
+
+});
 

@@ -158,3 +158,190 @@ const raw_r2 = raw`a\n${"b"}
 
 c`;
 
+// Jest's `it.each`:
+type Whitespace = " " | "\t" | "\v"
+>Whitespace : Symbol(Whitespace, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 41, 3))
+
+type Trim<S extends string, Chars extends string = Whitespace | "\n"> =
+>Trim : Symbol(Trim, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 44, 35))
+>S : Symbol(S, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 46, 10))
+>Chars : Symbol(Chars, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 46, 27))
+>Whitespace : Symbol(Whitespace, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 41, 3))
+
+    S extends `${Chars}${infer R}` ? Trim<R, Chars> :
+>S : Symbol(S, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 46, 10))
+>Chars : Symbol(Chars, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 46, 27))
+>R : Symbol(R, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 47, 30))
+>Trim : Symbol(Trim, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 44, 35))
+>R : Symbol(R, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 47, 30))
+>Chars : Symbol(Chars, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 46, 27))
+
+    S extends `${infer R}${Chars}` ? Trim<R, Chars> :
+>S : Symbol(S, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 46, 10))
+>R : Symbol(R, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 48, 22))
+>Chars : Symbol(Chars, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 46, 27))
+>Trim : Symbol(Trim, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 44, 35))
+>R : Symbol(R, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 48, 22))
+>Chars : Symbol(Chars, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 46, 27))
+
+    S;
+>S : Symbol(S, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 46, 10))
+
+type Split<S extends string, D extends string> =
+>Split : Symbol(Split, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 49, 6))
+>S : Symbol(S, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 51, 11))
+>D : Symbol(D, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 51, 28))
+
+    S extends D ? [] :
+>S : Symbol(S, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 51, 11))
+>D : Symbol(D, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 51, 28))
+
+    S extends `${infer H}${D}${infer T}` ? [H, ...Split<T, D>] :
+>S : Symbol(S, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 51, 11))
+>H : Symbol(H, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 53, 22))
+>D : Symbol(D, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 51, 28))
+>T : Symbol(T, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 53, 36))
+>H : Symbol(H, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 53, 22))
+>Split : Symbol(Split, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 49, 6))
+>T : Symbol(T, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 53, 36))
+>D : Symbol(D, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 51, 28))
+
+    [S];
+>S : Symbol(S, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 51, 11))
+
+type ParseRows<A extends any[], S extends readonly string[], Row extends any[] = [], Rows extends any[][] = []> =
+>ParseRows : Symbol(ParseRows, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 54, 8))
+>A : Symbol(A, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 56, 15))
+>S : Symbol(S, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 56, 31))
+>Row : Symbol(Row, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 56, 60))
+>Rows : Symbol(Rows, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 56, 84))
+
+    [A, S] extends [[infer AH, ...infer AT], readonly [infer TH extends string, ...infer TT extends string[]]] ?
+>A : Symbol(A, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 56, 15))
+>S : Symbol(S, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 56, 31))
+>AH : Symbol(AH, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 57, 26))
+>AT : Symbol(AT, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 57, 39))
+>TH : Symbol(TH, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 57, 60))
+>TT : Symbol(TT, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 57, 88))
+
+        Trim<TH, Whitespace> extends "|" ? ParseRows<AT, TT, [...Row, AH], Rows> :
+>Trim : Symbol(Trim, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 44, 35))
+>TH : Symbol(TH, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 57, 60))
+>Whitespace : Symbol(Whitespace, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 41, 3))
+>ParseRows : Symbol(ParseRows, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 54, 8))
+>AT : Symbol(AT, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 57, 39))
+>TT : Symbol(TT, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 57, 88))
+>Row : Symbol(Row, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 56, 60))
+>AH : Symbol(AH, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 57, 26))
+>Rows : Symbol(Rows, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 56, 84))
+
+        Trim<TH, Whitespace> extends "\n" | "" ? ParseRows<AT, TT, [], [...Rows, [...Row, AH]]> :
+>Trim : Symbol(Trim, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 44, 35))
+>TH : Symbol(TH, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 57, 60))
+>Whitespace : Symbol(Whitespace, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 41, 3))
+>ParseRows : Symbol(ParseRows, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 54, 8))
+>AT : Symbol(AT, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 57, 39))
+>TT : Symbol(TT, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 57, 88))
+>Rows : Symbol(Rows, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 56, 84))
+>Row : Symbol(Row, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 56, 60))
+>AH : Symbol(AH, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 57, 26))
+
+        never :
+    [A, S] extends [[], readonly []] ? Rows :
+>A : Symbol(A, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 56, 15))
+>S : Symbol(S, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 56, 31))
+>Rows : Symbol(Rows, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 56, 84))
+
+    never;
+
+type JestEachArgument<Headers extends string[], Rows extends any[][]> = {
+>JestEachArgument : Symbol(JestEachArgument, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 62, 10))
+>Headers : Symbol(Headers, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 64, 22))
+>Rows : Symbol(Rows, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 64, 47))
+
+    [P1 in keyof Rows]: {
+>P1 : Symbol(P1, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 65, 5))
+>Rows : Symbol(Rows, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 64, 47))
+
+        [P2 in keyof Headers as P2 extends `${number}` ? Trim<Headers[P2]> : never]:
+>P2 : Symbol(P2, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 66, 9))
+>Headers : Symbol(Headers, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 64, 22))
+>P2 : Symbol(P2, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 66, 9))
+>Trim : Symbol(Trim, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 44, 35))
+>Headers : Symbol(Headers, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 64, 22))
+>P2 : Symbol(P2, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 66, 9))
+
+            P2 extends keyof Rows[P1] ? Rows[P1][P2] : undefined;
+>P2 : Symbol(P2, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 66, 9))
+>Rows : Symbol(Rows, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 64, 47))
+>P1 : Symbol(P1, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 65, 5))
+>Rows : Symbol(Rows, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 64, 47))
+>P1 : Symbol(P1, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 65, 5))
+>P2 : Symbol(P2, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 66, 9))
+
+    };
+}[number];
+
+type JestEachFunction<Arg> = (name: string, cb: (arg: Arg) => void, timeout?: number) => void;
+>JestEachFunction : Symbol(JestEachFunction, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 69, 10))
+>Arg : Symbol(Arg, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 71, 22))
+>name : Symbol(name, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 71, 30))
+>cb : Symbol(cb, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 71, 43))
+>arg : Symbol(arg, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 71, 49))
+>Arg : Symbol(Arg, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 71, 22))
+>timeout : Symbol(timeout, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 71, 67))
+
+type JestEach<T extends readonly string[], A extends any[]> =
+>JestEach : Symbol(JestEach, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 71, 94))
+>T : Symbol(T, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 73, 14))
+>A : Symbol(A, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 73, 42))
+
+    T extends readonly [infer TH extends string, ...infer TT extends readonly string[]] ?
+>T : Symbol(T, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 73, 14))
+>TH : Symbol(TH, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 74, 29))
+>TT : Symbol(TT, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 74, 57))
+
+        JestEachFunction<JestEachArgument<Split<Trim<TH>, "|">, ParseRows<A, TT>>> :
+>JestEachFunction : Symbol(JestEachFunction, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 69, 10))
+>JestEachArgument : Symbol(JestEachArgument, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 62, 10))
+>Split : Symbol(Split, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 49, 6))
+>Trim : Symbol(Trim, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 44, 35))
+>TH : Symbol(TH, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 74, 29))
+>ParseRows : Symbol(ParseRows, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 54, 8))
+>A : Symbol(A, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 73, 42))
+>TT : Symbol(TT, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 74, 57))
+
+        null;
+
+declare function each<T extends readonly string[], A extends unknown[]>(strs: T, ...args: A): JestEach<T, A>;
+>each : Symbol(each, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 76, 13))
+>T : Symbol(T, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 78, 22))
+>A : Symbol(A, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 78, 50))
+>strs : Symbol(strs, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 78, 72))
+>T : Symbol(T, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 78, 22))
+>args : Symbol(args, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 78, 80))
+>A : Symbol(A, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 78, 50))
+>JestEach : Symbol(JestEach, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 71, 94))
+>T : Symbol(T, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 78, 22))
+>A : Symbol(A, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 78, 50))
+
+each`
+>each : Symbol(each, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 76, 13))
+
+    foo    | bar
+    ${"a"} | ${1}
+    ${"c"} | ${undefined}
+>undefined : Symbol(undefined)
+
+`("test", ({ foo, bar }) => {
+>foo : Symbol(foo, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 84, 12))
+>bar : Symbol(bar, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 84, 17))
+
+    foo;
+>foo : Symbol(foo, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 84, 12))
+
+    bar;
+>bar : Symbol(bar, Decl(taggedTemplateWithSpecificTemplateStrings.ts, 84, 17))
+
+});
+
