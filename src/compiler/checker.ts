@@ -21201,16 +21201,21 @@ namespace ts {
                     }
                     arrayOrTupleConstituent = constituent;
                 }
-                else {
-                    const properties = getPropertiesOfType(constituent);
-                    for (const property of properties) {
-                        if (isNumericLiteralName(property.escapedName) || property.escapedName === "length" as __String) {
+            }
+
+            if (arrayOrTupleConstituent) {
+                for (const constituent of (type as IntersectionType).types) {
+                    if (constituent !== arrayOrTupleConstituent) {
+                        const properties = getPropertiesOfType(constituent);
+                        for (const property of properties) {
+                            if (isNumericLiteralName(property.escapedName) || property.escapedName === "length" as __String) {
+                                return undefined;
+                            }
+                        }
+
+                        if (some(getIndexInfosOfType(constituent))) {
                             return undefined;
                         }
-                    }
-
-                    if (some(getIndexInfosOfType(constituent))) {
-                        return undefined;
                     }
                 }
             }
