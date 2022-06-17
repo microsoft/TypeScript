@@ -8990,6 +8990,7 @@ namespace ts {
         readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
         readonly includeInlayEnumMemberValueHints?: boolean;
         readonly allowRenameOfImportPath?: boolean;
+        readonly autoImportFileExcludePatterns?: string[];
     }
 
     /** Represents a bigint literal value without requiring bigint support */

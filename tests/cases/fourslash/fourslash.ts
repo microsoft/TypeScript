@@ -662,6 +662,7 @@ declare namespace FourSlashInterface {
         readonly jsxAttributeCompletionStyle?: "auto" | "braces" | "none";
         readonly providePrefixAndSuffixTextForRename?: boolean;
         readonly allowRenameOfImportPath?: boolean;
+        readonly autoImportFileExcludePatterns?: readonly string[];
     }
     interface InlayHintsOptions extends UserPreferences {
         readonly includeInlayParameterNameHints?: "none" | "literals" | "all";
