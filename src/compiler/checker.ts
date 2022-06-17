@@ -40828,6 +40828,42 @@ namespace ts {
                 // otherwise it will conflict with some local declaration). Note that in addition to normal flags we include matching SymbolFlags.Export*
                 // in order to prevent collisions with declarations that were exported from the current module (they still contribute to local names).
                 symbol = getMergedSymbol(symbol.exportSymbol || symbol);
+
+                // A type-only import/export will already have a grammar error in a JS file, so no need to issue more errors within
+                if (isInJSFile(node) && !(target.flags & SymbolFlags.Value) && !isTypeOnlyImportOrExportDeclaration(node)) {
+                    const errorNode =
+                        isImportOrExportSpecifier(node) ? node.propertyName || node.name :
+                        isNamedDeclaration(node) ? node.name :
+                        node;
+
+                    Debug.assert(node.kind !== SyntaxKind.NamespaceExport);
+                    if (node.kind === SyntaxKind.ExportSpecifier) {
+                        const diag = error(errorNode, Diagnostics.Types_cannot_appear_in_export_declarations_in_JavaScript_files);
+                        const alreadyExportedSymbol = getSourceFileOfNode(node).symbol?.exports?.get((node.propertyName || node.name).escapedText);
+                        if (alreadyExportedSymbol === target) {
+                            const exportingDeclaration = alreadyExportedSymbol.declarations?.find(isJSDocNode);
+                            if (exportingDeclaration) {
+                                addRelatedInfo(diag, createDiagnosticForNode(
+                                    exportingDeclaration,
+                                    Diagnostics._0_is_automatically_exported_here,
+                                    unescapeLeadingUnderscores(alreadyExportedSymbol.escapedName)));
+                            }
+                        }
+                    }
+                    else {
+                        Debug.assert(node.kind !== SyntaxKind.VariableDeclaration);
+                        const importDeclaration = findAncestor(node, or(isImportDeclaration, isImportEqualsDeclaration)) as ImportDeclaration | ImportEqualsDeclaration | undefined;
+                        const moduleSpecifier = (importDeclaration && tryGetModuleSpecifierFromDeclaration(importDeclaration)?.text) ?? "...";
+                        const importedIdentifier = unescapeLeadingUnderscores(isIdentifier(errorNode) ? errorNode.escapedText : symbol.escapedName);
+                        error(
+                            errorNode,
+                            Diagnostics._0_is_a_type_and_cannot_be_imported_in_JavaScript_files_Use_1_in_a_JSDoc_type_annotation,
+                            importedIdentifier,
+                            `import("${moduleSpecifier}").${importedIdentifier}`);
+                    }
+                    return;
+                }
+
                 const excludedMeanings =
                     (symbol.flags & (SymbolFlags.Value | SymbolFlags.ExportValue) ? SymbolFlags.Value : 0) |
                     (symbol.flags & SymbolFlags.Type ? SymbolFlags.Type : 0) |

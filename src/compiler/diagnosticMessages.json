@@ -3498,7 +3498,7 @@
     "'{0}' is an unused renaming of '{1}'. Did you intend to use it as a type annotation?": {
         "category": "Error",
         "code": 2842
-    }, 
+    },
     "We can only write a type for '{0}' by adding a type for the entire parameter here.": {
         "category": "Error",
         "code": 2843
@@ -7405,5 +7405,17 @@
     "A 'return' statement cannot be used inside a class static block.": {
         "category": "Error",
         "code": 18041
+    },
+    "'{0}' is a type and cannot be imported in JavaScript files. Use '{1}' in a JSDoc type annotation.": {
+        "category": "Error",
+        "code": 18042
+    },
+    "Types cannot appear in export declarations in JavaScript files.": {
+        "category": "Error",
+        "code": 18043
+    },
+    "'{0}' is automatically exported here.": {
+        "category": "Message",
+        "code": 18044
     }
 }
