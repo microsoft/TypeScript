@@ -4,7 +4,7 @@
 // @target: es3,es6
 
 // @filename: fileJs.js
-x ? y => ({ y }) : z => ({ z }) // Legal JS
+a ? b : (c) : d => e // Not legal JS; "Unexpected token ':'" at last colon
 
 // @filename: fileTs.ts
-x ? y => ({ y }) : z => ({ z })
+a ? b : (c) : d => e
