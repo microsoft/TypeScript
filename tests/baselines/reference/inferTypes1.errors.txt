@@ -210,6 +210,7 @@ tests/cases/conformance/types/conditional/inferTypes1.ts(153,40): error TS2322: 
     type B<T> = string extends T ? { [P in T]: void; } : T;  // Error
                                            ~
 !!! error TS2322: Type 'T' is not assignable to type 'string | number | symbol'.
+!!! related TS2208 tests/cases/conformance/types/conditional/inferTypes1.ts:153:8: This type parameter might need an `extends string | number | symbol` constraint.
     
     // Repro from #22302
     

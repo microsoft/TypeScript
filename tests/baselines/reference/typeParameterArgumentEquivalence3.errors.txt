@@ -18,5 +18,6 @@ tests/cases/compiler/typeParameterArgumentEquivalence3.ts(5,5): error TS2322: Ty
         ~
 !!! error TS2322: Type '(item: any) => T' is not assignable to type '(item: any) => boolean'.
 !!! error TS2322:   Type 'T' is not assignable to type 'boolean'.
+!!! related TS2208 tests/cases/compiler/typeParameterArgumentEquivalence3.ts:1:14: This type parameter might need an `extends boolean` constraint.
     }
     

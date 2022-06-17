@@ -165,7 +165,7 @@ namespace ts {
          * Returns a JSON-encoded value of the type:
          * { canRename: boolean, localizedErrorMessage: string, displayName: string, fullDisplayName: string, kind: string, kindModifiers: string, triggerSpan: { start; length } }
          */
-        getRenameInfo(fileName: string, position: number, options?: RenameInfoOptions): string;
+        getRenameInfo(fileName: string, position: number, preferences: UserPreferences): string;
         getSmartSelectionRange(fileName: string, position: number): string;
 
         /**
@@ -855,10 +855,10 @@ namespace ts {
             );
         }
 
-        public getRenameInfo(fileName: string, position: number, options?: RenameInfoOptions): string {
+        public getRenameInfo(fileName: string, position: number, preferences: UserPreferences): string {
             return this.forwardJSONCall(
                 `getRenameInfo('${fileName}', ${position})`,
-                () => this.languageService.getRenameInfo(fileName, position, options)
+                () => this.languageService.getRenameInfo(fileName, position, preferences)
             );
         }
 
