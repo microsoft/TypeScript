@@ -325,7 +325,7 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccess.ts(318,5): error TS232
         a = x;
         ~
 !!! error TS2322: Type 'T' is not assignable to type '{}'.
-!!! related TS2208 tests/cases/conformance/types/keyof/keyofAndIndexedAccess.ts:314:14: This type parameter probably needs an `extends object` constraint.
+!!! related TS2208 tests/cases/conformance/types/keyof/keyofAndIndexedAccess.ts:314:14: This type parameter might need an `extends {}` constraint.
         a = y;
         ~
 !!! error TS2322: Type 'T[keyof T]' is not assignable to type '{}'.

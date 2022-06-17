@@ -83,10 +83,12 @@ tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithMultipleBa
 !!! error TS2430: Interface 'Derived4<T>' incorrectly extends interface 'Base1<number>'.
 !!! error TS2430:   The types of 'x.a' are incompatible between these types.
 !!! error TS2430:     Type 'T' is not assignable to type 'number'.
+!!! related TS2208 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithMultipleBaseTypes.ts:54:24: This type parameter might need an `extends number` constraint.
                   ~~~~~~~~
 !!! error TS2430: Interface 'Derived4<T>' incorrectly extends interface 'Base2<number>'.
 !!! error TS2430:   The types of 'x.b' are incompatible between these types.
 !!! error TS2430:     Type 'T' is not assignable to type 'number'.
+!!! related TS2208 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithMultipleBaseTypes.ts:54:24: This type parameter might need an `extends number` constraint.
             x: {
                 a: T; b: T;
             }
@@ -97,10 +99,12 @@ tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithMultipleBa
 !!! error TS2430: Interface 'Derived5<T>' incorrectly extends interface 'Base1<T>'.
 !!! error TS2430:   Types of property 'x' are incompatible.
 !!! error TS2430:     Type 'T' is not assignable to type '{ a: T; }'.
+!!! related TS2208 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithMultipleBaseTypes.ts:60:24: This type parameter might need an `extends { a: T; }` constraint.
                   ~~~~~~~~
 !!! error TS2430: Interface 'Derived5<T>' incorrectly extends interface 'Base2<T>'.
 !!! error TS2430:   Types of property 'x' are incompatible.
 !!! error TS2430:     Type 'T' is not assignable to type '{ b: T; }'.
+!!! related TS2208 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithMultipleBaseTypes.ts:60:24: This type parameter might need an `extends { b: T; }` constraint.
             x: T;
         }
     }

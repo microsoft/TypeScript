@@ -1242,6 +1242,24 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Add_extends_constraint_2211" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Add `extends` constraint.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[`extends` 제약 조건을 추가합니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Add_extends_constraint_to_all_type_parameters_2212" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Add `extends` constraint to all type parameters]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[모든 형식 매개 변수에 `extends` 제약 조건 추가]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Add_import_from_0_90057" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Add import from "{0}"]]></Val>
@@ -13830,11 +13848,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";This_type_parameter_probably_needs_an_extends_object_constraint_2208" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";This_type_parameter_might_need_an_extends_0_constraint_2208" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[This type parameter probably needs an `extends object` constraint.]]></Val>
+          <Val><![CDATA[This type parameter might need an `extends {0}` constraint.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[이 형식 매개 변수에는 `extends object` 제약 조건이 필요할 수 있습니다.]]></Val>
+            <Val><![CDATA[이 형식 매개 변수에는 `extends {0}` 제약 조건이 필요할 수 있습니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15264,6 +15282,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";We_can_only_write_a_type_for_0_by_adding_a_type_for_the_entire_parameter_here_2843" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[We can only write a type for '{0}' by adding a type for the entire parameter here.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[여기에서 전체 매개 변수에 대한 형식을 추가하여 '{0}'에 대한 형식만 작성할 수 있습니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";When_assigning_functions_check_to_ensure_parameters_and_the_return_values_are_subtype_compatible_6698" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[When assigning functions, check to ensure parameters and the return values are subtype-compatible.]]></Val>
@@ -15614,6 +15641,15 @@
           <Val><![CDATA['{0}' is a type and must be imported using a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA['{0}'은(는) 형식이며, 'preserveValueImports'와 'isolatedModules'를 모두 사용하도록 설정한 경우 형식 전용 가져오기를 사용하여 가져와야 합니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";_0_is_an_unused_renaming_of_1_Did_you_intend_to_use_it_as_a_type_annotation_2842" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' is an unused renaming of '{1}'. Did you intend to use it as a type annotation?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}'은(는) '{1}'의 사용되지 않는 이름 변경입니다. 형식 주석으로 사용하려고 했습니까?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
