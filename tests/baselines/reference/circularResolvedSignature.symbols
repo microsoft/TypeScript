@@ -37,21 +37,17 @@ export function Component() {
         value: "string", // this should be a number
 >value : Symbol(value, Decl(circularResolvedSignature.ts, 9, 53))
 
-        foo: (arg) => setState((prev) => ({ ...prev, arg })),
+        foo: (arg) => setState(arg),
 >foo : Symbol(foo, Decl(circularResolvedSignature.ts, 10, 24))
 >arg : Symbol(arg, Decl(circularResolvedSignature.ts, 11, 14))
 >setState : Symbol(setState, Decl(circularResolvedSignature.ts, 9, 17))
->prev : Symbol(prev, Decl(circularResolvedSignature.ts, 11, 32))
->prev : Symbol(prev, Decl(circularResolvedSignature.ts, 11, 32))
->arg : Symbol(arg, Decl(circularResolvedSignature.ts, 11, 52))
+>arg : Symbol(arg, Decl(circularResolvedSignature.ts, 11, 14))
 
-        bar: (arg) => setState((prev) => ({ ...prev, arg })),
->bar : Symbol(bar, Decl(circularResolvedSignature.ts, 11, 61))
+        bar: (arg) => setState(arg),
+>bar : Symbol(bar, Decl(circularResolvedSignature.ts, 11, 36))
 >arg : Symbol(arg, Decl(circularResolvedSignature.ts, 12, 14))
 >setState : Symbol(setState, Decl(circularResolvedSignature.ts, 9, 17))
->prev : Symbol(prev, Decl(circularResolvedSignature.ts, 12, 32))
->prev : Symbol(prev, Decl(circularResolvedSignature.ts, 12, 32))
->arg : Symbol(arg, Decl(circularResolvedSignature.ts, 12, 52))
+>arg : Symbol(arg, Decl(circularResolvedSignature.ts, 12, 14))
 
     }));
 }

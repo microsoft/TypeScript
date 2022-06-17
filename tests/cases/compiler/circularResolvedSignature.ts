@@ -9,7 +9,7 @@ type Data = Readonly<{
 export function Component() {
     const [state, setState] = useState<Data>(() => ({
         value: "string", // this should be a number
-        foo: (arg) => setState((prev) => ({ ...prev, arg })),
-        bar: (arg) => setState((prev) => ({ ...prev, arg })),
+        foo: (arg) => setState(arg),
+        bar: (arg) => setState(arg),
     }));
 }

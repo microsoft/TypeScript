@@ -26,40 +26,30 @@ export function Component() {
     const [state, setState] = useState<Data>(() => ({
 >state : Readonly<{ value: number; foo: (arg: any) => void; bar: (arg: any) => void; }>
 >setState : (s: Readonly<{ value: number; foo: (arg: any) => void; bar: (arg: any) => void; }>) => void
->useState<Data>(() => ({        value: "string", // this should be a number        foo: (arg) => setState((prev) => ({ ...prev, arg })),        bar: (arg) => setState((prev) => ({ ...prev, arg })),    })) : [Readonly<{ value: number; foo: (arg: any) => void; bar: (arg: any) => void; }>, (s: Readonly<{ value: number; foo: (arg: any) => void; bar: (arg: any) => void; }>) => void]
+>useState<Data>(() => ({        value: "string", // this should be a number        foo: (arg) => setState(arg),        bar: (arg) => setState(arg),    })) : [Readonly<{ value: number; foo: (arg: any) => void; bar: (arg: any) => void; }>, (s: Readonly<{ value: number; foo: (arg: any) => void; bar: (arg: any) => void; }>) => void]
 >useState : <S>(initialState: () => S) => [S, (s: S) => void]
->() => ({        value: "string", // this should be a number        foo: (arg) => setState((prev) => ({ ...prev, arg })),        bar: (arg) => setState((prev) => ({ ...prev, arg })),    }) : () => { value: string; foo: (arg: any) => void; bar: (arg: any) => void; }
->({        value: "string", // this should be a number        foo: (arg) => setState((prev) => ({ ...prev, arg })),        bar: (arg) => setState((prev) => ({ ...prev, arg })),    }) : { value: string; foo: (arg: any) => void; bar: (arg: any) => void; }
->{        value: "string", // this should be a number        foo: (arg) => setState((prev) => ({ ...prev, arg })),        bar: (arg) => setState((prev) => ({ ...prev, arg })),    } : { value: string; foo: (arg: any) => void; bar: (arg: any) => void; }
+>() => ({        value: "string", // this should be a number        foo: (arg) => setState(arg),        bar: (arg) => setState(arg),    }) : () => { value: string; foo: (arg: any) => void; bar: (arg: any) => void; }
+>({        value: "string", // this should be a number        foo: (arg) => setState(arg),        bar: (arg) => setState(arg),    }) : { value: string; foo: (arg: any) => void; bar: (arg: any) => void; }
+>{        value: "string", // this should be a number        foo: (arg) => setState(arg),        bar: (arg) => setState(arg),    } : { value: string; foo: (arg: any) => void; bar: (arg: any) => void; }
 
         value: "string", // this should be a number
 >value : string
 >"string" : "string"
 
-        foo: (arg) => setState((prev) => ({ ...prev, arg })),
+        foo: (arg) => setState(arg),
 >foo : (arg: any) => void
->(arg) => setState((prev) => ({ ...prev, arg })) : (arg: any) => void
+>(arg) => setState(arg) : (arg: any) => void
 >arg : any
->setState((prev) => ({ ...prev, arg })) : void
+>setState(arg) : void
 >setState : (s: Readonly<{ value: number; foo: (arg: any) => void; bar: (arg: any) => void; }>) => void
->(prev) => ({ ...prev, arg }) : (prev: any) => any
->prev : any
->({ ...prev, arg }) : any
->{ ...prev, arg } : any
->prev : any
 >arg : any
 
-        bar: (arg) => setState((prev) => ({ ...prev, arg })),
+        bar: (arg) => setState(arg),
 >bar : (arg: any) => void
->(arg) => setState((prev) => ({ ...prev, arg })) : (arg: any) => void
+>(arg) => setState(arg) : (arg: any) => void
 >arg : any
->setState((prev) => ({ ...prev, arg })) : void
+>setState(arg) : void
 >setState : (s: Readonly<{ value: number; foo: (arg: any) => void; bar: (arg: any) => void; }>) => void
->(prev) => ({ ...prev, arg }) : (prev: any) => any
->prev : any
->({ ...prev, arg }) : any
->{ ...prev, arg } : any
->prev : any
 >arg : any
 
     }));
