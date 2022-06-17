@@ -40787,12 +40787,10 @@ namespace ts {
                         node;
 
                     Debug.assert(node.kind !== SyntaxKind.NamespaceExport);
-                    const isExport = node.kind === SyntaxKind.ExportSpecifier;
-                    if (isExport) {
-                        const alreadyExportedSymbol = getSourceFileOfNode(node).symbol?.exports?.get((node.propertyName || node.name).escapedText);
-                        const isAlreadyExported = alreadyExportedSymbol === target;
+                    if (node.kind === SyntaxKind.ExportSpecifier) {
                         const diag = error(errorNode, Diagnostics.Types_cannot_appear_in_export_declarations_in_JavaScript_files);
-                        if (isAlreadyExported) {
+                        const alreadyExportedSymbol = getSourceFileOfNode(node).symbol?.exports?.get((node.propertyName || node.name).escapedText);
+                        if (alreadyExportedSymbol === target) {
                             const exportingDeclaration = alreadyExportedSymbol.declarations?.find(isJSDocNode);
                             if (exportingDeclaration) {
                                 addRelatedInfo(diag, createDiagnosticForNode(
