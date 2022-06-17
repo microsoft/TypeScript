@@ -2361,7 +2361,7 @@ namespace ts {
     }
 
     /* @internal */
-    export function isApplicableVersionedTypesKey(conditions: string[], key: string) {
+    export function isApplicableVersionedTypesKey(conditions: readonly string[], key: string) {
         if (conditions.indexOf("types") === -1) return false; // only apply versioned types conditions if the types condition is applied
         if (!startsWith(key, "types@")) return false;
         const range = VersionRange.tryParse(key.substring("types@".length));

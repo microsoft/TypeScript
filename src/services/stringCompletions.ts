@@ -343,13 +343,14 @@ namespace ts.Completions.StringCompletions {
 
     function getStringLiteralCompletionsFromModuleNamesWorker(sourceFile: SourceFile, node: LiteralExpression, compilerOptions: CompilerOptions, host: LanguageServiceHost, typeChecker: TypeChecker, preferences: UserPreferences): readonly NameAndKind[] {
         const literalValue = normalizeSlashes(node.text);
+        const mode = isStringLiteralLike(node) ? getModeForUsageLocation(sourceFile, node) : undefined;
 
         const scriptPath = sourceFile.path;
         const scriptDirectory = getDirectoryPath(scriptPath);
 
         return isPathRelativeToScript(literalValue) || !compilerOptions.baseUrl && (isRootedDiskPath(literalValue) || isUrl(literalValue))
             ? getCompletionEntriesForRelativeModules(literalValue, scriptDirectory, compilerOptions, host, scriptPath, getIncludeExtensionOption())
-            : getCompletionEntriesForNonRelativeModules(literalValue, scriptDirectory, compilerOptions, host, typeChecker);
+            : getCompletionEntriesForNonRelativeModules(literalValue, scriptDirectory, mode, compilerOptions, host, typeChecker);
 
         function getIncludeExtensionOption() {
             const mode = isStringLiteralLike(node) ? getModeForUsageLocation(sourceFile, node) : undefined;
@@ -577,7 +578,7 @@ namespace ts.Completions.StringCompletions {
      *      Modules from node_modules (i.e. those listed in package.json)
      *          This includes all files that are found in node_modules/moduleName/ with acceptable file extensions
      */
-    function getCompletionEntriesForNonRelativeModules(fragment: string, scriptPath: string, compilerOptions: CompilerOptions, host: LanguageServiceHost, typeChecker: TypeChecker): readonly NameAndKind[] {
+    function getCompletionEntriesForNonRelativeModules(fragment: string, scriptPath: string, mode: SourceFile["impliedNodeFormat"], compilerOptions: CompilerOptions, host: LanguageServiceHost, typeChecker: TypeChecker): readonly NameAndKind[] {
         const { baseUrl, paths } = compilerOptions;
 
         const result: NameAndKind[] = [];
@@ -644,26 +645,27 @@ namespace ts.Completions.StringCompletions {
                                 }
                                 const keys = getOwnKeys(exports);
                                 const fragmentSubpath = components.join("/");
-                                const processedKeys = mapDefined(keys, k => {
-                                    if (k === ".") return undefined;
-                                    if (!startsWith(k, "./")) return undefined;
+                                for (const k of keys) {
+                                    if (k === ".") continue;
+                                    if (!startsWith(k, "./")) continue;
                                     const subpath = k.substring(2);
-                                    if (!startsWith(subpath, fragmentSubpath)) return undefined;
+                                    if (!startsWith(subpath, fragmentSubpath)) continue;
                                     // subpath is a valid export (barring conditions, which we don't currently check here)
                                     if (!stringContains(subpath, "*")) {
-                                        return subpath;
-                                    }
-                                    // pattern export - only return everything up to the `*`, so the user can autocomplete, then
-                                    // keep filling in the pattern (we could speculatively return a list of options by hitting disk,
-                                    // but conditions will make that somewhat awkward, as each condition may have a different set of possible
-                                    // options for the `*`.
-                                    return subpath.slice(0, subpath.indexOf("*"));
-                                });
-                                forEach(processedKeys, k => {
-                                    if (k) {
                                         result.push(nameAndKind(k, ScriptElementKind.externalModuleName, /*extension*/ undefined));
+                                        continue;
                                     }
-                                });
+                                    // pattern export
+                                    const pattern = getPatternFromFirstMatchingCondition(exports[k], mode === ModuleKind.ESNext ? ["node", "import", "types"] : ["node", "require", "types"]);
+                                    if (pattern) {
+                                        result.push(...getCompletionsForPathMapping(k, [pattern], fragmentSubpath, getDirectoryPath(packageFile), extensionOptions.extensions, host));
+                                        continue;
+                                    }
+
+                                    if (subpath.indexOf("*") > 0) {
+                                        result.push(nameAndKind(subpath.slice(0, subpath.indexOf("*")), ScriptElementKind.externalModuleName, /*extension*/ undefined));
+                                    }
+                                }
                                 return;
                             }
                         }
@@ -675,6 +677,20 @@ namespace ts.Completions.StringCompletions {
         }
 
         return result;
+    }
+
+    function getPatternFromFirstMatchingCondition(target: unknown, conditions: readonly string[]): string | undefined {
+        if (typeof target === "string") {
+            return target;
+        }
+        if (target && typeof target === "object" && !isArray(target)) {
+            for (const condition in target) {
+                if (condition === "default" || conditions.indexOf(condition) > -1 || isApplicableVersionedTypesKey(conditions, condition)) {
+                    const pattern = (target as MapLike<unknown>)[condition];
+                    return typeof pattern === "string" ? pattern : undefined;
+                }
+            }
+        }
     }
 
     function getFragmentDirectory(fragment: string): string | undefined {
@@ -689,6 +705,7 @@ namespace ts.Completions.StringCompletions {
             return !stringContains(path, "*") ? justPathMappingName(path) : emptyArray;
         }
 
+        path = path.replace(/^\.\//, ""); // remove leading "./"
         const pathPrefix = path.slice(0, path.length - 1);
         const remainingFragment = tryRemovePrefix(fragment, pathPrefix);
         if (remainingFragment === undefined) {
@@ -738,7 +755,7 @@ namespace ts.Completions.StringCompletions {
         const matches = mapDefined(tryReadDirectory(host, baseDirectory, fileExtensions, /*exclude*/ undefined, [includeGlob]), match => {
             const extension = tryGetExtensionFromPath(match);
             const name = trimPrefixAndSuffix(match);
-            return name === undefined ? undefined : nameAndKind(removeFileExtension(name), ScriptElementKind.scriptElement, extension);
+            return name === undefined ? undefined : nameAndKind(removeFileExtension(name), ScriptElementKind.externalModuleName, extension);
         });
         const directories = mapDefined(tryGetDirectories(host, baseDirectory).map(d => combinePaths(baseDirectory, d)), dir => {
             const name = trimPrefixAndSuffix(dir);
