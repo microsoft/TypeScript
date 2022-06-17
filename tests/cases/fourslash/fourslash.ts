@@ -397,8 +397,8 @@ declare namespace FourSlashInterface {
         }[]): void;
         /** Edits the current testfile and replaces with the semantic classifications */
         replaceWithSemanticClassifications(format: "2020")
-        renameInfoSucceeded(displayName?: string, fullDisplayName?: string, kind?: string, kindModifiers?: string, fileToRename?: string, range?: Range, allowRenameOfImportPath?: boolean): void;
-        renameInfoFailed(message?: string, allowRenameOfImportPath?: boolean): void;
+        renameInfoSucceeded(displayName?: string, fullDisplayName?: string, kind?: string, kindModifiers?: string, fileToRename?: string, range?: Range, preferences?: UserPreferences): void;
+        renameInfoFailed(message?: string, preferences?: UserPreferences): void;
         renameLocations(startRanges: ArrayOrSingle<Range>, options: RenameLocationsOptions): void;
         baselineRename(marker: string, options: RenameOptions): void;
 
@@ -660,6 +660,8 @@ declare namespace FourSlashInterface {
         readonly importModuleSpecifierPreference?: "shortest" | "project-relative" | "relative" | "non-relative";
         readonly importModuleSpecifierEnding?: "minimal" | "index" | "js";
         readonly jsxAttributeCompletionStyle?: "auto" | "braces" | "none";
+        readonly providePrefixAndSuffixTextForRename?: boolean;
+        readonly allowRenameOfImportPath?: boolean;
     }
     interface InlayHintsOptions extends UserPreferences {
         readonly includeInlayParameterNameHints?: "none" | "literals" | "all";

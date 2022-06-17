@@ -6312,6 +6312,15 @@
         "category": "Error",
         "code": 8034
     },
+    "You cannot rename elements that are defined in a 'node_modules' folder.": {
+        "category": "Error",
+        "code": 8035
+    },
+    "You cannot rename elements that are defined in another 'node_modules' folder.": {
+        "category": "Error",
+        "code": 8036
+    },
+
     "Declaration emit for this file requires using private name '{0}'. An explicit type annotation may unblock declaration emit.": {
         "category": "Error",
         "code": 9005

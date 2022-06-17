@@ -1707,7 +1707,8 @@ namespace ts.server {
         private getRenameInfo(args: protocol.FileLocationRequestArgs): RenameInfo {
             const { file, project } = this.getFileAndProject(args);
             const position = this.getPositionInFile(args, file);
-            return project.getLanguageService().getRenameInfo(file, position, { allowRenameOfImportPath: this.getPreferences(file).allowRenameOfImportPath });
+            const preferences = this.getPreferences(file);
+            return project.getLanguageService().getRenameInfo(file, position, preferences);
         }
 
         private getProjects(args: protocol.FileRequestArgs, getScriptInfoEnsuringProjectsUptoDate?: boolean, ignoreNoProjectError?: boolean): Projects {
@@ -1759,8 +1760,9 @@ namespace ts.server {
             const position = this.getPositionInFile(args, file);
             const projects = this.getProjects(args);
             const defaultProject = this.getDefaultProject(args);
+            const preferences = this.getPreferences(file);
             const renameInfo: protocol.RenameInfo = this.mapRenameInfo(
-                defaultProject.getLanguageService().getRenameInfo(file, position, { allowRenameOfImportPath: this.getPreferences(file).allowRenameOfImportPath }), Debug.checkDefined(this.projectService.getScriptInfo(file)));
+                defaultProject.getLanguageService().getRenameInfo(file, position, preferences), Debug.checkDefined(this.projectService.getScriptInfo(file)));
 
             if (!renameInfo.canRename) return simplifiedResult ? { info: renameInfo, locs: [] } : [];
 
@@ -1770,7 +1772,7 @@ namespace ts.server {
                 { fileName: args.file, pos: position },
                 !!args.findInStrings,
                 !!args.findInComments,
-                this.getPreferences(file)
+                preferences,
             );
             if (!simplifiedResult) return locations;
             return { info: renameInfo, locs: this.toSpanGroups(locations) };
