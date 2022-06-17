@@ -30732,11 +30732,16 @@ namespace ts {
                 return result;
             }
 
+            result = getCandidateForOverloadFailure(node, candidates, args, !!candidatesOutArray, checkMode);
+
             // No signatures were applicable. Now report errors based on the last applicable signature with
             // no arguments excluded from assignability checks.
             // If candidate is undefined, it means that no candidates had a suitable arity. In that case,
             // skip the checkApplicableSignature check.
             if (reportErrors) {
+                // TODO(jakebailey): explain this, and maybe move getResolvedSignature's caching here.
+                getNodeLinks(node).resolvedSignature = result;
+
                 if (candidatesForArgumentError) {
                     if (candidatesForArgumentError.length === 1 || candidatesForArgumentError.length > 3) {
                         const last = candidatesForArgumentError[candidatesForArgumentError.length - 1];
@@ -30822,7 +30827,7 @@ namespace ts {
                 }
             }
 
-            return getCandidateForOverloadFailure(node, candidates, args, !!candidatesOutArray, checkMode);
+            return result;
 
             function addImplementationSuccessElaboration(failed: Signature, diagnostic: Diagnostic) {
                 const oldCandidatesForArgumentError = candidatesForArgumentError;
