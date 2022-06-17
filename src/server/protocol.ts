@@ -3469,6 +3469,7 @@ namespace ts.server.protocol {
         readonly includeInlayPropertyDeclarationTypeHints?: boolean;
         readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
         readonly includeInlayEnumMemberValueHints?: boolean;
+        readonly autoImportFileExcludePatterns?: string[];
     }
 
     export interface CompilerOptions {

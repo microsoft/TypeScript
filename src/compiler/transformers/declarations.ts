@@ -453,7 +453,7 @@ namespace ts {
             return ret;
         }
 
-        function filterBindingPatternInitializers(name: BindingName) {
+        function filterBindingPatternInitializersAndRenamings(name: BindingName) {
             if (name.kind === SyntaxKind.Identifier) {
                 return name;
             }
@@ -471,7 +471,23 @@ namespace ts {
                 if (elem.kind === SyntaxKind.OmittedExpression) {
                     return elem;
                 }
-                return factory.updateBindingElement(elem, elem.dotDotDotToken, elem.propertyName, filterBindingPatternInitializers(elem.name), shouldPrintWithInitializer(elem) ? elem.initializer : undefined);
+                if (elem.propertyName && isIdentifier(elem.propertyName) && isIdentifier(elem.name) && !elem.symbol.isReferenced) {
+                   // Unnecessary property renaming is forbidden in types, so remove renaming
+                    return factory.updateBindingElement(
+                        elem,
+                        elem.dotDotDotToken,
+                        /* propertyName */ undefined,
+                        elem.propertyName,
+                        shouldPrintWithInitializer(elem) ? elem.initializer : undefined
+                    );
+                }
+                return factory.updateBindingElement(
+                    elem,
+                    elem.dotDotDotToken,
+                    elem.propertyName,
+                    filterBindingPatternInitializersAndRenamings(elem.name),
+                    shouldPrintWithInitializer(elem) ? elem.initializer : undefined
+                );
             }
         }
 
@@ -485,7 +501,7 @@ namespace ts {
                 p,
                 maskModifiers(p, modifierMask),
                 p.dotDotDotToken,
-                filterBindingPatternInitializers(p.name),
+                filterBindingPatternInitializersAndRenamings(p.name),
                 resolver.isOptionalParameter(p) ? (p.questionToken || factory.createToken(SyntaxKind.QuestionToken)) : undefined,
                 ensureType(p, type || p.type, /*ignorePrivate*/ true), // Ignore private param props, since this type is going straight back into a param
                 ensureNoInitializer(p)

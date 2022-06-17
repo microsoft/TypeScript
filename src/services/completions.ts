@@ -366,7 +366,7 @@ namespace ts.Completions {
         if (!previousResponse) return undefined;
 
         const lowerCaseTokenText = location.text.toLowerCase();
-        const exportMap = getExportInfoMap(file, host, program, cancellationToken);
+        const exportMap = getExportInfoMap(file, host, program, preferences, cancellationToken);
         const newEntries = resolvingModuleSpecifiers(
             "continuePreviousIncompleteResponse",
             host,
@@ -2616,7 +2616,7 @@ namespace ts.Completions {
 
             // Need to insert 'this.' before properties of `this` type, so only do that if `includeInsertTextCompletions`
             if (preferences.includeCompletionsWithInsertText && scopeNode.kind !== SyntaxKind.SourceFile) {
-                const thisType = typeChecker.tryGetThisTypeAt(scopeNode, /*includeGlobalThis*/ false);
+                const thisType = typeChecker.tryGetThisTypeAt(scopeNode, /*includeGlobalThis*/ false, isClassLike(scopeNode.parent) ? scopeNode : undefined);
                 if (thisType && !isProbablyGlobalType(thisType, sourceFile, typeChecker)) {
                     for (const symbol of getPropertiesForCompletion(thisType, typeChecker)) {
                         symbolToOriginInfoMap[symbols.length] = { kind: SymbolOriginInfoKind.ThisType };
@@ -2725,7 +2725,7 @@ namespace ts.Completions {
                 "";
 
             const moduleSpecifierCache = host.getModuleSpecifierCache?.();
-            const exportInfo = getExportInfoMap(sourceFile, host, program, cancellationToken);
+            const exportInfo = getExportInfoMap(sourceFile, host, program, preferences, cancellationToken);
             const packageJsonAutoImportProvider = host.getPackageJsonAutoImportProvider?.();
             const packageJsonFilter = detailsEntryId ? undefined : createPackageJsonImportFilter(sourceFile, preferences, host);
             resolvingModuleSpecifiers(

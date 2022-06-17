@@ -22,5 +22,5 @@ verify.renameLocations(r2, [r0, r1, r2]);
 for (const range of [r3b, r4b]) {
     goTo.rangeStart(range);
     verify.renameInfoSucceeded(/*displayName*/ "/a.ts", /*fullDisplayName*/ "/a.ts", /*kind*/ "module", /*kindModifiers*/ "", /*fileToRename*/ "/a.ts", range);
-    verify.renameInfoFailed("You cannot rename this element.", /*allowRenameOfImportPath*/ false);
+    verify.renameInfoFailed("You cannot rename this element.", { allowRenameOfImportPath: false });
 }

@@ -15258,6 +15258,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";We_can_only_write_a_type_for_0_by_adding_a_type_for_the_entire_parameter_here_2843" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[We can only write a type for '{0}' by adding a type for the entire parameter here.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Wir können nur einen Typ für „{0}“ schreiben, indem hier ein Typ für den gesamten Parameter hinzugefügt wird.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";When_assigning_functions_check_to_ensure_parameters_and_the_return_values_are_subtype_compatible_6698" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[When assigning functions, check to ensure parameters and the return values are subtype-compatible.]]></Val>
@@ -15608,6 +15617,15 @@
           <Val><![CDATA['{0}' is a type and must be imported using a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[„{0}“ ist ein Typ und muss mithilfe eines reinen Typimports importiert werden, wenn „preserveValueImports“ und isolatedModules“ beide aktiviert sind.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";_0_is_an_unused_renaming_of_1_Did_you_intend_to_use_it_as_a_type_annotation_2842" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' is an unused renaming of '{1}'. Did you intend to use it as a type annotation?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[„{0}“ ist eine nicht verwendete Umbenennung von „{1}“. Wollten Sie sie als Typanmerkung verwenden?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

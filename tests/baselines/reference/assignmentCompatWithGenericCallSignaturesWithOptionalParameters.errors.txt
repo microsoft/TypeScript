@@ -163,11 +163,13 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
 !!! error TS2322: Type '() => T' is not assignable to type '<T>() => T'.
 !!! error TS2322:   Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
 !!! error TS2322:     'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+!!! related TS2208 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18: This type parameter might need an `extends T` constraint.
             b.a = t.a2;
             ~~~
 !!! error TS2322: Type '(x?: T) => T' is not assignable to type '<T>() => T'.
 !!! error TS2322:   Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
 !!! error TS2322:     'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+!!! related TS2208 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18: This type parameter might need an `extends T` constraint.
             b.a = t.a3;
             ~~~
 !!! error TS2322: Type '(x: T) => T' is not assignable to type '<T>() => T'.
@@ -179,126 +181,147 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
 !!! error TS2322: Type '(x?: T, y?: T) => T' is not assignable to type '<T>() => T'.
 !!! error TS2322:   Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
 !!! error TS2322:     'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+!!! related TS2208 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18: This type parameter might need an `extends T` constraint.
     
             b.a2 = t.a;
             ~~~~
 !!! error TS2322: Type '() => T' is not assignable to type '<T>(x?: T) => T'.
 !!! error TS2322:   Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
 !!! error TS2322:     'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+!!! related TS2208 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18: This type parameter might need an `extends T` constraint.
             b.a2 = t.a2;
             ~~~~
 !!! error TS2322: Type '(x?: T) => T' is not assignable to type '<T>(x?: T) => T'.
 !!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2322:     Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
 !!! error TS2322:       'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+!!! related TS2208 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:43:14: This type parameter might need an `extends T` constraint.
             b.a2 = t.a3;
             ~~~~
 !!! error TS2322: Type '(x: T) => T' is not assignable to type '<T>(x?: T) => T'.
 !!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2322:     Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
 !!! error TS2322:       'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+!!! related TS2208 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:43:14: This type parameter might need an `extends T` constraint.
             b.a2 = t.a4;
             ~~~~
 !!! error TS2322: Type '(x: T, y?: T) => T' is not assignable to type '<T>(x?: T) => T'.
 !!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2322:     Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
 !!! error TS2322:       'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+!!! related TS2208 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:43:14: This type parameter might need an `extends T` constraint.
             b.a2 = t.a5;
             ~~~~
 !!! error TS2322: Type '(x?: T, y?: T) => T' is not assignable to type '<T>(x?: T) => T'.
 !!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2322:     Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
 !!! error TS2322:       'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+!!! related TS2208 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:43:14: This type parameter might need an `extends T` constraint.
     
             b.a3 = t.a;
             ~~~~
 !!! error TS2322: Type '() => T' is not assignable to type '<T>(x: T) => T'.
 !!! error TS2322:   Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
 !!! error TS2322:     'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+!!! related TS2208 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18: This type parameter might need an `extends T` constraint.
             b.a3 = t.a2;
             ~~~~
 !!! error TS2322: Type '(x?: T) => T' is not assignable to type '<T>(x: T) => T'.
 !!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2322:     Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
 !!! error TS2322:       'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+!!! related TS2208 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:44:14: This type parameter might need an `extends T` constraint.
             b.a3 = t.a3;
             ~~~~
 !!! error TS2322: Type '(x: T) => T' is not assignable to type '<T>(x: T) => T'.
 !!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2322:     Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
 !!! error TS2322:       'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+!!! related TS2208 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:44:14: This type parameter might need an `extends T` constraint.
             b.a3 = t.a4;
             ~~~~
 !!! error TS2322: Type '(x: T, y?: T) => T' is not assignable to type '<T>(x: T) => T'.
 !!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2322:     Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
 !!! error TS2322:       'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+!!! related TS2208 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:44:14: This type parameter might need an `extends T` constraint.
             b.a3 = t.a5;
             ~~~~
 !!! error TS2322: Type '(x?: T, y?: T) => T' is not assignable to type '<T>(x: T) => T'.
 !!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2322:     Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
 !!! error TS2322:       'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+!!! related TS2208 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:44:14: This type parameter might need an `extends T` constraint.
     
             b.a4 = t.a;
             ~~~~
 !!! error TS2322: Type '() => T' is not assignable to type '<T>(x: T, y?: T) => T'.
 !!! error TS2322:   Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
 !!! error TS2322:     'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+!!! related TS2208 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18: This type parameter might need an `extends T` constraint.
             b.a4 = t.a2;
             ~~~~
 !!! error TS2322: Type '(x?: T) => T' is not assignable to type '<T>(x: T, y?: T) => T'.
 !!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2322:     Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
 !!! error TS2322:       'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+!!! related TS2208 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:45:14: This type parameter might need an `extends T` constraint.
             b.a4 = t.a3;
             ~~~~
 !!! error TS2322: Type '(x: T) => T' is not assignable to type '<T>(x: T, y?: T) => T'.
 !!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2322:     Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
 !!! error TS2322:       'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+!!! related TS2208 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:45:14: This type parameter might need an `extends T` constraint.
             b.a4 = t.a4;
             ~~~~
 !!! error TS2322: Type '(x: T, y?: T) => T' is not assignable to type '<T>(x: T, y?: T) => T'.
 !!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2322:     Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
 !!! error TS2322:       'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+!!! related TS2208 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:45:14: This type parameter might need an `extends T` constraint.
             b.a4 = t.a5;
             ~~~~
 !!! error TS2322: Type '(x?: T, y?: T) => T' is not assignable to type '<T>(x: T, y?: T) => T'.
 !!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2322:     Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
 !!! error TS2322:       'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+!!! related TS2208 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:45:14: This type parameter might need an `extends T` constraint.
     
             b.a5 = t.a;
             ~~~~
 !!! error TS2322: Type '() => T' is not assignable to type '<T>(x?: T, y?: T) => T'.
 !!! error TS2322:   Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
 !!! error TS2322:     'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+!!! related TS2208 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18: This type parameter might need an `extends T` constraint.
             b.a5 = t.a2;
             ~~~~
 !!! error TS2322: Type '(x?: T) => T' is not assignable to type '<T>(x?: T, y?: T) => T'.
 !!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2322:     Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
 !!! error TS2322:       'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+!!! related TS2208 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:46:14: This type parameter might need an `extends T` constraint.
             b.a5 = t.a3;
             ~~~~
 !!! error TS2322: Type '(x: T) => T' is not assignable to type '<T>(x?: T, y?: T) => T'.
 !!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2322:     Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
 !!! error TS2322:       'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+!!! related TS2208 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:46:14: This type parameter might need an `extends T` constraint.
             b.a5 = t.a4;
             ~~~~
 !!! error TS2322: Type '(x: T, y?: T) => T' is not assignable to type '<T>(x?: T, y?: T) => T'.
 !!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2322:     Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
 !!! error TS2322:       'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+!!! related TS2208 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:46:14: This type parameter might need an `extends T` constraint.
             b.a5 = t.a5;
             ~~~~
 !!! error TS2322: Type '(x?: T, y?: T) => T' is not assignable to type '<T>(x?: T, y?: T) => T'.
 !!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2322:     Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
 !!! error TS2322:       'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+!!! related TS2208 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:46:14: This type parameter might need an `extends T` constraint.
         }
     }
     
