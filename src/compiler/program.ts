@@ -954,6 +954,7 @@ namespace ts {
         Diagnostics.let_is_not_allowed_to_be_used_as_a_name_in_let_or_const_declarations.code,
         Diagnostics.Class_constructor_may_not_be_a_generator.code,
         Diagnostics.Class_constructor_may_not_be_an_accessor.code,
+        Diagnostics.await_expressions_are_only_allowed_within_async_functions_and_at_the_top_levels_of_modules.code,
     ]);
 
     /**

@@ -1,4 +1,4 @@
-import { TSESTree } from "@typescript-eslint/experimental-utils";
+import { TSESTree } from "@typescript-eslint/utils";
 import { createRule } from "./utils";
 
 export = createRule({
@@ -6,7 +6,6 @@ export = createRule({
     meta: {
         docs: {
             description: ``,
-            category: "Best Practices",
             recommended: "error",
         },
         messages: {

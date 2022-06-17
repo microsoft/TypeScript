@@ -52,6 +52,7 @@ tests/cases/conformance/types/literal/templateLiteralTypes1.ts(252,7): error TS2
         z = x;  // Error
         ~
 !!! error TS2322: Type 'T' is not assignable to type '{ [P in keyof T & string as `p_${P}`]: T[P]; }'.
+!!! related TS2208 tests/cases/conformance/types/literal/templateLiteralTypes1.ts:38:14: This type parameter might need an `extends { [P in keyof T & string as `p_${P}`]: T[P]; }` constraint.
     }
     
     function fa2<T, U extends T, A extends string, B extends A>(x: { [P in B as `p_${P}`]: T }, y: { [Q in A as `p_${Q}`]: U }) {

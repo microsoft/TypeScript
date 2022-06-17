@@ -5,11 +5,11 @@ type TU1 = Uppercase<'hello'>;  // "HELLO"
 type TU2 = Uppercase<'foo' | 'bar'>;  // "FOO" | "BAR"
 >TU2 : "FOO" | "BAR"
 
-type TU3 = Uppercase<string>;  // string
->TU3 : string
+type TU3 = Uppercase<string>;  // Uppercase<string>
+>TU3 : Uppercase<string>
 
-type TU4 = Uppercase<any>;  // any
->TU4 : any
+type TU4 = Uppercase<any>;  // Uppercase<`${any}`>
+>TU4 : Uppercase<`${any}`>
 
 type TU5 = Uppercase<never>;  // never
 >TU5 : never
@@ -23,11 +23,11 @@ type TL1 = Lowercase<'HELLO'>;  // "hello"
 type TL2 = Lowercase<'FOO' | 'BAR'>;  // "foo" | "bar"
 >TL2 : "foo" | "bar"
 
-type TL3 = Lowercase<string>;  // string
->TL3 : string
+type TL3 = Lowercase<string>;  // Lowercase<string>
+>TL3 : Lowercase<string>
 
-type TL4 = Lowercase<any>;  // any
->TL4 : any
+type TL4 = Lowercase<any>;  // Lowercase<`${any}`>
+>TL4 : Lowercase<`${any}`>
 
 type TL5 = Lowercase<never>;  // never
 >TL5 : never
@@ -41,11 +41,11 @@ type TC1 = Capitalize<'hello'>;  // "Hello"
 type TC2 = Capitalize<'foo' | 'bar'>;  // "Foo" | "Bar"
 >TC2 : "Foo" | "Bar"
 
-type TC3 = Capitalize<string>;  // string
->TC3 : string
+type TC3 = Capitalize<string>;  // Capitalize<string>
+>TC3 : Capitalize<string>
 
-type TC4 = Capitalize<any>;  // any
->TC4 : any
+type TC4 = Capitalize<any>;  // Capitalize<`${any}`>
+>TC4 : Capitalize<`${any}`>
 
 type TC5 = Capitalize<never>;  // never
 >TC5 : never
@@ -59,11 +59,11 @@ type TN1 = Uncapitalize<'Hello'>;  // "hello"
 type TN2 = Uncapitalize<'Foo' | 'Bar'>;  // "foo" | "bar"
 >TN2 : "foo" | "bar"
 
-type TN3 = Uncapitalize<string>;  // string
->TN3 : string
+type TN3 = Uncapitalize<string>;  // Uncapitalize<string>
+>TN3 : Uncapitalize<string>
 
-type TN4 = Uncapitalize<any>;  // any
->TN4 : any
+type TN4 = Uncapitalize<any>;  // Uncapitalize<`${any}`>
+>TN4 : Uncapitalize<`${any}`>
 
 type TN5 = Uncapitalize<never>;  // never
 >TN5 : never
