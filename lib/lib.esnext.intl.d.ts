@@ -19,14 +19,12 @@ and limitations under the License.
 
 
 declare namespace Intl {
-    type NumberFormatPartTypes = "compact" | "currency" | "decimal" | "exponentInteger" | "exponentMinusSign" | "exponentSeparator" | "fraction" | "group" | "infinity" | "integer" | "literal" | "minusSign" | "nan" | "plusSign" | "percentSign" | "unit" | "unknown";
+  interface NumberRangeFormatPart extends NumberFormatPart {
+    source: "startRange" | "endRange" | "shared"
+  }
 
-    interface NumberFormatPart {
-        type: NumberFormatPartTypes;
-        value: string;
-    }
-
-    interface NumberFormat {
-        formatToParts(number?: number | bigint): NumberFormatPart[];
-    }
+  interface NumberFormat {
+    formatRange(start: number | bigint, end: number | bigint): string;
+    formatRangeToParts(start: number | bigint, end: number | bigint): NumberRangeFormatPart[];
+  }
 }
