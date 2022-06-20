@@ -30737,7 +30737,7 @@ namespace ts {
             // we need to ensure that the result is present for the error checks below so that if
             // this signature is encountered again, we handle the circularity (rather than producing a
             // different result which may produce no errors and assert). Callers of getResolvedSignature
-            // don't hit this issue becuase they only observe this result after it's had a chance to
+            // don't hit this issue because they only observe this result after it's had a chance to
             // be cached, but the error reporting code below executes before getResolvedSignature sets
             // resolvedSignature.
             getNodeLinks(node).resolvedSignature = result;
