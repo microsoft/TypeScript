@@ -181,7 +181,7 @@ function f8<T>(x: T) {
 >x : T
 
         x; // {}
->x : T
+>x : NonNullable<T>
     }
     else {
         x; // {}

@@ -27,7 +27,7 @@ Project '/a/tsconfig.json' (Configured)
 
 
 	index.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 
 -----------------------------------------------
 Search path: /a
@@ -77,7 +77,7 @@ Project '/b/tsconfig.json' (Configured)
 	../a/index.ts
 	  Imported via "../a" from file 'index.ts'
 	index.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 
 -----------------------------------------------
 Search path: /b

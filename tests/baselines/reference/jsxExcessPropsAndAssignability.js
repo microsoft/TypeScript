@@ -11,9 +11,7 @@ const myHoc = <ComposedComponentProps extends any>(
 
     const props: ComposedComponentProps = null as any;
 
-    // Expected no error, got none - good
     <WrapperComponent {...props} myProp={'1000000'} />;
-    // Expected error, but got none - bad!
     <WrapperComponent {...props} myProp={1000000} />;
 };
 
@@ -37,8 +35,6 @@ var React = require("react");
 var myHoc = function (ComposedComponent) {
     var WrapperComponent = null;
     var props = null;
-    // Expected no error, got none - good
     React.createElement(WrapperComponent, __assign({}, props, { myProp: '1000000' }));
-    // Expected error, but got none - bad!
     React.createElement(WrapperComponent, __assign({}, props, { myProp: 1000000 }));
 };

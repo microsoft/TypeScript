@@ -29,8 +29,8 @@ namespace ts.codefix {
         suppressLeadingAndTrailingTrivia(declaration);
         suppressLeadingAndTrailingTrivia(container);
 
-        let accessorModifiers: ModifiersArray | undefined;
-        let fieldModifiers: ModifiersArray | undefined;
+        let accessorModifiers: NodeArray<ModifierLike> | undefined;
+        let fieldModifiers: readonly ModifierLike[] | undefined;
         if (isClassLike(container)) {
             const modifierFlags = getEffectiveModifierFlags(declaration);
             if (isSourceFileJS(file)) {
@@ -41,6 +41,9 @@ namespace ts.codefix {
             else {
                 accessorModifiers = createModifiers(prepareModifierFlagsForAccessor(modifierFlags));
                 fieldModifiers = createModifiers(prepareModifierFlagsForField(modifierFlags));
+            }
+            if (canHaveDecorators(declaration)) {
+                fieldModifiers = concatenate(getDecorators(declaration), fieldModifiers);
             }
         }
 
@@ -120,7 +123,7 @@ namespace ts.codefix {
             };
         }
 
-        if ((getEffectiveModifierFlags(declaration) | meaning) !== meaning) {
+        if (((getEffectiveModifierFlags(declaration) & ModifierFlags.Modifier) | meaning) !== meaning) {
             return {
                 error: getLocaleSpecificMessage(Diagnostics.Can_only_convert_property_with_modifier)
             };
@@ -143,9 +146,8 @@ namespace ts.codefix {
         };
     }
 
-    function generateGetAccessor(fieldName: AcceptedNameType, accessorName: AcceptedNameType, type: TypeNode | undefined, modifiers: ModifiersArray | undefined, isStatic: boolean, container: ContainerDeclaration) {
+    function generateGetAccessor(fieldName: AcceptedNameType, accessorName: AcceptedNameType, type: TypeNode | undefined, modifiers: NodeArray<ModifierLike> | undefined, isStatic: boolean, container: ContainerDeclaration) {
         return factory.createGetAccessorDeclaration(
-            /*decorators*/ undefined,
             modifiers,
             accessorName,
             /*parameters*/ undefined!, // TODO: GH#18217
@@ -158,13 +160,11 @@ namespace ts.codefix {
         );
     }
 
-    function generateSetAccessor(fieldName: AcceptedNameType, accessorName: AcceptedNameType, type: TypeNode | undefined, modifiers: ModifiersArray | undefined, isStatic: boolean, container: ContainerDeclaration) {
+    function generateSetAccessor(fieldName: AcceptedNameType, accessorName: AcceptedNameType, type: TypeNode | undefined, modifiers: NodeArray<ModifierLike> | undefined, isStatic: boolean, container: ContainerDeclaration) {
         return factory.createSetAccessorDeclaration(
-            /*decorators*/ undefined,
             modifiers,
             accessorName,
             [factory.createParameterDeclaration(
-                /*decorators*/ undefined,
                 /*modifiers*/ undefined,
                 /*dotDotDotToken*/ undefined,
                 factory.createIdentifier("value"),
@@ -182,10 +182,9 @@ namespace ts.codefix {
         );
     }
 
-    function updatePropertyDeclaration(changeTracker: textChanges.ChangeTracker, file: SourceFile, declaration: PropertyDeclaration, type: TypeNode | undefined, fieldName: AcceptedNameType, modifiers: ModifiersArray | undefined) {
+    function updatePropertyDeclaration(changeTracker: textChanges.ChangeTracker, file: SourceFile, declaration: PropertyDeclaration, type: TypeNode | undefined, fieldName: AcceptedNameType, modifiers: readonly ModifierLike[] | undefined) {
         const property = factory.updatePropertyDeclaration(
             declaration,
-            declaration.decorators,
             modifiers,
             fieldName,
             declaration.questionToken || declaration.exclamationToken,
@@ -200,7 +199,7 @@ namespace ts.codefix {
         changeTracker.replacePropertyAssignment(file, declaration, assignment);
     }
 
-    function updateFieldDeclaration(changeTracker: textChanges.ChangeTracker, file: SourceFile, declaration: AcceptedDeclaration, type: TypeNode | undefined, fieldName: AcceptedNameType, modifiers: ModifiersArray | undefined) {
+    function updateFieldDeclaration(changeTracker: textChanges.ChangeTracker, file: SourceFile, declaration: AcceptedDeclaration, type: TypeNode | undefined, fieldName: AcceptedNameType, modifiers: readonly ModifierLike[] | undefined) {
         if (isPropertyDeclaration(declaration)) {
             updatePropertyDeclaration(changeTracker, file, declaration, type, fieldName, modifiers);
         }
@@ -209,7 +208,7 @@ namespace ts.codefix {
         }
         else {
             changeTracker.replaceNode(file, declaration,
-                factory.updateParameterDeclaration(declaration, declaration.decorators, modifiers, declaration.dotDotDotToken, cast(fieldName, isIdentifier), declaration.questionToken, declaration.type, declaration.initializer));
+                factory.updateParameterDeclaration(declaration, modifiers, declaration.dotDotDotToken, cast(fieldName, isIdentifier), declaration.questionToken, declaration.type, declaration.initializer));
         }
     }
 

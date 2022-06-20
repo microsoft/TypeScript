@@ -87,8 +87,8 @@ namespace ts {
                 /*name*/ undefined,
                 /*typeParameters*/ undefined,
                 [
-                    factory.createParameterDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, exportFunction),
-                    factory.createParameterDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, contextObject)
+                    factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, exportFunction),
+                    factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, contextObject)
                 ],
                 /*type*/ undefined,
                 moduleBodyBlock
@@ -385,12 +385,11 @@ namespace ts {
             }
 
             return factory.createFunctionDeclaration(
-                /*decorators*/ undefined,
                 /*modifiers*/ undefined,
                 /*asteriskToken*/ undefined,
                 exportStarFunction,
                 /*typeParameters*/ undefined,
-                [factory.createParameterDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, m)],
+                [factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, m)],
                 /*type*/ undefined,
                 factory.createBlock([
                     factory.createVariableStatement(
@@ -545,7 +544,7 @@ namespace ts {
                         /*asteriskToken*/ undefined,
                         /*name*/ undefined,
                         /*typeParameters*/ undefined,
-                        [factory.createParameterDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, parameterName)],
+                        [factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, parameterName)],
                         /*type*/ undefined,
                         factory.createBlock(statements, /*multiLine*/ true)
                     )
@@ -667,8 +666,7 @@ namespace ts {
                 hoistedStatements = append(hoistedStatements,
                     factory.updateFunctionDeclaration(
                         node,
-                        node.decorators,
-                        visitNodes(node.modifiers, modifierVisitor, isModifier),
+                        visitNodes(node.modifiers, modifierVisitor, isModifierLike),
                         node.asteriskToken,
                         factory.getDeclarationName(node, /*allowComments*/ true, /*allowSourceMaps*/ true),
                         /*typeParameters*/ undefined,
@@ -712,8 +710,7 @@ namespace ts {
                             name,
                             setTextRange(
                                 factory.createClassExpression(
-                                    visitNodes(node.decorators, visitor, isDecorator),
-                                    /*modifiers*/ undefined,
+                                    visitNodes(node.modifiers, modifierVisitor, isModifierLike),
                                     node.name,
                                     /*typeParameters*/ undefined,
                                     visitNodes(node.heritageClauses, visitor, isHeritageClause),

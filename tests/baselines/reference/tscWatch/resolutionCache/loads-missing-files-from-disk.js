@@ -50,16 +50,16 @@ WatchedFiles::
   {"fileName":"/a/foo.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/node_modules:
+  {"fileName":"/node_modules","pollingInterval":500}
 
 FsWatches::
 /:
-  {"directoryName":"","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":""}
 
 FsWatchesRecursive::
 /a:
-  {"directoryName":"/a","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/node_modules:
-  {"directoryName":"/node_modules","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a"}
 
 exitCode:: ExitStatus.undefined
 
@@ -117,7 +117,7 @@ FsWatches::
 
 FsWatchesRecursive::
 /a:
-  {"directoryName":"/a","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a"}
 
 exitCode:: ExitStatus.undefined
 

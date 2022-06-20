@@ -30,9 +30,9 @@ Output::
 a/lib/lib.d.ts
   Default library for target 'es3'
 a/b/commonFile1.ts
-  Matched by include pattern '**/*' in 'a/b/tsconfig.json'
+  Matched by default include pattern '**/*'
 a/b/commonFile2.ts
-  Matched by include pattern '**/*' in 'a/b/tsconfig.json'
+  Matched by default include pattern '**/*'
 [[90m12:00:22 AM[0m] Found 0 errors. Watching for file changes.
 
 
@@ -64,14 +64,14 @@ WatchedFiles::
   {"fileName":"/a/b/commonFile2.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/a/b/node_modules/@types:
+  {"fileName":"/a/b/node_modules/@types","pollingInterval":500}
 
 FsWatches::
 
 FsWatchesRecursive::
-/a/b/node_modules/@types:
-  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /a/b:
-  {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a/b"}
 
 exitCode:: ExitStatus.undefined
 
@@ -98,9 +98,9 @@ Output::
 a/lib/lib.d.ts
   Default library for target 'es3'
 a/b/commonFile1.ts
-  Matched by include pattern '**/*' in 'a/b/tsconfig.json'
+  Matched by default include pattern '**/*'
 a/b/commonFile2.ts
-  Matched by include pattern '**/*' in 'a/b/tsconfig.json'
+  Matched by default include pattern '**/*'
 [[90m12:00:32 AM[0m] Found 0 errors. Watching for file changes.
 
 
@@ -131,14 +131,14 @@ WatchedFiles::
   {"fileName":"/a/b/commonFile2.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/a/b/node_modules/@types:
+  {"fileName":"/a/b/node_modules/@types","pollingInterval":500}
 
 FsWatches::
 
 FsWatchesRecursive::
-/a/b/node_modules/@types:
-  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /a/b:
-  {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a/b"}
 
 exitCode:: ExitStatus.undefined
 
@@ -161,7 +161,7 @@ Output::
 a/lib/lib.d.ts
   Default library for target 'es3'
 a/b/commonFile1.ts
-  Matched by include pattern '**/*' in 'a/b/tsconfig.json'
+  Matched by default include pattern '**/*'
 [[90m12:00:38 AM[0m] Found 0 errors. Watching for file changes.
 
 
@@ -186,14 +186,14 @@ WatchedFiles::
   {"fileName":"/a/b/commonFile1.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/a/b/node_modules/@types:
+  {"fileName":"/a/b/node_modules/@types","pollingInterval":500}
 
 FsWatches::
 
 FsWatchesRecursive::
-/a/b/node_modules/@types:
-  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /a/b:
-  {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a/b"}
 
 exitCode:: ExitStatus.undefined
 
@@ -213,9 +213,9 @@ Output::
 a/lib/lib.d.ts
   Default library for target 'es3'
 a/b/commonFile1.ts
-  Matched by include pattern '**/*' in 'a/b/tsconfig.json'
+  Matched by default include pattern '**/*'
 a/b/commonFile2.ts
-  Matched by include pattern '**/*' in 'a/b/tsconfig.json'
+  Matched by default include pattern '**/*'
 [[90m12:00:48 AM[0m] Found 0 errors. Watching for file changes.
 
 
@@ -244,16 +244,16 @@ WatchedFiles::
   {"fileName":"/a/b/commonFile1.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/a/b/node_modules/@types:
+  {"fileName":"/a/b/node_modules/@types","pollingInterval":500}
 /a/b/commonfile2.ts:
   {"fileName":"/a/b/commonFile2.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
-/a/b/node_modules/@types:
-  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /a/b:
-  {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a/b"}
 
 exitCode:: ExitStatus.undefined
 

@@ -20,7 +20,7 @@ namespace ts.tscWatch {
                 scenario: "forceConsistentCasingInFileNames",
                 subScenario,
                 commandLineArgs: ["--w", "--p", tsconfig.path],
-                sys: () => createWatchedSystem([loggerFile, anotherFile, tsconfig, libFile, tsconfig]),
+                sys: () => createWatchedSystem([loggerFile, anotherFile, tsconfig, libFile]),
                 changes
             });
         }
