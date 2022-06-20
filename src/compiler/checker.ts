@@ -12939,9 +12939,8 @@ namespace ts {
                         continue;
                     }
                 }
-                // If this is a function or method declaration, get the accurate minArgumentCount from the @type tag, if present.
-                // If this is a variable or property declaration, apply the @type tag to it
-                // (getTypeForVariableLikeDeclaration()), not to the initializer.
+                // If this is a function or method declaration, get the signature from the @type tag for the sake of optional parameters.
+                // Exclude contextually-typed kinds because we already apply the @type tag to the context, plus applying it here to the initializer would supress checks that the two are compatible.
                 result.push(
                     (!isFunctionExpressionOrArrowFunction(decl) &&
                         !isObjectLiteralMethod(decl) &&
