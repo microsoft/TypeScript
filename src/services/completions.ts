@@ -4094,6 +4094,10 @@ namespace ts.Completions {
                 }
                 break;
            case SyntaxKind.Identifier: {
+                const originalKeywordKind = (location as Identifier).originalKeywordKind;
+                if (originalKeywordKind && isKeyword(originalKeywordKind)) {
+                    return undefined;
+                }
                 // class c { public prop = c| }
                 if (isPropertyDeclaration(location.parent) && location.parent.initializer === location) {
                     return undefined;
