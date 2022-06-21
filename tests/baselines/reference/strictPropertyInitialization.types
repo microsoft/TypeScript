@@ -395,3 +395,35 @@ class C12 {
     }
 }
 
+enum E {
+>E : E
+
+    A = "A",
+>A : E.A
+>"A" : "A"
+
+    B = "B"
+>B : E.B
+>"B" : "B"
+}
+class C13 {
+>C13 : C13
+
+    [E.A]: number;
+>[E.A] : number
+>E.A : E.A
+>E : typeof E
+>A : E.A
+
+    constructor() {
+        this[E.A] = 1;
+>this[E.A] = 1 : 1
+>this[E.A] : number
+>this : this
+>E.A : E.A
+>E : typeof E
+>A : E.A
+>1 : 1
+    }
+}
+
