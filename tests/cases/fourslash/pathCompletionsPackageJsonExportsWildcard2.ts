@@ -24,5 +24,19 @@
 verify.completions({
   marker: "",
   isNewIdentifierLocation: true,
-  exact: ["action/pageObjects/actionRenderer"]
+  exact: ["action"]
+});
+
+edit.insert("action/");
+
+verify.completions({
+  isNewIdentifierLocation: true,
+  exact: ["pageObjects"],
+});
+
+edit.insert("pageObjects/");
+
+verify.completions({
+  isNewIdentifierLocation: true,
+  exact: ["actionRenderer"],
 });

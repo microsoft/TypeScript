@@ -21,6 +21,6 @@
 
 verify.completions({
     marker: "",
-    exact: ["a", "b"].map(name => ({ name, kind: "script", kindModifiers: ".ts" })),
+    exact: ["a", "b"].map(name => ({ name, kind: "external module name", kindModifiers: ".ts" })),
     isNewIdentifierLocation: true,
 });

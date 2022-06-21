@@ -42,5 +42,5 @@
 verify.completions({
   marker: "",
   isNewIdentifierLocation: true,
-  exact: ["blah", "index", "arguments/index", "arguments"]
+  exact: ["blah", "index", "arguments"]
 });
