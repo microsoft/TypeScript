@@ -91,7 +91,7 @@ function foo1<a>(value: void|a): void {
 >value : void | a
 
         value; // value is void
->value : void
+>value : void | (a & void)
 
     } else {
         value; // value is a
