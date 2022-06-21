@@ -30736,6 +30736,16 @@ namespace ts {
                 return result;
             }
 
+            result = getCandidateForOverloadFailure(node, candidates, args, !!candidatesOutArray, checkMode);
+            // Preemptively cache the result; getResolvedSignature will do this after we return, but
+            // we need to ensure that the result is present for the error checks below so that if
+            // this signature is encountered again, we handle the circularity (rather than producing a
+            // different result which may produce no errors and assert). Callers of getResolvedSignature
+            // don't hit this issue because they only observe this result after it's had a chance to
+            // be cached, but the error reporting code below executes before getResolvedSignature sets
+            // resolvedSignature.
+            getNodeLinks(node).resolvedSignature = result;
+
             // No signatures were applicable. Now report errors based on the last applicable signature with
             // no arguments excluded from assignability checks.
             // If candidate is undefined, it means that no candidates had a suitable arity. In that case,
@@ -30826,7 +30836,7 @@ namespace ts {
                 }
             }
 
-            return getCandidateForOverloadFailure(node, candidates, args, !!candidatesOutArray, checkMode);
+            return result;
 
             function addImplementationSuccessElaboration(failed: Signature, diagnostic: Diagnostic) {
                 const oldCandidatesForArgumentError = candidatesForArgumentError;
