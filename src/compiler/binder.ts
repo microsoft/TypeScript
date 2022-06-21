@@ -3509,10 +3509,11 @@ namespace ts {
 
     export function isExportsOrModuleExportsOrAlias(sourceFile: SourceFile, node: Expression): boolean {
         let i = 0;
-        const q = [node];
-        while (q.length && i < 100) {
+        const q = createQueue<Expression>();
+        q.enqueue(node);
+        while (!q.isEmpty() && i < 100) {
             i++;
-            node = q.shift()!;
+            node = q.dequeue();
             if (isExportsIdentifier(node) || isModuleExportsAccessExpression(node)) {
                 return true;
             }
@@ -3520,10 +3521,10 @@ namespace ts {
                 const symbol = lookupSymbolForName(sourceFile, node.escapedText);
                 if (!!symbol && !!symbol.valueDeclaration && isVariableDeclaration(symbol.valueDeclaration) && !!symbol.valueDeclaration.initializer) {
                     const init = symbol.valueDeclaration.initializer;
-                    q.push(init);
+                    q.enqueue(init);
                     if (isAssignmentExpression(init, /*excludeCompoundAssignment*/ true)) {
-                        q.push(init.left);
-                        q.push(init.right);
+                        q.enqueue(init.left);
+                        q.enqueue(init.right);
                     }
                 }
             }

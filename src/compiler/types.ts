@@ -8998,4 +8998,11 @@ namespace ts {
         negative: boolean;
         base10Value: string;
     }
+
+    /* @internal */
+    export interface Queue<T> {
+        enqueue(...items: T[]): void;
+        dequeue(): T;
+        isEmpty(): boolean;
+    }
 }
