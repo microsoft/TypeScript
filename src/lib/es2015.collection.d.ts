@@ -29,8 +29,8 @@ interface Map<K, V> {
     has(key: K): boolean;
     /**
      * Adds a new element with a specified key and value to the Map object. If an element with the same key already exists, the element will be updated.
-     * @param key The key of the element to add to the Map object. The key may be any JavaScript type (any primitive value or any type of JavaScript object).
-     * @param value The value of the element to add to the Map object. The value may be any JavaScript type (any primitive value or any type of JavaScript object).
+     * @param key The key of the element to add to the Map object.
+     * @param value The value of the element to add to the Map object.
      */
     set(key: K, value: V): this;
     /**
