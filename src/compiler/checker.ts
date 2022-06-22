@@ -4644,24 +4644,29 @@ namespace ts {
             }
         }
 
-        function isEntityNameVisible(entityName: EntityNameOrEntityNameExpression, enclosingDeclaration: Node): SymbolVisibilityResult {
+        function isEntityNameVisible(entityName: EntityNameOrEntityNameExpression, enclosingDeclaration: Node, overrideMeaning?: SymbolFlags): SymbolVisibilityResult {
             // get symbol of the first identifier of the entityName
             let meaning: SymbolFlags;
-            if (entityName.parent.kind === SyntaxKind.TypeQuery ||
-                entityName.parent.kind === SyntaxKind.ExpressionWithTypeArguments && !isPartOfTypeNode(entityName.parent) ||
-                entityName.parent.kind === SyntaxKind.ComputedPropertyName) {
-                // Typeof value
-                meaning = SymbolFlags.Value | SymbolFlags.ExportValue;
-            }
-            else if (entityName.kind === SyntaxKind.QualifiedName || entityName.kind === SyntaxKind.PropertyAccessExpression ||
-                entityName.parent.kind === SyntaxKind.ImportEqualsDeclaration) {
-                // Left identifier from type reference or TypeAlias
-                // Entity name of the import declaration
-                meaning = SymbolFlags.Namespace;
+            if (overrideMeaning) {
+                meaning = overrideMeaning;
             }
             else {
-                // Type Reference or TypeAlias entity = Identifier
-                meaning = SymbolFlags.Type;
+                if (entityName.parent.kind === SyntaxKind.TypeQuery ||
+                    entityName.parent.kind === SyntaxKind.ExpressionWithTypeArguments && !isPartOfTypeNode(entityName.parent) ||
+                    entityName.parent.kind === SyntaxKind.ComputedPropertyName) {
+                    // Typeof value
+                    meaning = SymbolFlags.Value | SymbolFlags.ExportValue;
+                }
+                else if (entityName.kind === SyntaxKind.QualifiedName || entityName.kind === SyntaxKind.PropertyAccessExpression ||
+                    entityName.parent.kind === SyntaxKind.ImportEqualsDeclaration) {
+                    // Left identifier from type reference or TypeAlias
+                    // Entity name of the import declaration
+                    meaning = SymbolFlags.Namespace;
+                }
+                else {
+                    // Type Reference or TypeAlias entity = Identifier
+                    meaning = SymbolFlags.Type;
+                }
             }
 
             const firstIdentifier = getFirstIdentifier(entityName);

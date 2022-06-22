@@ -103,6 +103,7 @@ namespace ts {
     function getDeclarationTransformers(customTransformers?: CustomTransformers) {
         const transformers: TransformerFactory<SourceFile | Bundle>[] = [];
         transformers.push(transformDeclarations);
+        transformers.push(transformCoalesceImports);
         addRange(transformers, customTransformers && map(customTransformers.afterDeclarations, wrapDeclarationTransformerFactory));
         return transformers;
     }
