@@ -3,15 +3,13 @@ tests/cases/conformance/parser/ecmascript5/Generics/parserMemberAccessExpression
 tests/cases/conformance/parser/ecmascript5/Generics/parserMemberAccessExpression1.ts(2,1): error TS2304: Cannot find name 'Foo'.
 tests/cases/conformance/parser/ecmascript5/Generics/parserMemberAccessExpression1.ts(2,9): error TS2304: Cannot find name 'T'.
 tests/cases/conformance/parser/ecmascript5/Generics/parserMemberAccessExpression1.ts(3,1): error TS2304: Cannot find name 'Foo'.
-tests/cases/conformance/parser/ecmascript5/Generics/parserMemberAccessExpression1.ts(3,8): error TS1005: ';' expected.
-tests/cases/conformance/parser/ecmascript5/Generics/parserMemberAccessExpression1.ts(3,8): error TS2304: Cannot find name 'Bar'.
+tests/cases/conformance/parser/ecmascript5/Generics/parserMemberAccessExpression1.ts(3,8): error TS1477: Instantiation expression cannot be followed by property access.
 tests/cases/conformance/parser/ecmascript5/Generics/parserMemberAccessExpression1.ts(4,1): error TS2304: Cannot find name 'Foo'.
-tests/cases/conformance/parser/ecmascript5/Generics/parserMemberAccessExpression1.ts(4,8): error TS1005: ';' expected.
-tests/cases/conformance/parser/ecmascript5/Generics/parserMemberAccessExpression1.ts(4,8): error TS2304: Cannot find name 'Bar'.
+tests/cases/conformance/parser/ecmascript5/Generics/parserMemberAccessExpression1.ts(4,8): error TS1477: Instantiation expression cannot be followed by property access.
 tests/cases/conformance/parser/ecmascript5/Generics/parserMemberAccessExpression1.ts(4,12): error TS2304: Cannot find name 'T'.
 
 
-==== tests/cases/conformance/parser/ecmascript5/Generics/parserMemberAccessExpression1.ts (11 errors) ====
+==== tests/cases/conformance/parser/ecmascript5/Generics/parserMemberAccessExpression1.ts (9 errors) ====
     Foo<T>();
     ~~~
 !!! error TS2304: Cannot find name 'Foo'.
@@ -26,16 +24,12 @@ tests/cases/conformance/parser/ecmascript5/Generics/parserMemberAccessExpression
     ~~~
 !!! error TS2304: Cannot find name 'Foo'.
            ~~~
-!!! error TS1005: ';' expected.
-           ~~~
-!!! error TS2304: Cannot find name 'Bar'.
+!!! error TS1477: Instantiation expression cannot be followed by property access.
     Foo<T>.Bar<T>();
     ~~~
 !!! error TS2304: Cannot find name 'Foo'.
            ~~~
-!!! error TS1005: ';' expected.
-           ~~~
-!!! error TS2304: Cannot find name 'Bar'.
+!!! error TS1477: Instantiation expression cannot be followed by property access.
                ~
 !!! error TS2304: Cannot find name 'T'.
     

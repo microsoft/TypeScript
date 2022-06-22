@@ -18,18 +18,19 @@ const a2 = f.g<number>;  // () => number
 >g : <U>() => U
 
 const a3 = f<number>.g;  // <U>() => U
->a3 : { (): number; g<U>(): U; }
+>a3 : <U>() => U
+>f<number>.g : <U>() => U
 >f<number> : { (): number; g<U>(): U; }
 >f : { <T>(): T; g<U>(): U; }
->g : any
+>g : <U>() => U
 
 const a4 = f<number>.g<number>;  // () => number
->a4 : { (): number; g<U>(): U; }
+>a4 : () => number
+>f<number>.g<number> : () => number
+>f<number>.g : <U>() => U
 >f<number> : { (): number; g<U>(): U; }
 >f : { <T>(): T; g<U>(): U; }
->g : any
-><number> : number
-> : any
+>g : <U>() => U
 
 const a5 = f['g']<number>;  // () => number
 >a5 : () => number
@@ -106,30 +107,30 @@ declare let g: (<T>(x: T) => T) | undefined;
 >x : T
 
 const c1 = g<string> || ((x: string) => x);
->c1 : any
->g<string> || ((x: string) => x) : any
->g<string> : any
->g : any
+>c1 : (x: string) => string
+>g<string> || ((x: string) => x) : (x: string) => string
+>g<string> : ((x: string) => string) | undefined
+>g : (<T>(x: T) => T) | undefined
 >((x: string) => x) : (x: string) => string
 >(x: string) => x : (x: string) => string
 >x : string
 >x : string
 
 const c2 = g<string> ?? ((x: string) => x);
->c2 : any
->g<string> ?? ((x: string) => x) : any
->g<string> : any
->g : any
+>c2 : (x: string) => string
+>g<string> ?? ((x: string) => x) : (x: string) => string
+>g<string> : ((x: string) => string) | undefined
+>g : (<T>(x: T) => T) | undefined
 >((x: string) => x) : (x: string) => string
 >(x: string) => x : (x: string) => string
 >x : string
 >x : string
 
 const c3 = g<string> && ((x: string) => x);
->c3 : any
->g<string> && ((x: string) => x) : any
->g<string> : any
->g : any
+>c3 : ((x: string) => string) | undefined
+>g<string> && ((x: string) => x) : ((x: string) => string) | undefined
+>g<string> : ((x: string) => string) | undefined
+>g : (<T>(x: T) => T) | undefined
 >((x: string) => x) : (x: string) => string
 >(x: string) => x : (x: string) => string
 >x : string

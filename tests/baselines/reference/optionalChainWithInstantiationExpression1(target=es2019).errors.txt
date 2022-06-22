@@ -1,8 +1,7 @@
-tests/cases/compiler/optionalChainWithInstantiationExpression1.ts(12,9): error TS1005: ';' expected.
-tests/cases/compiler/optionalChainWithInstantiationExpression1.ts(12,9): error TS2304: Cannot find name 'd'.
+tests/cases/compiler/optionalChainWithInstantiationExpression1.ts(12,9): error TS1477: Instantiation expression cannot be followed by property access.
 
 
-==== tests/cases/compiler/optionalChainWithInstantiationExpression1.ts (2 errors) ====
+==== tests/cases/compiler/optionalChainWithInstantiationExpression1.ts (1 errors) ====
     declare namespace A {
         export class b<T> {
             static d: number;
@@ -16,9 +15,7 @@ tests/cases/compiler/optionalChainWithInstantiationExpression1.ts(12,9): error T
     
     a?.b<c>.d;
             ~
-!!! error TS1005: ';' expected.
-            ~
-!!! error TS2304: Cannot find name 'd'.
+!!! error TS1477: Instantiation expression cannot be followed by property access.
     
     a?.b.d
     

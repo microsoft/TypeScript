@@ -16,6 +16,5 @@ a?.b.d
 
 
 //// [optionalChainWithInstantiationExpression1.js]
-a?.b;
-d;
+a?.b.d;
 a?.b.d;

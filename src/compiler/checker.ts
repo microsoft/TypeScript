@@ -28912,7 +28912,14 @@ namespace ts {
             return nonNullType;
         }
 
+        function checkGrammarPropertyAccessExpression(node: PropertyAccessExpression) {
+            if (node.expression.kind === SyntaxKind.ExpressionWithTypeArguments) {
+                grammarErrorOnNode(node.name, Diagnostics.Instantiation_expression_cannot_be_followed_by_property_access);
+            }
+        }
+
         function checkPropertyAccessExpression(node: PropertyAccessExpression, checkMode: CheckMode | undefined) {
+            checkGrammarPropertyAccessExpression(node);
             return node.flags & NodeFlags.OptionalChain ? checkPropertyAccessChain(node as PropertyAccessChain, checkMode) :
                 checkPropertyAccessExpressionOrQualifiedName(node, node.expression, checkNonNullExpression(node.expression), node.name, checkMode);
         }
