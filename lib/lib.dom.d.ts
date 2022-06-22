@@ -12088,12 +12088,14 @@ interface Response extends Body {
     clone(): Response;
 }
 
-declare var Response: {
+declare interface ResponseConstructor {
     prototype: Response;
     new(body?: BodyInit | null, init?: ResponseInit): Response;
     error(): Response;
     redirect(url: string | URL, status?: number): Response;
-};
+}
+
+declare var Response: ResponseConstructor;
 
 /** Provides access to the properties of <a> element, as well as methods to manipulate them. */
 interface SVGAElement extends SVGGraphicsElement, SVGURIReference {
