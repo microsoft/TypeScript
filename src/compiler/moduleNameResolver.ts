@@ -2092,10 +2092,11 @@ namespace ts {
     }
 
     /**
+     * @internal
      * From https://github.com/nodejs/node/blob/8f39f51cbbd3b2de14b9ee896e26421cc5b20121/lib/internal/modules/esm/resolve.js#L722 -
      * "longest" has some nuance as to what "longest" means in the presence of pattern trailers
      */
-    function comparePatternKeys(a: string, b: string) {
+    export function comparePatternKeys(a: string, b: string) {
         const aPatternIndex = a.indexOf("*");
         const bPatternIndex = b.indexOf("*");
         const baseLenA = aPatternIndex === -1 ? a.length : aPatternIndex + 1;
