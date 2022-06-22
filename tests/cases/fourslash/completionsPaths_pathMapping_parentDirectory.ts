@@ -18,6 +18,6 @@
 
 verify.completions({
     marker: "",
-    exact: { name: "x", kind: "external module name", kindModifiers: ".ts" },
+    exact: { name: "x", kind: "script", kindModifiers: ".ts" },
     isNewIdentifierLocation: true,
 });

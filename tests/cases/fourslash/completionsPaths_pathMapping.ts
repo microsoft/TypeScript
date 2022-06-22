@@ -25,15 +25,15 @@ verify.completions(
     {
         marker: "0",
         exact: [
-            { name: "a", kind: "external module name", kindModifiers: ".ts" },
-            { name: "b", kind: "external module name", kindModifiers: ".ts" },
+            { name: "a", kind: "script", kindModifiers: ".ts" },
+            { name: "b", kind: "script", kindModifiers: ".ts" },
             { name: "dir", kind: "directory" },
         ],
         isNewIdentifierLocation: true,
     },
     {
         marker: "1",
-        exact: { name: "x", kind: "external module name", kindModifiers: ".ts" },
+        exact: { name: "x", kind: "script", kindModifiers: ".ts" },
         isNewIdentifierLocation: true,
     },
 );

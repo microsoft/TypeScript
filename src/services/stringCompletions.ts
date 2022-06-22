@@ -492,7 +492,7 @@ namespace ts.Completions.StringCompletions {
                 }
 
                 const { name, extension } = getFilenameWithExtensionOption(getBaseFileName(filePath), host.getCompilationSettings(), extensionOptions.includeExtensionsOption);
-                result.add(nameAndKind(name, ScriptElementKind.externalModuleName, extension));
+                result.add(nameAndKind(name, ScriptElementKind.scriptElement, extension));
             }
         }
 
@@ -795,7 +795,7 @@ namespace ts.Completions.StringCompletions {
                     return directoryResult(getPathComponents(basename)[0]);
                 }
                 const { name, extension } = getFilenameWithExtensionOption(basename, host.getCompilationSettings(), extensionOptions.includeExtensionsOption);
-                return nameAndKind(name, ScriptElementKind.externalModuleName, extension);
+                return nameAndKind(name, ScriptElementKind.scriptElement, extension);
             }
         });
 
