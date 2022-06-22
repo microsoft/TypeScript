@@ -25321,14 +25321,16 @@ namespace ts {
                 // We first attempt to filter the current type, narrowing constituents as appropriate and removing
                 // constituents that are unrelated to the candidate.
                 const narrowedType = type.flags & TypeFlags.AnyOrUnknown ? candidate :
-                    mapType(candidate, c =>
-                        mapType(type, t =>
-                            // If t and c are related, pick the most specific of the two. Otherwise, if t is generic
-                            // and c is possibly related to t, form an intersection. Otherwise, remove the type.
-                            isRelated(t, c) ? t :
-                            isRelated(c, t) ? c :
-                            maybeTypeOfKind(t, TypeFlags.Instantiable) && isRelated(c, getBaseConstraintOfType(t) || unknownType) ? getIntersectionType([t, c]) :
-                            neverType));
+                    mapType(candidate, c => {
+                        // For each constituent t in the current type, if t and and c are directly related, pick the most
+                        // specific of the two.
+                        const directlyRelated = mapType(type, t => isRelated(t, c) ? t : isRelated(c, t) ? c : neverType);
+                        // If no constituents are directly related, create intersections for any generic constituents that
+                        // are related by constraint.
+                        return directlyRelated.flags & TypeFlags.Never ?
+                            mapType(type, t => maybeTypeOfKind(t, TypeFlags.Instantiable) && isRelated(c, getBaseConstraintOfType(t) || unknownType) ? getIntersectionType([t, c]) : neverType) :
+                            directlyRelated;
+                    });
                 // If filtering produced a non-empty type, return that. Otherwise, pick the most specific of the two
                 // based on assignability, or as a last resort produce an intersection.
                 return !(narrowedType.flags & TypeFlags.Never) ? narrowedType :
