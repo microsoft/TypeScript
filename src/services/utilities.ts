@@ -2647,7 +2647,7 @@ namespace ts {
             Debug.assert(fileName === renameFilename);
             for (const change of textChanges) {
                 const { span, newText } = change;
-                const index = indexInTextChange(newText, name);
+                const index = indexInTextChange(newText, escapeString(name));
                 if (index !== -1) {
                     lastPos = span.start + delta + index;
 
