@@ -1153,7 +1153,7 @@ namespace ts {
                 }
 
                 // first element whose start position is before the input and whose end position is after or equal to the input
-                if (nodeContainsPosition(children[middle])) {
+                if (nodeContainsPosition(children[middle], start)) {
                     if (children[middle - 1]) {
                         // we want the _first_ element that contains the position, so left-recur if the prior node also contains the position
                         if (nodeContainsPosition(children[middle - 1])) {
@@ -1181,8 +1181,8 @@ namespace ts {
             return current;
         }
 
-        function nodeContainsPosition(node: Node) {
-            const start = allowPositionInLeadingTrivia ? node.getFullStart() : node.getStart(sourceFile, /*includeJsDoc*/ true);
+        function nodeContainsPosition(node: Node, start?: number) {
+            start ??= allowPositionInLeadingTrivia ? node.getFullStart() : node.getStart(sourceFile, /*includeJsDoc*/ true);
             if (start > position) {
                 // If this child begins after position, then all subsequent children will as well.
                 return false;
