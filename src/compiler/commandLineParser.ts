@@ -156,6 +156,7 @@ const libEntries: [string, string][] = [
     ["es2020", "lib.es2020.d.ts"],
     ["es2021", "lib.es2021.d.ts"],
     ["es2022", "lib.es2022.d.ts"],
+    ["es2023", "lib.es2023.d.ts"],
     ["esnext", "lib.esnext.d.ts"],
     // Host only
     ["dom", "lib.dom.d.ts"],
@@ -209,7 +210,8 @@ const libEntries: [string, string][] = [
     ["es2022.sharedmemory", "lib.es2022.sharedmemory.d.ts"],
     ["es2022.string", "lib.es2022.string.d.ts"],
     ["es2022.regexp", "lib.es2022.regexp.d.ts"],
-    ["esnext.array", "lib.es2022.array.d.ts"],
+    ["es2023.array", "lib.es2023.array.d.ts"],
+    ["esnext.array", "lib.es2023.array.d.ts"],
     ["esnext.symbol", "lib.es2019.symbol.d.ts"],
     ["esnext.asynciterable", "lib.es2018.asynciterable.d.ts"],
     ["esnext.intl", "lib.esnext.intl.d.ts"],
