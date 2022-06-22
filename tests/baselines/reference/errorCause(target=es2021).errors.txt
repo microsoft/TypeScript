@@ -1,24 +1,38 @@
-tests/cases/compiler/errorCause.ts(1,28): error TS2554: Expected 0-1 arguments, but got 2.
-tests/cases/compiler/errorCause.ts(2,5): error TS2550: Property 'cause' does not exist on type 'Error'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2022' or later.
-tests/cases/compiler/errorCause.ts(4,22): error TS2554: Expected 0-1 arguments, but got 2.
-tests/cases/compiler/errorCause.ts(5,23): error TS2554: Expected 0-1 arguments, but got 2.
-tests/cases/compiler/errorCause.ts(6,27): error TS2554: Expected 0-1 arguments, but got 2.
-tests/cases/compiler/errorCause.ts(7,24): error TS2554: Expected 0-1 arguments, but got 2.
+tests/cases/compiler/errorCause.ts(3,28): error TS2554: Expected 0-1 arguments, but got 2.
+tests/cases/compiler/errorCause.ts(4,5): error TS2550: Property 'cause' does not exist on type 'Error'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2022' or later.
+tests/cases/compiler/errorCause.ts(5,35): error TS2554: Expected 0-1 arguments, but got 2.
+tests/cases/compiler/errorCause.ts(6,12): error TS2550: Property 'cause' does not exist on type 'Error'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2022' or later.
 tests/cases/compiler/errorCause.ts(8,22): error TS2554: Expected 0-1 arguments, but got 2.
-tests/cases/compiler/errorCause.ts(9,21): error TS2554: Expected 0-1 arguments, but got 2.
-tests/cases/compiler/errorCause.ts(10,31): error TS2554: Expected 1-2 arguments, but got 3.
+tests/cases/compiler/errorCause.ts(9,22): error TS2554: Expected 0-1 arguments, but got 2.
+tests/cases/compiler/errorCause.ts(10,23): error TS2554: Expected 0-1 arguments, but got 2.
+tests/cases/compiler/errorCause.ts(11,27): error TS2554: Expected 0-1 arguments, but got 2.
+tests/cases/compiler/errorCause.ts(12,24): error TS2554: Expected 0-1 arguments, but got 2.
+tests/cases/compiler/errorCause.ts(13,22): error TS2554: Expected 0-1 arguments, but got 2.
+tests/cases/compiler/errorCause.ts(14,21): error TS2554: Expected 0-1 arguments, but got 2.
+tests/cases/compiler/errorCause.ts(15,31): error TS2554: Expected 1-2 arguments, but got 3.
 
 
-==== tests/cases/compiler/errorCause.ts (9 errors) ====
+==== tests/cases/compiler/errorCause.ts (12 errors) ====
+    declare const a: unknown;
+    
     let err = new Error("foo", { cause: new Error("bar") });
                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2554: Expected 0-1 arguments, but got 2.
     err.cause;
         ~~~~~
 !!! error TS2550: Property 'cause' does not exist on type 'Error'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2022' or later.
+    let anotherErr = new Error("foo", { cause: a });
+                                      ~~~~~~~~~~~~
+!!! error TS2554: Expected 0-1 arguments, but got 2.
+    anotherErr.cause;
+               ~~~~~
+!!! error TS2550: Property 'cause' does not exist on type 'Error'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2022' or later.
     
     new EvalError("foo", { cause: new Error("bar") });
                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2554: Expected 0-1 arguments, but got 2.
+    new EvalError("foo", { cause: a });
+                         ~~~~~~~~~~~~
 !!! error TS2554: Expected 0-1 arguments, but got 2.
     new RangeError("foo", { cause: new Error("bar") });
                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~
