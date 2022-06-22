@@ -363,6 +363,7 @@ namespace ts {
         }
 
         function modifierVisitor(node: Node): VisitResult<Node> {
+            if (isDecorator(node)) return undefined;
             if (modifierToFlag(node.kind) & ModifierFlags.TypeScriptModifier) {
                 return undefined;
             }
@@ -608,7 +609,7 @@ namespace ts {
         }
 
         function isClassLikeDeclarationWithTypeScriptSyntax(node: ClassLikeDeclaration) {
-            return some(node.decorators)
+            return hasDecorators(node)
                 || some(node.typeParameters)
                 || some(node.heritageClauses, hasTypeScriptClassSyntax)
                 || some(node.members, hasTypeScriptClassSyntax);
@@ -618,7 +619,6 @@ namespace ts {
             if (!isClassLikeDeclarationWithTypeScriptSyntax(node) && !(currentNamespace && hasSyntacticModifier(node, ModifierFlags.Export))) {
                 return factory.updateClassDeclaration(
                     node,
-                    elideNodes(factory, node.decorators), // preserve positions, if available
                     visitNodes(node.modifiers, modifierVisitor, isModifier),
                     node.name,
                     /*typeParameters*/ undefined,
@@ -635,7 +635,7 @@ namespace ts {
             }
 
             const name = node.name || (facts & ClassFacts.NeedsName ? factory.getGeneratedNameForNode(node) : undefined);
-            const allDecorators = getAllDecoratorsOfConstructor(node);
+            const allDecorators = getAllDecoratorsOfClass(node);
             const decorators = transformAllDecoratorsOfDeclaration(node, node, allDecorators);
 
             // we do not emit modifiers on the declaration if we are emitting an IIFE
@@ -648,8 +648,7 @@ namespace ts {
             //  }
             const classStatement = factory.updateClassDeclaration(
                 node,
-                decorators,
-                modifiers,
+                concatenate<ModifierLike>(decorators, modifiers),
                 name,
                 /*typeParameters*/ undefined,
                 visitNodes(node.heritageClauses, visitor, isHeritageClause),
@@ -742,12 +741,11 @@ namespace ts {
         }
 
         function visitClassExpression(node: ClassExpression): Expression {
-            const allDecorators = getAllDecoratorsOfConstructor(node);
+            const allDecorators = getAllDecoratorsOfClass(node);
             const decorators = transformAllDecoratorsOfDeclaration(node, node, allDecorators);
             return factory.updateClassExpression(
                 node,
                 decorators,
-                /*modifiers*/ undefined,
                 node.name,
                 /*typeParameters*/ undefined,
                 visitNodes(node.heritageClauses, visitor, isHeritageClause),
@@ -772,7 +770,6 @@ namespace ts {
                 for (const parameter of parametersWithPropertyAssignments) {
                     if (isIdentifier(parameter.name)) {
                         members.push(setOriginalNode(factory.createPropertyDeclaration(
-                            /*decorators*/ undefined,
                             /*modifiers*/ undefined,
                             parameter.name,
                             /*questionOrExclamationToken*/ undefined,
@@ -787,143 +784,6 @@ namespace ts {
         }
 
         /**
-         * A structure describing the decorators for a class element.
-         */
-        interface AllDecorators {
-            decorators: NodeArray<Decorator> | undefined;
-            parameters?: readonly (readonly Decorator[] | undefined)[];
-        }
-
-        /**
-         * Gets an array of arrays of decorators for the parameters of a function-like node.
-         * The offset into the result array should correspond to the offset of the parameter.
-         *
-         * @param node The function-like node.
-         */
-        function getDecoratorsOfParameters(node: FunctionLikeDeclaration | undefined) {
-            let decorators: (readonly Decorator[] | undefined)[] | undefined;
-            if (node) {
-                const parameters = node.parameters;
-                const firstParameterIsThis = parameters.length > 0 && parameterIsThisKeyword(parameters[0]);
-                const firstParameterOffset = firstParameterIsThis ? 1 : 0;
-                const numParameters = firstParameterIsThis ? parameters.length - 1 : parameters.length;
-                for (let i = 0; i < numParameters; i++) {
-                    const parameter = parameters[i + firstParameterOffset];
-                    if (decorators || parameter.decorators) {
-                        if (!decorators) {
-                            decorators = new Array(numParameters);
-                        }
-
-                        decorators[i] = parameter.decorators;
-                    }
-                }
-            }
-
-            return decorators;
-        }
-
-        /**
-         * Gets an AllDecorators object containing the decorators for the class and the decorators for the
-         * parameters of the constructor of the class.
-         *
-         * @param node The class node.
-         */
-        function getAllDecoratorsOfConstructor(node: ClassExpression | ClassDeclaration): AllDecorators | undefined {
-            const decorators = node.decorators;
-            const parameters = getDecoratorsOfParameters(getFirstConstructorWithBody(node));
-            if (!decorators && !parameters) {
-                return undefined;
-            }
-
-            return {
-                decorators,
-                parameters
-            };
-        }
-
-        /**
-         * Gets an AllDecorators object containing the decorators for the member and its parameters.
-         *
-         * @param parent The class node that contains the member.
-         * @param member The class member.
-         */
-        function getAllDecoratorsOfClassElement(member: ClassElement, parent: ClassExpression | ClassDeclaration): AllDecorators | undefined {
-            switch (member.kind) {
-                case SyntaxKind.GetAccessor:
-                case SyntaxKind.SetAccessor:
-                    return getAllDecoratorsOfAccessors(parent, member as AccessorDeclaration);
-
-                case SyntaxKind.MethodDeclaration:
-                    return getAllDecoratorsOfMethod(member as MethodDeclaration);
-
-                case SyntaxKind.PropertyDeclaration:
-                    return getAllDecoratorsOfProperty(member as PropertyDeclaration);
-
-                default:
-                    return undefined;
-            }
-        }
-
-        /**
-         * Gets an AllDecorators object containing the decorators for the accessor and its parameters.
-         *
-         * @param node The class node that contains the accessor.
-         * @param accessor The class accessor member.
-         */
-        function getAllDecoratorsOfAccessors(node: ClassExpression | ClassDeclaration, accessor: AccessorDeclaration): AllDecorators | undefined {
-            if (!accessor.body) {
-                return undefined;
-            }
-
-            const { firstAccessor, secondAccessor, setAccessor } = getAllAccessorDeclarations(node.members, accessor);
-            const firstAccessorWithDecorators = firstAccessor.decorators ? firstAccessor : secondAccessor && secondAccessor.decorators ? secondAccessor : undefined;
-            if (!firstAccessorWithDecorators || accessor !== firstAccessorWithDecorators) {
-                return undefined;
-            }
-
-            const decorators = firstAccessorWithDecorators.decorators;
-            const parameters = getDecoratorsOfParameters(setAccessor);
-            if (!decorators && !parameters) {
-                return undefined;
-            }
-
-            return { decorators, parameters };
-        }
-
-        /**
-         * Gets an AllDecorators object containing the decorators for the method and its parameters.
-         *
-         * @param method The class method member.
-         */
-        function getAllDecoratorsOfMethod(method: MethodDeclaration): AllDecorators | undefined {
-            if (!method.body) {
-                return undefined;
-            }
-
-            const decorators = method.decorators;
-            const parameters = getDecoratorsOfParameters(method);
-            if (!decorators && !parameters) {
-                return undefined;
-            }
-
-            return { decorators, parameters };
-        }
-
-        /**
-         * Gets an AllDecorators object containing the decorators for the property.
-         *
-         * @param property The class property member.
-         */
-        function getAllDecoratorsOfProperty(property: PropertyDeclaration): AllDecorators | undefined {
-            const decorators = property.decorators;
-            if (!decorators) {
-                return undefined;
-            }
-
-            return { decorators };
-        }
-
-        /**
          * Transforms all of the decorators for a declaration into an array of expressions.
          *
          * @param node The declaration node.
@@ -934,11 +794,13 @@ namespace ts {
                 return undefined;
             }
 
-            const decorators = visitNodes(allDecorators.decorators, visitor, isDecorator);
+            const decorators = visitArray(allDecorators.decorators, visitor, isDecorator);
             const parameterDecorators = flatMap(allDecorators.parameters, transformDecoratorsOfParameter);
             const metadataDecorators = some(decorators) || some(parameterDecorators) ? getTypeMetadata(node, container) : undefined;
             const result = factory.createNodeArray(concatenate(concatenate(decorators, parameterDecorators), metadataDecorators));
-            setTextRange(result, decorators);
+            const pos = firstOrUndefined(allDecorators.decorators)?.pos ?? -1;
+            const end = lastOrUndefined(allDecorators.decorators)?.end ?? -1;
+            setTextRangePosEnd(result, pos, end);
             return result;
         }
 
@@ -958,7 +820,8 @@ namespace ts {
                     setEmitFlags(helper, EmitFlags.NoComments);
 
                     const decorator = factory.createDecorator(helper);
-                    setTextRange(decorator, parameterDecorator.expression);
+                    setSourceMapRange(decorator, parameterDecorator.expression);
+                    setCommentRange(decorator, parameterDecorator.expression);
                     setEmitFlags(decorator, EmitFlags.NoComments);
                     decorators.push(decorator);
                 }
@@ -1101,7 +964,7 @@ namespace ts {
             // The names are used more than once when:
             //   - the property is non-static and its initializer is moved to the constructor (when there are parameter property assignments).
             //   - the property has a decorator.
-            if (isComputedPropertyName(name) && ((!hasStaticModifier(member) && currentClassHasParameterProperties) || some(member.decorators))) {
+            if (isComputedPropertyName(name) && ((!hasStaticModifier(member) && currentClassHasParameterProperties) || hasDecorators(member))) {
                 const expression = visitNode(name.expression, visitor, isExpression);
                 const innerExpression = skipPartiallyEmittedExpressions(expression);
                 if (!isSimpleInlineableExpression(innerExpression)) {
@@ -1158,7 +1021,7 @@ namespace ts {
 
         function visitPropertyDeclaration(node: PropertyDeclaration, parent: ClassLikeDeclaration) {
             const isAmbient = node.flags & NodeFlags.Ambient || hasSyntacticModifier(node, ModifierFlags.Abstract);
-            if (isAmbient && !some(node.decorators)) {
+            if (isAmbient && !hasDecorators(node)) {
                 return undefined;
             }
 
@@ -1169,8 +1032,7 @@ namespace ts {
             if (isAmbient) {
                 return factory.updatePropertyDeclaration(
                     node,
-                    decorators,
-                    factory.createModifiersFromModifierFlags(ModifierFlags.Ambient),
+                    concatenate<ModifierLike>(decorators, factory.createModifiersFromModifierFlags(ModifierFlags.Ambient)),
                     visitNode(node.name, visitor, isPropertyName),
                     /*questionOrExclamationToken*/ undefined,
                     /*type*/ undefined,
@@ -1180,8 +1042,7 @@ namespace ts {
 
             return factory.updatePropertyDeclaration(
                 node,
-                decorators,
-                visitNodes(node.modifiers, visitor, isModifier),
+                concatenate(decorators, visitNodes(node.modifiers, modifierVisitor, isModifierLike)),
                 visitPropertyNameOfClassElement(node),
                 /*questionOrExclamationToken*/ undefined,
                 /*type*/ undefined,
@@ -1196,8 +1057,7 @@ namespace ts {
 
             return factory.updateConstructorDeclaration(
                 node,
-                /*decorators*/ undefined,
-                /*modifiers*/ visitNodes(node.modifiers, visitor, isModifier),
+                /*modifiers*/ undefined,
                 visitParameterList(node.parameters, visitor, context),
                 transformConstructorBody(node.body, node)
             );
@@ -1319,8 +1179,7 @@ namespace ts {
             const decorators = isClassLike(parent) ? transformAllDecoratorsOfDeclaration(node, parent, allDecorators) : undefined;
             return factory.updateMethodDeclaration(
                 node,
-                decorators,
-                visitNodes(node.modifiers, modifierVisitor, isModifier),
+                concatenate(decorators, visitNodes(node.modifiers, modifierVisitor, isModifierLike)),
                 node.asteriskToken,
                 visitPropertyNameOfClassElement(node),
                 /*questionToken*/ undefined,
@@ -1356,8 +1215,7 @@ namespace ts {
 
             return factory.updateGetAccessorDeclaration(
                 node,
-                decorators,
-                visitNodes(node.modifiers, modifierVisitor, isModifier),
+                concatenate(decorators, visitNodes(node.modifiers, modifierVisitor, isModifierLike)),
                 visitPropertyNameOfClassElement(node),
                 visitParameterList(node.parameters, visitor, context),
                 /*type*/ undefined,
@@ -1380,8 +1238,7 @@ namespace ts {
 
             return factory.updateSetAccessorDeclaration(
                 node,
-                decorators,
-                visitNodes(node.modifiers, modifierVisitor, isModifier),
+                concatenate(decorators, visitNodes(node.modifiers, modifierVisitor, isModifierLike)),
                 visitPropertyNameOfClassElement(node),
                 visitParameterList(node.parameters, visitor, context),
                 visitFunctionBody(node.body, visitor, context) || factory.createBlock([])
@@ -1394,7 +1251,6 @@ namespace ts {
             }
             const updated = factory.updateFunctionDeclaration(
                 node,
-                /*decorators*/ undefined,
                 visitNodes(node.modifiers, modifierVisitor, isModifier),
                 node.asteriskToken,
                 node.name,
@@ -1448,7 +1304,6 @@ namespace ts {
 
             const updated = factory.updateParameterDeclaration(
                 node,
-                elideNodes(factory, node.decorators), // preserve positions, if available
                 elideNodes(factory, node.modifiers), // preserve positions, if available
                 node.dotDotDotToken,
                 visitNode(node.name, visitor, isBindingName),
@@ -1685,7 +1540,7 @@ namespace ts {
                         /*asteriskToken*/ undefined,
                         /*name*/ undefined,
                         /*typeParameters*/ undefined,
-                        [factory.createParameterDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, parameterName)],
+                        [factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, parameterName)],
                         /*type*/ undefined,
                         transformEnumBody(node, containerName)
                     ),
@@ -1986,7 +1841,7 @@ namespace ts {
                         /*asteriskToken*/ undefined,
                         /*name*/ undefined,
                         /*typeParameters*/ undefined,
-                        [factory.createParameterDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, parameterName)],
+                        [factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, parameterName)],
                         /*type*/ undefined,
                         transformModuleBody(node, containerName)
                     ),
@@ -2121,7 +1976,6 @@ namespace ts {
                 compilerOptions.importsNotUsedAsValues === ImportsNotUsedAsValues.Error
                 ? factory.updateImportDeclaration(
                     node,
-                    /*decorators*/ undefined,
                     /*modifiers*/ undefined,
                     importClause,
                     node.moduleSpecifier,
@@ -2213,7 +2067,6 @@ namespace ts {
             return exportClause
                 ? factory.updateExportDeclaration(
                     node,
-                    /*decorators*/ undefined,
                     /*modifiers*/ undefined,
                     node.isTypeOnly,
                     exportClause,
@@ -2284,7 +2137,6 @@ namespace ts {
                     return setOriginalNode(
                         setTextRange(
                             factory.createImportDeclaration(
-                                /*decorators*/ undefined,
                                 /*modifiers*/ undefined,
                                 /*importClause*/ undefined,
                                 node.moduleReference.expression,

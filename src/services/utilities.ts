@@ -768,7 +768,7 @@ namespace ts {
         if (isFunctionDeclaration(node)) {
             // for class and function declarations, use the `default` modifier
             // when the declaration is unnamed.
-            const defaultModifier = find(node.modifiers!, isDefaultModifier);
+            const defaultModifier = find(node.modifiers, isDefaultModifier);
             if (defaultModifier) return defaultModifier;
         }
         if (isFunctionExpression(node)) {
@@ -903,7 +903,7 @@ namespace ts {
         //
         // NOTE: If the node is a modifier, we don't adjust its location if it is the `default` modifier as that is handled
         // specially by `getSymbolAtLocation`.
-        if (isModifier(node) && (forRename || node.kind !== SyntaxKind.DefaultKeyword) ? contains(parent.modifiers, node) :
+        if (isModifier(node) && (forRename || node.kind !== SyntaxKind.DefaultKeyword) ? canHaveModifiers(parent) && contains(parent.modifiers, node) :
             node.kind === SyntaxKind.ClassKeyword ? isClassDeclaration(parent) || isClassExpression(node) :
                 node.kind === SyntaxKind.FunctionKeyword ? isFunctionDeclaration(parent) || isFunctionExpression(node) :
                     node.kind === SyntaxKind.InterfaceKeyword ? isInterfaceDeclaration(parent) :
@@ -1944,7 +1944,6 @@ namespace ts {
 
     export function makeImport(defaultImport: Identifier | undefined, namedImports: readonly ImportSpecifier[] | undefined, moduleSpecifier: string | Expression, quotePreference: QuotePreference, isTypeOnly?: boolean): ImportDeclaration {
         return factory.createImportDeclaration(
-            /*decorators*/ undefined,
             /*modifiers*/ undefined,
             defaultImport || namedImports
                 ? factory.createImportClause(!!isTypeOnly, defaultImport, namedImports && namedImports.length ? factory.createNamedImports(namedImports) : undefined)
@@ -2039,7 +2038,7 @@ namespace ts {
     }
 
     export function findModifier(node: Node, kind: Modifier["kind"]): Modifier | undefined {
-        return node.modifiers && find(node.modifiers, m => m.kind === kind);
+        return canHaveModifiers(node) ? find(node.modifiers, (m): m is Modifier => m.kind === kind) : undefined;
     }
 
     export function insertImports(changes: textChanges.ChangeTracker, sourceFile: SourceFile, imports: AnyImportOrRequireStatement | readonly AnyImportOrRequireStatement[], blankLineBetween: boolean): void {

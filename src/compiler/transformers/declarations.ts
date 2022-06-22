@@ -287,7 +287,6 @@ namespace ts {
                             needsDeclare = false;
                             const statements = isSourceFileJS(sourceFile) ? factory.createNodeArray(transformDeclarationsForJS(sourceFile, /*bundled*/ true)) : visitNodes(sourceFile.statements, visitDeclarationStatements);
                             const newFile = factory.updateSourceFile(sourceFile, [factory.createModuleDeclaration(
-                                [],
                                 [factory.createModifier(SyntaxKind.DeclareKeyword)],
                                 factory.createStringLiteral(getResolvedExternalModuleName(context.getEmitHost(), sourceFile)),
                                 factory.createModuleBlock(setTextRange(factory.createNodeArray(transformAndReplaceLatePaintedStatements(statements)), sourceFile.statements))
@@ -454,7 +453,7 @@ namespace ts {
             return ret;
         }
 
-        function filterBindingPatternInitializers(name: BindingName) {
+        function filterBindingPatternInitializersAndRenamings(name: BindingName) {
             if (name.kind === SyntaxKind.Identifier) {
                 return name;
             }
@@ -472,7 +471,23 @@ namespace ts {
                 if (elem.kind === SyntaxKind.OmittedExpression) {
                     return elem;
                 }
-                return factory.updateBindingElement(elem, elem.dotDotDotToken, elem.propertyName, filterBindingPatternInitializers(elem.name), shouldPrintWithInitializer(elem) ? elem.initializer : undefined);
+                if (elem.propertyName && isIdentifier(elem.propertyName) && isIdentifier(elem.name) && !elem.symbol.isReferenced) {
+                   // Unnecessary property renaming is forbidden in types, so remove renaming
+                    return factory.updateBindingElement(
+                        elem,
+                        elem.dotDotDotToken,
+                        /* propertyName */ undefined,
+                        elem.propertyName,
+                        shouldPrintWithInitializer(elem) ? elem.initializer : undefined
+                    );
+                }
+                return factory.updateBindingElement(
+                    elem,
+                    elem.dotDotDotToken,
+                    elem.propertyName,
+                    filterBindingPatternInitializersAndRenamings(elem.name),
+                    shouldPrintWithInitializer(elem) ? elem.initializer : undefined
+                );
             }
         }
 
@@ -484,10 +499,9 @@ namespace ts {
             }
             const newParam = factory.updateParameterDeclaration(
                 p,
-                /*decorators*/ undefined,
                 maskModifiers(p, modifierMask),
                 p.dotDotDotToken,
-                filterBindingPatternInitializers(p.name),
+                filterBindingPatternInitializersAndRenamings(p.name),
                 resolver.isOptionalParameter(p) ? (p.questionToken || factory.createToken(SyntaxKind.QuestionToken)) : undefined,
                 ensureType(p, type || p.type, /*ignorePrivate*/ true), // Ignore private param props, since this type is going straight back into a param
                 ensureNoInitializer(p)
@@ -558,7 +572,7 @@ namespace ts {
             if (node.kind === SyntaxKind.Parameter
                 || node.kind === SyntaxKind.PropertyDeclaration
                 || node.kind === SyntaxKind.PropertySignature) {
-                if (!node.initializer) return cleanup(resolver.createTypeOfDeclaration(node, enclosingDeclaration, declarationEmitNodeBuilderFlags, symbolTracker, shouldUseResolverType));
+                if (isPropertySignature(node) || !node.initializer) return cleanup(resolver.createTypeOfDeclaration(node, enclosingDeclaration, declarationEmitNodeBuilderFlags, symbolTracker, shouldUseResolverType));
                 return cleanup(resolver.createTypeOfDeclaration(node, enclosingDeclaration, declarationEmitNodeBuilderFlags, symbolTracker, shouldUseResolverType) || resolver.createTypeOfExpression(node.initializer, enclosingDeclaration, declarationEmitNodeBuilderFlags, symbolTracker));
             }
             return cleanup(resolver.createReturnTypeOfSignatureDeclaration(node, enclosingDeclaration, declarationEmitNodeBuilderFlags, symbolTracker));
@@ -649,7 +663,6 @@ namespace ts {
                 }
                 if (!newValueParameter) {
                     newValueParameter = factory.createParameterDeclaration(
-                        /*decorators*/ undefined,
                         /*modifiers*/ undefined,
                         /*dotDotDotToken*/ undefined,
                         "value"
@@ -715,7 +728,6 @@ namespace ts {
                 const specifier = getExternalModuleImportEqualsDeclarationExpression(decl);
                 return factory.updateImportEqualsDeclaration(
                     decl,
-                    /*decorators*/ undefined,
                     decl.modifiers,
                     decl.isTypeOnly,
                     decl.name,
@@ -736,7 +748,6 @@ namespace ts {
                 // import "mod" - possibly needed for side effects? (global interface patches, module augmentations, etc)
                 return factory.updateImportDeclaration(
                     decl,
-                    /*decorators*/ undefined,
                     decl.modifiers,
                     decl.importClause,
                     rewriteModuleSpecifier(decl, decl.moduleSpecifier),
@@ -747,7 +758,7 @@ namespace ts {
             const visibleDefaultBinding = decl.importClause && decl.importClause.name && resolver.isDeclarationVisible(decl.importClause) ? decl.importClause.name : undefined;
             if (!decl.importClause.namedBindings) {
                 // No named bindings (either namespace or list), meaning the import is just default or should be elided
-                return visibleDefaultBinding && factory.updateImportDeclaration(decl, /*decorators*/ undefined, decl.modifiers, factory.updateImportClause(
+                return visibleDefaultBinding && factory.updateImportDeclaration(decl, decl.modifiers, factory.updateImportClause(
                     decl.importClause,
                     decl.importClause.isTypeOnly,
                     visibleDefaultBinding,
@@ -757,7 +768,7 @@ namespace ts {
             if (decl.importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
                 // Namespace import (optionally with visible default)
                 const namedBindings = resolver.isDeclarationVisible(decl.importClause.namedBindings) ? decl.importClause.namedBindings : /*namedBindings*/ undefined;
-                return visibleDefaultBinding || namedBindings ? factory.updateImportDeclaration(decl, /*decorators*/ undefined, decl.modifiers, factory.updateImportClause(
+                return visibleDefaultBinding || namedBindings ? factory.updateImportDeclaration(decl, decl.modifiers, factory.updateImportClause(
                     decl.importClause,
                     decl.importClause.isTypeOnly,
                     visibleDefaultBinding,
@@ -769,7 +780,6 @@ namespace ts {
             if ((bindingList && bindingList.length) || visibleDefaultBinding) {
                 return factory.updateImportDeclaration(
                     decl,
-                    /*decorators*/ undefined,
                     decl.modifiers,
                     factory.updateImportClause(
                         decl.importClause,
@@ -785,7 +795,6 @@ namespace ts {
             if (resolver.isImportRequiredByAugmentation(decl)) {
                 return factory.updateImportDeclaration(
                     decl,
-                    /*decorators*/ undefined,
                     decl.modifiers,
                     /*importClause*/ undefined,
                     rewriteModuleSpecifier(decl, decl.moduleSpecifier),
@@ -824,7 +833,7 @@ namespace ts {
             while (length(lateMarkedStatements)) {
                 const i = lateMarkedStatements!.shift()!;
                 if (!isLateVisibilityPaintedStatement(i)) {
-                    return Debug.fail(`Late replaced statement was found which is not handled by the declaration transformer!: ${(ts as any).SyntaxKind ? (ts as any).SyntaxKind[(i as any).kind] : (i as any).kind}`);
+                    return Debug.fail(`Late replaced statement was found which is not handled by the declaration transformer!: ${Debug.formatSyntaxKind((i as Node).kind)}`);
                 }
                 const priorNeedsDeclare = needsDeclare;
                 needsDeclare = i.parent && isSourceFile(i.parent) && !(isExternalModule(i.parent) && isBundledEmit);
@@ -891,7 +900,7 @@ namespace ts {
             if (isMethodDeclaration(input) || isMethodSignature(input)) {
                 if (hasEffectiveModifier(input, ModifierFlags.Private)) {
                     if (input.symbol && input.symbol.declarations && input.symbol.declarations[0] !== input) return; // Elide all but the first overload
-                    return cleanup(factory.createPropertyDeclaration(/*decorators*/ undefined, ensureModifiers(input), input.name, /*questionToken*/ undefined, /*type*/ undefined, /*initializer*/ undefined));
+                    return cleanup(factory.createPropertyDeclaration(ensureModifiers(input), input.name, /*questionToken*/ undefined, /*type*/ undefined, /*initializer*/ undefined));
                 }
             }
 
@@ -932,7 +941,6 @@ namespace ts {
                     case SyntaxKind.Constructor: {
                         // A constructor declaration may not have a type annotation
                         const ctor = factory.createConstructorDeclaration(
-                            /*decorators*/ undefined,
                             /*modifiers*/ ensureModifiers(input),
                             updateParamsList(input, input.parameters, ModifierFlags.None),
                             /*body*/ undefined
@@ -944,7 +952,6 @@ namespace ts {
                             return cleanup(/*returnValue*/ undefined);
                         }
                         const sig = factory.createMethodDeclaration(
-                            /*decorators*/ undefined,
                             ensureModifiers(input),
                             /*asteriskToken*/ undefined,
                             input.name,
@@ -963,7 +970,6 @@ namespace ts {
                         const accessorType = getTypeAnnotationFromAllAccessorDeclarations(input, resolver.getAllAccessorDeclarations(input));
                         return cleanup(factory.updateGetAccessorDeclaration(
                             input,
-                            /*decorators*/ undefined,
                             ensureModifiers(input),
                             input.name,
                             updateAccessorParamsList(input, hasEffectiveModifier(input, ModifierFlags.Private)),
@@ -976,7 +982,6 @@ namespace ts {
                         }
                         return cleanup(factory.updateSetAccessorDeclaration(
                             input,
-                            /*decorators*/ undefined,
                             ensureModifiers(input),
                             input.name,
                             updateAccessorParamsList(input, hasEffectiveModifier(input, ModifierFlags.Private)),
@@ -988,7 +993,6 @@ namespace ts {
                         }
                         return cleanup(factory.updatePropertyDeclaration(
                             input,
-                            /*decorators*/ undefined,
                             ensureModifiers(input),
                             input.name,
                             input.questionToken,
@@ -1031,7 +1035,6 @@ namespace ts {
                     case SyntaxKind.IndexSignature: {
                         return cleanup(factory.updateIndexSignature(
                             input,
-                            /*decorators*/ undefined,
                             ensureModifiers(input),
                             updateParamsList(input, input.parameters),
                             visitNode(input.type, visitDeclarationSubtree) || factory.createKeywordTypeNode(SyntaxKind.AnyKeyword)
@@ -1080,7 +1083,7 @@ namespace ts {
                             input.isTypeOf
                         ));
                     }
-                    default: Debug.assertNever(input, `Attempted to process unhandled node kind: ${(ts as any).SyntaxKind[(input as any).kind]}`);
+                    default: Debug.assertNever(input, `Attempted to process unhandled node kind: ${Debug.formatSyntaxKind((input as Node).kind)}`);
                 }
             }
 
@@ -1131,7 +1134,6 @@ namespace ts {
                     // Rewrite external module names if necessary
                     return factory.updateExportDeclaration(
                         input,
-                        /*decorators*/ undefined,
                         input.modifiers,
                         input.isTypeOnly,
                         input.exportClause,
@@ -1161,7 +1163,7 @@ namespace ts {
 
                         preserveJsDoc(statement, input);
                         removeAllComments(input);
-                        return [statement, factory.updateExportAssignment(input, input.decorators, input.modifiers, newId)];
+                        return [statement, factory.updateExportAssignment(input, input.modifiers, newId)];
                     }
                 }
             }
@@ -1218,7 +1220,6 @@ namespace ts {
                 case SyntaxKind.TypeAliasDeclaration: // Type aliases get `declare`d if need be (for legacy support), but that's all
                     return cleanup(factory.updateTypeAliasDeclaration(
                         input,
-                        /*decorators*/ undefined,
                         ensureModifiers(input),
                         input.name,
                         visitNodes(input.typeParameters, visitDeclarationSubtree, isTypeParameterDeclaration),
@@ -1227,7 +1228,6 @@ namespace ts {
                 case SyntaxKind.InterfaceDeclaration: {
                     return cleanup(factory.updateInterfaceDeclaration(
                         input,
-                        /*decorators*/ undefined,
                         ensureModifiers(input),
                         input.name,
                         ensureTypeParams(input, input.typeParameters),
@@ -1239,7 +1239,6 @@ namespace ts {
                     // Generators lose their generator-ness, excepting their return type
                     const clean = cleanup(factory.updateFunctionDeclaration(
                         input,
-                        /*decorators*/ undefined,
                         ensureModifiers(input),
                         /*asteriskToken*/ undefined,
                         input.name,
@@ -1251,7 +1250,7 @@ namespace ts {
                     if (clean && resolver.isExpandoFunctionDeclaration(input) && shouldEmitFunctionProperties(input)) {
                         const props = resolver.getPropertiesOfContainerFunction(input);
                         // Use parseNodeFactory so it is usable as an enclosing declaration
-                        const fakespace = parseNodeFactory.createModuleDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, clean.name || factory.createIdentifier("_default"), factory.createModuleBlock([]), NodeFlags.Namespace);
+                        const fakespace = parseNodeFactory.createModuleDeclaration(/*modifiers*/ undefined, clean.name || factory.createIdentifier("_default"), factory.createModuleBlock([]), NodeFlags.Namespace);
                         setParent(fakespace, enclosingDeclaration as SourceFile | NamespaceDeclaration);
                         fakespace.locals = createSymbolTable(props);
                         fakespace.symbol = props[0].parent!;
@@ -1277,7 +1276,6 @@ namespace ts {
                         }
                         else {
                             declarations.push(factory.createExportDeclaration(
-                                /*decorators*/ undefined,
                                 /*modifiers*/ undefined,
                                 /*isTypeOnly*/ false,
                                 factory.createNamedExports(map(exportMappings, ([gen, exp]) => {
@@ -1285,7 +1283,7 @@ namespace ts {
                                 }))
                             ));
                         }
-                        const namespaceDecl = factory.createModuleDeclaration(/*decorators*/ undefined, ensureModifiers(input), input.name!, factory.createModuleBlock(declarations), NodeFlags.Namespace);
+                        const namespaceDecl = factory.createModuleDeclaration(ensureModifiers(input), input.name!, factory.createModuleBlock(declarations), NodeFlags.Namespace);
                         if (!hasEffectiveModifier(clean, ModifierFlags.Default)) {
                             return [clean, namespaceDecl];
                         }
@@ -1293,7 +1291,6 @@ namespace ts {
                         const modifiers = factory.createModifiersFromModifierFlags((getEffectiveModifierFlags(clean) & ~ModifierFlags.ExportDefault) | ModifierFlags.Ambient);
                         const cleanDeclaration = factory.updateFunctionDeclaration(
                             clean,
-                            /*decorators*/ undefined,
                             modifiers,
                             /*asteriskToken*/ undefined,
                             clean.name,
@@ -1305,14 +1302,12 @@ namespace ts {
 
                         const namespaceDeclaration = factory.updateModuleDeclaration(
                             namespaceDecl,
-                            /*decorators*/ undefined,
                             modifiers,
                             namespaceDecl.name,
                             namespaceDecl.body
                         );
 
                         const exportDefaultDeclaration = factory.createExportAssignment(
-                            /*decorators*/ undefined,
                             /*modifiers*/ undefined,
                             /*isExportEquals*/ false,
                             namespaceDecl.name
@@ -1361,7 +1356,6 @@ namespace ts {
                         const mods = ensureModifiers(input);
                         return cleanup(factory.updateModuleDeclaration(
                             input,
-                            /*decorators*/ undefined,
                             mods,
                             isExternalModuleAugmentation(input) ? rewriteModuleSpecifier(input, input.name) : input.name,
                             body
@@ -1378,7 +1372,6 @@ namespace ts {
                         lateStatementReplacementMap.delete(id);
                         return cleanup(factory.updateModuleDeclaration(
                             input,
-                            /*decorators*/ undefined,
                             mods,
                             input.name,
                             body as ModuleBody
@@ -1399,7 +1392,6 @@ namespace ts {
                             getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(param);
                             if (param.name.kind === SyntaxKind.Identifier) {
                                 return preserveJsDoc(factory.createPropertyDeclaration(
-                                    /*decorators*/ undefined,
                                     ensureModifiers(param),
                                     param.name,
                                     param.questionToken,
@@ -1420,7 +1412,6 @@ namespace ts {
                                     }
                                     elems = elems || [];
                                     elems.push(factory.createPropertyDeclaration(
-                                        /*decorators*/ undefined,
                                         ensureModifiers(param),
                                         elem.name as Identifier,
                                         /*questionToken*/ undefined,
@@ -1439,7 +1430,6 @@ namespace ts {
                     // Prevents other classes with the same public members from being used in place of the current class
                     const privateIdentifier = hasPrivateIdentifier ? [
                         factory.createPropertyDeclaration(
-                            /*decorators*/ undefined,
                             /*modifiers*/ undefined,
                             factory.createPrivateIdentifier("#private"),
                             /*questionToken*/ undefined,
@@ -1475,7 +1465,6 @@ namespace ts {
                         }));
                         return [statement, cleanup(factory.updateClassDeclaration(
                             input,
-                            /*decorators*/ undefined,
                             modifiers,
                             input.name,
                             typeParameters,
@@ -1487,7 +1476,6 @@ namespace ts {
                         const heritageClauses = transformHeritageClauses(input.heritageClauses);
                         return cleanup(factory.updateClassDeclaration(
                             input,
-                            /*decorators*/ undefined,
                             modifiers,
                             input.name,
                             typeParameters,
@@ -1500,7 +1488,7 @@ namespace ts {
                     return cleanup(transformVariableStatement(input));
                 }
                 case SyntaxKind.EnumDeclaration: {
-                    return cleanup(factory.updateEnumDeclaration(input, /*decorators*/ undefined, factory.createNodeArray(ensureModifiers(input)), input.name, factory.createNodeArray(mapDefined(input.members, m => {
+                    return cleanup(factory.updateEnumDeclaration(input, factory.createNodeArray(ensureModifiers(input)), input.name, factory.createNodeArray(mapDefined(input.members, m => {
                         if (shouldStripInternal(m)) return;
                         // Rewrite enum values to their constants, if available
                         const constValue = resolver.getConstantValue(m);
@@ -1509,7 +1497,7 @@ namespace ts {
                 }
             }
             // Anything left unhandled is an error, so this should be unreachable
-            return Debug.assertNever(input, `Unhandled top-level node in declaration emit: ${(ts as any).SyntaxKind[(input as any).kind]}`);
+            return Debug.assertNever(input, `Unhandled top-level node in declaration emit: ${Debug.formatSyntaxKind((input as Node).kind)}`);
 
             function cleanup<T extends Node>(node: T | undefined): T | undefined {
                 if (isEnclosingDeclaration(input)) {
@@ -1585,11 +1573,11 @@ namespace ts {
             return some(statements, isScopeMarker);
         }
 
-        function ensureModifiers(node: Node): readonly Modifier[] | undefined {
+        function ensureModifiers<T extends HasModifiers>(node: T): readonly Modifier[] | undefined {
             const currentFlags = getEffectiveModifierFlags(node);
             const newFlags = ensureModifierFlags(node);
             if (currentFlags === newFlags) {
-                return node.modifiers;
+                return visitArray(node.modifiers, n => tryCast(n, isModifier), isModifier);
             }
             return factory.createModifiersFromModifierFlags(newFlags);
         }

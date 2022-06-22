@@ -18,7 +18,7 @@ function f(_a, _b, _c) {
 
 
 //// [declarationEmitBindingPatterns.d.ts]
-declare const k: ({ x: z }: {
+declare const k: ({ x }: {
     x?: string;
 }) => void;
 declare var a: any;

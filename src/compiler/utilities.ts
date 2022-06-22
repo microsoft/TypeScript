@@ -502,11 +502,12 @@ namespace ts {
     }
 
     export function getNonDecoratorTokenPosOfNode(node: Node, sourceFile?: SourceFileLike): number {
-        if (nodeIsMissing(node) || !node.decorators) {
+        const lastDecorator = !nodeIsMissing(node) && canHaveModifiers(node) ? findLast(node.modifiers, isDecorator) : undefined;
+        if (!lastDecorator) {
             return getTokenPosOfNode(node, sourceFile);
         }
 
-        return skipTrivia((sourceFile || getSourceFileOfNode(node)).text, node.decorators.end);
+        return skipTrivia((sourceFile || getSourceFileOfNode(node)).text, lastDecorator.end);
     }
 
     export function getSourceTextOfNodeFromSourceFile(sourceFile: SourceFile, node: Node, includeTrivia = false): string {
@@ -1936,7 +1937,7 @@ namespace ts {
     export function nodeIsDecorated(node: ClassElement, parent: Node): boolean;
     export function nodeIsDecorated(node: Node, parent: Node, grandparent: Node): boolean;
     export function nodeIsDecorated(node: Node, parent?: Node, grandparent?: Node): boolean {
-        return node.decorators !== undefined
+        return hasDecorators(node)
             && nodeCanBeDecorated(node, parent!, grandparent!); // TODO: GH#18217
     }
 
@@ -4920,6 +4921,10 @@ namespace ts {
         return hasEffectiveModifier(node, ModifierFlags.Readonly);
     }
 
+    export function hasDecorators(node: Node): boolean {
+        return hasSyntacticModifier(node, ModifierFlags.Decorator);
+    }
+
     export function getSelectedEffectiveModifierFlags(node: Node, flags: ModifierFlags): ModifierFlags {
         return getEffectiveModifierFlags(node) & flags;
     }
@@ -4997,14 +5002,14 @@ namespace ts {
      * NOTE: This function does not use `parent` pointers and will not include modifiers from JSDoc.
      */
     export function getSyntacticModifierFlagsNoCache(node: Node): ModifierFlags {
-        let flags = modifiersToFlags(node.modifiers);
+        let flags = canHaveModifiers(node) ? modifiersToFlags(node.modifiers) : ModifierFlags.None;
         if (node.flags & NodeFlags.NestedNamespace || (node.kind === SyntaxKind.Identifier && (node as Identifier).isInJSDocNamespace)) {
             flags |= ModifierFlags.Export;
         }
         return flags;
     }
 
-    export function modifiersToFlags(modifiers: readonly Modifier[] | undefined) {
+    export function modifiersToFlags(modifiers: readonly ModifierLike[] | undefined) {
         let flags = ModifierFlags.None;
         if (modifiers) {
             for (const modifier of modifiers) {
@@ -5030,6 +5035,7 @@ namespace ts {
             case SyntaxKind.OverrideKeyword: return ModifierFlags.Override;
             case SyntaxKind.InKeyword: return ModifierFlags.In;
             case SyntaxKind.OutKeyword: return ModifierFlags.Out;
+            case SyntaxKind.Decorator: return ModifierFlags.Decorator;
         }
         return ModifierFlags.None;
     }
@@ -5422,8 +5428,9 @@ namespace ts {
      * Moves the start position of a range past any decorators.
      */
     export function moveRangePastDecorators(node: Node): TextRange {
-        return node.decorators && !positionIsSynthesized(node.decorators.end)
-            ? moveRangePos(node, node.decorators.end)
+        const lastDecorator = canHaveModifiers(node) ? findLast(node.modifiers, isDecorator) : undefined;
+        return lastDecorator && !positionIsSynthesized(lastDecorator.end)
+            ? moveRangePos(node, lastDecorator.end)
             : node;
     }
 
@@ -5431,8 +5438,9 @@ namespace ts {
      * Moves the start position of a range past any decorators or modifiers.
      */
     export function moveRangePastModifiers(node: Node): TextRange {
-        return node.modifiers && !positionIsSynthesized(node.modifiers.end)
-            ? moveRangePos(node, node.modifiers.end)
+        const lastModifier = canHaveModifiers(node) ? lastOrUndefined(node.modifiers) : undefined;
+        return lastModifier && !positionIsSynthesized(lastModifier.end)
+            ? moveRangePos(node, lastModifier.end)
             : moveRangePastDecorators(node);
     }
 
@@ -7537,8 +7545,12 @@ namespace ts {
                 return (node as TemplateLiteralTypeSpan).parent.templateSpans;
             case SyntaxKind.TemplateSpan:
                 return (node as TemplateSpan).parent.templateSpans;
-            case SyntaxKind.Decorator:
-                return (node as Decorator).parent.decorators;
+            case SyntaxKind.Decorator: {
+                const { parent } = node as Decorator;
+                return canHaveDecorators(parent) ? parent.modifiers :
+                    canHaveIllegalDecorators(parent) ? parent.decorators :
+                    undefined;
+            }
             case SyntaxKind.HeritageClause:
                 return (node as HeritageClause).parent.heritageClauses;
         }

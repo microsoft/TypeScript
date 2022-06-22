@@ -1,0 +1,404 @@
+=== tests/cases/conformance/types/literal/stringMappingOverPatternLiterals.ts ===
+// non-template
+type A = "aA";
+>A : Symbol(A, Decl(stringMappingOverPatternLiterals.ts, 0, 0))
+
+type B = Uppercase<A>;
+>B : Symbol(B, Decl(stringMappingOverPatternLiterals.ts, 1, 14))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+>A : Symbol(A, Decl(stringMappingOverPatternLiterals.ts, 0, 0))
+
+type C = Lowercase<A>;
+>C : Symbol(C, Decl(stringMappingOverPatternLiterals.ts, 2, 22))
+>Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
+>A : Symbol(A, Decl(stringMappingOverPatternLiterals.ts, 0, 0))
+
+// templated
+type ATemplate = `aA${string}`;
+>ATemplate : Symbol(ATemplate, Decl(stringMappingOverPatternLiterals.ts, 3, 22))
+
+type BTemplate = Uppercase<ATemplate>;
+>BTemplate : Symbol(BTemplate, Decl(stringMappingOverPatternLiterals.ts, 6, 31))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+>ATemplate : Symbol(ATemplate, Decl(stringMappingOverPatternLiterals.ts, 3, 22))
+
+type CTemplate = Lowercase<ATemplate>;
+>CTemplate : Symbol(CTemplate, Decl(stringMappingOverPatternLiterals.ts, 7, 38))
+>Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
+>ATemplate : Symbol(ATemplate, Decl(stringMappingOverPatternLiterals.ts, 3, 22))
+
+function f1(
+>f1 : Symbol(f1, Decl(stringMappingOverPatternLiterals.ts, 8, 38))
+
+    a: A,
+>a : Symbol(a, Decl(stringMappingOverPatternLiterals.ts, 10, 12))
+>A : Symbol(A, Decl(stringMappingOverPatternLiterals.ts, 0, 0))
+
+    b: B,
+>b : Symbol(b, Decl(stringMappingOverPatternLiterals.ts, 11, 9))
+>B : Symbol(B, Decl(stringMappingOverPatternLiterals.ts, 1, 14))
+
+    c: C,
+>c : Symbol(c, Decl(stringMappingOverPatternLiterals.ts, 12, 9))
+>C : Symbol(C, Decl(stringMappingOverPatternLiterals.ts, 2, 22))
+
+    a_template: ATemplate,
+>a_template : Symbol(a_template, Decl(stringMappingOverPatternLiterals.ts, 13, 9))
+>ATemplate : Symbol(ATemplate, Decl(stringMappingOverPatternLiterals.ts, 3, 22))
+
+    b_template: BTemplate,
+>b_template : Symbol(b_template, Decl(stringMappingOverPatternLiterals.ts, 14, 26))
+>BTemplate : Symbol(BTemplate, Decl(stringMappingOverPatternLiterals.ts, 6, 31))
+
+    c_template: CTemplate
+>c_template : Symbol(c_template, Decl(stringMappingOverPatternLiterals.ts, 15, 26))
+>CTemplate : Symbol(CTemplate, Decl(stringMappingOverPatternLiterals.ts, 7, 38))
+
+) {
+    // non-template versions should be assignable to templated versions (empty string matches string)
+    a_template = a;
+>a_template : Symbol(a_template, Decl(stringMappingOverPatternLiterals.ts, 13, 9))
+>a : Symbol(a, Decl(stringMappingOverPatternLiterals.ts, 10, 12))
+
+    b_template = b;
+>b_template : Symbol(b_template, Decl(stringMappingOverPatternLiterals.ts, 14, 26))
+>b : Symbol(b, Decl(stringMappingOverPatternLiterals.ts, 11, 9))
+
+    c_template = c;
+>c_template : Symbol(c_template, Decl(stringMappingOverPatternLiterals.ts, 15, 26))
+>c : Symbol(c, Decl(stringMappingOverPatternLiterals.ts, 12, 9))
+
+    // not the other way around
+    a = a_template;
+>a : Symbol(a, Decl(stringMappingOverPatternLiterals.ts, 10, 12))
+>a_template : Symbol(a_template, Decl(stringMappingOverPatternLiterals.ts, 13, 9))
+
+    b = b_template;
+>b : Symbol(b, Decl(stringMappingOverPatternLiterals.ts, 11, 9))
+>b_template : Symbol(b_template, Decl(stringMappingOverPatternLiterals.ts, 14, 26))
+
+    c = c_template;
+>c : Symbol(c, Decl(stringMappingOverPatternLiterals.ts, 12, 9))
+>c_template : Symbol(c_template, Decl(stringMappingOverPatternLiterals.ts, 15, 26))
+
+    // Additionally, all the template versions should be mutually incompatible (they describe differing sets)
+    a_template = b_template;
+>a_template : Symbol(a_template, Decl(stringMappingOverPatternLiterals.ts, 13, 9))
+>b_template : Symbol(b_template, Decl(stringMappingOverPatternLiterals.ts, 14, 26))
+
+    a_template = c_template;
+>a_template : Symbol(a_template, Decl(stringMappingOverPatternLiterals.ts, 13, 9))
+>c_template : Symbol(c_template, Decl(stringMappingOverPatternLiterals.ts, 15, 26))
+
+    b_template = a_template;
+>b_template : Symbol(b_template, Decl(stringMappingOverPatternLiterals.ts, 14, 26))
+>a_template : Symbol(a_template, Decl(stringMappingOverPatternLiterals.ts, 13, 9))
+
+    b_template = c_template;
+>b_template : Symbol(b_template, Decl(stringMappingOverPatternLiterals.ts, 14, 26))
+>c_template : Symbol(c_template, Decl(stringMappingOverPatternLiterals.ts, 15, 26))
+
+    c_template = a_template;
+>c_template : Symbol(c_template, Decl(stringMappingOverPatternLiterals.ts, 15, 26))
+>a_template : Symbol(a_template, Decl(stringMappingOverPatternLiterals.ts, 13, 9))
+
+    c_template = b_template;
+>c_template : Symbol(c_template, Decl(stringMappingOverPatternLiterals.ts, 15, 26))
+>b_template : Symbol(b_template, Decl(stringMappingOverPatternLiterals.ts, 14, 26))
+}
+
+// Raw string mapping assignability
+
+function f2(x1: string, x2: Uppercase<string>, x3: Lowercase<string>) {
+>f2 : Symbol(f2, Decl(stringMappingOverPatternLiterals.ts, 37, 1))
+>x1 : Symbol(x1, Decl(stringMappingOverPatternLiterals.ts, 41, 12))
+>x2 : Symbol(x2, Decl(stringMappingOverPatternLiterals.ts, 41, 23))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+>x3 : Symbol(x3, Decl(stringMappingOverPatternLiterals.ts, 41, 46))
+>Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
+
+    // ok
+    x1 = x2;
+>x1 : Symbol(x1, Decl(stringMappingOverPatternLiterals.ts, 41, 12))
+>x2 : Symbol(x2, Decl(stringMappingOverPatternLiterals.ts, 41, 23))
+
+    x1 = x3;
+>x1 : Symbol(x1, Decl(stringMappingOverPatternLiterals.ts, 41, 12))
+>x3 : Symbol(x3, Decl(stringMappingOverPatternLiterals.ts, 41, 46))
+
+    x2 = "ABC";
+>x2 : Symbol(x2, Decl(stringMappingOverPatternLiterals.ts, 41, 23))
+
+    x3 = "abc";
+>x3 : Symbol(x3, Decl(stringMappingOverPatternLiterals.ts, 41, 46))
+
+    // should fail (sets do not match)
+    x2 = x1;
+>x2 : Symbol(x2, Decl(stringMappingOverPatternLiterals.ts, 41, 23))
+>x1 : Symbol(x1, Decl(stringMappingOverPatternLiterals.ts, 41, 12))
+
+    x2 = x3;
+>x2 : Symbol(x2, Decl(stringMappingOverPatternLiterals.ts, 41, 23))
+>x3 : Symbol(x3, Decl(stringMappingOverPatternLiterals.ts, 41, 46))
+
+    x3 = x1;
+>x3 : Symbol(x3, Decl(stringMappingOverPatternLiterals.ts, 41, 46))
+>x1 : Symbol(x1, Decl(stringMappingOverPatternLiterals.ts, 41, 12))
+
+    x3 = x2;
+>x3 : Symbol(x3, Decl(stringMappingOverPatternLiterals.ts, 41, 46))
+>x2 : Symbol(x2, Decl(stringMappingOverPatternLiterals.ts, 41, 23))
+
+    x2 = "AbC";
+>x2 : Symbol(x2, Decl(stringMappingOverPatternLiterals.ts, 41, 23))
+
+    x3 = "AbC";
+>x3 : Symbol(x3, Decl(stringMappingOverPatternLiterals.ts, 41, 46))
+}
+
+// Mappings over mappings
+
+function f3(
+>f3 : Symbol(f3, Decl(stringMappingOverPatternLiterals.ts, 57, 1))
+
+    x1: Uppercase<string>,
+>x1 : Symbol(x1, Decl(stringMappingOverPatternLiterals.ts, 61, 12))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+
+    x2: Uppercase<Uppercase<string>>,
+>x2 : Symbol(x2, Decl(stringMappingOverPatternLiterals.ts, 62, 26))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+
+    x3: Uppercase<Lowercase<string>>) {
+>x3 : Symbol(x3, Decl(stringMappingOverPatternLiterals.ts, 63, 37))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+>Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
+
+    // _ideally_ these would all be equivalent
+    x1 = x2;
+>x1 : Symbol(x1, Decl(stringMappingOverPatternLiterals.ts, 61, 12))
+>x2 : Symbol(x2, Decl(stringMappingOverPatternLiterals.ts, 62, 26))
+
+    x1 = x3;
+>x1 : Symbol(x1, Decl(stringMappingOverPatternLiterals.ts, 61, 12))
+>x3 : Symbol(x3, Decl(stringMappingOverPatternLiterals.ts, 63, 37))
+
+    x2 = x1;
+>x2 : Symbol(x2, Decl(stringMappingOverPatternLiterals.ts, 62, 26))
+>x1 : Symbol(x1, Decl(stringMappingOverPatternLiterals.ts, 61, 12))
+
+    x2 = x3;
+>x2 : Symbol(x2, Decl(stringMappingOverPatternLiterals.ts, 62, 26))
+>x3 : Symbol(x3, Decl(stringMappingOverPatternLiterals.ts, 63, 37))
+
+    // you'd think these were equivalent - the outer `Uppercase` conceptually
+    // makes the inner `Lowercase` effectively a noop - but that's not so;
+    // the german sharp s makes that not completely true (lowercases to ss,
+    // which then uppercases to SS), so arbitrary nestings of mappings make differing sets!
+    x3 = x1;
+>x3 : Symbol(x3, Decl(stringMappingOverPatternLiterals.ts, 63, 37))
+>x1 : Symbol(x1, Decl(stringMappingOverPatternLiterals.ts, 61, 12))
+
+    x3 = x2;
+>x3 : Symbol(x3, Decl(stringMappingOverPatternLiterals.ts, 63, 37))
+>x2 : Symbol(x2, Decl(stringMappingOverPatternLiterals.ts, 62, 26))
+
+    // and this should also not be equivlent to any others
+    var x4: Lowercase<Uppercase<string>> = null as any;
+>x4 : Symbol(x4, Decl(stringMappingOverPatternLiterals.ts, 81, 7))
+>Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+
+    x1 = x4;
+>x1 : Symbol(x1, Decl(stringMappingOverPatternLiterals.ts, 61, 12))
+>x4 : Symbol(x4, Decl(stringMappingOverPatternLiterals.ts, 81, 7))
+
+    x2 = x4;
+>x2 : Symbol(x2, Decl(stringMappingOverPatternLiterals.ts, 62, 26))
+>x4 : Symbol(x4, Decl(stringMappingOverPatternLiterals.ts, 81, 7))
+
+    x3 = x4;
+>x3 : Symbol(x3, Decl(stringMappingOverPatternLiterals.ts, 63, 37))
+>x4 : Symbol(x4, Decl(stringMappingOverPatternLiterals.ts, 81, 7))
+
+    x4 = x1;
+>x4 : Symbol(x4, Decl(stringMappingOverPatternLiterals.ts, 81, 7))
+>x1 : Symbol(x1, Decl(stringMappingOverPatternLiterals.ts, 61, 12))
+
+    x4 = x2;
+>x4 : Symbol(x4, Decl(stringMappingOverPatternLiterals.ts, 81, 7))
+>x2 : Symbol(x2, Decl(stringMappingOverPatternLiterals.ts, 62, 26))
+
+    x4 = x3;
+>x4 : Symbol(x4, Decl(stringMappingOverPatternLiterals.ts, 81, 7))
+>x3 : Symbol(x3, Decl(stringMappingOverPatternLiterals.ts, 63, 37))
+}
+
+// string mapping over non-string pattern literals is preserved
+
+type NonStringPat = Uppercase<`aA${number}${bigint}${boolean}`>;
+>NonStringPat : Symbol(NonStringPat, Decl(stringMappingOverPatternLiterals.ts, 89, 1))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+
+type EquivalentNonStringPat = `AA${Uppercase<`${number}`>}${Uppercase<`${bigint}`>}${Uppercase<`${boolean}`>}`;
+>EquivalentNonStringPat : Symbol(EquivalentNonStringPat, Decl(stringMappingOverPatternLiterals.ts, 93, 64))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+
+function f4(x1: NonStringPat, x2: EquivalentNonStringPat) {
+>f4 : Symbol(f4, Decl(stringMappingOverPatternLiterals.ts, 94, 111))
+>x1 : Symbol(x1, Decl(stringMappingOverPatternLiterals.ts, 96, 12))
+>NonStringPat : Symbol(NonStringPat, Decl(stringMappingOverPatternLiterals.ts, 89, 1))
+>x2 : Symbol(x2, Decl(stringMappingOverPatternLiterals.ts, 96, 29))
+>EquivalentNonStringPat : Symbol(EquivalentNonStringPat, Decl(stringMappingOverPatternLiterals.ts, 93, 64))
+
+    // Should both work
+    x1 = x2;
+>x1 : Symbol(x1, Decl(stringMappingOverPatternLiterals.ts, 96, 12))
+>x2 : Symbol(x2, Decl(stringMappingOverPatternLiterals.ts, 96, 29))
+
+    x2 = x1;
+>x2 : Symbol(x2, Decl(stringMappingOverPatternLiterals.ts, 96, 29))
+>x1 : Symbol(x1, Decl(stringMappingOverPatternLiterals.ts, 96, 12))
+}
+
+// Capitalize and uncapitalize on template literals
+
+function f5(
+>f5 : Symbol(f5, Decl(stringMappingOverPatternLiterals.ts, 100, 1))
+
+    cap_tem: `A${string}`,
+>cap_tem : Symbol(cap_tem, Decl(stringMappingOverPatternLiterals.ts, 104, 12))
+
+    cap_str: Capitalize<string>,
+>cap_str : Symbol(cap_str, Decl(stringMappingOverPatternLiterals.ts, 105, 26))
+>Capitalize : Symbol(Capitalize, Decl(lib.es5.d.ts, --, --))
+
+    cap_tem_map: Capitalize<`A${string}`>,
+>cap_tem_map : Symbol(cap_tem_map, Decl(stringMappingOverPatternLiterals.ts, 106, 32))
+>Capitalize : Symbol(Capitalize, Decl(lib.es5.d.ts, --, --))
+
+    cap_tem_map2: Capitalize<`a${string}`>,
+>cap_tem_map2 : Symbol(cap_tem_map2, Decl(stringMappingOverPatternLiterals.ts, 107, 42))
+>Capitalize : Symbol(Capitalize, Decl(lib.es5.d.ts, --, --))
+
+    uncap_tem: `a${string}`,
+>uncap_tem : Symbol(uncap_tem, Decl(stringMappingOverPatternLiterals.ts, 108, 43))
+
+    uncap_str: Uncapitalize<string>,
+>uncap_str : Symbol(uncap_str, Decl(stringMappingOverPatternLiterals.ts, 109, 28))
+>Uncapitalize : Symbol(Uncapitalize, Decl(lib.es5.d.ts, --, --))
+
+    uncap_tem_map: Uncapitalize<`A${string}`>,
+>uncap_tem_map : Symbol(uncap_tem_map, Decl(stringMappingOverPatternLiterals.ts, 110, 36))
+>Uncapitalize : Symbol(Uncapitalize, Decl(lib.es5.d.ts, --, --))
+
+    uncap_tem_map2: Uncapitalize<`a${string}`>,
+>uncap_tem_map2 : Symbol(uncap_tem_map2, Decl(stringMappingOverPatternLiterals.ts, 111, 46))
+>Uncapitalize : Symbol(Uncapitalize, Decl(lib.es5.d.ts, --, --))
+
+) {
+    // All these are capitalized
+    cap_str = cap_tem;
+>cap_str : Symbol(cap_str, Decl(stringMappingOverPatternLiterals.ts, 105, 26))
+>cap_tem : Symbol(cap_tem, Decl(stringMappingOverPatternLiterals.ts, 104, 12))
+
+    cap_str = cap_tem_map;
+>cap_str : Symbol(cap_str, Decl(stringMappingOverPatternLiterals.ts, 105, 26))
+>cap_tem_map : Symbol(cap_tem_map, Decl(stringMappingOverPatternLiterals.ts, 106, 32))
+
+    cap_str = cap_tem_map2;
+>cap_str : Symbol(cap_str, Decl(stringMappingOverPatternLiterals.ts, 105, 26))
+>cap_tem_map2 : Symbol(cap_tem_map2, Decl(stringMappingOverPatternLiterals.ts, 107, 42))
+
+    // these are all equivalent
+    cap_tem = cap_tem_map;
+>cap_tem : Symbol(cap_tem, Decl(stringMappingOverPatternLiterals.ts, 104, 12))
+>cap_tem_map : Symbol(cap_tem_map, Decl(stringMappingOverPatternLiterals.ts, 106, 32))
+
+    cap_tem = cap_tem_map2;
+>cap_tem : Symbol(cap_tem, Decl(stringMappingOverPatternLiterals.ts, 104, 12))
+>cap_tem_map2 : Symbol(cap_tem_map2, Decl(stringMappingOverPatternLiterals.ts, 107, 42))
+
+    cap_tem_map = cap_tem_map2;
+>cap_tem_map : Symbol(cap_tem_map, Decl(stringMappingOverPatternLiterals.ts, 106, 32))
+>cap_tem_map2 : Symbol(cap_tem_map2, Decl(stringMappingOverPatternLiterals.ts, 107, 42))
+
+    cap_tem_map = cap_tem;
+>cap_tem_map : Symbol(cap_tem_map, Decl(stringMappingOverPatternLiterals.ts, 106, 32))
+>cap_tem : Symbol(cap_tem, Decl(stringMappingOverPatternLiterals.ts, 104, 12))
+
+    cap_tem_map2 = cap_tem_map;
+>cap_tem_map2 : Symbol(cap_tem_map2, Decl(stringMappingOverPatternLiterals.ts, 107, 42))
+>cap_tem_map : Symbol(cap_tem_map, Decl(stringMappingOverPatternLiterals.ts, 106, 32))
+
+    cap_tem_map2 = cap_tem;
+>cap_tem_map2 : Symbol(cap_tem_map2, Decl(stringMappingOverPatternLiterals.ts, 107, 42))
+>cap_tem : Symbol(cap_tem, Decl(stringMappingOverPatternLiterals.ts, 104, 12))
+
+    // meanwhile, these all require a `A` prefix
+    cap_tem = cap_str;
+>cap_tem : Symbol(cap_tem, Decl(stringMappingOverPatternLiterals.ts, 104, 12))
+>cap_str : Symbol(cap_str, Decl(stringMappingOverPatternLiterals.ts, 105, 26))
+
+    cap_tem_map = cap_str;
+>cap_tem_map : Symbol(cap_tem_map, Decl(stringMappingOverPatternLiterals.ts, 106, 32))
+>cap_str : Symbol(cap_str, Decl(stringMappingOverPatternLiterals.ts, 105, 26))
+
+    cap_tem_map2 = cap_str;
+>cap_tem_map2 : Symbol(cap_tem_map2, Decl(stringMappingOverPatternLiterals.ts, 107, 42))
+>cap_str : Symbol(cap_str, Decl(stringMappingOverPatternLiterals.ts, 105, 26))
+
+    // All these are uncapitalized
+    uncap_str = uncap_tem;
+>uncap_str : Symbol(uncap_str, Decl(stringMappingOverPatternLiterals.ts, 109, 28))
+>uncap_tem : Symbol(uncap_tem, Decl(stringMappingOverPatternLiterals.ts, 108, 43))
+
+    uncap_str = uncap_tem_map;
+>uncap_str : Symbol(uncap_str, Decl(stringMappingOverPatternLiterals.ts, 109, 28))
+>uncap_tem_map : Symbol(uncap_tem_map, Decl(stringMappingOverPatternLiterals.ts, 110, 36))
+
+    uncap_str = uncap_tem_map2;
+>uncap_str : Symbol(uncap_str, Decl(stringMappingOverPatternLiterals.ts, 109, 28))
+>uncap_tem_map2 : Symbol(uncap_tem_map2, Decl(stringMappingOverPatternLiterals.ts, 111, 46))
+
+    // these are all equivalent
+    uncap_tem = uncap_tem_map;
+>uncap_tem : Symbol(uncap_tem, Decl(stringMappingOverPatternLiterals.ts, 108, 43))
+>uncap_tem_map : Symbol(uncap_tem_map, Decl(stringMappingOverPatternLiterals.ts, 110, 36))
+
+    uncap_tem = uncap_tem_map2;
+>uncap_tem : Symbol(uncap_tem, Decl(stringMappingOverPatternLiterals.ts, 108, 43))
+>uncap_tem_map2 : Symbol(uncap_tem_map2, Decl(stringMappingOverPatternLiterals.ts, 111, 46))
+
+    uncap_tem_map = uncap_tem_map2;
+>uncap_tem_map : Symbol(uncap_tem_map, Decl(stringMappingOverPatternLiterals.ts, 110, 36))
+>uncap_tem_map2 : Symbol(uncap_tem_map2, Decl(stringMappingOverPatternLiterals.ts, 111, 46))
+
+    uncap_tem_map = uncap_tem;
+>uncap_tem_map : Symbol(uncap_tem_map, Decl(stringMappingOverPatternLiterals.ts, 110, 36))
+>uncap_tem : Symbol(uncap_tem, Decl(stringMappingOverPatternLiterals.ts, 108, 43))
+
+    uncap_tem_map2 = uncap_tem_map;
+>uncap_tem_map2 : Symbol(uncap_tem_map2, Decl(stringMappingOverPatternLiterals.ts, 111, 46))
+>uncap_tem_map : Symbol(uncap_tem_map, Decl(stringMappingOverPatternLiterals.ts, 110, 36))
+
+    uncap_tem_map2 = uncap_tem;
+>uncap_tem_map2 : Symbol(uncap_tem_map2, Decl(stringMappingOverPatternLiterals.ts, 111, 46))
+>uncap_tem : Symbol(uncap_tem, Decl(stringMappingOverPatternLiterals.ts, 108, 43))
+
+    // meanwhile, these all require a `a` prefix
+    uncap_tem = uncap_str;
+>uncap_tem : Symbol(uncap_tem, Decl(stringMappingOverPatternLiterals.ts, 108, 43))
+>uncap_str : Symbol(uncap_str, Decl(stringMappingOverPatternLiterals.ts, 109, 28))
+
+    uncap_tem_map = uncap_str;
+>uncap_tem_map : Symbol(uncap_tem_map, Decl(stringMappingOverPatternLiterals.ts, 110, 36))
+>uncap_str : Symbol(uncap_str, Decl(stringMappingOverPatternLiterals.ts, 109, 28))
+
+    uncap_tem_map2 = uncap_str;
+>uncap_tem_map2 : Symbol(uncap_tem_map2, Decl(stringMappingOverPatternLiterals.ts, 111, 46))
+>uncap_str : Symbol(uncap_str, Decl(stringMappingOverPatternLiterals.ts, 109, 28))
+}

@@ -98,7 +98,6 @@ namespace ts {
             if (!importRequireStatements) {
                 const createRequireName = factory.createUniqueName("_createRequire", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel);
                 const importStatement = factory.createImportDeclaration(
-                    /*decorators*/ undefined,
                     /*modifiers*/ undefined,
                     factory.createImportClause(
                         /*isTypeOnly*/ false,
@@ -174,7 +173,6 @@ namespace ts {
         function appendExportsOfImportEqualsDeclaration(statements: Statement[] | undefined, node: ImportEqualsDeclaration) {
             if (hasSyntacticModifier(node, ModifierFlags.Export)) {
                 statements = append(statements, factory.createExportDeclaration(
-                    /*decorators*/ undefined,
                     /*modifiers*/ undefined,
                     node.isTypeOnly,
                     factory.createNamedExports([factory.createExportSpecifier(/*isTypeOnly*/ false, /*propertyName*/ undefined, idText(node.name))])
@@ -202,7 +200,6 @@ namespace ts {
             const oldIdentifier = node.exportClause.name;
             const synthName = factory.getGeneratedNameForNode(oldIdentifier);
             const importDecl = factory.createImportDeclaration(
-                /*decorators*/ undefined,
                 /*modifiers*/ undefined,
                 factory.createImportClause(
                     /*isTypeOnly*/ false,
@@ -217,7 +214,6 @@ namespace ts {
             setOriginalNode(importDecl, node.exportClause);
 
             const exportDecl = isExportNamespaceAsDefaultDeclaration(node) ? factory.createExportDefault(synthName) : factory.createExportDeclaration(
-                /*decorators*/ undefined,
                 /*modifiers*/ undefined,
                 /*isTypeOnly*/ false,
                 factory.createNamedExports([factory.createExportSpecifier(/*isTypeOnly*/ false, synthName, oldIdentifier)]),

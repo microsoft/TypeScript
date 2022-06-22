@@ -400,12 +400,12 @@ namespace ts {
             const numParameters = firstParameterIsThis ? parameters.length - 1 : parameters.length;
             for (let i = 0; i < numParameters; i++) {
                 const parameter = parameters[i + firstParameterOffset];
-                if (decorators || parameter.decorators) {
+                if (decorators || hasDecorators(parameter)) {
                     if (!decorators) {
                         decorators = new Array(numParameters);
                     }
 
-                    decorators[i] = parameter.decorators;
+                    decorators[i] = getDecorators(parameter);
                 }
             }
         }
@@ -420,9 +420,9 @@ namespace ts {
      * @param node The class node.
      */
     export function getAllDecoratorsOfClass(node: ClassLikeDeclaration): AllDecorators | undefined {
-        const decorators = node.decorators;
+        const decorators = getDecorators(node);
         const parameters = getDecoratorsOfParameters(getFirstConstructorWithBody(node));
-        if (!decorators && !parameters) {
+        if (!some(decorators) && !some(parameters)) {
             return undefined;
         }
 
@@ -467,22 +467,26 @@ namespace ts {
         }
 
         const { firstAccessor, secondAccessor, getAccessor, setAccessor } = getAllAccessorDeclarations(parent.members, accessor);
-        const firstAccessorWithDecorators = firstAccessor.decorators ? firstAccessor : secondAccessor && secondAccessor.decorators ? secondAccessor : undefined;
+        const firstAccessorWithDecorators =
+            hasDecorators(firstAccessor) ? firstAccessor :
+            secondAccessor && hasDecorators(secondAccessor) ? secondAccessor :
+            undefined;
+
         if (!firstAccessorWithDecorators || accessor !== firstAccessorWithDecorators) {
             return undefined;
         }
 
-        const decorators = firstAccessorWithDecorators.decorators;
+        const decorators = getDecorators(firstAccessorWithDecorators);
         const parameters = getDecoratorsOfParameters(setAccessor);
-        if (!decorators && !parameters) {
+        if (!some(decorators) && !some(parameters)) {
             return undefined;
         }
 
         return {
             decorators,
             parameters,
-            getDecorators: getAccessor?.decorators,
-            setDecorators: setAccessor?.decorators
+            getDecorators: getAccessor && getDecorators(getAccessor),
+            setDecorators: setAccessor && getDecorators(setAccessor)
         };
     }
 
@@ -496,9 +500,9 @@ namespace ts {
             return undefined;
         }
 
-        const decorators = method.decorators;
+        const decorators = getDecorators(method);
         const parameters = getDecoratorsOfParameters(method);
-        if (!decorators && !parameters) {
+        if (!some(decorators) && !some(parameters)) {
             return undefined;
         }
 
@@ -511,8 +515,8 @@ namespace ts {
      * @param property The class property member.
      */
     function getAllDecoratorsOfProperty(property: PropertyDeclaration): AllDecorators | undefined {
-        const decorators = property.decorators;
-        if (!decorators) {
+        const decorators = getDecorators(property);
+        if (!some(decorators)) {
             return undefined;
 
         }

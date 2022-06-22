@@ -467,7 +467,10 @@ namespace ts {
 
         getSignatureHelpItems(fileName: string, position: number, options: SignatureHelpItemsOptions | undefined): SignatureHelpItems | undefined;
 
+        getRenameInfo(fileName: string, position: number, preferences: UserPreferences): RenameInfo;
+        /** @deprecated Use the signature with `UserPreferences` instead. */
         getRenameInfo(fileName: string, position: number, options?: RenameInfoOptions): RenameInfo;
+
         findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, providePrefixAndSuffixTextForRename?: boolean): readonly RenameLocation[] | undefined;
 
         getSmartSelectionRange(fileName: string, position: number): SelectionRange;
@@ -944,7 +947,7 @@ namespace ts {
         Remove = "remove",
     }
 
-    /* @deprecated - consider using EditorSettings instead */
+    /** @deprecated - consider using EditorSettings instead */
     export interface EditorOptions {
         BaseIndentSize?: number;
         IndentSize: number;
@@ -965,7 +968,7 @@ namespace ts {
         trimTrailingWhitespace?: boolean;
     }
 
-    /* @deprecated - consider using FormatCodeSettings instead */
+    /** @deprecated - consider using FormatCodeSettings instead */
     export interface FormatCodeOptions extends EditorOptions {
         InsertSpaceAfterCommaDelimiter: boolean;
         InsertSpaceAfterSemicolonInForStatements: boolean;
@@ -1135,6 +1138,9 @@ namespace ts {
         localizedErrorMessage: string;
     }
 
+    /**
+     * @deprecated Use `UserPreferences` instead.
+     */
     export interface RenameInfoOptions {
         readonly allowRenameOfImportPath?: boolean;
     }

@@ -1251,6 +1251,24 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Add_extends_constraint_2211" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Add `extends` constraint.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Ajoutez la contrainte « extends ».]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Add_extends_constraint_to_all_type_parameters_2212" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Add `extends` constraint to all type parameters]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Ajouter la contrainte « extends » à tous les paramètres de type]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Add_import_from_0_90057" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Add import from "{0}"]]></Val>
@@ -10113,6 +10131,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Project_0_is_out_of_date_because_buildinfo_file_1_indicates_that_some_of_the_changes_were_not_emitte_6399" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Project '{0}' is out of date because buildinfo file '{1}' indicates that some of the changes were not emitted]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Le projet « {0} » est obsolète, car le fichier buildinfo « {1} » indique que certaines modifications n’ont pas été émises]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Project_0_is_out_of_date_because_its_dependency_1_is_out_of_date_6353" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Project '{0}' is out of date because its dependency '{1}' is out of date]]></Val>
@@ -10122,11 +10149,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2_6350" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Project_0_is_out_of_date_because_output_1_is_older_than_input_2_6350" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Project '{0}' is out of date because oldest output '{1}' is older than newest input '{2}']]></Val>
+          <Val><![CDATA[Project '{0}' is out of date because output '{1}' is older than input '{2}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Le projet '{0}' est obsolète car la sortie la plus ancienne ('{1}') est antérieure à l'entrée la plus récente '{2}']]></Val>
+            <Val><![CDATA[Le projet '{0}' est obsolète car la sortie (« {1} ») est antérieure à l'entrée « {2} »]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10167,11 +10194,20 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2_6351" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Project_0_is_up_to_date_because_newest_input_1_is_older_than_output_2_6351" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Project '{0}' is up to date because newest input '{1}' is older than oldest output '{2}']]></Val>
+          <Val><![CDATA[Project '{0}' is up to date because newest input '{1}' is older than output '{2}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Le projet '{0}' est à jour car l'entrée la plus récente ('{1}') est antérieure à la sortie la plus ancienne ('{2}')]]></Val>
+            <Val><![CDATA[Le projet « {0} » est à jour car l'entrée la plus récente (« {1} ») est antérieure à la sortie (« {2} »)]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Project_0_is_up_to_date_but_needs_to_update_timestamps_of_output_files_that_are_older_than_input_fil_6400" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Project '{0}' is up to date but needs to update timestamps of output files that are older than input files]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Project « {0} » est à jour, mais doit mettre à jour les horodatages des fichiers de sortie plus anciens que les fichiers d’entrée]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13824,11 +13860,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";This_type_parameter_probably_needs_an_extends_object_constraint_2208" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";This_type_parameter_might_need_an_extends_0_constraint_2208" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[This type parameter probably needs an `extends object` constraint.]]></Val>
+          <Val><![CDATA[This type parameter might need an `extends {0}` constraint.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Ce paramètre de type nécessite probablement une contrainte 'extends object'.]]></Val>
+            <Val><![CDATA[Ce paramètre de type nécessite peut-être une contrainte « extends {0}».]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14673,6 +14709,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Types_cannot_appear_in_export_declarations_in_JavaScript_files_18043" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Types cannot appear in export declarations in JavaScript files.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Les types ne peuvent pas apparaître dans les déclarations d’exportation dans les fichiers JavaScript.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Types_have_separate_declarations_of_a_private_property_0_2442" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Types have separate declarations of a private property '{0}'.]]></Val>
@@ -15258,6 +15303,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";We_can_only_write_a_type_for_0_by_adding_a_type_for_the_entire_parameter_here_2843" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[We can only write a type for '{0}' by adding a type for the entire parameter here.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Nous ne pouvons écrire un type pour « {0} » qu’en ajoutant un type pour l’ensemble du paramètre ici.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";When_assigning_functions_check_to_ensure_parameters_and_the_return_values_are_subtype_compatible_6698" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[When assigning functions, check to ensure parameters and the return values are subtype-compatible.]]></Val>
@@ -15356,6 +15410,24 @@
           <Val><![CDATA[You cannot rename a module via a global import.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Vous ne pouvez pas renommer un module via une importation globale.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";You_cannot_rename_elements_that_are_defined_in_a_node_modules_folder_8035" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[You cannot rename elements that are defined in a 'node_modules' folder.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Vous ne pouvez pas renommer les éléments définis dans un dossier « node_modules ».]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";You_cannot_rename_elements_that_are_defined_in_another_node_modules_folder_8036" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[You cannot rename elements that are defined in another 'node_modules' folder.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Vous ne pouvez pas renommer les éléments définis dans un autre dossier « node_modules ».]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15603,6 +15675,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";_0_is_a_type_and_cannot_be_imported_in_JavaScript_files_Use_1_in_a_JSDoc_type_annotation_18042" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' is a type and cannot be imported in JavaScript files. Use '{1}' in a JSDoc type annotation.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}' est un type qui ne peut pas être importé dans des fichiers JavaScript. Utilisez '{1}' dans une annotation de type JSDoc.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";_0_is_a_type_and_must_be_imported_using_a_type_only_import_when_preserveValueImports_and_isolatedMod_1444" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA['{0}' is a type and must be imported using a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.]]></Val>
@@ -15612,11 +15693,29 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";_0_is_an_unused_renaming_of_1_Did_you_intend_to_use_it_as_a_type_annotation_2842" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' is an unused renaming of '{1}'. Did you intend to use it as a type annotation?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[« {0} » est un changement de nom inutilisé de « {1} ». Souhaitiez-vous l’utiliser comme annotation de type?]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";_0_is_assignable_to_the_constraint_of_type_1_but_1_could_be_instantiated_with_a_different_subtype_of_5075" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA['{0}' is assignable to the constraint of type '{1}', but '{1}' could be instantiated with a different subtype of constraint '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA['{0}' peut être assigné à la contrainte de type '{1}', mais '{1}' a pu être instancié avec un autre sous-type de contrainte '{2}'.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";_0_is_automatically_exported_here_18044" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' is automatically exported here.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}' est automatiquement exporté ici.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

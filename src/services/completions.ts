@@ -366,7 +366,7 @@ namespace ts.Completions {
         if (!previousResponse) return undefined;
 
         const lowerCaseTokenText = location.text.toLowerCase();
-        const exportMap = getExportInfoMap(file, host, program, cancellationToken);
+        const exportMap = getExportInfoMap(file, host, program, preferences, cancellationToken);
         const newEntries = resolvingModuleSpecifiers(
             "continuePreviousIncompleteResponse",
             host,
@@ -1064,7 +1064,7 @@ namespace ts.Completions {
             span = createTextSpanFromNode(contextToken);
         }
         if (isPropertyDeclaration(contextToken.parent)) {
-            modifiers |= modifiersToFlags(contextToken.parent.modifiers);
+            modifiers |= modifiersToFlags(contextToken.parent.modifiers) & ModifierFlags.Modifier;
             span = createTextSpanFromNode(contextToken.parent);
         }
         return { modifiers, span };
@@ -1194,7 +1194,6 @@ namespace ts.Completions {
 
                 const parameters = typeNode.parameters.map(typedParam =>
                     factory.createParameterDeclaration(
-                        /*decorators*/ undefined,
                         /*modifiers*/ undefined,
                         typedParam.dotDotDotToken,
                         typedParam.name,
@@ -1203,7 +1202,6 @@ namespace ts.Completions {
                         typedParam.initializer,
                     ));
                 return factory.createMethodDeclaration(
-                    /*decorators*/ undefined,
                     /*modifiers*/ undefined,
                     /*asteriskToken*/ undefined,
                     name,
@@ -2618,7 +2616,7 @@ namespace ts.Completions {
 
             // Need to insert 'this.' before properties of `this` type, so only do that if `includeInsertTextCompletions`
             if (preferences.includeCompletionsWithInsertText && scopeNode.kind !== SyntaxKind.SourceFile) {
-                const thisType = typeChecker.tryGetThisTypeAt(scopeNode, /*includeGlobalThis*/ false);
+                const thisType = typeChecker.tryGetThisTypeAt(scopeNode, /*includeGlobalThis*/ false, isClassLike(scopeNode.parent) ? scopeNode : undefined);
                 if (thisType && !isProbablyGlobalType(thisType, sourceFile, typeChecker)) {
                     for (const symbol of getPropertiesForCompletion(thisType, typeChecker)) {
                         symbolToOriginInfoMap[symbols.length] = { kind: SymbolOriginInfoKind.ThisType };
@@ -2727,7 +2725,7 @@ namespace ts.Completions {
                 "";
 
             const moduleSpecifierCache = host.getModuleSpecifierCache?.();
-            const exportInfo = getExportInfoMap(sourceFile, host, program, cancellationToken);
+            const exportInfo = getExportInfoMap(sourceFile, host, program, preferences, cancellationToken);
             const packageJsonAutoImportProvider = host.getPackageJsonAutoImportProvider?.();
             const packageJsonFilter = detailsEntryId ? undefined : createPackageJsonImportFilter(sourceFile, preferences, host);
             resolvingModuleSpecifiers(
@@ -4096,6 +4094,10 @@ namespace ts.Completions {
                 }
                 break;
            case SyntaxKind.Identifier: {
+                const originalKeywordKind = (location as Identifier).originalKeywordKind;
+                if (originalKeywordKind && isKeyword(originalKeywordKind)) {
+                    return undefined;
+                }
                 // class c { public prop = c| }
                 if (isPropertyDeclaration(location.parent) && location.parent.initializer === location) {
                     return undefined;

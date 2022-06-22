@@ -158,7 +158,7 @@ namespace ts.FindAllReferences {
         function isExported(node: Node, stopAtAmbientModule = false) {
             return findAncestor(node, node => {
                 if (stopAtAmbientModule && isAmbientModuleDeclaration(node)) return "quit";
-                return some(node.modifiers, mod => mod.kind === SyntaxKind.ExportKeyword);
+                return canHaveModifiers(node) && some(node.modifiers, isExportModifier);
             });
         }
 
