@@ -34,19 +34,31 @@
 verify.completions({
   marker: "",
   isNewIdentifierLocation: true,
-  exact: ["blah.js", "index.js", "foo", "subfolder", "bar", "exact-match"],
+  exact: [
+    { name: "blah.js", kind: "script", kindModifiers: ".js" },
+    { name: "index.js", kind: "script", kindModifiers: ".js" },
+    { name: "foo", kind: "directory" },
+    { name: "subfolder", kind: "directory" },
+    { name: "bar", kind: "directory" },
+    { name: "exact-match", kind: "script" },
+  ],
 });
 
 edit.insert("foo/");
 
 verify.completions({
   isNewIdentifierLocation: true,
-  exact: ["blah.js", "index.js", "foo", "subfolder"],
+  exact: [
+    { name: "blah.js", kind: "script", kindModifiers: ".js" },
+    { name: "index.js", kind: "script", kindModifiers: ".js" },
+    { name: "foo", kind: "directory" },
+    { name: "subfolder", kind: "directory" },
+  ],
 });
 
 edit.insert("foo/");
 
 verify.completions({
   isNewIdentifierLocation: true,
-  exact: ["onlyInFooFolder.js"],
+  exact: [{ name: "onlyInFooFolder.js", kind: "script", kindModifiers: ".js" }],
 });

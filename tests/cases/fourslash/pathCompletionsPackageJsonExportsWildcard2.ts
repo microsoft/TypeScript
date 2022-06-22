@@ -24,19 +24,19 @@
 verify.completions({
   marker: "",
   isNewIdentifierLocation: true,
-  exact: ["action"]
+  exact: [{ name: "action", kind: "directory" }]
 });
 
 edit.insert("action/");
 
 verify.completions({
   isNewIdentifierLocation: true,
-  exact: ["pageObjects"],
+  exact: [{ name: "pageObjects", kind: "directory" }],
 });
 
 edit.insert("pageObjects/");
 
 verify.completions({
   isNewIdentifierLocation: true,
-  exact: ["actionRenderer"],
+  exact: [{ name: "actionRenderer", kind: "script" }],
 });

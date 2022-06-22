@@ -42,5 +42,9 @@
 verify.completions({
   marker: "",
   isNewIdentifierLocation: true,
-  exact: ["blah", "index", "arguments"]
+  exact: [
+    { name: "blah", kind: "script", kindModifiers: "" },
+    { name: "index", kind: "script", kindModifiers: "" },
+    { name: "arguments", kind: "script", kindModifiers: "" },
+  ]
 });

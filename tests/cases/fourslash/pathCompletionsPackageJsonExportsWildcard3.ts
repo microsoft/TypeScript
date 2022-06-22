@@ -30,12 +30,16 @@
 verify.completions({
   marker: "",
   isNewIdentifierLocation: true,
-  exact: ["component-blah", "component-index", "component-subfolder"],
+  exact: [
+    { name: "component-blah", kind: "script" },
+    { name: "component-index", kind: "script" },
+    { name: "component-subfolder", kind: "directory" },
+  ],
 });
 
 edit.insert("component-subfolder/");
 
 verify.completions({
   isNewIdentifierLocation: true,
-  exact: ["one"],
+  exact: [{ name: "one", kind: "script" }],
 });

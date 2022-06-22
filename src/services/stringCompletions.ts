@@ -1,5 +1,30 @@
 /* @internal */
 namespace ts.Completions.StringCompletions {
+    interface NameAndKindSet {
+        add(value: NameAndKind): void;
+        has(name: string): boolean;
+        values(): Iterator<NameAndKind>;
+    }
+    const kindPrecedence = {
+        [ScriptElementKind.directory]: 0,
+        [ScriptElementKind.scriptElement]: 1,
+        [ScriptElementKind.externalModuleName]: 2,
+    };
+    function createNameAndKindSet(): NameAndKindSet {
+        const map = new Map<string, NameAndKind>();
+        function add(value: NameAndKind) {
+            const existing = map.get(value.name);
+            if (!existing || kindPrecedence[existing.kind] < kindPrecedence[value.kind]) {
+                map.set(value.name, value);
+            }
+        }
+        return {
+            add,
+            has: map.has.bind(map),
+            values: map.values.bind(map),
+        };
+    }
+
     export function getStringLiteralCompletions(
         sourceFile: SourceFile,
         position: number,
@@ -435,7 +460,7 @@ namespace ts.Completions.StringCompletions {
         host: LanguageServiceHost,
         exclude?: string,
         result = createNameAndKindSet()
-    ): Set<NameAndKind> {
+    ): NameAndKindSet {
         if (fragment === undefined) {
             fragment = "";
         }
@@ -526,7 +551,7 @@ namespace ts.Completions.StringCompletions {
 
     /** @returns whether `fragment` was a match for any `paths` (which should indicate whether any other path completions should be offered) */
     function addCompletionEntriesFromPaths(
-        result: Set<NameAndKind>,
+        result: NameAndKindSet,
         fragment: string,
         baseDirectory: string,
         extensionOptions: ExtensionOptions,
@@ -546,7 +571,7 @@ namespace ts.Completions.StringCompletions {
 
     /** @returns whether `fragment` was a match for any `paths` (which should indicate whether any other path completions should be offered) */
     function addCompletionEntriesFromPathsOrExports(
-        result: Set<NameAndKind>,
+        result: NameAndKindSet,
         fragment: string,
         baseDirectory: string,
         extensionOptions: ExtensionOptions,
@@ -595,10 +620,6 @@ namespace ts.Completions.StringCompletions {
         return matchedPath !== undefined;
     }
 
-    function createNameAndKindSet() {
-        return createSet<NameAndKind>(element => +generateDjb2Hash(element.name), (a, b) => a.name === b.name);
-    }
-
     /**
      * Check all of the declared modules and those in node modules. Possible sources of modules:
      *      Modules that are found by the type checker
@@ -642,7 +663,7 @@ namespace ts.Completions.StringCompletions {
             if (fragmentDirectory === undefined) {
                 for (const moduleName of enumerateNodeModulesVisibleToScript(host, scriptPath)) {
                     const moduleResult = nameAndKind(moduleName, ScriptElementKind.externalModuleName, /*extension*/ undefined);
-                    if (!result.has(moduleResult)) {
+                    if (!result.has(moduleResult.name)) {
                         foundGlobal = true;
                         result.add(moduleResult);
                     }
@@ -733,20 +754,20 @@ namespace ts.Completions.StringCompletions {
     ): readonly NameAndKind[] {
         if (!endsWith(path, "*")) {
             // For a path mapping "foo": ["/x/y/z.ts"], add "foo" itself as a completion.
-            return !stringContains(path, "*") ? justPathMappingName(path) : emptyArray;
+            return !stringContains(path, "*") ? justPathMappingName(path, ScriptElementKind.scriptElement) : emptyArray;
         }
 
         const pathPrefix = path.slice(0, path.length - 1);
         const remainingFragment = tryRemovePrefix(fragment, pathPrefix);
         if (remainingFragment === undefined) {
             const starIsFullPathComponent = path[path.length - 2] === "/";
-            return starIsFullPathComponent ? justPathMappingName(pathPrefix) : flatMap(patterns, pattern =>
+            return starIsFullPathComponent ? justPathMappingName(pathPrefix, ScriptElementKind.directory) : flatMap(patterns, pattern =>
                 getModulesForPathsPattern("", packageDirectory, pattern, extensionOptions, host)?.map(({ name, ...rest }) => ({ name: pathPrefix + name, ...rest })));
         }
         return flatMap(patterns, pattern => getModulesForPathsPattern(remainingFragment, packageDirectory, pattern, extensionOptions, host));
 
-        function justPathMappingName(name: string): readonly NameAndKind[] {
-            return startsWith(name, fragment) ? [directoryResult(removeTrailingDirectorySeparator(name))] : emptyArray;
+        function justPathMappingName(name: string, kind: ScriptElementKind.directory | ScriptElementKind.scriptElement): readonly NameAndKind[] {
+            return startsWith(name, fragment) ? [{ name: removeTrailingDirectorySeparator(name), kind, extension: undefined }] : emptyArray;
         }
     }
 
@@ -789,12 +810,12 @@ namespace ts.Completions.StringCompletions {
         const includeGlob = suffixHasFilename ? "**/*" : "./*";
 
         const matches = mapDefined(tryReadDirectory(host, baseDirectory, extensionOptions.extensions, /*exclude*/ undefined, [includeGlob]), match => {
-            const basename = trimPrefixAndSuffix(match);
-            if (basename) {
-                if (containsSlash(basename)) {
-                    return directoryResult(getPathComponents(basename)[0]);
+            const trimmedWithPattern = trimPrefixAndSuffix(match);
+            if (trimmedWithPattern) {
+                if (containsSlash(trimmedWithPattern)) {
+                    return directoryResult(getPathComponents(trimmedWithPattern)[0]);
                 }
-                const { name, extension } = getFilenameWithExtensionOption(basename, host.getCompilationSettings(), extensionOptions.includeExtensionsOption);
+                const { name, extension } = getFilenameWithExtensionOption(trimmedWithPattern, host.getCompilationSettings(), extensionOptions.includeExtensionsOption);
                 return nameAndKind(name, ScriptElementKind.scriptElement, extension);
             }
         });
@@ -858,7 +879,7 @@ namespace ts.Completions.StringCompletions {
         return addReplacementSpans(toComplete, range.pos + prefix.length, arrayFrom(names.values()));
     }
 
-    function getCompletionEntriesFromTypings(host: LanguageServiceHost, options: CompilerOptions, scriptPath: string, fragmentDirectory: string | undefined, extensionOptions: ExtensionOptions, result = createNameAndKindSet()): Set<NameAndKind> {
+    function getCompletionEntriesFromTypings(host: LanguageServiceHost, options: CompilerOptions, scriptPath: string, fragmentDirectory: string | undefined, extensionOptions: ExtensionOptions, result = createNameAndKindSet()): NameAndKindSet {
         // Check for typings specified in compiler options
         const seen = new Map<string, true>();
 
