@@ -1,0 +1,482 @@
+=== tests/cases/compiler/narrowingUnionToUnion.ts ===
+type Falsy = false | 0 | 0n | '' | null | undefined;
+>Falsy : Symbol(Falsy, Decl(narrowingUnionToUnion.ts, 0, 0))
+
+declare function isFalsy(value: unknown): value is Falsy;
+>isFalsy : Symbol(isFalsy, Decl(narrowingUnionToUnion.ts, 0, 52))
+>value : Symbol(value, Decl(narrowingUnionToUnion.ts, 2, 25))
+>value : Symbol(value, Decl(narrowingUnionToUnion.ts, 2, 25))
+>Falsy : Symbol(Falsy, Decl(narrowingUnionToUnion.ts, 0, 0))
+
+function fx1(x: string | number | undefined) {
+>fx1 : Symbol(fx1, Decl(narrowingUnionToUnion.ts, 2, 57))
+>x : Symbol(x, Decl(narrowingUnionToUnion.ts, 4, 13))
+
+    if (isFalsy(x)) {
+>isFalsy : Symbol(isFalsy, Decl(narrowingUnionToUnion.ts, 0, 52))
+>x : Symbol(x, Decl(narrowingUnionToUnion.ts, 4, 13))
+
+        x;  // "" | 0 | undefined
+>x : Symbol(x, Decl(narrowingUnionToUnion.ts, 4, 13))
+    }
+}
+
+function fx2<T>(x: T | undefined) {
+>fx2 : Symbol(fx2, Decl(narrowingUnionToUnion.ts, 8, 1))
+>T : Symbol(T, Decl(narrowingUnionToUnion.ts, 10, 13))
+>x : Symbol(x, Decl(narrowingUnionToUnion.ts, 10, 16))
+>T : Symbol(T, Decl(narrowingUnionToUnion.ts, 10, 13))
+
+    if (isFalsy(x)) {
+>isFalsy : Symbol(isFalsy, Decl(narrowingUnionToUnion.ts, 0, 52))
+>x : Symbol(x, Decl(narrowingUnionToUnion.ts, 10, 16))
+
+        x;  // T & Falsy | undefined
+>x : Symbol(x, Decl(narrowingUnionToUnion.ts, 10, 16))
+    }
+}
+
+function fx3<T extends string | number>(x: T) {
+>fx3 : Symbol(fx3, Decl(narrowingUnionToUnion.ts, 14, 1))
+>T : Symbol(T, Decl(narrowingUnionToUnion.ts, 16, 13))
+>x : Symbol(x, Decl(narrowingUnionToUnion.ts, 16, 40))
+>T : Symbol(T, Decl(narrowingUnionToUnion.ts, 16, 13))
+
+    if (isFalsy(x)) {
+>isFalsy : Symbol(isFalsy, Decl(narrowingUnionToUnion.ts, 0, 52))
+>x : Symbol(x, Decl(narrowingUnionToUnion.ts, 16, 40))
+
+        x;  // T & "" | T & 0
+>x : Symbol(x, Decl(narrowingUnionToUnion.ts, 16, 40))
+    }
+}
+
+declare function isA(obj: unknown): obj is { a: false } | { b: 0 };
+>isA : Symbol(isA, Decl(narrowingUnionToUnion.ts, 20, 1))
+>obj : Symbol(obj, Decl(narrowingUnionToUnion.ts, 22, 21))
+>obj : Symbol(obj, Decl(narrowingUnionToUnion.ts, 22, 21))
+>a : Symbol(a, Decl(narrowingUnionToUnion.ts, 22, 44))
+>b : Symbol(b, Decl(narrowingUnionToUnion.ts, 22, 59))
+
+function fx4(obj: { b: number }) {
+>fx4 : Symbol(fx4, Decl(narrowingUnionToUnion.ts, 22, 67))
+>obj : Symbol(obj, Decl(narrowingUnionToUnion.ts, 24, 13))
+>b : Symbol(b, Decl(narrowingUnionToUnion.ts, 24, 19))
+
+    if (isA(obj)) {
+>isA : Symbol(isA, Decl(narrowingUnionToUnion.ts, 20, 1))
+>obj : Symbol(obj, Decl(narrowingUnionToUnion.ts, 24, 13))
+
+        obj;  // { b: 0 }
+>obj : Symbol(obj, Decl(narrowingUnionToUnion.ts, 24, 13))
+    }
+}
+
+declare class X { x: string }
+>X : Symbol(X, Decl(narrowingUnionToUnion.ts, 28, 1))
+>x : Symbol(X.x, Decl(narrowingUnionToUnion.ts, 30, 17))
+
+declare class XS extends X { xs: string }
+>XS : Symbol(XS, Decl(narrowingUnionToUnion.ts, 30, 29))
+>X : Symbol(X, Decl(narrowingUnionToUnion.ts, 28, 1))
+>xs : Symbol(XS.xs, Decl(narrowingUnionToUnion.ts, 31, 28))
+
+declare class Y { y: string }
+>Y : Symbol(Y, Decl(narrowingUnionToUnion.ts, 31, 41))
+>y : Symbol(Y.y, Decl(narrowingUnionToUnion.ts, 33, 17))
+
+declare class YS extends Y { ys: string }
+>YS : Symbol(YS, Decl(narrowingUnionToUnion.ts, 33, 29))
+>Y : Symbol(Y, Decl(narrowingUnionToUnion.ts, 31, 41))
+>ys : Symbol(YS.ys, Decl(narrowingUnionToUnion.ts, 34, 28))
+
+declare function isXSorY(obj: unknown): obj is XS | Y;
+>isXSorY : Symbol(isXSorY, Decl(narrowingUnionToUnion.ts, 34, 41))
+>obj : Symbol(obj, Decl(narrowingUnionToUnion.ts, 36, 25))
+>obj : Symbol(obj, Decl(narrowingUnionToUnion.ts, 36, 25))
+>XS : Symbol(XS, Decl(narrowingUnionToUnion.ts, 30, 29))
+>Y : Symbol(Y, Decl(narrowingUnionToUnion.ts, 31, 41))
+
+function fx5<T extends X>(obj: X | YS, c: typeof XS | typeof Y) {
+>fx5 : Symbol(fx5, Decl(narrowingUnionToUnion.ts, 36, 54))
+>T : Symbol(T, Decl(narrowingUnionToUnion.ts, 38, 13))
+>X : Symbol(X, Decl(narrowingUnionToUnion.ts, 28, 1))
+>obj : Symbol(obj, Decl(narrowingUnionToUnion.ts, 38, 26))
+>X : Symbol(X, Decl(narrowingUnionToUnion.ts, 28, 1))
+>YS : Symbol(YS, Decl(narrowingUnionToUnion.ts, 33, 29))
+>c : Symbol(c, Decl(narrowingUnionToUnion.ts, 38, 38))
+>XS : Symbol(XS, Decl(narrowingUnionToUnion.ts, 30, 29))
+>Y : Symbol(Y, Decl(narrowingUnionToUnion.ts, 31, 41))
+
+    if (obj instanceof c) {
+>obj : Symbol(obj, Decl(narrowingUnionToUnion.ts, 38, 26))
+>c : Symbol(c, Decl(narrowingUnionToUnion.ts, 38, 38))
+
+        obj;  // XS | YS
+>obj : Symbol(obj, Decl(narrowingUnionToUnion.ts, 38, 26))
+    }
+    if (isXSorY(obj)) {
+>isXSorY : Symbol(isXSorY, Decl(narrowingUnionToUnion.ts, 34, 41))
+>obj : Symbol(obj, Decl(narrowingUnionToUnion.ts, 38, 26))
+
+        obj;  // XS | YS
+>obj : Symbol(obj, Decl(narrowingUnionToUnion.ts, 38, 26))
+    }
+}
+
+// Repro from #31156
+
+declare function isEmptyStrOrUndefined(mixed: any): mixed is "" | undefined;
+>isEmptyStrOrUndefined : Symbol(isEmptyStrOrUndefined, Decl(narrowingUnionToUnion.ts, 45, 1))
+>mixed : Symbol(mixed, Decl(narrowingUnionToUnion.ts, 49, 39))
+>mixed : Symbol(mixed, Decl(narrowingUnionToUnion.ts, 49, 39))
+
+function fx10(s: string | undefined) {
+>fx10 : Symbol(fx10, Decl(narrowingUnionToUnion.ts, 49, 76))
+>s : Symbol(s, Decl(narrowingUnionToUnion.ts, 51, 14))
+
+    if (isEmptyStrOrUndefined(s)) {
+>isEmptyStrOrUndefined : Symbol(isEmptyStrOrUndefined, Decl(narrowingUnionToUnion.ts, 45, 1))
+>s : Symbol(s, Decl(narrowingUnionToUnion.ts, 51, 14))
+
+        s;  // "" | undefined
+>s : Symbol(s, Decl(narrowingUnionToUnion.ts, 51, 14))
+
+        if (s == undefined) {
+>s : Symbol(s, Decl(narrowingUnionToUnion.ts, 51, 14))
+>undefined : Symbol(undefined)
+
+            s;  // undefined
+>s : Symbol(s, Decl(narrowingUnionToUnion.ts, 51, 14))
+        }
+        else {
+            s;  // ""
+>s : Symbol(s, Decl(narrowingUnionToUnion.ts, 51, 14))
+        }
+    }
+}
+
+// Repro from #37807
+
+function f1(x: any): asserts x is number | undefined { }
+>f1 : Symbol(f1, Decl(narrowingUnionToUnion.ts, 61, 1))
+>x : Symbol(x, Decl(narrowingUnionToUnion.ts, 65, 12))
+>x : Symbol(x, Decl(narrowingUnionToUnion.ts, 65, 12))
+
+let v1: number | string | undefined;
+>v1 : Symbol(v1, Decl(narrowingUnionToUnion.ts, 66, 3))
+
+f1(v1);
+>f1 : Symbol(f1, Decl(narrowingUnionToUnion.ts, 61, 1))
+>v1 : Symbol(v1, Decl(narrowingUnionToUnion.ts, 66, 3))
+
+v1;  // number | undefined
+>v1 : Symbol(v1, Decl(narrowingUnionToUnion.ts, 66, 3))
+
+function f2(x: any): asserts x is 6 | undefined { }
+>f2 : Symbol(f2, Decl(narrowingUnionToUnion.ts, 68, 3))
+>x : Symbol(x, Decl(narrowingUnionToUnion.ts, 70, 12))
+>x : Symbol(x, Decl(narrowingUnionToUnion.ts, 70, 12))
+
+let v2: number | string | undefined;
+>v2 : Symbol(v2, Decl(narrowingUnionToUnion.ts, 71, 3))
+
+f2(v2);
+>f2 : Symbol(f2, Decl(narrowingUnionToUnion.ts, 68, 3))
+>v2 : Symbol(v2, Decl(narrowingUnionToUnion.ts, 71, 3))
+
+v2;  // 6 | undefined
+>v2 : Symbol(v2, Decl(narrowingUnionToUnion.ts, 71, 3))
+
+// #39105
+
+declare function isEmptyString(value: string): value is '';
+>isEmptyString : Symbol(isEmptyString, Decl(narrowingUnionToUnion.ts, 73, 3))
+>value : Symbol(value, Decl(narrowingUnionToUnion.ts, 77, 31))
+>value : Symbol(value, Decl(narrowingUnionToUnion.ts, 77, 31))
+
+declare function isMaybeEmptyString(value: string | null | undefined): value is '' | null | undefined;
+>isMaybeEmptyString : Symbol(isMaybeEmptyString, Decl(narrowingUnionToUnion.ts, 77, 59))
+>value : Symbol(value, Decl(narrowingUnionToUnion.ts, 78, 36))
+>value : Symbol(value, Decl(narrowingUnionToUnion.ts, 78, 36))
+
+declare function isZero(value: number): value is 0;
+>isZero : Symbol(isZero, Decl(narrowingUnionToUnion.ts, 78, 102))
+>value : Symbol(value, Decl(narrowingUnionToUnion.ts, 80, 24))
+>value : Symbol(value, Decl(narrowingUnionToUnion.ts, 80, 24))
+
+declare function isMaybeZero(value: number | null | undefined): value is 0 | null | undefined;
+>isMaybeZero : Symbol(isMaybeZero, Decl(narrowingUnionToUnion.ts, 80, 51))
+>value : Symbol(value, Decl(narrowingUnionToUnion.ts, 81, 29))
+>value : Symbol(value, Decl(narrowingUnionToUnion.ts, 81, 29))
+
+declare function isEmptyArray<T>(value: T[]): value is [];
+>isEmptyArray : Symbol(isEmptyArray, Decl(narrowingUnionToUnion.ts, 81, 94))
+>T : Symbol(T, Decl(narrowingUnionToUnion.ts, 83, 30))
+>value : Symbol(value, Decl(narrowingUnionToUnion.ts, 83, 33))
+>T : Symbol(T, Decl(narrowingUnionToUnion.ts, 83, 30))
+>value : Symbol(value, Decl(narrowingUnionToUnion.ts, 83, 33))
+
+declare function isMaybeEmptyArray<T>(value: T[] | null | undefined): value is [] | null | undefined;
+>isMaybeEmptyArray : Symbol(isMaybeEmptyArray, Decl(narrowingUnionToUnion.ts, 83, 58))
+>T : Symbol(T, Decl(narrowingUnionToUnion.ts, 84, 35))
+>value : Symbol(value, Decl(narrowingUnionToUnion.ts, 84, 38))
+>T : Symbol(T, Decl(narrowingUnionToUnion.ts, 84, 35))
+>value : Symbol(value, Decl(narrowingUnionToUnion.ts, 84, 38))
+
+const TEST_CASES = [
+>TEST_CASES : Symbol(TEST_CASES, Decl(narrowingUnionToUnion.ts, 86, 5))
+
+    (value: string) => {
+>value : Symbol(value, Decl(narrowingUnionToUnion.ts, 87, 5))
+
+        if (isEmptyString(value)) {
+>isEmptyString : Symbol(isEmptyString, Decl(narrowingUnionToUnion.ts, 73, 3))
+>value : Symbol(value, Decl(narrowingUnionToUnion.ts, 87, 5))
+
+            value;  // ""
+>value : Symbol(value, Decl(narrowingUnionToUnion.ts, 87, 5))
+        }
+        else {
+            value;  // string
+>value : Symbol(value, Decl(narrowingUnionToUnion.ts, 87, 5))
+        }
+        if (isMaybeEmptyString(value)) {
+>isMaybeEmptyString : Symbol(isMaybeEmptyString, Decl(narrowingUnionToUnion.ts, 77, 59))
+>value : Symbol(value, Decl(narrowingUnionToUnion.ts, 87, 5))
+
+            value;  // ""
+>value : Symbol(value, Decl(narrowingUnionToUnion.ts, 87, 5))
+        }
+        else {
+            value;  // string
+>value : Symbol(value, Decl(narrowingUnionToUnion.ts, 87, 5))
+        }
+    },
+    (value?: string) => {
+>value : Symbol(value, Decl(narrowingUnionToUnion.ts, 101, 5))
+
+        if (isMaybeEmptyString(value)) {
+>isMaybeEmptyString : Symbol(isMaybeEmptyString, Decl(narrowingUnionToUnion.ts, 77, 59))
+>value : Symbol(value, Decl(narrowingUnionToUnion.ts, 101, 5))
+
+            value;  // "" | undefined
+>value : Symbol(value, Decl(narrowingUnionToUnion.ts, 101, 5))
+        }
+        else {
+            value;  // string
+>value : Symbol(value, Decl(narrowingUnionToUnion.ts, 101, 5))
+        }
+    },
+    (value: number) => {
+>value : Symbol(value, Decl(narrowingUnionToUnion.ts, 109, 5))
+
+        if (isZero(value)) {
+>isZero : Symbol(isZero, Decl(narrowingUnionToUnion.ts, 78, 102))
+>value : Symbol(value, Decl(narrowingUnionToUnion.ts, 109, 5))
+
+            value;  // 0
+>value : Symbol(value, Decl(narrowingUnionToUnion.ts, 109, 5))
+        }
+        else {
+            value;  // number
+>value : Symbol(value, Decl(narrowingUnionToUnion.ts, 109, 5))
+        }
+        if (isMaybeZero(value)) {
+>isMaybeZero : Symbol(isMaybeZero, Decl(narrowingUnionToUnion.ts, 80, 51))
+>value : Symbol(value, Decl(narrowingUnionToUnion.ts, 109, 5))
+
+            value; // 0
+>value : Symbol(value, Decl(narrowingUnionToUnion.ts, 109, 5))
+        }
+        else {
+            value;  // number
+>value : Symbol(value, Decl(narrowingUnionToUnion.ts, 109, 5))
+        }
+    },
+    (value?: number) => {
+>value : Symbol(value, Decl(narrowingUnionToUnion.ts, 123, 5))
+
+        if (isMaybeZero(value)) {
+>isMaybeZero : Symbol(isMaybeZero, Decl(narrowingUnionToUnion.ts, 80, 51))
+>value : Symbol(value, Decl(narrowingUnionToUnion.ts, 123, 5))
+
+            value;  // 0 | undefined
+>value : Symbol(value, Decl(narrowingUnionToUnion.ts, 123, 5))
+        }
+        else {
+            value;  // number
+>value : Symbol(value, Decl(narrowingUnionToUnion.ts, 123, 5))
+        }
+    },
+    (value: string[]) => {
+>value : Symbol(value, Decl(narrowingUnionToUnion.ts, 131, 5))
+
+        if (isEmptyArray(value)) {
+>isEmptyArray : Symbol(isEmptyArray, Decl(narrowingUnionToUnion.ts, 81, 94))
+>value : Symbol(value, Decl(narrowingUnionToUnion.ts, 131, 5))
+
+            value;  // []
+>value : Symbol(value, Decl(narrowingUnionToUnion.ts, 131, 5))
+        }
+        else {
+            value;  // string[]
+>value : Symbol(value, Decl(narrowingUnionToUnion.ts, 131, 5))
+        }
+        if (isMaybeEmptyArray(value)) {
+>isMaybeEmptyArray : Symbol(isMaybeEmptyArray, Decl(narrowingUnionToUnion.ts, 83, 58))
+>value : Symbol(value, Decl(narrowingUnionToUnion.ts, 131, 5))
+
+            value;  // []
+>value : Symbol(value, Decl(narrowingUnionToUnion.ts, 131, 5))
+        }
+        else {
+            value;  // string[]
+>value : Symbol(value, Decl(narrowingUnionToUnion.ts, 131, 5))
+        }
+    },
+    (value?: string[]) => {
+>value : Symbol(value, Decl(narrowingUnionToUnion.ts, 145, 5))
+
+        if (isMaybeEmptyArray(value)) {
+>isMaybeEmptyArray : Symbol(isMaybeEmptyArray, Decl(narrowingUnionToUnion.ts, 83, 58))
+>value : Symbol(value, Decl(narrowingUnionToUnion.ts, 145, 5))
+
+            value;  // [] | undefined
+>value : Symbol(value, Decl(narrowingUnionToUnion.ts, 145, 5))
+        }
+        else {
+            value;  // string[]
+>value : Symbol(value, Decl(narrowingUnionToUnion.ts, 145, 5))
+        }
+    },
+];
+
+// Repro from #42101
+
+type EmptyString = '' | null | undefined;
+>EmptyString : Symbol(EmptyString, Decl(narrowingUnionToUnion.ts, 153, 2))
+
+function isEmpty(value: string | EmptyString): value is EmptyString {
+>isEmpty : Symbol(isEmpty, Decl(narrowingUnionToUnion.ts, 157, 41))
+>value : Symbol(value, Decl(narrowingUnionToUnion.ts, 159, 17))
+>EmptyString : Symbol(EmptyString, Decl(narrowingUnionToUnion.ts, 153, 2))
+>value : Symbol(value, Decl(narrowingUnionToUnion.ts, 159, 17))
+>EmptyString : Symbol(EmptyString, Decl(narrowingUnionToUnion.ts, 153, 2))
+
+    return value === '' || value === null || value === undefined;
+>value : Symbol(value, Decl(narrowingUnionToUnion.ts, 159, 17))
+>value : Symbol(value, Decl(narrowingUnionToUnion.ts, 159, 17))
+>value : Symbol(value, Decl(narrowingUnionToUnion.ts, 159, 17))
+>undefined : Symbol(undefined)
+}
+
+let test: string | null | undefined;
+>test : Symbol(test, Decl(narrowingUnionToUnion.ts, 163, 3))
+
+if (isEmpty(test)) {
+>isEmpty : Symbol(isEmpty, Decl(narrowingUnionToUnion.ts, 157, 41))
+>test : Symbol(test, Decl(narrowingUnionToUnion.ts, 163, 3))
+
+    test;  // EmptyString
+>test : Symbol(test, Decl(narrowingUnionToUnion.ts, 163, 3))
+}
+
+// Repro from #43825
+
+declare function assert<T>(value: any): asserts value is T
+>assert : Symbol(assert, Decl(narrowingUnionToUnion.ts, 167, 1))
+>T : Symbol(T, Decl(narrowingUnionToUnion.ts, 171, 24))
+>value : Symbol(value, Decl(narrowingUnionToUnion.ts, 171, 27))
+>value : Symbol(value, Decl(narrowingUnionToUnion.ts, 171, 27))
+>T : Symbol(T, Decl(narrowingUnionToUnion.ts, 171, 24))
+
+function test1(foo: number | string | boolean) {
+>test1 : Symbol(test1, Decl(narrowingUnionToUnion.ts, 171, 58))
+>foo : Symbol(foo, Decl(narrowingUnionToUnion.ts, 173, 15))
+
+    assert<1 | string>(foo);
+>assert : Symbol(assert, Decl(narrowingUnionToUnion.ts, 167, 1))
+>foo : Symbol(foo, Decl(narrowingUnionToUnion.ts, 173, 15))
+
+    foo;  // string | 1
+>foo : Symbol(foo, Decl(narrowingUnionToUnion.ts, 173, 15))
+}
+
+// Repro from #46909
+
+function check1(x: unknown): x is (string | 0) {
+>check1 : Symbol(check1, Decl(narrowingUnionToUnion.ts, 176, 1))
+>x : Symbol(x, Decl(narrowingUnionToUnion.ts, 180, 16))
+>x : Symbol(x, Decl(narrowingUnionToUnion.ts, 180, 16))
+
+	return typeof x === "string" || x === 0;
+>x : Symbol(x, Decl(narrowingUnionToUnion.ts, 180, 16))
+>x : Symbol(x, Decl(narrowingUnionToUnion.ts, 180, 16))
+}
+
+function check2(x: unknown): x is ("hello" | 0) {
+>check2 : Symbol(check2, Decl(narrowingUnionToUnion.ts, 182, 1))
+>x : Symbol(x, Decl(narrowingUnionToUnion.ts, 184, 16))
+>x : Symbol(x, Decl(narrowingUnionToUnion.ts, 184, 16))
+
+	return x === "hello" || x === 0;
+>x : Symbol(x, Decl(narrowingUnionToUnion.ts, 184, 16))
+>x : Symbol(x, Decl(narrowingUnionToUnion.ts, 184, 16))
+}
+
+function test3(x: unknown) {
+>test3 : Symbol(test3, Decl(narrowingUnionToUnion.ts, 186, 1))
+>x : Symbol(x, Decl(narrowingUnionToUnion.ts, 188, 15))
+
+	if (typeof x === "string" || x === 0) {
+>x : Symbol(x, Decl(narrowingUnionToUnion.ts, 188, 15))
+>x : Symbol(x, Decl(narrowingUnionToUnion.ts, 188, 15))
+
+		x;  // string | 0
+>x : Symbol(x, Decl(narrowingUnionToUnion.ts, 188, 15))
+
+		if (x === "hello" || x === 0) {
+>x : Symbol(x, Decl(narrowingUnionToUnion.ts, 188, 15))
+>x : Symbol(x, Decl(narrowingUnionToUnion.ts, 188, 15))
+
+			x;  // 0 | "hello"
+>x : Symbol(x, Decl(narrowingUnionToUnion.ts, 188, 15))
+		}
+	}
+	if (check1(x)) {
+>check1 : Symbol(check1, Decl(narrowingUnionToUnion.ts, 176, 1))
+>x : Symbol(x, Decl(narrowingUnionToUnion.ts, 188, 15))
+
+		x;  // string | 0
+>x : Symbol(x, Decl(narrowingUnionToUnion.ts, 188, 15))
+
+		if (check2(x)) {
+>check2 : Symbol(check2, Decl(narrowingUnionToUnion.ts, 182, 1))
+>x : Symbol(x, Decl(narrowingUnionToUnion.ts, 188, 15))
+
+			x;  // 0 | "hello"
+>x : Symbol(x, Decl(narrowingUnionToUnion.ts, 188, 15))
+		}
+	}
+}
+
+// Repro from #49588
+
+function assertRelationIsNullOrStringArray(v: (string | number)[] | null): asserts v is string[] | null {}
+>assertRelationIsNullOrStringArray : Symbol(assertRelationIsNullOrStringArray, Decl(narrowingUnionToUnion.ts, 201, 1))
+>v : Symbol(v, Decl(narrowingUnionToUnion.ts, 205, 43))
+>v : Symbol(v, Decl(narrowingUnionToUnion.ts, 205, 43))
+
+function f1x(obj: (string | number)[] | null) {
+>f1x : Symbol(f1x, Decl(narrowingUnionToUnion.ts, 205, 106))
+>obj : Symbol(obj, Decl(narrowingUnionToUnion.ts, 207, 13))
+
+    assertRelationIsNullOrStringArray(obj);
+>assertRelationIsNullOrStringArray : Symbol(assertRelationIsNullOrStringArray, Decl(narrowingUnionToUnion.ts, 201, 1))
+>obj : Symbol(obj, Decl(narrowingUnionToUnion.ts, 207, 13))
+
+    obj;  // string[] | null
+>obj : Symbol(obj, Decl(narrowingUnionToUnion.ts, 207, 13))
+}
+
