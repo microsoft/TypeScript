@@ -32,7 +32,7 @@ function fx2<T>(x: T | undefined) {
 >x : T | undefined
 
         x;  // T & Falsy | undefined
->x : (T & undefined) | (T & null) | (T & false) | (T & "") | (T & 0) | (T & 0n) | undefined
+>x : (T & null) | (T & false) | (T & "") | (T & 0) | (T & 0n) | undefined
     }
 }
 
