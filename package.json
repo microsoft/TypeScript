@@ -54,6 +54,7 @@
         "@types/xml2js": "^0.4.11",
         "@typescript-eslint/eslint-plugin": "^5.28.0",
         "@typescript-eslint/parser": "^5.28.0",
+        "@typescript-eslint/type-utils": "^5.28.0",
         "@typescript-eslint/utils": "^5.28.0",
         "async": "latest",
         "azure-devops-node-api": "^11.1.1",

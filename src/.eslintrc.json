@@ -5,6 +5,9 @@
         "project": "./tsconfig-base.json"
     },
     "rules": {
+        "prefer-nullish-coalescing-truthy": "error", // Fork
+        // "@typescript-eslint/prefer-nullish-coalescing": "error",
+        // "@typescript-eslint/prefer-optional-chain": "error",
         "@typescript-eslint/no-unnecessary-qualifier": "error",
         "@typescript-eslint/no-unnecessary-type-assertion": "error"
     },
