@@ -1517,7 +1517,8 @@ namespace ts {
             // front and shrink the array (unless we'd be saving fewer than 100 slots)
             if (headIndex > 100 && headIndex > (elements.length >> 1)) {
                 const newLength = elements.length - headIndex;
-                elements.copyWithin(/*target*/ 0, /*&tart*/ headIndex);
+                elements.copyWithin(/*target*/ 0, /*start*/ headIndex);
+
                 elements.length = newLength;
                 headIndex = 0;
             }
