@@ -26672,11 +26672,22 @@ namespace ts {
             const func = getContainingFunction(node);
             if (func) {
                 const functionFlags = getFunctionFlags(func);
-                const contextualReturnType = getContextualReturnType(func);
+                let contextualReturnType = getContextualReturnType(func);
                 if (contextualReturnType) {
+                    const isAsyncGenerator = (functionFlags & FunctionFlags.Async) !== 0;
+                    if (!node.asteriskToken && contextualReturnType.flags & TypeFlags.Union) {
+                        contextualReturnType = filterType(contextualReturnType, type => {
+                            // >> What should we use to filter?
+                            // >> What will be the perf impacts? Is there caching? Is it enough to make this ok?
+                            // return !!getIterationTypeOfGeneratorFunctionReturnType(IterationTypeKind.Yield, type, isAsyncGenerator);
+                            // >> ^^^ doesn't work, because we get { yield: any, return: any } for bogus types
+                            const generator = createGeneratorReturnType(anyType, anyType, anyType, isAsyncGenerator);
+                            return checkTypeAssignableTo(generator, type, /*errorNode*/ undefined);
+                        });
+                    } // >> TODO: should we do something when `node.asteriskToken`?
                     return node.asteriskToken
                         ? contextualReturnType
-                        : getIterationTypeOfGeneratorFunctionReturnType(IterationTypeKind.Yield, contextualReturnType, (functionFlags & FunctionFlags.Async) !== 0);
+                        : getIterationTypeOfGeneratorFunctionReturnType(IterationTypeKind.Yield, contextualReturnType, isAsyncGenerator);
                 }
             }
 
