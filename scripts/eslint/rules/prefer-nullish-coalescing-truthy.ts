@@ -132,7 +132,12 @@ export = util.createRule<Options, MessageIds>({
                 }
             }
 
-            const possiblyFalsy = (ts.TypeFlags.PossiblyFalsy & ~(ts.TypeFlags.Undefined | ts.TypeFlags.Null)) | ts.TypeFlags.TypeVariable; // TODO: use constraint of type variable?
+            // "Easy" way to check if this thing is potentially falsy if `undefined | null` is removed.
+            // TODO: this is overly conservative, but I'm not sure how to actually check this easily.
+            const possiblyFalsy =
+                (ts.TypeFlags.PossiblyFalsy & ~(ts.TypeFlags.Undefined | ts.TypeFlags.Null))
+                | ts.TypeFlags.EnumLike // For some reason, this is not a part of PossiblyFalsy, even though these can be zero or "".
+                | ts.TypeFlags.TypeParameter; // TODO: if type parameter, check constraint
             if (getTypeFlags(type) & possiblyFalsy) {
                 return;
             }
