@@ -1,0 +1,30 @@
+=== tests/cases/compiler/discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts ===
+// repro #49643
+
+interface A {}
+>A : Symbol(A, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 0, 0))
+
+interface B {}
+>B : Symbol(B, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 2, 14))
+
+declare let opts:
+>opts : Symbol(opts, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 5, 11))
+
+   | { objectRef?: undefined; getObjectRef: () => any }
+>objectRef : Symbol(objectRef, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 6, 6))
+>getObjectRef : Symbol(getObjectRef, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 6, 29))
+
+   | { objectRef: A | B; getObjectRef?: undefined };
+>objectRef : Symbol(objectRef, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 7, 6))
+>A : Symbol(A, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 0, 0))
+>B : Symbol(B, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 2, 14))
+>getObjectRef : Symbol(getObjectRef, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 7, 24))
+
+opts.objectRef || opts.getObjectRef();
+>opts.objectRef : Symbol(objectRef, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 6, 6), Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 7, 6))
+>opts : Symbol(opts, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 5, 11))
+>objectRef : Symbol(objectRef, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 6, 6), Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 7, 6))
+>opts.getObjectRef : Symbol(getObjectRef, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 6, 29), Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 7, 24))
+>opts : Symbol(opts, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 5, 11))
+>getObjectRef : Symbol(getObjectRef, Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 6, 29), Decl(discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts, 7, 24))
+

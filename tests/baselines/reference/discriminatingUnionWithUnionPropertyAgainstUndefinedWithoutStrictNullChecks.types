@@ -1,0 +1,27 @@
+=== tests/cases/compiler/discriminatingUnionWithUnionPropertyAgainstUndefinedWithoutStrictNullChecks.ts ===
+// repro #49643
+
+interface A {}
+interface B {}
+
+declare let opts:
+>opts : { objectRef?: undefined; getObjectRef: () => any; } | { objectRef: A | B; getObjectRef?: undefined; }
+
+   | { objectRef?: undefined; getObjectRef: () => any }
+>objectRef : undefined
+>getObjectRef : () => any
+
+   | { objectRef: A | B; getObjectRef?: undefined };
+>objectRef : A | B
+>getObjectRef : undefined
+
+opts.objectRef || opts.getObjectRef();
+>opts.objectRef || opts.getObjectRef() : any
+>opts.objectRef : A | B
+>opts : { objectRef?: undefined; getObjectRef: () => any; } | { objectRef: A | B; getObjectRef?: undefined; }
+>objectRef : A | B
+>opts.getObjectRef() : any
+>opts.getObjectRef : () => any
+>opts : { objectRef?: undefined; getObjectRef: () => any; } | { objectRef: A | B; getObjectRef?: undefined; }
+>getObjectRef : () => any
+
