@@ -343,20 +343,25 @@ namespace ts {
         }
 
         getContextualDocumentationComment(context: Node | undefined, checker: TypeChecker | undefined): SymbolDisplayPart[] {
-            switch (context?.kind) {
-                case SyntaxKind.GetAccessor:
+            if (context) {
+                if (isGetAccessor(context)) {
                     if (!this.contextualGetAccessorDocumentationComment) {
                         this.contextualGetAccessorDocumentationComment = getDocumentationComment(filter(this.declarations, isGetAccessor), checker);
                     }
-                    return this.contextualGetAccessorDocumentationComment;
-                case SyntaxKind.SetAccessor:
+                    if (length(this.contextualGetAccessorDocumentationComment)) {
+                        return this.contextualGetAccessorDocumentationComment;
+                    }
+                }
+                if (isSetAccessor(context)) {
                     if (!this.contextualSetAccessorDocumentationComment) {
                         this.contextualSetAccessorDocumentationComment = getDocumentationComment(filter(this.declarations, isSetAccessor), checker);
                     }
-                    return this.contextualSetAccessorDocumentationComment;
-                default:
-                    return this.getDocumentationComment(checker);
+                    if (length(this.contextualSetAccessorDocumentationComment)) {
+                        return this.contextualSetAccessorDocumentationComment;
+                    }
+                }
             }
+            return this.getDocumentationComment(checker);
         }
 
         getJsDocTags(checker?: TypeChecker): JSDocTagInfo[] {
@@ -368,20 +373,25 @@ namespace ts {
         }
 
         getContextualJsDocTags(context: Node | undefined, checker: TypeChecker | undefined): JSDocTagInfo[] {
-            switch (context?.kind) {
-                case SyntaxKind.GetAccessor:
+            if (context) {
+                if (isGetAccessor(context)) {
                     if (!this.contextualGetAccessorTags) {
                         this.contextualGetAccessorTags = getJsDocTagsOfDeclarations(filter(this.declarations, isGetAccessor), checker);
                     }
-                    return this.contextualGetAccessorTags;
-                case SyntaxKind.SetAccessor:
+                    if (length(this.contextualGetAccessorTags)) {
+                        return this.contextualGetAccessorTags;
+                    }
+                }
+                if (isSetAccessor(context)) {
                     if (!this.contextualSetAccessorTags) {
                         this.contextualSetAccessorTags = getJsDocTagsOfDeclarations(filter(this.declarations, isSetAccessor), checker);
                     }
-                    return this.contextualSetAccessorTags;
-                default:
-                    return this.getJsDocTags(checker);
+                    if (length(this.contextualSetAccessorTags)) {
+                        return this.contextualSetAccessorTags;
+                    }
+                }
             }
+            return this.getJsDocTags(checker);
         }
     }
 
