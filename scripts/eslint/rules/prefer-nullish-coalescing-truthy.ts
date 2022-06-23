@@ -105,7 +105,35 @@ export = util.createRule<Options, MessageIds>({
                 return;
             }
 
-            if (util.getTypeFlags(type) & (ts.TypeFlags.BooleanLike | ts.TypeFlags.NumberLike | ts.TypeFlags.StringLike)) {
+            // util.getTypeFlags but it also adds flags from intersections, so we
+            // see `TypeFlags.String` on `string & { __brand: any }`.
+            function getTypeFlags(type: ts.Type) {
+                let seen: Set<ts.Type> | undefined;
+                let flags: ts.TypeFlags = 0;
+
+                getTypeFlagsWorker(type);
+                return flags;
+
+                function getTypeFlagsWorker(type: ts.Type) {
+                    if (!(type.flags & ts.TypeFlags.UnionOrIntersection)) {
+                        flags |= type.flags;
+                        return;
+                    }
+
+                    if (seen?.has(type)) {
+                        return;
+                    }
+
+                    (seen ??= new Set()).add(type);
+
+                    for (const t of (type as ts.UnionOrIntersectionType).types) {
+                        getTypeFlagsWorker(t);
+                    }
+                }
+            }
+
+            const possiblyFalsy = (ts.TypeFlags.PossiblyFalsy & ~(ts.TypeFlags.Undefined | ts.TypeFlags.Null)) | ts.TypeFlags.TypeVariable; // TODO: use constraint of type variable?
+            if (getTypeFlags(type) & possiblyFalsy) {
                 return;
             }
 
