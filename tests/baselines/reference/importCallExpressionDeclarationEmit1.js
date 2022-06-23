@@ -15,12 +15,12 @@ function returnDynamicLoad(path: string) {
 }
 
 //// [importCallExpressionDeclarationEmit1.js]
-Promise.resolve().then(() => require(getSpecifier()));
-var p0 = Promise.resolve().then(() => require(`${directory}\\${moduleFile}`));
-var p1 = Promise.resolve().then(() => require(getSpecifier()));
-const p2 = Promise.resolve().then(() => require(whatToLoad ? getSpecifier() : "defaulPath"));
+Promise.resolve(getSpecifier()).then(c => require(c));
+var p0 = Promise.resolve(`${directory}\\${moduleFile}`).then(c => require(c));
+var p1 = Promise.resolve(getSpecifier()).then(c => require(c));
+const p2 = Promise.resolve(whatToLoad ? getSpecifier() : "defaulPath").then(c => require(c));
 function returnDynamicLoad(path) {
-    return Promise.resolve().then(() => require(path));
+    return Promise.resolve(path).then(c => require(c));
 }
 
 

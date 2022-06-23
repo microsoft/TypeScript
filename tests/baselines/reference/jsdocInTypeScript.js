@@ -92,4 +92,4 @@ var E = {};
 E[""];
 // make sure import types in JSDoc are not resolved
 /** @type {import("should-not-be-resolved").Type} */
-var v = Promise.resolve().then(function () { return require(String()); });
+var v = Promise.resolve(String()).then(function (c) { return require(c); });

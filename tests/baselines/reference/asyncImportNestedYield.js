@@ -49,9 +49,9 @@ function foo() {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, __await("foo")];
                 case 1: return [4 /*yield*/, _a.sent()];
-                case 2: return [4 /*yield*/, __await.apply(void 0, [Promise.resolve().then(function () { return require(_a.sent()); })])];
+                case 2: return [4 /*yield*/, __await.apply(void 0, [Promise.resolve(_a.sent()).then(function (c) { return require(c); })])];
                 case 3:
-                    Promise.resolve().then(function () { return require((_a.sent())["default"]); });
+                    Promise.resolve((_a.sent())["default"]).then(function (c) { return require(c); });
                     return [2 /*return*/];
             }
         });

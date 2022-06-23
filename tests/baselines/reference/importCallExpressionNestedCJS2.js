@@ -54,7 +54,7 @@ function foo() {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, Promise.resolve().then(function () { return require("./foo"); })];
-                case 1: return [4 /*yield*/, Promise.resolve().then(function () { return require((_a.sent()).default); })];
+                case 1: return [4 /*yield*/, Promise.resolve((_a.sent()).default).then(function (c) { return require(c); })];
                 case 2: return [2 /*return*/, _a.sent()];
             }
         });

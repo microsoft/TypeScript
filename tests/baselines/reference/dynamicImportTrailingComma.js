@@ -4,4 +4,4 @@ import(path,);
 
 //// [dynamicImportTrailingComma.js]
 var path = './foo';
-Promise.resolve().then(function () { return require(path); });
+Promise.resolve(path).then(function (c) { return require(c); });

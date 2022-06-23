@@ -53,7 +53,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         return __awaiter(this, void 0, void 0, function* () {
             var _a;
             const packageName = '.';
-            const packageJson = yield (_a = packageName + '/package.json', __syncRequire ? Promise.resolve().then(() => require(_a)) : new Promise((resolve_1, reject_1) => { require([_a], resolve_1, reject_1); }));
+            const packageJson = yield (_a = packageName + '/package.json', __syncRequire ? Promise.resolve(_a).then(c => require(c)) : new Promise((resolve_1, reject_1) => { require([_a], resolve_1, reject_1); }));
         });
     }
 });

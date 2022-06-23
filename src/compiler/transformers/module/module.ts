@@ -721,7 +721,7 @@ namespace ts {
                     return createImportCallExpressionUMD(argument ?? factory.createVoidZero(), containsLexicalThis);
                 case ModuleKind.CommonJS:
                 default:
-                    return createImportCallExpressionCommonJS(argument, containsLexicalThis);
+                    return createImportCallExpressionCommonJS(argument);
             }
         }
 
@@ -745,7 +745,7 @@ namespace ts {
                 return factory.createConditionalExpression(
                     /*condition*/ factory.createIdentifier("__syncRequire"),
                     /*questionToken*/ undefined,
-                    /*whenTrue*/ createImportCallExpressionCommonJS(arg, containsLexicalThis),
+                    /*whenTrue*/ createImportCallExpressionCommonJS(arg),
                     /*colonToken*/ undefined,
                     /*whenFalse*/ createImportCallExpressionAMD(argClone, containsLexicalThis)
                 );
@@ -755,7 +755,7 @@ namespace ts {
                 return factory.createComma(factory.createAssignment(temp, arg), factory.createConditionalExpression(
                     /*condition*/ factory.createIdentifier("__syncRequire"),
                     /*questionToken*/ undefined,
-                    /*whenTrue*/ createImportCallExpressionCommonJS(temp, containsLexicalThis),
+                    /*whenTrue*/ createImportCallExpressionCommonJS(temp),
                     /*colonToken*/ undefined,
                     /*whenFalse*/ createImportCallExpressionAMD(temp, containsLexicalThis)
                 ));
@@ -820,14 +820,24 @@ namespace ts {
             return promise;
         }
 
-        function createImportCallExpressionCommonJS(arg: Expression | undefined, containsLexicalThis: boolean): Expression {
-            // import("./blah")
+        function createImportCallExpressionCommonJS(arg: Expression | undefined): Expression {
+            // import(x)
             // emit as
-            // Promise.resolve().then(function () { return require(x); }) /*CommonJs Require*/
+            // Promise.resolve(x).then(c => require(c)) /*CommonJs Require*/
             // We have to wrap require in then callback so that require is done in asynchronously
             // if we simply do require in resolve callback in Promise constructor. We will execute the loading immediately
-            const promiseResolveCall = factory.createCallExpression(factory.createPropertyAccessExpression(factory.createIdentifier("Promise"), "resolve"), /*typeArguments*/ undefined, /*argumentsArray*/ []);
-            let requireCall: Expression = factory.createCallExpression(factory.createIdentifier("require"), /*typeArguments*/ undefined, arg ? [arg] : []);
+            // For import("StringLiteral"), we prefer to emit require("StringLiteral") so that bundlers can analyze this.
+            const isStringLiteralSpecifier = arg?.kind === SyntaxKind.StringLiteral;
+            const promiseResolveCall = factory.createCallExpression(
+                factory.createPropertyAccessExpression(factory.createIdentifier("Promise"), "resolve"),
+                /*typeArguments*/ undefined,
+                /*argumentsArray*/ !arg || isStringLiteralSpecifier ? [] : [arg],
+            );
+            let requireCall: Expression = factory.createCallExpression(
+                factory.createIdentifier("require"),
+                /*typeArguments*/ undefined,
+                isStringLiteralSpecifier ? [arg] : arg ? [factory.createIdentifier("c")] : [],
+            );
             if (getESModuleInterop(compilerOptions)) {
                 requireCall = emitHelpers().createImportStarHelper(requireCall);
             }
@@ -837,7 +847,11 @@ namespace ts {
                 func = factory.createArrowFunction(
                     /*modifiers*/ undefined,
                     /*typeParameters*/ undefined,
-                    /*parameters*/ [],
+                    /*parameters*/ isStringLiteralSpecifier || !arg ? [] : [factory.createParameterDeclaration(
+                        /*modifiers*/ undefined,
+                        /*dotDotDotToken*/ undefined,
+                        "c",
+                    )],
                     /*type*/ undefined,
                     /*equalsGreaterThanToken*/ undefined,
                     requireCall);
@@ -848,16 +862,15 @@ namespace ts {
                     /*asteriskToken*/ undefined,
                     /*name*/ undefined,
                     /*typeParameters*/ undefined,
-                    /*parameters*/ [],
+                    /*parameters*/ isStringLiteralSpecifier ? [] : [factory.createParameterDeclaration(
+                        /*modifiers*/ undefined,
+                        /*dotDotDotToken*/ undefined,
+                        "c",
+                    )],
                     /*type*/ undefined,
                     factory.createBlock([factory.createReturnStatement(requireCall)]));
-
-                // if there is a lexical 'this' in the import call arguments, ensure we indicate
-                // that this new function expression indicates it captures 'this' so that the
-                // es2015 transformer will properly substitute 'this' with '_this'.
-                if (containsLexicalThis) {
-                    setEmitFlags(func, EmitFlags.CapturesThis);
-                }
+                // Note: because non-literal expressions are already evaluated
+                // synchronously, we don't need to capture `this`.
             }
 
             return factory.createCallExpression(factory.createPropertyAccessExpression(promiseResolveCall, "then"), /*typeArguments*/ undefined, [func]);
