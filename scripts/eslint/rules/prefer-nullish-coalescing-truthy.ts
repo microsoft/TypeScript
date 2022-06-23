@@ -61,9 +61,9 @@ export = util.createRule<Options, MessageIds>({
         hasSuggestions: true,
         messages: {
             preferNullishAssignment:
-                "Prefer using nullish coalescing operator (`??=`) instead of a logical assignment (`||=`), as it is a safer operator.",
+                "Prefer using nullish coalescing operator (`??=`) instead of a logical assignment (`||=`).",
             preferNullishLogical:
-                "Prefer using nullish coalescing operator (`??`) instead of a logical or (`||`), as it is a safer operator.",
+                "Prefer using nullish coalescing operator (`??`) instead of a logical or (`||`).",
             suggestNullishAssignment: "Fix to nullish coalescing assignment (`??=`).",
             suggestNullishLogical: "Fix to nullish coalescing operator (`??`).",
         },
