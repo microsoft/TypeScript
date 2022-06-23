@@ -1095,11 +1095,11 @@ namespace ts {
                 getNewLine: () => "\n",
             });
         }
-        return (computeHash || generateDjb2Hash)(text);
+        return (computeHash ?? generateDjb2Hash)(text);
     }
 
     export function computeSignature(text: string, computeHash: BuilderState.ComputeHash | undefined, data?: WriteFileCallbackData) {
-        return (computeHash || generateDjb2Hash)(getTextHandlingSourceMapForSignature(text, data));
+        return (computeHash ?? generateDjb2Hash)(getTextHandlingSourceMapForSignature(text, data));
     }
 
     export function createBuilderProgram(kind: BuilderProgramKind.SemanticDiagnosticsBuilderProgram, builderCreationParameters: BuilderCreationParameters): SemanticDiagnosticsBuilderProgram;
@@ -1225,7 +1225,7 @@ namespace ts {
                 if (isDeclarationFileName(fileName)) {
                     if (!outFile(state.compilerOptions)) {
                         Debug.assert(sourceFiles?.length === 1);
-                        let newSignature;
+                        let emitSignature;
                         if (!customTransformers) {
                             const file = sourceFiles[0];
                             const info = state.fileInfos.get(file.resolvedPath)!;
@@ -1237,14 +1237,15 @@ namespace ts {
                                     getCanonicalFileName,
                                     data,
                                 );
-                                if (!data?.diagnostics?.length) newSignature = signature;
+                                // With d.ts diagnostics they are also part of the signature so emitSignature will be different from it since its just hash of d.ts
+                                if (!data?.diagnostics?.length) emitSignature = signature;
                                 if (signature !== file.version) { // Update it
-                                    if (host.storeFilesChangingSignatureDuringEmit) (state.filesChangingSignature ||= new Set()).add(file.resolvedPath);
+                                    if (host.storeFilesChangingSignatureDuringEmit) (state.filesChangingSignature ??= new Set()).add(file.resolvedPath);
                                     if (state.exportedModulesMap) BuilderState.updateExportedModules(state, file, file.exportedModulesFromDeclarationEmit);
                                     if (state.affectedFiles) {
                                         // Keep old signature so we know what to undo if cancellation happens
                                         const existing = state.oldSignatures?.get(file.resolvedPath);
-                                        if (existing === undefined) (state.oldSignatures ||= new Map()).set(file.resolvedPath, info.signature || false);
+                                        if (existing === undefined) (state.oldSignatures ??= new Map()).set(file.resolvedPath, info.signature || false);
                                         info.signature = signature;
                                     }
                                     else {
@@ -1262,9 +1263,9 @@ namespace ts {
                         if (state.compilerOptions.composite) {
                             const filePath = sourceFiles[0].resolvedPath;
                             const oldSignature = state.emitSignatures?.get(filePath);
-                            newSignature ||= computeSignature(text, computeHash, data);
-                            if (newSignature !== oldSignature) {
-                                (state.emitSignatures ||= new Map()).set(filePath, newSignature);
+                            emitSignature ??= computeSignature(text, computeHash, data);
+                            if (emitSignature !== oldSignature) {
+                                (state.emitSignatures ??= new Map()).set(filePath, emitSignature);
                                 state.hasChangedEmitSignature = true;
                             }
                         }
