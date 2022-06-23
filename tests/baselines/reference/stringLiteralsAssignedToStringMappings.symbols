@@ -1,0 +1,30 @@
+=== tests/cases/conformance/types/literal/stringLiteralsAssignedToStringMappings.ts ===
+declare var x: Uppercase<Lowercase<string>>;
+>x : Symbol(x, Decl(stringLiteralsAssignedToStringMappings.ts, 0, 11))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+>Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
+
+// good
+x = "A";
+>x : Symbol(x, Decl(stringLiteralsAssignedToStringMappings.ts, 0, 11))
+
+// bad
+x = "a";
+>x : Symbol(x, Decl(stringLiteralsAssignedToStringMappings.ts, 0, 11))
+
+declare var y: Uppercase<Lowercase<`${number}`>>;
+>y : Symbol(y, Decl(stringLiteralsAssignedToStringMappings.ts, 8, 11))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+>Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
+
+// good
+y = "1";
+>y : Symbol(y, Decl(stringLiteralsAssignedToStringMappings.ts, 8, 11))
+
+// bad
+y = "a";
+>y : Symbol(y, Decl(stringLiteralsAssignedToStringMappings.ts, 8, 11))
+
+y = "A";
+>y : Symbol(y, Decl(stringLiteralsAssignedToStringMappings.ts, 8, 11))
+
