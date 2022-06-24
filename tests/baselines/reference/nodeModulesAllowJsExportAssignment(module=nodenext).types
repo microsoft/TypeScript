@@ -37,9 +37,9 @@ const a = {};
 >{} : {}
 
 module.exports = a;
->module.exports = a : any
->module.exports : any
->module : any
->exports : any
+>module.exports = a : {}
+>module.exports : {}
+>module : { exports: {}; }
+>exports : {}
 >a : {}
 

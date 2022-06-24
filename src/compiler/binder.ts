@@ -2832,12 +2832,12 @@ namespace ts {
         }
 
         function setCommonJsModuleIndicator(node: Node) {
-            if (file.externalModuleIndicator && file.externalModuleIndicator !== true) {
+            if (file.externalModuleIndicator && file.externalModuleIndicator !== true && file.commonJsModuleIndicator) {
                 return false;
             }
-            if (!file.commonJsModuleIndicator) {
+            if (file.commonJsModuleIndicator === undefined) {
                 file.commonJsModuleIndicator = node;
-                if (!file.externalModuleIndicator) {
+                if (file.externalModuleIndicator === undefined) {
                     bindSourceFileAsExternalModule();
                 }
             }

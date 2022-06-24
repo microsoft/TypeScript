@@ -14,6 +14,9 @@ import * as ns from "./cls";
 >ns : Symbol(ns, Decl(bin.js, 0, 6))
 
 module.exports = ns; // We refuse to bind cjs module exports assignments in the same file we find an import in
+>module.exports : Symbol(module.exports, Decl(bin.js, 0, 0))
+>module : Symbol(export=, Decl(bin.js, 0, 28))
+>exports : Symbol(export=, Decl(bin.js, 0, 28))
 >ns : Symbol(ns, Decl(bin.js, 0, 6))
 
 === tests/cases/conformance/jsdoc/declarations/globalNs.js ===

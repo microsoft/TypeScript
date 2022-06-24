@@ -60,4 +60,5 @@ declare const a: {};
 export = a;
 declare const a: {};
 //// [file.d.ts]
-export {};
+export = a;
+declare const a: {};

@@ -73,7 +73,8 @@ export class Foo {
 export = ns;
 import ns = require("./cls");
 //// [bin.d.ts]
-export {};
+export = ns;
+import * as ns from "./cls";
 //// [globalNs.d.ts]
 export * from "./cls";
 //// [includeAll.d.ts]

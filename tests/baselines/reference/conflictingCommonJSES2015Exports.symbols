@@ -1,11 +1,14 @@
 === tests/cases/conformance/salsa/bug24934.js ===
 export function abc(a, b, c) { return 5; }
->abc : Symbol(abc, Decl(bug24934.js, 0, 0))
+>abc : Symbol(abc, Decl(bug24934.js, 0, 0), Decl(bug24934.js, 1, 18))
 >a : Symbol(a, Decl(bug24934.js, 0, 20))
 >b : Symbol(b, Decl(bug24934.js, 0, 22))
 >c : Symbol(c, Decl(bug24934.js, 0, 25))
 
 module.exports = { abc };
+>module.exports : Symbol(module.exports, Decl(bug24934.js, 0, 0))
+>module : Symbol(module, Decl(bug24934.js, 0, 42))
+>exports : Symbol(module.exports, Decl(bug24934.js, 0, 0))
 >abc : Symbol(abc, Decl(bug24934.js, 1, 18))
 
 === tests/cases/conformance/salsa/use.js ===
