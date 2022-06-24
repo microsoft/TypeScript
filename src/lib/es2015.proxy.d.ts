@@ -46,7 +46,7 @@ interface ProxyHandler<T extends object> {
      * @param p The name of the property whose description should be retrieved.
      */
     getOwnPropertyDescriptor?(target: T, p: string | symbol): PropertyDescriptor | undefined;
-    
+
     /**
      * A trap for the `[[GetPrototypeOf]]` internal method.
      * @param target The target object.
