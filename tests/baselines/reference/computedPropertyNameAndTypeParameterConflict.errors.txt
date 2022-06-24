@@ -1,0 +1,13 @@
+error TS-1: Pre-emit (0) and post-emit (1) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
+
+
+!!! error TS-1: Pre-emit (0) and post-emit (1) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
+!!! related TS-1: The excess diagnostics are:
+!!! related TS2467 tests/cases/compiler/computedPropertyNameAndTypeParameterConflict.ts:3:6: A computed property name cannot reference a type parameter from its containing type.
+==== tests/cases/compiler/computedPropertyNameAndTypeParameterConflict.ts (0 errors) ====
+    declare const O: unique symbol;
+    declare class Bar<O> {
+        [O]: number;
+    }
+    
+    
