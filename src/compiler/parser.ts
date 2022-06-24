@@ -5646,8 +5646,10 @@ namespace ts {
             if (isOptionalChain && isPrivateIdentifier(propertyAccess.name)) {
                 parseErrorAtRange(propertyAccess.name, Diagnostics.An_optional_chain_cannot_contain_private_identifiers);
             }
-            else if (isExpressionWithTypeArguments(expression)) {
-                parseErrorAtRange(propertyAccess.name, Diagnostics.Instantiation_expression_cannot_be_followed_by_property_access);
+            if (isExpressionWithTypeArguments(expression) && expression.typeArguments) {
+                const pos = expression.typeArguments.pos - 1;
+                const end = skipTrivia(sourceText, expression.typeArguments.end) + 1;
+                parseErrorAt(pos, end, Diagnostics.Instantiation_expression_cannot_be_followed_by_property_access);
             }
             return finishNode(propertyAccess, pos);
         }

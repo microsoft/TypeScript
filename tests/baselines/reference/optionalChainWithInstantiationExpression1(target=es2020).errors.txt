@@ -1,4 +1,4 @@
-tests/cases/compiler/optionalChainWithInstantiationExpression1.ts(12,9): error TS1477: Instantiation expression cannot be followed by property access.
+tests/cases/compiler/optionalChainWithInstantiationExpression1.ts(12,5): error TS1477: Instantiation expression cannot be followed by property access.
 
 
 ==== tests/cases/compiler/optionalChainWithInstantiationExpression1.ts (1 errors) ====
@@ -14,7 +14,7 @@ tests/cases/compiler/optionalChainWithInstantiationExpression1.ts(12,9): error T
     declare const a: typeof A | undefined;
     
     a?.b<c>.d;
-            ~
+        ~~~
 !!! error TS1477: Instantiation expression cannot be followed by property access.
     
     a?.b.d
