@@ -41224,7 +41224,7 @@ namespace ts {
                 if (symbol && (symbol === undefinedSymbol || symbol === globalThisSymbol || symbol.declarations && isGlobalSourceFile(getDeclarationContainer(symbol.declarations[0])))) {
                     error(exportedName, Diagnostics.Cannot_export_0_Only_local_declarations_can_be_exported_from_a_module, idText(exportedName));
                 }
-                else {
+                else if (!node.parent.parent.isTypeOnly) {
                     markExportAsReferenced(node);
                     const target = symbol && (symbol.flags & SymbolFlags.Alias ? resolveAlias(symbol) : symbol);
                     if (!target || target === unknownSymbol || target.flags & SymbolFlags.Value) {
