@@ -5646,6 +5646,11 @@ namespace ts {
             if (isOptionalChain && isPrivateIdentifier(propertyAccess.name)) {
                 parseErrorAtRange(propertyAccess.name, Diagnostics.An_optional_chain_cannot_contain_private_identifiers);
             }
+            if (isExpressionWithTypeArguments(expression) && expression.typeArguments) {
+                const pos = expression.typeArguments.pos - 1;
+                const end = skipTrivia(sourceText, expression.typeArguments.end) + 1;
+                parseErrorAt(pos, end, Diagnostics.An_instantiation_expression_cannot_be_followed_by_a_property_access);
+            }
             return finishNode(propertyAccess, pos);
         }
 
