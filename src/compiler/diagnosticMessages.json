@@ -1493,7 +1493,7 @@
         "category": "Message",
         "code": 1476
     },
-    "Instantiation expression cannot be followed by property access.": {
+    "An instantiation expression cannot be followed by a property access.": {
         "category": "Error",
         "code": 1477
     },

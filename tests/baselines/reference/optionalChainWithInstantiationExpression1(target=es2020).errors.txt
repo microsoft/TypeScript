@@ -1,4 +1,4 @@
-tests/cases/compiler/optionalChainWithInstantiationExpression1.ts(12,5): error TS1477: Instantiation expression cannot be followed by property access.
+tests/cases/compiler/optionalChainWithInstantiationExpression1.ts(12,5): error TS1477: An instantiation expression cannot be followed by a property access.
 
 
 ==== tests/cases/compiler/optionalChainWithInstantiationExpression1.ts (1 errors) ====
@@ -15,7 +15,7 @@ tests/cases/compiler/optionalChainWithInstantiationExpression1.ts(12,5): error T
     
     a?.b<c>.d;
         ~~~
-!!! error TS1477: Instantiation expression cannot be followed by property access.
+!!! error TS1477: An instantiation expression cannot be followed by a property access.
     
     a?.b.d
     

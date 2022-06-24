@@ -1,5 +1,5 @@
 tests/cases/conformance/parser/ecmascript5/Generics/parserMemberAccessOffOfGenericType1.ts(1,9): error TS2304: Cannot find name 'List'.
-tests/cases/conformance/parser/ecmascript5/Generics/parserMemberAccessOffOfGenericType1.ts(1,13): error TS1477: Instantiation expression cannot be followed by property access.
+tests/cases/conformance/parser/ecmascript5/Generics/parserMemberAccessOffOfGenericType1.ts(1,13): error TS1477: An instantiation expression cannot be followed by a property access.
 
 
 ==== tests/cases/conformance/parser/ecmascript5/Generics/parserMemberAccessOffOfGenericType1.ts (2 errors) ====
@@ -7,4 +7,4 @@ tests/cases/conformance/parser/ecmascript5/Generics/parserMemberAccessOffOfGener
             ~~~~
 !!! error TS2304: Cannot find name 'List'.
                 ~~~~~~~~
-!!! error TS1477: Instantiation expression cannot be followed by property access.
+!!! error TS1477: An instantiation expression cannot be followed by a property access.

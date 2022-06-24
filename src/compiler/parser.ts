@@ -5649,7 +5649,7 @@ namespace ts {
             if (isExpressionWithTypeArguments(expression) && expression.typeArguments) {
                 const pos = expression.typeArguments.pos - 1;
                 const end = skipTrivia(sourceText, expression.typeArguments.end) + 1;
-                parseErrorAt(pos, end, Diagnostics.Instantiation_expression_cannot_be_followed_by_property_access);
+                parseErrorAt(pos, end, Diagnostics.An_instantiation_expression_cannot_be_followed_by_a_property_access);
             }
             return finishNode(propertyAccess, pos);
         }
