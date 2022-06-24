@@ -42,7 +42,7 @@ namespace ts {
         };
 
         function getParenthesizeLeftSideOfBinaryForOperator(operatorKind: BinaryOperator) {
-            binaryLeftOperandParenthesizerCache ||= new Map();
+            binaryLeftOperandParenthesizerCache ??= new Map();
             let parenthesizerRule = binaryLeftOperandParenthesizerCache.get(operatorKind);
             if (!parenthesizerRule) {
                 parenthesizerRule = node => parenthesizeLeftSideOfBinary(operatorKind, node);
@@ -52,7 +52,7 @@ namespace ts {
         }
 
         function getParenthesizeRightSideOfBinaryForOperator(operatorKind: BinaryOperator) {
-            binaryRightOperandParenthesizerCache ||= new Map();
+            binaryRightOperandParenthesizerCache ??= new Map();
             let parenthesizerRule = binaryRightOperandParenthesizerCache.get(operatorKind);
             if (!parenthesizerRule) {
                 parenthesizerRule = node => parenthesizeRightSideOfBinary(operatorKind, /*leftSide*/ undefined, node);

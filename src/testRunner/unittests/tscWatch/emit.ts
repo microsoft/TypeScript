@@ -127,7 +127,7 @@ namespace ts.tscWatch {
                         path: configFilePath,
                         content: JSON.stringify(configObj || {})
                     };
-                    const additionalFiles = getAdditionalFileOrFolder?.() || emptyArray;
+                    const additionalFiles = getAdditionalFileOrFolder?.() ?? emptyArray;
                     const files = [moduleFile1, file1Consumer1, file1Consumer2, globalFile3, moduleFile2, configFile, libFile, ...additionalFiles];
                     return createWatchedSystem(firstReloadFileList ?
                         map(firstReloadFileList, fileName => find(files, file => file.path === fileName)!) :

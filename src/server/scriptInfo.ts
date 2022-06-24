@@ -47,7 +47,7 @@ namespace ts.server {
         private pendingReloadFromDisk = false;
 
         constructor(private readonly host: ServerHost, private readonly info: ScriptInfo, initialVersion?: ScriptInfoVersion) {
-            this.version = initialVersion || { svc: 0, text: 0 };
+            this.version = initialVersion ?? { svc: 0, text: 0 };
         }
 
         public getVersion() {
@@ -255,7 +255,7 @@ namespace ts.server {
 
         private getLineMap() {
             Debug.assert(!this.svc, "ScriptVersionCache should not be set");
-            return this.lineMap || (this.lineMap = computeLineStarts(this.getOrLoadText()));
+            return this.lineMap ??= computeLineStarts(this.getOrLoadText());
         }
 
         getLineInfo(): LineInfo {
@@ -522,7 +522,7 @@ namespace ts.server {
                                 // its not the last one, find it and use that one if there
                                 if (defaultConfiguredProject === undefined &&
                                     index !== this.containingProjects.length - 1) {
-                                    defaultConfiguredProject = project.projectService.findDefaultConfiguredProject(this) || false;
+                                    defaultConfiguredProject = project.projectService.findDefaultConfiguredProject(this) ?? false;
                                 }
                                 if (defaultConfiguredProject === project) return project;
                                 if (!firstNonSourceOfProjectReferenceRedirect) firstNonSourceOfProjectReferenceRedirect = project;
@@ -537,8 +537,11 @@ namespace ts.server {
                         }
                     }
                     return ensurePrimaryProjectKind(defaultConfiguredProject ||
+                        // eslint-disable-next-line prefer-nullish-coalescing-truthy
                         firstNonSourceOfProjectReferenceRedirect ||
+                        // eslint-disable-next-line prefer-nullish-coalescing-truthy
                         firstConfiguredProject ||
+                        // eslint-disable-next-line prefer-nullish-coalescing-truthy
                         firstExternalProject ||
                         firstInferredProject);
             }

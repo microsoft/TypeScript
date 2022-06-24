@@ -35,7 +35,7 @@ namespace ts.FindAllReferences {
     export function nodeEntry(node: Node, kind: NodeEntryKind = EntryKind.Node): NodeEntry {
         return {
             kind,
-            node: (node as NamedDeclaration).name || node,
+            node: (node as NamedDeclaration).name ?? node,
             context: getContextNodeForNodeEntry(node)
         };
     }
@@ -317,7 +317,7 @@ namespace ts.FindAllReferences {
                     const { displayParts, kind } = getDefinitionKindAndDisplayParts(symbol, checker, originalNode);
                     const name = displayParts.map(p => p.text).join("");
                     const declaration = symbol.declarations && firstOrUndefined(symbol.declarations);
-                    const node = declaration ? (getNameOfDeclaration(declaration) || declaration) : originalNode;
+                    const node = declaration ? (getNameOfDeclaration(declaration) ?? declaration) : originalNode;
                     return {
                         ...getFileAndTextSpanFromNode(node),
                         name,
@@ -543,7 +543,7 @@ namespace ts.FindAllReferences {
 
     function getTextSpan(node: Node, sourceFile: SourceFile, endNode?: Node): TextSpan {
         let start = node.getStart(sourceFile);
-        let end = (endNode || node).getEnd();
+        let end = (endNode ?? node).getEnd();
         if (isStringLiteralLike(node) && (end - start) > 2) {
             Debug.assert(endNode === undefined);
             start += 1;
@@ -566,7 +566,7 @@ namespace ts.FindAllReferences {
     /** Whether a reference, `node`, is a definition of the `target` symbol */
     export function isDeclarationOfSymbol(node: Node, target: Symbol | undefined): boolean {
         if (!target) return false;
-        const source = getDeclarationFromName(node) ||
+        const source = getDeclarationFromName(node) ??
             (node.kind === SyntaxKind.DefaultKeyword ? node.parent
             : isLiteralComputedPropertyDeclarationName(node) ? node.parent.parent
             : node.kind === SyntaxKind.ConstructorKeyword && isConstructorDeclaration(node.parent) ? node.parent.parent
@@ -656,7 +656,7 @@ namespace ts.FindAllReferences {
                 }
                 return [{
                     definition: { type: DefinitionKind.TripleSlashReference, reference: resolvedRef.reference, file: node },
-                    references: getReferencesForNonModule(resolvedRef.file, fileIncludeReasons, program) || emptyArray
+                    references: getReferencesForNonModule(resolvedRef.file, fileIncludeReasons, program) ?? emptyArray
                 }];
             }
 
@@ -680,7 +680,7 @@ namespace ts.FindAllReferences {
                         const referencedFileName = node.getSourceFile().resolvedModules?.get(node.text, getModeForUsageLocation(node.getSourceFile(), node))?.resolvedFileName;
                         const referencedFile = referencedFileName ? program.getSourceFile(referencedFileName) : undefined;
                         if (referencedFile) {
-                            return [{ definition: { type: DefinitionKind.String, node }, references: getReferencesForNonModule(referencedFile, fileIncludeReasons, program) || emptyArray }];
+                            return [{ definition: { type: DefinitionKind.String, node }, references: getReferencesForNonModule(referencedFile, fileIncludeReasons, program) ?? emptyArray }];
                         }
                         // Fall through to string literal references. This is not very likely to return
                         // anything useful, but I guess it's better than nothing, and there's an existing
@@ -730,7 +730,7 @@ namespace ts.FindAllReferences {
 
         function getReferencesForNonModule(referencedFile: SourceFile, refFileMap: MultiMap<Path, FileIncludeReason>, program: Program): readonly SpanEntry[] | undefined {
             let entries: SpanEntry[] | undefined;
-            const references = refFileMap.get(referencedFile.path) || emptyArray;
+            const references = refFileMap.get(referencedFile.path) ?? emptyArray;
             for (const ref of references) {
                 if (isReferencedFile(ref)) {
                     const referencingFile = program.getSourceFileByPath(ref.file)!;
@@ -875,7 +875,7 @@ namespace ts.FindAllReferences {
                         // At `module.exports = ...`, reference node is `module`
                         const node = isBinaryExpression(decl) && isPropertyAccessExpression(decl.left) ? decl.left.expression :
                             isExportAssignment(decl) ? Debug.checkDefined(findChildOfKind(decl, SyntaxKind.ExportKeyword, sourceFile)) :
-                            getNameOfDeclaration(decl) || decl;
+                            getNameOfDeclaration(decl) ?? decl;
                         references.push(nodeEntry(node));
                     }
                 }
@@ -1115,7 +1115,7 @@ namespace ts.FindAllReferences {
                 // The other two forms seem to be handled downstream (e.g. in `skipPastExportOrImportSpecifier`), so special-casing the first form
                 // here appears to be intentional).
                 const {
-                    text = stripQuotes(symbolName(getLocalSymbolForExportDefault(symbol) || getNonModuleSymbolOfMergedModuleSymbol(symbol) || symbol)),
+                    text = stripQuotes(symbolName(getLocalSymbolForExportDefault(symbol) ?? getNonModuleSymbolOfMergedModuleSymbol(symbol) ?? symbol)),
                     allSearchSymbols = [symbol],
                 } = searchOptions;
                 const escapedText = escapeLeadingUnderscores(text);
@@ -2079,7 +2079,7 @@ namespace ts.FindAllReferences {
 
             const thisParameter = firstDefined(references, r => isParameter(r.node.parent) ? r.node : undefined);
             return [{
-                definition: { type: DefinitionKind.This, node: thisParameter || thisOrSuperKeyword },
+                definition: { type: DefinitionKind.This, node: thisParameter ?? thisOrSuperKeyword },
                 references
             }];
         }
@@ -2122,7 +2122,7 @@ namespace ts.FindAllReferences {
                             base = undefined;
                         }
                     }
-                    result.push(base || root || sym);
+                    result.push(base ?? root ?? sym);
                 },
                 // when try to find implementation, implementations is true, and not allowed to find base class
                 /*allowBaseTypes*/() => !implementations);

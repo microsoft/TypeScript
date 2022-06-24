@@ -213,7 +213,7 @@ namespace ts.SmartSelectionRange {
         let group: Node[] | undefined;
         for (const child of children) {
             if (groupOn(child)) {
-                group = group || [];
+                group ??= [];
                 group.push(child);
             }
             else {

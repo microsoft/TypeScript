@@ -445,7 +445,7 @@ namespace ts.formatting {
                 undefined;
 
             if (tokenInfo) {
-                const parent = findPrecedingToken(tokenInfo.end, sourceFile, enclosingNode)?.parent || previousParent!;
+                const parent = findPrecedingToken(tokenInfo.end, sourceFile, enclosingNode)?.parent ?? previousParent!;
                 processPair(
                     tokenInfo,
                     sourceFile.getLineAndCharacterOfPosition(tokenInfo.pos).line,

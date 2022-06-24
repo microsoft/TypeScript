@@ -780,7 +780,7 @@ namespace ts {
                     factory.createCallExpression(
                         factory.createIdentifier("require"),
                         /*typeArguments*/ undefined,
-                        [factory.createArrayLiteralExpression([arg || factory.createOmittedExpression()]), resolve, reject]
+                        [factory.createArrayLiteralExpression([arg ?? factory.createOmittedExpression()]), resolve, reject]
                     )
                 )
             ]);
@@ -1125,7 +1125,7 @@ namespace ts {
                             setOriginalNode(
                                 setTextRange(
                                     factory.createExpressionStatement(
-                                        emitHelpers().createCreateBindingHelper(generatedName, factory.createStringLiteralFromNode(specifier.propertyName || specifier.name), specifier.propertyName ? factory.createStringLiteralFromNode(specifier.name) : undefined)
+                                        emitHelpers().createCreateBindingHelper(generatedName, factory.createStringLiteralFromNode(specifier.propertyName ?? specifier.name), specifier.propertyName ? factory.createStringLiteralFromNode(specifier.name) : undefined)
                                     ),
                                     specifier),
                                 specifier
@@ -1136,10 +1136,10 @@ namespace ts {
                         const exportNeedsImportDefault =
                             !!getESModuleInterop(compilerOptions) &&
                             !(getEmitFlags(node) & EmitFlags.NeverApplyImportHelper) &&
-                            idText(specifier.propertyName || specifier.name) === "default";
+                            idText(specifier.propertyName ?? specifier.name) === "default";
                         const exportedValue = factory.createPropertyAccessExpression(
                             exportNeedsImportDefault ? emitHelpers().createImportDefaultHelper(generatedName) : generatedName,
-                            specifier.propertyName || specifier.name);
+                            specifier.propertyName ?? specifier.name);
                         statements.push(
                             setOriginalNode(
                                 setTextRange(
@@ -1921,7 +1921,7 @@ namespace ts {
                         );
                     }
                     else if (isImportSpecifier(importDeclaration)) {
-                        const name = importDeclaration.propertyName || importDeclaration.name;
+                        const name = importDeclaration.propertyName ?? importDeclaration.name;
                         return setTextRange(
                             factory.createPropertyAccessExpression(
                                 factory.getGeneratedNameForNode(importDeclaration.parent?.parent?.parent || importDeclaration),
@@ -1979,7 +1979,7 @@ namespace ts {
         function getExports(name: Identifier): Identifier[] | undefined {
             if (!isGeneratedIdentifier(name)) {
                 const valueDeclaration = resolver.getReferencedImportDeclaration(name)
-                    || resolver.getReferencedValueDeclaration(name);
+                    ?? resolver.getReferencedValueDeclaration(name);
                 if (valueDeclaration) {
                     return currentModuleInfo
                         && currentModuleInfo.exportedBindings[getOriginalNodeId(valueDeclaration)];

@@ -805,7 +805,7 @@ namespace ts.server {
             const { throttleWaitMilliseconds } = opts;
 
             this.eventHandler = this.canUseEvents
-                ? opts.eventHandler || (event => this.defaultEventHandler(event))
+                ? opts.eventHandler ?? (event => this.defaultEventHandler(event))
                 : undefined;
             const multistepOperationHost: MultistepOperationHost = {
                 executeWithRequestId: (requestId, action) => this.executeWithRequestId(requestId, action),
@@ -1282,7 +1282,7 @@ namespace ts.server {
         private getDefinition(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): readonly protocol.FileSpanWithContext[] | readonly DefinitionInfo[] {
             const { file, project } = this.getFileAndProject(args);
             const position = this.getPositionInFile(args, file);
-            const definitions = this.mapDefinitionInfoLocations(project.getLanguageService().getDefinitionAtPosition(file, position) || emptyArray, project);
+            const definitions = this.mapDefinitionInfoLocations(project.getLanguageService().getDefinitionAtPosition(file, position) ?? emptyArray, project);
             return simplifiedResult ? this.mapDefinitionInfo(definitions, project) : definitions.map(Session.mapToOriginalLocation);
         }
 
@@ -1335,7 +1335,7 @@ namespace ts.server {
             const { file, project } = this.getFileAndProject(args);
             const position = this.getPositionInFile(args, file);
             const unmappedDefinitions = project.getLanguageService().getDefinitionAtPosition(file, position);
-            let definitions: readonly DefinitionInfo[] = this.mapDefinitionInfoLocations(unmappedDefinitions || emptyArray, project).slice();
+            let definitions: readonly DefinitionInfo[] = this.mapDefinitionInfoLocations(unmappedDefinitions ?? emptyArray, project).slice();
             const needsJsResolution = this.projectService.serverMode === LanguageServiceMode.Semantic && (
                 !some(definitions, d => toNormalizedPath(d.fileName) !== file && !d.isAmbient) ||
                 some(definitions, d => !!d.failedAliasResolution));
@@ -1441,7 +1441,7 @@ namespace ts.server {
                         if (some(candidates)) {
                             return candidates;
                         }
-                    }) || emptyArray;
+                    }) ?? emptyArray;
                 }
                 return emptyArray;
             }
@@ -1577,7 +1577,7 @@ namespace ts.server {
             const { file, project } = this.getFileAndProject(args);
             const position = this.getPositionInFile(args, file);
 
-            const definitions = this.mapDefinitionInfoLocations(project.getLanguageService().getTypeDefinitionAtPosition(file, position) || emptyArray, project);
+            const definitions = this.mapDefinitionInfoLocations(project.getLanguageService().getTypeDefinitionAtPosition(file, position) ?? emptyArray, project);
             return this.mapDefinitionInfo(definitions, project);
         }
 
@@ -1595,7 +1595,7 @@ namespace ts.server {
         private getImplementation(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): readonly protocol.FileSpanWithContext[] | readonly ImplementationLocation[] {
             const { file, project } = this.getFileAndProject(args);
             const position = this.getPositionInFile(args, file);
-            const implementations = this.mapImplementationLocations(project.getLanguageService().getImplementationAtPosition(file, position) || emptyArray, project);
+            const implementations = this.mapImplementationLocations(project.getLanguageService().getImplementationAtPosition(file, position) ?? emptyArray, project);
             return simplifiedResult ?
                 implementations.map(({ fileName, textSpan, contextSpan }) => this.toFileSpanWithContext(fileName, textSpan, contextSpan, project)) :
                 implementations.map(Session.mapToOriginalLocation);
@@ -1880,7 +1880,7 @@ namespace ts.server {
             // Since this is syntactic operation, there should always be project for the file
             // we wouldnt have to ensure project but rather throw if we dont get project
             const file = toNormalizedPath(args.file);
-            const project = this.getProject(args.projectFileName) || this.projectService.tryGetDefaultProjectForFile(file);
+            const project = this.getProject(args.projectFileName) ?? this.projectService.tryGetDefaultProjectForFile(file);
             if (!project) {
                 return Errors.ThrowNoProject();
             }
@@ -1892,7 +1892,7 @@ namespace ts.server {
 
         private getFileAndProjectWorker(uncheckedFileName: string, projectFileName: string | undefined): { file: NormalizedPath, project: Project } {
             const file = toNormalizedPath(uncheckedFileName);
-            const project = this.getProject(projectFileName) || this.projectService.ensureDefaultProjectForFile(file);
+            const project = this.getProject(projectFileName) ?? this.projectService.ensureDefaultProjectForFile(file);
             return { file, project };
         }
 

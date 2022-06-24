@@ -108,7 +108,7 @@ namespace ts {
     }
 
     function getModuleInstanceStateForAliasTarget(specifier: ExportSpecifier, visited: ESMap<number, ModuleInstanceState | undefined>) {
-        const name = specifier.propertyName || specifier.name;
+        const name = specifier.propertyName ?? specifier.name;
         let p: Node | undefined = specifier.parent;
         while (p) {
             if (isBlock(p) || isModuleBlock(p) || isSourceFile(p)) {
@@ -515,9 +515,9 @@ namespace ts {
                             relatedInformation.push(createDiagnosticForNode(node, Diagnostics.Did_you_mean_0, `export type { ${unescapeLeadingUnderscores(node.name.escapedText)} }`));
                         }
 
-                        const declarationName = getNameOfDeclaration(node) || node;
+                        const declarationName = getNameOfDeclaration(node) ?? node;
                         forEach(symbol.declarations, (declaration, index) => {
-                            const decl = getNameOfDeclaration(declaration) || declaration;
+                            const decl = getNameOfDeclaration(declaration) ?? declaration;
                             const diag = createDiagnosticForNode(decl, message, messageNeedsName ? getDisplayName(declaration) : undefined);
                             file.bindDiagnostics.push(
                                 multipleDefaultExports ? addRelatedInfo(diag, createDiagnosticForNode(declarationName, index === 0 ? Diagnostics.Another_export_default_is_here : Diagnostics.and_here)) : diag
@@ -977,7 +977,7 @@ namespace ts {
 
         function addAntecedent(label: FlowLabel, antecedent: FlowNode): void {
             if (!(antecedent.flags & FlowFlags.Unreachable) && !contains(label.antecedents, antecedent)) {
-                (label.antecedents || (label.antecedents = [])).push(antecedent);
+                (label.antecedents ??= []).push(antecedent);
                 setFlowNodeReferenced(antecedent);
             }
         }
@@ -1730,7 +1730,7 @@ namespace ts {
             // of the node as part of the "true" branch, and continue to do so as we ascend back up to the outermost
             // chain node. We then treat the entire node as the right side of the expression.
             const preChainLabel = isOptionalChainRoot(node) ? createBranchLabel() : undefined;
-            bindOptionalExpression(node.expression, preChainLabel || trueTarget, falseTarget);
+            bindOptionalExpression(node.expression, preChainLabel ?? trueTarget, falseTarget);
             if (preChainLabel) {
                 currentFlow = finishFlowLabel(preChainLabel);
             }
@@ -2126,7 +2126,7 @@ namespace ts {
             const saveCurrentFlow = currentFlow;
             for (const typeAlias of delayedTypeAliases) {
                 const host = typeAlias.parent.parent;
-                container = findAncestor(host.parent, n => !!(getContainerFlags(n) & ContainerFlags.IsContainer)) || file;
+                container = findAncestor(host.parent, n => !!(getContainerFlags(n) & ContainerFlags.IsContainer)) ?? file;
                 blockScopeContainer = getEnclosingBlockScopeContainer(host) || file;
                 currentFlow = initFlowNode({ flags: FlowFlags.Start });
                 parent = typeAlias;
@@ -2803,7 +2803,7 @@ namespace ts {
                 file.bindDiagnostics.push(createDiagnosticForNode(node, diag));
             }
             else {
-                file.symbol.globalExports = file.symbol.globalExports || createSymbolTable();
+                file.symbol.globalExports ??= createSymbolTable();
                 declareSymbol(file.symbol.globalExports, file.symbol, node, SymbolFlags.Alias, SymbolFlags.AliasExcludes);
             }
         }
@@ -2933,7 +2933,7 @@ namespace ts {
 
                     if (constructorSymbol && constructorSymbol.valueDeclaration) {
                         // Declare a 'member' if the container is an ES5 class or ES6 constructor
-                        constructorSymbol.members = constructorSymbol.members || createSymbolTable();
+                        constructorSymbol.members ??= createSymbolTable();
                         // It's acceptable for multiple 'this' assignments of the same identifier to occur
                         if (hasDynamicName(node)) {
                             bindDynamicallyNamedThisPropertyAssignment(node, constructorSymbol, constructorSymbol.members);
@@ -2987,7 +2987,7 @@ namespace ts {
 
         function addLateBoundAssignmentDeclarationToSymbol(node: BinaryExpression | DynamicNamedDeclaration, symbol: Symbol | undefined) {
             if (symbol) {
-                (symbol.assignmentDeclarationMembers || (symbol.assignmentDeclarationMembers = new Map())).set(getNodeId(node), node);
+                (symbol.assignmentDeclarationMembers ??= new Map()).set(getNodeId(node), node);
             }
         }
 
@@ -3048,7 +3048,7 @@ namespace ts {
 
         function bindSpecialPropertyAssignment(node: BindablePropertyAssignmentExpression) {
             // Class declarations in Typescript do not allow property declarations
-            const parentSymbol = lookupSymbolForPropertyAccess(node.left.expression, container) || lookupSymbolForPropertyAccess(node.left.expression, blockScopeContainer) ;
+            const parentSymbol = lookupSymbolForPropertyAccess(node.left.expression, container) ?? lookupSymbolForPropertyAccess(node.left.expression, blockScopeContainer) ;
             if (!isInJSFile(node) && !isFunctionSymbol(parentSymbol)) {
                 return;
             }
@@ -3100,7 +3100,7 @@ namespace ts {
                     }
                     else {
                         const table = parent ? parent.exports! :
-                            file.jsGlobalAugmentations || (file.jsGlobalAugmentations = createSymbolTable());
+                            file.jsGlobalAugmentations ??= createSymbolTable();
                         return declareSymbol(table, parent, id, flags, excludeFlags);
                     }
                 });
@@ -3118,8 +3118,8 @@ namespace ts {
 
             // Set up the members collection if it doesn't exist already
             const symbolTable = isPrototypeProperty ?
-                (namespaceSymbol.members || (namespaceSymbol.members = createSymbolTable())) :
-                (namespaceSymbol.exports || (namespaceSymbol.exports = createSymbolTable()));
+                (namespaceSymbol.members ??= createSymbolTable()) :
+                (namespaceSymbol.exports ??= createSymbolTable());
 
             let includes = SymbolFlags.None;
             let excludes = SymbolFlags.None;
@@ -3163,7 +3163,7 @@ namespace ts {
         }
 
         function bindPropertyAssignment(name: BindableStaticNameExpression, propertyAccess: BindableStaticAccessExpression, isPrototypeProperty: boolean, containerIsClass: boolean) {
-            let namespaceSymbol = lookupSymbolForPropertyAccess(name, container) || lookupSymbolForPropertyAccess(name, blockScopeContainer);
+            let namespaceSymbol = lookupSymbolForPropertyAccess(name, container) ?? lookupSymbolForPropertyAccess(name, blockScopeContainer);
             const isToplevel = isTopLevelNamespaceAssignment(propertyAccess);
             namespaceSymbol = bindPotentiallyMissingNamespaces(namespaceSymbol, propertyAccess.expression, isToplevel, isPrototypeProperty, containerIsClass);
             bindPotentiallyNewExpandoMemberToNamespace(propertyAccess, namespaceSymbol, isPrototypeProperty);
@@ -3534,7 +3534,7 @@ namespace ts {
     function lookupSymbolForName(container: Node, name: __String): Symbol | undefined {
         const local = container.locals && container.locals.get(name);
         if (local) {
-            return local.exportSymbol || local;
+            return local.exportSymbol ?? local;
         }
         if (isSourceFile(container) && container.jsGlobalAugmentations && container.jsGlobalAugmentations.has(name)) {
             return container.jsGlobalAugmentations.get(name);

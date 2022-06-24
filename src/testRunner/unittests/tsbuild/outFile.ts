@@ -52,7 +52,7 @@ namespace ts {
                 subScenario,
                 fs: () => outFileFs,
                 scenario: "outfile-concat",
-                commandLineArgs: ["--b", "/src/third", "--verbose", ...(additionalCommandLineArgs || [])],
+                commandLineArgs: ["--b", "/src/third", "--verbose", ...(additionalCommandLineArgs ?? [])],
                 baselineSourceMap: true,
                 modifyFs,
                 baselineReadFileCalls: !baselineOnly,

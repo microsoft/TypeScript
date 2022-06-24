@@ -114,7 +114,7 @@ namespace ts.codefix {
                             name,
                             emptyArray,
                             typeNode,
-                            ambient ? undefined : body || createStubbedMethodBody(quotePreference)));
+                            ambient ? undefined : body ?? createStubbedMethodBody(quotePreference)));
                     }
                     else {
                         Debug.assertNode(accessor, isSetAccessorDeclaration, "The counterpart to a getter should be a setter");
@@ -124,7 +124,7 @@ namespace ts.codefix {
                             modifiers,
                             name,
                             createDummyParameters(1, [parameterName], [typeNode], 1, /*inJs*/ false),
-                            ambient ? undefined : body || createStubbedMethodBody(quotePreference)));
+                            ambient ? undefined : body ?? createStubbedMethodBody(quotePreference)));
                     }
                 }
                 break;
@@ -146,7 +146,7 @@ namespace ts.codefix {
                 if (declarations.length === 1) {
                     Debug.assert(signatures.length === 1, "One declaration implies one signature");
                     const signature = signatures[0];
-                    outputMethod(quotePreference, signature, modifiers, name, ambient ? undefined : body || createStubbedMethodBody(quotePreference));
+                    outputMethod(quotePreference, signature, modifiers, name, ambient ? undefined : body ?? createStubbedMethodBody(quotePreference));
                     break;
                 }
 
@@ -158,7 +158,7 @@ namespace ts.codefix {
                 if (!ambient) {
                     if (declarations.length > signatures.length) {
                         const signature = checker.getSignatureFromDeclaration(declarations[declarations.length - 1] as SignatureDeclaration)!;
-                        outputMethod(quotePreference, signature, modifiers, name, body || createStubbedMethodBody(quotePreference));
+                        outputMethod(quotePreference, signature, modifiers, name, body ?? createStubbedMethodBody(quotePreference));
                     }
                     else {
                         Debug.assert(declarations.length === signatures.length, "Declarations and signatures should match count");
@@ -455,7 +455,7 @@ namespace ts.codefix {
             typeParameters,
             parameters,
             returnType,
-            body || createStubbedMethodBody(quotePreference));
+            body ?? createStubbedMethodBody(quotePreference));
     }
 
     function createStubbedMethodBody(quotePreference: QuotePreference) {

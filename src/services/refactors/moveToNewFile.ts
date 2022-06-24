@@ -622,6 +622,7 @@ namespace ts.refactor {
                 return name;
             case SyntaxKind.ObjectBindingPattern: {
                 // We can't handle nested destructurings or property names well here, so just copy them all.
+                // eslint-disable-next-line prefer-nullish-coalescing-truthy
                 const newElements = name.elements.filter(prop => prop.propertyName || !isIdentifier(prop.name) || keep(prop.name));
                 return newElements.length ? factory.createObjectBindingPattern(newElements) : undefined;
             }

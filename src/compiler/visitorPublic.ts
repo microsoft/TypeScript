@@ -34,7 +34,7 @@ namespace ts {
             return undefined;
         }
         else if (isArray(visited)) {
-            visitedNode = (lift || extractSingleNode)(visited);
+            visitedNode = (lift ?? extractSingleNode)(visited);
         }
         else {
             visitedNode = visited;
@@ -449,7 +449,7 @@ namespace ts {
                     nodesVisitor(node.modifiers, visitor, isModifierLike),
                     nodeVisitor(node.name, visitor, isPropertyName),
                     // QuestionToken and ExclamationToken is uniqued in Property Declaration and the signature of 'updateProperty' is that too
-                    nodeVisitor(node.questionToken || node.exclamationToken, tokenVisitor, isQuestionOrExclamationToken),
+                    nodeVisitor(node.questionToken ?? node.exclamationToken, tokenVisitor, isQuestionOrExclamationToken),
                     nodeVisitor(node.type, visitor, isTypeNode),
                     nodeVisitor(node.initializer, visitor, isExpression));
 

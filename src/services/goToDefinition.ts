@@ -17,7 +17,7 @@ namespace ts.GoToDefinition {
         const typeChecker = program.getTypeChecker();
 
         if (node.kind === SyntaxKind.OverrideKeyword || (isJSDocOverrideTag(node) && rangeContainsPosition(node.tagName, position))) {
-            return getDefinitionFromOverriddenMember(typeChecker, node) || emptyArray;
+            return getDefinitionFromOverriddenMember(typeChecker, node) ?? emptyArray;
         }
 
         // Labels
@@ -45,7 +45,7 @@ namespace ts.GoToDefinition {
 
         if (searchOtherFilesOnly && failedAliasResolution) {
             // We couldn't resolve the specific import, try on the module specifier.
-            const importDeclaration = forEach([node, ...symbol?.declarations || emptyArray], n => findAncestor(n, isAnyImportOrBareOrAccessedRequire));
+            const importDeclaration = forEach([node, ...symbol?.declarations ?? emptyArray], n => findAncestor(n, isAnyImportOrBareOrAccessedRequire));
             const moduleSpecifier = importDeclaration && tryGetModuleSpecifierFromDeclaration(importDeclaration);
             if (moduleSpecifier) {
                 ({ symbol, failedAliasResolution } = getSymbol(moduleSpecifier, typeChecker, stopAtAlias));
@@ -90,7 +90,7 @@ namespace ts.GoToDefinition {
                 return [sigInfo];
             }
             else {
-                const defs = getDefinitionFromSymbol(typeChecker, symbol, node, failedAliasResolution, calledDeclaration) || emptyArray;
+                const defs = getDefinitionFromSymbol(typeChecker, symbol, node, failedAliasResolution, calledDeclaration) ?? emptyArray;
                 // For a 'super()' call, put the signature first, else put the variable first.
                 return node.kind === SyntaxKind.SuperKeyword ? [sigInfo, ...defs] : [...defs, sigInfo];
             }
@@ -104,7 +104,7 @@ namespace ts.GoToDefinition {
         if (node.parent.kind === SyntaxKind.ShorthandPropertyAssignment) {
             const shorthandSymbol = typeChecker.getShorthandAssignmentValueSymbol(symbol.valueDeclaration);
             const definitions = shorthandSymbol?.declarations ? shorthandSymbol.declarations.map(decl => createDefinitionInfo(decl, typeChecker, shorthandSymbol, node, /*unverified*/ false, failedAliasResolution)) : emptyArray;
-            return concatenate(definitions, getDefinitionFromObjectLiteralElement(typeChecker, node) || emptyArray);
+            return concatenate(definitions, getDefinitionFromObjectLiteralElement(typeChecker, node) ?? emptyArray);
         }
 
         // If the node is the name of a BindingElement within an ObjectBindingPattern instead of just returning the
@@ -128,7 +128,7 @@ namespace ts.GoToDefinition {
             });
         }
 
-        return concatenate(fileReferenceDefinition, getDefinitionFromObjectLiteralElement(typeChecker, node) || getDefinitionFromSymbol(typeChecker, symbol, node, failedAliasResolution));
+        return concatenate(fileReferenceDefinition, getDefinitionFromObjectLiteralElement(typeChecker, node) ?? getDefinitionFromSymbol(typeChecker, symbol, node, failedAliasResolution));
     }
 
     /**
@@ -273,8 +273,8 @@ namespace ts.GoToDefinition {
         }
 
         // Check if position is on triple slash reference.
-        const comment = findReferenceInPosition(sourceFile.referencedFiles, position) ||
-            findReferenceInPosition(sourceFile.typeReferenceDirectives, position) ||
+        const comment = findReferenceInPosition(sourceFile.referencedFiles, position) ??
+            findReferenceInPosition(sourceFile.typeReferenceDirectives, position) ??
             findReferenceInPosition(sourceFile.libReferenceDirectives, position);
 
         if (comment) {
@@ -360,13 +360,13 @@ namespace ts.GoToDefinition {
         const filteredDeclarations = filter(symbol.declarations, d => d !== excludeDeclaration);
         const withoutExpandos = filter(filteredDeclarations, d => !isExpandoDeclaration(d));
         const results = some(withoutExpandos) ? withoutExpandos : filteredDeclarations;
-        return getConstructSignatureDefinition() || getCallSignatureDefinition() || map(results, declaration => createDefinitionInfo(declaration, typeChecker, symbol, node, /*unverified*/ false, failedAliasResolution));
+        return getConstructSignatureDefinition() ?? getCallSignatureDefinition() ?? map(results, declaration => createDefinitionInfo(declaration, typeChecker, symbol, node, /*unverified*/ false, failedAliasResolution));
 
         function getConstructSignatureDefinition(): DefinitionInfo[] | undefined {
             // Applicable only if we are in a new expression, or we are on a constructor declaration
             // and in either case the symbol has a construct signature definition, i.e. class
             if (symbol.flags & SymbolFlags.Class && !(symbol.flags & (SymbolFlags.Function | SymbolFlags.Variable)) && (isNewExpressionTarget(node) || node.kind === SyntaxKind.ConstructorKeyword)) {
-                const cls = find(filteredDeclarations, isClassLike) || Debug.fail("Expected declaration to have at least one class-like declaration");
+                const cls = find(filteredDeclarations, isClassLike) ?? Debug.fail("Expected declaration to have at least one class-like declaration");
                 return getSignatureDefinition(cls.members, /*selectConstructors*/ true);
             }
         }
@@ -405,7 +405,7 @@ namespace ts.GoToDefinition {
     function createDefinitionInfoFromName(checker: TypeChecker, declaration: Declaration, symbolKind: ScriptElementKind, symbolName: string, containerName: string, unverified?: boolean, failedAliasResolution?: boolean, textSpan?: TextSpan): DefinitionInfo {
         const sourceFile = declaration.getSourceFile();
         if (!textSpan) {
-            const name = getNameOfDeclaration(declaration) || declaration;
+            const name = getNameOfDeclaration(declaration) ?? declaration;
             textSpan = createTextSpanFromNode(name, sourceFile);
         }
         return {

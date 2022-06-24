@@ -39,9 +39,9 @@ namespace ts.codefix {
         }
         const updated = factory.updateNamedTupleMember(
             namedTupleMember,
-            namedTupleMember.dotDotDotToken || (sawRest ? factory.createToken(SyntaxKind.DotDotDotToken) : undefined),
+            namedTupleMember.dotDotDotToken ?? (sawRest ? factory.createToken(SyntaxKind.DotDotDotToken) : undefined),
             namedTupleMember.name,
-            namedTupleMember.questionToken || (sawOptional ? factory.createToken(SyntaxKind.QuestionToken) : undefined),
+            namedTupleMember.questionToken ?? (sawOptional ? factory.createToken(SyntaxKind.QuestionToken) : undefined),
             unwrappedType
         );
         if (updated === namedTupleMember) {

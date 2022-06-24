@@ -39,7 +39,7 @@ namespace ts.BreakpointResolver {
             const start = lastDecorator ?
                 skipTrivia(sourceFile.text, lastDecorator.end) :
                 startNode.getStart(sourceFile);
-            return createTextSpanFromBounds(start, (endNode || startNode).getEnd());
+            return createTextSpanFromBounds(start, (endNode ?? startNode).getEnd());
         }
 
         function textSpanEndingAtNextToken(startNode: Node, previousTokenToFindNextEndToken: Node): TextSpan {
@@ -618,14 +618,14 @@ namespace ts.BreakpointResolver {
                     case SyntaxKind.ObjectBindingPattern:
                         // Breakpoint in last binding element or binding pattern if it contains no elements
                         const bindingPattern = node.parent as BindingPattern;
-                        return spanInNode(lastOrUndefined(bindingPattern.elements) || bindingPattern);
+                        return spanInNode(lastOrUndefined(bindingPattern.elements) ?? bindingPattern);
 
                     // Default to parent node
                     default:
                         if (isArrayLiteralOrObjectLiteralDestructuringPattern(node.parent)) {
                             // Breakpoint in last binding element or binding pattern if it contains no elements
                             const objectLiteral = node.parent as ObjectLiteralExpression;
-                            return textSpan(lastOrUndefined(objectLiteral.properties) || objectLiteral);
+                            return textSpan(lastOrUndefined(objectLiteral.properties) ?? objectLiteral);
                         }
                         return spanInNode(node.parent);
                 }
@@ -636,13 +636,13 @@ namespace ts.BreakpointResolver {
                     case SyntaxKind.ArrayBindingPattern:
                         // Breakpoint in last binding element or binding pattern if it contains no elements
                         const bindingPattern = node.parent as BindingPattern;
-                        return textSpan(lastOrUndefined(bindingPattern.elements) || bindingPattern);
+                        return textSpan(lastOrUndefined(bindingPattern.elements) ?? bindingPattern);
 
                     default:
                         if (isArrayLiteralOrObjectLiteralDestructuringPattern(node.parent)) {
                             // Breakpoint in last binding element or binding pattern if it contains no elements
                             const arrayLiteral = node.parent as ArrayLiteralExpression;
-                            return textSpan(lastOrUndefined(arrayLiteral.elements) || arrayLiteral);
+                            return textSpan(lastOrUndefined(arrayLiteral.elements) ?? arrayLiteral);
                         }
 
                         // Default to parent node

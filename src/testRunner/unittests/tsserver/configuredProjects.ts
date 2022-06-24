@@ -1016,7 +1016,7 @@ foo();`
                     content: `let b = 1;`
                 };
 
-                const host = createServerHost([alphaExtendedConfig, aConfig, aFile, bravoExtendedConfig, bConfig, bFile, ...(additionalFiles || emptyArray)]);
+                const host = createServerHost([alphaExtendedConfig, aConfig, aFile, bravoExtendedConfig, bConfig, bFile, ...(additionalFiles ?? emptyArray)]);
                 const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs() });
                 return { host, projectService, aFile, bFile, aConfig, bConfig, alphaExtendedConfig, bravoExtendedConfig };
             }

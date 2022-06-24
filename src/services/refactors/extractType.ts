@@ -146,7 +146,7 @@ namespace ts.refactor {
                 if (isIdentifier(node.typeName)) {
                     const typeName = node.typeName;
                     const symbol = checker.resolveName(typeName.text, typeName, SymbolFlags.TypeParameter, /* excludeGlobals */ true);
-                    for (const decl of symbol?.declarations || emptyArray) {
+                    for (const decl of symbol?.declarations ?? emptyArray) {
                         if (isTypeParameterDeclaration(decl) && decl.getSourceFile() === file) {
                             // skip extraction if the type node is in the range of the type parameter declaration.
                             // function foo<T extends { a?: /**/T }>(): void;

@@ -146,7 +146,7 @@ namespace ts.JsTyping {
         const filesToWatch: string[] = [];
 
         if (typeAcquisition.include) addInferredTypings(typeAcquisition.include, "Explicitly included types");
-        const exclude = typeAcquisition.exclude || [];
+        const exclude = typeAcquisition.exclude ?? [];
 
         // Directories to search for package.json, bower.json and other typing information
         if (!compilerOptions.types) {

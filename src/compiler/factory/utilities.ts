@@ -556,7 +556,7 @@ namespace ts {
             if (create) {
                 const parseNode = getOriginalNode(node, isSourceFile);
                 const emitNode = getOrCreateEmitNode(parseNode);
-                return emitNode.externalHelpersModuleName || (emitNode.externalHelpersModuleName = factory.createUniqueName(externalHelpersModuleNameText));
+                return emitNode.externalHelpersModuleName ??= factory.createUniqueName(externalHelpersModuleNameText);
             }
         }
     }
@@ -591,8 +591,8 @@ namespace ts {
         const moduleName = getExternalModuleName(importNode);
         if (moduleName && isStringLiteral(moduleName)) {
             return tryGetModuleNameFromDeclaration(importNode, host, factory, resolver, compilerOptions)
-                || tryRenameExternalModule(factory, moduleName, sourceFile)
-                || factory.cloneNode(moduleName);
+                ?? tryRenameExternalModule(factory, moduleName, sourceFile)
+                ?? factory.cloneNode(moduleName);
         }
 
         return undefined;

@@ -54,7 +54,7 @@ namespace ts.codefix {
                 }
                 const trackChanges: ContextualTrackChangesFunction = cb => (cb(t), []);
                 return getDeclarationSiteFix(context, expression, diagnostic.code, checker, trackChanges, fixedDeclarations)
-                    || getUseSiteFix(context, expression, diagnostic.code, checker, trackChanges, fixedDeclarations);
+                ?? getUseSiteFix(context, expression, diagnostic.code, checker, trackChanges, fixedDeclarations);
             });
         },
     });
@@ -156,7 +156,7 @@ namespace ts.codefix {
                 continue;
             }
 
-            (initializers || (initializers = [])).push({
+            (initializers ??= []).push({
                 expression: declaration.initializer,
                 declarationSymbol: symbol,
             });
@@ -189,7 +189,7 @@ namespace ts.codefix {
                         isCompleteFix = false;
                         continue;
                     }
-                    (sides || (sides = [])).push(side);
+                    (sides ??= []).push(side);
                 }
             }
             return sides && { identifiers: sides, isCompleteFix };

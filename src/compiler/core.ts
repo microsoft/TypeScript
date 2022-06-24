@@ -396,7 +396,7 @@ namespace ts {
                 }
             }
         }
-        return result || emptyArray;
+        return result ?? emptyArray;
     }
 
     export function flatMapToMutable<T, U>(array: readonly T[] | undefined, mapfn: (x: T, i: number) => U | readonly U[] | undefined): U[] {
@@ -473,7 +473,7 @@ namespace ts {
                 }
             }
         }
-        return result || array;
+        return result ?? array;
     }
 
     export function mapAllOrFail<T, U>(array: readonly T[], mapFn: (x: T, i: number) => U | undefined): U[] | undefined {
@@ -796,7 +796,7 @@ namespace ts {
     export function sortAndDeduplicate<T>(array: readonly string[]): SortedReadonlyArray<string>;
     export function sortAndDeduplicate<T>(array: readonly T[], comparer: Comparer<T>, equalityComparer?: EqualityComparer<T>): SortedReadonlyArray<T>;
     export function sortAndDeduplicate<T>(array: readonly T[], comparer?: Comparer<T>, equalityComparer?: EqualityComparer<T>): SortedReadonlyArray<T> {
-        return deduplicateSorted(sort(array, comparer), equalityComparer || comparer || compareStringsCaseSensitive as any as Comparer<T>);
+        return deduplicateSorted(sort(array, comparer), equalityComparer ?? comparer ?? compareStringsCaseSensitive as any as Comparer<T>);
     }
 
     export function arrayIsSorted<T>(array: readonly T[], comparer: Comparer<T>) {
@@ -852,7 +852,7 @@ namespace ts {
                 }
             }
         }
-        return result || array;
+        return result ?? array;
     }
 
     /**
@@ -1999,10 +1999,10 @@ namespace ts {
             // Hold onto common string comparers. This avoids constantly reallocating comparers during
             // tests.
             if (locale === undefined) {
-                return defaultComparer || (defaultComparer = stringComparerFactory(locale));
+                return defaultComparer ??= stringComparerFactory(locale);
             }
             else if (locale === "en-US") {
-                return enUSComparer || (enUSComparer = stringComparerFactory(locale));
+                return enUSComparer ??= stringComparerFactory(locale);
             }
             else {
                 return stringComparerFactory(locale);
@@ -2035,7 +2035,7 @@ namespace ts {
      * accents/diacritic marks, or case as unequal.
      */
     export function compareStringsCaseSensitiveUI(a: string, b: string) {
-        const comparer = uiComparerCaseSensitive || (uiComparerCaseSensitive = createUIStringComparer(uiLocale));
+        const comparer = uiComparerCaseSensitive ??= createUIStringComparer(uiLocale);
         return comparer(a, b);
     }
 
@@ -2337,7 +2337,7 @@ namespace ts {
     }
 
     export function enumerateInsertsAndDeletes<T, U>(newItems: readonly T[], oldItems: readonly U[], comparer: (a: T, b: U) => Comparison, inserted: (newItem: T) => void, deleted: (oldItem: U) => void, unchanged?: (oldItem: U, newItem: T) => void) {
-        unchanged = unchanged || noop;
+        unchanged ??= noop;
         let newIndex = 0;
         let oldIndex = 0;
         const newLen = newItems.length;

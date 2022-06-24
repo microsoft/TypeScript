@@ -297,7 +297,7 @@ namespace ts {
         createExtendedConfigFileWatch: (extendedConfigPath: string, extendedConfigFilePath: Path) => FileWatcher,
         toPath: (fileName: string) => Path,
     ) {
-        const extendedConfigs = arrayToMap(options?.configFile?.extendedSourceFiles || emptyArray, toPath);
+        const extendedConfigs = arrayToMap(options?.configFile?.extendedSourceFiles ?? emptyArray, toPath);
         // remove project from all unrelated watchers
         extendedConfigFilesMap.forEach((watcher, extendedConfigFilePath) => {
             if (!extendedConfigs.has(extendedConfigFilePath)) {
@@ -571,7 +571,7 @@ namespace ts {
                 watchFile: createFileWatcherWithLogging,
                 watchDirectory: createDirectoryWatcherWithLogging
             } :
-            triggerInvokingFactory || plainInvokeFactory;
+            triggerInvokingFactory ?? plainInvokeFactory;
         const excludeWatcherFactory = watchLogLevel === WatchLogLevel.Verbose ?
             createExcludeWatcherWithLogging :
             returnNoopFileWatcher;

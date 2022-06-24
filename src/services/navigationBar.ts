@@ -118,7 +118,7 @@ namespace ts.NavigationBar {
     function emptyNavigationBarNode(node: Node, name?: DeclarationName): NavigationBarNode {
         return {
             node,
-            name: name || (isDeclaration(node) || isExpression(node) ? getNameOfDeclaration(node) : undefined),
+            name: name ?? (isDeclaration(node) || isExpression(node) ? getNameOfDeclaration(node) : undefined),
             additionalNodes: undefined,
             parent,
             children: undefined,
@@ -469,7 +469,7 @@ namespace ts.NavigationBar {
     function mergeChildren(children: NavigationBarNode[], node: NavigationBarNode): void {
         const nameToItems = new Map<string, NavigationBarNode | NavigationBarNode[]>();
         filterMutate(children, (child, index) => {
-            const declName = child.name || getNameOfDeclaration(child.node as Declaration);
+            const declName = child.name ?? getNameOfDeclaration(child.node as Declaration);
             const name = declName && nodeText(declName);
             if (!name) {
                 // Anonymous items are never merged.
@@ -551,11 +551,11 @@ namespace ts.NavigationBar {
                     const ctor = emptyNavigationBarNode(ctorNode);
                     ctor.indent = a.indent + 1;
                     ctor.children = a.node === ctorFunction ? a.children : b.children;
-                    a.children = a.node === ctorFunction ? concatenate([ctor], b.children || [b]) : concatenate(a.children || [{ ...a }], [ctor]);
+                    a.children = a.node === ctorFunction ? concatenate([ctor], b.children ?? [b]) : concatenate(a.children ?? [{ ...a }], [ctor]);
                 }
                 else {
                     if (a.children || b.children) {
-                        a.children = concatenate(a.children || [{ ...a }], b.children || [b]);
+                        a.children = concatenate(a.children ?? [{ ...a }], b.children ?? [b]);
                         if (a.children) {
                             mergeChildren(a.children, a);
                             sortChildren(a.children);
@@ -656,7 +656,7 @@ namespace ts.NavigationBar {
 
     /** Merge source into target. Source should be thrown away after this is called. */
     function merge(target: NavigationBarNode, source: NavigationBarNode): void {
-        target.additionalNodes = target.additionalNodes || [];
+        target.additionalNodes ??= [];
         target.additionalNodes.push(source.node);
         if (source.additionalNodes) {
             target.additionalNodes.push(...source.additionalNodes);
@@ -834,7 +834,7 @@ namespace ts.NavigationBar {
             kind: getNodeKind(n.node),
             kindModifiers: getModifiers(n.node),
             spans: getSpans(n),
-            childItems: map(n.children, convertToSecondaryNavBarMenuItem) || emptyChildItemArray,
+            childItems: map(n.children, convertToSecondaryNavBarMenuItem) ?? emptyChildItemArray,
             indent: n.indent,
             bolded: false,
             grayed: false

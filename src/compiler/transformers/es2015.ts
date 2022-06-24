@@ -633,7 +633,7 @@ namespace ts {
                     convertedLoopState.containsLexicalThis = true;
                     return node;
                 }
-                return convertedLoopState.thisName || (convertedLoopState.thisName = factory.createUniqueName("this"));
+                return convertedLoopState.thisName ??= factory.createUniqueName("this");
             }
             return node;
         }
@@ -647,7 +647,7 @@ namespace ts {
                 return node;
             }
             if (resolver.isArgumentsLocalBinding(node)) {
-                return convertedLoopState.argumentsName || (convertedLoopState.argumentsName = factory.createUniqueName("arguments"));
+                return convertedLoopState.argumentsName ??= factory.createUniqueName("arguments");
             }
             return node;
         }
@@ -931,7 +931,7 @@ namespace ts {
                 transformConstructorBody(constructor, node, extendsClauseElement, hasSynthesizedSuper)
             );
 
-            setTextRange(constructorFunction, constructor || node);
+            setTextRange(constructorFunction, constructor ?? node);
             if (extendsClauseElement) {
                 setEmitFlags(constructorFunction, EmitFlags.CapturesThis);
             }
@@ -955,7 +955,7 @@ namespace ts {
             // If this is the case, we do not include the synthetic `...args` parameter and
             // will instead use the `arguments` object in ES5/3.
             return visitParameterList(constructor && !hasSynthesizedSuper ? constructor.parameters : undefined, visitor, context)
-                || [] as ParameterDeclaration[];
+                ?? [] as ParameterDeclaration[];
         }
 
         function createDefaultConstructorBody(node: ClassDeclaration | ClassExpression, isDerivedClass: boolean) {
@@ -1104,7 +1104,7 @@ namespace ts {
 
                     // If the super() call is the first statement, we can directly create and assign its result to `_this`
                     if (superStatementIndex <= existingPrologue.length) {
-                        insertCaptureThisForNode(statements, constructor, superCallExpression || createActualThis());
+                        insertCaptureThisForNode(statements, constructor, superCallExpression ?? createActualThis());
                     }
                     // Since the `super()` call isn't the first statement, it's split across 1-2 statements:
                     // * A prologue `var _this = this;`, in case the constructor accesses this before super()
@@ -2124,7 +2124,7 @@ namespace ts {
                 const element = node.elements[i];
                 const visited = visitNode(element, i < node.elements.length - 1 ? visitorWithUnusedExpressionResult : visitor, isExpression);
                 if (result || visited !== element) {
-                    result ||= node.elements.slice(0, i);
+                    result ??= node.elements.slice(0, i);
                     result.push(visited);
                 }
             }
@@ -2992,7 +2992,7 @@ namespace ts {
                 }
                 else {
                     // this is top level converted loop and we need to create an alias for 'arguments' object
-                    (extraVariableDeclarations || (extraVariableDeclarations = [])).push(
+                    (extraVariableDeclarations ??= []).push(
                         factory.createVariableDeclaration(
                             state.argumentsName,
                             /*exclamationToken*/ undefined,
@@ -3014,7 +3014,7 @@ namespace ts {
                     // NOTE:
                     // if converted loops were all nested in arrow function then we'll always emit '_this' so convertedLoopState.thisName will not be set.
                     // If it is set this means that all nested loops are not nested in arrow function and it is safe to capture 'this'.
-                    (extraVariableDeclarations || (extraVariableDeclarations = [])).push(
+                    (extraVariableDeclarations ??= []).push(
                         factory.createVariableDeclaration(
                             state.thisName,
                             /*exclamationToken*/ undefined,

@@ -206,7 +206,7 @@ namespace ts {
         function rehydrateCachedInfo(info: CachedSymbolExportInfo): SymbolExportInfo {
             if (info.symbol && info.moduleSymbol) return info as SymbolExportInfo;
             const { id, exportKind, targetFlags, isFromPackageJson, moduleFileName } = info;
-            const [cachedSymbol, cachedModuleSymbol] = symbols.get(id) || emptyArray;
+            const [cachedSymbol, cachedModuleSymbol] = symbols.get(id) ?? emptyArray;
             if (cachedSymbol && cachedModuleSymbol) {
                 return {
                     symbol: cachedSymbol,
@@ -220,10 +220,10 @@ namespace ts {
             const checker = (isFromPackageJson
                 ? host.getPackageJsonAutoImportProvider()!
                 : host.getCurrentProgram()!).getTypeChecker();
-            const moduleSymbol = info.moduleSymbol || cachedModuleSymbol || Debug.checkDefined(info.moduleFile
+            const moduleSymbol = info.moduleSymbol ?? cachedModuleSymbol ?? Debug.checkDefined(info.moduleFile
                 ? checker.getMergedSymbol(info.moduleFile.symbol)
                 : checker.tryFindAmbientModule(info.moduleName));
-            const symbol = info.symbol || cachedSymbol || Debug.checkDefined(exportKind === ExportKind.ExportEquals
+            const symbol = info.symbol ?? cachedSymbol ?? Debug.checkDefined(exportKind === ExportKind.ExportEquals
                 ? checker.resolveExternalModuleSymbol(moduleSymbol)
                 : checker.tryGetMemberInModuleExportsAndProperties(unescapeLeadingUnderscores(info.symbolTableKey), moduleSymbol),
                 `Could not find symbol '${info.symbolName}' by key '${info.symbolTableKey}' in module ${moduleSymbol.name}`);
@@ -377,7 +377,7 @@ namespace ts {
         // which will invalidate the export map cache if things change, so pull it before
         // checking the cache.
         host.getPackageJsonAutoImportProvider?.();
-        const cache = host.getCachedExportInfoMap?.() || createCacheableExportInfoMap({
+        const cache = host.getCachedExportInfoMap?.() ?? createCacheableExportInfoMap({
             getCurrentProgram: () => program,
             getPackageJsonAutoImportProvider: () => host.getPackageJsonAutoImportProvider?.(),
             getGlobalTypingsCacheLocation: () => host.getGlobalTypingsCacheLocation?.(),

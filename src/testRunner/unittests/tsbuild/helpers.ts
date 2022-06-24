@@ -221,7 +221,7 @@ interface Symbol {
     type ReadableProgramBuildInfo = ReadableProgramMultiFileEmitBuildInfo | ReadableProgramBundleEmitBuildInfo;
 
     function isReadableProgramBundleEmitBuildInfo(info: ReadableProgramBuildInfo | undefined): info is ReadableProgramBundleEmitBuildInfo {
-        return !!info && !!outFile(info.options || {});
+        return !!info && !!outFile(info.options ?? {});
     }
     type ReadableBuildInfo = Omit<BuildInfo, "program"> & { program: ReadableProgramBuildInfo | undefined; size: number; };
     function generateBuildInfoProgramBaseline(sys: System, buildInfoPath: string, buildInfo: BuildInfo) {
@@ -330,7 +330,7 @@ interface Symbol {
         if (!buildInfoPath || !sys.writtenFiles!.has(toPathWithSystem(sys, buildInfoPath))) return;
         if (!sys.fileExists(buildInfoPath)) return;
 
-        const buildInfo = getBuildInfo((originalReadCall || sys.readFile).call(sys, buildInfoPath, "utf8")!);
+        const buildInfo = getBuildInfo((originalReadCall ?? sys.readFile).call(sys, buildInfoPath, "utf8")!);
         generateBuildInfoProgramBaseline(sys, buildInfoPath, buildInfo);
 
         if (!outFile(options)) return;
@@ -340,8 +340,8 @@ interface Symbol {
 
         // Write the baselines:
         const baselineRecorder = new Harness.Compiler.WriterAggregator();
-        generateBundleFileSectionInfo(sys, originalReadCall || sys.readFile, baselineRecorder, bundle.js, jsFilePath);
-        generateBundleFileSectionInfo(sys, originalReadCall || sys.readFile, baselineRecorder, bundle.dts, declarationFilePath);
+        generateBundleFileSectionInfo(sys, originalReadCall ?? sys.readFile, baselineRecorder, bundle.js, jsFilePath);
+        generateBundleFileSectionInfo(sys, originalReadCall ?? sys.readFile, baselineRecorder, bundle.dts, declarationFilePath);
         baselineRecorder.Close();
         const text = baselineRecorder.lines.join("\r\n");
         sys.writeFile(`${buildInfoPath}.baseline.txt`, text);
@@ -509,7 +509,7 @@ interface Symbol {
 
         function addBaseline(...text: string[]) {
             if (!baselines || !headerAdded) {
-                (baselines ||= []).push(`${index}:: ${subScenario}`, ...(discrepancyExplanation?.()|| ["*** Needs explanation"]));
+                (baselines ??= []).push(`${index}:: ${subScenario}`, ...(discrepancyExplanation?.() ?? ["*** Needs explanation"]));
                 headerAdded = true;
             }
             baselines.push(...text);
@@ -603,7 +603,7 @@ interface Symbol {
                         subScenario: editScenario || subScenario,
                         diffWithInitial: true,
                         fs: () => index === 0 ? sys.vfs : editsSys[index - 1].vfs,
-                        commandLineArgs: editCommandLineArgs || commandLineArgs,
+                        commandLineArgs: editCommandLineArgs ?? commandLineArgs,
                         modifyFs,
                         baselineSourceMap,
                         baselineReadFileCalls,
@@ -639,7 +639,7 @@ interface Symbol {
                         baselines,
                         baseFs,
                         newSys: editsSys[index],
-                        commandLineArgs: edits[index].commandLineArgs || commandLineArgs,
+                        commandLineArgs: edits[index].commandLineArgs ?? commandLineArgs,
                         discrepancyExplanation: edits[index].discrepancyExplanation,
                         editFs: fs => {
                             for (let i = 0; i <= index; i++) {

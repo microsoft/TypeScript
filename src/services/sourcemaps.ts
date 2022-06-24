@@ -49,8 +49,8 @@ namespace ts {
                     f => !host.fileExists || host.fileExists(f) ? host.readFile!(f) : undefined
                 );
             }
-            documentPositionMappers.set(path, mapper || identitySourceMapConsumer);
-            return mapper || identitySourceMapConsumer;
+            documentPositionMappers.set(path, mapper ?? identitySourceMapConsumer);
+            return mapper ?? identitySourceMapConsumer;
         }
 
         function tryGetSourcePosition(info: DocumentPosition): DocumentPosition | undefined {
@@ -60,7 +60,7 @@ namespace ts {
             if (!file) return undefined;
 
             const newLoc = getDocumentPositionMapper(info.fileName).getSourcePosition(info);
-            return !newLoc || newLoc === info ? undefined : tryGetSourcePosition(newLoc) || newLoc;
+            return !newLoc || newLoc === info ? undefined : tryGetSourcePosition(newLoc) ?? newLoc;
         }
 
         function tryGetGeneratedPosition(info: DocumentPosition): DocumentPosition | undefined {
@@ -117,7 +117,7 @@ namespace ts {
         // This can be called from source mapper in either source program or program that includes generated file
         function getSourceFileLike(fileName: string) {
             return !host.getSourceFileLike ?
-                getSourceFile(fileName) || getOrCreateSourceFileLike(fileName) :
+                getSourceFile(fileName) ?? getOrCreateSourceFileLike(fileName) :
                 host.getSourceFileLike(fileName);
         }
 

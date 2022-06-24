@@ -27,7 +27,7 @@ namespace ts.server {
                             // No trailing slash
                             const nodeModulesPath = p.path.substring(0, p.path.indexOf(nodeModulesPathPart) + nodeModulesPathPart.length - 1);
                             if (!containedNodeModulesWatchers?.has(nodeModulesPath)) {
-                                (containedNodeModulesWatchers ||= new Map()).set(
+                                (containedNodeModulesWatchers ??= new Map()).set(
                                     nodeModulesPath,
                                     host.watchNodeModulesForPackageJsonChanges(nodeModulesPath),
                                 );
@@ -77,7 +77,7 @@ namespace ts.server {
                 result.clear();
             }
             currentKey = newKey;
-            return cache ||= new Map();
+            return cache ??= new Map();
         }
 
         function key(fromFileName: Path, preferences: UserPreferences, options: ModuleSpecifierOptions) {

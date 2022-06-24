@@ -151,7 +151,7 @@ namespace ts.FindAllReferences {
         }
 
         function handleImportCall(importCall: ImportCall) {
-            const top = findAncestor(importCall, isAmbientModuleDeclaration) || importCall.getSourceFile();
+            const top = findAncestor(importCall, isAmbientModuleDeclaration) ?? importCall.getSourceFile();
             addIndirectUser(top, /** addTransitiveDependencies */ !!isExported(importCall, /** stopAtAmbientModule */ true));
         }
 
@@ -263,7 +263,7 @@ namespace ts.FindAllReferences {
                 return;
             }
 
-            const { name, namedBindings } = decl.importClause || { name: undefined, namedBindings: undefined };
+            const { name, namedBindings } = decl.importClause ?? { name: undefined, namedBindings: undefined };
 
             if (namedBindings) {
                 switch (namedBindings.kind) {
@@ -461,7 +461,7 @@ namespace ts.FindAllReferences {
      * @param comingFromExport If we are doing a search for all exports, don't bother looking backwards for the imported symbol, since that's the reason we're here.
      */
     export function getImportOrExportSymbol(node: Node, symbol: Symbol, checker: TypeChecker, comingFromExport: boolean): ImportedSymbol | ExportedSymbol | undefined {
-        return comingFromExport ? getExport() : getExport() || getImport();
+        return comingFromExport ? getExport() : getExport() ?? getImport();
 
         function getExport(): ExportedSymbol | ImportedSymbol | undefined {
             const { parent } = node;

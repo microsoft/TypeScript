@@ -220,7 +220,7 @@ namespace ts.codefix {
         if (!classDeclaration && isPrivateIdentifier(token)) return undefined;
 
         // Prefer to change the class instead of the interface if they are merged
-        const declaration = classDeclaration || find(symbol.declarations, d => isInterfaceDeclaration(d) || isTypeLiteralNode(d)) as InterfaceDeclaration | TypeLiteralNode | undefined;
+        const declaration = classDeclaration ?? find(symbol.declarations, d => isInterfaceDeclaration(d) || isTypeLiteralNode(d)) as InterfaceDeclaration | TypeLiteralNode | undefined;
         if (declaration && !isSourceFileFromLibrary(program, declaration.getSourceFile())) {
             const makeStatic = !isTypeLiteralNode(declaration) && ((leftExpressionType as TypeReference).target || leftExpressionType) !== checker.getDeclaredTypeOfSymbol(symbol);
             if (makeStatic && (isPrivateIdentifier(token) || isInterfaceDeclaration(declaration))) return undefined;
@@ -337,7 +337,7 @@ namespace ts.codefix {
             const contextualType = checker.getContextualType(token.parent as Expression);
             typeNode = contextualType ? checker.typeToTypeNode(contextualType, /*enclosingDeclaration*/ undefined, NodeBuilderFlags.NoTruncation) : undefined;
         }
-        return typeNode || factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
+        return typeNode ?? factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
     }
 
     function addPropertyDeclaration(changeTracker: textChanges.ChangeTracker, sourceFile: SourceFile, node: ClassLikeDeclaration | InterfaceDeclaration | TypeLiteralNode, tokenName: string, typeNode: TypeNode, modifierFlags: ModifierFlags): void {
@@ -547,7 +547,7 @@ namespace ts.codefix {
             return factory.createObjectLiteralExpression(props, /*multiLine*/ true);
         }
         if (getObjectFlags(type) & ObjectFlags.Anonymous) {
-            const decl = find(type.symbol.declarations || emptyArray, or(isFunctionTypeNode, isMethodSignature, isMethodDeclaration));
+            const decl = find(type.symbol.declarations ?? emptyArray, or(isFunctionTypeNode, isMethodSignature, isMethodDeclaration));
             if (decl === undefined) return createUndefined();
 
             const signature = checker.getSignaturesOfType(type, SignatureKind.Call);

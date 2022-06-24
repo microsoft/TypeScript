@@ -900,6 +900,7 @@ namespace ts.projectSystem {
             };
             const jsconfig = {
                 path: "/jsconfig.json",
+                // eslint-disable-next-line prefer-nullish-coalescing-truthy
                 content: JSON.stringify(jsconfigContent || {})
             };
             // Should only accept direct dependencies.

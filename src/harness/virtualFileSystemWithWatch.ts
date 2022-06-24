@@ -166,7 +166,7 @@ interface Array<T> { length: number; [n: number]: T; }`
         if (!isNumber(eachKeyCountOrValueTester)) {
             valueTester = eachKeyCountOrValueTester;
         }
-        const [expectedValues, valueMapper] = valueTester || [undefined, undefined!];
+        const [expectedValues, valueMapper] = valueTester ?? [undefined, undefined!];
         expectedKeys.forEach((count, name) => {
             assert.isTrue(actual.has(name), `${caption}: expected to contain ${name}, actual keys: ${arrayFrom(actual.keys())}`);
             // Check key information only if eachKeyCount is provided
@@ -1171,7 +1171,7 @@ interface Array<T> { length: number; [n: number]: T; }`
     function baselineOutputs(baseline: string[], output: readonly string[], start: number, end = output.length) {
         let baselinedOutput: string[] | undefined;
         for (let i = start; i < end; i++) {
-            (baselinedOutput ||= []).push(output[i].replace(/Elapsed::\s[0-9]+(?:\.\d+)?ms/g, "Elapsed:: *ms"));
+            (baselinedOutput ??= []).push(output[i].replace(/Elapsed::\s[0-9]+(?:\.\d+)?ms/g, "Elapsed:: *ms"));
         }
         if (baselinedOutput) baseline.push(baselinedOutput.join(""));
     }

@@ -288,7 +288,7 @@ namespace ts.SignatureHelp {
     }
 
     function getImmediatelyContainingArgumentOrContextualParameterInfo(node: Node, position: number, sourceFile: SourceFile, checker: TypeChecker): ArgumentListInfo | undefined {
-        return tryGetParameterInfo(node, position, sourceFile, checker) || getImmediatelyContainingArgumentInfo(node, position, sourceFile);
+        return tryGetParameterInfo(node, position, sourceFile, checker) ?? getImmediatelyContainingArgumentInfo(node, position, sourceFile);
     }
 
     function getHighestBinary(b: BinaryExpression): BinaryExpression {
@@ -346,7 +346,7 @@ namespace ts.SignatureHelp {
     // The type of a function type node has a symbol at that node, but it's better to use the symbol for a parameter or type alias.
     function chooseBetterSymbol(s: Symbol): Symbol {
         return s.name === InternalSymbolName.Type
-            ? firstDefined(s.declarations, d => isFunctionTypeNode(d) ? d.parent.symbol : undefined) || s
+            ? firstDefined(s.declarations, d => isFunctionTypeNode(d) ? d.parent.symbol : undefined) ?? s
             : s;
     }
 
@@ -611,9 +611,9 @@ namespace ts.SignatureHelp {
     interface SignatureHelpItemInfo { readonly isVariadic: boolean; readonly parameters: SignatureHelpParameter[]; readonly prefix: readonly SymbolDisplayPart[]; readonly suffix: readonly SymbolDisplayPart[]; }
 
     function itemInfoForTypeParameters(candidateSignature: Signature, checker: TypeChecker, enclosingDeclaration: Node, sourceFile: SourceFile): SignatureHelpItemInfo[] {
-        const typeParameters = (candidateSignature.target || candidateSignature).typeParameters;
+        const typeParameters = (candidateSignature.target ?? candidateSignature).typeParameters;
         const printer = createPrinter({ removeComments: true });
-        const parameters = (typeParameters || emptyArray).map(t => createSignatureHelpParameterForTypeParameter(t, checker, enclosingDeclaration, sourceFile, printer));
+        const parameters = (typeParameters ?? emptyArray).map(t => createSignatureHelpParameterForTypeParameter(t, checker, enclosingDeclaration, sourceFile, printer));
         const thisParameter = candidateSignature.thisParameter ? [checker.symbolToParameterDeclaration(candidateSignature.thisParameter, enclosingDeclaration, signatureHelpNodeBuilderFlags)!] : [];
 
         return checker.getExpandedParameters(candidateSignature).map(paramList => {

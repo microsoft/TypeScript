@@ -587,7 +587,7 @@ namespace ts {
                         expression = expandPreOrPostfixIncrementOrDecrementExpression(factory, node, expression, hoistVariableDeclaration, temp);
                         expression = createPrivateIdentifierAssignment(
                             info,
-                            initializeExpression || readExpression,
+                            initializeExpression ?? readExpression,
                             expression,
                             SyntaxKind.EqualsToken
                         );
@@ -895,7 +895,7 @@ namespace ts {
 
             if (isCompoundAssignment(operator)) {
                 const { readExpression, initializeExpression } = createCopiableReceiverExpr(receiver);
-                receiver = initializeExpression || readExpression;
+                receiver = initializeExpression ?? readExpression;
                 right = factory.createBinaryExpression(
                     createPrivateIdentifierAccessHelper(info, readExpression),
                     getNonAssignmentOperatorForCompoundAssignment(operator),
@@ -1146,7 +1146,7 @@ namespace ts {
                 }
                 else {
                     const expressions: Expression[] = [];
-                    temp ||= createClassTempVar();
+                    temp ??= createClassTempVar();
                     if (isClassWithConstructorReference) {
                         // record an alias as the class name is not in scope for statics.
                         enableSubstitutionForClassAliases();
@@ -1262,7 +1262,7 @@ namespace ts {
                             parameters ?? [],
                             body
                         ),
-                        constructor || node
+                        constructor ?? node
                     ),
                     constructor
                 )
@@ -1728,7 +1728,7 @@ namespace ts {
         }
 
         function substituteExpressionIdentifier(node: Identifier): Expression {
-            return trySubstituteClassAlias(node) || node;
+            return trySubstituteClassAlias(node) ?? node;
         }
 
         function trySubstituteClassAlias(node: Identifier): Expression | undefined {
@@ -1790,7 +1790,7 @@ namespace ts {
         }
 
         function getClassLexicalEnvironment() {
-            return currentClassLexicalEnvironment ||= {
+            return currentClassLexicalEnvironment ??= {
                 facts: ClassFacts.None,
                 classConstructor: undefined,
                 superClassReference: undefined,
@@ -1800,7 +1800,7 @@ namespace ts {
 
         function getPrivateIdentifierEnvironment() {
             const lex = getClassLexicalEnvironment();
-            lex.privateIdentifierEnvironment ||= {
+            lex.privateIdentifierEnvironment ??= {
                 className: "",
                 identifiers: new Map()
             };
@@ -1808,7 +1808,7 @@ namespace ts {
         }
 
         function getPendingExpressions() {
-            return pendingExpressions || (pendingExpressions = []);
+            return pendingExpressions ??= [];
         }
 
         function addPrivateIdentifierToEnvironment(node: PrivateClassElementDeclaration) {
@@ -2124,7 +2124,7 @@ namespace ts {
                 if (isSpreadAssignment(node)) {
                     return factory.updateSpreadAssignment(
                         node,
-                        wrapped || visitNode(node.expression, visitorDestructuringTarget, isExpression)
+                        wrapped ?? visitNode(node.expression, visitorDestructuringTarget, isExpression)
                     );
                 }
                 Debug.assert(wrapped === undefined, "Should not have generated a wrapped target");
@@ -2168,7 +2168,7 @@ namespace ts {
         return factory.createAssignment(
             variableName,
             factory.createObjectLiteralExpression([
-                factory.createPropertyAssignment("value", initializer || factory.createVoidZero())
+                factory.createPropertyAssignment("value", initializer ?? factory.createVoidZero())
             ])
         );
     }
@@ -2177,7 +2177,7 @@ namespace ts {
         return factory.createCallExpression(
             factory.createPropertyAccessExpression(weakMapName, "set"),
             /*typeArguments*/ undefined,
-            [receiver, initializer || factory.createVoidZero()]
+            [receiver, initializer ?? factory.createVoidZero()]
         );
     }
 

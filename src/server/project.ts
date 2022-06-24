@@ -248,7 +248,7 @@ namespace ts.server {
             const result = host.require!(resolvedPath, moduleName); // TODO: GH#18217
             if (result.error) {
                 const err = result.error.stack || result.error.message || JSON.stringify(result.error);
-                (logErrors || log)(`Failed to load module '${moduleName}' from ${resolvedPath}: ${err}`);
+                (logErrors ?? log)(`Failed to load module '${moduleName}' from ${resolvedPath}: ${err}`);
                 return undefined;
             }
             return result.module;
@@ -268,7 +268,7 @@ namespace ts.server {
             }
             if (result.error) {
                 const err = result.error.stack || result.error.message || JSON.stringify(result.error);
-                (logErrors || log)(`Failed to dynamically import module '${moduleName}' from ${resolvedPath}: ${err}`);
+                (logErrors ?? log)(`Failed to dynamically import module '${moduleName}' from ${resolvedPath}: ${err}`);
                 return undefined;
             }
             return result.module;
@@ -429,11 +429,11 @@ namespace ts.server {
             this.rootFilesMap.forEach(value => {
                 if (this.languageServiceEnabled || (value.info && value.info.isScriptOpen())) {
                     // if language service is disabled - process only files that are open
-                    (result || (result = [])).push(value.fileName);
+                    (result ??= []).push(value.fileName);
                 }
             });
 
-            return addRange(result, this.typingFiles) || ts.emptyArray;
+            return addRange(result, this.typingFiles) ?? ts.emptyArray;
         }
 
         private getOrCreateScriptInfoAndAttachToProject(fileName: string) {
@@ -649,14 +649,14 @@ namespace ts.server {
          * Get the errors that dont have any file name associated
          */
         getGlobalProjectErrors(): readonly Diagnostic[] {
-            return filter(this.projectErrors, diagnostic => !diagnostic.file) || emptyArray;
+            return filter(this.projectErrors, diagnostic => !diagnostic.file) ?? emptyArray;
         }
 
         /**
          * Get all the project errors
          */
         getAllProjectErrors(): readonly Diagnostic[] {
-            return this.projectErrors || emptyArray;
+            return this.projectErrors ?? emptyArray;
         }
 
         setProjectErrors(projectErrors: Diagnostic[] | undefined) {
@@ -1038,14 +1038,14 @@ namespace ts.server {
         }
 
         registerFileUpdate(fileName: string) {
-            (this.updatedFileNames || (this.updatedFileNames = new Set<string>())).add(fileName);
+            (this.updatedFileNames ??= new Set<string>()).add(fileName);
         }
 
         /*@internal*/
         markFileAsDirty(changedFile: Path) {
             this.markAsDirty();
             if (this.exportMapCache && !this.exportMapCache.isEmpty()) {
-                (this.changedFilesForExportMapCache ||= new Set()).add(changedFile);
+                (this.changedFilesForExportMapCache ??= new Set()).add(changedFile);
             }
         }
 
@@ -1103,7 +1103,7 @@ namespace ts.server {
             this.hasAddedorRemovedFiles = false;
             this.hasAddedOrRemovedSymlinks = false;
 
-            const changedFiles: readonly Path[] = this.resolutionCache.finishRecordingFilesWithChangedResolutions() || emptyArray;
+            const changedFiles: readonly Path[] = this.resolutionCache.finishRecordingFilesWithChangedResolutions() ?? emptyArray;
 
             for (const file of changedFiles) {
                 // delete cached information for changed files
@@ -1211,7 +1211,7 @@ namespace ts.server {
                 // Update the missing file paths watcher
                 updateMissingFilePathsWatch(
                     this.program,
-                    this.missingFilesMap || (this.missingFilesMap = new Map()),
+                    this.missingFilesMap ??= new Map(),
                     // Watch the missing files
                     missingFilePath => this.addMissingFileWatcher(missingFilePath)
                 );
@@ -1282,7 +1282,7 @@ namespace ts.server {
                 this.moduleSpecifierCache.clear();
             }
 
-            const oldExternalFiles = this.externalFiles || emptyArray as SortedReadonlyArray<string>;
+            const oldExternalFiles = this.externalFiles ?? emptyArray as SortedReadonlyArray<string>;
             this.externalFiles = this.getExternalFiles();
             enumerateInsertsAndDeletes<string, string>(this.externalFiles, oldExternalFiles, getStringComparer(!this.useCaseSensitiveFileNames()),
                 // Ensure a ScriptInfo is created for new external files. This is performed indirectly
@@ -1484,7 +1484,7 @@ namespace ts.server {
         }
 
         getTypeAcquisition() {
-            return this.typeAcquisition || {};
+            return this.typeAcquisition ?? {};
         }
 
         /* @internal */
@@ -1774,7 +1774,7 @@ namespace ts.server {
 
         /*@internal*/
         getCachedExportInfoMap() {
-            return this.exportMapCache ||= createCacheableExportInfoMap(this);
+            return this.exportMapCache ??= createCacheableExportInfoMap(this);
         }
 
         /*@internal*/
@@ -1804,7 +1804,7 @@ namespace ts.server {
                 return {
                     fileExists: this.program.fileExists,
                     directoryExists: this.program.directoryExists,
-                    realpath: this.program.realpath || this.projectService.host.realpath?.bind(this.projectService.host),
+                    realpath: this.program.realpath ?? this.projectService.host.realpath?.bind(this.projectService.host),
                     getCurrentDirectory: this.getCurrentDirectory.bind(this),
                     readFile: this.projectService.host.readFile.bind(this.projectService.host),
                     getDirectories: this.projectService.host.getDirectories.bind(this.projectService.host),
@@ -1936,7 +1936,7 @@ namespace ts.server {
                     unresolvedImports = append(unresolvedImports, parsePackageName(name).packageName);
                 }
             });
-            return unresolvedImports || emptyArray;
+            return unresolvedImports ?? emptyArray;
         });
     }
 
@@ -1959,7 +1959,7 @@ namespace ts.server {
             if (!options && !this.getCompilationSettings()) {
                 return;
             }
-            const newOptions = cloneCompilerOptions(options || this.getCompilationSettings());
+            const newOptions = cloneCompilerOptions(options ?? this.getCompilationSettings());
             if (this._isJsInferredProject && typeof newOptions.maxNodeModuleJsDepth !== "number") {
                 newOptions.maxNodeModuleJsDepth = 2;
             }
@@ -2045,7 +2045,7 @@ namespace ts.server {
         }
 
         getTypeAcquisition(): TypeAcquisition {
-            return this.typeAcquisition || {
+            return this.typeAcquisition ?? {
                 enable: allRootFilesAreJsOrDts(this),
                 include: ts.emptyArray,
                 exclude: ts.emptyArray
@@ -2168,11 +2168,11 @@ namespace ts.server {
             if (rootNames?.length) {
                 hostProject.log(`AutoImportProviderProject: found ${rootNames.length} root files in ${dependenciesAdded} dependencies in ${timestamp() - start} ms`);
             }
-            return rootNames || ts.emptyArray;
+            return rootNames ?? ts.emptyArray;
 
             function addDependency(dependency: string) {
                 if (!startsWith(dependency, "@types/")) {
-                    (dependencyNames || (dependencyNames = new Set())).add(dependency);
+                    (dependencyNames ??= new Set()).add(dependency);
                 }
             }
 
@@ -2304,7 +2304,7 @@ namespace ts.server {
         }
 
         getScriptFileNames() {
-            return this.rootFileNames || ts.emptyArray;
+            return this.rootFileNames ?? ts.emptyArray;
         }
 
         getLanguageService(): never {
@@ -2503,7 +2503,7 @@ namespace ts.server {
         /*@internal*/
         setPotentialProjectReference(canonicalConfigPath: NormalizedPath) {
             Debug.assert(this.isInitialLoadPending());
-            (this.potentialProjectReferences || (this.potentialProjectReferences = new Set())).add(canonicalConfigPath);
+            (this.potentialProjectReferences ??= new Set()).add(canonicalConfigPath);
         }
 
         /*@internal*/
@@ -2552,14 +2552,14 @@ namespace ts.server {
          * Get the errors that dont have any file name associated
          */
         getGlobalProjectErrors(): readonly Diagnostic[] {
-            return filter(this.projectErrors, diagnostic => !diagnostic.file) || emptyArray;
+            return filter(this.projectErrors, diagnostic => !diagnostic.file) ?? emptyArray;
         }
 
         /**
          * Get all the project errors
          */
         getAllProjectErrors(): readonly Diagnostic[] {
-            return this.projectErrors || emptyArray;
+            return this.projectErrors ?? emptyArray;
         }
 
         setProjectErrors(projectErrors: Diagnostic[]) {
@@ -2648,7 +2648,7 @@ namespace ts.server {
         }
 
         getEffectiveTypeRoots() {
-            return getEffectiveTypeRoots(this.getCompilationSettings(), this.directoryStructureHost) || [];
+            return getEffectiveTypeRoots(this.getCompilationSettings(), this.directoryStructureHost) ?? [];
         }
 
         /*@internal*/

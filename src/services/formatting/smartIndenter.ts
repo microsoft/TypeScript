@@ -35,7 +35,7 @@ namespace ts.formatting {
             const precedingToken = findPrecedingToken(position, sourceFile, /*startNode*/ undefined, /*excludeJsdoc*/ true);
 
             // eslint-disable-next-line no-null/no-null
-            const enclosingCommentRange = getRangeOfEnclosingComment(sourceFile, position, precedingToken || null);
+            const enclosingCommentRange = getRangeOfEnclosingComment(sourceFile, position, precedingToken ?? null);
             if (enclosingCommentRange && enclosingCommentRange.kind === SyntaxKind.MultiLineCommentTrivia) {
                 return getCommentIndent(sourceFile, position, options, enclosingCommentRange);
             }
@@ -455,7 +455,7 @@ namespace ts.formatting {
                 case SyntaxKind.Constructor:
                 case SyntaxKind.ConstructorType:
                 case SyntaxKind.ConstructSignature:
-                    return getList((node as SignatureDeclaration).typeParameters) || getList((node as SignatureDeclaration).parameters);
+                    return getList((node as SignatureDeclaration).typeParameters) ?? getList((node as SignatureDeclaration).parameters);
                 case SyntaxKind.GetAccessor:
                     return getList((node as GetAccessorDeclaration).parameters);
                 case SyntaxKind.ClassDeclaration:
@@ -466,7 +466,7 @@ namespace ts.formatting {
                     return getList((node as ClassDeclaration | ClassExpression | InterfaceDeclaration | TypeAliasDeclaration | JSDocTemplateTag).typeParameters);
                 case SyntaxKind.NewExpression:
                 case SyntaxKind.CallExpression:
-                    return getList((node as CallExpression).typeArguments) || getList((node as CallExpression).arguments);
+                    return getList((node as CallExpression).typeArguments) ?? getList((node as CallExpression).arguments);
                 case SyntaxKind.VariableDeclarationList:
                     return getList((node as VariableDeclarationList).declarations);
                 case SyntaxKind.NamedImports:

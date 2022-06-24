@@ -89,7 +89,7 @@ namespace ts.refactor {
                 const node = exportNode as FunctionDeclaration | ClassDeclaration | InterfaceDeclaration | EnumDeclaration | TypeAliasDeclaration | NamespaceDeclaration;
                 if (!node.name) return undefined;
                 return noSymbolError(node.name)
-                    || { exportNode: node, exportName: node.name, wasDefault, exportingModuleSymbol };
+                    ?? { exportNode: node, exportName: node.name, wasDefault, exportingModuleSymbol };
             }
             case SyntaxKind.VariableStatement: {
                 const vs = exportNode as VariableStatement;
@@ -101,13 +101,13 @@ namespace ts.refactor {
                 if (!decl.initializer) return undefined;
                 Debug.assert(!wasDefault, "Can't have a default flag here");
                 return noSymbolError(decl.name)
-                    || { exportNode: vs, exportName: decl.name as Identifier, wasDefault, exportingModuleSymbol };
+                    ?? { exportNode: vs, exportName: decl.name as Identifier, wasDefault, exportingModuleSymbol };
             }
             case SyntaxKind.ExportAssignment: {
                 const node = exportNode as ExportAssignment;
                 if (node.isExportEquals) return undefined;
                 return noSymbolError(node.expression)
-                    || { exportNode: node, exportName: node.expression as Identifier, wasDefault, exportingModuleSymbol };
+                    ?? { exportNode: node, exportName: node.expression as Identifier, wasDefault, exportingModuleSymbol };
             }
             default:
                 return undefined;

@@ -6620,9 +6620,9 @@ namespace ts {
         setEachParent(prependChildren, node);
         node.hasNoDefaultLib = hasNoDefaultLib;
         node.helpers = helpers;
-        node.referencedFiles = referencedFiles || emptyArray;
+        node.referencedFiles = referencedFiles ?? emptyArray;
         node.typeReferenceDirectives = typeReferenceDirectives;
-        node.libReferenceDirectives = libReferenceDirectives || emptyArray;
+        node.libReferenceDirectives = libReferenceDirectives ?? emptyArray;
         return node;
     }
 

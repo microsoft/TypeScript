@@ -83,7 +83,7 @@ namespace project {
         }
 
         public get parseConfigHost(): fakes.ParseConfigHost {
-            return this._projectParseConfigHost || (this._projectParseConfigHost = new ProjectParseConfigHost(this.sys, this._testCase));
+            return this._projectParseConfigHost ??= new ProjectParseConfigHost(this.sys, this._testCase);
         }
 
         public getDefaultLibFileName(_options: ts.CompilerOptions) {

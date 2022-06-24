@@ -293,7 +293,7 @@ namespace ts {
         forEachAncestorDirectory(normalizePath(currentDirectory), directory => {
             const atTypes = combinePaths(directory, nodeModulesAtTypes);
             if (host.directoryExists!(atTypes)) {
-                (typeRoots || (typeRoots = [])).push(atTypes);
+                (typeRoots ??= []).push(atTypes);
             }
             return undefined;
         });
@@ -665,7 +665,7 @@ namespace ts {
             return cache?.get(toPath(packageJsonPath, currentDirectory, getCanonicalFileName));
         }
         function setPackageJsonInfo(packageJsonPath: string, info: PackageJsonInfo | boolean) {
-            (cache ||= new Map()).set(toPath(packageJsonPath, currentDirectory, getCanonicalFileName), info);
+            (cache ??= new Map()).set(toPath(packageJsonPath, currentDirectory, getCanonicalFileName), info);
         }
         function clear() {
             cache = undefined;
@@ -808,8 +808,8 @@ namespace ts {
         directoryToModuleNameMap?: CacheWithRedirects<ModeAwareCache<ResolvedModuleWithFailedLookupLocations>>,
         moduleNameToDirectoryMap?: CacheWithRedirects<PerModuleNameCache>,
     ): ModuleResolutionCache {
-        const preDirectoryResolutionCache = createPerDirectoryResolutionCache(currentDirectory, getCanonicalFileName, directoryToModuleNameMap ||= createCacheWithRedirects(options));
-        moduleNameToDirectoryMap ||= createCacheWithRedirects(options);
+        const preDirectoryResolutionCache = createPerDirectoryResolutionCache(currentDirectory, getCanonicalFileName, directoryToModuleNameMap ??= createCacheWithRedirects(options));
+        moduleNameToDirectoryMap ??= createCacheWithRedirects(options);
         const packageJsonInfoCache = createPackageJsonInfoCache(currentDirectory, getCanonicalFileName);
 
         return {
@@ -930,8 +930,8 @@ namespace ts {
         packageJsonInfoCache?: PackageJsonInfoCache | undefined,
         directoryToModuleNameMap?: CacheWithRedirects<ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>>,
     ): TypeReferenceDirectiveResolutionCache {
-        const preDirectoryResolutionCache = createPerDirectoryResolutionCache(currentDirectory, getCanonicalFileName, directoryToModuleNameMap ||= createCacheWithRedirects(options));
-        packageJsonInfoCache ||= createPackageJsonInfoCache(currentDirectory, getCanonicalFileName);
+        const preDirectoryResolutionCache = createPerDirectoryResolutionCache(currentDirectory, getCanonicalFileName, directoryToModuleNameMap ??= createCacheWithRedirects(options));
+        packageJsonInfoCache ??= createPackageJsonInfoCache(currentDirectory, getCanonicalFileName);
 
         return {
             ...packageJsonInfoCache,
@@ -1139,7 +1139,7 @@ namespace ts {
                 trace(state.host, Diagnostics.paths_option_is_specified_looking_for_a_pattern_to_match_module_name_0, moduleName);
             }
             const baseDirectory = getPathsBasePath(state.compilerOptions, state.host)!; // Always defined when 'paths' is defined
-            const pathPatterns = configFile?.configFileSpecs ? configFile.configFileSpecs.pathPatterns ||= tryParsePatterns(paths) : undefined;
+            const pathPatterns = configFile?.configFileSpecs ? configFile.configFileSpecs.pathPatterns ??= tryParsePatterns(paths) : undefined;
             return tryLoadModuleUsingPaths(extensions, moduleName, baseDirectory, paths, pathPatterns, loader, /*onlyRecordFailures*/ false, state);
         }
     }
@@ -1602,16 +1602,16 @@ namespace ts {
                     case Extension.Mjs:
                     case Extension.Mts:
                     case Extension.Dmts:
-                        return tryExtension(Extension.Mts) || (useDts ? tryExtension(Extension.Dmts) : undefined);
+                        return tryExtension(Extension.Mts) ?? (useDts ? tryExtension(Extension.Dmts) : undefined);
                     case Extension.Cjs:
                     case Extension.Cts:
                     case Extension.Dcts:
-                        return tryExtension(Extension.Cts) || (useDts ? tryExtension(Extension.Dcts) : undefined);
+                        return tryExtension(Extension.Cts) ?? (useDts ? tryExtension(Extension.Dcts) : undefined);
                     case Extension.Json:
                         candidate += Extension.Json;
                         return useDts ? tryExtension(Extension.Dts) : undefined;
                     default:
-                        return tryExtension(Extension.Ts) || tryExtension(Extension.Tsx) || (useDts ? tryExtension(Extension.Dts) : undefined);
+                        return tryExtension(Extension.Ts) ?? tryExtension(Extension.Tsx) ?? (useDts ? tryExtension(Extension.Dts) : undefined);
                 }
             case Extensions.JavaScript:
                 switch (originalExtension) {
@@ -1626,7 +1626,7 @@ namespace ts {
                     case Extension.Json:
                         return tryExtension(Extension.Json);
                     default:
-                        return tryExtension(Extension.Js) || tryExtension(Extension.Jsx);
+                        return tryExtension(Extension.Js) ?? tryExtension(Extension.Jsx);
                 }
             case Extensions.TSConfig:
             case Extensions.Json:
@@ -1729,7 +1729,7 @@ namespace ts {
             }
         }
 
-        return packageJsonInfo.resolvedEntrypoints = entrypoints || false;
+        return packageJsonInfo.resolvedEntrypoints = entrypoints ?? false;
     }
 
     function loadEntrypointsFromExportMap(
@@ -2447,7 +2447,7 @@ namespace ts {
                 return loadModuleFromExports(packageInfo, extensions, combinePaths(".", rest), state, cache, redirectedReference)?.value;
             }
             let pathAndExtension =
-                loadModuleFromFile(extensions, candidate, onlyRecordFailures, state) ||
+                loadModuleFromFile(extensions, candidate, onlyRecordFailures, state) ??
                 loadNodeModuleFromDirectoryWorker(
                     extensions,
                     candidate,
@@ -2490,7 +2490,7 @@ namespace ts {
     }
 
     function tryLoadModuleUsingPaths(extensions: Extensions, moduleName: string, baseDirectory: string, paths: MapLike<string[]>, pathPatterns: readonly (string | Pattern)[] | undefined, loader: ResolutionKindSpecificLoader, onlyRecordFailures: boolean, state: ModuleResolutionState): SearchResult<Resolved> {
-        pathPatterns ||= tryParsePatterns(paths);
+        pathPatterns ??= tryParsePatterns(paths);
         const matchedPattern = matchPatternOrExact(pathPatterns, moduleName);
         if (matchedPattern) {
             const matchedStar = isString(matchedPattern) ? undefined : matchedText(matchedPattern, moduleName);
@@ -2592,7 +2592,7 @@ namespace ts {
             reportDiagnostic: diag => void diagnostics.push(diag),
         };
 
-        const resolved = tryResolve(Extensions.TypeScript) || tryResolve(Extensions.JavaScript);
+        const resolved = tryResolve(Extensions.TypeScript) ?? tryResolve(Extensions.JavaScript);
         // No originalPath because classic resolution doesn't resolve realPath
         return createResolvedModuleWithFailedLookupLocations(
             resolved && resolved.value,

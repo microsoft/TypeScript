@@ -538,7 +538,7 @@ namespace ts.codefix {
                 cancellationToken.throwIfCancellationRequested();
                 calculateUsageOfNode(reference, usage);
             }
-            const calls = [...usage.constructs || [], ...usage.calls || []];
+            const calls = [...usage.constructs ?? [], ...usage.calls ?? []];
             return declaration.parameters.map((parameter, parameterIndex): ParameterInference => {
                 const types = [];
                 const isRest = isRestParameter(parameter);
@@ -577,7 +577,7 @@ namespace ts.codefix {
                 calculateUsageOfNode(reference, usage);
             }
 
-            return combineTypes(usage.candidateThisTypes || emptyArray);
+            return combineTypes(usage.candidateThisTypes ?? emptyArray);
         }
 
         function inferTypesFromReferencesSingle(references: readonly Identifier[]): Type[] {
@@ -804,10 +804,10 @@ namespace ts.codefix {
 
             calculateUsageOfNode(parent, call.return_);
             if (parent.kind === SyntaxKind.CallExpression) {
-                (usage.calls || (usage.calls = [])).push(call);
+                (usage.calls ??= []).push(call);
             }
             else {
-                (usage.constructs || (usage.constructs = [])).push(call);
+                (usage.constructs ??= []).push(call);
             }
         }
 
@@ -816,7 +816,7 @@ namespace ts.codefix {
             if (!usage.properties) {
                 usage.properties = new Map();
             }
-            const propertyUsage = usage.properties.get(name) || createEmptyUsage();
+            const propertyUsage = usage.properties.get(name) ?? createEmptyUsage();
             calculateUsageOfNode(parent, propertyUsage);
             usage.properties.set(name, propertyUsage);
         }
@@ -965,7 +965,7 @@ namespace ts.codefix {
                 types.push(inferStructuralType(usage));
             }
 
-            const candidateTypes = (usage.candidateTypes || []).map(t => checker.getBaseTypeOfLiteralType(t));
+            const candidateTypes = (usage.candidateTypes ?? []).map(t => checker.getBaseTypeOfLiteralType(t));
             const callsType = usage.calls?.length ? inferStructuralType(usage) : undefined;
             if (callsType && candidateTypes) {
                 types.push(checker.getUnionType([callsType, ...candidateTypes], UnionReduction.Subtype));
@@ -1090,7 +1090,7 @@ namespace ts.codefix {
                     genericParamType = elementType;
                 }
                 const targetType = (usageParam as SymbolLinks).type
-                    || (usageParam.valueDeclaration ? checker.getTypeOfSymbolAtLocation(usageParam, usageParam.valueDeclaration) : checker.getAnyType());
+                ?? (usageParam.valueDeclaration ? checker.getTypeOfSymbolAtLocation(usageParam, usageParam.valueDeclaration) : checker.getAnyType());
                 types.push(...inferTypeParameters(genericParamType, targetType, typeParameter));
             }
             const genericReturn = checker.getReturnTypeOfSignature(genericSig);
@@ -1120,13 +1120,13 @@ namespace ts.codefix {
 
         function addCandidateType(usage: Usage, type: Type | undefined) {
             if (type && !(type.flags & TypeFlags.Any) && !(type.flags & TypeFlags.Never)) {
-                (usage.candidateTypes || (usage.candidateTypes = [])).push(type);
+                (usage.candidateTypes ??= []).push(type);
             }
         }
 
         function addCandidateThisType(usage: Usage, type: Type | undefined) {
             if (type && !(type.flags & TypeFlags.Any) && !(type.flags & TypeFlags.Never)) {
-                (usage.candidateThisTypes || (usage.candidateThisTypes = [])).push(type);
+                (usage.candidateThisTypes ??= []).push(type);
             }
         }
     }

@@ -593,7 +593,7 @@ namespace ts.SymbolDisplay {
                 documentation = firstDefined(objectType.isUnion() ? objectType.types : [objectType], t => {
                     const prop = t.getProperty(name);
                     return prop ? prop.getDocumentationComment(typeChecker) : undefined;
-                }) || emptyArray;
+                }) ?? emptyArray;
             }
         }
 
@@ -642,7 +642,7 @@ namespace ts.SymbolDisplay {
             if (alias && symbolToDisplay === symbol) {
                 symbolToDisplay = alias;
             }
-            const fullSymbolDisplayParts = symbolToDisplayParts(typeChecker, symbolToDisplay, enclosingDeclaration || sourceFile, /*meaning*/ undefined,
+            const fullSymbolDisplayParts = symbolToDisplayParts(typeChecker, symbolToDisplay, enclosingDeclaration ?? sourceFile, /*meaning*/ undefined,
                 SymbolFormatFlags.WriteTypeParametersOrArguments | SymbolFormatFlags.UseOnlyExternalAliasing | SymbolFormatFlags.AllowAnyNodeKind);
             addRange(displayParts, fullSymbolDisplayParts);
 

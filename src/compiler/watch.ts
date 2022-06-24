@@ -231,14 +231,14 @@ namespace ts {
     export function explainIfFileIsRedirect(file: SourceFile, fileNameConvertor?: (fileName: string) => string): DiagnosticMessageChain[] | undefined {
         let result: DiagnosticMessageChain[] | undefined;
         if (file.path !== file.resolvedPath) {
-            (result ||= []).push(chainDiagnosticMessages(
+            (result ??= []).push(chainDiagnosticMessages(
                 /*details*/ undefined,
                 Diagnostics.File_is_output_of_project_reference_source_0,
                 toFileName(file.originalFileName, fileNameConvertor)
             ));
         }
         if (file.redirectInfo) {
-            (result ||= []).push(chainDiagnosticMessages(
+            (result ??= []).push(chainDiagnosticMessages(
                 /*details*/ undefined,
                 Diagnostics.File_redirects_to_file_0,
                 toFileName(file.redirectInfo.redirectTarget, fileNameConvertor)
@@ -490,13 +490,13 @@ namespace ts {
     export const returnNoopFileWatcher = () => noopFileWatcher;
 
     export function createWatchHost(system = sys, reportWatchStatus?: WatchStatusReporter): WatchHost {
-        const onWatchStatusChange = reportWatchStatus || createWatchStatusReporter(system);
+        const onWatchStatusChange = reportWatchStatus ?? createWatchStatusReporter(system);
         return {
             onWatchStatusChange,
-            watchFile: maybeBind(system, system.watchFile) || returnNoopFileWatcher,
-            watchDirectory: maybeBind(system, system.watchDirectory) || returnNoopFileWatcher,
-            setTimeout: maybeBind(system, system.setTimeout) || noop,
-            clearTimeout: maybeBind(system, system.clearTimeout) || noop
+            watchFile: maybeBind(system, system.watchFile) ?? returnNoopFileWatcher,
+            watchDirectory: maybeBind(system, system.watchDirectory) ?? returnNoopFileWatcher,
+            setTimeout: maybeBind(system, system.setTimeout) ?? noop,
+            clearTimeout: maybeBind(system, system.clearTimeout) ?? noop
         };
     }
 
@@ -591,7 +591,7 @@ namespace ts {
             directoryExists: maybeBind(directoryStructureHost, directoryStructureHost.directoryExists),
             getDirectories: maybeBind(directoryStructureHost, directoryStructureHost.getDirectories),
             realpath: maybeBind(host, host.realpath),
-            getEnvironmentVariable: maybeBind(host, host.getEnvironmentVariable) || (() => ""),
+            getEnvironmentVariable: maybeBind(host, host.getEnvironmentVariable) ?? (() => ""),
             createHash: maybeBind(host, host.createHash),
             readDirectory: maybeBind(host, host.readDirectory),
             disableUseFileVersionAsSignature: host.disableUseFileVersionAsSignature,
@@ -627,7 +627,7 @@ namespace ts {
 
     export function setGetSourceFileAsHashVersioned(compilerHost: CompilerHost, host: { createHash?(data: string): string; }) {
         const originalGetSourceFile = compilerHost.getSourceFile;
-        const computeHash = maybeBind(host, host.createHash) || generateDjb2Hash;
+        const computeHash = maybeBind(host, host.createHash) ?? generateDjb2Hash;
         compilerHost.getSourceFile = (...args) => {
             const result = originalGetSourceFile.call(compilerHost, ...args);
             if (result) {
@@ -659,7 +659,7 @@ namespace ts {
             createDirectory: path => system.createDirectory(path),
             writeFile: (path, data, writeByteOrderMark) => system.writeFile(path, data, writeByteOrderMark),
             createHash: maybeBind(system, system.createHash),
-            createProgram: createProgram || createEmitAndSemanticDiagnosticsBuilderProgram as any as CreateProgram<T>,
+            createProgram: createProgram ?? createEmitAndSemanticDiagnosticsBuilderProgram as any as CreateProgram<T>,
             disableUseFileVersionAsSignature: system.disableUseFileVersionAsSignature,
             storeFilesChangingSignatureDuringEmit: system.storeFilesChangingSignatureDuringEmit,
             now: maybeBind(system, system.now),
@@ -720,7 +720,7 @@ namespace ts {
         configFileName, optionsToExtend, watchOptionsToExtend, extraFileExtensions,
         system, createProgram, reportDiagnostic, reportWatchStatus
     }: CreateWatchCompilerHostOfConfigFileInput<T>): WatchCompilerHostOfConfigFile<T> {
-        const diagnosticReporter = reportDiagnostic || createDiagnosticReporter(system);
+        const diagnosticReporter = reportDiagnostic ?? createDiagnosticReporter(system);
         const host = createWatchCompilerHost(system, createProgram, diagnosticReporter, reportWatchStatus) as WatchCompilerHostOfConfigFile<T>;
         host.onUnRecoverableConfigFileDiagnostic = diagnostic => reportUnrecoverableDiagnostic(system, diagnosticReporter, diagnostic);
         host.configFileName = configFileName;
@@ -743,7 +743,7 @@ namespace ts {
         rootFiles, options, watchOptions, projectReferences,
         system, createProgram, reportDiagnostic, reportWatchStatus
     }: CreateWatchCompilerHostOfFilesAndCompilerOptionsInput<T>): WatchCompilerHostOfFilesAndCompilerOptions<T> {
-        const host = createWatchCompilerHost(system, createProgram, reportDiagnostic || createDiagnosticReporter(system), reportWatchStatus) as WatchCompilerHostOfFilesAndCompilerOptions<T>;
+        const host = createWatchCompilerHost(system, createProgram, reportDiagnostic ?? createDiagnosticReporter(system), reportWatchStatus) as WatchCompilerHostOfFilesAndCompilerOptions<T>;
         host.rootFiles = rootFiles;
         host.options = options;
         host.watchOptions = watchOptions;
@@ -763,12 +763,12 @@ namespace ts {
         system?: System;
     }
     export function performIncrementalCompilation(input: IncrementalCompilationOptions) {
-        const system = input.system || sys;
-        const host = input.host || (input.host = createIncrementalCompilerHost(input.options, system));
+        const system = input.system ?? sys;
+        const host = input.host ?? (input.host = createIncrementalCompilerHost(input.options, system));
         const builderProgram = createIncrementalProgram(input);
         const exitStatus = emitFilesAndReportErrorsAndGetExitStatus(
             builderProgram,
-            input.reportDiagnostic || createDiagnosticReporter(system),
+            input.reportDiagnostic ?? createDiagnosticReporter(system),
             s => host.trace && host.trace(s),
             input.reportErrorSummary || input.options.pretty ? (errorCount, filesInError) => system.write(getErrorSummaryText(errorCount, filesInError, system.newLine, host)) : undefined
         );

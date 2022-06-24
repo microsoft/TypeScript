@@ -161,7 +161,7 @@ namespace ts {
             context.requestEmitHelper(asyncGeneratorHelper);
 
             // Mark this node as originally an async function
-            (generatorFunc.emitNode || (generatorFunc.emitNode = {} as EmitNode)).flags |= EmitFlags.AsyncFunctionBody | EmitFlags.ReuseTempVariableScope;
+            (generatorFunc.emitNode ??= {} as EmitNode).flags |= EmitFlags.AsyncFunctionBody | EmitFlags.ReuseTempVariableScope;
 
             return factory.createCallExpression(
                 getUnscopedHelperName("__asyncGenerator"),
@@ -253,7 +253,7 @@ namespace ts {
             );
 
             // Mark this node as originally an async function
-            (generatorFunc.emitNode || (generatorFunc.emitNode = {} as EmitNode)).flags |= EmitFlags.AsyncFunctionBody | EmitFlags.ReuseTempVariableScope;
+            (generatorFunc.emitNode ??= {} as EmitNode).flags |= EmitFlags.AsyncFunctionBody | EmitFlags.ReuseTempVariableScope;
 
             return factory.createCallExpression(
                 getUnscopedHelperName("__awaiter"),
@@ -997,7 +997,7 @@ namespace ts {
     let allUnscopedEmitHelpers: ReadonlyESMap<string, UnscopedEmitHelper> | undefined;
 
     export function getAllUnscopedEmitHelpers() {
-        return allUnscopedEmitHelpers || (allUnscopedEmitHelpers = arrayToMap([
+        return allUnscopedEmitHelpers ??= arrayToMap([
             decorateHelper,
             metadataHelper,
             paramHelper,
@@ -1022,7 +1022,7 @@ namespace ts {
             classPrivateFieldInHelper,
             createBindingHelper,
             setModuleDefaultHelper
-        ], helper => helper.name));
+        ], helper => helper.name);
     }
 
     export const asyncSuperHelper: EmitHelper = {

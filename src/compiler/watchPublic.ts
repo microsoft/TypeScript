@@ -48,8 +48,8 @@ namespace ts {
     export function createIncrementalProgram<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>({
         rootNames, options, configFileParsingDiagnostics, projectReferences, host, createProgram
     }: IncrementalProgramOptions<T>): T {
-        host = host || createIncrementalCompilerHost(options);
-        createProgram = createProgram || createEmitAndSemanticDiagnosticsBuilderProgram as any as CreateProgram<T>;
+        host ??= createIncrementalCompilerHost(options);
+        createProgram ??= createEmitAndSemanticDiagnosticsBuilderProgram as any as CreateProgram<T>;
         const oldProgram = readBuilderProgram(options, host) as any as T;
         return createProgram(rootNames, options, host, oldProgram, configFileParsingDiagnostics, projectReferences);
     }
@@ -301,7 +301,7 @@ namespace ts {
         let hasChangedConfigFileParsingErrors = false;
 
         const cachedDirectoryStructureHost = configFileName === undefined ? undefined : createCachedDirectoryStructureHost(host, currentDirectory, useCaseSensitiveFileNames);
-        const directoryStructureHost: DirectoryStructureHost = cachedDirectoryStructureHost || host;
+        const directoryStructureHost: DirectoryStructureHost = cachedDirectoryStructureHost ?? host;
         const parseConfigFileHost = parseConfigHostFromCompilerHostLike(host, directoryStructureHost);
 
         // From tsc we want to get already parsed result and hence check for rootFileNames
@@ -609,7 +609,7 @@ namespace ts {
             if (hostSourceFileInfo !== undefined) {
                 // record the missing file paths so they can be removed later if watchers arent tracking them
                 if (isFileMissingOnHost(hostSourceFileInfo)) {
-                    (missingFilePathsRequestedForRelease || (missingFilePathsRequestedForRelease = [])).push(oldSourceFile.path);
+                    (missingFilePathsRequestedForRelease ??= []).push(oldSourceFile.path);
                 }
                 else if ((hostSourceFileInfo as FilePresentOnHost).sourceFile === oldSourceFile) {
                     if (hostSourceFileInfo.fileWatcher) {
@@ -737,7 +737,7 @@ namespace ts {
                 configFileName,
                 optionsToExtendForConfigFile,
                 parseConfigFileHost,
-                extendedConfigCache ||= new Map(),
+                extendedConfigCache ??= new Map(),
                 watchOptionsToExtend,
                 extraFileExtensions
             )!); // TODO: GH#18217
@@ -783,7 +783,7 @@ namespace ts {
                 config.reloadLevel = undefined;
             }
             else {
-                (parsedConfigs ||= new Map()).set(configPath, config = { parsedCommandLine });
+                (parsedConfigs ??= new Map()).set(configPath, config = { parsedCommandLine });
             }
             watchReferencedProject(configFileName, configPath, config);
             return parsedCommandLine;
@@ -797,7 +797,7 @@ namespace ts {
                 configFileName,
                 /*optionsToExtend*/ undefined,
                 parseConfigFileHost,
-                extendedConfigCache ||= new Map(),
+                extendedConfigCache ??= new Map(),
                 watchOptionsToExtend
             );
             parseConfigFileHost.onUnRecoverableConfigFileDiagnostic = onUnRecoverableConfigFileDiagnostic;
@@ -961,7 +961,7 @@ namespace ts {
 
         function watchReferencedProject(configFileName: string, configPath: Path, commandLine: ParsedConfig) {
             // Watch file
-            commandLine.watcher ||= watchFile(
+            commandLine.watcher ??= watchFile(
                 configFileName,
                 (_fileName, eventKind) => {
                     updateCachedSystemWithFile(configFileName, configPath, eventKind);
@@ -971,13 +971,13 @@ namespace ts {
                     scheduleProgramUpdate();
                 },
                 PollingInterval.High,
-                commandLine.parsedCommandLine?.watchOptions || watchOptions,
+                commandLine.parsedCommandLine?.watchOptions ?? watchOptions,
                 WatchType.ConfigFileOfReferencedProject
             );
             // Watch Wild card
             if (commandLine.parsedCommandLine?.wildcardDirectories) {
                 updateWatchingWildcardDirectories(
-                    commandLine.watchedDirectories ||= new Map(),
+                    commandLine.watchedDirectories ??= new Map(),
                     new Map(getEntries(commandLine.parsedCommandLine?.wildcardDirectories)),
                     (directory, flags) => watchDirectory(
                         directory,
@@ -1013,7 +1013,7 @@ namespace ts {
                             }
                         },
                         flags,
-                        commandLine.parsedCommandLine?.watchOptions || watchOptions,
+                        commandLine.parsedCommandLine?.watchOptions ?? watchOptions,
                         WatchType.WildcardDirectoryOfReferencedProject
                     )
                 );
@@ -1026,7 +1026,7 @@ namespace ts {
             updateExtendedConfigFilesWatches(
                 configPath,
                 commandLine.parsedCommandLine?.options,
-                commandLine.parsedCommandLine?.watchOptions || watchOptions,
+                commandLine.parsedCommandLine?.watchOptions ?? watchOptions,
                 WatchType.ExtendedConfigOfReferencedProject
             );
         }

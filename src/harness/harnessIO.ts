@@ -1083,10 +1083,10 @@ namespace Harness {
                 return option.type;
             }
             if (option.type === "boolean") {
-                return booleanVaryByStarSettingValues || (booleanVaryByStarSettingValues = new ts.Map(ts.getEntries({
+                return booleanVaryByStarSettingValues ??= new ts.Map(ts.getEntries({
                     true: 1,
                     false: 0
-                })));
+                }));
             }
         }
     }
@@ -1443,7 +1443,7 @@ namespace Harness {
             }
 
             const referenceDir = referencePath(relativeFileBase, opts && opts.Baselinefolder, opts && opts.Subfolder);
-            let existing = IO.readDirectory(referenceDir, referencedExtensions || [extension]);
+            let existing = IO.readDirectory(referenceDir, referencedExtensions ?? [extension]);
             if (extension === ".ts" || referencedExtensions && referencedExtensions.indexOf(".ts") > -1 && referencedExtensions.indexOf(".d.ts") === -1) {
                 // special-case and filter .d.ts out of .ts results
                 existing = existing.filter(f => !ts.endsWith(f, ".d.ts"));

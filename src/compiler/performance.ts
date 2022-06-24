@@ -118,7 +118,7 @@ namespace ts.performance {
     export function enable(system: System = sys) {
         if (!enabled) {
             enabled = true;
-            perfHooks ||= tryGetNativePerformanceHooks();
+            perfHooks ??= tryGetNativePerformanceHooks();
             if (perfHooks) {
                 timeorigin = perfHooks.performance.timeOrigin;
                 // NodeJS's Web Performance API is currently slower than expected, but we'd still like

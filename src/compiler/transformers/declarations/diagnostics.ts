@@ -306,7 +306,7 @@ namespace ts {
 
             return {
                 diagnosticMessage,
-                errorNode: (node as NamedDeclaration).name || node
+                errorNode: (node as NamedDeclaration).name ?? node
             };
         }
 

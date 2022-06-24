@@ -139,7 +139,7 @@ namespace ts.codefix {
             changeTracker.addJSDocTags(sourceFile, classElement, [factory.createJSDocOverrideTag(factory.createIdentifier("override"))]);
             return;
         }
-        const modifiers = classElement.modifiers || emptyArray;
+        const modifiers = classElement.modifiers ?? emptyArray;
         const staticModifier = find(modifiers, isStaticModifier);
         const abstractModifier = find(modifiers, isAbstractModifier);
         const accessibilityModifier = find(modifiers, m => isAccessibilityModifier(m.kind));

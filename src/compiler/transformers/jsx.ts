@@ -225,7 +225,7 @@ namespace ts {
                 tagName,
                 objectProperties,
                 keyAttr,
-                children || emptyArray,
+                children ?? emptyArray,
                 isChild,
                 location
             );
@@ -322,7 +322,7 @@ namespace ts {
             }
             return visitJsxOpeningLikeElementOrFragmentJSX(
                 getImplicitJsxFragmentReference(),
-                childrenProps || factory.createObjectLiteralExpression([]),
+                childrenProps ?? factory.createObjectLiteralExpression([]),
                 /*keyAttr*/ undefined,
                 children,
                 isChild,
@@ -387,7 +387,7 @@ namespace ts {
                 expressions.push(factory.createObjectLiteralExpression([children]));
             }
 
-            return singleOrUndefined(expressions) || emitHelpers().createAssignHelper(expressions);
+            return singleOrUndefined(expressions) ?? emitHelpers().createAssignHelper(expressions);
         }
 
         function transformJsxSpreadAttributeToExpression(node: JsxSpreadAttribute) {

@@ -1261,7 +1261,7 @@ namespace ts {
     export function findPrecedingToken(position: number, sourceFile: SourceFileLike, startNode: Node, excludeJsdoc?: boolean): Node | undefined;
     export function findPrecedingToken(position: number, sourceFile: SourceFile, startNode?: Node, excludeJsdoc?: boolean): Node | undefined;
     export function findPrecedingToken(position: number, sourceFile: SourceFileLike, startNode?: Node, excludeJsdoc?: boolean): Node | undefined {
-        const result = find((startNode || sourceFile) as Node);
+        const result = find((startNode ?? sourceFile) as Node);
         Debug.assert(!(result && isWhiteSpaceOnlyJsxText(result)));
         return result;
 
@@ -1793,7 +1793,7 @@ namespace ts {
     }
 
     export function createTextSpanFromNode(node: Node, sourceFile?: SourceFile, endNode?: Node): TextSpan {
-        return createTextSpanFromBounds(node.getStart(sourceFile), (endNode || node).getEnd());
+        return createTextSpanFromBounds(node.getStart(sourceFile), (endNode ?? node).getEnd());
     }
 
     export function createTextSpanFromStringLiteralLikeContent(node: StringLiteralLike) {
@@ -1883,7 +1883,7 @@ namespace ts {
     }
 
     export function skipConstraint(type: Type): Type {
-        return type.isTypeParameter() ? type.getConstraint() || type : type;
+        return type.isTypeParameter() ? type.getConstraint() ?? type : type;
     }
 
     export function getNameFromPropertyName(name: PropertyName): string | undefined {
@@ -1911,7 +1911,7 @@ namespace ts {
             getCurrentDirectory: () => host.getCurrentDirectory(),
             readFile: maybeBind(host, host.readFile),
             useCaseSensitiveFileNames: maybeBind(host, host.useCaseSensitiveFileNames),
-            getSymlinkCache: maybeBind(host, host.getSymlinkCache) || program.getSymlinkCache,
+            getSymlinkCache: maybeBind(host, host.getSymlinkCache) ?? program.getSymlinkCache,
             getModuleSpecifierCache: maybeBind(host, host.getModuleSpecifierCache),
             getPackageJsonInfoCache: () => program.getModuleResolutionCache()?.getPackageJsonInfoCache(),
             getGlobalTypingsCacheLocation: maybeBind(host, host.getGlobalTypingsCacheLocation),
@@ -2369,7 +2369,7 @@ namespace ts {
             const suffix = findLinkNameEnd(link.text);
             const name = getTextOfNode(link.name) + link.text.slice(0, suffix);
             const text = skipSeparatorFromLinkText(link.text.slice(suffix));
-            const decl = symbol?.valueDeclaration || symbol?.declarations?.[0];
+            const decl = symbol?.valueDeclaration ?? symbol?.declarations?.[0];
             if (decl) {
                 parts.push(linkNamePart(name, decl));
                 if (text) parts.push(linkTextPart(text));

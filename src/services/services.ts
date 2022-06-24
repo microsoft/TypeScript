@@ -76,7 +76,7 @@ namespace ts {
 
         public getFullText(sourceFile?: SourceFile): string {
             this.assertHasRealPosition();
-            return (sourceFile || this.getSourceFile()).text.substring(this.pos, this.end);
+            return (sourceFile ?? this.getSourceFile()).text.substring(this.pos, this.end);
         }
 
         public getText(sourceFile?: SourceFile): string {
@@ -97,7 +97,7 @@ namespace ts {
 
         public getChildren(sourceFile?: SourceFileLike): Node[] {
             this.assertHasRealPosition("Node without a real position cannot be scanned and thus has no token nodes - use forEachChild and collect the result if that's fine");
-            return this._children || (this._children = createChildren(this, sourceFile));
+            return this._children ??= createChildren(this, sourceFile);
         }
 
         public getFirstToken(sourceFile?: SourceFileLike): Node | undefined {
@@ -145,7 +145,7 @@ namespace ts {
             return children;
         }
 
-        scanner.setText((sourceFile || node.getSourceFile()).text);
+        scanner.setText((sourceFile ?? node.getSourceFile()).text);
         let pos = node.pos;
         const processNode = (child: Node) => {
             addSyntheticNodes(children, pos, child.pos, node);
@@ -250,7 +250,7 @@ namespace ts {
         }
 
         public getFullText(sourceFile?: SourceFile): string {
-            return (sourceFile || this.getSourceFile()).text.substring(this.pos, this.end);
+            return (sourceFile ?? this.getSourceFile()).text.substring(this.pos, this.end);
         }
 
         public getText(sourceFile?: SourceFile): string {
@@ -269,7 +269,7 @@ namespace ts {
         }
 
         public getChildren(): Node[] {
-            return this.kind === SyntaxKind.EndOfFileToken ? (this as EndOfFileToken).jsDoc || emptyArray : emptyArray;
+            return this.kind === SyntaxKind.EndOfFileToken ? (this as EndOfFileToken).jsDoc ?? emptyArray : emptyArray;
         }
 
         public getFirstToken(): Node | undefined {
@@ -578,11 +578,11 @@ namespace ts {
         }
 
         getDocumentationComment(): SymbolDisplayPart[] {
-            return this.documentationComment || (this.documentationComment = getDocumentationComment(singleElementArray(this.declaration), this.checker));
+            return this.documentationComment ??= getDocumentationComment(singleElementArray(this.declaration), this.checker);
         }
 
         getJsDocTags(): JSDocTagInfo[] {
-            return this.jsDocTags || (this.jsDocTags = getJsDocTagsOfDeclarations(singleElementArray(this.declaration), this.checker));
+            return this.jsDocTags ??= getJsDocTagsOfDeclarations(singleElementArray(this.declaration), this.checker);
         }
     }
 
@@ -1007,7 +1007,7 @@ namespace ts {
                 const options: CreateSourceFileOptions = {
                     languageVersion: ScriptTarget.Latest,
                     impliedNodeFormat: getImpliedNodeFormatForFile(
-                        toPath(fileName, this.host.getCurrentDirectory(), this.host.getCompilerHost?.()?.getCanonicalFileName || hostGetCanonicalFileName(this.host)),
+                        toPath(fileName, this.host.getCurrentDirectory(), this.host.getCompilerHost?.()?.getCanonicalFileName ?? hostGetCanonicalFileName(this.host)),
                         this.host.getCompilerHost?.()?.getModuleResolutionCache?.()?.getPackageJsonInfoCache(),
                         this.host,
                         this.host.getCompilationSettings()
@@ -1287,7 +1287,7 @@ namespace ts {
 
             // Get a fresh cache of the host information
             const newSettings = host.getCompilationSettings() || getDefaultCompilerOptions();
-            const hasInvalidatedResolution: HasInvalidatedResolution = host.hasInvalidatedResolution || returnFalse;
+            const hasInvalidatedResolution: HasInvalidatedResolution = host.hasInvalidatedResolution ?? returnFalse;
             const hasChangedAutomaticTypeDirectiveNames = maybeBind(host, host.hasChangedAutomaticTypeDirectiveNames);
             const projectReferences = host.getProjectReferences?.();
             let parsedCommandLines: ESMap<Path, ParsedCommandLine | false> | undefined;
@@ -1394,7 +1394,7 @@ namespace ts {
                 const result = host.getParsedCommandLine ?
                     host.getParsedCommandLine(fileName) :
                     getParsedCommandLineOfConfigFileUsingSourceFile(fileName);
-                (parsedCommandLines ||= new Map()).set(path, result || false);
+                (parsedCommandLines ??= new Map()).set(path, result ?? false);
                 return result;
             }
 
@@ -2539,7 +2539,7 @@ namespace ts {
 
         function getRenameInfo(fileName: string, position: number, preferences: UserPreferences | RenameInfoOptions | undefined): RenameInfo {
             synchronizeHostData();
-            return Rename.getRenameInfo(program, getValidSourceFile(fileName), position, preferences || {});
+            return Rename.getRenameInfo(program, getValidSourceFile(fileName), position, preferences ?? {});
         }
 
         function getRefactorContext(file: SourceFile, positionOrRange: number | TextRange, preferences: UserPreferences, formatOptions?: FormatCodeSettings, triggerReason?: RefactorTriggerReason, kind?: string): RefactorContext {

@@ -521,7 +521,7 @@ namespace ts.projectSystem {
                 const { session, getEvents, clearEvents } = createSessionWithDefaultEventHandler<protocol.ProjectsUpdatedInBackgroundEvent>(
                     host,
                     server.ProjectsUpdatedInBackgroundEvent,
-                    { noGetErrOnBackgroundUpdate, logger: logger || createHasErrorMessageLogger() }
+                    { noGetErrOnBackgroundUpdate, logger: logger ?? createHasErrorMessageLogger() }
                 );
 
                 return {

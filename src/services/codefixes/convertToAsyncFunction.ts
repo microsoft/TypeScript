@@ -257,7 +257,7 @@ namespace ts.codefix {
                 if (renameInfo && renameInfo.text !== (original.name || original.propertyName).getText()) {
                     return factory.createBindingElement(
                         original.dotDotDotToken,
-                        original.propertyName || original.name,
+                        original.propertyName ?? original.name,
                         renameInfo,
                         original.initializer);
                 }
@@ -273,7 +273,7 @@ namespace ts.codefix {
     }
 
     function getNewNameIfConflict(name: Identifier, originalNames: ReadonlyESMap<string, Symbol[]>): SynthIdentifier {
-        const numVarsSameName = (originalNames.get(name.text) || emptyArray).length;
+        const numVarsSameName = (originalNames.get(name.text) ?? emptyArray).length;
         const identifier = numVarsSameName === 0 ? name : factory.createIdentifier(name.text + "_" + numVarsSameName);
         return createSynthIdentifier(identifier);
     }
@@ -561,7 +561,7 @@ namespace ts.codefix {
                 const returnType = callSignatures[0].getReturnType();
                 const varDeclOrAssignment = createVariableOrAssignmentOrExpressionStatement(continuationArgName, factory.createAwaitExpression(synthCall), getExplicitPromisedTypeOfPromiseReturningCallExpression(parent, func, transformer.checker));
                 if (continuationArgName) {
-                    continuationArgName.types.push(transformer.checker.getAwaitedType(returnType) || returnType);
+                    continuationArgName.types.push(transformer.checker.getAwaitedType(returnType) ?? returnType);
                 }
                 return varDeclOrAssignment;
 
@@ -653,7 +653,7 @@ namespace ts.codefix {
                         if (!shouldReturn(parent, transformer)) {
                             const transformedStatement = createVariableOrAssignmentOrExpressionStatement(continuationArgName, possiblyAwaitedRightHandSide, /*typeAnnotation*/ undefined);
                             if (continuationArgName) {
-                                continuationArgName.types.push(transformer.checker.getAwaitedType(returnType) || returnType);
+                                continuationArgName.types.push(transformer.checker.getAwaitedType(returnType) ?? returnType);
                             }
                             return transformedStatement;
                         }
@@ -780,7 +780,7 @@ namespace ts.codefix {
             }
 
             const mapEntry = transformer.synthNamesMap.get(getSymbolId(symbol).toString());
-            return mapEntry || createSynthIdentifier(identifier, types);
+            return mapEntry ?? createSynthIdentifier(identifier, types);
         }
 
         function getSymbol(node: Node): Symbol | undefined {

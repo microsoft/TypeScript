@@ -16,7 +16,7 @@ namespace ts {
                 return [{ fileName: sourceFile.fileName, highlightSpans }];
             }
 
-            return getSemanticDocumentHighlights(position, node, program, cancellationToken, sourceFilesToSearch) || getSyntacticDocumentHighlights(node, sourceFile);
+            return getSemanticDocumentHighlights(position, node, program, cancellationToken, sourceFilesToSearch) ?? getSyntacticDocumentHighlights(node, sourceFile);
         }
 
         function getHighlightSpanForNode(node: Node, sourceFile: SourceFile): HighlightSpan {

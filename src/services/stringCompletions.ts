@@ -800,7 +800,7 @@ namespace ts.Completions.StringCompletions {
         // Check for typings specified in compiler options
         const seen = new Map<string, true>();
 
-        const typeRoots = tryAndIgnoreErrors(() => getEffectiveTypeRoots(options, host)) || emptyArray;
+        const typeRoots = tryAndIgnoreErrors(() => getEffectiveTypeRoots(options, host)) ?? emptyArray;
 
         for (const root of typeRoots) {
             getCompletionEntriesFromDirectories(root);

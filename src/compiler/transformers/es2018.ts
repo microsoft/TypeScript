@@ -498,7 +498,7 @@ namespace ts {
                 const element = node.elements[i];
                 const visited = visitNode(element, i < node.elements.length - 1 ? visitorWithUnusedExpressionResult : visitor, isExpression);
                 if (result || visited !== element) {
-                    result ||= node.elements.slice(0, i);
+                    result ??= node.elements.slice(0, i);
                     result.push(visited);
                 }
             }

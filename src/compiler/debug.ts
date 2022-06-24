@@ -114,7 +114,7 @@ namespace ts {
             debugger;
             const e = new Error(message ? `Debug Failure. ${message}` : "Debug Failure.");
             if ((Error as any).captureStackTrace) {
-                (Error as any).captureStackTrace(e, stackCrawlMark || fail);
+                (Error as any).captureStackTrace(e, stackCrawlMark ?? fail);
             }
             throw e;
         }
@@ -122,7 +122,7 @@ namespace ts {
         export function failBadSyntaxKind(node: Node, message?: string, stackCrawlMark?: AnyFunction): never {
             return fail(
                 `${message || "Unexpected node."}\r\nNode ${formatSyntaxKind(node.kind)} was unexpected.`,
-                stackCrawlMark || failBadSyntaxKind);
+                stackCrawlMark ?? failBadSyntaxKind);
         }
 
         export function assert(expression: unknown, message?: string, verboseDebugInfo?: string | (() => string), stackCrawlMark?: AnyFunction): asserts expression {
@@ -131,44 +131,44 @@ namespace ts {
                 if (verboseDebugInfo) {
                     message += "\r\nVerbose Debug Information: " + (typeof verboseDebugInfo === "string" ? verboseDebugInfo : verboseDebugInfo());
                 }
-                fail(message, stackCrawlMark || assert);
+                fail(message, stackCrawlMark ?? assert);
             }
         }
 
         export function assertEqual<T>(a: T, b: T, msg?: string, msg2?: string, stackCrawlMark?: AnyFunction): void {
             if (a !== b) {
                 const message = msg ? msg2 ? `${msg} ${msg2}` : msg : "";
-                fail(`Expected ${a} === ${b}. ${message}`, stackCrawlMark || assertEqual);
+                fail(`Expected ${a} === ${b}. ${message}`, stackCrawlMark ?? assertEqual);
             }
         }
 
         export function assertLessThan(a: number, b: number, msg?: string, stackCrawlMark?: AnyFunction): void {
             if (a >= b) {
-                fail(`Expected ${a} < ${b}. ${msg || ""}`, stackCrawlMark || assertLessThan);
+                fail(`Expected ${a} < ${b}. ${msg || ""}`, stackCrawlMark ?? assertLessThan);
             }
         }
 
         export function assertLessThanOrEqual(a: number, b: number, stackCrawlMark?: AnyFunction): void {
             if (a > b) {
-                fail(`Expected ${a} <= ${b}`, stackCrawlMark || assertLessThanOrEqual);
+                fail(`Expected ${a} <= ${b}`, stackCrawlMark ?? assertLessThanOrEqual);
             }
         }
 
         export function assertGreaterThanOrEqual(a: number, b: number, stackCrawlMark?: AnyFunction): void {
             if (a < b) {
-                fail(`Expected ${a} >= ${b}`, stackCrawlMark || assertGreaterThanOrEqual);
+                fail(`Expected ${a} >= ${b}`, stackCrawlMark ?? assertGreaterThanOrEqual);
             }
         }
 
         export function assertIsDefined<T>(value: T, message?: string, stackCrawlMark?: AnyFunction): asserts value is NonNullable<T> {
             // eslint-disable-next-line no-null/no-null
             if (value === undefined || value === null) {
-                fail(message, stackCrawlMark || assertIsDefined);
+                fail(message, stackCrawlMark ?? assertIsDefined);
             }
         }
 
         export function checkDefined<T>(value: T | null | undefined, message?: string, stackCrawlMark?: AnyFunction): T {
-            assertIsDefined(value, message, stackCrawlMark || checkDefined);
+            assertIsDefined(value, message, stackCrawlMark ?? checkDefined);
             return value;
         }
 
@@ -176,18 +176,18 @@ namespace ts {
         export function assertEachIsDefined<T>(value: readonly T[], message?: string, stackCrawlMark?: AnyFunction): asserts value is readonly NonNullable<T>[];
         export function assertEachIsDefined<T>(value: readonly T[], message?: string, stackCrawlMark?: AnyFunction) {
             for (const v of value) {
-                assertIsDefined(v, message, stackCrawlMark || assertEachIsDefined);
+                assertIsDefined(v, message, stackCrawlMark ?? assertEachIsDefined);
             }
         }
 
         export function checkEachDefined<T, A extends readonly T[]>(value: A, message?: string, stackCrawlMark?: AnyFunction): A {
-            assertEachIsDefined(value, message, stackCrawlMark || checkEachDefined);
+            assertEachIsDefined(value, message, stackCrawlMark ?? checkEachDefined);
             return value;
         }
 
         export function assertNever(member: never, message = "Illegal value:", stackCrawlMark?: AnyFunction): never {
             const detail = typeof member === "object" && hasProperty(member, "kind") && hasProperty(member, "pos") ? "SyntaxKind: " + formatSyntaxKind((member as Node).kind) : JSON.stringify(member);
-            return fail(`${message} ${detail}`, stackCrawlMark || assertNever);
+            return fail(`${message} ${detail}`, stackCrawlMark ?? assertNever);
         }
 
         export function assertEachNode<T extends Node, U extends T>(nodes: NodeArray<T>, test: (node: T) => node is U, message?: string, stackCrawlMark?: AnyFunction): asserts nodes is NodeArray<U>;
@@ -201,7 +201,7 @@ namespace ts {
                     test === undefined || every(nodes, test),
                     message || "Unexpected node.",
                     () => `Node array did not pass test '${getFunctionName(test)}'.`,
-                    stackCrawlMark || assertEachNode);
+                    stackCrawlMark ?? assertEachNode);
             }
         }
 
@@ -213,7 +213,7 @@ namespace ts {
                     node !== undefined && (test === undefined || test(node)),
                     message || "Unexpected node.",
                     () => `Node ${formatSyntaxKind(node?.kind)} did not pass test '${getFunctionName(test!)}'.`,
-                    stackCrawlMark || assertNode);
+                    stackCrawlMark ?? assertNode);
             }
         }
 
@@ -225,7 +225,7 @@ namespace ts {
                     node === undefined || test === undefined || !test(node),
                     message || "Unexpected node.",
                     () => `Node ${formatSyntaxKind(node!.kind)} should not have passed test '${getFunctionName(test!)}'.`,
-                    stackCrawlMark || assertNotNode);
+                    stackCrawlMark ?? assertNotNode);
             }
         }
 
@@ -238,7 +238,7 @@ namespace ts {
                     test === undefined || node === undefined || test(node),
                     message || "Unexpected node.",
                     () => `Node ${formatSyntaxKind(node?.kind)} did not pass test '${getFunctionName(test!)}'.`,
-                    stackCrawlMark || assertOptionalNode);
+                    stackCrawlMark ?? assertOptionalNode);
             }
         }
 
@@ -251,7 +251,7 @@ namespace ts {
                     kind === undefined || node === undefined || node.kind === kind,
                     message || "Unexpected node.",
                     () => `Node ${formatSyntaxKind(node?.kind)} was not a '${formatSyntaxKind(kind)}' token.`,
-                    stackCrawlMark || assertOptionalToken);
+                    stackCrawlMark ?? assertOptionalToken);
             }
         }
 
@@ -262,7 +262,7 @@ namespace ts {
                     node === undefined,
                     message || "Unexpected node.",
                     () => `Node ${formatSyntaxKind(node!.kind)} was unexpected'.`,
-                    stackCrawlMark || assertMissingNode);
+                    stackCrawlMark ?? assertMissingNode);
             }
         }
 

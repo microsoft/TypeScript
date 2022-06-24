@@ -53,7 +53,7 @@ namespace ts {
                     outDir: "bin",
                     ...sp.options
                 },
-                references: (sp.references || []).map(r => {
+                references: (sp.references ?? []).map(r => {
                     if (typeof r === "string") {
                         return { path: r };
                     }

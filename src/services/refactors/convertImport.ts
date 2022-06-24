@@ -193,7 +193,7 @@ namespace ts.refactor {
         const neededNamedImports: Set<ImportSpecifier> = new Set();
 
         for (const element of toConvert.elements) {
-            const propertyName = (element.propertyName || element.name).text;
+            const propertyName = (element.propertyName ?? element.name).text;
             FindAllReferences.Core.eachSymbolReferenceInFile(element.name, checker, sourceFile, id => {
                 const access = factory.createPropertyAccessExpression(factory.createIdentifier(namespaceImportName), propertyName);
                 if (isShorthandPropertyAssignment(id.parent)) {

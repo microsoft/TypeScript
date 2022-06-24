@@ -70,7 +70,7 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
             copyLeadingComments(expression!, returnStatement, file, SyntaxKind.MultiLineCommentTrivia, /* hasTrailingNewLine */ true);
         }
         else if (actionName === removeBracesAction.name && returnStatement) {
-            const actualExpression = expression || factory.createVoidZero();
+            const actualExpression = expression ?? factory.createVoidZero();
             body = needsParentheses(actualExpression) ? factory.createParenthesizedExpression(actualExpression) : actualExpression;
             copyTrailingAsLeadingComments(returnStatement, body, file, SyntaxKind.MultiLineCommentTrivia, /* hasTrailingNewLine */ false);
             copyLeadingComments(returnStatement, body, file, SyntaxKind.MultiLineCommentTrivia, /* hasTrailingNewLine */ false);

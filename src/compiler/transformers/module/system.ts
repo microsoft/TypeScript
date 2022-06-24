@@ -487,7 +487,7 @@ namespace ts {
                                                 factory.createStringLiteral(idText(e.name)),
                                                 factory.createElementAccessExpression(
                                                     parameterName,
-                                                    factory.createStringLiteral(idText(e.propertyName || e.name))
+                                                    factory.createStringLiteral(idText(e.propertyName ?? e.name))
                                                 )
                                             )
                                         );
@@ -1766,7 +1766,7 @@ namespace ts {
                                 factory.cloneNode(name),
                                 factory.createPropertyAccessExpression(
                                     factory.getGeneratedNameForNode(importDeclaration.parent?.parent?.parent || importDeclaration),
-                                    factory.cloneNode(importDeclaration.propertyName || importDeclaration.name)
+                                    factory.cloneNode(importDeclaration.propertyName ?? importDeclaration.name)
                                 ),
                             ),
                             /*location*/ node
@@ -1832,7 +1832,7 @@ namespace ts {
                         return setTextRange(
                             factory.createPropertyAccessExpression(
                                 factory.getGeneratedNameForNode(importDeclaration.parent?.parent?.parent || importDeclaration),
-                                factory.cloneNode(importDeclaration.propertyName || importDeclaration.name)
+                                factory.cloneNode(importDeclaration.propertyName ?? importDeclaration.name)
                             ),
                             /*location*/ node
                         );
@@ -1893,7 +1893,7 @@ namespace ts {
             let exportedNames: Identifier[] | undefined;
             if (!isGeneratedIdentifier(name)) {
                 const valueDeclaration = resolver.getReferencedImportDeclaration(name)
-                    || resolver.getReferencedValueDeclaration(name);
+                    ?? resolver.getReferencedValueDeclaration(name);
 
                 if (valueDeclaration) {
                     const exportContainer = resolver.getReferencedExportContainer(name, /*prefixLocals*/ false);

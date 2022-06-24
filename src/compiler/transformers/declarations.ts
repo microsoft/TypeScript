@@ -97,7 +97,7 @@ namespace ts {
             if (!typeReferenceDirectives) {
                 return;
             }
-            necessaryTypeReferences = necessaryTypeReferences || new Set();
+            necessaryTypeReferences ??= new Set();
             for (const ref of typeReferenceDirectives) {
                 necessaryTypeReferences.add(ref);
             }
@@ -135,14 +135,14 @@ namespace ts {
                 const errorInfo = getSymbolAccessibilityDiagnostic(symbolAccessibilityResult);
                 if (errorInfo) {
                     if (errorInfo.typeName) {
-                        context.addDiagnostic(createDiagnosticForNode(symbolAccessibilityResult.errorNode || errorInfo.errorNode,
+                        context.addDiagnostic(createDiagnosticForNode(symbolAccessibilityResult.errorNode ?? errorInfo.errorNode,
                             errorInfo.diagnosticMessage,
                             getTextOfNode(errorInfo.typeName),
                             symbolAccessibilityResult.errorSymbolName,
                             symbolAccessibilityResult.errorModuleName));
                     }
                     else {
-                        context.addDiagnostic(createDiagnosticForNode(symbolAccessibilityResult.errorNode || errorInfo.errorNode,
+                        context.addDiagnostic(createDiagnosticForNode(symbolAccessibilityResult.errorNode ?? errorInfo.errorNode,
                             errorInfo.diagnosticMessage,
                             symbolAccessibilityResult.errorSymbolName,
                             symbolAccessibilityResult.errorModuleName));
@@ -155,7 +155,7 @@ namespace ts {
 
         function trackExternalModuleSymbolOfImportTypeNode(symbol: Symbol) {
             if (!isBundledEmit) {
-                (exportedModulesFromDeclarationEmit || (exportedModulesFromDeclarationEmit = [])).push(symbol);
+                (exportedModulesFromDeclarationEmit ??= []).push(symbol);
             }
         }
 
@@ -169,7 +169,7 @@ namespace ts {
         function reportPrivateInBaseOfClassExpression(propertyName: string) {
             if (errorNameNode || errorFallbackNode) {
                 context.addDiagnostic(
-                    createDiagnosticForNode((errorNameNode || errorFallbackNode)!, Diagnostics.Property_0_of_exported_class_expression_may_not_be_private_or_protected, propertyName));
+                    createDiagnosticForNode((errorNameNode ?? errorFallbackNode)!, Diagnostics.Property_0_of_exported_class_expression_may_not_be_private_or_protected, propertyName));
             }
         }
 
@@ -182,7 +182,7 @@ namespace ts {
 
         function reportInaccessibleUniqueSymbolError() {
             if (errorNameNode || errorFallbackNode) {
-                context.addDiagnostic(createDiagnosticForNode((errorNameNode || errorFallbackNode)!, Diagnostics.The_inferred_type_of_0_references_an_inaccessible_1_type_A_type_annotation_is_necessary,
+                context.addDiagnostic(createDiagnosticForNode((errorNameNode ?? errorFallbackNode)!, Diagnostics.The_inferred_type_of_0_references_an_inaccessible_1_type_A_type_annotation_is_necessary,
                     errorDeclarationNameWithFallback(),
                     "unique symbol"));
             }
@@ -190,14 +190,14 @@ namespace ts {
 
         function reportCyclicStructureError() {
             if (errorNameNode || errorFallbackNode) {
-                context.addDiagnostic(createDiagnosticForNode((errorNameNode || errorFallbackNode)!, Diagnostics.The_inferred_type_of_0_references_a_type_with_a_cyclic_structure_which_cannot_be_trivially_serialized_A_type_annotation_is_necessary,
+                context.addDiagnostic(createDiagnosticForNode((errorNameNode ?? errorFallbackNode)!, Diagnostics.The_inferred_type_of_0_references_a_type_with_a_cyclic_structure_which_cannot_be_trivially_serialized_A_type_annotation_is_necessary,
                     errorDeclarationNameWithFallback()));
             }
         }
 
         function reportInaccessibleThisError() {
             if (errorNameNode || errorFallbackNode) {
-                context.addDiagnostic(createDiagnosticForNode((errorNameNode || errorFallbackNode)!, Diagnostics.The_inferred_type_of_0_references_an_inaccessible_1_type_A_type_annotation_is_necessary,
+                context.addDiagnostic(createDiagnosticForNode((errorNameNode ?? errorFallbackNode)!, Diagnostics.The_inferred_type_of_0_references_an_inaccessible_1_type_A_type_annotation_is_necessary,
                     errorDeclarationNameWithFallback(),
                     "this"));
             }
@@ -205,7 +205,7 @@ namespace ts {
 
         function reportLikelyUnsafeImportRequiredError(specifier: string) {
             if (errorNameNode || errorFallbackNode) {
-                context.addDiagnostic(createDiagnosticForNode((errorNameNode || errorFallbackNode)!, Diagnostics.The_inferred_type_of_0_cannot_be_named_without_a_reference_to_1_This_is_likely_not_portable_A_type_annotation_is_necessary,
+                context.addDiagnostic(createDiagnosticForNode((errorNameNode ?? errorFallbackNode)!, Diagnostics.The_inferred_type_of_0_cannot_be_named_without_a_reference_to_1_This_is_likely_not_portable_A_type_annotation_is_necessary,
                     errorDeclarationNameWithFallback(),
                     specifier));
             }
@@ -213,7 +213,7 @@ namespace ts {
 
         function reportTruncationError() {
             if (errorNameNode || errorFallbackNode) {
-                context.addDiagnostic(createDiagnosticForNode((errorNameNode || errorFallbackNode)!, Diagnostics.The_inferred_type_of_this_node_exceeds_the_maximum_length_the_compiler_will_serialize_An_explicit_type_annotation_is_needed));
+                context.addDiagnostic(createDiagnosticForNode((errorNameNode ?? errorFallbackNode)!, Diagnostics.The_inferred_type_of_this_node_exceeds_the_maximum_length_the_compiler_will_serialize_An_explicit_type_annotation_is_needed));
             }
         }
 
@@ -232,13 +232,13 @@ namespace ts {
 
         function reportNonSerializableProperty(propertyName: string) {
             if (errorNameNode || errorFallbackNode) {
-                context.addDiagnostic(createDiagnosticForNode((errorNameNode || errorFallbackNode)!, Diagnostics.The_type_of_this_node_cannot_be_serialized_because_its_property_0_cannot_be_serialized, propertyName));
+                context.addDiagnostic(createDiagnosticForNode((errorNameNode ?? errorFallbackNode)!, Diagnostics.The_type_of_this_node_cannot_be_serialized_because_its_property_0_cannot_be_serialized, propertyName));
             }
         }
 
         function reportImportTypeNodeResolutionModeOverride() {
             if (!isNightly() && (errorNameNode || errorFallbackNode)) {
-                context.addDiagnostic(createDiagnosticForNode((errorNameNode || errorFallbackNode)!, Diagnostics.The_type_of_this_expression_cannot_be_named_without_a_resolution_mode_assertion_which_is_an_unstable_feature_Use_nightly_TypeScript_to_silence_this_error_Try_updating_with_npm_install_D_typescript_next));
+                context.addDiagnostic(createDiagnosticForNode((errorNameNode ?? errorFallbackNode)!, Diagnostics.The_type_of_this_expression_cannot_be_named_without_a_resolution_mode_assertion_which_is_an_unstable_feature_Use_nightly_TypeScript_to_silence_this_error_Try_updating_with_npm_install_D_typescript_next));
             }
         }
 
@@ -248,7 +248,7 @@ namespace ts {
                 diagnosticMessage: s.errorModuleName
                     ? Diagnostics.Declaration_emit_for_this_file_requires_using_private_name_0_from_module_1_An_explicit_type_annotation_may_unblock_declaration_emit
                     : Diagnostics.Declaration_emit_for_this_file_requires_using_private_name_0_An_explicit_type_annotation_may_unblock_declaration_emit,
-                errorNode: s.errorNode || sourceFile
+                errorNode: s.errorNode ?? sourceFile
             }));
             const result = resolver.getDeclarationStatementsForSourceFile(sourceFile, declarationEmitNodeBuilderFlags, symbolTracker, bundled);
             getSymbolAccessibilityDiagnostic = oldDiag;
@@ -502,8 +502,8 @@ namespace ts {
                 maskModifiers(p, modifierMask),
                 p.dotDotDotToken,
                 filterBindingPatternInitializersAndRenamings(p.name),
-                resolver.isOptionalParameter(p) ? (p.questionToken || factory.createToken(SyntaxKind.QuestionToken)) : undefined,
-                ensureType(p, type || p.type, /*ignorePrivate*/ true), // Ignore private param props, since this type is going straight back into a param
+                resolver.isOptionalParameter(p) ? (p.questionToken ?? factory.createToken(SyntaxKind.QuestionToken)) : undefined,
+                ensureType(p, type ?? p.type, /*ignorePrivate*/ true), // Ignore private param props, since this type is going straight back into a param
                 ensureNoInitializer(p)
             );
             if (!suppressNewDiagnosticContexts) {
@@ -573,7 +573,7 @@ namespace ts {
                 || node.kind === SyntaxKind.PropertyDeclaration
                 || node.kind === SyntaxKind.PropertySignature) {
                 if (isPropertySignature(node) || !node.initializer) return cleanup(resolver.createTypeOfDeclaration(node, enclosingDeclaration, declarationEmitNodeBuilderFlags, symbolTracker, shouldUseResolverType));
-                return cleanup(resolver.createTypeOfDeclaration(node, enclosingDeclaration, declarationEmitNodeBuilderFlags, symbolTracker, shouldUseResolverType) || resolver.createTypeOfExpression(node.initializer, enclosingDeclaration, declarationEmitNodeBuilderFlags, symbolTracker));
+                return cleanup(resolver.createTypeOfDeclaration(node, enclosingDeclaration, declarationEmitNodeBuilderFlags, symbolTracker, shouldUseResolverType) ?? resolver.createTypeOfExpression(node.initializer, enclosingDeclaration, declarationEmitNodeBuilderFlags, symbolTracker));
             }
             return cleanup(resolver.createReturnTypeOfSignatureDeclaration(node, enclosingDeclaration, declarationEmitNodeBuilderFlags, symbolTracker));
 
@@ -582,7 +582,7 @@ namespace ts {
                 if (!suppressNewDiagnosticContexts) {
                     getSymbolAccessibilityDiagnostic = oldDiag;
                 }
-                return returnValue || factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
+                return returnValue ?? factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
             }
         }
 
@@ -670,7 +670,7 @@ namespace ts {
                 }
                 newParams = append(newParams, newValueParameter);
             }
-            return factory.createNodeArray(newParams || emptyArray);
+            return factory.createNodeArray(newParams ?? emptyArray);
         }
 
         function ensureTypeParams(node: Node, params: NodeArray<TypeParameterDeclaration> | undefined) {
@@ -714,7 +714,7 @@ namespace ts {
                 else {
                     const symbol = resolver.getSymbolOfExternalModuleSpecifier(input);
                     if (symbol) {
-                        (exportedModulesFromDeclarationEmit || (exportedModulesFromDeclarationEmit = [])).push(symbol);
+                        (exportedModulesFromDeclarationEmit ??= []).push(symbol);
                     }
                 }
             }
@@ -1250,7 +1250,7 @@ namespace ts {
                     if (clean && resolver.isExpandoFunctionDeclaration(input) && shouldEmitFunctionProperties(input)) {
                         const props = resolver.getPropertiesOfContainerFunction(input);
                         // Use parseNodeFactory so it is usable as an enclosing declaration
-                        const fakespace = parseNodeFactory.createModuleDeclaration(/*modifiers*/ undefined, clean.name || factory.createIdentifier("_default"), factory.createModuleBlock([]), NodeFlags.Namespace);
+                        const fakespace = parseNodeFactory.createModuleDeclaration(/*modifiers*/ undefined, clean.name ?? factory.createIdentifier("_default"), factory.createModuleBlock([]), NodeFlags.Namespace);
                         setParent(fakespace, enclosingDeclaration as SourceFile | NamespaceDeclaration);
                         fakespace.locals = createSymbolTable(props);
                         fakespace.symbol = props[0].parent!;
@@ -1410,7 +1410,7 @@ namespace ts {
                                     if (isBindingPattern(elem.name)) {
                                         elems = concatenate(elems, walkBindingPattern(elem.name));
                                     }
-                                    elems = elems || [];
+                                    elems ??= [];
                                     elems.push(factory.createPropertyDeclaration(
                                         ensureModifiers(param),
                                         elem.name as Identifier,

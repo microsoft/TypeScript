@@ -27,7 +27,7 @@ namespace Harness.LanguageService {
         }
 
         public getLineMap(): number[] {
-            return this.lineMap || (this.lineMap = ts.computeLineStarts(this.content));
+            return this.lineMap ??= ts.computeLineStarts(this.content);
         }
 
         public updateContent(content: string): void {
@@ -763,7 +763,7 @@ namespace Harness.LanguageService {
             }
 
             // System FS would follow symlinks, even though snapshots are stored by original file name
-            const snapshot = this.host.getScriptSnapshot(fileName) || this.host.getScriptSnapshot(this.realpath(fileName));
+            const snapshot = this.host.getScriptSnapshot(fileName) ?? this.host.getScriptSnapshot(this.realpath(fileName));
             return snapshot && ts.getSnapshotText(snapshot);
         }
 

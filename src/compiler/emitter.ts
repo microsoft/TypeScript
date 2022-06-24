@@ -149,11 +149,11 @@ namespace ts {
         return { addOutput, getOutputs };
         function addOutput(path: string | undefined) {
             if (path) {
-                (outputs || (outputs = [])).push(path);
+                (outputs ??= []).push(path);
             }
         }
         function getOutputs(): readonly string[] {
-            return outputs || emptyArray;
+            return outputs ?? emptyArray;
         }
     }
 
@@ -505,7 +505,7 @@ namespace ts {
                 return;
             }
             else if (isExportSpecifier(node)) {
-                resolver.collectLinkedAliases(node.propertyName || node.name, /*setVisibility*/ true);
+                resolver.collectLinkedAliases(node.propertyName ?? node.name, /*setVisibility*/ true);
                 return;
             }
             forEachChild(node, collectLinkedAliases);
@@ -1209,7 +1209,7 @@ namespace ts {
         }
 
         function getCurrentLineMap() {
-            return currentLineMap || (currentLineMap = getLineStarts(Debug.checkDefined(currentSourceFile)));
+            return currentLineMap ??= getLineStarts(Debug.checkDefined(currentSourceFile));
         }
 
         function emit(node: Node, parenthesizerRule?: (node: Node) => Node): void;
@@ -1836,7 +1836,7 @@ namespace ts {
                 for (const helper of helpers) {
                     if (!helper.scoped && !shouldSkip && !bundledHelpers.get(helper.name)) {
                         bundledHelpers.set(helper.name, true);
-                        (result || (result = [])).push(helper.name);
+                        (result ??= []).push(helper.name);
                     }
                 }
             }
@@ -2501,7 +2501,7 @@ namespace ts {
 
         function emitPropertyAccessExpression(node: PropertyAccessExpression) {
             emitExpression(node.expression, parenthesizer.parenthesizeLeftSideOfAccess);
-            const token = node.questionDotToken || setTextRangePosEnd(factory.createToken(SyntaxKind.DotToken) as DotToken, node.expression.end, node.name.pos);
+            const token = node.questionDotToken ?? setTextRangePosEnd(factory.createToken(SyntaxKind.DotToken) as DotToken, node.expression.end, node.name.pos);
             const linesBeforeDot = getLinesBetweenNodes(node, node.expression, token);
             const linesAfterDot = getLinesBetweenNodes(node, token, node.name);
 
@@ -3132,8 +3132,8 @@ namespace ts {
                 emit(node.catchClause);
             }
             if (node.finallyBlock) {
-                writeLineOrSpace(node, node.catchClause || node.tryBlock, node.finallyBlock);
-                emitTokenWithComment(SyntaxKind.FinallyKeyword, (node.catchClause || node.tryBlock).end, writeKeyword, node);
+                writeLineOrSpace(node, node.catchClause ?? node.tryBlock, node.finallyBlock);
+                emitTokenWithComment(SyntaxKind.FinallyKeyword, (node.catchClause ?? node.tryBlock).end, writeKeyword, node);
                 writeSpace();
                 emit(node.finallyBlock);
             }
@@ -3988,7 +3988,7 @@ namespace ts {
         }
 
         function emitSyntheticTripleSlashReferencesIfNeeded(node: Bundle) {
-            emitTripleSlashDirectives(!!node.hasNoDefaultLib, node.syntheticFileReferences || [], node.syntheticTypeReferences || [], node.syntheticLibReferences || []);
+            emitTripleSlashDirectives(!!node.hasNoDefaultLib, node.syntheticFileReferences ?? [], node.syntheticTypeReferences ?? [], node.syntheticLibReferences ?? []);
             for (const prepend of node.prepends) {
                 if (isUnparsedSource(prepend) && prepend.syntheticReferences) {
                     for (const ref of prepend.syntheticReferences) {
@@ -4150,7 +4150,7 @@ namespace ts {
                     if (!isPrologueDirective(statement)) break;
                     if (seenPrologueDirectives.has(statement.expression.text)) continue;
                     seenPrologueDirectives.add(statement.expression.text);
-                    (directives || (directives = [])).push({
+                    (directives ??= []).push({
                         pos: statement.pos,
                         end: statement.end,
                         expression: {
@@ -4161,7 +4161,7 @@ namespace ts {
                     });
                     end = end < statement.end ? statement.end : end;
                 }
-                if (directives) (prologues || (prologues = [])).push({ file: index, text: sourceFile.text.substring(0, end), directives });
+                if (directives) (prologues ??= []).push({ file: index, text: sourceFile.text.substring(0, end), directives });
             }
             return prologues;
         }
@@ -5105,7 +5105,7 @@ namespace ts {
                     forEach((node as NamedImports).elements, generateNames);
                     break;
                 case SyntaxKind.ImportSpecifier:
-                    generateNameIfNeeded((node as ImportSpecifier).propertyName || (node as ImportSpecifier).name);
+                    generateNameIfNeeded((node as ImportSpecifier).propertyName ?? (node as ImportSpecifier).name);
                     break;
             }
         }
@@ -5770,7 +5770,7 @@ namespace ts {
 
         function getParsedSourceMap(node: UnparsedSource) {
             if (node.parsedSourceMap === undefined && node.sourceMapText !== undefined) {
-                node.parsedSourceMap = tryParseRawSourceMap(node.sourceMapText) || false;
+                node.parsedSourceMap = tryParseRawSourceMap(node.sourceMapText) ?? false;
             }
             return node.parsedSourceMap || undefined;
         }
@@ -5802,11 +5802,11 @@ namespace ts {
                 }
             }
             else {
-                const source = sourceMapRange.source || sourceMapSource;
+                const source = sourceMapRange.source ?? sourceMapSource;
                 if (node.kind !== SyntaxKind.NotEmittedStatement
                     && (emitFlags & EmitFlags.NoLeadingSourceMap) === 0
                     && sourceMapRange.pos >= 0) {
-                    emitSourcePos(sourceMapRange.source || sourceMapSource, skipSourceTrivia(source, sourceMapRange.pos));
+                    emitSourcePos(source, skipSourceTrivia(source, sourceMapRange.pos));
                 }
                 if (emitFlags & EmitFlags.NoNestedSourceMaps) {
                     sourceMapsDisabled = true;
@@ -5826,7 +5826,7 @@ namespace ts {
                 if (node.kind !== SyntaxKind.NotEmittedStatement
                     && (emitFlags & EmitFlags.NoTrailingSourceMap) === 0
                     && sourceMapRange.end >= 0) {
-                    emitSourcePos(sourceMapRange.source || sourceMapSource, sourceMapRange.end);
+                    emitSourcePos(sourceMapRange.source ?? sourceMapSource, sourceMapRange.end);
                 }
             }
         }

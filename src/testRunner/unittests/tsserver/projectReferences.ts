@@ -956,7 +956,7 @@ export function bar() {}`
                     content: JSON.stringify({
                         ... (solutionOptions ? { compilerOptions: solutionOptions } : {}),
                         references: configRefs.map(path => ({ path })),
-                        files: solutionFiles || []
+                        files: solutionFiles ?? []
                     })
                 };
                 const dummyFile: File = {
@@ -1234,7 +1234,7 @@ bar;`
                         compilerOptions: {
                             module: "none",
                             composite: true,
-                            ...(extendOptionsProject2 || {})
+                            ...(extendOptionsProject2 ?? {})
                         },
                         references: [
                             { path: "../project1" }
@@ -1437,7 +1437,7 @@ bar;`
                 const config: File = {
                     path: `${tscWatch.projectRoot}/${packageName}/tsconfig.json`,
                     content: JSON.stringify({
-                        compilerOptions: { composite: true, ...optionsToExtend || {} },
+                        compilerOptions: { composite: true, ...optionsToExtend ?? {} },
                         references: references?.map(path => ({ path: `../${path}` }))
                     })
                 };

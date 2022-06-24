@@ -55,7 +55,7 @@ namespace ts.codefix {
                 break;
             case SyntaxKind.ArrowFunction:
                 const kind = containingFunction.typeParameters ? SyntaxKind.LessThanToken : SyntaxKind.OpenParenToken;
-                insertBefore = findChildOfKind(containingFunction, kind, sourceFile) || first(containingFunction.parameters);
+                insertBefore = findChildOfKind(containingFunction, kind, sourceFile) ?? first(containingFunction.parameters);
                 break;
             default:
                 return;

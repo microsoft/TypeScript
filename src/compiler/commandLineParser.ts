@@ -1516,8 +1516,8 @@ namespace ts {
         if (typeAcquisition && typeAcquisition.enableAutoDiscovery !== undefined && typeAcquisition.enable === undefined) {
             return {
                 enable: typeAcquisition.enableAutoDiscovery,
-                include: typeAcquisition.include || [],
-                exclude: typeAcquisition.exclude || []
+                include: typeAcquisition.include ?? [],
+                exclude: typeAcquisition.exclude ?? []
             };
         }
         return typeAcquisition;
@@ -1624,7 +1624,7 @@ namespace ts {
                     else {
                         const watchOpt = getOptionDeclarationFromName(watchOptionsDidYouMeanDiagnostics.getOptionsNameMap, inputOptionName, /*allowShort*/ true);
                         if (watchOpt) {
-                            i = parseOptionValue(args, i, watchOptionsDidYouMeanDiagnostics, watchOpt, watchOptions || (watchOptions = {}), errors);
+                            i = parseOptionValue(args, i, watchOptionsDidYouMeanDiagnostics, watchOpt, watchOptions ??= {}, errors);
                         }
                         else {
                             errors.push(createUnknownOptionError(inputOptionName, diagnostics, createCompilerDiagnostic, s));
@@ -1638,7 +1638,7 @@ namespace ts {
         }
 
         function parseResponseFile(fileName: string) {
-            const text = tryReadFile(fileName, readFile || (fileName => sys.readFile(fileName)));
+            const text = tryReadFile(fileName, readFile ?? (fileName => sys.readFile(fileName)));
             if (!isString(text)) {
                 errors.push(text);
                 return;
@@ -1726,7 +1726,7 @@ namespace ts {
                         break;
                     case "list":
                         const result = parseListTypeOption(opt, args[i], errors);
-                        options[opt.name] = result || [];
+                        options[opt.name] = result ?? [];
                         if (result) {
                             i++;
                         }
@@ -2747,10 +2747,10 @@ namespace ts {
 
         const parsedConfig = parseConfig(json, sourceFile, host, basePath, configFileName, resolutionStack, errors, extendedConfigCache);
         const { raw } = parsedConfig;
-        const options = extend(existingOptions, parsedConfig.options || {});
+        const options = extend(existingOptions, parsedConfig.options ?? {});
         const watchOptions = existingWatchOptions && parsedConfig.watchOptions ?
             extend(existingWatchOptions, parsedConfig.watchOptions) :
-            parsedConfig.watchOptions || existingWatchOptions;
+            parsedConfig.watchOptions ?? existingWatchOptions;
 
         options.configFilePath = configFileName && normalizeSlashes(configFileName);
         const configFileSpecs = getConfigFileSpecs();
@@ -2763,7 +2763,7 @@ namespace ts {
             watchOptions,
             fileNames: getFileNames(basePathForFileNames),
             projectReferences: getProjectReferences(basePathForFileNames),
-            typeAcquisition: parsedConfig.typeAcquisition || getDefaultTypeAcquisition(),
+            typeAcquisition: parsedConfig.typeAcquisition ?? getDefaultTypeAcquisition(),
             raw,
             errors,
             // Wildcard directories (provided as part of a wildcard path) are stored in a
@@ -2857,7 +2857,7 @@ namespace ts {
                         createCompilerDiagnosticOnlyIfJson(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, "reference.path", "string");
                     }
                     else {
-                        (projectReferences || (projectReferences = [])).push({
+                        (projectReferences ??= []).push({
                             path: getNormalizedAbsolutePath(ref.path, basePath),
                             originalPath: ref.path,
                             prepend: ref.prepend,
@@ -2910,8 +2910,8 @@ namespace ts {
         return createCompilerDiagnostic(
             Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2,
             configFileName || "tsconfig.json",
-            JSON.stringify(includeSpecs || []),
-            JSON.stringify(excludeSpecs || []));
+            JSON.stringify(includeSpecs ?? []),
+            JSON.stringify(excludeSpecs ?? []));
     }
 
     function shouldReportNoInputFiles(fileNames: string[], canJsonReportNoInutFiles: boolean, resolutionStack?: Path[]) {
@@ -3008,7 +3008,7 @@ namespace ts {
                 ownConfig.options = assign({}, extendedConfig.options, ownConfig.options);
                 ownConfig.watchOptions = ownConfig.watchOptions && extendedConfig.watchOptions ?
                     assign({}, extendedConfig.watchOptions, ownConfig.watchOptions) :
-                    ownConfig.watchOptions || extendedConfig.watchOptions;
+                    ownConfig.watchOptions ?? extendedConfig.watchOptions;
                 // TODO extend type typeAcquisition
             }
         }
@@ -3068,13 +3068,13 @@ namespace ts {
                         currentOption = options;
                         break;
                     case "watchOptions":
-                        currentOption = (watchOptions || (watchOptions = {}));
+                        currentOption = (watchOptions ??= {});
                         break;
                     case "typeAcquisition":
-                        currentOption = (typeAcquisition || (typeAcquisition = getDefaultTypeAcquisition(configFileName)));
+                        currentOption = (typeAcquisition ??= getDefaultTypeAcquisition(configFileName));
                         break;
                     case "typingOptions":
-                        currentOption = (typingOptionstypeAcquisition || (typingOptionstypeAcquisition = getDefaultTypeAcquisition(configFileName)));
+                        currentOption = (typingOptionstypeAcquisition ??= getDefaultTypeAcquisition(configFileName));
                         break;
                     default:
                         Debug.fail("Unknown option");
@@ -3270,7 +3270,7 @@ namespace ts {
         for (const id in jsonOptions) {
             const opt = optionsNameMap.get(id);
             if (opt) {
-                (defaultOptions || (defaultOptions = {}))[opt.name] = convertJsonOption(opt, jsonOptions[id], basePath, errors);
+                (defaultOptions ??= {})[opt.name] = convertJsonOption(opt, jsonOptions[id], basePath, errors);
             }
             else {
                 errors.push(createUnknownOptionError(id, diagnostics, createCompilerDiagnostic));

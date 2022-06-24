@@ -202,7 +202,7 @@ namespace ts.textChanges {
         if (hasTrailingComment) {
             // Check first for leading comments as if the node is the first import, we want to exclude the trivia;
             // otherwise we get the trailing comments.
-            const comment = getLeadingCommentRanges(sourceFile.text, fullStart)?.[0] || getTrailingCommentRanges(sourceFile.text, fullStart)?.[0];
+            const comment = getLeadingCommentRanges(sourceFile.text, fullStart)?.[0] ?? getTrailingCommentRanges(sourceFile.text, fullStart)?.[0];
             if (comment) {
                 return skipTrivia(sourceFile.text, comment.end, /*stopAfterLineBreak*/ true, /*stopAtComments*/ true);
             }
@@ -553,7 +553,7 @@ namespace ts.textChanges {
 
         public insertTypeParameters(sourceFile: SourceFile, node: SignatureDeclaration, typeParameters: readonly TypeParameterDeclaration[]): void {
             // If no `(`, is an arrow function `x => x`, so use the pos of the first parameter
-            const start = (findChildOfKind(node, SyntaxKind.OpenParenToken, sourceFile) || first(node.parameters)).getStart(sourceFile);
+            const start = (findChildOfKind(node, SyntaxKind.OpenParenToken, sourceFile) ?? first(node.parameters)).getStart(sourceFile);
             this.insertNodesAt(sourceFile, start, typeParameters, { prefix: "<", suffix: ">", joiner: ", " });
         }
 
@@ -687,7 +687,7 @@ namespace ts.textChanges {
         }
 
         public insertNodeAfterComma(sourceFile: SourceFile, after: Node, newNode: Node): void {
-            const endPosition = this.insertNodeAfterWorker(sourceFile, this.nextCommaToken(sourceFile, after) || after, newNode);
+            const endPosition = this.insertNodeAfterWorker(sourceFile, this.nextCommaToken(sourceFile, after) ?? after, newNode);
             this.insertNodeAt(sourceFile, endPosition, newNode, this.getInsertNodeAfterOptions(sourceFile, after));
         }
 

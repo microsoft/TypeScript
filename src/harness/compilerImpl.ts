@@ -258,10 +258,10 @@ namespace compiler {
         // and if the test is running `skipLibCheck` - an indicator that we want the tets to run quickly - skip the before/after error comparison, too
         const skipErrorComparison = ts.length(rootFiles) >= 100 || (!!compilerOptions.skipLibCheck && !!compilerOptions.declaration);
 
-        const preProgram = !skipErrorComparison ? ts.createProgram(rootFiles || [], { ...compilerOptions, configFile: compilerOptions.configFile, traceResolution: false }, host) : undefined;
+        const preProgram = !skipErrorComparison ? ts.createProgram(rootFiles ?? [], { ...compilerOptions, configFile: compilerOptions.configFile, traceResolution: false }, host) : undefined;
         const preErrors = preProgram && ts.getPreEmitDiagnostics(preProgram);
 
-        const program = ts.createProgram(rootFiles || [], compilerOptions, host);
+        const program = ts.createProgram(rootFiles ?? [], compilerOptions, host);
         const emitResult = program.emit();
         const postErrors = ts.getPreEmitDiagnostics(program);
         const longerErrors = ts.length(preErrors) > postErrors.length ? preErrors : postErrors;

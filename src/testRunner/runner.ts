@@ -152,7 +152,7 @@ ${JSON.stringify(dupes, undefined, 2)}`);
                 return true;
             }
 
-            const runnerConfig = testConfig.runners || testConfig.test;
+            const runnerConfig = testConfig.runners ?? testConfig.test;
             if (runnerConfig && runnerConfig.length > 0) {
                 if (testConfig.runners) {
                     runUnitTests = runnerConfig.indexOf("unittest") !== -1;

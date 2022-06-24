@@ -426,7 +426,7 @@ namespace ts {
 
     /* @internal */
     export function getLineStarts(sourceFile: SourceFileLike): readonly number[] {
-        return sourceFile.lineMap || (sourceFile.lineMap = computeLineStarts(sourceFile.text));
+        return sourceFile.lineMap ??= computeLineStarts(sourceFile.text);
     }
 
     /* @internal */

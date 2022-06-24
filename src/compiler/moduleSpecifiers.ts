@@ -202,7 +202,7 @@ namespace ts.moduleSpecifiers {
         if (!moduleSourceFile) return { moduleSpecifiers: emptyArray, computedWithoutCache };
 
         computedWithoutCache = true;
-        modulePaths ||= getAllModulePathsWorker(importingSourceFile.path, moduleSourceFile.originalFileName, host);
+        modulePaths ??= getAllModulePathsWorker(importingSourceFile.path, moduleSourceFile.originalFileName, host);
         const result = computeModuleSpecifiers(modulePaths, compilerOptions, importingSourceFile, host, userPreferences, options);
         cache?.set(importingSourceFile.path, moduleSourceFile.path, userPreferences, options, modulePaths, result);
         return { moduleSpecifiers: result, computedWithoutCache };
@@ -398,7 +398,7 @@ namespace ts.moduleSpecifiers {
         const cwd = host.getCurrentDirectory();
         const referenceRedirect = host.isSourceOfProjectReferenceRedirect(importedFileName) ? host.getProjectReferenceRedirect(importedFileName) : undefined;
         const importedPath = toPath(importedFileName, cwd, getCanonicalFileName);
-        const redirects = host.redirectTargetsMap.get(importedPath) || emptyArray;
+        const redirects = host.redirectTargetsMap.get(importedPath) ?? emptyArray;
         const importedFileNames = [...(referenceRedirect ? [referenceRedirect] : emptyArray), importedFileName, ...redirects];
         const targets = importedFileNames.map(f => getNormalizedAbsolutePath(f, cwd));
         let shouldFilterIgnoredPaths = !every(targets, containsIgnoredPath);
@@ -491,7 +491,7 @@ namespace ts.moduleSpecifiers {
             let pathsInDirectory: ModulePath[] | undefined;
             allFileNames.forEach(({ path, isRedirect, isInNodeModules }, fileName) => {
                 if (startsWith(path, directoryStart)) {
-                    (pathsInDirectory ||= []).push({ path: fileName, isRedirect, isInNodeModules });
+                    (pathsInDirectory ??= []).push({ path: fileName, isRedirect, isInNodeModules });
                     allFileNames.delete(fileName);
                 }
             });
@@ -734,7 +734,7 @@ namespace ts.moduleSpecifiers {
             let moduleFileToTry = path;
             const cachedPackageJson = host.getPackageJsonInfoCache?.()?.getPackageJsonInfo(packageJsonPath);
             if (typeof cachedPackageJson === "object" || cachedPackageJson === undefined && host.fileExists(packageJsonPath)) {
-                const packageJsonContent = cachedPackageJson?.packageJsonContent || JSON.parse(host.readFile!(packageJsonPath)!);
+                const packageJsonContent = cachedPackageJson?.packageJsonContent ?? JSON.parse(host.readFile!(packageJsonPath)!);
                 if (getEmitModuleResolutionKind(options) === ModuleResolutionKind.Node16 || getEmitModuleResolutionKind(options) === ModuleResolutionKind.NodeNext) {
                     // `conditions` *could* be made to go against `importingSourceFile.impliedNodeFormat` if something wanted to generate
                     // an ImportEqualsDeclaration in an ESM-implied file or an ImportCall in a CJS-implied file. But since this function is

@@ -22,7 +22,7 @@ namespace ts.server {
                 directoriesWithoutPackageJson.set(getDirectoryPath(fileName), true);
             },
             getInDirectory: directory => {
-                return packageJsons.get(combinePaths(directory, "package.json")) || undefined;
+                return packageJsons.get(combinePaths(directory, "package.json")) ?? undefined;
             },
             directoryHasPackageJson,
             searchDirectoryAndAncestors: directory => {

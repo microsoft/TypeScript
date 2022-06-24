@@ -187,7 +187,7 @@ namespace ts.codefix {
             declaration,
             modifiers,
             fieldName,
-            declaration.questionToken || declaration.exclamationToken,
+            declaration.questionToken ?? declaration.exclamationToken,
             type,
             declaration.initializer
         );

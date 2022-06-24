@@ -2821,7 +2821,7 @@ namespace ts {
             clauses.push(
                 factory.createCaseClause(
                     factory.createNumericLiteral(labelNumber),
-                    statements || []
+                    statements ?? []
                 )
             );
 

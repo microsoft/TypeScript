@@ -230,7 +230,7 @@ namespace ts {
             }
             if (canCopyEmitSignatures) {
                 const oldEmitSignature = oldState.emitSignatures.get(sourceFilePath);
-                if (oldEmitSignature) (state.emitSignatures ||= new Map()).set(sourceFilePath, oldEmitSignature);
+                if (oldEmitSignature) (state.emitSignatures ??= new Map()).set(sourceFilePath, oldEmitSignature);
             }
         });
 
@@ -243,7 +243,7 @@ namespace ts {
             // Add all files to affectedFilesPendingEmit since emit changed
             newProgram.getSourceFiles().forEach(f => addToAffectedFilesPendingEmit(state, f.resolvedPath, BuilderFileEmit.Full));
             Debug.assert(!state.seenAffectedFiles || !state.seenAffectedFiles.size);
-            state.seenAffectedFiles = state.seenAffectedFiles || new Set();
+            state.seenAffectedFiles ??= new Set();
         }
         // Since old states change files set is copied, any additional change means we would need to emit build info
         state.buildInfoEmitPending = !useOldState || state.changedFilesSet.size !== (oldState!.changedFilesSet?.size || 0);
@@ -395,7 +395,7 @@ namespace ts {
     function getNextAffectedFilePendingEmit(state: BuilderProgramState) {
         const { affectedFilesPendingEmit } = state;
         if (affectedFilesPendingEmit) {
-            const seenEmittedFiles = (state.seenEmittedFiles || (state.seenEmittedFiles = new Map()));
+            const seenEmittedFiles = (state.seenEmittedFiles ??= new Map());
             for (let i = state.affectedFilesPendingEmitIndex!; i < affectedFilesPendingEmit.length; i++) {
                 const affectedFile = Debug.checkDefined(state.program).getSourceFileByPath(affectedFilesPendingEmit[i]);
                 if (affectedFile) {
@@ -656,7 +656,7 @@ namespace ts {
             // Change in changeSet/affectedFilesPendingEmit, buildInfo needs to be emitted
             state.buildInfoEmitPending = true;
             if (emitKind !== undefined) {
-                (state.seenEmittedFiles || (state.seenEmittedFiles = new Map())).set((affected as SourceFile).resolvedPath, emitKind);
+                (state.seenEmittedFiles ??= new Map()).set((affected as SourceFile).resolvedPath, emitKind);
             }
             if (isPendingEmit) {
                 state.affectedFilesPendingEmitIndex!++;
@@ -771,7 +771,7 @@ namespace ts {
     export type ProgramBuildInfo = ProgramMultiFileEmitBuildInfo | ProgramBundleEmitBuildInfo;
 
     export function isProgramBundleEmitBuildInfo(info: ProgramBuildInfo): info is ProgramBundleEmitBuildInfo {
-        return !!outFile(info.options || {});
+        return !!outFile(info.options ?? {});
     }
 
     /**
@@ -819,7 +819,7 @@ namespace ts {
                 if (!isJsonSourceFile(file) && sourceFileMayBeEmitted(file, state.program!)) {
                     const emitSignature = state.emitSignatures?.get(key);
                     if (emitSignature !== actualSignature) {
-                        (emitSignatures ||= []).push(emitSignature === undefined ? fileId : [fileId, emitSignature]);
+                        (emitSignatures ??= []).push(emitSignature === undefined ? fileId : [fileId, emitSignature]);
                     }
                 }
             }
@@ -862,7 +862,7 @@ namespace ts {
         if (state.semanticDiagnosticsPerFile) {
             for (const key of arrayFrom(state.semanticDiagnosticsPerFile.keys()).sort(compareStringsCaseSensitive)) {
                 const value = state.semanticDiagnosticsPerFile.get(key)!;
-                (semanticDiagnosticsPerFile ||= []).push(
+                (semanticDiagnosticsPerFile ??= []).push(
                     value.length ?
                         [
                             toFileId(key),
@@ -878,7 +878,7 @@ namespace ts {
             const seenFiles = new Set<Path>();
             for (const path of state.affectedFilesPendingEmit.slice(state.affectedFilesPendingEmitIndex).sort(compareStringsCaseSensitive)) {
                 if (tryAddToSet(seenFiles, path)) {
-                    (affectedFilesPendingEmit ||= []).push([toFileId(path), state.affectedFilesPendingEmitKind!.get(path)!]);
+                    (affectedFilesPendingEmit ??= []).push([toFileId(path), state.affectedFilesPendingEmitKind!.get(path)!]);
                 }
             }
         }
@@ -886,7 +886,7 @@ namespace ts {
         let changeFileSet: ProgramBuildInfoFileId[] | undefined;
         if (state.changedFilesSet.size) {
             for (const path of arrayFrom(state.changedFilesSet.keys()).sort(compareStringsCaseSensitive)) {
-                (changeFileSet ||= []).push(toFileId(path));
+                (changeFileSet ??= []).push(toFileId(path));
             }
         }
 
@@ -927,8 +927,8 @@ namespace ts {
             const key = fileIds.join();
             let fileIdListId = fileNamesToFileIdListId?.get(key);
             if (fileIdListId === undefined) {
-                (fileIdsList ||= []).push(fileIds);
-                (fileNamesToFileIdListId ||= new Map()).set(key, fileIdListId = fileIdsList.length as ProgramBuildInfoFileIdListId);
+                (fileIdsList ??= []).push(fileIds);
+                (fileNamesToFileIdListId ??= new Map()).set(key, fileIdListId = fileIdsList.length as ProgramBuildInfoFileIdListId);
             }
             return fileIdListId;
         }
@@ -942,7 +942,7 @@ namespace ts {
             for (const name of getOwnKeys(options).sort(compareStringsCaseSensitive)) {
                 const optionInfo = optionsNameMap.get(name.toLowerCase());
                 if (optionInfo?.[optionKey]) {
-                    (result ||= {})[name] = convertToReusableCompilerOptionValue(
+                    (result ??= {})[name] = convertToReusableCompilerOptionValue(
                         optionInfo,
                         options[name] as CompilerOptionsValue,
                         relativeToBuildInfoEnsuringAbsolutePath
@@ -1035,7 +1035,7 @@ namespace ts {
             oldProgram = oldProgramOrHost as BuilderProgram;
             configFileParsingDiagnostics = configFileParsingDiagnosticsOrOldProgram as readonly Diagnostic[];
         }
-        return { host, newProgram, oldProgram, configFileParsingDiagnostics: configFileParsingDiagnostics || emptyArray };
+        return { host, newProgram, oldProgram, configFileParsingDiagnostics: configFileParsingDiagnostics ?? emptyArray };
     }
 
     export function computeSignature(text: string, data: WriteFileCallbackData | undefined, computeHash: BuilderState.ComputeHash | undefined) {
@@ -1095,7 +1095,7 @@ namespace ts {
 
         function emitBuildInfo(writeFile?: WriteFileCallback, cancellationToken?: CancellationToken): EmitResult {
             if (state.buildInfoEmitPending) {
-                const result = Debug.checkDefined(state.program).emitBuildInfo(writeFile || maybeBind(host, host.writeFile), cancellationToken);
+                const result = Debug.checkDefined(state.program).emitBuildInfo(writeFile ?? maybeBind(host, host.writeFile), cancellationToken);
                 state.buildInfoEmitPending = false;
                 return result;
             }
@@ -1124,7 +1124,7 @@ namespace ts {
                             state,
                             // When whole program is affected, do emit only once (eg when --out or --outFile is specified)
                             // Otherwise just affected file
-                            affected.emitBuildInfo(writeFile || maybeBind(host, host.writeFile), cancellationToken),
+                            affected.emitBuildInfo(writeFile ?? maybeBind(host, host.writeFile), cancellationToken),
                             affected,
                             /*emitKind*/ BuilderFileEmit.Full,
                             /*isPendingEmitFile*/ false,
@@ -1149,7 +1149,7 @@ namespace ts {
                     affected === state.program ? undefined : affected as SourceFile,
                     getEmitDeclarations(state.compilerOptions) ?
                         getWriteFileCallback(writeFile, customTransformers) :
-                        writeFile || maybeBind(host, host.writeFile),
+                        writeFile ?? maybeBind(host, host.writeFile),
                     cancellationToken,
                     emitOnlyDtsFiles || emitKind === BuilderFileEmit.DtsOnly,
                     customTransformers
@@ -1165,19 +1165,19 @@ namespace ts {
                 if (isDeclarationFileName(fileName)) {
                     if (!outFile(state.compilerOptions)) {
                         Debug.assert(sourceFiles?.length === 1);
-                        let newSignature;
+                        let newSignature: string;
                         if (!customTransformers) {
                             const file = sourceFiles[0];
                             const info = state.fileInfos.get(file.resolvedPath)!;
                             if (info.signature === file.version) {
                                 newSignature = computeSignature(text, data, computeHash);
                                 if (newSignature !== file.version) { // Update it
-                                    if (host.storeFilesChangingSignatureDuringEmit) (state.filesChangingSignature ||= new Set()).add(file.resolvedPath);
+                                    if (host.storeFilesChangingSignatureDuringEmit) (state.filesChangingSignature ??= new Set()).add(file.resolvedPath);
                                     if (state.exportedModulesMap) BuilderState.updateExportedModules(state, file, file.exportedModulesFromDeclarationEmit);
                                     if (state.affectedFiles) {
                                         // Keep old signature so we know what to undo if cancellation happens
                                         const existing = state.oldSignatures?.get(file.resolvedPath);
-                                        if (existing === undefined) (state.oldSignatures ||= new Map()).set(file.resolvedPath, info.signature || false);
+                                        if (existing === undefined) (state.oldSignatures ??= new Map()).set(file.resolvedPath, info.signature || false);
                                         info.signature = newSignature;
                                     }
                                     else {
@@ -1197,7 +1197,7 @@ namespace ts {
                             const oldSignature = state.emitSignatures?.get(filePath);
                             newSignature ||= computeSignature(text, data, computeHash);
                             if (newSignature !== oldSignature) {
-                                (state.emitSignatures ||= new Map()).set(filePath, newSignature);
+                                (state.emitSignatures ??= new Map()).set(filePath, newSignature);
                                 state.hasChangedEmitSignature = true;
                             }
                         }
@@ -1252,7 +1252,7 @@ namespace ts {
                     }
                     return {
                         emitSkipped,
-                        diagnostics: diagnostics || emptyArray,
+                        diagnostics: diagnostics ?? emptyArray,
                         emittedFiles,
                         sourceMaps
                     };
@@ -1274,7 +1274,7 @@ namespace ts {
                 targetSourceFile,
                 getEmitDeclarations(state.compilerOptions) ?
                     getWriteFileCallback(writeFile, customTransformers) :
-                    writeFile || maybeBind(host, host.writeFile),
+                    writeFile ?? maybeBind(host, host.writeFile),
                 cancellationToken,
                 emitOnlyDtsFiles,
                 customTransformers
@@ -1353,7 +1353,7 @@ namespace ts {
             for (const sourceFile of Debug.checkDefined(state.program).getSourceFiles()) {
                 diagnostics = addRange(diagnostics, getSemanticDiagnosticsOfFile(state, sourceFile, cancellationToken));
             }
-            return diagnostics || emptyArray;
+            return diagnostics ?? emptyArray;
         }
     }
 

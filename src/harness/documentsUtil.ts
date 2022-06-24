@@ -13,11 +13,11 @@ namespace documents {
         constructor(file: string, text: string, meta?: Map<string, string>) {
             this.file = file;
             this.text = text;
-            this.meta = meta || new Map<string, string>();
+            this.meta = meta ?? new Map<string, string>();
         }
 
         public get lineStarts(): readonly number[] {
-            return this._lineStarts || (this._lineStarts = ts.computeLineStarts(this.text));
+            return this._lineStarts ??= ts.computeLineStarts(this.text);
         }
 
         public static fromTestFile(file: Harness.Compiler.TestFile) {
@@ -29,12 +29,12 @@ namespace documents {
         }
 
         public asTestFile() {
-            return this._testFile || (this._testFile = {
+            return this._testFile ??= {
                 unitName: this.file,
                 content: this.text,
                 fileOptions: Array.from(this.meta)
                     .reduce((obj, [key, value]) => (obj[key] = value, obj), {} as Record<string, string>)
-            });
+            };
         }
     }
 

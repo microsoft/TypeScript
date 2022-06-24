@@ -133,7 +133,7 @@ namespace ts.codefix {
                             entry.defaultImport = { name: symbolName, addAsTypeOnly: reduceAddAsTypeOnlyValues(entry.defaultImport?.addAsTypeOnly, addAsTypeOnly) };
                             break;
                         case ImportKind.Named:
-                            const prevValue = (entry.namedImports ||= new Map()).get(symbolName);
+                            const prevValue = (entry.namedImports ??= new Map()).get(symbolName);
                             entry.namedImports.set(symbolName, reduceAddAsTypeOnlyValues(prevValue, addAsTypeOnly));
                             break;
                         case ImportKind.CommonJS:
@@ -184,7 +184,7 @@ namespace ts.codefix {
                     return newEntry;
                 }
                 if (addAsTypeOnly === AddAsTypeOnly.Allowed && (typeOnlyEntry || nonTypeOnlyEntry)) {
-                    return (typeOnlyEntry || nonTypeOnlyEntry)!;
+                    return (typeOnlyEntry ?? nonTypeOnlyEntry)!;
                 }
                 if (nonTypeOnlyEntry) {
                     return nonTypeOnlyEntry;
@@ -613,13 +613,13 @@ namespace ts.codefix {
             if (isVariableDeclarationInitializedToRequire(i.parent)) {
                 const moduleSymbol = checker.resolveExternalModuleName(moduleSpecifier);
                 if (moduleSymbol) {
-                    (importMap ||= createMultiMap()).add(getSymbolId(moduleSymbol), i.parent);
+                    (importMap ??= createMultiMap()).add(getSymbolId(moduleSymbol), i.parent);
                 }
             }
             else if (i.kind === SyntaxKind.ImportDeclaration || i.kind === SyntaxKind.ImportEqualsDeclaration) {
                 const moduleSymbol = checker.getSymbolAtLocation(moduleSpecifier);
                 if (moduleSymbol) {
-                    (importMap ||= createMultiMap()).add(getSymbolId(moduleSymbol), i);
+                    (importMap ??= createMultiMap()).add(getSymbolId(moduleSymbol), i);
                 }
             }
         }
@@ -1313,7 +1313,7 @@ namespace ts.codefix {
         let statements: RequireVariableStatement | readonly RequireVariableStatement[] | undefined;
         // const { default: foo, bar, etc } = require('./mod');
         if (defaultImport || namedImports?.length) {
-            const bindingElements = namedImports?.map(({ name }) => factory.createBindingElement(/*dotDotDotToken*/ undefined, /*propertyName*/ undefined, name)) || [];
+            const bindingElements = namedImports?.map(({ name }) => factory.createBindingElement(/*dotDotDotToken*/ undefined, /*propertyName*/ undefined, name)) ?? [];
             if (defaultImport) {
                 bindingElements.unshift(factory.createBindingElement(/*dotDotDotToken*/ undefined, "default", defaultImport.name));
             }

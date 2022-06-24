@@ -166,8 +166,8 @@ namespace ts {
         host.getModifiedTime = system.getModifiedTime ? path => system.getModifiedTime!(path) : returnUndefined;
         host.setModifiedTime = system.setModifiedTime ? (path, date) => system.setModifiedTime!(path, date) : noop;
         host.deleteFile = system.deleteFile ? path => system.deleteFile!(path) : noop;
-        host.reportDiagnostic = reportDiagnostic || createDiagnosticReporter(system);
-        host.reportSolutionBuilderStatus = reportSolutionBuilderStatus || createBuilderStatusReporter(system);
+        host.reportDiagnostic = reportDiagnostic ?? createDiagnosticReporter(system);
+        host.reportSolutionBuilderStatus = reportSolutionBuilderStatus ?? createBuilderStatusReporter(system);
         host.now = maybeBind(system, system.now); // For testing
         return host;
     }
@@ -414,7 +414,7 @@ namespace ts {
             parsed = getParsedCommandLineOfConfigFile(configFileName, baseCompilerOptions, parseConfigFileHost, extendedConfigCache, baseWatchOptions);
             parseConfigFileHost.onUnRecoverableConfigFileDiagnostic = noop;
         }
-        configFileCache.set(configFilePath, parsed || diagnostic!);
+        configFileCache.set(configFilePath, parsed ?? diagnostic!);
         return parsed;
     }
 
@@ -433,8 +433,8 @@ namespace ts {
         }
 
         return circularDiagnostics ?
-            { buildOrder: buildOrder || emptyArray, circularDiagnostics } :
-            buildOrder || emptyArray;
+            { buildOrder: buildOrder ?? emptyArray, circularDiagnostics } :
+            buildOrder ?? emptyArray;
 
         function visit(configFileName: ResolvedConfigFileName, inCircularContext?: boolean) {
             const projPath = toResolvedConfigFilePath(state, configFileName);
@@ -443,7 +443,7 @@ namespace ts {
             // Circular
             if (temporaryMarks.has(projPath)) {
                 if (!inCircularContext) {
-                    (circularDiagnostics || (circularDiagnostics = [])).push(
+                    (circularDiagnostics ??= []).push(
                         createCompilerDiagnostic(
                             Diagnostics.Project_references_may_not_form_a_circular_graph_Cycle_detected_Colon_0,
                             circularityReportStack.join("\r\n")
@@ -465,12 +465,12 @@ namespace ts {
 
             circularityReportStack.pop();
             permanentMarks.set(projPath, true);
-            (buildOrder || (buildOrder = [])).push(configFileName);
+            (buildOrder ??= []).push(configFileName);
         }
     }
 
     function getBuildOrder(state: SolutionBuilderState) {
-        return state.buildOrder || createStateBuildOrder(state);
+        return state.buildOrder ?? createStateBuildOrder(state);
     }
 
     function createStateBuildOrder(state: SolutionBuilderState) {
@@ -817,7 +817,7 @@ namespace ts {
                 emit: (targetSourceFile, writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers) => {
                     if (targetSourceFile || emitOnlyDtsFiles) {
                         return withProgramOrUndefined(
-                            program => program.emit(targetSourceFile, writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers || state.host.getCustomTransformers?.(project))
+                            program => program.emit(targetSourceFile, writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers ?? state.host.getCustomTransformers?.(project))
                         );
                     }
                     executeSteps(BuildStep.SemanticDiagnostics, cancellationToken);
@@ -854,7 +854,7 @@ namespace ts {
         }
 
         function withProgramOrEmptyArray<U>(action: (program: T) => readonly U[]): readonly U[] {
-            return withProgramOrUndefined(action) || emptyArray;
+            return withProgramOrUndefined(action) ?? emptyArray;
         }
 
         function createProgram() {
@@ -948,7 +948,7 @@ namespace ts {
             // Before emitting lets backup state, so we can revert it back if there are declaration errors to handle emit and declaration errors correctly
             const saved = program.saveEmitState();
             let declDiagnostics: Diagnostic[] | undefined;
-            const reportDeclarationDiagnostics = (d: Diagnostic) => (declDiagnostics || (declDiagnostics = [])).push(d);
+            const reportDeclarationDiagnostics = (d: Diagnostic) => (declDiagnostics ??= []).push(d);
             const outputFiles: OutputFile[] = [];
             const { emitResult } = emitFilesAndReportErrors(
                 program,
@@ -958,7 +958,7 @@ namespace ts {
                 (name, text, writeByteOrderMark, _onError, _sourceFiles, data) => outputFiles.push({ name, text, writeByteOrderMark, buildInfo: data?.buildInfo }),
                 cancellationToken,
                 /*emitOnlyDts*/ false,
-                customTransformers || state.host.getCustomTransformers?.(project)
+                customTransformers ?? state.host.getCustomTransformers?.(project)
             );
             // Don't emit .d.ts if there are decl file errors
             if (declDiagnostics) {
@@ -1000,7 +1000,7 @@ namespace ts {
                 }
                 writeFile(writeFileCallback ? { writeFile: writeFileCallback } : compilerHost, emitterDiagnostics, name, text, writeByteOrderMark);
                 if (!isIncremental && state.watch) {
-                    (outputTimeStampMap ||= getOutputTimeStampMap(state, projectPath)!).set(path, now ||= getCurrentTime(state.host));
+                    (outputTimeStampMap ??= getOutputTimeStampMap(state, projectPath)!).set(path, now ??= getCurrentTime(state.host));
                 }
             });
 
@@ -1094,7 +1094,7 @@ namespace ts {
                     const refName = resolveProjectName(state, ref.path);
                     return parseConfigFile(state, refName, toResolvedConfigFilePath(state, refName));
                 },
-                customTransformers || state.host.getCustomTransformers?.(project)
+                customTransformers ?? state.host.getCustomTransformers?.(project)
             );
 
             if (isString(outputFiles)) {
@@ -1490,8 +1490,8 @@ namespace ts {
         }
         const value = state.readFileWithCache(buildInfoPath);
         const buildInfo = value ? ts.getBuildInfo(value) : undefined;
-        Debug.assert(modifiedTime || !buildInfo);
-        state.buildInfoCache.set(resolvedConfigPath, { path, buildInfo: buildInfo || false, modifiedTime: modifiedTime || missingFileModifiedTime });
+        Debug.assert(modifiedTime ?? !buildInfo);
+        state.buildInfoCache.set(resolvedConfigPath, { path, buildInfo: buildInfo ?? false, modifiedTime: modifiedTime ?? missingFileModifiedTime });
         return buildInfo;
     }
 
@@ -1566,7 +1566,7 @@ namespace ts {
         let newestDeclarationFileContentChangedTime;
         if (buildInfoPath) {
             const buildInfoCacheEntry = getBuildInfoCacheEntry(state, buildInfoPath, resolvedPath);
-            buildInfoTime = buildInfoCacheEntry?.modifiedTime || ts.getModifiedTime(host, buildInfoPath);
+            buildInfoTime = buildInfoCacheEntry?.modifiedTime ?? ts.getModifiedTime(host, buildInfoPath);
             if (buildInfoTime === missingFileModifiedTime) {
                 if (!buildInfoCacheEntry) {
                     state.buildInfoCache.set(resolvedPath, {
@@ -1631,7 +1631,7 @@ namespace ts {
                     if (!buildInfoVersionMap) buildInfoVersionMap = getBuildInfoFileVersionMap(buildInfoProgram, buildInfoPath!, host);
                     version = buildInfoVersionMap.get(toPath(state, inputFile));
                     const text = version ? state.readFileWithCache(inputFile) : undefined;
-                    currentVersion = text && (host.createHash || generateDjb2Hash)(text);
+                    currentVersion = text && (host.createHash ?? generateDjb2Hash)(text);
                     if (version && version === currentVersion) pseudoInputUpToDate = true;
                 }
 
@@ -1739,12 +1739,12 @@ namespace ts {
         if (configStatus) return configStatus;
 
         // Check extended config time
-        const extendedConfigStatus = forEach(project.options.configFile!.extendedSourceFiles || emptyArray, configFile => checkConfigFileUpToDateStatus(state, configFile, oldestOutputFileTime, oldestOutputFileName!));
+        const extendedConfigStatus = forEach(project.options.configFile!.extendedSourceFiles ?? emptyArray, configFile => checkConfigFileUpToDateStatus(state, configFile, oldestOutputFileTime, oldestOutputFileName!));
         if (extendedConfigStatus) return extendedConfigStatus;
 
         // Check package file time
         const dependentPackageFileStatus = forEach(
-            state.lastCachedPackageJsonLookups.get(resolvedPath) || emptyArray,
+            state.lastCachedPackageJsonLookups.get(resolvedPath) ?? emptyArray,
             ([path]) => checkConfigFileUpToDateStatus(state, path, oldestOutputFileTime, oldestOutputFileName!)
         );
         if (dependentPackageFileStatus) return dependentPackageFileStatus;
@@ -1839,7 +1839,7 @@ namespace ts {
                     reportVerbose = false;
                     reportStatus(state, verboseMessage, proj.options.configFilePath!);
                 }
-                host.setModifiedTime(file, now ||= getCurrentTime(state.host));
+                host.setModifiedTime(file, now ??= getCurrentTime(state.host));
                 // Store output timestamps in a map because non incremental build will need to check them to determine up-to-dateness
                 if (outputTimeStampMap) {
                     outputTimeStampMap.set(path, now);
@@ -2288,7 +2288,7 @@ namespace ts {
             buildOrder.forEach(project => {
                 const projectPath = toResolvedConfigFilePath(state, project);
                 if (!state.projectErrorsReported.has(projectPath)) {
-                    reportErrors(state, diagnostics.get(projectPath) || emptyArray);
+                    reportErrors(state, diagnostics.get(projectPath) ?? emptyArray);
                 }
             });
             if (canReportSummary) diagnostics.forEach(singleProjectErrors => totalErrors += getErrorCountForSummary(singleProjectErrors));

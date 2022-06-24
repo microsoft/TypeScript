@@ -21,7 +21,7 @@ namespace ts {
     }
 
     export function getDeclarationsOfKind<T extends Declaration>(symbol: Symbol, kind: T["kind"]): T[] {
-        return filter(symbol.declarations || emptyArray, d => d.kind === kind) as T[];
+        return filter(symbol.declarations ?? emptyArray, d => d.kind === kind) as T[];
     }
 
     export function createSymbolTable(symbols?: readonly Symbol[]): SymbolTable {
@@ -272,7 +272,7 @@ namespace ts {
     }
 
     export function getSourceFileOfModule(module: Symbol) {
-        return getSourceFileOfNode(module.valueDeclaration || getNonAugmentationDeclaration(module));
+        return getSourceFileOfNode(module.valueDeclaration ?? getNonAugmentationDeclaration(module));
     }
 
     export function isPlainJsFile(file: SourceFile | undefined, checkJs: boolean | undefined): boolean {
@@ -478,7 +478,7 @@ namespace ts {
 
         if (isJSDocNode(node) || node.kind === SyntaxKind.JsxText) {
             // JsxText cannot actually contain comments, even though the scanner will think it sees comments
-            return skipTrivia((sourceFile || getSourceFileOfNode(node)).text, node.pos, /*stopAfterLineBreak*/ false, /*stopAtComments*/ true);
+            return skipTrivia((sourceFile ?? getSourceFileOfNode(node)).text, node.pos, /*stopAfterLineBreak*/ false, /*stopAtComments*/ true);
         }
 
         if (includeJsDoc && hasJSDocNodes(node)) {
@@ -494,7 +494,7 @@ namespace ts {
         }
 
         return skipTrivia(
-            (sourceFile || getSourceFileOfNode(node)).text,
+            (sourceFile ?? getSourceFileOfNode(node)).text,
             node.pos,
             /*stopAfterLineBreak*/ false,
             /*stopAtComments*/ false,
@@ -507,7 +507,7 @@ namespace ts {
             return getTokenPosOfNode(node, sourceFile);
         }
 
-        return skipTrivia((sourceFile || getSourceFileOfNode(node)).text, lastDecorator.end);
+        return skipTrivia((sourceFile ?? getSourceFileOfNode(node)).text, lastDecorator.end);
     }
 
     export function getSourceTextOfNodeFromSourceFile(sourceFile: SourceFile, node: Node, includeTrivia = false): string {
@@ -2256,7 +2256,7 @@ namespace ts {
     export function getAssignedExpandoInitializer(node: Node | undefined): Expression | undefined {
         if (node && node.parent && isBinaryExpression(node.parent) && node.parent.operatorToken.kind === SyntaxKind.EqualsToken) {
             const isPrototypeAssignment = isPrototypeAccess(node.parent.left);
-            return getExpandoInitializer(node.parent.right, isPrototypeAssignment) ||
+            return getExpandoInitializer(node.parent.right, isPrototypeAssignment) ??
                 getDefaultedExpandoInitializer(node.parent.left, node.parent.right, isPrototypeAssignment);
         }
         if (node && isCallExpression(node) && isBindableObjectDefinePropertyCall(node)) {
@@ -2576,7 +2576,7 @@ namespace ts {
     }
 
     export function importFromModuleSpecifier(node: StringLiteralLike): AnyValidImportOrReExport {
-        return tryGetImportFromModuleSpecifier(node) || Debug.failBadSyntaxKind(node.parent);
+        return tryGetImportFromModuleSpecifier(node) ?? Debug.failBadSyntaxKind(node.parent);
     }
 
     export function tryGetImportFromModuleSpecifier(node: StringLiteralLike): AnyValidImportOrReExport | undefined {
@@ -2740,7 +2740,7 @@ namespace ts {
             }
             node = getNextJSDocCommentLocation(node);
         }
-        return result || emptyArray;
+        return result ?? emptyArray;
     }
 
     function filterOwnedJSDocTags(hostNode: Node, jsDoc: JSDoc | JSDocTag) {
@@ -2835,11 +2835,11 @@ namespace ts {
         const host = getJSDocHost(node);
         if (host) {
             return getSourceOfDefaultedAssignment(host)
-                || getSourceOfAssignment(host)
-                || getSingleInitializerOfVariableStatementOrPropertyDeclaration(host)
-                || getSingleVariableOfVariableStatement(host)
-                || getNestedModuleDeclaration(host)
-                || host;
+                ?? getSourceOfAssignment(host)
+                ?? getSingleInitializerOfVariableStatementOrPropertyDeclaration(host)
+                ?? getSingleVariableOfVariableStatement(host)
+                ?? getNestedModuleDeclaration(host)
+                ?? host;
         }
     }
 
@@ -3222,7 +3222,7 @@ namespace ts {
 
     /** Returns the node in an `extends` or `implements` clause of a class or interface. */
     export function getAllSuperTypeNodes(node: Node): readonly TypeNode[] {
-        return isInterfaceDeclaration(node) ? getInterfaceBaseTypeNodes(node) || emptyArray :
+        return isInterfaceDeclaration(node) ? getInterfaceBaseTypeNodes(node) ?? emptyArray :
             isClassLike(node) ? concatenate(singleElementArray(getEffectiveBaseTypeNode(node)), getEffectiveImplementsTypeNodes(node)) || emptyArray :
             emptyArray;
     }
@@ -3470,7 +3470,7 @@ namespace ts {
     }
 
     export function getOriginalSourceFile(sourceFile: SourceFile) {
-        return getParseTreeNode(sourceFile, isSourceFile) || sourceFile;
+        return getParseTreeNode(sourceFile, isSourceFile) ?? sourceFile;
     }
 
     export const enum Associativity {
@@ -3956,7 +3956,7 @@ namespace ts {
         function getDiagnostics(): Diagnostic[];
         function getDiagnostics(fileName?: string): Diagnostic[] {
             if (fileName) {
-                return fileDiagnostics.get(fileName) || [];
+                return fileDiagnostics.get(fileName) ?? [];
             }
 
             const fileDiags: Diagnostic[] = flatMapToMutable(filesWithDiagnostics, f => fileDiagnostics.get(f));
@@ -4638,7 +4638,7 @@ namespace ts {
     export function getEffectiveReturnTypeNode(node: SignatureDeclaration | JSDocSignature): TypeNode | undefined {
         return isJSDocSignature(node) ?
             node.type && node.type.typeExpression && node.type.typeExpression.type :
-            node.type || (isInJSFile(node) ? getJSDocReturnType(node) : undefined);
+            node.type ?? (isInJSFile(node) ? getJSDocReturnType(node) : undefined);
     }
 
     export function getJSDocTypeParameterDeclarations(node: DeclarationWithTypeParameters): readonly TypeParameterDeclaration[] {
@@ -6014,7 +6014,7 @@ namespace ts {
     function SourceMapSource(this: SourceMapSource, fileName: string, text: string, skipTrivia?: (pos: number) => number) {
         this.fileName = fileName;
         this.text = text;
-        this.skipTrivia = skipTrivia || (pos => pos);
+        this.skipTrivia = skipTrivia ?? (pos => pos);
     }
 
     // eslint-disable-next-line prefer-const
@@ -6328,7 +6328,7 @@ namespace ts {
             case ModuleDetectionKind.Force:
                 // All non-declaration files are modules, declaration files still do the usual isFileProbablyExternalModule
                 return (file: SourceFile) => {
-                    file.externalModuleIndicator = isFileProbablyExternalModule(file) || !file.isDeclarationFile || undefined;
+                    file.externalModuleIndicator = (isFileProbablyExternalModule(file) ?? !file.isDeclarationFile) || undefined;
                 };
             case ModuleDetectionKind.Legacy:
                 // Files are modules if they have imports, exports, or import.meta
@@ -6566,7 +6566,7 @@ namespace ts {
             getSymlinkedFiles: () => symlinkedFiles,
             getSymlinkedDirectories: () => symlinkedDirectories,
             getSymlinkedDirectoriesByRealpath: () => symlinkedDirectoriesByRealpath,
-            setSymlinkedFile: (path, real) => (symlinkedFiles || (symlinkedFiles = new Map())).set(path, real),
+            setSymlinkedFile: (path, real) => (symlinkedFiles ??= new Map()).set(path, real),
             setSymlinkedDirectory: (symlink, real) => {
                 // Large, interconnected dependency graphs in pnpm will have a huge number of symlinks
                 // where both the realpath and the symlink path are inside node_modules/.pnpm. Since
@@ -6575,9 +6575,9 @@ namespace ts {
                 if (!containsIgnoredPath(symlinkPath)) {
                     symlinkPath = ensureTrailingDirectorySeparator(symlinkPath);
                     if (real !== false && !symlinkedDirectories?.has(symlinkPath)) {
-                        (symlinkedDirectoriesByRealpath ||= createMultiMap()).add(ensureTrailingDirectorySeparator(real.realPath), symlink);
+                        (symlinkedDirectoriesByRealpath ??= createMultiMap()).add(ensureTrailingDirectorySeparator(real.realPath), symlink);
                     }
-                    (symlinkedDirectories || (symlinkedDirectories = new Map())).set(symlinkPath, real);
+                    (symlinkedDirectories ??= new Map()).set(symlinkPath, real);
                 }
             },
             setSymlinksFromResolutions(files, typeReferenceDirectives) {
@@ -6595,7 +6595,7 @@ namespace ts {
             if (!resolution || !resolution.originalPath || !resolution.resolvedFileName) return;
             const { resolvedFileName, originalPath } = resolution;
             cache.setSymlinkedFile(toPath(originalPath, cwd, getCanonicalFileName), resolvedFileName);
-            const [commonResolved, commonOriginal] = guessDirectorySymlink(resolvedFileName, originalPath, cwd, getCanonicalFileName) || emptyArray;
+            const [commonResolved, commonOriginal] = guessDirectorySymlink(resolvedFileName, originalPath, cwd, getCanonicalFileName) ?? emptyArray;
             if (commonResolved && commonOriginal) {
                 cache.setSymlinkedDirectory(
                     commonOriginal,

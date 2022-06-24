@@ -46,7 +46,7 @@ namespace ts {
             cb: program => {
                 if (isAnyProgram(program)) {
                     baselineBuildInfo(program.getCompilerOptions(), sys, originalReadCall);
-                    (programs || (programs = [])).push(isBuilderProgram(program) ?
+                    (programs ??= []).push(isBuilderProgram(program) ?
                         [program.getProgram(), program] :
                         [program]
                     );
@@ -56,7 +56,7 @@ namespace ts {
                 }
             },
             getPrograms: () => {
-                const result = programs || emptyArray;
+                const result = programs ?? emptyArray;
                 programs = undefined;
                 return result;
             }

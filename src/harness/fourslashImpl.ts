@@ -1057,13 +1057,13 @@ namespace FourSlash {
         private _checker: ts.TypeChecker | undefined;
 
         private getProgram(): ts.Program {
-            if (!this._program) this._program = this.languageService.getProgram() || "missing";
+            if (!this._program) this._program = this.languageService.getProgram() ?? "missing";
             if (this._program === "missing") ts.Debug.fail("Could not retrieve program from language service");
             return this._program;
         }
 
         private getChecker() {
-            return this._checker || (this._checker = this.getProgram().getTypeChecker());
+            return this._checker ??= this.getProgram().getTypeChecker();
         }
 
         private getSourceFile(): ts.SourceFile {
@@ -1326,7 +1326,7 @@ namespace FourSlash {
 
         private testDiagnostics(expected: readonly FourSlashInterface.Diagnostic[], diagnostics: readonly ts.Diagnostic[], category: string) {
             assert.deepEqual(ts.realizeDiagnostics(diagnostics, "\n"), expected.map((e): ts.RealizedDiagnostic => {
-                const range = e.range || this.getRangesInFile()[0];
+                const range = e.range ?? this.getRangesInFile()[0];
                 if (!range) {
                     this.raiseError("Must provide a range for each expected diagnostic, or have one range in the fourslash source.");
                 }
@@ -1599,8 +1599,8 @@ namespace FourSlash {
             assert.equal(selectedItem.isVariadic, !!options.isVariadic);
 
             const actualTags = selectedItem.tags;
-            assert.equal(actualTags.length, (options.tags || ts.emptyArray).length, this.assertionMessageAtLastKnownMarker("signature help tags"));
-            ts.zipWith((options.tags || ts.emptyArray), actualTags, (expectedTag, actualTag) => {
+            assert.equal(actualTags.length, (options.tags ?? ts.emptyArray).length, this.assertionMessageAtLastKnownMarker("signature help tags"));
+            ts.zipWith((options.tags ?? ts.emptyArray), actualTags, (expectedTag, actualTag) => {
                 assert.equal(actualTag.name, expectedTag.name);
                 assert.deepEqual(actualTag.text, expectedTag.text, this.assertionMessageAtLastKnownMarker("signature help tag " + actualTag.name));
             });
@@ -1641,7 +1641,7 @@ namespace FourSlash {
             fileToRename: string | undefined,
             expectedRange: Range | undefined,
             preferences: ts.UserPreferences | undefined): void {
-            const renameInfo = this.languageService.getRenameInfo(this.activeFile.fileName, this.currentCaretPosition, preferences || { allowRenameOfImportPath: true });
+            const renameInfo = this.languageService.getRenameInfo(this.activeFile.fileName, this.currentCaretPosition, preferences ?? { allowRenameOfImportPath: true });
             if (!renameInfo.canRename) {
                 throw this.raiseError("Rename did not succeed");
             }
@@ -2254,9 +2254,9 @@ namespace FourSlash {
                     ts.toPath(this.activeFile.fileName, this.languageServiceAdapterHost.sys.getCurrentDirectory(), ts.hostGetCanonicalFileName(this.languageServiceAdapterHost)),
                     /*cache*/ undefined,
                     this.languageServiceAdapterHost,
-                    this.languageService.getProgram()?.getCompilerOptions() || {}
+                    this.languageService.getProgram()?.getCompilerOptions() ?? {}
                 ),
-                setExternalModuleIndicator: ts.getSetExternalModuleIndicator(this.languageService.getProgram()?.getCompilerOptions() || {})
+                setExternalModuleIndicator: ts.getSetExternalModuleIndicator(this.languageService.getProgram()?.getCompilerOptions() ?? {})
             };
             const referenceSourceFile = ts.createLanguageServiceSourceFile(
                 this.activeFile.fileName, createScriptSnapShot(content), options, /*version:*/ "0", /*setNodeParents:*/ false);
@@ -2922,7 +2922,7 @@ namespace FourSlash {
         public verifyCodeFixAll({ fixId, fixAllDescription, newFileContent, commands: expectedCommands }: FourSlashInterface.VerifyCodeFixAllOptions): void {
             const fixWithId = ts.find(this.getCodeFixes(this.activeFile.fileName), a => a.fixId === fixId);
             ts.Debug.assert(fixWithId !== undefined, "No available code fix has the expected id. Fix All is not available if there is only one potentially fixable diagnostic present.", () =>
-                `Expected '${fixId}'. Available actions:\n${ts.mapDefined(this.getCodeFixes(this.activeFile.fileName), a => `${a.fixName} (${a.fixId || "no fix id"})`).join("\n")}`);
+                `Expected '${fixId}'. Available actions:\n${ts.mapDefined(this.getCodeFixes(this.activeFile.fileName), a => `${a.fixName} (${a.fixId ?? "no fix id"})`).join("\n")}`);
             ts.Debug.assertEqual(fixWithId.fixAllDescription, fixAllDescription);
 
             const { changes, commands } = this.languageService.getCombinedCodeFix({ type: "file", fileName: this.activeFile.fileName }, fixId, this.formatCodeSettings, ts.emptyOptions);
@@ -3122,7 +3122,7 @@ namespace FourSlash {
 
         public verifyDocCommentTemplate(expected: ts.TextInsertion | undefined, options?: ts.DocCommentTemplateOptions) {
             const name = "verifyDocCommentTemplate";
-            const actual = this.languageService.getDocCommentTemplateAtPosition(this.activeFile.fileName, this.currentCaretPosition, options || { generateReturnInDocTemplate: true })!;
+            const actual = this.languageService.getDocCommentTemplateAtPosition(this.activeFile.fileName, this.currentCaretPosition, options ?? { generateReturnInDocTemplate: true })!;
 
             if (expected === undefined) {
                 if (actual) {
@@ -3335,7 +3335,7 @@ namespace FourSlash {
         }
 
         public verifyRangesAreOccurrences(isWriteAccess?: boolean, ranges?: Range[]) {
-            ranges = ranges || this.getRanges();
+            ranges ??= this.getRanges();
             assert(ranges.length);
             for (const r of ranges) {
                 this.goToRangeStart(r);
@@ -3366,7 +3366,7 @@ namespace FourSlash {
         }
 
         public verifyRangesAreDocumentHighlights(ranges: Range[] | undefined, options: FourSlashInterface.VerifyDocumentHighlightsOptions | undefined) {
-            ranges = ranges || this.getRanges();
+            ranges ??= this.getRanges();
             assert(ranges.length);
             const fileNames = options && options.filesToSearch || unique(ranges, range => range.fileName);
             for (const range of ranges) {
@@ -3386,7 +3386,7 @@ namespace FourSlash {
 
         private verifyDocumentHighlights(expectedRanges: Range[], fileNames: readonly string[] = [this.activeFile.fileName]) {
             fileNames = ts.map(fileNames, ts.normalizePath);
-            const documentHighlights = this.getDocumentHighlightsAtCurrentPosition(fileNames) || [];
+            const documentHighlights = this.getDocumentHighlightsAtCurrentPosition(fileNames) ?? [];
 
             for (const dh of documentHighlights) {
                 if (fileNames.indexOf(dh.fileName) === -1) {
@@ -3600,7 +3600,7 @@ namespace FourSlash {
             const action = ts.first(refactor.actions);
             assert(action.name === "Move to a new file" && action.description === "Move to a new file");
 
-            const editInfo = this.languageService.getEditsForRefactor(range.fileName, this.formatCodeSettings, range, refactor.name, action.name, options.preferences || ts.emptyOptions)!;
+            const editInfo = this.languageService.getEditsForRefactor(range.fileName, this.formatCodeSettings, range, refactor.name, action.name, options.preferences ?? ts.emptyOptions)!;
             this.verifyNewContent({ newFileContent: options.newFileContents }, editInfo.edits);
         }
 
@@ -3639,7 +3639,7 @@ namespace FourSlash {
             actionName: string,
             formattingOptions?: ts.FormatCodeSettings) {
 
-            formattingOptions = formattingOptions || this.formatCodeSettings;
+            formattingOptions ??= this.formatCodeSettings;
             const marker = this.getMarkerByName(markerName);
 
             const applicableRefactors = this.languageService.getApplicableRefactors(this.activeFile.fileName, marker.position, ts.emptyOptions);

@@ -59,7 +59,7 @@ namespace ts {
 
     /* @internal */
     export function getModifiedTime(host: { getModifiedTime: NonNullable<System["getModifiedTime"]>; }, fileName: string) {
-        return host.getModifiedTime(fileName) || missingFileModifiedTime;
+        return host.getModifiedTime(fileName) ?? missingFileModifiedTime;
     }
 
     interface Levels {
@@ -87,8 +87,8 @@ namespace ts {
             return;
         }
         const pollingIntervalChanged = setCustomLevels("TSC_WATCH_POLLINGINTERVAL", PollingInterval);
-        pollingChunkSize = getCustomPollingBasedLevels("TSC_WATCH_POLLINGCHUNKSIZE", defaultChunkLevels) || pollingChunkSize;
-        unchangedPollThresholds = getCustomPollingBasedLevels("TSC_WATCH_UNCHANGEDPOLLTHRESHOLDS", defaultChunkLevels) || unchangedPollThresholds;
+        pollingChunkSize = getCustomPollingBasedLevels("TSC_WATCH_POLLINGCHUNKSIZE", defaultChunkLevels) ?? pollingChunkSize;
+        unchangedPollThresholds = getCustomPollingBasedLevels("TSC_WATCH_UNCHANGEDPOLLTHRESHOLDS", defaultChunkLevels) ?? unchangedPollThresholds;
 
         function getLevel(envVar: string, level: keyof Levels) {
             return system.getEnvironmentVariable(`${envVar}_${level.toUpperCase()}`);
@@ -104,7 +104,7 @@ namespace ts {
             function setCustomLevel(level: keyof Levels) {
                 const customLevel = getLevel(baseVariable, level);
                 if (customLevel) {
-                    (customLevels || (customLevels = {}))[level] = Number(customLevel);
+                    (customLevels ??= {})[level] = Number(customLevel);
                 }
             }
         }
@@ -343,7 +343,7 @@ namespace ts {
             const filePath = toCanonicalName(fileName);
             fileWatcherCallbacks.add(filePath, callback);
             const dirPath = getDirectoryPath(filePath) || ".";
-            const watcher = dirWatchers.get(dirPath) ||
+            const watcher = dirWatchers.get(dirPath) ??
                 createDirectoryWatcher(getDirectoryPath(fileName) || ".", dirPath, fallbackOptions);
             watcher.referenceCount++;
             return {
@@ -745,7 +745,7 @@ namespace ts {
                 closeFileWatcher,
                 addChildDirectoryWatcher
             );
-            parentWatcher.childWatches = newChildWatches || emptyArray;
+            parentWatcher.childWatches = newChildWatches ?? emptyArray;
             return hasChanges;
 
             /**
@@ -760,7 +760,7 @@ namespace ts {
              * Add child directory watcher to the new ChildDirectoryWatcher list
              */
             function addChildDirectoryWatcher(childWatcher: ChildDirectoryWatcher) {
-                (newChildWatches || (newChildWatches = [])).push(childWatcher);
+                (newChildWatches ??= []).push(childWatcher);
             }
         }
 
@@ -805,7 +805,7 @@ namespace ts {
         return (eventName, _relativeFileName, modifiedTime) => {
             if (eventName === "rename") {
                 // Check time stamps rather than file system entry checks
-                modifiedTime ||= getModifiedTime(fileName) || missingFileModifiedTime;
+                modifiedTime ??= getModifiedTime(fileName) ?? missingFileModifiedTime;
                 callback(fileName, modifiedTime !== missingFileModifiedTime ? FileWatcherEventKind.Created : FileWatcherEventKind.Deleted, modifiedTime);
             }
             else {
@@ -938,11 +938,11 @@ namespace ts {
         }
 
         function ensureDynamicPollingWatchFile() {
-            return dynamicPollingWatchFile ||= createDynamicPriorityPollingWatchFile({ getModifiedTime, setTimeout });
+            return dynamicPollingWatchFile ??= createDynamicPriorityPollingWatchFile({ getModifiedTime, setTimeout });
         }
 
         function ensureFixedChunkSizePollingWatchFile() {
-            return fixedChunkSizePollingWatchFile ||= createFixedChunkSizePollingWatchFile({ getModifiedTime, setTimeout });
+            return fixedChunkSizePollingWatchFile ??= createFixedChunkSizePollingWatchFile({ getModifiedTime, setTimeout });
         }
 
         function updateOptionsForWatchFile(options: WatchOptions | undefined, useNonPollingWatchers?: boolean): WatchOptions {
@@ -1159,7 +1159,7 @@ namespace ts {
                     (!relativeName ||
                         relativeName === lastDirectoryPart ||
                         endsWith(relativeName, lastDirectoryPartWithDirectorySeparator!))) {
-                    const modifiedTime = getModifiedTime(fileOrDirectory) || missingFileModifiedTime;
+                    const modifiedTime = getModifiedTime(fileOrDirectory) ?? missingFileModifiedTime;
                     if (originalRelativeName) callback(event, originalRelativeName, modifiedTime);
                     callback(event, relativeName, modifiedTime);
                     if (inodeWatching) {
@@ -1198,7 +1198,7 @@ namespace ts {
                     fileOrDirectory,
                     (_fileName, eventKind, modifiedTime) => {
                         if (eventKind === FileWatcherEventKind.Created) {
-                            modifiedTime ||= getModifiedTime(fileOrDirectory) || missingFileModifiedTime;
+                            modifiedTime ??= getModifiedTime(fileOrDirectory) ?? missingFileModifiedTime;
                             if (modifiedTime !== missingFileModifiedTime) {
                                 callback("rename", "", modifiedTime);
                                 // Call the callback for current file or directory

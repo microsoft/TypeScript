@@ -61,7 +61,7 @@ namespace ts.server {
         }
 
         private lineOffsetToPosition(fileName: string, lineOffset: protocol.Location, lineMap?: number[]): number {
-            lineMap = lineMap || this.getLineMap(fileName);
+            lineMap ??= this.getLineMap(fileName);
             return computePositionOfLineAndCharacter(lineMap, lineOffset.line - 1, lineOffset.offset - 1);
         }
 
@@ -565,7 +565,7 @@ namespace ts.server {
                 return { start: 0, length: 0 };
             }
             fileName = fileName || span.file;
-            lineMap = lineMap || this.getLineMap(fileName);
+            lineMap ??= this.getLineMap(fileName);
             return createTextSpanFromBounds(
                 this.lineOffsetToPosition(fileName, span.start, lineMap),
                 this.lineOffsetToPosition(fileName, span.end, lineMap));

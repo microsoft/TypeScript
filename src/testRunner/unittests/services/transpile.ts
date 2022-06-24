@@ -12,7 +12,7 @@ namespace ts {
                 let oldTranspileResult: string;
                 let oldTranspileDiagnostics: Diagnostic[];
 
-                const transpileOptions: TranspileOptions = testSettings.options || {};
+                const transpileOptions: TranspileOptions = testSettings.options ?? {};
                 if (!transpileOptions.compilerOptions) {
                     transpileOptions.compilerOptions = { };
                 }

@@ -143,7 +143,7 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
                 p.dotDotDotToken,
                 p.name,
                 p.questionToken,
-                p.type || factory.createKeywordTypeNode(SyntaxKind.AnyKeyword)
+                p.type ?? factory.createKeywordTypeNode(SyntaxKind.AnyKeyword)
             ), p);
             const parameterDocComment = p.symbol && p.symbol.getDocumentationComment(checker);
             if (parameterDocComment) {

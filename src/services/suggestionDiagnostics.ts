@@ -55,7 +55,7 @@ namespace ts {
                 }
 
                 if (codefix.parameterShouldGetTypeFromJSDoc(node)) {
-                    diags.push(createDiagnosticForNode(node.name || node, Diagnostics.JSDoc_types_may_be_moved_to_TypeScript_types));
+                    diags.push(createDiagnosticForNode(node.name ?? node, Diagnostics.JSDoc_types_may_be_moved_to_TypeScript_types));
                 }
             }
 

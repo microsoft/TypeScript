@@ -333,7 +333,7 @@ namespace ts.OrganizeImports {
             if (importDeclaration.importClause === undefined) {
                 // Only the first such import is interesting - the others are redundant.
                 // Note: Unfortunately, we will lose trivia that was on this node.
-                importWithoutClause = importWithoutClause || importDeclaration;
+                importWithoutClause ??= importDeclaration;
                 continue;
             }
 
@@ -418,7 +418,7 @@ namespace ts.OrganizeImports {
                 if (exportDeclaration.exportClause === undefined) {
                     // Only the first such export is interesting - the others are redundant.
                     // Note: Unfortunately, we will lose trivia that was on this node.
-                    exportWithoutClause = exportWithoutClause || exportDeclaration;
+                    exportWithoutClause ??= exportDeclaration;
                 }
                 else if (exportDeclaration.isTypeOnly) {
                     typeOnlyExports.push(exportDeclaration);
@@ -455,7 +455,7 @@ namespace ts.OrganizeImports {
 
     export function compareImportOrExportSpecifiers<T extends ImportOrExportSpecifier>(s1: T, s2: T) {
         return compareBooleans(s1.isTypeOnly, s2.isTypeOnly)
-            || compareIdentifiers(s1.propertyName || s1.name, s2.propertyName || s2.name)
+            || compareIdentifiers(s1.propertyName ?? s1.name, s2.propertyName ?? s2.name)
             || compareIdentifiers(s1.name, s2.name);
     }
 

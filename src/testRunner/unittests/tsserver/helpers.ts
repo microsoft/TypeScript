@@ -379,7 +379,7 @@ namespace ts.projectSystem {
             typingsInstaller: undefined!, // TODO: GH#18217
             byteLength: Utils.byteLength,
             hrtime: process.hrtime,
-            logger: opts.logger || createHasErrorMessageLogger(),
+            logger: opts.logger ?? createHasErrorMessageLogger(),
             canUseEvents: false
         };
 
@@ -447,10 +447,10 @@ namespace ts.projectSystem {
     }
 
     export function createProjectService(host: server.ServerHost, options?: Partial<TestProjectServiceOptions>) {
-        const cancellationToken = options?.cancellationToken || server.nullCancellationToken;
-        const logger = options?.logger || createHasErrorMessageLogger();
+        const cancellationToken = options?.cancellationToken ?? server.nullCancellationToken;
+        const logger = options?.logger ?? createHasErrorMessageLogger();
         const useSingleInferredProject = options?.useSingleInferredProject !== undefined ? options.useSingleInferredProject : false;
-        return new TestProjectService(host, logger, cancellationToken, useSingleInferredProject, options?.typingsInstaller || server.nullTypingsInstaller, options);
+        return new TestProjectService(host, logger, cancellationToken, useSingleInferredProject, options?.typingsInstaller ?? server.nullTypingsInstaller, options);
     }
 
     export function checkNumberOfConfiguredProjects(projectService: server.ProjectService, expected: number) {

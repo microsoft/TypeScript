@@ -959,7 +959,7 @@ namespace vfs {
         private _getShadow(root: DirectoryInode): DirectoryInode;
         private _getShadow(root: Inode): Inode;
         private _getShadow(root: Inode) {
-            const shadows = this._lazy.shadows || (this._lazy.shadows = new Map<number, Inode>());
+            const shadows = this._lazy.shadows ?? (this._lazy.shadows = new Map<number, Inode>());
 
             let shadow = shadows.get(root.ino);
             if (!shadow) {

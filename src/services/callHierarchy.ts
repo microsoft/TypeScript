@@ -322,7 +322,7 @@ namespace ts.CallHierarchy {
                 || isRightSideOfPropertyAccess(node)
                 || isArgumentExpressionOfElementAccess(node)) {
                 const sourceFile = node.getSourceFile();
-                const ancestor = findAncestor(node, isValidCallHierarchyDeclaration) || sourceFile;
+                const ancestor = findAncestor(node, isValidCallHierarchyDeclaration) ?? sourceFile;
                 return { declaration: ancestor, range: createTextRangeFromNode(node, sourceFile) };
             }
         }

@@ -704,7 +704,7 @@ namespace ts.server {
                     host,
                     cancellationToken,
                     ...options,
-                    typingsInstaller: typingsInstaller || nullTypingsInstaller,
+                    typingsInstaller: typingsInstaller ?? nullTypingsInstaller,
                     byteLength: Buffer.byteLength,
                     hrtime: process.hrtime,
                     logger,
@@ -737,7 +737,7 @@ namespace ts.server {
                         if (this.logger.hasLevel(LogLevel.verbose)) {
                             this.logger.info(`eventPort: event "${eventName}" queued, but socket not yet initialized`);
                         }
-                        (this.socketEventQueue || (this.socketEventQueue = [])).push({ body, eventName });
+                        (this.socketEventQueue ??= []).push({ body, eventName });
                         return;
                     }
                     else {

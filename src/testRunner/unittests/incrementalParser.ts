@@ -43,7 +43,7 @@ namespace ts {
     // unavoidable.  If it does decrease an investigation should be done to make sure that things
     // are still ok and we're still appropriately reusing most of the tree.
     function compareTrees(oldText: IScriptSnapshot, newText: IScriptSnapshot, textChangeRange: TextChangeRange, expectedReusedElements: number, oldTree?: SourceFile) {
-        oldTree = oldTree || createTree(oldText, /*version:*/ ".");
+        oldTree ??= createTree(oldText, /*version:*/ ".");
         Utils.assertInvariants(oldTree, /*parent:*/ undefined);
 
         // Create a tree for the new text, in a non-incremental fashion.

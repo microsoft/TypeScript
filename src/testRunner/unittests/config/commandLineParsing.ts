@@ -2,7 +2,7 @@ namespace ts {
     describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
 
         function assertParseResult(commandLine: string[], expectedParsedCommandLine: ParsedCommandLine, workerDiagnostic?: () => ParseCommandLineWorkerDiagnostics) {
-            const parsed = parseCommandLineWorker(workerDiagnostic?.() || compilerOptionsDidYouMeanDiagnostics, commandLine);
+            const parsed = parseCommandLineWorker(workerDiagnostic?.() ?? compilerOptionsDidYouMeanDiagnostics, commandLine);
             assert.deepEqual(parsed.options, expectedParsedCommandLine.options);
             assert.deepEqual(parsed.watchOptions, expectedParsedCommandLine.watchOptions);
 

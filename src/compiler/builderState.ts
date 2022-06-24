@@ -87,7 +87,7 @@ namespace ts {
                     keys: () => forward.keys(),
 
                     deleteKey: k => {
-                        (deleted ||= new Set<Path>()).add(k);
+                        (deleted ??= new Set<Path>()).add(k);
 
                         const set = forward.get(k);
                         if (!set) {
@@ -248,7 +248,7 @@ namespace ts {
             }
 
             function addReferencedFile(referencedPath: Path) {
-                (referencedFiles || (referencedFiles = new Set())).add(referencedPath);
+                (referencedFiles ??= new Set()).add(referencedPath);
             }
         }
 
@@ -343,7 +343,7 @@ namespace ts {
 
         export function updateSignatureOfFile(state: BuilderState, signature: string | undefined, path: Path) {
             state.fileInfos.get(path)!.signature = signature;
-            (state.hasCalledUpdateShapeSignature ||= new Set()).add(path);
+            (state.hasCalledUpdateShapeSignature ??= new Set()).add(path);
         }
 
         /**
@@ -378,7 +378,7 @@ namespace ts {
             if (latestSignature === undefined) {
                 latestSignature = sourceFile.version;
                 if (state.exportedModulesMap && latestSignature !== prevSignature) {
-                    (state.oldExportedModulesMap ||= new Map()).set(sourceFile.resolvedPath, state.exportedModulesMap.getValues(sourceFile.resolvedPath) || false);
+                    (state.oldExportedModulesMap ??= new Map()).set(sourceFile.resolvedPath, state.exportedModulesMap.getValues(sourceFile.resolvedPath) ?? false);
                     // All the references in this file are exported
                     const references = state.referencedMap ? state.referencedMap.getValues(sourceFile.resolvedPath) : undefined;
                     if (references) {
@@ -389,14 +389,14 @@ namespace ts {
                     }
                 }
             }
-            (state.oldSignatures ||= new Map()).set(sourceFile.resolvedPath, prevSignature || false);
-            (state.hasCalledUpdateShapeSignature ||= new Set()).add(sourceFile.resolvedPath);
+            (state.oldSignatures ??= new Map()).set(sourceFile.resolvedPath, prevSignature || false);
+            (state.hasCalledUpdateShapeSignature ??= new Set()).add(sourceFile.resolvedPath);
             info.signature = latestSignature;
             return latestSignature !== prevSignature;
         }
 
         export function computeSignature(text: string, computeHash: ComputeHash | undefined) {
-            return (computeHash || generateDjb2Hash)(text);
+            return (computeHash ?? generateDjb2Hash)(text);
         }
 
         /**
@@ -404,7 +404,7 @@ namespace ts {
          */
         export function updateExportedModules(state: BuilderState, sourceFile: SourceFile, exportedModulesFromDeclarationEmit: ExportedModulesFromDeclarationEmit | undefined) {
             if (!state.exportedModulesMap) return;
-            (state.oldExportedModulesMap ||= new Map()).set(sourceFile.resolvedPath, state.exportedModulesMap.getValues(sourceFile.resolvedPath) || false);
+            (state.oldExportedModulesMap ??= new Map()).set(sourceFile.resolvedPath, state.exportedModulesMap.getValues(sourceFile.resolvedPath) ?? false);
             if (!exportedModulesFromDeclarationEmit) {
                 state.exportedModulesMap.deleteKey(sourceFile.resolvedPath);
                 return;
@@ -530,12 +530,12 @@ namespace ts {
                     addSourceFile(sourceFile);
                 }
             }
-            state.allFilesExcludingDefaultLibraryFile = result || emptyArray;
+            state.allFilesExcludingDefaultLibraryFile = result ?? emptyArray;
             return state.allFilesExcludingDefaultLibraryFile;
 
             function addSourceFile(sourceFile: SourceFile) {
                 if (!programOfThisState.isSourceFileDefaultLibrary(sourceFile)) {
-                    (result || (result = [])).push(sourceFile);
+                    (result ??= []).push(sourceFile);
                 }
             }
         }

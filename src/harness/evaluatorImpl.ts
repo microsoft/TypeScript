@@ -347,7 +347,7 @@ namespace evaluator {
                             // Set state so that re-entry while adding dependencies does nothing.
                             module.state = SystemModuleState.AddingDependencies;
                             const base = vpath.dirname(module.file);
-                            const dependencies = module.requestedDependencies || [];
+                            const dependencies = module.requestedDependencies ?? [];
 
                             for (const dependencyId of dependencies) {
                                 const dependency = this.load(this.resolve(dependencyId, base));

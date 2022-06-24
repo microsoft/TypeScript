@@ -64,7 +64,7 @@ namespace ts {
     export function isFileProbablyExternalModule(sourceFile: SourceFile) {
         // Try to use the first top-level import/export when available, then
         // fall back to looking for an 'import.meta' somewhere in the tree if necessary.
-        return forEach(sourceFile.statements, isAnExternalModuleIndicatorNode) ||
+        return forEach(sourceFile.statements, isAnExternalModuleIndicatorNode) ??
             getImportMetaIfNecessary(sourceFile);
     }
 
@@ -769,7 +769,7 @@ namespace ts {
         else {
             const setIndicator = format === undefined ? overrideSetExternalModuleIndicator : (file: SourceFile) => {
                 file.impliedNodeFormat = format;
-                return (overrideSetExternalModuleIndicator || setExternalModuleIndicator)(file);
+                return (overrideSetExternalModuleIndicator ?? setExternalModuleIndicator)(file);
             };
             result = Parser.parseSourceFile(fileName, sourceText, languageVersion, /*syntaxCursor*/ undefined, setParentNodes, scriptKind, setIndicator);
         }
@@ -986,7 +986,7 @@ namespace ts {
 
             initializeState(fileName, sourceText, languageVersion, syntaxCursor, scriptKind);
 
-            const result = parseSourceFileWorker(languageVersion, setParentNodes, scriptKind, setExternalModuleIndicatorOverride || setExternalModuleIndicator);
+            const result = parseSourceFileWorker(languageVersion, setParentNodes, scriptKind, setExternalModuleIndicatorOverride ?? setExternalModuleIndicator);
 
             clearState();
 
@@ -1893,7 +1893,7 @@ namespace ts {
         function parseExpectedToken<TKind extends SyntaxKind>(t: TKind, diagnosticMessage?: DiagnosticMessage, arg0?: any): Token<TKind>;
         function parseExpectedToken(t: SyntaxKind, diagnosticMessage?: DiagnosticMessage, arg0?: any): Node {
             return parseOptionalToken(t) ||
-                createMissingNode(t, /*reportAtCurrentPosition*/ false, diagnosticMessage || Diagnostics._0_expected, arg0 || tokenToString(t));
+                createMissingNode(t, /*reportAtCurrentPosition*/ false, diagnosticMessage ?? Diagnostics._0_expected, arg0 || tokenToString(t));
         }
 
         function parseExpectedTokenJSDoc<TKind extends JSDocSyntaxKind>(t: TKind): Token<TKind>;
@@ -2010,7 +2010,7 @@ namespace ts {
             }
 
             if (token() === SyntaxKind.PrivateIdentifier) {
-                parseErrorAtCurrentToken(privateIdentifierDiagnosticMessage || Diagnostics.Private_identifiers_are_not_allowed_outside_class_bodies);
+                parseErrorAtCurrentToken(privateIdentifierDiagnosticMessage ?? Diagnostics.Private_identifiers_are_not_allowed_outside_class_bodies);
                 return createIdentifier(/*isIdentifier*/ true);
             }
 
@@ -2030,7 +2030,7 @@ namespace ts {
                 Diagnostics.Identifier_expected_0_is_a_reserved_word_that_cannot_be_used_here :
                 Diagnostics.Identifier_expected;
 
-            return createMissingNode<Identifier>(SyntaxKind.Identifier, reportAtCurrentPosition, diagnosticMessage || defaultMessage, msgArg);
+            return createMissingNode<Identifier>(SyntaxKind.Identifier, reportAtCurrentPosition, diagnosticMessage ?? defaultMessage, msgArg);
         }
 
         function parseBindingIdentifier(privateIdentifierDiagnosticMessage?: DiagnosticMessage) {
@@ -3893,7 +3893,7 @@ namespace ts {
                 case SyntaxKind.NeverKeyword:
                 case SyntaxKind.ObjectKeyword:
                     // If these are followed by a dot, then parse these out as a dotted type reference instead.
-                    return tryParse(parseKeywordAndNoDot) || parseTypeReference();
+                    return tryParse(parseKeywordAndNoDot) ?? parseTypeReference();
                 case SyntaxKind.AsteriskEqualsToken:
                     // If there is '*=', treat it as * followed by postfix =
                     scanner.reScanAsteriskEqualsToken();
@@ -4124,7 +4124,7 @@ namespace ts {
             if (token() === operator || hasLeadingOperator) {
                 const types = [type];
                 while (parseOptional(operator)) {
-                    types.push(parseFunctionOrConstructorTypeToError(isUnionType) || parseConstituentType());
+                    types.push(parseFunctionOrConstructorTypeToError(isUnionType) ?? parseConstituentType());
                 }
                 type = finishNode(createTypeNode(createNodeArray(types, pos)), pos);
             }
@@ -4387,7 +4387,7 @@ namespace ts {
             // If we do successfully parse arrow-function, we must *not* recurse for productions 1, 2 or 3. An ArrowFunction is
             // not a LeftHandSideExpression, nor does it start a ConditionalExpression.  So we are done
             // with AssignmentExpression if we see one.
-            const arrowExpression = tryParseParenthesizedArrowFunctionExpression(allowReturnTypeInArrowFunction) || tryParseAsyncSimpleArrowFunctionExpression(allowReturnTypeInArrowFunction);
+            const arrowExpression = tryParseParenthesizedArrowFunctionExpression(allowReturnTypeInArrowFunction) ?? tryParseAsyncSimpleArrowFunctionExpression(allowReturnTypeInArrowFunction);
             if (arrowExpression) {
                 return arrowExpression;
             }
@@ -4674,7 +4674,7 @@ namespace ts {
 
             const result = parseParenthesizedArrowFunctionExpression(/*allowAmbiguity*/ false, allowReturnTypeInArrowFunction);
             if (!result) {
-                (notParenthesizedArrow || (notParenthesizedArrow = new Set())).add(tokenPos);
+                (notParenthesizedArrow ??= new Set()).add(tokenPos);
             }
 
             return result;
@@ -5639,7 +5639,7 @@ namespace ts {
 
         function parsePropertyAccessExpressionRest(pos: number, expression: LeftHandSideExpression, questionDotToken: QuestionDotToken | undefined) {
             const name = parseRightSideOfDot(/*allowIdentifierNames*/ true, /*allowPrivateIdentifiers*/ true);
-            const isOptionalChain = questionDotToken || tryReparseOptionalChain(expression);
+            const isOptionalChain = questionDotToken ?? tryReparseOptionalChain(expression);
             const propertyAccess = isOptionalChain ?
                 factory.createPropertyAccessChain(expression, questionDotToken, name) :
                 factory.createPropertyAccessExpression(expression, name);
@@ -6949,7 +6949,7 @@ namespace ts {
             const node = factory.createPropertyDeclaration(
                 combineDecoratorsAndModifiers(decorators, modifiers),
                 name,
-                questionToken || exclamationToken,
+                questionToken ?? exclamationToken,
                 type,
                 initializer);
             return withJSDoc(finishNode(node, pos), hasJSDoc);
@@ -8672,7 +8672,7 @@ namespace ts {
                     while (child = tryParse(() => parseChildParameterOrPropertyTag(PropertyLikeParse.CallbackParameter, indent) as JSDocParameterTag)) {
                         parameters = append(parameters, child);
                     }
-                    return createNodeArray(parameters || [], pos);
+                    return createNodeArray(parameters ?? [], pos);
                 }
 
                 function parseCallbackTag(start: number, tagName: Identifier, indent: number, indentText: string): JSDocCallbackTag {
@@ -8859,7 +8859,7 @@ namespace ts {
 
                 function parseJSDocIdentifierName(message?: DiagnosticMessage): Identifier {
                     if (!tokenIsIdentifierOrKeyword(token())) {
-                        return createMissingNode<Identifier>(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ !message, message || Diagnostics.Identifier_expected);
+                        return createMissingNode<Identifier>(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ !message, message ?? Diagnostics.Identifier_expected);
                     }
 
                     identifierCount++;
@@ -9538,7 +9538,7 @@ namespace ts {
     export function processCommentPragmas(context: PragmaContext, sourceText: string): void {
         const pragmas: PragmaPseudoMapEntry[] = [];
 
-        for (const range of getLeadingCommentRanges(sourceText, 0) || emptyArray) {
+        for (const range of getLeadingCommentRanges(sourceText, 0) ?? emptyArray) {
             const comment = sourceText.substring(range.pos, range.end);
             extractPragmas(pragmas, range, comment);
         }

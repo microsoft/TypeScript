@@ -101,7 +101,7 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
             }
         });
 
-        return (container || expr) as Expression;
+        return (container ?? expr) as Expression;
     }
 
     function treeToArray(current: Expression) {

@@ -114,7 +114,7 @@ namespace ts {
 
     // Unlike with the native Map/Set 'tryGet' functions in corePublic.ts, we eagerly evaluate these
     // since we will need them for `timestamp`, below.
-    const nativePerformanceHooks = tryGetWebPerformanceHooks() || tryGetNodePerformanceHooks();
+    const nativePerformanceHooks = tryGetWebPerformanceHooks() ?? tryGetNodePerformanceHooks();
     const nativePerformance = nativePerformanceHooks?.performance;
 
     export function tryGetNativePerformanceHooks() {

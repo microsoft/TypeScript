@@ -634,7 +634,7 @@ namespace ts {
                 context.startLexicalEnvironment();
             }
 
-            const name = node.name || (facts & ClassFacts.NeedsName ? factory.getGeneratedNameForNode(node) : undefined);
+            const name = node.name ?? (facts & ClassFacts.NeedsName ? factory.getGeneratedNameForNode(node) : undefined);
             const allDecorators = getAllDecoratorsOfClass(node);
             const decorators = transformAllDecoratorsOfDeclaration(node, node, allDecorators);
 
@@ -1219,7 +1219,7 @@ namespace ts {
                 visitPropertyNameOfClassElement(node),
                 visitParameterList(node.parameters, visitor, context),
                 /*type*/ undefined,
-                visitFunctionBody(node.body, visitor, context) || factory.createBlock([])
+                visitFunctionBody(node.body, visitor, context) ?? factory.createBlock([])
             );
         }
 
@@ -1241,7 +1241,7 @@ namespace ts {
                 concatenate(decorators, visitNodes(node.modifiers, modifierVisitor, isModifierLike)),
                 visitPropertyNameOfClassElement(node),
                 visitParameterList(node.parameters, visitor, context),
-                visitFunctionBody(node.body, visitor, context) || factory.createBlock([])
+                visitFunctionBody(node.body, visitor, context) ?? factory.createBlock([])
             );
         }
 
@@ -1949,7 +1949,7 @@ namespace ts {
         function getInnerMostModuleDeclarationFromDottedModule(moduleDeclaration: ModuleDeclaration): ModuleDeclaration | undefined {
             if (moduleDeclaration.body!.kind === SyntaxKind.ModuleDeclaration) {
                 const recursiveInnerModule = getInnerMostModuleDeclarationFromDottedModule(moduleDeclaration.body as ModuleDeclaration);
-                return recursiveInnerModule || moduleDeclaration.body as ModuleDeclaration;
+                return recursiveInnerModule ?? moduleDeclaration.body as ModuleDeclaration;
             }
         }
 
@@ -2390,7 +2390,7 @@ namespace ts {
 
         function substituteExpressionIdentifier(node: Identifier): Expression {
             return trySubstituteNamespaceExportedName(node)
-                || node;
+            ?? node;
         }
 
         function trySubstituteNamespaceExportedName(node: Identifier): Expression | undefined {

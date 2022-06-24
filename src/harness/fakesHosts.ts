@@ -245,7 +245,7 @@ namespace fakes {
         }
 
         public get parseConfigHost() {
-            return this._parseConfigHost || (this._parseConfigHost = new ParseConfigHost(this.sys));
+            return this._parseConfigHost ??= new ParseConfigHost(this.sys);
         }
 
         public getCurrentDirectory(): string {
@@ -532,7 +532,7 @@ ${indentText}${text}`;
 
         private constructor(sys: System | vfs.FileSystem, options?: ts.CompilerOptions, setParentNodes?: boolean, createProgram?: ts.CreateProgram<ts.BuilderProgram>) {
             super(sys, options, setParentNodes);
-            this.createProgram = createProgram || ts.createEmitAndSemanticDiagnosticsBuilderProgram;
+            this.createProgram = createProgram ?? ts.createEmitAndSemanticDiagnosticsBuilderProgram;
         }
 
         static create(sys: System | vfs.FileSystem, options?: ts.CompilerOptions, setParentNodes?: boolean, createProgram?: ts.CreateProgram<ts.BuilderProgram>) {
