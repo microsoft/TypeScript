@@ -1,0 +1,18 @@
+=== /lib/constants.js ===
+module.exports = {
+>module.exports : Symbol(module.exports, Decl(constants.js, 0, 0))
+>module : Symbol(export=, Decl(constants.js, 0, 0))
+>exports : Symbol(export=, Decl(constants.js, 0, 0))
+
+  str: 'x',
+>str : Symbol(str, Decl(constants.js, 0, 18))
+
+};
+
+=== /src/constants.ts ===
+import * as tsConstants from "../lib/constants";
+>tsConstants : Symbol(tsConstants, Decl(constants.ts, 0, 6))
+
+export { tsConstants };
+>tsConstants : Symbol(tsConstants, Decl(constants.ts, 1, 8))
+

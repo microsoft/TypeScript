@@ -134,5 +134,5 @@ tests/cases/conformance/jsx/file.tsx(56,13): error TS2769: No overload matches t
 !!! error TS2769:     Type '{ "data-format": true; }' is not assignable to type 'HyphenProps'.
 !!! error TS2769:       Types of property '"data-format"' are incompatible.
 !!! error TS2769:         Type 'boolean' is not assignable to type 'string'.
-!!! related TS2728 tests/cases/conformance/jsx/file.tsx:9:5: 'onClick' is declared here:
-!!! related TS2728 tests/cases/conformance/jsx/file.tsx:13:5: 'to' is declared here:
+!!! related TS2728 tests/cases/conformance/jsx/file.tsx:9:5: 'onClick' is declared here.
+!!! related TS2728 tests/cases/conformance/jsx/file.tsx:13:5: 'to' is declared here.

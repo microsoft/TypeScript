@@ -6,7 +6,7 @@ tests/cases/conformance/types/literal/templateLiteralTypes1.ts(165,15): error TS
 tests/cases/conformance/types/literal/templateLiteralTypes1.ts(197,16): error TS2590: Expression produces a union type that is too complex to represent.
 tests/cases/conformance/types/literal/templateLiteralTypes1.ts(201,16): error TS2590: Expression produces a union type that is too complex to represent.
 tests/cases/conformance/types/literal/templateLiteralTypes1.ts(205,16): error TS2590: Expression produces a union type that is too complex to represent.
-tests/cases/conformance/types/literal/templateLiteralTypes1.ts(251,7): error TS2590: Expression produces a union type that is too complex to represent.
+tests/cases/conformance/types/literal/templateLiteralTypes1.ts(252,7): error TS2590: Expression produces a union type that is too complex to represent.
 
 
 ==== tests/cases/conformance/types/literal/templateLiteralTypes1.ts (7 errors) ====
@@ -52,6 +52,7 @@ tests/cases/conformance/types/literal/templateLiteralTypes1.ts(251,7): error TS2
         z = x;  // Error
         ~
 !!! error TS2322: Type 'T' is not assignable to type '{ [P in keyof T & string as `p_${P}`]: T[P]; }'.
+!!! related TS2208 tests/cases/conformance/types/literal/templateLiteralTypes1.ts:38:14: This type parameter might need an `extends { [P in keyof T & string as `p_${P}`]: T[P]; }` constraint.
     }
     
     function fa2<T, U extends T, A extends string, B extends A>(x: { [P in B as `p_${P}`]: T }, y: { [Q in A as `p_${Q}`]: U }) {
@@ -242,6 +243,7 @@ tests/cases/conformance/types/literal/templateLiteralTypes1.ts(251,7): error TS2
     // Repro from #40970
     
     type PathKeys<T> =
+        unknown extends T ? never :
         T extends readonly any[] ? Extract<keyof T, `${number}`> | SubKeys<T, Extract<keyof T, `${number}`>> :
         T extends object ? Extract<keyof T, string> | SubKeys<T, Extract<keyof T, string>> :
         never;

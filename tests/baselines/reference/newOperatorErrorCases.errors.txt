@@ -1,10 +1,9 @@
 tests/cases/conformance/expressions/newOperator/newOperatorErrorCases.ts(26,16): error TS1005: ',' expected.
 tests/cases/conformance/expressions/newOperator/newOperatorErrorCases.ts(26,16): error TS2695: Left side of comma operator is unused and has no side effects.
-tests/cases/conformance/expressions/newOperator/newOperatorErrorCases.ts(31,9): error TS1384: A 'new' expression with type arguments must always be followed by a parenthesized argument list.
 tests/cases/conformance/expressions/newOperator/newOperatorErrorCases.ts(36,9): error TS2350: Only a void function can be called with the 'new' keyword.
 
 
-==== tests/cases/conformance/expressions/newOperator/newOperatorErrorCases.ts (4 errors) ====
+==== tests/cases/conformance/expressions/newOperator/newOperatorErrorCases.ts (3 errors) ====
     class C0 {
     
     }
@@ -39,9 +38,7 @@ tests/cases/conformance/expressions/newOperator/newOperatorErrorCases.ts(36,9): 
     // Generic construct expression with no parentheses
     var c1 = new T;
     var c1: T<{}>;
-    var c2 = new T<string>; // Parse error
-            ~~~~~~~~~~~~~~
-!!! error TS1384: A 'new' expression with type arguments must always be followed by a parenthesized argument list.
+    var c2 = new T<string>;  // Ok
     
     
     // Construct expression of non-void returning function

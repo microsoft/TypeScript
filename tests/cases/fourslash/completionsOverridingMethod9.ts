@@ -22,22 +22,12 @@ verify.completions({
     includes: [
         {
             name: "a",
-            sortText: completion.SortText.LocationPriority,
-            replacementSpan: {
-                fileName: "",
-                pos: 0,
-                end: 0,
-            },
+            sortText: completion.SortText.ClassMemberSnippets,
             insertText: "a?: number;"
         },
         {
             name: "b",
-            sortText: completion.SortText.LocationPriority,
-            replacementSpan: {
-                fileName: "",
-                pos: 0,
-                end: 0,
-            },
+            sortText: completion.SortText.ClassMemberSnippets,
             insertText: "b(x: number): void {\n}"
         },
     ],

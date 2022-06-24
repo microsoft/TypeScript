@@ -1,4 +1,4 @@
-tests/cases/compiler/interfaceNameAsIdentifier.ts(4,1): error TS2693: 'C' only refers to a type, but is being used as a value here:
+tests/cases/compiler/interfaceNameAsIdentifier.ts(4,1): error TS2693: 'C' only refers to a type, but is being used as a value here.
 tests/cases/compiler/interfaceNameAsIdentifier.ts(12,1): error TS2708: Cannot use namespace 'm2' as a value.
 
 
@@ -8,7 +8,7 @@ tests/cases/compiler/interfaceNameAsIdentifier.ts(12,1): error TS2708: Cannot us
     }
     C();
     ~
-!!! error TS2693: 'C' only refers to a type, but is being used as a value here:
+!!! error TS2693: 'C' only refers to a type, but is being used as a value here.
     
     module m2 {
         export interface C {

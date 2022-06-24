@@ -58,12 +58,12 @@ WatchedFiles::
   {"fileName":"/a/b/f2.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/a/b/node_modules/@types:
+  {"fileName":"/a/b/node_modules/@types","pollingInterval":500}
 
 FsWatches::
 
 FsWatchesRecursive::
-/a/b/node_modules/@types:
-  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 
@@ -89,7 +89,7 @@ Output::
   The file is in the program because:
     Part of 'files' list in tsconfig.json
 
-File is matched by 'files' list specified here: [96ma/b/tsconfig.json[0m:[93m1[0m:[93m40[0m
+File is matched by 'files' list specified here. [96ma/b/tsconfig.json[0m:[93m1[0m:[93m40[0m
 
   | {"compilerOptions":{},"files":["f1.ts","f2.ts"]}
     [96m                                       ▔▔▔▔▔▔▔[0m
@@ -116,14 +116,14 @@ WatchedFiles::
   {"fileName":"/a/b/f1.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/a/b/node_modules/@types:
+  {"fileName":"/a/b/node_modules/@types","pollingInterval":500}
 /a/b/f2.ts:
   {"fileName":"/a/b/f2.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
-/a/b/node_modules/@types:
-  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 

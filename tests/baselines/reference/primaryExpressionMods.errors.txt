@@ -18,5 +18,5 @@ tests/cases/compiler/primaryExpressionMods.ts(11,8): error TS2833: Cannot find n
     var q: m.P;             // Error
            ~
 !!! error TS2833: Cannot find namespace 'm'. Did you mean 'M'?
-!!! related TS2728 tests/cases/compiler/primaryExpressionMods.ts:1:8: 'M' is declared here:
+!!! related TS2728 tests/cases/compiler/primaryExpressionMods.ts:1:8: 'M' is declared here.
     

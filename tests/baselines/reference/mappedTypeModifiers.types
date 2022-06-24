@@ -1,21 +1,21 @@
 === tests/cases/conformance/types/mapped/mappedTypeModifiers.ts ===
 type T = { a: number, b: string };
->T : T
+>T : { a: number; b: string; }
 >a : number
 >b : string
 
 type TP = { a?: number, b?: string };
->TP : TP
+>TP : { a?: number | undefined; b?: string | undefined; }
 >a : number | undefined
 >b : string | undefined
 
 type TR = { readonly a: number, readonly b: string };
->TR : TR
+>TR : { readonly a: number; readonly b: string; }
 >a : number
 >b : string
 
 type TPR = { readonly a?: number, readonly b?: string };
->TPR : TPR
+>TPR : { readonly a?: number | undefined; readonly b?: string | undefined; }
 >a : number | undefined
 >b : string | undefined
 
@@ -105,28 +105,28 @@ type Boxified<T> = { [P in keyof T]: { x: T[P] } };
 >x : T[P]
 
 type B = { a: { x: number }, b: { x: string } };
->B : B
+>B : { a: {    x: number;}; b: {    x: string;}; }
 >a : { x: number; }
 >x : number
 >b : { x: string; }
 >x : string
 
 type BP = { a?: { x: number }, b?: { x: string } };
->BP : BP
+>BP : { a?: { x: number; } | undefined; b?: { x: string; } | undefined; }
 >a : { x: number; } | undefined
 >x : number
 >b : { x: string; } | undefined
 >x : string
 
 type BR = { readonly a: { x: number }, readonly b: { x: string } };
->BR : BR
+>BR : { readonly a: {    x: number;}; readonly b: {    x: string;}; }
 >a : { x: number; }
 >x : number
 >b : { x: string; }
 >x : string
 
 type BPR = { readonly a?: { x: number }, readonly b?: { x: string } };
->BPR : BPR
+>BPR : { readonly a?: { x: number; } | undefined; readonly b?: { x: string; } | undefined; }
 >a : { x: number; } | undefined
 >x : number
 >b : { x: string; } | undefined
@@ -214,7 +214,7 @@ var b04: Pick<BPR, keyof BPR>;
 >b04 : BPR
 
 type Foo = { prop: number, [x: string]: number };
->Foo : Foo
+>Foo : { [x: string]: number; prop: number; }
 >prop : number
 >x : string
 

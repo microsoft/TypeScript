@@ -1,0 +1,108 @@
+=== tests/cases/compiler/parameterPropertyInConstructorWithPrologues.ts ===
+// https://github.com/microsoft/TypeScript/issues/48671
+
+class Foo1 {
+>Foo1 : Foo1
+
+  constructor(private A: string) {
+>A : string
+
+    "ngInject1";
+>"ngInject1" : "ngInject1"
+  }
+}
+
+class Foo2 {
+>Foo2 : Foo2
+
+  constructor(private A: string, private B: string) {
+>A : string
+>B : string
+
+    "ngInject1";
+>"ngInject1" : "ngInject1"
+
+    "ngInject2";
+>"ngInject2" : "ngInject2"
+  }
+}
+
+class Foo3 {
+>Foo3 : Foo3
+
+  constructor(private A: string, private B: string, private C: string) {
+>A : string
+>B : string
+>C : string
+
+    "ngInject1";
+>"ngInject1" : "ngInject1"
+
+    "ngInject2";
+>"ngInject2" : "ngInject2"
+  }
+}
+
+class Foo4 {
+>Foo4 : Foo4
+
+  constructor(private A: string) {
+>A : string
+
+    "ngInject1";
+>"ngInject1" : "ngInject1"
+
+    console.log("hi");
+>console.log("hi") : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>"hi" : "hi"
+  }
+}
+
+class Foo5 {
+>Foo5 : Foo5
+
+  constructor(private A: string, private B: string) {
+>A : string
+>B : string
+
+    "ngInject1";
+>"ngInject1" : "ngInject1"
+
+    "ngInject2";
+>"ngInject2" : "ngInject2"
+
+    console.log("hi");
+>console.log("hi") : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>"hi" : "hi"
+  }
+}
+
+class Foo6 {
+>Foo6 : Foo6
+
+  constructor(private A: string, private B: string, private C: string) {
+>A : string
+>B : string
+>C : string
+
+    "ngInject1";
+>"ngInject1" : "ngInject1"
+
+    "ngInject2";
+>"ngInject2" : "ngInject2"
+
+    console.log("hi");
+>console.log("hi") : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>"hi" : "hi"
+  }
+}
+

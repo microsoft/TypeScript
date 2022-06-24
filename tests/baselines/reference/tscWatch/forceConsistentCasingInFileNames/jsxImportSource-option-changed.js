@@ -46,7 +46,7 @@ Output::
     Part of 'files' list in tsconfig.json
     Imported via "react/jsx-runtime" from file '/user/username/projects/myproject/index.tsx' with packageId 'react/jsx-runtime/index.d.ts@0.0.1' to import 'jsx' and 'jsxs' factory functions
 
-File is matched by 'files' list specified here: [96mtsconfig.json[0m:[93m1[0m:[93m115[0m
+File is matched by 'files' list specified here. [96mtsconfig.json[0m:[93m1[0m:[93m115[0m
 
   | {"compilerOptions":{"jsx":"react-jsx","jsxImportSource":"react","forceConsistentCasingInFileNames":true},"files":["node_modules/react/jsx-Runtime/index.d.ts","index.tsx"]}
     [96m                                                                                                                  ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
@@ -85,18 +85,16 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/index.tsx","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/user/username/projects/myproject/node_modules/react/jsx-runtime/package.json:
-  {"fileName":"/user/username/projects/myproject/node_modules/react/jsx-runtime/package.json","pollingInterval":250}
 /user/username/projects/myproject/node_modules/react/package.json:
   {"fileName":"/user/username/projects/myproject/node_modules/react/package.json","pollingInterval":250}
+/user/username/projects/myproject/node_modules/@types:
+  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/myproject/node_modules:
-  {"directoryName":"/user/username/projects/myproject/node_modules","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/node_modules"}
 
 exitCode:: ExitStatus.undefined
 

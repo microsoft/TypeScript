@@ -34,6 +34,8 @@ namespace ts {
         const getJSDocPrimaryTypeCreateFunction = memoizeOne(<T extends JSDocType>(kind: T["kind"]) => () => createJSDocPrimaryTypeWorker(kind));
         const getJSDocUnaryTypeCreateFunction = memoizeOne(<T extends JSDocType & { readonly type: TypeNode | undefined; }>(kind: T["kind"]) => (type: T["type"]) => createJSDocUnaryTypeWorker<T>(kind, type));
         const getJSDocUnaryTypeUpdateFunction = memoizeOne(<T extends JSDocType & { readonly type: TypeNode | undefined; }>(kind: T["kind"]) => (node: T, type: T["type"]) => updateJSDocUnaryTypeWorker<T>(kind, node, type));
+        const getJSDocPrePostfixUnaryTypeCreateFunction = memoizeOne(<T extends JSDocType & { readonly type: TypeNode | undefined; readonly postfix: boolean; }>(kind: T["kind"]) => (type: T["type"], postfix?: boolean) => createJSDocPrePostfixUnaryTypeWorker<T>(kind, type, postfix));
+        const getJSDocPrePostfixUnaryTypeUpdateFunction = memoizeOne(<T extends JSDocType & { readonly type: TypeNode | undefined; readonly postfix: boolean; }>(kind: T["kind"]) => (node: T, type: T["type"]) => updateJSDocPrePostfixUnaryTypeWorker<T>(kind, node, type));
         const getJSDocSimpleTagCreateFunction = memoizeOne(<T extends JSDocTag>(kind: T["kind"]) => (tagName: Identifier | undefined, comment?: NodeArray<JSDocComment>) => createJSDocSimpleTagWorker(kind, tagName, comment));
         const getJSDocSimpleTagUpdateFunction = memoizeOne(<T extends JSDocTag>(kind: T["kind"]) => (node: T, tagName: Identifier | undefined, comment?: NodeArray<JSDocComment>) => updateJSDocSimpleTagWorker(kind, node, tagName, comment));
         const getJSDocTypeLikeTagCreateFunction = memoizeOne(<T extends JSDocTag & { typeExpression?: JSDocTypeExpression }>(kind: T["kind"]) => (tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, comment?: NodeArray<JSDocComment>) => createJSDocTypeLikeTagWorker(kind, tagName, typeExpression, comment));
@@ -42,6 +44,8 @@ namespace ts {
         const factory: NodeFactory = {
             get parenthesizer() { return parenthesizerRules(); },
             get converters() { return converters(); },
+            baseFactory,
+            flags,
             createNodeArray,
             createNumericLiteral,
             createBigIntLiteral,
@@ -293,6 +297,8 @@ namespace ts {
             updateAssertClause,
             createAssertEntry,
             updateAssertEntry,
+            createImportTypeAssertionContainer,
+            updateImportTypeAssertionContainer,
             createNamespaceImport,
             updateNamespaceImport,
             createNamespaceExport,
@@ -315,10 +321,10 @@ namespace ts {
             // lazily load factory members for JSDoc types with similar structure
             get createJSDocAllType() { return getJSDocPrimaryTypeCreateFunction<JSDocAllType>(SyntaxKind.JSDocAllType); },
             get createJSDocUnknownType() { return getJSDocPrimaryTypeCreateFunction<JSDocUnknownType>(SyntaxKind.JSDocUnknownType); },
-            get createJSDocNonNullableType() { return getJSDocUnaryTypeCreateFunction<JSDocNonNullableType>(SyntaxKind.JSDocNonNullableType); },
-            get updateJSDocNonNullableType() { return getJSDocUnaryTypeUpdateFunction<JSDocNonNullableType>(SyntaxKind.JSDocNonNullableType); },
-            get createJSDocNullableType() { return getJSDocUnaryTypeCreateFunction<JSDocNullableType>(SyntaxKind.JSDocNullableType); },
-            get updateJSDocNullableType() { return getJSDocUnaryTypeUpdateFunction<JSDocNullableType>(SyntaxKind.JSDocNullableType); },
+            get createJSDocNonNullableType() { return getJSDocPrePostfixUnaryTypeCreateFunction<JSDocNonNullableType>(SyntaxKind.JSDocNonNullableType); },
+            get updateJSDocNonNullableType() { return getJSDocPrePostfixUnaryTypeUpdateFunction<JSDocNonNullableType>(SyntaxKind.JSDocNonNullableType); },
+            get createJSDocNullableType() { return getJSDocPrePostfixUnaryTypeCreateFunction<JSDocNullableType>(SyntaxKind.JSDocNullableType); },
+            get updateJSDocNullableType() { return getJSDocPrePostfixUnaryTypeUpdateFunction<JSDocNullableType>(SyntaxKind.JSDocNullableType); },
             get createJSDocOptionalType() { return getJSDocUnaryTypeCreateFunction<JSDocOptionalType>(SyntaxKind.JSDocOptionalType); },
             get updateJSDocOptionalType() { return getJSDocUnaryTypeUpdateFunction<JSDocOptionalType>(SyntaxKind.JSDocOptionalType); },
             get createJSDocVariadicType() { return getJSDocUnaryTypeCreateFunction<JSDocVariadicType>(SyntaxKind.JSDocVariadicType); },
@@ -573,15 +579,8 @@ namespace ts {
 
         function createBaseDeclaration<T extends Declaration | VariableStatement | ImportDeclaration>(
             kind: T["kind"],
-            decorators: readonly Decorator[] | undefined,
-            modifiers: readonly Modifier[] | undefined
         ) {
             const node = createBaseNode(kind);
-            node.decorators = asNodeArray(decorators);
-            node.modifiers = asNodeArray(modifiers);
-            node.transformFlags |=
-                propagateChildrenFlags(node.decorators) |
-                propagateChildrenFlags(node.modifiers);
             // NOTE: The following properties are commonly set by the binder and are added here to
             // ensure declarations have a stable shape.
             node.symbol = undefined!; // initialized by binder
@@ -593,17 +592,17 @@ namespace ts {
 
         function createBaseNamedDeclaration<T extends NamedDeclaration>(
             kind: T["kind"],
-            decorators: readonly Decorator[] | undefined,
-            modifiers: readonly Modifier[] | undefined,
+            modifiers: readonly ModifierLike[] | undefined,
             name: Identifier | PrivateIdentifier | StringLiteralLike | NumericLiteral | ComputedPropertyName | BindingPattern | string | undefined
         ) {
-            const node = createBaseDeclaration(
-                kind,
-                decorators,
-                modifiers
-            );
+            const node = createBaseDeclaration(kind);
             name = asName(name);
             node.name = name;
+            if (canHaveModifiers(node)) {
+                (node as Mutable<HasModifiers>).modifiers = asNodeArray(modifiers);
+                (node as Mutable<HasModifiers>).transformFlags |= propagateChildrenFlags(node.modifiers);
+                // node.decorators = filter(node.modifiers, isDecorator);
+            }
 
             // The PropertyName of a member is allowed to be `await`.
             // We don't need to exclude `await` for type signatures since types
@@ -630,14 +629,12 @@ namespace ts {
 
         function createBaseGenericNamedDeclaration<T extends NamedDeclaration & { typeParameters?: NodeArray<TypeParameterDeclaration> }>(
             kind: T["kind"],
-            decorators: readonly Decorator[] | undefined,
-            modifiers: readonly Modifier[] | undefined,
+            modifiers: readonly ModifierLike[] | undefined,
             name: Identifier | PrivateIdentifier | StringLiteralLike | NumericLiteral | ComputedPropertyName | BindingPattern | string | undefined,
             typeParameters: readonly TypeParameterDeclaration[] | undefined
         ) {
             const node = createBaseNamedDeclaration(
                 kind,
-                decorators,
                 modifiers,
                 name
             );
@@ -649,8 +646,7 @@ namespace ts {
 
         function createBaseSignatureDeclaration<T extends SignatureDeclarationBase>(
             kind: T["kind"],
-            decorators: readonly Decorator[] | undefined,
-            modifiers: readonly Modifier[] | undefined,
+            modifiers: readonly ModifierLike[] | undefined,
             name: Identifier | PrivateIdentifier | StringLiteralLike | NumericLiteral | ComputedPropertyName | BindingPattern | string | undefined,
             typeParameters: readonly TypeParameterDeclaration[] | undefined,
             parameters: readonly ParameterDeclaration[] | undefined,
@@ -658,7 +654,6 @@ namespace ts {
         ) {
             const node = createBaseGenericNamedDeclaration(
                 kind,
-                decorators,
                 modifiers,
                 name,
                 typeParameters
@@ -669,19 +664,23 @@ namespace ts {
                 propagateChildrenFlags(node.parameters) |
                 propagateChildFlags(node.type);
             if (type) node.transformFlags |= TransformFlags.ContainsTypeScript;
+
+            // The following properties are used for quick info
+            node.typeArguments = undefined;
             return node;
         }
 
-        function updateBaseSignatureDeclaration<T extends SignatureDeclarationBase>(updated: Mutable<T>, original: T) {
-            // copy children used only for error reporting
-            if (original.typeArguments) updated.typeArguments = original.typeArguments;
+        function finishUpdateBaseSignatureDeclaration<T extends SignatureDeclarationBase>(updated: Mutable<T>, original: T) {
+            if (updated !== original) {
+                // copy children used for quick info
+                updated.typeArguments = original.typeArguments;
+            }
             return update(updated, original);
         }
 
         function createBaseFunctionLikeDeclaration<T extends FunctionLikeDeclaration>(
             kind: T["kind"],
-            decorators: readonly Decorator[] | undefined,
-            modifiers: readonly Modifier[] | undefined,
+            modifiers: readonly ModifierLike[] | undefined,
             name: Identifier | PrivateIdentifier | StringLiteralLike | NumericLiteral | ComputedPropertyName | BindingPattern | string | undefined,
             typeParameters: readonly TypeParameterDeclaration[] | undefined,
             parameters: readonly ParameterDeclaration[] | undefined,
@@ -690,7 +689,6 @@ namespace ts {
         ) {
             const node = createBaseSignatureDeclaration(
                 kind,
-                decorators,
                 modifiers,
                 name,
                 typeParameters,
@@ -703,24 +701,15 @@ namespace ts {
             return node;
         }
 
-        function updateBaseFunctionLikeDeclaration<T extends FunctionLikeDeclaration>(updated: Mutable<T>, original: T) {
-            // copy children used only for error reporting
-            if (original.exclamationToken) updated.exclamationToken = original.exclamationToken;
-            if (original.typeArguments) updated.typeArguments = original.typeArguments;
-            return updateBaseSignatureDeclaration(updated, original);
-        }
-
         function createBaseInterfaceOrClassLikeDeclaration<T extends InterfaceDeclaration | ClassLikeDeclaration>(
             kind: T["kind"],
-            decorators: readonly Decorator[] | undefined,
-            modifiers: readonly Modifier[] | undefined,
+            modifiers: readonly ModifierLike[] | undefined,
             name: string | Identifier | undefined,
             typeParameters: readonly TypeParameterDeclaration[] | undefined,
             heritageClauses: readonly HeritageClause[] | undefined
         ) {
             const node = createBaseGenericNamedDeclaration(
                 kind,
-                decorators,
                 modifiers,
                 name,
                 typeParameters
@@ -732,8 +721,7 @@ namespace ts {
 
         function createBaseClassLikeDeclaration<T extends ClassLikeDeclaration>(
             kind: T["kind"],
-            decorators: readonly Decorator[] | undefined,
-            modifiers: readonly Modifier[] | undefined,
+            modifiers: readonly ModifierLike[] | undefined,
             name: string | Identifier | undefined,
             typeParameters: readonly TypeParameterDeclaration[] | undefined,
             heritageClauses: readonly HeritageClause[] | undefined,
@@ -741,7 +729,6 @@ namespace ts {
         ) {
             const node = createBaseInterfaceOrClassLikeDeclaration(
                 kind,
-                decorators,
                 modifiers,
                 name,
                 typeParameters,
@@ -754,14 +741,12 @@ namespace ts {
 
         function createBaseBindingLikeDeclaration<T extends PropertyDeclaration | VariableDeclaration | ParameterDeclaration | BindingElement>(
             kind: T["kind"],
-            decorators: readonly Decorator[] | undefined,
-            modifiers: readonly Modifier[] | undefined,
+            modifiers: readonly ModifierLike[] | undefined,
             name: string | T["name"] | undefined,
             initializer: Expression | undefined
         ) {
             const node = createBaseNamedDeclaration(
                 kind,
-                decorators,
                 modifiers,
                 name
             );
@@ -772,15 +757,13 @@ namespace ts {
 
         function createBaseVariableLikeDeclaration<T extends PropertyDeclaration | VariableDeclaration | ParameterDeclaration>(
             kind: T["kind"],
-            decorators: readonly Decorator[] | undefined,
-            modifiers: readonly Modifier[] | undefined,
+            modifiers: readonly ModifierLike[] | undefined,
             name: string | T["name"] | undefined,
             type: TypeNode | undefined,
             initializer: Expression | undefined
         ) {
             const node = createBaseBindingLikeDeclaration(
                 kind,
-                decorators,
                 modifiers,
                 name,
                 initializer
@@ -996,6 +979,8 @@ namespace ts {
                 case SyntaxKind.BigIntKeyword:
                 case SyntaxKind.NeverKeyword:
                 case SyntaxKind.ObjectKeyword:
+                case SyntaxKind.InKeyword:
+                case SyntaxKind.OutKeyword:
                 case SyntaxKind.OverrideKeyword:
                 case SyntaxKind.StringKeyword:
                 case SyntaxKind.BooleanKeyword:
@@ -1075,6 +1060,8 @@ namespace ts {
             if (flags & ModifierFlags.Override) result.push(createModifier(SyntaxKind.OverrideKeyword));
             if (flags & ModifierFlags.Readonly) result.push(createModifier(SyntaxKind.ReadonlyKeyword));
             if (flags & ModifierFlags.Async) result.push(createModifier(SyntaxKind.AsyncKeyword));
+            if (flags & ModifierFlags.In) result.push(createModifier(SyntaxKind.InKeyword));
+            if (flags & ModifierFlags.Out) result.push(createModifier(SyntaxKind.OutKeyword));
             return result.length ? result : undefined;
         }
 
@@ -1124,11 +1111,10 @@ namespace ts {
         //
 
         // @api
-        function createTypeParameterDeclaration(name: string | Identifier, constraint?: TypeNode, defaultType?: TypeNode) {
+        function createTypeParameterDeclaration(modifiers: readonly Modifier[] | undefined, name: string | Identifier, constraint?: TypeNode, defaultType?: TypeNode): TypeParameterDeclaration {
             const node = createBaseNamedDeclaration<TypeParameterDeclaration>(
                 SyntaxKind.TypeParameter,
-                /*decorators*/ undefined,
-                /*modifiers*/ undefined,
+                modifiers,
                 name
             );
             node.constraint = constraint;
@@ -1138,18 +1124,18 @@ namespace ts {
         }
 
         // @api
-        function updateTypeParameterDeclaration(node: TypeParameterDeclaration, name: Identifier, constraint: TypeNode | undefined, defaultType: TypeNode | undefined) {
-            return node.name !== name
+        function updateTypeParameterDeclaration(node: TypeParameterDeclaration, modifiers: readonly Modifier[] | undefined, name: Identifier, constraint: TypeNode | undefined, defaultType: TypeNode | undefined): TypeParameterDeclaration {
+            return node.modifiers !== modifiers
+                || node.name !== name
                 || node.constraint !== constraint
                 || node.default !== defaultType
-                ? update(createTypeParameterDeclaration(name, constraint, defaultType), node)
+                ? update(createTypeParameterDeclaration(modifiers, name, constraint, defaultType), node)
                 : node;
         }
 
         // @api
         function createParameterDeclaration(
-            decorators: readonly Decorator[] | undefined,
-            modifiers: readonly Modifier[] | undefined,
+            modifiers: readonly ModifierLike[] | undefined,
             dotDotDotToken: DotDotDotToken | undefined,
             name: string | BindingName,
             questionToken?: QuestionToken,
@@ -1158,7 +1144,6 @@ namespace ts {
         ) {
             const node = createBaseVariableLikeDeclaration<ParameterDeclaration>(
                 SyntaxKind.Parameter,
-                decorators,
                 modifiers,
                 name,
                 type,
@@ -1183,22 +1168,20 @@ namespace ts {
         // @api
         function updateParameterDeclaration(
             node: ParameterDeclaration,
-            decorators: readonly Decorator[] | undefined,
-            modifiers: readonly Modifier[] | undefined,
+            modifiers: readonly ModifierLike[] | undefined,
             dotDotDotToken: DotDotDotToken | undefined,
             name: string | BindingName,
             questionToken: QuestionToken | undefined,
             type: TypeNode | undefined,
             initializer: Expression | undefined
         ) {
-            return node.decorators !== decorators
-                || node.modifiers !== modifiers
+            return node.modifiers !== modifiers
                 || node.dotDotDotToken !== dotDotDotToken
                 || node.name !== name
                 || node.questionToken !== questionToken
                 || node.type !== type
                 || node.initializer !== initializer
-                ? update(createParameterDeclaration(decorators, modifiers, dotDotDotToken, name, questionToken, type, initializer), node)
+                ? update(createParameterDeclaration(modifiers, dotDotDotToken, name, questionToken, type, initializer), node)
                 : node;
         }
 
@@ -1209,7 +1192,8 @@ namespace ts {
             node.transformFlags |=
                 propagateChildFlags(node.expression) |
                 TransformFlags.ContainsTypeScript |
-                TransformFlags.ContainsTypeScriptClassSyntax;
+                TransformFlags.ContainsTypeScriptClassSyntax |
+                TransformFlags.ContainsDecorators;
             return node;
         }
 
@@ -1226,27 +1210,29 @@ namespace ts {
 
         // @api
         function createPropertySignature(
-            modifiers: readonly Modifier[] | undefined,
+            modifiers: readonly ModifierLike[] | undefined,
             name: PropertyName | string,
             questionToken: QuestionToken | undefined,
             type: TypeNode | undefined
         ): PropertySignature {
             const node = createBaseNamedDeclaration<PropertySignature>(
                 SyntaxKind.PropertySignature,
-                /*decorators*/ undefined,
                 modifiers,
                 name
             );
             node.type = type;
             node.questionToken = questionToken;
             node.transformFlags = TransformFlags.ContainsTypeScript;
+
+            // The following properties are used only to report grammar errors
+            node.initializer = undefined;
             return node;
         }
 
         // @api
         function updatePropertySignature(
             node: PropertySignature,
-            modifiers: readonly Modifier[] | undefined,
+            modifiers: readonly ModifierLike[] | undefined,
             name: PropertyName,
             questionToken: QuestionToken | undefined,
             type: TypeNode | undefined
@@ -1255,14 +1241,21 @@ namespace ts {
                 || node.name !== name
                 || node.questionToken !== questionToken
                 || node.type !== type
-                ? update(createPropertySignature(modifiers, name, questionToken, type), node)
+                ? finishUpdatePropertySignature(createPropertySignature(modifiers, name, questionToken, type), node)
                 : node;
+        }
+
+        function finishUpdatePropertySignature(updated: Mutable<PropertySignature>, original: PropertySignature) {
+            if (updated !== original) {
+                // copy children used only for error reporting
+                updated.initializer = original.initializer;
+            }
+            return update(updated, original);
         }
 
         // @api
         function createPropertyDeclaration(
-            decorators: readonly Decorator[] | undefined,
-            modifiers: readonly Modifier[] | undefined,
+            modifiers: readonly ModifierLike[] | undefined,
             name: string | PropertyName,
             questionOrExclamationToken: QuestionToken | ExclamationToken | undefined,
             type: TypeNode | undefined,
@@ -1270,7 +1263,6 @@ namespace ts {
         ) {
             const node = createBaseVariableLikeDeclaration<PropertyDeclaration>(
                 SyntaxKind.PropertyDeclaration,
-                decorators,
                 modifiers,
                 name,
                 type,
@@ -1294,27 +1286,25 @@ namespace ts {
         // @api
         function updatePropertyDeclaration(
             node: PropertyDeclaration,
-            decorators: readonly Decorator[] | undefined,
-            modifiers: readonly Modifier[] | undefined,
+            modifiers: readonly ModifierLike[] | undefined,
             name: string | PropertyName,
             questionOrExclamationToken: QuestionToken | ExclamationToken | undefined,
             type: TypeNode | undefined,
             initializer: Expression | undefined
         ) {
-            return node.decorators !== decorators
-                || node.modifiers !== modifiers
+            return node.modifiers !== modifiers
                 || node.name !== name
                 || node.questionToken !== (questionOrExclamationToken !== undefined && isQuestionToken(questionOrExclamationToken) ? questionOrExclamationToken : undefined)
                 || node.exclamationToken !== (questionOrExclamationToken !== undefined && isExclamationToken(questionOrExclamationToken) ? questionOrExclamationToken : undefined)
                 || node.type !== type
                 || node.initializer !== initializer
-                ? update(createPropertyDeclaration(decorators, modifiers, name, questionOrExclamationToken, type, initializer), node)
+                ? update(createPropertyDeclaration(modifiers, name, questionOrExclamationToken, type, initializer), node)
                 : node;
         }
 
         // @api
         function createMethodSignature(
-            modifiers: readonly Modifier[] | undefined,
+            modifiers: readonly ModifierLike[] | undefined,
             name: string | PropertyName,
             questionToken: QuestionToken | undefined,
             typeParameters: readonly TypeParameterDeclaration[] | undefined,
@@ -1323,7 +1313,6 @@ namespace ts {
         ) {
             const node = createBaseSignatureDeclaration<MethodSignature>(
                 SyntaxKind.MethodSignature,
-                /*decorators*/ undefined,
                 modifiers,
                 name,
                 typeParameters,
@@ -1338,7 +1327,7 @@ namespace ts {
         // @api
         function updateMethodSignature(
             node: MethodSignature,
-            modifiers: readonly Modifier[] | undefined,
+            modifiers: readonly ModifierLike[] | undefined,
             name: PropertyName,
             questionToken: QuestionToken | undefined,
             typeParameters: NodeArray<TypeParameterDeclaration> | undefined,
@@ -1351,14 +1340,13 @@ namespace ts {
                 || node.typeParameters !== typeParameters
                 || node.parameters !== parameters
                 || node.type !== type
-                ? updateBaseSignatureDeclaration(createMethodSignature(modifiers, name, questionToken, typeParameters, parameters, type), node)
+                ? finishUpdateBaseSignatureDeclaration(createMethodSignature(modifiers, name, questionToken, typeParameters, parameters, type), node)
                 : node;
         }
 
         // @api
         function createMethodDeclaration(
-            decorators: readonly Decorator[] | undefined,
-            modifiers: readonly Modifier[] | undefined,
+            modifiers: readonly ModifierLike[] | undefined,
             asteriskToken: AsteriskToken | undefined,
             name: string | PropertyName,
             questionToken: QuestionToken | undefined,
@@ -1369,7 +1357,6 @@ namespace ts {
         ) {
             const node = createBaseFunctionLikeDeclaration<MethodDeclaration>(
                 SyntaxKind.MethodDeclaration,
-                decorators,
                 modifiers,
                 name,
                 typeParameters,
@@ -1397,14 +1384,16 @@ namespace ts {
             else if (asteriskToken) {
                 node.transformFlags |= TransformFlags.ContainsGenerator;
             }
+
+            // The following properties are used only to report grammar errors
+            node.exclamationToken = undefined;
             return node;
         }
 
         // @api
         function updateMethodDeclaration(
             node: MethodDeclaration,
-            decorators: readonly Decorator[] | undefined,
-            modifiers: readonly Modifier[] | undefined,
+            modifiers: readonly ModifierLike[] | undefined,
             asteriskToken: AsteriskToken | undefined,
             name: PropertyName,
             questionToken: QuestionToken | undefined,
@@ -1413,8 +1402,7 @@ namespace ts {
             type: TypeNode | undefined,
             body: Block | undefined
         ) {
-            return node.decorators !== decorators
-                || node.modifiers !== modifiers
+            return node.modifiers !== modifiers
                 || node.asteriskToken !== asteriskToken
                 || node.name !== name
                 || node.questionToken !== questionToken
@@ -1422,52 +1410,62 @@ namespace ts {
                 || node.parameters !== parameters
                 || node.type !== type
                 || node.body !== body
-                ? updateBaseFunctionLikeDeclaration(createMethodDeclaration(decorators, modifiers, asteriskToken, name, questionToken, typeParameters, parameters, type, body), node)
+                ? finishUpdateMethodDeclaration(createMethodDeclaration(modifiers, asteriskToken, name, questionToken, typeParameters, parameters, type, body), node)
                 : node;
+        }
+
+        function finishUpdateMethodDeclaration(updated: Mutable<MethodDeclaration>, original: MethodDeclaration) {
+            if (updated !== original) {
+                updated.exclamationToken = original.exclamationToken;
+            }
+            return update(updated, original);
         }
 
         // @api
         function createClassStaticBlockDeclaration(
-            decorators: readonly Decorator[] | undefined,
-            modifiers: readonly Modifier[] | undefined,
             body: Block
         ): ClassStaticBlockDeclaration {
             const node = createBaseGenericNamedDeclaration<ClassStaticBlockDeclaration>(
                 SyntaxKind.ClassStaticBlockDeclaration,
-                decorators,
-                modifiers,
+                /*modifiers*/ undefined,
                 /*name*/ undefined,
                 /*typeParameters*/ undefined
             );
             node.body = body;
             node.transformFlags = propagateChildFlags(body) | TransformFlags.ContainsClassFields;
+
+            // The following properties are used only to report grammar errors
+            node.decorators = undefined;
+            node.modifiers = undefined;
             return node;
         }
 
         // @api
         function updateClassStaticBlockDeclaration(
             node: ClassStaticBlockDeclaration,
-            decorators: readonly Decorator[] | undefined,
-            modifiers: readonly Modifier[] | undefined,
             body: Block
         ): ClassStaticBlockDeclaration {
-            return node.decorators !== decorators
-                || node.modifier !== modifiers
-                || node.body !== body
-                ? update(createClassStaticBlockDeclaration(decorators, modifiers, body), node)
+            return node.body !== body
+                ? finishUpdateClassStaticBlockDeclaration(createClassStaticBlockDeclaration(body), node)
                 : node;
+        }
+
+        function finishUpdateClassStaticBlockDeclaration(updated: Mutable<ClassStaticBlockDeclaration>, original: ClassStaticBlockDeclaration) {
+            if (updated !== original) {
+                updated.decorators = original.decorators;
+                updated.modifiers = original.modifiers;
+            }
+            return update(updated, original);
         }
 
         // @api
         function createConstructorDeclaration(
-            decorators: readonly Decorator[] | undefined,
             modifiers: readonly Modifier[] | undefined,
             parameters: readonly ParameterDeclaration[],
             body: Block | undefined
         ) {
             const node = createBaseFunctionLikeDeclaration<ConstructorDeclaration>(
                 SyntaxKind.Constructor,
-                decorators,
                 modifiers,
                 /*name*/ undefined,
                 /*typeParameters*/ undefined,
@@ -1476,37 +1474,47 @@ namespace ts {
                 body
             );
             node.transformFlags |= TransformFlags.ContainsES2015;
+
+            // The following properties are used only to report grammar errors
+            node.decorators = undefined;
+            node.typeParameters = undefined;
+            node.type = undefined;
             return node;
         }
 
         // @api
         function updateConstructorDeclaration(
             node: ConstructorDeclaration,
-            decorators: readonly Decorator[] | undefined,
             modifiers: readonly Modifier[] | undefined,
             parameters: readonly ParameterDeclaration[],
             body: Block | undefined
         ) {
-            return node.decorators !== decorators
-                || node.modifiers !== modifiers
+            return node.modifiers !== modifiers
                 || node.parameters !== parameters
                 || node.body !== body
-                ? updateBaseFunctionLikeDeclaration(createConstructorDeclaration(decorators, modifiers, parameters, body), node)
+                ? finishUpdateConstructorDeclaration(createConstructorDeclaration(modifiers, parameters, body), node)
                 : node;
+        }
+
+        function finishUpdateConstructorDeclaration(updated: Mutable<ConstructorDeclaration>, original: ConstructorDeclaration) {
+            if (updated !== original) {
+                updated.decorators = original.decorators;
+                updated.typeParameters = original.typeParameters;
+                updated.type = original.type;
+            }
+            return finishUpdateBaseSignatureDeclaration(updated, original);
         }
 
         // @api
         function createGetAccessorDeclaration(
-            decorators: readonly Decorator[] | undefined,
-            modifiers: readonly Modifier[] | undefined,
+            modifiers: readonly ModifierLike[] | undefined,
             name: string | PropertyName,
             parameters: readonly ParameterDeclaration[],
             type: TypeNode | undefined,
             body: Block | undefined
         ) {
-            return createBaseFunctionLikeDeclaration<GetAccessorDeclaration>(
+            const node = createBaseFunctionLikeDeclaration<GetAccessorDeclaration>(
                 SyntaxKind.GetAccessor,
-                decorators,
                 modifiers,
                 name,
                 /*typeParameters*/ undefined,
@@ -1514,39 +1522,46 @@ namespace ts {
                 type,
                 body
             );
+
+            // The following properties are used only to report grammar errors
+            node.typeParameters = undefined;
+            return node;
         }
 
         // @api
         function updateGetAccessorDeclaration(
             node: GetAccessorDeclaration,
-            decorators: readonly Decorator[] | undefined,
-            modifiers: readonly Modifier[] | undefined,
+            modifiers: readonly ModifierLike[] | undefined,
             name: PropertyName,
             parameters: readonly ParameterDeclaration[],
             type: TypeNode | undefined,
             body: Block | undefined
         ) {
-            return node.decorators !== decorators
-                || node.modifiers !== modifiers
+            return node.modifiers !== modifiers
                 || node.name !== name
                 || node.parameters !== parameters
                 || node.type !== type
                 || node.body !== body
-                ? updateBaseFunctionLikeDeclaration(createGetAccessorDeclaration(decorators, modifiers, name, parameters, type, body), node)
+                ? finishUpdateGetAccessorDeclaration(createGetAccessorDeclaration(modifiers, name, parameters, type, body), node)
                 : node;
+        }
+
+        function finishUpdateGetAccessorDeclaration(updated: Mutable<GetAccessorDeclaration>, original: GetAccessorDeclaration) {
+            if (updated !== original) {
+                updated.typeParameters = original.typeParameters;
+            }
+            return finishUpdateBaseSignatureDeclaration(updated, original);
         }
 
         // @api
         function createSetAccessorDeclaration(
-            decorators: readonly Decorator[] | undefined,
-            modifiers: readonly Modifier[] | undefined,
+            modifiers: readonly ModifierLike[] | undefined,
             name: string | PropertyName,
             parameters: readonly ParameterDeclaration[],
             body: Block | undefined
         ) {
-            return createBaseFunctionLikeDeclaration<SetAccessorDeclaration>(
+            const node = createBaseFunctionLikeDeclaration<SetAccessorDeclaration>(
                 SyntaxKind.SetAccessor,
-                decorators,
                 modifiers,
                 name,
                 /*typeParameters*/ undefined,
@@ -1554,24 +1569,35 @@ namespace ts {
                 /*type*/ undefined,
                 body
             );
+
+            // The following properties are used only to report grammar errors
+            node.typeParameters = undefined;
+            node.type = undefined;
+            return node;
         }
 
         // @api
         function updateSetAccessorDeclaration(
             node: SetAccessorDeclaration,
-            decorators: readonly Decorator[] | undefined,
-            modifiers: readonly Modifier[] | undefined,
+            modifiers: readonly ModifierLike[] | undefined,
             name: PropertyName,
             parameters: readonly ParameterDeclaration[],
             body: Block | undefined
         ) {
-            return node.decorators !== decorators
-                || node.modifiers !== modifiers
+            return node.modifiers !== modifiers
                 || node.name !== name
                 || node.parameters !== parameters
                 || node.body !== body
-                ? updateBaseFunctionLikeDeclaration(createSetAccessorDeclaration(decorators, modifiers, name, parameters, body), node)
+                ? finishUpdateSetAccessorDeclaration(createSetAccessorDeclaration(modifiers, name, parameters, body), node)
                 : node;
+        }
+
+        function finishUpdateSetAccessorDeclaration(updated: Mutable<SetAccessorDeclaration>, original: SetAccessorDeclaration) {
+            if (updated !== original) {
+                updated.typeParameters = original.typeParameters;
+                updated.type = original.type;
+            }
+            return finishUpdateBaseSignatureDeclaration(updated, original);
         }
 
         // @api
@@ -1582,7 +1608,6 @@ namespace ts {
         ): CallSignatureDeclaration {
             const node = createBaseSignatureDeclaration<CallSignatureDeclaration>(
                 SyntaxKind.CallSignature,
-                /*decorators*/ undefined,
                 /*modifiers*/ undefined,
                 /*name*/ undefined,
                 typeParameters,
@@ -1603,7 +1628,7 @@ namespace ts {
             return node.typeParameters !== typeParameters
                 || node.parameters !== parameters
                 || node.type !== type
-                ? updateBaseSignatureDeclaration(createCallSignature(typeParameters, parameters, type), node)
+                ? finishUpdateBaseSignatureDeclaration(createCallSignature(typeParameters, parameters, type), node)
                 : node;
         }
 
@@ -1615,7 +1640,6 @@ namespace ts {
         ): ConstructSignatureDeclaration {
             const node = createBaseSignatureDeclaration<ConstructSignatureDeclaration>(
                 SyntaxKind.ConstructSignature,
-                /*decorators*/ undefined,
                 /*modifiers*/ undefined,
                 /*name*/ undefined,
                 typeParameters,
@@ -1636,20 +1660,18 @@ namespace ts {
             return node.typeParameters !== typeParameters
                 || node.parameters !== parameters
                 || node.type !== type
-                ? updateBaseSignatureDeclaration(createConstructSignature(typeParameters, parameters, type), node)
+                ? finishUpdateBaseSignatureDeclaration(createConstructSignature(typeParameters, parameters, type), node)
                 : node;
         }
 
         // @api
         function createIndexSignature(
-            decorators: readonly Decorator[] | undefined,
             modifiers: readonly Modifier[] | undefined,
             parameters: readonly ParameterDeclaration[],
             type: TypeNode | undefined
         ): IndexSignatureDeclaration {
             const node = createBaseSignatureDeclaration<IndexSignatureDeclaration>(
                 SyntaxKind.IndexSignature,
-                decorators,
                 modifiers,
                 /*name*/ undefined,
                 /*typeParameters*/ undefined,
@@ -1663,16 +1685,14 @@ namespace ts {
         // @api
         function updateIndexSignature(
             node: IndexSignatureDeclaration,
-            decorators: readonly Decorator[] | undefined,
             modifiers: readonly Modifier[] | undefined,
             parameters: readonly ParameterDeclaration[],
             type: TypeNode
         ) {
             return node.parameters !== parameters
                 || node.type !== type
-                || node.decorators !== decorators
                 || node.modifiers !== modifiers
-                ? updateBaseSignatureDeclaration(createIndexSignature(decorators, modifiers, parameters, type), node)
+                ? finishUpdateBaseSignatureDeclaration(createIndexSignature(modifiers, parameters, type), node)
                 : node;
         }
 
@@ -1746,7 +1766,6 @@ namespace ts {
         ): FunctionTypeNode {
             const node = createBaseSignatureDeclaration<FunctionTypeNode>(
                 SyntaxKind.FunctionType,
-                /*decorators*/ undefined,
                 /*modifiers*/ undefined,
                 /*name*/ undefined,
                 typeParameters,
@@ -1754,6 +1773,9 @@ namespace ts {
                 type
             );
             node.transformFlags = TransformFlags.ContainsTypeScript;
+
+            // The following properties are used only to report grammar errors
+            node.modifiers = undefined;
             return node;
         }
 
@@ -1767,8 +1789,15 @@ namespace ts {
             return node.typeParameters !== typeParameters
                 || node.parameters !== parameters
                 || node.type !== type
-                ? updateBaseSignatureDeclaration(createFunctionTypeNode(typeParameters, parameters, type), node)
+                ? finishUpdateFunctionTypeNode(createFunctionTypeNode(typeParameters, parameters, type), node)
                 : node;
+        }
+
+        function finishUpdateFunctionTypeNode(updated: Mutable<FunctionTypeNode>, original: FunctionTypeNode) {
+            if (updated !== original) {
+                updated.modifiers = original.modifiers;
+            }
+            return finishUpdateBaseSignatureDeclaration(updated, original);
         }
 
         // @api
@@ -1786,7 +1815,6 @@ namespace ts {
         ): ConstructorTypeNode {
             const node = createBaseSignatureDeclaration<ConstructorTypeNode>(
                 SyntaxKind.ConstructorType,
-                /*decorators*/ undefined,
                 modifiers,
                 /*name*/ undefined,
                 typeParameters,
@@ -1824,7 +1852,7 @@ namespace ts {
                 || node.typeParameters !== typeParameters
                 || node.parameters !== parameters
                 || node.type !== type
-                ? updateBaseSignatureDeclaration(createConstructorTypeNode(modifiers, typeParameters, parameters, type), node)
+                ? finishUpdateBaseSignatureDeclaration(createConstructorTypeNode(modifiers, typeParameters, parameters, type), node)
                 : node;
         }
 
@@ -1839,17 +1867,19 @@ namespace ts {
         }
 
         // @api
-        function createTypeQueryNode(exprName: EntityName) {
+        function createTypeQueryNode(exprName: EntityName, typeArguments?: readonly TypeNode[]) {
             const node = createBaseNode<TypeQueryNode>(SyntaxKind.TypeQuery);
             node.exprName = exprName;
+            node.typeArguments = typeArguments && parenthesizerRules().parenthesizeTypeArguments(typeArguments);
             node.transformFlags = TransformFlags.ContainsTypeScript;
             return node;
         }
 
         // @api
-        function updateTypeQueryNode(node: TypeQueryNode, exprName: EntityName) {
+        function updateTypeQueryNode(node: TypeQueryNode, exprName: EntityName, typeArguments?: readonly TypeNode[]) {
             return node.exprName !== exprName
-                ? update(createTypeQueryNode(exprName), node)
+                || node.typeArguments !== typeArguments
+                ? update(createTypeQueryNode(exprName, typeArguments), node)
                 : node;
         }
 
@@ -1871,7 +1901,7 @@ namespace ts {
         // @api
         function createArrayTypeNode(elementType: TypeNode) {
             const node = createBaseNode<ArrayTypeNode>(SyntaxKind.ArrayType);
-            node.elementType = parenthesizerRules().parenthesizeElementTypeOfArrayType(elementType);
+            node.elementType = parenthesizerRules().parenthesizeNonArrayTypeOfPostfixType(elementType);
             node.transformFlags = TransformFlags.ContainsTypeScript;
             return node;
         }
@@ -1886,7 +1916,7 @@ namespace ts {
         // @api
         function createTupleTypeNode(elements: readonly (TypeNode | NamedTupleMember)[]) {
             const node = createBaseNode<TupleTypeNode>(SyntaxKind.TupleType);
-            node.elements = createNodeArray(elements);
+            node.elements = createNodeArray(parenthesizerRules().parenthesizeElementTypesOfTupleType(elements));
             node.transformFlags = TransformFlags.ContainsTypeScript;
             return node;
         }
@@ -1922,7 +1952,7 @@ namespace ts {
         // @api
         function createOptionalTypeNode(type: TypeNode) {
             const node = createBaseNode<OptionalTypeNode>(SyntaxKind.OptionalType);
-            node.type = parenthesizerRules().parenthesizeElementTypeOfArrayType(type);
+            node.type = parenthesizerRules().parenthesizeTypeOfOptionalType(type);
             node.transformFlags = TransformFlags.ContainsTypeScript;
             return node;
         }
@@ -1949,44 +1979,44 @@ namespace ts {
                 : node;
         }
 
-        function createUnionOrIntersectionTypeNode(kind: SyntaxKind.UnionType | SyntaxKind.IntersectionType, types: readonly TypeNode[]) {
+        function createUnionOrIntersectionTypeNode(kind: SyntaxKind.UnionType | SyntaxKind.IntersectionType, types: readonly TypeNode[], parenthesize: (nodes: readonly TypeNode[]) => readonly TypeNode[]) {
             const node = createBaseNode<UnionTypeNode | IntersectionTypeNode>(kind);
-            node.types = parenthesizerRules().parenthesizeConstituentTypesOfUnionOrIntersectionType(types);
+            node.types = factory.createNodeArray(parenthesize(types));
             node.transformFlags = TransformFlags.ContainsTypeScript;
             return node;
         }
 
-        function updateUnionOrIntersectionTypeNode<T extends UnionOrIntersectionTypeNode>(node: T, types: NodeArray<TypeNode>): T {
+        function updateUnionOrIntersectionTypeNode<T extends UnionOrIntersectionTypeNode>(node: T, types: NodeArray<TypeNode>, parenthesize: (nodes: readonly TypeNode[]) => readonly TypeNode[]): T {
             return node.types !== types
-                ? update(createUnionOrIntersectionTypeNode(node.kind, types) as T, node)
+                ? update(createUnionOrIntersectionTypeNode(node.kind, types, parenthesize) as T, node)
                 : node;
         }
 
         // @api
         function createUnionTypeNode(types: readonly TypeNode[]): UnionTypeNode {
-            return createUnionOrIntersectionTypeNode(SyntaxKind.UnionType, types) as UnionTypeNode;
+            return createUnionOrIntersectionTypeNode(SyntaxKind.UnionType, types, parenthesizerRules().parenthesizeConstituentTypesOfUnionType) as UnionTypeNode;
         }
 
         // @api
         function updateUnionTypeNode(node: UnionTypeNode, types: NodeArray<TypeNode>) {
-            return updateUnionOrIntersectionTypeNode(node, types);
+            return updateUnionOrIntersectionTypeNode(node, types, parenthesizerRules().parenthesizeConstituentTypesOfUnionType);
         }
 
         // @api
         function createIntersectionTypeNode(types: readonly TypeNode[]): IntersectionTypeNode {
-            return createUnionOrIntersectionTypeNode(SyntaxKind.IntersectionType, types) as IntersectionTypeNode;
+            return createUnionOrIntersectionTypeNode(SyntaxKind.IntersectionType, types, parenthesizerRules().parenthesizeConstituentTypesOfIntersectionType) as IntersectionTypeNode;
         }
 
         // @api
         function updateIntersectionTypeNode(node: IntersectionTypeNode, types: NodeArray<TypeNode>) {
-            return updateUnionOrIntersectionTypeNode(node, types);
+            return updateUnionOrIntersectionTypeNode(node, types, parenthesizerRules().parenthesizeConstituentTypesOfIntersectionType);
         }
 
         // @api
         function createConditionalTypeNode(checkType: TypeNode, extendsType: TypeNode, trueType: TypeNode, falseType: TypeNode) {
             const node = createBaseNode<ConditionalTypeNode>(SyntaxKind.ConditionalType);
-            node.checkType = parenthesizerRules().parenthesizeMemberOfConditionalType(checkType);
-            node.extendsType = parenthesizerRules().parenthesizeMemberOfConditionalType(extendsType);
+            node.checkType = parenthesizerRules().parenthesizeCheckTypeOfConditionalType(checkType);
+            node.extendsType = parenthesizerRules().parenthesizeExtendsTypeOfConditionalType(extendsType);
             node.trueType = trueType;
             node.falseType = falseType;
             node.transformFlags = TransformFlags.ContainsTypeScript;
@@ -2036,9 +2066,16 @@ namespace ts {
         }
 
         // @api
-        function createImportTypeNode(argument: TypeNode, qualifier?: EntityName, typeArguments?: readonly TypeNode[], isTypeOf = false) {
+        function createImportTypeNode(
+            argument: TypeNode,
+            assertions?: ImportTypeAssertionContainer,
+            qualifier?: EntityName,
+            typeArguments?: readonly TypeNode[],
+            isTypeOf = false
+        ): ImportTypeNode {
             const node = createBaseNode<ImportTypeNode>(SyntaxKind.ImportType);
             node.argument = argument;
+            node.assertions = assertions;
             node.qualifier = qualifier;
             node.typeArguments = typeArguments && parenthesizerRules().parenthesizeTypeArguments(typeArguments);
             node.isTypeOf = isTypeOf;
@@ -2047,12 +2084,20 @@ namespace ts {
         }
 
         // @api
-        function updateImportTypeNode(node: ImportTypeNode, argument: TypeNode, qualifier: EntityName | undefined, typeArguments: readonly TypeNode[] | undefined, isTypeOf = node.isTypeOf) {
+        function updateImportTypeNode(
+            node: ImportTypeNode,
+            argument: TypeNode,
+            assertions: ImportTypeAssertionContainer | undefined,
+            qualifier: EntityName | undefined,
+            typeArguments: readonly TypeNode[] | undefined,
+            isTypeOf: boolean = node.isTypeOf
+        ): ImportTypeNode {
             return node.argument !== argument
+                || node.assertions !== assertions
                 || node.qualifier !== qualifier
                 || node.typeArguments !== typeArguments
                 || node.isTypeOf !== isTypeOf
-                ? update(createImportTypeNode(argument, qualifier, typeArguments, isTypeOf), node)
+                ? update(createImportTypeNode(argument, assertions, qualifier, typeArguments, isTypeOf), node)
                 : node;
         }
 
@@ -2082,7 +2127,9 @@ namespace ts {
         function createTypeOperatorNode(operator: SyntaxKind.KeyOfKeyword | SyntaxKind.UniqueKeyword | SyntaxKind.ReadonlyKeyword, type: TypeNode): TypeOperatorNode {
             const node = createBaseNode<TypeOperatorNode>(SyntaxKind.TypeOperator);
             node.operator = operator;
-            node.type = parenthesizerRules().parenthesizeMemberOfElementType(type);
+            node.type = operator === SyntaxKind.ReadonlyKeyword ?
+                parenthesizerRules().parenthesizeOperandOfReadonlyTypeOperator(type) :
+                parenthesizerRules().parenthesizeOperandOfTypeOperator(type);
             node.transformFlags = TransformFlags.ContainsTypeScript;
             return node;
         }
@@ -2097,7 +2144,7 @@ namespace ts {
         // @api
         function createIndexedAccessTypeNode(objectType: TypeNode, indexType: TypeNode) {
             const node = createBaseNode<IndexedAccessTypeNode>(SyntaxKind.IndexedAccessType);
-            node.objectType = parenthesizerRules().parenthesizeMemberOfElementType(objectType);
+            node.objectType = parenthesizerRules().parenthesizeNonArrayTypeOfPostfixType(objectType);
             node.indexType = indexType;
             node.transformFlags = TransformFlags.ContainsTypeScript;
             return node;
@@ -2200,7 +2247,6 @@ namespace ts {
         function createBindingElement(dotDotDotToken: DotDotDotToken | undefined, propertyName: string | PropertyName | undefined, name: string | BindingName, initializer?: Expression) {
             const node = createBaseBindingLikeDeclaration<BindingElement>(
                 SyntaxKind.BindingElement,
-                /*decorators*/ undefined,
                 /*modifiers*/ undefined,
                 name,
                 initializer && parenthesizerRules().parenthesizeExpressionForDisallowedComma(initializer)
@@ -2552,7 +2598,7 @@ namespace ts {
 
         // @api
         function createFunctionExpression(
-            modifiers: readonly Modifier[] | undefined,
+            modifiers: readonly ModifierLike[] | undefined,
             asteriskToken: AsteriskToken | undefined,
             name: string | Identifier | undefined,
             typeParameters: readonly TypeParameterDeclaration[] | undefined,
@@ -2562,7 +2608,6 @@ namespace ts {
         ) {
             const node = createBaseFunctionLikeDeclaration<FunctionExpression>(
                 SyntaxKind.FunctionExpression,
-                /*decorators*/ undefined,
                 modifiers,
                 name,
                 typeParameters,
@@ -2592,7 +2637,7 @@ namespace ts {
         // @api
         function updateFunctionExpression(
             node: FunctionExpression,
-            modifiers: readonly Modifier[] | undefined,
+            modifiers: readonly ModifierLike[] | undefined,
             asteriskToken: AsteriskToken | undefined,
             name: Identifier | undefined,
             typeParameters: readonly TypeParameterDeclaration[] | undefined,
@@ -2607,13 +2652,13 @@ namespace ts {
                 || node.parameters !== parameters
                 || node.type !== type
                 || node.body !== body
-                ? updateBaseFunctionLikeDeclaration(createFunctionExpression(modifiers, asteriskToken, name, typeParameters, parameters, type, body), node)
+                ? finishUpdateBaseSignatureDeclaration(createFunctionExpression(modifiers, asteriskToken, name, typeParameters, parameters, type, body), node)
                 : node;
         }
 
         // @api
         function createArrowFunction(
-            modifiers: readonly Modifier[] | undefined,
+            modifiers: readonly ModifierLike[] | undefined,
             typeParameters: readonly TypeParameterDeclaration[] | undefined,
             parameters: readonly ParameterDeclaration[],
             type: TypeNode | undefined,
@@ -2622,7 +2667,6 @@ namespace ts {
         ) {
             const node = createBaseFunctionLikeDeclaration<ArrowFunction>(
                 SyntaxKind.ArrowFunction,
-                /*decorators*/ undefined,
                 modifiers,
                 /*name*/ undefined,
                 typeParameters,
@@ -2643,7 +2687,7 @@ namespace ts {
         // @api
         function updateArrowFunction(
             node: ArrowFunction,
-            modifiers: readonly Modifier[] | undefined,
+            modifiers: readonly ModifierLike[] | undefined,
             typeParameters: readonly TypeParameterDeclaration[] | undefined,
             parameters: readonly ParameterDeclaration[],
             type: TypeNode | undefined,
@@ -2656,7 +2700,7 @@ namespace ts {
                 || node.type !== type
                 || node.equalsGreaterThanToken !== equalsGreaterThanToken
                 || node.body !== body
-                ? updateBaseFunctionLikeDeclaration(createArrowFunction(modifiers, typeParameters, parameters, type, equalsGreaterThanToken, body), node)
+                ? finishUpdateBaseSignatureDeclaration(createArrowFunction(modifiers, typeParameters, parameters, type, equalsGreaterThanToken, body), node)
                 : node;
         }
 
@@ -2994,8 +3038,7 @@ namespace ts {
 
         // @api
         function createClassExpression(
-            decorators: readonly Decorator[] | undefined,
-            modifiers: readonly Modifier[] | undefined,
+            modifiers: readonly ModifierLike[] | undefined,
             name: string | Identifier | undefined,
             typeParameters: readonly TypeParameterDeclaration[] | undefined,
             heritageClauses: readonly HeritageClause[] | undefined,
@@ -3003,7 +3046,6 @@ namespace ts {
         ) {
             const node = createBaseClassLikeDeclaration<ClassExpression>(
                 SyntaxKind.ClassExpression,
-                decorators,
                 modifiers,
                 name,
                 typeParameters,
@@ -3017,20 +3059,18 @@ namespace ts {
         // @api
         function updateClassExpression(
             node: ClassExpression,
-            decorators: readonly Decorator[] | undefined,
-            modifiers: readonly Modifier[] | undefined,
+            modifiers: readonly ModifierLike[] | undefined,
             name: Identifier | undefined,
             typeParameters: readonly TypeParameterDeclaration[] | undefined,
             heritageClauses: readonly HeritageClause[] | undefined,
             members: readonly ClassElement[]
         ) {
-            return node.decorators !== decorators
-                || node.modifiers !== modifiers
+            return node.modifiers !== modifiers
                 || node.name !== name
                 || node.typeParameters !== typeParameters
                 || node.heritageClauses !== heritageClauses
                 || node.members !== members
-                ? update(createClassExpression(decorators, modifiers, name, typeParameters, heritageClauses, members), node)
+                ? update(createClassExpression(modifiers, name, typeParameters, heritageClauses, members), node)
                 : node;
         }
 
@@ -3197,9 +3237,11 @@ namespace ts {
 
         // @api
         function createVariableStatement(modifiers: readonly Modifier[] | undefined, declarationList: VariableDeclarationList | readonly VariableDeclaration[]) {
-            const node = createBaseDeclaration<VariableStatement>(SyntaxKind.VariableStatement, /*decorators*/ undefined, modifiers);
+            const node = createBaseDeclaration<VariableStatement>(SyntaxKind.VariableStatement);
+            node.modifiers = asNodeArray(modifiers);
             node.declarationList = isArray(declarationList) ? createVariableDeclarationList(declarationList) : declarationList;
             node.transformFlags |=
+                propagateChildrenFlags(node.modifiers) |
                 propagateChildFlags(node.declarationList);
             if (modifiersToFlags(node.modifiers) & ModifierFlags.Ambient) {
                 node.transformFlags = TransformFlags.ContainsTypeScript;
@@ -3525,7 +3567,6 @@ namespace ts {
         function createVariableDeclaration(name: string | BindingName, exclamationToken: ExclamationToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined) {
             const node = createBaseVariableLikeDeclaration<VariableDeclaration>(
                 SyntaxKind.VariableDeclaration,
-                /*decorators*/ undefined,
                 /*modifiers*/ undefined,
                 name,
                 type,
@@ -3574,8 +3615,7 @@ namespace ts {
 
         // @api
         function createFunctionDeclaration(
-            decorators: readonly Decorator[] | undefined,
-            modifiers: readonly Modifier[] | undefined,
+            modifiers: readonly ModifierLike[] | undefined,
             asteriskToken: AsteriskToken | undefined,
             name: string | Identifier | undefined,
             typeParameters: readonly TypeParameterDeclaration[] | undefined,
@@ -3585,7 +3625,6 @@ namespace ts {
         ) {
             const node = createBaseFunctionLikeDeclaration<FunctionDeclaration>(
                 SyntaxKind.FunctionDeclaration,
-                decorators,
                 modifiers,
                 name,
                 typeParameters,
@@ -3613,14 +3652,16 @@ namespace ts {
                     node.transformFlags |= TransformFlags.ContainsGenerator;
                 }
             }
+
+            // The following properties are used only to report grammar errors
+            node.decorators = undefined;
             return node;
         }
 
         // @api
         function updateFunctionDeclaration(
             node: FunctionDeclaration,
-            decorators: readonly Decorator[] | undefined,
-            modifiers: readonly Modifier[] | undefined,
+            modifiers: readonly ModifierLike[] | undefined,
             asteriskToken: AsteriskToken | undefined,
             name: Identifier | undefined,
             typeParameters: readonly TypeParameterDeclaration[] | undefined,
@@ -3628,22 +3669,28 @@ namespace ts {
             type: TypeNode | undefined,
             body: Block | undefined
         ) {
-            return node.decorators !== decorators
-                || node.modifiers !== modifiers
+            return node.modifiers !== modifiers
                 || node.asteriskToken !== asteriskToken
                 || node.name !== name
                 || node.typeParameters !== typeParameters
                 || node.parameters !== parameters
                 || node.type !== type
                 || node.body !== body
-                ? updateBaseFunctionLikeDeclaration(createFunctionDeclaration(decorators, modifiers, asteriskToken, name, typeParameters, parameters, type, body), node)
+                ? finishUpdateFunctionDeclaration(createFunctionDeclaration(modifiers, asteriskToken, name, typeParameters, parameters, type, body), node)
                 : node;
+        }
+
+        function finishUpdateFunctionDeclaration(updated: Mutable<FunctionDeclaration>, original: FunctionDeclaration) {
+            if (updated !== original) {
+                // copy children used only for error reporting
+                updated.decorators = original.decorators;
+            }
+            return finishUpdateBaseSignatureDeclaration(updated, original);
         }
 
         // @api
         function createClassDeclaration(
-            decorators: readonly Decorator[] | undefined,
-            modifiers: readonly Modifier[] | undefined,
+            modifiers: readonly ModifierLike[] | undefined,
             name: string | Identifier | undefined,
             typeParameters: readonly TypeParameterDeclaration[] | undefined,
             heritageClauses: readonly HeritageClause[] | undefined,
@@ -3651,7 +3698,6 @@ namespace ts {
         ) {
             const node = createBaseClassLikeDeclaration<ClassDeclaration>(
                 SyntaxKind.ClassDeclaration,
-                decorators,
                 modifiers,
                 name,
                 typeParameters,
@@ -3673,26 +3719,23 @@ namespace ts {
         // @api
         function updateClassDeclaration(
             node: ClassDeclaration,
-            decorators: readonly Decorator[] | undefined,
-            modifiers: readonly Modifier[] | undefined,
+            modifiers: readonly ModifierLike[] | undefined,
             name: Identifier | undefined,
             typeParameters: readonly TypeParameterDeclaration[] | undefined,
             heritageClauses: readonly HeritageClause[] | undefined,
             members: readonly ClassElement[]
         ) {
-            return node.decorators !== decorators
-                || node.modifiers !== modifiers
+            return node.modifiers !== modifiers
                 || node.name !== name
                 || node.typeParameters !== typeParameters
                 || node.heritageClauses !== heritageClauses
                 || node.members !== members
-                ? update(createClassDeclaration(decorators, modifiers, name, typeParameters, heritageClauses, members), node)
+                ? update(createClassDeclaration(modifiers, name, typeParameters, heritageClauses, members), node)
                 : node;
         }
 
         // @api
         function createInterfaceDeclaration(
-            decorators: readonly Decorator[] | undefined,
             modifiers: readonly Modifier[] | undefined,
             name: string | Identifier,
             typeParameters: readonly TypeParameterDeclaration[] | undefined,
@@ -3701,7 +3744,6 @@ namespace ts {
         ) {
             const node = createBaseInterfaceOrClassLikeDeclaration<InterfaceDeclaration>(
                 SyntaxKind.InterfaceDeclaration,
-                decorators,
                 modifiers,
                 name,
                 typeParameters,
@@ -3709,32 +3751,39 @@ namespace ts {
             );
             node.members = createNodeArray(members);
             node.transformFlags = TransformFlags.ContainsTypeScript;
+
+            // The following properties are used only to report grammar errors
+            node.decorators = undefined;
             return node;
         }
 
         // @api
         function updateInterfaceDeclaration(
             node: InterfaceDeclaration,
-            decorators: readonly Decorator[] | undefined,
             modifiers: readonly Modifier[] | undefined,
             name: Identifier,
             typeParameters: readonly TypeParameterDeclaration[] | undefined,
             heritageClauses: readonly HeritageClause[] | undefined,
             members: readonly TypeElement[]
         ) {
-            return node.decorators !== decorators
-                || node.modifiers !== modifiers
+            return node.modifiers !== modifiers
                 || node.name !== name
                 || node.typeParameters !== typeParameters
                 || node.heritageClauses !== heritageClauses
                 || node.members !== members
-                ? update(createInterfaceDeclaration(decorators, modifiers, name, typeParameters, heritageClauses, members), node)
+                ? finishUpdateInterfaceDeclaration(createInterfaceDeclaration(modifiers, name, typeParameters, heritageClauses, members), node)
                 : node;
+        }
+
+        function finishUpdateInterfaceDeclaration(updated: Mutable<InterfaceDeclaration>, original: InterfaceDeclaration) {
+            if (updated !== original) {
+                updated.decorators = original.decorators;
+            }
+            return update(updated, original);
         }
 
         // @api
         function createTypeAliasDeclaration(
-            decorators: readonly Decorator[] | undefined,
             modifiers: readonly Modifier[] | undefined,
             name: string | Identifier,
             typeParameters: readonly TypeParameterDeclaration[] | undefined,
@@ -3742,44 +3791,49 @@ namespace ts {
         ) {
             const node = createBaseGenericNamedDeclaration<TypeAliasDeclaration>(
                 SyntaxKind.TypeAliasDeclaration,
-                decorators,
                 modifiers,
                 name,
                 typeParameters
             );
             node.type = type;
             node.transformFlags = TransformFlags.ContainsTypeScript;
+
+            // The following properties are used only to report grammar errors
+            node.decorators = undefined;
             return node;
         }
 
         // @api
         function updateTypeAliasDeclaration(
             node: TypeAliasDeclaration,
-            decorators: readonly Decorator[] | undefined,
             modifiers: readonly Modifier[] | undefined,
             name: Identifier,
             typeParameters: readonly TypeParameterDeclaration[] | undefined,
             type: TypeNode
         ) {
-            return node.decorators !== decorators
-                || node.modifiers !== modifiers
+            return node.modifiers !== modifiers
                 || node.name !== name
                 || node.typeParameters !== typeParameters
                 || node.type !== type
-                ? update(createTypeAliasDeclaration(decorators, modifiers, name, typeParameters, type), node)
+                ? finishUpdateTypeAliasDeclaration(createTypeAliasDeclaration(modifiers, name, typeParameters, type), node)
                 : node;
+        }
+
+        function finishUpdateTypeAliasDeclaration(updated: Mutable<TypeAliasDeclaration>, original: TypeAliasDeclaration) {
+            if (updated !== original) {
+                updated.decorators = original.decorators;
+            }
+            return update(updated, original);
         }
 
         // @api
         function createEnumDeclaration(
-            decorators: readonly Decorator[] | undefined,
             modifiers: readonly Modifier[] | undefined,
             name: string | Identifier,
             members: readonly EnumMember[]
         ) {
             const node = createBaseNamedDeclaration<EnumDeclaration>(
                 SyntaxKind.EnumDeclaration,
-                decorators,
                 modifiers,
                 name
             );
@@ -3788,37 +3842,41 @@ namespace ts {
                 propagateChildrenFlags(node.members) |
                 TransformFlags.ContainsTypeScript;
             node.transformFlags &= ~TransformFlags.ContainsPossibleTopLevelAwait; // Enum declarations cannot contain `await`
+
+            // The following properties are used only to report grammar errors
+            node.decorators = undefined;
             return node;
         }
 
         // @api
         function updateEnumDeclaration(
             node: EnumDeclaration,
-            decorators: readonly Decorator[] | undefined,
             modifiers: readonly Modifier[] | undefined,
             name: Identifier,
             members: readonly EnumMember[]) {
-            return node.decorators !== decorators
-                || node.modifiers !== modifiers
+            return node.modifiers !== modifiers
                 || node.name !== name
                 || node.members !== members
-                ? update(createEnumDeclaration(decorators, modifiers, name, members), node)
+                ? finishUpdateEnumDeclaration(createEnumDeclaration(modifiers, name, members), node)
                 : node;
+        }
+
+        function finishUpdateEnumDeclaration(updated: Mutable<EnumDeclaration>, original: EnumDeclaration) {
+            if (updated !== original) {
+                updated.decorators = original.decorators;
+            }
+            return update(updated, original);
         }
 
         // @api
         function createModuleDeclaration(
-            decorators: readonly Decorator[] | undefined,
             modifiers: readonly Modifier[] | undefined,
             name: ModuleName,
             body: ModuleBody | undefined,
             flags = NodeFlags.None
         ) {
-            const node = createBaseDeclaration<ModuleDeclaration>(
-                SyntaxKind.ModuleDeclaration,
-                decorators,
-                modifiers
-            );
+            const node = createBaseDeclaration<ModuleDeclaration>(SyntaxKind.ModuleDeclaration);
+            node.modifiers = asNodeArray(modifiers);
             node.flags |= flags & (NodeFlags.Namespace | NodeFlags.NestedNamespace | NodeFlags.GlobalAugmentation);
             node.name = name;
             node.body = body;
@@ -3827,28 +3885,37 @@ namespace ts {
             }
             else {
                 node.transformFlags |=
+                    propagateChildrenFlags(node.modifiers) |
                     propagateChildFlags(node.name) |
                     propagateChildFlags(node.body) |
                     TransformFlags.ContainsTypeScript;
             }
             node.transformFlags &= ~TransformFlags.ContainsPossibleTopLevelAwait; // Module declarations cannot contain `await`.
+
+            // The following properties are used only to report grammar errors
+            node.decorators = undefined;
             return node;
         }
 
         // @api
         function updateModuleDeclaration(
             node: ModuleDeclaration,
-            decorators: readonly Decorator[] | undefined,
             modifiers: readonly Modifier[] | undefined,
             name: ModuleName,
             body: ModuleBody | undefined
         ) {
-            return node.decorators !== decorators
-                || node.modifiers !== modifiers
+            return node.modifiers !== modifiers
                 || node.name !== name
                 || node.body !== body
-                ? update(createModuleDeclaration(decorators, modifiers, name, body, node.flags), node)
+                ? finishUpdateModuleDeclaration(createModuleDeclaration(modifiers, name, body, node.flags), node)
                 : node;
+        }
+
+        function finishUpdateModuleDeclaration(updated: Mutable<ModuleDeclaration>, original: ModuleDeclaration) {
+            if (updated !== original) {
+                updated.decorators = original.decorators;
+            }
+            return update(updated, original);
         }
 
         // @api
@@ -3885,24 +3952,34 @@ namespace ts {
         function createNamespaceExportDeclaration(name: string | Identifier) {
             const node = createBaseNamedDeclaration<NamespaceExportDeclaration>(
                 SyntaxKind.NamespaceExportDeclaration,
-                /*decorators*/ undefined,
                 /*modifiers*/ undefined,
                 name
             );
             node.transformFlags = TransformFlags.ContainsTypeScript;
+
+            // The following properties are used only to report grammar errors
+            node.decorators = undefined;
+            node.modifiers = undefined;
             return node;
         }
 
         // @api
         function updateNamespaceExportDeclaration(node: NamespaceExportDeclaration, name: Identifier) {
             return node.name !== name
-                ? update(createNamespaceExportDeclaration(name), node)
+                ? finishUpdateNamespaceExportDeclaration(createNamespaceExportDeclaration(name), node)
                 : node;
+        }
+
+        function finishUpdateNamespaceExportDeclaration(updated: Mutable<NamespaceExportDeclaration>, original: NamespaceExportDeclaration) {
+            if (updated !== original) {
+                updated.decorators = original.decorators;
+                updated.modifiers = original.modifiers;
+            }
+            return update(updated, original);
         }
 
         // @api
         function createImportEqualsDeclaration(
-            decorators: readonly Decorator[] | undefined,
             modifiers: readonly Modifier[] | undefined,
             isTypeOnly: boolean,
             name: string | Identifier,
@@ -3910,7 +3987,6 @@ namespace ts {
         ) {
             const node = createBaseNamedDeclaration<ImportEqualsDeclaration>(
                 SyntaxKind.ImportEqualsDeclaration,
-                decorators,
                 modifiers,
                 name
             );
@@ -3919,40 +3995,44 @@ namespace ts {
             node.transformFlags |= propagateChildFlags(node.moduleReference);
             if (!isExternalModuleReference(node.moduleReference)) node.transformFlags |= TransformFlags.ContainsTypeScript;
             node.transformFlags &= ~TransformFlags.ContainsPossibleTopLevelAwait; // Import= declaration is always parsed in an Await context
+
+            // The following properties are used only to report grammar errors
+            node.decorators = undefined;
             return node;
         }
 
         // @api
         function updateImportEqualsDeclaration(
             node: ImportEqualsDeclaration,
-            decorators: readonly Decorator[] | undefined,
             modifiers: readonly Modifier[] | undefined,
             isTypeOnly: boolean,
             name: Identifier,
             moduleReference: ModuleReference
         ) {
-            return node.decorators !== decorators
-                || node.modifiers !== modifiers
+            return node.modifiers !== modifiers
                 || node.isTypeOnly !== isTypeOnly
                 || node.name !== name
                 || node.moduleReference !== moduleReference
-                ? update(createImportEqualsDeclaration(decorators, modifiers, isTypeOnly, name, moduleReference), node)
+                ? finishUpdateImportEqualsDeclaration(createImportEqualsDeclaration(modifiers, isTypeOnly, name, moduleReference), node)
                 : node;
+        }
+
+        function finishUpdateImportEqualsDeclaration(updated: Mutable<ImportEqualsDeclaration>, original: ImportEqualsDeclaration) {
+            if (updated !== original) {
+                updated.decorators = original.decorators;
+            }
+            return update(updated, original);
         }
 
         // @api
         function createImportDeclaration(
-            decorators: readonly Decorator[] | undefined,
             modifiers: readonly Modifier[] | undefined,
             importClause: ImportClause | undefined,
             moduleSpecifier: Expression,
             assertClause: AssertClause | undefined
         ): ImportDeclaration {
-            const node = createBaseDeclaration<ImportDeclaration>(
-                SyntaxKind.ImportDeclaration,
-                decorators,
-                modifiers
-            );
+            const node = createBaseDeclaration<ImportDeclaration>(SyntaxKind.ImportDeclaration);
+            node.modifiers = asNodeArray(modifiers);
             node.importClause = importClause;
             node.moduleSpecifier = moduleSpecifier;
             node.assertClause = assertClause;
@@ -3960,25 +4040,33 @@ namespace ts {
                 propagateChildFlags(node.importClause) |
                 propagateChildFlags(node.moduleSpecifier);
             node.transformFlags &= ~TransformFlags.ContainsPossibleTopLevelAwait; // always parsed in an Await context
+
+            // The following properties are used only to report grammar errors
+            node.decorators = undefined;
             return node;
         }
 
         // @api
         function updateImportDeclaration(
             node: ImportDeclaration,
-            decorators: readonly Decorator[] | undefined,
             modifiers: readonly Modifier[] | undefined,
             importClause: ImportClause | undefined,
             moduleSpecifier: Expression,
             assertClause: AssertClause | undefined
         ) {
-            return node.decorators !== decorators
-                || node.modifiers !== modifiers
+            return node.modifiers !== modifiers
                 || node.importClause !== importClause
                 || node.moduleSpecifier !== moduleSpecifier
                 || node.assertClause !== assertClause
-                ? update(createImportDeclaration(decorators, modifiers, importClause, moduleSpecifier, assertClause), node)
+                ? finishUpdateImportDeclaration(createImportDeclaration(modifiers, importClause, moduleSpecifier, assertClause), node)
                 : node;
+        }
+
+        function finishUpdateImportDeclaration(updated: Mutable<ImportDeclaration>, original: ImportDeclaration) {
+            if (updated !== original) {
+                updated.decorators = original.decorators;
+            }
+            return update(updated, original);
         }
 
         // @api
@@ -4024,7 +4112,7 @@ namespace ts {
         }
 
         // @api
-        function createAssertEntry(name: AssertionKey, value: StringLiteral): AssertEntry {
+        function createAssertEntry(name: AssertionKey, value: Expression): AssertEntry {
             const node = createBaseNode<AssertEntry>(SyntaxKind.AssertEntry);
             node.name = name;
             node.value = value;
@@ -4033,10 +4121,26 @@ namespace ts {
         }
 
         // @api
-        function updateAssertEntry(node: AssertEntry, name: AssertionKey, value: StringLiteral): AssertEntry {
+        function updateAssertEntry(node: AssertEntry, name: AssertionKey, value: Expression): AssertEntry {
             return node.name !== name
                 || node.value !== value
                 ? update(createAssertEntry(name, value), node)
+                : node;
+        }
+
+        // @api
+        function createImportTypeAssertionContainer(clause: AssertClause, multiLine?: boolean): ImportTypeAssertionContainer {
+            const node = createBaseNode<ImportTypeAssertionContainer>(SyntaxKind.ImportTypeAssertionContainer);
+            node.assertClause = clause;
+            node.multiLine = multiLine;
+            return node;
+        }
+
+        // @api
+        function updateImportTypeAssertionContainer(node: ImportTypeAssertionContainer, clause: AssertClause, multiLine?: boolean): ImportTypeAssertionContainer {
+            return node.assertClause !== clause
+                || node.multiLine !== multiLine
+                ? update(createImportTypeAssertionContainer(clause, multiLine), node)
                 : node;
         }
 
@@ -4114,82 +4218,91 @@ namespace ts {
 
         // @api
         function createExportAssignment(
-            decorators: readonly Decorator[] | undefined,
             modifiers: readonly Modifier[] | undefined,
             isExportEquals: boolean | undefined,
             expression: Expression
         ) {
-            const node = createBaseDeclaration<ExportAssignment>(
-                SyntaxKind.ExportAssignment,
-                decorators,
-                modifiers
-            );
+            const node = createBaseDeclaration<ExportAssignment>(SyntaxKind.ExportAssignment);
+            node.modifiers = asNodeArray(modifiers);
             node.isExportEquals = isExportEquals;
             node.expression = isExportEquals
                 ? parenthesizerRules().parenthesizeRightSideOfBinary(SyntaxKind.EqualsToken, /*leftSide*/ undefined, expression)
                 : parenthesizerRules().parenthesizeExpressionOfExportDefault(expression);
-            node.transformFlags |= propagateChildFlags(node.expression);
+            node.transformFlags |= propagateChildrenFlags(node.modifiers) | propagateChildFlags(node.expression);
             node.transformFlags &= ~TransformFlags.ContainsPossibleTopLevelAwait; // always parsed in an Await context
+
+            // The following properties are used only to report grammar errors
+            node.decorators = undefined;
             return node;
         }
 
         // @api
         function updateExportAssignment(
             node: ExportAssignment,
-            decorators: readonly Decorator[] | undefined,
             modifiers: readonly Modifier[] | undefined,
             expression: Expression
         ) {
-            return node.decorators !== decorators
-                || node.modifiers !== modifiers
+            return node.modifiers !== modifiers
                 || node.expression !== expression
-                ? update(createExportAssignment(decorators, modifiers, node.isExportEquals, expression), node)
+                ? finishUpdateExportAssignment(createExportAssignment(modifiers, node.isExportEquals, expression), node)
                 : node;
+        }
+
+        function finishUpdateExportAssignment(updated: Mutable<ExportAssignment>, original: ExportAssignment) {
+            if (updated !== original) {
+                updated.decorators = original.decorators;
+            }
+            return update(updated, original);
         }
 
         // @api
         function createExportDeclaration(
-            decorators: readonly Decorator[] | undefined,
             modifiers: readonly Modifier[] | undefined,
             isTypeOnly: boolean,
             exportClause: NamedExportBindings | undefined,
             moduleSpecifier?: Expression,
             assertClause?: AssertClause
         ) {
-            const node = createBaseDeclaration<ExportDeclaration>(
-                SyntaxKind.ExportDeclaration,
-                decorators,
-                modifiers
-            );
+            const node = createBaseDeclaration<ExportDeclaration>(SyntaxKind.ExportDeclaration);
+            node.modifiers = asNodeArray(modifiers);
             node.isTypeOnly = isTypeOnly;
             node.exportClause = exportClause;
             node.moduleSpecifier = moduleSpecifier;
             node.assertClause = assertClause;
             node.transformFlags |=
+                propagateChildrenFlags(node.modifiers) |
                 propagateChildFlags(node.exportClause) |
                 propagateChildFlags(node.moduleSpecifier);
             node.transformFlags &= ~TransformFlags.ContainsPossibleTopLevelAwait; // always parsed in an Await context
+
+            // The following properties are used only to report grammar errors
+            node.decorators = undefined;
             return node;
         }
 
         // @api
         function updateExportDeclaration(
             node: ExportDeclaration,
-            decorators: readonly Decorator[] | undefined,
             modifiers: readonly Modifier[] | undefined,
             isTypeOnly: boolean,
             exportClause: NamedExportBindings | undefined,
             moduleSpecifier: Expression | undefined,
             assertClause: AssertClause | undefined
         ) {
-            return node.decorators !== decorators
-                || node.modifiers !== modifiers
+            return node.modifiers !== modifiers
                 || node.isTypeOnly !== isTypeOnly
                 || node.exportClause !== exportClause
                 || node.moduleSpecifier !== moduleSpecifier
                 || node.assertClause !== assertClause
-                ? update(createExportDeclaration(decorators, modifiers, isTypeOnly, exportClause, moduleSpecifier, assertClause), node)
+                ? finishUpdateExportDeclaration(createExportDeclaration(modifiers, isTypeOnly, exportClause, moduleSpecifier, assertClause), node)
                 : node;
+        }
+
+        function finishUpdateExportDeclaration(updated: Mutable<ExportDeclaration>, original: ExportDeclaration) {
+            if (updated !== original) {
+                updated.decorators = original.decorators;
+            }
+            return update(updated, original);
         }
 
         // @api
@@ -4231,12 +4344,8 @@ namespace ts {
         }
 
         // @api
-        function createMissingDeclaration() {
-            const node = createBaseDeclaration<MissingDeclaration>(
-                SyntaxKind.MissingDeclaration,
-                /*decorators*/ undefined,
-                /*modifiers*/ undefined
-            );
+        function createMissingDeclaration(): MissingDeclaration {
+            const node = createBaseDeclaration<MissingDeclaration>(SyntaxKind.MissingDeclaration);
             return node;
         }
 
@@ -4272,12 +4381,21 @@ namespace ts {
         }
 
         // @api
-        // createJSDocNonNullableType
         // createJSDocNullableType
+        // createJSDocNonNullableType
+        function createJSDocPrePostfixUnaryTypeWorker<T extends JSDocType & { readonly type: TypeNode | undefined; readonly postfix: boolean }>(kind: T["kind"], type: T["type"], postfix = false): T {
+            const node = createJSDocUnaryTypeWorker(
+                kind,
+                postfix ? type && parenthesizerRules().parenthesizeNonArrayTypeOfPostfixType(type) : type
+            ) as Mutable<T>;
+            node.postfix = postfix;
+            return node;
+        }
+
+        // @api
         // createJSDocOptionalType
         // createJSDocVariadicType
         // createJSDocNamepathType
-
         function createJSDocUnaryTypeWorker<T extends JSDocType & { readonly type: TypeNode | undefined; }>(kind: T["kind"], type: T["type"]): T {
             const node = createBaseNode<T>(kind);
             node.type = type;
@@ -4287,6 +4405,13 @@ namespace ts {
         // @api
         // updateJSDocNonNullableType
         // updateJSDocNullableType
+        function updateJSDocPrePostfixUnaryTypeWorker<T extends JSDocType & { readonly type: TypeNode | undefined; readonly postfix: boolean; }>(kind: T["kind"], node: T, type: T["type"]): T {
+            return node.type !== type
+            ? update(createJSDocPrePostfixUnaryTypeWorker(kind, type, node.postfix), node)
+            : node;
+        }
+
+        // @api
         // updateJSDocOptionalType
         // updateJSDocVariadicType
         // updateJSDocNamepathType
@@ -4300,7 +4425,6 @@ namespace ts {
         function createJSDocFunctionType(parameters: readonly ParameterDeclaration[], type: TypeNode | undefined): JSDocFunctionType {
             const node = createBaseSignatureDeclaration<JSDocFunctionType>(
                 SyntaxKind.JSDocFunctionType,
-                /*decorators*/ undefined,
                 /*modifiers*/ undefined,
                 /*name*/ undefined,
                 /*typeParameters*/ undefined,
@@ -4689,7 +4813,7 @@ namespace ts {
 
         // @api
         function createJSDocComment(comment?: string | NodeArray<JSDocComment> | undefined, tags?: readonly JSDocTag[] | undefined) {
-            const node = createBaseNode<JSDoc>(SyntaxKind.JSDocComment);
+            const node = createBaseNode<JSDoc>(SyntaxKind.JSDoc);
             node.comment = comment;
             node.tags = asNodeArray(tags);
             return node;
@@ -4854,7 +4978,7 @@ namespace ts {
         }
 
         // @api
-        function createJsxAttribute(name: Identifier, initializer: StringLiteral | JsxExpression | undefined) {
+        function createJsxAttribute(name: Identifier, initializer: JsxAttributeValue | undefined) {
             const node = createBaseNode<JsxAttribute>(SyntaxKind.JsxAttribute);
             node.name = name;
             node.initializer = initializer;
@@ -4866,7 +4990,7 @@ namespace ts {
         }
 
         // @api
-        function updateJsxAttribute(node: JsxAttribute, name: Identifier, initializer: StringLiteral | JsxExpression | undefined) {
+        function updateJsxAttribute(node: JsxAttribute, name: Identifier, initializer: JsxAttributeValue | undefined) {
             return node.name !== name
                 || node.initializer !== initializer
                 ? update(createJsxAttribute(name, initializer), node)
@@ -5026,7 +5150,6 @@ namespace ts {
         function createPropertyAssignment(name: string | PropertyName, initializer: Expression) {
             const node = createBaseNamedDeclaration<PropertyAssignment>(
                 SyntaxKind.PropertyAssignment,
-                /*decorators*/ undefined,
                 /*modifiers*/ undefined,
                 name
             );
@@ -5034,16 +5157,13 @@ namespace ts {
             node.transformFlags |=
                 propagateChildFlags(node.name) |
                 propagateChildFlags(node.initializer);
-            return node;
-        }
 
-        function finishUpdatePropertyAssignment(updated: Mutable<PropertyAssignment>, original: PropertyAssignment) {
-            // copy children used only for error reporting
-            if (original.decorators) updated.decorators = original.decorators;
-            if (original.modifiers) updated.modifiers = original.modifiers;
-            if (original.questionToken) updated.questionToken = original.questionToken;
-            if (original.exclamationToken) updated.exclamationToken = original.exclamationToken;
-            return update(updated, original);
+            // The following properties are used only to report grammar errors
+            node.decorators = undefined;
+            node.modifiers = undefined;
+            node.questionToken = undefined;
+            node.exclamationToken = undefined;
+            return node;
         }
 
         // @api
@@ -5054,11 +5174,21 @@ namespace ts {
                 : node;
         }
 
+        function finishUpdatePropertyAssignment(updated: Mutable<PropertyAssignment>, original: PropertyAssignment) {
+            // copy children used only for error reporting
+            if (updated !== original) {
+                updated.decorators = original.decorators;
+                updated.modifiers = original.modifiers;
+                updated.questionToken = original.questionToken;
+                updated.exclamationToken = original.exclamationToken;
+            }
+            return update(updated, original);
+        }
+
         // @api
         function createShorthandPropertyAssignment(name: string | Identifier, objectAssignmentInitializer?: Expression) {
             const node = createBaseNamedDeclaration<ShorthandPropertyAssignment>(
                 SyntaxKind.ShorthandPropertyAssignment,
-                /*decorators*/ undefined,
                 /*modifiers*/ undefined,
                 name
             );
@@ -5066,17 +5196,14 @@ namespace ts {
             node.transformFlags |=
                 propagateChildFlags(node.objectAssignmentInitializer) |
                 TransformFlags.ContainsES2015;
-            return node;
-        }
 
-        function finishUpdateShorthandPropertyAssignment(updated: Mutable<ShorthandPropertyAssignment>, original: ShorthandPropertyAssignment) {
-            // copy children used only for error reporting
-            if (original.decorators) updated.decorators = original.decorators;
-            if (original.modifiers) updated.modifiers = original.modifiers;
-            if (original.equalsToken) updated.equalsToken = original.equalsToken;
-            if (original.questionToken) updated.questionToken = original.questionToken;
-            if (original.exclamationToken) updated.exclamationToken = original.exclamationToken;
-            return update(updated, original);
+            // The following properties are used only to report grammar errors
+            node.equalsToken = undefined;
+            node.decorators = undefined;
+            node.modifiers = undefined;
+            node.questionToken = undefined;
+            node.exclamationToken = undefined;
+            return node;
         }
 
         // @api
@@ -5085,6 +5212,18 @@ namespace ts {
                 || node.objectAssignmentInitializer !== objectAssignmentInitializer
                 ? finishUpdateShorthandPropertyAssignment(createShorthandPropertyAssignment(name, objectAssignmentInitializer), node)
                 : node;
+        }
+
+        function finishUpdateShorthandPropertyAssignment(updated: Mutable<ShorthandPropertyAssignment>, original: ShorthandPropertyAssignment) {
+            if (updated !== original) {
+                // copy children used only for error reporting
+                updated.equalsToken = original.equalsToken;
+                updated.decorators = original.decorators;
+                updated.modifiers = original.modifiers;
+                updated.questionToken = original.questionToken;
+                updated.exclamationToken = original.exclamationToken;
+            }
+            return update(updated, original);
         }
 
         // @api
@@ -5165,7 +5304,7 @@ namespace ts {
             hasNoDefaultLib: boolean,
             libReferences: readonly FileReference[]
         ) {
-            const node = baseFactory.createBaseSourceFileNode(SyntaxKind.SourceFile) as Mutable<SourceFile>;
+            const node = (source.redirectInfo ? Object.create(source.redirectInfo.redirectTarget) : baseFactory.createBaseSourceFileNode(SyntaxKind.SourceFile)) as Mutable<SourceFile>;
             for (const p in source) {
                 if (p === "emitNode" || hasProperty(node, p) || !hasProperty(source, p)) continue;
                 (node as any)[p] = (source as any)[p];
@@ -5482,7 +5621,6 @@ namespace ts {
 
         function createExportDefault(expression: Expression) {
             return createExportAssignment(
-                /*decorators*/ undefined,
                 /*modifiers*/ undefined,
                 /*isExportEquals*/ false,
                 expression);
@@ -5490,7 +5628,6 @@ namespace ts {
 
         function createExternalModuleExport(exportName: Identifier) {
             return createExportDeclaration(
-                /*decorators*/ undefined,
                 /*modifiers*/ undefined,
                 /*isTypeOnly*/ false,
                 createNamedExports([
@@ -5743,11 +5880,9 @@ namespace ts {
                 createParenthesizedExpression(
                     createObjectLiteralExpression([
                         createSetAccessorDeclaration(
-                            /*decorators*/ undefined,
                             /*modifiers*/ undefined,
                             "value",
                             [createParameterDeclaration(
-                                /*decorators*/ undefined,
                                 /*modifiers*/ undefined,
                                 /*dotDotDotToken*/ undefined,
                                 paramName,
@@ -6088,29 +6223,31 @@ namespace ts {
             else {
                 modifierArray = modifiers;
             }
-            return isParameter(node) ? updateParameterDeclaration(node, node.decorators, modifierArray, node.dotDotDotToken, node.name, node.questionToken, node.type, node.initializer) :
+            return isTypeParameterDeclaration(node) ? updateTypeParameterDeclaration(node, modifierArray, node.name, node.constraint, node.default) :
+                isParameter(node) ? updateParameterDeclaration(node, modifierArray, node.dotDotDotToken, node.name, node.questionToken, node.type, node.initializer) :
+                isConstructorTypeNode(node) ? updateConstructorTypeNode1(node, modifierArray, node.typeParameters, node.parameters, node.type) :
                 isPropertySignature(node) ? updatePropertySignature(node, modifierArray, node.name, node.questionToken, node.type) :
-                isPropertyDeclaration(node) ? updatePropertyDeclaration(node, node.decorators, modifierArray, node.name, node.questionToken ?? node.exclamationToken, node.type, node.initializer) :
+                isPropertyDeclaration(node) ? updatePropertyDeclaration(node, modifierArray, node.name, node.questionToken ?? node.exclamationToken, node.type, node.initializer) :
                 isMethodSignature(node) ? updateMethodSignature(node, modifierArray, node.name, node.questionToken, node.typeParameters, node.parameters, node.type) :
-                isMethodDeclaration(node) ? updateMethodDeclaration(node, node.decorators, modifierArray, node.asteriskToken, node.name, node.questionToken, node.typeParameters, node.parameters, node.type, node.body) :
-                isConstructorDeclaration(node) ? updateConstructorDeclaration(node, node.decorators, modifierArray, node.parameters, node.body) :
-                isGetAccessorDeclaration(node) ? updateGetAccessorDeclaration(node, node.decorators, modifierArray, node.name, node.parameters, node.type, node.body) :
-                isSetAccessorDeclaration(node) ? updateSetAccessorDeclaration(node, node.decorators, modifierArray, node.name, node.parameters, node.body) :
-                isIndexSignatureDeclaration(node) ? updateIndexSignature(node, node.decorators, modifierArray, node.parameters, node.type) :
+                isMethodDeclaration(node) ? updateMethodDeclaration(node, modifierArray, node.asteriskToken, node.name, node.questionToken, node.typeParameters, node.parameters, node.type, node.body) :
+                isConstructorDeclaration(node) ? updateConstructorDeclaration(node, modifierArray, node.parameters, node.body) :
+                isGetAccessorDeclaration(node) ? updateGetAccessorDeclaration(node, modifierArray, node.name, node.parameters, node.type, node.body) :
+                isSetAccessorDeclaration(node) ? updateSetAccessorDeclaration(node, modifierArray, node.name, node.parameters, node.body) :
+                isIndexSignatureDeclaration(node) ? updateIndexSignature(node, modifierArray, node.parameters, node.type) :
                 isFunctionExpression(node) ? updateFunctionExpression(node, modifierArray, node.asteriskToken, node.name, node.typeParameters, node.parameters, node.type, node.body) :
                 isArrowFunction(node) ? updateArrowFunction(node, modifierArray, node.typeParameters, node.parameters, node.type, node.equalsGreaterThanToken, node.body) :
-                isClassExpression(node) ? updateClassExpression(node, node.decorators, modifierArray, node.name, node.typeParameters, node.heritageClauses, node.members) :
+                isClassExpression(node) ? updateClassExpression(node, modifierArray, node.name, node.typeParameters, node.heritageClauses, node.members) :
                 isVariableStatement(node) ? updateVariableStatement(node, modifierArray, node.declarationList) :
-                isFunctionDeclaration(node) ? updateFunctionDeclaration(node, node.decorators, modifierArray, node.asteriskToken, node.name, node.typeParameters, node.parameters, node.type, node.body) :
-                isClassDeclaration(node) ? updateClassDeclaration(node, node.decorators, modifierArray, node.name, node.typeParameters, node.heritageClauses, node.members) :
-                isInterfaceDeclaration(node) ? updateInterfaceDeclaration(node, node.decorators, modifierArray, node.name, node.typeParameters, node.heritageClauses, node.members) :
-                isTypeAliasDeclaration(node) ? updateTypeAliasDeclaration(node, node.decorators, modifierArray, node.name, node.typeParameters, node.type) :
-                isEnumDeclaration(node) ? updateEnumDeclaration(node, node.decorators, modifierArray, node.name, node.members) :
-                isModuleDeclaration(node) ? updateModuleDeclaration(node, node.decorators, modifierArray, node.name, node.body) :
-                isImportEqualsDeclaration(node) ? updateImportEqualsDeclaration(node, node.decorators, modifierArray, node.isTypeOnly, node.name, node.moduleReference) :
-                isImportDeclaration(node) ? updateImportDeclaration(node, node.decorators, modifierArray, node.importClause, node.moduleSpecifier, node.assertClause) :
-                isExportAssignment(node) ? updateExportAssignment(node, node.decorators, modifierArray, node.expression) :
-                isExportDeclaration(node) ? updateExportDeclaration(node, node.decorators, modifierArray, node.isTypeOnly, node.exportClause, node.moduleSpecifier, node.assertClause) :
+                isFunctionDeclaration(node) ? updateFunctionDeclaration(node, modifierArray, node.asteriskToken, node.name, node.typeParameters, node.parameters, node.type, node.body) :
+                isClassDeclaration(node) ? updateClassDeclaration(node, modifierArray, node.name, node.typeParameters, node.heritageClauses, node.members) :
+                isInterfaceDeclaration(node) ? updateInterfaceDeclaration(node, modifierArray, node.name, node.typeParameters, node.heritageClauses, node.members) :
+                isTypeAliasDeclaration(node) ? updateTypeAliasDeclaration(node, modifierArray, node.name, node.typeParameters, node.type) :
+                isEnumDeclaration(node) ? updateEnumDeclaration(node, modifierArray, node.name, node.members) :
+                isModuleDeclaration(node) ? updateModuleDeclaration(node, modifierArray, node.name, node.body) :
+                isImportEqualsDeclaration(node) ? updateImportEqualsDeclaration(node, modifierArray, node.isTypeOnly, node.name, node.moduleReference) :
+                isImportDeclaration(node) ? updateImportDeclaration(node, modifierArray, node.importClause, node.moduleSpecifier, node.assertClause) :
+                isExportAssignment(node) ? updateExportAssignment(node, modifierArray, node.expression) :
+                isExportDeclaration(node) ? updateExportDeclaration(node, modifierArray, node.isTypeOnly, node.exportClause, node.moduleSpecifier, node.assertClause) :
                 Debug.assertNever(node);
         }
 
@@ -6143,14 +6280,14 @@ namespace ts {
         }
     }
 
-    function updateWithoutOriginal<T extends Node>(updated: T, original: T): T {
+    function updateWithoutOriginal<T extends Node>(updated: Mutable<T>, original: T): T {
         if (updated !== original) {
             setTextRange(updated, original);
         }
         return updated;
     }
 
-    function updateWithOriginal<T extends Node>(updated: T, original: T): T {
+    function updateWithOriginal<T extends Node>(updated: Mutable<T>, original: T): T {
         if (updated !== original) {
             setOriginalNode(updated, original);
             setTextRange(updated, original);
@@ -6414,7 +6551,7 @@ namespace ts {
         let prologues: UnparsedPrologue[] | undefined;
         let helpers: UnscopedEmitHelper[] | undefined;
         let referencedFiles: FileReference[] | undefined;
-        let typeReferenceDirectives: string[] | undefined;
+        let typeReferenceDirectives: FileReference[] | undefined;
         let libReferenceDirectives: FileReference[] | undefined;
         let prependChildren: UnparsedTextLike[] | undefined;
         let texts: UnparsedSourceText[] | undefined;
@@ -6435,7 +6572,13 @@ namespace ts {
                     referencedFiles = append(referencedFiles, { pos: -1, end: -1, fileName: section.data });
                     break;
                 case BundleFileSectionKind.Type:
-                    typeReferenceDirectives = append(typeReferenceDirectives, section.data);
+                    typeReferenceDirectives = append(typeReferenceDirectives, { pos: -1, end: -1, fileName: section.data });
+                    break;
+                case BundleFileSectionKind.TypeResolutionModeImport:
+                    typeReferenceDirectives = append(typeReferenceDirectives, { pos: -1, end: -1, fileName: section.data, resolutionMode: ModuleKind.ESNext });
+                    break;
+                case BundleFileSectionKind.TypeResolutionModeRequire:
+                    typeReferenceDirectives = append(typeReferenceDirectives, { pos: -1, end: -1, fileName: section.data, resolutionMode: ModuleKind.CommonJS });
                     break;
                 case BundleFileSectionKind.Lib:
                     libReferenceDirectives = append(libReferenceDirectives, { pos: -1, end: -1, fileName: section.data });
@@ -6496,6 +6639,8 @@ namespace ts {
                 case BundleFileSectionKind.NoDefaultLib:
                 case BundleFileSectionKind.Reference:
                 case BundleFileSectionKind.Type:
+                case BundleFileSectionKind.TypeResolutionModeImport:
+                case BundleFileSectionKind.TypeResolutionModeRequire:
                 case BundleFileSectionKind.Lib:
                     syntheticReferences = append(syntheticReferences, setTextRange(factory.createUnparsedSyntheticReference(section), section));
                     break;

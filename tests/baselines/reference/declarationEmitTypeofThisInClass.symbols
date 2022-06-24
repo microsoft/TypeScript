@@ -1,0 +1,13 @@
+=== tests/cases/compiler/declarationEmitTypeofThisInClass.ts ===
+class Foo {
+>Foo : Symbol(Foo, Decl(declarationEmitTypeofThisInClass.ts, 0, 0))
+
+    public foo!: string
+>foo : Symbol(Foo.foo, Decl(declarationEmitTypeofThisInClass.ts, 0, 11))
+
+    public bar!: typeof this.foo //Public property 'bar' of exported class has or is using private name 'this'.(4031)
+>bar : Symbol(Foo.bar, Decl(declarationEmitTypeofThisInClass.ts, 1, 23))
+>this.foo : Symbol(Foo.foo, Decl(declarationEmitTypeofThisInClass.ts, 0, 11))
+>this : Symbol(Foo, Decl(declarationEmitTypeofThisInClass.ts, 0, 0))
+>foo : Symbol(Foo.foo, Decl(declarationEmitTypeofThisInClass.ts, 0, 11))
+}

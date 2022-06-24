@@ -37,9 +37,9 @@ Already included file name '/user/username/projects/myproject/ModuleC.ts' differ
   The file is in the program because:
     Imported via "./ModuleC" from file '/user/username/projects/myproject/moduleA.ts'
     Imported via "./moduleC" from file '/user/username/projects/myproject/moduleB.ts'
-    Matched by include pattern '**/*' in 'tsconfig.json'
+    Matched by default include pattern '**/*'
 
-File is included via import here: [96mmoduleB.ts[0m:[93m1[0m:[93m20[0m
+File is included via import here. [96mmoduleB.ts[0m:[93m1[0m:[93m20[0m
 
   | import a = require("./moduleC")
     [96m                   ▔▔▔▔▔▔▔▔▔▔▔[0m
@@ -50,9 +50,9 @@ File name '/user/username/projects/myproject/moduleC.ts' differs from already in
   The file is in the program because:
     Imported via "./ModuleC" from file '/user/username/projects/myproject/moduleA.ts'
     Imported via "./moduleC" from file '/user/username/projects/myproject/moduleB.ts'
-    Matched by include pattern '**/*' in 'tsconfig.json'
+    Matched by default include pattern '**/*'
 
-File is included via import here: [96mmoduleA.ts[0m:[93m1[0m:[93m20[0m
+File is included via import here. [96mmoduleA.ts[0m:[93m1[0m:[93m20[0m
 
   | import a = require("./ModuleC")
     [96m                   ▔▔▔▔▔▔▔▔▔▔▔[0m
@@ -61,11 +61,11 @@ File is included via import here: [96mmoduleA.ts[0m:[93m1[0m:[93m20[0m
 ModuleC.ts
   Imported via "./ModuleC" from file 'moduleA.ts'
   Imported via "./moduleC" from file 'moduleB.ts'
-  Matched by include pattern '**/*' in 'tsconfig.json'
+  Matched by default include pattern '**/*'
 moduleA.ts
-  Matched by include pattern '**/*' in 'tsconfig.json'
+  Matched by default include pattern '**/*'
 moduleB.ts
-  Matched by include pattern '**/*' in 'tsconfig.json'
+  Matched by default include pattern '**/*'
 [[90m12:00:32 AM[0m] Found 2 errors. Watching for file changes.
 
 
@@ -102,14 +102,14 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/moduleB.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/user/username/projects/myproject/node_modules/@types:
+  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
 
 FsWatches::
 
 FsWatchesRecursive::
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject"}
 
 exitCode:: ExitStatus.undefined
 
@@ -150,9 +150,9 @@ Already included file name '/user/username/projects/myproject/ModuleC.ts' differ
   The file is in the program because:
     Imported via "./ModuleC" from file '/user/username/projects/myproject/moduleA.ts'
     Imported via "./moduleC" from file '/user/username/projects/myproject/moduleB.ts'
-    Matched by include pattern '**/*' in 'tsconfig.json'
+    Matched by default include pattern '**/*'
 
-File is included via import here: [96mmoduleB.ts[0m:[93m1[0m:[93m20[0m
+File is included via import here. [96mmoduleB.ts[0m:[93m1[0m:[93m20[0m
 
   | import a = require("./moduleC")
     [96m                   ▔▔▔▔▔▔▔▔▔▔▔[0m
@@ -163,9 +163,9 @@ File name '/user/username/projects/myproject/moduleC.ts' differs from already in
   The file is in the program because:
     Imported via "./ModuleC" from file '/user/username/projects/myproject/moduleA.ts'
     Imported via "./moduleC" from file '/user/username/projects/myproject/moduleB.ts'
-    Matched by include pattern '**/*' in 'tsconfig.json'
+    Matched by default include pattern '**/*'
 
-File is included via import here: [96mmoduleA.ts[0m:[93m2[0m:[93m40[0m
+File is included via import here. [96mmoduleA.ts[0m:[93m2[0m:[93m40[0m
 
   | import a = require("./ModuleC")
     [96m                   ▔▔▔▔▔▔▔▔▔▔▔[0m
@@ -174,11 +174,11 @@ File is included via import here: [96mmoduleA.ts[0m:[93m2[0m:[93m40[0m
 ModuleC.ts
   Imported via "./ModuleC" from file 'moduleA.ts'
   Imported via "./moduleC" from file 'moduleB.ts'
-  Matched by include pattern '**/*' in 'tsconfig.json'
+  Matched by default include pattern '**/*'
 moduleA.ts
-  Matched by include pattern '**/*' in 'tsconfig.json'
+  Matched by default include pattern '**/*'
 moduleB.ts
-  Matched by include pattern '**/*' in 'tsconfig.json'
+  Matched by default include pattern '**/*'
 [[90m12:00:39 AM[0m] Found 2 errors. Watching for file changes.
 
 
@@ -209,14 +209,14 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/moduleB.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/user/username/projects/myproject/node_modules/@types:
+  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
 
 FsWatches::
 
 FsWatchesRecursive::
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject"}
 
 exitCode:: ExitStatus.undefined
 

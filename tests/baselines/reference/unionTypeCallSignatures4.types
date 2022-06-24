@@ -1,28 +1,28 @@
 === tests/cases/conformance/types/union/unionTypeCallSignatures4.ts ===
 type F1 = (a: string, b?: string) => void;
->F1 : F1
+>F1 : (a: string, b?: string) => void
 >a : string
 >b : string
 
 type F2 = (a: string, b?: string, c?: string) => void;
->F2 : F2
+>F2 : (a: string, b?: string, c?: string) => void
 >a : string
 >b : string
 >c : string
 
 type F3 = (a: string, ...rest: string[]) => void;
->F3 : F3
+>F3 : (a: string, ...rest: string[]) => void
 >a : string
 >rest : string[]
 
 type F4 = (a: string, b?: string, ...rest: string[]) => void;
->F4 : F4
+>F4 : (a: string, b?: string, ...rest: string[]) => void
 >a : string
 >b : string
 >rest : string[]
 
 type F5 = (a: string, b: string) => void;
->F5 : F5
+>F5 : (a: string, b: string) => void
 >a : string
 >b : string
 

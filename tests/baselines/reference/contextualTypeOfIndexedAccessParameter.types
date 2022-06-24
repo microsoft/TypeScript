@@ -1,9 +1,9 @@
 === tests/cases/compiler/contextualTypeOfIndexedAccessParameter.ts ===
 type Keys = "a" | "b";
->Keys : Keys
+>Keys : "a" | "b"
 
 type OptionsForKey = { a: { cb: (p: number) => number } } & { b: {} };
->OptionsForKey : OptionsForKey
+>OptionsForKey : { a: { cb: (p: number) => number; }; } & { b: {}; }
 >a : { cb: (p: number) => number; }
 >cb : (p: number) => number
 >p : number

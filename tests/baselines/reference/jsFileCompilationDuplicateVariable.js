@@ -28,5 +28,5 @@ out.d.ts(2,13): error TS2403: Subsequent variable declarations must have the sam
     declare var x: string;
                 ~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'number', but here has type 'string'.
-!!! related TS6203 out.d.ts:1:13: 'x' was also declared here:
+!!! related TS6203 out.d.ts:1:13: 'x' was also declared here.
     

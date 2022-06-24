@@ -3,7 +3,7 @@ tests/cases/conformance/expressions/valuesAndReferences/assignments.ts(14,1): er
 tests/cases/conformance/expressions/valuesAndReferences/assignments.ts(17,1): error TS2628: Cannot assign to 'E' because it is an enum.
 tests/cases/conformance/expressions/valuesAndReferences/assignments.ts(18,3): error TS2540: Cannot assign to 'A' because it is a read-only property.
 tests/cases/conformance/expressions/valuesAndReferences/assignments.ts(21,1): error TS2630: Cannot assign to 'fn' because it is a function.
-tests/cases/conformance/expressions/valuesAndReferences/assignments.ts(31,1): error TS2693: 'I' only refers to a type, but is being used as a value here:
+tests/cases/conformance/expressions/valuesAndReferences/assignments.ts(31,1): error TS2693: 'I' only refers to a type, but is being used as a value here.
 
 
 ==== tests/cases/conformance/expressions/valuesAndReferences/assignments.ts (6 errors) ====
@@ -49,4 +49,4 @@ tests/cases/conformance/expressions/valuesAndReferences/assignments.ts(31,1): er
     interface I { }
     I = null; // Error
     ~
-!!! error TS2693: 'I' only refers to a type, but is being used as a value here:
+!!! error TS2693: 'I' only refers to a type, but is being used as a value here.

@@ -58,7 +58,7 @@ Project '/user/username/projects/myproject/projects/project2/tsconfig.json' (Con
 	../project1/class1.ts
 	  Source from referenced project '../project1/tsconfig.json' included because '--module' is specified as 'none'
 	class2.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 
 -----------------------------------------------
 Search path: /user/username/projects/myproject/projects/project2
@@ -94,7 +94,7 @@ Project '/user/username/projects/myproject/projects/project1/tsconfig.json' (Con
 	../../../../../../a/lib/lib.d.ts
 	  Default library for target 'es3'
 	class1.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 
 -----------------------------------------------
 Search path: /user/username/projects/myproject/projects/project1
@@ -138,7 +138,7 @@ Project '/user/username/projects/myproject/projects/project2/tsconfig.json' (Con
 	../project1/class3.ts
 	  Source from referenced project '../project1/tsconfig.json' included because '--module' is specified as 'none'
 	class2.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 
 -----------------------------------------------
 Running: /user/username/projects/myproject/projects/project1/tsconfig.json
@@ -154,9 +154,9 @@ Project '/user/username/projects/myproject/projects/project1/tsconfig.json' (Con
 	../../../../../../a/lib/lib.d.ts
 	  Default library for target 'es3'
 	class1.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 	class3.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 
 -----------------------------------------------
 Running: *ensureProjectForOpenFiles*

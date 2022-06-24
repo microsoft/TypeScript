@@ -20,8 +20,8 @@ globalThis.assert = _chai.assert;
         }
         assertDeepImpl(a, b, msg);
 
-        function arrayExtraKeysObject(a: readonly ({} | null | undefined)[]): object {
-            const obj: { [key: string]: {} | null | undefined } = {};
+        function arrayExtraKeysObject(a: readonly unknown[]): object {
+            const obj: { [key: string]: unknown } = {};
             for (const key in a) {
                 if (Number.isNaN(Number(key))) {
                     obj[key] = a[key];

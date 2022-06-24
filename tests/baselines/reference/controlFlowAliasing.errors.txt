@@ -360,7 +360,7 @@ tests/cases/conformance/controlFlow/controlFlowAliasing.ts(280,5): error TS2454:
     if (a) { }
         ~
 !!! error TS2448: Block-scoped variable 'a' used before its declaration.
-!!! related TS2728 tests/cases/conformance/controlFlow/controlFlowAliasing.ts:282:7: 'a' is declared here:
+!!! related TS2728 tests/cases/conformance/controlFlow/controlFlowAliasing.ts:282:7: 'a' is declared here.
         ~
 !!! error TS2454: Variable 'a' is used before being assigned.
     

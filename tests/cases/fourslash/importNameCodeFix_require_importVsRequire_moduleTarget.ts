@@ -15,7 +15,7 @@ goTo.file("index.js");
 verify.codeFix({
   index: 0,
   errorCode: ts.Diagnostics.Cannot_find_name_0.code,
-  description: `Import 'x' from module "./a"`,
+  description: `Add import from "./a"`,
   applyChanges: false,
   newFileContent: 
 `import { x } from "./a";
@@ -30,7 +30,7 @@ edit.insertLine("const fs = require('fs');\n");
 verify.codeFix({
   index: 0,
   errorCode: ts.Diagnostics.Cannot_find_name_0.code,
-  description: `Import 'x' from module "./a"`,
+  description: `Add import from "./a"`,
   applyChanges: false,
   newFileContent: 
 `const fs = require('fs');

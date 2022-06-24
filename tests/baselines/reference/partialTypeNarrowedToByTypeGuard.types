@@ -1,9 +1,9 @@
 === tests/cases/compiler/partialTypeNarrowedToByTypeGuard.ts ===
 type Obj = {} | undefined;
->Obj : Obj
+>Obj : {} | undefined
 
 type User = {
->User : User
+>User : { email: string; name: string; }
 
     email: string;
 >email : string

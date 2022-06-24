@@ -236,7 +236,7 @@ const f40: <A, B>(b: B, a: A) => [A, B] = flip(zip);
 // Repro from #16293
 
 type fn = <A>(a: A) => A;
->fn : fn
+>fn : <A>(a: A) => A
 >a : A
 
 const fn: fn = a => a;

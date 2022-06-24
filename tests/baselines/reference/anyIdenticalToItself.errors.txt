@@ -7,7 +7,7 @@ tests/cases/compiler/anyIdenticalToItself.ts(10,9): error TS1056: Accessors are 
     function foo(x: any);
              ~~~
 !!! error TS2394: This overload signature is not compatible with its implementation signature.
-!!! related TS2750 tests/cases/compiler/anyIdenticalToItself.ts:3:10: The implementation signature is declared here:
+!!! related TS2750 tests/cases/compiler/anyIdenticalToItself.ts:3:10: The implementation signature is declared here.
     function foo(x: any);
     function foo(x: any, y: number) { }
     

@@ -166,7 +166,7 @@ tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.t
 !!! error TS2300: Duplicate identifier '#foo'.
             ~~~~
 !!! error TS2717: Subsequent property declarations must have the same type.  Property '#foo' must be of type '() => void', but here has type 'string'.
-!!! related TS6203 tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts:55:9: '#foo' was also declared here:
+!!! related TS6203 tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts:55:9: '#foo' was also declared here.
         }
     
         // Error
@@ -482,7 +482,7 @@ tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.t
 !!! error TS2300: Duplicate identifier '#foo'.
                    ~~~~
 !!! error TS2717: Subsequent property declarations must have the same type.  Property '#foo' must be of type '() => void', but here has type 'string'.
-!!! related TS6203 tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts:280:16: '#foo' was also declared here:
+!!! related TS6203 tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts:280:16: '#foo' was also declared here.
         }
     
         // Error

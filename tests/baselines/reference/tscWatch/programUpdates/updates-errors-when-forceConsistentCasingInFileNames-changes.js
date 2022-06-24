@@ -63,7 +63,7 @@ FsWatches::
 
 FsWatchesRecursive::
 /:
-  {"directoryName":"","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":""}
 
 exitCode:: ExitStatus.undefined
 
@@ -101,11 +101,11 @@ Output::
   [91m                                          ▔▔▔▔▔[0m
 File name '/A.ts' differs from already included file name '/a.ts' only in casing.
   The file is in the program because:
-    Matched by include pattern '**/*' in '/tsconfig.json'
+    Matched by default include pattern '**/*'
     Imported via './a' from file '/b.ts'
     Imported via './A' from file '/b.ts'
 
-File is included via import here: [96mb.ts[0m:[93m1[0m:[93m17[0m
+File is included via import here. [96mb.ts[0m:[93m1[0m:[93m17[0m
 
   | import {C} from './a'; import * as A from './A';
     [96m                ▔▔▔▔▔[0m
@@ -139,7 +139,7 @@ FsWatches::
 
 FsWatchesRecursive::
 /:
-  {"directoryName":"","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":""}
 
 exitCode:: ExitStatus.undefined
 

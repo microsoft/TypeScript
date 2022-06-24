@@ -37,7 +37,7 @@ Output::
   The file is in the program because:
     Part of 'files' list in tsconfig.json
 
-File is matched by 'files' list specified here: [96ma/b/tsconfig.json[0m:[93m5[0m:[93m25[0m
+File is matched by 'files' list specified here. [96ma/b/tsconfig.json[0m:[93m5[0m:[93m25[0m
 
   | "commonFile3.ts"
     [96m▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔[0m
@@ -67,12 +67,12 @@ WatchedFiles::
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 /a/b/commonfile3.ts:
   {"fileName":"/a/b/commonfile3.ts","pollingInterval":250}
+/a/b/node_modules/@types:
+  {"fileName":"/a/b/node_modules/@types","pollingInterval":500}
 
 FsWatches::
 
 FsWatchesRecursive::
-/a/b/node_modules/@types:
-  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 

@@ -1,0 +1,133 @@
+=== tests/cases/compiler/bindingPatternCannotBeOnlyInferenceSource.ts ===
+declare function f<T>(): T;
+>f : Symbol(f, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 0, 0))
+>T : Symbol(T, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 0, 19))
+>T : Symbol(T, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 0, 19))
+
+const {} = f();       // error (only in strictNullChecks)
+>f : Symbol(f, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 0, 0))
+
+const { p1 } = f();   // error
+>p1 : Symbol(p1, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 2, 7))
+>f : Symbol(f, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 0, 0))
+
+const [] = f();       // error
+>f : Symbol(f, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 0, 0))
+
+const [e1, e2] = f(); // error
+>e1 : Symbol(e1, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 4, 7))
+>e2 : Symbol(e2, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 4, 10))
+>f : Symbol(f, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 0, 0))
+
+// Repro from #43605
+type Dispatch<A = { type: any; [extraProps: string]: any }> = { <T extends A>(action: T): T };
+>Dispatch : Symbol(Dispatch, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 4, 21))
+>A : Symbol(A, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 7, 14))
+>type : Symbol(type, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 7, 19))
+>extraProps : Symbol(extraProps, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 7, 32))
+>T : Symbol(T, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 7, 65))
+>A : Symbol(A, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 7, 14))
+>action : Symbol(action, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 7, 78))
+>T : Symbol(T, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 7, 65))
+>T : Symbol(T, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 7, 65))
+
+type IFuncs = { readonly [key: string]: (...p: any) => void };
+>IFuncs : Symbol(IFuncs, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 7, 94))
+>key : Symbol(key, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 8, 26))
+>p : Symbol(p, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 8, 41))
+
+type IDestructuring<T extends IFuncs> = { readonly [key in keyof T]?: (...p: Parameters<T[key]>) => void };
+>IDestructuring : Symbol(IDestructuring, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 8, 62))
+>T : Symbol(T, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 9, 20))
+>IFuncs : Symbol(IFuncs, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 7, 94))
+>key : Symbol(key, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 9, 52))
+>T : Symbol(T, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 9, 20))
+>p : Symbol(p, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 9, 71))
+>Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 9, 20))
+>key : Symbol(key, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 9, 52))
+
+type Destructuring<T extends IFuncs, U extends IDestructuring<T>> = (dispatch: Dispatch<any>, funcs: T) => U;
+>Destructuring : Symbol(Destructuring, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 9, 107))
+>T : Symbol(T, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 10, 19))
+>IFuncs : Symbol(IFuncs, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 7, 94))
+>U : Symbol(U, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 10, 36))
+>IDestructuring : Symbol(IDestructuring, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 8, 62))
+>T : Symbol(T, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 10, 19))
+>dispatch : Symbol(dispatch, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 10, 69))
+>Dispatch : Symbol(Dispatch, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 4, 21))
+>funcs : Symbol(funcs, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 10, 93))
+>T : Symbol(T, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 10, 19))
+>U : Symbol(U, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 10, 36))
+
+const funcs1 = {
+>funcs1 : Symbol(funcs1, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 11, 5))
+
+    funcA: (a: boolean): void => {},
+>funcA : Symbol(funcA, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 11, 16))
+>a : Symbol(a, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 12, 12))
+
+    funcB: (b: string, bb: string): void => {},
+>funcB : Symbol(funcB, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 12, 36))
+>b : Symbol(b, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 13, 12))
+>bb : Symbol(bb, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 13, 22))
+
+    funcC: (c: number, cc: number, ccc: boolean): void => {},
+>funcC : Symbol(funcC, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 13, 47))
+>c : Symbol(c, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 14, 12))
+>cc : Symbol(cc, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 14, 22))
+>ccc : Symbol(ccc, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 14, 34))
+
+};
+type TFuncs1 = typeof funcs1;
+>TFuncs1 : Symbol(TFuncs1, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 15, 2))
+>funcs1 : Symbol(funcs1, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 11, 5))
+
+declare function useReduxDispatch1<T extends IDestructuring<TFuncs1>>(destructuring: Destructuring<TFuncs1, T>): T;
+>useReduxDispatch1 : Symbol(useReduxDispatch1, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 16, 29))
+>T : Symbol(T, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 17, 35))
+>IDestructuring : Symbol(IDestructuring, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 8, 62))
+>TFuncs1 : Symbol(TFuncs1, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 15, 2))
+>destructuring : Symbol(destructuring, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 17, 70))
+>Destructuring : Symbol(Destructuring, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 9, 107))
+>TFuncs1 : Symbol(TFuncs1, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 15, 2))
+>T : Symbol(T, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 17, 35))
+>T : Symbol(T, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 17, 35))
+
+const {} = useReduxDispatch1(
+>useReduxDispatch1 : Symbol(useReduxDispatch1, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 16, 29))
+
+    (d, f) => ({
+>d : Symbol(d, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 19, 5))
+>f : Symbol(f, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 19, 7))
+
+        funcA: (...p) => d(f.funcA(...p)), // p should be inferrable
+>funcA : Symbol(funcA, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 19, 16))
+>p : Symbol(p, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 20, 16))
+>d : Symbol(d, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 19, 5))
+>f.funcA : Symbol(funcA, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 11, 16))
+>f : Symbol(f, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 19, 7))
+>funcA : Symbol(funcA, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 11, 16))
+>p : Symbol(p, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 20, 16))
+
+        funcB: (...p) => d(f.funcB(...p)),
+>funcB : Symbol(funcB, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 20, 42))
+>p : Symbol(p, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 21, 16))
+>d : Symbol(d, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 19, 5))
+>f.funcB : Symbol(funcB, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 12, 36))
+>f : Symbol(f, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 19, 7))
+>funcB : Symbol(funcB, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 12, 36))
+>p : Symbol(p, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 21, 16))
+
+        funcC: (...p) => d(f.funcC(...p)),
+>funcC : Symbol(funcC, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 21, 42))
+>p : Symbol(p, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 22, 16))
+>d : Symbol(d, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 19, 5))
+>f.funcC : Symbol(funcC, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 13, 47))
+>f : Symbol(f, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 19, 7))
+>funcC : Symbol(funcC, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 13, 47))
+>p : Symbol(p, Decl(bindingPatternCannotBeOnlyInferenceSource.ts, 22, 16))
+
+    })
+);
+

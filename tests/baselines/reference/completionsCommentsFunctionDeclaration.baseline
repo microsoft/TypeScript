@@ -6,6 +6,7 @@
       "name": "3"
     },
     "completionList": {
+      "flags": 0,
       "isGlobalCompletion": true,
       "isMemberCompletion": false,
       "isNewIdentifierLocation": false,
@@ -1070,7 +1071,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI.",
+                  "text": "A value representing an unencoded URI.",
                   "kind": "text"
                 }
               ]
@@ -1183,7 +1184,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI component.",
+                  "text": "A value representing an unencoded URI component.",
                   "kind": "text"
                 }
               ]
@@ -3568,6 +3569,18 @@
           ]
         },
         {
+          "name": "type",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "type",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
           "name": "TypeError",
           "kind": "var",
           "kindModifiers": "declare",
@@ -4130,7 +4143,7 @@
           "name": "escape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "23",
+          "sortText": "z15",
           "displayParts": [
             {
               "text": "function",
@@ -4220,7 +4233,7 @@
           "name": "unescape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "23",
+          "sortText": "z15",
           "displayParts": [
             {
               "text": "function",
@@ -4316,6 +4329,7 @@
       "name": "7"
     },
     "completionList": {
+      "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": false,
       "isNewIdentifierLocation": true,
@@ -5341,7 +5355,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI.",
+                  "text": "A value representing an unencoded URI.",
                   "kind": "text"
                 }
               ]
@@ -5454,7 +5468,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI component.",
+                  "text": "A value representing an unencoded URI component.",
                   "kind": "text"
                 }
               ]
@@ -7196,6 +7210,18 @@
           ]
         },
         {
+          "name": "type",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "type",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
           "name": "TypeError",
           "kind": "var",
           "kindModifiers": "declare",
@@ -7606,7 +7632,7 @@
           "name": "escape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "23",
+          "sortText": "z15",
           "displayParts": [
             {
               "text": "function",
@@ -7696,7 +7722,7 @@
           "name": "unescape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "23",
+          "sortText": "z15",
           "displayParts": [
             {
               "text": "function",
@@ -7792,6 +7818,7 @@
       "name": "9"
     },
     "completionList": {
+      "flags": 0,
       "isGlobalCompletion": true,
       "isMemberCompletion": false,
       "isNewIdentifierLocation": false,
@@ -8856,7 +8883,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI.",
+                  "text": "A value representing an unencoded URI.",
                   "kind": "text"
                 }
               ]
@@ -8969,7 +8996,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value representing an encoded URI component.",
+                  "text": "A value representing an unencoded URI component.",
                   "kind": "text"
                 }
               ]
@@ -11354,6 +11381,18 @@
           ]
         },
         {
+          "name": "type",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "type",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
           "name": "TypeError",
           "kind": "var",
           "kindModifiers": "declare",
@@ -11916,7 +11955,7 @@
           "name": "escape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "23",
+          "sortText": "z15",
           "displayParts": [
             {
               "text": "function",
@@ -12006,7 +12045,7 @@
           "name": "unescape",
           "kind": "function",
           "kindModifiers": "deprecated,declare",
-          "sortText": "23",
+          "sortText": "z15",
           "displayParts": [
             {
               "text": "function",

@@ -10,7 +10,7 @@ tests/cases/conformance/classes/propertyMemberDeclarations/redefinedPararameterP
         b = this.a /*undefined*/;
                  ~
 !!! error TS2729: Property 'a' is used before its initialization.
-!!! related TS2728 tests/cases/conformance/classes/propertyMemberDeclarations/redefinedPararameterProperty.ts:8:17: 'a' is declared here:
+!!! related TS2728 tests/cases/conformance/classes/propertyMemberDeclarations/redefinedPararameterProperty.ts:8:17: 'a' is declared here.
       
         constructor(public a: number) {
             super();

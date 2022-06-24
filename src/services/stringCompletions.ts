@@ -210,12 +210,13 @@ namespace ts.Completions.StringCompletions {
 
             case SyntaxKind.CallExpression:
             case SyntaxKind.NewExpression:
+            case SyntaxKind.JsxAttribute:
                 if (!isRequireCallArgument(node) && !isImportCall(parent)) {
-                    const argumentInfo = SignatureHelp.getArgumentInfoForCompletions(node, position, sourceFile);
+                    const argumentInfo = SignatureHelp.getArgumentInfoForCompletions(parent.kind === SyntaxKind.JsxAttribute ? parent.parent : node, position, sourceFile);
                     // Get string literal completions from specialized signatures of the target
                     // i.e. declare function f(a: 'A');
                     // f("/*completion position*/")
-                    return argumentInfo ? getStringLiteralCompletionsFromSignature(argumentInfo, typeChecker) : fromContextualType();
+                    return argumentInfo ? getStringLiteralCompletionsFromSignature(argumentInfo.invocation, node, argumentInfo, typeChecker) : fromContextualType();
                 }
                 // falls through (is `require("")` or `require(""` or `import("")`)
 
@@ -257,15 +258,21 @@ namespace ts.Completions.StringCompletions {
             type !== current && isLiteralTypeNode(type) && isStringLiteral(type.literal) ? type.literal.text : undefined);
     }
 
-    function getStringLiteralCompletionsFromSignature(argumentInfo: SignatureHelp.ArgumentInfoForCompletions, checker: TypeChecker): StringLiteralCompletionsFromTypes {
+    function getStringLiteralCompletionsFromSignature(call: CallLikeExpression, arg: StringLiteralLike, argumentInfo: SignatureHelp.ArgumentInfoForCompletions, checker: TypeChecker): StringLiteralCompletionsFromTypes {
         let isNewIdentifier = false;
-
         const uniques = new Map<string, true>();
         const candidates: Signature[] = [];
-        checker.getResolvedSignature(argumentInfo.invocation, candidates, argumentInfo.argumentCount);
+        const editingArgument = isJsxOpeningLikeElement(call) ? Debug.checkDefined(findAncestor(arg.parent, isJsxAttribute)) : arg;
+        checker.getResolvedSignatureForStringLiteralCompletions(call, editingArgument, candidates);
         const types = flatMap(candidates, candidate => {
             if (!signatureHasRestParameter(candidate) && argumentInfo.argumentCount > candidate.parameters.length) return;
-            const type = candidate.getTypeParameterAtPosition(argumentInfo.argumentIndex);
+            let type = candidate.getTypeParameterAtPosition(argumentInfo.argumentIndex);
+            if (isJsxOpeningLikeElement(call)) {
+                const propType = checker.getTypeOfPropertyOfType(type, (editingArgument as JsxAttribute).name.text);
+                if (propType) {
+                    type = propType;
+                }
+            }
             isNewIdentifier = isNewIdentifier || !!(type.flags & TypeFlags.String);
             return getStringLiteralTypes(type, uniques);
         });
@@ -368,9 +375,20 @@ namespace ts.Completions.StringCompletions {
         }
     }
 
+    function isEmitResolutionKindUsingNodeModules(compilerOptions: CompilerOptions): boolean {
+        return getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.NodeJs ||
+            getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Node16 ||
+            getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.NodeNext;
+    }
+
+    function isEmitModuleResolutionRespectingExportMaps(compilerOptions: CompilerOptions) {
+        return getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Node16 ||
+        getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.NodeNext;
+    }
+
     function getSupportedExtensionsForModuleResolution(compilerOptions: CompilerOptions): readonly Extension[][] {
         const extensions = getSupportedExtensions(compilerOptions);
-        return getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.NodeJs ?
+        return isEmitResolutionKindUsingNodeModules(compilerOptions) ?
             getSupportedExtensionsWithJsonIfResolveJsonModule(compilerOptions, extensions) :
             extensions;
     }
@@ -430,9 +448,27 @@ namespace ts.Completions.StringCompletions {
 
         fragment = ensureTrailingDirectorySeparator(fragment);
 
-        // const absolutePath = normalizeAndPreserveTrailingSlash(isRootedDiskPath(fragment) ? fragment : combinePaths(scriptPath, fragment)); // TODO(rbuckton): should use resolvePaths
         const absolutePath = resolvePath(scriptPath, fragment);
         const baseDirectory = hasTrailingDirectorySeparator(absolutePath) ? absolutePath : getDirectoryPath(absolutePath);
+
+        // check for a version redirect
+        const packageJsonPath = findPackageJson(baseDirectory, host);
+        if (packageJsonPath) {
+            const packageJson = readJson(packageJsonPath, host as { readFile: (filename: string) => string | undefined });
+            const typesVersions = (packageJson as any).typesVersions;
+            if (typeof typesVersions === "object") {
+                const versionPaths = getPackageJsonTypesVersionsPaths(typesVersions)?.paths;
+                if (versionPaths) {
+                    const packageDirectory = getDirectoryPath(packageJsonPath);
+                    const pathInPackage = absolutePath.slice(ensureTrailingDirectorySeparator(packageDirectory).length);
+                    if (addCompletionEntriesFromPaths(result, pathInPackage, packageDirectory, extensions, versionPaths, host)) {
+                        // A true result means one of the `versionPaths` was matched, which will block relative resolution
+                        // to files and folders from here. All reachable paths given the pattern match are already added.
+                        return result;
+                    }
+                }
+            }
+        }
 
         const ignoreCase = !(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames());
         if (!tryDirectoryExists(host, baseDirectory)) return result;
@@ -487,37 +523,51 @@ namespace ts.Completions.StringCompletions {
             }
         }
 
-        // check for a version redirect
-        const packageJsonPath = findPackageJson(baseDirectory, host);
-        if (packageJsonPath) {
-            const packageJson = readJson(packageJsonPath, host as { readFile: (filename: string) => string | undefined });
-            const typesVersions = (packageJson as any).typesVersions;
-            if (typeof typesVersions === "object") {
-                const versionResult = getPackageJsonTypesVersionsPaths(typesVersions);
-                const versionPaths = versionResult && versionResult.paths;
-                const rest = absolutePath.slice(ensureTrailingDirectorySeparator(baseDirectory).length);
-                if (versionPaths) {
-                    addCompletionEntriesFromPaths(result, rest, baseDirectory, extensions, versionPaths, host);
-                }
-            }
-        }
-
         return result;
     }
 
+    /** @returns whether `fragment` was a match for any `paths` (which should indicate whether any other path completions should be offered) */
     function addCompletionEntriesFromPaths(result: NameAndKind[], fragment: string, baseDirectory: string, fileExtensions: readonly string[], paths: MapLike<string[]>, host: LanguageServiceHost) {
+        let pathResults: { results: NameAndKind[], matchedPattern: boolean }[] = [];
+        let matchedPathPrefixLength = -1;
         for (const path in paths) {
             if (!hasProperty(paths, path)) continue;
             const patterns = paths[path];
             if (patterns) {
-                for (const { name, kind, extension } of getCompletionsForPathMapping(path, patterns, fragment, baseDirectory, fileExtensions, host)) {
-                    // Path mappings may provide a duplicate way to get to something we've already added, so don't add again.
-                    if (!result.some(entry => entry.name === name)) {
-                        result.push(nameAndKind(name, kind, extension));
-                    }
+                const pathPattern = tryParsePattern(path);
+                if (!pathPattern) continue;
+                const isMatch = typeof pathPattern === "object" && isPatternMatch(pathPattern, fragment);
+                const isLongestMatch = isMatch && (matchedPathPrefixLength === undefined || pathPattern.prefix.length > matchedPathPrefixLength);
+                if (isLongestMatch) {
+                    // If this is a higher priority match than anything we've seen so far, previous results from matches are invalid, e.g.
+                    // for `import {} from "some-package/|"` with a typesVersions:
+                    // {
+                    //   "bar/*": ["bar/*"], // <-- 1. We add 'bar', but 'bar/*' doesn't match yet.
+                    //   "*": ["dist/*"],    // <-- 2. We match here and add files from dist. 'bar' is still ok because it didn't come from a match.
+                    //   "foo/*": ["foo/*"]  // <-- 3. We matched '*' earlier and added results from dist, but if 'foo/*' also matched,
+                    // }                               results in dist would not be visible. 'bar' still stands because it didn't come from a match.
+                    //                                 This is especially important if `dist/foo` is a folder, because if we fail to clear results
+                    //                                 added by the '*' match, after typing `"some-package/foo/|"` we would get file results from both
+                    //                                 ./dist/foo and ./foo, when only the latter will actually be resolvable.
+                    //                                 See pathCompletionsTypesVersionsWildcard6.ts.
+                    matchedPathPrefixLength = pathPattern.prefix.length;
+                    pathResults = pathResults.filter(r => !r.matchedPattern);
+                }
+                if (typeof pathPattern === "string" || matchedPathPrefixLength === undefined || pathPattern.prefix.length >= matchedPathPrefixLength) {
+                    pathResults.push({
+                        matchedPattern: isMatch,
+                        results: getCompletionsForPathMapping(path, patterns, fragment, baseDirectory, fileExtensions, host)
+                            .map(({ name, kind, extension }) => nameAndKind(name, kind, extension)),
+                    });
                 }
             }
         }
+
+        const equatePaths = host.useCaseSensitiveFileNames?.() ? equateStringsCaseSensitive : equateStringsCaseInsensitive;
+        const equateResults: EqualityComparer<NameAndKind> = (a, b) => equatePaths(a.name, b.name);
+        pathResults.forEach(pathResult => pathResult.results.forEach(pathResult => pushIfUnique(result, pathResult, equateResults)));
+
+        return matchedPathPrefixLength > -1;
     }
 
     /**
@@ -549,7 +599,7 @@ namespace ts.Completions.StringCompletions {
 
         getCompletionEntriesFromTypings(host, compilerOptions, scriptPath, fragmentDirectory, extensionOptions, result);
 
-        if (getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.NodeJs) {
+        if (isEmitResolutionKindUsingNodeModules(compilerOptions)) {
             // If looking for a global package name, don't just include everything in `node_modules` because that includes dependencies' own dependencies.
             // (But do if we didn't find anything, e.g. 'package.json' missing.)
             let foundGlobal = false;
@@ -562,12 +612,65 @@ namespace ts.Completions.StringCompletions {
                 }
             }
             if (!foundGlobal) {
-                forEachAncestorDirectory(scriptPath, ancestor => {
+                let ancestorLookup: (directory: string) => void | undefined = ancestor => {
                     const nodeModules = combinePaths(ancestor, "node_modules");
                     if (tryDirectoryExists(host, nodeModules)) {
                         getCompletionEntriesForDirectoryFragment(fragment, nodeModules, extensionOptions, host, /*exclude*/ undefined, result);
                     }
-                });
+                };
+                if (fragmentDirectory && isEmitModuleResolutionRespectingExportMaps(compilerOptions)) {
+                    const nodeModulesDirectoryLookup = ancestorLookup;
+                    ancestorLookup = ancestor => {
+                        const components = getPathComponents(fragment);
+                        components.shift(); // shift off empty root
+                        let packagePath = components.shift();
+                        if (!packagePath) {
+                            return nodeModulesDirectoryLookup(ancestor);
+                        }
+                        if (startsWith(packagePath, "@")) {
+                            const subName = components.shift();
+                            if (!subName) {
+                                return nodeModulesDirectoryLookup(ancestor);
+                            }
+                            packagePath = combinePaths(packagePath, subName);
+                        }
+                        const packageFile = combinePaths(ancestor, "node_modules", packagePath, "package.json");
+                        if (tryFileExists(host, packageFile)) {
+                            const packageJson = readJson(packageFile, host as { readFile: (filename: string) => string | undefined });
+                            const exports = (packageJson as any).exports;
+                            if (exports) {
+                                if (typeof exports !== "object" || exports === null) { // eslint-disable-line no-null/no-null
+                                    return; // null exports or entrypoint only, no sub-modules available
+                                }
+                                const keys = getOwnKeys(exports);
+                                const fragmentSubpath = components.join("/");
+                                const processedKeys = mapDefined(keys, k => {
+                                    if (k === ".") return undefined;
+                                    if (!startsWith(k, "./")) return undefined;
+                                    const subpath = k.substring(2);
+                                    if (!startsWith(subpath, fragmentSubpath)) return undefined;
+                                    // subpath is a valid export (barring conditions, which we don't currently check here)
+                                    if (!stringContains(subpath, "*")) {
+                                        return subpath;
+                                    }
+                                    // pattern export - only return everything up to the `*`, so the user can autocomplete, then
+                                    // keep filling in the pattern (we could speculatively return a list of options by hitting disk,
+                                    // but conditions will make that somewhat awkward, as each condition may have a different set of possible
+                                    // options for the `*`.
+                                    return subpath.slice(0, subpath.indexOf("*"));
+                                });
+                                forEach(processedKeys, k => {
+                                    if (k) {
+                                        result.push(nameAndKind(k, ScriptElementKind.externalModuleName, /*extension*/ undefined));
+                                    }
+                                });
+                                return;
+                            }
+                        }
+                        return nodeModulesDirectoryLookup(ancestor);
+                    };
+                }
+                forEachAncestorDirectory(scriptPath, ancestorLookup);
             }
         }
 
@@ -588,11 +691,15 @@ namespace ts.Completions.StringCompletions {
 
         const pathPrefix = path.slice(0, path.length - 1);
         const remainingFragment = tryRemovePrefix(fragment, pathPrefix);
-        return remainingFragment === undefined ? justPathMappingName(pathPrefix) : flatMap(patterns, pattern =>
-            getModulesForPathsPattern(remainingFragment, baseUrl, pattern, fileExtensions, host));
+        if (remainingFragment === undefined) {
+            const starIsFullPathComponent = path[path.length - 2] === "/";
+            return starIsFullPathComponent ? justPathMappingName(pathPrefix) : flatMap(patterns, pattern =>
+                getModulesForPathsPattern("", baseUrl, pattern, fileExtensions, host)?.map(({ name, ...rest }) => ({ name: pathPrefix + name, ...rest })));
+        }
+        return flatMap(patterns, pattern => getModulesForPathsPattern(remainingFragment, baseUrl, pattern, fileExtensions, host));
 
         function justPathMappingName(name: string): readonly NameAndKind[] {
-            return startsWith(name, fragment) ? [directoryResult(name)] : emptyArray;
+            return startsWith(name, fragment) ? [directoryResult(removeTrailingDirectorySeparator(name))] : emptyArray;
         }
     }
 

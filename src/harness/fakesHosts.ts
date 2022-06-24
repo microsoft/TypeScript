@@ -511,18 +511,19 @@ ${indentText}${text}`;
             buildInfo.version = ts.version;
             return ts.getBuildInfoText(buildInfo);
         };
+        return patchHostForBuildInfoWrite(sys, version);
+    }
+
+    export function patchHostForBuildInfoWrite<T extends ts.System>(sys: T, version: string) {
         const originalWrite = sys.write;
         sys.write = msg => originalWrite.call(sys, msg.replace(ts.version, version));
-
-        if (sys.writeFile) {
-            const originalWriteFile = sys.writeFile;
-            sys.writeFile = (fileName: string, content: string, writeByteOrderMark: boolean) => {
-                if (!ts.isBuildInfoFile(fileName)) return originalWriteFile.call(sys, fileName, content, writeByteOrderMark);
-                const buildInfo = ts.getBuildInfo(content);
-                buildInfo.version = version;
-                originalWriteFile.call(sys, fileName, ts.getBuildInfoText(buildInfo), writeByteOrderMark);
-            };
-        }
+        const originalWriteFile = sys.writeFile;
+        sys.writeFile = (fileName: string, content: string, writeByteOrderMark: boolean) => {
+            if (!ts.isBuildInfoFile(fileName)) return originalWriteFile.call(sys, fileName, content, writeByteOrderMark);
+            const buildInfo = ts.getBuildInfo(content);
+            buildInfo.version = version;
+            originalWriteFile.call(sys, fileName, ts.getBuildInfoText(buildInfo), writeByteOrderMark);
+        };
         return sys;
     }
 

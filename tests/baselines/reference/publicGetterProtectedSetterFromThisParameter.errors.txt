@@ -1,5 +1,5 @@
-tests/cases/compiler/publicGetterProtectedSetterFromThisParameter.ts(33,7): error TS2446: Property 'q' is protected and only accessible through an instance of class 'A'. This is an instance of class 'B'.
-tests/cases/compiler/publicGetterProtectedSetterFromThisParameter.ts(34,7): error TS2446: Property 'u' is protected and only accessible through an instance of class 'A'. This is an instance of class 'B'.
+tests/cases/compiler/publicGetterProtectedSetterFromThisParameter.ts(33,7): error TS2445: Property 'q' is protected and only accessible within class 'B' and its subclasses.
+tests/cases/compiler/publicGetterProtectedSetterFromThisParameter.ts(34,7): error TS2445: Property 'u' is protected and only accessible within class 'B' and its subclasses.
 
 
 ==== tests/cases/compiler/publicGetterProtectedSetterFromThisParameter.ts (2 errors) ====
@@ -37,9 +37,9 @@ tests/cases/compiler/publicGetterProtectedSetterFromThisParameter.ts(34,7): erro
         // These should error
         b.q = 0;
           ~
-!!! error TS2446: Property 'q' is protected and only accessible through an instance of class 'A'. This is an instance of class 'B'.
+!!! error TS2445: Property 'q' is protected and only accessible within class 'B' and its subclasses.
         b.u = 0;
           ~
-!!! error TS2446: Property 'u' is protected and only accessible through an instance of class 'A'. This is an instance of class 'B'.
+!!! error TS2445: Property 'u' is protected and only accessible within class 'B' and its subclasses.
     }
     

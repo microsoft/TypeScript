@@ -1,4 +1,4 @@
-tests/cases/compiler/index.ts(4,1): error TS2693: 'B' only refers to a type, but is being used as a value here:
+tests/cases/compiler/index.ts(4,1): error TS2693: 'B' only refers to a type, but is being used as a value here.
 tests/cases/compiler/index.ts(9,10): error TS2709: Cannot use namespace 'OriginalB' as a type.
 
 
@@ -23,7 +23,7 @@ tests/cases/compiler/index.ts(9,10): error TS2709: Cannot use namespace 'Origina
     const x: B = { x: "" };
     B.zzz;
     ~
-!!! error TS2693: 'B' only refers to a type, but is being used as a value here:
+!!! error TS2693: 'B' only refers to a type, but is being used as a value here.
     
     import * as OriginalB from "./b";
     OriginalB.zzz;

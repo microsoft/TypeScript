@@ -110,7 +110,7 @@ tests/cases/compiler/recursiveClassReferenceTest.ts(95,21): error TS2345: Argume
     			                 ~~~~
 !!! error TS2345: Argument of type 'Window' is not assignable to parameter of type 'IMode'.
 !!! error TS2345:   Property 'getInitialState' is missing in type 'Window' but required in type 'IMode'.
-!!! related TS2728 tests/cases/compiler/recursiveClassReferenceTest.ts:66:19: 'getInitialState' is declared here:
+!!! related TS2728 tests/cases/compiler/recursiveClassReferenceTest.ts:66:19: 'getInitialState' is declared here.
     		}
     
     

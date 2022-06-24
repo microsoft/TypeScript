@@ -3,7 +3,7 @@
   [91m▔▔▔▔▔[0m
 Property 'a' is missing in type '{}' but required in type 'A'.
 
-'a' is declared here: [96mtests/cases/compiler/deeplyNestedAssignabilityIssue.ts[0m:[93m2[0m:[93m5[0m
+'a' is declared here. [96mtests/cases/compiler/deeplyNestedAssignabilityIssue.ts[0m:[93m2[0m:[93m5[0m
 
   | a: number;
     [96m▔[0mThe expected type comes from property 'thing' which is declared here on type '{ thing: A; }' [96mtests/cases/compiler/deeplyNestedAssignabilityIssue.ts[0m:[93m9[0m:[93m17[0m
@@ -14,7 +14,7 @@ Property 'a' is missing in type '{}' but required in type 'A'.
   [91m▔▔▔▔▔▔▔[0m
 Property 'a' is missing in type '{}' but required in type 'A'.
 
-'a' is declared here: [96mtests/cases/compiler/deeplyNestedAssignabilityIssue.ts[0m:[93m2[0m:[93m5[0m
+'a' is declared here. [96mtests/cases/compiler/deeplyNestedAssignabilityIssue.ts[0m:[93m2[0m:[93m5[0m
 
   | a: number;
     [96m▔[0mThe expected type comes from property 'another' which is declared here on type '{ another: A; }' [96mtests/cases/compiler/deeplyNestedAssignabilityIssue.ts[0m:[93m12[0m:[93m17[0m
@@ -47,14 +47,14 @@ Property 'a' is missing in type '{}' but required in type 'A'.
                     thing: {}
                     ~~~~~
 !!! error TS2741: Property 'a' is missing in type '{}' but required in type 'A'.
-!!! related TS2728 tests/cases/compiler/deeplyNestedAssignabilityIssue.ts:2:5: 'a' is declared here:
+!!! related TS2728 tests/cases/compiler/deeplyNestedAssignabilityIssue.ts:2:5: 'a' is declared here.
 !!! related TS6500 tests/cases/compiler/deeplyNestedAssignabilityIssue.ts:9:17: The expected type comes from property 'thing' which is declared here on type '{ thing: A; }'
                 },
                 yetstill: {
                     another: {}
                     ~~~~~~~
 !!! error TS2741: Property 'a' is missing in type '{}' but required in type 'A'.
-!!! related TS2728 tests/cases/compiler/deeplyNestedAssignabilityIssue.ts:2:5: 'a' is declared here:
+!!! related TS2728 tests/cases/compiler/deeplyNestedAssignabilityIssue.ts:2:5: 'a' is declared here.
 !!! related TS6500 tests/cases/compiler/deeplyNestedAssignabilityIssue.ts:12:17: The expected type comes from property 'another' which is declared here on type '{ another: A; }'
                 }
             }

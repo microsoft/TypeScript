@@ -6,10 +6,10 @@ tests/cases/compiler/intTypeCheck.ts(99,5): error TS2696: The 'Object' type is a
 tests/cases/compiler/intTypeCheck.ts(100,20): error TS2351: This expression is not constructable.
   Type 'i1' has no construct signatures.
 tests/cases/compiler/intTypeCheck.ts(101,5): error TS2739: Type 'Base' is missing the following properties from type 'i1': p, p3, p6
-tests/cases/compiler/intTypeCheck.ts(103,5): error TS2739: Type '() => void' is missing the following properties from type 'i1': p, p3, p6
+tests/cases/compiler/intTypeCheck.ts(103,5): error TS2322: Type '() => void' is not assignable to type 'i1'.
 tests/cases/compiler/intTypeCheck.ts(106,5): error TS2322: Type 'boolean' is not assignable to type 'i1'.
 tests/cases/compiler/intTypeCheck.ts(106,20): error TS1109: Expression expected.
-tests/cases/compiler/intTypeCheck.ts(106,21): error TS2693: 'i1' only refers to a type, but is being used as a value here:
+tests/cases/compiler/intTypeCheck.ts(106,21): error TS2693: 'i1' only refers to a type, but is being used as a value here.
 tests/cases/compiler/intTypeCheck.ts(107,21): error TS2351: This expression is not constructable.
   Type '{}' has no construct signatures.
 tests/cases/compiler/intTypeCheck.ts(112,5): error TS2322: Type '{}' is not assignable to type 'i2'.
@@ -22,7 +22,7 @@ tests/cases/compiler/intTypeCheck.ts(115,5): error TS2322: Type 'Base' is not as
   Type 'Base' provides no match for the signature '(): any'.
 tests/cases/compiler/intTypeCheck.ts(120,5): error TS2322: Type 'boolean' is not assignable to type 'i2'.
 tests/cases/compiler/intTypeCheck.ts(120,21): error TS1109: Expression expected.
-tests/cases/compiler/intTypeCheck.ts(120,22): error TS2693: 'i2' only refers to a type, but is being used as a value here:
+tests/cases/compiler/intTypeCheck.ts(120,22): error TS2693: 'i2' only refers to a type, but is being used as a value here.
 tests/cases/compiler/intTypeCheck.ts(121,21): error TS2351: This expression is not constructable.
   Type '{}' has no construct signatures.
 tests/cases/compiler/intTypeCheck.ts(126,5): error TS2322: Type '{}' is not assignable to type 'i3'.
@@ -36,14 +36,14 @@ tests/cases/compiler/intTypeCheck.ts(131,5): error TS2322: Type '() => void' is 
   Type '() => void' provides no match for the signature 'new (): any'.
 tests/cases/compiler/intTypeCheck.ts(134,5): error TS2322: Type 'boolean' is not assignable to type 'i3'.
 tests/cases/compiler/intTypeCheck.ts(134,21): error TS1109: Expression expected.
-tests/cases/compiler/intTypeCheck.ts(134,22): error TS2693: 'i3' only refers to a type, but is being used as a value here:
+tests/cases/compiler/intTypeCheck.ts(134,22): error TS2693: 'i3' only refers to a type, but is being used as a value here.
 tests/cases/compiler/intTypeCheck.ts(135,21): error TS2351: This expression is not constructable.
   Type '{}' has no construct signatures.
 tests/cases/compiler/intTypeCheck.ts(142,21): error TS2351: This expression is not constructable.
   Type 'i4' has no construct signatures.
 tests/cases/compiler/intTypeCheck.ts(148,5): error TS2322: Type 'boolean' is not assignable to type 'i4'.
 tests/cases/compiler/intTypeCheck.ts(148,21): error TS1109: Expression expected.
-tests/cases/compiler/intTypeCheck.ts(148,22): error TS2693: 'i4' only refers to a type, but is being used as a value here:
+tests/cases/compiler/intTypeCheck.ts(148,22): error TS2693: 'i4' only refers to a type, but is being used as a value here.
 tests/cases/compiler/intTypeCheck.ts(149,21): error TS2351: This expression is not constructable.
   Type '{}' has no construct signatures.
 tests/cases/compiler/intTypeCheck.ts(154,5): error TS2739: Type '{}' is missing the following properties from type 'i5': p, p3, p6
@@ -52,10 +52,10 @@ tests/cases/compiler/intTypeCheck.ts(155,5): error TS2696: The 'Object' type is 
 tests/cases/compiler/intTypeCheck.ts(156,21): error TS2351: This expression is not constructable.
   Type 'i5' has no construct signatures.
 tests/cases/compiler/intTypeCheck.ts(157,5): error TS2739: Type 'Base' is missing the following properties from type 'i5': p, p3, p6
-tests/cases/compiler/intTypeCheck.ts(159,5): error TS2739: Type '() => void' is missing the following properties from type 'i5': p, p3, p6
+tests/cases/compiler/intTypeCheck.ts(159,5): error TS2322: Type '() => void' is not assignable to type 'i5'.
 tests/cases/compiler/intTypeCheck.ts(162,5): error TS2322: Type 'boolean' is not assignable to type 'i5'.
 tests/cases/compiler/intTypeCheck.ts(162,21): error TS1109: Expression expected.
-tests/cases/compiler/intTypeCheck.ts(162,22): error TS2693: 'i5' only refers to a type, but is being used as a value here:
+tests/cases/compiler/intTypeCheck.ts(162,22): error TS2693: 'i5' only refers to a type, but is being used as a value here.
 tests/cases/compiler/intTypeCheck.ts(163,21): error TS2351: This expression is not constructable.
   Type '{}' has no construct signatures.
 tests/cases/compiler/intTypeCheck.ts(168,5): error TS2322: Type '{}' is not assignable to type 'i6'.
@@ -70,7 +70,7 @@ tests/cases/compiler/intTypeCheck.ts(173,5): error TS2322: Type '() => void' is 
   Type 'void' is not assignable to type 'number'.
 tests/cases/compiler/intTypeCheck.ts(176,5): error TS2322: Type 'boolean' is not assignable to type 'i6'.
 tests/cases/compiler/intTypeCheck.ts(176,21): error TS1109: Expression expected.
-tests/cases/compiler/intTypeCheck.ts(176,22): error TS2693: 'i6' only refers to a type, but is being used as a value here:
+tests/cases/compiler/intTypeCheck.ts(176,22): error TS2693: 'i6' only refers to a type, but is being used as a value here.
 tests/cases/compiler/intTypeCheck.ts(177,21): error TS2351: This expression is not constructable.
   Type '{}' has no construct signatures.
 tests/cases/compiler/intTypeCheck.ts(182,5): error TS2322: Type '{}' is not assignable to type 'i7'.
@@ -84,14 +84,14 @@ tests/cases/compiler/intTypeCheck.ts(187,5): error TS2322: Type '() => void' is 
   Type '() => void' provides no match for the signature 'new (): any'.
 tests/cases/compiler/intTypeCheck.ts(190,5): error TS2322: Type 'boolean' is not assignable to type 'i7'.
 tests/cases/compiler/intTypeCheck.ts(190,21): error TS1109: Expression expected.
-tests/cases/compiler/intTypeCheck.ts(190,22): error TS2693: 'i7' only refers to a type, but is being used as a value here:
+tests/cases/compiler/intTypeCheck.ts(190,22): error TS2693: 'i7' only refers to a type, but is being used as a value here.
 tests/cases/compiler/intTypeCheck.ts(191,21): error TS2351: This expression is not constructable.
   Type '{}' has no construct signatures.
 tests/cases/compiler/intTypeCheck.ts(198,21): error TS2351: This expression is not constructable.
   Type 'i8' has no construct signatures.
 tests/cases/compiler/intTypeCheck.ts(204,5): error TS2322: Type 'boolean' is not assignable to type 'i8'.
 tests/cases/compiler/intTypeCheck.ts(204,21): error TS1109: Expression expected.
-tests/cases/compiler/intTypeCheck.ts(204,22): error TS2693: 'i8' only refers to a type, but is being used as a value here:
+tests/cases/compiler/intTypeCheck.ts(204,22): error TS2693: 'i8' only refers to a type, but is being used as a value here.
 tests/cases/compiler/intTypeCheck.ts(205,21): error TS2351: This expression is not constructable.
   Type '{}' has no construct signatures.
 
@@ -215,7 +215,7 @@ tests/cases/compiler/intTypeCheck.ts(205,21): error TS2351: This expression is n
     var obj5: i1 = null;
     var obj6: i1 = function () { };
         ~~~~
-!!! error TS2739: Type '() => void' is missing the following properties from type 'i1': p, p3, p6
+!!! error TS2322: Type '() => void' is not assignable to type 'i1'.
     //var obj7: i1 = function foo() { };
     var obj8: i1 = <i1> anyVar;
     var obj9: i1 = new <i1> anyVar;
@@ -224,7 +224,7 @@ tests/cases/compiler/intTypeCheck.ts(205,21): error TS2351: This expression is n
                        ~
 !!! error TS1109: Expression expected.
                         ~~
-!!! error TS2693: 'i1' only refers to a type, but is being used as a value here:
+!!! error TS2693: 'i1' only refers to a type, but is being used as a value here.
     var obj10: i1 = new {};
                         ~~
 !!! error TS2351: This expression is not constructable.
@@ -259,7 +259,7 @@ tests/cases/compiler/intTypeCheck.ts(205,21): error TS2351: This expression is n
                         ~
 !!! error TS1109: Expression expected.
                          ~~
-!!! error TS2693: 'i2' only refers to a type, but is being used as a value here:
+!!! error TS2693: 'i2' only refers to a type, but is being used as a value here.
     var obj21: i2 = new {};
                         ~~
 !!! error TS2351: This expression is not constructable.
@@ -295,7 +295,7 @@ tests/cases/compiler/intTypeCheck.ts(205,21): error TS2351: This expression is n
                         ~
 !!! error TS1109: Expression expected.
                          ~~
-!!! error TS2693: 'i3' only refers to a type, but is being used as a value here:
+!!! error TS2693: 'i3' only refers to a type, but is being used as a value here.
     var obj32: i3 = new {};
                         ~~
 !!! error TS2351: This expression is not constructable.
@@ -321,7 +321,7 @@ tests/cases/compiler/intTypeCheck.ts(205,21): error TS2351: This expression is n
                         ~
 !!! error TS1109: Expression expected.
                          ~~
-!!! error TS2693: 'i4' only refers to a type, but is being used as a value here:
+!!! error TS2693: 'i4' only refers to a type, but is being used as a value here.
     var obj43: i4 = new {};
                         ~~
 !!! error TS2351: This expression is not constructable.
@@ -347,7 +347,7 @@ tests/cases/compiler/intTypeCheck.ts(205,21): error TS2351: This expression is n
     var obj49: i5 = null;
     var obj50: i5 = function () { };
         ~~~~~
-!!! error TS2739: Type '() => void' is missing the following properties from type 'i5': p, p3, p6
+!!! error TS2322: Type '() => void' is not assignable to type 'i5'.
     //var obj51: i5 = function foo() { };
     var obj52: i5 = <i5> anyVar;
     var obj53: i5 = new <i5> anyVar;
@@ -356,7 +356,7 @@ tests/cases/compiler/intTypeCheck.ts(205,21): error TS2351: This expression is n
                         ~
 !!! error TS1109: Expression expected.
                          ~~
-!!! error TS2693: 'i5' only refers to a type, but is being used as a value here:
+!!! error TS2693: 'i5' only refers to a type, but is being used as a value here.
     var obj54: i5 = new {};
                         ~~
 !!! error TS2351: This expression is not constructable.
@@ -394,7 +394,7 @@ tests/cases/compiler/intTypeCheck.ts(205,21): error TS2351: This expression is n
                         ~
 !!! error TS1109: Expression expected.
                          ~~
-!!! error TS2693: 'i6' only refers to a type, but is being used as a value here:
+!!! error TS2693: 'i6' only refers to a type, but is being used as a value here.
     var obj65: i6 = new {};
                         ~~
 !!! error TS2351: This expression is not constructable.
@@ -430,7 +430,7 @@ tests/cases/compiler/intTypeCheck.ts(205,21): error TS2351: This expression is n
                         ~
 !!! error TS1109: Expression expected.
                          ~~
-!!! error TS2693: 'i7' only refers to a type, but is being used as a value here:
+!!! error TS2693: 'i7' only refers to a type, but is being used as a value here.
     var obj76: i7 = new {};
                         ~~
 !!! error TS2351: This expression is not constructable.
@@ -456,7 +456,7 @@ tests/cases/compiler/intTypeCheck.ts(205,21): error TS2351: This expression is n
                         ~
 !!! error TS1109: Expression expected.
                          ~~
-!!! error TS2693: 'i8' only refers to a type, but is being used as a value here:
+!!! error TS2693: 'i8' only refers to a type, but is being used as a value here.
     var obj87: i8 = new {};
                         ~~
 !!! error TS2351: This expression is not constructable.

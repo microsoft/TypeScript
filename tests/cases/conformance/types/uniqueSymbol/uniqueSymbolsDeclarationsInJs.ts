@@ -31,3 +31,6 @@ class C {
     readonlyCall = Symbol();
     readwriteCall = Symbol();
 }
+
+/** @type {unique symbol} */
+const a = Symbol();

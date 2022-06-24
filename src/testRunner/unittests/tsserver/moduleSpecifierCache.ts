@@ -39,14 +39,14 @@ namespace ts.projectSystem {
     describe("unittests:: tsserver:: moduleSpecifierCache", () => {
         it("caches importability within a file", () => {
             const { moduleSpecifierCache } = setup();
-            assert.isTrue(moduleSpecifierCache.get(bTs.path as Path, aTs.path as Path, {})?.isAutoImportable);
+            assert.isFalse(moduleSpecifierCache.get(bTs.path as Path, aTs.path as Path, {}, {})?.isBlockedByPackageJsonDependencies);
         });
 
         it("caches module specifiers within a file", () => {
             const { moduleSpecifierCache, triggerCompletions } = setup();
             // Completion at an import statement will calculate and cache module specifiers
             triggerCompletions({ file: cTs.path, line: 1, offset: cTs.content.length + 1 });
-            const mobxCache = moduleSpecifierCache.get(cTs.path as Path, mobxDts.path as Path, {});
+            const mobxCache = moduleSpecifierCache.get(cTs.path as Path, mobxDts.path as Path, {}, {});
             assert.deepEqual(mobxCache, {
                 modulePaths: [{
                     path: mobxDts.path,
@@ -54,25 +54,25 @@ namespace ts.projectSystem {
                     isRedirect: false
                 }],
                 moduleSpecifiers: ["mobx"],
-                isAutoImportable: true,
+                isBlockedByPackageJsonDependencies: false,
             });
         });
 
         it("invalidates module specifiers when changes happen in contained node_modules directories", () => {
-            const { host, moduleSpecifierCache, triggerCompletions } = setup();
+            const { host, session, moduleSpecifierCache, triggerCompletions } = setup(createLoggerWithInMemoryLogs());
             // Completion at an import statement will calculate and cache module specifiers
             triggerCompletions({ file: cTs.path, line: 1, offset: cTs.content.length + 1 });
-            checkWatchedDirectories(host, ["/src", "/node_modules"], /*recursive*/ true);
             host.writeFile("/node_modules/.staging/mobx-12345678/package.json", "{}");
             host.runQueuedTimeoutCallbacks();
             assert.equal(moduleSpecifierCache.count(), 0);
+            baselineTsserverLogs("moduleSpecifierCache", "invalidates module specifiers when changes happen in contained node_modules directories", session);
         });
 
         it("does not invalidate the cache when new files are added", () => {
             const { host, moduleSpecifierCache } = setup();
             host.writeFile("/src/a2.ts", aTs.content);
             host.runQueuedTimeoutCallbacks();
-            assert.isTrue(moduleSpecifierCache.get(bTs.path as Path, aTs.path as Path, {})?.isAutoImportable);
+            assert.isFalse(moduleSpecifierCache.get(bTs.path as Path, aTs.path as Path, {}, {})?.isBlockedByPackageJsonDependencies);
         });
 
         it("invalidates the cache when symlinks are added or removed", () => {
@@ -118,14 +118,14 @@ namespace ts.projectSystem {
             assert.isUndefined(getWithPreferences(preferences));
 
             function getWithPreferences(preferences: UserPreferences) {
-                return moduleSpecifierCache.get(bTs.path as Path, aTs.path as Path, preferences);
+                return moduleSpecifierCache.get(bTs.path as Path, aTs.path as Path, preferences, {});
             }
         });
     });
 
-    function setup() {
+    function setup(logger?: Logger) {
         const host = createServerHost([aTs, bTs, cTs, bSymlink, ambientDeclaration, tsconfig, packageJson, mobxPackageJson, mobxDts]);
-        const session = createSession(host);
+        const session = createSession(host, logger && { logger });
         openFilesForSession([aTs, bTs, cTs], session);
         const projectService = session.getProjectService();
         const project = configuredProjectAt(projectService, 0);

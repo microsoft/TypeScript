@@ -9,7 +9,7 @@ namespace ts {
                 return transformECMAScriptModule;
             case ModuleKind.System:
                 return transformSystemModule;
-            case ModuleKind.Node12:
+            case ModuleKind.Node16:
             case ModuleKind.NodeNext:
                 return transformNodeModule;
             default:
@@ -48,6 +48,7 @@ namespace ts {
         addRange(transformers, customTransformers && map(customTransformers.before, wrapScriptTransformerFactory));
 
         transformers.push(transformTypeScript);
+        transformers.push(transformLegacyDecorators);
         transformers.push(transformClassFields);
 
         if (getJSXTransformEnabled(compilerOptions)) {

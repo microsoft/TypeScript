@@ -1,12 +1,12 @@
-tests/cases/compiler/newOperator.ts(3,13): error TS2693: 'ifc' only refers to a type, but is being used as a value here:
+tests/cases/compiler/newOperator.ts(3,13): error TS2693: 'ifc' only refers to a type, but is being used as a value here.
 tests/cases/compiler/newOperator.ts(10,14): error TS2351: This expression is not constructable.
   Type 'Number' has no construct signatures.
 tests/cases/compiler/newOperator.ts(11,14): error TS2351: This expression is not constructable.
   Type 'String' has no construct signatures.
-tests/cases/compiler/newOperator.ts(12,5): error TS2693: 'string' only refers to a type, but is being used as a value here:
-tests/cases/compiler/newOperator.ts(18,14): error TS2693: 'string' only refers to a type, but is being used as a value here:
+tests/cases/compiler/newOperator.ts(12,5): error TS2693: 'string' only refers to a type, but is being used as a value here.
+tests/cases/compiler/newOperator.ts(18,14): error TS2693: 'string' only refers to a type, but is being used as a value here.
 tests/cases/compiler/newOperator.ts(18,21): error TS1011: An element access expression should take an argument.
-tests/cases/compiler/newOperator.ts(21,1): error TS2693: 'string' only refers to a type, but is being used as a value here:
+tests/cases/compiler/newOperator.ts(21,1): error TS2693: 'string' only refers to a type, but is being used as a value here.
 tests/cases/compiler/newOperator.ts(22,2): error TS1011: An element access expression should take an argument.
 tests/cases/compiler/newOperator.ts(28,13): error TS2304: Cannot find name 'q'.
 tests/cases/compiler/newOperator.ts(31,14): error TS2351: This expression is not constructable.
@@ -26,7 +26,7 @@ tests/cases/compiler/newOperator.ts(56,24): error TS1011: An element access expr
     // Attempting to 'new' an interface yields poor error
     var i = new ifc();
                 ~~~
-!!! error TS2693: 'ifc' only refers to a type, but is being used as a value here:
+!!! error TS2693: 'ifc' only refers to a type, but is being used as a value here.
     
     // Parens are optional
     var x = new Date;
@@ -43,7 +43,7 @@ tests/cases/compiler/newOperator.ts(56,24): error TS1011: An element access expr
 !!! error TS2351:   Type 'String' has no construct signatures.
     new string;
         ~~~~~~
-!!! error TS2693: 'string' only refers to a type, but is being used as a value here:
+!!! error TS2693: 'string' only refers to a type, but is being used as a value here.
     
     // Use in LHS of expression?
     (new Date()).toString();
@@ -51,14 +51,14 @@ tests/cases/compiler/newOperator.ts(56,24): error TS1011: An element access expr
     // Various spacing
     var t3 = new string[]( );
                  ~~~~~~
-!!! error TS2693: 'string' only refers to a type, but is being used as a value here:
+!!! error TS2693: 'string' only refers to a type, but is being used as a value here.
                         
 !!! error TS1011: An element access expression should take an argument.
     var t4 =
     new
     string
     ~~~~~~
-!!! error TS2693: 'string' only refers to a type, but is being used as a value here:
+!!! error TS2693: 'string' only refers to a type, but is being used as a value here.
     [
      
 !!! error TS1011: An element access expression should take an argument.

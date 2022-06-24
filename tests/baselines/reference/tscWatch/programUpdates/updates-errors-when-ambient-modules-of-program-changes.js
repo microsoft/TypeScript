@@ -52,14 +52,14 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/a.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/user/username/projects/myproject/node_modules/@types:
+  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
 
 FsWatches::
 
 FsWatchesRecursive::
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject"}
 
 exitCode:: ExitStatus.undefined
 
@@ -85,7 +85,7 @@ Output::
   [91m     ▔▔▔[0m
 Duplicate identifier 'foo'.
 
-'foo' was also declared here: [96mb.ts[0m:[93m2[0m:[93m8[0m
+'foo' was also declared here. [96mb.ts[0m:[93m2[0m:[93m8[0m
 
   | type foo = number;
     [96m     ▔▔▔[0m
@@ -94,7 +94,7 @@ Duplicate identifier 'foo'.
   [91m     ▔▔▔[0m
 Duplicate identifier 'foo'.
 
-'foo' was also declared here: [96ma.ts[0m:[93m2[0m:[93m8[0m
+'foo' was also declared here. [96ma.ts[0m:[93m2[0m:[93m8[0m
 
   | type foo = number;
     [96m     ▔▔▔[0m
@@ -127,16 +127,16 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/a.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/user/username/projects/myproject/node_modules/@types:
+  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
 /user/username/projects/myproject/b.ts:
   {"fileName":"/user/username/projects/myproject/b.ts","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject"}
 
 exitCode:: ExitStatus.undefined
 
@@ -180,14 +180,14 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/a.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/user/username/projects/myproject/node_modules/@types:
+  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
 
 FsWatches::
 
 FsWatchesRecursive::
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject"}
 
 exitCode:: ExitStatus.undefined
 

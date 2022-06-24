@@ -87,7 +87,6 @@ namespace ts.codefix {
                     }
                 }
                 addClassElement(factory.createPropertyDeclaration(
-                    /*decorators*/ undefined,
                     modifiers,
                     name,
                     optional && (preserveOptional & PreserveOptionalFlags.Property) ? factory.createToken(SyntaxKind.QuestionToken) : undefined,
@@ -111,7 +110,6 @@ namespace ts.codefix {
                 for (const accessor of orderedAccessors) {
                     if (isGetAccessorDeclaration(accessor)) {
                         addClassElement(factory.createGetAccessorDeclaration(
-                            /*decorators*/ undefined,
                             modifiers,
                             name,
                             emptyArray,
@@ -123,7 +121,6 @@ namespace ts.codefix {
                         const parameter = getSetAccessorValueParameter(accessor);
                         const parameterName = parameter && isIdentifier(parameter.name) ? idText(parameter.name) : undefined;
                         addClassElement(factory.createSetAccessorDeclaration(
-                            /*decorators*/ undefined,
                             modifiers,
                             name,
                             createDummyParameters(1, [parameterName], [typeNode], 1, /*inJs*/ false),
@@ -192,7 +189,11 @@ namespace ts.codefix {
         const program = context.program;
         const checker = program.getTypeChecker();
         const scriptTarget = getEmitScriptTarget(program.getCompilerOptions());
-        const flags = NodeBuilderFlags.NoTruncation | NodeBuilderFlags.NoUndefinedOptionalParameterType | NodeBuilderFlags.SuppressAnyReturnType | (quotePreference === QuotePreference.Single ? NodeBuilderFlags.UseSingleQuotesForStringLiteralType : 0);
+        const flags =
+            NodeBuilderFlags.NoTruncation
+            | NodeBuilderFlags.SuppressAnyReturnType
+            | NodeBuilderFlags.AllowEmptyTuple
+            | (quotePreference === QuotePreference.Single ? NodeBuilderFlags.UseSingleQuotesForStringLiteralType : NodeBuilderFlags.None);
         const signatureDeclaration = checker.signatureToSignatureDeclaration(signature, kind, enclosingDeclaration, flags, getNoopSymbolTrackerWithResolver(context)) as ArrowFunction | FunctionExpression | MethodDeclaration;
         if (!signatureDeclaration) {
             return undefined;
@@ -222,6 +223,7 @@ namespace ts.codefix {
                     }
                     return factory.updateTypeParameterDeclaration(
                         typeParameterDecl,
+                        typeParameterDecl.modifiers,
                         typeParameterDecl.name,
                         constraint,
                         defaultType
@@ -240,7 +242,6 @@ namespace ts.codefix {
                 }
                 return factory.updateParameterDeclaration(
                     parameterDecl,
-                    parameterDecl.decorators,
                     parameterDecl.modifiers,
                     parameterDecl.dotDotDotToken,
                     parameterDecl.name,
@@ -270,13 +271,13 @@ namespace ts.codefix {
             return factory.updateArrowFunction(signatureDeclaration, modifiers, typeParameters, parameters, type, signatureDeclaration.equalsGreaterThanToken, body ?? signatureDeclaration.body);
         }
         if (isMethodDeclaration(signatureDeclaration)) {
-            return factory.updateMethodDeclaration(signatureDeclaration, /* decorators */ undefined, modifiers, asteriskToken, name ?? factory.createIdentifier(""), questionToken, typeParameters, parameters, type, body);
+            return factory.updateMethodDeclaration(signatureDeclaration, modifiers, asteriskToken, name ?? factory.createIdentifier(""), questionToken, typeParameters, parameters, type, body);
         }
         return undefined;
     }
 
     export function createSignatureDeclarationFromCallExpression(
-        kind: SyntaxKind.MethodDeclaration | SyntaxKind.FunctionDeclaration,
+        kind: SyntaxKind.MethodDeclaration | SyntaxKind.FunctionDeclaration | SyntaxKind.MethodSignature,
         context: CodeFixContextBase,
         importAdder: ImportAdder,
         call: CallExpression,
@@ -306,35 +307,46 @@ namespace ts.codefix {
         const typeParameters = isJs || typeArguments === undefined
             ? undefined
             : map(typeArguments, (_, i) =>
-                factory.createTypeParameterDeclaration(CharacterCodes.T + typeArguments.length - 1 <= CharacterCodes.Z ? String.fromCharCode(CharacterCodes.T + i) : `T${i}`));
+                factory.createTypeParameterDeclaration(/*modifiers*/ undefined, CharacterCodes.T + typeArguments.length - 1 <= CharacterCodes.Z ? String.fromCharCode(CharacterCodes.T + i) : `T${i}`));
         const parameters = createDummyParameters(args.length, names, types, /*minArgumentCount*/ undefined, isJs);
         const type = isJs || contextualType === undefined
             ? undefined
             : checker.typeToTypeNode(contextualType, contextNode, /*flags*/ undefined, tracker);
 
-        if (kind === SyntaxKind.MethodDeclaration) {
-            return factory.createMethodDeclaration(
-                /*decorators*/ undefined,
-                modifiers,
-                asteriskToken,
-                name,
-                /*questionToken*/ undefined,
-                typeParameters,
-                parameters,
-                type,
-                isInterfaceDeclaration(contextNode) ? undefined : createStubbedMethodBody(quotePreference)
-            );
+        switch (kind) {
+            case SyntaxKind.MethodDeclaration:
+                return factory.createMethodDeclaration(
+                    modifiers,
+                    asteriskToken,
+                    name,
+                    /*questionToken*/ undefined,
+                    typeParameters,
+                    parameters,
+                    type,
+                    createStubbedMethodBody(quotePreference)
+                );
+            case SyntaxKind.MethodSignature:
+                return factory.createMethodSignature(
+                    modifiers,
+                    name,
+                    /*questionToken*/ undefined,
+                    typeParameters,
+                    parameters,
+                    type === undefined ? factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword) : type
+                );
+            case SyntaxKind.FunctionDeclaration:
+                return factory.createFunctionDeclaration(
+                    modifiers,
+                    asteriskToken,
+                    name,
+                    typeParameters,
+                    parameters,
+                    type,
+                    createStubbedBody(Diagnostics.Function_not_implemented.message, quotePreference)
+                );
+            default:
+                Debug.fail("Unexpected kind");
         }
-        return factory.createFunctionDeclaration(
-            /*decorators*/ undefined,
-            modifiers,
-            asteriskToken,
-            name,
-            typeParameters,
-            parameters,
-            type,
-            createStubbedBody(Diagnostics.Function_not_implemented.message, quotePreference)
-        );
     }
 
     export function typeToAutoImportableTypeNode(checker: TypeChecker, importAdder: ImportAdder, type: Type, contextNode: Node | undefined, scriptTarget: ScriptTarget, flags?: NodeBuilderFlags, tracker?: SymbolTracker): TypeNode | undefined {
@@ -354,12 +366,11 @@ namespace ts.codefix {
         const parameters: ParameterDeclaration[] = [];
         for (let i = 0; i < argCount; i++) {
             const newParameter = factory.createParameterDeclaration(
-                /*decorators*/ undefined,
                 /*modifiers*/ undefined,
                 /*dotDotDotToken*/ undefined,
                 /*name*/ names && names[i] || `arg${i}`,
                 /*questionToken*/ minArgumentCount !== undefined && i >= minArgumentCount ? factory.createToken(SyntaxKind.QuestionToken) : undefined,
-                /*type*/ inJs ? undefined : types && types[i] || factory.createKeywordTypeNode(SyntaxKind.AnyKeyword),
+                /*type*/ inJs ? undefined : types && types[i] || factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword),
                 /*initializer*/ undefined);
             parameters.push(newParameter);
         }
@@ -398,14 +409,12 @@ namespace ts.codefix {
         const parameters = createDummyParameters(maxNonRestArgs, maxArgsParameterSymbolNames, /* types */ undefined, minArgumentCount, /*inJs*/ false);
 
         if (someSigHasRestParameter) {
-            const anyArrayType = factory.createArrayTypeNode(factory.createKeywordTypeNode(SyntaxKind.AnyKeyword));
             const restParameter = factory.createParameterDeclaration(
-                /*decorators*/ undefined,
                 /*modifiers*/ undefined,
                 factory.createToken(SyntaxKind.DotDotDotToken),
                 maxArgsParameterSymbolNames[maxNonRestArgs] || "rest",
                 /*questionToken*/ maxNonRestArgs >= minArgumentCount ? factory.createToken(SyntaxKind.QuestionToken) : undefined,
-                anyArrayType,
+                factory.createArrayTypeNode(factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword)),
                 /*initializer*/ undefined);
             parameters.push(restParameter);
         }
@@ -439,7 +448,6 @@ namespace ts.codefix {
         body: Block | undefined
     ): MethodDeclaration {
         return factory.createMethodDeclaration(
-            /*decorators*/ undefined,
             modifiers,
             /*asteriskToken*/ undefined,
             name,

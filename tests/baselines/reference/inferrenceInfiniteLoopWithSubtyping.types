@@ -7,7 +7,7 @@ export type Thunk<T> = (() => T) | T;
 >Thunk : Thunk<T>
 
 export type ComposeOutputTypeDefinition = Readonly<ObjectTypeComposer<any, any> | EnumTypeComposer>;
->ComposeOutputTypeDefinition : ComposeOutputTypeDefinition
+>ComposeOutputTypeDefinition : Readonly<ObjectTypeComposer<any, any>> | Readonly<EnumTypeComposer>
 
 export class EnumTypeComposer {
 >EnumTypeComposer : EnumTypeComposer

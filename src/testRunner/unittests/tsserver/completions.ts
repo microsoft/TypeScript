@@ -42,7 +42,8 @@ namespace ts.projectSystem {
                 source: "/a",
                 sourceDisplay: undefined,
                 isSnippet: undefined,
-                data: { exportName: "foo", fileName: "/a.ts", ambientModuleName: undefined, isPackageJsonImport: undefined }
+                data: { exportName: "foo", fileName: "/a.ts", ambientModuleName: undefined, isPackageJsonImport: undefined },
+                labelDetails: undefined,
             };
 
             // `data.exportMapKey` contains a SymbolId so should not be mocked up with an expected value here.
@@ -51,6 +52,7 @@ namespace ts.projectSystem {
             assert.isString(exportMapKey);
             delete (response?.entries[0].data as any).exportMapKey;
             assert.deepEqual<protocol.CompletionInfo | undefined>(response, {
+                flags: CompletionInfoFlags.MayIncludeAutoImports,
                 isGlobalCompletion: true,
                 isIncomplete: undefined,
                 isMemberCompletion: false,
@@ -85,7 +87,7 @@ namespace ts.projectSystem {
                 {
                     codeActions: [
                         {
-                            description: `Import 'foo' from module "./a"`,
+                            description: `Add import from "./a"`,
                             changes: [
                                 {
                                     fileName: "/b.ts",
@@ -118,7 +120,7 @@ namespace ts.projectSystem {
                 {
                     codeActions: [
                         {
-                            description: `Import 'foo' from module "./a"`,
+                            description: `Add import from "./a"`,
                             changes: [
                                 {
                                     fileName: "/b.ts",

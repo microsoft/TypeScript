@@ -44,7 +44,7 @@ tests/cases/compiler/deeplyNestedCheck.ts(53,50): error TS2322: Type 'number' is
                             },
     ~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2741: Property 'i' is missing in type '{}' but required in type 'H'.
-!!! related TS2728 tests/cases/compiler/deeplyNestedCheck.ts:20:15: 'i' is declared here:
+!!! related TS2728 tests/cases/compiler/deeplyNestedCheck.ts:20:15: 'i' is declared here.
                           ],
                         },
                       },

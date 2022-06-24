@@ -10,5 +10,5 @@ tests/cases/compiler/b.ts(1,10): error TS2459: Module '"./a"' declares 'bar' loc
     import { bar } from "./a";
              ~~~
 !!! error TS2459: Module '"./a"' declares 'bar' locally, but it is not exported.
-!!! related TS2728 tests/cases/compiler/a.ts:2:18: 'bar' is declared here:
+!!! related TS2728 tests/cases/compiler/a.ts:2:18: 'bar' is declared here.
     

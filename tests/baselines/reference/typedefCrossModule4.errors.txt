@@ -6,11 +6,11 @@ tests/cases/conformance/jsdoc/mod3.js(3,20): error TS2300: Duplicate identifier 
     /** @typedef {number} Foo */
                           ~~~
 !!! error TS2300: Duplicate identifier 'Foo'.
-!!! related TS6203 tests/cases/conformance/jsdoc/mod3.js:3:20: 'Foo' was also declared here:
+!!! related TS6203 tests/cases/conformance/jsdoc/mod3.js:3:20: 'Foo' was also declared here.
     class Bar { }
     module.exports = { Foo: Bar };
                        ~~~
 !!! error TS2300: Duplicate identifier 'Foo'.
-!!! related TS6203 tests/cases/conformance/jsdoc/mod3.js:1:23: 'Foo' was also declared here:
+!!! related TS6203 tests/cases/conformance/jsdoc/mod3.js:1:23: 'Foo' was also declared here.
     
     

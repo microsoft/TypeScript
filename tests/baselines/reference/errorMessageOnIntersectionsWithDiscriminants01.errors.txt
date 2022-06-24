@@ -18,5 +18,5 @@ tests/cases/compiler/errorMessageOnIntersectionsWithDiscriminants01.ts(8,1): err
 !!! error TS2322:   Type '{ test: true; } & { foo: 1; }' is not assignable to type 'B'.
 !!! error TS2322:     Type '{ test: true; } & { foo: 1; }' is not assignable to type '{ test: true; } & { bar: 1; }'.
 !!! error TS2322:       Property 'bar' is missing in type '{ test: true; } & { foo: 1; }' but required in type '{ bar: 1; }'.
-!!! related TS2728 tests/cases/compiler/errorMessageOnIntersectionsWithDiscriminants01.ts:3:28: 'bar' is declared here:
+!!! related TS2728 tests/cases/compiler/errorMessageOnIntersectionsWithDiscriminants01.ts:3:28: 'bar' is declared here.
     

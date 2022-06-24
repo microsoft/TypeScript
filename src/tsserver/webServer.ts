@@ -1,12 +1,8 @@
 /*@internal*/
-namespace ts.server {
-    declare const addEventListener: any;
-    declare const postMessage: any;
-    declare const close: any;
-    declare const location: any;
-    declare const XMLHttpRequest: any;
-    declare const self: any;
 
+/// <reference lib="webworker" />
+
+namespace ts.server {
     const nullLogger: Logger = {
         close: noop,
         hasLevel: returnFalse,
@@ -39,9 +35,25 @@ namespace ts.server {
         let unknownServerMode: string | undefined;
         if (typeof modeOrUnknown === "number") serverMode = modeOrUnknown;
         else unknownServerMode = modeOrUnknown;
+        const logger = createLogger();
+
+        // enable deprecation logging
+        Debug.loggingHost = {
+            log(level, s) {
+                switch (level) {
+                    case ts.LogLevel.Error:
+                    case ts.LogLevel.Warning:
+                        return logger.msg(s, Msg.Err);
+                    case ts.LogLevel.Info:
+                    case ts.LogLevel.Verbose:
+                        return logger.msg(s, Msg.Info);
+                }
+            }
+        };
+
         return {
             args,
-            logger: createLogger(),
+            logger,
             cancellationToken: nullCancellationToken,
             // Webserver defaults to partial semantic mode
             serverMode: serverMode ?? LanguageServiceMode.PartialSemantic,
@@ -86,7 +98,7 @@ namespace ts.server {
     }
 
     function hrtime(previous?: [number, number]) {
-        const now = self.performance.now(performance) * 1e-3;
+        const now = self.performance.now() * 1e-3;
         let seconds = Math.floor(now);
         let nanoseconds = Math.floor((now % 1) * 1e9);
         if (previous) {
@@ -109,7 +121,7 @@ namespace ts.server {
             exit() {
                 this.logger.info("Exiting...");
                 this.projectService.closeLog();
-                close(0);
+                close();
             }
 
             listen() {

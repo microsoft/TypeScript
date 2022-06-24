@@ -100,8 +100,7 @@
           "start": 0,
           "length": 28
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -109,8 +108,7 @@
           "length": 1
         },
         "fileName": "/b.js",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   },
@@ -207,8 +205,7 @@
           "start": 17,
           "length": 20
         },
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       }
     ]
   }

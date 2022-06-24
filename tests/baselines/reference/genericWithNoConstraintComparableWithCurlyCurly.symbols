@@ -1,0 +1,72 @@
+=== tests/cases/compiler/genericWithNoConstraintComparableWithCurlyCurly.ts ===
+function foo<T>() {
+>foo : Symbol(foo, Decl(genericWithNoConstraintComparableWithCurlyCurly.ts, 0, 0))
+>T : Symbol(T, Decl(genericWithNoConstraintComparableWithCurlyCurly.ts, 0, 13))
+
+    let x = {};
+>x : Symbol(x, Decl(genericWithNoConstraintComparableWithCurlyCurly.ts, 1, 7))
+
+    x as T;
+>x : Symbol(x, Decl(genericWithNoConstraintComparableWithCurlyCurly.ts, 1, 7))
+>T : Symbol(T, Decl(genericWithNoConstraintComparableWithCurlyCurly.ts, 0, 13))
+}
+
+function bar<T extends unknown>() {
+>bar : Symbol(bar, Decl(genericWithNoConstraintComparableWithCurlyCurly.ts, 3, 1))
+>T : Symbol(T, Decl(genericWithNoConstraintComparableWithCurlyCurly.ts, 5, 13))
+
+    let x = {};
+>x : Symbol(x, Decl(genericWithNoConstraintComparableWithCurlyCurly.ts, 6, 7))
+
+    x as T;
+>x : Symbol(x, Decl(genericWithNoConstraintComparableWithCurlyCurly.ts, 6, 7))
+>T : Symbol(T, Decl(genericWithNoConstraintComparableWithCurlyCurly.ts, 5, 13))
+}
+
+function baz<T extends {}>() {
+>baz : Symbol(baz, Decl(genericWithNoConstraintComparableWithCurlyCurly.ts, 8, 1))
+>T : Symbol(T, Decl(genericWithNoConstraintComparableWithCurlyCurly.ts, 10, 13))
+
+    let x = {};
+>x : Symbol(x, Decl(genericWithNoConstraintComparableWithCurlyCurly.ts, 11, 7))
+
+    x as T;
+>x : Symbol(x, Decl(genericWithNoConstraintComparableWithCurlyCurly.ts, 11, 7))
+>T : Symbol(T, Decl(genericWithNoConstraintComparableWithCurlyCurly.ts, 10, 13))
+}
+
+function bat<T extends object>() {
+>bat : Symbol(bat, Decl(genericWithNoConstraintComparableWithCurlyCurly.ts, 13, 1))
+>T : Symbol(T, Decl(genericWithNoConstraintComparableWithCurlyCurly.ts, 15, 13))
+
+    let x = {};
+>x : Symbol(x, Decl(genericWithNoConstraintComparableWithCurlyCurly.ts, 16, 7))
+
+    x as T;
+>x : Symbol(x, Decl(genericWithNoConstraintComparableWithCurlyCurly.ts, 16, 7))
+>T : Symbol(T, Decl(genericWithNoConstraintComparableWithCurlyCurly.ts, 15, 13))
+}
+
+function no<T extends null | undefined>() {
+>no : Symbol(no, Decl(genericWithNoConstraintComparableWithCurlyCurly.ts, 18, 1))
+>T : Symbol(T, Decl(genericWithNoConstraintComparableWithCurlyCurly.ts, 20, 12))
+
+    let x = {};
+>x : Symbol(x, Decl(genericWithNoConstraintComparableWithCurlyCurly.ts, 21, 7))
+
+    x as T; // should error
+>x : Symbol(x, Decl(genericWithNoConstraintComparableWithCurlyCurly.ts, 21, 7))
+>T : Symbol(T, Decl(genericWithNoConstraintComparableWithCurlyCurly.ts, 20, 12))
+}
+
+function yes<T extends object | null | undefined>() {
+>yes : Symbol(yes, Decl(genericWithNoConstraintComparableWithCurlyCurly.ts, 23, 1))
+>T : Symbol(T, Decl(genericWithNoConstraintComparableWithCurlyCurly.ts, 25, 13))
+
+    let x = {};
+>x : Symbol(x, Decl(genericWithNoConstraintComparableWithCurlyCurly.ts, 26, 7))
+
+    x as T;
+>x : Symbol(x, Decl(genericWithNoConstraintComparableWithCurlyCurly.ts, 26, 7))
+>T : Symbol(T, Decl(genericWithNoConstraintComparableWithCurlyCurly.ts, 25, 13))
+}

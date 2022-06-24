@@ -163,6 +163,24 @@ namespace Harness.LanguageService {
             }
         }
 
+        public fileExists(path: string): boolean {
+            try {
+                return this.vfs.existsSync(path);
+            }
+            catch {
+                return false;
+            }
+        }
+
+        public readFile(path: string): string | undefined {
+            try {
+                return this.vfs.readFileSync(path).toString();
+            }
+            catch {
+                return undefined;
+            }
+        }
+
         public directoryExists(path: string) {
             return this.vfs.statSync(path).isDirectory();
         }
@@ -493,8 +511,8 @@ namespace Harness.LanguageService {
         getSignatureHelpItems(fileName: string, position: number, options: ts.SignatureHelpItemsOptions | undefined): ts.SignatureHelpItems {
             return unwrapJSONCallResult(this.shim.getSignatureHelpItems(fileName, position, options));
         }
-        getRenameInfo(fileName: string, position: number, options?: ts.RenameInfoOptions): ts.RenameInfo {
-            return unwrapJSONCallResult(this.shim.getRenameInfo(fileName, position, options));
+        getRenameInfo(fileName: string, position: number, preferences: ts.UserPreferences): ts.RenameInfo {
+            return unwrapJSONCallResult(this.shim.getRenameInfo(fileName, position, preferences));
         }
         getSmartSelectionRange(fileName: string, position: number): ts.SelectionRange {
             return unwrapJSONCallResult(this.shim.getSmartSelectionRange(fileName, position));
@@ -600,7 +618,7 @@ namespace Harness.LanguageService {
         provideCallHierarchyOutgoingCalls(fileName: string, position: number) {
             return unwrapJSONCallResult(this.shim.provideCallHierarchyOutgoingCalls(fileName, position));
         }
-        provideInlayHints(fileName: string, span: ts.TextSpan, preference: ts.InlayHintsOptions) {
+        provideInlayHints(fileName: string, span: ts.TextSpan, preference: ts.UserPreferences) {
             return unwrapJSONCallResult(this.shim.provideInlayHints(fileName, span, preference));
         }
         getEmitOutput(fileName: string): ts.EmitOutput {
@@ -611,6 +629,9 @@ namespace Harness.LanguageService {
         }
         getAutoImportProvider(): ts.Program | undefined {
             throw new Error("Program can not be marshaled across the shim layer.");
+        }
+        updateIsDefinitionOfReferencedSymbols(_referencedSymbols: readonly ts.ReferencedSymbol[], _knownSymbolSpans: ts.Set<ts.DocumentSpan>): boolean {
+            return ts.notImplemented();
         }
         getNonBoundSourceFile(): ts.SourceFile {
             throw new Error("SourceFile can not be marshaled across the shim layer.");
@@ -976,7 +997,7 @@ namespace Harness.LanguageService {
                 cancellationToken: ts.server.nullCancellationToken,
                 useSingleInferredProject: false,
                 useInferredProjectPerProjectRoot: false,
-                typingsInstaller: undefined!, // TODO: GH#18217
+                typingsInstaller: { ...ts.server.nullTypingsInstaller, globalTypingsCacheLocation: "/Library/Caches/typescript" },
                 byteLength: Utils.byteLength,
                 hrtime: process.hrtime,
                 logger: serverHost,

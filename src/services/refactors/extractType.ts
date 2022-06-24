@@ -144,11 +144,20 @@ namespace ts.refactor {
         function visitor(node: Node): true | undefined {
             if (isTypeReferenceNode(node)) {
                 if (isIdentifier(node.typeName)) {
-                    const symbol = checker.resolveName(node.typeName.text, node.typeName, SymbolFlags.TypeParameter, /* excludeGlobals */ true);
-                    const declaration = tryCast(symbol?.declarations?.[0], isTypeParameterDeclaration);
-                    if (declaration) {
-                        if (rangeContainsSkipTrivia(statement, declaration, file) && !rangeContainsSkipTrivia(selection, declaration, file)) {
-                            pushIfUnique(result, declaration);
+                    const typeName = node.typeName;
+                    const symbol = checker.resolveName(typeName.text, typeName, SymbolFlags.TypeParameter, /* excludeGlobals */ true);
+                    for (const decl of symbol?.declarations || emptyArray) {
+                        if (isTypeParameterDeclaration(decl) && decl.getSourceFile() === file) {
+                            // skip extraction if the type node is in the range of the type parameter declaration.
+                            // function foo<T extends { a?: /**/T }>(): void;
+                            if (decl.name.escapedText === typeName.escapedText && rangeContainsSkipTrivia(decl, selection, file)) {
+                                return true;
+                            }
+
+                            if (rangeContainsSkipTrivia(statement, decl, file) && !rangeContainsSkipTrivia(selection, decl, file)) {
+                                pushIfUnique(result, decl);
+                                break;
+                            }
                         }
                     }
                 }
@@ -191,10 +200,9 @@ namespace ts.refactor {
         const { firstStatement, selection, typeParameters } = info;
 
         const newTypeNode = factory.createTypeAliasDeclaration(
-            /* decorators */ undefined,
             /* modifiers */ undefined,
             name,
-            typeParameters.map(id => factory.updateTypeParameterDeclaration(id, id.name, id.constraint, /* defaultType */ undefined)),
+            typeParameters.map(id => factory.updateTypeParameterDeclaration(id, id.modifiers, id.name, id.constraint, /* defaultType */ undefined)),
             selection
         );
         changes.insertNodeBefore(file, firstStatement, ignoreSourceNewlines(newTypeNode), /* blankLineBetween */ true);
@@ -205,7 +213,6 @@ namespace ts.refactor {
         const { firstStatement, selection, typeParameters, typeElements } = info;
 
         const newTypeNode = factory.createInterfaceDeclaration(
-            /* decorators */ undefined,
             /* modifiers */ undefined,
             name,
             typeParameters,
@@ -220,6 +227,8 @@ namespace ts.refactor {
     function doTypedefChange(changes: textChanges.ChangeTracker, file: SourceFile, name: string, info: ExtractInfo) {
         const { firstStatement, selection, typeParameters } = info;
 
+        setEmitFlags(selection, EmitFlags.NoComments | EmitFlags.NoNestedComments);
+
         const node = factory.createJSDocTypedefTag(
             factory.createIdentifier("typedef"),
             factory.createJSDocTypeExpression(selection),
@@ -228,7 +237,7 @@ namespace ts.refactor {
         const templates: JSDocTemplateTag[] = [];
         forEach(typeParameters, typeParameter => {
             const constraint = getEffectiveConstraintOfTypeParameter(typeParameter);
-            const parameter = factory.createTypeParameterDeclaration(typeParameter.name);
+            const parameter = factory.createTypeParameterDeclaration(/*modifiers*/ undefined, typeParameter.name);
             const template = factory.createJSDocTemplateTag(
                 factory.createIdentifier("template"),
                 constraint && cast(constraint, isJSDocTypeExpression),

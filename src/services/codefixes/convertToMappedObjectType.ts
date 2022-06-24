@@ -25,21 +25,24 @@ namespace ts.codefix {
     interface Info { readonly indexSignature: IndexSignatureDeclaration; readonly container: FixableDeclaration; }
     function getInfo(sourceFile: SourceFile, pos: number): Info | undefined {
         const token = getTokenAtPosition(sourceFile, pos);
-        const indexSignature = cast(token.parent.parent, isIndexSignatureDeclaration);
-        if (isClassDeclaration(indexSignature.parent)) return undefined;
-        const container = isInterfaceDeclaration(indexSignature.parent) ? indexSignature.parent : cast(indexSignature.parent.parent, isTypeAliasDeclaration);
+        const indexSignature = tryCast(token.parent.parent, isIndexSignatureDeclaration);
+        if (!indexSignature) return undefined;
+
+        const container = isInterfaceDeclaration(indexSignature.parent) ? indexSignature.parent : tryCast(indexSignature.parent.parent, isTypeAliasDeclaration);
+        if (!container) return undefined;
+
         return { indexSignature, container };
     }
 
     function createTypeAliasFromInterface(declaration: FixableDeclaration, type: TypeNode): TypeAliasDeclaration {
-        return factory.createTypeAliasDeclaration(declaration.decorators, declaration.modifiers, declaration.name, declaration.typeParameters, type);
+        return factory.createTypeAliasDeclaration(declaration.modifiers, declaration.name, declaration.typeParameters, type);
     }
 
     function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, { indexSignature, container }: Info): void {
         const members = isInterfaceDeclaration(container) ? container.members : (container.type as TypeLiteralNode).members;
         const otherMembers = members.filter(member => !isIndexSignatureDeclaration(member));
         const parameter = first(indexSignature.parameters);
-        const mappedTypeParameter = factory.createTypeParameterDeclaration(cast(parameter.name, isIdentifier), parameter.type);
+        const mappedTypeParameter = factory.createTypeParameterDeclaration(/*modifiers*/ undefined, cast(parameter.name, isIdentifier), parameter.type);
         const mappedIntersectionType = factory.createMappedTypeNode(
             hasEffectiveReadonlyModifier(indexSignature) ? factory.createModifier(SyntaxKind.ReadonlyKeyword) : undefined,
             mappedTypeParameter,

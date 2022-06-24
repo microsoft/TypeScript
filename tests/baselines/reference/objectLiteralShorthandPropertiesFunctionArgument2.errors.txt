@@ -13,5 +13,5 @@ tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPr
         ~~~~~~
 !!! error TS2345: Argument of type '{ name: string; id: number; }' is not assignable to parameter of type '{ a: string; id: number; }'.
 !!! error TS2345:   Property 'a' is missing in type '{ name: string; id: number; }' but required in type '{ a: string; id: number; }'.
-!!! related TS2728 tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesFunctionArgument2.ts:6:19: 'a' is declared here:
+!!! related TS2728 tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesFunctionArgument2.ts:6:19: 'a' is declared here.
     

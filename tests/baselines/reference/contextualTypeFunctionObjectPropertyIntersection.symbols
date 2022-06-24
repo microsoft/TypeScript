@@ -1,0 +1,82 @@
+=== tests/cases/compiler/contextualTypeFunctionObjectPropertyIntersection.ts ===
+type Action<TEvent extends { type: string }> = (ev: TEvent) => void;
+>Action : Symbol(Action, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 0, 0))
+>TEvent : Symbol(TEvent, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 0, 12))
+>type : Symbol(type, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 0, 28))
+>ev : Symbol(ev, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 0, 48))
+>TEvent : Symbol(TEvent, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 0, 12))
+
+interface MachineConfig<TEvent extends { type: string }> {
+>MachineConfig : Symbol(MachineConfig, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 0, 68))
+>TEvent : Symbol(TEvent, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 2, 24))
+>type : Symbol(type, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 2, 40))
+
+  schema: {
+>schema : Symbol(MachineConfig.schema, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 2, 58))
+
+    events: TEvent;
+>events : Symbol(events, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 3, 11))
+>TEvent : Symbol(TEvent, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 2, 24))
+
+  };
+  on?: {
+>on : Symbol(MachineConfig.on, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 5, 4))
+
+    [K in TEvent["type"]]?: Action<TEvent extends { type: K } ? TEvent : never>;
+>K : Symbol(K, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 7, 5))
+>TEvent : Symbol(TEvent, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 2, 24))
+>Action : Symbol(Action, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 0, 0))
+>TEvent : Symbol(TEvent, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 2, 24))
+>type : Symbol(type, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 7, 51))
+>K : Symbol(K, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 7, 5))
+>TEvent : Symbol(TEvent, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 2, 24))
+
+  } & {
+    "*"?: Action<TEvent>;
+>"*" : Symbol("*", Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 8, 7))
+>Action : Symbol(Action, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 0, 0))
+>TEvent : Symbol(TEvent, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 2, 24))
+
+  };
+}
+
+declare function createMachine<TEvent extends { type: string }>(
+>createMachine : Symbol(createMachine, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 11, 1))
+>TEvent : Symbol(TEvent, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 13, 31))
+>type : Symbol(type, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 13, 47))
+
+  config: MachineConfig<TEvent>
+>config : Symbol(config, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 13, 64))
+>MachineConfig : Symbol(MachineConfig, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 0, 68))
+>TEvent : Symbol(TEvent, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 13, 31))
+
+): void;
+
+createMachine({
+>createMachine : Symbol(createMachine, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 11, 1))
+
+  schema: {
+>schema : Symbol(schema, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 17, 15))
+
+    events: {} as { type: "FOO" } | { type: "BAR" },
+>events : Symbol(events, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 18, 11))
+>type : Symbol(type, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 19, 19))
+>type : Symbol(type, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 19, 37))
+
+  },
+  on: {
+>on : Symbol(on, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 20, 4))
+
+    FOO: (ev) => {
+>FOO : Symbol(FOO, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 21, 7))
+>ev : Symbol(ev, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 22, 10))
+
+      ev.type; // should be 'FOO'
+>ev.type : Symbol(type, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 19, 19))
+>ev : Symbol(ev, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 22, 10))
+>type : Symbol(type, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 19, 19))
+
+    },
+  },
+});
+

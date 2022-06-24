@@ -240,8 +240,7 @@
           "start": 30,
           "length": 26
         },
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -253,8 +252,7 @@
           "start": 0,
           "length": 32
         },
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -266,8 +264,7 @@
           "start": 54,
           "length": 27
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -275,8 +272,7 @@
           "length": 5
         },
         "fileName": "/src/index.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }

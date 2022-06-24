@@ -122,7 +122,7 @@ tests/cases/conformance/functions/functionOverloadErrors.ts(116,19): error TS237
     function fewerParams();
              ~~~~~~~~~~~
 !!! error TS2394: This overload signature is not compatible with its implementation signature.
-!!! related TS2750 tests/cases/conformance/functions/functionOverloadErrors.ts:95:10: The implementation signature is declared here:
+!!! related TS2750 tests/cases/conformance/functions/functionOverloadErrors.ts:95:10: The implementation signature is declared here.
     function fewerParams(n: string) {
     }
     
@@ -130,14 +130,14 @@ tests/cases/conformance/functions/functionOverloadErrors.ts(116,19): error TS237
     function fn13(n: string);
              ~~~~
 !!! error TS2394: This overload signature is not compatible with its implementation signature.
-!!! related TS2750 tests/cases/conformance/functions/functionOverloadErrors.ts:100:10: The implementation signature is declared here:
+!!! related TS2750 tests/cases/conformance/functions/functionOverloadErrors.ts:100:10: The implementation signature is declared here.
     function fn13(n: number) { }
     
     //Function overloads where return types are not all subtype of implementation return type
     function fn14(n: string): string;
              ~~~~
 !!! error TS2394: This overload signature is not compatible with its implementation signature.
-!!! related TS2750 tests/cases/conformance/functions/functionOverloadErrors.ts:104:10: The implementation signature is declared here:
+!!! related TS2750 tests/cases/conformance/functions/functionOverloadErrors.ts:104:10: The implementation signature is declared here.
     function fn14() {
         return 3;
     }

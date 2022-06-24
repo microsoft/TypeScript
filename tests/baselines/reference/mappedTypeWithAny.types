@@ -1,6 +1,6 @@
 === tests/cases/conformance/types/mapped/mappedTypeWithAny.ts ===
 type Item = { value: string };
->Item : Item
+>Item : { value: string; }
 >value : string
 
 type ItemMap<T> = { [P in keyof T]: Item };
@@ -24,7 +24,7 @@ declare let x4: ItemMap<any>;
 // Repro from #19152
 
 type Data = {
->Data : Data
+>Data : { value: string; }
 
   value: string;
 >value : string

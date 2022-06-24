@@ -1,0 +1,219 @@
+Input::
+//// [/a/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+
+//// [/user/username/projects/myproject/main.ts]
+import { foo } from "./foo"; foo();
+
+//// [/user/username/projects/myproject/foo.ts]
+export declare function foo(): string;
+
+//// [/user/username/projects/myproject/tsconfig.json]
+{"watchOptions":{"watchFile":"useFsEvents"},"files":["foo.ts","main.ts"]}
+
+
+/a/lib/tsc.js -w --extendedDiagnostics
+Output::
+[[90m12:00:23 AM[0m] Starting compilation in watch mode...
+
+Current directory: /user/username/projects/myproject CaseSensitiveFileNames: false
+FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 {"watchFile":4} Config file
+Synchronizing program
+CreatingProgramWith::
+  roots: ["/user/username/projects/myproject/foo.ts","/user/username/projects/myproject/main.ts"]
+  options: {"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/foo.ts 250 {"watchFile":4} Source file
+FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/main.ts 250 {"watchFile":4} Source file
+FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 {"watchFile":4} Source file
+DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 {"watchFile":4} Type roots
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 {"watchFile":4} Type roots
+[[90m12:00:28 AM[0m] Found 0 errors. Watching for file changes.
+
+
+
+Program root files: ["/user/username/projects/myproject/foo.ts","/user/username/projects/myproject/main.ts"]
+Program options: {"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/foo.ts
+/user/username/projects/myproject/main.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/foo.ts
+/user/username/projects/myproject/main.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/myproject/foo.ts (used version)
+/user/username/projects/myproject/main.ts (used version)
+
+WatchedFiles::
+/user/username/projects/myproject/node_modules/@types:
+  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {"directoryName":"/user/username/projects/myproject/tsconfig.json"}
+/user/username/projects/myproject/foo.ts:
+  {"directoryName":"/user/username/projects/myproject/foo.ts"}
+/user/username/projects/myproject/main.ts:
+  {"directoryName":"/user/username/projects/myproject/main.ts"}
+/a/lib/lib.d.ts:
+  {"directoryName":"/a/lib/lib.d.ts"}
+
+FsWatchesRecursive::
+
+exitCode:: ExitStatus.undefined
+
+//// [/user/username/projects/myproject/foo.js]
+"use strict";
+exports.__esModule = true;
+
+
+//// [/user/username/projects/myproject/main.js]
+"use strict";
+exports.__esModule = true;
+var foo_1 = require("./foo");
+(0, foo_1.foo)();
+
+
+
+Change:: Introduce error such that when callback happens file is already appeared
+
+Input::
+//// [/user/username/projects/myproject/foo.ts]
+export declare function foo2(): string;
+
+
+Output::
+FileWatcher:: Triggered with /user/username/projects/myproject/foo.ts 0:: WatchInfo: /user/username/projects/myproject/foo.ts 250 {"watchFile":4} Source file
+Scheduling update
+Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/foo.ts 0:: WatchInfo: /user/username/projects/myproject/foo.ts 250 {"watchFile":4} Source file
+Synchronizing program
+[[90m12:00:32 AM[0m] File change detected. Starting incremental compilation...
+
+CreatingProgramWith::
+  roots: ["/user/username/projects/myproject/foo.ts","/user/username/projects/myproject/main.ts"]
+  options: {"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+[91m● [0m[96mmain.ts[0m:[93m1[0m:[93m10[0m  [91mError[0m TS2724
+| import { foo } from "./foo"; foo();
+  [91m         ▔▔▔[0m
+'"./foo"' has no exported member named 'foo'. Did you mean 'foo2'?
+
+'foo2' is declared here. [96mfoo.ts[0m:[93m1[0m:[93m25[0m
+
+  | export declare function foo2(): string;
+    [96m                        ▔▔▔▔[0m
+[[90m12:00:39 AM[0m] Found 1 error. Watching for file changes.
+
+
+
+Program root files: ["/user/username/projects/myproject/foo.ts","/user/username/projects/myproject/main.ts"]
+Program options: {"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program structureReused: Completely
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/foo.ts
+/user/username/projects/myproject/main.ts
+
+Semantic diagnostics in builder refreshed for::
+/user/username/projects/myproject/foo.ts
+/user/username/projects/myproject/main.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/myproject/foo.ts (computed .d.ts)
+/user/username/projects/myproject/main.ts (computed .d.ts)
+
+WatchedFiles::
+/user/username/projects/myproject/node_modules/@types:
+  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {"directoryName":"/user/username/projects/myproject/tsconfig.json"}
+/user/username/projects/myproject/foo.ts:
+  {"directoryName":"/user/username/projects/myproject/foo.ts"}
+/user/username/projects/myproject/main.ts:
+  {"directoryName":"/user/username/projects/myproject/main.ts"}
+/a/lib/lib.d.ts:
+  {"directoryName":"/a/lib/lib.d.ts"}
+
+FsWatchesRecursive::
+
+exitCode:: ExitStatus.undefined
+
+//// [/user/username/projects/myproject/foo.js] file written with same contents
+//// [/user/username/projects/myproject/main.js] file written with same contents
+
+Change:: Replace file with rename event that fixes error
+
+Input::
+//// [/user/username/projects/myproject/foo.ts]
+export declare function foo(): string;
+
+
+Output::
+FileWatcher:: Triggered with /user/username/projects/myproject/foo.ts 2:: WatchInfo: /user/username/projects/myproject/foo.ts 250 {"watchFile":4} Source file
+Scheduling update
+Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/foo.ts 2:: WatchInfo: /user/username/projects/myproject/foo.ts 250 {"watchFile":4} Source file
+FileWatcher:: Triggered with /user/username/projects/myproject/foo.ts 0:: WatchInfo: /user/username/projects/myproject/foo.ts 250 {"watchFile":4} Source file
+Scheduling update
+Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/foo.ts 0:: WatchInfo: /user/username/projects/myproject/foo.ts 250 {"watchFile":4} Source file
+Synchronizing program
+[[90m12:00:43 AM[0m] File change detected. Starting incremental compilation...
+
+CreatingProgramWith::
+  roots: ["/user/username/projects/myproject/foo.ts","/user/username/projects/myproject/main.ts"]
+  options: {"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+[[90m12:00:50 AM[0m] Found 0 errors. Watching for file changes.
+
+
+
+Program root files: ["/user/username/projects/myproject/foo.ts","/user/username/projects/myproject/main.ts"]
+Program options: {"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program structureReused: SafeModules
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/foo.ts
+/user/username/projects/myproject/main.ts
+
+Semantic diagnostics in builder refreshed for::
+/user/username/projects/myproject/foo.ts
+/user/username/projects/myproject/main.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/myproject/foo.ts (computed .d.ts)
+/user/username/projects/myproject/main.ts (computed .d.ts)
+
+WatchedFiles::
+/user/username/projects/myproject/node_modules/@types:
+  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {"directoryName":"/user/username/projects/myproject/tsconfig.json"}
+/user/username/projects/myproject/foo.ts:
+  {"directoryName":"/user/username/projects/myproject/foo.ts"}
+/user/username/projects/myproject/main.ts:
+  {"directoryName":"/user/username/projects/myproject/main.ts"}
+/a/lib/lib.d.ts:
+  {"directoryName":"/a/lib/lib.d.ts"}
+
+FsWatchesRecursive::
+
+exitCode:: ExitStatus.undefined
+
+//// [/user/username/projects/myproject/foo.js] file written with same contents
+//// [/user/username/projects/myproject/main.js] file written with same contents

@@ -6,7 +6,7 @@
     "modifierFlagsCache": 0,
     "transformFlags": 1,
     "typeName": {
-        "kind": "FirstNode",
+        "kind": "QualifiedName",
         "pos": 1,
         "end": 11,
         "flags": "JSDoc",

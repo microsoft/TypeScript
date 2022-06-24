@@ -116,10 +116,6 @@ namespace ts.textChanges {
          * Text of inserted node will be formatted with this delta, otherwise delta will be inferred from the new node kind
          */
         delta?: number;
-        /**
-         * Do not trim leading white spaces in the edit range
-         */
-        preserveLeadingWhitespace?: boolean;
     }
 
     export interface ReplaceWithMultipleNodesOptions extends InsertNodeOptions {
@@ -303,7 +299,7 @@ namespace ts.textChanges {
     export class ChangeTracker {
         private readonly changes: Change[] = [];
         private readonly newFiles: { readonly oldFile: SourceFile | undefined, readonly fileName: string, readonly statements: readonly (Statement | SyntaxKind.NewLineTrivia)[] }[] = [];
-        private readonly classesWithNodesInsertedAtStart = new Map<number, { readonly node: ClassDeclaration | InterfaceDeclaration | ObjectLiteralExpression, readonly sourceFile: SourceFile }>(); // Set<ClassDeclaration> implemented as Map<node id, ClassDeclaration>
+        private readonly classesWithNodesInsertedAtStart = new Map<number, { readonly node: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression, readonly sourceFile: SourceFile }>(); // Set<ClassDeclaration> implemented as Map<node id, ClassDeclaration>
         private readonly deletedNodes: { readonly sourceFile: SourceFile, readonly node: Node | NodeArray<TypeParameterDeclaration> }[] = [];
 
         public static fromContext(context: TextChangesContext): ChangeTracker {
@@ -339,6 +335,7 @@ namespace ts.textChanges {
             this.deletedNodes.push({ sourceFile, node });
         }
 
+        /** Stop! Consider using `delete` instead, which has logic for deleting nodes from delimited lists. */
         public deleteNode(sourceFile: SourceFile, node: Node, options: ConfigurableStartEnd = { leadingTriviaOption: LeadingTriviaOption.IncludeAll }): void {
             this.deleteRange(sourceFile, getAdjustedRange(sourceFile, node, node, options));
         }
@@ -491,32 +488,33 @@ namespace ts.textChanges {
             }
             const startPosition = getPrecedingNonSpaceCharacterPosition(sourceFile.text, fnStart - 1);
             const indent = sourceFile.text.slice(startPosition, fnStart);
-            this.insertNodeAt(sourceFile, fnStart, tag, { preserveLeadingWhitespace: false, suffix: this.newLineCharacter + indent });
+            this.insertNodeAt(sourceFile, fnStart, tag, { suffix: this.newLineCharacter + indent });
+        }
+
+        private createJSDocText(sourceFile: SourceFile, node: HasJSDoc) {
+            const comments = flatMap(node.jsDoc, jsDoc =>
+                isString(jsDoc.comment) ? factory.createJSDocText(jsDoc.comment) : jsDoc.comment) as JSDocComment[];
+            const jsDoc = singleOrUndefined(node.jsDoc);
+            return jsDoc && positionsAreOnSameLine(jsDoc.pos, jsDoc.end, sourceFile) && length(comments) === 0 ? undefined :
+                factory.createNodeArray(intersperse(comments, factory.createJSDocText("\n")));
+        }
+
+        public replaceJSDocComment(sourceFile: SourceFile, node: HasJSDoc, tags: readonly JSDocTag[]) {
+            this.insertJsdocCommentBefore(sourceFile, updateJSDocHost(node), factory.createJSDocComment(this.createJSDocText(sourceFile, node), factory.createNodeArray(tags)));
         }
 
         public addJSDocTags(sourceFile: SourceFile, parent: HasJSDoc, newTags: readonly JSDocTag[]): void {
-            const comments = flatMap(parent.jsDoc, j => typeof j.comment === "string" ? factory.createJSDocText(j.comment) : j.comment) as JSDocComment[];
             const oldTags = flatMapToMutable(parent.jsDoc, j => j.tags);
             const unmergedNewTags = newTags.filter(newTag => !oldTags.some((tag, i) => {
                 const merged = tryMergeJsdocTags(tag, newTag);
                 if (merged) oldTags[i] = merged;
                 return !!merged;
             }));
-            const tags = [...oldTags, ...unmergedNewTags];
-            const jsDoc = singleOrUndefined(parent.jsDoc);
-            const comment = jsDoc && positionsAreOnSameLine(jsDoc.pos, jsDoc.end, sourceFile) && !length(comments) ? undefined :
-                factory.createNodeArray(intersperse(comments, factory.createJSDocText("\n")));
-            const tag = factory.createJSDocComment(comment, factory.createNodeArray(tags));
-            const host = updateJSDocHost(parent);
-            this.insertJsdocCommentBefore(sourceFile, host, tag);
+            this.replaceJSDocComment(sourceFile, parent, [...oldTags, ...unmergedNewTags]);
         }
 
         public filterJSDocTags(sourceFile: SourceFile, parent: HasJSDoc, predicate: (tag: JSDocTag) => boolean): void {
-            const comments = flatMap(parent.jsDoc, j => typeof j.comment === "string" ? factory.createJSDocText(j.comment) : j.comment) as JSDocComment[];
-            const oldTags = flatMapToMutable(parent.jsDoc, j => j.tags);
-            const tag = factory.createJSDocComment(factory.createNodeArray(intersperse(comments, factory.createJSDocText("\n"))), factory.createNodeArray([...(filter(oldTags, predicate) || emptyArray)]));
-            const host = updateJSDocHost(parent);
-            this.insertJsdocCommentBefore(sourceFile, host, tag);
+            this.replaceJSDocComment(sourceFile, parent, filter(flatMapToMutable(parent.jsDoc, j => j.tags), predicate));
         }
 
         public replaceRangeWithText(sourceFile: SourceFile, range: TextRange, text: string): void {
@@ -620,27 +618,27 @@ namespace ts.textChanges {
             });
         }
 
-        public insertNodeAtClassStart(sourceFile: SourceFile, cls: ClassLikeDeclaration | InterfaceDeclaration, newElement: ClassElement): void {
-            this.insertNodeAtStartWorker(sourceFile, cls, newElement);
+        public insertMemberAtStart(sourceFile: SourceFile, node: ClassLikeDeclaration | InterfaceDeclaration | TypeLiteralNode, newElement: ClassElement | PropertySignature | MethodSignature): void {
+            this.insertNodeAtStartWorker(sourceFile, node, newElement);
         }
 
         public insertNodeAtObjectStart(sourceFile: SourceFile, obj: ObjectLiteralExpression, newElement: ObjectLiteralElementLike): void {
             this.insertNodeAtStartWorker(sourceFile, obj, newElement);
         }
 
-        private insertNodeAtStartWorker(sourceFile: SourceFile, cls: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression, newElement: ClassElement | ObjectLiteralElementLike): void {
-            const indentation = this.guessIndentationFromExistingMembers(sourceFile, cls) ?? this.computeIndentationForNewMember(sourceFile, cls);
-            this.insertNodeAt(sourceFile, getMembersOrProperties(cls).pos, newElement, this.getInsertNodeAtStartInsertOptions(sourceFile, cls, indentation));
+        private insertNodeAtStartWorker(sourceFile: SourceFile, node: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression | TypeLiteralNode, newElement: ClassElement | ObjectLiteralElementLike | PropertySignature | MethodSignature): void {
+            const indentation = this.guessIndentationFromExistingMembers(sourceFile, node) ?? this.computeIndentationForNewMember(sourceFile, node);
+            this.insertNodeAt(sourceFile, getMembersOrProperties(node).pos, newElement, this.getInsertNodeAtStartInsertOptions(sourceFile, node, indentation));
         }
 
         /**
          * Tries to guess the indentation from the existing members of a class/interface/object. All members must be on
          * new lines and must share the same indentation.
          */
-        private guessIndentationFromExistingMembers(sourceFile: SourceFile, cls: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression) {
+        private guessIndentationFromExistingMembers(sourceFile: SourceFile, node: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression | TypeLiteralNode) {
             let indentation: number | undefined;
-            let lastRange: TextRange = cls;
-            for (const member of getMembersOrProperties(cls)) {
+            let lastRange: TextRange = node;
+            for (const member of getMembersOrProperties(node)) {
                 if (rangeStartPositionsAreOnSameLine(lastRange, member, sourceFile)) {
                     // each indented member must be on a new line
                     return undefined;
@@ -659,13 +657,13 @@ namespace ts.textChanges {
             return indentation;
         }
 
-        private computeIndentationForNewMember(sourceFile: SourceFile, cls: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression) {
-            const clsStart = cls.getStart(sourceFile);
-            return formatting.SmartIndenter.findFirstNonWhitespaceColumn(getLineStartPositionForPosition(clsStart, sourceFile), clsStart, sourceFile, this.formatContext.options)
+        private computeIndentationForNewMember(sourceFile: SourceFile, node: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression | TypeLiteralNode) {
+            const nodeStart = node.getStart(sourceFile);
+            return formatting.SmartIndenter.findFirstNonWhitespaceColumn(getLineStartPositionForPosition(nodeStart, sourceFile), nodeStart, sourceFile, this.formatContext.options)
                 + (this.formatContext.options.indentSize ?? 4);
         }
 
-        private getInsertNodeAtStartInsertOptions(sourceFile: SourceFile, cls: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression, indentation: number): InsertNodeOptions {
+        private getInsertNodeAtStartInsertOptions(sourceFile: SourceFile, node: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression | TypeLiteralNode, indentation: number): InsertNodeOptions {
             // Rules:
             // - Always insert leading newline.
             // - For object literals:
@@ -676,15 +674,15 @@ namespace ts.textChanges {
             // - Only insert a trailing newline if body is single-line and there are no other insertions for the node.
             //   NOTE: This is handled in `finishClassesWithNodesInsertedAtStart`.
 
-            const members = getMembersOrProperties(cls);
+            const members = getMembersOrProperties(node);
             const isEmpty = members.length === 0;
-            const isFirstInsertion = addToSeen(this.classesWithNodesInsertedAtStart, getNodeId(cls), { node: cls, sourceFile });
-            const insertTrailingComma = isObjectLiteralExpression(cls) && (!isJsonSourceFile(sourceFile) || !isEmpty);
-            const insertLeadingComma = isObjectLiteralExpression(cls) && isJsonSourceFile(sourceFile) && isEmpty && !isFirstInsertion;
+            const isFirstInsertion = addToSeen(this.classesWithNodesInsertedAtStart, getNodeId(node), { node, sourceFile });
+            const insertTrailingComma = isObjectLiteralExpression(node) && (!isJsonSourceFile(sourceFile) || !isEmpty);
+            const insertLeadingComma = isObjectLiteralExpression(node) && isJsonSourceFile(sourceFile) && isEmpty && !isFirstInsertion;
             return {
                 indentation,
                 prefix: (insertLeadingComma ? "," : "") + this.newLineCharacter,
-                suffix: insertTrailingComma ? "," : ""
+                suffix: insertTrailingComma ? "," : isInterfaceDeclaration(node) && isEmpty ? ";" : ""
             };
         }
 
@@ -784,6 +782,20 @@ namespace ts.textChanges {
 
         public insertExportModifier(sourceFile: SourceFile, node: DeclarationStatement | VariableStatement): void {
             this.insertText(sourceFile, node.getStart(sourceFile), "export ");
+        }
+
+        public insertImportSpecifierAtIndex(sourceFile: SourceFile, importSpecifier: ImportSpecifier, namedImports: NamedImports, index: number) {
+            const prevSpecifier = namedImports.elements[index - 1];
+            if (prevSpecifier) {
+                this.insertNodeInListAfter(sourceFile, prevSpecifier, importSpecifier);
+            }
+            else {
+                this.insertNodeBefore(
+                    sourceFile,
+                    namedImports.elements[0],
+                    importSpecifier,
+                    !positionsAreOnSameLine(namedImports.elements[0].getStart(), namedImports.parent.parent.getStart(), sourceFile));
+            }
         }
 
         /**
@@ -986,8 +998,8 @@ namespace ts.textChanges {
         const close = findChildOfKind(cls, SyntaxKind.CloseBraceToken, sourceFile);
         return [open?.end, close?.end];
     }
-    function getMembersOrProperties(cls: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression): NodeArray<Node> {
-        return isObjectLiteralExpression(cls) ? cls.properties : cls.members;
+    function getMembersOrProperties(node: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression | TypeLiteralNode): NodeArray<Node> {
+        return isObjectLiteralExpression(node) ? node.properties : node.members;
     }
 
     export type ValidateNonFormattedText = (node: Node, text: string) => void;
@@ -1052,7 +1064,7 @@ namespace ts.textChanges {
                 ? change.nodes.map(n => removeSuffix(format(n), newLineCharacter)).join(change.options?.joiner || newLineCharacter)
                 : format(change.node);
             // strip initial indentation (spaces or tabs) if text will be inserted in the middle of the line
-            const noIndent = (options.preserveLeadingWhitespace || options.indentation !== undefined || getLineStartPositionForPosition(pos, sourceFile) === pos) ? text : text.replace(/^\s+/, "");
+            const noIndent = (options.indentation !== undefined || getLineStartPositionForPosition(pos, sourceFile) === pos) ? text : text.replace(/^\s+/, "");
             return (options.prefix || "") + noIndent
                  + ((!options.suffix || endsWith(noIndent, options.suffix))
                     ? "" : options.suffix);
@@ -1107,8 +1119,17 @@ namespace ts.textChanges {
         return skipTrivia(s, 0) === s.length;
     }
 
+    // A transformation context that won't perform parenthesization, as some parenthesization rules
+    // are more aggressive than is strictly necessary.
+    const textChangesTransformationContext: TransformationContext = {
+        ...nullTransformationContext,
+        factory: createNodeFactory(
+            nullTransformationContext.factory.flags | NodeFactoryFlags.NoParenthesizerRules,
+            nullTransformationContext.factory.baseFactory),
+    };
+
     export function assignPositionsToNode(node: Node): Node {
-        const visited = visitEachChild(node, assignPositionsToNode, nullTransformationContext, assignPositionsToNodeArray, assignPositionsToNode);
+        const visited = visitEachChild(node, assignPositionsToNode, textChangesTransformationContext, assignPositionsToNodeArray, assignPositionsToNode);
         // create proxy node for non synthesized nodes
         const newNode = nodeIsSynthesized(visited) ? visited : Object.create(visited) as Node;
         setTextRangePosEnd(newNode, getPos(node), getEnd(node));

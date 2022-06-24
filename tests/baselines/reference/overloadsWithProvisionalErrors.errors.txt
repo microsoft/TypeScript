@@ -36,7 +36,7 @@ tests/cases/compiler/overloadsWithProvisionalErrors.ts(8,17): error TS2304: Cann
 !!! error TS2769:     Argument of type '(s: string) => { a: any; }' is not assignable to parameter of type 'string'.
 !!! error TS2769:   Overload 2 of 2, '(lambda: (s: string) => { a: number; b: number; }): string', gave the following error.
 !!! error TS2769:     Property 'b' is missing in type '{ a: any; }' but required in type '{ a: number; b: number; }'.
-!!! related TS2728 tests/cases/compiler/overloadsWithProvisionalErrors.ts:3:42: 'b' is declared here:
+!!! related TS2728 tests/cases/compiler/overloadsWithProvisionalErrors.ts:3:42: 'b' is declared here.
 !!! related TS6502 tests/cases/compiler/overloadsWithProvisionalErrors.ts:3:14: The expected type comes from the return type of this signature.
                     ~~~~
 !!! error TS2304: Cannot find name 'blah'.

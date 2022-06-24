@@ -819,7 +819,7 @@ namespace ts {
                 /*asteriskToken*/ undefined,
                 /*name*/ undefined,
                 /*typeParameters*/ undefined,
-                extendsClauseElement ? [factory.createParameterDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, factory.createUniqueName("_super", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel))] : [],
+                extendsClauseElement ? [factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, factory.createUniqueName("_super", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel))] : [],
                 /*type*/ undefined,
                 transformClassBody(node, extendsClauseElement)
             );
@@ -922,7 +922,6 @@ namespace ts {
             const constructor = getFirstConstructorWithBody(node);
             const hasSynthesizedSuper = hasSynthesizedDefaultSuperCall(constructor, extendsClauseElement !== undefined);
             const constructorFunction = factory.createFunctionDeclaration(
-                /*decorators*/ undefined,
                 /*modifiers*/ undefined,
                 /*asteriskToken*/ undefined,
                 name,
@@ -1146,7 +1145,7 @@ namespace ts {
                         [
                             ...existingPrologue,
                             ...prologue,
-                            ...(superStatementIndex <= existingPrologue.length ? emptyArray : visitNodes(constructor.body.statements, visitor, isStatement, existingPrologue.length, superStatementIndex)),
+                            ...(superStatementIndex <= existingPrologue.length ? emptyArray : visitNodes(constructor.body.statements, visitor, isStatement, existingPrologue.length, superStatementIndex - existingPrologue.length)),
                             ...statements
                         ]
                     ),
@@ -1243,7 +1242,6 @@ namespace ts {
                 return setOriginalNode(
                     setTextRange(
                         factory.createParameterDeclaration(
-                            /*decorators*/ undefined,
                             /*modifiers*/ undefined,
                             /*dotDotDotToken*/ undefined,
                             factory.getGeneratedNameForNode(node),
@@ -1261,7 +1259,6 @@ namespace ts {
                 return setOriginalNode(
                     setTextRange(
                         factory.createParameterDeclaration(
-                            /*decorators*/ undefined,
                             /*modifiers*/ undefined,
                             /*dotDotDotToken*/ undefined,
                             node.name,
@@ -1905,7 +1902,6 @@ namespace ts {
             convertedLoopState = savedConvertedLoopState;
             return factory.updateFunctionDeclaration(
                 node,
-                /*decorators*/ undefined,
                 visitNodes(node.modifiers, visitor, isModifier),
                 node.asteriskToken,
                 name,
@@ -2954,9 +2950,11 @@ namespace ts {
             // variables declared in the loop initializer that will be changed inside the loop
             const loopOutParameters: LoopOutParameter[] = [];
             if (loopInitializer && (getCombinedNodeFlags(loopInitializer) & NodeFlags.BlockScoped)) {
-                const hasCapturedBindingsInForInitializer = shouldConvertInitializerOfForStatement(node);
+                const hasCapturedBindingsInForHead = shouldConvertInitializerOfForStatement(node) ||
+                    shouldConvertConditionOfForStatement(node) ||
+                    shouldConvertIncrementorOfForStatement(node);
                 for (const decl of loopInitializer.declarations) {
-                    processLoopVariableDeclaration(node, decl, loopParameters, loopOutParameters, hasCapturedBindingsInForInitializer);
+                    processLoopVariableDeclaration(node, decl, loopParameters, loopOutParameters, hasCapturedBindingsInForHead);
                 }
             }
 
@@ -3434,26 +3432,32 @@ namespace ts {
             });
         }
 
-        function processLoopVariableDeclaration(container: IterationStatement, decl: VariableDeclaration | BindingElement, loopParameters: ParameterDeclaration[], loopOutParameters: LoopOutParameter[], hasCapturedBindingsInForInitializer: boolean) {
+        function processLoopVariableDeclaration(container: IterationStatement, decl: VariableDeclaration | BindingElement, loopParameters: ParameterDeclaration[], loopOutParameters: LoopOutParameter[], hasCapturedBindingsInForHead: boolean) {
             const name = decl.name;
             if (isBindingPattern(name)) {
                 for (const element of name.elements) {
                     if (!isOmittedExpression(element)) {
-                        processLoopVariableDeclaration(container, element, loopParameters, loopOutParameters, hasCapturedBindingsInForInitializer);
+                        processLoopVariableDeclaration(container, element, loopParameters, loopOutParameters, hasCapturedBindingsInForHead);
                     }
                 }
             }
             else {
-                loopParameters.push(factory.createParameterDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, name));
+                loopParameters.push(factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, name));
                 const checkFlags = resolver.getNodeCheckFlags(decl);
-                if (checkFlags & NodeCheckFlags.NeedsLoopOutParameter || hasCapturedBindingsInForInitializer) {
+                if (checkFlags & NodeCheckFlags.NeedsLoopOutParameter || hasCapturedBindingsInForHead) {
                     const outParamName = factory.createUniqueName("out_" + idText(name));
                     let flags: LoopOutParameterFlags = 0;
                     if (checkFlags & NodeCheckFlags.NeedsLoopOutParameter) {
                         flags |= LoopOutParameterFlags.Body;
                     }
-                    if (isForStatement(container) && container.initializer && resolver.isBindingCapturedByNode(container.initializer, decl)) {
-                        flags |= LoopOutParameterFlags.Initializer;
+                    if (isForStatement(container)) {
+                        if (container.initializer && resolver.isBindingCapturedByNode(container.initializer, decl)) {
+                            flags |= LoopOutParameterFlags.Initializer;
+                        }
+                        if (container.condition && resolver.isBindingCapturedByNode(container.condition, decl) ||
+                            container.incrementor && resolver.isBindingCapturedByNode(container.incrementor, decl)) {
+                            flags |= LoopOutParameterFlags.Body;
+                        }
                     }
                     loopOutParameters.push({ flags, originalName: name, outParamName });
                 }
@@ -3641,10 +3645,10 @@ namespace ts {
             const parameters = visitParameterList(node.parameters, visitor, context);
             const body = transformFunctionBody(node);
             if (node.kind === SyntaxKind.GetAccessor) {
-                updated = factory.updateGetAccessorDeclaration(node, node.decorators, node.modifiers, node.name, parameters, node.type, body);
+                updated = factory.updateGetAccessorDeclaration(node, node.modifiers, node.name, parameters, node.type, body);
             }
             else {
-                updated = factory.updateSetAccessorDeclaration(node, node.decorators, node.modifiers, node.name, parameters, body);
+                updated = factory.updateSetAccessorDeclaration(node, node.modifiers, node.name, parameters, body);
             }
             exitSubtree(ancestorFacts, HierarchyFacts.FunctionSubtreeExcludes, HierarchyFacts.None);
             convertedLoopState = savedConvertedLoopState;

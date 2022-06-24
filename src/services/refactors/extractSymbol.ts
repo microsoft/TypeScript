@@ -217,6 +217,7 @@ namespace ts.refactor.extractSymbol {
         export const cannotAccessVariablesFromNestedScopes = createMessage("Cannot access variables from nested scopes");
         export const cannotExtractToJSClass = createMessage("Cannot extract constant to a class scope in JS");
         export const cannotExtractToExpressionArrowFunction = createMessage("Cannot extract constant to an arrow function without a block");
+        export const cannotExtractFunctionsContainingThisToMethod = createMessage("Cannot extract functions containing this to method");
     }
 
     enum RangeFacts {
@@ -225,10 +226,11 @@ namespace ts.refactor.extractSymbol {
         IsGenerator = 1 << 1,
         IsAsyncFunction = 1 << 2,
         UsesThis = 1 << 3,
+        UsesThisInFunction = 1 << 4,
         /**
          * The range is in a function which needs the 'static' modifier in a class
          */
-        InStaticRegion = 1 << 4
+        InStaticRegion = 1 << 5,
     }
 
     /**
@@ -242,6 +244,10 @@ namespace ts.refactor.extractSymbol {
          * Used to ensure we don't turn something used outside the range free (or worse, resolve to a different entity).
          */
         readonly declarations: Symbol[];
+        /**
+         * If `this` is referring to a function instead of class, we need to retrieve its type.
+         */
+        readonly thisNode: Node | undefined;
     }
 
     /**
@@ -283,7 +289,7 @@ namespace ts.refactor.extractSymbol {
 
         // Walk up starting from the the start position until we find a non-SourceFile node that subsumes the selected span.
         // This may fail (e.g. you select two statements in the root of a source file)
-        const start = cursorRequest ? getExtractableParent(startToken): getParentNodeInSpan(startToken, sourceFile, adjustedSpan);
+        const start = cursorRequest ? getExtractableParent(startToken) : getParentNodeInSpan(startToken, sourceFile, adjustedSpan);
 
         // Do the same for the ending position
         const end = cursorRequest ? start : getParentNodeInSpan(endToken, sourceFile, adjustedSpan);
@@ -294,12 +300,14 @@ namespace ts.refactor.extractSymbol {
         // about what things need to be done as part of the extraction.
         let rangeFacts = RangeFacts.None;
 
+        let thisNode: Node | undefined;
+
         if (!start || !end) {
             // cannot find either start or end node
             return { errors: [createFileDiagnostic(sourceFile, span.start, length, Messages.cannotExtractRange)] };
         }
 
-        if (isJSDoc(start)) {
+        if (start.flags & NodeFlags.JSDoc) {
             return { errors: [createFileDiagnostic(sourceFile, span.start, length, Messages.cannotExtractJSDoc)] };
         }
 
@@ -336,7 +344,7 @@ namespace ts.refactor.extractSymbol {
                 return { errors: [createFileDiagnostic(sourceFile, span.start, length, Messages.cannotExtractRange)] };
             }
 
-            return { targetRange: { range: statements, facts: rangeFacts, declarations } };
+            return { targetRange: { range: statements, facts: rangeFacts, declarations, thisNode } };
         }
 
         if (isReturnStatement(start) && !start.expression) {
@@ -351,7 +359,7 @@ namespace ts.refactor.extractSymbol {
         if (errors) {
             return { errors };
         }
-        return { targetRange: { range: getStatementOrExpressionRange(node)!, facts: rangeFacts, declarations } }; // TODO: GH#18217
+        return { targetRange: { range: getStatementOrExpressionRange(node)!, facts: rangeFacts, declarations, thisNode } }; // TODO: GH#18217
 
         /**
          * Attempt to refine the extraction node (generally, by shrinking it) to produce better results.
@@ -433,7 +441,7 @@ namespace ts.refactor.extractSymbol {
             // For understanding how skipTrivia functioned:
             Debug.assert(!positionIsSynthesized(nodeToCheck.pos), "This failure could trigger https://github.com/Microsoft/TypeScript/issues/20809 (2)");
 
-            if (!isStatement(nodeToCheck) && !(isExpressionNode(nodeToCheck) && isExtractableExpression(nodeToCheck))) {
+            if (!isStatement(nodeToCheck) && !(isExpressionNode(nodeToCheck) && isExtractableExpression(nodeToCheck)) && !isStringLiteralJsxAttribute(nodeToCheck)) {
                 return [createDiagnosticForNode(nodeToCheck, Messages.statementOrExpressionExpected)];
             }
 
@@ -452,6 +460,17 @@ namespace ts.refactor.extractSymbol {
             let seenLabels: __String[];
 
             visit(nodeToCheck);
+
+            if (rangeFacts & RangeFacts.UsesThis) {
+                const container = getThisContainer(nodeToCheck, /** includeArrowFunctions */ false);
+                if (
+                    container.kind === SyntaxKind.FunctionDeclaration ||
+                    (container.kind === SyntaxKind.MethodDeclaration && container.parent.kind === SyntaxKind.ObjectLiteralExpression) ||
+                    container.kind === SyntaxKind.FunctionExpression
+                ) {
+                    rangeFacts |= RangeFacts.UsesThisInFunction;
+                }
+            }
 
             return errors;
 
@@ -486,14 +505,15 @@ namespace ts.refactor.extractSymbol {
                         // but a super *method call* simply implies a 'this' reference
                         if (node.parent.kind === SyntaxKind.CallExpression) {
                             // Super constructor call
-                            const containingClass = getContainingClass(node)!; // TODO:GH#18217
-                            if (containingClass.pos < span.start || containingClass.end >= (span.start + span.length)) {
+                            const containingClass = getContainingClass(node);
+                            if (containingClass === undefined || containingClass.pos < span.start || containingClass.end >= (span.start + span.length)) {
                                 (errors ||= []).push(createDiagnosticForNode(node, Messages.cannotExtractSuper));
                                 return true;
                             }
                         }
                         else {
                             rangeFacts |= RangeFacts.UsesThis;
+                            thisNode = node;
                         }
                         break;
                     case SyntaxKind.ArrowFunction:
@@ -501,6 +521,7 @@ namespace ts.refactor.extractSymbol {
                         forEachChild(node, function check(n) {
                             if (isThis(n)) {
                                 rangeFacts |= RangeFacts.UsesThis;
+                                thisNode = node;
                             }
                             else if (isClassLike(n) || (isFunctionLike(n) && !isArrowFunction(n))) {
                                 return false;
@@ -559,6 +580,7 @@ namespace ts.refactor.extractSymbol {
                     case SyntaxKind.ThisType:
                     case SyntaxKind.ThisKeyword:
                         rangeFacts |= RangeFacts.UsesThis;
+                        thisNode = node;
                         break;
                     case SyntaxKind.LabeledStatement: {
                         const label = (node as LabeledStatement).label;
@@ -625,18 +647,22 @@ namespace ts.refactor.extractSymbol {
         if (isStatement(node)) {
             return [node];
         }
-        else if (isExpressionNode(node)) {
+        if (isExpressionNode(node)) {
             // If our selection is the expression in an ExpressionStatement, expand
             // the selection to include the enclosing Statement (this stops us
             // from trying to care about the return value of the extracted function
             // and eliminates double semicolon insertion in certain scenarios)
             return isExpressionStatement(node.parent) ? [node.parent] : node as Expression;
         }
+        if (isStringLiteralJsxAttribute(node)) {
+            return node;
+        }
         return undefined;
     }
 
     function isScope(node: Node): node is Scope {
-        return isFunctionLikeDeclaration(node) || isSourceFile(node) || isModuleBlock(node) || isClassLike(node);
+        return isArrowFunction(node) ? isFunctionBody(node.body) :
+            isFunctionLikeDeclaration(node) || isSourceFile(node) || isModuleBlock(node) || isClassLike(node);
     }
 
     /**
@@ -646,7 +672,7 @@ namespace ts.refactor.extractSymbol {
      */
     function collectEnclosingScopes(range: TargetRange): Scope[] {
         let current: Node = isReadonlyArray(range.range) ? first(range.range) : range.range;
-        if (range.facts & RangeFacts.UsesThis) {
+        if (range.facts & RangeFacts.UsesThis && !(range.facts & RangeFacts.UsesThisInFunction)) {
             // if range uses this as keyword or as type inside the class then it can only be extracted to a method of the containing class
             const containingClass = getContainingClass(current);
             if (containingClass) {
@@ -861,7 +887,6 @@ namespace ts.refactor.extractSymbol {
             }
 
             const paramDecl = factory.createParameterDeclaration(
-                /*decorators*/ undefined,
                 /*modifiers*/ undefined,
                 /*dotDotDotToken*/ undefined,
                 /*name*/ name,
@@ -900,6 +925,8 @@ namespace ts.refactor.extractSymbol {
 
         let newFunction: MethodDeclaration | FunctionDeclaration;
 
+        const callThis = !!(range.facts & RangeFacts.UsesThisInFunction);
+
         if (isClassLike(scope)) {
             // always create private method in TypeScript files
             const modifiers: Modifier[] = isJS ? [] : [factory.createModifier(SyntaxKind.PrivateKeyword)];
@@ -910,7 +937,6 @@ namespace ts.refactor.extractSymbol {
                 modifiers.push(factory.createModifier(SyntaxKind.AsyncKeyword));
             }
             newFunction = factory.createMethodDeclaration(
-                /*decorators*/ undefined,
                 modifiers.length ? modifiers : undefined,
                 range.facts & RangeFacts.IsGenerator ? factory.createToken(SyntaxKind.AsteriskToken) : undefined,
                 functionName,
@@ -922,8 +948,23 @@ namespace ts.refactor.extractSymbol {
             );
         }
         else {
+            if (callThis) {
+                parameters.unshift(
+                    factory.createParameterDeclaration(
+                        /*modifiers*/ undefined,
+                        /*dotDotDotToken*/ undefined,
+                        /*name*/ "this",
+                        /*questionToken*/ undefined,
+                        checker.typeToTypeNode(
+                            checker.getTypeAtLocation(range.thisNode!),
+                            scope,
+                            NodeBuilderFlags.NoTruncation
+                        ),
+                        /*initializer*/ undefined,
+                    )
+                );
+            }
             newFunction = factory.createFunctionDeclaration(
-                /*decorators*/ undefined,
                 range.facts & RangeFacts.IsAsyncFunction ? [factory.createToken(SyntaxKind.AsyncKeyword)] : undefined,
                 range.facts & RangeFacts.IsGenerator ? factory.createToken(SyntaxKind.AsteriskToken) : undefined,
                 functionName,
@@ -949,8 +990,15 @@ namespace ts.refactor.extractSymbol {
         // replace range with function call
         const called = getCalledExpression(scope, range, functionNameText);
 
+        if (callThis) {
+            callArguments.unshift(factory.createIdentifier("this"));
+        }
+
         let call: Expression = factory.createCallExpression(
-            called,
+            callThis ? factory.createPropertyAccessExpression(
+                called,
+                "call"
+            ) : called,
             callTypeArguments, // Note that no attempt is made to take advantage of type argument inference
             callArguments);
         if (range.facts & RangeFacts.IsGenerator) {
@@ -1133,7 +1181,9 @@ namespace ts.refactor.extractSymbol {
 
         // Make a unique name for the extracted variable
         const file = scope.getSourceFile();
-        const localNameText = getUniqueName(isClassLike(scope) ? "newProperty" : "newLocal", file);
+        const localNameText = isPropertyAccessExpression(node) && !isClassLike(scope) && !checker.resolveName(node.name.text, node, SymbolFlags.Value, /*excludeGlobals*/ false) && !isPrivateIdentifier(node.name) && !isKeyword(node.name.originalKeywordKind!)
+            ? node.name.text
+            : getUniqueName(isClassLike(scope) ? "newProperty" : "newLocal", file);
         const isJS = isInJSFile(scope);
 
         let variableType = isJS || !checker.isContextSensitive(node)
@@ -1158,7 +1208,6 @@ namespace ts.refactor.extractSymbol {
             modifiers.push(factory.createModifier(SyntaxKind.ReadonlyKeyword));
 
             const newVariable = factory.createPropertyDeclaration(
-                /*decorators*/ undefined,
                 modifiers,
                 localNameText,
                 /*questionToken*/ undefined,
@@ -1270,7 +1319,7 @@ namespace ts.refactor.extractSymbol {
                     if (paramType === checker.getAnyType()) hasAny = true;
 
                     parameters.push(factory.updateParameterDeclaration(p,
-                        p.decorators, p.modifiers, p.dotDotDotToken,
+                        p.modifiers, p.dotDotDotToken,
                         p.name, p.questionToken, p.type || checker.typeToTypeNode(paramType, scope, NodeBuilderFlags.NoTruncation), p.initializer));
                 }
             }
@@ -1280,7 +1329,7 @@ namespace ts.refactor.extractSymbol {
             if (hasAny) return { variableType, initializer };
             variableType = undefined;
             if (isArrowFunction(initializer)) {
-                initializer = factory.updateArrowFunction(initializer, node.modifiers, initializer.typeParameters,
+                initializer = factory.updateArrowFunction(initializer, canHaveModifiers(node) ? getModifiers(node) : undefined, initializer.typeParameters,
                     parameters,
                     initializer.type || checker.typeToTypeNode(functionSignature.getReturnType(), scope, NodeBuilderFlags.NoTruncation),
                     initializer.equalsGreaterThanToken,
@@ -1294,7 +1343,6 @@ namespace ts.refactor.extractSymbol {
                     if ((!firstParameter || (isIdentifier(firstParameter.name) && firstParameter.name.escapedText !== "this"))) {
                         const thisType = checker.getTypeOfSymbolAtLocation(functionSignature.thisParameter, node);
                         parameters.splice(0, 0, factory.createParameterDeclaration(
-                            /* decorators */ undefined,
                             /* modifiers */ undefined,
                             /* dotDotDotToken */ undefined,
                             "this",
@@ -1303,7 +1351,7 @@ namespace ts.refactor.extractSymbol {
                         ));
                     }
                 }
-                initializer = factory.updateFunctionExpression(initializer, node.modifiers, initializer.asteriskToken,
+                initializer = factory.updateFunctionExpression(initializer, canHaveModifiers(node) ? getModifiers(node) : undefined, initializer.asteriskToken,
                     initializer.name, initializer.typeParameters,
                     parameters,
                     initializer.type || checker.typeToTypeNode(functionSignature.getReturnType(), scope, NodeBuilderFlags.NoTruncation),
@@ -1649,7 +1697,7 @@ namespace ts.refactor.extractSymbol {
         // Unfortunately, this code takes advantage of the knowledge that the generated method
         // will use the contextual type of an expression as the return type of the extracted
         // method (and will therefore "use" all the types involved).
-        if (inGenericContext && !isReadonlyArray(targetRange.range)) {
+        if (inGenericContext && !isReadonlyArray(targetRange.range) && !isJsxAttribute(targetRange.range)) {
             const contextualType = checker.getContextualType(targetRange.range)!; // TODO: GH#18217
             recordTypeParameterUsages(contextualType);
         }
@@ -1702,6 +1750,10 @@ namespace ts.refactor.extractSymbol {
             if (i > 0 && (scopeUsages.usages.size > 0 || scopeUsages.typeParameterUsages.size > 0)) {
                 const errorNode = isReadonlyArray(targetRange.range) ? targetRange.range[0] : targetRange.range;
                 constantErrorsPerScope[i].push(createDiagnosticForNode(errorNode, Messages.cannotAccessVariablesFromNestedScopes));
+            }
+
+            if (targetRange.facts & RangeFacts.UsesThisInFunction && isClassLike(scopes[i])) {
+                functionErrorsPerScope[i].push(createDiagnosticForNode(targetRange.thisNode!, Messages.cannotExtractFunctionsContainingThisToMethod));
             }
 
             let hasWrite = false;
@@ -1997,6 +2049,11 @@ namespace ts.refactor.extractSymbol {
     }
 
     function isInJSXContent(node: Node) {
-        return (isJsxElement(node) || isJsxSelfClosingElement(node) || isJsxFragment(node)) && (isJsxElement(node.parent) || isJsxFragment(node.parent));
+        return isStringLiteralJsxAttribute(node) ||
+            (isJsxElement(node) || isJsxSelfClosingElement(node) || isJsxFragment(node)) && (isJsxElement(node.parent) || isJsxFragment(node.parent));
+    }
+
+    function isStringLiteralJsxAttribute(node: Node): node is StringLiteral {
+        return isStringLiteral(node) && node.parent && isJsxAttribute(node.parent);
     }
 }

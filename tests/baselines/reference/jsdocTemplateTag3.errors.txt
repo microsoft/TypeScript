@@ -35,7 +35,7 @@ tests/cases/conformance/jsdoc/a.js(25,2): error TS1069: Unexpected token. A type
       ~~~~~~~~~~
 !!! error TS2345: Argument of type '{ a: number; }' is not assignable to parameter of type '{ a: number; b: string; }'.
 !!! error TS2345:   Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
-!!! related TS2728 tests/cases/conformance/jsdoc/a.js:2:28: 'b' is declared here:
+!!! related TS2728 tests/cases/conformance/jsdoc/a.js:2:28: 'b' is declared here.
     
     /**
      * @template {NoLongerAllowed}

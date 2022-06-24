@@ -36,7 +36,7 @@ tests/cases/compiler/assignmentCompatBug2.ts(33,1): error TS2741: Property 'm' i
     b3 = {
     ~~
 !!! error TS2741: Property 'm' is missing in type '{ f: (n: number) => number; g: (s: string) => number; }' but required in type '{ f(n: number): number; g(s: string): number; m: number; n?: number; k?(a: any): any; }'.
-!!! related TS2728 tests/cases/compiler/assignmentCompatBug2.ts:7:55: 'm' is declared here:
+!!! related TS2728 tests/cases/compiler/assignmentCompatBug2.ts:7:55: 'm' is declared here.
         f: (n) => { return 0; },
         g: (s) => { return 0; },
     }; // error
@@ -44,7 +44,7 @@ tests/cases/compiler/assignmentCompatBug2.ts(33,1): error TS2741: Property 'm' i
     b3 = {
     ~~
 !!! error TS2741: Property 'g' is missing in type '{ f: (n: number) => number; m: number; }' but required in type '{ f(n: number): number; g(s: string): number; m: number; n?: number; k?(a: any): any; }'.
-!!! related TS2728 tests/cases/compiler/assignmentCompatBug2.ts:7:33: 'g' is declared here:
+!!! related TS2728 tests/cases/compiler/assignmentCompatBug2.ts:7:33: 'g' is declared here.
         f: (n) => { return 0; },
         m: 0,
     }; // error
@@ -60,7 +60,7 @@ tests/cases/compiler/assignmentCompatBug2.ts(33,1): error TS2741: Property 'm' i
     b3 = {
     ~~
 !!! error TS2741: Property 'm' is missing in type '{ f: (n: number) => number; g: (s: string) => number; n: number; k: (a: any) => any; }' but required in type '{ f(n: number): number; g(s: string): number; m: number; n?: number; k?(a: any): any; }'.
-!!! related TS2728 tests/cases/compiler/assignmentCompatBug2.ts:7:55: 'm' is declared here:
+!!! related TS2728 tests/cases/compiler/assignmentCompatBug2.ts:7:55: 'm' is declared here.
         f: (n) => { return 0; },
         g: (s) => { return 0; },
         n: 0,

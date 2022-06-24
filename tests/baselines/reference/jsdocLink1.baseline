@@ -141,7 +141,7 @@
               }
             },
             {
-              "text": "|postfix text",
+              "text": "postfix text",
               "kind": "linkText"
             },
             {

@@ -6,7 +6,7 @@
 // @Filename: inputFile1.ts
 //// module m {
 ////    export function foo() {
-////        class C implements I { }
+////        class C implements I { private a; }
 ////        interface I { }
 ////        return C;
 ////    }

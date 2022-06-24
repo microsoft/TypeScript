@@ -34,7 +34,7 @@ getPoint().c.x;
 import "./d";
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"assumeChangesOnlyAffectDirectDependencies":true,"declaration":true}}
+{}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -50,7 +50,7 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-/a/lib/tsc.js --w
+/a/lib/tsc.js --w --assumeChangesOnlyAffectDirectDependencies --d
 Output::
 >> Screen clear
 [[90m12:00:29 AM[0m] Starting compilation in watch mode...
@@ -75,7 +75,7 @@ Property 'x' does not exist on type 'Coords'.
 
 
 Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts","/user/username/projects/myproject/c.ts","/user/username/projects/myproject/d.ts","/user/username/projects/myproject/e.ts"]
-Program options: {"assumeChangesOnlyAffectDirectDependencies":true,"declaration":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"watch":true,"assumeChangesOnlyAffectDirectDependencies":true,"declaration":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -95,11 +95,11 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
-/user/username/projects/myproject/a.ts (used version)
-/user/username/projects/myproject/b.ts (used version)
-/user/username/projects/myproject/c.ts (used version)
-/user/username/projects/myproject/d.ts (used version)
-/user/username/projects/myproject/e.ts (used version)
+/user/username/projects/myproject/a.ts (computed .d.ts during emit)
+/user/username/projects/myproject/b.ts (computed .d.ts during emit)
+/user/username/projects/myproject/c.ts (computed .d.ts during emit)
+/user/username/projects/myproject/d.ts (computed .d.ts during emit)
+/user/username/projects/myproject/e.ts (computed .d.ts during emit)
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
@@ -116,14 +116,14 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/e.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/user/username/projects/myproject/node_modules/@types:
+  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
 
 FsWatches::
 
 FsWatchesRecursive::
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject"}
 
 exitCode:: ExitStatus.undefined
 
@@ -216,12 +216,27 @@ Output::
 >> Screen clear
 [[90m12:00:54 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:25 AM[0m] Found 0 errors. Watching for file changes.
+[91m● [0m[96mc.ts[0m:[93m6[0m:[93m13[0m  [91mError[0m TS2322
+| x: 1,
+  [91m▔▔▔▔[0m
+Type '{ x: number; y: number; }' is not assignable to type 'Coords'.
+  Object literal may only specify known properties, and 'x' does not exist in type 'Coords'.
+
+The expected type comes from property 'c' which is declared here on type 'PointWrapper' [96ma.ts[0m:[93m3[0m:[93m5[0m
+
+  | c: Coords;
+    [96m▔[0m
+[91m● [0m[96md.ts[0m:[93m2[0m:[93m14[0m  [91mError[0m TS2339
+| getPoint().c.x;
+  [91m             ▔[0m
+Property 'x' does not exist on type 'Coords'.
+
+[[90m12:01:07 AM[0m] Found 2 errors. Watching for file changes.
 
 
 
 Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts","/user/username/projects/myproject/c.ts","/user/username/projects/myproject/d.ts","/user/username/projects/myproject/e.ts"]
-Program options: {"assumeChangesOnlyAffectDirectDependencies":true,"declaration":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"watch":true,"assumeChangesOnlyAffectDirectDependencies":true,"declaration":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -234,16 +249,10 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/a.ts
 /user/username/projects/myproject/b.ts
-/user/username/projects/myproject/c.ts
-/user/username/projects/myproject/d.ts
-/user/username/projects/myproject/e.ts
 
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/a.ts (computed .d.ts)
 /user/username/projects/myproject/b.ts (computed .d.ts)
-/user/username/projects/myproject/c.ts (computed .d.ts)
-/user/username/projects/myproject/d.ts (computed .d.ts)
-/user/username/projects/myproject/e.ts (computed .d.ts)
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
@@ -260,14 +269,14 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/e.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/user/username/projects/myproject/node_modules/@types:
+  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
 
 FsWatches::
 
 FsWatchesRecursive::
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject"}
 
 exitCode:: ExitStatus.undefined
 
@@ -285,12 +294,6 @@ export interface Coords {
 
 //// [/user/username/projects/myproject/b.js] file written with same contents
 //// [/user/username/projects/myproject/b.d.ts] file written with same contents
-//// [/user/username/projects/myproject/c.js] file written with same contents
-//// [/user/username/projects/myproject/c.d.ts] file written with same contents
-//// [/user/username/projects/myproject/d.js] file written with same contents
-//// [/user/username/projects/myproject/d.d.ts] file written with same contents
-//// [/user/username/projects/myproject/e.js] file written with same contents
-//// [/user/username/projects/myproject/e.d.ts] file written with same contents
 
 Change:: Rename property x to x2 of interface Coords to revert back to original text
 
@@ -308,14 +311,29 @@ export interface Coords {
 
 Output::
 >> Screen clear
-[[90m12:01:29 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:11 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:42 AM[0m] Found 0 errors. Watching for file changes.
+[91m● [0m[96mc.ts[0m:[93m6[0m:[93m13[0m  [91mError[0m TS2322
+| x: 1,
+  [91m▔▔▔▔[0m
+Type '{ x: number; y: number; }' is not assignable to type 'Coords'.
+  Object literal may only specify known properties, and 'x' does not exist in type 'Coords'.
+
+The expected type comes from property 'c' which is declared here on type 'PointWrapper' [96ma.ts[0m:[93m3[0m:[93m5[0m
+
+  | c: Coords;
+    [96m▔[0m
+[91m● [0m[96md.ts[0m:[93m2[0m:[93m14[0m  [91mError[0m TS2339
+| getPoint().c.x;
+  [91m             ▔[0m
+Property 'x' does not exist on type 'Coords'.
+
+[[90m12:01:24 AM[0m] Found 2 errors. Watching for file changes.
 
 
 
 Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts","/user/username/projects/myproject/c.ts","/user/username/projects/myproject/d.ts","/user/username/projects/myproject/e.ts"]
-Program options: {"assumeChangesOnlyAffectDirectDependencies":true,"declaration":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"watch":true,"assumeChangesOnlyAffectDirectDependencies":true,"declaration":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -348,14 +366,14 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/e.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/user/username/projects/myproject/node_modules/@types:
+  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
 
 FsWatches::
 
 FsWatchesRecursive::
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject"}
 
 exitCode:: ExitStatus.undefined
 
@@ -390,14 +408,29 @@ export interface Coords {
 
 Output::
 >> Screen clear
-[[90m12:01:46 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:28 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:59 AM[0m] Found 0 errors. Watching for file changes.
+[91m● [0m[96mc.ts[0m:[93m6[0m:[93m13[0m  [91mError[0m TS2322
+| x: 1,
+  [91m▔▔▔▔[0m
+Type '{ x: number; y: number; }' is not assignable to type 'Coords'.
+  Object literal may only specify known properties, and 'x' does not exist in type 'Coords'.
+
+The expected type comes from property 'c' which is declared here on type 'PointWrapper' [96ma.ts[0m:[93m3[0m:[93m5[0m
+
+  | c: Coords;
+    [96m▔[0m
+[91m● [0m[96md.ts[0m:[93m2[0m:[93m14[0m  [91mError[0m TS2339
+| getPoint().c.x;
+  [91m             ▔[0m
+Property 'x' does not exist on type 'Coords'.
+
+[[90m12:01:41 AM[0m] Found 2 errors. Watching for file changes.
 
 
 
 Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts","/user/username/projects/myproject/c.ts","/user/username/projects/myproject/d.ts","/user/username/projects/myproject/e.ts"]
-Program options: {"assumeChangesOnlyAffectDirectDependencies":true,"declaration":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"watch":true,"assumeChangesOnlyAffectDirectDependencies":true,"declaration":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -430,14 +463,14 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/e.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/user/username/projects/myproject/node_modules/@types:
+  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
 
 FsWatches::
 
 FsWatchesRecursive::
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject"}
 
 exitCode:: ExitStatus.undefined
 

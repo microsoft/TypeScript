@@ -6,7 +6,7 @@ tests/cases/compiler/jsElementAccessNoContextualTypeCrash.js(2,1): error TS2741:
     self['Common'] = self['Common'] || {};
     ~~~~~~~~~~~~~~
 !!! error TS2741: Property 'localize' is missing in type '{}' but required in type 'typeof Common'.
-!!! related TS2728 tests/cases/compiler/jsElementAccessNoContextualTypeCrash.js:7:1: 'localize' is declared here:
+!!! related TS2728 tests/cases/compiler/jsElementAccessNoContextualTypeCrash.js:7:1: 'localize' is declared here.
     /**
      * @param {string} string
      * @return {string}

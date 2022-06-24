@@ -47,7 +47,7 @@ tests/cases/compiler/abstractPropertyInConstructor.ts(79,22): error TS2715: Abst
 !!! error TS2715: Abstract property 'prop' in class 'AbstractClass' cannot be accessed in the constructor.
                      ~~~~
 !!! error TS2729: Property 'prop' is used before its initialization.
-!!! related TS2728 tests/cases/compiler/abstractPropertyInConstructor.ts:20:14: 'prop' is declared here:
+!!! related TS2728 tests/cases/compiler/abstractPropertyInConstructor.ts:20:14: 'prop' is declared here.
         fn = () => this.prop;
     
         method2() {

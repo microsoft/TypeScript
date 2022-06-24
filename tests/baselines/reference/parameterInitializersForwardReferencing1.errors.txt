@@ -48,7 +48,7 @@ tests/cases/conformance/functions/parameterInitializersForwardReferencing1.ts(29
 !!! error TS2373: Parameter '{[foo]: bar}' cannot reference identifier 'foo' declared after it.
                   ~~~
 !!! error TS2448: Block-scoped variable 'foo' used before its declaration.
-!!! related TS2728 tests/cases/conformance/functions/parameterInitializersForwardReferencing1.ts:30:9: 'foo' is declared here:
+!!! related TS2728 tests/cases/conformance/functions/parameterInitializersForwardReferencing1.ts:30:9: 'foo' is declared here.
         let foo: number = 2;
     }
     
