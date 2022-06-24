@@ -1,0 +1,22 @@
+=== tests/cases/compiler/genericFunctionAgainstUnresolvableSelfReferencingAwaitedUnion.ts ===
+// repro #49646
+
+type EnvFunction = <T>() => T;
+>EnvFunction : Symbol(EnvFunction, Decl(genericFunctionAgainstUnresolvableSelfReferencingAwaitedUnion.ts, 0, 0))
+>T : Symbol(T, Decl(genericFunctionAgainstUnresolvableSelfReferencingAwaitedUnion.ts, 2, 20))
+>T : Symbol(T, Decl(genericFunctionAgainstUnresolvableSelfReferencingAwaitedUnion.ts, 2, 20))
+
+type SimpleType = string | Promise<SimpleType>;
+>SimpleType : Symbol(SimpleType, Decl(genericFunctionAgainstUnresolvableSelfReferencingAwaitedUnion.ts, 2, 30))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>SimpleType : Symbol(SimpleType, Decl(genericFunctionAgainstUnresolvableSelfReferencingAwaitedUnion.ts, 2, 30))
+
+declare const simple: SimpleType;
+>simple : Symbol(simple, Decl(genericFunctionAgainstUnresolvableSelfReferencingAwaitedUnion.ts, 6, 13))
+>SimpleType : Symbol(SimpleType, Decl(genericFunctionAgainstUnresolvableSelfReferencingAwaitedUnion.ts, 2, 30))
+
+const env: EnvFunction = () => simple;
+>env : Symbol(env, Decl(genericFunctionAgainstUnresolvableSelfReferencingAwaitedUnion.ts, 8, 5))
+>EnvFunction : Symbol(EnvFunction, Decl(genericFunctionAgainstUnresolvableSelfReferencingAwaitedUnion.ts, 0, 0))
+>simple : Symbol(simple, Decl(genericFunctionAgainstUnresolvableSelfReferencingAwaitedUnion.ts, 6, 13))
+
