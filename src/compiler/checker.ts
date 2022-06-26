@@ -27970,7 +27970,8 @@ namespace ts {
             // type with those properties for which the binding pattern specifies a default value.
             // If the object literal is spread into another object literal, skip this step and let the top-level object
             // literal handle it instead.
-            if (contextualTypeHasPattern && node.parent.kind !== SyntaxKind.SpreadAssignment) {
+            const spreadOrOutsidePossibleObjectParent = findAncestor(node, n => n.kind === SyntaxKind.SpreadAssignment || isStatement(n) || isArrowFunction(n))!;
+            if (contextualTypeHasPattern && spreadOrOutsidePossibleObjectParent.kind !== SyntaxKind.SpreadAssignment) {
                 for (const prop of getPropertiesOfType(contextualType)) {
                     if (!propertiesTable.get(prop.escapedName) && !getPropertyOfType(spread, prop.escapedName)) {
                         if (!(prop.flags & SymbolFlags.Optional)) {

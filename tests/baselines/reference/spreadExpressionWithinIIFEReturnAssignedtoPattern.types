@@ -1,0 +1,23 @@
+=== tests/cases/compiler/spreadExpressionWithinIIFEReturnAssignedtoPattern.ts ===
+// repro #49585
+
+const { value } = (() => ({
+>value : string
+>(() => ({  value: "",  ...(true ? {} : {}),}))() : { value: string; }
+>(() => ({  value: "",  ...(true ? {} : {}),})) : () => { value: string; }
+>() => ({  value: "",  ...(true ? {} : {}),}) : () => { value: string; }
+>({  value: "",  ...(true ? {} : {}),}) : { value: string; }
+>{  value: "",  ...(true ? {} : {}),} : { value: string; }
+
+  value: "",
+>value : string
+>"" : ""
+
+  ...(true ? {} : {}),
+>(true ? {} : {}) : {}
+>true ? {} : {} : {}
+>true : true
+>{} : {}
+>{} : {}
+
+}))();

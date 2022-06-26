@@ -1,0 +1,11 @@
+=== tests/cases/compiler/spreadExpressionWithinIIFEReturnAssignedtoPattern.ts ===
+// repro #49585
+
+const { value } = (() => ({
+>value : Symbol(value, Decl(spreadExpressionWithinIIFEReturnAssignedtoPattern.ts, 2, 7))
+
+  value: "",
+>value : Symbol(value, Decl(spreadExpressionWithinIIFEReturnAssignedtoPattern.ts, 2, 27))
+
+  ...(true ? {} : {}),
+}))();
