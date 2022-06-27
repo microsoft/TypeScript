@@ -2449,7 +2449,7 @@ namespace ts {
             return parseElement();
         }
 
-        function currentNode(parsingContext: ParsingContext): Node | undefined {
+        function currentNode(parsingContext: ParsingContext, pos?: number): Node | undefined {
             // If we don't have a cursor or the parsing context isn't reusable, there's nothing to reuse.
             //
             // If there is an outstanding parse error that we've encountered, but not attached to
@@ -2463,7 +2463,7 @@ namespace ts {
                 return undefined;
             }
 
-            const node = syntaxCursor.currentNode(scanner.getStartPos());
+            const node = syntaxCursor.currentNode(pos ?? scanner.getStartPos());
 
             // Can't reuse a missing node.
             // Can't reuse a node that intersected the change range.
@@ -6615,25 +6615,20 @@ namespace ts {
         }
 
         function parseDeclaration(): Statement {
-            // TODO: Can we hold onto the parsed decorators/modifiers and advance the scanner
-            //       if we can't reuse the declaration, so that we don't do this work twice?
-            //
             // `parseListElement` attempted to get the reused node at this position,
             // but the ambient context flag was not yet set, so the node appeared
             // not reusable in that context.
-            const isAmbient = some(lookAhead(() => (parseDecorators(), parseModifiers())), isDeclareModifier);
-            if (isAmbient) {
-                const node = tryReuseAmbientDeclaration();
-                if (node) {
-                    return node;
-                }
-            }
-
             const pos = getNodePos();
             const hasJSDoc = hasPrecedingJSDocComment();
             const decorators = parseDecorators();
             const modifiers = parseModifiers();
+            const isAmbient = some(modifiers, isDeclareModifier);
             if (isAmbient) {
+                const node = tryReuseAmbientDeclaration(pos);
+                if (node) {
+                    return node;
+                }
+
                 for (const m of modifiers!) {
                     (m as Mutable<Node>).flags |= NodeFlags.Ambient;
                 }
@@ -6644,9 +6639,9 @@ namespace ts {
             }
         }
 
-        function tryReuseAmbientDeclaration(): Statement | undefined {
+        function tryReuseAmbientDeclaration(pos: number): Statement | undefined {
             return doInsideOfContext(NodeFlags.Ambient, () => {
-                const node = currentNode(parsingContext);
+                const node = currentNode(parsingContext, pos);
                 if (node) {
                     return consumeNode(node) as Statement;
                 }
