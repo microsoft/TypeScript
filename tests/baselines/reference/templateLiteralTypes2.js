@@ -1,9 +1,9 @@
 //// [templateLiteralTypes2.ts]
 function ft1<T extends string>(s: string, n: number, u: 'foo' | 'bar' | 'baz', t: T) {
-    const c1 = `abc${s}`;  // `abc${string}`
-    const c2 = `abc${n}`;  // `abc${number}`
-    const c3 = `abc${u}`;  // "abcfoo" | "abcbar" | "abcbaz"
-    const c4 = `abc${t}`;  // `abc${T}
+    const c1 = `abc${s}`;
+    const c2 = `abc${n}`;
+    const c3 = `abc${u}`;
+    const c4 = `abc${t}`;
     const d1: `abc${string}` = `abc${s}`;
     const d2: `abc${number}` = `abc${n}`;
     const d3: `abc${'foo' | 'bar' | 'baz'}` = `abc${u}`;
@@ -15,9 +15,9 @@ function ft2(s: string) {
 }
 
 function ft10(s: string) {
-    const c1 = `abc${s}`;  // Widening type `abc${string}`
+    const c1 = `abc${s}`;  // Type string
     let v1 = c1;  // Type string
-    const c2 = c1;  // Widening type `abc${string}`
+    const c2 = c1;  // Type string
     let v2 = c2;  // Type string
     const c3: `abc${string}` = `abc${s}`;
     let v3 = c3;  // Type `abc${string}`
@@ -26,14 +26,14 @@ function ft10(s: string) {
 }
 
 function ft11(s: string, cond: boolean) {
-    const c1 = cond ? `foo${s}` : `bar${s}`;  // widening `foo${string}` | widening `bar${string}`
+    const c1 = cond ? `foo${s}` : `bar${s}`;  // string
     const c2: `foo${string}` | `bar${string}` = c1;  // `foo${string}` | `bar${string}`
-    const c3 = cond ? c1 : c2;  // `foo${string}` | `bar${string}`
-    const c4 = cond ? c3 : `baz${s}`;  // `foo${string}` | `bar${string}` | widening `baz${string}`
+    const c3 = cond ? c1 : c2;  // string
+    const c4 = cond ? c3 : `baz${s}`;  // string
     const c5: `foo${string}` | `bar${string}` | `baz${string}` = c4; // `foo${string}` | `bar${string}` | `baz${string}`
     let v1 = c1;  // string
     let v2 = c2;  // `foo${string}` | `bar${string}`
-    let v3 = c3;  // `foo${string}` | `bar${string}`
+    let v3 = c3;  // string
     let v4 = c4;  // string
     let v5 = c5;  // `foo${string}` | `bar${string}` | `baz${string}`
 }
@@ -91,7 +91,7 @@ declare const someString: string;
 const t3 = takesLiteral(`foo.bar.${someString}`);  // string
 
 const id4 = `foo.bar.${someString}`;
-const t4 = takesLiteral(id4);  // string
+const t4 = takesLiteral(id4);  // unknown
 
 declare const someUnion: 'abc' | 'def' | 'ghi';
 const t5 = takesLiteral(`foo.bar.${someUnion}`);  // "abc" | "def" | "ghi"
@@ -122,10 +122,10 @@ C2(`rotate(${interpolatedStyle.rotate}dig)`);
 //// [templateLiteralTypes2.js]
 "use strict";
 function ft1(s, n, u, t) {
-    var c1 = "abc".concat(s); // `abc${string}`
-    var c2 = "abc".concat(n); // `abc${number}`
-    var c3 = "abc".concat(u); // "abcfoo" | "abcbar" | "abcbaz"
-    var c4 = "abc".concat(t); // `abc${T}
+    var c1 = "abc".concat(s);
+    var c2 = "abc".concat(n);
+    var c3 = "abc".concat(u);
+    var c4 = "abc".concat(t);
     var d1 = "abc".concat(s);
     var d2 = "abc".concat(n);
     var d3 = "abc".concat(u);
@@ -135,9 +135,9 @@ function ft2(s) {
     return "abc".concat(s);
 }
 function ft10(s) {
-    var c1 = "abc".concat(s); // Widening type `abc${string}`
+    var c1 = "abc".concat(s); // Type string
     var v1 = c1; // Type string
-    var c2 = c1; // Widening type `abc${string}`
+    var c2 = c1; // Type string
     var v2 = c2; // Type string
     var c3 = "abc".concat(s);
     var v3 = c3; // Type `abc${string}`
@@ -145,14 +145,14 @@ function ft10(s) {
     var v4 = c4; // Type `abc${string}`
 }
 function ft11(s, cond) {
-    var c1 = cond ? "foo".concat(s) : "bar".concat(s); // widening `foo${string}` | widening `bar${string}`
+    var c1 = cond ? "foo".concat(s) : "bar".concat(s); // string
     var c2 = c1; // `foo${string}` | `bar${string}`
-    var c3 = cond ? c1 : c2; // `foo${string}` | `bar${string}`
-    var c4 = cond ? c3 : "baz".concat(s); // `foo${string}` | `bar${string}` | widening `baz${string}`
+    var c3 = cond ? c1 : c2; // string
+    var c4 = cond ? c3 : "baz".concat(s); // string
     var c5 = c4; // `foo${string}` | `bar${string}` | `baz${string}`
     var v1 = c1; // string
     var v2 = c2; // `foo${string}` | `bar${string}`
-    var v3 = c3; // `foo${string}` | `bar${string}`
+    var v3 = c3; // string
     var v4 = c4; // string
     var v5 = c5; // `foo${string}` | `bar${string}` | `baz${string}`
 }
@@ -190,7 +190,7 @@ var id2 = "foo.bar.baz";
 var t2 = takesLiteral(id2); // "baz"
 var t3 = takesLiteral("foo.bar.".concat(someString)); // string
 var id4 = "foo.bar.".concat(someString);
-var t4 = takesLiteral(id4); // string
+var t4 = takesLiteral(id4); // unknown
 var t5 = takesLiteral("foo.bar.".concat(someUnion)); // "abc" | "def" | "ghi"
 // Repro from #41732
 var pixelValue = 22;

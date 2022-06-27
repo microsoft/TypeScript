@@ -5,10 +5,10 @@ tests/cases/conformance/types/literal/templateLiteralTypes2.ts(32,11): error TS2
 
 ==== tests/cases/conformance/types/literal/templateLiteralTypes2.ts (3 errors) ====
     function ft1<T extends string>(s: string, n: number, u: 'foo' | 'bar' | 'baz', t: T) {
-        const c1 = `abc${s}`;  // `abc${string}`
-        const c2 = `abc${n}`;  // `abc${number}`
-        const c3 = `abc${u}`;  // "abcfoo" | "abcbar" | "abcbaz"
-        const c4 = `abc${t}`;  // `abc${T}
+        const c1 = `abc${s}`;
+        const c2 = `abc${n}`;
+        const c3 = `abc${u}`;
+        const c4 = `abc${t}`;
         const d1: `abc${string}` = `abc${s}`;
         const d2: `abc${number}` = `abc${n}`;
         const d3: `abc${'foo' | 'bar' | 'baz'}` = `abc${u}`;
@@ -20,9 +20,9 @@ tests/cases/conformance/types/literal/templateLiteralTypes2.ts(32,11): error TS2
     }
     
     function ft10(s: string) {
-        const c1 = `abc${s}`;  // Widening type `abc${string}`
+        const c1 = `abc${s}`;  // Type string
         let v1 = c1;  // Type string
-        const c2 = c1;  // Widening type `abc${string}`
+        const c2 = c1;  // Type string
         let v2 = c2;  // Type string
         const c3: `abc${string}` = `abc${s}`;
         let v3 = c3;  // Type `abc${string}`
@@ -33,18 +33,18 @@ tests/cases/conformance/types/literal/templateLiteralTypes2.ts(32,11): error TS2
     }
     
     function ft11(s: string, cond: boolean) {
-        const c1 = cond ? `foo${s}` : `bar${s}`;  // widening `foo${string}` | widening `bar${string}`
+        const c1 = cond ? `foo${s}` : `bar${s}`;  // string
         const c2: `foo${string}` | `bar${string}` = c1;  // `foo${string}` | `bar${string}`
               ~~
 !!! error TS2322: Type 'string' is not assignable to type '`foo${string}` | `bar${string}`'.
-        const c3 = cond ? c1 : c2;  // `foo${string}` | `bar${string}`
-        const c4 = cond ? c3 : `baz${s}`;  // `foo${string}` | `bar${string}` | widening `baz${string}`
+        const c3 = cond ? c1 : c2;  // string
+        const c4 = cond ? c3 : `baz${s}`;  // string
         const c5: `foo${string}` | `bar${string}` | `baz${string}` = c4; // `foo${string}` | `bar${string}` | `baz${string}`
               ~~
 !!! error TS2322: Type 'string' is not assignable to type '`foo${string}` | `bar${string}` | `baz${string}`'.
         let v1 = c1;  // string
         let v2 = c2;  // `foo${string}` | `bar${string}`
-        let v3 = c3;  // `foo${string}` | `bar${string}`
+        let v3 = c3;  // string
         let v4 = c4;  // string
         let v5 = c5;  // `foo${string}` | `bar${string}` | `baz${string}`
     }
@@ -102,7 +102,7 @@ tests/cases/conformance/types/literal/templateLiteralTypes2.ts(32,11): error TS2
     const t3 = takesLiteral(`foo.bar.${someString}`);  // string
     
     const id4 = `foo.bar.${someString}`;
-    const t4 = takesLiteral(id4);  // string
+    const t4 = takesLiteral(id4);  // unknown
     
     declare const someUnion: 'abc' | 'def' | 'ghi';
     const t5 = takesLiteral(`foo.bar.${someUnion}`);  // "abc" | "def" | "ghi"
