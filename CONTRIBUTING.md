@@ -148,6 +148,10 @@ The files in `lib/` are used to bootstrap compilation and usually **should not**
 
 The files `src/lib/dom.generated.d.ts` and `src/lib/webworker.generated.d.ts` both represent type declarations for the DOM and are auto-generated. To make any modifications to them, you will have to direct changes to https://github.com/Microsoft/TSJS-lib-generator
 
+## Documentation on TypeScript Compiler
+
+If you need a head start understanding how the compiler works, or how the code in different parts of the compiler works, there is a separate repo: [TypeScript Compiler Notes](https://github.com/microsoft/TypeScript-Compiler-Notes). As the name implies, it contains notes understood by different engineers about different parts of the compiler.
+
 ## Running the Tests
 
 To run all tests, invoke the `runtests-parallel` target using gulp:
