@@ -69,11 +69,11 @@ type K03 = keyof boolean;  // "valueOf"
 type K04 = keyof void;  // never
 >K04 : never
 
-type K05 = keyof undefined;  // never
->K05 : never
+type K05 = keyof undefined;  // string | number | symbol
+>K05 : string | number | symbol
 
-type K06 = keyof null;  // never
->K06 : never
+type K06 = keyof null;  // string | number | symbol
+>K06 : string | number | symbol
 >null : null
 
 type K07 = keyof never;  // string | number | symbol
