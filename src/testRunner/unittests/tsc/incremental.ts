@@ -524,5 +524,46 @@ console.log(a);`,
                 modifyFs: fs => fs.writeFileSync("/src/project/constants.ts", "export default 2;"),
             }],
         });
+
+        function verifyModifierChange(declaration: boolean) {
+            verifyTscWithEdits({
+                scenario: "incremental",
+                subScenario: `change to modifier of class expression field${declaration ? " with declaration emit enabled" : ""}`,
+                commandLineArgs: ["-p", "src/project", "--incremental"],
+                fs: () => loadProjectFromFiles({
+                    "/src/project/tsconfig.json": JSON.stringify({ compilerOptions: { declaration } }),
+                    "/src/project/main.ts": Utils.dedent`
+                        import MessageablePerson from './MessageablePerson.js';
+                        function logMessage( person: MessageablePerson ) {
+                            console.log( person.message );
+                        }`,
+                    "/src/project/MessageablePerson.ts": Utils.dedent`
+                        const Messageable = () => {
+                            return class MessageableClass {
+                                public message = 'hello';
+                            }
+                        };
+                        const wrapper = () => Messageable();
+                        type MessageablePerson = InstanceType<ReturnType<typeof wrapper>>;
+                        export default MessageablePerson;`,
+                }),
+                modifyFs: fs => appendText(fs, "/lib/lib.d.ts", Utils.dedent`
+                    type ReturnType<T extends (...args: any) => any> = T extends (...args: any) => infer R ? R : any;
+                    type InstanceType<T extends abstract new (...args: any) => any> = T extends abstract new (...args: any) => infer R ? R : any;`
+                ),
+                edits: [
+                    {
+                        subScenario: "modify public to protected",
+                        modifyFs: fs => replaceText(fs, "/src/project/MessageablePerson.ts", "public", "protected"),
+                    },
+                    {
+                        subScenario: "modify protected to public",
+                        modifyFs: fs => replaceText(fs, "/src/project/MessageablePerson.ts", "protected", "public"),
+                    },
+                ],
+            });
+        }
+        verifyModifierChange(/*declaration*/ false);
+        verifyModifierChange(/*declaration*/ true);
     });
 }
