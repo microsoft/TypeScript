@@ -15255,7 +15255,7 @@ namespace ts {
                 getObjectFlags(type) & ObjectFlags.Mapped ? getIndexTypeForMappedType(type as MappedType, stringsOnly, noIndexSignatures) :
                 type === wildcardType ? wildcardType :
                 type.flags & TypeFlags.Unknown ? neverType :
-                type.flags & (TypeFlags.Any | TypeFlags.Never) ? keyofConstraintType :
+                type.flags & (TypeFlags.Any | TypeFlags.Nullable | TypeFlags.Never) ? keyofConstraintType :
                 getLiteralTypeFromProperties(type, (noIndexSignatures ? TypeFlags.StringLiteral : TypeFlags.StringLike) | (stringsOnly ? 0 : TypeFlags.NumberLike | TypeFlags.ESSymbolLike),
                     stringsOnly === keyofStringsOnly && !noIndexSignatures);
         }
