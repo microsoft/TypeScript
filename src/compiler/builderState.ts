@@ -390,7 +390,13 @@ namespace ts {
                     sourceFile,
                     (fileName, text, _writeByteOrderMark, _onError, sourceFiles, data) => {
                         Debug.assert(isDeclarationFileName(fileName), `File extension for signature expected to be dts: Got:: ${fileName}`);
-                        latestSignature = computeSignatureWithDiagnostics(programOfThisState, text, computeHash, getCanonicalFileName, data);
+                        latestSignature = computeSignatureWithDiagnostics(
+                            sourceFile,
+                            text,
+                            computeHash,
+                            getCanonicalFileName,
+                            data,
+                        );
                         if (latestSignature !== prevSignature) {
                             updateExportedModules(state, sourceFile, sourceFiles![0].exportedModulesFromDeclarationEmit);
                         }

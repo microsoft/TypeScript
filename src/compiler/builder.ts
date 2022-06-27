@@ -1081,21 +1081,36 @@ namespace ts {
     }
 
     export function computeSignatureWithDiagnostics(
-        program: Program,
+        sourceFile: SourceFile,
         text: string,
         computeHash: BuilderState.ComputeHash | undefined,
         getCanonicalFileName: GetCanonicalFileName,
         data: WriteFileCallbackData | undefined
     ) {
         text = getTextHandlingSourceMapForSignature(text, data);
+        let sourceFileDirectory: string | undefined;
         if (data?.diagnostics?.length) {
-            text += formatDiagnostics(data.diagnostics, {
-                getCurrentDirectory: () => program.getCommonSourceDirectory(),
-                getCanonicalFileName,
-                getNewLine: () => "\n",
-            });
+            text += data.diagnostics.map(diagnostic =>
+                `${locationInfo(diagnostic)}${DiagnosticCategory[diagnostic.category]}${diagnostic.code}: ${flattenDiagnosticMessageText(diagnostic.messageText)}`
+            ).join("\n");
         }
         return (computeHash ?? generateDjb2Hash)(text);
+
+        function flattenDiagnosticMessageText(diagnostic: string | DiagnosticMessageChain | undefined): string {
+            return isString(diagnostic) ?
+                diagnostic :
+                diagnostic === undefined ?
+                    "" :
+                    !diagnostic.next ?
+                        diagnostic.messageText :
+                        diagnostic.messageText + diagnostic.next.map(flattenDiagnosticMessageText).join("\n");
+        }
+
+        function locationInfo(diagnostic: DiagnosticWithLocation) {
+            if (diagnostic.file.resolvedPath === sourceFile.resolvedPath) return `(${diagnostic.start},${diagnostic.length})`;
+            if (sourceFileDirectory === undefined) sourceFileDirectory = getDirectoryPath(sourceFile.resolvedPath);
+            return `${ensurePathIsNonModuleName(getRelativePathFromDirectory(sourceFileDirectory, diagnostic.file.resolvedPath, getCanonicalFileName))}(${diagnostic.start},${diagnostic.length})`;
+        }
     }
 
     export function computeSignature(text: string, computeHash: BuilderState.ComputeHash | undefined, data?: WriteFileCallbackData) {
@@ -1231,7 +1246,7 @@ namespace ts {
                             const info = state.fileInfos.get(file.resolvedPath)!;
                             if (info.signature === file.version) {
                                 const signature = computeSignatureWithDiagnostics(
-                                    state.program!,
+                                    file,
                                     text,
                                     computeHash,
                                     getCanonicalFileName,
