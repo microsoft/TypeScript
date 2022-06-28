@@ -1164,6 +1164,7 @@ namespace ts {
         builderProgram.getState = getState;
         builderProgram.saveEmitState = () => backupBuilderProgramEmitState(state);
         builderProgram.restoreEmitState = (saved) => restoreBuilderProgramEmitState(state, saved);
+        builderProgram.hasChangedEmitSignature = () => !!state.hasChangedEmitSignature;
         builderProgram.getAllDependencies = sourceFile => BuilderState.getAllDependencies(state, Debug.checkDefined(state.program), sourceFile);
         builderProgram.getSemanticDiagnostics = getSemanticDiagnostics;
         builderProgram.emit = emit;
@@ -1554,6 +1555,7 @@ namespace ts {
             getSemanticDiagnosticsOfNextAffectedFile: notImplemented,
             emitBuildInfo: notImplemented,
             close: noop,
+            hasChangedEmitSignature: returnFalse,
         };
 
         function toPath(path: string) {

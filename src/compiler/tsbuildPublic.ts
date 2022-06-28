@@ -980,24 +980,21 @@ namespace ts {
 
             // Actual Emit
             const { host, compilerHost } = state;
-            let resultFlags = BuildResultFlags.DeclarationOutputUnchanged;
-            const existingBuildInfo = state.buildInfoCache.get(projectPath)?.buildInfo || undefined;
+            const hasChangedEmitSignature = program.hasChangedEmitSignature?.();
+            let resultFlags = hasChangedEmitSignature ? BuildResultFlags.None : BuildResultFlags.DeclarationOutputUnchanged;
             const emitterDiagnostics = createDiagnosticCollection();
             const emittedOutputs = new Map<Path, string>();
             const options = program.getCompilerOptions();
             const isIncremental = isIncrementalCompilation(options);
             let outputTimeStampMap: ESMap<Path, Date> | undefined;
             let now: Date | undefined;
+            // Check dts write only if hasChangedEmitSignature is not implemented
+            const checkDtsChange = options.composite && hasChangedEmitSignature === undefined;
             outputFiles.forEach(({ name, text, writeByteOrderMark, buildInfo }) => {
                 const path = toPath(state, name);
                 emittedOutputs.set(toPath(state, name), name);
-                if (buildInfo) {
-                    setBuildInfo(state, buildInfo, projectPath, options);
-                    // Buildinfo has information on when last dts change time
-                    if (buildInfo.program?.dtsChangeTime !== existingBuildInfo?.program?.dtsChangeTime) {
-                        resultFlags &= ~BuildResultFlags.DeclarationOutputUnchanged;
-                    }
-                }
+                if (checkDtsChange && isDeclarationFileName(name)) resultFlags &= ~BuildResultFlags.DeclarationOutputUnchanged;
+                if (buildInfo) setBuildInfo(state, buildInfo, projectPath, options);
                 writeFile(writeFileCallback ? { writeFile: writeFileCallback } : compilerHost, emitterDiagnostics, name, text, writeByteOrderMark);
                 if (!isIncremental && state.watch) {
                     (outputTimeStampMap ||= getOutputTimeStampMap(state, projectPath)!).set(path, now ||= getCurrentTime(state.host));
@@ -1116,15 +1113,10 @@ namespace ts {
             const emitterDiagnostics = createDiagnosticCollection();
             const emittedOutputs = new Map<Path, string>();
             let resultFlags = BuildResultFlags.DeclarationOutputUnchanged;
-            const existingBuildInfo = state.buildInfoCache.get(projectPath)!.buildInfo as BuildInfo;
             outputFiles.forEach(({ name, text, writeByteOrderMark, buildInfo }) => {
                 emittedOutputs.set(toPath(state, name), name);
-                if (buildInfo) {
-                    setBuildInfo(state, buildInfo, projectPath, config.options);
-                    if (buildInfo.program?.dtsChangeTime !== existingBuildInfo.program?.dtsChangeTime) {
-                        resultFlags &= ~BuildResultFlags.DeclarationOutputUnchanged;
-                    }
-                }
+                if (isDeclarationFileName(name)) resultFlags &= ~BuildResultFlags.DeclarationOutputUnchanged;
+                if (buildInfo) setBuildInfo(state, buildInfo, projectPath, config.options);
                 writeFile(writeFileCallback ? { writeFile: writeFileCallback } : compilerHost, emitterDiagnostics, name, text, writeByteOrderMark);
             });
 
