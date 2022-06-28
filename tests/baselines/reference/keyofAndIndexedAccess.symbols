@@ -73,10 +73,10 @@ type K03 = keyof boolean;  // "valueOf"
 type K04 = keyof void;  // never
 >K04 : Symbol(K04, Decl(keyofAndIndexedAccess.ts, 28, 25))
 
-type K05 = keyof undefined;  // string | number | symbol
+type K05 = keyof undefined;  // never
 >K05 : Symbol(K05, Decl(keyofAndIndexedAccess.ts, 29, 22))
 
-type K06 = keyof null;  // string | number | symbol
+type K06 = keyof null;  // never
 >K06 : Symbol(K06, Decl(keyofAndIndexedAccess.ts, 30, 27))
 
 type K07 = keyof never;  // string | number | symbol
