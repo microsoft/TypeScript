@@ -1,0 +1,21 @@
+tests/cases/compiler/relatedViaDiscriminatedTypeNoError.ts(10,19): error TS2322: Type 'Model' is not assignable to type '{ flag: false; }'.
+  Types of property 'flag' are incompatible.
+    Type 'boolean' is not assignable to type 'false'.
+
+
+==== tests/cases/compiler/relatedViaDiscriminatedTypeNoError.ts (1 errors) ====
+    class Model {
+        constructor(public flag: boolean) {}
+    }
+    
+    type DiscriminatedUnion = { flag: true } | { flag: false };
+    class A<T extends DiscriminatedUnion> {
+        constructor(public model: T) { }
+    }
+    
+    class B extends A<Model> { }
+                      ~~~~~
+!!! error TS2322: Type 'Model' is not assignable to type '{ flag: false; }'.
+!!! error TS2322:   Types of property 'flag' are incompatible.
+!!! error TS2322:     Type 'boolean' is not assignable to type 'false'.
+    
