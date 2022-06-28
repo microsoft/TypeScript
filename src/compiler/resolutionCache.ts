@@ -13,7 +13,13 @@ namespace ts {
             partialResolutionInfo: PartialResolutionInfo | undefined
         ): (ResolvedModuleFull | undefined)[];
         getResolvedModuleWithFailedLookupLocationsFromCache(moduleName: string, containingFile: string, resolutionMode?: ModuleKind.CommonJS | ModuleKind.ESNext): CachedResolvedModuleWithFailedLookupLocations | undefined;
-        resolveTypeReferenceDirectives(typeDirectiveNames: string[] | readonly FileReference[], containingFile: string, redirectedReference?: ResolvedProjectReference, containingFileMode?: SourceFile["impliedNodeFormat"]): (ResolvedTypeReferenceDirective | undefined)[];
+        resolveTypeReferenceDirectives(
+            typeDirectiveNames: string[] | readonly FileReference[],
+            containingFile: string,
+            redirectedReference: ResolvedProjectReference | undefined,
+            containingFileMode: SourceFile["impliedNodeFormat"] | undefined,
+            partialResolutionInfo: PartialResolutionInfo | undefined
+        ): (ResolvedTypeReferenceDirective | undefined)[];
 
         invalidateResolutionsOfFailedLookupLocations(): boolean;
         invalidateResolutionOfFile(filePath: Path): void;
@@ -575,7 +581,13 @@ namespace ts {
             }
         }
 
-        function resolveTypeReferenceDirectives(typeDirectiveNames: string[] | readonly FileReference[], containingFile: string, redirectedReference?: ResolvedProjectReference, containingFileMode?: SourceFile["impliedNodeFormat"]): (ResolvedTypeReferenceDirective | undefined)[] {
+        function resolveTypeReferenceDirectives(
+            typeDirectiveNames: string[] | readonly FileReference[],
+            containingFile: string,
+            redirectedReference?: ResolvedProjectReference,
+            containingFileMode?: SourceFile["impliedNodeFormat"],
+            partialResolutionInfo?: PartialResolutionInfo
+        ): (ResolvedTypeReferenceDirective | undefined)[] {
             return resolveNamesWithLocalCache<CachedResolvedTypeReferenceDirectiveWithFailedLookupLocations, ResolvedTypeReferenceDirective>({
                 names: typeDirectiveNames,
                 containingFile,
@@ -585,7 +597,8 @@ namespace ts {
                 loader: resolveTypeReferenceDirective,
                 getResolutionWithResolvedFileName: getResolvedTypeReferenceDirective,
                 shouldRetryResolution: resolution => resolution.resolvedTypeReferenceDirective === undefined,
-                containingSourceFileMode: containingFileMode
+                containingSourceFileMode: containingFileMode,
+                partialResolutionInfo,
             });
         }
 

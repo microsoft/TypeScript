@@ -170,12 +170,16 @@ namespace ts {
         sourceFile.resolvedModules.set(moduleNameText, mode, resolvedModule);
     }
 
-    export function setResolvedTypeReferenceDirective(sourceFile: SourceFile, typeReferenceDirectiveName: string, resolvedTypeReferenceDirective?: ResolvedTypeReferenceDirective): void {
+    export function setResolvedTypeReferenceDirective(sourceFile: SourceFile, typeReferenceDirectiveName: string, resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective | undefined, mode: ModuleKind.CommonJS | ModuleKind.ESNext | undefined): void {
         if (!sourceFile.resolvedTypeReferenceDirectiveNames) {
             sourceFile.resolvedTypeReferenceDirectiveNames = createModeAwareCache();
         }
 
-        sourceFile.resolvedTypeReferenceDirectiveNames.set(typeReferenceDirectiveName, /*mode*/ undefined, resolvedTypeReferenceDirective);
+        sourceFile.resolvedTypeReferenceDirectiveNames.set(typeReferenceDirectiveName, mode, resolvedTypeReferenceDirective);
+    }
+
+    export function getResolvedTypeReferenceDirective(sourceFile: SourceFile | undefined, typeReferenceDirectiveName: string, mode: ModuleKind.CommonJS | ModuleKind.ESNext | undefined): ResolvedTypeReferenceDirective | undefined {
+        return sourceFile && sourceFile.resolvedTypeReferenceDirectiveNames && sourceFile.resolvedTypeReferenceDirectiveNames.get(typeReferenceDirectiveName, mode);
     }
 
     export function projectReferenceIsEqualTo(oldRef: ProjectReference, newRef: ProjectReference) {
