@@ -2184,7 +2184,16 @@ namespace ts {
                             !checkAndReportErrorForUsingNamespaceModuleAsValue(errorLocation, name, meaning) &&
                             !checkAndReportErrorForUsingValueAsType(errorLocation, name, meaning)) {
                             let suggestion: Symbol | undefined;
-                            if (getSpellingSuggestions && suggestionCount < maximumSuggestionCount) {
+                            let suggestedLib: string | undefined;
+                            // Report missing lib first
+                            if (nameArg) {
+                                suggestedLib = getSuggestedLibForNonExistentName(nameArg);
+                                if (suggestedLib) {
+                                    error(errorLocation, nameNotFoundMessage, diagnosticName(nameArg), suggestedLib);
+                                }
+                            }
+                            // then spelling suggestions
+                            if (!suggestedLib && getSpellingSuggestions && suggestionCount < maximumSuggestionCount) {
                                 suggestion = getSuggestedSymbolForNonexistentSymbol(originalLocation, name, meaning);
                                 const isGlobalScopeAugmentationDeclaration = suggestion?.valueDeclaration && isAmbientModule(suggestion.valueDeclaration) && isGlobalScopeAugmentation(suggestion.valueDeclaration);
                                 if (isGlobalScopeAugmentationDeclaration) {
@@ -2206,16 +2215,9 @@ namespace ts {
                                     }
                                 }
                             }
-                            if (!suggestion) {
-                                if (nameArg) {
-                                    const lib = getSuggestedLibForNonExistentName(nameArg);
-                                    if (lib) {
-                                        error(errorLocation, nameNotFoundMessage, diagnosticName(nameArg), lib);
-                                    }
-                                    else {
-                                        error(errorLocation, nameNotFoundMessage, diagnosticName(nameArg));
-                                    }
-                                }
+                            // And then fall back to unspecified "not found"
+                            if (!suggestion && !suggestedLib && nameArg) {
+                                error(errorLocation, nameNotFoundMessage, diagnosticName(nameArg));
                             }
                             suggestionCount++;
                         }
