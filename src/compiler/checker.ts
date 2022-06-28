@@ -27037,8 +27037,8 @@ namespace ts {
             return node === conditional.whenTrue || node === conditional.whenFalse ? getContextualType(conditional, contextFlags) : undefined;
         }
 
-        function getContextualTypeForChildJsxExpression(node: JsxElement, child: JsxChild) {
-            const attributesType = getApparentTypeOfContextualType(node.openingElement.tagName);
+        function getContextualTypeForChildJsxExpression(node: JsxElement, child: JsxChild, contextFlags?: ContextFlags) {
+            const attributesType = getApparentTypeOfContextualType(node.openingElement.tagName, contextFlags);
             // JSX expression is in children of JSX Element, we will look for an "children" attribute (we get the name from JSX.ElementAttributesProperty)
             const jsxChildrenPropertyName = getJsxElementChildrenPropertyName(getJsxNamespaceAt(node));
             if (!(attributesType && !isTypeAny(attributesType) && jsxChildrenPropertyName && jsxChildrenPropertyName !== "")) {
@@ -27057,28 +27057,28 @@ namespace ts {
             }, /*noReductions*/ true));
         }
 
-        function getContextualTypeForJsxExpression(node: JsxExpression): Type | undefined {
+        function getContextualTypeForJsxExpression(node: JsxExpression, contextFlags?: ContextFlags): Type | undefined {
             const exprParent = node.parent;
             return isJsxAttributeLike(exprParent)
-                ? getContextualType(node)
+                ? getContextualType(node, contextFlags)
                 : isJsxElement(exprParent)
-                    ? getContextualTypeForChildJsxExpression(exprParent, node)
+                    ? getContextualTypeForChildJsxExpression(exprParent, node, contextFlags)
                     : undefined;
         }
 
-        function getContextualTypeForJsxAttribute(attribute: JsxAttribute | JsxSpreadAttribute): Type | undefined {
+        function getContextualTypeForJsxAttribute(attribute: JsxAttribute | JsxSpreadAttribute, contextFlags?: ContextFlags): Type | undefined {
             // When we trying to resolve JsxOpeningLikeElement as a stateless function element, we will already give its attributes a contextual type
             // which is a type of the parameter of the signature we are trying out.
             // If there is no contextual type (e.g. we are trying to resolve stateful component), get attributes type from resolving element's tagName
             if (isJsxAttribute(attribute)) {
-                const attributesType = getApparentTypeOfContextualType(attribute.parent);
+                const attributesType = getApparentTypeOfContextualType(attribute.parent, contextFlags);
                 if (!attributesType || isTypeAny(attributesType)) {
                     return undefined;
                 }
                 return getTypeOfPropertyOfContextualType(attributesType, attribute.name.escapedText);
             }
             else {
-                return getContextualType(attribute.parent);
+                return getContextualType(attribute.parent, contextFlags);
             }
         }
 
@@ -27272,10 +27272,10 @@ namespace ts {
                 case SyntaxKind.ExportAssignment:
                     return tryGetTypeFromEffectiveTypeNode(parent as ExportAssignment);
                 case SyntaxKind.JsxExpression:
-                    return getContextualTypeForJsxExpression(parent as JsxExpression);
+                    return getContextualTypeForJsxExpression(parent as JsxExpression, contextFlags);
                 case SyntaxKind.JsxAttribute:
                 case SyntaxKind.JsxSpreadAttribute:
-                    return getContextualTypeForJsxAttribute(parent as JsxAttribute | JsxSpreadAttribute);
+                    return getContextualTypeForJsxAttribute(parent as JsxAttribute | JsxSpreadAttribute, contextFlags);
                 case SyntaxKind.JsxOpeningElement:
                 case SyntaxKind.JsxSelfClosingElement:
                     return getContextualJsxElementAttributesType(parent as JsxOpeningLikeElement, contextFlags);
