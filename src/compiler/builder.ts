@@ -62,10 +62,6 @@ namespace ts {
          */
         outSignature?: string;
         /**
-         * Time when d.ts was modified
-         */
-        dtsChangeTime: number | undefined;
-        /**
          * Name of the file whose dts was the latest to change
          */
         dtsChangeFile: string | undefined;
@@ -145,7 +141,6 @@ namespace ts {
         "programEmitComplete" |
         "emitSignatures" |
         "outSignature" |
-        "dtsChangeTime" |
         "dtsChangeFile" |
         "hasChangedEmitSignature"
     > & { changedFilesSet: BuilderProgramState["changedFilesSet"] | undefined };
@@ -172,7 +167,6 @@ namespace ts {
             state.outSignature = oldState?.outSignature;
         }
         state.changedFilesSet = new Set();
-        state.dtsChangeTime = compilerOptions.composite ? oldState?.dtsChangeTime : undefined;
         state.dtsChangeFile = compilerOptions.composite ? oldState?.dtsChangeFile : undefined;
 
         const useOldState = BuilderState.canReuseOldState(state.referencedMap, oldState);
@@ -307,7 +301,6 @@ namespace ts {
             programEmitComplete: state.programEmitComplete,
             emitSignatures: state.emitSignatures && new Map(state.emitSignatures),
             outSignature: state.outSignature,
-            dtsChangeTime: state.dtsChangeTime,
             dtsChangeFile: state.dtsChangeFile,
             hasChangedEmitSignature: state.hasChangedEmitSignature,
             changedFilesSet: outFilePath ? new Set(state.changedFilesSet) : undefined,
@@ -322,7 +315,6 @@ namespace ts {
         state.programEmitComplete = savedEmitState.programEmitComplete;
         state.emitSignatures = savedEmitState.emitSignatures;
         state.outSignature = savedEmitState.outSignature;
-        state.dtsChangeTime = savedEmitState.dtsChangeTime;
         state.dtsChangeFile = savedEmitState.dtsChangeFile;
         state.hasChangedEmitSignature = savedEmitState.hasChangedEmitSignature;
         if (savedEmitState.changedFilesSet) state.changedFilesSet = savedEmitState.changedFilesSet;
@@ -803,7 +795,6 @@ namespace ts {
         affectedFilesPendingEmit?: ProgramBuilderInfoFilePendingEmit[];
         changeFileSet?: readonly ProgramBuildInfoFileId[];
         emitSignatures?: readonly ProgramBuildInfoEmitSignature[];
-        dtsChangeTime?: number;
         // Because this is only output file in the program, we dont need fileId to deduplicate name
         dtsChangeFile?: string;
     }
@@ -813,7 +804,6 @@ namespace ts {
         fileInfos: readonly string[];
         options: CompilerOptions | undefined;
         outSignature?: string;
-        dtsChangeTime?: number;
         dtsChangeFile?: string;
     }
 
@@ -826,13 +816,11 @@ namespace ts {
     /**
      * Gets the program information to be emitted in buildInfo so that we can use it to create new program
      */
-    function getProgramBuildInfo(state: BuilderProgramState, getCanonicalFileName: GetCanonicalFileName, host: BuilderProgramHost): ProgramBuildInfo | undefined {
+    function getProgramBuildInfo(state: BuilderProgramState, getCanonicalFileName: GetCanonicalFileName): ProgramBuildInfo | undefined {
         const outFilePath = outFile(state.compilerOptions);
         if (outFilePath && !state.compilerOptions.composite) return;
         const currentDirectory = Debug.checkDefined(state.program).getCurrentDirectory();
         const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(getTsBuildInfoEmitOutputFilePath(state.compilerOptions)!, currentDirectory));
-        // Update the dtsChange time in buildInfo
-        state.dtsChangeTime = state.hasChangedEmitSignature ? getCurrentTime(host).getTime() : state.dtsChangeTime;
         // Convert the file name to Path here if we set the fileName instead to optimize multiple d.ts file emits and having to compute Canonical path
         const dtsChangeFile = state.dtsChangeFile ? relativeToBuildInfoEnsuringAbsolutePath(state.dtsChangeFile) : undefined;
         if (outFilePath) {
@@ -849,7 +837,6 @@ namespace ts {
                 fileInfos,
                 options: convertToProgramBuildInfoCompilerOptions(state.compilerOptions, "affectsBundleEmitBuildInfo"),
                 outSignature: state.outSignature,
-                dtsChangeTime: state.dtsChangeTime,
                 dtsChangeFile,
             };
             return result;
@@ -953,7 +940,6 @@ namespace ts {
             affectedFilesPendingEmit,
             changeFileSet,
             emitSignatures,
-            dtsChangeTime: state.dtsChangeTime,
             dtsChangeFile,
         };
         return result;
@@ -1152,7 +1138,7 @@ namespace ts {
          */
         const computeHash = maybeBind(host, host.createHash);
         const state = createBuilderProgramState(newProgram, getCanonicalFileName, oldState, host.disableUseFileVersionAsSignature);
-        newProgram.getProgramBuildInfo = () => getProgramBuildInfo(state, getCanonicalFileName, host);
+        newProgram.getProgramBuildInfo = () => getProgramBuildInfo(state, getCanonicalFileName);
 
         // To ensure that we arent storing any references to old program or new program without state
         newProgram = undefined!; // TODO: GH#18217
@@ -1495,7 +1481,6 @@ namespace ts {
             state = {
                 fileInfos: new Map(),
                 compilerOptions: program.options ? convertToOptionsWithAbsolutePaths(program.options, toAbsolutePath) : {},
-                dtsChangeTime: program.dtsChangeTime,
                 dtsChangeFile,
                 outSignature: program.outSignature,
             };
@@ -1526,7 +1511,6 @@ namespace ts {
                 affectedFilesPendingEmitKind: program.affectedFilesPendingEmit && arrayToMap(program.affectedFilesPendingEmit, value => toFilePath(value[0]), value => value[1]),
                 affectedFilesPendingEmitIndex: program.affectedFilesPendingEmit && 0,
                 changedFilesSet: new Set(map(program.changeFileSet, toFilePath)),
-                dtsChangeTime: program.dtsChangeTime,
                 dtsChangeFile,
                 emitSignatures: emitSignatures?.size ? emitSignatures : undefined,
             };

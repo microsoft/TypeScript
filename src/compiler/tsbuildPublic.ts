@@ -224,6 +224,7 @@ namespace ts {
         path: Path;
         buildInfo: BuildInfo | false;
         modifiedTime: Date;
+        dtsChangeTime?: Date | false;
     }
 
     interface SolutionBuilderState<T extends BuilderProgram = BuilderProgram> extends WatchFactory<WatchType, ResolvedConfigFileName> {
@@ -980,21 +981,17 @@ namespace ts {
 
             // Actual Emit
             const { host, compilerHost } = state;
-            const hasChangedEmitSignature = program.hasChangedEmitSignature?.();
-            let resultFlags = hasChangedEmitSignature ? BuildResultFlags.None : BuildResultFlags.DeclarationOutputUnchanged;
+            const resultFlags = program.hasChangedEmitSignature?.() ? BuildResultFlags.None : BuildResultFlags.DeclarationOutputUnchanged;
             const emitterDiagnostics = createDiagnosticCollection();
             const emittedOutputs = new Map<Path, string>();
             const options = program.getCompilerOptions();
             const isIncremental = isIncrementalCompilation(options);
             let outputTimeStampMap: ESMap<Path, Date> | undefined;
             let now: Date | undefined;
-            // Check dts write only if hasChangedEmitSignature is not implemented
-            const checkDtsChange = options.composite && hasChangedEmitSignature === undefined;
             outputFiles.forEach(({ name, text, writeByteOrderMark, buildInfo }) => {
                 const path = toPath(state, name);
                 emittedOutputs.set(toPath(state, name), name);
-                if (checkDtsChange && isDeclarationFileName(name)) resultFlags &= ~BuildResultFlags.DeclarationOutputUnchanged;
-                if (buildInfo) setBuildInfo(state, buildInfo, projectPath, options);
+                if (buildInfo) setBuildInfo(state, buildInfo, projectPath, options, resultFlags);
                 writeFile(writeFileCallback ? { writeFile: writeFileCallback } : compilerHost, emitterDiagnostics, name, text, writeByteOrderMark);
                 if (!isIncremental && state.watch) {
                     (outputTimeStampMap ||= getOutputTimeStampMap(state, projectPath)!).set(path, now ||= getCurrentTime(state.host));
@@ -1014,7 +1011,7 @@ namespace ts {
             Debug.assertIsDefined(program);
             Debug.assert(step === BuildStep.EmitBuildInfo);
             const emitResult = program.emitBuildInfo((name, text, writeByteOrderMark, onError, sourceFiles, data) => {
-                if (data?.buildInfo) setBuildInfo(state, data.buildInfo, projectPath, program!.getCompilerOptions());
+                if (data?.buildInfo) setBuildInfo(state, data.buildInfo, projectPath, program!.getCompilerOptions(), BuildResultFlags.DeclarationOutputUnchanged);
                 if (writeFileCallback) writeFileCallback(name, text, writeByteOrderMark, onError, sourceFiles, data);
                 else state.compilerHost.writeFile(name, text, writeByteOrderMark, onError, sourceFiles, data);
             }, cancellationToken);
@@ -1113,10 +1110,15 @@ namespace ts {
             const emitterDiagnostics = createDiagnosticCollection();
             const emittedOutputs = new Map<Path, string>();
             let resultFlags = BuildResultFlags.DeclarationOutputUnchanged;
+            const existingBuildInfo = state.buildInfoCache.get(projectPath)!.buildInfo as BuildInfo;
             outputFiles.forEach(({ name, text, writeByteOrderMark, buildInfo }) => {
                 emittedOutputs.set(toPath(state, name), name);
-                if (isDeclarationFileName(name)) resultFlags &= ~BuildResultFlags.DeclarationOutputUnchanged;
-                if (buildInfo) setBuildInfo(state, buildInfo, projectPath, config.options);
+                if (buildInfo) {
+                    if ((buildInfo.program as ProgramBundleEmitBuildInfo)?.outSignature !== (existingBuildInfo.program as ProgramBundleEmitBuildInfo)?.outSignature) {
+                        resultFlags &= ~BuildResultFlags.DeclarationOutputUnchanged;
+                    }
+                    setBuildInfo(state, buildInfo, projectPath, config.options, resultFlags);
+                }
                 writeFile(writeFileCallback ? { writeFile: writeFileCallback } : compilerHost, emitterDiagnostics, name, text, writeByteOrderMark);
             });
 
@@ -1456,15 +1458,28 @@ namespace ts {
         return result;
     }
 
-    function setBuildInfo(state: SolutionBuilderState, buildInfo: BuildInfo, resolvedConfigPath: ResolvedConfigFilePath, options: CompilerOptions) {
+    function setBuildInfo(
+        state: SolutionBuilderState,
+        buildInfo: BuildInfo,
+        resolvedConfigPath: ResolvedConfigFilePath,
+        options: CompilerOptions,
+        resultFlags: BuildResultFlags,
+    ) {
         const buildInfoPath = getTsBuildInfoEmitOutputFilePath(options)!;
         const existing = getBuildInfoCacheEntry(state, buildInfoPath, resolvedConfigPath);
+        const modifiedTime = getCurrentTime(state.host);
         if (existing) {
             existing.buildInfo = buildInfo;
-            existing.modifiedTime = getCurrentTime(state.host);
+            existing.modifiedTime = modifiedTime;
+            if (!(resultFlags & BuildResultFlags.DeclarationOutputUnchanged)) existing.dtsChangeTime = modifiedTime;
         }
         else {
-            state.buildInfoCache.set(resolvedConfigPath, { path: toPath(state, buildInfoPath), buildInfo, modifiedTime: getCurrentTime(state.host) });
+            state.buildInfoCache.set(resolvedConfigPath, {
+                path: toPath(state, buildInfoPath),
+                buildInfo,
+                modifiedTime,
+                dtsChangeTime: resultFlags & BuildResultFlags.DeclarationOutputUnchanged ? undefined : modifiedTime,
+            });
         }
     }
 
@@ -1474,17 +1489,19 @@ namespace ts {
         return existing?.path === path ? existing : undefined;
     }
 
-    function getBuildInfo(state: SolutionBuilderState, buildInfoPath: string, resolvedConfigPath: ResolvedConfigFilePath, modifiedTime: Date | undefined): BuildInfo | undefined {
+    function getOrCreateBuildInfoCacheEntry(state: SolutionBuilderState, buildInfoPath: string, resolvedConfigPath: ResolvedConfigFilePath, modifiedTime: Date | undefined) {
         const path = toPath(state, buildInfoPath);
-        const existing = state.buildInfoCache.get(resolvedConfigPath);
-        if (existing !== undefined && existing.path === path) {
-            return existing.buildInfo || undefined;
-        }
+        let result = state.buildInfoCache.get(resolvedConfigPath);
+        if (result && result.path === path) return result;
         const value = state.readFileWithCache(buildInfoPath);
         const buildInfo = value ? ts.getBuildInfo(value) : undefined;
         Debug.assert(modifiedTime || !buildInfo);
-        state.buildInfoCache.set(resolvedConfigPath, { path, buildInfo: buildInfo || false, modifiedTime: modifiedTime || missingFileModifiedTime });
-        return buildInfo;
+        state.buildInfoCache.set(resolvedConfigPath, result = { path, buildInfo: buildInfo || false, modifiedTime: modifiedTime || missingFileModifiedTime });
+        return result;
+    }
+
+    function getBuildInfo(state: SolutionBuilderState, buildInfoPath: string, resolvedConfigPath: ResolvedConfigFilePath, modifiedTime: Date | undefined): BuildInfo | undefined {
+        return getOrCreateBuildInfoCacheEntry(state, buildInfoPath, resolvedConfigPath, modifiedTime).buildInfo || undefined;
     }
 
     function checkConfigFileUpToDateStatus(state: SolutionBuilderState, configFile: string, oldestOutputFileTime: Date, oldestOutputFileName: string): Status.OutOfDateWithSelf | undefined {
@@ -1555,7 +1572,6 @@ namespace ts {
         let buildInfoTime: Date | undefined;
         let buildInfoProgram: ProgramBuildInfo | undefined;
         let buildInfoVersionMap: ESMap<Path, string> | undefined;
-        let newestDeclarationFileContentChangedTime;
         if (buildInfoPath) {
             const buildInfoCacheEntry = getBuildInfoCacheEntry(state, buildInfoPath, resolvedPath);
             buildInfoTime = buildInfoCacheEntry?.modifiedTime || ts.getModifiedTime(host, buildInfoPath);
@@ -1595,8 +1611,6 @@ namespace ts {
 
             oldestOutputFileTime = buildInfoTime;
             oldestOutputFileName = buildInfoPath;
-            // Get the last dtsChange time from build info
-            newestDeclarationFileContentChangedTime = buildInfo.program?.dtsChangeTime ? new Date(buildInfo.program.dtsChangeTime) : undefined;
         }
 
         // Check input files
@@ -1756,7 +1770,7 @@ namespace ts {
                 pseudoInputUpToDate ?
                     UpToDateStatusType.UpToDateWithInputFileText :
                     UpToDateStatusType.UpToDate,
-            newestDeclarationFileContentChangedTime,
+            newestDeclarationFileContentChangedTime: getDtsChangeTime(state, project.options, resolvedPath),
             newestInputFileTime,
             newestInputFileName,
             oldestOutputFileName: oldestOutputFileName!
@@ -1849,8 +1863,13 @@ namespace ts {
     function getDtsChangeTime(state: SolutionBuilderState, options: CompilerOptions, resolvedConfigPath: ResolvedConfigFilePath) {
         if (!options.composite) return undefined;
         const buildInfoPath = getTsBuildInfoEmitOutputFilePath(options)!;
-        const buildInfo = getBuildInfo(state, buildInfoPath, resolvedConfigPath, /*modifiedTime*/ undefined);
-        return buildInfo?.program?.dtsChangeTime ? new Date(buildInfo.program.dtsChangeTime) : undefined;
+        const entry = getOrCreateBuildInfoCacheEntry(state, buildInfoPath, resolvedConfigPath, /*modifiedTime*/ undefined);
+        if (entry.dtsChangeTime !== undefined) return entry.dtsChangeTime || undefined;
+        const dtsChangeTime = entry.buildInfo && entry.buildInfo.program && entry.buildInfo.program.dtsChangeFile ?
+            state.host.getModifiedTime(getNormalizedAbsolutePath(entry.buildInfo.program.dtsChangeFile, getDirectoryPath(entry.path))) :
+            undefined;
+        entry.dtsChangeTime = dtsChangeTime || false;
+        return dtsChangeTime;
     }
 
     function updateOutputTimestamps(state: SolutionBuilderState, proj: ParsedCommandLine, resolvedPath: ResolvedConfigFilePath) {

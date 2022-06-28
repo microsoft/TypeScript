@@ -263,7 +263,6 @@ interface Symbol {
                         toFileName(s) :
                         [toFileName(s[0]), s[1]]
                 ),
-                dtsChangeTime: buildInfo.program.dtsChangeTime,
                 dtsChangeFile: buildInfo.program.dtsChangeFile,
             };
         }
@@ -545,7 +544,6 @@ interface Symbol {
                     options: { ...readableBuildInfo.program.options, noEmit: undefined },
                     exportedModulesMap: undefined,
                     affectedFilesPendingEmit: undefined,
-                    dtsChangeTime: readableBuildInfo.program.dtsChangeTime ? "FakeTime" : undefined,
                     dtsChangeFile: readableBuildInfo.program.dtsChangeFile ? "FakeFileName" : undefined,
                 },
                 size: undefined, // Size doesnt need to be equal

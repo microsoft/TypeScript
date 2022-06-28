@@ -23,7 +23,6 @@ CleanBuild:
       "composite": true,
       "module": 0
     },
-    "dtsChangeTime": "FakeTime",
     "dtsChangeFile": "FakeFileName"
   },
   "version": "FakeTSVersion"
@@ -54,7 +53,6 @@ IncrementalBuild:
       "../project1/class1.d.ts",
       "./class2.ts"
     ],
-    "dtsChangeTime": "FakeTime",
     "dtsChangeFile": "FakeFileName"
   },
   "version": "FakeTSVersion"
@@ -84,7 +82,6 @@ CleanBuild:
       "composite": true,
       "module": 0
     },
-    "dtsChangeTime": "FakeTime",
     "dtsChangeFile": "FakeFileName"
   },
   "version": "FakeTSVersion"
@@ -113,7 +110,6 @@ IncrementalBuild:
     "semanticDiagnosticsPerFile": [
       "../../../lib/lib.d.ts"
     ],
-    "dtsChangeTime": "FakeTime",
     "dtsChangeFile": "FakeFileName"
   },
   "version": "FakeTSVersion"

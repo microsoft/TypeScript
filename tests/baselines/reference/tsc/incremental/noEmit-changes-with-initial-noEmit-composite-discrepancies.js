@@ -157,7 +157,6 @@ IncrementalBuild:
         "-4882119183-export {};\r\n"
       ]
     ],
-    "dtsChangeTime": "FakeTime",
     "dtsChangeFile": "FakeFileName"
   },
   "version": "FakeTSVersion"

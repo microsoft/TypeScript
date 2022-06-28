@@ -143,7 +143,6 @@ IncrementalBuild:
         ]
       ]
     ],
-    "dtsChangeTime": "FakeTime",
     "dtsChangeFile": "FakeFileName"
   },
   "version": "FakeTSVersion"
@@ -293,7 +292,6 @@ IncrementalBuild:
         ]
       ]
     ],
-    "dtsChangeTime": "FakeTime",
     "dtsChangeFile": "FakeFileName"
   },
   "version": "FakeTSVersion"
@@ -545,7 +543,6 @@ IncrementalBuild:
         "-4882119183-export {};\r\n"
       ]
     ],
-    "dtsChangeTime": "FakeTime",
     "dtsChangeFile": "FakeFileName"
   },
   "version": "FakeTSVersion"
@@ -712,7 +709,6 @@ IncrementalBuild:
         ]
       ]
     ],
-    "dtsChangeTime": "FakeTime",
     "dtsChangeFile": "FakeFileName"
   },
   "version": "FakeTSVersion"
@@ -862,7 +858,6 @@ IncrementalBuild:
         ]
       ]
     ],
-    "dtsChangeTime": "FakeTime",
     "dtsChangeFile": "FakeFileName"
   },
   "version": "FakeTSVersion"
@@ -1100,7 +1095,6 @@ IncrementalBuild:
         ]
       ]
     ],
-    "dtsChangeTime": "FakeTime",
     "dtsChangeFile": "FakeFileName"
   },
   "version": "FakeTSVersion"
@@ -1338,7 +1332,6 @@ IncrementalBuild:
         ]
       ]
     ],
-    "dtsChangeTime": "FakeTime",
     "dtsChangeFile": "FakeFileName"
   },
   "version": "FakeTSVersion"
@@ -1502,7 +1495,6 @@ IncrementalBuild:
         "-4882119183-export {};\r\n"
       ]
     ],
-    "dtsChangeTime": "FakeTime",
     "dtsChangeFile": "FakeFileName"
   },
   "version": "FakeTSVersion"
@@ -1669,7 +1661,6 @@ IncrementalBuild:
         ]
       ]
     ],
-    "dtsChangeTime": "FakeTime",
     "dtsChangeFile": "FakeFileName"
   },
   "version": "FakeTSVersion"
@@ -1819,7 +1810,6 @@ IncrementalBuild:
         ]
       ]
     ],
-    "dtsChangeTime": "FakeTime",
     "dtsChangeFile": "FakeFileName"
   },
   "version": "FakeTSVersion"
