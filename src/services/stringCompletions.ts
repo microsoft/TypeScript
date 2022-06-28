@@ -711,7 +711,7 @@ namespace ts.Completions.StringCompletions {
                                     extensionOptions,
                                     host,
                                     keys,
-                                    key => getPatternFromFirstMatchingCondition(exports[key], conditions),
+                                    key => singleElementArray(getPatternFromFirstMatchingCondition(exports[key], conditions)),
                                     comparePatternKeys);
                                 return;
                             }
@@ -726,15 +726,15 @@ namespace ts.Completions.StringCompletions {
         return arrayFrom(result.values());
     }
 
-    function getPatternFromFirstMatchingCondition(target: unknown, conditions: readonly string[]): [string] | undefined {
+    function getPatternFromFirstMatchingCondition(target: unknown, conditions: readonly string[]): string | undefined {
         if (typeof target === "string") {
-            return [target];
+            return target;
         }
         if (target && typeof target === "object" && !isArray(target)) {
             for (const condition in target) {
                 if (condition === "default" || conditions.indexOf(condition) > -1 || isApplicableVersionedTypesKey(conditions, condition)) {
                     const pattern = (target as MapLike<unknown>)[condition];
-                    return typeof pattern === "string" ? [pattern] : undefined;
+                    return getPatternFromFirstMatchingCondition(pattern, conditions);
                 }
             }
         }
@@ -804,27 +804,31 @@ namespace ts.Completions.StringCompletions {
         const baseDirectory = normalizePath(combinePaths(packageDirectory, expandedPrefixDirectory));
         const completePrefix = fragmentHasPath ? baseDirectory : ensureTrailingDirectorySeparator(baseDirectory) + normalizedPrefixBase;
 
-        // If we have a suffix of at least a whole filename (i.e., not just an extension), then we need
-        // to read the directory all the way down to see which directories contain a file matching that suffix.
-        const suffixHasFilename = normalizedSuffix && containsSlash(normalizedSuffix);
-        const includeGlob = suffixHasFilename ? "**/*" : "./*";
+        // If we have a suffix, then we read the directory all the way down to avoid returning completions for
+        // directories that don't contain files that would match the suffix. A previous comment here was concerned
+        // about the case where `normalizedSuffix` includes a `?` character, which should be interpreted literally,
+        // but will match any single character as part of the `include` pattern in `tryReadDirectory`. This is not
+        // a problem, because (in the extremely unusual circumstance where the suffix has a `?` in it) a `?`
+        // interpreted as "any character" can only return *too many* results as compared to the literal
+        // interpretation, so we can filter those superfluous results out via `trimPrefixAndSuffix` as we've always
+        // done.
+        const includeGlob = normalizedSuffix ? "**/*" + normalizedSuffix : "./*";
 
         const matches = mapDefined(tryReadDirectory(host, baseDirectory, extensionOptions.extensions, /*exclude*/ undefined, [includeGlob]), match => {
             const trimmedWithPattern = trimPrefixAndSuffix(match);
             if (trimmedWithPattern) {
                 if (containsSlash(trimmedWithPattern)) {
-                    return directoryResult(getPathComponents(trimmedWithPattern)[0]);
+                    return directoryResult(getPathComponents(removeLeadingDirectorySeparator(trimmedWithPattern))[1]);
                 }
                 const { name, extension } = getFilenameWithExtensionOption(trimmedWithPattern, host.getCompilationSettings(), extensionOptions.includeExtensionsOption);
                 return nameAndKind(name, ScriptElementKind.scriptElement, extension);
             }
         });
 
-        // If the suffix had a whole filename in it, we already recursively searched for all possible files
-        // that could match it and returned the directories that could possibly lead to matches. Otherwise,
-        // assume any directory could have something valid to import (not a great assumption - we could
-        // consider doing a whole glob more often and caching the results?)
-        const directories = suffixHasFilename
+        // If we had a suffix, we already recursively searched for all possible files that could match
+        // it and returned the directories leading to those files. Otherwise, assume any directory could
+        // have something valid to import.
+        const directories = normalizedSuffix
             ? emptyArray
             : mapDefined(tryGetDirectories(host, baseDirectory), dir => dir === "node_modules" ? undefined : directoryResult(dir));
         return [...matches, ...directories];
