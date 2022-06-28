@@ -19845,6 +19845,7 @@ namespace ts {
                         if (objectOnlyTarget.flags & TypeFlags.Union) {
                             const result = typeRelatedToDiscriminatedType(source, objectOnlyTarget as UnionType);
                             if (result) {
+                                resetErrorInfo(saveErrorInfo);
                                 return result;
                             }
                         }
