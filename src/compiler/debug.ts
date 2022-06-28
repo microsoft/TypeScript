@@ -748,5 +748,22 @@ namespace ts {
             const deprecation = createDeprecation(options?.name ?? getFunctionName(func), options);
             return wrapFunction(deprecation, func);
         }
+
+        export function formatVariance(varianceFlags: VarianceFlags) {
+            const variance = varianceFlags & VarianceFlags.VarianceMask;
+            let result =
+                variance === VarianceFlags.Invariant ? "in out" :
+                variance === VarianceFlags.Bivariant ? "[bivariant]" :
+                variance === VarianceFlags.Contravariant ? "in" :
+                variance === VarianceFlags.Covariant ? "out" :
+                variance === VarianceFlags.Independent ? "[independent]" : "";
+            if (varianceFlags & VarianceFlags.Unmeasurable) {
+                result += " (unmeasurable)";
+            }
+            else if (varianceFlags & VarianceFlags.Unreliable) {
+                result += " (unreliable)";
+            }
+            return result;
+        }
     }
 }
