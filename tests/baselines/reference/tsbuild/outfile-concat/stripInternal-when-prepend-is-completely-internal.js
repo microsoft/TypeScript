@@ -183,7 +183,7 @@ sourceFile:../first_PART1.ts
 >>>//# sourceMappingURL=first-output.js.map
 
 //// [/src/first/bin/first-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"..","sourceFiles":["../first_PART1.ts"],"js":{"sections":[{"pos":0,"end":28,"kind":"text"}],"mapHash":"8137573854-{\"version\":3,\"file\":\"first-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\"],\"names\":[],\"mappings\":\"AAAA,eAAe,CAAC,IAAM,CAAC,GAAG,CAAC,CAAC\"}","hash":"-14536113207-/* @internal */ var A = 1;\r\n//# sourceMappingURL=first-output.js.map"},"dts":{"sections":[{"pos":0,"end":20,"kind":"internal"}],"mapHash":"1199471594-{\"version\":3,\"file\":\"first-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\"],\"names\":[],\"mappings\":\"AAAgB,QAAA,MAAM,CAAC,IAAI,CAAC\"}","hash":"10602481092-declare const A = 1;\r\n//# sourceMappingURL=first-output.d.ts.map"}},"program":{"fileNames":["../first_part1.ts"],"fileInfos":["2890484261-/* @internal */ const A = 1;"],"options":{"composite":true,"outFile":"./first-output.js"},"outSignature":"-2963648387-declare const A = 1;\r\n","dtsChangeTime":13000},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"..","sourceFiles":["../first_PART1.ts"],"js":{"sections":[{"pos":0,"end":28,"kind":"text"}],"mapHash":"8137573854-{\"version\":3,\"file\":\"first-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\"],\"names\":[],\"mappings\":\"AAAA,eAAe,CAAC,IAAM,CAAC,GAAG,CAAC,CAAC\"}","hash":"-14536113207-/* @internal */ var A = 1;\r\n//# sourceMappingURL=first-output.js.map"},"dts":{"sections":[{"pos":0,"end":20,"kind":"internal"}],"mapHash":"1199471594-{\"version\":3,\"file\":\"first-output.d.ts\",\"sourceRoot\":\"\",\"sources\":[\"../first_PART1.ts\"],\"names\":[],\"mappings\":\"AAAgB,QAAA,MAAM,CAAC,IAAI,CAAC\"}","hash":"10602481092-declare const A = 1;\r\n//# sourceMappingURL=first-output.d.ts.map"}},"program":{"fileNames":["../first_part1.ts"],"fileInfos":["2890484261-/* @internal */ const A = 1;"],"options":{"composite":true,"outFile":"./first-output.js"},"outSignature":"-2963648387-declare const A = 1;\r\n","dtsChangeTime":13000,"dtsChangeFile":"./first-output.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/first/bin/first-output.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -242,10 +242,11 @@ declare const A = 1;
       "outFile": "./first-output.js"
     },
     "outSignature": "-2963648387-declare const A = 1;\r\n",
-    "dtsChangeTime": 13000
+    "dtsChangeTime": 13000,
+    "dtsChangeFile": "./first-output.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1013
+  "size": 1051
 }
 
 //// [/src/third/thirdjs/output/third-output.d.ts]
@@ -325,7 +326,7 @@ sourceFile:../../third_part1.ts
 >>>//# sourceMappingURL=third-output.js.map
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":0,"end":28,"kind":"prepend","data":"../../../first/bin/first-output.js","texts":[{"pos":0,"end":28,"kind":"text"}]},{"pos":28,"end":40,"kind":"text"}],"mapHash":"27220614446-{\"version\":3,\"file\":\"third-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\"AAAA,eAAe,CAAC,IAAM,CAAC,GAAG,CAAC,CAAC;ACA5B,IAAM,CAAC,GAAG,CAAC,CAAC\"}","hash":"-10155812952-/* @internal */ var A = 1;\r\nvar B = 2;\r\n//# sourceMappingURL=third-output.js.map"},"dts":{"sections":[{"pos":0,"end":0,"kind":"prepend","data":"../../../first/bin/first-output.d.ts","texts":[]},{"pos":0,"end":22,"kind":"text"}],"hash":"1000124863-declare const B = 2;\r\n"}},"program":{"fileNames":["../../third_part1.ts"],"fileInfos":["1943613816-const B = 2;"],"options":{"composite":true,"outFile":"./third-output.js"},"outSignature":"1000124863-declare const B = 2;\r\n","dtsChangeTime":25000},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":0,"end":28,"kind":"prepend","data":"../../../first/bin/first-output.js","texts":[{"pos":0,"end":28,"kind":"text"}]},{"pos":28,"end":40,"kind":"text"}],"mapHash":"27220614446-{\"version\":3,\"file\":\"third-output.js\",\"sourceRoot\":\"\",\"sources\":[\"../../../first/first_PART1.ts\",\"../../third_part1.ts\"],\"names\":[],\"mappings\":\"AAAA,eAAe,CAAC,IAAM,CAAC,GAAG,CAAC,CAAC;ACA5B,IAAM,CAAC,GAAG,CAAC,CAAC\"}","hash":"-10155812952-/* @internal */ var A = 1;\r\nvar B = 2;\r\n//# sourceMappingURL=third-output.js.map"},"dts":{"sections":[{"pos":0,"end":0,"kind":"prepend","data":"../../../first/bin/first-output.d.ts","texts":[]},{"pos":0,"end":22,"kind":"text"}],"hash":"1000124863-declare const B = 2;\r\n"}},"program":{"fileNames":["../../third_part1.ts"],"fileInfos":["1943613816-const B = 2;"],"options":{"composite":true,"outFile":"./third-output.js"},"outSignature":"1000124863-declare const B = 2;\r\n","dtsChangeTime":25000,"dtsChangeFile":"./third-output.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -412,9 +413,10 @@ declare const B = 2;
       "outFile": "./third-output.js"
     },
     "outSignature": "1000124863-declare const B = 2;\r\n",
-    "dtsChangeTime": 25000
+    "dtsChangeTime": 25000,
+    "dtsChangeFile": "./third-output.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1070
+  "size": 1108
 }
 

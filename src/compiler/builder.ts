@@ -65,6 +65,10 @@ namespace ts {
          * Time when d.ts was modified
          */
         dtsChangeTime: number | undefined;
+        /**
+         * Name of the file whose dts was the latest to change
+         */
+        dtsChangeFile: string | undefined;
     }
 
     export const enum BuilderFileEmit {
@@ -112,7 +116,7 @@ namespace ts {
         /**
          * Records if change in dts emit was detected
          */
-         hasChangedEmitSignature?: boolean;
+        hasChangedEmitSignature?: boolean;
         /**
          * Files pending to be emitted
          */
@@ -142,6 +146,7 @@ namespace ts {
         "emitSignatures" |
         "outSignature" |
         "dtsChangeTime" |
+        "dtsChangeFile" |
         "hasChangedEmitSignature"
     > & { changedFilesSet: BuilderProgramState["changedFilesSet"] | undefined };
 
@@ -168,6 +173,7 @@ namespace ts {
         }
         state.changedFilesSet = new Set();
         state.dtsChangeTime = compilerOptions.composite ? oldState?.dtsChangeTime : undefined;
+        state.dtsChangeFile = compilerOptions.composite ? oldState?.dtsChangeFile : undefined;
 
         const useOldState = BuilderState.canReuseOldState(state.referencedMap, oldState);
         const oldCompilerOptions = useOldState ? oldState!.compilerOptions : undefined;
@@ -302,6 +308,7 @@ namespace ts {
             emitSignatures: state.emitSignatures && new Map(state.emitSignatures),
             outSignature: state.outSignature,
             dtsChangeTime: state.dtsChangeTime,
+            dtsChangeFile: state.dtsChangeFile,
             hasChangedEmitSignature: state.hasChangedEmitSignature,
             changedFilesSet: outFilePath ? new Set(state.changedFilesSet) : undefined,
         };
@@ -316,6 +323,7 @@ namespace ts {
         state.emitSignatures = savedEmitState.emitSignatures;
         state.outSignature = savedEmitState.outSignature;
         state.dtsChangeTime = savedEmitState.dtsChangeTime;
+        state.dtsChangeFile = savedEmitState.dtsChangeFile;
         state.hasChangedEmitSignature = savedEmitState.hasChangedEmitSignature;
         if (savedEmitState.changedFilesSet) state.changedFilesSet = savedEmitState.changedFilesSet;
     }
@@ -796,6 +804,8 @@ namespace ts {
         changeFileSet?: readonly ProgramBuildInfoFileId[];
         emitSignatures?: readonly ProgramBuildInfoEmitSignature[];
         dtsChangeTime?: number;
+        // Because this is only output file in the program, we dont need fileId to deduplicate name
+        dtsChangeFile?: string;
     }
 
     export interface ProgramBundleEmitBuildInfo {
@@ -804,6 +814,7 @@ namespace ts {
         options: CompilerOptions | undefined;
         outSignature?: string;
         dtsChangeTime?: number;
+        dtsChangeFile?: string;
     }
 
     export type ProgramBuildInfo = ProgramMultiFileEmitBuildInfo | ProgramBundleEmitBuildInfo;
@@ -822,6 +833,8 @@ namespace ts {
         const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(getTsBuildInfoEmitOutputFilePath(state.compilerOptions)!, currentDirectory));
         // Update the dtsChange time in buildInfo
         state.dtsChangeTime = state.hasChangedEmitSignature ? getCurrentTime(host).getTime() : state.dtsChangeTime;
+        // Convert the file name to Path here if we set the fileName instead to optimize multiple d.ts file emits and having to compute Canonical path
+        const dtsChangeFile = state.dtsChangeFile ? relativeToBuildInfoEnsuringAbsolutePath(state.dtsChangeFile) : undefined;
         if (outFilePath) {
             const fileNames: string[] = [];
             const fileInfos: string[] = [];
@@ -837,6 +850,7 @@ namespace ts {
                 options: convertToProgramBuildInfoCompilerOptions(state.compilerOptions, "affectsBundleEmitBuildInfo"),
                 outSignature: state.outSignature,
                 dtsChangeTime: state.dtsChangeTime,
+                dtsChangeFile,
             };
             return result;
         }
@@ -940,6 +954,7 @@ namespace ts {
             changeFileSet,
             emitSignatures,
             dtsChangeTime: state.dtsChangeTime,
+            dtsChangeFile,
         };
         return result;
 
@@ -1282,6 +1297,7 @@ namespace ts {
                             if (emitSignature !== oldSignature) {
                                 (state.emitSignatures ??= new Map()).set(filePath, emitSignature);
                                 state.hasChangedEmitSignature = true;
+                                state.dtsChangeFile = fileName;
                             }
                         }
                     }
@@ -1290,6 +1306,7 @@ namespace ts {
                         if (newSignature !== state.outSignature) {
                             state.outSignature = newSignature;
                             state.hasChangedEmitSignature = true;
+                            state.dtsChangeFile = fileName;
                         }
                     }
                 }
@@ -1472,11 +1489,13 @@ namespace ts {
         let state: ReusableBuilderProgramState;
         let filePaths: Path[] | undefined;
         let filePathsSetList: Set<Path>[] | undefined;
+        const dtsChangeFile = program.dtsChangeFile ? toAbsolutePath(program.dtsChangeFile) : undefined;
         if (isProgramBundleEmitBuildInfo(program)) {
             state = {
                 fileInfos: new Map(),
                 compilerOptions: program.options ? convertToOptionsWithAbsolutePaths(program.options, toAbsolutePath) : {},
                 dtsChangeTime: program.dtsChangeTime,
+                dtsChangeFile,
                 outSignature: program.outSignature,
             };
         }
@@ -1507,6 +1526,7 @@ namespace ts {
                 affectedFilesPendingEmitIndex: program.affectedFilesPendingEmit && 0,
                 changedFilesSet: new Set(map(program.changeFileSet, toFilePath)),
                 dtsChangeTime: program.dtsChangeTime,
+                dtsChangeFile,
                 emitSignatures: emitSignatures?.size ? emitSignatures : undefined,
             };
         }

@@ -194,7 +194,7 @@ export type { TheNum } from './const.cjs';
 
 
 //// [/user/username/projects/myproject/packages/pkg2/build/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../../../a/lib/lib.es2022.full.d.ts","../const.cts","../index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-11202312776-export type TheNum = 42;","signature":"-9649133742-export declare type TheNum = 42;\n","impliedFormat":1},{"version":"-9668872159-export type { TheNum } from './const.cjs';","signature":"-9835135925-export type { TheNum } from './const.cjs';\n","impliedFormat":99}],"options":{"composite":true,"module":100,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3],"dtsChangeTime":45000},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../../../a/lib/lib.es2022.full.d.ts","../const.cts","../index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-11202312776-export type TheNum = 42;","signature":"-9649133742-export declare type TheNum = 42;\n","impliedFormat":1},{"version":"-9668872159-export type { TheNum } from './const.cjs';","signature":"-9835135925-export type { TheNum } from './const.cjs';\n","impliedFormat":99}],"options":{"composite":true,"module":100,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3],"dtsChangeTime":45000,"dtsChangeFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/packages/pkg2/build/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -247,10 +247,11 @@ export type { TheNum } from './const.cjs';
       "../const.cts",
       "../index.ts"
     ],
-    "dtsChangeTime": 45000
+    "dtsChangeTime": 45000,
+    "dtsChangeFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1041
+  "size": 1072
 }
 
 //// [/user/username/projects/myproject/packages/pkg1/build/index.js]
@@ -742,7 +743,7 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/packages/pkg2/build/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../../../a/lib/lib.es2022.full.d.ts","../const.cts","../index.cts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-11202312776-export type TheNum = 42;","signature":"-9649133742-export declare type TheNum = 42;\n","impliedFormat":1},{"version":"-9668872159-export type { TheNum } from './const.cjs';","signature":"-9835135925-export type { TheNum } from './const.cjs';\n","impliedFormat":1}],"options":{"composite":true,"module":100,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3],"dtsChangeTime":106000},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../../../a/lib/lib.es2022.full.d.ts","../const.cts","../index.cts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-11202312776-export type TheNum = 42;","signature":"-9649133742-export declare type TheNum = 42;\n","impliedFormat":1},{"version":"-9668872159-export type { TheNum } from './const.cjs';","signature":"-9835135925-export type { TheNum } from './const.cjs';\n","impliedFormat":1}],"options":{"composite":true,"module":100,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3],"dtsChangeTime":106000,"dtsChangeFile":"./index.d.cts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/packages/pkg2/build/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -795,10 +796,11 @@ exitCode:: ExitStatus.undefined
       "../const.cts",
       "../index.cts"
     ],
-    "dtsChangeTime": 106000
+    "dtsChangeTime": 106000,
+    "dtsChangeFile": "./index.d.cts"
   },
   "version": "FakeTSVersion",
-  "size": 1042
+  "size": 1074
 }
 
 //// [/user/username/projects/myproject/packages/pkg1/build/index.js]

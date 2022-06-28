@@ -68,7 +68,7 @@ export declare class A {
 
 
 //// [/user/username/projects/transitiveReferences/tsconfig.a.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./a.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-8566332115-export class A {}\r\n","signature":"-8728835846-export declare class A {\n}\n"}],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2],"dtsChangeTime":33000},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./a.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-8566332115-export class A {}\r\n","signature":"-8728835846-export declare class A {\n}\n"}],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2],"dtsChangeTime":33000,"dtsChangeFile":"./a.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/transitiveReferences/tsconfig.a.tsbuildinfo.readable.baseline.txt]
 {
@@ -97,10 +97,11 @@ export declare class A {
       "../../../../a/lib/lib.d.ts",
       "./a.ts"
     ],
-    "dtsChangeTime": 33000
+    "dtsChangeTime": 33000,
+    "dtsChangeFile": "./a.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 737
+  "size": 764
 }
 
 //// [/user/username/projects/transitiveReferences/b.js]
@@ -117,7 +118,7 @@ export declare const b: A;
 
 
 //// [/user/username/projects/transitiveReferences/tsconfig.b.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./a.d.ts","./b.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-8728835846-export declare class A {\n}\n",{"version":"-19869990292-import {A} from \"a\";export const b = new A();","signature":"1870369234-import { A } from \"a\";\nexport declare const b: A;\n"}],"options":{"composite":true},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3],"dtsChangeTime":43000},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./a.d.ts","./b.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-8728835846-export declare class A {\n}\n",{"version":"-19869990292-import {A} from \"a\";export const b = new A();","signature":"1870369234-import { A } from \"a\";\nexport declare const b: A;\n"}],"options":{"composite":true},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3],"dtsChangeTime":43000,"dtsChangeFile":"./b.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/transitiveReferences/tsconfig.b.tsbuildinfo.readable.baseline.txt]
 {
@@ -165,10 +166,11 @@ export declare const b: A;
       "./a.d.ts",
       "./b.ts"
     ],
-    "dtsChangeTime": 43000
+    "dtsChangeTime": 43000,
+    "dtsChangeFile": "./b.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 875
+  "size": 902
 }
 
 //// [/user/username/projects/transitiveReferences/c.js]

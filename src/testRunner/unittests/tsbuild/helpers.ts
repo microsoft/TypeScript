@@ -264,6 +264,7 @@ interface Symbol {
                         [toFileName(s[0]), s[1]]
                 ),
                 dtsChangeTime: buildInfo.program.dtsChangeTime,
+                dtsChangeFile: buildInfo.program.dtsChangeFile,
             };
         }
         const version = buildInfo.version === ts.version ? fakes.version : buildInfo.version;
@@ -545,6 +546,7 @@ interface Symbol {
                     exportedModulesMap: undefined,
                     affectedFilesPendingEmit: undefined,
                     dtsChangeTime: readableBuildInfo.program.dtsChangeTime ? "FakeTime" : undefined,
+                    dtsChangeFile: readableBuildInfo.program.dtsChangeFile ? "FakeFileName" : undefined,
                 },
                 size: undefined, // Size doesnt need to be equal
             },  /*replacer*/ undefined, 2),
