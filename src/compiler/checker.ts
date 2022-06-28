@@ -19287,13 +19287,21 @@ namespace ts {
             }
 
             function structuredTypeRelatedTo(source: Type, target: Type, reportErrors: boolean, intersectionState: IntersectionState): Ternary {
+                const saveErrorInfo = captureErrorCalculationState();
+                const result = structuredTypeRelatedToWorker(source, target, reportErrors, intersectionState, saveErrorInfo);
+                if (result) {
+                    resetErrorInfo(saveErrorInfo);
+                }
+                return result;
+            }
+
+            function structuredTypeRelatedToWorker(source: Type, target: Type, reportErrors: boolean, intersectionState: IntersectionState, saveErrorInfo: ReturnType<typeof captureErrorCalculationState>): Ternary {
                 if (intersectionState & IntersectionState.PropertyCheck) {
                     return propertiesRelatedTo(source, target, reportErrors, /*excludedProperties*/ undefined, IntersectionState.None);
                 }
                 let result: Ternary;
                 let originalErrorInfo: DiagnosticMessageChain | undefined;
                 let varianceCheckFailed = false;
-                const saveErrorInfo = captureErrorCalculationState();
                 let sourceFlags = source.flags;
                 const targetFlags = target.flags;
                 if (relation === identityRelation) {
@@ -19357,7 +19365,6 @@ namespace ts {
                         if (constraint && everyType(constraint, c => c !== source)) { // Skip comparison if expansion contains the source itself
                             // TODO: Stack errors so we get a pyramid for the "normal" comparison above, _and_ a second for this
                             if (result = isRelatedTo(constraint, target, RecursionFlags.Source, /*reportErrors*/ false, /*headMessage*/ undefined, intersectionState)) {
-                                resetErrorInfo(saveErrorInfo);
                                 return result;
                             }
                         }
@@ -19491,7 +19498,6 @@ namespace ts {
                             result &= isRelatedTo((source as IndexedAccessType).indexType, (target as IndexedAccessType).indexType, RecursionFlags.Both, reportErrors);
                         }
                         if (result) {
-                            resetErrorInfo(saveErrorInfo);
                             return result;
                         }
                         if (reportErrors) {
@@ -19596,7 +19602,6 @@ namespace ts {
                     // If we reach 10 levels of nesting for the same conditional type, assume it is an infinitely expanding recursive
                     // conditional type and bail out with a Ternary.Maybe result.
                     if (isDeeplyNestedType(target, targetStack, targetDepth, 10)) {
-                        resetErrorInfo(saveErrorInfo);
                         return Ternary.Maybe;
                     }
                     const c = target as ConditionalType;
@@ -19611,7 +19616,6 @@ namespace ts {
                         if (result = skipTrue ? Ternary.True : isRelatedTo(source, getTrueTypeFromConditionalType(c), RecursionFlags.Target, /*reportErrors*/ false)) {
                             result &= skipFalse ? Ternary.True : isRelatedTo(source, getFalseTypeFromConditionalType(c), RecursionFlags.Target, /*reportErrors*/ false);
                             if (result) {
-                                resetErrorInfo(saveErrorInfo);
                                 return result;
                             }
                         }
@@ -19644,12 +19648,10 @@ namespace ts {
                         const constraint = getConstraintOfType(source as TypeVariable) || unknownType;
                         // hi-speed no-this-instantiation check (less accurate, but avoids costly `this`-instantiation when the constraint will suffice), see #28231 for report on why this is needed
                         if (result = isRelatedTo(constraint, target, RecursionFlags.Source, /*reportErrors*/ false, /*headMessage*/ undefined, intersectionState)) {
-                            resetErrorInfo(saveErrorInfo);
                             return result;
                         }
                         // slower, fuller, this-instantiated check (necessary when comparing raw `this` types from base classes), see `subclassWithPolymorphicThisIsAssignable.ts` test for example
                         else if (result = isRelatedTo(getTypeWithThisArgument(constraint, source), target, RecursionFlags.Source, reportErrors && constraint !== unknownType && !(targetFlags & sourceFlags & TypeFlags.TypeParameter), /*headMessage*/ undefined, intersectionState)) {
-                            resetErrorInfo(saveErrorInfo);
                             return result;
                         }
                         if (isMappedTypeGenericIndexedAccess(source)) {
@@ -19658,7 +19660,6 @@ namespace ts {
                             const indexConstraint = getConstraintOfType((source as IndexedAccessType).indexType);
                             if (indexConstraint) {
                                 if (result = isRelatedTo(getIndexedAccessType((source as IndexedAccessType).objectType, indexConstraint), target, RecursionFlags.Source, reportErrors)) {
-                                    resetErrorInfo(saveErrorInfo);
                                     return result;
                                 }
                             }
@@ -19667,7 +19668,6 @@ namespace ts {
                 }
                 else if (sourceFlags & TypeFlags.Index) {
                     if (result = isRelatedTo(keyofConstraintType, target, RecursionFlags.Source, reportErrors)) {
-                        resetErrorInfo(saveErrorInfo);
                         return result;
                     }
                 }
@@ -19675,7 +19675,6 @@ namespace ts {
                     if (!(targetFlags & TypeFlags.TemplateLiteral)) {
                         const constraint = getBaseConstraintOfType(source);
                         if (constraint && constraint !== source && (result = isRelatedTo(constraint, target, RecursionFlags.Source, reportErrors))) {
-                            resetErrorInfo(saveErrorInfo);
                             return result;
                         }
                     }
@@ -19686,14 +19685,12 @@ namespace ts {
                             return Ternary.False;
                         }
                         if (result = isRelatedTo((source as StringMappingType).type, (target as StringMappingType).type, RecursionFlags.Both, reportErrors)) {
-                            resetErrorInfo(saveErrorInfo);
                             return result;
                         }
                     }
                     else {
                         const constraint = getBaseConstraintOfType(source);
                         if (constraint && (result = isRelatedTo(constraint, target, RecursionFlags.Source, reportErrors))) {
-                            resetErrorInfo(saveErrorInfo);
                             return result;
                         }
                     }
@@ -19702,7 +19699,6 @@ namespace ts {
                     // If we reach 10 levels of nesting for the same conditional type, assume it is an infinitely expanding recursive
                     // conditional type and bail out with a Ternary.Maybe result.
                     if (isDeeplyNestedType(source, sourceStack, sourceDepth, 10)) {
-                        resetErrorInfo(saveErrorInfo);
                         return Ternary.Maybe;
                     }
                     if (targetFlags & TypeFlags.Conditional) {
@@ -19725,7 +19721,6 @@ namespace ts {
                                 result &= isRelatedTo(getFalseTypeFromConditionalType(source as ConditionalType), getFalseTypeFromConditionalType(target as ConditionalType), RecursionFlags.Both, reportErrors);
                             }
                             if (result) {
-                                resetErrorInfo(saveErrorInfo);
                                 return result;
                             }
                         }
@@ -19736,7 +19731,6 @@ namespace ts {
                         const distributiveConstraint = hasNonCircularBaseConstraint(source) ? getConstraintOfDistributiveConditionalType(source as ConditionalType) : undefined;
                         if (distributiveConstraint) {
                             if (result = isRelatedTo(distributiveConstraint, target, RecursionFlags.Source, reportErrors)) {
-                                resetErrorInfo(saveErrorInfo);
                                 return result;
                             }
                         }
@@ -19747,7 +19741,6 @@ namespace ts {
                     const defaultConstraint = getDefaultConstraintOfConditionalType(source as ConditionalType);
                     if (defaultConstraint) {
                         if (result = isRelatedTo(defaultConstraint, target, RecursionFlags.Source, reportErrors)) {
-                            resetErrorInfo(saveErrorInfo);
                             return result;
                         }
                     }
@@ -19760,7 +19753,6 @@ namespace ts {
                     if (isGenericMappedType(target)) {
                         if (isGenericMappedType(source)) {
                             if (result = mappedTypeRelatedTo(source, target, reportErrors)) {
-                                resetErrorInfo(saveErrorInfo);
                                 return result;
                             }
                         }
@@ -19845,7 +19837,6 @@ namespace ts {
                         if (objectOnlyTarget.flags & TypeFlags.Union) {
                             const result = typeRelatedToDiscriminatedType(source, objectOnlyTarget as UnionType);
                             if (result) {
-                                resetErrorInfo(saveErrorInfo);
                                 return result;
                             }
                         }
