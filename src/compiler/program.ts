@@ -2413,7 +2413,9 @@ namespace ts {
                             // Check modifiers of property declaration
                             if (nodes === (parent as PropertyDeclaration).modifiers) {
                                 for (const modifier of nodes as NodeArray<ModifierLike>) {
-                                    if (isModifier(modifier) && modifier.kind !== SyntaxKind.StaticKeyword) {
+                                    if (isModifier(modifier)
+                                        && modifier.kind !== SyntaxKind.StaticKeyword
+                                        && modifier.kind !== SyntaxKind.AccessorKeyword) {
                                         diagnostics.push(createDiagnosticForNode(modifier, Diagnostics.The_0_modifier_can_only_be_used_in_TypeScript_files, tokenToString(modifier.kind)));
                                     }
                                 }
@@ -2467,6 +2469,7 @@ namespace ts {
                             case SyntaxKind.StaticKeyword:
                             case SyntaxKind.ExportKeyword:
                             case SyntaxKind.DefaultKeyword:
+                            case SyntaxKind.AccessorKeyword:
                         }
                     }
                 }

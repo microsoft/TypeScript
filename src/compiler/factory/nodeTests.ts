@@ -139,6 +139,11 @@ namespace ts {
         return node.kind === SyntaxKind.OverrideKeyword;
     }
 
+    /* @internal */
+    export function isAccessorModifier(node: Node): node is AccessorKeyword {
+        return node.kind === SyntaxKind.AccessorKeyword;
+    }
+
     /*@internal*/
     export function isSuperKeyword(node: Node): node is SuperExpression {
         return node.kind === SyntaxKind.SuperKeyword;

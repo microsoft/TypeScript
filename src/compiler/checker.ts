@@ -9083,7 +9083,7 @@ namespace ts {
                 return getTypeForBindingElement(declaration as BindingElement);
             }
 
-            const isProperty = isPropertyDeclaration(declaration) || isPropertySignature(declaration);
+            const isProperty = isPropertyDeclaration(declaration) && !hasAccessorModifier(declaration) || isPropertySignature(declaration);
             const isOptional = includeOptionality && (
                 isProperty && !!declaration.questionToken ||
                 isParameter(declaration) && (!!declaration.questionToken || isJSDocOptionalParameter(declaration)) ||
@@ -9831,21 +9831,25 @@ namespace ts {
             return type;
         }
 
-        function getAnnotatedAccessorTypeNode(accessor: AccessorDeclaration | undefined): TypeNode | undefined {
+        function getAnnotatedAccessorTypeNode(accessor: AccessorDeclaration | PropertyDeclaration | undefined): TypeNode | undefined {
             if (accessor) {
-                if (accessor.kind === SyntaxKind.GetAccessor) {
-                    const getterTypeAnnotation = getEffectiveReturnTypeNode(accessor);
-                    return getterTypeAnnotation;
-                }
-                else {
-                    const setterTypeAnnotation = getEffectiveSetAccessorTypeAnnotationNode(accessor);
-                    return setterTypeAnnotation;
+                switch (accessor.kind) {
+                    case SyntaxKind.GetAccessor:
+                        const getterTypeAnnotation = getEffectiveReturnTypeNode(accessor);
+                        return getterTypeAnnotation;
+                    case SyntaxKind.SetAccessor:
+                        const setterTypeAnnotation = getEffectiveSetAccessorTypeAnnotationNode(accessor);
+                        return setterTypeAnnotation;
+                    case SyntaxKind.PropertyDeclaration:
+                        Debug.assert(hasAccessorModifier(accessor));
+                        const accessorTypeAnnotation = getEffectiveTypeAnnotationNode(accessor);
+                        return accessorTypeAnnotation;
                 }
             }
             return undefined;
         }
 
-        function getAnnotatedAccessorType(accessor: AccessorDeclaration | undefined): Type | undefined {
+        function getAnnotatedAccessorType(accessor: AccessorDeclaration | PropertyDeclaration | undefined): Type | undefined {
             const node = getAnnotatedAccessorTypeNode(accessor);
             return node && getTypeFromTypeNode(node);
         }
@@ -9867,18 +9871,25 @@ namespace ts {
                 }
                 const getter = getDeclarationOfKind<AccessorDeclaration>(symbol, SyntaxKind.GetAccessor);
                 const setter = getDeclarationOfKind<AccessorDeclaration>(symbol, SyntaxKind.SetAccessor);
+                const accessor = tryCast(getDeclarationOfKind<PropertyDeclaration>(symbol, SyntaxKind.PropertyDeclaration), isAutoAccessorPropertyDeclaration);
+
                 // We try to resolve a getter type annotation, a setter type annotation, or a getter function
                 // body return type inference, in that order.
                 let type = getter && isInJSFile(getter) && getTypeForDeclarationFromJSDocComment(getter) ||
                     getAnnotatedAccessorType(getter) ||
                     getAnnotatedAccessorType(setter) ||
-                    getter && getter.body && getReturnTypeFromBody(getter);
+                    getAnnotatedAccessorType(accessor) ||
+                    getter && getter.body && getReturnTypeFromBody(getter) ||
+                    accessor && accessor.initializer && getWidenedTypeForVariableLikeDeclaration(accessor, /*includeOptionality*/ true);
                 if (!type) {
                     if (setter && !isPrivateWithinAmbient(setter)) {
                         errorOrSuggestion(noImplicitAny, setter, Diagnostics.Property_0_implicitly_has_type_any_because_its_set_accessor_lacks_a_parameter_type_annotation, symbolToString(symbol));
                     }
                     else if (getter && !isPrivateWithinAmbient(getter)) {
                         errorOrSuggestion(noImplicitAny, getter, Diagnostics.Property_0_implicitly_has_type_any_because_its_get_accessor_lacks_a_return_type_annotation, symbolToString(symbol));
+                    }
+                    else if (accessor && !isPrivateWithinAmbient(accessor)) {
+                        errorOrSuggestion(noImplicitAny, accessor, Diagnostics.Member_0_implicitly_has_an_1_type, symbolToString(symbol), "any");
                     }
                     type = anyType;
                 }
@@ -9887,6 +9898,9 @@ namespace ts {
                         error(getter, Diagnostics._0_is_referenced_directly_or_indirectly_in_its_own_type_annotation, symbolToString(symbol));
                     }
                     else if (getAnnotatedAccessorTypeNode(setter)) {
+                        error(setter, Diagnostics._0_is_referenced_directly_or_indirectly_in_its_own_type_annotation, symbolToString(symbol));
+                    }
+                    else if (getAnnotatedAccessorTypeNode(accessor)) {
                         error(setter, Diagnostics._0_is_referenced_directly_or_indirectly_in_its_own_type_annotation, symbolToString(symbol));
                     }
                     else if (getter && noImplicitAny) {
@@ -9905,7 +9919,9 @@ namespace ts {
                 if (!pushTypeResolution(symbol, TypeSystemPropertyName.WriteType)) {
                     return errorType;
                 }
-                const setter = getDeclarationOfKind<AccessorDeclaration>(symbol, SyntaxKind.SetAccessor);
+
+                const setter = getDeclarationOfKind<AccessorDeclaration>(symbol, SyntaxKind.SetAccessor)
+                    ?? tryCast(getDeclarationOfKind<PropertyDeclaration>(symbol, SyntaxKind.PropertyDeclaration), isAutoAccessorPropertyDeclaration);
                 let writeType = getAnnotatedAccessorType(setter);
                 if (!popTypeResolution()) {
                     if (getAnnotatedAccessorTypeNode(setter)) {
@@ -11063,8 +11079,10 @@ namespace ts {
                     const members = getMembersOfDeclaration(decl);
                     if (members) {
                         for (const member of members) {
-                            if (isStatic === hasStaticModifier(member) && hasLateBindableName(member)) {
-                                lateBindMember(symbol, earlySymbols, lateSymbols, member);
+                            if (isStatic === hasStaticModifier(member)) {
+                                if (hasLateBindableName(member)) {
+                                    lateBindMember(symbol, earlySymbols, lateSymbols, member);
+                                }
                             }
                         }
                     }
@@ -11078,8 +11096,10 @@ namespace ts {
                             || isBinaryExpression(member) && isPossiblyAliasedThisProperty(member, assignmentKind)
                             || assignmentKind === AssignmentDeclarationKind.ObjectDefinePrototypeProperty
                             || assignmentKind === AssignmentDeclarationKind.Prototype; // A straight `Prototype` assignment probably can never have a computed name
-                        if (isStatic === !isInstanceMember && hasLateBindableName(member)) {
-                            lateBindMember(symbol, earlySymbols, lateSymbols, member);
+                        if (isStatic === !isInstanceMember) {
+                            if (hasLateBindableName(member)) {
+                                lateBindMember(symbol, earlySymbols, lateSymbols, member);
+                            }
                         }
                     }
                 }
@@ -12918,7 +12938,7 @@ namespace ts {
         }
 
         function isOptionalPropertyDeclaration(node: Declaration) {
-            return isPropertyDeclaration(node) && node.questionToken;
+            return isPropertyDeclaration(node) && !hasAccessorModifier(node) && node.questionToken;
         }
 
         function isOptionalJSDocPropertyLikeTag(node: Node): node is JSDocPropertyLikeTag {
@@ -44183,6 +44203,9 @@ namespace ts {
                         else if (flags & ModifierFlags.Readonly) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "override", "readonly");
                         }
+                        else if (flags & ModifierFlags.Accessor) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "override", "accessor");
+                        }
                         else if (flags & ModifierFlags.Async) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "override", "async");
                         }
@@ -44203,6 +44226,9 @@ namespace ts {
                         }
                         else if (flags & ModifierFlags.Static) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, text, "static");
+                        }
+                        else if (flags & ModifierFlags.Accessor) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, text, "accessor");
                         }
                         else if (flags & ModifierFlags.Readonly) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, text, "readonly");
@@ -44237,6 +44263,9 @@ namespace ts {
                         else if (flags & ModifierFlags.Async) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "static", "async");
                         }
+                        else if (flags & ModifierFlags.Accessor) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "static", "accessor");
+                        }
                         else if (node.parent.kind === SyntaxKind.ModuleBlock || node.parent.kind === SyntaxKind.SourceFile) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_module_or_namespace_element, "static");
                         }
@@ -44251,6 +44280,23 @@ namespace ts {
                         }
                         flags |= ModifierFlags.Static;
                         lastStatic = modifier;
+                        break;
+
+                    case SyntaxKind.AccessorKeyword:
+                        if (flags & ModifierFlags.Accessor) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_already_seen, "accessor");
+                        }
+                        else if (flags & ModifierFlags.Readonly) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "accessor", "readonly");
+                        }
+                        else if (flags & ModifierFlags.Ambient) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "accessor", "declare");
+                        }
+                        else if (node.kind !== SyntaxKind.PropertyDeclaration) {
+                            return grammarErrorOnNode(modifier, Diagnostics.accessor_modifier_can_only_appear_on_a_property_declaration);
+                        }
+
+                        flags |= ModifierFlags.Accessor;
                         break;
 
                     case SyntaxKind.ReadonlyKeyword:
@@ -44348,6 +44394,9 @@ namespace ts {
                             }
                             if (flags & ModifierFlags.Override) {
                                 return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "abstract", "override");
+                            }
+                            if (flags & ModifierFlags.Accessor) {
+                                return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "abstract", "accessor");
                             }
                         }
                         if (isNamedDeclaration(node) && node.name.kind === SyntaxKind.PrivateIdentifier) {
@@ -45546,6 +45595,12 @@ namespace ts {
                 }
                 if (languageVersion < ScriptTarget.ES2015 && isPrivateIdentifier(node.name)) {
                     return grammarErrorOnNode(node.name, Diagnostics.Private_identifiers_are_only_available_when_targeting_ECMAScript_2015_and_higher);
+                }
+                if (languageVersion < ScriptTarget.ES2015 && isAutoAccessorPropertyDeclaration(node)) {
+                    return grammarErrorOnNode(node.name, Diagnostics.Properties_with_the_accessor_modifier_are_only_available_when_targeting_ECMAScript_2015_and_higher);
+                }
+                if (isAutoAccessorPropertyDeclaration(node) && checkGrammarForInvalidQuestionMark(node.questionToken, Diagnostics.An_accessor_property_cannot_be_declared_optional)) {
+                    return true;
                 }
             }
             else if (node.parent.kind === SyntaxKind.InterfaceDeclaration) {

@@ -177,13 +177,15 @@ namespace ts {
             //  (a|b)|c     -> a|(b|c)  -> a|b|c
             //  (a&b)&c     -> a&(b&c)  -> a&b&c
             //  (a^b)^c     -> a^(b^c)  -> a^b^c
+            //  (a,b),c     -> a,(b,c)  -> a,b,c
             //
             // While addition is associative in mathematics, JavaScript's `+` is not
             // guaranteed to be associative as it is overloaded with string concatenation.
             return binaryOperator === SyntaxKind.AsteriskToken
                 || binaryOperator === SyntaxKind.BarToken
                 || binaryOperator === SyntaxKind.AmpersandToken
-                || binaryOperator === SyntaxKind.CaretToken;
+                || binaryOperator === SyntaxKind.CaretToken
+                || binaryOperator === SyntaxKind.CommaToken;
         }
 
         /**

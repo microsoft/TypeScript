@@ -149,6 +149,7 @@ namespace ts.formatting {
                 "SpaceAfterCertainTypeScriptKeywords",
                 [
                     SyntaxKind.AbstractKeyword,
+                    SyntaxKind.AccessorKeyword,
                     SyntaxKind.ClassKeyword,
                     SyntaxKind.DeclareKeyword,
                     SyntaxKind.DefaultKeyword,

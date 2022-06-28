@@ -1271,6 +1271,7 @@ namespace FourSlashInterface {
 
         export const classElementKeywords: readonly ExpectedCompletionEntryObject[] = [
             "abstract",
+            "accessor",
             "async",
             "constructor",
             "declare",
