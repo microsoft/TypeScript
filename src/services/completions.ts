@@ -507,37 +507,8 @@ namespace ts.Completions {
         }
 
         const entries = createSortedArray<CompletionEntry>();
-
-        if (isUncheckedFile(sourceFile, compilerOptions)) {
-            const uniqueNames = getCompletionEntriesFromSymbols(
-                symbols,
-                entries,
-                /*replacementToken*/ undefined,
-                contextToken,
-                location,
-                sourceFile,
-                host,
-                program,
-                getEmitScriptTarget(compilerOptions),
-                log,
-                completionKind,
-                preferences,
-                compilerOptions,
-                formatContext,
-                isTypeOnlyLocation,
-                propertyAccessToConvert,
-                isJsxIdentifierExpected,
-                isJsxInitializer,
-                importCompletionNode,
-                recommendedCompletion,
-                symbolToOriginInfoMap,
-                symbolToSortTextMap,
-                isJsxIdentifierExpected,
-                isRightOfOpenTag,
-            );
-            getJSCompletionEntries(sourceFile, location.pos, uniqueNames, getEmitScriptTarget(compilerOptions), entries);
-        }
-        else {
+        const isChecked = !isUncheckedFile(sourceFile, compilerOptions);
+        if (isChecked) {
             if (!isNewIdentifierLocation && (!symbols || symbols.length === 0) && keywordFilters === KeywordCompletionFilters.None) {
                 return undefined;
             }
@@ -588,6 +559,36 @@ namespace ts.Completions {
 
         for (const literal of literals) {
             insertSorted(entries, createCompletionEntryForLiteral(sourceFile, preferences, literal), compareCompletionEntries, /*allowDuplicates*/ true);
+        }
+
+        if (!isChecked) {
+            const uniqueNames = getCompletionEntriesFromSymbols(
+                symbols,
+                entries,
+                /*replacementToken*/ undefined,
+                contextToken,
+                location,
+                sourceFile,
+                host,
+                program,
+                getEmitScriptTarget(compilerOptions),
+                log,
+                completionKind,
+                preferences,
+                compilerOptions,
+                formatContext,
+                isTypeOnlyLocation,
+                propertyAccessToConvert,
+                isJsxIdentifierExpected,
+                isJsxInitializer,
+                importCompletionNode,
+                recommendedCompletion,
+                symbolToOriginInfoMap,
+                symbolToSortTextMap,
+                isJsxIdentifierExpected,
+                isRightOfOpenTag,
+            );
+            getJSCompletionEntries(sourceFile, location.pos, uniqueNames, getEmitScriptTarget(compilerOptions), entries);
         }
 
         return {
@@ -668,6 +669,7 @@ namespace ts.Completions {
         uniqueNames: UniqueNameSet,
         target: ScriptTarget,
         entries: SortedArray<CompletionEntry>): void {
+        const entryNames = new Set(entries.map(e => e.name));
         getNameTable(sourceFile).forEach((pos, name) => {
             // Skip identifiers produced only from the current location
             if (pos === position) {
@@ -676,13 +678,15 @@ namespace ts.Completions {
             const realName = unescapeLeadingUnderscores(name);
             if (!uniqueNames.has(realName) && isIdentifierText(realName, target)) {
                 uniqueNames.add(realName);
-                insertSorted(entries, {
-                    name: realName,
-                    kind: ScriptElementKind.warning,
-                    kindModifiers: "",
-                    sortText: SortText.JavascriptIdentifiers,
-                    isFromUncheckedFile: true
-                }, compareCompletionEntries);
+                if (!entryNames.has(realName)) {
+                    insertSorted(entries, {
+                        name: realName,
+                        kind: ScriptElementKind.warning,
+                        kindModifiers: "",
+                        sortText: SortText.JavascriptIdentifiers,
+                        isFromUncheckedFile: true
+                    }, compareCompletionEntries);
+                }
             }
         });
     }
