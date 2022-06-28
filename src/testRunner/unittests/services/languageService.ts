@@ -62,7 +62,6 @@ export function Component(x: Config): any;`
                     emitSkipped: true,
                     diagnostics: emptyArray,
                     outputFiles: emptyArray,
-                    exportedModulesFromDeclarationEmit: undefined
                 }
             );
 
@@ -80,7 +79,6 @@ export function Component(x: Config): any;`
                         text: "export {};\r\n",
                         writeByteOrderMark: false
                     }],
-                    exportedModulesFromDeclarationEmit: undefined
                 }
             );
         });

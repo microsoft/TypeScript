@@ -3,7 +3,6 @@ namespace ts {
         outputFiles: OutputFile[];
         emitSkipped: boolean;
         /* @internal */ diagnostics: readonly Diagnostic[];
-        /* @internal */ exportedModulesFromDeclarationEmit?: ExportedModulesFromDeclarationEmit;
     }
 
     export interface OutputFile {

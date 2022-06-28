@@ -4137,6 +4137,8 @@ declare namespace ts {
         readonly includeInlayPropertyDeclarationTypeHints?: boolean;
         readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
         readonly includeInlayEnumMemberValueHints?: boolean;
+        readonly allowRenameOfImportPath?: boolean;
+        readonly autoImportFileExcludePatterns?: string[];
     }
     /** Represents a bigint literal value without requiring bigint support */
     export interface PseudoBigInt {
@@ -5917,6 +5919,8 @@ declare namespace ts {
         getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): TextSpan | undefined;
         getBreakpointStatementAtPosition(fileName: string, position: number): TextSpan | undefined;
         getSignatureHelpItems(fileName: string, position: number, options: SignatureHelpItemsOptions | undefined): SignatureHelpItems | undefined;
+        getRenameInfo(fileName: string, position: number, preferences: UserPreferences): RenameInfo;
+        /** @deprecated Use the signature with `UserPreferences` instead. */
         getRenameInfo(fileName: string, position: number, options?: RenameInfoOptions): RenameInfo;
         findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, providePrefixAndSuffixTextForRename?: boolean): readonly RenameLocation[] | undefined;
         getSmartSelectionRange(fileName: string, position: number): SelectionRange;
@@ -6296,6 +6300,7 @@ declare namespace ts {
         Insert = "insert",
         Remove = "remove"
     }
+    /** @deprecated - consider using EditorSettings instead */
     interface EditorOptions {
         BaseIndentSize?: number;
         IndentSize: number;
@@ -6313,6 +6318,7 @@ declare namespace ts {
         indentStyle?: IndentStyle;
         trimTrailingWhitespace?: boolean;
     }
+    /** @deprecated - consider using FormatCodeSettings instead */
     interface FormatCodeOptions extends EditorOptions {
         InsertSpaceAfterCommaDelimiter: boolean;
         InsertSpaceAfterSemicolonInForStatements: boolean;
@@ -6438,6 +6444,9 @@ declare namespace ts {
         canRename: false;
         localizedErrorMessage: string;
     }
+    /**
+     * @deprecated Use `UserPreferences` instead.
+     */
     interface RenameInfoOptions {
         readonly allowRenameOfImportPath?: boolean;
     }
@@ -9789,6 +9798,7 @@ declare namespace ts.server.protocol {
         readonly includeInlayPropertyDeclarationTypeHints?: boolean;
         readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
         readonly includeInlayEnumMemberValueHints?: boolean;
+        readonly autoImportFileExcludePatterns?: string[];
     }
     interface CompilerOptions {
         allowJs?: boolean;

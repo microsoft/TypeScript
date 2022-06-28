@@ -1242,6 +1242,24 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Add_extends_constraint_2211" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Add `extends` constraint.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Aggiungere il vincolo 'extends'.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Add_extends_constraint_to_all_type_parameters_2212" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Add `extends` constraint to all type parameters]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Aggiungere il vincolo `extends` a tutti i parametri di tipo]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Add_import_from_0_90057" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Add import from "{0}"]]></Val>
@@ -13830,11 +13848,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";This_type_parameter_probably_needs_an_extends_object_constraint_2208" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";This_type_parameter_might_need_an_extends_0_constraint_2208" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[This type parameter probably needs an `extends object` constraint.]]></Val>
+          <Val><![CDATA[This type parameter might need an `extends {0}` constraint.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Questo parametro di tipo richiede probabilmente un vincolo 'extends object'.]]></Val>
+            <Val><![CDATA[Questo parametro di tipo potrebbe richiedere un vincolo `extends {0}`.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14679,6 +14697,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Types_cannot_appear_in_export_declarations_in_JavaScript_files_18043" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Types cannot appear in export declarations in JavaScript files.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[I tipi non possono essere visualizzati nelle dichiarazioni di esportazione nei file JavaScript.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Types_have_separate_declarations_of_a_private_property_0_2442" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Types have separate declarations of a private property '{0}'.]]></Val>
@@ -15264,6 +15291,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";We_can_only_write_a_type_for_0_by_adding_a_type_for_the_entire_parameter_here_2843" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[We can only write a type for '{0}' by adding a type for the entire parameter here.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[È possibile solo scrivere un tipo per '{0}' aggiungendo qui un tipo per l'intero parametro.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";When_assigning_functions_check_to_ensure_parameters_and_the_return_values_are_subtype_compatible_6698" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[When assigning functions, check to ensure parameters and the return values are subtype-compatible.]]></Val>
@@ -15362,6 +15398,24 @@
           <Val><![CDATA[You cannot rename a module via a global import.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Non è possibile rinominare un modulo tramite un'importazione globale.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";You_cannot_rename_elements_that_are_defined_in_a_node_modules_folder_8035" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[You cannot rename elements that are defined in a 'node_modules' folder.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Non è possibile rinominare gli elementi definiti in una cartella 'node_modules'.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";You_cannot_rename_elements_that_are_defined_in_another_node_modules_folder_8036" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[You cannot rename elements that are defined in another 'node_modules' folder.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Non è possibile rinominare gli elementi definiti in un'altra cartella 'node_modules'.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15609,6 +15663,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";_0_is_a_type_and_cannot_be_imported_in_JavaScript_files_Use_1_in_a_JSDoc_type_annotation_18042" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' is a type and cannot be imported in JavaScript files. Use '{1}' in a JSDoc type annotation.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}' è un tipo e non può essere importato nei file JavaScript. Usare '{1}' in un'annotazione di tipo JSDoc.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";_0_is_a_type_and_must_be_imported_using_a_type_only_import_when_preserveValueImports_and_isolatedMod_1444" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA['{0}' is a type and must be imported using a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.]]></Val>
@@ -15618,11 +15681,29 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";_0_is_an_unused_renaming_of_1_Did_you_intend_to_use_it_as_a_type_annotation_2842" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' is an unused renaming of '{1}'. Did you intend to use it as a type annotation?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}' è una ridenominazione inutilizzata di '{1}'. Si intendeva utilizzarla come annotazione di tipo?]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";_0_is_assignable_to_the_constraint_of_type_1_but_1_could_be_instantiated_with_a_different_subtype_of_5075" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA['{0}' is assignable to the constraint of type '{1}', but '{1}' could be instantiated with a different subtype of constraint '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA['{0}' è assegnabile al vincolo di tipo '{1}', ma è possibile creare un'istanza di '{1}' con un sottotipo diverso del vincolo '{2}'.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";_0_is_automatically_exported_here_18044" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' is automatically exported here.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}' viene esportato automaticamente qui.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

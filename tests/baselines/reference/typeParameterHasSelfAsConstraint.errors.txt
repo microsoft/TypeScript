@@ -9,6 +9,7 @@ tests/cases/compiler/typeParameterHasSelfAsConstraint.ts(2,5): error TS2322: Typ
         return x;
         ~~~~~~~~~
 !!! error TS2322: Type 'T' is not assignable to type 'number'.
+!!! related TS2208 tests/cases/compiler/typeParameterHasSelfAsConstraint.ts:1:14: This type parameter might need an `extends number` constraint.
     }
      
     
