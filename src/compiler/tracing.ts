@@ -147,13 +147,13 @@ namespace ts { // eslint-disable-line one-namespace-per-file
         const sampleInterval = 1000 * 10;
         function writeStackEvent(index: number, endTime: number, results?: Args) {
             const { phase, name, args, time, separateBeginAndEnd } = eventStack[index];
-            const combinedArgs = { ...args, ...results };
             if (separateBeginAndEnd) {
-                writeEvent("E", phase, name, combinedArgs, /*extras*/ undefined, endTime);
+                Debug.assert(!results, "`results` are not supported for events with `separateBeginAndEnd`");
+                writeEvent("E", phase, name, args, /*extras*/ undefined, endTime);
             }
             // test if [time,endTime) straddles a sampling point
             else if (sampleInterval - (time % sampleInterval) <= endTime - time) {
-                writeEvent("X", phase, name, combinedArgs, `"dur":${endTime - time}`, time);
+                writeEvent("X", phase, name, { ...args, results }, `"dur":${endTime - time}`, time);
             }
         }
 
