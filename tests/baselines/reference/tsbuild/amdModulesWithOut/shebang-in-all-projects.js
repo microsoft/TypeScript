@@ -1012,9 +1012,9 @@ Output::
 
 [[90m12:00:39 AM[0m] Building project '/src/lib/tsconfig.json'...
 
-[[90m12:00:48 AM[0m] Project 'src/app/tsconfig.json' is out of date because output of its dependency 'src/lib' has changed
+[[90m12:00:47 AM[0m] Project 'src/app/tsconfig.json' is out of date because output of its dependency 'src/lib' has changed
 
-[[90m12:00:49 AM[0m] Updating output of project '/src/app/tsconfig.json'...
+[[90m12:00:48 AM[0m] Updating output of project '/src/app/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 
@@ -1389,7 +1389,6 @@ declare const myVar = 30;
   "size": 3234
 }
 
-//// [/src/lib/module.d.ts] file written with same contents
 //// [/src/lib/module.d.ts.map] file written with same contents
 //// [/src/lib/module.d.ts.map.baseline.txt] file written with same contents
 //// [/src/lib/module.js]

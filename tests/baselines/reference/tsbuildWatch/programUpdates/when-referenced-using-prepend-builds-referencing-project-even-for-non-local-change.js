@@ -604,7 +604,6 @@ function foo() { return 10; }
 function myFunc() { return 100; }
 
 
-//// [/user/username/projects/sample1/core/index.d.ts] file written with same contents
 //// [/user/username/projects/sample1/core/index.tsbuildinfo]
 {"bundle":{"commonSourceDirectory":"./","sourceFiles":["./index.ts"],"js":{"sections":[{"pos":0,"end":64,"kind":"text"}],"hash":"-5849092235-function foo() { return 10; }\nfunction myFunc() { return 100; }\n"},"dts":{"sections":[{"pos":0,"end":67,"kind":"text"}],"hash":"2172043225-declare function foo(): number;\ndeclare function myFunc(): number;\n"}},"program":{"fileNames":["./index.ts"],"fileInfos":["-6034018805-function foo() { return 10; }\nfunction myFunc() { return 100; }"],"options":{"composite":true,"outFile":"./index.js"},"outSignature":"2172043225-declare function foo(): number;\ndeclare function myFunc(): number;\n","dtsChangeTime":59250,"dtsChangeFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
@@ -679,7 +678,7 @@ Change:: Build logic
 Input::
 
 Output::
-[[90m12:02:07 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:02:04 AM[0m] Found 0 errors. Watching for file changes.
 
 
 

@@ -287,7 +287,7 @@ Output::
 
 [[90m12:01:22 AM[0m] Building project '/user/username/projects/myproject/project1/tsconfig.json'...
 
-[[90m12:01:36 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:33 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -337,7 +337,6 @@ exports.__esModule = true;
 var bar = 10;
 
 
-//// [/user/username/projects/myproject/project1/index.d.ts] file written with same contents
 //// [/user/username/projects/myproject/project1/tsconfig.tsbuildinfo]
 {"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./node_modules/file/index.d.ts","./index.ts","../node_modules/@types/foo/index.d.ts","../node_modules/@types/bar/index.d.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-12737086933-export const foo = 10;",{"version":"-7561100220-import { foo } from \"file\";const bar = 10;","signature":"-3531856636-export {};\n"},"-12737086933-export const foo = 10;","-12042713060-export const bar = 10;"],"options":{"composite":true},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,5,4,3,2],"dtsChangeTime":55000,"dtsChangeFile":"./index.d.ts"},"version":"FakeTSVersion"}
 

@@ -610,7 +610,7 @@ Change:: Build logic and tests
 Input::
 
 Output::
-[[90m12:02:17 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:02:11 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -677,7 +677,6 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/sample1/logic/index.js.map] file written with same contents
 //// [/user/username/projects/sample1/logic/index.js] file written with same contents
-//// [/user/username/projects/sample1/logic/index.d.ts] file written with same contents
 //// [/user/username/projects/sample1/logic/tsconfig.tsbuildinfo]
 {"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../core/index.d.ts","../core/anothermodule.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-1428376100-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\nexport declare class someClass {\n}\n//# sourceMappingURL=index.d.ts.map","-4454971016-export declare const World = \"hello\";\n//# sourceMappingURL=anotherModule.d.ts.map",{"version":"-5786964698-import * as c from '../core/index';\r\nexport function getSecondsInDay() {\r\n    return c.multiply(10, 15);\r\n}\r\nimport * as mod from '../core/anotherModule';\r\nexport const m = mod;\r\n","signature":"-9659407152-export declare function getSecondsInDay(): number;\nimport * as mod from '../core/anotherModule';\nexport declare const m: typeof mod;\n"}],"options":{"composite":true,"declaration":true,"skipDefaultLibCheck":true,"sourceMap":true},"fileIdsList":[[2,3],[3]],"referencedMap":[[4,1]],"exportedModulesMap":[[4,2]],"semanticDiagnosticsPerFile":[1,3,2,4],"dtsChangeTime":64000,"dtsChangeFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
@@ -749,7 +748,6 @@ exitCode:: ExitStatus.undefined
 }
 
 //// [/user/username/projects/sample1/tests/index.js] file written with same contents
-//// [/user/username/projects/sample1/tests/index.d.ts] file written with same contents
 //// [/user/username/projects/sample1/tests/tsconfig.tsbuildinfo]
 {"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../core/index.d.ts","../core/anothermodule.d.ts","../logic/index.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-1428376100-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\nexport declare class someClass {\n}\n//# sourceMappingURL=index.d.ts.map","-4454971016-export declare const World = \"hello\";\n//# sourceMappingURL=anotherModule.d.ts.map","-9659407152-export declare function getSecondsInDay(): number;\nimport * as mod from '../core/anotherModule';\nexport declare const m: typeof mod;\n",{"version":"12336236525-import * as c from '../core/index';\r\nimport * as logic from '../logic/index';\r\n\r\nc.leftPad(\"\", 10);\r\nlogic.getSecondsInDay();\r\n\r\nimport * as mod from '../core/anotherModule';\r\nexport const m = mod;\r\n","signature":"2702201019-import * as mod from '../core/anotherModule';\nexport declare const m: typeof mod;\n"}],"options":{"composite":true,"declaration":true,"skipDefaultLibCheck":true},"fileIdsList":[[3],[2,3,4]],"referencedMap":[[4,1],[5,2]],"exportedModulesMap":[[4,1],[5,1]],"semanticDiagnosticsPerFile":[1,3,2,4,5],"dtsChangeTime":76000,"dtsChangeFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
@@ -846,7 +844,7 @@ export function multiply(a: number, b: number) { return a * b; }
 
 Output::
 >> Screen clear
-[[90m12:02:21 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:02:15 AM[0m] File change detected. Starting incremental compilation...
 
 
 
@@ -911,7 +909,7 @@ export declare function multiply(a: number, b: number): number;
 //# sourceMappingURL=index.d.ts.map
 
 //// [/user/username/projects/sample1/core/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./anothermodule.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-2676574883-export const World = \"hello\";\r\n","signature":"-9234818176-export declare const World = \"hello\";\n"},{"version":"-18749805970-export const someString: string = \"HELLO WORLD\";\r\nexport function leftPad(s: string, n: number) { return s + n; }\r\nexport function multiply(a: number, b: number) { return a * b; }\r\n","signature":"-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n"}],"options":{"composite":true,"declaration":true,"declarationMap":true,"skipDefaultLibCheck":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3],"dtsChangeTime":142600,"dtsChangeFile":"./index.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./anothermodule.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-2676574883-export const World = \"hello\";\r\n","signature":"-9234818176-export declare const World = \"hello\";\n"},{"version":"-18749805970-export const someString: string = \"HELLO WORLD\";\r\nexport function leftPad(s: string, n: number) { return s + n; }\r\nexport function multiply(a: number, b: number) { return a * b; }\r\n","signature":"-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n"}],"options":{"composite":true,"declaration":true,"declarationMap":true,"skipDefaultLibCheck":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3],"dtsChangeTime":136600,"dtsChangeFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/sample1/core/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -949,7 +947,7 @@ export declare function multiply(a: number, b: number): number;
       "./anothermodule.ts",
       "./index.ts"
     ],
-    "dtsChangeTime": 142600,
+    "dtsChangeTime": 136600,
     "dtsChangeFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
@@ -962,7 +960,7 @@ Change:: Build logic and tests
 Input::
 
 Output::
-[[90m12:03:08 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:02:56 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -1029,7 +1027,6 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/sample1/logic/index.js.map] file written with same contents
 //// [/user/username/projects/sample1/logic/index.js] file written with same contents
-//// [/user/username/projects/sample1/logic/index.d.ts] file written with same contents
 //// [/user/username/projects/sample1/logic/tsconfig.tsbuildinfo]
 {"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../core/index.d.ts","../core/anothermodule.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-9047123202-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n//# sourceMappingURL=index.d.ts.map","-4454971016-export declare const World = \"hello\";\n//# sourceMappingURL=anotherModule.d.ts.map",{"version":"-5786964698-import * as c from '../core/index';\r\nexport function getSecondsInDay() {\r\n    return c.multiply(10, 15);\r\n}\r\nimport * as mod from '../core/anotherModule';\r\nexport const m = mod;\r\n","signature":"-9659407152-export declare function getSecondsInDay(): number;\nimport * as mod from '../core/anotherModule';\nexport declare const m: typeof mod;\n"}],"options":{"composite":true,"declaration":true,"skipDefaultLibCheck":true,"sourceMap":true},"fileIdsList":[[2,3],[3]],"referencedMap":[[4,1]],"exportedModulesMap":[[4,2]],"semanticDiagnosticsPerFile":[1,3,2,4],"dtsChangeTime":64000,"dtsChangeFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
@@ -1101,7 +1098,6 @@ exitCode:: ExitStatus.undefined
 }
 
 //// [/user/username/projects/sample1/tests/index.js] file written with same contents
-//// [/user/username/projects/sample1/tests/index.d.ts] file written with same contents
 //// [/user/username/projects/sample1/tests/tsconfig.tsbuildinfo]
 {"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../core/index.d.ts","../core/anothermodule.d.ts","../logic/index.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-9047123202-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n//# sourceMappingURL=index.d.ts.map","-4454971016-export declare const World = \"hello\";\n//# sourceMappingURL=anotherModule.d.ts.map","-9659407152-export declare function getSecondsInDay(): number;\nimport * as mod from '../core/anotherModule';\nexport declare const m: typeof mod;\n",{"version":"12336236525-import * as c from '../core/index';\r\nimport * as logic from '../logic/index';\r\n\r\nc.leftPad(\"\", 10);\r\nlogic.getSecondsInDay();\r\n\r\nimport * as mod from '../core/anotherModule';\r\nexport const m = mod;\r\n","signature":"2702201019-import * as mod from '../core/anotherModule';\nexport declare const m: typeof mod;\n"}],"options":{"composite":true,"declaration":true,"skipDefaultLibCheck":true},"fileIdsList":[[3],[2,3,4]],"referencedMap":[[4,1],[5,2]],"exportedModulesMap":[[4,1],[5,1]],"semanticDiagnosticsPerFile":[1,3,2,4,5],"dtsChangeTime":76000,"dtsChangeFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
@@ -1200,7 +1196,7 @@ export class someClass2 { }
 
 Output::
 >> Screen clear
-[[90m12:03:15 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:03:03 AM[0m] File change detected. Starting incremental compilation...
 
 
 
@@ -1281,7 +1277,7 @@ export declare class someClass2 {
 //# sourceMappingURL=index.d.ts.map
 
 //// [/user/username/projects/sample1/core/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./anothermodule.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-2676574883-export const World = \"hello\";\r\n","signature":"-9234818176-export declare const World = \"hello\";\n"},{"version":"-8266060440-export const someString: string = \"HELLO WORLD\";\r\nexport function leftPad(s: string, n: number) { return s + n; }\r\nexport function multiply(a: number, b: number) { return a * b; }\r\n\nexport class someClass { }\nexport class someClass2 { }","signature":"-1938481101-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\nexport declare class someClass {\n}\nexport declare class someClass2 {\n}\n"}],"options":{"composite":true,"declaration":true,"declarationMap":true,"skipDefaultLibCheck":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3],"dtsChangeTime":196950,"dtsChangeFile":"./index.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./anothermodule.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-2676574883-export const World = \"hello\";\r\n","signature":"-9234818176-export declare const World = \"hello\";\n"},{"version":"-8266060440-export const someString: string = \"HELLO WORLD\";\r\nexport function leftPad(s: string, n: number) { return s + n; }\r\nexport function multiply(a: number, b: number) { return a * b; }\r\n\nexport class someClass { }\nexport class someClass2 { }","signature":"-1938481101-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\nexport declare class someClass {\n}\nexport declare class someClass2 {\n}\n"}],"options":{"composite":true,"declaration":true,"declarationMap":true,"skipDefaultLibCheck":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3],"dtsChangeTime":184950,"dtsChangeFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/sample1/core/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -1319,7 +1315,7 @@ export declare class someClass2 {
       "./anothermodule.ts",
       "./index.ts"
     ],
-    "dtsChangeTime": 196950,
+    "dtsChangeTime": 184950,
     "dtsChangeFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
@@ -1332,7 +1328,7 @@ Change:: Build logic and tests
 Input::
 
 Output::
-[[90m12:04:03 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:03:45 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -1399,7 +1395,6 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/sample1/logic/index.js.map] file written with same contents
 //// [/user/username/projects/sample1/logic/index.js] file written with same contents
-//// [/user/username/projects/sample1/logic/index.d.ts] file written with same contents
 //// [/user/username/projects/sample1/logic/tsconfig.tsbuildinfo]
 {"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../core/index.d.ts","../core/anothermodule.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-8987447092-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\nexport declare class someClass {\n}\nexport declare class someClass2 {\n}\n//# sourceMappingURL=index.d.ts.map","-4454971016-export declare const World = \"hello\";\n//# sourceMappingURL=anotherModule.d.ts.map",{"version":"-5786964698-import * as c from '../core/index';\r\nexport function getSecondsInDay() {\r\n    return c.multiply(10, 15);\r\n}\r\nimport * as mod from '../core/anotherModule';\r\nexport const m = mod;\r\n","signature":"-9659407152-export declare function getSecondsInDay(): number;\nimport * as mod from '../core/anotherModule';\nexport declare const m: typeof mod;\n"}],"options":{"composite":true,"declaration":true,"skipDefaultLibCheck":true,"sourceMap":true},"fileIdsList":[[2,3],[3]],"referencedMap":[[4,1]],"exportedModulesMap":[[4,2]],"semanticDiagnosticsPerFile":[1,3,2,4],"dtsChangeTime":64000,"dtsChangeFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
@@ -1471,7 +1466,6 @@ exitCode:: ExitStatus.undefined
 }
 
 //// [/user/username/projects/sample1/tests/index.js] file written with same contents
-//// [/user/username/projects/sample1/tests/index.d.ts] file written with same contents
 //// [/user/username/projects/sample1/tests/tsconfig.tsbuildinfo]
 {"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../core/index.d.ts","../core/anothermodule.d.ts","../logic/index.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-8987447092-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\nexport declare class someClass {\n}\nexport declare class someClass2 {\n}\n//# sourceMappingURL=index.d.ts.map","-4454971016-export declare const World = \"hello\";\n//# sourceMappingURL=anotherModule.d.ts.map","-9659407152-export declare function getSecondsInDay(): number;\nimport * as mod from '../core/anotherModule';\nexport declare const m: typeof mod;\n",{"version":"12336236525-import * as c from '../core/index';\r\nimport * as logic from '../logic/index';\r\n\r\nc.leftPad(\"\", 10);\r\nlogic.getSecondsInDay();\r\n\r\nimport * as mod from '../core/anotherModule';\r\nexport const m = mod;\r\n","signature":"2702201019-import * as mod from '../core/anotherModule';\nexport declare const m: typeof mod;\n"}],"options":{"composite":true,"declaration":true,"skipDefaultLibCheck":true},"fileIdsList":[[3],[2,3,4]],"referencedMap":[[4,1],[5,2]],"exportedModulesMap":[[4,1],[5,1]],"semanticDiagnosticsPerFile":[1,3,2,4,5],"dtsChangeTime":76000,"dtsChangeFile":"./index.d.ts"},"version":"FakeTSVersion"}
 

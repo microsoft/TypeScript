@@ -488,9 +488,9 @@ src/core/anotherModule.d.ts
   File is output of project reference source 'src/core/anotherModule.ts'
 src/logic/index.ts
   Matched by default include pattern '**/*'
-[[90m12:00:55 AM[0m] Project 'src/tests/tsconfig.json' is out of date because output 'src/tests/tsconfig.tsbuildinfo' is older than input 'src/core'
+[[90m12:00:54 AM[0m] Project 'src/tests/tsconfig.json' is out of date because output 'src/tests/tsconfig.tsbuildinfo' is older than input 'src/core'
 
-[[90m12:00:56 AM[0m] Building project '/src/tests/tsconfig.json'...
+[[90m12:00:55 AM[0m] Building project '/src/tests/tsconfig.json'...
 
 lib/lib.d.ts
   Default library for target 'es3'
@@ -590,7 +590,6 @@ exports.someClass = someClass;
   "size": 1555
 }
 
-//// [/src/logic/index.d.ts] file written with same contents
 //// [/src/logic/index.js] file written with same contents
 //// [/src/logic/index.js.map] file written with same contents
 //// [/src/logic/tsconfig.tsbuildinfo]
@@ -663,7 +662,6 @@ exports.someClass = someClass;
   "size": 1648
 }
 
-//// [/src/tests/index.d.ts] file written with same contents
 //// [/src/tests/index.js] file written with same contents
 //// [/src/tests/tsconfig.tsbuildinfo]
 {"program":{"fileNames":["../../lib/lib.d.ts","../core/index.d.ts","../core/anothermodule.d.ts","../logic/index.d.ts","./index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-2069755619-export declare const someString: string;\r\nexport declare function leftPad(s: string, n: number): string;\r\nexport declare function multiply(a: number, b: number): number;\r\nexport declare class someClass {\r\n}\r\n//# sourceMappingURL=index.d.ts.map","7652028357-export declare const World = \"hello\";\r\n//# sourceMappingURL=anotherModule.d.ts.map","-6548680073-export declare function getSecondsInDay(): number;\r\nimport * as mod from '../core/anotherModule';\r\nexport declare const m: typeof mod;\r\n",{"version":"12336236525-import * as c from '../core/index';\r\nimport * as logic from '../logic/index';\r\n\r\nc.leftPad(\"\", 10);\r\nlogic.getSecondsInDay();\r\n\r\nimport * as mod from '../core/anotherModule';\r\nexport const m = mod;\r\n","signature":"-9209611-import * as mod from '../core/anotherModule';\r\nexport declare const m: typeof mod;\r\n"}],"options":{"composite":true,"declaration":true,"skipDefaultLibCheck":true},"fileIdsList":[[3],[2,3,4]],"referencedMap":[[4,1],[5,2]],"exportedModulesMap":[[4,1],[5,1]],"semanticDiagnosticsPerFile":[1,3,2,4,5],"dtsChangeTime":30000,"dtsChangeFile":"./index.d.ts"},"version":"FakeTSVersion"}
@@ -764,14 +762,14 @@ class someClass2 { }
 
 Output::
 /lib/tsc --b /src/tests --explainFiles --v
-[[90m12:01:03 AM[0m] Projects in this build: 
+[[90m12:01:01 AM[0m] Projects in this build: 
     * src/core/tsconfig.json
     * src/logic/tsconfig.json
     * src/tests/tsconfig.json
 
-[[90m12:01:04 AM[0m] Project 'src/core/tsconfig.json' is out of date because output 'src/core/tsconfig.tsbuildinfo' is older than input 'src/core/index.ts'
+[[90m12:01:02 AM[0m] Project 'src/core/tsconfig.json' is out of date because output 'src/core/tsconfig.tsbuildinfo' is older than input 'src/core/index.ts'
 
-[[90m12:01:05 AM[0m] Building project '/src/core/tsconfig.json'...
+[[90m12:01:03 AM[0m] Building project '/src/core/tsconfig.json'...
 
 lib/lib.d.ts
   Default library for target 'es3'
@@ -781,18 +779,17 @@ src/core/index.ts
   Matched by default include pattern '**/*'
 src/core/some_decl.d.ts
   Matched by default include pattern '**/*'
-[[90m12:01:12 AM[0m] Project 'src/logic/tsconfig.json' is up to date with .d.ts files from its dependencies
+[[90m12:01:09 AM[0m] Project 'src/logic/tsconfig.json' is up to date with .d.ts files from its dependencies
 
-[[90m12:01:13 AM[0m] Updating output timestamps of project '/src/logic/tsconfig.json'...
+[[90m12:01:10 AM[0m] Updating output timestamps of project '/src/logic/tsconfig.json'...
 
-[[90m12:01:16 AM[0m] Project 'src/tests/tsconfig.json' is up to date with .d.ts files from its dependencies
+[[90m12:01:13 AM[0m] Project 'src/tests/tsconfig.json' is up to date with .d.ts files from its dependencies
 
-[[90m12:01:17 AM[0m] Updating output timestamps of project '/src/tests/tsconfig.json'...
+[[90m12:01:14 AM[0m] Updating output timestamps of project '/src/tests/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 
 
-//// [/src/core/index.d.ts] file written with same contents
 //// [/src/core/index.d.ts.map] file written with same contents
 //// [/src/core/index.js]
 "use strict";
@@ -879,16 +876,16 @@ Input::
 
 Output::
 /lib/tsc --b /src/tests --explainFiles --v
-[[90m12:01:20 AM[0m] Projects in this build: 
+[[90m12:01:17 AM[0m] Projects in this build: 
     * src/core/tsconfig.json
     * src/logic/tsconfig.json
     * src/tests/tsconfig.json
 
-[[90m12:01:21 AM[0m] Project 'src/core/tsconfig.json' is up to date because newest input 'src/core/index.ts' is older than output 'src/core/tsconfig.tsbuildinfo'
+[[90m12:01:18 AM[0m] Project 'src/core/tsconfig.json' is up to date because newest input 'src/core/index.ts' is older than output 'src/core/tsconfig.tsbuildinfo'
 
-[[90m12:01:22 AM[0m] Project 'src/logic/tsconfig.json' is up to date because newest input 'src/logic/index.ts' is older than output 'src/logic/tsconfig.tsbuildinfo'
+[[90m12:01:19 AM[0m] Project 'src/logic/tsconfig.json' is up to date because newest input 'src/logic/index.ts' is older than output 'src/logic/tsconfig.tsbuildinfo'
 
-[[90m12:01:23 AM[0m] Project 'src/tests/tsconfig.json' is up to date because newest input 'src/tests/index.ts' is older than output 'src/tests/tsconfig.tsbuildinfo'
+[[90m12:01:20 AM[0m] Project 'src/tests/tsconfig.json' is up to date because newest input 'src/tests/index.ts' is older than output 'src/tests/tsconfig.tsbuildinfo'
 
 exitCode:: ExitStatus.Success
 

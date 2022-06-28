@@ -6107,13 +6107,13 @@ Output::
 
 [[90m12:01:01 AM[0m] Building project '/src/first/tsconfig.json'...
 
-[[90m12:01:10 AM[0m] Project 'src/second/tsconfig.json' is out of date because output of its dependency 'src/first' has changed
+[[90m12:01:09 AM[0m] Project 'src/second/tsconfig.json' is out of date because output of its dependency 'src/first' has changed
 
-[[90m12:01:11 AM[0m] Updating output of project '/src/second/tsconfig.json'...
+[[90m12:01:10 AM[0m] Updating output of project '/src/second/tsconfig.json'...
 
-[[90m12:01:18 AM[0m] Project 'src/third/tsconfig.json' is out of date because output of its dependency 'src/second' has changed
+[[90m12:01:17 AM[0m] Project 'src/third/tsconfig.json' is out of date because output of its dependency 'src/second' has changed
 
-[[90m12:01:19 AM[0m] Updating output of project '/src/third/tsconfig.json'...
+[[90m12:01:18 AM[0m] Updating output of project '/src/third/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 
@@ -8270,7 +8270,6 @@ declare class C {
   "size": 13821
 }
 
-//// [/src/first/bin/first-output.d.ts] file written with same contents
 //// [/src/first/bin/first-output.d.ts.map] file written with same contents
 //// [/src/first/bin/first-output.d.ts.map.baseline.txt] file written with same contents
 //// [/src/first/bin/first-output.js]

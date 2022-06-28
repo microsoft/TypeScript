@@ -1294,20 +1294,20 @@ namespace ts {
                             const filePath = sourceFiles[0].resolvedPath;
                             const oldSignature = state.emitSignatures?.get(filePath);
                             emitSignature ??= computeSignature(text, computeHash, data);
-                            if (emitSignature !== oldSignature) {
-                                (state.emitSignatures ??= new Map()).set(filePath, emitSignature);
-                                state.hasChangedEmitSignature = true;
-                                state.dtsChangeFile = fileName;
-                            }
+                            // Dont write dts files if they didn't change
+                            if (emitSignature === oldSignature) return;
+                            (state.emitSignatures ??= new Map()).set(filePath, emitSignature);
+                            state.hasChangedEmitSignature = true;
+                            state.dtsChangeFile = fileName;
                         }
                     }
                     else if (state.compilerOptions.composite) {
                         const newSignature = computeSignature(text, computeHash, data);
-                        if (newSignature !== state.outSignature) {
-                            state.outSignature = newSignature;
-                            state.hasChangedEmitSignature = true;
-                            state.dtsChangeFile = fileName;
-                        }
+                        // Dont write dts files if they didn't change
+                        if (newSignature === state.outSignature) return;
+                        state.outSignature = newSignature;
+                        state.hasChangedEmitSignature = true;
+                        state.dtsChangeFile = fileName;
                     }
                 }
                 if (writeFile) writeFile(fileName, text, writeByteOrderMark, onError, sourceFiles, data);

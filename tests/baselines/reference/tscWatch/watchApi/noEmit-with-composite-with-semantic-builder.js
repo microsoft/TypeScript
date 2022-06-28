@@ -359,7 +359,7 @@ Output::
 >> Screen clear
 [[90m12:00:56 AM[0m] Starting compilation in watch mode...
 
-[[90m12:01:06 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:03 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -446,7 +446,6 @@ exports.x = 10;
 // SomeComment
 
 
-//// [/user/username/projects/myproject/main.d.ts] file written with same contents
 
 Checking if output is same as EmitAndSemanticDiagnosticsBuilderProgram::
 Output file text for /user/username/projects/myproject/main.js is same:: true
@@ -467,9 +466,9 @@ export const x = 10;
 tsc --w
 Output::
 >> Screen clear
-[[90m12:01:12 AM[0m] Starting compilation in watch mode...
+[[90m12:01:09 AM[0m] Starting compilation in watch mode...
 
-[[90m12:01:28 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:19 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -559,9 +558,7 @@ exports.x = 10;
 // SomeComment
 
 
-//// [/user/username/projects/myproject/main.d.ts] file written with same contents
 //// [/user/username/projects/myproject/other.js] file written with same contents
-//// [/user/username/projects/myproject/other.d.ts] file written with same contents
 
 Checking if output is same as EmitAndSemanticDiagnosticsBuilderProgram::
 Output file text for /user/username/projects/myproject/main.js is same:: true

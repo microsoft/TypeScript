@@ -185,7 +185,7 @@ Output::
 >> Screen clear
 [[90m12:01:18 AM[0m] Starting compilation in watch mode...
 
-[[90m12:01:28 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:25 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -248,7 +248,6 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/packages/A/lib/test.js] file written with same contents
-//// [/user/username/projects/myproject/packages/A/lib/test.d.ts] file written with same contents
 //// [/user/username/projects/myproject/packages/A/tsconfig.tsbuildinfo]
 {"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../b/src/foo.ts","../b/src/bar/foo.ts","./src/test.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"4646078106-export function foo() { }","1045484683-export function bar() { }",{"version":"14700910833-import { foo } from 'b/lib/foo';\nimport { bar } from 'b/lib/bar/foo';\nfoo();\nbar();\n","signature":"-3531856636-export {};\n"}],"options":{"composite":true,"outDir":"./lib","rootDir":"./src"},"fileIdsList":[[2,3]],"referencedMap":[[4,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,4,3,2],"dtsChangeTime":65000,"dtsChangeFile":"./lib/test.d.ts"},"version":"FakeTSVersion"}
 

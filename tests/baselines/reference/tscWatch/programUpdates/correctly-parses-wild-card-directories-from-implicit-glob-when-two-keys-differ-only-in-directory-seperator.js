@@ -291,7 +291,7 @@ Synchronizing program
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/f1.ts","/user/username/projects/myproject/f2.ts","/user/username/projects/myproject/new-file.ts"]
   options: {"composite":true,"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-[[90m12:01:05 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:02 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -333,7 +333,6 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/f1.js] file written with same contents
-//// [/user/username/projects/myproject/f1.d.ts] file written with same contents
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
 {"program":{"fileNames":["../../../../a/lib/lib.d.ts","./new-file.ts","./f1.ts","./f2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-11960320495-export const z = 1;","signature":"-9207164725-export declare const z = 1;\n"},{"version":"1363236232-import { z } from \"./new-file\";export const x = 1","signature":"-7495133367-export declare const x = 1;\n"},{"version":"-10905812331-export const y = 1","signature":"-6203665398-export declare const y = 1;\n"}],"options":{"composite":true},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,3,4,2],"dtsChangeTime":45250,"dtsChangeFile":"./new-file.d.ts"},"version":"FakeTSVersion"}
 

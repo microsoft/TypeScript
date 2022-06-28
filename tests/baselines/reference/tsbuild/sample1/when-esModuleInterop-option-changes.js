@@ -452,7 +452,6 @@ Output::
 exitCode:: ExitStatus.Success
 
 
-//// [/src/tests/index.d.ts] file written with same contents
 //// [/src/tests/index.js]
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {

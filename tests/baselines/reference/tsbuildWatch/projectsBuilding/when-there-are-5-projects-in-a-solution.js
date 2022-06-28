@@ -454,23 +454,23 @@ Output::
 
 [[90m12:01:56 AM[0m] Building project '/user/username/projects/myproject/pkg0/tsconfig.json'...
 
-[[90m12:02:10 AM[0m] Project 'pkg1/tsconfig.json' is up to date with .d.ts files from its dependencies
+[[90m12:02:07 AM[0m] Project 'pkg1/tsconfig.json' is up to date with .d.ts files from its dependencies
 
-[[90m12:02:11 AM[0m] Updating output timestamps of project '/user/username/projects/myproject/pkg1/tsconfig.json'...
+[[90m12:02:08 AM[0m] Updating output timestamps of project '/user/username/projects/myproject/pkg1/tsconfig.json'...
 
-[[90m12:02:13 AM[0m] Project 'pkg2/tsconfig.json' is up to date with .d.ts files from its dependencies
+[[90m12:02:10 AM[0m] Project 'pkg2/tsconfig.json' is up to date with .d.ts files from its dependencies
 
-[[90m12:02:14 AM[0m] Updating output timestamps of project '/user/username/projects/myproject/pkg2/tsconfig.json'...
+[[90m12:02:11 AM[0m] Updating output timestamps of project '/user/username/projects/myproject/pkg2/tsconfig.json'...
 
-[[90m12:02:16 AM[0m] Project 'pkg3/tsconfig.json' is up to date with .d.ts files from its dependencies
+[[90m12:02:13 AM[0m] Project 'pkg3/tsconfig.json' is up to date with .d.ts files from its dependencies
 
-[[90m12:02:17 AM[0m] Updating output timestamps of project '/user/username/projects/myproject/pkg3/tsconfig.json'...
+[[90m12:02:14 AM[0m] Updating output timestamps of project '/user/username/projects/myproject/pkg3/tsconfig.json'...
 
-[[90m12:02:19 AM[0m] Project 'pkg4/tsconfig.json' is up to date with .d.ts files from its dependencies
+[[90m12:02:16 AM[0m] Project 'pkg4/tsconfig.json' is up to date with .d.ts files from its dependencies
 
-[[90m12:02:20 AM[0m] Updating output timestamps of project '/user/username/projects/myproject/pkg4/tsconfig.json'...
+[[90m12:02:17 AM[0m] Updating output timestamps of project '/user/username/projects/myproject/pkg4/tsconfig.json'...
 
-[[90m12:02:22 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:02:19 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -535,7 +535,6 @@ exports.pkg0 = 0;
 var someConst2 = 10;
 
 
-//// [/user/username/projects/myproject/pkg0/index.d.ts] file written with same contents
 //// [/user/username/projects/myproject/pkg0/tsconfig.tsbuildinfo]
 {"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-7839887915-export const pkg0 = 0;const someConst2 = 10;","signature":"-4821832606-export declare const pkg0 = 0;\n"}],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2],"dtsChangeTime":53000,"dtsChangeFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
@@ -634,11 +633,11 @@ export const pkg0 = 0;const someConst2 = 10;export const someConst = 10;
 
 Output::
 >> Screen clear
-[[90m12:02:25 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:02:22 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:02:26 AM[0m] Project 'pkg0/tsconfig.json' is out of date because output 'pkg0/tsconfig.tsbuildinfo' is older than input 'pkg0/index.ts'
+[[90m12:02:23 AM[0m] Project 'pkg0/tsconfig.json' is out of date because output 'pkg0/tsconfig.tsbuildinfo' is older than input 'pkg0/index.ts'
 
-[[90m12:02:27 AM[0m] Building project '/user/username/projects/myproject/pkg0/tsconfig.json'...
+[[90m12:02:24 AM[0m] Building project '/user/username/projects/myproject/pkg0/tsconfig.json'...
 
 
 
@@ -710,7 +709,7 @@ export declare const someConst = 10;
 
 
 //// [/user/username/projects/myproject/pkg0/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"1748855762-export const pkg0 = 0;const someConst2 = 10;export const someConst = 10;","signature":"-6216230055-export declare const pkg0 = 0;\nexport declare const someConst = 10;\n"}],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2],"dtsChangeTime":148500,"dtsChangeFile":"./index.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"1748855762-export const pkg0 = 0;const someConst2 = 10;export const someConst = 10;","signature":"-6216230055-export declare const pkg0 = 0;\nexport declare const someConst = 10;\n"}],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2],"dtsChangeTime":145500,"dtsChangeFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/pkg0/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -739,7 +738,7 @@ export declare const someConst = 10;
       "../../../../../a/lib/lib.d.ts",
       "./index.ts"
     ],
-    "dtsChangeTime": 148500,
+    "dtsChangeTime": 145500,
     "dtsChangeFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
@@ -752,31 +751,31 @@ Change:: build pkg1,pkg2,pkg3,pkg4
 Input::
 
 Output::
-[[90m12:02:42 AM[0m] Project 'pkg1/tsconfig.json' is out of date because output 'pkg1/index.js' is older than input 'pkg0/tsconfig.json'
+[[90m12:02:39 AM[0m] Project 'pkg1/tsconfig.json' is out of date because output 'pkg1/index.js' is older than input 'pkg0/tsconfig.json'
 
-[[90m12:02:43 AM[0m] Building project '/user/username/projects/myproject/pkg1/tsconfig.json'...
+[[90m12:02:40 AM[0m] Building project '/user/username/projects/myproject/pkg1/tsconfig.json'...
 
-[[90m12:02:44 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg1/tsconfig.json'...
+[[90m12:02:41 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg1/tsconfig.json'...
 
-[[90m12:02:46 AM[0m] Project 'pkg2/tsconfig.json' is out of date because output 'pkg2/index.js' is older than input 'pkg0/tsconfig.json'
+[[90m12:02:43 AM[0m] Project 'pkg2/tsconfig.json' is out of date because output 'pkg2/index.js' is older than input 'pkg0/tsconfig.json'
 
-[[90m12:02:47 AM[0m] Building project '/user/username/projects/myproject/pkg2/tsconfig.json'...
+[[90m12:02:44 AM[0m] Building project '/user/username/projects/myproject/pkg2/tsconfig.json'...
 
-[[90m12:02:48 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg2/tsconfig.json'...
+[[90m12:02:45 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg2/tsconfig.json'...
 
-[[90m12:02:50 AM[0m] Project 'pkg3/tsconfig.json' is out of date because output 'pkg3/index.js' is older than input 'pkg0/tsconfig.json'
+[[90m12:02:47 AM[0m] Project 'pkg3/tsconfig.json' is out of date because output 'pkg3/index.js' is older than input 'pkg0/tsconfig.json'
 
-[[90m12:02:51 AM[0m] Building project '/user/username/projects/myproject/pkg3/tsconfig.json'...
+[[90m12:02:48 AM[0m] Building project '/user/username/projects/myproject/pkg3/tsconfig.json'...
 
-[[90m12:02:52 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg3/tsconfig.json'...
+[[90m12:02:49 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg3/tsconfig.json'...
 
-[[90m12:02:54 AM[0m] Project 'pkg4/tsconfig.json' is out of date because output 'pkg4/index.js' is older than input 'pkg0/tsconfig.json'
+[[90m12:02:51 AM[0m] Project 'pkg4/tsconfig.json' is out of date because output 'pkg4/index.js' is older than input 'pkg0/tsconfig.json'
 
-[[90m12:02:55 AM[0m] Building project '/user/username/projects/myproject/pkg4/tsconfig.json'...
+[[90m12:02:52 AM[0m] Building project '/user/username/projects/myproject/pkg4/tsconfig.json'...
 
-[[90m12:02:56 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg4/tsconfig.json'...
+[[90m12:02:53 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/pkg4/tsconfig.json'...
 
-[[90m12:02:58 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:02:55 AM[0m] Found 0 errors. Watching for file changes.
 
 
 

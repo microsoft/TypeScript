@@ -2167,9 +2167,9 @@ Output::
 
 [[90m12:00:42 AM[0m] Building project '/src/lib/tsconfig.json'...
 
-[[90m12:00:51 AM[0m] Project 'src/app/tsconfig.json' is out of date because output of its dependency 'src/lib' has changed
+[[90m12:00:50 AM[0m] Project 'src/app/tsconfig.json' is out of date because output of its dependency 'src/lib' has changed
 
-[[90m12:00:52 AM[0m] Updating output of project '/src/app/tsconfig.json'...
+[[90m12:00:51 AM[0m] Updating output of project '/src/app/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 
@@ -3161,7 +3161,6 @@ declare const appfile4_ar: number[];
   "size": 7115
 }
 
-//// [/src/lib/module.d.ts] file written with same contents
 //// [/src/lib/module.d.ts.map] file written with same contents
 //// [/src/lib/module.d.ts.map.baseline.txt] file written with same contents
 //// [/src/lib/module.js]
@@ -3818,17 +3817,17 @@ export const x = 10;function forlibfile1Rest() { }console.log(x);
 
 Output::
 /lib/tsc --b /src/app --verbose
-[[90m12:01:03 AM[0m] Projects in this build: 
+[[90m12:01:02 AM[0m] Projects in this build: 
     * src/lib/tsconfig.json
     * src/app/tsconfig.json
 
-[[90m12:01:04 AM[0m] Project 'src/lib/tsconfig.json' is out of date because output 'src/lib/module.tsbuildinfo' is older than input 'src/lib/file1.ts'
+[[90m12:01:03 AM[0m] Project 'src/lib/tsconfig.json' is out of date because output 'src/lib/module.tsbuildinfo' is older than input 'src/lib/file1.ts'
 
-[[90m12:01:05 AM[0m] Building project '/src/lib/tsconfig.json'...
+[[90m12:01:04 AM[0m] Building project '/src/lib/tsconfig.json'...
 
-[[90m12:01:14 AM[0m] Project 'src/app/tsconfig.json' is out of date because output of its dependency 'src/lib' has changed
+[[90m12:01:12 AM[0m] Project 'src/app/tsconfig.json' is out of date because output of its dependency 'src/lib' has changed
 
-[[90m12:01:15 AM[0m] Updating output of project '/src/app/tsconfig.json'...
+[[90m12:01:13 AM[0m] Updating output of project '/src/app/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 
@@ -4733,7 +4732,6 @@ declare const appfile4_ar: number[];
   "size": 6895
 }
 
-//// [/src/lib/module.d.ts] file written with same contents
 //// [/src/lib/module.d.ts.map] file written with same contents
 //// [/src/lib/module.d.ts.map.baseline.txt] file written with same contents
 //// [/src/lib/module.js]

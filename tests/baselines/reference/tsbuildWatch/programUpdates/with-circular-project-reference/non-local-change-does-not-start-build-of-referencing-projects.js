@@ -454,7 +454,7 @@ Output::
 >> Screen clear
 [[90m12:01:20 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:36 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:33 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -510,7 +510,6 @@ exports.multiply = multiply;
 function foo() { }
 
 
-//// [/user/username/projects/sample1/core/index.d.ts] file written with same contents
 //// [/user/username/projects/sample1/core/tsconfig.tsbuildinfo]
 {"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./anothermodule.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-2676574883-export const World = \"hello\";\r\n","signature":"-9234818176-export declare const World = \"hello\";\n"},{"version":"-21447768693-export const someString: string = \"HELLO WORLD\";\r\nexport function leftPad(s: string, n: number) { return s + n; }\r\nexport function multiply(a: number, b: number) { return a * b; }\r\n\nfunction foo() { }","signature":"-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n"}],"options":{"composite":true,"declaration":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3],"dtsChangeTime":40000,"dtsChangeFile":"./index.d.ts"},"version":"FakeTSVersion"}
 

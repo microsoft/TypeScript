@@ -674,7 +674,6 @@ exitCode:: ExitStatus.Success
   "size": 2101
 }
 
-//// [/src/third/thirdjs/output/third-output.d.ts] file written with same contents
 //// [/src/third/thirdjs/output/third-output.d.ts.map] file written with same contents
 //// [/src/third/thirdjs/output/third-output.js] file written with same contents
 //// [/src/third/thirdjs/output/third-output.js.map] file written with same contents

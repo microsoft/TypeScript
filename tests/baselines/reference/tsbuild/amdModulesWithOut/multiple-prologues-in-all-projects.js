@@ -1276,9 +1276,9 @@ Output::
 
 [[90m12:00:43 AM[0m] Building project '/src/lib/tsconfig.json'...
 
-[[90m12:00:52 AM[0m] Project 'src/app/tsconfig.json' is out of date because output of its dependency 'src/lib' has changed
+[[90m12:00:51 AM[0m] Project 'src/app/tsconfig.json' is out of date because output of its dependency 'src/lib' has changed
 
-[[90m12:00:53 AM[0m] Updating output of project '/src/app/tsconfig.json'...
+[[90m12:00:52 AM[0m] Updating output of project '/src/app/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 
@@ -1798,7 +1798,6 @@ declare const myVar = 30;
   "size": 3821
 }
 
-//// [/src/lib/module.d.ts] file written with same contents
 //// [/src/lib/module.d.ts.map] file written with same contents
 //// [/src/lib/module.d.ts.map.baseline.txt] file written with same contents
 //// [/src/lib/module.js]
@@ -2199,17 +2198,17 @@ export const x = 10;console.log(x);
 
 Output::
 /lib/tsc --b /src/app --verbose
-[[90m12:01:04 AM[0m] Projects in this build: 
+[[90m12:01:03 AM[0m] Projects in this build: 
     * src/lib/tsconfig.json
     * src/app/tsconfig.json
 
-[[90m12:01:05 AM[0m] Project 'src/lib/tsconfig.json' is out of date because output 'src/lib/module.tsbuildinfo' is older than input 'src/lib/file1.ts'
+[[90m12:01:04 AM[0m] Project 'src/lib/tsconfig.json' is out of date because output 'src/lib/module.tsbuildinfo' is older than input 'src/lib/file1.ts'
 
-[[90m12:01:06 AM[0m] Building project '/src/lib/tsconfig.json'...
+[[90m12:01:05 AM[0m] Building project '/src/lib/tsconfig.json'...
 
-[[90m12:01:15 AM[0m] Project 'src/app/tsconfig.json' is out of date because output of its dependency 'src/lib' has changed
+[[90m12:01:13 AM[0m] Project 'src/app/tsconfig.json' is out of date because output of its dependency 'src/lib' has changed
 
-[[90m12:01:16 AM[0m] Updating output of project '/src/app/tsconfig.json'...
+[[90m12:01:14 AM[0m] Updating output of project '/src/app/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 
@@ -2922,7 +2921,6 @@ declare const myVar = 30;
   "size": 3857
 }
 
-//// [/src/lib/module.d.ts] file written with same contents
 //// [/src/lib/module.d.ts.map]
 {"version":3,"file":"module.d.ts","sourceRoot":"","sources":["file0.ts","file1.ts","file2.ts","global.ts"],"names":[],"mappings":"AACA,QAAA,MAAM,MAAM,KAAK,CAAC;;ICAlB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;;ICApB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,WAAW,KAAK,CAAC"}
 

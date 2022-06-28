@@ -261,7 +261,7 @@ CreatingProgramWith::
   options: {"module":0,"composite":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/projects/project2/tsconfig.json"}
   projectReferences: [{"path":"/user/username/projects/myproject/projects/project1","originalPath":"../project1"}]
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 250 undefined Source file
-[[90m12:01:00 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:57 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -316,7 +316,6 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/projects/project2/class2.js] file written with same contents
-//// [/user/username/projects/myproject/projects/project2/class2.d.ts] file written with same contents
 //// [/user/username/projects/myproject/projects/project2/tsconfig.tsbuildinfo]
 {"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../project1/class1.d.ts","../project1/class3.d.ts","./class2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-3469237238-declare class class1 {}","affectsGlobalScope":true},{"version":"-3469165364-declare class class3 {}","affectsGlobalScope":true},{"version":"777969115-class class2 {}","signature":"-2684084705-declare class class2 {\n}\n","affectsGlobalScope":true}],"options":{"composite":true,"module":0},"semanticDiagnosticsPerFile":[1,2,3,4],"dtsChangeTime":38000,"dtsChangeFile":"./class2.d.ts"},"version":"FakeTSVersion"}
 
@@ -429,7 +428,7 @@ DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/pro
 Project: /user/username/projects/myproject/projects/project1/tsconfig.json Detected output file: /user/username/projects/myproject/projects/project1/class3.d.ts
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Wild card directory of referenced project
 Synchronizing program
-[[90m12:01:09 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:06 AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/projects/project2/class2.ts"]
@@ -446,7 +445,7 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/proj
     [7m [0m [96m                                                                    ~~~~~~~~~~~~~~~~~~~~~~[0m
     File is output from referenced project specified here.
 
-[[90m12:01:19 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:01:13 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -497,7 +496,6 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/projects/project2/class2.js] file written with same contents
-//// [/user/username/projects/myproject/projects/project2/class2.d.ts] file written with same contents
 //// [/user/username/projects/myproject/projects/project2/tsconfig.tsbuildinfo]
 {"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../project1/class1.d.ts","./class2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-3469237238-declare class class1 {}","affectsGlobalScope":true},{"version":"777969115-class class2 {}","signature":"-2684084705-declare class class2 {\n}\n","affectsGlobalScope":true}],"options":{"composite":true,"module":0},"semanticDiagnosticsPerFile":[1],"dtsChangeTime":38000,"dtsChangeFile":"./class2.d.ts"},"version":"FakeTSVersion"}
 
@@ -557,14 +555,14 @@ DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/pro
 Project: /user/username/projects/myproject/projects/project1/tsconfig.json Detected output file: /user/username/projects/myproject/projects/project1/class3.d.ts
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Wild card directory of referenced project
 Synchronizing program
-[[90m12:01:26 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:20 AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/projects/project2/class2.ts"]
   options: {"module":0,"composite":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/projects/project2/tsconfig.json"}
   projectReferences: [{"path":"/user/username/projects/myproject/projects/project1","originalPath":"../project1"}]
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 250 undefined Source file
-[[90m12:01:36 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:27 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -619,7 +617,6 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/projects/project2/class2.js] file written with same contents
-//// [/user/username/projects/myproject/projects/project2/class2.d.ts] file written with same contents
 //// [/user/username/projects/myproject/projects/project2/tsconfig.tsbuildinfo]
 {"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../project1/class1.d.ts","../project1/class3.d.ts","./class2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-3469237238-declare class class1 {}","affectsGlobalScope":true},{"version":"-3469165364-declare class class3 {}","affectsGlobalScope":true},{"version":"777969115-class class2 {}","signature":"-2684084705-declare class class2 {\n}\n","affectsGlobalScope":true}],"options":{"composite":true,"module":0},"semanticDiagnosticsPerFile":[1,2,3,4],"dtsChangeTime":38000,"dtsChangeFile":"./class2.d.ts"},"version":"FakeTSVersion"}
 

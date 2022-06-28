@@ -277,13 +277,11 @@ exitCode:: ExitStatus.undefined
 var x = 1;
 
 
-//// [/a/b/commonFile1.d.ts] file written with same contents
 //// [/a/b/commonFile2.js]
 "use strict";
 var y = 1;
 
 
-//// [/a/b/commonFile2.d.ts] file written with same contents
 //// [/a/b/project1.tsconfig.tsbuildinfo]
 {"program":{"fileNames":["../lib/lib.d.ts","./commonfile1.ts","./commonfile2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"2167136208-let x = 1","signature":"2842409786-declare let x: number;\n","affectsGlobalScope":true},{"version":"2168322129-let y = 1","signature":"784887931-declare let y: number;\n","affectsGlobalScope":true}],"options":{"composite":true,"strict":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[2,3,1],"dtsChangeTime":29000,"dtsChangeFile":"./commonFile2.d.ts"},"version":"FakeTSVersion"}
 
@@ -336,11 +334,11 @@ Change:: Build project 2
 Input::
 
 Output::
-[[90m12:01:21 AM[0m] Project 'project2.tsconfig.json' is out of date because output 'project2.tsconfig.tsbuildinfo' is older than input 'alpha.tsconfig.json'
+[[90m12:01:15 AM[0m] Project 'project2.tsconfig.json' is out of date because output 'project2.tsconfig.tsbuildinfo' is older than input 'alpha.tsconfig.json'
 
-[[90m12:01:22 AM[0m] Building project '/a/b/project2.tsconfig.json'...
+[[90m12:01:16 AM[0m] Building project '/a/b/project2.tsconfig.json'...
 
-[[90m12:01:36 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:27 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -384,7 +382,6 @@ exitCode:: ExitStatus.undefined
 var z = 0;
 
 
-//// [/a/b/other.d.ts] file written with same contents
 //// [/a/b/project2.tsconfig.tsbuildinfo]
 {"program":{"fileNames":["../lib/lib.d.ts","./other.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"2874288940-let z = 0;","signature":"-1272633924-declare let z: number;\n","affectsGlobalScope":true}],"options":{"composite":true,"strict":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[2,1],"dtsChangeTime":45000,"dtsChangeFile":"./other.d.ts"},"version":"FakeTSVersion"}
 
@@ -434,13 +431,13 @@ Input::
 
 Output::
 >> Screen clear
-[[90m12:01:40 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:31 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:41 AM[0m] Project 'project2.tsconfig.json' is out of date because output 'project2.tsconfig.tsbuildinfo' is older than input 'bravo.tsconfig.json'
+[[90m12:01:32 AM[0m] Project 'project2.tsconfig.json' is out of date because output 'project2.tsconfig.tsbuildinfo' is older than input 'bravo.tsconfig.json'
 
-[[90m12:01:42 AM[0m] Building project '/a/b/project2.tsconfig.json'...
+[[90m12:01:33 AM[0m] Building project '/a/b/project2.tsconfig.json'...
 
-[[90m12:01:56 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:44 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -483,7 +480,6 @@ exitCode:: ExitStatus.undefined
 var z = 0;
 
 
-//// [/a/b/other.d.ts] file written with same contents
 //// [/a/b/project2.tsconfig.tsbuildinfo]
 {"program":{"fileNames":["../lib/lib.d.ts","./other.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"2874288940-let z = 0;","signature":"-1272633924-declare let z: number;\n","affectsGlobalScope":true}],"options":{"composite":true,"strict":false},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[2,1],"dtsChangeTime":45000,"dtsChangeFile":"./other.d.ts"},"version":"FakeTSVersion"}
 
@@ -533,13 +529,13 @@ Input::
 
 Output::
 >> Screen clear
-[[90m12:02:00 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:48 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:02:01 AM[0m] Project 'project2.tsconfig.json' is out of date because output 'commonFile1.js' is older than input 'project2.tsconfig.json'
+[[90m12:01:49 AM[0m] Project 'project2.tsconfig.json' is out of date because output 'commonFile1.js' is older than input 'project2.tsconfig.json'
 
-[[90m12:02:02 AM[0m] Building project '/a/b/project2.tsconfig.json'...
+[[90m12:01:50 AM[0m] Building project '/a/b/project2.tsconfig.json'...
 
-[[90m12:02:13 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:02:01 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -602,11 +598,11 @@ Input::
 
 Output::
 >> Screen clear
-[[90m12:02:18 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:02:06 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:02:19 AM[0m] Project 'project1.tsconfig.json' is out of date because output 'project1.tsconfig.tsbuildinfo' is older than input 'alpha.tsconfig.json'
+[[90m12:02:07 AM[0m] Project 'project1.tsconfig.json' is out of date because output 'project1.tsconfig.tsbuildinfo' is older than input 'alpha.tsconfig.json'
 
-[[90m12:02:20 AM[0m] Building project '/a/b/project1.tsconfig.json'...
+[[90m12:02:08 AM[0m] Building project '/a/b/project1.tsconfig.json'...
 
 
 
@@ -651,12 +647,10 @@ exitCode:: ExitStatus.undefined
 var x = 1;
 
 
-//// [/a/b/commonFile1.d.ts] file written with same contents
 //// [/a/b/commonFile2.js]
 var y = 1;
 
 
-//// [/a/b/commonFile2.d.ts] file written with same contents
 //// [/a/b/project1.tsconfig.tsbuildinfo]
 {"program":{"fileNames":["../lib/lib.d.ts","./commonfile1.ts","./commonfile2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"2167136208-let x = 1","signature":"2842409786-declare let x: number;\n","affectsGlobalScope":true},{"version":"2168322129-let y = 1","signature":"784887931-declare let y: number;\n","affectsGlobalScope":true}],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[2,3,1],"dtsChangeTime":29000,"dtsChangeFile":"./commonFile2.d.ts"},"version":"FakeTSVersion"}
 
@@ -708,11 +702,11 @@ Change:: Build project 2
 Input::
 
 Output::
-[[90m12:02:40 AM[0m] Project 'project2.tsconfig.json' is out of date because output 'commonFile1.js' is older than input 'alpha.tsconfig.json'
+[[90m12:02:22 AM[0m] Project 'project2.tsconfig.json' is out of date because output 'commonFile1.js' is older than input 'alpha.tsconfig.json'
 
-[[90m12:02:41 AM[0m] Building project '/a/b/project2.tsconfig.json'...
+[[90m12:02:23 AM[0m] Building project '/a/b/project2.tsconfig.json'...
 
-[[90m12:02:52 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:02:34 AM[0m] Found 0 errors. Watching for file changes.
 
 
 

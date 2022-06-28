@@ -502,18 +502,17 @@ Output::
 
 [[90m12:00:48 AM[0m] Building project '/src/core/tsconfig.json'...
 
-[[90m12:00:55 AM[0m] Project 'src/logic/tsconfig.json' is up to date with .d.ts files from its dependencies
+[[90m12:00:54 AM[0m] Project 'src/logic/tsconfig.json' is up to date with .d.ts files from its dependencies
 
-[[90m12:00:56 AM[0m] Updating output timestamps of project '/src/logic/tsconfig.json'...
+[[90m12:00:55 AM[0m] Updating output timestamps of project '/src/logic/tsconfig.json'...
 
-[[90m12:00:59 AM[0m] Project 'src/tests/tsconfig.json' is up to date with .d.ts files from its dependencies
+[[90m12:00:58 AM[0m] Project 'src/tests/tsconfig.json' is up to date with .d.ts files from its dependencies
 
-[[90m12:01:00 AM[0m] Updating output timestamps of project '/src/tests/tsconfig.json'...
+[[90m12:00:59 AM[0m] Updating output timestamps of project '/src/tests/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 
 
-//// [/src/core/index.d.ts] file written with same contents
 //// [/src/core/index.d.ts.map]
 {"version":3,"file":"index.d.ts","sourceRoot":"","sources":["index.ts"],"names":[],"mappings":"AAAA,eAAO,MAAM,UAAU,EAAE,MAAyB,CAAC;AACnD,wBAAgB,OAAO,CAAC,CAAC,EAAE,MAAM,EAAE,CAAC,EAAE,MAAM,UAAmB;AAC/D,wBAAgB,QAAQ,CAAC,CAAC,EAAE,MAAM,EAAE,CAAC,EAAE,MAAM,UAAmB"}
 
@@ -606,23 +605,22 @@ Input::
 
 Output::
 /lib/tsc --b /src/tests --verbose
-[[90m12:01:04 AM[0m] Projects in this build: 
+[[90m12:01:03 AM[0m] Projects in this build: 
     * src/core/tsconfig.json
     * src/logic/tsconfig.json
     * src/tests/tsconfig.json
 
-[[90m12:01:05 AM[0m] Project 'src/core/tsconfig.json' is up to date because newest input 'src/core/index.ts' is older than output 'src/core/tsconfig.tsbuildinfo'
+[[90m12:01:04 AM[0m] Project 'src/core/tsconfig.json' is up to date because newest input 'src/core/index.ts' is older than output 'src/core/tsconfig.tsbuildinfo'
 
-[[90m12:01:06 AM[0m] Project 'src/logic/tsconfig.json' is up to date because newest input 'src/logic/index.ts' is older than output 'src/logic/tsconfig.tsbuildinfo'
+[[90m12:01:05 AM[0m] Project 'src/logic/tsconfig.json' is up to date because newest input 'src/logic/index.ts' is older than output 'src/logic/tsconfig.tsbuildinfo'
 
-[[90m12:01:07 AM[0m] Project 'src/tests/tsconfig.json' is out of date because output 'src/tests/tsconfig.tsbuildinfo' is older than input 'src/tests/tsconfig.json'
+[[90m12:01:06 AM[0m] Project 'src/tests/tsconfig.json' is out of date because output 'src/tests/tsconfig.tsbuildinfo' is older than input 'src/tests/tsconfig.json'
 
-[[90m12:01:08 AM[0m] Building project '/src/tests/tsconfig.json'...
+[[90m12:01:07 AM[0m] Building project '/src/tests/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 
 
-//// [/src/tests/index.d.ts] file written with same contents
 //// [/src/tests/index.js] file written with same contents
 //// [/src/tests/tsconfig.tsbuildinfo]
 {"program":{"fileNames":["../../lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"3708260210-const m = 10;","signature":"1073907769-declare const m = 10;\r\n","affectsGlobalScope":true}],"options":{"composite":true,"declaration":true,"skipDefaultLibCheck":true,"target":0},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2],"dtsChangeTime":39000,"dtsChangeFile":"./index.d.ts"},"version":"FakeTSVersion"}

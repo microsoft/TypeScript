@@ -530,7 +530,6 @@ Output::
 exitCode:: ExitStatus.Success
 
 
-//// [/src/sub-project/sub-project.d.ts] file written with same contents
 //// [/src/sub-project/sub-project.js]
 /**
  * @template T, Name

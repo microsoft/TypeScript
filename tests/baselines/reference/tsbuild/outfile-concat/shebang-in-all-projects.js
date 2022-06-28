@@ -3381,11 +3381,11 @@ Output::
 
 [[90m12:01:26 AM[0m] Building project '/src/first/tsconfig.json'...
 
-[[90m12:01:35 AM[0m] Project 'src/second/tsconfig.json' is up to date because newest input 'src/second/second_part1.ts' is older than output 'src/2/second-output.tsbuildinfo'
+[[90m12:01:34 AM[0m] Project 'src/second/tsconfig.json' is up to date because newest input 'src/second/second_part1.ts' is older than output 'src/2/second-output.tsbuildinfo'
 
-[[90m12:01:36 AM[0m] Project 'src/third/tsconfig.json' is out of date because output of its dependency 'src/first' has changed
+[[90m12:01:35 AM[0m] Project 'src/third/tsconfig.json' is out of date because output of its dependency 'src/first' has changed
 
-[[90m12:01:37 AM[0m] Updating output of project '/src/third/tsconfig.json'...
+[[90m12:01:36 AM[0m] Updating output of project '/src/third/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 readFiles:: {
@@ -3412,7 +3412,6 @@ readFiles:: {
  "/src/2/second-output.d.ts": 1
 } 
 
-//// [/src/first/bin/first-output.d.ts] file written with same contents
 //// [/src/first/bin/first-output.d.ts.map] file written with same contents
 //// [/src/first/bin/first-output.d.ts.map.baseline.txt] file written with same contents
 //// [/src/first/bin/first-output.js]
