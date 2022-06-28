@@ -2161,6 +2161,17 @@ namespace ts {
                     }
                 }
             }
+
+            if (propertyWithInvalidInitializer && !(getEmitScriptTarget(compilerOptions) === ScriptTarget.ESNext && useDefineForClassFields)) {
+                // We have a match, but the reference occurred within a property initializer and the identifier also binds
+                // to a local variable in the constructor where the code will be emitted. Note that this is actually allowed
+                // with ESNext+useDefineForClassFields because the scope semantics are different.
+                const propertyName = (propertyWithInvalidInitializer as PropertyDeclaration).name;
+                error(errorLocation, Diagnostics.Initializer_of_instance_member_variable_0_cannot_reference_identifier_1_declared_in_the_constructor,
+                    declarationNameToString(propertyName), diagnosticName(nameArg!));
+                return undefined;
+            }
+
             if (!result) {
                 if (nameNotFoundMessage) {
                     addLazyDiagnostic(() => {
@@ -2210,16 +2221,6 @@ namespace ts {
                         }
                     });
                 }
-                return undefined;
-            }
-
-            if (propertyWithInvalidInitializer && !(getEmitScriptTarget(compilerOptions) === ScriptTarget.ESNext && useDefineForClassFields)) {
-                // We have a match, but the reference occurred within a property initializer and the identifier also binds
-                // to a local variable in the constructor where the code will be emitted. Note that this is actually allowed
-                // with ESNext+useDefineForClassFields because the scope semantics are different.
-                const propertyName = (propertyWithInvalidInitializer as PropertyDeclaration).name;
-                error(errorLocation, Diagnostics.Initializer_of_instance_member_variable_0_cannot_reference_identifier_1_declared_in_the_constructor,
-                    declarationNameToString(propertyName), diagnosticName(nameArg!));
                 return undefined;
             }
 
