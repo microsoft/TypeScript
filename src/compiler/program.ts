@@ -1685,32 +1685,33 @@ namespace ts {
         function resolveTypeReferenceDirectiveNamesReusingOldState(typeDirectiveNames: readonly FileReference[], containingFile: SourceFile): readonly (ResolvedTypeReferenceDirective | undefined)[];
         function resolveTypeReferenceDirectiveNamesReusingOldState(typeDirectiveNames: string[], containingFile: string): readonly (ResolvedTypeReferenceDirective | undefined)[];
         function resolveTypeReferenceDirectiveNamesReusingOldState(typeDirectiveNames: string[] | readonly FileReference[], containingFile: string | SourceFile): readonly (ResolvedTypeReferenceDirective | undefined)[] {
-            // TODO: (shkamat) reuse auto type reference resolutions
-            if (structureIsReused === StructureIsReused.Not || isString(containingFile)) {
+            if (structureIsReused === StructureIsReused.Not) {
                 return resolveTypeReferenceDirectiveNamesWorker(typeDirectiveNames, containingFile, /*partialResolutionInfo*/ undefined);
             }
 
-            const oldSourceFile = oldProgram && oldProgram.getSourceFile(containingFile.fileName);
-            if (oldSourceFile !== containingFile && containingFile.resolvedTypeReferenceDirectiveNames) {
-                // `file` was created for the new program.
-                //
-                // We only set `file.resolvedTypeReferenceDirectiveNames` via work from the current function,
-                // so it is defined iff we already called the current function on `file`.
-                // That call happened no later than the creation of the `file` object,
-                // which per above occurred during the current program creation.
-                // Since we assume the filesystem does not change during program creation,
-                // it is safe to reuse resolutions from the earlier call.
-                const result: ResolvedTypeReferenceDirective[] = [];
-                for (const typeDirectiveName of typeDirectiveNames as readonly FileReference[]) {
-                    // We lower-case all type references because npm automatically lowercases all packages. See GH#9824.
-                    const resolvedTypeReferenceDirective = containingFile.resolvedTypeReferenceDirectiveNames.get(typeDirectiveName.fileName.toLowerCase(), typeDirectiveName.resolutionMode || containingFile.impliedNodeFormat)!;
-                    result.push(resolvedTypeReferenceDirective);
+            const oldSourceFile = !isString(containingFile) ? oldProgram && oldProgram.getSourceFile(containingFile.fileName) : undefined;
+            if (!isString(containingFile)) {
+                if (oldSourceFile !== containingFile && containingFile.resolvedTypeReferenceDirectiveNames) {
+                    // `file` was created for the new program.
+                    //
+                    // We only set `file.resolvedTypeReferenceDirectiveNames` via work from the current function,
+                    // so it is defined iff we already called the current function on `file`.
+                    // That call happened no later than the creation of the `file` object,
+                    // which per above occurred during the current program creation.
+                    // Since we assume the filesystem does not change during program creation,
+                    // it is safe to reuse resolutions from the earlier call.
+                    const result: ResolvedTypeReferenceDirective[] = [];
+                    for (const typeDirectiveName of typeDirectiveNames as readonly FileReference[]) {
+                        // We lower-case all type references because npm automatically lowercases all packages. See GH#9824.
+                        const resolvedTypeReferenceDirective = containingFile.resolvedTypeReferenceDirectiveNames.get(typeDirectiveName.fileName.toLowerCase(), typeDirectiveName.resolutionMode || containingFile.impliedNodeFormat)!;
+                        result.push(resolvedTypeReferenceDirective);
+                    }
+                    return result;
                 }
-                return result;
             }
 
             /** An ordered list of module names for which we cannot recover the resolution. */
-            let unknownTypeReferenceDirectiveNames: FileReference[] | undefined;
+            let unknownTypeReferenceDirectiveNames: string [] | FileReference[] | undefined;
             let unknownTypeReferenceDirectiveNamesIndex: number[] | undefined;
             /**
              * The indexing of elements in this list matches that of `moduleNames`.
@@ -1720,12 +1721,15 @@ namespace ts {
              */
             let result: (ResolvedTypeReferenceDirective | undefined)[] | undefined;
             let reusedNames: { name: string; mode: ModuleKind.CommonJS | ModuleKind.ESNext | undefined; }[] | undefined;
+            const canReuseResolutions = !isString(containingFile) ?
+                containingFile === oldSourceFile && !hasInvalidatedResolution(oldSourceFile.path) :
+                !hasInvalidatedResolution(toPath(containingFile));
             for (let i = 0; i < typeDirectiveNames.length; i++) {
-                const entry = typeDirectiveNames[i] as FileReference;
+                const entry = typeDirectiveNames[i];
                 // If the source file is unchanged and doesnt have invalidated resolution, reuse the module resolutions
-                if (containingFile === oldSourceFile && !hasInvalidatedResolution(oldSourceFile.path)) {
-                    const typeDirectiveName = entry.fileName.toLowerCase();
-                    const mode = getModeForFileReference(entry, oldSourceFile.impliedNodeFormat);
+                if (canReuseResolutions) {
+                    const typeDirectiveName = !isString(entry) ? entry.fileName.toLowerCase() : entry;
+                    const mode = getModeForFileReference(entry, oldSourceFile?.impliedNodeFormat);
                     const oldResolvedTypeReferenceDirective = getResolvedTypeReferenceDirective(oldSourceFile, typeDirectiveName, mode);
                     if (oldResolvedTypeReferenceDirective) {
                         if (isTraceEnabled(options, host)) {
@@ -1734,7 +1738,7 @@ namespace ts {
                                     Diagnostics.Reusing_resolution_of_type_reference_directive_0_from_1_of_old_program_it_was_successfully_resolved_to_2_with_Package_ID_3 :
                                     Diagnostics.Reusing_resolution_of_type_reference_directive_0_from_1_of_old_program_it_was_successfully_resolved_to_2,
                                 typeDirectiveName,
-                                getNormalizedAbsolutePath(containingFile.originalFileName, currentDirectory),
+                                !isString(containingFile) ? getNormalizedAbsolutePath(containingFile.originalFileName, currentDirectory) : containingFile,
                                 oldResolvedTypeReferenceDirective.resolvedFileName,
                                 oldResolvedTypeReferenceDirective.packageId && packageIdToString(oldResolvedTypeReferenceDirective.packageId)
                             );
@@ -1745,7 +1749,7 @@ namespace ts {
                     }
                 }
                 // Resolution failed in the old program, or resolved to an ambient module for which we can't reuse the result.
-                (unknownTypeReferenceDirectiveNames ??= []).push(entry);
+                (unknownTypeReferenceDirectiveNames ??= []).push(entry as FileReference & string);
                 (unknownTypeReferenceDirectiveNamesIndex ??= []).push(i);
             }
 

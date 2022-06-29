@@ -326,5 +326,94 @@ namespace ts.tscWatch {
                 }
             ]
         });
+
+        verifyTscWatch({
+            scenario: "moduleResolution",
+            subScenario: "type reference resolutions reuse",
+            sys: () => createWatchedSystem([
+                {
+                    path: `${projectRoot}/tsconfig.json`,
+                    content: JSON.stringify({
+                        compilerOptions: { moduleResolution: "node16" },
+                    })
+                },
+                {
+                    path: `${projectRoot}/index.ts`,
+                    content: Utils.dedent`
+                        /// <reference types="pkg" resolution-mode="import"/>
+                        /// <reference types="pkg1" resolution-mode="require"/>
+                        export interface LocalInterface extends RequireInterface {}
+                    `
+                },
+                {
+                    path: `${projectRoot}/a.ts`,
+                    content: Utils.dedent`
+                        export const x = 10;
+                    `
+                },
+                {
+                    path: `${projectRoot}/node_modules/pkg/package.json`,
+                    content: JSON.stringify({
+                        name: "pkg",
+                        version: "0.0.1",
+                        exports: {
+                            import: "./import.js",
+                            require: "./require.js"
+                        }
+                    })
+                },
+                {
+                    path: `${projectRoot}/node_modules/pkg/import.d.ts`,
+                    content: Utils.dedent`
+                        export {};
+                        declare global {
+                            interface ImportInterface {}
+                        }
+                    `
+                },
+                {
+                    path: `${projectRoot}/node_modules/pkg/require.d.ts`,
+                    content: Utils.dedent`
+                        export {};
+                        declare global {
+                            interface RequireInterface {}
+                        }
+                    `
+                },
+                {
+                    path: `${projectRoot}/node_modules/pkg1/package.json`,
+                    content: JSON.stringify({
+                        name: "pkg1",
+                        version: "0.0.1",
+                        exports: {
+                            import: "./import.js",
+                            require: "./require.js"
+                        }
+                    })
+                },
+                {
+                    path: `${projectRoot}/node_modules/pkg1/import.d.ts`,
+                    content: Utils.dedent`
+                        export {};
+                        declare global {
+                            interface ImportInterface {}
+                        }
+                    `
+                },
+                {
+                    path: `${projectRoot}/node_modules/@types/pkg2/index.d.ts`,
+                    content: `export const x = 10;`
+                },
+                libFile
+            ], { currentDirectory: projectRoot }),
+            commandLineArgs: ["-w", "--traceResolution"],
+            changes: [
+                {
+                    caption: "modify aFile by adding import",
+                    change: sys => sys.prependFile(`${projectRoot}/a.ts`, `/// <reference types="pkg" resolution-mode="import"/>\n`),
+                    timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                }
+            ]
+        });
     });
 }
