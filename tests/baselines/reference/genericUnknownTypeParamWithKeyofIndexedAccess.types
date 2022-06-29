@@ -1,0 +1,35 @@
+=== tests/cases/compiler/genericUnknownTypeParamWithKeyofIndexedAccess.ts ===
+function test<T, K extends keyof T>(t: T, k: K) {
+>test : <T, K extends keyof T>(t: T, k: K) => NonNullable<T>[K]
+>t : T
+>k : K
+
+    return t[k];
+>t[k] : NonNullable<T>[K]
+>t : T
+>k : K
+}
+
+test(null, 'foo')
+>test(null, 'foo') : never
+>test : <T, K extends keyof T>(t: T, k: K) => NonNullable<T>[K]
+>null : null
+>'foo' : "foo"
+
+function test2<T extends unknown, K extends keyof T>(t: T, k: K) {
+>test2 : <T extends unknown, K extends keyof T>(t: T, k: K) => NonNullable<T>[K]
+>t : T
+>k : K
+
+    return t[k];
+>t[k] : NonNullable<T>[K]
+>t : T
+>k : K
+}
+
+test2(null, 'foo')
+>test2(null, 'foo') : never
+>test2 : <T extends unknown, K extends keyof T>(t: T, k: K) => NonNullable<T>[K]
+>null : null
+>'foo' : "foo"
+

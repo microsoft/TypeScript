@@ -28892,7 +28892,7 @@ namespace ts {
                 return errorType;
             }
             const facts = getTypeFacts(type);
-            if (facts & TypeFacts.IsUndefinedOrNull) {
+            if (facts & TypeFacts.IsUndefinedOrNull || type.flags & (TypeFlags.Intersection | TypeFlags.Instantiable) && (getBaseConstraintOfType(type) || unknownType) === unknownType) {
                 reportError(node, facts);
                 const t = getNonNullableType(type);
                 return t.flags & (TypeFlags.Nullable | TypeFlags.Never) ? errorType : t;

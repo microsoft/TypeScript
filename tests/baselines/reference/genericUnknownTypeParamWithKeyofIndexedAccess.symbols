@@ -1,0 +1,37 @@
+=== tests/cases/compiler/genericUnknownTypeParamWithKeyofIndexedAccess.ts ===
+function test<T, K extends keyof T>(t: T, k: K) {
+>test : Symbol(test, Decl(genericUnknownTypeParamWithKeyofIndexedAccess.ts, 0, 0))
+>T : Symbol(T, Decl(genericUnknownTypeParamWithKeyofIndexedAccess.ts, 0, 14))
+>K : Symbol(K, Decl(genericUnknownTypeParamWithKeyofIndexedAccess.ts, 0, 16))
+>T : Symbol(T, Decl(genericUnknownTypeParamWithKeyofIndexedAccess.ts, 0, 14))
+>t : Symbol(t, Decl(genericUnknownTypeParamWithKeyofIndexedAccess.ts, 0, 36))
+>T : Symbol(T, Decl(genericUnknownTypeParamWithKeyofIndexedAccess.ts, 0, 14))
+>k : Symbol(k, Decl(genericUnknownTypeParamWithKeyofIndexedAccess.ts, 0, 41))
+>K : Symbol(K, Decl(genericUnknownTypeParamWithKeyofIndexedAccess.ts, 0, 16))
+
+    return t[k];
+>t : Symbol(t, Decl(genericUnknownTypeParamWithKeyofIndexedAccess.ts, 0, 36))
+>k : Symbol(k, Decl(genericUnknownTypeParamWithKeyofIndexedAccess.ts, 0, 41))
+}
+
+test(null, 'foo')
+>test : Symbol(test, Decl(genericUnknownTypeParamWithKeyofIndexedAccess.ts, 0, 0))
+
+function test2<T extends unknown, K extends keyof T>(t: T, k: K) {
+>test2 : Symbol(test2, Decl(genericUnknownTypeParamWithKeyofIndexedAccess.ts, 4, 17))
+>T : Symbol(T, Decl(genericUnknownTypeParamWithKeyofIndexedAccess.ts, 6, 15))
+>K : Symbol(K, Decl(genericUnknownTypeParamWithKeyofIndexedAccess.ts, 6, 33))
+>T : Symbol(T, Decl(genericUnknownTypeParamWithKeyofIndexedAccess.ts, 6, 15))
+>t : Symbol(t, Decl(genericUnknownTypeParamWithKeyofIndexedAccess.ts, 6, 53))
+>T : Symbol(T, Decl(genericUnknownTypeParamWithKeyofIndexedAccess.ts, 6, 15))
+>k : Symbol(k, Decl(genericUnknownTypeParamWithKeyofIndexedAccess.ts, 6, 58))
+>K : Symbol(K, Decl(genericUnknownTypeParamWithKeyofIndexedAccess.ts, 6, 33))
+
+    return t[k];
+>t : Symbol(t, Decl(genericUnknownTypeParamWithKeyofIndexedAccess.ts, 6, 53))
+>k : Symbol(k, Decl(genericUnknownTypeParamWithKeyofIndexedAccess.ts, 6, 58))
+}
+
+test2(null, 'foo')
+>test2 : Symbol(test2, Decl(genericUnknownTypeParamWithKeyofIndexedAccess.ts, 4, 17))
+
