@@ -1,0 +1,40 @@
+=== tests/cases/compiler/unresolvableSelfReferencingAwaitedUnion.ts ===
+// repro #49646
+
+type EnvFunction = <T>() => T;
+>EnvFunction : Symbol(EnvFunction, Decl(unresolvableSelfReferencingAwaitedUnion.ts, 0, 0))
+>T : Symbol(T, Decl(unresolvableSelfReferencingAwaitedUnion.ts, 2, 20))
+>T : Symbol(T, Decl(unresolvableSelfReferencingAwaitedUnion.ts, 2, 20))
+
+type SimpleType = string | Promise<SimpleType>;
+>SimpleType : Symbol(SimpleType, Decl(unresolvableSelfReferencingAwaitedUnion.ts, 2, 30))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>SimpleType : Symbol(SimpleType, Decl(unresolvableSelfReferencingAwaitedUnion.ts, 2, 30))
+
+declare const simple: SimpleType;
+>simple : Symbol(simple, Decl(unresolvableSelfReferencingAwaitedUnion.ts, 6, 13))
+>SimpleType : Symbol(SimpleType, Decl(unresolvableSelfReferencingAwaitedUnion.ts, 2, 30))
+
+const env: EnvFunction = () => simple;
+>env : Symbol(env, Decl(unresolvableSelfReferencingAwaitedUnion.ts, 8, 5))
+>EnvFunction : Symbol(EnvFunction, Decl(unresolvableSelfReferencingAwaitedUnion.ts, 0, 0))
+>simple : Symbol(simple, Decl(unresolvableSelfReferencingAwaitedUnion.ts, 6, 13))
+
+// repro #49723
+
+type T1 = 1 | Promise<T1> | T1[];
+>T1 : Symbol(T1, Decl(unresolvableSelfReferencingAwaitedUnion.ts, 8, 38))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>T1 : Symbol(T1, Decl(unresolvableSelfReferencingAwaitedUnion.ts, 8, 38))
+>T1 : Symbol(T1, Decl(unresolvableSelfReferencingAwaitedUnion.ts, 8, 38))
+
+export async function myFunction(param: T1) {
+>myFunction : Symbol(myFunction, Decl(unresolvableSelfReferencingAwaitedUnion.ts, 12, 33))
+>param : Symbol(param, Decl(unresolvableSelfReferencingAwaitedUnion.ts, 14, 33))
+>T1 : Symbol(T1, Decl(unresolvableSelfReferencingAwaitedUnion.ts, 8, 38))
+
+  const awaited = await param
+>awaited : Symbol(awaited, Decl(unresolvableSelfReferencingAwaitedUnion.ts, 15, 7))
+>param : Symbol(param, Decl(unresolvableSelfReferencingAwaitedUnion.ts, 14, 33))
+}
+
