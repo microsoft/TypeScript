@@ -5,7 +5,13 @@ namespace ts {
         startRecordingFilesWithChangedResolutions(): void;
         finishRecordingFilesWithChangedResolutions(): Path[] | undefined;
 
-        resolveModuleNames(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference?: ResolvedProjectReference, containingSourceFile?: SourceFile): (ResolvedModuleFull | undefined)[];
+        resolveModuleNames(
+            moduleNames: string[],
+            containingFile: string,
+            redirectedReference: ResolvedProjectReference | undefined,
+            containingSourceFile: SourceFile | undefined,
+            partialResolutionInfo: PartialResolutionInfo | undefined
+        ): (ResolvedModuleFull | undefined)[];
         getResolvedModuleWithFailedLookupLocationsFromCache(moduleName: string, containingFile: string, resolutionMode?: ModuleKind.CommonJS | ModuleKind.ESNext): CachedResolvedModuleWithFailedLookupLocations | undefined;
         resolveTypeReferenceDirectives(typeDirectiveNames: string[] | readonly FileReference[], containingFile: string, redirectedReference?: ResolvedProjectReference, containingFileMode?: SourceFile["impliedNodeFormat"]): (ResolvedTypeReferenceDirective | undefined)[];
 
@@ -384,7 +390,7 @@ namespace ts {
             loader: (name: string, containingFile: string, options: CompilerOptions, host: ModuleResolutionHost, redirectedReference?: ResolvedProjectReference, containingSourceFile?: SourceFile, resolutionMode?: ModuleKind.CommonJS | ModuleKind.ESNext | undefined) => T;
             getResolutionWithResolvedFileName: GetResolutionWithResolvedFileName<T, R>;
             shouldRetryResolution: (t: T) => boolean;
-            reusedNames?: readonly string[];
+            partialResolutionInfo?: PartialResolutionInfo;
             logChanges?: boolean;
             containingSourceFile?: SourceFile;
             containingSourceFileMode?: SourceFile["impliedNodeFormat"];
@@ -393,7 +399,7 @@ namespace ts {
             names, containingFile, redirectedReference,
             cache, perDirectoryCacheWithRedirects,
             loader, getResolutionWithResolvedFileName,
-            shouldRetryResolution, reusedNames, logChanges, containingSourceFile, containingSourceFileMode
+            shouldRetryResolution, partialResolutionInfo, logChanges, containingSourceFile, containingSourceFileMode
         }: ResolveNamesWithLocalCacheInput<T, R>): (R | undefined)[] {
             const path = resolutionHost.toPath(containingFile);
             const resolutionsInFile = cache.get(path) || cache.set(path, createModeAwareCache()).get(path)!;
@@ -425,7 +431,7 @@ namespace ts {
                 // Type references instead supply a `containingSourceFileMode` and a non-string entry which contains
                 // a default file mode override if applicable.
                 const mode = !isString(entry) ? getModeForFileReference(entry, containingSourceFileMode) :
-                    containingSourceFile ? getModeForResolutionAtIndex(containingSourceFile, i) : undefined;
+                    containingSourceFile ? getModeForResolutionAtIndex(containingSourceFile, partialResolutionInfo?.namesIndex[i] ?? i) : undefined;
                 i++;
                 let resolution = resolutionsInFile.get(name, mode);
                 // Resolution is valid if it is present and not invalidated
@@ -509,13 +515,16 @@ namespace ts {
                 resolvedModules.push(getResolutionWithResolvedFileName(resolution));
             }
 
-            // Stop watching and remove the unused name
-            resolutionsInFile.forEach((resolution, name, mode) => {
-                if (!seenNamesInFile.has(name, mode) && !contains(reusedNames, name)) {
-                    stopWatchFailedLookupLocationOfResolution(resolution, path, getResolutionWithResolvedFileName);
-                    resolutionsInFile.delete(name, mode);
-                }
-            });
+            partialResolutionInfo?.reusedNames?.forEach(({ name, mode }) => seenNamesInFile.set(name, mode, true));
+            if (resolutionsInFile.size() !== seenNamesInFile.size()) {
+                // Stop watching and remove the unused name
+                resolutionsInFile.forEach((resolution, name, mode) => {
+                    if (!seenNamesInFile.has(name, mode)) {
+                        stopWatchFailedLookupLocationOfResolution(resolution, path, getResolutionWithResolvedFileName);
+                        resolutionsInFile.delete(name, mode);
+                    }
+                });
+            }
 
             return resolvedModules;
 
@@ -552,7 +561,13 @@ namespace ts {
             });
         }
 
-        function resolveModuleNames(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference?: ResolvedProjectReference, containingSourceFile?: SourceFile): (ResolvedModuleFull | undefined)[] {
+        function resolveModuleNames(
+            moduleNames: string[],
+            containingFile: string,
+            redirectedReference?: ResolvedProjectReference,
+            containingSourceFile?: SourceFile,
+            partialResolutionInfo?: PartialResolutionInfo
+        ): (ResolvedModuleFull | undefined)[] {
             return resolveNamesWithLocalCache<CachedResolvedModuleWithFailedLookupLocations, ResolvedModuleFull>({
                 names: moduleNames,
                 containingFile,
@@ -562,7 +577,7 @@ namespace ts {
                 loader: resolveModuleName,
                 getResolutionWithResolvedFileName: getResolvedModule,
                 shouldRetryResolution: resolution => !resolution.resolvedModule || !resolutionExtensionIsTSOrJson(resolution.resolvedModule.extension),
-                reusedNames,
+                partialResolutionInfo,
                 logChanges: logChangesWhenResolvingModule,
                 containingSourceFile,
             });

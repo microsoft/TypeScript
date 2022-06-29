@@ -737,8 +737,9 @@ namespace ts {
 
     /* @internal */
     export function createModeAwareCache<T>(): ModeAwareCache<T> {
-        const underlying = new Map<string, T>();
-        const memoizedReverseKeys = new Map<string, [specifier: string, mode: ModuleKind.CommonJS | ModuleKind.ESNext | undefined]>();
+        const underlying = new Map<ModeAwareCacheKey, T>();
+        type ModeAwareCacheKey = string & { __modeAwareCacheKey: any; };
+        const memoizedReverseKeys = new Map<ModeAwareCacheKey, [specifier: string, mode: ModuleKind.CommonJS | ModuleKind.ESNext | undefined]>();
 
         const cache: ModeAwareCache<T> = {
             get(specifier, mode) {
@@ -768,7 +769,7 @@ namespace ts {
         return cache;
 
         function getUnderlyingCacheKey(specifier: string, mode: ModuleKind.CommonJS | ModuleKind.ESNext | undefined) {
-            const result = mode === undefined ? specifier : `${mode}|${specifier}`;
+            const result = (mode === undefined ? specifier : `${mode}|${specifier}`) as ModeAwareCacheKey;
             memoizedReverseKeys.set(result, [specifier, mode]);
             return result;
         }
