@@ -8971,7 +8971,7 @@ namespace ts {
                     if (type) return type;
                 }
                 // Use contextual parameter type if one is available
-                const type = declaration.symbol.escapedName === InternalSymbolName.This ? getContextualThisParameterType(func, /*contextFlags*/ undefined) : getContextuallyTypedParameterType(declaration);
+                const type = declaration.symbol.escapedName === InternalSymbolName.This ? getContextualThisParameterType(func) : getContextuallyTypedParameterType(declaration);
                 if (type) {
                     return addOptionality(type, /*isProperty*/ false, isOptional);
                 }
@@ -26128,7 +26128,7 @@ namespace ts {
                     else if (isJSConstructor(container)) {
                         thisType = (getDeclaredTypeOfSymbol(getMergedSymbol(container.symbol)) as InterfaceType).thisType;
                     }
-                    thisType ||= getContextualThisParameterType(container, /*contextFlags*/ undefined);
+                    thisType ||= getContextualThisParameterType(container);
                 }
 
                 if (thisType) {
@@ -26479,7 +26479,7 @@ namespace ts {
             });
         }
 
-        function getContextualThisParameterType(func: SignatureDeclaration, contextFlags: ContextFlags | undefined): Type | undefined {
+        function getContextualThisParameterType(func: SignatureDeclaration): Type | undefined {
             if (func.kind === SyntaxKind.ArrowFunction) {
                 return undefined;
             }
@@ -26499,7 +26499,7 @@ namespace ts {
                     // We have an object literal method. Check if the containing object literal has a contextual type
                     // that includes a ThisType<T>. If so, T is the contextual type for 'this'. We continue looking in
                     // any directly enclosing object literals.
-                    const contextualType = getApparentTypeOfContextualType(containingLiteral, contextFlags);
+                    const contextualType = getApparentTypeOfContextualType(containingLiteral, /*contextFlags*/ undefined);
                     let literal = containingLiteral;
                     let type = contextualType;
                     while (type) {
@@ -26511,7 +26511,7 @@ namespace ts {
                             break;
                         }
                         literal = literal.parent.parent as ObjectLiteralExpression;
-                        type = getApparentTypeOfContextualType(literal, contextFlags);
+                        type = getApparentTypeOfContextualType(literal, /*contextFlags*/ undefined);
                     }
                     // There was no contextual ThisType<T> for the containing object literal, so the contextual type
                     // for 'this' is the non-null form of the contextual type for the containing object literal or
@@ -26703,9 +26703,9 @@ namespace ts {
             return false;
         }
 
-        function getContextualIterationType(kind: IterationTypeKind, functionDecl: SignatureDeclaration, contextFlags: ContextFlags | undefined): Type | undefined {
+        function getContextualIterationType(kind: IterationTypeKind, functionDecl: SignatureDeclaration): Type | undefined {
             const isAsync = !!(getFunctionFlags(functionDecl) & FunctionFlags.Async);
-            const contextualReturnType = getContextualReturnType(functionDecl, contextFlags);
+            const contextualReturnType = getContextualReturnType(functionDecl, /*contextFlags*/ undefined);
             if (contextualReturnType) {
                 return getIterationTypeOfGeneratorFunctionReturnType(kind, contextualReturnType, isAsync)
                     || undefined;
@@ -32709,7 +32709,7 @@ namespace ts {
                 return createGeneratorReturnType(
                     yieldType || neverType,
                     returnType || fallbackReturnType,
-                    nextType || getContextualIterationType(IterationTypeKind.Next, func, /*contextFlags*/ undefined) || unknownType,
+                    nextType || getContextualIterationType(IterationTypeKind.Next, func) || unknownType,
                     isAsync);
             }
             else {
@@ -34388,7 +34388,7 @@ namespace ts {
                 return getIterationTypeOfGeneratorFunctionReturnType(IterationTypeKind.Next, returnType, isAsync)
                     || anyType;
             }
-            let type = getContextualIterationType(IterationTypeKind.Next, func, /*contextFlags*/ undefined);
+            let type = getContextualIterationType(IterationTypeKind.Next, func);
             if (!type) {
                 type = anyType;
                 addLazyDiagnostic(() => {
