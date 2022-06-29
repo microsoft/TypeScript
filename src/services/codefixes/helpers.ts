@@ -295,8 +295,10 @@ namespace ts.codefix {
         const contextualType = isJs ? undefined : checker.getContextualType(call);
         const names = map(args, arg =>
             isIdentifier(arg) ? arg.text : isPropertyAccessExpression(arg) && isIdentifier(arg.name) ? arg.name.text : undefined);
-        const types = isJs ? [] : map(args, arg =>
-            typeToAutoImportableTypeNode(checker, importAdder, checker.getBaseTypeOfLiteralType(checker.getTypeAtLocation(arg)), contextNode, scriptTarget, /*flags*/ undefined, tracker));
+        const instanceTypes = isJs ? [] : map(args, arg => checker.getTypeAtLocation(arg));
+        const { argumentTypeNodes, argumentTypeParameters } = getArgumentTypesAndTypeParameters(
+            checker, importAdder, instanceTypes, contextNode, scriptTarget, /*flags*/ undefined, tracker
+        );
 
         const modifiers = modifierFlags
             ? factory.createNodeArray(factory.createModifiersFromModifierFlags(modifierFlags))
@@ -304,11 +306,8 @@ namespace ts.codefix {
         const asteriskToken = isYieldExpression(parent)
             ? factory.createToken(SyntaxKind.AsteriskToken)
             : undefined;
-        const typeParameters = isJs || typeArguments === undefined
-            ? undefined
-            : map(typeArguments, (_, i) =>
-                factory.createTypeParameterDeclaration(/*modifiers*/ undefined, CharacterCodes.T + typeArguments.length - 1 <= CharacterCodes.Z ? String.fromCharCode(CharacterCodes.T + i) : `T${i}`));
-        const parameters = createDummyParameters(args.length, names, types, /*minArgumentCount*/ undefined, isJs);
+        const typeParameters = isJs ? undefined : createTypeParametersForArguments(argumentTypeParameters, typeArguments);
+        const parameters = createDummyParameters(args.length, names, argumentTypeNodes, /*minArgumentCount*/ undefined, isJs);
         const type = isJs || contextualType === undefined
             ? undefined
             : checker.typeToTypeNode(contextualType, contextNode, /*flags*/ undefined, tracker);
@@ -349,7 +348,28 @@ namespace ts.codefix {
         }
     }
 
-    export function typeToAutoImportableTypeNode(checker: TypeChecker, importAdder: ImportAdder, type: Type, contextNode: Node | undefined, scriptTarget: ScriptTarget, flags?: NodeBuilderFlags, tracker?: SymbolTracker): TypeNode | undefined {
+    function createTypeParametersForArguments(argumentTypeParameters: string[], typeArguments: NodeArray<TypeNode> | undefined) {
+        const usedNames = new Set(argumentTypeParameters);
+
+        if (typeArguments) {
+            for (let i = 0, targetSize = usedNames.size + typeArguments.length; usedNames.size < targetSize; i += 1) {
+                usedNames.add(
+                    CharacterCodes.T + i <= CharacterCodes.Z
+                        ? String.fromCharCode(CharacterCodes.T + i)
+                        : `T${i}`
+                );
+            }
+        }
+
+        return map(
+            arrayFrom(usedNames.values()),
+            (usedName) => factory.createTypeParameterDeclaration(/*modifiers*/ undefined, usedName),
+        );
+    }
+
+    export function typeToAutoImportableTypeNode(checker: TypeChecker, importAdder: ImportAdder, instanceType: Type, contextNode: Node | undefined, scriptTarget: ScriptTarget, flags?: NodeBuilderFlags, tracker?: SymbolTracker): TypeNode | undefined {
+        // Widen the type so we don't emit nonsense annotations like "function fn(x: 3) {"
+        const type = checker.getBaseTypeOfLiteralType(instanceType);
         let typeNode = checker.typeToTypeNode(type, contextNode, flags, tracker);
         if (typeNode && isImportTypeNode(typeNode)) {
             const importableReference = tryGetAutoImportableReferenceFromTypeNode(typeNode, scriptTarget);
@@ -360,6 +380,42 @@ namespace ts.codefix {
         }
         // Ensure nodes are fresh so they can have different positions when going through formatting.
         return getSynthesizedDeepClone(typeNode);
+    }
+
+    export function getArgumentTypesAndTypeParameters(checker: TypeChecker, importAdder: ImportAdder, instanceTypes: Type[], contextNode: Node | undefined, scriptTarget: ScriptTarget, flags?: NodeBuilderFlags, tracker?: SymbolTracker) {
+        const argumentTypeNodes: TypeNode[] = [];
+        const argumentTypeParameters = new Set<string>();
+
+        for (const instanceType of instanceTypes) {
+            const argumentTypeNode = typeToAutoImportableTypeNode(checker, importAdder, instanceType, contextNode, scriptTarget, flags, tracker);
+            if (!argumentTypeNode) {
+                continue;
+            }
+
+            argumentTypeNodes.push(argumentTypeNode);
+            const argumentTypeParameter = getFirstTypeParameterName(instanceType);
+
+            if (argumentTypeParameter) {
+                argumentTypeParameters.add(argumentTypeParameter);
+            }
+        }
+
+        return { argumentTypeNodes, argumentTypeParameters: arrayFrom(argumentTypeParameters.values()) };
+    }
+
+    function getFirstTypeParameterName(type: Type): string | undefined {
+        if (type.flags & TypeFlags.Intersection) {
+            for (const subType of (type as IntersectionType).types) {
+                const subTypeName = getFirstTypeParameterName(subType);
+                if (subTypeName) {
+                    return subTypeName;
+                }
+            }
+        }
+
+        return type.flags & TypeFlags.TypeParameter
+            ? type.getSymbol()?.getName()
+            : undefined;
     }
 
     function createDummyParameters(argCount: number, names: (string | undefined)[] | undefined, types: (TypeNode | undefined)[] | undefined, minArgumentCount: number | undefined, inJs: boolean): ParameterDeclaration[] {
