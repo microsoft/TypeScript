@@ -22,8 +22,7 @@ var o = {
 >C : Symbol(C, Decl(b.js, 5, 9))
 
         this.c = 'nested object'
->this.c : Symbol(C.c, Decl(b.js, 6, 20))
->this : Symbol(C, Decl(b.js, 6, 6))
+>this : Symbol(o, Decl(b.js, 5, 7))
 >c : Symbol(C.c, Decl(b.js, 6, 20))
     }
 }

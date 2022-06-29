@@ -13,12 +13,12 @@ let obj = {
 >fun : Symbol(fun, Decl(index.js, 3, 9))
 
     this.x = 1
->this.x : Symbol(fun.x, Decl(index.js, 4, 19))
->this : Symbol(fun, Decl(index.js, 4, 6))
+>this.x : Symbol(x, Decl(index.js, 1, 11))
+>this : Symbol(obj, Decl(index.js, 1, 9))
 >x : Symbol(fun.x, Decl(index.js, 4, 19))
 
     this/*1*/
->this : Symbol(fun, Decl(index.js, 4, 6))
+>this : Symbol(obj, Decl(index.js, 1, 9))
 
   },
   f2: function() {

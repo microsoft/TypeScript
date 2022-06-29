@@ -19,13 +19,13 @@ let obj = {
 
     this.x = 1
 >this.x = 1 : 1
->this.x : any
->this : this
->x : any
+>this.x : number
+>this : { x: number; y: number[]; fun: typeof fun; f2: () => void; }
+>x : number
 >1 : 1
 
     this/*1*/
->this : this
+>this : { x: number; y: number[]; fun: typeof fun; f2: () => void; }
 
   },
   f2: function() {

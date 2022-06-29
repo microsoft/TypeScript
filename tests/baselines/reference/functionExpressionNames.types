@@ -31,7 +31,7 @@ var o = {
         this.c = 'nested object'
 >this.c = 'nested object' : "nested object"
 >this.c : any
->this : this
+>this : { C: typeof C; }
 >c : any
 >'nested object' : "nested object"
     }
