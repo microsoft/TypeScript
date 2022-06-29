@@ -256,5 +256,75 @@ namespace ts.tscWatch {
                 ],
             });
         });
+
+        verifyTscWatch({
+            scenario: "moduleResolution",
+            subScenario: "module resolutions from file are partially used",
+            sys: () => createWatchedSystem([
+                {
+                    path: `${projectRoot}/tsconfig.json`,
+                    content: JSON.stringify({
+                        compilerOptions: { moduleResolution: "node16" },
+                    })
+                },
+                {
+                    path: `${projectRoot}/index.ts`,
+                    content: Utils.dedent`
+                        import type { ImportInterface } from "pkg" assert { "resolution-mode": "import" };
+                        import type { RequireInterface } from "pkg1" assert { "resolution-mode": "require" };
+                        import {x} from "./a";
+                    `
+                },
+                {
+                    path: `${projectRoot}/a.ts`,
+                    content: Utils.dedent`
+                        export const x = 10;
+                    `
+                },
+                {
+                    path: `${projectRoot}/node_modules/pkg/package.json`,
+                    content: JSON.stringify({
+                        name: "pkg",
+                        version: "0.0.1",
+                        exports: {
+                            import: "./import.js",
+                            require: "./require.js"
+                        }
+                    })
+                },
+                {
+                    path: `${projectRoot}/node_modules/pkg/import.d.ts`,
+                    content: `export interface ImportInterface {}`
+                },
+                {
+                    path: `${projectRoot}/node_modules/pkg/require.d.ts`,
+                    content: `export interface RequireInterface {}`
+                },
+                {
+                    path: `${projectRoot}/node_modules/pkg1/package.json`,
+                    content: JSON.stringify({
+                        name: "pkg1",
+                        version: "0.0.1",
+                        exports: {
+                            import: "./import.js",
+                            require: "./require.js"
+                        }
+                    })
+                },
+                {
+                    path: `${projectRoot}/node_modules/pkg1/import.d.ts`,
+                    content: `export interface ImportInterface {}`
+                },
+                libFile
+            ], { currentDirectory: projectRoot }),
+            commandLineArgs: ["-w", "--traceResolution"],
+            changes: [
+                {
+                    caption: "modify aFile by adding import",
+                    change: sys => sys.appendFile(`${projectRoot}/a.ts`, `import type { ImportInterface } from "pkg" assert { "resolution-mode": "import" }`),
+                    timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                }
+            ]
+        });
     });
 }
