@@ -432,39 +432,41 @@ export declare function createExportedWidget3(): Widgets1.Widget3;
 export declare function createExportedWidget4(): Widgets1.SpecializedGlobalWidget.Widget4;
 //// [privacyFunctionCannotNameParameterTypeDeclFile_consumer.d.ts]
 /// <reference path="privacyFunctionCannotNameParameterTypeDeclFile_GlobalWidgets.d.ts" />
+import { type Widget1, type SpecializedWidget } from "./privacyFunctionCannotNameParameterTypeDeclFile_Widgets";
+import { type Widget3, type SpecializedGlobalWidget } from "GlobalWidgets";
 export declare class publicClassWithWithPrivateParmeterTypes {
     private param1;
-    param2: import("./privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1;
-    static myPublicStaticMethod(param?: import("./privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1): void;
+    param2: Widget1;
+    static myPublicStaticMethod(param?: Widget1): void;
     private static myPrivateStaticMethod;
-    myPublicMethod(param?: import("./privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1): void;
+    myPublicMethod(param?: Widget1): void;
     private myPrivateMethod;
-    constructor(param?: import("./privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1, param1?: import("./privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1, param2?: import("./privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1);
+    constructor(param?: Widget1, param1?: Widget1, param2?: Widget1);
 }
 export declare class publicClassWithWithPrivateParmeterTypes1 {
     private param1;
-    param2: import("GlobalWidgets").Widget3;
-    static myPublicStaticMethod(param?: import("GlobalWidgets").Widget3): void;
+    param2: Widget3;
+    static myPublicStaticMethod(param?: Widget3): void;
     private static myPrivateStaticMethod;
-    myPublicMethod(param?: import("GlobalWidgets").Widget3): void;
+    myPublicMethod(param?: Widget3): void;
     private myPrivateMethod;
-    constructor(param?: import("GlobalWidgets").Widget3, param1?: import("GlobalWidgets").Widget3, param2?: import("GlobalWidgets").Widget3);
+    constructor(param?: Widget3, param1?: Widget3, param2?: Widget3);
 }
-export declare function publicFunctionWithPrivateParmeterTypes(param?: import("./privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1): void;
-export declare function publicFunctionWithPrivateParmeterTypes1(param?: import("GlobalWidgets").Widget3): void;
+export declare function publicFunctionWithPrivateParmeterTypes(param?: Widget1): void;
+export declare function publicFunctionWithPrivateParmeterTypes1(param?: Widget3): void;
 export declare class publicClassWithPrivateModuleParameterTypes {
     private param1;
-    param2: import("./privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2;
-    static myPublicStaticMethod(param?: import("./privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2): void;
-    myPublicMethod(param?: import("./privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2): void;
-    constructor(param?: import("./privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2, param1?: import("./privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2, param2?: import("./privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2);
+    param2: SpecializedWidget.Widget2;
+    static myPublicStaticMethod(param?: SpecializedWidget.Widget2): void;
+    myPublicMethod(param?: SpecializedWidget.Widget2): void;
+    constructor(param?: SpecializedWidget.Widget2, param1?: SpecializedWidget.Widget2, param2?: SpecializedWidget.Widget2);
 }
 export declare class publicClassWithPrivateModuleParameterTypes2 {
     private param1;
-    param2: import("GlobalWidgets").SpecializedGlobalWidget.Widget4;
-    static myPublicStaticMethod(param?: import("GlobalWidgets").SpecializedGlobalWidget.Widget4): void;
-    myPublicMethod(param?: import("GlobalWidgets").SpecializedGlobalWidget.Widget4): void;
-    constructor(param?: import("GlobalWidgets").SpecializedGlobalWidget.Widget4, param1?: import("GlobalWidgets").SpecializedGlobalWidget.Widget4, param2?: import("GlobalWidgets").SpecializedGlobalWidget.Widget4);
+    param2: SpecializedGlobalWidget.Widget4;
+    static myPublicStaticMethod(param?: SpecializedGlobalWidget.Widget4): void;
+    myPublicMethod(param?: SpecializedGlobalWidget.Widget4): void;
+    constructor(param?: SpecializedGlobalWidget.Widget4, param1?: SpecializedGlobalWidget.Widget4, param2?: SpecializedGlobalWidget.Widget4);
 }
-export declare function publicFunctionWithPrivateModuleParameterTypes(param?: import("./privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2): void;
-export declare function publicFunctionWithPrivateModuleParameterTypes1(param?: import("GlobalWidgets").SpecializedGlobalWidget.Widget4): void;
+export declare function publicFunctionWithPrivateModuleParameterTypes(param?: SpecializedWidget.Widget2): void;
+export declare function publicFunctionWithPrivateModuleParameterTypes1(param?: SpecializedGlobalWidget.Widget4): void;

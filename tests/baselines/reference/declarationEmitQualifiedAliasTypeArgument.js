@@ -37,6 +37,7 @@ exports.fun2 = (0, bbb_1.create)();
 
 
 //// [index.d.ts]
+import { type INode } from "./bbb";
 import { T, Q } from "./lib";
-export declare const fun: () => import("./bbb").INode<T>;
-export declare const fun2: () => import("./bbb").INode<Q>;
+export declare const fun: () => INode<T>;
+export declare const fun2: () => INode<Q>;

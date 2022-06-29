@@ -24,8 +24,9 @@ export type WithSymbol = {
     [kSymbol]: true;
 };
 //// [b.d.ts]
+import { type WithSymbol } from './a';
 /**
  * @returns {import('./a').WithSymbol}
  * @param {import('./a').WithSymbol} value
  */
-export function b(value: import('./a').WithSymbol): import('./a').WithSymbol;
+export function b(value: WithSymbol): WithSymbol;

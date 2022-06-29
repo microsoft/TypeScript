@@ -120,9 +120,10 @@ exports.b = null;
 
 
 //// [index.d.ts]
-export declare type LocalInterface = import("pkg", { assert: { "resolution-mode": "foobar" } }).RequireInterface & import("pkg", { assert: { "resolution-mode": "import" } }).ImportInterface;
+import { type ImportInterface } from "pkg" assert { "resolution-mode": "import" };
+export declare type LocalInterface = import("pkg", { assert: { "resolution-mode": "foobar" } }).RequireInterface & ImportInterface;
 export declare const a: import("pkg").RequireInterface;
-export declare const b: import("pkg", { assert: { "resolution-mode": "import" } }).ImportInterface;
+export declare const b: ImportInterface;
 //// [other.d.ts]
 export declare type LocalInterface = import("pkg", { assert: {} });
 export declare const a: any;
@@ -142,6 +143,7 @@ export declare type LocalInterface = import("pkg", { assert: {} });
 export declare const a: any, Asserts1: any, RequireInterface: any;
 export declare const b: any, Asserts2: any, ImportInterface: any;
 //// [other5.d.ts]
-export declare type LocalInterface = import("pkg", { assert: {} }).RequireInterface & import("pkg", { assert: {} }).ImportInterface;
-export declare const a: import("pkg").RequireInterface;
+import { type RequireInterface, type ImportInterface } from "pkg" assert {};
+export declare type LocalInterface = RequireInterface & ImportInterface;
+export declare const a: RequireInterface;
 export declare const b: any;

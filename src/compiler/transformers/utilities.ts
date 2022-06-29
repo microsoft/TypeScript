@@ -33,7 +33,7 @@ namespace ts {
         }
 
         function transformBundle(node: Bundle) {
-            return context.factory.createBundle(map(node.sourceFiles, transformSourceFile), node.prepends);
+            return context.factory.updateBundle(node, map(node.sourceFiles, transformSourceFile), node.prepends);
         }
     }
 

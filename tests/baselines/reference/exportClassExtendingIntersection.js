@@ -125,9 +125,9 @@ export interface MyMixin {
 }
 export declare function MyMixin<T extends Constructor<MyBaseClass<any>>>(base: T): T & Constructor<MyMixin>;
 //// [FinalClass.d.ts]
-import { MyBaseClass } from './BaseClass';
+import { MyBaseClass, type Constructor } from './BaseClass';
 import { MyMixin } from './MixinClass';
-declare const MyExtendedClass_base: typeof MyBaseClass & import("./BaseClass").Constructor<MyMixin>;
+declare const MyExtendedClass_base: typeof MyBaseClass & Constructor<MyMixin>;
 export declare class MyExtendedClass extends MyExtendedClass_base<string> {
     extendedClassProperty: number;
 }

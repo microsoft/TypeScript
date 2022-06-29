@@ -42,5 +42,6 @@ exports.va2 = (0, other_1.fa)();
 
 
 //// [main.d.ts]
-export declare const va: import("ext").A2;
-export declare const va2: import("ext").A2;
+import { type A2 } from "ext";
+export declare const va: A2;
+export declare const va2: A2;

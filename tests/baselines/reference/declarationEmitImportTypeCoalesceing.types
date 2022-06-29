@@ -1,0 +1,73 @@
+=== tests/cases/compiler/whole.d.ts ===
+declare namespace thing {
+>thing : typeof thing
+
+    export const a = 1;
+>a : 1
+>1 : 1
+
+    export interface A {}
+    export function getNs(): typeof thing;
+>getNs : () => typeof thing
+>thing : typeof thing
+}
+export = thing;
+>thing : typeof thing
+
+=== tests/cases/compiler/types.d.ts ===
+export interface A {}
+export interface B {}
+export interface C {}
+
+export declare function getA(): A;
+>getA : () => A
+
+export declare function getB(): B;
+>getB : () => B
+
+export declare function getC(): C;
+>getC : () => C
+
+=== tests/cases/compiler/index.ts ===
+import { getA } from "./types";
+>getA : () => import("tests/cases/compiler/types").A
+
+import { getNs } from "./whole";
+>getNs : () => typeof import("tests/cases/compiler/whole")
+
+export const a1 = getA();
+>a1 : import("tests/cases/compiler/types").A
+>getA() : import("tests/cases/compiler/types").A
+>getA : () => import("tests/cases/compiler/types").A
+
+export const a2 = [getA()];
+>a2 : import("tests/cases/compiler/types").A[]
+>[getA()] : import("tests/cases/compiler/types").A[]
+>getA() : import("tests/cases/compiler/types").A
+>getA : () => import("tests/cases/compiler/types").A
+
+export const a3 = { a: getA() };
+>a3 : { a: import("tests/cases/compiler/types").A; }
+>{ a: getA() } : { a: import("tests/cases/compiler/types").A; }
+>a : import("tests/cases/compiler/types").A
+>getA() : import("tests/cases/compiler/types").A
+>getA : () => import("tests/cases/compiler/types").A
+
+export const ns1 = getNs();
+>ns1 : typeof import("tests/cases/compiler/whole")
+>getNs() : typeof import("tests/cases/compiler/whole")
+>getNs : () => typeof import("tests/cases/compiler/whole")
+
+export const ns2 = [getNs()];
+>ns2 : typeof import("tests/cases/compiler/whole")[]
+>[getNs()] : typeof import("tests/cases/compiler/whole")[]
+>getNs() : typeof import("tests/cases/compiler/whole")
+>getNs : () => typeof import("tests/cases/compiler/whole")
+
+export const ns3 = { a: getNs() };
+>ns3 : { a: typeof import("tests/cases/compiler/whole"); }
+>{ a: getNs() } : { a: typeof import("tests/cases/compiler/whole"); }
+>a : typeof import("tests/cases/compiler/whole")
+>getNs() : typeof import("tests/cases/compiler/whole")
+>getNs : () => typeof import("tests/cases/compiler/whole")
+

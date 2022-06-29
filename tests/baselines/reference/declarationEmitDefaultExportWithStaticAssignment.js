@@ -95,11 +95,11 @@ declare namespace Example {
 }
 export default Example;
 //// [index2.d.ts]
-import { Foo } from './foo';
+import { Foo, type Foo as Foo_1 } from './foo';
 export { Foo };
 declare function Example(): void;
 declare namespace Example {
-    var Foo: typeof import("./foo").Foo;
+    var Foo: typeof Foo_1;
 }
 export default Example;
 //// [index3.d.ts]

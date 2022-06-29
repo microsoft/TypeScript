@@ -5354,10 +5354,16 @@ namespace ts {
 
         // @api
         function updateBundle(node: Bundle, sourceFiles: readonly SourceFile[], prepends: readonly (UnparsedSource | InputFiles)[] = emptyArray) {
-            return node.sourceFiles !== sourceFiles
-                || node.prepends !== prepends
-                ? update(createBundle(sourceFiles, prepends), node)
-                : node;
+            if (node.sourceFiles !== sourceFiles
+                || node.prepends !== prepends) {
+                const newNode = update(createBundle(sourceFiles, prepends), node);
+                newNode.syntheticFileReferences = node.syntheticFileReferences;
+                newNode.syntheticLibReferences = node.syntheticLibReferences;
+                newNode.syntheticTypeReferences = node.syntheticTypeReferences;
+                newNode.hasNoDefaultLib = node.hasNoDefaultLib;
+                return newNode;
+            }
+            return node;
         }
 
         // @api

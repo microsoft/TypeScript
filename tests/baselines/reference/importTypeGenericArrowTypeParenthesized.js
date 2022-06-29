@@ -34,9 +34,10 @@ exports.works2 = (0, module_1.fn)(function (x) { return x; });
 
 //// [index.d.ts]
 /// <reference path="module.d.ts" />
-export declare const fail1: import("module").Modifier<(<T>(x: T) => T)>;
-export declare const fail2: import("module").Modifier<(<T>(x: T) => T)>;
-export declare const works1: import("module").Modifier<(x: number) => number>;
+import { type Modifier } from "module";
+export declare const fail1: Modifier<(<T>(x: T) => T)>;
+export declare const fail2: Modifier<(<T>(x: T) => T)>;
+export declare const works1: Modifier<(x: number) => number>;
 declare type MakeItWork = <T>(x: T) => T;
-export declare const works2: import("module").Modifier<MakeItWork>;
+export declare const works2: Modifier<MakeItWork>;
 export {};

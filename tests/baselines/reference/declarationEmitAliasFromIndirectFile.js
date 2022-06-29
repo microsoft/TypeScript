@@ -35,10 +35,11 @@ exports["default"] = fp.l10ns;
 
 
 //// [app.d.ts]
+import { type CustomLocale, type Locale } from "./locale";
 declare const _default: {
-    ar?: import("./locale").CustomLocale;
-    bg?: import("./locale").CustomLocale;
+    ar?: CustomLocale;
+    bg?: CustomLocale;
 } & {
-    default: import("./locale").Locale;
+    default: Locale;
 };
 export default _default;
