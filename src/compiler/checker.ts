@@ -26638,6 +26638,12 @@ namespace ts {
                 if (contextualReturnType) {
                     const functionFlags = getFunctionFlags(func);
                     if (functionFlags & FunctionFlags.Generator) { // Generator or AsyncGenerator function
+                        if (contextualReturnType.flags & TypeFlags.Union) {
+                            contextualReturnType = filterType(contextualReturnType, type => {
+                                const generator = createGeneratorReturnType(anyType, anyType, anyType, (functionFlags & FunctionFlags.Async) !== 0);
+                                return checkTypeAssignableTo(generator, type, /*errorNode*/ undefined);
+                            });
+                        }
                         const iterationReturnType = getIterationTypeOfGeneratorFunctionReturnType(IterationTypeKind.Return, contextualReturnType, (functionFlags & FunctionFlags.Async) !== 0);
                         if (!iterationReturnType) {
                             return undefined;
@@ -26676,14 +26682,10 @@ namespace ts {
                     const isAsyncGenerator = (functionFlags & FunctionFlags.Async) !== 0;
                     if (!node.asteriskToken && contextualReturnType.flags & TypeFlags.Union) {
                         contextualReturnType = filterType(contextualReturnType, type => {
-                            // >> What should we use to filter?
-                            // >> What will be the perf impacts? Is there caching? Is it enough to make this ok?
-                            // return !!getIterationTypeOfGeneratorFunctionReturnType(IterationTypeKind.Yield, type, isAsyncGenerator);
-                            // >> ^^^ doesn't work, because we get { yield: any, return: any } for bogus types
                             const generator = createGeneratorReturnType(anyType, anyType, anyType, isAsyncGenerator);
                             return checkTypeAssignableTo(generator, type, /*errorNode*/ undefined);
                         });
-                    } // >> TODO: should we do something when `node.asteriskToken`?
+                    }
                     return node.asteriskToken
                         ? contextualReturnType
                         : getIterationTypeOfGeneratorFunctionReturnType(IterationTypeKind.Yield, contextualReturnType, isAsyncGenerator);

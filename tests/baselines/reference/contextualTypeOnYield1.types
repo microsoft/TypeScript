@@ -1,4 +1,4 @@
-=== tests/cases/compiler/contextualTypeOnYield.ts ===
+=== tests/cases/compiler/contextualTypeOnYield1.ts ===
 type FuncOrGeneratorFunc = () => (number | Generator<(arg: number) => void, any, void>)
 >FuncOrGeneratorFunc : () => number | Generator<(arg: number) => void, any, void>
 >arg : number
