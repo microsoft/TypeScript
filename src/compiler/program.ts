@@ -1075,24 +1075,39 @@ namespace ts {
 
         let moduleResolutionCache: ModuleResolutionCache | undefined;
         let typeReferenceDirectiveResolutionCache: TypeReferenceDirectiveResolutionCache | undefined;
-        let actualResolveModuleNamesWorker: (moduleNames: string[], containingFile: SourceFile, containingFileName: string, reusedNames?: string[], redirectedReference?: ResolvedProjectReference) => ResolvedModuleFull[];
+        let actualResolveModuleNamesWorker: (
+            moduleNames: string[],
+            containingFile: SourceFile,
+            containingFileName: string,
+            redirectedReference: ResolvedProjectReference | undefined,
+            partialResolutionInfo: PartialResolutionInfo | undefined,
+        ) => ResolvedModuleFull[];
         const hasInvalidatedResolution = host.hasInvalidatedResolution || returnFalse;
         if (host.resolveModuleNames) {
-            actualResolveModuleNamesWorker = (moduleNames, containingFile, containingFileName, reusedNames, redirectedReference) => host.resolveModuleNames!(Debug.checkEachDefined(moduleNames), containingFileName, reusedNames, redirectedReference, options, containingFile).map(resolved => {
-                // An older host may have omitted extension, in which case we should infer it from the file extension of resolvedFileName.
-                if (!resolved || (resolved as ResolvedModuleFull).extension !== undefined) {
-                    return resolved as ResolvedModuleFull;
-                }
-                const withExtension = clone(resolved) as ResolvedModuleFull;
-                withExtension.extension = extensionFromPath(resolved.resolvedFileName);
-                return withExtension;
-            });
+            actualResolveModuleNamesWorker = (moduleNames, containingFile, containingFileName, redirectedReference, partialResolutionInfo) =>
+                host.resolveModuleNames!(
+                    Debug.checkEachDefined(moduleNames),
+                    containingFileName,
+                    partialResolutionInfo?.reusedNames?.map(({ name }) => name),
+                    redirectedReference,
+                    options,
+                    containingFile,
+                    partialResolutionInfo
+                ).map(resolved => {
+                    // An older host may have omitted extension, in which case we should infer it from the file extension of resolvedFileName.
+                    if (!resolved || (resolved as ResolvedModuleFull).extension !== undefined) {
+                        return resolved as ResolvedModuleFull;
+                    }
+                    const withExtension = clone(resolved) as ResolvedModuleFull;
+                    withExtension.extension = extensionFromPath(resolved.resolvedFileName);
+                    return withExtension;
+                });
             moduleResolutionCache = host.getModuleResolutionCache?.();
         }
         else {
             moduleResolutionCache = createModuleResolutionCache(currentDirectory, getCanonicalFileName, options);
             const loader = (moduleName: string, resolverMode: ModuleKind.CommonJS | ModuleKind.ESNext | undefined, containingFileName: string, redirectedReference: ResolvedProjectReference | undefined) => resolveModuleName(moduleName, containingFileName, options, host, moduleResolutionCache, redirectedReference, resolverMode).resolvedModule!; // TODO: GH#18217
-            actualResolveModuleNamesWorker = (moduleNames, containingFile, containingFileName, _reusedNames, redirectedReference) => loadWithModeAwareCache<ResolvedModuleFull>(Debug.checkEachDefined(moduleNames), containingFile, containingFileName, redirectedReference, loader);
+            actualResolveModuleNamesWorker = (moduleNames, containingFile, containingFileName, redirectedReference) => loadWithModeAwareCache<ResolvedModuleFull>(Debug.checkEachDefined(moduleNames), containingFile, containingFileName, redirectedReference, loader);
         }
 
         let actualResolveTypeReferenceDirectiveNamesWorker: (typeDirectiveNames: string[] | readonly FileReference[], containingFile: string, redirectedReference?: ResolvedProjectReference, containingFileMode?: SourceFile["impliedNodeFormat"] | undefined) => (ResolvedTypeReferenceDirective | undefined)[];
@@ -1398,13 +1413,13 @@ namespace ts {
             }
         }
 
-        function resolveModuleNamesWorker(moduleNames: string[], containingFile: SourceFile, reusedNames: string[] | undefined): readonly ResolvedModuleFull[] {
+        function resolveModuleNamesWorker(moduleNames: string[], containingFile: SourceFile, partialResolutionInfo: PartialResolutionInfo | undefined): readonly ResolvedModuleFull[] {
             if (!moduleNames.length) return emptyArray;
             const containingFileName = getNormalizedAbsolutePath(containingFile.originalFileName, currentDirectory);
             const redirectedReference = getRedirectReferenceForResolution(containingFile);
             tracing?.push(tracing.Phase.Program, "resolveModuleNamesWorker", { containingFileName });
             performance.mark("beforeResolveModule");
-            const result = actualResolveModuleNamesWorker(moduleNames, containingFile, containingFileName, reusedNames, redirectedReference);
+            const result = actualResolveModuleNamesWorker(moduleNames, containingFile, containingFileName, redirectedReference, partialResolutionInfo);
             performance.mark("afterResolveModule");
             performance.measure("ResolveModule", "beforeResolveModule", "afterResolveModule");
             tracing?.pop();
@@ -1511,7 +1526,7 @@ namespace ts {
             if (structureIsReused === StructureIsReused.Not && !file.ambientModuleNames.length) {
                 // If the old program state does not permit reusing resolutions and `file` does not contain locally defined ambient modules,
                 // the best we can do is fallback to the default logic.
-                return resolveModuleNamesWorker(moduleNames, file, /*reusedNames*/ undefined);
+                return resolveModuleNamesWorker(moduleNames, file, /*partialResolutionInfo*/ undefined);
             }
 
             const oldSourceFile = oldProgram && oldProgram.getSourceFile(file.fileName);
@@ -1540,6 +1555,7 @@ namespace ts {
 
             /** An ordered list of module names for which we cannot recover the resolution. */
             let unknownModuleNames: string[] | undefined;
+            let unknownModuleNamesIndex: number[] | undefined;
             /**
              * The indexing of elements in this list matches that of `moduleNames`.
              *
@@ -1550,7 +1566,7 @@ namespace ts {
              * * ResolvedModuleFull instance: can be reused.
              */
             let result: (ResolvedModuleFull | undefined)[] | undefined;
-            let reusedNames: string[] | undefined;
+            let reusedNames: { name: string; mode: ModuleKind.CommonJS | ModuleKind.ESNext | undefined; }[] | undefined;
             /** A transient placeholder used to mark predicted resolution in the result list. */
             const predictedToResolveToAmbientModuleMarker: ResolvedModuleFull = {} as any;
 
@@ -1558,7 +1574,8 @@ namespace ts {
                 const moduleName = moduleNames[i];
                 // If the source file is unchanged and doesnt have invalidated resolution, reuse the module resolutions
                 if (file === oldSourceFile && !hasInvalidatedResolution(oldSourceFile.path)) {
-                    const oldResolvedModule = getResolvedModule(oldSourceFile, moduleName, getModeForResolutionAtIndex(oldSourceFile, i));
+                    const mode = getModeForResolutionAtIndex(oldSourceFile, i);
+                    const oldResolvedModule = getResolvedModule(oldSourceFile, moduleName, mode);
                     if (oldResolvedModule) {
                         if (isTraceEnabled(options, host)) {
                             trace(host,
@@ -1571,8 +1588,8 @@ namespace ts {
                                 oldResolvedModule.packageId && packageIdToString(oldResolvedModule.packageId)
                             );
                         }
-                        (result || (result = new Array(moduleNames.length)))[i] = oldResolvedModule;
-                        (reusedNames || (reusedNames = [])).push(moduleName);
+                        (result ??= new Array(moduleNames.length))[i] = oldResolvedModule;
+                        (reusedNames ??= []).push({ name: moduleName, mode });
                         continue;
                     }
                 }
@@ -1596,12 +1613,13 @@ namespace ts {
                 }
                 else {
                     // Resolution failed in the old program, or resolved to an ambient module for which we can't reuse the result.
-                    (unknownModuleNames || (unknownModuleNames = [])).push(moduleName);
+                    (unknownModuleNames ??= []).push(moduleName);
+                    (unknownModuleNamesIndex ??= []).push(i);
                 }
             }
 
             const resolutions = unknownModuleNames && unknownModuleNames.length
-                ? resolveModuleNamesWorker(unknownModuleNames, file, reusedNames)
+                ? resolveModuleNamesWorker(unknownModuleNames, file, { reusedNames, namesIndex: unknownModuleNamesIndex! })
                 : emptyArray;
 
             // Combine results of resolutions and predicted results

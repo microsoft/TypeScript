@@ -246,29 +246,14 @@ File '/user/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Reusing resolution of module 'pkg' from '/user/username/projects/myproject/index.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/node_modules/pkg/import.d.ts' with Package ID 'pkg/import.d.ts@0.0.1'.
 Reusing resolution of module './a' from '/user/username/projects/myproject/index.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/a.ts'.
-======== Resolving module 'pkg1' from '/user/username/projects/myproject/index.ts'. ========
-Explicitly specified module resolution kind: 'Node16'.
-File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-Loading module 'pkg1' from 'node_modules' folder, target file type 'TypeScript'.
-File '/user/username/projects/myproject/node_modules/pkg1/package.json' exists according to earlier cached lookups.
-File name '/user/username/projects/myproject/node_modules/pkg1/import.js' has a '.js' extension - stripping it.
-File '/user/username/projects/myproject/node_modules/pkg1/import.ts' does not exist.
-File '/user/username/projects/myproject/node_modules/pkg1/import.tsx' does not exist.
-File '/user/username/projects/myproject/node_modules/pkg1/import.d.ts' exist - use it as a name resolution result.
-Resolving real path for '/user/username/projects/myproject/node_modules/pkg1/import.d.ts', result '/user/username/projects/myproject/node_modules/pkg1/import.d.ts'.
-======== Module name 'pkg1' was successfully resolved to '/user/username/projects/myproject/node_modules/pkg1/import.d.ts' with Package ID 'pkg1/import.d.ts@0.0.1'. ========
-File '/user/username/projects/myproject/node_modules/pkg1/package.json' exists according to earlier cached lookups.
+Reusing resolution of module 'pkg1' from '/user/username/projects/myproject/index.ts' of old program, it was not resolved.
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-[96mindex.ts[0m:[93m2[0m:[93m15[0m - [91merror[0m[90m TS2305: [0mModule '"pkg1"' has no exported member 'RequireInterface'.
+[96mindex.ts[0m:[93m2[0m:[93m39[0m - [91merror[0m[90m TS2307: [0mCannot find module 'pkg1' or its corresponding type declarations.
 
 [7m2[0m import type { RequireInterface } from "pkg1" assert { "resolution-mode": "require" };
-[7m [0m [91m              ~~~~~~~~~~~~~~~~[0m
+[7m [0m [91m                                      ~~~~~~[0m
 
 [[90m12:00:54 AM[0m] Found 1 error. Watching for file changes.
 
@@ -281,18 +266,15 @@ Program files::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/node_modules/pkg/import.d.ts
 /user/username/projects/myproject/a.ts
-/user/username/projects/myproject/node_modules/pkg1/import.d.ts
 /user/username/projects/myproject/index.ts
 
 Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/a.ts
-/user/username/projects/myproject/node_modules/pkg1/import.d.ts
 /user/username/projects/myproject/index.ts
 
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/a.ts (computed .d.ts)
 /user/username/projects/myproject/index.ts (computed .d.ts)
-/user/username/projects/myproject/node_modules/pkg1/import.d.ts (used version)
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
@@ -315,8 +297,6 @@ WatchedFiles::
   {"fileName":"/user/username/projects/package.json","pollingInterval":250}
 /user/username/projects/myproject/node_modules/@types:
   {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
-/user/username/projects/myproject/node_modules/pkg1/import.d.ts:
-  {"fileName":"/user/username/projects/myproject/node_modules/pkg1/import.d.ts","pollingInterval":250}
 
 FsWatches::
 /user/username/projects/myproject:
