@@ -32475,13 +32475,15 @@ namespace ts {
             const restType = getEffectiveRestType(context);
             if (restType && restType.flags & TypeFlags.TypeParameter) {
                 // The contextual signature has a generic rest parameter. We first instantiate the contextual
-                // signature (without fixing type parameters) and assign types to contextually typed parameters.
+                // signature (without fixing type parameters) and infer types without calling assignContextualParameterTypes
+                // (which would fix parameter types).
                 const instantiatedContext = instantiateSignature(context, inferenceContext.nonFixingMapper);
-                assignContextualParameterTypes(signature, instantiatedContext);
-                // We then infer from a tuple type representing the parameters that correspond to the contextual
-                // rest parameter.
-                const restPos = getParameterCount(context) - 1;
-                inferTypes(inferenceContext.inferences, getRestTypeAtPosition(signature, restPos), restType);
+                const instantiatedRestType = getEffectiveRestType(instantiatedContext);
+                if (instantiatedRestType) {
+                    // We then infer from a tuple type representing the parameters that correspond to the contextual
+                    // rest parameter.
+                    inferTypes(inferenceContext.inferences, getRestTypeAtPosition(signature, len), instantiatedRestType);
+                }
             }
         }
 

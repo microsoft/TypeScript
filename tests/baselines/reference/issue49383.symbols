@@ -1,0 +1,12 @@
+=== tests/cases/compiler/issue49383.ts ===
+function wrap<Args extends unknown[]>(_: (...args: Args) => void) {}
+>wrap : Symbol(wrap, Decl(issue49383.ts, 0, 0))
+>Args : Symbol(Args, Decl(issue49383.ts, 0, 14))
+>_ : Symbol(_, Decl(issue49383.ts, 0, 38))
+>args : Symbol(args, Decl(issue49383.ts, 0, 42))
+>Args : Symbol(Args, Decl(issue49383.ts, 0, 14))
+
+wrap(({ cancelable } = {}) => {});
+>wrap : Symbol(wrap, Decl(issue49383.ts, 0, 0))
+>cancelable : Symbol(cancelable, Decl(issue49383.ts, 1, 7))
+
