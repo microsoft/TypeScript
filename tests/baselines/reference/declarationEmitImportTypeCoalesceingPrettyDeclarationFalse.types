@@ -16,22 +16,21 @@ export = thing;
 
 === tests/cases/compiler/types.d.ts ===
 export interface A {}
-export interface B<T> {}
+export interface B {}
 export interface C {}
 
 export declare function getA(): A;
 >getA : () => A
 
-export declare function getB(): B<C>;
->getB : () => B<C>
+export declare function getB(): B;
+>getB : () => B
 
 export declare function getC(): C;
 >getC : () => C
 
 === tests/cases/compiler/index.ts ===
-import { getA, getB } from "./types";
+import { getA } from "./types";
 >getA : () => import("tests/cases/compiler/types").A
->getB : () => import("tests/cases/compiler/types").B<import("tests/cases/compiler/types").C>
 
 import { getNs } from "./whole";
 >getNs : () => typeof import("tests/cases/compiler/whole")
@@ -53,24 +52,6 @@ export const a3 = { a: getA() };
 >a : import("tests/cases/compiler/types").A
 >getA() : import("tests/cases/compiler/types").A
 >getA : () => import("tests/cases/compiler/types").A
-
-export const b1 = getB();
->b1 : import("tests/cases/compiler/types").B<import("tests/cases/compiler/types").C>
->getB() : import("tests/cases/compiler/types").B<import("tests/cases/compiler/types").C>
->getB : () => import("tests/cases/compiler/types").B<import("tests/cases/compiler/types").C>
-
-export const b2 = [getB()];
->b2 : import("tests/cases/compiler/types").B<import("tests/cases/compiler/types").C>[]
->[getB()] : import("tests/cases/compiler/types").B<import("tests/cases/compiler/types").C>[]
->getB() : import("tests/cases/compiler/types").B<import("tests/cases/compiler/types").C>
->getB : () => import("tests/cases/compiler/types").B<import("tests/cases/compiler/types").C>
-
-export const b3 = { a: getB() };
->b3 : { a: import("tests/cases/compiler/types").B<import("tests/cases/compiler/types").C>; }
->{ a: getB() } : { a: import("tests/cases/compiler/types").B<import("tests/cases/compiler/types").C>; }
->a : import("tests/cases/compiler/types").B<import("tests/cases/compiler/types").C>
->getB() : import("tests/cases/compiler/types").B<import("tests/cases/compiler/types").C>
->getB : () => import("tests/cases/compiler/types").B<import("tests/cases/compiler/types").C>
 
 export const ns1 = getNs();
 >ns1 : typeof import("tests/cases/compiler/whole")

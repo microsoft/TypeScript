@@ -511,6 +511,16 @@ namespace ts {
             description: Diagnostics.Create_sourcemaps_for_d_ts_files
         },
         {
+            name: "prettyDeclaration",
+            type: "boolean",
+            affectsEmit: true,
+            affectsMultiFileEmitBuildInfo: true,
+            category: Diagnostics.Emit,
+            transpileOptionValue: undefined,
+            description: Diagnostics.Enable_extra_transform_stages_that_make_declaration_emit_output_prettier,
+            defaultValueDescription: Diagnostics.true_if_declaration_is_true_false_otherwise,
+        },
+        {
             name: "emitDeclarationOnly",
             type: "boolean",
             affectsEmit: true,

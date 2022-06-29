@@ -6444,6 +6444,10 @@ namespace ts {
         return !!(compilerOptions.declaration || compilerOptions.composite);
     }
 
+    export function getEmitPrettyDeclarations(compilerOptions: CompilerOptions): boolean {
+        return compilerOptions.prettyDeclaration !== undefined ? !!compilerOptions.prettyDeclaration : !!compilerOptions.declaration;
+    }
+
     export function shouldPreserveConstEnums(compilerOptions: CompilerOptions): boolean {
         return !!(compilerOptions.preserveConstEnums || compilerOptions.isolatedModules);
     }

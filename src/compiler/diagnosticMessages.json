@@ -5835,6 +5835,14 @@
         "category": "Message",
         "code": 6803
     },
+    "Enable extra transform stages that make declaration emit output prettier.": {
+        "category": "Message",
+        "code": 6804
+    },
+    "true if declaration is true, false otherwise.": {
+        "category": "Message",
+        "code": 6805
+    },
 
     "one of:": {
         "category": "Message",

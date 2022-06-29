@@ -19,30 +19,27 @@ export = thing;
 export interface A {}
 >A : Symbol(A, Decl(types.d.ts, 0, 0))
 
-export interface B<T> {}
+export interface B {}
 >B : Symbol(B, Decl(types.d.ts, 0, 21))
->T : Symbol(T, Decl(types.d.ts, 1, 19))
 
 export interface C {}
->C : Symbol(C, Decl(types.d.ts, 1, 24))
+>C : Symbol(C, Decl(types.d.ts, 1, 21))
 
 export declare function getA(): A;
 >getA : Symbol(getA, Decl(types.d.ts, 2, 21))
 >A : Symbol(A, Decl(types.d.ts, 0, 0))
 
-export declare function getB(): B<C>;
+export declare function getB(): B;
 >getB : Symbol(getB, Decl(types.d.ts, 4, 34))
 >B : Symbol(B, Decl(types.d.ts, 0, 21))
->C : Symbol(C, Decl(types.d.ts, 1, 24))
 
 export declare function getC(): C;
->getC : Symbol(getC, Decl(types.d.ts, 5, 37))
->C : Symbol(C, Decl(types.d.ts, 1, 24))
+>getC : Symbol(getC, Decl(types.d.ts, 5, 34))
+>C : Symbol(C, Decl(types.d.ts, 1, 21))
 
 === tests/cases/compiler/index.ts ===
-import { getA, getB } from "./types";
+import { getA } from "./types";
 >getA : Symbol(getA, Decl(index.ts, 0, 8))
->getB : Symbol(getB, Decl(index.ts, 0, 14))
 
 import { getNs } from "./whole";
 >getNs : Symbol(getNs, Decl(index.ts, 1, 8))
@@ -60,29 +57,16 @@ export const a3 = { a: getA() };
 >a : Symbol(a, Decl(index.ts, 5, 19))
 >getA : Symbol(getA, Decl(index.ts, 0, 8))
 
-export const b1 = getB();
->b1 : Symbol(b1, Decl(index.ts, 7, 12))
->getB : Symbol(getB, Decl(index.ts, 0, 14))
-
-export const b2 = [getB()];
->b2 : Symbol(b2, Decl(index.ts, 8, 12))
->getB : Symbol(getB, Decl(index.ts, 0, 14))
-
-export const b3 = { a: getB() };
->b3 : Symbol(b3, Decl(index.ts, 9, 12))
->a : Symbol(a, Decl(index.ts, 9, 19))
->getB : Symbol(getB, Decl(index.ts, 0, 14))
-
 export const ns1 = getNs();
->ns1 : Symbol(ns1, Decl(index.ts, 11, 12))
+>ns1 : Symbol(ns1, Decl(index.ts, 7, 12))
 >getNs : Symbol(getNs, Decl(index.ts, 1, 8))
 
 export const ns2 = [getNs()];
->ns2 : Symbol(ns2, Decl(index.ts, 12, 12))
+>ns2 : Symbol(ns2, Decl(index.ts, 8, 12))
 >getNs : Symbol(getNs, Decl(index.ts, 1, 8))
 
 export const ns3 = { a: getNs() };
->ns3 : Symbol(ns3, Decl(index.ts, 13, 12))
->a : Symbol(a, Decl(index.ts, 13, 20))
+>ns3 : Symbol(ns3, Decl(index.ts, 9, 12))
+>a : Symbol(a, Decl(index.ts, 9, 20))
 >getNs : Symbol(getNs, Decl(index.ts, 1, 8))
 
