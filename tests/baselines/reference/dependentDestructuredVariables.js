@@ -309,6 +309,21 @@ const f60: Func = (kind, payload) => {
     }
 };
 
+// Repro from #48902
+
+function foo({
+    value1,
+    test1 = value1.test1,
+    test2 = value1.test2,
+    test3 = value1.test3,
+    test4 = value1.test4,
+    test5 = value1.test5,
+    test6 = value1.test6,
+    test7 = value1.test7,
+    test8 = value1.test8,
+    test9 = value1.test9
+}) {}
+
 
 //// [dependentDestructuredVariables.js]
 "use strict";
@@ -550,6 +565,8 @@ const f60 = (kind, payload) => {
         payload.toUpperCase(); // error
     }
 };
+// Repro from #48902
+function foo({ value1, test1 = value1.test1, test2 = value1.test2, test3 = value1.test3, test4 = value1.test4, test5 = value1.test5, test6 = value1.test6, test7 = value1.test7, test8 = value1.test8, test9 = value1.test9 }) { }
 
 
 //// [dependentDestructuredVariables.d.ts]
@@ -667,3 +684,15 @@ declare type FooAsyncGenMethod = {
 declare let fooAsyncGenM: FooAsyncGenMethod;
 declare type Func = <T extends ["a", number] | ["b", string]>(...args: T) => void;
 declare const f60: Func;
+declare function foo({ value1, test1, test2, test3, test4, test5, test6, test7, test8, test9 }: {
+    value1: any;
+    test1?: any;
+    test2?: any;
+    test3?: any;
+    test4?: any;
+    test5?: any;
+    test6?: any;
+    test7?: any;
+    test8?: any;
+    test9?: any;
+}): void;

@@ -55,12 +55,12 @@ namespace vfs {
         } = {};
 
         private _cwd: string; // current working directory
-        private _time: number | Date | (() => number | Date);
+        private _time: number;
         private _shadowRoot: FileSystem | undefined;
         private _dirStack: string[] | undefined;
 
         constructor(ignoreCase: boolean, options: FileSystemOptions = {}) {
-            const { time = -1, files, meta } = options;
+            const { time = ts.TestFSWithWatch.timeIncrements, files, meta } = options;
             this.ignoreCase = ignoreCase;
             this.stringComparer = this.ignoreCase ? vpath.compareCaseInsensitive : vpath.compareCaseSensitive;
             this._time = time;
@@ -167,16 +167,15 @@ namespace vfs {
          *
          * @link http://pubs.opengroup.org/onlinepubs/9699919799/functions/time.html
          */
-        public time(value?: number | Date | (() => number | Date)): number {
-            if (value !== undefined && this.isReadonly) throw createIOError("EPERM");
-            let result = this._time;
-            if (typeof result === "function") result = result();
-            if (typeof result === "object") result = result.getTime();
-            if (result === -1) result = Date.now();
+        public time(value?: number): number {
             if (value !== undefined) {
+                if (this.isReadonly) throw createIOError("EPERM");
                 this._time = value;
             }
-            return result;
+            else if (!this.isReadonly) {
+                this._time += ts.TestFSWithWatch.timeIncrements;
+            }
+            return this._time;
         }
 
         /**
@@ -843,7 +842,7 @@ namespace vfs {
                 container[basename] = new Symlink(node.symlink);
             }
             else {
-                container[basename] = new File(node.buffer || "");
+                container[basename] = new File(changed._getBuffer(node));
             }
             return true;
         }
@@ -1172,9 +1171,8 @@ namespace vfs {
     }
 
     export interface FileSystemOptions {
-        // Sets the initial timestamp for new files and directories, or the function used
-        // to calculate timestamps.
-        time?: number | Date | (() => number | Date);
+        // Sets the initial timestamp for new files and directories
+        time?: number;
 
         // A set of file system entries to initially add to the file system.
         files?: FileSet;

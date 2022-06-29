@@ -5,7 +5,7 @@ type Kind = "one" | "two" | "three";
 >Kind : "one" | "two" | "three"
 
 declare function getInterfaceFromString<T extends Kind>(options?: { type?: T } & { type?: Kind }): T;
->getInterfaceFromString : <T extends Kind>(options?: ({ type?: T | undefined; } & { type?: Kind | undefined; }) | undefined) => T
+>getInterfaceFromString : <T extends Kind>(options?: {    type?: T;} & {    type?: Kind;}) => T
 >options : ({ type?: T | undefined; } & { type?: Kind | undefined; }) | undefined
 >type : T | undefined
 >type : Kind | undefined

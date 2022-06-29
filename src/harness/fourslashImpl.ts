@@ -697,6 +697,13 @@ namespace FourSlash {
             this.verifyGoToX(arg0, endMarkerNames, () => this.getGoToDefinitionAndBoundSpan());
         }
 
+        public verifyGoToSourceDefinition(startMarkerNames: ArrayOrSingle<string>, end?: ArrayOrSingle<string | { marker: string, unverified?: boolean }> | { file: string, unverified?: boolean }) {
+            if (this.testType !== FourSlashTestType.Server) {
+                this.raiseError("goToSourceDefinition may only be used in fourslash/server tests.");
+            }
+            this.verifyGoToX(startMarkerNames, end, () => (this.languageService as ts.server.SessionClient).getSourceDefinitionAndBoundSpan(this.activeFile.fileName, this.currentCaretPosition)!);
+        }
+
         private getGoToDefinition(): readonly ts.DefinitionInfo[] {
             return this.languageService.getDefinitionAtPosition(this.activeFile.fileName, this.currentCaretPosition)!;
         }
@@ -764,7 +771,9 @@ namespace FourSlash {
             }
 
             if (endMarkers.length !== definitions.length) {
-                this.raiseError(`${testName} failed - expected to find ${endMarkers.length} definitions but got ${definitions.length}`);
+                const markers = definitions.map(d => ({ text: "HERE", fileName: d.fileName, position: d.textSpan.start }));
+                const actual = this.renderMarkers(markers);
+                this.raiseError(`${testName} failed - expected to find ${endMarkers.length} definitions but got ${definitions.length}\n\n${actual}`);
             }
 
             ts.zipWith(endMarkers, definitions, (endMarkerOrFileResult, definition, i) => {
@@ -774,17 +783,8 @@ namespace FourSlash {
                 ts.Debug.assert(typeof expectedFileName === "string");
                 const expectedPosition = marker?.position || 0;
                 if (ts.comparePaths(expectedFileName, definition.fileName, /*ignoreCase*/ true) !== ts.Comparison.EqualTo || expectedPosition !== definition.textSpan.start) {
-                    const filesToDisplay = ts.deduplicate([expectedFileName, definition.fileName], ts.equateValues);
                     const markers = [{ text: "EXPECTED", fileName: expectedFileName, position: expectedPosition }, { text: "ACTUAL", fileName: definition.fileName, position: definition.textSpan.start }];
-                    const text = filesToDisplay.map(fileName => {
-                        const markersToRender = markers.filter(m => m.fileName === fileName).sort((a, b) => b.position - a.position);
-                        let fileContent = this.tryGetFileContent(fileName) || "";
-                        for (const marker of markersToRender) {
-                            fileContent = fileContent.slice(0, marker.position) + `\x1b[1;4m/*${marker.text}*/\x1b[0;31m` + fileContent.slice(marker.position);
-                        }
-                        return `// @Filename: ${fileName}\n${fileContent}`;
-                    }).join("\n\n");
-
+                    const text = this.renderMarkers(markers);
                     this.raiseError(`${testName} failed for definition ${markerName || expectedFileName} (${i}): expected ${expectedFileName} at ${expectedPosition}, got ${definition.fileName} at ${definition.textSpan.start}\n\n${text}\n`);
                 }
                 if (definition.unverified && (typeof endMarkerOrFileResult === "string" || !endMarkerOrFileResult.unverified)) {
@@ -796,6 +796,18 @@ namespace FourSlash {
                     );
                 }
             });
+        }
+
+        private renderMarkers(markers: { text: string, fileName: string, position: number }[]) {
+            const filesToDisplay = ts.deduplicate(markers.map(m => m.fileName), ts.equateValues);
+            return filesToDisplay.map(fileName => {
+                const markersToRender = markers.filter(m => m.fileName === fileName).sort((a, b) => b.position - a.position);
+                let fileContent = this.tryGetFileContent(fileName) || "";
+                for (const marker of markersToRender) {
+                    fileContent = fileContent.slice(0, marker.position) + `\x1b[1;4m/*${marker.text}*/\x1b[0;31m` + fileContent.slice(marker.position);
+                }
+                return `// @Filename: ${fileName}\n${fileContent}`;
+            }).join("\n\n");
         }
 
         private verifyDefinitionTextSpan(defs: ts.DefinitionInfoAndBoundSpan, startMarkerName: string) {
@@ -1418,14 +1430,17 @@ namespace FourSlash {
                 contextRangeDelta?: number
                 contextRangeId?: string;
             }
-            const { findInStrings = false, findInComments = false, ranges = this.getRanges(), providePrefixAndSuffixTextForRename = true } = ts.isArray(options) ? { findInStrings: false, findInComments: false, ranges: options, providePrefixAndSuffixTextForRename: true } : options;
+            const { findInStrings = false, findInComments = false, ranges = this.getRanges(), providePrefixAndSuffixTextForRename = true } =
+                ts.isArray(options)
+                    ? { findInStrings: false, findInComments: false, ranges: options, providePrefixAndSuffixTextForRename: true }
+                    : options;
 
             const _startRanges = toArray(startRanges);
             assert(_startRanges.length);
             for (const startRange of _startRanges) {
                 this.goToRangeStart(startRange);
 
-                const renameInfo = this.languageService.getRenameInfo(this.activeFile.fileName, this.currentCaretPosition);
+                const renameInfo = this.languageService.getRenameInfo(this.activeFile.fileName, this.currentCaretPosition, { providePrefixAndSuffixTextForRename });
                 if (!renameInfo.canRename) {
                     this.raiseError("Expected rename to succeed, but it actually failed.");
                     break;
@@ -1618,8 +1633,15 @@ namespace FourSlash {
             }
         }
 
-        public verifyRenameInfoSucceeded(displayName: string | undefined, fullDisplayName: string | undefined, kind: string | undefined, kindModifiers: string | undefined, fileToRename: string | undefined, expectedRange: Range | undefined, renameInfoOptions: ts.RenameInfoOptions | undefined): void {
-            const renameInfo = this.languageService.getRenameInfo(this.activeFile.fileName, this.currentCaretPosition, renameInfoOptions || { allowRenameOfImportPath: true });
+        public verifyRenameInfoSucceeded(
+            displayName: string | undefined,
+            fullDisplayName: string | undefined,
+            kind: string | undefined,
+            kindModifiers: string | undefined,
+            fileToRename: string | undefined,
+            expectedRange: Range | undefined,
+            preferences: ts.UserPreferences | undefined): void {
+            const renameInfo = this.languageService.getRenameInfo(this.activeFile.fileName, this.currentCaretPosition, preferences || { allowRenameOfImportPath: true });
             if (!renameInfo.canRename) {
                 throw this.raiseError("Rename did not succeed");
             }
@@ -1644,9 +1666,9 @@ namespace FourSlash {
             }
         }
 
-        public verifyRenameInfoFailed(message?: string, allowRenameOfImportPath?: boolean) {
-            allowRenameOfImportPath = allowRenameOfImportPath === undefined ? true : allowRenameOfImportPath;
-            const renameInfo = this.languageService.getRenameInfo(this.activeFile.fileName, this.currentCaretPosition, { allowRenameOfImportPath });
+        public verifyRenameInfoFailed(message?: string, preferences?: ts.UserPreferences) {
+            const allowRenameOfImportPath = preferences?.allowRenameOfImportPath === undefined ? true : preferences.allowRenameOfImportPath;
+            const renameInfo = this.languageService.getRenameInfo(this.activeFile.fileName, this.currentCaretPosition, { ...preferences, allowRenameOfImportPath });
             if (renameInfo.canRename) {
                 throw this.raiseError("Rename was expected to fail");
             }

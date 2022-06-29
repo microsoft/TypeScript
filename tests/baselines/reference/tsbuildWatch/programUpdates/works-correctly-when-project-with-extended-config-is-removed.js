@@ -47,15 +47,15 @@ Output::
     * project2.tsconfig.json
     * tsconfig.json
 
-[[90m12:00:29 AM[0m] Project 'project1.tsconfig.json' is out of date because output file 'commonFile1.js' does not exist
+[[90m12:00:29 AM[0m] Project 'project1.tsconfig.json' is out of date because output file 'project1.tsconfig.tsbuildinfo' does not exist
 
 [[90m12:00:30 AM[0m] Building project '/a/b/project1.tsconfig.json'...
 
-[[90m12:00:43 AM[0m] Project 'project2.tsconfig.json' is out of date because output file 'other.js' does not exist
+[[90m12:00:45 AM[0m] Project 'project2.tsconfig.json' is out of date because output file 'project2.tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:44 AM[0m] Building project '/a/b/project2.tsconfig.json'...
+[[90m12:00:46 AM[0m] Building project '/a/b/project2.tsconfig.json'...
 
-[[90m12:00:53 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:57 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -74,8 +74,8 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
-/a/b/commonfile1.ts (used version)
-/a/b/commonfile2.ts (used version)
+/a/b/commonfile1.ts (computed .d.ts during emit)
+/a/b/commonfile2.ts (computed .d.ts during emit)
 
 Program root files: ["/a/b/other.ts"]
 Program options: {"strict":true,"composite":true,"watch":true,"configFilePath":"/a/b/project2.tsconfig.json"}
@@ -90,7 +90,7 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
-/a/b/other.ts (used version)
+/a/b/other.ts (computed .d.ts during emit)
 
 WatchedFiles::
 /a/b/project1.tsconfig.json:
@@ -135,7 +135,7 @@ declare let y: number;
 
 
 //// [/a/b/project1.tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../lib/lib.d.ts","./commonfile1.ts","./commonfile2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"2167136208-let x = 1","affectsGlobalScope":true},{"version":"2168322129-let y = 1","affectsGlobalScope":true}],"options":{"composite":true,"strict":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[2,3,1]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../lib/lib.d.ts","./commonfile1.ts","./commonfile2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"2167136208-let x = 1","signature":"2842409786-declare let x: number;\n","affectsGlobalScope":true},{"version":"2168322129-let y = 1","signature":"784887931-declare let y: number;\n","affectsGlobalScope":true}],"options":{"composite":true,"strict":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[2,3,1],"dtsChangeTime":31000},"version":"FakeTSVersion"}
 
 //// [/a/b/project1.tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -153,12 +153,12 @@ declare let y: number;
       },
       "./commonfile1.ts": {
         "version": "2167136208-let x = 1",
-        "signature": "2167136208-let x = 1",
+        "signature": "2842409786-declare let x: number;\n",
         "affectsGlobalScope": true
       },
       "./commonfile2.ts": {
         "version": "2168322129-let y = 1",
-        "signature": "2168322129-let y = 1",
+        "signature": "784887931-declare let y: number;\n",
         "affectsGlobalScope": true
       }
     },
@@ -172,10 +172,11 @@ declare let y: number;
       "./commonfile1.ts",
       "./commonfile2.ts",
       "../lib/lib.d.ts"
-    ]
+    ],
+    "dtsChangeTime": 31000
   },
   "version": "FakeTSVersion",
-  "size": 767
+  "size": 888
 }
 
 //// [/a/b/other.js]
@@ -188,7 +189,7 @@ declare let z: number;
 
 
 //// [/a/b/project2.tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../lib/lib.d.ts","./other.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"2874288940-let z = 0;","affectsGlobalScope":true}],"options":{"composite":true,"strict":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[2,1]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../lib/lib.d.ts","./other.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"2874288940-let z = 0;","signature":"-1272633924-declare let z: number;\n","affectsGlobalScope":true}],"options":{"composite":true,"strict":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[2,1],"dtsChangeTime":47000},"version":"FakeTSVersion"}
 
 //// [/a/b/project2.tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -205,7 +206,7 @@ declare let z: number;
       },
       "./other.ts": {
         "version": "2874288940-let z = 0;",
-        "signature": "2874288940-let z = 0;",
+        "signature": "-1272633924-declare let z: number;\n",
         "affectsGlobalScope": true
       }
     },
@@ -218,10 +219,11 @@ declare let z: number;
     "semanticDiagnosticsPerFile": [
       "./other.ts",
       "../lib/lib.d.ts"
-    ]
+    ],
+    "dtsChangeTime": 47000
   },
   "version": "FakeTSVersion",
-  "size": 680
+  "size": 753
 }
 
 
@@ -234,9 +236,9 @@ Input::
 
 Output::
 >> Screen clear
-[[90m12:00:56 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:00 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:57 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:01 AM[0m] Found 0 errors. Watching for file changes.
 
 
 

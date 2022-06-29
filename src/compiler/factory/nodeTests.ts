@@ -134,6 +134,11 @@ namespace ts {
         return node.kind === SyntaxKind.AbstractKeyword;
     }
 
+    /* @internal */
+    export function isOverrideModifier(node: Node): node is OverrideKeyword {
+        return node.kind === SyntaxKind.OverrideKeyword;
+    }
+
     /*@internal*/
     export function isSuperKeyword(node: Node): node is SuperExpression {
         return node.kind === SyntaxKind.SuperKeyword;
@@ -595,6 +600,10 @@ namespace ts {
 
     export function isImportClause(node: Node): node is ImportClause {
         return node.kind === SyntaxKind.ImportClause;
+    }
+
+    export function isImportTypeAssertionContainer(node: Node): node is ImportTypeAssertionContainer {
+        return node.kind === SyntaxKind.ImportTypeAssertionContainer;
     }
 
     export function isAssertClause(node: Node): node is AssertClause {

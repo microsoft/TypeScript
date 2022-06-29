@@ -1,0 +1,37 @@
+=== /node_modules/@types/node/index.d.ts ===
+declare module "fs" {
+>"fs" : Symbol("fs", Decl(index.d.ts, 0, 0))
+
+  export interface WriteFileOptions {}
+>WriteFileOptions : Symbol(WriteFileOptions, Decl(index.d.ts, 0, 21))
+
+  export function writeFile(path: string, data: any, options: WriteFileOptions, callback: (err: Error) => void): void;
+>writeFile : Symbol(writeFile, Decl(index.d.ts, 1, 38))
+>path : Symbol(path, Decl(index.d.ts, 2, 28))
+>data : Symbol(data, Decl(index.d.ts, 2, 41))
+>options : Symbol(options, Decl(index.d.ts, 2, 52))
+>WriteFileOptions : Symbol(WriteFileOptions, Decl(index.d.ts, 0, 21))
+>callback : Symbol(callback, Decl(index.d.ts, 2, 79))
+>err : Symbol(err, Decl(index.d.ts, 2, 91))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+
+=== /index.js ===
+import { writeFile, WriteFileOptions, WriteFileOptions as OtherName } from "fs";
+>writeFile : Symbol(writeFile, Decl(index.js, 0, 8))
+>WriteFileOptions : Symbol(WriteFileOptions, Decl(index.js, 0, 19))
+>WriteFileOptions : Symbol(WriteFileOptions, Decl(index.d.ts, 0, 21))
+>OtherName : Symbol(OtherName, Decl(index.js, 0, 37))
+
+/** @typedef {{ x: any }} JSDocType */
+
+export { JSDocType };
+>JSDocType : Symbol(JSDocType, Decl(index.js, 4, 8), Decl(index.js, 2, 4))
+
+export { JSDocType as ThisIsFine };
+>JSDocType : Symbol(JSDocType, Decl(index.js, 4, 8), Decl(index.js, 2, 4))
+>ThisIsFine : Symbol(ThisIsFine, Decl(index.js, 5, 8))
+
+export { WriteFileOptions };
+>WriteFileOptions : Symbol(WriteFileOptions, Decl(index.js, 6, 8))
+

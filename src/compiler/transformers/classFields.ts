@@ -366,7 +366,7 @@ namespace ts {
         }
 
         function visitMethodOrAccessorDeclaration(node: MethodDeclaration | AccessorDeclaration) {
-            Debug.assert(!some(node.decorators));
+            Debug.assert(!hasDecorators(node));
 
             if (!shouldTransformPrivateElementsOrClassStaticBlocks || !isPrivateIdentifier(node.name)) {
                 return visitEachChild(node, classElementVisitor, context);
@@ -385,7 +385,7 @@ namespace ts {
                     factory.createAssignment(
                         functionName,
                         factory.createFunctionExpression(
-                            filter(node.modifiers, m => !isStaticModifier(m)),
+                            filter(node.modifiers, (m): m is Modifier => isModifier(m) && !isStaticModifier(m)),
                             node.asteriskToken,
                             functionName,
                             /* typeParameters */ undefined,
@@ -421,7 +421,7 @@ namespace ts {
         }
 
         function visitPropertyDeclaration(node: PropertyDeclaration) {
-            Debug.assert(!some(node.decorators));
+            Debug.assert(!hasDecorators(node));
 
             if (isPrivateIdentifier(node.name)) {
                 if (!shouldTransformPrivateElementsOrClassStaticBlocks) {
@@ -433,8 +433,7 @@ namespace ts {
                     // Initializer is elided as the field is initialized in transformConstructor.
                     return factory.updatePropertyDeclaration(
                         node,
-                        /*decorators*/ undefined,
-                        visitNodes(node.modifiers, visitor, isModifier),
+                        visitNodes(node.modifiers, visitor, isModifierLike),
                         node.name,
                         /*questionOrExclamationToken*/ undefined,
                         /*type*/ undefined,
@@ -461,8 +460,6 @@ namespace ts {
                 const initializerStatement = transformPropertyOrClassStaticBlock(node, factory.createThis());
                 if (initializerStatement) {
                     const staticBlock = factory.createClassStaticBlockDeclaration(
-                        /*decorators*/ undefined,
-                        /*modifiers*/ undefined,
                         factory.createBlock([initializerStatement])
                     );
 
@@ -1051,7 +1048,6 @@ namespace ts {
             const statements: Statement[] = [
                 factory.updateClassDeclaration(
                     node,
-                    /*decorators*/ undefined,
                     node.modifiers,
                     node.name,
                     /*typeParameters*/ undefined,
@@ -1123,8 +1119,7 @@ namespace ts {
 
             const classExpression = factory.updateClassExpression(
                 node,
-                visitNodes(node.decorators, visitor, isDecorator),
-                node.modifiers,
+                visitNodes(node.modifiers, visitor, isModifierLike),
                 node.name,
                 /*typeParameters*/ undefined,
                 visitNodes(node.heritageClauses, heritageClauseVisitor, isHeritageClause),
@@ -1208,8 +1203,6 @@ namespace ts {
 
             if (!shouldTransformPrivateElementsOrClassStaticBlocks && some(pendingExpressions)) {
                 members.push(factory.createClassStaticBlockDeclaration(
-                    /*decorators*/ undefined,
-                    /*modifiers*/ undefined,
                     factory.createBlock([
                         factory.createExpressionStatement(factory.inlineExpressions(pendingExpressions))
                     ])
@@ -1265,7 +1258,6 @@ namespace ts {
                 setOriginalNode(
                     setTextRange(
                         factory.createConstructorDeclaration(
-                            /*decorators*/ undefined,
                             /*modifiers*/ undefined,
                             parameters ?? [],
                             body
@@ -1294,7 +1286,7 @@ namespace ts {
             resumeLexicalEnvironment();
 
             const needsSyntheticConstructor = !constructor && isDerivedClass;
-            let indexOfFirstStatementAfterSuper = 0;
+            let indexOfFirstStatementAfterSuperAndPrologue = 0;
             let prologueStatementCount = 0;
             let superStatementIndex = -1;
             let statements: Statement[] = [];
@@ -1305,12 +1297,15 @@ namespace ts {
 
                 // If there was a super call, visit existing statements up to and including it
                 if (superStatementIndex >= 0) {
-                    indexOfFirstStatementAfterSuper = superStatementIndex + 1;
+                    indexOfFirstStatementAfterSuperAndPrologue = superStatementIndex + 1;
                     statements = [
                         ...statements.slice(0, prologueStatementCount),
-                        ...visitNodes(constructor.body.statements, visitor, isStatement, prologueStatementCount, indexOfFirstStatementAfterSuper - prologueStatementCount),
+                        ...visitNodes(constructor.body.statements, visitor, isStatement, prologueStatementCount, indexOfFirstStatementAfterSuperAndPrologue - prologueStatementCount),
                         ...statements.slice(prologueStatementCount),
                     ];
+                }
+                else if (prologueStatementCount >= 0) {
+                    indexOfFirstStatementAfterSuperAndPrologue = prologueStatementCount;
                 }
             }
 
@@ -1354,26 +1349,25 @@ namespace ts {
                         }
                     }
                     if (parameterPropertyDeclarationCount > 0) {
-                        const parameterProperties = visitNodes(constructor.body.statements, visitor, isStatement, indexOfFirstStatementAfterSuper, parameterPropertyDeclarationCount);
+                        const parameterProperties = visitNodes(constructor.body.statements, visitor, isStatement, indexOfFirstStatementAfterSuperAndPrologue, parameterPropertyDeclarationCount);
 
                         // If there was a super() call found, add parameter properties immediately after it
                         if (superStatementIndex >= 0) {
                             addRange(statements, parameterProperties);
                         }
-                        // If a synthetic super() call was added, add them just after it
-                        else if (needsSyntheticConstructor) {
+                        else {
+                            // Add add parameter properties to the top of the constructor after the prologue
+                            let superAndPrologueStatementCount = prologueStatementCount;
+                            // If a synthetic super() call was added, need to account for that
+                            if (needsSyntheticConstructor) superAndPrologueStatementCount++;
                             statements = [
-                                statements[0],
+                                ...statements.slice(0, superAndPrologueStatementCount),
                                 ...parameterProperties,
-                                ...statements.slice(1),
+                                ...statements.slice(superAndPrologueStatementCount),
                             ];
                         }
-                        // Since there wasn't a super() call, add them to the top of the constructor
-                        else {
-                            statements = [...parameterProperties, ...statements];
-                        }
 
-                        indexOfFirstStatementAfterSuper += parameterPropertyDeclarationCount;
+                        indexOfFirstStatementAfterSuperAndPrologue += parameterPropertyDeclarationCount;
                     }
                 }
             }
@@ -1385,7 +1379,7 @@ namespace ts {
 
             // Add existing statements after the initial prologues and super call
             if (constructor) {
-                addRange(statements, visitNodes(constructor.body!.statements, visitBodyStatement, isStatement, indexOfFirstStatementAfterSuper + prologueStatementCount));
+                addRange(statements, visitNodes(constructor.body!.statements, visitBodyStatement, isStatement, indexOfFirstStatementAfterSuperAndPrologue));
             }
 
             statements = factory.mergeLexicalEnvironment(statements, endLexicalEnvironment());

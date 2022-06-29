@@ -10,10 +10,6 @@ namespace ts.projectSystem {
     export import createServerHost = TestFSWithWatch.createServerHost;
     export import checkArray = TestFSWithWatch.checkArray;
     export import libFile = TestFSWithWatch.libFile;
-    export import checkWatchedFiles = TestFSWithWatch.checkWatchedFiles;
-    export import checkWatchedFilesDetailed = TestFSWithWatch.checkWatchedFilesDetailed;
-    export import checkWatchedDirectories = TestFSWithWatch.checkWatchedDirectories;
-    export import checkWatchedDirectoriesDetailed = TestFSWithWatch.checkWatchedDirectoriesDetailed;
 
     export import commonFile1 = tscWatch.commonFile1;
     export import commonFile2 = tscWatch.commonFile2;
@@ -103,11 +99,22 @@ namespace ts.projectSystem {
                     .replace(/\"updateGraphDurationMs\"\:\d+(?:\.\d+)?/g, `"updateGraphDurationMs":*`)
                     .replace(/\"createAutoImportProviderProgramDurationMs\"\:\d+(?:\.\d+)?/g, `"createAutoImportProviderProgramDurationMs":*`)
                     .replace(`"version":"${version}"`, `"version":"FakeVersion"`)
+                    .replace(/getCompletionData: Get current token: \d+(?:\.\d+)?/g, `getCompletionData: Get current token: *`)
+                    .replace(/getCompletionData: Is inside comment: \d+(?:\.\d+)?/g, `getCompletionData: Is inside comment: *`)
+                    .replace(/getCompletionData: Get previous token: \d+(?:\.\d+)?/g, `getCompletionData: Get previous token: *`)
+                    .replace(/getCompletionsAtPosition: isCompletionListBlocker: \d+(?:\.\d+)?/g, `getCompletionsAtPosition: isCompletionListBlocker: *`)
+                    .replace(/getCompletionData: Semantic work: \d+(?:\.\d+)?/g, `getCompletionData: Semantic work: *`)
+                    .replace(/getCompletionsAtPosition: getCompletionEntriesFromSymbols: \d+(?:\.\d+)?/g, `getCompletionsAtPosition: getCompletionEntriesFromSymbols: *`)
+                    .replace(/forEachExternalModuleToImportFrom autoImportProvider: \d+(?:\.\d+)?/g, `forEachExternalModuleToImportFrom autoImportProvider: *`)
+                    .replace(/getExportInfoMap: done in \d+(?:\.\d+)?/g, `getExportInfoMap: done in *`)
+                    .replace(/collectAutoImports: \d+(?:\.\d+)?/g, `collectAutoImports: *`)
+                    .replace(/dependencies in \d+(?:\.\d+)?/g, `dependencies in *`)
+                    .replace(/\"exportMapKey\"\:\"[_$a-zA-Z][_$_$a-zA-Z0-9]*\|\d+\|/g, match => match.replace(/\|\d+\|/, `|*|`))
             )
         };
     }
 
-    export function baselineTsserverLogs(scenario: string, subScenario: string, sessionOrService: TestSession | TestProjectService) {
+    export function baselineTsserverLogs(scenario: string, subScenario: string, sessionOrService: { logger: Logger; }) {
         Debug.assert(sessionOrService.logger.logs.length); // Ensure caller used in memory logger
         Harness.Baseline.runBaseline(`tsserver/${scenario}/${subScenario.split(" ").join("-")}.js`, sessionOrService.logger.logs.join("\r\n"));
     }
@@ -138,7 +145,7 @@ namespace ts.projectSystem {
             installTypingHost: server.ServerHost,
             readonly typesRegistry = new Map<string, MapLike<string>>(),
             log?: TI.Log) {
-            super(installTypingHost, globalTypingsCacheLocation, TestFSWithWatch.safeList.path, customTypesMap.path, throttleLimit, log);
+            super(installTypingHost, globalTypingsCacheLocation, "/safeList.json" as Path, customTypesMap.path, throttleLimit, log);
         }
 
         protected postExecActions: PostExecAction[] = [];
@@ -379,14 +386,15 @@ namespace ts.projectSystem {
         return new TestSession({ ...sessionOptions, ...opts });
     }
 
-    export function createSessionWithEventTracking<T extends server.ProjectServiceEvent>(host: server.ServerHost, eventName: T["eventName"], ...eventNames: T["eventName"][]) {
+    export function createSessionWithEventTracking<T extends server.ProjectServiceEvent>(host: server.ServerHost, eventNames: T["eventName"] | T["eventName"][], opts: Partial<TestSessionOptions> = {}) {
         const events: T[] = [];
         const session = createSession(host, {
             eventHandler: e => {
-                if (e.eventName === eventName || eventNames.some(eventName => e.eventName === eventName)) {
+                if (isArray(eventNames) ? eventNames.some(eventName => e.eventName === eventName) : eventNames === e.eventName) {
                     events.push(e as T);
                 }
-            }
+            },
+            ...opts
         });
 
         return { session, events };
@@ -475,13 +483,6 @@ namespace ts.projectSystem {
         return iterResult.value;
     }
 
-    export function checkOrphanScriptInfos(service: server.ProjectService, expectedFiles: readonly string[]) {
-        checkArray("Orphan ScriptInfos:", arrayFrom(mapDefinedIterator(
-            service.filenameToScriptInfo.values(),
-            v => v.containingProjects.length === 0 ? v.fileName : undefined
-        )), expectedFiles);
-    }
-
     export function checkProjectActualFiles(project: server.Project, expectedFiles: readonly string[]) {
         checkArray(`${server.ProjectKind[project.projectKind]} project: ${project.getProjectName()}:: actual files`, project.getFileNames(), expectedFiles);
     }
@@ -520,14 +521,6 @@ namespace ts.projectSystem {
             ...getRootsToWatchWithAncestorDirectory(folder, "tsconfig.json"),
             ...getRootsToWatchWithAncestorDirectory(folder, "jsconfig.json")
         ];
-    }
-
-    export function checkOpenFiles(projectService: server.ProjectService, expectedFiles: File[]) {
-        checkArray("Open files", arrayFrom(projectService.openFiles.keys(), path => projectService.getScriptInfoForPath(path as Path)!.fileName), expectedFiles.map(file => file.path));
-    }
-
-    export function checkScriptInfos(projectService: server.ProjectService, expectedFiles: readonly string[], additionInfo?: string) {
-        checkArray(`ScriptInfos files: ${additionInfo || ""}`, arrayFrom(projectService.filenameToScriptInfo.values(), info => info.fileName), expectedFiles);
     }
 
     export function protocolLocationFromSubstring(str: string, substring: string, options?: SpanFromSubstringOptions): protocol.Location {

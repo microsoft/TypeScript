@@ -36,14 +36,15 @@ namespace ts.server {
     export class SessionClient implements LanguageService {
         private sequence = 0;
         private lineMaps = new Map<string, number[]>();
-        private messages: string[] = [];
+        private messages = createQueue<string>();
         private lastRenameEntry: RenameEntry | undefined;
+        private preferences: UserPreferences | undefined;
 
         constructor(private host: SessionClientHost) {
         }
 
         public onMessage(message: string): void {
-            this.messages.push(message);
+            this.messages.enqueue(message);
         }
 
         private writeMessage(message: string): void {
@@ -94,7 +95,7 @@ namespace ts.server {
             let foundResponseMessage = false;
             let response!: T;
             while (!foundResponseMessage) {
-                const lastMessage = this.messages.shift()!;
+                const lastMessage = this.messages.dequeue()!;
                 Debug.assert(!!lastMessage, "Did not receive any responses.");
                 const responseBody = extractMessage(lastMessage);
                 try {
@@ -124,6 +125,7 @@ namespace ts.server {
 
         /*@internal*/
         configure(preferences: UserPreferences) {
+            this.preferences = preferences;
             const args: protocol.ConfigureRequestArguments = { preferences };
             const request = this.processRequest(CommandNames.Configure, args);
             this.processResponse(request, /*expectEmptyBody*/ true);
@@ -298,7 +300,7 @@ namespace ts.server {
         getDefinitionAndBoundSpan(fileName: string, position: number): DefinitionInfoAndBoundSpan {
             const args: protocol.FileLocationRequestArgs = this.createFileLocationRequestArgs(fileName, position);
 
-            const request = this.processRequest<protocol.DefinitionRequest>(CommandNames.DefinitionAndBoundSpan, args);
+            const request = this.processRequest<protocol.DefinitionAndBoundSpanRequest>(CommandNames.DefinitionAndBoundSpan, args);
             const response = this.processResponse<protocol.DefinitionInfoAndBoundSpanResponse>(request);
             const body = Debug.checkDefined(response.body); // TODO: GH#18217
 
@@ -329,6 +331,23 @@ namespace ts.server {
                 textSpan: this.decodeSpan(entry),
                 kind: ScriptElementKind.unknown,
                 name: ""
+            }));
+        }
+
+        getSourceDefinitionAndBoundSpan(fileName: string, position: number): DefinitionInfo[] {
+            const args: protocol.FileLocationRequestArgs = this.createFileLocationRequestArgs(fileName, position);
+            const request = this.processRequest<protocol.FindSourceDefinitionRequest>(CommandNames.FindSourceDefinition, args);
+            const response = this.processResponse<protocol.DefinitionResponse>(request);
+            const body = Debug.checkDefined(response.body); // TODO: GH#18217
+
+            return body.map(entry => ({
+                containerKind: ScriptElementKind.unknown,
+                containerName: "",
+                fileName: entry.file,
+                textSpan: this.decodeSpan(entry),
+                kind: ScriptElementKind.unknown,
+                name: "",
+                unverified: entry.unverified,
             }));
         }
 
@@ -421,7 +440,7 @@ namespace ts.server {
             return notImplemented();
         }
 
-        getRenameInfo(fileName: string, position: number, _options?: RenameInfoOptions, findInStrings?: boolean, findInComments?: boolean): RenameInfo {
+        getRenameInfo(fileName: string, position: number, _preferences: UserPreferences, findInStrings?: boolean, findInComments?: boolean): RenameInfo {
             // Not passing along 'options' because server should already have those from the 'configure' command
             const args: protocol.RenameRequestArgs = { ...this.createFileLocationRequestArgs(fileName, position), findInStrings, findInComments };
 
@@ -471,13 +490,25 @@ namespace ts.server {
             return notImplemented();
         }
 
-        findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): RenameLocation[] {
+        findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, providePrefixAndSuffixTextForRename?: boolean): RenameLocation[] {
             if (!this.lastRenameEntry ||
                 this.lastRenameEntry.inputs.fileName !== fileName ||
                 this.lastRenameEntry.inputs.position !== position ||
                 this.lastRenameEntry.inputs.findInStrings !== findInStrings ||
                 this.lastRenameEntry.inputs.findInComments !== findInComments) {
-                this.getRenameInfo(fileName, position, { allowRenameOfImportPath: true }, findInStrings, findInComments);
+                if (providePrefixAndSuffixTextForRename !== undefined) {
+                    // User preferences have to be set through the `Configure` command
+                    this.configure({ providePrefixAndSuffixTextForRename });
+                    // Options argument is not used, so don't pass in options
+                    this.getRenameInfo(fileName, position, /*preferences*/{}, findInStrings, findInComments);
+                    // Restore previous user preferences
+                    if (this.preferences) {
+                        this.configure(this.preferences);
+                    }
+                }
+                else {
+                    this.getRenameInfo(fileName, position, /*preferences*/{}, findInStrings, findInComments);
+                }
             }
 
             return this.lastRenameEntry!.locations;
@@ -847,6 +878,10 @@ namespace ts.server {
 
         getAutoImportProvider(): Program | undefined {
             throw new Error("Program objects are not serializable through the server protocol.");
+        }
+
+        updateIsDefinitionOfReferencedSymbols(_referencedSymbols: readonly ReferencedSymbol[], _knownSymbolSpans: Set<DocumentSpan>): boolean {
+            return notImplemented();
         }
 
         getNonBoundSourceFile(_fileName: string): SourceFile {

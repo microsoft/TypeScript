@@ -25,7 +25,21 @@ import hello from "./hello.json"
 export default hello.hello
 
 //// [/src/tsconfig_withFiles.json]
-
+{
+  "compilerOptions": {
+    "composite": true,
+    "moduleResolution": "node",
+    "module": "commonjs",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "outDir": "dist",
+    "skipDefaultLibCheck": true
+  },
+  "files": [
+    "src/index.ts", "src/hello.json"
+  ]
+}
 
 //// [/src/tsconfig_withInclude.json]
 {
@@ -45,21 +59,52 @@ export default hello.hello
 }
 
 //// [/src/tsconfig_withIncludeAndFiles.json]
-
+{
+  "compilerOptions": {
+    "composite": true,
+    "moduleResolution": "node",
+    "module": "commonjs",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "outDir": "dist",
+    "skipDefaultLibCheck": true
+  },
+  "files": [
+    "src/hello.json"
+  ],
+  "include": [
+    "src/**/*"
+  ]
+}
 
 //// [/src/tsconfig_withIncludeOfJson.json]
-
+{
+  "compilerOptions": {
+    "composite": true,
+    "moduleResolution": "node",
+    "module": "commonjs",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "outDir": "dist",
+    "skipDefaultLibCheck": true
+  },
+  "include": [
+    "src/**/*", "src/**/*.json"
+  ]
+}
 
 
 
 Output::
 /lib/tsc --b /src/tsconfig_withInclude.json --v --explainFiles
-[[90m12:00:00 AM[0m] Projects in this build: 
+[[90m12:00:06 AM[0m] Projects in this build: 
     * src/tsconfig_withInclude.json
 
-[[90m12:00:00 AM[0m] Project 'src/tsconfig_withInclude.json' is out of date because output file 'src/dist/src/index.js' does not exist
+[[90m12:00:07 AM[0m] Project 'src/tsconfig_withInclude.json' is out of date because output file 'src/dist/tsconfig_withInclude.tsbuildinfo' does not exist
 
-[[90m12:00:00 AM[0m] Building project '/src/tsconfig_withInclude.json'...
+[[90m12:00:08 AM[0m] Building project '/src/tsconfig_withInclude.json'...
 
 [96msrc/src/index.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS6307: [0mFile '/src/src/hello.json' is not listed within the file list of project '/src/tsconfig_withInclude.json'. Projects must list all files or use an 'include' pattern.
 
@@ -79,7 +124,7 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 
 //// [/src/dist/tsconfig_withInclude.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","../src/hello.json","../src/index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"6651571919-{\n  \"hello\": \"world\"\n}","-27703454282-import hello from \"./hello.json\"\n\nexport default hello.hello"],"options":{"allowSyntheticDefaultImports":true,"composite":true,"esModuleInterop":true,"module":1,"outDir":"./","skipDefaultLibCheck":true},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3],"affectedFilesPendingEmit":[[2,1],[3,1]]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","../src/hello.json","../src/index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"6651571919-{\n  \"hello\": \"world\"\n}","-27703454282-import hello from \"./hello.json\"\n\nexport default hello.hello"],"options":{"allowSyntheticDefaultImports":true,"composite":true,"esModuleInterop":true,"module":1,"outDir":"./","skipDefaultLibCheck":true},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3],"affectedFilesPendingEmit":[[2,1],[3,1]],"emitSignatures":[3]},"version":"FakeTSVersion"}
 
 //// [/src/dist/tsconfig_withInclude.tsbuildinfo.readable.baseline.txt]
 {
@@ -141,9 +186,12 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
         "../src/index.ts",
         "Full"
       ]
+    ],
+    "emitSignatures": [
+      "../src/index.ts"
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1018
+  "size": 1039
 }
 

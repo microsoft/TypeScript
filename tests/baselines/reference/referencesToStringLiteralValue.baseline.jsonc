@@ -1,0 +1,22 @@
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/server/referencesToStringLiteralValue.ts",
+      "kind": "var",
+      "name": "some  string",
+      "textSpan": {
+        "start": 19,
+        "length": 12
+      },
+      "displayParts": [
+        {
+          "text": "\"some  string\"",
+          "kind": "stringLiteral"
+        }
+      ]
+    },
+    "references": []
+  }
+]

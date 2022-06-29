@@ -44,7 +44,6 @@ tests/cases/conformance/types/tuple/variadicTuples2.ts(73,5): error TS2322: Type
 tests/cases/conformance/types/tuple/variadicTuples2.ts(74,5): error TS2322: Type '[number, ...T]' is not assignable to type '[number, ...number[]]'.
   Type at position 1 in source is not compatible with type at position 1 in target.
     Type 'T[number]' is not assignable to type 'number'.
-      Type 'unknown' is not assignable to type 'number'.
 tests/cases/conformance/types/tuple/variadicTuples2.ts(107,16): error TS2345: Argument of type '[1, 2, 3, 4]' is not assignable to parameter of type '[...number[], (...values: number[]) => void]'.
   Type at position 3 in source is not compatible with type at position 1 in target.
     Type 'number' is not assignable to type '(...values: number[]) => void'.
@@ -206,7 +205,6 @@ tests/cases/conformance/types/tuple/variadicTuples2.ts(130,25): error TS2345: Ar
 !!! error TS2322: Type '[number, ...T]' is not assignable to type '[number, ...number[]]'.
 !!! error TS2322:   Type at position 1 in source is not compatible with type at position 1 in target.
 !!! error TS2322:     Type 'T[number]' is not assignable to type 'number'.
-!!! error TS2322:       Type 'unknown' is not assignable to type 'number'.
     }
     
     // Inference

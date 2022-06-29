@@ -158,7 +158,7 @@ namespace ts.FindAllReferences {
         function isExported(node: Node, stopAtAmbientModule = false) {
             return findAncestor(node, node => {
                 if (stopAtAmbientModule && isAmbientModuleDeclaration(node)) return "quit";
-                return some(node.modifiers, mod => mod.kind === SyntaxKind.ExportKeyword);
+                return canHaveModifiers(node) && some(node.modifiers, isExportModifier);
             });
         }
 
@@ -621,7 +621,7 @@ namespace ts.FindAllReferences {
                 Debug.assert((parent as ImportClause | NamespaceImport).name === node);
                 return true;
             case SyntaxKind.BindingElement:
-                return isInJSFile(node) && isVariableDeclarationInitializedToBareOrAccessedRequire(parent);
+                return isInJSFile(node) && isVariableDeclarationInitializedToBareOrAccessedRequire(parent.parent.parent);
             default:
                 return false;
         }

@@ -163,10 +163,11 @@ namespace ts {
     }
 
     /** Works like Array.prototype.find, returning `undefined` if no element satisfying the predicate is found. */
-    export function find<T, U extends T>(array: readonly T[], predicate: (element: T, index: number) => element is U): U | undefined;
-    export function find<T>(array: readonly T[], predicate: (element: T, index: number) => boolean): T | undefined;
-    export function find<T>(array: readonly T[], predicate: (element: T, index: number) => boolean): T | undefined {
-        for (let i = 0; i < array.length; i++) {
+    export function find<T, U extends T>(array: readonly T[] | undefined, predicate: (element: T, index: number) => element is U, startIndex?: number): U | undefined;
+    export function find<T>(array: readonly T[] | undefined, predicate: (element: T, index: number) => boolean, startIndex?: number): T | undefined;
+    export function find<T>(array: readonly T[] | undefined, predicate: (element: T, index: number) => boolean, startIndex?: number): T | undefined {
+        if (array === undefined) return undefined;
+        for (let i = startIndex ?? 0; i < array.length; i++) {
             const value = array[i];
             if (predicate(value, i)) {
                 return value;
@@ -175,10 +176,11 @@ namespace ts {
         return undefined;
     }
 
-    export function findLast<T, U extends T>(array: readonly T[], predicate: (element: T, index: number) => element is U): U | undefined;
-    export function findLast<T>(array: readonly T[], predicate: (element: T, index: number) => boolean): T | undefined;
-    export function findLast<T>(array: readonly T[], predicate: (element: T, index: number) => boolean): T | undefined {
-        for (let i = array.length - 1; i >= 0; i--) {
+    export function findLast<T, U extends T>(array: readonly T[] | undefined, predicate: (element: T, index: number) => element is U, startIndex?: number): U | undefined;
+    export function findLast<T>(array: readonly T[] | undefined, predicate: (element: T, index: number) => boolean, startIndex?: number): T | undefined;
+    export function findLast<T>(array: readonly T[] | undefined, predicate: (element: T, index: number) => boolean, startIndex?: number): T | undefined {
+        if (array === undefined) return undefined;
+        for (let i = startIndex ?? array.length - 1; i >= 0; i--) {
             const value = array[i];
             if (predicate(value, i)) {
                 return value;
@@ -188,8 +190,9 @@ namespace ts {
     }
 
     /** Works like Array.prototype.findIndex, returning `-1` if no element satisfying the predicate is found. */
-    export function findIndex<T>(array: readonly T[], predicate: (element: T, index: number) => boolean, startIndex?: number): number {
-        for (let i = startIndex || 0; i < array.length; i++) {
+    export function findIndex<T>(array: readonly T[] | undefined, predicate: (element: T, index: number) => boolean, startIndex?: number): number {
+        if (array === undefined) return -1;
+        for (let i = startIndex ?? 0; i < array.length; i++) {
             if (predicate(array[i], i)) {
                 return i;
             }
@@ -197,8 +200,9 @@ namespace ts {
         return -1;
     }
 
-    export function findLastIndex<T>(array: readonly T[], predicate: (element: T, index: number) => boolean, startIndex?: number): number {
-        for (let i = startIndex === undefined ? array.length - 1 : startIndex; i >= 0; i--) {
+    export function findLastIndex<T>(array: readonly T[] | undefined, predicate: (element: T, index: number) => boolean, startIndex?: number): number {
+        if (array === undefined) return -1;
+        for (let i = startIndex ?? array.length - 1; i >= 0; i--) {
             if (predicate(array[i], i)) {
                 return i;
             }
@@ -1079,8 +1083,8 @@ namespace ts {
     /**
      * Returns the first element of an array if non-empty, `undefined` otherwise.
      */
-    export function firstOrUndefined<T>(array: readonly T[]): T | undefined {
-        return array.length === 0 ? undefined : array[0];
+    export function firstOrUndefined<T>(array: readonly T[] | undefined): T | undefined {
+        return array === undefined || array.length === 0 ? undefined : array[0];
     }
 
     export function first<T>(array: readonly T[]): T {
@@ -1091,8 +1095,8 @@ namespace ts {
     /**
      * Returns the last element of an array if non-empty, `undefined` otherwise.
      */
-    export function lastOrUndefined<T>(array: readonly T[]): T | undefined {
-        return array.length === 0 ? undefined : array[array.length - 1];
+    export function lastOrUndefined<T>(array: readonly T[] | undefined): T | undefined {
+        return array === undefined || array.length === 0 ? undefined : array[array.length - 1];
     }
 
     export function last<T>(array: readonly T[]): T {
@@ -1486,6 +1490,47 @@ namespace ts {
 
     export function createUnderscoreEscapedMultiMap<T>(): UnderscoreEscapedMultiMap<T> {
         return createMultiMap() as UnderscoreEscapedMultiMap<T>;
+    }
+
+    export function createQueue<T>(items?: readonly T[]): Queue<T> {
+        const elements: (T | undefined)[] = items?.slice() || [];
+        let headIndex = 0;
+
+        function isEmpty() {
+            return headIndex === elements.length;
+        }
+
+        function enqueue(...items: T[]) {
+            elements.push(...items);
+        }
+
+        function dequeue(): T {
+            if (isEmpty()) {
+                throw new Error("Queue is empty");
+            }
+
+            const result = elements[headIndex] as T;
+            elements[headIndex] = undefined; // Don't keep referencing dequeued item
+            headIndex++;
+
+            // If more than half of the queue is empty, copy the remaining elements to the
+            // front and shrink the array (unless we'd be saving fewer than 100 slots)
+            if (headIndex > 100 && headIndex > (elements.length >> 1)) {
+                const newLength = elements.length - headIndex;
+                elements.copyWithin(/*target*/ 0, /*start*/ headIndex);
+
+                elements.length = newLength;
+                headIndex = 0;
+            }
+
+            return result;
+        }
+
+        return {
+            enqueue,
+            dequeue,
+            isEmpty,
+        };
     }
 
     /**
@@ -2035,7 +2080,7 @@ namespace ts {
         return comparer(a, b);
     }
 
-    export function compareProperties<T, K extends keyof T>(a: T | undefined, b: T | undefined, key: K, comparer: Comparer<T[K]>): Comparison {
+    export function compareProperties<T extends object, K extends keyof T>(a: T | undefined, b: T | undefined, key: K, comparer: Comparer<T[K]>): Comparison {
         return a === b ? Comparison.EqualTo :
             a === undefined ? Comparison.LessThan :
             b === undefined ? Comparison.GreaterThan :
@@ -2299,7 +2344,7 @@ namespace ts {
         return startsWith(getCanonicalFileName(str), getCanonicalFileName(prefix)) ? str.substring(prefix.length) : undefined;
     }
 
-    function isPatternMatch({ prefix, suffix }: Pattern, candidate: string) {
+    export function isPatternMatch({ prefix, suffix }: Pattern, candidate: string) {
         return candidate.length >= prefix.length + suffix.length &&
             startsWith(candidate, prefix) &&
             endsWith(candidate, suffix);

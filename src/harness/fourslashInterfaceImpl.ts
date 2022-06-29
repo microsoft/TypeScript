@@ -324,6 +324,10 @@ namespace FourSlashInterface {
             this.state.verifyGoToType(arg0, endMarkerName);
         }
 
+        public goToSourceDefinition(startMarkerNames: ArrayOrSingle<string>, end: { file: string } | ArrayOrSingle<string>) {
+            this.state.verifyGoToSourceDefinition(startMarkerNames, end);
+        }
+
         public goToDefinitionForMarkers(...markerNames: string[]) {
             this.state.verifyGoToDefinitionForMarkers(markerNames);
         }
@@ -400,8 +404,8 @@ namespace FourSlashInterface {
             this.state.baselineSignatureHelp();
         }
 
-        public baselineCompletions() {
-            this.state.baselineCompletions();
+        public baselineCompletions(preferences?: ts.UserPreferences) {
+            this.state.baselineCompletions(preferences);
         }
 
         public baselineSmartSelection() {
@@ -552,12 +556,19 @@ namespace FourSlashInterface {
             this.state.replaceWithSemanticClassifications(format);
         }
 
-        public renameInfoSucceeded(displayName?: string, fullDisplayName?: string, kind?: string, kindModifiers?: string, fileToRename?: string, expectedRange?: FourSlash.Range, options?: ts.RenameInfoOptions) {
-            this.state.verifyRenameInfoSucceeded(displayName, fullDisplayName, kind, kindModifiers, fileToRename, expectedRange, options);
+        public renameInfoSucceeded(
+            displayName?: string,
+            fullDisplayName?: string,
+            kind?: string,
+            kindModifiers?: string,
+            fileToRename?: string,
+            expectedRange?: FourSlash.Range,
+            preferences?: ts.UserPreferences) {
+            this.state.verifyRenameInfoSucceeded(displayName, fullDisplayName, kind, kindModifiers, fileToRename, expectedRange, preferences);
         }
 
-        public renameInfoFailed(message?: string, allowRenameOfImportPath?: boolean) {
-            this.state.verifyRenameInfoFailed(message, allowRenameOfImportPath);
+        public renameInfoFailed(message?: string, preferences?: ts.UserPreferences) {
+            this.state.verifyRenameInfoFailed(message, preferences);
         }
 
         public renameLocations(startRanges: ArrayOrSingle<FourSlash.Range>, options: RenameLocationsOptions) {
@@ -1494,6 +1505,7 @@ namespace FourSlashInterface {
             "throw",
             "true",
             "try",
+            "type",
             "typeof",
             "var",
             "void",
@@ -1645,6 +1657,7 @@ namespace FourSlashInterface {
             "throw",
             "true",
             "try",
+            "type",
             "typeof",
             "var",
             "void",

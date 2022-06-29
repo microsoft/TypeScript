@@ -10,10 +10,6 @@ namespace ts {
             outFileWithBuildFs = undefined!;
         });
 
-        function createSolutionBuilder(host: fakes.SolutionBuilderHost, baseOptions?: BuildOptions) {
-            return ts.createSolutionBuilder(host, ["/src/third"], { dry: false, force: false, verbose: true, ...(baseOptions || {}) });
-        }
-
         interface VerifyOutFileScenarioInput {
             subScenario: string;
             modifyFs?: (fs: vfs.FileSystem) => void;
@@ -108,8 +104,9 @@ namespace ts {
         function getOutFileFsAfterBuild() {
             if (outFileWithBuildFs) return outFileWithBuildFs;
             const fs = outFileFs.shadow();
-            const host = fakes.SolutionBuilderHost.create(fs);
-            const builder = createSolutionBuilder(host);
+            const sys = new fakes.System(fs, { executingFilePath: "/lib/tsc" });
+            const host = createSolutionBuilderHostForBaseline(sys as TscCompileSystem);
+            const builder = createSolutionBuilder(host, ["/src/third"], { dry: false, force: false, verbose: true });
             builder.build();
             fs.makeReadonly();
             return outFileWithBuildFs = fs;
@@ -146,9 +143,8 @@ namespace ts {
             commandLineArgs: ["--b", "/src/third", "--verbose"],
             compile: sys => {
                 // Buildinfo will have version which does not match with current ts version
-                fakes.patchHostForBuildInfoWrite(sys, "FakeTSCurrentVersion");
-                const buildHost = createSolutionBuilderHost(sys);
-                const builder = ts.createSolutionBuilder(buildHost, ["/src/third"], { verbose: true });
+                const buildHost = createSolutionBuilderHostForBaseline(sys, "FakeTSCurrentVersion");
+                const builder = createSolutionBuilder(buildHost, ["/src/third"], { verbose: true });
                 sys.exit(builder.build());
             }
         });
@@ -175,14 +171,30 @@ namespace ts {
             ]
         });
 
+        verifyTscWithEdits({
+            scenario: "outFile",
+            subScenario: "when input file text does not change but its modified time changes",
+            fs: () => outFileFs,
+            commandLineArgs: ["--b", "/src/third", "--verbose"],
+            edits: [
+                {
+                    subScenario: "upstream project changes without changing file text",
+                    modifyFs: fs => {
+                        const time = new Date(fs.time());
+                        fs.utimesSync("/src/first/first_PART1.ts", time, time);
+                    },
+                },
+            ]
+        });
+
         verifyTscCompileLike(testTscCompileLike, {
             scenario: "outFile",
             subScenario: "builds till project specified",
             fs: () => outFileFs,
             commandLineArgs: ["--build", "/src/second/tsconfig.json"],
             compile: sys => {
-                const buildHost = createSolutionBuilderHost(sys);
-                const builder = ts.createSolutionBuilder(buildHost, ["/src/third/tsconfig.json"], {});
+                const buildHost = createSolutionBuilderHostForBaseline(sys);
+                const builder = createSolutionBuilder(buildHost, ["/src/third/tsconfig.json"], {});
                 sys.exit(builder.build("/src/second/tsconfig.json"));
             }
         });
@@ -193,8 +205,8 @@ namespace ts {
             fs: getOutFileFsAfterBuild,
             commandLineArgs: ["--build", "--clean", "/src/second/tsconfig.json"],
             compile: sys => {
-                const buildHost = createSolutionBuilderHost(sys);
-                const builder = ts.createSolutionBuilder(buildHost, ["/src/third/tsconfig.json"], { verbose: true });
+                const buildHost = createSolutionBuilderHostForBaseline(sys);
+                const builder = createSolutionBuilder(buildHost, ["/src/third/tsconfig.json"], { verbose: true });
                 sys.exit(builder.clean("/src/second/tsconfig.json"));
             }
         });

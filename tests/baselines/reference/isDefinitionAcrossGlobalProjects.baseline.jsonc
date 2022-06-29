@@ -1,0 +1,1144 @@
+// === /a/index.ts ===
+// namespace NS {
+//     export function /*FIND ALL REFS*/[|FA|]() {
+//         FB();
+//     }
+// }
+// 
+// interface I {
+//     FA();
+// }
+// 
+// const ia: I = {
+//     FA() { },
+//     FB() { },
+//     FC() { },
+//  };
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/a/index.ts",
+      "kind": "function",
+      "name": "function NS.FA(): void",
+      "textSpan": {
+        "start": 35,
+        "length": 2
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "NS",
+          "kind": "moduleName"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "FA",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 19,
+        "length": 42
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 35,
+          "length": 2
+        },
+        "fileName": "/a/index.ts",
+        "contextSpan": {
+          "start": 19,
+          "length": 42
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      }
+    ]
+  }
+]
+
+// === /b/index.ts ===
+// namespace NS {
+//     export function FB() {}
+// }
+// 
+// interface [|I|] {
+//     FB();
+// }
+// 
+// const ib: [|I|] = { FB() {} };
+
+// === /c/index.ts ===
+// namespace NS {
+//     export function FC() {}
+// }
+// 
+// interface [|I|] {
+//     FC();
+// }
+// 
+// const ic: [|I|] = { FC() {} };
+
+// === /a/index.ts ===
+// namespace NS {
+//     export function FA() {
+//         FB();
+//     }
+// }
+// 
+// interface /*FIND ALL REFS*/[|I|] {
+//     FA();
+// }
+// 
+// const ia: [|I|] = {
+//     FA() { },
+//     FB() { },
+//     FC() { },
+//  };
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/b/index.ts",
+      "kind": "interface",
+      "name": "interface I",
+      "textSpan": {
+        "start": 56,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "interface",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        }
+      ],
+      "contextSpan": {
+        "start": 46,
+        "length": 25
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 56,
+          "length": 1
+        },
+        "fileName": "/b/index.ts",
+        "contextSpan": {
+          "start": 46,
+          "length": 25
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 83,
+          "length": 1
+        },
+        "fileName": "/b/index.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 56,
+          "length": 1
+        },
+        "fileName": "/c/index.ts",
+        "contextSpan": {
+          "start": 46,
+          "length": 25
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 83,
+          "length": 1
+        },
+        "fileName": "/c/index.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 75,
+          "length": 1
+        },
+        "fileName": "/a/index.ts",
+        "contextSpan": {
+          "start": 65,
+          "length": 25
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 102,
+          "length": 1
+        },
+        "fileName": "/a/index.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /a/index.ts ===
+// namespace NS {
+//     export function FA() {
+//         FB();
+//     }
+// }
+// 
+// interface I {
+//     /*FIND ALL REFS*/[|FA|]();
+// }
+// 
+// const ia: I = {
+//     [|FA|]() { },
+//     FB() { },
+//     FC() { },
+//  };
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/a/index.ts",
+      "kind": "method",
+      "name": "(method) I.FA(): any",
+      "textSpan": {
+        "start": 83,
+        "length": 2
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "FA",
+          "kind": "methodName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 83,
+        "length": 5
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 83,
+          "length": 2
+        },
+        "fileName": "/a/index.ts",
+        "contextSpan": {
+          "start": 83,
+          "length": 5
+        },
+        "isWriteAccess": false,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 112,
+          "length": 2
+        },
+        "fileName": "/a/index.ts",
+        "contextSpan": {
+          "start": 112,
+          "length": 8
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /b/index.ts ===
+// namespace NS {
+//     export function /*FIND ALL REFS*/[|FB|]() {}
+// }
+// 
+// interface I {
+//     FB();
+// }
+// 
+// const ib: I = { FB() {} };
+
+// === /a/index.ts ===
+// namespace NS {
+//     export function FA() {
+//         [|FB|]();
+//     }
+// }
+// 
+// interface I {
+//     FA();
+// }
+// 
+// const ia: I = {
+//     FA() { },
+//     FB() { },
+//     FC() { },
+//  };
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/b/index.ts",
+      "kind": "function",
+      "name": "function NS.FB(): void",
+      "textSpan": {
+        "start": 35,
+        "length": 2
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "NS",
+          "kind": "moduleName"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "FB",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 19,
+        "length": 23
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 35,
+          "length": 2
+        },
+        "fileName": "/b/index.ts",
+        "contextSpan": {
+          "start": 19,
+          "length": 23
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 50,
+          "length": 2
+        },
+        "fileName": "/a/index.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /b/index.ts ===
+// namespace NS {
+//     export function FB() {}
+// }
+// 
+// interface /*FIND ALL REFS*/[|I|] {
+//     FB();
+// }
+// 
+// const ib: [|I|] = { FB() {} };
+
+// === /c/index.ts ===
+// namespace NS {
+//     export function FC() {}
+// }
+// 
+// interface [|I|] {
+//     FC();
+// }
+// 
+// const ic: [|I|] = { FC() {} };
+
+// === /a/index.ts ===
+// namespace NS {
+//     export function FA() {
+//         FB();
+//     }
+// }
+// 
+// interface [|I|] {
+//     FA();
+// }
+// 
+// const ia: [|I|] = {
+//     FA() { },
+//     FB() { },
+//     FC() { },
+//  };
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/b/index.ts",
+      "kind": "interface",
+      "name": "interface I",
+      "textSpan": {
+        "start": 56,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "interface",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        }
+      ],
+      "contextSpan": {
+        "start": 46,
+        "length": 25
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 56,
+          "length": 1
+        },
+        "fileName": "/b/index.ts",
+        "contextSpan": {
+          "start": 46,
+          "length": 25
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 83,
+          "length": 1
+        },
+        "fileName": "/b/index.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 56,
+          "length": 1
+        },
+        "fileName": "/c/index.ts",
+        "contextSpan": {
+          "start": 46,
+          "length": 25
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 83,
+          "length": 1
+        },
+        "fileName": "/c/index.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 75,
+          "length": 1
+        },
+        "fileName": "/a/index.ts",
+        "contextSpan": {
+          "start": 65,
+          "length": 25
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 102,
+          "length": 1
+        },
+        "fileName": "/a/index.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /b/index.ts ===
+// namespace NS {
+//     export function FB() {}
+// }
+// 
+// interface I {
+//     /*FIND ALL REFS*/[|FB|]();
+// }
+// 
+// const ib: I = { [|FB|]() {} };
+
+// === /a/index.ts ===
+// namespace NS {
+//     export function FA() {
+//         FB();
+//     }
+// }
+// 
+// interface I {
+//     FA();
+// }
+// 
+// const ia: I = {
+//     FA() { },
+//     [|FB|]() { },
+//     FC() { },
+//  };
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/b/index.ts",
+      "kind": "method",
+      "name": "(method) I.FB(): any",
+      "textSpan": {
+        "start": 64,
+        "length": 2
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "FB",
+          "kind": "methodName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 64,
+        "length": 5
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 64,
+          "length": 2
+        },
+        "fileName": "/b/index.ts",
+        "contextSpan": {
+          "start": 64,
+          "length": 5
+        },
+        "isWriteAccess": false,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 89,
+          "length": 2
+        },
+        "fileName": "/b/index.ts",
+        "contextSpan": {
+          "start": 89,
+          "length": 7
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 126,
+          "length": 2
+        },
+        "fileName": "/a/index.ts",
+        "contextSpan": {
+          "start": 126,
+          "length": 8
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /c/index.ts ===
+// namespace NS {
+//     export function /*FIND ALL REFS*/[|FC|]() {}
+// }
+// 
+// interface I {
+//     FC();
+// }
+// 
+// const ic: I = { FC() {} };
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/c/index.ts",
+      "kind": "function",
+      "name": "function NS.FC(): void",
+      "textSpan": {
+        "start": 35,
+        "length": 2
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "NS",
+          "kind": "moduleName"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "FC",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 19,
+        "length": 23
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 35,
+          "length": 2
+        },
+        "fileName": "/c/index.ts",
+        "contextSpan": {
+          "start": 19,
+          "length": 23
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      }
+    ]
+  }
+]
+
+// === /c/index.ts ===
+// namespace NS {
+//     export function FC() {}
+// }
+// 
+// interface /*FIND ALL REFS*/[|I|] {
+//     FC();
+// }
+// 
+// const ic: [|I|] = { FC() {} };
+
+// === /b/index.ts ===
+// namespace NS {
+//     export function FB() {}
+// }
+// 
+// interface [|I|] {
+//     FB();
+// }
+// 
+// const ib: [|I|] = { FB() {} };
+
+// === /a/index.ts ===
+// namespace NS {
+//     export function FA() {
+//         FB();
+//     }
+// }
+// 
+// interface [|I|] {
+//     FA();
+// }
+// 
+// const ia: [|I|] = {
+//     FA() { },
+//     FB() { },
+//     FC() { },
+//  };
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/c/index.ts",
+      "kind": "interface",
+      "name": "interface I",
+      "textSpan": {
+        "start": 56,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "interface",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        }
+      ],
+      "contextSpan": {
+        "start": 46,
+        "length": 25
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 56,
+          "length": 1
+        },
+        "fileName": "/c/index.ts",
+        "contextSpan": {
+          "start": 46,
+          "length": 25
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 83,
+          "length": 1
+        },
+        "fileName": "/c/index.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/b/index.ts",
+      "kind": "interface",
+      "name": "interface I",
+      "textSpan": {
+        "start": 56,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "interface",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        }
+      ],
+      "contextSpan": {
+        "start": 46,
+        "length": 25
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 56,
+          "length": 1
+        },
+        "fileName": "/b/index.ts",
+        "contextSpan": {
+          "start": 46,
+          "length": 25
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 83,
+          "length": 1
+        },
+        "fileName": "/b/index.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 75,
+          "length": 1
+        },
+        "fileName": "/a/index.ts",
+        "contextSpan": {
+          "start": 65,
+          "length": 25
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 102,
+          "length": 1
+        },
+        "fileName": "/a/index.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /c/index.ts ===
+// namespace NS {
+//     export function FC() {}
+// }
+// 
+// interface I {
+//     /*FIND ALL REFS*/[|FC|]();
+// }
+// 
+// const ic: I = { [|FC|]() {} };
+
+// === /a/index.ts ===
+// namespace NS {
+//     export function FA() {
+//         FB();
+//     }
+// }
+// 
+// interface I {
+//     FA();
+// }
+// 
+// const ia: I = {
+//     FA() { },
+//     FB() { },
+//     [|FC|]() { },
+//  };
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/c/index.ts",
+      "kind": "method",
+      "name": "(method) I.FC(): any",
+      "textSpan": {
+        "start": 64,
+        "length": 2
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "FC",
+          "kind": "methodName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 64,
+        "length": 5
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 64,
+          "length": 2
+        },
+        "fileName": "/c/index.ts",
+        "contextSpan": {
+          "start": 64,
+          "length": 5
+        },
+        "isWriteAccess": false,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 89,
+          "length": 2
+        },
+        "fileName": "/c/index.ts",
+        "contextSpan": {
+          "start": 89,
+          "length": 7
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 140,
+          "length": 2
+        },
+        "fileName": "/a/index.ts",
+        "contextSpan": {
+          "start": 140,
+          "length": 8
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  }
+]

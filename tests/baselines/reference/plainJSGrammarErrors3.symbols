@@ -1,0 +1,11 @@
+=== tests/cases/conformance/salsa/plainJSGrammarErrors3.js ===
+
+No type information for this code.=== /a.js ===
+function foo() {
+>foo : Symbol(foo, Decl(a.js, 0, 0))
+
+    await new Promise(undefined);
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>undefined : Symbol(undefined)
+}
+

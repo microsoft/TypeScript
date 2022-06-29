@@ -1,10 +1,10 @@
 === tests/cases/conformance/types/union/unionTypeReduction2.ts ===
 function f1(x: { f(): void }, y: { f(x?: string): void }) {
->f1 : (x: {    f(): void;}, y: { f(x?: string | undefined): void; }) => void
+>f1 : (x: {    f(): void;}, y: { f(x?: string): void; }) => void
 >x : { f(): void; }
 >f : () => void
->y : { f(x?: string | undefined): void; }
->f : (x?: string | undefined) => void
+>y : { f(x?: string): void; }
+>f : (x?: string) => void
 >x : string | undefined
 
     let z = !!true ? x : y;  // { f(x?: string): void }
@@ -31,12 +31,12 @@ function f1(x: { f(): void }, y: { f(x?: string): void }) {
 }
 
 function f2(x: { f(x: string | undefined): void }, y: { f(x?: string): void }) {
->f2 : (x: { f(x: string | undefined): void; }, y: { f(x?: string | undefined): void; }) => void
+>f2 : (x: { f(x: string | undefined): void; }, y: { f(x?: string): void; }) => void
 >x : { f(x: string | undefined): void; }
 >f : (x: string | undefined) => void
 >x : string | undefined
->y : { f(x?: string | undefined): void; }
->f : (x?: string | undefined) => void
+>y : { f(x?: string): void; }
+>f : (x?: string) => void
 >x : string | undefined
 
     let z = !!true ? x : y;  // { f(x?: string): void }
@@ -63,9 +63,9 @@ function f2(x: { f(x: string | undefined): void }, y: { f(x?: string): void }) {
 }
 
 function f3(x: () => void, y: (x?: string) => void) {
->f3 : (x: () => void, y: (x?: string | undefined) => void) => void
+>f3 : (x: () => void, y: (x?: string) => void) => void
 >x : () => void
->y : (x?: string | undefined) => void
+>y : (x?: string) => void
 >x : string | undefined
 
     let f = !!true ? x : y;  // (x?: string) => void
@@ -88,10 +88,10 @@ function f3(x: () => void, y: (x?: string) => void) {
 }
 
 function f4(x: (x: string | undefined) => void, y: (x?: string) => void) {
->f4 : (x: (x: string | undefined) => void, y: (x?: string | undefined) => void) => void
+>f4 : (x: (x: string | undefined) => void, y: (x?: string) => void) => void
 >x : (x: string | undefined) => void
 >x : string | undefined
->y : (x?: string | undefined) => void
+>y : (x?: string) => void
 >x : string | undefined
 
     let f = !!true ? x : y;  // (x?: string) => void
@@ -114,10 +114,10 @@ function f4(x: (x: string | undefined) => void, y: (x?: string) => void) {
 }
 
 function f5(x: (x: string | undefined) => void, y: (x?: 'hello') => void) {
->f5 : (x: (x: string | undefined) => void, y: (x?: "hello" | undefined) => void) => void
+>f5 : (x: (x: string | undefined) => void, y: (x?: 'hello') => void) => void
 >x : (x: string | undefined) => void
 >x : string | undefined
->y : (x?: "hello" | undefined) => void
+>y : (x?: 'hello') => void
 >x : "hello" | undefined
 
     let f = !!true ? x : y;  // (x?: 'hello') => void
@@ -140,10 +140,10 @@ function f5(x: (x: string | undefined) => void, y: (x?: 'hello') => void) {
 }
 
 function f6(x: (x: 'hello' | undefined) => void, y: (x?: string) => void) {
->f6 : (x: (x: 'hello' | undefined) => void, y: (x?: string | undefined) => void) => void
+>f6 : (x: (x: 'hello' | undefined) => void, y: (x?: string) => void) => void
 >x : (x: 'hello' | undefined) => void
 >x : "hello" | undefined
->y : (x?: string | undefined) => void
+>y : (x?: string) => void
 >x : string | undefined
 
     let f = !!true ? x : y;  // (x: 'hello' | undefined) => void
@@ -173,10 +173,10 @@ type A = {
 }
 
 type B = {
->B : { f(x?: string | undefined): void; g(): void; }
+>B : { f(x?: string): void; g(): void; }
 
     f(x?: string): void;
->f : (x?: string | undefined) => void
+>f : (x?: string) => void
 >x : string | undefined
 
     g(): void;
@@ -227,9 +227,9 @@ declare const val: ReturnVal;
 >val : ReturnVal
 
 function run(options: { something?(b?: string): void }) {
->run : (options: { something?(b?: string | undefined): void; }) => void
->options : { something?(b?: string | undefined): void; }
->something : ((b?: string | undefined) => void) | undefined
+>run : (options: { something?(b?: string): void; }) => void
+>options : { something?(b?: string): void; }
+>something : ((b?: string) => void) | undefined
 >b : string | undefined
 
     const something = options.something ?? val.something;

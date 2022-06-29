@@ -1,11 +1,32 @@
 Input::
 //// [/lib/lib.d.ts]
-
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 //// [/src/core/index.ts]
+export function multiply(a: number, b: number) { return a * b; }
 
 
 //// [/src/core/tsconfig.json]
+{
+    "compilerOptions": {
+        "composite": true,
+        "declaration": true,
+        "declarationMap": true,
+        "skipDefaultLibCheck": true
+    }
+}
 
 
 //// [/src/no-references/tsconfig.json]
@@ -22,6 +43,18 @@ Input::
 
 
 //// [/src/with-references/tsconfig.json]
+{
+    "references": [
+        { "path": "../core" },
+    ],
+    "files": [],
+    "compilerOptions": {
+        "composite": true,
+        "declaration": true,
+        "forceConsistentCasingInFileNames": true,
+        "skipDefaultLibCheck": true
+    }
+}
 
 
 

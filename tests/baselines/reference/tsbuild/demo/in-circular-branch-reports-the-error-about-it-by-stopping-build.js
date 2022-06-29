@@ -1,14 +1,53 @@
 Input::
 //// [/lib/lib.d.ts]
-
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 //// [/src/animals/animal.ts]
+export type Size = "small" | "medium" | "large";
+export default interface Animal {
+    size: Size;
+}
 
 
 //// [/src/animals/dog.ts]
+import Animal from '.';
+import { makeRandomName } from '../core/utilities';
+
+export interface Dog extends Animal {
+    woof(): void;
+    name: string;
+}
+
+export function createDog(): Dog {
+    return ({
+        size: "medium",
+        woof: function(this: Dog) {
+            console.log(`${this.name} says "Woof"!`);
+        },
+        name: makeRandomName()
+    });
+}
+
 
 
 //// [/src/animals/index.ts]
+import Animal from './animal';
+
+export default Animal;
+import { createDog, Dog } from './dog';
+export { createDog, Dog };
 
 
 //// [/src/animals/tsconfig.json]
@@ -39,6 +78,16 @@ Input::
 }
 
 //// [/src/core/utilities.ts]
+
+export function makeRandomName() {
+    return "Bob!?! ";
+}
+
+export function lastElementOf<T>(arr: T[]): T | undefined {
+    if (arr.length === 0) return undefined;
+    return arr[arr.length - 1];
+}
+
 
 
 //// [/src/tsconfig-base.json]
@@ -87,13 +136,21 @@ Input::
 }
 
 //// [/src/zoo/zoo.ts]
+import { Dog, createDog } from '../animals/index';
+
+export function createZoo(): Array<Dog> {
+    return [
+        createDog()
+    ];
+}
+
 
 
 
 
 Output::
 /lib/tsc --b /src/tsconfig.json --verbose
-[[90m12:00:00 AM[0m] Projects in this build: 
+[[90m12:00:07 AM[0m] Projects in this build: 
     * src/animals/tsconfig.json
     * src/zoo/tsconfig.json
     * src/core/tsconfig.json

@@ -21,7 +21,8 @@ namespace ts {
         function getSampleFsAfterBuild() {
             if (projFsWithBuild) return projFsWithBuild;
             const fs = projFs.shadow();
-            const host = fakes.SolutionBuilderHost.create(fs);
+            const sys = new fakes.System(fs, { executingFilePath: "/lib/tsc" });
+            const host = createSolutionBuilderHostForBaseline(sys as TscCompileSystem);
             const builder = createSolutionBuilder(host, ["/src/tests"], {});
             builder.build();
             fs.makeReadonly();
@@ -84,7 +85,7 @@ namespace ts {
                 fs: getSampleFsAfterBuild,
                 commandLineArgs: ["--b", "/src/logic", "--clean"],
                 compile: sys => {
-                    const buildHost = createSolutionBuilderHost(sys);
+                    const buildHost = createSolutionBuilderHostForBaseline(sys);
                     const builder = createSolutionBuilder(buildHost, ["/src/third/tsconfig.json"], {});
                     sys.exit(builder.clean("/src/logic"));
                 }
@@ -96,7 +97,7 @@ namespace ts {
                 fs: getSampleFsAfterBuild,
                 commandLineArgs: ["--b", "/src/logic2", "--clean"],
                 compile: sys => {
-                    const buildHost = createSolutionBuilderHost(sys);
+                    const buildHost = createSolutionBuilderHostForBaseline(sys);
                     const builder = createSolutionBuilder(buildHost, ["/src/third/tsconfig.json"], {});
                     sys.exit(builder.clean("/src/logic2"));
                 }
@@ -137,6 +138,22 @@ namespace ts {
                 ]
             });
 
+            verifyTscWithEdits({
+                scenario: "sample1",
+                subScenario: "when input file text does not change but its modified time changes",
+                fs: () => projFs,
+                commandLineArgs: ["--b", "/src/tests", "--verbose"],
+                edits: [
+                    {
+                        subScenario: "upstream project changes without changing file text",
+                        modifyFs: fs => {
+                            const time = new Date(fs.time());
+                            fs.utimesSync("/src/core/index.ts", time, time);
+                        },
+                    },
+                ]
+            });
+
             verifyTsc({
                 scenario: "sample1",
                 subScenario: "indicates that it would skip builds during a dry build",
@@ -158,8 +175,7 @@ namespace ts {
                 commandLineArgs: ["--b", "/src/tests", "--verbose"],
                 compile: sys => {
                     // Buildinfo will have version which does not match with current ts version
-                    fakes.patchHostForBuildInfoWrite(sys, "FakeTSCurrentVersion");
-                    const buildHost = createSolutionBuilderHost(sys);
+                    const buildHost = createSolutionBuilderHostForBaseline(sys, "FakeTSCurrentVersion");
                     const builder = createSolutionBuilder(buildHost, ["/src/tests"], { verbose: true });
                     sys.exit(builder.build());
                 }
@@ -179,8 +195,7 @@ namespace ts {
                 commandLineArgs: ["--b", "/src/tests", "--verbose"],
                 compile: sys => {
                     // Buildinfo will have version which does not match with current ts version
-                    fakes.patchHostForBuildInfoWrite(sys, "FakeTSCurrentVersion");
-                    const buildHost = createSolutionBuilderHost(sys);
+                    const buildHost = createSolutionBuilderHostForBaseline(sys, "FakeTSCurrentVersion");
                     const builder = createSolutionBuilder(buildHost, ["/src/tests"], { verbose: true });
                     sys.exit(builder.build());
                 },
@@ -207,7 +222,7 @@ namespace ts {
                 fs: () => projFs,
                 commandLineArgs: ["--build", "/src/logic/tsconfig.json"],
                 compile: sys => {
-                    const buildHost = createSolutionBuilderHost(sys);
+                    const buildHost = createSolutionBuilderHostForBaseline(sys);
                     const builder = createSolutionBuilder(buildHost, ["/src/tests"], {});
                     sys.exit(builder.build("/src/logic/tsconfig.json"));
                 }
@@ -219,7 +234,7 @@ namespace ts {
                 fs: () => projFs,
                 commandLineArgs: ["--build", "/src/logic2/tsconfig.json"],
                 compile: sys => {
-                    const buildHost = createSolutionBuilderHost(sys);
+                    const buildHost = createSolutionBuilderHostForBaseline(sys);
                     const builder = createSolutionBuilder(buildHost, ["/src/tests"], {});
                     sys.exit(builder.build("/src/logic2/tsconfig.json"));
                 }
@@ -247,7 +262,7 @@ namespace ts {
                     )
                 );
 
-                const host = createSolutionBuilderHost(system);
+                const host = createSolutionBuilderHostForBaseline(system);
                 const builder = createSolutionBuilder(host, [testsConfig.path], {});
                 baseline.push("Input::");
                 baselineState();
@@ -278,7 +293,7 @@ namespace ts {
                 fs: () => projFs,
                 commandLineArgs: ["--build", "/src/logic2/tsconfig.json"],
                 compile: sys => {
-                    const buildHost = createSolutionBuilderHost(sys);
+                    const buildHost = createSolutionBuilderHostForBaseline(sys);
                     const builder = createSolutionBuilder(buildHost, ["/src/tests"], { verbose: true });
                     sys.exit(builder.buildReferences("/src/tests"));
                 }
@@ -286,12 +301,13 @@ namespace ts {
         });
 
         describe("downstream-blocked compilations", () => {
-            verifyTsc({
+            verifyTscWithEdits({
                 scenario: "sample1",
                 subScenario: "does not build downstream projects if upstream projects have errors",
                 fs: () => projFs,
                 commandLineArgs: ["--b", "/src/tests", "--verbose"],
-                modifyFs: fs => replaceText(fs, "/src/logic/index.ts", "c.multiply(10, 15)", `c.muitply()`)
+                modifyFs: fs => replaceText(fs, "/src/logic/index.ts", "c.multiply(10, 15)", `c.muitply()`),
+                edits: noChangeOnlyRuns
             });
         });
 
@@ -318,7 +334,7 @@ namespace ts {
                     )
                 );
 
-                const host = createSolutionBuilderHost(system);
+                const host = createSolutionBuilderHostForBaseline(system);
                 const builder = createSolutionBuilder(host, [testsConfig.path], { dry: false, force: false, verbose: false });
                 builder.build();
                 baselineState("Build of project");
@@ -339,11 +355,11 @@ namespace ts {
                 function verifyInvalidation(heading: string) {
                     // Rebuild this project
                     builder.invalidateProject(logicConfig.path as ResolvedConfigFilePath);
-                    builder.buildNextInvalidatedProject();
+                    builder.getNextInvalidatedProject()?.done();
                     baselineState(`${heading}:: After rebuilding logicConfig`);
 
                     // Build downstream projects should update 'tests', but not 'core'
-                    builder.buildNextInvalidatedProject();
+                    builder.getNextInvalidatedProject()?.done();
                     baselineState(`${heading}:: After building next project`);
                 }
 
@@ -367,7 +383,8 @@ export class someClass { }`),
                 subScenario: "incremental-declaration-doesnt-change",
                 modifyFs: fs => appendText(fs, "/src/core/index.ts", `
 class someClass2 { }`),
-            }
+            },
+            noChangeRun,
         ];
 
         describe("lists files", () => {
@@ -507,6 +524,34 @@ class someClass2 { }`),
                     subScenario: "incremental-declaration-changes",
                     modifyFs: fs => replaceText(fs, "/src/tests/tsconfig.json", `"esModuleInterop": false`, `"esModuleInterop": true`),
                 }],
+            });
+
+            verifyTsc({
+                scenario: "sample1",
+                subScenario: "reports error if input file is missing",
+                fs: () => projFs,
+                commandLineArgs: ["--b", "/src/tests", "--v"],
+                modifyFs: fs => {
+                    fs.writeFileSync("/src/core/tsconfig.json", JSON.stringify({
+                        compilerOptions: { composite: true },
+                        files: ["anotherModule.ts", "index.ts", "some_decl.d.ts"]
+                    }));
+                    fs.unlinkSync("/src/core/anotherModule.ts");
+                }
+            });
+
+            verifyTsc({
+                scenario: "sample1",
+                subScenario: "reports error if input file is missing with force",
+                fs: () => projFs,
+                commandLineArgs: ["--b", "/src/tests", "--v", "--f"],
+                modifyFs: fs => {
+                    fs.writeFileSync("/src/core/tsconfig.json", JSON.stringify({
+                        compilerOptions: { composite: true },
+                        files: ["anotherModule.ts", "index.ts", "some_decl.d.ts"]
+                    }));
+                    fs.unlinkSync("/src/core/anotherModule.ts");
+                }
             });
         });
     });

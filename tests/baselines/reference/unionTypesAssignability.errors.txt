@@ -133,10 +133,12 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTyp
         ~
 !!! error TS2322: Type 'U' is not assignable to type 'T'.
 !!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
+!!! related TS2208 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts:63:17: This type parameter might need an `extends T` constraint.
         u = t; // error
         ~
 !!! error TS2322: Type 'T' is not assignable to type 'U'.
 !!! error TS2322:   'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+!!! related TS2208 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts:63:14: This type parameter might need an `extends U` constraint.
         var x : T | U;
         x = t; // ok
         x = u; // ok
@@ -145,9 +147,11 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTyp
         ~
 !!! error TS2322: Type 'T | U' is not assignable to type 'T'.
 !!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'T | U'.
+!!! related TS2208 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts:63:17: This type parameter might need an `extends T` constraint.
         u = x; // error T not assignable to U
         ~
 !!! error TS2322: Type 'T | U' is not assignable to type 'U'.
 !!! error TS2322:   'U' could be instantiated with an arbitrary type which could be unrelated to 'T | U'.
+!!! related TS2208 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts:63:14: This type parameter might need an `extends U` constraint.
     }
     

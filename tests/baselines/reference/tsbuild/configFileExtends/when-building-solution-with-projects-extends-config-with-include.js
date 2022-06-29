@@ -39,21 +39,21 @@ export const b: Unrestricted = 1;
 
 Output::
 /lib/tsc --b /src/tsconfig.json --v --listFiles
-[[90m12:00:00 AM[0m] Projects in this build: 
+[[90m12:00:16 AM[0m] Projects in this build: 
     * src/shared/tsconfig.json
     * src/webpack/tsconfig.json
     * src/tsconfig.json
 
-[[90m12:00:00 AM[0m] Project 'src/shared/tsconfig.json' is out of date because output file 'src/target-tsc-build/shared/index.js' does not exist
+[[90m12:00:17 AM[0m] Project 'src/shared/tsconfig.json' is out of date because output file 'src/target-tsc-build/shared/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:00 AM[0m] Building project '/src/shared/tsconfig.json'...
+[[90m12:00:18 AM[0m] Building project '/src/shared/tsconfig.json'...
 
 /lib/lib.d.ts
 /src/shared/index.ts
 /src/shared/typings-base/globals.d.ts
-[[90m12:00:00 AM[0m] Project 'src/webpack/tsconfig.json' is out of date because output file 'src/target-tsc-build/webpack/index.js' does not exist
+[[90m12:00:27 AM[0m] Project 'src/webpack/tsconfig.json' is out of date because output file 'src/target-tsc-build/webpack/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:00 AM[0m] Building project '/src/webpack/tsconfig.json'...
+[[90m12:00:28 AM[0m] Building project '/src/webpack/tsconfig.json'...
 
 /lib/lib.d.ts
 /src/webpack/index.ts
@@ -73,7 +73,7 @@ exports.a = 1;
 
 
 //// [/src/target-tsc-build/shared/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../lib/lib.d.ts","../../shared/index.ts","../../shared/typings-base/globals.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-22125360210-export const a: Unrestricted = 1;",{"version":"4725476611-type Unrestricted = any;","affectsGlobalScope":true}],"options":{"composite":true,"outDir":"..","rootDir":"../.."},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../lib/lib.d.ts","../../shared/index.ts","../../shared/typings-base/globals.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-22125360210-export const a: Unrestricted = 1;","signature":"-478734393-export declare const a: Unrestricted;\r\n"},{"version":"4725476611-type Unrestricted = any;","affectsGlobalScope":true}],"options":{"composite":true,"outDir":"..","rootDir":"../.."},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3],"dtsChangeTime":19000},"version":"FakeTSVersion"}
 
 //// [/src/target-tsc-build/shared/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -91,7 +91,7 @@ exports.a = 1;
       },
       "../../shared/index.ts": {
         "version": "-22125360210-export const a: Unrestricted = 1;",
-        "signature": "-22125360210-export const a: Unrestricted = 1;"
+        "signature": "-478734393-export declare const a: Unrestricted;\r\n"
       },
       "../../shared/typings-base/globals.d.ts": {
         "version": "4725476611-type Unrestricted = any;",
@@ -110,10 +110,11 @@ exports.a = 1;
       "../../../lib/lib.d.ts",
       "../../shared/index.ts",
       "../../shared/typings-base/globals.d.ts"
-    ]
+    ],
+    "dtsChangeTime": 19000
   },
   "version": "FakeTSVersion",
-  "size": 901
+  "size": 1002
 }
 
 //// [/src/target-tsc-build/webpack/index.d.ts]
@@ -128,7 +129,7 @@ exports.b = 1;
 
 
 //// [/src/target-tsc-build/webpack/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../lib/lib.d.ts","../../webpack/index.ts","../../shared/typings-base/globals.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-14405273073-export const b: Unrestricted = 1;",{"version":"4725476611-type Unrestricted = any;","affectsGlobalScope":true}],"options":{"composite":true,"outDir":"..","rootDir":"../.."},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,3,2]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../lib/lib.d.ts","../../webpack/index.ts","../../shared/typings-base/globals.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-14405273073-export const b: Unrestricted = 1;","signature":"-5074241048-export declare const b: Unrestricted;\r\n"},{"version":"4725476611-type Unrestricted = any;","affectsGlobalScope":true}],"options":{"composite":true,"outDir":"..","rootDir":"../.."},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,3,2],"dtsChangeTime":29000},"version":"FakeTSVersion"}
 
 //// [/src/target-tsc-build/webpack/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -146,7 +147,7 @@ exports.b = 1;
       },
       "../../webpack/index.ts": {
         "version": "-14405273073-export const b: Unrestricted = 1;",
-        "signature": "-14405273073-export const b: Unrestricted = 1;"
+        "signature": "-5074241048-export declare const b: Unrestricted;\r\n"
       },
       "../../shared/typings-base/globals.d.ts": {
         "version": "4725476611-type Unrestricted = any;",
@@ -165,9 +166,10 @@ exports.b = 1;
       "../../../lib/lib.d.ts",
       "../../shared/typings-base/globals.d.ts",
       "../../webpack/index.ts"
-    ]
+    ],
+    "dtsChangeTime": 29000
   },
   "version": "FakeTSVersion",
-  "size": 902
+  "size": 1004
 }
 

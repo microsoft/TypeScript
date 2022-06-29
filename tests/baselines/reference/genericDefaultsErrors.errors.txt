@@ -39,6 +39,7 @@ tests/cases/compiler/genericDefaultsErrors.ts(42,29): error TS2716: Type paramet
     declare function f05<T, U extends number = T>(): void; // error
                                                ~
 !!! error TS2344: Type 'T' does not satisfy the constraint 'number'.
+!!! related TS2208 tests/cases/compiler/genericDefaultsErrors.ts:5:22: This type parameter might need an `extends number` constraint.
     declare function f06<T, U extends T = number>(): void; // error
                                           ~~~~~~
 !!! error TS2344: Type 'number' does not satisfy the constraint 'T'.
@@ -88,6 +89,7 @@ tests/cases/compiler/genericDefaultsErrors.ts(42,29): error TS2716: Type paramet
     interface i07<T, U extends number = T> { } // error
                                         ~
 !!! error TS2344: Type 'T' does not satisfy the constraint 'number'.
+!!! related TS2208 tests/cases/compiler/genericDefaultsErrors.ts:28:15: This type parameter might need an `extends number` constraint.
     interface i08<T, U extends T = number> { } // error
                                    ~~~~~~
 !!! error TS2344: Type 'number' does not satisfy the constraint 'T'.
