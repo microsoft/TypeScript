@@ -61,7 +61,7 @@ namespace ts {
         GeneratorYield,
     }
 
-    const enum TypeFacts {
+    export const enum TypeFacts {
         None = 0,
         TypeofEQString = 1 << 0,      // typeof x === "string"
         TypeofEQNumber = 1 << 1,      // typeof x === "number"
@@ -169,7 +169,7 @@ namespace ts {
         WriteType,
     }
 
-    const enum CheckMode {
+    export const enum CheckMode {
         Normal = 0,                                     // Normal type checking
         Contextual = 1 << 0,                            // Explicitly assigned contextual type, therefore not cacheable
         Inferential = 1 << 1,                           // Inferential typing
@@ -182,7 +182,7 @@ namespace ts {
                                                         //   we need to preserve generic types instead of substituting them for constraints
     }
 
-    const enum SignatureCheckMode {
+    export const enum SignatureCheckMode {
         BivariantCallback = 1 << 0,
         StrictCallback    = 1 << 1,
         IgnoreReturnTypes = 1 << 2,
