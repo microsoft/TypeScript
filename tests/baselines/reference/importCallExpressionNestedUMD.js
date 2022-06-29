@@ -45,8 +45,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     var __syncRequire = typeof module === "object" && typeof module.exports === "object";
     function foo() {
         return __awaiter(this, void 0, void 0, function* () {
-            var _a;
-            return yield (_a = (yield __syncRequire ? Promise.resolve().then(() => require("./foo")) : new Promise((resolve_1, reject_1) => { require(["./foo"], resolve_1, reject_1); })).default, __syncRequire ? Promise.resolve(_a).then(c => require(c)) : new Promise((resolve_2, reject_2) => { require([_a], resolve_2, reject_2); }));
+            var _a, _b;
+            return yield (_a = (yield __syncRequire ? Promise.resolve().then(() => require("./foo")) : new Promise((resolve_1, reject_1) => { require(["./foo"], resolve_1, reject_1); })).default, __syncRequire ? (_b = _a, Promise.resolve().then(() => require(_b))) : new Promise((resolve_2, reject_2) => { require([_a], resolve_2, reject_2); }));
         });
     }
 });

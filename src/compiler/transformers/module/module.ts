@@ -823,20 +823,21 @@ namespace ts {
         function createImportCallExpressionCommonJS(arg: Expression | undefined): Expression {
             // import(x)
             // emit as
-            // Promise.resolve(x).then(c => require(c)) /*CommonJs Require*/
+            // var _a;
+            // (_a = x, Promise.resolve().then(() => require(_a)) /*CommonJs Require*/
             // We have to wrap require in then callback so that require is done in asynchronously
             // if we simply do require in resolve callback in Promise constructor. We will execute the loading immediately
-            // For import("StringLiteral"), we prefer to emit require("StringLiteral") so that bundlers can analyze this.
-            const isStringLiteralSpecifier = arg?.kind === SyntaxKind.StringLiteral;
+            // If the arg is not inlineable, we have to evaluate it in the current scope with a temp var
+            const temp = arg && !isSimpleInlineableExpression(arg) ? factory.createTempVariable(hoistVariableDeclaration) : undefined;
             const promiseResolveCall = factory.createCallExpression(
                 factory.createPropertyAccessExpression(factory.createIdentifier("Promise"), "resolve"),
                 /*typeArguments*/ undefined,
-                /*argumentsArray*/ !arg || isStringLiteralSpecifier ? [] : [arg],
+                /*argumentsArray*/ [],
             );
             let requireCall: Expression = factory.createCallExpression(
                 factory.createIdentifier("require"),
                 /*typeArguments*/ undefined,
-                isStringLiteralSpecifier ? [arg] : arg ? [factory.createIdentifier("c")] : [],
+                temp ? [temp] : arg ? [arg] : [],
             );
             if (getESModuleInterop(compilerOptions)) {
                 requireCall = emitHelpers().createImportStarHelper(requireCall);
@@ -847,11 +848,7 @@ namespace ts {
                 func = factory.createArrowFunction(
                     /*modifiers*/ undefined,
                     /*typeParameters*/ undefined,
-                    /*parameters*/ isStringLiteralSpecifier || !arg ? [] : [factory.createParameterDeclaration(
-                        /*modifiers*/ undefined,
-                        /*dotDotDotToken*/ undefined,
-                        "c",
-                    )],
+                    /*parameters*/ [],
                     /*type*/ undefined,
                     /*equalsGreaterThanToken*/ undefined,
                     requireCall);
@@ -862,18 +859,16 @@ namespace ts {
                     /*asteriskToken*/ undefined,
                     /*name*/ undefined,
                     /*typeParameters*/ undefined,
-                    /*parameters*/ isStringLiteralSpecifier ? [] : [factory.createParameterDeclaration(
-                        /*modifiers*/ undefined,
-                        /*dotDotDotToken*/ undefined,
-                        "c",
-                    )],
+                    /*parameters*/ [],
                     /*type*/ undefined,
                     factory.createBlock([factory.createReturnStatement(requireCall)]));
                 // Note: because non-literal expressions are already evaluated
                 // synchronously, we don't need to capture `this`.
             }
 
-            return factory.createCallExpression(factory.createPropertyAccessExpression(promiseResolveCall, "then"), /*typeArguments*/ undefined, [func]);
+            const downleveledImport = factory.createCallExpression(factory.createPropertyAccessExpression(promiseResolveCall, "then"), /*typeArguments*/ undefined, [func]);
+
+            return temp === undefined ? downleveledImport : factory.createCommaListExpression([factory.createAssignment(temp, arg!), downleveledImport]);
         }
 
         function getHelperExpressionForExport(node: ExportDeclaration, innerExpr: Expression) {

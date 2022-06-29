@@ -16,14 +16,16 @@ const someFunction = async () => {
 
 
 //// [dynamicImportEvaluateSpecifier.js]
+var _a, _b;
 // https://github.com/microsoft/TypeScript/issues/48285
 let i = 0;
-Promise.resolve(String(i++)).then(c => require(c));
-Promise.resolve(String(i++)).then(c => require(c));
+_a = String(i++), Promise.resolve().then(() => require(_a));
+_b = String(i++), Promise.resolve().then(() => require(_b));
 const getPath = async () => {
     /* in reality this would do some async FS operation, or a web request */
     return "/root/my/cool/path";
 };
 const someFunction = async () => {
-    const result = await Promise.resolve(await getPath()).then(c => require(c));
+    var _a;
+    const result = await (_a = await getPath(), Promise.resolve().then(() => require(_a)));
 };
