@@ -541,7 +541,7 @@ namespace ts.Completions {
         if (keywordFilters !== KeywordCompletionFilters.None) {
             for (const keywordEntry of getKeywordCompletions(keywordFilters, !insideJsDocTagTypeExpression && isSourceFileJS(sourceFile))) {
                 if (isTypeOnlyLocation && isTypeKeyword(stringToToken(keywordEntry.name)!) || !uniqueNames.has(keywordEntry.name)) {
-                    uniqueNames.add(keywordEntry.name)
+                    uniqueNames.add(keywordEntry.name);
                     insertSorted(entries, keywordEntry, compareCompletionEntries, /*allowDuplicates*/ true);
                 }
             }
@@ -549,14 +549,14 @@ namespace ts.Completions {
 
         for (const keywordEntry of getContextualKeywords(contextToken, position)) {
             if (!uniqueNames.has(keywordEntry.name)) {
-                uniqueNames.add(keywordEntry.name)
+                uniqueNames.add(keywordEntry.name);
                 insertSorted(entries, keywordEntry, compareCompletionEntries, /*allowDuplicates*/ true);
             }
         }
 
         for (const literal of literals) {
             const literalEntry = createCompletionEntryForLiteral(sourceFile, preferences, literal);
-            uniqueNames.add(literalEntry.name)
+            uniqueNames.add(literalEntry.name);
             insertSorted(entries, literalEntry, compareCompletionEntries, /*allowDuplicates*/ true);
         }
 
@@ -642,7 +642,6 @@ namespace ts.Completions {
         uniqueNames: UniqueNameSet,
         target: ScriptTarget,
         entries: SortedArray<CompletionEntry>): void {
-        const entryNames = new Set(entries.map(e => e.name));
         getNameTable(sourceFile).forEach((pos, name) => {
             // Skip identifiers produced only from the current location
             if (pos === position) {
@@ -651,15 +650,13 @@ namespace ts.Completions {
             const realName = unescapeLeadingUnderscores(name);
             if (!uniqueNames.has(realName) && isIdentifierText(realName, target)) {
                 uniqueNames.add(realName);
-                if (!entryNames.has(realName)) {
-                    insertSorted(entries, {
-                        name: realName,
-                        kind: ScriptElementKind.warning,
-                        kindModifiers: "",
-                        sortText: SortText.JavascriptIdentifiers,
-                        isFromUncheckedFile: true
-                    }, compareCompletionEntries);
-                }
+                insertSorted(entries, {
+                    name: realName,
+                    kind: ScriptElementKind.warning,
+                    kindModifiers: "",
+                    sortText: SortText.JavascriptIdentifiers,
+                    isFromUncheckedFile: true
+                }, compareCompletionEntries);
             }
         });
     }
