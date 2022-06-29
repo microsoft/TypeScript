@@ -1,4 +1,4 @@
-=== tests/cases/compiler/issue49383.ts ===
+=== tests/cases/compiler/inferredRestTypeFixedOnce.ts ===
 function wrap<Args extends unknown[]>(_: (...args: Args) => void) {}
 >wrap : <Args extends unknown[]>(_: (...args: Args) => void) => void
 >_ : (...args: Args) => void
