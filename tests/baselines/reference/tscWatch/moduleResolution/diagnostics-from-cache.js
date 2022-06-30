@@ -32,8 +32,7 @@ Output::
 
 Found 'package.json' at '/user/username/projects/myproject/package.json'.
 'package.json' does not have a 'typesVersions' field.
-Found 'package.json' at '/user/username/projects/myproject/package.json'.
-'package.json' does not have a 'typesVersions' field.
+File '/user/username/projects/myproject/package.json' exists according to earlier cached lookups.
 ======== Resolving module '@this/package' from '/user/username/projects/myproject/index.ts'. ========
 Explicitly specified module resolution kind: 'NodeNext'.
 File '/user/username/projects/myproject/package.json' exists according to earlier cached lookups.
@@ -43,10 +42,12 @@ Resolving real path for '/user/username/projects/myproject/index.ts', result '/u
 File '/a/lib/package.json' does not exist.
 File '/a/package.json' does not exist.
 File '/package.json' does not exist.
-File '/a/lib/package.json' does not exist.
-File '/a/package.json' does not exist.
-File '/package.json' does not exist.
-[[90m12:00:34 AM[0m] Found 0 errors. Watching for file changes.
+File '/a/lib/package.json' does not exist according to earlier cached lookups.
+File '/a/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+[91merror[0m[90m TS2209: [0mThe project root is ambiguous, but is required to resolve export map entry '.' in file '/user/username/projects/myproject/package.json'. Supply the `rootDir` compiler option to disambiguate.
+
+[[90m12:00:34 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -57,9 +58,7 @@ Program files::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/index.ts
 
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/index.ts
+No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)

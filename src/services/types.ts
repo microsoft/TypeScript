@@ -292,7 +292,10 @@ namespace ts {
         /* @internal */ getGlobalTypingsCacheLocation?(): string | undefined;
         /* @internal */ getSymlinkCache?(files?: readonly SourceFile[]): SymlinkCache;
         /* Lets the Program from a AutoImportProviderProject use its host project's ModuleResolutionCache */
-        /* @internal */ getModuleResolutionCache?(): ModuleResolutionCache | undefined;
+        /**
+         * Returns the module resolution cache used by a provided `resolveModuleNames` implementation so that any non-name module resolution operations (eg, package.json lookup) can reuse it
+         */
+        getModuleResolutionCache?(): ModuleResolutionCache | undefined;
 
         /*
          * Required for full import and type reference completions.
