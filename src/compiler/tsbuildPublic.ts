@@ -224,7 +224,7 @@ namespace ts {
         path: Path;
         buildInfo: BuildInfo | false;
         modifiedTime: Date;
-        dtsChangeTime?: Date | false;
+        latestChangedDtsTime?: Date | false;
     }
 
     interface SolutionBuilderState<T extends BuilderProgram = BuilderProgram> extends WatchFactory<WatchType, ResolvedConfigFileName> {
@@ -1470,14 +1470,14 @@ namespace ts {
         if (existing) {
             existing.buildInfo = buildInfo;
             existing.modifiedTime = modifiedTime;
-            if (!(resultFlags & BuildResultFlags.DeclarationOutputUnchanged)) existing.dtsChangeTime = modifiedTime;
+            if (!(resultFlags & BuildResultFlags.DeclarationOutputUnchanged)) existing.latestChangedDtsTime = modifiedTime;
         }
         else {
             state.buildInfoCache.set(resolvedConfigPath, {
                 path: toPath(state, buildInfoPath),
                 buildInfo,
                 modifiedTime,
-                dtsChangeTime: resultFlags & BuildResultFlags.DeclarationOutputUnchanged ? undefined : modifiedTime,
+                latestChangedDtsTime: resultFlags & BuildResultFlags.DeclarationOutputUnchanged ? undefined : modifiedTime,
             });
         }
     }
@@ -1721,7 +1721,7 @@ namespace ts {
 
                 // If the upstream project has only change .d.ts files, and we've built
                 // *after* those files, then we're "psuedo up to date" and eligible for a fast rebuild
-                const newestDeclarationFileContentChangedTime = getDtsChangeTime(state, resolvedConfig.options, resolvedRefPath);
+                const newestDeclarationFileContentChangedTime = getLatestChangedDtsTime(state, resolvedConfig.options, resolvedRefPath);
                 if (newestDeclarationFileContentChangedTime && newestDeclarationFileContentChangedTime <= oldestOutputFileTime) {
                     pseudoUpToDate = true;
                     upstreamChangedProject = ref.path;
@@ -1857,15 +1857,15 @@ namespace ts {
         });
     }
 
-    function getDtsChangeTime(state: SolutionBuilderState, options: CompilerOptions, resolvedConfigPath: ResolvedConfigFilePath) {
+    function getLatestChangedDtsTime(state: SolutionBuilderState, options: CompilerOptions, resolvedConfigPath: ResolvedConfigFilePath) {
         if (!options.composite) return undefined;
         const entry = Debug.checkDefined(state.buildInfoCache.get(resolvedConfigPath));
-        if (entry.dtsChangeTime !== undefined) return entry.dtsChangeTime || undefined;
-        const dtsChangeTime = entry.buildInfo && entry.buildInfo.program && entry.buildInfo.program.dtsChangeFile ?
-            state.host.getModifiedTime(getNormalizedAbsolutePath(entry.buildInfo.program.dtsChangeFile, getDirectoryPath(entry.path))) :
+        if (entry.latestChangedDtsTime !== undefined) return entry.latestChangedDtsTime || undefined;
+        const latestChangedDtsTime = entry.buildInfo && entry.buildInfo.program && entry.buildInfo.program.latestChangedDtsFile ?
+            state.host.getModifiedTime(getNormalizedAbsolutePath(entry.buildInfo.program.latestChangedDtsFile, getDirectoryPath(entry.path))) :
             undefined;
-        entry.dtsChangeTime = dtsChangeTime || false;
-        return dtsChangeTime;
+        entry.latestChangedDtsTime = latestChangedDtsTime || false;
+        return latestChangedDtsTime;
     }
 
     function updateOutputTimestamps(state: SolutionBuilderState, proj: ParsedCommandLine, resolvedPath: ResolvedConfigFilePath) {

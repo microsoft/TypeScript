@@ -64,7 +64,7 @@ namespace ts {
         /**
          * Name of the file whose dts was the latest to change
          */
-        dtsChangeFile: string | undefined;
+        latestChangedDtsFile: string | undefined;
     }
 
     export const enum BuilderFileEmit {
@@ -141,7 +141,7 @@ namespace ts {
         "programEmitComplete" |
         "emitSignatures" |
         "outSignature" |
-        "dtsChangeFile" |
+        "latestChangedDtsFile" |
         "hasChangedEmitSignature"
     > & { changedFilesSet: BuilderProgramState["changedFilesSet"] | undefined };
 
@@ -167,7 +167,7 @@ namespace ts {
             state.outSignature = oldState?.outSignature;
         }
         state.changedFilesSet = new Set();
-        state.dtsChangeFile = compilerOptions.composite ? oldState?.dtsChangeFile : undefined;
+        state.latestChangedDtsFile = compilerOptions.composite ? oldState?.latestChangedDtsFile : undefined;
 
         const useOldState = BuilderState.canReuseOldState(state.referencedMap, oldState);
         const oldCompilerOptions = useOldState ? oldState!.compilerOptions : undefined;
@@ -301,7 +301,7 @@ namespace ts {
             programEmitComplete: state.programEmitComplete,
             emitSignatures: state.emitSignatures && new Map(state.emitSignatures),
             outSignature: state.outSignature,
-            dtsChangeFile: state.dtsChangeFile,
+            latestChangedDtsFile: state.latestChangedDtsFile,
             hasChangedEmitSignature: state.hasChangedEmitSignature,
             changedFilesSet: outFilePath ? new Set(state.changedFilesSet) : undefined,
         };
@@ -315,7 +315,7 @@ namespace ts {
         state.programEmitComplete = savedEmitState.programEmitComplete;
         state.emitSignatures = savedEmitState.emitSignatures;
         state.outSignature = savedEmitState.outSignature;
-        state.dtsChangeFile = savedEmitState.dtsChangeFile;
+        state.latestChangedDtsFile = savedEmitState.latestChangedDtsFile;
         state.hasChangedEmitSignature = savedEmitState.hasChangedEmitSignature;
         if (savedEmitState.changedFilesSet) state.changedFilesSet = savedEmitState.changedFilesSet;
     }
@@ -796,7 +796,7 @@ namespace ts {
         changeFileSet?: readonly ProgramBuildInfoFileId[];
         emitSignatures?: readonly ProgramBuildInfoEmitSignature[];
         // Because this is only output file in the program, we dont need fileId to deduplicate name
-        dtsChangeFile?: string;
+        latestChangedDtsFile?: string;
     }
 
     export interface ProgramBundleEmitBuildInfo {
@@ -804,7 +804,7 @@ namespace ts {
         fileInfos: readonly string[];
         options: CompilerOptions | undefined;
         outSignature?: string;
-        dtsChangeFile?: string;
+        latestChangedDtsFile?: string;
     }
 
     export type ProgramBuildInfo = ProgramMultiFileEmitBuildInfo | ProgramBundleEmitBuildInfo;
@@ -822,7 +822,7 @@ namespace ts {
         const currentDirectory = Debug.checkDefined(state.program).getCurrentDirectory();
         const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(getTsBuildInfoEmitOutputFilePath(state.compilerOptions)!, currentDirectory));
         // Convert the file name to Path here if we set the fileName instead to optimize multiple d.ts file emits and having to compute Canonical path
-        const dtsChangeFile = state.dtsChangeFile ? relativeToBuildInfoEnsuringAbsolutePath(state.dtsChangeFile) : undefined;
+        const latestChangedDtsFile = state.latestChangedDtsFile ? relativeToBuildInfoEnsuringAbsolutePath(state.latestChangedDtsFile) : undefined;
         if (outFilePath) {
             const fileNames: string[] = [];
             const fileInfos: string[] = [];
@@ -837,7 +837,7 @@ namespace ts {
                 fileInfos,
                 options: convertToProgramBuildInfoCompilerOptions(state.compilerOptions, "affectsBundleEmitBuildInfo"),
                 outSignature: state.outSignature,
-                dtsChangeFile,
+                latestChangedDtsFile,
             };
             return result;
         }
@@ -940,7 +940,7 @@ namespace ts {
             affectedFilesPendingEmit,
             changeFileSet,
             emitSignatures,
-            dtsChangeFile,
+            latestChangedDtsFile,
         };
         return result;
 
@@ -1285,7 +1285,7 @@ namespace ts {
                             if (emitSignature === oldSignature) return;
                             (state.emitSignatures ??= new Map()).set(filePath, emitSignature);
                             state.hasChangedEmitSignature = true;
-                            state.dtsChangeFile = fileName;
+                            state.latestChangedDtsFile = fileName;
                         }
                     }
                     else if (state.compilerOptions.composite) {
@@ -1294,7 +1294,7 @@ namespace ts {
                         if (newSignature === state.outSignature) return;
                         state.outSignature = newSignature;
                         state.hasChangedEmitSignature = true;
-                        state.dtsChangeFile = fileName;
+                        state.latestChangedDtsFile = fileName;
                     }
                 }
                 if (writeFile) writeFile(fileName, text, writeByteOrderMark, onError, sourceFiles, data);
@@ -1476,12 +1476,12 @@ namespace ts {
         let state: ReusableBuilderProgramState;
         let filePaths: Path[] | undefined;
         let filePathsSetList: Set<Path>[] | undefined;
-        const dtsChangeFile = program.dtsChangeFile ? toAbsolutePath(program.dtsChangeFile) : undefined;
+        const latestChangedDtsFile = program.latestChangedDtsFile ? toAbsolutePath(program.latestChangedDtsFile) : undefined;
         if (isProgramBundleEmitBuildInfo(program)) {
             state = {
                 fileInfos: new Map(),
                 compilerOptions: program.options ? convertToOptionsWithAbsolutePaths(program.options, toAbsolutePath) : {},
-                dtsChangeFile,
+                latestChangedDtsFile,
                 outSignature: program.outSignature,
             };
         }
@@ -1511,7 +1511,7 @@ namespace ts {
                 affectedFilesPendingEmitKind: program.affectedFilesPendingEmit && arrayToMap(program.affectedFilesPendingEmit, value => toFilePath(value[0]), value => value[1]),
                 affectedFilesPendingEmitIndex: program.affectedFilesPendingEmit && 0,
                 changedFilesSet: new Set(map(program.changeFileSet, toFilePath)),
-                dtsChangeFile,
+                latestChangedDtsFile,
                 emitSignatures: emitSignatures?.size ? emitSignatures : undefined,
             };
         }

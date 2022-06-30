@@ -263,7 +263,7 @@ interface Symbol {
                         toFileName(s) :
                         [toFileName(s[0]), s[1]]
                 ),
-                dtsChangeFile: buildInfo.program.dtsChangeFile,
+                latestChangedDtsFile: buildInfo.program.latestChangedDtsFile,
             };
         }
         const version = buildInfo.version === ts.version ? fakes.version : buildInfo.version;
@@ -544,7 +544,7 @@ interface Symbol {
                     options: { ...readableBuildInfo.program.options, noEmit: undefined },
                     exportedModulesMap: undefined,
                     affectedFilesPendingEmit: undefined,
-                    dtsChangeFile: readableBuildInfo.program.dtsChangeFile ? "FakeFileName" : undefined,
+                    latestChangedDtsFile: readableBuildInfo.program.latestChangedDtsFile ? "FakeFileName" : undefined,
                 },
                 size: undefined, // Size doesnt need to be equal
             },  /*replacer*/ undefined, 2),
