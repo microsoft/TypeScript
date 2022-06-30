@@ -13364,10 +13364,9 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                                         //   type Foo<T extends string, U extends T> = [T, U];
                                         //   type Bar<T> = T extends Foo<infer X, infer X> ? Foo<X, X> : T;
                                         // the instantiated constraint for U is X, so we discard that inference.
-                                        const mapper = makeFunctionTypeMapper(t => {
-                                            const index = typeParameters.indexOf(t);
-                                            return index > -1 ? getEffectiveTypeArgumentAtIndex(typeReference, typeParameters, index) : t;
-                                        });
+                                        const mapper = makeDeferredTypeMapper(typeParameters, typeParameters.map((_, index) => () => {
+                                            return getEffectiveTypeArgumentAtIndex(typeReference, typeParameters, index);
+                                        }));
                                         const constraint = instantiateType(declaredConstraint, mapper);
                                         if (constraint !== typeParameter) {
                                             inferences = append(inferences, constraint);
