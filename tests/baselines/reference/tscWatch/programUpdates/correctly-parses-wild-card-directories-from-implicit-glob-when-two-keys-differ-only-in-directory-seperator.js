@@ -37,7 +37,7 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/f2.ts 250 und
 FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 undefined Source file
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Type roots
-[[90m12:00:35 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:34 AM[0m] Found 0 errors. Watching for file changes.
 
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
@@ -104,7 +104,7 @@ export declare const y = 1;
 
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./f1.ts","./f2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-10906998252-export const x = 1","signature":"-7495133367-export declare const x = 1;\n"},{"version":"-10905812331-export const y = 1","signature":"-6203665398-export declare const y = 1;\n"}],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3],"dtsChangeTime":32000},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./f1.ts","./f2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-10906998252-export const x = 1","signature":"-7495133367-export declare const x = 1;\n"},{"version":"-10905812331-export const y = 1","signature":"-6203665398-export declare const y = 1;\n"}],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./f2.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -139,10 +139,10 @@ export declare const y = 1;
       "./f1.ts",
       "./f2.ts"
     ],
-    "dtsChangeTime": 32000
+    "latestChangedDtsFile": "./f2.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 850
+  "size": 863
 }
 
 
@@ -159,7 +159,7 @@ Scheduling update
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/new-file.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
 Reloading new file names and options
 Synchronizing program
-[[90m12:00:40 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:39 AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/f1.ts","/user/username/projects/myproject/f2.ts","/user/username/projects/myproject/new-file.ts"]
@@ -171,7 +171,7 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myprojec
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/new-file.d.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
 Project: /user/username/projects/myproject/tsconfig.json Detected output file: /user/username/projects/myproject/new-file.d.ts
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/new-file.d.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
-[[90m12:00:49 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:47 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -213,7 +213,7 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./f1.ts","./f2.ts","./new-file.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-10906998252-export const x = 1","signature":"-7495133367-export declare const x = 1;\n"},{"version":"-10905812331-export const y = 1","signature":"-6203665398-export declare const y = 1;\n"},{"version":"-11960320495-export const z = 1;","signature":"-9207164725-export declare const z = 1;\n"}],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3,4],"dtsChangeTime":45250},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./f1.ts","./f2.ts","./new-file.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-10906998252-export const x = 1","signature":"-7495133367-export declare const x = 1;\n"},{"version":"-10905812331-export const y = 1","signature":"-6203665398-export declare const y = 1;\n"},{"version":"-11960320495-export const z = 1;","signature":"-9207164725-export declare const z = 1;\n"}],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3,4],"latestChangedDtsFile":"./new-file.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -254,10 +254,10 @@ exitCode:: ExitStatus.undefined
       "./f2.ts",
       "./new-file.ts"
     ],
-    "dtsChangeTime": 45250
+    "latestChangedDtsFile": "./new-file.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 971
+  "size": 990
 }
 
 //// [/user/username/projects/myproject/new-file.js]
@@ -284,12 +284,12 @@ FileWatcher:: Triggered with /user/username/projects/myproject/f1.ts 1:: WatchIn
 Scheduling update
 Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/f1.ts 1:: WatchInfo: /user/username/projects/myproject/f1.ts 250 undefined Source file
 Synchronizing program
-[[90m12:00:55 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:53 AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/f1.ts","/user/username/projects/myproject/f2.ts","/user/username/projects/myproject/new-file.ts"]
   options: {"composite":true,"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-[[90m12:01:05 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:00 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -331,9 +331,8 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/f1.js] file written with same contents
-//// [/user/username/projects/myproject/f1.d.ts] file written with same contents
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./new-file.ts","./f1.ts","./f2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-11960320495-export const z = 1;","signature":"-9207164725-export declare const z = 1;\n"},{"version":"1363236232-import { z } from \"./new-file\";export const x = 1","signature":"-7495133367-export declare const x = 1;\n"},{"version":"-10905812331-export const y = 1","signature":"-6203665398-export declare const y = 1;\n"}],"options":{"composite":true},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,3,4,2],"dtsChangeTime":45250},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./new-file.ts","./f1.ts","./f2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-11960320495-export const z = 1;","signature":"-9207164725-export declare const z = 1;\n"},{"version":"1363236232-import { z } from \"./new-file\";export const x = 1","signature":"-7495133367-export declare const x = 1;\n"},{"version":"-10905812331-export const y = 1","signature":"-6203665398-export declare const y = 1;\n"}],"options":{"composite":true},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,3,4,2],"latestChangedDtsFile":"./new-file.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -383,9 +382,9 @@ exitCode:: ExitStatus.undefined
       "./f2.ts",
       "./new-file.ts"
     ],
-    "dtsChangeTime": 45250
+    "latestChangedDtsFile": "./new-file.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1027
+  "size": 1046
 }
 

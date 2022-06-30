@@ -29,7 +29,7 @@ namespace ts.tscWatch {
                     },
                     // not ideal, but currently because of d.ts but no new file is written
                     // There will be timeout queued even though file contents are same
-                    timeouts: checkSingleTimeoutQueueLengthAndRun
+                    timeouts: sys => sys.checkTimeoutQueueLength(0),
                 },
                 {
                     caption: "non local edit in logic ts, and build logic",
