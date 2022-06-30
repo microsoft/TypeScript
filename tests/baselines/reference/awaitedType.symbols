@@ -403,3 +403,33 @@ type _Expect<TActual extends TExpected, TExpected> = TActual;
 >TExpected : Symbol(TExpected, Decl(awaitedType.ts, 160, 39))
 >TActual : Symbol(TActual, Decl(awaitedType.ts, 160, 13))
 
+// https://github.com/microsoft/TypeScript/issues/48320
+async function f17<T extends (...args: any[]) => Promise<any>>(fn: T) {
+>f17 : Symbol(f17, Decl(awaitedType.ts, 160, 61))
+>T : Symbol(T, Decl(awaitedType.ts, 163, 19))
+>args : Symbol(args, Decl(awaitedType.ts, 163, 30))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>fn : Symbol(fn, Decl(awaitedType.ts, 163, 63))
+>T : Symbol(T, Decl(awaitedType.ts, 163, 19))
+
+    const ret: Awaited<ReturnType<T>> = await fn(1, 2, 3);
+>ret : Symbol(ret, Decl(awaitedType.ts, 164, 9))
+>Awaited : Symbol(Awaited, Decl(lib.es5.d.ts, --, --))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(awaitedType.ts, 163, 19))
+>fn : Symbol(fn, Decl(awaitedType.ts, 163, 63))
+
+    return ret;
+>ret : Symbol(ret, Decl(awaitedType.ts, 164, 9))
+}
+async function f17_usage() {
+>f17_usage : Symbol(f17_usage, Decl(awaitedType.ts, 166, 1))
+
+    const x = await f17(async () => 123 as const);
+>x : Symbol(x, Decl(awaitedType.ts, 168, 9))
+>f17 : Symbol(f17, Decl(awaitedType.ts, 160, 61))
+>const : Symbol(const)
+
+    return { x };
+>x : Symbol(x, Decl(awaitedType.ts, 169, 12))
+}
