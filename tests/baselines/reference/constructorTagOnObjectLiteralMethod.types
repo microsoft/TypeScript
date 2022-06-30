@@ -5,7 +5,7 @@ const obj = {
 
   /** @constructor */
   Foo() { this.bar = "bar" }
->Foo : () => void
+>Foo : typeof obj.Foo
 >this.bar = "bar" : "bar"
 >this.bar : any
 >this : { Foo(): void; }
@@ -15,10 +15,10 @@ const obj = {
 };
 (new obj.Foo()).bar
 >(new obj.Foo()).bar : any
->(new obj.Foo()) : any
->new obj.Foo() : any
->obj.Foo : () => void
+>(new obj.Foo()) : void
+>new obj.Foo() : void
+>obj.Foo : typeof obj.Foo
 >obj : { Foo(): void; }
->Foo : () => void
+>Foo : typeof obj.Foo
 >bar : any
 
