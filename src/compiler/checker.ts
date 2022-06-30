@@ -32472,19 +32472,6 @@ namespace ts {
                     }
                 }
             }
-            const restType = getEffectiveRestType(context);
-            if (restType && restType.flags & TypeFlags.TypeParameter) {
-                // The contextual signature has a generic rest parameter. We first instantiate the contextual
-                // signature (without fixing type parameters) and infer types without calling assignContextualParameterTypes
-                // (which would fix parameter types).
-                const instantiatedContext = instantiateSignature(context, inferenceContext.nonFixingMapper);
-                const instantiatedRestType = getEffectiveRestType(instantiatedContext);
-                if (instantiatedRestType) {
-                    // We then infer from a tuple type representing the parameters that correspond to the contextual
-                    // rest parameter.
-                    inferTypes(inferenceContext.inferences, getRestTypeAtPosition(signature, len), instantiatedRestType);
-                }
-            }
         }
 
         function assignContextualParameterTypes(signature: Signature, context: Signature) {
@@ -33000,10 +32987,15 @@ namespace ts {
                     if (isContextSensitive(node)) {
                         if (contextualSignature) {
                             const inferenceContext = getInferenceContext(node);
+                            let instantiatedContextualSignature: Signature | undefined;
                             if (checkMode && checkMode & CheckMode.Inferential) {
                                 inferFromAnnotatedParameters(signature, contextualSignature, inferenceContext!);
+                                const restType = getEffectiveRestType(contextualSignature);
+                                if (restType && restType.flags & TypeFlags.TypeParameter) {
+                                    instantiatedContextualSignature = instantiateSignature(contextualSignature, inferenceContext!.nonFixingMapper);
+                                }
                             }
-                            const instantiatedContextualSignature = inferenceContext ?
+                            instantiatedContextualSignature ||= inferenceContext ?
                                 instantiateSignature(contextualSignature, inferenceContext.mapper) : contextualSignature;
                             assignContextualParameterTypes(signature, instantiatedContextualSignature);
                         }
