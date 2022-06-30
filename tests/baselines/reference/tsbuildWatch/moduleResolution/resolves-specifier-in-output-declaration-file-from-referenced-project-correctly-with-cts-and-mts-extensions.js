@@ -151,20 +151,12 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/packages/pkg2/index.ts","pollingInterval":250}
 /user/username/projects/myproject/packages/pkg2/package.json:
   {"fileName":"/user/username/projects/myproject/packages/pkg2/package.json","pollingInterval":250}
-/a/lib/package.json:
-  {"fileName":"/a/lib/package.json","pollingInterval":250}
-/a/package.json:
-  {"fileName":"/a/package.json","pollingInterval":250}
-/package.json:
-  {"fileName":"/package.json","pollingInterval":250}
 /user/username/projects/myproject/packages/pkg1/tsconfig.json:
   {"fileName":"/user/username/projects/myproject/packages/pkg1/tsconfig.json","pollingInterval":250}
 /user/username/projects/myproject/packages/pkg1/index.ts:
   {"fileName":"/user/username/projects/myproject/packages/pkg1/index.ts","pollingInterval":250}
 /user/username/projects/myproject/packages/pkg1/package.json:
   {"fileName":"/user/username/projects/myproject/packages/pkg1/package.json","pollingInterval":250}
-/user/username/projects/myproject/packages/pkg2/build/package.json:
-  {"fileName":"/user/username/projects/myproject/packages/pkg2/build/package.json","pollingInterval":250}
 
 FsWatches::
 
@@ -348,20 +340,12 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/packages/pkg2/index.ts","pollingInterval":250}
 /user/username/projects/myproject/packages/pkg2/package.json:
   {"fileName":"/user/username/projects/myproject/packages/pkg2/package.json","pollingInterval":250}
-/a/lib/package.json:
-  {"fileName":"/a/lib/package.json","pollingInterval":250}
-/a/package.json:
-  {"fileName":"/a/package.json","pollingInterval":250}
-/package.json:
-  {"fileName":"/package.json","pollingInterval":250}
 /user/username/projects/myproject/packages/pkg1/tsconfig.json:
   {"fileName":"/user/username/projects/myproject/packages/pkg1/tsconfig.json","pollingInterval":250}
 /user/username/projects/myproject/packages/pkg1/index.ts:
   {"fileName":"/user/username/projects/myproject/packages/pkg1/index.ts","pollingInterval":250}
 /user/username/projects/myproject/packages/pkg1/package.json:
   {"fileName":"/user/username/projects/myproject/packages/pkg1/package.json","pollingInterval":250}
-/user/username/projects/myproject/packages/pkg2/build/package.json:
-  {"fileName":"/user/username/projects/myproject/packages/pkg2/build/package.json","pollingInterval":250}
 
 FsWatches::
 
@@ -453,20 +437,12 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/packages/pkg2/index.ts","pollingInterval":250}
 /user/username/projects/myproject/packages/pkg2/package.json:
   {"fileName":"/user/username/projects/myproject/packages/pkg2/package.json","pollingInterval":250}
-/a/lib/package.json:
-  {"fileName":"/a/lib/package.json","pollingInterval":250}
-/a/package.json:
-  {"fileName":"/a/package.json","pollingInterval":250}
-/package.json:
-  {"fileName":"/package.json","pollingInterval":250}
 /user/username/projects/myproject/packages/pkg1/tsconfig.json:
   {"fileName":"/user/username/projects/myproject/packages/pkg1/tsconfig.json","pollingInterval":250}
 /user/username/projects/myproject/packages/pkg1/index.ts:
   {"fileName":"/user/username/projects/myproject/packages/pkg1/index.ts","pollingInterval":250}
 /user/username/projects/myproject/packages/pkg1/package.json:
   {"fileName":"/user/username/projects/myproject/packages/pkg1/package.json","pollingInterval":250}
-/user/username/projects/myproject/packages/pkg2/build/package.json:
-  {"fileName":"/user/username/projects/myproject/packages/pkg2/build/package.json","pollingInterval":250}
 
 FsWatches::
 
@@ -570,20 +546,12 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/packages/pkg2/index.ts","pollingInterval":250}
 /user/username/projects/myproject/packages/pkg2/package.json:
   {"fileName":"/user/username/projects/myproject/packages/pkg2/package.json","pollingInterval":250}
-/a/lib/package.json:
-  {"fileName":"/a/lib/package.json","pollingInterval":250}
-/a/package.json:
-  {"fileName":"/a/package.json","pollingInterval":250}
-/package.json:
-  {"fileName":"/package.json","pollingInterval":250}
 /user/username/projects/myproject/packages/pkg1/tsconfig.json:
   {"fileName":"/user/username/projects/myproject/packages/pkg1/tsconfig.json","pollingInterval":250}
 /user/username/projects/myproject/packages/pkg1/index.ts:
   {"fileName":"/user/username/projects/myproject/packages/pkg1/index.ts","pollingInterval":250}
 /user/username/projects/myproject/packages/pkg1/package.json:
   {"fileName":"/user/username/projects/myproject/packages/pkg1/package.json","pollingInterval":250}
-/user/username/projects/myproject/packages/pkg2/build/package.json:
-  {"fileName":"/user/username/projects/myproject/packages/pkg2/build/package.json","pollingInterval":250}
 
 FsWatches::
 
@@ -714,20 +682,12 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/packages/pkg2/const.cts","pollingInterval":250}
 /user/username/projects/myproject/packages/pkg2/package.json:
   {"fileName":"/user/username/projects/myproject/packages/pkg2/package.json","pollingInterval":250}
-/a/lib/package.json:
-  {"fileName":"/a/lib/package.json","pollingInterval":250}
-/a/package.json:
-  {"fileName":"/a/package.json","pollingInterval":250}
-/package.json:
-  {"fileName":"/package.json","pollingInterval":250}
 /user/username/projects/myproject/packages/pkg1/tsconfig.json:
   {"fileName":"/user/username/projects/myproject/packages/pkg1/tsconfig.json","pollingInterval":250}
 /user/username/projects/myproject/packages/pkg1/index.ts:
   {"fileName":"/user/username/projects/myproject/packages/pkg1/index.ts","pollingInterval":250}
 /user/username/projects/myproject/packages/pkg1/package.json:
   {"fileName":"/user/username/projects/myproject/packages/pkg1/package.json","pollingInterval":250}
-/user/username/projects/myproject/packages/pkg2/build/package.json:
-  {"fileName":"/user/username/projects/myproject/packages/pkg2/build/package.json","pollingInterval":250}
 /user/username/projects/myproject/packages/pkg2/index.cts:
   {"fileName":"/user/username/projects/myproject/packages/pkg2/index.cts","pollingInterval":250}
 

@@ -111,14 +111,20 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/pkg0/tsconfig.json","pollingInterval":250}
 /user/username/projects/myproject/pkg0/index.ts:
   {"fileName":"/user/username/projects/myproject/pkg0/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg0/package.json:
+  {"fileName":"/user/username/projects/myproject/pkg0/package.json","pollingInterval":250}
 /user/username/projects/myproject/pkg1/tsconfig.json:
   {"fileName":"/user/username/projects/myproject/pkg1/tsconfig.json","pollingInterval":250}
 /user/username/projects/myproject/pkg1/index.ts:
   {"fileName":"/user/username/projects/myproject/pkg1/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg1/package.json:
+  {"fileName":"/user/username/projects/myproject/pkg1/package.json","pollingInterval":250}
 /user/username/projects/myproject/pkg2/tsconfig.json:
   {"fileName":"/user/username/projects/myproject/pkg2/tsconfig.json","pollingInterval":250}
 /user/username/projects/myproject/pkg2/index.ts:
   {"fileName":"/user/username/projects/myproject/pkg2/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg2/package.json:
+  {"fileName":"/user/username/projects/myproject/pkg2/package.json","pollingInterval":250}
 /user/username/projects/myproject/tsconfig.json:
   {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
 
@@ -321,14 +327,20 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/pkg0/tsconfig.json","pollingInterval":250}
 /user/username/projects/myproject/pkg0/index.ts:
   {"fileName":"/user/username/projects/myproject/pkg0/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg0/package.json:
+  {"fileName":"/user/username/projects/myproject/pkg0/package.json","pollingInterval":250}
 /user/username/projects/myproject/pkg1/tsconfig.json:
   {"fileName":"/user/username/projects/myproject/pkg1/tsconfig.json","pollingInterval":250}
 /user/username/projects/myproject/pkg1/index.ts:
   {"fileName":"/user/username/projects/myproject/pkg1/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg1/package.json:
+  {"fileName":"/user/username/projects/myproject/pkg1/package.json","pollingInterval":250}
 /user/username/projects/myproject/pkg2/tsconfig.json:
   {"fileName":"/user/username/projects/myproject/pkg2/tsconfig.json","pollingInterval":250}
 /user/username/projects/myproject/pkg2/index.ts:
   {"fileName":"/user/username/projects/myproject/pkg2/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg2/package.json:
+  {"fileName":"/user/username/projects/myproject/pkg2/package.json","pollingInterval":250}
 /user/username/projects/myproject/tsconfig.json:
   {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
 
@@ -403,14 +415,20 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/pkg0/tsconfig.json","pollingInterval":250}
 /user/username/projects/myproject/pkg0/index.ts:
   {"fileName":"/user/username/projects/myproject/pkg0/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg0/package.json:
+  {"fileName":"/user/username/projects/myproject/pkg0/package.json","pollingInterval":250}
 /user/username/projects/myproject/pkg1/tsconfig.json:
   {"fileName":"/user/username/projects/myproject/pkg1/tsconfig.json","pollingInterval":250}
 /user/username/projects/myproject/pkg1/index.ts:
   {"fileName":"/user/username/projects/myproject/pkg1/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg1/package.json:
+  {"fileName":"/user/username/projects/myproject/pkg1/package.json","pollingInterval":250}
 /user/username/projects/myproject/pkg2/tsconfig.json:
   {"fileName":"/user/username/projects/myproject/pkg2/tsconfig.json","pollingInterval":250}
 /user/username/projects/myproject/pkg2/index.ts:
   {"fileName":"/user/username/projects/myproject/pkg2/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg2/package.json:
+  {"fileName":"/user/username/projects/myproject/pkg2/package.json","pollingInterval":250}
 /user/username/projects/myproject/tsconfig.json:
   {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
 
@@ -462,14 +480,20 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/pkg0/tsconfig.json","pollingInterval":250}
 /user/username/projects/myproject/pkg0/index.ts:
   {"fileName":"/user/username/projects/myproject/pkg0/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg0/package.json:
+  {"fileName":"/user/username/projects/myproject/pkg0/package.json","pollingInterval":250}
 /user/username/projects/myproject/pkg1/tsconfig.json:
   {"fileName":"/user/username/projects/myproject/pkg1/tsconfig.json","pollingInterval":250}
 /user/username/projects/myproject/pkg1/index.ts:
   {"fileName":"/user/username/projects/myproject/pkg1/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg1/package.json:
+  {"fileName":"/user/username/projects/myproject/pkg1/package.json","pollingInterval":250}
 /user/username/projects/myproject/pkg2/tsconfig.json:
   {"fileName":"/user/username/projects/myproject/pkg2/tsconfig.json","pollingInterval":250}
 /user/username/projects/myproject/pkg2/index.ts:
   {"fileName":"/user/username/projects/myproject/pkg2/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg2/package.json:
+  {"fileName":"/user/username/projects/myproject/pkg2/package.json","pollingInterval":250}
 /user/username/projects/myproject/tsconfig.json:
   {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
 
@@ -584,14 +608,20 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/pkg0/tsconfig.json","pollingInterval":250}
 /user/username/projects/myproject/pkg0/index.ts:
   {"fileName":"/user/username/projects/myproject/pkg0/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg0/package.json:
+  {"fileName":"/user/username/projects/myproject/pkg0/package.json","pollingInterval":250}
 /user/username/projects/myproject/pkg1/tsconfig.json:
   {"fileName":"/user/username/projects/myproject/pkg1/tsconfig.json","pollingInterval":250}
 /user/username/projects/myproject/pkg1/index.ts:
   {"fileName":"/user/username/projects/myproject/pkg1/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg1/package.json:
+  {"fileName":"/user/username/projects/myproject/pkg1/package.json","pollingInterval":250}
 /user/username/projects/myproject/pkg2/tsconfig.json:
   {"fileName":"/user/username/projects/myproject/pkg2/tsconfig.json","pollingInterval":250}
 /user/username/projects/myproject/pkg2/index.ts:
   {"fileName":"/user/username/projects/myproject/pkg2/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg2/package.json:
+  {"fileName":"/user/username/projects/myproject/pkg2/package.json","pollingInterval":250}
 /user/username/projects/myproject/tsconfig.json:
   {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
 
@@ -621,14 +651,20 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/pkg0/tsconfig.json","pollingInterval":250}
 /user/username/projects/myproject/pkg0/index.ts:
   {"fileName":"/user/username/projects/myproject/pkg0/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg0/package.json:
+  {"fileName":"/user/username/projects/myproject/pkg0/package.json","pollingInterval":250}
 /user/username/projects/myproject/pkg1/tsconfig.json:
   {"fileName":"/user/username/projects/myproject/pkg1/tsconfig.json","pollingInterval":250}
 /user/username/projects/myproject/pkg1/index.ts:
   {"fileName":"/user/username/projects/myproject/pkg1/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg1/package.json:
+  {"fileName":"/user/username/projects/myproject/pkg1/package.json","pollingInterval":250}
 /user/username/projects/myproject/pkg2/tsconfig.json:
   {"fileName":"/user/username/projects/myproject/pkg2/tsconfig.json","pollingInterval":250}
 /user/username/projects/myproject/pkg2/index.ts:
   {"fileName":"/user/username/projects/myproject/pkg2/index.ts","pollingInterval":250}
+/user/username/projects/myproject/pkg2/package.json:
+  {"fileName":"/user/username/projects/myproject/pkg2/package.json","pollingInterval":250}
 /user/username/projects/myproject/tsconfig.json:
   {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
 

@@ -213,12 +213,18 @@ namespace ts.tscWatch {
                 {
                     caption: "reports import errors after change to package file",
                     change: sys => replaceFileText(sys, `${projectRoot}/packages/pkg2/package.json`, `index.js`, `other.js`),
-                    timeouts: runQueuedTimeoutCallbacks,
+                    timeouts: sys => {
+                        sys.runQueuedTimeoutCallbacks(); // building pkg2
+                        sys.runQueuedTimeoutCallbacks(); // building pkg1
+                    },
                 },
                 {
                     caption: "removes those errors when a package file is changed back",
                     change: sys => replaceFileText(sys, `${projectRoot}/packages/pkg2/package.json`, `other.js`, `index.js`),
-                    timeouts: runQueuedTimeoutCallbacks,
+                    timeouts: sys => {
+                        sys.runQueuedTimeoutCallbacks(); // building pkg2
+                        sys.runQueuedTimeoutCallbacks(); // building pkg1
+                    },
                 },
             ]
         });

@@ -97,6 +97,8 @@ WatchedFiles::
   {"fileName":"/a/b/commonFile1.ts","pollingInterval":250}
 /a/b/commonfile2.ts:
   {"fileName":"/a/b/commonFile2.ts","pollingInterval":250}
+/a/b/package.json:
+  {"fileName":"/a/b/package.json","pollingInterval":250}
 /a/b/project2.tsconfig.json:
   {"fileName":"/a/b/project2.tsconfig.json","pollingInterval":250}
 /a/b/bravo.tsconfig.json:
@@ -257,6 +259,8 @@ WatchedFiles::
   {"fileName":"/a/b/commonFile1.ts","pollingInterval":250}
 /a/b/commonfile2.ts:
   {"fileName":"/a/b/commonFile2.ts","pollingInterval":250}
+/a/b/package.json:
+  {"fileName":"/a/b/package.json","pollingInterval":250}
 /a/b/project2.tsconfig.json:
   {"fileName":"/a/b/project2.tsconfig.json","pollingInterval":250}
 /a/b/bravo.tsconfig.json:
@@ -363,6 +367,8 @@ WatchedFiles::
   {"fileName":"/a/b/commonFile1.ts","pollingInterval":250}
 /a/b/commonfile2.ts:
   {"fileName":"/a/b/commonFile2.ts","pollingInterval":250}
+/a/b/package.json:
+  {"fileName":"/a/b/package.json","pollingInterval":250}
 /a/b/project2.tsconfig.json:
   {"fileName":"/a/b/project2.tsconfig.json","pollingInterval":250}
 /a/b/bravo.tsconfig.json:
@@ -462,6 +468,8 @@ WatchedFiles::
   {"fileName":"/a/b/commonFile1.ts","pollingInterval":250}
 /a/b/commonfile2.ts:
   {"fileName":"/a/b/commonFile2.ts","pollingInterval":250}
+/a/b/package.json:
+  {"fileName":"/a/b/package.json","pollingInterval":250}
 /a/b/project2.tsconfig.json:
   {"fileName":"/a/b/project2.tsconfig.json","pollingInterval":250}
 /a/b/bravo.tsconfig.json:
@@ -567,6 +575,8 @@ WatchedFiles::
   {"fileName":"/a/b/commonFile1.ts","pollingInterval":250}
 /a/b/commonfile2.ts:
   {"fileName":"/a/b/commonFile2.ts","pollingInterval":250}
+/a/b/package.json:
+  {"fileName":"/a/b/package.json","pollingInterval":250}
 /a/b/project2.tsconfig.json:
   {"fileName":"/a/b/project2.tsconfig.json","pollingInterval":250}
 /a/b/other.ts:
@@ -629,6 +639,8 @@ WatchedFiles::
   {"fileName":"/a/b/commonFile1.ts","pollingInterval":250}
 /a/b/commonfile2.ts:
   {"fileName":"/a/b/commonFile2.ts","pollingInterval":250}
+/a/b/package.json:
+  {"fileName":"/a/b/package.json","pollingInterval":250}
 /a/b/project2.tsconfig.json:
   {"fileName":"/a/b/project2.tsconfig.json","pollingInterval":250}
 /a/b/other.ts:
@@ -736,6 +748,8 @@ WatchedFiles::
   {"fileName":"/a/b/commonFile1.ts","pollingInterval":250}
 /a/b/commonfile2.ts:
   {"fileName":"/a/b/commonFile2.ts","pollingInterval":250}
+/a/b/package.json:
+  {"fileName":"/a/b/package.json","pollingInterval":250}
 /a/b/project2.tsconfig.json:
   {"fileName":"/a/b/project2.tsconfig.json","pollingInterval":250}
 /a/b/other.ts:

@@ -157,12 +157,14 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/packages/pkg2/index.ts","pollingInterval":250}
 /user/username/projects/myproject/packages/pkg2/other.ts:
   {"fileName":"/user/username/projects/myproject/packages/pkg2/other.ts","pollingInterval":250}
+/user/username/projects/myproject/packages/pkg2/package.json:
+  {"fileName":"/user/username/projects/myproject/packages/pkg2/package.json","pollingInterval":250}
 /user/username/projects/myproject/packages/pkg1/tsconfig.json:
   {"fileName":"/user/username/projects/myproject/packages/pkg1/tsconfig.json","pollingInterval":250}
 /user/username/projects/myproject/packages/pkg1/index.ts:
   {"fileName":"/user/username/projects/myproject/packages/pkg1/index.ts","pollingInterval":250}
-/user/username/projects/myproject/packages/pkg2/package.json:
-  {"fileName":"/user/username/projects/myproject/packages/pkg2/package.json","pollingInterval":250}
+/user/username/projects/myproject/packages/pkg1/package.json:
+  {"fileName":"/user/username/projects/myproject/packages/pkg1/package.json","pollingInterval":250}
 
 FsWatches::
 
@@ -282,9 +284,24 @@ Output::
 >> Screen clear
 [[90m12:01:20 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:21 AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because output 'packages/pkg1/build/index.js' is older than input 'packages/pkg2/package.json'
+[[90m12:01:21 AM[0m] Project 'packages/pkg2/tsconfig.json' is out of date because output 'packages/pkg2/build/tsconfig.tsbuildinfo' is older than input 'packages/pkg2/package.json'
 
-[[90m12:01:22 AM[0m] Building project '/user/username/projects/myproject/packages/pkg1/tsconfig.json'...
+[[90m12:01:22 AM[0m] Building project '/user/username/projects/myproject/packages/pkg2/tsconfig.json'...
+
+======== Resolving module './const.js' from '/user/username/projects/myproject/packages/pkg2/index.ts'. ========
+Module resolution kind is not specified, using 'NodeJs'.
+Loading module as file / folder, candidate module location '/user/username/projects/myproject/packages/pkg2/const.js', target file type 'TypeScript'.
+File '/user/username/projects/myproject/packages/pkg2/const.js.ts' does not exist.
+File '/user/username/projects/myproject/packages/pkg2/const.js.tsx' does not exist.
+File '/user/username/projects/myproject/packages/pkg2/const.js.d.ts' does not exist.
+File name '/user/username/projects/myproject/packages/pkg2/const.js' has a '.js' extension - stripping it.
+File '/user/username/projects/myproject/packages/pkg2/const.ts' exist - use it as a name resolution result.
+======== Module name './const.js' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/const.ts'. ========
+[[90m12:01:23 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/packages/pkg2/tsconfig.json'...
+
+[[90m12:01:25 AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because output 'packages/pkg1/build/index.js' is older than input 'packages/pkg2/package.json'
+
+[[90m12:01:26 AM[0m] Building project '/user/username/projects/myproject/packages/pkg1/tsconfig.json'...
 
 ======== Resolving module 'pkg2' from '/user/username/projects/myproject/packages/pkg1/index.ts'. ========
 Module resolution kind is not specified, using 'NodeJs'.
@@ -316,9 +333,22 @@ Resolving real path for '/user/username/projects/myproject/node_modules/pkg2/bui
 [7m1[0m import type { TheNum } from 'pkg2'
 [7m [0m [91m              ~~~~~~[0m
 
-[[90m12:01:23 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:01:27 AM[0m] Found 1 error. Watching for file changes.
 
 
+
+Program root files: ["/user/username/projects/myproject/packages/pkg2/const.ts","/user/username/projects/myproject/packages/pkg2/index.ts","/user/username/projects/myproject/packages/pkg2/other.ts"]
+Program options: {"composite":true,"outDir":"/user/username/projects/myproject/packages/pkg2/build","baseUrl":"/user/username/projects/myproject/packages/pkg2","watch":true,"traceResolution":true,"configFilePath":"/user/username/projects/myproject/packages/pkg2/tsconfig.json"}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/packages/pkg2/const.ts
+/user/username/projects/myproject/packages/pkg2/index.ts
+/user/username/projects/myproject/packages/pkg2/other.ts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
 
 Program root files: ["/user/username/projects/myproject/packages/pkg1/index.ts"]
 Program options: {"outDir":"/user/username/projects/myproject/packages/pkg1/build","watch":true,"traceResolution":true,"configFilePath":"/user/username/projects/myproject/packages/pkg1/tsconfig.json"}
@@ -345,12 +375,14 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/packages/pkg2/index.ts","pollingInterval":250}
 /user/username/projects/myproject/packages/pkg2/other.ts:
   {"fileName":"/user/username/projects/myproject/packages/pkg2/other.ts","pollingInterval":250}
+/user/username/projects/myproject/packages/pkg2/package.json:
+  {"fileName":"/user/username/projects/myproject/packages/pkg2/package.json","pollingInterval":250}
 /user/username/projects/myproject/packages/pkg1/tsconfig.json:
   {"fileName":"/user/username/projects/myproject/packages/pkg1/tsconfig.json","pollingInterval":250}
 /user/username/projects/myproject/packages/pkg1/index.ts:
   {"fileName":"/user/username/projects/myproject/packages/pkg1/index.ts","pollingInterval":250}
-/user/username/projects/myproject/packages/pkg2/package.json:
-  {"fileName":"/user/username/projects/myproject/packages/pkg2/package.json","pollingInterval":250}
+/user/username/projects/myproject/packages/pkg1/package.json:
+  {"fileName":"/user/username/projects/myproject/packages/pkg1/package.json","pollingInterval":250}
 
 FsWatches::
 
@@ -362,6 +394,7 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+//// [/user/username/projects/myproject/packages/pkg2/build/tsconfig.tsbuildinfo] file changed its modified time
 
 Change:: removes those errors when a package file is changed back
 
@@ -372,11 +405,26 @@ Input::
 
 Output::
 >> Screen clear
-[[90m12:01:27 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:31 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:28 AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because output 'packages/pkg1/build/index.js' is older than input 'packages/pkg2/package.json'
+[[90m12:01:32 AM[0m] Project 'packages/pkg2/tsconfig.json' is out of date because output 'packages/pkg2/build/tsconfig.tsbuildinfo' is older than input 'packages/pkg2/package.json'
 
-[[90m12:01:29 AM[0m] Building project '/user/username/projects/myproject/packages/pkg1/tsconfig.json'...
+[[90m12:01:33 AM[0m] Building project '/user/username/projects/myproject/packages/pkg2/tsconfig.json'...
+
+======== Resolving module './const.js' from '/user/username/projects/myproject/packages/pkg2/index.ts'. ========
+Module resolution kind is not specified, using 'NodeJs'.
+Loading module as file / folder, candidate module location '/user/username/projects/myproject/packages/pkg2/const.js', target file type 'TypeScript'.
+File '/user/username/projects/myproject/packages/pkg2/const.js.ts' does not exist.
+File '/user/username/projects/myproject/packages/pkg2/const.js.tsx' does not exist.
+File '/user/username/projects/myproject/packages/pkg2/const.js.d.ts' does not exist.
+File name '/user/username/projects/myproject/packages/pkg2/const.js' has a '.js' extension - stripping it.
+File '/user/username/projects/myproject/packages/pkg2/const.ts' exist - use it as a name resolution result.
+======== Module name './const.js' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/const.ts'. ========
+[[90m12:01:34 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/myproject/packages/pkg2/tsconfig.json'...
+
+[[90m12:01:36 AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because output 'packages/pkg1/build/index.js' is older than input 'packages/pkg2/package.json'
+
+[[90m12:01:37 AM[0m] Building project '/user/username/projects/myproject/packages/pkg1/tsconfig.json'...
 
 ======== Resolving module 'pkg2' from '/user/username/projects/myproject/packages/pkg1/index.ts'. ========
 Module resolution kind is not specified, using 'NodeJs'.
@@ -415,9 +463,22 @@ File '/user/username/projects/myproject/packages/pkg2/build/const.ts' does not e
 File '/user/username/projects/myproject/packages/pkg2/build/const.tsx' does not exist.
 File '/user/username/projects/myproject/packages/pkg2/build/const.d.ts' exist - use it as a name resolution result.
 ======== Module name './const.js' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/build/const.d.ts'. ========
-[[90m12:01:34 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:42 AM[0m] Found 0 errors. Watching for file changes.
 
 
+
+Program root files: ["/user/username/projects/myproject/packages/pkg2/const.ts","/user/username/projects/myproject/packages/pkg2/index.ts","/user/username/projects/myproject/packages/pkg2/other.ts"]
+Program options: {"composite":true,"outDir":"/user/username/projects/myproject/packages/pkg2/build","baseUrl":"/user/username/projects/myproject/packages/pkg2","watch":true,"traceResolution":true,"configFilePath":"/user/username/projects/myproject/packages/pkg2/tsconfig.json"}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/packages/pkg2/const.ts
+/user/username/projects/myproject/packages/pkg2/index.ts
+/user/username/projects/myproject/packages/pkg2/other.ts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
 
 Program root files: ["/user/username/projects/myproject/packages/pkg1/index.ts"]
 Program options: {"outDir":"/user/username/projects/myproject/packages/pkg1/build","watch":true,"traceResolution":true,"configFilePath":"/user/username/projects/myproject/packages/pkg1/tsconfig.json"}
@@ -447,12 +508,14 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/packages/pkg2/index.ts","pollingInterval":250}
 /user/username/projects/myproject/packages/pkg2/other.ts:
   {"fileName":"/user/username/projects/myproject/packages/pkg2/other.ts","pollingInterval":250}
+/user/username/projects/myproject/packages/pkg2/package.json:
+  {"fileName":"/user/username/projects/myproject/packages/pkg2/package.json","pollingInterval":250}
 /user/username/projects/myproject/packages/pkg1/tsconfig.json:
   {"fileName":"/user/username/projects/myproject/packages/pkg1/tsconfig.json","pollingInterval":250}
 /user/username/projects/myproject/packages/pkg1/index.ts:
   {"fileName":"/user/username/projects/myproject/packages/pkg1/index.ts","pollingInterval":250}
-/user/username/projects/myproject/packages/pkg2/package.json:
-  {"fileName":"/user/username/projects/myproject/packages/pkg2/package.json","pollingInterval":250}
+/user/username/projects/myproject/packages/pkg1/package.json:
+  {"fileName":"/user/username/projects/myproject/packages/pkg1/package.json","pollingInterval":250}
 
 FsWatches::
 
@@ -464,4 +527,5 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
+//// [/user/username/projects/myproject/packages/pkg2/build/tsconfig.tsbuildinfo] file changed its modified time
 //// [/user/username/projects/myproject/packages/pkg1/build/index.js] file written with same contents

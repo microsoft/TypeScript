@@ -82,6 +82,8 @@ WatchedFiles::
   {"fileName":"/user/username/projects/noEmitOnError/src/main.ts","pollingInterval":250}
 /user/username/projects/noemitonerror/src/other.ts:
   {"fileName":"/user/username/projects/noEmitOnError/src/other.ts","pollingInterval":250}
+/user/username/projects/noemitonerror/package.json:
+  {"fileName":"/user/username/projects/noEmitOnError/package.json","pollingInterval":250}
 
 FsWatches::
 
@@ -136,6 +138,8 @@ WatchedFiles::
   {"fileName":"/user/username/projects/noEmitOnError/src/main.ts","pollingInterval":250}
 /user/username/projects/noemitonerror/src/other.ts:
   {"fileName":"/user/username/projects/noEmitOnError/src/other.ts","pollingInterval":250}
+/user/username/projects/noemitonerror/package.json:
+  {"fileName":"/user/username/projects/noEmitOnError/package.json","pollingInterval":250}
 
 FsWatches::
 
@@ -198,6 +202,8 @@ WatchedFiles::
   {"fileName":"/user/username/projects/noEmitOnError/src/main.ts","pollingInterval":250}
 /user/username/projects/noemitonerror/src/other.ts:
   {"fileName":"/user/username/projects/noEmitOnError/src/other.ts","pollingInterval":250}
+/user/username/projects/noemitonerror/package.json:
+  {"fileName":"/user/username/projects/noEmitOnError/package.json","pollingInterval":250}
 
 FsWatches::
 
@@ -276,6 +282,8 @@ WatchedFiles::
   {"fileName":"/user/username/projects/noEmitOnError/src/main.ts","pollingInterval":250}
 /user/username/projects/noemitonerror/src/other.ts:
   {"fileName":"/user/username/projects/noEmitOnError/src/other.ts","pollingInterval":250}
+/user/username/projects/noemitonerror/package.json:
+  {"fileName":"/user/username/projects/noEmitOnError/package.json","pollingInterval":250}
 
 FsWatches::
 
@@ -330,6 +338,8 @@ WatchedFiles::
   {"fileName":"/user/username/projects/noEmitOnError/src/main.ts","pollingInterval":250}
 /user/username/projects/noemitonerror/src/other.ts:
   {"fileName":"/user/username/projects/noEmitOnError/src/other.ts","pollingInterval":250}
+/user/username/projects/noemitonerror/package.json:
+  {"fileName":"/user/username/projects/noEmitOnError/package.json","pollingInterval":250}
 
 FsWatches::
 
@@ -386,6 +396,8 @@ WatchedFiles::
   {"fileName":"/user/username/projects/noEmitOnError/src/main.ts","pollingInterval":250}
 /user/username/projects/noemitonerror/src/other.ts:
   {"fileName":"/user/username/projects/noEmitOnError/src/other.ts","pollingInterval":250}
+/user/username/projects/noemitonerror/package.json:
+  {"fileName":"/user/username/projects/noEmitOnError/package.json","pollingInterval":250}
 
 FsWatches::
 
@@ -445,6 +457,8 @@ WatchedFiles::
   {"fileName":"/user/username/projects/noEmitOnError/src/main.ts","pollingInterval":250}
 /user/username/projects/noemitonerror/src/other.ts:
   {"fileName":"/user/username/projects/noEmitOnError/src/other.ts","pollingInterval":250}
+/user/username/projects/noemitonerror/package.json:
+  {"fileName":"/user/username/projects/noEmitOnError/package.json","pollingInterval":250}
 
 FsWatches::
 
