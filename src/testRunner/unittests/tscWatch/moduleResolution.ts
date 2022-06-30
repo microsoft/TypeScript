@@ -72,5 +72,47 @@ namespace ts.tscWatch {
                 },
             ]
         });
+
+        verifyTscWatch({
+            scenario: "moduleResolution",
+            subScenario: "diagnostics from cache",
+            sys: () => createWatchedSystem([
+                {
+                    path: `${projectRoot}/tsconfig.json`,
+                    content: JSON.stringify({
+                        compilerOptions: {
+                            moduleResolution: "nodenext",
+                            outDir: "./dist",
+                            declaration: true,
+                            declarationDir: "./types"
+                        },
+                    })
+                },
+                {
+                    path: `${projectRoot}/package.json`,
+                    content: JSON.stringify({
+                        name: "@this/package",
+                        type: "module",
+                        exports: {
+                            ".": {
+                                default: "./dist/index.js",
+                                types: "./types/index.d.ts"
+                            }
+                        }
+                    })
+                },
+                {
+                    path: `${projectRoot}/index.ts`,
+                    content: Utils.dedent`
+                        import * as me from "@this/package";
+                        me.thing()
+                        export function thing(): void {}
+                    `
+                },
+                libFile
+            ], { currentDirectory: projectRoot }),
+            commandLineArgs: ["-w", "--traceResolution"],
+            changes: emptyArray
+        });
     });
 }
