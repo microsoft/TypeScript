@@ -264,6 +264,7 @@ namespace ts {
             resolvedModuleNames.clear();
             resolvedTypeReferenceDirectives.clear();
             resolvedFileToResolution.clear();
+            nonRelativeExternalModuleResolutions.clear();
             resolutionsWithFailedLookups.length = 0;
             resolutionsWithOnlyAffectingLocations.length = 0;
             failedLookupChecks = undefined;
@@ -313,13 +314,12 @@ namespace ts {
         function clearPerDirectoryResolutions() {
             moduleResolutionCache.clear();
             typeReferenceDirectiveResolutionCache.clear();
-            nonRelativeExternalModuleResolutions.forEach(watchFailedLookupLocationOfNonRelativeModuleResolutions);
-            nonRelativeExternalModuleResolutions.clear();
         }
 
         function finishCachingPerDirectoryResolution() {
             filesWithInvalidatedNonRelativeUnresolvedImports = undefined;
-            clearPerDirectoryResolutions();
+            nonRelativeExternalModuleResolutions.forEach(watchFailedLookupLocationOfNonRelativeModuleResolutions);
+            nonRelativeExternalModuleResolutions.clear();
             directoryWatchesOfFailedLookups.forEach((watcher, path) => {
                 if (watcher.refCount === 0) {
                     directoryWatchesOfFailedLookups.delete(path);
