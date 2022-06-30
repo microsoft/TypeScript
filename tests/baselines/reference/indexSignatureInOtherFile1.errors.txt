@@ -1,10 +1,7 @@
-error TS-1: Pre-emit (0) and post-emit (2) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
+tests/cases/compiler/index.ts(2,3): error TS2411: Property '[Symbol.iterator]' of type '() => IterableIterator<any>' is not assignable to 'symbol' index type 'string'.
+tests/cases/compiler/index.ts(2,3): error TS2411: Property '[Symbol.unscopables]' of type '() => { copyWithin: boolean; entries: boolean; fill: boolean; find: boolean; findIndex: boolean; keys: boolean; values: boolean; }' is not assignable to 'symbol' index type 'string'.
 
 
-!!! error TS-1: Pre-emit (0) and post-emit (2) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
-!!! related TS-1: The excess diagnostics are:
-!!! related TS2411 tests/cases/compiler/other.ts:14:3: Property '[Symbol.iterator]' of type '() => IterableIterator<any>' is not assignable to 'symbol' index type 'string'.
-!!! related TS2411 tests/cases/compiler/other.ts:23:3: Property '[Symbol.unscopables]' of type '() => { copyWithin: boolean; entries: boolean; fill: boolean; find: boolean; findIndex: boolean; keys: boolean; values: boolean; }' is not assignable to 'symbol' index type 'string'.
 ==== tests/cases/compiler/other.ts (0 errors) ====
     interface Array1<T> {
       length: number;
@@ -39,7 +36,13 @@ error TS-1: Pre-emit (0) and post-emit (2) diagnostic counts do not match! This 
       };
     }
     
-==== tests/cases/compiler/index.ts (0 errors) ====
+==== tests/cases/compiler/index.ts (2 errors) ====
     class Test extends Array1 {
       [key: symbol]: string
+      ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2411: Property '[Symbol.iterator]' of type '() => IterableIterator<any>' is not assignable to 'symbol' index type 'string'.
+!!! related TS2728 tests/cases/compiler/other.ts:14:3: '[Symbol.iterator]' is declared here.
+      ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2411: Property '[Symbol.unscopables]' of type '() => { copyWithin: boolean; entries: boolean; fill: boolean; find: boolean; findIndex: boolean; keys: boolean; values: boolean; }' is not assignable to 'symbol' index type 'string'.
+!!! related TS2728 tests/cases/compiler/other.ts:23:3: '[Symbol.unscopables]' is declared here.
     }
