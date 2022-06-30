@@ -39379,7 +39379,7 @@ namespace ts {
             const interfaceDeclaration = getObjectFlags(type) & ObjectFlags.Interface ? getDeclarationOfKind(type.symbol, SyntaxKind.InterfaceDeclaration) : undefined;
             const propDeclaration = declaration && declaration.kind === SyntaxKind.BinaryExpression ||
                 name && name.kind === SyntaxKind.ComputedPropertyName ? declaration : undefined;
-            const localPropDeclaration = propDeclaration && getParentOfSymbol(prop) === type.symbol ? propDeclaration : undefined;
+            const localPropDeclaration = getParentOfSymbol(prop) === type.symbol ? declaration : undefined;
             for (const info of indexInfos) {
                 const localIndexDeclaration = info.declaration && getParentOfSymbol(getSymbolOfNode(info.declaration)) === type.symbol ? info.declaration : undefined;
                 // We check only when (a) the property is declared in the containing type, or (b) the applicable index signature is declared
