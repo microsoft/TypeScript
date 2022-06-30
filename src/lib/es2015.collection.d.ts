@@ -1,12 +1,8 @@
 interface Map<K, V> {
-    /**
-     * Removes all elements from the Map.
-     */
+
     clear(): void;
     /**
-     * Removes the specified element from the Map by key.
-     * @param key
-     * @returns Returns true if an element in the Map existed and has been removed, or false if the element does not exist.
+     * @returns true if an element in the Map existed and has been removed, or false if the element does not exist.
      */
     delete(key: K): boolean;
     /**
@@ -17,23 +13,19 @@ interface Map<K, V> {
     forEach(callbackfn: (value: V, key: K, map: Map<K, V>) => void, thisArg?: any): void;
     /**
      * Returns a specified element from the Map object. If the value that is associated to the provided key is an object, then you will get a reference to that object and any change made to that object will effectively modify it inside the Map.
-     * @param key
      * @returns Returns the element associated with the specified key. If no element is associated with the specified key, undefined is returned.
      */
     get(key: K): V | undefined;
     /**
-     * Returns a boolean indicating whether an element with the specified key exists or not.
-     * @param key
+     * @returns boolean indicating whether an element with the specified key exists or not.
      */
     has(key: K): boolean;
     /**
      * Adds a new element with a specified key and value to the Map. If an element with the same key already exists, the element will be updated.
-     * @param key
-     * @param value
      */
     set(key: K, value: V): this;
     /**
-     * Returns the number of elements in the Map.
+     * @returns the number of elements in the Map.
      */
     readonly size: number;
 }
@@ -54,24 +46,21 @@ interface ReadonlyMap<K, V> {
 
 interface WeakMap<K extends object, V> {
     /**
-     * Removes the specified element.
-     * @param key
+     * Removes the specified element from the WeakMap.
+     * @returns true if the element was successfully removed, or false if it was not present.
      */
     delete(key: K): boolean;
     /**
-     * Returns a specified element.
-     * @param key
+     * @returns a specified element.
      */
     get(key: K): V | undefined;
     /**
-     * Returns a boolean indicating whether an element with the specified key exists or not.
-     * @param key
+     * @returns a boolean indicating whether an element with the specified key exists or not.
      */
     has(key: K): boolean;
     /**
      * Adds a new element with a specified key and value.
      * @param key Must be an object.
-     * @param value
      */
     set(key: K, value: V): this;
 }
@@ -85,16 +74,12 @@ declare var WeakMap: WeakMapConstructor;
 interface Set<T> {
     /**
      * Appends a new element with a specified value to the end of the Set.
-     * @param value
      */
     add(value: T): this;
-    /**
-     * Removes all elements from object.
-     */
+
     clear(): void;
     /**
-     * Removes a specified value from a Set.
-     * @param value
+     * Removes a specified value from the Set.
      * @returns Returns true if an element in the Set existed and has been removed, or false if the element does not exist.
      */
     delete(value: T): boolean;
@@ -105,12 +90,11 @@ interface Set<T> {
      */
     forEach(callbackfn: (value: T, value2: T, set: Set<T>) => void, thisArg?: any): void;
     /**
-     * Returns a boolean indicating whether an element with the specified value exists in the Set or not.
-     * @param value
+     * @returns a boolean indicating whether an element with the specified value exists in the Set or not.
      */
     has(value: T): boolean;
     /**
-     * Returns the number of (unique) elements in Set.
+     * @returns the number of (unique) elements in Set.
      */
     readonly size: number;
 }
@@ -130,17 +114,15 @@ interface ReadonlySet<T> {
 interface WeakSet<T extends object> {
     /**
      * Appends a new object to the end of the WeakSet.
-     * @param value
      */
     add(value: T): this;
     /**
      * Removes the specified element from the WeakSet.
-     * @param value
+     * @returns Returns true if the element existed and has been removed, or false if the element does not exist.
      */
     delete(value: T): boolean;
     /**
-     * Returns a boolean indicating whether an object exists in the WeakSet or not.
-     * @param value
+     * @returns a boolean indicating whether an object exists in the WeakSet or not.
      */
     has(value: T): boolean;
 }
