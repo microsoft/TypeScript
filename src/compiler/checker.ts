@@ -16220,6 +16220,7 @@ namespace ts {
                     links.resolvedSymbol = unknownSymbol;
                     return links.resolvedType = errorType;
                 }
+                const isExportEquals = !!innerModuleSymbol.exports?.get(InternalSymbolName.ExportEquals);
                 const moduleSymbol = resolveExternalModuleSymbol(innerModuleSymbol, /*dontResolveAlias*/ false);
                 if (!nodeIsMissing(node.qualifier)) {
                     const nameStack: Identifier[] = getIdentifierChain(node.qualifier!);
@@ -16231,9 +16232,11 @@ namespace ts {
                         // That, in turn, ultimately uses `getPropertyOfType` on the type of the symbol, which differs slightly from
                         // the `exports` lookup process that only looks up namespace members which is used for most type references
                         const mergedResolvedSymbol = getMergedSymbol(resolveSymbol(currentNamespace));
-                        const next = node.isTypeOf
+                        const symbolFromVariable = node.isTypeOf || isInJSFile(node) && isExportEquals
                             ? getPropertyOfType(getTypeOfSymbol(mergedResolvedSymbol), current.escapedText, /*skipObjectFunctionPropertyAugment*/ false, /*includeTypeOnlyMembers*/ true)
-                            : getSymbol(getExportsOfSymbol(mergedResolvedSymbol), current.escapedText, meaning);
+                            : undefined;
+                        const symbolFromModule = node.isTypeOf ? undefined : getSymbol(getExportsOfSymbol(mergedResolvedSymbol), current.escapedText, meaning);
+                        const next = symbolFromModule ?? symbolFromVariable;
                         if (!next) {
                             error(current, Diagnostics.Namespace_0_has_no_exported_member_1, getFullyQualifiedName(currentNamespace), declarationNameToString(current));
                             return links.resolvedType = errorType;

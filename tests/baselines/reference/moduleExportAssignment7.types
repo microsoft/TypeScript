@@ -1,0 +1,179 @@
+=== tests/cases/conformance/salsa/mod.js ===
+class Thing  { x = 1 }
+>Thing : Thing
+>x : number
+>1 : 1
+
+class AnotherThing { y = 2  }
+>AnotherThing : AnotherThing
+>y : number
+>2 : 2
+
+function foo() { return 3 }
+>foo : () => number
+>3 : 3
+
+function bar() { return 4 }
+>bar : () => number
+>4 : 4
+
+/** @typedef {() => number} buz */
+module.exports = {
+>module.exports = {    Thing,    AnotherThing,    foo,    qux: bar,    baz() { return 5 }} : { Thing: typeof Thing; AnotherThing: typeof AnotherThing; foo: () => number; qux: () => number; baz(): number; }
+>module.exports : { Thing: typeof Thing; AnotherThing: typeof AnotherThing; foo: () => number; qux: () => number; baz(): number; }
+>module : { exports: { Thing: typeof Thing; AnotherThing: typeof AnotherThing; foo: () => number; qux: () => number; baz(): number; }; }
+>exports : { Thing: typeof Thing; AnotherThing: typeof AnotherThing; foo: () => number; qux: () => number; baz(): number; }
+>{    Thing,    AnotherThing,    foo,    qux: bar,    baz() { return 5 }} : { Thing: typeof Thing; AnotherThing: typeof AnotherThing; foo: () => number; qux: () => number; baz(): number; }
+
+    Thing,
+>Thing : typeof Thing
+
+    AnotherThing,
+>AnotherThing : typeof AnotherThing
+
+    foo,
+>foo : () => number
+
+    qux: bar,
+>qux : () => number
+>bar : () => number
+
+    baz() { return 5 }
+>baz : () => number
+>5 : 5
+}
+=== tests/cases/conformance/salsa/main.js ===
+/**
+ * @param {import("./mod").Thing} a
+ * @param {import("./mod").AnotherThing} b
+ * @param {import("./mod").foo} c
+ * @param {import("./mod").qux} d
+ * @param {import("./mod").baz} e
+ * @param {import("./mod").buz} f
+ */
+function test(a, b, c, d, e, f) {
+>test : (a: Thing, b: AnotherThing, c: () => number, d: () => number, e: () => number, f: import("./mod").buz) => number
+>a : Thing
+>b : AnotherThing
+>c : () => number
+>d : () => number
+>e : () => number
+>f : import("tests/cases/conformance/salsa/mod").buz
+
+    return a.x + b.y + c() + d() + e() + f()
+>a.x + b.y + c() + d() + e() + f() : number
+>a.x + b.y + c() + d() + e() : number
+>a.x + b.y + c() + d() : number
+>a.x + b.y + c() : number
+>a.x + b.y : number
+>a.x : number
+>a : Thing
+>x : number
+>b.y : number
+>b : AnotherThing
+>y : number
+>c() : number
+>c : () => number
+>d() : number
+>d : () => number
+>e() : number
+>e : () => number
+>f() : number
+>f : import("tests/cases/conformance/salsa/mod").buz
+}
+
+=== tests/cases/conformance/salsa/index.ts ===
+function types(
+>types : (a: any, b: any, c: any, d: any, e: any, f: import('./mod').buz) => any
+
+    a: import('./mod').Thing,
+>a : any
+
+    b: import('./mod').AnotherThing,
+>b : any
+
+    c: import('./mod').foo,
+>c : any
+
+    d: import('./mod').qux,
+>d : any
+
+    e: import('./mod').baz,
+>e : any
+
+    f: import('./mod').buz,
+>f : import("tests/cases/conformance/salsa/mod").buz
+
+) {
+    return a.x + b.y + c() + d() + e() + f()
+>a.x + b.y + c() + d() + e() + f() : any
+>a.x + b.y + c() + d() + e() : any
+>a.x + b.y + c() + d() : any
+>a.x + b.y + c() : any
+>a.x + b.y : any
+>a.x : any
+>a : any
+>x : any
+>b.y : any
+>b : any
+>y : any
+>c() : any
+>c : any
+>d() : any
+>d : any
+>e() : any
+>e : any
+>f() : number
+>f : import("tests/cases/conformance/salsa/mod").buz
+}
+
+function values(
+>values : (a: typeof import('./mod').Thing, b: typeof import('./mod').AnotherThing, c: typeof import('./mod').foo, d: typeof import('./mod').qux, e: typeof import('./mod').baz, f: any) => any
+
+    a: typeof import('./mod').Thing,
+>a : typeof Thing
+>Thing : any
+
+    b: typeof import('./mod').AnotherThing,
+>b : typeof AnotherThing
+>AnotherThing : any
+
+    c: typeof import('./mod').foo,
+>c : () => number
+>foo : any
+
+    d: typeof import('./mod').qux,
+>d : () => number
+>qux : any
+
+    e: typeof import('./mod').baz,
+>e : () => number
+>baz : any
+
+    f: typeof import('./mod').buz,
+>f : any
+>buz : any
+
+) {
+    return a.length + b.length + c() + d() + e() + f()
+>a.length + b.length + c() + d() + e() + f() : any
+>a.length + b.length + c() + d() + e() : number
+>a.length + b.length + c() + d() : number
+>a.length + b.length + c() : number
+>a.length + b.length : number
+>a.length : number
+>a : typeof Thing
+>length : number
+>b.length : number
+>b : typeof AnotherThing
+>length : number
+>c() : number
+>c : () => number
+>d() : number
+>d : () => number
+>e() : number
+>e : () => number
+>f() : any
+>f : any
+}
+
