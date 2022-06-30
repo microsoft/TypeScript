@@ -25,6 +25,7 @@ interface Array<T> { length: number; [n: number]: T; }
 
     /* Projects */
     // "incremental": true,                              /* Save .tsbuildinfo files to allow for incremental compilation of projects. */
+    // "cacheResolutions": true,                         /* Save resolutions into .tsbuildinfo file and use them for incremental compilation. */
     // "composite": true,                                /* Enable constraints that allow a TypeScript project to be used with project references. */
     // "tsBuildInfoFile": "./.tsbuildinfo",              /* Specify the path to .tsbuildinfo incremental compilation file. */
     // "disableSourceOfProjectReferenceRedirect": true,  /* Disable preferring source files instead of declaration files when referencing composite projects. */
@@ -154,8 +155,8 @@ Output::
   The file is in the program because:
     Default library for target 'es2016'
 
-  [96mtsconfig.json[0m:[93m14[0m:[93m15[0m
-    [7m14[0m     "target": "es2016",                                  /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
+  [96mtsconfig.json[0m:[93m15[0m:[93m15[0m
+    [7m15[0m     "target": "es2016",                                  /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
     [7m  [0m [96m              ~~~~~~~~[0m
     File is default library for target specified here.
 
@@ -289,8 +290,8 @@ Output::
   The file is in the program because:
     Default library for target 'es2016'
 
-  [96mtsconfig.json[0m:[93m14[0m:[93m15[0m
-    [7m14[0m     "target": "es2016",                                  /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
+  [96mtsconfig.json[0m:[93m15[0m:[93m15[0m
+    [7m15[0m     "target": "es2016",                                  /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
     [7m  [0m [96m              ~~~~~~~~[0m
     File is default library for target specified here.
 

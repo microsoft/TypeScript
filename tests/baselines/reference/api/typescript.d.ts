@@ -3048,6 +3048,7 @@ declare namespace ts {
         jsxImportSource?: string;
         composite?: boolean;
         incremental?: boolean;
+        cacheResolutions?: boolean;
         tsBuildInfoFile?: string;
         removeComments?: boolean;
         rootDir?: string;
@@ -5505,6 +5506,7 @@ declare namespace ts {
         force?: boolean;
         verbose?: boolean;
         incremental?: boolean;
+        cacheResolutions?: boolean;
         assumeChangesOnlyAffectDirectDependencies?: boolean;
         traceResolution?: boolean;
         [option: string]: CompilerOptionsValue | undefined;

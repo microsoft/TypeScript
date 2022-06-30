@@ -4,6 +4,7 @@
 
     /* Projects */
     // "incremental": true,                              /* Save .tsbuildinfo files to allow for incremental compilation of projects. */
+    // "cacheResolutions": true,                         /* Save resolutions into .tsbuildinfo file and use them for incremental compilation. */
     // "composite": true,                                /* Enable constraints that allow a TypeScript project to be used with project references. */
     // "tsBuildInfoFile": "./.tsbuildinfo",              /* Specify the path to .tsbuildinfo incremental compilation file. */
     // "disableSourceOfProjectReferenceRedirect": true,  /* Disable preferring source files instead of declaration files when referencing composite projects. */

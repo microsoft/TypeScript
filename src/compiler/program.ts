@@ -3532,6 +3532,10 @@ namespace ts {
                 }
             }
 
+            if (options.cacheResolutions && !isIncrementalCompilation(options)) {
+                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1_or_option_2, "cacheResolutions", "incremental", "composite");
+            }
+
             const outputFile = outFile(options);
             if (options.tsBuildInfoFile) {
                 if (!isIncrementalCompilation(options)) {

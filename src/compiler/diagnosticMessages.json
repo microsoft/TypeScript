@@ -5863,6 +5863,10 @@
         "category": "Message",
         "code": 6718
     },
+    "Save resolutions into .tsbuildinfo file and use them for incremental compilation.": {
+        "category": "Message",
+        "code": 6719
+    },
     "Default catch clause variables as 'unknown' instead of 'any'.": {
         "category": "Message",
         "code": 6803

@@ -17,6 +17,7 @@ namespace ts {
         /*@internal*/ explainFiles?: boolean;
         /*@internal*/ pretty?: boolean;
         incremental?: boolean;
+        cacheResolutions?: boolean;
         assumeChangesOnlyAffectDirectDependencies?: boolean;
 
         traceResolution?: boolean;

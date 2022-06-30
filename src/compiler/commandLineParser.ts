@@ -297,6 +297,17 @@ namespace ts {
             defaultValueDescription: Diagnostics.false_unless_composite_is_set
         },
         {
+            name: "cacheResolutions",
+            type: "boolean",
+            category: Diagnostics.Projects,
+            description: Diagnostics.Save_resolutions_into_tsbuildinfo_file_and_use_them_for_incremental_compilation,
+            affectsModuleResolution: true,
+            affectsMultiFileEmitBuildInfo: true,
+            affectsBundleEmitBuildInfo: true,
+            transpileOptionValue: undefined,
+            defaultValueDescription: false,
+        },
+        {
             name: "assumeChangesOnlyAffectDirectDependencies",
             type: "boolean",
             affectsSemanticDiagnostics: true,
