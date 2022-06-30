@@ -7083,6 +7083,7 @@ declare namespace ts {
         jsxImportSource?: string;
         composite?: boolean;
         incremental?: boolean;
+        cacheResolutions?: boolean;
         tsBuildInfoFile?: string;
         removeComments?: boolean;
         rootDir?: string;

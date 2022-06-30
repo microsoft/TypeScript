@@ -713,6 +713,16 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         description: Diagnostics.Enable_constraints_that_allow_a_TypeScript_project_to_be_used_with_project_references,
     },
     {
+        name: "cacheResolutions",
+        type: "boolean",
+        category: Diagnostics.Projects,
+        description: Diagnostics.Save_resolutions_into_tsbuildinfo_file_and_use_them_for_incremental_compilation,
+        affectsBuildInfo: true,
+        affectsModuleResolution: true,
+        transpileOptionValue: undefined,
+        defaultValueDescription: false,
+    },
+    {
         name: "tsBuildInfoFile",
         type: "string",
         affectsEmit: true,
