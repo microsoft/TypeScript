@@ -5285,12 +5285,15 @@ namespace ts {
 
         function parseSuperExpression(): MemberExpression {
             const pos = getNodePos();
-            const expression = parseTokenNode<PrimaryExpression>();
+            let expression = parseTokenNode<MemberExpression>();
             if (token() === SyntaxKind.LessThanToken) {
                 const startPos = getNodePos();
                 const typeArguments = tryParse(parseTypeArgumentsInExpression);
                 if (typeArguments !== undefined) {
                     parseErrorAt(startPos, getNodePos(), Diagnostics.super_may_not_use_type_arguments);
+                    if (!isTemplateStartOfTaggedTemplate()) {
+                        expression = factory.createExpressionWithTypeArguments(expression, typeArguments);
+                    }
                 }
             }
 
