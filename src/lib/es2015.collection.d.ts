@@ -7,8 +7,6 @@ interface Map<K, V> {
     delete(key: K): boolean;
     /**
      * Executes a provided function once per each key/value pair in the Map, in insertion order.
-     * @param callbackfn
-     * @param thisArg
      */
     forEach(callbackfn: (value: V, key: K, map: Map<K, V>) => void, thisArg?: any): void;
     /**
@@ -85,8 +83,6 @@ interface Set<T> {
     delete(value: T): boolean;
     /**
      * Executes a provided function once per each value in the Set object, in insertion order.
-     * @param callbackfn
-     * @param thisArg
      */
     forEach(callbackfn: (value: T, value2: T, set: Set<T>) => void, thisArg?: any): void;
     /**
