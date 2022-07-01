@@ -36601,6 +36601,37 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                 type;
         }
 
+        function isAwaitedTypeNeeded(type: Type) {
+            // If this is already an `Awaited<T>`, we shouldn't wrap it. This helps to avoid `Awaited<Awaited<T>>` in higher-order.
+            if (isTypeAny(type) || isAwaitedTypeInstantiation(type)) {
+                return false;
+            }
+
+            // We only need `Awaited<T>` if `T` contains possibly non-primitive types.
+            if (isGenericObjectType(type)) {
+                const baseConstraint = getBaseConstraintOfType(type);
+                // We only need `Awaited<T>` if `T` has no base constraint, or the base constraint of `T` is `any`, `unknown`, `{}`, `object`,
+                // or is promise-like.
+                if (!baseConstraint || (baseConstraint.flags & TypeFlags.AnyOrUnknown) || isEmptyObjectType(baseConstraint) || isThenableType(baseConstraint)) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        function tryCreateAwaitedType(type: Type): Type | undefined {
+            // Nothing to do if `Awaited<T>` doesn't exist
+            const awaitedSymbol = getGlobalAwaitedSymbol(/*reportErrors*/ true);
+            if (awaitedSymbol) {
+                // Unwrap unions that may contain `Awaited<T>`, otherwise its possible to manufacture an `Awaited<Awaited<T> | U>` where
+                // an `Awaited<T | U>` would suffice.
+                return getTypeAliasInstantiation(awaitedSymbol, [unwrapAwaitedType(type)]);
+            }
+
+            return undefined;
+        }
+
         function createAwaitedTypeIfNeeded(type: Type): Type {
             // We wrap type `T` in `Awaited<T>` based on the following conditions:
             // - `T` is not already an `Awaited<U>`, and
@@ -36610,28 +36641,10 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
             //   - The base constraint of `T` is `any`, `unknown`, `object`, or `{}`, or
             //   - The base constraint of `T` is an object type with a callable `then` method.
 
-            if (isTypeAny(type)) {
-                return type;
-            }
-
-            // If this is already an `Awaited<T>`, just return it. This helps to avoid `Awaited<Awaited<T>>` in higher-order.
-            if (isAwaitedTypeInstantiation(type)) {
-                return type;
-            }
-
-            // Only instantiate `Awaited<T>` if `T` contains possibly non-primitive types.
-            if (isGenericObjectType(type)) {
-                const baseConstraint = getBaseConstraintOfType(type);
-                // Only instantiate `Awaited<T>` if `T` has no base constraint, or the base constraint of `T` is `any`, `unknown`, `{}`, `object`,
-                // or is promise-like.
-                if (!baseConstraint || (baseConstraint.flags & TypeFlags.AnyOrUnknown) || isEmptyObjectType(baseConstraint) || isThenableType(baseConstraint)) {
-                    // Nothing to do if `Awaited<T>` doesn't exist
-                    const awaitedSymbol = getGlobalAwaitedSymbol(/*reportErrors*/ true);
-                    if (awaitedSymbol) {
-                        // Unwrap unions that may contain `Awaited<T>`, otherwise its possible to manufacture an `Awaited<Awaited<T> | U>` where
-                        // an `Awaited<T | U>` would suffice.
-                        return getTypeAliasInstantiation(awaitedSymbol, [unwrapAwaitedType(type)]);
-                    }
+            if (isAwaitedTypeNeeded(type)) {
+                const awaitedType = tryCreateAwaitedType(type);
+                if (awaitedType) {
+                    return awaitedType;
                 }
             }
 
@@ -36691,6 +36704,11 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                 awaitedTypeStack.pop();
 
                 return typeAsAwaitable.awaitedTypeOfType = mapped;
+            }
+
+            // If `type` is generic and should be wrapped in `Awaited<T>`, return it.
+            if (isAwaitedTypeNeeded(type)) {
+                return typeAsAwaitable.awaitedTypeOfType = type;
             }
 
             const thisTypeForErrorOut: { value: Type | undefined } = { value: undefined };
