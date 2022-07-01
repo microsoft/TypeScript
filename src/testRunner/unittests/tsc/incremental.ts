@@ -125,8 +125,8 @@ const a: string = 10;`, "utf-8"),
             function verifyNoEmitChanges(compilerOptions: CompilerOptions) {
                 const discrepancyExplanation = () => [
                     ...noChangeWithExportsDiscrepancyRun.discrepancyExplanation!(),
-                    "Clean build will not have dtsChangeTime as there was no emit and emitSignatures as undefined for files",
-                    "Incremental will store the past dtsChangeTime and emitSignatures",
+                    "Clean build will not have latestChangedDtsFile as there was no emit and emitSignatures as undefined for files",
+                    "Incremental will store the past latestChangedDtsFile and emitSignatures",
                 ];
                 const discrepancyIfNoDtsEmit = getEmitDeclarations(compilerOptions) ?
                     undefined :

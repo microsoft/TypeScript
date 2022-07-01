@@ -50,9 +50,9 @@ Output::
 
 [[90m12:00:15 AM[0m] Building project '/src/shared/tsconfig.json'...
 
-[[90m12:00:22 AM[0m] Project 'src/webpack/tsconfig.json' is out of date because output file 'src/webpack/tsconfig.tsbuildinfo' does not exist
+[[90m12:00:21 AM[0m] Project 'src/webpack/tsconfig.json' is out of date because output file 'src/webpack/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:23 AM[0m] Building project '/src/webpack/tsconfig.json'...
+[[90m12:00:22 AM[0m] Building project '/src/webpack/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 Program root files: ["/src/shared/index.ts"]
@@ -120,7 +120,7 @@ exports.f2 = f2;
 
 
 //// [/src/shared/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"8649344783-export function f1() { }\nexport class c { }\nexport enum e { }\n// leading\nexport function f2() { } // trailing"],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2],"emitSignatures":[[2,"-15963581979-export declare function f1(): void;\r\nexport declare class c {\r\n}\r\nexport declare enum e {\r\n}\r\nexport declare function f2(): void;\r\n"]],"dtsChangeTime":16000},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"8649344783-export function f1() { }\nexport class c { }\nexport enum e { }\n// leading\nexport function f2() { } // trailing"],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2],"emitSignatures":[[2,"-15963581979-export declare function f1(): void;\r\nexport declare class c {\r\n}\r\nexport declare enum e {\r\n}\r\nexport declare function f2(): void;\r\n"]],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/shared/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -155,10 +155,10 @@ exports.f2 = f2;
         "-15963581979-export declare function f1(): void;\r\nexport declare class c {\r\n}\r\nexport declare enum e {\r\n}\r\nexport declare function f2(): void;\r\n"
       ]
     ],
-    "dtsChangeTime": 16000
+    "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1018
+  "size": 1034
 }
 
 //// [/src/webpack/index.d.ts]
@@ -195,7 +195,7 @@ exports.f22 = f22;
 
 
 //// [/src/webpack/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"20140662566-export function f2() { }\nexport class c2 { }\nexport enum e2 { }\n// leading\nexport function f22() { } // trailing"],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2],"emitSignatures":[[2,"-4025519876-export declare function f2(): void;\r\nexport declare class c2 {\r\n}\r\nexport declare enum e2 {\r\n}\r\nexport declare function f22(): void;\r\n"]],"dtsChangeTime":24000},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"20140662566-export function f2() { }\nexport class c2 { }\nexport enum e2 { }\n// leading\nexport function f22() { } // trailing"],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2],"emitSignatures":[[2,"-4025519876-export declare function f2(): void;\r\nexport declare class c2 {\r\n}\r\nexport declare enum e2 {\r\n}\r\nexport declare function f22(): void;\r\n"]],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/webpack/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -230,9 +230,9 @@ exports.f22 = f22;
         "-4025519876-export declare function f2(): void;\r\nexport declare class c2 {\r\n}\r\nexport declare enum e2 {\r\n}\r\nexport declare function f22(): void;\r\n"
       ]
     ],
-    "dtsChangeTime": 24000
+    "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1024
+  "size": 1040
 }
 

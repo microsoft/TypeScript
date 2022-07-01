@@ -712,7 +712,6 @@ namespace ts {
         useCaseSensitiveFileNames(): boolean;
         getNewLine(): string;
         createHash?(data: string): string;
-        now?(): Date;
         getBuildInfo?(fileName: string, configFilePath: string | undefined): BuildInfo | undefined;
     }
 
@@ -832,7 +831,6 @@ namespace ts {
                         if (newBuildInfo.program && changedDtsText !== undefined && config.options.composite) {
                             // Update the output signature
                             (newBuildInfo.program as ProgramBundleEmitBuildInfo).outSignature = computeSignature(changedDtsText, createHash, changedDtsData);
-                            newBuildInfo.program.dtsChangeTime = getCurrentTime(host).getTime();
                         }
                         // Update sourceFileInfo
                         const { js, dts, sourceFiles } = buildInfo.bundle!;

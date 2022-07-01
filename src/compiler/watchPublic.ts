@@ -30,7 +30,6 @@ namespace ts {
         host.createHash = maybeBind(system, system.createHash);
         host.disableUseFileVersionAsSignature = system.disableUseFileVersionAsSignature;
         host.storeFilesChangingSignatureDuringEmit = system.storeFilesChangingSignatureDuringEmit;
-        host.now = maybeBind(system, system.now);
         setGetSourceFileAsHashVersioned(host, system);
         changeCompilerHostLikeToUseCache(host, fileName => toPath(fileName, host.getCurrentDirectory(), host.getCanonicalFileName));
         return host;

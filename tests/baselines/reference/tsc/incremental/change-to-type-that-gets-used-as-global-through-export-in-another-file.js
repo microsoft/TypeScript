@@ -55,7 +55,7 @@ exports["default"] = 1;
 
 
 //// [/src/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","./class1.ts","./constants.ts","./types.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"4085502068-const a: MagicNumber = 1;\nconsole.log(a);","signature":"-4973073251-declare const a = 1;\r\n","affectsGlobalScope":true},{"version":"-2659799048-export default 1;","signature":"-5298367302-declare const _default: 1;\r\nexport default _default;\r\n"},{"version":"-2080821236-type MagicNumber = typeof import('./constants').default","affectsGlobalScope":true}],"options":{"composite":true},"fileIdsList":[[3]],"referencedMap":[[4,1]],"exportedModulesMap":[[4,1]],"semanticDiagnosticsPerFile":[1,2,3,4],"dtsChangeTime":15000},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","./class1.ts","./constants.ts","./types.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"4085502068-const a: MagicNumber = 1;\nconsole.log(a);","signature":"-4973073251-declare const a = 1;\r\n","affectsGlobalScope":true},{"version":"-2659799048-export default 1;","signature":"-5298367302-declare const _default: 1;\r\nexport default _default;\r\n"},{"version":"-2080821236-type MagicNumber = typeof import('./constants').default","affectsGlobalScope":true}],"options":{"composite":true},"fileIdsList":[[3]],"referencedMap":[[4,1]],"exportedModulesMap":[[4,1]],"semanticDiagnosticsPerFile":[1,2,3,4],"latestChangedDtsFile":"./constants.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -111,10 +111,10 @@ exports["default"] = 1;
       "./constants.ts",
       "./types.d.ts"
     ],
-    "dtsChangeTime": 15000
+    "latestChangedDtsFile": "./constants.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1158
+  "size": 1178
 }
 
 
@@ -155,7 +155,7 @@ exports["default"] = 2;
 
 
 //// [/src/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","./class1.ts","./constants.ts","./types.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"4085502068-const a: MagicNumber = 1;\nconsole.log(a);","signature":"-4973037314-declare const a = 2;\r\n","affectsGlobalScope":true},{"version":"-2659799015-export default 2;","signature":"1573564507-declare const _default: 2;\r\nexport default _default;\r\n"},{"version":"-2080821236-type MagicNumber = typeof import('./constants').default","affectsGlobalScope":true}],"options":{"composite":true},"fileIdsList":[[3]],"referencedMap":[[4,1]],"exportedModulesMap":[[4,1]],"semanticDiagnosticsPerFile":[1,[2,[{"file":"./class1.ts","start":6,"length":1,"code":2322,"category":1,"messageText":"Type '1' is not assignable to type '2'."}]],3,4],"dtsChangeTime":22000},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","./class1.ts","./constants.ts","./types.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"4085502068-const a: MagicNumber = 1;\nconsole.log(a);","signature":"-4973037314-declare const a = 2;\r\n","affectsGlobalScope":true},{"version":"-2659799015-export default 2;","signature":"1573564507-declare const _default: 2;\r\nexport default _default;\r\n"},{"version":"-2080821236-type MagicNumber = typeof import('./constants').default","affectsGlobalScope":true}],"options":{"composite":true},"fileIdsList":[[3]],"referencedMap":[[4,1]],"exportedModulesMap":[[4,1]],"semanticDiagnosticsPerFile":[1,[2,[{"file":"./class1.ts","start":6,"length":1,"code":2322,"category":1,"messageText":"Type '1' is not assignable to type '2'."}]],3,4],"latestChangedDtsFile":"./constants.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -223,9 +223,9 @@ exports["default"] = 2;
       "./constants.ts",
       "./types.d.ts"
     ],
-    "dtsChangeTime": 22000
+    "latestChangedDtsFile": "./constants.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1286
+  "size": 1306
 }
 
