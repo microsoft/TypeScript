@@ -4664,6 +4664,7 @@ namespace ts {
         UseAliasDefinedOutsideCurrentScope      = 1 << 14,  // Allow non-visible aliases
         UseSingleQuotesForStringLiteralType     = 1 << 28,  // Use single quotes for string literal type
         NoTypeReduction                         = 1 << 29,  // Don't call getReducedType
+        OmitThisParameter                       = 1 << 30,
 
         // Error handling
         AllowThisInObjectLiteral                = 1 << 15,
