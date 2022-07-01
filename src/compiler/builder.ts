@@ -246,7 +246,9 @@ namespace ts {
             state.seenAffectedFiles = state.seenAffectedFiles || new Set();
         }
         // Since old states change files set is copied, any additional change means we would need to emit build info
-        state.buildInfoEmitPending = !useOldState || state.changedFilesSet.size !== (oldState!.changedFilesSet?.size || 0);
+        state.buildInfoEmitPending = !useOldState ||
+            state.changedFilesSet.size !== (oldState!.changedFilesSet?.size || 0) ||
+            state.fileInfos.size !== oldState!.fileInfos.size;
         return state;
     }
 

@@ -553,6 +553,28 @@ class someClass2 { }`),
                     fs.unlinkSync("/src/core/anotherModule.ts");
                 }
             });
+
+            verifyTscWithEdits({
+                scenario: "sample1",
+                subScenario: "cacheResolutions",
+                baselinePrograms: true,
+                fs: () => projFs,
+                modifyFs: fs => {
+                    cacheResolutions("/src/core/tsconfig.json");
+                    cacheResolutions("/src/logic/tsconfig.json");
+                    cacheResolutions("/src/tests/tsconfig.json");
+                    function cacheResolutions(file: string) {
+                        const content = JSON.parse(fs.readFileSync(file, "utf-8"));
+                        content.compilerOptions = {
+                            ...content.compilerOptions || {},
+                            cacheResolutions: true
+                        };
+                        fs.writeFileSync(file, JSON.stringify(content, /*replacer*/ undefined, 4));
+                    }
+                },
+                commandLineArgs: ["--b", "/src/tests"],
+                edits: coreChanges,
+            });
         });
     });
 }
