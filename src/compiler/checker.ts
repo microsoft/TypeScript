@@ -25740,10 +25740,14 @@ namespace ts {
                 return getTypeOfSymbol(symbol);
             }
 
-            // We should only mark aliases as referenced if there isn't a local value declaration
-            // for the symbol. Also, don't mark any property access expression LHS - checkPropertyAccessExpression will handle that
+            // Mark alias as referenced, unless:
+            // - this is a property access expression LHS - checkPropertyAccessExpression will handle that
+            // - this is a descendant of a type only export declaration.
             if (!(node.parent && isPropertyAccessExpression(node.parent) && node.parent.expression === node)) {
-                markAliasReferenced(symbol, node);
+                const greatGrandparent = node.parent?.parent?.parent;
+                if (!(greatGrandparent && isExportDeclaration(greatGrandparent) && greatGrandparent.isTypeOnly)) {
+                    markAliasReferenced(symbol, node);
+                }
             }
 
             const localOrExportSymbol = getExportSymbolOfValueSymbolIfExported(symbol);
@@ -41224,8 +41228,10 @@ namespace ts {
                 if (symbol && (symbol === undefinedSymbol || symbol === globalThisSymbol || symbol.declarations && isGlobalSourceFile(getDeclarationContainer(symbol.declarations[0])))) {
                     error(exportedName, Diagnostics.Cannot_export_0_Only_local_declarations_can_be_exported_from_a_module, idText(exportedName));
                 }
-                else if (!node.parent.parent.isTypeOnly) {
-                    markExportAsReferenced(node);
+                else {
+                    if (!node.parent.parent.isTypeOnly) {
+                        markExportAsReferenced(node);
+                    }
                     const target = symbol && (symbol.flags & SymbolFlags.Alias ? resolveAlias(symbol) : symbol);
                     if (!target || target === unknownSymbol || target.flags & SymbolFlags.Value) {
                         checkExpressionCached(node.propertyName || node.name);
