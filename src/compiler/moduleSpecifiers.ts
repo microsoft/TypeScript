@@ -308,9 +308,8 @@ namespace ts.moduleSpecifiers {
             return relativePath;
         }
 
-        const importRelativeToBaseUrl = removeExtensionAndIndexPostFix(relativeToBaseUrl, ending, compilerOptions);
-        const fromPaths = paths && tryGetModuleNameFromPaths(removeFileExtension(relativeToBaseUrl), importRelativeToBaseUrl, paths);
-        const nonRelative = fromPaths === undefined && baseUrl !== undefined ? importRelativeToBaseUrl : fromPaths;
+        const fromPaths = paths && tryGetModuleNameFromPaths(relativeToBaseUrl, paths, ending, host, compilerOptions);
+        const nonRelative = fromPaths === undefined && baseUrl !== undefined ? removeExtensionAndIndexPostFix(relativeToBaseUrl, ending, compilerOptions) : fromPaths;
         if (!nonRelative) {
             return relativePath;
         }
@@ -508,7 +507,7 @@ namespace ts.moduleSpecifiers {
         if (allFileNames.size) {
             const remainingPaths = arrayFrom(allFileNames.values());
             if (remainingPaths.length > 1) remainingPaths.sort(comparePathsByRedirectAndNumberOfDirectorySeparators);
-            sortedPaths.push(...remainingPaths);
+            sortedPaths.push(...remainingPath);
         }
 
         return sortedPaths;
@@ -559,14 +558,49 @@ namespace ts.moduleSpecifiers {
         }
     }
 
-    function tryGetModuleNameFromPaths(relativeToBaseUrlWithIndex: string, relativeToBaseUrl: string, paths: MapLike<readonly string[]>): string | undefined {
+    function tryGetModuleNameFromPaths(relativeToBaseUrl: string, paths: MapLike<readonly string[]>, preferredEnding: Ending, host: ModuleSpecifierResolutionHost, compilerOptions: CompilerOptions): string | undefined {
         for (const key in paths) {
             for (const patternText of paths[key]) {
+
                 const pattern = removeFileExtension(normalizePath(patternText));
                 const indexOfStar = pattern.indexOf("*");
                 if (indexOfStar !== -1) {
                     const prefix = pattern.substr(0, indexOfStar);
                     const suffix = pattern.substr(indexOfStar + 1);
+                    // In module resolution, if `pattern` itself has an extension, a file with that extension is looked up directly,
+                    // meaning a '.ts' or '.d.ts' extension is allowed to resolve. This is distinct from the case where a '*' substitution
+                    // causes a module specifier to have an extension, i.e. the extension comes from the module specifier in a JS/TS file
+                    // and matches the '*'. For example:
+                    //
+                    // Module Specifier      | Path Mapping                  | Interpolation       | Resolution Action
+                    // ---------------------->------------------------------->--------------------->---------------------------------------------------------------
+                    // import "@app/foo"    -> "@app/*": ["./src/app/*.ts"] -> "./src/app/foo.ts" -> tryFile("./src/app/foo.ts") || [continue resolution algorithm]
+                    // import "@app/foo.ts" -> "@app/*": ["./src/app/*"]    -> "./src/app/foo.ts" -> [continue resolution algorithm]
+                    //
+                    // (https://github.com/microsoft/TypeScript/blob/ad4ded80e1d58f0bf36ac16bea71bc10d9f09895/src/compiler/moduleNameResolver.ts#L2509-L2516)
+                    //
+                    // The interpolation produced by both scenarios is identical, but in only the former, where the extension is encoded in
+                    // the path mapping rather than in the module specifier, will we prioritize a file lookup on the interpolation result.
+                    // (In fact, currently, the latter scenario will necessarily fail since no resolution mode recognizes '.ts' as a valid
+                    // extension for a module specifier.)
+                    //
+                    // Here, this means we need to be careful about whether we generate a match from the target filename (typically with a
+                    // .ts extension) or a series of module specifiers representing :
+                    //
+                    // Filename            | Relative Module Specifiers                   | Path Mapping                 | Filename Candidate | Module Specifier Candidates
+                    // --------------------<----------------------------------------------<------------------------------<-------------------||----------------------------
+                    // dist/haha.d.ts      <- dist/haha, dist/haha.js                     <- "@app/*": ["./dist/*.d.ts"] <- @app/haha        || (none)
+                    // dist/haha.d.ts      <- dist/haha, dist/haha.js                     <- "@app/*": ["./dist/*"]      <- (none)           || @app/haha, @app/haha.js
+                    // dist/foo/index.d.ts <- dist/foo, dist/foo/index, dist/foo/index.js <- "@app/*": ["./dist/*.d.ts"] <- @app/foo/index   || (none)
+                    // dist/foo/index.d.ts <- dist/foo, dist/foo/index, dist/foo/index.js <- "@app/*": ["./dist/*"]      <- (none)           || @app/foo, @app/foo/index, @app/foo/index.js
+                    // dist/wow.js.js      <- dist/wow.js, dist/wow.js.js                 <- "@app/*": ["./dist/*.js"]   <- @app/wow.js      || @app/wow, @app/wow.js
+                    //
+                    // The "Filename Candidate" can be generated only if `pattern` has an extension. While it represents a higher priority
+                    // match in module resolution, as long as the list of relative module specifiers takes into account the existence of other
+                    // files (e.g. 'dist/wow.js' cannot refer to 'dist/wow.js.js' if 'dist/wow.js' exists), I don't think it necessarily must
+                    // be the top priority module specifier generated here. Care must be taken that (a) the list of relative module specifiers
+                    // to run the interpolation are actually valid for the module resolution mode, and (b) that they are ordered by preference.
+                    // The last row shows that the filename candidate and module specifier candidates are not mutually exclusive.
                     if (relativeToBaseUrl.length >= prefix.length + suffix.length &&
                         startsWith(relativeToBaseUrl, prefix) &&
                         endsWith(relativeToBaseUrl, suffix) ||
@@ -578,7 +612,38 @@ namespace ts.moduleSpecifiers {
                 else if (pattern === relativeToBaseUrl || pattern === relativeToBaseUrlWithIndex) {
                     return key;
                 }
+
+                // const pattern = normalizePath(patternText);
+                // const indexOfStar = key.indexOf("*");
+                // if (indexOfStar !== -1) {
+                //     const prefix = key.substring(0, indexOfStar);
+                //     const suffix = key.substring(indexOfStar + 1);
+                //     const matchedStar = relativeToBaseUrl.substring(prefix.length, relativeToBaseUrl.length - suffix.length);
+                //     const spec = prefix + matchedStar + suffix;
+                //     const file = pattern.replace("*", matchedStar);
+                //     if (resultIsMatch(file)) {
+                //         if (suffix) {
+                //             // If the pattern had a suffix after the '*', we can't change the ending.
+                //             return spec;
+                //         }
+                //         let result = removeExtensionAndIndexPostFix(spec, preferredEnding, compilerOptions, host);
+                //         // If we possibly stripped off a `/index`, there's a chance the result no longer matches the pattern.
+                //         if (preferredEnding === Ending.Minimal && !startsWith(result, prefix)) {
+                //             result = removeExtensionAndIndexPostFix(spec, Ending.Index, compilerOptions, host);
+                //         }
+                //         return result;
+                //     }
+                // }
+                // else if (resultIsMatch(pattern)) {
+                //     return key;
+                // }
             }
+        }
+
+        function resultIsMatch(result: string) {
+            if (result === relativeToBaseUrl) return true;
+            const allowedEndings = [Ending.Minimal, Ending.Index, Ending.JsExtension]; // TODO
+            return allowedEndings.some(ending => removeExtensionAndIndexPostFix(relativeToBaseUrl, ending, compilerOptions, host) === result);
         }
     }
 
@@ -760,9 +825,11 @@ namespace ts.moduleSpecifiers {
                 if (versionPaths) {
                     const subModuleName = path.slice(packageRootPath.length + 1);
                     const fromPaths = tryGetModuleNameFromPaths(
-                        removeFileExtension(subModuleName),
-                        removeExtensionAndIndexPostFix(subModuleName, Ending.Minimal, options),
-                        versionPaths.paths
+                        subModuleName,
+                        versionPaths.paths,
+                        Ending.Minimal,
+                        host,
+                        options
                     );
                     if (fromPaths !== undefined) {
                         moduleFileToTry = combinePaths(packageRootPath, fromPaths);
