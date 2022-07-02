@@ -25740,14 +25740,8 @@ namespace ts {
                 return getTypeOfSymbol(symbol);
             }
 
-            // Mark alias as referenced, unless:
-            // - this is a property access expression LHS - checkPropertyAccessExpression will handle that
-            // - this is a descendant of a type only export declaration.
-            if (!(node.parent && isPropertyAccessExpression(node.parent) && node.parent.expression === node)) {
-                const greatGrandparent = node.parent?.parent?.parent;
-                if (!(greatGrandparent && isExportDeclaration(greatGrandparent) && greatGrandparent.isTypeOnly)) {
-                    markAliasReferenced(symbol, node);
-                }
+            if (shouldMarkIdentifierAliasReferenced(node)) {
+                markAliasReferenced(symbol, node);
             }
 
             const localOrExportSymbol = getExportSymbolOfValueSymbolIfExported(symbol);
@@ -25892,6 +25886,25 @@ namespace ts {
                 return type;
             }
             return assignmentKind ? getBaseTypeOfLiteralType(flowType) : flowType;
+        }
+
+        function shouldMarkIdentifierAliasReferenced(node: Identifier): boolean {
+            const parent = node.parent;
+            if (parent) {
+                // A property access expression LHS? checkPropertyAccessExpression will handle that.
+                if (isPropertyAccessExpression(parent) && parent.expression === node) {
+                    return false;
+                }
+                // Next two check for an identifier inside a type only export.
+                if (isExportSpecifier(parent) && parent.isTypeOnly) {
+                    return false;
+                }
+                const greatGrandparent = parent.parent?.parent;
+                if (greatGrandparent && isExportDeclaration(greatGrandparent) && greatGrandparent.isTypeOnly) {
+                    return false;
+                }
+            }
+            return true;
         }
 
         function isInsideFunctionOrInstancePropertyInitializer(node: Node, threshold: Node): boolean {
@@ -41229,7 +41242,7 @@ namespace ts {
                     error(exportedName, Diagnostics.Cannot_export_0_Only_local_declarations_can_be_exported_from_a_module, idText(exportedName));
                 }
                 else {
-                    if (!node.parent.parent.isTypeOnly) {
+                    if (!node.isTypeOnly && !node.parent.parent.isTypeOnly) {
                         markExportAsReferenced(node);
                     }
                     const target = symbol && (symbol.flags & SymbolFlags.Alias ? resolveAlias(symbol) : symbol);

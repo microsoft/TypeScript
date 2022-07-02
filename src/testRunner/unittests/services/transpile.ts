@@ -492,5 +492,12 @@ export * as alias from './file';`, {
                 options: { compilerOptions: { module: ModuleKind.CommonJS } }
             }
         );
+
+        transpilesCorrectly("Elides import equals referenced only by type only export specifier",
+            `import IFoo = Namespace.IFoo;` +
+            `export { type IFoo };`, {
+                options: { compilerOptions: { module: ModuleKind.CommonJS } }
+            }
+        );
     });
 }
