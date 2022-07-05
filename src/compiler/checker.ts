@@ -2165,7 +2165,7 @@ namespace ts {
             // The invalid initializer error is needed in two situation:
             // 1. When result is undefined, after checking for a missing "this."
             // 2. When result is defined
-            const checkAndReportErrorForInvalidInitializer = ()=>{
+            function checkAndReportErrorForInvalidInitializer() {
                 if (propertyWithInvalidInitializer && !(getEmitScriptTarget(compilerOptions) === ScriptTarget.ESNext && useDefineForClassFields)) {
                     // We have a match, but the reference occurred within a property initializer and the identifier also binds
                     // to a local variable in the constructor where the code will be emitted. Note that this is actually allowed
@@ -2176,7 +2176,7 @@ namespace ts {
                     return true;
                 }
                 return false;
-            };
+            }
 
             if (!result) {
                 if (nameNotFoundMessage) {
