@@ -8990,38 +8990,38 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Object_is_of_type_unknown_2571" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";_0_is_of_type_unknown_2571" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Object is of type 'unknown'.]]></Val>
+          <Val><![CDATA['{0}' is of type 'unknown'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[O objeto é do tipo 'desconhecido'.]]></Val>
+            <Val><![CDATA[O objeto '{0}' é do tipo 'desconhecido'.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Object_is_possibly_null_2531" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";_0_is_possibly_null_2531" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Object is possibly 'null'.]]></Val>
+          <Val><![CDATA['{0}' is possibly 'null'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Possivelmente, o objeto é 'nulo'.]]></Val>
+            <Val><![CDATA[Possivelmente, o objeto '{0}' é 'nulo'.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Object_is_possibly_null_or_undefined_2533" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";_0_is_possibly_null_or_undefined_2533" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Object is possibly 'null' or 'undefined'.]]></Val>
+          <Val><![CDATA['{0}' is possibly 'null' or 'undefined'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Possivelmente, o objeto é 'nulo' ou 'indefinido'.]]></Val>
+            <Val><![CDATA[Possivelmente, o objeto '{0}' é 'nulo' ou 'indefinido'.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Object_is_possibly_undefined_2532" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";_0_is_possibly_undefined_2532" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Object is possibly 'undefined'.]]></Val>
+          <Val><![CDATA['{0}' is possibly 'undefined'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Possivelmente, o objeto é 'nulo'.]]></Val>
+            <Val><![CDATA[Possivelmente, o objeto '{0}' é 'nulo'.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
