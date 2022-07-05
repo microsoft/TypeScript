@@ -28910,10 +28910,13 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
         }
 
         function reportObjectPossiblyNullOrUndefinedError(node: Node, facts: TypeFacts) {
+            const source = getSourceFileOfNode(node);
+            const text = getSourceTextOfNodeFromSourceFile(source, node);
             error(node, facts & TypeFacts.IsUndefined ? facts & TypeFacts.IsNull ?
-                Diagnostics.Object_is_possibly_null_or_undefined :
-                Diagnostics.Object_is_possibly_undefined :
-                Diagnostics.Object_is_possibly_null
+                Diagnostics._0_is_possibly_null_or_undefined :
+                Diagnostics._0_is_possibly_undefined :
+                Diagnostics._0_is_possibly_null,
+                text
             );
         }
 
@@ -28931,7 +28934,9 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
             reportError: (node: Node, facts: TypeFacts) => void
         ): Type {
             if (strictNullChecks && type.flags & TypeFlags.Unknown) {
-                error(node, Diagnostics.Object_is_of_type_unknown);
+                const source = getSourceFileOfNode(node);
+                const text = getSourceTextOfNodeFromSourceFile(source, node);
+                error(node, Diagnostics._0_is_of_type_unknown, text);
                 return errorType;
             }
             const facts = getTypeFacts(type);
@@ -28948,9 +28953,11 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
         }
 
         function checkNonNullNonVoidType(type: Type, node: Node): Type {
+            const source = getSourceFileOfNode(node);
+            const text = getSourceTextOfNodeFromSourceFile(source, node);
             const nonNullType = checkNonNullType(type, node);
             if (nonNullType.flags & TypeFlags.Void) {
-                error(node, Diagnostics.Object_is_possibly_undefined);
+                error(node, Diagnostics._0_is_possibly_undefined, text);
             }
             return nonNullType;
         }

@@ -2416,15 +2416,15 @@
         "category": "Error",
         "code": 2530
     },
-    "Object is possibly 'null'.": {
+    "'{0}' is possibly 'null'.": {
         "category": "Error",
         "code": 2531
     },
-    "Object is possibly 'undefined'.": {
+    "'{0}' is possibly 'undefined'.": {
         "category": "Error",
         "code": 2532
     },
-    "Object is possibly 'null' or 'undefined'.": {
+    "'{0}' is possibly 'null' or 'undefined'.": {
         "category": "Error",
         "code": 2533
     },
@@ -2561,7 +2561,7 @@
         "category": "Error",
         "code": 2570
     },
-    "Object is of type 'unknown'.": {
+    "'{0}' is of type 'unknown'.": {
         "category": "Error",
         "code": 2571
     },
