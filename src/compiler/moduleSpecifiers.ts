@@ -611,27 +611,46 @@ namespace ts.moduleSpecifiers {
                 // resolution, but as long criteria (b) above is met, I don't think its result needs to be the highest priority result
                 // in module specifier generation. I have included it last, as it's difficult to tell exactly where it should be
                 // sorted among the others for a particular value of `importModuleSpecifierEnding`.
-                const candidates = deduplicate(allowedEndings.map(ending => removeExtensionAndIndexPostFix(relativeToBaseUrl, ending, compilerOptions, host)), equateValues);
+                const candidates: { ending: Ending | undefined, value: string }[] = allowedEndings.map(ending => ({
+                    ending,
+                    value: removeExtensionAndIndexPostFix(relativeToBaseUrl, ending, compilerOptions)
+                }));
                 if (tryGetExtensionFromPath(pattern)) {
-                    pushIfUnique(candidates, relativeToBaseUrl);
+                    candidates.push({ ending: undefined, value: relativeToBaseUrl });
                 }
 
                 if (indexOfStar !== -1) {
                     const prefix = pattern.substring(0, indexOfStar);
                     const suffix = pattern.substring(indexOfStar + 1);
-                    for (const input of candidates) {
-                        if (input.length >= prefix.length + suffix.length &&
-                            startsWith(input, prefix) &&
-                            endsWith(input, suffix)) {
-                            const matchedStar = input.substring(prefix.length, input.length - suffix.length);
+                    for (const { ending, value } of candidates) {
+                        if (value.length >= prefix.length + suffix.length &&
+                            startsWith(value, prefix) &&
+                            endsWith(value, suffix) &&
+                            validateEnding({ ending, value })
+                        ) {
+                            const matchedStar = value.substring(prefix.length, value.length - suffix.length);
                             return key.replace("*", matchedStar);
                         }
                     }
                 }
-                else if (contains(candidates, pattern)) {
+                else if (
+                    some(candidates, c => c.ending !== Ending.Minimal && pattern === c.value) ||
+                    some(candidates, c => c.ending === Ending.Minimal && pattern === c.value && validateEnding(c))
+                ) {
                     return key;
                 }
             }
+        }
+
+        function validateEnding({ ending, value }: { ending: Ending | undefined, value: string }) {
+            // Optimization: `removeExtensionAndIndexPostFix` can query the file system (a good bit) if `ending` is `Minimal`, the basename
+            // is 'index', and a `host` is provided. To avoid that until it's unavoidable, we ran the function with no `host` above. Only
+            // here, after we've checked that the minimal ending is indeed a match (via the length and prefix/suffix checks / `some` calls),
+            // do we check that the host-validated result is consistent with the answer we got before. If it's not, it falls back to the
+            // `Ending.Index` result, which should already be in the list of candidates if `Minimal` was. (Note: the assumption here is
+            // that every module resolution mode that supports dropping extensions also supports dropping `/index`. Like literally
+            // everything else in this file, this logic needs to be updated if that's not true in some future module resolution mode.)
+            return ending !== Ending.Minimal || value === removeExtensionAndIndexPostFix(relativeToBaseUrl, ending, compilerOptions, host);
         }
     }
 
