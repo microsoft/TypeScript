@@ -466,6 +466,20 @@ namespace ts {
                                     factory.createAssignment(importVariableName, parameterName)
                                 )
                             );
+                            if (hasSyntacticModifier(entry, ModifierFlags.Export)) {
+                                statements.push(
+                                    factory.createExpressionStatement(
+                                        factory.createCallExpression(
+                                            exportFunction,
+                                            /*typeArguments*/ undefined,
+                                            [
+                                                factory.createStringLiteral(idText(importVariableName)),
+                                                parameterName,
+                                            ]
+                                        )
+                                    )
+                                );
+                            }
                             break;
 
                         case SyntaxKind.ExportDeclaration:
