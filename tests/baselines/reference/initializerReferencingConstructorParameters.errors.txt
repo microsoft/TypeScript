@@ -1,8 +1,8 @@
 tests/cases/conformance/classes/propertyMemberDeclarations/initializerReferencingConstructorParameters.ts(4,9): error TS2301: Initializer of instance member variable 'a' cannot reference identifier 'x' declared in the constructor.
 tests/cases/conformance/classes/propertyMemberDeclarations/initializerReferencingConstructorParameters.ts(5,15): error TS2301: Initializer of instance member variable 'b' cannot reference identifier 'x' declared in the constructor.
-tests/cases/conformance/classes/propertyMemberDeclarations/initializerReferencingConstructorParameters.ts(10,9): error TS2301: Initializer of instance member variable 'a' cannot reference identifier 'x' declared in the constructor.
+tests/cases/conformance/classes/propertyMemberDeclarations/initializerReferencingConstructorParameters.ts(10,9): error TS2663: Cannot find name 'x'. Did you mean the instance member 'this.x'?
 tests/cases/conformance/classes/propertyMemberDeclarations/initializerReferencingConstructorParameters.ts(11,15): error TS2301: Initializer of instance member variable 'b' cannot reference identifier 'x' declared in the constructor.
-tests/cases/conformance/classes/propertyMemberDeclarations/initializerReferencingConstructorParameters.ts(23,9): error TS2301: Initializer of instance member variable 'b' cannot reference identifier 'x' declared in the constructor.
+tests/cases/conformance/classes/propertyMemberDeclarations/initializerReferencingConstructorParameters.ts(23,9): error TS2663: Cannot find name 'x'. Did you mean the instance member 'this.x'?
 
 
 ==== tests/cases/conformance/classes/propertyMemberDeclarations/initializerReferencingConstructorParameters.ts (5 errors) ====
@@ -21,7 +21,7 @@ tests/cases/conformance/classes/propertyMemberDeclarations/initializerReferencin
     class D {
         a = x; // error
             ~
-!!! error TS2301: Initializer of instance member variable 'a' cannot reference identifier 'x' declared in the constructor.
+!!! error TS2663: Cannot find name 'x'. Did you mean the instance member 'this.x'?
         b: typeof x; // error
                   ~
 !!! error TS2301: Initializer of instance member variable 'b' cannot reference identifier 'x' declared in the constructor.
@@ -38,6 +38,6 @@ tests/cases/conformance/classes/propertyMemberDeclarations/initializerReferencin
         a = this.x; // ok
         b = x; // error
             ~
-!!! error TS2301: Initializer of instance member variable 'b' cannot reference identifier 'x' declared in the constructor.
+!!! error TS2663: Cannot find name 'x'. Did you mean the instance member 'this.x'?
         constructor(public x: T) { }
     }

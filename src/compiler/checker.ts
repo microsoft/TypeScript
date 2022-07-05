@@ -2162,21 +2162,28 @@ namespace ts {
                 }
             }
 
-            if (propertyWithInvalidInitializer && !(getEmitScriptTarget(compilerOptions) === ScriptTarget.ESNext && useDefineForClassFields)) {
-                // We have a match, but the reference occurred within a property initializer and the identifier also binds
-                // to a local variable in the constructor where the code will be emitted. Note that this is actually allowed
-                // with ESNext+useDefineForClassFields because the scope semantics are different.
-                const propertyName = (propertyWithInvalidInitializer as PropertyDeclaration).name;
-                error(errorLocation, Diagnostics.Initializer_of_instance_member_variable_0_cannot_reference_identifier_1_declared_in_the_constructor,
-                    declarationNameToString(propertyName), diagnosticName(nameArg!));
-                return undefined;
-            }
+            // The invalid initializer error is needed in two situation:
+            // 1. When result is undefined, after checking for a missing "this."
+            // 2. When result is defined
+            const checkAndReportErrorForInvalidInitializer = ()=>{
+                if (propertyWithInvalidInitializer && !(getEmitScriptTarget(compilerOptions) === ScriptTarget.ESNext && useDefineForClassFields)) {
+                    // We have a match, but the reference occurred within a property initializer and the identifier also binds
+                    // to a local variable in the constructor where the code will be emitted. Note that this is actually allowed
+                    // with ESNext+useDefineForClassFields because the scope semantics are different.
+                    const propertyName = (propertyWithInvalidInitializer as PropertyDeclaration).name;
+                    error(errorLocation, Diagnostics.Initializer_of_instance_member_variable_0_cannot_reference_identifier_1_declared_in_the_constructor,
+                        declarationNameToString(propertyName), diagnosticName(nameArg!));
+                    return true;
+                }
+                return false;
+            };
 
             if (!result) {
                 if (nameNotFoundMessage) {
                     addLazyDiagnostic(() => {
                         if (!errorLocation ||
                             !checkAndReportErrorForMissingPrefix(errorLocation, name, nameArg!) && // TODO: GH#18217
+                            !checkAndReportErrorForInvalidInitializer() &&
                             !checkAndReportErrorForExtendingInterface(errorLocation) &&
                             !checkAndReportErrorForUsingTypeAsNamespace(errorLocation, name, meaning) &&
                             !checkAndReportErrorForExportingPrimitiveType(errorLocation, name) &&
@@ -2223,6 +2230,9 @@ namespace ts {
                         }
                     });
                 }
+                return undefined;
+            }
+            else if (checkAndReportErrorForInvalidInitializer()) {
                 return undefined;
             }
 
