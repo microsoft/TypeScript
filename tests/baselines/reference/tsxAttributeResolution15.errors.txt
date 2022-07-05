@@ -1,6 +1,6 @@
 tests/cases/conformance/jsx/file.tsx(11,21): error TS2322: Type '{ prop1: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<BigGreeter> & { children?: ReactNode; }'.
   Property 'prop1' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<BigGreeter> & { children?: ReactNode; }'.
-tests/cases/conformance/jsx/file.tsx(14,39): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/jsx/file.tsx(14,39): error TS2532: 'this' is possibly 'undefined'.
 
 
 ==== tests/cases/conformance/jsx/file.tsx (2 errors) ====
@@ -22,5 +22,5 @@ tests/cases/conformance/jsx/file.tsx(14,39): error TS2532: Object is possibly 'u
     // OK
     let b = <BigGreeter ref={(input) => { this.textInput = input; }} />
                                           ~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS2532: 'this' is possibly 'undefined'.
     let c = <BigGreeter data-extra="hi" />

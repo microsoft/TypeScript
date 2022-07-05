@@ -1,7 +1,7 @@
-tests/cases/conformance/expressions/literals/literals.ts(8,10): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/literals/literals.ts(8,17): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/literals/literals.ts(9,9): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/expressions/literals/literals.ts(9,21): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/expressions/literals/literals.ts(8,10): error TS2531: 'null' is possibly 'null'.
+tests/cases/conformance/expressions/literals/literals.ts(8,17): error TS2531: 'null' is possibly 'null'.
+tests/cases/conformance/expressions/literals/literals.ts(9,9): error TS2532: 'undefined' is possibly 'undefined'.
+tests/cases/conformance/expressions/literals/literals.ts(9,21): error TS2532: 'undefined' is possibly 'undefined'.
 tests/cases/conformance/expressions/literals/literals.ts(19,9): error TS1085: Octal literals are not available when targeting ECMAScript 5 and higher. Use the syntax '0o1'.
 tests/cases/conformance/expressions/literals/literals.ts(24,9): error TS1085: Octal literals are not available when targeting ECMAScript 5 and higher. Use the syntax '-0o3'.
 
@@ -16,14 +16,14 @@ tests/cases/conformance/expressions/literals/literals.ts(24,9): error TS1085: Oc
     
     var nu = null / null;
              ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS2531: 'null' is possibly 'null'.
                     ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS2531: 'null' is possibly 'null'.
     var u = undefined / undefined;
             ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS2532: 'undefined' is possibly 'undefined'.
                         ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS2532: 'undefined' is possibly 'undefined'.
     
     var b: boolean;
     var b = true;

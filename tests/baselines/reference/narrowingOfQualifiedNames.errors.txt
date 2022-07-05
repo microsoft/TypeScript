@@ -1,5 +1,5 @@
-tests/cases/compiler/narrowingOfQualifiedNames.ts(33,25): error TS2532: Object is possibly 'undefined'.
-tests/cases/compiler/narrowingOfQualifiedNames.ts(38,29): error TS2532: Object is possibly 'undefined'.
+tests/cases/compiler/narrowingOfQualifiedNames.ts(33,25): error TS2532: 'foo.a.b' is possibly 'undefined'.
+tests/cases/compiler/narrowingOfQualifiedNames.ts(38,29): error TS2532: 'foo.a.b' is possibly 'undefined'.
 
 
 ==== tests/cases/compiler/narrowingOfQualifiedNames.ts (2 errors) ====
@@ -37,14 +37,14 @@ tests/cases/compiler/narrowingOfQualifiedNames.ts(38,29): error TS2532: Object i
             type B = typeof foo.a.b;
             type C = typeof foo.a.b.c;
                             ~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS2532: 'foo.a.b' is possibly 'undefined'.
     
             for(const _ of [1]) {
                 type A = typeof foo.a;
                 type B = typeof foo.a.b;
                 type C = typeof foo.a.b.c;
                                 ~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS2532: 'foo.a.b' is possibly 'undefined'.
     
                 if (foo.a.b) {
                     type A = typeof foo.a;

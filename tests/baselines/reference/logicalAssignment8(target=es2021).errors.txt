@@ -1,4 +1,4 @@
-tests/cases/conformance/es2021/logicalAssignment/logicalAssignment8.ts(12,5): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/es2021/logicalAssignment/logicalAssignment8.ts(12,5): error TS2532: '(results &&= bar?.value ?? [])' is possibly 'undefined'.
 
 
 ==== tests/cases/conformance/es2021/logicalAssignment/logicalAssignment8.ts (1 errors) ====
@@ -15,6 +15,6 @@ tests/cases/conformance/es2021/logicalAssignment/logicalAssignment8.ts(12,5): er
     function foo3(results: number[] | undefined) {
         (results &&= bar?.value ?? []).push(100);
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS2532: '(results &&= bar?.value ?? [])' is possibly 'undefined'.
     }
     

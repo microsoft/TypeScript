@@ -1,4 +1,4 @@
-tests/cases/conformance/jsx/file.tsx(32,45): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/jsx/file.tsx(32,45): error TS2532: 'this' is possibly 'undefined'.
 
 
 ==== tests/cases/conformance/jsx/file.tsx (1 errors) ====
@@ -35,6 +35,6 @@ tests/cases/conformance/jsx/file.tsx(32,45): error TS2532: Object is possibly 'u
     let e2 = <EmptyProp {...j} />
     let e3 = <EmptyProp {...{ ref: (input) => { this.textInput = input; } }} />
                                                 ~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS2532: 'this' is possibly 'undefined'.
     let e4 = <EmptyProp data-prop />
     let e5 = <EmptyProp {...{ "data-prop": true}} />
