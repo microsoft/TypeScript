@@ -36,7 +36,7 @@ namespace ts.server {
     export class SessionClient implements LanguageService {
         private sequence = 0;
         private lineMaps = new Map<string, number[]>();
-        private messages: string[] = [];
+        private messages = createQueue<string>();
         private lastRenameEntry: RenameEntry | undefined;
         private preferences: UserPreferences | undefined;
 
@@ -44,7 +44,7 @@ namespace ts.server {
         }
 
         public onMessage(message: string): void {
-            this.messages.push(message);
+            this.messages.enqueue(message);
         }
 
         private writeMessage(message: string): void {
@@ -95,7 +95,7 @@ namespace ts.server {
             let foundResponseMessage = false;
             let response!: T;
             while (!foundResponseMessage) {
-                const lastMessage = this.messages.shift()!;
+                const lastMessage = this.messages.dequeue()!;
                 Debug.assert(!!lastMessage, "Did not receive any responses.");
                 const responseBody = extractMessage(lastMessage);
                 try {

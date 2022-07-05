@@ -1,0 +1,32 @@
+=== tests/cases/compiler/unresolvableSelfReferencingAwaitedUnion.ts ===
+// repro #49646
+
+type EnvFunction = <T>() => T;
+>EnvFunction : <T>() => T
+
+type SimpleType = string | Promise<SimpleType>;
+>SimpleType : string | Promise<SimpleType>
+
+declare const simple: SimpleType;
+>simple : SimpleType
+
+const env: EnvFunction = () => simple;
+>env : EnvFunction
+>() => simple : () => SimpleType
+>simple : SimpleType
+
+// repro #49723
+
+type T1 = 1 | Promise<T1> | T1[];
+>T1 : 1 | Promise<T1> | T1[]
+
+export async function myFunction(param: T1) {
+>myFunction : (param: T1) => Promise<void>
+>param : T1
+
+  const awaited = await param
+>awaited : 1 | T1[]
+>await param : 1 | T1[]
+>param : T1
+}
+

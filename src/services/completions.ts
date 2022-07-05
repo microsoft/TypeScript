@@ -507,87 +507,61 @@ namespace ts.Completions {
         }
 
         const entries = createSortedArray<CompletionEntry>();
-
-        if (isUncheckedFile(sourceFile, compilerOptions)) {
-            const uniqueNames = getCompletionEntriesFromSymbols(
-                symbols,
-                entries,
-                /*replacementToken*/ undefined,
-                contextToken,
-                location,
-                sourceFile,
-                host,
-                program,
-                getEmitScriptTarget(compilerOptions),
-                log,
-                completionKind,
-                preferences,
-                compilerOptions,
-                formatContext,
-                isTypeOnlyLocation,
-                propertyAccessToConvert,
-                isJsxIdentifierExpected,
-                isJsxInitializer,
-                importCompletionNode,
-                recommendedCompletion,
-                symbolToOriginInfoMap,
-                symbolToSortTextMap,
-                isJsxIdentifierExpected,
-                isRightOfOpenTag,
-            );
-            getJSCompletionEntries(sourceFile, location.pos, uniqueNames, getEmitScriptTarget(compilerOptions), entries);
+        const isChecked = isCheckedFile(sourceFile, compilerOptions);
+        if (isChecked && !isNewIdentifierLocation && (!symbols || symbols.length === 0) && keywordFilters === KeywordCompletionFilters.None) {
+            return undefined;
         }
-        else {
-            if (!isNewIdentifierLocation && (!symbols || symbols.length === 0) && keywordFilters === KeywordCompletionFilters.None) {
-                return undefined;
-            }
-
-            getCompletionEntriesFromSymbols(
-                symbols,
-                entries,
-                /*replacementToken*/ undefined,
-                contextToken,
-                location,
-                sourceFile,
-                host,
-                program,
-                getEmitScriptTarget(compilerOptions),
-                log,
-                completionKind,
-                preferences,
-                compilerOptions,
-                formatContext,
-                isTypeOnlyLocation,
-                propertyAccessToConvert,
-                isJsxIdentifierExpected,
-                isJsxInitializer,
-                importCompletionNode,
-                recommendedCompletion,
-                symbolToOriginInfoMap,
-                symbolToSortTextMap,
-                isJsxIdentifierExpected,
-                isRightOfOpenTag,
-            );
-        }
+        const uniqueNames = getCompletionEntriesFromSymbols(
+            symbols,
+            entries,
+            /*replacementToken*/ undefined,
+            contextToken,
+            location,
+            sourceFile,
+            host,
+            program,
+            getEmitScriptTarget(compilerOptions),
+            log,
+            completionKind,
+            preferences,
+            compilerOptions,
+            formatContext,
+            isTypeOnlyLocation,
+            propertyAccessToConvert,
+            isJsxIdentifierExpected,
+            isJsxInitializer,
+            importCompletionNode,
+            recommendedCompletion,
+            symbolToOriginInfoMap,
+            symbolToSortTextMap,
+            isJsxIdentifierExpected,
+            isRightOfOpenTag,
+        );
 
         if (keywordFilters !== KeywordCompletionFilters.None) {
-            const entryNames = new Set(entries.map(e => e.name));
             for (const keywordEntry of getKeywordCompletions(keywordFilters, !insideJsDocTagTypeExpression && isSourceFileJS(sourceFile))) {
-                if (isTypeOnlyLocation && isTypeKeyword(stringToToken(keywordEntry.name)!) || !entryNames.has(keywordEntry.name)) {
+                if (isTypeOnlyLocation && isTypeKeyword(stringToToken(keywordEntry.name)!) || !uniqueNames.has(keywordEntry.name)) {
+                    uniqueNames.add(keywordEntry.name);
                     insertSorted(entries, keywordEntry, compareCompletionEntries, /*allowDuplicates*/ true);
                 }
             }
         }
 
-        const entryNames = new Set(entries.map(e => e.name));
         for (const keywordEntry of getContextualKeywords(contextToken, position)) {
-            if (!entryNames.has(keywordEntry.name)) {
+            if (!uniqueNames.has(keywordEntry.name)) {
+                uniqueNames.add(keywordEntry.name);
                 insertSorted(entries, keywordEntry, compareCompletionEntries, /*allowDuplicates*/ true);
             }
         }
 
         for (const literal of literals) {
-            insertSorted(entries, createCompletionEntryForLiteral(sourceFile, preferences, literal), compareCompletionEntries, /*allowDuplicates*/ true);
+            const literalEntry = createCompletionEntryForLiteral(sourceFile, preferences, literal);
+            uniqueNames.add(literalEntry.name);
+            insertSorted(entries, literalEntry, compareCompletionEntries, /*allowDuplicates*/ true);
+        }
+
+        if (!isChecked) {
+            getJSCompletionEntries(sourceFile, location.pos, uniqueNames, getEmitScriptTarget(compilerOptions), entries);
         }
 
         return {
@@ -601,8 +575,8 @@ namespace ts.Completions {
         };
     }
 
-    function isUncheckedFile(sourceFile: SourceFile, compilerOptions: CompilerOptions): boolean {
-        return isSourceFileJS(sourceFile) && !isCheckJsEnabledForFile(sourceFile, compilerOptions);
+    function isCheckedFile(sourceFile: SourceFile, compilerOptions: CompilerOptions): boolean {
+        return !isSourceFileJS(sourceFile) || !!isCheckJsEnabledForFile(sourceFile, compilerOptions);
     }
 
     function isMemberCompletionKind(kind: CompletionKind): boolean {
@@ -1942,7 +1916,7 @@ namespace ts.Completions {
         cancellationToken?: CancellationToken,
     ): CompletionData | Request | undefined {
         const typeChecker = program.getTypeChecker();
-        const inUncheckedFile = isUncheckedFile(sourceFile, compilerOptions);
+        const inCheckedFile = isCheckedFile(sourceFile, compilerOptions);
         let start = timestamp();
         let currentToken = getTokenAtPosition(sourceFile, position); // TODO: GH#15853
         // We will check for jsdoc comments with insideComment and getJsDocTagAtPosition. (TODO: that seems rather inefficient to check the same thing so many times.)
@@ -2396,20 +2370,20 @@ namespace ts.Completions {
             }
 
             const propertyAccess = node.kind === SyntaxKind.ImportType ? node as ImportTypeNode : node.parent as PropertyAccessExpression | QualifiedName;
-            if (inUncheckedFile) {
+            if (inCheckedFile) {
+                for (const symbol of type.getApparentProperties()) {
+                    if (typeChecker.isValidPropertyAccessForCompletions(propertyAccess, type, symbol)) {
+                        addPropertySymbol(symbol, /* insertAwait */ false, insertQuestionDot);
+                    }
+                }
+            }
+            else {
                 // In javascript files, for union types, we don't just get the members that
                 // the individual types have in common, we also include all the members that
                 // each individual type has. This is because we're going to add all identifiers
                 // anyways. So we might as well elevate the members that were at least part
                 // of the individual types to a higher status since we know what they are.
                 symbols.push(...filter(getPropertiesForCompletion(type, typeChecker), s => typeChecker.isValidPropertyAccessForCompletions(propertyAccess, type, s)));
-            }
-            else {
-                for (const symbol of type.getApparentProperties()) {
-                    if (typeChecker.isValidPropertyAccessForCompletions(propertyAccess, type, symbol)) {
-                        addPropertySymbol(symbol, /* insertAwait */ false, insertQuestionDot);
-                    }
-                }
             }
 
             if (insertAwait && preferences.includeCompletionsWithInsertText) {

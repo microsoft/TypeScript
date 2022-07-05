@@ -1,0 +1,103 @@
+=== tests/cases/compiler/inferTypeConstraintInstantiationCircularity.ts ===
+type AMappedType<T> = { [KeyType in keyof T]: number };
+>AMappedType : AMappedType<T>
+
+type HasM = {
+>HasM : { m: number; }
+
+  m: number;
+>m : number
+
+};
+
+// Simplified repro from #48059
+
+interface X1<
+  T extends HasM,
+  Output = AMappedType<{ s: number; } & { [k in keyof T]: number; }>
+>s : number
+
+> {
+  tee: T;
+>tee : T
+
+  output: Output;
+>output : Output
+}
+
+type F1<T> = T extends X1<infer U> ? U : never;
+>F1 : F1<T>
+
+// With default inlined
+
+interface X2<
+  T extends HasM,
+  Output
+> {
+  tee: T;
+>tee : T
+
+  output: Output;
+>output : Output
+}
+
+type F2<T> = T extends X2<infer U, AMappedType<{ s: number; } & { [k in keyof (infer U)]: number; }>> ? U : never;
+>F2 : F2<T>
+>s : number
+
+// Original repro
+
+type Simplify<T> = {[KeyType in keyof T]: T[KeyType]};
+>Simplify : Simplify<T>
+
+type optionalKeys<T extends object> = {
+>optionalKeys : optionalKeys<T>
+
+    [k in keyof T]: undefined extends T[k] ? k : never;
+}[keyof T];
+
+type requiredKeys<T extends object> = Exclude<keyof T, optionalKeys<T>>;
+>requiredKeys : requiredKeys<T>
+
+export type addQuestionMarks<T extends object> = {
+>addQuestionMarks : addQuestionMarks<T>
+
+    [k in optionalKeys<T>]?: T[k];
+} & {
+    [k in requiredKeys<T>]: T[k];
+};
+
+type ZodRawShape = {
+>ZodRawShape : { [k: string]: ZodType<any>; }
+
+    [k: string]: ZodType<any>;
+>k : string
+
+};
+
+interface ZodType<Output> {
+  _type: Output;
+>_type : Output
+}
+
+interface ZodObject<
+  T extends ZodRawShape,
+  Output = Simplify<
+    {
+      [k in optionalKeys<T>]?: T[k];
+    } & {
+      [k in requiredKeys<T>]: T[k];
+    }
+  >
+> extends ZodType<Output> {
+  readonly _shape: T;
+>_shape : T
+}
+
+type MyObject<T> = T extends ZodObject<infer U>
+>MyObject : MyObject<T>
+
+  ? U extends ZodRawShape
+    ? U
+    : never
+  : never;

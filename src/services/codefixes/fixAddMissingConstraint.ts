@@ -51,7 +51,7 @@ namespace ts.codefix {
         if (!newConstraint) return;
         const newConstraintText = newConstraint[1];
 
-        changes.insertText(related.file!, related.start! + related.length!, ` extends ${newConstraintText}`);
+        changes.insertText(related.file!, decl.name.end, ` extends ${newConstraintText}`);
     }
 
     function findAncestorMatchingSpan(sourceFile: SourceFile, span: TextSpan): Node {

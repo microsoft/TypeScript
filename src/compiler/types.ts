@@ -4026,6 +4026,7 @@ namespace ts {
     export interface WriteFileCallbackData {
         /*@internal*/ sourceMapUrlPos?: number;
         /*@internal*/ buildInfo?: BuildInfo;
+        /*@internal*/ diagnostics?: readonly DiagnosticWithLocation[];
     }
     export type WriteFileCallback = (
         fileName: string,
@@ -4335,7 +4336,6 @@ namespace ts {
         diagnostics: readonly Diagnostic[];
         emittedFiles?: string[]; // Array of files the compiler wrote to disk
         /* @internal */ sourceMaps?: SourceMapEmitResult[];  // Array of sourceMapData if compiler emitted sourcemaps
-        /* @internal */ exportedModulesFromDeclarationEmit?: ExportedModulesFromDeclarationEmit;
     }
 
     /* @internal */
@@ -6025,6 +6025,7 @@ namespace ts {
     export const enum TypeMapKind {
         Simple,
         Array,
+        Deferred,
         Function,
         Composite,
         Merged,
@@ -6034,7 +6035,8 @@ namespace ts {
     export type TypeMapper =
         | { kind: TypeMapKind.Simple, source: Type, target: Type }
         | { kind: TypeMapKind.Array, sources: readonly Type[], targets: readonly Type[] | undefined }
-        | { kind: TypeMapKind.Function, func: (t: Type) => Type }
+        | { kind: TypeMapKind.Deferred, sources: readonly Type[], targets: (() => Type)[] }
+        | { kind: TypeMapKind.Function, func: (t: Type) => Type, debugInfo?: () => string }
         | { kind: TypeMapKind.Composite | TypeMapKind.Merged, mapper1: TypeMapper, mapper2: TypeMapper };
 
     export const enum InferencePriority {
@@ -6981,7 +6983,6 @@ namespace ts {
         // For testing:
         /*@internal*/ disableUseFileVersionAsSignature?: boolean;
         /*@internal*/ storeFilesChangingSignatureDuringEmit?: boolean;
-        /*@internal*/ now?(): Date;
     }
 
     /** true if --out otherwise source file name */
@@ -8997,5 +8998,12 @@ namespace ts {
     export interface PseudoBigInt {
         negative: boolean;
         base10Value: string;
+    }
+
+    /* @internal */
+    export interface Queue<T> {
+        enqueue(...items: T[]): void;
+        dequeue(): T;
+        isEmpty(): boolean;
     }
 }
