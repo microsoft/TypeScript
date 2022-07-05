@@ -580,14 +580,14 @@ namespace ts.moduleSpecifiers {
                 // causes a module specifier to have an extension, i.e. the extension comes from the module specifier in a JS/TS file
                 // and matches the '*'. For example:
                 //
-                // Module Specifier      | Path Mapping                  | Interpolation       | Resolution Action
+                // Module Specifier      | Path Mapping (key: [pattern]) | Interpolation       | Resolution Action
                 // ---------------------->------------------------------->--------------------->---------------------------------------------------------------
                 // import "@app/foo"    -> "@app/*": ["./src/app/*.ts"] -> "./src/app/foo.ts" -> tryFile("./src/app/foo.ts") || [continue resolution algorithm]
                 // import "@app/foo.ts" -> "@app/*": ["./src/app/*"]    -> "./src/app/foo.ts" -> [continue resolution algorithm]
                 //
                 // (https://github.com/microsoft/TypeScript/blob/ad4ded80e1d58f0bf36ac16bea71bc10d9f09895/src/compiler/moduleNameResolver.ts#L2509-L2516)
                 //
-                // The interpolation produced by both scenarios is identical, but in only the former, where the extension is encoded in
+                // The interpolation produced by both scenarios is identical, but only in the former, where the extension is encoded in
                 // the path mapping rather than in the module specifier, will we prioritize a file lookup on the interpolation result.
                 // (In fact, currently, the latter scenario will necessarily fail since no resolution mode recognizes '.ts' as a valid
                 // extension for a module specifier.)
@@ -607,7 +607,10 @@ namespace ts.moduleSpecifiers {
                 // relative module specifiers to run the interpolation (a) is actually valid for the module resolution mode, (b) takes
                 // into account the existence of other files (e.g. 'dist/wow.js' cannot refer to 'dist/wow.js.js' if 'dist/wow.js'
                 // exists) and (c) that they are ordered by preference. The last row shows that the filename result and module
-                // specifier results are not mutually exclusive.
+                // specifier results are not mutually exclusive. Note that the filename result is a higher priority in module
+                // resolution, but as long criteria (b) above is met, I don't think its result needs to be the highest priority result
+                // in module specifier generation. I have included it last, as it's difficult to tell exactly where it should be
+                // sorted among the others for a particular value of `importModuleSpecifierEnding`.
                 const candidates = deduplicate(allowedEndings.map(ending => removeExtensionAndIndexPostFix(relativeToBaseUrl, ending, compilerOptions, host)), equateValues);
                 if (tryGetExtensionFromPath(pattern)) {
                     pushIfUnique(candidates, relativeToBaseUrl);
