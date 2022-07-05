@@ -121,7 +121,7 @@ namespace ts.moduleSpecifiers {
         const info = getInfo(importingSourceFileName, host);
         const modulePaths = getAllModulePaths(importingSourceFileName, toFileName, host, userPreferences, options);
         return firstDefined(modulePaths, modulePath => tryGetModuleNameAsNodeModule(modulePath, info, importingSourceFile, host, compilerOptions, userPreferences, /*packageNameOnly*/ undefined, options.overrideImportMode)) ||
-            getLocalModuleSpecifier(toFileName, info, compilerOptions, host, preferences);
+            getLocalModuleSpecifier(toFileName, info, compilerOptions, host, options.overrideImportMode || importingSourceFile.impliedNodeFormat, preferences);
     }
 
     export function tryGetModuleSpecifiersFromCache(
@@ -257,7 +257,7 @@ namespace ts.moduleSpecifiers {
             }
 
             if (!specifier && !modulePath.isRedirect) {
-                const local = getLocalModuleSpecifier(modulePath.path, info, compilerOptions, host, preferences);
+                const local = getLocalModuleSpecifier(modulePath.path, info, compilerOptions, host, options.overrideImportMode || importingSourceFile.impliedNodeFormat, preferences);
                 if (pathIsBareSpecifier(local)) {
                     pathsSpecifiers = append(pathsSpecifiers, local);
                 }
@@ -293,7 +293,7 @@ namespace ts.moduleSpecifiers {
         return { getCanonicalFileName, importingSourceFileName, sourceDirectory };
     }
 
-    function getLocalModuleSpecifier(moduleFileName: string, info: Info, compilerOptions: CompilerOptions, host: ModuleSpecifierResolutionHost, { ending, relativePreference }: Preferences): string {
+    function getLocalModuleSpecifier(moduleFileName: string, info: Info, compilerOptions: CompilerOptions, host: ModuleSpecifierResolutionHost, importMode: SourceFile["impliedNodeFormat"], { ending, relativePreference }: Preferences): string {
         const { baseUrl, paths, rootDirs } = compilerOptions;
         const { sourceDirectory, getCanonicalFileName } = info;
         const relativePath = rootDirs && tryGetModuleNameFromRootDirs(rootDirs, moduleFileName, sourceDirectory, getCanonicalFileName, ending, compilerOptions) ||
@@ -308,7 +308,7 @@ namespace ts.moduleSpecifiers {
             return relativePath;
         }
 
-        const fromPaths = paths && tryGetModuleNameFromPaths(relativeToBaseUrl, paths, ending, host, compilerOptions);
+        const fromPaths = paths && tryGetModuleNameFromPaths(relativeToBaseUrl, paths, getAllowedEndings(ending, compilerOptions, importMode), host, compilerOptions);
         const nonRelative = fromPaths === undefined && baseUrl !== undefined ? removeExtensionAndIndexPostFix(relativeToBaseUrl, ending, compilerOptions) : fromPaths;
         if (!nonRelative) {
             return relativePath;
@@ -507,7 +507,7 @@ namespace ts.moduleSpecifiers {
         if (allFileNames.size) {
             const remainingPaths = arrayFrom(allFileNames.values());
             if (remainingPaths.length > 1) remainingPaths.sort(comparePathsByRedirectAndNumberOfDirectorySeparators);
-            sortedPaths.push(...remainingPath);
+            sortedPaths.push(...remainingPaths);
         }
 
         return sortedPaths;
@@ -558,92 +558,77 @@ namespace ts.moduleSpecifiers {
         }
     }
 
-    function tryGetModuleNameFromPaths(relativeToBaseUrl: string, paths: MapLike<readonly string[]>, preferredEnding: Ending, host: ModuleSpecifierResolutionHost, compilerOptions: CompilerOptions): string | undefined {
+    function getAllowedEndings(preferredEnding: Ending, compilerOptions: CompilerOptions, importMode: SourceFile["impliedNodeFormat"]) {
+        if (getEmitModuleResolutionKind(compilerOptions) >= ModuleResolutionKind.Node16 && importMode === ModuleKind.ESNext) {
+            return [Ending.JsExtension];
+        }
+        switch (preferredEnding) {
+            case Ending.JsExtension: return [Ending.JsExtension, Ending.Minimal, Ending.Index];
+            case Ending.Index: return [Ending.Index, Ending.Minimal, Ending.JsExtension];
+            case Ending.Minimal: return [Ending.Minimal, Ending.Index, Ending.JsExtension];
+            default: Debug.assertNever(preferredEnding);
+        }
+    }
+
+    function tryGetModuleNameFromPaths(relativeToBaseUrl: string, paths: MapLike<readonly string[]>, allowedEndings: Ending[], host: ModuleSpecifierResolutionHost, compilerOptions: CompilerOptions): string | undefined {
         for (const key in paths) {
             for (const patternText of paths[key]) {
-
-                const pattern = removeFileExtension(normalizePath(patternText));
+                const pattern = normalizePath(patternText);
                 const indexOfStar = pattern.indexOf("*");
+                // In module resolution, if `pattern` itself has an extension, a file with that extension is looked up directly,
+                // meaning a '.ts' or '.d.ts' extension is allowed to resolve. This is distinct from the case where a '*' substitution
+                // causes a module specifier to have an extension, i.e. the extension comes from the module specifier in a JS/TS file
+                // and matches the '*'. For example:
+                //
+                // Module Specifier      | Path Mapping                  | Interpolation       | Resolution Action
+                // ---------------------->------------------------------->--------------------->---------------------------------------------------------------
+                // import "@app/foo"    -> "@app/*": ["./src/app/*.ts"] -> "./src/app/foo.ts" -> tryFile("./src/app/foo.ts") || [continue resolution algorithm]
+                // import "@app/foo.ts" -> "@app/*": ["./src/app/*"]    -> "./src/app/foo.ts" -> [continue resolution algorithm]
+                //
+                // (https://github.com/microsoft/TypeScript/blob/ad4ded80e1d58f0bf36ac16bea71bc10d9f09895/src/compiler/moduleNameResolver.ts#L2509-L2516)
+                //
+                // The interpolation produced by both scenarios is identical, but in only the former, where the extension is encoded in
+                // the path mapping rather than in the module specifier, will we prioritize a file lookup on the interpolation result.
+                // (In fact, currently, the latter scenario will necessarily fail since no resolution mode recognizes '.ts' as a valid
+                // extension for a module specifier.)
+                //
+                // Here, this means we need to be careful about whether we generate a match from the target filename (typically with a
+                // .ts extension) or a series of module specifiers representing :
+                //
+                // Filename            | Relative Module Specifier Candidates         | Path Mapping                 | Filename Result    | Module Specifier Results
+                // --------------------<----------------------------------------------<------------------------------<-------------------||----------------------------
+                // dist/haha.d.ts      <- dist/haha, dist/haha.js                     <- "@app/*": ["./dist/*.d.ts"] <- @app/haha        || (none)
+                // dist/haha.d.ts      <- dist/haha, dist/haha.js                     <- "@app/*": ["./dist/*"]      <- (none)           || @app/haha, @app/haha.js
+                // dist/foo/index.d.ts <- dist/foo, dist/foo/index, dist/foo/index.js <- "@app/*": ["./dist/*.d.ts"] <- @app/foo/index   || (none)
+                // dist/foo/index.d.ts <- dist/foo, dist/foo/index, dist/foo/index.js <- "@app/*": ["./dist/*"]      <- (none)           || @app/foo, @app/foo/index, @app/foo/index.js
+                // dist/wow.js.js      <- dist/wow.js, dist/wow.js.js                 <- "@app/*": ["./dist/*.js"]   <- @app/wow.js      || @app/wow, @app/wow.js
+                //
+                // The "Filename Result" can be generated only if `pattern` has an extension. Care must be taken that the list of
+                // relative module specifiers to run the interpolation (a) is actually valid for the module resolution mode, (b) takes
+                // into account the existence of other files (e.g. 'dist/wow.js' cannot refer to 'dist/wow.js.js' if 'dist/wow.js'
+                // exists) and (c) that they are ordered by preference. The last row shows that the filename result and module
+                // specifier results are not mutually exclusive.
+                const candidates = deduplicate(allowedEndings.map(ending => removeExtensionAndIndexPostFix(relativeToBaseUrl, ending, compilerOptions, host)), equateValues);
+                if (tryGetExtensionFromPath(pattern)) {
+                    pushIfUnique(candidates, relativeToBaseUrl);
+                }
+
                 if (indexOfStar !== -1) {
-                    const prefix = pattern.substr(0, indexOfStar);
-                    const suffix = pattern.substr(indexOfStar + 1);
-                    // In module resolution, if `pattern` itself has an extension, a file with that extension is looked up directly,
-                    // meaning a '.ts' or '.d.ts' extension is allowed to resolve. This is distinct from the case where a '*' substitution
-                    // causes a module specifier to have an extension, i.e. the extension comes from the module specifier in a JS/TS file
-                    // and matches the '*'. For example:
-                    //
-                    // Module Specifier      | Path Mapping                  | Interpolation       | Resolution Action
-                    // ---------------------->------------------------------->--------------------->---------------------------------------------------------------
-                    // import "@app/foo"    -> "@app/*": ["./src/app/*.ts"] -> "./src/app/foo.ts" -> tryFile("./src/app/foo.ts") || [continue resolution algorithm]
-                    // import "@app/foo.ts" -> "@app/*": ["./src/app/*"]    -> "./src/app/foo.ts" -> [continue resolution algorithm]
-                    //
-                    // (https://github.com/microsoft/TypeScript/blob/ad4ded80e1d58f0bf36ac16bea71bc10d9f09895/src/compiler/moduleNameResolver.ts#L2509-L2516)
-                    //
-                    // The interpolation produced by both scenarios is identical, but in only the former, where the extension is encoded in
-                    // the path mapping rather than in the module specifier, will we prioritize a file lookup on the interpolation result.
-                    // (In fact, currently, the latter scenario will necessarily fail since no resolution mode recognizes '.ts' as a valid
-                    // extension for a module specifier.)
-                    //
-                    // Here, this means we need to be careful about whether we generate a match from the target filename (typically with a
-                    // .ts extension) or a series of module specifiers representing :
-                    //
-                    // Filename            | Relative Module Specifiers                   | Path Mapping                 | Filename Candidate | Module Specifier Candidates
-                    // --------------------<----------------------------------------------<------------------------------<-------------------||----------------------------
-                    // dist/haha.d.ts      <- dist/haha, dist/haha.js                     <- "@app/*": ["./dist/*.d.ts"] <- @app/haha        || (none)
-                    // dist/haha.d.ts      <- dist/haha, dist/haha.js                     <- "@app/*": ["./dist/*"]      <- (none)           || @app/haha, @app/haha.js
-                    // dist/foo/index.d.ts <- dist/foo, dist/foo/index, dist/foo/index.js <- "@app/*": ["./dist/*.d.ts"] <- @app/foo/index   || (none)
-                    // dist/foo/index.d.ts <- dist/foo, dist/foo/index, dist/foo/index.js <- "@app/*": ["./dist/*"]      <- (none)           || @app/foo, @app/foo/index, @app/foo/index.js
-                    // dist/wow.js.js      <- dist/wow.js, dist/wow.js.js                 <- "@app/*": ["./dist/*.js"]   <- @app/wow.js      || @app/wow, @app/wow.js
-                    //
-                    // The "Filename Candidate" can be generated only if `pattern` has an extension. While it represents a higher priority
-                    // match in module resolution, as long as the list of relative module specifiers takes into account the existence of other
-                    // files (e.g. 'dist/wow.js' cannot refer to 'dist/wow.js.js' if 'dist/wow.js' exists), I don't think it necessarily must
-                    // be the top priority module specifier generated here. Care must be taken that (a) the list of relative module specifiers
-                    // to run the interpolation are actually valid for the module resolution mode, and (b) that they are ordered by preference.
-                    // The last row shows that the filename candidate and module specifier candidates are not mutually exclusive.
-                    if (relativeToBaseUrl.length >= prefix.length + suffix.length &&
-                        startsWith(relativeToBaseUrl, prefix) &&
-                        endsWith(relativeToBaseUrl, suffix) ||
-                        !suffix && relativeToBaseUrl === removeTrailingDirectorySeparator(prefix)) {
-                        const matchedStar = relativeToBaseUrl.substr(prefix.length, relativeToBaseUrl.length - suffix.length - prefix.length);
-                        return key.replace("*", matchedStar);
+                    const prefix = pattern.substring(0, indexOfStar);
+                    const suffix = pattern.substring(indexOfStar + 1);
+                    for (const input of candidates) {
+                        if (input.length >= prefix.length + suffix.length &&
+                            startsWith(input, prefix) &&
+                            endsWith(input, suffix)) {
+                            const matchedStar = input.substring(prefix.length, input.length - suffix.length);
+                            return key.replace("*", matchedStar);
+                        }
                     }
                 }
-                else if (pattern === relativeToBaseUrl || pattern === relativeToBaseUrlWithIndex) {
+                else if (contains(candidates, pattern)) {
                     return key;
                 }
-
-                // const pattern = normalizePath(patternText);
-                // const indexOfStar = key.indexOf("*");
-                // if (indexOfStar !== -1) {
-                //     const prefix = key.substring(0, indexOfStar);
-                //     const suffix = key.substring(indexOfStar + 1);
-                //     const matchedStar = relativeToBaseUrl.substring(prefix.length, relativeToBaseUrl.length - suffix.length);
-                //     const spec = prefix + matchedStar + suffix;
-                //     const file = pattern.replace("*", matchedStar);
-                //     if (resultIsMatch(file)) {
-                //         if (suffix) {
-                //             // If the pattern had a suffix after the '*', we can't change the ending.
-                //             return spec;
-                //         }
-                //         let result = removeExtensionAndIndexPostFix(spec, preferredEnding, compilerOptions, host);
-                //         // If we possibly stripped off a `/index`, there's a chance the result no longer matches the pattern.
-                //         if (preferredEnding === Ending.Minimal && !startsWith(result, prefix)) {
-                //             result = removeExtensionAndIndexPostFix(spec, Ending.Index, compilerOptions, host);
-                //         }
-                //         return result;
-                //     }
-                // }
-                // else if (resultIsMatch(pattern)) {
-                //     return key;
-                // }
             }
-        }
-
-        function resultIsMatch(result: string) {
-            if (result === relativeToBaseUrl) return true;
-            const allowedEndings = [Ending.Minimal, Ending.Index, Ending.JsExtension]; // TODO
-            return allowedEndings.some(ending => removeExtensionAndIndexPostFix(relativeToBaseUrl, ending, compilerOptions, host) === result);
         }
     }
 
@@ -742,10 +727,10 @@ namespace ts.moduleSpecifiers {
 
         // Simplify the full file path to something that can be resolved by Node.
 
+        const preferences = getPreferences(host, userPreferences, options, importingSourceFile);
         let moduleSpecifier = path;
         let isPackageRootPath = false;
         if (!packageNameOnly) {
-            const preferences = getPreferences(host, userPreferences, options, importingSourceFile);
             let packageRootIndex = parts.packageRootIndex;
             let moduleFileName: string | undefined;
             while (true) {
@@ -797,15 +782,17 @@ namespace ts.moduleSpecifiers {
             const packageRootPath = path.substring(0, packageRootIndex);
             const packageJsonPath = combinePaths(packageRootPath, "package.json");
             let moduleFileToTry = path;
+            let maybeBlockedByTypesVersions = false;
             const cachedPackageJson = host.getPackageJsonInfoCache?.()?.getPackageJsonInfo(packageJsonPath);
             if (typeof cachedPackageJson === "object" || cachedPackageJson === undefined && host.fileExists(packageJsonPath)) {
                 const packageJsonContent = cachedPackageJson?.packageJsonContent || JSON.parse(host.readFile!(packageJsonPath)!);
+                const importMode = overrideMode || importingSourceFile.impliedNodeFormat;
                 if (getEmitModuleResolutionKind(options) === ModuleResolutionKind.Node16 || getEmitModuleResolutionKind(options) === ModuleResolutionKind.NodeNext) {
                     // `conditions` *could* be made to go against `importingSourceFile.impliedNodeFormat` if something wanted to generate
                     // an ImportEqualsDeclaration in an ESM-implied file or an ImportCall in a CJS-implied file. But since this function is
                     // usually called to conjure an import out of thin air, we don't have an existing usage to call `getModeForUsageAtIndex`
                     // with, so for now we just stick with the mode of the file.
-                    const conditions = ["node", overrideMode || importingSourceFile.impliedNodeFormat === ModuleKind.ESNext ? "import" : "require", "types"];
+                    const conditions = ["node", importMode === ModuleKind.ESNext ? "import" : "require", "types"];
                     const fromExports = packageJsonContent.exports && typeof packageJsonContent.name === "string"
                         ? tryGetModuleNameFromExports(options, path, packageRootPath, getPackageNameFromTypesPackageName(packageJsonContent.name), packageJsonContent.exports, conditions)
                         : undefined;
@@ -827,19 +814,29 @@ namespace ts.moduleSpecifiers {
                     const fromPaths = tryGetModuleNameFromPaths(
                         subModuleName,
                         versionPaths.paths,
-                        Ending.Minimal,
+                        getAllowedEndings(preferences.ending, options, importMode),
                         host,
                         options
                     );
-                    if (fromPaths !== undefined) {
+                    if (fromPaths === undefined) {
+                        maybeBlockedByTypesVersions = true;
+                    }
+                    else {
                         moduleFileToTry = combinePaths(packageRootPath, fromPaths);
                     }
                 }
                 // If the file is the main module, it can be imported by the package name
                 const mainFileRelative = packageJsonContent.typings || packageJsonContent.types || packageJsonContent.main || "index.js";
-                if (isString(mainFileRelative)) {
+                if (isString(mainFileRelative) && !(maybeBlockedByTypesVersions && matchPatternOrExact(tryParsePatterns(versionPaths!.paths), mainFileRelative))) {
+                    // The 'main' file is also subject to mapping through typesVersions, and we couldn't come up with a path
+                    // explicitly through typesVersions, so if it matches a key in typesVersions now, it's not reachable.
+                    // (The only way this can happen is if some file in a package that's not resolvable from outside the
+                    // package got pulled into the program anyway, e.g. transitively through a file that *is* reachable. It
+                    // happens very easily in fourslash tests though, since every test file listed gets included. See
+                    // importNameCodeFix_typesVersions.ts for an example.)
                     const mainExportFile = toPath(mainFileRelative, packageRootPath, getCanonicalFileName);
                     if (removeFileExtension(mainExportFile) === removeFileExtension(getCanonicalFileName(moduleFileToTry))) {
+                        // ^ An arbitrary removal of file extension for this comparison is almost certainly wrong
                         return { packageRootPath, moduleFileToTry };
                     }
                 }

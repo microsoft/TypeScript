@@ -6,7 +6,7 @@
 // @Filename: /node_modules/unified/package.json
 //// {
 ////   "name": "unified",
-////   "types": "types/ts3.4/index.d.ts",
+////   "types": "types/ts3.444/index.d.ts",
 ////   "typesVersions": {
 ////     ">=4.0": {
 ////       "types/ts3.444/*": [
@@ -33,5 +33,5 @@ verify.importFixModuleSpecifiers("", [
   // This obviously doesn't look like a desired module specifier, but the package.json is misconfigured
   // (taken from a real-world example). The fact that it resolves (according to TS) is good enough to
   // generate it.
-  "unified/types/ts3.444/index",
+  "unified/types/ts3.444/index.js",
 ], { importModuleSpecifierEnding: "js" });
