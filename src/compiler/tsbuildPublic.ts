@@ -1358,7 +1358,7 @@ namespace ts {
         config: ParsedCommandLine
     ) {
         if (program) {
-            if (program && state.write) listFiles(program, state.write);
+            if (state.write) listFiles(program, state.write);
             if (state.host.afterProgramEmitAndDiagnostics) {
                 state.host.afterProgramEmitAndDiagnostics(program);
             }

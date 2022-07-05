@@ -7091,7 +7091,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                     }
                 }
 
-                function serializeSymbol(symbol: Symbol, isPrivate: boolean, propertyAsAlias: boolean) {
+                function serializeSymbol(symbol: Symbol, isPrivate: boolean, propertyAsAlias: boolean): void {
                     // cache visited list based on merged symbol, since we want to use the unmerged top-level symbol, but
                     // still skip reserializing it if we encounter the merged product later on
                     const visitedSym = getMergedSymbol(symbol);
@@ -7104,12 +7104,11 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                     if (skipMembershipCheck || (!!length(symbol.declarations) && some(symbol.declarations, d => !!findAncestor(d, n => n === enclosingDeclaration)))) {
                         const oldContext = context;
                         context = cloneNodeBuilderContext(context);
-                        const result = serializeSymbolWorker(symbol, isPrivate, propertyAsAlias);
+                        serializeSymbolWorker(symbol, isPrivate, propertyAsAlias);
                         if (context.reportedDiagnostic) {
                             oldcontext.reportedDiagnostic = context.reportedDiagnostic; // hoist diagnostic result into outer context
                         }
                         context = oldContext;
-                        return result;
                     }
                 }
 
@@ -7123,7 +7122,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                 // If it's a property: emit `export default _default` with a `_default` prop
                 // If it's a class/interface/function: emit a class/interface/function with a `default` modifier
                 // These forms can merge, eg (`export default 12; export default interface A {}`)
-                function serializeSymbolWorker(symbol: Symbol, isPrivate: boolean, propertyAsAlias: boolean) {
+                function serializeSymbolWorker(symbol: Symbol, isPrivate: boolean, propertyAsAlias: boolean): void {
                     const symbolName = unescapeLeadingUnderscores(symbol.escapedName);
                     const isDefault = symbol.escapedName === InternalSymbolName.Default;
                     if (isPrivate && !(context.flags & NodeBuilderFlags.AllowAnonymousIdentifier) && isStringANonContextualKeyword(symbolName) && !isDefault) {
@@ -10499,7 +10498,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                         error(declaration.typeExpression.type, Diagnostics.Type_alias_0_circularly_references_itself, symbolToString(symbol));
                     }
                     else {
-                        error(isNamedDeclaration(declaration) ? declaration.name : declaration || declaration, Diagnostics.Type_alias_0_circularly_references_itself, symbolToString(symbol));
+                        error(isNamedDeclaration(declaration) ? declaration.name || declaration : declaration, Diagnostics.Type_alias_0_circularly_references_itself, symbolToString(symbol));
                     }
                 }
                 links.declaredType = type;
@@ -31004,7 +31003,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                         argCheckMode = checkMode & CheckMode.IsForStringLiteralArgumentCompletions;
                         if (inferenceContext) {
                             const typeArgumentTypes = inferTypeArguments(node, candidate, args, argCheckMode, inferenceContext);
-                            checkCandidate = getSignatureInstantiation(candidate, typeArgumentTypes, isInJSFile(candidate.declaration), inferenceContext && inferenceContext.inferredTypeParameters);
+                            checkCandidate = getSignatureInstantiation(candidate, typeArgumentTypes, isInJSFile(candidate.declaration), inferenceContext.inferredTypeParameters);
                             // If the original signature has a generic rest type, instantiation may produce a
                             // signature with different arity and we need to perform another arity check.
                             if (getNonArrayRestType(candidate) && !hasCorrectArity(node, args, checkCandidate, signatureHelpTrailingComma)) {
@@ -45014,9 +45013,6 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                     }
                 }
                 else {
-                    return grammarErrorOnNode(initializer, Diagnostics.Initializers_are_not_allowed_in_ambient_contexts);
-                }
-                if (!isConstOrReadonly || isInvalidInitializer) {
                     return grammarErrorOnNode(initializer, Diagnostics.Initializers_are_not_allowed_in_ambient_contexts);
                 }
             }
