@@ -593,7 +593,7 @@ namespace ts.moduleSpecifiers {
                 // extension for a module specifier.)
                 //
                 // Here, this means we need to be careful about whether we generate a match from the target filename (typically with a
-                // .ts extension) or a series of module specifiers representing :
+                // .ts extension) or the possible relative module specifiers representing that file:
                 //
                 // Filename            | Relative Module Specifier Candidates         | Path Mapping                 | Filename Result    | Module Specifier Results
                 // --------------------<----------------------------------------------<------------------------------<-------------------||----------------------------
