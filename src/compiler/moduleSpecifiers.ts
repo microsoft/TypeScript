@@ -791,10 +791,6 @@ namespace ts.moduleSpecifiers {
                 const packageJsonContent = cachedPackageJson?.packageJsonContent || JSON.parse(host.readFile!(packageJsonPath)!);
                 const importMode = overrideMode || importingSourceFile.impliedNodeFormat;
                 if (getEmitModuleResolutionKind(options) === ModuleResolutionKind.Node16 || getEmitModuleResolutionKind(options) === ModuleResolutionKind.NodeNext) {
-                    // `conditions` *could* be made to go against `importingSourceFile.impliedNodeFormat` if something wanted to generate
-                    // an ImportEqualsDeclaration in an ESM-implied file or an ImportCall in a CJS-implied file. But since this function is
-                    // usually called to conjure an import out of thin air, we don't have an existing usage to call `getModeForUsageAtIndex`
-                    // with, so for now we just stick with the mode of the file.
                     const conditions = ["node", importMode === ModuleKind.ESNext ? "import" : "require", "types"];
                     const fromExports = packageJsonContent.exports && typeof packageJsonContent.name === "string"
                         ? tryGetModuleNameFromExports(options, path, packageRootPath, getPackageNameFromTypesPackageName(packageJsonContent.name), packageJsonContent.exports, conditions)
