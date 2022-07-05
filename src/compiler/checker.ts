@@ -791,6 +791,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
         const stringMappingTypes = new Map<string, StringMappingType>();
         const substitutionTypes = new Map<string, SubstitutionType>();
         const subtypeReductionCache = new Map<string, Type[]>();
+        const cachedTypes = new Map<string, Type>();
         const evolvingArrayTypes: EvolvingArrayType[] = [];
         const undefinedProperties: SymbolTable = new Map();
         const markerTypes = new Set<number>();
@@ -1089,6 +1090,15 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
         initializeTypeChecker();
 
         return checker;
+
+        function getCachedType(key: string | undefined) {
+            return key ? cachedTypes.get(key) : undefined;
+        }
+
+        function setCachedType(key: string | undefined, type: Type) {
+            if (key) cachedTypes.set(key, type);
+            return type;
+        }
 
         function getJsxNamespace(location: Node | undefined): __String {
             if (location) {
@@ -21335,8 +21345,13 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                 type.flags & TypeFlags.NumberLiteral ? numberType :
                 type.flags & TypeFlags.BigIntLiteral ? bigintType :
                 type.flags & TypeFlags.BooleanLiteral ? booleanType :
-                type.flags & TypeFlags.Union ? mapType(type as UnionType, getBaseTypeOfLiteralType) :
+                type.flags & TypeFlags.Union ? getBaseTypeOfLiteralTypeUnion(type as UnionType) :
                 type;
+        }
+
+        function getBaseTypeOfLiteralTypeUnion(type: UnionType) {
+            const key = `B${getTypeId(type)}`;
+            return getCachedType(key) ?? setCachedType(key, mapType(type, getBaseTypeOfLiteralType));
         }
 
         function getWidenedLiteralType(type: Type): Type {
@@ -23574,23 +23589,25 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
         // For example, when a variable of type number | string | boolean is assigned a value of type number | boolean,
         // we remove type string.
         function getAssignmentReducedType(declaredType: UnionType, assignedType: Type) {
-            if (declaredType !== assignedType) {
-                if (assignedType.flags & TypeFlags.Never) {
-                    return assignedType;
-                }
-                let reducedType = filterType(declaredType, t => typeMaybeAssignableTo(assignedType, t));
-                if (assignedType.flags & TypeFlags.BooleanLiteral && isFreshLiteralType(assignedType)) {
-                    reducedType = mapType(reducedType, getFreshTypeOfLiteralType); // Ensure that if the assignment is a fresh type, that we narrow to fresh types
-                }
-                // Our crude heuristic produces an invalid result in some cases: see GH#26130.
-                // For now, when that happens, we give up and don't narrow at all.  (This also
-                // means we'll never narrow for erroneous assignments where the assigned type
-                // is not assignable to the declared type.)
-                if (isTypeAssignableTo(assignedType, reducedType)) {
-                    return reducedType;
-                }
+            if (declaredType === assignedType) {
+                return declaredType;
             }
-            return declaredType;
+            if (assignedType.flags & TypeFlags.Never) {
+                return assignedType;
+            }
+            const key = `A${getTypeId(declaredType)},${getTypeId(assignedType)}`;
+            return getCachedType(key) ?? setCachedType(key, getAssignmentReducedTypeWorker(declaredType, assignedType));
+        }
+
+        function getAssignmentReducedTypeWorker(declaredType: UnionType, assignedType: Type) {
+            const filteredType = filterType(declaredType, t => typeMaybeAssignableTo(assignedType, t));
+            // Ensure that we narrow to fresh types if the assignment is a fresh boolean literal type.
+            const reducedType = assignedType.flags & TypeFlags.BooleanLiteral && isFreshLiteralType(assignedType) ? mapType(filteredType, getFreshTypeOfLiteralType) : filteredType;
+            // Our crude heuristic produces an invalid result in some cases: see GH#26130.
+            // For now, when that happens, we give up and don't narrow at all.  (This also
+            // means we'll never narrow for erroneous assignments where the assigned type
+            // is not assignable to the declared type.)
+            return isTypeAssignableTo(assignedType, reducedType) ? reducedType : declaredType;
         }
 
         function isFunctionObjectType(type: ObjectType): boolean {
@@ -25084,7 +25101,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                 const targetType = hasStaticModifier(Debug.checkDefined(symbol.valueDeclaration, "should always have a declaration"))
                     ? getTypeOfSymbol(classSymbol) as InterfaceType
                     : getDeclaredTypeOfSymbol(classSymbol);
-                return getNarrowedType(type, targetType, assumeTrue, isTypeDerivedFrom);
+                return getNarrowedType(type, targetType, assumeTrue, /*checkDerived*/ true);
             }
 
             function narrowTypeByOptionalChainContainment(type: Type, operator: SyntaxKind, value: Expression, assumeTrue: boolean): Type {
@@ -25358,10 +25375,16 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                     if (!nonConstructorTypeInUnion) return type;
                 }
 
-                return getNarrowedType(type, targetType, assumeTrue, isTypeDerivedFrom);
+                return getNarrowedType(type, targetType, assumeTrue, /*checkDerived*/ true);
             }
 
-            function getNarrowedType(type: Type, candidate: Type, assumeTrue: boolean, isRelated: (source: Type, target: Type) => boolean) {
+            function getNarrowedType(type: Type, candidate: Type, assumeTrue: boolean, checkDerived: boolean) {
+                const key = type.flags & TypeFlags.Union ? `N${getTypeId(type)},${getTypeId(candidate)},${(assumeTrue ? 1 : 0) | (checkDerived ? 2 : 0)}` : undefined;
+                return getCachedType(key) ?? setCachedType(key, getNarrowedTypeWorker(type, candidate, assumeTrue, checkDerived));
+            }
+
+            function getNarrowedTypeWorker(type: Type, candidate: Type, assumeTrue: boolean, checkDerived: boolean) {
+                const isRelated = checkDerived ? isTypeDerivedFrom : isTypeSubtypeOf;
                 if (!assumeTrue) {
                     return filterType(type, t => !isRelated(t, candidate));
                 }
@@ -25373,7 +25396,6 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                         return assignableType;
                     }
                 }
-
                 // If the candidate type is a subtype of the target type, narrow to the candidate type.
                 // Otherwise, if the target type is assignable to the candidate type, keep the target type.
                 // Otherwise, if the candidate type is assignable to the target type, narrow to the candidate
@@ -25412,7 +25434,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                     const predicateArgument = getTypePredicateArgument(predicate, callExpression);
                     if (predicateArgument) {
                         if (isMatchingReference(reference, predicateArgument)) {
-                            return getNarrowedType(type, predicate.type, assumeTrue, isTypeSubtypeOf);
+                            return getNarrowedType(type, predicate.type, assumeTrue, /*checkDerived*/ false);
                         }
                         if (strictNullChecks && assumeTrue && optionalChainContainsReference(predicateArgument, reference) &&
                             !(getTypeFacts(predicate.type) & TypeFacts.EQUndefined)) {
@@ -25420,7 +25442,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                         }
                         const access = getDiscriminantPropertyAccess(predicateArgument, type);
                         if (access) {
-                            return narrowTypeByDiscriminant(type, access, t => getNarrowedType(t, predicate.type!, assumeTrue, isTypeSubtypeOf));
+                            return narrowTypeByDiscriminant(type, access, t => getNarrowedType(t, predicate.type!, assumeTrue, /*checkDerived*/ false));
                         }
                     }
                 }
