@@ -4668,7 +4668,7 @@ namespace ts {
 
         // Error handling
         AllowThisInObjectLiteral                = 1 << 15,
-        AllowQualifiedNameInPlaceOfIdentifier    = 1 << 16,
+        AllowQualifiedNameInPlaceOfIdentifier   = 1 << 16,
         /** @deprecated AllowQualifedNameInPlaceOfIdentifier. Use AllowQualifiedNameInPlaceOfIdentifier instead. */
         AllowQualifedNameInPlaceOfIdentifier    = AllowQualifiedNameInPlaceOfIdentifier,
         AllowAnonymousIdentifier                = 1 << 17,
@@ -4710,6 +4710,7 @@ namespace ts {
         UseAliasDefinedOutsideCurrentScope      = 1 << 14, // For a `type T = ... ` defined in a different file, write `T` instead of its value, even though `T` can't be accessed in the current scope.
         UseSingleQuotesForStringLiteralType     = 1 << 28, // Use single quotes for string literal type
         NoTypeReduction                         = 1 << 29, // Don't call getReducedType
+        OmitThisParameter                       = 1 << 30,
 
         // Error Handling
         AllowUniqueESSymbolType                 = 1 << 20, // This is bit 20 to align with the same bit in `NodeBuilderFlags`
@@ -4729,7 +4730,7 @@ namespace ts {
         NodeBuilderFlagsMask = NoTruncation | WriteArrayAsGenericType | UseStructuralFallback | WriteTypeArgumentsOfSignature |
             UseFullyQualifiedType | SuppressAnyReturnType | MultilineObjectLiterals | WriteClassExpressionAsTypeLiteral |
             UseTypeOfFunction | OmitParameterModifiers | UseAliasDefinedOutsideCurrentScope | AllowUniqueESSymbolType | InTypeAlias |
-            UseSingleQuotesForStringLiteralType | NoTypeReduction,
+            UseSingleQuotesForStringLiteralType | NoTypeReduction | OmitThisParameter
     }
 
     export const enum SymbolFormatFlags {
