@@ -1,0 +1,4 @@
+=== tests/cases/compiler/systemModule18.ts ===
+export import React = require("react");
+>React : any
+
