@@ -1,0 +1,29 @@
+tests/cases/compiler/constructorReturningAPrimitive.ts(15,9): error TS2322: Type 'T' is not assignable to type 'B<T>'.
+tests/cases/compiler/constructorReturningAPrimitive.ts(15,9): error TS2409: Return type of constructor signature must be assignable to the instance type of the class.
+
+
+==== tests/cases/compiler/constructorReturningAPrimitive.ts (2 errors) ====
+    // technically not allowed by JavaScript but we don't have a 'not-primitive' constraint
+    // functionally only possible when your class is otherwise devoid of members so of little consequence in practice
+    
+    class A {
+        constructor() {
+            return 1;
+        }
+    }
+    
+    var a = new A();
+    
+    class B<T> {
+        constructor() {
+            var x: T;
+            return x;
+            ~~~~~~~~~
+!!! error TS2322: Type 'T' is not assignable to type 'B<T>'.
+!!! related TS2208 tests/cases/compiler/constructorReturningAPrimitive.ts:12:9: This type parameter might need an `extends B<T>` constraint.
+            ~~~~~~~~~
+!!! error TS2409: Return type of constructor signature must be assignable to the instance type of the class.
+        }
+    }
+    
+    var b = new B<number>();

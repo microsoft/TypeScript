@@ -1,0 +1,24 @@
+tests/cases/conformance/jsx/file.tsx(9,5): error TS2416: Property 'props' in type 'B<U>' is not assignable to the same property in base type 'Component<U, {}>'.
+  Type 'U' is not assignable to type 'U & { children?: ReactNode; }'.
+    Type 'U' is not assignable to type '{ children?: ReactNode; }'.
+
+
+==== tests/cases/conformance/jsx/file.tsx (1 errors) ====
+    import React = require('react');
+    
+    class B1<T extends { x: string } = { x:string } > extends React.Component<T, {}> {
+        render() {
+            return <div>hi</div>; 
+        }
+    }
+    class B<U> extends React.Component<U, {}> {
+        props: U;
+        ~~~~~
+!!! error TS2416: Property 'props' in type 'B<U>' is not assignable to the same property in base type 'Component<U, {}>'.
+!!! error TS2416:   Type 'U' is not assignable to type 'U & { children?: ReactNode; }'.
+!!! error TS2416:     Type 'U' is not assignable to type '{ children?: ReactNode; }'.
+!!! related TS2208 tests/cases/conformance/jsx/file.tsx:8:9: This type parameter might need an `extends { children?: React.ReactNode; }` constraint.
+        render() {
+            return <B1 {...this.props} x="hi" />;
+        }
+    }

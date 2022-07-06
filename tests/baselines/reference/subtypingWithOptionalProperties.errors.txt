@@ -1,0 +1,17 @@
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithOptionalProperties.ts(5,9): error TS2322: Type 'T' is not assignable to type '{ s?: number; }'.
+
+
+==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithOptionalProperties.ts (1 errors) ====
+    // subtyping is not transitive due to optional properties but the subtyping algorithm assumes it is for the 99% case
+    
+    // returns { s?: number; }
+    function f<T>(a: T) {
+        var b: { s?: number } = a;
+            ~
+!!! error TS2322: Type 'T' is not assignable to type '{ s?: number; }'.
+!!! related TS2208 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithOptionalProperties.ts:4:12: This type parameter might need an `extends { s?: number; }` constraint.
+        return b;
+    }
+    
+    var r = f({ s: new Object() }); // ok
+    r.s && r.s.toFixed(); // would blow up at runtime

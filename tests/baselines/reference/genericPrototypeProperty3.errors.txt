@@ -1,0 +1,23 @@
+tests/cases/compiler/genericPrototypeProperty3.ts(6,5): error TS2416: Property 'target' in type 'MyEvent<T>' is not assignable to the same property in base type 'BaseEvent'.
+  Type 'T' is not assignable to type '{}'.
+
+
+==== tests/cases/compiler/genericPrototypeProperty3.ts (1 errors) ====
+    class BaseEvent {
+        target: {};
+    }
+    
+    class MyEvent<T> extends BaseEvent { // T is instantiated to any in the prototype, which is assignable to {}
+        target: T;
+        ~~~~~~
+!!! error TS2416: Property 'target' in type 'MyEvent<T>' is not assignable to the same property in base type 'BaseEvent'.
+!!! error TS2416:   Type 'T' is not assignable to type '{}'.
+!!! related TS2208 tests/cases/compiler/genericPrototypeProperty3.ts:5:15: This type parameter might need an `extends {}` constraint.
+    }
+    class BaseEventWrapper {
+        t: BaseEvent;
+    }
+    
+    class MyEventWrapper extends BaseEventWrapper {
+        t: MyEvent<any>;
+    }
