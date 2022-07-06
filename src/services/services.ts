@@ -1283,7 +1283,7 @@ namespace ts {
                 lastTypesRootVersion = typeRootsVersion;
             }
 
-            const rootFileNames = host.getScriptFileNames();
+            const rootFileNames = host.getScriptFileNames().slice();
 
             // Get a fresh cache of the host information
             const newSettings = host.getCompilationSettings() || getDefaultCompilerOptions();
