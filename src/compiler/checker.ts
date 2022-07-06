@@ -2762,44 +2762,66 @@ namespace ts {
         function getTargetOfImportClause(node: ImportClause, dontResolveAlias: boolean): Symbol | undefined {
             const moduleSymbol = resolveExternalModuleName(node, node.parent.moduleSpecifier);
             if (moduleSymbol) {
-                let exportDefaultSymbol: Symbol | undefined;
-                if (isShorthandAmbientModuleSymbol(moduleSymbol)) {
-                    exportDefaultSymbol = moduleSymbol;
+                return getTargetofModuleDefault(moduleSymbol, node, dontResolveAlias);
+            }
+        }
+
+        function getTargetofModuleDefault(moduleSymbol: Symbol, node: TypeOnlyCompatibleAliasDeclaration, dontResolveAlias: boolean) {
+            let exportDefaultSymbol: Symbol | undefined;
+            if (isShorthandAmbientModuleSymbol(moduleSymbol)) {
+                exportDefaultSymbol = moduleSymbol;
+            }
+            else {
+                exportDefaultSymbol = resolveExportByName(moduleSymbol, InternalSymbolName.Default, node, dontResolveAlias);
+            }
+
+            const file = moduleSymbol.declarations?.find(isSourceFile);
+            const specifier = getModuleSpecifierForTypeOnlyCompatibleAliasDeclaration(node);
+            if (!specifier) {
+                return exportDefaultSymbol;
+            }
+            const hasDefaultOnly = isOnlyImportedAsDefault(specifier);
+            const hasSyntheticDefault = canHaveSyntheticDefault(file, moduleSymbol, dontResolveAlias, specifier);
+            if (!exportDefaultSymbol && !hasSyntheticDefault && !hasDefaultOnly) {
+                if (hasExportAssignmentSymbol(moduleSymbol)) {
+                    const compilerOptionName = moduleKind >= ModuleKind.ES2015 ? "allowSyntheticDefaultImports" : "esModuleInterop";
+                    const exportEqualsSymbol = moduleSymbol.exports!.get(InternalSymbolName.ExportEquals);
+                    const exportAssignment = exportEqualsSymbol!.valueDeclaration;
+                    const err = error(node.name, Diagnostics.Module_0_can_only_be_default_imported_using_the_1_flag, symbolToString(moduleSymbol), compilerOptionName);
+
+                    if (exportAssignment) {
+                        addRelatedInfo(err, createDiagnosticForNode(
+                            exportAssignment,
+                            Diagnostics.This_module_is_declared_with_using_export_and_can_only_be_used_with_a_default_import_when_using_the_0_flag,
+                            compilerOptionName
+                        ));
+                    }
+                }
+                else if (isImportClause(node)) {
+                    reportNonDefaultExport(moduleSymbol, node);
                 }
                 else {
-                    exportDefaultSymbol = resolveExportByName(moduleSymbol, InternalSymbolName.Default, node, dontResolveAlias);
+                    errorNoModuleMemberSymbol(moduleSymbol, moduleSymbol, node, isImportOrExportSpecifier(node) && node.propertyName || node.name);
                 }
+            }
+            else if (hasSyntheticDefault || hasDefaultOnly) {
+                // per emit behavior, a synthetic default overrides a "real" .default member if `__esModule` is not present
+                const resolved = resolveExternalModuleSymbol(moduleSymbol, dontResolveAlias) || resolveSymbol(moduleSymbol, dontResolveAlias);
+                markSymbolOfAliasDeclarationIfTypeOnly(node, moduleSymbol, resolved, /*overwriteTypeOnly*/ false);
+                return resolved;
+            }
+            markSymbolOfAliasDeclarationIfTypeOnly(node, exportDefaultSymbol, /*finalTarget*/ undefined, /*overwriteTypeOnly*/ false);
+            return exportDefaultSymbol;
+        }
 
-                const file = moduleSymbol.declarations?.find(isSourceFile);
-                const hasDefaultOnly = isOnlyImportedAsDefault(node.parent.moduleSpecifier);
-                const hasSyntheticDefault = canHaveSyntheticDefault(file, moduleSymbol, dontResolveAlias, node.parent.moduleSpecifier);
-                if (!exportDefaultSymbol && !hasSyntheticDefault && !hasDefaultOnly) {
-                    if (hasExportAssignmentSymbol(moduleSymbol)) {
-                        const compilerOptionName = moduleKind >= ModuleKind.ES2015 ? "allowSyntheticDefaultImports" : "esModuleInterop";
-                        const exportEqualsSymbol = moduleSymbol.exports!.get(InternalSymbolName.ExportEquals);
-                        const exportAssignment = exportEqualsSymbol!.valueDeclaration;
-                        const err = error(node.name, Diagnostics.Module_0_can_only_be_default_imported_using_the_1_flag, symbolToString(moduleSymbol), compilerOptionName);
-
-                        if (exportAssignment) {
-                            addRelatedInfo(err, createDiagnosticForNode(
-                                exportAssignment,
-                                Diagnostics.This_module_is_declared_with_using_export_and_can_only_be_used_with_a_default_import_when_using_the_0_flag,
-                                compilerOptionName
-                            ));
-                        }
-                    }
-                    else {
-                        reportNonDefaultExport(moduleSymbol, node);
-                    }
-                }
-                else if (hasSyntheticDefault || hasDefaultOnly) {
-                    // per emit behavior, a synthetic default overrides a "real" .default member if `__esModule` is not present
-                    const resolved = resolveExternalModuleSymbol(moduleSymbol, dontResolveAlias) || resolveSymbol(moduleSymbol, dontResolveAlias);
-                    markSymbolOfAliasDeclarationIfTypeOnly(node, moduleSymbol, resolved, /*overwriteTypeOnly*/ false);
-                    return resolved;
-                }
-                markSymbolOfAliasDeclarationIfTypeOnly(node, exportDefaultSymbol, /*finalTarget*/ undefined, /*overwriteTypeOnly*/ false);
-                return exportDefaultSymbol;
+        function getModuleSpecifierForTypeOnlyCompatibleAliasDeclaration(node: TypeOnlyCompatibleAliasDeclaration): Expression | undefined {
+            switch (node.kind) {
+                case SyntaxKind.ImportClause: return node.parent.moduleSpecifier;
+                case SyntaxKind.ImportEqualsDeclaration: return isExternalModuleReference(node.moduleReference) ? node.moduleReference.expression : undefined;
+                case SyntaxKind.NamespaceImport: return node.parent.parent.moduleSpecifier;
+                case SyntaxKind.ImportSpecifier: return node.parent.parent.parent.moduleSpecifier;
+                case SyntaxKind.ExportSpecifier: return node.parent.parent.moduleSpecifier;
+                default: return Debug.assertNever(node);
             }
         }
 
@@ -2933,38 +2955,42 @@ namespace ts {
                         combineValueAndTypeSymbols(symbolFromVariable, symbolFromModule) :
                         symbolFromModule || symbolFromVariable;
                     if (!symbol) {
-                        const moduleName = getFullyQualifiedName(moduleSymbol, node);
-                        const declarationName = declarationNameToString(name);
-                        const suggestion = getSuggestedSymbolForNonexistentModule(name, targetSymbol);
-                        if (suggestion !== undefined) {
-                            const suggestionName = symbolToString(suggestion);
-                            const diagnostic = error(name, Diagnostics._0_has_no_exported_member_named_1_Did_you_mean_2, moduleName, declarationName, suggestionName);
-                            if (suggestion.valueDeclaration) {
-                                addRelatedInfo(diagnostic,
-                                    createDiagnosticForNode(suggestion.valueDeclaration, Diagnostics._0_is_declared_here, suggestionName)
-                                );
-                            }
-                        }
-                        else {
-                            if (moduleSymbol.exports?.has(InternalSymbolName.Default)) {
-                                error(
-                                    name,
-                                    Diagnostics.Module_0_has_no_exported_member_1_Did_you_mean_to_use_import_1_from_0_instead,
-                                    moduleName,
-                                    declarationName
-                                );
-                            }
-                            else {
-                                reportNonExportedMember(node, name, declarationName, moduleSymbol, moduleName);
-                            }
-                        }
+                        errorNoModuleMemberSymbol(moduleSymbol, targetSymbol, node, name);
                     }
                     return symbol;
                 }
             }
         }
 
-        function reportNonExportedMember(node: ImportDeclaration | ExportDeclaration | VariableDeclaration, name: Identifier, declarationName: string, moduleSymbol: Symbol, moduleName: string): void {
+        function errorNoModuleMemberSymbol(moduleSymbol: Symbol, targetSymbol: Symbol, node: Node, name: Identifier) {
+            const moduleName = getFullyQualifiedName(moduleSymbol, node);
+            const declarationName = declarationNameToString(name);
+            const suggestion = getSuggestedSymbolForNonexistentModule(name, targetSymbol);
+            if (suggestion !== undefined) {
+                const suggestionName = symbolToString(suggestion);
+                const diagnostic = error(name, Diagnostics._0_has_no_exported_member_named_1_Did_you_mean_2, moduleName, declarationName, suggestionName);
+                if (suggestion.valueDeclaration) {
+                    addRelatedInfo(diagnostic,
+                        createDiagnosticForNode(suggestion.valueDeclaration, Diagnostics._0_is_declared_here, suggestionName)
+                    );
+                }
+            }
+            else {
+                if (moduleSymbol.exports?.has(InternalSymbolName.Default)) {
+                    error(
+                        name,
+                        Diagnostics.Module_0_has_no_exported_member_1_Did_you_mean_to_use_import_1_from_0_instead,
+                        moduleName,
+                        declarationName
+                    );
+                }
+                else {
+                    reportNonExportedMember(node, name, declarationName, moduleSymbol, moduleName);
+                }
+            }
+        }
+
+        function reportNonExportedMember(node: Node, name: Identifier, declarationName: string, moduleSymbol: Symbol, moduleName: string): void {
             const localSymbol = moduleSymbol.valueDeclaration?.locals?.get(name.escapedText);
             const exports = moduleSymbol.exports;
             if (localSymbol) {
@@ -2989,7 +3015,7 @@ namespace ts {
             }
         }
 
-        function reportInvalidImportEqualsExportMember(node: ImportDeclaration | ExportDeclaration | VariableDeclaration, name: Identifier, declarationName: string, moduleName: string) {
+        function reportInvalidImportEqualsExportMember(node: Node, name: Identifier, declarationName: string, moduleName: string) {
             if (moduleKind >= ModuleKind.ES2015) {
                 const message = getESModuleInterop(compilerOptions) ? Diagnostics._0_can_only_be_imported_by_using_a_default_import :
                     Diagnostics._0_can_only_be_imported_by_turning_on_the_esModuleInterop_flag_and_using_a_default_import;
@@ -3010,6 +3036,13 @@ namespace ts {
         }
 
         function getTargetOfImportSpecifier(node: ImportSpecifier | BindingElement, dontResolveAlias: boolean): Symbol | undefined {
+            if (isImportSpecifier(node) && idText(node.propertyName || node.name) === InternalSymbolName.Default) {
+                const specifier = getModuleSpecifierForTypeOnlyCompatibleAliasDeclaration(node);
+                const moduleSymbol = specifier && resolveExternalModuleName(node, specifier);
+                if (moduleSymbol) {
+                    return getTargetofModuleDefault(moduleSymbol, node, dontResolveAlias);
+                }
+            }
             const root = isBindingElement(node) ? getRootDeclaration(node) as VariableDeclaration : node.parent.parent.parent;
             const commonJSPropertyAccess = getCommonJSPropertyAccess(root);
             const resolved = getExternalModuleMember(root, commonJSPropertyAccess || node, dontResolveAlias);
@@ -3034,6 +3067,13 @@ namespace ts {
         }
 
         function getTargetOfExportSpecifier(node: ExportSpecifier, meaning: SymbolFlags, dontResolveAlias?: boolean) {
+            if (idText(node.propertyName || node.name) === InternalSymbolName.Default) {
+                const specifier = getModuleSpecifierForTypeOnlyCompatibleAliasDeclaration(node);
+                const moduleSymbol = specifier && resolveExternalModuleName(node, specifier);
+                if (moduleSymbol) {
+                    return getTargetofModuleDefault(moduleSymbol, node, !!dontResolveAlias);
+                }
+            }
             const resolved = node.parent.parent.moduleSpecifier ?
                 getExternalModuleMember(node.parent.parent, node, dontResolveAlias) :
                 resolveEntityName(node.propertyName || node.name, meaning, /*ignoreErrors*/ false, dontResolveAlias);
