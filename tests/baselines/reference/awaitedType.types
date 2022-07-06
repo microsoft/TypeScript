@@ -278,8 +278,8 @@ async function f11<T extends { then(onfulfilled: (value: unknown) => void): void
 
     // y: Awaited<T>
     const y = await x;
->y : unknown
->await x : unknown
+>y : Awaited<T>
+>await x : Awaited<T>
 >x : T
 }
 
@@ -358,3 +358,37 @@ async function f16<T extends number & { then(): void }>(x: T) {
 type _Expect<TActual extends TExpected, TExpected> = TActual;
 >_Expect : TActual
 
+// https://github.com/microsoft/TypeScript/issues/48320
+async function f17<T extends (...args: any[]) => Promise<any>>(fn: T) {
+>f17 : <T extends (...args: any[]) => Promise<any>>(fn: T) => Promise<ReturnType<T>>
+>args : any[]
+>fn : T
+
+    const ret: Awaited<ReturnType<T>> = await fn(1, 2, 3);
+>ret : Awaited<ReturnType<T>>
+>await fn(1, 2, 3) : any
+>fn(1, 2, 3) : Promise<any>
+>fn : T
+>1 : 1
+>2 : 2
+>3 : 3
+
+    return ret;
+>ret : Awaited<ReturnType<T>>
+}
+async function f17_usage() {
+>f17_usage : () => Promise<{ x: 123; }>
+
+    const x = await f17(async () => 123 as const);
+>x : 123
+>await f17(async () => 123 as const) : 123
+>f17(async () => 123 as const) : Promise<Promise<123>>
+>f17 : <T extends (...args: any[]) => Promise<any>>(fn: T) => Promise<ReturnType<T>>
+>async () => 123 as const : () => Promise<123>
+>123 as const : 123
+>123 : 123
+
+    return { x };
+>{ x } : { x: 123; }
+>x : 123
+}

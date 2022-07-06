@@ -36,7 +36,7 @@ namespace ts.server {
     export class SessionClient implements LanguageService {
         private sequence = 0;
         private lineMaps = new Map<string, number[]>();
-        private messages: string[] = [];
+        private messages = createQueue<string>();
         private lastRenameEntry: RenameEntry | undefined;
         private preferences: UserPreferences | undefined;
 
@@ -44,7 +44,7 @@ namespace ts.server {
         }
 
         public onMessage(message: string): void {
-            this.messages.push(message);
+            this.messages.enqueue(message);
         }
 
         private writeMessage(message: string): void {
@@ -95,7 +95,7 @@ namespace ts.server {
             let foundResponseMessage = false;
             let response!: T;
             while (!foundResponseMessage) {
-                const lastMessage = this.messages.shift()!;
+                const lastMessage = this.messages.dequeue()!;
                 Debug.assert(!!lastMessage, "Did not receive any responses.");
                 const responseBody = extractMessage(lastMessage);
                 try {
@@ -440,7 +440,7 @@ namespace ts.server {
             return notImplemented();
         }
 
-        getRenameInfo(fileName: string, position: number, _options?: RenameInfoOptions, findInStrings?: boolean, findInComments?: boolean): RenameInfo {
+        getRenameInfo(fileName: string, position: number, _preferences: UserPreferences, findInStrings?: boolean, findInComments?: boolean): RenameInfo {
             // Not passing along 'options' because server should already have those from the 'configure' command
             const args: protocol.RenameRequestArgs = { ...this.createFileLocationRequestArgs(fileName, position), findInStrings, findInComments };
 
@@ -500,14 +500,14 @@ namespace ts.server {
                     // User preferences have to be set through the `Configure` command
                     this.configure({ providePrefixAndSuffixTextForRename });
                     // Options argument is not used, so don't pass in options
-                    this.getRenameInfo(fileName, position, /*options*/{}, findInStrings, findInComments);
+                    this.getRenameInfo(fileName, position, /*preferences*/{}, findInStrings, findInComments);
                     // Restore previous user preferences
                     if (this.preferences) {
                         this.configure(this.preferences);
                     }
                 }
                 else {
-                    this.getRenameInfo(fileName, position, /*options*/{}, findInStrings, findInComments);
+                    this.getRenameInfo(fileName, position, /*preferences*/{}, findInStrings, findInComments);
                 }
             }
 

@@ -61,9 +61,9 @@ File '/user/username/projects/myproject/packages/pkg2/const.js.d.ts' does not ex
 File name '/user/username/projects/myproject/packages/pkg2/const.js' has a '.js' extension - stripping it.
 File '/user/username/projects/myproject/packages/pkg2/const.ts' exist - use it as a name resolution result.
 ======== Module name './const.js' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/const.ts'. ========
-[[90m12:01:08 AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because output file 'packages/pkg1/build/index.js' does not exist
+[[90m12:01:07 AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because output file 'packages/pkg1/build/index.js' does not exist
 
-[[90m12:01:09 AM[0m] Building project '/user/username/projects/myproject/packages/pkg1/tsconfig.json'...
+[[90m12:01:08 AM[0m] Building project '/user/username/projects/myproject/packages/pkg1/tsconfig.json'...
 
 ======== Resolving module 'pkg2' from '/user/username/projects/myproject/packages/pkg1/index.ts'. ========
 Module resolution kind is not specified, using 'NodeJs'.
@@ -102,7 +102,7 @@ File '/user/username/projects/myproject/packages/pkg2/build/const.ts' does not e
 File '/user/username/projects/myproject/packages/pkg2/build/const.tsx' does not exist.
 File '/user/username/projects/myproject/packages/pkg2/build/const.d.ts' exist - use it as a name resolution result.
 ======== Module name './const.js' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/build/const.d.ts'. ========
-[[90m12:01:16 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:15 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -202,7 +202,7 @@ export declare type TheStr = string;
 
 
 //// [/user/username/projects/myproject/packages/pkg2/build/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../../../a/lib/lib.d.ts","../const.ts","../index.ts","../other.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-11202312776-export type TheNum = 42;","signature":"-9649133742-export declare type TheNum = 42;\n"},{"version":"-11225381282-export type { TheNum } from './const.js';","signature":"-9660329432-export type { TheNum } from './const.js';\n"},{"version":"-4609154030-export type TheStr = string;","signature":"-10420741908-export declare type TheStr = string;\n"}],"options":{"composite":true,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3,4],"dtsChangeTime":47000},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../../../a/lib/lib.d.ts","../const.ts","../index.ts","../other.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-11202312776-export type TheNum = 42;","signature":"-9649133742-export declare type TheNum = 42;\n"},{"version":"-11225381282-export type { TheNum } from './const.js';","signature":"-9660329432-export type { TheNum } from './const.js';\n"},{"version":"-4609154030-export type TheStr = string;","signature":"-10420741908-export declare type TheStr = string;\n"}],"options":{"composite":true,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3,4],"latestChangedDtsFile":"./other.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/packages/pkg2/build/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -257,10 +257,10 @@ export declare type TheStr = string;
       "../index.ts",
       "../other.ts"
     ],
-    "dtsChangeTime": 47000
+    "latestChangedDtsFile": "./other.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1096
+  "size": 1112
 }
 
 //// [/user/username/projects/myproject/packages/pkg1/build/index.js]
@@ -280,11 +280,11 @@ Input::
 
 Output::
 >> Screen clear
-[[90m12:01:20 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:19 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:21 AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because output 'packages/pkg1/build/index.js' is older than input 'packages/pkg2/package.json'
+[[90m12:01:20 AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because output 'packages/pkg1/build/index.js' is older than input 'packages/pkg2/package.json'
 
-[[90m12:01:22 AM[0m] Building project '/user/username/projects/myproject/packages/pkg1/tsconfig.json'...
+[[90m12:01:21 AM[0m] Building project '/user/username/projects/myproject/packages/pkg1/tsconfig.json'...
 
 ======== Resolving module 'pkg2' from '/user/username/projects/myproject/packages/pkg1/index.ts'. ========
 Module resolution kind is not specified, using 'NodeJs'.
@@ -316,7 +316,7 @@ Resolving real path for '/user/username/projects/myproject/node_modules/pkg2/bui
 [7m1[0m import type { TheNum } from 'pkg2'
 [7m [0m [91m              ~~~~~~[0m
 
-[[90m12:01:23 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:01:22 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -372,11 +372,11 @@ Input::
 
 Output::
 >> Screen clear
-[[90m12:01:27 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:26 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:28 AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because output 'packages/pkg1/build/index.js' is older than input 'packages/pkg2/package.json'
+[[90m12:01:27 AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because output 'packages/pkg1/build/index.js' is older than input 'packages/pkg2/package.json'
 
-[[90m12:01:29 AM[0m] Building project '/user/username/projects/myproject/packages/pkg1/tsconfig.json'...
+[[90m12:01:28 AM[0m] Building project '/user/username/projects/myproject/packages/pkg1/tsconfig.json'...
 
 ======== Resolving module 'pkg2' from '/user/username/projects/myproject/packages/pkg1/index.ts'. ========
 Module resolution kind is not specified, using 'NodeJs'.
@@ -415,7 +415,7 @@ File '/user/username/projects/myproject/packages/pkg2/build/const.ts' does not e
 File '/user/username/projects/myproject/packages/pkg2/build/const.tsx' does not exist.
 File '/user/username/projects/myproject/packages/pkg2/build/const.d.ts' exist - use it as a name resolution result.
 ======== Module name './const.js' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/build/const.d.ts'. ========
-[[90m12:01:34 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:33 AM[0m] Found 0 errors. Watching for file changes.
 
 
 

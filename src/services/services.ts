@@ -2537,9 +2537,9 @@ namespace ts {
             }
         }
 
-        function getRenameInfo(fileName: string, position: number, options?: RenameInfoOptions): RenameInfo {
+        function getRenameInfo(fileName: string, position: number, preferences: UserPreferences | RenameInfoOptions | undefined): RenameInfo {
             synchronizeHostData();
-            return Rename.getRenameInfo(program, getValidSourceFile(fileName), position, options);
+            return Rename.getRenameInfo(program, getValidSourceFile(fileName), position, preferences || {});
         }
 
         function getRefactorContext(file: SourceFile, positionOrRange: number | TextRange, preferences: UserPreferences, formatOptions?: FormatCodeSettings, triggerReason?: RefactorTriggerReason, kind?: string): RefactorContext {

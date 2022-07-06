@@ -7,9 +7,10 @@
 // @Filename: /node_modules/@types/node/index.d.ts
 declare const require: any;
 
-// @Filename: /a.js
+// @Filename: /a.ts
 export class Foo {}
 
 // @Filename: /b.ts
-const { Foo } = require("./a");
+import * as A from "./a";
+const { Foo } = A;
 export default class extends Foo {}

@@ -4026,6 +4026,7 @@ namespace ts {
     export interface WriteFileCallbackData {
         /*@internal*/ sourceMapUrlPos?: number;
         /*@internal*/ buildInfo?: BuildInfo;
+        /*@internal*/ diagnostics?: readonly DiagnosticWithLocation[];
     }
     export type WriteFileCallback = (
         fileName: string,
@@ -4335,7 +4336,6 @@ namespace ts {
         diagnostics: readonly Diagnostic[];
         emittedFiles?: string[]; // Array of files the compiler wrote to disk
         /* @internal */ sourceMaps?: SourceMapEmitResult[];  // Array of sourceMapData if compiler emitted sourcemaps
-        /* @internal */ exportedModulesFromDeclarationEmit?: ExportedModulesFromDeclarationEmit;
     }
 
     /* @internal */
@@ -4597,7 +4597,7 @@ namespace ts {
          */
         /* @internal */ resolveExternalModuleSymbol(symbol: Symbol): Symbol;
         /** @param node A location where we might consider accessing `this`. Not necessarily a ThisExpression. */
-        /* @internal */ tryGetThisTypeAt(node: Node, includeGlobalThis?: boolean): Type | undefined;
+        /* @internal */ tryGetThisTypeAt(node: Node, includeGlobalThis?: boolean, container?: Node): Type | undefined;
         /* @internal */ getTypeArgumentConstraint(node: TypeNode): Type | undefined;
 
         /**
@@ -4664,10 +4664,11 @@ namespace ts {
         UseAliasDefinedOutsideCurrentScope      = 1 << 14,  // Allow non-visible aliases
         UseSingleQuotesForStringLiteralType     = 1 << 28,  // Use single quotes for string literal type
         NoTypeReduction                         = 1 << 29,  // Don't call getReducedType
+        OmitThisParameter                       = 1 << 25,
 
         // Error handling
         AllowThisInObjectLiteral                = 1 << 15,
-        AllowQualifiedNameInPlaceOfIdentifier    = 1 << 16,
+        AllowQualifiedNameInPlaceOfIdentifier   = 1 << 16,
         /** @deprecated AllowQualifedNameInPlaceOfIdentifier. Use AllowQualifiedNameInPlaceOfIdentifier instead. */
         AllowQualifedNameInPlaceOfIdentifier    = AllowQualifiedNameInPlaceOfIdentifier,
         AllowAnonymousIdentifier                = 1 << 17,
@@ -4709,6 +4710,7 @@ namespace ts {
         UseAliasDefinedOutsideCurrentScope      = 1 << 14, // For a `type T = ... ` defined in a different file, write `T` instead of its value, even though `T` can't be accessed in the current scope.
         UseSingleQuotesForStringLiteralType     = 1 << 28, // Use single quotes for string literal type
         NoTypeReduction                         = 1 << 29, // Don't call getReducedType
+        OmitThisParameter                       = 1 << 25,
 
         // Error Handling
         AllowUniqueESSymbolType                 = 1 << 20, // This is bit 20 to align with the same bit in `NodeBuilderFlags`
@@ -4728,7 +4730,7 @@ namespace ts {
         NodeBuilderFlagsMask = NoTruncation | WriteArrayAsGenericType | UseStructuralFallback | WriteTypeArgumentsOfSignature |
             UseFullyQualifiedType | SuppressAnyReturnType | MultilineObjectLiterals | WriteClassExpressionAsTypeLiteral |
             UseTypeOfFunction | OmitParameterModifiers | UseAliasDefinedOutsideCurrentScope | AllowUniqueESSymbolType | InTypeAlias |
-            UseSingleQuotesForStringLiteralType | NoTypeReduction,
+            UseSingleQuotesForStringLiteralType | NoTypeReduction | OmitThisParameter
     }
 
     export const enum SymbolFormatFlags {
@@ -6025,6 +6027,7 @@ namespace ts {
     export const enum TypeMapKind {
         Simple,
         Array,
+        Deferred,
         Function,
         Composite,
         Merged,
@@ -6034,7 +6037,8 @@ namespace ts {
     export type TypeMapper =
         | { kind: TypeMapKind.Simple, source: Type, target: Type }
         | { kind: TypeMapKind.Array, sources: readonly Type[], targets: readonly Type[] | undefined }
-        | { kind: TypeMapKind.Function, func: (t: Type) => Type }
+        | { kind: TypeMapKind.Deferred, sources: readonly Type[], targets: (() => Type)[] }
+        | { kind: TypeMapKind.Function, func: (t: Type) => Type, debugInfo?: () => string }
         | { kind: TypeMapKind.Composite | TypeMapKind.Merged, mapper1: TypeMapper, mapper2: TypeMapper };
 
     export const enum InferencePriority {
@@ -6981,7 +6985,6 @@ namespace ts {
         // For testing:
         /*@internal*/ disableUseFileVersionAsSignature?: boolean;
         /*@internal*/ storeFilesChangingSignatureDuringEmit?: boolean;
-        /*@internal*/ now?(): Date;
     }
 
     /** true if --out otherwise source file name */
@@ -8989,11 +8992,20 @@ namespace ts {
         readonly includeInlayPropertyDeclarationTypeHints?: boolean;
         readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
         readonly includeInlayEnumMemberValueHints?: boolean;
+        readonly allowRenameOfImportPath?: boolean;
+        readonly autoImportFileExcludePatterns?: string[];
     }
 
     /** Represents a bigint literal value without requiring bigint support */
     export interface PseudoBigInt {
         negative: boolean;
         base10Value: string;
+    }
+
+    /* @internal */
+    export interface Queue<T> {
+        enqueue(...items: T[]): void;
+        dequeue(): T;
+        isEmpty(): boolean;
     }
 }

@@ -131,9 +131,9 @@ namespace ts { // eslint-disable-line one-namespace-per-file
             }
             eventStack.push({ phase, name, args, time: 1000 * timestamp(), separateBeginAndEnd });
         }
-        export function pop() {
+        export function pop(results?: Args) {
             Debug.assert(eventStack.length > 0);
-            writeStackEvent(eventStack.length - 1, 1000 * timestamp());
+            writeStackEvent(eventStack.length - 1, 1000 * timestamp(), results);
             eventStack.length--;
         }
         export function popAll() {
@@ -145,14 +145,15 @@ namespace ts { // eslint-disable-line one-namespace-per-file
         }
         // sample every 10ms
         const sampleInterval = 1000 * 10;
-        function writeStackEvent(index: number, endTime: number) {
+        function writeStackEvent(index: number, endTime: number, results?: Args) {
             const { phase, name, args, time, separateBeginAndEnd } = eventStack[index];
             if (separateBeginAndEnd) {
+                Debug.assert(!results, "`results` are not supported for events with `separateBeginAndEnd`");
                 writeEvent("E", phase, name, args, /*extras*/ undefined, endTime);
             }
             // test if [time,endTime) straddles a sampling point
             else if (sampleInterval - (time % sampleInterval) <= endTime - time) {
-                writeEvent("X", phase, name, args, `"dur":${endTime - time}`, time);
+                writeEvent("X", phase, name, { ...args, results }, `"dur":${endTime - time}`, time);
             }
         }
 

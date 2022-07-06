@@ -1,5 +1,0 @@
-=== tests/cases/conformance/parser/ecmascript5/ArrowFunctionExpressions/parserArrowFunctionExpression9.ts ===
-b ? (c) : d => e
->c : Symbol(c, Decl(parserArrowFunctionExpression9.ts, 0, 5))
->d : Symbol(d)
-

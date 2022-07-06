@@ -1,0 +1,54 @@
+=== tests/cases/compiler/circularResolvedSignature.ts ===
+declare function useState<S>(initialState: (() => S)): [S, (s: S) => void];
+>useState : Symbol(useState, Decl(circularResolvedSignature.ts, 0, 0))
+>S : Symbol(S, Decl(circularResolvedSignature.ts, 0, 26))
+>initialState : Symbol(initialState, Decl(circularResolvedSignature.ts, 0, 29))
+>S : Symbol(S, Decl(circularResolvedSignature.ts, 0, 26))
+>S : Symbol(S, Decl(circularResolvedSignature.ts, 0, 26))
+>s : Symbol(s, Decl(circularResolvedSignature.ts, 0, 60))
+>S : Symbol(S, Decl(circularResolvedSignature.ts, 0, 26))
+
+type Data = Readonly<{
+>Data : Symbol(Data, Decl(circularResolvedSignature.ts, 0, 75))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+
+    value: number;
+>value : Symbol(value, Decl(circularResolvedSignature.ts, 2, 22))
+
+    foo: (arg: any) => void;
+>foo : Symbol(foo, Decl(circularResolvedSignature.ts, 3, 18))
+>arg : Symbol(arg, Decl(circularResolvedSignature.ts, 4, 10))
+
+    bar: (arg: any) => void;
+>bar : Symbol(bar, Decl(circularResolvedSignature.ts, 4, 28))
+>arg : Symbol(arg, Decl(circularResolvedSignature.ts, 5, 10))
+
+}>;
+
+export function Component() {
+>Component : Symbol(Component, Decl(circularResolvedSignature.ts, 6, 3))
+
+    const [state, setState] = useState<Data>(() => ({
+>state : Symbol(state, Decl(circularResolvedSignature.ts, 9, 11))
+>setState : Symbol(setState, Decl(circularResolvedSignature.ts, 9, 17))
+>useState : Symbol(useState, Decl(circularResolvedSignature.ts, 0, 0))
+>Data : Symbol(Data, Decl(circularResolvedSignature.ts, 0, 75))
+
+        value: "string", // this should be a number
+>value : Symbol(value, Decl(circularResolvedSignature.ts, 9, 53))
+
+        foo: (arg) => setState(arg),
+>foo : Symbol(foo, Decl(circularResolvedSignature.ts, 10, 24))
+>arg : Symbol(arg, Decl(circularResolvedSignature.ts, 11, 14))
+>setState : Symbol(setState, Decl(circularResolvedSignature.ts, 9, 17))
+>arg : Symbol(arg, Decl(circularResolvedSignature.ts, 11, 14))
+
+        bar: (arg) => setState(arg),
+>bar : Symbol(bar, Decl(circularResolvedSignature.ts, 11, 36))
+>arg : Symbol(arg, Decl(circularResolvedSignature.ts, 12, 14))
+>setState : Symbol(setState, Decl(circularResolvedSignature.ts, 9, 17))
+>arg : Symbol(arg, Decl(circularResolvedSignature.ts, 12, 14))
+
+    }));
+}
+
