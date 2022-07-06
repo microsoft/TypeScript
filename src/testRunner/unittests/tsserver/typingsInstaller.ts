@@ -1946,7 +1946,7 @@ namespace ts.projectSystem {
         const foooPath = "/a/b/node_modules/fooo/index.d.ts";
         function verifyResolvedModuleOfFooo(project: server.Project) {
             server.updateProjectIfDirty(project);
-            const foooResolution = project.getLanguageService().getProgram()!.getSourceFileByPath(appPath)!.resolvedModules!.get("fooo", /*mode*/ undefined)!;
+            const foooResolution = project.getLanguageService().getProgram()!.getSourceFileByPath(appPath)!.resolvedModules!.get("fooo", /*mode*/ undefined)!.resolvedModule!;
             assert.equal(foooResolution.resolvedFileName, foooPath);
             return foooResolution;
         }

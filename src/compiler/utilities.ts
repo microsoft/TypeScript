@@ -159,27 +159,17 @@ namespace ts {
     }
 
     export function getResolvedModule(sourceFile: SourceFile | undefined, moduleNameText: string, mode: ModuleKind.CommonJS | ModuleKind.ESNext | undefined): ResolvedModuleFull | undefined {
-        return sourceFile && sourceFile.resolvedModules && sourceFile.resolvedModules.get(moduleNameText, mode);
+        return sourceFile?.resolvedModules?.get(moduleNameText, mode)?.resolvedModule;
     }
 
-    export function setResolvedModule(sourceFile: SourceFile, moduleNameText: string, resolvedModule: ResolvedModuleFull | undefined, mode: ModuleKind.CommonJS | ModuleKind.ESNext | undefined): void {
-        if (!sourceFile.resolvedModules) {
-            sourceFile.resolvedModules = createModeAwareCache();
-        }
-
+    export function setResolvedModule(sourceFile: SourceFile, moduleNameText: string, resolvedModule: ResolvedModuleWithFailedLookupLocations, mode: ModuleKind.CommonJS | ModuleKind.ESNext | undefined): void {
+        sourceFile.resolvedModules ??= createModeAwareCache();
         sourceFile.resolvedModules.set(moduleNameText, mode, resolvedModule);
     }
 
-    export function setResolvedTypeReferenceDirective(sourceFile: SourceFile, typeReferenceDirectiveName: string, resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective | undefined, mode: ModuleKind.CommonJS | ModuleKind.ESNext | undefined): void {
-        if (!sourceFile.resolvedTypeReferenceDirectiveNames) {
-            sourceFile.resolvedTypeReferenceDirectiveNames = createModeAwareCache();
-        }
-
+    export function setResolvedTypeReferenceDirective(sourceFile: SourceFile, typeReferenceDirectiveName: string, resolvedTypeReferenceDirective: ResolvedTypeReferenceDirectiveWithFailedLookupLocations, mode: ModuleKind.CommonJS | ModuleKind.ESNext | undefined): void {
+        sourceFile.resolvedTypeReferenceDirectiveNames ??= createModeAwareCache();
         sourceFile.resolvedTypeReferenceDirectiveNames.set(typeReferenceDirectiveName, mode, resolvedTypeReferenceDirective);
-    }
-
-    export function getResolvedTypeReferenceDirective(sourceFile: SourceFile | undefined, typeReferenceDirectiveName: string, mode: ModuleKind.CommonJS | ModuleKind.ESNext | undefined): ResolvedTypeReferenceDirective | undefined {
-        return sourceFile && sourceFile.resolvedTypeReferenceDirectiveNames && sourceFile.resolvedTypeReferenceDirectiveNames.get(typeReferenceDirectiveName, mode);
     }
 
     export function projectReferenceIsEqualTo(oldRef: ProjectReference, newRef: ProjectReference) {
@@ -188,12 +178,16 @@ namespace ts {
             !oldRef.circular === !newRef.circular;
     }
 
-    export function moduleResolutionIsEqualTo(oldResolution: ResolvedModuleFull, newResolution: ResolvedModuleFull): boolean {
-        return oldResolution.isExternalLibraryImport === newResolution.isExternalLibraryImport &&
-            oldResolution.extension === newResolution.extension &&
-            oldResolution.resolvedFileName === newResolution.resolvedFileName &&
-            oldResolution.originalPath === newResolution.originalPath &&
-            packageIdIsEqual(oldResolution.packageId, newResolution.packageId);
+    export function moduleResolutionIsEqualTo(oldResolution: ResolvedModuleWithFailedLookupLocations, newResolution: ResolvedModuleWithFailedLookupLocations): boolean {
+        return oldResolution === newResolution ||
+            oldResolution.resolvedModule === newResolution.resolvedModule ||
+            !!oldResolution.resolvedModule &&
+            !!newResolution.resolvedModule &&
+            oldResolution.resolvedModule.isExternalLibraryImport === newResolution.resolvedModule.isExternalLibraryImport &&
+            oldResolution.resolvedModule.extension === newResolution.resolvedModule.extension &&
+            oldResolution.resolvedModule.resolvedFileName === newResolution.resolvedModule.resolvedFileName &&
+            oldResolution.resolvedModule.originalPath === newResolution.resolvedModule.originalPath &&
+            packageIdIsEqual(oldResolution.resolvedModule.packageId, newResolution.resolvedModule.packageId);
     }
 
     function packageIdIsEqual(a: PackageId | undefined, b: PackageId | undefined): boolean {
@@ -208,10 +202,14 @@ namespace ts {
         return `${packageIdToPackageName(packageId)}@${packageId.version}`;
     }
 
-    export function typeDirectiveIsEqualTo(oldResolution: ResolvedTypeReferenceDirective, newResolution: ResolvedTypeReferenceDirective): boolean {
-        return oldResolution.resolvedFileName === newResolution.resolvedFileName
-            && oldResolution.primary === newResolution.primary
-            && oldResolution.originalPath === newResolution.originalPath;
+    export function typeDirectiveIsEqualTo(oldResolution: ResolvedTypeReferenceDirectiveWithFailedLookupLocations, newResolution: ResolvedTypeReferenceDirectiveWithFailedLookupLocations): boolean {
+        return oldResolution === newResolution ||
+            oldResolution.resolvedTypeReferenceDirective === newResolution.resolvedTypeReferenceDirective ||
+            !!oldResolution.resolvedTypeReferenceDirective &&
+            !!newResolution.resolvedTypeReferenceDirective &&
+            oldResolution.resolvedTypeReferenceDirective.resolvedFileName === newResolution.resolvedTypeReferenceDirective.resolvedFileName &&
+            oldResolution.resolvedTypeReferenceDirective.primary === newResolution.resolvedTypeReferenceDirective.primary &&
+            oldResolution.resolvedTypeReferenceDirective.originalPath === newResolution.resolvedTypeReferenceDirective.originalPath;
     }
 
     export function hasChangesInResolutions<T>(
@@ -6551,7 +6549,7 @@ namespace ts {
          * don't include automatic type reference directives. Must be called only when
          * `hasProcessedResolutions` returns false (once per cache instance).
          */
-        setSymlinksFromResolutions(files: readonly SourceFile[], typeReferenceDirectives: ModeAwareCache<ResolvedTypeReferenceDirective | undefined> | undefined): void;
+        setSymlinksFromResolutions(files: readonly SourceFile[], typeReferenceDirectives: ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations> | undefined): void;
         /**
          * @internal
          * Whether `setSymlinksFromResolutions` has already been called.
@@ -6586,9 +6584,10 @@ namespace ts {
                 Debug.assert(!hasProcessedResolutions);
                 hasProcessedResolutions = true;
                 for (const file of files) {
-                    file.resolvedModules?.forEach(resolution => processResolution(this, resolution));
+                    file.resolvedModules?.forEach(resolution => processResolution(this, resolution?.resolvedModule));
+                    file.resolvedTypeReferenceDirectiveNames?.forEach(resolution => processResolution(this, resolution?.resolvedTypeReferenceDirective));
                 }
-                typeReferenceDirectives?.forEach(resolution => processResolution(this, resolution));
+                typeReferenceDirectives?.forEach(resolution => processResolution(this, resolution.resolvedTypeReferenceDirective));
             },
             hasProcessedResolutions: () => hasProcessedResolutions,
         };

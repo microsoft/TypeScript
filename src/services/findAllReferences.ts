@@ -677,7 +677,7 @@ namespace ts.FindAllReferences {
                 if (!options.implementations && isStringLiteralLike(node)) {
                     if (isModuleSpecifierLike(node)) {
                         const fileIncludeReasons = program.getFileIncludeReasons();
-                        const referencedFileName = node.getSourceFile().resolvedModules?.get(node.text, getModeForUsageLocation(node.getSourceFile(), node))?.resolvedFileName;
+                        const referencedFileName = node.getSourceFile().resolvedModules?.get(node.text, getModeForUsageLocation(node.getSourceFile(), node))?.resolvedModule?.resolvedFileName;
                         const referencedFile = referencedFileName ? program.getSourceFile(referencedFileName) : undefined;
                         if (referencedFile) {
                             return [{ definition: { type: DefinitionKind.String, node }, references: getReferencesForNonModule(referencedFile, fileIncludeReasons, program) || emptyArray }];

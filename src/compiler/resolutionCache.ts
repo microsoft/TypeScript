@@ -11,15 +11,14 @@ namespace ts {
             redirectedReference: ResolvedProjectReference | undefined,
             containingSourceFile: SourceFile | undefined,
             partialResolutionInfo: PartialResolutionInfo | undefined
-        ): (ResolvedModuleFull | undefined)[];
-        getResolvedModuleWithFailedLookupLocationsFromCache(moduleName: string, containingFile: string, resolutionMode?: ModuleKind.CommonJS | ModuleKind.ESNext): CachedResolvedModuleWithFailedLookupLocations | undefined;
+        ): ResolvedModuleWithFailedLookupLocations[];
         resolveTypeReferenceDirectives(
             typeDirectiveNames: string[] | readonly FileReference[],
             containingFile: string,
             redirectedReference: ResolvedProjectReference | undefined,
             containingFileMode: SourceFile["impliedNodeFormat"] | undefined,
             partialResolutionInfo: PartialResolutionInfo | undefined
-        ): (ResolvedTypeReferenceDirective | undefined)[];
+        ): ResolvedTypeReferenceDirectiveWithFailedLookupLocations[];
 
         invalidateResolutionsOfFailedLookupLocations(): boolean;
         invalidateResolutionOfFile(filePath: Path): void;
@@ -44,7 +43,7 @@ namespace ts {
 
     interface ResolutionWithFailedLookupLocations {
         readonly failedLookupLocations: string[];
-        readonly affectingLocations: string[];
+        affectingLocations?: string[];
         isInvalidated?: boolean;
         refCount?: number;
         // Files that have this resolution using
@@ -240,7 +239,6 @@ namespace ts {
             startCachingPerDirectoryResolution,
             finishCachingPerDirectoryResolution,
             resolveModuleNames,
-            getResolvedModuleWithFailedLookupLocationsFromCache,
             resolveTypeReferenceDirectives,
             removeResolutionsFromProjectReferenceRedirects,
             removeResolutionsOfFile,
@@ -390,7 +388,7 @@ namespace ts {
             if (globalCache !== undefined && !isExternalModuleNameRelative(moduleName) && !(primaryResult.resolvedModule && extensionIsTS(primaryResult.resolvedModule.extension))) {
                 // create different collection of failed lookup locations for second pass
                 // if it will fail and we've already found something during the first pass - we don't want to pollute its results
-                const { resolvedModule, failedLookupLocations, affectingLocations } = loadModuleFromGlobalCache(
+                const { resolvedModule, failedLookupLocations, affectingLocations, resolutionDiagnostics } = loadModuleFromGlobalCache(
                     Debug.checkDefined(resolutionHost.globalCacheResolutionModuleName)(moduleName),
                     resolutionHost.projectName,
                     compilerOptions,
@@ -402,7 +400,8 @@ namespace ts {
                     // Modify existing resolution so its saved in the directory cache as well
                     (primaryResult.resolvedModule as any) = resolvedModule;
                     primaryResult.failedLookupLocations.push(...failedLookupLocations);
-                    primaryResult.affectingLocations.push(...affectingLocations);
+                    primaryResult.affectingLocations = updateResolutionField(primaryResult.affectingLocations, affectingLocations);
+                    primaryResult.resolutionDiagnostics = updateResolutionField(primaryResult.resolutionDiagnostics, resolutionDiagnostics);
                     return primaryResult;
                 }
             }
@@ -434,7 +433,7 @@ namespace ts {
             cache, perDirectoryCacheWithRedirects,
             loader, getResolutionWithResolvedFileName,
             shouldRetryResolution, partialResolutionInfo, logChanges, containingSourceFile, containingSourceFileMode
-        }: ResolveNamesWithLocalCacheInput<T, R>): (R | undefined)[] {
+        }: ResolveNamesWithLocalCacheInput<T, R>): T[] {
             const path = resolutionHost.toPath(containingFile);
             const resolutionsInFile = cache.get(path) || cache.set(path, createModeAwareCache()).get(path)!;
             const dirPath = getDirectoryPath(path);
@@ -444,7 +443,7 @@ namespace ts {
                 perDirectoryResolution = createModeAwareCache();
                 perDirectoryCache.set(dirPath, perDirectoryResolution);
             }
-            const resolvedModules: (R | undefined)[] = [];
+            const resolvedModules: T[] = [];
             const compilerOptions = resolutionHost.getCompilationSettings();
             const hasInvalidatedNonRelativeUnresolvedImport = logChanges && isFileWithInvalidatedNonRelativeUnresolvedImports(path);
 
@@ -458,7 +457,7 @@ namespace ts {
             const seenNamesInFile = createModeAwareCache<true>();
             let i = 0;
             for (const entry of names) {
-                const name = isString(entry) ? entry : entry.fileName.toLowerCase();
+                const name = isString(entry) ? entry : toFileNameLowerCase(entry.fileName);
                 // Imports supply a `containingSourceFile` but no `containingSourceFileMode` - it would be redundant
                 // they require calculating the mode for a given import from it's position in the resolution table, since a given
                 // import's syntax may override the file's default mode.
@@ -546,7 +545,7 @@ namespace ts {
                 }
                 Debug.assert(resolution !== undefined && !resolution.isInvalidated);
                 seenNamesInFile.set(name, mode, true);
-                resolvedModules.push(getResolutionWithResolvedFileName(resolution));
+                resolvedModules.push(resolution);
             }
 
             partialResolutionInfo?.reusedNames?.forEach(({ name, mode }) => seenNamesInFile.set(name, mode, true));
@@ -587,7 +586,7 @@ namespace ts {
             redirectedReference?: ResolvedProjectReference,
             containingFileMode?: SourceFile["impliedNodeFormat"],
             partialResolutionInfo?: PartialResolutionInfo
-        ): (ResolvedTypeReferenceDirective | undefined)[] {
+        ) {
             return resolveNamesWithLocalCache<CachedResolvedTypeReferenceDirectiveWithFailedLookupLocations, ResolvedTypeReferenceDirective>({
                 names: typeDirectiveNames,
                 containingFile,
@@ -608,7 +607,7 @@ namespace ts {
             redirectedReference?: ResolvedProjectReference,
             containingSourceFile?: SourceFile,
             partialResolutionInfo?: PartialResolutionInfo
-        ): (ResolvedModuleFull | undefined)[] {
+        ) {
             return resolveNamesWithLocalCache<CachedResolvedModuleWithFailedLookupLocations, ResolvedModuleFull>({
                 names: moduleNames,
                 containingFile,
@@ -622,12 +621,6 @@ namespace ts {
                 logChanges: logChangesWhenResolvingModule,
                 containingSourceFile,
             });
-        }
-
-        function getResolvedModuleWithFailedLookupLocationsFromCache(moduleName: string, containingFile: string, resolutionMode?: ModuleKind.CommonJS | ModuleKind.ESNext): CachedResolvedModuleWithFailedLookupLocations | undefined {
-            const cache = resolvedModuleNames.get(resolutionHost.toPath(containingFile));
-            if (!cache) return undefined;
-            return cache.get(moduleName, resolutionMode);
         }
 
         function isNodeModulesAtTypesDirectory(dirPath: Path) {
@@ -731,7 +724,7 @@ namespace ts {
             Debug.assert(!!resolution.refCount);
 
             const { failedLookupLocations, affectingLocations } = resolution;
-            if (!failedLookupLocations.length && !affectingLocations.length) return;
+            if (!failedLookupLocations.length && !affectingLocations?.length) return;
             if (failedLookupLocations.length) resolutionsWithFailedLookups.push(resolution);
 
             let setAtRoot = false;
@@ -766,7 +759,7 @@ namespace ts {
         function watchAffectingLocationsOfResolution(resolution: ResolutionWithFailedLookupLocations, addToResolutionsWithOnlyAffectingLocations: boolean) {
             Debug.assert(!!resolution.refCount);
             const { affectingLocations } = resolution;
-            if (!affectingLocations.length) return;
+            if (!affectingLocations?.length) return;
             if (addToResolutionsWithOnlyAffectingLocations) resolutionsWithOnlyAffectingLocations.push(resolution);
             // Watch package json
             for (const affectingLocation of affectingLocations) {
@@ -894,13 +887,16 @@ namespace ts {
                     removeDirectoryWatcher(rootPath);
                 }
             }
-            else if (affectingLocations.length) {
+            else if (affectingLocations?.length) {
                 unorderedRemoveItem(resolutionsWithOnlyAffectingLocations, resolution);
             }
 
-            for (const affectingLocation of affectingLocations) {
-                const watcher = fileWatchesOfAffectingLocations.get(affectingLocation)!;
-                watcher.resolutions--;
+            if (affectingLocations) {
+                for (const affectingLocation of affectingLocations) {
+                    const watcher = fileWatchesOfAffectingLocations.get(affectingLocation)!;
+                    watcher.resolutions--;
+
+                }
             }
         }
 
@@ -1074,7 +1070,7 @@ namespace ts {
         }
 
         function canInvalidatedFailedLookupResolutionWithAffectingLocation(resolution: ResolutionWithFailedLookupLocations) {
-            return !!affectingPathChecks && resolution.affectingLocations.some(location => affectingPathChecks!.has(location));
+            return !!affectingPathChecks && !!resolution.affectingLocations?.some(location => affectingPathChecks!.has(location));
         }
 
         function closeTypeRootsWatch() {

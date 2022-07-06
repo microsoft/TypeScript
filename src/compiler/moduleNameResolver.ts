@@ -95,16 +95,29 @@ namespace ts {
         resultFromCache: ResolvedModuleWithFailedLookupLocations | undefined
     ): ResolvedModuleWithFailedLookupLocations {
         if (resultFromCache) {
-            resultFromCache.failedLookupLocations.push(...failedLookupLocations);
-            resultFromCache.affectingLocations.push(...affectingLocations);
+            if (failedLookupLocations.length) resultFromCache.failedLookupLocations.push(...failedLookupLocations);
+            resultFromCache.affectingLocations = updateResolutionField(resultFromCache.affectingLocations, affectingLocations);
+            resultFromCache.resolutionDiagnostics = updateResolutionField(resultFromCache.resolutionDiagnostics, diagnostics);
             return resultFromCache;
         }
         return {
             resolvedModule: resolved && { resolvedFileName: resolved.path, originalPath: resolved.originalPath === true ? undefined : resolved.originalPath, extension: resolved.extension, isExternalLibraryImport, packageId: resolved.packageId },
             failedLookupLocations,
-            affectingLocations,
-            resolutionDiagnostics: diagnostics,
+            affectingLocations: initializeResolutionField(affectingLocations),
+            resolutionDiagnostics: initializeResolutionField(diagnostics),
         };
+    }
+
+    function initializeResolutionField<T>(value: T[]): T[] | undefined {
+        return value.length ? value : undefined;
+    }
+
+    /*@internal*/
+    export function updateResolutionField<T>(to: T[] | undefined, value: T[] | undefined) {
+        if (!value?.length) return to;
+        if (!to?.length) return value;
+        to.push(...value);
+        return to;
     }
 
     /*@internal*/
@@ -400,7 +413,12 @@ namespace ts {
                 isExternalLibraryImport: pathContainsNodeModules(fileName),
             };
         }
-        result = { resolvedTypeReferenceDirective, failedLookupLocations, affectingLocations, resolutionDiagnostics: diagnostics };
+        result = {
+            resolvedTypeReferenceDirective,
+            failedLookupLocations,
+            affectingLocations: initializeResolutionField(affectingLocations),
+            resolutionDiagnostics: initializeResolutionField(diagnostics),
+        };
         perFolderCache?.set(typeReferenceDirectiveName, /*mode*/ resolutionMode, result);
         if (traceEnabled) traceResult(result);
         return result;
@@ -777,7 +795,7 @@ namespace ts {
         for (let i = 0; i < keys.length; ++i) {
             const entry = keys[i];
             // We lower-case all type references because npm automatically lowercases all packages. See GH#9824.
-            const name = !isString(entry) ? entry.fileName.toLowerCase() : entry;
+            const name = !isString(entry) ? toFileNameLowerCase(entry.fileName) : entry;
             const mode = !isString(entry) ? entry.resolutionMode || file.impliedNodeFormat : getModeForResolutionAtIndex(file, i);
             map.set(name, mode, values[i]);
         }

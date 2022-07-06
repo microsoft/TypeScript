@@ -505,7 +505,7 @@ namespace ts.server {
             return !this.isWatchedMissingFile(path) && this.directoryStructureHost.fileExists(file);
         }
 
-        resolveModuleNames(moduleNames: string[], containingFile: string, _reusedNames?: string[], redirectedReference?: ResolvedProjectReference, _options?: CompilerOptions, containingSourceFile?: SourceFile, partialResolutionInfo?: PartialResolutionInfo): (ResolvedModuleFull | undefined)[] {
+        resolveModuleNames(moduleNames: string[], containingFile: string, _reusedNames?: string[], redirectedReference?: ResolvedProjectReference, _options?: CompilerOptions, containingSourceFile?: SourceFile, partialResolutionInfo?: PartialResolutionInfo) {
             return this.resolutionCache.resolveModuleNames(moduleNames, containingFile, redirectedReference, containingSourceFile, partialResolutionInfo);
         }
 
@@ -513,11 +513,7 @@ namespace ts.server {
             return this.resolutionCache.getModuleResolutionCache();
         }
 
-        getResolvedModuleWithFailedLookupLocationsFromCache(moduleName: string, containingFile: string, resolutionMode?: ModuleKind.CommonJS | ModuleKind.ESNext): ResolvedModuleWithFailedLookupLocations | undefined {
-            return this.resolutionCache.getResolvedModuleWithFailedLookupLocationsFromCache(moduleName, containingFile, resolutionMode);
-        }
-
-        resolveTypeReferenceDirectives(typeDirectiveNames: string[] | FileReference[], containingFile: string, redirectedReference?: ResolvedProjectReference, _options?: CompilerOptions, containingFileMode?: SourceFile["impliedNodeFormat"] | undefined, partialResolutionInfo?: PartialResolutionInfo): (ResolvedTypeReferenceDirective | undefined)[] {
+        resolveTypeReferenceDirectives(typeDirectiveNames: string[] | FileReference[], containingFile: string, redirectedReference?: ResolvedProjectReference, _options?: CompilerOptions, containingFileMode?: SourceFile["impliedNodeFormat"] | undefined, partialResolutionInfo?: PartialResolutionInfo) {
             return this.resolutionCache.resolveTypeReferenceDirectives(typeDirectiveNames, containingFile, redirectedReference, containingFileMode, partialResolutionInfo);
         }
 
@@ -1929,7 +1925,7 @@ namespace ts.server {
         return getOrUpdate(cachedUnresolvedImportsPerFile, file.path, () => {
             if (!file.resolvedModules) return emptyArray;
             let unresolvedImports: string[] | undefined;
-            file.resolvedModules.forEach((resolvedModule, name) => {
+            file.resolvedModules.forEach(({ resolvedModule }, name) => {
                 // pick unresolved non-relative names
                 if ((!resolvedModule || !resolutionExtensionIsTSOrJson(resolvedModule.extension)) &&
                     !isExternalModuleNameRelative(name) &&
