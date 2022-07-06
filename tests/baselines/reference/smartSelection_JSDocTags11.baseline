@@ -1,0 +1,40 @@
+const x = 1;
+type Foo = {
+  /** comment */
+  /**/status: number;
+};
+
+
+  status         
+
+
+  status: number 
+
+
+  status: number;
+
+
+  /** comment */
+  status: number;
+
+
+            ↲
+••/** comment */
+  status: number;↲
+
+
+           {
+  /** comment */
+  status: number;
+} 
+
+type Foo = {
+  /** comment */
+  status: number;
+};
+
+const x = 1;
+type Foo = {
+  /** comment */
+  status: number;
+};
