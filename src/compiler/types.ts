@@ -6605,7 +6605,7 @@ namespace ts {
         isTSConfigOnly?: boolean;                               // True if option can only be specified via tsconfig.json file
         isCommandLineOnly?: boolean;
         showInSimplifiedHelpView?: boolean;
-        category?: DiagnosticMessage;
+        category: DiagnosticMessage;
         strictFlag?: true;                                      // true if the option is one of the flag under strict
         affectsSourceFile?: true;                               // true if we should recreate SourceFiles after this option changes
         affectsModuleResolution?: true;                         // currently same effect as `affectsSourceFile`
@@ -6618,6 +6618,7 @@ namespace ts {
         affectsBundleEmitBuildInfo?: true;                      // true if this options should be emitted in buildInfo with --out
         transpileOptionValue?: boolean | undefined;             // If set this means that the option should be set to this value when transpiling
         extraValidation?: (value: CompilerOptionsValue) => [DiagnosticMessage, ...string[]] | undefined; // Additional validation to be performed for the value to be valid
+        allowedAsPragma?: boolean;                              // True if this option is allowed as a comment pragma to be toggled on a per-file basis (eg, `// @ts-strict false`)
     }
 
     /* @internal */
@@ -6653,7 +6654,7 @@ namespace ts {
     /* @internal */
     export interface DidYouMeanOptionsDiagnostics {
         alternateMode?: AlternateModeDiagnostics;
-        optionDeclarations: CommandLineOption[];
+        optionDeclarations: readonly CommandLineOption[];
         unknownOptionDiagnostic: DiagnosticMessage,
         unknownDidYouMeanDiagnostic: DiagnosticMessage,
     }
@@ -8864,52 +8865,6 @@ namespace ts {
         kind?: PragmaKindFlags;
     }
 
-    // While not strictly a type, this is here because `PragmaMap` needs to be here to be used with `SourceFile`, and we don't
-    //  fancy effectively defining it twice, once in value-space and once in type-space
-    /* @internal */
-    export const commentPragmas = {
-        "reference": {
-            args: [
-                { name: "types", optional: true, captureSpan: true },
-                { name: "lib", optional: true, captureSpan: true },
-                { name: "path", optional: true, captureSpan: true },
-                { name: "no-default-lib", optional: true },
-                { name: "resolution-mode", optional: true }
-            ],
-            kind: PragmaKindFlags.TripleSlashXML
-        },
-        "amd-dependency": {
-            args: [{ name: "path" }, { name: "name", optional: true }],
-            kind: PragmaKindFlags.TripleSlashXML
-        },
-        "amd-module": {
-            args: [{ name: "name" }],
-            kind: PragmaKindFlags.TripleSlashXML
-        },
-        "ts-check": {
-            kind: PragmaKindFlags.SingleLine
-        },
-        "ts-nocheck": {
-            kind: PragmaKindFlags.SingleLine
-        },
-        "jsx": {
-            args: [{ name: "factory" }],
-            kind: PragmaKindFlags.MultiLine
-        },
-        "jsxfrag": {
-            args: [{ name: "factory" }],
-            kind: PragmaKindFlags.MultiLine
-        },
-        "jsximportsource": {
-            args: [{ name: "factory" }],
-            kind: PragmaKindFlags.MultiLine
-        },
-        "jsxruntime": {
-            args: [{ name: "factory" }],
-            kind: PragmaKindFlags.MultiLine
-        },
-    } as const;
-
     /* @internal */
     type PragmaArgTypeMaybeCapture<TDesc> = TDesc extends {captureSpan: true} ? {value: string, pos: number, end: number} : string;
 
@@ -8920,7 +8875,7 @@ namespace ts {
             : {[K in TName]: PragmaArgTypeMaybeCapture<TDesc>};
 
     /* @internal */
-    type UnionToIntersection<U> =
+    export type UnionToIntersection<U> =
             (U extends any ? (k: U) => void : never) extends ((k: infer I) => void) ? I : never;
 
     /* @internal */

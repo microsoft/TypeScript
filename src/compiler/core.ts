@@ -2104,7 +2104,7 @@ namespace ts {
      *        (0.4 allows 1 substitution/transposition for every 5 characters,
      *         and 1 insertion/deletion at 3 characters)
      */
-    export function getSpellingSuggestion<T>(name: string, candidates: T[], getName: (candidate: T) => string | undefined): T | undefined {
+    export function getSpellingSuggestion<T>(name: string, candidates: readonly T[], getName: (candidate: T) => string | undefined): T | undefined {
         const maximumLengthDifference = Math.min(2, Math.floor(name.length * 0.34));
         let bestDistance = Math.floor(name.length * 0.4) + 1; // If the best result is worse than this, don't bother.
         let bestCandidate: T | undefined;
@@ -2509,5 +2509,9 @@ namespace ts {
             end--;
         }
         return s.slice(0, end + 1);
+    }
+
+    export function is<T>(): <U extends T>(arg: U) => U {
+        return identity;
     }
 }

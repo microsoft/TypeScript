@@ -9643,8 +9643,16 @@ namespace ts {
                 case "jsxfrag":
                 case "jsximportsource":
                 case "jsxruntime":
+                case "ts-strict":
+                case "ts-noImplicitAny":
+                case "ts-strictNullChecks":
+                case "ts-strictFunctionTypes":
+                case "ts-strictBindCallApply":
+                case "ts-strictProeprtyInitialization":
+                case "ts-noImplicitThis":
+                
                     return; // Accessed directly
-                default: Debug.fail("Unhandled pragma kind"); // Can this be made into an assertNever in the future?
+                default: Debug.assertNever(key, `Unhandled pragma kind: ${key}`);
             }
         });
     }
