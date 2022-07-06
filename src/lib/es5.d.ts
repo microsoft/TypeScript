@@ -913,12 +913,24 @@ interface DateConstructor {
 declare var Date: DateConstructor;
 
 interface RegExpMatchArray extends Array<string> {
+    /**
+     * The index of the search at which the result was found.
+     */
     index?: number;
+    /**
+     * A copy of the search string.
+     */
     input?: string;
 }
 
 interface RegExpExecArray extends Array<string> {
+    /**
+     * The index of the search at which the result was found.
+     */
     index: number;
+    /**
+     * A copy of the search string.
+     */
     input: string;
 }
 

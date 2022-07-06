@@ -1493,6 +1493,10 @@
         "category": "Message",
         "code": 1476
     },
+    "An instantiation expression cannot be followed by a property access.": {
+        "category": "Error",
+        "code": 1477
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",

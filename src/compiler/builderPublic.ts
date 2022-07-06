@@ -42,6 +42,8 @@ namespace ts {
         saveEmitState(): SavedBuildProgramEmitState;
         /*@internal*/
         restoreEmitState(saved: SavedBuildProgramEmitState): void;
+        /*@internal*/
+        hasChangedEmitSignature?(): boolean;
         /**
          * Returns current program
          */

@@ -1,0 +1,72 @@
+=== tests/cases/compiler/accessorDeclarationOrder.ts ===
+class C1 {
+>C1 : Symbol(C1, Decl(accessorDeclarationOrder.ts, 0, 0))
+
+    #name: string;
+>#name : Symbol(C1.#name, Decl(accessorDeclarationOrder.ts, 0, 10))
+
+    public get name() {
+>name : Symbol(C1.name, Decl(accessorDeclarationOrder.ts, 1, 18), Decl(accessorDeclarationOrder.ts, 5, 5))
+
+        return this.#name;
+>this.#name : Symbol(C1.#name, Decl(accessorDeclarationOrder.ts, 0, 10))
+>this : Symbol(C1, Decl(accessorDeclarationOrder.ts, 0, 0))
+    }
+
+    private set name(name: string) {
+>name : Symbol(C1.name, Decl(accessorDeclarationOrder.ts, 1, 18), Decl(accessorDeclarationOrder.ts, 5, 5))
+>name : Symbol(name, Decl(accessorDeclarationOrder.ts, 7, 21))
+
+        this.#name = name;
+>this.#name : Symbol(C1.#name, Decl(accessorDeclarationOrder.ts, 0, 10))
+>this : Symbol(C1, Decl(accessorDeclarationOrder.ts, 0, 0))
+>name : Symbol(name, Decl(accessorDeclarationOrder.ts, 7, 21))
+    }
+}
+
+class C2 {
+>C2 : Symbol(C2, Decl(accessorDeclarationOrder.ts, 10, 1))
+
+    #name: string;
+>#name : Symbol(C2.#name, Decl(accessorDeclarationOrder.ts, 12, 10))
+
+    private set name(name: string) {
+>name : Symbol(C2.name, Decl(accessorDeclarationOrder.ts, 13, 18), Decl(accessorDeclarationOrder.ts, 17, 5))
+>name : Symbol(name, Decl(accessorDeclarationOrder.ts, 15, 21))
+
+        this.#name = name;
+>this.#name : Symbol(C2.#name, Decl(accessorDeclarationOrder.ts, 12, 10))
+>this : Symbol(C2, Decl(accessorDeclarationOrder.ts, 10, 1))
+>name : Symbol(name, Decl(accessorDeclarationOrder.ts, 15, 21))
+    }
+
+    public get name() {
+>name : Symbol(C2.name, Decl(accessorDeclarationOrder.ts, 13, 18), Decl(accessorDeclarationOrder.ts, 17, 5))
+
+        return this.#name;
+>this.#name : Symbol(C2.#name, Decl(accessorDeclarationOrder.ts, 12, 10))
+>this : Symbol(C2, Decl(accessorDeclarationOrder.ts, 10, 1))
+    }
+}
+
+const c1 = new C1();
+>c1 : Symbol(c1, Decl(accessorDeclarationOrder.ts, 24, 5))
+>C1 : Symbol(C1, Decl(accessorDeclarationOrder.ts, 0, 0))
+
+const c2 = new C2();
+>c2 : Symbol(c2, Decl(accessorDeclarationOrder.ts, 25, 5))
+>C2 : Symbol(C2, Decl(accessorDeclarationOrder.ts, 10, 1))
+
+
+// no error
+c1.name;
+>c1.name : Symbol(C1.name, Decl(accessorDeclarationOrder.ts, 1, 18), Decl(accessorDeclarationOrder.ts, 5, 5))
+>c1 : Symbol(c1, Decl(accessorDeclarationOrder.ts, 24, 5))
+>name : Symbol(C1.name, Decl(accessorDeclarationOrder.ts, 1, 18), Decl(accessorDeclarationOrder.ts, 5, 5))
+
+// no error
+c2.name;
+>c2.name : Symbol(C2.name, Decl(accessorDeclarationOrder.ts, 13, 18), Decl(accessorDeclarationOrder.ts, 17, 5))
+>c2 : Symbol(c2, Decl(accessorDeclarationOrder.ts, 25, 5))
+>name : Symbol(C2.name, Decl(accessorDeclarationOrder.ts, 13, 18), Decl(accessorDeclarationOrder.ts, 17, 5))
+

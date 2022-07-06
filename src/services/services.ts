@@ -343,20 +343,25 @@ namespace ts {
         }
 
         getContextualDocumentationComment(context: Node | undefined, checker: TypeChecker | undefined): SymbolDisplayPart[] {
-            switch (context?.kind) {
-                case SyntaxKind.GetAccessor:
+            if (context) {
+                if (isGetAccessor(context)) {
                     if (!this.contextualGetAccessorDocumentationComment) {
                         this.contextualGetAccessorDocumentationComment = getDocumentationComment(filter(this.declarations, isGetAccessor), checker);
                     }
-                    return this.contextualGetAccessorDocumentationComment;
-                case SyntaxKind.SetAccessor:
+                    if (length(this.contextualGetAccessorDocumentationComment)) {
+                        return this.contextualGetAccessorDocumentationComment;
+                    }
+                }
+                if (isSetAccessor(context)) {
                     if (!this.contextualSetAccessorDocumentationComment) {
                         this.contextualSetAccessorDocumentationComment = getDocumentationComment(filter(this.declarations, isSetAccessor), checker);
                     }
-                    return this.contextualSetAccessorDocumentationComment;
-                default:
-                    return this.getDocumentationComment(checker);
+                    if (length(this.contextualSetAccessorDocumentationComment)) {
+                        return this.contextualSetAccessorDocumentationComment;
+                    }
+                }
             }
+            return this.getDocumentationComment(checker);
         }
 
         getJsDocTags(checker?: TypeChecker): JSDocTagInfo[] {
@@ -368,20 +373,25 @@ namespace ts {
         }
 
         getContextualJsDocTags(context: Node | undefined, checker: TypeChecker | undefined): JSDocTagInfo[] {
-            switch (context?.kind) {
-                case SyntaxKind.GetAccessor:
+            if (context) {
+                if (isGetAccessor(context)) {
                     if (!this.contextualGetAccessorTags) {
                         this.contextualGetAccessorTags = getJsDocTagsOfDeclarations(filter(this.declarations, isGetAccessor), checker);
                     }
-                    return this.contextualGetAccessorTags;
-                case SyntaxKind.SetAccessor:
+                    if (length(this.contextualGetAccessorTags)) {
+                        return this.contextualGetAccessorTags;
+                    }
+                }
+                if (isSetAccessor(context)) {
                     if (!this.contextualSetAccessorTags) {
                         this.contextualSetAccessorTags = getJsDocTagsOfDeclarations(filter(this.declarations, isSetAccessor), checker);
                     }
-                    return this.contextualSetAccessorTags;
-                default:
-                    return this.getJsDocTags(checker);
+                    if (length(this.contextualSetAccessorTags)) {
+                        return this.contextualSetAccessorTags;
+                    }
+                }
             }
+            return this.getJsDocTags(checker);
         }
     }
 
@@ -1283,7 +1293,10 @@ namespace ts {
                 lastTypesRootVersion = typeRootsVersion;
             }
 
-            const rootFileNames = host.getScriptFileNames();
+            // This array is retained by the program and will be used to determine if the program is up to date,
+            // so we need to make a copy in case the host mutates the underlying array - otherwise it would look
+            // like every program always has the host's current list of root files.
+            const rootFileNames = host.getScriptFileNames().slice();
 
             // Get a fresh cache of the host information
             const newSettings = host.getCompilationSettings() || getDefaultCompilerOptions();

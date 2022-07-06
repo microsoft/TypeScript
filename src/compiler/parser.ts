@@ -2449,7 +2449,7 @@ namespace ts {
             return parseElement();
         }
 
-        function currentNode(parsingContext: ParsingContext): Node | undefined {
+        function currentNode(parsingContext: ParsingContext, pos?: number): Node | undefined {
             // If we don't have a cursor or the parsing context isn't reusable, there's nothing to reuse.
             //
             // If there is an outstanding parse error that we've encountered, but not attached to
@@ -2463,7 +2463,7 @@ namespace ts {
                 return undefined;
             }
 
-            const node = syntaxCursor.currentNode(scanner.getStartPos());
+            const node = syntaxCursor.currentNode(pos ?? scanner.getStartPos());
 
             // Can't reuse a missing node.
             // Can't reuse a node that intersected the change range.
@@ -3631,11 +3631,11 @@ namespace ts {
             const hasJSDoc = hasPrecedingJSDocComment();
             const modifiers = parseModifiers();
             if (parseContextualModifier(SyntaxKind.GetKeyword)) {
-                return parseAccessorDeclaration(pos, hasJSDoc, /*decorators*/ undefined, modifiers, SyntaxKind.GetAccessor);
+                return parseAccessorDeclaration(pos, hasJSDoc, /*decorators*/ undefined, modifiers, SyntaxKind.GetAccessor, SignatureFlags.Type);
             }
 
             if (parseContextualModifier(SyntaxKind.SetKeyword)) {
-                return parseAccessorDeclaration(pos, hasJSDoc, /*decorators*/ undefined, modifiers, SyntaxKind.SetAccessor);
+                return parseAccessorDeclaration(pos, hasJSDoc, /*decorators*/ undefined, modifiers, SyntaxKind.SetAccessor, SignatureFlags.Type);
             }
 
             if (isIndexSignature()) {
@@ -5646,6 +5646,11 @@ namespace ts {
             if (isOptionalChain && isPrivateIdentifier(propertyAccess.name)) {
                 parseErrorAtRange(propertyAccess.name, Diagnostics.An_optional_chain_cannot_contain_private_identifiers);
             }
+            if (isExpressionWithTypeArguments(expression) && expression.typeArguments) {
+                const pos = expression.typeArguments.pos - 1;
+                const end = skipTrivia(sourceText, expression.typeArguments.end) + 1;
+                parseErrorAt(pos, end, Diagnostics.An_instantiation_expression_cannot_be_followed_by_a_property_access);
+            }
             return finishNode(propertyAccess, pos);
         }
 
@@ -5923,10 +5928,10 @@ namespace ts {
             const modifiers = parseModifiers();
 
             if (parseContextualModifier(SyntaxKind.GetKeyword)) {
-                return parseAccessorDeclaration(pos, hasJSDoc, decorators, modifiers, SyntaxKind.GetAccessor);
+                return parseAccessorDeclaration(pos, hasJSDoc, decorators, modifiers, SyntaxKind.GetAccessor, SignatureFlags.None);
             }
             if (parseContextualModifier(SyntaxKind.SetKeyword)) {
-                return parseAccessorDeclaration(pos, hasJSDoc, decorators, modifiers, SyntaxKind.SetAccessor);
+                return parseAccessorDeclaration(pos, hasJSDoc, decorators, modifiers, SyntaxKind.SetAccessor, SignatureFlags.None);
             }
 
             const asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
@@ -6610,25 +6615,20 @@ namespace ts {
         }
 
         function parseDeclaration(): Statement {
-            // TODO: Can we hold onto the parsed decorators/modifiers and advance the scanner
-            //       if we can't reuse the declaration, so that we don't do this work twice?
-            //
             // `parseListElement` attempted to get the reused node at this position,
             // but the ambient context flag was not yet set, so the node appeared
             // not reusable in that context.
-            const isAmbient = some(lookAhead(() => (parseDecorators(), parseModifiers())), isDeclareModifier);
-            if (isAmbient) {
-                const node = tryReuseAmbientDeclaration();
-                if (node) {
-                    return node;
-                }
-            }
-
             const pos = getNodePos();
             const hasJSDoc = hasPrecedingJSDocComment();
             const decorators = parseDecorators();
             const modifiers = parseModifiers();
+            const isAmbient = some(modifiers, isDeclareModifier);
             if (isAmbient) {
+                const node = tryReuseAmbientDeclaration(pos);
+                if (node) {
+                    return node;
+                }
+
                 for (const m of modifiers!) {
                     (m as Mutable<Node>).flags |= NodeFlags.Ambient;
                 }
@@ -6639,9 +6639,9 @@ namespace ts {
             }
         }
 
-        function tryReuseAmbientDeclaration(): Statement | undefined {
+        function tryReuseAmbientDeclaration(pos: number): Statement | undefined {
             return doInsideOfContext(NodeFlags.Ambient, () => {
-                const node = currentNode(parsingContext);
+                const node = currentNode(parsingContext, pos);
                 if (node) {
                     return consumeNode(node) as Statement;
                 }
@@ -6701,11 +6701,16 @@ namespace ts {
         }
 
         function parseFunctionBlockOrSemicolon(flags: SignatureFlags, diagnosticMessage?: DiagnosticMessage): Block | undefined {
-            if (token() !== SyntaxKind.OpenBraceToken && canParseSemicolon()) {
-                parseSemicolon();
-                return;
+            if (token() !== SyntaxKind.OpenBraceToken) {
+                if (flags & SignatureFlags.Type) {
+                    parseTypeMemberSemicolon();
+                    return;
+                }
+                if (canParseSemicolon()) {
+                    parseSemicolon();
+                    return;
+                }
             }
-
             return parseFunctionBlock(flags, diagnosticMessage);
         }
 
@@ -6972,12 +6977,12 @@ namespace ts {
             return parsePropertyDeclaration(pos, hasJSDoc, decorators, modifiers, name, questionToken);
         }
 
-        function parseAccessorDeclaration(pos: number, hasJSDoc: boolean, decorators: NodeArray<Decorator> | undefined, modifiers: NodeArray<Modifier> | undefined, kind: AccessorDeclaration["kind"]): AccessorDeclaration {
+        function parseAccessorDeclaration(pos: number, hasJSDoc: boolean, decorators: NodeArray<Decorator> | undefined, modifiers: NodeArray<Modifier> | undefined, kind: AccessorDeclaration["kind"], flags: SignatureFlags): AccessorDeclaration {
             const name = parsePropertyName();
             const typeParameters = parseTypeParameters();
             const parameters = parseParameters(SignatureFlags.None);
             const type = parseReturnType(SyntaxKind.ColonToken, /*isType*/ false);
-            const body = parseFunctionBlockOrSemicolon(SignatureFlags.None);
+            const body = parseFunctionBlockOrSemicolon(flags);
             const node = kind === SyntaxKind.GetAccessor
                 ? factory.createGetAccessorDeclaration(combineDecoratorsAndModifiers(decorators, modifiers), name, parameters, type, body)
                 : factory.createSetAccessorDeclaration(combineDecoratorsAndModifiers(decorators, modifiers), name, parameters, body);
@@ -7188,11 +7193,11 @@ namespace ts {
             }
 
             if (parseContextualModifier(SyntaxKind.GetKeyword)) {
-                return parseAccessorDeclaration(pos, hasJSDoc, decorators, modifiers, SyntaxKind.GetAccessor);
+                return parseAccessorDeclaration(pos, hasJSDoc, decorators, modifiers, SyntaxKind.GetAccessor, SignatureFlags.None);
             }
 
             if (parseContextualModifier(SyntaxKind.SetKeyword)) {
-                return parseAccessorDeclaration(pos, hasJSDoc, decorators, modifiers, SyntaxKind.SetAccessor);
+                return parseAccessorDeclaration(pos, hasJSDoc, decorators, modifiers, SyntaxKind.SetAccessor, SignatureFlags.None);
             }
 
             if (token() === SyntaxKind.ConstructorKeyword || token() === SyntaxKind.StringLiteral) {

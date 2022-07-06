@@ -485,7 +485,7 @@ namespace ts.codefix {
         const checker = context.program.getTypeChecker();
         const props = map(info.properties, prop => {
             const initializer = tryGetValueFromType(context, checker, importAdder, quotePreference, checker.getTypeOfSymbol(prop), info.parentDeclaration);
-            return factory.createPropertyAssignment(createPropertyNameNodeForIdentifierOrLiteral(prop.name, target, quotePreference === QuotePreference.Single), initializer);
+            return factory.createPropertyAssignment(createPropertyNameFromSymbol(prop, target, quotePreference, checker), initializer);
         });
         const options = {
             leadingTriviaOption: textChanges.LeadingTriviaOption.Exclude,
@@ -607,5 +607,15 @@ namespace ts.codefix {
         }
         const declaration = findAncestor(callExpression, n => isMethodDeclaration(n) || isConstructorDeclaration(n));
         return declaration && declaration.parent === node ? declaration : undefined;
+    }
+
+    function createPropertyNameFromSymbol(symbol: Symbol, target: ScriptTarget, quotePreference: QuotePreference, checker: TypeChecker) {
+        if (isTransientSymbol(symbol) && symbol.nameType && symbol.nameType.flags & TypeFlags.UniqueESSymbol) {
+            const expression = checker.symbolToExpression((symbol.nameType as UniqueESSymbolType).symbol, SymbolFlags.Value, symbol.valueDeclaration, NodeBuilderFlags.AllowUniqueESSymbolType);
+            if (expression) {
+                return factory.createComputedPropertyName(expression);
+            }
+        }
+        return createPropertyNameNodeForIdentifierOrLiteral(symbol.name, target, quotePreference === QuotePreference.Single);
     }
 }

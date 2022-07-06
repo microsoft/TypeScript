@@ -394,6 +394,22 @@ namespace ts {
             return formatEnum(flags, (ts as any).FlowFlags, /*isFlags*/ true);
         }
 
+        export function formatRelationComparisonResult(result: RelationComparisonResult | undefined): string {
+            return formatEnum(result, (ts as any).RelationComparisonResult, /*isFlags*/ true);
+        }
+
+        export function formatCheckMode(mode: CheckMode | undefined): string {
+            return formatEnum(mode, (ts as any).CheckMode, /*isFlags*/ true);
+        }
+
+        export function formatSignatureCheckMode(mode: SignatureCheckMode | undefined): string {
+            return formatEnum(mode, (ts as any).SignatureCheckMode, /*isFlags*/ true);
+        }
+
+        export function formatTypeFacts(facts: TypeFacts | undefined): string {
+            return formatEnum(facts, (ts as any).TypeFacts, /*isFlags*/ true);
+        }
+
         let isDebugInfoEnabled = false;
 
         interface ExtendedDebugModule {
@@ -747,6 +763,23 @@ namespace ts {
         export function deprecate<F extends (...args: any[]) => any>(func: F, options?: DeprecationOptions): F {
             const deprecation = createDeprecation(options?.name ?? getFunctionName(func), options);
             return wrapFunction(deprecation, func);
+        }
+
+        export function formatVariance(varianceFlags: VarianceFlags) {
+            const variance = varianceFlags & VarianceFlags.VarianceMask;
+            let result =
+                variance === VarianceFlags.Invariant ? "in out" :
+                variance === VarianceFlags.Bivariant ? "[bivariant]" :
+                variance === VarianceFlags.Contravariant ? "in" :
+                variance === VarianceFlags.Covariant ? "out" :
+                variance === VarianceFlags.Independent ? "[independent]" : "";
+            if (varianceFlags & VarianceFlags.Unmeasurable) {
+                result += " (unmeasurable)";
+            }
+            else if (varianceFlags & VarianceFlags.Unreliable) {
+                result += " (unreliable)";
+            }
+            return result;
         }
     }
 }
