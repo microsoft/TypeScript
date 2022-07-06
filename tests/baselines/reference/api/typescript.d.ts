@@ -2420,6 +2420,7 @@ declare namespace ts {
         UseAliasDefinedOutsideCurrentScope = 16384,
         UseSingleQuotesForStringLiteralType = 268435456,
         NoTypeReduction = 536870912,
+        OmitThisParameter = 33554432,
         AllowThisInObjectLiteral = 32768,
         AllowQualifiedNameInPlaceOfIdentifier = 65536,
         /** @deprecated AllowQualifedNameInPlaceOfIdentifier. Use AllowQualifiedNameInPlaceOfIdentifier instead. */
@@ -2450,6 +2451,7 @@ declare namespace ts {
         UseAliasDefinedOutsideCurrentScope = 16384,
         UseSingleQuotesForStringLiteralType = 268435456,
         NoTypeReduction = 536870912,
+        OmitThisParameter = 33554432,
         AllowUniqueESSymbolType = 1048576,
         AddUndefined = 131072,
         WriteArrowStyleSignature = 262144,
@@ -2458,7 +2460,7 @@ declare namespace ts {
         InFirstTypeArgument = 4194304,
         InTypeAlias = 8388608,
         /** @deprecated */ WriteOwnNameForAnyLike = 0,
-        NodeBuilderFlagsMask = 814775659
+        NodeBuilderFlagsMask = 848330091
     }
     export enum SymbolFormatFlags {
         None = 0,

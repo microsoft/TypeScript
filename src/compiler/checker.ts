@@ -791,6 +791,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
         const stringMappingTypes = new Map<string, StringMappingType>();
         const substitutionTypes = new Map<string, SubstitutionType>();
         const subtypeReductionCache = new Map<string, Type[]>();
+        const cachedTypes = new Map<string, Type>();
         const evolvingArrayTypes: EvolvingArrayType[] = [];
         const undefinedProperties: SymbolTable = new Map();
         const markerTypes = new Set<number>();
@@ -1089,6 +1090,15 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
         initializeTypeChecker();
 
         return checker;
+
+        function getCachedType(key: string | undefined) {
+            return key ? cachedTypes.get(key) : undefined;
+        }
+
+        function setCachedType(key: string | undefined, type: Type) {
+            if (key) cachedTypes.set(key, type);
+            return type;
+        }
 
         function getJsxNamespace(location: Node | undefined): __String {
             if (location) {
@@ -5858,7 +5868,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                 const expandedParams = getExpandedParameters(signature, /*skipUnionExpanding*/ true)[0];
                 // If the expanded parameter list had a variadic in a non-trailing position, don't expand it
                 const parameters = (some(expandedParams, p => p !== expandedParams[expandedParams.length - 1] && !!(getCheckFlags(p) & CheckFlags.RestParameter)) ? signature.parameters : expandedParams).map(parameter => symbolToParameterDeclaration(parameter, context, kind === SyntaxKind.Constructor, options?.privateSymbolVisitor, options?.bundledImports));
-                const thisParameter = tryGetThisParameterDeclaration(signature, context);
+                const thisParameter = context.flags & NodeBuilderFlags.OmitThisParameter ? undefined : tryGetThisParameterDeclaration(signature, context);
                 if (thisParameter) {
                     parameters.unshift(thisParameter);
                 }
@@ -7081,7 +7091,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                     }
                 }
 
-                function serializeSymbol(symbol: Symbol, isPrivate: boolean, propertyAsAlias: boolean) {
+                function serializeSymbol(symbol: Symbol, isPrivate: boolean, propertyAsAlias: boolean): void {
                     // cache visited list based on merged symbol, since we want to use the unmerged top-level symbol, but
                     // still skip reserializing it if we encounter the merged product later on
                     const visitedSym = getMergedSymbol(symbol);
@@ -7094,12 +7104,11 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                     if (skipMembershipCheck || (!!length(symbol.declarations) && some(symbol.declarations, d => !!findAncestor(d, n => n === enclosingDeclaration)))) {
                         const oldContext = context;
                         context = cloneNodeBuilderContext(context);
-                        const result = serializeSymbolWorker(symbol, isPrivate, propertyAsAlias);
+                        serializeSymbolWorker(symbol, isPrivate, propertyAsAlias);
                         if (context.reportedDiagnostic) {
                             oldcontext.reportedDiagnostic = context.reportedDiagnostic; // hoist diagnostic result into outer context
                         }
                         context = oldContext;
-                        return result;
                     }
                 }
 
@@ -7113,7 +7122,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                 // If it's a property: emit `export default _default` with a `_default` prop
                 // If it's a class/interface/function: emit a class/interface/function with a `default` modifier
                 // These forms can merge, eg (`export default 12; export default interface A {}`)
-                function serializeSymbolWorker(symbol: Symbol, isPrivate: boolean, propertyAsAlias: boolean) {
+                function serializeSymbolWorker(symbol: Symbol, isPrivate: boolean, propertyAsAlias: boolean): void {
                     const symbolName = unescapeLeadingUnderscores(symbol.escapedName);
                     const isDefault = symbol.escapedName === InternalSymbolName.Default;
                     if (isPrivate && !(context.flags & NodeBuilderFlags.AllowAnonymousIdentifier) && isStringANonContextualKeyword(symbolName) && !isDefault) {
@@ -10489,7 +10498,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                         error(declaration.typeExpression.type, Diagnostics.Type_alias_0_circularly_references_itself, symbolToString(symbol));
                     }
                     else {
-                        error(isNamedDeclaration(declaration) ? declaration.name : declaration || declaration, Diagnostics.Type_alias_0_circularly_references_itself, symbolToString(symbol));
+                        error(isNamedDeclaration(declaration) ? declaration.name || declaration : declaration, Diagnostics.Type_alias_0_circularly_references_itself, symbolToString(symbol));
                     }
                 }
                 links.declaredType = type;
@@ -21335,8 +21344,13 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                 type.flags & TypeFlags.NumberLiteral ? numberType :
                 type.flags & TypeFlags.BigIntLiteral ? bigintType :
                 type.flags & TypeFlags.BooleanLiteral ? booleanType :
-                type.flags & TypeFlags.Union ? mapType(type as UnionType, getBaseTypeOfLiteralType) :
+                type.flags & TypeFlags.Union ? getBaseTypeOfLiteralTypeUnion(type as UnionType) :
                 type;
+        }
+
+        function getBaseTypeOfLiteralTypeUnion(type: UnionType) {
+            const key = `B${getTypeId(type)}`;
+            return getCachedType(key) ?? setCachedType(key, mapType(type, getBaseTypeOfLiteralType));
         }
 
         function getWidenedLiteralType(type: Type): Type {
@@ -23574,23 +23588,25 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
         // For example, when a variable of type number | string | boolean is assigned a value of type number | boolean,
         // we remove type string.
         function getAssignmentReducedType(declaredType: UnionType, assignedType: Type) {
-            if (declaredType !== assignedType) {
-                if (assignedType.flags & TypeFlags.Never) {
-                    return assignedType;
-                }
-                let reducedType = filterType(declaredType, t => typeMaybeAssignableTo(assignedType, t));
-                if (assignedType.flags & TypeFlags.BooleanLiteral && isFreshLiteralType(assignedType)) {
-                    reducedType = mapType(reducedType, getFreshTypeOfLiteralType); // Ensure that if the assignment is a fresh type, that we narrow to fresh types
-                }
-                // Our crude heuristic produces an invalid result in some cases: see GH#26130.
-                // For now, when that happens, we give up and don't narrow at all.  (This also
-                // means we'll never narrow for erroneous assignments where the assigned type
-                // is not assignable to the declared type.)
-                if (isTypeAssignableTo(assignedType, reducedType)) {
-                    return reducedType;
-                }
+            if (declaredType === assignedType) {
+                return declaredType;
             }
-            return declaredType;
+            if (assignedType.flags & TypeFlags.Never) {
+                return assignedType;
+            }
+            const key = `A${getTypeId(declaredType)},${getTypeId(assignedType)}`;
+            return getCachedType(key) ?? setCachedType(key, getAssignmentReducedTypeWorker(declaredType, assignedType));
+        }
+
+        function getAssignmentReducedTypeWorker(declaredType: UnionType, assignedType: Type) {
+            const filteredType = filterType(declaredType, t => typeMaybeAssignableTo(assignedType, t));
+            // Ensure that we narrow to fresh types if the assignment is a fresh boolean literal type.
+            const reducedType = assignedType.flags & TypeFlags.BooleanLiteral && isFreshLiteralType(assignedType) ? mapType(filteredType, getFreshTypeOfLiteralType) : filteredType;
+            // Our crude heuristic produces an invalid result in some cases: see GH#26130.
+            // For now, when that happens, we give up and don't narrow at all.  (This also
+            // means we'll never narrow for erroneous assignments where the assigned type
+            // is not assignable to the declared type.)
+            return isTypeAssignableTo(assignedType, reducedType) ? reducedType : declaredType;
         }
 
         function isFunctionObjectType(type: ObjectType): boolean {
@@ -25084,7 +25100,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                 const targetType = hasStaticModifier(Debug.checkDefined(symbol.valueDeclaration, "should always have a declaration"))
                     ? getTypeOfSymbol(classSymbol) as InterfaceType
                     : getDeclaredTypeOfSymbol(classSymbol);
-                return getNarrowedType(type, targetType, assumeTrue, isTypeDerivedFrom);
+                return getNarrowedType(type, targetType, assumeTrue, /*checkDerived*/ true);
             }
 
             function narrowTypeByOptionalChainContainment(type: Type, operator: SyntaxKind, value: Expression, assumeTrue: boolean): Type {
@@ -25358,10 +25374,16 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                     if (!nonConstructorTypeInUnion) return type;
                 }
 
-                return getNarrowedType(type, targetType, assumeTrue, isTypeDerivedFrom);
+                return getNarrowedType(type, targetType, assumeTrue, /*checkDerived*/ true);
             }
 
-            function getNarrowedType(type: Type, candidate: Type, assumeTrue: boolean, isRelated: (source: Type, target: Type) => boolean) {
+            function getNarrowedType(type: Type, candidate: Type, assumeTrue: boolean, checkDerived: boolean) {
+                const key = type.flags & TypeFlags.Union ? `N${getTypeId(type)},${getTypeId(candidate)},${(assumeTrue ? 1 : 0) | (checkDerived ? 2 : 0)}` : undefined;
+                return getCachedType(key) ?? setCachedType(key, getNarrowedTypeWorker(type, candidate, assumeTrue, checkDerived));
+            }
+
+            function getNarrowedTypeWorker(type: Type, candidate: Type, assumeTrue: boolean, checkDerived: boolean) {
+                const isRelated = checkDerived ? isTypeDerivedFrom : isTypeSubtypeOf;
                 if (!assumeTrue) {
                     return filterType(type, t => !isRelated(t, candidate));
                 }
@@ -25373,7 +25395,6 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                         return assignableType;
                     }
                 }
-
                 // If the candidate type is a subtype of the target type, narrow to the candidate type.
                 // Otherwise, if the target type is assignable to the candidate type, keep the target type.
                 // Otherwise, if the candidate type is assignable to the target type, narrow to the candidate
@@ -25412,7 +25433,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                     const predicateArgument = getTypePredicateArgument(predicate, callExpression);
                     if (predicateArgument) {
                         if (isMatchingReference(reference, predicateArgument)) {
-                            return getNarrowedType(type, predicate.type, assumeTrue, isTypeSubtypeOf);
+                            return getNarrowedType(type, predicate.type, assumeTrue, /*checkDerived*/ false);
                         }
                         if (strictNullChecks && assumeTrue && optionalChainContainsReference(predicateArgument, reference) &&
                             !(getTypeFacts(predicate.type) & TypeFacts.EQUndefined)) {
@@ -25420,7 +25441,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                         }
                         const access = getDiscriminantPropertyAccess(predicateArgument, type);
                         if (access) {
-                            return narrowTypeByDiscriminant(type, access, t => getNarrowedType(t, predicate.type!, assumeTrue, isTypeSubtypeOf));
+                            return narrowTypeByDiscriminant(type, access, t => getNarrowedType(t, predicate.type!, assumeTrue, /*checkDerived*/ false));
                         }
                     }
                 }
@@ -25783,9 +25804,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                 return getTypeOfSymbol(symbol);
             }
 
-            // We should only mark aliases as referenced if there isn't a local value declaration
-            // for the symbol. Also, don't mark any property access expression LHS - checkPropertyAccessExpression will handle that
-            if (!(node.parent && isPropertyAccessExpression(node.parent) && node.parent.expression === node)) {
+            if (shouldMarkIdentifierAliasReferenced(node)) {
                 markAliasReferenced(symbol, node);
             }
 
@@ -25931,6 +25950,25 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                 return type;
             }
             return assignmentKind ? getBaseTypeOfLiteralType(flowType) : flowType;
+        }
+
+        function shouldMarkIdentifierAliasReferenced(node: Identifier): boolean {
+            const parent = node.parent;
+            if (parent) {
+                // A property access expression LHS? checkPropertyAccessExpression will handle that.
+                if (isPropertyAccessExpression(parent) && parent.expression === node) {
+                    return false;
+                }
+                // Next two check for an identifier inside a type only export.
+                if (isExportSpecifier(parent) && parent.isTypeOnly) {
+                    return false;
+                }
+                const greatGrandparent = parent.parent?.parent;
+                if (greatGrandparent && isExportDeclaration(greatGrandparent) && greatGrandparent.isTypeOnly) {
+                    return false;
+                }
+            }
+            return true;
         }
 
         function isInsideFunctionOrInstancePropertyInitializer(node: Node, threshold: Node): boolean {
@@ -30972,7 +31010,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                         argCheckMode = checkMode & CheckMode.IsForStringLiteralArgumentCompletions;
                         if (inferenceContext) {
                             const typeArgumentTypes = inferTypeArguments(node, candidate, args, argCheckMode, inferenceContext);
-                            checkCandidate = getSignatureInstantiation(candidate, typeArgumentTypes, isInJSFile(candidate.declaration), inferenceContext && inferenceContext.inferredTypeParameters);
+                            checkCandidate = getSignatureInstantiation(candidate, typeArgumentTypes, isInJSFile(candidate.declaration), inferenceContext.inferredTypeParameters);
                             // If the original signature has a generic rest type, instantiation may produce a
                             // signature with different arity and we need to perform another arity check.
                             if (getNonArrayRestType(candidate) && !hasCorrectArity(node, args, checkCandidate, signatureHelpTrailingComma)) {
@@ -41314,7 +41352,9 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                     error(exportedName, Diagnostics.Cannot_export_0_Only_local_declarations_can_be_exported_from_a_module, idText(exportedName));
                 }
                 else {
-                    markExportAsReferenced(node);
+                    if (!node.isTypeOnly && !node.parent.parent.isTypeOnly) {
+                        markExportAsReferenced(node);
+                    }
                     const target = symbol && (symbol.flags & SymbolFlags.Alias ? resolveAlias(symbol) : symbol);
                     if (!target || target === unknownSymbol || target.flags & SymbolFlags.Value) {
                         checkExpressionCached(node.propertyName || node.name);
@@ -44980,9 +45020,6 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                     }
                 }
                 else {
-                    return grammarErrorOnNode(initializer, Diagnostics.Initializers_are_not_allowed_in_ambient_contexts);
-                }
-                if (!isConstOrReadonly || isInvalidInitializer) {
                     return grammarErrorOnNode(initializer, Diagnostics.Initializers_are_not_allowed_in_ambient_contexts);
                 }
             }
