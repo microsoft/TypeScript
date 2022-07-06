@@ -507,11 +507,6 @@ namespace ts {
         }
 
         if (commandLine.options.project) {
-            if (commandLine.fileNames.length !== 0) {
-                reportDiagnostic(createCompilerDiagnostic(Diagnostics.Option_project_cannot_be_mixed_with_source_files_on_a_command_line));
-                return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
-            }
-
             const fileOrDirectory = normalizePath(commandLine.options.project);
             if (!fileOrDirectory /* current directory "." */ || sys.directoryExists(fileOrDirectory)) {
                 configFileName = combinePaths(fileOrDirectory, "tsconfig.json");
@@ -528,7 +523,7 @@ namespace ts {
                 }
             }
         }
-        else if (commandLine.fileNames.length === 0) {
+        else {
             const searchPath = normalizePath(sys.getCurrentDirectory());
             configFileName = findConfigFile(searchPath, fileName => sys.fileExists(fileName));
         }
@@ -552,6 +547,9 @@ namespace ts {
         if (configFileName) {
             const extendedConfigCache = new Map<string, ExtendedConfigCacheEntry>();
             const configParseResult = parseConfigFileWithSystem(configFileName, commandLineOptions, extendedConfigCache, commandLine.watchOptions, sys, reportDiagnostic)!; // TODO: GH#18217
+            if (length(commandLine.fileNames)) {
+                configParseResult.fileNames = commandLine.fileNames;
+            }
             if (commandLineOptions.showConfig) {
                 if (configParseResult.errors.length !== 0) {
                     reportDiagnostic = updateReportDiagnostic(

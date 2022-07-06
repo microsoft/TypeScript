@@ -117,11 +117,12 @@ interface Symbol {
      */
     export function loadProjectFromFiles(
         files: vfs.FileSet,
-        libContentToAppend?: string
+        libContentToAppend?: string,
+        cwd = "/"
     ): vfs.FileSystem {
         const fs = new vfs.FileSystem(/*ignoreCase*/ true, {
             files,
-            cwd: "/",
+            cwd,
             meta: { defaultLibLocation: "/lib" },
         });
         addLibAndMakeReadonly(fs, libContentToAppend);

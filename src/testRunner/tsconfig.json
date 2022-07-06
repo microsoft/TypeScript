@@ -152,6 +152,7 @@
         "unittests/tsbuildWatch/reexport.ts",
         "unittests/tsbuildWatch/watchEnvironment.ts",
         "unittests/tsc/cancellationToken.ts",
+        "unittests/tsc/commandLineOverridesConfig.ts",
         "unittests/tsc/composite.ts",
         "unittests/tsc/declarationEmit.ts",
         "unittests/tsc/incremental.ts",
