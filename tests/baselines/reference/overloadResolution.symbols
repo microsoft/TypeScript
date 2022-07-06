@@ -242,7 +242,9 @@ var n = fn5((n) => n.toFixed());
 >n : Symbol(n, Decl(overloadResolution.ts, 53, 3), Decl(overloadResolution.ts, 54, 3), Decl(overloadResolution.ts, 59, 3), Decl(overloadResolution.ts, 90, 3))
 >fn5 : Symbol(fn5, Decl(overloadResolution.ts, 84, 16), Decl(overloadResolution.ts, 87, 45), Decl(overloadResolution.ts, 88, 45))
 >n : Symbol(n, Decl(overloadResolution.ts, 90, 13))
+>n.toFixed : Symbol(__index, Decl(lib.es5.d.ts, --, --))
 >n : Symbol(n, Decl(overloadResolution.ts, 90, 13))
+>toFixed : Symbol(__index, Decl(lib.es5.d.ts, --, --))
 
 var s = fn5((n) => n.substr(0));
 >s : Symbol(s, Decl(overloadResolution.ts, 21, 3), Decl(overloadResolution.ts, 22, 3), Decl(overloadResolution.ts, 37, 3), Decl(overloadResolution.ts, 51, 3), Decl(overloadResolution.ts, 52, 3) ... and 3 more)

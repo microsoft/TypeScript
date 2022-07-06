@@ -15,5 +15,7 @@ enum U8 {
 }
 
 U8.bit_2
+>U8.bit_2 : Symbol(U8.__index)
 >U8 : Symbol(U8, Decl(exactSpellingSuggestion.ts, 0, 0))
+>bit_2 : Symbol(U8.__index)
 

@@ -13,18 +13,24 @@ const recordOfRecords: RecordOfRecords = {}
 >RecordOfRecords : Symbol(RecordOfRecords, Decl(spreadOfObjectLiteralAssignableToIndexSignature.ts, 0, 36))
 
 recordOfRecords.propA = {...(foo !== undefined ? {foo} : {})} // OK
+>recordOfRecords.propA : Symbol(RecordOfRecords.__index)
 >recordOfRecords : Symbol(recordOfRecords, Decl(spreadOfObjectLiteralAssignableToIndexSignature.ts, 3, 5))
+>propA : Symbol(RecordOfRecords.__index)
 >foo : Symbol(foo, Decl(spreadOfObjectLiteralAssignableToIndexSignature.ts, 0, 5))
 >undefined : Symbol(undefined)
 >foo : Symbol(foo, Decl(spreadOfObjectLiteralAssignableToIndexSignature.ts, 4, 50))
 
 recordOfRecords.propB = {...(foo && {foo})} // OK
+>recordOfRecords.propB : Symbol(RecordOfRecords.__index)
 >recordOfRecords : Symbol(recordOfRecords, Decl(spreadOfObjectLiteralAssignableToIndexSignature.ts, 3, 5))
+>propB : Symbol(RecordOfRecords.__index)
 >foo : Symbol(foo, Decl(spreadOfObjectLiteralAssignableToIndexSignature.ts, 0, 5))
 >foo : Symbol(foo, Decl(spreadOfObjectLiteralAssignableToIndexSignature.ts, 5, 37))
 
 recordOfRecords.propC = {...(foo !== undefined && {foo})} // error'd in 3.7 beta, should be OK
+>recordOfRecords.propC : Symbol(RecordOfRecords.__index)
 >recordOfRecords : Symbol(recordOfRecords, Decl(spreadOfObjectLiteralAssignableToIndexSignature.ts, 3, 5))
+>propC : Symbol(RecordOfRecords.__index)
 >foo : Symbol(foo, Decl(spreadOfObjectLiteralAssignableToIndexSignature.ts, 0, 5))
 >undefined : Symbol(undefined)
 >foo : Symbol(foo, Decl(spreadOfObjectLiteralAssignableToIndexSignature.ts, 6, 51))
@@ -39,18 +45,24 @@ const recordsOfRecordsOrEmpty: RecordOfRecordsOrEmpty = {}
 >RecordOfRecordsOrEmpty : Symbol(RecordOfRecordsOrEmpty, Decl(spreadOfObjectLiteralAssignableToIndexSignature.ts, 6, 57))
 
 recordsOfRecordsOrEmpty.propA = {...(foo !== undefined ? {foo} : {})} // OK
+>recordsOfRecordsOrEmpty.propA : Symbol(RecordOfRecordsOrEmpty.__index)
 >recordsOfRecordsOrEmpty : Symbol(recordsOfRecordsOrEmpty, Decl(spreadOfObjectLiteralAssignableToIndexSignature.ts, 9, 5))
+>propA : Symbol(RecordOfRecordsOrEmpty.__index)
 >foo : Symbol(foo, Decl(spreadOfObjectLiteralAssignableToIndexSignature.ts, 0, 5))
 >undefined : Symbol(undefined)
 >foo : Symbol(foo, Decl(spreadOfObjectLiteralAssignableToIndexSignature.ts, 10, 58))
 
 recordsOfRecordsOrEmpty.propB = {...(foo && {foo})} // OK
+>recordsOfRecordsOrEmpty.propB : Symbol(RecordOfRecordsOrEmpty.__index)
 >recordsOfRecordsOrEmpty : Symbol(recordsOfRecordsOrEmpty, Decl(spreadOfObjectLiteralAssignableToIndexSignature.ts, 9, 5))
+>propB : Symbol(RecordOfRecordsOrEmpty.__index)
 >foo : Symbol(foo, Decl(spreadOfObjectLiteralAssignableToIndexSignature.ts, 0, 5))
 >foo : Symbol(foo, Decl(spreadOfObjectLiteralAssignableToIndexSignature.ts, 11, 45))
 
 recordsOfRecordsOrEmpty.propC = {...(foo !== undefined && {foo})} // OK
+>recordsOfRecordsOrEmpty.propC : Symbol(RecordOfRecordsOrEmpty.__index)
 >recordsOfRecordsOrEmpty : Symbol(recordsOfRecordsOrEmpty, Decl(spreadOfObjectLiteralAssignableToIndexSignature.ts, 9, 5))
+>propC : Symbol(RecordOfRecordsOrEmpty.__index)
 >foo : Symbol(foo, Decl(spreadOfObjectLiteralAssignableToIndexSignature.ts, 0, 5))
 >undefined : Symbol(undefined)
 >foo : Symbol(foo, Decl(spreadOfObjectLiteralAssignableToIndexSignature.ts, 12, 59))

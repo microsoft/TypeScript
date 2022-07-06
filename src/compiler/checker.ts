@@ -450,6 +450,7 @@ namespace ts {
             getTypeOfPropertyOfType: (type, name) => getTypeOfPropertyOfType(type, escapeLeadingUnderscores(name)),
             getIndexInfoOfType: (type, kind) => getIndexInfoOfType(type, kind === IndexKind.String ? stringType : numberType),
             getIndexInfosOfType,
+            getIndexInfosOfIndexSymbol,
             getSignaturesOfType,
             getIndexTypeOfType: (type, kind) => getIndexTypeOfType(type, kind === IndexKind.String ? stringType : numberType),
             getIndexType: type => getIndexType(type),
@@ -42214,6 +42215,16 @@ namespace ts {
 
                     if (name.kind === SyntaxKind.PropertyAccessExpression) {
                         checkPropertyAccessExpression(name, CheckMode.Normal);
+                        if(!links.resolvedSymbol){
+                            const expressionType = checkExpressionCached(name.expression);
+                            const infos = getApplicableIndexInfos(expressionType, checkExpressionCached(name.name));
+                            if (length(infos) ) {
+                                const copy = createSymbol(SymbolFlags.Signature, InternalSymbolName.Index);
+                                copy.declarations = mapDefined(infos, i => i.declaration);
+                                copy.parent = expressionType.symbol ? expressionType.symbol : getSymbolAtLocation(copy.declarations[0].parent);
+                                return copy;
+                            }
+                        }
                     }
                     else {
                         checkQualifiedName(name, CheckMode.Normal);

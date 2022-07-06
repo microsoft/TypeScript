@@ -219,7 +219,9 @@ function fn5() { return undefined; }
 fn5 `${ (n) => n.toFixed() }`; // will error; 'n' should have type 'string'.
 >fn5 : Symbol(fn5, Decl(taggedTemplateStringsWithOverloadResolution3.ts, 62, 25), Decl(taggedTemplateStringsWithOverloadResolution3.ts, 65, 73), Decl(taggedTemplateStringsWithOverloadResolution3.ts, 66, 73))
 >n : Symbol(n, Decl(taggedTemplateStringsWithOverloadResolution3.ts, 68, 9))
+>n.toFixed : Symbol(__index, Decl(lib.es5.d.ts, --, --))
 >n : Symbol(n, Decl(taggedTemplateStringsWithOverloadResolution3.ts, 68, 9))
+>toFixed : Symbol(__index, Decl(lib.es5.d.ts, --, --))
 
 fn5 `${ (n) => n.substr(0) }`;
 >fn5 : Symbol(fn5, Decl(taggedTemplateStringsWithOverloadResolution3.ts, 62, 25), Decl(taggedTemplateStringsWithOverloadResolution3.ts, 65, 73), Decl(taggedTemplateStringsWithOverloadResolution3.ts, 66, 73))

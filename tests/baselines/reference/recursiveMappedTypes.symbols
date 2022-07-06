@@ -217,7 +217,9 @@ declare let x: ListChild;
 >ListChild : Symbol(ListChild, Decl(recursiveMappedTypes.ts, 73, 1))
 
 x.type;
+>x.type : Symbol(__index)
 >x : Symbol(x, Decl(recursiveMappedTypes.ts, 77, 11))
+>type : Symbol(__index)
 
 // Repros from #41790
 

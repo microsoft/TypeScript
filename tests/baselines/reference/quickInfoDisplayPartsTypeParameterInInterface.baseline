@@ -282,6 +282,10 @@
         {
           "text": "U",
           "kind": "typeParameterName"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
         }
       ],
       "documentation": []
@@ -458,6 +462,10 @@
         {
           "text": " ",
           "kind": "space"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
         },
         {
           "text": "T",
@@ -830,6 +838,10 @@
         {
           "text": "U",
           "kind": "typeParameterName"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
         }
       ],
       "documentation": []
@@ -998,6 +1010,10 @@
         {
           "text": " ",
           "kind": "space"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
         },
         {
           "text": "T",
@@ -1516,6 +1532,10 @@
         {
           "text": "U",
           "kind": "typeParameterName"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
         }
       ],
       "documentation": []
@@ -1708,6 +1728,10 @@
         {
           "text": " ",
           "kind": "space"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
         },
         {
           "text": "T",
@@ -2940,6 +2964,10 @@
         {
           "text": ">",
           "kind": "punctuation"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
         }
       ],
       "documentation": []
@@ -3176,6 +3204,10 @@
         {
           "text": ">",
           "kind": "punctuation"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
         }
       ],
       "documentation": []
@@ -3698,6 +3730,10 @@
         {
           "text": ">",
           "kind": "punctuation"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
         }
       ],
       "documentation": []
@@ -3926,6 +3962,10 @@
         {
           "text": ">",
           "kind": "punctuation"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
         }
       ],
       "documentation": []
@@ -4678,6 +4718,10 @@
         {
           "text": ">",
           "kind": "punctuation"
+        },
+        {
+          "text": "U",
+          "kind": "typeParameterName"
         }
       ],
       "documentation": []
@@ -4958,6 +5002,10 @@
         {
           "text": ">",
           "kind": "punctuation"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
         }
       ],
       "documentation": []

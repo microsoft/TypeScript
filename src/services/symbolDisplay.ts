@@ -64,6 +64,7 @@ namespace ts.SymbolDisplay {
         if (flags & SymbolFlags.SetAccessor) return ScriptElementKind.memberSetAccessorElement;
         if (flags & SymbolFlags.Method) return ScriptElementKind.memberFunctionElement;
         if (flags & SymbolFlags.Constructor) return ScriptElementKind.constructorImplementationElement;
+        if (flags & SymbolFlags.Signature) return ScriptElementKind.indexSignatureElement;
 
         if (flags & SymbolFlags.Property) {
             if (flags & SymbolFlags.Transient && (symbol as TransientSymbol).checkFlags & CheckFlags.Synthetic) {
@@ -498,58 +499,67 @@ namespace ts.SymbolDisplay {
         }
         if (!hasAddedSymbolInfo) {
             if (symbolKind !== ScriptElementKind.unknown) {
-                if (type) {
-                    if (isThisExpression) {
-                        prefixNextMeaning();
-                        displayParts.push(keywordPart(SyntaxKind.ThisKeyword));
-                    }
-                    else {
-                        addPrefixForAnyFunctionOrVar(symbol, symbolKind);
-                    }
-
-                    // For properties, variables and local vars: show the type
-                    if (symbolKind === ScriptElementKind.memberVariableElement ||
-                        symbolKind === ScriptElementKind.memberGetAccessorElement ||
-                        symbolKind === ScriptElementKind.memberSetAccessorElement ||
-                        symbolKind === ScriptElementKind.jsxAttribute ||
-                        symbolFlags & SymbolFlags.Variable ||
-                        symbolKind === ScriptElementKind.localVariableElement ||
-                        isThisExpression) {
-                        displayParts.push(punctuationPart(SyntaxKind.ColonToken));
-                        displayParts.push(spacePart());
-                        // If the type is type parameter, format it specially
-                        if (type.symbol && type.symbol.flags & SymbolFlags.TypeParameter) {
-                            const typeParameterParts = mapToDisplayParts(writer => {
-                                const param = typeChecker.typeParameterToDeclaration(type as TypeParameter, enclosingDeclaration, symbolDisplayNodeBuilderFlags)!;
-                                getPrinter().writeNode(EmitHint.Unspecified, param, getSourceFileOfNode(getParseTreeNode(enclosingDeclaration)), writer);
-                            });
-                            addRange(displayParts, typeParameterParts);
+                let indexInfos;
+                if(symbolKind === ScriptElementKind.indexSignatureElement) indexInfos = typeChecker.getIndexInfosOfIndexSymbol(symbol);
+                    if (type) {
+                        if (isThisExpression) {
+                            prefixNextMeaning();
+                            displayParts.push(keywordPart(SyntaxKind.ThisKeyword));
                         }
                         else {
-                            addRange(displayParts, typeToDisplayParts(typeChecker, type, enclosingDeclaration));
+                            addPrefixForAnyFunctionOrVar(symbol, symbolKind, indexInfos);
                         }
-                        if ((symbol as TransientSymbol).target && ((symbol as TransientSymbol).target as TransientSymbol).tupleLabelDeclaration) {
-                            const labelDecl = ((symbol as TransientSymbol).target as TransientSymbol).tupleLabelDeclaration!;
-                            Debug.assertNode(labelDecl.name, isIdentifier);
+                        // For properties, variables and local vars: show the type
+                        if (symbolKind === ScriptElementKind.memberVariableElement ||
+                            symbolKind === ScriptElementKind.memberGetAccessorElement ||
+                            symbolKind === ScriptElementKind.memberSetAccessorElement ||
+                            symbolKind === ScriptElementKind.jsxAttribute ||
+                            symbolFlags & SymbolFlags.Variable ||
+                            symbolKind === ScriptElementKind.localVariableElement ||
+                            symbolKind === ScriptElementKind.indexSignatureElement ||
+                            isThisExpression) {
+                            displayParts.push(punctuationPart(SyntaxKind.ColonToken));
                             displayParts.push(spacePart());
-                            displayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
-                            displayParts.push(textPart(idText(labelDecl.name)));
-                            displayParts.push(punctuationPart(SyntaxKind.CloseParenToken));
+                            // If the type is type parameter, format it specially
+                            if (type.symbol && type.symbol.flags & SymbolFlags.TypeParameter && symbolKind !== ScriptElementKind.indexSignatureElement) {
+                                const typeParameterParts = mapToDisplayParts(writer => {
+                                    const param = typeChecker.typeParameterToDeclaration(type as TypeParameter, enclosingDeclaration, symbolDisplayNodeBuilderFlags)!;
+                                    getPrinter().writeNode(EmitHint.Unspecified, param, getSourceFileOfNode(getParseTreeNode(enclosingDeclaration)), writer);
+                                });
+                                addRange(displayParts, typeParameterParts);
+                            }
+                            //If the type is index signature, format it specially as well
+                            if(symbolKind === ScriptElementKind.indexSignatureElement){
+                                if(indexInfos){
+                                    const indexTypeParts = typeToDisplayParts(typeChecker, indexInfos[0].type);
+                                    addRange(displayParts, indexTypeParts);
+                                }
+                            }
+                            else {
+                                addRange(displayParts, typeToDisplayParts(typeChecker, type, enclosingDeclaration));
+                            }
+                            if ((symbol as TransientSymbol).target && ((symbol as TransientSymbol).target as TransientSymbol).tupleLabelDeclaration) {
+                                const labelDecl = ((symbol as TransientSymbol).target as TransientSymbol).tupleLabelDeclaration!;
+                                Debug.assertNode(labelDecl.name, isIdentifier);
+                                displayParts.push(spacePart());
+                                displayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
+                                displayParts.push(textPart(idText(labelDecl.name)));
+                                displayParts.push(punctuationPart(SyntaxKind.CloseParenToken));
+                            }
+                        }
+                        else if (symbolFlags & SymbolFlags.Function ||
+                            symbolFlags & SymbolFlags.Method ||
+                            symbolFlags & SymbolFlags.Constructor ||
+                            symbolFlags & SymbolFlags.Signature ||
+                            symbolFlags & SymbolFlags.Accessor ||
+                            symbolKind === ScriptElementKind.memberFunctionElement) {
+                            const allSignatures = type.getNonNullableType().getCallSignatures();
+                            if (allSignatures.length) {
+                                addSignatureDisplayParts(allSignatures[0], allSignatures);
+                                hasMultipleSignatures = allSignatures.length > 1;
+                            }
                         }
                     }
-                    else if (symbolFlags & SymbolFlags.Function ||
-                        symbolFlags & SymbolFlags.Method ||
-                        symbolFlags & SymbolFlags.Constructor ||
-                        symbolFlags & SymbolFlags.Signature ||
-                        symbolFlags & SymbolFlags.Accessor ||
-                        symbolKind === ScriptElementKind.memberFunctionElement) {
-                        const allSignatures = type.getNonNullableType().getCallSignatures();
-                        if (allSignatures.length) {
-                            addSignatureDisplayParts(allSignatures[0], allSignatures);
-                            hasMultipleSignatures = allSignatures.length > 1;
-                        }
-                    }
-                }
             }
             else {
                 symbolKind = getSymbolKind(typeChecker, symbol, location);
@@ -638,26 +648,50 @@ namespace ts.SymbolDisplay {
             displayParts.push(spacePart());
         }
 
-        function addFullSymbolName(symbolToDisplay: Symbol, enclosingDeclaration?: Node) {
+        function addFullSymbolName(symbolToDisplay: Symbol, enclosingDeclaration?: Node, indexInfos?:IndexInfo[]) {
             if (alias && symbolToDisplay === symbol) {
                 symbolToDisplay = alias;
             }
-            const fullSymbolDisplayParts = symbolToDisplayParts(typeChecker, symbolToDisplay, enclosingDeclaration || sourceFile, /*meaning*/ undefined,
-                SymbolFormatFlags.WriteTypeParametersOrArguments | SymbolFormatFlags.UseOnlyExternalAliasing | SymbolFormatFlags.AllowAnyNodeKind);
+            let fullSymbolDisplayParts = symbolToDisplayParts(typeChecker, symbolToDisplay, enclosingDeclaration || sourceFile, /*meaning*/ undefined,
+            SymbolFormatFlags.WriteTypeParametersOrArguments | SymbolFormatFlags.UseOnlyExternalAliasing | SymbolFormatFlags.AllowAnyNodeKind);
+            if(symbolToDisplay.flags & SymbolFlags.Signature){
+                if(indexInfos){
+                    let index = 1;
+                    fullSymbolDisplayParts[index++] = punctuationPart(SyntaxKind.OpenBracketToken);
+                    if(length(indexInfos)){
+                        //Needed to handle more than one type of index
+                        for(let info=0; info<indexInfos.length; info++){
+                            const indexTypeDisplayParts =  typeToDisplayParts(typeChecker, indexInfos[info].keyType);
+                            //Needed to handle template literals
+                            for (const part of indexTypeDisplayParts){
+                                fullSymbolDisplayParts[index++] = part; 
+                            }
+                            if(info !== indexInfos.length-1){
+                                fullSymbolDisplayParts[index++] = spacePart();
+                                fullSymbolDisplayParts[index++] = punctuationPart(SyntaxKind.BarToken);
+                                fullSymbolDisplayParts[index++] = spacePart();
+                            }
+                        }
+                        fullSymbolDisplayParts[index] = punctuationPart(SyntaxKind.CloseBracketToken);
+                    }
+                }
+                else{
+                    fullSymbolDisplayParts[2] = textOrKeywordPart(TypeFlags[`1`]); //This is the fallback in case else fails
+                }
+            }
             addRange(displayParts, fullSymbolDisplayParts);
-
             if (symbol.flags & SymbolFlags.Optional) {
                 displayParts.push(punctuationPart(SyntaxKind.QuestionToken));
             }
         }
 
-        function addPrefixForAnyFunctionOrVar(symbol: Symbol, symbolKind: string) {
+        function addPrefixForAnyFunctionOrVar(symbol: Symbol, symbolKind: string, indexInfos?:IndexInfo[]) {
             prefixNextMeaning();
             if (symbolKind) {
                 pushSymbolKind(symbolKind);
                 if (symbol && !some(symbol.declarations, d => isArrowFunction(d) || (isFunctionExpression(d) || isClassExpression(d)) && !d.name)) {
                     displayParts.push(spacePart());
-                    addFullSymbolName(symbol);
+                    addFullSymbolName(symbol, undefined, indexInfos);
                 }
             }
         }

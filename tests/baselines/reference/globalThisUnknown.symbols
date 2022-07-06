@@ -6,7 +6,9 @@ declare let win: Window & typeof globalThis;
 
 // this access should be an error
 win.hi
+>win.hi : Symbol(__index, Decl(lib.dom.d.ts, --, --))
 >win : Symbol(win, Decl(globalThisUnknown.ts, 0, 11))
+>hi : Symbol(__index, Decl(lib.dom.d.ts, --, --))
 
 // these two should be fine, with type any
 this.hi

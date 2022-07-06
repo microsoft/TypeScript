@@ -198,5 +198,7 @@ var noContextualType = ({ aNumber = 12, ...notEmptyObject }) => aNumber + notEmp
 >aNumber : Symbol(aNumber, Decl(objectRest.ts, 45, 25))
 >notEmptyObject : Symbol(notEmptyObject, Decl(objectRest.ts, 45, 39))
 >aNumber : Symbol(aNumber, Decl(objectRest.ts, 45, 25))
+>notEmptyObject.anythingGoes : Symbol(notEmptyObject.__index)
 >notEmptyObject : Symbol(notEmptyObject, Decl(objectRest.ts, 45, 39))
+>anythingGoes : Symbol(notEmptyObject.__index)
 

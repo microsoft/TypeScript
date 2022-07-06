@@ -59,7 +59,9 @@ var n3 = b.reduce<string>( (x, y) => x + y, ""); // Initial value is of type str
 >y : Symbol(y, Decl(genericReduce.ts, 10, 30))
 
 n3.toExponential(2); // should error if 'n3' is correctly type 'string'
+>n3.toExponential : Symbol(__index, Decl(lib.es5.d.ts, --, --))
 >n3 : Symbol(n3, Decl(genericReduce.ts, 10, 3))
+>toExponential : Symbol(__index, Decl(lib.es5.d.ts, --, --))
 
 n3.charAt(0);        // should not error if 'n3' is correctly type 'string'
 >n3.charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))

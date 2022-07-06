@@ -90,10 +90,14 @@ function f2<T extends { [key: string]: number }>(a: { x: number, y: number }, b:
 >x : Symbol(x, Decl(keyofAndIndexedAccess2.ts, 12, 53))
 
     b.x;
+>b.x : Symbol(__index, Decl(keyofAndIndexedAccess2.ts, 12, 82))
 >b : Symbol(b, Decl(keyofAndIndexedAccess2.ts, 12, 77))
+>x : Symbol(__index, Decl(keyofAndIndexedAccess2.ts, 12, 82))
 
     c.x;
+>c.x : Symbol(T.__index, Decl(keyofAndIndexedAccess2.ts, 12, 23))
 >c : Symbol(c, Decl(keyofAndIndexedAccess2.ts, 12, 107))
+>x : Symbol(T.__index, Decl(keyofAndIndexedAccess2.ts, 12, 23))
 
     c[k];
 >c : Symbol(c, Decl(keyofAndIndexedAccess2.ts, 12, 107))
@@ -105,10 +109,14 @@ function f2<T extends { [key: string]: number }>(a: { x: number, y: number }, b:
 >x : Symbol(x, Decl(keyofAndIndexedAccess2.ts, 12, 53))
 
     b.x = 1;
+>b.x : Symbol(__index, Decl(keyofAndIndexedAccess2.ts, 12, 82))
 >b : Symbol(b, Decl(keyofAndIndexedAccess2.ts, 12, 77))
+>x : Symbol(__index, Decl(keyofAndIndexedAccess2.ts, 12, 82))
 
     c.x = 1;  // Error, cannot write to index signature through constraint
+>c.x : Symbol(T.__index, Decl(keyofAndIndexedAccess2.ts, 12, 23))
 >c : Symbol(c, Decl(keyofAndIndexedAccess2.ts, 12, 107))
+>x : Symbol(T.__index, Decl(keyofAndIndexedAccess2.ts, 12, 23))
 
     c[k] = 1; // Error, cannot write to index signature through constraint
 >c : Symbol(c, Decl(keyofAndIndexedAccess2.ts, 12, 107))
@@ -234,7 +242,9 @@ function f11<K extends keyof Dict>(obj: Dict, k1: keyof Dict, k2: K) {
 >K : Symbol(K, Decl(keyofAndIndexedAccess2.ts, 57, 13))
 
   obj.foo = 123;
+>obj.foo : Symbol(__index)
 >obj : Symbol(obj, Decl(keyofAndIndexedAccess2.ts, 57, 35))
+>foo : Symbol(__index)
 
   obj[k1] = 123;
 >obj : Symbol(obj, Decl(keyofAndIndexedAccess2.ts, 57, 35))
@@ -262,7 +272,9 @@ function f12<T extends Readonly<Dict>, K extends keyof T>(obj: T, k1: keyof Dict
 >K : Symbol(K, Decl(keyofAndIndexedAccess2.ts, 63, 38))
 
   obj.foo = 123;  // Error
+>obj.foo : Symbol(T.__index)
 >obj : Symbol(obj, Decl(keyofAndIndexedAccess2.ts, 63, 58))
+>foo : Symbol(T.__index)
 
   obj[k1] = 123;  // Error
 >obj : Symbol(obj, Decl(keyofAndIndexedAccess2.ts, 63, 58))
@@ -513,7 +525,9 @@ export class c {
 
   constructor() {
     this.a = "b";
+>this.a : Symbol(c.__index, Decl(keyofAndIndexedAccess2.ts, 140, 16))
 >this : Symbol(c, Decl(keyofAndIndexedAccess2.ts, 136, 1))
+>a : Symbol(c.__index, Decl(keyofAndIndexedAccess2.ts, 140, 16))
 
     this["a"] = "b";
 >this : Symbol(c, Decl(keyofAndIndexedAccess2.ts, 136, 1))

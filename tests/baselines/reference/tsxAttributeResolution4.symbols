@@ -32,5 +32,7 @@ interface Attribs1 {
 >test1 : Symbol(JSX.IntrinsicElements.test1, Decl(file.tsx, 2, 30))
 >x : Symbol(x, Decl(file.tsx, 14, 13))
 >n : Symbol(n, Decl(file.tsx, 14, 17))
+>n.len : Symbol(__index, Decl(lib.es5.d.ts, --, --))
 >n : Symbol(n, Decl(file.tsx, 14, 17))
+>len : Symbol(__index, Decl(lib.es5.d.ts, --, --))
 

@@ -115,9 +115,11 @@ thing.doSomething((x, y) => x.name.toExponential(0)); // x.name should be string
 >doSomething : Symbol(MyArrayWrapper.doSomething, Decl(lambdaParamTypes.ts, 1, 36))
 >x : Symbol(x, Decl(lambdaParamTypes.ts, 19, 19))
 >y : Symbol(y, Decl(lambdaParamTypes.ts, 19, 21))
+>x.name.toExponential : Symbol(__index, Decl(lib.es5.d.ts, --, --))
 >x.name : Symbol(name, Decl(lambdaParamTypes.ts, 7, 21))
 >x : Symbol(x, Decl(lambdaParamTypes.ts, 19, 19))
 >name : Symbol(name, Decl(lambdaParamTypes.ts, 7, 21))
+>toExponential : Symbol(__index, Decl(lib.es5.d.ts, --, --))
 
 thing.doSomething((x, y) => y.id.charAt(0));
 >thing.doSomething : Symbol(MyArrayWrapper.doSomething, Decl(lambdaParamTypes.ts, 1, 36))
@@ -135,7 +137,9 @@ thing.doSomething((x, y) => y.name.toExponential(0));
 >doSomething : Symbol(MyArrayWrapper.doSomething, Decl(lambdaParamTypes.ts, 1, 36))
 >x : Symbol(x, Decl(lambdaParamTypes.ts, 21, 19))
 >y : Symbol(y, Decl(lambdaParamTypes.ts, 21, 21))
+>y.name.toExponential : Symbol(__index, Decl(lib.es5.d.ts, --, --))
 >y.name : Symbol(name, Decl(lambdaParamTypes.ts, 7, 21))
 >y : Symbol(y, Decl(lambdaParamTypes.ts, 21, 21))
 >name : Symbol(name, Decl(lambdaParamTypes.ts, 7, 21))
+>toExponential : Symbol(__index, Decl(lib.es5.d.ts, --, --))
 

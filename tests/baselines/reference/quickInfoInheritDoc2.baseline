@@ -64,6 +64,10 @@
         {
           "text": "T",
           "kind": "typeParameterName"
+        },
+        {
+          "text": "T",
+          "kind": "typeParameterName"
         }
       ],
       "documentation": [

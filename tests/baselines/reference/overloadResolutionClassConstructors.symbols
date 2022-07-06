@@ -211,7 +211,9 @@ class fn5 {
 new fn5((n) => n.toFixed());
 >fn5 : Symbol(fn5, Decl(overloadResolutionClassConstructors.ts, 87, 20))
 >n : Symbol(n, Decl(overloadResolutionClassConstructors.ts, 95, 9))
+>n.toFixed : Symbol(__index, Decl(lib.es5.d.ts, --, --))
 >n : Symbol(n, Decl(overloadResolutionClassConstructors.ts, 95, 9))
+>toFixed : Symbol(__index, Decl(lib.es5.d.ts, --, --))
 
 new fn5((n) => n.substr(0));
 >fn5 : Symbol(fn5, Decl(overloadResolutionClassConstructors.ts, 87, 20))
@@ -223,7 +225,9 @@ new fn5((n) => n.substr(0));
 new fn5((n) => n.blah); // Error
 >fn5 : Symbol(fn5, Decl(overloadResolutionClassConstructors.ts, 87, 20))
 >n : Symbol(n, Decl(overloadResolutionClassConstructors.ts, 97, 9))
+>n.blah : Symbol(__index, Decl(lib.es5.d.ts, --, --))
 >n : Symbol(n, Decl(overloadResolutionClassConstructors.ts, 97, 9))
+>blah : Symbol(__index, Decl(lib.es5.d.ts, --, --))
 
 
 

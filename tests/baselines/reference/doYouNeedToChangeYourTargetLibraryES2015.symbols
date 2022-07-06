@@ -44,6 +44,8 @@ const testReflectSetPrototypeOf = Reflect.setPrototypeOf({}, {});
 
 const testArrayFind = [""].find((val, idx, obj) => {
 >testArrayFind : Symbol(testArrayFind, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 14, 5))
+>[""].find : Symbol(Array.__index, Decl(lib.es5.d.ts, --, --))
+>find : Symbol(Array.__index, Decl(lib.es5.d.ts, --, --))
 >val : Symbol(val, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 14, 33))
 >idx : Symbol(idx, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 14, 37))
 >obj : Symbol(obj, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 14, 42))
@@ -52,6 +54,8 @@ const testArrayFind = [""].find((val, idx, obj) => {
 });
 const testArrayFindIndex = [""].findIndex((val, idx, obj) => {
 >testArrayFindIndex : Symbol(testArrayFindIndex, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 17, 5))
+>[""].findIndex : Symbol(Array.__index, Decl(lib.es5.d.ts, --, --))
+>findIndex : Symbol(Array.__index, Decl(lib.es5.d.ts, --, --))
 >val : Symbol(val, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 17, 43))
 >idx : Symbol(idx, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 17, 47))
 >obj : Symbol(obj, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 17, 52))
@@ -60,18 +64,28 @@ const testArrayFindIndex = [""].findIndex((val, idx, obj) => {
 });
 const testArrayFill = [""].fill("fill");
 >testArrayFill : Symbol(testArrayFill, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 20, 5))
+>[""].fill : Symbol(Array.__index, Decl(lib.es5.d.ts, --, --))
+>fill : Symbol(Array.__index, Decl(lib.es5.d.ts, --, --))
 
 const testArrayCopyWithin = [""].copyWithin(0, 0);
 >testArrayCopyWithin : Symbol(testArrayCopyWithin, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 21, 5))
+>[""].copyWithin : Symbol(Array.__index, Decl(lib.es5.d.ts, --, --))
+>copyWithin : Symbol(Array.__index, Decl(lib.es5.d.ts, --, --))
 
 const testArrayEntries = [""].entries();
 >testArrayEntries : Symbol(testArrayEntries, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 22, 5))
+>[""].entries : Symbol(Array.__index, Decl(lib.es5.d.ts, --, --))
+>entries : Symbol(Array.__index, Decl(lib.es5.d.ts, --, --))
 
 const testArrayKeys = [""].keys();
 >testArrayKeys : Symbol(testArrayKeys, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 23, 5))
+>[""].keys : Symbol(Array.__index, Decl(lib.es5.d.ts, --, --))
+>keys : Symbol(Array.__index, Decl(lib.es5.d.ts, --, --))
 
 const testArrayValues = [""].values();
 >testArrayValues : Symbol(testArrayValues, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 24, 5))
+>[""].values : Symbol(Array.__index, Decl(lib.es5.d.ts, --, --))
+>values : Symbol(Array.__index, Decl(lib.es5.d.ts, --, --))
 
 const testArrayConstructorFrom = Array.from([]);
 >testArrayConstructorFrom : Symbol(testArrayConstructorFrom, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 25, 5))
@@ -240,60 +254,98 @@ const testAsyncIterator: AsyncIterator<any, any, any> = null as any;
 
 const testStringCodePointAt = "".codePointAt(0);
 >testStringCodePointAt : Symbol(testStringCodePointAt, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 67, 5))
+>"".codePointAt : Symbol(__index, Decl(lib.es5.d.ts, --, --))
+>codePointAt : Symbol(__index, Decl(lib.es5.d.ts, --, --))
 
 const testStringIncludes = "".includes("");
 >testStringIncludes : Symbol(testStringIncludes, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 68, 5))
+>"".includes : Symbol(__index, Decl(lib.es5.d.ts, --, --))
+>includes : Symbol(__index, Decl(lib.es5.d.ts, --, --))
 
 const testStringEndsWith = "".endsWith("");
 >testStringEndsWith : Symbol(testStringEndsWith, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 69, 5))
+>"".endsWith : Symbol(__index, Decl(lib.es5.d.ts, --, --))
+>endsWith : Symbol(__index, Decl(lib.es5.d.ts, --, --))
 
 const testStringNormalize = "".normalize();
 >testStringNormalize : Symbol(testStringNormalize, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 70, 5))
+>"".normalize : Symbol(__index, Decl(lib.es5.d.ts, --, --))
+>normalize : Symbol(__index, Decl(lib.es5.d.ts, --, --))
 
 const testStringRepeat = "".repeat(0);
 >testStringRepeat : Symbol(testStringRepeat, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 71, 5))
+>"".repeat : Symbol(__index, Decl(lib.es5.d.ts, --, --))
+>repeat : Symbol(__index, Decl(lib.es5.d.ts, --, --))
 
 const testStringStartsWith = "".startsWith("");
 >testStringStartsWith : Symbol(testStringStartsWith, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 72, 5))
+>"".startsWith : Symbol(__index, Decl(lib.es5.d.ts, --, --))
+>startsWith : Symbol(__index, Decl(lib.es5.d.ts, --, --))
 
 const testStringAnchor = "".anchor("");
 >testStringAnchor : Symbol(testStringAnchor, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 73, 5))
+>"".anchor : Symbol(__index, Decl(lib.es5.d.ts, --, --))
+>anchor : Symbol(__index, Decl(lib.es5.d.ts, --, --))
 
 const testStringBig = "".big();
 >testStringBig : Symbol(testStringBig, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 74, 5))
+>"".big : Symbol(__index, Decl(lib.es5.d.ts, --, --))
+>big : Symbol(__index, Decl(lib.es5.d.ts, --, --))
 
 const testStringBlink = "".blink();
 >testStringBlink : Symbol(testStringBlink, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 75, 5))
+>"".blink : Symbol(__index, Decl(lib.es5.d.ts, --, --))
+>blink : Symbol(__index, Decl(lib.es5.d.ts, --, --))
 
 const testStringBold = "".bold();
 >testStringBold : Symbol(testStringBold, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 76, 5))
+>"".bold : Symbol(__index, Decl(lib.es5.d.ts, --, --))
+>bold : Symbol(__index, Decl(lib.es5.d.ts, --, --))
 
 const testStringFixed = "".fixed();
 >testStringFixed : Symbol(testStringFixed, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 77, 5))
+>"".fixed : Symbol(__index, Decl(lib.es5.d.ts, --, --))
+>fixed : Symbol(__index, Decl(lib.es5.d.ts, --, --))
 
 const testStringFontColor = "".fontcolor("blue");
 >testStringFontColor : Symbol(testStringFontColor, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 78, 5))
+>"".fontcolor : Symbol(__index, Decl(lib.es5.d.ts, --, --))
+>fontcolor : Symbol(__index, Decl(lib.es5.d.ts, --, --))
 
 const testStringFontSize = "".fontsize(0);
 >testStringFontSize : Symbol(testStringFontSize, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 79, 5))
+>"".fontsize : Symbol(__index, Decl(lib.es5.d.ts, --, --))
+>fontsize : Symbol(__index, Decl(lib.es5.d.ts, --, --))
 
 const testStringItalics = "".italics();
 >testStringItalics : Symbol(testStringItalics, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 80, 5))
+>"".italics : Symbol(__index, Decl(lib.es5.d.ts, --, --))
+>italics : Symbol(__index, Decl(lib.es5.d.ts, --, --))
 
 const testStringLink = "".link("");
 >testStringLink : Symbol(testStringLink, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 81, 5))
+>"".link : Symbol(__index, Decl(lib.es5.d.ts, --, --))
+>link : Symbol(__index, Decl(lib.es5.d.ts, --, --))
 
 const testStringSmall = "".small();
 >testStringSmall : Symbol(testStringSmall, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 82, 5))
+>"".small : Symbol(__index, Decl(lib.es5.d.ts, --, --))
+>small : Symbol(__index, Decl(lib.es5.d.ts, --, --))
 
 const testStringStrike = "".strike();
 >testStringStrike : Symbol(testStringStrike, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 83, 5))
+>"".strike : Symbol(__index, Decl(lib.es5.d.ts, --, --))
+>strike : Symbol(__index, Decl(lib.es5.d.ts, --, --))
 
 const testStringSub = "".sub();
 >testStringSub : Symbol(testStringSub, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 84, 5))
+>"".sub : Symbol(__index, Decl(lib.es5.d.ts, --, --))
+>sub : Symbol(__index, Decl(lib.es5.d.ts, --, --))
 
 const testStringSup = "".sup();
 >testStringSup : Symbol(testStringSup, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 85, 5))
+>"".sup : Symbol(__index, Decl(lib.es5.d.ts, --, --))
+>sup : Symbol(__index, Decl(lib.es5.d.ts, --, --))
 
 const testStringConstructorFromCodePoint = String.fromCodePoint();
 >testStringConstructorFromCodePoint : Symbol(testStringConstructorFromCodePoint, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 86, 5))

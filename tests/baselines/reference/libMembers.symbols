@@ -13,7 +13,9 @@ s.substring(3,4);
 >substring : Symbol(String.substring, Decl(lib.es5.d.ts, --, --))
 
 s.subby(12);   // error unresolved
+>s.subby : Symbol(__index, Decl(lib.es5.d.ts, --, --))
 >s : Symbol(s, Decl(libMembers.ts, 0, 3))
+>subby : Symbol(__index, Decl(lib.es5.d.ts, --, --))
 
 String.fromCharCode(12);
 >String.fromCharCode : Symbol(StringConstructor.fromCharCode, Decl(lib.es5.d.ts, --, --))

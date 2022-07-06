@@ -7,6 +7,9 @@ var functions = [function() {
 >functions : Symbol(functions, Decl(undefinedSymbolReferencedInArrayLiteral1.ts, 2, 3))
 
     [1, 2, 3].NonexistantMethod();
+>[1, 2, 3].NonexistantMethod : Symbol(Array.__index, Decl(lib.es5.d.ts, --, --))
+>NonexistantMethod : Symbol(Array.__index, Decl(lib.es5.d.ts, --, --))
+
     anotherNonExistingMethod();
 }];
 

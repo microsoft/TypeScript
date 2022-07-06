@@ -13,7 +13,9 @@ if (typeof config['works'] !== 'boolean') {
 
     config.works.prop = 'test'; // ok
 >config.works.prop : Symbol(prop, Decl(controlFlowElementAccess2.ts, 1, 30))
+>config.works : Symbol(__index, Decl(controlFlowElementAccess2.ts, 0, 23))
 >config : Symbol(config, Decl(controlFlowElementAccess2.ts, 0, 13))
+>works : Symbol(__index, Decl(controlFlowElementAccess2.ts, 0, 23))
 >prop : Symbol(prop, Decl(controlFlowElementAccess2.ts, 1, 30))
 
     config['works'].prop = 'test'; // error, config['works']: boolean | { 'prop': string }
@@ -22,7 +24,9 @@ if (typeof config['works'] !== 'boolean') {
 >prop : Symbol(prop, Decl(controlFlowElementAccess2.ts, 1, 30))
 }
 if (typeof config.works !== 'boolean') {
+>config.works : Symbol(__index, Decl(controlFlowElementAccess2.ts, 0, 23))
 >config : Symbol(config, Decl(controlFlowElementAccess2.ts, 0, 13))
+>works : Symbol(__index, Decl(controlFlowElementAccess2.ts, 0, 23))
 
     config['works'].prop = 'test'; // error, config['works']: boolean | { 'prop': string }
 >config['works'].prop : Symbol(prop, Decl(controlFlowElementAccess2.ts, 1, 30))
@@ -31,7 +35,9 @@ if (typeof config.works !== 'boolean') {
 
     config.works.prop = 'test'; // ok
 >config.works.prop : Symbol(prop, Decl(controlFlowElementAccess2.ts, 1, 30))
+>config.works : Symbol(__index, Decl(controlFlowElementAccess2.ts, 0, 23))
 >config : Symbol(config, Decl(controlFlowElementAccess2.ts, 0, 13))
+>works : Symbol(__index, Decl(controlFlowElementAccess2.ts, 0, 23))
 >prop : Symbol(prop, Decl(controlFlowElementAccess2.ts, 1, 30))
 }
 
