@@ -1283,7 +1283,10 @@ namespace ts {
                 lastTypesRootVersion = typeRootsVersion;
             }
 
-            const rootFileNames = host.getScriptFileNames();
+            // This array is retained by the program and will be used to determine if the program is up to date,
+            // so we need to make a copy in case the host mutates the underlying array - otherwise it would look
+            // like every program always has the host's current list of root files.
+            const rootFileNames = host.getScriptFileNames().slice();
 
             // Get a fresh cache of the host information
             const newSettings = host.getCompilationSettings() || getDefaultCompilerOptions();
