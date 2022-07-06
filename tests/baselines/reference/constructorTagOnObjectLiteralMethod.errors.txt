@@ -1,5 +1,5 @@
 tests/cases/conformance/jsdoc/example.js(3,16): error TS2339: Property 'bar' does not exist on type '{ Foo(): void; }'.
-tests/cases/conformance/jsdoc/example.js(5,17): error TS2339: Property 'bar' does not exist on type 'void'.
+tests/cases/conformance/jsdoc/example.js(5,2): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
 
 
 ==== tests/cases/conformance/jsdoc/example.js (2 errors) ====
@@ -10,6 +10,6 @@ tests/cases/conformance/jsdoc/example.js(5,17): error TS2339: Property 'bar' doe
 !!! error TS2339: Property 'bar' does not exist on type '{ Foo(): void; }'.
     };
     (new obj.Foo()).bar
-                    ~~~
-!!! error TS2339: Property 'bar' does not exist on type 'void'.
+     ~~~~~~~~~~~~~
+!!! error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
     

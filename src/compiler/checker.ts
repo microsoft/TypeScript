@@ -31684,19 +31684,19 @@ namespace ts {
          * Indicates whether a declaration can be treated as a constructor in a JavaScript
          * file.
          */
-        function isJSConstructor(node: Node | undefined): node is FunctionDeclaration | FunctionExpression | MethodDeclaration {
+        function isJSConstructor(node: Node | undefined): node is FunctionDeclaration | FunctionExpression {
             if (!node || !isInJSFile(node)) {
                 return false;
             }
-            const func = isFunctionDeclaration(node) || isFunctionExpression(node) || isObjectLiteralMethod(node) ? node :
+            const func = isFunctionDeclaration(node) || isFunctionExpression(node) ? node :
                 (isVariableDeclaration(node) || isPropertyAssignment(node)) && node.initializer && isFunctionExpression(node.initializer) ? node.initializer :
                 undefined;
             if (func) {
                 // If the node has a @class or @constructor tag, treat it like a constructor.
                 if (getJSDocClassTag(node)) return true;
 
-                // If the node is a property/method of an object literal.
-                if (isPropertyAssignment(node.parent) || isObjectLiteralMethod(node)) return false;
+                // If the node is a property of an object literal.
+                if (isPropertyAssignment(node.parent)) return false;
 
                 // If the symbol of the node has members, treat it like a constructor.
                 const symbol = getSymbolOfNode(func);

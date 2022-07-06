@@ -38,7 +38,7 @@ const b1 = {
 
     /** @class */
     foo() {
->foo : typeof b1.foo
+>foo : () => void
 
         this.x = 0;
 >this.x = 0 : 0
