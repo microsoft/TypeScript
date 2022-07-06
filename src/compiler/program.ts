@@ -1429,6 +1429,12 @@ namespace ts {
             }
         });
 
+        for (const file of files!) {
+            file.resolvedModules?.forEach(addResolutionDiagnostics);
+            file.resolvedTypeReferenceDirectiveNames?.forEach(addResolutionDiagnostics);
+        }
+        automaticTypeDirectiveResolutions!.forEach(addResolutionDiagnostics);
+
         verifyCompilerOptions();
         performance.mark("afterProgram");
         performance.measure("Program", "beforeProgram", "afterProgram");
@@ -1436,34 +1442,8 @@ namespace ts {
 
         return program;
 
-        function addResolutionDiagnostics(list: Diagnostic[] | undefined) {
-            if (!list) return;
-            for (const elem of list) {
-                programDiagnostics.add(elem);
-            }
-        }
-
-        function pullDiagnosticsFromCache(names: string[] | readonly FileReference[], containingFile: SourceFile) {
-            if (!moduleResolutionCache) return;
-            const containingFileName = getNormalizedAbsolutePath(containingFile.originalFileName, currentDirectory);
-            const containingFileMode = !isString(containingFile) ? containingFile.impliedNodeFormat : undefined;
-            const containingDir = getDirectoryPath(containingFileName);
-            const redirectedReference = getRedirectReferenceForResolution(containingFile);
-            let i = 0;
-            for (const n of names) {
-                // mimics logic done in the resolution cache, should be resilient to upgrading it to use `FileReference`s for non-type-reference modal lookups to make it rely on the index in the list less
-                const mode = typeof n === "string" ? getModeForResolutionAtIndex(containingFile, i) : getModeForFileReference(n, containingFileMode);
-                const name = typeof n === "string" ? n : n.fileName;
-                i++;
-                // only nonrelative names hit the cache, and, at least as of right now, only nonrelative names can issue diagnostics
-                // (Since diagnostics are only issued via import or export map lookup)
-                // This may totally change if/when the issue of output paths not mapping to input files is fixed in a broader context
-                // When it is, how we extract diagnostics from the module name resolver will have the be refined - the current cache
-                // APIs wrapping the underlying resolver make it almost impossible to smuggle the diagnostics out in a generalized way
-                if (isExternalModuleNameRelative(name)) continue;
-                const diags = moduleResolutionCache.getOrCreateCacheForModuleName(name, mode, redirectedReference).get(containingDir)?.resolutionDiagnostics;
-                addResolutionDiagnostics(diags);
-            }
+        function addResolutionDiagnostics(resolution: ResolvedModuleWithFailedLookupLocations | ResolvedTypeReferenceDirectiveWithFailedLookupLocations) {
+            resolution.resolutionDiagnostics?.forEach(diagnostic => programDiagnostics.add(diagnostic));
         }
 
         function resolveModuleNamesWorker(moduleNames: string[], containingFile: SourceFile, partialResolutionInfo: PartialResolutionInfo | undefined) {
@@ -1476,7 +1456,6 @@ namespace ts {
             performance.mark("afterResolveModule");
             performance.measure("ResolveModule", "beforeResolveModule", "afterResolveModule");
             tracing?.pop();
-            pullDiagnosticsFromCache(moduleNames, containingFile);
             return result;
         }
 

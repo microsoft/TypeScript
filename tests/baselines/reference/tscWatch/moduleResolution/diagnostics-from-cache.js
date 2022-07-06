@@ -145,7 +145,9 @@ File '/user/username/projects/myproject/index.ts' exist - use it as a name resol
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-[[90m12:00:50 AM[0m] Found 0 errors. Watching for file changes.
+[91merror[0m[90m TS2209: [0mThe project root is ambiguous, but is required to resolve export map entry '.' in file '/user/username/projects/myproject/package.json'. Supply the `rootDir` compiler option to disambiguate.
+
+[[90m12:00:50 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -157,10 +159,7 @@ Program files::
 /user/username/projects/myproject/index.ts
 /user/username/projects/myproject/index2.ts
 
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/index.ts
-/user/username/projects/myproject/index2.ts
+No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/index2.ts (computed .d.ts)
