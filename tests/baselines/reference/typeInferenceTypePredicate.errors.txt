@@ -1,0 +1,13 @@
+tests/cases/compiler/typeInferenceTypePredicate.ts(1,50): error TS2677: A type predicate's type must be assignable to its parameter's type.
+  Type 'T' is not assignable to type '{}'.
+
+
+==== tests/cases/compiler/typeInferenceTypePredicate.ts (1 errors) ====
+    declare function f<T>(predicate: (x: {}) => x is T): T;
+                                                     ~
+!!! error TS2677: A type predicate's type must be assignable to its parameter's type.
+!!! error TS2677:   Type 'T' is not assignable to type '{}'.
+!!! related TS2208 tests/cases/compiler/typeInferenceTypePredicate.ts:1:20: This type parameter might need an `extends {}` constraint.
+    // 'res' should be of type 'number'.
+    const res = f((n): n is number => true);
+    

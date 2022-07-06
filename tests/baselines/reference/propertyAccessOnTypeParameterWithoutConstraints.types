@@ -3,36 +3,36 @@ class C<T> {
 >C : C<T>
 
     f() {
->f : () => string
+>f : () => any
 
         var x: T;
 >x : T
 
         var a = x['toString'](); // should be string
->a : string
->x['toString']() : string
->x['toString'] : () => string
+>a : any
+>x['toString']() : any
+>x['toString'] : any
 >x : T
 >'toString' : "toString"
 
         return a + x.toString();
->a + x.toString() : string
->a : string
->x.toString() : string
->x.toString : () => string
+>a + x.toString() : any
+>a : any
+>x.toString() : any
+>x.toString : any
 >x : T
->toString : () => string
+>toString : any
     }
 }
 
 var r = (new C<number>()).f();
->r : string
->(new C<number>()).f() : string
->(new C<number>()).f : () => string
+>r : any
+>(new C<number>()).f() : any
+>(new C<number>()).f : () => any
 >(new C<number>()) : C<number>
 >new C<number>() : C<number>
 >C : typeof C
->f : () => string
+>f : () => any
 
 interface I<T> {
     foo: T;
@@ -66,51 +66,51 @@ var a: {
 }
 var r3: string = a().toString();
 >r3 : string
->a().toString() : string
->a().toString : () => string
+>a().toString() : any
+>a().toString : any
 >a() : unknown
 >a : <T>() => T
->toString : () => string
+>toString : any
 
 var r3b: string = a()['toString']();
 >r3b : string
->a()['toString']() : string
->a()['toString'] : () => string
+>a()['toString']() : any
+>a()['toString'] : any
 >a() : unknown
 >a : <T>() => T
 >'toString' : "toString"
 
 var b = {
->b : { foo: <T>(x: T) => string; }
->{    foo: <T>(x: T) => {        var a = x['toString'](); // should be string        return a + x.toString();    }} : { foo: <T>(x: T) => string; }
+>b : { foo: <T>(x: T) => any; }
+>{    foo: <T>(x: T) => {        var a = x['toString'](); // should be string        return a + x.toString();    }} : { foo: <T>(x: T) => any; }
 
     foo: <T>(x: T) => {
->foo : <T>(x: T) => string
-><T>(x: T) => {        var a = x['toString'](); // should be string        return a + x.toString();    } : <T>(x: T) => string
+>foo : <T>(x: T) => any
+><T>(x: T) => {        var a = x['toString'](); // should be string        return a + x.toString();    } : <T>(x: T) => any
 >x : T
 
         var a = x['toString'](); // should be string
->a : string
->x['toString']() : string
->x['toString'] : () => string
+>a : any
+>x['toString']() : any
+>x['toString'] : any
 >x : T
 >'toString' : "toString"
 
         return a + x.toString();
->a + x.toString() : string
->a : string
->x.toString() : string
->x.toString : () => string
+>a + x.toString() : any
+>a : any
+>x.toString() : any
+>x.toString : any
 >x : T
->toString : () => string
+>toString : any
     }
 }
 
 var r4 = b.foo(1);
->r4 : string
->b.foo(1) : string
->b.foo : <T>(x: T) => string
->b : { foo: <T>(x: T) => string; }
->foo : <T>(x: T) => string
+>r4 : any
+>b.foo(1) : any
+>b.foo : <T>(x: T) => any
+>b : { foo: <T>(x: T) => any; }
+>foo : <T>(x: T) => any
 >1 : 1
 

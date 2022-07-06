@@ -12355,7 +12355,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                 t.flags & TypeFlags.ESSymbolLike ? getGlobalESSymbolType() :
                 t.flags & TypeFlags.NonPrimitive ? emptyObjectType :
                 t.flags & TypeFlags.Index ? keyofConstraintType :
-                t.flags & TypeFlags.Unknown && !strictNullChecks ? emptyObjectType :
+                // t.flags & TypeFlags.Unknown && !strictNullChecks ? emptyObjectType :
                 t;
         }
 

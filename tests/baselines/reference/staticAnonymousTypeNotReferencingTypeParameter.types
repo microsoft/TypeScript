@@ -282,17 +282,17 @@ class ListWrapper {
 
     return tessst.funkyFor(array, t => t.toString()) ? a.reverse() : a;
 >tessst.funkyFor(array, t => t.toString()) ? a.reverse() : a : T[]
->tessst.funkyFor(array, t => t.toString()) : string
+>tessst.funkyFor(array, t => t.toString()) : any
 >tessst.funkyFor : <T, U>(array: T[], callback: (element: T, index: number) => U) => U
 >tessst : typeof tessst
 >funkyFor : <T, U>(array: T[], callback: (element: T, index: number) => U) => U
 >array : T[]
->t => t.toString() : (t: T) => string
+>t => t.toString() : (t: T) => any
 >t : T
->t.toString() : string
->t.toString : () => string
+>t.toString() : any
+>t.toString : any
 >t : T
->toString : () => string
+>toString : any
 >a.reverse() : T[]
 >a.reverse : () => T[]
 >a : T[]

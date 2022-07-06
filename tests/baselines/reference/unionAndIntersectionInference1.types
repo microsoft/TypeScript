@@ -241,11 +241,11 @@ const func = <T>() => {};
 ><T>() => {} : <T>() => void
 
 const assign = <T, U>(a: T, b: U) => Object.assign(a, b);
->assign : <T, U>(a: T, b: U) => T & U
-><T, U>(a: T, b: U) => Object.assign(a, b) : <T, U>(a: T, b: U) => T & U
+>assign : <T, U>(a: T, b: U) => {} & U
+><T, U>(a: T, b: U) => Object.assign(a, b) : <T, U>(a: T, b: U) => {} & U
 >a : T
 >b : U
->Object.assign(a, b) : T & U
+>Object.assign(a, b) : {} & U
 >Object.assign : { <T extends {}, U>(target: T, source: U): T & U; <T extends {}, U, V>(target: T, source1: U, source2: V): T & U & V; <T extends {}, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W; (target: object, ...sources: any[]): any; }
 >Object : ObjectConstructor
 >assign : { <T extends {}, U>(target: T, source: U): T & U; <T extends {}, U, V>(target: T, source1: U, source2: V): T & U & V; <T extends {}, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W; (target: object, ...sources: any[]): any; }
@@ -255,8 +255,8 @@ const assign = <T, U>(a: T, b: U) => Object.assign(a, b);
 const res: (() => void) & { func: any } = assign(() => {}, { func });
 >res : (() => void) & { func: any; }
 >func : any
->assign(() => {}, { func }) : (() => void) & { func: <T>() => void; }
->assign : <T, U>(a: T, b: U) => T & U
+>assign(() => {}, { func }) : { func: <T>() => void; }
+>assign : <T, U>(a: T, b: U) => {} & U
 >() => {} : () => void
 >{ func } : { func: <T>() => void; }
 >func : <T>() => void

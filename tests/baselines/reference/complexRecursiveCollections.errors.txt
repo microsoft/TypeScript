@@ -1,3 +1,4 @@
+tests/cases/compiler/immutable.ts(261,76): error TS2344: Type 'T' does not satisfy the constraint 'Object'.
 tests/cases/compiler/immutable.ts(341,22): error TS2430: Interface 'Keyed<K, V>' incorrectly extends interface 'Collection<K, V>'.
   The types returned by 'toSeq()' are incompatible between these types.
     Type 'Keyed<K, V>' is not assignable to type 'this'.
@@ -33,7 +34,7 @@ tests/cases/compiler/immutable.ts(391,22): error TS2430: Interface 'Set<T>' inco
         flatMap<M>(mapper: (value: T, key: void, iter: this) => Ara<M>, context?: any): N2<M>;
         toSeq(): N2<T>;
     }
-==== tests/cases/compiler/immutable.ts (3 errors) ====
+==== tests/cases/compiler/immutable.ts (4 errors) ====
     // Test that complex recursive collections can pass the `extends` assignability check without
     // running out of memory. This bug was exposed in Typescript 2.4 when more generic signatures
     // started being checked.
@@ -295,6 +296,9 @@ tests/cases/compiler/immutable.ts(391,22): error TS2430: Interface 'Set<T>' inco
         }
       }
       export function Record<T>(defaultValues: T, name?: string): Record.Class<T>;
+                                                                               ~
+!!! error TS2344: Type 'T' does not satisfy the constraint 'Object'.
+!!! related TS2208 tests/cases/compiler/immutable.ts:261:26: This type parameter might need an `extends Object` constraint.
       export module Seq {
         function isSeq(maybeSeq: any): maybeSeq is Seq.Indexed<any> | Seq.Keyed<any, any>;
         function of<T>(...values: Array<T>): Seq.Indexed<T>;
