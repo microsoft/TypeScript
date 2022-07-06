@@ -42,10 +42,10 @@ new Intl.DateTimeFormat().formatRange
 >formatRange : (startDate: number | bigint | Date, endDate: number | bigint | Date) => string
 
 new Intl.DateTimeFormat().formatRangeToParts
->new Intl.DateTimeFormat().formatRangeToParts : (startDate: number | bigint | Date, endDate: number | bigint | Date) => Intl.DateTimeFormatPart[]
+>new Intl.DateTimeFormat().formatRangeToParts : (startDate: number | bigint | Date, endDate: number | bigint | Date) => Intl.DateTimeRangeFormatPart[]
 >new Intl.DateTimeFormat() : Intl.DateTimeFormat
 >Intl.DateTimeFormat : { (locales?: string | string[], options?: Intl.DateTimeFormatOptions): Intl.DateTimeFormat; new (locales?: string | string[], options?: Intl.DateTimeFormatOptions): Intl.DateTimeFormat; supportedLocalesOf(locales: string | string[], options?: Intl.DateTimeFormatOptions): string[]; readonly prototype: Intl.DateTimeFormat; }
 >Intl : typeof Intl
 >DateTimeFormat : { (locales?: string | string[], options?: Intl.DateTimeFormatOptions): Intl.DateTimeFormat; new (locales?: string | string[], options?: Intl.DateTimeFormatOptions): Intl.DateTimeFormat; supportedLocalesOf(locales: string | string[], options?: Intl.DateTimeFormatOptions): string[]; readonly prototype: Intl.DateTimeFormat; }
->formatRangeToParts : (startDate: number | bigint | Date, endDate: number | bigint | Date) => Intl.DateTimeFormatPart[]
+>formatRangeToParts : (startDate: number | bigint | Date, endDate: number | bigint | Date) => Intl.DateTimeRangeFormatPart[]
 

@@ -123,6 +123,11 @@ const a: string = 10;`, "utf-8"),
             verifyNoEmitChanges({ composite: true });
 
             function verifyNoEmitChanges(compilerOptions: CompilerOptions) {
+                const discrepancyExplanation = () => [
+                    ...noChangeWithExportsDiscrepancyRun.discrepancyExplanation!(),
+                    "Clean build will not have latestChangedDtsFile as there was no emit and emitSignatures as undefined for files",
+                    "Incremental will store the past latestChangedDtsFile and emitSignatures",
+                ];
                 const discrepancyIfNoDtsEmit = getEmitDeclarations(compilerOptions) ?
                     undefined :
                     noChangeWithExportsDiscrepancyRun.discrepancyExplanation;
@@ -130,7 +135,11 @@ const a: string = 10;`, "utf-8"),
                     ...noChangeRun,
                     subScenario: "No Change run with noEmit",
                     commandLineArgs: ["--p", "src/project", "--noEmit"],
-                    discrepancyExplanation: discrepancyIfNoDtsEmit,
+                    discrepancyExplanation: compilerOptions.composite ?
+                        discrepancyExplanation :
+                        !compilerOptions.declaration ?
+                            noChangeWithExportsDiscrepancyRun.discrepancyExplanation :
+                            undefined,
                 };
                 const noChangeRunWithEmit: TestTscEdit = {
                     ...noChangeRun,
@@ -157,12 +166,16 @@ const a: string = 10;`, "utf-8"),
                             subScenario: "Introduce error but still noEmit",
                             commandLineArgs: ["--p", "src/project", "--noEmit"],
                             modifyFs: fs => replaceText(fs, "/src/project/src/class.ts", "prop", "prop1"),
-                            discrepancyExplanation: getEmitDeclarations(compilerOptions) ? noChangeWithExportsDiscrepancyRun.discrepancyExplanation : undefined,
+                            discrepancyExplanation: compilerOptions.composite ?
+                                discrepancyExplanation :
+                                compilerOptions.declaration ?
+                                    noChangeWithExportsDiscrepancyRun.discrepancyExplanation :
+                                    undefined,
                         },
                         {
                             subScenario: "Fix error and emit",
                             modifyFs: fs => replaceText(fs, "/src/project/src/class.ts", "prop1", "prop"),
-                            discrepancyExplanation: discrepancyIfNoDtsEmit
+                            discrepancyExplanation: discrepancyIfNoDtsEmit,
                         },
                         noChangeRunWithEmit,
                         noChangeRunWithNoEmit,
@@ -171,7 +184,7 @@ const a: string = 10;`, "utf-8"),
                         {
                             subScenario: "Introduce error and emit",
                             modifyFs: fs => replaceText(fs, "/src/project/src/class.ts", "prop", "prop1"),
-                            discrepancyExplanation: discrepancyIfNoDtsEmit
+                            discrepancyExplanation: discrepancyIfNoDtsEmit,
                         },
                         noChangeRunWithEmit,
                         noChangeRunWithNoEmit,
@@ -181,7 +194,9 @@ const a: string = 10;`, "utf-8"),
                             subScenario: "Fix error and no emit",
                             commandLineArgs: ["--p", "src/project", "--noEmit"],
                             modifyFs: fs => replaceText(fs, "/src/project/src/class.ts", "prop1", "prop"),
-                            discrepancyExplanation: noChangeWithExportsDiscrepancyRun.discrepancyExplanation,
+                            discrepancyExplanation: compilerOptions.composite ?
+                                discrepancyExplanation :
+                                noChangeWithExportsDiscrepancyRun.discrepancyExplanation,
                         },
                         noChangeRunWithEmit,
                         noChangeRunWithNoEmit,
@@ -205,7 +220,9 @@ const a: string = 10;`, "utf-8"),
                         {
                             subScenario: "Fix error and no emit",
                             modifyFs: fs => replaceText(fs, "/src/project/src/class.ts", "prop1", "prop"),
-                            discrepancyExplanation: noChangeWithExportsDiscrepancyRun.discrepancyExplanation
+                            discrepancyExplanation: compilerOptions.composite ?
+                                discrepancyExplanation :
+                                noChangeWithExportsDiscrepancyRun.discrepancyExplanation,
                         },
                         noChangeRunWithEmit,
                     ],
@@ -507,5 +524,46 @@ console.log(a);`,
                 modifyFs: fs => fs.writeFileSync("/src/project/constants.ts", "export default 2;"),
             }],
         });
+
+        function verifyModifierChange(declaration: boolean) {
+            verifyTscWithEdits({
+                scenario: "incremental",
+                subScenario: `change to modifier of class expression field${declaration ? " with declaration emit enabled" : ""}`,
+                commandLineArgs: ["-p", "src/project", "--incremental"],
+                fs: () => loadProjectFromFiles({
+                    "/src/project/tsconfig.json": JSON.stringify({ compilerOptions: { declaration } }),
+                    "/src/project/main.ts": Utils.dedent`
+                        import MessageablePerson from './MessageablePerson.js';
+                        function logMessage( person: MessageablePerson ) {
+                            console.log( person.message );
+                        }`,
+                    "/src/project/MessageablePerson.ts": Utils.dedent`
+                        const Messageable = () => {
+                            return class MessageableClass {
+                                public message = 'hello';
+                            }
+                        };
+                        const wrapper = () => Messageable();
+                        type MessageablePerson = InstanceType<ReturnType<typeof wrapper>>;
+                        export default MessageablePerson;`,
+                }),
+                modifyFs: fs => appendText(fs, "/lib/lib.d.ts", Utils.dedent`
+                    type ReturnType<T extends (...args: any) => any> = T extends (...args: any) => infer R ? R : any;
+                    type InstanceType<T extends abstract new (...args: any) => any> = T extends abstract new (...args: any) => infer R ? R : any;`
+                ),
+                edits: [
+                    {
+                        subScenario: "modify public to protected",
+                        modifyFs: fs => replaceText(fs, "/src/project/MessageablePerson.ts", "public", "protected"),
+                    },
+                    {
+                        subScenario: "modify protected to public",
+                        modifyFs: fs => replaceText(fs, "/src/project/MessageablePerson.ts", "protected", "public"),
+                    },
+                ],
+            });
+        }
+        verifyModifierChange(/*declaration*/ false);
+        verifyModifierChange(/*declaration*/ true);
     });
 }

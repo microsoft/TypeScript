@@ -72,7 +72,7 @@ En.A;
 type T = {
     x: any;
     y: number;
-    test(arg0: number, arg1: number);
+    test(arg0: number, arg1: number): unknown;
 };
 function foo(t: T) {
     t.x;

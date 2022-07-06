@@ -1,0 +1,30 @@
+tests/cases/compiler/unresolvableSelfReferencingAwaitedUnion.ts(9,32): error TS2322: Type 'SimpleType' is not assignable to type 'T'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to 'SimpleType'.
+tests/cases/compiler/unresolvableSelfReferencingAwaitedUnion.ts(16,19): error TS1062: Type is referenced directly or indirectly in the fulfillment callback of its own 'then' method.
+
+
+==== tests/cases/compiler/unresolvableSelfReferencingAwaitedUnion.ts (2 errors) ====
+    // repro #49646
+    
+    type EnvFunction = <T>() => T;
+    
+    type SimpleType = string | Promise<SimpleType>;
+    
+    declare const simple: SimpleType;
+    
+    const env: EnvFunction = () => simple;
+                                   ~~~~~~
+!!! error TS2322: Type 'SimpleType' is not assignable to type 'T'.
+!!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'SimpleType'.
+!!! related TS6502 tests/cases/compiler/unresolvableSelfReferencingAwaitedUnion.ts:3:20: The expected type comes from the return type of this signature.
+    
+    // repro #49723
+    
+    type T1 = 1 | Promise<T1> | T1[];
+    
+    export async function myFunction(param: T1) {
+      const awaited = await param
+                      ~~~~~~~~~~~
+!!! error TS1062: Type is referenced directly or indirectly in the fulfillment callback of its own 'then' method.
+    }
+    

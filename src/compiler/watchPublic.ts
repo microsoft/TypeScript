@@ -3,17 +3,26 @@ namespace ts {
         useCaseSensitiveFileNames(): boolean;
         getCurrentDirectory(): string;
         readFile(fileName: string): string | undefined;
+        /*@internal*/
+        getBuildInfo?(fileName: string, configFilePath: string | undefined): BuildInfo | undefined;
     }
     export function readBuilderProgram(compilerOptions: CompilerOptions, host: ReadBuildProgramHost) {
-        if (outFile(compilerOptions)) return undefined;
         const buildInfoPath = getTsBuildInfoEmitOutputFilePath(compilerOptions);
         if (!buildInfoPath) return undefined;
-        const content = host.readFile(buildInfoPath);
-        if (!content) return undefined;
-        const buildInfo = getBuildInfo(content);
+        let buildInfo;
+        if (host.getBuildInfo) {
+            // host provides buildinfo, get it from there. This allows host to cache it
+            buildInfo = host.getBuildInfo(buildInfoPath, compilerOptions.configFilePath);
+            if (!buildInfo) return undefined;
+        }
+        else {
+            const content = host.readFile(buildInfoPath);
+            if (!content) return undefined;
+            buildInfo = getBuildInfo(content);
+        }
         if (buildInfo.version !== version) return undefined;
         if (!buildInfo.program) return undefined;
-        return createBuildProgramUsingProgramBuildInfo(buildInfo.program, buildInfoPath, host);
+        return createBuilderProgramUsingProgramBuildInfo(buildInfo.program, buildInfoPath, host);
     }
 
     export function createIncrementalCompilerHost(options: CompilerOptions, system = sys): CompilerHost {
@@ -116,6 +125,7 @@ namespace ts {
         // For testing
         disableUseFileVersionAsSignature?: boolean;
         storeFilesChangingSignatureDuringEmit?: boolean;
+        now?(): Date;
     }
 
     export interface WatchCompilerHost<T extends BuilderProgram> extends ProgramHost<T>, WatchHost {
@@ -267,14 +277,12 @@ namespace ts {
         let builderProgram: T;
         let reloadLevel: ConfigFileProgramReloadLevel;                      // level to indicate if the program needs to be reloaded from config file/just filenames etc
         let missingFilesMap: ESMap<Path, FileWatcher>;                       // Map of file watchers for the missing files
-        let packageJsonMap: ESMap<Path, FileWatcher>;                       // map of watchers for package json files used in module resolution
         let watchedWildcardDirectories: ESMap<string, WildcardDirectoryWatcher>; // map of watchers for the wild card directories in the config file
         let timerToUpdateProgram: any;                                      // timer callback to recompile the program
         let timerToInvalidateFailedLookupResolutions: any;                  // timer callback to invalidate resolutions for changes in failed lookup locations
         let parsedConfigs: ESMap<Path, ParsedConfig> | undefined;           // Parsed commandline and watching cached for referenced projects
         let sharedExtendedConfigFileWatchers: ESMap<Path, SharedExtendedConfigFileWatcher<Path>>; // Map of file watchers for extended files, shared between different referenced projects
         let extendedConfigCache = host.extendedConfigCache;                 // Cache for extended config evaluation
-        let changesAffectResolution = false;                                // Flag for indicating non-config changes affect module resolution
         let reportFileChangeDetectedOnCreateProgram = false;                // True if synchronizeProgram should report "File change detected..." when a new program is created
 
         const sourceFilesCache = new Map<string, HostFileInfo>();           // Cache that stores the source file and version info
@@ -332,6 +340,7 @@ namespace ts {
         compilerHost.getCompilationSettings = () => compilerOptions;
         compilerHost.useSourceOfProjectReferenceRedirect = maybeBind(host, host.useSourceOfProjectReferenceRedirect);
         compilerHost.watchDirectoryOfFailedLookupLocation = (dir, cb, flags) => watchDirectory(dir, cb, flags, watchOptions, WatchType.FailedLookupLocations);
+        compilerHost.watchAffectingFileLocation = (file, cb) => watchFile(file, cb, PollingInterval.High, watchOptions, WatchType.PackageJson);
         compilerHost.watchTypeRootsDirectory = (dir, cb, flags) => watchDirectory(dir, cb, flags, watchOptions, WatchType.TypeRoots);
         compilerHost.getCachedDirectoryStructureHost = () => cachedDirectoryStructureHost;
         compilerHost.scheduleInvalidateResolutionsOfFailedLookupLocations = scheduleInvalidateResolutionsOfFailedLookupLocations;
@@ -407,10 +416,6 @@ namespace ts {
                 });
                 parsedConfigs = undefined;
             }
-            if (packageJsonMap) {
-                clearMap(packageJsonMap, closeFileWatcher);
-                packageJsonMap = undefined!;
-            }
         }
 
         function getCurrentBuilderProgram() {
@@ -428,13 +433,13 @@ namespace ts {
             const program = getCurrentBuilderProgram();
             if (hasChangedCompilerOptions) {
                 newLine = updateNewLine();
-                if (program && (changesAffectResolution || changesAffectModuleResolution(program.getCompilerOptions(), compilerOptions))) {
+                if (program && changesAffectModuleResolution(program.getCompilerOptions(), compilerOptions)) {
                     resolutionCache.clear();
                 }
             }
 
             // All resolutions are invalid if user provided resolutions
-            const hasInvalidatedResolution = resolutionCache.createHasInvalidatedResolution(userProvidedResolution || changesAffectResolution);
+            const hasInvalidatedResolution = resolutionCache.createHasInvalidatedResolution(userProvidedResolution);
             if (isProgramUptoDate(getCurrentProgram(), rootFileNames, compilerOptions, getSourceVersion, fileExists, hasInvalidatedResolution, hasChangedAutomaticTypeDirectiveNames, getParsedCommandLine, projectReferences)) {
                 if (hasChangedConfigFileParsingErrors) {
                     if (reportFileChangeDetectedOnCreateProgram) {
@@ -451,7 +456,6 @@ namespace ts {
                 createNewProgram(hasInvalidatedResolution);
             }
 
-            changesAffectResolution = false; // reset for next sync
             reportFileChangeDetectedOnCreateProgram = false;
 
             if (host.afterProgramCreate && program !== builderProgram) {
@@ -475,13 +479,10 @@ namespace ts {
             compilerHost.hasInvalidatedResolution = hasInvalidatedResolution;
             compilerHost.hasChangedAutomaticTypeDirectiveNames = hasChangedAutomaticTypeDirectiveNames;
             builderProgram = createProgram(rootFileNames, compilerOptions, compilerHost, builderProgram, configFileParsingDiagnostics, projectReferences);
-            // map package json cache entries to their realpaths so we don't try to watch across symlinks
-            const packageCacheEntries = map(resolutionCache.getModuleResolutionCache().getPackageJsonInfoCache().entries(), ([path, data]) => ([compilerHost.realpath ? toPath(compilerHost.realpath(path)) : path, data] as const));
             resolutionCache.finishCachingPerDirectoryResolution();
 
             // Update watches
             updateMissingFilePathsWatch(builderProgram.getProgram(), missingFilesMap || (missingFilesMap = new Map()), watchMissingFilePath);
-            updatePackageJsonWatch(packageCacheEntries, packageJsonMap || (packageJsonMap = new Map()), watchPackageJsonLookupPath);
             if (needsUpdateInTypeRootWatch) {
                 resolutionCache.updateTypeRootsWatch();
             }
@@ -700,6 +701,7 @@ namespace ts {
 
         function reloadFileNamesFromConfigFile() {
             writeLog("Reloading new file names and options");
+            reloadLevel = ConfigFileProgramReloadLevel.None;
             rootFileNames = getFileNamesFromConfigSpecs(compilerOptions.configFile!.configFileSpecs!, getNormalizedAbsolutePath(getDirectoryPath(configFileName), currentDirectory), compilerOptions, parseConfigFileHost, extraFileExtensions);
             if (updateErrorForNoInputFiles(rootFileNames, getNormalizedAbsolutePath(configFileName, currentDirectory), compilerOptions.configFile!.configFileSpecs!, configFileParsingDiagnostics!, canConfigFileJsonReportNoInputFiles)) {
                 hasChangedConfigFileParsingErrors = true;
@@ -845,24 +847,6 @@ namespace ts {
             return parsedConfigs?.has(missingFilePath) ?
                 noopFileWatcher :
                 watchFilePath(missingFilePath, missingFilePath, onMissingFileChange, PollingInterval.Medium, watchOptions, WatchType.MissingFile);
-        }
-
-        function watchPackageJsonLookupPath(packageJsonPath: Path) {
-            // If the package.json is pulled into the compilation itself (eg, via json imports), don't add a second watcher here
-            return sourceFilesCache.has(packageJsonPath) ?
-                noopFileWatcher :
-                watchFilePath(packageJsonPath, packageJsonPath, onPackageJsonChange, PollingInterval.High, watchOptions, WatchType.PackageJson);
-        }
-
-        function onPackageJsonChange(fileName: string, eventKind: FileWatcherEventKind, path: Path) {
-            updateCachedSystemWithFile(fileName, path, eventKind);
-
-            // package.json changes invalidate module resolution and can change the set of loaded files
-            // so if we witness a change to one, we have to do a full reload
-            reloadLevel = ConfigFileProgramReloadLevel.Full;
-            changesAffectResolution = true;
-            // Update the program
-            scheduleProgramUpdate();
         }
 
         function onMissingFileChange(fileName: string, eventKind: FileWatcherEventKind, missingFilePath: Path) {

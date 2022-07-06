@@ -291,8 +291,8 @@ namespace ts {
     ): boolean {
         if (from === to) return false;
         const cachedResult = moduleSpecifierCache?.get(from.path, to.path, preferences, {});
-        if (cachedResult?.isAutoImportable !== undefined) {
-            return cachedResult.isAutoImportable;
+        if (cachedResult?.isBlockedByPackageJsonDependencies !== undefined) {
+            return !cachedResult.isBlockedByPackageJsonDependencies;
         }
 
         const getCanonicalFileName = hostGetCanonicalFileName(moduleSpecifierResolutionHost);
@@ -313,7 +313,7 @@ namespace ts {
 
         if (packageJsonFilter) {
             const isAutoImportable = hasImportablePath && packageJsonFilter.allowsImportingSourceFile(to, moduleSpecifierResolutionHost);
-            moduleSpecifierCache?.setIsAutoImportable(from.path, to.path, preferences, {}, isAutoImportable);
+            moduleSpecifierCache?.setBlockedByPackageJsonDependencies(from.path, to.path, preferences, {}, !isAutoImportable);
             return isAutoImportable;
         }
 
@@ -336,32 +336,42 @@ namespace ts {
     export function forEachExternalModuleToImportFrom(
         program: Program,
         host: LanguageServiceHost,
+        preferences: UserPreferences,
         useAutoImportProvider: boolean,
         cb: (module: Symbol, moduleFile: SourceFile | undefined, program: Program, isFromPackageJson: boolean) => void,
     ) {
-        forEachExternalModule(program.getTypeChecker(), program.getSourceFiles(), (module, file) => cb(module, file, program, /*isFromPackageJson*/ false));
+        const useCaseSensitiveFileNames = hostUsesCaseSensitiveFileNames(host);
+        const excludePatterns = preferences.autoImportFileExcludePatterns && mapDefined(preferences.autoImportFileExcludePatterns, spec => {
+            // The client is expected to send rooted path specs since we don't know
+            // what directory a relative path is relative to.
+            const pattern = getPatternFromSpec(spec, "", "exclude");
+            return pattern ? getRegexFromPattern(pattern, useCaseSensitiveFileNames) : undefined;
+        });
+
+        forEachExternalModule(program.getTypeChecker(), program.getSourceFiles(), excludePatterns, (module, file) => cb(module, file, program, /*isFromPackageJson*/ false));
         const autoImportProvider = useAutoImportProvider && host.getPackageJsonAutoImportProvider?.();
         if (autoImportProvider) {
             const start = timestamp();
-            forEachExternalModule(autoImportProvider.getTypeChecker(), autoImportProvider.getSourceFiles(), (module, file) => cb(module, file, autoImportProvider, /*isFromPackageJson*/ true));
+            forEachExternalModule(autoImportProvider.getTypeChecker(), autoImportProvider.getSourceFiles(), excludePatterns, (module, file) => cb(module, file, autoImportProvider, /*isFromPackageJson*/ true));
             host.log?.(`forEachExternalModuleToImportFrom autoImportProvider: ${timestamp() - start}`);
         }
     }
 
-    function forEachExternalModule(checker: TypeChecker, allSourceFiles: readonly SourceFile[], cb: (module: Symbol, sourceFile: SourceFile | undefined) => void) {
+    function forEachExternalModule(checker: TypeChecker, allSourceFiles: readonly SourceFile[], excludePatterns: readonly RegExp[] | undefined, cb: (module: Symbol, sourceFile: SourceFile | undefined) => void) {
+        const isExcluded = (fileName: string) => excludePatterns?.some(p => p.test(fileName));
         for (const ambient of checker.getAmbientModules()) {
-            if (!stringContains(ambient.name, "*")) {
+            if (!stringContains(ambient.name, "*") && !(excludePatterns && ambient.declarations?.every(d => isExcluded(d.getSourceFile().fileName)))) {
                 cb(ambient, /*sourceFile*/ undefined);
             }
         }
         for (const sourceFile of allSourceFiles) {
-            if (isExternalOrCommonJsModule(sourceFile)) {
+            if (isExternalOrCommonJsModule(sourceFile) && !isExcluded(sourceFile.fileName)) {
                 cb(checker.getMergedSymbol(sourceFile.symbol), sourceFile);
             }
         }
     }
 
-    export function getExportInfoMap(importingFile: SourceFile, host: LanguageServiceHost, program: Program, cancellationToken: CancellationToken | undefined): ExportInfoMap {
+    export function getExportInfoMap(importingFile: SourceFile, host: LanguageServiceHost, program: Program, preferences: UserPreferences, cancellationToken: CancellationToken | undefined): ExportInfoMap {
         const start = timestamp();
         // Pulling the AutoImportProvider project will trigger its updateGraph if pending,
         // which will invalidate the export map cache if things change, so pull it before
@@ -381,38 +391,45 @@ namespace ts {
         host.log?.("getExportInfoMap: cache miss or empty; calculating new results");
         const compilerOptions = program.getCompilerOptions();
         let moduleCount = 0;
-        forEachExternalModuleToImportFrom(program, host, /*useAutoImportProvider*/ true, (moduleSymbol, moduleFile, program, isFromPackageJson) => {
-            if (++moduleCount % 100 === 0) cancellationToken?.throwIfCancellationRequested();
-            const seenExports = new Map<__String, true>();
-            const checker = program.getTypeChecker();
-            const defaultInfo = getDefaultLikeExportInfo(moduleSymbol, checker, compilerOptions);
-            // Note: I think we shouldn't actually see resolved module symbols here, but weird merges
-            // can cause it to happen: see 'completionsImport_mergedReExport.ts'
-            if (defaultInfo && isImportableSymbol(defaultInfo.symbol, checker)) {
-                cache.add(
-                    importingFile.path,
-                    defaultInfo.symbol,
-                    defaultInfo.exportKind === ExportKind.Default ? InternalSymbolName.Default : InternalSymbolName.ExportEquals,
-                    moduleSymbol,
-                    moduleFile,
-                    defaultInfo.exportKind,
-                    isFromPackageJson,
-                    checker);
-            }
-            checker.forEachExportAndPropertyOfModule(moduleSymbol, (exported, key) => {
-                if (exported !== defaultInfo?.symbol && isImportableSymbol(exported, checker) && addToSeen(seenExports, key)) {
+        try {
+            forEachExternalModuleToImportFrom(program, host, preferences, /*useAutoImportProvider*/ true, (moduleSymbol, moduleFile, program, isFromPackageJson) => {
+                if (++moduleCount % 100 === 0) cancellationToken?.throwIfCancellationRequested();
+                const seenExports = new Map<__String, true>();
+                const checker = program.getTypeChecker();
+                const defaultInfo = getDefaultLikeExportInfo(moduleSymbol, checker, compilerOptions);
+                // Note: I think we shouldn't actually see resolved module symbols here, but weird merges
+                // can cause it to happen: see 'completionsImport_mergedReExport.ts'
+                if (defaultInfo && isImportableSymbol(defaultInfo.symbol, checker)) {
                     cache.add(
                         importingFile.path,
-                        exported,
-                        key,
+                        defaultInfo.symbol,
+                        defaultInfo.exportKind === ExportKind.Default ? InternalSymbolName.Default : InternalSymbolName.ExportEquals,
                         moduleSymbol,
                         moduleFile,
-                        ExportKind.Named,
+                        defaultInfo.exportKind,
                         isFromPackageJson,
                         checker);
                 }
+                checker.forEachExportAndPropertyOfModule(moduleSymbol, (exported, key) => {
+                    if (exported !== defaultInfo?.symbol && isImportableSymbol(exported, checker) && addToSeen(seenExports, key)) {
+                        cache.add(
+                            importingFile.path,
+                            exported,
+                            key,
+                            moduleSymbol,
+                            moduleFile,
+                            ExportKind.Named,
+                            isFromPackageJson,
+                            checker);
+                    }
+                });
             });
-        });
+        }
+        catch (err) {
+            // Ensure cache is reset if operation is cancelled
+            cache.clear();
+            throw err;
+        }
 
         host.log?.(`getExportInfoMap: done in ${timestamp() - start} ms`);
         return cache;

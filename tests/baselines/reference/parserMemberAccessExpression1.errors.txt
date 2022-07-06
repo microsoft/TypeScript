@@ -3,11 +3,13 @@ tests/cases/conformance/parser/ecmascript5/Generics/parserMemberAccessExpression
 tests/cases/conformance/parser/ecmascript5/Generics/parserMemberAccessExpression1.ts(2,1): error TS2304: Cannot find name 'Foo'.
 tests/cases/conformance/parser/ecmascript5/Generics/parserMemberAccessExpression1.ts(2,9): error TS2304: Cannot find name 'T'.
 tests/cases/conformance/parser/ecmascript5/Generics/parserMemberAccessExpression1.ts(3,1): error TS2304: Cannot find name 'Foo'.
+tests/cases/conformance/parser/ecmascript5/Generics/parserMemberAccessExpression1.ts(3,4): error TS1477: An instantiation expression cannot be followed by a property access.
 tests/cases/conformance/parser/ecmascript5/Generics/parserMemberAccessExpression1.ts(4,1): error TS2304: Cannot find name 'Foo'.
+tests/cases/conformance/parser/ecmascript5/Generics/parserMemberAccessExpression1.ts(4,4): error TS1477: An instantiation expression cannot be followed by a property access.
 tests/cases/conformance/parser/ecmascript5/Generics/parserMemberAccessExpression1.ts(4,12): error TS2304: Cannot find name 'T'.
 
 
-==== tests/cases/conformance/parser/ecmascript5/Generics/parserMemberAccessExpression1.ts (7 errors) ====
+==== tests/cases/conformance/parser/ecmascript5/Generics/parserMemberAccessExpression1.ts (9 errors) ====
     Foo<T>();
     ~~~
 !!! error TS2304: Cannot find name 'Foo'.
@@ -21,9 +23,13 @@ tests/cases/conformance/parser/ecmascript5/Generics/parserMemberAccessExpression
     Foo<T>.Bar();
     ~~~
 !!! error TS2304: Cannot find name 'Foo'.
+       ~~~
+!!! error TS1477: An instantiation expression cannot be followed by a property access.
     Foo<T>.Bar<T>();
     ~~~
 !!! error TS2304: Cannot find name 'Foo'.
+       ~~~
+!!! error TS1477: An instantiation expression cannot be followed by a property access.
                ~
 !!! error TS2304: Cannot find name 'T'.
     

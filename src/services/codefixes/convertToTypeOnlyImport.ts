@@ -40,7 +40,6 @@ namespace ts.codefix {
             changes.deleteNodeRangeExcludingEnd(context.sourceFile, importClause.name, importDeclaration.importClause.namedBindings);
             changes.insertNodeBefore(context.sourceFile, importDeclaration, factory.updateImportDeclaration(
                 importDeclaration,
-                /*decorators*/ undefined,
                 /*modifiers*/ undefined,
                 factory.createImportClause(
                     /*isTypeOnly*/ true,

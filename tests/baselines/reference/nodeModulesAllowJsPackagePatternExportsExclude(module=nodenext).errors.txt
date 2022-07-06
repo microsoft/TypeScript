@@ -1,0 +1,123 @@
+tests/cases/conformance/node/allowJs/index.cjs(2,23): error TS2307: Cannot find module 'inner/cjs/exclude/index' or its corresponding type declarations.
+tests/cases/conformance/node/allowJs/index.cjs(3,23): error TS2307: Cannot find module 'inner/mjs/exclude/index' or its corresponding type declarations.
+tests/cases/conformance/node/allowJs/index.cjs(4,24): error TS2307: Cannot find module 'inner/js/exclude/index' or its corresponding type declarations.
+tests/cases/conformance/node/allowJs/index.js(2,23): error TS2307: Cannot find module 'inner/cjs/exclude/index' or its corresponding type declarations.
+tests/cases/conformance/node/allowJs/index.js(3,23): error TS2307: Cannot find module 'inner/mjs/exclude/index' or its corresponding type declarations.
+tests/cases/conformance/node/allowJs/index.js(4,24): error TS2307: Cannot find module 'inner/js/exclude/index' or its corresponding type declarations.
+tests/cases/conformance/node/allowJs/index.mjs(2,23): error TS2307: Cannot find module 'inner/cjs/exclude/index' or its corresponding type declarations.
+tests/cases/conformance/node/allowJs/index.mjs(3,23): error TS2307: Cannot find module 'inner/mjs/exclude/index' or its corresponding type declarations.
+tests/cases/conformance/node/allowJs/index.mjs(4,24): error TS2307: Cannot find module 'inner/js/exclude/index' or its corresponding type declarations.
+tests/cases/conformance/node/allowJs/node_modules/inner/exclude/index.d.cts(2,22): error TS2307: Cannot find module 'inner/cjs/exclude/index' or its corresponding type declarations.
+tests/cases/conformance/node/allowJs/node_modules/inner/exclude/index.d.cts(3,22): error TS2307: Cannot find module 'inner/mjs/exclude/index' or its corresponding type declarations.
+tests/cases/conformance/node/allowJs/node_modules/inner/exclude/index.d.cts(4,23): error TS2307: Cannot find module 'inner/js/exclude/index' or its corresponding type declarations.
+tests/cases/conformance/node/allowJs/node_modules/inner/exclude/index.d.mts(2,22): error TS2307: Cannot find module 'inner/cjs/exclude/index' or its corresponding type declarations.
+tests/cases/conformance/node/allowJs/node_modules/inner/exclude/index.d.mts(3,22): error TS2307: Cannot find module 'inner/mjs/exclude/index' or its corresponding type declarations.
+tests/cases/conformance/node/allowJs/node_modules/inner/exclude/index.d.mts(4,23): error TS2307: Cannot find module 'inner/js/exclude/index' or its corresponding type declarations.
+tests/cases/conformance/node/allowJs/node_modules/inner/exclude/index.d.ts(2,22): error TS2307: Cannot find module 'inner/cjs/exclude/index' or its corresponding type declarations.
+tests/cases/conformance/node/allowJs/node_modules/inner/exclude/index.d.ts(3,22): error TS2307: Cannot find module 'inner/mjs/exclude/index' or its corresponding type declarations.
+tests/cases/conformance/node/allowJs/node_modules/inner/exclude/index.d.ts(4,23): error TS2307: Cannot find module 'inner/js/exclude/index' or its corresponding type declarations.
+
+
+==== tests/cases/conformance/node/allowJs/index.js (3 errors) ====
+    // esm format file
+    import * as cjsi from "inner/cjs/exclude/index";
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'inner/cjs/exclude/index' or its corresponding type declarations.
+    import * as mjsi from "inner/mjs/exclude/index";
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'inner/mjs/exclude/index' or its corresponding type declarations.
+    import * as typei from "inner/js/exclude/index";
+                           ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'inner/js/exclude/index' or its corresponding type declarations.
+    cjsi;
+    mjsi;
+    typei;
+==== tests/cases/conformance/node/allowJs/index.mjs (3 errors) ====
+    // esm format file
+    import * as cjsi from "inner/cjs/exclude/index";
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'inner/cjs/exclude/index' or its corresponding type declarations.
+    import * as mjsi from "inner/mjs/exclude/index";
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'inner/mjs/exclude/index' or its corresponding type declarations.
+    import * as typei from "inner/js/exclude/index";
+                           ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'inner/js/exclude/index' or its corresponding type declarations.
+    cjsi;
+    mjsi;
+    typei;
+==== tests/cases/conformance/node/allowJs/index.cjs (3 errors) ====
+    // cjs format file
+    import * as cjsi from "inner/cjs/exclude/index";
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'inner/cjs/exclude/index' or its corresponding type declarations.
+    import * as mjsi from "inner/mjs/exclude/index";
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'inner/mjs/exclude/index' or its corresponding type declarations.
+    import * as typei from "inner/js/exclude/index";
+                           ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'inner/js/exclude/index' or its corresponding type declarations.
+    cjsi;
+    mjsi;
+    typei;
+==== tests/cases/conformance/node/allowJs/node_modules/inner/exclude/index.d.ts (3 errors) ====
+    // cjs format file
+    import * as cjs from "inner/cjs/exclude/index";
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'inner/cjs/exclude/index' or its corresponding type declarations.
+    import * as mjs from "inner/mjs/exclude/index";
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'inner/mjs/exclude/index' or its corresponding type declarations.
+    import * as type from "inner/js/exclude/index";
+                          ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'inner/js/exclude/index' or its corresponding type declarations.
+    export { cjs };
+    export { mjs };
+    export { type };
+==== tests/cases/conformance/node/allowJs/node_modules/inner/exclude/index.d.mts (3 errors) ====
+    // esm format file
+    import * as cjs from "inner/cjs/exclude/index";
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'inner/cjs/exclude/index' or its corresponding type declarations.
+    import * as mjs from "inner/mjs/exclude/index";
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'inner/mjs/exclude/index' or its corresponding type declarations.
+    import * as type from "inner/js/exclude/index";
+                          ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'inner/js/exclude/index' or its corresponding type declarations.
+    export { cjs };
+    export { mjs };
+    export { type };
+==== tests/cases/conformance/node/allowJs/node_modules/inner/exclude/index.d.cts (3 errors) ====
+    // cjs format file
+    import * as cjs from "inner/cjs/exclude/index";
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'inner/cjs/exclude/index' or its corresponding type declarations.
+    import * as mjs from "inner/mjs/exclude/index";
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'inner/mjs/exclude/index' or its corresponding type declarations.
+    import * as type from "inner/js/exclude/index";
+                          ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'inner/js/exclude/index' or its corresponding type declarations.
+    export { cjs };
+    export { mjs };
+    export { type };
+==== tests/cases/conformance/node/allowJs/package.json (0 errors) ====
+    {
+        "name": "package",
+        "private": true,
+        "type": "module"
+    }
+==== tests/cases/conformance/node/allowJs/node_modules/inner/package.json (0 errors) ====
+    {
+        "name": "inner",
+        "private": true,
+        "exports": {
+            "./cjs/*": "./*.cjs",
+            "./cjs/exclude/*": null,
+            "./mjs/*": "./*.mjs",
+            "./mjs/exclude/*": null,
+            "./js/*": "./*.js",
+            "./js/exclude/*": null
+        }
+    } 

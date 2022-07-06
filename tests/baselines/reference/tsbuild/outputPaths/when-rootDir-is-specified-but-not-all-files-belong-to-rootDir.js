@@ -36,7 +36,7 @@ Output::
 
 [91merror[0m[90m TS6059: [0mFile '/src/types/type.ts' is not under 'rootDir' '/src/src'. 'rootDir' is expected to contain all source files.
   The file is in the program because:
-    Matched by include pattern '**/*' in '/src/tsconfig.json'
+    Matched by default include pattern '**/*'
 
 
 Found 1 error.
@@ -61,7 +61,7 @@ Output::
 
 [91merror[0m[90m TS6059: [0mFile '/src/types/type.ts' is not under 'rootDir' '/src/src'. 'rootDir' is expected to contain all source files.
   The file is in the program because:
-    Matched by include pattern '**/*' in '/src/tsconfig.json'
+    Matched by default include pattern '**/*'
 
 
 Found 1 error.
@@ -79,7 +79,7 @@ Output::
 /lib/tsc -p /src/tsconfig.json
 [91merror[0m[90m TS6059: [0mFile '/src/types/type.ts' is not under 'rootDir' '/src/src'. 'rootDir' is expected to contain all source files.
   The file is in the program because:
-    Matched by include pattern '**/*' in '/src/tsconfig.json'
+    Matched by default include pattern '**/*'
 
 
 Found 1 error.

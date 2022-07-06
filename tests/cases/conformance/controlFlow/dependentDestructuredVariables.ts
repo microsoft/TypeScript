@@ -312,3 +312,18 @@ const f60: Func = (kind, payload) => {
         payload.toUpperCase();  // error
     }
 };
+
+// Repro from #48902
+
+function foo({
+    value1,
+    test1 = value1.test1,
+    test2 = value1.test2,
+    test3 = value1.test3,
+    test4 = value1.test4,
+    test5 = value1.test5,
+    test6 = value1.test6,
+    test7 = value1.test7,
+    test8 = value1.test8,
+    test9 = value1.test9
+}) {}

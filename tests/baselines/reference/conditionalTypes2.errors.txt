@@ -32,7 +32,7 @@ tests/cases/conformance/types/conditional/conditionalTypes2.ts(74,12): error TS2
   Property 'bat' is missing in type 'Foo & Bar' but required in type '{ foo: string; bat: string; }'.
 tests/cases/conformance/types/conditional/conditionalTypes2.ts(75,12): error TS2345: Argument of type 'Extract2<T, Foo, Bar>' is not assignable to parameter of type '{ foo: string; bat: string; }'.
   Type 'T extends Bar ? T : never' is not assignable to type '{ foo: string; bat: string; }'.
-    Property 'bat' is missing in type 'Bar & Foo' but required in type '{ foo: string; bat: string; }'.
+    Type 'Bar & Foo & T' is not assignable to type '{ foo: string; bat: string; }'.
 
 
 ==== tests/cases/conformance/types/conditional/conditionalTypes2.ts (7 errors) ====
@@ -55,6 +55,7 @@ tests/cases/conformance/types/conditional/conditionalTypes2.ts(75,12): error TS2
 !!! error TS2322: Type 'Covariant<A>' is not assignable to type 'Covariant<B>'.
 !!! error TS2322:   Type 'A' is not assignable to type 'B'.
 !!! error TS2322:     'B' could be instantiated with an arbitrary type which could be unrelated to 'A'.
+!!! related TS2208 tests/cases/conformance/types/conditional/conditionalTypes2.ts:13:13: This type parameter might need an `extends B` constraint.
     }
     
     function f2<A, B extends A>(a: Contravariant<A>, b: Contravariant<B>) {
@@ -63,6 +64,7 @@ tests/cases/conformance/types/conditional/conditionalTypes2.ts(75,12): error TS2
 !!! error TS2322: Type 'Contravariant<B>' is not assignable to type 'Contravariant<A>'.
 !!! error TS2322:   Type 'A' is not assignable to type 'B'.
 !!! error TS2322:     'B' could be instantiated with an arbitrary type which could be unrelated to 'A'.
+!!! related TS2208 tests/cases/conformance/types/conditional/conditionalTypes2.ts:18:13: This type parameter might need an `extends B` constraint.
         b = a;
     }
     
@@ -91,6 +93,8 @@ tests/cases/conformance/types/conditional/conditionalTypes2.ts(75,12): error TS2
 !!! error TS2322:         Type 'A' is not assignable to type 'B extends string ? keyof B : B'.
 !!! error TS2322:           Type 'A' is not assignable to type 'B'.
 !!! error TS2322:             'B' could be instantiated with an arbitrary type which could be unrelated to 'A'.
+!!! related TS2208 tests/cases/conformance/types/conditional/conditionalTypes2.ts:23:13: This type parameter might need an `extends B` constraint.
+!!! related TS2208 tests/cases/conformance/types/conditional/conditionalTypes2.ts:23:13: This type parameter might need an `extends B extends string ? keyof B : B` constraint.
     }
     
     // Extract<T, Function> is a T that is known to be a Function
@@ -155,8 +159,7 @@ tests/cases/conformance/types/conditional/conditionalTypes2.ts(75,12): error TS2
                ~
 !!! error TS2345: Argument of type 'Extract2<T, Foo, Bar>' is not assignable to parameter of type '{ foo: string; bat: string; }'.
 !!! error TS2345:   Type 'T extends Bar ? T : never' is not assignable to type '{ foo: string; bat: string; }'.
-!!! error TS2345:     Property 'bat' is missing in type 'Bar & Foo' but required in type '{ foo: string; bat: string; }'.
-!!! related TS2728 tests/cases/conformance/types/conditional/conditionalTypes2.ts:62:43: 'bat' is declared here.
+!!! error TS2345:     Type 'Bar & Foo & T' is not assignable to type '{ foo: string; bat: string; }'.
     }
     
     // Repros from #22860

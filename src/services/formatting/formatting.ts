@@ -417,7 +417,7 @@ namespace ts.formatting {
         if (formattingScanner.isOnToken()) {
             const startLine = sourceFile.getLineAndCharacterOfPosition(enclosingNode.getStart(sourceFile)).line;
             let undecoratedStartLine = startLine;
-            if (enclosingNode.decorators) {
+            if (hasDecorators(enclosingNode)) {
                 undecoratedStartLine = sourceFile.getLineAndCharacterOfPosition(getNonDecoratorTokenPosOfNode(enclosingNode, sourceFile)).line;
             }
 
@@ -539,9 +539,11 @@ namespace ts.formatting {
         }
 
         function getFirstNonDecoratorTokenOfNode(node: Node) {
-            if (node.modifiers && node.modifiers.length) {
-                return node.modifiers[0].kind;
+            if (canHaveModifiers(node)) {
+                const modifier = find(node.modifiers, isModifier, findIndex(node.modifiers, isDecorator));
+                if (modifier) return modifier.kind;
             }
+
             switch (node.kind) {
                 case SyntaxKind.ClassDeclaration: return SyntaxKind.ClassKeyword;
                 case SyntaxKind.InterfaceDeclaration: return SyntaxKind.InterfaceKeyword;
@@ -617,7 +619,6 @@ namespace ts.formatting {
                             case SyntaxKind.JsxOpeningElement:
                             case SyntaxKind.JsxClosingElement:
                             case SyntaxKind.JsxSelfClosingElement:
-                            case SyntaxKind.ExpressionWithTypeArguments:
                                 return false;
                         }
                         break;
@@ -631,7 +632,7 @@ namespace ts.formatting {
                 // if token line equals to the line of containing node (this is a first token in the node) - use node indentation
                 return nodeStartLine !== line
                     // if this token is the first token following the list of decorators, we do not need to indent
-                    && !(node.decorators && kind === getFirstNonDecoratorTokenOfNode(node));
+                    && !(hasDecorators(node) && kind === getFirstNonDecoratorTokenOfNode(node));
             }
 
             function getDelta(child: TextRangeWithKind) {
@@ -691,12 +692,16 @@ namespace ts.formatting {
                 isListItem: boolean,
                 isFirstListItem?: boolean): number {
 
+                if (nodeIsMissing(child)) {
+                    return inheritedIndentation;
+                }
+
                 const childStartPos = child.getStart(sourceFile);
 
                 const childStartLine = sourceFile.getLineAndCharacterOfPosition(childStartPos).line;
 
                 let undecoratedChildStartLine = childStartLine;
-                if (child.decorators) {
+                if (hasDecorators(child)) {
                     undecoratedChildStartLine = sourceFile.getLineAndCharacterOfPosition(getNonDecoratorTokenPosOfNode(child, sourceFile)).line;
                 }
 
@@ -778,6 +783,13 @@ namespace ts.formatting {
 
                 let listDynamicIndentation = parentDynamicIndentation;
                 let startLine = parentStartLine;
+                // node range is outside the target range - do not dive inside
+                if (!rangeOverlapsWithStartEnd(originalRange, nodes.pos, nodes.end)) {
+                    if (nodes.end < originalRange.pos) {
+                        formattingScanner.skipToEndOf(nodes);
+                    }
+                    return;
+                }
 
                 if (listStartToken !== SyntaxKind.Unknown) {
                     // introduce a new indentation scope for lists (including list start and end tokens)
@@ -824,12 +836,10 @@ namespace ts.formatting {
                 const listEndToken = getCloseTokenForOpenToken(listStartToken);
                 if (listEndToken !== SyntaxKind.Unknown && formattingScanner.isOnToken() && formattingScanner.getStartPos() < originalRange.end) {
                     let tokenInfo: TokenInfo | undefined = formattingScanner.readTokenInfo(parent);
-                    if (tokenInfo.token.kind === SyntaxKind.CommaToken && isCallLikeExpression(parent)) {
-                        const commaTokenLine = sourceFile.getLineAndCharacterOfPosition(tokenInfo.token.pos).line;
-                        if (startLine !== commaTokenLine) {
-                            formattingScanner.advance();
-                            tokenInfo = formattingScanner.isOnToken() ? formattingScanner.readTokenInfo(parent) : undefined;
-                        }
+                    if (tokenInfo.token.kind === SyntaxKind.CommaToken) {
+                        // consume the comma
+                        consumeTokenAndAdvanceScanner(tokenInfo, parent, listDynamicIndentation, parent);
+                        tokenInfo = formattingScanner.isOnToken() ? formattingScanner.readTokenInfo(parent) : undefined;
                     }
 
                     // consume the list end token only if it is still belong to the parent
@@ -1302,6 +1312,12 @@ namespace ts.formatting {
             case SyntaxKind.MethodDeclaration:
             case SyntaxKind.MethodSignature:
             case SyntaxKind.ArrowFunction:
+            case SyntaxKind.CallSignature:
+            case SyntaxKind.ConstructSignature:
+            case SyntaxKind.FunctionType:
+            case SyntaxKind.ConstructorType:
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
                 if ((node as FunctionDeclaration).typeParameters === list) {
                     return SyntaxKind.LessThanToken;
                 }
@@ -1318,7 +1334,19 @@ namespace ts.formatting {
                     return SyntaxKind.OpenParenToken;
                 }
                 break;
+            case SyntaxKind.ClassDeclaration:
+            case SyntaxKind.ClassExpression:
+            case SyntaxKind.InterfaceDeclaration:
+            case SyntaxKind.TypeAliasDeclaration:
+                if ((node as ClassDeclaration).typeParameters === list) {
+                    return SyntaxKind.LessThanToken;
+                }
+                break;
             case SyntaxKind.TypeReference:
+            case SyntaxKind.TaggedTemplateExpression:
+            case SyntaxKind.TypeQuery:
+            case SyntaxKind.ExpressionWithTypeArguments:
+            case SyntaxKind.ImportType:
                 if ((node as TypeReferenceNode).typeArguments === list) {
                     return SyntaxKind.LessThanToken;
                 }

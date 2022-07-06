@@ -673,6 +673,7 @@ interface DataView {
      * Gets the BigInt64 value at the specified byte offset from the start of the view. There is
      * no alignment constraint; multi-byte values may be fetched from any offset.
      * @param byteOffset The place in the buffer at which the value should be retrieved.
+     * @param littleEndian If false or undefined, a big-endian value should be read.
      */
     getBigInt64(byteOffset: number, littleEndian?: boolean): bigint;
 
@@ -680,6 +681,7 @@ interface DataView {
      * Gets the BigUint64 value at the specified byte offset from the start of the view. There is
      * no alignment constraint; multi-byte values may be fetched from any offset.
      * @param byteOffset The place in the buffer at which the value should be retrieved.
+     * @param littleEndian If false or undefined, a big-endian value should be read.
      */
     getBigUint64(byteOffset: number, littleEndian?: boolean): bigint;
 
@@ -687,8 +689,7 @@ interface DataView {
      * Stores a BigInt64 value at the specified byte offset from the start of the view.
      * @param byteOffset The place in the buffer at which the value should be set.
      * @param value The value to set.
-     * @param littleEndian If false or undefined, a big-endian value should be written,
-     * otherwise a little-endian value should be written.
+     * @param littleEndian If false or undefined, a big-endian value should be written.
      */
     setBigInt64(byteOffset: number, value: bigint, littleEndian?: boolean): void;
 
@@ -696,8 +697,7 @@ interface DataView {
      * Stores a BigUint64 value at the specified byte offset from the start of the view.
      * @param byteOffset The place in the buffer at which the value should be set.
      * @param value The value to set.
-     * @param littleEndian If false or undefined, a big-endian value should be written,
-     * otherwise a little-endian value should be written.
+     * @param littleEndian If false or undefined, a big-endian value should be written.
      */
     setBigUint64(byteOffset: number, value: bigint, littleEndian?: boolean): void;
 }

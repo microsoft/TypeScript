@@ -58,16 +58,16 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/src/file2.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/user/username/projects/myproject/node_modules/@types:
+  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject"}
 /user/username/projects/myproject/dist:
-  {"directoryName":"/user/username/projects/myproject/dist","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/dist"}
 /user/username/projects/myproject/src:
-  {"directoryName":"/user/username/projects/myproject/src","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/src"}
 
 FsWatchesRecursive::
 
@@ -101,16 +101,16 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/src/file2.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/user/username/projects/myproject/node_modules/@types:
+  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
 
 FsWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject"}
 /user/username/projects/myproject/dist:
-  {"directoryName":"/user/username/projects/myproject/dist","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/dist"}
 /user/username/projects/myproject/src:
-  {"directoryName":"/user/username/projects/myproject/src","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/src"}
 
 FsWatchesRecursive::
 
@@ -131,7 +131,7 @@ Output::
 
 [91merror[0m[90m TS6053: [0mFile '/user/username/projects/myproject/src/file2.ts' not found.
   The file is in the program because:
-    Matched by include pattern '**/*' in '/user/username/projects/myproject/tsconfig.json'
+    Matched by default include pattern '**/*'
 
 [[90m12:00:41 AM[0m] Found 1 error. Watching for file changes.
 
@@ -157,18 +157,18 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/src/file1.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/user/username/projects/myproject/node_modules/@types:
+  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
 /user/username/projects/myproject/src/file2.ts:
   {"fileName":"/user/username/projects/myproject/src/file2.ts","pollingInterval":250}
 
 FsWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject"}
 /user/username/projects/myproject/dist:
-  {"directoryName":"/user/username/projects/myproject/dist","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/dist"}
 /user/username/projects/myproject/src:
-  {"directoryName":"/user/username/projects/myproject/src","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/src"}
 
 FsWatchesRecursive::
 
@@ -215,18 +215,18 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/src/file1.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/user/username/projects/myproject/node_modules/@types:
+  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
 /user/username/projects/myproject/src/renamed.ts:
   {"fileName":"/user/username/projects/myproject/src/renamed.ts","pollingInterval":250}
 
 FsWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject"}
 /user/username/projects/myproject/dist:
-  {"directoryName":"/user/username/projects/myproject/dist","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/dist"}
 /user/username/projects/myproject/src:
-  {"directoryName":"/user/username/projects/myproject/src","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/src"}
 
 FsWatchesRecursive::
 

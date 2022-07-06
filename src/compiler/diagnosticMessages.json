@@ -435,6 +435,10 @@
         "category": "Error",
         "code": 1144
     },
+    "'{' or JSX element expected.": {
+        "category": "Error",
+        "code": 1145
+    },
     "Declaration expected.": {
         "category": "Error",
         "code": 1146
@@ -646,6 +650,10 @@
     "'{0}' cannot be compiled under '--isolatedModules' because it is considered a global script file. Add an import, export, or an empty 'export {}' statement to make it a module.": {
         "category": "Error",
         "code": 1208
+    },
+    "Invalid optional chain from new expression. Did you mean to call '{0}()'?": {
+        "category": "Error",
+        "code": 1209
     },
     "Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of '{0}'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.": {
         "category": "Error",
@@ -900,6 +908,10 @@
         "category": "Error",
         "code": 1308
     },
+    "The current file is a CommonJS module and cannot use 'await' at the top level.": {
+        "category": "Error",
+        "code": 1309
+    },
     "Did you mean to use a ':'? An '=' can only follow a property name when the containing object literal is part of a destructuring pattern.": {
         "category": "Error",
         "code": 1312
@@ -944,11 +956,11 @@
         "category": "Error",
         "code": 1322
     },
-    "Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node12', or 'nodenext'.": {
+    "Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node16', or 'nodenext'.": {
         "category": "Error",
         "code": 1323
     },
-    "Dynamic imports only support a second argument when the '--module' option is set to 'esnext' or 'nodenext'.": {
+    "Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', or 'nodenext'.": {
         "category": "Error",
         "code": 1324
     },
@@ -956,7 +968,7 @@
         "category": "Error",
         "code": 1325
     },
-    "Dynamic import cannot have type arguments.": {
+    "This use of 'import' is invalid. 'import()' calls can be written, but they must have parentheses and cannot have type arguments.": {
         "category": "Error",
         "code": 1326
     },
@@ -1012,11 +1024,15 @@
         "category": "Error",
         "code": 1340
     },
+    "Class constructor may not be an accessor.": {
+        "category": "Error",
+        "code": 1341
+    },
     "Type arguments cannot be used here.": {
         "category": "Error",
         "code": 1342
     },
-    "The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node12', or 'nodenext'.": {
+    "The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', or 'nodenext'.": {
         "category": "Error",
         "code": 1343
     },
@@ -1084,6 +1100,10 @@
         "category": "Error",
         "code": 1359
     },
+    "Class constructor may not be a generator.": {
+        "category": "Error",
+        "code": 1360
+    },
     "'{0}' cannot be used as a value because it was imported using 'import type'.": {
         "category": "Error",
         "code": 1361
@@ -1140,7 +1160,7 @@
         "category": "Message",
         "code": 1377
     },
-    "Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', or 'nodenext', and the 'target' option is set to 'es2017' or higher.": {
+    "Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', or 'nodenext', and the 'target' option is set to 'es2017' or higher.": {
         "category": "Error",
         "code": 1378
     },
@@ -1348,7 +1368,7 @@
         "category": "Error",
         "code": 1431
     },
-    "Top-level 'for await' loops are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', or 'nodenext', and the 'target' option is set to 'es2017' or higher.": {
+    "Top-level 'for await' loops are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', or 'nodenext', and the 'target' option is set to 'es2017' or higher.": {
         "category": "Error",
         "code": 1432
     },
@@ -1420,7 +1440,7 @@
         "category": "Error",
         "code": 1451
     },
-    "Resolution modes are only supported when `moduleResolution` is `node12` or `nodenext`.": {
+    "'resolution-mode' assertions are only supported when `moduleResolution` is `node16` or `nodenext`.": {
         "category": "Error",
         "code": 1452
     },
@@ -1439,6 +1459,10 @@
     "Type import assertions should have exactly one key - `resolution-mode` - with value `import` or `require`.": {
         "category": "Error",
         "code": 1456
+    },
+    "Matched by default include pattern '**/*'": {
+        "category": "Message",
+        "code": 1457
     },
 
     "The 'import.meta' meta-property is not allowed in files which will build into CommonJS output.": {
@@ -1465,9 +1489,13 @@
         "category": "Message",
         "code": 1475
     },
-    "\"auto\": Treat files with imports, exports, import.meta, jsx (with jsx: react-jsx), or esm format (with module: node12+) as modules.": {
+    "\"auto\": Treat files with imports, exports, import.meta, jsx (with jsx: react-jsx), or esm format (with module: node16+) as modules.": {
         "category": "Message",
         "code": 1476
+    },
+    "An instantiation expression cannot be followed by a property access.": {
+        "category": "Error",
+        "code": 1477
     },
 
     "The types of '{0}' are incompatible between these types.": {
@@ -1506,9 +1534,26 @@
         "category": "Error",
         "code": 2207
     },
-    "This type parameter probably needs an `extends object` constraint.": {
+    "This type parameter might need an `extends {0}` constraint.": {
         "category": "Error",
         "code": 2208
+    },
+
+    "The project root is ambiguous, but is required to resolve export map entry '{0}' in file '{1}'. Supply the `rootDir` compiler option to disambiguate.": {
+        "category": "Error",
+        "code": 2209
+    },
+    "The project root is ambiguous, but is required to resolve import map entry '{0}' in file '{1}'. Supply the `rootDir` compiler option to disambiguate.": {
+        "category": "Error",
+        "code": 2210
+    },
+    "Add `extends` constraint.": {
+        "category": "Message",
+        "code": 2211
+    },
+    "Add `extends` constraint to all type parameters": {
+        "category": "Message",
+        "code": 2212
     },
 
     "Duplicate identifier '{0}'.": {
@@ -2511,10 +2556,7 @@
         "category": "Error",
         "code": 2568
     },
-    "Type '{0}' is not an array type or a string type. Use compiler option '--downlevelIteration' to allow iterating of iterators.": {
-        "category": "Error",
-        "code": 2569
-    },
+
     "Could not find name '{0}'. Did you mean '{1}'?": {
         "category": "Error",
         "code": 2570
@@ -3369,6 +3411,10 @@
         "category": "Error",
         "code": 2809
     },
+    "Expected 1 argument, but got 0. 'new Promise()' needs a JSDoc hint to produce a 'resolve' that can be called without arguments.": {
+        "category": "Error",
+        "code": 2810
+    },
     "Initializer for property '{0}'": {
         "category": "Error",
         "code": 2811
@@ -3421,11 +3467,11 @@
         "category": "Error",
         "code": 2833
     },
-    "Relative import paths need explicit file extensions in EcmaScript imports when '--moduleResolution' is 'node12' or 'nodenext'. Consider adding an extension to the import path.": {
+    "Relative import paths need explicit file extensions in EcmaScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.": {
         "category": "Error",
         "code": 2834
     },
-    "Relative import paths need explicit file extensions in EcmaScript imports when '--moduleResolution' is 'node12' or 'nodenext'. Did you mean '{0}'?": {
+    "Relative import paths need explicit file extensions in EcmaScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean '{0}'?": {
         "category": "Error",
         "code": 2835
     },
@@ -3440,6 +3486,26 @@
     "All declarations of '{0}' must have identical constraints.": {
         "category": "Error",
         "code": 2838
+    },
+    "This condition will always return '{0}' since JavaScript compares objects by reference, not value.": {
+        "category": "Error",
+        "code": 2839
+    },
+    "An interface cannot extend a primitive type like '{0}'; an interface can only extend named types and classes": {
+        "category": "Error",
+        "code": 2840
+    },
+    "The type of this expression cannot be named without a 'resolution-mode' assertion, which is an unstable feature. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.": {
+        "category": "Error",
+        "code": 2841
+    },
+    "'{0}' is an unused renaming of '{1}'. Did you intend to use it as a type annotation?": {
+        "category": "Error",
+        "code": 2842
+    },
+    "We can only write a type for '{0}' by adding a type for the entire parameter here.": {
+        "category": "Error",
+        "code": 2843
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -3869,6 +3935,10 @@
     "Compiler option '{0}' of value '{1}' is unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.": {
         "category": "Error",
         "code": 4124
+    },
+    "'resolution-mode' assertions are unstable. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.": {
+        "category": "Error",
+        "code": 4125
     },
 
     "The current host does not support the '{0}' option.": {
@@ -5090,11 +5160,11 @@
         "category": "Error",
         "code": 6310
     },
-    "Project '{0}' is out of date because oldest output '{1}' is older than newest input '{2}'": {
+    "Project '{0}' is out of date because output '{1}' is older than input '{2}'": {
         "category": "Message",
         "code": 6350
     },
-    "Project '{0}' is up to date because newest input '{1}' is older than oldest output '{2}'": {
+    "Project '{0}' is up to date because newest input '{1}' is older than output '{2}'": {
         "category": "Message",
         "code": 6351
     },
@@ -5271,6 +5341,14 @@
     "Reusing resolution of type reference directive '{0}' from '{1}' found in cache from location '{2}', it was not resolved.": {
         "category": "Message",
         "code": 6398
+    },
+    "Project '{0}' is out of date because buildinfo file '{1}' indicates that some of the changes were not emitted": {
+        "category": "Message",
+        "code": 6399
+    },
+    "Project '{0}' is up to date but needs to update timestamps of output files that are older than input files": {
+        "category": "Message",
+        "code": 6400
     },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {
@@ -6109,10 +6187,6 @@
         "category": "Error",
         "code": 7061
     },
-    "JSON imports are experimental in ES module mode imports.": {
-        "category": "Error",
-        "code": 7062
-    },
 
     "You cannot rename this element.": {
         "category": "Error",
@@ -6242,6 +6316,15 @@
         "category": "Error",
         "code": 8034
     },
+    "You cannot rename elements that are defined in a 'node_modules' folder.": {
+        "category": "Error",
+        "code": 8035
+    },
+    "You cannot rename elements that are defined in another 'node_modules' folder.": {
+        "category": "Error",
+        "code": 8036
+    },
+
     "Declaration emit for this file requires using private name '{0}'. An explicit type annotation may unblock declaration emit.": {
         "category": "Error",
         "code": 9005
@@ -7326,5 +7409,17 @@
     "A 'return' statement cannot be used inside a class static block.": {
         "category": "Error",
         "code": 18041
+    },
+    "'{0}' is a type and cannot be imported in JavaScript files. Use '{1}' in a JSDoc type annotation.": {
+        "category": "Error",
+        "code": 18042
+    },
+    "Types cannot appear in export declarations in JavaScript files.": {
+        "category": "Error",
+        "code": 18043
+    },
+    "'{0}' is automatically exported here.": {
+        "category": "Message",
+        "code": 18044
     }
 }

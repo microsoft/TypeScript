@@ -33,7 +33,7 @@ namespace ts {
         Deleted
     }
 
-    export type FileWatcherCallback = (fileName: string, eventKind: FileWatcherEventKind) => void;
+    export type FileWatcherCallback = (fileName: string, eventKind: FileWatcherEventKind, modifiedTime?: Date) => void;
     export type DirectoryWatcherCallback = (fileName: string) => void;
     /*@internal*/
     export interface WatchedFile {
@@ -364,7 +364,7 @@ namespace ts {
             const watcher = fsWatch(
                 dirName,
                 FileSystemEntryKind.Directory,
-                (_eventName: string, relativeFileName) => {
+                (_eventName: string, relativeFileName, modifiedTime) => {
                     // When files are deleted from disk, the triggered "rename" event would have a relativefileName of "undefined"
                     if (!isString(relativeFileName)) return;
                     const fileName = getNormalizedAbsolutePath(relativeFileName, dirName);
@@ -372,7 +372,7 @@ namespace ts {
                     const callbacks = fileName && fileWatcherCallbacks.get(toCanonicalName(fileName));
                     if (callbacks) {
                         for (const fileCallback of callbacks) {
-                            fileCallback(fileName, FileWatcherEventKind.Changed);
+                            fileCallback(fileName, FileWatcherEventKind.Changed, modifiedTime);
                         }
                     }
                 },
@@ -446,9 +446,9 @@ namespace ts {
                 cache.set(path, {
                     watcher: watchFile(
                         fileName,
-                        (fileName, eventKind) => forEach(
+                        (fileName, eventKind, modifiedTime) => forEach(
                             callbacksCache.get(path),
-                            cb => cb(fileName, eventKind)
+                            cb => cb(fileName, eventKind, modifiedTime)
                         ),
                         pollingInterval,
                         options
@@ -480,7 +480,8 @@ namespace ts {
         const newTime = modifiedTime.getTime();
         if (oldTime !== newTime) {
             watchedFile.mtime = modifiedTime;
-            watchedFile.callback(watchedFile.fileName, getFileWatcherEventKind(oldTime, newTime));
+            // Pass modified times so tsc --build can use it
+            watchedFile.callback(watchedFile.fileName, getFileWatcherEventKind(oldTime, newTime), modifiedTime);
             return true;
         }
 
@@ -517,7 +518,7 @@ namespace ts {
         useCaseSensitiveFileNames: boolean;
         getCurrentDirectory: System["getCurrentDirectory"];
         getAccessibleSortedChildDirectories(path: string): readonly string[];
-        directoryExists(dir: string): boolean;
+        fileSystemEntryExists: FileSystemEntryExists;
         realpath(s: string): string;
         setTimeout: NonNullable<System["setTimeout"]>;
         clearTimeout: NonNullable<System["clearTimeout"]>;
@@ -534,7 +535,7 @@ namespace ts {
         useCaseSensitiveFileNames,
         getCurrentDirectory,
         getAccessibleSortedChildDirectories,
-        directoryExists,
+        fileSystemEntryExists,
         realpath,
         setTimeout,
         clearTimeout
@@ -654,7 +655,7 @@ namespace ts {
         function nonSyncUpdateChildWatches(dirName: string, dirPath: Path, fileName: string, options: WatchOptions | undefined) {
             // Iterate through existing children and update the watches if needed
             const parentWatcher = cache.get(dirPath);
-            if (parentWatcher && directoryExists(dirName)) {
+            if (parentWatcher && fileSystemEntryExists(dirName, FileSystemEntryKind.Directory)) {
                 // Schedule the update and postpone invoke for callbacks
                 scheduleUpdateChildWatches(dirName, dirPath, fileName, options);
                 return;
@@ -732,7 +733,7 @@ namespace ts {
             if (!parentWatcher) return false;
             let newChildWatches: ChildDirectoryWatcher[] | undefined;
             const hasChanges = enumerateInsertsAndDeletes<string, ChildDirectoryWatcher>(
-                directoryExists(parentDir) ? mapDefined(getAccessibleSortedChildDirectories(parentDir), child => {
+                fileSystemEntryExists(parentDir, FileSystemEntryKind.Directory) ? mapDefined(getAccessibleSortedChildDirectories(parentDir), child => {
                     const childFullName = getNormalizedAbsolutePath(child, parentDir);
                     // Filter our the symbolic link directories since those arent included in recursive watch
                     // which is same behaviour when recursive: true is passed to fs.watch
@@ -776,10 +777,15 @@ namespace ts {
     }
 
     /*@internal*/
-    export type FsWatchCallback = (eventName: "rename" | "change", relativeFileName: string | undefined) => void;
+    export type FsWatchCallback = (eventName: "rename" | "change", relativeFileName: string | undefined, modifiedTime?: Date) => void;
     /*@internal*/
     export type FsWatch = (fileOrDirectory: string, entryKind: FileSystemEntryKind, callback: FsWatchCallback, recursive: boolean, fallbackPollingInterval: PollingInterval, fallbackOptions: WatchOptions | undefined) => FileWatcher;
-
+    /*@internal*/
+    export interface FsWatchWorkerWatcher extends FileWatcher {
+        on(eventName: string, listener: () => void): void;
+    }
+    /*@internal*/
+    export type FsWatchWorker = (fileOrDirectory: string, recursive: boolean, callback: FsWatchCallback) => FsWatchWorkerWatcher;
     /*@internal*/
     export const enum FileSystemEntryKind {
         File,
@@ -788,21 +794,23 @@ namespace ts {
 
     /*@internal*/
     export function createFileWatcherCallback(callback: FsWatchCallback): FileWatcherCallback {
-        return (_fileName, eventKind) => callback(eventKind === FileWatcherEventKind.Changed ? "change" : "rename", "");
+        return (_fileName, eventKind, modifiedTime) => callback(eventKind === FileWatcherEventKind.Changed ? "change" : "rename", "", modifiedTime);
     }
 
     function createFsWatchCallbackForFileWatcherCallback(
         fileName: string,
         callback: FileWatcherCallback,
-        fileExists: System["fileExists"]
+        getModifiedTime: NonNullable<System["getModifiedTime"]>
     ): FsWatchCallback {
-        return eventName => {
+        return (eventName, _relativeFileName, modifiedTime) => {
             if (eventName === "rename") {
-                callback(fileName, fileExists(fileName) ? FileWatcherEventKind.Created : FileWatcherEventKind.Deleted);
+                // Check time stamps rather than file system entry checks
+                modifiedTime ||= getModifiedTime(fileName) || missingFileModifiedTime;
+                callback(fileName, modifiedTime !== missingFileModifiedTime ? FileWatcherEventKind.Created : FileWatcherEventKind.Deleted, modifiedTime);
             }
             else {
                 // Change
-                callback(fileName, FileWatcherEventKind.Changed);
+                callback(fileName, FileWatcherEventKind.Changed, modifiedTime);
             }
         };
     }
@@ -841,6 +849,9 @@ namespace ts {
     }
 
     /*@internal*/
+    export type FileSystemEntryExists = (fileorDirectrory: string, entryKind: FileSystemEntryKind) => boolean;
+
+    /*@internal*/
     export interface CreateSystemWatchFunctions {
         // Polling watch file
         pollingWatchFile: HostWatchFile;
@@ -849,12 +860,11 @@ namespace ts {
         setTimeout: NonNullable<System["setTimeout"]>;
         clearTimeout: NonNullable<System["clearTimeout"]>;
         // For fs events :
-        fsWatch: FsWatch;
-        fileExists: System["fileExists"];
+        fsWatchWorker: FsWatchWorker;
+        fileSystemEntryExists: FileSystemEntryExists;
         useCaseSensitiveFileNames: boolean;
         getCurrentDirectory: System["getCurrentDirectory"];
         fsSupportsRecursiveFsWatch: boolean;
-        directoryExists: System["directoryExists"];
         getAccessibleSortedChildDirectories(path: string): readonly string[];
         realpath(s: string): string;
         // For backward compatibility environment variables
@@ -862,6 +872,8 @@ namespace ts {
         useNonPollingWatchers?: boolean;
         tscWatchDirectory: string | undefined;
         defaultWatchFileKind: System["defaultWatchFileKind"];
+        inodeWatching: boolean;
+        sysLog: (s: string) => void;
     }
 
     /*@internal*/
@@ -870,23 +882,25 @@ namespace ts {
         getModifiedTime,
         setTimeout,
         clearTimeout,
-        fsWatch,
-        fileExists,
+        fsWatchWorker,
+        fileSystemEntryExists,
         useCaseSensitiveFileNames,
         getCurrentDirectory,
         fsSupportsRecursiveFsWatch,
-        directoryExists,
         getAccessibleSortedChildDirectories,
         realpath,
         tscWatchFile,
         useNonPollingWatchers,
         tscWatchDirectory,
         defaultWatchFileKind,
+        inodeWatching,
+        sysLog,
     }: CreateSystemWatchFunctions): { watchFile: HostWatchFile; watchDirectory: HostWatchDirectory; } {
         let dynamicPollingWatchFile: HostWatchFile | undefined;
         let fixedChunkSizePollingWatchFile: HostWatchFile | undefined;
         let nonPollingWatchFile: HostWatchFile | undefined;
         let hostRecursiveDirectoryWatcher: HostWatchDirectory | undefined;
+        let hitSystemWatcherLimit = false;
         return {
             watchFile,
             watchDirectory
@@ -908,7 +922,7 @@ namespace ts {
                     return fsWatch(
                         fileName,
                         FileSystemEntryKind.File,
-                        createFsWatchCallbackForFileWatcherCallback(fileName, callback, fileExists),
+                        createFsWatchCallbackForFileWatcherCallback(fileName, callback, getModifiedTime),
                         /*recursive*/ false,
                         pollingInterval,
                         getFallbackOptions(options)
@@ -988,7 +1002,7 @@ namespace ts {
                 hostRecursiveDirectoryWatcher = createDirectoryWatcherSupportingRecursive({
                     useCaseSensitiveFileNames,
                     getCurrentDirectory,
-                    directoryExists,
+                    fileSystemEntryExists,
                     getAccessibleSortedChildDirectories,
                     watchDirectory: nonRecursiveWatchDirectory,
                     realpath,
@@ -1056,6 +1070,147 @@ namespace ts {
                             defaultFallbackPolling :
                             undefined
                     };
+            }
+        }
+
+        function fsWatch(
+            fileOrDirectory: string,
+            entryKind: FileSystemEntryKind,
+            callback: FsWatchCallback,
+            recursive: boolean,
+            fallbackPollingInterval: PollingInterval,
+            fallbackOptions: WatchOptions | undefined
+        ): FileWatcher {
+            let lastDirectoryPartWithDirectorySeparator: string | undefined;
+            let lastDirectoryPart: string | undefined;
+            if (inodeWatching) {
+                lastDirectoryPartWithDirectorySeparator = fileOrDirectory.substring(fileOrDirectory.lastIndexOf(directorySeparator));
+                lastDirectoryPart = lastDirectoryPartWithDirectorySeparator.slice(directorySeparator.length);
+            }
+            /** Watcher for the file system entry depending on whether it is missing or present */
+            let watcher = !fileSystemEntryExists(fileOrDirectory, entryKind) ?
+                watchMissingFileSystemEntry() :
+                watchPresentFileSystemEntry();
+            return {
+                close: () => {
+                    // Close the watcher (either existing file system entry watcher or missing file system entry watcher)
+                    watcher.close();
+                    watcher = undefined!;
+                }
+            };
+
+            function updateWatcher(createWatcher: () => FileWatcher) {
+                // If watcher is not closed, update it
+                if (watcher) {
+                    sysLog(`sysLog:: ${fileOrDirectory}:: Changing watcher to ${createWatcher === watchPresentFileSystemEntry ? "Present" : "Missing"}FileSystemEntryWatcher`);
+                    watcher.close();
+                    watcher = createWatcher();
+                }
+            }
+
+            /**
+             * Watch the file or directory that is currently present
+             * and when the watched file or directory is deleted, switch to missing file system entry watcher
+             */
+            function watchPresentFileSystemEntry(): FileWatcher {
+                if (hitSystemWatcherLimit) {
+                    sysLog(`sysLog:: ${fileOrDirectory}:: Defaulting to watchFile`);
+                    return watchPresentFileSystemEntryWithFsWatchFile();
+                }
+                try {
+                    const presentWatcher = fsWatchWorker(
+                        fileOrDirectory,
+                        recursive,
+                        inodeWatching ?
+                            callbackChangingToMissingFileSystemEntry :
+                            callback
+                    );
+                    // Watch the missing file or directory or error
+                    presentWatcher.on("error", () => {
+                        callback("rename", "");
+                        updateWatcher(watchMissingFileSystemEntry);
+                    });
+                    return presentWatcher;
+                }
+                catch (e) {
+                    // Catch the exception and use polling instead
+                    // Eg. on linux the number of watches are limited and one could easily exhaust watches and the exception ENOSPC is thrown when creating watcher at that point
+                    // so instead of throwing error, use fs.watchFile
+                    hitSystemWatcherLimit ||= e.code === "ENOSPC";
+                    sysLog(`sysLog:: ${fileOrDirectory}:: Changing to watchFile`);
+                    return watchPresentFileSystemEntryWithFsWatchFile();
+                }
+            }
+
+            function callbackChangingToMissingFileSystemEntry(event: "rename" | "change", relativeName: string | undefined) {
+                // In some scenarios, file save operation fires event with fileName.ext~ instead of fileName.ext
+                // To ensure we see the file going missing and coming back up (file delete and then recreated)
+                // and watches being updated correctly we are calling back with fileName.ext as well as fileName.ext~
+                // The worst is we have fired event that was not needed but we wont miss any changes
+                // especially in cases where file goes missing and watches wrong inode
+                let originalRelativeName: string | undefined;
+                if (relativeName && endsWith(relativeName, "~")) {
+                    originalRelativeName = relativeName;
+                    relativeName = relativeName.slice(0, relativeName.length - 1);
+                }
+                // because relativeName is not guaranteed to be correct we need to check on each rename with few combinations
+                // Eg on ubuntu while watching app/node_modules the relativeName is "node_modules" which is neither relative nor full path
+                if (event === "rename" &&
+                    (!relativeName ||
+                        relativeName === lastDirectoryPart ||
+                        endsWith(relativeName, lastDirectoryPartWithDirectorySeparator!))) {
+                    const modifiedTime = getModifiedTime(fileOrDirectory) || missingFileModifiedTime;
+                    if (originalRelativeName) callback(event, originalRelativeName, modifiedTime);
+                    callback(event, relativeName, modifiedTime);
+                    if (inodeWatching) {
+                        // If this was rename event, inode has changed means we need to update watcher
+                        updateWatcher(modifiedTime === missingFileModifiedTime ? watchMissingFileSystemEntry : watchPresentFileSystemEntry);
+                    }
+                    else if (modifiedTime === missingFileModifiedTime) {
+                        updateWatcher(watchMissingFileSystemEntry);
+                    }
+                }
+                else {
+                    if (originalRelativeName) callback(event, originalRelativeName);
+                    callback(event, relativeName);
+                }
+            }
+
+            /**
+             * Watch the file or directory using fs.watchFile since fs.watch threw exception
+             * Eg. on linux the number of watches are limited and one could easily exhaust watches and the exception ENOSPC is thrown when creating watcher at that point
+             */
+            function watchPresentFileSystemEntryWithFsWatchFile(): FileWatcher {
+                return watchFile(
+                    fileOrDirectory,
+                    createFileWatcherCallback(callback),
+                    fallbackPollingInterval,
+                    fallbackOptions
+                );
+            }
+
+            /**
+             * Watch the file or directory that is missing
+             * and switch to existing file or directory when the missing filesystem entry is created
+             */
+            function watchMissingFileSystemEntry(): FileWatcher {
+                return watchFile(
+                    fileOrDirectory,
+                    (_fileName, eventKind, modifiedTime) => {
+                        if (eventKind === FileWatcherEventKind.Created) {
+                            modifiedTime ||= getModifiedTime(fileOrDirectory) || missingFileModifiedTime;
+                            if (modifiedTime !== missingFileModifiedTime) {
+                                callback("rename", "", modifiedTime);
+                                // Call the callback for current file or directory
+                                // For now it could be callback for the inner directory creation,
+                                // but just return current directory, better than current no-op
+                                updateWatcher(watchPresentFileSystemEntry);
+                            }
+                        }
+                    },
+                    fallbackPollingInterval,
+                    fallbackOptions
+                );
             }
         }
     }
@@ -1272,8 +1427,6 @@ namespace ts {
             let activeSession: import("inspector").Session | "stopping" | undefined;
             let profilePath = "./profile.cpuprofile";
 
-            let hitSystemWatcherLimit = false;
-
             const Buffer: {
                 new (input: string, encoding?: string): any;
                 from?(input: string, encoding?: string): any;
@@ -1294,20 +1447,21 @@ namespace ts {
                 getModifiedTime,
                 setTimeout,
                 clearTimeout,
-                fsWatch,
+                fsWatchWorker,
                 useCaseSensitiveFileNames,
                 getCurrentDirectory,
-                fileExists,
+                fileSystemEntryExists,
                 // Node 4.0 `fs.watch` function supports the "recursive" option on both OSX and Windows
                 // (ref: https://github.com/nodejs/node/pull/2649 and https://github.com/Microsoft/TypeScript/issues/4643)
                 fsSupportsRecursiveFsWatch,
-                directoryExists,
                 getAccessibleSortedChildDirectories: path => getAccessibleFileSystemEntries(path).directories,
                 realpath,
                 tscWatchFile: process.env.TSC_WATCHFILE,
                 useNonPollingWatchers: process.env.TSC_NONPOLLING_WATCHER,
                 tscWatchDirectory: process.env.TSC_WATCHDIRECTORY,
                 defaultWatchFileKind: () => sys!.defaultWatchFileKind?.(),
+                inodeWatching: isLinuxOrMacOs,
+                sysLog,
             });
             const nodeSystem: System = {
                 args: process.argv.slice(2),
@@ -1542,7 +1696,7 @@ namespace ts {
                     close: () => _fs.unwatchFile(fileName, fileChanged)
                 };
 
-                function fileChanged(curr: any, prev: any) {
+                function fileChanged(curr: import("fs").Stats, prev: import("fs").Stats) {
                     // previous event kind check is to ensure we recongnize the file as previously also missing when it is restored or renamed twice (that is it disappears and reappears)
                     // In such case, prevTime returned is same as prev time of event when file was deleted as per node documentation
                     const isPreviouslyDeleted = +prev.mtime === 0 || eventKind === FileWatcherEventKind.Deleted;
@@ -1564,139 +1718,23 @@ namespace ts {
                         // File changed
                         eventKind = FileWatcherEventKind.Changed;
                     }
-                    callback(fileName, eventKind);
+                    callback(fileName, eventKind, curr.mtime);
                 }
             }
 
-            function fsWatch(
+            function fsWatchWorker(
                 fileOrDirectory: string,
-                entryKind: FileSystemEntryKind,
-                callback: FsWatchCallback,
                 recursive: boolean,
-                fallbackPollingInterval: PollingInterval,
-                fallbackOptions: WatchOptions | undefined
-            ): FileWatcher {
-                let options: any;
-                let lastDirectoryPartWithDirectorySeparator: string | undefined;
-                let lastDirectoryPart: string | undefined;
-                if (isLinuxOrMacOs) {
-                    lastDirectoryPartWithDirectorySeparator = fileOrDirectory.substr(fileOrDirectory.lastIndexOf(directorySeparator));
-                    lastDirectoryPart = lastDirectoryPartWithDirectorySeparator.slice(directorySeparator.length);
-                }
-                /** Watcher for the file system entry depending on whether it is missing or present */
-                let watcher = !fileSystemEntryExists(fileOrDirectory, entryKind) ?
-                    watchMissingFileSystemEntry() :
-                    watchPresentFileSystemEntry();
-                return {
-                    close: () => {
-                        // Close the watcher (either existing file system entry watcher or missing file system entry watcher)
-                        watcher.close();
-                        watcher = undefined!;
-                    }
-                };
-
-                /**
-                 * Invoke the callback with rename and update the watcher if not closed
-                 * @param createWatcher
-                 */
-                function invokeCallbackAndUpdateWatcher(createWatcher: () => FileWatcher) {
-                    sysLog(`sysLog:: ${fileOrDirectory}:: Changing watcher to ${createWatcher === watchPresentFileSystemEntry ? "Present" : "Missing"}FileSystemEntryWatcher`);
-                    // Call the callback for current directory
-                    callback("rename", "");
-
-                    // If watcher is not closed, update it
-                    if (watcher) {
-                        watcher.close();
-                        watcher = createWatcher();
-                    }
-                }
-
-                /**
-                 * Watch the file or directory that is currently present
-                 * and when the watched file or directory is deleted, switch to missing file system entry watcher
-                 */
-                function watchPresentFileSystemEntry(): FileWatcher {
-                    // Node 4.0 `fs.watch` function supports the "recursive" option on both OSX and Windows
-                    // (ref: https://github.com/nodejs/node/pull/2649 and https://github.com/Microsoft/TypeScript/issues/4643)
-                    if (options === undefined) {
-                        if (fsSupportsRecursiveFsWatch) {
-                            options = { persistent: true, recursive: !!recursive };
-                        }
-                        else {
-                            options = { persistent: true };
-                        }
-                    }
-
-                    if (hitSystemWatcherLimit) {
-                        sysLog(`sysLog:: ${fileOrDirectory}:: Defaulting to fsWatchFile`);
-                        return watchPresentFileSystemEntryWithFsWatchFile();
-                    }
-                    try {
-                        const presentWatcher = _fs.watch(
-                            fileOrDirectory,
-                            options,
-                            isLinuxOrMacOs ?
-                                callbackChangingToMissingFileSystemEntry :
-                                callback
-                        );
-                        // Watch the missing file or directory or error
-                        presentWatcher.on("error", () => invokeCallbackAndUpdateWatcher(watchMissingFileSystemEntry));
-                        return presentWatcher;
-                    }
-                    catch (e) {
-                        // Catch the exception and use polling instead
-                        // Eg. on linux the number of watches are limited and one could easily exhaust watches and the exception ENOSPC is thrown when creating watcher at that point
-                        // so instead of throwing error, use fs.watchFile
-                        hitSystemWatcherLimit ||= e.code === "ENOSPC";
-                        sysLog(`sysLog:: ${fileOrDirectory}:: Changing to fsWatchFile`);
-                        return watchPresentFileSystemEntryWithFsWatchFile();
-                    }
-                }
-
-                function callbackChangingToMissingFileSystemEntry(event: "rename" | "change", relativeName: string | undefined) {
-                    // because relativeName is not guaranteed to be correct we need to check on each rename with few combinations
-                    // Eg on ubuntu while watching app/node_modules the relativeName is "node_modules" which is neither relative nor full path
-                    return event === "rename" &&
-                        (!relativeName ||
-                            relativeName === lastDirectoryPart ||
-                            (relativeName.lastIndexOf(lastDirectoryPartWithDirectorySeparator!) !== -1 && relativeName.lastIndexOf(lastDirectoryPartWithDirectorySeparator!) === relativeName.length - lastDirectoryPartWithDirectorySeparator!.length)) &&
-                        !fileSystemEntryExists(fileOrDirectory, entryKind) ?
-                        invokeCallbackAndUpdateWatcher(watchMissingFileSystemEntry) :
-                        callback(event, relativeName);
-                }
-
-                /**
-                 * Watch the file or directory using fs.watchFile since fs.watch threw exception
-                 * Eg. on linux the number of watches are limited and one could easily exhaust watches and the exception ENOSPC is thrown when creating watcher at that point
-                 */
-                function watchPresentFileSystemEntryWithFsWatchFile(): FileWatcher {
-                    return watchFile(
-                        fileOrDirectory,
-                        createFileWatcherCallback(callback),
-                        fallbackPollingInterval,
-                        fallbackOptions
-                    );
-                }
-
-                /**
-                 * Watch the file or directory that is missing
-                 * and switch to existing file or directory when the missing filesystem entry is created
-                 */
-                function watchMissingFileSystemEntry(): FileWatcher {
-                    return watchFile(
-                        fileOrDirectory,
-                        (_fileName, eventKind) => {
-                            if (eventKind === FileWatcherEventKind.Created && fileSystemEntryExists(fileOrDirectory, entryKind)) {
-                                // Call the callback for current file or directory
-                                // For now it could be callback for the inner directory creation,
-                                // but just return current directory, better than current no-op
-                                invokeCallbackAndUpdateWatcher(watchPresentFileSystemEntry);
-                            }
-                        },
-                        fallbackPollingInterval,
-                        fallbackOptions
-                    );
-                }
+                callback: FsWatchCallback,
+            ) {
+                // Node 4.0 `fs.watch` function supports the "recursive" option on both OSX and Windows
+                // (ref: https://github.com/nodejs/node/pull/2649 and https://github.com/Microsoft/TypeScript/issues/4643)
+                return _fs.watch(
+                    fileOrDirectory,
+                    fsSupportsRecursiveFsWatch ?
+                        { persistent: true, recursive: !!recursive } : { persistent: true },
+                    callback
+                );
             }
 
             function readFileWorker(fileName: string, _encoding?: string): string | undefined {
@@ -1859,11 +1897,18 @@ namespace ts {
             }
 
             function getModifiedTime(path: string) {
+                // Since the error thrown by fs.statSync isn't used, we can avoid collecting a stack trace to improve
+                // the CPU time performance.
+                const originalStackTraceLimit = Error.stackTraceLimit;
+                Error.stackTraceLimit = 0;
                 try {
                     return statSync(path)?.mtime;
                 }
                 catch (e) {
                     return undefined;
+                }
+                finally {
+                    Error.stackTraceLimit = originalStackTraceLimit;
                 }
             }
 

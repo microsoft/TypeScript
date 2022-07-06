@@ -6,6 +6,7 @@
       "name": "2"
     },
     "completionList": {
+      "flags": 0,
       "isGlobalCompletion": false,
       "isMemberCompletion": true,
       "isNewIdentifierLocation": false,
