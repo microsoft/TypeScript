@@ -304,21 +304,21 @@ namespace Harness {
 
         // Additional options not already in ts.optionDeclarations
         const harnessOptionDeclarations: ts.CommandLineOption[] = [
-            { name: "allowNonTsExtensions", type: "boolean", defaultValueDescription: false },
-            { name: "useCaseSensitiveFileNames", type: "boolean", defaultValueDescription: false },
-            { name: "baselineFile", type: "string" },
-            { name: "includeBuiltFile", type: "string" },
-            { name: "fileName", type: "string" },
-            { name: "libFiles", type: "string" },
-            { name: "noErrorTruncation", type: "boolean", defaultValueDescription: false },
-            { name: "suppressOutputPathCheck", type: "boolean", defaultValueDescription: false },
-            { name: "noImplicitReferences", type: "boolean", defaultValueDescription: false },
-            { name: "currentDirectory", type: "string" },
-            { name: "symlink", type: "string" },
-            { name: "link", type: "string" },
-            { name: "noTypesAndSymbols", type: "boolean", defaultValueDescription: false },
+            { name: "allowNonTsExtensions", type: "boolean", defaultValueDescription: false, category: ts.Diagnostics.ALL_COMPILER_OPTIONS },
+            { name: "useCaseSensitiveFileNames", type: "boolean", defaultValueDescription: false, category: ts.Diagnostics.ALL_COMPILER_OPTIONS },
+            { name: "baselineFile", type: "string", category: ts.Diagnostics.ALL_COMPILER_OPTIONS },
+            { name: "includeBuiltFile", type: "string", category: ts.Diagnostics.ALL_COMPILER_OPTIONS },
+            { name: "fileName", type: "string", category: ts.Diagnostics.ALL_COMPILER_OPTIONS },
+            { name: "libFiles", type: "string", category: ts.Diagnostics.ALL_COMPILER_OPTIONS },
+            { name: "noErrorTruncation", type: "boolean", defaultValueDescription: false, category: ts.Diagnostics.ALL_COMPILER_OPTIONS },
+            { name: "suppressOutputPathCheck", type: "boolean", defaultValueDescription: false, category: ts.Diagnostics.ALL_COMPILER_OPTIONS },
+            { name: "noImplicitReferences", type: "boolean", defaultValueDescription: false, category: ts.Diagnostics.ALL_COMPILER_OPTIONS },
+            { name: "currentDirectory", type: "string", category: ts.Diagnostics.ALL_COMPILER_OPTIONS },
+            { name: "symlink", type: "string", category: ts.Diagnostics.ALL_COMPILER_OPTIONS },
+            { name: "link", type: "string", category: ts.Diagnostics.ALL_COMPILER_OPTIONS },
+            { name: "noTypesAndSymbols", type: "boolean", defaultValueDescription: false, category: ts.Diagnostics.ALL_COMPILER_OPTIONS },
             // Emitted js baseline will print full paths for every output file
-            { name: "fullEmitPaths", type: "boolean", defaultValueDescription: false },
+            { name: "fullEmitPaths", type: "boolean", defaultValueDescription: false, category: ts.Diagnostics.ALL_COMPILER_OPTIONS },
         ];
 
         let optionsIndex: ts.ESMap<string, ts.CommandLineOption>;
