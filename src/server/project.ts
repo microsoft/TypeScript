@@ -393,7 +393,7 @@ namespace ts.server {
             if (this.program && !this.symlinks.hasProcessedResolutions()) {
                 this.symlinks.setSymlinksFromResolutions(
                     this.program.getSourceFiles(),
-                    this.program.getResolvedTypeReferenceDirectives());
+                    this.program.getAutomaticTypeDirectiveResolutions());
             }
             return this.symlinks;
         }
