@@ -10,7 +10,11 @@ let obj = {
   f2: function() {
     this.x
     this/*2*/
-  }
+  },
+  f3: (function() {
+    this.x = 1
+    this/*3*/
+  }),
 }
 
 
@@ -27,5 +31,9 @@ var obj = {
     f2: function () {
         this.x;
         this; /*2*/
-    }
+    },
+    f3: (function () {
+        this.x = 1;
+        this; /*3*/
+    })
 };

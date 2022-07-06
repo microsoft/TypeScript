@@ -31696,7 +31696,7 @@ namespace ts {
                 if (getJSDocClassTag(node)) return true;
 
                 // If the node is a property of an object literal.
-                if (isPropertyAssignment(node.parent)) return false;
+                if (isPropertyAssignment(walkUpParenthesizedExpressions(func.parent))) return false;
 
                 // If the symbol of the node has members, treat it like a constructor.
                 const symbol = getSymbolOfNode(func);
