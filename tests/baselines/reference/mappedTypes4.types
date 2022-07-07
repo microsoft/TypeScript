@@ -160,10 +160,10 @@ type Z = { a: number };
 type Clone<T> = {
 >Clone : Clone<T>
 
-  [P in keyof (T & {})]: T[P];
+  [P in keyof (T & {})]: (T & {})[P];
 };
 type M = Clone<Z>; // M should be { a: number }
->M : Clone<Z>
+>M : { a: number; }
 
 var z1: Z;
 >z1 : Z
