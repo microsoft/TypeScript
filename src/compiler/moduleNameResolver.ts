@@ -2092,10 +2092,11 @@ namespace ts {
     }
 
     /**
+     * @internal
      * From https://github.com/nodejs/node/blob/8f39f51cbbd3b2de14b9ee896e26421cc5b20121/lib/internal/modules/esm/resolve.js#L722 -
      * "longest" has some nuance as to what "longest" means in the presence of pattern trailers
      */
-    function comparePatternKeys(a: string, b: string) {
+    export function comparePatternKeys(a: string, b: string) {
         const aPatternIndex = a.indexOf("*");
         const bPatternIndex = b.indexOf("*");
         const baseLenA = aPatternIndex === -1 ? a.length : aPatternIndex + 1;
@@ -2361,7 +2362,7 @@ namespace ts {
     }
 
     /* @internal */
-    export function isApplicableVersionedTypesKey(conditions: string[], key: string) {
+    export function isApplicableVersionedTypesKey(conditions: readonly string[], key: string) {
         if (conditions.indexOf("types") === -1) return false; // only apply versioned types conditions if the types condition is applied
         if (!startsWith(key, "types@")) return false;
         const range = VersionRange.tryParse(key.substring("types@".length));
