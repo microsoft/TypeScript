@@ -980,11 +980,13 @@ export function zipToModeAwareCache<K, V>(
     return map;
 }
 
-function getOriginalOrResolvedModuleFileName(result: ResolvedModuleWithFailedLookupLocations) {
+/** @internal */
+export function getOriginalOrResolvedModuleFileName(result: ResolvedModuleWithFailedLookupLocations) {
     return result.resolvedModule && (result.resolvedModule.originalPath || result.resolvedModule.resolvedFileName);
 }
 
-function getOriginalOrResolvedTypeReferenceFileName(result: ResolvedTypeReferenceDirectiveWithFailedLookupLocations) {
+/** @internal */
+export function getOriginalOrResolvedTypeReferenceFileName(result: ResolvedTypeReferenceDirectiveWithFailedLookupLocations) {
     return result.resolvedTypeReferenceDirective &&
         (result.resolvedTypeReferenceDirective.originalPath || result.resolvedTypeReferenceDirective.resolvedFileName);
 }

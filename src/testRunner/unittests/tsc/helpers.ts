@@ -536,10 +536,46 @@ type ReadableProgramBuildInfoFileInfo<T> = Omit<ts.BuilderState.FileInfo, "impli
     impliedFormat: string | undefined;
     original: T | undefined;
 };
+interface ReadableProgramBuildInfoResolutionBase {
+    readonly resolvedFileName: string;
+    readonly originalPath: string | undefined;
+}
+type ReadableProgramBuildInfoResolvedModuleFull = Omit<ts.ProgramBuildInfoResolvedModuleFull, "resolvedFileName" | "originalPath"> & ReadableProgramBuildInfoResolutionBase;
+type ReadableProgramBuildInfoResolvedTypeReferenceDirective = Omit<ts.ProgramBuildInfoResolvedTypeReferenceDirective, "resolvedFileName" | "originalPath"> & ReadableProgramBuildInfoResolutionBase;
+type ReadableProgramBuildInfoResolution = Omit<ts.ProgramBuildInfoResolution, "resolvedModule" | "resolvedTypeReferenceDirective" | "failedLookupLocations" | "affectingLocations"> & {
+    readonly resolutionId: ts.ProgramBuildInfoResolutionId;
+    readonly resolvedModule: ReadableProgramBuildInfoResolvedModuleFull | undefined;
+    readonly resolvedTypeReferenceDirective: ReadableProgramBuildInfoResolvedTypeReferenceDirective | undefined;
+    readonly failedLookupLocations: readonly string[] | undefined;
+    readonly affectingLocations: readonly string[] | undefined;
+};
+type ReadableWithOriginal<T, O> = T & {
+    readonly original: O;
+};
+interface ReadableProgramBuildInfoResolutionEntry {
+    resolutionEntryId: ts.ProgramBuildInfoResolutionEntryId;
+    name: string;
+    resolution: ReadableProgramBuildInfoResolution;
+    mode: string | undefined;
+}
+interface ReadableProgramBuildInfoResolutionCacheEntry {
+    dir: string;
+    resolutions: readonly ReadableProgramBuildInfoResolutionEntry[];
+}
+type ReadableProgramBuildInfoCacheResolutions = Omit<ts.ProgramBuildInfoCacheResolutions,
+    "resolutions" | "resolutionEntries" | "modules" | "typeRefs"
+> & {
+    resolutions: readonly ReadableWithOriginal<ReadableProgramBuildInfoResolution, ts.ProgramBuildInfoResolution>[];
+    resolutionEntries: readonly ReadableWithOriginal<ReadableProgramBuildInfoResolutionEntry, ts.ProgramBuildInfoResolutionEntry>[];
+    modules: ReadableProgramBuildInfoResolutionCacheEntry[] | undefined;
+    typeRefs: ReadableProgramBuildInfoResolutionCacheEntry[] | undefined;
+};
+
 type ReadableProgramMultiFileEmitBuildInfo = Omit<ts.ProgramMultiFileEmitBuildInfo,
     "fileIdsList" | "fileInfos" |
     "referencedMap" | "exportedModulesMap" | "semanticDiagnosticsPerFile" |
-    "affectedFilesPendingEmit" | "changeFileSet" | "emitSignatures"
+    "affectedFilesPendingEmit" | "changeFileSet" | "emitSignatures" |
+    "cacheResolutions"
 > & {
     fileNamesList: readonly (readonly string[])[] | undefined;
     fileInfos: ts.MapLike<ReadableProgramBuildInfoFileInfo<ts.ProgramMultiFileEmitBuildInfoFileInfo>>;
@@ -549,11 +585,15 @@ type ReadableProgramMultiFileEmitBuildInfo = Omit<ts.ProgramMultiFileEmitBuildIn
     affectedFilesPendingEmit: readonly ReadableProgramBuilderInfoFilePendingEmit[] | undefined;
     changeFileSet: readonly string[] | undefined;
     emitSignatures: readonly ReadableProgramBuildInfoEmitSignature[] | undefined;
+    cacheResolutions: ReadableProgramBuildInfoCacheResolutions | undefined;
 };
 type ReadableProgramBuildInfoBundlePendingEmit = [emitKind: ReadableBuilderFileEmit, original: ts.ProgramBuildInfoBundlePendingEmit];
-type ReadableProgramBundleEmitBuildInfo = Omit<ts.ProgramBundleEmitBuildInfo, "fileInfos" | "pendingEmit"> & {
+type ReadableProgramBundleEmitBuildInfo = Omit<ts.ProgramBundleEmitBuildInfo,
+    "fileInfos" | "pendingEmit" | "cacheResolutions"
+> & {
     fileInfos: ts.MapLike<string | ReadableProgramBuildInfoFileInfo<ts.BuilderState.FileInfo>>;
     pendingEmit: ReadableProgramBuildInfoBundlePendingEmit | undefined;
+    cacheResolutions: ReadableProgramBuildInfoCacheResolutions | undefined;
 };
 
 type ReadableProgramBuildInfo = ReadableProgramMultiFileEmitBuildInfo | ReadableProgramBundleEmitBuildInfo;
@@ -563,8 +603,14 @@ function isReadableProgramBundleEmitBuildInfo(info: ReadableProgramBuildInfo | u
 }
 type ReadableBuildInfo = Omit<ts.BuildInfo, "program"> & { program: ReadableProgramBuildInfo | undefined; size: number; };
 function generateBuildInfoProgramBaseline(sys: ts.System, buildInfoPath: string, buildInfo: ts.BuildInfo) {
+    interface ReadableWithOriginalArray<T, O> {
+        readables: T[];
+        withOriginals: ReadableWithOriginal<T, O>[];
+    }
     let program: ReadableProgramBuildInfo | undefined;
     let fileNamesList: string[][] | undefined;
+    let resolutions: ReadableWithOriginalArray<ReadableProgramBuildInfoResolution, ts.ProgramBuildInfoResolution>;
+    let resolutionEntries: ReadableWithOriginalArray<ReadableProgramBuildInfoResolutionEntry, ts.ProgramBuildInfoResolutionEntry>;
     if (buildInfo.program && ts.isProgramBundleEmitBuildInfo(buildInfo.program)) {
         const fileInfos: ReadableProgramBundleEmitBuildInfo["fileInfos"] = {};
         buildInfo.program?.fileInfos?.forEach((fileInfo, index) =>
@@ -582,6 +628,7 @@ function generateBuildInfoProgramBaseline(sys: ts.System, buildInfoPath: string,
                     toReadableBuilderFileEmit(ts.toProgramEmitPending(pendingEmit, buildInfo.program.options)),
                     pendingEmit
                 ],
+            cacheResolutions: toReadableProgramBuildInfoResolutions(buildInfo.program.cacheResolutions),
         };
     }
     else if (buildInfo.program) {
@@ -609,6 +656,7 @@ function generateBuildInfoProgramBaseline(sys: ts.System, buildInfoPath: string,
                     [toFileName(s[0]), s[1]]
             ),
             latestChangedDtsFile: buildInfo.program.latestChangedDtsFile,
+            cacheResolutions: toReadableProgramBuildInfoResolutions(buildInfo.program.cacheResolutions),
         };
     }
     const version = buildInfo.version === ts.version ? fakes.version : buildInfo.version;
@@ -636,7 +684,7 @@ function generateBuildInfoProgramBaseline(sys: ts.System, buildInfoPath: string,
     // For now its just JSON.stringify
     sys.writeFile(`${buildInfoPath}.readable.baseline.txt`, JSON.stringify(result, /*replacer*/ undefined, 2));
 
-    function toFileName(fileId: ts.ProgramBuildInfoFileId) {
+    function toFileName(fileId: ts.ProgramBuildInfoFileId | ts.ProgramBuildInfoAbsoluteFileId) {
         return buildInfo.program!.fileNames[fileId - 1];
     }
 
@@ -649,8 +697,12 @@ function generateBuildInfoProgramBaseline(sys: ts.System, buildInfoPath: string,
         return {
             original: ts.isString(original) ? undefined : original,
             ...info,
-            impliedFormat: info.impliedFormat && ts.getNameOfCompilerOptionValue(info.impliedFormat, ts.moduleOptionDeclaration.type),
+            impliedFormat: toReadableMode(info.impliedFormat),
         };
+    }
+
+    function toReadableMode(mode: ts.ResolutionMode) {
+        return mode && ts.getNameOfCompilerOptionValue(mode, ts.moduleOptionDeclaration.type);
     }
 
     function toMapOfReferencedSet(referenceMap: ts.ProgramBuildInfoReferencedMap | undefined): ts.MapLike<string[]> | undefined {
@@ -682,6 +734,74 @@ function generateBuildInfoProgramBaseline(sys: ts.System, buildInfoPath: string,
         function addFlags(flag: string) {
             result = result ? `${result} | ${flag}` : flag;
         }
+    }
+
+    function toReadableProgramBuildInfoResolutions(cacheResolutions: ts.ProgramBuildInfoCacheResolutions | undefined): ReadableProgramBuildInfoCacheResolutions | undefined {
+        if (!cacheResolutions) return cacheResolutions;
+        resolutions = toReadableWithOriginalArray(cacheResolutions.resolutions, toReadableProgramBuildInfoResolution);
+        resolutionEntries = toReadableWithOriginalArray(cacheResolutions.resolutionEntries, toReadableProgramBuildInfoResolutionEntry);
+        return {
+            ...cacheResolutions,
+            resolutions: resolutions.withOriginals,
+            resolutionEntries: resolutionEntries.withOriginals,
+            modules: toReadableProgramBuildInfoResolutionCache(cacheResolutions.modules),
+            typeRefs: toReadableProgramBuildInfoResolutionCache(cacheResolutions.typeRefs)
+        };
+    }
+
+    function toReadableProgramBuildInfoResolution(resolution: ts.ProgramBuildInfoResolution, index: number): ReadableProgramBuildInfoResolution {
+        return {
+            resolutionId: index + 1 as ts.ProgramBuildInfoResolutionId,
+            ...resolution,
+            resolvedModule: toReadableProgramBuildInfoResolved(resolution.resolvedModule),
+            resolvedTypeReferenceDirective: toReadableProgramBuildInfoResolved(resolution.resolvedTypeReferenceDirective),
+            failedLookupLocations: resolution.failedLookupLocations?.map(toFileName),
+            affectingLocations: resolution.affectingLocations?.map(toFileName),
+        };
+    }
+
+    function toReadableProgramBuildInfoResolved(resolved: ts.ProgramBuildInfoResolvedModuleFull | undefined): ReadableProgramBuildInfoResolvedModuleFull | undefined;
+    function toReadableProgramBuildInfoResolved(resolved: ts.ProgramBuildInfoResolvedTypeReferenceDirective | undefined): ReadableProgramBuildInfoResolvedTypeReferenceDirective | undefined;
+    function toReadableProgramBuildInfoResolved(resolved: ts.ProgramBuildInfoResolvedModuleFull | ts.ProgramBuildInfoResolvedTypeReferenceDirective | undefined): ReadableProgramBuildInfoResolvedModuleFull | ReadableProgramBuildInfoResolvedTypeReferenceDirective | undefined {
+        return resolved && {
+            ...resolved,
+            resolvedFileName: toFileName(resolved.resolvedFileName),
+            originalPath: resolved.originalPath && toFileName(resolved.originalPath)
+        };
+    }
+
+    function toName(nameId: ts.ProgramBuildInfoResolutionNameId): string {
+        return buildInfo.program!.cacheResolutions!.names[nameId - 1];
+    }
+
+    function toReadableProgramBuildInfoResolutionEntry(entry: ts.ProgramBuildInfoResolutionEntry, index: number): ReadableProgramBuildInfoResolutionEntry {
+        return {
+            resolutionEntryId: index + 1 as ts.ProgramBuildInfoResolutionEntryId,
+            name: toName(entry[0]),
+            resolution: resolutions.readables[entry[1] - 1],
+            mode: toReadableMode(entry[2])
+        };
+    }
+
+    function toReadableProgramBuildInfoResolutionCache(cache: ts.ProgramBuildInfoResolutionCache | undefined): ReadableProgramBuildInfoResolutionCacheEntry[] | undefined {
+        return cache?.map(([dirId, resolutions]) => ({
+            dir: toFileName(dirId),
+            resolutions: resolutions.map(entry => resolutionEntries.readables[entry - 1]),
+        }));
+    }
+
+    function toReadableWithOriginalArray<O, R>(originals: readonly O[], toReadable: (original: O, index: number) => R): ReadableWithOriginalArray<R, O> {
+        const readables: R[] = [];
+        const withOriginals: ReadableWithOriginal<R, O>[] = [];
+        originals.forEach((original, index) => {
+            const r = toReadable(original, index);
+            readables.push(r);
+            withOriginals.push({
+                original,
+                ...r,
+            });
+        });
+        return { readables, withOriginals };
     }
 }
 

@@ -165,7 +165,7 @@ exports.x = 10;
 
 
 //// [/src/project/dist/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../lib/lib.d.ts","../index.ts","../index2.ts","../randomfileforimport.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"5618920854-import * as me from \"@this/package\";\nme.thing()\nexport function thing(): void {}\n","signature":"-4018078458-export declare function thing(): void;\r\n","impliedFormat":99},{"version":"5871974342-export function thing(): void {}\n","signature":"-4018078458-export declare function thing(): void;\r\n","impliedFormat":99},{"version":"-10726455937-export const x = 10;","signature":"-6057683066-export declare const x = 10;\r\n","impliedFormat":99}],"options":{"cacheResolutions":true,"declaration":true,"declarationDir":"../types","outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[2,1]],"exportedModulesMap":[]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../lib/lib.d.ts","../index.ts","../index2.ts","../randomfileforimport.ts","..","../package.json"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"5618920854-import * as me from \"@this/package\";\nme.thing()\nexport function thing(): void {}\n","signature":"-4018078458-export declare function thing(): void;\r\n","impliedFormat":99},{"version":"5871974342-export function thing(): void {}\n","signature":"-4018078458-export declare function thing(): void;\r\n","impliedFormat":99},{"version":"-10726455937-export const x = 10;","signature":"-6057683066-export declare const x = 10;\r\n","impliedFormat":99}],"options":{"cacheResolutions":true,"declaration":true,"declarationDir":"../types","outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[2,1]],"exportedModulesMap":[],"cacheResolutions":{"resolutions":[{"resolvedModule":{"resolvedFileName":2,"isExternalLibraryImport":true},"affectingLocations":[6],"resolutionDiagnostics":[{"messageText":"The project root is ambiguous, but is required to resolve export map entry '.' in file '/src/project/package.json'. Supply the `rootDir` compiler option to disambiguate.","category":1,"code":2209}]}],"names":["@this/package"],"resolutionEntries":[[1,1,99]],"modules":[[5,[1]]]}},"version":"FakeTSVersion"}
 
 //// [/src/project/dist/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -174,7 +174,9 @@ exports.x = 10;
       "../../../lib/lib.d.ts",
       "../index.ts",
       "../index2.ts",
-      "../randomfileforimport.ts"
+      "../randomfileforimport.ts",
+      "..",
+      "../package.json"
     ],
     "fileNamesList": [
       [
@@ -235,10 +237,108 @@ exports.x = 10;
         "../index.ts"
       ]
     },
-    "exportedModulesMap": {}
+    "exportedModulesMap": {},
+    "cacheResolutions": {
+      "resolutions": [
+        {
+          "original": {
+            "resolvedModule": {
+              "resolvedFileName": 2,
+              "isExternalLibraryImport": true
+            },
+            "affectingLocations": [
+              6
+            ],
+            "resolutionDiagnostics": [
+              {
+                "messageText": "The project root is ambiguous, but is required to resolve export map entry '.' in file '/src/project/package.json'. Supply the `rootDir` compiler option to disambiguate.",
+                "category": 1,
+                "code": 2209
+              }
+            ]
+          },
+          "resolutionId": 1,
+          "resolvedModule": {
+            "resolvedFileName": "../index.ts",
+            "isExternalLibraryImport": true
+          },
+          "affectingLocations": [
+            "../package.json"
+          ],
+          "resolutionDiagnostics": [
+            {
+              "messageText": "The project root is ambiguous, but is required to resolve export map entry '.' in file '/src/project/package.json'. Supply the `rootDir` compiler option to disambiguate.",
+              "category": 1,
+              "code": 2209
+            }
+          ]
+        }
+      ],
+      "names": [
+        "@this/package"
+      ],
+      "resolutionEntries": [
+        {
+          "original": [
+            1,
+            1,
+            99
+          ],
+          "resolutionEntryId": 1,
+          "name": "@this/package",
+          "resolution": {
+            "resolutionId": 1,
+            "resolvedModule": {
+              "resolvedFileName": "../index.ts",
+              "isExternalLibraryImport": true
+            },
+            "affectingLocations": [
+              "../package.json"
+            ],
+            "resolutionDiagnostics": [
+              {
+                "messageText": "The project root is ambiguous, but is required to resolve export map entry '.' in file '/src/project/package.json'. Supply the `rootDir` compiler option to disambiguate.",
+                "category": 1,
+                "code": 2209
+              }
+            ]
+          },
+          "mode": "esnext"
+        }
+      ],
+      "modules": [
+        {
+          "dir": "..",
+          "resolutions": [
+            {
+              "resolutionEntryId": 1,
+              "name": "@this/package",
+              "resolution": {
+                "resolutionId": 1,
+                "resolvedModule": {
+                  "resolvedFileName": "../index.ts",
+                  "isExternalLibraryImport": true
+                },
+                "affectingLocations": [
+                  "../package.json"
+                ],
+                "resolutionDiagnostics": [
+                  {
+                    "messageText": "The project root is ambiguous, but is required to resolve export map entry '.' in file '/src/project/package.json'. Supply the `rootDir` compiler option to disambiguate.",
+                    "category": 1,
+                    "code": 2209
+                  }
+                ]
+              },
+              "mode": "esnext"
+            }
+          ]
+        }
+      ]
+    }
   },
   "version": "FakeTSVersion",
-  "size": 1284
+  "size": 1758
 }
 
 //// [/src/project/types/index.d.ts]
@@ -391,7 +491,7 @@ resolvedModules:
 
 //// [/src/project/dist/randomFileForImport.js] file written with same contents
 //// [/src/project/dist/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../lib/lib.d.ts","../index.ts","../index2.ts","../randomfileforimport.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"5618920854-import * as me from \"@this/package\";\nme.thing()\nexport function thing(): void {}\n","signature":"-4018078458-export declare function thing(): void;\r\n","impliedFormat":99},{"version":"5871974342-export function thing(): void {}\n","signature":"-4018078458-export declare function thing(): void;\r\n","impliedFormat":99},{"version":"4314805146-import * as me from \"@this/package\";\nexport const x = 10;","signature":"-6057683066-export declare const x = 10;\r\n","impliedFormat":99}],"options":{"cacheResolutions":true,"declaration":true,"declarationDir":"../types","outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[2,1],[4,1]],"exportedModulesMap":[]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../lib/lib.d.ts","../index.ts","../index2.ts","../randomfileforimport.ts","..","../package.json"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"5618920854-import * as me from \"@this/package\";\nme.thing()\nexport function thing(): void {}\n","signature":"-4018078458-export declare function thing(): void;\r\n","impliedFormat":99},{"version":"5871974342-export function thing(): void {}\n","signature":"-4018078458-export declare function thing(): void;\r\n","impliedFormat":99},{"version":"4314805146-import * as me from \"@this/package\";\nexport const x = 10;","signature":"-6057683066-export declare const x = 10;\r\n","impliedFormat":99}],"options":{"cacheResolutions":true,"declaration":true,"declarationDir":"../types","outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[2,1],[4,1]],"exportedModulesMap":[],"cacheResolutions":{"resolutions":[{"resolvedModule":{"resolvedFileName":2,"isExternalLibraryImport":true},"affectingLocations":[6],"resolutionDiagnostics":[{"messageText":"The project root is ambiguous, but is required to resolve export map entry '.' in file '/src/project/package.json'. Supply the `rootDir` compiler option to disambiguate.","category":1,"code":2209}]}],"names":["@this/package"],"resolutionEntries":[[1,1,99]],"modules":[[5,[1]]]}},"version":"FakeTSVersion"}
 
 //// [/src/project/dist/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -400,7 +500,9 @@ resolvedModules:
       "../../../lib/lib.d.ts",
       "../index.ts",
       "../index2.ts",
-      "../randomfileforimport.ts"
+      "../randomfileforimport.ts",
+      "..",
+      "../package.json"
     ],
     "fileNamesList": [
       [
@@ -464,10 +566,108 @@ resolvedModules:
         "../index.ts"
       ]
     },
-    "exportedModulesMap": {}
+    "exportedModulesMap": {},
+    "cacheResolutions": {
+      "resolutions": [
+        {
+          "original": {
+            "resolvedModule": {
+              "resolvedFileName": 2,
+              "isExternalLibraryImport": true
+            },
+            "affectingLocations": [
+              6
+            ],
+            "resolutionDiagnostics": [
+              {
+                "messageText": "The project root is ambiguous, but is required to resolve export map entry '.' in file '/src/project/package.json'. Supply the `rootDir` compiler option to disambiguate.",
+                "category": 1,
+                "code": 2209
+              }
+            ]
+          },
+          "resolutionId": 1,
+          "resolvedModule": {
+            "resolvedFileName": "../index.ts",
+            "isExternalLibraryImport": true
+          },
+          "affectingLocations": [
+            "../package.json"
+          ],
+          "resolutionDiagnostics": [
+            {
+              "messageText": "The project root is ambiguous, but is required to resolve export map entry '.' in file '/src/project/package.json'. Supply the `rootDir` compiler option to disambiguate.",
+              "category": 1,
+              "code": 2209
+            }
+          ]
+        }
+      ],
+      "names": [
+        "@this/package"
+      ],
+      "resolutionEntries": [
+        {
+          "original": [
+            1,
+            1,
+            99
+          ],
+          "resolutionEntryId": 1,
+          "name": "@this/package",
+          "resolution": {
+            "resolutionId": 1,
+            "resolvedModule": {
+              "resolvedFileName": "../index.ts",
+              "isExternalLibraryImport": true
+            },
+            "affectingLocations": [
+              "../package.json"
+            ],
+            "resolutionDiagnostics": [
+              {
+                "messageText": "The project root is ambiguous, but is required to resolve export map entry '.' in file '/src/project/package.json'. Supply the `rootDir` compiler option to disambiguate.",
+                "category": 1,
+                "code": 2209
+              }
+            ]
+          },
+          "mode": "esnext"
+        }
+      ],
+      "modules": [
+        {
+          "dir": "..",
+          "resolutions": [
+            {
+              "resolutionEntryId": 1,
+              "name": "@this/package",
+              "resolution": {
+                "resolutionId": 1,
+                "resolvedModule": {
+                  "resolvedFileName": "../index.ts",
+                  "isExternalLibraryImport": true
+                },
+                "affectingLocations": [
+                  "../package.json"
+                ],
+                "resolutionDiagnostics": [
+                  {
+                    "messageText": "The project root is ambiguous, but is required to resolve export map entry '.' in file '/src/project/package.json'. Supply the `rootDir` compiler option to disambiguate.",
+                    "category": 1,
+                    "code": 2209
+                  }
+                ]
+              },
+              "mode": "esnext"
+            }
+          ]
+        }
+      ]
+    }
   },
   "version": "FakeTSVersion",
-  "size": 1328
+  "size": 1802
 }
 
 //// [/src/project/types/randomFileForImport.d.ts] file written with same contents
