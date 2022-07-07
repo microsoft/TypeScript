@@ -51,8 +51,8 @@ module.exports = {
  * @param {import("./mod").baz} e
  * @param {import("./mod").buz} f
  */
-function test(a, b, c, d, e, f) {
->test : (a: Thing, b: AnotherThing, c: () => number, d: () => number, e: () => number, f: import("./mod").buz) => number
+function jstypes(a, b, c, d, e, f) {
+>jstypes : (a: Thing, b: AnotherThing, c: () => number, d: () => number, e: () => number, f: import("./mod").buz) => number
 >a : Thing
 >b : AnotherThing
 >c : () => number
@@ -80,6 +80,45 @@ function test(a, b, c, d, e, f) {
 >e : () => number
 >f() : number
 >f : import("tests/cases/conformance/salsa/mod").buz
+}
+
+/**
+ * @param {typeof import("./mod").Thing} a
+ * @param {typeof import("./mod").AnotherThing} b
+ * @param {typeof import("./mod").foo} c
+ * @param {typeof import("./mod").qux} d
+ * @param {typeof import("./mod").baz} e
+ * @param {typeof import("./mod").buz} f
+ */
+function jsvalues(a, b, c, d, e, f) {
+>jsvalues : (a: typeof import("./mod").Thing, b: typeof import("./mod").AnotherThing, c: typeof import("./mod").foo, d: typeof import("./mod").qux, e: typeof import("./mod").baz, f: any) => any
+>a : typeof Thing
+>b : typeof AnotherThing
+>c : () => number
+>d : () => number
+>e : () => number
+>f : any
+
+    return a.length + b.length + c() + d() + e() + f()
+>a.length + b.length + c() + d() + e() + f() : any
+>a.length + b.length + c() + d() + e() : number
+>a.length + b.length + c() + d() : number
+>a.length + b.length + c() : number
+>a.length + b.length : number
+>a.length : number
+>a : typeof Thing
+>length : number
+>b.length : number
+>b : typeof AnotherThing
+>length : number
+>c() : number
+>c : () => number
+>d() : number
+>d : () => number
+>e() : number
+>e : () => number
+>f() : any
+>f : any
 }
 
 === tests/cases/conformance/salsa/index.ts ===

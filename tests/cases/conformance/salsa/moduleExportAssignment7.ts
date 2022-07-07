@@ -23,8 +23,20 @@ module.exports = {
  * @param {import("./mod").baz} e
  * @param {import("./mod").buz} f
  */
-function test(a, b, c, d, e, f) {
+function jstypes(a, b, c, d, e, f) {
     return a.x + b.y + c() + d() + e() + f()
+}
+
+/**
+ * @param {typeof import("./mod").Thing} a
+ * @param {typeof import("./mod").AnotherThing} b
+ * @param {typeof import("./mod").foo} c
+ * @param {typeof import("./mod").qux} d
+ * @param {typeof import("./mod").baz} e
+ * @param {typeof import("./mod").buz} f
+ */
+function jsvalues(a, b, c, d, e, f) {
+    return a.length + b.length + c() + d() + e() + f()
 }
 
 // @Filename: index.ts
