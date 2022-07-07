@@ -200,10 +200,35 @@ interface Symbol {
     type ReadableProgramBuilderInfoFilePendingEmit = [string, "DtsOnly" | "Full"];
     type ReadableProgramBuildInfoEmitSignature = string | [string, string];
     type ReadableProgramBuildInfoFileInfo = Omit<BuilderState.FileInfo, "impliedFormat"> & { impliedFormat: string | undefined; };
+
+    export interface ReadableProgramBuildInfoResolutionBase {
+        readonly resolvedFileName: string;
+        readonly originalPath: string | undefined;
+    }
+    export type ReadableProgramBuildInfoResolvedModuleFull = Omit<ProgramBuildInfoResolvedModuleFull, "resolvedFileName" | "originalPath"> & ReadableProgramBuildInfoResolutionBase;
+    export type ReadableProgramBuildInfoResolvedTypeReferenceDirective = Omit<ProgramBuildInfoResolvedTypeReferenceDirective, "resolvedFileName" | "originalPath"> & ReadableProgramBuildInfoResolutionBase;
+    export type ReadableProgramBuildInfoResolution = Omit<ProgramBuildInfoResolution, "resolvedModule" | "resolvedTypeReferenceDirective" | "failedLookupLocations" | "affectingLocations"> & {
+        readonly resolvedModule: ReadableProgramBuildInfoResolvedModuleFull | undefined;
+        readonly resolvedTypeReferenceDirective: ReadableProgramBuildInfoResolvedTypeReferenceDirective | undefined;
+        readonly failedLookupLocations: readonly string[] | undefined;
+        readonly affectingLocations: readonly string[] | undefined;
+    };
+
+    export type ReadableProgramBuildInfoResolutionEntry = [name: string, resolution: ReadableProgramBuildInfoResolution, mode?: string];
+    export type ReadableProgramBuildInfoResolutionCache = [dir: string, resolutions: readonly ReadableProgramBuildInfoResolutionEntry[]][];
+    export interface ReadableProgramBuildInfoCacheResolutions {
+        resolutions: readonly ReadableProgramBuildInfoResolution[];
+        names: readonly string[];
+        resolutionEntries: ReadableProgramBuildInfoResolutionEntry[];
+        modules?: ReadableProgramBuildInfoResolutionCache;
+        typeRefs?: ReadableProgramBuildInfoResolutionCache;
+    }
+
     type ReadableProgramMultiFileEmitBuildInfo = Omit<ProgramMultiFileEmitBuildInfo,
         "fileIdsList" | "fileInfos" |
         "referencedMap" | "exportedModulesMap" | "semanticDiagnosticsPerFile" |
-        "affectedFilesPendingEmit" | "changeFileSet" | "emitSignatures"
+        "affectedFilesPendingEmit" | "changeFileSet" | "emitSignatures" |
+        "cacheResolutions"
     > & {
         fileNamesList: readonly (readonly string[])[] | undefined;
         fileInfos: MapLike<ReadableProgramBuildInfoFileInfo>;
@@ -213,9 +238,11 @@ interface Symbol {
         affectedFilesPendingEmit?: readonly ReadableProgramBuilderInfoFilePendingEmit[];
         changeFileSet?: readonly string[];
         emitSignatures?: readonly ReadableProgramBuildInfoEmitSignature[];
+        cacheResolutions?: ReadableProgramBuildInfoCacheResolutions;
     };
-    type ReadableProgramBundleEmitBuildInfo = Omit<ProgramBundleEmitBuildInfo, "fileInfos"> & {
+    type ReadableProgramBundleEmitBuildInfo = Omit<ProgramBundleEmitBuildInfo, "fileInfos" | "cacheResolutions"> & {
         fileInfos: MapLike<string>;
+        cacheResolutions?: ReadableProgramBuildInfoCacheResolutions;
     };
 
     type ReadableProgramBuildInfo = ReadableProgramMultiFileEmitBuildInfo | ReadableProgramBundleEmitBuildInfo;
@@ -227,12 +254,15 @@ interface Symbol {
     function generateBuildInfoProgramBaseline(sys: System, buildInfoPath: string, buildInfo: BuildInfo) {
         let program: ReadableProgramBuildInfo | undefined;
         let fileNamesList: string[][] | undefined;
+        let resolutions: ReadableProgramBuildInfoResolution[] | undefined;
+        let resolutionEntries: ReadableProgramBuildInfoResolutionEntry[] | undefined;
         if (buildInfo.program && isProgramBundleEmitBuildInfo(buildInfo.program)) {
             const fileInfos: ReadableProgramBundleEmitBuildInfo["fileInfos"] = {};
             buildInfo.program?.fileInfos?.forEach((fileInfo, index) => fileInfos[toFileName(index + 1 as ProgramBuildInfoFileId)] = fileInfo);
             program = {
                 ...buildInfo.program,
-                fileInfos
+                fileInfos,
+                cacheResolutions: toReadableProgramBuildInfoResolutions(buildInfo.program.cacheResolutions),
             };
         }
         else if (buildInfo.program) {
@@ -264,6 +294,7 @@ interface Symbol {
                         [toFileName(s[0]), s[1]]
                 ),
                 latestChangedDtsFile: buildInfo.program.latestChangedDtsFile,
+                cacheResolutions: toReadableProgramBuildInfoResolutions(buildInfo.program.cacheResolutions),
             };
         }
         const version = buildInfo.version === ts.version ? fakes.version : buildInfo.version;
@@ -291,7 +322,7 @@ interface Symbol {
         // For now its just JSON.stringify
         sys.writeFile(`${buildInfoPath}.readable.baseline.txt`, JSON.stringify(result, /*replacer*/ undefined, 2));
 
-        function toFileName(fileId: ProgramBuildInfoFileId) {
+        function toFileName(fileId: ProgramBuildInfoFileId | ProgramBuildInfoAbsoluteFileId) {
             return buildInfo.program!.fileNames[fileId - 1];
         }
 
@@ -303,8 +334,12 @@ interface Symbol {
             const info = toBuilderStateFileInfo(fileInfo);
             return {
                 ...info,
-                impliedFormat: info.impliedFormat && getNameOfCompilerOptionValue(info.impliedFormat, moduleOptionDeclaration.type),
+                impliedFormat: toReadableMode(info.impliedFormat),
             };
+        }
+
+        function toReadableMode(mode: SourceFile["impliedNodeFormat"]): string | undefined {
+            return mode && getNameOfCompilerOptionValue(mode, moduleOptionDeclaration.type);
         }
 
         function toMapOfReferencedSet(referenceMap: ProgramBuildInfoReferencedMap | undefined): MapLike<string[]> | undefined {
@@ -314,6 +349,60 @@ interface Symbol {
                 result[toFileName(fileNamesKey)] = toFileNames(fileNamesListKey);
             }
             return result;
+        }
+
+        function toReadableProgramBuildInfoResolutions(cacheResolutions: ProgramBuildInfoCacheResolutions | undefined): ReadableProgramBuildInfoCacheResolutions | undefined {
+            if (!cacheResolutions) return cacheResolutions;
+            resolutions = cacheResolutions.resolutions.map(toReadableProgramBuildInfoResolution);
+            resolutionEntries = cacheResolutions.resolutionEntries.map(toReadableProgramBuildInfoResolutionEntry);
+            return {
+                ...cacheResolutions,
+                resolutions,
+                resolutionEntries,
+                modules: toReadableProgramBuildInfoResolutionCache(cacheResolutions.modules),
+                typeRefs: toReadableProgramBuildInfoResolutionCache(cacheResolutions.typeRefs)
+            };
+        }
+
+        function toReadableProgramBuildInfoResolution(resolution: ProgramBuildInfoResolution | ProgramBuildInfoResolutionId): ReadableProgramBuildInfoResolution {
+            return isNumber(resolution) ?
+                resolutions![resolution - 1] :
+                {
+                    ...resolution,
+                    resolvedModule: toReadableProgramBuildInfoResolved(resolution.resolvedModule),
+                    resolvedTypeReferenceDirective: toReadableProgramBuildInfoResolved(resolution.resolvedTypeReferenceDirective),
+                    failedLookupLocations: resolution.failedLookupLocations?.map(toFileName),
+                    affectingLocations: resolution.affectingLocations?.map(toFileName),
+                };
+        }
+
+        function toReadableProgramBuildInfoResolved(resolved: ProgramBuildInfoResolvedModuleFull | undefined): ReadableProgramBuildInfoResolvedModuleFull | undefined;
+        function toReadableProgramBuildInfoResolved(resolved: ProgramBuildInfoResolvedTypeReferenceDirective | undefined): ReadableProgramBuildInfoResolvedTypeReferenceDirective | undefined;
+        function toReadableProgramBuildInfoResolved(resolved: ProgramBuildInfoResolvedModuleFull | ProgramBuildInfoResolvedTypeReferenceDirective | undefined): ReadableProgramBuildInfoResolvedModuleFull | ReadableProgramBuildInfoResolvedTypeReferenceDirective | undefined {
+            return resolved && {
+                ...resolved,
+                resolvedFileName: toFileName(resolved.resolvedFileName),
+                originalPath: resolved.originalPath && toFileName(resolved.originalPath)
+            };
+        }
+
+        function toName(nameId: ProgramBuildInfoResolutionNameId): string {
+            return buildInfo.program!.cacheResolutions!.names[nameId - 1];
+        }
+
+        function toReadableProgramBuildInfoResolutionEntry(entry: ProgramBuildInfoResolutionEntry | ProgramBuildInfoResolutionEntryId): ReadableProgramBuildInfoResolutionEntry {
+            return isNumber(entry) ?
+                resolutionEntries![entry - 1] :
+                entry[2] ?
+                    [toName(entry[0]), toReadableProgramBuildInfoResolution(entry[1]), toReadableMode(entry[2])] :
+                    [toName(entry[0]), toReadableProgramBuildInfoResolution(entry[1])];
+        }
+
+        function toReadableProgramBuildInfoResolutionCache(cache: ProgramBuildInfoResolutionCache | undefined): ReadableProgramBuildInfoResolutionCache | undefined {
+            return cache?.map(([dirId, resolutions]) => [
+                toFileName(dirId),
+                resolutions.map(toReadableProgramBuildInfoResolutionEntry)
+            ]);
         }
     }
 

@@ -564,12 +564,15 @@ namespace ts {
         /*@internal*/ clearAllExceptPackageJsonInfoCache(): void;
     }
 
+    /*@internal*/
+    export type MoreAwareCacheEntry<T> = [key: string, mode: ModuleKind.CommonJS | ModuleKind.ESNext | undefined, elem: T];
     export interface ModeAwareCache<T> {
         get(key: string, mode: ModuleKind.CommonJS | ModuleKind.ESNext | undefined): T | undefined;
         set(key: string, mode: ModuleKind.CommonJS | ModuleKind.ESNext | undefined, value: T): this;
         delete(key: string, mode: ModuleKind.CommonJS | ModuleKind.ESNext | undefined): this;
         has(key: string, mode: ModuleKind.CommonJS | ModuleKind.ESNext | undefined): boolean;
         forEach(cb: (elem: T, key: string, mode: ModuleKind.CommonJS | ModuleKind.ESNext | undefined) => void): void;
+        /*@internal*/ entries(): Iterator<MoreAwareCacheEntry<T>>;
         size(): number;
     }
 
@@ -775,9 +778,18 @@ namespace ts {
                     return cb(elem, specifier, mode);
                 });
             },
+            entries() {
+                const keys = underlying.entries();
+                return {
+                    next() {
+                        const next = keys.next();
+                        return !next.done ? { value: [...memoizedReverseKeys.get(next.value[0])!, next.value[1]] } : next;
+                    },
+                };
+            },
             size() {
                 return underlying.size;
-            }
+            },
         };
         return cache;
 

@@ -1631,7 +1631,7 @@ namespace ts {
             if (buildInfoTime && buildInfoTime < inputTime) {
                 let version: string | undefined;
                 let currentVersion: string | undefined;
-                if (buildInfoProgram) {
+                if (buildInfoProgram?.fileInfos) {
                     // Read files and see if they are same, read is anyways cached
                     if (!buildInfoVersionMap) buildInfoVersionMap = getBuildInfoFileVersionMap(buildInfoProgram, buildInfoPath!, host);
                     version = buildInfoVersionMap.get(toPath(state, inputFile));
