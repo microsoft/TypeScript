@@ -1,0 +1,16 @@
+=== tests/cases/compiler/declarationEmitDistributiveConditionalWithInfer.ts ===
+// This function's type is changed on declaration
+export const fun = (
+>fun : Symbol(fun, Decl(declarationEmitDistributiveConditionalWithInfer.ts, 1, 12))
+
+    subFun: <Collection, Field extends keyof Collection>()
+>subFun : Symbol(subFun, Decl(declarationEmitDistributiveConditionalWithInfer.ts, 1, 20))
+>Collection : Symbol(Collection, Decl(declarationEmitDistributiveConditionalWithInfer.ts, 2, 13))
+>Field : Symbol(Field, Decl(declarationEmitDistributiveConditionalWithInfer.ts, 2, 24))
+>Collection : Symbol(Collection, Decl(declarationEmitDistributiveConditionalWithInfer.ts, 2, 13))
+
+        => FlatArray<Collection[Field], 0>[]) => { };
+>FlatArray : Symbol(FlatArray, Decl(lib.es2019.array.d.ts, --, --))
+>Collection : Symbol(Collection, Decl(declarationEmitDistributiveConditionalWithInfer.ts, 2, 13))
+>Field : Symbol(Field, Decl(declarationEmitDistributiveConditionalWithInfer.ts, 2, 24))
+

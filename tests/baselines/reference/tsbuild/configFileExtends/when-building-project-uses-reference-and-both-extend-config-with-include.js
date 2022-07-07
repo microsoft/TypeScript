@@ -50,9 +50,9 @@ Output::
 /lib/lib.d.ts
 /src/shared/index.ts
 /src/shared/typings-base/globals.d.ts
-[[90m12:00:27 AM[0m] Project 'src/webpack/tsconfig.json' is out of date because output file 'src/target-tsc-build/webpack/tsconfig.tsbuildinfo' does not exist
+[[90m12:00:26 AM[0m] Project 'src/webpack/tsconfig.json' is out of date because output file 'src/target-tsc-build/webpack/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:28 AM[0m] Building project '/src/webpack/tsconfig.json'...
+[[90m12:00:27 AM[0m] Building project '/src/webpack/tsconfig.json'...
 
 /lib/lib.d.ts
 /src/webpack/index.ts
@@ -72,7 +72,7 @@ exports.a = 1;
 
 
 //// [/src/target-tsc-build/shared/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../lib/lib.d.ts","../../shared/index.ts","../../shared/typings-base/globals.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-22125360210-export const a: Unrestricted = 1;","signature":"-478734393-export declare const a: Unrestricted;\r\n"},{"version":"4725476611-type Unrestricted = any;","affectsGlobalScope":true}],"options":{"composite":true,"outDir":"..","rootDir":"../.."},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3],"dtsChangeTime":19000},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../lib/lib.d.ts","../../shared/index.ts","../../shared/typings-base/globals.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-22125360210-export const a: Unrestricted = 1;","signature":"-478734393-export declare const a: Unrestricted;\r\n"},{"version":"4725476611-type Unrestricted = any;","affectsGlobalScope":true}],"options":{"composite":true,"outDir":"..","rootDir":"../.."},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/target-tsc-build/shared/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -110,10 +110,10 @@ exports.a = 1;
       "../../shared/index.ts",
       "../../shared/typings-base/globals.d.ts"
     ],
-    "dtsChangeTime": 19000
+    "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1002
+  "size": 1018
 }
 
 //// [/src/target-tsc-build/webpack/index.d.ts]
@@ -128,7 +128,7 @@ exports.b = 1;
 
 
 //// [/src/target-tsc-build/webpack/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../lib/lib.d.ts","../../webpack/index.ts","../../shared/typings-base/globals.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-14405273073-export const b: Unrestricted = 1;","signature":"-5074241048-export declare const b: Unrestricted;\r\n"},{"version":"4725476611-type Unrestricted = any;","affectsGlobalScope":true}],"options":{"composite":true,"outDir":"..","rootDir":"../.."},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,3,2],"dtsChangeTime":29000},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../lib/lib.d.ts","../../webpack/index.ts","../../shared/typings-base/globals.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-14405273073-export const b: Unrestricted = 1;","signature":"-5074241048-export declare const b: Unrestricted;\r\n"},{"version":"4725476611-type Unrestricted = any;","affectsGlobalScope":true}],"options":{"composite":true,"outDir":"..","rootDir":"../.."},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,3,2],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/target-tsc-build/webpack/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -166,9 +166,9 @@ exports.b = 1;
       "../../shared/typings-base/globals.d.ts",
       "../../webpack/index.ts"
     ],
-    "dtsChangeTime": 29000
+    "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1004
+  "size": 1020
 }
 

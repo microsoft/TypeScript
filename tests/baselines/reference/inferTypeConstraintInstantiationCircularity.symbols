@@ -1,0 +1,206 @@
+=== tests/cases/compiler/inferTypeConstraintInstantiationCircularity.ts ===
+type AMappedType<T> = { [KeyType in keyof T]: number };
+>AMappedType : Symbol(AMappedType, Decl(inferTypeConstraintInstantiationCircularity.ts, 0, 0))
+>T : Symbol(T, Decl(inferTypeConstraintInstantiationCircularity.ts, 0, 17))
+>KeyType : Symbol(KeyType, Decl(inferTypeConstraintInstantiationCircularity.ts, 0, 25))
+>T : Symbol(T, Decl(inferTypeConstraintInstantiationCircularity.ts, 0, 17))
+
+type HasM = {
+>HasM : Symbol(HasM, Decl(inferTypeConstraintInstantiationCircularity.ts, 0, 55))
+
+  m: number;
+>m : Symbol(m, Decl(inferTypeConstraintInstantiationCircularity.ts, 2, 13))
+
+};
+
+// Simplified repro from #48059
+
+interface X1<
+>X1 : Symbol(X1, Decl(inferTypeConstraintInstantiationCircularity.ts, 4, 2))
+
+  T extends HasM,
+>T : Symbol(T, Decl(inferTypeConstraintInstantiationCircularity.ts, 8, 13))
+>HasM : Symbol(HasM, Decl(inferTypeConstraintInstantiationCircularity.ts, 0, 55))
+
+  Output = AMappedType<{ s: number; } & { [k in keyof T]: number; }>
+>Output : Symbol(Output, Decl(inferTypeConstraintInstantiationCircularity.ts, 9, 17))
+>AMappedType : Symbol(AMappedType, Decl(inferTypeConstraintInstantiationCircularity.ts, 0, 0))
+>s : Symbol(s, Decl(inferTypeConstraintInstantiationCircularity.ts, 10, 24))
+>k : Symbol(k, Decl(inferTypeConstraintInstantiationCircularity.ts, 10, 43))
+>T : Symbol(T, Decl(inferTypeConstraintInstantiationCircularity.ts, 8, 13))
+
+> {
+  tee: T;
+>tee : Symbol(X1.tee, Decl(inferTypeConstraintInstantiationCircularity.ts, 11, 3))
+>T : Symbol(T, Decl(inferTypeConstraintInstantiationCircularity.ts, 8, 13))
+
+  output: Output;
+>output : Symbol(X1.output, Decl(inferTypeConstraintInstantiationCircularity.ts, 12, 9))
+>Output : Symbol(Output, Decl(inferTypeConstraintInstantiationCircularity.ts, 9, 17))
+}
+
+type F1<T> = T extends X1<infer U> ? U : never;
+>F1 : Symbol(F1, Decl(inferTypeConstraintInstantiationCircularity.ts, 14, 1))
+>T : Symbol(T, Decl(inferTypeConstraintInstantiationCircularity.ts, 16, 8))
+>T : Symbol(T, Decl(inferTypeConstraintInstantiationCircularity.ts, 16, 8))
+>X1 : Symbol(X1, Decl(inferTypeConstraintInstantiationCircularity.ts, 4, 2))
+>U : Symbol(U, Decl(inferTypeConstraintInstantiationCircularity.ts, 16, 31))
+>U : Symbol(U, Decl(inferTypeConstraintInstantiationCircularity.ts, 16, 31))
+
+// With default inlined
+
+interface X2<
+>X2 : Symbol(X2, Decl(inferTypeConstraintInstantiationCircularity.ts, 16, 47))
+
+  T extends HasM,
+>T : Symbol(T, Decl(inferTypeConstraintInstantiationCircularity.ts, 20, 13))
+>HasM : Symbol(HasM, Decl(inferTypeConstraintInstantiationCircularity.ts, 0, 55))
+
+  Output
+>Output : Symbol(Output, Decl(inferTypeConstraintInstantiationCircularity.ts, 21, 17))
+
+> {
+  tee: T;
+>tee : Symbol(X2.tee, Decl(inferTypeConstraintInstantiationCircularity.ts, 23, 3))
+>T : Symbol(T, Decl(inferTypeConstraintInstantiationCircularity.ts, 20, 13))
+
+  output: Output;
+>output : Symbol(X2.output, Decl(inferTypeConstraintInstantiationCircularity.ts, 24, 9))
+>Output : Symbol(Output, Decl(inferTypeConstraintInstantiationCircularity.ts, 21, 17))
+}
+
+type F2<T> = T extends X2<infer U, AMappedType<{ s: number; } & { [k in keyof (infer U)]: number; }>> ? U : never;
+>F2 : Symbol(F2, Decl(inferTypeConstraintInstantiationCircularity.ts, 26, 1))
+>T : Symbol(T, Decl(inferTypeConstraintInstantiationCircularity.ts, 28, 8))
+>T : Symbol(T, Decl(inferTypeConstraintInstantiationCircularity.ts, 28, 8))
+>X2 : Symbol(X2, Decl(inferTypeConstraintInstantiationCircularity.ts, 16, 47))
+>U : Symbol(U, Decl(inferTypeConstraintInstantiationCircularity.ts, 28, 31), Decl(inferTypeConstraintInstantiationCircularity.ts, 28, 84))
+>AMappedType : Symbol(AMappedType, Decl(inferTypeConstraintInstantiationCircularity.ts, 0, 0))
+>s : Symbol(s, Decl(inferTypeConstraintInstantiationCircularity.ts, 28, 48))
+>k : Symbol(k, Decl(inferTypeConstraintInstantiationCircularity.ts, 28, 67))
+>U : Symbol(U, Decl(inferTypeConstraintInstantiationCircularity.ts, 28, 31), Decl(inferTypeConstraintInstantiationCircularity.ts, 28, 84))
+>U : Symbol(U, Decl(inferTypeConstraintInstantiationCircularity.ts, 28, 31), Decl(inferTypeConstraintInstantiationCircularity.ts, 28, 84))
+
+// Original repro
+
+type Simplify<T> = {[KeyType in keyof T]: T[KeyType]};
+>Simplify : Symbol(Simplify, Decl(inferTypeConstraintInstantiationCircularity.ts, 28, 114))
+>T : Symbol(T, Decl(inferTypeConstraintInstantiationCircularity.ts, 32, 14))
+>KeyType : Symbol(KeyType, Decl(inferTypeConstraintInstantiationCircularity.ts, 32, 21))
+>T : Symbol(T, Decl(inferTypeConstraintInstantiationCircularity.ts, 32, 14))
+>T : Symbol(T, Decl(inferTypeConstraintInstantiationCircularity.ts, 32, 14))
+>KeyType : Symbol(KeyType, Decl(inferTypeConstraintInstantiationCircularity.ts, 32, 21))
+
+type optionalKeys<T extends object> = {
+>optionalKeys : Symbol(optionalKeys, Decl(inferTypeConstraintInstantiationCircularity.ts, 32, 54))
+>T : Symbol(T, Decl(inferTypeConstraintInstantiationCircularity.ts, 34, 18))
+
+    [k in keyof T]: undefined extends T[k] ? k : never;
+>k : Symbol(k, Decl(inferTypeConstraintInstantiationCircularity.ts, 35, 5))
+>T : Symbol(T, Decl(inferTypeConstraintInstantiationCircularity.ts, 34, 18))
+>T : Symbol(T, Decl(inferTypeConstraintInstantiationCircularity.ts, 34, 18))
+>k : Symbol(k, Decl(inferTypeConstraintInstantiationCircularity.ts, 35, 5))
+>k : Symbol(k, Decl(inferTypeConstraintInstantiationCircularity.ts, 35, 5))
+
+}[keyof T];
+>T : Symbol(T, Decl(inferTypeConstraintInstantiationCircularity.ts, 34, 18))
+
+type requiredKeys<T extends object> = Exclude<keyof T, optionalKeys<T>>;
+>requiredKeys : Symbol(requiredKeys, Decl(inferTypeConstraintInstantiationCircularity.ts, 36, 11))
+>T : Symbol(T, Decl(inferTypeConstraintInstantiationCircularity.ts, 38, 18))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(inferTypeConstraintInstantiationCircularity.ts, 38, 18))
+>optionalKeys : Symbol(optionalKeys, Decl(inferTypeConstraintInstantiationCircularity.ts, 32, 54))
+>T : Symbol(T, Decl(inferTypeConstraintInstantiationCircularity.ts, 38, 18))
+
+export type addQuestionMarks<T extends object> = {
+>addQuestionMarks : Symbol(addQuestionMarks, Decl(inferTypeConstraintInstantiationCircularity.ts, 38, 72))
+>T : Symbol(T, Decl(inferTypeConstraintInstantiationCircularity.ts, 40, 29))
+
+    [k in optionalKeys<T>]?: T[k];
+>k : Symbol(k, Decl(inferTypeConstraintInstantiationCircularity.ts, 41, 5))
+>optionalKeys : Symbol(optionalKeys, Decl(inferTypeConstraintInstantiationCircularity.ts, 32, 54))
+>T : Symbol(T, Decl(inferTypeConstraintInstantiationCircularity.ts, 40, 29))
+>T : Symbol(T, Decl(inferTypeConstraintInstantiationCircularity.ts, 40, 29))
+>k : Symbol(k, Decl(inferTypeConstraintInstantiationCircularity.ts, 41, 5))
+
+} & {
+    [k in requiredKeys<T>]: T[k];
+>k : Symbol(k, Decl(inferTypeConstraintInstantiationCircularity.ts, 43, 5))
+>requiredKeys : Symbol(requiredKeys, Decl(inferTypeConstraintInstantiationCircularity.ts, 36, 11))
+>T : Symbol(T, Decl(inferTypeConstraintInstantiationCircularity.ts, 40, 29))
+>T : Symbol(T, Decl(inferTypeConstraintInstantiationCircularity.ts, 40, 29))
+>k : Symbol(k, Decl(inferTypeConstraintInstantiationCircularity.ts, 43, 5))
+
+};
+
+type ZodRawShape = {
+>ZodRawShape : Symbol(ZodRawShape, Decl(inferTypeConstraintInstantiationCircularity.ts, 44, 2))
+
+    [k: string]: ZodType<any>;
+>k : Symbol(k, Decl(inferTypeConstraintInstantiationCircularity.ts, 47, 5))
+>ZodType : Symbol(ZodType, Decl(inferTypeConstraintInstantiationCircularity.ts, 48, 2))
+
+};
+
+interface ZodType<Output> {
+>ZodType : Symbol(ZodType, Decl(inferTypeConstraintInstantiationCircularity.ts, 48, 2))
+>Output : Symbol(Output, Decl(inferTypeConstraintInstantiationCircularity.ts, 50, 18))
+
+  _type: Output;
+>_type : Symbol(ZodType._type, Decl(inferTypeConstraintInstantiationCircularity.ts, 50, 27))
+>Output : Symbol(Output, Decl(inferTypeConstraintInstantiationCircularity.ts, 50, 18))
+}
+
+interface ZodObject<
+>ZodObject : Symbol(ZodObject, Decl(inferTypeConstraintInstantiationCircularity.ts, 52, 1))
+
+  T extends ZodRawShape,
+>T : Symbol(T, Decl(inferTypeConstraintInstantiationCircularity.ts, 54, 20))
+>ZodRawShape : Symbol(ZodRawShape, Decl(inferTypeConstraintInstantiationCircularity.ts, 44, 2))
+
+  Output = Simplify<
+>Output : Symbol(Output, Decl(inferTypeConstraintInstantiationCircularity.ts, 55, 24))
+>Simplify : Symbol(Simplify, Decl(inferTypeConstraintInstantiationCircularity.ts, 28, 114))
+    {
+      [k in optionalKeys<T>]?: T[k];
+>k : Symbol(k, Decl(inferTypeConstraintInstantiationCircularity.ts, 58, 7))
+>optionalKeys : Symbol(optionalKeys, Decl(inferTypeConstraintInstantiationCircularity.ts, 32, 54))
+>T : Symbol(T, Decl(inferTypeConstraintInstantiationCircularity.ts, 54, 20))
+>T : Symbol(T, Decl(inferTypeConstraintInstantiationCircularity.ts, 54, 20))
+>k : Symbol(k, Decl(inferTypeConstraintInstantiationCircularity.ts, 58, 7))
+
+    } & {
+      [k in requiredKeys<T>]: T[k];
+>k : Symbol(k, Decl(inferTypeConstraintInstantiationCircularity.ts, 60, 7))
+>requiredKeys : Symbol(requiredKeys, Decl(inferTypeConstraintInstantiationCircularity.ts, 36, 11))
+>T : Symbol(T, Decl(inferTypeConstraintInstantiationCircularity.ts, 54, 20))
+>T : Symbol(T, Decl(inferTypeConstraintInstantiationCircularity.ts, 54, 20))
+>k : Symbol(k, Decl(inferTypeConstraintInstantiationCircularity.ts, 60, 7))
+    }
+  >
+> extends ZodType<Output> {
+>ZodType : Symbol(ZodType, Decl(inferTypeConstraintInstantiationCircularity.ts, 48, 2))
+>Output : Symbol(Output, Decl(inferTypeConstraintInstantiationCircularity.ts, 55, 24))
+
+  readonly _shape: T;
+>_shape : Symbol(ZodObject._shape, Decl(inferTypeConstraintInstantiationCircularity.ts, 63, 27))
+>T : Symbol(T, Decl(inferTypeConstraintInstantiationCircularity.ts, 54, 20))
+}
+
+type MyObject<T> = T extends ZodObject<infer U>
+>MyObject : Symbol(MyObject, Decl(inferTypeConstraintInstantiationCircularity.ts, 65, 1))
+>T : Symbol(T, Decl(inferTypeConstraintInstantiationCircularity.ts, 67, 14))
+>T : Symbol(T, Decl(inferTypeConstraintInstantiationCircularity.ts, 67, 14))
+>ZodObject : Symbol(ZodObject, Decl(inferTypeConstraintInstantiationCircularity.ts, 52, 1))
+>U : Symbol(U, Decl(inferTypeConstraintInstantiationCircularity.ts, 67, 44))
+
+  ? U extends ZodRawShape
+>U : Symbol(U, Decl(inferTypeConstraintInstantiationCircularity.ts, 67, 44))
+>ZodRawShape : Symbol(ZodRawShape, Decl(inferTypeConstraintInstantiationCircularity.ts, 44, 2))
+
+    ? U
+>U : Symbol(U, Decl(inferTypeConstraintInstantiationCircularity.ts, 67, 44))
+
+    : never
+  : never;

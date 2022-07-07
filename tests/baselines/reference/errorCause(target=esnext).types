@@ -1,4 +1,7 @@
 === tests/cases/compiler/errorCause.ts ===
+declare const a: unknown;
+>a : unknown
+
 let err = new Error("foo", { cause: new Error("bar") });
 >err : Error
 >new Error("foo", { cause: new Error("bar") }) : Error
@@ -11,9 +14,23 @@ let err = new Error("foo", { cause: new Error("bar") });
 >"bar" : "bar"
 
 err.cause;
->err.cause : Error
+>err.cause : unknown
 >err : Error
->cause : Error
+>cause : unknown
+
+let anotherErr = new Error("foo", { cause: a });
+>anotherErr : Error
+>new Error("foo", { cause: a }) : Error
+>Error : ErrorConstructor
+>"foo" : "foo"
+>{ cause: a } : { cause: unknown; }
+>cause : unknown
+>a : unknown
+
+anotherErr.cause;
+>anotherErr.cause : unknown
+>anotherErr : Error
+>cause : unknown
 
 new EvalError("foo", { cause: new Error("bar") });
 >new EvalError("foo", { cause: new Error("bar") }) : EvalError
@@ -24,6 +41,14 @@ new EvalError("foo", { cause: new Error("bar") });
 >new Error("bar") : Error
 >Error : ErrorConstructor
 >"bar" : "bar"
+
+new EvalError("foo", { cause: a });
+>new EvalError("foo", { cause: a }) : EvalError
+>EvalError : EvalErrorConstructor
+>"foo" : "foo"
+>{ cause: a } : { cause: unknown; }
+>cause : unknown
+>a : unknown
 
 new RangeError("foo", { cause: new Error("bar") });
 >new RangeError("foo", { cause: new Error("bar") }) : RangeError

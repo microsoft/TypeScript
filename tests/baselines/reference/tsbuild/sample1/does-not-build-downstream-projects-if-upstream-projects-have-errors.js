@@ -120,18 +120,18 @@ Output::
 
 [[90m12:00:09 AM[0m] Building project '/src/core/tsconfig.json'...
 
-[[90m12:00:20 AM[0m] Project 'src/logic/tsconfig.json' is out of date because output file 'src/logic/tsconfig.tsbuildinfo' does not exist
+[[90m12:00:19 AM[0m] Project 'src/logic/tsconfig.json' is out of date because output file 'src/logic/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:21 AM[0m] Building project '/src/logic/tsconfig.json'...
+[[90m12:00:20 AM[0m] Building project '/src/logic/tsconfig.json'...
 
 [96msrc/logic/index.ts[0m:[93m3[0m:[93m14[0m - [91merror[0m[90m TS2339: [0mProperty 'muitply' does not exist on type 'typeof import("/src/core/index")'.
 
 [7m3[0m     return c.muitply();
 [7m [0m [91m             ~~~~~~~[0m
 
-[[90m12:00:25 AM[0m] Project 'src/tests/tsconfig.json' can't be built because its dependency 'src/logic' has errors
+[[90m12:00:24 AM[0m] Project 'src/tests/tsconfig.json' can't be built because its dependency 'src/logic' has errors
 
-[[90m12:00:26 AM[0m] Skipping build of project '/src/tests/tsconfig.json' because its dependency '/src/logic' has errors
+[[90m12:00:25 AM[0m] Skipping build of project '/src/tests/tsconfig.json' because its dependency '/src/logic' has errors
 
 
 Found 1 error.
@@ -174,7 +174,7 @@ exports.multiply = multiply;
 
 
 //// [/src/core/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","./anothermodule.ts","./index.ts","./some_decl.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-2676574883-export const World = \"hello\";\r\n","signature":"-8396256275-export declare const World = \"hello\";\r\n"},{"version":"-18749805970-export const someString: string = \"HELLO WORLD\";\r\nexport function leftPad(s: string, n: number) { return s + n; }\r\nexport function multiply(a: number, b: number) { return a * b; }\r\n","signature":"1874987148-export declare const someString: string;\r\nexport declare function leftPad(s: string, n: number): string;\r\nexport declare function multiply(a: number, b: number): number;\r\n"},{"version":"-9253692965-declare const dts: any;\r\n","affectsGlobalScope":true}],"options":{"composite":true,"declaration":true,"declarationMap":true,"skipDefaultLibCheck":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3,4],"dtsChangeTime":10000},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","./anothermodule.ts","./index.ts","./some_decl.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-2676574883-export const World = \"hello\";\r\n","signature":"-8396256275-export declare const World = \"hello\";\r\n"},{"version":"-18749805970-export const someString: string = \"HELLO WORLD\";\r\nexport function leftPad(s: string, n: number) { return s + n; }\r\nexport function multiply(a: number, b: number) { return a * b; }\r\n","signature":"1874987148-export declare const someString: string;\r\nexport declare function leftPad(s: string, n: number): string;\r\nexport declare function multiply(a: number, b: number): number;\r\n"},{"version":"-9253692965-declare const dts: any;\r\n","affectsGlobalScope":true}],"options":{"composite":true,"declaration":true,"declarationMap":true,"skipDefaultLibCheck":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3,4],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/core/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -219,10 +219,10 @@ exports.multiply = multiply;
       "./index.ts",
       "./some_decl.d.ts"
     ],
-    "dtsChangeTime": 10000
+    "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1453
+  "size": 1469
 }
 
 //// [/src/logic/tsconfig.tsbuildinfo]
@@ -328,25 +328,25 @@ Input::
 
 Output::
 /lib/tsc --b /src/tests --verbose
-[[90m12:00:27 AM[0m] Projects in this build: 
+[[90m12:00:26 AM[0m] Projects in this build: 
     * src/core/tsconfig.json
     * src/logic/tsconfig.json
     * src/tests/tsconfig.json
 
-[[90m12:00:28 AM[0m] Project 'src/core/tsconfig.json' is up to date because newest input 'src/core/anotherModule.ts' is older than output 'src/core/tsconfig.tsbuildinfo'
+[[90m12:00:27 AM[0m] Project 'src/core/tsconfig.json' is up to date because newest input 'src/core/anotherModule.ts' is older than output 'src/core/tsconfig.tsbuildinfo'
 
-[[90m12:00:29 AM[0m] Project 'src/logic/tsconfig.json' is out of date because buildinfo file 'src/logic/tsconfig.tsbuildinfo' indicates that some of the changes were not emitted
+[[90m12:00:28 AM[0m] Project 'src/logic/tsconfig.json' is out of date because buildinfo file 'src/logic/tsconfig.tsbuildinfo' indicates that some of the changes were not emitted
 
-[[90m12:00:30 AM[0m] Building project '/src/logic/tsconfig.json'...
+[[90m12:00:29 AM[0m] Building project '/src/logic/tsconfig.json'...
 
 [96msrc/logic/index.ts[0m:[93m3[0m:[93m14[0m - [91merror[0m[90m TS2339: [0mProperty 'muitply' does not exist on type 'typeof import("/src/core/index")'.
 
 [7m3[0m     return c.muitply();
 [7m [0m [91m             ~~~~~~~[0m
 
-[[90m12:00:31 AM[0m] Project 'src/tests/tsconfig.json' can't be built because its dependency 'src/logic' has errors
+[[90m12:00:30 AM[0m] Project 'src/tests/tsconfig.json' can't be built because its dependency 'src/logic' has errors
 
-[[90m12:00:32 AM[0m] Skipping build of project '/src/tests/tsconfig.json' because its dependency '/src/logic' has errors
+[[90m12:00:31 AM[0m] Skipping build of project '/src/tests/tsconfig.json' because its dependency '/src/logic' has errors
 
 
 Found 1 error.

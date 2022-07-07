@@ -60,9 +60,9 @@ File '/user/username/projects/myproject/packages/pkg2/const.cts' exist - use it 
 File '/a/lib/package.json' does not exist.
 File '/a/package.json' does not exist.
 File '/package.json' does not exist.
-[[90m12:01:02 AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because output file 'packages/pkg1/build/index.js' does not exist
+[[90m12:01:01 AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because output file 'packages/pkg1/build/index.js' does not exist
 
-[[90m12:01:03 AM[0m] Building project '/user/username/projects/myproject/packages/pkg1/tsconfig.json'...
+[[90m12:01:02 AM[0m] Building project '/user/username/projects/myproject/packages/pkg1/tsconfig.json'...
 
 Found 'package.json' at '/user/username/projects/myproject/packages/pkg1/package.json'.
 'package.json' does not have a 'typesVersions' field.
@@ -99,7 +99,7 @@ File '/user/username/projects/myproject/packages/pkg2/build/const.d.cts' exist -
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-[[90m12:01:10 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:09 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -194,7 +194,7 @@ export type { TheNum } from './const.cjs';
 
 
 //// [/user/username/projects/myproject/packages/pkg2/build/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../../../a/lib/lib.es2022.full.d.ts","../const.cts","../index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-11202312776-export type TheNum = 42;","signature":"-9649133742-export declare type TheNum = 42;\n","impliedFormat":1},{"version":"-9668872159-export type { TheNum } from './const.cjs';","signature":"-9835135925-export type { TheNum } from './const.cjs';\n","impliedFormat":99}],"options":{"composite":true,"module":100,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3],"dtsChangeTime":45000},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../../../a/lib/lib.es2022.full.d.ts","../const.cts","../index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-11202312776-export type TheNum = 42;","signature":"-9649133742-export declare type TheNum = 42;\n","impliedFormat":1},{"version":"-9668872159-export type { TheNum } from './const.cjs';","signature":"-9835135925-export type { TheNum } from './const.cjs';\n","impliedFormat":99}],"options":{"composite":true,"module":100,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/packages/pkg2/build/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -247,10 +247,10 @@ export type { TheNum } from './const.cjs';
       "../const.cts",
       "../index.ts"
     ],
-    "dtsChangeTime": 45000
+    "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1041
+  "size": 1057
 }
 
 //// [/user/username/projects/myproject/packages/pkg1/build/index.js]
@@ -267,11 +267,11 @@ Input::
 
 Output::
 >> Screen clear
-[[90m12:01:14 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:13 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:15 AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because output 'packages/pkg1/build/index.js' is older than input 'packages/pkg1/package.json'
+[[90m12:01:14 AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because output 'packages/pkg1/build/index.js' is older than input 'packages/pkg1/package.json'
 
-[[90m12:01:16 AM[0m] Building project '/user/username/projects/myproject/packages/pkg1/tsconfig.json'...
+[[90m12:01:15 AM[0m] Building project '/user/username/projects/myproject/packages/pkg1/tsconfig.json'...
 
 Found 'package.json' at '/user/username/projects/myproject/packages/pkg1/package.json'.
 'package.json' does not have a 'typesVersions' field.
@@ -320,7 +320,7 @@ File '/package.json' does not exist.
 [7m1[0m import type { TheNum } from 'pkg2'
 [7m [0m [91m                            ~~~~~~[0m
 
-[[90m12:01:17 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:01:16 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -383,11 +383,11 @@ Input::
 
 Output::
 >> Screen clear
-[[90m12:01:21 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:20 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:22 AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because output 'packages/pkg1/build/index.js' is older than input 'packages/pkg1/package.json'
+[[90m12:01:21 AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because output 'packages/pkg1/build/index.js' is older than input 'packages/pkg1/package.json'
 
-[[90m12:01:23 AM[0m] Building project '/user/username/projects/myproject/packages/pkg1/tsconfig.json'...
+[[90m12:01:22 AM[0m] Building project '/user/username/projects/myproject/packages/pkg1/tsconfig.json'...
 
 Found 'package.json' at '/user/username/projects/myproject/packages/pkg1/package.json'.
 'package.json' does not have a 'typesVersions' field.
@@ -425,7 +425,7 @@ File '/user/username/projects/myproject/packages/pkg2/build/const.d.cts' exist -
 File '/a/lib/package.json' does not exist.
 File '/a/package.json' does not exist.
 File '/package.json' does not exist.
-[[90m12:01:28 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:27 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -489,11 +489,11 @@ Input::
 
 Output::
 >> Screen clear
-[[90m12:01:32 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:31 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:33 AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because output 'packages/pkg1/build/index.js' is older than input 'packages/pkg1/package.json'
+[[90m12:01:32 AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because output 'packages/pkg1/build/index.js' is older than input 'packages/pkg1/package.json'
 
-[[90m12:01:34 AM[0m] Building project '/user/username/projects/myproject/packages/pkg1/tsconfig.json'...
+[[90m12:01:33 AM[0m] Building project '/user/username/projects/myproject/packages/pkg1/tsconfig.json'...
 
 Found 'package.json' at '/user/username/projects/myproject/packages/pkg1/package.json'.
 'package.json' does not have a 'typesVersions' field.
@@ -542,7 +542,7 @@ File '/package.json' does not exist.
 [7m1[0m import type { TheNum } from 'pkg2'
 [7m [0m [91m                            ~~~~~~[0m
 
-[[90m12:01:35 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:01:34 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -609,11 +609,11 @@ export type { TheNum } from './const.cjs';
 
 Output::
 >> Screen clear
-[[90m12:01:43 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:42 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:44 AM[0m] Project 'packages/pkg2/tsconfig.json' is out of date because output 'packages/pkg2/build/tsconfig.tsbuildinfo' is older than input 'packages/pkg2/index.cts'
+[[90m12:01:43 AM[0m] Project 'packages/pkg2/tsconfig.json' is out of date because output 'packages/pkg2/build/tsconfig.tsbuildinfo' is older than input 'packages/pkg2/index.cts'
 
-[[90m12:01:45 AM[0m] Building project '/user/username/projects/myproject/packages/pkg2/tsconfig.json'...
+[[90m12:01:44 AM[0m] Building project '/user/username/projects/myproject/packages/pkg2/tsconfig.json'...
 
 ======== Resolving module './const.cjs' from '/user/username/projects/myproject/packages/pkg2/index.cts'. ========
 Module resolution kind is not specified, using 'Node16'.
@@ -627,9 +627,9 @@ File '/user/username/projects/myproject/packages/pkg2/const.cts' exist - use it 
 File '/a/lib/package.json' does not exist.
 File '/a/package.json' does not exist.
 File '/package.json' does not exist.
-[[90m12:01:58 AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because output 'packages/pkg1/build/index.js' is older than input 'packages/pkg2'
+[[90m12:01:56 AM[0m] Project 'packages/pkg1/tsconfig.json' is out of date because output 'packages/pkg1/build/index.js' is older than input 'packages/pkg2'
 
-[[90m12:01:59 AM[0m] Building project '/user/username/projects/myproject/packages/pkg1/tsconfig.json'...
+[[90m12:01:57 AM[0m] Building project '/user/username/projects/myproject/packages/pkg1/tsconfig.json'...
 
 Found 'package.json' at '/user/username/projects/myproject/packages/pkg1/package.json'.
 'package.json' does not have a 'typesVersions' field.
@@ -672,7 +672,7 @@ File '/user/username/projects/myproject/packages/pkg2/build/const.d.cts' exist -
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-[[90m12:02:04 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:02:02 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -742,7 +742,7 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/packages/pkg2/build/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../../../a/lib/lib.es2022.full.d.ts","../const.cts","../index.cts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-11202312776-export type TheNum = 42;","signature":"-9649133742-export declare type TheNum = 42;\n","impliedFormat":1},{"version":"-9668872159-export type { TheNum } from './const.cjs';","signature":"-9835135925-export type { TheNum } from './const.cjs';\n","impliedFormat":1}],"options":{"composite":true,"module":100,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3],"dtsChangeTime":106000},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../../../a/lib/lib.es2022.full.d.ts","../const.cts","../index.cts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-11202312776-export type TheNum = 42;","signature":"-9649133742-export declare type TheNum = 42;\n","impliedFormat":1},{"version":"-9668872159-export type { TheNum } from './const.cjs';","signature":"-9835135925-export type { TheNum } from './const.cjs';\n","impliedFormat":1}],"options":{"composite":true,"module":100,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./index.d.cts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/packages/pkg2/build/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -795,10 +795,10 @@ exitCode:: ExitStatus.undefined
       "../const.cts",
       "../index.cts"
     ],
-    "dtsChangeTime": 106000
+    "latestChangedDtsFile": "./index.d.cts"
   },
   "version": "FakeTSVersion",
-  "size": 1042
+  "size": 1058
 }
 
 //// [/user/username/projects/myproject/packages/pkg1/build/index.js]
