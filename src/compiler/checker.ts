@@ -1874,7 +1874,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
             let result: Symbol | undefined;
             let lastLocation: Node | undefined;
             let lastSelfReferenceLocation: Node | undefined;
-            let propertyWithInvalidInitializer: Node | undefined;
+            let propertyWithInvalidInitializer: PropertyDeclaration | undefined;
             let associatedDeclarationForContainingInitializerOrBindingName: ParameterDeclaration | BindingElement | undefined;
             let withinDeferredContext = false;
             const errorLocation = location;
@@ -2008,6 +2008,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                             if (ctor && ctor.locals) {
                                 if (lookup(ctor.locals, name, meaning & SymbolFlags.Value)) {
                                     // Remember the property node, it will be used later to report appropriate error
+                                    Debug.assertNode(location, isPropertyDeclaration);
                                     propertyWithInvalidInitializer = location;
                                 }
                             }
@@ -2213,9 +2214,11 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                     // We have a match, but the reference occurred within a property initializer and the identifier also binds
                     // to a local variable in the constructor where the code will be emitted. Note that this is actually allowed
                     // with ESNext+useDefineForClassFields because the scope semantics are different.
-                    const propertyName = (propertyWithInvalidInitializer as PropertyDeclaration).name;
-                    error(errorLocation, Diagnostics.Initializer_of_instance_member_variable_0_cannot_reference_identifier_1_declared_in_the_constructor,
-                        declarationNameToString(propertyName), diagnosticName(nameArg!));
+                    error(errorLocation,
+                        errorLocation && propertyWithInvalidInitializer.type && textRangeContainsPositionInclusive(propertyWithInvalidInitializer.type, errorLocation.pos)
+                            ? Diagnostics.Type_of_instance_member_variable_0_cannot_reference_identifier_1_declared_in_the_constructor
+                            : Diagnostics.Initializer_of_instance_member_variable_0_cannot_reference_identifier_1_declared_in_the_constructor,
+                        declarationNameToString(propertyWithInvalidInitializer.name), diagnosticName(nameArg!));
                     return true;
                 }
                 return false;
