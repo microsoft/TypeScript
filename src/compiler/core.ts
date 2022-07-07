@@ -2105,7 +2105,7 @@ namespace ts {
      *         and 1 insertion/deletion at 3 characters)
      */
     export function getSpellingSuggestion<T>(name: string, candidates: T[], getName: (candidate: T) => string | undefined): T | undefined {
-        const maximumLengthDifference = Math.min(2, Math.floor(name.length * 0.34));
+        const maximumLengthDifference = Math.max(2, Math.floor(name.length * 0.34));
         let bestDistance = Math.floor(name.length * 0.4) + 1; // If the best result is worse than this, don't bother.
         let bestCandidate: T | undefined;
         for (const candidate of candidates) {
