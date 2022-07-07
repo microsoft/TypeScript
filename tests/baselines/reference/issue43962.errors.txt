@@ -1,0 +1,38 @@
+tests/cases/compiler/issue43962.ts(20,5): error TS2345: Argument of type 'Op<number, Box<number>>' is not assignable to parameter of type 'Op<number, Box<never>>'.
+  Type 'Box<number>' is not assignable to type 'Box<never>'.
+    Type 'number' is not assignable to type 'never'.
+
+
+==== tests/cases/compiler/issue43962.ts (1 errors) ====
+    type Op<I, O> = (thing: Thing<I>) => Thing<O>;
+    type Thing<T> = {
+        value: T;
+        pipe<A, B>(
+            opA: Op<T, A>,
+            opB: Op<A, B>,
+        ): Thing<B>;
+    };
+    type Box<V> = { data: V };
+    
+    declare const thing: Thing<number>;
+    
+    declare function map<T, R>(project: (value: T) => R): Op<T, R>;
+    declare function tap<T>(next: (value: T) => void): Op<T, T>;
+    declare function box<V>(data: V): Box<V>;
+    declare function createAndUnbox<V>(factory: () => Thing<V | Box<V>>): Thing<V>;
+    declare function log(value: any): void;
+    
+    const result1 = createAndUnbox(() => thing.pipe(
+        map((data) => box(data)),
+        ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type 'Op<number, Box<number>>' is not assignable to parameter of type 'Op<number, Box<never>>'.
+!!! error TS2345:   Type 'Box<number>' is not assignable to type 'Box<never>'.
+!!! error TS2345:     Type 'number' is not assignable to type 'never'.
+        tap((v) => log(v)),
+    ));
+    
+    const result2 = createAndUnbox(() => thing.pipe(
+        tap((v) => log(v)),
+        map((data) => box(data)),
+    ));
+    
