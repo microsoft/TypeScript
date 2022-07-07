@@ -6,22 +6,22 @@ function ft1<T extends string>(s: string, n: number, u: 'foo' | 'bar' | 'baz', t
 >u : "foo" | "bar" | "baz"
 >t : T
 
-    const c1 = `abc${s}`;  // `abc${string}`
+    const c1 = `abc${s}`;
 >c1 : string
 >`abc${s}` : string
 >s : string
 
-    const c2 = `abc${n}`;  // `abc${number}`
+    const c2 = `abc${n}`;
 >c2 : string
 >`abc${n}` : string
 >n : number
 
-    const c3 = `abc${u}`;  // "abcfoo" | "abcbar" | "abcbaz"
+    const c3 = `abc${u}`;
 >c3 : string
 >`abc${u}` : string
 >u : "foo" | "bar" | "baz"
 
-    const c4 = `abc${t}`;  // `abc${T}
+    const c4 = `abc${t}`;
 >c4 : string
 >`abc${t}` : string
 >t : T
@@ -60,7 +60,7 @@ function ft10(s: string) {
 >ft10 : (s: string) => void
 >s : string
 
-    const c1 = `abc${s}`;  // Widening type `abc${string}`
+    const c1 = `abc${s}`;  // Type string
 >c1 : string
 >`abc${s}` : string
 >s : string
@@ -69,7 +69,7 @@ function ft10(s: string) {
 >v1 : string
 >c1 : string
 
-    const c2 = c1;  // Widening type `abc${string}`
+    const c2 = c1;  // Type string
 >c2 : string
 >c1 : string
 
@@ -100,7 +100,7 @@ function ft11(s: string, cond: boolean) {
 >s : string
 >cond : boolean
 
-    const c1 = cond ? `foo${s}` : `bar${s}`;  // widening `foo${string}` | widening `bar${string}`
+    const c1 = cond ? `foo${s}` : `bar${s}`;  // string
 >c1 : string
 >cond ? `foo${s}` : `bar${s}` : string
 >cond : boolean
@@ -113,14 +113,14 @@ function ft11(s: string, cond: boolean) {
 >c2 : `foo${string}` | `bar${string}`
 >c1 : string
 
-    const c3 = cond ? c1 : c2;  // `foo${string}` | `bar${string}`
+    const c3 = cond ? c1 : c2;  // string
 >c3 : string
 >cond ? c1 : c2 : string
 >cond : boolean
 >c1 : string
 >c2 : `foo${string}` | `bar${string}`
 
-    const c4 = cond ? c3 : `baz${s}`;  // `foo${string}` | `bar${string}` | widening `baz${string}`
+    const c4 = cond ? c3 : `baz${s}`;  // string
 >c4 : string
 >cond ? c3 : `baz${s}` : string
 >cond : boolean
@@ -140,7 +140,7 @@ function ft11(s: string, cond: boolean) {
 >v2 : `foo${string}` | `bar${string}`
 >c2 : `foo${string}` | `bar${string}`
 
-    let v3 = c3;  // `foo${string}` | `bar${string}`
+    let v3 = c3;  // string
 >v3 : string
 >c3 : string
 
@@ -347,7 +347,7 @@ const id4 = `foo.bar.${someString}`;
 >`foo.bar.${someString}` : string
 >someString : string
 
-const t4 = takesLiteral(id4);  // string
+const t4 = takesLiteral(id4);  // unknown
 >t4 : unknown
 >takesLiteral(id4) : unknown
 >takesLiteral : <T extends string>(literal: T) => T extends `foo.bar.${infer R}` ? R : unknown
