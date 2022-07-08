@@ -69,6 +69,11 @@ namespace ts {
             modules: ESMap<Path, ModeAwareCache<ResolvedModuleWithFailedLookupLocations>> | undefined;
             typeRefs: ESMap<Path, ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>> | undefined;
         };
+        resuableCacheResolutions?: {
+            resolutions: ProgramBuildInfoCacheResolutions;
+            fileNames: readonly string[];
+            buildInfoPath: string;
+        }
     }
 
     export const enum BuilderFileEmit {
@@ -290,8 +295,10 @@ namespace ts {
     /**
      * Releases program and other related not needed properties
      */
-    function releaseCache(state: BuilderProgramState) {
+    function releaseCache(state: BuilderProgramState, getCanonicalFileName: GetCanonicalFileName) {
         BuilderState.releaseCache(state);
+        // Store the resolutions if possible
+        if (!state.resuableCacheResolutions) getCacheResolutions(state, getCanonicalFileName);
         state.program = undefined;
     }
 
@@ -864,7 +871,8 @@ namespace ts {
         const outFilePath = outFile(state.compilerOptions);
         if (outFilePath && !state.compilerOptions.composite && !state.compilerOptions.cacheResolutions) return;
         const currentDirectory = Debug.checkDefined(state.program).getCurrentDirectory();
-        const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(getTsBuildInfoEmitOutputFilePath(state.compilerOptions)!, currentDirectory));
+        const buildInfoPath = getNormalizedAbsolutePath(getTsBuildInfoEmitOutputFilePath(state.compilerOptions)!, currentDirectory);
+        const buildInfoDirectory = getDirectoryPath(buildInfoPath);
         // Convert the file name to Path here if we set the fileName instead to optimize multiple d.ts file emits and having to compute Canonical path
         const latestChangedDtsFile = state.latestChangedDtsFile ? relativeToBuildInfoEnsuringAbsolutePath(state.latestChangedDtsFile) : undefined;
 
@@ -1098,13 +1106,18 @@ namespace ts {
             if (!resolutions) return;
             Debug.assertIsDefined(names);
             Debug.assertIsDefined(resolutionEntries);
-            return {
-                resolutions: resolutions.map(toProgramBuildInfoResolution),
-                names,
-                resolutionEntries,
-                modules,
-                typeRefs,
+            state.resuableCacheResolutions = {
+                resolutions: {
+                    resolutions: resolutions.map(toProgramBuildInfoResolution),
+                    names,
+                    resolutionEntries,
+                    modules,
+                    typeRefs,
+                },
+                fileNames,
+                buildInfoPath,
             };
+            return state.resuableCacheResolutions.resolutions;
         }
 
         function toProgramBuildInfoResolutionCache<T extends ResolvedModuleWithFailedLookupLocations | ResolvedTypeReferenceDirectiveWithFailedLookupLocations>(cache: ESMap<Path, ModeAwareCache<T>> | undefined): ProgramBuildInfoResolutionCache | undefined {
@@ -1325,7 +1338,7 @@ namespace ts {
         builderProgram.getAllDependencies = sourceFile => BuilderState.getAllDependencies(state, Debug.checkDefined(state.program), sourceFile);
         builderProgram.getSemanticDiagnostics = getSemanticDiagnostics;
         builderProgram.emit = emit;
-        builderProgram.releaseProgram = () => releaseCache(state);
+        builderProgram.releaseProgram = () => releaseCache(state, getCanonicalFileName);
 
         if (kind === BuilderProgramKind.SemanticDiagnosticsBuilderProgram) {
             (builderProgram as SemanticDiagnosticsBuilderProgram).getSemanticDiagnosticsOfNextAffectedFile = getSemanticDiagnosticsOfNextAffectedFile;
@@ -1640,12 +1653,37 @@ namespace ts {
                 { version: fileInfo.version, signature: fileInfo.signature === false ? undefined : fileInfo.version, affectsGlobalScope: fileInfo.affectsGlobalScope, impliedFormat: fileInfo.impliedFormat };
     }
 
-    export function createBuilderProgramUsingProgramBuildInfo(program: ProgramBuildInfo, buildInfoPath: string, host: ReadBuildProgramHost): EmitAndSemanticDiagnosticsBuilderProgram {
+    function getProgramBuildInfoFilePathDecoder(fileNames: readonly string[], buildInfoPath: string, host: ReadBuildProgramHost) {
         const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(buildInfoPath, host.getCurrentDirectory()));
         const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
+        let filePaths: Path[] | undefined;
+        let fileAbsolutePaths: string[] | undefined;
+
+        return { toAbsolutePath, toFilePath, toFileAbsolutePath };
+
+        function toPath(path: string) {
+            return ts.toPath(path, buildInfoDirectory, getCanonicalFileName);
+        }
+
+        function toAbsolutePath(path: string) {
+            return getNormalizedAbsolutePath(path, buildInfoDirectory);
+        }
+
+        function toFilePath(fileId: ProgramBuildInfoFileId): Path {
+            return filePaths?.[fileId - 1] ??
+                ((filePaths ??= new Array(fileNames.length))[fileId - 1] = toPath(fileNames[fileId - 1]));
+        }
+
+        function toFileAbsolutePath(fileId: ProgramBuildInfoAbsoluteFileId): string {
+            return fileAbsolutePaths?.[fileId - 1] ??
+                ((fileAbsolutePaths ??= new Array(fileNames.length))[fileId - 1] = toAbsolutePath(fileNames[fileId - 1]));
+        }
+    }
+
+    export function createBuilderProgramUsingProgramBuildInfo(program: ProgramBuildInfo, buildInfoPath: string, host: ReadBuildProgramHost): EmitAndSemanticDiagnosticsBuilderProgram {
+        const { toFilePath, toAbsolutePath } = getProgramBuildInfoFilePathDecoder(program.fileNames, buildInfoPath, host);
 
         let state: ReusableBuilderProgramState;
-        let filePaths: Path[] | undefined;
         let filePathsSetList: Set<Path>[] | undefined;
         const latestChangedDtsFile = program.latestChangedDtsFile ? toAbsolutePath(program.latestChangedDtsFile) : undefined;
         if (isProgramBundleEmitBuildInfo(program)) {
@@ -1654,10 +1692,10 @@ namespace ts {
                 compilerOptions: program.options ? convertToOptionsWithAbsolutePaths(program.options, toAbsolutePath) : {},
                 latestChangedDtsFile,
                 outSignature: program.outSignature,
+                resuableCacheResolutions: toResuableCacheResolutions(),
             };
         }
         else {
-            filePaths = program.fileNames?.map(toPath);
             filePathsSetList = program.fileIdsList?.map(fileIds => new Set(fileIds.map(toFilePath)));
             const fileInfos = new Map<Path, BuilderState.FileInfo>();
             const emitSignatures = program.options?.composite && !outFile(program.options) ? new Map<Path, string>() : undefined;
@@ -1684,6 +1722,7 @@ namespace ts {
                 changedFilesSet: new Set(map(program.changeFileSet, toFilePath)),
                 latestChangedDtsFile,
                 emitSignatures: emitSignatures?.size ? emitSignatures : undefined,
+                resuableCacheResolutions: toResuableCacheResolutions(),
             };
         }
 
@@ -1713,18 +1752,6 @@ namespace ts {
             hasChangedEmitSignature: returnFalse,
         };
 
-        function toPath(path: string) {
-            return ts.toPath(path, buildInfoDirectory, getCanonicalFileName);
-        }
-
-        function toAbsolutePath(path: string) {
-            return getNormalizedAbsolutePath(path, buildInfoDirectory);
-        }
-
-        function toFilePath(fileId: ProgramBuildInfoFileId) {
-            return filePaths![fileId - 1];
-        }
-
         function toFilePathsSet(fileIdsListId: ProgramBuildInfoFileIdListId) {
             return filePathsSetList![fileIdsListId - 1];
         }
@@ -1739,6 +1766,14 @@ namespace ts {
                 map.set(toFilePath(fileId), toFilePathsSet(fileIdListId))
             );
             return map;
+        }
+
+        function toResuableCacheResolutions(): BuilderProgramState["resuableCacheResolutions"] {
+            return program.cacheResolutions && {
+                resolutions: program.cacheResolutions,
+                fileNames: program.fileNames,
+                buildInfoPath,
+            };
         }
     }
 
