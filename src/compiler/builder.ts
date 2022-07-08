@@ -1246,7 +1246,7 @@ namespace ts {
                 rootNames: newProgramOrRootNames,
                 options: hostOrOptions as CompilerOptions,
                 host: oldProgramOrHost as CompilerHost,
-                oldProgram: oldProgram && oldProgram.getProgramOrUndefined(),
+                oldProgram: oldProgram?.getProgramOrOldBuildInfoProgramUndefined(),
                 configFileParsingDiagnostics,
                 projectReferences
             });
@@ -1339,6 +1339,7 @@ namespace ts {
         builderProgram.getSemanticDiagnostics = getSemanticDiagnostics;
         builderProgram.emit = emit;
         builderProgram.releaseProgram = () => releaseCache(state, getCanonicalFileName);
+        builderProgram.getProgramOrOldBuildInfoProgramUndefined = createGetProgramOrOldBuildInfoProgramUndefined(state);
 
         if (kind === BuilderProgramKind.SemanticDiagnosticsBuilderProgram) {
             (builderProgram as SemanticDiagnosticsBuilderProgram).getSemanticDiagnosticsOfNextAffectedFile = getSemanticDiagnosticsOfNextAffectedFile;
@@ -1732,6 +1733,7 @@ namespace ts {
             restoreEmitState: noop,
             getProgram: notImplemented,
             getProgramOrUndefined: returnUndefined,
+            getProgramOrOldBuildInfoProgramUndefined: createGetProgramOrOldBuildInfoProgramUndefined(state),
             releaseProgram: noop,
             getCompilerOptions: () => state.compilerOptions,
             getSourceFile: notImplemented,
@@ -1777,6 +1779,21 @@ namespace ts {
         }
     }
 
+    function createGetProgramOrOldBuildInfoProgramUndefined(state: ReusableBuilderProgramState): () => Program | OldBuildInfoProgram | undefined {
+        let oldProgram: OldBuildInfoProgram | false | undefined;
+        return () => (state.program ?? oldProgram ?? (oldProgram = createOldBuildInfoProgram(state) || false)) || undefined;
+    }
+
+    export function createOldBuildInfoProgram(
+        state: ReusableBuilderProgramState
+    ): OldBuildInfoProgram | undefined {
+        if (!state.cacheResolutions && !state.resuableCacheResolutions) return undefined;
+        return {
+            isBuildInfoProgram: true,
+            getCompilerOptions: () => state.compilerOptions,
+        };
+    }
+
     export function getBuildInfoFileVersionMap(
         program: ProgramBuildInfo,
         buildInfoPath: string,
@@ -1800,6 +1817,7 @@ namespace ts {
             restoreEmitState: noop,
             getProgram,
             getProgramOrUndefined: () => getState().program,
+            getProgramOrOldBuildInfoProgramUndefined: () => getState().program,
             releaseProgram: () => getState().program = undefined,
             getCompilerOptions: () => getState().compilerOptions,
             getSourceFile: fileName => getProgram().getSourceFile(fileName),

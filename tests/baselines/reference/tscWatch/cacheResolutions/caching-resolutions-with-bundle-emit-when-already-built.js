@@ -2126,7 +2126,7 @@ node_modules/@types/pkg4/index.d.ts
 
 Program root files: ["/src/project/fileWithTypeRefs.ts","/src/project/randomFileForImport.ts","/src/project/randomFileForTypeRef.ts"]
 Program options: {"module":2,"composite":true,"cacheResolutions":true,"traceResolution":true,"out":"./out.js","watch":true,"explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/src/project/tsconfig.json"}
-Program structureReused: Not
+Program structureReused: SafeModuleCache
 Program files::
 /a/lib/lib.d.ts
 /src/project/node_modules/pkg2/index.d.ts
@@ -2547,7 +2547,7 @@ node_modules/@types/pkg4/index.d.ts
 
 Program root files: ["/src/project/randomFileForImport.ts","/src/project/randomFileForTypeRef.ts"]
 Program options: {"module":2,"composite":true,"cacheResolutions":true,"traceResolution":true,"out":"./out.js","watch":true,"explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/src/project/tsconfig.json"}
-Program structureReused: Not
+Program structureReused: SafeModuleCache
 Program files::
 /a/lib/lib.d.ts
 /src/project/pkg0.d.ts
@@ -2914,7 +2914,7 @@ node_modules/@types/pkg4/index.d.ts
 
 Program root files: ["/src/project/randomFileForImport.ts","/src/project/randomFileForTypeRef.ts"]
 Program options: {"module":2,"composite":true,"cacheResolutions":true,"traceResolution":true,"out":"./out.js","watch":true,"explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/src/project/tsconfig.json"}
-Program structureReused: Not
+Program structureReused: SafeModuleCache
 Program files::
 /a/lib/lib.d.ts
 /src/project/randomFileForImport.ts
@@ -3167,7 +3167,7 @@ node_modules/@types/pkg4/index.d.ts
 
 Program root files: ["/src/project/randomFileForImport.ts","/src/project/randomFileForTypeRef.ts"]
 Program options: {"module":2,"composite":true,"cacheResolutions":true,"traceResolution":true,"out":"./out.js","watch":true,"explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/src/project/tsconfig.json"}
-Program structureReused: Not
+Program structureReused: SafeModuleCache
 Program files::
 /a/lib/lib.d.ts
 /src/project/randomFileForImport.ts
