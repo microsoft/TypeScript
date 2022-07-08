@@ -2491,7 +2491,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                 return host.fileExists(f);
             },
             useCaseSensitiveFileNames: () => host.useCaseSensitiveFileNames(),
-            getBuildInfo: bundle => program.getBuildInfo?.(bundle),
+            getBuildInfo: (bundle, buildInfoPath) => program.getBuildInfo?.(bundle, buildInfoPath),
             getSourceFileFromReference: (file, ref) => program.getSourceFileFromReference(file, ref),
             redirectTargetsMap,
             getFileIncludeReasons: program.getFileIncludeReasons,

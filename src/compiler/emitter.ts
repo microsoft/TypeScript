@@ -811,7 +811,7 @@ export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFi
             emitSkipped = true;
             return;
         }
-        const buildInfo = host.getBuildInfo(bundle) || createBuildInfo(/*program*/ undefined, bundle);
+        const buildInfo = host.getBuildInfo(bundle, buildInfoPath) || createBuildInfo(/*program*/ undefined, bundle);
         // Pass buildinfo as additional data to avoid having to reparse
         writeFile(host, emitterDiagnostics, buildInfoPath, getBuildInfoText(buildInfo), /*writeByteOrderMark*/ false, /*sourceFiles*/ undefined, { buildInfo });
     }
