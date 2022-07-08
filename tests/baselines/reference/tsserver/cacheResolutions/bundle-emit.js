@@ -883,7 +883,7 @@ Info 208  [00:04:58.000] Reusing resolution of type reference directive 'pkg3' f
 Info 209  [00:04:59.000] Reusing resolution of module 'pkg0' from '/src/project/randomFileForImport.ts' of old program, it was successfully resolved to '/src/project/pkg0.d.ts'.
 Info 210  [00:05:00.000] Reusing resolution of type reference directive 'pkg2' from '/src/project/randomFileForTypeRef.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg2/index.d.ts'.
 Info 211  [00:05:01.000] Reusing resolution of type reference directive 'pkg4' from '/src/project/__inferred type names__.ts' of old program, it was successfully resolved to '/src/project/node_modules/@types/pkg4/index.d.ts'.
-Info 212  [00:05:02.000] Finishing updateGraphWorker: Project: /src/project/tsconfig.json Version: 6 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 212  [00:05:02.000] Finishing updateGraphWorker: Project: /src/project/tsconfig.json Version: 6 structureChanged: true structureIsReused:: SafeModuleCache Elapsed:: *ms
 Info 213  [00:05:03.000] Project '/src/project/tsconfig.json' (Configured)
 Info 214  [00:05:04.000] 	Files (8)
 	/a/lib/lib.d.ts
@@ -1000,7 +1000,7 @@ Info 233  [00:05:40.000] Starting updateGraphWorker: Project: /src/project/tscon
 Info 234  [00:05:41.000] Reusing resolution of module 'pkg0' from '/src/project/randomFileForImport.ts' of old program, it was successfully resolved to '/src/project/pkg0.d.ts'.
 Info 235  [00:05:42.000] Reusing resolution of type reference directive 'pkg2' from '/src/project/randomFileForTypeRef.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg2/index.d.ts'.
 Info 236  [00:05:43.000] Reusing resolution of type reference directive 'pkg4' from '/src/project/__inferred type names__.ts' of old program, it was successfully resolved to '/src/project/node_modules/@types/pkg4/index.d.ts'.
-Info 237  [00:05:44.000] Finishing updateGraphWorker: Project: /src/project/tsconfig.json Version: 7 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 237  [00:05:44.000] Finishing updateGraphWorker: Project: /src/project/tsconfig.json Version: 7 structureChanged: true structureIsReused:: SafeModuleCache Elapsed:: *ms
 Info 238  [00:05:45.000] Project '/src/project/tsconfig.json' (Configured)
 Info 239  [00:05:46.000] 	Files (6)
 	/a/lib/lib.d.ts
@@ -1126,7 +1126,7 @@ Info 277  [00:06:41.000] File '/pkg0.jsx' does not exist.
 Info 278  [00:06:42.000] ======== Module name 'pkg0' was not resolved. ========
 Info 279  [00:06:43.000] Reusing resolution of type reference directive 'pkg2' from '/src/project/randomFileForTypeRef.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg2/index.d.ts'.
 Info 280  [00:06:44.000] Reusing resolution of type reference directive 'pkg4' from '/src/project/__inferred type names__.ts' of old program, it was successfully resolved to '/src/project/node_modules/@types/pkg4/index.d.ts'.
-Info 281  [00:06:45.000] Finishing updateGraphWorker: Project: /src/project/tsconfig.json Version: 8 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 281  [00:06:45.000] Finishing updateGraphWorker: Project: /src/project/tsconfig.json Version: 8 structureChanged: true structureIsReused:: SafeModuleCache Elapsed:: *ms
 Info 282  [00:06:46.000] Project '/src/project/tsconfig.json' (Configured)
 Info 283  [00:06:47.000] 	Files (5)
 	/a/lib/lib.d.ts
@@ -1232,7 +1232,7 @@ Info 306  [00:07:27.000] Directory '/src/node_modules' does not exist, skipping 
 Info 307  [00:07:28.000] Directory '/node_modules' does not exist, skipping all lookups in it.
 Info 308  [00:07:29.000] ======== Type reference directive 'pkg2' was not resolved. ========
 Info 309  [00:07:30.000] Reusing resolution of type reference directive 'pkg4' from '/src/project/__inferred type names__.ts' of old program, it was successfully resolved to '/src/project/node_modules/@types/pkg4/index.d.ts'.
-Info 310  [00:07:31.000] Finishing updateGraphWorker: Project: /src/project/tsconfig.json Version: 9 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 310  [00:07:31.000] Finishing updateGraphWorker: Project: /src/project/tsconfig.json Version: 9 structureChanged: true structureIsReused:: SafeModuleCache Elapsed:: *ms
 Info 311  [00:07:32.000] Project '/src/project/tsconfig.json' (Configured)
 Info 312  [00:07:33.000] 	Files (4)
 	/a/lib/lib.d.ts

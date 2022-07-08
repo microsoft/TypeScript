@@ -45,6 +45,7 @@ import {
     createModuleResolutionCache,
     createMultiMap,
     CreateProgramOptions,
+    CreateProgramOptionsWithOldBuildInfoProgramConstructor,
     createSourceFile,
     CreateSourceFileOptions,
     createSymlinkCache,
@@ -226,6 +227,8 @@ import {
     notImplementedResolver,
     noTransformers,
     ObjectLiteralExpression,
+    OldBuildInfoProgram,
+    OldBuildInfoProgramConstructor,
     OperationCanceledException,
     optionsHaveChanges,
     outFile,
@@ -1388,7 +1391,7 @@ function shouldProgramCreateNewSourceFiles(program: Program | undefined, newOpti
     return optionsHaveChanges(program.getCompilerOptions(), newOptions, sourceFileAffectingCompilerOptions);
 }
 
-function createCreateProgramOptions(rootNames: readonly string[], options: CompilerOptions, host?: CompilerHost, oldProgram?: Program, configFileParsingDiagnostics?: readonly Diagnostic[]): CreateProgramOptions {
+function createCreateProgramOptions(rootNames: readonly string[], options: CompilerOptions, host?: CompilerHost, oldProgram?: Program | OldBuildInfoProgramConstructor, configFileParsingDiagnostics?: readonly Diagnostic[]): CreateProgramOptionsWithOldBuildInfoProgramConstructor {
     return {
         rootNames,
         options,
@@ -1409,6 +1412,8 @@ function createCreateProgramOptions(rootNames: readonly string[], options: Compi
  * @returns A 'Program' object.
  */
 export function createProgram(createProgramOptions: CreateProgramOptions): Program;
+/** @internal */
+export function createProgram(createProgramOptions: CreateProgramOptionsWithOldBuildInfoProgramConstructor): Program; // eslint-disable-line @typescript-eslint/unified-signatures
 /**
  * Create a new 'Program' instance. A Program is an immutable collection of 'SourceFile's and a 'CompilerOptions'
  * that represent a compilation unit.
@@ -1424,10 +1429,10 @@ export function createProgram(createProgramOptions: CreateProgramOptions): Progr
  * @returns A 'Program' object.
  */
 export function createProgram(rootNames: readonly string[], options: CompilerOptions, host?: CompilerHost, oldProgram?: Program, configFileParsingDiagnostics?: readonly Diagnostic[]): Program;
-export function createProgram(rootNamesOrOptions: readonly string[] | CreateProgramOptions, _options?: CompilerOptions, _host?: CompilerHost, _oldProgram?: Program, _configFileParsingDiagnostics?: readonly Diagnostic[]): Program {
+export function createProgram(rootNamesOrOptions: readonly string[] | CreateProgramOptionsWithOldBuildInfoProgramConstructor, _options?: CompilerOptions, _host?: CompilerHost, _oldProgram?: Program, _configFileParsingDiagnostics?: readonly Diagnostic[]): Program {
     const createProgramOptions = isArray(rootNamesOrOptions) ? createCreateProgramOptions(rootNamesOrOptions, _options!, _host, _oldProgram, _configFileParsingDiagnostics) : rootNamesOrOptions; // TODO: GH#18217
     const { rootNames, options, configFileParsingDiagnostics, projectReferences } = createProgramOptions;
-    let { oldProgram } = createProgramOptions;
+    let { oldProgram: oldProgramOrOldBuildInfoProgramConstructor } = createProgramOptions;
 
     let processingDefaultLibFiles: SourceFile[] | undefined;
     let processingOtherFiles: SourceFile[] | undefined;
@@ -1567,6 +1572,12 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                 typeReferenceDirectiveResolutionCache,
                 createTypeReferenceResolutionLoader,
             );
+    }
+
+    let oldProgram = typeof oldProgramOrOldBuildInfoProgramConstructor === "object" ? oldProgramOrOldBuildInfoProgramConstructor : undefined;
+    let oldBuildInfoProgram: OldBuildInfoProgram | undefined;
+    if (!oldProgram && typeof oldProgramOrOldBuildInfoProgramConstructor === "function") {
+        oldBuildInfoProgram = oldProgramOrOldBuildInfoProgramConstructor(host);
     }
 
     // Map from a stringified PackageId to the source file with that id.
@@ -1749,6 +1760,8 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
 
     // unconditionally set oldProgram to undefined to prevent it from being captured in closure
     oldProgram = undefined;
+    oldBuildInfoProgram = undefined;
+    oldProgramOrOldBuildInfoProgramConstructor = undefined;
 
     const program: Program = {
         getRootFileNames: () => rootNames,
@@ -2222,14 +2235,21 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     }
 
     function tryReuseStructureFromOldProgram(): StructureIsReused {
-        if (!oldProgram) {
+        // check properties that can affect structure of the program or module resolution strategy
+        // if any of these properties has changed - structure cannot be reused
+        const oldOptions = oldProgram?.getCompilerOptions() || oldBuildInfoProgram?.getCompilerOptions();
+        if (!oldOptions || changesAffectModuleResolution(oldOptions, options)) {
             return StructureIsReused.Not;
         }
 
-        // check properties that can affect structure of the program or module resolution strategy
-        // if any of these properties has changed - structure cannot be reused
-        const oldOptions = oldProgram.getCompilerOptions();
-        if (changesAffectModuleResolution(oldOptions, options)) {
+        const result = tryReuseStructureFromOldProgramWorker();
+        return options.cacheResolutions && (oldProgram || oldBuildInfoProgram) && result === StructureIsReused.Not ?
+            StructureIsReused.SafeModuleCache :
+            result;
+    }
+
+    function tryReuseStructureFromOldProgramWorker(): StructureIsReused {
+        if (!oldProgram) {
             return StructureIsReused.Not;
         }
 
@@ -2414,7 +2434,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             return structureIsReused;
         }
 
-        if (changesAffectingProgramStructure(oldOptions, options)) {
+        if (changesAffectingProgramStructure(oldProgram.getCompilerOptions(), options)) {
             return StructureIsReused.SafeModules;
         }
 
