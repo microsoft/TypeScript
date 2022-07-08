@@ -1,0 +1,82 @@
+=== tests/cases/conformance/controlFlow/controlFlowBindingElement.ts ===
+{
+    const data =  { param: 'value' };
+>data : Symbol(data, Decl(controlFlowBindingElement.ts, 1, 9))
+>param : Symbol(param, Decl(controlFlowBindingElement.ts, 1, 19))
+
+    const {
+        param = (() => { throw new Error('param is not defined') })(),
+>param : Symbol(param, Decl(controlFlowBindingElement.ts, 3, 11))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    } = data;
+>data : Symbol(data, Decl(controlFlowBindingElement.ts, 1, 9))
+    
+    console.log(param); // should not trigger 'Unreachable code detected.'    
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>param : Symbol(param, Decl(controlFlowBindingElement.ts, 3, 11))
+}
+
+
+{
+    const data =  { param: 'value' };
+>data : Symbol(data, Decl(controlFlowBindingElement.ts, 12, 9))
+>param : Symbol(param, Decl(controlFlowBindingElement.ts, 12, 19))
+
+    let foo: string | undefined = "";
+>foo : Symbol(foo, Decl(controlFlowBindingElement.ts, 14, 7))
+
+    const {
+        param = (() => { throw new Error('param is not defined') })(),
+>param : Symbol(param, Decl(controlFlowBindingElement.ts, 15, 11))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    } = data;
+>data : Symbol(data, Decl(controlFlowBindingElement.ts, 12, 9))
+    
+    foo;  // should be string  
+>foo : Symbol(foo, Decl(controlFlowBindingElement.ts, 14, 7))
+}
+
+{
+    const data =  { param: 'value' };
+>data : Symbol(data, Decl(controlFlowBindingElement.ts, 23, 9))
+>param : Symbol(param, Decl(controlFlowBindingElement.ts, 23, 19))
+
+    let foo: string | undefined = "";
+>foo : Symbol(foo, Decl(controlFlowBindingElement.ts, 25, 7))
+
+    const {
+        param = (() => { foo = undefined })(),
+>param : Symbol(param, Decl(controlFlowBindingElement.ts, 26, 11))
+>foo : Symbol(foo, Decl(controlFlowBindingElement.ts, 25, 7))
+>undefined : Symbol(undefined)
+
+    } = data;
+>data : Symbol(data, Decl(controlFlowBindingElement.ts, 23, 9))
+    
+    foo;  // should be string | undefined
+>foo : Symbol(foo, Decl(controlFlowBindingElement.ts, 25, 7))
+}
+
+{
+    const data =  { param: 'value' };
+>data : Symbol(data, Decl(controlFlowBindingElement.ts, 34, 9))
+>param : Symbol(param, Decl(controlFlowBindingElement.ts, 34, 19))
+
+    let foo: string | undefined = "";
+>foo : Symbol(foo, Decl(controlFlowBindingElement.ts, 36, 7))
+
+    const {
+        param = (() => { return "" + 1 })(),
+>param : Symbol(param, Decl(controlFlowBindingElement.ts, 37, 11))
+
+    } = data;
+>data : Symbol(data, Decl(controlFlowBindingElement.ts, 34, 9))
+    
+    foo;  // should be string
+>foo : Symbol(foo, Decl(controlFlowBindingElement.ts, 36, 7))
+}
+

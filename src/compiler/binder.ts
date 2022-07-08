@@ -1655,6 +1655,7 @@ namespace ts {
         }
 
         function bindBindingElementFlow(node: BindingElement) {
+            const preBindingElementFlow = currentFlow;
             if (isBindingPattern(node.name)) {
                 // When evaluating a binding pattern, the initializer is evaluated before the binding pattern, per:
                 // - https://tc39.es/ecma262/#sec-destructuring-binding-patterns-runtime-semantics-iteratorbindinginitialization
@@ -1669,6 +1670,16 @@ namespace ts {
             else {
                 bindEachChild(node);
             }
+
+            // a BindingElement does not have side effects if initializers are not evaluated and used. (see GH#49759)
+            const postBindingElementLabel = createBranchLabel();
+            if (preBindingElementFlow !== unreachableFlow) {
+                addAntecedent(postBindingElementLabel, preBindingElementFlow);
+            }
+            if (postBindingElementLabel !== unreachableFlow) {
+                addAntecedent(postBindingElementLabel, currentFlow);
+            }
+            currentFlow = finishFlowLabel(postBindingElementLabel);
         }
 
         function bindJSDocTypeAlias(node: JSDocTypedefTag | JSDocCallbackTag | JSDocEnumTag) {

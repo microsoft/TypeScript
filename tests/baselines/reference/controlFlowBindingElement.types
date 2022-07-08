@@ -1,0 +1,114 @@
+=== tests/cases/conformance/controlFlow/controlFlowBindingElement.ts ===
+{
+    const data =  { param: 'value' };
+>data : { param: string; }
+>{ param: 'value' } : { param: string; }
+>param : string
+>'value' : "value"
+
+    const {
+        param = (() => { throw new Error('param is not defined') })(),
+>param : string
+>(() => { throw new Error('param is not defined') })() : never
+>(() => { throw new Error('param is not defined') }) : () => never
+>() => { throw new Error('param is not defined') } : () => never
+>new Error('param is not defined') : Error
+>Error : ErrorConstructor
+>'param is not defined' : "param is not defined"
+
+    } = data;
+>data : { param: string; }
+    
+    console.log(param); // should not trigger 'Unreachable code detected.'    
+>console.log(param) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>param : string
+}
+
+
+{
+    const data =  { param: 'value' };
+>data : { param: string; }
+>{ param: 'value' } : { param: string; }
+>param : string
+>'value' : "value"
+
+    let foo: string | undefined = "";
+>foo : string | undefined
+>"" : ""
+
+    const {
+        param = (() => { throw new Error('param is not defined') })(),
+>param : string
+>(() => { throw new Error('param is not defined') })() : never
+>(() => { throw new Error('param is not defined') }) : () => never
+>() => { throw new Error('param is not defined') } : () => never
+>new Error('param is not defined') : Error
+>Error : ErrorConstructor
+>'param is not defined' : "param is not defined"
+
+    } = data;
+>data : { param: string; }
+    
+    foo;  // should be string  
+>foo : string
+}
+
+{
+    const data =  { param: 'value' };
+>data : { param: string; }
+>{ param: 'value' } : { param: string; }
+>param : string
+>'value' : "value"
+
+    let foo: string | undefined = "";
+>foo : string | undefined
+>"" : ""
+
+    const {
+        param = (() => { foo = undefined })(),
+>param : string | void
+>(() => { foo = undefined })() : void
+>(() => { foo = undefined }) : () => void
+>() => { foo = undefined } : () => void
+>foo = undefined : undefined
+>foo : string | undefined
+>undefined : undefined
+
+    } = data;
+>data : { param: string; }
+    
+    foo;  // should be string | undefined
+>foo : string | undefined
+}
+
+{
+    const data =  { param: 'value' };
+>data : { param: string; }
+>{ param: 'value' } : { param: string; }
+>param : string
+>'value' : "value"
+
+    let foo: string | undefined = "";
+>foo : string | undefined
+>"" : ""
+
+    const {
+        param = (() => { return "" + 1 })(),
+>param : string
+>(() => { return "" + 1 })() : string
+>(() => { return "" + 1 }) : () => string
+>() => { return "" + 1 } : () => string
+>"" + 1 : string
+>"" : ""
+>1 : 1
+
+    } = data;
+>data : { param: string; }
+    
+    foo;  // should be string
+>foo : string
+}
+
