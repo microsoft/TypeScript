@@ -523,7 +523,7 @@ namespace ts {
                 }
             }
         }
-        else {
+        else if (!hasProperty(commandLine.options, "project")) {
             const searchPath = normalizePath(sys.getCurrentDirectory());
             configFileName = findConfigFile(searchPath, fileName => sys.fileExists(fileName));
         }
