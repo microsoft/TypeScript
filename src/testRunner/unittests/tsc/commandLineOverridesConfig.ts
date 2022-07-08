@@ -79,5 +79,25 @@ namespace ts {
             commandLineArgs: ["-p", "tsconfig.new.json", "--strict", "false"],
             environmentVariables: {},
         });
+
+        verifyTsc({
+            scenario: "commandLineOverridesConfig",
+            subScenario: "-p null disables config",
+            fs: () => loadProjectFromFiles({
+                "/src/project/src/main.ts": "export const x = 10;",
+                "/src/project/src/file.ts": "export const y: string = undefined;",
+                "/src/project/tsconfig.json": Utils.dedent`
+                    {
+                        "compilerOptions": {
+                            "strict": true,
+                        },
+                        "include": [
+                            "src/**/*.ts"
+                        ]
+                    }`,
+            }, /*libContent*/ undefined, "/src/project/"),
+            commandLineArgs: ["-p", "null", "src/file.ts"],
+            environmentVariables: {},
+        });
     });
 }
