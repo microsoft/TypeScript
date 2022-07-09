@@ -119,9 +119,7 @@ module M {
 
             result+=((Color._map[z[i].color])+"\r\n");
 >result : Symbol(result, Decl(interfaceAssignmentCompat.ts, 25, 11))
->Color._map : Symbol(Color.__index)
 >Color : Symbol(Color, Decl(interfaceAssignmentCompat.ts, 0, 10))
->_map : Symbol(Color.__index)
 >z[i].color : Symbol(IEye.color, Decl(interfaceAssignmentCompat.ts, 7, 27))
 >z : Symbol(z, Decl(interfaceAssignmentCompat.ts, 33, 11))
 >i : Symbol(i, Decl(interfaceAssignmentCompat.ts, 35, 16))

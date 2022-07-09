@@ -224,10 +224,6 @@
         {
           "text": "U",
           "kind": "typeParameterName"
-        },
-        {
-          "text": "U",
-          "kind": "typeParameterName"
         }
       ],
       "documentation": []
@@ -376,10 +372,6 @@
         {
           "text": " ",
           "kind": "space"
-        },
-        {
-          "text": "U",
-          "kind": "typeParameterName"
         },
         {
           "text": "U",
@@ -740,10 +732,6 @@
         {
           "text": "string",
           "kind": "keyword"
-        },
-        {
-          "text": "U",
-          "kind": "typeParameterName"
         }
       ],
       "documentation": []
@@ -928,10 +916,6 @@
         {
           "text": "string",
           "kind": "keyword"
-        },
-        {
-          "text": "U",
-          "kind": "typeParameterName"
         }
       ],
       "documentation": []

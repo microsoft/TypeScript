@@ -49,7 +49,5 @@ var writable = { ...roindex };
 >roindex : Symbol(roindex, Decl(objectSpreadIndexSignature.ts, 13, 11))
 
 writable.a = 0;  // should be ok.
->writable.a : Symbol(__index)
 >writable : Symbol(writable, Decl(objectSpreadIndexSignature.ts, 14, 3))
->a : Symbol(__index)
 

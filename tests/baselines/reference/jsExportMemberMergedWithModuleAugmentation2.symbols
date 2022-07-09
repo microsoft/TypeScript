@@ -21,7 +21,5 @@ declare module "./test" {
 }
 
 a.toFixed();
->a.toFixed : Symbol(__index, Decl(lib.es5.d.ts, --, --))
 >a : Symbol(a, Decl(index.ts, 0, 8))
->toFixed : Symbol(__index, Decl(lib.es5.d.ts, --, --))
 

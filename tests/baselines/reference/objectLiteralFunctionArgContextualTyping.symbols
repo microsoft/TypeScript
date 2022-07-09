@@ -45,7 +45,5 @@ f2({ value: '', toString: (s) => s.uhhh }) // error
 >value : Symbol(value, Decl(objectLiteralFunctionArgContextualTyping.ts, 12, 4))
 >toString : Symbol(toString, Decl(objectLiteralFunctionArgContextualTyping.ts, 12, 15))
 >s : Symbol(s, Decl(objectLiteralFunctionArgContextualTyping.ts, 12, 27))
->s.uhhh : Symbol(__index, Decl(lib.es5.d.ts, --, --))
 >s : Symbol(s, Decl(objectLiteralFunctionArgContextualTyping.ts, 12, 27))
->uhhh : Symbol(__index, Decl(lib.es5.d.ts, --, --))
 

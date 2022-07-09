@@ -2,7 +2,5 @@
 // used to leak __missing into error message
 var p2 = window. 
 >p2 : Symbol(p2, Decl(incompleteDottedExpressionAtEOF.ts, 1, 3))
->window. : Symbol(__index, Decl(lib.dom.d.ts, --, --))
 >window : Symbol(window, Decl(lib.dom.d.ts, --, --))
-> : Symbol(__index, Decl(lib.dom.d.ts, --, --))
 

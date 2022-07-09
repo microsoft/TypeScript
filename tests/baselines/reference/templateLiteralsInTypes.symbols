@@ -7,7 +7,5 @@ const f = (hdr: string, val: number) => `${hdr}:\t${val}\r\n` as `${string}:\t${
 >val : Symbol(val, Decl(templateLiteralsInTypes.ts, 0, 23))
 
 f("x").foo;
->f("x").foo : Symbol(__index, Decl(lib.es5.d.ts, --, --))
 >f : Symbol(f, Decl(templateLiteralsInTypes.ts, 0, 5))
->foo : Symbol(__index, Decl(lib.es5.d.ts, --, --))
 

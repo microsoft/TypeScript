@@ -80,9 +80,7 @@ var str = "Hello world";
 >str : Symbol(str, Decl(modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts, 42, 3))
 
 str.includes("hello", 0);
->str.includes : Symbol(__index, Decl(lib.es5.d.ts, --, --))
 >str : Symbol(str, Decl(modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts, 42, 3))
->includes : Symbol(__index, Decl(lib.es5.d.ts, --, --))
 
 // Using ES6 symbol
 var s = Symbol();

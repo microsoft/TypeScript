@@ -10,9 +10,6 @@ var functions = [function () {
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     [1, 2, 3].NonexistantMethod();
->[1, 2, 3].NonexistantMethod : Symbol(Array.__index, Decl(lib.es5.d.ts, --, --))
->NonexistantMethod : Symbol(Array.__index, Decl(lib.es5.d.ts, --, --))
-
     derp();
 }];
 

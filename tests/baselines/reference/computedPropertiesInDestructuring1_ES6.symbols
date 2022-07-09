@@ -73,9 +73,7 @@ let [{[foo()]: bar6}] = [{bar: "bar"}];
 >bar : Symbol(bar, Decl(computedPropertiesInDestructuring1_ES6.ts, 20, 26))
 
 let [{[foo.toExponential()]: bar7}] = [{bar: "bar"}];
->foo.toExponential : Symbol(__index, Decl(lib.es5.d.ts, --, --))
 >foo : Symbol(foo, Decl(computedPropertiesInDestructuring1_ES6.ts, 1, 3))
->toExponential : Symbol(__index, Decl(lib.es5.d.ts, --, --))
 >bar7 : Symbol(bar7, Decl(computedPropertiesInDestructuring1_ES6.ts, 21, 6))
 >bar : Symbol(bar, Decl(computedPropertiesInDestructuring1_ES6.ts, 21, 40))
 

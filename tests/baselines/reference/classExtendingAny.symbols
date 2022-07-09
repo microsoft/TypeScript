@@ -54,9 +54,7 @@ class B extends Err {
 >wat : Symbol(B.wat, Decl(b.js, 2, 15))
 
         this.wit
->this.wit : Symbol(B.__index)
 >this : Symbol(B, Decl(b.js, 0, 0))
->wit : Symbol(B.__index)
 
         this['wot']
 >this : Symbol(B, Decl(b.js, 0, 0))

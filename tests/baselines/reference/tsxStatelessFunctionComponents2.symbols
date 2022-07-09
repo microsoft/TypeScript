@@ -67,11 +67,9 @@ let e = <BigGreeter ref={x => x.greeting.subtr(10)} />;
 >BigGreeter : Symbol(BigGreeter, Decl(file.tsx, 4, 1))
 >ref : Symbol(ref, Decl(file.tsx, 24, 19))
 >x : Symbol(x, Decl(file.tsx, 24, 25))
->x.greeting.subtr : Symbol(__index, Decl(lib.d.ts, --, --))
 >x.greeting : Symbol(BigGreeter.greeting, Decl(file.tsx, 9, 2))
 >x : Symbol(x, Decl(file.tsx, 24, 25))
 >greeting : Symbol(BigGreeter.greeting, Decl(file.tsx, 9, 2))
->subtr : Symbol(__index, Decl(lib.d.ts, --, --))
 
 // Error (ref callback is contextually typed)
 let f = <BigGreeter ref={x => x.notARealProperty} />;

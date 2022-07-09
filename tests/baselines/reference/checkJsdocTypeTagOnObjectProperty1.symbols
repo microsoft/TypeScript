@@ -61,9 +61,7 @@ var k = obj.method1(0);
 >method1 : Symbol(method1, Decl(0.js, 6, 12))
 
 obj.bar1 = "42";
->obj.bar1 : Symbol(__index)
 >obj : Symbol(obj, Decl(0.js, 2, 5), Decl(0.js, 17, 1), Decl(0.js, 19, 7), Decl(0.js, 21, 23))
->bar1 : Symbol(__index)
 
 obj.arrowFunc(0);
 >obj.arrowFunc : Symbol(arrowFunc, Decl(0.js, 14, 20))

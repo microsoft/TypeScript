@@ -31,15 +31,11 @@ var ResultIsNumber4 = ENUM1--;
 var ResultIsNumber5 = --(ENUM["A"] + ENUM.B);
 >ResultIsNumber5 : Symbol(ResultIsNumber5, Decl(decrementOperatorWithEnumTypeInvalidOperations.ts, 13, 3))
 >ENUM : Symbol(ENUM, Decl(decrementOperatorWithEnumTypeInvalidOperations.ts, 0, 0))
->ENUM.B : Symbol(ENUM.__index)
 >ENUM : Symbol(ENUM, Decl(decrementOperatorWithEnumTypeInvalidOperations.ts, 0, 0))
->B : Symbol(ENUM.__index)
 
 var ResultIsNumber6 = (ENUM.A + ENUM["B"])--;
 >ResultIsNumber6 : Symbol(ResultIsNumber6, Decl(decrementOperatorWithEnumTypeInvalidOperations.ts, 14, 3))
->ENUM.A : Symbol(ENUM.__index)
 >ENUM : Symbol(ENUM, Decl(decrementOperatorWithEnumTypeInvalidOperations.ts, 0, 0))
->A : Symbol(ENUM.__index)
 >ENUM : Symbol(ENUM, Decl(decrementOperatorWithEnumTypeInvalidOperations.ts, 0, 0))
 
 // miss assignment operator

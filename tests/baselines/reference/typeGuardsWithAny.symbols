@@ -19,9 +19,7 @@ if (typeof x === "string") {
 >x : Symbol(x, Decl(typeGuardsWithAny.ts, 0, 3))
 
     x.p; // Error, type any narrowed by primitive type check
->x.p : Symbol(__index, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(typeGuardsWithAny.ts, 0, 3))
->p : Symbol(__index, Decl(lib.es5.d.ts, --, --))
 }
 else {
     x.p; // No error, type unaffected in this branch

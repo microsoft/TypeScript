@@ -25,9 +25,7 @@ const enum E1 {
     // forward reference to the element of the same enum
     Y = E1.Z,
 >Y : Symbol(E1.Y, Decl(constEnumErrors.ts, 11, 10))
->E1.Z : Symbol(E1.__index)
 >E1 : Symbol(E1, Decl(constEnumErrors.ts, 6, 1))
->Z : Symbol(E1.__index)
 
     Y1 = E1["Z"]
 >Y1 : Symbol(E1.Y1, Decl(constEnumErrors.ts, 13, 13))

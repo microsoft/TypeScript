@@ -529,7 +529,7 @@ namespace ts.SymbolDisplay {
                                 addRange(displayParts, typeParameterParts);
                             }
                             //If the type is index signature, format it specially as well
-                            if(symbolKind === ScriptElementKind.indexSignatureElement){
+                            else if(symbolKind === ScriptElementKind.indexSignatureElement){
                                 if(indexInfos){
                                     const indexTypeParts = typeToDisplayParts(typeChecker, indexInfos[0].type);
                                     addRange(displayParts, indexTypeParts);

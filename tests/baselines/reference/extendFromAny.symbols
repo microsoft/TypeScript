@@ -28,12 +28,8 @@ C.sknown.length; // error, 'sknown' has no 'length' property
 >sknown : Symbol(C.sknown, Decl(extendFromAny.ts, 2, 14))
 
 c.unknown.length; // ok, unknown: any
->c.unknown : Symbol(C.__index)
 >c : Symbol(c, Decl(extendFromAny.ts, 6, 3))
->unknown : Symbol(C.__index)
 
 C.sunknown.length; // ok: sunknown: any
->C.sunknown : Symbol(C.__index)
 >C : Symbol(C, Decl(extendFromAny.ts, 0, 22))
->sunknown : Symbol(C.__index)
 

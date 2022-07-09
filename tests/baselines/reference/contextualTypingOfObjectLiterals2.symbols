@@ -15,7 +15,5 @@ f2({ foo: s => s.hmm }) // 's' should be 'string', so this should be an error
 >f2 : Symbol(f2, Decl(contextualTypingOfObjectLiterals2.ts, 2, 1))
 >foo : Symbol(foo, Decl(contextualTypingOfObjectLiterals2.ts, 4, 4))
 >s : Symbol(s, Decl(contextualTypingOfObjectLiterals2.ts, 4, 9))
->s.hmm : Symbol(__index, Decl(lib.es5.d.ts, --, --))
 >s : Symbol(s, Decl(contextualTypingOfObjectLiterals2.ts, 4, 9))
->hmm : Symbol(__index, Decl(lib.es5.d.ts, --, --))
 

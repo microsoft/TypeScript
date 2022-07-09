@@ -9,9 +9,7 @@ var y = 2
 
 // should work in JS
 window.z = 3
->window.z : Symbol(__index, Decl(lib.dom.d.ts, --, --))
 >window : Symbol(window, Decl(lib.dom.d.ts, --, --), Decl(globalThisPropertyAssignment.js, 1, 9))
->z : Symbol(__index, Decl(lib.dom.d.ts, --, --))
 
 // should work in JS (even though it's a secondary declaration)
 globalThis.alpha = 4

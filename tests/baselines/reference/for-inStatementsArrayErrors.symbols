@@ -22,9 +22,7 @@ for (let x in a) {
     }
     let a3 = x.unknownProperty;
 >a3 : Symbol(a3, Decl(for-inStatementsArrayErrors.ts, 7, 7))
->x.unknownProperty : Symbol(__index, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(for-inStatementsArrayErrors.ts, 2, 8))
->unknownProperty : Symbol(__index, Decl(lib.es5.d.ts, --, --))
 }
 
 var i: number;

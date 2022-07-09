@@ -42,7 +42,5 @@ interface Attribs1 {
 >test1 : Symbol(JSX.IntrinsicElements.test1, Decl(file.tsx, 2, 30))
 >c1 : Symbol(c1, Decl(file.tsx, 16, 6))
 >x : Symbol(x, Decl(file.tsx, 16, 12))
->x.leng : Symbol(__index, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(file.tsx, 16, 12))
->leng : Symbol(__index, Decl(lib.es5.d.ts, --, --))
 
