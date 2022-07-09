@@ -42379,6 +42379,10 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                             return resolveJSDocMemberName(name, /*ignoreErrors*/ false, getSymbolOfNode(container));
                         }
                     }
+                    const container = isJSDoc ? getJSDocHost(name) : undefined;
+                    if (result && container && isEnumMember(container) && container === result.valueDeclaration) {
+                        return resolveEntityName(name, meaning, /*ignoreErrors*/ true, /* dontResolveAlias */ true, getSourceFileOfNode(container)) || result;
+                    }
                     return result;
                 }
                 else if (isPrivateIdentifier(name)) {
