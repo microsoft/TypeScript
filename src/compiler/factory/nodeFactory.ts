@@ -418,6 +418,9 @@ namespace ts {
             updateJsxSpreadAttribute,
             createJsxExpression,
             updateJsxExpression,
+            createJsxNamespacedName,
+            updateJsxNamespacedName,
+
             createCaseClause,
             updateCaseClause,
             createDefaultClause,
@@ -5047,6 +5050,26 @@ namespace ts {
         function updateJsxExpression(node: JsxExpression, expression: Expression | undefined) {
             return node.expression !== expression
                 ? update(createJsxExpression(node.dotDotDotToken, expression), node)
+                : node;
+        }
+
+        // @api
+        function createJsxNamespacedName(namespace: Identifier, name: Identifier) {
+            const node = createBaseNode<JsxNamespacedName>(SyntaxKind.JsxNamespacedName);
+            node.namespace = namespace;
+            node.name = name;
+            node.transformFlags |=
+                propagateChildFlags(node.namespace) |
+                propagateChildFlags(node.name) |
+                TransformFlags.ContainsJsx;
+            return node;
+        }
+
+        // @api
+        function updateJsxNamespacedName(node: JsxNamespacedName, namespace: Identifier, name: Identifier) {
+            return node.namespace !== namespace
+                || node.name !== name
+                ? update(createJsxNamespacedName(namespace, name), node)
                 : node;
         }
 

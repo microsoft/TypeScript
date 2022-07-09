@@ -11995,7 +11995,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
         function isTypeInvalidDueToUnionDiscriminant(contextualType: Type, obj: ObjectLiteralExpression | JsxAttributes): boolean {
             const list = obj.properties as NodeArray<ObjectLiteralElementLike | JsxAttributeLike>;
             return list.some(property => {
-                const nameType = property.name && getLiteralTypeFromPropertyName(property.name);
+                const nameType = property.name && (isJsxNamespacedName(property.name) ? getStringLiteralType(getTextOfJsxAttributeName(property.name)) : getLiteralTypeFromPropertyName(property.name));
                 const name = nameType && isTypeUsableAsPropertyName(nameType) ? getPropertyNameFromType(nameType) : undefined;
                 const expected = name === undefined ? undefined : getTypeOfPropertyOfType(contextualType, name);
                 return !!expected && isLiteralType(expected) && !isTypeAssignableTo(getTypeOfNode(property), expected);
@@ -17790,8 +17790,8 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
         function *generateJsxAttributes(node: JsxAttributes): ElaborationIterator {
             if (!length(node.properties)) return;
             for (const prop of node.properties) {
-                if (isJsxSpreadAttribute(prop) || isHyphenatedJsxName(idText(prop.name))) continue;
-                yield { errorNode: prop.name, innerExpression: prop.initializer, nameType: getStringLiteralType(idText(prop.name)) };
+                if (isJsxSpreadAttribute(prop) || isHyphenatedJsxName(getTextOfJsxAttributeName(prop.name))) continue;
+                yield { errorNode: prop.name, innerExpression: prop.initializer, nameType: getStringLiteralType(getTextOfJsxAttributeName(prop.name)) };
             }
         }
 
@@ -27195,7 +27195,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                 if (!attributesType || isTypeAny(attributesType)) {
                     return undefined;
                 }
-                return getTypeOfPropertyOfContextualType(attributesType, attribute.name.escapedText);
+                return getTypeOfPropertyOfContextualType(attributesType, getEscapedTextOfJsxAttributeName(attribute.name));
             }
             else {
                 return getContextualType(attribute.parent, contextFlags);
@@ -28247,7 +28247,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                     attributeSymbol.target = member;
                     attributesTable.set(attributeSymbol.escapedName, attributeSymbol);
                     allAttributesTable?.set(attributeSymbol.escapedName, attributeSymbol);
-                    if (attributeDecl.name.escapedText === jsxChildrenPropertyName) {
+                    if (getEscapedTextOfJsxAttributeName(attributeDecl.name) === jsxChildrenPropertyName) {
                         explicitlySpecifyChildrenAttribute = true;
                     }
                 }
@@ -44622,8 +44622,9 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                 }
 
                 const { name, initializer } = attr;
-                if (!seen.get(name.escapedText)) {
-                    seen.set(name.escapedText, true);
+                const escapedText = getEscapedTextOfJsxAttributeName(name);
+                if (!seen.get(escapedText)) {
+                    seen.set(escapedText, true);
                 }
                 else {
                     return grammarErrorOnNode(name, Diagnostics.JSX_elements_cannot_have_multiple_attributes_with_the_same_name);
@@ -44636,25 +44637,11 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
         }
 
         function checkGrammarJsxName(node: JsxTagNameExpression) {
-            if (isPropertyAccessExpression(node)) {
-                let propName: JsxTagNameExpression = node;
-                do {
-                    const check = checkGrammarJsxNestedIdentifier(propName.name);
-                    if (check) {
-                        return check;
-                    }
-                    propName = propName.expression;
-                } while (isPropertyAccessExpression(propName));
-                const check = checkGrammarJsxNestedIdentifier(propName);
-                if (check) {
-                    return check;
-                }
+            if (isPropertyAccessExpression(node) && isJsxNamespacedName(node.expression)) {
+                return grammarErrorOnNode(node.expression, Diagnostics.JSX_property_access_expressions_cannot_include_JSX_namespace_names);
             }
-
-            function checkGrammarJsxNestedIdentifier(name: MemberName | ThisExpression) {
-                if (isIdentifier(name) && idText(name).indexOf(":") !== -1) {
-                    return grammarErrorOnNode(name, Diagnostics.JSX_property_access_expressions_cannot_include_JSX_namespace_names);
-                }
+            if (isJsxNamespacedName(node) && getJSXTransformEnabled(compilerOptions) && !isIntrinsicJsxName(node.namespace.escapedText)) {
+                return grammarErrorOnNode(node, Diagnostics.React_components_cannot_include_JSX_namespace_names);
             }
         }
 

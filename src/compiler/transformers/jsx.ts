@@ -173,7 +173,7 @@ namespace ts {
                 if (isJsxSpreadAttribute(elem)) {
                     spread = true;
                 }
-                else if (spread && isJsxAttribute(elem) && elem.name.escapedText === "key") {
+                else if (spread && isJsxAttribute(elem) && isIdentifier(elem.name) && elem.name.escapedText === "key") {
                     return true;
                 }
             }
@@ -525,12 +525,15 @@ namespace ts {
                 return getTagName(node.openingElement);
             }
             else {
-                const name = node.tagName;
-                if (isIdentifier(name) && isIntrinsicJsxName(name.escapedText)) {
-                    return factory.createStringLiteral(idText(name));
+                const tagName = node.tagName;
+                if (isIdentifier(tagName) && isIntrinsicJsxName(tagName.escapedText)) {
+                    return factory.createStringLiteral(idText(tagName));
+                }
+                else if (isJsxNamespacedName(tagName)) {
+                    return factory.createStringLiteral(idText(tagName.namespace) + ":" + idText(tagName.name));
                 }
                 else {
-                    return createExpressionFromEntityName(factory, name);
+                    return createExpressionFromEntityName(factory, tagName);
                 }
             }
         }
@@ -542,13 +545,11 @@ namespace ts {
          */
         function getAttributeName(node: JsxAttribute): StringLiteral | Identifier {
             const name = node.name;
-            const text = idText(name);
-            if (/^[A-Za-z_]\w*$/.test(text)) {
-                return name;
+            if (isIdentifier(name)) {
+                const text = idText(name);
+                return (/^[A-Za-z_]\w*$/.test(text)) ? name : factory.createStringLiteral(text);
             }
-            else {
-                return factory.createStringLiteral(text);
-            }
+            return factory.createStringLiteral(idText(name.namespace) + ":" + idText(name.name));
         }
 
         function visitJsxExpression(node: JsxExpression) {

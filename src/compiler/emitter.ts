@@ -1776,6 +1776,8 @@ namespace ts {
                         return emitJsxSelfClosingElement(node as JsxSelfClosingElement);
                     case SyntaxKind.JsxFragment:
                         return emitJsxFragment(node as JsxFragment);
+                    case SyntaxKind.JsxNamespacedName:
+                        return emitJsxNamespacedName(node as JsxNamespacedName);
 
                     // Synthesized list
                     case SyntaxKind.SyntaxList:
@@ -3677,6 +3679,12 @@ namespace ts {
                     writer.decreaseIndent();
                 }
             }
+        }
+
+        function emitJsxNamespacedName(node: JsxNamespacedName) {
+            emitIdentifierName(node.namespace);
+            writePunctuation(":");
+            emitIdentifierName(node.name);
         }
 
         function emitJsxTagName(node: JsxTagNameExpression) {

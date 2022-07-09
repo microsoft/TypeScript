@@ -337,6 +337,7 @@ namespace ts {
         JsxAttributes,
         JsxSpreadAttribute,
         JsxExpression,
+        JsxNamespacedName,
 
         // Clauses
         CaseClause,
@@ -2678,15 +2679,23 @@ namespace ts {
         | Identifier
         | ThisExpression
         | JsxTagNamePropertyAccess
+        | JsxNamespacedName
         ;
 
     export interface JsxTagNamePropertyAccess extends PropertyAccessExpression {
         readonly expression: JsxTagNameExpression;
     }
 
-    export interface JsxAttributes extends ObjectLiteralExpressionBase<JsxAttributeLike> {
+    export interface JsxAttributes extends PrimaryExpression, Declaration {
+        readonly properties: NodeArray<JsxAttributeLike>;
         readonly kind: SyntaxKind.JsxAttributes;
         readonly parent: JsxOpeningLikeElement;
+    }
+
+    export interface JsxNamespacedName extends PrimaryExpression {
+        readonly kind: SyntaxKind.JsxNamespacedName;
+        readonly name: Identifier;
+        readonly namespace: Identifier;
     }
 
     /// The opening element of a <Tag>...</Tag> JsxElement
@@ -2726,10 +2735,10 @@ namespace ts {
         readonly parent: JsxFragment;
     }
 
-    export interface JsxAttribute extends ObjectLiteralElement {
+    export interface JsxAttribute extends Declaration {
         readonly kind: SyntaxKind.JsxAttribute;
         readonly parent: JsxAttributes;
-        readonly name: Identifier;
+        readonly name: Identifier | JsxNamespacedName;
         /// JSX attribute initializers are optional; <X y /> is sugar for <X y={true} />
         readonly initializer?: JsxAttributeValue;
     }
@@ -2743,6 +2752,7 @@ namespace ts {
 
     export interface JsxSpreadAttribute extends ObjectLiteralElement {
         readonly kind: SyntaxKind.JsxSpreadAttribute;
+        readonly name: PropertyName;
         readonly parent: JsxAttributes;
         readonly expression: Expression;
     }
@@ -7866,14 +7876,16 @@ namespace ts {
         createJsxOpeningFragment(): JsxOpeningFragment;
         createJsxJsxClosingFragment(): JsxClosingFragment;
         updateJsxFragment(node: JsxFragment, openingFragment: JsxOpeningFragment, children: readonly JsxChild[], closingFragment: JsxClosingFragment): JsxFragment;
-        createJsxAttribute(name: Identifier, initializer: JsxAttributeValue | undefined): JsxAttribute;
-        updateJsxAttribute(node: JsxAttribute, name: Identifier, initializer: JsxAttributeValue | undefined): JsxAttribute;
+        createJsxAttribute(name: Identifier | JsxNamespacedName, initializer: JsxAttributeValue | undefined): JsxAttribute;
+        updateJsxAttribute(node: JsxAttribute, name: Identifier | JsxNamespacedName, initializer: JsxAttributeValue | undefined): JsxAttribute;
         createJsxAttributes(properties: readonly JsxAttributeLike[]): JsxAttributes;
         updateJsxAttributes(node: JsxAttributes, properties: readonly JsxAttributeLike[]): JsxAttributes;
         createJsxSpreadAttribute(expression: Expression): JsxSpreadAttribute;
         updateJsxSpreadAttribute(node: JsxSpreadAttribute, expression: Expression): JsxSpreadAttribute;
         createJsxExpression(dotDotDotToken: DotDotDotToken | undefined, expression: Expression | undefined): JsxExpression;
         updateJsxExpression(node: JsxExpression, expression: Expression | undefined): JsxExpression;
+        createJsxNamespacedName(namespace: Identifier, name: Identifier): JsxNamespacedName;
+        updateJsxNamespacedName(node: JsxNamespacedName, namespace: Identifier, name: Identifier): JsxNamespacedName;
 
         //
         // Clauses

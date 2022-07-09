@@ -573,7 +573,9 @@ namespace ts {
                     visitNode(cbNode, (node as JsxExpression).expression);
             case SyntaxKind.JsxClosingElement:
                 return visitNode(cbNode, (node as JsxClosingElement).tagName);
-
+            case SyntaxKind.JsxNamespacedName:
+                return visitNode(cbNode, (node as JsxNamespacedName).namespace) ||
+                    visitNode(cbNode, (node as JsxNamespacedName).name);
             case SyntaxKind.OptionalType:
             case SyntaxKind.RestType:
             case SyntaxKind.JSDocTypeExpression:
@@ -5484,18 +5486,29 @@ namespace ts {
 
         function parseJsxElementName(): JsxTagNameExpression {
             const pos = getNodePos();
-            scanJsxIdentifier();
             // JsxElement can have name in the form of
             //      propertyAccessExpression
             //      primaryExpression in the form of an identifier and "this" keyword
             // We can't just simply use parseLeftHandSideExpressionOrHigher because then we will start consider class,function etc as a keyword
             // We only want to consider "this" as a primaryExpression
-            let expression: JsxTagNameExpression = token() === SyntaxKind.ThisKeyword ?
-                parseTokenNode<ThisExpression>() : parseIdentifierName();
+            let expression: JsxTagNameExpression = parseJsxTagName();
             while (parseOptional(SyntaxKind.DotToken)) {
                 expression = finishNode(factory.createPropertyAccessExpression(expression, parseRightSideOfDot(/*allowIdentifierNames*/ true, /*allowPrivateIdentifiers*/ false)), pos) as JsxTagNamePropertyAccess;
             }
             return expression;
+        }
+
+        function parseJsxTagName(): Identifier | JsxNamespacedName | ThisExpression {
+            const pos = getNodePos();
+            scanJsxIdentifier();
+
+            const isThis = token() === SyntaxKind.ThisKeyword;
+            const tagName = parseIdentifierName();
+            if (parseOptional(SyntaxKind.ColonToken)) {
+                scanJsxIdentifier();
+                return finishNode(factory.createJsxNamespacedName(tagName, parseIdentifierName()), pos);
+            }
+            return isThis ? finishNode(factory.createToken(SyntaxKind.ThisKeyword), pos) : tagName;
         }
 
         function parseJsxExpression(inExpressionContext: boolean): JsxExpression | undefined {
@@ -5530,9 +5543,8 @@ namespace ts {
                 return parseJsxSpreadAttribute();
             }
 
-            scanJsxIdentifier();
             const pos = getNodePos();
-            return finishNode(factory.createJsxAttribute(parseIdentifierName(), parseJsxAttributeValue()), pos);
+            return finishNode(factory.createJsxAttribute(parseJsxAttributeName(), parseJsxAttributeValue()), pos);
         }
 
         function parseJsxAttributeValue(): JsxAttributeValue | undefined {
@@ -5549,6 +5561,18 @@ namespace ts {
                 parseErrorAtCurrentToken(Diagnostics.or_JSX_element_expected);
             }
             return undefined;
+        }
+
+        function parseJsxAttributeName() {
+            const pos = getNodePos();
+            scanJsxIdentifier();
+
+            const attrName = parseIdentifierName();
+            if (parseOptional(SyntaxKind.ColonToken)) {
+                scanJsxIdentifier();
+                return finishNode(factory.createJsxNamespacedName(attrName, parseIdentifierName()), pos);
+            }
+            return attrName;
         }
 
         function parseJsxSpreadAttribute(): JsxSpreadAttribute {
@@ -9758,6 +9782,11 @@ namespace ts {
 
         if (lhs.kind === SyntaxKind.ThisKeyword) {
             return true;
+        }
+
+        if (lhs.kind === SyntaxKind.JsxNamespacedName) {
+            return lhs.namespace.escapedText === (rhs as JsxNamespacedName).namespace.escapedText &&
+                lhs.name.escapedText === (rhs as JsxNamespacedName).name.escapedText;
         }
 
         // If we are at this statement then we must have PropertyAccessExpression and because tag name in Jsx element can only

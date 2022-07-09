@@ -2349,7 +2349,6 @@ namespace ts {
                 // everything after it to the token
                 // Do note that this means that `scanJsxIdentifier` effectively _mutates_ the visible token without advancing to a new token
                 // Any caller should be expecting this behavior and should only read the pos or token value after calling it.
-                let namespaceSeparator = false;
                 while (pos < end) {
                     const ch = text.charCodeAt(pos);
                     if (ch === CharacterCodes.minus) {
@@ -2357,23 +2356,11 @@ namespace ts {
                         pos++;
                         continue;
                     }
-                    else if (ch === CharacterCodes.colon && !namespaceSeparator) {
-                        tokenValue += ":";
-                        pos++;
-                        namespaceSeparator = true;
-                        token = SyntaxKind.Identifier; // swap from keyword kind to identifier kind
-                        continue;
-                    }
                     const oldPos = pos;
                     tokenValue += scanIdentifierParts(); // reuse `scanIdentifierParts` so unicode escapes are handled
                     if (pos === oldPos) {
                         break;
                     }
-                }
-                // Do not include a trailing namespace separator in the token, since this is against the spec.
-                if (tokenValue.slice(-1) === ":") {
-                    tokenValue = tokenValue.slice(0, -1);
-                    pos--;
                 }
                 return getIdentifierToken();
             }

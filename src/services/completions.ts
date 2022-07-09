@@ -3730,7 +3730,7 @@ namespace ts.Completions {
                 }
 
                 if (attr.kind === SyntaxKind.JsxAttribute) {
-                    seenNames.add(attr.name.escapedText);
+                    seenNames.add(getEscapedTextOfJsxAttributeName(attr.name));
                 }
                 else if (isJsxSpreadAttribute(attr)) {
                     setMembersDeclaredBySpreadAssignment(attr, membersDeclaredBySpreadAssignment);

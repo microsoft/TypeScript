@@ -721,6 +721,10 @@ namespace ts {
         return node.kind === SyntaxKind.JsxExpression;
     }
 
+    export function isJsxNamespacedName(node: Node): node is JsxNamespacedName {
+        return node.kind === SyntaxKind.JsxNamespacedName;
+    }
+
     // Clauses
 
     export function isCaseClause(node: Node): node is CaseClause {

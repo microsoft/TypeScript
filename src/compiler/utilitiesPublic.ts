@@ -1554,6 +1554,7 @@ namespace ts {
             case SyntaxKind.JsxElement:
             case SyntaxKind.JsxSelfClosingElement:
             case SyntaxKind.JsxFragment:
+            case SyntaxKind.JsxNamespacedName:
             case SyntaxKind.TaggedTemplateExpression:
             case SyntaxKind.ArrayLiteralExpression:
             case SyntaxKind.ParenthesizedExpression:
@@ -1897,7 +1898,8 @@ namespace ts {
         const kind = node.kind;
         return kind === SyntaxKind.ThisKeyword
             || kind === SyntaxKind.Identifier
-            || kind === SyntaxKind.PropertyAccessExpression;
+            || kind === SyntaxKind.PropertyAccessExpression
+            || kind === SyntaxKind.JsxNamespacedName;
     }
 
     /* @internal */

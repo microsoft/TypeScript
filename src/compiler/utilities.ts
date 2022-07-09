@@ -1031,6 +1031,8 @@ namespace ts {
                 }
             case SyntaxKind.JSDocMemberName:
                 return entityNameToString(name.left) + entityNameToString(name.right);
+            case SyntaxKind.JsxNamespacedName:
+                return entityNameToString(name.namespace) + ":" + entityNameToString(name.name);
             default:
                 return Debug.assertNever(name);
         }
@@ -7744,5 +7746,13 @@ namespace ts {
 
     export function getParameterTypeNode(parameter: ParameterDeclaration | JSDocParameterTag) {
         return parameter.kind === SyntaxKind.JSDocParameterTag ? parameter.typeExpression?.type : parameter.type;
+    }
+
+    export function getEscapedTextOfJsxAttributeName(node: Identifier | JsxNamespacedName): __String {
+        return isIdentifier(node) ? node.escapedText : (getEscapedTextOfJsxAttributeName(node.namespace) + ":" + getEscapedTextOfJsxAttributeName(node.name)) as __String;
+    }
+
+    export function getTextOfJsxAttributeName(node: Identifier | JsxNamespacedName): string {
+        return isIdentifier(node) ? idText(node) : getTextOfJsxAttributeName(node.namespace) + ":" + getTextOfJsxAttributeName(node.name);
     }
 }
