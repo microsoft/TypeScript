@@ -850,6 +850,9 @@ namespace ts {
                 case SyntaxKind.BindingElement:
                     bindBindingElementFlow(node as BindingElement);
                     break;
+                case SyntaxKind.Parameter:
+                    bindParameterFlow(node as ParameterDeclaration);
+                    break;
                 case SyntaxKind.ObjectLiteralExpression:
                 case SyntaxKind.ArrayLiteralExpression:
                 case SyntaxKind.PropertyAssignment:
@@ -1655,31 +1658,42 @@ namespace ts {
         }
 
         function bindBindingElementFlow(node: BindingElement) {
-            const preBindingElementFlow = currentFlow;
-            if (isBindingPattern(node.name)) {
-                // When evaluating a binding pattern, the initializer is evaluated before the binding pattern, per:
-                // - https://tc39.es/ecma262/#sec-destructuring-binding-patterns-runtime-semantics-iteratorbindinginitialization
-                //   - `BindingElement: BindingPattern Initializer?`
-                // - https://tc39.es/ecma262/#sec-runtime-semantics-keyedbindinginitialization
-                //   - `BindingElement: BindingPattern Initializer?`
-                bind(node.dotDotDotToken);
-                bind(node.propertyName);
-                bind(node.initializer);
-                bind(node.name);
-            }
-            else {
-                bindEachChild(node);
-            }
+            bindOptionalFlow(() => {
+                if (isBindingPattern(node.name)) {
+                    // When evaluating a binding pattern, the initializer is evaluated before the binding pattern, per:
+                    // - https://tc39.es/ecma262/#sec-destructuring-binding-patterns-runtime-semantics-iteratorbindinginitialization
+                    //   - `BindingElement: BindingPattern Initializer?`
+                    // - https://tc39.es/ecma262/#sec-runtime-semantics-keyedbindinginitialization
+                    //   - `BindingElement: BindingPattern Initializer?`
+                    bind(node.dotDotDotToken);
+                    bind(node.propertyName);
+                    bind(node.initializer);
+                    bind(node.name);
+                }
+                else {
+                    bindEachChild(node);
+                }
+            });
+        }
 
-            // a BindingElement does not have side effects if initializers are not evaluated and used. (see GH#49759)
-            const postBindingElementLabel = createBranchLabel();
-            if (preBindingElementFlow !== unreachableFlow) {
-                addAntecedent(postBindingElementLabel, preBindingElementFlow);
+        function bindParameterFlow(node: ParameterDeclaration) {
+            bindOptionalFlow(() => {
+                bindEachChild(node);
+            });
+        }
+
+        // a BindingElement/Parameter does not have side effects if initializers are not evaluated and used. (see GH#49759)
+        function bindOptionalFlow(cb: () => void) {
+            const entryFlow = currentFlow;
+            cb();
+            const exitFlow = createBranchLabel();
+            if (entryFlow !== unreachableFlow) {
+                addAntecedent(exitFlow, entryFlow);
             }
-            if (postBindingElementLabel !== unreachableFlow) {
-                addAntecedent(postBindingElementLabel, currentFlow);
+            if (exitFlow !== unreachableFlow) {
+                addAntecedent(exitFlow, currentFlow);
             }
-            currentFlow = finishFlowLabel(postBindingElementLabel);
+            currentFlow = finishFlowLabel(exitFlow);
         }
 
         function bindJSDocTypeAlias(node: JSDocTypedefTag | JSDocCallbackTag | JSDocEnumTag) {
