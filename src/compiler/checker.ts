@@ -2210,7 +2210,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
             // 1. When result is undefined, after checking for a missing "this."
             // 2. When result is defined
             function checkAndReportErrorForInvalidInitializer() {
-                if (propertyWithInvalidInitializer && !(getEmitScriptTarget(compilerOptions) === ScriptTarget.ESNext && useDefineForClassFields)) {
+                if (propertyWithInvalidInitializer && !useDefineForClassFields) {
                     // We have a match, but the reference occurred within a property initializer and the identifier also binds
                     // to a local variable in the constructor where the code will be emitted. Note that this is actually allowed
                     // with ESNext+useDefineForClassFields because the scope semantics are different.

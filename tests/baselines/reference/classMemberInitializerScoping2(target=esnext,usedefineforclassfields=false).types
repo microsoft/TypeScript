@@ -1,0 +1,16 @@
+=== tests/cases/compiler/classMemberInitializerScoping2.ts ===
+const x = 1
+>x : 1
+>1 : 1
+
+class C {
+>C : C
+
+    p = x
+>p : any
+>x : any
+
+    constructor(x: string) { }
+>x : string
+}
+
