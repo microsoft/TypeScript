@@ -4,5 +4,5 @@ interface ObjectConstructor {
      * @param o An object.
      * @param v A property name.
      */
-    hasOwn(o: object, v: PropertyKey): boolean;
+    hasOwn(o: {}, v: PropertyKey): boolean;
 }

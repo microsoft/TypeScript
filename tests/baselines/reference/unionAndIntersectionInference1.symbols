@@ -272,9 +272,9 @@ const assign = <T, U>(a: T, b: U) => Object.assign(a, b);
 >T : Symbol(T, Decl(unionAndIntersectionInference1.ts, 94, 16))
 >b : Symbol(b, Decl(unionAndIntersectionInference1.ts, 94, 27))
 >U : Symbol(U, Decl(unionAndIntersectionInference1.ts, 94, 18))
->Object.assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Object.assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >a : Symbol(a, Decl(unionAndIntersectionInference1.ts, 94, 22))
 >b : Symbol(b, Decl(unionAndIntersectionInference1.ts, 94, 27))
 

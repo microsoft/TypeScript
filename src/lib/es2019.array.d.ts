@@ -6,7 +6,6 @@ type FlatArray<Arr, Depth extends number> = {
 }[Depth extends -1 ? "done" : "recur"];
 
 interface ReadonlyArray<T> {
-
     /**
      * Calls a defined callback function on each element of an array. Then, flattens the result into
      * a new array.
@@ -17,11 +16,7 @@ interface ReadonlyArray<T> {
      * @param thisArg An object to which the this keyword can refer in the callback function. If
      * thisArg is omitted, undefined is used as the this value.
      */
-    flatMap<U, This = undefined> (
-        callback: (this: This, value: T, index: number, array: T[]) => U | ReadonlyArray<U>,
-        thisArg?: This
-    ): U[]
-
+    flatMap<U>(callback: (value: T, index: number, array: T[]) => U | ReadonlyArray<U>, thisArg?: any): U[]
 
     /**
      * Returns a new array with all sub-array elements concatenated into it recursively up to the
@@ -29,14 +24,10 @@ interface ReadonlyArray<T> {
      *
      * @param depth The maximum recursion depth
      */
-    flat<A, D extends number = 1>(
-        this: A,
-        depth?: D
-    ): FlatArray<A, D>[]
+    flat<A, D extends number = 1>(this: A, depth?: D): FlatArray<A, D>[]
   }
 
 interface Array<T> {
-
     /**
      * Calls a defined callback function on each element of an array. Then, flattens the result into
      * a new array.
@@ -47,10 +38,7 @@ interface Array<T> {
      * @param thisArg An object to which the this keyword can refer in the callback function. If
      * thisArg is omitted, undefined is used as the this value.
      */
-    flatMap<U, This = undefined> (
-        callback: (this: This, value: T, index: number, array: T[]) => U | ReadonlyArray<U>,
-        thisArg?: This
-    ): U[]
+    flatMap<U> (callback: (value: T, index: number, array: T[]) => U | ReadonlyArray<U>, thisArg?: any): U[]
 
     /**
      * Returns a new array with all sub-array elements concatenated into it recursively up to the
@@ -58,8 +46,5 @@ interface Array<T> {
      *
      * @param depth The maximum recursion depth
      */
-    flat<A, D extends number = 1>(
-        this: A,
-        depth?: D
-    ): FlatArray<A, D>[]
+    flat<A, D extends number = 1>(this: A, depth?: D): FlatArray<A, D>[]
 }

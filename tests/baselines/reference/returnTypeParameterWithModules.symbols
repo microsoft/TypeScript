@@ -13,11 +13,11 @@ module M1 {
 
         return Array.prototype.reduce.apply(ar, e ? [f, e] : [f]);
 >Array.prototype.reduce.apply : Symbol(Function.apply, Decl(lib.es5.d.ts, --, --))
->Array.prototype.reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array.prototype.reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Array.prototype : Symbol(ArrayConstructor.prototype, Decl(lib.es5.d.ts, --, --))
 >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >prototype : Symbol(ArrayConstructor.prototype, Decl(lib.es5.d.ts, --, --))
->reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >apply : Symbol(Function.apply, Decl(lib.es5.d.ts, --, --))
 >ar : Symbol(ar, Decl(returnTypeParameterWithModules.ts, 1, 30))
 >e : Symbol(e, Decl(returnTypeParameterWithModules.ts, 1, 36))

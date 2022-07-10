@@ -9,9 +9,9 @@ function setFunc(v){}
 
 Object.defineProperty({}, "0", <PropertyDescriptor>({
 >Object.defineProperty({}, "0", <PropertyDescriptor>({          get: getFunc,          set: setFunc,          configurable: true      })) : {}
->Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>Object.defineProperty : <T extends object>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >Object : ObjectConstructor
->defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>defineProperty : <T extends object>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >{} : {}
 >"0" : "0"
 ><PropertyDescriptor>({          get: getFunc,          set: setFunc,          configurable: true      }) : PropertyDescriptor

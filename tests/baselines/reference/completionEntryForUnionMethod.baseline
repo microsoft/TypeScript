@@ -3326,170 +3326,6 @@
               "kind": "keyword"
             },
             {
-              "text": ")",
-              "kind": "punctuation"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "string",
-              "kind": "keyword"
-            },
-            {
-              "text": ";",
-              "kind": "punctuation"
-            },
-            {
-              "text": "\n",
-              "kind": "lineBreak"
-            },
-            {
-              "text": "    ",
-              "kind": "space"
-            },
-            {
-              "text": "(",
-              "kind": "punctuation"
-            },
-            {
-              "text": "callbackfn",
-              "kind": "parameterName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "(",
-              "kind": "punctuation"
-            },
-            {
-              "text": "previousValue",
-              "kind": "parameterName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "string",
-              "kind": "keyword"
-            },
-            {
-              "text": ",",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "currentValue",
-              "kind": "parameterName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "string",
-              "kind": "keyword"
-            },
-            {
-              "text": ",",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "currentIndex",
-              "kind": "parameterName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "number",
-              "kind": "keyword"
-            },
-            {
-              "text": ",",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "array",
-              "kind": "parameterName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "string",
-              "kind": "keyword"
-            },
-            {
-              "text": "[",
-              "kind": "punctuation"
-            },
-            {
-              "text": "]",
-              "kind": "punctuation"
-            },
-            {
-              "text": ")",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "=>",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "string",
-              "kind": "keyword"
-            },
-            {
               "text": ",",
               "kind": "punctuation"
             },
@@ -3500,6 +3336,10 @@
             {
               "text": "initialValue",
               "kind": "parameterName"
+            },
+            {
+              "text": "?",
+              "kind": "punctuation"
             },
             {
               "text": ":",
@@ -4062,170 +3902,6 @@
               "kind": "keyword"
             },
             {
-              "text": ")",
-              "kind": "punctuation"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "string",
-              "kind": "keyword"
-            },
-            {
-              "text": ";",
-              "kind": "punctuation"
-            },
-            {
-              "text": "\n",
-              "kind": "lineBreak"
-            },
-            {
-              "text": "    ",
-              "kind": "space"
-            },
-            {
-              "text": "(",
-              "kind": "punctuation"
-            },
-            {
-              "text": "callbackfn",
-              "kind": "parameterName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "(",
-              "kind": "punctuation"
-            },
-            {
-              "text": "previousValue",
-              "kind": "parameterName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "string",
-              "kind": "keyword"
-            },
-            {
-              "text": ",",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "currentValue",
-              "kind": "parameterName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "string",
-              "kind": "keyword"
-            },
-            {
-              "text": ",",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "currentIndex",
-              "kind": "parameterName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "number",
-              "kind": "keyword"
-            },
-            {
-              "text": ",",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "array",
-              "kind": "parameterName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "string",
-              "kind": "keyword"
-            },
-            {
-              "text": "[",
-              "kind": "punctuation"
-            },
-            {
-              "text": "]",
-              "kind": "punctuation"
-            },
-            {
-              "text": ")",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "=>",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "string",
-              "kind": "keyword"
-            },
-            {
               "text": ",",
               "kind": "punctuation"
             },
@@ -4236,6 +3912,10 @@
             {
               "text": "initialValue",
               "kind": "parameterName"
+            },
+            {
+              "text": "?",
+              "kind": "punctuation"
             },
             {
               "text": ":",
@@ -5633,7 +5313,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "Function used to determine the order of the elements. It is expected to return\r\na negative value if the first argument is less than the second argument, zero if they're equal, and a positive\r\nvalue otherwise. If omitted, the elements are sorted in ascending, ASCII character order.\r\n```ts\r\n[11,2,22,1].sort((a, b) => a - b)\r\n```",
+                  "text": "Function used to determine the order of the elements. It is expected to return\r\na negative value if the first argument is less than the second argument, zero if they're equal, and a positive\r\nvalue otherwise. If omitted, the elements are sorted in ascending, ASCII character order.\r\n```ts\r\n[11, 2, 22, 1].sort((a, b) => a - b)\r\n```",
                   "kind": "text"
                 }
               ]
@@ -5830,7 +5510,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "The zero-based location in the array from which to start removing elements.",
+                  "text": "The zero-based index in the array from which to start removing elements.",
                   "kind": "text"
                 }
               ]

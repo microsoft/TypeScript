@@ -75,10 +75,10 @@ const intersectDictionaries = <F1 extends Dictionary, F2 extends Dictionary>(
 >d2 : F2
 
 ): F1 & F2 => Object.assign({}, d1, d2);
->Object.assign({}, d1, d2) : {} & F1 & F2
->Object.assign : { <T extends {}, U>(target: T, source: U): T & U; <T extends {}, U, V>(target: T, source1: U, source2: V): T & U & V; <T extends {}, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W; (target: object, ...sources: any[]): any; }
+>Object.assign({}, d1, d2) : Writable<F1> & Writable<F2>
+>Object.assign : { <T extends {}>(target: T): T; <T extends {}, U>(target: T, source: U): T & Writable<U>; <T extends {}, U, V>(target: T, source1: U, source2: V): T & Writable<U> & Writable<V>; <T extends {}, U, V, W>(target: T, source1: U, source2: V, source3: W): T & Writable<U> & Writable<V> & Writable<W>; (target: {}, ...sources: any[]): any; }
 >Object : ObjectConstructor
->assign : { <T extends {}, U>(target: T, source: U): T & U; <T extends {}, U, V>(target: T, source1: U, source2: V): T & U & V; <T extends {}, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W; (target: object, ...sources: any[]): any; }
+>assign : { <T extends {}>(target: T): T; <T extends {}, U>(target: T, source: U): T & Writable<U>; <T extends {}, U, V>(target: T, source1: U, source2: V): T & Writable<U> & Writable<V>; <T extends {}, U, V, W>(target: T, source1: U, source2: V, source3: W): T & Writable<U> & Writable<V> & Writable<W>; (target: {}, ...sources: any[]): any; }
 >{} : {}
 >d1 : F1
 >d2 : F2

@@ -241,22 +241,22 @@ const func = <T>() => {};
 ><T>() => {} : <T>() => void
 
 const assign = <T, U>(a: T, b: U) => Object.assign(a, b);
->assign : <T, U>(a: T, b: U) => T & U
-><T, U>(a: T, b: U) => Object.assign(a, b) : <T, U>(a: T, b: U) => T & U
+>assign : <T, U>(a: T, b: U) => T & Writable<U>
+><T, U>(a: T, b: U) => Object.assign(a, b) : <T, U>(a: T, b: U) => T & Writable<U>
 >a : T
 >b : U
->Object.assign(a, b) : T & U
->Object.assign : { <T extends {}, U>(target: T, source: U): T & U; <T extends {}, U, V>(target: T, source1: U, source2: V): T & U & V; <T extends {}, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W; (target: object, ...sources: any[]): any; }
+>Object.assign(a, b) : T & Writable<U>
+>Object.assign : { <T extends {}>(target: T): T; <T extends {}, U>(target: T, source: U): T & Writable<U>; <T extends {}, U, V>(target: T, source1: U, source2: V): T & Writable<U> & Writable<V>; <T extends {}, U, V, W>(target: T, source1: U, source2: V, source3: W): T & Writable<U> & Writable<V> & Writable<W>; (target: {}, ...sources: any[]): any; }
 >Object : ObjectConstructor
->assign : { <T extends {}, U>(target: T, source: U): T & U; <T extends {}, U, V>(target: T, source1: U, source2: V): T & U & V; <T extends {}, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W; (target: object, ...sources: any[]): any; }
+>assign : { <T extends {}>(target: T): T; <T extends {}, U>(target: T, source: U): T & Writable<U>; <T extends {}, U, V>(target: T, source1: U, source2: V): T & Writable<U> & Writable<V>; <T extends {}, U, V, W>(target: T, source1: U, source2: V, source3: W): T & Writable<U> & Writable<V> & Writable<W>; (target: {}, ...sources: any[]): any; }
 >a : T
 >b : U
 
 const res: (() => void) & { func: any } = assign(() => {}, { func });
 >res : (() => void) & { func: any; }
 >func : any
->assign(() => {}, { func }) : (() => void) & { func: <T>() => void; }
->assign : <T, U>(a: T, b: U) => T & U
+>assign(() => {}, { func }) : (() => void) & Writable<{ func: <T>() => void; }>
+>assign : <T, U>(a: T, b: U) => T & Writable<U>
 >() => {} : () => void
 >{ func } : { func: <T>() => void; }
 >func : <T>() => void

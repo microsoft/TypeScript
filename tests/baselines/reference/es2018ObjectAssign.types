@@ -1,10 +1,10 @@
 === tests/cases/compiler/es2018ObjectAssign.ts ===
 const test = Object.assign({}, { test: true });
->test : { test: boolean; }
->Object.assign({}, { test: true }) : { test: boolean; }
->Object.assign : { <T extends {}, U>(target: T, source: U): T & U; <T extends {}, U, V>(target: T, source1: U, source2: V): T & U & V; <T extends {}, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W; (target: object, ...sources: any[]): any; }
+>test : Writable<{ test: boolean; }>
+>Object.assign({}, { test: true }) : Writable<{ test: boolean; }>
+>Object.assign : { <T extends {}>(target: T): T; <T extends {}, U>(target: T, source: U): T & Writable<U>; <T extends {}, U, V>(target: T, source1: U, source2: V): T & Writable<U> & Writable<V>; <T extends {}, U, V, W>(target: T, source1: U, source2: V, source3: W): T & Writable<U> & Writable<V> & Writable<W>; (target: {}, ...sources: any[]): any; }
 >Object : ObjectConstructor
->assign : { <T extends {}, U>(target: T, source: U): T & U; <T extends {}, U, V>(target: T, source1: U, source2: V): T & U & V; <T extends {}, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W; (target: object, ...sources: any[]): any; }
+>assign : { <T extends {}>(target: T): T; <T extends {}, U>(target: T, source: U): T & Writable<U>; <T extends {}, U, V>(target: T, source1: U, source2: V): T & Writable<U> & Writable<V>; <T extends {}, U, V, W>(target: T, source1: U, source2: V, source3: W): T & Writable<U> & Writable<V> & Writable<W>; (target: {}, ...sources: any[]): any; }
 >{} : {}
 >{ test: true } : { test: true; }
 >test : true

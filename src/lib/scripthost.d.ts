@@ -175,7 +175,7 @@ declare var WScript: {
 
     /**
      * Creates a COM object.
-     * @param strProgiID
+     * @param strProgID
      * @param strPrefix Function names in the form prefix_event will be bound to this object's COM events.
      */
     CreateObject(strProgID: string, strPrefix?: string): any;
@@ -277,9 +277,9 @@ interface VBArray<T = any> {
     ubound(dimension?: number): number;
 
     /**
-     * Returns a Javascript array with all the elements in the VBArray. If there are multiple dimensions,
+     * Returns a JavaScript array with all the elements in the VBArray. If there are multiple dimensions,
      * each successive dimension is appended to the end of the array.
-     * Example: [[1,2,3],[4,5,6]] becomes [1,2,3,4,5,6]
+     * Example: [[1, 2, 3], [4, 5, 6]] becomes [1, 2, 3, 4, 5, 6]
      */
     toArray(): T[];
 }

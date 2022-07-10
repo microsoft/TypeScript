@@ -8,7 +8,17 @@ interface Array<T> {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    find<S extends T>(predicate: (this: void, value: T, index: number, obj: T[]) => value is S, thisArg?: any): S | undefined;
+    find<S extends T>(predicate: (value: T, index: number, obj: T[]) => value is S, thisArg?: any): S | undefined;
+
+    /**
+     * Returns the value of the first element in the array where predicate is true, and undefined
+     * otherwise.
+     * @param predicate find calls predicate once for each element of the array, in ascending
+     * order, until it finds one where predicate returns true. If such an element is found, find
+     * immediately returns that element value. Otherwise, find returns undefined.
+     * @param thisArg If provided, it will be used as the this value for each invocation of
+     * predicate. If it is not provided, undefined is used instead.
+     */
     find(predicate: (value: T, index: number, obj: T[]) => unknown, thisArg?: any): T | undefined;
 
     /**
@@ -26,19 +36,19 @@ interface Array<T> {
      * Changes all array elements from `start` to `end` index to a static `value` and returns the modified array
      * @param value value to fill array section with
      * @param start index to start filling the array at. If start is negative, it is treated as
-     * length+start where length is the length of the array.
+     * length + start where length is the length of the array.
      * @param end index to stop filling the array at. If end is negative, it is treated as
-     * length+end.
+     * length + end.
      */
     fill(value: T, start?: number, end?: number): this;
 
     /**
      * Returns the this object after copying a section of the array identified by start and end
      * to the same array starting at position target
-     * @param target If target is negative, it is treated as length+target where length is the
+     * @param target If target is negative, it is treated as length + target where length is the
      * length of the array.
-     * @param start If start is negative, it is treated as length+start. If end is negative, it
-     * is treated as length+end.
+     * @param start If start is negative, it is treated as length + start. If end is negative, it
+     * is treated as length + end.
      * @param end If not specified, length of the this object is used as its default value.
      */
     copyWithin(target: number, start: number, end?: number): this;
@@ -46,24 +56,24 @@ interface Array<T> {
 
 interface ArrayConstructor {
     /**
-     * Creates an array from an array-like object.
-     * @param arrayLike An array-like object to convert to an array.
+     * Creates an array from an array-like or iterable object.
+     * @param source An array-like or iterable object to convert to an array.
      */
-    from<T>(arrayLike: ArrayLike<T>): T[];
+    from<T>(source: ArrayLike<T>): T[];
 
     /**
-     * Creates an array from an iterable object.
-     * @param arrayLike An array-like object to convert to an array.
+     * Creates an array from an array-like or iterable object.
+     * @param source An array-like or iterable object to convert to an array.
      * @param mapfn A mapping function to call on every element of the array.
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
-    from<T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[];
+    from<T, U>(source: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[];
 
     /**
      * Returns a new array from a set of elements.
      * @param items A set of elements to include in the new array object.
      */
-    of<T>(...items: T[]): T[];
+    of<T extends any[]>(...items: T): T;
 }
 
 interface DateConstructor {
@@ -194,7 +204,7 @@ interface NumberConstructor {
     /**
      * The value of Number.EPSILON is the difference between 1 and the smallest value greater than 1
      * that is representable as a Number value, which is approximately:
-     * 2.2204460492503130808472633361816 x 10‍−‍16.
+     * 2.2204460492503130808472633361816E−‍16 (2^-52).
      */
     readonly EPSILON: number;
 
@@ -229,14 +239,14 @@ interface NumberConstructor {
     /**
      * The value of the largest integer n such that n and n + 1 are both exactly representable as
      * a Number value.
-     * The value of Number.MAX_SAFE_INTEGER is 9007199254740991 2^53 − 1.
+     * The value of Number.MAX_SAFE_INTEGER is 9007199254740991 (2^53 − 1).
      */
     readonly MAX_SAFE_INTEGER: number;
 
     /**
      * The value of the smallest integer n such that n and n − 1 are both exactly representable as
      * a Number value.
-     * The value of Number.MIN_SAFE_INTEGER is −9007199254740991 (−(2^53 − 1)).
+     * The value of Number.MIN_SAFE_INTEGER is −9007199254740991 (−2^53 + 1).
      */
     readonly MIN_SAFE_INTEGER: number;
 
@@ -261,9 +271,16 @@ interface ObjectConstructor {
      * Copy the values of all of the enumerable own properties from one or more source objects to a
      * target object. Returns the target object.
      * @param target The target object to copy to.
+     */
+    assign<T extends {}>(target: T): T;
+
+    /**
+     * Copy the values of all of the enumerable own properties from one or more source objects to a
+     * target object. Returns the target object.
+     * @param target The target object to copy to.
      * @param source The source object from which to copy properties.
      */
-    assign<T extends {}, U>(target: T, source: U): T & U;
+    assign<T extends {}, U>(target: T, source: U): T & Writable<U>;
 
     /**
      * Copy the values of all of the enumerable own properties from one or more source objects to a
@@ -272,7 +289,7 @@ interface ObjectConstructor {
      * @param source1 The first source object from which to copy properties.
      * @param source2 The second source object from which to copy properties.
      */
-    assign<T extends {}, U, V>(target: T, source1: U, source2: V): T & U & V;
+    assign<T extends {}, U, V>(target: T, source1: U, source2: V): T & Writable<U> & Writable<V>;
 
     /**
      * Copy the values of all of the enumerable own properties from one or more source objects to a
@@ -282,21 +299,21 @@ interface ObjectConstructor {
      * @param source2 The second source object from which to copy properties.
      * @param source3 The third source object from which to copy properties.
      */
-    assign<T extends {}, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W;
+    assign<T extends {}, U, V, W>(target: T, source1: U, source2: V, source3: W): T & Writable<U> & Writable<V> & Writable<W>;
 
     /**
      * Copy the values of all of the enumerable own properties from one or more source objects to a
      * target object. Returns the target object.
      * @param target The target object to copy to.
-     * @param sources One or more source objects from which to copy properties
+     * @param sources One or more source objects from which to copy properties.
      */
-    assign(target: object, ...sources: any[]): any;
+    assign(target: {}, ...sources: any[]): any;
 
     /**
      * Returns an array of all symbol properties found directly on object o.
      * @param o Object to retrieve the symbols from.
      */
-    getOwnPropertySymbols(o: any): symbol[];
+    getOwnPropertySymbols(o: {}): symbol[];
 
     /**
      * Returns the names of the enumerable string properties and methods of an object.
@@ -316,7 +333,7 @@ interface ObjectConstructor {
      * @param o The object to change its prototype.
      * @param proto The value of the new prototype or null.
      */
-    setPrototypeOf(o: any, proto: object | null): any;
+    setPrototypeOf(o: {}, proto: object | null): any;
 }
 
 interface ReadonlyArray<T> {
@@ -329,7 +346,17 @@ interface ReadonlyArray<T> {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    find<S extends T>(predicate: (this: void, value: T, index: number, obj: readonly T[]) => value is S, thisArg?: any): S | undefined;
+    find<S extends T>(predicate: (value: T, index: number, obj: readonly T[]) => value is S, thisArg?: any): S | undefined;
+
+    /**
+     * Returns the value of the first element in the array where predicate is true, and undefined
+     * otherwise.
+     * @param predicate find calls predicate once for each element of the array, in ascending
+     * order, until it finds one where predicate returns true. If such an element is found, find
+     * immediately returns that element value. Otherwise, find returns undefined.
+     * @param thisArg If provided, it will be used as the this value for each invocation of
+     * predicate. If it is not provided, undefined is used instead.
+     */
     find(predicate: (value: T, index: number, obj: readonly T[]) => unknown, thisArg?: any): T | undefined;
 
     /**
@@ -379,11 +406,11 @@ interface RegExpConstructor {
 
 interface String {
     /**
-     * Returns a nonnegative integer Number less than 1114112 (0x110000) that is the code point
-     * value of the UTF-16 encoded code point starting at the string element at position pos in
-     * the String resulting from converting this object to a String.
-     * If there is no element at that position, the result is undefined.
-     * If a valid UTF-16 surrogate pair does not begin at pos, the result is the code unit at pos.
+     * Returns a non-negative integer less than 1114112 (0x110000) that is the code point value
+     * starting at the string element at the specified position.
+     * @param pos The zero-based index of the desired code point. If there is no character at the
+     * specified index, undefined is returned. If a UTF-16 surrogate pair does not begin at pos,
+     * the result is the code unit at pos.
      */
     codePointAt(pos: number): number | undefined;
 
@@ -397,46 +424,38 @@ interface String {
     includes(searchString: string, position?: number): boolean;
 
     /**
-     * Returns true if the sequence of elements of searchString converted to a String is the
-     * same as the corresponding elements of this object (converted to a String) starting at
-     * endPosition – length(this). Otherwise returns false.
+     * Determines whether the string ends with a substring, ending at the specified index.
+     * @param searchString The string to search for.
+     * @param endPosition The index at which to begin searching for. The default value is the
+     * length of searchString.
      */
     endsWith(searchString: string, endPosition?: number): boolean;
 
     /**
      * Returns the String value result of normalizing the string into the normalization form
      * named by form as specified in Unicode Standard Annex #15, Unicode Normalization Forms.
-     * @param form Applicable values: "NFC", "NFD", "NFKC", or "NFKD", If not specified default
-     * is "NFC"
+     * @param form The normalization form to be used. The default value is "NFC".
      */
-    normalize(form: "NFC" | "NFD" | "NFKC" | "NFKD"): string;
-
-    /**
-     * Returns the String value result of normalizing the string into the normalization form
-     * named by form as specified in Unicode Standard Annex #15, Unicode Normalization Forms.
-     * @param form Applicable values: "NFC", "NFD", "NFKC", or "NFKD", If not specified default
-     * is "NFC"
-     */
-    normalize(form?: string): string;
+    normalize(form?: "NFC" | "NFD" | "NFKC" | "NFKD"): string;
 
     /**
      * Returns a String value that is made from count copies appended together. If count is 0,
      * the empty string is returned.
-     * @param count number of copies to append
+     * @param count The number of copies to append
      */
     repeat(count: number): string;
 
     /**
-     * Returns true if the sequence of elements of searchString converted to a String is the
-     * same as the corresponding elements of this object (converted to a String) starting at
-     * position. Otherwise returns false.
+     * Determines whether the string starts with a substring, beginning at the specified index.
+     * @param searchString The string to search for.
+     * @param position The index at which to begin searching for. The default value is 0.
      */
     startsWith(searchString: string, position?: number): boolean;
 
     /**
-     * Returns an `<a>` HTML anchor element and sets the name attribute to the text value
+     * Returns an `<a>` HTML anchor element and sets the name attribute value
      * @deprecated A legacy feature for browser compatibility
-     * @param name
+     * @param name The name attribute value
      */
     anchor(name: string): string;
 
@@ -467,20 +486,16 @@ interface String {
     /**
      * Returns a `<font>` HTML element and sets the color attribute value
      * @deprecated A legacy feature for browser compatibility
+     * @param color The color attribute value
      */
     fontcolor(color: string): string;
 
     /**
      * Returns a `<font>` HTML element and sets the size attribute value
      * @deprecated A legacy feature for browser compatibility
+     * @param size The size attribute value
      */
-    fontsize(size: number): string;
-
-    /**
-     * Returns a `<font>` HTML element and sets the size attribute value
-     * @deprecated A legacy feature for browser compatibility
-     */
-    fontsize(size: string): string;
+    fontsize(size: number | string): string;
 
     /**
      * Returns an `<i>` HTML element
@@ -491,6 +506,7 @@ interface String {
     /**
      * Returns an `<a>` HTML element and sets the href attribute value
      * @deprecated A legacy feature for browser compatibility
+     * @param url The href attribute value
      */
     link(url: string): string;
 
@@ -521,8 +537,9 @@ interface String {
 
 interface StringConstructor {
     /**
-     * Return the String value whose elements are, in order, the elements in the List elements.
-     * If length is 0, the empty string is returned.
+     * Returns a string created by a sequence of code points.
+     * If no arguments are given, the empty string is returned.
+     * @param codePoints A sequence of code points.
      */
     fromCodePoint(...codePoints: number[]): string;
 
@@ -535,5 +552,5 @@ interface StringConstructor {
      * @param template A well-formed template string call site representation.
      * @param substitutions A set of substitution values.
      */
-    raw(template: { raw: readonly string[] | ArrayLike<string>}, ...substitutions: any[]): string;
+    raw(template: { raw: readonly string[] | ArrayLike<string> }, ...substitutions: any[]): string;
 }

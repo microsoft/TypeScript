@@ -13,7 +13,7 @@ interface RegExp {
     /**
      * Matches a string with this regular expression, and returns an iterable of matches
      * containing the results of that search.
-     * @param string A string to search within.
+     * @param str A string to search within.
      */
     [Symbol.matchAll](str: string): IterableIterator<RegExpMatchArray>;
 }

@@ -94,43 +94,43 @@ void p3.result.three;
 //// [declarationsWithRecursiveInternalTypesProduceUniqueTypeParams.d.ts]
 export declare type Key<U> = keyof U;
 export declare type Value<K extends Key<U>, U> = U[K];
-export declare const updateIfChanged: <T>(t: T) => (<K extends keyof T>(key: K) => (<K_1 extends keyof Value<K, T>>(key: K_1) => (<K_2 extends keyof Value<K_1, Value<K, T>>>(key: K_2) => (<K_3 extends keyof Value<K_2, Value<K_1, Value<K, T>>>>(key: K_3) => (<K_4 extends keyof Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>(key: K_4) => (<K_5 extends keyof Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>>(key: K_5) => (<K_6 extends keyof Value<K_5, Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>>>(key: K_6) => (<K_7 extends keyof Value<K_6, Value<K_5, Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>>>>(key: K_7) => (<K_8 extends keyof Value<K_7, Value<K_6, Value<K_5, Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>>>>>(key: K_8) => (<K_9 extends keyof Value<K_8, Value<K_7, Value<K_6, Value<K_5, Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>>>>>>(key: K_9) => (<K_10 extends keyof Value<K_9, Value<K_8, Value<K_7, Value<K_6, Value<K_5, Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>>>>>>>(key: K_10) => any & {
+export declare const updateIfChanged: <T>(t: T) => (<K extends keyof T>(key: K) => (<K_1 extends keyof Value<K, T>>(key: K_1) => (<K_2 extends keyof Value<K_1, Value<K, T>>>(key: K_2) => (<K_3 extends keyof Value<K_2, Value<K_1, Value<K, T>>>>(key: K_3) => (<K_4 extends keyof Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>(key: K_4) => (<K_5 extends keyof Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>>(key: K_5) => (<K_6 extends keyof Value<K_5, Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>>>(key: K_6) => (<K_7 extends keyof Value<K_6, Value<K_5, Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>>>>(key: K_7) => (<K_8 extends keyof Value<K_7, Value<K_6, Value<K_5, Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>>>>>(key: K_8) => (<K_9 extends keyof Value<K_8, Value<K_7, Value<K_6, Value<K_5, Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>>>>>>(key: K_9) => (<K_10 extends keyof Value<K_9, Value<K_8, Value<K_7, Value<K_6, Value<K_5, Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>>>>>>>(key: K_10) => any & Writable<{
     map: (updater: (u: Value<K_10, Value<K_9, Value<K_8, Value<K_7, Value<K_6, Value<K_5, Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>>>>>>>) => Value<K_10, Value<K_9, Value<K_8, Value<K_7, Value<K_6, Value<K_5, Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>>>>>>>) => T;
     set: (newU: Value<K_10, Value<K_9, Value<K_8, Value<K_7, Value<K_6, Value<K_5, Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>>>>>>>) => T;
-}) & {
+}>) & Writable<{
     map: (updater: (u: Value<K_9, Value<K_8, Value<K_7, Value<K_6, Value<K_5, Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>>>>>>) => Value<K_9, Value<K_8, Value<K_7, Value<K_6, Value<K_5, Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>>>>>>) => T;
     set: (newU: Value<K_9, Value<K_8, Value<K_7, Value<K_6, Value<K_5, Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>>>>>>) => T;
-}) & {
+}>) & Writable<{
     map: (updater: (u: Value<K_8, Value<K_7, Value<K_6, Value<K_5, Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>>>>>) => Value<K_8, Value<K_7, Value<K_6, Value<K_5, Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>>>>>) => T;
     set: (newU: Value<K_8, Value<K_7, Value<K_6, Value<K_5, Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>>>>>) => T;
-}) & {
+}>) & Writable<{
     map: (updater: (u: Value<K_7, Value<K_6, Value<K_5, Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>>>>) => Value<K_7, Value<K_6, Value<K_5, Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>>>>) => T;
     set: (newU: Value<K_7, Value<K_6, Value<K_5, Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>>>>) => T;
-}) & {
+}>) & Writable<{
     map: (updater: (u: Value<K_6, Value<K_5, Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>>>) => Value<K_6, Value<K_5, Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>>>) => T;
     set: (newU: Value<K_6, Value<K_5, Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>>>) => T;
-}) & {
+}>) & Writable<{
     map: (updater: (u: Value<K_5, Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>>) => Value<K_5, Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>>) => T;
     set: (newU: Value<K_5, Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>>) => T;
-}) & {
+}>) & Writable<{
     map: (updater: (u: Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>) => Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>) => T;
     set: (newU: Value<K_4, Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>>) => T;
-}) & {
+}>) & Writable<{
     map: (updater: (u: Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>) => Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>) => T;
     set: (newU: Value<K_3, Value<K_2, Value<K_1, Value<K, T>>>>) => T;
-}) & {
+}>) & Writable<{
     map: (updater: (u: Value<K_2, Value<K_1, Value<K, T>>>) => Value<K_2, Value<K_1, Value<K, T>>>) => T;
     set: (newU: Value<K_2, Value<K_1, Value<K, T>>>) => T;
-}) & {
+}>) & Writable<{
     map: (updater: (u: Value<K_1, Value<K, T>>) => Value<K_1, Value<K, T>>) => T;
     set: (newU: Value<K_1, Value<K, T>>) => T;
-}) & {
+}>) & Writable<{
     map: (updater: (u: Value<K, T>) => Value<K, T>) => T;
     set: (newU: Value<K, T>) => T;
-}) & {
+}>) & Writable<{
     map: (updater: (u: T) => T) => T;
     set: (newU: T) => T;
-};
+}>;
 export declare const testRecFun: <T extends Object>(parent: T) => {
     result: T;
     deeper: <U extends Object>(child: U) => {

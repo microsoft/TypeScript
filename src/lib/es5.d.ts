@@ -143,7 +143,7 @@ interface ObjectConstructor {
      * Returns the prototype of an object.
      * @param o The object that references the prototype.
      */
-    getPrototypeOf(o: any): any;
+    getPrototypeOf(o: {}): any;
 
     /**
      * Gets the own property descriptor of the specified object.
@@ -151,14 +151,14 @@ interface ObjectConstructor {
      * @param o Object that contains the property.
      * @param p Name of the property.
      */
-    getOwnPropertyDescriptor(o: any, p: PropertyKey): PropertyDescriptor | undefined;
+    getOwnPropertyDescriptor(o: {}, p: PropertyKey): PropertyDescriptor | undefined;
 
     /**
      * Returns the names of the own properties of an object. The own properties of an object are those that are defined directly
      * on that object, and are not inherited from the object's prototype. The properties of an object include both fields (objects) and functions.
      * @param o Object that contains the own properties.
      */
-    getOwnPropertyNames(o: any): string[];
+    getOwnPropertyNames(o: {}): string[];
 
     /**
      * Creates an object that has the specified prototype or that has null prototype.
@@ -179,14 +179,14 @@ interface ObjectConstructor {
      * @param p The property name.
      * @param attributes Descriptor for the property. It can be for a data property or an accessor property.
      */
-    defineProperty<T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>): T;
+    defineProperty<T extends object>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>): T;
 
     /**
      * Adds one or more properties to an object, and/or modifies attributes of existing properties.
      * @param o Object on which to add or modify the properties. This can be a native JavaScript object or a DOM object.
      * @param properties JavaScript object that contains one or more descriptor objects. Each descriptor object describes a data property or an accessor property.
      */
-    defineProperties<T>(o: T, properties: PropertyDescriptorMap & ThisType<any>): T;
+    defineProperties<T extends object>(o: T, properties: PropertyDescriptorMap & ThisType<any>): T;
 
     /**
      * Prevents the modification of attributes of existing properties, and prevents the addition of new properties.
@@ -198,7 +198,7 @@ interface ObjectConstructor {
      * Prevents the modification of existing property attributes and values, and prevents the addition of new properties.
      * @param a Object on which to lock the attributes.
      */
-    freeze<T>(a: T[]): readonly T[];
+    freeze<T extends readonly any[]>(a: T): Readonly<T>;
 
     /**
      * Prevents the modification of existing property attributes and values, and prevents the addition of new properties.
@@ -210,7 +210,7 @@ interface ObjectConstructor {
      * Prevents the modification of existing property attributes and values, and prevents the addition of new properties.
      * @param o Object on which to lock the attributes.
      */
-    freeze<T extends {[idx: string]: U | null | undefined | object}, U extends string | bigint | number | boolean | symbol>(o: T): Readonly<T>;
+    freeze<T extends { [idx: string]: U | null | undefined | object }, U extends string | bigint | number | boolean | symbol>(o: T): Readonly<T>;
 
     /**
      * Prevents the modification of existing property attributes and values, and prevents the addition of new properties.
@@ -317,9 +317,14 @@ interface CallableFunction extends Function {
     /**
      * Calls the function with the specified object as the this value and the elements of specified array as the arguments.
      * @param thisArg The object to be used as the this object.
-     * @param args An array of argument values to be passed to the function.
      */
     apply<T, R>(this: (this: T) => R, thisArg: T): R;
+
+    /**
+     * Calls the function with the specified object as the this value and the elements of specified array as the arguments.
+     * @param thisArg The object to be used as the this object.
+     * @param args An array of argument values to be passed to the function.
+     */
     apply<T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R;
 
     /**
@@ -333,13 +338,53 @@ interface CallableFunction extends Function {
      * For a given function, creates a bound function that has the same body as the original function.
      * The this object of the bound function is associated with the specified object, and has the specified initial parameters.
      * @param thisArg The object to be used as the this object.
-     * @param args Arguments to bind to the parameters of the function.
      */
     bind<T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>;
+
+    /**
+     * For a given function, creates a bound function that has the same body as the original function.
+     * The this object of the bound function is associated with the specified object, and has the specified initial parameters.
+     * @param thisArg The object to be used as the this object.
+     * @param arg0 The first argument to bind to the parameters of the function.
+     */
     bind<T, A0, A extends any[], R>(this: (this: T, arg0: A0, ...args: A) => R, thisArg: T, arg0: A0): (...args: A) => R;
+
+    /**
+     * For a given function, creates a bound function that has the same body as the original function.
+     * The this object of the bound function is associated with the specified object, and has the specified initial parameters.
+     * @param thisArg The object to be used as the this object.
+     * @param arg0 The first argument to bind to the parameters of the function.
+     * @param arg1 The second argument to bind to the parameters of the function.
+     */
     bind<T, A0, A1, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1): (...args: A) => R;
+
+    /**
+     * For a given function, creates a bound function that has the same body as the original function.
+     * The this object of the bound function is associated with the specified object, and has the specified initial parameters.
+     * @param thisArg The object to be used as the this object.
+     * @param arg0 The first argument to bind to the parameters of the function.
+     * @param arg1 The second argument to bind to the parameters of the function.
+     * @param arg2 The third argument to bind to the parameters of the function.
+     */
     bind<T, A0, A1, A2, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2): (...args: A) => R;
+
+    /**
+     * For a given function, creates a bound function that has the same body as the original function.
+     * The this object of the bound function is associated with the specified object, and has the specified initial parameters.
+     * @param thisArg The object to be used as the this object.
+     * @param arg0 The first argument to bind to the parameters of the function.
+     * @param arg1 The second argument to bind to the parameters of the function.
+     * @param arg2 The third argument to bind to the parameters of the function.
+     * @param arg3 The fourth to bind to the parameters of the function.
+     */
     bind<T, A0, A1, A2, A3, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3): (...args: A) => R;
+
+    /**
+     * For a given function, creates a bound function that has the same body as the original function.
+     * The this object of the bound function is associated with the specified object, and has the specified initial parameters.
+     * @param thisArg The object to be used as the this object.
+     * @param args Arguments to bind to the parameters of the function.
+     */
     bind<T, AX, R>(this: (this: T, ...args: AX[]) => R, thisArg: T, ...args: AX[]): (...args: AX[]) => R;
 }
 
@@ -347,9 +392,13 @@ interface NewableFunction extends Function {
     /**
      * Calls the function with the specified object as the this value and the elements of specified array as the arguments.
      * @param thisArg The object to be used as the this object.
-     * @param args An array of argument values to be passed to the function.
      */
     apply<T>(this: new () => T, thisArg: T): void;
+    /**
+     * Calls the function with the specified object as the this value and the elements of specified array as the arguments.
+     * @param thisArg The object to be used as the this object.
+     * @param args An array of argument values to be passed to the function.
+     */
     apply<T, A extends any[]>(this: new (...args: A) => T, thisArg: T, args: A): void;
 
     /**
@@ -363,13 +412,53 @@ interface NewableFunction extends Function {
      * For a given function, creates a bound function that has the same body as the original function.
      * The this object of the bound function is associated with the specified object, and has the specified initial parameters.
      * @param thisArg The object to be used as the this object.
-     * @param args Arguments to bind to the parameters of the function.
      */
     bind<T>(this: T, thisArg: any): T;
+
+    /**
+     * For a given function, creates a bound function that has the same body as the original function.
+     * The this object of the bound function is associated with the specified object, and has the specified initial parameters.
+     * @param thisArg The object to be used as the this object.
+     * @param arg0 The first argument to bind to the parameters of the function.
+     */
     bind<A0, A extends any[], R>(this: new (arg0: A0, ...args: A) => R, thisArg: any, arg0: A0): new (...args: A) => R;
+
+    /**
+     * For a given function, creates a bound function that has the same body as the original function.
+     * The this object of the bound function is associated with the specified object, and has the specified initial parameters.
+     * @param thisArg The object to be used as the this object.
+     * @param arg0 The first argument to bind to the parameters of the function.
+     * @param arg1 The second argument to bind to the parameters of the function.
+     */
     bind<A0, A1, A extends any[], R>(this: new (arg0: A0, arg1: A1, ...args: A) => R, thisArg: any, arg0: A0, arg1: A1): new (...args: A) => R;
+
+    /**
+     * For a given function, creates a bound function that has the same body as the original function.
+     * The this object of the bound function is associated with the specified object, and has the specified initial parameters.
+     * @param thisArg The object to be used as the this object.
+     * @param arg0 The first argument to bind to the parameters of the function.
+     * @param arg1 The second argument to bind to the parameters of the function.
+     * @param arg2 The third argument to bind to the parameters of the function.
+     */
     bind<A0, A1, A2, A extends any[], R>(this: new (arg0: A0, arg1: A1, arg2: A2, ...args: A) => R, thisArg: any, arg0: A0, arg1: A1, arg2: A2): new (...args: A) => R;
+
+    /**
+     * For a given function, creates a bound function that has the same body as the original function.
+     * The this object of the bound function is associated with the specified object, and has the specified initial parameters.
+     * @param thisArg The object to be used as the this object.
+     * @param arg0 The first argument to bind to the parameters of the function.
+     * @param arg1 The second argument to bind to the parameters of the function.
+     * @param arg2 The third argument to bind to the parameters of the function.
+     * @param arg3 The fourth to bind to the parameters of the function.
+     */
     bind<A0, A1, A2, A3, A extends any[], R>(this: new (arg0: A0, arg1: A1, arg2: A2, arg3: A3, ...args: A) => R, thisArg: any, arg0: A0, arg1: A1, arg2: A2, arg3: A3): new (...args: A) => R;
+
+    /**
+     * For a given function, creates a bound function that has the same body as the original function.
+     * The this object of the bound function is associated with the specified object, and has the specified initial parameters.
+     * @param thisArg The object to be used as the this object.
+     * @param args Arguments to bind to the parameters of the function.
+     */
     bind<AX, R>(this: new (...args: AX[]) => R, thisArg: any, ...args: AX[]): new (...args: AX[]) => R;
 }
 
@@ -390,7 +479,7 @@ interface String {
     charAt(pos: number): string;
 
     /**
-     * Returns the Unicode value of the character at the specified location.
+     * Returns a non-negative integer less than 65536 (0x10000) that is the code unit value of the character at the specified index.
      * @param index The zero-based index of the desired character. If there is no character at the specified index, NaN is returned.
      */
     charCodeAt(index: number): number;
@@ -416,42 +505,47 @@ interface String {
     lastIndexOf(searchString: string, position?: number): number;
 
     /**
-     * Determines whether two strings are equivalent in the current locale.
-     * @param that String to compare to target string
+     * Determines whether the reference string comes before, after or is equivalent to the specified string in the current locale.
+     * Returns a negative integer if it comes before, a positive number if it comes after, and 0 if they are equivalent.
+     * @param that The string to compare to.
      */
     localeCompare(that: string): number;
 
     /**
      * Matches a string with a regular expression, and returns an array containing the results of that search.
-     * @param regexp A variable name or string literal containing the regular expression pattern and flags.
+     * @param regexp The regular expression for matching. If the provided value is not a RegExp, it is implicitly
+     * converted to a RegExp by using `new RegExp(regexp)`.
      */
     match(regexp: string | RegExp): RegExpMatchArray | null;
 
     /**
-     * Replaces text in a string, using a regular expression or search string.
-     * @param searchValue A string to search for.
-     * @param replaceValue A string containing the text to replace for every successful match of searchValue in this string.
+     * Replaces one or more occurrences of substrings that match a search string or a regular expression.
+     * Only the first occurrence will be replaced unless a RegExp with a `g` (global) flag is used.
+     * @param searchValue A string or RegExp search value.
+     * @param replaceValue The replacement text.
      */
     replace(searchValue: string | RegExp, replaceValue: string): string;
 
     /**
-     * Replaces text in a string, using a regular expression or search string.
-     * @param searchValue A string to search for.
+     * Replaces one or more occurrences of substrings that match a search string or a regular expression.
+     * Only the first occurrence will be replaced unless a RegExp with a `g` (global) flag is used.
+     * @param searchValue A string or RegExp search value.
      * @param replacer A function that returns the replacement text.
      */
     replace(searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string;
 
     /**
      * Finds the first substring match in a regular expression search.
-     * @param regexp The regular expression pattern and applicable flags.
+     * @param regexp The regular expression for matching. If the provided value is not a RegExp, it is implicitly
+     * converted to a RegExp by using `new RegExp(regexp)`.
      */
     search(regexp: string | RegExp): number;
 
     /**
      * Returns a section of a string.
-     * @param start The index to the beginning of the specified portion of stringObj.
-     * @param end The index to the end of the specified portion of stringObj. The substring includes the characters up to, but not including, the character indicated by end.
-     * If this value is not specified, the substring continues to the end of stringObj.
+     * @param start The index to the beginning of the specified portion of the string.
+     * @param end The index to the end of the specified portion of the string. The substring includes the characters up to, but not including, the character indicated by end.
+     * If this value is not specified, the substring continues to the end of the string.
      */
     slice(start?: number, end?: number): string;
 
@@ -463,9 +557,9 @@ interface String {
     split(separator: string | RegExp, limit?: number): string[];
 
     /**
-     * Returns the substring at the specified location within a String object.
-     * @param start The zero-based index number indicating the beginning of the substring.
-     * @param end Zero-based index number indicating the end of the substring. The substring includes the characters up to, but not including, the character indicated by end.
+     * Returns the substring beginning at the specified index within a String object.
+     * @param start The zero-based index indicating the beginning of the substring.
+     * @param end The zero-based index indicating the end of the substring. The substring includes the characters up to, but not including, the character indicated by end.
      * If end is omitted, the characters from start through the end of the original string are returned.
      */
     substring(start: number, end?: number): string;
@@ -490,9 +584,9 @@ interface String {
 
     // IE extensions
     /**
-     * Gets a substring beginning at the specified location and having the specified length.
+     * Gets a substring beginning at the specified index and having the specified length.
      * @deprecated A legacy feature for browser compatibility
-     * @param from The starting position of the desired substring. The index of the first character in the string is zero.
+     * @param from The starting index of the desired substring. The index of the first character in the string is zero.
      * @param length The number of characters to include in the returned substring.
      */
     substr(from: number, length?: number): string;
@@ -511,7 +605,7 @@ interface StringConstructor {
 }
 
 /**
- * Allows manipulation and formatting of text strings and determination and location of substrings within strings.
+ * Allows manipulation and formatting of text strings and determination of location of substrings within strings.
  */
 declare var String: StringConstructor;
 
@@ -963,7 +1057,7 @@ interface RegExp {
 
     // Non-standard extensions
     /** @deprecated A legacy feature for browser compatibility */
-    compile(pattern: string, flags?: string): this;
+    compile(pattern: string, flags?: string): RegExp;
 }
 
 interface RegExpConstructor {
@@ -1232,8 +1326,7 @@ interface ReadonlyArray<T> {
      * @param callbackfn A function that accepts up to four arguments. The reduce method calls the callbackfn function one time for each element in the array.
      * @param initialValue If initialValue is specified, it is used as the initial value to start the accumulation. The first call to the callbackfn function provides this value as an argument instead of an array value.
      */
-    reduce(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: readonly T[]) => T): T;
-    reduce(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: readonly T[]) => T, initialValue: T): T;
+    reduce(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: readonly T[]) => T, initialValue?: T): T;
     /**
      * Calls the specified callback function for all the elements in an array. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
      * @param callbackfn A function that accepts up to four arguments. The reduce method calls the callbackfn function one time for each element in the array.
@@ -1245,8 +1338,7 @@ interface ReadonlyArray<T> {
      * @param callbackfn A function that accepts up to four arguments. The reduceRight method calls the callbackfn function one time for each element in the array.
      * @param initialValue If initialValue is specified, it is used as the initial value to start the accumulation. The first call to the callbackfn function provides this value as an argument instead of an array value.
      */
-    reduceRight(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: readonly T[]) => T): T;
-    reduceRight(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: readonly T[]) => T, initialValue: T): T;
+    reduceRight(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: readonly T[]) => T, initialValue?: T): T;
     /**
      * Calls the specified callback function for all the elements in an array, in descending order. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
      * @param callbackfn A function that accepts up to four arguments. The reduceRight method calls the callbackfn function one time for each element in the array.
@@ -1331,20 +1423,20 @@ interface Array<T> {
      * a negative value if the first argument is less than the second argument, zero if they're equal, and a positive
      * value otherwise. If omitted, the elements are sorted in ascending, ASCII character order.
      * ```ts
-     * [11,2,22,1].sort((a, b) => a - b)
+     * [11, 2, 22, 1].sort((a, b) => a - b)
      * ```
      */
-    sort(compareFn?: (a: T, b: T) => number): this;
+    sort(compareFn?: (a: T, b: T) => number): T[];
     /**
      * Removes elements from an array and, if necessary, inserts new elements in their place, returning the deleted elements.
-     * @param start The zero-based location in the array from which to start removing elements.
+     * @param start The zero-based index in the array from which to start removing elements.
      * @param deleteCount The number of elements to remove.
      * @returns An array containing the elements that were deleted.
      */
     splice(start: number, deleteCount?: number): T[];
     /**
      * Removes elements from an array and, if necessary, inserts new elements in their place, returning the deleted elements.
-     * @param start The zero-based location in the array from which to start removing elements.
+     * @param start The zero-based index in the array from which to start removing elements.
      * @param deleteCount The number of elements to remove.
      * @param items Elements to insert into the array in place of the deleted elements.
      * @returns An array containing the elements that were deleted.
@@ -1423,8 +1515,7 @@ interface Array<T> {
      * @param callbackfn A function that accepts up to four arguments. The reduce method calls the callbackfn function one time for each element in the array.
      * @param initialValue If initialValue is specified, it is used as the initial value to start the accumulation. The first call to the callbackfn function provides this value as an argument instead of an array value.
      */
-    reduce(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T): T;
-    reduce(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue: T): T;
+    reduce(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue?: T): T;
     /**
      * Calls the specified callback function for all the elements in an array. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
      * @param callbackfn A function that accepts up to four arguments. The reduce method calls the callbackfn function one time for each element in the array.
@@ -1436,8 +1527,7 @@ interface Array<T> {
      * @param callbackfn A function that accepts up to four arguments. The reduceRight method calls the callbackfn function one time for each element in the array.
      * @param initialValue If initialValue is specified, it is used as the initial value to start the accumulation. The first call to the callbackfn function provides this value as an argument instead of an array value.
      */
-    reduceRight(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T): T;
-    reduceRight(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue: T): T;
+    reduceRight(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue?: T): T;
     /**
      * Calls the specified callback function for all the elements in an array, in descending order. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
      * @param callbackfn A function that accepts up to four arguments. The reduceRight method calls the callbackfn function one time for each element in the array.
@@ -1542,6 +1632,13 @@ type Required<T> = {
  */
 type Readonly<T> = {
     readonly [P in keyof T]: T[P];
+};
+
+/**
+ * Make all properties in T writable
+ */
+type Writable<T> = {
+    -readonly [P in keyof T]: T[P];
 };
 
 /**
@@ -1835,13 +1932,13 @@ interface Int8Array {
     /**
      * Returns the this object after copying a section of the array identified by start and end
      * to the same array starting at position target
-     * @param target If target is negative, it is treated as length+target where length is the
+     * @param target If target is negative, it is treated as length + target where length is the
      * length of the array.
-     * @param start If start is negative, it is treated as length+start. If end is negative, it
-     * is treated as length+end.
+     * @param start If start is negative, it is treated as length + start. If end is negative, it
+     * is treated as length + end.
      * @param end If not specified, length of the this object is used as its default value.
      */
-    copyWithin(target: number, start: number, end?: number): this;
+    copyWithin(target: number, start: number, end?: number): Int8Array;
 
     /**
      * Determines whether all the members of an array satisfy the specified test.
@@ -1857,11 +1954,11 @@ interface Int8Array {
      * Changes all array elements from `start` to `end` index to a static `value` and returns the modified array
      * @param value value to fill array section with
      * @param start index to start filling the array at. If start is negative, it is treated as
-     * length+start where length is the length of the array.
+     * length + start where length is the length of the array.
      * @param end index to stop filling the array at. If end is negative, it is treated as
-     * length+end.
+     * length + end.
      */
-    fill(value: number, start?: number, end?: number): this;
+    fill(value: number, start?: number, end?: number): Int8Array;
 
     /**
      * Returns the elements of an array that meet the condition specified in a callback function.
@@ -1870,7 +1967,7 @@ interface Int8Array {
      * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    filter(predicate: (value: number, index: number, array: Int8Array) => any, thisArg?: any): Int8Array;
+    filter(predicate: (value: number, index: number, array: Int8Array) => unknown, thisArg?: any): Int8Array;
 
     /**
      * Returns the value of the first element in the array where predicate is true, and undefined
@@ -1881,7 +1978,7 @@ interface Int8Array {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    find(predicate: (value: number, index: number, obj: Int8Array) => boolean, thisArg?: any): number | undefined;
+    find(predicate: (value: number, index: number, obj: Int8Array) => unknown, thisArg?: any): number | undefined;
 
     /**
      * Returns the index of the first element in the array where predicate is true, and -1
@@ -1892,7 +1989,7 @@ interface Int8Array {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    findIndex(predicate: (value: number, index: number, obj: Int8Array) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: number, index: number, obj: Int8Array) => unknown, thisArg?: any): number;
 
     /**
      * Performs the specified action for each element in an array.
@@ -1951,8 +2048,7 @@ interface Int8Array {
      * the accumulation. The first call to the callbackfn function provides this value as an argument
      * instead of an array value.
      */
-    reduce(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Int8Array) => number): number;
-    reduce(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Int8Array) => number, initialValue: number): number;
+    reduce(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Int8Array) => number, initialValue?: number): number;
 
     /**
      * Calls the specified callback function for all the elements in an array. The return value of
@@ -1976,8 +2072,7 @@ interface Int8Array {
      * the accumulation. The first call to the callbackfn function provides this value as an
      * argument instead of an array value.
      */
-    reduceRight(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Int8Array) => number): number;
-    reduceRight(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Int8Array) => number, initialValue: number): number;
+    reduceRight(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Int8Array) => number, initialValue?: number): number;
 
     /**
      * Calls the specified callback function for all the elements in an array, in descending order.
@@ -2026,10 +2121,10 @@ interface Int8Array {
      * a negative value if first argument is less than second argument, zero if they're equal and a positive
      * value otherwise. If omitted, the elements are sorted in ascending order.
      * ```ts
-     * [11,2,22,1].sort((a, b) => a - b)
+     * [11, 2, 22, 1].sort((a, b) => a - b)
      * ```
      */
-    sort(compareFn?: (a: number, b: number) => number): this;
+    sort(compareFn?: (a: number, b: number) => number): Int8Array;
 
     /**
      * Gets a new Int8Array view of the ArrayBuffer store for this array, referencing the elements
@@ -2056,7 +2151,7 @@ interface Int8Array {
 }
 interface Int8ArrayConstructor {
     readonly prototype: Int8Array;
-    new(length: number): Int8Array;
+    new(length?: number): Int8Array;
     new(array: ArrayLike<number> | ArrayBufferLike): Int8Array;
     new(buffer: ArrayBufferLike, byteOffset?: number, length?: number): Int8Array;
 
@@ -2073,17 +2168,17 @@ interface Int8ArrayConstructor {
 
     /**
      * Creates an array from an array-like or iterable object.
-     * @param arrayLike An array-like or iterable object to convert to an array.
+     * @param source An array-like or iterable object to convert to an array.
      */
-    from(arrayLike: ArrayLike<number>): Int8Array;
+    from(source: ArrayLike<number>): Int8Array;
 
     /**
      * Creates an array from an array-like or iterable object.
-     * @param arrayLike An array-like or iterable object to convert to an array.
+     * @param source An array-like or iterable object to convert to an array.
      * @param mapfn A mapping function to call on every element of the array.
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
-    from<T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Int8Array;
+    from<T>(source: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Int8Array;
 
 
 }
@@ -2117,13 +2212,13 @@ interface Uint8Array {
     /**
      * Returns the this object after copying a section of the array identified by start and end
      * to the same array starting at position target
-     * @param target If target is negative, it is treated as length+target where length is the
+     * @param target If target is negative, it is treated as length + target where length is the
      * length of the array.
-     * @param start If start is negative, it is treated as length+start. If end is negative, it
-     * is treated as length+end.
+     * @param start If start is negative, it is treated as length + start. If end is negative, it
+     * is treated as length + end.
      * @param end If not specified, length of the this object is used as its default value.
      */
-    copyWithin(target: number, start: number, end?: number): this;
+    copyWithin(target: number, start: number, end?: number): Uint8Array;
 
     /**
      * Determines whether all the members of an array satisfy the specified test.
@@ -2139,11 +2234,11 @@ interface Uint8Array {
      * Changes all array elements from `start` to `end` index to a static `value` and returns the modified array
      * @param value value to fill array section with
      * @param start index to start filling the array at. If start is negative, it is treated as
-     * length+start where length is the length of the array.
+     * length + start where length is the length of the array.
      * @param end index to stop filling the array at. If end is negative, it is treated as
-     * length+end.
+     * length + end.
      */
-    fill(value: number, start?: number, end?: number): this;
+    fill(value: number, start?: number, end?: number): Uint8Array;
 
     /**
      * Returns the elements of an array that meet the condition specified in a callback function.
@@ -2152,7 +2247,7 @@ interface Uint8Array {
      * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    filter(predicate: (value: number, index: number, array: Uint8Array) => any, thisArg?: any): Uint8Array;
+    filter(predicate: (value: number, index: number, array: Uint8Array) => unknown, thisArg?: any): Uint8Array;
 
     /**
      * Returns the value of the first element in the array where predicate is true, and undefined
@@ -2163,7 +2258,7 @@ interface Uint8Array {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    find(predicate: (value: number, index: number, obj: Uint8Array) => boolean, thisArg?: any): number | undefined;
+    find(predicate: (value: number, index: number, obj: Uint8Array) => unknown, thisArg?: any): number | undefined;
 
     /**
      * Returns the index of the first element in the array where predicate is true, and -1
@@ -2174,7 +2269,7 @@ interface Uint8Array {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    findIndex(predicate: (value: number, index: number, obj: Uint8Array) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: number, index: number, obj: Uint8Array) => unknown, thisArg?: any): number;
 
     /**
      * Performs the specified action for each element in an array.
@@ -2233,8 +2328,7 @@ interface Uint8Array {
      * the accumulation. The first call to the callbackfn function provides this value as an argument
      * instead of an array value.
      */
-    reduce(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint8Array) => number): number;
-    reduce(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint8Array) => number, initialValue: number): number;
+    reduce(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint8Array) => number, initialValue?: number): number;
 
     /**
      * Calls the specified callback function for all the elements in an array. The return value of
@@ -2258,8 +2352,7 @@ interface Uint8Array {
      * the accumulation. The first call to the callbackfn function provides this value as an
      * argument instead of an array value.
      */
-    reduceRight(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint8Array) => number): number;
-    reduceRight(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint8Array) => number, initialValue: number): number;
+    reduceRight(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint8Array) => number, initialValue?: number): number;
 
     /**
      * Calls the specified callback function for all the elements in an array, in descending order.
@@ -2308,10 +2401,10 @@ interface Uint8Array {
      * a negative value if first argument is less than second argument, zero if they're equal and a positive
      * value otherwise. If omitted, the elements are sorted in ascending order.
      * ```ts
-     * [11,2,22,1].sort((a, b) => a - b)
+     * [11, 2, 22, 1].sort((a, b) => a - b)
      * ```
      */
-    sort(compareFn?: (a: number, b: number) => number): this;
+    sort(compareFn?: (a: number, b: number) => number): Uint8Array;
 
     /**
      * Gets a new Uint8Array view of the ArrayBuffer store for this array, referencing the elements
@@ -2339,7 +2432,7 @@ interface Uint8Array {
 
 interface Uint8ArrayConstructor {
     readonly prototype: Uint8Array;
-    new(length: number): Uint8Array;
+    new(length?: number): Uint8Array;
     new(array: ArrayLike<number> | ArrayBufferLike): Uint8Array;
     new(buffer: ArrayBufferLike, byteOffset?: number, length?: number): Uint8Array;
 
@@ -2356,17 +2449,17 @@ interface Uint8ArrayConstructor {
 
     /**
      * Creates an array from an array-like or iterable object.
-     * @param arrayLike An array-like or iterable object to convert to an array.
+     * @param source An array-like or iterable object to convert to an array.
      */
-    from(arrayLike: ArrayLike<number>): Uint8Array;
+    from(source: ArrayLike<number>): Uint8Array;
 
     /**
      * Creates an array from an array-like or iterable object.
-     * @param arrayLike An array-like or iterable object to convert to an array.
+     * @param source An array-like or iterable object to convert to an array.
      * @param mapfn A mapping function to call on every element of the array.
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
-    from<T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint8Array;
+    from<T>(source: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint8Array;
 
 }
 declare var Uint8Array: Uint8ArrayConstructor;
@@ -2399,13 +2492,13 @@ interface Uint8ClampedArray {
     /**
      * Returns the this object after copying a section of the array identified by start and end
      * to the same array starting at position target
-     * @param target If target is negative, it is treated as length+target where length is the
+     * @param target If target is negative, it is treated as length + target where length is the
      * length of the array.
-     * @param start If start is negative, it is treated as length+start. If end is negative, it
-     * is treated as length+end.
+     * @param start If start is negative, it is treated as length + start. If end is negative, it
+     * is treated as length + end.
      * @param end If not specified, length of the this object is used as its default value.
      */
-    copyWithin(target: number, start: number, end?: number): this;
+    copyWithin(target: number, start: number, end?: number): Uint8ClampedArray;
 
     /**
      * Determines whether all the members of an array satisfy the specified test.
@@ -2421,11 +2514,11 @@ interface Uint8ClampedArray {
      * Changes all array elements from `start` to `end` index to a static `value` and returns the modified array
      * @param value value to fill array section with
      * @param start index to start filling the array at. If start is negative, it is treated as
-     * length+start where length is the length of the array.
+     * length + start where length is the length of the array.
      * @param end index to stop filling the array at. If end is negative, it is treated as
-     * length+end.
+     * length + end.
      */
-    fill(value: number, start?: number, end?: number): this;
+    fill(value: number, start?: number, end?: number): Uint8ClampedArray;
 
     /**
      * Returns the elements of an array that meet the condition specified in a callback function.
@@ -2434,7 +2527,7 @@ interface Uint8ClampedArray {
      * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    filter(predicate: (value: number, index: number, array: Uint8ClampedArray) => any, thisArg?: any): Uint8ClampedArray;
+    filter(predicate: (value: number, index: number, array: Uint8ClampedArray) => unknown, thisArg?: any): Uint8ClampedArray;
 
     /**
      * Returns the value of the first element in the array where predicate is true, and undefined
@@ -2445,7 +2538,7 @@ interface Uint8ClampedArray {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    find(predicate: (value: number, index: number, obj: Uint8ClampedArray) => boolean, thisArg?: any): number | undefined;
+    find(predicate: (value: number, index: number, obj: Uint8ClampedArray) => unknown, thisArg?: any): number | undefined;
 
     /**
      * Returns the index of the first element in the array where predicate is true, and -1
@@ -2456,7 +2549,7 @@ interface Uint8ClampedArray {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    findIndex(predicate: (value: number, index: number, obj: Uint8ClampedArray) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: number, index: number, obj: Uint8ClampedArray) => unknown, thisArg?: any): number;
 
     /**
      * Performs the specified action for each element in an array.
@@ -2515,8 +2608,7 @@ interface Uint8ClampedArray {
      * the accumulation. The first call to the callbackfn function provides this value as an argument
      * instead of an array value.
      */
-    reduce(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint8ClampedArray) => number): number;
-    reduce(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint8ClampedArray) => number, initialValue: number): number;
+    reduce(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint8ClampedArray) => number, initialValue?: number): number;
 
     /**
      * Calls the specified callback function for all the elements in an array. The return value of
@@ -2540,8 +2632,7 @@ interface Uint8ClampedArray {
      * the accumulation. The first call to the callbackfn function provides this value as an
      * argument instead of an array value.
      */
-    reduceRight(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint8ClampedArray) => number): number;
-    reduceRight(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint8ClampedArray) => number, initialValue: number): number;
+    reduceRight(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint8ClampedArray) => number, initialValue?: number): number;
 
     /**
      * Calls the specified callback function for all the elements in an array, in descending order.
@@ -2590,10 +2681,10 @@ interface Uint8ClampedArray {
      * a negative value if first argument is less than second argument, zero if they're equal and a positive
      * value otherwise. If omitted, the elements are sorted in ascending order.
      * ```ts
-     * [11,2,22,1].sort((a, b) => a - b)
+     * [11, 2, 22, 1].sort((a, b) => a - b)
      * ```
      */
-    sort(compareFn?: (a: number, b: number) => number): this;
+    sort(compareFn?: (a: number, b: number) => number): Uint8ClampedArray;
 
     /**
      * Gets a new Uint8ClampedArray view of the ArrayBuffer store for this array, referencing the elements
@@ -2621,7 +2712,7 @@ interface Uint8ClampedArray {
 
 interface Uint8ClampedArrayConstructor {
     readonly prototype: Uint8ClampedArray;
-    new(length: number): Uint8ClampedArray;
+    new(length?: number): Uint8ClampedArray;
     new(array: ArrayLike<number> | ArrayBufferLike): Uint8ClampedArray;
     new(buffer: ArrayBufferLike, byteOffset?: number, length?: number): Uint8ClampedArray;
 
@@ -2638,17 +2729,17 @@ interface Uint8ClampedArrayConstructor {
 
     /**
      * Creates an array from an array-like or iterable object.
-     * @param arrayLike An array-like or iterable object to convert to an array.
+     * @param source An array-like or iterable object to convert to an array.
      */
-    from(arrayLike: ArrayLike<number>): Uint8ClampedArray;
+    from(source: ArrayLike<number>): Uint8ClampedArray;
 
     /**
      * Creates an array from an array-like or iterable object.
-     * @param arrayLike An array-like or iterable object to convert to an array.
+     * @param source An array-like or iterable object to convert to an array.
      * @param mapfn A mapping function to call on every element of the array.
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
-    from<T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint8ClampedArray;
+    from<T>(source: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint8ClampedArray;
 }
 declare var Uint8ClampedArray: Uint8ClampedArrayConstructor;
 
@@ -2680,13 +2771,13 @@ interface Int16Array {
     /**
      * Returns the this object after copying a section of the array identified by start and end
      * to the same array starting at position target
-     * @param target If target is negative, it is treated as length+target where length is the
+     * @param target If target is negative, it is treated as length + target where length is the
      * length of the array.
-     * @param start If start is negative, it is treated as length+start. If end is negative, it
-     * is treated as length+end.
+     * @param start If start is negative, it is treated as length + start. If end is negative, it
+     * is treated as length + end.
      * @param end If not specified, length of the this object is used as its default value.
      */
-    copyWithin(target: number, start: number, end?: number): this;
+    copyWithin(target: number, start: number, end?: number): Int16Array;
 
     /**
      * Determines whether all the members of an array satisfy the specified test.
@@ -2702,11 +2793,11 @@ interface Int16Array {
      * Changes all array elements from `start` to `end` index to a static `value` and returns the modified array
      * @param value value to fill array section with
      * @param start index to start filling the array at. If start is negative, it is treated as
-     * length+start where length is the length of the array.
+     * length + start where length is the length of the array.
      * @param end index to stop filling the array at. If end is negative, it is treated as
-     * length+end.
+     * length + end.
      */
-    fill(value: number, start?: number, end?: number): this;
+    fill(value: number, start?: number, end?: number): Int16Array;
 
     /**
      * Returns the elements of an array that meet the condition specified in a callback function.
@@ -2715,7 +2806,7 @@ interface Int16Array {
      * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    filter(predicate: (value: number, index: number, array: Int16Array) => any, thisArg?: any): Int16Array;
+    filter(predicate: (value: number, index: number, array: Int16Array) => unknown, thisArg?: any): Int16Array;
 
     /**
      * Returns the value of the first element in the array where predicate is true, and undefined
@@ -2726,7 +2817,7 @@ interface Int16Array {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    find(predicate: (value: number, index: number, obj: Int16Array) => boolean, thisArg?: any): number | undefined;
+    find(predicate: (value: number, index: number, obj: Int16Array) => unknown, thisArg?: any): number | undefined;
 
     /**
      * Returns the index of the first element in the array where predicate is true, and -1
@@ -2737,7 +2828,7 @@ interface Int16Array {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    findIndex(predicate: (value: number, index: number, obj: Int16Array) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: number, index: number, obj: Int16Array) => unknown, thisArg?: any): number;
 
     /**
      * Performs the specified action for each element in an array.
@@ -2795,8 +2886,7 @@ interface Int16Array {
      * the accumulation. The first call to the callbackfn function provides this value as an argument
      * instead of an array value.
      */
-    reduce(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Int16Array) => number): number;
-    reduce(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Int16Array) => number, initialValue: number): number;
+    reduce(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Int16Array) => number, initialValue?: number): number;
 
     /**
      * Calls the specified callback function for all the elements in an array. The return value of
@@ -2820,8 +2910,7 @@ interface Int16Array {
      * the accumulation. The first call to the callbackfn function provides this value as an
      * argument instead of an array value.
      */
-    reduceRight(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Int16Array) => number): number;
-    reduceRight(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Int16Array) => number, initialValue: number): number;
+    reduceRight(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Int16Array) => number, initialValue?: number): number;
 
     /**
      * Calls the specified callback function for all the elements in an array, in descending order.
@@ -2870,10 +2959,10 @@ interface Int16Array {
      * a negative value if first argument is less than second argument, zero if they're equal and a positive
      * value otherwise. If omitted, the elements are sorted in ascending order.
      * ```ts
-     * [11,2,22,1].sort((a, b) => a - b)
+     * [11, 2, 22, 1].sort((a, b) => a - b)
      * ```
      */
-    sort(compareFn?: (a: number, b: number) => number): this;
+    sort(compareFn?: (a: number, b: number) => number): Int16Array;
 
     /**
      * Gets a new Int16Array view of the ArrayBuffer store for this array, referencing the elements
@@ -2901,7 +2990,7 @@ interface Int16Array {
 
 interface Int16ArrayConstructor {
     readonly prototype: Int16Array;
-    new(length: number): Int16Array;
+    new(length?: number): Int16Array;
     new(array: ArrayLike<number> | ArrayBufferLike): Int16Array;
     new(buffer: ArrayBufferLike, byteOffset?: number, length?: number): Int16Array;
 
@@ -2918,17 +3007,17 @@ interface Int16ArrayConstructor {
 
     /**
      * Creates an array from an array-like or iterable object.
-     * @param arrayLike An array-like or iterable object to convert to an array.
+     * @param source An array-like or iterable object to convert to an array.
      */
-    from(arrayLike: ArrayLike<number>): Int16Array;
+    from(source: ArrayLike<number>): Int16Array;
 
     /**
      * Creates an array from an array-like or iterable object.
-     * @param arrayLike An array-like or iterable object to convert to an array.
+     * @param source An array-like or iterable object to convert to an array.
      * @param mapfn A mapping function to call on every element of the array.
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
-    from<T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Int16Array;
+    from<T>(source: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Int16Array;
 
 
 }
@@ -2962,13 +3051,13 @@ interface Uint16Array {
     /**
      * Returns the this object after copying a section of the array identified by start and end
      * to the same array starting at position target
-     * @param target If target is negative, it is treated as length+target where length is the
+     * @param target If target is negative, it is treated as length + target where length is the
      * length of the array.
-     * @param start If start is negative, it is treated as length+start. If end is negative, it
-     * is treated as length+end.
+     * @param start If start is negative, it is treated as length + start. If end is negative, it
+     * is treated as length + end.
      * @param end If not specified, length of the this object is used as its default value.
      */
-    copyWithin(target: number, start: number, end?: number): this;
+    copyWithin(target: number, start: number, end?: number): Uint16Array;
 
     /**
      * Determines whether all the members of an array satisfy the specified test.
@@ -2984,11 +3073,11 @@ interface Uint16Array {
      * Changes all array elements from `start` to `end` index to a static `value` and returns the modified array
      * @param value value to fill array section with
      * @param start index to start filling the array at. If start is negative, it is treated as
-     * length+start where length is the length of the array.
+     * length + start where length is the length of the array.
      * @param end index to stop filling the array at. If end is negative, it is treated as
-     * length+end.
+     * length + end.
      */
-    fill(value: number, start?: number, end?: number): this;
+    fill(value: number, start?: number, end?: number): Uint16Array;
 
     /**
      * Returns the elements of an array that meet the condition specified in a callback function.
@@ -2997,7 +3086,7 @@ interface Uint16Array {
      * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    filter(predicate: (value: number, index: number, array: Uint16Array) => any, thisArg?: any): Uint16Array;
+    filter(predicate: (value: number, index: number, array: Uint16Array) => unknown, thisArg?: any): Uint16Array;
 
     /**
      * Returns the value of the first element in the array where predicate is true, and undefined
@@ -3008,7 +3097,7 @@ interface Uint16Array {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    find(predicate: (value: number, index: number, obj: Uint16Array) => boolean, thisArg?: any): number | undefined;
+    find(predicate: (value: number, index: number, obj: Uint16Array) => unknown, thisArg?: any): number | undefined;
 
     /**
      * Returns the index of the first element in the array where predicate is true, and -1
@@ -3019,7 +3108,7 @@ interface Uint16Array {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    findIndex(predicate: (value: number, index: number, obj: Uint16Array) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: number, index: number, obj: Uint16Array) => unknown, thisArg?: any): number;
 
     /**
      * Performs the specified action for each element in an array.
@@ -3078,8 +3167,7 @@ interface Uint16Array {
      * the accumulation. The first call to the callbackfn function provides this value as an argument
      * instead of an array value.
      */
-    reduce(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint16Array) => number): number;
-    reduce(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint16Array) => number, initialValue: number): number;
+    reduce(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint16Array) => number, initialValue?: number): number;
 
     /**
      * Calls the specified callback function for all the elements in an array. The return value of
@@ -3103,8 +3191,7 @@ interface Uint16Array {
      * the accumulation. The first call to the callbackfn function provides this value as an
      * argument instead of an array value.
      */
-    reduceRight(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint16Array) => number): number;
-    reduceRight(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint16Array) => number, initialValue: number): number;
+    reduceRight(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint16Array) => number, initialValue?: number): number;
 
     /**
      * Calls the specified callback function for all the elements in an array, in descending order.
@@ -3153,10 +3240,10 @@ interface Uint16Array {
      * a negative value if first argument is less than second argument, zero if they're equal and a positive
      * value otherwise. If omitted, the elements are sorted in ascending order.
      * ```ts
-     * [11,2,22,1].sort((a, b) => a - b)
+     * [11, 2, 22, 1].sort((a, b) => a - b)
      * ```
      */
-    sort(compareFn?: (a: number, b: number) => number): this;
+    sort(compareFn?: (a: number, b: number) => number): Uint16Array;
 
     /**
      * Gets a new Uint16Array view of the ArrayBuffer store for this array, referencing the elements
@@ -3184,7 +3271,7 @@ interface Uint16Array {
 
 interface Uint16ArrayConstructor {
     readonly prototype: Uint16Array;
-    new(length: number): Uint16Array;
+    new(length?: number): Uint16Array;
     new(array: ArrayLike<number> | ArrayBufferLike): Uint16Array;
     new(buffer: ArrayBufferLike, byteOffset?: number, length?: number): Uint16Array;
 
@@ -3201,17 +3288,17 @@ interface Uint16ArrayConstructor {
 
     /**
      * Creates an array from an array-like or iterable object.
-     * @param arrayLike An array-like or iterable object to convert to an array.
+     * @param source An array-like or iterable object to convert to an array.
      */
-    from(arrayLike: ArrayLike<number>): Uint16Array;
+    from(source: ArrayLike<number>): Uint16Array;
 
     /**
      * Creates an array from an array-like or iterable object.
-     * @param arrayLike An array-like or iterable object to convert to an array.
+     * @param source An array-like or iterable object to convert to an array.
      * @param mapfn A mapping function to call on every element of the array.
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
-    from<T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint16Array;
+    from<T>(source: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint16Array;
 
 
 }
@@ -3244,13 +3331,13 @@ interface Int32Array {
     /**
      * Returns the this object after copying a section of the array identified by start and end
      * to the same array starting at position target
-     * @param target If target is negative, it is treated as length+target where length is the
+     * @param target If target is negative, it is treated as length + target where length is the
      * length of the array.
-     * @param start If start is negative, it is treated as length+start. If end is negative, it
-     * is treated as length+end.
+     * @param start If start is negative, it is treated as length + start. If end is negative, it
+     * is treated as length + end.
      * @param end If not specified, length of the this object is used as its default value.
      */
-    copyWithin(target: number, start: number, end?: number): this;
+    copyWithin(target: number, start: number, end?: number): Int32Array;
 
     /**
      * Determines whether all the members of an array satisfy the specified test.
@@ -3266,11 +3353,11 @@ interface Int32Array {
      * Changes all array elements from `start` to `end` index to a static `value` and returns the modified array
      * @param value value to fill array section with
      * @param start index to start filling the array at. If start is negative, it is treated as
-     * length+start where length is the length of the array.
+     * length + start where length is the length of the array.
      * @param end index to stop filling the array at. If end is negative, it is treated as
-     * length+end.
+     * length + end.
      */
-    fill(value: number, start?: number, end?: number): this;
+    fill(value: number, start?: number, end?: number): Int32Array;
 
     /**
      * Returns the elements of an array that meet the condition specified in a callback function.
@@ -3279,7 +3366,7 @@ interface Int32Array {
      * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    filter(predicate: (value: number, index: number, array: Int32Array) => any, thisArg?: any): Int32Array;
+    filter(predicate: (value: number, index: number, array: Int32Array) => unknown, thisArg?: any): Int32Array;
 
     /**
      * Returns the value of the first element in the array where predicate is true, and undefined
@@ -3290,7 +3377,7 @@ interface Int32Array {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    find(predicate: (value: number, index: number, obj: Int32Array) => boolean, thisArg?: any): number | undefined;
+    find(predicate: (value: number, index: number, obj: Int32Array) => unknown, thisArg?: any): number | undefined;
 
     /**
      * Returns the index of the first element in the array where predicate is true, and -1
@@ -3301,7 +3388,7 @@ interface Int32Array {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    findIndex(predicate: (value: number, index: number, obj: Int32Array) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: number, index: number, obj: Int32Array) => unknown, thisArg?: any): number;
 
     /**
      * Performs the specified action for each element in an array.
@@ -3360,8 +3447,7 @@ interface Int32Array {
      * the accumulation. The first call to the callbackfn function provides this value as an argument
      * instead of an array value.
      */
-    reduce(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Int32Array) => number): number;
-    reduce(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Int32Array) => number, initialValue: number): number;
+    reduce(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Int32Array) => number, initialValue?: number): number;
 
     /**
      * Calls the specified callback function for all the elements in an array. The return value of
@@ -3385,8 +3471,7 @@ interface Int32Array {
      * the accumulation. The first call to the callbackfn function provides this value as an
      * argument instead of an array value.
      */
-    reduceRight(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Int32Array) => number): number;
-    reduceRight(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Int32Array) => number, initialValue: number): number;
+    reduceRight(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Int32Array) => number, initialValue?: number): number;
 
     /**
      * Calls the specified callback function for all the elements in an array, in descending order.
@@ -3435,10 +3520,10 @@ interface Int32Array {
      * a negative value if first argument is less than second argument, zero if they're equal and a positive
      * value otherwise. If omitted, the elements are sorted in ascending order.
      * ```ts
-     * [11,2,22,1].sort((a, b) => a - b)
+     * [11, 2, 22, 1].sort((a, b) => a - b)
      * ```
      */
-    sort(compareFn?: (a: number, b: number) => number): this;
+    sort(compareFn?: (a: number, b: number) => number): Int32Array;
 
     /**
      * Gets a new Int32Array view of the ArrayBuffer store for this array, referencing the elements
@@ -3466,7 +3551,7 @@ interface Int32Array {
 
 interface Int32ArrayConstructor {
     readonly prototype: Int32Array;
-    new(length: number): Int32Array;
+    new(length?: number): Int32Array;
     new(array: ArrayLike<number> | ArrayBufferLike): Int32Array;
     new(buffer: ArrayBufferLike, byteOffset?: number, length?: number): Int32Array;
 
@@ -3483,17 +3568,17 @@ interface Int32ArrayConstructor {
 
     /**
      * Creates an array from an array-like or iterable object.
-     * @param arrayLike An array-like or iterable object to convert to an array.
+     * @param source An array-like or iterable object to convert to an array.
      */
-    from(arrayLike: ArrayLike<number>): Int32Array;
+    from(source: ArrayLike<number>): Int32Array;
 
     /**
      * Creates an array from an array-like or iterable object.
-     * @param arrayLike An array-like or iterable object to convert to an array.
+     * @param source An array-like or iterable object to convert to an array.
      * @param mapfn A mapping function to call on every element of the array.
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
-    from<T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Int32Array;
+    from<T>(source: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Int32Array;
 
 }
 declare var Int32Array: Int32ArrayConstructor;
@@ -3526,13 +3611,13 @@ interface Uint32Array {
     /**
      * Returns the this object after copying a section of the array identified by start and end
      * to the same array starting at position target
-     * @param target If target is negative, it is treated as length+target where length is the
+     * @param target If target is negative, it is treated as length + target where length is the
      * length of the array.
-     * @param start If start is negative, it is treated as length+start. If end is negative, it
-     * is treated as length+end.
+     * @param start If start is negative, it is treated as length + start. If end is negative, it
+     * is treated as length + end.
      * @param end If not specified, length of the this object is used as its default value.
      */
-    copyWithin(target: number, start: number, end?: number): this;
+    copyWithin(target: number, start: number, end?: number): Uint32Array;
 
     /**
      * Determines whether all the members of an array satisfy the specified test.
@@ -3548,11 +3633,11 @@ interface Uint32Array {
      * Changes all array elements from `start` to `end` index to a static `value` and returns the modified array
      * @param value value to fill array section with
      * @param start index to start filling the array at. If start is negative, it is treated as
-     * length+start where length is the length of the array.
+     * length + start where length is the length of the array.
      * @param end index to stop filling the array at. If end is negative, it is treated as
-     * length+end.
+     * length + end.
      */
-    fill(value: number, start?: number, end?: number): this;
+    fill(value: number, start?: number, end?: number): Uint32Array;
 
     /**
      * Returns the elements of an array that meet the condition specified in a callback function.
@@ -3561,7 +3646,7 @@ interface Uint32Array {
      * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    filter(predicate: (value: number, index: number, array: Uint32Array) => any, thisArg?: any): Uint32Array;
+    filter(predicate: (value: number, index: number, array: Uint32Array) => unknown, thisArg?: any): Uint32Array;
 
     /**
      * Returns the value of the first element in the array where predicate is true, and undefined
@@ -3572,7 +3657,7 @@ interface Uint32Array {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    find(predicate: (value: number, index: number, obj: Uint32Array) => boolean, thisArg?: any): number | undefined;
+    find(predicate: (value: number, index: number, obj: Uint32Array) => unknown, thisArg?: any): number | undefined;
 
     /**
      * Returns the index of the first element in the array where predicate is true, and -1
@@ -3583,7 +3668,7 @@ interface Uint32Array {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    findIndex(predicate: (value: number, index: number, obj: Uint32Array) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: number, index: number, obj: Uint32Array) => unknown, thisArg?: any): number;
 
     /**
      * Performs the specified action for each element in an array.
@@ -3641,8 +3726,7 @@ interface Uint32Array {
      * the accumulation. The first call to the callbackfn function provides this value as an argument
      * instead of an array value.
      */
-    reduce(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint32Array) => number): number;
-    reduce(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint32Array) => number, initialValue: number): number;
+    reduce(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint32Array) => number, initialValue?: number): number;
 
     /**
      * Calls the specified callback function for all the elements in an array. The return value of
@@ -3666,8 +3750,7 @@ interface Uint32Array {
      * the accumulation. The first call to the callbackfn function provides this value as an
      * argument instead of an array value.
      */
-    reduceRight(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint32Array) => number): number;
-    reduceRight(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint32Array) => number, initialValue: number): number;
+    reduceRight(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Uint32Array) => number, initialValue?: number): number;
 
     /**
      * Calls the specified callback function for all the elements in an array, in descending order.
@@ -3716,10 +3799,10 @@ interface Uint32Array {
      * a negative value if first argument is less than second argument, zero if they're equal and a positive
      * value otherwise. If omitted, the elements are sorted in ascending order.
      * ```ts
-     * [11,2,22,1].sort((a, b) => a - b)
+     * [11, 2, 22, 1].sort((a, b) => a - b)
      * ```
      */
-    sort(compareFn?: (a: number, b: number) => number): this;
+    sort(compareFn?: (a: number, b: number) => number): Uint32Array;
 
     /**
      * Gets a new Uint32Array view of the ArrayBuffer store for this array, referencing the elements
@@ -3747,7 +3830,7 @@ interface Uint32Array {
 
 interface Uint32ArrayConstructor {
     readonly prototype: Uint32Array;
-    new(length: number): Uint32Array;
+    new(length?: number): Uint32Array;
     new(array: ArrayLike<number> | ArrayBufferLike): Uint32Array;
     new(buffer: ArrayBufferLike, byteOffset?: number, length?: number): Uint32Array;
 
@@ -3764,17 +3847,17 @@ interface Uint32ArrayConstructor {
 
     /**
      * Creates an array from an array-like or iterable object.
-     * @param arrayLike An array-like or iterable object to convert to an array.
+     * @param source An array-like or iterable object to convert to an array.
      */
-    from(arrayLike: ArrayLike<number>): Uint32Array;
+    from(source: ArrayLike<number>): Uint32Array;
 
     /**
      * Creates an array from an array-like or iterable object.
-     * @param arrayLike An array-like or iterable object to convert to an array.
+     * @param source An array-like or iterable object to convert to an array.
      * @param mapfn A mapping function to call on every element of the array.
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
-    from<T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint32Array;
+    from<T>(source: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint32Array;
 
 }
 declare var Uint32Array: Uint32ArrayConstructor;
@@ -3807,13 +3890,13 @@ interface Float32Array {
     /**
      * Returns the this object after copying a section of the array identified by start and end
      * to the same array starting at position target
-     * @param target If target is negative, it is treated as length+target where length is the
+     * @param target If target is negative, it is treated as length + target where length is the
      * length of the array.
-     * @param start If start is negative, it is treated as length+start. If end is negative, it
-     * is treated as length+end.
+     * @param start If start is negative, it is treated as length + start. If end is negative, it
+     * is treated as length + end.
      * @param end If not specified, length of the this object is used as its default value.
      */
-    copyWithin(target: number, start: number, end?: number): this;
+    copyWithin(target: number, start: number, end?: number): Float32Array;
 
     /**
      * Determines whether all the members of an array satisfy the specified test.
@@ -3829,11 +3912,11 @@ interface Float32Array {
      * Changes all array elements from `start` to `end` index to a static `value` and returns the modified array
      * @param value value to fill array section with
      * @param start index to start filling the array at. If start is negative, it is treated as
-     * length+start where length is the length of the array.
+     * length + start where length is the length of the array.
      * @param end index to stop filling the array at. If end is negative, it is treated as
-     * length+end.
+     * length + end.
      */
-    fill(value: number, start?: number, end?: number): this;
+    fill(value: number, start?: number, end?: number): Float32Array;
 
     /**
      * Returns the elements of an array that meet the condition specified in a callback function.
@@ -3842,7 +3925,7 @@ interface Float32Array {
      * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    filter(predicate: (value: number, index: number, array: Float32Array) => any, thisArg?: any): Float32Array;
+    filter(predicate: (value: number, index: number, array: Float32Array) => unknown, thisArg?: any): Float32Array;
 
     /**
      * Returns the value of the first element in the array where predicate is true, and undefined
@@ -3853,7 +3936,7 @@ interface Float32Array {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    find(predicate: (value: number, index: number, obj: Float32Array) => boolean, thisArg?: any): number | undefined;
+    find(predicate: (value: number, index: number, obj: Float32Array) => unknown, thisArg?: any): number | undefined;
 
     /**
      * Returns the index of the first element in the array where predicate is true, and -1
@@ -3864,7 +3947,7 @@ interface Float32Array {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    findIndex(predicate: (value: number, index: number, obj: Float32Array) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: number, index: number, obj: Float32Array) => unknown, thisArg?: any): number;
 
     /**
      * Performs the specified action for each element in an array.
@@ -3923,8 +4006,7 @@ interface Float32Array {
      * the accumulation. The first call to the callbackfn function provides this value as an argument
      * instead of an array value.
      */
-    reduce(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Float32Array) => number): number;
-    reduce(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Float32Array) => number, initialValue: number): number;
+    reduce(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Float32Array) => number, initialValue?: number): number;
 
     /**
      * Calls the specified callback function for all the elements in an array. The return value of
@@ -3948,8 +4030,7 @@ interface Float32Array {
      * the accumulation. The first call to the callbackfn function provides this value as an
      * argument instead of an array value.
      */
-    reduceRight(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Float32Array) => number): number;
-    reduceRight(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Float32Array) => number, initialValue: number): number;
+    reduceRight(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Float32Array) => number, initialValue?: number): number;
 
     /**
      * Calls the specified callback function for all the elements in an array, in descending order.
@@ -3998,10 +4079,10 @@ interface Float32Array {
      * a negative value if first argument is less than second argument, zero if they're equal and a positive
      * value otherwise. If omitted, the elements are sorted in ascending order.
      * ```ts
-     * [11,2,22,1].sort((a, b) => a - b)
+     * [11, 2, 22, 1].sort((a, b) => a - b)
      * ```
      */
-    sort(compareFn?: (a: number, b: number) => number): this;
+    sort(compareFn?: (a: number, b: number) => number): Float32Array;
 
     /**
      * Gets a new Float32Array view of the ArrayBuffer store for this array, referencing the elements
@@ -4029,7 +4110,7 @@ interface Float32Array {
 
 interface Float32ArrayConstructor {
     readonly prototype: Float32Array;
-    new(length: number): Float32Array;
+    new(length?: number): Float32Array;
     new(array: ArrayLike<number> | ArrayBufferLike): Float32Array;
     new(buffer: ArrayBufferLike, byteOffset?: number, length?: number): Float32Array;
 
@@ -4046,17 +4127,17 @@ interface Float32ArrayConstructor {
 
     /**
      * Creates an array from an array-like or iterable object.
-     * @param arrayLike An array-like or iterable object to convert to an array.
+     * @param source An array-like or iterable object to convert to an array.
      */
-    from(arrayLike: ArrayLike<number>): Float32Array;
+    from(source: ArrayLike<number>): Float32Array;
 
     /**
      * Creates an array from an array-like or iterable object.
-     * @param arrayLike An array-like or iterable object to convert to an array.
+     * @param source An array-like or iterable object to convert to an array.
      * @param mapfn A mapping function to call on every element of the array.
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
-    from<T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Float32Array;
+    from<T>(source: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Float32Array;
 
 
 }
@@ -4090,13 +4171,13 @@ interface Float64Array {
     /**
      * Returns the this object after copying a section of the array identified by start and end
      * to the same array starting at position target
-     * @param target If target is negative, it is treated as length+target where length is the
+     * @param target If target is negative, it is treated as length + target where length is the
      * length of the array.
-     * @param start If start is negative, it is treated as length+start. If end is negative, it
-     * is treated as length+end.
+     * @param start If start is negative, it is treated as length + start. If end is negative, it
+     * is treated as length + end.
      * @param end If not specified, length of the this object is used as its default value.
      */
-    copyWithin(target: number, start: number, end?: number): this;
+    copyWithin(target: number, start: number, end?: number): Float64Array;
 
     /**
      * Determines whether all the members of an array satisfy the specified test.
@@ -4112,11 +4193,11 @@ interface Float64Array {
      * Changes all array elements from `start` to `end` index to a static `value` and returns the modified array
      * @param value value to fill array section with
      * @param start index to start filling the array at. If start is negative, it is treated as
-     * length+start where length is the length of the array.
+     * length + start where length is the length of the array.
      * @param end index to stop filling the array at. If end is negative, it is treated as
-     * length+end.
+     * length + end.
      */
-    fill(value: number, start?: number, end?: number): this;
+    fill(value: number, start?: number, end?: number): Float64Array;
 
     /**
      * Returns the elements of an array that meet the condition specified in a callback function.
@@ -4125,7 +4206,7 @@ interface Float64Array {
      * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    filter(predicate: (value: number, index: number, array: Float64Array) => any, thisArg?: any): Float64Array;
+    filter(predicate: (value: number, index: number, array: Float64Array) => unknown, thisArg?: any): Float64Array;
 
     /**
      * Returns the value of the first element in the array where predicate is true, and undefined
@@ -4136,7 +4217,7 @@ interface Float64Array {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    find(predicate: (value: number, index: number, obj: Float64Array) => boolean, thisArg?: any): number | undefined;
+    find(predicate: (value: number, index: number, obj: Float64Array) => unknown, thisArg?: any): number | undefined;
 
     /**
      * Returns the index of the first element in the array where predicate is true, and -1
@@ -4147,7 +4228,7 @@ interface Float64Array {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    findIndex(predicate: (value: number, index: number, obj: Float64Array) => boolean, thisArg?: any): number;
+    findIndex(predicate: (value: number, index: number, obj: Float64Array) => unknown, thisArg?: any): number;
 
     /**
      * Performs the specified action for each element in an array.
@@ -4206,8 +4287,7 @@ interface Float64Array {
      * the accumulation. The first call to the callbackfn function provides this value as an argument
      * instead of an array value.
      */
-    reduce(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Float64Array) => number): number;
-    reduce(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Float64Array) => number, initialValue: number): number;
+    reduce(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Float64Array) => number, initialValue?: number): number;
 
     /**
      * Calls the specified callback function for all the elements in an array. The return value of
@@ -4231,8 +4311,7 @@ interface Float64Array {
      * the accumulation. The first call to the callbackfn function provides this value as an
      * argument instead of an array value.
      */
-    reduceRight(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Float64Array) => number): number;
-    reduceRight(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Float64Array) => number, initialValue: number): number;
+    reduceRight(callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: Float64Array) => number, initialValue?: number): number;
 
     /**
      * Calls the specified callback function for all the elements in an array, in descending order.
@@ -4281,10 +4360,10 @@ interface Float64Array {
      * a negative value if first argument is less than second argument, zero if they're equal and a positive
      * value otherwise. If omitted, the elements are sorted in ascending order.
      * ```ts
-     * [11,2,22,1].sort((a, b) => a - b)
+     * [11, 2, 22, 1].sort((a, b) => a - b)
      * ```
      */
-    sort(compareFn?: (a: number, b: number) => number): this;
+    sort(compareFn?: (a: number, b: number) => number): Float64Array;
 
     /**
      * at begin, inclusive, up to end, exclusive.
@@ -4303,7 +4382,7 @@ interface Float64Array {
 
 interface Float64ArrayConstructor {
     readonly prototype: Float64Array;
-    new(length: number): Float64Array;
+    new(length?: number): Float64Array;
     new(array: ArrayLike<number> | ArrayBufferLike): Float64Array;
     new(buffer: ArrayBufferLike, byteOffset?: number, length?: number): Float64Array;
 
@@ -4320,17 +4399,17 @@ interface Float64ArrayConstructor {
 
     /**
      * Creates an array from an array-like or iterable object.
-     * @param arrayLike An array-like or iterable object to convert to an array.
+     * @param source An array-like or iterable object to convert to an array.
      */
-    from(arrayLike: ArrayLike<number>): Float64Array;
+    from(source: ArrayLike<number>): Float64Array;
 
     /**
      * Creates an array from an array-like or iterable object.
-     * @param arrayLike An array-like or iterable object to convert to an array.
+     * @param source An array-like or iterable object to convert to an array.
      * @param mapfn A mapping function to call on every element of the array.
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
-    from<T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Float64Array;
+    from<T>(source: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Float64Array;
 
 }
 declare var Float64Array: Float64ArrayConstructor;

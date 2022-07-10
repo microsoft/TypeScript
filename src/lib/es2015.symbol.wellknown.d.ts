@@ -219,22 +219,22 @@ interface String {
     match(matcher: { [Symbol.match](string: string): RegExpMatchArray | null; }): RegExpMatchArray | null;
 
     /**
-     * Replaces first match with string or all matches with RegExp.
-     * @param searchValue A string or RegExp search value.
-     * @param replaceValue A string containing the text to replace for match.
+     * Replaces one or more occurrences of substrings that match the method provided by `searchValue`.
+     * @param searchValue An object that supports searching for and replacing matches within a string.
+     * @param replaceValue The replacement text.
      */
     replace(searchValue: { [Symbol.replace](string: string, replaceValue: string): string; }, replaceValue: string): string;
 
     /**
-     * Replaces text in a string, using an object that supports replacement within a string.
-     * @param searchValue A object can search for and replace matches within a string.
+     * Replaces one or more occurrences of substrings that match the method provided by `searchValue`.
+     * @param searchValue An object that supports searching for and replacing matches within a string.
      * @param replacer A function that returns the replacement text.
      */
     replace(searchValue: { [Symbol.replace](string: string, replacer: (substring: string, ...args: any[]) => string): string; }, replacer: (substring: string, ...args: any[]) => string): string;
 
     /**
      * Finds the first substring match in a regular expression search.
-     * @param searcher An object which supports searching within a string.
+     * @param searcher An object that supports searching within a string.
      */
     search(searcher: { [Symbol.search](string: string): number; }): number;
 
