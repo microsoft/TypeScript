@@ -23432,27 +23432,31 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
         }
 
         function tryGetElementAccessExpressionName(node: ElementAccessExpression) {
-            if (isStringOrNumericLiteralLike(node.argumentExpression)) {
-                return escapeLeadingUnderscores(node.argumentExpression.text);
-            }
-            if (isEntityNameExpression(node.argumentExpression)) {
-                const symbol = resolveEntityName(node.argumentExpression, SymbolFlags.Value, /*ignoreErrors*/ true);
-                if (!symbol || !isConstVariable(symbol)) return undefined;
+            return isStringOrNumericLiteralLike(node.argumentExpression) ? escapeLeadingUnderscores(node.argumentExpression.text) :
+                isEntityNameExpression(node.argumentExpression) ? tryGetNameFromEntityNameExpression(node.argumentExpression) : undefined;
+        }
 
-                const declaration = symbol.valueDeclaration;
-                if (declaration === undefined) return undefined;
+        function tryGetNameFromEntityNameExpression(node: EntityNameOrEntityNameExpression) {
+            const symbol = resolveEntityName(node, SymbolFlags.Value, /*ignoreErrors*/ true);
+            if (!symbol || !(isConstVariable(symbol) || (symbol.flags & SymbolFlags.EnumMember))) return undefined;
 
-                const type = tryGetTypeFromEffectiveTypeNode(declaration);
-                if (type) {
-                    const name = tryGetNameFromType(type);
-                    if (name !== undefined) {
-                        return name;
-                    }
+            const declaration = symbol.valueDeclaration;
+            if (declaration === undefined) return undefined;
+
+            const type = tryGetTypeFromEffectiveTypeNode(declaration);
+            if (type) {
+                const name = tryGetNameFromType(type);
+                if (name !== undefined) {
+                    return name;
                 }
-
-                if (hasOnlyExpressionInitializer(declaration)) {
-                    const initializer = getEffectiveInitializer(declaration);
-                    return initializer && tryGetNameFromType(getTypeOfExpression(initializer));
+            }
+            if (hasOnlyExpressionInitializer(declaration)) {
+                const initializer = getEffectiveInitializer(declaration);
+                if (initializer) {
+                    return tryGetNameFromType(getTypeOfExpression(initializer));
+                }
+                if (isEnumMember(declaration)) {
+                    return getTextOfPropertyName(declaration.name);
                 }
             }
             return undefined;
@@ -44579,7 +44583,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                 }
 
                 if (!inDestructuring) {
-                    const effectiveName = getPropertyNameForPropertyNameNode(name);
+                    const effectiveName = getEffectivePropertyNameForPropertyName(name);
                     if (effectiveName === undefined) {
                         continue;
                     }
@@ -45592,6 +45596,12 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                 }
             }
             return undefined;
+        }
+
+        function getEffectivePropertyNameForPropertyName(node: PropertyName) {
+            const name = getPropertyNameForPropertyNameNode(node);
+            return name ? name :
+                isComputedPropertyName(node) && isEntityNameExpression(node.expression) ? tryGetNameFromEntityNameExpression(node.expression) : undefined;
         }
     }
 

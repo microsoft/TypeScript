@@ -1,4 +1,4 @@
-//// [duplicateObjectLiteralProperty_computedName.ts]
+//// [duplicateObjectLiteralProperty_computedName1.ts]
 const t1 = {
     1: 1,
     [1]: 0 // duplicate
@@ -35,7 +35,7 @@ const t7 = {
 }
 
 
-//// [duplicateObjectLiteralProperty_computedName.js]
+//// [duplicateObjectLiteralProperty_computedName1.js]
 var _a, _b, _c, _d, _e, _f, _g;
 var t1 = (_a = {
         1: 1
