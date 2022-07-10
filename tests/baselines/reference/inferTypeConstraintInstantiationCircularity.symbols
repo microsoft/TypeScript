@@ -108,7 +108,7 @@ type optionalKeys<T extends object> = {
 type requiredKeys<T extends object> = Exclude<keyof T, optionalKeys<T>>;
 >requiredKeys : Symbol(requiredKeys, Decl(inferTypeConstraintInstantiationCircularity.ts, 36, 11))
 >T : Symbol(T, Decl(inferTypeConstraintInstantiationCircularity.ts, 38, 18))
->Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>Exclude : Symbol(Exclude, Decl(lib.utils.modifiers.d.ts, --, --))
 >T : Symbol(T, Decl(inferTypeConstraintInstantiationCircularity.ts, 38, 18))
 >optionalKeys : Symbol(optionalKeys, Decl(inferTypeConstraintInstantiationCircularity.ts, 32, 54))
 >T : Symbol(T, Decl(inferTypeConstraintInstantiationCircularity.ts, 38, 18))

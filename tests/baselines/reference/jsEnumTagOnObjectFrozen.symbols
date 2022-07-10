@@ -28,9 +28,9 @@ cbThing(type => {
 
         time: Date.now(),
 >time : Symbol(time, Decl(usage.js, 12, 22))
->Date.now : Symbol(DateConstructor.now, Decl(lib.es5.d.ts, --, --))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
->now : Symbol(DateConstructor.now, Decl(lib.es5.d.ts, --, --))
+>Date.now : Symbol(DateConstructor.now, Decl(lib.es2009.date.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2009.date.d.ts, --, --), Decl(lib.es2009.date.d.ts, --, --), Decl(lib.es2009.date.d.ts, --, --))
+>now : Symbol(DateConstructor.now, Decl(lib.es2009.date.d.ts, --, --))
 
         type,
 >type : Symbol(type, Decl(usage.js, 13, 25))
@@ -42,9 +42,9 @@ cbThing(type => {
 /** @enum {string} */
 const Thing = Object.freeze({
 >Thing : Symbol(Thing, Decl(index.js, 1, 5), Decl(index.js, 0, 4))
->Object.freeze : Symbol(ObjectConstructor.freeze, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->freeze : Symbol(ObjectConstructor.freeze, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object.freeze : Symbol(ObjectConstructor.freeze, Decl(lib.es2009.object.d.ts, --, --), Decl(lib.es2009.object.d.ts, --, --), Decl(lib.es2009.object.d.ts, --, --), Decl(lib.es2009.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es2009.object.d.ts, --, --), Decl(lib.es2009.object.d.ts, --, --))
+>freeze : Symbol(ObjectConstructor.freeze, Decl(lib.es2009.object.d.ts, --, --), Decl(lib.es2009.object.d.ts, --, --), Decl(lib.es2009.object.d.ts, --, --), Decl(lib.es2009.object.d.ts, --, --))
 
     a: "thing",
 >a : Symbol(a, Decl(index.js, 1, 29))

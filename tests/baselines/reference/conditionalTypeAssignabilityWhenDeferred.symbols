@@ -106,9 +106,9 @@ function f<T>(t: T) {
   var x: T | null = Math.random() > 0.5 ? null : t;
 >x : Symbol(x, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 31, 5))
 >T : Symbol(T, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 30, 11))
->Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math.random : Symbol(Math.random, Decl(lib.es2009.math.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es2009.math.d.ts, --, --), Decl(lib.es2009.math.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es2009.math.d.ts, --, --))
 >t : Symbol(t, Decl(conditionalTypeAssignabilityWhenDeferred.ts, 30, 14))
 
   onlyNullablePlease(x); // should work

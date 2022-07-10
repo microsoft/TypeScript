@@ -28,7 +28,7 @@ function Foonly() {
 Foonly.prototype.mreal = function() {
 >Foonly.prototype : Symbol(Foonly.mreal, Decl(inferringClassMembersFromAssignments6.js, 6, 1))
 >Foonly : Symbol(Foonly, Decl(inferringClassMembersFromAssignments6.js, 0, 0))
->prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>prototype : Symbol(Function.prototype, Decl(lib.es2009.function.d.ts, --, --))
 >mreal : Symbol(Foonly.mreal, Decl(inferringClassMembersFromAssignments6.js, 6, 1))
 
     var self = this

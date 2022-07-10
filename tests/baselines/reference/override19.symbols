@@ -18,7 +18,7 @@ declare function CreateMixin<C extends Foo, T extends Foo>(Context: C, Base: T):
    new (...args: any[]): { context: InstanceType<C> }
 >args : Symbol(args, Decl(override19.ts, 2, 8))
 >context : Symbol(context, Decl(override19.ts, 2, 26))
->InstanceType : Symbol(InstanceType, Decl(lib.es5.d.ts, --, --))
+>InstanceType : Symbol(InstanceType, Decl(lib.utils.modifiers.d.ts, --, --))
 >C : Symbol(C, Decl(override19.ts, 1, 29))
 }
 class Context {}

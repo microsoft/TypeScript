@@ -19,7 +19,7 @@ const foo = (a) => {
 >(a).y : Symbol(y, Decl(assertionTypePredicates2.js, 5, 19))
 >a : Symbol(a, Decl(assertionTypePredicates2.js, 12, 13))
 >y : Symbol(y, Decl(assertionTypePredicates2.js, 5, 19))
->TypeError : Symbol(TypeError, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>TypeError : Symbol(TypeError, Decl(lib.es2009.typeerror.d.ts, --, --), Decl(lib.es2009.typeerror.d.ts, --, --))
 
     return undefined;
 >undefined : Symbol(undefined)

@@ -1,0 +1,23 @@
+lib.es5.d.ts(48,21): error TS6054: File 'lib.es2009.uint16array' has an unsupported extension. The only supported extensions are '.ts', '.tsx', '.d.ts', '.cts', '.d.cts', '.mts', '.d.mts'.
+
+
+==== private_m4.ts (0 errors) ====
+    
+    export class d {
+    };
+    export var x: d;
+    export function foo(): d {
+        return new d();
+    }
+    
+    
+==== useModule.ts (0 errors) ====
+    // only used privately no need to emit
+    import private_m4 = require("private_m4");
+    export module usePrivate_m4_m1 {
+        var x3 = private_m4.x;
+        var d3 = private_m4.d;
+        var f3 = private_m4.foo();
+    
+        export var numberVar: number;
+    }

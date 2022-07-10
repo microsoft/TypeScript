@@ -17,9 +17,9 @@ function f1<T extends string | undefined>(x: T, y: { a: T }, z: [T]): string {
 >x : Symbol(x, Decl(controlFlowGenericTypes.ts, 0, 42))
 
         x.length;
->x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x.length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
 >x : Symbol(x, Decl(controlFlowGenericTypes.ts, 0, 42))
->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
 
         return x;
 >x : Symbol(x, Decl(controlFlowGenericTypes.ts, 0, 42))
@@ -30,11 +30,11 @@ function f1<T extends string | undefined>(x: T, y: { a: T }, z: [T]): string {
 >a : Symbol(a, Decl(controlFlowGenericTypes.ts, 0, 52))
 
         y.a.length;
->y.a.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>y.a.length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
 >y.a : Symbol(a, Decl(controlFlowGenericTypes.ts, 0, 52))
 >y : Symbol(y, Decl(controlFlowGenericTypes.ts, 0, 47))
 >a : Symbol(a, Decl(controlFlowGenericTypes.ts, 0, 52))
->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
 
         return y.a;
 >y.a : Symbol(a, Decl(controlFlowGenericTypes.ts, 0, 52))
@@ -46,10 +46,10 @@ function f1<T extends string | undefined>(x: T, y: { a: T }, z: [T]): string {
 >0 : Symbol(0)
 
         z[0].length;
->z[0].length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>z[0].length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
 >z : Symbol(z, Decl(controlFlowGenericTypes.ts, 0, 60))
 >0 : Symbol(0)
->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
 
         return z[0];
 >z : Symbol(z, Decl(controlFlowGenericTypes.ts, 0, 60))
@@ -62,7 +62,7 @@ function f2<T>(x: Extract<T, string | undefined> | null): string {
 >f2 : Symbol(f2, Decl(controlFlowGenericTypes.ts, 15, 1))
 >T : Symbol(T, Decl(controlFlowGenericTypes.ts, 17, 12))
 >x : Symbol(x, Decl(controlFlowGenericTypes.ts, 17, 15))
->Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>Extract : Symbol(Extract, Decl(lib.utils.modifiers.d.ts, --, --))
 >T : Symbol(T, Decl(controlFlowGenericTypes.ts, 17, 12))
 
     if (x) {
@@ -72,9 +72,9 @@ function f2<T>(x: Extract<T, string | undefined> | null): string {
 >x : Symbol(x, Decl(controlFlowGenericTypes.ts, 17, 15))
 
         x.length;
->x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x.length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
 >x : Symbol(x, Decl(controlFlowGenericTypes.ts, 17, 15))
->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
 
         return x;
 >x : Symbol(x, Decl(controlFlowGenericTypes.ts, 17, 15))
@@ -434,7 +434,7 @@ function fx1<T, K extends keyof T>(obj: T, key: K) {
 function fx2<T extends Record<keyof T, string>, K extends keyof T>(obj: T, key: K) {
 >fx2 : Symbol(fx2, Decl(controlFlowGenericTypes.ts, 147, 1))
 >T : Symbol(T, Decl(controlFlowGenericTypes.ts, 149, 13))
->Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.utils.modifiers.d.ts, --, --))
 >T : Symbol(T, Decl(controlFlowGenericTypes.ts, 149, 13))
 >K : Symbol(K, Decl(controlFlowGenericTypes.ts, 149, 47))
 >T : Symbol(T, Decl(controlFlowGenericTypes.ts, 149, 13))
@@ -458,7 +458,7 @@ function fx2<T extends Record<keyof T, string>, K extends keyof T>(obj: T, key: 
 function fx3<T extends Record<keyof T, string> | undefined, K extends keyof T>(obj: T, key: K) {
 >fx3 : Symbol(fx3, Decl(controlFlowGenericTypes.ts, 152, 1))
 >T : Symbol(T, Decl(controlFlowGenericTypes.ts, 154, 13))
->Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.utils.modifiers.d.ts, --, --))
 >T : Symbol(T, Decl(controlFlowGenericTypes.ts, 154, 13))
 >K : Symbol(K, Decl(controlFlowGenericTypes.ts, 154, 59))
 >T : Symbol(T, Decl(controlFlowGenericTypes.ts, 154, 13))
@@ -486,12 +486,12 @@ class TableBaseEnum<
 
     PublicSpec extends Record<keyof InternalSpec, any>,
 >PublicSpec : Symbol(PublicSpec, Decl(controlFlowGenericTypes.ts, 161, 20))
->Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.utils.modifiers.d.ts, --, --))
 >InternalSpec : Symbol(InternalSpec, Decl(controlFlowGenericTypes.ts, 162, 55))
 
     InternalSpec extends Record<keyof PublicSpec, any>  | undefined = undefined> {
 >InternalSpec : Symbol(InternalSpec, Decl(controlFlowGenericTypes.ts, 162, 55))
->Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.utils.modifiers.d.ts, --, --))
 >PublicSpec : Symbol(PublicSpec, Decl(controlFlowGenericTypes.ts, 161, 20))
 
     m() {
@@ -534,7 +534,7 @@ function f10<T extends { a: string } | undefined>(x: T, y: Partial<T>) {
 >x : Symbol(x, Decl(controlFlowGenericTypes.ts, 178, 50))
 >T : Symbol(T, Decl(controlFlowGenericTypes.ts, 178, 13))
 >y : Symbol(y, Decl(controlFlowGenericTypes.ts, 178, 55))
->Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.utils.modifiers.d.ts, --, --))
 >T : Symbol(T, Decl(controlFlowGenericTypes.ts, 178, 13))
 
     y = x;
@@ -556,7 +556,7 @@ class SqlTable<T> {
     protected validateRow(_row: Partial<SqlInsertSet<T>>): void {
 >validateRow : Symbol(SqlTable.validateRow, Decl(controlFlowGenericTypes.ts, 184, 19))
 >_row : Symbol(_row, Decl(controlFlowGenericTypes.ts, 185, 26))
->Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.utils.modifiers.d.ts, --, --))
 >SqlInsertSet : Symbol(SqlInsertSet, Decl(controlFlowGenericTypes.ts, 180, 1))
 >T : Symbol(T, Decl(controlFlowGenericTypes.ts, 184, 15))
     }

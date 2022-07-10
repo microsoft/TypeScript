@@ -113,10 +113,10 @@ class Foo<T extends string> {
 >hasData : Symbol(Foo.hasData, Decl(spreadObjectOrFalsy.ts, 45, 5))
 
             this.data.toLocaleLowerCase();
->this.data.toLocaleLowerCase : Symbol(String.toLocaleLowerCase, Decl(lib.es5.d.ts, --, --))
+>this.data.toLocaleLowerCase : Symbol(String.toLocaleLowerCase, Decl(lib.es2009.string.d.ts, --, --))
 >this.data : Symbol(data, Decl(spreadObjectOrFalsy.ts, 39, 29), Decl(spreadObjectOrFalsy.ts, 35, 25))
 >data : Symbol(data, Decl(spreadObjectOrFalsy.ts, 39, 29), Decl(spreadObjectOrFalsy.ts, 35, 25))
->toLocaleLowerCase : Symbol(String.toLocaleLowerCase, Decl(lib.es5.d.ts, --, --))
+>toLocaleLowerCase : Symbol(String.toLocaleLowerCase, Decl(lib.es2009.string.d.ts, --, --))
         }
     }
     hasData(): this is DatafulFoo<T> {

@@ -53,7 +53,7 @@ interface Entry {
  function makeEntityStore<T extends Record<string, Entity>>(config: T): Nodes<T> {
 >makeEntityStore : Symbol(makeEntityStore, Decl(substitutionTypeNoMergeOfAssignableType.ts, 16, 3))
 >T : Symbol(T, Decl(substitutionTypeNoMergeOfAssignableType.ts, 18, 26))
->Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.utils.modifiers.d.ts, --, --))
 >Entity : Symbol(Entity, Decl(substitutionTypeNoMergeOfAssignableType.ts, 2, 2))
 >config : Symbol(config, Decl(substitutionTypeNoMergeOfAssignableType.ts, 18, 60))
 >T : Symbol(T, Decl(substitutionTypeNoMergeOfAssignableType.ts, 18, 26))

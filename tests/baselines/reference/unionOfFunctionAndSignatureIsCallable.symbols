@@ -2,7 +2,7 @@
 function f1(c1: Function, c2: () => object,  callable: typeof c1 | typeof c2) {
 >f1 : Symbol(f1, Decl(unionOfFunctionAndSignatureIsCallable.ts, 0, 0))
 >c1 : Symbol(c1, Decl(unionOfFunctionAndSignatureIsCallable.ts, 0, 12))
->Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es2009.function.d.ts, --, --), Decl(lib.es2009.function.d.ts, --, --))
 >c2 : Symbol(c2, Decl(unionOfFunctionAndSignatureIsCallable.ts, 0, 25))
 >callable : Symbol(callable, Decl(unionOfFunctionAndSignatureIsCallable.ts, 0, 43))
 >c1 : Symbol(c1, Decl(unionOfFunctionAndSignatureIsCallable.ts, 0, 12))

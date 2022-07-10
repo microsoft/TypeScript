@@ -13,7 +13,7 @@ interface StatelessComponent<P> {
     (): any;
     defaultProps?: Partial<P>;
 >defaultProps : Symbol(StatelessComponent.defaultProps, Decl(expandoFunctionContextualTypes.ts, 5, 12))
->Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.utils.modifiers.d.ts, --, --))
 >P : Symbol(P, Decl(expandoFunctionContextualTypes.ts, 4, 29))
 }
 

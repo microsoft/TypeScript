@@ -6,14 +6,14 @@ declare class Component<P, S = {}> {
 
     readonly props: Readonly<{ children?: unknown }> & Readonly<P>;
 >props : Symbol(Component.props, Decl(thisIndexOnExistingReadonlyFieldIsNotNever.ts, 0, 36))
->Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>Readonly : Symbol(Readonly, Decl(lib.utils.modifiers.d.ts, --, --))
 >children : Symbol(children, Decl(thisIndexOnExistingReadonlyFieldIsNotNever.ts, 1, 30))
->Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>Readonly : Symbol(Readonly, Decl(lib.utils.modifiers.d.ts, --, --))
 >P : Symbol(P, Decl(thisIndexOnExistingReadonlyFieldIsNotNever.ts, 0, 24))
 
     state: Readonly<S>;
 >state : Symbol(Component.state, Decl(thisIndexOnExistingReadonlyFieldIsNotNever.ts, 1, 67))
->Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>Readonly : Symbol(Readonly, Decl(lib.utils.modifiers.d.ts, --, --))
 >S : Symbol(S, Decl(thisIndexOnExistingReadonlyFieldIsNotNever.ts, 0, 26))
 }
 interface CoachMarkAnchorProps<C> {

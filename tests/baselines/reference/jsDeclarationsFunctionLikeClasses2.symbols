@@ -13,7 +13,7 @@ export function Vec(len) {
 >this.storage : Symbol(Vec.storage, Decl(source.js, 3, 26))
 >this : Symbol(Vec, Decl(source.js, 0, 0), Decl(source.js, 8, 1))
 >storage : Symbol(Vec.storage, Decl(source.js, 3, 26))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es2009.array.d.ts, --, --), Decl(lib.es2009.array.d.ts, --, --))
 >len : Symbol(len, Decl(source.js, 3, 20))
 }
 
@@ -30,19 +30,19 @@ Vec.prototype = {
 >other : Symbol(other, Decl(source.js, 14, 8))
 
         if (other.storage.length !== this.storage.length) {
->other.storage.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>other.storage.length : Symbol(Array.length, Decl(lib.es2009.array.d.ts, --, --))
 >other.storage : Symbol(Vec.storage, Decl(source.js, 3, 26))
 >other : Symbol(other, Decl(source.js, 14, 8))
 >storage : Symbol(Vec.storage, Decl(source.js, 3, 26))
->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
->this.storage.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es2009.array.d.ts, --, --))
+>this.storage.length : Symbol(Array.length, Decl(lib.es2009.array.d.ts, --, --))
 >this.storage : Symbol(Vec.storage, Decl(source.js, 3, 26))
 >this : Symbol(Vec, Decl(source.js, 0, 0), Decl(source.js, 8, 1))
 >storage : Symbol(Vec.storage, Decl(source.js, 3, 26))
->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es2009.array.d.ts, --, --))
 
             throw new Error(`Dot product only applicable for vectors of equal length`);
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2009.error.d.ts, --, --))
         }
         let sum = 0;
 >sum : Symbol(sum, Decl(source.js, 18, 11))
@@ -50,11 +50,11 @@ Vec.prototype = {
         for (let i = 0; i < this.storage.length; i++) {
 >i : Symbol(i, Decl(source.js, 19, 16))
 >i : Symbol(i, Decl(source.js, 19, 16))
->this.storage.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>this.storage.length : Symbol(Array.length, Decl(lib.es2009.array.d.ts, --, --))
 >this.storage : Symbol(Vec.storage, Decl(source.js, 3, 26))
 >this : Symbol(Vec, Decl(source.js, 0, 0), Decl(source.js, 8, 1))
 >storage : Symbol(Vec.storage, Decl(source.js, 3, 26))
->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es2009.array.d.ts, --, --))
 >i : Symbol(i, Decl(source.js, 19, 16))
 
             sum += (this.storage[i] * other.storage[i]);
@@ -81,11 +81,11 @@ Vec.prototype = {
         for (let i = 0; i < this.storage.length; i++) {
 >i : Symbol(i, Decl(source.js, 26, 16))
 >i : Symbol(i, Decl(source.js, 26, 16))
->this.storage.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>this.storage.length : Symbol(Array.length, Decl(lib.es2009.array.d.ts, --, --))
 >this.storage : Symbol(Vec.storage, Decl(source.js, 3, 26))
 >this : Symbol(Vec, Decl(source.js, 0, 0), Decl(source.js, 8, 1))
 >storage : Symbol(Vec.storage, Decl(source.js, 3, 26))
->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es2009.array.d.ts, --, --))
 >i : Symbol(i, Decl(source.js, 26, 16))
 
             sum += (this.storage[i] ** 2);
@@ -96,9 +96,9 @@ Vec.prototype = {
 >i : Symbol(i, Decl(source.js, 26, 16))
         }
         return Math.sqrt(sum);
->Math.sqrt : Symbol(Math.sqrt, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->sqrt : Symbol(Math.sqrt, Decl(lib.es5.d.ts, --, --))
+>Math.sqrt : Symbol(Math.sqrt, Decl(lib.es2009.math.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es2009.math.d.ts, --, --), Decl(lib.es2009.math.d.ts, --, --))
+>sqrt : Symbol(Math.sqrt, Decl(lib.es2009.math.d.ts, --, --))
 >sum : Symbol(sum, Decl(source.js, 25, 11))
     }
 }
@@ -122,9 +122,9 @@ export function Point2D(x, y) {
 >y : Symbol(y, Decl(source.js, 37, 26))
     }
     Vec.call(this, 2);
->Vec.call : Symbol(Function.call, Decl(lib.es5.d.ts, --, --))
+>Vec.call : Symbol(Function.call, Decl(lib.es2009.function.d.ts, --, --))
 >Vec : Symbol(Vec, Decl(source.js, 0, 0), Decl(source.js, 8, 1))
->call : Symbol(Function.call, Decl(lib.es5.d.ts, --, --))
+>call : Symbol(Function.call, Decl(lib.es2009.function.d.ts, --, --))
 >this : Symbol(Point2D, Decl(source.js, 31, 1), Decl(source.js, 44, 1))
 
     this.x = x;

@@ -13,7 +13,7 @@ for (const i of [0, 1, 2, 3, 4]) {
 >i : Symbol(i, Decl(ES5For-of37.ts, 2, 10))
 
                 throw new Error('ERR');
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2009.error.d.ts, --, --))
             }
         }
         console.log(i);

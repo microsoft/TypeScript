@@ -1,7 +1,7 @@
 === tests/cases/conformance/controlFlow/controlFlowIfStatement.ts ===
 let x: string | number | boolean | RegExp;
 >x : Symbol(x, Decl(controlFlowIfStatement.ts, 0, 3))
->RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es2009.regexp.d.ts, --, --), Decl(lib.es2009.regexp.d.ts, --, --))
 
 let cond: boolean;
 >cond : Symbol(cond, Decl(controlFlowIfStatement.ts, 1, 3))
@@ -82,9 +82,9 @@ function c<T>(data: string | T): T {
 >data : Symbol(data, Decl(controlFlowIfStatement.ts, 36, 14))
 
         return JSON.parse(data);
->JSON.parse : Symbol(JSON.parse, Decl(lib.es5.d.ts, --, --))
->JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->parse : Symbol(JSON.parse, Decl(lib.es5.d.ts, --, --))
+>JSON.parse : Symbol(JSON.parse, Decl(lib.es2009.json.d.ts, --, --))
+>JSON : Symbol(JSON, Decl(lib.es2009.json.d.ts, --, --), Decl(lib.es2009.json.d.ts, --, --))
+>parse : Symbol(JSON.parse, Decl(lib.es2009.json.d.ts, --, --))
 >data : Symbol(data, Decl(controlFlowIfStatement.ts, 36, 14))
     }
     else {
@@ -102,7 +102,7 @@ function d<T extends string>(data: string | T): never {
 >data : Symbol(data, Decl(controlFlowIfStatement.ts, 44, 29))
 
         throw new Error('will always happen');
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2009.error.d.ts, --, --))
     }
     else {
         return data;

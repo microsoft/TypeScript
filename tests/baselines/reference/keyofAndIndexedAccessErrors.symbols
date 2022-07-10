@@ -27,27 +27,27 @@ type T00 = keyof K0;  // Error
 
 type T01 = keyof Object;
 >T01 : Symbol(T01, Decl(keyofAndIndexedAccessErrors.ts, 9, 20))
->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es2009.object.d.ts, --, --), Decl(lib.es2009.object.d.ts, --, --))
 
 type T02 = keyof keyof Object;
 >T02 : Symbol(T02, Decl(keyofAndIndexedAccessErrors.ts, 11, 24))
->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es2009.object.d.ts, --, --), Decl(lib.es2009.object.d.ts, --, --))
 
 type T03 = keyof keyof keyof Object;
 >T03 : Symbol(T03, Decl(keyofAndIndexedAccessErrors.ts, 12, 30))
->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es2009.object.d.ts, --, --), Decl(lib.es2009.object.d.ts, --, --))
 
 type T04 = keyof keyof keyof keyof Object;
 >T04 : Symbol(T04, Decl(keyofAndIndexedAccessErrors.ts, 13, 36))
->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es2009.object.d.ts, --, --), Decl(lib.es2009.object.d.ts, --, --))
 
 type T05 = keyof keyof keyof keyof keyof Object;
 >T05 : Symbol(T05, Decl(keyofAndIndexedAccessErrors.ts, 14, 42))
->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es2009.object.d.ts, --, --), Decl(lib.es2009.object.d.ts, --, --))
 
 type T06 = keyof keyof keyof keyof keyof keyof Object;
 >T06 : Symbol(T06, Decl(keyofAndIndexedAccessErrors.ts, 15, 48))
->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es2009.object.d.ts, --, --), Decl(lib.es2009.object.d.ts, --, --))
 
 type T10 = Shape["name"];
 >T10 : Symbol(T10, Decl(keyofAndIndexedAccessErrors.ts, 16, 54))
@@ -329,7 +329,7 @@ function f3<T, K extends Extract<keyof T, string>, U extends T, J extends K>(
 >f3 : Symbol(f3, Decl(keyofAndIndexedAccessErrors.ts, 95, 1))
 >T : Symbol(T, Decl(keyofAndIndexedAccessErrors.ts, 98, 12))
 >K : Symbol(K, Decl(keyofAndIndexedAccessErrors.ts, 98, 14))
->Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>Extract : Symbol(Extract, Decl(lib.utils.modifiers.d.ts, --, --))
 >T : Symbol(T, Decl(keyofAndIndexedAccessErrors.ts, 98, 12))
 >U : Symbol(U, Decl(keyofAndIndexedAccessErrors.ts, 98, 50))
 >T : Symbol(T, Decl(keyofAndIndexedAccessErrors.ts, 98, 12))
@@ -434,7 +434,7 @@ function f4<T extends { [K in keyof T]: string }>(k: keyof T) {
 type UndefinedKeys<T extends Record<string, any>> = {
 >UndefinedKeys : Symbol(UndefinedKeys, Decl(keyofAndIndexedAccessErrors.ts, 123, 1))
 >T : Symbol(T, Decl(keyofAndIndexedAccessErrors.ts, 127, 19))
->Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.utils.modifiers.d.ts, --, --))
 
   [K in keyof T]: undefined extends T[K] ? K : never
 >K : Symbol(K, Decl(keyofAndIndexedAccessErrors.ts, 128, 3))
@@ -466,7 +466,7 @@ const b1: Result1['b'] = 'b';
 function test1<T extends Record<string, any>, K extends keyof T>(t: T, k: K) {
 >test1 : Symbol(test1, Decl(keyofAndIndexedAccessErrors.ts, 136, 29))
 >T : Symbol(T, Decl(keyofAndIndexedAccessErrors.ts, 138, 15))
->Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.utils.modifiers.d.ts, --, --))
 >K : Symbol(K, Decl(keyofAndIndexedAccessErrors.ts, 138, 45))
 >T : Symbol(T, Decl(keyofAndIndexedAccessErrors.ts, 138, 15))
 >t : Symbol(t, Decl(keyofAndIndexedAccessErrors.ts, 138, 65))
@@ -497,8 +497,8 @@ function f30<T, K extends keyof T>() {
 
     let x: Partial<Record<keyof T, string>>[K] = "hello";
 >x : Symbol(x, Decl(keyofAndIndexedAccessErrors.ts, 147, 7))
->Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
->Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.utils.modifiers.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.utils.modifiers.d.ts, --, --))
 >T : Symbol(T, Decl(keyofAndIndexedAccessErrors.ts, 146, 13))
 >K : Symbol(K, Decl(keyofAndIndexedAccessErrors.ts, 146, 15))
 }
@@ -511,14 +511,14 @@ function f31<T, K extends keyof T>() {
 
     let x: Partial<Partial<Partial<Partial<Partial<Partial<Partial<Record<keyof T, string>>>>>>>>[K] = "hello";
 >x : Symbol(x, Decl(keyofAndIndexedAccessErrors.ts, 151, 7))
->Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
->Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
->Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
->Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
->Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
->Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
->Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
->Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.utils.modifiers.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.utils.modifiers.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.utils.modifiers.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.utils.modifiers.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.utils.modifiers.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.utils.modifiers.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.utils.modifiers.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.utils.modifiers.d.ts, --, --))
 >T : Symbol(T, Decl(keyofAndIndexedAccessErrors.ts, 150, 13))
 >K : Symbol(K, Decl(keyofAndIndexedAccessErrors.ts, 150, 15))
 }

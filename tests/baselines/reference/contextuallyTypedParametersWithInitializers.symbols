@@ -106,7 +106,7 @@ const f3: unknown = (x = 1) => 0;  // number
 
 const f4: Function = (x = 1) => 0;  // number
 >f4 : Symbol(f4, Decl(contextuallyTypedParametersWithInitializers.ts, 20, 5))
->Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es2009.function.d.ts, --, --), Decl(lib.es2009.function.d.ts, --, --))
 >x : Symbol(x, Decl(contextuallyTypedParametersWithInitializers.ts, 20, 22))
 
 const f5: (...args: any[]) => any = (x = 1) => 0;  // any
@@ -150,7 +150,7 @@ declare function g3<T extends unknown>(x: T): T;
 declare function g4<T extends Function>(x: T): T;
 >g4 : Symbol(g4, Decl(contextuallyTypedParametersWithInitializers.ts, 28, 48))
 >T : Symbol(T, Decl(contextuallyTypedParametersWithInitializers.ts, 29, 20))
->Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es2009.function.d.ts, --, --), Decl(lib.es2009.function.d.ts, --, --))
 >x : Symbol(x, Decl(contextuallyTypedParametersWithInitializers.ts, 29, 40))
 >T : Symbol(T, Decl(contextuallyTypedParametersWithInitializers.ts, 29, 20))
 >T : Symbol(T, Decl(contextuallyTypedParametersWithInitializers.ts, 29, 20))
@@ -241,7 +241,7 @@ const newGetFoo2 = id(function getFoo ({ foo = 42 }) {
 declare function memoize<F extends Function>(func: F): F;
 >memoize : Symbol(memoize, Decl(contextuallyTypedParametersWithInitializers.ts, 53, 3))
 >F : Symbol(F, Decl(contextuallyTypedParametersWithInitializers.ts, 57, 25))
->Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es2009.function.d.ts, --, --), Decl(lib.es2009.function.d.ts, --, --))
 >func : Symbol(func, Decl(contextuallyTypedParametersWithInitializers.ts, 57, 45))
 >F : Symbol(F, Decl(contextuallyTypedParametersWithInitializers.ts, 57, 25))
 >F : Symbol(F, Decl(contextuallyTypedParametersWithInitializers.ts, 57, 25))
@@ -285,8 +285,8 @@ const memoizedAdd3 = memoize((x: number, y = 0): number => x + y);
 declare function execute(script: string | Function): Promise<string>;
 >execute : Symbol(execute, Decl(contextuallyTypedParametersWithInitializers.ts, 67, 66))
 >script : Symbol(script, Decl(contextuallyTypedParametersWithInitializers.ts, 71, 25))
->Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es2009.function.d.ts, --, --), Decl(lib.es2009.function.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --))
   
 export function executeSomething() {
 >executeSomething : Symbol(executeSomething, Decl(contextuallyTypedParametersWithInitializers.ts, 71, 69))
@@ -314,6 +314,6 @@ const fz1 = (debug = true) => false;
 
 const fz2: Function = (debug = true) => false;
 >fz2 : Symbol(fz2, Decl(contextuallyTypedParametersWithInitializers.ts, 82, 5))
->Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es2009.function.d.ts, --, --), Decl(lib.es2009.function.d.ts, --, --))
 >debug : Symbol(debug, Decl(contextuallyTypedParametersWithInitializers.ts, 82, 23))
 

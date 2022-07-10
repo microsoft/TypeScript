@@ -23,9 +23,9 @@ function f1() {
     finally {
         if (a != null && a.toFixed(0) == "123") { 
 >a : Symbol(a, Decl(tryCatchFinallyControlFlow.ts, 3, 7))
->a.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>a.toFixed : Symbol(Number.toFixed, Decl(lib.es2009.number.d.ts, --, --))
 >a : Symbol(a, Decl(tryCatchFinallyControlFlow.ts, 3, 7))
->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es2009.number.d.ts, --, --))
         }
     }
 }
@@ -413,9 +413,9 @@ const main = () => {
 >hoge : Symbol(hoge, Decl(tryCatchFinallyControlFlow.ts, 228, 7))
 
             hoge.length;
->hoge.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>hoge.length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
 >hoge : Symbol(hoge, Decl(tryCatchFinallyControlFlow.ts, 228, 7))
->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
         }
         return;
     }

@@ -12,9 +12,9 @@ function distanceFromOrigin([x, y]: [number, number]) {
 >y : Symbol(y, Decl(readonlyTupleAndArrayElaboration.ts, 5, 31))
 
     return Math.sqrt(x ** 2 + y ** 2);
->Math.sqrt : Symbol(Math.sqrt, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->sqrt : Symbol(Math.sqrt, Decl(lib.es5.d.ts, --, --))
+>Math.sqrt : Symbol(Math.sqrt, Decl(lib.es2009.math.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es2009.math.d.ts, --, --), Decl(lib.es2009.math.d.ts, --, --))
+>sqrt : Symbol(Math.sqrt, Decl(lib.es2009.math.d.ts, --, --))
 >x : Symbol(x, Decl(readonlyTupleAndArrayElaboration.ts, 5, 29))
 >y : Symbol(y, Decl(readonlyTupleAndArrayElaboration.ts, 5, 31))
 }
@@ -34,7 +34,7 @@ arryFn(point);
 declare function arryFn2(x: Array<number>): void;
 >arryFn2 : Symbol(arryFn2, Decl(readonlyTupleAndArrayElaboration.ts, 12, 14))
 >x : Symbol(x, Decl(readonlyTupleAndArrayElaboration.ts, 14, 25))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es2009.array.d.ts, --, --), Decl(lib.es2009.array.d.ts, --, --))
 
 arryFn2(point);
 >arryFn2 : Symbol(arryFn2, Decl(readonlyTupleAndArrayElaboration.ts, 12, 14))
@@ -45,11 +45,11 @@ declare const a: readonly number[];
 
 declare const b: Readonly<number[]>;
 >b : Symbol(b, Decl(readonlyTupleAndArrayElaboration.ts, 18, 13))
->Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>Readonly : Symbol(Readonly, Decl(lib.utils.modifiers.d.ts, --, --))
 
 declare const c: ReadonlyArray<number>;
 >c : Symbol(c, Decl(readonlyTupleAndArrayElaboration.ts, 19, 13))
->ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es2009.array.d.ts, --, --))
 
 arryFn2(a);
 >arryFn2 : Symbol(arryFn2, Decl(readonlyTupleAndArrayElaboration.ts, 12, 14))

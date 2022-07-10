@@ -13,7 +13,7 @@ namespace JSX {
 
     [key: string]: Record<string, any>;
 >key : Symbol(key, Decl(library.ts, 4, 5))
->Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.utils.modifiers.d.ts, --, --))
   }
 }
 

@@ -12,7 +12,7 @@ var i: I;
 
 var o: Object;
 >o : Symbol(o, Decl(objectTypeHidingMembersOfObjectAssignmentCompat2.ts, 5, 3))
->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es2009.object.d.ts, --, --), Decl(lib.es2009.object.d.ts, --, --))
 
 o = i; // error
 >o : Symbol(o, Decl(objectTypeHidingMembersOfObjectAssignmentCompat2.ts, 5, 3))

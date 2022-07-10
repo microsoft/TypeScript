@@ -63,7 +63,7 @@ other.puuuce // OK, from another file
 >other : Symbol(other, Decl(other.js, 3, 3))
 
 new Date().getGMTDate() // OK, from another file
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2009.date.d.ts, --, --), Decl(lib.es2009.date.d.ts, --, --), Decl(lib.es2009.date.d.ts, --, --))
 
 // No suggestions for globals from other files
 const atoc = setIntegral(() => console.log('ok'), 500)

@@ -17,46 +17,46 @@ bigintVal = BigInt.asUintN(8, 0xFFFFn);
 
 bigintVal = bigintVal.valueOf(); // should error - bigintVal inferred as {}
 >bigintVal : Symbol(bigintVal, Decl(bigintWithoutLib.ts, 3, 3))
->bigintVal.valueOf : Symbol(Object.valueOf, Decl(lib.es5.d.ts, --, --))
+>bigintVal.valueOf : Symbol(Object.valueOf, Decl(lib.es2009.object.d.ts, --, --))
 >bigintVal : Symbol(bigintVal, Decl(bigintWithoutLib.ts, 3, 3))
->valueOf : Symbol(Object.valueOf, Decl(lib.es5.d.ts, --, --))
+>valueOf : Symbol(Object.valueOf, Decl(lib.es2009.object.d.ts, --, --))
 
 let stringVal: string = bigintVal.toString(); // should not error - bigintVal inferred as {}
 >stringVal : Symbol(stringVal, Decl(bigintWithoutLib.ts, 9, 3))
->bigintVal.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+>bigintVal.toString : Symbol(Object.toString, Decl(lib.es2009.object.d.ts, --, --))
 >bigintVal : Symbol(bigintVal, Decl(bigintWithoutLib.ts, 3, 3))
->toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(Object.toString, Decl(lib.es2009.object.d.ts, --, --))
 
 stringVal = bigintVal.toString(2); // should error - bigintVal inferred as {}
 >stringVal : Symbol(stringVal, Decl(bigintWithoutLib.ts, 9, 3))
->bigintVal.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+>bigintVal.toString : Symbol(Object.toString, Decl(lib.es2009.object.d.ts, --, --))
 >bigintVal : Symbol(bigintVal, Decl(bigintWithoutLib.ts, 3, 3))
->toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(Object.toString, Decl(lib.es2009.object.d.ts, --, --))
 
 stringVal = bigintVal.toLocaleString(); // should not error - bigintVal inferred as {}
 >stringVal : Symbol(stringVal, Decl(bigintWithoutLib.ts, 9, 3))
->bigintVal.toLocaleString : Symbol(Object.toLocaleString, Decl(lib.es5.d.ts, --, --))
+>bigintVal.toLocaleString : Symbol(Object.toLocaleString, Decl(lib.es2009.object.d.ts, --, --))
 >bigintVal : Symbol(bigintVal, Decl(bigintWithoutLib.ts, 3, 3))
->toLocaleString : Symbol(Object.toLocaleString, Decl(lib.es5.d.ts, --, --))
+>toLocaleString : Symbol(Object.toLocaleString, Decl(lib.es2009.object.d.ts, --, --))
 
 stringVal = bigintVal.toLocaleString('de-DE'); // should not error - bigintVal inferred as {}
 >stringVal : Symbol(stringVal, Decl(bigintWithoutLib.ts, 9, 3))
->bigintVal.toLocaleString : Symbol(Object.toLocaleString, Decl(lib.es5.d.ts, --, --))
+>bigintVal.toLocaleString : Symbol(Object.toLocaleString, Decl(lib.es2009.object.d.ts, --, --))
 >bigintVal : Symbol(bigintVal, Decl(bigintWithoutLib.ts, 3, 3))
->toLocaleString : Symbol(Object.toLocaleString, Decl(lib.es5.d.ts, --, --))
+>toLocaleString : Symbol(Object.toLocaleString, Decl(lib.es2009.object.d.ts, --, --))
 
 stringVal = bigintVal.toLocaleString('de-DE', { style: 'currency' }); // should not error - bigintVal inferred as {}
 >stringVal : Symbol(stringVal, Decl(bigintWithoutLib.ts, 9, 3))
->bigintVal.toLocaleString : Symbol(Object.toLocaleString, Decl(lib.es5.d.ts, --, --))
+>bigintVal.toLocaleString : Symbol(Object.toLocaleString, Decl(lib.es2009.object.d.ts, --, --))
 >bigintVal : Symbol(bigintVal, Decl(bigintWithoutLib.ts, 3, 3))
->toLocaleString : Symbol(Object.toLocaleString, Decl(lib.es5.d.ts, --, --))
+>toLocaleString : Symbol(Object.toLocaleString, Decl(lib.es2009.object.d.ts, --, --))
 >style : Symbol(style, Decl(bigintWithoutLib.ts, 13, 47))
 
 stringVal = bigintVal.toLocaleString('de-DE', { style: 'currency', currency: 'EUR' }) // should not error - bigintVal inferred as {}
 >stringVal : Symbol(stringVal, Decl(bigintWithoutLib.ts, 9, 3))
->bigintVal.toLocaleString : Symbol(Object.toLocaleString, Decl(lib.es5.d.ts, --, --))
+>bigintVal.toLocaleString : Symbol(Object.toLocaleString, Decl(lib.es2009.object.d.ts, --, --))
 >bigintVal : Symbol(bigintVal, Decl(bigintWithoutLib.ts, 3, 3))
->toLocaleString : Symbol(Object.toLocaleString, Decl(lib.es5.d.ts, --, --))
+>toLocaleString : Symbol(Object.toLocaleString, Decl(lib.es2009.object.d.ts, --, --))
 >style : Symbol(style, Decl(bigintWithoutLib.ts, 14, 47))
 >currency : Symbol(currency, Decl(bigintWithoutLib.ts, 14, 66))
 
@@ -76,15 +76,15 @@ bigIntArray = new BigInt64Array([1, 2, 3]);
 
 bigIntArray = new BigInt64Array(new ArrayBuffer(80));
 >bigIntArray : Symbol(bigIntArray, Decl(bigintWithoutLib.ts, 17, 3))
->ArrayBuffer : Symbol(ArrayBuffer, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>ArrayBuffer : Symbol(ArrayBuffer, Decl(lib.es2009.arraybuffer.d.ts, --, --), Decl(lib.es2009.arraybuffer.d.ts, --, --))
 
 bigIntArray = new BigInt64Array(new ArrayBuffer(80), 8);
 >bigIntArray : Symbol(bigIntArray, Decl(bigintWithoutLib.ts, 17, 3))
->ArrayBuffer : Symbol(ArrayBuffer, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>ArrayBuffer : Symbol(ArrayBuffer, Decl(lib.es2009.arraybuffer.d.ts, --, --), Decl(lib.es2009.arraybuffer.d.ts, --, --))
 
 bigIntArray = new BigInt64Array(new ArrayBuffer(80), 8, 3);
 >bigIntArray : Symbol(bigIntArray, Decl(bigintWithoutLib.ts, 17, 3))
->ArrayBuffer : Symbol(ArrayBuffer, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>ArrayBuffer : Symbol(ArrayBuffer, Decl(lib.es2009.arraybuffer.d.ts, --, --), Decl(lib.es2009.arraybuffer.d.ts, --, --))
 
 let len: number = bigIntArray.length;
 >len : Symbol(len, Decl(bigintWithoutLib.ts, 24, 3))
@@ -95,7 +95,7 @@ bigIntArray.length = 10;
 
 let arrayBufferLike: ArrayBufferView = bigIntArray;
 >arrayBufferLike : Symbol(arrayBufferLike, Decl(bigintWithoutLib.ts, 26, 3))
->ArrayBufferView : Symbol(ArrayBufferView, Decl(lib.es5.d.ts, --, --))
+>ArrayBufferView : Symbol(ArrayBufferView, Decl(lib.es2009.arraybuffer.d.ts, --, --))
 >bigIntArray : Symbol(bigIntArray, Decl(bigintWithoutLib.ts, 17, 3))
 
 // Test BigUint64Array
@@ -114,15 +114,15 @@ bigUintArray = new BigUint64Array([1, 2, 3]);
 
 bigUintArray = new BigUint64Array(new ArrayBuffer(80));
 >bigUintArray : Symbol(bigUintArray, Decl(bigintWithoutLib.ts, 29, 3))
->ArrayBuffer : Symbol(ArrayBuffer, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>ArrayBuffer : Symbol(ArrayBuffer, Decl(lib.es2009.arraybuffer.d.ts, --, --), Decl(lib.es2009.arraybuffer.d.ts, --, --))
 
 bigUintArray = new BigUint64Array(new ArrayBuffer(80), 8);
 >bigUintArray : Symbol(bigUintArray, Decl(bigintWithoutLib.ts, 29, 3))
->ArrayBuffer : Symbol(ArrayBuffer, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>ArrayBuffer : Symbol(ArrayBuffer, Decl(lib.es2009.arraybuffer.d.ts, --, --), Decl(lib.es2009.arraybuffer.d.ts, --, --))
 
 bigUintArray = new BigUint64Array(new ArrayBuffer(80), 8, 3);
 >bigUintArray : Symbol(bigUintArray, Decl(bigintWithoutLib.ts, 29, 3))
->ArrayBuffer : Symbol(ArrayBuffer, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>ArrayBuffer : Symbol(ArrayBuffer, Decl(lib.es2009.arraybuffer.d.ts, --, --), Decl(lib.es2009.arraybuffer.d.ts, --, --))
 
 len = bigIntArray.length;
 >len : Symbol(len, Decl(bigintWithoutLib.ts, 24, 3))
@@ -138,8 +138,8 @@ arrayBufferLike = bigIntArray;
 // Test added DataView methods
 const dataView = new DataView(new ArrayBuffer(80));
 >dataView : Symbol(dataView, Decl(bigintWithoutLib.ts, 41, 5))
->DataView : Symbol(DataView, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->ArrayBuffer : Symbol(ArrayBuffer, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>DataView : Symbol(DataView, Decl(lib.es2009.dataview.d.ts, --, --), Decl(lib.es2009.dataview.d.ts, --, --))
+>ArrayBuffer : Symbol(ArrayBuffer, Decl(lib.es2009.arraybuffer.d.ts, --, --), Decl(lib.es2009.arraybuffer.d.ts, --, --))
 
 dataView.setBigInt64(1, -1n);
 >dataView : Symbol(dataView, Decl(bigintWithoutLib.ts, 41, 5))
@@ -177,17 +177,17 @@ bigintVal = dataView.getBigUint64(2, true);
 
 // Test Intl methods with new parameter type
 new Intl.NumberFormat("fr").format(3000n);
->new Intl.NumberFormat("fr").format : Symbol(Intl.NumberFormat.format, Decl(lib.es5.d.ts, --, --))
->Intl.NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --))
->NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->format : Symbol(Intl.NumberFormat.format, Decl(lib.es5.d.ts, --, --))
+>new Intl.NumberFormat("fr").format : Symbol(Intl.NumberFormat.format, Decl(lib.es2009.intl.d.ts, --, --))
+>Intl.NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es2009.intl.d.ts, --, --), Decl(lib.es2009.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es2009.intl.d.ts, --, --))
+>NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es2009.intl.d.ts, --, --), Decl(lib.es2009.intl.d.ts, --, --))
+>format : Symbol(Intl.NumberFormat.format, Decl(lib.es2009.intl.d.ts, --, --))
 
 new Intl.NumberFormat("fr").format(bigintVal);
->new Intl.NumberFormat("fr").format : Symbol(Intl.NumberFormat.format, Decl(lib.es5.d.ts, --, --))
->Intl.NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --))
->NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->format : Symbol(Intl.NumberFormat.format, Decl(lib.es5.d.ts, --, --))
+>new Intl.NumberFormat("fr").format : Symbol(Intl.NumberFormat.format, Decl(lib.es2009.intl.d.ts, --, --))
+>Intl.NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es2009.intl.d.ts, --, --), Decl(lib.es2009.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es2009.intl.d.ts, --, --))
+>NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es2009.intl.d.ts, --, --), Decl(lib.es2009.intl.d.ts, --, --))
+>format : Symbol(Intl.NumberFormat.format, Decl(lib.es2009.intl.d.ts, --, --))
 >bigintVal : Symbol(bigintVal, Decl(bigintWithoutLib.ts, 3, 3))
 

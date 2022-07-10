@@ -75,125 +75,125 @@ const testArrayValues = [""].values();
 
 const testArrayConstructorFrom = Array.from([]);
 >testArrayConstructorFrom : Symbol(testArrayConstructorFrom, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 25, 5))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es2009.array.d.ts, --, --), Decl(lib.es2009.array.d.ts, --, --))
 
 const testArrayConstructorOf = Array.of([]);
 >testArrayConstructorOf : Symbol(testArrayConstructorOf, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 26, 5))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es2009.array.d.ts, --, --), Decl(lib.es2009.array.d.ts, --, --))
 
 const testObjectConstructorAssign = Object.assign({}, {});
 >testObjectConstructorAssign : Symbol(testObjectConstructorAssign, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 27, 5))
->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es2009.object.d.ts, --, --), Decl(lib.es2009.object.d.ts, --, --))
 
 const testObjectConstructorGetOwnPropertySymbols = Object.getOwnPropertySymbols({});
 >testObjectConstructorGetOwnPropertySymbols : Symbol(testObjectConstructorGetOwnPropertySymbols, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 28, 5))
->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es2009.object.d.ts, --, --), Decl(lib.es2009.object.d.ts, --, --))
 
 const testObjectConstructorKeys = Object.keys({});
 >testObjectConstructorKeys : Symbol(testObjectConstructorKeys, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 29, 5))
->Object.keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --))
->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --))
+>Object.keys : Symbol(ObjectConstructor.keys, Decl(lib.es2009.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es2009.object.d.ts, --, --), Decl(lib.es2009.object.d.ts, --, --))
+>keys : Symbol(ObjectConstructor.keys, Decl(lib.es2009.object.d.ts, --, --))
 
 const testObjectConstructorIs = Object.is({}, {});
 >testObjectConstructorIs : Symbol(testObjectConstructorIs, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 30, 5))
->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es2009.object.d.ts, --, --), Decl(lib.es2009.object.d.ts, --, --))
 
 const testObjectConstructorSetPrototypeOf = Object.setPrototypeOf({}, {});
 >testObjectConstructorSetPrototypeOf : Symbol(testObjectConstructorSetPrototypeOf, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 31, 5))
->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es2009.object.d.ts, --, --), Decl(lib.es2009.object.d.ts, --, --))
 
 const testNumberConstructorIsFinite = Number.isFinite(0);
 >testNumberConstructorIsFinite : Symbol(testNumberConstructorIsFinite, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 32, 5))
->Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Number : Symbol(Number, Decl(lib.es2009.number.d.ts, --, --), Decl(lib.es2009.number.d.ts, --, --), Decl(lib.es2009.number.d.ts, --, --))
 
 const testNumberConstructorIsInteger = Number.isInteger(0);
 >testNumberConstructorIsInteger : Symbol(testNumberConstructorIsInteger, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 33, 5))
->Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Number : Symbol(Number, Decl(lib.es2009.number.d.ts, --, --), Decl(lib.es2009.number.d.ts, --, --), Decl(lib.es2009.number.d.ts, --, --))
 
 const testNumberConstructorIsNan = Number.isNaN(0);
 >testNumberConstructorIsNan : Symbol(testNumberConstructorIsNan, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 34, 5))
->Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Number : Symbol(Number, Decl(lib.es2009.number.d.ts, --, --), Decl(lib.es2009.number.d.ts, --, --), Decl(lib.es2009.number.d.ts, --, --))
 
 const testNumberConstructorIsSafeInteger = Number.isSafeInteger(0);
 >testNumberConstructorIsSafeInteger : Symbol(testNumberConstructorIsSafeInteger, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 35, 5))
->Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Number : Symbol(Number, Decl(lib.es2009.number.d.ts, --, --), Decl(lib.es2009.number.d.ts, --, --), Decl(lib.es2009.number.d.ts, --, --))
 
 const testNumberConstructorParseFloat = Number.parseFloat("0");
 >testNumberConstructorParseFloat : Symbol(testNumberConstructorParseFloat, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 36, 5))
->Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Number : Symbol(Number, Decl(lib.es2009.number.d.ts, --, --), Decl(lib.es2009.number.d.ts, --, --), Decl(lib.es2009.number.d.ts, --, --))
 
 const testNumberConstructorParseInt = Number.parseInt("0");
 >testNumberConstructorParseInt : Symbol(testNumberConstructorParseInt, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 37, 5))
->Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Number : Symbol(Number, Decl(lib.es2009.number.d.ts, --, --), Decl(lib.es2009.number.d.ts, --, --), Decl(lib.es2009.number.d.ts, --, --))
 
 const testMathClz32 = Math.clz32(0);
 >testMathClz32 : Symbol(testMathClz32, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 38, 5))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es2009.math.d.ts, --, --), Decl(lib.es2009.math.d.ts, --, --))
 
 const testMathImul = Math.imul(0,0);
 >testMathImul : Symbol(testMathImul, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 39, 5))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es2009.math.d.ts, --, --), Decl(lib.es2009.math.d.ts, --, --))
 
 const testMathSign = Math.sign(0);
 >testMathSign : Symbol(testMathSign, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 40, 5))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es2009.math.d.ts, --, --), Decl(lib.es2009.math.d.ts, --, --))
 
 const testMathLog10 = Math.log10(0);
 >testMathLog10 : Symbol(testMathLog10, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 41, 5))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es2009.math.d.ts, --, --), Decl(lib.es2009.math.d.ts, --, --))
 
 const testMathLog2 = Math.log2(0);
 >testMathLog2 : Symbol(testMathLog2, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 42, 5))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es2009.math.d.ts, --, --), Decl(lib.es2009.math.d.ts, --, --))
 
 const testMathLog1p = Math.log1p(0);
 >testMathLog1p : Symbol(testMathLog1p, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 43, 5))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es2009.math.d.ts, --, --), Decl(lib.es2009.math.d.ts, --, --))
 
 const testMathExpm1 = Math.expm1(0);
 >testMathExpm1 : Symbol(testMathExpm1, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 44, 5))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es2009.math.d.ts, --, --), Decl(lib.es2009.math.d.ts, --, --))
 
 const testMathCosh = Math.cosh(0);
 >testMathCosh : Symbol(testMathCosh, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 45, 5))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es2009.math.d.ts, --, --), Decl(lib.es2009.math.d.ts, --, --))
 
 const testMathSinh = Math.sinh(0);
 >testMathSinh : Symbol(testMathSinh, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 46, 5))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es2009.math.d.ts, --, --), Decl(lib.es2009.math.d.ts, --, --))
 
 const testMathTanh = Math.tanh(0);
 >testMathTanh : Symbol(testMathTanh, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 47, 5))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es2009.math.d.ts, --, --), Decl(lib.es2009.math.d.ts, --, --))
 
 const testMathAcosh = Math.acosh(0);
 >testMathAcosh : Symbol(testMathAcosh, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 48, 5))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es2009.math.d.ts, --, --), Decl(lib.es2009.math.d.ts, --, --))
 
 const testMathAsinh = Math.asinh(0);
 >testMathAsinh : Symbol(testMathAsinh, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 49, 5))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es2009.math.d.ts, --, --), Decl(lib.es2009.math.d.ts, --, --))
 
 const testMathAtanh = Math.atanh(0);
 >testMathAtanh : Symbol(testMathAtanh, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 50, 5))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es2009.math.d.ts, --, --), Decl(lib.es2009.math.d.ts, --, --))
 
 const testMathHypot = Math.hypot(0,0);
 >testMathHypot : Symbol(testMathHypot, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 51, 5))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es2009.math.d.ts, --, --), Decl(lib.es2009.math.d.ts, --, --))
 
 const testMathTrunc = Math.trunc(0);
 >testMathTrunc : Symbol(testMathTrunc, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 52, 5))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es2009.math.d.ts, --, --), Decl(lib.es2009.math.d.ts, --, --))
 
 const testMathFround = Math.fround(0);
 >testMathFround : Symbol(testMathFround, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 53, 5))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es2009.math.d.ts, --, --), Decl(lib.es2009.math.d.ts, --, --))
 
 const testMathCbrt = Math.cbrt(0);
 >testMathCbrt : Symbol(testMathCbrt, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 54, 5))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es2009.math.d.ts, --, --), Decl(lib.es2009.math.d.ts, --, --))
 
 const testMap: Map<any, any> = null as any;
 >testMap : Symbol(testMap, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 55, 5))
@@ -297,11 +297,11 @@ const testStringSup = "".sup();
 
 const testStringConstructorFromCodePoint = String.fromCodePoint();
 >testStringConstructorFromCodePoint : Symbol(testStringConstructorFromCodePoint, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 86, 5))
->String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es2009.string.d.ts, --, --), Decl(lib.es2009.string.d.ts, --, --), Decl(lib.es2009.string.d.ts, --, --))
 
 const testStringConstructorRaw = String.raw``;
 >testStringConstructorRaw : Symbol(testStringConstructorRaw, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 87, 5))
->String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es2009.string.d.ts, --, --), Decl(lib.es2009.string.d.ts, --, --), Decl(lib.es2009.string.d.ts, --, --))
 
 const testRegExpFlags = /abc/g.flags;
 >testRegExpFlags : Symbol(testRegExpFlags, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 88, 5))

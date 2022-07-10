@@ -14,8 +14,8 @@ export function Repro({ SelectProps = {} }: { SelectProps?: Partial<Parameters<t
 >Repro : Symbol(Repro, Decl(jsxPartialSpread.tsx, 2, 26))
 >SelectProps : Symbol(SelectProps, Decl(jsxPartialSpread.tsx, 4, 23))
 >SelectProps : Symbol(SelectProps, Decl(jsxPartialSpread.tsx, 4, 45))
->Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
->Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.utils.modifiers.d.ts, --, --))
+>Parameters : Symbol(Parameters, Decl(lib.utils.modifiers.d.ts, --, --))
 >Select : Symbol(Select, Decl(jsxPartialSpread.tsx, 1, 5))
 
     return (

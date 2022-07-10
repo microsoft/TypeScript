@@ -33,9 +33,9 @@ export function Timestamped<TBase extends Constructor>(Base: TBase) {
 
         timestamp = Date.now();
 >timestamp : Symbol((Anonymous class).timestamp, Decl(wrapClass.ts, 11, 31))
->Date.now : Symbol(DateConstructor.now, Decl(lib.es5.d.ts, --, --))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
->now : Symbol(DateConstructor.now, Decl(lib.es5.d.ts, --, --))
+>Date.now : Symbol(DateConstructor.now, Decl(lib.es2009.date.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2009.date.d.ts, --, --), Decl(lib.es2009.date.d.ts, --, --), Decl(lib.es2009.date.d.ts, --, --))
+>now : Symbol(DateConstructor.now, Decl(lib.es2009.date.d.ts, --, --))
 
     };
 }

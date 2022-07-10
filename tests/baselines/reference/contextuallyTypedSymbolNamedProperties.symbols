@@ -3,11 +3,11 @@
 
 const A = Symbol("A");
 >A : Symbol(A, Decl(contextuallyTypedSymbolNamedProperties.ts, 2, 5))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es2009.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
 
 const B = Symbol("B");
 >B : Symbol(B, Decl(contextuallyTypedSymbolNamedProperties.ts, 3, 5))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es2009.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
 
 type Action =
 >Action : Symbol(Action, Decl(contextuallyTypedSymbolNamedProperties.ts, 3, 22))
@@ -67,7 +67,7 @@ const x: { [sym: symbol]: (p: string) => void } = { [A]: s => s.length };
 >[A] : Symbol([A], Decl(contextuallyTypedSymbolNamedProperties.ts, 18, 51))
 >A : Symbol(A, Decl(contextuallyTypedSymbolNamedProperties.ts, 2, 5))
 >s : Symbol(s, Decl(contextuallyTypedSymbolNamedProperties.ts, 18, 56))
->s.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>s.length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
 >s : Symbol(s, Decl(contextuallyTypedSymbolNamedProperties.ts, 18, 56))
->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
 

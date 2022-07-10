@@ -12,7 +12,7 @@ declare function withRest(a: any, ...args: Array<any>): void;
 >withRest : Symbol(withRest, Decl(callOverload.ts, 1, 47))
 >a : Symbol(a, Decl(callOverload.ts, 2, 26))
 >args : Symbol(args, Decl(callOverload.ts, 2, 33))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es2009.array.d.ts, --, --), Decl(lib.es2009.array.d.ts, --, --))
 
 var n: number[];
 >n : Symbol(n, Decl(callOverload.ts, 3, 3))

@@ -4,7 +4,7 @@
 function normalFunc(p: Promise<number>) {
 >normalFunc : Symbol(normalFunc, Decl(awaitInNonAsyncFunction.ts, 0, 0))
 >p : Symbol(p, Decl(awaitInNonAsyncFunction.ts, 2, 20))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
 
   for await (const _ of []);
 >_ : Symbol(_, Decl(awaitInNonAsyncFunction.ts, 3, 18))
@@ -16,7 +16,7 @@ function normalFunc(p: Promise<number>) {
 export function exportedFunc(p: Promise<number>) {
 >exportedFunc : Symbol(exportedFunc, Decl(awaitInNonAsyncFunction.ts, 5, 1))
 >p : Symbol(p, Decl(awaitInNonAsyncFunction.ts, 7, 29))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
 
   for await (const _ of []);
 >_ : Symbol(_, Decl(awaitInNonAsyncFunction.ts, 8, 18))
@@ -28,7 +28,7 @@ export function exportedFunc(p: Promise<number>) {
 const functionExpression = function(p: Promise<number>) {
 >functionExpression : Symbol(functionExpression, Decl(awaitInNonAsyncFunction.ts, 12, 5))
 >p : Symbol(p, Decl(awaitInNonAsyncFunction.ts, 12, 36))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
 
   for await (const _ of []);
 >_ : Symbol(_, Decl(awaitInNonAsyncFunction.ts, 13, 18))
@@ -40,7 +40,7 @@ const functionExpression = function(p: Promise<number>) {
 const arrowFunc = (p: Promise<number>) => {
 >arrowFunc : Symbol(arrowFunc, Decl(awaitInNonAsyncFunction.ts, 17, 5))
 >p : Symbol(p, Decl(awaitInNonAsyncFunction.ts, 17, 19))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
 
   for await (const _ of []);
 >_ : Symbol(_, Decl(awaitInNonAsyncFunction.ts, 18, 18))
@@ -53,7 +53,7 @@ const arrowFunc = (p: Promise<number>) => {
 function* generatorFunc(p: Promise<number>) {
 >generatorFunc : Symbol(generatorFunc, Decl(awaitInNonAsyncFunction.ts, 20, 2))
 >p : Symbol(p, Decl(awaitInNonAsyncFunction.ts, 22, 24))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
 
   for await (const _ of []);
 >_ : Symbol(_, Decl(awaitInNonAsyncFunction.ts, 23, 18))
@@ -67,7 +67,7 @@ class clazz {
 
   constructor(p: Promise<number>) {
 >p : Symbol(p, Decl(awaitInNonAsyncFunction.ts, 28, 14))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
 
     for await (const _ of []);
 >_ : Symbol(_, Decl(awaitInNonAsyncFunction.ts, 29, 20))
@@ -78,7 +78,7 @@ class clazz {
   method(p: Promise<number>) {
 >method : Symbol(clazz.method, Decl(awaitInNonAsyncFunction.ts, 31, 3))
 >p : Symbol(p, Decl(awaitInNonAsyncFunction.ts, 32, 9))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
 
   for await (const _ of []);
 >_ : Symbol(_, Decl(awaitInNonAsyncFunction.ts, 33, 18))

@@ -4,13 +4,13 @@ declare const y: never[] | string[];
 
 export const yThen = y.map(item => item.length);
 >yThen : Symbol(yThen, Decl(one.ts, 1, 12))
->y.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>y.map : Symbol(Array.map, Decl(lib.es2009.array.d.ts, --, --), Decl(lib.es2009.array.d.ts, --, --))
 >y : Symbol(y, Decl(one.ts, 0, 13))
->map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>map : Symbol(Array.map, Decl(lib.es2009.array.d.ts, --, --), Decl(lib.es2009.array.d.ts, --, --))
 >item : Symbol(item, Decl(one.ts, 1, 27))
->item.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>item.length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
 >item : Symbol(item, Decl(one.ts, 1, 27))
->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
 
 === tests/cases/compiler/two.ts ===
 declare const y: number[][] | string[];
@@ -18,13 +18,13 @@ declare const y: number[][] | string[];
 
 export const yThen = y.map(item => item.length);
 >yThen : Symbol(yThen, Decl(two.ts, 1, 12))
->y.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>y.map : Symbol(Array.map, Decl(lib.es2009.array.d.ts, --, --), Decl(lib.es2009.array.d.ts, --, --))
 >y : Symbol(y, Decl(two.ts, 0, 13))
->map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>map : Symbol(Array.map, Decl(lib.es2009.array.d.ts, --, --), Decl(lib.es2009.array.d.ts, --, --))
 >item : Symbol(item, Decl(two.ts, 1, 27))
->item.length : Symbol(length, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>item.length : Symbol(length, Decl(lib.es2009.string.d.ts, --, --), Decl(lib.es2009.array.d.ts, --, --))
 >item : Symbol(item, Decl(two.ts, 1, 27))
->length : Symbol(length, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>length : Symbol(length, Decl(lib.es2009.string.d.ts, --, --), Decl(lib.es2009.array.d.ts, --, --))
 
 === tests/cases/compiler/three.ts ===
 // #42504
@@ -68,7 +68,7 @@ interface Callback<T> {
 
     (error: Error, result: null): unknown
 >error : Symbol(error, Decl(three.ts, 14, 5))
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2009.error.d.ts, --, --))
 >result : Symbol(result, Decl(three.ts, 14, 18))
 }
 
@@ -131,9 +131,9 @@ export function series<T>(tasks: Task<T>[], callback: Callback<T[]>): void {
                     // must use postfix-!, since `error` and `result` don't have a
                     // causal relationship when the overloads are combined
                     results.push(result!)
->results.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>results.push : Symbol(Array.push, Decl(lib.es2009.array.d.ts, --, --))
 >results : Symbol(results, Decl(three.ts, 23, 7))
->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es2009.array.d.ts, --, --))
 >result : Symbol(result, Decl(three.ts, 30, 24))
 
                     next()

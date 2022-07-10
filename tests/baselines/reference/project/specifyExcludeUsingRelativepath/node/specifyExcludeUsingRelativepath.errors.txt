@@ -1,0 +1,16 @@
+lib.es5.d.ts(48,21): error TS6054: File 'lib.es2009.uint16array' has an unsupported extension. The only supported extensions are '.ts', '.tsx', '.d.ts', '.cts', '.d.cts', '.mts', '.d.mts'.
+
+
+==== tsconfig.json (0 errors) ====
+    { 
+        "compilerOptions": {
+            "outDir": "./OutDir",
+            "declaration": true
+        },
+        "exclude": [
+            "./node_modules",
+            "./OutDir"  
+        ]
+    }
+==== a.ts (0 errors) ====
+        var test = 10;

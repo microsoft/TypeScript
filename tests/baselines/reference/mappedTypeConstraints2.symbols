@@ -55,7 +55,7 @@ type Mapped3<K extends string> = { [P in K as Uppercase<P>]: { a: P } };
 >K : Symbol(K, Decl(mappedTypeConstraints2.ts, 12, 13))
 >P : Symbol(P, Decl(mappedTypeConstraints2.ts, 12, 36))
 >K : Symbol(K, Decl(mappedTypeConstraints2.ts, 12, 13))
->Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+>Uppercase : Symbol(Uppercase, Decl(lib.utils.modifiers.d.ts, --, --))
 >P : Symbol(P, Decl(mappedTypeConstraints2.ts, 12, 36))
 >a : Symbol(a, Decl(mappedTypeConstraints2.ts, 12, 62))
 >P : Symbol(P, Decl(mappedTypeConstraints2.ts, 12, 36))
@@ -67,7 +67,7 @@ function f3<K extends string>(obj: Mapped3<K>, key: Uppercase<K>) {
 >Mapped3 : Symbol(Mapped3, Decl(mappedTypeConstraints2.ts, 10, 1))
 >K : Symbol(K, Decl(mappedTypeConstraints2.ts, 14, 12))
 >key : Symbol(key, Decl(mappedTypeConstraints2.ts, 14, 46))
->Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+>Uppercase : Symbol(Uppercase, Decl(lib.utils.modifiers.d.ts, --, --))
 >K : Symbol(K, Decl(mappedTypeConstraints2.ts, 14, 12))
 
     const x: { a: K } = obj[key];  // Error
@@ -142,7 +142,7 @@ function validate<T extends object>(obj: T, bounds: NumericBoundsOf<T>) {
 >key : Symbol(key, Decl(mappedTypeConstraints2.ts, 38, 16))
 >val : Symbol(val, Decl(mappedTypeConstraints2.ts, 38, 20))
 >Object.entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es2009.object.d.ts, --, --), Decl(lib.es2009.object.d.ts, --, --))
 >entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
 >obj : Symbol(obj, Decl(mappedTypeConstraints2.ts, 37, 36))
 

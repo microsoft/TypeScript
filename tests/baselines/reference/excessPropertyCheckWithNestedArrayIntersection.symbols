@@ -4,7 +4,7 @@ interface ValueOnlyFields {
 
     fields: Array<{
 >fields : Symbol(ValueOnlyFields.fields, Decl(excessPropertyCheckWithNestedArrayIntersection.ts, 0, 27))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es2009.array.d.ts, --, --), Decl(lib.es2009.array.d.ts, --, --))
 
         value: number | null;
 >value : Symbol(value, Decl(excessPropertyCheckWithNestedArrayIntersection.ts, 1, 19))
@@ -16,7 +16,7 @@ interface ValueAndKeyFields {
 
     fields: Array<{
 >fields : Symbol(ValueAndKeyFields.fields, Decl(excessPropertyCheckWithNestedArrayIntersection.ts, 5, 29))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es2009.array.d.ts, --, --), Decl(lib.es2009.array.d.ts, --, --))
 
         key: string | null;
 >key : Symbol(key, Decl(excessPropertyCheckWithNestedArrayIntersection.ts, 6, 19))

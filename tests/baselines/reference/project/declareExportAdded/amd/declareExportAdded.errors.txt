@@ -1,0 +1,13 @@
+lib.es5.d.ts(48,21): error TS6054: File 'lib.es2009.uint16array' has an unsupported extension. The only supported extensions are '.ts', '.tsx', '.d.ts', '.cts', '.d.cts', '.mts', '.d.mts'.
+
+
+==== ref.d.ts (0 errors) ====
+    declare module M1
+    {
+        export function f1(): void;
+    }
+==== consumer.ts (0 errors) ====
+    ///<reference path="ref.d.ts" />
+    
+    // in the generated code a 'this' is added before this call
+    M1.f1();

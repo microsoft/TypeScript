@@ -1,6 +1,6 @@
 === tests/cases/compiler/errorHandlingInInstanceOf.ts ===
 if (x instanceof String) {
->String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es2009.string.d.ts, --, --), Decl(lib.es2009.string.d.ts, --, --), Decl(lib.es2009.string.d.ts, --, --))
 }
 
 var y: any;

@@ -23,14 +23,14 @@ foo("", function* () {
         *[Symbol.iterator]() {
 >[Symbol.iterator] : Symbol([Symbol.iterator], Decl(generatorTypeCheck46.ts, 3, 12))
 >Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es2009.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 
             yield x => x.length
 >x : Symbol(x, Decl(generatorTypeCheck46.ts, 5, 17))
->x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x.length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
 >x : Symbol(x, Decl(generatorTypeCheck46.ts, 5, 17))
->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
         }
     }
 }, p => undefined); // T is fixed, should be string

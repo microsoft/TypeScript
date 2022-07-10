@@ -143,27 +143,27 @@ m2.setonlyAccessor = 0;
 
 === tests/cases/conformance/jsdoc/mod1.js ===
 Object.defineProperty(exports, "thing", { value: 42, writable: true });
->Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es2009.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es2009.object.d.ts, --, --), Decl(lib.es2009.object.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es2009.object.d.ts, --, --))
 >exports : Symbol("tests/cases/conformance/jsdoc/mod1", Decl(mod1.js, 0, 0))
 >"thing" : Symbol(thing, Decl(mod1.js, 0, 0))
 >value : Symbol(value, Decl(mod1.js, 0, 41))
 >writable : Symbol(writable, Decl(mod1.js, 0, 52))
 
 Object.defineProperty(exports, "readonlyProp", { value: "Smith", writable: false });
->Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es2009.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es2009.object.d.ts, --, --), Decl(lib.es2009.object.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es2009.object.d.ts, --, --))
 >exports : Symbol("tests/cases/conformance/jsdoc/mod1", Decl(mod1.js, 0, 0))
 >"readonlyProp" : Symbol(readonlyProp, Decl(mod1.js, 0, 71))
 >value : Symbol(value, Decl(mod1.js, 1, 48))
 >writable : Symbol(writable, Decl(mod1.js, 1, 64))
 
 Object.defineProperty(exports, "rwAccessors", { get() { return 98122 }, set(_) { /*ignore*/ } });
->Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es2009.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es2009.object.d.ts, --, --), Decl(lib.es2009.object.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es2009.object.d.ts, --, --))
 >exports : Symbol("tests/cases/conformance/jsdoc/mod1", Decl(mod1.js, 0, 0))
 >"rwAccessors" : Symbol(rwAccessors, Decl(mod1.js, 1, 84))
 >get : Symbol(get, Decl(mod1.js, 2, 47))
@@ -171,17 +171,17 @@ Object.defineProperty(exports, "rwAccessors", { get() { return 98122 }, set(_) {
 >_ : Symbol(_, Decl(mod1.js, 2, 76))
 
 Object.defineProperty(exports, "readonlyAccessor", { get() { return 21.75 } });
->Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es2009.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es2009.object.d.ts, --, --), Decl(lib.es2009.object.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es2009.object.d.ts, --, --))
 >exports : Symbol("tests/cases/conformance/jsdoc/mod1", Decl(mod1.js, 0, 0))
 >"readonlyAccessor" : Symbol(readonlyAccessor, Decl(mod1.js, 2, 97))
 >get : Symbol(get, Decl(mod1.js, 3, 52))
 
 Object.defineProperty(exports, "setonlyAccessor", {
->Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es2009.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es2009.object.d.ts, --, --), Decl(lib.es2009.object.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es2009.object.d.ts, --, --))
 >exports : Symbol("tests/cases/conformance/jsdoc/mod1", Decl(mod1.js, 0, 0))
 >"setonlyAccessor" : Symbol(setonlyAccessor, Decl(mod1.js, 3, 79))
 
@@ -192,16 +192,16 @@ Object.defineProperty(exports, "setonlyAccessor", {
 
         this.rwAccessors = Number(str) 
 >rwAccessors : Symbol(rwAccessors, Decl(mod1.js, 6, 14))
->Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Number : Symbol(Number, Decl(lib.es2009.number.d.ts, --, --), Decl(lib.es2009.number.d.ts, --, --), Decl(lib.es2009.number.d.ts, --, --))
 >str : Symbol(str, Decl(mod1.js, 6, 8))
     }
 });
 
 === tests/cases/conformance/jsdoc/mod2.js ===
 Object.defineProperty(module.exports, "thing", { value: "yes", writable: true });
->Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es2009.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es2009.object.d.ts, --, --), Decl(lib.es2009.object.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es2009.object.d.ts, --, --))
 >module.exports : Symbol(module.exports, Decl(mod2.js, 0, 0))
 >module : Symbol(module, Decl(mod2.js, 0, 22))
 >exports : Symbol(module.exports, Decl(mod2.js, 0, 0))
@@ -210,9 +210,9 @@ Object.defineProperty(module.exports, "thing", { value: "yes", writable: true })
 >writable : Symbol(writable, Decl(mod2.js, 0, 62))
 
 Object.defineProperty(module.exports, "readonlyProp", { value: "Smith", writable: false });
->Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es2009.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es2009.object.d.ts, --, --), Decl(lib.es2009.object.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es2009.object.d.ts, --, --))
 >module.exports : Symbol(module.exports, Decl(mod2.js, 0, 0))
 >module : Symbol(module, Decl(mod2.js, 0, 22))
 >exports : Symbol(module.exports, Decl(mod2.js, 0, 0))
@@ -221,9 +221,9 @@ Object.defineProperty(module.exports, "readonlyProp", { value: "Smith", writable
 >writable : Symbol(writable, Decl(mod2.js, 1, 71))
 
 Object.defineProperty(module.exports, "rwAccessors", { get() { return 98122 }, set(_) { /*ignore*/ } });
->Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es2009.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es2009.object.d.ts, --, --), Decl(lib.es2009.object.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es2009.object.d.ts, --, --))
 >module.exports : Symbol(module.exports, Decl(mod2.js, 0, 0))
 >module : Symbol(module, Decl(mod2.js, 0, 22))
 >exports : Symbol(module.exports, Decl(mod2.js, 0, 0))
@@ -233,9 +233,9 @@ Object.defineProperty(module.exports, "rwAccessors", { get() { return 98122 }, s
 >_ : Symbol(_, Decl(mod2.js, 2, 83))
 
 Object.defineProperty(module.exports, "readonlyAccessor", { get() { return 21.75 } });
->Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es2009.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es2009.object.d.ts, --, --), Decl(lib.es2009.object.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es2009.object.d.ts, --, --))
 >module.exports : Symbol(module.exports, Decl(mod2.js, 0, 0))
 >module : Symbol(module, Decl(mod2.js, 0, 22))
 >exports : Symbol(module.exports, Decl(mod2.js, 0, 0))
@@ -243,9 +243,9 @@ Object.defineProperty(module.exports, "readonlyAccessor", { get() { return 21.75
 >get : Symbol(get, Decl(mod2.js, 3, 59))
 
 Object.defineProperty(module.exports, "setonlyAccessor", {
->Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es2009.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es2009.object.d.ts, --, --), Decl(lib.es2009.object.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es2009.object.d.ts, --, --))
 >module.exports : Symbol(module.exports, Decl(mod2.js, 0, 0))
 >module : Symbol(module, Decl(mod2.js, 0, 22))
 >exports : Symbol(module.exports, Decl(mod2.js, 0, 0))
@@ -258,7 +258,7 @@ Object.defineProperty(module.exports, "setonlyAccessor", {
 
         this.rwAccessors = Number(str) 
 >rwAccessors : Symbol(rwAccessors, Decl(mod2.js, 6, 14))
->Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Number : Symbol(Number, Decl(lib.es2009.number.d.ts, --, --), Decl(lib.es2009.number.d.ts, --, --), Decl(lib.es2009.number.d.ts, --, --))
 >str : Symbol(str, Decl(mod2.js, 6, 8))
     }
 });

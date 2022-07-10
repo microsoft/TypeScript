@@ -3,7 +3,7 @@
 
 const sym = Symbol();
 >sym : Symbol(sym, Decl(indexSignatures1.ts, 2, 5))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es2009.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
 
 function gg3(x: { [key: string]: string }, y: { [key: symbol]: string }, z: { [sym]: number }) {
 >gg3 : Symbol(gg3, Decl(indexSignatures1.ts, 2, 21))
@@ -166,9 +166,9 @@ const funcs: Funcs = {
     sfoo: x => x.length,  // x: string
 >sfoo : Symbol(sfoo, Decl(indexSignatures1.ts, 61, 22))
 >x : Symbol(x, Decl(indexSignatures1.ts, 62, 9))
->x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x.length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
 >x : Symbol(x, Decl(indexSignatures1.ts, 62, 9))
->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
 
     nfoo: x => x * 2,     // n: number
 >nfoo : Symbol(nfoo, Decl(indexSignatures1.ts, 62, 24))
@@ -224,7 +224,7 @@ type Invalid<T extends string> = {
 
     [key: Error]: string;  // Error
 >key : Symbol(key, Decl(indexSignatures1.ts, 88, 5))
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
 
     [key: T & string]: string;  // Error
 >key : Symbol(key, Decl(indexSignatures1.ts, 89, 5))
@@ -626,7 +626,7 @@ const obj12 = {
 
     [Symbol()]: 5 as const,
 >[Symbol()] : Symbol([Symbol()], Decl(indexSignatures1.ts, 214, 22))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es2009.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
 >const : Symbol(const)
 
 };
@@ -659,7 +659,7 @@ const obj13 = {
 
     [Symbol()]: 5 as const,
 >[Symbol()] : Symbol([Symbol()], Decl(indexSignatures1.ts, 223, 22))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es2009.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
 >const : Symbol(const)
 
 };
@@ -668,11 +668,11 @@ const obj13 = {
 
 const system = Symbol('system');
 >system : Symbol(system, Decl(indexSignatures1.ts, 229, 5))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es2009.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
 
 const SomeSytePlugin = Symbol('SomeSytePlugin');
 >SomeSytePlugin : Symbol(SomeSytePlugin, Decl(indexSignatures1.ts, 230, 5))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es2009.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
 
 interface Plugs {
 >Plugs : Symbol(Plugs, Decl(indexSignatures1.ts, 230, 48))
@@ -711,11 +711,11 @@ plugins[system][SomeSytePlugin]();
 
 var theAnswer: symbol = Symbol('secret');
 >theAnswer : Symbol(theAnswer, Decl(indexSignatures1.ts, 244, 3))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es2009.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
 
 var obj = {} as Record<symbol, number>;
 >obj : Symbol(obj, Decl(indexSignatures1.ts, 245, 3))
->Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.utils.modifiers.d.ts, --, --))
 
 obj[theAnswer] = 42;
 >obj : Symbol(obj, Decl(indexSignatures1.ts, 245, 3))
@@ -725,7 +725,7 @@ obj[theAnswer] = 42;
 
 const directive = Symbol('directive');
 >directive : Symbol(directive, Decl(indexSignatures1.ts, 250, 5))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es2009.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
 
 declare function foo<TArg, TRet, TDir>(options: { [x in string]: (arg: TArg) => TRet } & { [directive]?: TDir }): void;
 >foo : Symbol(foo, Decl(indexSignatures1.ts, 250, 38))
@@ -858,7 +858,7 @@ const id: IdType = '0000-0000-0000-0001';
 
 type A = Record<IdType, string>;
 >A : Symbol(A, Decl(indexSignatures1.ts, 291, 41))
->Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.utils.modifiers.d.ts, --, --))
 >IdType : Symbol(IdType, Decl(indexSignatures1.ts, 288, 36))
 
 const a: A = { [id]: 'test' }
@@ -924,7 +924,7 @@ type Rec1 = { [key: Id]: number };
 
 type Rec2 = Record<Id, number>;
 >Rec2 : Symbol(Rec2, Decl(indexSignatures1.ts, 316, 34))
->Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.utils.modifiers.d.ts, --, --))
 >Id : Symbol(Id, Decl(indexSignatures1.ts, 311, 59))
 
 type K1 = keyof Rec1;  // Id

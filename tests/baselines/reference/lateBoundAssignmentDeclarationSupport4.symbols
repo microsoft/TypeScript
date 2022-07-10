@@ -25,7 +25,7 @@ const z = inst[x.S];
 // currently unsupported
 const _sym = Symbol();
 >_sym : Symbol(_sym, Decl(lateBoundAssignmentDeclarationSupport4.js, 1, 5))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es2009.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 const _str = "my-fake-sym";
 >_str : Symbol(_str, Decl(lateBoundAssignmentDeclarationSupport4.js, 2, 5))
@@ -34,15 +34,15 @@ function F() {
 >F : Symbol(F, Decl(lateBoundAssignmentDeclarationSupport4.js, 2, 27))
 }
 F.prototype[_sym] = "ok";
->F.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>F.prototype : Symbol(Function.prototype, Decl(lib.es2009.function.d.ts, --, --))
 >F : Symbol(F, Decl(lateBoundAssignmentDeclarationSupport4.js, 2, 27))
->prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>prototype : Symbol(Function.prototype, Decl(lib.es2009.function.d.ts, --, --))
 >_sym : Symbol(_sym, Decl(lateBoundAssignmentDeclarationSupport4.js, 1, 5))
 
 F.prototype[_str] = "ok";
->F.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>F.prototype : Symbol(Function.prototype, Decl(lib.es2009.function.d.ts, --, --))
 >F : Symbol(F, Decl(lateBoundAssignmentDeclarationSupport4.js, 2, 27))
->prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>prototype : Symbol(Function.prototype, Decl(lib.es2009.function.d.ts, --, --))
 >_str : Symbol(_str, Decl(lateBoundAssignmentDeclarationSupport4.js, 2, 5))
 
 const inst =  new F();

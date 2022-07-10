@@ -47,7 +47,7 @@ fork: while (false) {
 
 /** @typedef {{ p: string }} P */
 throw new Error('Unreachable')
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2009.error.d.ts, --, --))
 
 /** @typedef {{ q: string }} Q */
 try {

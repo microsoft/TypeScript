@@ -6,17 +6,17 @@ type Set1<T, K1 extends keyof T> = T extends any[] ? T : Pick<T, Exclude<keyof T
 >T : Symbol(T, Decl(twiceNestedKeyofIndexInference.ts, 0, 10))
 >T : Symbol(T, Decl(twiceNestedKeyofIndexInference.ts, 0, 10))
 >T : Symbol(T, Decl(twiceNestedKeyofIndexInference.ts, 0, 10))
->Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>Pick : Symbol(Pick, Decl(lib.utils.modifiers.d.ts, --, --))
 >T : Symbol(T, Decl(twiceNestedKeyofIndexInference.ts, 0, 10))
->Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>Exclude : Symbol(Exclude, Decl(lib.utils.modifiers.d.ts, --, --))
 >T : Symbol(T, Decl(twiceNestedKeyofIndexInference.ts, 0, 10))
 >K1 : Symbol(K1, Decl(twiceNestedKeyofIndexInference.ts, 0, 12))
 
     [SK1 in K1]-?: Required<Pick<T, SK1>>;
 >SK1 : Symbol(SK1, Decl(twiceNestedKeyofIndexInference.ts, 1, 5))
 >K1 : Symbol(K1, Decl(twiceNestedKeyofIndexInference.ts, 0, 12))
->Required : Symbol(Required, Decl(lib.es5.d.ts, --, --))
->Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>Required : Symbol(Required, Decl(lib.utils.modifiers.d.ts, --, --))
+>Pick : Symbol(Pick, Decl(lib.utils.modifiers.d.ts, --, --))
 >T : Symbol(T, Decl(twiceNestedKeyofIndexInference.ts, 0, 10))
 >SK1 : Symbol(SK1, Decl(twiceNestedKeyofIndexInference.ts, 1, 5))
 
@@ -33,16 +33,16 @@ type Set2<T, K1 extends keyof T, K2 extends keyof T[K1]> = T extends any[] ? T :
 >K1 : Symbol(K1, Decl(twiceNestedKeyofIndexInference.ts, 4, 12))
 >T : Symbol(T, Decl(twiceNestedKeyofIndexInference.ts, 4, 10))
 >T : Symbol(T, Decl(twiceNestedKeyofIndexInference.ts, 4, 10))
->Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>Pick : Symbol(Pick, Decl(lib.utils.modifiers.d.ts, --, --))
 >T : Symbol(T, Decl(twiceNestedKeyofIndexInference.ts, 4, 10))
->Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>Exclude : Symbol(Exclude, Decl(lib.utils.modifiers.d.ts, --, --))
 >T : Symbol(T, Decl(twiceNestedKeyofIndexInference.ts, 4, 10))
 >K1 : Symbol(K1, Decl(twiceNestedKeyofIndexInference.ts, 4, 12))
 
     [SK1 in K1]-?: Required<{
 >SK1 : Symbol(SK1, Decl(twiceNestedKeyofIndexInference.ts, 5, 5))
 >K1 : Symbol(K1, Decl(twiceNestedKeyofIndexInference.ts, 4, 12))
->Required : Symbol(Required, Decl(lib.es5.d.ts, --, --))
+>Required : Symbol(Required, Decl(lib.utils.modifiers.d.ts, --, --))
 
         [key in K1]: Set1<T[K1], K2>;
 >key : Symbol(key, Decl(twiceNestedKeyofIndexInference.ts, 6, 9))

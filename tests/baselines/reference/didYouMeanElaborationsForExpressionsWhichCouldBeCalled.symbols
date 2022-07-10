@@ -15,7 +15,7 @@ declare function foo(arg: { x: Bar, y: Date }, item: number, items?: [number, nu
 >x : Symbol(x, Decl(didYouMeanElaborationsForExpressionsWhichCouldBeCalled.ts, 6, 27))
 >Bar : Symbol(Bar, Decl(didYouMeanElaborationsForExpressionsWhichCouldBeCalled.ts, 0, 0))
 >y : Symbol(y, Decl(didYouMeanElaborationsForExpressionsWhichCouldBeCalled.ts, 6, 35))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2009.date.d.ts, --, --), Decl(lib.es2009.date.d.ts, --, --), Decl(lib.es2009.date.d.ts, --, --))
 >item : Symbol(item, Decl(didYouMeanElaborationsForExpressionsWhichCouldBeCalled.ts, 6, 46))
 >items : Symbol(items, Decl(didYouMeanElaborationsForExpressionsWhichCouldBeCalled.ts, 6, 60))
 
@@ -28,7 +28,7 @@ foo({
 
     y: Date
 >y : Symbol(y, Decl(didYouMeanElaborationsForExpressionsWhichCouldBeCalled.ts, 9, 11))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2009.date.d.ts, --, --), Decl(lib.es2009.date.d.ts, --, --), Decl(lib.es2009.date.d.ts, --, --))
 
 }, getNum());
 >getNum : Symbol(getNum, Decl(didYouMeanElaborationsForExpressionsWhichCouldBeCalled.ts, 2, 1))
@@ -42,7 +42,7 @@ foo({
 
     y: new Date()
 >y : Symbol(y, Decl(didYouMeanElaborationsForExpressionsWhichCouldBeCalled.ts, 14, 17))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2009.date.d.ts, --, --), Decl(lib.es2009.date.d.ts, --, --), Decl(lib.es2009.date.d.ts, --, --))
 
 }, getNum);
 >getNum : Symbol(getNum, Decl(didYouMeanElaborationsForExpressionsWhichCouldBeCalled.ts, 2, 1))
@@ -57,7 +57,7 @@ foo({
 
     y: new Date()
 >y : Symbol(y, Decl(didYouMeanElaborationsForExpressionsWhichCouldBeCalled.ts, 20, 17))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2009.date.d.ts, --, --), Decl(lib.es2009.date.d.ts, --, --), Decl(lib.es2009.date.d.ts, --, --))
 
 }, getNum(), [
 >getNum : Symbol(getNum, Decl(didYouMeanElaborationsForExpressionsWhichCouldBeCalled.ts, 2, 1))

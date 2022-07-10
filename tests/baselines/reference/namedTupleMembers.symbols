@@ -115,7 +115,7 @@ export function readSegment([length, count]: [number, number]) {}
 // documenting binding pattern behavior (currently does _not_ generate tuple names)
 export const val = null as any as Parameters<typeof readSegment>[0];
 >val : Symbol(val, Decl(namedTupleMembers.ts, 50, 12))
->Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>Parameters : Symbol(Parameters, Decl(lib.utils.modifiers.d.ts, --, --))
 >readSegment : Symbol(readSegment, Decl(namedTupleMembers.ts, 45, 60))
 
 export type RecursiveTupleA = [initial: string, next: RecursiveTupleA];
@@ -184,7 +184,7 @@ declare function getArgsForInjection<T extends (...args: any[]) => any>(x: T): P
 >args : Symbol(args, Decl(namedTupleMembers.ts, 73, 48))
 >x : Symbol(x, Decl(namedTupleMembers.ts, 73, 72))
 >T : Symbol(T, Decl(namedTupleMembers.ts, 73, 37))
->Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>Parameters : Symbol(Parameters, Decl(lib.utils.modifiers.d.ts, --, --))
 >T : Symbol(T, Decl(namedTupleMembers.ts, 73, 37))
 
 export const argumentsOfGAsFirstArgument = f(getArgsForInjection(g)); // one tuple with captures arguments as first member

@@ -18,7 +18,7 @@ import foo from "./exp";
 >foo : Symbol(foo, Decl(imp.ts, 0, 6))
 
 foo.toExponential(2);
->foo.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+>foo.toExponential : Symbol(Number.toExponential, Decl(lib.es2009.number.d.ts, --, --))
 >foo : Symbol(foo, Decl(imp.ts, 0, 6))
->toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+>toExponential : Symbol(Number.toExponential, Decl(lib.es2009.number.d.ts, --, --))
 

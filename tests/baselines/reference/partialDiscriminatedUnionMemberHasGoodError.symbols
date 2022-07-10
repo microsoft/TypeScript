@@ -37,9 +37,9 @@ const foo: Wrapper[] = [];
 >Wrapper : Symbol(Wrapper, Decl(partialDiscriminatedUnionMemberHasGoodError.ts, 10, 31))
 
 foo.push({
->foo.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>foo.push : Symbol(Array.push, Decl(lib.es2009.array.d.ts, --, --))
 >foo : Symbol(foo, Decl(partialDiscriminatedUnionMemberHasGoodError.ts, 16, 5))
->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es2009.array.d.ts, --, --))
 
     types: [{
 >types : Symbol(types, Decl(partialDiscriminatedUnionMemberHasGoodError.ts, 18, 10))

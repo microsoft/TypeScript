@@ -1,0 +1,40 @@
+lib.es5.d.ts(48,21): error TS6054: File 'lib.es2009.uint16array' has an unsupported extension. The only supported extensions are '.ts', '.tsx', '.d.ts', '.cts', '.d.cts', '.mts', '.d.mts'.
+
+
+==== A.ts (0 errors) ====
+    export class A
+    {
+        public A(): string{ return "hello from A"; }
+    }
+    
+==== AA.ts (0 errors) ====
+    export class AA
+    {
+        public A(): string{ return "hello from AA"; }
+    }
+    
+==== B.ts (0 errors) ====
+    import A = require("../A/A");
+    import AA = require("../A/AA/AA");
+    
+    export class B
+    {
+        public Create(): IA
+        {
+            return new A.A();
+        }
+    }
+    
+    export interface IA
+    {
+        A(): string;
+    }
+    
+==== root.ts (0 errors) ====
+    //import A = require("./A/A");
+    import B = require("B/B");
+    
+    var a = (new B.B()).Create();
+    
+    
+    

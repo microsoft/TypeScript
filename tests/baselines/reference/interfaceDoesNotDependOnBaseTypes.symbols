@@ -7,14 +7,14 @@ if (typeof x !== "string") {
 >x : Symbol(x, Decl(interfaceDoesNotDependOnBaseTypes.ts, 0, 3))
 
     x.push("");
->x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>x.push : Symbol(Array.push, Decl(lib.es2009.array.d.ts, --, --))
 >x : Symbol(x, Decl(interfaceDoesNotDependOnBaseTypes.ts, 0, 3))
->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es2009.array.d.ts, --, --))
 
     x.push([""]);
->x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>x.push : Symbol(Array.push, Decl(lib.es2009.array.d.ts, --, --))
 >x : Symbol(x, Decl(interfaceDoesNotDependOnBaseTypes.ts, 0, 3))
->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es2009.array.d.ts, --, --))
 }
 
 type StringTree = string | StringTreeArray;
@@ -23,6 +23,6 @@ type StringTree = string | StringTreeArray;
 
 interface StringTreeArray extends Array<StringTree> { }
 >StringTreeArray : Symbol(StringTreeArray, Decl(interfaceDoesNotDependOnBaseTypes.ts, 6, 43))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es2009.array.d.ts, --, --), Decl(lib.es2009.array.d.ts, --, --))
 >StringTree : Symbol(StringTree, Decl(interfaceDoesNotDependOnBaseTypes.ts, 4, 1))
 

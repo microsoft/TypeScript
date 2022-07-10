@@ -41,7 +41,7 @@ interface I<T> {
 >foo : Symbol(I.foo, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType.ts, 16, 16))
 >x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType.ts, 17, 8))
 >T : Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType.ts, 16, 12))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2009.date.d.ts, --, --), Decl(lib.es2009.date.d.ts, --, --), Decl(lib.es2009.date.d.ts, --, --))
 }
 
 interface I2 {
@@ -52,7 +52,7 @@ interface I2 {
 >T : Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType.ts, 21, 8))
 >x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType.ts, 21, 11))
 >T : Symbol(T, Decl(objectTypesIdentityWithGenericCallSignaturesDifferingByReturnType.ts, 21, 8))
->RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es2009.regexp.d.ts, --, --), Decl(lib.es2009.regexp.d.ts, --, --))
 }
 
 var a: { foo<T>(x: T): T }

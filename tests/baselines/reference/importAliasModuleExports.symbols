@@ -27,9 +27,9 @@ A.prototype.func = function() { this._func = 0; }
 >this : Symbol(A, Decl(mod1.js, 0, 0))
 
 Object.defineProperty(A.prototype, "def", { value: 0 });
->Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es2009.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es2009.object.d.ts, --, --), Decl(lib.es2009.object.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es2009.object.d.ts, --, --))
 >A.prototype : Symbol(A.prototype)
 >A : Symbol(A, Decl(main.js, 0, 6))
 >prototype : Symbol(A.prototype)

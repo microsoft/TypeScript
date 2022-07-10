@@ -60,11 +60,11 @@ function goo1(x: Item) {
 >undefined : Symbol(undefined)
 
         x.foo.length;
->x.foo.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x.foo.length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
 >x.foo : Symbol(Item1.foo, Decl(discriminantPropertyCheck.ts, 7, 14))
 >x : Symbol(x, Decl(discriminantPropertyCheck.ts, 20, 14))
 >foo : Symbol(Item1.foo, Decl(discriminantPropertyCheck.ts, 7, 14))
->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
     }
 }
 
@@ -83,11 +83,11 @@ function goo2(x: Item) {
 >kind : Symbol(kind, Decl(discriminantPropertyCheck.ts, 6, 30), Decl(discriminantPropertyCheck.ts, 13, 30))
 
         x.foo.length;  // Error, intervening discriminant guard
->x.foo.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x.foo.length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
 >x.foo : Symbol(Item1.foo, Decl(discriminantPropertyCheck.ts, 7, 14))
 >x : Symbol(x, Decl(discriminantPropertyCheck.ts, 26, 14))
 >foo : Symbol(Item1.foo, Decl(discriminantPropertyCheck.ts, 7, 14))
->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
     }
 }
 
@@ -106,11 +106,11 @@ function foo1(x: Item) {
 >undefined : Symbol(undefined)
 
         x.foo.length;
->x.foo.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x.foo.length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
 >x.foo : Symbol(foo, Decl(discriminantPropertyCheck.ts, 7, 14), Decl(discriminantPropertyCheck.ts, 14, 14))
 >x : Symbol(x, Decl(discriminantPropertyCheck.ts, 32, 14))
 >foo : Symbol(foo, Decl(discriminantPropertyCheck.ts, 7, 14), Decl(discriminantPropertyCheck.ts, 14, 14))
->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
     }
 }
 
@@ -129,11 +129,11 @@ function foo2(x: Item) {
 >bar : Symbol(Base.bar, Decl(discriminantPropertyCheck.ts, 2, 16))
 
         x.foo.length;
->x.foo.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x.foo.length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
 >x.foo : Symbol(foo, Decl(discriminantPropertyCheck.ts, 7, 14), Decl(discriminantPropertyCheck.ts, 14, 14))
 >x : Symbol(x, Decl(discriminantPropertyCheck.ts, 38, 14))
 >foo : Symbol(foo, Decl(discriminantPropertyCheck.ts, 7, 14), Decl(discriminantPropertyCheck.ts, 14, 14))
->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
     }
 }
 
@@ -152,11 +152,11 @@ function foo3(x: Item) {
 >undefined : Symbol(undefined)
 
         x.foo.length;
->x.foo.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x.foo.length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
 >x.foo : Symbol(foo, Decl(discriminantPropertyCheck.ts, 7, 14), Decl(discriminantPropertyCheck.ts, 14, 14))
 >x : Symbol(x, Decl(discriminantPropertyCheck.ts, 44, 14))
 >foo : Symbol(foo, Decl(discriminantPropertyCheck.ts, 7, 14), Decl(discriminantPropertyCheck.ts, 14, 14))
->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
     }
 }
 
@@ -175,11 +175,11 @@ function foo4(x: Item) {
 >baz : Symbol(baz, Decl(discriminantPropertyCheck.ts, 8, 28), Decl(discriminantPropertyCheck.ts, 15, 28))
 
         x.foo.length;
->x.foo.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x.foo.length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
 >x.foo : Symbol(foo, Decl(discriminantPropertyCheck.ts, 7, 14), Decl(discriminantPropertyCheck.ts, 14, 14))
 >x : Symbol(x, Decl(discriminantPropertyCheck.ts, 50, 14))
 >foo : Symbol(foo, Decl(discriminantPropertyCheck.ts, 7, 14), Decl(discriminantPropertyCheck.ts, 14, 14))
->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
     }
 }
 
@@ -198,11 +198,11 @@ function foo5(x: Item) {
 >undefined : Symbol(undefined)
 
         x.foo.length;
->x.foo.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x.foo.length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
 >x.foo : Symbol(Item1.foo, Decl(discriminantPropertyCheck.ts, 7, 14))
 >x : Symbol(x, Decl(discriminantPropertyCheck.ts, 56, 14))
 >foo : Symbol(Item1.foo, Decl(discriminantPropertyCheck.ts, 7, 14))
->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
     }
 }
 
@@ -221,11 +221,11 @@ function foo6(x: Item) {
 >qux : Symbol(qux, Decl(discriminantPropertyCheck.ts, 9, 17), Decl(discriminantPropertyCheck.ts, 16, 17))
 
         x.foo.length;  // Error, intervening discriminant guard
->x.foo.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x.foo.length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
 >x.foo : Symbol(Item1.foo, Decl(discriminantPropertyCheck.ts, 7, 14))
 >x : Symbol(x, Decl(discriminantPropertyCheck.ts, 62, 14))
 >foo : Symbol(Item1.foo, Decl(discriminantPropertyCheck.ts, 7, 14))
->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
     }
 }
 
@@ -285,11 +285,11 @@ function func2(inst: Instance) {
 >Str : Symbol(Types.Str, Decl(discriminantPropertyCheck.ts, 70, 12))
 
                 inst.value.length;
->inst.value.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>inst.value.length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
 >inst.value : Symbol(StrType.value, Decl(discriminantPropertyCheck.ts, 75, 20))
 >inst : Symbol(inst, Decl(discriminantPropertyCheck.ts, 85, 15))
 >value : Symbol(StrType.value, Decl(discriminantPropertyCheck.ts, 75, 20))
->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
 
                 break;
             }
@@ -299,11 +299,11 @@ function func2(inst: Instance) {
 >Num : Symbol(Types.Num, Decl(discriminantPropertyCheck.ts, 70, 21))
 
                 inst.value.toExponential;
->inst.value.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+>inst.value.toExponential : Symbol(Number.toExponential, Decl(lib.es2009.number.d.ts, --, --))
 >inst.value : Symbol(NumType.value, Decl(discriminantPropertyCheck.ts, 81, 20))
 >inst : Symbol(inst, Decl(discriminantPropertyCheck.ts, 85, 15))
 >value : Symbol(NumType.value, Decl(discriminantPropertyCheck.ts, 81, 20))
->toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+>toExponential : Symbol(Number.toExponential, Decl(lib.es2009.number.d.ts, --, --))
 
                 break;
             }
@@ -472,7 +472,7 @@ type TypeBar2 = { type: BarEnum.bar2 };
 function func3(value: Partial<UnionOfBar>) {
 >func3 : Symbol(func3, Decl(discriminantPropertyCheck.ts, 161, 39))
 >value : Symbol(value, Decl(discriminantPropertyCheck.ts, 163, 15))
->Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.utils.modifiers.d.ts, --, --))
 >UnionOfBar : Symbol(UnionOfBar, Decl(discriminantPropertyCheck.ts, 157, 1))
 
     if (value.type !== undefined) {
@@ -610,7 +610,7 @@ type AllTests = TestA | TestB;
 
 type MapOfAllTests = Record<string, AllTests>;
 >MapOfAllTests : Symbol(MapOfAllTests, Decl(discriminantPropertyCheck.ts, 218, 30))
->Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.utils.modifiers.d.ts, --, --))
 >AllTests : Symbol(AllTests, Decl(discriminantPropertyCheck.ts, 216, 1))
 
 const doTestingStuff = (mapOfTests: MapOfAllTests, ids: string[]) => {
@@ -620,9 +620,9 @@ const doTestingStuff = (mapOfTests: MapOfAllTests, ids: string[]) => {
 >ids : Symbol(ids, Decl(discriminantPropertyCheck.ts, 222, 50))
 
     ids.forEach(id => {
->ids.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>ids.forEach : Symbol(Array.forEach, Decl(lib.es2009.array.d.ts, --, --))
 >ids : Symbol(ids, Decl(discriminantPropertyCheck.ts, 222, 50))
->forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>forEach : Symbol(Array.forEach, Decl(lib.es2009.array.d.ts, --, --))
 >id : Symbol(id, Decl(discriminantPropertyCheck.ts, 223, 16))
 
         let test;

@@ -1,0 +1,7 @@
+lib.es5.d.ts(48,21): error TS6054: File 'lib.es2009.uint16array' has an unsupported extension. The only supported extensions are '.ts', '.tsx', '.d.ts', '.js', '.jsx', '.cts', '.d.cts', '.cjs', '.mts', '.d.mts', '.mjs'.
+
+
+==== SameNameFilesNotSpecifiedWithAllowJs/tsconfig.json (0 errors) ====
+    { "compilerOptions": { "allowJs": true } }
+==== SameNameFilesNotSpecifiedWithAllowJs/a.ts (0 errors) ====
+    var test = 10;

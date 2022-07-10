@@ -10,7 +10,7 @@ declare function call<Fn extends (...args: any[]) => any>(
 
     ...args: Parameters<Fn>
 >args : Symbol(args, Decl(spreadOfParamsFromGeneratorMakesRequiredParams.ts, 1, 11))
->Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>Parameters : Symbol(Parameters, Decl(lib.utils.modifiers.d.ts, --, --))
 >Fn : Symbol(Fn, Decl(spreadOfParamsFromGeneratorMakesRequiredParams.ts, 0, 22))
 
 ): any;

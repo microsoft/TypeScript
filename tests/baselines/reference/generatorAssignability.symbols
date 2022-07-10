@@ -145,7 +145,7 @@ async function f3() {
 >o : Symbol(o, Decl(generatorAssignability.ts, 64, 9))
 >[Symbol.asyncIterator] : Symbol([Symbol.asyncIterator], Decl(generatorAssignability.ts, 64, 15))
 >Symbol.asyncIterator : Symbol(SymbolConstructor.asyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es2009.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
 >asyncIterator : Symbol(SymbolConstructor.asyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
 >syncGenerator : Symbol(syncGenerator, Decl(generatorAssignability.ts, 59, 9))
 

@@ -6,7 +6,7 @@ type Getters<T> = { [P in keyof T & string as `get${Capitalize<P>}`]: () => T[P]
 >T : Symbol(T, Decl(mappedTypeAsClauses.ts, 2, 13))
 >P : Symbol(P, Decl(mappedTypeAsClauses.ts, 2, 21))
 >T : Symbol(T, Decl(mappedTypeAsClauses.ts, 2, 13))
->Capitalize : Symbol(Capitalize, Decl(lib.es5.d.ts, --, --))
+>Capitalize : Symbol(Capitalize, Decl(lib.utils.modifiers.d.ts, --, --))
 >P : Symbol(P, Decl(mappedTypeAsClauses.ts, 2, 21))
 >T : Symbol(T, Decl(mappedTypeAsClauses.ts, 2, 13))
 >P : Symbol(P, Decl(mappedTypeAsClauses.ts, 2, 21))
@@ -68,7 +68,7 @@ type Methods<T> = { [P in keyof T as T[P] extends Function ? P : never]: T[P] };
 >T : Symbol(T, Decl(mappedTypeAsClauses.ts, 20, 13))
 >T : Symbol(T, Decl(mappedTypeAsClauses.ts, 20, 13))
 >P : Symbol(P, Decl(mappedTypeAsClauses.ts, 20, 21))
->Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es2009.function.d.ts, --, --), Decl(lib.es2009.function.d.ts, --, --))
 >P : Symbol(P, Decl(mappedTypeAsClauses.ts, 20, 21))
 >T : Symbol(T, Decl(mappedTypeAsClauses.ts, 20, 13))
 >P : Symbol(P, Decl(mappedTypeAsClauses.ts, 20, 21))
@@ -118,7 +118,7 @@ type Lazyify<T> = {
     [K in keyof T as `get${Capitalize<K & string>}`]: () => T[K]
 >K : Symbol(K, Decl(mappedTypeAsClauses.ts, 33, 5))
 >T : Symbol(T, Decl(mappedTypeAsClauses.ts, 32, 13))
->Capitalize : Symbol(Capitalize, Decl(lib.es5.d.ts, --, --))
+>Capitalize : Symbol(Capitalize, Decl(lib.utils.modifiers.d.ts, --, --))
 >K : Symbol(K, Decl(mappedTypeAsClauses.ts, 33, 5))
 >T : Symbol(T, Decl(mappedTypeAsClauses.ts, 32, 13))
 >K : Symbol(K, Decl(mappedTypeAsClauses.ts, 33, 5))
@@ -420,7 +420,7 @@ type TS0<T> = keyof { [P in keyof T as keyof Record<P, number>]: string };
 >T : Symbol(T, Decl(mappedTypeAsClauses.ts, 135, 9))
 >P : Symbol(P, Decl(mappedTypeAsClauses.ts, 135, 23))
 >T : Symbol(T, Decl(mappedTypeAsClauses.ts, 135, 9))
->Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.utils.modifiers.d.ts, --, --))
 >P : Symbol(P, Decl(mappedTypeAsClauses.ts, 135, 23))
 
 type TS1<T> = keyof { [P in keyof T as Extract<P, 'a' | 'b' | 'c'>]: string };
@@ -428,7 +428,7 @@ type TS1<T> = keyof { [P in keyof T as Extract<P, 'a' | 'b' | 'c'>]: string };
 >T : Symbol(T, Decl(mappedTypeAsClauses.ts, 136, 9))
 >P : Symbol(P, Decl(mappedTypeAsClauses.ts, 136, 23))
 >T : Symbol(T, Decl(mappedTypeAsClauses.ts, 136, 9))
->Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>Extract : Symbol(Extract, Decl(lib.utils.modifiers.d.ts, --, --))
 >P : Symbol(P, Decl(mappedTypeAsClauses.ts, 136, 23))
 
 type TS2<T> = keyof { [P in keyof T as P & ('a' | 'b' | 'c')]: string };
@@ -443,7 +443,7 @@ type TS3<T> = keyof { [P in keyof T as Exclude<P, 'a' | 'b' | 'c'>]: string };
 >T : Symbol(T, Decl(mappedTypeAsClauses.ts, 138, 9))
 >P : Symbol(P, Decl(mappedTypeAsClauses.ts, 138, 23))
 >T : Symbol(T, Decl(mappedTypeAsClauses.ts, 138, 9))
->Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>Exclude : Symbol(Exclude, Decl(lib.utils.modifiers.d.ts, --, --))
 >P : Symbol(P, Decl(mappedTypeAsClauses.ts, 138, 23))
 
 type TS4<T> = keyof { [P in keyof T as NameMap[P & keyof NameMap]]: string };
@@ -508,9 +508,9 @@ type TN3<T> = keyof { [P in keyof T as Exclude<Exclude<Exclude<P, 'c'>, 'b'>, 'a
 >T : Symbol(T, Decl(mappedTypeAsClauses.ts, 148, 9))
 >P : Symbol(P, Decl(mappedTypeAsClauses.ts, 148, 23))
 >T : Symbol(T, Decl(mappedTypeAsClauses.ts, 148, 9))
->Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
->Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
->Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>Exclude : Symbol(Exclude, Decl(lib.utils.modifiers.d.ts, --, --))
+>Exclude : Symbol(Exclude, Decl(lib.utils.modifiers.d.ts, --, --))
+>Exclude : Symbol(Exclude, Decl(lib.utils.modifiers.d.ts, --, --))
 >P : Symbol(P, Decl(mappedTypeAsClauses.ts, 148, 23))
 
 type TN4<T, U> = keyof { [K in keyof T as (K extends U ? T[K] : never) extends T[K] ? K : never]: string };

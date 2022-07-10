@@ -34,7 +34,7 @@ key = "abc";
 
 key = Symbol();
 >key : Symbol(key, Decl(a.ts, 9, 3))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es2009.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
 
 key = 123n; // should error
 >key : Symbol(key, Decl(a.ts, 9, 3))
@@ -45,7 +45,7 @@ const bigNum: bigint = 0n;
 
 const typedArray = new Uint8Array(3);
 >typedArray : Symbol(typedArray, Decl(a.ts, 17, 5))
->Uint8Array : Symbol(Uint8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --))
+>Uint8Array : Symbol(Uint8Array, Decl(lib.es2009.uint8array.d.ts, --, --), Decl(lib.es2009.uint8array.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --))
 
 typedArray[bigNum] = 0xAA; // should error
 >typedArray : Symbol(typedArray, Decl(a.ts, 17, 5))
@@ -53,7 +53,7 @@ typedArray[bigNum] = 0xAA; // should error
 
 typedArray[String(bigNum)] = 0xAA;
 >typedArray : Symbol(typedArray, Decl(a.ts, 17, 5))
->String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 4 more)
+>String : Symbol(String, Decl(lib.es2009.string.d.ts, --, --), Decl(lib.es2009.string.d.ts, --, --), Decl(lib.es2009.string.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.string.d.ts, --, --) ... and 4 more)
 >bigNum : Symbol(bigNum, Decl(a.ts, 16, 5))
 
 typedArray["1"] = 0xBB;

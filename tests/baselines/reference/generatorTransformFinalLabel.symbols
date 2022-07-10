@@ -10,6 +10,6 @@ async function test(skip: boolean) {
     }
     else {
         throw Error('test')
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2009.error.d.ts, --, --))
     }
 }

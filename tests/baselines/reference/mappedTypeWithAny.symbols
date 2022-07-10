@@ -170,7 +170,7 @@ type Evolver<T extends Evolvable<any> = any> = {
 
   [key in keyof Partial<T>]: never;
 >key : Symbol(key, Decl(mappedTypeWithAny.ts, 60, 3))
->Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.utils.modifiers.d.ts, --, --))
 >T : Symbol(T, Decl(mappedTypeWithAny.ts, 59, 13))
 
 };

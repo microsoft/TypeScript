@@ -4,7 +4,7 @@ interface I {
 
     (stringParts: TemplateStringsArray, ...rest: number[]): I;
 >stringParts : Symbol(stringParts, Decl(taggedTemplateStringsWithTypedTags.ts, 1, 5))
->TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es5.d.ts, --, --))
+>TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es2009.string.d.ts, --, --))
 >rest : Symbol(rest, Decl(taggedTemplateStringsWithTypedTags.ts, 1, 39))
 >I : Symbol(I, Decl(taggedTemplateStringsWithTypedTags.ts, 0, 0))
 

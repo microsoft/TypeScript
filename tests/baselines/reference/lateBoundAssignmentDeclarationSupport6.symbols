@@ -25,7 +25,7 @@ const z = inst[x.S];
 // currently unsupported
 const _sym = Symbol();
 >_sym : Symbol(_sym, Decl(lateBoundAssignmentDeclarationSupport6.js, 1, 5))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es2009.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 const _str = "my-fake-sym";
 >_str : Symbol(_str, Decl(lateBoundAssignmentDeclarationSupport6.js, 2, 5))
@@ -36,26 +36,26 @@ function F() {
 F.prototype.defsAClass = true;
 >F.prototype : Symbol(F.defsAClass, Decl(lateBoundAssignmentDeclarationSupport6.js, 5, 1))
 >F : Symbol(F, Decl(lateBoundAssignmentDeclarationSupport6.js, 2, 27))
->prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>prototype : Symbol(Function.prototype, Decl(lib.es2009.function.d.ts, --, --))
 >defsAClass : Symbol(F.defsAClass, Decl(lateBoundAssignmentDeclarationSupport6.js, 5, 1))
 
 Object.defineProperty(F.prototype, _str, {value: "ok"});
->Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
->F.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es2009.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es2009.object.d.ts, --, --), Decl(lib.es2009.object.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es2009.object.d.ts, --, --))
+>F.prototype : Symbol(Function.prototype, Decl(lib.es2009.function.d.ts, --, --))
 >F : Symbol(F, Decl(lateBoundAssignmentDeclarationSupport6.js, 2, 27))
->prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>prototype : Symbol(Function.prototype, Decl(lib.es2009.function.d.ts, --, --))
 >_str : Symbol(_str, Decl(lateBoundAssignmentDeclarationSupport6.js, 2, 5))
 >value : Symbol(value, Decl(lateBoundAssignmentDeclarationSupport6.js, 7, 42))
 
 Object.defineProperty(F.prototype, _sym, {value: "ok"});
->Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
->F.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es2009.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es2009.object.d.ts, --, --), Decl(lib.es2009.object.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es2009.object.d.ts, --, --))
+>F.prototype : Symbol(Function.prototype, Decl(lib.es2009.function.d.ts, --, --))
 >F : Symbol(F, Decl(lateBoundAssignmentDeclarationSupport6.js, 2, 27))
->prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>prototype : Symbol(Function.prototype, Decl(lib.es2009.function.d.ts, --, --))
 >_sym : Symbol(_sym, Decl(lateBoundAssignmentDeclarationSupport6.js, 1, 5))
 >value : Symbol(value, Decl(lateBoundAssignmentDeclarationSupport6.js, 8, 42))
 

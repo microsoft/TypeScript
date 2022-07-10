@@ -49,7 +49,7 @@ function f3(x: 1 | 2) {
         case 2: return 20;
         // Default considered reachable to allow defensive coding
         default: throw new Error("Bad input");
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2009.error.d.ts, --, --))
     }
 }
 
@@ -166,9 +166,9 @@ function area(s: Shape): number {
 
         case "circle": area = Math.PI * s.radius * s.radius; break;
 >area : Symbol(area, Decl(exhaustiveSwitchStatements1.ts, 65, 7))
->Math.PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
+>Math.PI : Symbol(Math.PI, Decl(lib.es2009.math.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es2009.math.d.ts, --, --), Decl(lib.es2009.math.d.ts, --, --))
+>PI : Symbol(Math.PI, Decl(lib.es2009.math.d.ts, --, --))
 >s.radius : Symbol(Circle.radius, Decl(exhaustiveSwitchStatements1.ts, 58, 34))
 >s : Symbol(s, Decl(exhaustiveSwitchStatements1.ts, 64, 14))
 >radius : Symbol(Circle.radius, Decl(exhaustiveSwitchStatements1.ts, 58, 34))
@@ -178,9 +178,9 @@ function area(s: Shape): number {
 
         case "triangle": area = Math.sqrt(3) / 4 * s.side * s.side; break;
 >area : Symbol(area, Decl(exhaustiveSwitchStatements1.ts, 65, 7))
->Math.sqrt : Symbol(Math.sqrt, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->sqrt : Symbol(Math.sqrt, Decl(lib.es5.d.ts, --, --))
+>Math.sqrt : Symbol(Math.sqrt, Decl(lib.es2009.math.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es2009.math.d.ts, --, --), Decl(lib.es2009.math.d.ts, --, --))
+>sqrt : Symbol(Math.sqrt, Decl(lib.es2009.math.d.ts, --, --))
 >s.side : Symbol(Triangle.side, Decl(exhaustiveSwitchStatements1.ts, 60, 38))
 >s : Symbol(s, Decl(exhaustiveSwitchStatements1.ts, 64, 14))
 >side : Symbol(Triangle.side, Decl(exhaustiveSwitchStatements1.ts, 60, 38))
@@ -225,9 +225,9 @@ function areaWrapped(s: Shape): number {
 >height : Symbol(Rectangle.height, Decl(exhaustiveSwitchStatements1.ts, 56, 55))
 
             case "circle": return Math.PI * s.radius * s.radius;
->Math.PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
+>Math.PI : Symbol(Math.PI, Decl(lib.es2009.math.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es2009.math.d.ts, --, --), Decl(lib.es2009.math.d.ts, --, --))
+>PI : Symbol(Math.PI, Decl(lib.es2009.math.d.ts, --, --))
 >s.radius : Symbol(Circle.radius, Decl(exhaustiveSwitchStatements1.ts, 58, 34))
 >s : Symbol(s, Decl(exhaustiveSwitchStatements1.ts, 75, 21))
 >radius : Symbol(Circle.radius, Decl(exhaustiveSwitchStatements1.ts, 58, 34))
@@ -236,9 +236,9 @@ function areaWrapped(s: Shape): number {
 >radius : Symbol(Circle.radius, Decl(exhaustiveSwitchStatements1.ts, 58, 34))
 
             case "triangle": return Math.sqrt(3) / 4 * s.side * s.side;
->Math.sqrt : Symbol(Math.sqrt, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->sqrt : Symbol(Math.sqrt, Decl(lib.es5.d.ts, --, --))
+>Math.sqrt : Symbol(Math.sqrt, Decl(lib.es2009.math.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es2009.math.d.ts, --, --), Decl(lib.es2009.math.d.ts, --, --))
+>sqrt : Symbol(Math.sqrt, Decl(lib.es2009.math.d.ts, --, --))
 >s.side : Symbol(Triangle.side, Decl(exhaustiveSwitchStatements1.ts, 60, 38))
 >s : Symbol(s, Decl(exhaustiveSwitchStatements1.ts, 75, 21))
 >side : Symbol(Triangle.side, Decl(exhaustiveSwitchStatements1.ts, 60, 38))

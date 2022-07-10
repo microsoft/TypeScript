@@ -12,9 +12,9 @@ class C {
 >fn : Symbol(fn, Decl(asyncFunctionDeclarationCapturesArguments_es5.ts, 2, 25))
 
            await other.apply(this, arguments);
->other.apply : Symbol(Function.apply, Decl(lib.es5.d.ts, --, --))
+>other.apply : Symbol(Function.apply, Decl(lib.es2009.function.d.ts, --, --))
 >other : Symbol(other, Decl(asyncFunctionDeclarationCapturesArguments_es5.ts, 1, 13))
->apply : Symbol(Function.apply, Decl(lib.es5.d.ts, --, --))
+>apply : Symbol(Function.apply, Decl(lib.es2009.function.d.ts, --, --))
 >arguments : Symbol(arguments)
       }
    }

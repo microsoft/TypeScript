@@ -37,21 +37,21 @@ export function foo<T extends NumList | StrList>(arr: T & (NumList | StrList)) {
 
 export type TypedArray = Int32Array | Uint8Array;
 >TypedArray : Symbol(TypedArray, Decl(unionWithIndexSignature.ts, 11, 1))
->Int32Array : Symbol(Int32Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->Uint8Array : Symbol(Uint8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Int32Array : Symbol(Int32Array, Decl(lib.es2009.int32array.d.ts, --, --), Decl(lib.es2009.int32array.d.ts, --, --))
+>Uint8Array : Symbol(Uint8Array, Decl(lib.es2009.uint8array.d.ts, --, --), Decl(lib.es2009.uint8array.d.ts, --, --))
 
 export function isTypedArray(a: {}): a is Int32Array | Uint8Array {
 >isTypedArray : Symbol(isTypedArray, Decl(unionWithIndexSignature.ts, 15, 49))
 >a : Symbol(a, Decl(unionWithIndexSignature.ts, 17, 29))
 >a : Symbol(a, Decl(unionWithIndexSignature.ts, 17, 29))
->Int32Array : Symbol(Int32Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->Uint8Array : Symbol(Uint8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Int32Array : Symbol(Int32Array, Decl(lib.es2009.int32array.d.ts, --, --), Decl(lib.es2009.int32array.d.ts, --, --))
+>Uint8Array : Symbol(Uint8Array, Decl(lib.es2009.uint8array.d.ts, --, --), Decl(lib.es2009.uint8array.d.ts, --, --))
 
   return a instanceof Int32Array || a instanceof Uint8Array;
 >a : Symbol(a, Decl(unionWithIndexSignature.ts, 17, 29))
->Int32Array : Symbol(Int32Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Int32Array : Symbol(Int32Array, Decl(lib.es2009.int32array.d.ts, --, --), Decl(lib.es2009.int32array.d.ts, --, --))
 >a : Symbol(a, Decl(unionWithIndexSignature.ts, 17, 29))
->Uint8Array : Symbol(Uint8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Uint8Array : Symbol(Uint8Array, Decl(lib.es2009.uint8array.d.ts, --, --), Decl(lib.es2009.uint8array.d.ts, --, --))
 }
 
 export function flatten<T extends number|TypedArray>(arr: T) {

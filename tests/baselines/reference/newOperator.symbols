@@ -9,11 +9,11 @@ var i = new ifc();
 // Parens are optional
 var x = new Date;
 >x : Symbol(x, Decl(newOperator.ts, 5, 3))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2009.date.d.ts, --, --), Decl(lib.es2009.date.d.ts, --, --), Decl(lib.es2009.date.d.ts, --, --))
 
 var y = new Date();
 >y : Symbol(y, Decl(newOperator.ts, 6, 3))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2009.date.d.ts, --, --), Decl(lib.es2009.date.d.ts, --, --), Decl(lib.es2009.date.d.ts, --, --))
 
 // Target is not a class or var, good error
 var t1 = new 53();
@@ -26,9 +26,9 @@ new string;
 
 // Use in LHS of expression?
 (new Date()).toString();
->(new Date()).toString : Symbol(Date.toString, Decl(lib.es5.d.ts, --, --))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
->toString : Symbol(Date.toString, Decl(lib.es5.d.ts, --, --))
+>(new Date()).toString : Symbol(Date.toString, Decl(lib.es2009.date.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2009.date.d.ts, --, --), Decl(lib.es2009.date.d.ts, --, --), Decl(lib.es2009.date.d.ts, --, --))
+>toString : Symbol(Date.toString, Decl(lib.es2009.date.d.ts, --, --))
 
 // Various spacing
 var t3 = new string[]( );
@@ -51,11 +51,11 @@ var f = new q();
 // not legal
 var t5 = new new Date;
 >t5 : Symbol(t5, Decl(newOperator.ts, 30, 3))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2009.date.d.ts, --, --), Decl(lib.es2009.date.d.ts, --, --), Decl(lib.es2009.date.d.ts, --, --))
 
 // Can be an expression
 new String;
->String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es2009.string.d.ts, --, --), Decl(lib.es2009.string.d.ts, --, --), Decl(lib.es2009.string.d.ts, --, --))
 
 // Error on union
 declare const union: { a: string } | { b: string }

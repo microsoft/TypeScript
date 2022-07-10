@@ -101,7 +101,7 @@ const r = extend({
 
             type: Object as PropType<MyType>,
 >type : Symbol(type, Decl(reverseMappedPartiallyInferableTypes.ts, 33, 22))
->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es2009.object.d.ts, --, --), Decl(lib.es2009.object.d.ts, --, --))
 >PropType : Symbol(PropType, Decl(reverseMappedPartiallyInferableTypes.ts, 2, 31))
 >MyType : Symbol(MyType, Decl(reverseMappedPartiallyInferableTypes.ts, 25, 90))
 
@@ -120,7 +120,7 @@ const r = extend({
 
             type: Object as PropType<MyType>,
 >type : Symbol(type, Decl(reverseMappedPartiallyInferableTypes.ts, 39, 19))
->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es2009.object.d.ts, --, --), Decl(lib.es2009.object.d.ts, --, --))
 >PropType : Symbol(PropType, Decl(reverseMappedPartiallyInferableTypes.ts, 2, 31))
 >MyType : Symbol(MyType, Decl(reverseMappedPartiallyInferableTypes.ts, 25, 90))
 
@@ -231,9 +231,9 @@ const obj2 = id({
 >k : Symbol(k, Decl(reverseMappedPartiallyInferableTypes.ts, 79, 17))
 
             return k.length > 0;
->k.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>k.length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
 >k : Symbol(k, Decl(reverseMappedPartiallyInferableTypes.ts, 79, 17))
->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
         }
     }
 });

@@ -1,0 +1,16 @@
+lib.es5.d.ts(48,21): error TS6054: File 'lib.es2009.uint16array' has an unsupported extension. The only supported extensions are '.ts', '.tsx', '.d.ts', '.cts', '.d.cts', '.mts', '.d.mts'.
+
+
+==== fncOnly_m4.ts (0 errors) ====
+    
+    export class d {
+    };
+    export var x: d;
+    export function foo(): d {
+        return new d();
+    }
+    
+    
+==== useModule.ts (0 errors) ====
+    import fncOnly_m4 = require("fncOnly_m4");
+    export var useFncOnly_m4_f4 = fncOnly_m4.foo();

@@ -1,7 +1,7 @@
 === tests/cases/compiler/declarationEmitClassMemberWithComputedPropertyName.ts ===
 const k1 = Symbol();
 >k1 : Symbol(k1, Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 0, 5))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es2009.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
 
 const k2 = 'foo' as const;
 >k2 : Symbol(k2, Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 1, 5))
@@ -9,7 +9,7 @@ const k2 = 'foo' as const;
 
 const k3 = Symbol();
 >k3 : Symbol(k3, Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 3, 5))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es2009.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
 
 const k4 = 'prop' as const;
 >k4 : Symbol(k4, Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 4, 5))

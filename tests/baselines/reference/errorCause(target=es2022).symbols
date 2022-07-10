@@ -4,9 +4,9 @@ declare const a: unknown;
 
 let err = new Error("foo", { cause: new Error("bar") });
 >err : Symbol(err, Decl(errorCause.ts, 2, 3))
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
 >cause : Symbol(cause, Decl(errorCause.ts, 2, 28))
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
 
 err.cause;
 >err.cause : Symbol(Error.cause, Decl(lib.es2022.error.d.ts, --, --))
@@ -15,7 +15,7 @@ err.cause;
 
 let anotherErr = new Error("foo", { cause: a });
 >anotherErr : Symbol(anotherErr, Decl(errorCause.ts, 4, 3))
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
 >cause : Symbol(cause, Decl(errorCause.ts, 4, 35))
 >a : Symbol(a, Decl(errorCause.ts, 0, 13))
 
@@ -25,42 +25,42 @@ anotherErr.cause;
 >cause : Symbol(Error.cause, Decl(lib.es2022.error.d.ts, --, --))
 
 new EvalError("foo", { cause: new Error("bar") });
->EvalError : Symbol(EvalError, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>EvalError : Symbol(EvalError, Decl(lib.es2009.evalerror.d.ts, --, --), Decl(lib.es2009.evalerror.d.ts, --, --))
 >cause : Symbol(cause, Decl(errorCause.ts, 7, 22))
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
 
 new EvalError("foo", { cause: a });
->EvalError : Symbol(EvalError, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>EvalError : Symbol(EvalError, Decl(lib.es2009.evalerror.d.ts, --, --), Decl(lib.es2009.evalerror.d.ts, --, --))
 >cause : Symbol(cause, Decl(errorCause.ts, 8, 22))
 >a : Symbol(a, Decl(errorCause.ts, 0, 13))
 
 new RangeError("foo", { cause: new Error("bar") });
->RangeError : Symbol(RangeError, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>RangeError : Symbol(RangeError, Decl(lib.es2009.rangeerror.d.ts, --, --), Decl(lib.es2009.rangeerror.d.ts, --, --))
 >cause : Symbol(cause, Decl(errorCause.ts, 9, 23))
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
 
 new ReferenceError("foo", { cause: new Error("bar") });
->ReferenceError : Symbol(ReferenceError, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>ReferenceError : Symbol(ReferenceError, Decl(lib.es2009.referenceerror.d.ts, --, --), Decl(lib.es2009.referenceerror.d.ts, --, --))
 >cause : Symbol(cause, Decl(errorCause.ts, 10, 27))
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
 
 new SyntaxError("foo", { cause: new Error("bar") });
->SyntaxError : Symbol(SyntaxError, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>SyntaxError : Symbol(SyntaxError, Decl(lib.es2009.syntaxerror.d.ts, --, --), Decl(lib.es2009.syntaxerror.d.ts, --, --))
 >cause : Symbol(cause, Decl(errorCause.ts, 11, 24))
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
 
 new TypeError("foo", { cause: new Error("bar") });
->TypeError : Symbol(TypeError, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>TypeError : Symbol(TypeError, Decl(lib.es2009.typeerror.d.ts, --, --), Decl(lib.es2009.typeerror.d.ts, --, --))
 >cause : Symbol(cause, Decl(errorCause.ts, 12, 22))
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
 
 new URIError("foo", { cause: new Error("bar") });
->URIError : Symbol(URIError, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>URIError : Symbol(URIError, Decl(lib.es2009.urierror.d.ts, --, --), Decl(lib.es2009.urierror.d.ts, --, --))
 >cause : Symbol(cause, Decl(errorCause.ts, 13, 21))
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
 
 new AggregateError([], "foo", { cause: new Error("bar") });
 >AggregateError : Symbol(AggregateError, Decl(lib.es2021.promise.d.ts, --, --), Decl(lib.es2021.promise.d.ts, --, --))
 >cause : Symbol(cause, Decl(errorCause.ts, 14, 31))
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
 

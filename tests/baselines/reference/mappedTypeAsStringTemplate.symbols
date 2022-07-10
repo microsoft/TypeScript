@@ -6,7 +6,7 @@ function foo<T extends { [K in keyof T as `${Extract<K, string>}y`]: number }>(f
 >T : Symbol(T, Decl(mappedTypeAsStringTemplate.ts, 2, 13))
 >K : Symbol(K, Decl(mappedTypeAsStringTemplate.ts, 2, 26))
 >T : Symbol(T, Decl(mappedTypeAsStringTemplate.ts, 2, 13))
->Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>Extract : Symbol(Extract, Decl(lib.utils.modifiers.d.ts, --, --))
 >K : Symbol(K, Decl(mappedTypeAsStringTemplate.ts, 2, 26))
 >foox : Symbol(foox, Decl(mappedTypeAsStringTemplate.ts, 2, 79))
 >T : Symbol(T, Decl(mappedTypeAsStringTemplate.ts, 2, 13))

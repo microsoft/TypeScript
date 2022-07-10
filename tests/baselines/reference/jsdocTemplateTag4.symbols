@@ -23,7 +23,7 @@ function Multimap() {
 Multimap.prototype.get = function (key) {
 >Multimap.prototype : Symbol(Multimap.get, Decl(a.js, 9, 2))
 >Multimap : Symbol(Multimap, Decl(a.js, 0, 0))
->prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>prototype : Symbol(Function.prototype, Decl(lib.es2009.function.d.ts, --, --))
 >get : Symbol(Multimap.get, Decl(a.js, 9, 2))
 >key : Symbol(key, Decl(a.js, 15, 35))
 
@@ -58,7 +58,7 @@ var Multimap2 = function() {
 Multimap2.prototype.get = function (key) {
 >Multimap2.prototype : Symbol(Multimap2.get, Decl(a.js, 28, 2))
 >Multimap2 : Symbol(Multimap2, Decl(a.js, 25, 3))
->prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>prototype : Symbol(Function.prototype, Decl(lib.es2009.function.d.ts, --, --))
 >get : Symbol(Multimap2.get, Decl(a.js, 28, 2))
 >key : Symbol(key, Decl(a.js, 34, 36))
 
@@ -100,7 +100,7 @@ Ns.Multimap3.prototype.get = function (key) {
 >Ns.Multimap3 : Symbol(Ns.Multimap3, Decl(a.js, 38, 12))
 >Ns : Symbol(Ns, Decl(a.js, 38, 3), Decl(a.js, 38, 12))
 >Multimap3 : Symbol(Ns.Multimap3, Decl(a.js, 38, 12))
->prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>prototype : Symbol(Function.prototype, Decl(lib.es2009.function.d.ts, --, --))
 >get : Symbol(Ns.Multimap3.get, Decl(a.js, 48, 2))
 >key : Symbol(key, Decl(a.js, 54, 39))
 

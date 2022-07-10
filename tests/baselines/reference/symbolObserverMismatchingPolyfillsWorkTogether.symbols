@@ -18,7 +18,7 @@ const obj = {
     [Symbol.observer]: 0
 >[Symbol.observer] : Symbol([Symbol.observer], Decl(symbolObserverMismatchingPolyfillsWorkTogether.ts, 7, 13))
 >Symbol.observer : Symbol(SymbolConstructor.observer, Decl(symbolObserverMismatchingPolyfillsWorkTogether.ts, 0, 29), Decl(symbolObserverMismatchingPolyfillsWorkTogether.ts, 3, 29))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es2009.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >observer : Symbol(SymbolConstructor.observer, Decl(symbolObserverMismatchingPolyfillsWorkTogether.ts, 0, 29), Decl(symbolObserverMismatchingPolyfillsWorkTogether.ts, 3, 29))
 
 };

@@ -33,9 +33,9 @@ export class TestRunner {
 >arg2 : Symbol(arg2, Decl(duplicateLocalVariable1.ts, 15, 36))
 
         return (arg1.every(function (val, index) { return val === arg2[index] }));
->arg1.every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>arg1.every : Symbol(Array.every, Decl(lib.es2009.array.d.ts, --, --), Decl(lib.es2009.array.d.ts, --, --))
 >arg1 : Symbol(arg1, Decl(duplicateLocalVariable1.ts, 15, 24))
->every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>every : Symbol(Array.every, Decl(lib.es2009.array.d.ts, --, --), Decl(lib.es2009.array.d.ts, --, --))
 >val : Symbol(val, Decl(duplicateLocalVariable1.ts, 16, 37))
 >index : Symbol(index, Decl(duplicateLocalVariable1.ts, 16, 41))
 >val : Symbol(val, Decl(duplicateLocalVariable1.ts, 16, 37))
@@ -49,11 +49,11 @@ export class TestRunner {
 >TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
 
         this.tests.push(test);
->this.tests.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>this.tests.push : Symbol(Array.push, Decl(lib.es2009.array.d.ts, --, --))
 >this.tests : Symbol(TestRunner.tests, Decl(duplicateLocalVariable1.ts, 12, 25))
 >this : Symbol(TestRunner, Decl(duplicateLocalVariable1.ts, 11, 1))
 >tests : Symbol(TestRunner.tests, Decl(duplicateLocalVariable1.ts, 12, 25))
->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es2009.array.d.ts, --, --))
 >test : Symbol(test, Decl(duplicateLocalVariable1.ts, 19, 19))
     }
     public run() {
@@ -116,16 +116,16 @@ export class TestRunner {
 
                         var regex = new RegExp(testcase.errorMessageRegEx);
 >regex : Symbol(regex, Decl(duplicateLocalVariable1.ts, 38, 27))
->RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es2009.regexp.d.ts, --, --), Decl(lib.es2009.regexp.d.ts, --, --))
 >testcase.errorMessageRegEx : Symbol(TestCase.errorMessageRegEx, Decl(duplicateLocalVariable1.ts, 9, 63))
 >testcase : Symbol(testcase, Decl(duplicateLocalVariable1.ts, 26, 15))
 >errorMessageRegEx : Symbol(TestCase.errorMessageRegEx, Decl(duplicateLocalVariable1.ts, 9, 63))
 
                         testResult = regex.test(e.message);
 >testResult : Symbol(testResult, Decl(duplicateLocalVariable1.ts, 27, 15))
->regex.test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
+>regex.test : Symbol(RegExp.test, Decl(lib.es2009.regexp.d.ts, --, --))
 >regex : Symbol(regex, Decl(duplicateLocalVariable1.ts, 38, 27))
->test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
+>test : Symbol(RegExp.test, Decl(lib.es2009.regexp.d.ts, --, --))
 >e : Symbol(e, Decl(duplicateLocalVariable1.ts, 31, 19))
                     }
                 } 
@@ -180,14 +180,14 @@ export var tests: TestRunner = (function () {
 >testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
 >addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
 >TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2009.error.d.ts, --, --))
 
     testRunner.addTest(new TestCase("Test RegEx error message match", function () { throw new Error("Should also pass"); return false; }, "Should [also]+ pass"));
 >testRunner.addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
 >testRunner : Symbol(testRunner, Decl(duplicateLocalVariable1.ts, 59, 7))
 >addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
 >TestCase : Symbol(TestCase, Decl(duplicateLocalVariable1.ts, 6, 37))
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2009.error.d.ts, --, --))
 
     testRunner.addTest(new TestCase("Test array compare true", function () { return TestRunner.arrayCompare([1, 2, 3], [1, 2, 3]); }));
 >testRunner.addTest : Symbol(TestRunner.addTest, Decl(duplicateLocalVariable1.ts, 17, 5))
@@ -476,9 +476,9 @@ export var tests: TestRunner = (function () {
 >i : Symbol(i, Decl(duplicateLocalVariable1.ts, 156, 20))
 
                 chars.push(fb.readByte());
->chars.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>chars.push : Symbol(Array.push, Decl(lib.es2009.array.d.ts, --, --))
 >chars : Symbol(chars, Decl(duplicateLocalVariable1.ts, 155, 15))
->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es2009.array.d.ts, --, --))
 >fb : Symbol(fb, Decl(duplicateLocalVariable1.ts, 154, 15))
             }
             return TestRunner.arrayCompare(chars, [0x54, 0xC3, 0xA8, 0xE1, 0xB4, 0xA3, 0xE2, 0x80, 0xA0, 0x0D, 0x0A]);
@@ -511,9 +511,9 @@ export var tests: TestRunner = (function () {
 >i : Symbol(i, Decl(duplicateLocalVariable1.ts, 167, 20))
 
                 chars.push(fb.readUtf8CodePoint());
->chars.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>chars.push : Symbol(Array.push, Decl(lib.es2009.array.d.ts, --, --))
 >chars : Symbol(chars, Decl(duplicateLocalVariable1.ts, 166, 15))
->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es2009.array.d.ts, --, --))
 >fb : Symbol(fb, Decl(duplicateLocalVariable1.ts, 165, 15))
             }
             return TestRunner.arrayCompare(chars, [0x0054, 0x00E8, 0x1D23, 0x2020, 0x000D, 0x000A]);
@@ -562,9 +562,9 @@ export var tests: TestRunner = (function () {
 >i : Symbol(i, Decl(duplicateLocalVariable1.ts, 178, 20), Decl(duplicateLocalVariable1.ts, 183, 20))
 
                 bytes.push(fb.readByte());
->bytes.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>bytes.push : Symbol(Array.push, Decl(lib.es2009.array.d.ts, --, --))
 >bytes : Symbol(bytes, Decl(duplicateLocalVariable1.ts, 182, 15))
->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es2009.array.d.ts, --, --))
 >fb : Symbol(fb, Decl(duplicateLocalVariable1.ts, 175, 15))
             }
             var expected = [0xEF, 0xBB, 0xBF, 0x54, 0xC3, 0xA8, 0xE1, 0xB4, 0xA3, 0xE2, 0x80, 0xA0, 0x0D, 0x0A];
@@ -602,9 +602,9 @@ export var tests: TestRunner = (function () {
 >chars : Symbol(chars, Decl(duplicateLocalVariable1.ts, 196, 15))
 
             chars.forEach(function (val) { fb.writeUtf16CodePoint(val, false); });
->chars.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>chars.forEach : Symbol(Array.forEach, Decl(lib.es2009.array.d.ts, --, --))
 >chars : Symbol(chars, Decl(duplicateLocalVariable1.ts, 196, 15))
->forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>forEach : Symbol(Array.forEach, Decl(lib.es2009.array.d.ts, --, --))
 >val : Symbol(val, Decl(duplicateLocalVariable1.ts, 197, 36))
 >fb : Symbol(fb, Decl(duplicateLocalVariable1.ts, 194, 15))
 >val : Symbol(val, Decl(duplicateLocalVariable1.ts, 197, 36))
@@ -622,7 +622,7 @@ export var tests: TestRunner = (function () {
 >savedFile : Symbol(savedFile, Decl(duplicateLocalVariable1.ts, 200, 15))
 
                 throw Error("Incorrect encoding");
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2009.error.d.ts, --, --))
             }
             var expectedBytes = [0xFF, 0xFE, 0x54, 0x00, 0xE8, 0x00, 0x23, 0x1D, 0x20, 0x20, 0x0D, 0x00, 0x0A, 0x00]
 >expectedBytes : Symbol(expectedBytes, Decl(duplicateLocalVariable1.ts, 204, 15))
@@ -631,9 +631,9 @@ export var tests: TestRunner = (function () {
 >savedFile : Symbol(savedFile, Decl(duplicateLocalVariable1.ts, 200, 15))
 
             expectedBytes.forEach(function (val) {
->expectedBytes.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>expectedBytes.forEach : Symbol(Array.forEach, Decl(lib.es2009.array.d.ts, --, --))
 >expectedBytes : Symbol(expectedBytes, Decl(duplicateLocalVariable1.ts, 204, 15))
->forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>forEach : Symbol(Array.forEach, Decl(lib.es2009.array.d.ts, --, --))
 >val : Symbol(val, Decl(duplicateLocalVariable1.ts, 206, 44))
 
                 var byteVal = savedFile.readByte();
@@ -645,7 +645,7 @@ export var tests: TestRunner = (function () {
 >val : Symbol(val, Decl(duplicateLocalVariable1.ts, 206, 44))
 
                     throw Error("Incorrect byte value");
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2009.error.d.ts, --, --))
                 }
             });
             return true;
@@ -704,7 +704,7 @@ export var tests: TestRunner = (function () {
 >savedFile : Symbol(savedFile, Decl(duplicateLocalVariable1.ts, 231, 15))
 
                 throw Error("Incorrect encoding");
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2009.error.d.ts, --, --))
             }
 
             var codePoints = [];
@@ -716,9 +716,9 @@ export var tests: TestRunner = (function () {
 >i : Symbol(i, Decl(duplicateLocalVariable1.ts, 237, 20))
 
                 codePoints.push(savedFile.readUtf16CodePoint(false));
->codePoints.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>codePoints.push : Symbol(Array.push, Decl(lib.es2009.array.d.ts, --, --))
 >codePoints : Symbol(codePoints, Decl(duplicateLocalVariable1.ts, 236, 15))
->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es2009.array.d.ts, --, --))
 >savedFile : Symbol(savedFile, Decl(duplicateLocalVariable1.ts, 231, 15))
             }
             var expectedCodePoints = [0x10480, 0x10481, 0x10482, 0x54, 0x68, 0x69];
@@ -749,7 +749,7 @@ export var tests: TestRunner = (function () {
 >savedFile : Symbol(savedFile, Decl(duplicateLocalVariable1.ts, 246, 15))
 
                 throw Error("Incorrect encoding");
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2009.error.d.ts, --, --))
             }
 
             var codePoints = [];
@@ -761,9 +761,9 @@ export var tests: TestRunner = (function () {
 >i : Symbol(i, Decl(duplicateLocalVariable1.ts, 252, 20))
 
                 codePoints.push(savedFile.readUtf8CodePoint());
->codePoints.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>codePoints.push : Symbol(Array.push, Decl(lib.es2009.array.d.ts, --, --))
 >codePoints : Symbol(codePoints, Decl(duplicateLocalVariable1.ts, 251, 15))
->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es2009.array.d.ts, --, --))
 >savedFile : Symbol(savedFile, Decl(duplicateLocalVariable1.ts, 246, 15))
             }
             var expectedCodePoints = [0x10480, 0x10481, 0x10482, 0x54, 0x68, 0x69];
@@ -797,9 +797,9 @@ export var tests: TestRunner = (function () {
 >chars : Symbol(chars, Decl(duplicateLocalVariable1.ts, 263, 15))
 
             chars.forEach(function (val) { fb.writeUtf8CodePoint(val); });
->chars.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>chars.forEach : Symbol(Array.forEach, Decl(lib.es2009.array.d.ts, --, --))
 >chars : Symbol(chars, Decl(duplicateLocalVariable1.ts, 263, 15))
->forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>forEach : Symbol(Array.forEach, Decl(lib.es2009.array.d.ts, --, --))
 >val : Symbol(val, Decl(duplicateLocalVariable1.ts, 264, 36))
 >fb : Symbol(fb, Decl(duplicateLocalVariable1.ts, 262, 15))
 >val : Symbol(val, Decl(duplicateLocalVariable1.ts, 264, 36))
@@ -817,15 +817,15 @@ export var tests: TestRunner = (function () {
 >savedFile : Symbol(savedFile, Decl(duplicateLocalVariable1.ts, 267, 15))
 
                 throw Error("Incorrect encoding");
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2009.error.d.ts, --, --))
             }
             var expectedBytes = [0xF0, 0x90, 0x92, 0x80, 0xF0, 0x90, 0x92, 0x81, 0xF0, 0x90, 0x92, 0x82, 0x54, 0x68, 0x69];
 >expectedBytes : Symbol(expectedBytes, Decl(duplicateLocalVariable1.ts, 271, 15))
 
             expectedBytes.forEach(function (val) {
->expectedBytes.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>expectedBytes.forEach : Symbol(Array.forEach, Decl(lib.es2009.array.d.ts, --, --))
 >expectedBytes : Symbol(expectedBytes, Decl(duplicateLocalVariable1.ts, 271, 15))
->forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>forEach : Symbol(Array.forEach, Decl(lib.es2009.array.d.ts, --, --))
 >val : Symbol(val, Decl(duplicateLocalVariable1.ts, 272, 44))
 
                 var byteVal = savedFile.readByte();
@@ -837,7 +837,7 @@ export var tests: TestRunner = (function () {
 >val : Symbol(val, Decl(duplicateLocalVariable1.ts, 272, 44))
 
                     throw Error("Incorrect byte value");
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2009.error.d.ts, --, --))
                 }
             });
             return true;

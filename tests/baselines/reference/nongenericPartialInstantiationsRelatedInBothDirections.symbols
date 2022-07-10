@@ -17,9 +17,9 @@ interface ObjectContaining<T> {
 
   new (sample: Partial<T>): Partial<T>
 >sample : Symbol(sample, Decl(nongenericPartialInstantiationsRelatedInBothDirections.ts, 6, 7))
->Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.utils.modifiers.d.ts, --, --))
 >T : Symbol(T, Decl(nongenericPartialInstantiationsRelatedInBothDirections.ts, 5, 27))
->Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.utils.modifiers.d.ts, --, --))
 >T : Symbol(T, Decl(nongenericPartialInstantiationsRelatedInBothDirections.ts, 5, 27))
 }
 declare let cafoo: ObjectContaining<{ a: number, foo: number }>;

@@ -88,7 +88,7 @@ f1 = f4;
 interface CoolArray<E> extends Array<E> { 
 >CoolArray : Symbol(CoolArray, Decl(genericRestParameters3.ts, 24, 8))
 >E : Symbol(E, Decl(genericRestParameters3.ts, 28, 20))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es2009.array.d.ts, --, --), Decl(lib.es2009.array.d.ts, --, --))
 >E : Symbol(E, Decl(genericRestParameters3.ts, 28, 20))
 
     hello: number;
@@ -184,7 +184,7 @@ declare function foo2(...args: string[] | number[]): void;
 
 let x2: ReadonlyArray<string> = ["hello"];
 >x2 : Symbol(x2, Decl(genericRestParameters3.ts, 63, 3))
->ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es2009.array.d.ts, --, --))
 
 foo2(...x2);
 >foo2 : Symbol(foo2, Decl(genericRestParameters3.ts, 58, 12))
@@ -203,7 +203,7 @@ type Signature = (x: string, ...rest: RestParams) => void;
 
 type MergedParams = Parameters<Signature>;  // [x: string, y: string] | [x: string, y: number]
 >MergedParams : Symbol(MergedParams, Decl(genericRestParameters3.ts, 70, 58))
->Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>Parameters : Symbol(Parameters, Decl(lib.utils.modifiers.d.ts, --, --))
 >Signature : Symbol(Signature, Decl(genericRestParameters3.ts, 68, 44))
 
 declare let ff1: (...rest: [string, string] | [string, number]) => void;

@@ -23,7 +23,7 @@ function Cls(t) {
 Cls.prototype.topLevelComment = function (t, v) {
 >Cls.prototype : Symbol(Cls.topLevelComment, Decl(constructorFunctionMethodTypeParameters.js, 6, 1))
 >Cls : Symbol(Cls, Decl(constructorFunctionMethodTypeParameters.js, 0, 0))
->prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>prototype : Symbol(Function.prototype, Decl(lib.es2009.function.d.ts, --, --))
 >topLevelComment : Symbol(Cls.topLevelComment, Decl(constructorFunctionMethodTypeParameters.js, 6, 1))
 >t : Symbol(t, Decl(constructorFunctionMethodTypeParameters.js, 14, 42))
 >v : Symbol(v, Decl(constructorFunctionMethodTypeParameters.js, 14, 44))
@@ -36,7 +36,7 @@ Cls.prototype.topLevelComment = function (t, v) {
 Cls.prototype.nestedComment =
 >Cls.prototype : Symbol(Cls.nestedComment, Decl(constructorFunctionMethodTypeParameters.js, 16, 2))
 >Cls : Symbol(Cls, Decl(constructorFunctionMethodTypeParameters.js, 0, 0))
->prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>prototype : Symbol(Function.prototype, Decl(lib.es2009.function.d.ts, --, --))
 >nestedComment : Symbol(Cls.nestedComment, Decl(constructorFunctionMethodTypeParameters.js, 16, 2))
 
     /**

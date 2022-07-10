@@ -13,13 +13,13 @@ interface AsyncLoaderProps<TResult> {
 
     readonly prop1: () => Promise<TResult>;
 >prop1 : Symbol(AsyncLoaderProps.prop1, Decl(checkJsxSubtleSkipContextSensitiveBug.tsx, 5, 37))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >TResult : Symbol(TResult, Decl(checkJsxSubtleSkipContextSensitiveBug.tsx, 5, 27))
 
     readonly prop2: (result: Exclude<TResult, ErrorResult>) => any;
 >prop2 : Symbol(AsyncLoaderProps.prop2, Decl(checkJsxSubtleSkipContextSensitiveBug.tsx, 6, 43))
 >result : Symbol(result, Decl(checkJsxSubtleSkipContextSensitiveBug.tsx, 8, 21))
->Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>Exclude : Symbol(Exclude, Decl(lib.utils.modifiers.d.ts, --, --))
 >TResult : Symbol(TResult, Decl(checkJsxSubtleSkipContextSensitiveBug.tsx, 5, 27))
 >ErrorResult : Symbol(ErrorResult, Decl(checkJsxSubtleSkipContextSensitiveBug.tsx, 1, 31))
 }
@@ -39,7 +39,7 @@ class AsyncLoader<TResult> extends React.Component<AsyncLoaderProps<TResult>> {
 
 async function load(): Promise<{ success: true } | ErrorResult> {
 >load : Symbol(load, Decl(checkJsxSubtleSkipContextSensitiveBug.tsx, 13, 1))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >success : Symbol(success, Decl(checkJsxSubtleSkipContextSensitiveBug.tsx, 15, 32))
 >ErrorResult : Symbol(ErrorResult, Decl(checkJsxSubtleSkipContextSensitiveBug.tsx, 1, 31))
 

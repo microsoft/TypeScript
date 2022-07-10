@@ -3,11 +3,11 @@
 
 function truePromise(): Promise<true> {
 >truePromise : Symbol(truePromise, Decl(inferFromGenericFunctionReturnTypes3.ts, 0, 0))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     return Promise.resolve(true);
 >Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 }
 
@@ -105,8 +105,8 @@ let a: FolderContentItem[] = [];
 
 a = [1, 2, 3, 4, 5].map(v => ({ type: 'folder' }));
 >a : Symbol(a, Decl(inferFromGenericFunctionReturnTypes3.ts, 42, 3))
->[1, 2, 3, 4, 5].map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
->map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>[1, 2, 3, 4, 5].map : Symbol(Array.map, Decl(lib.es2009.array.d.ts, --, --))
+>map : Symbol(Array.map, Decl(lib.es2009.array.d.ts, --, --))
 >v : Symbol(v, Decl(inferFromGenericFunctionReturnTypes3.ts, 43, 24))
 >type : Symbol(type, Decl(inferFromGenericFunctionReturnTypes3.ts, 43, 31))
 
@@ -114,14 +114,14 @@ a = [1, 2, 3, 4, 5].map(v => ({ type: 'folder' }));
 
 let arr: Array<[number, number]> = [[1, 2]]
 >arr : Symbol(arr, Decl(inferFromGenericFunctionReturnTypes3.ts, 47, 3))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es2009.array.d.ts, --, --), Decl(lib.es2009.array.d.ts, --, --), Decl(lib.es2015.array.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 let mappedArr: Array<[number, number]> = arr.map(([x, y]) => {
 >mappedArr : Symbol(mappedArr, Decl(inferFromGenericFunctionReturnTypes3.ts, 49, 3))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->arr.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es2009.array.d.ts, --, --), Decl(lib.es2009.array.d.ts, --, --), Decl(lib.es2015.array.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>arr.map : Symbol(Array.map, Decl(lib.es2009.array.d.ts, --, --))
 >arr : Symbol(arr, Decl(inferFromGenericFunctionReturnTypes3.ts, 47, 3))
->map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>map : Symbol(Array.map, Decl(lib.es2009.array.d.ts, --, --))
 >x : Symbol(x, Decl(inferFromGenericFunctionReturnTypes3.ts, 49, 51))
 >y : Symbol(y, Decl(inferFromGenericFunctionReturnTypes3.ts, 49, 53))
 
@@ -177,9 +177,9 @@ function bug(): Diagnostic[] {
 >values : Symbol(values, Decl(inferFromGenericFunctionReturnTypes3.ts, 72, 4))
 
 	return values.map((value) => {
->values.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>values.map : Symbol(Array.map, Decl(lib.es2009.array.d.ts, --, --))
 >values : Symbol(values, Decl(inferFromGenericFunctionReturnTypes3.ts, 72, 4))
->map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>map : Symbol(Array.map, Decl(lib.es2009.array.d.ts, --, --))
 >value : Symbol(value, Decl(inferFromGenericFunctionReturnTypes3.ts, 73, 20))
 
 		return {
@@ -203,12 +203,12 @@ function objectToMap(obj: any) {
 
 	return new Map(Object.keys(obj).map(key => [key, obj[key]]));
 >Map : Symbol(Map, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->Object.keys(obj).map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
->Object.keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Object.keys(obj).map : Symbol(Array.map, Decl(lib.es2009.array.d.ts, --, --))
+>Object.keys : Symbol(ObjectConstructor.keys, Decl(lib.es2009.object.d.ts, --, --), Decl(lib.es2015.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es2009.object.d.ts, --, --), Decl(lib.es2009.object.d.ts, --, --))
+>keys : Symbol(ObjectConstructor.keys, Decl(lib.es2009.object.d.ts, --, --), Decl(lib.es2015.object.d.ts, --, --))
 >obj : Symbol(obj, Decl(inferFromGenericFunctionReturnTypes3.ts, 83, 21))
->map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>map : Symbol(Array.map, Decl(lib.es2009.array.d.ts, --, --))
 >key : Symbol(key, Decl(inferFromGenericFunctionReturnTypes3.ts, 84, 37))
 >key : Symbol(key, Decl(inferFromGenericFunctionReturnTypes3.ts, 84, 37))
 >obj : Symbol(obj, Decl(inferFromGenericFunctionReturnTypes3.ts, 83, 21))
@@ -237,8 +237,8 @@ function createPerson(): Person {
   return {
     phoneNumbers: [1].map(() => ({
 >phoneNumbers : Symbol(phoneNumbers, Decl(inferFromGenericFunctionReturnTypes3.ts, 96, 10))
->[1].map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
->map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>[1].map : Symbol(Array.map, Decl(lib.es2009.array.d.ts, --, --))
+>map : Symbol(Array.map, Decl(lib.es2009.array.d.ts, --, --))
 
       __typename: 'PhoneNumber'
 >__typename : Symbol(__typename, Decl(inferFromGenericFunctionReturnTypes3.ts, 97, 34))
@@ -341,8 +341,8 @@ interface I {
 const a3: I[] = ['a', 'b'].map(name => {
 >a3 : Symbol(a3, Decl(inferFromGenericFunctionReturnTypes3.ts, 140, 5))
 >I : Symbol(I, Decl(inferFromGenericFunctionReturnTypes3.ts, 131, 53))
->['a', 'b'].map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
->map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>['a', 'b'].map : Symbol(Array.map, Decl(lib.es2009.array.d.ts, --, --))
+>map : Symbol(Array.map, Decl(lib.es2009.array.d.ts, --, --))
 >name : Symbol(name, Decl(inferFromGenericFunctionReturnTypes3.ts, 140, 31))
 
     return {
@@ -372,8 +372,8 @@ type Player = {
  
 type F = () => Promise<Array<Player>>;
 >F : Symbol(F, Decl(inferFromGenericFunctionReturnTypes3.ts, 153, 2))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es2009.array.d.ts, --, --), Decl(lib.es2009.array.d.ts, --, --), Decl(lib.es2015.array.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Player : Symbol(Player, Decl(inferFromGenericFunctionReturnTypes3.ts, 145, 3))
  
 const f1: F = () => {
@@ -382,7 +382,7 @@ const f1: F = () => {
 
     return Promise.all([
 >Promise.all : Symbol(PromiseConstructor.all, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >all : Symbol(PromiseConstructor.all, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
         {
             name: "David Gomes",

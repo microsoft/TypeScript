@@ -10,13 +10,13 @@ function f1<T, K1 extends keyof T, K2 extends keyof T[K1]>() {
 
     let v1: Extract<T, string> = 0 as any as T;  // Error
 >v1 : Symbol(v1, Decl(deepComparisons.ts, 1, 7))
->Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>Extract : Symbol(Extract, Decl(lib.utils.modifiers.d.ts, --, --))
 >T : Symbol(T, Decl(deepComparisons.ts, 0, 12))
 >T : Symbol(T, Decl(deepComparisons.ts, 0, 12))
 
     let v2: Extract<T[K1], string> = 0 as any as T[K1];  // Error
 >v2 : Symbol(v2, Decl(deepComparisons.ts, 2, 7))
->Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>Extract : Symbol(Extract, Decl(lib.utils.modifiers.d.ts, --, --))
 >T : Symbol(T, Decl(deepComparisons.ts, 0, 12))
 >K1 : Symbol(K1, Decl(deepComparisons.ts, 0, 14))
 >T : Symbol(T, Decl(deepComparisons.ts, 0, 12))
@@ -24,7 +24,7 @@ function f1<T, K1 extends keyof T, K2 extends keyof T[K1]>() {
 
     let v3: Extract<T[K1][K2], string> = 0 as any as T[K1][K2];  // No error
 >v3 : Symbol(v3, Decl(deepComparisons.ts, 3, 7))
->Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>Extract : Symbol(Extract, Decl(lib.utils.modifiers.d.ts, --, --))
 >T : Symbol(T, Decl(deepComparisons.ts, 0, 12))
 >K1 : Symbol(K1, Decl(deepComparisons.ts, 0, 14))
 >K2 : Symbol(K2, Decl(deepComparisons.ts, 0, 34))

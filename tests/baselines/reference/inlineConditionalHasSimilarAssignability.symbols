@@ -15,7 +15,7 @@ function foo<T>(a: T) {
 
   const b: Extract<any[], T> = 0 as any;
 >b : Symbol(b, Decl(inlineConditionalHasSimilarAssignability.ts, 3, 7))
->Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>Extract : Symbol(Extract, Decl(lib.utils.modifiers.d.ts, --, --))
 >T : Symbol(T, Decl(inlineConditionalHasSimilarAssignability.ts, 2, 13))
 
   a = b; // ok

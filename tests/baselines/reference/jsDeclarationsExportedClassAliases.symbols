@@ -17,13 +17,13 @@ module.exports = {
 === tests/cases/conformance/jsdoc/declarations/utils/errors.js ===
 class FancyError extends Error {
 >FancyError : Symbol(FancyError, Decl(errors.js, 0, 0))
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2009.error.d.ts, --, --))
 
     constructor(status) {
 >status : Symbol(status, Decl(errors.js, 1, 16))
 
         super(`error with status ${status}`);
->super : Symbol(ErrorConstructor, Decl(lib.es5.d.ts, --, --))
+>super : Symbol(ErrorConstructor, Decl(lib.es2009.error.d.ts, --, --))
 >status : Symbol(status, Decl(errors.js, 1, 16))
     }
 }

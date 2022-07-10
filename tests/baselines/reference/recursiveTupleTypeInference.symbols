@@ -12,7 +12,7 @@ export type F<T> = null extends T
 
     ? [F<NonNullable<T>>, "null"]
 >F : Symbol(F, Decl(recursiveTupleTypeInference.ts, 2, 40))
->NonNullable : Symbol(NonNullable, Decl(lib.es5.d.ts, --, --))
+>NonNullable : Symbol(NonNullable, Decl(lib.utils.modifiers.d.ts, --, --))
 >T : Symbol(T, Decl(recursiveTupleTypeInference.ts, 4, 14))
 
     : T extends number

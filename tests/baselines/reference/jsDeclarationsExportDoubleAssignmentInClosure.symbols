@@ -12,7 +12,7 @@ function foo() {
 
         return (o == null) ? create(base) : defineProperties(Object(o), descriptors);
 >o : Symbol(o, Decl(index.js, 2, 41))
->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es2009.object.d.ts, --, --), Decl(lib.es2009.object.d.ts, --, --))
 >o : Symbol(o, Decl(index.js, 2, 41))
 
     };

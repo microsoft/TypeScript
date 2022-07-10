@@ -60,7 +60,7 @@ type CatMap = {
   [V in AnimalTypes]: Extract<Cats, { type: V }>[]
 >V : Symbol(V, Decl(mappedTypeOverlappingStringEnumKeys.ts, 26, 3))
 >AnimalTypes : Symbol(AnimalTypes, Decl(mappedTypeOverlappingStringEnumKeys.ts, 9, 2))
->Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>Extract : Symbol(Extract, Decl(lib.utils.modifiers.d.ts, --, --))
 >Cats : Symbol(Cats, Decl(mappedTypeOverlappingStringEnumKeys.ts, 21, 1))
 >type : Symbol(type, Decl(mappedTypeOverlappingStringEnumKeys.ts, 26, 37))
 >V : Symbol(V, Decl(mappedTypeOverlappingStringEnumKeys.ts, 26, 3))

@@ -4,7 +4,7 @@ var x = true;
 
 var a: Boolean;
 >a : Symbol(a, Decl(assignFromBooleanInterface.ts, 1, 3))
->Boolean : Symbol(Boolean, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Boolean : Symbol(Boolean, Decl(lib.es2009.boolean.d.ts, --, --), Decl(lib.es2009.boolean.d.ts, --, --))
 
 x = a;
 >x : Symbol(x, Decl(assignFromBooleanInterface.ts, 0, 3))

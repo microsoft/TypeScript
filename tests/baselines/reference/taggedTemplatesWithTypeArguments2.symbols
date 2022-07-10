@@ -5,7 +5,7 @@ export interface SomethingTaggable {
     <T>(t: TemplateStringsArray, ...args: T[]): SomethingNewable;
 >T : Symbol(T, Decl(taggedTemplatesWithTypeArguments2.ts, 1, 5))
 >t : Symbol(t, Decl(taggedTemplatesWithTypeArguments2.ts, 1, 8))
->TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es5.d.ts, --, --))
+>TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es2009.string.d.ts, --, --))
 >args : Symbol(args, Decl(taggedTemplatesWithTypeArguments2.ts, 1, 32))
 >T : Symbol(T, Decl(taggedTemplatesWithTypeArguments2.ts, 1, 5))
 >SomethingNewable : Symbol(SomethingNewable, Decl(taggedTemplatesWithTypeArguments2.ts, 2, 1))

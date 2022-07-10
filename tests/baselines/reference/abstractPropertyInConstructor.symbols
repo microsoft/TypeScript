@@ -11,16 +11,16 @@ abstract class AbstractClass {
 >this.method : Symbol(AbstractClass.method, Decl(abstractPropertyInConstructor.ts, 20, 37))
 >this : Symbol(AbstractClass, Decl(abstractPropertyInConstructor.ts, 0, 0))
 >method : Symbol(AbstractClass.method, Decl(abstractPropertyInConstructor.ts, 20, 37))
->parseInt : Symbol(parseInt, Decl(lib.es5.d.ts, --, --))
+>parseInt : Symbol(parseInt, Decl(lib.es2009.core.d.ts, --, --))
 >str : Symbol(str, Decl(abstractPropertyInConstructor.ts, 1, 16))
 
         let val = this.prop.toLowerCase();
 >val : Symbol(val, Decl(abstractPropertyInConstructor.ts, 3, 11))
->this.prop.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+>this.prop.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es2009.string.d.ts, --, --))
 >this.prop : Symbol(AbstractClass.prop, Decl(abstractPropertyInConstructor.ts, 17, 5))
 >this : Symbol(AbstractClass, Decl(abstractPropertyInConstructor.ts, 0, 0))
 >prop : Symbol(AbstractClass.prop, Decl(abstractPropertyInConstructor.ts, 17, 5))
->toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+>toLowerCase : Symbol(String.toLowerCase, Decl(lib.es2009.string.d.ts, --, --))
 
         if (!str) {
 >str : Symbol(str, Decl(abstractPropertyInConstructor.ts, 1, 16))
@@ -117,11 +117,11 @@ abstract class DerivedAbstractClass extends AbstractClass {
 >this.cb : Symbol(DerivedAbstractClass.cb, Decl(abstractPropertyInConstructor.ts, 32, 59))
 >this : Symbol(DerivedAbstractClass, Decl(abstractPropertyInConstructor.ts, 30, 1))
 >cb : Symbol(DerivedAbstractClass.cb, Decl(abstractPropertyInConstructor.ts, 32, 59))
->this.prop.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+>this.prop.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es2009.string.d.ts, --, --))
 >this.prop : Symbol(AbstractClass.prop, Decl(abstractPropertyInConstructor.ts, 17, 5))
 >this : Symbol(DerivedAbstractClass, Decl(abstractPropertyInConstructor.ts, 30, 1))
 >prop : Symbol(AbstractClass.prop, Decl(abstractPropertyInConstructor.ts, 17, 5))
->toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+>toLowerCase : Symbol(String.toLowerCase, Decl(lib.es2009.string.d.ts, --, --))
 
         this.method(1);
 >this.method : Symbol(AbstractClass.method, Decl(abstractPropertyInConstructor.ts, 20, 37))

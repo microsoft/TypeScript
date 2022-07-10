@@ -70,13 +70,13 @@ type TL3 = TL2<'o'>;  // 'axoybxoyc'
 type Cases<T extends string> = `${Uppercase<T>} ${Lowercase<T>} ${Capitalize<T>} ${Uncapitalize<T>}`;
 >Cases : Symbol(Cases, Decl(templateLiteralTypes1.ts, 21, 20))
 >T : Symbol(T, Decl(templateLiteralTypes1.ts, 25, 11))
->Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+>Uppercase : Symbol(Uppercase, Decl(lib.utils.modifiers.d.ts, --, --))
 >T : Symbol(T, Decl(templateLiteralTypes1.ts, 25, 11))
->Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
+>Lowercase : Symbol(Lowercase, Decl(lib.utils.modifiers.d.ts, --, --))
 >T : Symbol(T, Decl(templateLiteralTypes1.ts, 25, 11))
->Capitalize : Symbol(Capitalize, Decl(lib.es5.d.ts, --, --))
+>Capitalize : Symbol(Capitalize, Decl(lib.utils.modifiers.d.ts, --, --))
 >T : Symbol(T, Decl(templateLiteralTypes1.ts, 25, 11))
->Uncapitalize : Symbol(Uncapitalize, Decl(lib.es5.d.ts, --, --))
+>Uncapitalize : Symbol(Uncapitalize, Decl(lib.utils.modifiers.d.ts, --, --))
 >T : Symbol(T, Decl(templateLiteralTypes1.ts, 25, 11))
 
 type TCA1 = Cases<'bar'>;  // 'BAR bar Bar bar'
@@ -93,7 +93,7 @@ function test<T extends 'foo' | 'bar'>(name: `get${Capitalize<T>}`) {
 >test : Symbol(test, Decl(templateLiteralTypes1.ts, 28, 25))
 >T : Symbol(T, Decl(templateLiteralTypes1.ts, 32, 14))
 >name : Symbol(name, Decl(templateLiteralTypes1.ts, 32, 39))
->Capitalize : Symbol(Capitalize, Decl(lib.es5.d.ts, --, --))
+>Capitalize : Symbol(Capitalize, Decl(lib.utils.modifiers.d.ts, --, --))
 >T : Symbol(T, Decl(templateLiteralTypes1.ts, 32, 14))
 
     let s1: string = name;
@@ -235,7 +235,7 @@ type SnakeToCamelCase<S extends string> =
 >S : Symbol(S, Decl(templateLiteralTypes1.ts, 69, 22))
 >T : Symbol(T, Decl(templateLiteralTypes1.ts, 70, 22))
 >U : Symbol(U, Decl(templateLiteralTypes1.ts, 70, 33))
->Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
+>Lowercase : Symbol(Lowercase, Decl(lib.utils.modifiers.d.ts, --, --))
 >T : Symbol(T, Decl(templateLiteralTypes1.ts, 70, 22))
 >SnakeToPascalCase : Symbol(SnakeToPascalCase, Decl(templateLiteralTypes1.ts, 72, 25))
 >U : Symbol(U, Decl(templateLiteralTypes1.ts, 70, 33))
@@ -243,7 +243,7 @@ type SnakeToCamelCase<S extends string> =
     S extends `${infer T}` ? `${Lowercase<T>}` :
 >S : Symbol(S, Decl(templateLiteralTypes1.ts, 69, 22))
 >T : Symbol(T, Decl(templateLiteralTypes1.ts, 71, 22))
->Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
+>Lowercase : Symbol(Lowercase, Decl(lib.utils.modifiers.d.ts, --, --))
 >T : Symbol(T, Decl(templateLiteralTypes1.ts, 71, 22))
 
     SnakeToPascalCase<S>;
@@ -261,8 +261,8 @@ type SnakeToPascalCase<S extends string> =
 >S : Symbol(S, Decl(templateLiteralTypes1.ts, 74, 23))
 >T : Symbol(T, Decl(templateLiteralTypes1.ts, 76, 22))
 >U : Symbol(U, Decl(templateLiteralTypes1.ts, 76, 33))
->Capitalize : Symbol(Capitalize, Decl(lib.es5.d.ts, --, --))
->Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
+>Capitalize : Symbol(Capitalize, Decl(lib.utils.modifiers.d.ts, --, --))
+>Lowercase : Symbol(Lowercase, Decl(lib.utils.modifiers.d.ts, --, --))
 >T : Symbol(T, Decl(templateLiteralTypes1.ts, 76, 22))
 >SnakeToPascalCase : Symbol(SnakeToPascalCase, Decl(templateLiteralTypes1.ts, 72, 25))
 >U : Symbol(U, Decl(templateLiteralTypes1.ts, 76, 33))
@@ -270,8 +270,8 @@ type SnakeToPascalCase<S extends string> =
     S extends `${infer T}` ? `${Capitalize<Lowercase<T>>}` :
 >S : Symbol(S, Decl(templateLiteralTypes1.ts, 74, 23))
 >T : Symbol(T, Decl(templateLiteralTypes1.ts, 77, 22))
->Capitalize : Symbol(Capitalize, Decl(lib.es5.d.ts, --, --))
->Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
+>Capitalize : Symbol(Capitalize, Decl(lib.utils.modifiers.d.ts, --, --))
+>Lowercase : Symbol(Lowercase, Decl(lib.utils.modifiers.d.ts, --, --))
 >T : Symbol(T, Decl(templateLiteralTypes1.ts, 77, 22))
 
     never;
@@ -883,20 +883,20 @@ type PathKeys<T> =
 
     T extends readonly any[] ? Extract<keyof T, `${number}`> | SubKeys<T, Extract<keyof T, `${number}`>> :
 >T : Symbol(T, Decl(templateLiteralTypes1.ts, 217, 14))
->Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>Extract : Symbol(Extract, Decl(lib.utils.modifiers.d.ts, --, --))
 >T : Symbol(T, Decl(templateLiteralTypes1.ts, 217, 14))
 >SubKeys : Symbol(SubKeys, Decl(templateLiteralTypes1.ts, 221, 10))
 >T : Symbol(T, Decl(templateLiteralTypes1.ts, 217, 14))
->Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>Extract : Symbol(Extract, Decl(lib.utils.modifiers.d.ts, --, --))
 >T : Symbol(T, Decl(templateLiteralTypes1.ts, 217, 14))
 
     T extends object ? Extract<keyof T, string> | SubKeys<T, Extract<keyof T, string>> :
 >T : Symbol(T, Decl(templateLiteralTypes1.ts, 217, 14))
->Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>Extract : Symbol(Extract, Decl(lib.utils.modifiers.d.ts, --, --))
 >T : Symbol(T, Decl(templateLiteralTypes1.ts, 217, 14))
 >SubKeys : Symbol(SubKeys, Decl(templateLiteralTypes1.ts, 221, 10))
 >T : Symbol(T, Decl(templateLiteralTypes1.ts, 217, 14))
->Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>Extract : Symbol(Extract, Decl(lib.utils.modifiers.d.ts, --, --))
 >T : Symbol(T, Decl(templateLiteralTypes1.ts, 217, 14))
 
     never;

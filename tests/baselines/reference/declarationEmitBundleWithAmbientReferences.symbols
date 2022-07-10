@@ -5,7 +5,7 @@ declare module "lib/result" {
     export type Result<E extends Error, T> = (E & Failure<E>) | (T & Success<T>);
 >Result : Symbol(Result, Decl(lib.d.ts, --, --))
 >E : Symbol(E, Decl(lib.d.ts, --, --))
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2009.error.d.ts, --, --))
 >T : Symbol(T, Decl(lib.d.ts, --, --))
 >E : Symbol(E, Decl(lib.d.ts, --, --))
 >Failure : Symbol(Failure, Decl(lib.d.ts, --, --))
@@ -17,7 +17,7 @@ declare module "lib/result" {
     export interface Failure<E extends Error> { }
 >Failure : Symbol(Failure, Decl(lib.d.ts, --, --))
 >E : Symbol(E, Decl(lib.d.ts, --, --))
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2009.error.d.ts, --, --))
 
     export interface Success<T> { }
 >Success : Symbol(Success, Decl(lib.d.ts, --, --))
@@ -32,7 +32,7 @@ export type T<T> = Result<Error, T>;
 >T : Symbol(T, Decl(datastore_result.ts, 0, 36))
 >T : Symbol(T, Decl(datastore_result.ts, 2, 14))
 >Result : Symbol(Result, Decl(datastore_result.ts, 0, 8))
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2009.error.d.ts, --, --))
 >T : Symbol(T, Decl(datastore_result.ts, 2, 14))
 
 === tests/cases/compiler/src/conditional_directive_field.ts ===

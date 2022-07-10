@@ -4,53 +4,53 @@ interface Stuff {
 
   a?: () => Promise<number[]>;
 >a : Symbol(Stuff.a, Decl(errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts, 0, 17))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --))
 
   b: () => Promise<string>;
 >b : Symbol(Stuff.b, Decl(errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts, 1, 30))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --))
 
   c: () => Promise<string>;
 >c : Symbol(Stuff.c, Decl(errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts, 2, 27))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --))
 
   d: () => Promise<string>;
 >d : Symbol(Stuff.d, Decl(errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts, 3, 27))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --))
 
   e: () => Promise<string>;
 >e : Symbol(Stuff.e, Decl(errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts, 4, 27))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --))
 
   f: () => Promise<string>;
 >f : Symbol(Stuff.f, Decl(errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts, 5, 27))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --))
 
   g: () => Promise<string>;
 >g : Symbol(Stuff.g, Decl(errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts, 6, 27))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --))
 
   h: () => Promise<string>;
 >h : Symbol(Stuff.h, Decl(errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts, 7, 27))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --))
 
   i: () => Promise<string>;
 >i : Symbol(Stuff.i, Decl(errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts, 8, 27))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --))
 
   j: () => Promise<string>;
 >j : Symbol(Stuff.j, Decl(errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts, 9, 27))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --))
 
   k: () => Promise<number>;
 >k : Symbol(Stuff.k, Decl(errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts, 10, 27))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --))
 }
 
 function foo(): Stuff | Date {
 >foo : Symbol(foo, Decl(errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts, 12, 1))
 >Stuff : Symbol(Stuff, Decl(errorOnUnionVsObjectShouldDeeplyDisambiguate2.ts, 0, 0))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2009.date.d.ts, --, --), Decl(lib.es2009.date.d.ts, --, --), Decl(lib.es2009.date.d.ts, --, --))
 
   return {
     a() { return [123] },

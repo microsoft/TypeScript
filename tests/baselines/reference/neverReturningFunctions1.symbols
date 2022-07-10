@@ -4,7 +4,7 @@ function fail(message?: string): never {
 >message : Symbol(message, Decl(neverReturningFunctions1.ts, 0, 14))
 
     throw new Error(message);
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2009.error.d.ts, --, --))
 >message : Symbol(message, Decl(neverReturningFunctions1.ts, 0, 14))
 }
 
@@ -18,9 +18,9 @@ function f01(x: string | undefined) {
 >fail : Symbol(fail, Decl(neverReturningFunctions1.ts, 0, 0))
 
     x.length;  // string
->x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x.length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
 >x : Symbol(x, Decl(neverReturningFunctions1.ts, 4, 13))
->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
 }
 
 function f02(x: number): number {
@@ -64,9 +64,9 @@ function f11(x: string | undefined, fail: (message?: string) => never) {
 >fail : Symbol(fail, Decl(neverReturningFunctions1.ts, 21, 35))
 
     x.length;  // string
->x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x.length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
 >x : Symbol(x, Decl(neverReturningFunctions1.ts, 21, 13))
->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
 }
 
 function f12(x: number, fail: (message?: string) => never): number {
@@ -122,9 +122,9 @@ function f21(x: string | undefined) {
 >fail : Symbol(Debug.fail, Decl(neverReturningFunctions1.ts, 38, 17))
 
     x.length;  // string
->x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x.length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
 >x : Symbol(x, Decl(neverReturningFunctions1.ts, 42, 13))
->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
 }
 
 function f22(x: number): number {
@@ -184,7 +184,7 @@ class Test {
 >message : Symbol(message, Decl(neverReturningFunctions1.ts, 66, 9))
 
         throw new Error(message);
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2009.error.d.ts, --, --))
 >message : Symbol(message, Decl(neverReturningFunctions1.ts, 66, 9))
     }
     f1(x: string | undefined) {
@@ -199,9 +199,9 @@ class Test {
 >fail : Symbol(Test.fail, Decl(neverReturningFunctions1.ts, 65, 12))
 
         x.length;  // string
->x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x.length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
 >x : Symbol(x, Decl(neverReturningFunctions1.ts, 69, 7))
->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
     }
     f2(x: number): number {
 >f2 : Symbol(Test.f2, Decl(neverReturningFunctions1.ts, 72, 5))
@@ -390,7 +390,7 @@ function f43() {
 
     const fail = (): never => { throw new Error(); };
 >fail : Symbol(fail, Decl(neverReturningFunctions1.ts, 156, 9))
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2009.error.d.ts, --, --))
 
     const f = [fail];
 >f : Symbol(f, Decl(neverReturningFunctions1.ts, 157, 9))
@@ -525,9 +525,9 @@ export type ComponentDefinition<T extends object = object> = T & Partial<Compone
 >ComponentDefinition : Symbol(ComponentDefinition, Decl(neverReturningFunctions1.ts, 201, 27))
 >T : Symbol(T, Decl(neverReturningFunctions1.ts, 203, 32))
 >T : Symbol(T, Decl(neverReturningFunctions1.ts, 203, 32))
->Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.utils.modifiers.d.ts, --, --))
 >Component : Symbol(Component, Decl(neverReturningFunctions1.ts, 161, 1))
->ThisType : Symbol(ThisType, Decl(lib.es5.d.ts, --, --))
+>ThisType : Symbol(ThisType, Decl(lib.utils.modifiers.d.ts, --, --))
 >T : Symbol(T, Decl(neverReturningFunctions1.ts, 203, 32))
 >Component : Symbol(Component, Decl(neverReturningFunctions1.ts, 161, 1))
 
@@ -608,7 +608,7 @@ class MyThrowable {
 >throw : Symbol(MyThrowable.throw, Decl(neverReturningFunctions1.ts, 234, 19))
 
         throw new Error();
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2009.error.d.ts, --, --))
     }
 }
 
@@ -648,7 +648,7 @@ interface Services {
 function foo(services: Readonly<Services>, s: string | null): string {
 >foo : Symbol(foo, Decl(neverReturningFunctions1.ts, 253, 1))
 >services : Symbol(services, Decl(neverReturningFunctions1.ts, 255, 13))
->Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>Readonly : Symbol(Readonly, Decl(lib.utils.modifiers.d.ts, --, --))
 >Services : Symbol(Services, Decl(neverReturningFunctions1.ts, 247, 1))
 >s : Symbol(s, Decl(neverReturningFunctions1.ts, 255, 42))
 

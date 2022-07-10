@@ -149,9 +149,9 @@ const f09 = pipe(list, x => x.length);
 >pipe : Symbol(pipe, Decl(genericFunctionInference1.ts, 0, 0), Decl(genericFunctionInference1.ts, 0, 84), Decl(genericFunctionInference1.ts, 1, 104))
 >list : Symbol(list, Decl(genericFunctionInference1.ts, 2, 124))
 >x : Symbol(x, Decl(genericFunctionInference1.ts, 17, 22))
->x.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>x.length : Symbol(Array.length, Decl(lib.es2009.array.d.ts, --, --))
 >x : Symbol(x, Decl(genericFunctionInference1.ts, 17, 22))
->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es2009.array.d.ts, --, --))
 
 const f10 = pipe(foo);
 >f10 : Symbol(f10, Decl(genericFunctionInference1.ts, 18, 5))
@@ -286,9 +286,9 @@ const g09: <T>(x: T) => number = pipe(list, x => x.length);
 >pipe : Symbol(pipe, Decl(genericFunctionInference1.ts, 0, 0), Decl(genericFunctionInference1.ts, 0, 84), Decl(genericFunctionInference1.ts, 1, 104))
 >list : Symbol(list, Decl(genericFunctionInference1.ts, 2, 124))
 >x : Symbol(x, Decl(genericFunctionInference1.ts, 30, 43))
->x.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>x.length : Symbol(Array.length, Decl(lib.es2009.array.d.ts, --, --))
 >x : Symbol(x, Decl(genericFunctionInference1.ts, 30, 43))
->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es2009.array.d.ts, --, --))
 
 const g10: <T extends { value: T }>(x: T) => T = pipe(foo);
 >g10 : Symbol(g10, Decl(genericFunctionInference1.ts, 31, 5))
@@ -703,7 +703,7 @@ export interface Data {
 
     value: Date;
 >value : Symbol(Data.value, Decl(genericFunctionInference1.ts, 126, 16))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2009.date.d.ts, --, --), Decl(lib.es2009.date.d.ts, --, --), Decl(lib.es2009.date.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 }
 
 var data: Data[] = [];
@@ -800,9 +800,9 @@ const map = <T, U>(transform: (t: T) => U) =>
     (arr: T[]) => arr.map(transform)
 >arr : Symbol(arr, Decl(genericFunctionInference1.ts, 151, 5))
 >T : Symbol(T, Decl(genericFunctionInference1.ts, 150, 13))
->arr.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>arr.map : Symbol(Array.map, Decl(lib.es2009.array.d.ts, --, --))
 >arr : Symbol(arr, Decl(genericFunctionInference1.ts, 151, 5))
->map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>map : Symbol(Array.map, Decl(lib.es2009.array.d.ts, --, --))
 >transform : Symbol(transform, Decl(genericFunctionInference1.ts, 150, 19))
 
 const identityStr = (t: string) => t;
@@ -922,13 +922,13 @@ const fn30: Fn = pipe(
 const promise = Promise.resolve(1);
 >promise : Symbol(promise, Decl(genericFunctionInference1.ts, 194, 5))
 >Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 
 promise.then(
->promise.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>promise.then : Symbol(Promise.then, Decl(lib.es2009.promise.d.ts, --, --))
 >promise : Symbol(promise, Decl(genericFunctionInference1.ts, 194, 5))
->then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>then : Symbol(Promise.then, Decl(lib.es2009.promise.d.ts, --, --))
 
     pipe(
 >pipe : Symbol(pipe, Decl(genericFunctionInference1.ts, 0, 0), Decl(genericFunctionInference1.ts, 0, 84), Decl(genericFunctionInference1.ts, 1, 104))

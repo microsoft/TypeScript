@@ -16,7 +16,7 @@ interface Mapper<R> {
 
     <Map extends Record<string, string>>(map: Map): { [K in keyof Map]: R };
 >Map : Symbol(Map, Decl(helper.d.ts, 3, 5))
->Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.utils.modifiers.d.ts, --, --))
 >map : Symbol(map, Decl(helper.d.ts, 3, 41))
 >Map : Symbol(Map, Decl(helper.d.ts, 3, 5))
 >K : Symbol(K, Decl(helper.d.ts, 3, 55))

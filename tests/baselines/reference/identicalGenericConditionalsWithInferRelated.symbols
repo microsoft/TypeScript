@@ -47,15 +47,15 @@ export type MappedResult<T> =
 
     T extends Boolean ? boolean :
 >T : Symbol(T, Decl(identicalGenericConditionalsWithInferRelated.ts, 12, 25))
->Boolean : Symbol(Boolean, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Boolean : Symbol(Boolean, Decl(lib.es2009.boolean.d.ts, --, --), Decl(lib.es2009.boolean.d.ts, --, --))
 
     T extends Number ? number :
 >T : Symbol(T, Decl(identicalGenericConditionalsWithInferRelated.ts, 12, 25))
->Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Number : Symbol(Number, Decl(lib.es2009.number.d.ts, --, --), Decl(lib.es2009.number.d.ts, --, --), Decl(lib.es2009.number.d.ts, --, --))
 
     T extends String ? string :
 >T : Symbol(T, Decl(identicalGenericConditionalsWithInferRelated.ts, 12, 25))
->String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es2009.string.d.ts, --, --), Decl(lib.es2009.string.d.ts, --, --), Decl(lib.es2009.string.d.ts, --, --))
 
     T
 >T : Symbol(T, Decl(identicalGenericConditionalsWithInferRelated.ts, 12, 25))
@@ -94,7 +94,7 @@ class Y implements X {
 >T : Symbol(T, Decl(identicalGenericConditionalsWithInferRelated.ts, 24, 89))
 
         throw new Error()
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2009.error.d.ts, --, --))
     }
 }
 

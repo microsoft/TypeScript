@@ -58,8 +58,8 @@ enum E {
 
     y = (() => this).length // error, can't use this in enum
 >y : Symbol(E.y, Decl(arrowFunctionContexts.ts, 29, 16))
->(() => this).length : Symbol(Function.length, Decl(lib.es5.d.ts, --, --))
->length : Symbol(Function.length, Decl(lib.es5.d.ts, --, --))
+>(() => this).length : Symbol(Function.length, Decl(lib.es2009.function.d.ts, --, --))
+>length : Symbol(Function.length, Decl(lib.es2009.function.d.ts, --, --))
 }
 
 // Arrow function as module variable initializer
@@ -139,8 +139,8 @@ module M2 {
 
         y = (() => this).length
 >y : Symbol(E.y, Decl(arrowFunctionContexts.ts, 70, 20))
->(() => this).length : Symbol(Function.length, Decl(lib.es5.d.ts, --, --))
->length : Symbol(Function.length, Decl(lib.es5.d.ts, --, --))
+>(() => this).length : Symbol(Function.length, Decl(lib.es2009.function.d.ts, --, --))
+>length : Symbol(Function.length, Decl(lib.es2009.function.d.ts, --, --))
     }
 
     // Arrow function as module variable initializer

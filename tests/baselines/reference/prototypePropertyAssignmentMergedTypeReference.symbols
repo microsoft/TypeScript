@@ -9,7 +9,7 @@ var f = function() {
 f.prototype.a = "a";
 >f.prototype : Symbol(f.a, Decl(prototypePropertyAssignmentMergedTypeReference.js, 3, 2))
 >f : Symbol(f, Decl(prototypePropertyAssignmentMergedTypeReference.js, 1, 3))
->prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>prototype : Symbol(Function.prototype, Decl(lib.es2009.function.d.ts, --, --))
 >a : Symbol(f.a, Decl(prototypePropertyAssignmentMergedTypeReference.js, 3, 2))
 
 /** @type {new () => f} */

@@ -71,9 +71,9 @@ someGenerics2a<string>((n: string) => n);
 someGenerics2a<string>((n) => n.substr(0));
 >someGenerics2a : Symbol(someGenerics2a, Decl(typeArgumentInferenceWithConstraints.ts, 17, 36))
 >n : Symbol(n, Decl(typeArgumentInferenceWithConstraints.ts, 23, 24))
->n.substr : Symbol(String.substr, Decl(lib.es5.d.ts, --, --))
+>n.substr : Symbol(String.substr, Decl(lib.es2009.string.d.ts, --, --))
 >n : Symbol(n, Decl(typeArgumentInferenceWithConstraints.ts, 23, 24))
->substr : Symbol(String.substr, Decl(lib.es5.d.ts, --, --))
+>substr : Symbol(String.substr, Decl(lib.es2009.string.d.ts, --, --))
 
 function someGenerics2b<T extends string, U extends number>(n: (x: T, y: U) => void) { }
 >someGenerics2b : Symbol(someGenerics2b, Decl(typeArgumentInferenceWithConstraints.ts, 23, 43))
@@ -101,9 +101,9 @@ someGenerics2b<string, number>((n, t) => n.substr(t * t));
 >someGenerics2b : Symbol(someGenerics2b, Decl(typeArgumentInferenceWithConstraints.ts, 23, 43))
 >n : Symbol(n, Decl(typeArgumentInferenceWithConstraints.ts, 28, 32))
 >t : Symbol(t, Decl(typeArgumentInferenceWithConstraints.ts, 28, 34))
->n.substr : Symbol(String.substr, Decl(lib.es5.d.ts, --, --))
+>n.substr : Symbol(String.substr, Decl(lib.es2009.string.d.ts, --, --))
 >n : Symbol(n, Decl(typeArgumentInferenceWithConstraints.ts, 28, 32))
->substr : Symbol(String.substr, Decl(lib.es5.d.ts, --, --))
+>substr : Symbol(String.substr, Decl(lib.es2009.string.d.ts, --, --))
 >t : Symbol(t, Decl(typeArgumentInferenceWithConstraints.ts, 28, 34))
 >t : Symbol(t, Decl(typeArgumentInferenceWithConstraints.ts, 28, 34))
 

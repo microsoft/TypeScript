@@ -35,7 +35,7 @@ const g: <U, R, S>(com: () => Iterator<S, U, R> | AsyncIterator<S, U, R>) => Pro
 >S : Symbol(S, Decl(unionAndIntersectionInference3.ts, 8, 15))
 >U : Symbol(U, Decl(unionAndIntersectionInference3.ts, 8, 10))
 >R : Symbol(R, Decl(unionAndIntersectionInference3.ts, 8, 12))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
 >U : Symbol(U, Decl(unionAndIntersectionInference3.ts, 8, 10))
 >U : Symbol(U, Decl(unionAndIntersectionInference3.ts, 8, 97))
 >R : Symbol(R, Decl(unionAndIntersectionInference3.ts, 8, 99))
@@ -49,7 +49,7 @@ const g: <U, R, S>(com: () => Iterator<S, U, R> | AsyncIterator<S, U, R>) => Pro
 >S : Symbol(S, Decl(unionAndIntersectionInference3.ts, 8, 102))
 >U : Symbol(U, Decl(unionAndIntersectionInference3.ts, 8, 97))
 >R : Symbol(R, Decl(unionAndIntersectionInference3.ts, 8, 99))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
 >U : Symbol(U, Decl(unionAndIntersectionInference3.ts, 8, 97))
 
   throw com;
@@ -75,7 +75,7 @@ interface Bar1<T> {
 >test : Symbol(Bar1.test, Decl(unionAndIntersectionInference3.ts, 16, 19))
 >value : Symbol(value, Decl(unionAndIntersectionInference3.ts, 17, 9))
 >T : Symbol(T, Decl(unionAndIntersectionInference3.ts, 16, 15))
->PromiseLike : Symbol(PromiseLike, Decl(lib.es5.d.ts, --, --))
+>PromiseLike : Symbol(PromiseLike, Decl(lib.es2009.promise.d.ts, --, --))
 >T : Symbol(T, Decl(unionAndIntersectionInference3.ts, 16, 15))
 }
 
@@ -87,7 +87,7 @@ declare let f1: <T>(x: Foo1<T> | Bar1<T>) => Promise<T>;
 >T : Symbol(T, Decl(unionAndIntersectionInference3.ts, 20, 17))
 >Bar1 : Symbol(Bar1, Decl(unionAndIntersectionInference3.ts, 14, 1))
 >T : Symbol(T, Decl(unionAndIntersectionInference3.ts, 20, 17))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
 >T : Symbol(T, Decl(unionAndIntersectionInference3.ts, 20, 17))
 
 declare let f2: <U>(x: Foo1<U> | Bar1<U>) => Promise<U>;
@@ -98,7 +98,7 @@ declare let f2: <U>(x: Foo1<U> | Bar1<U>) => Promise<U>;
 >U : Symbol(U, Decl(unionAndIntersectionInference3.ts, 21, 17))
 >Bar1 : Symbol(Bar1, Decl(unionAndIntersectionInference3.ts, 14, 1))
 >U : Symbol(U, Decl(unionAndIntersectionInference3.ts, 21, 17))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
 >U : Symbol(U, Decl(unionAndIntersectionInference3.ts, 21, 17))
 
 f1 = f2;
@@ -127,7 +127,7 @@ type Bar2<T> = {
 >test : Symbol(test, Decl(unionAndIntersectionInference3.ts, 30, 16))
 >value : Symbol(value, Decl(unionAndIntersectionInference3.ts, 31, 9))
 >T : Symbol(T, Decl(unionAndIntersectionInference3.ts, 30, 10))
->PromiseLike : Symbol(PromiseLike, Decl(lib.es5.d.ts, --, --))
+>PromiseLike : Symbol(PromiseLike, Decl(lib.es2009.promise.d.ts, --, --))
 >T : Symbol(T, Decl(unionAndIntersectionInference3.ts, 30, 10))
 }
 
@@ -139,7 +139,7 @@ declare let g1: <T>(x: Foo2<T> | Bar2<T>) => Promise<T>;
 >T : Symbol(T, Decl(unionAndIntersectionInference3.ts, 34, 17))
 >Bar2 : Symbol(Bar2, Decl(unionAndIntersectionInference3.ts, 28, 1))
 >T : Symbol(T, Decl(unionAndIntersectionInference3.ts, 34, 17))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
 >T : Symbol(T, Decl(unionAndIntersectionInference3.ts, 34, 17))
 
 declare let g2: <U>(x: Foo2<U> | Bar2<U>) => Promise<U>;
@@ -150,7 +150,7 @@ declare let g2: <U>(x: Foo2<U> | Bar2<U>) => Promise<U>;
 >U : Symbol(U, Decl(unionAndIntersectionInference3.ts, 35, 17))
 >Bar2 : Symbol(Bar2, Decl(unionAndIntersectionInference3.ts, 28, 1))
 >U : Symbol(U, Decl(unionAndIntersectionInference3.ts, 35, 17))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
 >U : Symbol(U, Decl(unionAndIntersectionInference3.ts, 35, 17))
 
 g1 = g2;
@@ -260,7 +260,7 @@ declare function withRouter<
 
 ): ComponentClass<Omit<P, keyof RouteComponentProps>>;
 >ComponentClass : Symbol(ComponentClass, Decl(unionAndIntersectionInference3.ts, 56, 39))
->Omit : Symbol(Omit, Decl(lib.es5.d.ts, --, --))
+>Omit : Symbol(Omit, Decl(lib.utils.modifiers.d.ts, --, --))
 >P : Symbol(P, Decl(unionAndIntersectionInference3.ts, 65, 28))
 >RouteComponentProps : Symbol(RouteComponentProps, Decl(unionAndIntersectionInference3.ts, 61, 72))
 

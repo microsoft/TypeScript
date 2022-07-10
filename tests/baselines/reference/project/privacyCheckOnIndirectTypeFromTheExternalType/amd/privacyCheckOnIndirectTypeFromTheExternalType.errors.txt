@@ -1,0 +1,13 @@
+lib.es5.d.ts(48,21): error TS6054: File 'lib.es2009.uint16array' has an unsupported extension. The only supported extensions are '.ts', '.tsx', '.d.ts', '.cts', '.d.cts', '.mts', '.d.mts'.
+
+
+==== indirectExternalModule.ts (0 errors) ====
+    export class indirectClass {
+    }
+==== externalModule.ts (0 errors) ====
+    import im0 = require("indirectExternalModule");
+    export var x = new im0.indirectClass();
+    
+==== test.ts (0 errors) ====
+    import im1 = require("externalModule");
+    export var x = im1.x;

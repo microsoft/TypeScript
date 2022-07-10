@@ -496,59 +496,59 @@ const c30 = f30(42, x => "" + x, x => x + 1);  // [(x: number) => string, (x: nu
 
 type T01 = Parameters<(x: number, y: string, z: boolean) => void>;
 >T01 : Symbol(T01, Decl(genericRestParameters1.ts, 124, 45))
->Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>Parameters : Symbol(Parameters, Decl(lib.utils.modifiers.d.ts, --, --))
 >x : Symbol(x, Decl(genericRestParameters1.ts, 126, 23))
 >y : Symbol(y, Decl(genericRestParameters1.ts, 126, 33))
 >z : Symbol(z, Decl(genericRestParameters1.ts, 126, 44))
 
 type T02 = Parameters<(...args: [number, string, boolean]) => void>;
 >T02 : Symbol(T02, Decl(genericRestParameters1.ts, 126, 66))
->Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>Parameters : Symbol(Parameters, Decl(lib.utils.modifiers.d.ts, --, --))
 >args : Symbol(args, Decl(genericRestParameters1.ts, 127, 23))
 
 type T03 = ConstructorParameters<new (x: number, y: string, z: boolean) => void>;
 >T03 : Symbol(T03, Decl(genericRestParameters1.ts, 127, 68))
->ConstructorParameters : Symbol(ConstructorParameters, Decl(lib.es5.d.ts, --, --))
+>ConstructorParameters : Symbol(ConstructorParameters, Decl(lib.utils.modifiers.d.ts, --, --))
 >x : Symbol(x, Decl(genericRestParameters1.ts, 128, 38))
 >y : Symbol(y, Decl(genericRestParameters1.ts, 128, 48))
 >z : Symbol(z, Decl(genericRestParameters1.ts, 128, 59))
 
 type T04 = ConstructorParameters<new (...args: [number, string, boolean]) => void>;
 >T04 : Symbol(T04, Decl(genericRestParameters1.ts, 128, 81))
->ConstructorParameters : Symbol(ConstructorParameters, Decl(lib.es5.d.ts, --, --))
+>ConstructorParameters : Symbol(ConstructorParameters, Decl(lib.utils.modifiers.d.ts, --, --))
 >args : Symbol(args, Decl(genericRestParameters1.ts, 129, 38))
 
 type T05<T> = Parameters<(...args: T[]) => void>;
 >T05 : Symbol(T05, Decl(genericRestParameters1.ts, 129, 83))
 >T : Symbol(T, Decl(genericRestParameters1.ts, 130, 9))
->Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>Parameters : Symbol(Parameters, Decl(lib.utils.modifiers.d.ts, --, --))
 >args : Symbol(args, Decl(genericRestParameters1.ts, 130, 26))
 >T : Symbol(T, Decl(genericRestParameters1.ts, 130, 9))
 
 type T06<T> = ConstructorParameters<new (...args: []) => void>;
 >T06 : Symbol(T06, Decl(genericRestParameters1.ts, 130, 49))
 >T : Symbol(T, Decl(genericRestParameters1.ts, 131, 9))
->ConstructorParameters : Symbol(ConstructorParameters, Decl(lib.es5.d.ts, --, --))
+>ConstructorParameters : Symbol(ConstructorParameters, Decl(lib.utils.modifiers.d.ts, --, --))
 >args : Symbol(args, Decl(genericRestParameters1.ts, 131, 41))
 
 type T07<T extends any[]> = Parameters<(...args: T) => void>;
 >T07 : Symbol(T07, Decl(genericRestParameters1.ts, 131, 63))
 >T : Symbol(T, Decl(genericRestParameters1.ts, 132, 9))
->Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>Parameters : Symbol(Parameters, Decl(lib.utils.modifiers.d.ts, --, --))
 >args : Symbol(args, Decl(genericRestParameters1.ts, 132, 40))
 >T : Symbol(T, Decl(genericRestParameters1.ts, 132, 9))
 
 type T08<T extends any[]> = ConstructorParameters<new (...args: T) => void>;
 >T08 : Symbol(T08, Decl(genericRestParameters1.ts, 132, 61))
 >T : Symbol(T, Decl(genericRestParameters1.ts, 133, 9))
->ConstructorParameters : Symbol(ConstructorParameters, Decl(lib.es5.d.ts, --, --))
+>ConstructorParameters : Symbol(ConstructorParameters, Decl(lib.utils.modifiers.d.ts, --, --))
 >args : Symbol(args, Decl(genericRestParameters1.ts, 133, 55))
 >T : Symbol(T, Decl(genericRestParameters1.ts, 133, 9))
 
 type T09 = Parameters<Function>;
 >T09 : Symbol(T09, Decl(genericRestParameters1.ts, 133, 76))
->Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
->Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Parameters : Symbol(Parameters, Decl(lib.utils.modifiers.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es2009.function.d.ts, --, --), Decl(lib.es2009.function.d.ts, --, --))
 
 type Record1 = {
 >Record1 : Symbol(Record1, Decl(genericRestParameters1.ts, 134, 32))

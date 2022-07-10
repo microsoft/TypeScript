@@ -20,7 +20,7 @@ class A {
 function decorator(target: Object, propertyKey: string) {
 >decorator : Symbol(decorator, Decl(decoratorMetadataOnInferredType.ts, 6, 1))
 >target : Symbol(target, Decl(decoratorMetadataOnInferredType.ts, 8, 19))
->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es2009.object.d.ts, --, --), Decl(lib.es2009.object.d.ts, --, --))
 >propertyKey : Symbol(propertyKey, Decl(decoratorMetadataOnInferredType.ts, 8, 34))
 }
 

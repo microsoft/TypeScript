@@ -8,7 +8,7 @@ declare function pick<O, T extends keyof O>(keys: T[], obj?: O): Pick<O, T>;
 >T : Symbol(T, Decl(bindingPatternContextualTypeDoesNotCauseWidening.ts, 0, 24))
 >obj : Symbol(obj, Decl(bindingPatternContextualTypeDoesNotCauseWidening.ts, 0, 54))
 >O : Symbol(O, Decl(bindingPatternContextualTypeDoesNotCauseWidening.ts, 0, 22))
->Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>Pick : Symbol(Pick, Decl(lib.utils.modifiers.d.ts, --, --))
 >O : Symbol(O, Decl(bindingPatternContextualTypeDoesNotCauseWidening.ts, 0, 22))
 >T : Symbol(T, Decl(bindingPatternContextualTypeDoesNotCauseWidening.ts, 0, 24))
 

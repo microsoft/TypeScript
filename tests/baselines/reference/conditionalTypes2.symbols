@@ -100,9 +100,9 @@ function isFunction<T>(value: T): value is Extract<T, Function> {
 >value : Symbol(value, Decl(conditionalTypes2.ts, 28, 23))
 >T : Symbol(T, Decl(conditionalTypes2.ts, 28, 20))
 >value : Symbol(value, Decl(conditionalTypes2.ts, 28, 23))
->Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>Extract : Symbol(Extract, Decl(lib.utils.modifiers.d.ts, --, --))
 >T : Symbol(T, Decl(conditionalTypes2.ts, 28, 20))
->Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es2009.function.d.ts, --, --), Decl(lib.es2009.function.d.ts, --, --))
 
     return typeof value === "function";
 >value : Symbol(value, Decl(conditionalTypes2.ts, 28, 23))
@@ -122,7 +122,7 @@ function getFunction<T>(item: T) {
 >item : Symbol(item, Decl(conditionalTypes2.ts, 32, 24))
     }
     throw new Error();
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2009.error.d.ts, --, --))
 }
 
 function f10<T>(x: T) {
@@ -137,7 +137,7 @@ function f10<T>(x: T) {
 
         const f: Function = x;
 >f : Symbol(f, Decl(conditionalTypes2.ts, 41, 13))
->Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es2009.function.d.ts, --, --), Decl(lib.es2009.function.d.ts, --, --))
 >x : Symbol(x, Decl(conditionalTypes2.ts, 39, 16))
 
         const t: T = x;
@@ -208,13 +208,13 @@ function f20<T>(x: Extract<Extract<T, Foo>, Bar>, y: Extract<T, Foo & Bar>, z: E
 >f20 : Symbol(f20, Decl(conditionalTypes2.ts, 63, 71))
 >T : Symbol(T, Decl(conditionalTypes2.ts, 65, 13))
 >x : Symbol(x, Decl(conditionalTypes2.ts, 65, 16))
->Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
->Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>Extract : Symbol(Extract, Decl(lib.utils.modifiers.d.ts, --, --))
+>Extract : Symbol(Extract, Decl(lib.utils.modifiers.d.ts, --, --))
 >T : Symbol(T, Decl(conditionalTypes2.ts, 65, 13))
 >Foo : Symbol(Foo, Decl(conditionalTypes2.ts, 55, 1))
 >Bar : Symbol(Bar, Decl(conditionalTypes2.ts, 57, 27))
 >y : Symbol(y, Decl(conditionalTypes2.ts, 65, 49))
->Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>Extract : Symbol(Extract, Decl(lib.utils.modifiers.d.ts, --, --))
 >T : Symbol(T, Decl(conditionalTypes2.ts, 65, 13))
 >Foo : Symbol(Foo, Decl(conditionalTypes2.ts, 55, 1))
 >Bar : Symbol(Bar, Decl(conditionalTypes2.ts, 57, 27))
@@ -241,13 +241,13 @@ function f21<T>(x: Extract<Extract<T, Foo>, Bar>, y: Extract<T, Foo & Bar>, z: E
 >f21 : Symbol(f21, Decl(conditionalTypes2.ts, 69, 1))
 >T : Symbol(T, Decl(conditionalTypes2.ts, 71, 13))
 >x : Symbol(x, Decl(conditionalTypes2.ts, 71, 16))
->Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
->Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>Extract : Symbol(Extract, Decl(lib.utils.modifiers.d.ts, --, --))
+>Extract : Symbol(Extract, Decl(lib.utils.modifiers.d.ts, --, --))
 >T : Symbol(T, Decl(conditionalTypes2.ts, 71, 13))
 >Foo : Symbol(Foo, Decl(conditionalTypes2.ts, 55, 1))
 >Bar : Symbol(Bar, Decl(conditionalTypes2.ts, 57, 27))
 >y : Symbol(y, Decl(conditionalTypes2.ts, 71, 49))
->Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>Extract : Symbol(Extract, Decl(lib.utils.modifiers.d.ts, --, --))
 >T : Symbol(T, Decl(conditionalTypes2.ts, 71, 13))
 >Foo : Symbol(Foo, Decl(conditionalTypes2.ts, 55, 1))
 >Bar : Symbol(Bar, Decl(conditionalTypes2.ts, 57, 27))
@@ -324,7 +324,7 @@ class Vector<T> implements Seq<T> {
 >Vector : Symbol(Vector, Decl(conditionalTypes2.ts, 87, 1))
 >U : Symbol(U, Decl(conditionalTypes2.ts, 93, 15))
 >Vector : Symbol(Vector, Decl(conditionalTypes2.ts, 87, 1))
->Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>Exclude : Symbol(Exclude, Decl(lib.utils.modifiers.d.ts, --, --))
 >T : Symbol(T, Decl(conditionalTypes2.ts, 89, 13))
 >U : Symbol(U, Decl(conditionalTypes2.ts, 93, 15))
 
@@ -387,12 +387,12 @@ interface B1<T> extends A1<T> {
 declare function toString1(value: object | Function): string ;
 >toString1 : Symbol(toString1, Decl(conditionalTypes2.ts, 107, 1))
 >value : Symbol(value, Decl(conditionalTypes2.ts, 111, 27))
->Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es2009.function.d.ts, --, --), Decl(lib.es2009.function.d.ts, --, --))
 
 declare function toString2(value: Function): string ;
 >toString2 : Symbol(toString2, Decl(conditionalTypes2.ts, 111, 62))
 >value : Symbol(value, Decl(conditionalTypes2.ts, 112, 27))
->Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es2009.function.d.ts, --, --), Decl(lib.es2009.function.d.ts, --, --))
 
 function foo<T>(value: T) {
 >foo : Symbol(foo, Decl(conditionalTypes2.ts, 112, 53))
@@ -606,7 +606,7 @@ type UnionComplement = {
   [K in Union]: Exclude<Union, K>
 >K : Symbol(K, Decl(conditionalTypes2.ts, 164, 3))
 >Union : Symbol(Union, Decl(conditionalTypes2.ts, 154, 36))
->Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>Exclude : Symbol(Exclude, Decl(lib.utils.modifiers.d.ts, --, --))
 >Union : Symbol(Union, Decl(conditionalTypes2.ts, 154, 36))
 >K : Symbol(K, Decl(conditionalTypes2.ts, 164, 3))
 
@@ -626,9 +626,9 @@ type UnionComplementComplement = {
   [K in Union]: Exclude<Union, Exclude<Union, K>>
 >K : Symbol(K, Decl(conditionalTypes2.ts, 171, 3))
 >Union : Symbol(Union, Decl(conditionalTypes2.ts, 154, 36))
->Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>Exclude : Symbol(Exclude, Decl(lib.utils.modifiers.d.ts, --, --))
 >Union : Symbol(Union, Decl(conditionalTypes2.ts, 154, 36))
->Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>Exclude : Symbol(Exclude, Decl(lib.utils.modifiers.d.ts, --, --))
 >Union : Symbol(Union, Decl(conditionalTypes2.ts, 154, 36))
 >K : Symbol(K, Decl(conditionalTypes2.ts, 171, 3))
 
@@ -648,7 +648,7 @@ type ProductComplement = {
   [K in Union]: Exclude<ProductUnion, { f1: K }>
 >K : Symbol(K, Decl(conditionalTypes2.ts, 178, 3))
 >Union : Symbol(Union, Decl(conditionalTypes2.ts, 154, 36))
->Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>Exclude : Symbol(Exclude, Decl(lib.utils.modifiers.d.ts, --, --))
 >ProductUnion : Symbol(ProductUnion, Decl(conditionalTypes2.ts, 159, 51))
 >f1 : Symbol(f1, Decl(conditionalTypes2.ts, 178, 39))
 >K : Symbol(K, Decl(conditionalTypes2.ts, 178, 3))
@@ -669,9 +669,9 @@ type ProductComplementComplement = {
   [K in Union]: Exclude<ProductUnion, Exclude<ProductUnion, { f1: K }>>
 >K : Symbol(K, Decl(conditionalTypes2.ts, 185, 3))
 >Union : Symbol(Union, Decl(conditionalTypes2.ts, 154, 36))
->Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>Exclude : Symbol(Exclude, Decl(lib.utils.modifiers.d.ts, --, --))
 >ProductUnion : Symbol(ProductUnion, Decl(conditionalTypes2.ts, 159, 51))
->Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>Exclude : Symbol(Exclude, Decl(lib.utils.modifiers.d.ts, --, --))
 >ProductUnion : Symbol(ProductUnion, Decl(conditionalTypes2.ts, 159, 51))
 >f1 : Symbol(f1, Decl(conditionalTypes2.ts, 185, 61))
 >K : Symbol(K, Decl(conditionalTypes2.ts, 185, 3))
@@ -785,7 +785,7 @@ declare type GetPropertyNamesOfType<T, RestrictToType> = {
 
 	[PropertyName in Extract<keyof T, string>]: T[PropertyName] extends RestrictToType ? PropertyName : never
 >PropertyName : Symbol(PropertyName, Decl(conditionalTypes2.ts, 224, 2))
->Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>Extract : Symbol(Extract, Decl(lib.utils.modifiers.d.ts, --, --))
 >T : Symbol(T, Decl(conditionalTypes2.ts, 223, 36))
 >T : Symbol(T, Decl(conditionalTypes2.ts, 223, 36))
 >PropertyName : Symbol(PropertyName, Decl(conditionalTypes2.ts, 224, 2))
@@ -793,21 +793,21 @@ declare type GetPropertyNamesOfType<T, RestrictToType> = {
 >PropertyName : Symbol(PropertyName, Decl(conditionalTypes2.ts, 224, 2))
 
 }[Extract<keyof T, string>];
->Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>Extract : Symbol(Extract, Decl(lib.utils.modifiers.d.ts, --, --))
 >T : Symbol(T, Decl(conditionalTypes2.ts, 223, 36))
 
 declare type GetAllPropertiesOfType<T, RestrictToType> = Pick<
 >GetAllPropertiesOfType : Symbol(GetAllPropertiesOfType, Decl(conditionalTypes2.ts, 225, 28))
 >T : Symbol(T, Decl(conditionalTypes2.ts, 227, 36))
 >RestrictToType : Symbol(RestrictToType, Decl(conditionalTypes2.ts, 227, 38))
->Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>Pick : Symbol(Pick, Decl(lib.utils.modifiers.d.ts, --, --))
 
 	T,
 >T : Symbol(T, Decl(conditionalTypes2.ts, 227, 36))
 
 	GetPropertyNamesOfType<Required<T>, RestrictToType>
 >GetPropertyNamesOfType : Symbol(GetPropertyNamesOfType, Decl(conditionalTypes2.ts, 221, 2))
->Required : Symbol(Required, Decl(lib.es5.d.ts, --, --))
+>Required : Symbol(Required, Decl(lib.utils.modifiers.d.ts, --, --))
 >T : Symbol(T, Decl(conditionalTypes2.ts, 227, 36))
 >RestrictToType : Symbol(RestrictToType, Decl(conditionalTypes2.ts, 227, 38))
 

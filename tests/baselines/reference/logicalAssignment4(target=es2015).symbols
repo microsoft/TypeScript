@@ -4,9 +4,9 @@ function foo1(results: number[] | undefined) {
 >results : Symbol(results, Decl(logicalAssignment4.ts, 0, 14))
 
     (results ||= []).push(100);
->(results ||= []).push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>(results ||= []).push : Symbol(Array.push, Decl(lib.es2009.array.d.ts, --, --))
 >results : Symbol(results, Decl(logicalAssignment4.ts, 0, 14))
->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es2009.array.d.ts, --, --))
 }
 
 function foo2(results: number[] | undefined) {
@@ -14,9 +14,9 @@ function foo2(results: number[] | undefined) {
 >results : Symbol(results, Decl(logicalAssignment4.ts, 4, 14))
 
     (results ??= []).push(100);
->(results ??= []).push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>(results ??= []).push : Symbol(Array.push, Decl(lib.es2009.array.d.ts, --, --))
 >results : Symbol(results, Decl(logicalAssignment4.ts, 4, 14))
->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es2009.array.d.ts, --, --))
 }
 
 function foo3(results: number[] | undefined) {
@@ -27,9 +27,9 @@ function foo3(results: number[] | undefined) {
 >results : Symbol(results, Decl(logicalAssignment4.ts, 8, 14))
 
     results.push(100);
->results.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>results.push : Symbol(Array.push, Decl(lib.es2009.array.d.ts, --, --))
 >results : Symbol(results, Decl(logicalAssignment4.ts, 8, 14))
->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es2009.array.d.ts, --, --))
 }
 
 function foo4(results: number[] | undefined) {
@@ -40,9 +40,9 @@ function foo4(results: number[] | undefined) {
 >results : Symbol(results, Decl(logicalAssignment4.ts, 13, 14))
 
     results.push(100);
->results.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>results.push : Symbol(Array.push, Decl(lib.es2009.array.d.ts, --, --))
 >results : Symbol(results, Decl(logicalAssignment4.ts, 13, 14))
->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es2009.array.d.ts, --, --))
 }
 
 interface ThingWithOriginal {

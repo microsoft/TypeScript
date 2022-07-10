@@ -3,7 +3,7 @@ declare global {
 >global : Symbol(global, Decl(controlFlowInstanceofExtendsFunction.ts, 0, 0))
 
     interface Function {
->Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(controlFlowInstanceofExtendsFunction.ts, 0, 16))
+>Function : Symbol(Function, Decl(lib.es2009.function.d.ts, --, --), Decl(lib.es2009.function.d.ts, --, --), Decl(controlFlowInstanceofExtendsFunction.ts, 0, 16))
 
         now(): string;
 >now : Symbol(Function.now, Decl(controlFlowInstanceofExtendsFunction.ts, 1, 24))
@@ -12,9 +12,9 @@ declare global {
 
 Function.prototype.now = function () {
 >Function.prototype.now : Symbol(Function.now, Decl(controlFlowInstanceofExtendsFunction.ts, 1, 24))
->Function.prototype : Symbol(FunctionConstructor.prototype, Decl(lib.es5.d.ts, --, --))
->Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(controlFlowInstanceofExtendsFunction.ts, 0, 16))
->prototype : Symbol(FunctionConstructor.prototype, Decl(lib.es5.d.ts, --, --))
+>Function.prototype : Symbol(FunctionConstructor.prototype, Decl(lib.es2009.function.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es2009.function.d.ts, --, --), Decl(lib.es2009.function.d.ts, --, --), Decl(controlFlowInstanceofExtendsFunction.ts, 0, 16))
+>prototype : Symbol(FunctionConstructor.prototype, Decl(lib.es2009.function.d.ts, --, --))
 >now : Symbol(Function.now, Decl(controlFlowInstanceofExtendsFunction.ts, 1, 24))
 
     return "now"
@@ -59,9 +59,9 @@ console.log(Y.now()) // works as expected
 export const x: X | number = Math.random() > 0.5 ? new X() : 1
 >x : Symbol(x, Decl(controlFlowInstanceofExtendsFunction.ts, 27, 12))
 >X : Symbol(X, Decl(controlFlowInstanceofExtendsFunction.ts, 8, 1))
->Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math.random : Symbol(Math.random, Decl(lib.es2009.math.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es2009.math.d.ts, --, --), Decl(lib.es2009.math.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es2009.math.d.ts, --, --))
 >X : Symbol(X, Decl(controlFlowInstanceofExtendsFunction.ts, 8, 1))
 
 if (x instanceof X) {

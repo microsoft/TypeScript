@@ -27,8 +27,8 @@ enum Bar {
 
   a = (1).valueOf(),   // ok
 >a : Symbol(Bar.a, Decl(enumBasics2.ts, 8, 10))
->(1).valueOf : Symbol(Number.valueOf, Decl(lib.es5.d.ts, --, --))
->valueOf : Symbol(Number.valueOf, Decl(lib.es5.d.ts, --, --))
+>(1).valueOf : Symbol(Number.valueOf, Decl(lib.es2009.number.d.ts, --, --))
+>valueOf : Symbol(Number.valueOf, Decl(lib.es2009.number.d.ts, --, --))
 
   b = Foo.a,           // ok
 >b : Symbol(Bar.b, Decl(enumBasics2.ts, 9, 20))
@@ -38,11 +38,11 @@ enum Bar {
 
   c = Foo.a.valueOf(), // ok
 >c : Symbol(Bar.c, Decl(enumBasics2.ts, 10, 12))
->Foo.a.valueOf : Symbol(Number.valueOf, Decl(lib.es5.d.ts, --, --))
+>Foo.a.valueOf : Symbol(Number.valueOf, Decl(lib.es2009.number.d.ts, --, --))
 >Foo.a : Symbol(Foo.a, Decl(enumBasics2.ts, 0, 10))
 >Foo : Symbol(Foo, Decl(enumBasics2.ts, 0, 0))
 >a : Symbol(Foo.a, Decl(enumBasics2.ts, 0, 10))
->valueOf : Symbol(Number.valueOf, Decl(lib.es5.d.ts, --, --))
+>valueOf : Symbol(Number.valueOf, Decl(lib.es2009.number.d.ts, --, --))
 
   d = Foo.a.a,         // should error
 >d : Symbol(Bar.d, Decl(enumBasics2.ts, 11, 22))

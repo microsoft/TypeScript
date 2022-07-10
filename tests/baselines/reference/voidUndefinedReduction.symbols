@@ -26,8 +26,8 @@ if (isDefined(foo)) {
 >console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
 >log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
->foo.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>foo.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es2009.string.d.ts, --, --))
 >foo : Symbol(foo, Decl(voidUndefinedReduction.ts, 6, 13))
->toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es2009.string.d.ts, --, --))
 }
 

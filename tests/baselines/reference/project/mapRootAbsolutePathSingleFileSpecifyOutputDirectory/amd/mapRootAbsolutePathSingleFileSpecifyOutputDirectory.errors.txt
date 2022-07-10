@@ -1,0 +1,13 @@
+lib.es5.d.ts(48,21): error TS6054: File 'lib.es2009.uint16array' has an unsupported extension. The only supported extensions are '.ts', '.tsx', '.d.ts', '.cts', '.d.cts', '.mts', '.d.mts'.
+
+
+==== test.ts (0 errors) ====
+    var a1 = 10;
+    class c1 {
+        public p1: number;
+    }
+    
+    var instance1 = new c1();
+    function f1() {
+        return instance1;
+    }

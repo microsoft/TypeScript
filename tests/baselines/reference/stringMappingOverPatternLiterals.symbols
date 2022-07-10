@@ -5,12 +5,12 @@ type A = "aA";
 
 type B = Uppercase<A>;
 >B : Symbol(B, Decl(stringMappingOverPatternLiterals.ts, 1, 14))
->Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+>Uppercase : Symbol(Uppercase, Decl(lib.utils.modifiers.d.ts, --, --))
 >A : Symbol(A, Decl(stringMappingOverPatternLiterals.ts, 0, 0))
 
 type C = Lowercase<A>;
 >C : Symbol(C, Decl(stringMappingOverPatternLiterals.ts, 2, 22))
->Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
+>Lowercase : Symbol(Lowercase, Decl(lib.utils.modifiers.d.ts, --, --))
 >A : Symbol(A, Decl(stringMappingOverPatternLiterals.ts, 0, 0))
 
 // templated
@@ -19,12 +19,12 @@ type ATemplate = `aA${string}`;
 
 type BTemplate = Uppercase<ATemplate>;
 >BTemplate : Symbol(BTemplate, Decl(stringMappingOverPatternLiterals.ts, 6, 31))
->Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+>Uppercase : Symbol(Uppercase, Decl(lib.utils.modifiers.d.ts, --, --))
 >ATemplate : Symbol(ATemplate, Decl(stringMappingOverPatternLiterals.ts, 3, 22))
 
 type CTemplate = Lowercase<ATemplate>;
 >CTemplate : Symbol(CTemplate, Decl(stringMappingOverPatternLiterals.ts, 7, 38))
->Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
+>Lowercase : Symbol(Lowercase, Decl(lib.utils.modifiers.d.ts, --, --))
 >ATemplate : Symbol(ATemplate, Decl(stringMappingOverPatternLiterals.ts, 3, 22))
 
 function f1(
@@ -113,9 +113,9 @@ function f2(x1: string, x2: Uppercase<string>, x3: Lowercase<string>) {
 >f2 : Symbol(f2, Decl(stringMappingOverPatternLiterals.ts, 37, 1))
 >x1 : Symbol(x1, Decl(stringMappingOverPatternLiterals.ts, 41, 12))
 >x2 : Symbol(x2, Decl(stringMappingOverPatternLiterals.ts, 41, 23))
->Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+>Uppercase : Symbol(Uppercase, Decl(lib.utils.modifiers.d.ts, --, --))
 >x3 : Symbol(x3, Decl(stringMappingOverPatternLiterals.ts, 41, 46))
->Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
+>Lowercase : Symbol(Lowercase, Decl(lib.utils.modifiers.d.ts, --, --))
 
     // ok
     x1 = x2;
@@ -163,17 +163,17 @@ function f3(
 
     x1: Uppercase<string>,
 >x1 : Symbol(x1, Decl(stringMappingOverPatternLiterals.ts, 61, 12))
->Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+>Uppercase : Symbol(Uppercase, Decl(lib.utils.modifiers.d.ts, --, --))
 
     x2: Uppercase<Uppercase<string>>,
 >x2 : Symbol(x2, Decl(stringMappingOverPatternLiterals.ts, 62, 26))
->Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
->Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+>Uppercase : Symbol(Uppercase, Decl(lib.utils.modifiers.d.ts, --, --))
+>Uppercase : Symbol(Uppercase, Decl(lib.utils.modifiers.d.ts, --, --))
 
     x3: Uppercase<Lowercase<string>>) {
 >x3 : Symbol(x3, Decl(stringMappingOverPatternLiterals.ts, 63, 37))
->Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
->Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
+>Uppercase : Symbol(Uppercase, Decl(lib.utils.modifiers.d.ts, --, --))
+>Lowercase : Symbol(Lowercase, Decl(lib.utils.modifiers.d.ts, --, --))
 
     // _ideally_ these would all be equivalent
     x1 = x2;
@@ -207,8 +207,8 @@ function f3(
     // and this should also not be equivlent to any others
     var x4: Lowercase<Uppercase<string>> = null as any;
 >x4 : Symbol(x4, Decl(stringMappingOverPatternLiterals.ts, 81, 7))
->Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
->Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+>Lowercase : Symbol(Lowercase, Decl(lib.utils.modifiers.d.ts, --, --))
+>Uppercase : Symbol(Uppercase, Decl(lib.utils.modifiers.d.ts, --, --))
 
     x1 = x4;
 >x1 : Symbol(x1, Decl(stringMappingOverPatternLiterals.ts, 61, 12))
@@ -239,13 +239,13 @@ function f3(
 
 type NonStringPat = Uppercase<`aA${number}${bigint}${boolean}`>;
 >NonStringPat : Symbol(NonStringPat, Decl(stringMappingOverPatternLiterals.ts, 89, 1))
->Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+>Uppercase : Symbol(Uppercase, Decl(lib.utils.modifiers.d.ts, --, --))
 
 type EquivalentNonStringPat = `AA${Uppercase<`${number}`>}${Uppercase<`${bigint}`>}${Uppercase<`${boolean}`>}`;
 >EquivalentNonStringPat : Symbol(EquivalentNonStringPat, Decl(stringMappingOverPatternLiterals.ts, 93, 64))
->Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
->Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
->Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+>Uppercase : Symbol(Uppercase, Decl(lib.utils.modifiers.d.ts, --, --))
+>Uppercase : Symbol(Uppercase, Decl(lib.utils.modifiers.d.ts, --, --))
+>Uppercase : Symbol(Uppercase, Decl(lib.utils.modifiers.d.ts, --, --))
 
 function f4(x1: NonStringPat, x2: EquivalentNonStringPat) {
 >f4 : Symbol(f4, Decl(stringMappingOverPatternLiterals.ts, 94, 111))
@@ -274,30 +274,30 @@ function f5(
 
     cap_str: Capitalize<string>,
 >cap_str : Symbol(cap_str, Decl(stringMappingOverPatternLiterals.ts, 105, 26))
->Capitalize : Symbol(Capitalize, Decl(lib.es5.d.ts, --, --))
+>Capitalize : Symbol(Capitalize, Decl(lib.utils.modifiers.d.ts, --, --))
 
     cap_tem_map: Capitalize<`A${string}`>,
 >cap_tem_map : Symbol(cap_tem_map, Decl(stringMappingOverPatternLiterals.ts, 106, 32))
->Capitalize : Symbol(Capitalize, Decl(lib.es5.d.ts, --, --))
+>Capitalize : Symbol(Capitalize, Decl(lib.utils.modifiers.d.ts, --, --))
 
     cap_tem_map2: Capitalize<`a${string}`>,
 >cap_tem_map2 : Symbol(cap_tem_map2, Decl(stringMappingOverPatternLiterals.ts, 107, 42))
->Capitalize : Symbol(Capitalize, Decl(lib.es5.d.ts, --, --))
+>Capitalize : Symbol(Capitalize, Decl(lib.utils.modifiers.d.ts, --, --))
 
     uncap_tem: `a${string}`,
 >uncap_tem : Symbol(uncap_tem, Decl(stringMappingOverPatternLiterals.ts, 108, 43))
 
     uncap_str: Uncapitalize<string>,
 >uncap_str : Symbol(uncap_str, Decl(stringMappingOverPatternLiterals.ts, 109, 28))
->Uncapitalize : Symbol(Uncapitalize, Decl(lib.es5.d.ts, --, --))
+>Uncapitalize : Symbol(Uncapitalize, Decl(lib.utils.modifiers.d.ts, --, --))
 
     uncap_tem_map: Uncapitalize<`A${string}`>,
 >uncap_tem_map : Symbol(uncap_tem_map, Decl(stringMappingOverPatternLiterals.ts, 110, 36))
->Uncapitalize : Symbol(Uncapitalize, Decl(lib.es5.d.ts, --, --))
+>Uncapitalize : Symbol(Uncapitalize, Decl(lib.utils.modifiers.d.ts, --, --))
 
     uncap_tem_map2: Uncapitalize<`a${string}`>,
 >uncap_tem_map2 : Symbol(uncap_tem_map2, Decl(stringMappingOverPatternLiterals.ts, 111, 46))
->Uncapitalize : Symbol(Uncapitalize, Decl(lib.es5.d.ts, --, --))
+>Uncapitalize : Symbol(Uncapitalize, Decl(lib.utils.modifiers.d.ts, --, --))
 
 ) {
     // All these are capitalized

@@ -456,7 +456,7 @@ let Anon = class <out T> {
 
     foo(): InstanceType<(typeof Anon<T>)> {
 >foo : Symbol(Anon.foo, Decl(varianceAnnotations.ts, 163, 26))
->InstanceType : Symbol(InstanceType, Decl(lib.es5.d.ts, --, --))
+>InstanceType : Symbol(InstanceType, Decl(lib.utils.modifiers.d.ts, --, --))
 >Anon : Symbol(Anon, Decl(varianceAnnotations.ts, 163, 3))
 >T : Symbol(T, Decl(varianceAnnotations.ts, 163, 18))
 

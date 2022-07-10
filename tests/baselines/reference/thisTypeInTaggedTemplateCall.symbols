@@ -8,7 +8,7 @@ class Foo {
 >this : Symbol(this, Decl(thisTypeInTaggedTemplateCall.ts, 1, 16))
 >T : Symbol(T, Decl(thisTypeInTaggedTemplateCall.ts, 1, 13))
 >strings : Symbol(strings, Decl(thisTypeInTaggedTemplateCall.ts, 1, 34))
->TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es5.d.ts, --, --))
+>TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es2009.string.d.ts, --, --))
 
         return new this()
 >this : Symbol(this, Decl(thisTypeInTaggedTemplateCall.ts, 1, 16))

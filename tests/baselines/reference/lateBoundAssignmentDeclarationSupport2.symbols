@@ -19,7 +19,7 @@ const z = x[x.S];
 // currently unsupported
 const _sym = Symbol();
 >_sym : Symbol(_sym, Decl(lateBoundAssignmentDeclarationSupport2.js, 1, 5))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es2009.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 const _str = "my-fake-sym";
 >_str : Symbol(_str, Decl(lateBoundAssignmentDeclarationSupport2.js, 2, 5))

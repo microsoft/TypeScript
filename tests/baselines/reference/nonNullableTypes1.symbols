@@ -14,7 +14,7 @@ function error(): never {
 >error : Symbol(error, Decl(nonNullableTypes1.ts, 2, 1))
 
     throw new Error();
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2009.error.d.ts, --, --))
 }
 
 function f2<T>(x: T) {  // NonNullable<T>

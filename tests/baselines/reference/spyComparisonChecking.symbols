@@ -10,7 +10,7 @@ interface Spy {
 
     and: Function;
 >and : Symbol(Spy.and, Decl(spyComparisonChecking.ts, 3, 21))
->Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es2009.function.d.ts, --, --), Decl(lib.es2009.function.d.ts, --, --))
 
     mostRecentCall: { args: any[]; };
 >mostRecentCall : Symbol(Spy.mostRecentCall, Decl(spyComparisonChecking.ts, 4, 18))
@@ -38,7 +38,7 @@ declare function createSpyObj<T>(
     name: string, names: Array<keyof T>): SpyObj<T>;
 >name : Symbol(name, Decl(spyComparisonChecking.ts, 13, 33))
 >names : Symbol(names, Decl(spyComparisonChecking.ts, 14, 17))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es2009.array.d.ts, --, --), Decl(lib.es2009.array.d.ts, --, --))
 >T : Symbol(T, Decl(spyComparisonChecking.ts, 13, 30))
 >SpyObj : Symbol(SpyObj, Decl(spyComparisonChecking.ts, 7, 1))
 >T : Symbol(T, Decl(spyComparisonChecking.ts, 13, 30))
@@ -48,7 +48,7 @@ function mock<T>(spyName: string, methodNames: Array<keyof T>): SpyObj<T> {
 >T : Symbol(T, Decl(spyComparisonChecking.ts, 16, 14))
 >spyName : Symbol(spyName, Decl(spyComparisonChecking.ts, 16, 17))
 >methodNames : Symbol(methodNames, Decl(spyComparisonChecking.ts, 16, 33))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es2009.array.d.ts, --, --), Decl(lib.es2009.array.d.ts, --, --))
 >T : Symbol(T, Decl(spyComparisonChecking.ts, 16, 14))
 >SpyObj : Symbol(SpyObj, Decl(spyComparisonChecking.ts, 7, 1))
 >T : Symbol(T, Decl(spyComparisonChecking.ts, 16, 14))

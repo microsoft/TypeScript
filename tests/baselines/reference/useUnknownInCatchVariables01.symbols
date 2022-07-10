@@ -24,28 +24,28 @@ catch (e) {
 >console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
 >log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
->e.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>e.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es2009.string.d.ts, --, --))
 >e : Symbol(e, Decl(useUnknownInCatchVariables01.ts, 3, 7))
->toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es2009.string.d.ts, --, --))
     }
     if (e instanceof Error) {
 >e : Symbol(e, Decl(useUnknownInCatchVariables01.ts, 3, 7))
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2009.error.d.ts, --, --))
 
         e.stack?.toUpperCase();
->e.stack?.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
->e.stack : Symbol(Error.stack, Decl(lib.es5.d.ts, --, --))
+>e.stack?.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es2009.string.d.ts, --, --))
+>e.stack : Symbol(Error.stack, Decl(lib.es2009.error.d.ts, --, --))
 >e : Symbol(e, Decl(useUnknownInCatchVariables01.ts, 3, 7))
->stack : Symbol(Error.stack, Decl(lib.es5.d.ts, --, --))
->toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>stack : Symbol(Error.stack, Decl(lib.es2009.error.d.ts, --, --))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es2009.string.d.ts, --, --))
     }
     if (typeof e === "number") {
 >e : Symbol(e, Decl(useUnknownInCatchVariables01.ts, 3, 7))
 
         e.toExponential();
->e.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+>e.toExponential : Symbol(Number.toExponential, Decl(lib.es2009.number.d.ts, --, --))
 >e : Symbol(e, Decl(useUnknownInCatchVariables01.ts, 3, 7))
->toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+>toExponential : Symbol(Number.toExponential, Decl(lib.es2009.number.d.ts, --, --))
 
         e++;
 >e : Symbol(e, Decl(useUnknownInCatchVariables01.ts, 3, 7))

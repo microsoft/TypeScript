@@ -449,7 +449,7 @@ function ensureNotNull<T>(x: T) {
 
     if (x === null) throw Error();
 >x : Symbol(x, Decl(unknownControlFlow.ts, 212, 26))
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2009.error.d.ts, --, --))
 
     return x;  // T & ({} | undefined)
 >x : Symbol(x, Decl(unknownControlFlow.ts, 212, 26))
@@ -464,7 +464,7 @@ function ensureNotUndefined<T>(x: T) {
     if (x === undefined) throw Error();
 >x : Symbol(x, Decl(unknownControlFlow.ts, 217, 31))
 >undefined : Symbol(undefined)
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2009.error.d.ts, --, --))
 
     return x;  // T & ({} | null)
 >x : Symbol(x, Decl(unknownControlFlow.ts, 217, 31))
@@ -501,9 +501,9 @@ function f40(a: string | undefined, b: number | null | undefined) {
 type QQ<T> = NonNullable<NonNullable<NonNullable<T>>>;
 >QQ : Symbol(QQ, Decl(unknownControlFlow.ts, 229, 1))
 >T : Symbol(T, Decl(unknownControlFlow.ts, 231, 8))
->NonNullable : Symbol(NonNullable, Decl(lib.es5.d.ts, --, --))
->NonNullable : Symbol(NonNullable, Decl(lib.es5.d.ts, --, --))
->NonNullable : Symbol(NonNullable, Decl(lib.es5.d.ts, --, --))
+>NonNullable : Symbol(NonNullable, Decl(lib.utils.modifiers.d.ts, --, --))
+>NonNullable : Symbol(NonNullable, Decl(lib.utils.modifiers.d.ts, --, --))
+>NonNullable : Symbol(NonNullable, Decl(lib.utils.modifiers.d.ts, --, --))
 >T : Symbol(T, Decl(unknownControlFlow.ts, 231, 8))
 
 function f41<T>(a: T) {
@@ -586,30 +586,30 @@ function deepEquals<T>(a: T, b: T): boolean {
         return false;
     }
     if (Array.isArray(a) || Array.isArray(b)) {
->Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es2009.array.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es2009.array.d.ts, --, --), Decl(lib.es2009.array.d.ts, --, --))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es2009.array.d.ts, --, --))
 >a : Symbol(a, Decl(unknownControlFlow.ts, 247, 23))
->Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es2009.array.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es2009.array.d.ts, --, --), Decl(lib.es2009.array.d.ts, --, --))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es2009.array.d.ts, --, --))
 >b : Symbol(b, Decl(unknownControlFlow.ts, 247, 28))
 
         return false;
     }
     if (Object.keys(a).length !== Object.keys(b).length) { // Error here
->Object.keys(a).length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
->Object.keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --))
->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --))
+>Object.keys(a).length : Symbol(Array.length, Decl(lib.es2009.array.d.ts, --, --))
+>Object.keys : Symbol(ObjectConstructor.keys, Decl(lib.es2009.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es2009.object.d.ts, --, --), Decl(lib.es2009.object.d.ts, --, --))
+>keys : Symbol(ObjectConstructor.keys, Decl(lib.es2009.object.d.ts, --, --))
 >a : Symbol(a, Decl(unknownControlFlow.ts, 247, 23))
->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
->Object.keys(b).length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
->Object.keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --))
->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es2009.array.d.ts, --, --))
+>Object.keys(b).length : Symbol(Array.length, Decl(lib.es2009.array.d.ts, --, --))
+>Object.keys : Symbol(ObjectConstructor.keys, Decl(lib.es2009.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es2009.object.d.ts, --, --), Decl(lib.es2009.object.d.ts, --, --))
+>keys : Symbol(ObjectConstructor.keys, Decl(lib.es2009.object.d.ts, --, --))
 >b : Symbol(b, Decl(unknownControlFlow.ts, 247, 28))
->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es2009.array.d.ts, --, --))
 
         return false;
     }
@@ -718,6 +718,6 @@ type Bar<T extends NullableFoo> = NonNullable<T>[string];
 >Bar : Symbol(Bar, Decl(unknownControlFlow.ts, 297, 35))
 >T : Symbol(T, Decl(unknownControlFlow.ts, 299, 9))
 >NullableFoo : Symbol(NullableFoo, Decl(unknownControlFlow.ts, 296, 38))
->NonNullable : Symbol(NonNullable, Decl(lib.es5.d.ts, --, --))
+>NonNullable : Symbol(NonNullable, Decl(lib.utils.modifiers.d.ts, --, --))
 >T : Symbol(T, Decl(unknownControlFlow.ts, 299, 9))
 

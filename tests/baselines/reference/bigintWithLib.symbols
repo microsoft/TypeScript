@@ -89,17 +89,17 @@ bigIntArray = new BigInt64Array([1, 2, 3]); // should error
 bigIntArray = new BigInt64Array(new ArrayBuffer(80));
 >bigIntArray : Symbol(bigIntArray, Decl(bigintWithLib.ts, 15, 3))
 >BigInt64Array : Symbol(BigInt64Array, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
->ArrayBuffer : Symbol(ArrayBuffer, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>ArrayBuffer : Symbol(ArrayBuffer, Decl(lib.es2009.arraybuffer.d.ts, --, --), Decl(lib.es2009.arraybuffer.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 bigIntArray = new BigInt64Array(new ArrayBuffer(80), 8);
 >bigIntArray : Symbol(bigIntArray, Decl(bigintWithLib.ts, 15, 3))
 >BigInt64Array : Symbol(BigInt64Array, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
->ArrayBuffer : Symbol(ArrayBuffer, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>ArrayBuffer : Symbol(ArrayBuffer, Decl(lib.es2009.arraybuffer.d.ts, --, --), Decl(lib.es2009.arraybuffer.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 bigIntArray = new BigInt64Array(new ArrayBuffer(80), 8, 3);
 >bigIntArray : Symbol(bigIntArray, Decl(bigintWithLib.ts, 15, 3))
 >BigInt64Array : Symbol(BigInt64Array, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
->ArrayBuffer : Symbol(ArrayBuffer, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>ArrayBuffer : Symbol(ArrayBuffer, Decl(lib.es2009.arraybuffer.d.ts, --, --), Decl(lib.es2009.arraybuffer.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 let len: number = bigIntArray.length;
 >len : Symbol(len, Decl(bigintWithLib.ts, 22, 3))
@@ -114,7 +114,7 @@ bigIntArray.length = 10; // should error
 
 let arrayBufferLike: ArrayBufferView = bigIntArray;
 >arrayBufferLike : Symbol(arrayBufferLike, Decl(bigintWithLib.ts, 24, 3))
->ArrayBufferView : Symbol(ArrayBufferView, Decl(lib.es5.d.ts, --, --))
+>ArrayBufferView : Symbol(ArrayBufferView, Decl(lib.es2009.arraybuffer.d.ts, --, --))
 >bigIntArray : Symbol(bigIntArray, Decl(bigintWithLib.ts, 15, 3))
 
 // Test BigUint64Array
@@ -138,17 +138,17 @@ bigUintArray = new BigUint64Array([1, 2, 3]); // should error
 bigUintArray = new BigUint64Array(new ArrayBuffer(80));
 >bigUintArray : Symbol(bigUintArray, Decl(bigintWithLib.ts, 27, 3))
 >BigUint64Array : Symbol(BigUint64Array, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
->ArrayBuffer : Symbol(ArrayBuffer, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>ArrayBuffer : Symbol(ArrayBuffer, Decl(lib.es2009.arraybuffer.d.ts, --, --), Decl(lib.es2009.arraybuffer.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 bigUintArray = new BigUint64Array(new ArrayBuffer(80), 8);
 >bigUintArray : Symbol(bigUintArray, Decl(bigintWithLib.ts, 27, 3))
 >BigUint64Array : Symbol(BigUint64Array, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
->ArrayBuffer : Symbol(ArrayBuffer, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>ArrayBuffer : Symbol(ArrayBuffer, Decl(lib.es2009.arraybuffer.d.ts, --, --), Decl(lib.es2009.arraybuffer.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 bigUintArray = new BigUint64Array(new ArrayBuffer(80), 8, 3);
 >bigUintArray : Symbol(bigUintArray, Decl(bigintWithLib.ts, 27, 3))
 >BigUint64Array : Symbol(BigUint64Array, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
->ArrayBuffer : Symbol(ArrayBuffer, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>ArrayBuffer : Symbol(ArrayBuffer, Decl(lib.es2009.arraybuffer.d.ts, --, --), Decl(lib.es2009.arraybuffer.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 len = bigIntArray.length;
 >len : Symbol(len, Decl(bigintWithLib.ts, 22, 3))
@@ -168,8 +168,8 @@ arrayBufferLike = bigIntArray;
 // Test added DataView methods
 const dataView = new DataView(new ArrayBuffer(80));
 >dataView : Symbol(dataView, Decl(bigintWithLib.ts, 39, 5))
->DataView : Symbol(DataView, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
->ArrayBuffer : Symbol(ArrayBuffer, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>DataView : Symbol(DataView, Decl(lib.es2009.dataview.d.ts, --, --), Decl(lib.es2009.dataview.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+>ArrayBuffer : Symbol(ArrayBuffer, Decl(lib.es2009.arraybuffer.d.ts, --, --), Decl(lib.es2009.arraybuffer.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 dataView.setBigInt64(1, -1n);
 >dataView.setBigInt64 : Symbol(DataView.setBigInt64, Decl(lib.es2020.bigint.d.ts, --, --))
@@ -240,17 +240,17 @@ let z = 12n; // should emit type bigint in declaration file
 
 // Test Intl methods with new parameter type
 new Intl.NumberFormat("fr").format(3000n);
->new Intl.NumberFormat("fr").format : Symbol(Intl.NumberFormat.format, Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
->Intl.NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
->Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
->NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
->format : Symbol(Intl.NumberFormat.format, Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+>new Intl.NumberFormat("fr").format : Symbol(Intl.NumberFormat.format, Decl(lib.es2009.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+>Intl.NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es2009.intl.d.ts, --, --), Decl(lib.es2009.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es2009.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+>NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es2009.intl.d.ts, --, --), Decl(lib.es2009.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+>format : Symbol(Intl.NumberFormat.format, Decl(lib.es2009.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
 
 new Intl.NumberFormat("fr").format(bigintVal);
->new Intl.NumberFormat("fr").format : Symbol(Intl.NumberFormat.format, Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
->Intl.NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
->Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
->NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
->format : Symbol(Intl.NumberFormat.format, Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+>new Intl.NumberFormat("fr").format : Symbol(Intl.NumberFormat.format, Decl(lib.es2009.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+>Intl.NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es2009.intl.d.ts, --, --), Decl(lib.es2009.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es2009.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+>NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es2009.intl.d.ts, --, --), Decl(lib.es2009.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+>format : Symbol(Intl.NumberFormat.format, Decl(lib.es2009.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
 >bigintVal : Symbol(bigintVal, Decl(bigintWithLib.ts, 1, 3))
 

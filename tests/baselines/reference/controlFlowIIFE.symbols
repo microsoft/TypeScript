@@ -16,9 +16,9 @@ function f1() {
 >n : Symbol(n, Decl(controlFlowIIFE.ts, 5, 11))
 
             return x.length;
->x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x.length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
 >x : Symbol(x, Decl(controlFlowIIFE.ts, 3, 7))
->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
 
         }();
     }
@@ -38,9 +38,9 @@ function f2() {
 >n : Symbol(n, Decl(controlFlowIIFE.ts, 14, 11))
 
             return x.length;
->x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x.length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
 >x : Symbol(x, Decl(controlFlowIIFE.ts, 12, 7))
->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
 
         })();
     }
@@ -62,9 +62,9 @@ function f3() {
         let n = (z => x.length + y + z)(y = 1);
 >n : Symbol(n, Decl(controlFlowIIFE.ts, 24, 11))
 >z : Symbol(z, Decl(controlFlowIIFE.ts, 24, 17))
->x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x.length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
 >x : Symbol(x, Decl(controlFlowIIFE.ts, 21, 7))
->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
 >y : Symbol(y, Decl(controlFlowIIFE.ts, 22, 7))
 >z : Symbol(z, Decl(controlFlowIIFE.ts, 24, 17))
 >y : Symbol(y, Decl(controlFlowIIFE.ts, 22, 7))
@@ -99,13 +99,13 @@ if (!test) {
 >test : Symbol(test, Decl(controlFlowIIFE.ts, 39, 3))
 
     throw new Error('Test is not defined');
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2009.error.d.ts, --, --))
 }
 (() => {
     test.slice(1); // No error
->test.slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
+>test.slice : Symbol(String.slice, Decl(lib.es2009.string.d.ts, --, --))
 >test : Symbol(test, Decl(controlFlowIIFE.ts, 39, 3))
->slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
+>slice : Symbol(String.slice, Decl(lib.es2009.string.d.ts, --, --))
 
 })();
 

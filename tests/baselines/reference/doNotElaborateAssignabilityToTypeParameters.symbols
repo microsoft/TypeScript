@@ -4,7 +4,7 @@ async function foo<T>(x: T): Promise<T> {
 >T : Symbol(T, Decl(doNotElaborateAssignabilityToTypeParameters.ts, 0, 19))
 >x : Symbol(x, Decl(doNotElaborateAssignabilityToTypeParameters.ts, 0, 22))
 >T : Symbol(T, Decl(doNotElaborateAssignabilityToTypeParameters.ts, 0, 19))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >T : Symbol(T, Decl(doNotElaborateAssignabilityToTypeParameters.ts, 0, 19))
 
   let yaddable = await getXOrYadda(x);

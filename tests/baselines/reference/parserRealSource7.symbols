@@ -61,9 +61,9 @@ module TypeScript {
 
                 baseTypeLinks[baseTypeLinks.length] = typeLink;
 >baseTypeLinks : Symbol(baseTypeLinks, Decl(parserRealSource7.ts, 11, 45))
->baseTypeLinks.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>baseTypeLinks.length : Symbol(Array.length, Decl(lib.es2009.array.d.ts, --, --))
 >baseTypeLinks : Symbol(baseTypeLinks, Decl(parserRealSource7.ts, 11, 45))
->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es2009.array.d.ts, --, --))
 >typeLink : Symbol(typeLink, Decl(parserRealSource7.ts, 20, 19))
             }
         }
@@ -255,7 +255,7 @@ module TypeScript {
 >name : Symbol(name, Decl(parserRealSource7.ts, 87, 40))
 >scopeChain : Symbol(scopeChain, Decl(parserRealSource7.ts, 87, 53))
 >ScopeChain : Symbol(ScopeChain)
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es2009.symbol.d.ts, --, --))
 
         var symbol = scopeChain.scope.find(name, false, true);
 >symbol : Symbol(symbol, Decl(parserRealSource7.ts, 88, 11))
@@ -283,11 +283,11 @@ module TypeScript {
 >AST : Symbol(AST)
 >context : Symbol(context, Decl(parserRealSource7.ts, 97, 44))
 >IAliasScopeContext : Symbol(IAliasScopeContext, Decl(parserRealSource7.ts, 79, 34))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es2009.symbol.d.ts, --, --))
 
         var symbol: Symbol = null;
 >symbol : Symbol(symbol, Decl(parserRealSource7.ts, 98, 11))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es2009.symbol.d.ts, --, --))
 
         switch (alias.nodeType) {
 >alias : Symbol(alias, Decl(parserRealSource7.ts, 97, 33))

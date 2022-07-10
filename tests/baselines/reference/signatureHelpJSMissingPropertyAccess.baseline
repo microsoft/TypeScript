@@ -11,8 +11,8 @@
           "isVariadic": false,
           "prefixDisplayParts": [
             {
-              "text": "ReadonlyArray",
-              "kind": "interfaceName"
+              "text": "Array",
+              "kind": "localName"
             },
             {
               "text": ".",
@@ -178,14 +178,6 @@
                   "kind": "space"
                 },
                 {
-                  "text": "readonly",
-                  "kind": "keyword"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
                   "text": "T",
                   "kind": "typeParameterName"
                 },
@@ -318,8 +310,8 @@
           "isVariadic": false,
           "prefixDisplayParts": [
             {
-              "text": "ReadonlyArray",
-              "kind": "interfaceName"
+              "text": "Array",
+              "kind": "localName"
             },
             {
               "text": ".",
@@ -373,12 +365,7 @@
           "parameters": [
             {
               "name": "predicate",
-              "documentation": [
-                {
-                  "text": "A function that accepts up to three arguments. The filter method calls the predicate function one time for each element in the array.",
-                  "kind": "text"
-                }
-              ],
+              "documentation": [],
               "displayParts": [
                 {
                   "text": "predicate",
@@ -457,14 +444,6 @@
                   "kind": "space"
                 },
                 {
-                  "text": "readonly",
-                  "kind": "keyword"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
                   "text": "T",
                   "kind": "typeParameterName"
                 },
@@ -502,12 +481,7 @@
             },
             {
               "name": "thisArg",
-              "documentation": [
-                {
-                  "text": "An object to which the this keyword can refer in the predicate function. If thisArg is omitted, undefined is used as the this value.",
-                  "kind": "text"
-                }
-              ],
+              "documentation": [],
               "displayParts": [
                 {
                   "text": "thisArg",
@@ -534,48 +508,8 @@
               "isRest": false
             }
           ],
-          "documentation": [
-            {
-              "text": "Returns the elements of an array that meet the condition specified in a callback function.",
-              "kind": "text"
-            }
-          ],
-          "tags": [
-            {
-              "name": "param",
-              "text": [
-                {
-                  "text": "predicate",
-                  "kind": "parameterName"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "A function that accepts up to three arguments. The filter method calls the predicate function one time for each element in the array.",
-                  "kind": "text"
-                }
-              ]
-            },
-            {
-              "name": "param",
-              "text": [
-                {
-                  "text": "thisArg",
-                  "kind": "parameterName"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "An object to which the this keyword can refer in the predicate function. If thisArg is omitted, undefined is used as the this value.",
-                  "kind": "text"
-                }
-              ]
-            }
-          ]
+          "documentation": [],
+          "tags": []
         }
       ],
       "applicableSpan": {

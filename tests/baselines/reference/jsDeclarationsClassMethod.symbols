@@ -30,7 +30,7 @@ function C1() {
 C1.prototype.method = function (x, y) {
 >C1.prototype : Symbol(C1.method, Decl(jsDeclarationsClassMethod.js, 10, 1))
 >C1 : Symbol(C1, Decl(jsDeclarationsClassMethod.js, 0, 0), Decl(jsDeclarationsClassMethod.js, 20, 1))
->prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>prototype : Symbol(Function.prototype, Decl(lib.es2009.function.d.ts, --, --))
 >method : Symbol(C1.method, Decl(jsDeclarationsClassMethod.js, 10, 1))
 >x : Symbol(x, Decl(jsDeclarationsClassMethod.js, 18, 32))
 >y : Symbol(y, Decl(jsDeclarationsClassMethod.js, 18, 34))

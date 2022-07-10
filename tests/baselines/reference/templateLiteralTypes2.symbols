@@ -240,12 +240,12 @@ function ft14(t: `foo${number}`) {
 
     let x2: String = t;
 >x2 : Symbol(x2, Decl(templateLiteralTypes2.ts, 66, 7))
->String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es2009.string.d.ts, --, --), Decl(lib.es2009.string.d.ts, --, --), Decl(lib.es2009.string.d.ts, --, --))
 >t : Symbol(t, Decl(templateLiteralTypes2.ts, 64, 14))
 
     let x3: Object = t;
 >x3 : Symbol(x3, Decl(templateLiteralTypes2.ts, 67, 7))
->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es2009.object.d.ts, --, --), Decl(lib.es2009.object.d.ts, --, --))
 >t : Symbol(t, Decl(templateLiteralTypes2.ts, 64, 14))
 
     let x4: {} = t;

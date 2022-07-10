@@ -178,9 +178,9 @@ type ExpectType<Exp, Act> = Match<Exp, Act> extends "Match"
   ? ({} extends Exp ? Match<Required<Exp>, Required<Act>> : "Match")
 >Exp : Symbol(Exp, Decl(indexingTypesWithNever.ts, 56, 16))
 >Match : Symbol(Match, Decl(indexingTypesWithNever.ts, 50, 63))
->Required : Symbol(Required, Decl(lib.es5.d.ts, --, --))
+>Required : Symbol(Required, Decl(lib.utils.modifiers.d.ts, --, --))
 >Exp : Symbol(Exp, Decl(indexingTypesWithNever.ts, 56, 16))
->Required : Symbol(Required, Decl(lib.es5.d.ts, --, --))
+>Required : Symbol(Required, Decl(lib.utils.modifiers.d.ts, --, --))
 >Act : Symbol(Act, Decl(indexingTypesWithNever.ts, 56, 20))
 
   : "Did not match";
@@ -392,7 +392,7 @@ declare const o0Test: ExpectType<{}, O0Props>;
 type Example<T extends Record<'a', string>> = T['a'];
 >Example : Symbol(Example, Decl(indexingTypesWithNever.ts, 108, 46))
 >T : Symbol(T, Decl(indexingTypesWithNever.ts, 112, 13))
->Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.utils.modifiers.d.ts, --, --))
 >T : Symbol(T, Decl(indexingTypesWithNever.ts, 112, 13))
 
 type Res1 = Example<{ a: "x" } | { a: "y" }>;  // "x" | "y"

@@ -81,9 +81,9 @@ function area(s: Shape): number {
 >'height' : Symbol(Rectangle.height, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 6, 18))
 
         case "circle": return Math.PI * s['radius'] * s.radius;
->Math.PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
+>Math.PI : Symbol(Math.PI, Decl(lib.es2009.math.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es2009.math.d.ts, --, --), Decl(lib.es2009.math.d.ts, --, --))
+>PI : Symbol(Math.PI, Decl(lib.es2009.math.d.ts, --, --))
 >s : Symbol(s, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 23, 14))
 >'radius' : Symbol(Circle.radius, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 10, 26))
 >s.radius : Symbol(Circle.radius, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 10, 26))
@@ -141,9 +141,9 @@ function subarea(s: Subshape): number {
 >height : Symbol(Rectangle.height, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 6, 18))
 
         case "circle": return Math.PI * s[0].sub.under["shape"].radius * s[0]["sub"].under.shape["radius"];
->Math.PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
+>Math.PI : Symbol(Math.PI, Decl(lib.es2009.math.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es2009.math.d.ts, --, --), Decl(lib.es2009.math.d.ts, --, --))
+>PI : Symbol(Math.PI, Decl(lib.es2009.math.d.ts, --, --))
 >s[0].sub.under["shape"].radius : Symbol(Circle.radius, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 10, 26))
 >s[0].sub.under : Symbol(under, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 16, 14))
 >s[0].sub : Symbol(sub, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 15, 10))

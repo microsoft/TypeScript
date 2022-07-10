@@ -555,13 +555,13 @@ function ft1<T extends string>(t: T, u: Uppercase<T>, u1: Uppercase<`1.${T}.3`>,
 >t : Symbol(t, Decl(templateLiteralTypes3.ts, 185, 31))
 >T : Symbol(T, Decl(templateLiteralTypes3.ts, 185, 13))
 >u : Symbol(u, Decl(templateLiteralTypes3.ts, 185, 36))
->Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+>Uppercase : Symbol(Uppercase, Decl(lib.utils.modifiers.d.ts, --, --))
 >T : Symbol(T, Decl(templateLiteralTypes3.ts, 185, 13))
 >u1 : Symbol(u1, Decl(templateLiteralTypes3.ts, 185, 53))
->Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+>Uppercase : Symbol(Uppercase, Decl(lib.utils.modifiers.d.ts, --, --))
 >T : Symbol(T, Decl(templateLiteralTypes3.ts, 185, 13))
 >u2 : Symbol(u2, Decl(templateLiteralTypes3.ts, 185, 80))
->Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+>Uppercase : Symbol(Uppercase, Decl(lib.utils.modifiers.d.ts, --, --))
 >T : Symbol(T, Decl(templateLiteralTypes3.ts, 185, 13))
 
     spread(`1.${t}.3`, `1.${t}.4`);

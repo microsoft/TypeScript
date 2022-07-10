@@ -1,11 +1,11 @@
 === tests/cases/compiler/spreadOfObjectLiteralAssignableToIndexSignature.ts ===
 const foo: Record<never, never> = {} // OK
 >foo : Symbol(foo, Decl(spreadOfObjectLiteralAssignableToIndexSignature.ts, 0, 5))
->Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.utils.modifiers.d.ts, --, --))
 
 interface RecordOfRecords extends Record<keyof any, RecordOfRecords> {}
 >RecordOfRecords : Symbol(RecordOfRecords, Decl(spreadOfObjectLiteralAssignableToIndexSignature.ts, 0, 36))
->Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.utils.modifiers.d.ts, --, --))
 >RecordOfRecords : Symbol(RecordOfRecords, Decl(spreadOfObjectLiteralAssignableToIndexSignature.ts, 0, 36))
 
 const recordOfRecords: RecordOfRecords = {}
@@ -31,7 +31,7 @@ recordOfRecords.propC = {...(foo !== undefined && {foo})} // error'd in 3.7 beta
 
 interface RecordOfRecordsOrEmpty extends Record<keyof any, RecordOfRecordsOrEmpty | {}> {}
 >RecordOfRecordsOrEmpty : Symbol(RecordOfRecordsOrEmpty, Decl(spreadOfObjectLiteralAssignableToIndexSignature.ts, 6, 57))
->Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.utils.modifiers.d.ts, --, --))
 >RecordOfRecordsOrEmpty : Symbol(RecordOfRecordsOrEmpty, Decl(spreadOfObjectLiteralAssignableToIndexSignature.ts, 6, 57))
 
 const recordsOfRecordsOrEmpty: RecordOfRecordsOrEmpty = {}

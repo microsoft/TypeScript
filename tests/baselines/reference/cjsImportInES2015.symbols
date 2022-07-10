@@ -10,7 +10,7 @@ function handleError(err: SpecialError) {}
 === /project/node_modules/cjs-dep/index.d.ts ===
 declare class SpecialError extends Error {}
 >SpecialError : Symbol(SpecialError, Decl(index.d.ts, 0, 0))
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2009.error.d.ts, --, --))
 
 export = SpecialError;
 >SpecialError : Symbol(SpecialError, Decl(index.d.ts, 0, 0))

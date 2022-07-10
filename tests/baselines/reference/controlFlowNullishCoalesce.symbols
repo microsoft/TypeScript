@@ -8,9 +8,9 @@ o ?? (a = 1);
 >a : Symbol(a, Decl(controlFlowNullishCoalesce.ts, 1, 3))
 
 a.toString();
->a.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>a.toString : Symbol(Number.toString, Decl(lib.es2009.number.d.ts, --, --))
 >a : Symbol(a, Decl(controlFlowNullishCoalesce.ts, 1, 3))
->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es2009.number.d.ts, --, --))
 
 // assignment flow
 declare const o: { x: number } | undefined;

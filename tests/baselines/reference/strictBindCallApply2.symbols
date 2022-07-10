@@ -12,13 +12,13 @@ function fn(this: Foo) {}
 
 type Test = ThisParameterType<typeof fn>; 
 >Test : Symbol(Test, Decl(strictBindCallApply2.ts, 3, 25))
->ThisParameterType : Symbol(ThisParameterType, Decl(lib.es5.d.ts, --, --))
+>ThisParameterType : Symbol(ThisParameterType, Decl(lib.es2009.function.d.ts, --, --))
 >fn : Symbol(fn, Decl(strictBindCallApply2.ts, 2, 31))
 
 const fb = fn.bind({ blub: "blub" });
 >fb : Symbol(fb, Decl(strictBindCallApply2.ts, 7, 5))
->fn.bind : Symbol(CallableFunction.bind, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --) ... and 1 more)
+>fn.bind : Symbol(CallableFunction.bind, Decl(lib.es2009.function.d.ts, --, --), Decl(lib.es2009.function.d.ts, --, --), Decl(lib.es2009.function.d.ts, --, --), Decl(lib.es2009.function.d.ts, --, --), Decl(lib.es2009.function.d.ts, --, --) ... and 1 more)
 >fn : Symbol(fn, Decl(strictBindCallApply2.ts, 2, 31))
->bind : Symbol(CallableFunction.bind, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --) ... and 1 more)
+>bind : Symbol(CallableFunction.bind, Decl(lib.es2009.function.d.ts, --, --), Decl(lib.es2009.function.d.ts, --, --), Decl(lib.es2009.function.d.ts, --, --), Decl(lib.es2009.function.d.ts, --, --), Decl(lib.es2009.function.d.ts, --, --) ... and 1 more)
 >blub : Symbol(blub, Decl(strictBindCallApply2.ts, 7, 20))
 

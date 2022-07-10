@@ -3,17 +3,17 @@
 >obj : Symbol(obj, Decl(objectLitGetterSetter.ts, 0, 15))
 
             Object.defineProperty(obj, "accProperty", <PropertyDescriptor>({
->Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es2009.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es2009.object.d.ts, --, --), Decl(lib.es2009.object.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es2009.object.d.ts, --, --))
 >obj : Symbol(obj, Decl(objectLitGetterSetter.ts, 0, 15))
->PropertyDescriptor : Symbol(PropertyDescriptor, Decl(lib.es5.d.ts, --, --))
+>PropertyDescriptor : Symbol(PropertyDescriptor, Decl(lib.es2009.object.d.ts, --, --))
 
                 get: function () {
 >get : Symbol(get, Decl(objectLitGetterSetter.ts, 1, 76))
 
                     eval("public = 1;");
->eval : Symbol(eval, Decl(lib.es5.d.ts, --, --))
+>eval : Symbol(eval, Decl(lib.es2009.core.d.ts, --, --))
 
                     return 11;
                 },

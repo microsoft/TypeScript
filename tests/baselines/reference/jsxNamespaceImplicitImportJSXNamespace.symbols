@@ -9,18 +9,18 @@ type Defaultize<Props, Defaults> =
 >Props : Symbol(Props, Decl(index.d.ts, 0, 16))
 
 		? Partial<Pick<Props, Extract<keyof Props, keyof Defaults>>> &
->Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
->Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.utils.modifiers.d.ts, --, --))
+>Pick : Symbol(Pick, Decl(lib.utils.modifiers.d.ts, --, --))
 >Props : Symbol(Props, Decl(index.d.ts, 0, 16))
->Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>Extract : Symbol(Extract, Decl(lib.utils.modifiers.d.ts, --, --))
 >Props : Symbol(Props, Decl(index.d.ts, 0, 16))
 >Defaults : Symbol(Defaults, Decl(index.d.ts, 0, 22))
 
 				// Include the remaining properties from Props
 				Pick<Props, Exclude<keyof Props, keyof Defaults>>
->Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>Pick : Symbol(Pick, Decl(lib.utils.modifiers.d.ts, --, --))
 >Props : Symbol(Props, Decl(index.d.ts, 0, 16))
->Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>Exclude : Symbol(Exclude, Decl(lib.utils.modifiers.d.ts, --, --))
 >Props : Symbol(Props, Decl(index.d.ts, 0, 16))
 >Defaults : Symbol(Defaults, Decl(index.d.ts, 0, 22))
 
@@ -156,7 +156,7 @@ export function jsx(
 >SVGAttributes : Symbol(JSXInternal.SVGAttributes, Decl(index.d.ts, 8, 40))
 
         Record<string, any> & { children?: ComponentChild },
->Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.utils.modifiers.d.ts, --, --))
 >children : Symbol(children, Decl(index.d.ts, 14, 31))
 >ComponentChild : Symbol(ComponentChild, Decl(index.d.ts, 2, 18))
 
@@ -205,7 +205,7 @@ export function jsxs(
 >SVGAttributes : Symbol(JSXInternal.SVGAttributes, Decl(index.d.ts, 8, 40))
 
         Record<string, any> & { children?: ComponentChild[] },
->Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.utils.modifiers.d.ts, --, --))
 >children : Symbol(children, Decl(index.d.ts, 28, 31))
 >ComponentChild : Symbol(ComponentChild, Decl(index.d.ts, 2, 18))
 
@@ -254,7 +254,7 @@ export function jsxDEV(
 >SVGAttributes : Symbol(JSXInternal.SVGAttributes, Decl(index.d.ts, 8, 40))
 
         Record<string, any> & { children?: ComponentChildren },
->Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.utils.modifiers.d.ts, --, --))
 >children : Symbol(children, Decl(index.d.ts, 42, 31))
 >ComponentChildren : Symbol(ComponentChildren, Decl(index.d.ts, 3, 19))
 

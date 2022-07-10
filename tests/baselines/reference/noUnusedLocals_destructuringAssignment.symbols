@@ -21,11 +21,11 @@ class C {
 
     private f(): Function {
 >f : Symbol(C.f, Decl(noUnusedLocals_destructuringAssignment.ts, 7, 5))
->Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es2009.function.d.ts, --, --), Decl(lib.es2009.function.d.ts, --, --))
 
         let f: Function;
 >f : Symbol(f, Decl(noUnusedLocals_destructuringAssignment.ts, 10, 11))
->Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es2009.function.d.ts, --, --), Decl(lib.es2009.function.d.ts, --, --))
 
         ({ f } = this);
 >f : Symbol(f, Decl(noUnusedLocals_destructuringAssignment.ts, 11, 10))

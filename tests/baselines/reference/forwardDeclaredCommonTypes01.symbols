@@ -1,10 +1,10 @@
 === tests/cases/compiler/forwardDeclaredCommonTypes01.ts ===
 interface Promise<T> {}
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(forwardDeclaredCommonTypes01.ts, 0, 0))
->T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(forwardDeclaredCommonTypes01.ts, 0, 18))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --), Decl(forwardDeclaredCommonTypes01.ts, 0, 0))
+>T : Symbol(T, Decl(lib.es2009.promise.d.ts, --, --), Decl(forwardDeclaredCommonTypes01.ts, 0, 18))
 
 interface Symbol {}
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(forwardDeclaredCommonTypes01.ts, 0, 23))
+>Symbol : Symbol(Symbol, Decl(lib.es2009.symbol.d.ts, --, --), Decl(forwardDeclaredCommonTypes01.ts, 0, 23))
 
 interface Map<K, V> {}
 >Map : Symbol(Map, Decl(forwardDeclaredCommonTypes01.ts, 1, 19))

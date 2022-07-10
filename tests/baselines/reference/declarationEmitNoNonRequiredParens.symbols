@@ -15,6 +15,6 @@ export type TestType = typeof Test;
 export const bar = (null as TestType[Extract<keyof TestType, string>][]);
 >bar : Symbol(bar, Decl(declarationEmitNoNonRequiredParens.ts, 6, 12))
 >TestType : Symbol(TestType, Decl(declarationEmitNoNonRequiredParens.ts, 2, 1))
->Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>Extract : Symbol(Extract, Decl(lib.utils.modifiers.d.ts, --, --))
 >TestType : Symbol(TestType, Decl(declarationEmitNoNonRequiredParens.ts, 2, 1))
 

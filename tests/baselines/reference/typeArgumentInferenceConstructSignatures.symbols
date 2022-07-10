@@ -91,9 +91,9 @@ new someGenerics2a<string>((n: string) => n);
 new someGenerics2a<string>((n) => n.substr(0));
 >someGenerics2a : Symbol(someGenerics2a, Decl(typeArgumentInferenceConstructSignatures.ts, 25, 36), Decl(typeArgumentInferenceConstructSignatures.ts, 31, 3))
 >n : Symbol(n, Decl(typeArgumentInferenceConstructSignatures.ts, 34, 28))
->n.substr : Symbol(String.substr, Decl(lib.es5.d.ts, --, --))
+>n.substr : Symbol(String.substr, Decl(lib.es2009.string.d.ts, --, --))
 >n : Symbol(n, Decl(typeArgumentInferenceConstructSignatures.ts, 34, 28))
->substr : Symbol(String.substr, Decl(lib.es5.d.ts, --, --))
+>substr : Symbol(String.substr, Decl(lib.es2009.string.d.ts, --, --))
 
 interface someGenerics2b {
 >someGenerics2b : Symbol(someGenerics2b, Decl(typeArgumentInferenceConstructSignatures.ts, 34, 47), Decl(typeArgumentInferenceConstructSignatures.ts, 39, 3))
@@ -127,9 +127,9 @@ new someGenerics2b<string, number>((n, t) => n.substr(t * t));
 >someGenerics2b : Symbol(someGenerics2b, Decl(typeArgumentInferenceConstructSignatures.ts, 34, 47), Decl(typeArgumentInferenceConstructSignatures.ts, 39, 3))
 >n : Symbol(n, Decl(typeArgumentInferenceConstructSignatures.ts, 42, 36))
 >t : Symbol(t, Decl(typeArgumentInferenceConstructSignatures.ts, 42, 38))
->n.substr : Symbol(String.substr, Decl(lib.es5.d.ts, --, --))
+>n.substr : Symbol(String.substr, Decl(lib.es2009.string.d.ts, --, --))
 >n : Symbol(n, Decl(typeArgumentInferenceConstructSignatures.ts, 42, 36))
->substr : Symbol(String.substr, Decl(lib.es5.d.ts, --, --))
+>substr : Symbol(String.substr, Decl(lib.es2009.string.d.ts, --, --))
 >t : Symbol(t, Decl(typeArgumentInferenceConstructSignatures.ts, 42, 38))
 >t : Symbol(t, Decl(typeArgumentInferenceConstructSignatures.ts, 42, 38))
 

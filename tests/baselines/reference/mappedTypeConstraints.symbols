@@ -5,9 +5,9 @@ function f0<T extends { a: string, b: string }>(obj: Pick<T, Extract<keyof T, 'b
 >a : Symbol(a, Decl(mappedTypeConstraints.ts, 0, 23))
 >b : Symbol(b, Decl(mappedTypeConstraints.ts, 0, 34))
 >obj : Symbol(obj, Decl(mappedTypeConstraints.ts, 0, 48))
->Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>Pick : Symbol(Pick, Decl(lib.utils.modifiers.d.ts, --, --))
 >T : Symbol(T, Decl(mappedTypeConstraints.ts, 0, 12))
->Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>Extract : Symbol(Extract, Decl(lib.utils.modifiers.d.ts, --, --))
 >T : Symbol(T, Decl(mappedTypeConstraints.ts, 0, 12))
 
     obj.b;
@@ -22,9 +22,9 @@ function f1<T extends { a: string, b: string }>(obj: Pick<T, Exclude<keyof T, 'a
 >a : Symbol(a, Decl(mappedTypeConstraints.ts, 4, 23))
 >b : Symbol(b, Decl(mappedTypeConstraints.ts, 4, 34))
 >obj : Symbol(obj, Decl(mappedTypeConstraints.ts, 4, 48))
->Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>Pick : Symbol(Pick, Decl(lib.utils.modifiers.d.ts, --, --))
 >T : Symbol(T, Decl(mappedTypeConstraints.ts, 4, 12))
->Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>Exclude : Symbol(Exclude, Decl(lib.utils.modifiers.d.ts, --, --))
 >T : Symbol(T, Decl(mappedTypeConstraints.ts, 4, 12))
 
     obj.b;
@@ -42,7 +42,7 @@ function f2<T extends { a: string, b: string }, U extends { b: string, c: string
 >b : Symbol(b, Decl(mappedTypeConstraints.ts, 8, 59))
 >c : Symbol(c, Decl(mappedTypeConstraints.ts, 8, 70))
 >obj : Symbol(obj, Decl(mappedTypeConstraints.ts, 8, 84))
->Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>Pick : Symbol(Pick, Decl(lib.utils.modifiers.d.ts, --, --))
 >T : Symbol(T, Decl(mappedTypeConstraints.ts, 8, 12))
 >U : Symbol(U, Decl(mappedTypeConstraints.ts, 8, 47))
 >T : Symbol(T, Decl(mappedTypeConstraints.ts, 8, 12))
@@ -63,7 +63,7 @@ function f3<T extends { a: string, b: string }, U extends { b: string, c: string
 >b : Symbol(b, Decl(mappedTypeConstraints.ts, 12, 59))
 >c : Symbol(c, Decl(mappedTypeConstraints.ts, 12, 70))
 >obj : Symbol(obj, Decl(mappedTypeConstraints.ts, 12, 84))
->Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>Pick : Symbol(Pick, Decl(lib.utils.modifiers.d.ts, --, --))
 >T : Symbol(T, Decl(mappedTypeConstraints.ts, 12, 12))
 >U : Symbol(U, Decl(mappedTypeConstraints.ts, 12, 47))
 >T : Symbol(T, Decl(mappedTypeConstraints.ts, 12, 12))
@@ -91,8 +91,8 @@ function f4<T extends { a: string, b: string }>(obj: Record<Exclude<keyof T, 'b'
 >a : Symbol(a, Decl(mappedTypeConstraints.ts, 18, 23))
 >b : Symbol(b, Decl(mappedTypeConstraints.ts, 18, 34))
 >obj : Symbol(obj, Decl(mappedTypeConstraints.ts, 18, 48))
->Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
->Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.utils.modifiers.d.ts, --, --))
+>Exclude : Symbol(Exclude, Decl(lib.utils.modifiers.d.ts, --, --))
 >T : Symbol(T, Decl(mappedTypeConstraints.ts, 18, 12))
 
     obj.a;

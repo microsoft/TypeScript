@@ -4,47 +4,47 @@ interface Stuff {
 
     a?: () => Promise<number[]>;
 >a : Symbol(Stuff.a, Decl(errorOnUnionVsObjectShouldDeeplyDisambiguate.ts, 0, 17))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --))
 
     b: () => Promise<string>;
 >b : Symbol(Stuff.b, Decl(errorOnUnionVsObjectShouldDeeplyDisambiguate.ts, 1, 32))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --))
 
     c: () => Promise<string>;
 >c : Symbol(Stuff.c, Decl(errorOnUnionVsObjectShouldDeeplyDisambiguate.ts, 2, 29))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --))
 
     d: () => Promise<string>;
 >d : Symbol(Stuff.d, Decl(errorOnUnionVsObjectShouldDeeplyDisambiguate.ts, 3, 29))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --))
 
     e: () => Promise<string>;
 >e : Symbol(Stuff.e, Decl(errorOnUnionVsObjectShouldDeeplyDisambiguate.ts, 4, 29))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --))
 
     f: () => Promise<string>;
 >f : Symbol(Stuff.f, Decl(errorOnUnionVsObjectShouldDeeplyDisambiguate.ts, 5, 29))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --))
 
     g: () => Promise<string>;
 >g : Symbol(Stuff.g, Decl(errorOnUnionVsObjectShouldDeeplyDisambiguate.ts, 6, 29))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --))
 
     h: () => Promise<string>;
 >h : Symbol(Stuff.h, Decl(errorOnUnionVsObjectShouldDeeplyDisambiguate.ts, 7, 29))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --))
 
     i: () => Promise<string>;
 >i : Symbol(Stuff.i, Decl(errorOnUnionVsObjectShouldDeeplyDisambiguate.ts, 8, 29))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --))
 
     j: () => Promise<string>;
 >j : Symbol(Stuff.j, Decl(errorOnUnionVsObjectShouldDeeplyDisambiguate.ts, 9, 29))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --))
 
     k: () => Promise<number>;
 >k : Symbol(Stuff.k, Decl(errorOnUnionVsObjectShouldDeeplyDisambiguate.ts, 10, 29))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --))
   }
   
   function foo(): Stuff | string {

@@ -27,9 +27,9 @@ callIt({
     consume: n => n.toFixed()
 >consume : Symbol(consume, Decl(intraExpressionInferences.ts, 8, 21))
 >n : Symbol(n, Decl(intraExpressionInferences.ts, 9, 12))
->n.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>n.toFixed : Symbol(Number.toFixed, Decl(lib.es2009.number.d.ts, --, --))
 >n : Symbol(n, Decl(intraExpressionInferences.ts, 9, 12))
->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es2009.number.d.ts, --, --))
 
 });
 
@@ -43,9 +43,9 @@ callIt({
     consume: n => n.toFixed(),
 >consume : Symbol(consume, Decl(intraExpressionInferences.ts, 13, 21))
 >n : Symbol(n, Decl(intraExpressionInferences.ts, 14, 12))
->n.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>n.toFixed : Symbol(Number.toFixed, Decl(lib.es2009.number.d.ts, --, --))
 >n : Symbol(n, Decl(intraExpressionInferences.ts, 14, 12))
->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es2009.number.d.ts, --, --))
 
 });
 
@@ -60,9 +60,9 @@ callIt({
     consume: n => n.toFixed()
 >consume : Symbol(consume, Decl(intraExpressionInferences.ts, 20, 6))
 >n : Symbol(n, Decl(intraExpressionInferences.ts, 21, 12))
->n.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>n.toFixed : Symbol(Number.toFixed, Decl(lib.es2009.number.d.ts, --, --))
 >n : Symbol(n, Decl(intraExpressionInferences.ts, 21, 12))
->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es2009.number.d.ts, --, --))
 
 });
 
@@ -78,17 +78,17 @@ declare function callItT<T>(obj: [(n: number) => T, (x: T) => void]): void;
 callItT([() => 0, n => n.toFixed()]);
 >callItT : Symbol(callItT, Decl(intraExpressionInferences.ts, 22, 3))
 >n : Symbol(n, Decl(intraExpressionInferences.ts, 26, 17))
->n.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>n.toFixed : Symbol(Number.toFixed, Decl(lib.es2009.number.d.ts, --, --))
 >n : Symbol(n, Decl(intraExpressionInferences.ts, 26, 17))
->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es2009.number.d.ts, --, --))
 
 callItT([_a => 0, n => n.toFixed()]);
 >callItT : Symbol(callItT, Decl(intraExpressionInferences.ts, 22, 3))
 >_a : Symbol(_a, Decl(intraExpressionInferences.ts, 27, 9))
 >n : Symbol(n, Decl(intraExpressionInferences.ts, 27, 17))
->n.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>n.toFixed : Symbol(Number.toFixed, Decl(lib.es2009.number.d.ts, --, --))
 >n : Symbol(n, Decl(intraExpressionInferences.ts, 27, 17))
->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es2009.number.d.ts, --, --))
 
 // Repro from #25092
 
@@ -126,9 +126,9 @@ const myGeneric = inferTypeFn({
     operateWithGeneric: generic => generic.toFixed()
 >operateWithGeneric : Symbol(operateWithGeneric, Decl(intraExpressionInferences.ts, 39, 36))
 >generic : Symbol(generic, Decl(intraExpressionInferences.ts, 40, 23))
->generic.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>generic.toFixed : Symbol(Number.toFixed, Decl(lib.es2009.number.d.ts, --, --))
 >generic : Symbol(generic, Decl(intraExpressionInferences.ts, 40, 23))
->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es2009.number.d.ts, --, --))
 
 });
 
@@ -298,7 +298,7 @@ class Wrapper<T = any> {
 
 type WrappedMap = Record<string, Wrapper>;
 >WrappedMap : Symbol(WrappedMap, Decl(intraExpressionInferences.ts, 103, 1))
->Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.utils.modifiers.d.ts, --, --))
 >Wrapper : Symbol(Wrapper, Decl(intraExpressionInferences.ts, 97, 3))
 
 type Unwrap<D extends WrappedMap> = {
@@ -540,7 +540,7 @@ example({
     map: (number) => String(number)
 >map : Symbol(map, Decl(intraExpressionInferences.ts, 170, 35))
 >number : Symbol(number, Decl(intraExpressionInferences.ts, 171, 10))
->String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es2009.string.d.ts, --, --), Decl(lib.es2009.string.d.ts, --, --), Decl(lib.es2009.string.d.ts, --, --))
 >number : Symbol(number, Decl(intraExpressionInferences.ts, 171, 10))
 
 });
@@ -557,7 +557,7 @@ example({
     map: (number) => String(number)
 >map : Symbol(map, Decl(intraExpressionInferences.ts, 175, 48))
 >number : Symbol(number, Decl(intraExpressionInferences.ts, 176, 10))
->String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es2009.string.d.ts, --, --), Decl(lib.es2009.string.d.ts, --, --), Decl(lib.es2009.string.d.ts, --, --))
 >number : Symbol(number, Decl(intraExpressionInferences.ts, 176, 10))
 
 });
@@ -574,7 +574,7 @@ example({
     map: (number) => String(number)
 >map : Symbol(map, Decl(intraExpressionInferences.ts, 180, 40))
 >number : Symbol(number, Decl(intraExpressionInferences.ts, 181, 10))
->String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es2009.string.d.ts, --, --), Decl(lib.es2009.string.d.ts, --, --), Decl(lib.es2009.string.d.ts, --, --))
 >number : Symbol(number, Decl(intraExpressionInferences.ts, 181, 10))
 
 });

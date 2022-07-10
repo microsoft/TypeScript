@@ -6,19 +6,19 @@ function f<TType>(
     a: { weak?: string } & Readonly<TType> & { name: "ok" },
 >a : Symbol(a, Decl(homomorphicMappedTypeIntersectionAssignability.ts, 0, 18))
 >weak : Symbol(weak, Decl(homomorphicMappedTypeIntersectionAssignability.ts, 1, 8))
->Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>Readonly : Symbol(Readonly, Decl(lib.utils.modifiers.d.ts, --, --))
 >TType : Symbol(TType, Decl(homomorphicMappedTypeIntersectionAssignability.ts, 0, 11))
 >name : Symbol(name, Decl(homomorphicMappedTypeIntersectionAssignability.ts, 1, 46))
 
     b: Readonly<TType & { name: string }>,
 >b : Symbol(b, Decl(homomorphicMappedTypeIntersectionAssignability.ts, 1, 60))
->Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>Readonly : Symbol(Readonly, Decl(lib.utils.modifiers.d.ts, --, --))
 >TType : Symbol(TType, Decl(homomorphicMappedTypeIntersectionAssignability.ts, 0, 11))
 >name : Symbol(name, Decl(homomorphicMappedTypeIntersectionAssignability.ts, 2, 25))
 
     c: Readonly<TType> & { name: string }) {
 >c : Symbol(c, Decl(homomorphicMappedTypeIntersectionAssignability.ts, 2, 42))
->Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>Readonly : Symbol(Readonly, Decl(lib.utils.modifiers.d.ts, --, --))
 >TType : Symbol(TType, Decl(homomorphicMappedTypeIntersectionAssignability.ts, 0, 11))
 >name : Symbol(name, Decl(homomorphicMappedTypeIntersectionAssignability.ts, 3, 26))
 

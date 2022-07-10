@@ -1,0 +1,18 @@
+lib.es5.d.ts(48,21): error TS6054: File 'lib.es2009.uint16array' has an unsupported extension. The only supported extensions are '.ts', '.tsx', '.d.ts', '.cts', '.d.cts', '.mts', '.d.mts'.
+
+
+==== decl.d.ts (0 errors) ====
+    declare module "decl"
+    {
+        export function call();
+    }
+==== consume.ts (0 errors) ====
+    ///<reference path="decl.d.ts" />
+    import decl = require("decl");
+    var str = decl.call();
+    
+    declare function fail();
+    
+    if(str !== "success") {
+        fail();
+    }

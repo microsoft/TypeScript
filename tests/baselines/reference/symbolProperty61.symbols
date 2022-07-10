@@ -13,10 +13,10 @@ declare global {
 const observable: typeof Symbol.obs = Symbol.obs
 >observable : Symbol(observable, Decl(symbolProperty61.ts, 6, 5))
 >Symbol.obs : Symbol(SymbolConstructor.obs, Decl(symbolProperty61.ts, 1, 31))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es2009.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >obs : Symbol(SymbolConstructor.obs, Decl(symbolProperty61.ts, 1, 31))
 >Symbol.obs : Symbol(SymbolConstructor.obs, Decl(symbolProperty61.ts, 1, 31))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es2009.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >obs : Symbol(SymbolConstructor.obs, Decl(symbolProperty61.ts, 1, 31))
 
 export class MyObservable<T> {
@@ -56,7 +56,7 @@ type InteropObservable<T> = {
     [Symbol.obs]: () => { subscribe(next: (val: T) => void): void }
 >[Symbol.obs] : Symbol([Symbol.obs], Decl(symbolProperty61.ts, 20, 29))
 >Symbol.obs : Symbol(SymbolConstructor.obs, Decl(symbolProperty61.ts, 1, 31))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es2009.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >obs : Symbol(SymbolConstructor.obs, Decl(symbolProperty61.ts, 1, 31))
 >subscribe : Symbol(subscribe, Decl(symbolProperty61.ts, 21, 25))
 >next : Symbol(next, Decl(symbolProperty61.ts, 21, 36))
@@ -74,7 +74,7 @@ function from<T>(obs: InteropObservable<T>) {
     return obs[Symbol.obs]()
 >obs : Symbol(obs, Decl(symbolProperty61.ts, 24, 17))
 >Symbol.obs : Symbol(SymbolConstructor.obs, Decl(symbolProperty61.ts, 1, 31))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es2009.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >obs : Symbol(SymbolConstructor.obs, Decl(symbolProperty61.ts, 1, 31))
 }
 

@@ -10,7 +10,7 @@ type BugHelper<T, TAll> = T extends any ? Exclude<UnionKeys<TAll>, keyof T> : ne
 >T : Symbol(T, Decl(substitutionTypesCompareCorrectlyInRestrictiveInstances.ts, 1, 15))
 >TAll : Symbol(TAll, Decl(substitutionTypesCompareCorrectlyInRestrictiveInstances.ts, 1, 17))
 >T : Symbol(T, Decl(substitutionTypesCompareCorrectlyInRestrictiveInstances.ts, 1, 15))
->Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>Exclude : Symbol(Exclude, Decl(lib.utils.modifiers.d.ts, --, --))
 >UnionKeys : Symbol(UnionKeys, Decl(substitutionTypesCompareCorrectlyInRestrictiveInstances.ts, 0, 0))
 >TAll : Symbol(TAll, Decl(substitutionTypesCompareCorrectlyInRestrictiveInstances.ts, 1, 17))
 >T : Symbol(T, Decl(substitutionTypesCompareCorrectlyInRestrictiveInstances.ts, 1, 15))

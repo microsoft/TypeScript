@@ -165,7 +165,7 @@ type KeysCanBeExpanded_<T, N extends number, Depth extends number[]> = N extends
 
         T extends Array<infer U> ? KeysCanBeExpanded_<U, N, Depth> :
 >T : Symbol(T, Decl(recursiveConditionalCrash3.ts, 57, 24))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es2009.array.d.ts, --, --), Decl(lib.es2009.array.d.ts, --, --))
 >U : Symbol(U, Decl(recursiveConditionalCrash3.ts, 60, 29))
 >KeysCanBeExpanded_ : Symbol(KeysCanBeExpanded_, Decl(recursiveConditionalCrash3.ts, 51, 20))
 >U : Symbol(U, Decl(recursiveConditionalCrash3.ts, 60, 29))
@@ -254,7 +254,7 @@ type Expand__<O, Keys, P extends string, N extends number , Depth extends unknow
 
             O extends Array<infer U> ?
 >O : Symbol(O, Decl(recursiveConditionalCrash3.ts, 80, 14))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es2009.array.d.ts, --, --), Decl(lib.es2009.array.d.ts, --, --))
 >U : Symbol(U, Decl(recursiveConditionalCrash3.ts, 87, 33))
 
                 Expand__<U, Keys, P, N, Depth>[]

@@ -6,7 +6,7 @@ declare function decorator(target: any, key: any): any;
 
 const b = Symbol('b');
 >b : Symbol(b, Decl(decoratorInAmbientContext.ts, 2, 5))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es2009.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
 
 class Foo {
 >Foo : Symbol(Foo, Decl(decoratorInAmbientContext.ts, 2, 22))

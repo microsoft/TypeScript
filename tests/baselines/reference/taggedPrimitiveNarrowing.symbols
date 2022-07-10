@@ -12,12 +12,12 @@ function getHashLength(hash: Hash): number {
 >hash : Symbol(hash, Decl(taggedPrimitiveNarrowing.ts, 2, 23))
 
         throw new Error("This doesn't look like a hash");
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2009.error.d.ts, --, --))
     }
     return hash.length;
->hash.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>hash.length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
 >hash : Symbol(hash, Decl(taggedPrimitiveNarrowing.ts, 2, 23))
->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
 }
 
 function getHashLength2<T extends { __tag__: unknown}>(hash: string & T): number {
@@ -31,11 +31,11 @@ function getHashLength2<T extends { __tag__: unknown}>(hash: string & T): number
 >hash : Symbol(hash, Decl(taggedPrimitiveNarrowing.ts, 9, 55))
 
         throw new Error("This doesn't look like a hash");
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2009.error.d.ts, --, --))
     }
     return hash.length;
->hash.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>hash.length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
 >hash : Symbol(hash, Decl(taggedPrimitiveNarrowing.ts, 9, 55))
->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
 }
 

@@ -5,7 +5,7 @@ class A {
     /** @return {number} */
     method() { throw new Error(); }
 >method : Symbol(A.method, Decl(a.js, 0, 9))
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2009.error.d.ts, --, --))
 }
 /** @implements {A} */
 class B  {

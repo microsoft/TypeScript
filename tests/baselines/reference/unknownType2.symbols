@@ -36,9 +36,9 @@ if (u === 5) {
 
     const y = u.toString(10);
 >y : Symbol(y, Decl(unknownType2.ts, 12, 9))
->u.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>u.toString : Symbol(Number.toString, Decl(lib.es2009.number.d.ts, --, --))
 >u : Symbol(u, Decl(unknownType2.ts, 6, 5))
->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es2009.number.d.ts, --, --))
 }
 
 if (u === true || u === false) {
@@ -119,7 +119,7 @@ if (u == true) {
 
 if (u == Object) {
 >u : Symbol(u, Decl(unknownType2.ts, 6, 5))
->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es2009.object.d.ts, --, --), Decl(lib.es2009.object.d.ts, --, --))
 
     type E = isTrue<isUnknown<typeof u>>
 >E : Symbol(E, Decl(unknownType2.ts, 47, 18))
@@ -546,7 +546,7 @@ function switchResponse(x: unknown): SomeResponse {
 
         default:
             throw new Error('unknown response');
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2009.error.d.ts, --, --))
     }
     // Arguably this should be never.
     type End = isTrue<isUnknown<typeof x>>
@@ -572,7 +572,7 @@ function switchResponseWrong(x: unknown): SomeResponse {
 
         default:
             throw new Error('Can you repeat the question?');
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2009.error.d.ts, --, --))
     }
     // Arguably this should be never.
     type End = isTrue<isUnknown<typeof x>>
@@ -594,7 +594,7 @@ function f2(x: unknown): string | undefined {
 >x : Symbol(x, Decl(unknownType2.ts, 225, 12))
 
     throw new Error();
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2009.error.d.ts, --, --))
   }
   return x;
 >x : Symbol(x, Decl(unknownType2.ts, 225, 12))

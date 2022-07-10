@@ -125,7 +125,7 @@ type NonReactStatics<
     > = {
         [key in Exclude<
 >key : Symbol(key, Decl(styledComponentsInstantiaionLimitNotReached.ts, 51, 9))
->Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>Exclude : Symbol(Exclude, Decl(lib.utils.modifiers.d.ts, --, --))
 
             keyof S,
 >S : Symbol(S, Decl(styledComponentsInstantiaionLimitNotReached.ts, 45, 21))
@@ -230,7 +230,7 @@ export type StyledComponentProps<
 >WithOptionalTheme : Symbol(WithOptionalTheme, Decl(styledComponentsInstantiaionLimitNotReached.ts, 125, 64))
 
         Omit<
->Omit : Symbol(Omit, Decl(lib.es5.d.ts, --, --))
+>Omit : Symbol(Omit, Decl(lib.utils.modifiers.d.ts, --, --))
 
             ReactDefaultizedProps<
 >ReactDefaultizedProps : Symbol(ReactDefaultizedProps, Decl(styledComponentsInstantiaionLimitNotReached.ts, 116, 12))
@@ -259,10 +259,10 @@ export type StyledComponentProps<
 
         > &
         Partial<
->Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.utils.modifiers.d.ts, --, --))
 
             Pick<
->Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>Pick : Symbol(Pick, Decl(lib.utils.modifiers.d.ts, --, --))
 
                 React.ComponentPropsWithRef<
 >React : Symbol(React, Decl(styledComponentsInstantiaionLimitNotReached.ts, 1, 6))
@@ -307,25 +307,25 @@ type Defaultize<P, D> = P extends any
 >P : Symbol(P, Decl(styledComponentsInstantiaionLimitNotReached.ts, 110, 16))
 
     : Pick<P, Exclude<keyof P, keyof D>> &
->Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>Pick : Symbol(Pick, Decl(lib.utils.modifiers.d.ts, --, --))
 >P : Symbol(P, Decl(styledComponentsInstantiaionLimitNotReached.ts, 110, 16))
->Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>Exclude : Symbol(Exclude, Decl(lib.utils.modifiers.d.ts, --, --))
 >P : Symbol(P, Decl(styledComponentsInstantiaionLimitNotReached.ts, 110, 16))
 >D : Symbol(D, Decl(styledComponentsInstantiaionLimitNotReached.ts, 110, 18))
 
     Partial<Pick<P, Extract<keyof P, keyof D>>> &
->Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
->Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.utils.modifiers.d.ts, --, --))
+>Pick : Symbol(Pick, Decl(lib.utils.modifiers.d.ts, --, --))
 >P : Symbol(P, Decl(styledComponentsInstantiaionLimitNotReached.ts, 110, 16))
->Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>Extract : Symbol(Extract, Decl(lib.utils.modifiers.d.ts, --, --))
 >P : Symbol(P, Decl(styledComponentsInstantiaionLimitNotReached.ts, 110, 16))
 >D : Symbol(D, Decl(styledComponentsInstantiaionLimitNotReached.ts, 110, 18))
 
     Partial<Pick<D, Exclude<keyof D, keyof P>>>
->Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
->Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.utils.modifiers.d.ts, --, --))
+>Pick : Symbol(Pick, Decl(lib.utils.modifiers.d.ts, --, --))
 >D : Symbol(D, Decl(styledComponentsInstantiaionLimitNotReached.ts, 110, 18))
->Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>Exclude : Symbol(Exclude, Decl(lib.utils.modifiers.d.ts, --, --))
 >D : Symbol(D, Decl(styledComponentsInstantiaionLimitNotReached.ts, 110, 18))
 >P : Symbol(P, Decl(styledComponentsInstantiaionLimitNotReached.ts, 110, 16))
 
@@ -371,7 +371,7 @@ type WithOptionalTheme<P extends { theme?: T }, T> = Omit<P, 'theme'> & {
 >theme : Symbol(theme, Decl(styledComponentsInstantiaionLimitNotReached.ts, 126, 34))
 >T : Symbol(T, Decl(styledComponentsInstantiaionLimitNotReached.ts, 126, 47))
 >T : Symbol(T, Decl(styledComponentsInstantiaionLimitNotReached.ts, 126, 47))
->Omit : Symbol(Omit, Decl(lib.es5.d.ts, --, --))
+>Omit : Symbol(Omit, Decl(lib.utils.modifiers.d.ts, --, --))
 >P : Symbol(P, Decl(styledComponentsInstantiaionLimitNotReached.ts, 126, 23))
 
     theme?: T;
@@ -383,7 +383,7 @@ type WithOptionalTheme<P extends { theme?: T }, T> = Omit<P, 'theme'> & {
 type ForwardRefExoticBase<P> = Pick<React.ForwardRefExoticComponent<P>, keyof React.ForwardRefExoticComponent<any>>;
 >ForwardRefExoticBase : Symbol(ForwardRefExoticBase, Decl(styledComponentsInstantiaionLimitNotReached.ts, 128, 2))
 >P : Symbol(P, Decl(styledComponentsInstantiaionLimitNotReached.ts, 130, 26))
->Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>Pick : Symbol(Pick, Decl(lib.utils.modifiers.d.ts, --, --))
 >React : Symbol(React, Decl(styledComponentsInstantiaionLimitNotReached.ts, 1, 6))
 >ForwardRefExoticComponent : Symbol(React.ForwardRefExoticComponent, Decl(react16.d.ts, 2382, 10))
 >P : Symbol(P, Decl(styledComponentsInstantiaionLimitNotReached.ts, 130, 26))

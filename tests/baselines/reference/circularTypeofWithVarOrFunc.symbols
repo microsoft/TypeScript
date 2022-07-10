@@ -41,7 +41,7 @@ interface Input {
 
 type R = ReturnType<typeof mul>;
 >R : Symbol(R, Decl(circularTypeofWithVarOrFunc.ts, 15, 1))
->ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>ReturnType : Symbol(ReturnType, Decl(lib.utils.modifiers.d.ts, --, --))
 >mul : Symbol(mul, Decl(circularTypeofWithVarOrFunc.ts, 17, 32))
 
 function mul(input: Input): R {
@@ -63,7 +63,7 @@ function mul(input: Input): R {
 
 type R2 = ReturnType<typeof f>;
 >R2 : Symbol(R2, Decl(circularTypeofWithVarOrFunc.ts, 20, 1))
->ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>ReturnType : Symbol(ReturnType, Decl(lib.utils.modifiers.d.ts, --, --))
 >f : Symbol(f, Decl(circularTypeofWithVarOrFunc.ts, 24, 31))
 
 function f(): R2 { return 0; }

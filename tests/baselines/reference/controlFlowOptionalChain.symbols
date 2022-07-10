@@ -22,9 +22,9 @@ o?.[a = 1];
 >a : Symbol(a, Decl(controlFlowOptionalChain.ts, 7, 3))
 
 a.toString();
->a.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>a.toString : Symbol(Number.toString, Decl(lib.es2009.number.d.ts, --, --))
 >a : Symbol(a, Decl(controlFlowOptionalChain.ts, 7, 3))
->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es2009.number.d.ts, --, --))
 
 let b: number;
 >b : Symbol(b, Decl(controlFlowOptionalChain.ts, 11, 3))
@@ -34,9 +34,9 @@ o?.x[b = 1];
 >b : Symbol(b, Decl(controlFlowOptionalChain.ts, 11, 3))
 
 b.toString();
->b.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>b.toString : Symbol(Number.toString, Decl(lib.es2009.number.d.ts, --, --))
 >b : Symbol(b, Decl(controlFlowOptionalChain.ts, 11, 3))
->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es2009.number.d.ts, --, --))
 
 let c: number;
 >c : Symbol(c, Decl(controlFlowOptionalChain.ts, 15, 3))
@@ -46,9 +46,9 @@ o?.(c = 1)
 >c : Symbol(c, Decl(controlFlowOptionalChain.ts, 15, 3))
 
 c.toString();
->c.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>c.toString : Symbol(Number.toString, Decl(lib.es2009.number.d.ts, --, --))
 >c : Symbol(c, Decl(controlFlowOptionalChain.ts, 15, 3))
->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es2009.number.d.ts, --, --))
 
 let d: number;
 >d : Symbol(d, Decl(controlFlowOptionalChain.ts, 19, 3))
@@ -58,9 +58,9 @@ o?.x(d = 1);
 >d : Symbol(d, Decl(controlFlowOptionalChain.ts, 19, 3))
 
 d.toString();
->d.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>d.toString : Symbol(Number.toString, Decl(lib.es2009.number.d.ts, --, --))
 >d : Symbol(d, Decl(controlFlowOptionalChain.ts, 19, 3))
->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es2009.number.d.ts, --, --))
 
 // type predicates
 declare const f: undefined | ((x: any) => x is number);
@@ -543,7 +543,7 @@ declare const isDefined: <T>(value: T) => asserts value is NonNullable<T>;
 >value : Symbol(value, Decl(controlFlowOptionalChain.ts, 136, 29))
 >T : Symbol(T, Decl(controlFlowOptionalChain.ts, 136, 26))
 >value : Symbol(value, Decl(controlFlowOptionalChain.ts, 136, 29))
->NonNullable : Symbol(NonNullable, Decl(lib.es5.d.ts, --, --))
+>NonNullable : Symbol(NonNullable, Decl(lib.utils.modifiers.d.ts, --, --))
 >T : Symbol(T, Decl(controlFlowOptionalChain.ts, 136, 26))
 
 declare const isString: (value: unknown) => asserts value is string;
@@ -1302,7 +1302,7 @@ function f20(o: Thing | undefined) {
 >o?.baz : Symbol(baz, Decl(controlFlowOptionalChain.ts, 161, 51))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 382, 13))
 >baz : Symbol(baz, Decl(controlFlowOptionalChain.ts, 161, 51))
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2009.error.d.ts, --, --))
 
         o.baz;
 >o.baz : Symbol(baz, Decl(controlFlowOptionalChain.ts, 161, 51))
@@ -1347,7 +1347,7 @@ function f21(o: Thing | null) {
 >o?.baz : Symbol(baz, Decl(controlFlowOptionalChain.ts, 161, 51))
 >o : Symbol(o, Decl(controlFlowOptionalChain.ts, 397, 13))
 >baz : Symbol(baz, Decl(controlFlowOptionalChain.ts, 161, 51))
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2009.error.d.ts, --, --))
 
         o.baz;
 >o.baz : Symbol(baz, Decl(controlFlowOptionalChain.ts, 161, 51))
@@ -1509,7 +1509,7 @@ declare function assertNonNull<T>(x: T): asserts x is NonNullable<T>;
 >x : Symbol(x, Decl(controlFlowOptionalChain.ts, 467, 34))
 >T : Symbol(T, Decl(controlFlowOptionalChain.ts, 467, 31))
 >x : Symbol(x, Decl(controlFlowOptionalChain.ts, 467, 34))
->NonNullable : Symbol(NonNullable, Decl(lib.es5.d.ts, --, --))
+>NonNullable : Symbol(NonNullable, Decl(lib.utils.modifiers.d.ts, --, --))
 >T : Symbol(T, Decl(controlFlowOptionalChain.ts, 467, 31))
 
 function f30(o: Thing | undefined) {
@@ -1677,9 +1677,9 @@ function getArea(shape?: Shape) {
 
         case 'circle':
             return Math.PI * shape.radius ** 2
->Math.PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
+>Math.PI : Symbol(Math.PI, Decl(lib.es2009.math.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es2009.math.d.ts, --, --), Decl(lib.es2009.math.d.ts, --, --))
+>PI : Symbol(Math.PI, Decl(lib.es2009.math.d.ts, --, --))
 >shape.radius : Symbol(radius, Decl(controlFlowOptionalChain.ts, 526, 23))
 >shape : Symbol(shape, Decl(controlFlowOptionalChain.ts, 528, 17))
 >radius : Symbol(radius, Decl(controlFlowOptionalChain.ts, 526, 23))

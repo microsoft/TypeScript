@@ -25,31 +25,31 @@ function testcase() {
 
   var a = new Array(false,undefined,null,"0",obj,-1.3333333333333, "str",-0,true,+0, one, 1,0, false, _float, -(4/3));
 >a : Symbol(a, Decl(parser15.4.4.14-9-2.ts, 15, 5))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es2009.array.d.ts, --, --), Decl(lib.es2009.array.d.ts, --, --))
 >undefined : Symbol(undefined)
 >obj : Symbol(obj, Decl(parser15.4.4.14-9-2.ts, 12, 5))
 >one : Symbol(one, Decl(parser15.4.4.14-9-2.ts, 13, 5))
 >_float : Symbol(_float, Decl(parser15.4.4.14-9-2.ts, 14, 5))
 
   if (a.indexOf(-(4/3)) === 14 &&      // a[14]=_float===-(4/3)
->a.indexOf : Symbol(Array.indexOf, Decl(lib.es5.d.ts, --, --))
+>a.indexOf : Symbol(Array.indexOf, Decl(lib.es2009.array.d.ts, --, --))
 >a : Symbol(a, Decl(parser15.4.4.14-9-2.ts, 15, 5))
->indexOf : Symbol(Array.indexOf, Decl(lib.es5.d.ts, --, --))
+>indexOf : Symbol(Array.indexOf, Decl(lib.es2009.array.d.ts, --, --))
 
       a.indexOf(0) === 7      &&       // a[7] = +0, 0===+0
->a.indexOf : Symbol(Array.indexOf, Decl(lib.es5.d.ts, --, --))
+>a.indexOf : Symbol(Array.indexOf, Decl(lib.es2009.array.d.ts, --, --))
 >a : Symbol(a, Decl(parser15.4.4.14-9-2.ts, 15, 5))
->indexOf : Symbol(Array.indexOf, Decl(lib.es5.d.ts, --, --))
+>indexOf : Symbol(Array.indexOf, Decl(lib.es2009.array.d.ts, --, --))
 
       a.indexOf(-0) === 7      &&     // a[7] = +0, -0===+0
->a.indexOf : Symbol(Array.indexOf, Decl(lib.es5.d.ts, --, --))
+>a.indexOf : Symbol(Array.indexOf, Decl(lib.es2009.array.d.ts, --, --))
 >a : Symbol(a, Decl(parser15.4.4.14-9-2.ts, 15, 5))
->indexOf : Symbol(Array.indexOf, Decl(lib.es5.d.ts, --, --))
+>indexOf : Symbol(Array.indexOf, Decl(lib.es2009.array.d.ts, --, --))
 
       a.indexOf(1) === 10 )            // a[10] =one=== 1
->a.indexOf : Symbol(Array.indexOf, Decl(lib.es5.d.ts, --, --))
+>a.indexOf : Symbol(Array.indexOf, Decl(lib.es2009.array.d.ts, --, --))
 >a : Symbol(a, Decl(parser15.4.4.14-9-2.ts, 15, 5))
->indexOf : Symbol(Array.indexOf, Decl(lib.es5.d.ts, --, --))
+>indexOf : Symbol(Array.indexOf, Decl(lib.es2009.array.d.ts, --, --))
   {
     return true;
   }

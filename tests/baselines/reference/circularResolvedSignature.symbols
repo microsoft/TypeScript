@@ -10,7 +10,7 @@ declare function useState<S>(initialState: (() => S)): [S, (s: S) => void];
 
 type Data = Readonly<{
 >Data : Symbol(Data, Decl(circularResolvedSignature.ts, 0, 75))
->Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>Readonly : Symbol(Readonly, Decl(lib.utils.modifiers.d.ts, --, --))
 
     value: number;
 >value : Symbol(value, Decl(circularResolvedSignature.ts, 2, 22))

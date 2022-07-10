@@ -21,16 +21,16 @@ function fn<T>(arg: Q<T>) {
 fn<string | number>(m => m.toFixed());
 >fn : Symbol(fn, Decl(callOfConditionalTypeWithConcreteBranches.ts, 0, 59))
 >m : Symbol(m, Decl(callOfConditionalTypeWithConcreteBranches.ts, 7, 20))
->m.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>m.toFixed : Symbol(Number.toFixed, Decl(lib.es2009.number.d.ts, --, --))
 >m : Symbol(m, Decl(callOfConditionalTypeWithConcreteBranches.ts, 7, 20))
->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es2009.number.d.ts, --, --))
 
 fn<number>(m => m.toFixed());
 >fn : Symbol(fn, Decl(callOfConditionalTypeWithConcreteBranches.ts, 0, 59))
 >m : Symbol(m, Decl(callOfConditionalTypeWithConcreteBranches.ts, 8, 11))
->m.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>m.toFixed : Symbol(Number.toFixed, Decl(lib.es2009.number.d.ts, --, --))
 >m : Symbol(m, Decl(callOfConditionalTypeWithConcreteBranches.ts, 8, 11))
->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es2009.number.d.ts, --, --))
 
 // Ensure the following real-world example that relies on substitution still works
 type ExtractParameters<T> = "parameters" extends keyof T
@@ -99,9 +99,9 @@ type X<V> = V extends (...args: any[]) => any ? (...args: Parameters<V>) => void
 >V : Symbol(V, Decl(callOfConditionalTypeWithConcreteBranches.ts, 33, 7))
 >args : Symbol(args, Decl(callOfConditionalTypeWithConcreteBranches.ts, 33, 23))
 >args : Symbol(args, Decl(callOfConditionalTypeWithConcreteBranches.ts, 33, 49))
->Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>Parameters : Symbol(Parameters, Decl(lib.utils.modifiers.d.ts, --, --))
 >V : Symbol(V, Decl(callOfConditionalTypeWithConcreteBranches.ts, 33, 7))
->Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es2009.function.d.ts, --, --), Decl(lib.es2009.function.d.ts, --, --))
 
 // vscode - another `Parameters` example
 export type AddFirstParameterToFunctions<Target> = {
@@ -117,7 +117,7 @@ export type AddFirstParameterToFunctions<Target> = {
 
       ? (...args: Parameters<Target[K]>) => void
 >args : Symbol(args, Decl(callOfConditionalTypeWithConcreteBranches.ts, 38, 9))
->Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>Parameters : Symbol(Parameters, Decl(lib.utils.modifiers.d.ts, --, --))
 >Target : Symbol(Target, Decl(callOfConditionalTypeWithConcreteBranches.ts, 36, 41))
 >K : Symbol(K, Decl(callOfConditionalTypeWithConcreteBranches.ts, 37, 3))
 

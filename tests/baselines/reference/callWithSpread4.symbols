@@ -26,15 +26,15 @@ declare const pli: {
 >RW : Symbol(RW, Decl(callWithSpread4.ts, 1, 22))
 >s5 : Symbol(s5, Decl(callWithSpread4.ts, 4, 35))
 >W : Symbol(W, Decl(callWithSpread4.ts, 0, 22))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
 
     (streams: ReadonlyArray<R | W | RW>): Promise<void>;
 >streams : Symbol(streams, Decl(callWithSpread4.ts, 5, 5))
->ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --) ... and 1 more)
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es2009.array.d.ts, --, --), Decl(lib.es2015.array.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --) ... and 1 more)
 >R : Symbol(R, Decl(callWithSpread4.ts, 0, 0))
 >W : Symbol(W, Decl(callWithSpread4.ts, 0, 22))
 >RW : Symbol(RW, Decl(callWithSpread4.ts, 1, 22))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
 
     (s1: R, s2: RW | W, ...streams: Array<RW | W>): Promise<void>;
 >s1 : Symbol(s1, Decl(callWithSpread4.ts, 6, 5))
@@ -43,10 +43,10 @@ declare const pli: {
 >RW : Symbol(RW, Decl(callWithSpread4.ts, 1, 22))
 >W : Symbol(W, Decl(callWithSpread4.ts, 0, 22))
 >streams : Symbol(streams, Decl(callWithSpread4.ts, 6, 23))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 3 more)
+>Array : Symbol(Array, Decl(lib.es2009.array.d.ts, --, --), Decl(lib.es2009.array.d.ts, --, --), Decl(lib.es2015.array.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 3 more)
 >RW : Symbol(RW, Decl(callWithSpread4.ts, 1, 22))
 >W : Symbol(W, Decl(callWithSpread4.ts, 0, 22))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
 }
 
 declare var writes: W

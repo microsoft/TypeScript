@@ -20,17 +20,17 @@ function f10({ kind, payload }: Action) {
 >kind : Symbol(kind, Decl(dependentDestructuredVariables.ts, 4, 14))
 
         payload.toFixed();
->payload.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>payload.toFixed : Symbol(Number.toFixed, Decl(lib.es2009.number.d.ts, --, --))
 >payload : Symbol(payload, Decl(dependentDestructuredVariables.ts, 4, 20))
->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es2009.number.d.ts, --, --))
     }
     if (kind === 'B') {
 >kind : Symbol(kind, Decl(dependentDestructuredVariables.ts, 4, 14))
 
         payload.toUpperCase();
->payload.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>payload.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es2009.string.d.ts, --, --))
 >payload : Symbol(payload, Decl(dependentDestructuredVariables.ts, 4, 20))
->toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es2009.string.d.ts, --, --))
     }
 }
 
@@ -48,17 +48,17 @@ function f11(action: Action) {
 >kind : Symbol(kind, Decl(dependentDestructuredVariables.ts, 14, 11))
 
         payload.toFixed();
->payload.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>payload.toFixed : Symbol(Number.toFixed, Decl(lib.es2009.number.d.ts, --, --))
 >payload : Symbol(payload, Decl(dependentDestructuredVariables.ts, 14, 17))
->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es2009.number.d.ts, --, --))
     }
     if (kind === 'B') {
 >kind : Symbol(kind, Decl(dependentDestructuredVariables.ts, 14, 11))
 
         payload.toUpperCase();
->payload.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>payload.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es2009.string.d.ts, --, --))
 >payload : Symbol(payload, Decl(dependentDestructuredVariables.ts, 14, 17))
->toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es2009.string.d.ts, --, --))
     }
 }
 
@@ -73,16 +73,16 @@ function f12({ kind, payload }: Action) {
 
         case 'A':
             payload.toFixed();
->payload.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>payload.toFixed : Symbol(Number.toFixed, Decl(lib.es2009.number.d.ts, --, --))
 >payload : Symbol(payload, Decl(dependentDestructuredVariables.ts, 23, 20))
->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es2009.number.d.ts, --, --))
 
             break;
         case 'B':
             payload.toUpperCase();
->payload.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>payload.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es2009.string.d.ts, --, --))
 >payload : Symbol(payload, Decl(dependentDestructuredVariables.ts, 23, 20))
->toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es2009.string.d.ts, --, --))
 
             break;
         default:
@@ -115,17 +115,17 @@ function f20({ kind, payload }: Action2) {
 >kind : Symbol(kind, Decl(dependentDestructuredVariables.ts, 40, 14))
 
             payload.toFixed();
->payload.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>payload.toFixed : Symbol(Number.toFixed, Decl(lib.es2009.number.d.ts, --, --))
 >payload : Symbol(payload, Decl(dependentDestructuredVariables.ts, 40, 20))
->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es2009.number.d.ts, --, --))
         }
         if (kind === 'B') {
 >kind : Symbol(kind, Decl(dependentDestructuredVariables.ts, 40, 14))
 
             payload.toUpperCase();
->payload.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>payload.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es2009.string.d.ts, --, --))
 >payload : Symbol(payload, Decl(dependentDestructuredVariables.ts, 40, 20))
->toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es2009.string.d.ts, --, --))
         }
     }
 }
@@ -147,17 +147,17 @@ function f21(action: Action2) {
 >kind : Symbol(kind, Decl(dependentDestructuredVariables.ts, 52, 11))
 
             payload.toFixed();
->payload.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>payload.toFixed : Symbol(Number.toFixed, Decl(lib.es2009.number.d.ts, --, --))
 >payload : Symbol(payload, Decl(dependentDestructuredVariables.ts, 52, 17))
->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es2009.number.d.ts, --, --))
         }
         if (kind === 'B') {
 >kind : Symbol(kind, Decl(dependentDestructuredVariables.ts, 52, 11))
 
             payload.toUpperCase();
->payload.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>payload.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es2009.string.d.ts, --, --))
 >payload : Symbol(payload, Decl(dependentDestructuredVariables.ts, 52, 17))
->toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es2009.string.d.ts, --, --))
         }
     }
 }
@@ -181,17 +181,17 @@ function f22(action: Action2) {
 >kind : Symbol(kind, Decl(dependentDestructuredVariables.ts, 65, 15))
 
             payload.toFixed();
->payload.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>payload.toFixed : Symbol(Number.toFixed, Decl(lib.es2009.number.d.ts, --, --))
 >payload : Symbol(payload, Decl(dependentDestructuredVariables.ts, 65, 21))
->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es2009.number.d.ts, --, --))
         }
         if (kind === 'B') {
 >kind : Symbol(kind, Decl(dependentDestructuredVariables.ts, 65, 15))
 
             payload.toUpperCase();
->payload.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>payload.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es2009.string.d.ts, --, --))
 >payload : Symbol(payload, Decl(dependentDestructuredVariables.ts, 65, 21))
->toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es2009.string.d.ts, --, --))
         }
     }
 }
@@ -210,16 +210,16 @@ function f23({ kind, payload }: Action2) {
 
             case 'A':
                 payload.toFixed();
->payload.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>payload.toFixed : Symbol(Number.toFixed, Decl(lib.es2009.number.d.ts, --, --))
 >payload : Symbol(payload, Decl(dependentDestructuredVariables.ts, 75, 20))
->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es2009.number.d.ts, --, --))
 
                 break;
             case 'B':
                 payload.toUpperCase();
->payload.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>payload.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es2009.string.d.ts, --, --))
 >payload : Symbol(payload, Decl(dependentDestructuredVariables.ts, 75, 20))
->toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es2009.string.d.ts, --, --))
 
                 break;
             default:
@@ -293,17 +293,17 @@ function f40(...[kind, data]: Args) {
 >kind : Symbol(kind, Decl(dependentDestructuredVariables.ts, 115, 17))
 
         data.toFixed();
->data.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>data.toFixed : Symbol(Number.toFixed, Decl(lib.es2009.number.d.ts, --, --))
 >data : Symbol(data, Decl(dependentDestructuredVariables.ts, 115, 22))
->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es2009.number.d.ts, --, --))
     }
     if (kind === 'B') {
 >kind : Symbol(kind, Decl(dependentDestructuredVariables.ts, 115, 17))
 
         data.toUpperCase();
->data.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>data.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es2009.string.d.ts, --, --))
 >data : Symbol(data, Decl(dependentDestructuredVariables.ts, 115, 22))
->toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es2009.string.d.ts, --, --))
     }
 }
 
@@ -321,7 +321,7 @@ interface B<T> { variant: 'b', value: Array<T> }
 >T : Symbol(T, Decl(dependentDestructuredVariables.ts, 128, 12))
 >variant : Symbol(B.variant, Decl(dependentDestructuredVariables.ts, 128, 16))
 >value : Symbol(B.value, Decl(dependentDestructuredVariables.ts, 128, 30))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 3 more)
+>Array : Symbol(Array, Decl(lib.es2009.array.d.ts, --, --), Decl(lib.es2009.array.d.ts, --, --), Decl(lib.es2015.array.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 3 more)
 >T : Symbol(T, Decl(dependentDestructuredVariables.ts, 128, 12))
 
 type AB<T> = A<T> | B<T>;
@@ -342,7 +342,7 @@ declare function printValueList<T>(t: Array<T>): void;
 >printValueList : Symbol(printValueList, Decl(dependentDestructuredVariables.ts, 132, 43))
 >T : Symbol(T, Decl(dependentDestructuredVariables.ts, 134, 32))
 >t : Symbol(t, Decl(dependentDestructuredVariables.ts, 134, 35))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 3 more)
+>Array : Symbol(Array, Decl(lib.es2009.array.d.ts, --, --), Decl(lib.es2009.array.d.ts, --, --), Decl(lib.es2015.array.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 3 more)
 >T : Symbol(T, Decl(dependentDestructuredVariables.ts, 134, 32))
 
 function unrefined1<T>(ab: AB<T>): void {
@@ -451,17 +451,17 @@ f50((kind, data) => {
 >kind : Symbol(kind, Decl(dependentDestructuredVariables.ts, 173, 5))
 
         data.toFixed();
->data.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>data.toFixed : Symbol(Number.toFixed, Decl(lib.es2009.number.d.ts, --, --))
 >data : Symbol(data, Decl(dependentDestructuredVariables.ts, 173, 10))
->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es2009.number.d.ts, --, --))
     }
     if (kind === 'B') {
 >kind : Symbol(kind, Decl(dependentDestructuredVariables.ts, 173, 5))
 
         data.toUpperCase();
->data.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>data.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es2009.string.d.ts, --, --))
 >data : Symbol(data, Decl(dependentDestructuredVariables.ts, 173, 10))
->toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es2009.string.d.ts, --, --))
     }
 });
 
@@ -475,17 +475,17 @@ const f51: (...args: ['A', number] | ['B', string]) => void = (kind, payload) =>
 >kind : Symbol(kind, Decl(dependentDestructuredVariables.ts, 182, 63))
 
         payload.toFixed();
->payload.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>payload.toFixed : Symbol(Number.toFixed, Decl(lib.es2009.number.d.ts, --, --))
 >payload : Symbol(payload, Decl(dependentDestructuredVariables.ts, 182, 68))
->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es2009.number.d.ts, --, --))
     }
     if (kind === 'B') {
 >kind : Symbol(kind, Decl(dependentDestructuredVariables.ts, 182, 63))
 
         payload.toUpperCase();
->payload.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>payload.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es2009.string.d.ts, --, --))
 >payload : Symbol(payload, Decl(dependentDestructuredVariables.ts, 182, 68))
->toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es2009.string.d.ts, --, --))
     }
 };
 
@@ -499,9 +499,9 @@ const f52: (...args: ['A', number] | ['B']) => void = (kind, payload?) => {
 >kind : Symbol(kind, Decl(dependentDestructuredVariables.ts, 191, 55))
 
         payload.toFixed();
->payload.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>payload.toFixed : Symbol(Number.toFixed, Decl(lib.es2009.number.d.ts, --, --))
 >payload : Symbol(payload, Decl(dependentDestructuredVariables.ts, 191, 60))
->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es2009.number.d.ts, --, --))
     }
     else {
         payload;  // undefined
@@ -514,7 +514,7 @@ declare function readFile(path: string, callback: (...args: [err: null, data: un
 >path : Symbol(path, Decl(dependentDestructuredVariables.ts, 200, 26))
 >callback : Symbol(callback, Decl(dependentDestructuredVariables.ts, 200, 39))
 >args : Symbol(args, Decl(dependentDestructuredVariables.ts, 200, 51))
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
 
 readFile('hello', (err, data) => {
 >readFile : Symbol(readFile, Decl(dependentDestructuredVariables.ts, 198, 2))
@@ -525,15 +525,15 @@ readFile('hello', (err, data) => {
 >err : Symbol(err, Decl(dependentDestructuredVariables.ts, 202, 19))
 
         data.length;
->data.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>data.length : Symbol(Array.length, Decl(lib.es2009.array.d.ts, --, --))
 >data : Symbol(data, Decl(dependentDestructuredVariables.ts, 202, 23))
->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es2009.array.d.ts, --, --))
     }
     else {
         err.message;
->err.message : Symbol(Error.message, Decl(lib.es5.d.ts, --, --))
+>err.message : Symbol(Error.message, Decl(lib.es2009.error.d.ts, --, --))
 >err : Symbol(err, Decl(dependentDestructuredVariables.ts, 202, 19))
->message : Symbol(Error.message, Decl(lib.es5.d.ts, --, --))
+>message : Symbol(Error.message, Decl(lib.es2009.error.d.ts, --, --))
     }
 });
 
@@ -572,11 +572,11 @@ const reducer: (...args: ReducerArgs) => void = (op, args) => {
 >console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
 >log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
->args.firstArr.concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>args.firstArr.concat : Symbol(Array.concat, Decl(lib.es2009.array.d.ts, --, --), Decl(lib.es2009.array.d.ts, --, --))
 >args.firstArr : Symbol(firstArr, Decl(dependentDestructuredVariables.ts, 211, 67))
 >args : Symbol(args, Decl(dependentDestructuredVariables.ts, 213, 52))
 >firstArr : Symbol(firstArr, Decl(dependentDestructuredVariables.ts, 211, 67))
->concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>concat : Symbol(Array.concat, Decl(lib.es2009.array.d.ts, --, --), Decl(lib.es2009.array.d.ts, --, --))
 >args.secondArr : Symbol(secondArr, Decl(dependentDestructuredVariables.ts, 211, 84))
 >args : Symbol(args, Decl(dependentDestructuredVariables.ts, 213, 52))
 >secondArr : Symbol(secondArr, Decl(dependentDestructuredVariables.ts, 211, 84))
@@ -649,7 +649,7 @@ type FooAsyncMethod = {
 >e : Symbol(e, Decl(dependentDestructuredVariables.ts, 249, 23))
 
   ): Promise<any>;
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
 }
 
 let fooAsyncM: FooAsyncMethod = {
@@ -770,17 +770,17 @@ const f60: Func = (kind, payload) => {
 >kind : Symbol(kind, Decl(dependentDestructuredVariables.ts, 301, 19))
 
         payload.toFixed();  // error
->payload.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>payload.toFixed : Symbol(Number.toFixed, Decl(lib.es2009.number.d.ts, --, --))
 >payload : Symbol(payload, Decl(dependentDestructuredVariables.ts, 301, 24))
->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es2009.number.d.ts, --, --))
     }
     if (kind === "b") {
 >kind : Symbol(kind, Decl(dependentDestructuredVariables.ts, 301, 19))
 
         payload.toUpperCase();  // error
->payload.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>payload.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es2009.string.d.ts, --, --))
 >payload : Symbol(payload, Decl(dependentDestructuredVariables.ts, 301, 24))
->toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es2009.string.d.ts, --, --))
     }
 };
 

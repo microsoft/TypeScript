@@ -71,8 +71,8 @@ enum T5 {
 
     h = `1`.length
 >h : Symbol(T5.h, Decl(enumConstantMemberWithTemplateLiterals.ts, 29, 19))
->`1`.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>`1`.length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
 }
 
 enum T6 {
@@ -83,8 +83,8 @@ enum T6 {
 
     b = `12`.length
 >b : Symbol(T6.b, Decl(enumConstantMemberWithTemplateLiterals.ts, 34, 10))
->`12`.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>`12`.length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
 }
 
 declare enum T7 {

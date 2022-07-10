@@ -11,7 +11,7 @@ declare module "assert" {
 >actual : Symbol(actual, Decl(node.d.ts, 3, 26))
 >expected : Symbol(expected, Decl(node.d.ts, 3, 38))
 >message : Symbol(message, Decl(node.d.ts, 3, 53))
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2009.error.d.ts, --, --))
 }
 
 === tests/cases/compiler/ns.ts ===

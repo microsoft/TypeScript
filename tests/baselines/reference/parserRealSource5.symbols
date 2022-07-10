@@ -52,11 +52,11 @@ module TypeScript {
 >startLine : Symbol(PrintContext.startLine, Decl(parserRealSource5.ts, 22, 9))
 
             if (this.builder.length > 0) {
->this.builder.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>this.builder.length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
 >this.builder : Symbol(PrintContext.builder, Decl(parserRealSource5.ts, 7, 31))
 >this : Symbol(PrintContext, Decl(parserRealSource5.ts, 5, 19))
 >builder : Symbol(PrintContext.builder, Decl(parserRealSource5.ts, 7, 31))
->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
 
                 CompilerDiagnostics.Alert(this.builder);
 >this.builder : Symbol(PrintContext.builder, Decl(parserRealSource5.ts, 7, 31))

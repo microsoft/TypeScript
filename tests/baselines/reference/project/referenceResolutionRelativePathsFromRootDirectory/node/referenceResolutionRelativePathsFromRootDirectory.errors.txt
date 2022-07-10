@@ -1,0 +1,13 @@
+lib.es5.d.ts(48,21): error TS6054: File 'lib.es2009.uint16array' has an unsupported extension. The only supported extensions are '.ts', '.tsx', '.d.ts', '.cts', '.d.cts', '.mts', '.d.mts'.
+
+
+==== bar/bar.ts (0 errors) ====
+    /// <reference path="../src/ts/foo/foo.ts" />
+    // This is bar.ts
+    class bar {
+    }
+==== src/ts/foo/foo.ts (0 errors) ====
+    /// <reference path="../../../bar/bar.ts" />
+    
+    class foo {
+    }

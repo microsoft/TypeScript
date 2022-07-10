@@ -10,7 +10,7 @@ declare const iterable: Iterable<number>;
 declare const iterableOfPromise: Iterable<Promise<number>>;
 >iterableOfPromise : Symbol(iterableOfPromise, Decl(types.forAwait.es2018.1.ts, 2, 13))
 >Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
 
 async function f1() {
 >f1 : Symbol(f1, Decl(types.forAwait.es2018.1.ts, 2, 59))

@@ -265,7 +265,7 @@ function positiveIntersectionTest(x: { a: string } & { b: string }) {
 // Repro from #38608
 declare const error: Error;
 >error : Symbol(error, Decl(inKeywordTypeguard.ts, 107, 13))
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2009.error.d.ts, --, --))
 
 if ('extra' in error) {
 >error : Symbol(error, Decl(inKeywordTypeguard.ts, 107, 13))

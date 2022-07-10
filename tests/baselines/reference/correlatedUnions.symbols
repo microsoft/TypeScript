@@ -72,9 +72,9 @@ processRecord({ kind: 'n', v: 42, f: v => v.toExponential() });
 >v : Symbol(v, Decl(correlatedUnions.ts, 18, 26))
 >f : Symbol(f, Decl(correlatedUnions.ts, 18, 33))
 >v : Symbol(v, Decl(correlatedUnions.ts, 18, 36))
->v.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+>v.toExponential : Symbol(Number.toExponential, Decl(lib.es2009.number.d.ts, --, --))
 >v : Symbol(v, Decl(correlatedUnions.ts, 18, 36))
->toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+>toExponential : Symbol(Number.toExponential, Decl(lib.es2009.number.d.ts, --, --))
 
 // --------
 
@@ -202,16 +202,16 @@ const handlers: HandlerMap = {
     foo: s => s.length,
 >foo : Symbol(foo, Decl(correlatedUnions.ts, 59, 30))
 >s : Symbol(s, Decl(correlatedUnions.ts, 60, 8))
->s.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>s.length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
 >s : Symbol(s, Decl(correlatedUnions.ts, 60, 8))
->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
 
     bar: n => n.toFixed(2)
 >bar : Symbol(bar, Decl(correlatedUnions.ts, 60, 23))
 >n : Symbol(n, Decl(correlatedUnions.ts, 61, 8))
->n.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>n.toFixed : Symbol(Number.toFixed, Decl(lib.es2009.number.d.ts, --, --))
 >n : Symbol(n, Decl(correlatedUnions.ts, 61, 8))
->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es2009.number.d.ts, --, --))
 
 };
 
@@ -262,9 +262,9 @@ function process<K extends Keys>(data: DataEntry<K>[]) {
 >K : Symbol(K, Decl(correlatedUnions.ts, 75, 17))
 
     data.forEach(block => {
->data.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>data.forEach : Symbol(Array.forEach, Decl(lib.es2009.array.d.ts, --, --))
 >data : Symbol(data, Decl(correlatedUnions.ts, 75, 33))
->forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>forEach : Symbol(Array.forEach, Decl(lib.es2009.array.d.ts, --, --))
 >block : Symbol(block, Decl(correlatedUnions.ts, 76, 17))
 
         if (block.type in handlers) {
@@ -308,13 +308,13 @@ type LetterCaller<K extends keyof LetterMap> = { [P in K]: { letter: Record<P, L
 >P : Symbol(P, Decl(correlatedUnions.ts, 89, 50))
 >K : Symbol(K, Decl(correlatedUnions.ts, 89, 18))
 >letter : Symbol(letter, Decl(correlatedUnions.ts, 89, 60))
->Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.utils.modifiers.d.ts, --, --))
 >P : Symbol(P, Decl(correlatedUnions.ts, 89, 50))
 >LetterMap : Symbol(LetterMap, Decl(correlatedUnions.ts, 84, 40))
 >P : Symbol(P, Decl(correlatedUnions.ts, 89, 50))
 >caller : Symbol(caller, Decl(correlatedUnions.ts, 89, 93))
 >x : Symbol(x, Decl(correlatedUnions.ts, 89, 103))
->Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.utils.modifiers.d.ts, --, --))
 >P : Symbol(P, Decl(correlatedUnions.ts, 89, 50))
 >LetterMap : Symbol(LetterMap, Decl(correlatedUnions.ts, 84, 40))
 >P : Symbol(P, Decl(correlatedUnions.ts, 89, 50))
@@ -719,7 +719,7 @@ function func<K extends keyof MyObj>(k: K): MyObj[K]['name'] | undefined {
 
     const myObj: Partial<MyObj>[K] = ref[k];
 >myObj : Symbol(myObj, Decl(correlatedUnions.ts, 200, 9))
->Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.utils.modifiers.d.ts, --, --))
 >MyObj : Symbol(MyObj, Decl(correlatedUnions.ts, 181, 1))
 >K : Symbol(K, Decl(correlatedUnions.ts, 199, 14))
 >ref : Symbol(ref, Decl(correlatedUnions.ts, 194, 5))
@@ -735,7 +735,7 @@ function func<K extends keyof MyObj>(k: K): MyObj[K]['name'] | undefined {
     }
     const myObj2: Partial<MyObj>[keyof MyObj] = ref[k];
 >myObj2 : Symbol(myObj2, Decl(correlatedUnions.ts, 204, 9))
->Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.utils.modifiers.d.ts, --, --))
 >MyObj : Symbol(MyObj, Decl(correlatedUnions.ts, 181, 1))
 >MyObj : Symbol(MyObj, Decl(correlatedUnions.ts, 181, 1))
 >ref : Symbol(ref, Decl(correlatedUnions.ts, 194, 5))
@@ -769,7 +769,7 @@ function foo<T extends keyof Foo>(prop: T, f: Required<Foo>) {
 >prop : Symbol(prop, Decl(correlatedUnions.ts, 217, 34))
 >T : Symbol(T, Decl(correlatedUnions.ts, 217, 13))
 >f : Symbol(f, Decl(correlatedUnions.ts, 217, 42))
->Required : Symbol(Required, Decl(lib.es5.d.ts, --, --))
+>Required : Symbol(Required, Decl(lib.utils.modifiers.d.ts, --, --))
 >Foo : Symbol(Foo, Decl(correlatedUnions.ts, 209, 1))
 
     bar(f[prop]);
@@ -787,7 +787,7 @@ declare function bar(t: string): void;
 declare function makeCompleteLookupMapping<T extends ReadonlyArray<any>, Attr extends keyof T[number]>(
 >makeCompleteLookupMapping : Symbol(makeCompleteLookupMapping, Decl(correlatedUnions.ts, 221, 38))
 >T : Symbol(T, Decl(correlatedUnions.ts, 225, 43))
->ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es2009.array.d.ts, --, --))
 >Attr : Symbol(Attr, Decl(correlatedUnions.ts, 225, 72))
 >T : Symbol(T, Decl(correlatedUnions.ts, 225, 43))
 

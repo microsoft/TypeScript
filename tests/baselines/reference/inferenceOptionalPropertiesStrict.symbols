@@ -29,7 +29,7 @@ const y2 = test(x2);
 
 var v1: Required<{ a?: string, b?: number }>;
 >v1 : Symbol(v1, Decl(inferenceOptionalPropertiesStrict.ts, 8, 3), Decl(inferenceOptionalPropertiesStrict.ts, 9, 3))
->Required : Symbol(Required, Decl(lib.es5.d.ts, --, --))
+>Required : Symbol(Required, Decl(lib.utils.modifiers.d.ts, --, --))
 >a : Symbol(a, Decl(inferenceOptionalPropertiesStrict.ts, 8, 18))
 >b : Symbol(b, Decl(inferenceOptionalPropertiesStrict.ts, 8, 30))
 
@@ -40,7 +40,7 @@ var v1: { a: string, b: number };
 
 var v2: Required<{ a?: string, b?: number | undefined }>;
 >v2 : Symbol(v2, Decl(inferenceOptionalPropertiesStrict.ts, 11, 3), Decl(inferenceOptionalPropertiesStrict.ts, 12, 3))
->Required : Symbol(Required, Decl(lib.es5.d.ts, --, --))
+>Required : Symbol(Required, Decl(lib.utils.modifiers.d.ts, --, --))
 >a : Symbol(a, Decl(inferenceOptionalPropertiesStrict.ts, 11, 18))
 >b : Symbol(b, Decl(inferenceOptionalPropertiesStrict.ts, 11, 30))
 
@@ -51,7 +51,7 @@ var v2: { a: string, b: number | undefined };
 
 var v3: Partial<{ a: string, b: string }>;
 >v3 : Symbol(v3, Decl(inferenceOptionalPropertiesStrict.ts, 14, 3), Decl(inferenceOptionalPropertiesStrict.ts, 15, 3))
->Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.utils.modifiers.d.ts, --, --))
 >a : Symbol(a, Decl(inferenceOptionalPropertiesStrict.ts, 14, 17))
 >b : Symbol(b, Decl(inferenceOptionalPropertiesStrict.ts, 14, 28))
 
@@ -62,7 +62,7 @@ var v3: { a?: string, b?: string };
 
 var v4: Partial<{ a: string, b: string | undefined }>;
 >v4 : Symbol(v4, Decl(inferenceOptionalPropertiesStrict.ts, 17, 3), Decl(inferenceOptionalPropertiesStrict.ts, 18, 3))
->Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.utils.modifiers.d.ts, --, --))
 >a : Symbol(a, Decl(inferenceOptionalPropertiesStrict.ts, 17, 17))
 >b : Symbol(b, Decl(inferenceOptionalPropertiesStrict.ts, 17, 28))
 
@@ -73,8 +73,8 @@ var v4: { a?: string, b?: string | undefined };
 
 var v5: Required<Partial<{ a: string, b: string }>>;
 >v5 : Symbol(v5, Decl(inferenceOptionalPropertiesStrict.ts, 20, 3), Decl(inferenceOptionalPropertiesStrict.ts, 21, 3))
->Required : Symbol(Required, Decl(lib.es5.d.ts, --, --))
->Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Required : Symbol(Required, Decl(lib.utils.modifiers.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.utils.modifiers.d.ts, --, --))
 >a : Symbol(a, Decl(inferenceOptionalPropertiesStrict.ts, 20, 26))
 >b : Symbol(b, Decl(inferenceOptionalPropertiesStrict.ts, 20, 37))
 
@@ -85,8 +85,8 @@ var v5: { a: string, b: string };
 
 var v6: Required<Partial<{ a: string, b: string | undefined }>>;
 >v6 : Symbol(v6, Decl(inferenceOptionalPropertiesStrict.ts, 23, 3), Decl(inferenceOptionalPropertiesStrict.ts, 24, 3))
->Required : Symbol(Required, Decl(lib.es5.d.ts, --, --))
->Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Required : Symbol(Required, Decl(lib.utils.modifiers.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.utils.modifiers.d.ts, --, --))
 >a : Symbol(a, Decl(inferenceOptionalPropertiesStrict.ts, 23, 26))
 >b : Symbol(b, Decl(inferenceOptionalPropertiesStrict.ts, 23, 37))
 

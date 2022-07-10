@@ -103,13 +103,13 @@ type Example<T, U> = { [K in keyof T]: K extends keyof U ? UnexpectedError<K> : 
 type UnexpectedError<T extends PropertyKey> = T
 >UnexpectedError : Symbol(UnexpectedError, Decl(intersectionWithUnionConstraint.ts, 30, 96))
 >T : Symbol(T, Decl(intersectionWithUnionConstraint.ts, 32, 21))
->PropertyKey : Symbol(PropertyKey, Decl(lib.es5.d.ts, --, --))
+>PropertyKey : Symbol(PropertyKey, Decl(lib.es2009.object.d.ts, --, --))
 >T : Symbol(T, Decl(intersectionWithUnionConstraint.ts, 32, 21))
 
 type NoErrorHere<T extends PropertyKey> = T
 >NoErrorHere : Symbol(NoErrorHere, Decl(intersectionWithUnionConstraint.ts, 32, 47))
 >T : Symbol(T, Decl(intersectionWithUnionConstraint.ts, 33, 17))
->PropertyKey : Symbol(PropertyKey, Decl(lib.es5.d.ts, --, --))
+>PropertyKey : Symbol(PropertyKey, Decl(lib.es2009.object.d.ts, --, --))
 >T : Symbol(T, Decl(intersectionWithUnionConstraint.ts, 33, 17))
 
 // Repro from #30331
@@ -118,7 +118,7 @@ type a<T> = T extends Array<infer U> ? U : never;
 >a : Symbol(a, Decl(intersectionWithUnionConstraint.ts, 33, 43))
 >T : Symbol(T, Decl(intersectionWithUnionConstraint.ts, 37, 7))
 >T : Symbol(T, Decl(intersectionWithUnionConstraint.ts, 37, 7))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es2009.array.d.ts, --, --), Decl(lib.es2009.array.d.ts, --, --))
 >U : Symbol(U, Decl(intersectionWithUnionConstraint.ts, 37, 33))
 >U : Symbol(U, Decl(intersectionWithUnionConstraint.ts, 37, 33))
 

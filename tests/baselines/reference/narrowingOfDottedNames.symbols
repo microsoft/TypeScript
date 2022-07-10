@@ -114,7 +114,7 @@ class Foo1
     constructor() {
         if (this instanceof Boolean) {
 >this : Symbol(Foo1, Decl(narrowingOfDottedNames.ts, 38, 1))
->Boolean : Symbol(Boolean, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Boolean : Symbol(Boolean, Decl(lib.es2009.boolean.d.ts, --, --), Decl(lib.es2009.boolean.d.ts, --, --))
         }
     }
 }

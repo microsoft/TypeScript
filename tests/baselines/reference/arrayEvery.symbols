@@ -9,14 +9,14 @@ const isString = (x: unknown): x is string => typeof x === 'string';
 >x : Symbol(x, Decl(arrayEvery.ts, 2, 18))
 
 if (foo.every(isString)) {
->foo.every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>foo.every : Symbol(Array.every, Decl(lib.es2009.array.d.ts, --, --), Decl(lib.es2009.array.d.ts, --, --))
 >foo : Symbol(foo, Decl(arrayEvery.ts, 0, 5))
->every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>every : Symbol(Array.every, Decl(lib.es2009.array.d.ts, --, --), Decl(lib.es2009.array.d.ts, --, --))
 >isString : Symbol(isString, Decl(arrayEvery.ts, 2, 5))
 
   foo[0].slice(0);
->foo[0].slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
+>foo[0].slice : Symbol(String.slice, Decl(lib.es2009.string.d.ts, --, --))
 >foo : Symbol(foo, Decl(arrayEvery.ts, 0, 5))
->slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
+>slice : Symbol(String.slice, Decl(lib.es2009.string.d.ts, --, --))
 }
 

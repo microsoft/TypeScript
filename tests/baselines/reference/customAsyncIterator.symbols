@@ -15,7 +15,7 @@ class ConstantIterator<T> implements AsyncIterator<T, undefined, T | undefined> 
 >next : Symbol(ConstantIterator.next, Decl(customAsyncIterator.ts, 3, 5))
 >value : Symbol(value, Decl(customAsyncIterator.ts, 4, 15))
 >T : Symbol(T, Decl(customAsyncIterator.ts, 1, 23))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
 >IteratorResult : Symbol(IteratorResult, Decl(lib.es2015.iterable.d.ts, --, --))
 >T : Symbol(T, Decl(customAsyncIterator.ts, 1, 23))
 
@@ -23,7 +23,7 @@ class ConstantIterator<T> implements AsyncIterator<T, undefined, T | undefined> 
 >value : Symbol(value, Decl(customAsyncIterator.ts, 4, 15))
 
             throw new Error("ConstantIterator.prototype.next may not take any values");
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
         }
         return { value: this.constant, done: false };
 >value : Symbol(value, Decl(customAsyncIterator.ts, 8, 16))

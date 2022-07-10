@@ -116,7 +116,7 @@ type Result<T> = { error?: undefined, value: T } | { error: Error };
 >value : Symbol(value, Decl(discriminatedUnionTypes2.ts, 35, 37))
 >T : Symbol(T, Decl(discriminatedUnionTypes2.ts, 35, 12))
 >error : Symbol(error, Decl(discriminatedUnionTypes2.ts, 35, 52))
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2009.error.d.ts, --, --))
 
 function f15(x: Result<number>) {
 >f15 : Symbol(f15, Decl(discriminatedUnionTypes2.ts, 35, 68))
@@ -135,11 +135,11 @@ function f15(x: Result<number>) {
     }
     else {
         x.error.message;
->x.error.message : Symbol(Error.message, Decl(lib.es5.d.ts, --, --))
+>x.error.message : Symbol(Error.message, Decl(lib.es2009.error.d.ts, --, --))
 >x.error : Symbol(error, Decl(discriminatedUnionTypes2.ts, 35, 52))
 >x : Symbol(x, Decl(discriminatedUnionTypes2.ts, 37, 13))
 >error : Symbol(error, Decl(discriminatedUnionTypes2.ts, 35, 52))
->message : Symbol(Error.message, Decl(lib.es5.d.ts, --, --))
+>message : Symbol(Error.message, Decl(lib.es2009.error.d.ts, --, --))
     }
 }
 
@@ -150,7 +150,7 @@ f15({ value: 10 });
 f15({ error: new Error("boom") });
 >f15 : Symbol(f15, Decl(discriminatedUnionTypes2.ts, 35, 68))
 >error : Symbol(error, Decl(discriminatedUnionTypes2.ts, 47, 5))
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2009.error.d.ts, --, --))
 
 // Repro from #24193
 
@@ -159,7 +159,7 @@ interface WithError {
 
     error: Error
 >error : Symbol(WithError.error, Decl(discriminatedUnionTypes2.ts, 51, 21))
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2009.error.d.ts, --, --))
 
     data: null
 >data : Symbol(WithError.data, Decl(discriminatedUnionTypes2.ts, 52, 16))
@@ -212,7 +212,7 @@ function f20<Data>(carrier: DataCarrier<Data>) {
     } else {
         const error: Error = carrier.error
 >error : Symbol(error, Decl(discriminatedUnionTypes2.ts, 68, 13))
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2009.error.d.ts, --, --))
 >carrier.error : Symbol(WithError.error, Decl(discriminatedUnionTypes2.ts, 51, 21))
 >carrier : Symbol(carrier, Decl(discriminatedUnionTypes2.ts, 63, 19))
 >error : Symbol(WithError.error, Decl(discriminatedUnionTypes2.ts, 51, 21))

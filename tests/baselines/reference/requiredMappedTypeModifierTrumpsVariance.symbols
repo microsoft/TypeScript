@@ -1,7 +1,7 @@
 === tests/cases/compiler/requiredMappedTypeModifierTrumpsVariance.ts ===
 const a: Required<{ a?: 1; x: 1 }> = { a: 1, x: 1 };
 >a : Symbol(a, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 0, 5))
->Required : Symbol(Required, Decl(lib.es5.d.ts, --, --))
+>Required : Symbol(Required, Decl(lib.utils.modifiers.d.ts, --, --))
 >a : Symbol(a, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 0, 19))
 >x : Symbol(x, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 0, 26))
 >a : Symbol(a, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 0, 38))
@@ -9,7 +9,7 @@ const a: Required<{ a?: 1; x: 1 }> = { a: 1, x: 1 };
 
 const b: Required<{ b?: 1; x: 1 }> = { b: 1, x: 1 };
 >b : Symbol(b, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 1, 5))
->Required : Symbol(Required, Decl(lib.es5.d.ts, --, --))
+>Required : Symbol(Required, Decl(lib.utils.modifiers.d.ts, --, --))
 >b : Symbol(b, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 1, 19))
 >x : Symbol(x, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 1, 26))
 >b : Symbol(b, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 1, 38))
@@ -43,7 +43,7 @@ interface Foo<T> {
 
     a: Required<T>;
 >a : Symbol(Foo.a, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 10, 18))
->Required : Symbol(Required, Decl(lib.es5.d.ts, --, --))
+>Required : Symbol(Required, Decl(lib.utils.modifiers.d.ts, --, --))
 >T : Symbol(T, Decl(requiredMappedTypeModifierTrumpsVariance.ts, 10, 14))
 }
 const aa: Foo<{ a?: 1; x: 1 }> = { a: { a: 1, x: 1 } };

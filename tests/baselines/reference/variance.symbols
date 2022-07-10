@@ -52,11 +52,11 @@ class Bar<T extends string> {
 >pushThis : Symbol(Bar.pushThis, Decl(variance.ts, 19, 59))
 
     Bar.instance.push(this);
->Bar.instance.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>Bar.instance.push : Symbol(Array.push, Decl(lib.es2009.array.d.ts, --, --))
 >Bar.instance : Symbol(Bar.instance, Decl(variance.ts, 16, 29))
 >Bar : Symbol(Bar, Decl(variance.ts, 11, 25))
 >instance : Symbol(Bar.instance, Decl(variance.ts, 16, 29))
->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es2009.array.d.ts, --, --))
 >this : Symbol(Bar, Decl(variance.ts, 11, 25))
   }
 }

@@ -18,7 +18,7 @@ type A = {
 
 type B = Omit<A, 'a'>;
 >B : Symbol(B, Decl(omitTypeHelperModifiers01.ts, 5, 2))
->Omit : Symbol(Omit, Decl(lib.es5.d.ts, --, --))
+>Omit : Symbol(Omit, Decl(lib.utils.modifiers.d.ts, --, --))
 >A : Symbol(A, Decl(omitTypeHelperModifiers01.ts, 0, 0))
 
 function f(x: B) {

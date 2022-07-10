@@ -66,7 +66,7 @@ function fn(x: boolean) {
 
     try { } catch (x: Error) { } // error in the type
 >x : Symbol(x, Decl(catchClauseWithTypeAnnotation.ts, 18, 19))
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2009.error.d.ts, --, --))
 
     try { } catch (x: object) { } // error in the type
 >x : Symbol(x, Decl(catchClauseWithTypeAnnotation.ts, 19, 19))
@@ -132,6 +132,6 @@ function fn(x: boolean) {
 
     try { } catch ({ x }: Error) { } // error in the type
 >x : Symbol(x, Decl(catchClauseWithTypeAnnotation.ts, 38, 20))
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2009.error.d.ts, --, --))
 }
 

@@ -20,6 +20,6 @@ type FFG<T> = T extends O ? X<ReturnType<T['m']>> : never; // error!
 >T : Symbol(T, Decl(substituteReturnTypeSatisfiesConstraint.ts, 3, 9))
 >O : Symbol(O, Decl(substituteReturnTypeSatisfiesConstraint.ts, 0, 23))
 >X : Symbol(X, Decl(substituteReturnTypeSatisfiesConstraint.ts, 1, 24))
->ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>ReturnType : Symbol(ReturnType, Decl(lib.utils.modifiers.d.ts, --, --))
 >T : Symbol(T, Decl(substituteReturnTypeSatisfiesConstraint.ts, 3, 9))
 

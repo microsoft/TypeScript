@@ -56,7 +56,7 @@ export type SpecArray<INPUT, ROOTINPUT = any> = Array<Spec<INPUT, ROOTINPUT>>;
 >SpecArray : Symbol(SpecArray, Decl(specedNoStackBlown.ts, 14, 90))
 >INPUT : Symbol(INPUT, Decl(specedNoStackBlown.ts, 16, 22))
 >ROOTINPUT : Symbol(ROOTINPUT, Decl(specedNoStackBlown.ts, 16, 28))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es2009.array.d.ts, --, --), Decl(lib.es2009.array.d.ts, --, --))
 >Spec : Symbol(Spec, Decl(specedNoStackBlown.ts, 12, 45))
 >INPUT : Symbol(INPUT, Decl(specedNoStackBlown.ts, 16, 22))
 >ROOTINPUT : Symbol(ROOTINPUT, Decl(specedNoStackBlown.ts, 16, 28))
@@ -66,13 +66,13 @@ export type SpecFunction<INPUT, ROOTINPUT = any> = [INPUT] extends [ReadonlyArra
 >INPUT : Symbol(INPUT, Decl(specedNoStackBlown.ts, 18, 25))
 >ROOTINPUT : Symbol(ROOTINPUT, Decl(specedNoStackBlown.ts, 18, 31))
 >INPUT : Symbol(INPUT, Decl(specedNoStackBlown.ts, 18, 25))
->ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es2009.array.d.ts, --, --))
 >U : Symbol(U, Decl(specedNoStackBlown.ts, 18, 87))
 
     ? (value: INPUT) => ReadonlyArray<SpecArray<U, ROOTINPUT>>
 >value : Symbol(value, Decl(specedNoStackBlown.ts, 19, 7))
 >INPUT : Symbol(INPUT, Decl(specedNoStackBlown.ts, 18, 25))
->ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es2009.array.d.ts, --, --))
 >SpecArray : Symbol(SpecArray, Decl(specedNoStackBlown.ts, 14, 90))
 >U : Symbol(U, Decl(specedNoStackBlown.ts, 18, 87))
 >ROOTINPUT : Symbol(ROOTINPUT, Decl(specedNoStackBlown.ts, 18, 31))
@@ -98,7 +98,7 @@ export type SpecObject<INPUT, ROOTINPUT = any> = Partial<{[key in keyof INPUT]: 
 >SpecObject : Symbol(SpecObject, Decl(specedNoStackBlown.ts, 22, 56))
 >INPUT : Symbol(INPUT, Decl(specedNoStackBlown.ts, 24, 23))
 >ROOTINPUT : Symbol(ROOTINPUT, Decl(specedNoStackBlown.ts, 24, 29))
->Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.utils.modifiers.d.ts, --, --))
 >key : Symbol(key, Decl(specedNoStackBlown.ts, 24, 59))
 >INPUT : Symbol(INPUT, Decl(specedNoStackBlown.ts, 24, 23))
 >SpecValue : Symbol(SpecValue, Decl(specedNoStackBlown.ts, 24, 115))
@@ -111,7 +111,7 @@ export type SpecValue<INPUT, ROOTINPUT = any> = [INPUT] extends [ReadonlyArray<a
 >INPUT : Symbol(INPUT, Decl(specedNoStackBlown.ts, 26, 22))
 >ROOTINPUT : Symbol(ROOTINPUT, Decl(specedNoStackBlown.ts, 26, 28))
 >INPUT : Symbol(INPUT, Decl(specedNoStackBlown.ts, 26, 22))
->ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es2009.array.d.ts, --, --))
 
     ? SpecArray<INPUT, ROOTINPUT> | SpecFunction<INPUT, ROOTINPUT>
 >SpecArray : Symbol(SpecArray, Decl(specedNoStackBlown.ts, 14, 90))

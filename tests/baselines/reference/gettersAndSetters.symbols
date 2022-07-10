@@ -117,9 +117,9 @@ var i:I1 = function (n) {return n;}
 // Repro from #45006
 const x: string | number = Math.random() < 0.5 ? "str" : 123;
 >x : Symbol(x, Decl(gettersAndSetters.ts, 41, 5))
->Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math.random : Symbol(Math.random, Decl(lib.es2009.math.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es2009.math.d.ts, --, --), Decl(lib.es2009.math.d.ts, --, --), Decl(lib.es2015.math.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es2009.math.d.ts, --, --))
 
 if (typeof x === "string") {
 >x : Symbol(x, Decl(gettersAndSetters.ts, 41, 5))
@@ -130,21 +130,21 @@ if (typeof x === "string") {
     set prop(_: any) { x.toUpperCase(); },
 >prop : Symbol(prop, Decl(gettersAndSetters.ts, 43, 13), Decl(gettersAndSetters.ts, 44, 42))
 >_ : Symbol(_, Decl(gettersAndSetters.ts, 44, 13))
->x.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>x.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es2009.string.d.ts, --, --))
 >x : Symbol(x, Decl(gettersAndSetters.ts, 41, 5))
->toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es2009.string.d.ts, --, --))
 
     get prop() { return x.toUpperCase() },
 >prop : Symbol(prop, Decl(gettersAndSetters.ts, 43, 13), Decl(gettersAndSetters.ts, 44, 42))
->x.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>x.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es2009.string.d.ts, --, --))
 >x : Symbol(x, Decl(gettersAndSetters.ts, 41, 5))
->toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es2009.string.d.ts, --, --))
 
     method() { return x.toUpperCase() }
 >method : Symbol(method, Decl(gettersAndSetters.ts, 45, 42))
->x.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>x.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es2009.string.d.ts, --, --))
 >x : Symbol(x, Decl(gettersAndSetters.ts, 41, 5))
->toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es2009.string.d.ts, --, --))
   }
 }
 

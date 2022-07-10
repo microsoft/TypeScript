@@ -31,7 +31,7 @@ declare function assertDefined<T>(value: T): asserts value is NonNullable<T>;
 >value : Symbol(value, Decl(assertionTypePredicates1.ts, 7, 34))
 >T : Symbol(T, Decl(assertionTypePredicates1.ts, 7, 31))
 >value : Symbol(value, Decl(assertionTypePredicates1.ts, 7, 34))
->NonNullable : Symbol(NonNullable, Decl(lib.es5.d.ts, --, --))
+>NonNullable : Symbol(NonNullable, Decl(lib.utils.modifiers.d.ts, --, --))
 >T : Symbol(T, Decl(assertionTypePredicates1.ts, 7, 31))
 
 function f01(x: unknown) {
@@ -44,20 +44,20 @@ function f01(x: unknown) {
 >x : Symbol(x, Decl(assertionTypePredicates1.ts, 9, 13))
 
         x.length;
->x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x.length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
 >x : Symbol(x, Decl(assertionTypePredicates1.ts, 9, 13))
->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
     }
     if (!!true) {
         assert(x instanceof Error);
 >assert : Symbol(assert, Decl(assertionTypePredicates1.ts, 3, 5))
 >x : Symbol(x, Decl(assertionTypePredicates1.ts, 9, 13))
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2009.error.d.ts, --, --))
 
         x.message;
->x.message : Symbol(Error.message, Decl(lib.es5.d.ts, --, --))
+>x.message : Symbol(Error.message, Decl(lib.es2009.error.d.ts, --, --))
 >x : Symbol(x, Decl(assertionTypePredicates1.ts, 9, 13))
->message : Symbol(Error.message, Decl(lib.es5.d.ts, --, --))
+>message : Symbol(Error.message, Decl(lib.es2009.error.d.ts, --, --))
     }
     if (!!true) {
         assert(typeof x === "boolean" || typeof x === "number");
@@ -66,9 +66,9 @@ function f01(x: unknown) {
 >x : Symbol(x, Decl(assertionTypePredicates1.ts, 9, 13))
 
         x.toLocaleString;
->x.toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>x.toLocaleString : Symbol(toLocaleString, Decl(lib.es2009.number.d.ts, --, --), Decl(lib.es2009.object.d.ts, --, --))
 >x : Symbol(x, Decl(assertionTypePredicates1.ts, 9, 13))
->toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>toLocaleString : Symbol(toLocaleString, Decl(lib.es2009.number.d.ts, --, --), Decl(lib.es2009.object.d.ts, --, --))
     }
     if (!!true) {
         assert(isArrayOfStrings(x));
@@ -77,9 +77,9 @@ function f01(x: unknown) {
 >x : Symbol(x, Decl(assertionTypePredicates1.ts, 9, 13))
 
         x[0].length;
->x[0].length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x[0].length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
 >x : Symbol(x, Decl(assertionTypePredicates1.ts, 9, 13))
->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
     }
     if (!!true) {
         assertIsArrayOfStrings(x);
@@ -87,9 +87,9 @@ function f01(x: unknown) {
 >x : Symbol(x, Decl(assertionTypePredicates1.ts, 9, 13))
 
         x[0].length;
->x[0].length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x[0].length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
 >x : Symbol(x, Decl(assertionTypePredicates1.ts, 9, 13))
->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
     }
     if (!!true) {
         assertIsArrayOfStrings(false);
@@ -143,9 +143,9 @@ function f02(x: string | undefined) {
 >x : Symbol(x, Decl(assertionTypePredicates1.ts, 50, 13))
 
         x.length;
->x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x.length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
 >x : Symbol(x, Decl(assertionTypePredicates1.ts, 50, 13))
->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
     }
     if (!!true) {
         assert(x !== undefined);
@@ -154,9 +154,9 @@ function f02(x: string | undefined) {
 >undefined : Symbol(undefined)
 
         x.length;
->x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x.length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
 >x : Symbol(x, Decl(assertionTypePredicates1.ts, 50, 13))
->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
     }
     if (!!true) {
         assertDefined(x);
@@ -164,9 +164,9 @@ function f02(x: string | undefined) {
 >x : Symbol(x, Decl(assertionTypePredicates1.ts, 50, 13))
 
         x.length;
->x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x.length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
 >x : Symbol(x, Decl(assertionTypePredicates1.ts, 50, 13))
->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
     }
 }
 
@@ -182,9 +182,9 @@ function f03(x: string | undefined, assert: (value: unknown) => asserts value) {
 >x : Symbol(x, Decl(assertionTypePredicates1.ts, 65, 13))
 
     x.length;
->x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x.length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
 >x : Symbol(x, Decl(assertionTypePredicates1.ts, 65, 13))
->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
 }
 
 namespace Debug {
@@ -202,7 +202,7 @@ namespace Debug {
 >value : Symbol(value, Decl(assertionTypePredicates1.ts, 72, 45))
 >T : Symbol(T, Decl(assertionTypePredicates1.ts, 72, 42))
 >value : Symbol(value, Decl(assertionTypePredicates1.ts, 72, 45))
->NonNullable : Symbol(NonNullable, Decl(lib.es5.d.ts, --, --))
+>NonNullable : Symbol(NonNullable, Decl(lib.utils.modifiers.d.ts, --, --))
 >T : Symbol(T, Decl(assertionTypePredicates1.ts, 72, 42))
 }
 
@@ -218,9 +218,9 @@ function f10(x: string | undefined) {
 >x : Symbol(x, Decl(assertionTypePredicates1.ts, 75, 13))
 
         x.length;
->x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x.length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
 >x : Symbol(x, Decl(assertionTypePredicates1.ts, 75, 13))
->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
     }
     if (!!true) {
         Debug.assert(x !== undefined);
@@ -231,9 +231,9 @@ function f10(x: string | undefined) {
 >undefined : Symbol(undefined)
 
         x.length;
->x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x.length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
 >x : Symbol(x, Decl(assertionTypePredicates1.ts, 75, 13))
->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
     }
     if (!!true) {
         Debug.assertDefined(x);
@@ -243,9 +243,9 @@ function f10(x: string | undefined) {
 >x : Symbol(x, Decl(assertionTypePredicates1.ts, 75, 13))
 
         x.length;
->x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x.length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
 >x : Symbol(x, Decl(assertionTypePredicates1.ts, 75, 13))
->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
     }
     if (!!true) {
         Debug.assert(false);
@@ -270,7 +270,7 @@ class Test {
 >value : Symbol(value, Decl(assertionTypePredicates1.ts, 95, 11))
 
         throw new Error();
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2009.error.d.ts, --, --))
     }
     isTest2(): this is Test2 {
 >isTest2 : Symbol(Test.isTest2, Decl(assertionTypePredicates1.ts, 98, 5))
@@ -289,7 +289,7 @@ class Test {
 >Test2 : Symbol(Test2, Decl(assertionTypePredicates1.ts, 127, 1))
 
         throw new Error();
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2009.error.d.ts, --, --))
     }
     assertThis(): asserts this {
 >assertThis : Symbol(Test.assertThis, Decl(assertionTypePredicates1.ts, 105, 5))
@@ -298,7 +298,7 @@ class Test {
 >this : Symbol(Test, Decl(assertionTypePredicates1.ts, 92, 1))
 
         throw new Error();
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2009.error.d.ts, --, --))
     }
     bar() {
 >bar : Symbol(Test.bar, Decl(assertionTypePredicates1.ts, 109, 5))
@@ -322,9 +322,9 @@ class Test {
 >x : Symbol(x, Decl(assertionTypePredicates1.ts, 114, 8))
 
         x.length;
->x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x.length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
 >x : Symbol(x, Decl(assertionTypePredicates1.ts, 114, 8))
->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
 
         if (this.isTest2()) {
 >this.isTest2 : Symbol(Test.isTest2, Decl(assertionTypePredicates1.ts, 98, 5))
@@ -381,9 +381,9 @@ class Derived extends Test {
 >x : Symbol(x, Decl(assertionTypePredicates1.ts, 134, 8))
 
         x.length;
->x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x.length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
 >x : Symbol(x, Decl(assertionTypePredicates1.ts, 134, 8))
->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
     }
     baz(x: number) {
 >baz : Symbol(Derived.baz, Decl(assertionTypePredicates1.ts, 137, 5))

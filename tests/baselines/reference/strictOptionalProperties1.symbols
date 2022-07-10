@@ -97,9 +97,9 @@ function f2(obj: { a?: string, b?: string | undefined }) {
 >a : Symbol(a, Decl(strictOptionalProperties1.ts, 9, 18))
     }
     if (obj.hasOwnProperty('a')) {
->obj.hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es5.d.ts, --, --))
+>obj.hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es2009.object.d.ts, --, --))
 >obj : Symbol(obj, Decl(strictOptionalProperties1.ts, 9, 12))
->hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es5.d.ts, --, --))
+>hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es2009.object.d.ts, --, --))
 
         obj.a;
 >obj.a : Symbol(a, Decl(strictOptionalProperties1.ts, 9, 18))
@@ -159,9 +159,9 @@ function f2(obj: { a?: string, b?: string | undefined }) {
 >b : Symbol(b, Decl(strictOptionalProperties1.ts, 9, 30))
     }
     if (obj.hasOwnProperty('b')) {
->obj.hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es5.d.ts, --, --))
+>obj.hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es2009.object.d.ts, --, --))
 >obj : Symbol(obj, Decl(strictOptionalProperties1.ts, 9, 12))
->hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es5.d.ts, --, --))
+>hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es2009.object.d.ts, --, --))
 
         obj.b;
 >obj.b : Symbol(b, Decl(strictOptionalProperties1.ts, 9, 30))
@@ -195,7 +195,7 @@ function f2(obj: { a?: string, b?: string | undefined }) {
 function f3(obj: Partial<{ a: string, b: string | undefined }>) {
 >f3 : Symbol(f3, Decl(strictOptionalProperties1.ts, 45, 1))
 >obj : Symbol(obj, Decl(strictOptionalProperties1.ts, 47, 12))
->Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.utils.modifiers.d.ts, --, --))
 >a : Symbol(a, Decl(strictOptionalProperties1.ts, 47, 26))
 >b : Symbol(b, Decl(strictOptionalProperties1.ts, 47, 37))
 
@@ -341,7 +341,7 @@ type InputProps = {
 
 const defaultProps: Pick<Props, 'foo'> = { foo: 'foo' };
 >defaultProps : Symbol(defaultProps, Decl(strictOptionalProperties1.ts, 97, 5))
->Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>Pick : Symbol(Pick, Decl(lib.utils.modifiers.d.ts, --, --))
 >Props : Symbol(Props, Decl(strictOptionalProperties1.ts, 83, 1))
 >foo : Symbol(foo, Decl(strictOptionalProperties1.ts, 97, 42))
 
@@ -486,7 +486,7 @@ declare function f13<T>(x: Partial<T>): T;
 >f13 : Symbol(f13, Decl(strictOptionalProperties1.ts, 145, 9))
 >T : Symbol(T, Decl(strictOptionalProperties1.ts, 147, 21))
 >x : Symbol(x, Decl(strictOptionalProperties1.ts, 147, 24))
->Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.utils.modifiers.d.ts, --, --))
 >T : Symbol(T, Decl(strictOptionalProperties1.ts, 147, 21))
 >T : Symbol(T, Decl(strictOptionalProperties1.ts, 147, 21))
 
@@ -542,7 +542,7 @@ function expectNotUndefined<T>(value: Undefinable<T>): T {
 >undefined : Symbol(undefined)
 
         throw new TypeError('value is undefined');
->TypeError : Symbol(TypeError, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>TypeError : Symbol(TypeError, Decl(lib.es2009.typeerror.d.ts, --, --), Decl(lib.es2009.typeerror.d.ts, --, --))
     }
     return value;
 >value : Symbol(value, Decl(strictOptionalProperties1.ts, 163, 31))

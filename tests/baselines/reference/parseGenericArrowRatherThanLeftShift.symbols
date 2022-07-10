@@ -1,7 +1,7 @@
 === tests/cases/compiler/parseGenericArrowRatherThanLeftShift.ts ===
 type Bar = ReturnType<<T>(x: T) => number>;
 >Bar : Symbol(Bar, Decl(parseGenericArrowRatherThanLeftShift.ts, 0, 0))
->ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>ReturnType : Symbol(ReturnType, Decl(lib.utils.modifiers.d.ts, --, --))
 >T : Symbol(T, Decl(parseGenericArrowRatherThanLeftShift.ts, 0, 23))
 >x : Symbol(x, Decl(parseGenericArrowRatherThanLeftShift.ts, 0, 26))
 >T : Symbol(T, Decl(parseGenericArrowRatherThanLeftShift.ts, 0, 23))

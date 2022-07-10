@@ -82,7 +82,7 @@ class GetSetMonster {
 >value : Symbol(value, Decl(es6ClassTest2.ts, 34, 15))
 
             throw new Error('Health must be non-negative.')
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2009.error.d.ts, --, --))
     }
         this._health = value
 >this._health : Symbol(GetSetMonster._health, Decl(es6ClassTest2.ts, 19, 36))

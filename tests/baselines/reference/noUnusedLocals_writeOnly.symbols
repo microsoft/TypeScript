@@ -67,5 +67,5 @@ function f(x = 0, b = false) {
 function f2(_: ReadonlyArray<number>): void {}
 >f2 : Symbol(f2, Decl(noUnusedLocals_writeOnly.ts, 19, 1))
 >_ : Symbol(_, Decl(noUnusedLocals_writeOnly.ts, 20, 12))
->ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es2009.array.d.ts, --, --))
 

@@ -13,12 +13,12 @@ declare class Component<P> {
 
   constructor(props: Readonly<P>);
 >props : Symbol(props, Decl(checkJsxIntersectionElementPropsType.tsx, 5, 14))
->Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>Readonly : Symbol(Readonly, Decl(lib.utils.modifiers.d.ts, --, --))
 >P : Symbol(P, Decl(checkJsxIntersectionElementPropsType.tsx, 4, 24))
 
   readonly props: Readonly<P>;
 >props : Symbol(Component.props, Decl(checkJsxIntersectionElementPropsType.tsx, 5, 34))
->Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>Readonly : Symbol(Readonly, Decl(lib.utils.modifiers.d.ts, --, --))
 >P : Symbol(P, Decl(checkJsxIntersectionElementPropsType.tsx, 4, 24))
 }
 

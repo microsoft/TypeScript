@@ -18011,7 +18011,7 @@ type DiscriminateUnion<T, K extends keyof T, V extends T[K]> = T extends Record<
 >T : Symbol(T, Decl(conditionalTypeDiscriminatingLargeUnionRegularTypeFetchingSpeedReasonable.ts, 8002, 23))
 >K : Symbol(K, Decl(conditionalTypeDiscriminatingLargeUnionRegularTypeFetchingSpeedReasonable.ts, 8002, 25))
 >T : Symbol(T, Decl(conditionalTypeDiscriminatingLargeUnionRegularTypeFetchingSpeedReasonable.ts, 8002, 23))
->Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.utils.modifiers.d.ts, --, --))
 >K : Symbol(K, Decl(conditionalTypeDiscriminatingLargeUnionRegularTypeFetchingSpeedReasonable.ts, 8002, 25))
 >V : Symbol(V, Decl(conditionalTypeDiscriminatingLargeUnionRegularTypeFetchingSpeedReasonable.ts, 8002, 44))
 >T : Symbol(T, Decl(conditionalTypeDiscriminatingLargeUnionRegularTypeFetchingSpeedReasonable.ts, 8002, 23))

@@ -1,7 +1,7 @@
 === tests/cases/compiler/context.ts ===
 export const Key = Symbol();
 >Key : Symbol(Key, Decl(context.ts, 0, 12))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es2009.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 export interface Context {
 >Context : Symbol(Context, Decl(context.ts, 0, 28))

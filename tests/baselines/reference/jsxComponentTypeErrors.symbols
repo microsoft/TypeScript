@@ -47,9 +47,9 @@ class ClassComponent {
 
 const MixedComponent = Math.random() ? FunctionComponent : ClassComponent;
 >MixedComponent : Symbol(MixedComponent, Decl(jsxComponentTypeErrors.tsx, 22, 5))
->Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math.random : Symbol(Math.random, Decl(lib.es2009.math.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es2009.math.d.ts, --, --), Decl(lib.es2009.math.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es2009.math.d.ts, --, --))
 >FunctionComponent : Symbol(FunctionComponent, Decl(jsxComponentTypeErrors.tsx, 7, 1), Decl(jsxComponentTypeErrors.tsx, 13, 1))
 >ClassComponent : Symbol(ClassComponent, Decl(jsxComponentTypeErrors.tsx, 16, 1))
 

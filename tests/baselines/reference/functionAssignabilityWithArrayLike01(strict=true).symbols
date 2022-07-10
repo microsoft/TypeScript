@@ -4,6 +4,6 @@ function func() {}
 
 const array: ArrayLike<any> = func;
 >array : Symbol(array, Decl(functionAssignabilityWithArrayLike01.ts, 1, 5))
->ArrayLike : Symbol(ArrayLike, Decl(lib.es5.d.ts, --, --))
+>ArrayLike : Symbol(ArrayLike, Decl(lib.es2009.array.d.ts, --, --))
 >func : Symbol(func, Decl(functionAssignabilityWithArrayLike01.ts, 0, 0))
 

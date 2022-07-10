@@ -14,12 +14,12 @@ interface Foo {
 
 export type Bar = Omit<Foo, "c">;
 >Bar : Symbol(Bar, Decl(omitTypeTestErrors01.ts, 4, 1))
->Omit : Symbol(Omit, Decl(lib.es5.d.ts, --, --))
+>Omit : Symbol(Omit, Decl(lib.utils.modifiers.d.ts, --, --))
 >Foo : Symbol(Foo, Decl(omitTypeTestErrors01.ts, 0, 0))
 
 export type Baz = Omit<Foo, "b" | "c">;
 >Baz : Symbol(Baz, Decl(omitTypeTestErrors01.ts, 6, 33))
->Omit : Symbol(Omit, Decl(lib.es5.d.ts, --, --))
+>Omit : Symbol(Omit, Decl(lib.utils.modifiers.d.ts, --, --))
 >Foo : Symbol(Foo, Decl(omitTypeTestErrors01.ts, 0, 0))
 
 export function getBarC(bar: Bar) {

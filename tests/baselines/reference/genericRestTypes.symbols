@@ -22,9 +22,9 @@ type Explicit = (...args: Tail<Parameters<MyFunctionType>>) => ReturnType<MyFunc
 >Explicit : Symbol(Explicit, Decl(genericRestTypes.ts, 6, 60))
 >args : Symbol(args, Decl(genericRestTypes.ts, 8, 17))
 >Tail : Symbol(Tail, Decl(genericRestTypes.ts, 0, 0))
->Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>Parameters : Symbol(Parameters, Decl(lib.utils.modifiers.d.ts, --, --))
 >MyFunctionType : Symbol(MyFunctionType, Decl(genericRestTypes.ts, 4, 110))
->ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>ReturnType : Symbol(ReturnType, Decl(lib.utils.modifiers.d.ts, --, --))
 >MyFunctionType : Symbol(MyFunctionType, Decl(genericRestTypes.ts, 4, 110))
 
 type Bind1<T extends (head: any, ...tail: any[]) => any> = (...args: Tail<Parameters<T>>) => ReturnType<T>;
@@ -34,9 +34,9 @@ type Bind1<T extends (head: any, ...tail: any[]) => any> = (...args: Tail<Parame
 >tail : Symbol(tail, Decl(genericRestTypes.ts, 10, 32))
 >args : Symbol(args, Decl(genericRestTypes.ts, 10, 60))
 >Tail : Symbol(Tail, Decl(genericRestTypes.ts, 0, 0))
->Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>Parameters : Symbol(Parameters, Decl(lib.utils.modifiers.d.ts, --, --))
 >T : Symbol(T, Decl(genericRestTypes.ts, 10, 11))
->ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>ReturnType : Symbol(ReturnType, Decl(lib.utils.modifiers.d.ts, --, --))
 >T : Symbol(T, Decl(genericRestTypes.ts, 10, 11))
 
 type Generic = Bind1<MyFunctionType>; // (bar: string) => boolean

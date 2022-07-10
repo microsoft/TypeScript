@@ -4,7 +4,7 @@ function test() {
 
     var cats = new Array<WAWA>(); // WAWA is not a valid type
 >cats : Symbol(cats, Decl(invalidSymbolInTypeParameter1.ts, 1, 7))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es2009.array.d.ts, --, --), Decl(lib.es2009.array.d.ts, --, --))
 >WAWA : Symbol(WAWA)
 }
 

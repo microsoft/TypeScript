@@ -11,7 +11,7 @@ type __Awaited<T> =
 
     T extends PromiseLike<infer U> ? __Awaited<U> :
 >T : Symbol(T, Decl(recursiveConditionalTypes.ts, 2, 15))
->PromiseLike : Symbol(PromiseLike, Decl(lib.es5.d.ts, --, --))
+>PromiseLike : Symbol(PromiseLike, Decl(lib.es2009.promise.d.ts, --, --))
 >U : Symbol(U, Decl(recursiveConditionalTypes.ts, 4, 31))
 >__Awaited : Symbol(__Awaited, Decl(recursiveConditionalTypes.ts, 0, 0))
 >U : Symbol(U, Decl(recursiveConditionalTypes.ts, 4, 31))
@@ -30,7 +30,7 @@ type MyPromise<T> = {
 >value : Symbol(value, Decl(recursiveConditionalTypes.ts, 8, 17))
 >T : Symbol(T, Decl(recursiveConditionalTypes.ts, 7, 15))
 >U : Symbol(U, Decl(recursiveConditionalTypes.ts, 8, 9))
->PromiseLike : Symbol(PromiseLike, Decl(lib.es5.d.ts, --, --))
+>PromiseLike : Symbol(PromiseLike, Decl(lib.es2009.promise.d.ts, --, --))
 >U : Symbol(U, Decl(recursiveConditionalTypes.ts, 8, 9))
 >MyPromise : Symbol(MyPromise, Decl(recursiveConditionalTypes.ts, 5, 6))
 >U : Symbol(U, Decl(recursiveConditionalTypes.ts, 8, 9))
@@ -39,15 +39,15 @@ type MyPromise<T> = {
 type InfinitePromise<T> = Promise<InfinitePromise<T>>;
 >InfinitePromise : Symbol(InfinitePromise, Decl(recursiveConditionalTypes.ts, 9, 1))
 >T : Symbol(T, Decl(recursiveConditionalTypes.ts, 11, 21))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
 >InfinitePromise : Symbol(InfinitePromise, Decl(recursiveConditionalTypes.ts, 9, 1))
 >T : Symbol(T, Decl(recursiveConditionalTypes.ts, 11, 21))
 
 type P0 = __Awaited<Promise<string | Promise<MyPromise<number> | null> | undefined>>;
 >P0 : Symbol(P0, Decl(recursiveConditionalTypes.ts, 11, 54))
 >__Awaited : Symbol(__Awaited, Decl(recursiveConditionalTypes.ts, 0, 0))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
 >MyPromise : Symbol(MyPromise, Decl(recursiveConditionalTypes.ts, 5, 6))
 
 type P1 = __Awaited<any>;
@@ -566,7 +566,7 @@ let five: Add<2, 3>;
 type _PrependNextNum<A extends Array<unknown>> = A['length'] extends infer T
 >_PrependNextNum : Symbol(_PrependNextNum, Decl(recursiveConditionalTypes.ts, 147, 20))
 >A : Symbol(A, Decl(recursiveConditionalTypes.ts, 151, 21))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 3 more)
+>Array : Symbol(Array, Decl(lib.es2009.array.d.ts, --, --), Decl(lib.es2009.array.d.ts, --, --), Decl(lib.es2015.array.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 3 more)
 >A : Symbol(A, Decl(recursiveConditionalTypes.ts, 151, 21))
 >T : Symbol(T, Decl(recursiveConditionalTypes.ts, 151, 74))
 
@@ -584,7 +584,7 @@ type _PrependNextNum<A extends Array<unknown>> = A['length'] extends infer T
 type _Enumerate<A extends Array<unknown>, N extends number> = N extends A['length']
 >_Enumerate : Symbol(_Enumerate, Decl(recursiveConditionalTypes.ts, 155, 12))
 >A : Symbol(A, Decl(recursiveConditionalTypes.ts, 157, 16))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 3 more)
+>Array : Symbol(Array, Decl(lib.es2009.array.d.ts, --, --), Decl(lib.es2009.array.d.ts, --, --), Decl(lib.es2015.array.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 3 more)
 >N : Symbol(N, Decl(recursiveConditionalTypes.ts, 157, 41))
 >N : Symbol(N, Decl(recursiveConditionalTypes.ts, 157, 41))
 >A : Symbol(A, Decl(recursiveConditionalTypes.ts, 157, 16))
@@ -623,8 +623,8 @@ function foo2<T extends unknown[]>(value: T): Enumerate<T['length']> {
 >T : Symbol(T, Decl(recursiveConditionalTypes.ts, 167, 14))
 
     return value.length;  // Error
->value.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>value.length : Symbol(Array.length, Decl(lib.es2009.array.d.ts, --, --))
 >value : Symbol(value, Decl(recursiveConditionalTypes.ts, 167, 35))
->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es2009.array.d.ts, --, --))
 }
 

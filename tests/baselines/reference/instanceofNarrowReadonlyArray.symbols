@@ -7,7 +7,7 @@ function narrow(x: readonly number[] | number): readonly number[] {
 
     if (x instanceof Array) {
 >x : Symbol(x, Decl(instanceofNarrowReadonlyArray.ts, 2, 16))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es2009.array.d.ts, --, --), Decl(lib.es2009.array.d.ts, --, --))
 
         return x;
 >x : Symbol(x, Decl(instanceofNarrowReadonlyArray.ts, 2, 16))

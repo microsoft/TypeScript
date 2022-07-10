@@ -13,7 +13,7 @@ declare module "fs" {
 >WriteFileOptions : Symbol(WriteFileOptions, Decl(index.d.ts, 0, 21))
 >callback : Symbol(callback, Decl(index.d.ts, 2, 79))
 >err : Symbol(err, Decl(index.d.ts, 2, 91))
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2009.error.d.ts, --, --))
 }
 
 === /index.js ===

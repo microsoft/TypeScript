@@ -81,13 +81,13 @@ function test(required1: () => boolean, required2: () => boolean, b: boolean, op
 
     // ok
     [].forEach((f: () => void) => f && f.apply(parent, []));
->[].forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
->forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>[].forEach : Symbol(Array.forEach, Decl(lib.es2009.array.d.ts, --, --))
+>forEach : Symbol(Array.forEach, Decl(lib.es2009.array.d.ts, --, --))
 >f : Symbol(f, Decl(truthinessCallExpressionCoercion2.ts, 37, 16))
 >f : Symbol(f, Decl(truthinessCallExpressionCoercion2.ts, 37, 16))
->f.apply : Symbol(Function.apply, Decl(lib.es5.d.ts, --, --))
+>f.apply : Symbol(Function.apply, Decl(lib.es2009.function.d.ts, --, --))
 >f : Symbol(f, Decl(truthinessCallExpressionCoercion2.ts, 37, 16))
->apply : Symbol(Function.apply, Decl(lib.es5.d.ts, --, --))
+>apply : Symbol(Function.apply, Decl(lib.es2009.function.d.ts, --, --))
 >parent : Symbol(parent, Decl(lib.dom.d.ts, --, --))
 
     // error
@@ -227,7 +227,7 @@ function checksPropertyAccess() {
 >A.from : Symbol(A.from, Decl(truthinessCallExpressionCoercion2.ts, 0, 17))
 >A : Symbol(A, Decl(truthinessCallExpressionCoercion2.ts, 0, 0))
 >from : Symbol(A.from, Decl(truthinessCallExpressionCoercion2.ts, 0, 17))
->Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es2009.function.d.ts, --, --), Decl(lib.es2009.function.d.ts, --, --), Decl(lib.es2015.function.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >B.from : Symbol(B.from, Decl(truthinessCallExpressionCoercion2.ts, 4, 17))
 >B : Symbol(B, Decl(truthinessCallExpressionCoercion2.ts, 2, 1))
 >from : Symbol(B.from, Decl(truthinessCallExpressionCoercion2.ts, 4, 17))

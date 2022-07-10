@@ -13,7 +13,7 @@ var Validator = function VFunc() {
 Validator.prototype.num = 12
 >Validator.prototype : Symbol(Validator.num, Decl(jsdocConstructorFunctionTypeReference.js, 2, 2))
 >Validator : Symbol(Validator, Decl(jsdocConstructorFunctionTypeReference.js, 0, 3))
->prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>prototype : Symbol(Function.prototype, Decl(lib.es2009.function.d.ts, --, --))
 >num : Symbol(Validator.num, Decl(jsdocConstructorFunctionTypeReference.js, 2, 2))
 
 /**

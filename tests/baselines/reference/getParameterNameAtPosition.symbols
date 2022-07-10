@@ -4,7 +4,7 @@
 interface Mock<Y extends any[]> extends Function {
 >Mock : Symbol(Mock, Decl(getParameterNameAtPosition.ts, 0, 0))
 >Y : Symbol(Y, Decl(getParameterNameAtPosition.ts, 2, 15))
->Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es2009.function.d.ts, --, --), Decl(lib.es2009.function.d.ts, --, --))
 
     (...args: Y): any;
 >args : Symbol(args, Decl(getParameterNameAtPosition.ts, 3, 5))

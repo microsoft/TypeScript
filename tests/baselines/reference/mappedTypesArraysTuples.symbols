@@ -20,11 +20,11 @@ type T00 = Boxified<[number, string?, ...boolean[]]>;
 
 type T01 = Partial<[number, string?, ...boolean[]]>;
 >T01 : Symbol(T01, Decl(mappedTypesArraysTuples.ts, 3, 53))
->Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.utils.modifiers.d.ts, --, --))
 
 type T02 = Required<[number, string?, ...boolean[]]>;
 >T02 : Symbol(T02, Decl(mappedTypesArraysTuples.ts, 4, 52))
->Required : Symbol(Required, Decl(lib.es5.d.ts, --, --))
+>Required : Symbol(Required, Decl(lib.utils.modifiers.d.ts, --, --))
 
 type T10 = Boxified<string[]>;
 >T10 : Symbol(T10, Decl(mappedTypesArraysTuples.ts, 5, 53))
@@ -32,26 +32,26 @@ type T10 = Boxified<string[]>;
 
 type T11 = Partial<string[]>;
 >T11 : Symbol(T11, Decl(mappedTypesArraysTuples.ts, 7, 30))
->Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.utils.modifiers.d.ts, --, --))
 
 type T12 = Required<string[]>;
 >T12 : Symbol(T12, Decl(mappedTypesArraysTuples.ts, 8, 29))
->Required : Symbol(Required, Decl(lib.es5.d.ts, --, --))
+>Required : Symbol(Required, Decl(lib.utils.modifiers.d.ts, --, --))
 
 type T13 = Boxified<ReadonlyArray<string>>;
 >T13 : Symbol(T13, Decl(mappedTypesArraysTuples.ts, 9, 30))
 >Boxified : Symbol(Boxified, Decl(mappedTypesArraysTuples.ts, 0, 27))
->ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es2009.array.d.ts, --, --))
 
 type T14 = Partial<ReadonlyArray<string>>;
 >T14 : Symbol(T14, Decl(mappedTypesArraysTuples.ts, 10, 43))
->Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
->ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.utils.modifiers.d.ts, --, --))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es2009.array.d.ts, --, --))
 
 type T15 = Required<ReadonlyArray<string>>;
 >T15 : Symbol(T15, Decl(mappedTypesArraysTuples.ts, 11, 42))
->Required : Symbol(Required, Decl(lib.es5.d.ts, --, --))
->ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+>Required : Symbol(Required, Decl(lib.utils.modifiers.d.ts, --, --))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es2009.array.d.ts, --, --))
 
 type T20 = Boxified<(string | undefined)[]>;
 >T20 : Symbol(T20, Decl(mappedTypesArraysTuples.ts, 12, 43))
@@ -59,35 +59,35 @@ type T20 = Boxified<(string | undefined)[]>;
 
 type T21 = Partial<(string | undefined)[]>;
 >T21 : Symbol(T21, Decl(mappedTypesArraysTuples.ts, 14, 44))
->Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.utils.modifiers.d.ts, --, --))
 
 type T22 = Required<(string | undefined)[]>;
 >T22 : Symbol(T22, Decl(mappedTypesArraysTuples.ts, 15, 43))
->Required : Symbol(Required, Decl(lib.es5.d.ts, --, --))
+>Required : Symbol(Required, Decl(lib.utils.modifiers.d.ts, --, --))
 
 type T23 = Boxified<ReadonlyArray<string | undefined>>;
 >T23 : Symbol(T23, Decl(mappedTypesArraysTuples.ts, 16, 44))
 >Boxified : Symbol(Boxified, Decl(mappedTypesArraysTuples.ts, 0, 27))
->ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es2009.array.d.ts, --, --))
 
 type T24 = Partial<ReadonlyArray<string | undefined>>;
 >T24 : Symbol(T24, Decl(mappedTypesArraysTuples.ts, 17, 55))
->Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
->ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.utils.modifiers.d.ts, --, --))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es2009.array.d.ts, --, --))
 
 type T25 = Required<ReadonlyArray<string | undefined>>;
 >T25 : Symbol(T25, Decl(mappedTypesArraysTuples.ts, 18, 54))
->Required : Symbol(Required, Decl(lib.es5.d.ts, --, --))
->ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+>Required : Symbol(Required, Decl(lib.utils.modifiers.d.ts, --, --))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es2009.array.d.ts, --, --))
 
 type T30 = Boxified<Partial<string[]>>;
 >T30 : Symbol(T30, Decl(mappedTypesArraysTuples.ts, 19, 55))
 >Boxified : Symbol(Boxified, Decl(mappedTypesArraysTuples.ts, 0, 27))
->Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.utils.modifiers.d.ts, --, --))
 
 type T31 = Partial<Boxified<string[]>>;
 >T31 : Symbol(T31, Decl(mappedTypesArraysTuples.ts, 21, 39))
->Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.utils.modifiers.d.ts, --, --))
 >Boxified : Symbol(Boxified, Decl(mappedTypesArraysTuples.ts, 0, 27))
 
 type A = { a: string };
@@ -103,7 +103,7 @@ type T40 = Boxified<A | A[] | ReadonlyArray<A> | [A, B] | string | string[]>;
 >Boxified : Symbol(Boxified, Decl(mappedTypesArraysTuples.ts, 0, 27))
 >A : Symbol(A, Decl(mappedTypesArraysTuples.ts, 22, 39))
 >A : Symbol(A, Decl(mappedTypesArraysTuples.ts, 22, 39))
->ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es2009.array.d.ts, --, --))
 >A : Symbol(A, Decl(mappedTypesArraysTuples.ts, 22, 39))
 >A : Symbol(A, Decl(mappedTypesArraysTuples.ts, 22, 39))
 >B : Symbol(B, Decl(mappedTypesArraysTuples.ts, 24, 23))
@@ -118,26 +118,26 @@ type ReadWrite<T> = { -readonly [P in keyof T] : T[P] };
 
 type T50 = Readonly<string[]>;
 >T50 : Symbol(T50, Decl(mappedTypesArraysTuples.ts, 29, 56))
->Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>Readonly : Symbol(Readonly, Decl(lib.utils.modifiers.d.ts, --, --))
 
 type T51 = Readonly<[number, number]>;
 >T51 : Symbol(T51, Decl(mappedTypesArraysTuples.ts, 31, 30))
->Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>Readonly : Symbol(Readonly, Decl(lib.utils.modifiers.d.ts, --, --))
 
 type T52 = Partial<Readonly<string[]>>;
 >T52 : Symbol(T52, Decl(mappedTypesArraysTuples.ts, 32, 38))
->Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
->Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.utils.modifiers.d.ts, --, --))
+>Readonly : Symbol(Readonly, Decl(lib.utils.modifiers.d.ts, --, --))
 
 type T53 = Readonly<Partial<string[]>>;
 >T53 : Symbol(T53, Decl(mappedTypesArraysTuples.ts, 33, 39))
->Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
->Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Readonly : Symbol(Readonly, Decl(lib.utils.modifiers.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.utils.modifiers.d.ts, --, --))
 
 type T54 = ReadWrite<Required<T53>>;
 >T54 : Symbol(T54, Decl(mappedTypesArraysTuples.ts, 34, 39))
 >ReadWrite : Symbol(ReadWrite, Decl(mappedTypesArraysTuples.ts, 27, 77))
->Required : Symbol(Required, Decl(lib.es5.d.ts, --, --))
+>Required : Symbol(Required, Decl(lib.utils.modifiers.d.ts, --, --))
 >T53 : Symbol(T53, Decl(mappedTypesArraysTuples.ts, 33, 39))
 
 declare function unboxify<T>(x: Boxified<T>): T;
@@ -184,7 +184,7 @@ declare function nonpartial<T>(x: Partial<T>): T;
 >nonpartial : Symbol(nonpartial, Decl(mappedTypesArraysTuples.ts, 46, 24))
 >T : Symbol(T, Decl(mappedTypesArraysTuples.ts, 48, 28))
 >x : Symbol(x, Decl(mappedTypesArraysTuples.ts, 48, 31))
->Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.utils.modifiers.d.ts, --, --))
 >T : Symbol(T, Decl(mappedTypesArraysTuples.ts, 48, 28))
 >T : Symbol(T, Decl(mappedTypesArraysTuples.ts, 48, 28))
 
@@ -218,7 +218,7 @@ type __Awaited<T> = T extends PromiseLike<infer U> ? U : T;
 >__Awaited : Symbol(__Awaited, Decl(mappedTypesArraysTuples.ts, 57, 26))
 >T : Symbol(T, Decl(mappedTypesArraysTuples.ts, 59, 15))
 >T : Symbol(T, Decl(mappedTypesArraysTuples.ts, 59, 15))
->PromiseLike : Symbol(PromiseLike, Decl(lib.es5.d.ts, --, --))
+>PromiseLike : Symbol(PromiseLike, Decl(lib.es2009.promise.d.ts, --, --))
 >U : Symbol(U, Decl(mappedTypesArraysTuples.ts, 59, 47))
 >U : Symbol(U, Decl(mappedTypesArraysTuples.ts, 59, 47))
 >T : Symbol(T, Decl(mappedTypesArraysTuples.ts, 59, 15))
@@ -237,7 +237,7 @@ declare function all<T extends any[]>(...values: T): Promise<Awaitified<T>>;
 >T : Symbol(T, Decl(mappedTypesArraysTuples.ts, 62, 21))
 >values : Symbol(values, Decl(mappedTypesArraysTuples.ts, 62, 38))
 >T : Symbol(T, Decl(mappedTypesArraysTuples.ts, 62, 21))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --))
 >Awaitified : Symbol(Awaitified, Decl(mappedTypesArraysTuples.ts, 59, 59))
 >T : Symbol(T, Decl(mappedTypesArraysTuples.ts, 62, 21))
 
@@ -245,10 +245,10 @@ function f1(a: number, b: Promise<number>, c: string[], d: Promise<string[]>) {
 >f1 : Symbol(f1, Decl(mappedTypesArraysTuples.ts, 62, 76))
 >a : Symbol(a, Decl(mappedTypesArraysTuples.ts, 64, 12))
 >b : Symbol(b, Decl(mappedTypesArraysTuples.ts, 64, 22))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --))
 >c : Symbol(c, Decl(mappedTypesArraysTuples.ts, 64, 42))
 >d : Symbol(d, Decl(mappedTypesArraysTuples.ts, 64, 55))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --))
 
     let x1 = all(a);
 >x1 : Symbol(x1, Decl(mappedTypesArraysTuples.ts, 65, 7))
@@ -287,16 +287,16 @@ function f2<T extends any[]>(a: Boxified<T>) {
     let x: Box<any> | undefined = a.pop();
 >x : Symbol(x, Decl(mappedTypesArraysTuples.ts, 72, 7))
 >Box : Symbol(Box, Decl(mappedTypesArraysTuples.ts, 0, 0))
->a.pop : Symbol(Array.pop, Decl(lib.es5.d.ts, --, --))
+>a.pop : Symbol(Array.pop, Decl(lib.es2009.array.d.ts, --, --))
 >a : Symbol(a, Decl(mappedTypesArraysTuples.ts, 71, 29))
->pop : Symbol(Array.pop, Decl(lib.es5.d.ts, --, --))
+>pop : Symbol(Array.pop, Decl(lib.es2009.array.d.ts, --, --))
 
     let y: Box<any>[] = a.concat(a);
 >y : Symbol(y, Decl(mappedTypesArraysTuples.ts, 73, 7))
 >Box : Symbol(Box, Decl(mappedTypesArraysTuples.ts, 0, 0))
->a.concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>a.concat : Symbol(Array.concat, Decl(lib.es2009.array.d.ts, --, --), Decl(lib.es2009.array.d.ts, --, --))
 >a : Symbol(a, Decl(mappedTypesArraysTuples.ts, 71, 29))
->concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>concat : Symbol(Array.concat, Decl(lib.es2009.array.d.ts, --, --), Decl(lib.es2009.array.d.ts, --, --))
 >a : Symbol(a, Decl(mappedTypesArraysTuples.ts, 71, 29))
 }
 
@@ -306,7 +306,7 @@ type ElementType<T> = T extends Array<infer U> ? U : never;
 >ElementType : Symbol(ElementType, Decl(mappedTypesArraysTuples.ts, 74, 1))
 >T : Symbol(T, Decl(mappedTypesArraysTuples.ts, 78, 17))
 >T : Symbol(T, Decl(mappedTypesArraysTuples.ts, 78, 17))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es2009.array.d.ts, --, --), Decl(lib.es2009.array.d.ts, --, --))
 >U : Symbol(U, Decl(mappedTypesArraysTuples.ts, 78, 43))
 >U : Symbol(U, Decl(mappedTypesArraysTuples.ts, 78, 43))
 

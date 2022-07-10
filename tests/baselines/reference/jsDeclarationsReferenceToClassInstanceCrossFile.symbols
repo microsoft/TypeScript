@@ -71,11 +71,11 @@ class Render {
 >Rectangle : Symbol(Rectangle, Decl(index.js, 0, 7))
 
         this.objects.push(obj);
->this.objects.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>this.objects.push : Symbol(Array.push, Decl(lib.es2009.array.d.ts, --, --))
 >this.objects : Symbol(Render.objects, Decl(index.js, 3, 19))
 >this : Symbol(Render, Decl(index.js, 0, 43))
 >objects : Symbol(Render.objects, Decl(index.js, 3, 19))
->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es2009.array.d.ts, --, --))
 >obj : Symbol(obj, Decl(index.js, 16, 13))
 
         return obj;

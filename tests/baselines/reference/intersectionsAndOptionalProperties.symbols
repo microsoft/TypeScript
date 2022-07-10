@@ -37,7 +37,7 @@ interface To {
 type From =  { field: null } & Omit<To, 'field'>;
 >From : Symbol(From, Decl(intersectionsAndOptionalProperties.ts, 12, 1))
 >field : Symbol(field, Decl(intersectionsAndOptionalProperties.ts, 14, 14))
->Omit : Symbol(Omit, Decl(lib.es5.d.ts, --, --))
+>Omit : Symbol(Omit, Decl(lib.utils.modifiers.d.ts, --, --))
 >To : Symbol(To, Decl(intersectionsAndOptionalProperties.ts, 5, 6))
 
 function foo(v: From) {

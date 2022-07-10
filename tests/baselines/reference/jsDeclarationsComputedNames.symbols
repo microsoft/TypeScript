@@ -1,11 +1,11 @@
 === tests/cases/conformance/jsdoc/declarations/index.js ===
 const TopLevelSym = Symbol();
 >TopLevelSym : Symbol(TopLevelSym, Decl(index.js, 0, 5))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es2009.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 const InnerSym = Symbol();
 >InnerSym : Symbol(InnerSym, Decl(index.js, 1, 5))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es2009.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 module.exports = {
 >module.exports : Symbol(module.exports, Decl(index.js, 0, 0))
@@ -38,11 +38,11 @@ module.exports = {
 === tests/cases/conformance/jsdoc/declarations/index2.js ===
 const TopLevelSym = Symbol();
 >TopLevelSym : Symbol(TopLevelSym, Decl(index2.js, 0, 5))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es2009.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 const InnerSym = Symbol();
 >InnerSym : Symbol(InnerSym, Decl(index2.js, 1, 5))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es2009.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 export class MyClass {
 >MyClass : Symbol(MyClass, Decl(index2.js, 1, 26))

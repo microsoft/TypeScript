@@ -18,14 +18,14 @@ Thing.doSomething();
 // GH#46468
 class ElementsArray extends Array {
 >ElementsArray : Symbol(ElementsArray, Decl(a.js, 6, 20))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es2009.array.d.ts, --, --), Decl(lib.es2009.array.d.ts, --, --))
 
     static {
         const superisArray = super.isArray;
 >superisArray : Symbol(superisArray, Decl(a.js, 11, 13))
->super.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
->super : Symbol(ArrayConstructor, Decl(lib.es5.d.ts, --, --))
->isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>super.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es2009.array.d.ts, --, --))
+>super : Symbol(ArrayConstructor, Decl(lib.es2009.array.d.ts, --, --))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es2009.array.d.ts, --, --))
 
         const customIsArray = (arg)=> superisArray(arg);
 >customIsArray : Symbol(customIsArray, Decl(a.js, 12, 13))

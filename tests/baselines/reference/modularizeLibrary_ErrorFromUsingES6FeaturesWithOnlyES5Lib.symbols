@@ -8,7 +8,7 @@ function f(x: number, y: number, z: number) {
 >z : Symbol(z, Decl(modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts, 2, 32))
 
     return Array.from(arguments);
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es2009.array.d.ts, --, --), Decl(lib.es2009.array.d.ts, --, --))
 >arguments : Symbol(arguments)
 }
 
@@ -35,7 +35,7 @@ Baz.name;
 
 // Using ES6 math
 Math.sign(1);
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es2009.math.d.ts, --, --), Decl(lib.es2009.math.d.ts, --, --))
 
 // Using ES6 object
 var o = {
@@ -52,9 +52,9 @@ var o = {
     }
 };
 o.hasOwnProperty(Symbol.hasInstance);
->o.hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es5.d.ts, --, --))
+>o.hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es2009.object.d.ts, --, --))
 >o : Symbol(o, Decl(modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts, 22, 3))
->hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es5.d.ts, --, --))
+>hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es2009.object.d.ts, --, --))
 
 // Using Es6 proxy
 var t = {}
@@ -70,7 +70,7 @@ Reflect.isExtensible({});
 // Using Es6 regexp
 var reg = new RegExp("/s");
 >reg : Symbol(reg, Decl(modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts, 38, 3))
->RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es2009.regexp.d.ts, --, --), Decl(lib.es2009.regexp.d.ts, --, --))
 
 reg.flags;
 >reg : Symbol(reg, Decl(modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts, 38, 3))

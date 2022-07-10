@@ -7,9 +7,9 @@ function C() { this.x = false; };
 
 /** @type {number} */
 C.prototype.x;
->C.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>C.prototype : Symbol(Function.prototype, Decl(lib.es2009.function.d.ts, --, --))
 >C : Symbol(C, Decl(a.js, 0, 0))
->prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>prototype : Symbol(Function.prototype, Decl(lib.es2009.function.d.ts, --, --))
 
 new C().x;
 >new C().x : Symbol(C.x, Decl(a.js, 0, 14), Decl(a.js, 0, 33))

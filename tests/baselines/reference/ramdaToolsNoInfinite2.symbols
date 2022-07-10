@@ -13,7 +13,7 @@ declare module "Any/Kind" {
 >A : Symbol(A, Decl(ramdaToolsNoInfinite2.ts, 4, 21))
 >Extends : Symbol(Extends, Decl(ramdaToolsNoInfinite2.ts, 1, 12))
 >A : Symbol(A, Decl(ramdaToolsNoInfinite2.ts, 4, 21))
->Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es2009.function.d.ts, --, --), Decl(lib.es2009.function.d.ts, --, --))
 >Extends : Symbol(Extends, Decl(ramdaToolsNoInfinite2.ts, 1, 12))
 >A : Symbol(A, Decl(ramdaToolsNoInfinite2.ts, 4, 21))
 >List : Symbol(List, Decl(ramdaToolsNoInfinite2.ts, 2, 12))
@@ -33,7 +33,7 @@ declare module "Any/Compute" {
 >Compute : Symbol(Compute, Decl(ramdaToolsNoInfinite2.ts, 6, 30))
 >A : Symbol(A, Decl(ramdaToolsNoInfinite2.ts, 7, 24))
 >A : Symbol(A, Decl(ramdaToolsNoInfinite2.ts, 7, 24))
->Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es2009.function.d.ts, --, --), Decl(lib.es2009.function.d.ts, --, --))
 >A : Symbol(A, Decl(ramdaToolsNoInfinite2.ts, 7, 24))
 
         [K in keyof A]: A[K];
@@ -242,7 +242,7 @@ declare module "Union/Has" {
 >Union : Symbol(Union, Decl(ramdaToolsNoInfinite2.ts, 65, 12))
 >Not : Symbol(Not, Decl(ramdaToolsNoInfinite2.ts, 66, 12))
 >Extends : Symbol(Extends, Decl(ramdaToolsNoInfinite2.ts, 67, 12))
->Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>Exclude : Symbol(Exclude, Decl(lib.utils.modifiers.d.ts, --, --))
 >U1 : Symbol(U1, Decl(ramdaToolsNoInfinite2.ts, 69, 36))
 >U : Symbol(U, Decl(ramdaToolsNoInfinite2.ts, 69, 20))
 >U1 : Symbol(U1, Decl(ramdaToolsNoInfinite2.ts, 69, 36))
@@ -348,7 +348,7 @@ declare module "List/ObjectOf" {
 >L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 106, 26))
 >_Omit : Symbol(_Omit, Decl(ramdaToolsNoInfinite2.ts, 101, 12))
 >L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 106, 26))
->Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>Exclude : Symbol(Exclude, Decl(lib.utils.modifiers.d.ts, --, --))
 >_Omit : Symbol(_Omit, Decl(ramdaToolsNoInfinite2.ts, 101, 12))
 >L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 106, 26))
 >L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 106, 26))
@@ -823,7 +823,7 @@ declare module "List/_Internal" {
 >L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 238, 22))
 >List : Symbol(List, Decl(ramdaToolsNoInfinite2.ts, 236, 12))
 >Overwrite : Symbol(Overwrite, Decl(ramdaToolsNoInfinite2.ts, 235, 12))
->Required : Symbol(Required, Decl(lib.es5.d.ts, --, --))
+>Required : Symbol(Required, Decl(lib.utils.modifiers.d.ts, --, --))
 >L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 238, 22))
 >L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 238, 22))
 }
@@ -1761,7 +1761,7 @@ declare module "List/List" {
     export type List<A = any> = ReadonlyArray<A>;
 >List : Symbol(List, Decl(ramdaToolsNoInfinite2.ts, 516, 28))
 >A : Symbol(A, Decl(ramdaToolsNoInfinite2.ts, 518, 21))
->ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es2009.array.d.ts, --, --))
 >A : Symbol(A, Decl(ramdaToolsNoInfinite2.ts, 518, 21))
 }
 declare module "Function/Function" {

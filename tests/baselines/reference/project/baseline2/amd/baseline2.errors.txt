@@ -1,0 +1,11 @@
+lib.es5.d.ts(48,21): error TS6054: File 'lib.es2009.uint16array' has an unsupported extension. The only supported extensions are '.ts', '.tsx', '.d.ts', '.cts', '.d.cts', '.mts', '.d.mts'.
+
+
+==== decl.ts (0 errors) ====
+    export interface Point { x: number; y: number; };
+    export function point (x: number, y: number): Point {
+    	return { x: x, y: y };
+    }
+==== dont_emit.ts (0 errors) ====
+    import g = require("decl");
+    var p: g.Point = { x: 10, y: 20 };

@@ -139,13 +139,13 @@ type BC = B & C;  // never
 
 type U1 = Partial<A & B>;  // never
 >U1 : Symbol(U1, Decl(intersectionReduction.ts, 43, 16))
->Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.utils.modifiers.d.ts, --, --))
 >A : Symbol(A, Decl(intersectionReduction.ts, 30, 28))
 >B : Symbol(B, Decl(intersectionReduction.ts, 32, 36))
 
 type U2 = Readonly<A & B>;  // never
 >U2 : Symbol(U2, Decl(intersectionReduction.ts, 45, 25))
->Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>Readonly : Symbol(Readonly, Decl(lib.utils.modifiers.d.ts, --, --))
 >A : Symbol(A, Decl(intersectionReduction.ts, 30, 28))
 >B : Symbol(B, Decl(intersectionReduction.ts, 32, 36))
 

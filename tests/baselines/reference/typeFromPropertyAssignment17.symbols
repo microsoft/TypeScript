@@ -76,7 +76,7 @@ M.defaults = function (def) {
 M.prototype.m = function () {
 >M.prototype : Symbol(M.m, Decl(minimatch.js, 11, 1))
 >M : Symbol(M, Decl(minimatch.js, 13, 1), Decl(minimatch.js, 8, 1))
->prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>prototype : Symbol(Function.prototype, Decl(lib.es2009.function.d.ts, --, --))
 >m : Symbol(M.m, Decl(minimatch.js, 11, 1))
 }
 function M() {

@@ -1,0 +1,17 @@
+lib.es5.d.ts(48,21): error TS6054: File 'lib.es2009.uint16array' has an unsupported extension. The only supported extensions are '.ts', '.tsx', '.d.ts', '.cts', '.d.cts', '.mts', '.d.mts'.
+
+
+==== internal.ts (0 errors) ====
+    module outer {
+    	export var b = "foo";
+    }
+==== external2.ts (0 errors) ====
+    export function square(x: number) {
+    	return (x * x);
+    }
+==== external.ts (0 errors) ====
+    ///<reference path="internal.ts" />
+    import a = require("external2");
+    
+    outer.b = "bar";
+    var c = a.square(5);

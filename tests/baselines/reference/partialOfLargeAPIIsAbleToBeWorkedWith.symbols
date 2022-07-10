@@ -213,7 +213,7 @@ interface MyAPI {
 
 const obj: Partial<MyAPI> = {};
 >obj : Symbol(obj, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 55, 5))
->Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.utils.modifiers.d.ts, --, --))
 >MyAPI : Symbol(MyAPI, Decl(partialOfLargeAPIIsAbleToBeWorkedWith.ts, 0, 0))
 
 declare var keys: (keyof MyAPI)[];

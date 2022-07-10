@@ -39,9 +39,9 @@ export class D {}
 >D : Symbol(D, Decl(index.js, 20, 1))
 
 Object.defineProperty(D.prototype, "x", {
->Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es2009.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es2009.object.d.ts, --, --), Decl(lib.es2009.object.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es2009.object.d.ts, --, --))
 >D.prototype : Symbol(D.prototype)
 >D : Symbol(D, Decl(index.js, 20, 1))
 >prototype : Symbol(D.prototype)
@@ -58,9 +58,9 @@ export class E {}
 >E : Symbol(E, Decl(index.js, 27, 3))
 
 Object.defineProperty(E.prototype, "x", {
->Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es2009.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es2009.object.d.ts, --, --), Decl(lib.es2009.object.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es2009.object.d.ts, --, --))
 >E.prototype : Symbol(E.prototype)
 >E : Symbol(E, Decl(index.js, 27, 3))
 >prototype : Symbol(E.prototype)
@@ -79,9 +79,9 @@ export class F {}
 >F : Symbol(F, Decl(index.js, 35, 3))
 
 Object.defineProperty(F.prototype, "x", {
->Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es2009.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es2009.object.d.ts, --, --), Decl(lib.es2009.object.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es2009.object.d.ts, --, --))
 >F.prototype : Symbol(F.prototype)
 >F : Symbol(F, Decl(index.js, 35, 3))
 >prototype : Symbol(F.prototype)

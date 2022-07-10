@@ -105,7 +105,7 @@ function g(p1: I, p2: Partial<I>): I {
 >p1 : Symbol(p1, Decl(conditionalTypeRelaxingConstraintAssignability.ts, 33, 11))
 >I : Symbol(I, Decl(conditionalTypeRelaxingConstraintAssignability.ts, 22, 27))
 >p2 : Symbol(p2, Decl(conditionalTypeRelaxingConstraintAssignability.ts, 33, 17))
->Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.utils.modifiers.d.ts, --, --))
 >I : Symbol(I, Decl(conditionalTypeRelaxingConstraintAssignability.ts, 22, 27))
 >I : Symbol(I, Decl(conditionalTypeRelaxingConstraintAssignability.ts, 22, 27))
 

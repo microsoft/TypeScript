@@ -16,22 +16,22 @@ function f2<T extends {}>(o: T) {
 >T : Symbol(T, Decl(genericUnboundedTypeParamAssignability.ts, 4, 12))
 
   o.toString(); // no error
->o.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+>o.toString : Symbol(Object.toString, Decl(lib.es2009.object.d.ts, --, --))
 >o : Symbol(o, Decl(genericUnboundedTypeParamAssignability.ts, 4, 26))
->toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(Object.toString, Decl(lib.es2009.object.d.ts, --, --))
 }
 
 function f3<T extends Record<string, any>>(o: T) {
 >f3 : Symbol(f3, Decl(genericUnboundedTypeParamAssignability.ts, 6, 1))
 >T : Symbol(T, Decl(genericUnboundedTypeParamAssignability.ts, 8, 12))
->Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.utils.modifiers.d.ts, --, --))
 >o : Symbol(o, Decl(genericUnboundedTypeParamAssignability.ts, 8, 43))
 >T : Symbol(T, Decl(genericUnboundedTypeParamAssignability.ts, 8, 12))
 
   o.toString(); // no error
->o.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+>o.toString : Symbol(Object.toString, Decl(lib.es2009.object.d.ts, --, --))
 >o : Symbol(o, Decl(genericUnboundedTypeParamAssignability.ts, 8, 43))
->toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(Object.toString, Decl(lib.es2009.object.d.ts, --, --))
 }
 
 function user<T>(t: T) {

@@ -11,36 +11,36 @@ declare namespace lf {
 >query : Symbol(query, Decl(lovefield-ts.d.ts, 3, 11))
 >query : Symbol(query)
 >Builder : Symbol(query.Builder)
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es2009.array.d.ts, --, --), Decl(lib.es2009.array.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es2009.object.d.ts, --, --), Decl(lib.es2009.object.d.ts, --, --))
 
     begin(scope: Array<schema.Table>): Promise<void>
 >begin : Symbol(Transaction.begin, Decl(lovefield-ts.d.ts, 3, 56), Decl(lovefield.js, 0, 31))
 >scope : Symbol(scope, Decl(lovefield-ts.d.ts, 4, 10))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es2009.array.d.ts, --, --), Decl(lib.es2009.array.d.ts, --, --))
 >schema : Symbol(schema)
 >Table : Symbol(schema.Table)
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --))
 
     commit(): Promise<void>
 >commit : Symbol(Transaction.commit, Decl(lovefield-ts.d.ts, 4, 52))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --))
 
     exec(queries: Array<query.Builder>): Promise<Array<Array<Object>>>
 >exec : Symbol(Transaction.exec, Decl(lovefield-ts.d.ts, 5, 27))
 >queries : Symbol(queries, Decl(lovefield-ts.d.ts, 6, 9))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es2009.array.d.ts, --, --), Decl(lib.es2009.array.d.ts, --, --))
 >query : Symbol(query)
 >Builder : Symbol(query.Builder)
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es2009.array.d.ts, --, --), Decl(lib.es2009.array.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es2009.array.d.ts, --, --), Decl(lib.es2009.array.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es2009.object.d.ts, --, --), Decl(lib.es2009.object.d.ts, --, --))
 
     rollback(): Promise<void>
 >rollback : Symbol(Transaction.rollback, Decl(lovefield-ts.d.ts, 6, 70))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --))
 
     stats(): TransactionStats
 >stats : Symbol(Transaction.stats, Decl(lovefield-ts.d.ts, 7, 29))
@@ -62,7 +62,7 @@ lf.Transaction.prototype.begin = function(scope) {};
 >lf.Transaction : Symbol(lf.Transaction, Decl(lovefield-ts.d.ts, 1, 22), Decl(lovefield.js, 0, 0))
 >lf : Symbol(lf, Decl(lovefield-ts.d.ts, 0, 0), Decl(lovefield.js, 0, 0))
 >Transaction : Symbol(lf.Transaction, Decl(lovefield-ts.d.ts, 1, 22), Decl(lovefield.js, 0, 0))
->prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>prototype : Symbol(Function.prototype, Decl(lib.es2009.function.d.ts, --, --))
 >begin : Symbol(lf.Transaction.begin, Decl(lovefield-ts.d.ts, 3, 56), Decl(lovefield.js, 0, 31))
 >scope : Symbol(scope, Decl(lovefield.js, 5, 42))
 

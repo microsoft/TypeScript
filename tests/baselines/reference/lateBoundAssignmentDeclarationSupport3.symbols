@@ -19,15 +19,15 @@ const z = x[x.S];
 // currently unsupported
 const _sym = Symbol();
 >_sym : Symbol(_sym, Decl(lateBoundAssignmentDeclarationSupport3.js, 1, 5))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es2009.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 const _str = "my-fake-sym";
 >_str : Symbol(_str, Decl(lateBoundAssignmentDeclarationSupport3.js, 2, 5))
 
 Object.defineProperty(module.exports, _sym, { value: "ok" });
->Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es2009.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es2009.object.d.ts, --, --), Decl(lib.es2009.object.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es2009.object.d.ts, --, --))
 >module.exports : Symbol(module.exports, Decl(lateBoundAssignmentDeclarationSupport3.js, 0, 0))
 >module : Symbol(module, Decl(lateBoundAssignmentDeclarationSupport3.js, 5, 61))
 >exports : Symbol(module.exports, Decl(lateBoundAssignmentDeclarationSupport3.js, 0, 0))
@@ -35,9 +35,9 @@ Object.defineProperty(module.exports, _sym, { value: "ok" });
 >value : Symbol(value, Decl(lateBoundAssignmentDeclarationSupport3.js, 4, 45))
 
 Object.defineProperty(module.exports, _str, { value: "ok" });
->Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es2009.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es2009.object.d.ts, --, --), Decl(lib.es2009.object.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es2009.object.d.ts, --, --))
 >module.exports : Symbol(module.exports, Decl(lateBoundAssignmentDeclarationSupport3.js, 0, 0))
 >module : Symbol(module, Decl(lateBoundAssignmentDeclarationSupport3.js, 5, 61))
 >exports : Symbol(module.exports, Decl(lateBoundAssignmentDeclarationSupport3.js, 0, 0))

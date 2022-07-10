@@ -35,7 +35,7 @@ export class IterableWeakMap<K extends object, V> implements WeakMap<K, V> {
     declare readonly [Symbol.toStringTag]: "IterableWeakMap";
 >[Symbol.toStringTag] : Symbol(IterableWeakMap[Symbol.toStringTag], Decl(esNextWeakRefs_IterableWeakMap.ts, 9, 76))
 >Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es2009.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
 >toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     #weakMap = new WeakMap<K, { readonly ref: WeakRef<K>; value: V }>();
@@ -232,7 +232,7 @@ export class IterableWeakMap<K extends object, V> implements WeakMap<K, V> {
     declare [Symbol.iterator]: this["entries"];
 >[Symbol.iterator] : Symbol(IterableWeakMap[Symbol.iterator], Decl(esNextWeakRefs_IterableWeakMap.ts, 60, 5))
 >Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es2009.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
 >iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 
     *entries(): Generator<[key: K, value: V], void> {
@@ -296,9 +296,9 @@ export class IterableWeakMap<K extends object, V> implements WeakMap<K, V> {
 }
 
 Object.defineProperties(IterableWeakMap.prototype, {
->Object.defineProperties : Symbol(ObjectConstructor.defineProperties, Decl(lib.es5.d.ts, --, --))
->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->defineProperties : Symbol(ObjectConstructor.defineProperties, Decl(lib.es5.d.ts, --, --))
+>Object.defineProperties : Symbol(ObjectConstructor.defineProperties, Decl(lib.es2009.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es2009.object.d.ts, --, --), Decl(lib.es2009.object.d.ts, --, --))
+>defineProperties : Symbol(ObjectConstructor.defineProperties, Decl(lib.es2009.object.d.ts, --, --))
 >IterableWeakMap.prototype : Symbol(IterableWeakMap.prototype)
 >IterableWeakMap : Symbol(IterableWeakMap, Decl(esNextWeakRefs_IterableWeakMap.ts, 6, 2))
 >prototype : Symbol(IterableWeakMap.prototype)
@@ -306,7 +306,7 @@ Object.defineProperties(IterableWeakMap.prototype, {
     [Symbol.iterator]: {
 >[Symbol.iterator] : Symbol([Symbol.iterator], Decl(esNextWeakRefs_IterableWeakMap.ts, 85, 52))
 >Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es2009.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
 >iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 
         configurable: true,
@@ -320,10 +320,10 @@ Object.defineProperties(IterableWeakMap.prototype, {
 
         value: Object.getOwnPropertyDescriptor(
 >value : Symbol(value, Decl(esNextWeakRefs_IterableWeakMap.ts, 89, 23))
->Object.getOwnPropertyDescriptor(            IterableWeakMap.prototype,            "entries",        )!.value : Symbol(PropertyDescriptor.value, Decl(lib.es5.d.ts, --, --))
->Object.getOwnPropertyDescriptor : Symbol(ObjectConstructor.getOwnPropertyDescriptor, Decl(lib.es5.d.ts, --, --))
->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->getOwnPropertyDescriptor : Symbol(ObjectConstructor.getOwnPropertyDescriptor, Decl(lib.es5.d.ts, --, --))
+>Object.getOwnPropertyDescriptor(            IterableWeakMap.prototype,            "entries",        )!.value : Symbol(PropertyDescriptor.value, Decl(lib.es2009.object.d.ts, --, --))
+>Object.getOwnPropertyDescriptor : Symbol(ObjectConstructor.getOwnPropertyDescriptor, Decl(lib.es2009.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es2009.object.d.ts, --, --), Decl(lib.es2009.object.d.ts, --, --))
+>getOwnPropertyDescriptor : Symbol(ObjectConstructor.getOwnPropertyDescriptor, Decl(lib.es2009.object.d.ts, --, --))
 
             IterableWeakMap.prototype,
 >IterableWeakMap.prototype : Symbol(IterableWeakMap.prototype)
@@ -332,13 +332,13 @@ Object.defineProperties(IterableWeakMap.prototype, {
 
             "entries",
         )!.value,
->value : Symbol(PropertyDescriptor.value, Decl(lib.es5.d.ts, --, --))
+>value : Symbol(PropertyDescriptor.value, Decl(lib.es2009.object.d.ts, --, --))
 
     },
     [Symbol.toStringTag]: {
 >[Symbol.toStringTag] : Symbol([Symbol.toStringTag], Decl(esNextWeakRefs_IterableWeakMap.ts, 94, 6))
 >Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es2009.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
 >toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
         configurable: true,

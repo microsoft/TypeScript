@@ -17,12 +17,12 @@ interface Person {
 {
   const dice = () => Math.floor(Math.random() * 6);
 >dice : Symbol(dice, Decl(check.ts, 11, 7))
->Math.floor : Symbol(Math.floor, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->floor : Symbol(Math.floor, Decl(lib.es5.d.ts, --, --))
->Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math.floor : Symbol(Math.floor, Decl(lib.es2009.math.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es2009.math.d.ts, --, --), Decl(lib.es2009.math.d.ts, --, --))
+>floor : Symbol(Math.floor, Decl(lib.es2009.math.d.ts, --, --))
+>Math.random : Symbol(Math.random, Decl(lib.es2009.math.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es2009.math.d.ts, --, --), Decl(lib.es2009.math.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es2009.math.d.ts, --, --))
 
   dice.first = 'Rando';  
 >dice.first : Symbol(dice.first, Decl(check.ts, 11, 51))
@@ -57,12 +57,12 @@ function doHumanThings(param) {}
 
 const dice1 = () => Math.floor(Math.random() * 6);
 >dice1 : Symbol(dice1, Decl(check.js, 12, 5), Decl(check.js, 12, 50))
->Math.floor : Symbol(Math.floor, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->floor : Symbol(Math.floor, Decl(lib.es5.d.ts, --, --))
->Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math.floor : Symbol(Math.floor, Decl(lib.es2009.math.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es2009.math.d.ts, --, --), Decl(lib.es2009.math.d.ts, --, --))
+>floor : Symbol(Math.floor, Decl(lib.es2009.math.d.ts, --, --))
+>Math.random : Symbol(Math.random, Decl(lib.es2009.math.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es2009.math.d.ts, --, --), Decl(lib.es2009.math.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es2009.math.d.ts, --, --))
 
 // dice1.first = 'Rando';
 dice1.last = 'Calrissian';
@@ -76,12 +76,12 @@ dice1.last = 'Calrissian';
 {
   const dice2 = () => Math.floor(Math.random() * 6);
 >dice2 : Symbol(dice2, Decl(check.js, 20, 7))
->Math.floor : Symbol(Math.floor, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->floor : Symbol(Math.floor, Decl(lib.es5.d.ts, --, --))
->Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math.floor : Symbol(Math.floor, Decl(lib.es2009.math.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es2009.math.d.ts, --, --), Decl(lib.es2009.math.d.ts, --, --))
+>floor : Symbol(Math.floor, Decl(lib.es2009.math.d.ts, --, --))
+>Math.random : Symbol(Math.random, Decl(lib.es2009.math.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es2009.math.d.ts, --, --), Decl(lib.es2009.math.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es2009.math.d.ts, --, --))
 
   dice2.first = 'Rando';
 >dice2.first : Symbol(dice2.first, Decl(check.js, 20, 52))

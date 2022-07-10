@@ -53,9 +53,9 @@ consumeClass(createClass(str => console.log(str.length)));
 >console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
 >log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
->str.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>str.length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
 >str : Symbol(str, Decl(lambdaParameterWithTupleArgsHasCorrectAssignability.ts, 16, 25))
->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
 
 // should work
 consumeClass(createClass((str, _unused_num) => console.log(str.length)));
@@ -66,7 +66,7 @@ consumeClass(createClass((str, _unused_num) => console.log(str.length)));
 >console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
 >log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
->str.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>str.length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
 >str : Symbol(str, Decl(lambdaParameterWithTupleArgsHasCorrectAssignability.ts, 19, 26))
->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
 

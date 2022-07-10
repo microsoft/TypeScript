@@ -29,7 +29,7 @@ export function art(value: any, message?: string | Error): asserts value;
 >art : Symbol(art, Decl(ex.d.ts, 0, 0))
 >value : Symbol(value, Decl(ex.d.ts, 1, 20))
 >message : Symbol(message, Decl(ex.d.ts, 1, 31))
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2009.error.d.ts, --, --))
 >value : Symbol(value, Decl(ex.d.ts, 1, 20))
 
 === tests/cases/conformance/salsa/ex2.d.ts ===
@@ -37,7 +37,7 @@ declare function art(value: any, message?: string | Error): asserts value;
 >art : Symbol(art, Decl(ex2.d.ts, 0, 0))
 >value : Symbol(value, Decl(ex2.d.ts, 0, 21))
 >message : Symbol(message, Decl(ex2.d.ts, 0, 32))
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2009.error.d.ts, --, --))
 >value : Symbol(value, Decl(ex2.d.ts, 0, 21))
 
 export = art;

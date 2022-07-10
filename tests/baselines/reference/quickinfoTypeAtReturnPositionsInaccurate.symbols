@@ -53,7 +53,7 @@ const isNumClass = <Item extends NumClass<number> | StrClass<string>> (
 
     ): item is Extract<Item, NumClass<any>> => {
 >item : Symbol(item, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 16, 71))
->Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>Extract : Symbol(Extract, Decl(lib.utils.modifiers.d.ts, --, --))
 >Item : Symbol(Item, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 16, 20))
 >NumClass : Symbol(NumClass, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 0, 0))
 

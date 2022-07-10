@@ -480,7 +480,7 @@ var obj17: any;
 
 if (obj17 instanceof Object) { // can't narrow type from 'any' to 'Object'
 >obj17 : Symbol(obj17, Decl(typeGuardsWithInstanceOfByConstructorSignature.ts, 190, 3))
->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es2009.object.d.ts, --, --), Decl(lib.es2009.object.d.ts, --, --))
 
     obj17.foo1;
 >obj17 : Symbol(obj17, Decl(typeGuardsWithInstanceOfByConstructorSignature.ts, 190, 3))
@@ -494,7 +494,7 @@ var obj18: any;
 
 if (obj18 instanceof Function) { // can't narrow type from 'any' to 'Function'
 >obj18 : Symbol(obj18, Decl(typeGuardsWithInstanceOfByConstructorSignature.ts, 196, 3))
->Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es2009.function.d.ts, --, --), Decl(lib.es2009.function.d.ts, --, --))
 
     obj18.foo1;
 >obj18 : Symbol(obj18, Decl(typeGuardsWithInstanceOfByConstructorSignature.ts, 196, 3))

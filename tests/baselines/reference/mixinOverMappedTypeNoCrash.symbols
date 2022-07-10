@@ -26,7 +26,7 @@ type InstanceInterface<I> = {
 type Constructor<I extends Object, C = any> = ClassInterface<C> & InstanceInterface<I>
 >Constructor : Symbol(Constructor, Decl(mixinOverMappedTypeNoCrash.ts, 7, 1))
 >I : Symbol(I, Decl(mixinOverMappedTypeNoCrash.ts, 9, 17))
->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es2009.object.d.ts, --, --), Decl(lib.es2009.object.d.ts, --, --))
 >C : Symbol(C, Decl(mixinOverMappedTypeNoCrash.ts, 9, 34))
 >ClassInterface : Symbol(ClassInterface, Decl(mixinOverMappedTypeNoCrash.ts, 0, 0))
 >C : Symbol(C, Decl(mixinOverMappedTypeNoCrash.ts, 9, 34))

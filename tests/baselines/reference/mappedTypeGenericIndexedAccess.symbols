@@ -57,12 +57,12 @@ class Test {
 >name : Symbol(name, Decl(mappedTypeGenericIndexedAccess.ts, 15, 36))
         }
         this.entries[name]?.push(entry);
->this.entries[name]?.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>this.entries[name]?.push : Symbol(Array.push, Decl(lib.es2009.array.d.ts, --, --))
 >this.entries : Symbol(Test.entries, Decl(mappedTypeGenericIndexedAccess.ts, 8, 12))
 >this : Symbol(Test, Decl(mappedTypeGenericIndexedAccess.ts, 6, 1))
 >entries : Symbol(Test.entries, Decl(mappedTypeGenericIndexedAccess.ts, 8, 12))
 >name : Symbol(name, Decl(mappedTypeGenericIndexedAccess.ts, 15, 36))
->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es2009.array.d.ts, --, --))
 >entry : Symbol(entry, Decl(mappedTypeGenericIndexedAccess.ts, 15, 44))
     }
 }

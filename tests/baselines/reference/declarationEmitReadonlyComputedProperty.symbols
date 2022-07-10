@@ -1,7 +1,7 @@
 === tests/cases/compiler/bug.ts ===
 export const SYMBOL = Symbol()
 >SYMBOL : Symbol(SYMBOL, Decl(bug.ts, 0, 12))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es2009.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 export interface Interface {
 >Interface : Symbol(Interface, Decl(bug.ts, 0, 30))

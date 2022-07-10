@@ -1,7 +1,7 @@
 === tests/cases/compiler/keyRemappingKeyofResult.ts ===
 const sym = Symbol("")
 >sym : Symbol(sym, Decl(keyRemappingKeyofResult.ts, 0, 5))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es2009.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 type Orig = { [k: string]: any, str: any, [sym]: any }
 >Orig : Symbol(Orig, Decl(keyRemappingKeyofResult.ts, 0, 22))
@@ -12,7 +12,7 @@ type Orig = { [k: string]: any, str: any, [sym]: any }
 
 type Okay = Exclude<keyof Orig, never>
 >Okay : Symbol(Okay, Decl(keyRemappingKeyofResult.ts, 1, 54))
->Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>Exclude : Symbol(Exclude, Decl(lib.utils.modifiers.d.ts, --, --))
 >Orig : Symbol(Orig, Decl(keyRemappingKeyofResult.ts, 0, 22))
 
 // type Okay = string | number | typeof sym
@@ -21,7 +21,7 @@ type Remapped = { [K in keyof Orig as {} extends Record<K, any> ? never : K]: an
 >Remapped : Symbol(Remapped, Decl(keyRemappingKeyofResult.ts, 3, 38))
 >K : Symbol(K, Decl(keyRemappingKeyofResult.ts, 6, 19))
 >Orig : Symbol(Orig, Decl(keyRemappingKeyofResult.ts, 0, 22))
->Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.utils.modifiers.d.ts, --, --))
 >K : Symbol(K, Decl(keyRemappingKeyofResult.ts, 6, 19))
 >K : Symbol(K, Decl(keyRemappingKeyofResult.ts, 6, 19))
 
@@ -33,7 +33,7 @@ type Remapped = { [K in keyof Orig as {} extends Record<K, any> ? never : K]: an
 
 type Oops = Exclude<keyof Remapped, never>
 >Oops : Symbol(Oops, Decl(keyRemappingKeyofResult.ts, 6, 83))
->Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>Exclude : Symbol(Exclude, Decl(lib.utils.modifiers.d.ts, --, --))
 >Remapped : Symbol(Remapped, Decl(keyRemappingKeyofResult.ts, 3, 38))
 
 declare let x: Oops;
@@ -86,7 +86,7 @@ function f<T>() {
 >Remapped : Symbol(Remapped, Decl(keyRemappingKeyofResult.ts, 27, 19))
 >K : Symbol(K, Decl(keyRemappingKeyofResult.ts, 30, 23))
 >Orig : Symbol(Orig, Decl(keyRemappingKeyofResult.ts, 20, 17))
->Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.utils.modifiers.d.ts, --, --))
 >K : Symbol(K, Decl(keyRemappingKeyofResult.ts, 30, 23))
 >K : Symbol(K, Decl(keyRemappingKeyofResult.ts, 30, 23))
 
@@ -148,15 +148,15 @@ function g<T>() {
     type NonIndex<T extends PropertyKey> = {} extends Record<T, any> ? never : T;
 >NonIndex : Symbol(NonIndex, Decl(keyRemappingKeyofResult.ts, 51, 19))
 >T : Symbol(T, Decl(keyRemappingKeyofResult.ts, 54, 18))
->PropertyKey : Symbol(PropertyKey, Decl(lib.es5.d.ts, --, --))
->Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>PropertyKey : Symbol(PropertyKey, Decl(lib.es2009.object.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.utils.modifiers.d.ts, --, --))
 >T : Symbol(T, Decl(keyRemappingKeyofResult.ts, 54, 18))
 >T : Symbol(T, Decl(keyRemappingKeyofResult.ts, 54, 18))
 
     type DistributiveNonIndex<T extends PropertyKey> = T extends unknown ? NonIndex<T> : never;
 >DistributiveNonIndex : Symbol(DistributiveNonIndex, Decl(keyRemappingKeyofResult.ts, 54, 81))
 >T : Symbol(T, Decl(keyRemappingKeyofResult.ts, 55, 30))
->PropertyKey : Symbol(PropertyKey, Decl(lib.es5.d.ts, --, --))
+>PropertyKey : Symbol(PropertyKey, Decl(lib.es2009.object.d.ts, --, --))
 >T : Symbol(T, Decl(keyRemappingKeyofResult.ts, 55, 30))
 >NonIndex : Symbol(NonIndex, Decl(keyRemappingKeyofResult.ts, 51, 19))
 >T : Symbol(T, Decl(keyRemappingKeyofResult.ts, 55, 30))

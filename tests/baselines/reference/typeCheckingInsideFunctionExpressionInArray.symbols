@@ -7,7 +7,7 @@ var functions = [function () {
 
     k = new Object();
 >k : Symbol(k, Decl(typeCheckingInsideFunctionExpressionInArray.ts, 1, 5))
->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es2009.object.d.ts, --, --), Decl(lib.es2009.object.d.ts, --, --))
 
     [1, 2, 3].NonexistantMethod();
     derp();

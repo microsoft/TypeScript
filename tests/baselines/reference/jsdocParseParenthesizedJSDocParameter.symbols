@@ -3,7 +3,7 @@
 var x = s => s.toString()
 >x : Symbol(x, Decl(paren.js, 1, 3))
 >s : Symbol(s, Decl(paren.js, 1, 7))
->s.toString : Symbol(String.toString, Decl(lib.es5.d.ts, --, --))
+>s.toString : Symbol(String.toString, Decl(lib.es2009.string.d.ts, --, --))
 >s : Symbol(s, Decl(paren.js, 1, 7))
->toString : Symbol(String.toString, Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(String.toString, Decl(lib.es2009.string.d.ts, --, --))
 

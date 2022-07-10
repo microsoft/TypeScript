@@ -7,9 +7,9 @@ export function register(data: any) {
 >data : Symbol(data, Decl(register.ts, 1, 25))
 
   r.push(data);
->r.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>r.push : Symbol(Array.push, Decl(lib.es2009.array.d.ts, --, --))
 >r : Symbol(r, Decl(register.ts, 0, 5))
->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es2009.array.d.ts, --, --))
 >data : Symbol(data, Decl(register.ts, 1, 25))
 }
 === tests/cases/compiler/data1.ts ===

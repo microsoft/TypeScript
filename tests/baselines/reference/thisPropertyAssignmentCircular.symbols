@@ -15,11 +15,11 @@ export class Foo {
 >this.foo : Symbol(Foo.foo, Decl(thisPropertyAssignmentCircular.js, 1, 19), Decl(thisPropertyAssignmentCircular.js, 4, 14))
 >this : Symbol(Foo, Decl(thisPropertyAssignmentCircular.js, 0, 0))
 >foo : Symbol(Foo.foo, Decl(thisPropertyAssignmentCircular.js, 1, 19), Decl(thisPropertyAssignmentCircular.js, 4, 14))
->this.foo.slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
+>this.foo.slice : Symbol(String.slice, Decl(lib.es2009.string.d.ts, --, --))
 >this.foo : Symbol(Foo.foo, Decl(thisPropertyAssignmentCircular.js, 1, 19), Decl(thisPropertyAssignmentCircular.js, 4, 14))
 >this : Symbol(Foo, Decl(thisPropertyAssignmentCircular.js, 0, 0))
 >foo : Symbol(Foo.foo, Decl(thisPropertyAssignmentCircular.js, 1, 19), Decl(thisPropertyAssignmentCircular.js, 4, 14))
->slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
+>slice : Symbol(String.slice, Decl(lib.es2009.string.d.ts, --, --))
     }
     m() {
 >m : Symbol(Foo.m, Decl(thisPropertyAssignmentCircular.js, 6, 5))
@@ -44,10 +44,10 @@ function C() {
 >this.x : Symbol(C.x, Decl(thisPropertyAssignmentCircular.js, 13, 14), Decl(thisPropertyAssignmentCircular.js, 14, 15))
 >this : Symbol(C, Decl(thisPropertyAssignmentCircular.js, 10, 1))
 >x : Symbol(C.x, Decl(thisPropertyAssignmentCircular.js, 13, 14), Decl(thisPropertyAssignmentCircular.js, 14, 15))
->this.x.toString : Symbol(Function.toString, Decl(lib.es5.d.ts, --, --))
+>this.x.toString : Symbol(Function.toString, Decl(lib.es2009.function.d.ts, --, --))
 >this.x : Symbol(C.x, Decl(thisPropertyAssignmentCircular.js, 13, 14), Decl(thisPropertyAssignmentCircular.js, 14, 15))
 >this : Symbol(C, Decl(thisPropertyAssignmentCircular.js, 10, 1))
 >x : Symbol(C.x, Decl(thisPropertyAssignmentCircular.js, 13, 14), Decl(thisPropertyAssignmentCircular.js, 14, 15))
->toString : Symbol(Function.toString, Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(Function.toString, Decl(lib.es2009.function.d.ts, --, --))
 }
 

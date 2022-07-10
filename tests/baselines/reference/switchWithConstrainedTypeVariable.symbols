@@ -12,16 +12,16 @@ function function1<T extends 'a' | 'b'>(key: T) {
 
     case 'a':
       key.toLowerCase();
->key.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+>key.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es2009.string.d.ts, --, --))
 >key : Symbol(key, Decl(switchWithConstrainedTypeVariable.ts, 2, 40))
->toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+>toLowerCase : Symbol(String.toLowerCase, Decl(lib.es2009.string.d.ts, --, --))
 
       break;
     default:
       key.toLowerCase();
->key.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+>key.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es2009.string.d.ts, --, --))
 >key : Symbol(key, Decl(switchWithConstrainedTypeVariable.ts, 2, 40))
->toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+>toLowerCase : Symbol(String.toLowerCase, Decl(lib.es2009.string.d.ts, --, --))
 
       break;
   }

@@ -11,7 +11,7 @@ type T = {
 
 const K1 = Symbol();
 >K1 : Symbol(K1, Decl(typeUsedAsTypeLiteralIndex.ts, 5, 5))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es2009.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
 
 type T1 = {
 >T1 : Symbol(T1, Decl(typeUsedAsTypeLiteralIndex.ts, 5, 20))

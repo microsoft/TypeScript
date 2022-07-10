@@ -32,7 +32,7 @@ function g<
 
 >(a2: ReturnType<T[M]>, x: A) {
 >a2 : Symbol(a2, Decl(genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts, 11, 2))
->ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>ReturnType : Symbol(ReturnType, Decl(lib.utils.modifiers.d.ts, --, --))
 >T : Symbol(T, Decl(genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts, 8, 11))
 >M : Symbol(M, Decl(genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts, 9, 30))
 >x : Symbol(x, Decl(genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts, 11, 23))
@@ -59,7 +59,7 @@ function g2<
 
 >(a2: ReturnType<T[M]>) {
 >a2 : Symbol(a2, Decl(genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts, 20, 2))
->ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>ReturnType : Symbol(ReturnType, Decl(lib.utils.modifiers.d.ts, --, --))
 >T : Symbol(T, Decl(genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts, 17, 12))
 >M : Symbol(M, Decl(genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts, 18, 30))
 

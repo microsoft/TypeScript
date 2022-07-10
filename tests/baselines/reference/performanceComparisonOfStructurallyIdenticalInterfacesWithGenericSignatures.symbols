@@ -4,7 +4,7 @@ export declare type ThenArg<T> = T extends any ? any : T extends PromiseLike<inf
 >T : Symbol(T, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 0, 28))
 >T : Symbol(T, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 0, 28))
 >T : Symbol(T, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 0, 28))
->PromiseLike : Symbol(PromiseLike, Decl(lib.es5.d.ts, --, --))
+>PromiseLike : Symbol(PromiseLike, Decl(lib.es2009.promise.d.ts, --, --))
 >U : Symbol(U, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 0, 82))
 >U : Symbol(U, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 0, 82))
 >T : Symbol(T, Decl(performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts, 0, 28))

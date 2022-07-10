@@ -6,7 +6,7 @@ type Style = StyleBase | StyleArray;
 
 interface StyleArray extends Array<Style> {}
 >StyleArray : Symbol(StyleArray, Decl(nestedRecursiveArraysOrObjectsError01.ts, 0, 36))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es2009.array.d.ts, --, --), Decl(lib.es2009.array.d.ts, --, --))
 >Style : Symbol(Style, Decl(nestedRecursiveArraysOrObjectsError01.ts, 0, 0))
 
 interface StyleBase {

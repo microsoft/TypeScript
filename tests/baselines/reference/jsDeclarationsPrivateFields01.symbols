@@ -20,10 +20,10 @@ export class C {
 >#screamingHello : Symbol(C.#screamingHello, Decl(file.js, 6, 5), Decl(file.js, 10, 5))
 
         return this.#hello.toUpperCase();
->this.#hello.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>this.#hello.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es2009.string.d.ts, --, --))
 >this.#hello : Symbol(C.#hello, Decl(file.js, 0, 16))
 >this : Symbol(C, Decl(file.js, 0, 0))
->toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es2009.string.d.ts, --, --))
     }
     /** @param value {string} */
     set #screamingHello(value) {

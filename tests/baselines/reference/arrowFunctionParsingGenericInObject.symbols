@@ -23,7 +23,7 @@ const fn1async = () => ({
 >T : Symbol(T, Decl(arrowFunctionParsingGenericInObject.ts, 6, 17))
 >value : Symbol(value, Decl(arrowFunctionParsingGenericInObject.ts, 6, 32))
 >T : Symbol(T, Decl(arrowFunctionParsingGenericInObject.ts, 6, 17))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
 >T : Symbol(T, Decl(arrowFunctionParsingGenericInObject.ts, 6, 17))
 >value : Symbol(value, Decl(arrowFunctionParsingGenericInObject.ts, 6, 32))
 
@@ -56,7 +56,7 @@ const fn2async = () => ({
 >T : Symbol(T, Decl(arrowFunctionParsingGenericInObject.ts, 16, 17))
 >value : Symbol(value, Decl(arrowFunctionParsingGenericInObject.ts, 16, 20))
 >T : Symbol(T, Decl(arrowFunctionParsingGenericInObject.ts, 16, 17))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
 >T : Symbol(T, Decl(arrowFunctionParsingGenericInObject.ts, 16, 17))
 >value : Symbol(value, Decl(arrowFunctionParsingGenericInObject.ts, 16, 20))
 
@@ -92,7 +92,7 @@ const fn3async = () => ({
 >T : Symbol(T, Decl(arrowFunctionParsingGenericInObject.ts, 27, 17))
 >value : Symbol(value, Decl(arrowFunctionParsingGenericInObject.ts, 27, 32))
 >T : Symbol(T, Decl(arrowFunctionParsingGenericInObject.ts, 27, 17))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
 >T : Symbol(T, Decl(arrowFunctionParsingGenericInObject.ts, 27, 17))
 >value : Symbol(value, Decl(arrowFunctionParsingGenericInObject.ts, 27, 32))
 
@@ -125,7 +125,7 @@ const fn4async = () => ({
 >T : Symbol(T, Decl(arrowFunctionParsingGenericInObject.ts, 37, 17))
 >value : Symbol(value, Decl(arrowFunctionParsingGenericInObject.ts, 37, 32))
 >T : Symbol(T, Decl(arrowFunctionParsingGenericInObject.ts, 37, 17))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
 >T : Symbol(T, Decl(arrowFunctionParsingGenericInObject.ts, 37, 17))
 >value : Symbol(value, Decl(arrowFunctionParsingGenericInObject.ts, 37, 32))
 

@@ -139,13 +139,13 @@ type X5<T> =
 
     T extends Promise<infer U extends string> ? ["string", U] :
 >T : Symbol(T, Decl(inferTypesWithExtends1.ts, 41, 8))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --))
 >U : Symbol(U, Decl(inferTypesWithExtends1.ts, 42, 27))
 >U : Symbol(U, Decl(inferTypesWithExtends1.ts, 42, 27))
 
     T extends Promise<infer U extends number> ? ["number", U] :
 >T : Symbol(T, Decl(inferTypesWithExtends1.ts, 41, 8))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --))
 >U : Symbol(U, Decl(inferTypesWithExtends1.ts, 43, 27))
 >U : Symbol(U, Decl(inferTypesWithExtends1.ts, 43, 27))
 
@@ -154,17 +154,17 @@ type X5<T> =
 type X5_T1 = X5<Promise<"a" | "b">>; // ["string", "a" | "b"]
 >X5_T1 : Symbol(X5_T1, Decl(inferTypesWithExtends1.ts, 44, 10))
 >X5 : Symbol(X5, Decl(inferTypesWithExtends1.ts, 38, 41))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --))
 
 type X5_T2 = X5<Promise<1 | 2>>; // ["number", 1 | 2]
 >X5_T2 : Symbol(X5_T2, Decl(inferTypesWithExtends1.ts, 46, 36))
 >X5 : Symbol(X5, Decl(inferTypesWithExtends1.ts, 38, 41))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --))
 
 type X5_T3 = X5<Promise<1n | 2n>>; // never
 >X5_T3 : Symbol(X5_T3, Decl(inferTypesWithExtends1.ts, 47, 32))
 >X5 : Symbol(X5, Decl(inferTypesWithExtends1.ts, 38, 41))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --))
 
 // infer to property type
 type X6<T> =

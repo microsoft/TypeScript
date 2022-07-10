@@ -70,10 +70,10 @@ var ys: any[];
 
 var ys = realanys.filter(Boolean)
 >ys : Symbol(ys, Decl(booleanFilterAnyArray.ts, 16, 3), Decl(booleanFilterAnyArray.ts, 17, 3))
->realanys.filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>realanys.filter : Symbol(Array.filter, Decl(lib.es2009.array.d.ts, --, --), Decl(lib.es2009.array.d.ts, --, --))
 >realanys : Symbol(realanys, Decl(booleanFilterAnyArray.ts, 15, 11))
->filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->Boolean : Symbol(Boolean, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>filter : Symbol(Array.filter, Decl(lib.es2009.array.d.ts, --, --), Decl(lib.es2009.array.d.ts, --, --))
+>Boolean : Symbol(Boolean, Decl(lib.es2009.boolean.d.ts, --, --), Decl(lib.es2009.boolean.d.ts, --, --))
 
 var foo = [{ name: 'x' }]
 >foo : Symbol(foo, Decl(booleanFilterAnyArray.ts, 19, 3))
@@ -81,14 +81,14 @@ var foo = [{ name: 'x' }]
 
 var foor: Array<{name: string}>
 >foor : Symbol(foor, Decl(booleanFilterAnyArray.ts, 20, 3), Decl(booleanFilterAnyArray.ts, 21, 3))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es2009.array.d.ts, --, --), Decl(lib.es2009.array.d.ts, --, --))
 >name : Symbol(name, Decl(booleanFilterAnyArray.ts, 20, 17))
 
 var foor = foo.filter(x => x.name)
 >foor : Symbol(foor, Decl(booleanFilterAnyArray.ts, 20, 3), Decl(booleanFilterAnyArray.ts, 21, 3))
->foo.filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>foo.filter : Symbol(Array.filter, Decl(lib.es2009.array.d.ts, --, --), Decl(lib.es2009.array.d.ts, --, --))
 >foo : Symbol(foo, Decl(booleanFilterAnyArray.ts, 19, 3))
->filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>filter : Symbol(Array.filter, Decl(lib.es2009.array.d.ts, --, --), Decl(lib.es2009.array.d.ts, --, --))
 >x : Symbol(x, Decl(booleanFilterAnyArray.ts, 21, 22))
 >x.name : Symbol(name, Decl(booleanFilterAnyArray.ts, 19, 12))
 >x : Symbol(x, Decl(booleanFilterAnyArray.ts, 21, 22))
@@ -96,12 +96,12 @@ var foor = foo.filter(x => x.name)
 
 var foos: Array<boolean>
 >foos : Symbol(foos, Decl(booleanFilterAnyArray.ts, 22, 3), Decl(booleanFilterAnyArray.ts, 23, 3))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es2009.array.d.ts, --, --), Decl(lib.es2009.array.d.ts, --, --))
 
 var foos = [true, true, false, null].filter((thing): thing is boolean => thing !== null)
 >foos : Symbol(foos, Decl(booleanFilterAnyArray.ts, 22, 3), Decl(booleanFilterAnyArray.ts, 23, 3))
->[true, true, false, null].filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>[true, true, false, null].filter : Symbol(Array.filter, Decl(lib.es2009.array.d.ts, --, --), Decl(lib.es2009.array.d.ts, --, --))
+>filter : Symbol(Array.filter, Decl(lib.es2009.array.d.ts, --, --), Decl(lib.es2009.array.d.ts, --, --))
 >thing : Symbol(thing, Decl(booleanFilterAnyArray.ts, 23, 45))
 >thing : Symbol(thing, Decl(booleanFilterAnyArray.ts, 23, 45))
 >thing : Symbol(thing, Decl(booleanFilterAnyArray.ts, 23, 45))

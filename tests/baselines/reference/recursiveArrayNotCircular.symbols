@@ -56,7 +56,7 @@ function assertNever(a: never): never {
 >a : Symbol(a, Decl(recursiveArrayNotCircular.ts, 15, 21))
 
     throw new Error("Unreachable!");
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es2009.error.d.ts, --, --), Decl(lib.es2009.error.d.ts, --, --))
 }
 
 function reducer(action: ReducerAction): void {
@@ -111,11 +111,11 @@ function reducer(action: ReducerAction): void {
 >Batch : Symbol(ActionType.Batch, Decl(recursiveArrayNotCircular.ts, 5, 8))
 
             action.payload.map(reducer);
->action.payload.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>action.payload.map : Symbol(Array.map, Decl(lib.es2009.array.d.ts, --, --))
 >action.payload : Symbol(payload, Decl(recursiveArrayNotCircular.ts, 0, 62))
 >action : Symbol(action, Decl(recursiveArrayNotCircular.ts, 19, 17))
 >payload : Symbol(payload, Decl(recursiveArrayNotCircular.ts, 0, 62))
->map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>map : Symbol(Array.map, Decl(lib.es2009.array.d.ts, --, --))
 >reducer : Symbol(reducer, Decl(recursiveArrayNotCircular.ts, 17, 1))
 
             break;

@@ -8,7 +8,7 @@ type EnvFunction = <T>() => T;
 
 type SimpleType = string | Promise<SimpleType>;
 >SimpleType : Symbol(SimpleType, Decl(unresolvableSelfReferencingAwaitedUnion.ts, 2, 30))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --))
 >SimpleType : Symbol(SimpleType, Decl(unresolvableSelfReferencingAwaitedUnion.ts, 2, 30))
 
 declare const simple: SimpleType;
@@ -24,7 +24,7 @@ const env: EnvFunction = () => simple;
 
 type T1 = 1 | Promise<T1> | T1[];
 >T1 : Symbol(T1, Decl(unresolvableSelfReferencingAwaitedUnion.ts, 8, 38))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --))
 >T1 : Symbol(T1, Decl(unresolvableSelfReferencingAwaitedUnion.ts, 8, 38))
 >T1 : Symbol(T1, Decl(unresolvableSelfReferencingAwaitedUnion.ts, 8, 38))
 

@@ -48,7 +48,7 @@ function bad<P extends Props>(props: Readonly<P>) {
 >P : Symbol(P, Decl(voidReturnIndexUnionInference.ts, 17, 13))
 >Props : Symbol(Props, Decl(voidReturnIndexUnionInference.ts, 10, 1))
 >props : Symbol(props, Decl(voidReturnIndexUnionInference.ts, 17, 30))
->Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>Readonly : Symbol(Readonly, Decl(lib.utils.modifiers.d.ts, --, --))
 >P : Symbol(P, Decl(voidReturnIndexUnionInference.ts, 17, 13))
 
     safeInvoke(props.onFoo, "blah");

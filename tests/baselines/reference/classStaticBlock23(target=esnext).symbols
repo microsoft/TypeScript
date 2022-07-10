@@ -1,11 +1,11 @@
 === tests/cases/conformance/classes/classStaticBlock/classStaticBlock23.ts ===
 const nums = [1, 2, 3].map(n => Promise.resolve(n))
 >nums : Symbol(nums, Decl(classStaticBlock23.ts, 0, 5))
->[1, 2, 3].map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
->map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>[1, 2, 3].map : Symbol(Array.map, Decl(lib.es2009.array.d.ts, --, --))
+>map : Symbol(Array.map, Decl(lib.es2009.array.d.ts, --, --))
 >n : Symbol(n, Decl(classStaticBlock23.ts, 0, 27))
 >Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es2009.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
 >resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >n : Symbol(n, Decl(classStaticBlock23.ts, 0, 27))
 

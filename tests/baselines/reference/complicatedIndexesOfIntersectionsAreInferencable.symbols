@@ -26,28 +26,28 @@ declare function Func<Values = object, ExtraProps = {}>(
 >ExtraProps : Symbol(ExtraProps, Decl(complicatedIndexesOfIntersectionsAreInferencable.ts, 6, 38))
 
         ? Readonly<FormikConfig<Values> & ExtraProps>
->Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>Readonly : Symbol(Readonly, Decl(lib.utils.modifiers.d.ts, --, --))
 >FormikConfig : Symbol(FormikConfig, Decl(complicatedIndexesOfIntersectionsAreInferencable.ts, 0, 0))
 >Values : Symbol(Values, Decl(complicatedIndexesOfIntersectionsAreInferencable.ts, 6, 22))
 >ExtraProps : Symbol(ExtraProps, Decl(complicatedIndexesOfIntersectionsAreInferencable.ts, 6, 38))
 
         : Pick<Readonly<FormikConfig<Values> & ExtraProps>, "validate" | "initialValues" | Exclude<keyof ExtraProps, "validateOnChange">>
->Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
->Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>Pick : Symbol(Pick, Decl(lib.utils.modifiers.d.ts, --, --))
+>Readonly : Symbol(Readonly, Decl(lib.utils.modifiers.d.ts, --, --))
 >FormikConfig : Symbol(FormikConfig, Decl(complicatedIndexesOfIntersectionsAreInferencable.ts, 0, 0))
 >Values : Symbol(Values, Decl(complicatedIndexesOfIntersectionsAreInferencable.ts, 6, 22))
 >ExtraProps : Symbol(ExtraProps, Decl(complicatedIndexesOfIntersectionsAreInferencable.ts, 6, 38))
->Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>Exclude : Symbol(Exclude, Decl(lib.utils.modifiers.d.ts, --, --))
 >ExtraProps : Symbol(ExtraProps, Decl(complicatedIndexesOfIntersectionsAreInferencable.ts, 6, 38))
 
         & Partial<Pick<Readonly<FormikConfig<Values> & ExtraProps>, "validateOnChange" | Extract<keyof ExtraProps, "validateOnChange">>>)
->Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
->Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
->Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.utils.modifiers.d.ts, --, --))
+>Pick : Symbol(Pick, Decl(lib.utils.modifiers.d.ts, --, --))
+>Readonly : Symbol(Readonly, Decl(lib.utils.modifiers.d.ts, --, --))
 >FormikConfig : Symbol(FormikConfig, Decl(complicatedIndexesOfIntersectionsAreInferencable.ts, 0, 0))
 >Values : Symbol(Values, Decl(complicatedIndexesOfIntersectionsAreInferencable.ts, 6, 22))
 >ExtraProps : Symbol(ExtraProps, Decl(complicatedIndexesOfIntersectionsAreInferencable.ts, 6, 38))
->Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>Extract : Symbol(Extract, Decl(lib.utils.modifiers.d.ts, --, --))
 >ExtraProps : Symbol(ExtraProps, Decl(complicatedIndexesOfIntersectionsAreInferencable.ts, 6, 38))
 
 ): void;

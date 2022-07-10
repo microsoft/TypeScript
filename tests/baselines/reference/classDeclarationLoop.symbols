@@ -15,9 +15,9 @@ for (let i = 0; i < 10; ++i) {
 >i : Symbol(i, Decl(classDeclarationLoop.ts, 1, 8))
     }
     arr.push(C);
->arr.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>arr.push : Symbol(Array.push, Decl(lib.es2009.array.d.ts, --, --))
 >arr : Symbol(arr, Decl(classDeclarationLoop.ts, 0, 5))
->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es2009.array.d.ts, --, --))
 >C : Symbol(C, Decl(classDeclarationLoop.ts, 1, 30))
 }
 

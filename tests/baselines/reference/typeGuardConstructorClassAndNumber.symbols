@@ -12,9 +12,9 @@ let var1: C1 | number;
 >C1 : Symbol(C1, Decl(typeGuardConstructorClassAndNumber.ts, 0, 0))
 
 if (var1.constructor == C1) {
->var1.constructor : Symbol(Object.constructor, Decl(lib.es5.d.ts, --, --))
+>var1.constructor : Symbol(Object.constructor, Decl(lib.es2009.object.d.ts, --, --))
 >var1 : Symbol(var1, Decl(typeGuardConstructorClassAndNumber.ts, 5, 3))
->constructor : Symbol(Object.constructor, Decl(lib.es5.d.ts, --, --))
+>constructor : Symbol(Object.constructor, Decl(lib.es2009.object.d.ts, --, --))
 >C1 : Symbol(C1, Decl(typeGuardConstructorClassAndNumber.ts, 0, 0))
 
     var1; // C1
@@ -31,7 +31,7 @@ else {
 }
 if (var1["constructor"] == C1) {
 >var1 : Symbol(var1, Decl(typeGuardConstructorClassAndNumber.ts, 5, 3))
->"constructor" : Symbol(Object.constructor, Decl(lib.es5.d.ts, --, --))
+>"constructor" : Symbol(Object.constructor, Decl(lib.es2009.object.d.ts, --, --))
 >C1 : Symbol(C1, Decl(typeGuardConstructorClassAndNumber.ts, 0, 0))
 
     var1; // C1
@@ -47,9 +47,9 @@ else {
 >var1 : Symbol(var1, Decl(typeGuardConstructorClassAndNumber.ts, 5, 3))
 }
 if (var1.constructor === C1) {
->var1.constructor : Symbol(Object.constructor, Decl(lib.es5.d.ts, --, --))
+>var1.constructor : Symbol(Object.constructor, Decl(lib.es2009.object.d.ts, --, --))
 >var1 : Symbol(var1, Decl(typeGuardConstructorClassAndNumber.ts, 5, 3))
->constructor : Symbol(Object.constructor, Decl(lib.es5.d.ts, --, --))
+>constructor : Symbol(Object.constructor, Decl(lib.es2009.object.d.ts, --, --))
 >C1 : Symbol(C1, Decl(typeGuardConstructorClassAndNumber.ts, 0, 0))
 
     var1; // C1
@@ -66,7 +66,7 @@ else {
 }
 if (var1["constructor"] === C1) {
 >var1 : Symbol(var1, Decl(typeGuardConstructorClassAndNumber.ts, 5, 3))
->"constructor" : Symbol(Object.constructor, Decl(lib.es5.d.ts, --, --))
+>"constructor" : Symbol(Object.constructor, Decl(lib.es2009.object.d.ts, --, --))
 >C1 : Symbol(C1, Decl(typeGuardConstructorClassAndNumber.ts, 0, 0))
 
     var1; // C1
@@ -83,9 +83,9 @@ else {
 }
 if (C1 == var1.constructor) {
 >C1 : Symbol(C1, Decl(typeGuardConstructorClassAndNumber.ts, 0, 0))
->var1.constructor : Symbol(Object.constructor, Decl(lib.es5.d.ts, --, --))
+>var1.constructor : Symbol(Object.constructor, Decl(lib.es2009.object.d.ts, --, --))
 >var1 : Symbol(var1, Decl(typeGuardConstructorClassAndNumber.ts, 5, 3))
->constructor : Symbol(Object.constructor, Decl(lib.es5.d.ts, --, --))
+>constructor : Symbol(Object.constructor, Decl(lib.es2009.object.d.ts, --, --))
 
     var1; // C1
 >var1 : Symbol(var1, Decl(typeGuardConstructorClassAndNumber.ts, 5, 3))
@@ -102,7 +102,7 @@ else {
 if (C1 == var1["constructor"]) {
 >C1 : Symbol(C1, Decl(typeGuardConstructorClassAndNumber.ts, 0, 0))
 >var1 : Symbol(var1, Decl(typeGuardConstructorClassAndNumber.ts, 5, 3))
->"constructor" : Symbol(Object.constructor, Decl(lib.es5.d.ts, --, --))
+>"constructor" : Symbol(Object.constructor, Decl(lib.es2009.object.d.ts, --, --))
 
     var1; // C1
 >var1 : Symbol(var1, Decl(typeGuardConstructorClassAndNumber.ts, 5, 3))
@@ -118,9 +118,9 @@ else {
 }
 if (C1 === var1.constructor) {
 >C1 : Symbol(C1, Decl(typeGuardConstructorClassAndNumber.ts, 0, 0))
->var1.constructor : Symbol(Object.constructor, Decl(lib.es5.d.ts, --, --))
+>var1.constructor : Symbol(Object.constructor, Decl(lib.es2009.object.d.ts, --, --))
 >var1 : Symbol(var1, Decl(typeGuardConstructorClassAndNumber.ts, 5, 3))
->constructor : Symbol(Object.constructor, Decl(lib.es5.d.ts, --, --))
+>constructor : Symbol(Object.constructor, Decl(lib.es2009.object.d.ts, --, --))
 
     var1; // C1
 >var1 : Symbol(var1, Decl(typeGuardConstructorClassAndNumber.ts, 5, 3))
@@ -137,7 +137,7 @@ else {
 if (C1 === var1["constructor"]) {
 >C1 : Symbol(C1, Decl(typeGuardConstructorClassAndNumber.ts, 0, 0))
 >var1 : Symbol(var1, Decl(typeGuardConstructorClassAndNumber.ts, 5, 3))
->"constructor" : Symbol(Object.constructor, Decl(lib.es5.d.ts, --, --))
+>"constructor" : Symbol(Object.constructor, Decl(lib.es2009.object.d.ts, --, --))
 
     var1; // C1
 >var1 : Symbol(var1, Decl(typeGuardConstructorClassAndNumber.ts, 5, 3))
@@ -153,9 +153,9 @@ else {
 }
 
 if (var1.constructor != C1) {
->var1.constructor : Symbol(Object.constructor, Decl(lib.es5.d.ts, --, --))
+>var1.constructor : Symbol(Object.constructor, Decl(lib.es2009.object.d.ts, --, --))
 >var1 : Symbol(var1, Decl(typeGuardConstructorClassAndNumber.ts, 5, 3))
->constructor : Symbol(Object.constructor, Decl(lib.es5.d.ts, --, --))
+>constructor : Symbol(Object.constructor, Decl(lib.es2009.object.d.ts, --, --))
 >C1 : Symbol(C1, Decl(typeGuardConstructorClassAndNumber.ts, 0, 0))
 
     var1; // C1 | number
@@ -170,7 +170,7 @@ else {
 }
 if (var1["constructor"] != C1) {
 >var1 : Symbol(var1, Decl(typeGuardConstructorClassAndNumber.ts, 5, 3))
->"constructor" : Symbol(Object.constructor, Decl(lib.es5.d.ts, --, --))
+>"constructor" : Symbol(Object.constructor, Decl(lib.es2009.object.d.ts, --, --))
 >C1 : Symbol(C1, Decl(typeGuardConstructorClassAndNumber.ts, 0, 0))
 
     var1; // C1 | number
@@ -184,9 +184,9 @@ else {
 >var1 : Symbol(var1, Decl(typeGuardConstructorClassAndNumber.ts, 5, 3))
 }
 if (var1.constructor !== C1) {
->var1.constructor : Symbol(Object.constructor, Decl(lib.es5.d.ts, --, --))
+>var1.constructor : Symbol(Object.constructor, Decl(lib.es2009.object.d.ts, --, --))
 >var1 : Symbol(var1, Decl(typeGuardConstructorClassAndNumber.ts, 5, 3))
->constructor : Symbol(Object.constructor, Decl(lib.es5.d.ts, --, --))
+>constructor : Symbol(Object.constructor, Decl(lib.es2009.object.d.ts, --, --))
 >C1 : Symbol(C1, Decl(typeGuardConstructorClassAndNumber.ts, 0, 0))
 
     var1; // C1 | number
@@ -201,7 +201,7 @@ else {
 }
 if (var1["constructor"] !== C1) {
 >var1 : Symbol(var1, Decl(typeGuardConstructorClassAndNumber.ts, 5, 3))
->"constructor" : Symbol(Object.constructor, Decl(lib.es5.d.ts, --, --))
+>"constructor" : Symbol(Object.constructor, Decl(lib.es2009.object.d.ts, --, --))
 >C1 : Symbol(C1, Decl(typeGuardConstructorClassAndNumber.ts, 0, 0))
 
     var1; // C1 | number
@@ -216,9 +216,9 @@ else {
 }
 if (C1 != var1.constructor) {
 >C1 : Symbol(C1, Decl(typeGuardConstructorClassAndNumber.ts, 0, 0))
->var1.constructor : Symbol(Object.constructor, Decl(lib.es5.d.ts, --, --))
+>var1.constructor : Symbol(Object.constructor, Decl(lib.es2009.object.d.ts, --, --))
 >var1 : Symbol(var1, Decl(typeGuardConstructorClassAndNumber.ts, 5, 3))
->constructor : Symbol(Object.constructor, Decl(lib.es5.d.ts, --, --))
+>constructor : Symbol(Object.constructor, Decl(lib.es2009.object.d.ts, --, --))
 
     var1; // C1 | number
 >var1 : Symbol(var1, Decl(typeGuardConstructorClassAndNumber.ts, 5, 3))
@@ -233,7 +233,7 @@ else {
 if (C1 != var1["constructor"]) {
 >C1 : Symbol(C1, Decl(typeGuardConstructorClassAndNumber.ts, 0, 0))
 >var1 : Symbol(var1, Decl(typeGuardConstructorClassAndNumber.ts, 5, 3))
->"constructor" : Symbol(Object.constructor, Decl(lib.es5.d.ts, --, --))
+>"constructor" : Symbol(Object.constructor, Decl(lib.es2009.object.d.ts, --, --))
 
     var1; // C1 | number
 >var1 : Symbol(var1, Decl(typeGuardConstructorClassAndNumber.ts, 5, 3))
@@ -247,9 +247,9 @@ else {
 }
 if (C1 !== var1.constructor) {
 >C1 : Symbol(C1, Decl(typeGuardConstructorClassAndNumber.ts, 0, 0))
->var1.constructor : Symbol(Object.constructor, Decl(lib.es5.d.ts, --, --))
+>var1.constructor : Symbol(Object.constructor, Decl(lib.es2009.object.d.ts, --, --))
 >var1 : Symbol(var1, Decl(typeGuardConstructorClassAndNumber.ts, 5, 3))
->constructor : Symbol(Object.constructor, Decl(lib.es5.d.ts, --, --))
+>constructor : Symbol(Object.constructor, Decl(lib.es2009.object.d.ts, --, --))
 
     var1; // C1 | number
 >var1 : Symbol(var1, Decl(typeGuardConstructorClassAndNumber.ts, 5, 3))
@@ -264,7 +264,7 @@ else {
 if (C1 !== var1["constructor"]) {
 >C1 : Symbol(C1, Decl(typeGuardConstructorClassAndNumber.ts, 0, 0))
 >var1 : Symbol(var1, Decl(typeGuardConstructorClassAndNumber.ts, 5, 3))
->"constructor" : Symbol(Object.constructor, Decl(lib.es5.d.ts, --, --))
+>"constructor" : Symbol(Object.constructor, Decl(lib.es2009.object.d.ts, --, --))
 
     var1; // C1 | number
 >var1 : Symbol(var1, Decl(typeGuardConstructorClassAndNumber.ts, 5, 3))
@@ -282,23 +282,23 @@ else {
 function foo(instance: Function | object) {
 >foo : Symbol(foo, Decl(typeGuardConstructorClassAndNumber.ts, 118, 1))
 >instance : Symbol(instance, Decl(typeGuardConstructorClassAndNumber.ts, 122, 13))
->Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es2009.function.d.ts, --, --), Decl(lib.es2009.function.d.ts, --, --))
 
     if (typeof instance === 'function') {
 >instance : Symbol(instance, Decl(typeGuardConstructorClassAndNumber.ts, 122, 13))
 
         if (instance.prototype == null || instance.prototype.constructor == null) {
->instance.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>instance.prototype : Symbol(Function.prototype, Decl(lib.es2009.function.d.ts, --, --))
 >instance : Symbol(instance, Decl(typeGuardConstructorClassAndNumber.ts, 122, 13))
->prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
->instance.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>prototype : Symbol(Function.prototype, Decl(lib.es2009.function.d.ts, --, --))
+>instance.prototype : Symbol(Function.prototype, Decl(lib.es2009.function.d.ts, --, --))
 >instance : Symbol(instance, Decl(typeGuardConstructorClassAndNumber.ts, 122, 13))
->prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>prototype : Symbol(Function.prototype, Decl(lib.es2009.function.d.ts, --, --))
 
             return instance.length;
->instance.length : Symbol(Function.length, Decl(lib.es5.d.ts, --, --))
+>instance.length : Symbol(Function.length, Decl(lib.es2009.function.d.ts, --, --))
 >instance : Symbol(instance, Decl(typeGuardConstructorClassAndNumber.ts, 122, 13))
->length : Symbol(Function.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(Function.length, Decl(lib.es2009.function.d.ts, --, --))
         }
     }
 }

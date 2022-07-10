@@ -2,19 +2,19 @@
 function distinguish(thing: string | number | Date) {
 >distinguish : Symbol(distinguish, Decl(controlFlowInstanceOfGuardPrimitives.ts, 0, 0))
 >thing : Symbol(thing, Decl(controlFlowInstanceOfGuardPrimitives.ts, 0, 21))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2009.date.d.ts, --, --), Decl(lib.es2009.date.d.ts, --, --), Decl(lib.es2009.date.d.ts, --, --))
 
     if (thing instanceof Object) {
 >thing : Symbol(thing, Decl(controlFlowInstanceOfGuardPrimitives.ts, 0, 21))
->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es2009.object.d.ts, --, --), Decl(lib.es2009.object.d.ts, --, --))
 
         console.log("Aha!! It's a Date in " + thing.getFullYear());
 >console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
 >log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
->thing.getFullYear : Symbol(Date.getFullYear, Decl(lib.es5.d.ts, --, --))
+>thing.getFullYear : Symbol(Date.getFullYear, Decl(lib.es2009.date.d.ts, --, --))
 >thing : Symbol(thing, Decl(controlFlowInstanceOfGuardPrimitives.ts, 0, 21))
->getFullYear : Symbol(Date.getFullYear, Decl(lib.es5.d.ts, --, --))
+>getFullYear : Symbol(Date.getFullYear, Decl(lib.es2009.date.d.ts, --, --))
 
     } else if (typeof thing === 'string') {
 >thing : Symbol(thing, Decl(controlFlowInstanceOfGuardPrimitives.ts, 0, 21))
@@ -23,24 +23,24 @@ function distinguish(thing: string | number | Date) {
 >console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
 >log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
->thing.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>thing.length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
 >thing : Symbol(thing, Decl(controlFlowInstanceOfGuardPrimitives.ts, 0, 21))
->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es2009.string.d.ts, --, --))
 
     } else {
         console.log("Aha!! It's the number " + thing.toPrecision(3));
 >console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
 >log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
->thing.toPrecision : Symbol(Number.toPrecision, Decl(lib.es5.d.ts, --, --))
+>thing.toPrecision : Symbol(Number.toPrecision, Decl(lib.es2009.number.d.ts, --, --))
 >thing : Symbol(thing, Decl(controlFlowInstanceOfGuardPrimitives.ts, 0, 21))
->toPrecision : Symbol(Number.toPrecision, Decl(lib.es5.d.ts, --, --))
+>toPrecision : Symbol(Number.toPrecision, Decl(lib.es2009.number.d.ts, --, --))
     }
 }
 
 distinguish(new Date());
 >distinguish : Symbol(distinguish, Decl(controlFlowInstanceOfGuardPrimitives.ts, 0, 0))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2009.date.d.ts, --, --), Decl(lib.es2009.date.d.ts, --, --), Decl(lib.es2009.date.d.ts, --, --))
 
 distinguish("beef");
 >distinguish : Symbol(distinguish, Decl(controlFlowInstanceOfGuardPrimitives.ts, 0, 0))
