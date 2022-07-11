@@ -835,7 +835,7 @@ namespace ts {
             return false;
         }
         // If `alwaysStrict` is set, then treat the file as strict.
-        if (getStrictOptionValue(compilerOptions, "alwaysStrict")) {
+        if (getStrictOptionValue(node, compilerOptions, "alwaysStrict")) {
             return true;
         }
         // Starting with a "use strict" directive indicates the file is strict.
@@ -6449,6 +6449,17 @@ namespace ts {
         return !!(options.incremental || options.composite);
     }
 
+    export type FileLocalOptionName = (typeof optionsAllowedAsPragmaOption)[number]["name"];
+
+    export function getFileLocalCompilerOption<T extends FileLocalOptionName>(file: SourceFile | undefined, opts: CompilerOptions, name: T, isStrictFlag?: boolean): CompilerOptions[T] {
+        const localStrictValue = (file?.localOptions && hasProperty(file.localOptions, "strict")) ? file.localOptions.strict : undefined;
+        const strict = localStrictValue === undefined ? opts.strict : localStrictValue;
+        if (file?.localOptions && hasProperty(file.localOptions, name)) {
+            return file.localOptions[name] !== undefined ? file.localOptions[name] : opts[name] !== undefined ? opts[name] : isStrictFlag ? strict : undefined;
+        }
+        return opts[name] !== undefined ? opts[name] : isStrictFlag ? strict : undefined;
+    }
+
     export type StrictOptionName =
         | "noImplicitAny"
         | "noImplicitThis"
@@ -6460,8 +6471,8 @@ namespace ts {
         | "useUnknownInCatchVariables"
         ;
 
-    export function getStrictOptionValue(compilerOptions: CompilerOptions, flag: StrictOptionName): boolean {
-        return compilerOptions[flag] === undefined ? !!compilerOptions.strict : !!compilerOptions[flag];
+    export function getStrictOptionValue(file: SourceFile | undefined, compilerOptions: CompilerOptions, flag: StrictOptionName): boolean {
+        return !!getFileLocalCompilerOption(file, compilerOptions, flag, /*isStrictFlag*/ true);
     }
 
     export function getAllowJSCompilerOption(compilerOptions: CompilerOptions): boolean {
@@ -6485,7 +6496,7 @@ namespace ts {
     }
 
     export function getCompilerOptionValue(options: CompilerOptions, option: CommandLineOption): unknown {
-        return option.strictFlag ? getStrictOptionValue(options, option.name as StrictOptionName) : options[option.name];
+        return option.strictFlag ? options[option.name] === undefined ? !!options.strict : !!options[option.name] : options[option.name];
     }
 
     export function getJSXTransformEnabled(options: CompilerOptions): boolean {

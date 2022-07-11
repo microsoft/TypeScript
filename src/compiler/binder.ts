@@ -285,7 +285,7 @@ namespace ts {
         return bindSourceFile;
 
         function bindInStrictMode(file: SourceFile, opts: CompilerOptions): boolean {
-            if (getStrictOptionValue(opts, "alwaysStrict") && !file.isDeclarationFile) {
+            if (getStrictOptionValue(file, opts, "alwaysStrict") && !file.isDeclarationFile) {
                 // bind in strict mode source files with alwaysStrict option
                 return true;
             }

@@ -63,7 +63,6 @@ namespace ts {
         const resolver = context.getEmitResolver();
         const compilerOptions = context.getCompilerOptions();
         const languageVersion = getEmitScriptTarget(compilerOptions);
-        const strictNullChecks = getStrictOptionValue(compilerOptions, "strictNullChecks");
 
         let currentLexicalScope: SourceFile | CaseBlock | ModuleBlock | Block;
         let currentNameScope: ClassLikeDeclaration | undefined;
@@ -344,7 +343,7 @@ namespace ts {
                     return factory.createIdentifier("Object"); // Reduce to `any` in a union or intersection
                 }
 
-                if (!strictNullChecks && ((isLiteralTypeNode(typeNode) && typeNode.literal.kind === SyntaxKind.NullKeyword) || typeNode.kind === SyntaxKind.UndefinedKeyword)) {
+                if (!getStrictOptionValue(getSourceFileOfNode(currentLexicalScope), compilerOptions, "strictNullChecks") && ((isLiteralTypeNode(typeNode) && typeNode.literal.kind === SyntaxKind.NullKeyword) || typeNode.kind === SyntaxKind.UndefinedKeyword)) {
                     continue; // Elide null and undefined from unions for metadata, just like what we did prior to the implementation of strict null checks
                 }
 

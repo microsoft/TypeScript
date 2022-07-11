@@ -3857,6 +3857,7 @@ namespace ts {
         /* @internal */ checkJsDirective?: CheckJsDirective;
         /* @internal */ version: string;
         /* @internal */ pragmas: ReadonlyPragmaMap;
+        /* @internal */ localOptions?: CompilerOptions;
         /* @internal */ localJsxNamespace?: __String;
         /* @internal */ localJsxFragmentNamespace?: __String;
         /* @internal */ localJsxFactory?: EntityName;
@@ -8887,7 +8888,7 @@ namespace ts {
      * Maps a pragma definition into the desired shape for its arguments object
      */
     /* @internal */
-    type PragmaArgumentType<KPrag extends keyof ConcretePragmaSpecs> =
+    export type PragmaArgumentType<KPrag extends keyof ConcretePragmaSpecs> =
         ConcretePragmaSpecs[KPrag] extends { args: readonly PragmaArgumentSpecification<any>[] }
             ? UnionToIntersection<ArgumentDefinitionToFieldUnion<ConcretePragmaSpecs[KPrag]["args"]>>
             : never;

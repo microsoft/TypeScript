@@ -1431,6 +1431,11 @@ namespace ts {
     /* @internal */
     export const optionsAffectingProgramStructure = optionDeclarations.filter(isAffectsProgramStructureOption);
 
+    /* @internal */
+    export function isStrictOption<T extends CommandLineOption>(option: T): option is WithTrue<T, "strictFlag"> {
+        return !!option.strictFlag === true;
+    }
+
     function isAllowedAsPragmaOption<T extends CommandLineOption>(option: T): option is WithTrue<T, "allowedAsPragma"> {
         return !!option.allowedAsPragma;
     }
@@ -1790,10 +1795,11 @@ namespace ts {
         }
     }
 
-    function parseOptionValue(
+    /* @internal */
+    export function parseOptionValue(
         args: readonly string[],
         i: number,
-        diagnostics: ParseCommandLineWorkerDiagnostics,
+        diagnostics: ParseCommandLineWorkerDiagnostics | undefined,
         opt: CommandLineOption,
         options: OptionsBase,
         errors: Diagnostic[]
@@ -1821,7 +1827,7 @@ namespace ts {
         }
         else {
             // Check to see if no argument was provided (e.g. "--locale" is the last command-line argument).
-            if (!args[i] && opt.type !== "boolean") {
+            if (!args[i] && opt.type !== "boolean" && diagnostics) {
                 errors.push(createCompilerDiagnostic(diagnostics.optionTypeMismatchDiagnostic, opt.name, getCompilerOptionValueTypeString(opt)));
             }
 

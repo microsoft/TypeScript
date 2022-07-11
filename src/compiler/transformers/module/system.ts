@@ -222,7 +222,7 @@ namespace ts {
             startLexicalEnvironment();
 
             // Add any prologue directives.
-            const ensureUseStrict = getStrictOptionValue(compilerOptions, "alwaysStrict") || (!compilerOptions.noImplicitUseStrict && isExternalModule(currentSourceFile));
+            const ensureUseStrict = getStrictOptionValue(node, compilerOptions, "alwaysStrict") || (!compilerOptions.noImplicitUseStrict && isExternalModule(currentSourceFile));
             const statementOffset = factory.copyPrologue(node.statements, statements, ensureUseStrict, topLevelVisitor);
 
             // var __moduleName = context_1 && context_1.id;
