@@ -1,0 +1,65 @@
+=== tests/cases/compiler/weakTypeAndPrimitiveNarrowing.ts ===
+type LiteralsAndWeakTypes = 
+>LiteralsAndWeakTypes : Symbol(LiteralsAndWeakTypes, Decl(weakTypeAndPrimitiveNarrowing.ts, 0, 0))
+
+  | 'A'
+  | 'B'
+  | { optional?: true }
+>optional : Symbol(optional, Decl(weakTypeAndPrimitiveNarrowing.ts, 3, 5))
+
+  | { toLowerCase?(): string }
+>toLowerCase : Symbol(toLowerCase, Decl(weakTypeAndPrimitiveNarrowing.ts, 4, 5))
+
+  | { toUpperCase?(): string, otherOptionalProp?: number };
+>toUpperCase : Symbol(toUpperCase, Decl(weakTypeAndPrimitiveNarrowing.ts, 5, 5))
+>otherOptionalProp : Symbol(otherOptionalProp, Decl(weakTypeAndPrimitiveNarrowing.ts, 5, 29))
+
+const g = (arg: LiteralsAndWeakTypes) => {
+>g : Symbol(g, Decl(weakTypeAndPrimitiveNarrowing.ts, 7, 5))
+>arg : Symbol(arg, Decl(weakTypeAndPrimitiveNarrowing.ts, 7, 11))
+>LiteralsAndWeakTypes : Symbol(LiteralsAndWeakTypes, Decl(weakTypeAndPrimitiveNarrowing.ts, 0, 0))
+
+    if (arg === 'A') {
+>arg : Symbol(arg, Decl(weakTypeAndPrimitiveNarrowing.ts, 7, 11))
+
+      arg;
+>arg : Symbol(arg, Decl(weakTypeAndPrimitiveNarrowing.ts, 7, 11))
+
+    } else {
+      arg;
+>arg : Symbol(arg, Decl(weakTypeAndPrimitiveNarrowing.ts, 7, 11))
+    }
+}
+
+type PrimitivesAndWeakTypes =
+>PrimitivesAndWeakTypes : Symbol(PrimitivesAndWeakTypes, Decl(weakTypeAndPrimitiveNarrowing.ts, 13, 1))
+
+  | string
+  | number
+  | { optional?: true }
+>optional : Symbol(optional, Decl(weakTypeAndPrimitiveNarrowing.ts, 18, 5))
+
+  | { toLowerCase?(): string }
+>toLowerCase : Symbol(toLowerCase, Decl(weakTypeAndPrimitiveNarrowing.ts, 19, 5))
+
+  | { toUpperCase?(): string, otherOptionalProp?: number };
+>toUpperCase : Symbol(toUpperCase, Decl(weakTypeAndPrimitiveNarrowing.ts, 20, 5))
+>otherOptionalProp : Symbol(otherOptionalProp, Decl(weakTypeAndPrimitiveNarrowing.ts, 20, 29))
+
+const h = (arg: PrimitivesAndWeakTypes) => {
+>h : Symbol(h, Decl(weakTypeAndPrimitiveNarrowing.ts, 22, 5))
+>arg : Symbol(arg, Decl(weakTypeAndPrimitiveNarrowing.ts, 22, 11))
+>PrimitivesAndWeakTypes : Symbol(PrimitivesAndWeakTypes, Decl(weakTypeAndPrimitiveNarrowing.ts, 13, 1))
+
+    if (arg === 'A') {
+>arg : Symbol(arg, Decl(weakTypeAndPrimitiveNarrowing.ts, 22, 11))
+
+      arg;
+>arg : Symbol(arg, Decl(weakTypeAndPrimitiveNarrowing.ts, 22, 11))
+
+    } else {
+      arg;
+>arg : Symbol(arg, Decl(weakTypeAndPrimitiveNarrowing.ts, 22, 11))
+    }
+}
+
