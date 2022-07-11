@@ -394,6 +394,22 @@ namespace ts {
             return formatEnum(flags, (ts as any).FlowFlags, /*isFlags*/ true);
         }
 
+        export function formatRelationComparisonResult(result: RelationComparisonResult | undefined): string {
+            return formatEnum(result, (ts as any).RelationComparisonResult, /*isFlags*/ true);
+        }
+
+        export function formatCheckMode(mode: CheckMode | undefined): string {
+            return formatEnum(mode, (ts as any).CheckMode, /*isFlags*/ true);
+        }
+
+        export function formatSignatureCheckMode(mode: SignatureCheckMode | undefined): string {
+            return formatEnum(mode, (ts as any).SignatureCheckMode, /*isFlags*/ true);
+        }
+
+        export function formatTypeFacts(facts: TypeFacts | undefined): string {
+            return formatEnum(facts, (ts as any).TypeFacts, /*isFlags*/ true);
+        }
+
         let isDebugInfoEnabled = false;
 
         interface ExtendedDebugModule {

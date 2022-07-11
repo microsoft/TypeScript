@@ -955,3 +955,100 @@ function foo({
 
 }) {}
 
+// Repro from #49772
+
+function fa1(x: [true, number] | [false, string]) {
+>fa1 : (x: [true, number] | [false, string]) => void
+>x : [true, number] | [false, string]
+>true : true
+>false : false
+
+    const [guard, value] = x;
+>guard : boolean
+>value : string | number
+>x : [true, number] | [false, string]
+
+    if (guard) {
+>guard : boolean
+
+        for (;;) {
+            value;  // number
+>value : number
+        }
+    }
+    else {
+        while (!!true) {
+>!!true : true
+>!true : false
+>true : true
+
+            value;  // string
+>value : string
+        }
+    }
+}
+
+function fa2(x: { guard: true, value: number } | { guard: false, value: string }) {
+>fa2 : (x: {    guard: true;    value: number;} | {    guard: false;    value: string;}) => void
+>x : { guard: true; value: number; } | { guard: false; value: string; }
+>guard : true
+>true : true
+>value : number
+>guard : false
+>false : false
+>value : string
+
+    const { guard, value } = x;
+>guard : boolean
+>value : string | number
+>x : { guard: true; value: number; } | { guard: false; value: string; }
+
+    if (guard) {
+>guard : boolean
+
+        for (;;) {
+            value;  // number
+>value : number
+        }
+    }
+    else {
+        while (!!true) {
+>!!true : true
+>!true : false
+>true : true
+
+            value;  // string
+>value : string
+        }
+    }
+}
+
+const fa3: (...args: [true, number] | [false, string]) => void = (guard, value) => {
+>fa3 : (...args: [true, number] | [false, string]) => void
+>args : [true, number] | [false, string]
+>true : true
+>false : false
+>(guard, value) => {    if (guard) {        for (;;) {            value;  // number        }    }    else {        while (!!true) {            value;  // string        }    }} : (guard: boolean, value: string | number) => void
+>guard : boolean
+>value : string | number
+
+    if (guard) {
+>guard : boolean
+
+        for (;;) {
+            value;  // number
+>value : number
+        }
+    }
+    else {
+        while (!!true) {
+>!!true : true
+>!true : false
+>true : true
+
+            value;  // string
+>value : string
+        }
+    }
+}
+

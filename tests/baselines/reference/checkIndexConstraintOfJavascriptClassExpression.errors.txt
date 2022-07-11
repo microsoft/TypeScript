@@ -1,4 +1,4 @@
-tests/cases/compiler/weird.js(1,1): error TS2304: Cannot find name 'someFunction'.
+tests/cases/compiler/weird.js(1,1): error TS2552: Cannot find name 'someFunction'. Did you mean 'Function'?
 tests/cases/compiler/weird.js(1,23): error TS7006: Parameter 'BaseClass' implicitly has an 'any' type.
 tests/cases/compiler/weird.js(9,17): error TS7006: Parameter 'error' implicitly has an 'any' type.
 
@@ -6,7 +6,8 @@ tests/cases/compiler/weird.js(9,17): error TS7006: Parameter 'error' implicitly 
 ==== tests/cases/compiler/weird.js (3 errors) ====
     someFunction(function(BaseClass) {
     ~~~~~~~~~~~~
-!!! error TS2304: Cannot find name 'someFunction'.
+!!! error TS2552: Cannot find name 'someFunction'. Did you mean 'Function'?
+!!! related TS2728 /.ts/lib.es5.d.ts:324:13: 'Function' is declared here.
                           ~~~~~~~~~
 !!! error TS7006: Parameter 'BaseClass' implicitly has an 'any' type.
         'use strict';
