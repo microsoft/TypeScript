@@ -1,0 +1,625 @@
+=== tests/cases/compiler/arrayMethodPredicates.ts ===
+var array: number[];
+>array : number[]
+
+var readonlyArray: readonly number[];
+>readonlyArray : readonly number[]
+
+var int8Array: Int8Array;
+>int8Array : Int8Array
+
+var uint8Array: Uint8Array;
+>uint8Array : Uint8Array
+
+var uint8ClampedArray: Uint8ClampedArray;
+>uint8ClampedArray : Uint8ClampedArray
+
+var int16Array: Int16Array;
+>int16Array : Int16Array
+
+var uint16Array: Uint16Array;
+>uint16Array : Uint16Array
+
+var int32Array: Int32Array;
+>int32Array : Int32Array
+
+var uint32Array: Uint32Array;
+>uint32Array : Uint32Array
+
+var float32Array: Float32Array;
+>float32Array : Float32Array
+
+var float64Array: Float64Array;
+>float64Array : Float64Array
+
+var bigInt64Array: BigInt64Array;
+>bigInt64Array : BigInt64Array
+
+var bigUint64Array: BigUint64Array;
+>bigUint64Array : BigUint64Array
+
+array.every(x => x);
+>array.every(x => x) : boolean
+>array.every : { <S extends number>(predicate: (value: number, index: number, array: number[]) => value is S, thisArg?: any): this is S[]; (predicate: (value: number, index: number, array: number[]) => unknown, thisArg?: any): boolean; }
+>array : number[]
+>every : { <S extends number>(predicate: (value: number, index: number, array: number[]) => value is S, thisArg?: any): this is S[]; (predicate: (value: number, index: number, array: number[]) => unknown, thisArg?: any): boolean; }
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+readonlyArray.every(x => x);
+>readonlyArray.every(x => x) : boolean
+>readonlyArray.every : { <S extends number>(predicate: (value: number, index: number, array: readonly number[]) => value is S, thisArg?: any): this is readonly S[]; (predicate: (value: number, index: number, array: readonly number[]) => unknown, thisArg?: any): boolean; }
+>readonlyArray : readonly number[]
+>every : { <S extends number>(predicate: (value: number, index: number, array: readonly number[]) => value is S, thisArg?: any): this is readonly S[]; (predicate: (value: number, index: number, array: readonly number[]) => unknown, thisArg?: any): boolean; }
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+int8Array.every(x => x);
+>int8Array.every(x => x) : boolean
+>int8Array.every : (predicate: (value: number, index: number, array: Int8Array) => unknown, thisArg?: any) => boolean
+>int8Array : Int8Array
+>every : (predicate: (value: number, index: number, array: Int8Array) => unknown, thisArg?: any) => boolean
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+uint8Array.every(x => x);
+>uint8Array.every(x => x) : boolean
+>uint8Array.every : (predicate: (value: number, index: number, array: Uint8Array) => unknown, thisArg?: any) => boolean
+>uint8Array : Uint8Array
+>every : (predicate: (value: number, index: number, array: Uint8Array) => unknown, thisArg?: any) => boolean
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+uint8ClampedArray.every(x => x);
+>uint8ClampedArray.every(x => x) : boolean
+>uint8ClampedArray.every : (predicate: (value: number, index: number, array: Uint8ClampedArray) => unknown, thisArg?: any) => boolean
+>uint8ClampedArray : Uint8ClampedArray
+>every : (predicate: (value: number, index: number, array: Uint8ClampedArray) => unknown, thisArg?: any) => boolean
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+int16Array.every(x => x);
+>int16Array.every(x => x) : boolean
+>int16Array.every : (predicate: (value: number, index: number, array: Int16Array) => unknown, thisArg?: any) => boolean
+>int16Array : Int16Array
+>every : (predicate: (value: number, index: number, array: Int16Array) => unknown, thisArg?: any) => boolean
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+uint16Array.every(x => x);
+>uint16Array.every(x => x) : boolean
+>uint16Array.every : (predicate: (value: number, index: number, array: Uint16Array) => unknown, thisArg?: any) => boolean
+>uint16Array : Uint16Array
+>every : (predicate: (value: number, index: number, array: Uint16Array) => unknown, thisArg?: any) => boolean
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+int32Array.every(x => x);
+>int32Array.every(x => x) : boolean
+>int32Array.every : (predicate: (value: number, index: number, array: Int32Array) => unknown, thisArg?: any) => boolean
+>int32Array : Int32Array
+>every : (predicate: (value: number, index: number, array: Int32Array) => unknown, thisArg?: any) => boolean
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+uint32Array.every(x => x);
+>uint32Array.every(x => x) : boolean
+>uint32Array.every : (predicate: (value: number, index: number, array: Uint32Array) => unknown, thisArg?: any) => boolean
+>uint32Array : Uint32Array
+>every : (predicate: (value: number, index: number, array: Uint32Array) => unknown, thisArg?: any) => boolean
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+float32Array.every(x => x);
+>float32Array.every(x => x) : boolean
+>float32Array.every : (predicate: (value: number, index: number, array: Float32Array) => unknown, thisArg?: any) => boolean
+>float32Array : Float32Array
+>every : (predicate: (value: number, index: number, array: Float32Array) => unknown, thisArg?: any) => boolean
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+float64Array.every(x => x);
+>float64Array.every(x => x) : boolean
+>float64Array.every : (predicate: (value: number, index: number, array: Float64Array) => unknown, thisArg?: any) => boolean
+>float64Array : Float64Array
+>every : (predicate: (value: number, index: number, array: Float64Array) => unknown, thisArg?: any) => boolean
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+bigInt64Array.every(x => x);
+>bigInt64Array.every(x => x) : boolean
+>bigInt64Array.every : (predicate: (value: bigint, index: number, array: BigInt64Array) => unknown, thisArg?: any) => boolean
+>bigInt64Array : BigInt64Array
+>every : (predicate: (value: bigint, index: number, array: BigInt64Array) => unknown, thisArg?: any) => boolean
+>x => x : (x: bigint) => bigint
+>x : bigint
+>x : bigint
+
+bigUint64Array.every(x => x);
+>bigUint64Array.every(x => x) : boolean
+>bigUint64Array.every : (predicate: (value: bigint, index: number, array: BigUint64Array) => unknown, thisArg?: any) => boolean
+>bigUint64Array : BigUint64Array
+>every : (predicate: (value: bigint, index: number, array: BigUint64Array) => unknown, thisArg?: any) => boolean
+>x => x : (x: bigint) => bigint
+>x : bigint
+>x : bigint
+
+array.filter(x => x);
+>array.filter(x => x) : number[]
+>array.filter : { <S extends number>(predicate: (value: number, index: number, array: number[]) => value is S, thisArg?: any): S[]; (predicate: (value: number, index: number, array: number[]) => unknown, thisArg?: any): number[]; }
+>array : number[]
+>filter : { <S extends number>(predicate: (value: number, index: number, array: number[]) => value is S, thisArg?: any): S[]; (predicate: (value: number, index: number, array: number[]) => unknown, thisArg?: any): number[]; }
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+readonlyArray.filter(x => x);
+>readonlyArray.filter(x => x) : number[]
+>readonlyArray.filter : { <S extends number>(predicate: (value: number, index: number, array: readonly number[]) => value is S, thisArg?: any): S[]; (predicate: (value: number, index: number, array: readonly number[]) => unknown, thisArg?: any): number[]; }
+>readonlyArray : readonly number[]
+>filter : { <S extends number>(predicate: (value: number, index: number, array: readonly number[]) => value is S, thisArg?: any): S[]; (predicate: (value: number, index: number, array: readonly number[]) => unknown, thisArg?: any): number[]; }
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+int8Array.filter(x => x);
+>int8Array.filter(x => x) : Int8Array
+>int8Array.filter : (predicate: (value: number, index: number, array: Int8Array) => unknown, thisArg?: any) => Int8Array
+>int8Array : Int8Array
+>filter : (predicate: (value: number, index: number, array: Int8Array) => unknown, thisArg?: any) => Int8Array
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+uint8Array.filter(x => x);
+>uint8Array.filter(x => x) : Uint8Array
+>uint8Array.filter : (predicate: (value: number, index: number, array: Uint8Array) => unknown, thisArg?: any) => Uint8Array
+>uint8Array : Uint8Array
+>filter : (predicate: (value: number, index: number, array: Uint8Array) => unknown, thisArg?: any) => Uint8Array
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+uint8ClampedArray.filter(x => x);
+>uint8ClampedArray.filter(x => x) : Uint8ClampedArray
+>uint8ClampedArray.filter : (predicate: (value: number, index: number, array: Uint8ClampedArray) => unknown, thisArg?: any) => Uint8ClampedArray
+>uint8ClampedArray : Uint8ClampedArray
+>filter : (predicate: (value: number, index: number, array: Uint8ClampedArray) => unknown, thisArg?: any) => Uint8ClampedArray
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+int16Array.filter(x => x);
+>int16Array.filter(x => x) : Int16Array
+>int16Array.filter : (predicate: (value: number, index: number, array: Int16Array) => unknown, thisArg?: any) => Int16Array
+>int16Array : Int16Array
+>filter : (predicate: (value: number, index: number, array: Int16Array) => unknown, thisArg?: any) => Int16Array
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+uint16Array.filter(x => x);
+>uint16Array.filter(x => x) : Uint16Array
+>uint16Array.filter : (predicate: (value: number, index: number, array: Uint16Array) => unknown, thisArg?: any) => Uint16Array
+>uint16Array : Uint16Array
+>filter : (predicate: (value: number, index: number, array: Uint16Array) => unknown, thisArg?: any) => Uint16Array
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+int32Array.filter(x => x);
+>int32Array.filter(x => x) : Int32Array
+>int32Array.filter : (predicate: (value: number, index: number, array: Int32Array) => unknown, thisArg?: any) => Int32Array
+>int32Array : Int32Array
+>filter : (predicate: (value: number, index: number, array: Int32Array) => unknown, thisArg?: any) => Int32Array
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+uint32Array.filter(x => x);
+>uint32Array.filter(x => x) : Uint32Array
+>uint32Array.filter : (predicate: (value: number, index: number, array: Uint32Array) => unknown, thisArg?: any) => Uint32Array
+>uint32Array : Uint32Array
+>filter : (predicate: (value: number, index: number, array: Uint32Array) => unknown, thisArg?: any) => Uint32Array
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+float32Array.filter(x => x);
+>float32Array.filter(x => x) : Float32Array
+>float32Array.filter : (predicate: (value: number, index: number, array: Float32Array) => unknown, thisArg?: any) => Float32Array
+>float32Array : Float32Array
+>filter : (predicate: (value: number, index: number, array: Float32Array) => unknown, thisArg?: any) => Float32Array
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+float64Array.filter(x => x);
+>float64Array.filter(x => x) : Float64Array
+>float64Array.filter : (predicate: (value: number, index: number, array: Float64Array) => unknown, thisArg?: any) => Float64Array
+>float64Array : Float64Array
+>filter : (predicate: (value: number, index: number, array: Float64Array) => unknown, thisArg?: any) => Float64Array
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+bigInt64Array.filter(x => x);
+>bigInt64Array.filter(x => x) : BigInt64Array
+>bigInt64Array.filter : (predicate: (value: bigint, index: number, array: BigInt64Array) => unknown, thisArg?: any) => BigInt64Array
+>bigInt64Array : BigInt64Array
+>filter : (predicate: (value: bigint, index: number, array: BigInt64Array) => unknown, thisArg?: any) => BigInt64Array
+>x => x : (x: bigint) => bigint
+>x : bigint
+>x : bigint
+
+bigUint64Array.filter(x => x);
+>bigUint64Array.filter(x => x) : BigUint64Array
+>bigUint64Array.filter : (predicate: (value: bigint, index: number, array: BigUint64Array) => unknown, thisArg?: any) => BigUint64Array
+>bigUint64Array : BigUint64Array
+>filter : (predicate: (value: bigint, index: number, array: BigUint64Array) => unknown, thisArg?: any) => BigUint64Array
+>x => x : (x: bigint) => bigint
+>x : bigint
+>x : bigint
+
+array.find(x => x);
+>array.find(x => x) : number
+>array.find : { <S extends number>(predicate: (value: number, index: number, array: number[]) => value is S, thisArg?: any): S; (predicate: (value: number, index: number, array: number[]) => unknown, thisArg?: any): number; }
+>array : number[]
+>find : { <S extends number>(predicate: (value: number, index: number, array: number[]) => value is S, thisArg?: any): S; (predicate: (value: number, index: number, array: number[]) => unknown, thisArg?: any): number; }
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+readonlyArray.find(x => x);
+>readonlyArray.find(x => x) : number
+>readonlyArray.find : { <S extends number>(predicate: (value: number, index: number, array: readonly number[]) => value is S, thisArg?: any): S; (predicate: (value: number, index: number, array: readonly number[]) => unknown, thisArg?: any): number; }
+>readonlyArray : readonly number[]
+>find : { <S extends number>(predicate: (value: number, index: number, array: readonly number[]) => value is S, thisArg?: any): S; (predicate: (value: number, index: number, array: readonly number[]) => unknown, thisArg?: any): number; }
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+int8Array.find(x => x);
+>int8Array.find(x => x) : number
+>int8Array.find : (predicate: (value: number, index: number, obj: Int8Array) => unknown, thisArg?: any) => number
+>int8Array : Int8Array
+>find : (predicate: (value: number, index: number, obj: Int8Array) => unknown, thisArg?: any) => number
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+uint8Array.find(x => x);
+>uint8Array.find(x => x) : number
+>uint8Array.find : (predicate: (value: number, index: number, obj: Uint8Array) => unknown, thisArg?: any) => number
+>uint8Array : Uint8Array
+>find : (predicate: (value: number, index: number, obj: Uint8Array) => unknown, thisArg?: any) => number
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+uint8ClampedArray.find(x => x);
+>uint8ClampedArray.find(x => x) : number
+>uint8ClampedArray.find : (predicate: (value: number, index: number, obj: Uint8ClampedArray) => unknown, thisArg?: any) => number
+>uint8ClampedArray : Uint8ClampedArray
+>find : (predicate: (value: number, index: number, obj: Uint8ClampedArray) => unknown, thisArg?: any) => number
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+int16Array.find(x => x);
+>int16Array.find(x => x) : number
+>int16Array.find : (predicate: (value: number, index: number, obj: Int16Array) => unknown, thisArg?: any) => number
+>int16Array : Int16Array
+>find : (predicate: (value: number, index: number, obj: Int16Array) => unknown, thisArg?: any) => number
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+uint16Array.find(x => x);
+>uint16Array.find(x => x) : number
+>uint16Array.find : (predicate: (value: number, index: number, obj: Uint16Array) => unknown, thisArg?: any) => number
+>uint16Array : Uint16Array
+>find : (predicate: (value: number, index: number, obj: Uint16Array) => unknown, thisArg?: any) => number
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+int32Array.find(x => x);
+>int32Array.find(x => x) : number
+>int32Array.find : (predicate: (value: number, index: number, obj: Int32Array) => unknown, thisArg?: any) => number
+>int32Array : Int32Array
+>find : (predicate: (value: number, index: number, obj: Int32Array) => unknown, thisArg?: any) => number
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+uint32Array.find(x => x);
+>uint32Array.find(x => x) : number
+>uint32Array.find : (predicate: (value: number, index: number, obj: Uint32Array) => unknown, thisArg?: any) => number
+>uint32Array : Uint32Array
+>find : (predicate: (value: number, index: number, obj: Uint32Array) => unknown, thisArg?: any) => number
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+float32Array.find(x => x);
+>float32Array.find(x => x) : number
+>float32Array.find : (predicate: (value: number, index: number, obj: Float32Array) => unknown, thisArg?: any) => number
+>float32Array : Float32Array
+>find : (predicate: (value: number, index: number, obj: Float32Array) => unknown, thisArg?: any) => number
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+float64Array.find(x => x);
+>float64Array.find(x => x) : number
+>float64Array.find : (predicate: (value: number, index: number, obj: Float64Array) => unknown, thisArg?: any) => number
+>float64Array : Float64Array
+>find : (predicate: (value: number, index: number, obj: Float64Array) => unknown, thisArg?: any) => number
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+bigInt64Array.find(x => x);
+>bigInt64Array.find(x => x) : bigint
+>bigInt64Array.find : (predicate: (value: bigint, index: number, array: BigInt64Array) => unknown, thisArg?: any) => bigint
+>bigInt64Array : BigInt64Array
+>find : (predicate: (value: bigint, index: number, array: BigInt64Array) => unknown, thisArg?: any) => bigint
+>x => x : (x: bigint) => bigint
+>x : bigint
+>x : bigint
+
+bigUint64Array.find(x => x);
+>bigUint64Array.find(x => x) : bigint
+>bigUint64Array.find : (predicate: (value: bigint, index: number, array: BigUint64Array) => unknown, thisArg?: any) => bigint
+>bigUint64Array : BigUint64Array
+>find : (predicate: (value: bigint, index: number, array: BigUint64Array) => unknown, thisArg?: any) => bigint
+>x => x : (x: bigint) => bigint
+>x : bigint
+>x : bigint
+
+array.findIndex(x => x);
+>array.findIndex(x => x) : number
+>array.findIndex : (predicate: (value: number, index: number, array: number[]) => unknown, thisArg?: any) => number
+>array : number[]
+>findIndex : (predicate: (value: number, index: number, array: number[]) => unknown, thisArg?: any) => number
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+readonlyArray.findIndex(x => x);
+>readonlyArray.findIndex(x => x) : number
+>readonlyArray.findIndex : (predicate: (value: number, index: number, array: readonly number[]) => unknown, thisArg?: any) => number
+>readonlyArray : readonly number[]
+>findIndex : (predicate: (value: number, index: number, array: readonly number[]) => unknown, thisArg?: any) => number
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+int8Array.findIndex(x => x);
+>int8Array.findIndex(x => x) : number
+>int8Array.findIndex : (predicate: (value: number, index: number, obj: Int8Array) => unknown, thisArg?: any) => number
+>int8Array : Int8Array
+>findIndex : (predicate: (value: number, index: number, obj: Int8Array) => unknown, thisArg?: any) => number
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+uint8Array.findIndex(x => x);
+>uint8Array.findIndex(x => x) : number
+>uint8Array.findIndex : (predicate: (value: number, index: number, obj: Uint8Array) => unknown, thisArg?: any) => number
+>uint8Array : Uint8Array
+>findIndex : (predicate: (value: number, index: number, obj: Uint8Array) => unknown, thisArg?: any) => number
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+uint8ClampedArray.findIndex(x => x);
+>uint8ClampedArray.findIndex(x => x) : number
+>uint8ClampedArray.findIndex : (predicate: (value: number, index: number, obj: Uint8ClampedArray) => unknown, thisArg?: any) => number
+>uint8ClampedArray : Uint8ClampedArray
+>findIndex : (predicate: (value: number, index: number, obj: Uint8ClampedArray) => unknown, thisArg?: any) => number
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+int16Array.findIndex(x => x);
+>int16Array.findIndex(x => x) : number
+>int16Array.findIndex : (predicate: (value: number, index: number, obj: Int16Array) => unknown, thisArg?: any) => number
+>int16Array : Int16Array
+>findIndex : (predicate: (value: number, index: number, obj: Int16Array) => unknown, thisArg?: any) => number
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+uint16Array.findIndex(x => x);
+>uint16Array.findIndex(x => x) : number
+>uint16Array.findIndex : (predicate: (value: number, index: number, obj: Uint16Array) => unknown, thisArg?: any) => number
+>uint16Array : Uint16Array
+>findIndex : (predicate: (value: number, index: number, obj: Uint16Array) => unknown, thisArg?: any) => number
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+int32Array.findIndex(x => x);
+>int32Array.findIndex(x => x) : number
+>int32Array.findIndex : (predicate: (value: number, index: number, obj: Int32Array) => unknown, thisArg?: any) => number
+>int32Array : Int32Array
+>findIndex : (predicate: (value: number, index: number, obj: Int32Array) => unknown, thisArg?: any) => number
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+uint32Array.findIndex(x => x);
+>uint32Array.findIndex(x => x) : number
+>uint32Array.findIndex : (predicate: (value: number, index: number, obj: Uint32Array) => unknown, thisArg?: any) => number
+>uint32Array : Uint32Array
+>findIndex : (predicate: (value: number, index: number, obj: Uint32Array) => unknown, thisArg?: any) => number
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+float32Array.findIndex(x => x);
+>float32Array.findIndex(x => x) : number
+>float32Array.findIndex : (predicate: (value: number, index: number, obj: Float32Array) => unknown, thisArg?: any) => number
+>float32Array : Float32Array
+>findIndex : (predicate: (value: number, index: number, obj: Float32Array) => unknown, thisArg?: any) => number
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+float64Array.findIndex(x => x);
+>float64Array.findIndex(x => x) : number
+>float64Array.findIndex : (predicate: (value: number, index: number, obj: Float64Array) => unknown, thisArg?: any) => number
+>float64Array : Float64Array
+>findIndex : (predicate: (value: number, index: number, obj: Float64Array) => unknown, thisArg?: any) => number
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+bigInt64Array.findIndex(x => x);
+>bigInt64Array.findIndex(x => x) : number
+>bigInt64Array.findIndex : (predicate: (value: bigint, index: number, array: BigInt64Array) => unknown, thisArg?: any) => number
+>bigInt64Array : BigInt64Array
+>findIndex : (predicate: (value: bigint, index: number, array: BigInt64Array) => unknown, thisArg?: any) => number
+>x => x : (x: bigint) => bigint
+>x : bigint
+>x : bigint
+
+bigUint64Array.findIndex(x => x);
+>bigUint64Array.findIndex(x => x) : number
+>bigUint64Array.findIndex : (predicate: (value: bigint, index: number, array: BigUint64Array) => unknown, thisArg?: any) => number
+>bigUint64Array : BigUint64Array
+>findIndex : (predicate: (value: bigint, index: number, array: BigUint64Array) => unknown, thisArg?: any) => number
+>x => x : (x: bigint) => bigint
+>x : bigint
+>x : bigint
+
+array.some(x => x);
+>array.some(x => x) : boolean
+>array.some : (predicate: (value: number, index: number, array: number[]) => unknown, thisArg?: any) => boolean
+>array : number[]
+>some : (predicate: (value: number, index: number, array: number[]) => unknown, thisArg?: any) => boolean
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+readonlyArray.some(x => x);
+>readonlyArray.some(x => x) : boolean
+>readonlyArray.some : (predicate: (value: number, index: number, array: readonly number[]) => unknown, thisArg?: any) => boolean
+>readonlyArray : readonly number[]
+>some : (predicate: (value: number, index: number, array: readonly number[]) => unknown, thisArg?: any) => boolean
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+int8Array.some(x => x);
+>int8Array.some(x => x) : boolean
+>int8Array.some : (predicate: (value: number, index: number, array: Int8Array) => unknown, thisArg?: any) => boolean
+>int8Array : Int8Array
+>some : (predicate: (value: number, index: number, array: Int8Array) => unknown, thisArg?: any) => boolean
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+uint8Array.some(x => x);
+>uint8Array.some(x => x) : boolean
+>uint8Array.some : (predicate: (value: number, index: number, array: Uint8Array) => unknown, thisArg?: any) => boolean
+>uint8Array : Uint8Array
+>some : (predicate: (value: number, index: number, array: Uint8Array) => unknown, thisArg?: any) => boolean
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+uint8ClampedArray.some(x => x);
+>uint8ClampedArray.some(x => x) : boolean
+>uint8ClampedArray.some : (predicate: (value: number, index: number, array: Uint8ClampedArray) => unknown, thisArg?: any) => boolean
+>uint8ClampedArray : Uint8ClampedArray
+>some : (predicate: (value: number, index: number, array: Uint8ClampedArray) => unknown, thisArg?: any) => boolean
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+int16Array.some(x => x);
+>int16Array.some(x => x) : boolean
+>int16Array.some : (predicate: (value: number, index: number, array: Int16Array) => unknown, thisArg?: any) => boolean
+>int16Array : Int16Array
+>some : (predicate: (value: number, index: number, array: Int16Array) => unknown, thisArg?: any) => boolean
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+uint16Array.some(x => x);
+>uint16Array.some(x => x) : boolean
+>uint16Array.some : (predicate: (value: number, index: number, array: Uint16Array) => unknown, thisArg?: any) => boolean
+>uint16Array : Uint16Array
+>some : (predicate: (value: number, index: number, array: Uint16Array) => unknown, thisArg?: any) => boolean
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+int32Array.some(x => x);
+>int32Array.some(x => x) : boolean
+>int32Array.some : (predicate: (value: number, index: number, array: Int32Array) => unknown, thisArg?: any) => boolean
+>int32Array : Int32Array
+>some : (predicate: (value: number, index: number, array: Int32Array) => unknown, thisArg?: any) => boolean
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+uint32Array.some(x => x);
+>uint32Array.some(x => x) : boolean
+>uint32Array.some : (predicate: (value: number, index: number, array: Uint32Array) => unknown, thisArg?: any) => boolean
+>uint32Array : Uint32Array
+>some : (predicate: (value: number, index: number, array: Uint32Array) => unknown, thisArg?: any) => boolean
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+float32Array.some(x => x);
+>float32Array.some(x => x) : boolean
+>float32Array.some : (predicate: (value: number, index: number, array: Float32Array) => unknown, thisArg?: any) => boolean
+>float32Array : Float32Array
+>some : (predicate: (value: number, index: number, array: Float32Array) => unknown, thisArg?: any) => boolean
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+float64Array.some(x => x);
+>float64Array.some(x => x) : boolean
+>float64Array.some : (predicate: (value: number, index: number, array: Float64Array) => unknown, thisArg?: any) => boolean
+>float64Array : Float64Array
+>some : (predicate: (value: number, index: number, array: Float64Array) => unknown, thisArg?: any) => boolean
+>x => x : (x: number) => number
+>x : number
+>x : number
+
+bigInt64Array.some(x => x);
+>bigInt64Array.some(x => x) : boolean
+>bigInt64Array.some : (predicate: (value: bigint, index: number, array: BigInt64Array) => unknown, thisArg?: any) => boolean
+>bigInt64Array : BigInt64Array
+>some : (predicate: (value: bigint, index: number, array: BigInt64Array) => unknown, thisArg?: any) => boolean
+>x => x : (x: bigint) => bigint
+>x : bigint
+>x : bigint
+
+bigUint64Array.some(x => x);
+>bigUint64Array.some(x => x) : boolean
+>bigUint64Array.some : (predicate: (value: bigint, index: number, array: BigUint64Array) => unknown, thisArg?: any) => boolean
+>bigUint64Array : BigUint64Array
+>some : (predicate: (value: bigint, index: number, array: BigUint64Array) => unknown, thisArg?: any) => boolean
+>x => x : (x: bigint) => bigint
+>x : bigint
+>x : bigint
+

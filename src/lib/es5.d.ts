@@ -228,19 +228,37 @@ interface ObjectConstructor {
      * Returns true if existing property attributes cannot be modified in an object and new properties cannot be added to the object.
      * @param o Object to test.
      */
-    isSealed(o: any): boolean;
+    isSealed(o: object): boolean;
+
+    /**
+     * Returns true if existing property attributes cannot be modified in an object and new properties cannot be added to the object.
+     * @param o Object to test.
+     */
+    isSealed(o: any): true;
 
     /**
      * Returns true if existing property attributes and values cannot be modified in an object, and new properties cannot be added to the object.
      * @param o Object to test.
      */
-    isFrozen(o: any): boolean;
+    isFrozen(o: object): boolean;
+
+    /**
+     * Returns true if existing property attributes and values cannot be modified in an object, and new properties cannot be added to the object.
+     * @param o Object to test.
+     */
+    isFrozen(o: any): true;
 
     /**
      * Returns a value that indicates whether new properties can be added to an object.
      * @param o Object to test.
      */
-    isExtensible(o: any): boolean;
+    isExtensible(o: object): boolean;
+
+    /**
+     * Returns a value that indicates whether new properties can be added to an object.
+     * @param o Object to test.
+     */
+    isExtensible(o: any): false;
 
     /**
      * Returns the names of the enumerable string properties and methods of an object.
@@ -594,13 +612,13 @@ interface NumberConstructor {
 
     /**
      * A value that is less than the largest negative number that can be represented in JavaScript.
-     * JavaScript displays NEGATIVE_INFINITY values as -infinity.
+     * JavaScript displays NEGATIVE_INFINITY values as -Infinity.
      */
     readonly NEGATIVE_INFINITY: number;
 
     /**
      * A value greater than the largest number that can be represented in JavaScript.
-     * JavaScript displays POSITIVE_INFINITY values as infinity.
+     * JavaScript displays POSITIVE_INFINITY values as Infinity.
      */
     readonly POSITIVE_INFINITY: number;
 }
@@ -1154,13 +1172,17 @@ interface ReadonlyArray<T> {
      */
     readonly length: number;
     /**
-     * Returns a string representation of an array.
+     * Returns a string representation of the array.
      */
     toString(): string;
     /**
-     * Returns a string representation of an array. The elements are converted to string using their toLocaleString methods.
+     * Returns a string representation of the array. The elements are converted to string using their toLocaleString methods.
      */
     toLocaleString(): string;
+    /**
+     * Returns the primitive value of the array.
+     */
+    valueOf(): readonly T[];
     /**
      * Combines two or more arrays.
      * @param items Additional items to add to the end of array1.
@@ -1286,13 +1308,17 @@ interface Array<T> {
      */
     length: number;
     /**
-     * Returns a string representation of an array.
+     * Returns a string representation of the array.
      */
     toString(): string;
     /**
-     * Returns a string representation of an array. The elements are converted to string using their toLocaleString methods.
+     * Returns a string representation of the array. The elements are converted to string using their toLocaleString methods.
      */
     toLocaleString(): string;
+    /**
+     * Returns the primitive value of the array.
+     */
+    valueOf(): T[];
     /**
      * Removes the last element from an array and returns it.
      * If the array is empty, undefined is returned and the array is not modified.
@@ -2059,16 +2085,18 @@ interface Int8Array {
     subarray(begin?: number, end?: number): Int8Array;
 
     /**
-     * Converts a number to a string by using the current locale.
+     * Returns a string representation of the array in the current locale.
      */
     toLocaleString(): string;
 
     /**
-     * Returns a string representation of an array.
+     * Returns a string representation of the array.
      */
     toString(): string;
 
-    /** Returns the primitive value of the specified object. */
+    /**
+     * Returns the primitive value of the array.
+     */
     valueOf(): Int8Array;
 
     [index: number]: number;
@@ -2339,16 +2367,18 @@ interface Uint8Array {
     subarray(begin?: number, end?: number): Uint8Array;
 
     /**
-     * Converts a number to a string by using the current locale.
+     * Returns a string representation of the array in the current locale.
      */
     toLocaleString(): string;
 
     /**
-     * Returns a string representation of an array.
+     * Returns a string representation of the array.
      */
     toString(): string;
 
-    /** Returns the primitive value of the specified object. */
+    /**
+     * Returns the primitive value of the array.
+     */
     valueOf(): Uint8Array;
 
     [index: number]: number;
@@ -2619,16 +2649,18 @@ interface Uint8ClampedArray {
     subarray(begin?: number, end?: number): Uint8ClampedArray;
 
     /**
-     * Converts a number to a string by using the current locale.
+     * Returns a string representation of the array in the current locale.
      */
     toLocaleString(): string;
 
     /**
-     * Returns a string representation of an array.
+     * Returns a string representation of the array.
      */
     toString(): string;
 
-    /** Returns the primitive value of the specified object. */
+    /**
+     * Returns the primitive value of the array.
+     */
     valueOf(): Uint8ClampedArray;
 
     [index: number]: number;
@@ -2897,16 +2929,18 @@ interface Int16Array {
     subarray(begin?: number, end?: number): Int16Array;
 
     /**
-     * Converts a number to a string by using the current locale.
+     * Returns a string representation of the array in the current locale.
      */
     toLocaleString(): string;
 
     /**
-     * Returns a string representation of an array.
+     * Returns a string representation of the array.
      */
     toString(): string;
 
-    /** Returns the primitive value of the specified object. */
+    /**
+     * Returns the primitive value of the array.
+     */
     valueOf(): Int16Array;
 
     [index: number]: number;
@@ -3178,16 +3212,18 @@ interface Uint16Array {
     subarray(begin?: number, end?: number): Uint16Array;
 
     /**
-     * Converts a number to a string by using the current locale.
+     * Returns a string representation of the array in the current locale.
      */
     toLocaleString(): string;
 
     /**
-     * Returns a string representation of an array.
+     * Returns a string representation of the array.
      */
     toString(): string;
 
-    /** Returns the primitive value of the specified object. */
+    /**
+     * Returns the primitive value of the array.
+     */
     valueOf(): Uint16Array;
 
     [index: number]: number;
@@ -3458,16 +3494,18 @@ interface Int32Array {
     subarray(begin?: number, end?: number): Int32Array;
 
     /**
-     * Converts a number to a string by using the current locale.
+     * Returns a string representation of the array in the current locale.
      */
     toLocaleString(): string;
 
     /**
-     * Returns a string representation of an array.
+     * Returns a string representation of the array.
      */
     toString(): string;
 
-    /** Returns the primitive value of the specified object. */
+    /**
+     * Returns the primitive value of the array.
+     */
     valueOf(): Int32Array;
 
     [index: number]: number;
@@ -3737,16 +3775,18 @@ interface Uint32Array {
     subarray(begin?: number, end?: number): Uint32Array;
 
     /**
-     * Converts a number to a string by using the current locale.
+     * Returns a string representation of the array in the current locale.
      */
     toLocaleString(): string;
 
     /**
-     * Returns a string representation of an array.
+     * Returns a string representation of the array.
      */
     toString(): string;
 
-    /** Returns the primitive value of the specified object. */
+    /**
+     * Returns the primitive value of the array.
+     */
     valueOf(): Uint32Array;
 
     [index: number]: number;
@@ -4017,16 +4057,18 @@ interface Float32Array {
     subarray(begin?: number, end?: number): Float32Array;
 
     /**
-     * Converts a number to a string by using the current locale.
+     * Returns a string representation of the array in the current locale.
      */
     toLocaleString(): string;
 
     /**
-     * Returns a string representation of an array.
+     * Returns a string representation of the array.
      */
     toString(): string;
 
-    /** Returns the primitive value of the specified object. */
+    /**
+     * Returns the primitive value of the array.
+     */
     valueOf(): Float32Array;
 
     [index: number]: number;
@@ -4290,15 +4332,26 @@ interface Float64Array {
     sort(compareFn?: (a: number, b: number) => number): Float64Array;
 
     /**
+     * Gets a new Float64Array view of the ArrayBuffer store for this array, referencing the elements
      * at begin, inclusive, up to end, exclusive.
      * @param begin The index of the beginning of the array.
      * @param end The index of the end of the array.
      */
     subarray(begin?: number, end?: number): Float64Array;
 
+    /**
+     * Returns a string representation of the array in the current locale.
+     */
+    toLocaleString(): string;
+
+    /**
+     * Returns a string representation of the array.
+     */
     toString(): string;
 
-    /** Returns the primitive value of the specified object. */
+    /**
+     * Returns the primitive value of the array.
+     */
     valueOf(): Float64Array;
 
     [index: number]: number;

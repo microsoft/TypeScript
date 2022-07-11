@@ -38,7 +38,7 @@ interface Array<T> {
      * @param thisArg An object to which the this keyword can refer in the callback function. If
      * thisArg is omitted, undefined is used as the this value.
      */
-    flatMap<U> (callback: (value: T, index: number, array: T[]) => U | ReadonlyArray<U>, thisArg?: any): U[]
+    flatMap<U>(callback: (value: T, index: number, array: T[]) => U | ReadonlyArray<U>, thisArg?: any): U[]
 
     /**
      * Returns a new array with all sub-array elements concatenated into it recursively up to the

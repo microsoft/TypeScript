@@ -5612,7 +5612,7 @@
           ],
           "documentation": [
             {
-              "text": "Returns a string representation of an array. The elements are converted to string using their toLocaleString methods.",
+              "text": "Returns a string representation of the array. The elements are converted to string using their toLocaleString methods.",
               "kind": "text"
             }
           ]
@@ -5686,7 +5686,7 @@
           ],
           "documentation": [
             {
-              "text": "Returns a string representation of an array.",
+              "text": "Returns a string representation of the array.",
               "kind": "text"
             }
           ]
@@ -5805,6 +5805,112 @@
                   "kind": "text"
                 }
               ]
+            }
+          ]
+        },
+        {
+          "name": "valueOf",
+          "kind": "method",
+          "kindModifiers": "declare",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "method",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Array",
+              "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "T",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
+              "text": ".",
+              "kind": "punctuation"
+            },
+            {
+              "text": "valueOf",
+              "kind": "propertyName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "string",
+              "kind": "keyword"
+            },
+            {
+              "text": "[",
+              "kind": "punctuation"
+            },
+            {
+              "text": "]",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "|",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            },
+            {
+              "text": "[",
+              "kind": "punctuation"
+            },
+            {
+              "text": "]",
+              "kind": "punctuation"
+            }
+          ],
+          "documentation": [
+            {
+              "text": "Returns the primitive value of the array.",
+              "kind": "text"
             }
           ]
         }

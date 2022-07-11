@@ -350,13 +350,13 @@ interface BigInt64Array {
      */
     subarray(begin?: number, end?: number): BigInt64Array;
 
-    /** Converts the array to a string by using the current locale. */
+    /** Returns a string representation of the array in the current locale. */
     toLocaleString(): string;
 
     /** Returns a string representation of the array. */
     toString(): string;
 
-    /** Returns the primitive value of the specified object. */
+    /** Returns the primitive value of the array. */
     valueOf(): BigInt64Array;
 
     /** Yields each value in the array. */
@@ -627,13 +627,13 @@ interface BigUint64Array {
      */
     subarray(begin?: number, end?: number): BigUint64Array;
 
-    /** Converts the array to a string by using the current locale. */
+    /** Returns a string representation of the array in the current locale. */
     toLocaleString(): string;
 
     /** Returns a string representation of the array. */
     toString(): string;
 
-    /** Returns the primitive value of the specified object. */
+    /** Returns the primitive value of the array. */
     valueOf(): BigUint64Array;
 
     /** Yields each value in the array. */

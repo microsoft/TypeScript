@@ -223,15 +223,15 @@ interface String {
 interface Int8Array {
     [Symbol.iterator](): IterableIterator<number>;
     /**
-     * Returns an array of key, value pairs for every entry in the array
+     * Yields index, value pairs for every entry in the array.
      */
     entries(): IterableIterator<[number, number]>;
     /**
-     * Returns an list of keys in the array
+     * Yields each index in the array.
      */
     keys(): IterableIterator<number>;
     /**
-     * Returns an list of values in the array
+     * Yields each value in the array.
      */
     values(): IterableIterator<number>;
 }
@@ -257,15 +257,15 @@ interface Int8ArrayConstructor {
 interface Uint8Array {
     [Symbol.iterator](): IterableIterator<number>;
     /**
-     * Returns an array of key, value pairs for every entry in the array
+     * Yields index, value pairs for every entry in the array.
      */
     entries(): IterableIterator<[number, number]>;
     /**
-     * Returns an list of keys in the array
+     * Yields each index in the array.
      */
     keys(): IterableIterator<number>;
     /**
-     * Returns an list of values in the array
+     * Yields each value in the array.
      */
     values(): IterableIterator<number>;
 }
@@ -291,17 +291,17 @@ interface Uint8ArrayConstructor {
 interface Uint8ClampedArray {
     [Symbol.iterator](): IterableIterator<number>;
     /**
-     * Returns an array of key, value pairs for every entry in the array
+     * Yields index, value pairs for every entry in the array.
      */
     entries(): IterableIterator<[number, number]>;
 
     /**
-     * Returns an list of keys in the array
+     * Yields each index in the array.
      */
     keys(): IterableIterator<number>;
 
     /**
-     * Returns an list of values in the array
+     * Yields each value in the array.
      */
     values(): IterableIterator<number>;
 }
@@ -327,17 +327,17 @@ interface Uint8ClampedArrayConstructor {
 interface Int16Array {
     [Symbol.iterator](): IterableIterator<number>;
     /**
-     * Returns an array of key, value pairs for every entry in the array
+     * Yields index, value pairs for every entry in the array.
      */
     entries(): IterableIterator<[number, number]>;
 
     /**
-     * Returns an list of keys in the array
+     * Yields each index in the array.
      */
     keys(): IterableIterator<number>;
 
     /**
-     * Returns an list of values in the array
+     * Yields each value in the array.
      */
     values(): IterableIterator<number>;
 }
@@ -363,15 +363,15 @@ interface Int16ArrayConstructor {
 interface Uint16Array {
     [Symbol.iterator](): IterableIterator<number>;
     /**
-     * Returns an array of key, value pairs for every entry in the array
+     * Yields index, value pairs for every entry in the array.
      */
     entries(): IterableIterator<[number, number]>;
     /**
-     * Returns an list of keys in the array
+     * Yields each index in the array.
      */
     keys(): IterableIterator<number>;
     /**
-     * Returns an list of values in the array
+     * Yields each value in the array.
      */
     values(): IterableIterator<number>;
 }
@@ -397,15 +397,15 @@ interface Uint16ArrayConstructor {
 interface Int32Array {
     [Symbol.iterator](): IterableIterator<number>;
     /**
-     * Returns an array of key, value pairs for every entry in the array
+     * Yields index, value pairs for every entry in the array.
      */
     entries(): IterableIterator<[number, number]>;
     /**
-     * Returns an list of keys in the array
+     * Yields each index in the array.
      */
     keys(): IterableIterator<number>;
     /**
-     * Returns an list of values in the array
+     * Yields each value in the array.
      */
     values(): IterableIterator<number>;
 }
@@ -431,15 +431,15 @@ interface Int32ArrayConstructor {
 interface Uint32Array {
     [Symbol.iterator](): IterableIterator<number>;
     /**
-     * Returns an array of key, value pairs for every entry in the array
+     * Yields index, value pairs for every entry in the array.
      */
     entries(): IterableIterator<[number, number]>;
     /**
-     * Returns an list of keys in the array
+     * Yields each index in the array.
      */
     keys(): IterableIterator<number>;
     /**
-     * Returns an list of values in the array
+     * Yields each value in the array.
      */
     values(): IterableIterator<number>;
 }
@@ -465,15 +465,15 @@ interface Uint32ArrayConstructor {
 interface Float32Array {
     [Symbol.iterator](): IterableIterator<number>;
     /**
-     * Returns an array of key, value pairs for every entry in the array
+     * Yields index, value pairs for every entry in the array.
      */
     entries(): IterableIterator<[number, number]>;
     /**
-     * Returns an list of keys in the array
+     * Yields each index in the array.
      */
     keys(): IterableIterator<number>;
     /**
-     * Returns an list of values in the array
+     * Yields each value in the array.
      */
     values(): IterableIterator<number>;
 }
@@ -499,15 +499,15 @@ interface Float32ArrayConstructor {
 interface Float64Array {
     [Symbol.iterator](): IterableIterator<number>;
     /**
-     * Returns an array of key, value pairs for every entry in the array
+     * Yields index, value pairs for every entry in the array.
      */
     entries(): IterableIterator<[number, number]>;
     /**
-     * Returns an list of keys in the array
+     * Yields each index in the array.
      */
     keys(): IterableIterator<number>;
     /**
-     * Returns an list of values in the array
+     * Yields each value in the array.
      */
     values(): IterableIterator<number>;
 }

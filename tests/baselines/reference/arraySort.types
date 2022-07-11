@@ -1,0 +1,201 @@
+=== tests/cases/compiler/arraySort.ts ===
+var strTuple: ["foo", "bar", "baz"];
+>strTuple : ["foo", "bar", "baz"]
+
+strTuple.sort(); // Type should be ("foo" | "bar" | "baz")[] instead of ["foo", "bar", "baz"]
+>strTuple.sort() : ("foo" | "bar" | "baz")[]
+>strTuple.sort : (compareFn?: (a: "foo" | "bar" | "baz", b: "foo" | "bar" | "baz") => number) => ("foo" | "bar" | "baz")[]
+>strTuple : ["foo", "bar", "baz"]
+>sort : (compareFn?: (a: "foo" | "bar" | "baz", b: "foo" | "bar" | "baz") => number) => ("foo" | "bar" | "baz")[]
+
+var numTuple: [11, 2, 22, 1];
+>numTuple : [11, 2, 22, 1]
+
+numTuple.sort((a, b) => a - b); // Type should be (11 | 2 | 22 | 1)[] instead of [11, 2, 22, 1]
+>numTuple.sort((a, b) => a - b) : (11 | 2 | 22 | 1)[]
+>numTuple.sort : (compareFn?: (a: 11 | 2 | 22 | 1, b: 11 | 2 | 22 | 1) => number) => (11 | 2 | 22 | 1)[]
+>numTuple : [11, 2, 22, 1]
+>sort : (compareFn?: (a: 11 | 2 | 22 | 1, b: 11 | 2 | 22 | 1) => number) => (11 | 2 | 22 | 1)[]
+>(a, b) => a - b : (a: 11 | 2 | 22 | 1, b: 11 | 2 | 22 | 1) => number
+>a : 11 | 2 | 22 | 1
+>b : 11 | 2 | 22 | 1
+>a - b : number
+>a : 11 | 2 | 22 | 1
+>b : 11 | 2 | 22 | 1
+
+interface Int8ArrayExtension extends Int8Array {}
+var int8Array: Int8ArrayExtension;
+>int8Array : Int8ArrayExtension
+
+int8Array.sort((a, b) => a - b); // Int8Array
+>int8Array.sort((a, b) => a - b) : Int8Array
+>int8Array.sort : (compareFn?: (a: number, b: number) => number) => Int8Array
+>int8Array : Int8ArrayExtension
+>sort : (compareFn?: (a: number, b: number) => number) => Int8Array
+>(a, b) => a - b : (a: number, b: number) => number
+>a : number
+>b : number
+>a - b : number
+>a : number
+>b : number
+
+interface Uint8ArrayExtension extends Uint8Array {}
+var uint8Array: Uint8ArrayExtension;
+>uint8Array : Uint8ArrayExtension
+
+uint8Array.sort((a, b) => a - b); // Uint8Array
+>uint8Array.sort((a, b) => a - b) : Uint8Array
+>uint8Array.sort : (compareFn?: (a: number, b: number) => number) => Uint8Array
+>uint8Array : Uint8ArrayExtension
+>sort : (compareFn?: (a: number, b: number) => number) => Uint8Array
+>(a, b) => a - b : (a: number, b: number) => number
+>a : number
+>b : number
+>a - b : number
+>a : number
+>b : number
+
+interface Uint8ClampedArrayExtension extends Uint8ClampedArray {}
+var uint8ClampedArray: Uint8ClampedArrayExtension;
+>uint8ClampedArray : Uint8ClampedArrayExtension
+
+uint8ClampedArray.sort((a, b) => a - b); // Uint8ClampedArray
+>uint8ClampedArray.sort((a, b) => a - b) : Uint8ClampedArray
+>uint8ClampedArray.sort : (compareFn?: (a: number, b: number) => number) => Uint8ClampedArray
+>uint8ClampedArray : Uint8ClampedArrayExtension
+>sort : (compareFn?: (a: number, b: number) => number) => Uint8ClampedArray
+>(a, b) => a - b : (a: number, b: number) => number
+>a : number
+>b : number
+>a - b : number
+>a : number
+>b : number
+
+interface Int16ArrayExtension extends Int16Array {}
+var int16Array: Int16ArrayExtension;
+>int16Array : Int16ArrayExtension
+
+int16Array.sort((a, b) => a - b); // Int16Array
+>int16Array.sort((a, b) => a - b) : Int16Array
+>int16Array.sort : (compareFn?: (a: number, b: number) => number) => Int16Array
+>int16Array : Int16ArrayExtension
+>sort : (compareFn?: (a: number, b: number) => number) => Int16Array
+>(a, b) => a - b : (a: number, b: number) => number
+>a : number
+>b : number
+>a - b : number
+>a : number
+>b : number
+
+interface Uint16ArrayExtension extends Uint16Array {}
+var uint16Array: Uint16ArrayExtension;
+>uint16Array : Uint16ArrayExtension
+
+uint16Array.sort((a, b) => a - b); // Uint16Array
+>uint16Array.sort((a, b) => a - b) : Uint16Array
+>uint16Array.sort : (compareFn?: (a: number, b: number) => number) => Uint16Array
+>uint16Array : Uint16ArrayExtension
+>sort : (compareFn?: (a: number, b: number) => number) => Uint16Array
+>(a, b) => a - b : (a: number, b: number) => number
+>a : number
+>b : number
+>a - b : number
+>a : number
+>b : number
+
+interface Int32ArrayExtension extends Int32Array {}
+var int32Array: Int32ArrayExtension;
+>int32Array : Int32ArrayExtension
+
+int32Array.sort((a, b) => a - b); // Int32Array
+>int32Array.sort((a, b) => a - b) : Int32Array
+>int32Array.sort : (compareFn?: (a: number, b: number) => number) => Int32Array
+>int32Array : Int32ArrayExtension
+>sort : (compareFn?: (a: number, b: number) => number) => Int32Array
+>(a, b) => a - b : (a: number, b: number) => number
+>a : number
+>b : number
+>a - b : number
+>a : number
+>b : number
+
+interface Uint32ArrayExtension extends Uint32Array {}
+var uint32Array: Uint32ArrayExtension;
+>uint32Array : Uint32ArrayExtension
+
+uint32Array.sort((a, b) => a - b); // Uint32Array
+>uint32Array.sort((a, b) => a - b) : Uint32Array
+>uint32Array.sort : (compareFn?: (a: number, b: number) => number) => Uint32Array
+>uint32Array : Uint32ArrayExtension
+>sort : (compareFn?: (a: number, b: number) => number) => Uint32Array
+>(a, b) => a - b : (a: number, b: number) => number
+>a : number
+>b : number
+>a - b : number
+>a : number
+>b : number
+
+interface Float32ArrayExtension extends Float32Array {}
+var float32Array: Float32ArrayExtension;
+>float32Array : Float32ArrayExtension
+
+float32Array.sort((a, b) => a - b); // Float32Array
+>float32Array.sort((a, b) => a - b) : Float32Array
+>float32Array.sort : (compareFn?: (a: number, b: number) => number) => Float32Array
+>float32Array : Float32ArrayExtension
+>sort : (compareFn?: (a: number, b: number) => number) => Float32Array
+>(a, b) => a - b : (a: number, b: number) => number
+>a : number
+>b : number
+>a - b : number
+>a : number
+>b : number
+
+interface Float64ArrayExtension extends Float64Array {}
+var float64Array: Float64ArrayExtension;
+>float64Array : Float64ArrayExtension
+
+float64Array.sort((a, b) => a - b); // Float64Array
+>float64Array.sort((a, b) => a - b) : Float64Array
+>float64Array.sort : (compareFn?: (a: number, b: number) => number) => Float64Array
+>float64Array : Float64ArrayExtension
+>sort : (compareFn?: (a: number, b: number) => number) => Float64Array
+>(a, b) => a - b : (a: number, b: number) => number
+>a : number
+>b : number
+>a - b : number
+>a : number
+>b : number
+
+interface BigInt64ArrayExtension extends BigInt64Array {}
+var bigInt64Array: BigInt64ArrayExtension;
+>bigInt64Array : BigInt64ArrayExtension
+
+bigInt64Array.sort((a, b) => a - b); // BigInt64Array
+>bigInt64Array.sort((a, b) => a - b) : BigInt64Array
+>bigInt64Array.sort : (compareFn?: (a: bigint, b: bigint) => number | bigint) => BigInt64Array
+>bigInt64Array : BigInt64ArrayExtension
+>sort : (compareFn?: (a: bigint, b: bigint) => number | bigint) => BigInt64Array
+>(a, b) => a - b : (a: bigint, b: bigint) => bigint
+>a : bigint
+>b : bigint
+>a - b : bigint
+>a : bigint
+>b : bigint
+
+interface BigUint64ArrayExtension extends BigUint64Array {}
+var bigUint64Array: BigUint64ArrayExtension;
+>bigUint64Array : BigUint64ArrayExtension
+
+bigUint64Array.sort((a, b) => a - b); // BigUint64Array
+>bigUint64Array.sort((a, b) => a - b) : BigUint64Array
+>bigUint64Array.sort : (compareFn?: (a: bigint, b: bigint) => number | bigint) => BigUint64Array
+>bigUint64Array : BigUint64ArrayExtension
+>sort : (compareFn?: (a: bigint, b: bigint) => number | bigint) => BigUint64Array
+>(a, b) => a - b : (a: bigint, b: bigint) => bigint
+>a : bigint
+>b : bigint
+>a - b : bigint
+>a : bigint
+>b : bigint
+

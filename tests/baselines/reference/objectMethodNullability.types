@@ -1,0 +1,297 @@
+=== tests/cases/compiler/objectMethodNullability.ts ===
+// All of the following should produce an error:
+
+Object.assign(undefined);
+>Object.assign(undefined) : {}
+>Object.assign : { <T extends {}>(target: T): T; <T extends {}, U>(target: T, source: U): T & Writable<U>; <T extends {}, U, V>(target: T, source1: U, source2: V): T & Writable<U> & Writable<V>; <T extends {}, U, V, W>(target: T, source1: U, source2: V, source3: W): T & Writable<U> & Writable<V> & Writable<W>; (target: {}, ...sources: any[]): any; }
+>Object : ObjectConstructor
+>assign : { <T extends {}>(target: T): T; <T extends {}, U>(target: T, source: U): T & Writable<U>; <T extends {}, U, V>(target: T, source1: U, source2: V): T & Writable<U> & Writable<V>; <T extends {}, U, V, W>(target: T, source1: U, source2: V, source3: W): T & Writable<U> & Writable<V> & Writable<W>; (target: {}, ...sources: any[]): any; }
+>undefined : undefined
+
+Object.create(undefined);
+>Object.create(undefined) : any
+>Object.create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>Object : ObjectConstructor
+>create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>undefined : undefined
+
+Object.defineProperties(undefined, {});
+>Object.defineProperties(undefined, {}) : object
+>Object.defineProperties : <T extends object>(o: T, properties: PropertyDescriptorMap & ThisType<any>) => T
+>Object : ObjectConstructor
+>defineProperties : <T extends object>(o: T, properties: PropertyDescriptorMap & ThisType<any>) => T
+>undefined : undefined
+>{} : {}
+
+Object.defineProperty(undefined, "foo", {});
+>Object.defineProperty(undefined, "foo", {}) : object
+>Object.defineProperty : <T extends object>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>Object : ObjectConstructor
+>defineProperty : <T extends object>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>undefined : undefined
+>"foo" : "foo"
+>{} : {}
+
+Object.entries(undefined);
+>Object.entries(undefined) : [string, unknown][]
+>Object.entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
+>Object : ObjectConstructor
+>entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
+>undefined : undefined
+
+Object.getOwnPropertyDescriptor(undefined, "foo");
+>Object.getOwnPropertyDescriptor(undefined, "foo") : PropertyDescriptor | undefined
+>Object.getOwnPropertyDescriptor : (o: {}, p: PropertyKey) => PropertyDescriptor | undefined
+>Object : ObjectConstructor
+>getOwnPropertyDescriptor : (o: {}, p: PropertyKey) => PropertyDescriptor | undefined
+>undefined : undefined
+>"foo" : "foo"
+
+Object.getOwnPropertyDescriptors(undefined);
+>Object.getOwnPropertyDescriptors(undefined) : {} & { [x: string]: PropertyDescriptor; }
+>Object.getOwnPropertyDescriptors : <T extends {}>(o: T) => { [P in keyof T]: TypedPropertyDescriptor<T[P]>; } & { [x: string]: PropertyDescriptor; }
+>Object : ObjectConstructor
+>getOwnPropertyDescriptors : <T extends {}>(o: T) => { [P in keyof T]: TypedPropertyDescriptor<T[P]>; } & { [x: string]: PropertyDescriptor; }
+>undefined : undefined
+
+Object.getOwnPropertyNames(undefined);
+>Object.getOwnPropertyNames(undefined) : string[]
+>Object.getOwnPropertyNames : (o: {}) => string[]
+>Object : ObjectConstructor
+>getOwnPropertyNames : (o: {}) => string[]
+>undefined : undefined
+
+Object.getOwnPropertySymbols(undefined);
+>Object.getOwnPropertySymbols(undefined) : symbol[]
+>Object.getOwnPropertySymbols : (o: {}) => symbol[]
+>Object : ObjectConstructor
+>getOwnPropertySymbols : (o: {}) => symbol[]
+>undefined : undefined
+
+Object.getPrototypeOf(undefined);
+>Object.getPrototypeOf(undefined) : any
+>Object.getPrototypeOf : (o: {}) => any
+>Object : ObjectConstructor
+>getPrototypeOf : (o: {}) => any
+>undefined : undefined
+
+Object.hasOwn(undefined, "foo");
+>Object.hasOwn(undefined, "foo") : boolean
+>Object.hasOwn : (o: {}, v: PropertyKey) => boolean
+>Object : ObjectConstructor
+>hasOwn : (o: {}, v: PropertyKey) => boolean
+>undefined : undefined
+>"foo" : "foo"
+
+Object.keys(undefined);
+>Object.keys(undefined) : string[]
+>Object.keys : { (o: object): string[]; (o: {}): string[]; }
+>Object : ObjectConstructor
+>keys : { (o: object): string[]; (o: {}): string[]; }
+>undefined : undefined
+
+Object.setPrototypeOf(undefined, {});
+>Object.setPrototypeOf(undefined, {}) : any
+>Object.setPrototypeOf : (o: {}, proto: object | null) => any
+>Object : ObjectConstructor
+>setPrototypeOf : (o: {}, proto: object | null) => any
+>undefined : undefined
+>{} : {}
+
+Object.values(undefined);
+>Object.values(undefined) : unknown[]
+>Object.values : { <T>(o: { [s: string]: T; } | ArrayLike<T>): T[]; (o: {}): any[]; }
+>Object : ObjectConstructor
+>values : { <T>(o: { [s: string]: T; } | ArrayLike<T>): T[]; (o: {}): any[]; }
+>undefined : undefined
+
+Object.create(0);
+>Object.create(0) : any
+>Object.create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>Object : ObjectConstructor
+>create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>0 : 0
+
+Object.defineProperties(0, {});
+>Object.defineProperties(0, {}) : object
+>Object.defineProperties : <T extends object>(o: T, properties: PropertyDescriptorMap & ThisType<any>) => T
+>Object : ObjectConstructor
+>defineProperties : <T extends object>(o: T, properties: PropertyDescriptorMap & ThisType<any>) => T
+>0 : 0
+>{} : {}
+
+Object.defineProperty(0, "foo", {});
+>Object.defineProperty(0, "foo", {}) : object
+>Object.defineProperty : <T extends object>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>Object : ObjectConstructor
+>defineProperty : <T extends object>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+>0 : 0
+>"foo" : "foo"
+>{} : {}
+
+// While the following should not:
+
+Object.assign(0);
+>Object.assign(0) : 0
+>Object.assign : { <T extends {}>(target: T): T; <T extends {}, U>(target: T, source: U): T & Writable<U>; <T extends {}, U, V>(target: T, source1: U, source2: V): T & Writable<U> & Writable<V>; <T extends {}, U, V, W>(target: T, source1: U, source2: V, source3: W): T & Writable<U> & Writable<V> & Writable<W>; (target: {}, ...sources: any[]): any; }
+>Object : ObjectConstructor
+>assign : { <T extends {}>(target: T): T; <T extends {}, U>(target: T, source: U): T & Writable<U>; <T extends {}, U, V>(target: T, source1: U, source2: V): T & Writable<U> & Writable<V>; <T extends {}, U, V, W>(target: T, source1: U, source2: V, source3: W): T & Writable<U> & Writable<V> & Writable<W>; (target: {}, ...sources: any[]): any; }
+>0 : 0
+
+Object.entries(0);
+>Object.entries(0) : [string, any][]
+>Object.entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
+>Object : ObjectConstructor
+>entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
+>0 : 0
+
+Object.getOwnPropertyDescriptor(0, "foo");
+>Object.getOwnPropertyDescriptor(0, "foo") : PropertyDescriptor | undefined
+>Object.getOwnPropertyDescriptor : (o: {}, p: PropertyKey) => PropertyDescriptor | undefined
+>Object : ObjectConstructor
+>getOwnPropertyDescriptor : (o: {}, p: PropertyKey) => PropertyDescriptor | undefined
+>0 : 0
+>"foo" : "foo"
+
+Object.getOwnPropertyDescriptors(0);
+>Object.getOwnPropertyDescriptors(0) : number & { [x: string]: PropertyDescriptor; }
+>Object.getOwnPropertyDescriptors : <T extends {}>(o: T) => { [P in keyof T]: TypedPropertyDescriptor<T[P]>; } & { [x: string]: PropertyDescriptor; }
+>Object : ObjectConstructor
+>getOwnPropertyDescriptors : <T extends {}>(o: T) => { [P in keyof T]: TypedPropertyDescriptor<T[P]>; } & { [x: string]: PropertyDescriptor; }
+>0 : 0
+
+Object.getOwnPropertyNames(0);
+>Object.getOwnPropertyNames(0) : string[]
+>Object.getOwnPropertyNames : (o: {}) => string[]
+>Object : ObjectConstructor
+>getOwnPropertyNames : (o: {}) => string[]
+>0 : 0
+
+Object.getOwnPropertySymbols(0);
+>Object.getOwnPropertySymbols(0) : symbol[]
+>Object.getOwnPropertySymbols : (o: {}) => symbol[]
+>Object : ObjectConstructor
+>getOwnPropertySymbols : (o: {}) => symbol[]
+>0 : 0
+
+Object.getPrototypeOf(0);
+>Object.getPrototypeOf(0) : any
+>Object.getPrototypeOf : (o: {}) => any
+>Object : ObjectConstructor
+>getPrototypeOf : (o: {}) => any
+>0 : 0
+
+Object.hasOwn(0, "foo");
+>Object.hasOwn(0, "foo") : boolean
+>Object.hasOwn : (o: {}, v: PropertyKey) => boolean
+>Object : ObjectConstructor
+>hasOwn : (o: {}, v: PropertyKey) => boolean
+>0 : 0
+>"foo" : "foo"
+
+Object.keys(0);
+>Object.keys(0) : string[]
+>Object.keys : { (o: object): string[]; (o: {}): string[]; }
+>Object : ObjectConstructor
+>keys : { (o: object): string[]; (o: {}): string[]; }
+>0 : 0
+
+Object.setPrototypeOf(0, {});
+>Object.setPrototypeOf(0, {}) : any
+>Object.setPrototypeOf : (o: {}, proto: object | null) => any
+>Object : ObjectConstructor
+>setPrototypeOf : (o: {}, proto: object | null) => any
+>0 : 0
+>{} : {}
+
+Object.values(0);
+>Object.values(0) : any[]
+>Object.values : { <T>(o: { [s: string]: T; } | ArrayLike<T>): T[]; (o: {}): any[]; }
+>Object : ObjectConstructor
+>values : { <T>(o: { [s: string]: T; } | ArrayLike<T>): T[]; (o: {}): any[]; }
+>0 : 0
+
+Object.freeze(undefined);
+>Object.freeze(undefined) : undefined
+>Object.freeze : { <T extends readonly any[]>(a: T): Readonly<T>; <T extends Function>(f: T): T; <T extends { [idx: string]: object | U | null | undefined; }, U extends string | number | bigint | boolean | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
+>Object : ObjectConstructor
+>freeze : { <T extends readonly any[]>(a: T): Readonly<T>; <T extends Function>(f: T): T; <T extends { [idx: string]: object | U | null | undefined; }, U extends string | number | bigint | boolean | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
+>undefined : undefined
+
+Object.isExtensible(undefined);
+>Object.isExtensible(undefined) : false
+>Object.isExtensible : { (o: object): boolean; (o: any): false; }
+>Object : ObjectConstructor
+>isExtensible : { (o: object): boolean; (o: any): false; }
+>undefined : undefined
+
+Object.isFrozen(undefined);
+>Object.isFrozen(undefined) : true
+>Object.isFrozen : { (o: object): boolean; (o: any): true; }
+>Object : ObjectConstructor
+>isFrozen : { (o: object): boolean; (o: any): true; }
+>undefined : undefined
+
+Object.isSealed(undefined);
+>Object.isSealed(undefined) : true
+>Object.isSealed : { (o: object): boolean; (o: any): true; }
+>Object : ObjectConstructor
+>isSealed : { (o: object): boolean; (o: any): true; }
+>undefined : undefined
+
+Object.preventExtensions(undefined);
+>Object.preventExtensions(undefined) : undefined
+>Object.preventExtensions : <T>(o: T) => T
+>Object : ObjectConstructor
+>preventExtensions : <T>(o: T) => T
+>undefined : undefined
+
+Object.seal(undefined);
+>Object.seal(undefined) : undefined
+>Object.seal : <T>(o: T) => T
+>Object : ObjectConstructor
+>seal : <T>(o: T) => T
+>undefined : undefined
+
+Object.freeze(0);
+>Object.freeze(0) : number
+>Object.freeze : { <T extends readonly any[]>(a: T): Readonly<T>; <T extends Function>(f: T): T; <T extends { [idx: string]: object | U | null | undefined; }, U extends string | number | bigint | boolean | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
+>Object : ObjectConstructor
+>freeze : { <T extends readonly any[]>(a: T): Readonly<T>; <T extends Function>(f: T): T; <T extends { [idx: string]: object | U | null | undefined; }, U extends string | number | bigint | boolean | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
+>0 : 0
+
+Object.isExtensible(0);
+>Object.isExtensible(0) : false
+>Object.isExtensible : { (o: object): boolean; (o: any): false; }
+>Object : ObjectConstructor
+>isExtensible : { (o: object): boolean; (o: any): false; }
+>0 : 0
+
+Object.isFrozen(0);
+>Object.isFrozen(0) : true
+>Object.isFrozen : { (o: object): boolean; (o: any): true; }
+>Object : ObjectConstructor
+>isFrozen : { (o: object): boolean; (o: any): true; }
+>0 : 0
+
+Object.isSealed(0);
+>Object.isSealed(0) : true
+>Object.isSealed : { (o: object): boolean; (o: any): true; }
+>Object : ObjectConstructor
+>isSealed : { (o: object): boolean; (o: any): true; }
+>0 : 0
+
+Object.preventExtensions(0);
+>Object.preventExtensions(0) : 0
+>Object.preventExtensions : <T>(o: T) => T
+>Object : ObjectConstructor
+>preventExtensions : <T>(o: T) => T
+>0 : 0
+
+Object.seal(0);
+>Object.seal(0) : 0
+>Object.seal : <T>(o: T) => T
+>Object : ObjectConstructor
+>seal : <T>(o: T) => T
+>0 : 0
+

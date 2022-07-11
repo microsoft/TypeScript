@@ -1,0 +1,225 @@
+=== tests/cases/compiler/objectMethodNullability.ts ===
+// All of the following should produce an error:
+
+Object.assign(undefined);
+>Object.assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>undefined : Symbol(undefined)
+
+Object.create(undefined);
+>Object.create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>undefined : Symbol(undefined)
+
+Object.defineProperties(undefined, {});
+>Object.defineProperties : Symbol(ObjectConstructor.defineProperties, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperties : Symbol(ObjectConstructor.defineProperties, Decl(lib.es5.d.ts, --, --))
+>undefined : Symbol(undefined)
+
+Object.defineProperty(undefined, "foo", {});
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>undefined : Symbol(undefined)
+
+Object.entries(undefined);
+>Object.entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>undefined : Symbol(undefined)
+
+Object.getOwnPropertyDescriptor(undefined, "foo");
+>Object.getOwnPropertyDescriptor : Symbol(ObjectConstructor.getOwnPropertyDescriptor, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>getOwnPropertyDescriptor : Symbol(ObjectConstructor.getOwnPropertyDescriptor, Decl(lib.es5.d.ts, --, --))
+>undefined : Symbol(undefined)
+
+Object.getOwnPropertyDescriptors(undefined);
+>Object.getOwnPropertyDescriptors : Symbol(ObjectConstructor.getOwnPropertyDescriptors, Decl(lib.es2017.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>getOwnPropertyDescriptors : Symbol(ObjectConstructor.getOwnPropertyDescriptors, Decl(lib.es2017.object.d.ts, --, --))
+>undefined : Symbol(undefined)
+
+Object.getOwnPropertyNames(undefined);
+>Object.getOwnPropertyNames : Symbol(ObjectConstructor.getOwnPropertyNames, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>getOwnPropertyNames : Symbol(ObjectConstructor.getOwnPropertyNames, Decl(lib.es5.d.ts, --, --))
+>undefined : Symbol(undefined)
+
+Object.getOwnPropertySymbols(undefined);
+>Object.getOwnPropertySymbols : Symbol(ObjectConstructor.getOwnPropertySymbols, Decl(lib.es2015.core.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>getOwnPropertySymbols : Symbol(ObjectConstructor.getOwnPropertySymbols, Decl(lib.es2015.core.d.ts, --, --))
+>undefined : Symbol(undefined)
+
+Object.getPrototypeOf(undefined);
+>Object.getPrototypeOf : Symbol(ObjectConstructor.getPrototypeOf, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>getPrototypeOf : Symbol(ObjectConstructor.getPrototypeOf, Decl(lib.es5.d.ts, --, --))
+>undefined : Symbol(undefined)
+
+Object.hasOwn(undefined, "foo");
+>Object.hasOwn : Symbol(ObjectConstructor.hasOwn, Decl(lib.es2022.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>hasOwn : Symbol(ObjectConstructor.hasOwn, Decl(lib.es2022.object.d.ts, --, --))
+>undefined : Symbol(undefined)
+
+Object.keys(undefined);
+>Object.keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>undefined : Symbol(undefined)
+
+Object.setPrototypeOf(undefined, {});
+>Object.setPrototypeOf : Symbol(ObjectConstructor.setPrototypeOf, Decl(lib.es2015.core.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>setPrototypeOf : Symbol(ObjectConstructor.setPrototypeOf, Decl(lib.es2015.core.d.ts, --, --))
+>undefined : Symbol(undefined)
+
+Object.values(undefined);
+>Object.values : Symbol(ObjectConstructor.values, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>values : Symbol(ObjectConstructor.values, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>undefined : Symbol(undefined)
+
+Object.create(0);
+>Object.create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+Object.defineProperties(0, {});
+>Object.defineProperties : Symbol(ObjectConstructor.defineProperties, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperties : Symbol(ObjectConstructor.defineProperties, Decl(lib.es5.d.ts, --, --))
+
+Object.defineProperty(0, "foo", {});
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+
+// While the following should not:
+
+Object.assign(0);
+>Object.assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+
+Object.entries(0);
+>Object.entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+
+Object.getOwnPropertyDescriptor(0, "foo");
+>Object.getOwnPropertyDescriptor : Symbol(ObjectConstructor.getOwnPropertyDescriptor, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>getOwnPropertyDescriptor : Symbol(ObjectConstructor.getOwnPropertyDescriptor, Decl(lib.es5.d.ts, --, --))
+
+Object.getOwnPropertyDescriptors(0);
+>Object.getOwnPropertyDescriptors : Symbol(ObjectConstructor.getOwnPropertyDescriptors, Decl(lib.es2017.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>getOwnPropertyDescriptors : Symbol(ObjectConstructor.getOwnPropertyDescriptors, Decl(lib.es2017.object.d.ts, --, --))
+
+Object.getOwnPropertyNames(0);
+>Object.getOwnPropertyNames : Symbol(ObjectConstructor.getOwnPropertyNames, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>getOwnPropertyNames : Symbol(ObjectConstructor.getOwnPropertyNames, Decl(lib.es5.d.ts, --, --))
+
+Object.getOwnPropertySymbols(0);
+>Object.getOwnPropertySymbols : Symbol(ObjectConstructor.getOwnPropertySymbols, Decl(lib.es2015.core.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>getOwnPropertySymbols : Symbol(ObjectConstructor.getOwnPropertySymbols, Decl(lib.es2015.core.d.ts, --, --))
+
+Object.getPrototypeOf(0);
+>Object.getPrototypeOf : Symbol(ObjectConstructor.getPrototypeOf, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>getPrototypeOf : Symbol(ObjectConstructor.getPrototypeOf, Decl(lib.es5.d.ts, --, --))
+
+Object.hasOwn(0, "foo");
+>Object.hasOwn : Symbol(ObjectConstructor.hasOwn, Decl(lib.es2022.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>hasOwn : Symbol(ObjectConstructor.hasOwn, Decl(lib.es2022.object.d.ts, --, --))
+
+Object.keys(0);
+>Object.keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+
+Object.setPrototypeOf(0, {});
+>Object.setPrototypeOf : Symbol(ObjectConstructor.setPrototypeOf, Decl(lib.es2015.core.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>setPrototypeOf : Symbol(ObjectConstructor.setPrototypeOf, Decl(lib.es2015.core.d.ts, --, --))
+
+Object.values(0);
+>Object.values : Symbol(ObjectConstructor.values, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>values : Symbol(ObjectConstructor.values, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+
+Object.freeze(undefined);
+>Object.freeze : Symbol(ObjectConstructor.freeze, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>freeze : Symbol(ObjectConstructor.freeze, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>undefined : Symbol(undefined)
+
+Object.isExtensible(undefined);
+>Object.isExtensible : Symbol(ObjectConstructor.isExtensible, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>isExtensible : Symbol(ObjectConstructor.isExtensible, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>undefined : Symbol(undefined)
+
+Object.isFrozen(undefined);
+>Object.isFrozen : Symbol(ObjectConstructor.isFrozen, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>isFrozen : Symbol(ObjectConstructor.isFrozen, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>undefined : Symbol(undefined)
+
+Object.isSealed(undefined);
+>Object.isSealed : Symbol(ObjectConstructor.isSealed, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>isSealed : Symbol(ObjectConstructor.isSealed, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>undefined : Symbol(undefined)
+
+Object.preventExtensions(undefined);
+>Object.preventExtensions : Symbol(ObjectConstructor.preventExtensions, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>preventExtensions : Symbol(ObjectConstructor.preventExtensions, Decl(lib.es5.d.ts, --, --))
+>undefined : Symbol(undefined)
+
+Object.seal(undefined);
+>Object.seal : Symbol(ObjectConstructor.seal, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>seal : Symbol(ObjectConstructor.seal, Decl(lib.es5.d.ts, --, --))
+>undefined : Symbol(undefined)
+
+Object.freeze(0);
+>Object.freeze : Symbol(ObjectConstructor.freeze, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>freeze : Symbol(ObjectConstructor.freeze, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+Object.isExtensible(0);
+>Object.isExtensible : Symbol(ObjectConstructor.isExtensible, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>isExtensible : Symbol(ObjectConstructor.isExtensible, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+Object.isFrozen(0);
+>Object.isFrozen : Symbol(ObjectConstructor.isFrozen, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>isFrozen : Symbol(ObjectConstructor.isFrozen, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+Object.isSealed(0);
+>Object.isSealed : Symbol(ObjectConstructor.isSealed, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>isSealed : Symbol(ObjectConstructor.isSealed, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+Object.preventExtensions(0);
+>Object.preventExtensions : Symbol(ObjectConstructor.preventExtensions, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>preventExtensions : Symbol(ObjectConstructor.preventExtensions, Decl(lib.es5.d.ts, --, --))
+
+Object.seal(0);
+>Object.seal : Symbol(ObjectConstructor.seal, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>seal : Symbol(ObjectConstructor.seal, Decl(lib.es5.d.ts, --, --))
+

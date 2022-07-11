@@ -1,0 +1,85 @@
+// @lib: esnext
+
+var array: number[];
+var readonlyArray: readonly number[];
+var int8Array: Int8Array;
+var uint8Array: Uint8Array;
+var uint8ClampedArray: Uint8ClampedArray;
+var int16Array: Int16Array;
+var uint16Array: Uint16Array;
+var int32Array: Int32Array;
+var uint32Array: Uint32Array;
+var float32Array: Float32Array;
+var float64Array: Float64Array;
+var bigInt64Array: BigInt64Array;
+var bigUint64Array: BigUint64Array;
+
+array.every(x => x);
+readonlyArray.every(x => x);
+int8Array.every(x => x);
+uint8Array.every(x => x);
+uint8ClampedArray.every(x => x);
+int16Array.every(x => x);
+uint16Array.every(x => x);
+int32Array.every(x => x);
+uint32Array.every(x => x);
+float32Array.every(x => x);
+float64Array.every(x => x);
+bigInt64Array.every(x => x);
+bigUint64Array.every(x => x);
+
+array.filter(x => x);
+readonlyArray.filter(x => x);
+int8Array.filter(x => x);
+uint8Array.filter(x => x);
+uint8ClampedArray.filter(x => x);
+int16Array.filter(x => x);
+uint16Array.filter(x => x);
+int32Array.filter(x => x);
+uint32Array.filter(x => x);
+float32Array.filter(x => x);
+float64Array.filter(x => x);
+bigInt64Array.filter(x => x);
+bigUint64Array.filter(x => x);
+
+array.find(x => x);
+readonlyArray.find(x => x);
+int8Array.find(x => x);
+uint8Array.find(x => x);
+uint8ClampedArray.find(x => x);
+int16Array.find(x => x);
+uint16Array.find(x => x);
+int32Array.find(x => x);
+uint32Array.find(x => x);
+float32Array.find(x => x);
+float64Array.find(x => x);
+bigInt64Array.find(x => x);
+bigUint64Array.find(x => x);
+
+array.findIndex(x => x);
+readonlyArray.findIndex(x => x);
+int8Array.findIndex(x => x);
+uint8Array.findIndex(x => x);
+uint8ClampedArray.findIndex(x => x);
+int16Array.findIndex(x => x);
+uint16Array.findIndex(x => x);
+int32Array.findIndex(x => x);
+uint32Array.findIndex(x => x);
+float32Array.findIndex(x => x);
+float64Array.findIndex(x => x);
+bigInt64Array.findIndex(x => x);
+bigUint64Array.findIndex(x => x);
+
+array.some(x => x);
+readonlyArray.some(x => x);
+int8Array.some(x => x);
+uint8Array.some(x => x);
+uint8ClampedArray.some(x => x);
+int16Array.some(x => x);
+uint16Array.some(x => x);
+int32Array.some(x => x);
+uint32Array.some(x => x);
+float32Array.some(x => x);
+float64Array.some(x => x);
+bigInt64Array.some(x => x);
+bigUint64Array.some(x => x);
