@@ -18,7 +18,7 @@ verify.completions({
         {
             name: "toString",
             text: "(method) Array<number>.toString(): string",
-            documentation: "Returns a string representation of an array.",
+            documentation: "Returns a string representation of the array.",
             kind: "method",
             kindModifiers: "declare",
         },
