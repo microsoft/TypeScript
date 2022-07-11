@@ -340,23 +340,6 @@ namespace ts {
         const Symbol = objectAllocator.getSymbolConstructor();
         const Type = objectAllocator.getTypeConstructor();
         const Signature = objectAllocator.getSignatureConstructor();
-        type DebugType = Type & { __debugTypeToString(): string }; // eslint-disable-line @typescript-eslint/naming-convention
-        class DebugTypeMapper {
-            declare kind: TypeMapKind;
-            __debugToString(): string { // eslint-disable-line @typescript-eslint/naming-convention
-                Debug.type<TypeMapper>(this);
-                switch (this.kind) {
-                    case TypeMapKind.Function: return this.debugInfo?.() || "(function mapper)";
-                    case TypeMapKind.Simple: return `${(this.source as DebugType).__debugTypeToString()} -> ${(this.target as DebugType).__debugTypeToString()}`;
-                    case TypeMapKind.Array: return zipWith(this.sources, this.targets || map(this.sources, () => anyType), (s, t) => `${(s as DebugType).__debugTypeToString()} -> ${(t as DebugType).__debugTypeToString()}`).join(", ");
-                    case TypeMapKind.Deferred: return zipWith(this.sources, this.targets, (s, t) => `${(s as DebugType).__debugTypeToString()} -> ${(t() as DebugType).__debugTypeToString()}`).join(", ");
-                    case TypeMapKind.Merged:
-                    case TypeMapKind.Composite: return `m1: ${(this.mapper1 as unknown as DebugTypeMapper).__debugToString().split("\n").join("\n    ")}
-m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n").join("\n    ")}`;
-                    default: return Debug.assertNever(this);
-                }
-            }
-        }
 
         let typeCount = 0;
         let symbolCount = 0;
@@ -16881,31 +16864,24 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
             }
         }
 
-        function attachDebugPrototypeIfDebug(mapper: TypeMapper): TypeMapper {
-            if (Debug.isDebugging) {
-                return Object.setPrototypeOf(mapper, DebugTypeMapper.prototype);
-            }
-            return mapper;
-        }
-
         function makeUnaryTypeMapper(source: Type, target: Type): TypeMapper {
-            return attachDebugPrototypeIfDebug({ kind: TypeMapKind.Simple, source, target });
+            return Debug.attachDebugPrototypeIfDebug({ kind: TypeMapKind.Simple, source, target });
         }
 
         function makeArrayTypeMapper(sources: readonly TypeParameter[], targets: readonly Type[] | undefined): TypeMapper {
-            return attachDebugPrototypeIfDebug({ kind: TypeMapKind.Array, sources, targets });
+            return Debug.attachDebugPrototypeIfDebug({ kind: TypeMapKind.Array, sources, targets });
         }
 
         function makeFunctionTypeMapper(func: (t: Type) => Type, debugInfo: () => string): TypeMapper {
-            return attachDebugPrototypeIfDebug({ kind: TypeMapKind.Function, func, debugInfo: Debug.isDebugging ? debugInfo : undefined });
+            return Debug.attachDebugPrototypeIfDebug({ kind: TypeMapKind.Function, func, debugInfo: Debug.isDebugging ? debugInfo : undefined });
         }
 
         function makeDeferredTypeMapper(sources: readonly TypeParameter[], targets: (() => Type)[]) {
-            return attachDebugPrototypeIfDebug({ kind: TypeMapKind.Deferred, sources, targets });
+            return Debug.attachDebugPrototypeIfDebug({ kind: TypeMapKind.Deferred, sources, targets });
         }
 
         function makeCompositeTypeMapper(kind: TypeMapKind.Composite | TypeMapKind.Merged, mapper1: TypeMapper, mapper2: TypeMapper): TypeMapper {
-            return attachDebugPrototypeIfDebug({ kind, mapper1, mapper2 });
+            return Debug.attachDebugPrototypeIfDebug({ kind, mapper1, mapper2 });
         }
 
         function createTypeEraser(sources: readonly TypeParameter[]): TypeMapper {

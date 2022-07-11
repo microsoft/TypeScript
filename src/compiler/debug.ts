@@ -781,5 +781,36 @@ namespace ts {
             }
             return result;
         }
+
+        export type DebugType = Type & { __debugTypeToString(): string }; // eslint-disable-line @typescript-eslint/naming-convention
+        export class DebugTypeMapper {
+            declare kind: TypeMapKind;
+            __debugToString(): string { // eslint-disable-line @typescript-eslint/naming-convention
+                type<TypeMapper>(this);
+                switch (this.kind) {
+                    case TypeMapKind.Function: return this.debugInfo?.() || "(function mapper)";
+                    case TypeMapKind.Simple: return `${(this.source as DebugType).__debugTypeToString()} -> ${(this.target as DebugType).__debugTypeToString()}`;
+                    case TypeMapKind.Array: return zipWith<DebugType, DebugType | string, unknown>(
+                        this.sources as readonly DebugType[],
+                        this.targets as readonly DebugType[] || map(this.sources, () => "any"),
+                        (s, t) => `${s.__debugTypeToString()} -> ${typeof t === "string" ? t : t.__debugTypeToString()}`).join(", ");
+                    case TypeMapKind.Deferred: return zipWith(
+                        this.sources,
+                        this.targets,
+                        (s, t) => `${(s as DebugType).__debugTypeToString()} -> ${(t() as DebugType).__debugTypeToString()}`).join(", ");
+                    case TypeMapKind.Merged:
+                    case TypeMapKind.Composite: return `m1: ${(this.mapper1 as unknown as DebugTypeMapper).__debugToString().split("\n").join("\n    ")}
+m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n").join("\n    ")}`;
+                    default: return assertNever(this);
+                }
+            }
+        }
+
+        export function attachDebugPrototypeIfDebug(mapper: TypeMapper): TypeMapper {
+            if (isDebugging) {
+                return Object.setPrototypeOf(mapper, DebugTypeMapper.prototype);
+            }
+            return mapper;
+        }
     }
 }
