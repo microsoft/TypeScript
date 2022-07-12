@@ -42217,7 +42217,10 @@ namespace ts {
                         checkPropertyAccessExpression(name, CheckMode.Normal);
                         if(!links.resolvedSymbol){
                             const expressionType = checkExpressionCached(name.expression);
-                            const infos = getApplicableIndexInfos(expressionType, getLiteralTypeFromPropertyName(name.name));
+                            let infos  = getApplicableIndexInfos(expressionType, getLiteralTypeFromPropertyName(name.name));
+                            if(infos.length === 0 && getIndexInfosOfType(expressionType).filter(type => type.keyType.flags & TypeFlags.TemplateLiteral || type.keyType.flags & TypeFlags.ESSymbol).length > 0){
+                                infos = getApplicableIndexInfos(expressionType, checkExpressionCached(name.name));
+                            }
                             if (length(infos) && infos[0].declaration && infos[0].declaration?.symbol.flags & SymbolFlags.Signature && infos[0].declaration?.jsDoc) {
                                 const copy = createSymbol(SymbolFlags.Signature, InternalSymbolName.Index);
                                 copy.declarations = mapDefined(infos, i => i.declaration);

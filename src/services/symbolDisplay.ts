@@ -648,11 +648,11 @@ namespace ts.SymbolDisplay {
             displayParts.push(spacePart());
         }
 
-        function addFullSymbolName(symbolToDisplay: Symbol, enclosingDeclaration?: Node, indexInfos?:IndexInfo[]) {
+        function addFullSymbolName(symbolToDisplay: Symbol, enclosingDeclaration?: Node, indexInfos?: IndexInfo[]) {
             if (alias && symbolToDisplay === symbol) {
                 symbolToDisplay = alias;
             }
-            let fullSymbolDisplayParts = symbolToDisplayParts(typeChecker, symbolToDisplay, enclosingDeclaration || sourceFile, /*meaning*/ undefined,
+            const fullSymbolDisplayParts = symbolToDisplayParts(typeChecker, symbolToDisplay, enclosingDeclaration || sourceFile, /*meaning*/ undefined,
             SymbolFormatFlags.WriteTypeParametersOrArguments | SymbolFormatFlags.UseOnlyExternalAliasing | SymbolFormatFlags.AllowAnyNodeKind);
             if(symbolToDisplay.flags & SymbolFlags.Signature){
                 if(indexInfos){
@@ -661,11 +661,9 @@ namespace ts.SymbolDisplay {
                     if(length(indexInfos)){
                         //Needed to handle more than one type of index
                         for(let info=0; info<indexInfos.length; info++){
-                            const indexTypeDisplayParts =  typeToDisplayParts(typeChecker, indexInfos[info].keyType);
+                            const indexTypeDisplayParts = typeToDisplayParts(typeChecker, indexInfos[info].keyType);
                             //Needed to handle template literals
-                            for (const part of indexTypeDisplayParts){
-                                fullSymbolDisplayParts[index++] = part; 
-                            }
+                            for (const part of indexTypeDisplayParts) fullSymbolDisplayParts[index++] = part;
                             if(info !== indexInfos.length-1){
                                 fullSymbolDisplayParts[index++] = spacePart();
                                 fullSymbolDisplayParts[index++] = punctuationPart(SyntaxKind.BarToken);
@@ -685,13 +683,14 @@ namespace ts.SymbolDisplay {
             }
         }
 
-        function addPrefixForAnyFunctionOrVar(symbol: Symbol, symbolKind: string, indexInfos?:IndexInfo[]) {
+        function addPrefixForAnyFunctionOrVar(symbol: Symbol, symbolKind: string, indexInfos?: IndexInfo[]) {
             prefixNextMeaning();
             if (symbolKind) {
                 pushSymbolKind(symbolKind);
                 if (symbol && !some(symbol.declarations, d => isArrowFunction(d) || (isFunctionExpression(d) || isClassExpression(d)) && !d.name)) {
                     displayParts.push(spacePart());
-                    addFullSymbolName(symbol, undefined, indexInfos);
+                    const enclosingDeclaration = undefined;
+                    addFullSymbolName(symbol, enclosingDeclaration, indexInfos);
                 }
             }
         }
