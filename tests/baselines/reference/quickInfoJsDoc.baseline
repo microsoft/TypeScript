@@ -1,0 +1,677 @@
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoJsDoc.ts",
+      "position": 416,
+      "name": "0"
+    },
+    "quickInfo": {
+      "kind": "property",
+      "kindModifiers": "deprecated",
+      "textSpan": {
+        "start": 411,
+        "length": 5
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "C",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "field",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "A field",
+          "kind": "text"
+        }
+      ],
+      "tags": [
+        {
+          "name": "deprecated"
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoJsDoc.ts",
+      "position": 437,
+      "name": "1"
+    },
+    "quickInfo": {
+      "kind": "property",
+      "kindModifiers": "deprecated",
+      "textSpan": {
+        "start": 431,
+        "length": 6
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "C",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "getter",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "A getter",
+          "kind": "text"
+        }
+      ],
+      "tags": [
+        {
+          "name": "deprecated"
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoJsDoc.ts",
+      "position": 453,
+      "name": "2"
+    },
+    "quickInfo": {
+      "kind": "method",
+      "kindModifiers": "deprecated",
+      "textSpan": {
+        "start": 452,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "C",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "m",
+          "kind": "methodName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "A method",
+          "kind": "text"
+        }
+      ],
+      "tags": [
+        {
+          "name": "deprecated"
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoJsDoc.ts",
+      "position": 466,
+      "name": "3"
+    },
+    "quickInfo": {
+      "kind": "var",
+      "kindModifiers": "deprecated",
+      "textSpan": {
+        "start": 463,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "foo",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "A constant",
+          "kind": "text"
+        }
+      ],
+      "tags": [
+        {
+          "name": "deprecated"
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoJsDoc.ts",
+      "position": 477,
+      "name": "4"
+    },
+    "quickInfo": {
+      "kind": "class",
+      "kindModifiers": "deprecated",
+      "textSpan": {
+        "start": 476,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "class",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "C",
+          "kind": "className"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "A class",
+          "kind": "text"
+        }
+      ],
+      "tags": [
+        {
+          "name": "deprecated"
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoJsDoc.ts",
+      "position": 492,
+      "name": "5"
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoJsDoc.ts",
+      "position": 565,
+      "name": "6"
+    },
+    "quickInfo": {
+      "kind": "property",
+      "kindModifiers": "deprecated",
+      "textSpan": {
+        "start": 560,
+        "length": 5
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "C",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "field",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "A field",
+          "kind": "text"
+        }
+      ],
+      "tags": [
+        {
+          "name": "deprecated"
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoJsDoc.ts",
+      "position": 586,
+      "name": "7"
+    },
+    "quickInfo": {
+      "kind": "property",
+      "kindModifiers": "deprecated",
+      "textSpan": {
+        "start": 580,
+        "length": 6
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "C",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "getter",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "A getter",
+          "kind": "text"
+        }
+      ],
+      "tags": [
+        {
+          "name": "deprecated"
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoJsDoc.ts",
+      "position": 602,
+      "name": "8"
+    },
+    "quickInfo": {
+      "kind": "method",
+      "kindModifiers": "deprecated",
+      "textSpan": {
+        "start": 601,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "C",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "m",
+          "kind": "methodName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "A method",
+          "kind": "text"
+        }
+      ],
+      "tags": [
+        {
+          "name": "deprecated"
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoJsDoc.ts",
+      "position": 615,
+      "name": "9"
+    },
+    "quickInfo": {
+      "kind": "var",
+      "kindModifiers": "deprecated",
+      "textSpan": {
+        "start": 612,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "foo",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "A constant",
+          "kind": "text"
+        }
+      ],
+      "tags": [
+        {
+          "name": "deprecated"
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoJsDoc.ts",
+      "position": 626,
+      "name": "10"
+    },
+    "quickInfo": {
+      "kind": "class",
+      "kindModifiers": "deprecated",
+      "textSpan": {
+        "start": 625,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "class",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "C",
+          "kind": "className"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "A class",
+          "kind": "text"
+        }
+      ],
+      "tags": [
+        {
+          "name": "deprecated"
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoJsDoc.ts",
+      "position": 638,
+      "name": "11"
+    },
+    "quickInfo": {
+      "kind": "function",
+      "kindModifiers": "deprecated",
+      "textSpan": {
+        "start": 636,
+        "length": 2
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "fn",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "A function",
+          "kind": "text"
+        }
+      ],
+      "tags": [
+        {
+          "name": "deprecated"
+        }
+      ]
+    }
+  }
+]
