@@ -1,0 +1,58 @@
+tests/cases/compiler/uncalledFunctionChecksInConditional2.ts(20,5): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+tests/cases/compiler/uncalledFunctionChecksInConditional2.ts(38,5): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+
+
+==== tests/cases/compiler/uncalledFunctionChecksInConditional2.ts (2 errors) ====
+    {
+      const perf = window.performance
+    
+      // Simplified
+      if (
+        perf &&
+        perf.measure &&
+        perf.clearMarks &&
+        perf.clearMeasures
+      ) {
+        perf.measure("");
+        perf.clearMarks("")
+        perf.clearMeasures("")
+      }
+    
+      // With ||
+      if (
+        perf &&
+        perf.mark &&
+        perf.measure || !!true
+        ~~~~~~~~~~~~
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+      ) {
+        perf.mark("");
+      }
+    };
+    
+    // Original #49192
+    declare let inBrowser: boolean;
+    {
+      let mark;
+      let measure;
+      const perf = inBrowser && window.performance
+      /* istanbul ignore if */
+      if (
+        perf &&
+        perf.mark &&
+        perf.measure &&
+        perf.clearMarks &&
+        perf.clearMeasures
+        ~~~~~~~~~~~~~~~~~~
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+      ) {
+        mark = (tag) => perf.mark(tag)
+        measure = (name, startTag, endTag) => {
+          perf.measure(name, startTag, endTag)
+          perf.clearMarks(startTag)
+          perf.clearMarks(endTag)
+          // perf.clearMeasures(name)
+        }
+      }
+    };
+    

@@ -1,0 +1,180 @@
+=== tests/cases/compiler/uncalledFunctionChecksInConditional2.ts ===
+{
+  const perf = window.performance
+>perf : Performance
+>window.performance : Performance
+>window : Window & typeof globalThis
+>performance : Performance
+
+  // Simplified
+  if (
+    perf &&
+>perf &&    perf.measure &&    perf.clearMarks &&    perf.clearMeasures : (measureName?: string | undefined) => void
+>perf &&    perf.measure &&    perf.clearMarks : (markName?: string | undefined) => void
+>perf &&    perf.measure : (measureName: string, startOrMeasureOptions?: string | PerformanceMeasureOptions | undefined, endMark?: string | undefined) => PerformanceMeasure
+>perf : Performance
+
+    perf.measure &&
+>perf.measure : (measureName: string, startOrMeasureOptions?: string | PerformanceMeasureOptions | undefined, endMark?: string | undefined) => PerformanceMeasure
+>perf : Performance
+>measure : (measureName: string, startOrMeasureOptions?: string | PerformanceMeasureOptions | undefined, endMark?: string | undefined) => PerformanceMeasure
+
+    perf.clearMarks &&
+>perf.clearMarks : (markName?: string | undefined) => void
+>perf : Performance
+>clearMarks : (markName?: string | undefined) => void
+
+    perf.clearMeasures
+>perf.clearMeasures : (measureName?: string | undefined) => void
+>perf : Performance
+>clearMeasures : (measureName?: string | undefined) => void
+
+  ) {
+    perf.measure("");
+>perf.measure("") : PerformanceMeasure
+>perf.measure : (measureName: string, startOrMeasureOptions?: string | PerformanceMeasureOptions | undefined, endMark?: string | undefined) => PerformanceMeasure
+>perf : Performance
+>measure : (measureName: string, startOrMeasureOptions?: string | PerformanceMeasureOptions | undefined, endMark?: string | undefined) => PerformanceMeasure
+>"" : ""
+
+    perf.clearMarks("")
+>perf.clearMarks("") : void
+>perf.clearMarks : (markName?: string | undefined) => void
+>perf : Performance
+>clearMarks : (markName?: string | undefined) => void
+>"" : ""
+
+    perf.clearMeasures("")
+>perf.clearMeasures("") : void
+>perf.clearMeasures : (measureName?: string | undefined) => void
+>perf : Performance
+>clearMeasures : (measureName?: string | undefined) => void
+>"" : ""
+  }
+
+  // With ||
+  if (
+    perf &&
+>perf &&    perf.mark &&    perf.measure || !!true : (measureName: string, startOrMeasureOptions?: string | PerformanceMeasureOptions | undefined, endMark?: string | undefined) => PerformanceMeasure
+>perf &&    perf.mark &&    perf.measure : (measureName: string, startOrMeasureOptions?: string | PerformanceMeasureOptions | undefined, endMark?: string | undefined) => PerformanceMeasure
+>perf &&    perf.mark : (markName: string, markOptions?: PerformanceMarkOptions | undefined) => PerformanceMark
+>perf : Performance
+
+    perf.mark &&
+>perf.mark : (markName: string, markOptions?: PerformanceMarkOptions | undefined) => PerformanceMark
+>perf : Performance
+>mark : (markName: string, markOptions?: PerformanceMarkOptions | undefined) => PerformanceMark
+
+    perf.measure || !!true
+>perf.measure : (measureName: string, startOrMeasureOptions?: string | PerformanceMeasureOptions | undefined, endMark?: string | undefined) => PerformanceMeasure
+>perf : Performance
+>measure : (measureName: string, startOrMeasureOptions?: string | PerformanceMeasureOptions | undefined, endMark?: string | undefined) => PerformanceMeasure
+>!!true : true
+>!true : false
+>true : true
+
+  ) {
+    perf.mark("");
+>perf.mark("") : PerformanceMark
+>perf.mark : (markName: string, markOptions?: PerformanceMarkOptions | undefined) => PerformanceMark
+>perf : Performance
+>mark : (markName: string, markOptions?: PerformanceMarkOptions | undefined) => PerformanceMark
+>"" : ""
+  }
+};
+
+// Original #49192
+declare let inBrowser: boolean;
+>inBrowser : boolean
+{
+  let mark;
+>mark : any
+
+  let measure;
+>measure : any
+
+  const perf = inBrowser && window.performance
+>perf : false | Performance
+>inBrowser && window.performance : false | Performance
+>inBrowser : boolean
+>window.performance : Performance
+>window : Window & typeof globalThis
+>performance : Performance
+
+  /* istanbul ignore if */
+  if (
+    perf &&
+>perf &&    perf.mark &&    perf.measure &&    perf.clearMarks &&    perf.clearMeasures : false | ((measureName?: string | undefined) => void)
+>perf &&    perf.mark &&    perf.measure &&    perf.clearMarks : false | ((markName?: string | undefined) => void)
+>perf &&    perf.mark &&    perf.measure : false | ((measureName: string, startOrMeasureOptions?: string | PerformanceMeasureOptions | undefined, endMark?: string | undefined) => PerformanceMeasure)
+>perf &&    perf.mark : false | ((markName: string, markOptions?: PerformanceMarkOptions | undefined) => PerformanceMark)
+>perf : false | Performance
+
+    perf.mark &&
+>perf.mark : (markName: string, markOptions?: PerformanceMarkOptions | undefined) => PerformanceMark
+>perf : Performance
+>mark : (markName: string, markOptions?: PerformanceMarkOptions | undefined) => PerformanceMark
+
+    perf.measure &&
+>perf.measure : (measureName: string, startOrMeasureOptions?: string | PerformanceMeasureOptions | undefined, endMark?: string | undefined) => PerformanceMeasure
+>perf : Performance
+>measure : (measureName: string, startOrMeasureOptions?: string | PerformanceMeasureOptions | undefined, endMark?: string | undefined) => PerformanceMeasure
+
+    perf.clearMarks &&
+>perf.clearMarks : (markName?: string | undefined) => void
+>perf : Performance
+>clearMarks : (markName?: string | undefined) => void
+
+    perf.clearMeasures
+>perf.clearMeasures : (measureName?: string | undefined) => void
+>perf : Performance
+>clearMeasures : (measureName?: string | undefined) => void
+
+  ) {
+    mark = (tag) => perf.mark(tag)
+>mark = (tag) => perf.mark(tag) : (tag: any) => PerformanceMark
+>mark : any
+>(tag) => perf.mark(tag) : (tag: any) => PerformanceMark
+>tag : any
+>perf.mark(tag) : PerformanceMark
+>perf.mark : (markName: string, markOptions?: PerformanceMarkOptions | undefined) => PerformanceMark
+>perf : Performance
+>mark : (markName: string, markOptions?: PerformanceMarkOptions | undefined) => PerformanceMark
+>tag : any
+
+    measure = (name, startTag, endTag) => {
+>measure = (name, startTag, endTag) => {      perf.measure(name, startTag, endTag)      perf.clearMarks(startTag)      perf.clearMarks(endTag)      // perf.clearMeasures(name)    } : (name: any, startTag: any, endTag: any) => void
+>measure : any
+>(name, startTag, endTag) => {      perf.measure(name, startTag, endTag)      perf.clearMarks(startTag)      perf.clearMarks(endTag)      // perf.clearMeasures(name)    } : (name: any, startTag: any, endTag: any) => void
+>name : any
+>startTag : any
+>endTag : any
+
+      perf.measure(name, startTag, endTag)
+>perf.measure(name, startTag, endTag) : PerformanceMeasure
+>perf.measure : (measureName: string, startOrMeasureOptions?: string | PerformanceMeasureOptions | undefined, endMark?: string | undefined) => PerformanceMeasure
+>perf : Performance
+>measure : (measureName: string, startOrMeasureOptions?: string | PerformanceMeasureOptions | undefined, endMark?: string | undefined) => PerformanceMeasure
+>name : any
+>startTag : any
+>endTag : any
+
+      perf.clearMarks(startTag)
+>perf.clearMarks(startTag) : void
+>perf.clearMarks : (markName?: string | undefined) => void
+>perf : Performance
+>clearMarks : (markName?: string | undefined) => void
+>startTag : any
+
+      perf.clearMarks(endTag)
+>perf.clearMarks(endTag) : void
+>perf.clearMarks : (markName?: string | undefined) => void
+>perf : Performance
+>clearMarks : (markName?: string | undefined) => void
+>endTag : any
+
+      // perf.clearMeasures(name)
+    }
+  }
+};
+

@@ -33919,7 +33919,11 @@ namespace ts {
                     const operator = operatorToken.kind;
                     if (operator === SyntaxKind.AmpersandAmpersandToken || operator === SyntaxKind.BarBarToken || operator === SyntaxKind.QuestionQuestionToken) {
                         if (operator === SyntaxKind.AmpersandAmpersandToken) {
-                            const parent = walkUpParenthesizedExpressions(node.parent);
+                            let parent = node.parent;
+                            while (parent.kind === SyntaxKind.ParenthesizedExpression
+                                || isBinaryExpression(parent) && (parent.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken || parent.operatorToken.kind === SyntaxKind.BarBarToken)) {
+                                parent = parent.parent;
+                            }
                             checkTestingKnownTruthyCallableOrAwaitableType(node.left, isIfStatement(parent) ? parent.thenStatement : undefined);
                         }
                         checkTruthinessOfType(leftType, node.left);
