@@ -1444,12 +1444,12 @@ namespace ts {
     export const optionsAllowedAsPragmaOption = optionDeclarations.filter(isAllowedAsPragmaOption);
 
     /* @internal */
-    type CompilerOptionsIntoPragmaDefinitions<T extends CommandLineOption> = UnionToIntersection<T extends unknown ? {[K in T["name"] & string as `ts-${K}`]: { readonly kind: PragmaKindFlags, readonly args: readonly [{ readonly name: "value", readonly optional: true }] }} : never>;
+    type CompilerOptionsIntoPragmaDefinitions<T extends CommandLineOption> = UnionToIntersection<T extends unknown ? {[K in T["name"] & string as `ts-${Lowercase<K>}`]: { readonly kind: PragmaKindFlags, readonly args: readonly [{ readonly name: "value", readonly optional: true }] }} : never>;
 
     function convertCompilerOptionsIntoPragmasSpecs<T extends readonly CommandLineOption[]>(options: T): CompilerOptionsIntoPragmaDefinitions<T[number]> {
         const result = {} as CompilerOptionsIntoPragmaDefinitions<T[number]>;
         for (const elem of options) {
-            result[`ts-${elem.name}` as keyof typeof result] = {
+            result[`ts-${elem.name.toLowerCase()}` as keyof typeof result] = {
                 args: [{ name: "value", optional: true }],
                 kind: PragmaKindFlags.SingleLine | PragmaKindFlags.MultiLine
             } as any;

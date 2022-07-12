@@ -9642,29 +9642,29 @@ namespace ts {
                     break;
                 }
                 case "ts-strict":
-                case "ts-noImplicitAny":
-                case "ts-strictNullChecks":
-                case "ts-strictFunctionTypes":
-                case "ts-strictBindCallApply":
-                case "ts-noImplicitThis":
-                case "ts-strictPropertyInitialization":
-                case "ts-useUnknownInCatchVariables":
-                case "ts-alwaysStrict":
-                case "ts-noUnusedLocals":
-                case "ts-noUnusedParameters":
-                case "ts-exactOptionalPropertyTypes":
-                case "ts-noPropertyAccessFromIndexSignature":
-                case "ts-noImplicitReturns":
-                case "ts-noFallthroughCasesInSwitch":
-                case "ts-noUncheckedIndexedAccess":
-                case "ts-noImplicitOverride": {
+                case "ts-noimplicitany":
+                case "ts-strictnullchecks":
+                case "ts-strictfunctiontypes":
+                case "ts-strictbindcallapply":
+                case "ts-noimplicitthis":
+                case "ts-strictpropertyinitialization":
+                case "ts-useunknownincatchvariables":
+                case "ts-alwaysstrict":
+                case "ts-nounusedlocals":
+                case "ts-nounusedparameters":
+                case "ts-exactoptionalpropertytypes":
+                case "ts-nopropertyaccessfromindexsignature":
+                case "ts-noimplicitreturns":
+                case "ts-nofallthroughcasesinswitch":
+                case "ts-nouncheckedindexedaccess":
+                case "ts-noimplicitoverride": {
                     const optName = key.slice(3);
-                    const opt = find(optionsAllowedAsPragmaOption, o => o.name === optName)!;
+                    const opt = find(optionsAllowedAsPragmaOption, o => o.name.toLowerCase() === optName)!;
                     const entry = (isArray(entryOrList) ? last(entryOrList) : entryOrList);
-                    const unparsedValue = (entry.arguments as PragmaArgumentType<`ts-${FileLocalOptionName}`>).value;
+                    const unparsedValue = (entry.arguments as PragmaArgumentType<`ts-${Lowercase<FileLocalOptionName>}`>).value;
                     const optContainer: OptionsBase = {};
                     const errors: Diagnostic[] = []
-                    const parsedValue = unparsedValue === undefined ? true : (parseOptionValue([unparsedValue], 0, /*diagnostics*/ undefined, opt, optContainer, errors), optContainer[unparsedValue]);
+                    const parsedValue = unparsedValue === undefined ? true : (parseOptionValue([unparsedValue], 0, /*diagnostics*/ undefined, opt, optContainer, errors), optContainer[opt.name]);
                     if (unparsedValue === undefined && opt.type !== "boolean") {
                         errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_expects_an_argument, optName));
                     }
@@ -9679,7 +9679,7 @@ namespace ts {
                         });
                     }
                     if (!length(errors)) {
-                        (context.localOptions ??= {})[optName] = parsedValue;
+                        (context.localOptions ??= {})[opt.name as string] = parsedValue;
                     }
                 }
                 case "jsx":
