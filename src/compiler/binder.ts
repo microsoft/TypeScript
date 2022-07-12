@@ -1672,19 +1672,24 @@ namespace ts {
         }
 
         function bindParameterFlow(node: ParameterDeclaration) {
+            node.modifiers?.forEach(bind);
+            bind(node.dotDotDotToken);
+            bind(node.questionToken);
+            bind(node.type);
             bindOptionalFlow(() => {
-                bindEachChild(node);
+                bind(node.initializer);
             });
+            bind(node.name);
         }
 
         // a BindingElement/Parameter does not have side effects if initializers are not evaluated and used. (see GH#49759)
         function bindOptionalFlow(cb: () => void) {
             const entryFlow = currentFlow;
             cb();
-            const exitFlow = createBranchLabel();
-            if (exitFlow === entryFlow) {
+            if (currentFlow === entryFlow) {
                 return;
             }
+            const exitFlow = createBranchLabel();
             if (entryFlow !== unreachableFlow) {
                 addAntecedent(exitFlow, entryFlow);
             }

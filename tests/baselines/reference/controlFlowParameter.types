@@ -70,3 +70,24 @@ function f3(
 >a : string | number
 }
 
+function f4(
+>f4 : (a?: number | string | undefined, { [(a = "")]: b }?: any) => void
+
+  a: number | string | undefined = 1,
+>a : string | number | undefined
+>1 : 1
+
+  { [(a = "")]: b } = {} as any
+>(a = "") : ""
+>a = "" : ""
+>a : string | number | undefined
+>"" : ""
+>b : any
+>{} as any : any
+>{} : {}
+
+) {
+  a; // should be string
+>a : string
+}
+

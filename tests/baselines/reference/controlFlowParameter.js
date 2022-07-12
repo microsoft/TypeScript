@@ -25,6 +25,13 @@ function f3(
   a; // should be number | string
 }
 
+function f4(
+  a: number | string | undefined = 1,
+  { [(a = "")]: b } = {} as any
+) {
+  a; // should be string
+}
+
 
 //// [controlFlowParameter.js]
 function f1(required) {
@@ -45,4 +52,9 @@ function f3(a, required) {
         a = "";
     })(); }
     a; // should be number | string
+}
+function f4(a, _a) {
+    if (a === void 0) { a = 1; }
+    var _b = _a === void 0 ? {} : _a, _c = (a = ""), b = _b[_c];
+    a; // should be string
 }

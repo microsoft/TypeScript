@@ -25,3 +25,10 @@ function f3(
 ) {
   a; // should be number | string
 }
+
+function f4(
+  a: number | string | undefined = 1,
+  { [(a = "")]: b } = {} as any
+) {
+  a; // should be string
+}

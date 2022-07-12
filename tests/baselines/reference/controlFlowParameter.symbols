@@ -52,3 +52,18 @@ function f3(
 >a : Symbol(a, Decl(controlFlowParameter.ts, 17, 12))
 }
 
+function f4(
+>f4 : Symbol(f4, Decl(controlFlowParameter.ts, 24, 1))
+
+  a: number | string | undefined = 1,
+>a : Symbol(a, Decl(controlFlowParameter.ts, 26, 12))
+
+  { [(a = "")]: b } = {} as any
+>a : Symbol(a, Decl(controlFlowParameter.ts, 26, 12))
+>b : Symbol(b, Decl(controlFlowParameter.ts, 28, 3))
+
+) {
+  a; // should be string
+>a : Symbol(a, Decl(controlFlowParameter.ts, 26, 12))
+}
+
