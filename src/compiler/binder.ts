@@ -1686,16 +1686,12 @@ namespace ts {
         function bindOptionalFlow(cb: () => void) {
             const entryFlow = currentFlow;
             cb();
-            if (currentFlow === entryFlow) {
+            if (entryFlow === unreachableFlow || entryFlow === currentFlow) {
                 return;
             }
             const exitFlow = createBranchLabel();
-            if (entryFlow !== unreachableFlow) {
-                addAntecedent(exitFlow, entryFlow);
-            }
-            if (exitFlow !== unreachableFlow) {
-                addAntecedent(exitFlow, currentFlow);
-            }
+            addAntecedent(exitFlow, entryFlow);
+            addAntecedent(exitFlow, currentFlow);
             currentFlow = finishFlowLabel(exitFlow);
         }
 
