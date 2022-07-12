@@ -1,15 +1,15 @@
 interface ProxyHandler<T extends object> {
     /**
      * A trap method for a function call.
-     * @param target The target callable object.
-     * @param thisArg The `this` argument for the call.
-     * @param argArray The list of arguments for rthe call
+     * @param target The original callable object which is being proxied.
+     * @param thisArg The `this` argument for the function call.
+     * @param argArray The list of arguments for the function call.
      */
     apply?(target: T, thisArg: any, argArray: any[]): any;
 
     /**
      * A trap for the `new` operator.
-     * @param target The target object.
+     * @param target The original object which is being proxied.
      * @param argArray The list of arguments for the constructor.
      * @param newTarget The constructor that was originally called.
      */
@@ -17,7 +17,7 @@ interface ProxyHandler<T extends object> {
 
     /**
      * A trap for `Object.defineProperty()`.
-     * @param target The target object.
+     * @param target The original object which is being proxied.
      * @param p The name or `Symbol` of the property whose description is to be retrieved.
      * @param attributes The descriptor for the property being defined or modified.
      * @returns A `Boolean` indicating whether or not the property has been defined.
@@ -26,7 +26,7 @@ interface ProxyHandler<T extends object> {
 
     /**
      * A trap for the `delete` operator.
-     * @param target The target object.
+     * @param target The original object which is being proxied.
      * @param p The name or `Symbol` of the property to delete.
      * @returns A `Boolean` indicating whether or not the property was deleted.
      */
@@ -34,7 +34,7 @@ interface ProxyHandler<T extends object> {
 
     /**
      * A trap for getting a property value.
-     * @param target The target object.
+     * @param target The original object which is being proxied.
      * @param p The name or `Symbol` of the property to get.
      * @param receiver The proxy or an object that inherits from the proxy.
      */
@@ -42,45 +42,45 @@ interface ProxyHandler<T extends object> {
 
     /**
      * A trap for `Object.getOwnPropertyDescriptor()`.
-     * @param target The target object.
+     * @param target The original object which is being proxied.
      * @param p The name of the property whose description should be retrieved.
      */
     getOwnPropertyDescriptor?(target: T, p: string | symbol): PropertyDescriptor | undefined;
 
     /**
      * A trap for the `[[GetPrototypeOf]]` internal method.
-     * @param target The target object.
+     * @param target The original object which is being proxied.
      */
     getPrototypeOf?(target: T): object | null;
 
     /**
      * A trap for the `in` operator.
-     * @param target The target object.
+     * @param target The original object which is being proxied.
      * @param p The name or `Symbol` of the property to check for existence.
      */
     has?(target: T, p: string | symbol): boolean;
 
     /**
      * A trap for `Object.isExtensible()`.
-     * @param target The target object.
+     * @param target The original object which is being proxied.
      */
     isExtensible?(target: T): boolean;
 
     /**
      * A trap for `Reflect.ownKeys()`.
-     * @param target The target object.
+     * @param target The original object which is being proxied.
      */
     ownKeys?(target: T): ArrayLike<string | symbol>;
 
     /**
      * A trap for `Object.preventExtensions()`.
-     * @param target The target object.
+     * @param target The original object which is being proxied.
      */
     preventExtensions?(target: T): boolean;
 
     /**
      * A trap for setting a property value.
-     * @param target The target object.
+     * @param target The original object which is being proxied.
      * @param p The name or `Symbol` of the property to set.
      * @param value The new value of the property to set.
      * @param receiver The object to which the assignment was originally directed.
@@ -90,7 +90,7 @@ interface ProxyHandler<T extends object> {
 
     /**
      * A trap for `Object.setPrototypeOf()`.
-     * @param target The target object.
+     * @param target The original object which is being proxied.
      * @param v The object's new prototype or `null`.
      */
     setPrototypeOf?(target: T, v: object | null): boolean;
@@ -105,7 +105,9 @@ interface ProxyConstructor {
     revocable<T extends object>(target: T, handler: ProxyHandler<T>): { proxy: T; revoke: () => void; };
 
     /**
-     * Creates a Proxy object.
+     * Creates a Proxy object. The Proxy object allows you to create an object that can be used in place of the
+     * original object, but which may redefine fundamental Object operations like getting, setting, and defining
+     * properties. Proxy objects are commonly used to log property accesses, validate, format, or sanitize inputs.
      * @param target A target object to wrap with Proxy.
      * @param handler An object whose properties define the behavior of Proxy when an operation is attempted on it.
      */
