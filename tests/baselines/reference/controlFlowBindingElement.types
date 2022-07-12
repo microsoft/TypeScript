@@ -112,3 +112,139 @@
 >foo : string
 }
 
+{
+    interface Window {
+        window: Window;
+>window : Window
+    }
+
+    let foo: string | undefined;
+>foo : string | undefined
+
+    let window = {} as Window;
+>window : Window
+>{} as Window : Window
+>{} : {}
+
+    window.window = window;
+>window.window = window : Window
+>window.window : Window
+>window : Window
+>window : Window
+>window : Window
+
+    const { [(() => { foo = ""; return 'window' as const })()]:
+>(() => { foo = ""; return 'window' as const })() : "window"
+>(() => { foo = ""; return 'window' as const }) : () => "window"
+>() => { foo = ""; return 'window' as const } : () => "window"
+>foo = "" : ""
+>foo : string | undefined
+>"" : ""
+>'window' as const : "window"
+>'window' : "window"
+
+        { [(() => { return 'window' as const })()]: bar } } = window;
+>(() => { return 'window' as const })() : "window"
+>(() => { return 'window' as const }) : () => "window"
+>() => { return 'window' as const } : () => "window"
+>'window' as const : "window"
+>'window' : "window"
+>bar : Window
+>window : Window
+
+    foo;  // should be string
+>foo : string
+}
+
+{
+    interface Window {
+        window: Window;
+>window : Window
+    }
+
+    let foo: string | undefined;
+>foo : string | undefined
+
+    let window = {} as Window;
+>window : Window
+>{} as Window : Window
+>{} : {}
+
+    window.window = window;
+>window.window = window : Window
+>window.window : Window
+>window : Window
+>window : Window
+>window : Window
+
+    const { [(() => {  return 'window' as const })()]:
+>(() => {  return 'window' as const })() : "window"
+>(() => {  return 'window' as const }) : () => "window"
+>() => {  return 'window' as const } : () => "window"
+>'window' as const : "window"
+>'window' : "window"
+
+        { [(() => { foo = ""; return 'window' as const })()]: bar } } = window;
+>(() => { foo = ""; return 'window' as const })() : "window"
+>(() => { foo = ""; return 'window' as const }) : () => "window"
+>() => { foo = ""; return 'window' as const } : () => "window"
+>foo = "" : ""
+>foo : string | undefined
+>"" : ""
+>'window' as const : "window"
+>'window' : "window"
+>bar : Window
+>window : Window
+
+    foo;  // should be string
+>foo : string
+}
+
+{
+    interface Window {
+        window: Window;
+>window : Window
+    }
+
+    let foo: string | undefined;
+>foo : string | undefined
+
+    let window = {} as Window;
+>window : Window
+>{} as Window : Window
+>{} : {}
+
+    window.window = window;
+>window.window = window : Window
+>window.window : Window
+>window : Window
+>window : Window
+>window : Window
+
+    const { [(() => { return 'window' as const })()]:
+>(() => { return 'window' as const })() : "window"
+>(() => { return 'window' as const }) : () => "window"
+>() => { return 'window' as const } : () => "window"
+>'window' as const : "window"
+>'window' : "window"
+
+        { [(() => { return 'window' as const })()]: bar = (() => { foo = ""; return window; })() } } = window;
+>(() => { return 'window' as const })() : "window"
+>(() => { return 'window' as const }) : () => "window"
+>() => { return 'window' as const } : () => "window"
+>'window' as const : "window"
+>'window' : "window"
+>bar : Window
+>(() => { foo = ""; return window; })() : Window
+>(() => { foo = ""; return window; }) : () => Window
+>() => { foo = ""; return window; } : () => Window
+>foo = "" : ""
+>foo : string | undefined
+>"" : ""
+>window : Window
+>window : Window
+
+    foo;  // should be string | undefined
+>foo : string | undefined
+}
+

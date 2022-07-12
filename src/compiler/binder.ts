@@ -1658,22 +1658,17 @@ namespace ts {
         }
 
         function bindBindingElementFlow(node: BindingElement) {
+            // When evaluating a binding pattern, the initializer is evaluated before the binding pattern, per:
+            // - https://tc39.es/ecma262/#sec-destructuring-binding-patterns-runtime-semantics-iteratorbindinginitialization
+            //   - `BindingElement: BindingPattern Initializer?`
+            // - https://tc39.es/ecma262/#sec-runtime-semantics-keyedbindinginitialization
+            //   - `BindingElement: BindingPattern Initializer?`
+            bind(node.dotDotDotToken);
+            bind(node.propertyName);
             bindOptionalFlow(() => {
-                if (isBindingPattern(node.name)) {
-                    // When evaluating a binding pattern, the initializer is evaluated before the binding pattern, per:
-                    // - https://tc39.es/ecma262/#sec-destructuring-binding-patterns-runtime-semantics-iteratorbindinginitialization
-                    //   - `BindingElement: BindingPattern Initializer?`
-                    // - https://tc39.es/ecma262/#sec-runtime-semantics-keyedbindinginitialization
-                    //   - `BindingElement: BindingPattern Initializer?`
-                    bind(node.dotDotDotToken);
-                    bind(node.propertyName);
-                    bind(node.initializer);
-                    bind(node.name);
-                }
-                else {
-                    bindEachChild(node);
-                }
+                bind(node.initializer);
             });
+            bind(node.name);
         }
 
         function bindParameterFlow(node: ParameterDeclaration) {
@@ -1687,6 +1682,9 @@ namespace ts {
             const entryFlow = currentFlow;
             cb();
             const exitFlow = createBranchLabel();
+            if (exitFlow === entryFlow) {
+                return;
+            }
             if (entryFlow !== unreachableFlow) {
                 addAntecedent(exitFlow, entryFlow);
             }
