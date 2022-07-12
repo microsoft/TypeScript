@@ -3,7 +3,7 @@
 ////const x = 1;
 ////type Foo = {
 ////  /** comment */
-////  /**/status: number;
+////  /*2*/readonly /*1*/status: number;
 ////};
 
 // https://github.com/microsoft/TypeScript/issues/39618
