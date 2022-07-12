@@ -188,7 +188,7 @@ namespace ts {
     function getCompilerOptionsOfBuildOptions(buildOptions: BuildOptions): CompilerOptions {
         const result = {} as CompilerOptions;
         commonOptionsWithBuild.forEach(option => {
-            if (hasProperty(buildOptions, option.name)) result[option.name] = buildOptions[option.name];
+            if (hasProperty(buildOptions, option.name)) result[option.name as string] = buildOptions[option.name];
         });
         return result;
     }

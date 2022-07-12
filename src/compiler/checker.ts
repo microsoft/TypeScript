@@ -376,16 +376,16 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
         const moduleKind = getEmitModuleKind(compilerOptions);
         const useDefineForClassFields = getUseDefineForClassFields(compilerOptions);
         const allowSyntheticDefaultImports = getAllowSyntheticDefaultImports(compilerOptions);
-        const strictNullChecks = getStrictOptionValue(compilerOptions, "strictNullChecks");
-        const strictFunctionTypes = getStrictOptionValue(compilerOptions, "strictFunctionTypes");
-        const strictBindCallApply = getStrictOptionValue(compilerOptions, "strictBindCallApply");
-        const strictPropertyInitialization = getStrictOptionValue(compilerOptions, "strictPropertyInitialization");
-        const noImplicitAny = getStrictOptionValue(compilerOptions, "noImplicitAny");
-        const noImplicitThis = getStrictOptionValue(compilerOptions, "noImplicitThis");
-        const useUnknownInCatchVariables = getStrictOptionValue(compilerOptions, "useUnknownInCatchVariables");
+        const strictNullChecks = getStrictOptionValue(/*file*/ undefined, compilerOptions, "strictNullChecks"); // TODO: file-local-ness
+        const strictFunctionTypes = (file: SourceFile | undefined) => getStrictOptionValue(file, compilerOptions, "strictFunctionTypes");
+        const strictBindCallApply = (file: SourceFile | undefined) => getStrictOptionValue(file, compilerOptions, "strictBindCallApply");
+        const strictPropertyInitialization = (file: SourceFile) => getStrictOptionValue(file, compilerOptions, "strictPropertyInitialization");
+        const noImplicitAny = (context: Node | undefined) => getStrictOptionValue(context && getSourceFileOfNode(context), compilerOptions, "noImplicitAny");
+        const noImplicitThis = (file: SourceFile) => getStrictOptionValue(file, compilerOptions, "noImplicitThis");
+        const useUnknownInCatchVariables = (file: SourceFile) => getStrictOptionValue(file, compilerOptions, "useUnknownInCatchVariables");
         const keyofStringsOnly = !!compilerOptions.keyofStringsOnly;
         const freshObjectLiteralFlag = compilerOptions.suppressExcessPropertyErrors ? 0 : ObjectFlags.FreshLiteral;
-        const exactOptionalPropertyTypes = compilerOptions.exactOptionalPropertyTypes;
+        const exactOptionalPropertyTypes = compilerOptions.exactOptionalPropertyTypes; // TODO: File-local-ness
 
         const checkBinaryExpression = createCheckBinaryExpression();
         const emitResolver = createResolver();
@@ -716,7 +716,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
 
                     diagnostics = addRange(diagnostics, suggestionDiagnostics.getDiagnostics(file.fileName));
                     checkUnusedIdentifiers(getPotentiallyUnusedIdentifiers(file), (containingNode, kind, diag) => {
-                        if (!containsParseError(containingNode) && !unusedIsError(kind, !!(containingNode.flags & NodeFlags.Ambient))) {
+                        if (!containsParseError(containingNode) && !unusedIsError(kind, !!(containingNode.flags & NodeFlags.Ambient), file)) {
                             (diagnostics || (diagnostics = [])).push({ ...diag, category: DiagnosticCategory.Suggestion });
                         }
                     });
@@ -970,8 +970,8 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
 
         let globalObjectType: ObjectType;
         let globalFunctionType: ObjectType;
-        let globalCallableFunctionType: ObjectType;
-        let globalNewableFunctionType: ObjectType;
+        let globalCallableFunctionType: (file: SourceFile | undefined) => ObjectType;
+        let globalNewableFunctionType: (file: SourceFile | undefined) => ObjectType;
         let globalArrayType: GenericType;
         let globalReadonlyArrayType: GenericType;
         let globalStringType: ObjectType;
@@ -3564,7 +3564,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                     (isLiteralImportTypeNode(location) ? location : undefined)?.argument.literal;
             const mode = contextSpecifier && isStringLiteralLike(contextSpecifier) ? getModeForUsageLocation(currentSourceFile, contextSpecifier) : currentSourceFile.impliedNodeFormat;
             const resolvedModule = getResolvedModule(currentSourceFile, moduleReference, mode);
-            const resolutionDiagnostic = resolvedModule && getResolutionDiagnostic(compilerOptions, resolvedModule);
+            const resolutionDiagnostic = resolvedModule && getResolutionDiagnostic(currentSourceFile, compilerOptions, resolvedModule);
             const sourceFile = resolvedModule
                 && (!resolutionDiagnostic || resolutionDiagnostic === Diagnostics.Module_0_was_resolved_to_1_but_jsx_is_not_set)
                 && host.getSourceFile(resolvedModule.resolvedFileName);
@@ -3619,7 +3619,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                     error(errorNode, diag, moduleReference, resolvedModule!.resolvedFileName);
                 }
                 else {
-                    errorOnImplicitAnyModule(/*isError*/ noImplicitAny && !!moduleNotFoundError, errorNode, resolvedModule!, moduleReference);
+                    errorOnImplicitAnyModule(/*isError*/ noImplicitAny(errorNode) && !!moduleNotFoundError, errorNode, resolvedModule!, moduleReference);
                 }
                 // Failed imports and untyped modules are both treated in an untyped manner; only difference is whether we give a diagnostic first.
                 return undefined;
@@ -8990,7 +8990,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                 return addOptionality(declaredType, isProperty, isOptional);
             }
 
-            if ((noImplicitAny || isInJSFile(declaration)) &&
+            if ((noImplicitAny(declaration) || isInJSFile(declaration)) &&
                 isVariableDeclaration(declaration) && !isBindingPattern(declaration.name) &&
                 !(getCombinedModifierFlags(declaration) & ModifierFlags.Export) && !(declaration.flags & NodeFlags.Ambient)) {
                 // If --noImplicitAny is on or the declaration is in a Javascript file,
@@ -9046,7 +9046,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                 return addOptionality(type, isProperty, isOptional);
             }
 
-            if (isPropertyDeclaration(declaration) && (noImplicitAny || isInJSFile(declaration))) {
+            if (isPropertyDeclaration(declaration) && (noImplicitAny(declaration) || isInJSFile(declaration))) {
                 // We have a property declaration with no type annotation or initializer, in noImplicitAny mode or a .js file.
                 // Use control flow analysis of this.xxx assignments in the constructor or static block to determine the type of the property.
                 if (!hasStaticModifier(declaration)) {
@@ -9105,7 +9105,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
             // noImplicitAny mode or a .js file.
             const declaration = symbol.valueDeclaration;
             return declaration && isPropertyDeclaration(declaration) && !getEffectiveTypeAnnotationNode(declaration) &&
-                !declaration.initializer && (noImplicitAny || isInJSFile(declaration));
+                !declaration.initializer && (noImplicitAny(declaration) || isInJSFile(declaration));
         }
 
         function getDeclaringConstructor(symbol: Symbol) {
@@ -9147,7 +9147,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                 setParent(reference, staticBlock);
                 reference.flowNode = staticBlock.returnFlowNode;
                 const flowType = getFlowTypeOfProperty(reference, symbol);
-                if (noImplicitAny && (flowType === autoType || flowType === autoArrayType)) {
+                if (noImplicitAny(reference) && (flowType === autoType || flowType === autoArrayType)) {
                     error(symbol.valueDeclaration, Diagnostics.Member_0_implicitly_has_an_1_type, symbolToString(symbol), typeToString(flowType));
                 }
                 // We don't infer a type if assignments are only null or undefined.
@@ -9167,7 +9167,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
             setParent(reference, constructor);
             reference.flowNode = constructor.returnFlowNode;
             const flowType = getFlowTypeOfProperty(reference, symbol);
-            if (noImplicitAny && (flowType === autoType || flowType === autoArrayType)) {
+            if (noImplicitAny(reference) && (flowType === autoType || flowType === autoArrayType)) {
                 error(symbol.valueDeclaration, Diagnostics.Member_0_implicitly_has_an_1_type, symbolToString(symbol), typeToString(flowType));
             }
             // We don't infer a type if assignments are only null or undefined.
@@ -9635,7 +9635,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
             if (isCatchClauseVariableDeclarationOrBindingElement(declaration)) {
                 const typeNode = getEffectiveTypeAnnotationNode(declaration);
                 if (typeNode === undefined) {
-                    return useUnknownInCatchVariables ? unknownType : anyType;
+                    return useUnknownInCatchVariables(getSourceFileOfNode(declaration)) ? unknownType : anyType;
                 }
                 const type = getTypeOfNode(typeNode);
                 // an errorType will make `checkTryStatement` issue an error
@@ -9776,10 +9776,10 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                     getter && getter.body && getReturnTypeFromBody(getter);
                 if (!type) {
                     if (setter && !isPrivateWithinAmbient(setter)) {
-                        errorOrSuggestion(noImplicitAny, setter, Diagnostics.Property_0_implicitly_has_type_any_because_its_set_accessor_lacks_a_parameter_type_annotation, symbolToString(symbol));
+                        errorOrSuggestion(noImplicitAny(setter), setter, Diagnostics.Property_0_implicitly_has_type_any_because_its_set_accessor_lacks_a_parameter_type_annotation, symbolToString(symbol));
                     }
                     else if (getter && !isPrivateWithinAmbient(getter)) {
-                        errorOrSuggestion(noImplicitAny, getter, Diagnostics.Property_0_implicitly_has_type_any_because_its_get_accessor_lacks_a_return_type_annotation, symbolToString(symbol));
+                        errorOrSuggestion(noImplicitAny(getter), getter, Diagnostics.Property_0_implicitly_has_type_any_because_its_get_accessor_lacks_a_return_type_annotation, symbolToString(symbol));
                     }
                     type = anyType;
                 }
@@ -9790,7 +9790,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                     else if (getAnnotatedAccessorTypeNode(setter)) {
                         error(setter, Diagnostics._0_is_referenced_directly_or_indirectly_in_its_own_type_annotation, symbolToString(symbol));
                     }
-                    else if (getter && noImplicitAny) {
+                    else if (getter && noImplicitAny(getter)) {
                         error(getter, Diagnostics._0_implicitly_has_return_type_any_because_it_does_not_have_a_return_type_annotation_and_is_referenced_directly_or_indirectly_in_one_of_its_return_expressions, symbolToString(symbol));
                     }
                     type = anyType;
@@ -9922,7 +9922,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                 return errorType;
             }
             // Check if variable has initializer that circularly references the variable itself
-            if (noImplicitAny && (declaration.kind !== SyntaxKind.Parameter || (declaration as HasInitializer).initializer)) {
+            if (noImplicitAny(declaration) && (declaration.kind !== SyntaxKind.Parameter || (declaration as HasInitializer).initializer)) {
                 error(symbol.valueDeclaration, Diagnostics._0_implicitly_has_type_any_because_it_does_not_have_a_type_annotation_and_is_referenced_directly_or_indirectly_in_its_own_initializer,
                     symbolToString(symbol));
             }
@@ -12638,9 +12638,10 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                     return symbol;
                 }
                 if (skipObjectFunctionPropertyAugment) return undefined;
+                const file = symbol?.valueDeclaration && getSourceFileOfNode(symbol.valueDeclaration);
                 const functionType = resolved === anyFunctionType ? globalFunctionType :
-                    resolved.callSignatures.length ? globalCallableFunctionType :
-                    resolved.constructSignatures.length ? globalNewableFunctionType :
+                    resolved.callSignatures.length ? globalCallableFunctionType(file) :
+                    resolved.constructSignatures.length ? globalNewableFunctionType(file) :
                     undefined;
                 if (functionType) {
                     const symbol = getPropertyOfObjectType(functionType, name);
@@ -13153,7 +13154,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                         if (typeNode) {
                             error(typeNode, Diagnostics.Return_type_annotation_circularly_references_itself);
                         }
-                        else if (noImplicitAny) {
+                        else if (noImplicitAny(signature.declaration)) {
                             const declaration = signature.declaration as Declaration;
                             const name = getNameOfDeclaration(declaration);
                             if (name) {
@@ -13589,7 +13590,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                 const numTypeArguments = length(node.typeArguments);
                 const minTypeArgumentCount = getMinTypeArgumentCount(typeParameters);
                 const isJs = isInJSFile(node);
-                const isJsImplicitAny = !noImplicitAny && isJs;
+                const isJsImplicitAny = !noImplicitAny(node) && isJs;
                 if (!isJsImplicitAny && (numTypeArguments < minTypeArgumentCount || numTypeArguments > typeParameters.length)) {
                     const missingAugmentsTag = isJs && isExpressionWithTypeArguments(node) && !isJSDocAugmentsTag(node.parent);
                     const diag = minTypeArgumentCount === typeParameters.length ?
@@ -13890,9 +13891,9 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                         checkNoTypeArguments(node);
                         return globalFunctionType;
                     case "array":
-                        return (!typeArgs || !typeArgs.length) && !noImplicitAny ? anyArrayType : undefined;
+                        return (!typeArgs || !typeArgs.length) && !noImplicitAny(node) ? anyArrayType : undefined;
                     case "promise":
-                        return (!typeArgs || !typeArgs.length) && !noImplicitAny ? createPromiseType(anyType) : undefined;
+                        return (!typeArgs || !typeArgs.length) && !noImplicitAny(node) ? createPromiseType(anyType) : undefined;
                     case "Object":
                         if (typeArgs && typeArgs.length === 2) {
                             if (isJSDocIndexSignature(node)) {
@@ -13904,7 +13905,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                             return anyType;
                         }
                         checkNoTypeArguments(node);
-                        return !noImplicitAny ? anyType : undefined;
+                        return !noImplicitAny(node) ? anyType : undefined;
                 }
             }
         }
@@ -15507,9 +15508,6 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
          * This mirrors the behavior of the index signature propagation, to which this behaves similarly (but doesn't affect assignability or inference).
          */
         function isJSLiteralType(type: Type): boolean {
-            if (noImplicitAny) {
-                return false; // Flag is meaningless under `noImplicitAny` mode
-            }
             if (getObjectFlags(type) & ObjectFlags.JSLiteral) {
                 return true;
             }
@@ -15626,7 +15624,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                 }
                 if (accessExpression && !isConstEnumObjectType(objectType)) {
                     if (isObjectLiteralType(objectType)) {
-                        if (noImplicitAny && indexType.flags & (TypeFlags.StringLiteral | TypeFlags.NumberLiteral)) {
+                        if (noImplicitAny(accessNode) && indexType.flags & (TypeFlags.StringLiteral | TypeFlags.NumberLiteral)) {
                             diagnostics.add(createDiagnosticForNode(accessExpression, Diagnostics.Property_0_does_not_exist_on_type_1, (indexType as StringLiteralType).value, typeToString(objectType)));
                             return undefinedType;
                         }
@@ -15641,7 +15639,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                     if (objectType.symbol === globalThisSymbol && propName !== undefined && globalThisSymbol.exports!.has(propName) && (globalThisSymbol.exports!.get(propName)!.flags & SymbolFlags.BlockScoped)) {
                         error(accessExpression, Diagnostics.Property_0_does_not_exist_on_type_1, unescapeLeadingUnderscores(propName), typeToString(objectType));
                     }
-                    else if (noImplicitAny && !compilerOptions.suppressImplicitAnyIndexErrors && !(accessFlags & AccessFlags.SuppressNoImplicitAnyError)) {
+                    else if (noImplicitAny(accessExpression) && !compilerOptions.suppressImplicitAnyIndexErrors && !(accessFlags & AccessFlags.SuppressNoImplicitAnyError)) {
                         if (propName !== undefined && typeHasStaticProperty(propName, objectType)) {
                             const typeName = typeToString(objectType);
                             error(accessExpression, Diagnostics.Property_0_does_not_exist_on_type_1_Did_you_mean_to_access_the_static_member_2_instead, propName as string, typeName, typeName + "[" + getTextOfNode(accessExpression.argumentExpression) + "]");
@@ -15909,7 +15907,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
             }
             // In noUncheckedIndexedAccess mode, indexed access operations that occur in an expression in a read position and resolve to
             // an index signature have 'undefined' included in their type.
-            if (compilerOptions.noUncheckedIndexedAccess && accessFlags & AccessFlags.ExpressionPosition) accessFlags |= AccessFlags.IncludeUndefined;
+            if (getFileLocalCompilerOption(getSourceFileOfNode(accessNode), compilerOptions, "noUncheckedIndexedAccess") && accessFlags & AccessFlags.ExpressionPosition) accessFlags |= AccessFlags.IncludeUndefined;
             // If the index type is generic, or if the object type is generic and doesn't originate in an expression and
             // the operation isn't exclusively indexing the fixed (non-variadic) portion of a tuple type, we are performing
             // a higher-order index access where we cannot meaningfully access the properties of the object type. Note that
@@ -16716,7 +16714,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                 case SyntaxKind.NeverKeyword:
                     return neverType;
                 case SyntaxKind.ObjectKeyword:
-                    return node.flags & NodeFlags.JavaScriptFile && !noImplicitAny ? anyType : nonPrimitiveType;
+                    return node.flags & NodeFlags.JavaScriptFile && !noImplicitAny(node) ? anyType : nonPrimitiveType;
                 case SyntaxKind.IntrinsicKeyword:
                     return intrinsicMarkerType;
                 case SyntaxKind.ThisType:
@@ -18044,7 +18042,10 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
             }
 
             const kind = target.declaration ? target.declaration.kind : SyntaxKind.Unknown;
-            const strictVariance = !(checkMode & SignatureCheckMode.Callback) && strictFunctionTypes && kind !== SyntaxKind.MethodDeclaration &&
+            const sourceFile = source.declaration && getSourceFileOfNode(source.declaration);
+            const targetFile = target.declaration && getSourceFileOfNode(target.declaration);
+            const strictSignatureComparison = strictFunctionTypes(sourceFile) || strictFunctionTypes(targetFile);
+            const strictVariance = !(checkMode & SignatureCheckMode.Callback) && strictSignatureComparison && kind !== SyntaxKind.MethodDeclaration &&
                 kind !== SyntaxKind.MethodSignature && kind !== SyntaxKind.Constructor;
             let result = Ternary.True;
 
@@ -18954,7 +18955,9 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
             }
 
             function hasExcessProperties(source: FreshObjectLiteralType, target: Type, reportErrors: boolean): boolean {
-                if (!isExcessPropertyCheckTarget(target) || !noImplicitAny && getObjectFlags(target) & ObjectFlags.JSLiteral) {
+                const sourceNoImplicitAny = noImplicitAny(source.symbol?.valueDeclaration);
+                const targetNoImplicitAny = noImplicitAny(target.symbol?.valueDeclaration);
+                if (!isExcessPropertyCheckTarget(target) || !(sourceNoImplicitAny || targetNoImplicitAny) && getObjectFlags(target) & ObjectFlags.JSLiteral) {
                     return false; // Disable excess property checks on JS literals to simulate having an implicit "index signature" - but only outside of noImplicitAny
                 }
                 const isComparingJsxAttributes = !!(getObjectFlags(source) & ObjectFlags.JsxAttributes);
@@ -21802,7 +21805,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                 case SyntaxKind.BinaryExpression:
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.PropertySignature:
-                    diagnostic = noImplicitAny ? Diagnostics.Member_0_implicitly_has_an_1_type : Diagnostics.Member_0_implicitly_has_an_1_type_but_a_better_type_may_be_inferred_from_usage;
+                    diagnostic = noImplicitAny(declaration) ? Diagnostics.Member_0_implicitly_has_an_1_type : Diagnostics.Member_0_implicitly_has_an_1_type_but_a_better_type_may_be_inferred_from_usage;
                     break;
                 case SyntaxKind.Parameter:
                     const param = declaration as ParameterDeclaration;
@@ -21813,16 +21816,16 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                         param.name.originalKeywordKind && isTypeNodeKind(param.name.originalKeywordKind))) {
                         const newName = "arg" + param.parent.parameters.indexOf(param);
                         const typeName = declarationNameToString(param.name) + (param.dotDotDotToken ? "[]" : "");
-                        errorOrSuggestion(noImplicitAny, declaration, Diagnostics.Parameter_has_a_name_but_no_type_Did_you_mean_0_Colon_1, newName, typeName);
+                        errorOrSuggestion(noImplicitAny(declaration), declaration, Diagnostics.Parameter_has_a_name_but_no_type_Did_you_mean_0_Colon_1, newName, typeName);
                         return;
                     }
                     diagnostic = (declaration as ParameterDeclaration).dotDotDotToken ?
-                        noImplicitAny ? Diagnostics.Rest_parameter_0_implicitly_has_an_any_type : Diagnostics.Rest_parameter_0_implicitly_has_an_any_type_but_a_better_type_may_be_inferred_from_usage :
-                        noImplicitAny ? Diagnostics.Parameter_0_implicitly_has_an_1_type : Diagnostics.Parameter_0_implicitly_has_an_1_type_but_a_better_type_may_be_inferred_from_usage;
+                        noImplicitAny(declaration) ? Diagnostics.Rest_parameter_0_implicitly_has_an_any_type : Diagnostics.Rest_parameter_0_implicitly_has_an_any_type_but_a_better_type_may_be_inferred_from_usage :
+                        noImplicitAny(declaration) ? Diagnostics.Parameter_0_implicitly_has_an_1_type : Diagnostics.Parameter_0_implicitly_has_an_1_type_but_a_better_type_may_be_inferred_from_usage;
                     break;
                 case SyntaxKind.BindingElement:
                     diagnostic = Diagnostics.Binding_element_0_implicitly_has_an_1_type;
-                    if (!noImplicitAny) {
+                    if (!noImplicitAny(declaration)) {
                         // Don't issue a suggestion for binding elements since the codefix doesn't yet support them.
                         return;
                     }
@@ -21837,7 +21840,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                 case SyntaxKind.SetAccessor:
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
-                    if (noImplicitAny && !(declaration as NamedDeclaration).name) {
+                    if (noImplicitAny(declaration) && !(declaration as NamedDeclaration).name) {
                         if (wideningKind === WideningKind.GeneratorYield) {
                             error(declaration, Diagnostics.Generator_implicitly_has_yield_type_0_because_it_does_not_yield_any_values_Consider_supplying_a_return_type_annotation, typeAsString);
                         }
@@ -21846,24 +21849,24 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                         }
                         return;
                     }
-                    diagnostic = !noImplicitAny ? Diagnostics._0_implicitly_has_an_1_return_type_but_a_better_type_may_be_inferred_from_usage :
+                    diagnostic = !noImplicitAny(declaration) ? Diagnostics._0_implicitly_has_an_1_return_type_but_a_better_type_may_be_inferred_from_usage :
                         wideningKind === WideningKind.GeneratorYield ? Diagnostics._0_which_lacks_return_type_annotation_implicitly_has_an_1_yield_type :
                         Diagnostics._0_which_lacks_return_type_annotation_implicitly_has_an_1_return_type;
                     break;
                 case SyntaxKind.MappedType:
-                    if (noImplicitAny) {
+                    if (noImplicitAny(declaration)) {
                         error(declaration, Diagnostics.Mapped_object_type_implicitly_has_an_any_template_type);
                     }
                     return;
                 default:
-                    diagnostic = noImplicitAny ? Diagnostics.Variable_0_implicitly_has_an_1_type : Diagnostics.Variable_0_implicitly_has_an_1_type_but_a_better_type_may_be_inferred_from_usage;
+                    diagnostic = noImplicitAny(declaration) ? Diagnostics.Variable_0_implicitly_has_an_1_type : Diagnostics.Variable_0_implicitly_has_an_1_type_but_a_better_type_may_be_inferred_from_usage;
             }
-            errorOrSuggestion(noImplicitAny, declaration, diagnostic, declarationNameToString(getNameOfDeclaration(declaration)), typeAsString);
+            errorOrSuggestion(noImplicitAny(declaration), declaration, diagnostic, declarationNameToString(getNameOfDeclaration(declaration)), typeAsString);
         }
 
         function reportErrorsFromWidening(declaration: Declaration, type: Type, wideningKind?: WideningKind) {
             addLazyDiagnostic(() => {
-                if (noImplicitAny && getObjectFlags(type) & ObjectFlags.ContainsWideningType && (!wideningKind || !getContextualSignatureForFunctionLikeDeclaration(declaration as FunctionLikeDeclaration))) {
+                if (noImplicitAny(declaration) && getObjectFlags(type) & ObjectFlags.ContainsWideningType && (!wideningKind || !getContextualSignatureForFunctionLikeDeclaration(declaration as FunctionLikeDeclaration))) {
                     // Report implicit any error within type if possible, otherwise report error on declaration
                     if (!reportWideningErrorsInType(type)) {
                         reportImplicitAny(declaration, type, wideningKind);
@@ -22692,7 +22695,10 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
             }
 
             function inferFromContravariantTypes(source: Type, target: Type) {
-                if (strictFunctionTypes || priority & InferencePriority.AlwaysStrict) {
+                const sourceFile = source.symbol?.valueDeclaration && getSourceFileOfNode(source.symbol?.valueDeclaration);
+                const targetFile = target.symbol?.valueDeclaration && getSourceFileOfNode(target.symbol?.valueDeclaration);
+                const strictSignatureComparison = strictFunctionTypes(sourceFile) || strictFunctionTypes(targetFile);
+                if (strictSignatureComparison || priority & InferencePriority.AlwaysStrict) {
                     contravariant = !contravariant;
                     inferFromTypes(source, target);
                     contravariant = !contravariant;
@@ -23756,18 +23762,18 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
             const nameType = getLiteralTypeFromPropertyName(name);
             if (!isTypeUsableAsPropertyName(nameType)) return errorType;
             const text = getPropertyNameFromType(nameType);
-            return getTypeOfPropertyOfType(type, text) || includeUndefinedInIndexSignature(getApplicableIndexInfoForName(type, text)?.type) || errorType;
+            return getTypeOfPropertyOfType(type, text) || includeUndefinedInIndexSignature(getApplicableIndexInfoForName(type, text)?.type, type) || errorType;
         }
 
         function getTypeOfDestructuredArrayElement(type: Type, index: number) {
             return everyType(type, isTupleLikeType) && getTupleElementType(type, index) ||
-                includeUndefinedInIndexSignature(checkIteratedTypeOrElementType(IterationUse.Destructuring, type, undefinedType, /*errorNode*/ undefined)) ||
+                includeUndefinedInIndexSignature(checkIteratedTypeOrElementType(IterationUse.Destructuring, type, undefinedType, /*errorNode*/ undefined), type) ||
                 errorType;
         }
 
-        function includeUndefinedInIndexSignature(type: Type | undefined): Type | undefined {
+        function includeUndefinedInIndexSignature(type: Type | undefined, parentType: Type): Type | undefined {
             if (!type) return type;
-            return compilerOptions.noUncheckedIndexedAccess ?
+            return getFileLocalCompilerOption(getSourceFileOfNode(parentType.symbol?.valueDeclaration), compilerOptions, "noUncheckedIndexedAccess") ?
                 getUnionType([type, undefinedType]) :
                 type;
         }
@@ -25947,7 +25953,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
             // control flow based type does include undefined.
             if (!isEvolvingArrayOperationTarget(node) && (type === autoType || type === autoArrayType)) {
                 if (flowType === autoType || flowType === autoArrayType) {
-                    if (noImplicitAny) {
+                    if (noImplicitAny(node)) {
                         error(getNameOfDeclaration(declaration), Diagnostics.Variable_0_implicitly_has_type_1_in_some_locations_where_its_type_cannot_be_determined, symbolToString(symbol), typeToString(flowType));
                         error(node, Diagnostics.Variable_0_implicitly_has_an_1_type, symbolToString(symbol), typeToString(flowType));
                     }
@@ -26182,7 +26188,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
             }
 
             const type = tryGetThisTypeAt(node, /*includeGlobalThis*/ true, container);
-            if (noImplicitThis) {
+            if (noImplicitThis(getSourceFileOfNode(node))) {
                 const globalThisType = getTypeOfSymbol(globalThisSymbol);
                 if (type === globalThisType && capturedByArrowFunction) {
                     error(node, Diagnostics.The_containing_arrow_function_captures_the_global_value_of_this);
@@ -26584,7 +26590,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                 }
             }
             const inJs = isInJSFile(func);
-            if (noImplicitThis || inJs) {
+            if (noImplicitThis(getSourceFileOfNode(func)) || inJs) {
                 const containingLiteral = getContainingObjectLiteral(func);
                 if (containingLiteral) {
                     // We have an object literal method. Check if the containing object literal has a contextual type
@@ -27523,7 +27529,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
         }
 
         function getIntersectedSignatures(signatures: readonly Signature[]) {
-            return getStrictOptionValue(compilerOptions, "noImplicitAny")
+            return some(signatures, s => noImplicitAny(s.declaration))
                 ? reduceLeft(
                     signatures,
                     (left, right) =>
@@ -28384,7 +28390,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                     return links.resolvedSymbol = unknownSymbol;
                 }
                 else {
-                    if (noImplicitAny) {
+                    if (noImplicitAny(node)) {
                         error(node, Diagnostics.JSX_element_implicitly_has_type_any_because_no_interface_JSX_0_exists, unescapeLeadingUnderscores(JsxNames.IntrinsicElements));
                     }
                     return links.resolvedSymbol = unknownSymbol;
@@ -28639,7 +28645,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
             }
 
             if (getJsxElementTypeAt(errorNode) === undefined) {
-                if (noImplicitAny) {
+                if (noImplicitAny(errorNode)) {
                     error(errorNode, Diagnostics.JSX_element_implicitly_has_type_any_because_the_global_type_JSX_Element_does_not_exist);
                 }
             }
@@ -29227,7 +29233,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                         if (globalThisSymbol.exports!.has(right.escapedText) && (globalThisSymbol.exports!.get(right.escapedText)!.flags & SymbolFlags.BlockScoped)) {
                             error(right, Diagnostics.Property_0_does_not_exist_on_type_1, unescapeLeadingUnderscores(right.escapedText), typeToString(leftType));
                         }
-                        else if (noImplicitAny) {
+                        else if (noImplicitAny(right)) {
                             error(right, Diagnostics.Element_implicitly_has_an_any_type_because_type_0_has_no_index_signature, typeToString(leftType));
                         }
                         return anyType;
@@ -29241,8 +29247,8 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                     error(node, Diagnostics.Index_signature_in_type_0_only_permits_reading, typeToString(apparentType));
                 }
 
-                propType = (compilerOptions.noUncheckedIndexedAccess && !isAssignmentTarget(node)) ? getUnionType([indexInfo.type, undefinedType]) : indexInfo.type;
-                if (compilerOptions.noPropertyAccessFromIndexSignature && isPropertyAccessExpression(node)) {
+                propType = (getFileLocalCompilerOption(getSourceFileOfNode(node), compilerOptions, "noUncheckedIndexedAccess") && !isAssignmentTarget(node)) ? getUnionType([indexInfo.type, undefinedType]) : indexInfo.type;
+                if (getFileLocalCompilerOption(getSourceFileOfNode(node), compilerOptions, "noPropertyAccessFromIndexSignature") && isPropertyAccessExpression(node)) {
                     error(right, Diagnostics.Property_0_comes_from_an_index_signature_so_it_must_be_accessed_with_0, unescapeLeadingUnderscores(right.escapedText));
                 }
                 if (indexInfo.declaration && getCombinedNodeFlags(indexInfo.declaration) & NodeFlags.Deprecated) {
@@ -29312,7 +29318,8 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
             // and if we are in a constructor of the same class as the property declaration, assume that
             // the property is uninitialized at the top of the control flow.
             let assumeUninitialized = false;
-            if (strictNullChecks && strictPropertyInitialization && isAccessExpression(node) && node.expression.kind === SyntaxKind.ThisKeyword) {
+            const file = getSourceFileOfNode(node);
+            if (strictNullChecks && strictPropertyInitialization(file) && isAccessExpression(node) && node.expression.kind === SyntaxKind.ThisKeyword) {
                 const declaration = prop && prop.valueDeclaration;
                 if (declaration && isPropertyWithoutInitializer(declaration)) {
                     if (!isStatic(declaration)) {
@@ -31355,7 +31362,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
             const callSignatures = getSignaturesOfType(expressionType, SignatureKind.Call);
             if (callSignatures.length) {
                 const signature = resolveCall(node, callSignatures, candidatesOutArray, checkMode, SignatureFlags.None);
-                if (!noImplicitAny) {
+                if (!noImplicitAny(node)) {
                     if (signature.declaration && !isJSConstructor(signature.declaration) && getReturnTypeOfSignature(signature) !== voidType) {
                         error(node, Diagnostics.Only_a_void_function_can_be_called_with_the_new_keyword);
                     }
@@ -31914,7 +31921,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                     !isJSConstructor(declaration)) {
 
                     // When resolved signature is a call signature (and not a construct signature) the result type is any
-                    if (noImplicitAny) {
+                    if (noImplicitAny(declaration)) {
                         error(node, Diagnostics.new_expression_whose_target_lacks_a_construct_signature_implicitly_has_an_any_type);
                     }
                     return anyType;
@@ -33003,7 +33010,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                 else if (type && strictNullChecks && !isTypeAssignableTo(undefinedType, type)) {
                     error(errorNode, Diagnostics.Function_lacks_ending_return_statement_and_return_type_does_not_include_undefined);
                 }
-                else if (compilerOptions.noImplicitReturns) {
+                else if (getFileLocalCompilerOption(getSourceFileOfNode(errorNode), compilerOptions, "noImplicitReturns")) {
                     if (!type) {
                         // If return type annotation is omitted check if function has any explicit return statements.
                         // If it does not have any - its inferred return type is void - don't do any checks.
@@ -33671,7 +33678,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
             // present (aka the tuple element property). This call also checks that the parentType is in
             // fact an iterable or array (depending on target language).
             const possiblyOutOfBoundsType = checkIteratedTypeOrElementType(IterationUse.Destructuring | IterationUse.PossiblyOutOfBounds, sourceType, undefinedType, node) || errorType;
-            let inBoundsType: Type | undefined = compilerOptions.noUncheckedIndexedAccess ? undefined: possiblyOutOfBoundsType;
+            let inBoundsType: Type | undefined = getFileLocalCompilerOption(getSourceFileOfNode(node), compilerOptions, "noUncheckedIndexedAccess") ? undefined: possiblyOutOfBoundsType;
             for (let i = 0; i < elements.length; i++) {
                 let type = possiblyOutOfBoundsType;
                 if (node.elements[i].kind === SyntaxKind.SpreadElement) {
@@ -34477,7 +34484,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
             if (!type) {
                 type = anyType;
                 addLazyDiagnostic(() => {
-                    if (noImplicitAny && !expressionResultIsUnused(node)) {
+                    if (noImplicitAny(node) && !expressionResultIsUnused(node)) {
                         const contextualType = getContextualType(node);
                         if (!contextualType || isTypeAny(contextualType)) {
                             error(node, Diagnostics.yield_expression_implicitly_results_in_an_any_type_because_its_containing_generator_lacks_a_return_type_annotation);
@@ -35336,7 +35343,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
             function checkSignatureDeclarationDiagnostics() {
                 checkCollisionWithArgumentsInGeneratedCode(node);
                 const returnTypeNode = getEffectiveReturnTypeNode(node);
-                if (noImplicitAny && !returnTypeNode) {
+                if (noImplicitAny(node) && !returnTypeNode) {
                     switch (node.kind) {
                         case SyntaxKind.ConstructSignature:
                             error(node, Diagnostics.Construct_signature_which_lacks_return_type_annotation_implicitly_has_an_any_return_type);
@@ -38526,7 +38533,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
 
             const uplevelIteration = languageVersion >= ScriptTarget.ES2015;
             const downlevelIteration = !uplevelIteration && compilerOptions.downlevelIteration;
-            const possibleOutOfBounds = compilerOptions.noUncheckedIndexedAccess && !!(use & IterationUse.PossiblyOutOfBounds);
+            const possibleOutOfBounds = getFileLocalCompilerOption(getSourceFileOfNode(errorNode), compilerOptions, "noUncheckedIndexedAccess") && !!(use & IterationUse.PossiblyOutOfBounds);
 
             // Get the iterated type of an `Iterable<T>` or `IterableIterator<T>` only in ES2015
             // or higher, when inside of an async generator or for-await-if, or when
@@ -38548,7 +38555,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                     }
                 }
                 if (iterationTypes || uplevelIteration) {
-                    return possibleOutOfBounds ? includeUndefinedInIndexSignature(iterationTypes && iterationTypes.yieldType) : (iterationTypes && iterationTypes.yieldType);
+                    return possibleOutOfBounds ? includeUndefinedInIndexSignature(iterationTypes && iterationTypes.yieldType, inputType) : (iterationTypes && iterationTypes.yieldType);
                 }
             }
 
@@ -38585,7 +38592,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                     // Now that we've removed all the StringLike types, if no constituents remain, then the entire
                     // arrayOrStringType was a string.
                     if (arrayType.flags & TypeFlags.Never) {
-                        return possibleOutOfBounds ? includeUndefinedInIndexSignature(stringType) : stringType;
+                        return possibleOutOfBounds ? includeUndefinedInIndexSignature(stringType, globalStringType) : stringType;
                     }
                 }
             }
@@ -38605,20 +38612,20 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                         defaultDiagnostic,
                         typeToString(arrayType));
                 }
-                return hasStringConstituent ? possibleOutOfBounds ? includeUndefinedInIndexSignature(stringType) : stringType : undefined;
+                return hasStringConstituent ? possibleOutOfBounds ? includeUndefinedInIndexSignature(stringType, globalStringType) : stringType : undefined;
             }
 
             const arrayElementType = getIndexTypeOfType(arrayType, numberType);
             if (hasStringConstituent && arrayElementType) {
                 // This is just an optimization for the case where arrayOrStringType is string | string[]
-                if (arrayElementType.flags & TypeFlags.StringLike && !compilerOptions.noUncheckedIndexedAccess) {
+                if (arrayElementType.flags & TypeFlags.StringLike && !getFileLocalCompilerOption(getSourceFileOfNode(errorNode), compilerOptions, "noUncheckedIndexedAccess")) {
                     return stringType;
                 }
 
                 return getUnionType(possibleOutOfBounds ? [arrayElementType, stringType, undefinedType] : [arrayElementType, stringType], UnionReduction.Subtype);
             }
 
-            return (use & IterationUse.PossiblyOutOfBounds) ? includeUndefinedInIndexSignature(arrayElementType) : arrayElementType;
+            return (use & IterationUse.PossiblyOutOfBounds) ? includeUndefinedInIndexSignature(arrayElementType, arrayType) : arrayElementType;
 
             function getIterationDiagnosticDetails(allowsStrings: boolean, downlevelIteration: boolean | undefined): [error: DiagnosticMessage, maybeMissingAwait: boolean] {
                 if (downlevelIteration) {
@@ -39315,7 +39322,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                     }
                 }
             }
-            else if (container.kind !== SyntaxKind.Constructor && compilerOptions.noImplicitReturns && !isUnwrappedReturnTypeVoidOrAny(container, returnType)) {
+            else if (container.kind !== SyntaxKind.Constructor && getFileLocalCompilerOption(getSourceFileOfNode(node), compilerOptions, "noImplicitReturns") && !isUnwrappedReturnTypeVoidOrAny(container, returnType)) {
                 // The function has a return type, but the return statement doesn't have an expression.
                 error(node, Diagnostics.Not_all_code_paths_return_a_value);
             }
@@ -39364,7 +39371,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                     addLazyDiagnostic(createLazyCaseClauseDiagnostics(clause));
                 }
                 forEach(clause.statements, checkSourceElement);
-                if (compilerOptions.noFallthroughCasesInSwitch && clause.fallthroughFlowNode && isReachableFlowNode(clause.fallthroughFlowNode)) {
+                if (getFileLocalCompilerOption(getSourceFileOfNode(clause), compilerOptions, "noFallthroughCasesInSwitch") && clause.fallthroughFlowNode && isReachableFlowNode(clause.fallthroughFlowNode)) {
                     error(clause, Diagnostics.Fallthrough_case_in_switch);
                 }
 
@@ -39977,7 +39984,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
         ): MemberOverrideStatus {
             const isJs = isInJSFile(node);
             const nodeInAmbientContext = !!(node.flags & NodeFlags.Ambient);
-            if (baseWithThis && (memberHasOverrideModifier || compilerOptions.noImplicitOverride)) {
+            if (baseWithThis && (memberHasOverrideModifier || getFileLocalCompilerOption(getSourceFileOfNode(node), compilerOptions, "noImplicitOverride"))) {
                 const memberEscapedName = escapeLeadingUnderscores(memberName);
                 const thisType = memberIsStatic ? staticType : typeWithThis;
                 const baseType = memberIsStatic ? baseStaticType : baseWithThis;
@@ -40005,7 +40012,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                     }
                     return MemberOverrideStatus.HasInvalidOverride;
                 }
-                else if (prop && baseProp?.declarations && compilerOptions.noImplicitOverride && !nodeInAmbientContext) {
+                else if (prop && baseProp?.declarations && getFileLocalCompilerOption(getSourceFileOfNode(node), compilerOptions, "noImplicitOverride") && !nodeInAmbientContext) {
                     const baseHasAbstract = some(baseProp.declarations, hasAbstractModifier);
                     if (memberHasOverrideModifier) {
                         return MemberOverrideStatus.Ok;
@@ -40354,7 +40361,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
         }
 
         function checkPropertyInitialization(node: ClassLikeDeclaration) {
-            if (!strictNullChecks || !strictPropertyInitialization || node.flags & NodeFlags.Ambient) {
+            if (!strictNullChecks || !strictPropertyInitialization(getSourceFileOfNode(node)) || node.flags & NodeFlags.Ambient) {
                 return;
             }
             const constructor = findConstructorDeclaration(node);
@@ -41860,15 +41867,15 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
             tracing?.pop();
         }
 
-        function unusedIsError(kind: UnusedKind, isAmbient: boolean): boolean {
+        function unusedIsError(kind: UnusedKind, isAmbient: boolean, file: SourceFile): boolean {
             if (isAmbient) {
                 return false;
             }
             switch (kind) {
                 case UnusedKind.Local:
-                    return !!compilerOptions.noUnusedLocals;
+                    return !!getFileLocalCompilerOption(file, compilerOptions, "noUnusedLocals");
                 case UnusedKind.Parameter:
-                    return !!compilerOptions.noUnusedParameters;
+                    return !!getFileLocalCompilerOption(file, compilerOptions, "noUnusedParameters");
                 default:
                     return Debug.assertNever(kind);
             }
@@ -41906,9 +41913,9 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
 
                 addLazyDiagnostic(() => {
                     // This relies on the results of other lazy diagnostics, so must be computed after them
-                    if (!node.isDeclarationFile && (compilerOptions.noUnusedLocals || compilerOptions.noUnusedParameters)) {
+                    if (!node.isDeclarationFile && (getFileLocalCompilerOption(node, compilerOptions, "noUnusedLocals") || getFileLocalCompilerOption(node, compilerOptions, "noUnusedParameters"))) {
                         checkUnusedIdentifiers(getPotentiallyUnusedIdentifiers(node), (containingNode, kind, diag) => {
-                            if (!containsParseError(containingNode) && unusedIsError(kind, !!(containingNode.flags & NodeFlags.Ambient))) {
+                            if (!containsParseError(containingNode) && unusedIsError(kind, !!(containingNode.flags & NodeFlags.Ambient), node)) {
                                 diagnostics.add(diag);
                             }
                         });
@@ -42746,8 +42753,9 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
         function getAugmentedPropertiesOfType(type: Type): Symbol[] {
             type = getApparentType(type);
             const propsByName = createSymbolTable(getPropertiesOfType(type));
-            const functionType = getSignaturesOfType(type, SignatureKind.Call).length ? globalCallableFunctionType :
-                getSignaturesOfType(type, SignatureKind.Construct).length ? globalNewableFunctionType :
+            const file = type.symbol?.valueDeclaration && getSourceFileOfNode(type.symbol.valueDeclaration);
+            const functionType = getSignaturesOfType(type, SignatureKind.Call).length ? globalCallableFunctionType(file) :
+                getSignaturesOfType(type, SignatureKind.Construct).length ? globalNewableFunctionType(file) :
                 undefined;
             if (functionType) {
                 forEach(getPropertiesOfType(functionType), p => {
@@ -43662,8 +43670,8 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
             globalArrayType = getGlobalType("Array" as __String, /*arity*/ 1, /*reportErrors*/ true);
             globalObjectType = getGlobalType("Object" as __String, /*arity*/ 0, /*reportErrors*/ true);
             globalFunctionType = getGlobalType("Function" as __String, /*arity*/ 0, /*reportErrors*/ true);
-            globalCallableFunctionType = strictBindCallApply && getGlobalType("CallableFunction" as __String, /*arity*/ 0, /*reportErrors*/ true) || globalFunctionType;
-            globalNewableFunctionType = strictBindCallApply && getGlobalType("NewableFunction" as __String, /*arity*/ 0, /*reportErrors*/ true) || globalFunctionType;
+            globalCallableFunctionType = (file: SourceFile | undefined) => strictBindCallApply(file) && getGlobalType("CallableFunction" as __String, /*arity*/ 0, /*reportErrors*/ true) || globalFunctionType;
+            globalNewableFunctionType = (file: SourceFile | undefined) => strictBindCallApply(file) && getGlobalType("NewableFunction" as __String, /*arity*/ 0, /*reportErrors*/ true) || globalFunctionType;
             globalStringType = getGlobalType("String" as __String, /*arity*/ 0, /*reportErrors*/ true);
             globalNumberType = getGlobalType("Number" as __String, /*arity*/ 0, /*reportErrors*/ true);
             globalBooleanType = getGlobalType("Boolean" as __String, /*arity*/ 0, /*reportErrors*/ true);
