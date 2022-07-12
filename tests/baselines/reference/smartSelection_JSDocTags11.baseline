@@ -1,40 +1,83 @@
 const x = 1;
 type Foo = {
   /** comment */
-  /**/status: number;
+  /**/readonly status: number;
 };
 
 
-  status         
+  readonly                
 
 
-  status: number 
+  readonly status         
 
 
-  status: number;
+  readonly status: number;
 
 
   /** comment */
-  status: number;
+  readonly status: number;
 
 
             ↲
 ••/** comment */
-  status: number;↲
+  readonly status: number;↲
 
 
            {
   /** comment */
-  status: number;
+  readonly status: number;
 } 
 
 type Foo = {
   /** comment */
-  status: number;
+  readonly status: number;
 };
 
 const x = 1;
 type Foo = {
   /** comment */
-  status: number;
+  readonly status: number;
+};
+
+================================================================================
+
+const x = 1;
+type Foo = {
+  /** comment */
+  readonly /**/status: number;
+};
+
+
+           status         
+
+
+  readonly status         
+
+
+  readonly status: number;
+
+
+  /** comment */
+  readonly status: number;
+
+
+            ↲
+••/** comment */
+  readonly status: number;↲
+
+
+           {
+  /** comment */
+  readonly status: number;
+} 
+
+type Foo = {
+  /** comment */
+  readonly status: number;
+};
+
+const x = 1;
+type Foo = {
+  /** comment */
+  readonly status: number;
 };
