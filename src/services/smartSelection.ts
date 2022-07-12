@@ -195,7 +195,10 @@ namespace ts.SmartSelectionRange {
         if (isPropertySignature(node)) {
             const children = groupChildren(node.getChildren(), child =>
                 child === node.name || contains(node.modifiers, child));
-            return splitChildren(children, ({ kind }) => kind === SyntaxKind.ColonToken || kind === SyntaxKind.JSDoc);
+            const firstJSDocChild = children[0]?.kind === SyntaxKind.JSDoc ? children[0] : undefined;
+            const withJSDocSeparated = firstJSDocChild? children.slice(1) : children;
+            const splittedChildren = splitChildren(withJSDocSeparated, ({ kind }) => kind === SyntaxKind.ColonToken);
+            return firstJSDocChild? [firstJSDocChild, createSyntaxList(splittedChildren)] : splittedChildren;
         }
 
         // Group the parameter name with its `...`, then that group with its `?`, then pivot on `=`.
