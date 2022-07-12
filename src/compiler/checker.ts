@@ -3101,11 +3101,6 @@ namespace ts {
             return getNodeLinks(expression).resolvedSymbol;
         }
 
-        function getTargetOfPropertyAssignment(node: PropertyAssignment, dontRecursivelyResolve: boolean): Symbol | undefined {
-            const expression = node.initializer;
-            return getTargetOfAliasLikeExpression(expression, dontRecursivelyResolve);
-        }
-
         function getTargetOfAccessExpression(node: AccessExpression, dontRecursivelyResolve: boolean): Symbol | undefined {
             if (!(isBinaryExpression(node.parent) && node.parent.left === node && node.parent.operatorToken.kind === SyntaxKind.EqualsToken)) {
                 return undefined;
@@ -3138,7 +3133,7 @@ namespace ts {
                 case SyntaxKind.ShorthandPropertyAssignment:
                     return resolveEntityName((node as ShorthandPropertyAssignment).name, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace, /*ignoreErrors*/ true, dontRecursivelyResolve);
                 case SyntaxKind.PropertyAssignment:
-                    return getTargetOfPropertyAssignment(node as PropertyAssignment, dontRecursivelyResolve);
+                    return getTargetOfAliasLikeExpression((node as PropertyAssignment).initializer, dontRecursivelyResolve);
                 case SyntaxKind.ElementAccessExpression:
                 case SyntaxKind.PropertyAccessExpression:
                     return getTargetOfAccessExpression(node as AccessExpression, dontRecursivelyResolve);
@@ -9348,7 +9343,7 @@ namespace ts {
                 }
                 (resolvedSymbol || symbol).exports!.forEach((s, name) => {
                     const exportedMember = members.get(name)!;
-                    if (exportedMember && exportedMember !== s) {
+                    if (exportedMember && exportedMember !== s && !(s.flags & SymbolFlags.Alias)) {
                         if (s.flags & SymbolFlags.Value && exportedMember.flags & SymbolFlags.Value) {
                             // If the member has an additional value-like declaration, union the types from the two declarations,
                             // but issue an error if they occurred in two different files. The purpose is to support a JS file with

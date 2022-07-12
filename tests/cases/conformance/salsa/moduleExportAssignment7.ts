@@ -12,7 +12,8 @@ module.exports = {
     AnotherThing,
     foo,
     qux: bar,
-    baz() { return 5 }
+    baz() { return 5 },
+    literal: "",
 }
 // @Filename: main.js
 /**
@@ -22,9 +23,10 @@ module.exports = {
  * @param {import("./mod").qux} d
  * @param {import("./mod").baz} e
  * @param {import("./mod").buz} f
+ * @param {import("./mod").literal} g
  */
-function jstypes(a, b, c, d, e, f) {
-    return a.x + b.y + c() + d() + e() + f()
+function jstypes(a, b, c, d, e, f, g) {
+    return a.x + b.y + c() + d() + e() + f() + g.length
 }
 
 /**
@@ -34,9 +36,10 @@ function jstypes(a, b, c, d, e, f) {
  * @param {typeof import("./mod").qux} d
  * @param {typeof import("./mod").baz} e
  * @param {typeof import("./mod").buz} f
+ * @param {typeof import("./mod").literal} g
  */
-function jsvalues(a, b, c, d, e, f) {
-    return a.length + b.length + c() + d() + e() + f()
+function jsvalues(a, b, c, d, e, f, g) {
+    return a.length + b.length + c() + d() + e() + f() + g.length
 }
 
 // @Filename: index.ts
@@ -48,8 +51,9 @@ function types(
     d: import('./mod').qux,
     e: import('./mod').baz,
     f: import('./mod').buz,
+    g: import('./mod').literal,
 ) {
-    return a.x + b.y + c() + d() + e() + f()
+    return a.x + b.y + c() + d() + e() + f() + g.length
 }
 
 function values(
@@ -59,6 +63,7 @@ function values(
     d: typeof import('./mod').qux,
     e: typeof import('./mod').baz,
     f: typeof import('./mod').buz,
+    g: typeof import('./mod').literal,
 ) {
-    return a.length + b.length + c() + d() + e() + f()
+    return a.length + b.length + c() + d() + e() + f() + g.length
 }

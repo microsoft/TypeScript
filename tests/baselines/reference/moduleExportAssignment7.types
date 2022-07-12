@@ -19,11 +19,11 @@ function bar() { return 4 }
 
 /** @typedef {() => number} buz */
 module.exports = {
->module.exports = {    Thing,    AnotherThing,    foo,    qux: bar,    baz() { return 5 }} : { Thing: typeof Thing; AnotherThing: typeof AnotherThing; foo: () => number; qux: () => number; baz(): number; }
->module.exports : { Thing: typeof Thing; AnotherThing: typeof AnotherThing; foo: () => number; qux: () => number; baz(): number; }
->module : { exports: { Thing: typeof Thing; AnotherThing: typeof AnotherThing; foo: () => number; qux: () => number; baz(): number; }; }
->exports : { Thing: typeof Thing; AnotherThing: typeof AnotherThing; foo: () => number; qux: () => number; baz(): number; }
->{    Thing,    AnotherThing,    foo,    qux: bar,    baz() { return 5 }} : { Thing: typeof Thing; AnotherThing: typeof AnotherThing; foo: () => number; qux: () => number; baz(): number; }
+>module.exports = {    Thing,    AnotherThing,    foo,    qux: bar,    baz() { return 5 },    literal: "",} : { Thing: typeof Thing; AnotherThing: typeof AnotherThing; foo: () => number; qux: () => number; baz(): number; literal: string; }
+>module.exports : { Thing: typeof Thing; AnotherThing: typeof AnotherThing; foo: () => number; qux: () => number; baz(): number; literal: string; }
+>module : { exports: { Thing: typeof Thing; AnotherThing: typeof AnotherThing; foo: () => number; qux: () => number; baz(): number; literal: string; }; }
+>exports : { Thing: typeof Thing; AnotherThing: typeof AnotherThing; foo: () => number; qux: () => number; baz(): number; literal: string; }
+>{    Thing,    AnotherThing,    foo,    qux: bar,    baz() { return 5 },    literal: "",} : { Thing: typeof Thing; AnotherThing: typeof AnotherThing; foo: () => number; qux: () => number; baz(): number; literal: string; }
 
     Thing,
 >Thing : typeof Thing
@@ -38,9 +38,13 @@ module.exports = {
 >qux : () => number
 >bar : () => number
 
-    baz() { return 5 }
+    baz() { return 5 },
 >baz : () => number
 >5 : 5
+
+    literal: "",
+>literal : string
+>"" : ""
 }
 === tests/cases/conformance/salsa/main.js ===
 /**
@@ -50,27 +54,30 @@ module.exports = {
  * @param {import("./mod").qux} d
  * @param {import("./mod").baz} e
  * @param {import("./mod").buz} f
+ * @param {import("./mod").literal} g
  */
-function jstypes(a, b, c, d, e, f) {
->jstypes : (a: Thing, b: AnotherThing, c: () => number, d: () => number, e: () => number, f: import("./mod").buz) => number
->a : Thing
->b : AnotherThing
+function jstypes(a, b, c, d, e, f, g) {
+>jstypes : (a: import("./mod").Thing, b: import("./mod").AnotherThing, c: () => number, d: () => number, e: () => number, f: import("./mod").buz, g: string) => number
+>a : import("tests/cases/conformance/salsa/mod").Thing
+>b : import("tests/cases/conformance/salsa/mod").AnotherThing
 >c : () => number
 >d : () => number
 >e : () => number
 >f : import("tests/cases/conformance/salsa/mod").buz
+>g : string
 
-    return a.x + b.y + c() + d() + e() + f()
+    return a.x + b.y + c() + d() + e() + f() + g.length
+>a.x + b.y + c() + d() + e() + f() + g.length : number
 >a.x + b.y + c() + d() + e() + f() : number
 >a.x + b.y + c() + d() + e() : number
 >a.x + b.y + c() + d() : number
 >a.x + b.y + c() : number
 >a.x + b.y : number
 >a.x : number
->a : Thing
+>a : import("tests/cases/conformance/salsa/mod").Thing
 >x : number
 >b.y : number
->b : AnotherThing
+>b : import("tests/cases/conformance/salsa/mod").AnotherThing
 >y : number
 >c() : number
 >c : () => number
@@ -80,6 +87,9 @@ function jstypes(a, b, c, d, e, f) {
 >e : () => number
 >f() : number
 >f : import("tests/cases/conformance/salsa/mod").buz
+>g.length : number
+>g : string
+>length : number
 }
 
 /**
@@ -89,27 +99,30 @@ function jstypes(a, b, c, d, e, f) {
  * @param {typeof import("./mod").qux} d
  * @param {typeof import("./mod").baz} e
  * @param {typeof import("./mod").buz} f
+ * @param {typeof import("./mod").literal} g
  */
-function jsvalues(a, b, c, d, e, f) {
->jsvalues : (a: typeof import("./mod").Thing, b: typeof import("./mod").AnotherThing, c: typeof import("./mod").foo, d: typeof import("./mod").qux, e: typeof import("./mod").baz, f: any) => any
->a : typeof Thing
->b : typeof AnotherThing
+function jsvalues(a, b, c, d, e, f, g) {
+>jsvalues : (a: typeof import("./mod").Thing, b: typeof import("./mod").AnotherThing, c: typeof import("./mod").foo, d: typeof import("./mod").qux, e: typeof import("./mod").baz, f: any, g: typeof import("./mod").literal) => any
+>a : typeof import("tests/cases/conformance/salsa/mod").Thing
+>b : typeof import("tests/cases/conformance/salsa/mod").AnotherThing
 >c : () => number
 >d : () => number
 >e : () => number
 >f : any
+>g : string
 
-    return a.length + b.length + c() + d() + e() + f()
+    return a.length + b.length + c() + d() + e() + f() + g.length
+>a.length + b.length + c() + d() + e() + f() + g.length : any
 >a.length + b.length + c() + d() + e() + f() : any
 >a.length + b.length + c() + d() + e() : number
 >a.length + b.length + c() + d() : number
 >a.length + b.length + c() : number
 >a.length + b.length : number
 >a.length : number
->a : typeof Thing
+>a : typeof import("tests/cases/conformance/salsa/mod").Thing
 >length : number
 >b.length : number
->b : typeof AnotherThing
+>b : typeof import("tests/cases/conformance/salsa/mod").AnotherThing
 >length : number
 >c() : number
 >c : () => number
@@ -119,17 +132,20 @@ function jsvalues(a, b, c, d, e, f) {
 >e : () => number
 >f() : any
 >f : any
+>g.length : number
+>g : string
+>length : number
 }
 
 === tests/cases/conformance/salsa/index.ts ===
 function types(
->types : (a: any, b: any, c: any, d: any, e: any, f: import('./mod').buz) => any
+>types : (a: import('./mod').Thing, b: import('./mod').AnotherThing, c: any, d: any, e: any, f: import('./mod').buz, g: any) => any
 
     a: import('./mod').Thing,
->a : any
+>a : import("tests/cases/conformance/salsa/mod").Thing
 
     b: import('./mod').AnotherThing,
->b : any
+>b : import("tests/cases/conformance/salsa/mod").AnotherThing
 
     c: import('./mod').foo,
 >c : any
@@ -143,19 +159,23 @@ function types(
     f: import('./mod').buz,
 >f : import("tests/cases/conformance/salsa/mod").buz
 
+    g: import('./mod').literal,
+>g : any
+
 ) {
-    return a.x + b.y + c() + d() + e() + f()
+    return a.x + b.y + c() + d() + e() + f() + g.length
+>a.x + b.y + c() + d() + e() + f() + g.length : any
 >a.x + b.y + c() + d() + e() + f() : any
 >a.x + b.y + c() + d() + e() : any
 >a.x + b.y + c() + d() : any
 >a.x + b.y + c() : any
->a.x + b.y : any
->a.x : any
->a : any
->x : any
->b.y : any
->b : any
->y : any
+>a.x + b.y : number
+>a.x : number
+>a : import("tests/cases/conformance/salsa/mod").Thing
+>x : number
+>b.y : number
+>b : import("tests/cases/conformance/salsa/mod").AnotherThing
+>y : number
 >c() : any
 >c : any
 >d() : any
@@ -164,17 +184,20 @@ function types(
 >e : any
 >f() : number
 >f : import("tests/cases/conformance/salsa/mod").buz
+>g.length : any
+>g : any
+>length : any
 }
 
 function values(
->values : (a: typeof import('./mod').Thing, b: typeof import('./mod').AnotherThing, c: typeof import('./mod').foo, d: typeof import('./mod').qux, e: typeof import('./mod').baz, f: any) => any
+>values : (a: typeof import('./mod').Thing, b: typeof import('./mod').AnotherThing, c: typeof import('./mod').foo, d: typeof import('./mod').qux, e: typeof import('./mod').baz, f: any, g: typeof import('./mod').literal) => any
 
     a: typeof import('./mod').Thing,
->a : typeof Thing
+>a : typeof import("tests/cases/conformance/salsa/mod").Thing
 >Thing : any
 
     b: typeof import('./mod').AnotherThing,
->b : typeof AnotherThing
+>b : typeof import("tests/cases/conformance/salsa/mod").AnotherThing
 >AnotherThing : any
 
     c: typeof import('./mod').foo,
@@ -193,18 +216,23 @@ function values(
 >f : any
 >buz : any
 
+    g: typeof import('./mod').literal,
+>g : string
+>literal : any
+
 ) {
-    return a.length + b.length + c() + d() + e() + f()
+    return a.length + b.length + c() + d() + e() + f() + g.length
+>a.length + b.length + c() + d() + e() + f() + g.length : any
 >a.length + b.length + c() + d() + e() + f() : any
 >a.length + b.length + c() + d() + e() : number
 >a.length + b.length + c() + d() : number
 >a.length + b.length + c() : number
 >a.length + b.length : number
 >a.length : number
->a : typeof Thing
+>a : typeof import("tests/cases/conformance/salsa/mod").Thing
 >length : number
 >b.length : number
->b : typeof AnotherThing
+>b : typeof import("tests/cases/conformance/salsa/mod").AnotherThing
 >length : number
 >c() : number
 >c : () => number
@@ -214,5 +242,8 @@ function values(
 >e : () => number
 >f() : any
 >f : any
+>g.length : number
+>g : string
+>length : number
 }
 

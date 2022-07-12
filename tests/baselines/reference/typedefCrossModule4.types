@@ -4,10 +4,10 @@ class Bar { }
 >Bar : Bar
 
 module.exports = { Foo: Bar };
->module.exports = { Foo: Bar } : { Foo: typeof Bar; }
->module.exports : { Foo: typeof Bar; }
->module : { exports: { Foo: typeof Bar; }; }
->exports : { Foo: typeof Bar; }
+>module.exports = { Foo: Bar } : typeof module.exports
+>module.exports : typeof module.exports
+>module : { exports: typeof module.exports; }
+>exports : typeof module.exports
 >{ Foo: Bar } : { Foo: typeof Bar; }
 >Foo : typeof Bar
 >Bar : typeof Bar

@@ -2893,9 +2893,12 @@ namespace ts {
                 return;
             }
 
-            if (isObjectLiteralExpression(assignedExpression) && every(assignedExpression.properties, isShorthandPropertyAssignment)) {
-                forEach(assignedExpression.properties, bindExportAssignedObjectMemberAlias);
-                return;
+            if (isObjectLiteralExpression(assignedExpression)) {
+                forEach(assignedExpression.properties, bindExportAssignedObjectMemberAlias)
+                if (every(assignedExpression.properties, isAliasablePropertyAssignment)) {
+                    // If every property in the object literal is aliased, skip binding the object literal; it won't be used.
+                    return;
+                }
             }
 
             // 'module.exports = expr' assignment
@@ -2906,8 +2909,18 @@ namespace ts {
             setValueDeclaration(symbol, node);
         }
 
-        function bindExportAssignedObjectMemberAlias(node: ShorthandPropertyAssignment) {
-            declareSymbol(file.symbol.exports!, file.symbol, node, SymbolFlags.Alias | SymbolFlags.Assignment, SymbolFlags.None);
+        /**
+         * Note that constructor functions are not considered aliasable in the binder, but are in the checker -- because identifying
+         * a constructor function requires a complete binding, because property declarations are non-local.
+         */
+        function isAliasablePropertyAssignment(p: ObjectLiteralElementLike) {
+            return isShorthandPropertyAssignment(p) || isPropertyAssignment(p) && isAliasableExpression(p.initializer);
+        }
+
+        function bindExportAssignedObjectMemberAlias(node: ObjectLiteralElementLike) {
+            if (isAliasablePropertyAssignment(node)) {
+                declareSymbol(file.symbol.exports!, file.symbol, node, SymbolFlags.Alias | SymbolFlags.Assignment, SymbolFlags.None);
+            }
         }
 
         function bindThisPropertyAssignment(node: BindablePropertyAssignmentExpression | PropertyAccessExpression | LiteralLikeElementAccessExpression) {
