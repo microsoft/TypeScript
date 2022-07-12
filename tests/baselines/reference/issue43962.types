@@ -50,11 +50,11 @@ declare function log(value: any): void;
 >value : any
 
 const result1 = createAndUnbox(() => thing.pipe(
->result1 : Thing<Box<never>>
->createAndUnbox(() => thing.pipe(    map((data) => box(data)),    tap((v) => log(v)),)) : Thing<Box<never>>
+>result1 : Thing<number>
+>createAndUnbox(() => thing.pipe(    map((data) => box(data)),    tap((v) => log(v)),)) : Thing<number>
 >createAndUnbox : <V>(factory: () => Thing<V | Box<V>>) => Thing<V>
->() => thing.pipe(    map((data) => box(data)),    tap((v) => log(v)),) : () => Thing<Box<never>>
->thing.pipe(    map((data) => box(data)),    tap((v) => log(v)),) : Thing<Box<never>>
+>() => thing.pipe(    map((data) => box(data)),    tap((v) => log(v)),) : () => Thing<Box<number>>
+>thing.pipe(    map((data) => box(data)),    tap((v) => log(v)),) : Thing<Box<number>>
 >thing.pipe : <A, B>(opA: Op<number, A>, opB: Op<A, B>) => Thing<B>
 >thing : Thing<number>
 >pipe : <A, B>(opA: Op<number, A>, opB: Op<A, B>) => Thing<B>
@@ -69,13 +69,13 @@ const result1 = createAndUnbox(() => thing.pipe(
 >data : number
 
     tap((v) => log(v)),
->tap((v) => log(v)) : Op<Box<never>, Box<never>>
+>tap((v) => log(v)) : Op<Box<number>, Box<number>>
 >tap : <T>(next: (value: T) => void) => Op<T, T>
->(v) => log(v) : (v: Box<never>) => void
->v : Box<never>
+>(v) => log(v) : (v: Box<number>) => void
+>v : Box<number>
 >log(v) : void
 >log : (value: any) => void
->v : Box<never>
+>v : Box<number>
 
 ));
 
