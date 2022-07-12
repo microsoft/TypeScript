@@ -830,3 +830,81 @@ function foo({
 
 }) {}
 
+// Repro from #49772
+
+function fa1(x: [true, number] | [false, string]) {
+>fa1 : Symbol(fa1, Decl(dependentDestructuredVariables.ts, 323, 5))
+>x : Symbol(x, Decl(dependentDestructuredVariables.ts, 327, 13))
+
+    const [guard, value] = x;
+>guard : Symbol(guard, Decl(dependentDestructuredVariables.ts, 328, 11))
+>value : Symbol(value, Decl(dependentDestructuredVariables.ts, 328, 17))
+>x : Symbol(x, Decl(dependentDestructuredVariables.ts, 327, 13))
+
+    if (guard) {
+>guard : Symbol(guard, Decl(dependentDestructuredVariables.ts, 328, 11))
+
+        for (;;) {
+            value;  // number
+>value : Symbol(value, Decl(dependentDestructuredVariables.ts, 328, 17))
+        }
+    }
+    else {
+        while (!!true) {
+            value;  // string
+>value : Symbol(value, Decl(dependentDestructuredVariables.ts, 328, 17))
+        }
+    }
+}
+
+function fa2(x: { guard: true, value: number } | { guard: false, value: string }) {
+>fa2 : Symbol(fa2, Decl(dependentDestructuredVariables.ts, 339, 1))
+>x : Symbol(x, Decl(dependentDestructuredVariables.ts, 341, 13))
+>guard : Symbol(guard, Decl(dependentDestructuredVariables.ts, 341, 17))
+>value : Symbol(value, Decl(dependentDestructuredVariables.ts, 341, 30))
+>guard : Symbol(guard, Decl(dependentDestructuredVariables.ts, 341, 50))
+>value : Symbol(value, Decl(dependentDestructuredVariables.ts, 341, 64))
+
+    const { guard, value } = x;
+>guard : Symbol(guard, Decl(dependentDestructuredVariables.ts, 342, 11))
+>value : Symbol(value, Decl(dependentDestructuredVariables.ts, 342, 18))
+>x : Symbol(x, Decl(dependentDestructuredVariables.ts, 341, 13))
+
+    if (guard) {
+>guard : Symbol(guard, Decl(dependentDestructuredVariables.ts, 342, 11))
+
+        for (;;) {
+            value;  // number
+>value : Symbol(value, Decl(dependentDestructuredVariables.ts, 342, 18))
+        }
+    }
+    else {
+        while (!!true) {
+            value;  // string
+>value : Symbol(value, Decl(dependentDestructuredVariables.ts, 342, 18))
+        }
+    }
+}
+
+const fa3: (...args: [true, number] | [false, string]) => void = (guard, value) => {
+>fa3 : Symbol(fa3, Decl(dependentDestructuredVariables.ts, 355, 5))
+>args : Symbol(args, Decl(dependentDestructuredVariables.ts, 355, 12))
+>guard : Symbol(guard, Decl(dependentDestructuredVariables.ts, 355, 66))
+>value : Symbol(value, Decl(dependentDestructuredVariables.ts, 355, 72))
+
+    if (guard) {
+>guard : Symbol(guard, Decl(dependentDestructuredVariables.ts, 355, 66))
+
+        for (;;) {
+            value;  // number
+>value : Symbol(value, Decl(dependentDestructuredVariables.ts, 355, 72))
+        }
+    }
+    else {
+        while (!!true) {
+            value;  // string
+>value : Symbol(value, Decl(dependentDestructuredVariables.ts, 355, 72))
+        }
+    }
+}
+

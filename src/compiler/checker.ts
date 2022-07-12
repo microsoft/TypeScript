@@ -340,23 +340,6 @@ namespace ts {
         const Symbol = objectAllocator.getSymbolConstructor();
         const Type = objectAllocator.getTypeConstructor();
         const Signature = objectAllocator.getSignatureConstructor();
-        type DebugType = Type & { __debugTypeToString(): string }; // eslint-disable-line @typescript-eslint/naming-convention
-        class DebugTypeMapper {
-            declare kind: TypeMapKind;
-            __debugToString(): string { // eslint-disable-line @typescript-eslint/naming-convention
-                Debug.type<TypeMapper>(this);
-                switch (this.kind) {
-                    case TypeMapKind.Function: return this.debugInfo?.() || "(function mapper)";
-                    case TypeMapKind.Simple: return `${(this.source as DebugType).__debugTypeToString()} -> ${(this.target as DebugType).__debugTypeToString()}`;
-                    case TypeMapKind.Array: return zipWith(this.sources, this.targets || map(this.sources, () => anyType), (s, t) => `${(s as DebugType).__debugTypeToString()} -> ${(t as DebugType).__debugTypeToString()}`).join(", ");
-                    case TypeMapKind.Deferred: return zipWith(this.sources, this.targets, (s, t) => `${(s as DebugType).__debugTypeToString()} -> ${(t() as DebugType).__debugTypeToString()}`).join(", ");
-                    case TypeMapKind.Merged:
-                    case TypeMapKind.Composite: return `m1: ${(this.mapper1 as unknown as DebugTypeMapper).__debugToString().split("\n").join("\n    ")}
-m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n").join("\n    ")}`;
-                    default: return Debug.assertNever(this);
-                }
-            }
-        }
 
         let typeCount = 0;
         let symbolCount = 0;
@@ -15312,20 +15295,24 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
          * type parameters in the union with a special never type that is treated as a literal in `getReducedType`, we can cause the `getReducedType` logic
          * to reduce the resulting type if possible (since only intersections with conflicting literal-typed properties are reducible).
          */
-        function isPossiblyReducibleByInstantiation(type: UnionType): boolean {
-            return some(type.types, t => {
-                const uniqueFilled = getUniqueLiteralFilledInstantiation(t);
-                return getReducedType(uniqueFilled) !== uniqueFilled;
-            });
+        function isPossiblyReducibleByInstantiation(type: Type): boolean {
+            const uniqueFilled = getUniqueLiteralFilledInstantiation(type);
+            return getReducedType(uniqueFilled) !== uniqueFilled;
+        }
+
+        function shouldDeferIndexType(type: Type) {
+            return !!(type.flags & TypeFlags.InstantiableNonPrimitive ||
+                isGenericTupleType(type) ||
+                isGenericMappedType(type) && !hasDistributiveNameType(type) ||
+                type.flags & TypeFlags.Union && some((type as UnionType).types, isPossiblyReducibleByInstantiation) ||
+                type.flags & TypeFlags.Intersection && maybeTypeOfKind(type, TypeFlags.Instantiable) && some((type as IntersectionType).types, isEmptyAnonymousObjectType));
         }
 
         function getIndexType(type: Type, stringsOnly = keyofStringsOnly, noIndexSignatures?: boolean): Type {
             type = getReducedType(type);
-            return type.flags & TypeFlags.Union ? isPossiblyReducibleByInstantiation(type as UnionType)
-                    ? getIndexTypeForGenericType(type as InstantiableType | UnionOrIntersectionType, stringsOnly)
-                    : getIntersectionType(map((type as UnionType).types, t => getIndexType(t, stringsOnly, noIndexSignatures))) :
+            return shouldDeferIndexType(type) ? getIndexTypeForGenericType(type as InstantiableType | UnionOrIntersectionType, stringsOnly) :
+                type.flags & TypeFlags.Union ? getIntersectionType(map((type as UnionType).types, t => getIndexType(t, stringsOnly, noIndexSignatures))) :
                 type.flags & TypeFlags.Intersection ? getUnionType(map((type as IntersectionType).types, t => getIndexType(t, stringsOnly, noIndexSignatures))) :
-                type.flags & TypeFlags.InstantiableNonPrimitive || isGenericTupleType(type) || isGenericMappedType(type) && !hasDistributiveNameType(type) ? getIndexTypeForGenericType(type as InstantiableType | UnionOrIntersectionType, stringsOnly) :
                 getObjectFlags(type) & ObjectFlags.Mapped ? getIndexTypeForMappedType(type as MappedType, stringsOnly, noIndexSignatures) :
                 type === wildcardType ? wildcardType :
                 type.flags & TypeFlags.Unknown ? neverType :
@@ -16880,31 +16867,24 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
             }
         }
 
-        function attachDebugPrototypeIfDebug(mapper: TypeMapper): TypeMapper {
-            if (Debug.isDebugging) {
-                return Object.setPrototypeOf(mapper, DebugTypeMapper.prototype);
-            }
-            return mapper;
-        }
-
         function makeUnaryTypeMapper(source: Type, target: Type): TypeMapper {
-            return attachDebugPrototypeIfDebug({ kind: TypeMapKind.Simple, source, target });
+            return Debug.attachDebugPrototypeIfDebug({ kind: TypeMapKind.Simple, source, target });
         }
 
         function makeArrayTypeMapper(sources: readonly TypeParameter[], targets: readonly Type[] | undefined): TypeMapper {
-            return attachDebugPrototypeIfDebug({ kind: TypeMapKind.Array, sources, targets });
+            return Debug.attachDebugPrototypeIfDebug({ kind: TypeMapKind.Array, sources, targets });
         }
 
         function makeFunctionTypeMapper(func: (t: Type) => Type, debugInfo: () => string): TypeMapper {
-            return attachDebugPrototypeIfDebug({ kind: TypeMapKind.Function, func, debugInfo: Debug.isDebugging ? debugInfo : undefined });
+            return Debug.attachDebugPrototypeIfDebug({ kind: TypeMapKind.Function, func, debugInfo: Debug.isDebugging ? debugInfo : undefined });
         }
 
         function makeDeferredTypeMapper(sources: readonly TypeParameter[], targets: (() => Type)[]) {
-            return attachDebugPrototypeIfDebug({ kind: TypeMapKind.Deferred, sources, targets });
+            return Debug.attachDebugPrototypeIfDebug({ kind: TypeMapKind.Deferred, sources, targets });
         }
 
         function makeCompositeTypeMapper(kind: TypeMapKind.Composite | TypeMapKind.Merged, mapper1: TypeMapper, mapper2: TypeMapper): TypeMapper {
-            return attachDebugPrototypeIfDebug({ kind, mapper1, mapper2 });
+            return Debug.attachDebugPrototypeIfDebug({ kind, mapper1, mapper2 });
         }
 
         function createTypeEraser(sources: readonly TypeParameter[]): TypeMapper {
@@ -23351,6 +23331,15 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                         const key = getFlowCacheKey((node as AccessExpression).expression, declaredType, initialType, flowContainer);
                         return key && key + "." + propName;
                     }
+                    break;
+                case SyntaxKind.ObjectBindingPattern:
+                case SyntaxKind.ArrayBindingPattern:
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.ArrowFunction:
+                case SyntaxKind.MethodDeclaration:
+                    // Handle pseudo-references originating in getNarrowedTypeOfSymbol.
+                    return `${getNodeId(node)}#${getTypeId(declaredType)}`;
             }
             return undefined;
         }

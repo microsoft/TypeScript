@@ -1,0 +1,117 @@
+type B = {};
+type A = {
+    a(/** Comment */ /**/p0: number, /** Comment */ p1: number, /** Comment */ p2: number): string;
+};
+
+
+                     p0                                                                        
+
+
+                     p0: number                                                                
+
+
+      /** Comment */ p0: number                                                                
+
+
+      /** Comment */ p0: number, /** Comment */ p1: number, /** Comment */ p2: number          
+
+
+    a(/** Comment */ p0: number, /** Comment */ p1: number, /** Comment */ p2: number): string;
+
+
+          ↲
+••••a(/** Comment */ p0: number, /** Comment */ p1: number, /** Comment */ p2: number): string;↲
+
+
+         {
+    a(/** Comment */ p0: number, /** Comment */ p1: number, /** Comment */ p2: number): string;
+} 
+
+type A = {
+    a(/** Comment */ p0: number, /** Comment */ p1: number, /** Comment */ p2: number): string;
+};
+
+type B = {};
+type A = {
+    a(/** Comment */ p0: number, /** Comment */ p1: number, /** Comment */ p2: number): string;
+};
+
+================================================================================
+
+type B = {};
+type A = {
+    a(/** Comment */ p0: number, /** Comment */ /**/p1: number, /** Comment */ p2: number): string;
+};
+
+
+                                                p1                                             
+
+
+                                                p1: number                                     
+
+
+                                 /** Comment */ p1: number                                     
+
+
+      /** Comment */ p0: number, /** Comment */ p1: number, /** Comment */ p2: number          
+
+
+    a(/** Comment */ p0: number, /** Comment */ p1: number, /** Comment */ p2: number): string;
+
+
+          ↲
+••••a(/** Comment */ p0: number, /** Comment */ p1: number, /** Comment */ p2: number): string;↲
+
+
+         {
+    a(/** Comment */ p0: number, /** Comment */ p1: number, /** Comment */ p2: number): string;
+} 
+
+type A = {
+    a(/** Comment */ p0: number, /** Comment */ p1: number, /** Comment */ p2: number): string;
+};
+
+type B = {};
+type A = {
+    a(/** Comment */ p0: number, /** Comment */ p1: number, /** Comment */ p2: number): string;
+};
+
+================================================================================
+
+type B = {};
+type A = {
+    a(/** Comment */ p0: number, /** Comment */ p1: number, /** Comment */ /**/p2: number): string;
+};
+
+
+                                                                           p2                  
+
+
+                                                                           p2: number          
+
+
+                                                            /** Comment */ p2: number          
+
+
+      /** Comment */ p0: number, /** Comment */ p1: number, /** Comment */ p2: number          
+
+
+    a(/** Comment */ p0: number, /** Comment */ p1: number, /** Comment */ p2: number): string;
+
+
+          ↲
+••••a(/** Comment */ p0: number, /** Comment */ p1: number, /** Comment */ p2: number): string;↲
+
+
+         {
+    a(/** Comment */ p0: number, /** Comment */ p1: number, /** Comment */ p2: number): string;
+} 
+
+type A = {
+    a(/** Comment */ p0: number, /** Comment */ p1: number, /** Comment */ p2: number): string;
+};
+
+type B = {};
+type A = {
+    a(/** Comment */ p0: number, /** Comment */ p1: number, /** Comment */ p2: number): string;
+};

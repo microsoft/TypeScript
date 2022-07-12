@@ -718,3 +718,87 @@ function foo<T>(x: T | null) {
     }
 }
 
+// We allow an unconstrained object of a generic type `T` to be indexed by a key of type `keyof T`
+// without a check that the object is non-undefined and non-null. This is safe because `keyof T`
+// is `never` (meaning no possible keys) for any `T` that includes `undefined` or `null`.
+
+function ff1<T>(t: T, k: keyof T) {
+>ff1 : <T>(t: T, k: keyof T) => void
+>t : T
+>k : keyof T
+
+    t[k];
+>t[k] : T[keyof T]
+>t : T
+>k : keyof T
+}
+
+function ff2<T>(t: T & {}, k: keyof T) {
+>ff2 : <T>(t: T & {}, k: keyof T) => void
+>t : T & {}
+>k : keyof T
+
+    t[k];
+>t[k] : (T & {})[keyof T]
+>t : T & {}
+>k : keyof T
+}
+
+function ff3<T>(t: T, k: keyof (T & {})) {
+>ff3 : <T>(t: T, k: keyof (T & {})) => void
+>t : T
+>k : keyof (T & {})
+
+    t[k];  // Error
+>t[k] : any
+>t : T
+>k : keyof (T & {})
+}
+
+function ff4<T>(t: T & {}, k: keyof (T & {})) {
+>ff4 : <T>(t: T & {}, k: keyof (T & {})) => void
+>t : T & {}
+>k : keyof (T & {})
+
+    t[k];
+>t[k] : (T & {})[keyof (T & {})]
+>t : T & {}
+>k : keyof (T & {})
+}
+
+ff1(null, 'foo');  // Error
+>ff1(null, 'foo') : void
+>ff1 : <T>(t: T, k: keyof T) => void
+>null : null
+>'foo' : "foo"
+
+ff2(null, 'foo');  // Error
+>ff2(null, 'foo') : void
+>ff2 : <T>(t: T & {}, k: keyof T) => void
+>null : null
+>'foo' : "foo"
+
+ff3(null, 'foo');
+>ff3(null, 'foo') : void
+>ff3 : <T>(t: T, k: keyof (T & {})) => void
+>null : null
+>'foo' : "foo"
+
+ff4(null, 'foo');  // Error
+>ff4(null, 'foo') : void
+>ff4 : <T>(t: T & {}, k: keyof (T & {})) => void
+>null : null
+>'foo' : "foo"
+
+// Repro from #49681
+
+type Foo = { [key: string]: unknown };
+>Foo : { [key: string]: unknown; }
+>key : string
+
+type NullableFoo = Foo | undefined;
+>NullableFoo : Foo | undefined
+
+type Bar<T extends NullableFoo> = NonNullable<T>[string];
+>Bar : Bar<T>
+
