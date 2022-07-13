@@ -359,7 +359,7 @@ namespace ts {
         const moduleKind = getEmitModuleKind(compilerOptions);
         const useDefineForClassFields = getUseDefineForClassFields(compilerOptions);
         const allowSyntheticDefaultImports = getAllowSyntheticDefaultImports(compilerOptions);
-        const strictNullChecks = getStrictOptionValue(/*file*/ undefined, compilerOptions, "strictNullChecks"); // TODO: file-local-ness
+        const strictNullChecks = (context: Node | undefined) => getStrictOptionValue(context && getSourceFileOfNode(context), compilerOptions, "strictNullChecks");
         const strictFunctionTypes = (file: SourceFile | undefined) => getStrictOptionValue(file, compilerOptions, "strictFunctionTypes");
         const strictBindCallApply = (file: SourceFile | undefined) => getStrictOptionValue(file, compilerOptions, "strictBindCallApply");
         const strictPropertyInitialization = (file: SourceFile) => getStrictOptionValue(file, compilerOptions, "strictPropertyInitialization");
@@ -633,8 +633,8 @@ namespace ts {
             getFalseType: (fresh?) => fresh ? falseType : regularFalseType,
             getTrueType: (fresh?) => fresh ? trueType : regularTrueType,
             getVoidType: () => voidType,
-            getUndefinedType: () => undefinedType,
-            getNullType: () => nullType,
+            getUndefinedType: (widening?: boolean) => widening ? undefinedWideningType : undefinedType,
+            getNullType: (widening?: boolean) => widening ? nullWideningType : nullType,
             getESSymbolType: () => esSymbolType,
             getNeverType: () => neverType,
             getOptionalType: () => optionalType,
@@ -793,12 +793,16 @@ namespace ts {
         const unknownType = createIntrinsicType(TypeFlags.Unknown, "unknown");
         const nonNullUnknownType = createIntrinsicType(TypeFlags.Unknown, "unknown");
         const undefinedType = createIntrinsicType(TypeFlags.Undefined, "undefined");
-        const undefinedWideningType = strictNullChecks ? undefinedType : createIntrinsicType(TypeFlags.Undefined, "undefined", ObjectFlags.ContainsWideningType);
+        const undefinedPermissiveType = createIntrinsicType(TypeFlags.Undefined, "undefined");
+        const undefinedWideningType = createIntrinsicType(TypeFlags.Undefined, "undefined", ObjectFlags.ContainsWideningType);
+        const getUndefinedWideningType = (context: Node | undefined) => strictNullChecks(context) ? undefinedType : undefinedWideningType;
         const optionalType = createIntrinsicType(TypeFlags.Undefined, "undefined");
         const missingType = createIntrinsicType(TypeFlags.Undefined, "undefined");
         const getMissingOrUndefinedType = (context: Node | undefined) => exactOptionalPropertyTypes(context) ? missingType : undefinedType;
         const nullType = createIntrinsicType(TypeFlags.Null, "null");
-        const nullWideningType = strictNullChecks ? nullType : createIntrinsicType(TypeFlags.Null, "null", ObjectFlags.ContainsWideningType);
+        const nullWideningType = createIntrinsicType(TypeFlags.Null, "null", ObjectFlags.ContainsWideningType);
+        const nullPermissiveType = createIntrinsicType(TypeFlags.Null, "null");
+        const getNullWideningType = (context: Node | undefined) => strictNullChecks(context) ? nullType : nullWideningType;
         const stringType = createIntrinsicType(TypeFlags.String, "string");
         const numberType = createIntrinsicType(TypeFlags.Number, "number");
         const bigintType = createIntrinsicType(TypeFlags.BigInt, "bigint");
@@ -855,7 +859,7 @@ namespace ts {
         emptyTypeLiteralSymbol.members = createSymbolTable();
         const emptyTypeLiteralType = createAnonymousType(emptyTypeLiteralSymbol, emptySymbols, emptyArray, emptyArray, emptyArray);
 
-        const unknownUnionType = strictNullChecks ? getUnionType([undefinedType, nullType, createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, emptyArray)]) : unknownType;
+        const unknownUnionType = getUnionType([undefinedType, nullType, createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, emptyArray)]);
 
         const emptyGenericType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, emptyArray) as ObjectType as GenericType;
         emptyGenericType.instantiations = new Map<string, TypeReference>();
@@ -6079,7 +6083,7 @@ namespace ts {
 
                 let parameterType = getTypeOfSymbol(parameterSymbol);
                 if (parameterDeclaration && isRequiredInitializedParameter(parameterDeclaration)) {
-                    parameterType = getOptionalType(parameterType);
+                    parameterType = getOptionalType(parameterType, context.enclosingDeclaration);
                 }
                 const parameterTypeNode = serializeTypeForDeclaration(context, parameterType, parameterSymbol, context.enclosingDeclaration, privateSymbolVisitor, bundledImports);
 
@@ -6742,7 +6746,7 @@ namespace ts {
                     return true;
                 }
                 if (isParameter(annotatedDeclaration) && annotatedDeclaration.questionToken) {
-                    return getTypeWithFacts(type, TypeFacts.NEUndefined) === typeFromTypeNode;
+                    return getTypeWithFacts(type, TypeFacts.NEUndefined, typeNode) === typeFromTypeNode;
                 }
                 return false;
             }
@@ -8875,9 +8879,9 @@ namespace ts {
             return !!(type.flags & TypeFlags.Instantiable) && maybeTypeOfKind(getBaseConstraintOfType(type) || unknownType, TypeFlags.Undefined);
         }
 
-        function getNonUndefinedType(type: Type) {
+        function getNonUndefinedType(type: Type, context: Node) {
             const typeOrConstraint = someType(type, isGenericTypeWithUndefinedConstraint) ? mapType(type, t => t.flags & TypeFlags.Instantiable ? getBaseConstraintOrType(t) : t) : type;
-            return getTypeWithFacts(typeOrConstraint, TypeFacts.NEUndefined);
+            return getTypeWithFacts(typeOrConstraint, TypeFacts.NEUndefined, context);
         }
 
         // Determine the control flow type associated with a destructuring declaration or assignment. The following
@@ -8958,19 +8962,19 @@ namespace ts {
             }
             const pattern = declaration.parent;
             // Relax null check on ambient destructuring parameters, since the parameters have no implementation and are just documentation
-            if (strictNullChecks && declaration.flags & NodeFlags.Ambient && isParameterDeclaration(declaration)) {
-                parentType = getNonNullableType(parentType);
+            if (strictNullChecks(declaration) && declaration.flags & NodeFlags.Ambient && isParameterDeclaration(declaration)) {
+                parentType = getNonNullableType(parentType, declaration);
             }
             // Filter `undefined` from the type we check against if the parent has an initializer and that initializer is not possibly `undefined`
-            else if (strictNullChecks && pattern.parent.initializer && !(getTypeFacts(getTypeOfInitializer(pattern.parent.initializer)) & TypeFacts.EQUndefined)) {
-                parentType = getTypeWithFacts(parentType, TypeFacts.NEUndefined);
+            else if (strictNullChecks(declaration) && pattern.parent.initializer && !(getTypeFacts(getTypeOfInitializer(pattern.parent.initializer), declaration) & TypeFacts.EQUndefined)) {
+                parentType = getTypeWithFacts(parentType, TypeFacts.NEUndefined, declaration);
             }
 
             let type: Type | undefined;
             if (pattern.kind === SyntaxKind.ObjectBindingPattern) {
                 if (declaration.dotDotDotToken) {
                     parentType = getReducedType(parentType);
-                    if (parentType.flags & TypeFlags.Unknown || !isValidSpreadType(parentType)) {
+                    if (parentType.flags & TypeFlags.Unknown || !isValidSpreadType(parentType, declaration)) {
                         error(declaration, Diagnostics.Rest_types_may_only_be_created_from_object_types);
                         return errorType;
                     }
@@ -9020,9 +9024,9 @@ namespace ts {
             if (getEffectiveTypeAnnotationNode(walkUpBindingElementsAndPatterns(declaration))) {
                 // In strict null checking mode, if a default value of a non-undefined type is specified, remove
                 // undefined from the final type.
-                return strictNullChecks && !(getTypeFacts(checkDeclarationInitializer(declaration, CheckMode.Normal)) & TypeFacts.IsUndefined) ? getNonUndefinedType(type) : type;
+                return strictNullChecks(declaration) && !(getTypeFacts(checkDeclarationInitializer(declaration, CheckMode.Normal), declaration) & TypeFacts.IsUndefined) ? getNonUndefinedType(type, declaration) : type;
             }
-            return widenTypeInferredFromInitializer(declaration, getUnionType([getNonUndefinedType(type), checkDeclarationInitializer(declaration, CheckMode.Normal)], UnionReduction.Subtype));
+            return widenTypeInferredFromInitializer(declaration, getUnionType([getNonUndefinedType(type, declaration), checkDeclarationInitializer(declaration, CheckMode.Normal)], UnionReduction.Subtype));
         }
 
         function getTypeForDeclarationFromJSDocComment(declaration: Node) {
@@ -9043,8 +9047,8 @@ namespace ts {
             return expr.kind === SyntaxKind.ArrayLiteralExpression && (expr as ArrayLiteralExpression).elements.length === 0;
         }
 
-        function addOptionality(type: Type, isProperty: Node | undefined = undefined, isOptional = true): Type {
-            return strictNullChecks && isOptional ? getOptionalType(type, isProperty) : type;
+        function addOptionality(type: Type, context: Node | undefined, isProperty = false, isOptional = true): Type {
+            return strictNullChecks(context) && isOptional ? getOptionalType(type, context, isProperty) : type;
         }
 
         // Return the inferred type for a variable, parameter, or property declaration
@@ -9056,7 +9060,7 @@ namespace ts {
             // A variable declared in a for..in statement is of type string, or of type keyof T when the
             // right hand expression is of a type parameter type.
             if (isVariableDeclaration(declaration) && declaration.parent.parent.kind === SyntaxKind.ForInStatement) {
-                const indexType = getIndexType(getNonNullableTypeIfNeeded(checkExpression(declaration.parent.parent.expression, /*checkMode*/ checkMode)));
+                const indexType = getIndexType(getNonNullableTypeIfNeeded(checkExpression(declaration.parent.parent.expression, /*checkMode*/ checkMode), declaration));
                 return indexType.flags & (TypeFlags.TypeParameter | TypeFlags.Index) ? getExtractStringType(indexType) : stringType;
             }
 
@@ -9082,7 +9086,7 @@ namespace ts {
             // Use type from type annotation if one is present
             const declaredType = tryGetTypeFromEffectiveTypeNode(declaration);
             if (declaredType) {
-                return addOptionality(declaredType, isProperty ? declaration : undefined, isOptional);
+                return addOptionality(declaredType, declaration, isProperty, isOptional);
             }
 
             if ((noImplicitAny(declaration) || isInJSFile(declaration)) &&
@@ -9122,7 +9126,7 @@ namespace ts {
                 // Use contextual parameter type if one is available
                 const type = declaration.symbol.escapedName === InternalSymbolName.This ? getContextualThisParameterType(func) : getContextuallyTypedParameterType(declaration);
                 if (type) {
-                    return addOptionality(type, /*isProperty*/ undefined, isOptional);
+                    return addOptionality(type, declaration, /*isProperty*/ undefined, isOptional);
                 }
             }
 
@@ -9136,7 +9140,7 @@ namespace ts {
                     }
                 }
                 const type = widenTypeInferredFromInitializer(declaration, checkDeclarationInitializer(declaration, checkMode));
-                return addOptionality(type, isProperty ? declaration : undefined, isOptional);
+                return addOptionality(type, declaration, isProperty, isOptional);
             }
 
             if (isPropertyDeclaration(declaration) && (noImplicitAny(declaration) || isInJSFile(declaration))) {
@@ -9147,14 +9151,14 @@ namespace ts {
                     const type = constructor ? getFlowTypeInConstructor(declaration.symbol, constructor) :
                         getEffectiveModifierFlags(declaration) & ModifierFlags.Ambient ? getTypeOfPropertyInBaseClass(declaration.symbol) :
                         undefined;
-                    return type && addOptionality(type, declaration, isOptional);
+                    return type && addOptionality(type, declaration, /*isProperty*/ true, isOptional);
                 }
                 else {
                     const staticBlocks = filter(declaration.parent.members, isClassStaticBlockDeclaration);
                     const type = staticBlocks.length ? getFlowTypeInStaticBlocks(declaration.symbol, staticBlocks) :
                         getEffectiveModifierFlags(declaration) & ModifierFlags.Ambient ? getTypeOfPropertyInBaseClass(declaration.symbol) :
                         undefined;
-                    return type && addOptionality(type, declaration, isOptional);
+                    return type && addOptionality(type, declaration, /*isProperty*/ true, isOptional);
                 }
             }
 
@@ -9244,7 +9248,7 @@ namespace ts {
                     error(symbol.valueDeclaration, Diagnostics.Member_0_implicitly_has_an_1_type, symbolToString(symbol), typeToString(flowType));
                 }
                 // We don't infer a type if assignments are only null or undefined.
-                if (everyType(flowType, isNullableType)) {
+                if (everyType(flowType, t => isNullableType(t, reference))) {
                     continue;
                 }
                 return convertAutoToAny(flowType);
@@ -9264,7 +9268,7 @@ namespace ts {
                 error(symbol.valueDeclaration, Diagnostics.Member_0_implicitly_has_an_1_type, symbolToString(symbol), typeToString(flowType));
             }
             // We don't infer a type if assignments are only null or undefined.
-            return everyType(flowType, isNullableType) ? undefined : convertAutoToAny(flowType);
+            return everyType(flowType, t => isNullableType(t, reference)) ? undefined : convertAutoToAny(flowType);
         }
 
         function getFlowTypeOfProperty(reference: Node, prop: Symbol | undefined) {
@@ -9343,7 +9347,7 @@ namespace ts {
                     type = getUnionType(sourceTypes!);
                 }
             }
-            const widened = getWidenedType(addOptionality(type, /*isProperty*/ undefined, definedInMethod && !definedInConstructor));
+            const widened = getWidenedType(addOptionality(type, container, /*isProperty*/ false, definedInMethod && !definedInConstructor));
             if (symbol.valueDeclaration && filterType(widened, t => !!(t.flags & ~TypeFlags.Nullable)) === neverType) {
                 reportImplicitAny(symbol.valueDeclaration, anyType);
                 return anyType;
@@ -9542,7 +9546,7 @@ namespace ts {
                 // contextual type or, if the element itself is a binding pattern, with the type implied by that binding
                 // pattern.
                 const contextualType = isBindingPattern(element.name) ? getTypeFromBindingPattern(element.name, /*includePatternInType*/ true, /*reportErrors*/ false) : unknownType;
-                return addOptionality(widenTypeInferredFromInitializer(element, checkDeclarationInitializer(element, CheckMode.Normal, contextualType)));
+                return addOptionality(widenTypeInferredFromInitializer(element, checkDeclarationInitializer(element, CheckMode.Normal, contextualType)), element, /*isProperty*/ true);
             }
             if (isBindingPattern(element.name)) {
                 return getTypeFromBindingPattern(element.name, includePatternInType, reportErrors);
@@ -9963,7 +9967,7 @@ namespace ts {
                 return baseTypeVariable ? getIntersectionType([type, baseTypeVariable]) : type;
             }
             else {
-                return strictNullChecks && symbol.flags & SymbolFlags.Optional ? getOptionalType(type) : type;
+                return strictNullChecks(declaration) && symbol.flags & SymbolFlags.Optional ? getOptionalType(type, declaration) : type;
             }
         }
 
@@ -11843,7 +11847,7 @@ namespace ts {
                             !(templateModifiers & MappedTypeModifiers.ExcludeOptional) && modifiersProp && modifiersProp.flags & SymbolFlags.Optional);
                         const isReadonly = !!(templateModifiers & MappedTypeModifiers.IncludeReadonly ||
                             !(templateModifiers & MappedTypeModifiers.ExcludeReadonly) && modifiersProp && isReadonlySymbol(modifiersProp));
-                        const stripOptional = strictNullChecks && !isOptional && modifiersProp && modifiersProp.flags & SymbolFlags.Optional;
+                        const stripOptional = strictNullChecks(type.declaration) && !isOptional && modifiersProp && modifiersProp.flags & SymbolFlags.Optional;
                         const lateFlag: CheckFlags = modifiersProp ? getIsLateCheckFlag(modifiersProp) : 0;
                         const prop = createSymbol(SymbolFlags.Property | (isOptional ? SymbolFlags.Optional : 0), propName,
                             lateFlag | CheckFlags.Mapped | (isReadonly ? CheckFlags.Readonly : 0) | (stripOptional ? CheckFlags.StripOptional : 0)) as MappedSymbol;
@@ -11883,7 +11887,7 @@ namespace ts {
                 // When creating an optional property in strictNullChecks mode, if 'undefined' isn't assignable to the
                 // type, we include 'undefined' in the type. Similarly, when creating a non-optional property in strictNullChecks
                 // mode, if the underlying property is optional we remove 'undefined' from the type.
-                let type = strictNullChecks && symbol.flags & SymbolFlags.Optional && !maybeTypeOfKind(propType, TypeFlags.Undefined | TypeFlags.Void) ? getOptionalType(propType, mappedType.declaration) :
+                let type = strictNullChecks(mappedType.declaration) && symbol.flags & SymbolFlags.Optional && !maybeTypeOfKind(propType, TypeFlags.Undefined | TypeFlags.Void) ? getOptionalType(propType, mappedType.declaration, /*isProperty*/ true) :
                     symbol.checkFlags & CheckFlags.StripOptional ? removeMissingOrUndefinedType(propType, mappedType.declaration) :
                     propType;
                 if (!popTypeResolution()) {
@@ -11914,7 +11918,7 @@ namespace ts {
         function getTemplateTypeFromMappedType(type: MappedType) {
             return type.templateType ||
                 (type.templateType = type.declaration.type ?
-                    instantiateType(addOptionality(getTypeFromTypeNode(type.declaration.type), type.declaration, !!(getMappedTypeModifiers(type) & MappedTypeModifiers.IncludeOptional)), type.mapper) :
+                    instantiateType(addOptionality(getTypeFromTypeNode(type.declaration.type), type.declaration, /*isProperty*/ true, !!(getMappedTypeModifiers(type) & MappedTypeModifiers.IncludeOptional)), type.mapper) :
                     errorType);
         }
 
@@ -12105,6 +12109,10 @@ namespace ts {
                 type.flags & TypeFlags.IndexedAccess ? getConstraintOfIndexedAccess(type as IndexedAccessType) :
                 type.flags & TypeFlags.Conditional ? getConstraintOfConditionalType(type as ConditionalType) :
                 getBaseConstraintOfType(type);
+        }
+
+        function getUnknownConstraintForType(type: Type): Type {
+            return !strictNullChecks(type.symbol?.declarations?.[0] || type.aliasSymbol?.declarations?.[0]) ? nonNullUnknownType : unknownType;
         }
 
         function getConstraintOfTypeParameter(typeParameter: TypeParameter): Type | undefined {
@@ -12441,7 +12449,7 @@ namespace ts {
          * type itself.
          */
         function getApparentType(type: Type): Type {
-            const t = !(type.flags & TypeFlags.Instantiable) ? type : getBaseConstraintOfType(type) || unknownType;
+            const t = !(type.flags & TypeFlags.Instantiable) ? type : getBaseConstraintOfType(type) || getUnknownConstraintForType(type);
             return getObjectFlags(t) & ObjectFlags.Mapped ? getApparentTypeOfMappedType(t as MappedType) :
                 t.flags & TypeFlags.Intersection ? getApparentTypeOfIntersectionType(t as IntersectionType) :
                 t.flags & TypeFlags.StringLike ? globalStringType :
@@ -12451,7 +12459,7 @@ namespace ts {
                 t.flags & TypeFlags.ESSymbolLike ? getGlobalESSymbolType() :
                 t.flags & TypeFlags.NonPrimitive ? emptyObjectType :
                 t.flags & TypeFlags.Index ? keyofConstraintType :
-                t.flags & TypeFlags.Unknown && !strictNullChecks ? emptyObjectType :
+                t === nonNullUnknownType ? emptyObjectType :
                 t;
         }
 
@@ -12528,11 +12536,11 @@ namespace ts {
                         const indexInfo = !isLateBoundName(name) && getApplicableIndexInfoForName(type, name);
                         if (indexInfo) {
                             checkFlags |= CheckFlags.WritePartial | (indexInfo.isReadonly ? CheckFlags.Readonly : 0);
-                            indexTypes = append(indexTypes, isTupleType(type) ? getRestTypeOfTupleType(type) || undefinedType : indexInfo.type);
+                            indexTypes = append(indexTypes, isTupleType(type) ? getRestTypeOfTupleType(type) || (strictNullChecks(indexInfo.declaration) ? undefinedType : neverType) : indexInfo.type);
                         }
                         else if (isObjectLiteralType(type) && !(getObjectFlags(type) & ObjectFlags.ContainsSpread)) {
                             checkFlags |= CheckFlags.WritePartial;
-                            indexTypes = append(indexTypes, undefinedType);
+                            indexTypes = append(indexTypes, strictNullChecks(type.symbol.valueDeclaration) ? undefinedType : neverType);
                         }
                         else {
                             checkFlags |= CheckFlags.ReadPartial;
@@ -13248,10 +13256,10 @@ namespace ts {
                     getReturnTypeFromAnnotation(signature.declaration!) ||
                     (nodeIsMissing((signature.declaration as FunctionLikeDeclaration).body) ? anyType : getReturnTypeFromBody(signature.declaration as FunctionLikeDeclaration));
                 if (signature.flags & SignatureFlags.IsInnerCallChain) {
-                    type = addOptionalTypeMarker(type);
+                    type = addOptionalTypeMarker(type, signature.declaration);
                 }
                 else if (signature.flags & SignatureFlags.IsOuterCallChain) {
-                    type = getOptionalType(type);
+                    type = strictNullChecks(signature.declaration) ? getOptionalType(type, signature.declaration) : type;
                 }
                 if (!popTypeResolution()) {
                     if (signature.declaration) {
@@ -14017,7 +14025,7 @@ namespace ts {
 
         function getTypeFromJSDocNullableTypeNode(node: JSDocNullableType) {
             const type = getTypeFromTypeNode(node.type);
-            return strictNullChecks ? getNullableType(type, TypeFlags.Null) : type;
+            return strictNullChecks(node) ? getNullableType(type, TypeFlags.Null) : type;
         }
 
         function getTypeFromTypeReference(node: TypeReferenceType): Type {
@@ -14616,7 +14624,7 @@ namespace ts {
         }
 
         function getTypeFromOptionalTypeNode(node: OptionalTypeNode): Type {
-            return addOptionality(getTypeFromTypeNode(node.type), node);
+            return addOptionality(getTypeFromTypeNode(node.type), node, /*isProperty*/ true);
         }
 
         function getTypeId(type: Type): TypeId {
@@ -14636,37 +14644,64 @@ namespace ts {
             return false;
         }
 
-        function addTypeToUnion(typeSet: Type[], includes: TypeFlags, type: Type) {
-            const flags = type.flags;
-            if (flags & TypeFlags.Union) {
-                return addTypesToUnion(typeSet, includes | (isNamedUnionType(type) ? TypeFlags.Union : 0), (type as UnionType).types);
+        function addTypeToListSorted(typeSet: Type[], type: Type) {
+            const len = typeSet.length;
+            const index = len && type.id > typeSet[len - 1].id ? ~len : binarySearch(typeSet, type, getTypeId, compareValues);
+            if (index < 0) {
+                typeSet.splice(~index, 0, type);
             }
-            // We ignore 'never' types in unions
-            if (!(flags & TypeFlags.Never)) {
-                includes |= flags & TypeFlags.IncludesMask;
-                if (flags & TypeFlags.Instantiable) includes |= TypeFlags.IncludesInstantiable;
-                if (type === wildcardType) includes |= TypeFlags.IncludesWildcard;
-                if (!strictNullChecks && flags & TypeFlags.Nullable) {
-                    if (!(getObjectFlags(type) & ObjectFlags.ContainsWideningType)) includes |= TypeFlags.IncludesNonWideningType;
-                }
-                else {
-                    const len = typeSet.length;
-                    const index = len && type.id > typeSet[len - 1].id ? ~len : binarySearch(typeSet, type, getTypeId, compareValues);
-                    if (index < 0) {
-                        typeSet.splice(~index, 0, type);
-                    }
-                }
-            }
-            return includes;
         }
 
         // Add the given types to the given type set. Order is preserved, duplicates are removed,
         // and nested types of the given kind are flattened into the set.
         function addTypesToUnion(typeSet: Type[], includes: TypeFlags, types: readonly Type[]): TypeFlags {
-            for (const type of types) {
-                includes = addTypeToUnion(typeSet, includes, type);
+            let undefinedVariant: Type | undefined;
+            includes = addTypesToUnionWorker(typeSet, includes, types);
+            if (includes & TypeFlags.Null) {
+                if (includes & TypeFlags.IncludesNonWideningType) {
+                    addTypeToListSorted(typeSet, includes & TypeFlags.IncludesNonWideningType ? nullType : nullWideningType);
+                }
+            }
+            if (includes & TypeFlags.Undefined) {
+                if (includes & TypeFlags.IncludesNonWideningType) {
+                    addTypeToListSorted(typeSet, includes & TypeFlags.IncludesNonWideningType ? undefinedVariant || undefinedType : undefinedWideningType);
+                }
             }
             return includes;
+
+
+            function addTypeToUnion(typeSet: Type[], includes: TypeFlags, type: Type) {
+                const flags = type.flags;
+                if (flags & TypeFlags.Union) {
+                    return addTypesToUnionWorker(typeSet, includes | (isNamedUnionType(type) ? TypeFlags.Union : 0), (type as UnionType).types);
+                }
+                // We ignore 'never' types in unions
+                if (!(flags & TypeFlags.Never)) {
+                    includes |= flags & TypeFlags.IncludesMask;
+                    if (flags & TypeFlags.Instantiable) includes |= TypeFlags.IncludesInstantiable;
+                    if (type === wildcardType) includes |= TypeFlags.IncludesWildcard;
+                    if (flags & TypeFlags.Nullable) {
+                        if (!(getObjectFlags(type) & ObjectFlags.ContainsWideningType)) {
+                            includes |= TypeFlags.IncludesNonWideningType;
+                            if (flags & TypeFlags.Undefined) {
+                                if (!undefinedVariant) undefinedVariant = type;
+                                else undefinedVariant = undefinedType; // multiple of the missing, optional, or base undefined types combine to just normal undefined
+                            }
+                        }
+                    }
+                    else {
+                        addTypeToListSorted(typeSet, type);
+                    }
+                }
+                return includes;
+            }
+
+            function addTypesToUnionWorker(typeSet: Type[], includes: TypeFlags, types: readonly Type[]): TypeFlags {
+                for (const type of types) {
+                    includes = addTypeToUnion(typeSet, includes, type);
+                }
+                return includes;
+            }
         }
 
         function removeSubtypes(types: Type[], hasObjectTypes: boolean): Type[] | undefined {
@@ -14936,10 +14971,23 @@ namespace ts {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
                 const aliasSymbol = getAliasSymbolForTypeNode(node);
-                links.resolvedType = getUnionType(map(node.types, getTypeFromTypeNode), UnionReduction.Literal,
+                links.resolvedType = getUnionType(map(node.types, getTypeFromUnionMemberTypeNode), UnionReduction.Literal,
                     aliasSymbol, getTypeArgumentsForAliasSymbol(aliasSymbol));
             }
             return links.resolvedType;
+        }
+
+        /**
+         * This is a syntactic approximation of the longstanding non-strictNullChecks behavior of unions with null/undefined
+         * eliminating the null/undefined upon construction. By doing it at type construction site, we can get per-file behavior.
+         * The downside is that a helper like `type Union<T, U> = T | U` isn't affected by this, and so will preserve null/undefined
+         * arguments where it wouldn't have before.
+         */
+        function getTypeFromUnionMemberTypeNode(node: TypeNode) {
+            if (strictNullChecks(node) || !((isLiteralTypeNode(node) && isNullOrUndefined(node.literal)) || isNullOrUndefined(node as Node as Expression) || node.kind === SyntaxKind.UndefinedKeyword)) {
+                return getTypeFromTypeNode(node);
+            }
+            return neverType;
         }
 
         function addTypeToIntersection(typeSet: ESMap<string, Type>, includes: TypeFlags, type: Type) {
@@ -14957,7 +15005,7 @@ namespace ts {
                 if (flags & TypeFlags.AnyOrUnknown) {
                     if (type === wildcardType) includes |= TypeFlags.IncludesWildcard;
                 }
-                else if (strictNullChecks || !(flags & TypeFlags.Nullable)) {
+                else {
                     if (type === missingType) {
                         includes |= TypeFlags.IncludesMissingType;
                         type = undefinedType;
@@ -15132,17 +15180,19 @@ namespace ts {
             // a number-like type and a type known to be non-number-like, or
             // a symbol-like type and a type known to be non-symbol-like, or
             // a void-like type and a type known to be non-void-like, or
-            // a non-primitive type and a type known to be primitive.
+            // a non-primitive type and a type known to be primitive, or
+            // an index type and a nullable or bigint-like type.
             if (includes & TypeFlags.Never) {
                 return contains(typeSet, silentNeverType) ? silentNeverType : neverType;
             }
-            if (strictNullChecks && includes & TypeFlags.Nullable && includes & (TypeFlags.Object | TypeFlags.NonPrimitive | TypeFlags.IncludesEmptyObject) ||
+            if (includes & TypeFlags.Nullable && includes & (TypeFlags.Object | TypeFlags.NonPrimitive | TypeFlags.IncludesEmptyObject) ||
                 includes & TypeFlags.NonPrimitive && includes & (TypeFlags.DisjointDomains & ~TypeFlags.NonPrimitive) ||
                 includes & TypeFlags.StringLike && includes & (TypeFlags.DisjointDomains & ~TypeFlags.StringLike) ||
                 includes & TypeFlags.NumberLike && includes & (TypeFlags.DisjointDomains & ~TypeFlags.NumberLike) ||
                 includes & TypeFlags.BigIntLike && includes & (TypeFlags.DisjointDomains & ~TypeFlags.BigIntLike) ||
                 includes & TypeFlags.ESSymbolLike && includes & (TypeFlags.DisjointDomains & ~TypeFlags.ESSymbolLike) ||
-                includes & TypeFlags.VoidLike && includes & (TypeFlags.DisjointDomains & ~TypeFlags.VoidLike)) {
+                includes & TypeFlags.VoidLike && includes & (TypeFlags.DisjointDomains & ~TypeFlags.VoidLike) ||
+                includes & TypeFlags.Index && includes & (TypeFlags.Nullable | TypeFlags.BigIntLike)) {
                 return neverType;
             }
             if (includes & TypeFlags.TemplateLiteral && includes & TypeFlags.StringLiteral && extractRedundantTemplateLiterals(typeSet)) {
@@ -15150,9 +15200,6 @@ namespace ts {
             }
             if (includes & TypeFlags.Any) {
                 return includes & TypeFlags.IncludesWildcard ? wildcardType : anyType;
-            }
-            if (!strictNullChecks && includes & TypeFlags.Nullable) {
-                return includes & TypeFlags.Undefined ? undefinedType : nullType;
             }
             if (includes & TypeFlags.String && includes & (TypeFlags.StringLiteral | TypeFlags.TemplateLiteral | TypeFlags.StringMapping) ||
                 includes & TypeFlags.Number && includes & TypeFlags.NumberLiteral ||
@@ -16052,7 +16099,10 @@ namespace ts {
             // In the following we resolve T[K] to the type of the property in T selected by K.
             // We treat boolean as different from other unions to improve errors;
             // skipping straight to getPropertyTypeForIndexType gives errors with 'boolean' instead of 'true'.
-            const apparentObjectType = getReducedApparentType(objectType);
+            let apparentObjectType = getReducedApparentType(objectType);
+            if (!strictNullChecks(accessNode) && apparentObjectType.flags & TypeFlags.Unknown) {
+                apparentObjectType = emptyObjectType;
+            }
             if (indexType.flags & TypeFlags.Union && !(indexType.flags & TypeFlags.Boolean)) {
                 const propTypes: Type[] = [];
                 let wasMissingProp = false;
@@ -16521,7 +16571,7 @@ namespace ts {
                         const isSetonlyAccessor = prop.flags & SymbolFlags.SetAccessor && !(prop.flags & SymbolFlags.GetAccessor);
                         const flags = SymbolFlags.Property | SymbolFlags.Optional;
                         const result = createSymbol(flags, prop.escapedName, getIsLateCheckFlag(prop) | (readonly ? CheckFlags.Readonly : 0));
-                        result.type = isSetonlyAccessor ? undefinedType : addOptionality(getTypeOfSymbol(prop), prop.valueDeclaration || factory.createEmptyStatement());
+                        result.type = isSetonlyAccessor ? undefinedType : addOptionality(getTypeOfSymbol(prop), prop.declarations?.[0], /*isProperty*/ true);
                         result.declarations = prop.declarations;
                         result.nameType = getSymbolLinks(prop).nameType;
                         result.syntheticOrigin = prop;
@@ -16712,7 +16762,7 @@ namespace ts {
 
         function getTypeFromLiteralTypeNode(node: LiteralTypeNode): Type {
             if (node.literal.kind === SyntaxKind.NullKeyword) {
-                return nullType;
+                return strictNullChecks(node) ? nullType : nullPermissiveType;
             }
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
@@ -16801,7 +16851,7 @@ namespace ts {
             const links = getNodeLinks(node);
             return links.resolvedType || (links.resolvedType =
                     node.dotDotDotToken ? getTypeFromRestTypeNode(node) :
-                    addOptionality(getTypeFromTypeNode(node.type), node, !!node.questionToken));
+                    addOptionality(getTypeFromTypeNode(node.type), node, /*isProperty*/ true, !!node.questionToken));
         }
 
         function getTypeFromTypeNode(node: TypeNode): Type {
@@ -16829,10 +16879,10 @@ namespace ts {
                 case SyntaxKind.VoidKeyword:
                     return voidType;
                 case SyntaxKind.UndefinedKeyword:
-                    return undefinedType;
+                    return strictNullChecks(node) ? undefinedType : undefinedPermissiveType;
                 case SyntaxKind.NullKeyword as TypeNodeSyntaxKind:
                     // TODO(rbuckton): `NullKeyword` is no longer a `TypeNode`, but we defensively allow it here because of incorrect casts in the Language Service.
-                    return nullType;
+                    return strictNullChecks(node) ? nullType : nullPermissiveType;
                 case SyntaxKind.NeverKeyword:
                     return neverType;
                 case SyntaxKind.ObjectKeyword:
@@ -16865,7 +16915,7 @@ namespace ts {
                 case SyntaxKind.JSDocNullableType:
                     return getTypeFromJSDocNullableTypeNode(node as JSDocNullableType);
                 case SyntaxKind.JSDocOptionalType:
-                    return addOptionality(getTypeFromTypeNode((node as JSDocOptionalType).type));
+                    return addOptionality(getTypeFromTypeNode((node as JSDocOptionalType).type), node);
                 case SyntaxKind.NamedTupleMember:
                     return getTypeFromNamedTupleTypeNode(node as NamedTupleMember);
                 case SyntaxKind.ParenthesizedType:
@@ -17290,8 +17340,8 @@ namespace ts {
             const templateMapper = appendTypeMapping(mapper, getTypeParameterFromMappedType(type), key);
             const propType = instantiateType(getTemplateTypeFromMappedType(type.target as MappedType || type), templateMapper);
             const modifiers = getMappedTypeModifiers(type);
-            return strictNullChecks && modifiers & MappedTypeModifiers.IncludeOptional && !maybeTypeOfKind(propType, TypeFlags.Undefined | TypeFlags.Void) ? getOptionalType(propType, type.declaration) :
-                strictNullChecks && modifiers & MappedTypeModifiers.ExcludeOptional && isOptional ? getTypeWithFacts(propType, TypeFacts.NEUndefined) :
+            return modifiers & MappedTypeModifiers.IncludeOptional && !maybeTypeOfKind(propType, TypeFlags.Undefined | TypeFlags.Void) ? getOptionalType(propType, type.declaration, /*isProperty*/ false) :
+                modifiers & MappedTypeModifiers.ExcludeOptional && isOptional ? getTypeWithFacts(propType, TypeFacts.NEUndefined, type.declaration) :
                 propType;
         }
 
@@ -18196,10 +18246,10 @@ namespace ts {
                     // similar to return values, callback parameters are output positions. This means that a Promise<T>,
                     // where T is used only in callback parameter positions, will be co-variant (as opposed to bi-variant)
                     // with respect to T.
-                    const sourceSig = checkMode & SignatureCheckMode.Callback ? undefined : getSingleCallSignature(getNonNullableType(sourceType));
-                    const targetSig = checkMode & SignatureCheckMode.Callback ? undefined : getSingleCallSignature(getNonNullableType(targetType));
+                    const sourceSig = checkMode & SignatureCheckMode.Callback ? undefined : getSingleCallSignature(getNonNullableType(sourceType, sourceFile));
+                    const targetSig = checkMode & SignatureCheckMode.Callback ? undefined : getSingleCallSignature(getNonNullableType(targetType, targetFile));
                     const callbacks = sourceSig && targetSig && !getTypePredicateOfSignature(sourceSig) && !getTypePredicateOfSignature(targetSig) &&
-                        (getTypeFacts(sourceType) & TypeFacts.IsUndefinedOrNull) === (getTypeFacts(targetType) & TypeFacts.IsUndefinedOrNull);
+                        (getTypeFacts(sourceType, sourceFile) & TypeFacts.IsUndefinedOrNull) === (getTypeFacts(targetType, targetFile) & TypeFacts.IsUndefinedOrNull);
                     let related = callbacks ?
                         compareSignaturesRelated(targetSig, sourceSig, (checkMode & SignatureCheckMode.StrictArity) | (strictVariance ? SignatureCheckMode.StrictCallback : SignatureCheckMode.BivariantCallback), reportErrors, errorReporter, incompatibleErrorReporter, compareTypes, reportUnreliableMarkers) :
                         !(checkMode & SignatureCheckMode.Callback) && !strictVariance && compareTypes(sourceType, targetType, /*reportErrors*/ false) || compareTypes(targetType, sourceType, reportErrors);
@@ -18335,7 +18385,7 @@ namespace ts {
         }
 
         function isUnknownLikeUnionType(type: Type) {
-            if (strictNullChecks && type.flags & TypeFlags.Union) {
+            if (type.flags & TypeFlags.Union) {
                 if (!((type as UnionType).objectFlags & ObjectFlags.IsUnknownLikeUnionComputed)) {
                     const types = (type as UnionType).types;
                     (type as UnionType).objectFlags |= ObjectFlags.IsUnknownLikeUnionComputed | (types.length >= 3 && types[0].flags & TypeFlags.Undefined &&
@@ -18415,8 +18465,9 @@ namespace ts {
             }
             // In non-strictNullChecks mode, `undefined` and `null` are assignable to anything except `never`.
             // Since unions and intersections may reduce to `never`, we exclude them here.
-            if (s & TypeFlags.Undefined && (!strictNullChecks && !(t & TypeFlags.UnionOrIntersection) || t & (TypeFlags.Undefined | TypeFlags.Void))) return true;
-            if (s & TypeFlags.Null && (!strictNullChecks && !(t & TypeFlags.UnionOrIntersection) || t & TypeFlags.Null)) return true;
+            if ((source === undefinedWideningType || source === nullWideningType || source === undefinedPermissiveType || source === nullPermissiveType) && !(t & TypeFlags.UnionOrIntersection)) return true;
+            if (s & TypeFlags.Undefined && t & (TypeFlags.Undefined | TypeFlags.Void)) return true;
+            if (s & TypeFlags.Null && t & TypeFlags.Null) return true;
             if (s & TypeFlags.Object && t & TypeFlags.NonPrimitive && !(relation === strictSubtypeRelation && isEmptyAnonymousObjectType(source) && !(getObjectFlags(source) & ObjectFlags.FreshLiteral))) return true;
             if (relation === assignableRelation || relation === comparableRelation) {
                 if (s & TypeFlags.Any) return true;
@@ -18728,7 +18779,9 @@ namespace ts {
                     relatedInfo = [info];
                 }
                 else {
-                    relatedInfo.push(info);
+                    if (!some(relatedInfo, i => compareDiagnostics(i, info) === Comparison.EqualTo)) {
+                        relatedInfo.push(info);
+                    }
                 }
             }
 
@@ -19842,13 +19895,13 @@ namespace ts {
                 if (sourceFlags & TypeFlags.TypeVariable) {
                     // IndexedAccess comparisons are handled above in the `targetFlags & TypeFlage.IndexedAccess` branch
                     if (!(sourceFlags & TypeFlags.IndexedAccess && targetFlags & TypeFlags.IndexedAccess)) {
-                        const constraint = getConstraintOfType(source as TypeVariable) || unknownType;
+                        const constraint = getConstraintOfType(source as TypeVariable) || getUnknownConstraintForType(source as TypeVariable);
                         // hi-speed no-this-instantiation check (less accurate, but avoids costly `this`-instantiation when the constraint will suffice), see #28231 for report on why this is needed
                         if (result = isRelatedTo(constraint, target, RecursionFlags.Source, /*reportErrors*/ false, /*headMessage*/ undefined, intersectionState)) {
                             return result;
                         }
                         // slower, fuller, this-instantiated check (necessary when comparing raw `this` types from base classes), see `subclassWithPolymorphicThisIsAssignable.ts` test for example
-                        else if (result = isRelatedTo(getTypeWithThisArgument(constraint, source), target, RecursionFlags.Source, reportErrors && constraint !== unknownType && !(targetFlags & sourceFlags & TypeFlags.TypeParameter), /*headMessage*/ undefined, intersectionState)) {
+                        else if (result = isRelatedTo(getTypeWithThisArgument(constraint, source), target, RecursionFlags.Source, reportErrors && !(constraint.flags & TypeFlags.Unknown) && !(targetFlags & sourceFlags & TypeFlags.TypeParameter), /*headMessage*/ undefined, intersectionState)) {
                             return result;
                         }
                         if (isMappedTypeGenericIndexedAccess(source)) {
@@ -20164,7 +20217,7 @@ namespace ts {
                             if (!targetProperty) continue outer;
                             if (sourceProperty === targetProperty) continue;
                             // We compare the source property to the target in the context of a single discriminant type.
-                            const related = propertyRelatedTo(source, target, sourceProperty, targetProperty, _ => combination[i], /*reportErrors*/ false, IntersectionState.None, /*skipOptional*/ strictNullChecks || relation === comparableRelation);
+                            const related = propertyRelatedTo(source, target, sourceProperty, targetProperty, _ => combination[i], /*reportErrors*/ false, IntersectionState.None, /*skipOptional*/ strictNullChecks(targetProperty.valueDeclaration) || relation === comparableRelation);
                             // If the target property could not be found, or if the properties were not related,
                             // then this constituent is not a match.
                             if (!related) {
@@ -20221,8 +20274,8 @@ namespace ts {
             }
 
             function isPropertySymbolTypeRelated(sourceProp: Symbol, targetProp: Symbol, getTypeOfSourceProperty: (sym: Symbol) => Type, reportErrors: boolean, intersectionState: IntersectionState): Ternary {
-                const targetIsOptional = strictNullChecks && !!(getCheckFlags(targetProp) & CheckFlags.Partial);
-                const effectiveTarget = addOptionality(getNonMissingTypeOfSymbol(targetProp), /*isProperty*/ undefined, targetIsOptional);
+                const targetIsOptional = strictNullChecks(targetProp.valueDeclaration) && !!(getCheckFlags(targetProp) & CheckFlags.Partial);
+                const effectiveTarget = addOptionality(getNonMissingTypeOfSymbol(targetProp), targetProp.valueDeclaration, /*isProperty*/ false, targetIsOptional);
                 const effectiveSource = getTypeOfSourceProperty(sourceProp);
                 return isRelatedTo(effectiveSource, effectiveTarget, RecursionFlags.Both, reportErrors, /*headMessage*/ undefined, intersectionState);
             }
@@ -20678,7 +20731,7 @@ namespace ts {
                         const propType = getNonMissingTypeOfSymbol(prop);
                         const type = exactOptionalPropertyTypes(prop.valueDeclaration) || propType.flags & TypeFlags.Undefined || keyType === numberType || !(prop.flags & SymbolFlags.Optional)
                             ? propType
-                            : getTypeWithFacts(propType, TypeFacts.NEUndefined);
+                            : getTypeWithFacts(propType, TypeFacts.NEUndefined, prop.valueDeclaration);
                         const related = isRelatedTo(type, targetInfo.type, RecursionFlags.Both, reportErrors);
                         if (!related) {
                             if (reportErrors) {
@@ -20835,7 +20888,8 @@ namespace ts {
                 findMatchingTypeReferenceOrTypeAliasReference(source, target) ||
                 findBestTypeForObjectLiteral(source, target) ||
                 findBestTypeForInvokable(source, target) ||
-                findMostOverlappyType(source, target);
+                findMostOverlappyType(source, target) ||
+                (target.types.length === 2 && target.types[0].flags & TypeFlags.Nullable ? target.types[1] : undefined);
         }
 
         function discriminateTypeByDiscriminableItems(target: UnionType, discriminators: [() => Type, __String][], related: (source: Type, target: Type) => boolean | Ternary, defaultValue?: undefined, skipPartial?: boolean): Type | undefined;
@@ -21330,12 +21384,12 @@ namespace ts {
             return reduceLeft(types, (flags, t) => flags | (t.flags & TypeFlags.Union ? getCombinedTypeFlags((t as UnionType).types) : t.flags), 0);
         }
 
-        function getCommonSupertype(types: Type[]): Type {
+        function getCommonSupertype(types: Type[], context: Node | undefined): Type {
             if (types.length === 1) {
                 return types[0];
             }
             // Remove nullable types from each of the candidates.
-            const primaryTypes = strictNullChecks ? sameMap(types, t => filterType(t, u => !(u.flags & TypeFlags.Nullable))) : types;
+            const primaryTypes = strictNullChecks(context) ? sameMap(types, t => filterType(t, u => !(u.flags & TypeFlags.Nullable))) : types;
             // When the candidate types are all literal types with the same base type, return a union
             // of those literal types. Otherwise, return the leftmost type for which no type to the
             // right is a supertype.
@@ -21410,7 +21464,7 @@ namespace ts {
         }
 
         function isEmptyLiteralType(type: Type): boolean {
-            return strictNullChecks ? type === implicitNeverType : type === undefinedWideningType;
+            return type === implicitNeverType || type === undefinedWideningType;
         }
 
         function isEmptyArrayLiteralType(type: Type): boolean {
@@ -21565,8 +21619,8 @@ namespace ts {
             return value.base10Value === "0";
         }
 
-        function removeDefinitelyFalsyTypes(type: Type): Type {
-            return filterType(type, t => !!(getTypeFacts(t) & TypeFacts.Truthy));
+        function removeDefinitelyFalsyTypes(type: Type, context: Node | undefined): Type {
+            return filterType(type, t => !!(getTypeFacts(t, context) & TypeFacts.Truthy));
         }
 
         function extractDefinitelyFalsyTypes(type: Type): Type {
@@ -21599,9 +21653,14 @@ namespace ts {
                 getUnionType([type, undefinedType, nullType]);
         }
 
-        function getOptionalType(type: Type, property: Node | undefined = undefined): Type {
-            Debug.assert(strictNullChecks);
-            return type.flags & TypeFlags.Undefined ? type : getUnionType([type, property ? getMissingOrUndefinedType(property) : undefinedType]);
+        /**
+         * *Most* callers should only use this when `strictNullChecks` is known to be `true` for the given `context`,
+         * as it unconditionally introduces some form of `undefined` into the result.
+         * An important exception is control-flow-based initialization checking, which sometimes may want to use this
+         * outside `strictNullChecks` mode.
+         */
+        function getOptionalType(type: Type, context: Node | undefined, isProperty = false): Type {
+            return type.flags & TypeFlags.Undefined ? type : getUnionType([type, isProperty ? getMissingOrUndefinedType(context) : undefinedType]);
         }
 
         function getGlobalNonNullableTypeInstantiation(type: Type) {
@@ -21613,24 +21672,24 @@ namespace ts {
                 getIntersectionType([type, emptyObjectType]);
         }
 
-        function getNonNullableType(type: Type): Type {
-            return strictNullChecks ? getAdjustedTypeWithFacts(type, TypeFacts.NEUndefinedOrNull) : type;
+        function getNonNullableType(type: Type, context: Node | undefined): Type {
+            return getAdjustedTypeWithFacts(type, TypeFacts.NEUndefinedOrNull, context);
         }
 
-        function addOptionalTypeMarker(type: Type) {
-            return strictNullChecks ? getUnionType([type, optionalType]) : type;
+        function addOptionalTypeMarker(type: Type, context: Node | undefined) {
+            return strictNullChecks(context) ? getUnionType([type, optionalType]) : type;
         }
 
         function removeOptionalTypeMarker(type: Type): Type {
-            return strictNullChecks ? removeType(type, optionalType) : type;
+            return removeType(type, optionalType);
         }
 
         function propagateOptionalTypeMarker(type: Type, node: OptionalChain, wasOptional: boolean) {
-            return wasOptional ? isOutermostOptionalChain(node) ? getOptionalType(type) : addOptionalTypeMarker(type) : type;
+            return wasOptional ? isOutermostOptionalChain(node) ? getOptionalType(type, node) : addOptionalTypeMarker(type, node) : type;
         }
 
         function getOptionalExpressionType(exprType: Type, expression: Expression) {
-            return isExpressionOfOptionalChainRoot(expression) ? getNonNullableType(exprType) :
+            return isExpressionOfOptionalChainRoot(expression) ? getNonNullableType(exprType, expression) :
                 isOptionalChain(expression) ? removeOptionalTypeMarker(exprType) :
                 exprType;
         }
@@ -21644,7 +21703,7 @@ namespace ts {
         }
 
         function removeMissingOrUndefinedType(type: Type, context: Node | undefined): Type {
-            return exactOptionalPropertyTypes(context) ? removeType(type, missingType) : getTypeWithFacts(type, TypeFacts.NEUndefined);
+            return exactOptionalPropertyTypes(context) ? removeType(type, missingType) : getTypeWithFacts(type, TypeFacts.NEUndefined, context);
         }
 
         /**
@@ -23283,7 +23342,7 @@ namespace ts {
             // Otherwise, infer a common supertype.
             const unwidenedType = inference.priority! & InferencePriority.PriorityImpliesCombination ?
                 getUnionType(baseCandidates, UnionReduction.Subtype) :
-                getCommonSupertype(baseCandidates);
+                getCommonSupertype(baseCandidates, inference.typeParameter.symbol.declarations?.[0]);
             return getWidenedType(unwidenedType);
         }
 
@@ -23767,52 +23826,52 @@ namespace ts {
                 resolved.members.get("bind" as __String) && isTypeSubtypeOf(type, globalFunctionType));
         }
 
-        function getTypeFacts(type: Type): TypeFacts {
+        function getTypeFacts(type: Type, context: Node | undefined): TypeFacts {
             if (type.flags & (TypeFlags.Intersection | TypeFlags.Instantiable)) {
                 type = getBaseConstraintOfType(type) || unknownType;
             }
             const flags = type.flags;
             if (flags & (TypeFlags.String | TypeFlags.StringMapping)) {
-                return strictNullChecks ? TypeFacts.StringStrictFacts : TypeFacts.StringFacts;
+                return strictNullChecks(context) ? TypeFacts.StringStrictFacts : TypeFacts.StringFacts;
             }
             if (flags & (TypeFlags.StringLiteral | TypeFlags.TemplateLiteral)) {
                 const isEmpty = flags & TypeFlags.StringLiteral && (type as StringLiteralType).value === "";
-                return strictNullChecks ?
+                return strictNullChecks(context) ?
                     isEmpty ? TypeFacts.EmptyStringStrictFacts : TypeFacts.NonEmptyStringStrictFacts :
                     isEmpty ? TypeFacts.EmptyStringFacts : TypeFacts.NonEmptyStringFacts;
             }
             if (flags & (TypeFlags.Number | TypeFlags.Enum)) {
-                return strictNullChecks ? TypeFacts.NumberStrictFacts : TypeFacts.NumberFacts;
+                return strictNullChecks(context) ? TypeFacts.NumberStrictFacts : TypeFacts.NumberFacts;
             }
             if (flags & TypeFlags.NumberLiteral) {
                 const isZero = (type as NumberLiteralType).value === 0;
-                return strictNullChecks ?
+                return strictNullChecks(context) ?
                     isZero ? TypeFacts.ZeroNumberStrictFacts : TypeFacts.NonZeroNumberStrictFacts :
                     isZero ? TypeFacts.ZeroNumberFacts : TypeFacts.NonZeroNumberFacts;
             }
             if (flags & TypeFlags.BigInt) {
-                return strictNullChecks ? TypeFacts.BigIntStrictFacts : TypeFacts.BigIntFacts;
+                return strictNullChecks(context) ? TypeFacts.BigIntStrictFacts : TypeFacts.BigIntFacts;
             }
             if (flags & TypeFlags.BigIntLiteral) {
                 const isZero = isZeroBigInt(type as BigIntLiteralType);
-                return strictNullChecks ?
+                return strictNullChecks(context) ?
                     isZero ? TypeFacts.ZeroBigIntStrictFacts : TypeFacts.NonZeroBigIntStrictFacts :
                     isZero ? TypeFacts.ZeroBigIntFacts : TypeFacts.NonZeroBigIntFacts;
             }
             if (flags & TypeFlags.Boolean) {
-                return strictNullChecks ? TypeFacts.BooleanStrictFacts : TypeFacts.BooleanFacts;
+                return strictNullChecks(context) ? TypeFacts.BooleanStrictFacts : TypeFacts.BooleanFacts;
             }
             if (flags & TypeFlags.BooleanLike) {
-                return strictNullChecks ?
+                return strictNullChecks(context) ?
                     (type === falseType || type === regularFalseType) ? TypeFacts.FalseStrictFacts : TypeFacts.TrueStrictFacts :
                     (type === falseType || type === regularFalseType) ? TypeFacts.FalseFacts : TypeFacts.TrueFacts;
             }
             if (flags & TypeFlags.Object) {
                 return getObjectFlags(type) & ObjectFlags.Anonymous && isEmptyObjectType(type as ObjectType) ?
-                    strictNullChecks ? TypeFacts.EmptyObjectStrictFacts : TypeFacts.EmptyObjectFacts :
+                    strictNullChecks(context) ? TypeFacts.EmptyObjectStrictFacts : TypeFacts.EmptyObjectFacts :
                     isFunctionObjectType(type as ObjectType) ?
-                        strictNullChecks ? TypeFacts.FunctionStrictFacts : TypeFacts.FunctionFacts :
-                        strictNullChecks ? TypeFacts.ObjectStrictFacts : TypeFacts.ObjectFacts;
+                        strictNullChecks(context) ? TypeFacts.FunctionStrictFacts : TypeFacts.FunctionFacts :
+                        strictNullChecks(context) ? TypeFacts.ObjectStrictFacts : TypeFacts.ObjectFacts;
             }
             if (flags & TypeFlags.Void) {
                 return TypeFacts.VoidFacts;
@@ -23824,24 +23883,24 @@ namespace ts {
                 return TypeFacts.NullFacts;
             }
             if (flags & TypeFlags.ESSymbolLike) {
-                return strictNullChecks ? TypeFacts.SymbolStrictFacts : TypeFacts.SymbolFacts;
+                return strictNullChecks(context) ? TypeFacts.SymbolStrictFacts : TypeFacts.SymbolFacts;
             }
             if (flags & TypeFlags.NonPrimitive) {
-                return strictNullChecks ? TypeFacts.ObjectStrictFacts : TypeFacts.ObjectFacts;
+                return strictNullChecks(context) ? TypeFacts.ObjectStrictFacts : TypeFacts.ObjectFacts;
             }
             if (flags & TypeFlags.Never) {
                 return TypeFacts.None;
             }
             if (flags & TypeFlags.Union) {
-                return reduceLeft((type as UnionType).types, (facts, t) => facts | getTypeFacts(t), TypeFacts.None);
+                return reduceLeft((type as UnionType).types, (facts, t) => facts | getTypeFacts(t, context), TypeFacts.None);
             }
             if (flags & TypeFlags.Intersection) {
-                return getIntersectionTypeFacts(type as IntersectionType);
+                return getIntersectionTypeFacts(type as IntersectionType, context);
             }
             return TypeFacts.UnknownFacts;
         }
 
-        function getIntersectionTypeFacts(type: IntersectionType): TypeFacts {
+        function getIntersectionTypeFacts(type: IntersectionType, context: Node | undefined): TypeFacts {
             // When an intersection contains a primitive type we ignore object type constituents as they are
             // presumably type tags. For example, in string & { __kind__: "name" } we ignore the object type.
             const ignoreObjects = maybeTypeOfKind(type, TypeFlags.Primitive);
@@ -23851,7 +23910,7 @@ namespace ts {
             let andedFacts = TypeFacts.All;
             for (const t of type.types) {
                 if (!(ignoreObjects && t.flags & TypeFlags.Object)) {
-                    const f = getTypeFacts(t);
+                    const f = getTypeFacts(t, context);
                     oredFacts |= f;
                     andedFacts &= f;
                 }
@@ -23859,24 +23918,24 @@ namespace ts {
             return oredFacts & TypeFacts.OrFactsMask | andedFacts & TypeFacts.AndFactsMask;
         }
 
-        function getTypeWithFacts(type: Type, include: TypeFacts) {
-            return filterType(type, t => (getTypeFacts(t) & include) !== 0);
+        function getTypeWithFacts(type: Type, include: TypeFacts, context: Node | undefined) {
+            return filterType(type, t => (getTypeFacts(t, context) & include) !== 0);
         }
 
         // This function is similar to getTypeWithFacts, except that in strictNullChecks mode it replaces type
         // unknown with the union {} | null | undefined (and reduces that accordingly), and it intersects remaining
         // instantiable types with {}, {} | null, or {} | undefined in order to remove null and/or undefined.
-        function getAdjustedTypeWithFacts(type: Type, facts: TypeFacts) {
-            const reduced = recombineUnknownType(getTypeWithFacts(strictNullChecks && type.flags & TypeFlags.Unknown ? unknownUnionType : type, facts));
-            if (strictNullChecks) {
+        function getAdjustedTypeWithFacts(type: Type, facts: TypeFacts, context: Node | undefined) {
+            const reduced = recombineUnknownType(getTypeWithFacts(strictNullChecks(context) && type.flags & TypeFlags.Unknown ? unknownUnionType : type, facts, context));
+            if (strictNullChecks(context)) {
                 switch (facts) {
                     case TypeFacts.NEUndefined:
-                        return mapType(reduced, t => getTypeFacts(t) & TypeFacts.EQUndefined ? getIntersectionType([t, getTypeFacts(t) & TypeFacts.EQNull && !maybeTypeOfKind(reduced, TypeFlags.Null) ? getUnionType([emptyObjectType, nullType]) : emptyObjectType]): t);
+                        return mapType(reduced, t => getTypeFacts(t, context) & TypeFacts.EQUndefined ? getIntersectionType([t, getTypeFacts(t, context) & TypeFacts.EQNull && !maybeTypeOfKind(reduced, TypeFlags.Null) ? getUnionType([emptyObjectType, nullType]) : emptyObjectType]): t);
                     case TypeFacts.NENull:
-                        return mapType(reduced, t => getTypeFacts(t) & TypeFacts.EQNull ? getIntersectionType([t, getTypeFacts(t) & TypeFacts.EQUndefined && !maybeTypeOfKind(reduced, TypeFlags.Undefined) ? getUnionType([emptyObjectType, undefinedType]) : emptyObjectType]): t);
+                        return mapType(reduced, t => getTypeFacts(t, context) & TypeFacts.EQNull ? getIntersectionType([t, getTypeFacts(t, context) & TypeFacts.EQUndefined && !maybeTypeOfKind(reduced, TypeFlags.Undefined) ? getUnionType([emptyObjectType, undefinedType]) : emptyObjectType]): t);
                     case TypeFacts.NEUndefinedOrNull:
                     case TypeFacts.Truthy:
-                        return mapType(reduced, t => getTypeFacts(t) & TypeFacts.EQUndefinedOrNull ? getGlobalNonNullableTypeInstantiation(t): t);
+                        return mapType(reduced, t => getTypeFacts(t, context) & TypeFacts.EQUndefinedOrNull ? getGlobalNonNullableTypeInstantiation(t): t);
                 }
             }
             return reduced;
@@ -23888,7 +23947,7 @@ namespace ts {
 
         function getTypeWithDefault(type: Type, defaultExpression: Expression) {
             return defaultExpression ?
-                getUnionType([getNonUndefinedType(type), getTypeOfExpression(defaultExpression)]) :
+                getUnionType([getNonUndefinedType(type, defaultExpression), getTypeOfExpression(defaultExpression)]) :
                 type;
         }
 
@@ -24582,7 +24641,7 @@ namespace ts {
             // on empty arrays are possible without implicit any errors and new element types can be inferred without
             // type mismatch errors.
             const resultType = getObjectFlags(evolvedType) & ObjectFlags.EvolvingArray && isEvolvingArrayOperationTarget(reference) ? autoArrayType : finalizeEvolvingArrayType(evolvedType);
-            if (resultType === unreachableNeverType || reference.parent && reference.parent.kind === SyntaxKind.NonNullExpression && !(resultType.flags & TypeFlags.Never) && getTypeWithFacts(resultType, TypeFacts.NEUndefinedOrNull).flags & TypeFlags.Never) {
+            if (resultType === unreachableNeverType || reference.parent && reference.parent.kind === SyntaxKind.NonNullExpression && !(resultType.flags & TypeFlags.Never) && getTypeWithFacts(resultType, TypeFacts.NEUndefinedOrNull, reference).flags & TypeFlags.Never) {
                 return declaredType;
             }
             // The non-null unknown type should never escape control flow analysis.
@@ -24745,7 +24804,7 @@ namespace ts {
                 }
                 // for (const _ in ref) acts as a nonnull on ref
                 if (isVariableDeclaration(node) && node.parent.parent.kind === SyntaxKind.ForInStatement && isMatchingReference(reference, node.parent.parent.expression)) {
-                    return getNonNullableTypeIfNeeded(finalizeEvolvingArrayType(getTypeFromFlowType(getTypeAtFlowNode(flow.antecedent))));
+                    return getNonNullableTypeIfNeeded(finalizeEvolvingArrayType(getTypeFromFlowType(getTypeAtFlowNode(flow.antecedent))), node);
                 }
                 // Assignment doesn't affect reference
                 return undefined;
@@ -24850,7 +24909,7 @@ namespace ts {
                     type = narrowBySwitchOnTypeOf(type, flow.switchStatement, flow.clauseStart, flow.clauseEnd);
                 }
                 else {
-                    if (strictNullChecks) {
+                    if (strictNullChecks(expr)) {
                         if (optionalChainContainsReference(expr, reference)) {
                             type = narrowTypeBySwitchOptionalChainContainment(type, flow.switchStatement, flow.clauseStart, flow.clauseEnd,
                                 t => !(t.flags & (TypeFlags.Undefined | TypeFlags.Never)));
@@ -25005,6 +25064,32 @@ namespace ts {
                 return result;
             }
 
+            /**
+             * This function preserves the non-strict mode behavior of `undefined` and `null` evaporating on contact with a union
+             * It uses `filterType` rather than `getTypeWithFacts` because `getTypeWithFacts` would consider generic constraints, which
+             * the old non-strict union-creation behavior never did.
+             */
+            function filterNullAndUndefinedFromUnionIfNotStrict(type: Type) {
+                if (strictNullChecks(reference)) {
+                    return type;
+                }
+                if (!(type.flags & TypeFlags.Union)) {
+                    return type;
+                }
+                let containedNull: Type | undefined;
+                const filtered = filterType(type, t => {
+                    if (t.flags & TypeFlags.Null) {
+                        containedNull = t;
+                    }
+                    return !(t.flags & TypeFlags.Nullable);
+                });
+                if (!(filtered.flags & TypeFlags.Never)) {
+                    return filtered;
+                }
+                // only null/undefined union members - if both are present, historically, this makes the union evaluate to `null`
+                return containedNull || type;
+            }
+
             // At flow control branch or loop junctions, if the type along every antecedent code path
             // is an evolving array type, we construct a combined evolving array type. Otherwise we
             // finalize all evolving array types.
@@ -25012,7 +25097,7 @@ namespace ts {
                 if (isEvolvingArrayTypeList(types)) {
                     return getEvolvingArrayType(getUnionType(map(types, getElementTypeOfEvolvingArrayType)));
                 }
-                const result = recombineUnknownType(getUnionType(sameMap(types, finalizeEvolvingArrayType), subtypeReduction));
+                const result = filterNullAndUndefinedFromUnionIfNotStrict(recombineUnknownType(getUnionType(sameMap(types, finalizeEvolvingArrayType), subtypeReduction)));
                 if (result !== declaredType && result.flags & declaredType.flags & TypeFlags.Union && arraysEqual((result as UnionType).types, (declaredType as UnionType).types)) {
                     return declaredType;
                 }
@@ -25079,12 +25164,12 @@ namespace ts {
                 if (propName === undefined) {
                     return type;
                 }
-                const removeNullable = strictNullChecks && isOptionalChain(access) && maybeTypeOfKind(type, TypeFlags.Nullable);
-                let propType = getTypeOfPropertyOfType(removeNullable ? getTypeWithFacts(type, TypeFacts.NEUndefinedOrNull) : type, propName);
+                const removeNullable = strictNullChecks(access) && isOptionalChain(access) && maybeTypeOfKind(type, TypeFlags.Nullable);
+                let propType = getTypeOfPropertyOfType(removeNullable ? getTypeWithFacts(type, TypeFacts.NEUndefinedOrNull, access) : type, propName);
                 if (!propType) {
                     return type;
                 }
-                propType = removeNullable ? getOptionalType(propType) : propType;
+                propType = removeNullable ? getOptionalType(propType, access) : propType;
                 const narrowedPropType = narrowType(propType);
                 return filterType(type, t => {
                     const discriminantType = getTypeOfPropertyOrIndexSignature(t, propName);
@@ -25120,14 +25205,14 @@ namespace ts {
 
             function narrowTypeByTruthiness(type: Type, expr: Expression, assumeTrue: boolean): Type {
                 if (isMatchingReference(reference, expr)) {
-                    return getAdjustedTypeWithFacts(type, assumeTrue ? TypeFacts.Truthy : TypeFacts.Falsy);
+                    return getAdjustedTypeWithFacts(type, assumeTrue ? TypeFacts.Truthy : TypeFacts.Falsy, expr);
                 }
-                if (strictNullChecks && assumeTrue && optionalChainContainsReference(expr, reference)) {
-                    type = getAdjustedTypeWithFacts(type, TypeFacts.NEUndefinedOrNull);
+                if (strictNullChecks(expr) && assumeTrue && optionalChainContainsReference(expr, reference)) {
+                    type = getAdjustedTypeWithFacts(type, TypeFacts.NEUndefinedOrNull, expr);
                 }
                 const access = getDiscriminantPropertyAccess(expr, type);
                 if (access) {
-                    return narrowTypeByDiscriminant(type, access, t => getTypeWithFacts(t, assumeTrue ? TypeFacts.Truthy : TypeFacts.Falsy));
+                    return narrowTypeByDiscriminant(type, access, t => getTypeWithFacts(t, assumeTrue ? TypeFacts.Truthy : TypeFacts.Falsy, expr));
                 }
                 return type;
             }
@@ -25176,7 +25261,7 @@ namespace ts {
                         if (isMatchingReference(reference, right)) {
                             return narrowTypeByEquality(type, operator, left, assumeTrue);
                         }
-                        if (strictNullChecks) {
+                        if (strictNullChecks(expr)) {
                             if (optionalChainContainsReference(left, reference)) {
                                 type = narrowTypeByOptionalChainContainment(type, operator, right, assumeTrue);
                             }
@@ -25211,7 +25296,7 @@ namespace ts {
                             const name = escapeLeadingUnderscores((leftType as StringLiteralType).value);
                             if (containsMissingType(type) && isAccessExpression(reference) && isMatchingReference(reference.expression, target) &&
                                 getAccessedPropertyName(reference) === name) {
-                                return getTypeWithFacts(type, assumeTrue ? TypeFacts.NEUndefined : TypeFacts.EQUndefined);
+                                return getTypeWithFacts(type, assumeTrue ? TypeFacts.NEUndefined : TypeFacts.EQUndefined, expr);
                             }
                             if (isMatchingReference(reference, target)) {
                                 return narrowByInKeyword(type, name, assumeTrue);
@@ -25269,7 +25354,7 @@ namespace ts {
                 // Note that we include any and unknown in the exclusion test because their domain includes null and undefined.
                 const removeNullable = equalsOperator !== assumeTrue && everyType(valueType, t => !!(t.flags & nullableFlags)) ||
                     equalsOperator === assumeTrue && everyType(valueType, t => !(t.flags & (TypeFlags.AnyOrUnknown | nullableFlags)));
-                return removeNullable ? getAdjustedTypeWithFacts(type, TypeFacts.NEUndefinedOrNull) : type;
+                return removeNullable ? getAdjustedTypeWithFacts(type, TypeFacts.NEUndefinedOrNull, value) : type;
             }
 
             function narrowTypeByEquality(type: Type, operator: SyntaxKind, value: Expression, assumeTrue: boolean): Type {
@@ -25290,7 +25375,7 @@ namespace ts {
                     return type;
                 }
                 if (valueType.flags & TypeFlags.Nullable) {
-                    if (!strictNullChecks) {
+                    if (!strictNullChecks(value)) {
                         return type;
                     }
                     const doubleEquals = operator === SyntaxKind.EqualsEqualsToken || operator === SyntaxKind.ExclamationEqualsToken;
@@ -25299,7 +25384,7 @@ namespace ts {
                         valueType.flags & TypeFlags.Null ?
                             assumeTrue ? TypeFacts.EQNull : TypeFacts.NENull :
                             assumeTrue ? TypeFacts.EQUndefined : TypeFacts.NEUndefined;
-                    return getAdjustedTypeWithFacts(type, facts);
+                    return getAdjustedTypeWithFacts(type, facts, value);
                 }
                 if (assumeTrue) {
                     const filterFn: (t: Type) => boolean = operator === SyntaxKind.EqualsEqualsToken ?
@@ -25320,19 +25405,19 @@ namespace ts {
                 }
                 const target = getReferenceCandidate(typeOfExpr.expression);
                 if (!isMatchingReference(reference, target)) {
-                    if (strictNullChecks && optionalChainContainsReference(target, reference) && assumeTrue === (literal.text !== "undefined")) {
-                        return getAdjustedTypeWithFacts(type, TypeFacts.NEUndefinedOrNull);
+                    if (strictNullChecks(typeOfExpr) && optionalChainContainsReference(target, reference) && assumeTrue === (literal.text !== "undefined")) {
+                        return getAdjustedTypeWithFacts(type, TypeFacts.NEUndefinedOrNull, typeOfExpr);
                     }
                     return type;
                 }
                 return assumeTrue ?
                     narrowTypeByTypeName(type, literal.text) :
-                    getTypeWithFacts(type, typeofNEFacts.get(literal.text) || TypeFacts.TypeofNEHostObject);
+                    getTypeWithFacts(type, typeofNEFacts.get(literal.text) || TypeFacts.TypeofNEHostObject, typeOfExpr);
             }
 
             function narrowTypeBySwitchOptionalChainContainment(type: Type, switchStatement: SwitchStatement, clauseStart: number, clauseEnd: number, clauseCheck: (type: Type) => boolean) {
                 const everyClauseChecks = clauseStart !== clauseEnd && every(getSwitchClauseTypes(switchStatement).slice(clauseStart, clauseEnd), clauseCheck);
-                return everyClauseChecks ? getTypeWithFacts(type, TypeFacts.NEUndefinedOrNull) : type;
+                return everyClauseChecks ? getTypeWithFacts(type, TypeFacts.NEUndefinedOrNull, switchStatement) : type;
             }
 
             function narrowTypeBySwitchOnDiscriminant(type: Type, switchStatement: SwitchStatement, clauseStart: number, clauseEnd: number) {
@@ -25398,14 +25483,14 @@ namespace ts {
                     // the constituent based on its type facts. We use the strict subtype relation because it treats `object`
                     // as a subtype of `{}`, and we need the type facts check because function types are subtypes of `object`,
                     // but are classified as "function" according to `typeof`.
-                    isTypeRelatedTo(t, impliedType, strictSubtypeRelation) ? getTypeFacts(t) & facts ? t : neverType :
+                    isTypeRelatedTo(t, impliedType, strictSubtypeRelation) ? getTypeFacts(t, reference) & facts ? t : neverType :
                     // We next check if the consituent is a supertype of the implied type. If so, we substitute the implied
                     // type. This handles top types like `unknown` and `{}`, and supertypes like `{ toString(): string }`.
                     isTypeSubtypeOf(impliedType, t) ? impliedType :
                     // Neither the constituent nor the implied type is a subtype of the other, however their domains may still
                     // overlap. For example, an unconstrained type parameter and type `string`. If the type facts indicate
                     // possible overlap, we form an intersection. Otherwise, we eliminate the constituent.
-                    getTypeFacts(t) & facts ? getIntersectionType([t, impliedType]) :
+                    getTypeFacts(t, reference) & facts ? getIntersectionType([t, impliedType]) :
                     neverType);
             }
 
@@ -25420,7 +25505,7 @@ namespace ts {
                 if (hasDefaultClause) {
                     // In the default clause we filter constituents down to those that are not-equal to all handled cases.
                     const notEqualFacts = getNotEqualFactsFromTypeofSwitch(clauseStart, clauseEnd, witnesses);
-                    return filterType(type, t => (getTypeFacts(t) & notEqualFacts) === notEqualFacts);
+                    return filterType(type, t => (getTypeFacts(t, switchStatement) & notEqualFacts) === notEqualFacts);
                 }
                 // In the non-default cause we create a union of the type narrowed by each of the listed cases.
                 const clauseWitnesses = witnesses.slice(clauseStart, clauseEnd);
@@ -25484,8 +25569,8 @@ namespace ts {
             function narrowTypeByInstanceof(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {
                 const left = getReferenceCandidate(expr.left);
                 if (!isMatchingReference(reference, left)) {
-                    if (assumeTrue && strictNullChecks && optionalChainContainsReference(left, reference)) {
-                        return getAdjustedTypeWithFacts(type, TypeFacts.NEUndefinedOrNull);
+                    if (assumeTrue && strictNullChecks(expr) && optionalChainContainsReference(left, reference)) {
+                        return getAdjustedTypeWithFacts(type, TypeFacts.NEUndefinedOrNull, expr);
                     }
                     return type;
                 }
@@ -25583,7 +25668,7 @@ namespace ts {
                         isIdentifier(callAccess.name) && callAccess.name.escapedText === "hasOwnProperty" && callExpression.arguments.length === 1) {
                         const argument = callExpression.arguments[0];
                         if (isStringLiteralLike(argument) && getAccessedPropertyName(reference) === escapeLeadingUnderscores(argument.text)) {
-                            return getTypeWithFacts(type, assumeTrue ? TypeFacts.NEUndefined : TypeFacts.EQUndefined);
+                            return getTypeWithFacts(type, assumeTrue ? TypeFacts.NEUndefined : TypeFacts.EQUndefined, argument);
                         }
                     }
                 }
@@ -25598,9 +25683,9 @@ namespace ts {
                         if (isMatchingReference(reference, predicateArgument)) {
                             return getNarrowedType(type, predicate.type, assumeTrue, /*checkDerived*/ false);
                         }
-                        if (strictNullChecks && assumeTrue && optionalChainContainsReference(predicateArgument, reference) &&
-                            !(getTypeFacts(predicate.type) & TypeFacts.EQUndefined)) {
-                            type = getAdjustedTypeWithFacts(type, TypeFacts.NEUndefinedOrNull);
+                        if (strictNullChecks(callExpression) && assumeTrue && optionalChainContainsReference(predicateArgument, reference) &&
+                            !(getTypeFacts(predicate.type, callExpression) & TypeFacts.EQUndefined)) {
+                            type = getAdjustedTypeWithFacts(type, TypeFacts.NEUndefinedOrNull, callExpression);
                         }
                         const access = getDiscriminantPropertyAccess(predicateArgument, type);
                         if (access) {
@@ -25659,11 +25744,11 @@ namespace ts {
 
             function narrowTypeByOptionality(type: Type, expr: Expression, assumePresent: boolean): Type {
                 if (isMatchingReference(reference, expr)) {
-                    return getAdjustedTypeWithFacts(type, assumePresent ? TypeFacts.NEUndefinedOrNull : TypeFacts.EQUndefinedOrNull);
+                    return getAdjustedTypeWithFacts(type, assumePresent ? TypeFacts.NEUndefinedOrNull : TypeFacts.EQUndefinedOrNull, expr);
                 }
                 const access = getDiscriminantPropertyAccess(expr, type);
                 if (access) {
-                    return narrowTypeByDiscriminant(type, access, t => getTypeWithFacts(t, assumePresent ? TypeFacts.NEUndefinedOrNull : TypeFacts.EQUndefinedOrNull));
+                    return narrowTypeByDiscriminant(type, access, t => getTypeWithFacts(t, assumePresent ? TypeFacts.NEUndefinedOrNull : TypeFacts.EQUndefinedOrNull, expr));
                 }
                 return type;
             }
@@ -25748,14 +25833,14 @@ namespace ts {
         /** remove undefined from the annotated type of a parameter when there is an initializer (that doesn't include undefined) */
         function removeOptionalityFromDeclaredType(declaredType: Type, declaration: VariableLikeDeclaration): Type {
             if (pushTypeResolution(declaration.symbol, TypeSystemPropertyName.DeclaredType)) {
-                const annotationIncludesUndefined = strictNullChecks &&
+                const annotationIncludesUndefined = strictNullChecks(declaration) &&
                     declaration.kind === SyntaxKind.Parameter &&
                     declaration.initializer &&
-                    getTypeFacts(declaredType) & TypeFacts.IsUndefined &&
-                    !(getTypeFacts(checkExpression(declaration.initializer)) & TypeFacts.IsUndefined);
+                    getTypeFacts(declaredType, declaration) & TypeFacts.IsUndefined &&
+                    !(getTypeFacts(checkExpression(declaration.initializer), declaration) & TypeFacts.IsUndefined);
                 popTypeResolution();
 
-                return annotationIncludesUndefined ? getTypeWithFacts(declaredType, TypeFacts.NEUndefined) : declaredType;
+                return annotationIncludesUndefined ? getTypeWithFacts(declaredType, TypeFacts.NEUndefined, declaration) : declaredType;
             }
             else {
                 reportCircularityError(declaration.symbol);
@@ -25941,6 +26026,19 @@ namespace ts {
                 return errorType;
             }
 
+            if (symbol === undefinedSymbol) {
+                const assignmentKind = getAssignmentTargetKind(node);
+                if (assignmentKind) {
+                    if (!(symbol.flags & SymbolFlags.Variable) &&
+                        !(isInJSFile(node) && symbol.flags & SymbolFlags.ValueModule)) {
+                        const assignmentError = Diagnostics.Cannot_assign_to_0_because_it_is_not_a_variable;
+                        error(node, assignmentError, symbolToString(symbol));
+                        return errorType;
+                    }
+                }
+                return getUndefinedWideningType(node);
+            }
+
             // As noted in ECMAScript 6 language spec, arrow functions never have an arguments objects.
             // Although in down-level emit of arrow function, we emit it using function expression which means that
             // arguments objects will be bound to the inner object; emitting arrow function natively in ES6, arguments objects
@@ -26086,14 +26184,14 @@ namespace ts {
             // the entire control flow graph from the variable's declaration (i.e. when the flow container and
             // declaration container are the same).
             const assumeInitialized = isParameter || isAlias || isOuterVariable || isSpreadDestructuringAssignmentTarget || isModuleExports || isBindingElement(declaration) ||
-                type !== autoType && type !== autoArrayType && (!strictNullChecks || (type.flags & (TypeFlags.AnyOrUnknown | TypeFlags.Void)) !== 0 ||
+                type !== autoType && type !== autoArrayType && (!strictNullChecks(node) || (type.flags & (TypeFlags.AnyOrUnknown | TypeFlags.Void)) !== 0 ||
                 isInTypeQuery(node) || node.parent.kind === SyntaxKind.ExportSpecifier) ||
                 node.parent.kind === SyntaxKind.NonNullExpression ||
                 declaration.kind === SyntaxKind.VariableDeclaration && (declaration as VariableDeclaration).exclamationToken ||
                 declaration.flags & NodeFlags.Ambient;
             const initialType = assumeInitialized ? (isParameter ? removeOptionalityFromDeclaredType(type, declaration as VariableLikeDeclaration) : type) :
                 type === autoType || type === autoArrayType ? undefinedType :
-                getOptionalType(type);
+                getOptionalType(type, node);
             const flowType = getFlowTypeOfReference(node, type, initialType, flowContainer);
             // A variable is considered uninitialized when it is possible to analyze the entire control flow graph
             // from declaration to use, and when the variable's declared type doesn't include undefined but the
@@ -26760,7 +26858,7 @@ namespace ts {
                     // There was no contextual ThisType<T> for the containing object literal, so the contextual type
                     // for 'this' is the non-null form of the contextual type for the containing object literal or
                     // the type of the object literal itself.
-                    return getWidenedType(contextualType ? getNonNullableType(contextualType) : checkExpressionCached(containingLiteral));
+                    return getWidenedType(contextualType ? getNonNullableType(contextualType, literal) : checkExpressionCached(containingLiteral));
                 }
                 // In an assignment of the form 'obj.xxx = function(...)' or 'obj[xxx] = function(...)', the
                 // contextual type for 'this' is 'obj'.
@@ -26802,7 +26900,7 @@ namespace ts {
                 links.resolvedSignature = anySignature;
                 const type = indexOfParameter < args.length ?
                     getWidenedLiteralType(checkExpression(args[indexOfParameter])) :
-                    parameter.initializer ? undefined : undefinedWideningType;
+                    parameter.initializer ? undefined : getUndefinedWideningType(parameter);
                 links.resolvedSignature = cached;
                 return type;
             }
@@ -27909,7 +28007,7 @@ namespace ts {
                 else {
                     const elementContextualType = getContextualTypeForElementExpression(contextualType, elementTypes.length);
                     const type = checkExpressionForMutableLocation(e, checkMode, elementContextualType, forceTuple);
-                    elementTypes.push(addOptionality(type, e, hasOmittedExpression));
+                    elementTypes.push(addOptionality(type, e, /*isProperty*/ true, hasOmittedExpression));
                     elementFlags.push(hasOmittedExpression ? ElementFlags.Optional : ElementFlags.Required);
                     if (contextualType && someType(contextualType, isTupleLikeType) && checkMode && checkMode & CheckMode.Inferential && !(checkMode & CheckMode.SkipContextSensitive) && isContextSensitive(e)) {
                         const inferenceContext = getInferenceContext(node);
@@ -27926,7 +28024,7 @@ namespace ts {
             }
             return createArrayLiteralType(createArrayType(elementTypes.length ?
                 getUnionType(sameMap(elementTypes, (t, i) => elementFlags[i] & ElementFlags.Variadic ? getIndexedAccessTypeOrUndefined(t, numberType) || anyType : t), UnionReduction.Subtype) :
-                strictNullChecks ? implicitNeverType : undefinedWideningType, inConstContext));
+                strictNullChecks(node) ? implicitNeverType : undefinedWideningType, inConstContext));
         }
 
         function createArrayLiteralType(type: Type) {
@@ -28038,7 +28136,7 @@ namespace ts {
             // Grammar checking
             checkGrammarObjectLiteralExpression(node, inDestructuringPattern);
 
-            const allPropertiesTable = strictNullChecks ? createSymbolTable() : undefined;
+            const allPropertiesTable = strictNullChecks(node) ? createSymbolTable() : undefined;
             let propertiesTable = createSymbolTable();
             let propertiesArray: Symbol[] = [];
             let spread: Type = emptyObjectType;
@@ -28155,7 +28253,7 @@ namespace ts {
                         hasComputedSymbolProperty = false;
                     }
                     const type = getReducedType(checkExpression(memberDecl.expression));
-                    if (isValidSpreadType(type)) {
+                    if (isValidSpreadType(type, memberDecl)) {
                         const mergedType = tryMergeUnionOfObjectTypeAndEmptyObject(type, inConstContext);
                         if (allPropertiesTable) {
                             checkSpreadPropOverrides(mergedType, allPropertiesTable, memberDecl);
@@ -28274,10 +28372,10 @@ namespace ts {
             }
         }
 
-        function isValidSpreadType(type: Type): boolean {
-            const t = removeDefinitelyFalsyTypes(mapType(type, getBaseConstraintOrType));
+        function isValidSpreadType(type: Type, context: Node | undefined): boolean {
+            const t = removeDefinitelyFalsyTypes(mapType(type, getBaseConstraintOrType), context);
             return !!(t.flags & (TypeFlags.Any | TypeFlags.NonPrimitive | TypeFlags.Object | TypeFlags.InstantiableNonPrimitive) ||
-                t.flags & TypeFlags.UnionOrIntersection && every((t as UnionOrIntersectionType).types, isValidSpreadType));
+                t.flags & TypeFlags.UnionOrIntersection && every((t as UnionOrIntersectionType).types, t => isValidSpreadType(t, context)));
         }
 
         function checkJsxSelfClosingElementDeferred(node: JsxSelfClosingElement) {
@@ -28355,7 +28453,7 @@ namespace ts {
          */
         function createJsxAttributesTypeFromAttributesProperty(openingLikeElement: JsxOpeningLikeElement, checkMode: CheckMode | undefined) {
             const attributes = openingLikeElement.attributes;
-            const allAttributesTable = strictNullChecks ? createSymbolTable() : undefined;
+            const allAttributesTable = strictNullChecks(openingLikeElement) ? createSymbolTable() : undefined;
             let attributesTable = createSymbolTable();
             let spread: Type = emptyJsxObjectType;
             let hasSpreadAnyType = false;
@@ -28394,7 +28492,7 @@ namespace ts {
                     if (isTypeAny(exprType)) {
                         hasSpreadAnyType = true;
                     }
-                    if (isValidSpreadType(exprType)) {
+                    if (isValidSpreadType(exprType, attributeDecl)) {
                         spread = getSpreadType(spread, exprType, attributes.symbol, objectFlags, /*readonly*/ false);
                         if (allAttributesTable) {
                             checkSpreadPropOverrides(exprType, allAttributesTable, attributeDecl);
@@ -29111,12 +29209,12 @@ namespace ts {
             return checkNonNullType(checkExpression(node), node);
         }
 
-        function isNullableType(type: Type) {
-            return !!(getTypeFacts(type) & TypeFacts.IsUndefinedOrNull);
+        function isNullableType(type: Type, context: Node | undefined) {
+            return !!(getTypeFacts(type, context) & TypeFacts.IsUndefinedOrNull);
         }
 
-        function getNonNullableTypeIfNeeded(type: Type) {
-            return isNullableType(type) ? getNonNullableType(type) : type;
+        function getNonNullableTypeIfNeeded(type: Type, context: Node | undefined) {
+            return isNullableType(type, context) ? getNonNullableType(type, context) : type;
         }
 
         function reportObjectPossiblyNullOrUndefinedError(node: Node, facts: TypeFacts) {
@@ -29140,14 +29238,19 @@ namespace ts {
             node: Node,
             reportError: (node: Node, facts: TypeFacts) => void
         ): Type {
-            if (strictNullChecks && type.flags & TypeFlags.Unknown) {
+            if (strictNullChecks(node) && type.flags & TypeFlags.Unknown) {
                 error(node, Diagnostics.Object_is_of_type_unknown);
                 return errorType;
             }
-            const facts = getTypeFacts(type);
+            const facts = getTypeFacts(type, node);
             if (facts & TypeFacts.IsUndefinedOrNull) {
-                reportError(node, facts);
-                const t = getNonNullableType(type);
+                // In non-strict-null-checks mode, traditionally unions have evaporated null/undefined upon construction (thus type facts would never have included them)
+                // _However_, non-union'd null/undefined could still exist... and still threw this error. It's oddly redundant
+                // and odd given the usual 'ignore null/undefined' behavior of non-strictNullChecks mode, but it's what we've done.
+                if (strictNullChecks(node) || !(type.flags & TypeFlags.Union)) {
+                    reportError(node, facts);
+                }
+                const t = getNonNullableType(type, node);
                 return t.flags & (TypeFlags.Nullable | TypeFlags.Never) ? errorType : t;
             }
             return type;
@@ -29313,7 +29416,10 @@ namespace ts {
         function checkPropertyAccessExpressionOrQualifiedName(node: PropertyAccessExpression | QualifiedName, left: Expression | QualifiedName, leftType: Type, right: Identifier | PrivateIdentifier, checkMode: CheckMode | undefined) {
             const parentSymbol = getNodeLinks(left).resolvedSymbol;
             const assignmentKind = getAssignmentTargetKind(node);
-            const apparentType = getApparentType(assignmentKind !== AssignmentKind.None || isMethodAccessForCall(node) ? getWidenedType(leftType) : leftType);
+            let apparentType = getApparentType(assignmentKind !== AssignmentKind.None || isMethodAccessForCall(node) ? getWidenedType(leftType) : leftType);
+            if (!strictNullChecks(node) && apparentType.flags & TypeFlags.Unknown) {
+                apparentType = emptyObjectType;
+            }
             const isAnyLike = isTypeAny(apparentType) || apparentType === silentNeverType;
             let prop: Symbol | undefined;
             if (isPrivateIdentifier(right)) {
@@ -29475,7 +29581,7 @@ namespace ts {
             // the property is uninitialized at the top of the control flow.
             let assumeUninitialized = false;
             const file = getSourceFileOfNode(node);
-            if (strictNullChecks && strictPropertyInitialization(file) && isAccessExpression(node) && node.expression.kind === SyntaxKind.ThisKeyword) {
+            if (strictNullChecks(node) && strictPropertyInitialization(file) && isAccessExpression(node) && node.expression.kind === SyntaxKind.ThisKeyword) {
                 const declaration = prop && prop.valueDeclaration;
                 if (declaration && isPropertyWithoutInitializer(declaration)) {
                     if (!isStatic(declaration)) {
@@ -29486,13 +29592,13 @@ namespace ts {
                     }
                 }
             }
-            else if (strictNullChecks && prop && prop.valueDeclaration &&
+            else if (strictNullChecks(node) && prop && prop.valueDeclaration &&
                 isPropertyAccessExpression(prop.valueDeclaration) &&
                 getAssignmentDeclarationPropertyAccessKind(prop.valueDeclaration) &&
                 getControlFlowContainer(node) === getControlFlowContainer(prop.valueDeclaration)) {
                 assumeUninitialized = true;
             }
-            const flowType = getFlowTypeOfReference(node, propType, assumeUninitialized ? getOptionalType(propType) : propType);
+            const flowType = getFlowTypeOfReference(node, propType, assumeUninitialized ? getOptionalType(propType, node) : propType);
             if (assumeUninitialized && !containsUndefinedType(propType) && containsUndefinedType(flowType)) {
                 error(errorNode, Diagnostics.Property_0_is_used_before_being_assigned, symbolToString(prop!)); // TODO: GH#18217
                 // Return the declared type to reduce follow-on errors
@@ -30176,7 +30282,7 @@ namespace ts {
             }
             for (let i = argCount; i < effectiveMinimumArguments; i++) {
                 const type = getTypeAtPosition(signature, i);
-                if (filterType(type, isInJSFile(node) && !strictNullChecks ? acceptsVoidUndefinedUnknownOrAny : acceptsVoid).flags & TypeFlags.Never) {
+                if (filterType(type, isInJSFile(node) && !strictNullChecks(node) ? acceptsVoidUndefinedUnknownOrAny : acceptsVoid).flags & TypeFlags.Never) {
                     return false;
                 }
             }
@@ -30250,7 +30356,7 @@ namespace ts {
                 return voidType;
             }
             const thisArgumentType = checkExpression(thisArgumentNode);
-            return isOptionalChainRoot(thisArgumentNode.parent) ? getNonNullableType(thisArgumentType) :
+            return isOptionalChainRoot(thisArgumentNode.parent) ? getNonNullableType(thisArgumentType, thisArgumentNode) :
                 isOptionalChain(thisArgumentNode.parent) ? removeOptionalTypeMarker(thisArgumentType) :
                 thisArgumentType;
         }
@@ -32246,7 +32352,7 @@ namespace ts {
                         const anonymousSymbol = createSymbol(SymbolFlags.TypeLiteral, InternalSymbolName.Type);
                         const defaultContainingObject = createDefaultPropertyWrapperForModule(symbol, originalSymbol, anonymousSymbol);
                         anonymousSymbol.type = defaultContainingObject;
-                        synthType.syntheticType = isValidSpreadType(type) ? getSpreadType(type, defaultContainingObject, anonymousSymbol, /*objectFlags*/ 0, /*readonly*/ false) : defaultContainingObject;
+                        synthType.syntheticType = isValidSpreadType(type, file) ? getSpreadType(type, defaultContainingObject, anonymousSymbol, /*objectFlags*/ 0, /*readonly*/ false) : defaultContainingObject;
                     }
                     else {
                         synthType.syntheticType = type;
@@ -32363,12 +32469,12 @@ namespace ts {
         function checkNonNullChain(node: NonNullChain) {
             const leftType = checkExpression(node.expression);
             const nonOptionalType = getOptionalExpressionType(leftType, node.expression);
-            return propagateOptionalTypeMarker(getNonNullableType(nonOptionalType), node, nonOptionalType !== leftType);
+            return propagateOptionalTypeMarker(getNonNullableType(nonOptionalType, node), node, nonOptionalType !== leftType);
         }
 
         function checkNonNullAssertion(node: NonNullExpression) {
             return node.flags & NodeFlags.OptionalChain ? checkNonNullChain(node as NonNullChain) :
-                getNonNullableType(checkExpression(node.expression));
+                getNonNullableType(checkExpression(node.expression), node);
         }
 
         function checkExpressionWithTypeArguments(node: ExpressionWithTypeArguments | TypeQueryNode) {
@@ -32499,10 +32605,10 @@ namespace ts {
 
         function getTypeOfParameter(symbol: Symbol) {
             const type = getTypeOfSymbol(symbol);
-            if (strictNullChecks) {
+            if (strictNullChecks(symbol.valueDeclaration)) {
                 const declaration = symbol.valueDeclaration;
                 if (declaration && hasInitializer(declaration)) {
-                    return getOptionalType(type);
+                    return getOptionalType(type, declaration);
                 }
             }
             return type;
@@ -32956,7 +33062,8 @@ namespace ts {
                     yieldType || neverType,
                     returnType || fallbackReturnType,
                     nextType || getContextualIterationType(IterationTypeKind.Next, func) || unknownType,
-                    isAsync);
+                    isAsync,
+                    strictNullChecks(func));
             }
             else {
                 // From within an async function you can return either a non-promise value or a promise. Any
@@ -32968,7 +33075,7 @@ namespace ts {
             }
         }
 
-        function createGeneratorReturnType(yieldType: Type, returnType: Type, nextType: Type, isAsyncGenerator: boolean) {
+        function createGeneratorReturnType(yieldType: Type, returnType: Type, nextType: Type, isAsyncGenerator: boolean, isStrictNullChecks: boolean) {
             const resolver = isAsyncGenerator ? asyncIterationTypesResolver : syncIterationTypesResolver;
             const globalGeneratorType = resolver.getGlobalGeneratorType(/*reportErrors*/ false);
             yieldType = resolver.resolveIterationType(yieldType, /*errorNode*/ undefined) || unknownType;
@@ -32981,7 +33088,7 @@ namespace ts {
                 const globalType = resolver.getGlobalIterableIteratorType(/*reportErrors*/ false);
                 const iterationTypes = globalType !== emptyGenericType ? getIterationTypesOfGlobalIterableType(globalType, resolver) : undefined;
                 const iterableIteratorReturnType = iterationTypes ? iterationTypes.returnType : anyType;
-                const iterableIteratorNextType = iterationTypes ? iterationTypes.nextType : undefinedType;
+                const iterableIteratorNextType = iterationTypes ? iterationTypes.nextType : isStrictNullChecks ? undefinedType : undefinedPermissiveType;
                 if (isTypeAssignableTo(returnType, iterableIteratorReturnType) &&
                     isTypeAssignableTo(iterableIteratorNextType, nextType)) {
                     if (globalType !== emptyGenericType) {
@@ -33006,7 +33113,7 @@ namespace ts {
             const nextTypes: Type[] = [];
             const isAsync = (getFunctionFlags(func) & FunctionFlags.Async) !== 0;
             forEachYieldExpression(func.body as Block, yieldExpression => {
-                const yieldExpressionType = yieldExpression.expression ? checkExpression(yieldExpression.expression, checkMode) : undefinedWideningType;
+                const yieldExpressionType = yieldExpression.expression ? checkExpression(yieldExpression.expression, checkMode) : getUndefinedWideningType(func);
                 pushIfUnique(yieldTypes, getYieldedTypeOfYieldExpression(yieldExpression, yieldExpressionType, anyType, isAsync));
                 let nextType: Type | undefined;
                 if (yieldExpression.asteriskToken) {
@@ -33062,7 +33169,7 @@ namespace ts {
                     return (TypeFacts.AllTypeofNE & notEqualFacts) === TypeFacts.AllTypeofNE;
                 }
                 // A missing not-equal flag indicates that the type wasn't handled by some case.
-                return !someType(operandConstraint, t => (getTypeFacts(t) & notEqualFacts) === notEqualFacts);
+                return !someType(operandConstraint, t => (getTypeFacts(t, node) & notEqualFacts) === notEqualFacts);
             }
             const type = getTypeOfExpression(node.expression);
             if (!isLiteralType(type)) {
@@ -33108,7 +33215,7 @@ namespace ts {
             if (aggregatedTypes.length === 0 && !hasReturnWithNoExpression && (hasReturnOfTypeNever || mayReturnNever(func))) {
                 return undefined;
             }
-            if (strictNullChecks && aggregatedTypes.length && hasReturnWithNoExpression &&
+            if (strictNullChecks(func) && aggregatedTypes.length && hasReturnWithNoExpression &&
                 !(isJSConstructor(func) && aggregatedTypes.some(t => t.symbol === func.symbol))) {
                 // Javascript "callable constructors", containing eg `if (!(this instanceof A)) return new A()` should not add undefined
                 pushIfUnique(aggregatedTypes, undefinedType);
@@ -33166,7 +33273,7 @@ namespace ts {
                     // this function does not conform to the specification.
                     error(errorNode, Diagnostics.A_function_whose_declared_type_is_neither_void_nor_any_must_return_a_value);
                 }
-                else if (type && strictNullChecks && !isTypeAssignableTo(undefinedType, type)) {
+                else if (type && strictNullChecks(func) && !isTypeAssignableTo(undefinedType, type)) {
                     error(errorNode, Diagnostics.Function_lacks_ending_return_statement_and_return_type_does_not_include_undefined);
                 }
                 else if (getFileLocalCompilerOption(getSourceFileOfNode(errorNode), compilerOptions, "noImplicitReturns")) {
@@ -33455,9 +33562,9 @@ namespace ts {
 
         function checkDeleteExpressionMustBeOptional(expr: AccessExpression, symbol: Symbol) {
             const type = getTypeOfSymbol(symbol);
-            if (strictNullChecks &&
+            if (strictNullChecks(expr) &&
                 !(type.flags & (TypeFlags.AnyOrUnknown | TypeFlags.Never)) &&
-                !(exactOptionalPropertyTypes(expr) ? symbol.flags & SymbolFlags.Optional : getTypeFacts(type) & TypeFacts.IsUndefined)) {
+                !(exactOptionalPropertyTypes(expr) ? symbol.flags & SymbolFlags.Optional : getTypeFacts(type, expr) & TypeFacts.IsUndefined)) {
                 error(expr, Diagnostics.The_operand_of_a_delete_operator_must_be_optional);
             }
         }
@@ -33469,7 +33576,7 @@ namespace ts {
 
         function checkVoidExpression(node: VoidExpression): Type {
             checkExpression(node.expression);
-            return undefinedWideningType;
+            return getUndefinedWideningType(node);
         }
 
         function checkAwaitExpressionGrammar(node: AwaitExpression): void {
@@ -33588,7 +33695,7 @@ namespace ts {
                     return getUnaryResultType(operandType);
                 case SyntaxKind.ExclamationToken:
                     checkTruthinessExpression(node.operand);
-                    const facts = getTypeFacts(operandType) & (TypeFacts.Truthy | TypeFacts.Falsy);
+                    const facts = getTypeFacts(operandType, node) & (TypeFacts.Truthy | TypeFacts.Falsy);
                     return facts === TypeFacts.Truthy ? falseType :
                         facts === TypeFacts.Falsy ? trueType :
                         booleanType;
@@ -33774,7 +33881,7 @@ namespace ts {
 
         function checkObjectLiteralAssignment(node: ObjectLiteralExpression, sourceType: Type, rightIsThis?: boolean): Type {
             const properties = node.properties;
-            if (strictNullChecks && properties.length === 0) {
+            if (strictNullChecks(node) && properties.length === 0) {
                 return checkNonNullType(sourceType, node);
             }
             for (let i = 0; i < properties.length; i++) {
@@ -33860,7 +33967,7 @@ namespace ts {
                         // when the element is a SyntaxKind.ElementAccessExpression.
                         const accessFlags = AccessFlags.ExpressionPosition | (hasDefaultValue(element) ? AccessFlags.NoTupleBoundsCheck : 0);
                         const elementType = getIndexedAccessTypeOrUndefined(sourceType, indexType, accessFlags, createSyntheticExpression(element, indexType)) || errorType;
-                        const assignedType = hasDefaultValue(element) ? getTypeWithFacts(elementType, TypeFacts.NEUndefined) : elementType;
+                        const assignedType = hasDefaultValue(element) ? getTypeWithFacts(elementType, TypeFacts.NEUndefined, node) : elementType;
                         const type = getFlowTypeOfDestructuring(element, assignedType);
                         return checkDestructuringAssignment(element, type, checkMode);
                     }
@@ -33893,9 +34000,9 @@ namespace ts {
                 if (prop.objectAssignmentInitializer) {
                     // In strict null checking mode, if a default value of a non-undefined type is specified, remove
                     // undefined from the final type.
-                    if (strictNullChecks &&
-                        !(getTypeFacts(checkExpression(prop.objectAssignmentInitializer)) & TypeFacts.IsUndefined)) {
-                        sourceType = getTypeWithFacts(sourceType, TypeFacts.NEUndefined);
+                    if (strictNullChecks(exprOrAssignment) &&
+                        !(getTypeFacts(checkExpression(prop.objectAssignmentInitializer), exprOrAssignment) & TypeFacts.IsUndefined)) {
+                        sourceType = getTypeWithFacts(sourceType, TypeFacts.NEUndefined, exprOrAssignment);
                     }
                     checkBinaryLikeExpression(prop.name, prop.equalsToken!, prop.objectAssignmentInitializer, checkMode);
                 }
@@ -33909,8 +34016,8 @@ namespace ts {
                 checkBinaryExpression(target as BinaryExpression, checkMode);
                 target = (target as BinaryExpression).left;
                 // A default value is specified, so remove undefined from the final type.
-                if (strictNullChecks) {
-                    sourceType = getTypeWithFacts(sourceType, TypeFacts.NEUndefined);
+                if (strictNullChecks(exprOrAssignment)) {
+                    sourceType = getTypeWithFacts(sourceType, TypeFacts.NEUndefined, exprOrAssignment);
                 }
             }
             if (target.kind === SyntaxKind.ObjectLiteralExpression) {
@@ -34350,8 +34457,8 @@ namespace ts {
                     return checkInExpression(left, right, leftType, rightType);
                 case SyntaxKind.AmpersandAmpersandToken:
                 case SyntaxKind.AmpersandAmpersandEqualsToken: {
-                    const resultType = getTypeFacts(leftType) & TypeFacts.Truthy ?
-                        getUnionType([extractDefinitelyFalsyTypes(strictNullChecks ? leftType : getBaseTypeOfLiteralType(rightType)), rightType]) :
+                    const resultType = getTypeFacts(leftType, left) & TypeFacts.Truthy ?
+                        getUnionType([extractDefinitelyFalsyTypes(strictNullChecks(left) ? leftType : getBaseTypeOfLiteralType(rightType)), rightType]) :
                         leftType;
                     if (operator === SyntaxKind.AmpersandAmpersandEqualsToken) {
                         checkAssignmentOperator(rightType);
@@ -34360,8 +34467,8 @@ namespace ts {
                 }
                 case SyntaxKind.BarBarToken:
                 case SyntaxKind.BarBarEqualsToken: {
-                    const resultType = getTypeFacts(leftType) & TypeFacts.Falsy ?
-                        getUnionType([getNonNullableType(removeDefinitelyFalsyTypes(leftType)), rightType], UnionReduction.Subtype) :
+                    const resultType = getTypeFacts(leftType, left) & TypeFacts.Falsy ?
+                        getUnionType([getNonNullableType(removeDefinitelyFalsyTypes(leftType, left), left), rightType], UnionReduction.Subtype) :
                         leftType;
                     if (operator === SyntaxKind.BarBarEqualsToken) {
                         checkAssignmentOperator(rightType);
@@ -34370,8 +34477,8 @@ namespace ts {
                 }
                 case SyntaxKind.QuestionQuestionToken:
                 case SyntaxKind.QuestionQuestionEqualsToken: {
-                    const resultType = getTypeFacts(leftType) & TypeFacts.EQUndefinedOrNull ?
-                        getUnionType([getNonNullableType(leftType), rightType], UnionReduction.Subtype) :
+                    const resultType = getTypeFacts(leftType, left) & TypeFacts.EQUndefinedOrNull ?
+                        getUnionType([getNonNullableType(leftType, left), rightType], UnionReduction.Subtype) :
                         leftType;
                     if (operator === SyntaxKind.QuestionQuestionEqualsToken) {
                         checkAssignmentOperator(rightType);
@@ -34628,7 +34735,7 @@ namespace ts {
             const signatureYieldType = iterationTypes && iterationTypes.yieldType || anyType;
             const signatureNextType = iterationTypes && iterationTypes.nextType || anyType;
             const resolvedSignatureNextType = isAsync ? getAwaitedType(signatureNextType) || anyType : signatureNextType;
-            const yieldExpressionType = node.expression ? checkExpression(node.expression) : undefinedWideningType;
+            const yieldExpressionType = node.expression ? checkExpression(node.expression) : getUndefinedWideningType(node);
             const yieldedType = getYieldedTypeOfYieldExpression(node, yieldExpressionType, resolvedSignatureNextType, isAsync);
             if (returnType && yieldedType) {
                 checkTypeAssignableToAndOptionallyElaborate(yieldedType, signatureYieldType, node.expression || node, node.expression);
@@ -34888,7 +34995,7 @@ namespace ts {
                 if (signature && signature.typeParameters) {
                     const contextualType = getApparentTypeOfContextualType(node as Expression, ContextFlags.NoConstraints);
                     if (contextualType) {
-                        const contextualSignature = getSingleSignature(getNonNullableType(contextualType), callSignature ? SignatureKind.Call : SignatureKind.Construct, /*allowMembers*/ false);
+                        const contextualSignature = getSingleSignature(getNonNullableType(contextualType, node), callSignature ? SignatureKind.Call : SignatureKind.Construct, /*allowMembers*/ false);
                         if (contextualSignature && !contextualSignature.typeParameters) {
                             if (checkMode & CheckMode.SkipGenericFunctions) {
                                 skippedGenericFunction(node, checkMode);
@@ -35178,7 +35285,7 @@ namespace ts {
                 case SyntaxKind.SuperKeyword:
                     return checkSuperExpression(node);
                 case SyntaxKind.NullKeyword:
-                    return nullWideningType;
+                    return getNullWideningType(node);
                 case SyntaxKind.NoSubstitutionTemplateLiteral:
                 case SyntaxKind.StringLiteral:
                     return getFreshTypeOfLiteralType(getStringLiteralType((node as StringLiteralLike).text));
@@ -35253,7 +35360,7 @@ namespace ts {
                 case SyntaxKind.SpreadElement:
                     return checkSpreadExpression(node as SpreadElement, checkMode);
                 case SyntaxKind.OmittedExpression:
-                    return undefinedWideningType;
+                    return getUndefinedWideningType(node);
                 case SyntaxKind.YieldExpression:
                     return checkYieldExpression(node as YieldExpression);
                 case SyntaxKind.SyntheticExpression:
@@ -35534,7 +35641,7 @@ namespace ts {
                             const generatorYieldType = getIterationTypeOfGeneratorFunctionReturnType(IterationTypeKind.Yield, returnType, (functionFlags & FunctionFlags.Async) !== 0) || anyType;
                             const generatorReturnType = getIterationTypeOfGeneratorFunctionReturnType(IterationTypeKind.Return, returnType, (functionFlags & FunctionFlags.Async) !== 0) || generatorYieldType;
                             const generatorNextType = getIterationTypeOfGeneratorFunctionReturnType(IterationTypeKind.Next, returnType, (functionFlags & FunctionFlags.Async) !== 0) || unknownType;
-                            const generatorInstantiation = createGeneratorReturnType(generatorYieldType, generatorReturnType, generatorNextType, !!(functionFlags & FunctionFlags.Async));
+                            const generatorInstantiation = createGeneratorReturnType(generatorYieldType, generatorReturnType, generatorNextType, !!(functionFlags & FunctionFlags.Async), strictNullChecks(node));
                             checkTypeAssignableTo(generatorInstantiation, returnType, returnTypeNode);
                         }
                     }
@@ -36143,7 +36250,10 @@ namespace ts {
             }
             // Check if we're indexing with a numeric type and if either object or index types
             // is a generic type with a constraint that has a numeric index signature.
-            const apparentObjectType = getApparentType(objectType);
+            let apparentObjectType = getApparentType(objectType);
+            if (!strictNullChecks(accessNode) && apparentObjectType.flags & TypeFlags.Unknown) {
+                apparentObjectType = emptyObjectType;
+            }
             if (getIndexInfoOfType(apparentObjectType, numberType) && isTypeAssignableToKind(indexType, TypeFlags.NumberLike)) {
                 return type;
             }
@@ -36746,7 +36856,7 @@ namespace ts {
                 return undefined;
             }
 
-            const onfulfilledParameterType = getTypeWithFacts(getUnionType(map(candidates, getTypeOfFirstParameterOfSignature)), TypeFacts.NEUndefinedOrNull);
+            const onfulfilledParameterType = getTypeWithFacts(getUnionType(map(candidates, getTypeOfFirstParameterOfSignature)), TypeFacts.NEUndefinedOrNull, errorNode);
             if (isTypeAny(onfulfilledParameterType)) {
                 return undefined;
             }
@@ -36780,14 +36890,14 @@ namespace ts {
         /**
          * Determines whether a type is an object with a callable `then` member.
          */
-        function isThenableType(type: Type): boolean {
+        function isThenableType(type: Type, context: Node | undefined): boolean {
             if (allTypesAssignableToKind(type, TypeFlags.Primitive | TypeFlags.Never)) {
                 // primitive types cannot be considered "thenable" since they are not objects.
                 return false;
             }
 
             const thenFunction = getTypeOfPropertyOfType(type, "then" as __String);
-            return !!thenFunction && getSignaturesOfType(getTypeWithFacts(thenFunction, TypeFacts.NEUndefinedOrNull), SignatureKind.Call).length > 0;
+            return !!thenFunction && getSignaturesOfType(getTypeWithFacts(thenFunction, TypeFacts.NEUndefinedOrNull, context), SignatureKind.Call).length > 0;
         }
 
         interface AwaitedTypeInstantiation extends Type {
@@ -36813,7 +36923,7 @@ namespace ts {
                 type;
         }
 
-        function isAwaitedTypeNeeded(type: Type) {
+        function isAwaitedTypeNeeded(type: Type, context: Node | undefined) {
             // If this is already an `Awaited<T>`, we shouldn't wrap it. This helps to avoid `Awaited<Awaited<T>>` in higher-order.
             if (isTypeAny(type) || isAwaitedTypeInstantiation(type)) {
                 return false;
@@ -36825,7 +36935,7 @@ namespace ts {
                 // We only need `Awaited<T>` if `T` is a type variable that has no base constraint, or the base constraint of `T` is `any`, `unknown`, `{}`, `object`,
                 // or is promise-like.
                 if (baseConstraint ?
-                    baseConstraint.flags & TypeFlags.AnyOrUnknown || isEmptyObjectType(baseConstraint) || isThenableType(baseConstraint) :
+                    baseConstraint.flags & TypeFlags.AnyOrUnknown || isEmptyObjectType(baseConstraint) || isThenableType(baseConstraint, context) :
                     maybeTypeOfKind(type, TypeFlags.TypeVariable)) {
                     return true;
                 }
@@ -36846,7 +36956,7 @@ namespace ts {
             return undefined;
         }
 
-        function createAwaitedTypeIfNeeded(type: Type): Type {
+        function createAwaitedTypeIfNeeded(type: Type, context: Node | undefined): Type {
             // We wrap type `T` in `Awaited<T>` based on the following conditions:
             // - `T` is not already an `Awaited<U>`, and
             // - `T` is generic, and
@@ -36855,7 +36965,7 @@ namespace ts {
             //   - The base constraint of `T` is `any`, `unknown`, `object`, or `{}`, or
             //   - The base constraint of `T` is an object type with a callable `then` method.
 
-            if (isAwaitedTypeNeeded(type)) {
+            if (isAwaitedTypeNeeded(type, context)) {
                 const awaitedType = tryCreateAwaitedType(type);
                 if (awaitedType) {
                     return awaitedType;
@@ -36878,7 +36988,7 @@ namespace ts {
          */
         function getAwaitedType(type: Type, errorNode?: Node, diagnosticMessage?: DiagnosticMessage, arg0?: string | number): Type | undefined {
             const awaitedType = getAwaitedTypeNoAlias(type, errorNode, diagnosticMessage, arg0);
-            return awaitedType && createAwaitedTypeIfNeeded(awaitedType);
+            return awaitedType && createAwaitedTypeIfNeeded(awaitedType, errorNode);
         }
 
         /**
@@ -36921,7 +37031,7 @@ namespace ts {
             }
 
             // If `type` is generic and should be wrapped in `Awaited<T>`, return it.
-            if (isAwaitedTypeNeeded(type)) {
+            if (isAwaitedTypeNeeded(type, errorNode)) {
                 return typeAsAwaitable.awaitedTypeOfType = type;
             }
 
@@ -36996,7 +37106,7 @@ namespace ts {
             // of a runtime problem. If the user wants to return this value from an async
             // function, they would need to wrap it in some other value. If they want it to
             // be treated as a promise, they can cast to <any>.
-            if (isThenableType(type)) {
+            if (isThenableType(type, errorNode)) {
                 if (errorNode) {
                     Debug.assertIsDefined(diagnosticMessage);
                     let chain: DiagnosticMessageChain | undefined;
@@ -37237,7 +37347,7 @@ namespace ts {
                 if (typeNode.kind === SyntaxKind.NeverKeyword) {
                     continue; // Always elide `never` from the union/intersection if possible
                 }
-                if (!strictNullChecks && (typeNode.kind === SyntaxKind.LiteralType && (typeNode as LiteralTypeNode).literal.kind === SyntaxKind.NullKeyword || typeNode.kind === SyntaxKind.UndefinedKeyword)) {
+                if (!strictNullChecks(typeNode) && (typeNode.kind === SyntaxKind.LiteralType && (typeNode as LiteralTypeNode).literal.kind === SyntaxKind.NullKeyword || typeNode.kind === SyntaxKind.UndefinedKeyword)) {
                     continue; // Elide null and undefined from unions for metadata, just like what we did prior to the implementation of strict null checks
                 }
                 const individualEntityName = getEntityNameForDecoratorMetadata(typeNode);
@@ -38231,7 +38341,7 @@ namespace ts {
                     const widenedType = getWidenedTypeForVariableLikeDeclaration(node);
                     if (needCheckInitializer) {
                         const initializerType = checkExpressionCached(node.initializer);
-                        if (strictNullChecks && needCheckWidenedType) {
+                        if (strictNullChecks(node) && needCheckWidenedType) {
                             checkNonNullNonVoidType(initializerType, node);
                         }
                         else {
@@ -38243,7 +38353,7 @@ namespace ts {
                         if (isArrayBindingPattern(node.name)) {
                             checkIteratedTypeOrElementType(IterationUse.Destructuring, widenedType, undefinedType, node);
                         }
-                        else if (strictNullChecks) {
+                        else if (strictNullChecks(node)) {
                             checkNonNullNonVoidType(widenedType, node);
                         }
                     }
@@ -38385,7 +38495,7 @@ namespace ts {
         }
 
         function checkTestingKnownTruthyCallableOrAwaitableType(condExpr: Expression, body?: Statement | Expression) {
-            if (!strictNullChecks) return;
+            if (!strictNullChecks(condExpr)) return;
 
             helper(condExpr, body);
             while (isBinaryExpression(condExpr) && condExpr.operatorToken.kind === SyntaxKind.BarBarToken) {
@@ -38401,7 +38511,7 @@ namespace ts {
                 if (isModuleExportsAccessExpression(location)) return;
                 const type = checkTruthinessExpression(location);
                 const isPropertyExpressionCast = isPropertyAccessExpression(location) && isTypeAssertion(location.expression);
-                if (!(getTypeFacts(type) & TypeFacts.Truthy) || isPropertyExpressionCast) return;
+                if (!(getTypeFacts(type, condExpr) & TypeFacts.Truthy) || isPropertyExpressionCast) return;
 
                 // While it technically should be invalid for any known-truthy value
                 // to be tested, we de-scope to functions and Promises unreferenced in
@@ -38616,7 +38726,12 @@ namespace ts {
             // Grammar checking
             checkGrammarForInOrForOfStatement(node);
 
-            const rightType = getNonNullableTypeIfNeeded(checkExpression(node.expression));
+            const exprType = checkExpression(node.expression);
+            // Previosuly, in non-strictNullChecks mode, `getNonNullableTypeIfNeeded` internally skipped doing work.
+            // Since `null` can manifest in non-strict mode, it unconditionally does work now, however at this location that
+            // difference is visible - an exact `null` is mapped into `never` (and could then issue an error), whereas before it would stay as `null`.
+            // To preserve that non-erroring behavior, we flag stripping null behind strict here.
+            const rightType = strictNullChecks(node) ? getNonNullableTypeIfNeeded(exprType, node) : exprType;
             // TypeScript 1.0 spec (April 2014): 5.4
             // In a 'for-in' statement of the form
             // for (let VarDecl in Expr) Statement
@@ -39341,7 +39456,7 @@ namespace ts {
             }
 
             const methodType = method && !(methodName === "next" && (method.flags & SymbolFlags.Optional))
-                ? methodName === "next" ? getTypeOfSymbol(method) : getTypeWithFacts(getTypeOfSymbol(method), TypeFacts.NEUndefinedOrNull)
+                ? methodName === "next" ? getTypeOfSymbol(method) : getTypeWithFacts(getTypeOfSymbol(method), TypeFacts.NEUndefinedOrNull, errorNode || method.valueDeclaration)
                 : undefined;
 
             if (isTypeAny(methodType)) {
@@ -39531,7 +39646,7 @@ namespace ts {
             const signature = getSignatureFromDeclaration(container);
             const returnType = getReturnTypeOfSignature(signature);
             const functionFlags = getFunctionFlags(container);
-            if (strictNullChecks || node.expression || returnType.flags & TypeFlags.Never) {
+            if (strictNullChecks(node) || node.expression || returnType.flags & TypeFlags.Never) {
                 const exprType = node.expression ? checkExpressionCached(node.expression) : undefinedType;
                 if (container.kind === SyntaxKind.SetAccessor) {
                     if (node.expression) {
@@ -40500,7 +40615,7 @@ namespace ts {
                                 if ((uninitialized as PropertyDeclaration).exclamationToken
                                     || !constructor
                                     || !isIdentifier(propName)
-                                    || !strictNullChecks
+                                    || !strictNullChecks(propName)
                                     || !isPropertyInitializedInConstructor(propName, type, constructor)) {
                                     const errorMessage = Diagnostics.Property_0_will_overwrite_the_base_property_in_1_If_this_is_intentional_add_an_initializer_Otherwise_add_a_declare_modifier_or_remove_the_redundant_declaration;
                                     error(getNameOfDeclaration(derived.valueDeclaration) || derived.valueDeclaration, errorMessage, symbolToString(base), typeToString(baseType));
@@ -40600,7 +40715,7 @@ namespace ts {
         }
 
         function checkPropertyInitialization(node: ClassLikeDeclaration) {
-            if (!strictNullChecks || !strictPropertyInitialization(getSourceFileOfNode(node)) || node.flags & NodeFlags.Ambient) {
+            if (!strictNullChecks(node) || !strictPropertyInitialization(getSourceFileOfNode(node)) || node.flags & NodeFlags.Ambient) {
                 return;
             }
             const constructor = findConstructorDeclaration(node);
@@ -40637,7 +40752,7 @@ namespace ts {
                     setParent(reference.expression, reference);
                     setParent(reference, staticBlock);
                     reference.flowNode = staticBlock.returnFlowNode;
-                    const flowType = getFlowTypeOfReference(reference, propType, getOptionalType(propType));
+                    const flowType = getFlowTypeOfReference(reference, propType, getOptionalType(propType, reference));
                     if (!containsUndefinedType(flowType)) {
                         return true;
                     }
@@ -40653,7 +40768,7 @@ namespace ts {
             setParent(reference.expression, reference);
             setParent(reference, constructor);
             reference.flowNode = constructor.returnFlowNode;
-            const flowType = getFlowTypeOfReference(reference, propType, getOptionalType(propType));
+            const flowType = getFlowTypeOfReference(reference, propType, getOptionalType(propType, propName));
             return !containsUndefinedType(flowType);
         }
 
@@ -42026,7 +42141,7 @@ namespace ts {
             if (isParameter(parent) && isJSDocFunctionType(parent.parent)) {
                 return createArrayType(type);
             }
-            return addOptionality(type);
+            return addOptionality(type, parent);
         }
 
         // Function and class expression bodies are checked after all statements in the enclosing body. This is
@@ -43322,7 +43437,7 @@ namespace ts {
         }
 
         function isRequiredInitializedParameter(parameter: ParameterDeclaration | JSDocParameterTag): boolean {
-            return !!strictNullChecks &&
+            return !!strictNullChecks(parameter) &&
                 !isOptionalParameter(parameter) &&
                 !isJSDocParameterTag(parameter) &&
                 !!parameter.initializer &&
@@ -43330,7 +43445,7 @@ namespace ts {
         }
 
         function isOptionalUninitializedParameterProperty(parameter: ParameterDeclaration) {
-            return strictNullChecks &&
+            return strictNullChecks(parameter) &&
                 isOptionalParameter(parameter) &&
                 !parameter.initializer &&
                 hasSyntacticModifier(parameter, ModifierFlags.ParameterPropertyModifier);
@@ -43491,7 +43606,7 @@ namespace ts {
                 flags |= NodeBuilderFlags.AllowUniqueESSymbolType;
             }
             if (addUndefined) {
-                type = getOptionalType(type);
+                type = getOptionalType(type, declarationIn);
             }
             return nodeBuilder.typeToTypeNode(type, enclosingDeclaration, flags | NodeBuilderFlags.MultilineObjectLiterals, tracker);
         }
@@ -43906,7 +44021,7 @@ namespace ts {
             // Setup global builtins
             addToSymbolTable(globals, builtinGlobals, Diagnostics.Declaration_name_conflicts_with_built_in_global_identifier_0);
 
-            getSymbolLinks(undefinedSymbol).type = undefinedWideningType;
+            getSymbolLinks(undefinedSymbol).type = undefinedType; // `checkIdentifier` overrides this with the widening type when relevant
             getSymbolLinks(argumentsSymbol).type = getGlobalType("IArguments" as __String, /*arity*/ 0, /*reportErrors*/ true);
             getSymbolLinks(unknownSymbol).type = errorType;
             getSymbolLinks(globalThisSymbol).type = createObjectType(ObjectFlags.Anonymous, globalThisSymbol);
