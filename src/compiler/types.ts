@@ -5337,6 +5337,7 @@ namespace ts {
         skipDirectInference?: true;         // Flag set by the API `getContextualType` call on a node when `Completions` is passed to force the checker to skip making inferences to a node's type
         declarationRequiresScopeChange?: boolean; // Set by `useOuterVariableScopeInParameter` in checker when downlevel emit would change the name resolution scope inside of a parameter.
         serializedTypes?: ESMap<string, TypeNode & {truncating?: boolean, addedLength: number}>; // Collection of types serialized at this location
+        sourceFile?: SourceFile | undefined; // Cached lookup result of `getSourceFileOfNode`
     }
 
     export const enum TypeFlags {

@@ -1075,6 +1075,17 @@ namespace ts {
 
         return checker;
 
+        function getSourceFileOfNode(node: Node): SourceFile;
+        function getSourceFileOfNode(node: Node | undefined): SourceFile | undefined;
+        function getSourceFileOfNode(node: Node | undefined) {
+            if (!node) return node;
+            const links = getNodeLinks(node);
+            if (!hasProperty(links, "sourceFile")) {
+                links.sourceFile = ts.getSourceFileOfNode(node);
+            }
+            return links.sourceFile;
+        }
+
         function getCachedType(key: string | undefined) {
             return key ? cachedTypes.get(key) : undefined;
         }
