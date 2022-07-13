@@ -64,7 +64,7 @@ const item3 = satisfies<Item>()({ value: null });
 >value : null
 >null : null
 
-const values2: Array<"1" | "2" | null> = ["1", "2", null]; // same reported type as `values`
+const values2: Array<"1" | "2" | null> = ["1", "2", null];
 >values2 : ("1" | "2" | null)[]
 >null : null
 >["1", "2", null] : ("1" | "2" | null)[]
@@ -72,7 +72,7 @@ const values2: Array<"1" | "2" | null> = ["1", "2", null]; // same reported type
 >"2" : "2"
 >null : null
 
-const filteredValues2 = values2.filter(isNotNull); // `null` correctly gets excluded from type
+const filteredValues2 = values2.filter(isNotNull);
 >filteredValues2 : ("1" | "2")[]
 >values2.filter(isNotNull) : ("1" | "2")[]
 >values2.filter : { <S extends "1" | "2" | null>(predicate: (value: "1" | "2" | null, index: number, array: ("1" | "2" | null)[]) => value is S, thisArg?: any): S[]; (predicate: (value: "1" | "2" | null, index: number, array: ("1" | "2" | null)[]) => unknown, thisArg?: any): ("1" | "2" | null)[]; }
@@ -95,12 +95,11 @@ const values1 = [item1, item2, item3].map(item => item.value);
 >item : { value: "1"; } | { value: "2"; } | { value: null; }
 >value : "1" | "2" | null
 
-const filteredValues1 = values1.filter(isNotNull); // still contains `null` in type :(
+const filteredValues1 = values1.filter(isNotNull);
 >filteredValues1 : ("1" | "2")[]
 >values1.filter(isNotNull) : ("1" | "2")[]
 >values1.filter : { <S extends "1" | "2" | null>(predicate: (value: "1" | "2" | null, index: number, array: ("1" | "2" | null)[]) => value is S, thisArg?: any): S[]; (predicate: (value: "1" | "2" | null, index: number, array: ("1" | "2" | null)[]) => unknown, thisArg?: any): ("1" | "2" | null)[]; }
 >values1 : ("1" | "2" | null)[]
 >filter : { <S extends "1" | "2" | null>(predicate: (value: "1" | "2" | null, index: number, array: ("1" | "2" | null)[]) => value is S, thisArg?: any): S[]; (predicate: (value: "1" | "2" | null, index: number, array: ("1" | "2" | null)[]) => unknown, thisArg?: any): ("1" | "2" | null)[]; }
 >isNotNull : <T>(value: T | null) => value is T
-
 

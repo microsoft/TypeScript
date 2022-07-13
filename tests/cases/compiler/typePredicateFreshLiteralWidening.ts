@@ -21,9 +21,8 @@ const item1 = satisfies<Item>()({ value: "1" });
 const item2 = satisfies<Item>()({ value: "2" });
 const item3 = satisfies<Item>()({ value: null });
 
-const values2: Array<"1" | "2" | null> = ["1", "2", null]; // same reported type as `values`
-const filteredValues2 = values2.filter(isNotNull); // `null` correctly gets excluded from type
+const values2: Array<"1" | "2" | null> = ["1", "2", null];
+const filteredValues2 = values2.filter(isNotNull);
 
 const values1 = [item1, item2, item3].map(item => item.value);
-const filteredValues1 = values1.filter(isNotNull); // still contains `null` in type :(
-
+const filteredValues1 = values1.filter(isNotNull);

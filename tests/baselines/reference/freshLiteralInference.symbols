@@ -1,0 +1,55 @@
+=== tests/cases/compiler/freshLiteralInference.ts ===
+declare function f1<T extends "1" | "2" | "3">(x: T): T;
+>f1 : Symbol(f1, Decl(freshLiteralInference.ts, 0, 0))
+>T : Symbol(T, Decl(freshLiteralInference.ts, 0, 20))
+>x : Symbol(x, Decl(freshLiteralInference.ts, 0, 47))
+>T : Symbol(T, Decl(freshLiteralInference.ts, 0, 20))
+>T : Symbol(T, Decl(freshLiteralInference.ts, 0, 20))
+
+const value = f1("1");  // regular "1"
+>value : Symbol(value, Decl(freshLiteralInference.ts, 2, 5))
+>f1 : Symbol(f1, Decl(freshLiteralInference.ts, 0, 0))
+
+let x1 = value;  // regular "1"
+>x1 : Symbol(x1, Decl(freshLiteralInference.ts, 3, 3))
+>value : Symbol(value, Decl(freshLiteralInference.ts, 2, 5))
+
+declare function f2<T extends "1" | "2" | "3">(x: { value: T }): { value: T };
+>f2 : Symbol(f2, Decl(freshLiteralInference.ts, 3, 15))
+>T : Symbol(T, Decl(freshLiteralInference.ts, 5, 20))
+>x : Symbol(x, Decl(freshLiteralInference.ts, 5, 47))
+>value : Symbol(value, Decl(freshLiteralInference.ts, 5, 51))
+>T : Symbol(T, Decl(freshLiteralInference.ts, 5, 20))
+>value : Symbol(value, Decl(freshLiteralInference.ts, 5, 66))
+>T : Symbol(T, Decl(freshLiteralInference.ts, 5, 20))
+
+const obj2 = f2({ value: "1" });  // { value: regular "1" }
+>obj2 : Symbol(obj2, Decl(freshLiteralInference.ts, 7, 5))
+>f2 : Symbol(f2, Decl(freshLiteralInference.ts, 3, 15))
+>value : Symbol(value, Decl(freshLiteralInference.ts, 7, 17))
+
+let x2 = obj2.value;  // regular "1"
+>x2 : Symbol(x2, Decl(freshLiteralInference.ts, 8, 3))
+>obj2.value : Symbol(value, Decl(freshLiteralInference.ts, 5, 66))
+>obj2 : Symbol(obj2, Decl(freshLiteralInference.ts, 7, 5))
+>value : Symbol(value, Decl(freshLiteralInference.ts, 5, 66))
+
+declare function f3<T extends { value: "1" | "2" | "3" }>(obj: T): T;
+>f3 : Symbol(f3, Decl(freshLiteralInference.ts, 8, 20))
+>T : Symbol(T, Decl(freshLiteralInference.ts, 10, 20))
+>value : Symbol(value, Decl(freshLiteralInference.ts, 10, 31))
+>obj : Symbol(obj, Decl(freshLiteralInference.ts, 10, 58))
+>T : Symbol(T, Decl(freshLiteralInference.ts, 10, 20))
+>T : Symbol(T, Decl(freshLiteralInference.ts, 10, 20))
+
+const obj3 = f3({ value: "1" });  // before: { value: fresh "1" }
+>obj3 : Symbol(obj3, Decl(freshLiteralInference.ts, 12, 5))
+>f3 : Symbol(f3, Decl(freshLiteralInference.ts, 8, 20))
+>value : Symbol(value, Decl(freshLiteralInference.ts, 12, 17))
+
+let x3 = obj3.value;  // before: string, after: "1"
+>x3 : Symbol(x3, Decl(freshLiteralInference.ts, 13, 3))
+>obj3.value : Symbol(value, Decl(freshLiteralInference.ts, 12, 17))
+>obj3 : Symbol(obj3, Decl(freshLiteralInference.ts, 12, 5))
+>value : Symbol(value, Decl(freshLiteralInference.ts, 12, 17))
+
