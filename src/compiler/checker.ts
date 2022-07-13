@@ -789,7 +789,6 @@ namespace ts {
         const wildcardType = createIntrinsicType(TypeFlags.Any, "any");
         const errorType = createIntrinsicType(TypeFlags.Any, "error");
         const unresolvedType = createIntrinsicType(TypeFlags.Any, "unresolved");
-        const nonInferrableAnyType = createIntrinsicType(TypeFlags.Any, "any", ObjectFlags.ContainsWideningType);
         const intrinsicMarkerType = createIntrinsicType(TypeFlags.Any, "intrinsic");
         const unknownType = createIntrinsicType(TypeFlags.Unknown, "unknown");
         const nonNullUnknownType = createIntrinsicType(TypeFlags.Unknown, "unknown");
@@ -9455,11 +9454,7 @@ namespace ts {
             if (reportErrors && !declarationBelongsToPrivateAmbientMember(element)) {
                 reportImplicitAny(element, anyType);
             }
-            // When we're including the pattern in the type (an indication we're obtaining a contextual type), we
-            // use the non-inferrable any type. Inference will never directly infer this type, but it is possible
-            // to infer a type that contains it, e.g. for a binding pattern like [foo] or { foo }. In such cases,
-            // widening of the binding pattern type substitutes a regular any for the non-inferrable any.
-            return includePatternInType ? nonInferrableAnyType : anyType;
+            return anyType;
         }
 
         // Return the type implied by an object binding pattern
