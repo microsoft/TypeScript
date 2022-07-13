@@ -1387,6 +1387,7 @@ namespace ts {
         ...commandOptionsWithoutBuild,
     ] as const);
 
+    /* @internal */
     type WithTrue<T, K extends keyof T> = T extends unknown ? K extends unknown ? T[K] extends true ? T : never : never : never;
 
     function isAffectsSemanticDiagnosticsOption<T extends CommandLineOption>(option: T): option is WithTrue<T, "affectsSemanticDiagnostics"> {

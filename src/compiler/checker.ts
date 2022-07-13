@@ -15510,12 +15510,15 @@ namespace ts {
          * Should all count as literals and not print errors on access or assignment of possibly existing properties.
          * This mirrors the behavior of the index signature propagation, to which this behaves similarly (but doesn't affect assignability or inference).
          */
-        function isJSLiteralType(type: Type): boolean {
+        function isJSLiteralType(type: Type, context?: Node): boolean {
+            if (noImplicitAny(getSourceFileOfNode(context))) {
+                return false; // Flag is meaningless under `noImplicitAny` mode
+            }
             if (getObjectFlags(type) & ObjectFlags.JSLiteral) {
                 return true;
             }
             if (type.flags & TypeFlags.Union) {
-                return every((type as UnionType).types, isJSLiteralType);
+                return every((type as UnionType).types, t => isJSLiteralType(t));
             }
             if (type.flags & TypeFlags.Intersection) {
                 return some((type as IntersectionType).types, isJSLiteralType);
@@ -15622,7 +15625,7 @@ namespace ts {
                 if (indexType.flags & TypeFlags.Never) {
                     return neverType;
                 }
-                if (isJSLiteralType(objectType)) {
+                if (isJSLiteralType(objectType, accessNode)) {
                     return anyType;
                 }
                 if (accessExpression && !isConstEnumObjectType(objectType)) {
@@ -15693,7 +15696,7 @@ namespace ts {
                     return undefined;
                 }
             }
-            if (isJSLiteralType(objectType)) {
+            if (isJSLiteralType(objectType, accessNode)) {
                 return anyType;
             }
             if (accessNode) {
@@ -29231,7 +29234,7 @@ namespace ts {
                     getApplicableIndexInfoForName(apparentType, right.escapedText) : undefined;
                 if (!(indexInfo && indexInfo.type)) {
                     const isUncheckedJS = isUncheckedJSSuggestion(node, leftType.symbol, /*excludeClasses*/ true);
-                    if (!isUncheckedJS && isJSLiteralType(leftType)) {
+                    if (!isUncheckedJS && isJSLiteralType(leftType, node)) {
                         return anyType;
                     }
                     if (leftType.symbol === globalThisSymbol) {

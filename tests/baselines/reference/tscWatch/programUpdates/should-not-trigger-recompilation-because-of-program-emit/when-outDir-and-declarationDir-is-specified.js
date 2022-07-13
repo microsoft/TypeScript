@@ -134,13 +134,9 @@ Output::
 
 [91merror[0m[90m TS2318: [0mCannot find global type 'Boolean'.
 
-[91merror[0m[90m TS2318: [0mCannot find global type 'CallableFunction'.
-
 [91merror[0m[90m TS2318: [0mCannot find global type 'Function'.
 
 [91merror[0m[90m TS2318: [0mCannot find global type 'IArguments'.
-
-[91merror[0m[90m TS2318: [0mCannot find global type 'NewableFunction'.
 
 [91merror[0m[90m TS2318: [0mCannot find global type 'Number'.
 
@@ -159,7 +155,7 @@ Output::
     [7m  [0m [96m              ~~~~~~~~[0m
     File is default library for target specified here.
 
-[[90m12:00:46 AM[0m] Found 11 errors. Watching for file changes.
+[[90m12:00:46 AM[0m] Found 9 errors. Watching for file changes.
 
 
 
@@ -269,13 +265,9 @@ Output::
 
 [91merror[0m[90m TS2318: [0mCannot find global type 'Boolean'.
 
-[91merror[0m[90m TS2318: [0mCannot find global type 'CallableFunction'.
-
 [91merror[0m[90m TS2318: [0mCannot find global type 'Function'.
 
 [91merror[0m[90m TS2318: [0mCannot find global type 'IArguments'.
-
-[91merror[0m[90m TS2318: [0mCannot find global type 'NewableFunction'.
 
 [91merror[0m[90m TS2318: [0mCannot find global type 'Number'.
 
@@ -294,7 +286,7 @@ Output::
     [7m  [0m [96m              ~~~~~~~~[0m
     File is default library for target specified here.
 
-[[90m12:00:54 AM[0m] Found 11 errors. Watching for file changes.
+[[90m12:00:54 AM[0m] Found 9 errors. Watching for file changes.
 
 
 
