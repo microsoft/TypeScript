@@ -785,8 +785,7 @@ namespace ts {
         const errorTypes = new Map<string, Type>();
 
         const anyType = createIntrinsicType(TypeFlags.Any, "any");
-        const autoType = createIntrinsicType(TypeFlags.Any, "any");
-        autoType.objectFlags |= ObjectFlags.NonInferrableType;
+        const autoType = createIntrinsicType(TypeFlags.Any, "any", ObjectFlags.NonInferrableType);
         const wildcardType = createIntrinsicType(TypeFlags.Any, "any");
         const errorType = createIntrinsicType(TypeFlags.Any, "error");
         const unresolvedType = createIntrinsicType(TypeFlags.Any, "unresolved");
