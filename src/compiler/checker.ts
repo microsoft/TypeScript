@@ -13493,12 +13493,12 @@ namespace ts {
 
         // This function is used to propagate certain flags when creating new object type references and union types.
         // It is only necessary to do so if a constituent type might be the undefined type, the null type, the type
-        // of an object literal or the anyFunctionType. This is because there are operations in the type checker
+        // of an object literal or a non-inferrable type. This is because there are operations in the type checker
         // that care about the presence of such types at arbitrary depth in a containing type.
-        function getPropagatingFlagsOfTypes(types: readonly Type[], excludeKinds: TypeFlags): ObjectFlags {
+        function getPropagatingFlagsOfTypes(types: readonly Type[], excludeKinds?: TypeFlags): ObjectFlags {
             let result: ObjectFlags = 0;
             for (const type of types) {
-                if (!(type.flags & excludeKinds)) {
+                if (excludeKinds === undefined || !(type.flags & excludeKinds)) {
                     result |= getObjectFlags(type);
                 }
             }
@@ -13511,7 +13511,7 @@ namespace ts {
             if (!type) {
                 type = createObjectType(ObjectFlags.Reference, target.symbol) as TypeReference;
                 target.instantiations.set(id, type);
-                type.objectFlags |= typeArguments ? getPropagatingFlagsOfTypes(typeArguments, /*excludeKinds*/ 0) : 0;
+                type.objectFlags |= typeArguments ? getPropagatingFlagsOfTypes(typeArguments) : 0;
                 type.target = target;
                 type.resolvedTypeArguments = typeArguments;
             }
@@ -17190,7 +17190,7 @@ namespace ts {
             result.mapper = mapper;
             result.aliasSymbol = aliasSymbol || type.aliasSymbol;
             result.aliasTypeArguments = aliasSymbol ? aliasTypeArguments : instantiateTypes(type.aliasTypeArguments, mapper);
-            result.objectFlags |= result.aliasTypeArguments ? getPropagatingFlagsOfTypes(result.aliasTypeArguments, /*excludeKinds*/ 0) : 0;
+            result.objectFlags |= result.aliasTypeArguments ? getPropagatingFlagsOfTypes(result.aliasTypeArguments) : 0;
             return result;
         }
 
