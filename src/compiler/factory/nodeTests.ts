@@ -942,6 +942,10 @@ namespace ts {
         return node.kind === SyntaxKind.JSDocImplementsTag;
     }
 
+    export function isJSDocThrowsTag(node: Node): node is JSDocThrowsTag {
+        return node.kind === SyntaxKind.JSDocThrowsTag;
+    }
+
     // Synthesized list
 
     /* @internal */

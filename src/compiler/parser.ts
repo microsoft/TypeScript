@@ -645,6 +645,10 @@ namespace ts {
                 return visitNode(cbNode, (node as JSDocTag).tagName) ||
                     visitNode(cbNode, (node as JSDocReturnTag | JSDocTypeTag | JSDocThisTag | JSDocEnumTag).typeExpression) ||
                     (typeof (node as JSDoc).comment === "string" ? undefined : visitNodes(cbNode, cbNodes, (node as JSDoc).comment as NodeArray<JSDocComment> | undefined));
+            case SyntaxKind.JSDocThrowsTag:
+                return visitNode(cbNode, (node as JSDocThrowsTag).tagName) ||
+                    visitNode(cbNode, (node as JSDocThrowsTag).name) ||
+                    (typeof (node as JSDoc).comment === "string" ? undefined : visitNodes(cbNode, cbNodes, (node as JSDoc).comment as NodeArray<JSDocComment> | undefined));
             case SyntaxKind.JSDocSignature:
                 return forEach((node as JSDocSignature).typeParameters, cbNode) ||
                     forEach((node as JSDocSignature).parameters, cbNode) ||
@@ -8200,6 +8204,9 @@ namespace ts {
                         case "see":
                             tag = parseSeeTag(start, tagName, margin, indentText);
                             break;
+                        case "throws":
+                            tag = parseThrowsTag(start, tagName, margin, indentText);
+                            break;
                         default:
                             tag = parseUnknownTag(start, tagName, margin, indentText);
                             break;
@@ -8400,6 +8407,11 @@ namespace ts {
                     return token() === SyntaxKind.OpenBraceToken ? parseJSDocTypeExpression() : undefined;
                 }
 
+                function tryParseJSDocNameReference(): JSDocNameReference | undefined {
+                    skipWhitespaceOrAsterisk();
+                    return token() === SyntaxKind.OpenBraceToken ? parseJSDocNameReference() : undefined;
+                }
+
                 function parseBracketNameInPropertyAndParamTag(): { name: EntityName, isBracketed: boolean } {
                     // Looking for something like '[foo]', 'foo', '[foo.bar]' or 'foo.bar'
                     const isBracketed = parseOptionalJsdoc(SyntaxKind.OpenBracketToken);
@@ -8503,6 +8515,12 @@ namespace ts {
                     const nameExpression = isMarkdownOrJSDocLink ? undefined : parseJSDocNameReference();
                     const comments = indent !== undefined && indentText !== undefined ? parseTrailingTagComments(start, getNodePos(), indent, indentText) : undefined;
                     return finishNode(factory.createJSDocSeeTag(tagName, nameExpression, comments), start);
+                }
+
+                function parseThrowsTag(start: number, tagName: Identifier, indent: number, indentText: string): JSDocThrowsTag {
+                    const name = tryParseJSDocNameReference();
+                    const comment = parseTrailingTagComments(start, getNodePos(), indent, indentText);
+                    return finishNode(factory.createJSDocThrowsTag(tagName, name, comment), start);
                 }
 
                 function parseAuthorTag(start: number, tagName: Identifier, indent: number, indentText: string): JSDocAuthorTag {

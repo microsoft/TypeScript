@@ -196,12 +196,13 @@ namespace ts.JsDoc {
                 return displayParts;
             case SyntaxKind.JSDocTypeTag:
                 return withNode((tag as JSDocTypeTag).typeExpression);
+            case SyntaxKind.JSDocThrowsTag:
             case SyntaxKind.JSDocTypedefTag:
             case SyntaxKind.JSDocCallbackTag:
             case SyntaxKind.JSDocPropertyTag:
             case SyntaxKind.JSDocParameterTag:
             case SyntaxKind.JSDocSeeTag:
-                const { name } = tag as JSDocTypedefTag | JSDocCallbackTag | JSDocPropertyTag | JSDocParameterTag | JSDocSeeTag;
+                const { name } = tag as JSDocThrowsTag | JSDocTypedefTag | JSDocCallbackTag | JSDocPropertyTag | JSDocParameterTag | JSDocSeeTag;
                 return name ? withNode(name)
                     : comment === undefined ? undefined
                     : getDisplayPartsFromComment(comment, checker);

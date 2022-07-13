@@ -365,6 +365,9 @@ namespace ts {
             updateJSDocLinkCode,
             createJSDocLinkPlain,
             updateJSDocLinkPlain,
+            createJSDocThrowsTag,
+            updateJSDocThrowsTag,
+
             // lazily load factory members for JSDoc tags with similar structure
             get createJSDocTypeTag() { return getJSDocTypeLikeTagCreateFunction<JSDocTypeTag>(SyntaxKind.JSDocTypeTag); },
             get updateJSDocTypeTag() { return getJSDocTypeLikeTagUpdateFunction<JSDocTypeTag>(SyntaxKind.JSDocTypeTag); },
@@ -4728,6 +4731,22 @@ namespace ts {
                 || node.class !== className
                 || node.comment !== comment
                 ? update(createJSDocImplementsTag(tagName, className, comment), node)
+                : node;
+        }
+
+        // @api
+        function createJSDocThrowsTag(tagName: Identifier, name: JSDocNameReference | undefined, comment?: string | NodeArray<JSDocComment>): JSDocThrowsTag {
+            const node = createBaseJSDocTag<JSDocThrowsTag>(SyntaxKind.JSDocThrowsTag, tagName, comment);
+            node.name = name;
+            return node;
+        }
+
+        // @api
+        function updateJSDocThrowsTag(node: JSDocThrowsTag, tagName: Identifier, name: JSDocNameReference | undefined, comment?: string | NodeArray<JSDocComment>): JSDocThrowsTag {
+            return node.tagName !== tagName
+                || node.name !== name
+                || node.comment !== comment
+                ? update(createJSDocThrowsTag(tagName, name, comment), node)
                 : node;
         }
 

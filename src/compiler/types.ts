@@ -409,6 +409,7 @@ namespace ts {
         JSDocTypedefTag,
         JSDocSeeTag,
         JSDocPropertyTag,
+        JSDocThrowsTag,
 
         // Synthesized list
         SyntaxList,
@@ -453,9 +454,9 @@ namespace ts {
         LastStatement = DebuggerStatement,
         FirstNode = QualifiedName,
         FirstJSDocNode = JSDocTypeExpression,
-        LastJSDocNode = JSDocPropertyTag,
+        LastJSDocNode = JSDocThrowsTag,
         FirstJSDocTagNode = JSDocTag,
-        LastJSDocTagNode = JSDocPropertyTag,
+        LastJSDocTagNode = JSDocThrowsTag,
         /* @internal */ FirstContextualKeyword = AbstractKeyword,
         /* @internal */ LastContextualKeyword = OfKeyword,
     }
@@ -3571,6 +3572,11 @@ namespace ts {
         readonly fullName?: JSDocNamespaceDeclaration | Identifier;
         readonly name?: Identifier;
         readonly typeExpression: JSDocSignature;
+    }
+
+    export interface JSDocThrowsTag extends JSDocTag {
+        readonly kind: SyntaxKind.JSDocThrowsTag;
+        readonly name?: JSDocNameReference;
     }
 
     export interface JSDocSignature extends JSDocType, Declaration {
@@ -7843,6 +7849,8 @@ namespace ts {
         updateJSDocDeprecatedTag(node: JSDocDeprecatedTag, tagName: Identifier, comment?: string | NodeArray<JSDocComment>): JSDocDeprecatedTag;
         createJSDocOverrideTag(tagName: Identifier, comment?: string | NodeArray<JSDocComment>): JSDocOverrideTag;
         updateJSDocOverrideTag(node: JSDocOverrideTag, tagName: Identifier, comment?: string | NodeArray<JSDocComment>): JSDocOverrideTag;
+        createJSDocThrowsTag(tagName: Identifier, name?: JSDocNameReference, comment?: string | NodeArray<JSDocComment>): JSDocThrowsTag;
+        updateJSDocThrowsTag(node: JSDocThrowsTag, tagName: Identifier | undefined, name?: JSDocNameReference | undefined, comment?: string | NodeArray<JSDocComment> | undefined): JSDocThrowsTag;
         createJSDocText(text: string): JSDocText;
         updateJSDocText(node: JSDocText, text: string): JSDocText;
         createJSDocComment(comment?: string | NodeArray<JSDocComment> | undefined, tags?: readonly JSDocTag[] | undefined): JSDoc;

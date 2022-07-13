@@ -1670,6 +1670,9 @@ namespace ts {
                         return emitJSDocTypedefTag(node as JSDocTypedefTag);
                     case SyntaxKind.JSDocSeeTag:
                         return emitJSDocSeeTag(node as JSDocSeeTag);
+                    case SyntaxKind.JSDocThrowsTag:
+                        return emitJSDocThrowsTag(node as JSDocThrowsTag);
+
                     // SyntaxKind.JSDocPropertyTag (see JSDocParameterTag, above)
 
                     // Transformation nodes
@@ -3937,6 +3940,12 @@ namespace ts {
                 writePunctuation("]");
             }
             emitJSDocComment(param.comment);
+        }
+
+        function emitJSDocThrowsTag(tag: JSDocThrowsTag) {
+            emitJSDocTagName(tag.tagName);
+            emit(tag.name);
+            emitJSDocComment(tag.comment);
         }
 
         function emitJSDocTagName(tagName: Identifier) {

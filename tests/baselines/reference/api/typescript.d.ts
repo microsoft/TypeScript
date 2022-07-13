@@ -455,14 +455,15 @@ declare namespace ts {
         JSDocTypedefTag = 345,
         JSDocSeeTag = 346,
         JSDocPropertyTag = 347,
-        SyntaxList = 348,
-        NotEmittedStatement = 349,
-        PartiallyEmittedExpression = 350,
-        CommaListExpression = 351,
-        MergeDeclarationMarker = 352,
-        EndOfDeclarationMarker = 353,
-        SyntheticReferenceExpression = 354,
-        Count = 355,
+        JSDocThrowsTag = 348,
+        SyntaxList = 349,
+        NotEmittedStatement = 350,
+        PartiallyEmittedExpression = 351,
+        CommaListExpression = 352,
+        MergeDeclarationMarker = 353,
+        EndOfDeclarationMarker = 354,
+        SyntheticReferenceExpression = 355,
+        Count = 356,
         FirstAssignment = 63,
         LastAssignment = 78,
         FirstCompoundAssignment = 64,
@@ -491,9 +492,9 @@ declare namespace ts {
         LastStatement = 253,
         FirstNode = 161,
         FirstJSDocNode = 309,
-        LastJSDocNode = 347,
+        LastJSDocNode = 348,
         FirstJSDocTagNode = 327,
-        LastJSDocTagNode = 347,
+        LastJSDocTagNode = 348,
     }
     export type TriviaSyntaxKind = SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia | SyntaxKind.NewLineTrivia | SyntaxKind.WhitespaceTrivia | SyntaxKind.ShebangTrivia | SyntaxKind.ConflictMarkerTrivia;
     export type LiteralSyntaxKind = SyntaxKind.NumericLiteral | SyntaxKind.BigIntLiteral | SyntaxKind.StringLiteral | SyntaxKind.JsxText | SyntaxKind.JsxTextAllWhiteSpaces | SyntaxKind.RegularExpressionLiteral | SyntaxKind.NoSubstitutionTemplateLiteral;
@@ -1966,6 +1967,10 @@ declare namespace ts {
         readonly fullName?: JSDocNamespaceDeclaration | Identifier;
         readonly name?: Identifier;
         readonly typeExpression: JSDocSignature;
+    }
+    export interface JSDocThrowsTag extends JSDocTag {
+        readonly kind: SyntaxKind.JSDocThrowsTag;
+        readonly name?: JSDocNameReference;
     }
     export interface JSDocSignature extends JSDocType, Declaration {
         readonly kind: SyntaxKind.JSDocSignature;
@@ -3750,6 +3755,8 @@ declare namespace ts {
         updateJSDocDeprecatedTag(node: JSDocDeprecatedTag, tagName: Identifier, comment?: string | NodeArray<JSDocComment>): JSDocDeprecatedTag;
         createJSDocOverrideTag(tagName: Identifier, comment?: string | NodeArray<JSDocComment>): JSDocOverrideTag;
         updateJSDocOverrideTag(node: JSDocOverrideTag, tagName: Identifier, comment?: string | NodeArray<JSDocComment>): JSDocOverrideTag;
+        createJSDocThrowsTag(tagName: Identifier, name?: JSDocNameReference, comment?: string | NodeArray<JSDocComment>): JSDocThrowsTag;
+        updateJSDocThrowsTag(node: JSDocThrowsTag, tagName: Identifier | undefined, name?: JSDocNameReference | undefined, comment?: string | NodeArray<JSDocComment> | undefined): JSDocThrowsTag;
         createJSDocText(text: string): JSDocText;
         updateJSDocText(node: JSDocText, text: string): JSDocText;
         createJSDocComment(comment?: string | NodeArray<JSDocComment> | undefined, tags?: readonly JSDocTag[] | undefined): JSDoc;
@@ -4825,6 +4832,7 @@ declare namespace ts {
     function isJSDocUnknownTag(node: Node): node is JSDocUnknownTag;
     function isJSDocPropertyTag(node: Node): node is JSDocPropertyTag;
     function isJSDocImplementsTag(node: Node): node is JSDocImplementsTag;
+    function isJSDocThrowsTag(node: Node): node is JSDocThrowsTag;
 }
 declare namespace ts {
     function setTextRange<T extends TextRange>(range: T, location: TextRange | undefined): T;
