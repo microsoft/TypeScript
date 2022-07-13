@@ -3493,7 +3493,7 @@ namespace ts {
                 createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "lib", "noLib");
             }
 
-            if (options.noImplicitUseStrict && getStrictOptionValue(/*file*/undefined, options, "alwaysStrict")) {
+            if (options.noImplicitUseStrict && getStrictOptionValue(/*file*/ undefined, options, "alwaysStrict")) {
                 createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "noImplicitUseStrict", "alwaysStrict");
             }
 

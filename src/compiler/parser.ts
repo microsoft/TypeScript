@@ -9663,7 +9663,7 @@ namespace ts {
                     const entry = (isArray(entryOrList) ? last(entryOrList) : entryOrList);
                     const unparsedValue = (entry.arguments as PragmaArgumentType<`ts-${Lowercase<FileLocalOptionName>}`>).value;
                     const optContainer: OptionsBase = {};
-                    const errors: Diagnostic[] = []
+                    const errors: Diagnostic[] = [];
                     const parsedValue = unparsedValue === undefined ? true : (parseOptionValue([unparsedValue], 0, /*diagnostics*/ undefined, opt, optContainer, errors), optContainer[opt.name]);
                     if (unparsedValue === undefined && opt.type !== "boolean") {
                         errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_expects_an_argument, optName));
@@ -9681,6 +9681,7 @@ namespace ts {
                     if (!length(errors)) {
                         (context.localOptions ??= {})[opt.name as string] = parsedValue;
                     }
+                    break;
                 }
                 case "jsx":
                 case "jsxfrag":
