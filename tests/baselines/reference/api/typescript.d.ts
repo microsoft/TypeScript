@@ -2323,7 +2323,7 @@ declare namespace ts {
         getWidenedType(type: Type): Type;
         getReturnTypeOfSignature(signature: Signature): Type;
         getNullableType(type: Type, flags: TypeFlags): Type;
-        getNonNullableType(type: Type): Type;
+        getNonNullableType(type: Type, context?: Node | undefined): Type;
         getTypeArguments(type: TypeReference): readonly Type[];
         /** Note that the resulting nodes cannot be checked. */
         typeToTypeNode(type: Type, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined): TypeNode | undefined;

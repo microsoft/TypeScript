@@ -4386,9 +4386,9 @@ namespace ts {
         /* @internal */ getParameterType(signature: Signature, parameterIndex: number): Type;
         /* @internal */ getParameterIdentifierNameAtPosition(signature: Signature, parameterIndex: number): [parameterName: __String, isRestParameter: boolean] | undefined;
         getNullableType(type: Type, flags: TypeFlags): Type;
-        getNonNullableType(type: Type): Type;
+        getNonNullableType(type: Type, context?: Node | undefined): Type;
         /* @internal */ getNonOptionalType(type: Type): Type;
-        /* @internal */ isNullableType(type: Type): boolean;
+        /* @internal */ isNullableType(type: Type, context?: Node | undefined): boolean;
         getTypeArguments(type: TypeReference): readonly Type[];
 
         // TODO: GH#18217 `xToDeclaration` calls are frequently asserted as defined.
@@ -4520,8 +4520,8 @@ namespace ts {
         /* @internal */ getFalseType(fresh?: boolean): Type;
         /* @internal */ getTrueType(fresh?: boolean): Type;
         /* @internal */ getVoidType(): Type;
-        /* @internal */ getUndefinedType(): Type;
-        /* @internal */ getNullType(): Type;
+        /* @internal */ getUndefinedType(widening?: boolean): Type;
+        /* @internal */ getNullType(widening?: boolean): Type;
         /* @internal */ getESSymbolType(): Type;
         /* @internal */ getNeverType(): Type;
         /* @internal */ getOptionalType(): Type;
@@ -5416,12 +5416,12 @@ namespace ts {
         Narrowable = Any | Unknown | StructuredOrInstantiable | StringLike | NumberLike | BigIntLike | BooleanLike | ESSymbol | UniqueESSymbol | NonPrimitive,
         // The following flags are aggregated during union and intersection type construction
         /* @internal */
-        IncludesMask = Any | Unknown | Primitive | Never | Object | Union | Intersection | NonPrimitive | TemplateLiteral,
+        IncludesMask = Any | Unknown | Primitive | Never | Object | Union | Intersection | NonPrimitive | TemplateLiteral | Index | StringMapping,
         // The following flags are used for different purposes during union and intersection type construction
         /* @internal */
         IncludesMissingType = TypeParameter,
         /* @internal */
-        IncludesNonWideningType = Index,
+        IncludesNonWideningType = 1 << 29, // repurpose for true typeflag when needed
         /* @internal */
         IncludesWildcard = IndexedAccess,
         /* @internal */

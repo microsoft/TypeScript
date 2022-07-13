@@ -72,7 +72,6 @@ var r3: string = a().toString();
 var r3b: string = a()['toString']();
 >r3b : Symbol(r3b, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 21, 3))
 >a : Symbol(a, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 17, 3))
->'toString' : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
 
 var b = {
 >b : Symbol(b, Decl(propertyAccessOnTypeParameterWithoutConstraints.ts, 23, 3))

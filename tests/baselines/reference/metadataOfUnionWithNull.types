@@ -54,7 +54,7 @@ class B {
 >PropDeco : (target: Object, propKey: string | symbol) => void
 
     d: undefined | null;
->d : null
+>d : never
 >null : null
 
     @PropDeco
