@@ -1,4 +1,4 @@
-//// [issue43962.ts]
+//// [nonInferrableTypePropagation1.ts]
 type Op<I, O> = (thing: Thing<I>) => Thing<O>;
 type Thing<T> = {
     value: T;
@@ -28,7 +28,7 @@ const result2 = createAndUnbox(() => thing.pipe(
 ));
 
 
-//// [issue43962.js]
+//// [nonInferrableTypePropagation1.js]
 "use strict";
 var result1 = createAndUnbox(function () { return thing.pipe(map(function (data) { return box(data); }), tap(function (v) { return log(v); })); });
 var result2 = createAndUnbox(function () { return thing.pipe(tap(function (v) { return log(v); }), map(function (data) { return box(data); })); });
