@@ -2040,41 +2040,6 @@ namespace ts {
         }
 
         function bindObjectLiteralExpression(node: ObjectLiteralExpression) {
-            const enum ElementKind {
-                Property = 1,
-                Accessor = 2
-            }
-
-            if (inStrictMode && !isAssignmentTarget(node)) {
-                const seen = new Map<__String, ElementKind>();
-
-                for (const prop of node.properties) {
-                    if (prop.kind === SyntaxKind.SpreadAssignment || prop.name.kind !== SyntaxKind.Identifier) {
-                        continue;
-                    }
-
-                    const identifier = prop.name;
-
-                    // ECMA-262 11.1.5 Object Initializer
-                    // If previous is not undefined then throw a SyntaxError exception if any of the following conditions are true
-                    // a.This production is contained in strict code and IsDataDescriptor(previous) is true and
-                    // IsDataDescriptor(propId.descriptor) is true.
-                    //    b.IsDataDescriptor(previous) is true and IsAccessorDescriptor(propId.descriptor) is true.
-                    //    c.IsAccessorDescriptor(previous) is true and IsDataDescriptor(propId.descriptor) is true.
-                    //    d.IsAccessorDescriptor(previous) is true and IsAccessorDescriptor(propId.descriptor) is true
-                    // and either both previous and propId.descriptor have[[Get]] fields or both previous and propId.descriptor have[[Set]] fields
-                    const currentKind = prop.kind === SyntaxKind.PropertyAssignment || prop.kind === SyntaxKind.ShorthandPropertyAssignment || prop.kind === SyntaxKind.MethodDeclaration
-                        ? ElementKind.Property
-                        : ElementKind.Accessor;
-
-                    const existingKind = seen.get(identifier.escapedText);
-                    if (!existingKind) {
-                        seen.set(identifier.escapedText, currentKind);
-                        continue;
-                    }
-                }
-            }
-
             return bindAnonymousDeclaration(node, SymbolFlags.ObjectLiteral, InternalSymbolName.Object);
         }
 
