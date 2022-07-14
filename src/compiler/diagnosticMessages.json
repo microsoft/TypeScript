@@ -2356,6 +2356,10 @@
         "category": "Error",
         "code": 2513
     },
+    "Cannot use a negative integer for indexing on '{0}'.": {
+        "category": "Error",
+        "code": 2514
+    },
     "Non-abstract class '{0}' does not implement inherited abstract member '{1}' from class '{2}'.": {
         "category": "Error",
         "code": 2515

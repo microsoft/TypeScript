@@ -88,6 +88,13 @@ var ele17 = numTupleTuple[2]; // number | [string, number]
 >numTupleTuple : [number, [string, number]]
 >2 : 2
 
+var ele19 = strNumTuple[-1]   // error
+>ele19 : undefined
+>strNumTuple[-1] : undefined
+>strNumTuple : [string, number]
+>-1 : -1
+>1 : 1
+
 var eleUnion10 = unionTuple1[0]; // number
 >eleUnion10 : number
 >unionTuple1[0] : number

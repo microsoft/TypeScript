@@ -15,6 +15,8 @@ var ele15 = strNumTuple["0"]; // string
 var ele16 = strNumTuple["1"]; // number
 var strNumTuple1 = numTupleTuple[1];  //[string, number];
 var ele17 = numTupleTuple[2]; // number | [string, number]
+var ele19 = strNumTuple[-1]   // error
+
 var eleUnion10 = unionTuple1[0]; // number
 var eleUnion11 = unionTuple1[1]; // string | number
 var eleUnion12 = unionTuple1[2]; // string | number

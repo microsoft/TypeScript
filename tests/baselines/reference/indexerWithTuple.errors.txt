@@ -1,10 +1,11 @@
 tests/cases/conformance/types/tuple/indexerWithTuple.ts(11,25): error TS2493: Tuple type '[string, number]' of length '2' has no element at index '2'.
 tests/cases/conformance/types/tuple/indexerWithTuple.ts(17,27): error TS2493: Tuple type '[number, [string, number]]' of length '2' has no element at index '2'.
-tests/cases/conformance/types/tuple/indexerWithTuple.ts(20,30): error TS2493: Tuple type '[number, string | number]' of length '2' has no element at index '2'.
-tests/cases/conformance/types/tuple/indexerWithTuple.ts(28,30): error TS2493: Tuple type '[boolean, string | number]' of length '2' has no element at index '2'.
+tests/cases/conformance/types/tuple/indexerWithTuple.ts(18,25): error TS2514: Cannot use a negative integer for indexing on '[string, number]'.
+tests/cases/conformance/types/tuple/indexerWithTuple.ts(22,30): error TS2493: Tuple type '[number, string | number]' of length '2' has no element at index '2'.
+tests/cases/conformance/types/tuple/indexerWithTuple.ts(30,30): error TS2493: Tuple type '[boolean, string | number]' of length '2' has no element at index '2'.
 
 
-==== tests/cases/conformance/types/tuple/indexerWithTuple.ts (4 errors) ====
+==== tests/cases/conformance/types/tuple/indexerWithTuple.ts (5 errors) ====
     var strNumTuple: [string, number] = ["foo", 10]; 
     var numTupleTuple: [number, [string, number]] = [10, ["bar", 20]];
     var unionTuple1: [number, string| number] = [10, "foo"]; 
@@ -26,6 +27,10 @@ tests/cases/conformance/types/tuple/indexerWithTuple.ts(28,30): error TS2493: Tu
     var ele17 = numTupleTuple[2]; // number | [string, number]
                               ~
 !!! error TS2493: Tuple type '[number, [string, number]]' of length '2' has no element at index '2'.
+    var ele19 = strNumTuple[-1]   // error
+                            ~~
+!!! error TS2514: Cannot use a negative integer for indexing on '[string, number]'.
+    
     var eleUnion10 = unionTuple1[0]; // number
     var eleUnion11 = unionTuple1[1]; // string | number
     var eleUnion12 = unionTuple1[2]; // string | number
