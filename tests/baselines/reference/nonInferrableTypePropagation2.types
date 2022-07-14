@@ -66,11 +66,11 @@ const x = pipe(es, filter(exists((n) => n > 0)))
 >es : Either<string, number>[]
 >filter(exists((n) => n > 0)) : (as: readonly Either<string, number>[]) => readonly Either<string, number>[]
 >filter : { <A, B extends A>(refinement: Refinement<A, B>): (as: readonly A[]) => readonly B[]; <A>(predicate: Predicate<A>): <B extends A>(bs: readonly B[]) => readonly B[]; <A>(predicate: Predicate<A>): (as: readonly A[]) => readonly A[]; }
->exists((n) => n > 0) : <E>(ma: Either<E, unknown>) => boolean
+>exists((n) => n > 0) : <E>(ma: Either<E, number>) => boolean
 >exists : <A>(predicate: Predicate<A>) => <E>(ma: Either<E, A>) => boolean
->(n) => n > 0 : (n: unknown) => boolean
->n : unknown
+>(n) => n > 0 : (n: number) => boolean
+>n : number
 >n > 0 : boolean
->n : unknown
+>n : number
 >0 : 0
 
