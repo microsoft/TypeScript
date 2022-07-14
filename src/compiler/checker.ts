@@ -8977,9 +8977,9 @@ namespace ts {
                 return getTypeForBindingElement(declaration as BindingElement);
             }
 
-            const isProperty = isPropertyDeclaration(declaration) || isPropertySignature(declaration);
+            const isProperty = isPropertyDeclaration(declaration) || isPropertySignature(declaration) || isJSDocPropertyTag(declaration);
             const isOptional = includeOptionality && (
-                isProperty && !!declaration.questionToken ||
+                (isPropertyDeclaration(declaration) || isPropertySignature(declaration)) && !!declaration.questionToken ||
                 isParameter(declaration) && (!!declaration.questionToken || isJSDocOptionalParameter(declaration)) ||
                 isOptionalJSDocPropertyLikeTag(declaration));
 
