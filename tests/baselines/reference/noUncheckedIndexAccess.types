@@ -1,0 +1,65 @@
+=== tests/cases/compiler/noUncheckedIndexAccess.ts ===
+enum Meat {
+>Meat : Meat
+
+    Sausage,
+>Sausage : Meat.Sausage
+
+    Bacon
+>Bacon : Meat.Bacon
+  }
+  const sausage = Meat.Sausage
+>sausage : Meat.Sausage
+>Meat.Sausage : Meat.Sausage
+>Meat : typeof Meat
+>Sausage : Meat.Sausage
+
+  const valueSausage = Meat[sausage]
+>valueSausage : string
+>Meat[sausage] : string
+>Meat : typeof Meat
+>sausage : Meat.Sausage
+
+  const bacon = Meat.Bacon
+>bacon : Meat.Bacon
+>Meat.Bacon : Meat.Bacon
+>Meat : typeof Meat
+>Bacon : Meat.Bacon
+
+  const valueBacon = Meat[bacon]
+>valueBacon : string
+>Meat[bacon] : string
+>Meat : typeof Meat
+>bacon : Meat.Bacon
+
+  const union: Meat.Bacon | Meat.Sausage = Meat.Bacon
+>union : Meat
+>Meat : any
+>Meat : any
+>Meat.Bacon : Meat.Bacon
+>Meat : typeof Meat
+>Bacon : Meat.Bacon
+
+  const valueUnion = Meat[union]
+>valueUnion : string
+>Meat[union] : string
+>Meat : typeof Meat
+>union : Meat.Bacon
+
+  //Avoiding a false positive
+  const value = Meat[0]
+>value : string | undefined
+>Meat[0] : string | undefined
+>Meat : typeof Meat
+>0 : 0
+
+  const t = "testing"
+>t : "testing"
+>"testing" : "testing"
+
+  const value2 = Meat[t]
+>value2 : error
+>Meat[t] : error
+>Meat : typeof Meat
+>t : "testing"
+
