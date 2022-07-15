@@ -2356,7 +2356,7 @@
         "category": "Error",
         "code": 2513
     },
-    "Cannot use a negative integer for indexing on '{0}'.": {
+    "A tuple type cannot be indexed with a negative value.": {
         "category": "Error",
         "code": 2514
     },

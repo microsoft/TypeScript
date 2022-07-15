@@ -15587,7 +15587,7 @@ namespace ts {
                         const indexNode = getIndexNodeForAccessExpression(accessNode);
                         if (isTupleType(objectType)) {
                             if (index < 0) {
-                                error(indexNode, Diagnostics.Cannot_use_a_negative_integer_for_indexing_on_0, typeToString(objectType));
+                                error(indexNode, Diagnostics.A_tuple_type_cannot_be_indexed_with_a_negative_value);
                                 return undefinedType;
                             }
                             error(indexNode, Diagnostics.Tuple_type_0_of_length_1_has_no_element_at_index_2,
