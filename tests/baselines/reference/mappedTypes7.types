@@ -1,0 +1,173 @@
+=== tests/cases/conformance/types/mapped/mappedTypes7.ts ===
+let _: MethodMapper<'foo' | 'bar', {foo: string, bar: number}, number[]> = {
+>_ : MethodMapper<"foo" | "bar", { foo: string; bar: number; }, number[]>
+>foo : string
+>bar : number
+>{  foo: (arg: { foo: string; bar: number; }): number[] => {    throw new Error("Function not implemented.");  },  bar: (arg: { foo: string; bar: number; }): number[] => {    throw new Error("Function not implemented.");  }} : { foo: (arg: {    foo: string;    bar: number;}) => number[]; bar: (arg: {    foo: string;    bar: number;}) => number[]; }
+
+  foo: (arg: { foo: string; bar: number; }): number[] => {
+>foo : (arg: {    foo: string;    bar: number;}) => number[]
+>(arg: { foo: string; bar: number; }): number[] => {    throw new Error("Function not implemented.");  } : (arg: {    foo: string;    bar: number;}) => number[]
+>arg : { foo: string; bar: number; }
+>foo : string
+>bar : number
+
+    throw new Error("Function not implemented.");
+>new Error("Function not implemented.") : Error
+>Error : ErrorConstructor
+>"Function not implemented." : "Function not implemented."
+
+  },
+  bar: (arg: { foo: string; bar: number; }): number[] => {
+>bar : (arg: {    foo: string;    bar: number;}) => number[]
+>(arg: { foo: string; bar: number; }): number[] => {    throw new Error("Function not implemented.");  } : (arg: {    foo: string;    bar: number;}) => number[]
+>arg : { foo: string; bar: number; }
+>foo : string
+>bar : number
+
+    throw new Error("Function not implemented.");
+>new Error("Function not implemented.") : Error
+>Error : ErrorConstructor
+>"Function not implemented." : "Function not implemented."
+  }
+}
+
+let $ = (): MethodMapper<'foo' | 'bar', {foo: string, bar: number}, number[]> => {
+>$ : () => MethodMapper<"foo" | "bar", { foo: string; bar: number; }, number[]>
+>(): MethodMapper<'foo' | 'bar', {foo: string, bar: number}, number[]> => {  const foo =  (arg: { foo: string; bar: number; }): number[] => {    throw new Error("Function not implemented.");  };  const bar =  (arg: { foo: string; bar: number; }): number[] => {    throw new Error("Function not implemented.");  };  return {    foo,    bar  }} : () => MethodMapper<"foo" | "bar", { foo: string; bar: number; }, number[]>
+>foo : string
+>bar : number
+
+  const foo =  (arg: { foo: string; bar: number; }): number[] => {
+>foo : (arg: { foo: string; bar: number; }) => number[]
+>(arg: { foo: string; bar: number; }): number[] => {    throw new Error("Function not implemented.");  } : (arg: { foo: string; bar: number; }) => number[]
+>arg : { foo: string; bar: number; }
+>foo : string
+>bar : number
+
+    throw new Error("Function not implemented.");
+>new Error("Function not implemented.") : Error
+>Error : ErrorConstructor
+>"Function not implemented." : "Function not implemented."
+
+  };
+  const bar =  (arg: { foo: string; bar: number; }): number[] => {
+>bar : (arg: { foo: string; bar: number; }) => number[]
+>(arg: { foo: string; bar: number; }): number[] => {    throw new Error("Function not implemented.");  } : (arg: { foo: string; bar: number; }) => number[]
+>arg : { foo: string; bar: number; }
+>foo : string
+>bar : number
+
+    throw new Error("Function not implemented.");
+>new Error("Function not implemented.") : Error
+>Error : ErrorConstructor
+>"Function not implemented." : "Function not implemented."
+
+  };
+  return {
+>{    foo,    bar  } : { foo: (arg: { foo: string; bar: number; }) => number[]; bar: (arg: { foo: string; bar: number; }) => number[]; }
+
+    foo,
+>foo : (arg: { foo: string; bar: number; }) => number[]
+
+    bar
+>bar : (arg: { foo: string; bar: number; }) => number[]
+  }
+};
+
+let a = (): MethodMapper<'method'> => {
+>a : () => MethodMapper<'method'>
+>(): MethodMapper<'method'> => {  const method = (): void => {}  return {method}} : () => MethodMapper<'method'>
+
+  const method = (): void => {}
+>method : () => void
+>(): void => {} : () => void
+
+  return {method}
+>{method} : { method: () => void; }
+>method : () => void
+
+};
+
+let err = (): MethodMapper<'method'> => {
+>err : () => MethodMapper<'method'>
+>(): MethodMapper<'method'> => {  const err = (): void => {}  return {    err // Error  }} : () => MethodMapper<'method'>
+
+  const err = (): void => {}
+>err : () => void
+>(): void => {} : () => void
+
+  return {
+>{    err // Error  } : { err: () => void; }
+
+    err // Error
+>err : () => void
+  }
+}
+
+// Repro from #49811
+const methods = [
+>methods : readonly ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD"]
+>[  "GET",  "POST",  "PUT",  "PATCH",  "DELETE",  "OPTIONS",  "HEAD",] as const : readonly ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD"]
+>[  "GET",  "POST",  "PUT",  "PATCH",  "DELETE",  "OPTIONS",  "HEAD",] : readonly ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD"]
+
+  "GET",
+>"GET" : "GET"
+
+  "POST",
+>"POST" : "POST"
+
+  "PUT",
+>"PUT" : "PUT"
+
+  "PATCH",
+>"PATCH" : "PATCH"
+
+  "DELETE",
+>"DELETE" : "DELETE"
+
+  "OPTIONS",
+>"OPTIONS" : "OPTIONS"
+
+  "HEAD",
+>"HEAD" : "HEAD"
+
+] as const;
+
+type Method = typeof methods[number];
+>Method : "GET" | "POST" | "PUT" | "PATCH" | "DELETE" | "OPTIONS" | "HEAD"
+>methods : readonly ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD"]
+
+class Router implements MethodMapper<Method> {
+>Router : Router
+
+  delete(): void {
+>delete : () => void
+  }
+
+  get(): void {
+>get : () => void
+  }
+
+  head(): void {
+>head : () => void
+  }
+
+  options(): void {
+>options : () => void
+  }
+
+  patch(): void {
+>patch : () => void
+  }
+
+  post(): void {
+>post : () => void
+  }
+
+  put(): void {
+>put : () => void
+  }
+
+}
+

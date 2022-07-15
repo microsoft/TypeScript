@@ -1,0 +1,141 @@
+=== tests/cases/conformance/types/mapped/mappedTypes7.ts ===
+let _: MethodMapper<'foo' | 'bar', {foo: string, bar: number}, number[]> = {
+>_ : Symbol(_, Decl(mappedTypes7.ts, 0, 3))
+>MethodMapper : Symbol(MethodMapper, Decl(lib.es5.d.ts, --, --))
+>foo : Symbol(foo, Decl(mappedTypes7.ts, 0, 36))
+>bar : Symbol(bar, Decl(mappedTypes7.ts, 0, 48))
+
+  foo: (arg: { foo: string; bar: number; }): number[] => {
+>foo : Symbol(foo, Decl(mappedTypes7.ts, 0, 76))
+>arg : Symbol(arg, Decl(mappedTypes7.ts, 1, 8))
+>foo : Symbol(foo, Decl(mappedTypes7.ts, 1, 14))
+>bar : Symbol(bar, Decl(mappedTypes7.ts, 1, 27))
+
+    throw new Error("Function not implemented.");
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+  },
+  bar: (arg: { foo: string; bar: number; }): number[] => {
+>bar : Symbol(bar, Decl(mappedTypes7.ts, 3, 4))
+>arg : Symbol(arg, Decl(mappedTypes7.ts, 4, 8))
+>foo : Symbol(foo, Decl(mappedTypes7.ts, 4, 14))
+>bar : Symbol(bar, Decl(mappedTypes7.ts, 4, 27))
+
+    throw new Error("Function not implemented.");
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+  }
+}
+
+let $ = (): MethodMapper<'foo' | 'bar', {foo: string, bar: number}, number[]> => {
+>$ : Symbol($, Decl(mappedTypes7.ts, 9, 3))
+>MethodMapper : Symbol(MethodMapper, Decl(lib.es5.d.ts, --, --))
+>foo : Symbol(foo, Decl(mappedTypes7.ts, 9, 41))
+>bar : Symbol(bar, Decl(mappedTypes7.ts, 9, 53))
+
+  const foo =  (arg: { foo: string; bar: number; }): number[] => {
+>foo : Symbol(foo, Decl(mappedTypes7.ts, 10, 7))
+>arg : Symbol(arg, Decl(mappedTypes7.ts, 10, 16))
+>foo : Symbol(foo, Decl(mappedTypes7.ts, 10, 22))
+>bar : Symbol(bar, Decl(mappedTypes7.ts, 10, 35))
+
+    throw new Error("Function not implemented.");
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+  };
+  const bar =  (arg: { foo: string; bar: number; }): number[] => {
+>bar : Symbol(bar, Decl(mappedTypes7.ts, 13, 7))
+>arg : Symbol(arg, Decl(mappedTypes7.ts, 13, 16))
+>foo : Symbol(foo, Decl(mappedTypes7.ts, 13, 22))
+>bar : Symbol(bar, Decl(mappedTypes7.ts, 13, 35))
+
+    throw new Error("Function not implemented.");
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+  };
+  return {
+    foo,
+>foo : Symbol(foo, Decl(mappedTypes7.ts, 16, 10))
+
+    bar
+>bar : Symbol(bar, Decl(mappedTypes7.ts, 17, 8))
+  }
+};
+
+let a = (): MethodMapper<'method'> => {
+>a : Symbol(a, Decl(mappedTypes7.ts, 22, 3))
+>MethodMapper : Symbol(MethodMapper, Decl(lib.es5.d.ts, --, --))
+
+  const method = (): void => {}
+>method : Symbol(method, Decl(mappedTypes7.ts, 23, 7))
+
+  return {method}
+>method : Symbol(method, Decl(mappedTypes7.ts, 24, 10))
+
+};
+
+let err = (): MethodMapper<'method'> => {
+>err : Symbol(err, Decl(mappedTypes7.ts, 27, 3))
+>MethodMapper : Symbol(MethodMapper, Decl(lib.es5.d.ts, --, --))
+
+  const err = (): void => {}
+>err : Symbol(err, Decl(mappedTypes7.ts, 28, 7))
+
+  return {
+    err // Error
+>err : Symbol(err, Decl(mappedTypes7.ts, 29, 10))
+  }
+}
+
+// Repro from #49811
+const methods = [
+>methods : Symbol(methods, Decl(mappedTypes7.ts, 35, 5))
+
+  "GET",
+  "POST",
+  "PUT",
+  "PATCH",
+  "DELETE",
+  "OPTIONS",
+  "HEAD",
+] as const;
+>const : Symbol(const)
+
+type Method = typeof methods[number];
+>Method : Symbol(Method, Decl(mappedTypes7.ts, 43, 11))
+>methods : Symbol(methods, Decl(mappedTypes7.ts, 35, 5))
+
+class Router implements MethodMapper<Method> {
+>Router : Symbol(Router, Decl(mappedTypes7.ts, 45, 37))
+>MethodMapper : Symbol(MethodMapper, Decl(lib.es5.d.ts, --, --))
+>Method : Symbol(Method, Decl(mappedTypes7.ts, 43, 11))
+
+  delete(): void {
+>delete : Symbol(Router.delete, Decl(mappedTypes7.ts, 47, 46))
+  }
+
+  get(): void {
+>get : Symbol(Router.get, Decl(mappedTypes7.ts, 49, 3))
+  }
+
+  head(): void {
+>head : Symbol(Router.head, Decl(mappedTypes7.ts, 52, 3))
+  }
+
+  options(): void {
+>options : Symbol(Router.options, Decl(mappedTypes7.ts, 55, 3))
+  }
+
+  patch(): void {
+>patch : Symbol(Router.patch, Decl(mappedTypes7.ts, 58, 3))
+  }
+
+  post(): void {
+>post : Symbol(Router.post, Decl(mappedTypes7.ts, 61, 3))
+  }
+
+  put(): void {
+>put : Symbol(Router.put, Decl(mappedTypes7.ts, 64, 3))
+  }
+
+}
+
