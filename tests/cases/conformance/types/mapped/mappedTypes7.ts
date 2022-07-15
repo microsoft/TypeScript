@@ -1,4 +1,5 @@
 // @strict: true
+// @declaration: true
 
 let _: MethodMapper<'foo' | 'bar', {foo: string, bar: number}, number[]> = {
   foo: (arg: { foo: string; bar: number; }): number[] => {

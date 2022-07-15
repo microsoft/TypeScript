@@ -106,6 +106,7 @@ let err = (): MethodMapper<'method'> => {
 }
 
 // Repro from #49811
+
 const methods = [
 >methods : readonly ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD"]
 >[  "GET",  "POST",  "PUT",  "PATCH",  "DELETE",  "OPTIONS",  "HEAD",] as const : readonly ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD"]

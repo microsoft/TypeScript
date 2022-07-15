@@ -41,6 +41,7 @@ tests/cases/conformance/types/mapped/mappedTypes7.ts(31,5): error TS2322: Type '
     }
     
     // Repro from #49811
+    
     const methods = [
       "GET",
       "POST",

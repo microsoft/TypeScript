@@ -87,8 +87,9 @@ let err = (): MethodMapper<'method'> => {
 }
 
 // Repro from #49811
+
 const methods = [
->methods : Symbol(methods, Decl(mappedTypes7.ts, 35, 5))
+>methods : Symbol(methods, Decl(mappedTypes7.ts, 36, 5))
 
   "GET",
   "POST",
@@ -101,40 +102,40 @@ const methods = [
 >const : Symbol(const)
 
 type Method = typeof methods[number];
->Method : Symbol(Method, Decl(mappedTypes7.ts, 43, 11))
->methods : Symbol(methods, Decl(mappedTypes7.ts, 35, 5))
+>Method : Symbol(Method, Decl(mappedTypes7.ts, 44, 11))
+>methods : Symbol(methods, Decl(mappedTypes7.ts, 36, 5))
 
 class Router implements MethodMapper<Method> {
->Router : Symbol(Router, Decl(mappedTypes7.ts, 45, 37))
+>Router : Symbol(Router, Decl(mappedTypes7.ts, 46, 37))
 >MethodMapper : Symbol(MethodMapper, Decl(lib.es5.d.ts, --, --))
->Method : Symbol(Method, Decl(mappedTypes7.ts, 43, 11))
+>Method : Symbol(Method, Decl(mappedTypes7.ts, 44, 11))
 
   delete(): void {
->delete : Symbol(Router.delete, Decl(mappedTypes7.ts, 47, 46))
+>delete : Symbol(Router.delete, Decl(mappedTypes7.ts, 48, 46))
   }
 
   get(): void {
->get : Symbol(Router.get, Decl(mappedTypes7.ts, 49, 3))
+>get : Symbol(Router.get, Decl(mappedTypes7.ts, 50, 3))
   }
 
   head(): void {
->head : Symbol(Router.head, Decl(mappedTypes7.ts, 52, 3))
+>head : Symbol(Router.head, Decl(mappedTypes7.ts, 53, 3))
   }
 
   options(): void {
->options : Symbol(Router.options, Decl(mappedTypes7.ts, 55, 3))
+>options : Symbol(Router.options, Decl(mappedTypes7.ts, 56, 3))
   }
 
   patch(): void {
->patch : Symbol(Router.patch, Decl(mappedTypes7.ts, 58, 3))
+>patch : Symbol(Router.patch, Decl(mappedTypes7.ts, 59, 3))
   }
 
   post(): void {
->post : Symbol(Router.post, Decl(mappedTypes7.ts, 61, 3))
+>post : Symbol(Router.post, Decl(mappedTypes7.ts, 62, 3))
   }
 
   put(): void {
->put : Symbol(Router.put, Decl(mappedTypes7.ts, 64, 3))
+>put : Symbol(Router.put, Decl(mappedTypes7.ts, 65, 3))
   }
 
 }
