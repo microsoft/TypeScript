@@ -358,12 +358,12 @@ var BAR_LOOKUP = makeCompleteLookupMapping(ALL_BARS, 'name');
 
 
 //// [correlatedUnions.d.ts]
-declare type RecordMap = {
+type RecordMap = {
     n: number;
     s: string;
     b: boolean;
 };
-declare type UnionRecord<K extends keyof RecordMap = keyof RecordMap> = {
+type UnionRecord<K extends keyof RecordMap = keyof RecordMap> = {
     [P in K]: {
         kind: P;
         v: RecordMap[P];
@@ -373,39 +373,39 @@ declare type UnionRecord<K extends keyof RecordMap = keyof RecordMap> = {
 declare function processRecord<K extends keyof RecordMap>(rec: UnionRecord<K>): void;
 declare const r1: UnionRecord<'n'>;
 declare const r2: UnionRecord;
-declare type TextFieldData = {
+type TextFieldData = {
     value: string;
 };
-declare type SelectFieldData = {
+type SelectFieldData = {
     options: string[];
     selectedValue: string;
 };
-declare type FieldMap = {
+type FieldMap = {
     text: TextFieldData;
     select: SelectFieldData;
 };
-declare type FormField<K extends keyof FieldMap> = {
+type FormField<K extends keyof FieldMap> = {
     type: K;
     data: FieldMap[K];
 };
-declare type RenderFunc<K extends keyof FieldMap> = (props: FieldMap[K]) => void;
-declare type RenderFuncMap = {
+type RenderFunc<K extends keyof FieldMap> = (props: FieldMap[K]) => void;
+type RenderFuncMap = {
     [K in keyof FieldMap]: RenderFunc<K>;
 };
 declare function renderTextField(props: TextFieldData): void;
 declare function renderSelectField(props: SelectFieldData): void;
 declare const renderFuncs: RenderFuncMap;
 declare function renderField<K extends keyof FieldMap>(field: FormField<K>): void;
-declare type TypeMap = {
+type TypeMap = {
     foo: string;
     bar: number;
 };
-declare type Keys = keyof TypeMap;
-declare type HandlerMap = {
+type Keys = keyof TypeMap;
+type HandlerMap = {
     [P in Keys]: (x: TypeMap[P]) => void;
 };
 declare const handlers: HandlerMap;
-declare type DataEntry<K extends Keys = Keys> = {
+type DataEntry<K extends Keys = Keys> = {
     [P in K]: {
         type: P;
         data: TypeMap[P];
@@ -413,25 +413,25 @@ declare type DataEntry<K extends Keys = Keys> = {
 }[K];
 declare const data: DataEntry[];
 declare function process<K extends Keys>(data: DataEntry<K>[]): void;
-declare type LetterMap = {
+type LetterMap = {
     A: string;
     B: number;
 };
-declare type LetterCaller<K extends keyof LetterMap> = {
+type LetterCaller<K extends keyof LetterMap> = {
     [P in K]: {
         letter: Record<P, LetterMap[P]>;
         caller: (x: Record<P, LetterMap[P]>) => void;
     };
 }[K];
 declare function call<K extends keyof LetterMap>({ letter, caller }: LetterCaller<K>): void;
-declare type A = {
+type A = {
     A: string;
 };
-declare type B = {
+type B = {
     B: number;
 };
-declare type ACaller = (a: A) => void;
-declare type BCaller = (b: B) => void;
+type ACaller = (a: A) => void;
+type BCaller = (b: B) => void;
 declare const xx: {
     letter: A;
     caller: ACaller;
@@ -439,7 +439,7 @@ declare const xx: {
     letter: B;
     caller: BCaller;
 };
-declare type Ev<K extends keyof DocumentEventMap> = {
+type Ev<K extends keyof DocumentEventMap> = {
     [P in K]: {
         readonly name: P;
         readonly once?: boolean;
@@ -459,12 +459,12 @@ declare const scrollEvent: {
     readonly callback: (ev: Event) => void;
 };
 declare function ff1(): void;
-declare type ArgMap = {
+type ArgMap = {
     a: number;
     b: string;
 };
-declare type Func<K extends keyof ArgMap> = (x: ArgMap[K]) => void;
-declare type Funcs = {
+type Func<K extends keyof ArgMap> = (x: ArgMap[K]) => void;
+type Funcs = {
     [K in keyof ArgMap]: Func<K>;
 };
 declare function f1<K extends keyof ArgMap>(funcs: Funcs, key: K, arg: ArgMap[K]): void;
@@ -502,7 +502,7 @@ declare const BAR_LOOKUP: {
         readonly name: "b";
     };
 };
-declare type BarLookup = typeof BAR_LOOKUP;
-declare type Baz = {
+type BarLookup = typeof BAR_LOOKUP;
+type Baz = {
     [K in keyof BarLookup]: BarLookup[K]['name'];
 };
