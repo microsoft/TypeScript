@@ -3,13 +3,14 @@ tests/cases/conformance/types/tuple/indexerWithTuple.ts(17,27): error TS2493: Tu
 tests/cases/conformance/types/tuple/indexerWithTuple.ts(18,25): error TS2514: A tuple type cannot be indexed with a negative value.
 tests/cases/conformance/types/tuple/indexerWithTuple.ts(22,30): error TS2493: Tuple type '[number, string | number]' of length '2' has no element at index '2'.
 tests/cases/conformance/types/tuple/indexerWithTuple.ts(30,30): error TS2493: Tuple type '[boolean, string | number]' of length '2' has no element at index '2'.
+tests/cases/conformance/types/tuple/indexerWithTuple.ts(38,28): error TS2514: A tuple type cannot be indexed with a negative value.
 
 
-==== tests/cases/conformance/types/tuple/indexerWithTuple.ts (5 errors) ====
-    var strNumTuple: [string, number] = ["foo", 10]; 
+==== tests/cases/conformance/types/tuple/indexerWithTuple.ts (6 errors) ====
+    var strNumTuple: [string, number] = ["foo", 10];
     var numTupleTuple: [number, [string, number]] = [10, ["bar", 20]];
-    var unionTuple1: [number, string| number] = [10, "foo"]; 
-    var unionTuple2: [boolean, string| number] = [true, "foo"]; 
+    var unionTuple1: [number, string| number] = [10, "foo"];
+    var unionTuple2: [boolean, string| number] = [true, "foo"];
     
     // no error
     var idx0 = 0;
@@ -27,7 +28,7 @@ tests/cases/conformance/types/tuple/indexerWithTuple.ts(30,30): error TS2493: Tu
     var ele17 = numTupleTuple[2]; // number | [string, number]
                               ~
 !!! error TS2493: Tuple type '[number, [string, number]]' of length '2' has no element at index '2'.
-    var ele19 = strNumTuple[-1]   // error
+    var ele19 = strNumTuple[-1]   // undefined
                             ~~
 !!! error TS2514: A tuple type cannot be indexed with a negative value.
     
@@ -50,3 +51,10 @@ tests/cases/conformance/types/tuple/indexerWithTuple.ts(30,30): error TS2493: Tu
     var eleUnion24 = unionTuple2[idx1]; // string | number | boolean
     var eleUnion25 = unionTuple2["0"]; // boolean
     var eleUnion26 = unionTuple2["1"]; // string | number
+    
+    type t1 = [string, number][0];  // string
+    type t2 = [string, number][1];  // number
+    type t3 = [string, number][-1]; // undefined
+                               ~~
+!!! error TS2514: A tuple type cannot be indexed with a negative value.
+    
