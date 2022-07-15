@@ -1619,6 +1619,13 @@ type Capitalize<S extends string> = intrinsic;
 type Uncapitalize<S extends string> = intrinsic;
 
 /**
+ * Given a list of T methods it maps them using P as their parameter type if null is used as parameter of P is considered a method without parameters and R as their Return type
+ */
+type MethodMapper<T extends string, P extends unknown = null, R = void> = {
+    [M in T as `${Lowercase<string & M>}`]: P extends null ? () => R : P extends any[] ? (...args: P) => R : (arg: P) => R
+};
+
+/**
  * Marker for contextual 'this' type
  */
 interface ThisType<T> { }
