@@ -139,7 +139,7 @@ exports.x = 10;
 
 
 //// [/src/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../lib/lib.d.ts","./src/index.ts","./types/type.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-10726455937-export const x = 10;","signature":"-6057683066-export declare const x = 10;\r\n"},{"version":"-4885977236-export type t = string;","signature":"-4409762125-export declare type t = string;\r\n"}],"options":{"composite":true,"outDir":"./dist","rootDir":"./src"},"referencedMap":[],"exportedModulesMap":[],"dtsChangeTime":25000},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../lib/lib.d.ts","./src/index.ts","./types/type.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-10726455937-export const x = 10;","signature":"-6057683066-export declare const x = 10;\r\n"},{"version":"-4885977236-export type t = string;","signature":"-4409762125-export declare type t = string;\r\n"}],"options":{"composite":true,"outDir":"./dist","rootDir":"./src"},"referencedMap":[],"exportedModulesMap":[],"latestChangedDtsFile":"./types/type.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -171,10 +171,10 @@ exports.x = 10;
     },
     "referencedMap": {},
     "exportedModulesMap": {},
-    "dtsChangeTime": 25000
+    "latestChangedDtsFile": "./types/type.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 948
+  "size": 969
 }
 
 //// [/src/types/type.d.ts]

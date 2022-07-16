@@ -26,7 +26,7 @@ const obj = new Derived(); // nothing printed
 >obj : Symbol(obj, Decl(accessorsOverrideProperty2.ts, 9, 5))
 >Derived : Symbol(Derived, Decl(accessorsOverrideProperty2.ts, 2, 1))
 
-console.log(obj.x); // 1
+console.log(obj.x); // number
 >console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
 >log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))

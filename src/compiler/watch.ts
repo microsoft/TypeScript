@@ -596,7 +596,6 @@ namespace ts {
             readDirectory: maybeBind(host, host.readDirectory),
             disableUseFileVersionAsSignature: host.disableUseFileVersionAsSignature,
             storeFilesChangingSignatureDuringEmit: host.storeFilesChangingSignatureDuringEmit,
-            now: maybeBind(host, host.now),
         };
 
         function writeFile(fileName: string, text: string, writeByteOrderMark: boolean, onError: (message: string) => void) {
