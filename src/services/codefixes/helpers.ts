@@ -185,7 +185,7 @@ namespace ts.codefix {
         optional: boolean | undefined,
         enclosingDeclaration: Node | undefined,
         importAdder: ImportAdder | undefined
-     ) {
+    ) {
         const program = context.program;
         const checker = program.getTypeChecker();
         const scriptTarget = getEmitScriptTarget(program.getCompilerOptions());

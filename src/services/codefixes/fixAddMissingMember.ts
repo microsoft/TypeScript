@@ -31,8 +31,9 @@ namespace ts.codefix {
                 const changes = textChanges.ChangeTracker.with(context, t => addJsxAttributes(t, context, info));
                 return [createCodeFixAction(fixMissingAttributes, changes, Diagnostics.Add_missing_attributes, fixMissingAttributes, Diagnostics.Add_all_missing_attributes)];
             }
-            if (info.kind === InfoKind.Function) {
-                const changes = textChanges.ChangeTracker.with(context, t => addFunctionDeclaration(t, context, info));
+            if (info.kind === InfoKind.Function || info.kind === InfoKind.Signature) {
+                const changes = textChanges.ChangeTracker.with(context, t =>
+                    info.kind === InfoKind.Signature ? addFunctionDeclarationFromSignature(t, context, info) : addFunctionDeclaration(t, context, info));
                 return [createCodeFixAction(fixMissingFunctionDeclaration, changes, [Diagnostics.Add_missing_function_declaration_0, info.token.text], fixMissingFunctionDeclaration, Diagnostics.Add_all_missing_function_declarations)];
             }
             if (info.kind === InfoKind.Enum) {
@@ -54,9 +55,13 @@ namespace ts.codefix {
                     if (!info || !addToSeen(seen, getNodeId(info.parentDeclaration) + "#" + info.token.text)) {
                         return;
                     }
-
-                    if (fixId === fixMissingFunctionDeclaration && info.kind === InfoKind.Function) {
-                        addFunctionDeclaration(changes, context, info);
+                    if (fixId === fixMissingFunctionDeclaration && (info.kind === InfoKind.Function || info.kind === InfoKind.Signature)) {
+                        if (info.kind === InfoKind.Signature) {
+                            addFunctionDeclarationFromSignature(changes, context, info);
+                        }
+                        else {
+                            addFunctionDeclaration(changes, context, info);
+                        }
                     }
                     else if (fixId === fixMissingProperties && info.kind === InfoKind.ObjectLiteral) {
                         addObjectLiteralProperties(changes, context, info);
@@ -107,8 +112,8 @@ namespace ts.codefix {
         },
     });
 
-    const enum InfoKind { TypeLikeDeclaration, Enum, Function, ObjectLiteral, JsxAttributes }
-    type Info = TypeLikeDeclarationInfo | EnumInfo | FunctionInfo | ObjectLiteralInfo | JsxAttributesInfo;
+    const enum InfoKind { TypeLikeDeclaration, Enum, Function, ObjectLiteral, JsxAttributes, Signature }
+    type Info = TypeLikeDeclarationInfo | EnumInfo | FunctionInfo | ObjectLiteralInfo | JsxAttributesInfo | SignatureInfo;
 
     interface EnumInfo {
         readonly kind: InfoKind.Enum;
@@ -148,6 +153,14 @@ namespace ts.codefix {
         readonly token: Identifier;
         readonly attributes: Symbol[];
         readonly parentDeclaration: JsxOpeningLikeElement;
+    }
+
+    interface SignatureInfo {
+        readonly kind: InfoKind.Signature;
+        readonly token: Identifier;
+        readonly signature: Signature;
+        readonly sourceFile: SourceFile;
+        readonly parentDeclaration: Node;
     }
 
     function getInfo(sourceFile: SourceFile, tokenPos: number, errorCode: number, checker: TypeChecker, program: Program): Info | undefined {
@@ -190,8 +203,16 @@ namespace ts.codefix {
             return { kind: InfoKind.JsxAttributes, token, attributes, parentDeclaration: token.parent };
         }
 
-        if (isIdentifier(token) && isCallExpression(parent)) {
-            return { kind: InfoKind.Function, token, call: parent, sourceFile, modifierFlags: ModifierFlags.None, parentDeclaration: sourceFile };
+        if (isIdentifier(token)) {
+            const type = checker.getContextualType(token);
+            if (type && getObjectFlags(type) & ObjectFlags.Anonymous) {
+                const signature = firstOrUndefined(checker.getSignaturesOfType(type, SignatureKind.Call));
+                if (signature === undefined) return undefined;
+                return { kind: InfoKind.Signature, token, signature, sourceFile, parentDeclaration: token.parent };
+            }
+            if (isCallExpression(parent)) {
+                return { kind: InfoKind.Function, token, call: parent, sourceFile, modifierFlags: ModifierFlags.None, parentDeclaration: sourceFile };
+            }
         }
 
         if (!isPropertyAccessExpression(parent)) return undefined;
@@ -455,6 +476,24 @@ namespace ts.codefix {
         const importAdder = createImportAdder(context.sourceFile, context.program, context.preferences, context.host);
         const functionDeclaration = createSignatureDeclarationFromCallExpression(SyntaxKind.FunctionDeclaration, context, importAdder, info.call, idText(info.token), info.modifierFlags, info.parentDeclaration) as FunctionDeclaration;
         changes.insertNodeAtEndOfScope(info.sourceFile, info.parentDeclaration, functionDeclaration);
+        importAdder.writeFixes(changes);
+    }
+
+    function addFunctionDeclarationFromSignature(changes: textChanges.ChangeTracker, context: CodeFixContextBase, info: SignatureInfo) {
+        const quotePreference = getQuotePreference(context.sourceFile, context.preferences);
+        const importAdder = createImportAdder(context.sourceFile, context.program, context.preferences, context.host);
+        const functionDeclaration = createSignatureDeclarationFromSignature(SyntaxKind.FunctionExpression, context, quotePreference, info.signature,
+            createStubbedBody(Diagnostics.Function_not_implemented.message, quotePreference), info.token, /*modifiers*/ undefined, /*optional*/ undefined, /*enclosingDeclaration*/ undefined, importAdder);
+        if (functionDeclaration === undefined) {
+            Debug.fail("fixMissingFunctionDeclaration codefix got unexpected error.");
+        }
+        const returnStatement = isJsxExpression(info.parentDeclaration) ? findAncestor(info.parentDeclaration, isReturnStatement) : undefined;
+        if (returnStatement) {
+            changes.insertNodeBefore(info.sourceFile, returnStatement, functionDeclaration, /*blankLineBetween*/ true);
+        }
+        else {
+            changes.insertNodeAtEndOfScope(info.sourceFile, info.sourceFile, functionDeclaration);
+        }
         importAdder.writeFixes(changes);
     }
 
