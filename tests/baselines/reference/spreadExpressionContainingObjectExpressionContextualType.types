@@ -1,4 +1,4 @@
-=== tests/cases/compiler/spreadExpressionWithinIIFEReturnAssignedtoPattern.ts ===
+=== tests/cases/compiler/spreadExpressionContainingObjectExpressionContextualType.ts ===
 // repro #49585
 
 const { value } = (() => ({
@@ -21,3 +21,25 @@ const { value } = (() => ({
 >{} : {}
 
 }))();
+
+// repro 49684#discussion_r920545763
+
+const { value2 } = {
+>value2 : string
+>{  value2: "",  ...(() => true ? {} : {})(),} : { value2: string; }
+
+  value2: "",
+>value2 : string
+>"" : ""
+
+  ...(() => true ? {} : {})(),
+>(() => true ? {} : {})() : {}
+>(() => true ? {} : {}) : () => {}
+>() => true ? {} : {} : () => {}
+>true ? {} : {} : {}
+>true : true
+>{} : {}
+>{} : {}
+
+};
+
