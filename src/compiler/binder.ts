@@ -2906,7 +2906,7 @@ namespace ts {
             setValueDeclaration(symbol, node);
         }
 
-        function bindExportAssignedObjectMemberAlias(node: ObjectLiteralElementLike) {
+        function bindExportAssignedObjectMemberAlias(node: ShorthandPropertyAssignment) {
             declareSymbol(file.symbol.exports!, file.symbol, node, SymbolFlags.Alias | SymbolFlags.Assignment, SymbolFlags.None);
         }
 
