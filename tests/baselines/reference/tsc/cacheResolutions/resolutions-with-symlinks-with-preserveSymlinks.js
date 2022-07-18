@@ -214,20 +214,8 @@ export declare const x = 10;
 
 /a/lib/tsc.js -p /src/project --explainFiles
 Output::
-======== Resolving module 'pkg0' from '/src/project/main.ts'. ========
-Module resolution kind is not specified, using 'NodeJs'.
-Loading module 'pkg0' from 'node_modules' folder, target file types: TypeScript, Declaration.
-File '/src/project/node_modules/pkg0/package.json' does not exist.
-File '/src/project/node_modules/pkg0.ts' does not exist.
-File '/src/project/node_modules/pkg0.tsx' does not exist.
-File '/src/project/node_modules/pkg0.d.ts' does not exist.
-File '/src/project/node_modules/pkg0/index.ts' does not exist.
-File '/src/project/node_modules/pkg0/index.tsx' does not exist.
-File '/src/project/node_modules/pkg0/index.d.ts' exist - use it as a name resolution result.
-======== Module name 'pkg0' was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'. ========
-======== Resolving module 'pkg0' from '/src/project/randomFileForImport.ts'. ========
-Resolution for module 'pkg0' was found in cache from location '/src/project'.
-======== Module name 'pkg0' was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'. ========
+Reusing resolution of module 'pkg0' from '/src/project/main.ts' found in cache from location '/src/project', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Reusing resolution of module 'pkg0' from '/src/project/randomFileForImport.ts' found in cache from location '/src/project', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
 a/lib/lib.d.ts
   Default library for target 'es5'
 src/project/node_modules/pkg0/index.d.ts
@@ -241,7 +229,7 @@ src/project/randomFileForImport.ts
 
 Program root files: ["/src/project/main.ts","/src/project/randomFileForImport.ts"]
 Program options: {"composite":true,"cacheResolutions":true,"traceResolution":true,"preserveSymlinks":true,"project":"/src/project","explainFiles":true,"configFilePath":"/src/project/tsconfig.json"}
-Program structureReused: Not
+Program structureReused: SafeModuleCache
 Program files::
 /a/lib/lib.d.ts
 /src/project/node_modules/pkg0/index.d.ts
@@ -259,8 +247,8 @@ resolvedModules:
 pkg0: {
   "resolvedModule": {
     "resolvedFileName": "/src/project/node_modules/pkg0/index.d.ts",
-    "extension": ".d.ts",
-    "isExternalLibraryImport": true
+    "isExternalLibraryImport": true,
+    "extension": ".d.ts"
   },
   "failedLookupLocations": [
     "/src/project/node_modules/pkg0/package.json",
@@ -277,8 +265,8 @@ resolvedModules:
 pkg0: {
   "resolvedModule": {
     "resolvedFileName": "/src/project/node_modules/pkg0/index.d.ts",
-    "extension": ".d.ts",
-    "isExternalLibraryImport": true
+    "isExternalLibraryImport": true,
+    "extension": ".d.ts"
   },
   "failedLookupLocations": [
     "/src/project/node_modules/pkg0/package.json",

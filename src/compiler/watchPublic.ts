@@ -115,7 +115,7 @@ export function readBuilderProgram(compilerOptions: CompilerOptions, host: ReadB
         buildInfo = getBuildInfo(buildInfoPath, content);
     }
     if (!buildInfo || buildInfo.version !== version || !buildInfo.program) return undefined;
-    return createBuilderProgramUsingProgramBuildInfo(buildInfo, buildInfoPath, host);
+    return createBuilderProgramUsingProgramBuildInfo(buildInfo, buildInfoPath, host, compilerOptions.configFilePath);
 }
 
 export function createIncrementalCompilerHost(options: CompilerOptions, system = sys): CompilerHost {

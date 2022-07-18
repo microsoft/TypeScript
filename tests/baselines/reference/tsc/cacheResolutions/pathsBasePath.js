@@ -94,7 +94,7 @@ exports.x = 10;
 
 
 //// [/src/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","./lib/pkg0/index.d.ts","./main.ts","./randomfileforimport.ts","./","./lib/pkg0.ts","./lib/pkg0.tsx","./lib/pkg0.d.ts","./lib/pkg0/package.json","./lib/pkg0/index.ts","./lib/pkg0/index.tsx"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"769951468-export interface ImportInterface0 {}",{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"-10726455937-export const x = 10;","signature":"-6057683066-export declare const x = 10;\r\n"}],"options":{"cacheResolutions":true,"composite":true},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3,4],"latestChangedDtsFile":"./randomFileForImport.d.ts","cacheResolutions":{"resolutions":[{"resolvedModule":{"resolvedFileName":2},"failedLookupLocations":[6,7,8,9,10,11]}],"names":["pkg0"],"resolutionEntries":[[1,1]],"modules":[[5,[1]]]}},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","./lib/pkg0/index.d.ts","./main.ts","./randomfileforimport.ts","./","./lib/pkg0.ts","./lib/pkg0.tsx","./lib/pkg0.d.ts","./lib/pkg0/package.json","./lib/pkg0/index.ts","./lib/pkg0/index.tsx"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"769951468-export interface ImportInterface0 {}",{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"-10726455937-export const x = 10;","signature":"-6057683066-export declare const x = 10;\r\n"}],"options":{"cacheResolutions":true,"composite":true,"paths":{"*":["./lib/*"]}},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3,4],"latestChangedDtsFile":"./randomFileForImport.d.ts","cacheResolutions":{"resolutions":[{"resolvedModule":{"resolvedFileName":2},"failedLookupLocations":[6,7,8,9,10,11]}],"names":["pkg0"],"resolutionEntries":[[1,1]],"modules":[[5,[1]]]}},"version":"FakeTSVersion"}
 
 //// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -150,7 +150,12 @@ exports.x = 10;
     },
     "options": {
       "cacheResolutions": true,
-      "composite": true
+      "composite": true,
+      "paths": {
+        "*": [
+          "./lib/*"
+        ]
+      }
     },
     "referencedMap": {
       "./main.ts": [
@@ -250,7 +255,7 @@ exports.x = 10;
     }
   },
   "version": "FakeTSVersion",
-  "size": 1425
+  "size": 1451
 }
 
 
@@ -265,23 +270,8 @@ export const x = 10;
 
 Output::
 /lib/tsc -p /src/project --explainFiles
-======== Resolving module 'pkg0' from '/src/project/main.ts'. ========
-Module resolution kind is not specified, using 'NodeJs'.
-'paths' option is specified, looking for a pattern to match module name 'pkg0'.
-Module name 'pkg0', matched pattern '*'.
-Trying substitution './lib/*', candidate module location: './lib/pkg0'.
-Loading module as file / folder, candidate module location '/src/project/lib/pkg0', target file types: TypeScript, Declaration.
-File '/src/project/lib/pkg0.ts' does not exist.
-File '/src/project/lib/pkg0.tsx' does not exist.
-File '/src/project/lib/pkg0.d.ts' does not exist.
-File '/src/project/lib/pkg0/package.json' does not exist.
-File '/src/project/lib/pkg0/index.ts' does not exist.
-File '/src/project/lib/pkg0/index.tsx' does not exist.
-File '/src/project/lib/pkg0/index.d.ts' exist - use it as a name resolution result.
-======== Module name 'pkg0' was successfully resolved to '/src/project/lib/pkg0/index.d.ts'. ========
-======== Resolving module 'pkg0' from '/src/project/randomFileForImport.ts'. ========
-Resolution for module 'pkg0' was found in cache from location '/src/project'.
-======== Module name 'pkg0' was successfully resolved to '/src/project/lib/pkg0/index.d.ts'. ========
+Reusing resolution of module 'pkg0' from '/src/project/main.ts' found in cache from location '/src/project', it was successfully resolved to '/src/project/lib/pkg0/index.d.ts'.
+Reusing resolution of module 'pkg0' from '/src/project/randomFileForImport.ts' found in cache from location '/src/project', it was successfully resolved to '/src/project/lib/pkg0/index.d.ts'.
 lib/lib.d.ts
   Default library for target 'es5'
 src/project/lib/pkg0/index.d.ts
@@ -297,8 +287,7 @@ resolvedModules:
 pkg0: {
   "resolvedModule": {
     "resolvedFileName": "/src/project/lib/pkg0/index.d.ts",
-    "extension": ".d.ts",
-    "isExternalLibraryImport": false
+    "extension": ".d.ts"
   },
   "failedLookupLocations": [
     "/src/project/lib/pkg0.ts",
@@ -315,8 +304,7 @@ resolvedModules:
 pkg0: {
   "resolvedModule": {
     "resolvedFileName": "/src/project/lib/pkg0/index.d.ts",
-    "extension": ".d.ts",
-    "isExternalLibraryImport": false
+    "extension": ".d.ts"
   },
   "failedLookupLocations": [
     "/src/project/lib/pkg0.ts",
@@ -331,7 +319,7 @@ pkg0: {
 
 //// [/src/project/randomFileForImport.js] file written with same contents
 //// [/src/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","./lib/pkg0/index.d.ts","./main.ts","./randomfileforimport.ts","./","./lib/pkg0.ts","./lib/pkg0.tsx","./lib/pkg0.d.ts","./lib/pkg0/package.json","./lib/pkg0/index.ts","./lib/pkg0/index.tsx"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"769951468-export interface ImportInterface0 {}",{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"10580737119-import type { ImportInterface0 } from \"pkg0\";\nexport const x = 10;","signature":"-6057683066-export declare const x = 10;\r\n"}],"options":{"cacheResolutions":true,"composite":true},"fileIdsList":[[2]],"referencedMap":[[3,1],[4,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3,4],"latestChangedDtsFile":"./randomFileForImport.d.ts","cacheResolutions":{"resolutions":[{"resolvedModule":{"resolvedFileName":2},"failedLookupLocations":[6,7,8,9,10,11]}],"names":["pkg0"],"resolutionEntries":[[1,1]],"modules":[[5,[1]]]}},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","./lib/pkg0/index.d.ts","./main.ts","./randomfileforimport.ts","./","./lib/pkg0.ts","./lib/pkg0.tsx","./lib/pkg0.d.ts","./lib/pkg0/package.json","./lib/pkg0/index.ts","./lib/pkg0/index.tsx"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"769951468-export interface ImportInterface0 {}",{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"10580737119-import type { ImportInterface0 } from \"pkg0\";\nexport const x = 10;","signature":"-6057683066-export declare const x = 10;\r\n"}],"options":{"cacheResolutions":true,"composite":true,"paths":{"*":["./lib/*"]}},"fileIdsList":[[2]],"referencedMap":[[3,1],[4,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3,4],"latestChangedDtsFile":"./randomFileForImport.d.ts","cacheResolutions":{"resolutions":[{"resolvedModule":{"resolvedFileName":2},"failedLookupLocations":[6,7,8,9,10,11]}],"names":["pkg0"],"resolutionEntries":[[1,1]],"modules":[[5,[1]]]}},"version":"FakeTSVersion"}
 
 //// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -387,7 +375,12 @@ pkg0: {
     },
     "options": {
       "cacheResolutions": true,
-      "composite": true
+      "composite": true,
+      "paths": {
+        "*": [
+          "./lib/*"
+        ]
+      }
     },
     "referencedMap": {
       "./main.ts": [
@@ -490,6 +483,6 @@ pkg0: {
     }
   },
   "version": "FakeTSVersion",
-  "size": 1479
+  "size": 1505
 }
 
