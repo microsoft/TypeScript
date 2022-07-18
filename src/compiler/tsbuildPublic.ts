@@ -302,8 +302,8 @@ namespace ts {
         const typeReferenceDirectiveResolutionCache = !compilerHost.resolveTypeReferenceDirectives ? createTypeReferenceDirectiveResolutionCache(currentDirectory, getCanonicalFileName, /*options*/ undefined, moduleResolutionCache?.getPackageJsonInfoCache()) : undefined;
         if (!compilerHost.resolveModuleNames) {
             const loader = (moduleName: string, resolverMode: ResolutionMode, containingFile: string, redirectedReference: ResolvedProjectReference | undefined) => resolveModuleName(moduleName, containingFile, state.projectCompilerOptions, compilerHost, moduleResolutionCache, redirectedReference, resolverMode);
-            compilerHost.resolveModuleNames = (moduleNames, containingFile, _reusedNames, redirectedReference, _options, containingSourceFile) =>
-                loadWithModeAwareCache(moduleNames, Debug.checkDefined(containingSourceFile), containingFile, redirectedReference, loader);
+            compilerHost.resolveModuleNames = (moduleNames, containingFile, _reusedNames, redirectedReference, _options, containingSourceFile, partialResolutionInfo) =>
+                loadWithModeAwareCache(moduleNames, Debug.checkDefined(containingSourceFile), containingFile, redirectedReference, partialResolutionInfo, loader);
             compilerHost.getModuleResolutionCache = () => moduleResolutionCache;
         }
         if (!compilerHost.resolveTypeReferenceDirectives) {

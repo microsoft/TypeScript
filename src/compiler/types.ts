@@ -6599,8 +6599,9 @@ namespace ts {
 
     /*@internal*/
     export interface OldBuildInfoProgram {
-        isBuildInfoProgram: true; // temp -- later change this to some method thats distinct
         getCompilerOptions(): CompilerOptions;
+        getResolvedModule(dirPath: Path, name: string, mode: ResolutionMode): ResolvedModuleWithFailedLookupLocations | undefined;
+        getResolvedTypeReferenceDirective(dirPath: Path, name: string, mode: ResolutionMode): ResolvedTypeReferenceDirectiveWithFailedLookupLocations | undefined;
     }
 
     /*@internal*/
@@ -6933,7 +6934,7 @@ namespace ts {
 
     export interface ResolvedTypeReferenceDirective {
         // True if the type declaration file was found in a primary lookup location
-        primary: boolean;
+        primary: boolean | undefined;
         // The location of the .d.ts file we located, or undefined if resolution failed
         resolvedFileName: string | undefined;
         /**

@@ -428,10 +428,10 @@ namespace ts {
                 trace(host, Diagnostics.Type_reference_directive_0_was_not_resolved, typeReferenceDirectiveName);
             }
             else if (result.resolvedTypeReferenceDirective.packageId) {
-                trace(host, Diagnostics.Type_reference_directive_0_was_successfully_resolved_to_1_with_Package_ID_2_primary_Colon_3, typeReferenceDirectiveName, result.resolvedTypeReferenceDirective.resolvedFileName, packageIdToString(result.resolvedTypeReferenceDirective.packageId), result.resolvedTypeReferenceDirective.primary);
+                trace(host, Diagnostics.Type_reference_directive_0_was_successfully_resolved_to_1_with_Package_ID_2_primary_Colon_3, typeReferenceDirectiveName, result.resolvedTypeReferenceDirective.resolvedFileName, packageIdToString(result.resolvedTypeReferenceDirective.packageId), !!result.resolvedTypeReferenceDirective.primary);
             }
             else {
-                trace(host, Diagnostics.Type_reference_directive_0_was_successfully_resolved_to_1_primary_Colon_2, typeReferenceDirectiveName, result.resolvedTypeReferenceDirective.resolvedFileName, result.resolvedTypeReferenceDirective.primary);
+                trace(host, Diagnostics.Type_reference_directive_0_was_successfully_resolved_to_1_primary_Colon_2, typeReferenceDirectiveName, result.resolvedTypeReferenceDirective.resolvedFileName, !!result.resolvedTypeReferenceDirective.primary);
             }
         }
 
