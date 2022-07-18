@@ -1,0 +1,35 @@
+=== tests/cases/compiler/instanceofTypeAliasToGenericClass.ts ===
+// If Table is non generic error does not occur
+declare class TableClass<S = any>  {
+>TableClass : Symbol(TableClass, Decl(instanceofTypeAliasToGenericClass.ts, 0, 0))
+>S : Symbol(S, Decl(instanceofTypeAliasToGenericClass.ts, 1, 25))
+
+    _field: S
+>_field : Symbol(TableClass._field, Decl(instanceofTypeAliasToGenericClass.ts, 1, 36))
+>S : Symbol(S, Decl(instanceofTypeAliasToGenericClass.ts, 1, 25))
+}
+
+export type Table = TableClass;
+>Table : Symbol(Table, Decl(instanceofTypeAliasToGenericClass.ts, 3, 1))
+>TableClass : Symbol(TableClass, Decl(instanceofTypeAliasToGenericClass.ts, 0, 0))
+
+function fn<T extends Table>(o: T) {
+>fn : Symbol(fn, Decl(instanceofTypeAliasToGenericClass.ts, 5, 31))
+>T : Symbol(T, Decl(instanceofTypeAliasToGenericClass.ts, 7, 12))
+>Table : Symbol(Table, Decl(instanceofTypeAliasToGenericClass.ts, 3, 1))
+>o : Symbol(o, Decl(instanceofTypeAliasToGenericClass.ts, 7, 29))
+>T : Symbol(T, Decl(instanceofTypeAliasToGenericClass.ts, 7, 12))
+
+    return o instanceof TableClass // error in 4.8
+>o : Symbol(o, Decl(instanceofTypeAliasToGenericClass.ts, 7, 29))
+>TableClass : Symbol(TableClass, Decl(instanceofTypeAliasToGenericClass.ts, 0, 0))
+}
+
+declare const o: Table;
+>o : Symbol(o, Decl(instanceofTypeAliasToGenericClass.ts, 11, 13))
+>Table : Symbol(Table, Decl(instanceofTypeAliasToGenericClass.ts, 3, 1))
+
+o instanceof TableClass // This is ok 
+>o : Symbol(o, Decl(instanceofTypeAliasToGenericClass.ts, 11, 13))
+>TableClass : Symbol(TableClass, Decl(instanceofTypeAliasToGenericClass.ts, 0, 0))
+
