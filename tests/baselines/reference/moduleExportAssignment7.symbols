@@ -115,11 +115,9 @@ function types(
 
     a: import('./mod').Thing,
 >a : Symbol(a, Decl(index.ts, 0, 15))
->Thing : Symbol(Thing, Decl(mod.js, 5, 18))
 
     b: import('./mod').AnotherThing,
 >b : Symbol(b, Decl(index.ts, 1, 29))
->AnotherThing : Symbol(AnotherThing, Decl(mod.js, 6, 10))
 
     c: import('./mod').foo,
 >c : Symbol(c, Decl(index.ts, 2, 36))
@@ -139,12 +137,8 @@ function types(
 
 ) {
     return a.x + b.y + c() + d() + e() + f() + g.length
->a.x : Symbol(Thing.x, Decl(mod.js, 0, 14))
 >a : Symbol(a, Decl(index.ts, 0, 15))
->x : Symbol(Thing.x, Decl(mod.js, 0, 14))
->b.y : Symbol(AnotherThing.y, Decl(mod.js, 1, 20))
 >b : Symbol(b, Decl(index.ts, 1, 29))
->y : Symbol(AnotherThing.y, Decl(mod.js, 1, 20))
 >c : Symbol(c, Decl(index.ts, 2, 36))
 >d : Symbol(d, Decl(index.ts, 3, 27))
 >e : Symbol(e, Decl(index.ts, 4, 27))
