@@ -1,13 +1,16 @@
-// If Table is non generic error does not occur
-declare class TableClass<S = any>  {
-    _field: S
+declare class TableClass<S = any> {
+    _field: S;
 }
 
 export type Table = TableClass;
 
 function fn<T extends Table>(o: T) {
-    return o instanceof TableClass // error in 4.8
+    return o instanceof TableClass;
+}
+
+function fn2<T extends TableClass>(o: T) {
+    return o instanceof TableClass;
 }
 
 declare const o: Table;
-o instanceof TableClass // This is ok 
+o instanceof TableClass;
