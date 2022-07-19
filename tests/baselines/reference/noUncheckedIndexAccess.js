@@ -15,9 +15,17 @@ enum Meat {
   //Avoiding a false positive
   const value = Meat[0]
 
-  const t = "testing"
-  const value2 = Meat[t]
+  const valueUndefined = "testing"
+  const value2 = Meat[valueUndefined]
 
+  enum A {
+    a, b, c
+  }
+  enum B {
+    x, y, z
+  }
+  
+  const value3 = A[B.x];
 
 //// [noUncheckedIndexAccess.js]
 var Meat;
@@ -33,5 +41,18 @@ var union = Meat.Bacon;
 var valueUnion = Meat[union];
 //Avoiding a false positive
 var value = Meat[0];
-var t = "testing";
-var value2 = Meat[t];
+var valueUndefined = "testing";
+var value2 = Meat[valueUndefined];
+var A;
+(function (A) {
+    A[A["a"] = 0] = "a";
+    A[A["b"] = 1] = "b";
+    A[A["c"] = 2] = "c";
+})(A || (A = {}));
+var B;
+(function (B) {
+    B[B["x"] = 0] = "x";
+    B[B["y"] = 1] = "y";
+    B[B["z"] = 2] = "z";
+})(B || (B = {}));
+var value3 = A[B.x];

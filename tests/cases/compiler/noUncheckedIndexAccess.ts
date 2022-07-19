@@ -17,5 +17,14 @@ enum Meat {
   //Avoiding a false positive
   const value = Meat[0]
 
-  const t = "testing"
-  const value2 = Meat[t]
+  const valueUndefined = "testing"
+  const value2 = Meat[valueUndefined]
+
+  enum A {
+    a, b, c
+  }
+  enum B {
+    x, y, z
+  }
+  
+  const value3 = A[B.x];
