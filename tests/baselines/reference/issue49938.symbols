@@ -1,0 +1,48 @@
+=== tests/cases/compiler/issue49938.ts ===
+function equal<T>(a: T, b: T) { }
+>equal : Symbol(equal, Decl(issue49938.ts, 0, 0))
+>T : Symbol(T, Decl(issue49938.ts, 0, 15))
+>a : Symbol(a, Decl(issue49938.ts, 0, 18))
+>T : Symbol(T, Decl(issue49938.ts, 0, 15))
+>b : Symbol(b, Decl(issue49938.ts, 0, 23))
+>T : Symbol(T, Decl(issue49938.ts, 0, 15))
+
+let v = null!;
+>v : Symbol(v, Decl(issue49938.ts, 2, 3))
+
+// Object types with common base types
+
+type B = { foo: string }
+>B : Symbol(B, Decl(issue49938.ts, 2, 14))
+>foo : Symbol(foo, Decl(issue49938.ts, 6, 10))
+
+type D = { foo: string; bar: number }
+>D : Symbol(D, Decl(issue49938.ts, 6, 24))
+>foo : Symbol(foo, Decl(issue49938.ts, 7, 10))
+>bar : Symbol(bar, Decl(issue49938.ts, 7, 23))
+
+// Error in 4.8 TS can't find common type ❌
+// 4.7 T was undefined | B
+equal(v as B, v as undefined | D)
+>equal : Symbol(equal, Decl(issue49938.ts, 0, 0))
+>v : Symbol(v, Decl(issue49938.ts, 2, 3))
+>B : Symbol(B, Decl(issue49938.ts, 2, 14))
+>v : Symbol(v, Decl(issue49938.ts, 2, 3))
+>D : Symbol(D, Decl(issue49938.ts, 6, 24))
+
+// ok T is B ✅
+equal(v as B, v as D)
+>equal : Symbol(equal, Decl(issue49938.ts, 0, 0))
+>v : Symbol(v, Decl(issue49938.ts, 2, 3))
+>B : Symbol(B, Decl(issue49938.ts, 2, 14))
+>v : Symbol(v, Decl(issue49938.ts, 2, 3))
+>D : Symbol(D, Decl(issue49938.ts, 6, 24))
+
+// ok T is B | undefined ✅
+equal(v as B, v as B | undefined)
+>equal : Symbol(equal, Decl(issue49938.ts, 0, 0))
+>v : Symbol(v, Decl(issue49938.ts, 2, 3))
+>B : Symbol(B, Decl(issue49938.ts, 2, 14))
+>v : Symbol(v, Decl(issue49938.ts, 2, 3))
+>B : Symbol(B, Decl(issue49938.ts, 2, 14))
+
