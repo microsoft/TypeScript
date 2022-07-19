@@ -12318,7 +12318,7 @@ namespace ts {
             const typeVariable = getHomomorphicTypeVariable(type);
             if (typeVariable && !type.declaration.nameType) {
                 const constraint = getConstraintOfTypeParameter(typeVariable);
-                if (constraint && isArrayOrTupleType(constraint)) {
+                if (constraint && everyType(constraint, isArrayOrTupleType)) {
                     return instantiateType(type, prependTypeMapping(typeVariable, constraint, type.mapper));
                 }
             }
@@ -19860,7 +19860,7 @@ namespace ts {
                             return varianceResult;
                         }
                     }
-                    else if (isReadonlyArrayType(target) ? isArrayOrTupleType(source) : isArrayType(target) && isTupleType(source) && !source.target.readonly) {
+                    else if (isReadonlyArrayType(target) ? everyType(source, isArrayOrTupleType) : isArrayType(target) && isTupleType(source) && !source.target.readonly) {
                         if (relation !== identityRelation) {
                             return isRelatedTo(getIndexTypeOfType(source, numberType) || anyType, getIndexTypeOfType(target, numberType) || anyType, RecursionFlags.Both, reportErrors);
                         }
