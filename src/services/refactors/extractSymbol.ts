@@ -231,7 +231,6 @@ namespace ts.refactor.extractSymbol {
          * The range is in a function which needs the 'static' modifier in a class
          */
         InStaticRegion = 1 << 5,
-        InLoop = 1 << 6
     }
 
     /**
@@ -552,9 +551,7 @@ namespace ts.refactor.extractSymbol {
                 const savedPermittedJumps = permittedJumps;
                 switch (node.kind) {
                     case SyntaxKind.IfStatement:
-                        if (!(rangeFacts & RangeFacts.InLoop)) {
-                            permittedJumps = PermittedJumps.None;
-                        }
+                        permittedJumps &= ~PermittedJumps.Return;
                         break;
                     case SyntaxKind.TryStatement:
                         // forbid all jumps inside try blocks
@@ -575,7 +572,6 @@ namespace ts.refactor.extractSymbol {
                         if (isIterationStatement(node, /*lookInLabeledStatements*/ false)) {
                             // allow unlabeled break/continue inside loops
                             permittedJumps |= PermittedJumps.Break | PermittedJumps.Continue;
-                            rangeFacts |= RangeFacts.InLoop;
                         }
                         break;
                 }
