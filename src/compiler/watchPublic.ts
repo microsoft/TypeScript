@@ -447,7 +447,11 @@ namespace ts {
 
             // All resolutions are invalid if user provided resolutions
             const hasInvalidatedResolution = resolutionCache.createHasInvalidatedResolution(userProvidedResolution);
-            if (isProgramUptoDate(getCurrentProgram(), rootFileNames, compilerOptions, getSourceVersion, fileExists, hasInvalidatedResolution, hasChangedAutomaticTypeDirectiveNames, getParsedCommandLine, projectReferences)) {
+            const {
+                originalReadFile, originalFileExists, originalDirectoryExists,
+                originalCreateDirectory, originalWriteFile,
+            } = changeCompilerHostLikeToUseCache(compilerHost, toPath);
+            if (isProgramUptoDate(getCurrentProgram(), rootFileNames, compilerOptions, getSourceVersion, fileName => compilerHost.fileExists(fileName), hasInvalidatedResolution, hasChangedAutomaticTypeDirectiveNames, getParsedCommandLine, projectReferences)) {
                 if (hasChangedConfigFileParsingErrors) {
                     if (reportFileChangeDetectedOnCreateProgram) {
                         reportWatchDiagnostic(Diagnostics.File_change_detected_Starting_incremental_compilation);
@@ -464,10 +468,15 @@ namespace ts {
             }
 
             reportFileChangeDetectedOnCreateProgram = false;
-
             if (host.afterProgramCreate && program !== builderProgram) {
                 host.afterProgramCreate(builderProgram);
             }
+
+            compilerHost.readFile = originalReadFile;
+            compilerHost.fileExists = originalFileExists;
+            compilerHost.directoryExists = originalDirectoryExists;
+            compilerHost.createDirectory = originalCreateDirectory;
+            compilerHost.writeFile = originalWriteFile!;
 
             return builderProgram;
         }
