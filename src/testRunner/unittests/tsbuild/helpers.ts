@@ -338,7 +338,7 @@ interface Symbol {
             };
         }
 
-        function toReadableMode(mode: SourceFile["impliedNodeFormat"]): string | undefined {
+        function toReadableMode(mode: ResolutionMode): string | undefined {
             return mode && getNameOfCompilerOptionValue(mode, moduleOptionDeclaration.type);
         }
 

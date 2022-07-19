@@ -65,7 +65,7 @@ namespace ts {
             readonly version: string;
             signature: string | undefined;
             affectsGlobalScope: true | undefined;
-            impliedFormat: SourceFile["impliedNodeFormat"];
+            impliedFormat: ResolutionMode;
         }
 
         export interface ReadonlyManyToManyPathMap {

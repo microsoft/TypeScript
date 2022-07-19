@@ -630,7 +630,7 @@ namespace ts.Completions.StringCompletions {
     function getCompletionEntriesForNonRelativeModules(
         fragment: string,
         scriptPath: string,
-        mode: SourceFile["impliedNodeFormat"],
+        mode: ResolutionMode,
         compilerOptions: CompilerOptions,
         host: LanguageServiceHost,
         includeExtensionsOption: IncludeExtensionsOption,

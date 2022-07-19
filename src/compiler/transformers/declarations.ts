@@ -58,7 +58,7 @@ namespace ts {
         let needsScopeFixMarker = false;
         let resultHasScopeMarker = false;
         let enclosingDeclaration: Node;
-        let necessaryTypeReferences: Set<[specifier: string, mode: SourceFile["impliedNodeFormat"] | undefined]> | undefined;
+        let necessaryTypeReferences: Set<[specifier: string, mode: ResolutionMode]> | undefined;
         let lateMarkedStatements: LateVisibilityPaintedStatement[] | undefined;
         let lateStatementReplacementMap: ESMap<NodeId, VisitResult<LateVisibilityPaintedStatement | ExportAssignment>>;
         let suppressNewDiagnosticContexts: boolean;
@@ -93,7 +93,7 @@ namespace ts {
         const { noResolve, stripInternal } = options;
         return transformRoot;
 
-        function recordTypeReferenceDirectivesIfNecessary(typeReferenceDirectives: readonly [specifier: string, mode: SourceFile["impliedNodeFormat"] | undefined][] | undefined): void {
+        function recordTypeReferenceDirectivesIfNecessary(typeReferenceDirectives: readonly [specifier: string, mode: ResolutionMode][] | undefined): void {
             if (!typeReferenceDirectives) {
                 return;
             }
@@ -363,7 +363,7 @@ namespace ts {
                 return necessaryTypeReferences ? mapDefined(arrayFrom(necessaryTypeReferences.keys()), getFileReferenceForSpecifierModeTuple) : [];
             }
 
-            function getFileReferenceForSpecifierModeTuple([typeName, mode]: [specifier: string, mode: SourceFile["impliedNodeFormat"] | undefined]): FileReference | undefined {
+            function getFileReferenceForSpecifierModeTuple([typeName, mode]: [specifier: string, mode: ResolutionMode]): FileReference | undefined {
                 // Elide type references for which we have imports
                 if (emittedImports) {
                     for (const importStatement of emittedImports) {

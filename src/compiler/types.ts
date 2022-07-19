@@ -3348,7 +3348,7 @@ namespace ts {
 
     export interface FileReference extends TextRange {
         fileName: string;
-        resolutionMode?: SourceFile["impliedNodeFormat"];
+        resolutionMode?: ResolutionMode;
     }
 
     export interface CheckJsDirective extends TextRange {
@@ -3798,7 +3798,7 @@ namespace ts {
          * of `node`). If so, this field will be unset and source files will be considered to be
          * CommonJS-output-format by the node module transformer and type checker, regardless of extension or context.
          */
-        impliedNodeFormat?: ModuleKind.ESNext | ModuleKind.CommonJS;
+        impliedNodeFormat?: ResolutionMode;
         /*@internal*/ packageJsonLocations?: readonly string[];
         /*@internal*/ packageJsonScope?: PackageJsonInfo;
 
@@ -5008,8 +5008,8 @@ namespace ts {
         moduleExportsSomeValue(moduleReferenceExpression: Expression): boolean;
         isArgumentsLocalBinding(node: Identifier): boolean;
         getExternalModuleFileFromDeclaration(declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration | ImportTypeNode | ImportCall): SourceFile | undefined;
-        getTypeReferenceDirectivesForEntityName(name: EntityNameOrEntityNameExpression): [specifier: string, mode: SourceFile["impliedNodeFormat"] | undefined][] | undefined;
-        getTypeReferenceDirectivesForSymbol(symbol: Symbol, meaning?: SymbolFlags): [specifier: string, mode: SourceFile["impliedNodeFormat"] | undefined][] | undefined;
+        getTypeReferenceDirectivesForEntityName(name: EntityNameOrEntityNameExpression): [specifier: string, mode: ResolutionMode][] | undefined;
+        getTypeReferenceDirectivesForSymbol(symbol: Symbol, meaning?: SymbolFlags): [specifier: string, mode: ResolutionMode][] | undefined;
         isLiteralConstDeclaration(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration): boolean;
         getJsxFactoryEntity(location?: Node): EntityName | undefined;
         getJsxFragmentFactoryEntity(location?: Node): EntityName | undefined;
@@ -6960,7 +6960,7 @@ namespace ts {
     export type HasChangedAutomaticTypeDirectiveNames = () => boolean;
 
     export interface PartialResolutionInfo {
-        reusedNames: { name: string; mode: ModuleKind.CommonJS | ModuleKind.ESNext | undefined; }[] | undefined;
+        reusedNames: { name: string; mode: ResolutionMode; }[] | undefined;
         namesIndex: readonly number[];
     }
 
@@ -6992,7 +6992,7 @@ namespace ts {
         /**
          * This method is a companion for 'resolveModuleNames' and is used to resolve 'types' references to actual type declaration files
          */
-        resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[] | readonly FileReference[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingFileMode?: SourceFile["impliedNodeFormat"] | undefined, partialResolutionInfo?: PartialResolutionInfo): ResolvedTypeReferenceDirectiveWithFailedLookupLocations[] | (ResolvedTypeReferenceDirective | undefined)[];
+        resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[] | readonly FileReference[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingFileMode?: ResolutionMode, partialResolutionInfo?: PartialResolutionInfo): ResolvedTypeReferenceDirectiveWithFailedLookupLocations[] | (ResolvedTypeReferenceDirective | undefined)[];
         getEnvironmentVariable?(name: string): string | undefined;
         /* @internal */ onReleaseOldSourceFile?(oldSourceFile: SourceFile, oldOptions: CompilerOptions, hasSourceFileByPath: boolean): void;
         /* @internal */ onReleaseParsedCommandLine?(configFileName: string, oldResolvedRef: ResolvedProjectReference | undefined, optionOptions: CompilerOptions): void;
@@ -8686,7 +8686,7 @@ namespace ts {
 
     /* @internal */
     export interface ModuleSpecifierOptions {
-        overrideImportMode?: SourceFile["impliedNodeFormat"];
+        overrideImportMode?: ResolutionMode;
     }
 
     /* @internal */

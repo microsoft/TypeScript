@@ -822,7 +822,7 @@ namespace ts {
 
     export type ProgramBuildInfoResolutionId = number & { __programBuildInfoResolutionIdBrand: any };
     export type ProgramBuildInfoResolutionNameId = number & { __programBuildInfoResolutionNameIdBrand: any };
-    export type ProgramBuildInfoResolutionEntry = [nameId: ProgramBuildInfoResolutionNameId, resolutionId: ProgramBuildInfoResolutionId, mode?: SourceFile["impliedNodeFormat"]];
+    export type ProgramBuildInfoResolutionEntry = [nameId: ProgramBuildInfoResolutionNameId, resolutionId: ProgramBuildInfoResolutionId, mode?: ResolutionMode];
     export type ProgramBuildInfoResolutionEntryId = number & { __programBuildInfoResolutionEntryId: any };
     export type ProgramBuildInfoResolutionCache = [dirId: ProgramBuildInfoFileId, resolutions: readonly ProgramBuildInfoResolutionEntryId[]][];
     export interface ProgramBuildInfoCacheResolutions {

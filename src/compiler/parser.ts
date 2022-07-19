@@ -739,7 +739,7 @@ namespace ts {
          * and files on disk, but needs to be done with a module resolution cache in scope to be performant.
          * This is usually `undefined` for compilations that do not have `moduleResolution` values of `node16` or `nodenext`.
          */
-        impliedNodeFormat?: ModuleKind.ESNext | ModuleKind.CommonJS;
+        impliedNodeFormat?: ResolutionMode;
         /**
          * Controls how module-y-ness is set for the given file. Usually the result of calling
          * `getSetExternalModuleIndicator` on a valid `CompilerOptions` object. If not present, the default
@@ -9532,7 +9532,7 @@ namespace ts {
         moduleName?: string;
     }
 
-    function parseResolutionMode(mode: string | undefined, pos: number, end: number, reportDiagnostic: PragmaDiagnosticReporter): ModuleKind.ESNext | ModuleKind.CommonJS | undefined {
+    function parseResolutionMode(mode: string | undefined, pos: number, end: number, reportDiagnostic: PragmaDiagnosticReporter): ResolutionMode {
         if (!mode) {
             return undefined;
         }

@@ -16,7 +16,7 @@ namespace ts {
             typeDirectiveNames: string[] | readonly FileReference[],
             containingFile: string,
             redirectedReference: ResolvedProjectReference | undefined,
-            containingFileMode: SourceFile["impliedNodeFormat"] | undefined,
+            containingFileMode: ResolutionMode,
             partialResolutionInfo: PartialResolutionInfo | undefined
         ): ResolvedTypeReferenceDirectiveWithFailedLookupLocations[];
 
@@ -376,7 +376,7 @@ namespace ts {
             hasChangedAutomaticTypeDirectiveNames = false;
         }
 
-        function resolveModuleName(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, redirectedReference?: ResolvedProjectReference, _containingSourceFile?: never, mode?: ModuleKind.CommonJS | ModuleKind.ESNext | undefined): CachedResolvedModuleWithFailedLookupLocations {
+        function resolveModuleName(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, redirectedReference?: ResolvedProjectReference, _containingSourceFile?: never, mode?: ResolutionMode): CachedResolvedModuleWithFailedLookupLocations {
             const primaryResult = ts.resolveModuleName(moduleName, containingFile, compilerOptions, host, moduleResolutionCache, redirectedReference, mode);
             // return result immediately only if global cache support is not enabled or if it is .ts, .tsx or .d.ts
             if (!resolutionHost.getGlobalCache) {
@@ -410,7 +410,7 @@ namespace ts {
             return primaryResult;
         }
 
-        function resolveTypeReferenceDirective(typeReferenceDirectiveName: string, containingFile: string | undefined, options: CompilerOptions, host: ModuleResolutionHost, redirectedReference?: ResolvedProjectReference, _containingSourceFile?: SourceFile, resolutionMode?: SourceFile["impliedNodeFormat"] | undefined): CachedResolvedTypeReferenceDirectiveWithFailedLookupLocations {
+        function resolveTypeReferenceDirective(typeReferenceDirectiveName: string, containingFile: string | undefined, options: CompilerOptions, host: ModuleResolutionHost, redirectedReference?: ResolvedProjectReference, _containingSourceFile?: SourceFile, resolutionMode?: ResolutionMode): CachedResolvedTypeReferenceDirectiveWithFailedLookupLocations {
             return ts.resolveTypeReferenceDirective(typeReferenceDirectiveName, containingFile, options, host, redirectedReference, typeReferenceDirectiveResolutionCache, resolutionMode);
         }
 
@@ -420,13 +420,13 @@ namespace ts {
             redirectedReference: ResolvedProjectReference | undefined;
             cache: ESMap<Path, ModeAwareCache<T>>;
             perDirectoryCacheWithRedirects: CacheWithRedirects<ModeAwareCache<T>>;
-            loader: (name: string, containingFile: string, options: CompilerOptions, host: ModuleResolutionHost, redirectedReference?: ResolvedProjectReference, containingSourceFile?: SourceFile, resolutionMode?: ModuleKind.CommonJS | ModuleKind.ESNext | undefined) => T;
+            loader: (name: string, containingFile: string, options: CompilerOptions, host: ModuleResolutionHost, redirectedReference?: ResolvedProjectReference, containingSourceFile?: SourceFile, resolutionMode?: ResolutionMode) => T;
             getResolutionWithResolvedFileName: GetResolutionWithResolvedFileName<T, R>;
             shouldRetryResolution: (t: T) => boolean;
             partialResolutionInfo?: PartialResolutionInfo;
             logChanges?: boolean;
             containingSourceFile?: SourceFile;
-            containingSourceFileMode?: SourceFile["impliedNodeFormat"];
+            containingSourceFileMode?: ResolutionMode;
         }
         function resolveNamesWithLocalCache<T extends ResolutionWithFailedLookupLocations, R extends ResolutionWithResolvedFileName>({
             names, containingFile, redirectedReference,
@@ -584,7 +584,7 @@ namespace ts {
             typeDirectiveNames: string[] | readonly FileReference[],
             containingFile: string,
             redirectedReference?: ResolvedProjectReference,
-            containingFileMode?: SourceFile["impliedNodeFormat"],
+            containingFileMode?: ResolutionMode,
             partialResolutionInfo?: PartialResolutionInfo
         ) {
             return resolveNamesWithLocalCache<CachedResolvedTypeReferenceDirectiveWithFailedLookupLocations, ResolvedTypeReferenceDirective>({
