@@ -30780,7 +30780,7 @@ namespace ts {
 
             let typeArguments: NodeArray<TypeNode> | undefined;
 
-            if (!isDecorator) {
+            if (!isDecorator && !isSuperCall(node)) {
                 typeArguments = (node as CallExpression).typeArguments;
 
                 // We already perform checking on the type arguments on the class declaration itself.
