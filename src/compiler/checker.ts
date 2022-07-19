@@ -12743,12 +12743,14 @@ namespace ts {
 
         // Return list of type parameters with duplicates removed (duplicate identifier errors are generated in the actual
         // type checking functions).
-        function getTypeParametersFromDeclaration(declaration: DeclarationWithTypeParameters): TypeParameter[] | undefined {
+        function getTypeParametersFromDeclaration(declaration: DeclarationWithTypeParameters): readonly TypeParameter[] | undefined {
             let result: TypeParameter[] | undefined;
             for (const node of getEffectiveTypeParameterDeclarations(declaration)) {
                 result = appendIfUnique(result, getDeclaredTypeOfTypeParameter(node.symbol));
             }
-            return result;
+            return result?.length ? result
+                : isFunctionDeclaration(declaration) ? getSignatureOfTypeTag(declaration)?.typeParameters
+                : undefined;
         }
 
         function symbolsToArray(symbols: SymbolTable): Symbol[] {
