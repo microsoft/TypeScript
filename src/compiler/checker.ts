@@ -11896,12 +11896,18 @@ namespace ts {
                     else if ((type as MappedType).objectFlags & ObjectFlags.Mapped) {
                         resolveMappedTypeMembers(type as MappedType);
                     }
+                    else {
+                        Debug.fail("Unhandled object type " + Debug.formatObjectFlags(type.objectFlags));
+                    }
                 }
                 else if (type.flags & TypeFlags.Union) {
                     resolveUnionTypeMembers(type as UnionType);
                 }
                 else if (type.flags & TypeFlags.Intersection) {
                     resolveIntersectionTypeMembers(type as IntersectionType);
+                }
+                else {
+                    Debug.fail("Unhandled type " + Debug.formatTypeFlags(type.flags));
                 }
             }
             return type as ResolvedType;
@@ -24613,7 +24619,7 @@ namespace ts {
                 }
                 // for (const _ in ref) acts as a nonnull on ref
                 if (isVariableDeclaration(node) && node.parent.parent.kind === SyntaxKind.ForInStatement && isMatchingReference(reference, node.parent.parent.expression)) {
-                    return getNonNullableTypeIfNeeded(getTypeFromFlowType(getTypeAtFlowNode(flow.antecedent)));
+                    return getNonNullableTypeIfNeeded(finalizeEvolvingArrayType(getTypeFromFlowType(getTypeAtFlowNode(flow.antecedent))));
                 }
                 // Assignment doesn't affect reference
                 return undefined;
