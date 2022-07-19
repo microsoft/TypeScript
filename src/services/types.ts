@@ -1045,7 +1045,12 @@ namespace ts {
         containerKind: ScriptElementKind;
         containerName: string;
         unverified?: boolean;
-        /* @internal */ isLocal?: boolean;
+        /** @internal
+         * Initially, this value is determined syntactically, but it is updated by the checker to cover
+         * cases like declarations that are exported in subsequent statements.  As a result, the value
+         * may be "incomplete" if this span has yet to be checked.
+         */
+        isLocal?: boolean;
         /* @internal */ isAmbient?: boolean;
         /* @internal */ failedAliasResolution?: boolean;
     }
