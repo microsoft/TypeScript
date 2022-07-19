@@ -1,8 +1,7 @@
 tests/cases/compiler/superWithTypeArgument.ts(7,14): error TS2754: 'super' may not use type arguments.
-tests/cases/compiler/superWithTypeArgument.ts(7,15): error TS2558: Expected 0 type arguments, but got 1.
 
 
-==== tests/cases/compiler/superWithTypeArgument.ts (2 errors) ====
+==== tests/cases/compiler/superWithTypeArgument.ts (1 errors) ====
     class C {
         
     }
@@ -12,7 +11,5 @@ tests/cases/compiler/superWithTypeArgument.ts(7,15): error TS2558: Expected 0 ty
             super<T>();
                  ~~~
 !!! error TS2754: 'super' may not use type arguments.
-                  ~
-!!! error TS2558: Expected 0 type arguments, but got 1.
         }
     }
