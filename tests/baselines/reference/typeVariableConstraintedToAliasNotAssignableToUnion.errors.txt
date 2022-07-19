@@ -1,3 +1,11 @@
+tests/cases/compiler/typeVariableConstraintedToAliasNotAssignableToUnion.ts(21,5): error TS2322: Type 'T' is not assignable to type 'boolean'.
+  Type 'TableClass<any>' is not assignable to type 'boolean'.
+tests/cases/compiler/typeVariableConstraintedToAliasNotAssignableToUnion.ts(22,5): error TS2322: Type 'T' is not assignable to type 'string | number'.
+  Type 'TableClass<any>' is not assignable to type 'string | number'.
+tests/cases/compiler/typeVariableConstraintedToAliasNotAssignableToUnion.ts(23,5): error TS2322: Type 'T' is not assignable to type 'string | Something'.
+  Type 'TableClass<any>' is not assignable to type 'string | Something'.
+tests/cases/compiler/typeVariableConstraintedToAliasNotAssignableToUnion.ts(24,5): error TS2322: Type 'T' is not assignable to type 'Something | SomethingElse'.
+  Type 'TableClass<any>' is not assignable to type 'Something | SomethingElse'.
 tests/cases/compiler/typeVariableConstraintedToAliasNotAssignableToUnion.ts(28,5): error TS2322: Type 'T' is not assignable to type 'boolean'.
   Type 'TableClass<any>' is not assignable to type 'boolean'.
 tests/cases/compiler/typeVariableConstraintedToAliasNotAssignableToUnion.ts(29,5): error TS2322: Type 'T' is not assignable to type 'string | number'.
@@ -12,7 +20,7 @@ tests/cases/compiler/typeVariableConstraintedToAliasNotAssignableToUnion.ts(37,1
 tests/cases/compiler/typeVariableConstraintedToAliasNotAssignableToUnion.ts(38,1): error TS2322: Type 'Table' is not assignable to type 'Something | SomethingElse'.
 
 
-==== tests/cases/compiler/typeVariableConstraintedToAliasNotAssignableToUnion.ts (8 errors) ====
+==== tests/cases/compiler/typeVariableConstraintedToAliasNotAssignableToUnion.ts (12 errors) ====
     declare class TableClass<S = any> {
         _field: S;
     }
@@ -34,9 +42,21 @@ tests/cases/compiler/typeVariableConstraintedToAliasNotAssignableToUnion.ts(38,1
     
     function fn<T extends Table>(o: T) {
         aBoolean = o;
+        ~~~~~~~~
+!!! error TS2322: Type 'T' is not assignable to type 'boolean'.
+!!! error TS2322:   Type 'TableClass<any>' is not assignable to type 'boolean'.
         aStringOrNumber = o;
+        ~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'T' is not assignable to type 'string | number'.
+!!! error TS2322:   Type 'TableClass<any>' is not assignable to type 'string | number'.
         aStringOrSomething = o;
+        ~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'T' is not assignable to type 'string | Something'.
+!!! error TS2322:   Type 'TableClass<any>' is not assignable to type 'string | Something'.
         someUnion = o;
+        ~~~~~~~~~
+!!! error TS2322: Type 'T' is not assignable to type 'Something | SomethingElse'.
+!!! error TS2322:   Type 'TableClass<any>' is not assignable to type 'Something | SomethingElse'.
     }
     
     function fn2<T extends TableClass>(o: T) {
