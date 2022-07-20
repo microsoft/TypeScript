@@ -3507,6 +3507,10 @@
         "category": "Error",
         "code": 2843
     },
+    "Type of instance member variable '{0}' cannot reference identifier '{1}' declared in the constructor.": {
+        "category": "Error",
+        "code": 2844
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

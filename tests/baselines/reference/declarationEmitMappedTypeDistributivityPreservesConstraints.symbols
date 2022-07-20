@@ -1,0 +1,49 @@
+=== tests/cases/compiler/types.ts ===
+type Fns = Record<string, (...params: unknown[]) => unknown>
+>Fns : Symbol(Fns, Decl(types.ts, 0, 0))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>params : Symbol(params, Decl(types.ts, 0, 27))
+
+type Map<T extends Fns> = { [K in keyof T]: T[K]; };
+>Map : Symbol(Map, Decl(types.ts, 0, 60))
+>T : Symbol(T, Decl(types.ts, 2, 9))
+>Fns : Symbol(Fns, Decl(types.ts, 0, 0))
+>K : Symbol(K, Decl(types.ts, 2, 29))
+>T : Symbol(T, Decl(types.ts, 2, 9))
+>T : Symbol(T, Decl(types.ts, 2, 9))
+>K : Symbol(K, Decl(types.ts, 2, 29))
+
+type AllArg<T extends Fns> = { [K in keyof T]: Parameters<T[K]> };
+>AllArg : Symbol(AllArg, Decl(types.ts, 2, 52))
+>T : Symbol(T, Decl(types.ts, 4, 12))
+>Fns : Symbol(Fns, Decl(types.ts, 0, 0))
+>K : Symbol(K, Decl(types.ts, 4, 32))
+>T : Symbol(T, Decl(types.ts, 4, 12))
+>Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(types.ts, 4, 12))
+>K : Symbol(K, Decl(types.ts, 4, 32))
+
+function fn<T extends { x: Map<T['x']> }>(sliceIndex: T): AllArg<T['x']> {
+>fn : Symbol(fn, Decl(types.ts, 4, 66))
+>T : Symbol(T, Decl(types.ts, 6, 12))
+>x : Symbol(x, Decl(types.ts, 6, 23))
+>Map : Symbol(Map, Decl(types.ts, 0, 60))
+>T : Symbol(T, Decl(types.ts, 6, 12))
+>sliceIndex : Symbol(sliceIndex, Decl(types.ts, 6, 42))
+>T : Symbol(T, Decl(types.ts, 6, 12))
+>AllArg : Symbol(AllArg, Decl(types.ts, 2, 52))
+>T : Symbol(T, Decl(types.ts, 6, 12))
+
+    return null!;
+}
+
+export default { fn };
+>fn : Symbol(fn, Decl(types.ts, 10, 16))
+
+=== tests/cases/compiler/reexport.ts ===
+import test from "./types";
+>test : Symbol(test, Decl(reexport.ts, 0, 6))
+
+export default { test };
+>test : Symbol(test, Decl(reexport.ts, 1, 16))
+

@@ -3631,11 +3631,11 @@ namespace ts {
             const hasJSDoc = hasPrecedingJSDocComment();
             const modifiers = parseModifiers();
             if (parseContextualModifier(SyntaxKind.GetKeyword)) {
-                return parseAccessorDeclaration(pos, hasJSDoc, /*decorators*/ undefined, modifiers, SyntaxKind.GetAccessor);
+                return parseAccessorDeclaration(pos, hasJSDoc, /*decorators*/ undefined, modifiers, SyntaxKind.GetAccessor, SignatureFlags.Type);
             }
 
             if (parseContextualModifier(SyntaxKind.SetKeyword)) {
-                return parseAccessorDeclaration(pos, hasJSDoc, /*decorators*/ undefined, modifiers, SyntaxKind.SetAccessor);
+                return parseAccessorDeclaration(pos, hasJSDoc, /*decorators*/ undefined, modifiers, SyntaxKind.SetAccessor, SignatureFlags.Type);
             }
 
             if (isIndexSignature()) {
@@ -5285,12 +5285,15 @@ namespace ts {
 
         function parseSuperExpression(): MemberExpression {
             const pos = getNodePos();
-            const expression = parseTokenNode<PrimaryExpression>();
+            let expression = parseTokenNode<MemberExpression>();
             if (token() === SyntaxKind.LessThanToken) {
                 const startPos = getNodePos();
                 const typeArguments = tryParse(parseTypeArgumentsInExpression);
                 if (typeArguments !== undefined) {
                     parseErrorAt(startPos, getNodePos(), Diagnostics.super_may_not_use_type_arguments);
+                    if (!isTemplateStartOfTaggedTemplate()) {
+                        expression = factory.createExpressionWithTypeArguments(expression, typeArguments);
+                    }
                 }
             }
 
@@ -5928,10 +5931,10 @@ namespace ts {
             const modifiers = parseModifiers();
 
             if (parseContextualModifier(SyntaxKind.GetKeyword)) {
-                return parseAccessorDeclaration(pos, hasJSDoc, decorators, modifiers, SyntaxKind.GetAccessor);
+                return parseAccessorDeclaration(pos, hasJSDoc, decorators, modifiers, SyntaxKind.GetAccessor, SignatureFlags.None);
             }
             if (parseContextualModifier(SyntaxKind.SetKeyword)) {
-                return parseAccessorDeclaration(pos, hasJSDoc, decorators, modifiers, SyntaxKind.SetAccessor);
+                return parseAccessorDeclaration(pos, hasJSDoc, decorators, modifiers, SyntaxKind.SetAccessor, SignatureFlags.None);
             }
 
             const asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
@@ -6701,11 +6704,16 @@ namespace ts {
         }
 
         function parseFunctionBlockOrSemicolon(flags: SignatureFlags, diagnosticMessage?: DiagnosticMessage): Block | undefined {
-            if (token() !== SyntaxKind.OpenBraceToken && canParseSemicolon()) {
-                parseSemicolon();
-                return;
+            if (token() !== SyntaxKind.OpenBraceToken) {
+                if (flags & SignatureFlags.Type) {
+                    parseTypeMemberSemicolon();
+                    return;
+                }
+                if (canParseSemicolon()) {
+                    parseSemicolon();
+                    return;
+                }
             }
-
             return parseFunctionBlock(flags, diagnosticMessage);
         }
 
@@ -6972,12 +6980,12 @@ namespace ts {
             return parsePropertyDeclaration(pos, hasJSDoc, decorators, modifiers, name, questionToken);
         }
 
-        function parseAccessorDeclaration(pos: number, hasJSDoc: boolean, decorators: NodeArray<Decorator> | undefined, modifiers: NodeArray<Modifier> | undefined, kind: AccessorDeclaration["kind"]): AccessorDeclaration {
+        function parseAccessorDeclaration(pos: number, hasJSDoc: boolean, decorators: NodeArray<Decorator> | undefined, modifiers: NodeArray<Modifier> | undefined, kind: AccessorDeclaration["kind"], flags: SignatureFlags): AccessorDeclaration {
             const name = parsePropertyName();
             const typeParameters = parseTypeParameters();
             const parameters = parseParameters(SignatureFlags.None);
             const type = parseReturnType(SyntaxKind.ColonToken, /*isType*/ false);
-            const body = parseFunctionBlockOrSemicolon(SignatureFlags.None);
+            const body = parseFunctionBlockOrSemicolon(flags);
             const node = kind === SyntaxKind.GetAccessor
                 ? factory.createGetAccessorDeclaration(combineDecoratorsAndModifiers(decorators, modifiers), name, parameters, type, body)
                 : factory.createSetAccessorDeclaration(combineDecoratorsAndModifiers(decorators, modifiers), name, parameters, body);
@@ -7188,11 +7196,11 @@ namespace ts {
             }
 
             if (parseContextualModifier(SyntaxKind.GetKeyword)) {
-                return parseAccessorDeclaration(pos, hasJSDoc, decorators, modifiers, SyntaxKind.GetAccessor);
+                return parseAccessorDeclaration(pos, hasJSDoc, decorators, modifiers, SyntaxKind.GetAccessor, SignatureFlags.None);
             }
 
             if (parseContextualModifier(SyntaxKind.SetKeyword)) {
-                return parseAccessorDeclaration(pos, hasJSDoc, decorators, modifiers, SyntaxKind.SetAccessor);
+                return parseAccessorDeclaration(pos, hasJSDoc, decorators, modifiers, SyntaxKind.SetAccessor, SignatureFlags.None);
             }
 
             if (token() === SyntaxKind.ConstructorKeyword || token() === SyntaxKind.StringLiteral) {

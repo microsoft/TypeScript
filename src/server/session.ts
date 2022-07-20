@@ -344,6 +344,8 @@ namespace ts.server {
     function getDefinitionLocation(defaultProject: Project, initialLocation: DocumentPosition, isForRename: boolean): DocumentPosition | undefined {
         const infos = defaultProject.getLanguageService().getDefinitionAtPosition(initialLocation.fileName, initialLocation.pos, /*searchOtherFilesOnly*/ false, /*stopAtAlias*/ isForRename);
         const info = infos && firstOrUndefined(infos);
+        // Note that the value of `isLocal` may depend on whether or not the checker has run on the containing file
+        // (implying that FAR cascading behavior may depend on request order)
         return info && !info.isLocal ? { fileName: info.fileName, pos: info.textSpan.start } : undefined;
     }
 
