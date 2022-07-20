@@ -21228,7 +21228,17 @@ namespace ts {
             const primaryTypes = filter(types, t => !(t.flags & TypeFlags.Nullable));
             if (primaryTypes.length) {
                 const supertypeOrUnion = getSupertypeOrUnion(primaryTypes);
-                return primaryTypes === types ? supertypeOrUnion : getUnionType([supertypeOrUnion, ...filter(types, t => !!(t.flags & TypeFlags.Nullable))]);
+                const supertypeOrUnionFacts = getTypeFacts(supertypeOrUnion);
+                const allFacts = getAllTypeFacts(types);
+
+                let missingNullableFlags: TypeFlags = 0;
+                if (allFacts & TypeFacts.IsNull && !(supertypeOrUnionFacts & TypeFacts.IsNull)) {
+                    missingNullableFlags |= TypeFlags.Null;
+                }
+                if (allFacts & TypeFacts.IsUndefined && !(supertypeOrUnionFacts & TypeFacts.IsUndefined)) {
+                    missingNullableFlags |= TypeFlags.Undefined;
+                }
+                return getNullableType(supertypeOrUnion, missingNullableFlags);
             }
             return getUnionType(types, UnionReduction.Subtype);
         }
@@ -23717,12 +23727,16 @@ namespace ts {
                 return TypeFacts.None;
             }
             if (flags & TypeFlags.Union) {
-                return reduceLeft((type as UnionType).types, (facts, t) => facts | getTypeFacts(t), TypeFacts.None);
+                return getAllTypeFacts((type as UnionType).types);
             }
             if (flags & TypeFlags.Intersection) {
                 return getIntersectionTypeFacts(type as IntersectionType);
             }
             return TypeFacts.UnknownFacts;
+        }
+
+        function getAllTypeFacts(types: Type[]): TypeFacts {
+            return reduceLeft(types, (facts, t) => facts | getTypeFacts(t), TypeFacts.None);
         }
 
         function getIntersectionTypeFacts(type: IntersectionType): TypeFacts {
