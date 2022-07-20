@@ -382,10 +382,10 @@ namespace ts.JsDoc {
         // * if the caret was directly in front of the object, then we add an extra line and indentation.
         const openComment = "/**";
         const closeComment = " */";
-        
+
         // If any of the existing jsDoc has tags, ignore adding new ones.
         let hasTag = false;
-        for (let jsDoc of commentOwnerJsDoc || []) {
+        for (const jsDoc of commentOwnerJsDoc || []) {
             if (jsDoc.tags) {
                 hasTag = true;
                 break;
