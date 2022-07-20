@@ -12118,7 +12118,7 @@ namespace ts {
                         }
                     }
                 }
-                return getIntersectionType(constraints);
+                return getNormalizedType(getIntersectionType(constraints), /*writing*/ false); // The source types were normalized; ensure the result is normalized too.
             }
             return undefined;
         }
@@ -19434,7 +19434,7 @@ namespace ts {
                         // the type param can be compared with itself in the target (with the influence of its constraint to match other parts)
                         // For example, if `T extends 1 | 2` and `U extends 2 | 3` and we compare `T & U` to `T & U & (1 | 2 | 3)`
                         const constraint = getEffectiveConstraintOfIntersection(source.flags & TypeFlags.Intersection ? (source as IntersectionType).types: [source], !!(target.flags & TypeFlags.Union));
-                        if (constraint && everyType(constraint, c => !isTypeIdenticalTo(c, source))) { // Skip comparison if expansion contains the source itself
+                        if (constraint && everyType(constraint, c => c !== source)) { // Skip comparison if expansion contains the source itself
                             // TODO: Stack errors so we get a pyramid for the "normal" comparison above, _and_ a second for this
                             if (result = isRelatedTo(constraint, target, RecursionFlags.Source, /*reportErrors*/ false, /*headMessage*/ undefined, intersectionState)) {
                                 return result;
