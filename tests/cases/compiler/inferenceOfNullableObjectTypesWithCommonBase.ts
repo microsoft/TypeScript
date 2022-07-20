@@ -9,11 +9,17 @@ let v = null!;
 type B = { foo: string }
 type D = { foo: string; bar: number }
 
-// Error in 4.8 TS can't find common type ❌
-// 4.7 T was undefined | B
 equal(v as B, v as undefined | D)
+equal(v as undefined | D, v as B)
 
-// ok T is B ✅
+equal<undefined | B>(v as B, v as undefined | D)
+equal<undefined | B>(v as undefined | D, v as B)
+
+equal(v as B, v as undefined)
+equal(v as undefined, v as B)
+
 equal(v as B, v as D)
-// ok T is B | undefined ✅
+equal(v as D, v as B)
+
 equal(v as B, v as B | undefined)
+equal(v as B | undefined, v as B)
