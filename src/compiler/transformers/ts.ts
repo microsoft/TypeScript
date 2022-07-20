@@ -1113,7 +1113,8 @@ namespace ts {
             }
 
             // Add remaining statements from the body, skipping the super() call if it was found and any (already added) prologue statements
-            addRange(statements, visitNodes(body.statements, visitor, isStatement, superStatementIndex + 1 + prologueStatementCount));
+            const start = superStatementIndex >= 0 ? superStatementIndex + 1 : prologueStatementCount;
+            addRange(statements, visitNodes(body.statements, visitor, isStatement, start));
 
             // End the lexical environment.
             statements = factory.mergeLexicalEnvironment(statements, endLexicalEnvironment());
