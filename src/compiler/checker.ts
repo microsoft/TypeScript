@@ -21218,29 +21218,26 @@ namespace ts {
             }
             return literalTypesWithSameBaseType(types) ?
                 getUnionType(types) :
-                reduceLeft(types, (s, t) => isTypeSubtypeOf(s, t) ? t : s)!;
+                reduceLeft(types, (s, t) => isTypeSubtypeOf(getNonNullableTypeIfNeeded(s), getNonNullableTypeIfNeeded(t)) ? t : s)!;
         }
 
         function getCommonSupertype(types: Type[]): Type {
             if (!strictNullChecks) {
                 return getSupertypeOrUnion(types);
             }
-            const primaryTypes = filter(types, t => !(t.flags & TypeFlags.Nullable));
-            if (primaryTypes.length) {
-                const supertypeOrUnion = getSupertypeOrUnion(primaryTypes);
-                const supertypeOrUnionFacts = getTypeFacts(supertypeOrUnion);
-                const allFacts = getAllTypeFacts(types);
 
-                let missingNullableFlags: TypeFlags = 0;
-                if (allFacts & TypeFacts.IsNull && !(supertypeOrUnionFacts & TypeFacts.IsNull)) {
-                    missingNullableFlags |= TypeFlags.Null;
-                }
-                if (allFacts & TypeFacts.IsUndefined && !(supertypeOrUnionFacts & TypeFacts.IsUndefined)) {
-                    missingNullableFlags |= TypeFlags.Undefined;
-                }
-                return getNullableType(supertypeOrUnion, missingNullableFlags);
+            const supertypeOrUnion = getSupertypeOrUnion(types);
+            const supertypeOrUnionFacts = getTypeFacts(supertypeOrUnion);
+            const allFacts = getAllTypeFacts(types);
+
+            let missingNullableFlags: TypeFlags = 0;
+            if (allFacts & TypeFacts.IsNull && !(supertypeOrUnionFacts & TypeFacts.IsNull)) {
+                missingNullableFlags |= TypeFlags.Null;
             }
-            return getUnionType(types, UnionReduction.Subtype);
+            if (allFacts & TypeFacts.IsUndefined && !(supertypeOrUnionFacts & TypeFacts.IsUndefined)) {
+                missingNullableFlags |= TypeFlags.Undefined;
+            }
+            return getNullableType(supertypeOrUnion, missingNullableFlags);
         }
 
         // Return the leftmost type for which no type to the right is a subtype.
