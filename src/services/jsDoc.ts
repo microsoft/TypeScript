@@ -386,7 +386,6 @@ namespace ts.JsDoc {
         // If any of the existing jsDoc has tags, ignore adding new ones.
         const hasTag = (commentOwnerJsDoc || []).some(jsDoc => !!jsDoc.tags);
 
-
         if (tags && !hasTag) {
             const preamble = openComment + newLine + indentationStr + " * ";
             const endLine = tokenStart === position ? newLine + indentationStr : "";
