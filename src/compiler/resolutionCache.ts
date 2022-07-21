@@ -52,7 +52,7 @@ namespace ts {
 
     interface ResolutionWithResolvedFileName {
         resolvedFileName: string | undefined;
-        packagetId?: PackageId;
+        packageId?: PackageId;
     }
 
     interface CachedResolvedModuleWithFailedLookupLocations extends ResolvedModuleWithFailedLookupLocations, ResolutionWithFailedLookupLocations {
@@ -483,12 +483,12 @@ namespace ts {
                                 host,
                                 loader === resolveModuleName as unknown ?
                                     resolved?.resolvedFileName ?
-                                        resolved.packagetId ?
+                                        resolved.packageId ?
                                             Diagnostics.Reusing_resolution_of_module_0_from_1_found_in_cache_from_location_2_it_was_successfully_resolved_to_3_with_Package_ID_4:
                                             Diagnostics.Reusing_resolution_of_module_0_from_1_found_in_cache_from_location_2_it_was_successfully_resolved_to_3:
                                         Diagnostics.Reusing_resolution_of_module_0_from_1_found_in_cache_from_location_2_it_was_not_resolved :
                                     resolved?.resolvedFileName ?
-                                        resolved.packagetId ?
+                                        resolved.packageId ?
                                             Diagnostics.Reusing_resolution_of_type_reference_directive_0_from_1_found_in_cache_from_location_2_it_was_successfully_resolved_to_3_with_Package_ID_4 :
                                             Diagnostics.Reusing_resolution_of_type_reference_directive_0_from_1_found_in_cache_from_location_2_it_was_successfully_resolved_to_3 :
                                         Diagnostics.Reusing_resolution_of_type_reference_directive_0_from_1_found_in_cache_from_location_2_it_was_not_resolved,
@@ -496,7 +496,7 @@ namespace ts {
                                 containingFile,
                                 getDirectoryPath(containingFile),
                                 resolved?.resolvedFileName,
-                                resolved?.packagetId && packageIdToString(resolved.packagetId)
+                                resolved?.packageId && packageIdToString(resolved.packageId)
                             );
                         }
                     }
@@ -527,19 +527,19 @@ namespace ts {
                             host,
                             loader === resolveModuleName as unknown ?
                                 resolved?.resolvedFileName ?
-                                    resolved.packagetId ?
+                                    resolved.packageId ?
                                         Diagnostics.Reusing_resolution_of_module_0_from_1_of_old_program_it_was_successfully_resolved_to_2_with_Package_ID_3 :
                                         Diagnostics.Reusing_resolution_of_module_0_from_1_of_old_program_it_was_successfully_resolved_to_2 :
                                     Diagnostics.Reusing_resolution_of_module_0_from_1_of_old_program_it_was_not_resolved :
                                 resolved?.resolvedFileName ?
-                                    resolved.packagetId ?
+                                    resolved.packageId ?
                                         Diagnostics.Reusing_resolution_of_type_reference_directive_0_from_1_of_old_program_it_was_successfully_resolved_to_2_with_Package_ID_3 :
                                         Diagnostics.Reusing_resolution_of_type_reference_directive_0_from_1_of_old_program_it_was_successfully_resolved_to_2 :
                                     Diagnostics.Reusing_resolution_of_type_reference_directive_0_from_1_of_old_program_it_was_not_resolved,
                             name,
                             containingFile,
                             resolved?.resolvedFileName,
-                            resolved?.packagetId && packageIdToString(resolved.packagetId)
+                            resolved?.packageId && packageIdToString(resolved.packageId)
                         );
                     }
                 }
