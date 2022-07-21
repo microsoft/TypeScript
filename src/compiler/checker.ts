@@ -28088,7 +28088,7 @@ namespace ts {
             // literal handle it instead.
             if (contextualTypeHasPattern) {
                 const rootPatternParent = findAncestor(contextualType.pattern!.parent, n => n.kind === SyntaxKind.VariableDeclaration || n.kind === SyntaxKind.BinaryExpression || n.kind === SyntaxKind.Parameter);
-                const spreadOrOutsideRootObject = findAncestor(node, n => n === rootPatternParent || (n.kind === SyntaxKind.SpreadAssignment && getContextualType(n.parent as Expression, /*contextFlags*/ undefined)!.pattern === contextualType.pattern))!;
+                const spreadOrOutsideRootObject = findAncestor(node, n => n === rootPatternParent || (n.kind === SyntaxKind.SpreadAssignment))!;
 
                 if (spreadOrOutsideRootObject.kind !== SyntaxKind.SpreadAssignment) {
                     for (const prop of getPropertiesOfType(contextualType)) {
