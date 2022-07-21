@@ -10541,7 +10541,7 @@ namespace ts {
                     return (expr as PrefixUnaryExpression).operator === SyntaxKind.MinusToken &&
                         (expr as PrefixUnaryExpression).operand.kind === SyntaxKind.NumericLiteral;
                 case SyntaxKind.Identifier:
-                    return nodeIsMissing(expr) || !!getSymbolOfNode(member.parent).exports!.get((expr as Identifier).escapedText);
+                    return nodeIsMissing(expr) || getSymbolOfNode(member.parent).exports!.get((expr as Identifier).escapedText)?.valueDeclaration?.kind === SyntaxKind.EnumMember;
                 case SyntaxKind.BinaryExpression:
                     return isStringConcatExpression(expr);
                 default:
