@@ -2,15 +2,12 @@ interface ProxyHandler<T extends object> {
     /**
      * A trap method for a function call.
      * @param target The original callable object which is being proxied.
-     * @param thisArg The `this` argument for the function call.
-     * @param argArray The list of arguments for the function call.
      */
     apply?(target: T, thisArg: any, argArray: any[]): any;
 
     /**
      * A trap for the `new` operator.
      * @param target The original object which is being proxied.
-     * @param argArray The list of arguments for the constructor.
      * @param newTarget The constructor that was originally called.
      */
     construct?(target: T, argArray: any[], newTarget: Function): object;
@@ -18,11 +15,9 @@ interface ProxyHandler<T extends object> {
     /**
      * A trap for `Object.defineProperty()`.
      * @param target The original object which is being proxied.
-     * @param p The name or `Symbol` of the property whose description is to be retrieved.
-     * @param attributes The descriptor for the property being defined or modified.
      * @returns A `Boolean` indicating whether or not the property has been defined.
      */
-    defineProperty?(target: T, p: string | symbol, attributes: PropertyDescriptor): boolean;
+    defineProperty?(target: T, property: string | symbol, attributes: PropertyDescriptor): boolean;
 
     /**
      * A trap for the `delete` operator.
@@ -82,16 +77,15 @@ interface ProxyHandler<T extends object> {
      * A trap for setting a property value.
      * @param target The original object which is being proxied.
      * @param p The name or `Symbol` of the property to set.
-     * @param value The new value of the property to set.
      * @param receiver The object to which the assignment was originally directed.
      * @returns `A `Boolean` indicating whether or not the property was set.
      */
-    set?(target: T, p: string | symbol, value: any, receiver: any): boolean;
+    set?(target: T, p: string | symbol, newValue: any, receiver: any): boolean;
 
     /**
      * A trap for `Object.setPrototypeOf()`.
      * @param target The original object which is being proxied.
-     * @param v The object's new prototype or `null`.
+     * @param newPrototype The object's new prototype or `null`.
      */
     setPrototypeOf?(target: T, v: object | null): boolean;
 }
