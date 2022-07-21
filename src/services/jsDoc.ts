@@ -384,13 +384,7 @@ namespace ts.JsDoc {
         const closeComment = " */";
 
         // If any of the existing jsDoc has tags, ignore adding new ones.
-        let hasTag = false;
-        for (const jsDoc of commentOwnerJsDoc || []) {
-            if (jsDoc.tags) {
-                hasTag = true;
-                break;
-            }
-        }
+        const hasTag = (commentOwnerJsDoc || []).some(jsDoc => !!jsDoc.tags);
 
 
         if (tags && !hasTag) {
