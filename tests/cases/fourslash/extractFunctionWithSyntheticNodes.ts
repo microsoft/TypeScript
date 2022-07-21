@@ -1,6 +1,9 @@
 /// <reference path="fourslash.ts" />
 
-// @filename: index.esm.d.ts
+// @filename: /project/tsconfig.json
+//// {}
+
+// @filename: /project/index.esm.d.ts
 //// export declare class Chart {
 ////     constructor(config: ChartConfiguration);
 //// }
@@ -22,7 +25,7 @@
 ////     getLabelForValue(value: number): string;
 //// }
   
-// @filename: options.ts
+// @filename: /project/options.ts
 //// import { Chart } from './index.esm';
 //// 
 //// const chart = new Chart({
@@ -34,7 +37,7 @@
 ////     }
 //// });
 
-goTo.file("options.ts");
+goTo.file("/project/options.ts");
 verify.noErrors();
 goTo.select("a", "b");
 edit.applyRefactor({
@@ -42,5 +45,18 @@ edit.applyRefactor({
     actionName: "function_scope_0",
     actionDescription: "Extract to inner function in method 'callback'",
     newContent:
-`TODO`
+`import { Chart } from './index.esm';
+
+const chart = new Chart({
+    options: {
+        callback(tickValue) {
+            const value = /*RENAME*/newFunction.call(this);
+            return '$' + value;
+
+            function newFunction(this: import("/project/index.esm").Scale<import("/project/index.esm").CoreScaleOptions>) {
+                return this.getLabelForValue(tickValue as number);
+            }
+        }
+    }
+});`
 });

@@ -716,7 +716,7 @@ namespace ts.formatting {
                 }
 
                 // child node is outside the target range - do not dive inside
-                if (!rangeOverlapsWithStartEnd(originalRange, child.pos, child.end)) {
+                if (!nodeIsSynthesized(child) && !rangeOverlapsWithStartEnd(originalRange, child.pos, child.end)) {
                     if (child.end < originalRange.pos) {
                         formattingScanner.skipToEndOf(child);
                     }
@@ -784,7 +784,7 @@ namespace ts.formatting {
                 let listDynamicIndentation = parentDynamicIndentation;
                 let startLine = parentStartLine;
                 // node range is outside the target range - do not dive inside
-                if (!rangeOverlapsWithStartEnd(originalRange, nodes.pos, nodes.end)) {
+                if (!nodeIsSynthesized(nodes) && !rangeOverlapsWithStartEnd(originalRange, nodes.pos, nodes.end)) {
                     if (nodes.end < originalRange.pos) {
                         formattingScanner.skipToEndOf(nodes);
                     }
