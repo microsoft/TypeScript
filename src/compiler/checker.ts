@@ -21227,17 +21227,22 @@ namespace ts {
             }
 
             const supertypeOrUnion = getSupertypeOrUnion(types);
-            const supertypeOrUnionFacts = getTypeFacts(supertypeOrUnion);
-            const allFacts = getAllTypeFacts(types);
+
+            const shouldHaveNull = some(types, t => someHas(t, TypeFlags.Null));
+            const shouldHaveUndefined = some(types, t => someHas(t, TypeFlags.Undefined));
 
             let missingNullableFlags: TypeFlags = 0;
-            if (allFacts & TypeFacts.IsNull && !(supertypeOrUnionFacts & TypeFacts.IsNull)) {
+            if (shouldHaveNull && !someHas(supertypeOrUnion, TypeFlags.Null)) {
                 missingNullableFlags |= TypeFlags.Null;
             }
-            if (allFacts & TypeFacts.IsUndefined && !(supertypeOrUnionFacts & TypeFacts.IsUndefined)) {
+            if (shouldHaveUndefined && !someHas(supertypeOrUnion, TypeFlags.Undefined)) {
                 missingNullableFlags |= TypeFlags.Undefined;
             }
             return getNullableType(supertypeOrUnion, missingNullableFlags);
+
+            function someHas(type: Type, flags: TypeFlags): boolean {
+                return someType(type, t => !!(t.flags & flags));
+            }
         }
 
         // Return the leftmost type for which no type to the right is a subtype.
@@ -23724,16 +23729,12 @@ namespace ts {
                 return TypeFacts.None;
             }
             if (flags & TypeFlags.Union) {
-                return getAllTypeFacts((type as UnionType).types);
+                return reduceLeft((type as UnionType).types, (facts, t) => facts | getTypeFacts(t), TypeFacts.None);
             }
             if (flags & TypeFlags.Intersection) {
                 return getIntersectionTypeFacts(type as IntersectionType);
             }
             return TypeFacts.UnknownFacts;
-        }
-
-        function getAllTypeFacts(types: Type[]): TypeFacts {
-            return reduceLeft(types, (facts, t) => facts | getTypeFacts(t), TypeFacts.None);
         }
 
         function getIntersectionTypeFacts(type: IntersectionType): TypeFacts {
