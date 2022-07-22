@@ -133,5 +133,35 @@ namespace ts.tscWatch.cacheResolutions {
                 });
             }
         });
+
+        describe("resolution reuse from multiple places", () => {
+            verifyTscWatchMultiFile("caching resolutions when resolution reused from multiple places", getWatchSystemWithSameResolutionFromMultiplePlaces);
+            verifyTscWatchMultiFile("caching resolutions when resolution reused from multiple places when already built", getWatchSystemWithSameResolutionFromMultiplePlacesWithBuild);
+            function verifyTscWatchMultiFile(subScenario: string, sys: () => WatchedSystem) {
+                verifyTscWatch({
+                    scenario: "cacheResolutions",
+                    subScenario,
+                    sys,
+                    commandLineArgs: ["-b", "-w", "--explainFiles"],
+                    changes: [
+                        {
+                            caption: "modify randomFileForImport by adding import",
+                            change: sys => sys.prependFile("/src/project/randomFileForImport.ts", `import type { ImportInterface0 } from "pkg0";\n`),
+                            timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                        },
+                        {
+                            caption: "modify b/randomFileForImport by adding import",
+                            change: sys => sys.prependFile("/src/project/b/randomFileForImport.ts", `import type { ImportInterface0 } from "pkg0";\n`),
+                            timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                        },
+                        {
+                            caption: "modify c/ca/caa/randomFileForImport by adding import",
+                            change: sys => sys.prependFile("/src/project/c/ca/caa/randomFileForImport.ts", `import type { ImportInterface0 } from "pkg0";\n`),
+                            timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                        },
+                    ]
+                });
+            }
+        });
     });
 }

@@ -159,5 +159,32 @@ namespace ts.tscWatch.cacheResolutions {
                 }
             ]
         });
+
+        verifyTscWithEdits({
+            scenario: "cacheResolutions",
+            subScenario: "caching resolutions when resolution reused from multiple places",
+            fs: getFsWithSameResolutionFromMultiplePlaces,
+            commandLineArgs: ["-p", "/src/project", "--explainFiles"],
+            edits: [
+                {
+                    subScenario: "modify randomFileForImport by adding import",
+                    modifyFs: fs => prependText(fs, "/src/project/randomFileForImport.ts", `import type { ImportInterface0 } from "pkg0";\n`),
+                },
+                {
+                    subScenario: "modify b/randomFileForImport by adding import",
+                    modifyFs: fs => prependText(fs, "/src/project/b/randomFileForImport.ts", `import type { ImportInterface0 } from "pkg0";\n`),
+                    discrepancyExplanation: () => [
+                        "Resolution is not reused in incremental which is TODO (shkamat)"
+                    ]
+                },
+                {
+                    subScenario: "modify c/ca/caa/randomFileForImport by adding import",
+                    modifyFs: fs => prependText(fs, "/src/project/c/ca/caa/randomFileForImport.ts", `import type { ImportInterface0 } from "pkg0";\n`),
+                    discrepancyExplanation: () => [
+                        "Resolution is not reused in incremental which is TODO (shkamat)"
+                    ]
+                },
+            ]
+        });
     });
 }
