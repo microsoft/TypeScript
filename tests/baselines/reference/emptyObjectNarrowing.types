@@ -1,0 +1,22 @@
+=== tests/cases/compiler/emptyObjectNarrowing.ts ===
+// Repro from #49988
+
+declare function isObject(value: unknown): value is Record<string, unknown>;
+>isObject : (value: unknown) => value is Record<string, unknown>
+>value : unknown
+
+const obj = {};
+>obj : {}
+>{} : {}
+
+if (isObject(obj)) {
+>isObject(obj) : boolean
+>isObject : (value: unknown) => value is Record<string, unknown>
+>obj : {}
+
+    obj['attr'];
+>obj['attr'] : unknown
+>obj : Record<string, unknown>
+>'attr' : "attr"
+}
+

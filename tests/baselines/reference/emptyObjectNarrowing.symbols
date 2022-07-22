@@ -1,0 +1,20 @@
+=== tests/cases/compiler/emptyObjectNarrowing.ts ===
+// Repro from #49988
+
+declare function isObject(value: unknown): value is Record<string, unknown>;
+>isObject : Symbol(isObject, Decl(emptyObjectNarrowing.ts, 0, 0))
+>value : Symbol(value, Decl(emptyObjectNarrowing.ts, 2, 26))
+>value : Symbol(value, Decl(emptyObjectNarrowing.ts, 2, 26))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+const obj = {};
+>obj : Symbol(obj, Decl(emptyObjectNarrowing.ts, 3, 5))
+
+if (isObject(obj)) {
+>isObject : Symbol(isObject, Decl(emptyObjectNarrowing.ts, 0, 0))
+>obj : Symbol(obj, Decl(emptyObjectNarrowing.ts, 3, 5))
+
+    obj['attr'];
+>obj : Symbol(obj, Decl(emptyObjectNarrowing.ts, 3, 5))
+}
+
