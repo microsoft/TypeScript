@@ -363,7 +363,7 @@ namespace ts.codefix {
 
         return map(
             arrayFrom(usedNames.values()),
-            (usedName) => factory.createTypeParameterDeclaration(/*modifiers*/ undefined, usedName),
+            usedName => factory.createTypeParameterDeclaration(/*modifiers*/ undefined, usedName),
         );
     }
 
