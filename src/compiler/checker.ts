@@ -2191,7 +2191,7 @@ namespace ts {
             // 1. When result is undefined, after checking for a missing "this."
             // 2. When result is defined
             function checkAndReportErrorForInvalidInitializer() {
-                if (propertyWithInvalidInitializer && !(getEmitScriptTarget(compilerOptions) === ScriptTarget.ESNext && useDefineForClassFields)) {
+                if (propertyWithInvalidInitializer && !(useDefineForClassFields && getEmitScriptTarget(compilerOptions) >= ScriptTarget.ES2022)) {
                     // We have a match, but the reference occurred within a property initializer and the identifier also binds
                     // to a local variable in the constructor where the code will be emitted. Note that this is actually allowed
                     // with ESNext+useDefineForClassFields because the scope semantics are different.
@@ -11896,12 +11896,18 @@ namespace ts {
                     else if ((type as MappedType).objectFlags & ObjectFlags.Mapped) {
                         resolveMappedTypeMembers(type as MappedType);
                     }
+                    else {
+                        Debug.fail("Unhandled object type " + Debug.formatObjectFlags(type.objectFlags));
+                    }
                 }
                 else if (type.flags & TypeFlags.Union) {
                     resolveUnionTypeMembers(type as UnionType);
                 }
                 else if (type.flags & TypeFlags.Intersection) {
                     resolveIntersectionTypeMembers(type as IntersectionType);
+                }
+                else {
+                    Debug.fail("Unhandled type " + Debug.formatTypeFlags(type.flags));
                 }
             }
             return type as ResolvedType;
@@ -12743,12 +12749,14 @@ namespace ts {
 
         // Return list of type parameters with duplicates removed (duplicate identifier errors are generated in the actual
         // type checking functions).
-        function getTypeParametersFromDeclaration(declaration: DeclarationWithTypeParameters): TypeParameter[] | undefined {
+        function getTypeParametersFromDeclaration(declaration: DeclarationWithTypeParameters): readonly TypeParameter[] | undefined {
             let result: TypeParameter[] | undefined;
             for (const node of getEffectiveTypeParameterDeclarations(declaration)) {
                 result = appendIfUnique(result, getDeclaredTypeOfTypeParameter(node.symbol));
             }
-            return result;
+            return result?.length ? result
+                : isFunctionDeclaration(declaration) ? getSignatureOfTypeTag(declaration)?.typeParameters
+                : undefined;
         }
 
         function symbolsToArray(symbols: SymbolTable): Symbol[] {
@@ -22556,15 +22564,11 @@ namespace ts {
                     inferFromTypeArguments(getTypeArguments(source as TypeReference), getTypeArguments(target as TypeReference), getVariances((source as TypeReference).target));
                 }
                 else if (source.flags & TypeFlags.Index && target.flags & TypeFlags.Index) {
-                    contravariant = !contravariant;
-                    inferFromTypes((source as IndexType).type, (target as IndexType).type);
-                    contravariant = !contravariant;
+                    inferFromContravariantTypes((source as IndexType).type, (target as IndexType).type);
                 }
                 else if ((isLiteralType(source) || source.flags & TypeFlags.String) && target.flags & TypeFlags.Index) {
                     const empty = createEmptyObjectTypeFromStringLiteral(source);
-                    contravariant = !contravariant;
-                    inferWithPriority(empty, (target as IndexType).type, InferencePriority.LiteralKeyof);
-                    contravariant = !contravariant;
+                    inferFromContravariantTypesWithPriority(empty, (target as IndexType).type, InferencePriority.LiteralKeyof);
                 }
                 else if (source.flags & TypeFlags.IndexedAccess && target.flags & TypeFlags.IndexedAccess) {
                     inferFromTypes((source as IndexedAccessType).objectType, (target as IndexedAccessType).objectType);
@@ -22577,10 +22581,7 @@ namespace ts {
                 }
                 else if (source.flags & TypeFlags.Substitution) {
                     inferFromTypes((source as SubstitutionType).baseType, target);
-                    const oldPriority = priority;
-                    priority |= InferencePriority.SubstituteSource;
-                    inferFromTypes((source as SubstitutionType).substitute, target); // Make substitute inference at a lower priority
-                    priority = oldPriority;
+                    inferWithPriority((source as SubstitutionType).substitute, target, InferencePriority.SubstituteSource); // Make substitute inference at a lower priority
                 }
                 else if (target.flags & TypeFlags.Conditional) {
                     invokeOnce(source, target, inferToConditionalType);
@@ -22628,6 +22629,20 @@ namespace ts {
                 const savePriority = priority;
                 priority |= newPriority;
                 inferFromTypes(source, target);
+                priority = savePriority;
+            }
+
+            function inferFromContravariantTypesWithPriority(source: Type, target: Type, newPriority: InferencePriority) {
+                const savePriority = priority;
+                priority |= newPriority;
+                inferFromContravariantTypes(source, target);
+                priority = savePriority;
+            }
+
+            function inferToMultipleTypesWithPriority(source: Type, targets: Type[], targetFlags: TypeFlags, newPriority: InferencePriority) {
+                const savePriority = priority;
+                priority |= newPriority;
+                inferToMultipleTypes(source, targets, targetFlags);
                 priority = savePriority;
             }
 
@@ -22694,10 +22709,14 @@ namespace ts {
             }
 
             function inferFromContravariantTypes(source: Type, target: Type) {
+                contravariant = !contravariant;
+                inferFromTypes(source, target);
+                contravariant = !contravariant;
+            }
+
+            function inferFromContravariantTypesIfStrictFunctionTypes(source: Type, target: Type) {
                 if (strictFunctionTypes || priority & InferencePriority.AlwaysStrict) {
-                    contravariant = !contravariant;
-                    inferFromTypes(source, target);
-                    contravariant = !contravariant;
+                    inferFromContravariantTypes(source, target);
                 }
                 else {
                     inferFromTypes(source, target);
@@ -22860,11 +22879,8 @@ namespace ts {
                     inferFromTypes(getFalseTypeFromConditionalType(source as ConditionalType), getFalseTypeFromConditionalType(target));
                 }
                 else {
-                    const savePriority = priority;
-                    priority |= contravariant ? InferencePriority.ContravariantConditional : 0;
                     const targetTypes = [getTrueTypeFromConditionalType(target), getFalseTypeFromConditionalType(target)];
-                    inferToMultipleTypes(source, targetTypes, target.flags);
-                    priority = savePriority;
+                    inferToMultipleTypesWithPriority(source, targetTypes, target.flags, contravariant ? InferencePriority.ContravariantConditional : 0);
                 }
             }
 
@@ -23059,7 +23075,7 @@ namespace ts {
                 const kind = target.declaration ? target.declaration.kind : SyntaxKind.Unknown;
                 // Once we descend into a bivariant signature we remain bivariant for all nested inferences
                 bivariant = bivariant || kind === SyntaxKind.MethodDeclaration || kind === SyntaxKind.MethodSignature || kind === SyntaxKind.Constructor;
-                applyToParameterTypes(source, target, inferFromContravariantTypes);
+                applyToParameterTypes(source, target, inferFromContravariantTypesIfStrictFunctionTypes);
                 bivariant = saveBivariant;
                 applyToReturnTypes(source, target, inferFromTypes);
             }
@@ -24613,7 +24629,7 @@ namespace ts {
                 }
                 // for (const _ in ref) acts as a nonnull on ref
                 if (isVariableDeclaration(node) && node.parent.parent.kind === SyntaxKind.ForInStatement && isMatchingReference(reference, node.parent.parent.expression)) {
-                    return getNonNullableTypeIfNeeded(getTypeFromFlowType(getTypeAtFlowNode(flow.antecedent)));
+                    return getNonNullableTypeIfNeeded(finalizeEvolvingArrayType(getTypeFromFlowType(getTypeAtFlowNode(flow.antecedent))));
                 }
                 // Assignment doesn't affect reference
                 return undefined;
@@ -30764,7 +30780,7 @@ namespace ts {
 
             let typeArguments: NodeArray<TypeNode> | undefined;
 
-            if (!isDecorator) {
+            if (!isDecorator && !isSuperCall(node)) {
                 typeArguments = (node as CallExpression).typeArguments;
 
                 // We already perform checking on the type arguments on the class declaration itself.
@@ -33439,7 +33455,7 @@ namespace ts {
                         error(node.operand, Diagnostics.The_0_operator_cannot_be_applied_to_type_symbol, tokenToString(node.operator));
                     }
                     if (node.operator === SyntaxKind.PlusToken) {
-                        if (maybeTypeOfKind(operandType, TypeFlags.BigIntLike)) {
+                        if (maybeTypeOfKindConsideringBaseConstraint(operandType, TypeFlags.BigIntLike)) {
                             error(node.operand, Diagnostics.Operator_0_cannot_be_applied_to_type_1, tokenToString(node.operator), typeToString(getBaseTypeOfLiteralType(operandType)));
                         }
                         return numberType;

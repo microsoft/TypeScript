@@ -143,7 +143,7 @@ namespace ts.codefix {
                     break;
                 }
 
-                const signatures = checker.getSignaturesOfType(type, SignatureKind.Call);
+                const signatures = type.isUnion() ? flatMap(type.types, t => t.getCallSignatures()) : type.getCallSignatures();
                 if (!some(signatures)) {
                     break;
                 }
