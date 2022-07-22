@@ -1090,6 +1090,11 @@ namespace ts {
         let skipDefaultLib = options.noLib;
         const getDefaultLibraryFileName = memoize(() => host.getDefaultLibFileName(options));
         const defaultLibraryPath = host.getDefaultLibLocation ? host.getDefaultLibLocation() : getDirectoryPath(getDefaultLibraryFileName());
+        /**
+         * Diagnostics for the program
+         * Only add diagnostics directly if it always would be done irrespective of program structure reuse.
+         * Otherwise fileProcessingDiagnostics is correct locations so that the diagnostics can be reported in all structure use scenarios
+         */
         const programDiagnostics = createDiagnosticCollection();
         const currentDirectory = host.getCurrentDirectory();
         const supportedExtensions = getSupportedExtensions(options);
@@ -1435,16 +1440,12 @@ namespace ts {
                 case FilePreprocessingDiagnosticsKind.FilePreprocessingReferencedDiagnostic:
                     const { file, pos, end } = getReferencedFileLocation(getSourceFileByPath, diagnostic.reason) as ReferenceFileLocation;
                     return programDiagnostics.add(createFileDiagnostic(file, Debug.checkDefined(pos), Debug.checkDefined(end) - pos, diagnostic.diagnostic, ...diagnostic.args || emptyArray));
+                case FilePreprocessingDiagnosticsKind.ResolutionDiagnostics:
+                    return diagnostic.diagnostics.forEach(d => programDiagnostics.add(d));
                 default:
                     Debug.assertNever(diagnostic);
             }
         });
-
-        for (const file of files!) {
-            file.resolvedModules?.forEach(addResolutionDiagnostics);
-            file.resolvedTypeReferenceDirectiveNames?.forEach(addResolutionDiagnostics);
-        }
-        automaticTypeDirectiveResolutions!.forEach(addResolutionDiagnostics);
 
         verifyCompilerOptions();
         performance.mark("afterProgram");
@@ -1454,7 +1455,17 @@ namespace ts {
         return program;
 
         function addResolutionDiagnostics(resolution: ResolvedModuleWithFailedLookupLocations | ResolvedTypeReferenceDirectiveWithFailedLookupLocations) {
-            resolution.resolutionDiagnostics?.forEach(diagnostic => programDiagnostics.add(diagnostic));
+            if (!resolution.resolutionDiagnostics) return;
+            (fileProcessingDiagnostics ??= []).push({
+                kind: FilePreprocessingDiagnosticsKind.ResolutionDiagnostics,
+                diagnostics: resolution.resolutionDiagnostics.map(d => createCompilerDiagnostic(
+                    d.isImports
+                        ? Diagnostics.The_project_root_is_ambiguous_but_is_required_to_resolve_import_map_entry_0_in_file_1_Supply_the_rootDir_compiler_option_to_disambiguate
+                        : Diagnostics.The_project_root_is_ambiguous_but_is_required_to_resolve_export_map_entry_0_in_file_1_Supply_the_rootDir_compiler_option_to_disambiguate,
+                    d.entry === "" ? "." : d.entry, // replace empty string with `.` - the reverse of the operation done when entries are built - so main entrypoint errors don't look weird
+                    d.packagePath
+                ))
+            });
         }
 
         function resolveModuleNamesWorker(moduleNames: string[], containingFile: SourceFile, partialResolutionInfo: PartialResolutionInfo | undefined, redirectedReference: ResolvedProjectReference | false | undefined) {
@@ -3338,7 +3349,10 @@ namespace ts {
                 setResolvedTypeReferenceDirective(file, fileName, resolvedTypeReferenceDirective, getModeForFileReference(ref, file.impliedNodeFormat));
                 const mode = ref.resolutionMode || file.impliedNodeFormat;
                 if (mode && getEmitModuleResolutionKind(options) !== ModuleResolutionKind.Node16 && getEmitModuleResolutionKind(options) !== ModuleResolutionKind.NodeNext) {
-                    programDiagnostics.add(createDiagnosticForRange(file, ref, Diagnostics.resolution_mode_assertions_are_only_supported_when_moduleResolution_is_node16_or_nodenext));
+                    (fileProcessingDiagnostics ??= []).push({
+                        kind: FilePreprocessingDiagnosticsKind.ResolutionDiagnostics,
+                        diagnostics: [createDiagnosticForRange(file, ref, Diagnostics.resolution_mode_assertions_are_only_supported_when_moduleResolution_is_node16_or_nodenext)]
+                    });
                 }
                 processTypeReferenceDirective(fileName, mode, resolvedTypeReferenceDirective, { kind: FileIncludeKind.TypeReferenceDirective, file: file.path, index, });
             }
@@ -3361,6 +3375,7 @@ namespace ts {
             resolution: ResolvedTypeReferenceDirectiveWithFailedLookupLocations,
             reason: FileIncludeReason
         ): void {
+            addResolutionDiagnostics(resolution);
 
             // If we already found this library as a primary reference - nothing to do
             const previousResolution = resolvedTypeReferenceDirectives.get(typeReferenceDirective, mode)?.resolvedTypeReferenceDirective;
@@ -3444,7 +3459,7 @@ namespace ts {
                     const unqualifiedLibName = removeSuffix(removePrefix(libName, "lib."), ".d.ts");
                     const suggestion = getSpellingSuggestion(unqualifiedLibName, libs, identity);
                     const diagnostic = suggestion ? Diagnostics.Cannot_find_lib_definition_for_0_Did_you_mean_1 : Diagnostics.Cannot_find_lib_definition_for_0;
-                    (fileProcessingDiagnostics ||= []).push({
+                    (fileProcessingDiagnostics ??= []).push({
                         kind: FilePreprocessingDiagnosticsKind.FilePreprocessingReferencedDiagnostic,
                         reason: { kind: FileIncludeKind.LibReferenceDirective, file: file.path, index, },
                         diagnostic,
@@ -3469,6 +3484,7 @@ namespace ts {
                 for (let index = 0; index < moduleNames.length; index++) {
                     const resolution = resolutions[index];
                     setResolvedModule(file, moduleNames[index], resolution, getModeForResolutionAtIndex(file, index));
+                    addResolutionDiagnostics(resolution);
 
                     if (!resolution.resolvedModule) {
                         continue;
@@ -3935,7 +3951,7 @@ namespace ts {
         }
 
         function addFilePreprocessingFileExplainingDiagnostic(file: SourceFile | undefined, fileProcessingReason: FileIncludeReason, diagnostic: DiagnosticMessage, args?: (string | number | undefined)[]) {
-            (fileProcessingDiagnostics ||= []).push({
+            (fileProcessingDiagnostics ??= []).push({
                 kind: FilePreprocessingDiagnosticsKind.FilePreprocessingFileExplainingDiagnostic,
                 file: file && file.path,
                 fileProcessingReason,

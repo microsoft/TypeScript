@@ -116,5 +116,48 @@ namespace ts.tscWatch.cacheResolutions {
                 },
             ]
         });
+
+        verifyTscWithEdits({
+            scenario: "cacheResolutions",
+            subScenario: "diagnostics from cache",
+            fs: () => loadProjectFromFiles({
+                "/src/project/tsconfig.json": JSON.stringify({
+                    compilerOptions: {
+                        moduleResolution: "nodenext",
+                        outDir: "./dist",
+                        declaration:true,
+                        declarationDir: "./types",
+                        cacheResolutions: true,
+                        traceResolution: true,
+                    },
+                }),
+                "/src/project/package.json": JSON.stringify({
+                    name: "@this/package",
+                    type: "module",
+                    exports: {
+                        ".": {
+                            default: "./dist/index.js",
+                            types: "./types/index.d.ts"
+                        }
+                    }
+                }),
+                "/src/project/index.ts": Utils.dedent`
+                    import * as me from "@this/package";
+                    me.thing()
+                    export function thing(): void {}
+                `,
+                "/src/project/index2.ts": Utils.dedent`
+                    export function thing(): void {}
+                `,
+                "/src/project/randomFileForImport.ts": "export const x = 10;",
+            }),
+            commandLineArgs: ["-p", "/src/project", "--incremental", "--explainFiles"],
+            edits: [
+                {
+                    subScenario: "modify randomFileForImport by adding import",
+                    modifyFs: fs => prependText(fs, "/src/project/randomFileForImport.ts", `import * as me from "@this/package";\n`),
+                }
+            ]
+        });
     });
 }

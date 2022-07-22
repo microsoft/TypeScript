@@ -207,11 +207,15 @@ interface Symbol {
     }
     export type ReadableProgramBuildInfoResolvedModuleFull = Omit<ProgramBuildInfoResolvedModuleFull, "resolvedFileName" | "originalPath"> & ReadableProgramBuildInfoResolutionBase;
     export type ReadableProgramBuildInfoResolvedTypeReferenceDirective = Omit<ProgramBuildInfoResolvedTypeReferenceDirective, "resolvedFileName" | "originalPath"> & ReadableProgramBuildInfoResolutionBase;
-    export type ReadableProgramBuildInfoResolution = Omit<ProgramBuildInfoResolution, "resolvedModule" | "resolvedTypeReferenceDirective" | "failedLookupLocations" | "affectingLocations"> & {
+    export type ReadableProgramBuildInfoResolutionDiagnostic = Omit<ProgramBuildInfoResolutionDiagnostic, "packagePath"> & {
+        packagePath: string;
+    };
+    export type ReadableProgramBuildInfoResolution = Omit<ProgramBuildInfoResolution, "resolvedModule" | "resolvedTypeReferenceDirective" | "failedLookupLocations" | "affectingLocations" | "resolutionDiagnostics"> & {
         readonly resolvedModule: ReadableProgramBuildInfoResolvedModuleFull | undefined;
         readonly resolvedTypeReferenceDirective: ReadableProgramBuildInfoResolvedTypeReferenceDirective | undefined;
         readonly failedLookupLocations: readonly string[] | undefined;
         readonly affectingLocations: readonly string[] | undefined;
+        readonly resolutionDiagnostics: readonly ReadableProgramBuildInfoResolutionDiagnostic[] | undefined;
     };
 
     export type ReadableProgramBuildInfoResolutionEntry = [name: string, resolution: ReadableProgramBuildInfoResolution, mode?: string];
@@ -380,6 +384,7 @@ interface Symbol {
                     resolvedTypeReferenceDirective: toReadableProgramBuildInfoResolved(resolution.resolvedTypeReferenceDirective),
                     failedLookupLocations: resolution.failedLookupLocations?.map(toFileName),
                     affectingLocations: resolution.affectingLocations?.map(toFileName),
+                    resolutionDiagnostics: resolution.resolutionDiagnostics?.map(toReadableProgramBuildInfoResolutionDiagnostic),
                 };
         }
 
@@ -390,6 +395,13 @@ interface Symbol {
                 ...resolved,
                 resolvedFileName: toFileName(resolved.resolvedFileName),
                 originalPath: resolved.originalPath && toFileName(resolved.originalPath)
+            };
+        }
+
+        function toReadableProgramBuildInfoResolutionDiagnostic(d: ProgramBuildInfoResolutionDiagnostic): ReadableProgramBuildInfoResolutionDiagnostic {
+            return {
+                ...d,
+                packagePath: toFileName(d.packagePath)
             };
         }
 

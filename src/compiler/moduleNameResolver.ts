@@ -91,7 +91,7 @@ namespace ts {
         isExternalLibraryImport: boolean | undefined,
         failedLookupLocations: string[],
         affectingLocations: string[],
-        diagnostics: Diagnostic[],
+        diagnostics: ResolutionDiagnostic[],
         resultFromCache: ResolvedModuleWithFailedLookupLocations | undefined
     ): ResolvedModuleWithFailedLookupLocations {
         if (resultFromCache) {
@@ -132,7 +132,7 @@ namespace ts {
         features: NodeResolutionFeatures;
         conditions: readonly string[];
         requestContainingDirectory: string | undefined;
-        reportDiagnostic: DiagnosticReporter;
+        reportResolutionDiagnostic: (d: ResolutionDiagnostic) => void;
     }
 
     /** Just the fields that we use for module resolution. */
@@ -381,7 +381,7 @@ namespace ts {
             features |= NodeResolutionFeatures.EsmMode;
         }
         const conditions = features & NodeResolutionFeatures.Exports ? features & NodeResolutionFeatures.EsmMode ? ["node", "import", "types"] : ["node", "require", "types"] : [];
-        const diagnostics: Diagnostic[] = [];
+        const diagnostics: ResolutionDiagnostic[] = [];
         const moduleResolutionState: ModuleResolutionState = {
             compilerOptions: options,
             host,
@@ -392,7 +392,7 @@ namespace ts {
             features,
             conditions,
             requestContainingDirectory: containingDirectory,
-            reportDiagnostic: diag => void diagnostics.push(diag),
+            reportResolutionDiagnostic: diag => void diagnostics.push(diag),
         };
         let resolved = primaryLookup();
         let primary = true;
@@ -1458,7 +1458,7 @@ namespace ts {
             conditions.pop();
         }
 
-        const diagnostics: Diagnostic[] = [];
+        const diagnostics: ResolutionDiagnostic[] = [];
         const state: ModuleResolutionState = {
             compilerOptions,
             host,
@@ -1469,7 +1469,7 @@ namespace ts {
             features,
             conditions,
             requestContainingDirectory: containingDirectory,
-            reportDiagnostic: diag => void diagnostics.push(diag),
+            reportResolutionDiagnostic: diag => void diagnostics.push(diag),
         };
 
         const result = forEach(extensions, ext => tryResolve(ext));
@@ -1899,7 +1899,7 @@ namespace ts {
             features: NodeResolutionFeatures.None,
             conditions: emptyArray,
             requestContainingDirectory: undefined,
-            reportDiagnostic: noop
+            reportResolutionDiagnostic: noop
         };
     }
 
@@ -2396,15 +2396,7 @@ namespace ts {
                             fragment = ensureTrailingDirectorySeparator(commonDir);
                         }
                     }
-                    if (commonSourceDirGuesses.length > 1) {
-                        state.reportDiagnostic(createCompilerDiagnostic(
-                            isImports
-                                ? Diagnostics.The_project_root_is_ambiguous_but_is_required_to_resolve_import_map_entry_0_in_file_1_Supply_the_rootDir_compiler_option_to_disambiguate
-                                : Diagnostics.The_project_root_is_ambiguous_but_is_required_to_resolve_export_map_entry_0_in_file_1_Supply_the_rootDir_compiler_option_to_disambiguate,
-                            entry === "" ? "." : entry, // replace empty string with `.` - the reverse of the operation done when entries are built - so main entrypoint errors don't look weird
-                            packagePath
-                        ));
-                    }
+                    if (commonSourceDirGuesses.length > 1) state.reportResolutionDiagnostic({ isImports, entry, packagePath });
                     for (const commonSourceDirGuess of commonSourceDirGuesses) {
                         const candidateDirectories = getOutputDirectoriesForBaseDirectory(commonSourceDirGuess);
                         for (const candidateDir of candidateDirectories) {
@@ -2670,7 +2662,7 @@ namespace ts {
         const failedLookupLocations: string[] = [];
         const affectingLocations: string[] = [];
         const containingDirectory = getDirectoryPath(containingFile);
-        const diagnostics: Diagnostic[] = [];
+        const diagnostics: ResolutionDiagnostic[] = [];
         const state: ModuleResolutionState = {
             compilerOptions,
             host,
@@ -2680,7 +2672,7 @@ namespace ts {
             features: NodeResolutionFeatures.None,
             conditions: [],
             requestContainingDirectory: containingDirectory,
-            reportDiagnostic: diag => void diagnostics.push(diag),
+            reportResolutionDiagnostic: diag => void diagnostics.push(diag),
         };
 
         const resolved = tryResolve(Extensions.TypeScript) || tryResolve(Extensions.JavaScript);
@@ -2738,7 +2730,7 @@ namespace ts {
         }
         const failedLookupLocations: string[] = [];
         const affectingLocations: string[] = [];
-        const diagnostics: Diagnostic[] = [];
+        const diagnostics: ResolutionDiagnostic[] = [];
         const state: ModuleResolutionState = {
             compilerOptions,
             host,
@@ -2749,7 +2741,7 @@ namespace ts {
             features: NodeResolutionFeatures.None,
             conditions: [],
             requestContainingDirectory: undefined,
-            reportDiagnostic: diag => void diagnostics.push(diag),
+            reportResolutionDiagnostic: diag => void diagnostics.push(diag),
         };
         const resolved = loadModuleFromImmediateNodeModulesDirectory(Extensions.DtsOnly, moduleName, globalCache, state, /*typesScopeOnly*/ false, /*cache*/ undefined, /*redirectedReference*/ undefined);
         return createResolvedModuleWithFailedLookupLocations(

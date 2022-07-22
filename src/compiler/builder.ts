@@ -812,12 +812,17 @@ namespace ts {
     }
     export type ProgramBuildInfoResolvedModuleFull = Omit<ResolvedModuleFull, "resolvedFileName" | "isExternalLibraryImport" | "originalPath" | "extension"> & ProgramBuildInfoResolutionBase;
     export type ProgramBuildInfoResolvedTypeReferenceDirective = Omit<ResolvedTypeReferenceDirective, "resolvedFileName" | "isExternalLibraryImport" | "originalPath" | "primary"> & ProgramBuildInfoResolutionBase;
+    export interface ProgramBuildInfoResolutionDiagnostic {
+        isImports: true | undefined;
+        entry: string | undefined;
+        packagePath: ProgramBuildInfoAbsoluteFileId;
+    }
     export interface ProgramBuildInfoResolution {
         readonly resolvedModule: ProgramBuildInfoResolvedModuleFull | undefined;
         readonly resolvedTypeReferenceDirective: ProgramBuildInfoResolvedTypeReferenceDirective | undefined;
         readonly failedLookupLocations: readonly ProgramBuildInfoAbsoluteFileId[] | undefined;
         readonly affectingLocations: readonly ProgramBuildInfoAbsoluteFileId[] | undefined;
-        readonly resolutionDiagnostics: readonly ReusableDiagnostic[] | undefined;
+        readonly resolutionDiagnostics: readonly ProgramBuildInfoResolutionDiagnostic[] | undefined;
     }
 
     export type ProgramBuildInfoResolutionId = number & { __programBuildInfoResolutionIdBrand: any };
@@ -1201,7 +1206,7 @@ namespace ts {
                 resolvedTypeReferenceDirective: toProgramBuildInfoResolved((resolution as ResolvedTypeReferenceDirectiveWithFailedLookupLocations).resolvedTypeReferenceDirective),
                 failedLookupLocations: toReadonlyArrayOrUndefined(resolution.failedLookupLocations, toAbsoluteFileId),
                 affectingLocations: toReadonlyArrayOrUndefined(resolution.affectingLocations, toAbsoluteFileId),
-                resolutionDiagnostics: toReadonlyArrayOrUndefined(resolution.resolutionDiagnostics, toReusableDiagnostic),
+                resolutionDiagnostics: toReadonlyArrayOrUndefined(resolution.resolutionDiagnostics, toProgramBuildInfoResolutionDiagnostic),
             };
         }
 
@@ -1216,6 +1221,14 @@ namespace ts {
                 primary: (resolved as ResolvedTypeReferenceDirective).primary || undefined,
                 extension: undefined,
             } : undefined;
+        }
+
+        function toProgramBuildInfoResolutionDiagnostic(d: ResolutionDiagnostic): ProgramBuildInfoResolutionDiagnostic {
+            return {
+                isImports: d.isImports || undefined,
+                entry: d.entry || undefined,
+                packagePath: toAbsoluteFileId(d.packagePath),
+            };
         }
     }
 
@@ -1980,7 +1993,7 @@ namespace ts {
                     resolvedTypeReferenceDirective: toResolved(resolution.resolvedTypeReferenceDirective, resolvedFileName, extenstion),
                     failedLookupLocations: resolution.failedLookupLocations?.map(resuableCacheResolutions!.getProgramBuildInfoFilePathDecoder().toFileAbsolutePath) || [],
                     affectingLocations: resolution.affectingLocations?.map(resuableCacheResolutions!.getProgramBuildInfoFilePathDecoder().toFileAbsolutePath),
-                    resolutionDiagnostics: resolution.resolutionDiagnostics?.length ? convertToDiagnostics(resolution.resolutionDiagnostics, /*newProgram*/ undefined, /*getCanonicalFileName*/ undefined) as Diagnostic[] : undefined
+                    resolutionDiagnostics: resolution.resolutionDiagnostics?.map(toResolutionDiagnostic)
                 };
             }
             resolutions[resolutionId - 1] = false;
@@ -1998,6 +2011,14 @@ namespace ts {
                 resolvedFileName,
                 originalPath: resolved.originalPath ? resuableCacheResolutions!.getProgramBuildInfoFilePathDecoder().toFileAbsolutePath(resolved.originalPath) : undefined,
                 extension,
+            };
+        }
+
+        function toResolutionDiagnostic(d: ProgramBuildInfoResolutionDiagnostic): ResolutionDiagnostic {
+            return {
+                isImports: !!d.isImports,
+                entry: d.entry || "",
+                packagePath: resuableCacheResolutions!.getProgramBuildInfoFilePathDecoder().toFileAbsolutePath(d.packagePath)
             };
         }
     }
