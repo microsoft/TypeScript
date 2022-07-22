@@ -2,8 +2,7 @@
 
 // @noImplicitAny: true
 ////function existing<T>(value: T) {
-////  const keyofTypeof = Object.keys(value)[0] as keyof T;
-////  added/*1*/(keyofTypeof);
+////  added/*1*/<T, string>(value, "");
 ////}
 
 goTo.marker("1");
@@ -11,11 +10,10 @@ verify.codeFix({
   description: "Add missing function declaration 'added'",
   index: 0,
   newFileContent: `function existing<T>(value: T) {
-  const keyofTypeof = Object.keys(value)[0] as keyof T;
-  added(keyofTypeof);
+  added<T, string>(value, "");
 }
 
-function added(keyofTypeof: string | number | symbol) {
+function added<T, U>(value: T, arg1: string) {
     throw new Error("Function not implemented.");
 }
 `,

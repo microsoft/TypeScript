@@ -306,7 +306,7 @@ namespace ts.codefix {
         const asteriskToken = isYieldExpression(parent)
             ? factory.createToken(SyntaxKind.AsteriskToken)
             : undefined;
-        const typeParameters = isJs ? undefined : createTypeParametersForArguments(argumentTypeParameters, typeArguments);
+        const typeParameters = isJs ? undefined : createTypeParametersForArguments(checker, argumentTypeParameters, typeArguments);
         const parameters = createDummyParameters(args.length, names, argumentTypeNodes, /*minArgumentCount*/ undefined, isJs);
         const type = isJs || contextualType === undefined
             ? undefined
@@ -348,11 +348,13 @@ namespace ts.codefix {
         }
     }
 
-    function createTypeParametersForArguments(argumentTypeParameters: string[], typeArguments: NodeArray<TypeNode> | undefined) {
-        const usedNames = new Set(argumentTypeParameters);
+    function createTypeParametersForArguments(checker: TypeChecker, argumentTypeParameters: [string, Type][], typeArguments: NodeArray<TypeNode> | undefined) {
+        const usedNames = new Set(argumentTypeParameters.map(pair => pair[0]));
 
         if (typeArguments) {
-            for (let i = 0, targetSize = usedNames.size + typeArguments.length; usedNames.size < targetSize; i += 1) {
+            const typeArgumentsWithNewTypes = typeArguments.filter(typeArgument => !argumentTypeParameters.some(pair => checker.getTypeAtLocation(typeArgument) === pair[1]));
+            const targetSize = usedNames.size + typeArgumentsWithNewTypes.length;
+            for (let i = 0; usedNames.size < targetSize; i += 1) {
                 usedNames.add(
                     CharacterCodes.T + i <= CharacterCodes.Z
                         ? String.fromCharCode(CharacterCodes.T + i)
@@ -383,8 +385,23 @@ namespace ts.codefix {
     }
 
     export function getArgumentTypesAndTypeParameters(checker: TypeChecker, importAdder: ImportAdder, instanceTypes: Type[], contextNode: Node | undefined, scriptTarget: ScriptTarget, flags?: NodeBuilderFlags, tracker?: SymbolTracker) {
+        // Types to be used as the types of the parameters in the new function
+        // E.g. from this source:
+        //   added("", 0)
+        // the value will look like:
+        //   [{ typeName: { text: "string" } }, { typeName: { text: "number" }]
+        // and in the output function will generate:
+        //   function added(a: string, b: number) { ... }
         const argumentTypeNodes: TypeNode[] = [];
-        const argumentTypeParameters = new Set<string>();
+
+        // Names of type parameters provided as arguments to the call
+        // E.g. from this source:
+        //  added<T, U>();
+        // the value will look like:
+        //   [ ["T", { typeName: { text: "T" } } ], ["U", { typeName: { text: "U" }] ]
+        // and in the output function will generate:
+        //   function added<T, U>() { ... }
+        const argumentTypeParameters = new Map<string, Type>();
 
         for (const instanceType of instanceTypes) {
             const argumentTypeNode = typeToAutoImportableTypeNode(checker, importAdder, instanceType, contextNode, scriptTarget, flags, tracker);
@@ -396,16 +413,16 @@ namespace ts.codefix {
             const argumentTypeParameter = getFirstTypeParameterName(instanceType);
 
             if (argumentTypeParameter) {
-                argumentTypeParameters.add(argumentTypeParameter);
+                argumentTypeParameters.set(argumentTypeParameter, instanceType);
             }
         }
 
-        return { argumentTypeNodes, argumentTypeParameters: arrayFrom(argumentTypeParameters.values()) };
+        return { argumentTypeNodes, argumentTypeParameters: arrayFrom(argumentTypeParameters.entries()) };
     }
 
     function getFirstTypeParameterName(type: Type): string | undefined {
-        if (type.flags & TypeFlags.Intersection) {
-            for (const subType of (type as IntersectionType).types) {
+        if (type.flags & (TypeFlags.Union | TypeFlags.Intersection)) {
+            for (const subType of (type as UnionType | IntersectionType).types) {
                 const subTypeName = getFirstTypeParameterName(subType);
                 if (subTypeName) {
                     return subTypeName;
@@ -420,13 +437,18 @@ namespace ts.codefix {
 
     function createDummyParameters(argCount: number, names: (string | undefined)[] | undefined, types: (TypeNode | undefined)[] | undefined, minArgumentCount: number | undefined, inJs: boolean): ParameterDeclaration[] {
         const parameters: ParameterDeclaration[] = [];
+        const parameterNameCounts = new Map<string, number>();
         for (let i = 0; i < argCount; i++) {
+            const parameterName = names?.[i] || `arg${i}`;
+            const parameterNameCount = parameterNameCounts.get(parameterName);
+            parameterNameCounts.set(parameterName, (parameterNameCount || 0) + 1);
+
             const newParameter = factory.createParameterDeclaration(
                 /*modifiers*/ undefined,
                 /*dotDotDotToken*/ undefined,
-                /*name*/ names && names[i] || `arg${i}`,
+                /*name*/ parameterName + (parameterNameCount || ""),
                 /*questionToken*/ minArgumentCount !== undefined && i >= minArgumentCount ? factory.createToken(SyntaxKind.QuestionToken) : undefined,
-                /*type*/ inJs ? undefined : types && types[i] || factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword),
+                /*type*/ inJs ? undefined : types?.[i] || factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword),
                 /*initializer*/ undefined);
             parameters.push(newParameter);
         }

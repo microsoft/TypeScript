@@ -878,16 +878,11 @@ namespace ts.refactor.extractSymbol {
         const callArguments: Identifier[] = [];
         let writes: UsageEntry[] | undefined;
         usagesInScope.forEach((usage, name) => {
-            const typeNode = isJS
-                ? undefined
-                : codefix.typeToAutoImportableTypeNode(
-                    checker,
-                    importAdder,
-                    checker.getTypeOfSymbolAtLocation(usage.symbol, usage.node),
-                    scope,
-                    scriptTarget,
-                    NodeBuilderFlags.NoTruncation,
-                );
+            let typeNode: TypeNode | undefined;
+            if (!isJS) {
+                const type = checker.getTypeOfSymbolAtLocation(usage.symbol, usage.node);
+                typeNode = codefix.typeToAutoImportableTypeNode(checker, importAdder, type, scope, scriptTarget, NodeBuilderFlags.NoTruncation);
+            }
 
             const paramDecl = factory.createParameterDeclaration(
                 /*modifiers*/ undefined,
