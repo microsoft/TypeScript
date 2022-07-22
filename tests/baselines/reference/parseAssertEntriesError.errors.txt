@@ -1,5 +1,5 @@
 /index.ts(2,7): error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
-/index.ts(2,32): error TS1005: '}' expected.
+/index.ts(2,32): error TS1478: Identifier or string literal expected.
 /index.ts(2,32): error TS2695: Left side of comma operator is unused and has no side effects.
 /index.ts(2,55): error TS1005: ';' expected.
 /index.ts(2,66): error TS1128: Declaration or statement expected.
@@ -10,7 +10,7 @@
 /index.ts(3,36): error TS1005: ':' expected.
 /index.ts(3,70): error TS2339: Property 'ImportInterface' does not exist on type 'Promise<{ default: typeof import("/node_modules/pkg/import"); }>'.
 /index.ts(5,34): error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
-/index.ts(5,59): error TS1005: '}' expected.
+/index.ts(5,59): error TS1478: Identifier or string literal expected.
 /index.ts(5,59): error TS2695: Left side of comma operator is unused and has no side effects.
 /index.ts(5,82): error TS1005: ';' expected.
 /index.ts(5,93): error TS1128: Declaration or statement expected.
@@ -21,7 +21,7 @@
 /index.ts(5,98): error TS2304: Cannot find name 'RequireInterface'.
 /index.ts(5,114): error TS1128: Declaration or statement expected.
 /index.ts(6,34): error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
-/index.ts(6,59): error TS1005: '}' expected.
+/index.ts(6,59): error TS1478: Identifier or string literal expected.
 /index.ts(6,59): error TS2695: Left side of comma operator is unused and has no side effects.
 /index.ts(6,82): error TS1005: ';' expected.
 /index.ts(6,92): error TS1128: Declaration or statement expected.
@@ -39,9 +39,7 @@
           ~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
                                    ~~~~
-!!! error TS1005: '}' expected.
-!!! related TS1007 /index.ts:2:31: The parser expected to find a '}' to match the '{' token here.
-!!! related TS1007 /index.ts:2:21: The parser expected to find a '}' to match the '{' token here.
+!!! error TS1478: Identifier or string literal expected.
                                    ~~~~
 !!! error TS2695: Left side of comma operator is unused and has no side effects.
                                                           ~
@@ -66,9 +64,7 @@
                                      ~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
                                                               ~~~~
-!!! error TS1005: '}' expected.
-!!! related TS1007 /index.ts:5:58: The parser expected to find a '}' to match the '{' token here.
-!!! related TS1007 /index.ts:5:48: The parser expected to find a '}' to match the '{' token here.
+!!! error TS1478: Identifier or string literal expected.
                                                               ~~~~
 !!! error TS2695: Left side of comma operator is unused and has no side effects.
                                                                                      ~
@@ -91,9 +87,7 @@
                                      ~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
                                                               ~~~~
-!!! error TS1005: '}' expected.
-!!! related TS1007 /index.ts:6:58: The parser expected to find a '}' to match the '{' token here.
-!!! related TS1007 /index.ts:6:48: The parser expected to find a '}' to match the '{' token here.
+!!! error TS1478: Identifier or string literal expected.
                                                               ~~~~
 !!! error TS2695: Left side of comma operator is unused and has no side effects.
                                                                                      ~
