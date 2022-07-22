@@ -12028,7 +12028,7 @@ namespace ts {
             if (isMappedTypeGenericIndexedAccess(type)) {
                 // For indexed access types of the form { [P in K]: E }[X], where K is non-generic and X is generic,
                 // we substitute an instantiation of E where P is replaced with X.
-                return substituteIndexedMappedType(type.objectType as MappedType, type.indexType);
+                return substituteIndexedMappedType(type.objectType, type.indexType);
             }
             const indexConstraint = getSimplifiedTypeOrConstraint(type.indexType);
             if (indexConstraint && indexConstraint !== type.indexType) {
@@ -18210,8 +18210,8 @@ namespace ts {
         function isEmptyObjectType(type: Type): boolean {
             return type.flags & TypeFlags.Object ? !isGenericMappedType(type) && isEmptyResolvedType(resolveStructuredTypeMembers(type as ObjectType)) :
                 type.flags & TypeFlags.NonPrimitive ? true :
-                isUnionType(type.flags) ? some(type.types, isEmptyObjectType) :
-                isIntersectionType(type.flags) ? every(type.types, isEmptyObjectType) :
+                isUnionType(type) ? some(type.types, isEmptyObjectType) :
+                isIntersectionType(type) ? every(type.types, isEmptyObjectType) :
                 false;
         }
 
