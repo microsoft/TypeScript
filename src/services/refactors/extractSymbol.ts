@@ -551,7 +551,7 @@ namespace ts.refactor.extractSymbol {
                 const savedPermittedJumps = permittedJumps;
                 switch (node.kind) {
                     case SyntaxKind.IfStatement:
-                        permittedJumps = PermittedJumps.None;
+                        permittedJumps &= ~PermittedJumps.Return;
                         break;
                     case SyntaxKind.TryStatement:
                         // forbid all jumps inside try blocks

@@ -138,7 +138,7 @@ namespace ts.codefix {
                 // If there is more than one overload but no implementation signature
                 // (eg: an abstract method or interface declaration), there is a 1-1
                 // correspondence of declarations and signatures.
-                const signatures = checker.getSignaturesOfType(type, SignatureKind.Call);
+                const signatures = type.isUnion() ? flatMap(type.types, t => t.getCallSignatures()) : type.getCallSignatures();
                 if (!some(signatures)) {
                     break;
                 }

@@ -5,7 +5,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(16,37): error TS
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(16,46): error TS1011: An element access expression should take an argument.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(21,36): error TS2552: Cannot find name 'TypeLink'. Did you mean 'typeLink'?
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(29,29): error TS2304: Cannot find name 'Type'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(29,45): error TS2304: Cannot find name 'TypeDeclaration'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(29,45): error TS2552: Cannot find name 'TypeDeclaration'. Did you mean 'CSSStyleDeclaration'?
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(34,43): error TS2304: Cannot find name 'Type'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(34,54): error TS2304: Cannot find name 'AST'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(34,68): error TS2304: Cannot find name 'TypeCollectionContext'.
@@ -351,7 +351,8 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(828,13): error T
                                 ~~~~
 !!! error TS2304: Cannot find name 'Type'.
                                                 ~~~~~~~~~~~~~~~
-!!! error TS2304: Cannot find name 'TypeDeclaration'.
+!!! error TS2552: Cannot find name 'TypeDeclaration'. Did you mean 'CSSStyleDeclaration'?
+!!! related TS2728 /.ts/lib.dom.d.ts:3275:13: 'CSSStyleDeclaration' is declared here.
             type.extendsTypeLinks = getBaseTypeLinks(typeDecl.extendsList, type.extendsTypeLinks);
             type.implementsTypeLinks = getBaseTypeLinks(typeDecl.implementsList, type.implementsTypeLinks);
         }

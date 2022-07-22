@@ -709,7 +709,8 @@ namespace ts.server {
                     this.program!,
                     scriptInfo.path,
                     this.cancellationToken,
-                    maybeBind(this.projectService.host, this.projectService.host.createHash)
+                    maybeBind(this.projectService.host, this.projectService.host.createHash),
+                    this.getCanonicalFileName,
                 ),
                 sourceFile => this.shouldEmitFile(this.projectService.getScriptInfoForPath(sourceFile.path)) ? sourceFile.fileName : undefined
             );
