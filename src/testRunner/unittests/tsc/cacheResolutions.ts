@@ -86,5 +86,35 @@ namespace ts.tscWatch.cacheResolutions {
                 },
             ]
         });
+
+        verifyTscWithEdits({
+            scenario: "cacheResolutions",
+            subScenario: "caching resolutions with pathsBasePath",
+            fs: () => loadProjectFromFiles({
+                "/src/project/tsconfig.json": JSON.stringify({
+                    compilerOptions: {
+                        paths: {
+                            "*": ["./lib/*"]
+                        },
+                        composite: true,
+                        cacheResolutions: true,
+                        traceResolution: true,
+                    },
+                    files: ["main.ts", "randomFileForImport.ts"],
+                }),
+                "/src/project/main.ts": Utils.dedent`
+                    import type { ImportInterface0 } from "pkg0";
+                `,
+                "/src/project/randomFileForImport.ts": "export const x = 10;",
+                "/src/project/lib/pkg0/index.d.ts": getPkgImportContent("Import", 0),
+            }),
+            commandLineArgs: ["-p", "/src/project", "--explainFiles"],
+            edits: [
+                {
+                    subScenario: "modify randomFileForImport by adding import",
+                    modifyFs: fs => prependText(fs, "/src/project/randomFileForImport.ts", `import type { ImportInterface0 } from "pkg0";\n`),
+                },
+            ]
+        });
     });
 }

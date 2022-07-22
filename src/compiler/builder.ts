@@ -66,8 +66,8 @@ namespace ts {
          */
         latestChangedDtsFile: string | undefined;
         cacheResolutions?: {
-            modules: ESMap<Path, ModeAwareCache<ResolvedModuleWithFailedLookupLocations>> | undefined;
-            typeRefs: ESMap<Path, ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>> | undefined;
+            modules: CacheWithRedirects<ModeAwareCache<ResolvedModuleWithFailedLookupLocations>, Path> | undefined;
+            typeRefs: CacheWithRedirects<ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>, Path> | undefined;
         };
         resuableCacheResolutions?: {
             cache: ProgramBuildInfoCacheResolutions;
@@ -825,12 +825,20 @@ namespace ts {
     export type ProgramBuildInfoResolutionEntry = [nameId: ProgramBuildInfoResolutionNameId, resolutionId: ProgramBuildInfoResolutionId, mode?: ResolutionMode];
     export type ProgramBuildInfoResolutionEntryId = number & { __programBuildInfoResolutionEntryId: any };
     export type ProgramBuildInfoResolutionCache = [dirId: ProgramBuildInfoFileId, resolutions: readonly ProgramBuildInfoResolutionEntryId[]][];
+    export interface ProgramBuildInfoResolutionRedirectsCache {
+        options: CompilerOptions | undefined;
+        cache: ProgramBuildInfoResolutionCache;
+    }
+    export type ProgramBuildInfoResolutionCacheWithRedirects = ProgramBuildInfoResolutionCache | {
+        own: ProgramBuildInfoResolutionCache | undefined;
+        redirects: readonly ProgramBuildInfoResolutionRedirectsCache[];
+    };
     export interface ProgramBuildInfoCacheResolutions {
         resolutions: readonly ProgramBuildInfoResolution[];
         names: readonly string[];
         resolutionEntries: ProgramBuildInfoResolutionEntry[];
-        modules?: ProgramBuildInfoResolutionCache;
-        typeRefs?: ProgramBuildInfoResolutionCache;
+        modules?: ProgramBuildInfoResolutionCacheWithRedirects;
+        typeRefs?: ProgramBuildInfoResolutionCacheWithRedirects;
     }
 
     export interface ProgramMultiFileEmitBuildInfo {
@@ -893,11 +901,11 @@ namespace ts {
                     (fileInfos ??= [])[fileId - 1] = sourceFile.version;
                 });
             }
-            const cacheResolutions = toProgramBuildInfoResolutions();
+            const cacheResolutions = toProgramBuildInfoCacheResolutions();
             const result: ProgramBundleEmitBuildInfo = {
                 fileNames,
                 fileInfos,
-                options: toProgramBuildInfoCompilerOptions(state.compilerOptions, "affectsBundleEmitBuildInfo"),
+                options: toProgramBuildInfoCompilerOptions(state.compilerOptions, "affectsBundleEmitBuildInfo", !!state.compilerOptions.cacheResolutions),
                 outSignature: state.outSignature,
                 latestChangedDtsFile,
                 cacheResolutions,
@@ -990,11 +998,11 @@ namespace ts {
             }
         }
 
-        const cacheResolutions = toProgramBuildInfoResolutions();
+        const cacheResolutions = toProgramBuildInfoCacheResolutions();
         const result: ProgramMultiFileEmitBuildInfo = {
             fileNames,
             fileInfos,
-            options: toProgramBuildInfoCompilerOptions(state.compilerOptions, "affectsMultiFileEmitBuildInfo"),
+            options: toProgramBuildInfoCompilerOptions(state.compilerOptions, "affectsMultiFileEmitBuildInfo", !!state.compilerOptions.cacheResolutions),
             fileIdsList,
             referencedMap,
             exportedModulesMap,
@@ -1045,18 +1053,26 @@ namespace ts {
 
         /**
          * @param optionKey key of CommandLineOption to use to determine if the option should be serialized in tsbuildinfo
+         * @param affectsModuleResolution serialize options affecting module resolution
          */
-        function toProgramBuildInfoCompilerOptions(options: CompilerOptions, optionKey: "affectsBundleEmitBuildInfo" | "affectsMultiFileEmitBuildInfo") {
+        function toProgramBuildInfoCompilerOptions(
+            options: CompilerOptions,
+            optionKey: "affectsBundleEmitBuildInfo" | "affectsMultiFileEmitBuildInfo" | undefined,
+            affectsModuleResolution: boolean,
+        ) {
             let result: CompilerOptions | undefined;
-            const considerModuleResolution = options.cacheResolutions;
             const { optionsNameMap } = getOptionsNameMap();
             for (const name of getOwnKeys(options).sort(compareStringsCaseSensitive)) {
                 const optionInfo = optionsNameMap.get(name.toLowerCase());
-                if (optionInfo?.[optionKey] || considerModuleResolution && optionInfo?.affectsModuleResolution) {
+                if ((optionKey && optionInfo?.[optionKey]) || (affectsModuleResolution && (optionInfo?.affectsModuleResolution))) {
                     (result ??= {})[name] = toReusableCompilerOptionValue(
                         optionInfo,
                         options[name] as CompilerOptionsValue,
                     );
+                }
+                else if (affectsModuleResolution && name === "pathsBasePath") {
+                    (result ??= {}).pathsBasePath = relativeToBuildInfoEnsuringAbsolutePath(options.pathsBasePath!);
+                    continue;
                 }
             }
             return result;
@@ -1100,10 +1116,10 @@ namespace ts {
             };
         }
 
-        function toProgramBuildInfoResolutions(): ProgramBuildInfoCacheResolutions | undefined {
+        function toProgramBuildInfoCacheResolutions(): ProgramBuildInfoCacheResolutions | undefined {
             const cacheResolutions = getCacheResolutions(state, getCanonicalFileName);
-            const modules = toProgramBuildInfoResolutionCache(cacheResolutions?.modules);
-            const typeRefs = toProgramBuildInfoResolutionCache(cacheResolutions?.typeRefs);
+            const modules = toProgramBuildInfoResolutionCacheWithRedirects(cacheResolutions?.modules);
+            const typeRefs = toProgramBuildInfoResolutionCacheWithRedirects(cacheResolutions?.typeRefs);
             if (!resolutions) return;
             Debug.assertIsDefined(names);
             Debug.assertIsDefined(resolutionEntries);
@@ -1120,7 +1136,29 @@ namespace ts {
             return state.resuableCacheResolutions.cache;
         }
 
-        function toProgramBuildInfoResolutionCache<T extends ResolvedModuleWithFailedLookupLocations | ResolvedTypeReferenceDirectiveWithFailedLookupLocations>(cache: ESMap<Path, ModeAwareCache<T>> | undefined): ProgramBuildInfoResolutionCache | undefined {
+        function toProgramBuildInfoResolutionCacheWithRedirects<T extends ResolvedModuleWithFailedLookupLocations | ResolvedTypeReferenceDirectiveWithFailedLookupLocations>(
+            cache: CacheWithRedirects<ModeAwareCache<T>, Path> | undefined
+        ): ProgramBuildInfoResolutionCacheWithRedirects | undefined {
+            if (!cache) return undefined;
+            const ownMap = cache.getOwnMap();
+            const own = toProgramBuildInfoResolutionCache(ownMap);
+            let redirects: ProgramBuildInfoResolutionRedirectsCache[] | undefined;
+            cache.redirectsKeyToCache.forEach(({ map, options }) => {
+                if (map === ownMap) return;
+                const redirectCache = toProgramBuildInfoResolutionCache(map);
+                if (redirectCache) {
+                    (redirects ??= []).push({
+                        options: toProgramBuildInfoCompilerOptions(options, /*optionKey*/ undefined, /*affectsModuleResolution*/ true),
+                        cache: redirectCache
+                    });
+                }
+            });
+            return !redirects ? own : { own, redirects };
+        }
+
+        function toProgramBuildInfoResolutionCache<T extends ResolvedModuleWithFailedLookupLocations | ResolvedTypeReferenceDirectiveWithFailedLookupLocations>(
+            cache: ESMap<Path, ModeAwareCache<T>>
+        ): ProgramBuildInfoResolutionCache | undefined {
             return cache && arrayFrom(cache.entries(), ([dirPath, dirCache]) => [
                 toFileId(dirPath),
                 arrayFrom(dirCache.entries()).map(toProgramBuildInfoResolutionEntryId)
@@ -1183,38 +1221,45 @@ namespace ts {
 
     function getCacheResolutions(state: BuilderProgramState, getCanonicalFileName: GetCanonicalFileName) {
         if (state.cacheResolutions || !state.compilerOptions.cacheResolutions) return state.cacheResolutions;
-        let modules: ESMap<Path, ModeAwareCache<ResolvedModuleWithFailedLookupLocations>> | undefined;
-        let typeRefs: ESMap<Path, ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>> | undefined;
+        let modules: CacheWithRedirects<ModeAwareCache<ResolvedModuleWithFailedLookupLocations>, Path> | undefined;
+        let typeRefs: CacheWithRedirects<ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>, Path> | undefined;
         state.program!.getSourceFiles().forEach(f => {
-            const containingPath = getDirectoryPath(f.path);
-            modules = toPerDirectoryCache(modules, containingPath, f.resolvedModules);
-            typeRefs = toPerDirectoryCache(typeRefs, containingPath, f.resolvedTypeReferenceDirectiveNames);
+            modules = toPerDirectoryCache(state, modules, f, f.resolvedModules);
+            typeRefs = toPerDirectoryCache(state, typeRefs, f, f.resolvedTypeReferenceDirectiveNames);
         });
         const automaticTypeDirectiveNames = state.program!.getAutomaticTypeDirectiveNames();
         if (automaticTypeDirectiveNames.length) {
             const currentDirectory = state.program!.getCurrentDirectory();
             const containingDirectory = state.compilerOptions.configFilePath ? getDirectoryPath(state.compilerOptions.configFilePath) : currentDirectory;
             const containingPath = toPath(containingDirectory, currentDirectory, getCanonicalFileName);
-            typeRefs = toPerDirectoryCache(typeRefs, containingPath, state.program!.getAutomaticTypeDirectiveResolutions());
+            typeRefs = toPerDirectoryCache(state, typeRefs, containingPath, state.program!.getAutomaticTypeDirectiveResolutions());
         }
         return state.cacheResolutions = { modules, typeRefs };
-    }
+     }
 
     function toPerDirectoryCache<T extends ResolvedModuleWithFailedLookupLocations | ResolvedTypeReferenceDirectiveWithFailedLookupLocations>(
-        perDirCache: ESMap<Path, ModeAwareCache<T>> | undefined,
-        dirPath: Path,
+        state: BuilderProgramState,
+        cacheWithRedirects: CacheWithRedirects<ModeAwareCache<T>, Path> | undefined,
+        fOrDirPath: SourceFile | Path,
         cache: ModeAwareCache<T> | undefined,
-    ): ESMap<Path, ModeAwareCache<T>> | undefined {
-        if (!cache?.size()) return perDirCache;
-        let dirCache = perDirCache?.get(dirPath);
+    ): CacheWithRedirects<ModeAwareCache<T>, Path> | undefined {
+        if (!cache?.size()) return cacheWithRedirects;
+        let dirPath: Path, redirectedReference: ResolvedProjectReference | undefined;
+        if (!isString(fOrDirPath)) {
+            redirectedReference = state.program!.getRedirectReferenceForResolution(fOrDirPath);
+            dirPath = getDirectoryPath(fOrDirPath.path);
+        }
+        else {
+            dirPath = fOrDirPath;
+        }
+        let dirCache = cacheWithRedirects?.getMapOfCacheRedirects(redirectedReference)?.get(dirPath);
         cache.forEach((resolution, name, mode) => {
             if (!(resolution as ResolvedModuleWithFailedLookupLocations).resolvedModule?.resolvedFileName && !(resolution as ResolvedTypeReferenceDirectiveWithFailedLookupLocations).resolvedTypeReferenceDirective?.resolvedFileName) return;
-            // TODO:: (shkamat) redirected references
             if (dirCache?.has(name, mode)) return;
-            if (!dirCache) (perDirCache ??= new Map()).set(dirPath, dirCache = createModeAwareCache());
+            if (!dirCache) (cacheWithRedirects ??= createCacheWithRedirects(state.compilerOptions)).getOrCreateMapOfCacheRedirects(redirectedReference).set(dirPath, dirCache = createModeAwareCache());
             dirCache.set(name, mode, resolution);
         });
-        return perDirCache;
+        return cacheWithRedirects;
     }
 
     export enum BuilderProgramKind {
@@ -1802,30 +1847,33 @@ namespace ts {
 
         type Resolution = ResolvedModuleWithFailedLookupLocations & ResolvedTypeReferenceDirectiveWithFailedLookupLocations;
         type ResolutionEntry = [name: string, resolutionId: ProgramBuildInfoResolutionId, mode: ResolutionMode];
-        type DecodedResolvedMap = ESMap<Path, readonly ProgramBuildInfoResolutionEntryId[] | ModeAwareCache<ProgramBuildInfoResolutionId>>;
-        const decodedResolvedModules: DecodedResolvedMap = new Map();
-        const decodedResolvedTypeRefs: DecodedResolvedMap = new Map();
+        type BuildInfoResolutionEntriesOrModeAwareCache = readonly ProgramBuildInfoResolutionEntryId[] | ModeAwareCache<ProgramBuildInfoResolutionId>;
+        type DecodedResolvedMap = CacheWithRedirects<BuildInfoResolutionEntriesOrModeAwareCache, Path>;
+        const decodedResolvedModules: DecodedResolvedMap = createCacheWithRedirects(state.compilerOptions);
+        const decodedResolvedTypeRefs: DecodedResolvedMap = createCacheWithRedirects(state.compilerOptions);
 
         let resolutions: (Resolution | false)[] | undefined;
         let resolutionEntries: ResolutionEntry[] | undefined;
 
         return {
             getCompilerOptions: () => state.compilerOptions,
-            getResolvedModule: (dirPath, name, mode) => getResolvedFromCache(
-                    cacheResolutions?.modules,
-                    resuableCacheResolutions?.cache.modules,
-                    decodedResolvedModules,
-                    dirPath,
-                    name,
-                    mode
-                ),
-            getResolvedTypeReferenceDirective: (dirPath, name, mode) => getResolvedFromCache(
+            getResolvedModule: (dirPath, name, mode, redirectedReference) => getResolvedFromCache(
+                cacheResolutions?.modules,
+                resuableCacheResolutions?.cache.modules,
+                decodedResolvedModules,
+                dirPath,
+                name,
+                mode,
+                redirectedReference,
+            ),
+            getResolvedTypeReferenceDirective: (dirPath, name, mode, redirectedReference) => getResolvedFromCache(
                 cacheResolutions?.typeRefs,
                 resuableCacheResolutions?.cache.typeRefs,
                 decodedResolvedTypeRefs,
                 dirPath,
                 name,
-                mode
+                mode,
+                redirectedReference,
             ),
         };
 
@@ -1836,14 +1884,16 @@ namespace ts {
         }
 
         function getResolvedFromCache(
-            cache: ESMap<Path, ModeAwareCache<ResolvedModuleWithFailedLookupLocations | ResolvedTypeReferenceDirectiveWithFailedLookupLocations>> | undefined,
-            reusableCache: ProgramBuildInfoResolutionCache | undefined,
+            cache: CacheWithRedirects<ModeAwareCache<ResolvedModuleWithFailedLookupLocations | ResolvedTypeReferenceDirectiveWithFailedLookupLocations>, Path> | undefined,
+            reusableCache: ProgramBuildInfoResolutionCacheWithRedirects | undefined,
             decodedReusableCache: DecodedResolvedMap,
             dirPath: Path,
             name: string,
-            mode: ResolutionMode
+            mode: ResolutionMode,
+            redirectedReference: ResolvedProjectReference | undefined,
         ): Resolution | undefined {
-            const fromCache = cache?.get(dirPath)?.get(name, mode);
+            // If we are using the cache, directly get from there
+            const fromCache = cache?.getMapOfCacheRedirects(redirectedReference)?.get(dirPath)?.get(name, mode);
             if (fromCache) {
                 return fileExists(
                     (fromCache as ResolvedModuleWithFailedLookupLocations).resolvedModule?.resolvedFileName ||
@@ -1851,17 +1901,42 @@ namespace ts {
                 ) ? fromCache as Resolution : undefined;
             }
             if (!reusableCache) return undefined;
-            if (!decodedReusableCache.size) {
-                reusableCache.forEach(([dirId, entryId]) => decodedReusableCache.set(
-                    resuableCacheResolutions!.getProgramBuildInfoFilePathDecoder().toFilePath(dirId),
-                    entryId
-                ));
-            };
-            let cacheForDir = decodedReusableCache.get(dirPath);
+
+            // Decode so we have maps for directories
+            if (!decodedReusableCache.getOwnMap().size && !decodedReusableCache.redirectsKeyToCache.size) {
+                if (isArray(reusableCache)) {
+                    setBuildInfoResolutionEntries(decodedReusableCache, state.compilerOptions, reusableCache);
+                }
+                else {
+                    if (reusableCache.own) setBuildInfoResolutionEntries(decodedReusableCache, state.compilerOptions, reusableCache.own);
+                    reusableCache.redirects.forEach(({ options, cache }) => setBuildInfoResolutionEntries(
+                        decodedReusableCache,
+                        options ? convertToOptionsWithAbsolutePaths(options, resuableCacheResolutions!.getProgramBuildInfoFilePathDecoder().toAbsolutePath) : {},
+                        cache
+                    ));
+                }
+            }
+
+            const actualCache = decodedReusableCache.getMapOfCacheRedirects(redirectedReference);
+            let cacheForDir = actualCache?.get(dirPath);
             if (!cacheForDir) return undefined;
-            if (isArray(cacheForDir)) decodedReusableCache.set(dirPath, cacheForDir = toModeAwareCache(cacheForDir));
+
+            // If this was not decoded to mode aware cache, decode now
+            if (isArray(cacheForDir)) actualCache!.set(dirPath, cacheForDir = toModeAwareCache(cacheForDir));
             const resolutionId = cacheForDir.get(name, mode);
             return resolutionId ? toResolution(resolutionId) : undefined;
+        }
+
+        function setBuildInfoResolutionEntries(
+            decodedReusableCache: DecodedResolvedMap,
+            options: CompilerOptions,
+            reusableCache: ProgramBuildInfoResolutionCache,
+        ) {
+            const map = decodedReusableCache.createMapForCompilerOptions(options || {});
+            reusableCache.forEach(([dirId, entryId]) => map.set(
+                resuableCacheResolutions!.getProgramBuildInfoFilePathDecoder().toFilePath(dirId),
+                entryId
+            ));
         }
 
         function toModeAwareCache(entries: readonly ProgramBuildInfoResolutionEntryId[]) {

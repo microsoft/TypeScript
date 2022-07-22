@@ -94,5 +94,44 @@ namespace ts.tscWatch.cacheResolutions {
                 });
             }
         });
+
+        describe("multi project", () => {
+            verifyTscWatchMultiProject("caching resolutions in multi project scenario", getWatchSystemWithMultipleProjects);
+            verifyTscWatchMultiProject("caching resolutions in multi project scenario when already built", getWatchSystemWithMultipleProjectsWithBuild);
+            function verifyTscWatchMultiProject(subScenario: string, sys: () => WatchedSystem) {
+                verifyTscWatch({
+                    scenario: "cacheResolutions",
+                    subScenario,
+                    sys,
+                    commandLineArgs: ["-b", "-w", "--explainFiles", "-v"],
+                    changes: [
+                        {
+                            caption: "modify aRandomFileForImport by adding import",
+                            change: sys => sys.prependFile("/src/project/aRandomFileForImport.ts", `export type { ImportInterface0 } from "pkg0";\n`),
+                            timeouts: sys => {
+                                sys.runQueuedTimeoutCallbacks();
+                                sys.runQueuedTimeoutCallbacks();
+                            },
+                        },
+                        {
+                            caption: "modify bRandomFileForImport by adding import",
+                            change: sys => sys.prependFile("/src/project/bRandomFileForImport.ts", `export type { ImportInterface0 } from "pkg0";\n`),
+                            timeouts: sys => {
+                                sys.runQueuedTimeoutCallbacks();
+                                sys.runQueuedTimeoutCallbacks();
+                            },
+                        },
+                        {
+                            caption: "modify cRandomFileForImport by adding import",
+                            change: sys => sys.prependFile("/src/project/cRandomFileForImport.ts", `export type { ImportInterface0 } from "pkg0";\n`),
+                            timeouts: sys => {
+                                sys.runQueuedTimeoutCallbacks();
+                                sys.runQueuedTimeoutCallbacks();
+                            },
+                        },
+                    ]
+                });
+            }
+        });
     });
 }

@@ -1410,6 +1410,7 @@ namespace ts {
             getProjectReferenceRedirect,
             getResolvedProjectReferenceToRedirect,
             getResolvedProjectReferenceByPath,
+            getRedirectReferenceForResolution,
             forEachResolvedProjectReference,
             isSourceOfProjectReferenceRedirect,
             emitBuildInfo,
@@ -1456,27 +1457,27 @@ namespace ts {
             resolution.resolutionDiagnostics?.forEach(diagnostic => programDiagnostics.add(diagnostic));
         }
 
-        function resolveModuleNamesWorker(moduleNames: string[], containingFile: SourceFile, partialResolutionInfo: PartialResolutionInfo | undefined) {
+        function resolveModuleNamesWorker(moduleNames: string[], containingFile: SourceFile, partialResolutionInfo: PartialResolutionInfo | undefined, redirectedReference: ResolvedProjectReference | false | undefined) {
             if (!moduleNames.length) return emptyArray;
             const containingFileName = getNormalizedAbsolutePath(containingFile.originalFileName, currentDirectory);
-            const redirectedReference = getRedirectReferenceForResolution(containingFile);
+            if (redirectedReference === undefined) redirectedReference = getRedirectReferenceForResolution(containingFile);
             tracing?.push(tracing.Phase.Program, "resolveModuleNamesWorker", { containingFileName });
             performance.mark("beforeResolveModule");
-            const result = actualResolveModuleNamesWorker(moduleNames, containingFile, containingFileName, redirectedReference, partialResolutionInfo);
+            const result = actualResolveModuleNamesWorker(moduleNames, containingFile, containingFileName, redirectedReference || undefined, partialResolutionInfo);
             performance.mark("afterResolveModule");
             performance.measure("ResolveModule", "beforeResolveModule", "afterResolveModule");
             tracing?.pop();
             return result;
         }
 
-        function resolveTypeReferenceDirectiveNamesWorker(typeDirectiveNames: string[] | readonly FileReference[], containingFile: string | SourceFile, partialResolutionInfo: PartialResolutionInfo | undefined) {
+        function resolveTypeReferenceDirectiveNamesWorker(typeDirectiveNames: string[] | readonly FileReference[], containingFile: string | SourceFile, partialResolutionInfo: PartialResolutionInfo | undefined, redirectedReference: ResolvedProjectReference | false | undefined) {
             if (!typeDirectiveNames.length) return [];
             const containingFileName = !isString(containingFile) ? getNormalizedAbsolutePath(containingFile.originalFileName, currentDirectory) : containingFile;
-            const redirectedReference = !isString(containingFile) ? getRedirectReferenceForResolution(containingFile) : undefined;
+            if (redirectedReference === undefined && !isString(containingFile)) redirectedReference = getRedirectReferenceForResolution(containingFile);
             const containingFileMode = !isString(containingFile) ? containingFile.impliedNodeFormat : undefined;
             tracing?.push(tracing.Phase.Program, "resolveTypeReferenceDirectiveNamesWorker", { containingFileName });
             performance.mark("beforeResolveTypeReference");
-            const result = actualResolveTypeReferenceDirectiveNamesWorker(typeDirectiveNames, containingFileName, redirectedReference, containingFileMode, partialResolutionInfo);
+            const result = actualResolveTypeReferenceDirectiveNamesWorker(typeDirectiveNames, containingFileName, redirectedReference || undefined, containingFileMode, partialResolutionInfo);
             performance.mark("afterResolveTypeReference");
             performance.measure("ResolveTypeReference", "beforeResolveTypeReference", "afterResolveTypeReference");
             tracing?.pop();
@@ -1564,7 +1565,7 @@ namespace ts {
             if (structureIsReused === StructureIsReused.Not && !file.ambientModuleNames.length) {
                 // If the old program state does not permit reusing resolutions and `file` does not contain locally defined ambient modules,
                 // the best we can do is fallback to the default logic.
-                return resolveModuleNamesWorker(moduleNames, file, /*partialResolutionInfo*/ undefined);
+                return resolveModuleNamesWorker(moduleNames, file, /*partialResolutionInfo*/ undefined, /*redirectedReference*/ undefined);
             }
 
             const oldSourceFile = oldProgram && oldProgram.getSourceFile(file.fileName);
@@ -1607,12 +1608,20 @@ namespace ts {
             let result: (ResolvedModuleWithFailedLookupLocations | typeof predictedToResolveToAmbientModuleMarker)[] | undefined;
             /** A transient placeholder used to mark predicted resolution in the result list. */
             const predictedToResolveToAmbientModuleMarker = true;
+            let redirectedReference: ResolvedProjectReference | false | undefined;
             for (let i = 0; i < moduleNames.length; i++) {
                 const moduleName = moduleNames[i];
                 // If the source file is unchanged and doesnt have invalidated resolution, reuse the module resolutions
                 if (oldBuildInfoProgram || file === oldSourceFile && !hasInvalidatedResolution(oldSourceFile.path)) {
                     const mode = getModeForResolutionAtIndex(file, i);
-                    const oldResolution = !oldBuildInfoProgram ? oldSourceFile?.resolvedModules?.get(moduleName, mode) : oldBuildInfoProgram.getResolvedModule(getDirectoryPath(file.path), moduleName, mode);
+                    const oldResolution = !oldBuildInfoProgram ?
+                        oldSourceFile?.resolvedModules?.get(moduleName, mode) :
+                        oldBuildInfoProgram.getResolvedModule(
+                            getDirectoryPath(file.path),
+                            moduleName,
+                            mode,
+                            (redirectedReference === undefined ? (redirectedReference = getRedirectReferenceForResolution(file) || false) : redirectedReference) || undefined,
+                        );
                     if (oldResolution?.resolvedModule) {
                         if (isTraceEnabled(options, host)) {
                             const fileLocation = getNormalizedAbsolutePath(file.originalFileName, currentDirectory);
@@ -1671,7 +1680,7 @@ namespace ts {
             }
 
             const resolutions = unknownModuleNames && unknownModuleNames.length
-                ? resolveModuleNamesWorker(unknownModuleNames, file, { reusedNames, namesIndex: unknownModuleNamesIndex! })
+                ? resolveModuleNamesWorker(unknownModuleNames, file, { reusedNames, namesIndex: unknownModuleNamesIndex! }, redirectedReference)
                 : emptyArray;
 
             // Combine results of resolutions and predicted results
@@ -1731,11 +1740,13 @@ namespace ts {
         function resolveTypeReferenceDirectiveNamesReusingOldState(typeDirectiveNames: string[], containingFile: string): readonly ResolvedTypeReferenceDirectiveWithFailedLookupLocations[];
         function resolveTypeReferenceDirectiveNamesReusingOldState(typeDirectiveNames: string[] | readonly FileReference[], containingFile: string | SourceFile): readonly ResolvedTypeReferenceDirectiveWithFailedLookupLocations[] {
             if (structureIsReused === StructureIsReused.Not) {
-                return resolveTypeReferenceDirectiveNamesWorker(typeDirectiveNames, containingFile, /*partialResolutionInfo*/ undefined);
+                return resolveTypeReferenceDirectiveNamesWorker(typeDirectiveNames, containingFile, /*partialResolutionInfo*/ undefined, /*redirectedReference*/ undefined);
             }
 
-            const oldSourceFile = !isString(containingFile) ? oldProgram && oldProgram.getSourceFile(containingFile.fileName) : undefined;
-            if (!isString(containingFile) && oldSourceFile !== containingFile && containingFile.resolvedTypeReferenceDirectiveNames) {
+            const containingSourceFile = !isString(containingFile) ? containingFile : undefined;
+            const inferredTypeFile = !isString(containingFile) ? undefined : containingFile;
+            const oldSourceFile = containingSourceFile && oldProgram?.getSourceFile(containingSourceFile.fileName);
+            if (containingSourceFile && oldSourceFile !== containingSourceFile && containingSourceFile.resolvedTypeReferenceDirectiveNames) {
                 // `file` was created for the new program.
                 //
                 // We only set `file.resolvedTypeReferenceDirectiveNames` via work from the current function,
@@ -1747,7 +1758,7 @@ namespace ts {
                 const result: ResolvedTypeReferenceDirectiveWithFailedLookupLocations[] = [];
                 for (const typeDirectiveName of typeDirectiveNames as readonly FileReference[]) {
                     // We lower-case all type references because npm automatically lowercases all packages. See GH#9824.
-                    const resolvedTypeReferenceDirective = containingFile.resolvedTypeReferenceDirectiveNames.get(toFileNameLowerCase(typeDirectiveName.fileName), typeDirectiveName.resolutionMode || containingFile.impliedNodeFormat)!;
+                    const resolvedTypeReferenceDirective = containingSourceFile.resolvedTypeReferenceDirectiveNames.get(toFileNameLowerCase(typeDirectiveName.fileName), typeDirectiveName.resolutionMode || containingSourceFile.impliedNodeFormat)!;
                     result.push(resolvedTypeReferenceDirective);
                 }
                 return result;
@@ -1765,22 +1776,28 @@ namespace ts {
             let result: ResolvedTypeReferenceDirectiveWithFailedLookupLocations[] | undefined;
             let reusedNames: PartialResolutionInfo["reusedNames"];
             const canReuseResolutions = oldBuildInfoProgram || (
-                !isString(containingFile) ?
-                    containingFile === oldSourceFile && !hasInvalidatedResolution(oldSourceFile.path) :
-                    !hasInvalidatedResolution(toPath(containingFile))
+                containingSourceFile ?
+                    containingSourceFile === oldSourceFile && !hasInvalidatedResolution(oldSourceFile.path) :
+                    !hasInvalidatedResolution(toPath(inferredTypeFile!))
             );
+            let redirectedReference: ResolvedProjectReference | false | undefined;
             for (let i = 0; i < typeDirectiveNames.length; i++) {
                 const entry = typeDirectiveNames[i];
                 // If the source file is unchanged and doesnt have invalidated resolution, reuse the module resolutions
                 if (canReuseResolutions) {
                     const typeDirectiveName = !isString(entry) ? entry.fileName.toLowerCase() : entry;
-                    const mode = getModeForFileReference(entry, !isString(containingFile) ? containingFile?.impliedNodeFormat : undefined);
+                    const mode = getModeForFileReference(entry, containingSourceFile?.impliedNodeFormat);
                     const oldResolution = !oldBuildInfoProgram ?
-                        (!isString(containingFile) ? oldSourceFile?.resolvedTypeReferenceDirectiveNames : oldProgram?.getAutomaticTypeDirectiveResolutions())?.get(typeDirectiveName, mode) :
-                        oldBuildInfoProgram.getResolvedTypeReferenceDirective(getDirectoryPath(!isString(containingFile) ? containingFile.path : toPath(containingFile)), typeDirectiveName, mode);
+                        (containingSourceFile ? oldSourceFile?.resolvedTypeReferenceDirectiveNames : oldProgram?.getAutomaticTypeDirectiveResolutions())?.get(typeDirectiveName, mode) :
+                        oldBuildInfoProgram.getResolvedTypeReferenceDirective(
+                            getDirectoryPath(containingSourceFile? containingSourceFile.path : toPath(inferredTypeFile!)),
+                            typeDirectiveName,
+                            mode,
+                            containingSourceFile && (redirectedReference === undefined ? (redirectedReference = getRedirectReferenceForResolution(containingSourceFile) || false) : redirectedReference) || undefined,
+                        );
                     if (oldResolution?.resolvedTypeReferenceDirective) {
                         if (isTraceEnabled(options, host)) {
-                            const fileLocation = !isString(containingFile) ? getNormalizedAbsolutePath(containingFile.originalFileName, currentDirectory) : containingFile;
+                            const fileLocation = containingSourceFile ? getNormalizedAbsolutePath(containingSourceFile.originalFileName, currentDirectory) : inferredTypeFile!;
                             if (!oldBuildInfoProgram) {
                                 trace(host,
                                     oldResolution.resolvedTypeReferenceDirective.packageId ?
@@ -1816,7 +1833,7 @@ namespace ts {
             }
 
             if (!unknownTypeReferenceDirectiveNames) return result || emptyArray;
-            const resolutions = resolveTypeReferenceDirectiveNamesWorker(unknownTypeReferenceDirectiveNames, containingFile, { reusedNames, namesIndex: unknownTypeReferenceDirectiveNamesIndex! });
+            const resolutions = resolveTypeReferenceDirectiveNamesWorker(unknownTypeReferenceDirectiveNames, containingFile, { reusedNames, namesIndex: unknownTypeReferenceDirectiveNamesIndex! }, redirectedReference);
             if (!result) {
                 Debug.assert(resolutions.length === typeDirectiveNames.length);
                 return resolutions;

@@ -143,6 +143,38 @@ namespace ts.projectSystem {
             }
         });
 
+        describe("multi project", () => {
+            verifyTsserverWithMultiProject("caching resolutions in multi project scenario when not built", tscWatch.cacheResolutions.getServerHostWithMultipleProjects, "bRandomFileForImport", "/src/project/tsconfig.b.json");
+            verifyTsserverWithMultiProject("caching resolutions in multi project scenario on project with mixed redirect options when not built", tscWatch.cacheResolutions.getServerHostWithMultipleProjects, "cRandomFileForImport");
+            verifyTsserverWithMultiProject("caching resolutions in multi project scenario", tscWatch.cacheResolutions.getServerHostWithMultipleProjectsWithBuild, "bRandomFileForImport", "/src/project/tsconfig.b.json");
+            verifyTsserverWithMultiProject("caching resolutions in multi project scenario on project with mixed redirect options", tscWatch.cacheResolutions.getServerHostWithMultipleProjectsWithBuild, "cRandomFileForImport");
+            function verifyTsserverWithMultiProject(scenario: string, createHost: () => TestServerHost, file: string, project?: string) {
+                it(scenario, () => {
+                    const host = createHost();
+                    fakes.patchHostForBuildInfoReadWrite(host);
+                    const logger = createLoggerWithInMemoryLogs();
+                    const session = createSession(host, { logger });
+                    openFilesForSession([`/src/project/${file}.ts`], session);
+
+                    logger.info(`modify ${file} by adding import`);
+                    session.executeCommandSeq<protocol.ChangeRequest>({
+                        command: protocol.CommandTypes.Change,
+                        arguments: {
+                            file: `/src/project/${file}.ts`,
+                            line: 1,
+                            offset: 1,
+                            endLine: 1,
+                            endOffset: 1,
+                            insertString: `export type { ImportInterface0 } from "pkg0";\n`,
+                        }
+                    });
+                    if (project) server.updateProjectIfDirty(session.getProjectService().configuredProjects.get(project)!);
+                    server.updateProjectIfDirty(session.getProjectService().configuredProjects.get("/src/project/tsconfig.json")!);
+                    baselineTsserverLogs("cacheResolutions", scenario, session);
+                });
+            }
+        });
+
         describe("on sample project", () => {
             function cacheResolutions(file: File) {
                 const content = JSON.parse(file.content);

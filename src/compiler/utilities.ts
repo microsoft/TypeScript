@@ -85,7 +85,8 @@ namespace ts {
     }
 
     export function optionsHaveModuleResolutionChanges(oldOptions: CompilerOptions, newOptions: CompilerOptions) {
-        return optionsHaveChanges(oldOptions, newOptions, moduleResolutionOptionDeclarations);
+        return oldOptions.pathsBasePath !== newOptions.pathsBasePath ||
+            optionsHaveChanges(oldOptions, newOptions, moduleResolutionOptionDeclarations);
     }
 
     export function changesAffectingProgramStructure(oldOptions: CompilerOptions, newOptions: CompilerOptions) {

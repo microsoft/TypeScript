@@ -124,5 +124,25 @@ namespace ts.tscWatch.cacheResolutions {
                 });
             }
         });
+
+        describe("multi project", () => {
+            verifyTscWatchMultiProject("caching resolutions in multi project scenario", "/src/project/tsconfig.b.json", "bRandomFileForImport");
+            verifyTscWatchMultiProject("caching resolutions in multi project scenario on project with mixed redirect options", "/src/project", "cRandomFileForImport");
+            function verifyTscWatchMultiProject(subScenario: string, project: string, file: string) {
+                verifyTscWatch({
+                    scenario: "cacheResolutions",
+                    subScenario,
+                    sys: getWatchSystemWithMultipleProjectsWithBuild,
+                    commandLineArgs: ["-p", project, "-w", "--explainFiles"],
+                    changes: [
+                        {
+                            caption: `modify ${file} by adding import`,
+                            change: sys => sys.prependFile(`/src/project/${file}.ts`, `export type { ImportInterface0 } from "pkg0";\n`),
+                            timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                        },
+                    ]
+                });
+            }
+        });
     });
 }

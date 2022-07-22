@@ -55,6 +55,63 @@ namespace ts.tscWatch.cacheResolutions {
                 },
             ]
         });
+
+        verifyTscWithEdits({
+            scenario: "cacheResolutions",
+            subScenario: "caching resolutions in multi project scenario",
+            fs: getFsWithMultipleProjects,
+            commandLineArgs: ["-b", "/src/project", "--explainFiles", "--v"],
+            edits: [
+                {
+                    subScenario: "modify aRandomFileForImport by adding import",
+                    modifyFs: fs => prependText(fs, "/src/project/aRandomFileForImport.ts", `export type { ImportInterface0 } from "pkg0";\n`),
+                },
+                {
+                    subScenario: "modify bRandomFileForImport by adding import",
+                    modifyFs: fs => prependText(fs, "/src/project/bRandomFileForImport.ts", `export type { ImportInterface0 } from "pkg0";\n`),
+                },
+                {
+                    subScenario: "modify cRandomFileForImport by adding import",
+                    modifyFs: fs => prependText(fs, "/src/project/cRandomFileForImport.ts", `export type { ImportInterface0 } from "pkg0";\n`),
+                },
+                {
+                    subScenario: "Project build on B",
+                    modifyFs: noop,
+                    commandLineArgs: ["-p", "/src/project/tsconfig.b.json", "--explainFiles"],
+                    discrepancyExplanation: () => [
+                        "During incremental build, build succeeds because everything was built",
+                        "Clean build does not have project build from a so it errors and has extra errors and incorrect buildinfo",
+                    ]
+                },
+                {
+                    subScenario: "modify bRandomFileForImport2 by adding import and project build",
+                    modifyFs: fs => prependText(fs, "/src/project/bRandomFileForImport2.ts", `export type { ImportInterface0 } from "pkg0";\n`),
+                    commandLineArgs: ["-p", "/src/project/tsconfig.b.json", "--explainFiles"],
+                    discrepancyExplanation: () => [
+                        "During incremental build, build succeeds because everything was built",
+                        "Clean build does not have project build from a so it errors and has extra errors and incorrect buildinfo",
+                    ]
+                },
+                {
+                    subScenario: "Project build on c",
+                    modifyFs: noop,
+                    commandLineArgs: ["-p", "/src/project", "--explainFiles"],
+                    discrepancyExplanation: () => [
+                        "During incremental build, build succeeds because everything was built",
+                        "Clean build does not have project build from a and b so it errors and has extra errors and incorrect buildinfo",
+                    ]
+                },
+                {
+                    subScenario: "modify cRandomFileForImport2 by adding import and project build",
+                    modifyFs: fs => prependText(fs, "/src/project/cRandomFileForImport2.ts", `export type { ImportInterface0 } from "pkg0";\n`),
+                    commandLineArgs: ["-p", "/src/project", "--explainFiles"],
+                    discrepancyExplanation: () => [
+                        "During incremental build, build succeeds because everything was built",
+                        "Clean build does not have project build from a and b so it errors and has extra errors and incorrect buildinfo",
+                    ]
+                },
+            ]
+        });
     });
 
     function getRandomFileContent() {
@@ -81,7 +138,7 @@ namespace ts.tscWatch.cacheResolutions {
             }
         `;
     }
-    export function getFsMapWithNode16(): { [path: string]: string; } {
+    function getFsMapWithNode16(): { [path: string]: string; } {
         return {
             "/src/project/tsconfig.json": JSON.stringify({
                 compilerOptions: {
@@ -136,20 +193,18 @@ namespace ts.tscWatch.cacheResolutions {
     }
 
     export function getWatchSystemWithNode16WithBuild() {
-        return getSystemWithBuild(getWatchSystemWithNode16);
-    }
-
-    export function getServerHostWithNode16WithBuild() {
-        return getSystemWithBuild(getServerHostWithNode16);
-    }
-
-    function getSystemWithBuild(createSystem: () => WatchedSystem) {
-        const system = createSystem();
+        const system = getWatchSystemWithNode16();
         solutionBuildWithBaseline(system, ["/src/project"]);
         return system;
     }
 
-    export function getFsMapWithOut(): { [path: string]: string; } {
+    export function getServerHostWithNode16WithBuild() {
+        const system = getServerHostWithNode16();
+        solutionBuildWithBaseline(system, ["/src/project"]);
+        return system;
+    }
+
+    function getFsMapWithOut(): { [path: string]: string; } {
         return {
             "/src/project/tsconfig.json": JSON.stringify({
                 compilerOptions: {
@@ -197,10 +252,97 @@ namespace ts.tscWatch.cacheResolutions {
     }
 
     export function getWatchSystemWithOutWithBuild() {
-        return getSystemWithBuild(getWatchSystemWithOut);
+        const system = getWatchSystemWithOut();
+        solutionBuildWithBaseline(system, ["/src/project"]);
+        return system;
     }
 
     export function getServerHostWithOutWithBuild() {
-        return getSystemWithBuild(getServerHostWithOut);
+        const system = getServerHostWithOut();
+        solutionBuildWithBaseline(system, ["/src/project"]);
+        return system;
+    }
+
+    function getFsMapWithMultipleProjects(): { [path: string]: string; } {
+        return {
+            "/src/project/tsconfig.a.json": JSON.stringify({
+                compilerOptions: {
+                    composite: true,
+                    cacheResolutions: true,
+                    traceResolution: true,
+                },
+                files: ["aFileWithImports.ts", "aRandomFileForImport.ts", "aRandomFileForImport2.ts"],
+            }),
+            "/src/project/aFileWithImports.ts": Utils.dedent`
+                import type { ImportInterface0 } from "pkg0";
+                export { x } from "./aRandomFileForImport";
+                export { x as x2 } from "./aRandomFileForImport2";
+                export const y = 10;
+            `,
+            "/src/project/aRandomFileForImport.ts": getRandomFileContent(),
+            "/src/project/aRandomFileForImport2.ts": getRandomFileContent(),
+            "/src/project/node_modules/pkg0/index.d.ts": getPkgImportContent("Import", 0),
+            "/src/project/tsconfig.b.json": JSON.stringify({
+                compilerOptions: {
+                    composite: true,
+                    cacheResolutions: true,
+                    traceResolution: true,
+                },
+                files: ["bFileWithImports.ts", "bRandomFileForImport.ts", "bRandomFileForImport2.ts"],
+                references: [{ path: "./tsconfig.a.json" }]
+            }),
+            "/src/project/bFileWithImports.ts": Utils.dedent`
+                export { y } from "./aFileWithImports";
+                export { x } from "./bRandomFileForImport";
+                import type { ImportInterface0 } from "pkg0";
+            `,
+            "/src/project/bRandomFileForImport.ts": getRandomFileContent(),
+            "/src/project/bRandomFileForImport2.ts": getRandomFileContent(),
+            "/src/project/tsconfig.json": JSON.stringify({
+                compilerOptions: {
+                    composite: true,
+                    cacheResolutions: true,
+                    traceResolution: true,
+                    module: "amd"
+                },
+                files: ["cFileWithImports.ts", "cRandomFileForImport.ts", "cRandomFileForImport2.ts"],
+                references: [{ path: "./tsconfig.a.json" }, { path: "./tsconfig.b.json" }]
+            }),
+            "/src/project/cFileWithImports.ts": Utils.dedent`
+                import { y } from "./bFileWithImports";
+                import type { ImportInterface0 } from "pkg0";
+            `,
+            "/src/project/cRandomFileForImport.ts": getRandomFileContent(),
+            "/src/project/cRandomFileForImport2.ts": getRandomFileContent(),
+            "/src/project/pkg0.d.ts": getPkgImportContent("Import", 0),
+        };
+    }
+
+    export function getFsWithMultipleProjects() {
+        return loadProjectFromFiles(getFsMapWithMultipleProjects());
+    }
+
+    export function getWatchSystemWithMultipleProjects() {
+        const system = createWatchedSystem(getFsMapWithMultipleProjects(), { currentDirectory: "/src/project" });
+        system.ensureFileOrFolder(libFile);
+        return system;
+    }
+
+    export function getServerHostWithMultipleProjects() {
+        const system = TestFSWithWatch.createServerHost(getFsMapWithMultipleProjects(), { currentDirectory: "/src/project" });
+        system.writeFile(libFile.path, libFile.content);
+        return system;
+    }
+
+    export function getWatchSystemWithMultipleProjectsWithBuild() {
+        const system = getWatchSystemWithMultipleProjects();
+        solutionBuildWithBaseline(system, ["/src/project"]);
+        return system;
+    }
+
+    export function getServerHostWithMultipleProjectsWithBuild() {
+        const system = getServerHostWithMultipleProjects();
+        solutionBuildWithBaseline(system, ["/src/project"]);
+        return system;
     }
 }

@@ -216,12 +216,19 @@ interface Symbol {
 
     export type ReadableProgramBuildInfoResolutionEntry = [name: string, resolution: ReadableProgramBuildInfoResolution, mode?: string];
     export type ReadableProgramBuildInfoResolutionCache = [dir: string, resolutions: readonly ReadableProgramBuildInfoResolutionEntry[]][];
+    export type ReadableProgramBuildInfoResolutionRedirectsCache = Omit<ProgramBuildInfoResolutionRedirectsCache, "cache"> & {
+        cache: ReadableProgramBuildInfoResolutionCache;
+    };
+    export type ReadableProgramBuildInfoResolutionCacheWithRedirects = ReadableProgramBuildInfoResolutionCache | {
+        own: ReadableProgramBuildInfoResolutionCache | undefined;
+        redirects: readonly ReadableProgramBuildInfoResolutionRedirectsCache[];
+    };
     export interface ReadableProgramBuildInfoCacheResolutions {
         resolutions: readonly ReadableProgramBuildInfoResolution[];
         names: readonly string[];
         resolutionEntries: ReadableProgramBuildInfoResolutionEntry[];
-        modules?: ReadableProgramBuildInfoResolutionCache;
-        typeRefs?: ReadableProgramBuildInfoResolutionCache;
+        modules?: ReadableProgramBuildInfoResolutionCacheWithRedirects;
+        typeRefs?: ReadableProgramBuildInfoResolutionCacheWithRedirects;
     }
 
     type ReadableProgramMultiFileEmitBuildInfo = Omit<ProgramMultiFileEmitBuildInfo,
@@ -359,8 +366,8 @@ interface Symbol {
                 ...cacheResolutions,
                 resolutions,
                 resolutionEntries,
-                modules: toReadableProgramBuildInfoResolutionCache(cacheResolutions.modules),
-                typeRefs: toReadableProgramBuildInfoResolutionCache(cacheResolutions.typeRefs)
+                modules: toReadableProgramBuildInfoResolutionCacheWithRedirects(cacheResolutions.modules),
+                typeRefs: toReadableProgramBuildInfoResolutionCacheWithRedirects(cacheResolutions.typeRefs)
             };
         }
 
@@ -403,6 +410,17 @@ interface Symbol {
                 toFileName(dirId),
                 resolutions.map(toReadableProgramBuildInfoResolutionEntry)
             ]);
+        }
+
+        function toReadableProgramBuildInfoResolutionCacheWithRedirects(cache: ProgramBuildInfoResolutionCacheWithRedirects | undefined): ReadableProgramBuildInfoResolutionCacheWithRedirects | undefined {
+            return cache ?
+                isArray(cache) ?
+                    toReadableProgramBuildInfoResolutionCache(cache) :
+                    {
+                        own: toReadableProgramBuildInfoResolutionCache(cache.own),
+                        redirects: cache.redirects.map(r => ({ ...r, cache: toReadableProgramBuildInfoResolutionCache(r.cache)! }))
+                    }
+                : undefined;
         }
     }
 
