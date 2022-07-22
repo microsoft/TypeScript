@@ -20621,7 +20621,8 @@ namespace ts {
                 if (sourceInfo) {
                     return indexInfoRelatedTo(sourceInfo, targetInfo, reportErrors);
                 }
-                if (!(intersectionState & IntersectionState.Source) && isObjectTypeWithInferableIndex(source)) {
+                if (!(intersectionState & IntersectionState.Source) && isObjectTypeWithInferableIndex(source) &&
+                    !((relation === subtypeRelation || relation === strictSubtypeRelation) && isEmptyAnonymousObjectType(source) && !(getObjectFlags(source) & ObjectFlags.FreshLiteral))) {
                     // Intersection constituents are never considered to have an inferred index signature
                     return membersRelatedToIndexInfo(source, targetInfo, reportErrors);
                 }
