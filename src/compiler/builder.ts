@@ -66,8 +66,8 @@ namespace ts {
          */
         latestChangedDtsFile: string | undefined;
         cacheResolutions?: {
-            modules: CacheWithRedirects<ModeAwareCache<ResolvedModuleWithFailedLookupLocations>, Path> | undefined;
-            typeRefs: CacheWithRedirects<ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>, Path> | undefined;
+            modules: CacheWithRedirects<Path, ModeAwareCache<ResolvedModuleWithFailedLookupLocations>> | undefined;
+            typeRefs: CacheWithRedirects<Path, ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>> | undefined;
         };
         resuableCacheResolutions?: {
             cache: ProgramBuildInfoCacheResolutions;
@@ -1142,7 +1142,7 @@ namespace ts {
         }
 
         function toProgramBuildInfoResolutionCacheWithRedirects<T extends ResolvedModuleWithFailedLookupLocations | ResolvedTypeReferenceDirectiveWithFailedLookupLocations>(
-            cache: CacheWithRedirects<ModeAwareCache<T>, Path> | undefined
+            cache: CacheWithRedirects<Path, ModeAwareCache<T>> | undefined
         ): ProgramBuildInfoResolutionCacheWithRedirects | undefined {
             if (!cache) return undefined;
             const ownMap = cache.getOwnMap();
@@ -1234,8 +1234,8 @@ namespace ts {
 
     function getCacheResolutions(state: BuilderProgramState, getCanonicalFileName: GetCanonicalFileName) {
         if (state.cacheResolutions || !state.compilerOptions.cacheResolutions) return state.cacheResolutions;
-        let modules: CacheWithRedirects<ModeAwareCache<ResolvedModuleWithFailedLookupLocations>, Path> | undefined;
-        let typeRefs: CacheWithRedirects<ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>, Path> | undefined;
+        let modules: CacheWithRedirects<Path, ModeAwareCache<ResolvedModuleWithFailedLookupLocations>> | undefined;
+        let typeRefs: CacheWithRedirects<Path, ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>> | undefined;
         state.program!.getSourceFiles().forEach(f => {
             modules = toPerDirectoryCache(state, modules, f, f.resolvedModules);
             typeRefs = toPerDirectoryCache(state, typeRefs, f, f.resolvedTypeReferenceDirectiveNames);
@@ -1252,10 +1252,10 @@ namespace ts {
 
     function toPerDirectoryCache<T extends ResolvedModuleWithFailedLookupLocations | ResolvedTypeReferenceDirectiveWithFailedLookupLocations>(
         state: BuilderProgramState,
-        cacheWithRedirects: CacheWithRedirects<ModeAwareCache<T>, Path> | undefined,
+        cacheWithRedirects: CacheWithRedirects<Path, ModeAwareCache<T>> | undefined,
         fOrDirPath: SourceFile | Path,
         cache: ModeAwareCache<T> | undefined,
-    ): CacheWithRedirects<ModeAwareCache<T>, Path> | undefined {
+    ): CacheWithRedirects<Path, ModeAwareCache<T>> | undefined {
         if (!cache?.size()) return cacheWithRedirects;
         let dirPath: Path, redirectedReference: ResolvedProjectReference | undefined;
         if (!isString(fOrDirPath)) {
@@ -1861,7 +1861,7 @@ namespace ts {
         type Resolution = ResolvedModuleWithFailedLookupLocations & ResolvedTypeReferenceDirectiveWithFailedLookupLocations;
         type ResolutionEntry = [name: string, resolutionId: ProgramBuildInfoResolutionId, mode: ResolutionMode];
         type BuildInfoResolutionEntriesOrModeAwareCache = readonly ProgramBuildInfoResolutionEntryId[] | ModeAwareCache<ProgramBuildInfoResolutionId>;
-        type DecodedResolvedMap = CacheWithRedirects<BuildInfoResolutionEntriesOrModeAwareCache, Path>;
+        type DecodedResolvedMap = CacheWithRedirects<Path, BuildInfoResolutionEntriesOrModeAwareCache>;
         const decodedResolvedModules: DecodedResolvedMap = createCacheWithRedirects(state.compilerOptions);
         const decodedResolvedTypeRefs: DecodedResolvedMap = createCacheWithRedirects(state.compilerOptions);
 
@@ -1897,7 +1897,7 @@ namespace ts {
         }
 
         function getResolvedFromCache(
-            cache: CacheWithRedirects<ModeAwareCache<ResolvedModuleWithFailedLookupLocations | ResolvedTypeReferenceDirectiveWithFailedLookupLocations>, Path> | undefined,
+            cache: CacheWithRedirects<Path, ModeAwareCache<ResolvedModuleWithFailedLookupLocations | ResolvedTypeReferenceDirectiveWithFailedLookupLocations>> | undefined,
             reusableCache: ProgramBuildInfoResolutionCacheWithRedirects | undefined,
             decodedReusableCache: DecodedResolvedMap,
             dirPath: Path,
