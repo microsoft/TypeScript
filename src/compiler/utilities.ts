@@ -7674,8 +7674,56 @@ namespace ts {
             factory.createStringLiteral(name, !!singleQuote);
     }
 
+    export function isConditionalType(type: Type): type is ConditionalType {
+        return !!(type.flags & TypeFlags.Conditional);
+    }
+
+    export function isIndexType(type: Type): type is IndexType {
+        return !!(type.flags & TypeFlags.Index);
+    }
+
+    export function isIndexedAccessType(type: Type): type is IndexedAccessType {
+        return !!(type.flags & TypeFlags.IndexedAccess);
+    }
+
+    export function isIntersectionType(type: Type): type is IntersectionType {
+        return !!(type.flags & TypeFlags.Intersection);
+    }
+
+    export function isObjectType(type: Type): type is ObjectType {
+        return !!(type.flags & TypeFlags.Object);
+    }
+
+    export function isStringMappingType(type: Type): type is StringMappingType {
+        return !!(type.flags & TypeFlags.StringMapping);
+    }
+
+    export function isSubstitutionType(type: Type): type is SubstitutionType {
+        return !!(type.flags & TypeFlags.Substitution);
+    }
+
+    export function isTemplateLiteralType(type: Type): type is TemplateLiteralType {
+        return !!(type.flags & TypeFlags.TemplateLiteral);
+    }
+
+    export function isTypeParameterType(type: Type): type is TypeParameter {
+        return !!(type.flags & TypeFlags.TypeParameter);
+    }
+
     export function isThisTypeParameter(type: Type): boolean {
-        return !!(type.flags & TypeFlags.TypeParameter && (type as TypeParameter).isThisType);
+        return isTypeParameterType(type) && !!type.isThisType;
+    }
+
+    export function isTypeVariableType(type: Type): type is TypeVariable {
+        return !!(type.flags & TypeFlags.TypeVariable);
+    }
+
+    export function isUnionType(type: Type): type is UnionType {
+        return !!(type.flags & TypeFlags.Union);
+    }
+
+    export function isUnionOrIntersectionType(type: Type): type is IntersectionType | UnionType {
+        return !!(type.flags & TypeFlags.Union | TypeFlags.Intersection);
     }
 
     export interface NodeModulePathParts {
