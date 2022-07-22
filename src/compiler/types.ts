@@ -4538,6 +4538,7 @@ export interface Program extends ScriptReferenceHost {
     /** @internal */ getResolvedProjectReferenceToRedirect(fileName: string): ResolvedProjectReference | undefined;
     /** @internal */ forEachResolvedProjectReference<T>(cb: (resolvedProjectReference: ResolvedProjectReference) => T | undefined): T | undefined;
     /** @internal */ getResolvedProjectReferenceByPath(projectReferencePath: Path): ResolvedProjectReference | undefined;
+    /** @internal */ getRedirectReferenceForResolution(file: SourceFile): ResolvedProjectReference | undefined;
     /** @internal */ isSourceOfProjectReferenceRedirect(fileName: string): boolean;
     /** @internal */ getBuildInfo?(bundle: BundleBuildInfo | undefined, buildInfoPath: string): BuildInfo;
     /** @internal */ emitBuildInfo(writeFile?: WriteFileCallback, cancellationToken?: CancellationToken): EmitResult;
@@ -6972,13 +6973,14 @@ export interface CreateProgramOptions {
 /** @internal */
 export interface OldBuildInfoProgram {
     getCompilerOptions(): CompilerOptions;
-    getResolvedModule(name: string, mode: ResolutionMode, dirPath: Path): ResolvedModuleWithFailedLookupLocations | undefined;
-    getResolvedTypeReferenceDirective(name: string, mode: ResolutionMode, dirPath: Path): ResolvedTypeReferenceDirectiveWithFailedLookupLocations | undefined;
+    getResolvedModule(name: string, mode: ResolutionMode, dirPath: Path, redirectedReference: ResolvedProjectReference | undefined): ResolvedModuleWithFailedLookupLocations | undefined;
+    getResolvedTypeReferenceDirective(name: string, mode: ResolutionMode, dirPath: Path, redirectedReference: ResolvedProjectReference | undefined): ResolvedTypeReferenceDirectiveWithFailedLookupLocations | undefined;
 }
 
 /** @internal */
 export interface OldBuildInfoProgramHost {
     fileExists(fileName: string): boolean;
+    getCompilerOptions(): CompilerOptions;
 }
 
 /** @internal */

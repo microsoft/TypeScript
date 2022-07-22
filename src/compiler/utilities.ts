@@ -615,7 +615,8 @@ export function changesAffectModuleResolution(oldOptions: CompilerOptions, newOp
 
 /** @internal */
 export function optionsHaveModuleResolutionChanges(oldOptions: CompilerOptions, newOptions: CompilerOptions) {
-    return optionsHaveChanges(oldOptions, newOptions, moduleResolutionOptionDeclarations);
+    return oldOptions.pathsBasePath !== newOptions.pathsBasePath ||
+        optionsHaveChanges(oldOptions, newOptions, moduleResolutionOptionDeclarations);
 }
 
 /** @internal */

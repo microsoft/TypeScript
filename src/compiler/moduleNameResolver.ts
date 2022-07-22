@@ -705,8 +705,10 @@ export interface ModeAwareCache<T> {
  * This assumes that any module id will have the same resolution for sibling files located in the same folder.
  */
 export interface PerDirectoryResolutionCache<T> {
+    /** @internal*/ perDirectoryMap: CacheWithRedirects<Path, ModeAwareCache<T>>;
     getFromDirectoryCache(name: string, mode: ResolutionMode, directoryName: string, redirectedReference: ResolvedProjectReference | undefined): T | undefined;
     getOrCreateCacheForDirectory(directoryName: string, redirectedReference?: ResolvedProjectReference): ModeAwareCache<T>;
+    /** @internal*/ getOrCreateCacheForDirectoryWithPath(directory: Path, redirectedReference: ResolvedProjectReference | undefined): ModeAwareCache<T>;
     clear(): void;
     /**
      *  Updates with the current compilerOptions the cache will operate with.
@@ -780,13 +782,18 @@ export function getKeyForCompilerOptions(options: CompilerOptions, affectingOpti
 export interface CacheWithRedirects<K, V> {
     getMapOfCacheRedirects(redirectedReference: ResolvedProjectReference | undefined): Map<K, V> | undefined;
     getOrCreateMapOfCacheRedirects(redirectedReference: ResolvedProjectReference | undefined): Map<K, V>;
+    getOrCreateMap(redirectOptions: CompilerOptions, create: true): Map<K, V>;
+    getOrCreateMap(redirectOptions: CompilerOptions, create: false): Map<K, V> | undefined;
     update(newOptions: CompilerOptions): void;
     clear(): void;
+    getOwnMap(): Map<K, V>;
+    redirectsMap: Map<CompilerOptions, Map<K, V>>;
 }
 
 /** @internal */
+export type RedirectsCacheKey = string & { __compilerOptionsKey: any; };
+/** @internal */
 export function createCacheWithRedirects<K, V>(ownOptions: CompilerOptions | undefined): CacheWithRedirects<K, V> {
-    type RedirectsCacheKey = string & { __compilerOptionsKey: any; };
     const redirectsMap = new Map<CompilerOptions, Map<K, V>>();
     const optionsToRedirectsKey = new Map<CompilerOptions, RedirectsCacheKey>();
     const redirectsKeyToMap = new Map<RedirectsCacheKey, Map<K, V>>();
@@ -795,8 +802,11 @@ export function createCacheWithRedirects<K, V>(ownOptions: CompilerOptions | und
     return {
         getMapOfCacheRedirects,
         getOrCreateMapOfCacheRedirects,
+        getOrCreateMap,
         update,
         clear,
+        getOwnMap: () => ownMap,
+        redirectsMap,
     };
 
     function getMapOfCacheRedirects(redirectedReference: ResolvedProjectReference | undefined): Map<K, V> | undefined {
@@ -891,31 +901,40 @@ function getOrCreateCache<K, V>(cacheWithRedirects: CacheWithRedirects<K, V>, re
     return result;
 }
 
-function createPerDirectoryResolutionCache<T>(currentDirectory: string, getCanonicalFileName: GetCanonicalFileName, options: CompilerOptions | undefined): PerDirectoryResolutionCache<T> {
-    const directoryToModuleNameMap = createCacheWithRedirects<Path, ModeAwareCache<T>>(options);
+/** @internal */
+export function createPerDirectoryResolutionCache<T>(currentDirectory: string, getCanonicalFileName: GetCanonicalFileName, options: CompilerOptions | undefined): PerDirectoryResolutionCache<T> {
+    const perDirectoryMap = createCacheWithRedirects<Path, ModeAwareCache<T>>(options);
     return {
+        perDirectoryMap,
         getFromDirectoryCache,
         getOrCreateCacheForDirectory,
+        getOrCreateCacheForDirectoryWithPath,
         clear,
         update,
     };
 
     function clear() {
-        directoryToModuleNameMap.clear();
+        perDirectoryMap.clear();
     }
 
     function update(options: CompilerOptions) {
-        directoryToModuleNameMap.update(options);
+        perDirectoryMap.update(options);
     }
 
     function getOrCreateCacheForDirectory(directoryName: string, redirectedReference?: ResolvedProjectReference) {
-        const path = toPath(directoryName, currentDirectory, getCanonicalFileName);
-        return getOrCreateCache(directoryToModuleNameMap, redirectedReference, path, () => createModeAwareCache());
+        return getOrCreateCacheForDirectoryWithPath(toPath(directoryName, currentDirectory, getCanonicalFileName), redirectedReference);
+    }
+
+    function getOrCreateCacheForDirectoryWithPath(directory: Path, redirectedReference: ResolvedProjectReference | undefined) {
+        return getOrCreateCache(perDirectoryMap, redirectedReference, directory, () => createModeAwareCache());
     }
 
     function getFromDirectoryCache(name: string, mode: ResolutionMode, directoryName: string, redirectedReference: ResolvedProjectReference | undefined) {
-        const path = toPath(directoryName, currentDirectory, getCanonicalFileName);
-        return directoryToModuleNameMap.getMapOfCacheRedirects(redirectedReference)?.get(path)?.get(name, mode);
+        return getFromDirectoryCacheWithPath(name, mode, toPath(directoryName, currentDirectory, getCanonicalFileName), redirectedReference);
+    }
+
+    function getFromDirectoryCacheWithPath(name: string, mode: ResolutionMode, directory: Path, redirectedReference: ResolvedProjectReference | undefined) {
+        return perDirectoryMap.getMapOfCacheRedirects(redirectedReference)?.get(directory)?.get(name, mode);
     }
 }
 

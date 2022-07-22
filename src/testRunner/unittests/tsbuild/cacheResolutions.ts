@@ -1,9 +1,11 @@
+import * as ts from "../../_namespaces/ts";
 import {
     noChangeRun,
     prependText,
     verifyTsc,
 } from "../tsc/helpers";
 import {
+    getFsWithMultipleProjects,
     getFsWithNode16,
     getFsWithOut,
     getPkgImportContent,
@@ -64,6 +66,64 @@ describe("unittests:: tsbuild:: cacheResolutions::", () => {
             {
                 caption: "modify randomFileForTypeRef by adding typeRef",
                 edit: fs => prependText(fs, "/src/project/randomFileForTypeRef.ts", `/// <reference types="pkg2"/>\n`),
+            },
+        ]
+    });
+
+    verifyTsc({
+        scenario: "cacheResolutions",
+        subScenario: "multi project",
+        fs: getFsWithMultipleProjects,
+        commandLineArgs: ["-b", "/src/project", "--explainFiles", "--v"],
+        baselineModulesAndTypeRefs: true,
+        edits: [
+            {
+                caption: "modify aRandomFileForImport by adding import",
+                edit: fs => prependText(fs, "/src/project/aRandomFileForImport.ts", `export type { ImportInterface0 } from "pkg0";\n`),
+            },
+            {
+                caption: "modify bRandomFileForImport by adding import",
+                edit: fs => prependText(fs, "/src/project/bRandomFileForImport.ts", `export type { ImportInterface0 } from "pkg0";\n`),
+            },
+            {
+                caption: "modify cRandomFileForImport by adding import",
+                edit: fs => prependText(fs, "/src/project/cRandomFileForImport.ts", `export type { ImportInterface0 } from "pkg0";\n`),
+            },
+            {
+                caption: "Project build on B",
+                edit: ts.noop,
+                commandLineArgs: ["-p", "/src/project/tsconfig.b.json", "--explainFiles"],
+                discrepancyExplanation: () => [
+                    "During incremental build, build succeeds because everything was built",
+                    "Clean build does not have project build from a so it errors and has extra errors and incorrect buildinfo",
+                ]
+            },
+            {
+                caption: "modify bRandomFileForImport2 by adding import and project build",
+                edit: fs => prependText(fs, "/src/project/bRandomFileForImport2.ts", `export type { ImportInterface0 } from "pkg0";\n`),
+                commandLineArgs: ["-p", "/src/project/tsconfig.b.json", "--explainFiles"],
+                discrepancyExplanation: () => [
+                    "During incremental build, build succeeds because everything was built",
+                    "Clean build does not have project build from a so it errors and has extra errors and incorrect buildinfo",
+                ]
+            },
+            {
+                caption: "Project build on c",
+                edit: ts.noop,
+                commandLineArgs: ["-p", "/src/project", "--explainFiles"],
+                discrepancyExplanation: () => [
+                    "During incremental build, build succeeds because everything was built",
+                    "Clean build does not have project build from a and b so it errors and has extra errors and incorrect buildinfo",
+                ]
+            },
+            {
+                caption: "modify cRandomFileForImport2 by adding import and project build",
+                edit: fs => prependText(fs, "/src/project/cRandomFileForImport2.ts", `export type { ImportInterface0 } from "pkg0";\n`),
+                commandLineArgs: ["-p", "/src/project", "--explainFiles"],
+                discrepancyExplanation: () => [
+                    "During incremental build, build succeeds because everything was built",
+                    "Clean build does not have project build from a and b so it errors and has extra errors and incorrect buildinfo",
+                ]
             },
         ]
     });
