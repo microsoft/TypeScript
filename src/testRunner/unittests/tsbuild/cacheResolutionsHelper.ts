@@ -242,3 +242,100 @@ export function getServerHostWithMultipleProjectsWithBuild() {
     solutionBuildWithBaseline(system, ["/src/project"]);
     return system;
 }
+
+function getFsMapWithSameResolutionFromMultiplePlaces(): { [path: string]: string; } {
+    return {
+        "/src/project/tsconfig.json": JSON.stringify({
+            compilerOptions: {
+                composite: true,
+                cacheResolutions: true,
+                traceResolution: true,
+            },
+            files: [
+                "fileWithImports.ts",
+                "randomFileForImport.ts",
+                "a/fileWithImports.ts",
+                "b/ba/fileWithImports.ts",
+                "b/randomFileForImport.ts",
+                "c/ca/fileWithImports.ts",
+                "c/ca/caa/randomFileForImport.ts",
+                "c/ca/caa/caaa/fileWithImports.ts",
+                "c/cb/fileWithImports.ts",
+                "d/da/daa/daaa/fileWithImports.ts",
+                "d/da/daa/fileWithImports.ts",
+                "d/da/fileWithImports.ts",
+                "e/ea/fileWithImports.ts",
+                "e/ea/eaa/fileWithImports.ts",
+                "e/ea/eaa/eaaa/fileWithImports.ts",
+            ],
+        }),
+        "/src/project/fileWithImports.ts": Utils.dedent`
+            import type { ImportInterface0 } from "pkg0";
+        `,
+        "/src/project/randomFileForImport.ts": getRandomFileContent(),
+        "/src/project/a/fileWithImports.ts": Utils.dedent`
+            import type { ImportInterface0 } from "pkg0";
+        `,
+        "/src/project/b/ba/fileWithImports.ts": Utils.dedent`
+            import type { ImportInterface0 } from "pkg0";
+        `,
+        "/src/project/b/randomFileForImport.ts": getRandomFileContent(),
+        "/src/project/c/ca/fileWithImports.ts": Utils.dedent`
+            import type { ImportInterface0 } from "pkg0";
+        `,
+        "/src/project/c/ca/caa/randomFileForImport.ts": getRandomFileContent(),
+        "/src/project/c/ca/caa/caaa/fileWithImports.ts": Utils.dedent`
+            import type { ImportInterface0 } from "pkg0";
+        `,
+        "/src/project/c/cb/fileWithImports.ts": Utils.dedent`
+            import type { ImportInterface0 } from "pkg0";
+        `,
+        "/src/project/d/da/daa/daaa/fileWithImports.ts": Utils.dedent`
+            import type { ImportInterface0 } from "pkg0";
+        `,
+        "/src/project/d/da/daa/fileWithImports.ts": Utils.dedent`
+            import type { ImportInterface0 } from "pkg0";
+        `,
+        "/src/project/d/da/fileWithImports.ts": Utils.dedent`
+            import type { ImportInterface0 } from "pkg0";
+        `,
+        "/src/project/e/ea/fileWithImports.ts": Utils.dedent`
+            import type { ImportInterface0 } from "pkg0";
+        `,
+        "/src/project/e/ea/eaa/fileWithImports.ts": Utils.dedent`
+            import type { ImportInterface0 } from "pkg0";
+        `,
+        "/src/project/e/ea/eaa/eaaa/fileWithImports.ts": Utils.dedent`
+            import type { ImportInterface0 } from "pkg0";
+        `,
+        "/src/project/node_modules/pkg0/index.d.ts": getPkgImportContent("Import", 0),
+    };
+}
+
+export function getFsWithSameResolutionFromMultiplePlaces() {
+    return loadProjectFromFiles(getFsMapWithSameResolutionFromMultiplePlaces());
+}
+
+export function getWatchSystemWithSameResolutionFromMultiplePlaces() {
+    const system = createWatchedSystem(getFsMapWithSameResolutionFromMultiplePlaces(), { currentDirectory: "/src/project" });
+    system.ensureFileOrFolder(libFile);
+    return system;
+}
+
+export function getServerHostWithSameResolutionFromMultiplePlaces() {
+    const system = createServerHost(getFsMapWithSameResolutionFromMultiplePlaces(), { currentDirectory: "/src/project" });
+    system.writeFile(libFile.path, libFile.content);
+    return system;
+}
+
+export function getWatchSystemWithSameResolutionFromMultiplePlacesWithBuild() {
+    const system = getWatchSystemWithSameResolutionFromMultiplePlaces();
+    solutionBuildWithBaseline(system, ["/src/project"]);
+    return system;
+}
+
+export function getServerHostWithSameResolutionFromMultiplePlacesWithBuild() {
+    const system = getServerHostWithSameResolutionFromMultiplePlaces();
+    solutionBuildWithBaseline(system, ["/src/project"]);
+    return system;
+}

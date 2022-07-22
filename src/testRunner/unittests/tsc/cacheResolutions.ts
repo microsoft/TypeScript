@@ -6,6 +6,7 @@ import {
 import {
     getFsWithNode16,
     getFsWithOut,
+    getFsWithSameResolutionFromMultiplePlaces,
     getPkgImportContent,
     getPkgTypeRefContent,
 } from "../tsbuild/cacheResolutionsHelper";
@@ -222,5 +223,33 @@ describe("unittests:: tsc:: cacheResolutions::", () => {
             caption: "modify randomFileForImport by adding import",
             edit: fs => prependText(fs, "/src/project/randomFileForImport.ts", `import * as me from "@this/package";\n`),
         }],
+    });
+
+    verifyTsc({
+        scenario: "cacheResolutions",
+        subScenario: "multiple places",
+        fs: getFsWithSameResolutionFromMultiplePlaces,
+        commandLineArgs: ["-p", "/src/project", "--explainFiles"],
+        baselineModulesAndTypeRefs: true,
+        edits: [
+            {
+                caption: "modify randomFileForImport by adding import",
+                edit: fs => prependText(fs, "/src/project/randomFileForImport.ts", `import type { ImportInterface0 } from "pkg0";\n`),
+            },
+            {
+                caption: "modify b/randomFileForImport by adding import",
+                edit: fs => prependText(fs, "/src/project/b/randomFileForImport.ts", `import type { ImportInterface0 } from "pkg0";\n`),
+                discrepancyExplanation: () => [
+                    "Resolution is not reused in incremental which is TODO (shkamat)"
+                ]
+            },
+            {
+                caption: "modify c/ca/caa/randomFileForImport by adding import",
+                edit: fs => prependText(fs, "/src/project/c/ca/caa/randomFileForImport.ts", `import type { ImportInterface0 } from "pkg0";\n`),
+                discrepancyExplanation: () => [
+                    "Resolution is not reused in incremental which is TODO (shkamat)"
+                ]
+            },
+        ]
     });
 });

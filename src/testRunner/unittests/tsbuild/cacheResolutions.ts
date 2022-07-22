@@ -8,6 +8,7 @@ import {
     getFsWithMultipleProjects,
     getFsWithNode16,
     getFsWithOut,
+    getFsWithSameResolutionFromMultiplePlaces,
     getPkgImportContent,
     getPkgTypeRefContent,
 } from "./cacheResolutionsHelper";
@@ -123,6 +124,34 @@ describe("unittests:: tsbuild:: cacheResolutions::", () => {
                 discrepancyExplanation: () => [
                     "During incremental build, build succeeds because everything was built",
                     "Clean build does not have project build from a and b so it errors and has extra errors and incorrect buildinfo",
+                ]
+            },
+        ]
+    });
+
+    verifyTsc({
+        scenario: "cacheResolutions",
+        subScenario: "multiple places",
+        fs: getFsWithSameResolutionFromMultiplePlaces,
+        commandLineArgs: ["-b", "/src/project", "--explainFiles"],
+        baselineModulesAndTypeRefs: true,
+        edits: [
+            {
+                caption: "modify randomFileForImport by adding import",
+                edit: fs => prependText(fs, "/src/project/randomFileForImport.ts", `import type { ImportInterface0 } from "pkg0";\n`),
+            },
+            {
+                caption: "modify b/randomFileForImport by adding import",
+                edit: fs => prependText(fs, "/src/project/b/randomFileForImport.ts", `import type { ImportInterface0 } from "pkg0";\n`),
+                discrepancyExplanation: () => [
+                    "Resolution is not reused in incremental which is TODO (shkamat)"
+                ]
+            },
+            {
+                caption: "modify c/ca/caa/randomFileForImport by adding import",
+                edit: fs => prependText(fs, "/src/project/c/ca/caa/randomFileForImport.ts", `import type { ImportInterface0 } from "pkg0";\n`),
+                discrepancyExplanation: () => [
+                    "Resolution is not reused in incremental which is TODO (shkamat)"
                 ]
             },
         ]
