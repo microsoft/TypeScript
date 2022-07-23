@@ -11959,8 +11959,8 @@ namespace ts {
 
         function getPropertiesOfType(type: Type): Symbol[] {
             type = getReducedApparentType(type);
-            return type.flags & TypeFlags.UnionOrIntersection ?
-                getPropertiesOfUnionOrIntersectionType(type as UnionType) :
+            return isUnionOrIntersectionType(type) ?
+                getPropertiesOfUnionOrIntersectionType(type) :
                 getPropertiesOfObjectType(type);
         }
 
@@ -12712,7 +12712,7 @@ namespace ts {
             // signature applies to types assignable to 'number', `${number}` and numeric string literal types.
             return isTypeAssignableTo(source, target) ||
                 target === stringType && isTypeAssignableTo(source, numberType) ||
-                target === numberType && (source === numericStringType || !!(source.flags & TypeFlags.StringLiteral) && isNumericLiteralName((source as StringLiteralType).value));
+                target === numberType && (source === numericStringType || isStringLiteralType(source) && isNumericLiteralName(source.value));
         }
 
         function getIndexInfosOfStructuredType(type: Type): readonly IndexInfo[] {
@@ -15436,7 +15436,7 @@ namespace ts {
         }
 
         function getTemplateStringForType(type: Type) {
-            return type.flags & TypeFlags.StringLiteral ? (type as StringLiteralType).value :
+            return isStringLiteralType(type) ? type.value :
                 isNumberLiteralType(type) ? "" + type.value :
                 isBigIntLiteralType(type) ? pseudoBigIntToString(type.value) :
                 type.flags & (TypeFlags.BooleanLiteral | TypeFlags.Nullable) ? (type as IntrinsicType).intrinsicName :
@@ -15736,11 +15736,11 @@ namespace ts {
         }
 
         function isPatternLiteralPlaceholderType(type: Type): boolean {
-            return !!(type.flags & (TypeFlags.Any | TypeFlags.String | TypeFlags.Number | TypeFlags.BigInt)) || !!(type.flags & TypeFlags.StringMapping && isPatternLiteralPlaceholderType((type as StringMappingType).type));
+            return !!(type.flags & (TypeFlags.Any | TypeFlags.String | TypeFlags.Number | TypeFlags.BigInt)) || !!(isStringMappingType(type) && isPatternLiteralPlaceholderType(type.type));
         }
 
         function isPatternLiteralType(type: Type) {
-            return !!(type.flags & TypeFlags.TemplateLiteral) && every((type as TemplateLiteralType).types, isPatternLiteralPlaceholderType);
+            return isTemplateLiteralType(type) && every(type.types, isPatternLiteralPlaceholderType);
         }
 
         function isGenericType(type: Type): boolean {
@@ -15793,8 +15793,8 @@ namespace ts {
         function distributeObjectOverIndexType(objectType: Type, indexType: Type, writing: boolean) {
             // T[A | B] -> T[A] | T[B] (reading)
             // T[A | B] -> T[A] & T[B] (writing)
-            if (indexType.flags & TypeFlags.Union) {
-                const types = map((indexType as UnionType).types, t => getSimplifiedType(getIndexedAccessType(objectType, t), writing));
+            if (isUnionType(indexType)) {
+                const types = map(indexType.types, t => getSimplifiedType(getIndexedAccessType(objectType, t), writing));
                 return writing ? getIntersectionType(types) : getUnionType(types);
             }
         }
@@ -15945,10 +15945,10 @@ namespace ts {
             // We treat boolean as different from other unions to improve errors;
             // skipping straight to getPropertyTypeForIndexType gives errors with 'boolean' instead of 'true'.
             const apparentObjectType = getReducedApparentType(objectType);
-            if (indexType.flags & TypeFlags.Union && !(indexType.flags & TypeFlags.Boolean)) {
+            if (isUnionType(indexType) && !(indexType.flags & TypeFlags.Boolean)) {
                 const propTypes: Type[] = [];
                 let wasMissingProp = false;
-                for (const t of (indexType as UnionType).types) {
+                for (const t of indexType.types) {
                     const propType = getPropertyTypeForIndexType(objectType, apparentObjectType, t, indexType, accessNode, accessFlags | (wasMissingProp ? AccessFlags.SuppressNoImplicitAnyError : 0));
                     if (propType) {
                         propTypes.push(propType);
@@ -16383,17 +16383,17 @@ namespace ts {
         }
 
         function tryMergeUnionOfObjectTypeAndEmptyObject(type: Type, readonly: boolean): Type {
-            if (!(type.flags & TypeFlags.Union)) {
+            if (!isUnionType(type)) {
                 return type;
             }
-            if (every((type as UnionType).types, isEmptyObjectTypeOrSpreadsIntoEmptyObject)) {
-                return find((type as UnionType).types, isEmptyObjectType) || emptyObjectType;
+            if (every(type.types, isEmptyObjectTypeOrSpreadsIntoEmptyObject)) {
+                return find(type.types, isEmptyObjectType) || emptyObjectType;
             }
-            const firstType = find((type as UnionType).types, t => !isEmptyObjectTypeOrSpreadsIntoEmptyObject(t));
+            const firstType = find(type.types, t => !isEmptyObjectTypeOrSpreadsIntoEmptyObject(t));
             if (!firstType) {
                 return type;
             }
-            const secondType = find((type as UnionType).types, t => t !== firstType && !isEmptyObjectTypeOrSpreadsIntoEmptyObject(t));
+            const secondType = find(type.types, t => t !== firstType && !isEmptyObjectTypeOrSpreadsIntoEmptyObject(t));
             if (secondType) {
                 return type;
             }
@@ -16563,7 +16563,7 @@ namespace ts {
 
         function getRegularTypeOfLiteralType(type: Type): Type {
             return type.flags & TypeFlags.Literal ? (type as LiteralType).regularType :
-                type.flags & TypeFlags.Union ? ((type as UnionType).regularType || ((type as UnionType).regularType = mapType(type, getRegularTypeOfLiteralType) as UnionType)) :
+                isUnionType(type) ? (type.regularType || (type.regularType = mapType(type, getRegularTypeOfLiteralType) as UnionType)) :
                 type;
         }
 
@@ -22062,10 +22062,10 @@ namespace ts {
         function createEmptyObjectTypeFromStringLiteral(type: Type) {
             const members = createSymbolTable();
             forEachType(type, t => {
-                if (!(t.flags & TypeFlags.StringLiteral)) {
+                if (!isStringLiteralType(t)) {
                     return;
                 }
-                const name = escapeLeadingUnderscores((t as StringLiteralType).value);
+                const name = escapeLeadingUnderscores(t.value);
                 const literalProp = createSymbol(SymbolFlags.Property, name);
                 literalProp.type = anyType;
                 if (t.symbol) {
@@ -22274,7 +22274,7 @@ namespace ts {
             if (target.flags & TypeFlags.TemplateLiteral) {
                 return isTypeAssignableTo(source, target);
             }
-            if (target.flags & TypeFlags.StringMapping) {
+            if (isStringMappingType(target)) {
                 // We need to see whether applying the same mappings of the target
                 // onto the source would produce an identical type *and* that
                 // it's compatible with the inner-most non-string-mapped type.
@@ -22283,9 +22283,9 @@ namespace ts {
                 // and the source is compatible with the unmapped target, then they must
                 // still reside in the same domain.
                 const mappingStack = [];
-                while (target.flags & TypeFlags.StringMapping) {
+                while (isStringMappingType(target)) {
                     mappingStack.unshift(target.symbol);
-                    target = (target as StringMappingType).type;
+                    target = target.type;
                 }
                 const mappedSource = reduceLeft(mappingStack, (memo, value) => getStringMappingType(value, memo), source);
                 return mappedSource === source && isMemberOfStringMapping(source, target);
@@ -22902,16 +22902,16 @@ namespace ts {
 
                         // If we are inferring from a string literal type to a type variable whose constraint includes one of the
                         // allowed template literal placeholder types, infer from a literal type corresponding to the constraint.
-                        if (source.flags & TypeFlags.StringLiteral && target.flags & TypeFlags.TypeVariable) {
+                        if (isStringLiteralType(source) && target.flags & TypeFlags.TypeVariable) {
                             const inferenceContext = getInferenceInfoForType(target);
                             const constraint = inferenceContext ? getBaseConstraintOfType(inferenceContext.typeParameter) : undefined;
                             if (constraint && !isTypeAny(constraint)) {
-                                const constraintTypes = constraint.flags & TypeFlags.Union ? (constraint as UnionType).types : [constraint];
+                                const constraintTypes = isUnionType(constraint) ? constraint.types : [constraint];
                                 let allTypeFlags: TypeFlags = reduceLeft(constraintTypes, (flags, t) => flags | t.flags, 0 as TypeFlags);
 
                                 // If the constraint contains `string`, we don't need to look for a more preferred type
                                 if (!(allTypeFlags & TypeFlags.String)) {
-                                    const str = (source as StringLiteralType).value;
+                                    const str = source.value;
 
                                     // If the type contains `number` or a number literal and the string isn't a valid number, exclude numbers
                                     if (allTypeFlags & TypeFlags.NumberLike && !isValidNumberString(str, /*roundTripOnly*/ true)) {
@@ -23662,7 +23662,7 @@ namespace ts {
                 return strictNullChecks ? TypeFacts.StringStrictFacts : TypeFacts.StringFacts;
             }
             if (flags & (TypeFlags.StringLiteral | TypeFlags.TemplateLiteral)) {
-                const isEmpty = flags & TypeFlags.StringLiteral && (type as StringLiteralType).value === "";
+                const isEmpty = isStringLiteralType(type) && type.value === "";
                 return strictNullChecks ?
                     isEmpty ? TypeFacts.EmptyStringStrictFacts : TypeFacts.NonEmptyStringStrictFacts :
                     isEmpty ? TypeFacts.EmptyStringFacts : TypeFacts.NonEmptyStringFacts;
@@ -24743,7 +24743,7 @@ namespace ts {
                         }
                         else if (expr.kind === SyntaxKind.TypeOfExpression && optionalChainContainsReference((expr as TypeOfExpression).expression, reference)) {
                             type = narrowTypeBySwitchOptionalChainContainment(type, flow.switchStatement, flow.clauseStart, flow.clauseEnd,
-                                t => !(t.flags & TypeFlags.Never || t.flags & TypeFlags.StringLiteral && (t as StringLiteralType).value === "undefined"));
+                                t => !(t.flags & TypeFlags.Never || isStringLiteralType(t) && t.value === "undefined"));
                         }
                     }
                     const access = getDiscriminantPropertyAccess(expr, type);
@@ -25093,8 +25093,8 @@ namespace ts {
                         }
                         const target = getReferenceCandidate(expr.right);
                         const leftType = getTypeOfNode(expr.left);
-                        if (leftType.flags & TypeFlags.StringLiteral) {
-                            const name = escapeLeadingUnderscores((leftType as StringLiteralType).value);
+                        if (isStringLiteralType(leftType)) {
+                            const name = escapeLeadingUnderscores(leftType.value);
                             if (containsMissingType(type) && isAccessExpression(reference) && isMatchingReference(reference.expression, target) &&
                                 getAccessedPropertyName(reference) === name) {
                                 return getTypeWithFacts(type, assumeTrue ? TypeFacts.NEUndefined : TypeFacts.EQUndefined);
@@ -27483,8 +27483,8 @@ namespace ts {
                 return getOrCreateTypeFromSignature(fakeSignature);
             }
             const tagType = checkExpressionCached(context.tagName);
-            if (tagType.flags & TypeFlags.StringLiteral) {
-                const result = getIntrinsicAttributesTypeFromStringLiteralType(tagType as StringLiteralType, context);
+            if (isStringLiteralType(tagType)) {
+                const result = getIntrinsicAttributesTypeFromStringLiteralType(tagType, context);
                 if (!result) {
                     return errorType;
                 }
@@ -28548,10 +28548,10 @@ namespace ts {
             if (elementType.flags & TypeFlags.String) {
                 return [anySignature];
             }
-            else if (elementType.flags & TypeFlags.StringLiteral) {
-                const intrinsicType = getIntrinsicAttributesTypeFromStringLiteralType(elementType as StringLiteralType, caller);
+            else if (isStringLiteralType(elementType)) {
+                const intrinsicType = getIntrinsicAttributesTypeFromStringLiteralType(elementType, caller);
                 if (!intrinsicType) {
-                    error(caller, Diagnostics.Property_0_does_not_exist_on_type_1, (elementType as StringLiteralType).value, "JSX." + JsxNames.IntrinsicElements);
+                    error(caller, Diagnostics.Property_0_does_not_exist_on_type_1, elementType.value, "JSX." + JsxNames.IntrinsicElements);
                     return emptyArray;
                 }
                 else {
