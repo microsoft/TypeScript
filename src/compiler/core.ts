@@ -1492,6 +1492,47 @@ namespace ts {
         return createMultiMap() as UnderscoreEscapedMultiMap<T>;
     }
 
+    export function createQueue<T>(items?: readonly T[]): Queue<T> {
+        const elements: (T | undefined)[] = items?.slice() || [];
+        let headIndex = 0;
+
+        function isEmpty() {
+            return headIndex === elements.length;
+        }
+
+        function enqueue(...items: T[]) {
+            elements.push(...items);
+        }
+
+        function dequeue(): T {
+            if (isEmpty()) {
+                throw new Error("Queue is empty");
+            }
+
+            const result = elements[headIndex] as T;
+            elements[headIndex] = undefined; // Don't keep referencing dequeued item
+            headIndex++;
+
+            // If more than half of the queue is empty, copy the remaining elements to the
+            // front and shrink the array (unless we'd be saving fewer than 100 slots)
+            if (headIndex > 100 && headIndex > (elements.length >> 1)) {
+                const newLength = elements.length - headIndex;
+                elements.copyWithin(/*target*/ 0, /*start*/ headIndex);
+
+                elements.length = newLength;
+                headIndex = 0;
+            }
+
+            return result;
+        }
+
+        return {
+            enqueue,
+            dequeue,
+            isEmpty,
+        };
+    }
+
     /**
      * Creates a Set with custom equality and hash code functionality.  This is useful when you
      * want to use something looser than object identity - e.g. "has the same span".
@@ -2064,7 +2105,7 @@ namespace ts {
      *         and 1 insertion/deletion at 3 characters)
      */
     export function getSpellingSuggestion<T>(name: string, candidates: T[], getName: (candidate: T) => string | undefined): T | undefined {
-        const maximumLengthDifference = Math.min(2, Math.floor(name.length * 0.34));
+        const maximumLengthDifference = Math.max(2, Math.floor(name.length * 0.34));
         let bestDistance = Math.floor(name.length * 0.4) + 1; // If the best result is worse than this, don't bother.
         let bestCandidate: T | undefined;
         for (const candidate of candidates) {

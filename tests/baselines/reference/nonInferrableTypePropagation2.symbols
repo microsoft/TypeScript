@@ -1,0 +1,136 @@
+=== tests/cases/compiler/nonInferrableTypePropagation2.ts ===
+export interface Predicate<A> {
+>Predicate : Symbol(Predicate, Decl(nonInferrableTypePropagation2.ts, 0, 0))
+>A : Symbol(A, Decl(nonInferrableTypePropagation2.ts, 0, 27))
+
+    (a: A): boolean
+>a : Symbol(a, Decl(nonInferrableTypePropagation2.ts, 1, 5))
+>A : Symbol(A, Decl(nonInferrableTypePropagation2.ts, 0, 27))
+}
+
+interface Left<E> {
+>Left : Symbol(Left, Decl(nonInferrableTypePropagation2.ts, 2, 1))
+>E : Symbol(E, Decl(nonInferrableTypePropagation2.ts, 4, 15))
+
+    readonly _tag: 'Left'
+>_tag : Symbol(Left._tag, Decl(nonInferrableTypePropagation2.ts, 4, 19))
+
+    readonly left: E
+>left : Symbol(Left.left, Decl(nonInferrableTypePropagation2.ts, 5, 25))
+>E : Symbol(E, Decl(nonInferrableTypePropagation2.ts, 4, 15))
+}
+  
+interface Right<A> {
+>Right : Symbol(Right, Decl(nonInferrableTypePropagation2.ts, 7, 1))
+>A : Symbol(A, Decl(nonInferrableTypePropagation2.ts, 9, 16))
+
+    readonly _tag: 'Right'
+>_tag : Symbol(Right._tag, Decl(nonInferrableTypePropagation2.ts, 9, 20))
+
+    readonly right: A
+>right : Symbol(Right.right, Decl(nonInferrableTypePropagation2.ts, 10, 26))
+>A : Symbol(A, Decl(nonInferrableTypePropagation2.ts, 9, 16))
+}
+
+type Either<E, A> = Left<E> | Right<A>;
+>Either : Symbol(Either, Decl(nonInferrableTypePropagation2.ts, 12, 1))
+>E : Symbol(E, Decl(nonInferrableTypePropagation2.ts, 14, 12))
+>A : Symbol(A, Decl(nonInferrableTypePropagation2.ts, 14, 14))
+>Left : Symbol(Left, Decl(nonInferrableTypePropagation2.ts, 2, 1))
+>E : Symbol(E, Decl(nonInferrableTypePropagation2.ts, 14, 12))
+>Right : Symbol(Right, Decl(nonInferrableTypePropagation2.ts, 7, 1))
+>A : Symbol(A, Decl(nonInferrableTypePropagation2.ts, 14, 14))
+
+interface Refinement<A, B extends A> {
+>Refinement : Symbol(Refinement, Decl(nonInferrableTypePropagation2.ts, 14, 39))
+>A : Symbol(A, Decl(nonInferrableTypePropagation2.ts, 16, 21))
+>B : Symbol(B, Decl(nonInferrableTypePropagation2.ts, 16, 23))
+>A : Symbol(A, Decl(nonInferrableTypePropagation2.ts, 16, 21))
+
+    (a: A): a is B
+>a : Symbol(a, Decl(nonInferrableTypePropagation2.ts, 17, 5))
+>A : Symbol(A, Decl(nonInferrableTypePropagation2.ts, 16, 21))
+>a : Symbol(a, Decl(nonInferrableTypePropagation2.ts, 17, 5))
+>B : Symbol(B, Decl(nonInferrableTypePropagation2.ts, 16, 23))
+}
+
+declare const filter: {
+>filter : Symbol(filter, Decl(nonInferrableTypePropagation2.ts, 20, 13))
+
+    <A, B extends A>(refinement: Refinement<A, B>): (as: ReadonlyArray<A>) => ReadonlyArray<B>
+>A : Symbol(A, Decl(nonInferrableTypePropagation2.ts, 21, 5))
+>B : Symbol(B, Decl(nonInferrableTypePropagation2.ts, 21, 7))
+>A : Symbol(A, Decl(nonInferrableTypePropagation2.ts, 21, 5))
+>refinement : Symbol(refinement, Decl(nonInferrableTypePropagation2.ts, 21, 21))
+>Refinement : Symbol(Refinement, Decl(nonInferrableTypePropagation2.ts, 14, 39))
+>A : Symbol(A, Decl(nonInferrableTypePropagation2.ts, 21, 5))
+>B : Symbol(B, Decl(nonInferrableTypePropagation2.ts, 21, 7))
+>as : Symbol(as, Decl(nonInferrableTypePropagation2.ts, 21, 53))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+>A : Symbol(A, Decl(nonInferrableTypePropagation2.ts, 21, 5))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+>B : Symbol(B, Decl(nonInferrableTypePropagation2.ts, 21, 7))
+
+    <A>(predicate: Predicate<A>): <B extends A>(bs: ReadonlyArray<B>) => ReadonlyArray<B>
+>A : Symbol(A, Decl(nonInferrableTypePropagation2.ts, 22, 5))
+>predicate : Symbol(predicate, Decl(nonInferrableTypePropagation2.ts, 22, 8))
+>Predicate : Symbol(Predicate, Decl(nonInferrableTypePropagation2.ts, 0, 0))
+>A : Symbol(A, Decl(nonInferrableTypePropagation2.ts, 22, 5))
+>B : Symbol(B, Decl(nonInferrableTypePropagation2.ts, 22, 35))
+>A : Symbol(A, Decl(nonInferrableTypePropagation2.ts, 22, 5))
+>bs : Symbol(bs, Decl(nonInferrableTypePropagation2.ts, 22, 48))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+>B : Symbol(B, Decl(nonInferrableTypePropagation2.ts, 22, 35))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+>B : Symbol(B, Decl(nonInferrableTypePropagation2.ts, 22, 35))
+
+    <A>(predicate: Predicate<A>): (as: ReadonlyArray<A>) => ReadonlyArray<A>
+>A : Symbol(A, Decl(nonInferrableTypePropagation2.ts, 23, 5))
+>predicate : Symbol(predicate, Decl(nonInferrableTypePropagation2.ts, 23, 8))
+>Predicate : Symbol(Predicate, Decl(nonInferrableTypePropagation2.ts, 0, 0))
+>A : Symbol(A, Decl(nonInferrableTypePropagation2.ts, 23, 5))
+>as : Symbol(as, Decl(nonInferrableTypePropagation2.ts, 23, 35))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+>A : Symbol(A, Decl(nonInferrableTypePropagation2.ts, 23, 5))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+>A : Symbol(A, Decl(nonInferrableTypePropagation2.ts, 23, 5))
+
+};
+
+declare function pipe<A, B>(a: A, ab: (a: A) => B): B;
+>pipe : Symbol(pipe, Decl(nonInferrableTypePropagation2.ts, 24, 2))
+>A : Symbol(A, Decl(nonInferrableTypePropagation2.ts, 26, 22))
+>B : Symbol(B, Decl(nonInferrableTypePropagation2.ts, 26, 24))
+>a : Symbol(a, Decl(nonInferrableTypePropagation2.ts, 26, 28))
+>A : Symbol(A, Decl(nonInferrableTypePropagation2.ts, 26, 22))
+>ab : Symbol(ab, Decl(nonInferrableTypePropagation2.ts, 26, 33))
+>a : Symbol(a, Decl(nonInferrableTypePropagation2.ts, 26, 39))
+>A : Symbol(A, Decl(nonInferrableTypePropagation2.ts, 26, 22))
+>B : Symbol(B, Decl(nonInferrableTypePropagation2.ts, 26, 24))
+>B : Symbol(B, Decl(nonInferrableTypePropagation2.ts, 26, 24))
+
+declare function exists<A>(predicate: Predicate<A>): <E>(ma: Either<E, A>) => boolean;
+>exists : Symbol(exists, Decl(nonInferrableTypePropagation2.ts, 26, 54))
+>A : Symbol(A, Decl(nonInferrableTypePropagation2.ts, 27, 24))
+>predicate : Symbol(predicate, Decl(nonInferrableTypePropagation2.ts, 27, 27))
+>Predicate : Symbol(Predicate, Decl(nonInferrableTypePropagation2.ts, 0, 0))
+>A : Symbol(A, Decl(nonInferrableTypePropagation2.ts, 27, 24))
+>E : Symbol(E, Decl(nonInferrableTypePropagation2.ts, 27, 54))
+>ma : Symbol(ma, Decl(nonInferrableTypePropagation2.ts, 27, 57))
+>Either : Symbol(Either, Decl(nonInferrableTypePropagation2.ts, 12, 1))
+>E : Symbol(E, Decl(nonInferrableTypePropagation2.ts, 27, 54))
+>A : Symbol(A, Decl(nonInferrableTypePropagation2.ts, 27, 24))
+
+declare const es: Either<string, number>[];
+>es : Symbol(es, Decl(nonInferrableTypePropagation2.ts, 29, 13))
+>Either : Symbol(Either, Decl(nonInferrableTypePropagation2.ts, 12, 1))
+
+const x = pipe(es, filter(exists((n) => n > 0)))
+>x : Symbol(x, Decl(nonInferrableTypePropagation2.ts, 30, 5))
+>pipe : Symbol(pipe, Decl(nonInferrableTypePropagation2.ts, 24, 2))
+>es : Symbol(es, Decl(nonInferrableTypePropagation2.ts, 29, 13))
+>filter : Symbol(filter, Decl(nonInferrableTypePropagation2.ts, 20, 13))
+>exists : Symbol(exists, Decl(nonInferrableTypePropagation2.ts, 26, 54))
+>n : Symbol(n, Decl(nonInferrableTypePropagation2.ts, 30, 34))
+>n : Symbol(n, Decl(nonInferrableTypePropagation2.ts, 30, 34))
+

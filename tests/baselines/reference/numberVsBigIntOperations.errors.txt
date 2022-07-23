@@ -62,9 +62,11 @@ tests/cases/compiler/numberVsBigIntOperations.ts(61,1): error TS2365: Operator '
 tests/cases/compiler/numberVsBigIntOperations.ts(70,2): error TS2736: Operator '+' cannot be applied to type 'number | bigint'.
 tests/cases/compiler/numberVsBigIntOperations.ts(86,7): error TS1155: 'const' declarations must be initialized.
 tests/cases/compiler/numberVsBigIntOperations.ts(93,7): error TS1155: 'const' declarations must be initialized.
+tests/cases/compiler/numberVsBigIntOperations.ts(98,6): error TS2736: Operator '+' cannot be applied to type 'S'.
+tests/cases/compiler/numberVsBigIntOperations.ts(99,5): error TS2365: Operator '+' cannot be applied to types 'number' and 'S'.
 
 
-==== tests/cases/compiler/numberVsBigIntOperations.ts (64 errors) ====
+==== tests/cases/compiler/numberVsBigIntOperations.ts (66 errors) ====
     // Cannot mix bigints and numbers
     let bigInt = 1n, num = 2;
     bigInt = 1n; bigInt = 2; num = 1n; num = 2;
@@ -287,3 +289,14 @@ tests/cases/compiler/numberVsBigIntOperations.ts(93,7): error TS1155: 'const' de
           ~~~~~~~~~~~~
 !!! error TS1155: 'const' declarations must be initialized.
     if (bigZeroOrOne) isOne(bigZeroOrOne);
+    
+    type NumberOrBigint = number | bigint;
+    function getKey<S extends NumberOrBigint>(key: S) {
+        +key;   // should error
+         ~~~
+!!! error TS2736: Operator '+' cannot be applied to type 'S'.
+        0 + key;    // should error
+        ~~~~~~~
+!!! error TS2365: Operator '+' cannot be applied to types 'number' and 'S'.
+    }
+    

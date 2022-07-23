@@ -14697,6 +14697,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Types_cannot_appear_in_export_declarations_in_JavaScript_files_18043" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Types cannot appear in export declarations in JavaScript files.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[類型不能出現在 JavaScript 檔案的匯出宣告中。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Types_have_separate_declarations_of_a_private_property_0_2442" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Types have separate declarations of a private property '{0}'.]]></Val>
@@ -15393,6 +15402,24 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";You_cannot_rename_elements_that_are_defined_in_a_node_modules_folder_8035" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[You cannot rename elements that are defined in a 'node_modules' folder.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[您無法重新命名 'node_modules' 資料夾中定義的元素。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";You_cannot_rename_elements_that_are_defined_in_another_node_modules_folder_8036" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[You cannot rename elements that are defined in another 'node_modules' folder.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[您無法重新命名其他 'node_modules' 資料夾中定義的元素。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";You_cannot_rename_elements_that_are_defined_in_the_standard_TypeScript_library_8001" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[You cannot rename elements that are defined in the standard TypeScript library.]]></Val>
@@ -15636,6 +15663,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";_0_is_a_type_and_cannot_be_imported_in_JavaScript_files_Use_1_in_a_JSDoc_type_annotation_18042" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' is a type and cannot be imported in JavaScript files. Use '{1}' in a JSDoc type annotation.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}' 為類型，無法匯入 JavaScript 檔案。在 JSDoc 類型註釋中使用 '{1}'。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";_0_is_a_type_and_must_be_imported_using_a_type_only_import_when_preserveValueImports_and_isolatedMod_1444" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA['{0}' is a type and must be imported using a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.]]></Val>
@@ -15659,6 +15695,15 @@
           <Val><![CDATA['{0}' is assignable to the constraint of type '{1}', but '{1}' could be instantiated with a different subtype of constraint '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA['{0}' 可指派給 '{1}' 類型的條件約束，但可能會將 '{1}' 以不同的條件約束 '{2}' 子類型來具現化。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";_0_is_automatically_exported_here_18044" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' is automatically exported here.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}' 會自動匯出到此處。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

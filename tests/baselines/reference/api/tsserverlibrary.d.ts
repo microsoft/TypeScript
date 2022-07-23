@@ -2103,6 +2103,12 @@ declare namespace ts {
          * It is _public_ so that (pre)transformers can set this field,
          * since it switches the builtin `node` module transform. Generally speaking, if unset,
          * the field is treated as though it is `ModuleKind.CommonJS`.
+         *
+         * Note that this field is only set by the module resolution process when
+         * `moduleResolution` is `Node16` or `NodeNext`, which is implied by the `module` setting
+         * of `Node16` or `NodeNext`, respectively, but may be overriden (eg, by a `moduleResolution`
+         * of `node`). If so, this field will be unset and source files will be considered to be
+         * CommonJS-output-format by the node module transformer and type checker, regardless of extension or context.
          */
         impliedNodeFormat?: ModuleKind.ESNext | ModuleKind.CommonJS;
     }
@@ -2427,6 +2433,7 @@ declare namespace ts {
         UseAliasDefinedOutsideCurrentScope = 16384,
         UseSingleQuotesForStringLiteralType = 268435456,
         NoTypeReduction = 536870912,
+        OmitThisParameter = 33554432,
         AllowThisInObjectLiteral = 32768,
         AllowQualifiedNameInPlaceOfIdentifier = 65536,
         /** @deprecated AllowQualifedNameInPlaceOfIdentifier. Use AllowQualifiedNameInPlaceOfIdentifier instead. */
@@ -2457,6 +2464,7 @@ declare namespace ts {
         UseAliasDefinedOutsideCurrentScope = 16384,
         UseSingleQuotesForStringLiteralType = 268435456,
         NoTypeReduction = 536870912,
+        OmitThisParameter = 33554432,
         AllowUniqueESSymbolType = 1048576,
         AddUndefined = 131072,
         WriteArrowStyleSignature = 262144,
@@ -2465,7 +2473,7 @@ declare namespace ts {
         InFirstTypeArgument = 4194304,
         InTypeAlias = 8388608,
         /** @deprecated */ WriteOwnNameForAnyLike = 0,
-        NodeBuilderFlagsMask = 814775659
+        NodeBuilderFlagsMask = 848330091
     }
     export enum SymbolFormatFlags {
         None = 0,
@@ -4147,6 +4155,7 @@ declare namespace ts {
         readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
         readonly includeInlayEnumMemberValueHints?: boolean;
         readonly allowRenameOfImportPath?: boolean;
+        readonly autoImportFileExcludePatterns?: string[];
     }
     /** Represents a bigint literal value without requiring bigint support */
     export interface PseudoBigInt {
@@ -4464,6 +4473,12 @@ declare namespace ts {
     /**
      * Gets the effective type parameters. If the node was parsed in a
      * JavaScript file, gets the type parameters from the `@template` tag from JSDoc.
+     *
+     * This does *not* return type parameters from a jsdoc reference to a generic type, eg
+     *
+     * type Id = <T>(x: T) => T
+     * /** @type {Id} /
+     * function id(x) { return x }
      */
     function getEffectiveTypeParameterDeclarations(node: DeclarationWithTypeParameters): readonly TypeParameterDeclaration[];
     function getEffectiveConstraintOfTypeParameter(node: TypeParameterDeclaration): TypeNode | undefined;
@@ -9779,6 +9794,7 @@ declare namespace ts.server.protocol {
         readonly includeInlayPropertyDeclarationTypeHints?: boolean;
         readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
         readonly includeInlayEnumMemberValueHints?: boolean;
+        readonly autoImportFileExcludePatterns?: string[];
     }
     interface CompilerOptions {
         allowJs?: boolean;

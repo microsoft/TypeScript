@@ -1,5 +1,9 @@
 declare namespace Intl {
 
+    interface DateTimeFormatPartTypesRegistry {
+        fractionalSecond: any
+     }
+
     interface DateTimeFormatOptions {
         formatMatcher?: "basic" | "best fit" | "best fit" | undefined;
         dateStyle?: "full" | "long" | "medium" | "short" | undefined;

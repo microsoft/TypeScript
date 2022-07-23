@@ -1,3 +1,5 @@
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(7,13): error TS1477: An instantiation expression cannot be followed by a property access.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(8,13): error TS1477: An instantiation expression cannot be followed by a property access.
 tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(13,12): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'string[]'.
 tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(13,14): error TS2693: 'number' only refers to a type, but is being used as a value here.
 tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(18,12): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'number'.
@@ -14,7 +16,7 @@ tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpr
 tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts(45,12): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'number'.
 
 
-==== tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts (14 errors) ====
+==== tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressionErrors.ts (16 errors) ====
     declare let f: { <T>(): T, g<U>(): U };
     
     // Type arguments in member expressions
@@ -22,7 +24,11 @@ tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpr
     const a1 = f<number>;  // { (): number; g<U>(): U; }
     const a2 = f.g<number>;  // () => number
     const a3 = f<number>.g;  // <U>() => U
+                ~~~~~~~~
+!!! error TS1477: An instantiation expression cannot be followed by a property access.
     const a4 = f<number>.g<number>;  // () => number
+                ~~~~~~~~
+!!! error TS1477: An instantiation expression cannot be followed by a property access.
     const a5 = f['g']<number>;  // () => number
     
     // `[` is an expression starter and cannot immediately follow a type argument list
