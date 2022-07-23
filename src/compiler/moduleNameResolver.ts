@@ -824,7 +824,8 @@ namespace ts {
 
     /*@internal*/
     export type ModeAwareCacheKey = string & { __modeAwareCacheKey: any; };
-    function getModeAwareCacheKey(specifier: string, mode: ResolutionMode) {
+    /*@internal*/
+    export function getModeAwareCacheKey(specifier: string, mode: ResolutionMode) {
         return (mode === undefined ? specifier : `${mode}|${specifier}`) as ModeAwareCacheKey;
     }
 
@@ -888,6 +889,81 @@ namespace ts {
             map.set(name, mode, values[i]);
         }
         return map;
+    }
+
+    function getCommonPrefix(directory: Path, resolution: string, toPath: (dir: string) => Path) {
+        const resolutionDirectory = toPath(getDirectoryPath(resolution));
+
+        // find first position where directory and resolution differs
+        let i = 0;
+        const limit = Math.min(directory.length, resolutionDirectory.length);
+        while (i < limit && directory.charCodeAt(i) === resolutionDirectory.charCodeAt(i)) {
+            i++;
+        }
+        if (i === directory.length && (resolutionDirectory.length === i || resolutionDirectory[i] === directorySeparator)) {
+            return directory;
+        }
+        const rootLength = getRootLength(directory);
+        if (i < rootLength) {
+            return undefined;
+        }
+        const sep = directory.lastIndexOf(directorySeparator, i - 1);
+        if (sep === -1) {
+            return undefined;
+        }
+        return directory.substr(0, Math.max(sep, rootLength));
+    }
+
+    /*@internal*/
+    export function getResolvedFileNameForModuleNameToDirectorySet(result: ResolvedModuleWithFailedLookupLocations) {
+        return result.resolvedModule &&
+            (result.resolvedModule.originalPath || result.resolvedModule.resolvedFileName);
+    }
+
+    /**
+     * At first this function add entry directory -> module resolution result to the table.
+     * Then it computes the set of parent folders for 'directory' that should have the same module resolution result
+     * and for every parent folder in set it adds entry: parent -> module resolution. .
+     * Lets say we first directory name: /a/b/c/d/e and resolution result is: /a/b/bar.ts.
+     * Set of parent folders that should have the same result will be:
+     * [
+     *     /a/b/c/d, /a/b/c, /a/b
+     * ]
+     * this means that request for module resolution from file in any of these folder will be immediately found in cache.
+     */
+    /*@internal*/
+    export function moduleNameToDirectorySet<T>(
+        directoryPathMap: ESMap<Path, T>,
+        directory: Path,
+        result: T,
+        getResolvedFileName: (result: T) => string | undefined,
+        toPath: (dir: string) => Path,
+        ancestoryWorker: (directory: Path) => void,
+    ) {
+        // if entry is already in cache do nothing
+        if (directoryPathMap.has(directory)) return;
+        directoryPathMap.set(directory, result);
+
+        const resolvedFileName = getResolvedFileName(result);
+        // find common prefix between directory and resolved file name
+        // this common prefix should be the shortest path that has the same resolution
+        // directory: /a/b/c/d/e
+        // resolvedFileName: /a/b/foo.d.ts
+        // commonPrefix: /a/b
+        // for failed lookups cache the result for every directory up to root
+        const commonPrefix = resolvedFileName && getCommonPrefix(directory, resolvedFileName, toPath);
+        let current = directory;
+        while (current !== commonPrefix) {
+            const parent = getDirectoryPath(current);
+            if (parent === current) break;
+            if (directoryPathMap.has(parent)) {
+                ancestoryWorker(parent);
+                break;
+            }
+            directoryPathMap.set(parent, result);
+            ancestoryWorker(parent);
+            current = parent;
+        }
     }
 
     export function createModuleResolutionCache(
@@ -956,7 +1032,7 @@ namespace ts {
             return { get, set };
 
             function get(directory: string): ResolvedModuleWithFailedLookupLocations | undefined {
-                return directoryPathMap.get(toPath(directory, currentDirectory, getCanonicalFileName));
+                return directoryPathMap.get(toPath(directory));
             }
 
             /**
@@ -971,55 +1047,19 @@ namespace ts {
              * this means that request for module resolution from file in any of these folder will be immediately found in cache.
              */
             function set(directory: string, result: ResolvedModuleWithFailedLookupLocations): void {
-                const path = toPath(directory, currentDirectory, getCanonicalFileName);
-                // if entry is already in cache do nothing
-                if (directoryPathMap.has(path)) {
-                    return;
-                }
-                directoryPathMap.set(path, result);
-
-                const resolvedFileName = result.resolvedModule &&
-                    (result.resolvedModule.originalPath || result.resolvedModule.resolvedFileName);
-                // find common prefix between directory and resolved file name
-                // this common prefix should be the shortest path that has the same resolution
-                // directory: /a/b/c/d/e
-                // resolvedFileName: /a/b/foo.d.ts
-                // commonPrefix: /a/b
-                // for failed lookups cache the result for every directory up to root
-                const commonPrefix = resolvedFileName && getCommonPrefix(path, resolvedFileName);
-                let current = path;
-                while (current !== commonPrefix) {
-                    const parent = getDirectoryPath(current);
-                    if (parent === current || directoryPathMap.has(parent)) {
-                        break;
-                    }
-                    directoryPathMap.set(parent, result);
-                    current = parent;
-                }
+                return moduleNameToDirectorySet(
+                    directoryPathMap,
+                    toPath(directory),
+                    result,
+                    getResolvedFileNameForModuleNameToDirectorySet,
+                    toPath,
+                    noop,
+                );
             }
+        }
 
-            function getCommonPrefix(directory: Path, resolution: string) {
-                const resolutionDirectory = toPath(getDirectoryPath(resolution), currentDirectory, getCanonicalFileName);
-
-                // find first position where directory and resolution differs
-                let i = 0;
-                const limit = Math.min(directory.length, resolutionDirectory.length);
-                while (i < limit && directory.charCodeAt(i) === resolutionDirectory.charCodeAt(i)) {
-                    i++;
-                }
-                if (i === directory.length && (resolutionDirectory.length === i || resolutionDirectory[i] === directorySeparator)) {
-                    return directory;
-                }
-                const rootLength = getRootLength(directory);
-                if (i < rootLength) {
-                    return undefined;
-                }
-                const sep = directory.lastIndexOf(directorySeparator, i - 1);
-                if (sep === -1) {
-                    return undefined;
-                }
-                return directory.substr(0, Math.max(sep, rootLength));
-            }
+        function toPath(fileName: string) {
+            return ts.toPath(fileName, currentDirectory, getCanonicalFileName);
         }
     }
 
