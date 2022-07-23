@@ -15147,9 +15147,9 @@ namespace ts {
         }
 
         function getConstituentCount(type: Type): number {
-            return !(type.flags & TypeFlags.UnionOrIntersection) || type.aliasSymbol ? 1 :
-                type.flags & TypeFlags.Union && (type as UnionType).origin ? getConstituentCount((type as UnionType).origin!) :
-                getConstituentCountOfTypes((type as UnionOrIntersectionType).types);
+            return !isUnionOrIntersectionType(type) || type.aliasSymbol ? 1 :
+                isUnionType(type) && type.origin ? getConstituentCount(type.origin) :
+                getConstituentCountOfTypes(type.types);
         }
 
         function getConstituentCountOfTypes(types: Type[]): number {
@@ -15756,19 +15756,19 @@ namespace ts {
         }
 
         function getGenericObjectFlags(type: Type): ObjectFlags {
-            if (type.flags & TypeFlags.UnionOrIntersection) {
-                if (!((type as UnionOrIntersectionType).objectFlags & ObjectFlags.IsGenericTypeComputed)) {
-                    (type as UnionOrIntersectionType).objectFlags |= ObjectFlags.IsGenericTypeComputed |
-                        reduceLeft((type as UnionOrIntersectionType).types, (flags, t) => flags | getGenericObjectFlags(t), 0);
+            if (isUnionOrIntersectionType(type)) {
+                if (!(type.objectFlags & ObjectFlags.IsGenericTypeComputed)) {
+                    type.objectFlags |= ObjectFlags.IsGenericTypeComputed |
+                        reduceLeft(type.types, (flags, t) => flags | getGenericObjectFlags(t), 0);
                 }
-                return (type as UnionOrIntersectionType).objectFlags & ObjectFlags.IsGenericType;
+                return type.objectFlags & ObjectFlags.IsGenericType;
             }
-            if (type.flags & TypeFlags.Substitution) {
-                if (!((type as SubstitutionType).objectFlags & ObjectFlags.IsGenericTypeComputed)) {
-                    (type as SubstitutionType).objectFlags |= ObjectFlags.IsGenericTypeComputed |
-                        getGenericObjectFlags((type as SubstitutionType).substitute) | getGenericObjectFlags((type as SubstitutionType).baseType);
+            if (isSubstitutionType(type)) {
+                if (!(type.objectFlags & ObjectFlags.IsGenericTypeComputed)) {
+                    type.objectFlags |= ObjectFlags.IsGenericTypeComputed |
+                        getGenericObjectFlags(type.substitute) | getGenericObjectFlags(type.baseType);
                 }
-                return (type as SubstitutionType).objectFlags & ObjectFlags.IsGenericType;
+                return type.objectFlags & ObjectFlags.IsGenericType;
             }
             return (type.flags & TypeFlags.InstantiableNonPrimitive || isGenericMappedType(type) || isGenericTupleType(type) ? ObjectFlags.IsGenericObjectType : 0) |
                 (type.flags & (TypeFlags.InstantiableNonPrimitive | TypeFlags.Index | TypeFlags.TemplateLiteral | TypeFlags.StringMapping) && !isPatternLiteralType(type) ? ObjectFlags.IsGenericIndexType : 0);
@@ -17263,8 +17263,8 @@ namespace ts {
             if (flags & TypeFlags.TypeParameter) {
                 return getMappedType(type, mapper);
             }
-            if (flags & TypeFlags.Object) {
-                const objectFlags = (type as ObjectType).objectFlags;
+            if (isObjectType(type)) {
+                const objectFlags = type.objectFlags;
                 if (objectFlags & (ObjectFlags.Reference | ObjectFlags.Anonymous | ObjectFlags.Mapped)) {
                     if (objectFlags & ObjectFlags.Reference && !(type as TypeReference).node) {
                         const resolvedTypeArguments = (type as TypeReference).resolvedTypeArguments;
@@ -17278,9 +17278,9 @@ namespace ts {
                 }
                 return type;
             }
-            if (flags & TypeFlags.UnionOrIntersection) {
-                const origin = type.flags & TypeFlags.Union ? (type as UnionType).origin : undefined;
-                const types = origin && origin.flags & TypeFlags.UnionOrIntersection ? (origin as UnionOrIntersectionType).types : (type as UnionOrIntersectionType).types;
+            if (isUnionOrIntersectionType(type)) {
+                const origin = isUnionType(type) ? type.origin : undefined;
+                const types = origin && isUnionOrIntersectionType(origin) ? origin.types : type.types;
                 const newTypes = instantiateTypes(types, mapper);
                 if (newTypes === types && aliasSymbol === type.aliasSymbol) {
                     return type;
@@ -18234,12 +18234,12 @@ namespace ts {
         }
 
         function containsUndefinedType(type: Type) {
-            return !!((type.flags & TypeFlags.Union ? (type as UnionType).types[0] : type).flags & TypeFlags.Undefined);
+            return !!((isUnionType(type) ? type.types[0] : type).flags & TypeFlags.Undefined);
         }
 
         function isStringIndexSignatureOnlyType(type: Type): boolean {
             return type.flags & TypeFlags.Object && !isGenericMappedType(type) && getPropertiesOfType(type).length === 0 && getIndexInfosOfType(type).length === 1 && !!getIndexInfoOfType(type, stringType) ||
-                type.flags & TypeFlags.UnionOrIntersection && every((type as UnionOrIntersectionType).types, isStringIndexSignatureOnlyType) ||
+                isUnionOrIntersectionType(type) && every(type.types, isStringIndexSignatureOnlyType) ||
                 false;
         }
 
@@ -18358,8 +18358,8 @@ namespace ts {
             while (true) {
                 const t = isFreshLiteralType(type) ? (type as FreshableType).regularType :
                     getObjectFlags(type) & ObjectFlags.Reference ? (type as TypeReference).node ? createTypeReference((type as TypeReference).target, getTypeArguments(type as TypeReference)) : getSingleBaseForNonAugmentingSubtype(type) || type :
-                    type.flags & TypeFlags.UnionOrIntersection ? getNormalizedUnionOrIntersectionType(type as UnionOrIntersectionType, writing) :
-                    type.flags & TypeFlags.Substitution ? writing ? (type as SubstitutionType).baseType : (type as SubstitutionType).substitute :
+                    isUnionOrIntersectionType(type) ? getNormalizedUnionOrIntersectionType(type, writing) :
+                    isSubstitutionType(type) ? writing ? type.baseType : type.substitute :
                     type.flags & TypeFlags.Simplifiable ? getSimplifiedType(type, writing) :
                     type;
                 if (t === type) return t;
@@ -19390,10 +19390,10 @@ namespace ts {
                 const targetFlags = target.flags;
                 if (relation === identityRelation) {
                     // We've already checked that source.flags and target.flags are identical
-                    if (sourceFlags & TypeFlags.UnionOrIntersection) {
-                        let result = eachTypeRelatedToSomeType(source as UnionOrIntersectionType, target as UnionOrIntersectionType);
+                    if (isUnionOrIntersectionType(source)) {
+                        let result = eachTypeRelatedToSomeType(source, target as UnionOrIntersectionType);
                         if (result) {
-                            result &= eachTypeRelatedToSomeType(target as UnionOrIntersectionType, source as UnionOrIntersectionType);
+                            result &= eachTypeRelatedToSomeType(target as UnionOrIntersectionType, source);
                         }
                         return result;
                     }
@@ -22037,7 +22037,7 @@ namespace ts {
                     objectFlags & ObjectFlags.Reference && ((type as TypeReference).node || forEach(getTypeArguments(type as TypeReference), couldContainTypeVariables)) ||
                     objectFlags & ObjectFlags.Anonymous && type.symbol && type.symbol.flags & (SymbolFlags.Function | SymbolFlags.Method | SymbolFlags.Class | SymbolFlags.TypeLiteral | SymbolFlags.ObjectLiteral) && type.symbol.declarations ||
                     objectFlags & (ObjectFlags.Mapped | ObjectFlags.ReverseMapped | ObjectFlags.ObjectRestType | ObjectFlags.InstantiationExpressionType)) ||
-                type.flags & TypeFlags.UnionOrIntersection && !(type.flags & TypeFlags.EnumLiteral) && !isNonGenericTopLevelType(type) && some((type as UnionOrIntersectionType).types, couldContainTypeVariables));
+                isUnionOrIntersectionType(type) && !(type.flags & TypeFlags.EnumLiteral) && !isNonGenericTopLevelType(type) && some(type.types, couldContainTypeVariables));
             if (type.flags & TypeFlags.ObjectFlagsType) {
                 (type as ObjectFlagsType).objectFlags |= ObjectFlags.CouldContainTypeVariablesComputed | (result ? ObjectFlags.CouldContainTypeVariables : 0);
             }
@@ -22437,18 +22437,18 @@ namespace ts {
                     // And if there weren't any type arguments, there's no reason to run inference as the types must be the same.
                     return;
                 }
-                if (source === target && source.flags & TypeFlags.UnionOrIntersection) {
+                if (source === target && isUnionOrIntersectionType(source)) {
                     // When source and target are the same union or intersection type, just relate each constituent
                     // type to itself.
-                    for (const t of (source as UnionOrIntersectionType).types) {
+                    for (const t of source.types) {
                         inferFromTypes(t, t);
                     }
                     return;
                 }
-                if (target.flags & TypeFlags.Union) {
+                if (isUnionType(target)) {
                     // First, infer between identically matching source and target constituents and remove the
                     // matching types.
-                    const [tempSources, tempTargets] = inferFromMatchingTypes(source.flags & TypeFlags.Union ? (source as UnionType).types : [source], (target as UnionType).types, isTypeOrBaseIdenticalTo);
+                    const [tempSources, tempTargets] = inferFromMatchingTypes(isUnionType(source) ? source.types : [source], target.types, isTypeOrBaseIdenticalTo);
                     // Next, infer between closely matching source and target constituents and remove
                     // the matching types. Types closely match when they are instantiations of the same
                     // object type or instantiations of the same type alias.
@@ -23967,8 +23967,8 @@ namespace ts {
         }
 
         function isTypeSubsetOfUnion(source: Type, target: UnionType) {
-            if (source.flags & TypeFlags.Union) {
-                for (const t of (source as UnionType).types) {
+            if (isUnionType(source)) {
+                for (const t of source.types) {
                     if (!containsType(target.types, t)) {
                         return false;
                     }
@@ -23982,37 +23982,37 @@ namespace ts {
         }
 
         function forEachType<T>(type: Type, f: (t: Type) => T | undefined): T | undefined {
-            return type.flags & TypeFlags.Union ? forEach((type as UnionType).types, f) : f(type);
+            return isUnionType(type) ? forEach(type.types, f) : f(type);
         }
 
         function someType(type: Type, f: (t: Type) => boolean): boolean {
-            return type.flags & TypeFlags.Union ? some((type as UnionType).types, f) : f(type);
+            return isUnionType(type) ? some(type.types, f) : f(type);
         }
 
         function everyType(type: Type, f: (t: Type) => boolean): boolean {
-            return type.flags & TypeFlags.Union ? every((type as UnionType).types, f) : f(type);
+            return isUnionType(type) ? every(type.types, f) : f(type);
         }
 
         function everyContainedType(type: Type, f: (t: Type) => boolean): boolean {
-            return type.flags & TypeFlags.UnionOrIntersection ? every((type as UnionOrIntersectionType).types, f) : f(type);
+            return isUnionOrIntersectionType(type) ? every(type.types, f) : f(type);
         }
 
         function filterType(type: Type, f: (t: Type) => boolean): Type {
-            if (type.flags & TypeFlags.Union) {
-                const types = (type as UnionType).types;
+            if (isUnionType(type)) {
+                const types = type.types;
                 const filtered = filter(types, f);
                 if (filtered === types) {
                     return type;
                 }
-                const origin = (type as UnionType).origin;
+                const { origin } = type;
                 let newOrigin: Type | undefined;
-                if (origin && origin.flags & TypeFlags.Union) {
+                if (origin && isUnionType(origin)) {
                     // If the origin type is a (denormalized) union type, filter its non-union constituents. If that ends
                     // up removing a smaller number of types than in the normalized constituent set (meaning some of the
                     // filtered types are within nested unions in the origin), then we can't construct a new origin type.
                     // Otherwise, if we have exactly one type left in the origin set, return that as the filtered type.
                     // Otherwise, construct a new filtered origin type.
-                    const originTypes = (origin as UnionType).types;
+                    const originTypes = origin.types;
                     const originFiltered = filter(originTypes, t => !!(t.flags & TypeFlags.Union) || f(t));
                     if (originTypes.length - originFiltered.length === types.length - filtered.length) {
                         if (originFiltered.length === 1) {
@@ -24021,7 +24021,7 @@ namespace ts {
                         newOrigin = createOriginUnionOrIntersectionType(TypeFlags.Union, originFiltered);
                     }
                 }
-                return getUnionTypeFromSortedList(filtered, (type as UnionType).objectFlags, /*aliasSymbol*/ undefined, /*aliasTypeArguments*/ undefined, newOrigin);
+                return getUnionTypeFromSortedList(filtered, type.objectFlags, /*aliasSymbol*/ undefined, /*aliasTypeArguments*/ undefined, newOrigin);
             }
             return type.flags & TypeFlags.Never || f(type) ? type : neverType;
         }
@@ -28157,7 +28157,7 @@ namespace ts {
         function isValidSpreadType(type: Type): boolean {
             const t = removeDefinitelyFalsyTypes(mapType(type, getBaseConstraintOrType));
             return !!(t.flags & (TypeFlags.Any | TypeFlags.NonPrimitive | TypeFlags.Object | TypeFlags.InstantiableNonPrimitive) ||
-                t.flags & TypeFlags.UnionOrIntersection && every((t as UnionOrIntersectionType).types, isValidSpreadType));
+                isUnionOrIntersectionType(t) && every(t.types, isValidSpreadType));
         }
 
         function checkJsxSelfClosingElementDeferred(node: JsxSelfClosingElement) {
@@ -28764,8 +28764,8 @@ namespace ts {
                     return true;
                 }
             }
-            else if (targetType.flags & TypeFlags.UnionOrIntersection && isExcessPropertyCheckTarget(targetType)) {
-                for (const t of (targetType as UnionOrIntersectionType).types) {
+            else if (isUnionOrIntersectionType(targetType) && isExcessPropertyCheckTarget(targetType)) {
+                for (const t of targetType.types) {
                     if (isKnownProperty(t, name, isComparingJsxAttributes)) {
                         return true;
                     }
@@ -33527,8 +33527,8 @@ namespace ts {
             if (type.flags & kind) {
                 return true;
             }
-            if (type.flags & TypeFlags.UnionOrIntersection) {
-                const types = (type as UnionOrIntersectionType).types;
+            if (isUnionOrIntersectionType(type)) {
+                const types = type.types;
                 for (const t of types) {
                     if (maybeTypeOfKind(t, kind)) {
                         return true;
@@ -34684,8 +34684,8 @@ namespace ts {
 
         function isLiteralOfContextualType(candidateType: Type, contextualType: Type | undefined): boolean {
             if (contextualType) {
-                if (contextualType.flags & TypeFlags.UnionOrIntersection) {
-                    const types = (contextualType as UnionType).types;
+                if (isUnionOrIntersectionType(contextualType)) {
+                    const types = contextualType.types;
                     return some(types, t => isLiteralOfContextualType(candidateType, t));
                 }
                 if (contextualType.flags & TypeFlags.InstantiableNonPrimitive) {
