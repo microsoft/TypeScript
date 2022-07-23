@@ -4988,18 +4988,18 @@ namespace ts {
                 if (type.flags & TypeFlags.EnumLike) {
                     return symbolToTypeNode(type.symbol, context, SymbolFlags.Type);
                 }
-                if (type.flags & TypeFlags.StringLiteral) {
-                    context.approximateLength += ((type as StringLiteralType).value.length + 2);
-                    return factory.createLiteralTypeNode(setEmitFlags(factory.createStringLiteral((type as StringLiteralType).value, !!(context.flags & NodeBuilderFlags.UseSingleQuotesForStringLiteralType)), EmitFlags.NoAsciiEscaping));
+                if (isStringLiteralType(type)) {
+                    context.approximateLength += (type.value.length + 2);
+                    return factory.createLiteralTypeNode(setEmitFlags(factory.createStringLiteral(type.value, !!(context.flags & NodeBuilderFlags.UseSingleQuotesForStringLiteralType)), EmitFlags.NoAsciiEscaping));
                 }
-                if (type.flags & TypeFlags.NumberLiteral) {
-                    const value = (type as NumberLiteralType).value;
+                if (isNumberLiteralType(type)) {
+                    const value = type.value;
                     context.approximateLength += ("" + value).length;
                     return factory.createLiteralTypeNode(value < 0 ? factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, factory.createNumericLiteral(-value)) : factory.createNumericLiteral(value));
                 }
-                if (type.flags & TypeFlags.BigIntLiteral) {
-                    context.approximateLength += (pseudoBigIntToString((type as BigIntLiteralType).value).length) + 1;
-                    return factory.createLiteralTypeNode((factory.createBigIntLiteral((type as BigIntLiteralType).value)));
+                if (isBigIntLiteralType(type)) {
+                    context.approximateLength += (pseudoBigIntToString(type.value).length) + 1;
+                    return factory.createLiteralTypeNode((factory.createBigIntLiteral(type.value)));
                 }
                 if (type.flags & TypeFlags.BooleanLiteral) {
                     context.approximateLength += (type as IntrinsicType).intrinsicName.length;
@@ -11915,8 +11915,8 @@ namespace ts {
 
         /** Return properties of an object type or an empty array for other types */
         function getPropertiesOfObjectType(type: Type): Symbol[] {
-            if (type.flags & TypeFlags.Object) {
-                return resolveStructuredTypeMembers(type as ObjectType).properties;
+            if (isObjectType(type)) {
+                return resolveStructuredTypeMembers(type).properties;
             }
             return emptyArray;
         }
@@ -11925,8 +11925,8 @@ namespace ts {
          * return the symbol for that property. Otherwise return undefined.
          */
         function getPropertyOfObjectType(type: Type, name: __String): Symbol | undefined {
-            if (type.flags & TypeFlags.Object) {
-                const resolved = resolveStructuredTypeMembers(type as ObjectType);
+            if (isObjectType(type)) {
+                const resolved = resolveStructuredTypeMembers(type);
                 const symbol = resolved.members.get(name);
                 if (symbol && symbolIsValue(symbol)) {
                     return symbol;
@@ -12208,8 +12208,8 @@ namespace ts {
                         constraint :
                         getBaseConstraint(constraint);
                 }
-                if (t.flags & TypeFlags.UnionOrIntersection) {
-                    const types = (t as UnionOrIntersectionType).types;
+                if (isUnionOrIntersectionType(t)) {
+                    const types = t.types;
                     const baseTypes: Type[] = [];
                     let different = false;
                     for (const type of types) {
@@ -12234,10 +12234,10 @@ namespace ts {
                 if (t.flags & TypeFlags.Index) {
                     return keyofConstraintType;
                 }
-                if (t.flags & TypeFlags.TemplateLiteral) {
-                    const types = (t as TemplateLiteralType).types;
+                if (isTemplateLiteralType(t)) {
+                    const types = t.types;
                     const constraints = mapDefined(types, getBaseConstraint);
-                    return constraints.length === types.length ? getTemplateLiteralType((t as TemplateLiteralType).texts, constraints) : stringType;
+                    return constraints.length === types.length ? getTemplateLiteralType(t.texts, constraints) : stringType;
                 }
                 if (isStringMappingType(t)) {
                     const constraint = getBaseConstraint(t.type);
@@ -15412,9 +15412,9 @@ namespace ts {
                         text += addText;
                         if (!isTextsArray) return true;
                     }
-                    else if (t.flags & TypeFlags.TemplateLiteral) {
-                        text += (t as TemplateLiteralType).texts[0];
-                        if (!addSpans((t as TemplateLiteralType).texts, (t as TemplateLiteralType).types)) return false;
+                    else if (isTemplateLiteralType(t)) {
+                        text += t.texts[0];
+                        if (!addSpans(t.texts, t.types)) return false;
                         text += addText;
                         if (!isTextsArray) return true;
                     }
@@ -15437,8 +15437,8 @@ namespace ts {
 
         function getTemplateStringForType(type: Type) {
             return type.flags & TypeFlags.StringLiteral ? (type as StringLiteralType).value :
-                type.flags & TypeFlags.NumberLiteral ? "" + (type as NumberLiteralType).value :
-                type.flags & TypeFlags.BigIntLiteral ? pseudoBigIntToString((type as BigIntLiteralType).value) :
+                isNumberLiteralType(type) ? "" + type.value :
+                isBigIntLiteralType(type) ? pseudoBigIntToString(type.value) :
                 type.flags & (TypeFlags.BooleanLiteral | TypeFlags.Nullable) ? (type as IntrinsicType).intrinsicName :
                 undefined;
         }
@@ -15455,8 +15455,8 @@ namespace ts {
                 // Mapping<Mapping<T>> === Mapping<T>
                 type.flags & TypeFlags.StringMapping && symbol === type.symbol ? type :
                 isGenericIndexType(type) || isPatternLiteralPlaceholderType(type) ? getStringMappingTypeForGenericType(symbol, isPatternLiteralPlaceholderType(type) && !(type.flags & TypeFlags.StringMapping) ? getTemplateLiteralType(["", ""], [type]) : type) :
-                type.flags & TypeFlags.StringLiteral ? getStringLiteralType(applyStringMapping(symbol, (type as StringLiteralType).value)) :
-                type.flags & TypeFlags.TemplateLiteral ? getTemplateLiteralType(...applyTemplateStringMapping(symbol, (type as TemplateLiteralType).texts, (type as TemplateLiteralType).types)) :
+                isStringLiteralType(type) ? getStringLiteralType(applyStringMapping(symbol, type.value)) :
+                isTemplateLiteralType(type) ? getTemplateLiteralType(...applyTemplateStringMapping(symbol, type.texts, type.types)) :
                 type;
         }
 
@@ -15679,11 +15679,11 @@ namespace ts {
                                         const symbolName = getFullyQualifiedName((indexType as UniqueESSymbolType).symbol, accessExpression);
                                         errorInfo = chainDiagnosticMessages(/* details */ undefined, Diagnostics.Property_0_does_not_exist_on_type_1, "[" + symbolName + "]", typeToString(objectType));
                                     }
-                                    else if (indexType.flags & TypeFlags.StringLiteral) {
-                                        errorInfo = chainDiagnosticMessages(/* details */ undefined, Diagnostics.Property_0_does_not_exist_on_type_1, (indexType as StringLiteralType).value, typeToString(objectType));
+                                    else if (isStringLiteralType(indexType)) {
+                                        errorInfo = chainDiagnosticMessages(/* details */ undefined, Diagnostics.Property_0_does_not_exist_on_type_1, indexType.value, typeToString(objectType));
                                     }
-                                    else if (indexType.flags & TypeFlags.NumberLiteral) {
-                                        errorInfo = chainDiagnosticMessages(/* details */ undefined, Diagnostics.Property_0_does_not_exist_on_type_1, (indexType as NumberLiteralType).value, typeToString(objectType));
+                                    else if (isNumberLiteralType(indexType)) {
+                                        errorInfo = chainDiagnosticMessages(/* details */ undefined, Diagnostics.Property_0_does_not_exist_on_type_1, indexType.value, typeToString(objectType));
                                     }
                                     else if (indexType.flags & (TypeFlags.Number | TypeFlags.String)) {
                                         errorInfo = chainDiagnosticMessages(/* details */ undefined, Diagnostics.No_index_signature_with_a_parameter_of_type_0_was_found_on_type_1, typeToString(indexType), typeToString(objectType));
@@ -17485,11 +17485,11 @@ namespace ts {
         // Note that this check ignores type parameters and only considers the
         // inheritance hierarchy.
         function isTypeDerivedFrom(source: Type, target: Type): boolean {
-            return source.flags & TypeFlags.Union ? every((source as UnionType).types, t => isTypeDerivedFrom(t, target)) :
-                target.flags & TypeFlags.Union ? some((target as UnionType).types, t => isTypeDerivedFrom(source, t)) :
+            return isUnionType(source) ? every(source.types, t => isTypeDerivedFrom(t, target)) :
+                isUnionType(target) ? some(target.types, t => isTypeDerivedFrom(source, t)) :
                 source.flags & TypeFlags.InstantiableNonPrimitive ? isTypeDerivedFrom(getBaseConstraintOfType(source) || unknownType, target) :
                 target === globalObjectType ? !!(source.flags & (TypeFlags.Object | TypeFlags.NonPrimitive)) :
-                target === globalFunctionType ? !!(source.flags & TypeFlags.Object) && isFunctionObjectType(source as ObjectType) :
+                target === globalFunctionType ? isObjectType(source) && isFunctionObjectType(source) :
                 hasBaseType(source, getTargetType(target)) || (isArrayType(target) && !isReadonlyArrayType(target) && isTypeDerivedFrom(source, globalReadonlyArrayType));
         }
 
@@ -17673,8 +17673,8 @@ namespace ts {
             if (idx) {
                 return idx;
             }
-            if (target.flags & TypeFlags.Union) {
-                const best = getBestMatchingType(source, target as UnionType);
+            if (isUnionType(target)) {
+                const best = getBestMatchingType(source, target);
                 if (best) {
                     return getIndexedAccessTypeOrUndefined(best, nameType);
                 }
@@ -18287,9 +18287,9 @@ namespace ts {
                 t & TypeFlags.StringLiteral && !(t & TypeFlags.EnumLiteral) &&
                 (source as StringLiteralType).value === (target as StringLiteralType).value) return true;
             if (s & TypeFlags.NumberLike && t & TypeFlags.Number) return true;
-            if (s & TypeFlags.NumberLiteral && s & TypeFlags.EnumLiteral &&
-                t & TypeFlags.NumberLiteral && !(t & TypeFlags.EnumLiteral) &&
-                (source as NumberLiteralType).value === (target as NumberLiteralType).value) return true;
+            if (isNumberLiteralType(source) && s & TypeFlags.EnumLiteral &&
+                isNumberLiteralType(target) && !(t & TypeFlags.EnumLiteral) &&
+                source.value === target.value) return true;
             if (s & TypeFlags.BigIntLike && t & TypeFlags.BigInt) return true;
             if (s & TypeFlags.BooleanLike && t & TypeFlags.Boolean) return true;
             if (s & TypeFlags.ESSymbolLike && t & TypeFlags.ESSymbol) return true;
@@ -18663,8 +18663,8 @@ namespace ts {
                         message = Diagnostics.Type_0_is_not_assignable_to_type_1_with_exactOptionalPropertyTypes_Colon_true_Consider_adding_undefined_to_the_types_of_the_target_s_properties;
                     }
                     else {
-                        if (source.flags & TypeFlags.StringLiteral && target.flags & TypeFlags.Union) {
-                            const suggestedType = getSuggestedTypeForNonexistentStringLiteralType(source as StringLiteralType, target as UnionType);
+                        if (isStringLiteralType(source) && isUnionType(target)) {
+                            const suggestedType = getSuggestedTypeForNonexistentStringLiteralType(source, target);
                             if (suggestedType) {
                                 reportError(Diagnostics.Type_0_is_not_assignable_to_type_1_Did_you_mean_2, generalizedSourceType, targetType, typeToString(suggestedType));
                                 return;
@@ -18828,8 +18828,8 @@ namespace ts {
 
                     traceUnionsOrIntersectionsTooLarge(source, target);
 
-                    const skipCaching = source.flags & TypeFlags.Union && (source as UnionType).types.length < 4 && !(target.flags & TypeFlags.Union) ||
-                        target.flags & TypeFlags.Union && (target as UnionType).types.length < 4 && !(source.flags & TypeFlags.StructuredOrInstantiable);
+                    const skipCaching = isUnionType(source) && source.types.length < 4 && !isUnionType(target) ||
+                        isUnionType(target) && target.types.length < 4 && !(source.flags & TypeFlags.StructuredOrInstantiable);
                     let result = skipCaching ?
                         unionOrIntersectionRelatedTo(source, target, reportErrors, intersectionState) :
                         recursiveTypeRelatedTo(source, target, reportErrors, intersectionState, recursionFlags);
@@ -18907,8 +18907,8 @@ namespace ts {
                     return;
                 }
                 reportRelationError(headMessage, source, target);
-                if (source.flags & TypeFlags.TypeParameter && source.symbol?.declarations?.[0] && !getConstraintOfType(source as TypeVariable)) {
-                    const syntheticParam = cloneTypeParameter(source as TypeParameter);
+                if (isTypeParameterType(source) && source.symbol?.declarations?.[0] && !getConstraintOfType(source)) {
+                    const syntheticParam = cloneTypeParameter(source);
                     syntheticParam.constraint = instantiateType(target, makeUnaryTypeMapper(source, syntheticParam));
                     if (hasNonCircularBaseConstraint(syntheticParam)) {
                         const targetConstraintString = typeToString(target, source.symbol.declarations[0]);
@@ -18922,9 +18922,9 @@ namespace ts {
                     return;
                 }
 
-                if ((source.flags & TypeFlags.UnionOrIntersection) && (target.flags & TypeFlags.UnionOrIntersection)) {
-                    const sourceUnionOrIntersection = source as UnionOrIntersectionType;
-                    const targetUnionOrIntersection = target as UnionOrIntersectionType;
+                if (isUnionOrIntersectionType(source) && isUnionOrIntersectionType(target)) {
+                    const sourceUnionOrIntersection = source;
+                    const targetUnionOrIntersection = target;
 
                     if (sourceUnionOrIntersection.objectFlags & targetUnionOrIntersection.objectFlags & ObjectFlags.PrimitiveUnion) {
                         // There's a fast path for comparing primitive unions
@@ -18949,7 +18949,7 @@ namespace ts {
             function getTypeOfPropertyInTypes(types: Type[], name: __String) {
                 const appendPropType = (propTypes: Type[] | undefined, type: Type) => {
                     type = getApparentType(type);
-                    const prop = type.flags & TypeFlags.UnionOrIntersection ? getPropertyOfUnionOrIntersectionType(type as UnionOrIntersectionType, name) : getPropertyOfObjectType(type, name);
+                    const prop = isUnionOrIntersectionType(type) ? getPropertyOfUnionOrIntersectionType(type, name) : getPropertyOfObjectType(type, name);
                     const propType = prop && getTypeOfSymbol(prop) || getApplicableIndexInfoForName(type, name)?.type || undefinedType;
                     return append(propTypes, propType);
                 };
@@ -18967,9 +18967,9 @@ namespace ts {
                 }
                 let reducedTarget = target;
                 let checkTypes: Type[] | undefined;
-                if (target.flags & TypeFlags.Union) {
-                    reducedTarget = findMatchingDiscriminantType(source, target as UnionType, isRelatedTo) || filterPrimitivesIfContainsNonPrimitive(target as UnionType);
-                    checkTypes = reducedTarget.flags & TypeFlags.Union ? (reducedTarget as UnionType).types : [reducedTarget];
+                if (isUnionType(target)) {
+                    reducedTarget = findMatchingDiscriminantType(source, target, isRelatedTo) || filterPrimitivesIfContainsNonPrimitive(target);
+                    checkTypes = isUnionType(reducedTarget) ? reducedTarget.types : [reducedTarget];
                 }
                 for (const prop of getPropertiesOfType(source)) {
                     if (shouldCheckAsExcessProperty(prop, source.symbol) && !isIgnoredJsxProperty(source, prop)) {
@@ -19046,10 +19046,10 @@ namespace ts {
                 // Note that these checks are specifically ordered to produce correct results. In particular,
                 // we need to deconstruct unions before intersections (because unions are always at the top),
                 // and we need to handle "each" relations before "some" relations for the same kind of type.
-                if (source.flags & TypeFlags.Union) {
+                if (isUnionType(source)) {
                     return relation === comparableRelation ?
-                        someTypeRelatedToType(source as UnionType, target, reportErrors && !(source.flags & TypeFlags.Primitive), intersectionState) :
-                        eachTypeRelatedToType(source as UnionType, target, reportErrors && !(source.flags & TypeFlags.Primitive), intersectionState);
+                        someTypeRelatedToType(source, target, reportErrors && !(source.flags & TypeFlags.Primitive), intersectionState) :
+                        eachTypeRelatedToType(source, target, reportErrors && !(source.flags & TypeFlags.Primitive), intersectionState);
                 }
                 if (isUnionType(target)) {
                     return typeRelatedToSomeType(getRegularTypeOfObjectLiteral(source), target, reportErrors && !(source.flags & TypeFlags.Primitive) && !(target.flags & TypeFlags.Primitive));
@@ -19762,12 +19762,12 @@ namespace ts {
                         }
                     }
                 }
-                else if (sourceFlags & TypeFlags.StringMapping) {
-                    if (targetFlags & TypeFlags.StringMapping) {
-                        if ((source as StringMappingType).symbol !== (target as StringMappingType).symbol) {
+                else if (isStringMappingType(source)) {
+                    if (isStringMappingType(target)) {
+                        if (source.symbol !== target.symbol) {
                             return Ternary.False;
                         }
-                        if (result = isRelatedTo((source as StringMappingType).type, (target as StringMappingType).type, RecursionFlags.Both, reportErrors)) {
+                        if (result = isRelatedTo(source.type, target.type, RecursionFlags.Both, reportErrors)) {
                             return result;
                         }
                     }
@@ -20688,8 +20688,8 @@ namespace ts {
                 return false;
             }
 
-            if (type.flags & TypeFlags.UnionOrIntersection) {
-                return !!forEach((type as IntersectionType).types, typeCouldHaveTopLevelSingletonTypes);
+            if (isUnionOrIntersectionType(type)) {
+                return !!forEach(type.types, typeCouldHaveTopLevelSingletonTypes);
             }
 
             if (type.flags & TypeFlags.Instantiable) {
@@ -20699,7 +20699,7 @@ namespace ts {
                 }
             }
 
-            return isUnitType(type) || !!(type.flags & TypeFlags.TemplateLiteral) || !!(type.flags & TypeFlags.StringMapping);
+            return isUnitType(type) || isTemplateLiteralType(type) || isStringMappingType(type);
         }
 
         function getExactOptionalUnassignableProperties(source: Type, target: Type) {
@@ -20767,8 +20767,8 @@ namespace ts {
          * and no required properties, call/construct signatures or index signatures
          */
         function isWeakType(type: Type): boolean {
-            if (type.flags & TypeFlags.Object) {
-                const resolved = resolveStructuredTypeMembers(type as ObjectType);
+            if (isObjectType(type)) {
+                const resolved = resolveStructuredTypeMembers(type);
                 return resolved.callSignatures.length === 0 && resolved.constructSignatures.length === 0 && resolved.indexInfos.length === 0 &&
                     resolved.properties.length > 0 && every(resolved.properties, p => !!(p.flags & SymbolFlags.Optional));
             }
@@ -21470,9 +21470,9 @@ namespace ts {
                 type === regularFalseType ||
                 type === falseType ||
                 type.flags & (TypeFlags.Void | TypeFlags.Undefined | TypeFlags.Null | TypeFlags.AnyOrUnknown) ||
-                type.flags & TypeFlags.StringLiteral && (type as StringLiteralType).value === "" ||
-                type.flags & TypeFlags.NumberLiteral && (type as NumberLiteralType).value === 0 ||
-                type.flags & TypeFlags.BigIntLiteral && isZeroBigInt(type as BigIntLiteralType) ? type :
+                isStringLiteralType(type) && type.value === "" ||
+                isNumberLiteralType(type) && type.value === 0 ||
+                isBigIntLiteralType(type) && isZeroBigInt(type) ? type :
                 neverType;
         }
 
@@ -22297,25 +22297,25 @@ namespace ts {
             if (source === target || target.flags & (TypeFlags.Any | TypeFlags.String)) {
                 return true;
             }
-            if (source.flags & TypeFlags.StringLiteral) {
-                const value = (source as StringLiteralType).value;
+            if (isStringLiteralType(source)) {
+                const value = source.value;
                 return !!(target.flags & TypeFlags.Number && isValidNumberString(value, /*roundTripOnly*/ false) ||
                     target.flags & TypeFlags.BigInt && isValidBigIntString(value, /*roundTripOnly*/ false) ||
                     target.flags & (TypeFlags.BooleanLiteral | TypeFlags.Nullable) && value === (target as IntrinsicType).intrinsicName ||
                     target.flags & TypeFlags.StringMapping && isMemberOfStringMapping(getStringLiteralType(value), target));
             }
-            if (source.flags & TypeFlags.TemplateLiteral) {
-                const texts = (source as TemplateLiteralType).texts;
-                return texts.length === 2 && texts[0] === "" && texts[1] === "" && isTypeAssignableTo((source as TemplateLiteralType).types[0], target);
+            if (isTemplateLiteralType(source)) {
+                const texts = source.texts;
+                return texts.length === 2 && texts[0] === "" && texts[1] === "" && isTypeAssignableTo(source.types[0], target);
             }
             return isTypeAssignableTo(source, target);
         }
 
         function inferTypesFromTemplateLiteralType(source: Type, target: TemplateLiteralType): Type[] | undefined {
-            return source.flags & TypeFlags.StringLiteral ? inferFromLiteralPartsToTemplateLiteral([(source as StringLiteralType).value], emptyArray, target) :
-                source.flags & TypeFlags.TemplateLiteral ?
-                    arraysEqual((source as TemplateLiteralType).texts, target.texts) ? map((source as TemplateLiteralType).types, getStringLikeTypeForType) :
-                    inferFromLiteralPartsToTemplateLiteral((source as TemplateLiteralType).texts, (source as TemplateLiteralType).types, target) :
+            return isStringLiteralType(source) ? inferFromLiteralPartsToTemplateLiteral([source.value], emptyArray, target) :
+                isTemplateLiteralType(source) ?
+                    arraysEqual(source.texts, target.texts) ? map(source.types, getStringLikeTypeForType) :
+                    inferFromLiteralPartsToTemplateLiteral(source.texts, source.types, target) :
                 undefined;
         }
 
@@ -22927,14 +22927,14 @@ namespace ts {
                                     const matchingType = reduceLeft(constraintTypes, (left, right) =>
                                         !(right.flags & allTypeFlags) ? left :
                                         left.flags & TypeFlags.String ? left : right.flags & TypeFlags.String ? source :
-                                        left.flags & TypeFlags.TemplateLiteral ? left : right.flags & TypeFlags.TemplateLiteral && isTypeMatchedByTemplateLiteralType(source, right as TemplateLiteralType) ? source :
+                                        left.flags & TypeFlags.TemplateLiteral ? left : isTemplateLiteralType(right) && isTypeMatchedByTemplateLiteralType(source, right) ? source :
                                         left.flags & TypeFlags.StringMapping ? left : right.flags & TypeFlags.StringMapping && str === applyStringMapping(right.symbol, str) ? source :
-                                        left.flags & TypeFlags.StringLiteral ? left : right.flags & TypeFlags.StringLiteral && (right as StringLiteralType).value === str ? right :
+                                        left.flags & TypeFlags.StringLiteral ? left : isStringLiteralType(right) && right.value === str ? right :
                                         left.flags & TypeFlags.Number ? left : right.flags & TypeFlags.Number ? getNumberLiteralType(+str) :
                                         left.flags & TypeFlags.Enum ? left : right.flags & TypeFlags.Enum ? getNumberLiteralType(+str) :
-                                        left.flags & TypeFlags.NumberLiteral ? left : right.flags & TypeFlags.NumberLiteral && (right as NumberLiteralType).value === +str ? right :
+                                        left.flags & TypeFlags.NumberLiteral ? left : isNumberLiteralType(right) && right.value === +str ? right :
                                         left.flags & TypeFlags.BigInt ? left : right.flags & TypeFlags.BigInt ? parseBigIntLiteralType(str) :
-                                        left.flags & TypeFlags.BigIntLiteral ? left : right.flags & TypeFlags.BigIntLiteral && pseudoBigIntToString((right as BigIntLiteralType).value) === str ? right :
+                                        left.flags & TypeFlags.BigIntLiteral ? left : isBigIntLiteralType(right) && pseudoBigIntToString(right.value) === str ? right :
                                         left.flags & TypeFlags.Boolean ? left : right.flags & TypeFlags.Boolean ? str === "true" ? trueType : str === "false" ? falseType : booleanType :
                                         left.flags & TypeFlags.BooleanLiteral ? left : right.flags & TypeFlags.BooleanLiteral && (right as IntrinsicType).intrinsicName === str ? right :
                                         left.flags & TypeFlags.Undefined ? left : right.flags & TypeFlags.Undefined && (right as IntrinsicType).intrinsicName === str ? right :
@@ -23126,7 +23126,7 @@ namespace ts {
 
         function hasPrimitiveConstraint(type: TypeParameter): boolean {
             const constraint = getConstraintOfTypeParameter(type);
-            return !!constraint && maybeTypeOfKind(constraint.flags & TypeFlags.Conditional ? getDefaultConstraintOfConditionalType(constraint as ConditionalType) : constraint, TypeFlags.Primitive | TypeFlags.Index | TypeFlags.TemplateLiteral | TypeFlags.StringMapping);
+            return !!constraint && maybeTypeOfKind(isConditionalType(constraint) ? getDefaultConstraintOfConditionalType(constraint) : constraint, TypeFlags.Primitive | TypeFlags.Index | TypeFlags.TemplateLiteral | TypeFlags.StringMapping);
         }
 
         function isObjectLiteralType(type: Type) {
@@ -23670,8 +23670,8 @@ namespace ts {
             if (flags & (TypeFlags.Number | TypeFlags.Enum)) {
                 return strictNullChecks ? TypeFacts.NumberStrictFacts : TypeFacts.NumberFacts;
             }
-            if (flags & TypeFlags.NumberLiteral) {
-                const isZero = (type as NumberLiteralType).value === 0;
+            if (isNumberLiteralType(type)) {
+                const isZero = type.value === 0;
                 return strictNullChecks ?
                     isZero ? TypeFacts.ZeroNumberStrictFacts : TypeFacts.NonZeroNumberStrictFacts :
                     isZero ? TypeFacts.ZeroNumberFacts : TypeFacts.NonZeroNumberFacts;
@@ -23679,8 +23679,8 @@ namespace ts {
             if (flags & TypeFlags.BigInt) {
                 return strictNullChecks ? TypeFacts.BigIntStrictFacts : TypeFacts.BigIntFacts;
             }
-            if (flags & TypeFlags.BigIntLiteral) {
-                const isZero = isZeroBigInt(type as BigIntLiteralType);
+            if (isBigIntLiteralType(type)) {
+                const isZero = isZeroBigInt(type);
                 return strictNullChecks ?
                     isZero ? TypeFacts.ZeroBigIntStrictFacts : TypeFacts.NonZeroBigIntStrictFacts :
                     isZero ? TypeFacts.ZeroBigIntFacts : TypeFacts.NonZeroBigIntFacts;
@@ -23693,10 +23693,10 @@ namespace ts {
                     (type === falseType || type === regularFalseType) ? TypeFacts.FalseStrictFacts : TypeFacts.TrueStrictFacts :
                     (type === falseType || type === regularFalseType) ? TypeFacts.FalseFacts : TypeFacts.TrueFacts;
             }
-            if (flags & TypeFlags.Object) {
-                return getObjectFlags(type) & ObjectFlags.Anonymous && isEmptyObjectType(type as ObjectType) ?
+            if (isObjectType(type)) {
+                return getObjectFlags(type) & ObjectFlags.Anonymous && isEmptyObjectType(type) ?
                     strictNullChecks ? TypeFacts.EmptyObjectStrictFacts : TypeFacts.EmptyObjectFacts :
-                    isFunctionObjectType(type as ObjectType) ?
+                    isFunctionObjectType(type) ?
                         strictNullChecks ? TypeFacts.FunctionStrictFacts : TypeFacts.FunctionFacts :
                         strictNullChecks ? TypeFacts.ObjectStrictFacts : TypeFacts.ObjectFacts;
             }
@@ -29658,7 +29658,7 @@ namespace ts {
         }
 
         function getSuggestedTypeForNonexistentStringLiteralType(source: StringLiteralType, target: UnionType): StringLiteralType | undefined {
-            const candidates = target.types.filter((type): type is StringLiteralType => !!(type.flags & TypeFlags.StringLiteral));
+            const candidates = target.types.filter(isStringLiteralType);
             return getSpellingSuggestion(source.value, candidates, type => type.value);
         }
 
@@ -30082,8 +30082,8 @@ namespace ts {
         }
 
         function getSingleSignature(type: Type, kind: SignatureKind, allowMembers: boolean): Signature | undefined {
-            if (type.flags & TypeFlags.Object) {
-                const resolved = resolveStructuredTypeMembers(type as ObjectType);
+            if (isObjectType(type)) {
+                const resolved = resolveStructuredTypeMembers(type);
                 if (allowMembers || resolved.properties.length === 0 && resolved.indexInfos.length === 0) {
                     if (kind === SignatureKind.Call && resolved.callSignatures.length === 1 && resolved.constructSignatures.length === 0) {
                         return resolved.callSignatures[0];
@@ -32275,8 +32275,8 @@ namespace ts {
                 return result;
 
                 function getInstantiatedTypePart(type: Type): Type {
-                    if (type.flags & TypeFlags.Object) {
-                        const resolved = resolveStructuredTypeMembers(type as ObjectType);
+                    if (isObjectType(type)) {
+                        const resolved = resolveStructuredTypeMembers(type);
                         const callSignatures = getInstantiatedSignatures(resolved.callSignatures);
                         const constructSignatures = getInstantiatedSignatures(resolved.constructSignatures);
                         hasSignatures ||= resolved.callSignatures.length !== 0 || resolved.constructSignatures.length !== 0;
@@ -45595,8 +45595,8 @@ namespace ts {
 
         // Keep this up-to-date with the same logic within `getApparentTypeOfContextualType`, since they should behave similarly
         function findMatchingDiscriminantType(source: Type, target: Type, isRelatedTo: (source: Type, target: Type) => Ternary, skipPartial?: boolean) {
-            if (target.flags & TypeFlags.Union && source.flags & (TypeFlags.Intersection | TypeFlags.Object)) {
-                const match = getMatchingUnionConstituentForType(target as UnionType, source);
+            if (isUnionType(target) && source.flags & (TypeFlags.Intersection | TypeFlags.Object)) {
+                const match = getMatchingUnionConstituentForType(target, source);
                 if (match) {
                     return match;
                 }
@@ -45604,7 +45604,7 @@ namespace ts {
                 if (sourceProperties) {
                     const sourcePropertiesFiltered = findDiscriminantProperties(sourceProperties, target);
                     if (sourcePropertiesFiltered) {
-                        return discriminateTypeByDiscriminableItems(target as UnionType, map(sourcePropertiesFiltered, p => ([() => getTypeOfSymbol(p), p.escapedName] as [() => Type, __String])), isRelatedTo, /*defaultValue*/ undefined, skipPartial);
+                        return discriminateTypeByDiscriminableItems(target, map(sourcePropertiesFiltered, p => ([() => getTypeOfSymbol(p), p.escapedName] as [() => Type, __String])), isRelatedTo, /*defaultValue*/ undefined, skipPartial);
                     }
                 }
             }

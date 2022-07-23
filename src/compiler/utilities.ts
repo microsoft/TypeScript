@@ -7674,6 +7674,10 @@ namespace ts {
             factory.createStringLiteral(name, !!singleQuote);
     }
 
+    export function isBigIntLiteralType(type: Type): type is BigIntLiteralType {
+        return !!(type.flags & TypeFlags.BigIntLiteral);
+    }
+
     export function isConditionalType(type: Type): type is ConditionalType {
         return !!(type.flags & TypeFlags.Conditional);
     }
@@ -7690,6 +7694,10 @@ namespace ts {
         return !!(type.flags & TypeFlags.Intersection);
     }
 
+    export function isNumberLiteralType(type: Type): type is NumberLiteralType {
+        return !!(type.flags & TypeFlags.NumberLiteral);
+    }
+
     export function isObjectType(type: Type): type is ObjectType {
         return !!(type.flags & TypeFlags.Object);
     }
@@ -7700,6 +7708,10 @@ namespace ts {
 
     export function isSubstitutionType(type: Type): type is SubstitutionType {
         return !!(type.flags & TypeFlags.Substitution);
+    }
+
+    export function isStringLiteralType(type: Type): type is StringLiteralType {
+        return !!(type.flags & TypeFlags.StringLiteral);
     }
 
     export function isTemplateLiteralType(type: Type): type is TemplateLiteralType {
