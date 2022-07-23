@@ -7723,7 +7723,7 @@ namespace ts {
     }
 
     export function isUnionOrIntersectionType(type: Type): type is IntersectionType | UnionType {
-        return !!(type.flags & TypeFlags.Union | TypeFlags.Intersection);
+        return !!(type.flags & TypeFlags.UnionOrIntersection);
     }
 
     export interface NodeModulePathParts {
