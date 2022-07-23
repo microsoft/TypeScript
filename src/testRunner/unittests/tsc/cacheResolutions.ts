@@ -239,15 +239,12 @@ describe("unittests:: tsc:: cacheResolutions::", () => {
             {
                 caption: "modify b/randomFileForImport by adding import",
                 edit: fs => prependText(fs, "/src/project/b/randomFileForImport.ts", `import type { ImportInterface0 } from "pkg0";\n`),
-                discrepancyExplanation: () => [
-                    "Resolution is not reused in incremental which is TODO (shkamat)"
-                ]
             },
             {
                 caption: "modify c/ca/caa/randomFileForImport by adding import",
                 edit: fs => prependText(fs, "/src/project/c/ca/caa/randomFileForImport.ts", `import type { ImportInterface0 } from "pkg0";\n`),
                 discrepancyExplanation: () => [
-                    "Resolution is not reused in incremental which is TODO (shkamat)"
+                    "Failed lookups shouldnt matter in cache resolution and should be ignored which is TODO (shkamat)"
                 ]
             },
         ]
