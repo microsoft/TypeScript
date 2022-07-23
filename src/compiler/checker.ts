@@ -21198,39 +21198,35 @@ namespace ts {
         function literalTypesWithSameBaseType(types: Type[]): boolean {
             let commonBaseType: Type | undefined;
             for (const t of types) {
-                const baseType = getBaseTypeOfLiteralType(t);
-                if (!commonBaseType) {
-                    commonBaseType = baseType;
-                }
-                if (baseType === t || baseType !== commonBaseType) {
-                    return false;
+                if (!(t.flags & TypeFlags.Never)) {
+                    const baseType = getBaseTypeOfLiteralType(t);
+                    commonBaseType ??= baseType;
+                    if (baseType === t || baseType !== commonBaseType) {
+                        return false;
+                    }
                 }
             }
             return true;
         }
 
-        // When the candidate types are all literal types with the same base type, return a union
-        // of those literal types. Otherwise, return the leftmost type for which no type to the
-        // right is a supertype.
-        function getSupertypeOrUnion(types: Type[]): Type {
-            if (types.length === 1) {
-                return types[0];
-            }
-            return literalTypesWithSameBaseType(types) ?
-                getUnionType(types) :
-                reduceLeft(types, (s, t) => isTypeSubtypeOf(s, t) ? t : s)!;
+        function getCombinedTypeFlags(types: Type[]): TypeFlags {
+            return reduceLeft(types, (flags, t) => flags | (t.flags & TypeFlags.Union ? getCombinedTypeFlags((t as UnionType).types) : t.flags), 0);
         }
 
         function getCommonSupertype(types: Type[]): Type {
-            if (!strictNullChecks) {
-                return getSupertypeOrUnion(types);
+            if (types.length === 1) {
+                return types[0];
             }
-            const primaryTypes = filter(types, t => !(t.flags & TypeFlags.Nullable));
-            if (primaryTypes.length) {
-                const supertypeOrUnion = getSupertypeOrUnion(primaryTypes);
-                return primaryTypes === types ? supertypeOrUnion : getUnionType([supertypeOrUnion, ...filter(types, t => !!(t.flags & TypeFlags.Nullable))]);
-            }
-            return getUnionType(types, UnionReduction.Subtype);
+            // Remove nullable types from each of the candidates.
+            const primaryTypes = strictNullChecks ? sameMap(types, t => filterType(t, u => !(u.flags & TypeFlags.Nullable))) : types;
+            // When the candidate types are all literal types with the same base type, return a union
+            // of those literal types. Otherwise, return the leftmost type for which no type to the
+            // right is a supertype.
+            const superTypeOrUnion = literalTypesWithSameBaseType(primaryTypes) ?
+                getUnionType(primaryTypes) :
+                reduceLeft(primaryTypes, (s, t) => isTypeSubtypeOf(s, t) ? t : s)!;
+            // Add any nullable types that occurred in the candidates back to the result.
+            return primaryTypes === types ? superTypeOrUnion : getNullableType(superTypeOrUnion, getCombinedTypeFlags(types) & TypeFlags.Nullable);
         }
 
         // Return the leftmost type for which no type to the right is a subtype.
