@@ -27403,7 +27403,7 @@ namespace ts {
                     return getContextualType(parent as NonNullExpression, contextFlags);
                 case SyntaxKind.SatisfiesExpression:
                     const assertedType = getTypeFromTypeNode((parent as SatisfiesExpression).type);
-                    const outerType = getContextualType(parent as SatisfiesExpression);
+                    const outerType = getContextualType(parent as SatisfiesExpression, contextFlags);
                     return outerType === undefined ? assertedType : getIntersectionType([assertedType, outerType]);
                 case SyntaxKind.ExportAssignment:
                     return tryGetTypeFromEffectiveTypeNode(parent as ExportAssignment);
