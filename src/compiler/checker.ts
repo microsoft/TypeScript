@@ -1005,9 +1005,6 @@ namespace ts {
         let lastFlowNode: FlowNode | undefined;
         let lastFlowNodeReachable: boolean;
         let flowTypeCache: Type[] | undefined;
-        let isWithinSpreadAssignment = false;
-
-        const objectsWithinSpread = new WeakSet<Node>();
 
         const emptyStringType = getStringLiteralType("");
         const zeroType = getNumberLiteralType(0);
@@ -28035,10 +28032,7 @@ namespace ts {
                         hasComputedNumberProperty = false;
                         hasComputedSymbolProperty = false;
                     }
-                    const isAlreadyWithinSpread = isWithinSpreadAssignment;
-                    isWithinSpreadAssignment = true;
                     const type = getReducedType(checkExpression(memberDecl.expression));
-                    isWithinSpreadAssignment = isAlreadyWithinSpread;
                     if (isValidSpreadType(type)) {
                         const mergedType = tryMergeUnionOfObjectTypeAndEmptyObject(type, inConstContext);
                         if (allPropertiesTable) {
@@ -28088,23 +28082,31 @@ namespace ts {
                 propertiesArray.push(member);
             }
 
-            if (isWithinSpreadAssignment) {
-                objectsWithinSpread.add(node);
-            }
-
             // If object literal is contextually typed by the implied type of a binding pattern, augment the result
             // type with those properties for which the binding pattern specifies a default value.
             // If the object literal is spread into another object literal, skip this step and let the top-level object
             // literal handle it instead.
-            if (contextualTypeHasPattern && !objectsWithinSpread.has(node)) {
-                for (const prop of getPropertiesOfType(contextualType)) {
-                    if (!propertiesTable.get(prop.escapedName) && !getPropertyOfType(spread, prop.escapedName)) {
-                        if (!(prop.flags & SymbolFlags.Optional)) {
-                            error(prop.valueDeclaration || (prop as TransientSymbol).bindingElement,
-                                Diagnostics.Initializer_provides_no_value_for_this_binding_element_and_the_binding_element_has_no_default_value);
+            if (contextualTypeHasPattern) {
+                const rootPatternParent = findAncestor(contextualType.pattern!.parent, n =>
+                    n.kind === SyntaxKind.VariableDeclaration ||
+                    n.kind === SyntaxKind.BinaryExpression ||
+                    n.kind === SyntaxKind.Parameter
+                );
+                const spreadOrOutsideRootObject = findAncestor(node, n =>
+                    n === rootPatternParent ||
+                    n.kind === SyntaxKind.SpreadAssignment
+                )!;
+
+                if (spreadOrOutsideRootObject.kind !== SyntaxKind.SpreadAssignment) {
+                    for (const prop of getPropertiesOfType(contextualType)) {
+                        if (!propertiesTable.get(prop.escapedName) && !getPropertyOfType(spread, prop.escapedName)) {
+                            if (!(prop.flags & SymbolFlags.Optional)) {
+                                error(prop.valueDeclaration || (prop as TransientSymbol).bindingElement,
+                                    Diagnostics.Initializer_provides_no_value_for_this_binding_element_and_the_binding_element_has_no_default_value);
+                            }
+                            propertiesTable.set(prop.escapedName, prop);
+                            propertiesArray.push(prop);
                         }
-                        propertiesTable.set(prop.escapedName, prop);
-                        propertiesArray.push(prop);
                     }
                 }
             }
