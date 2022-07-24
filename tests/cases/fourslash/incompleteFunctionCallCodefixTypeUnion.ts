@@ -13,7 +13,7 @@ verify.codeFix({
   added(value);
 }
 
-function added<T>(arg1: T) {
+function added<T>(value: T) {
     throw new Error("Function not implemented.");
 }
 `,

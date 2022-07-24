@@ -348,18 +348,14 @@ namespace ts.codefix {
         }
     }
 
-    function createTypeParametersForArguments(checker: TypeChecker, argumentTypeParameters: [string, Type][], typeArguments: NodeArray<TypeNode> | undefined) {
+    function createTypeParametersForArguments(checker: TypeChecker, argumentTypeParameters: [string, Type | undefined][], typeArguments: NodeArray<TypeNode> | undefined) {
         const usedNames = new Set(argumentTypeParameters.map(pair => pair[0]));
 
         if (typeArguments) {
             const typeArgumentsWithNewTypes = typeArguments.filter(typeArgument => !argumentTypeParameters.some(pair => checker.getTypeAtLocation(typeArgument) === pair[1]));
             const targetSize = usedNames.size + typeArgumentsWithNewTypes.length;
             for (let i = 0; usedNames.size < targetSize; i += 1) {
-                usedNames.add(
-                    CharacterCodes.T + i <= CharacterCodes.Z
-                        ? String.fromCharCode(CharacterCodes.T + i)
-                        : `T${i}`
-                );
+                usedNames.add(createTypeParameterName(i));
             }
         }
 
@@ -367,6 +363,12 @@ namespace ts.codefix {
             arrayFrom(usedNames.values()),
             usedName => factory.createTypeParameterDeclaration(/*modifiers*/ undefined, usedName),
         );
+    }
+
+    function createTypeParameterName(index: number) {
+        return CharacterCodes.T + index <= CharacterCodes.Z
+            ? String.fromCharCode(CharacterCodes.T + index)
+            : `T${index}`;
     }
 
     export function typeToAutoImportableTypeNode(checker: TypeChecker, importAdder: ImportAdder, instanceType: Type, contextNode: Node | undefined, scriptTarget: ScriptTarget, flags?: NodeBuilderFlags, tracker?: SymbolTracker): TypeNode | undefined {
@@ -380,8 +382,17 @@ namespace ts.codefix {
                 typeNode = importableReference.typeNode;
             }
         }
+
         // Ensure nodes are fresh so they can have different positions when going through formatting.
         return getSynthesizedDeepClone(typeNode);
+    }
+
+    function typeContainsTypeParameter(type: Type) {
+        if (type.isUnionOrIntersection()) {
+            return type.types.some(typeContainsTypeParameter);
+        }
+
+        return type.flags & TypeFlags.TypeParameter;
     }
 
     export function getArgumentTypesAndTypeParameters(checker: TypeChecker, importAdder: ImportAdder, instanceTypes: Type[], contextNode: Node | undefined, scriptTarget: ScriptTarget, flags?: NodeBuilderFlags, tracker?: SymbolTracker) {
@@ -401,9 +412,27 @@ namespace ts.codefix {
         //   [ ["T", { typeName: { text: "T" } } ], ["U", { typeName: { text: "U" }] ]
         // and in the output function will generate:
         //   function added<T, U>() { ... }
-        const argumentTypeParameters = new Map<string, Type>();
+        const argumentTypeParameters = new Map<string, Type | undefined>();
 
-        for (const instanceType of instanceTypes) {
+        for (let i = 0; i < instanceTypes.length; i += 1) {
+            const instanceType = instanceTypes[i];
+
+            // If the instance type contains a deep reference to an existing type parameter,
+            // instead of copying the full union or intersection, create a new type parameter
+            // E.g. from this source:
+            //   function existing<T, U>(value: T | U & string) {
+            //     added/*1*/(value);
+            // We don't want to output this:
+            //    function added<T>(value: T | U & string) { ... }
+            // We instead want to output:
+            //    function added<T>(value: T) { ... }
+            if (instanceType.isUnionOrIntersection() && instanceType.types.some(typeContainsTypeParameter)) {
+                const synthesizedTypeParameterName = createTypeParameterName(i);
+                argumentTypeNodes.push(factory.createTypeReferenceNode(synthesizedTypeParameterName));
+                argumentTypeParameters.set(synthesizedTypeParameterName, undefined);
+                continue;
+            }
+
             const argumentTypeNode = typeToAutoImportableTypeNode(checker, importAdder, instanceType, contextNode, scriptTarget, flags, tracker);
             if (!argumentTypeNode) {
                 continue;

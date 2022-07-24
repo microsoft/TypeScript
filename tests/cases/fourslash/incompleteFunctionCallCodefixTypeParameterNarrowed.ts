@@ -17,7 +17,7 @@ verify.codeFix({
   }
 }
 
-function added<T>(value: T & number) {
+function added<T>(value: T) {
     throw new Error("Function not implemented.");
 }
 `,
