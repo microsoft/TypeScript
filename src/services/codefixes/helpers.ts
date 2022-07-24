@@ -405,18 +405,21 @@ namespace ts.codefix {
         // Types to be used as the types of the parameters in the new function
         // E.g. from this source:
         //   added("", 0)
-        // the value will look like:
+        // The value will look like:
         //   [{ typeName: { text: "string" } }, { typeName: { text: "number" }]
-        // and in the output function will generate:
+        // And in the output function will generate:
         //   function added(a: string, b: number) { ... }
         const argumentTypeNodes: TypeNode[] = [];
 
         // Names of type parameters provided as arguments to the call
         // E.g. from this source:
-        //  added<T, U>();
-        // the value will look like:
-        //   [ ["T", { typeName: { text: "T" } } ], ["U", { typeName: { text: "U" }] ]
-        // and in the output function will generate:
+        //   added<T, U>(value);
+        // The value will look like:
+        //   [
+        //     ["T", { argumentType: { typeName: { text: "T" } } } ],
+        //     ["U", { argumentType: { typeName: { text: "U" } } } ],
+        //   ]
+        // And in the output function will generate:
         //   function added<T, U>() { ... }
         const argumentTypeParameters = new Map<string, ArgumentTypeParameterAndConstraint | undefined>();
 
