@@ -348,11 +348,17 @@ namespace ts.codefix {
         }
     }
 
-    function createTypeParametersForArguments(checker: TypeChecker, argumentTypeParameters: [string, Type | undefined][], typeArguments: NodeArray<TypeNode> | undefined) {
+    interface ArgumentTypeParameterAndConstraint {
+        argumentType: Type;
+        constraint?: TypeNode;
+    }
+
+    function createTypeParametersForArguments(checker: TypeChecker, argumentTypeParameters: [string, ArgumentTypeParameterAndConstraint | undefined][], typeArguments: NodeArray<TypeNode> | undefined) {
         const usedNames = new Set(argumentTypeParameters.map(pair => pair[0]));
+        const constraintsByName = new Map(argumentTypeParameters);
 
         if (typeArguments) {
-            const typeArgumentsWithNewTypes = typeArguments.filter(typeArgument => !argumentTypeParameters.some(pair => checker.getTypeAtLocation(typeArgument) === pair[1]));
+            const typeArgumentsWithNewTypes = typeArguments.filter(typeArgument => !argumentTypeParameters.some(pair => checker.getTypeAtLocation(typeArgument) === pair[1]?.argumentType));
             const targetSize = usedNames.size + typeArgumentsWithNewTypes.length;
             for (let i = 0; usedNames.size < targetSize; i += 1) {
                 usedNames.add(createTypeParameterName(i));
@@ -361,7 +367,7 @@ namespace ts.codefix {
 
         return map(
             arrayFrom(usedNames.values()),
-            usedName => factory.createTypeParameterDeclaration(/*modifiers*/ undefined, usedName),
+            usedName => factory.createTypeParameterDeclaration(/*modifiers*/ undefined, usedName, constraintsByName.get(usedName)?.constraint),
         );
     }
 
@@ -412,7 +418,7 @@ namespace ts.codefix {
         //   [ ["T", { typeName: { text: "T" } } ], ["U", { typeName: { text: "U" }] ]
         // and in the output function will generate:
         //   function added<T, U>() { ... }
-        const argumentTypeParameters = new Map<string, Type | undefined>();
+        const argumentTypeParameters = new Map<string, ArgumentTypeParameterAndConstraint | undefined>();
 
         for (let i = 0; i < instanceTypes.length; i += 1) {
             const instanceType = instanceTypes[i];
@@ -441,12 +447,29 @@ namespace ts.codefix {
             argumentTypeNodes.push(argumentTypeNode);
             const argumentTypeParameter = getFirstTypeParameterName(instanceType);
 
+            // If the instance type is a type parameter with a constraint (other than an anonymous object),
+            // remember that constraint for when we create the new type parameter
+            // E.g. from this source:
+            //   function existing<T extends string>(value: T) {
+            //     added/*1*/(value);
+            // We don't want to output this:
+            //    function added<T>(value: T) { ... }
+            // We instead want to output:
+            //    function added<T extends string>(value: T) { ... }
+            const instanceTypeConstraint = instanceType.isTypeParameter() && instanceType.constraint && !isAnonymousObjectConstraintType(instanceType.constraint)
+                ? typeToAutoImportableTypeNode(checker, importAdder, instanceType.constraint, contextNode, scriptTarget, flags, tracker)
+                : undefined;
+
             if (argumentTypeParameter) {
-                argumentTypeParameters.set(argumentTypeParameter, instanceType);
+                argumentTypeParameters.set(argumentTypeParameter, { argumentType: instanceType, constraint: instanceTypeConstraint });
             }
         }
 
         return { argumentTypeNodes, argumentTypeParameters: arrayFrom(argumentTypeParameters.entries()) };
+    }
+
+    function isAnonymousObjectConstraintType(type: Type) {
+        return (type.flags & TypeFlags.Object) && (type as ObjectType).objectFlags === ObjectFlags.Anonymous;
     }
 
     function getFirstTypeParameterName(type: Type): string | undefined {
