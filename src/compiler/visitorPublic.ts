@@ -616,7 +616,7 @@ namespace ts {
                     nodeVisitor(node.argument, visitor, isTypeNode),
                     nodeVisitor(node.assertions, visitor, isNode),
                     nodeVisitor(node.qualifier, visitor, isEntityName),
-                    visitNodes(node.typeArguments, visitor, isTypeNode),
+                    nodesVisitor(node.typeArguments, visitor, isTypeNode),
                     node.isTypeOf
                 );
 
@@ -630,10 +630,10 @@ namespace ts {
             case SyntaxKind.NamedTupleMember:
                 Debug.type<NamedTupleMember>(node);
                 return factory.updateNamedTupleMember(node,
-                    visitNode(node.dotDotDotToken, visitor, isDotDotDotToken),
-                    visitNode(node.name, visitor, isIdentifier),
-                    visitNode(node.questionToken, visitor, isQuestionToken),
-                    visitNode(node.type, visitor, isTypeNode),
+                    nodeVisitor(node.dotDotDotToken, visitor, isDotDotDotToken),
+                    nodeVisitor(node.name, visitor, isIdentifier),
+                    nodeVisitor(node.questionToken, visitor, isQuestionToken),
+                    nodeVisitor(node.type, visitor, isTypeNode),
                 );
 
             case SyntaxKind.ParenthesizedType:
@@ -761,7 +761,7 @@ namespace ts {
                 Debug.type<TaggedTemplateExpression>(node);
                 return factory.updateTaggedTemplateExpression(node,
                     nodeVisitor(node.tag, visitor, isExpression),
-                    visitNodes(node.typeArguments, visitor, isTypeNode),
+                    nodesVisitor(node.typeArguments, visitor, isTypeNode),
                     nodeVisitor(node.template, visitor, isTemplateLiteral));
 
             case SyntaxKind.TypeAssertionExpression:
