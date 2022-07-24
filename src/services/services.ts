@@ -1363,6 +1363,8 @@ namespace ts {
                 onUnRecoverableConfigFileDiagnostic: noop,
             };
 
+            const documentRegistryBucketKey = documentRegistry.getKeyForCompilationSettings(newSettings);
+
             // If the program is already up-to-date, we can reuse it
             if (isProgramUptoDate(program, rootFileNames, newSettings, (_path, fileName) => host.getScriptVersion(fileName), fileName => compilerHost!.fileExists(fileName), hasInvalidatedResolution, hasChangedAutomaticTypeDirectiveNames, getParsedCommandLine, projectReferences)) {
                 return;
@@ -1374,7 +1376,6 @@ namespace ts {
             // the program points to old source files that have been invalidated because of
             // incremental parsing.
 
-            const documentRegistryBucketKey = documentRegistry.getKeyForCompilationSettings(newSettings);
             const options: CreateProgramOptions = {
                 rootNames: rootFileNames,
                 options: newSettings,
