@@ -23,3 +23,12 @@ equal(v as D, v as B)
 
 equal(v as B, v as B | undefined)
 equal(v as B | undefined, v as B)
+
+equal(v as 'a' | undefined, v as 'b');
+equal(v as 'a', v as 'b' | undefined);
+
+equal(v as 'a' | undefined, v as 'b' | null);
+equal(v as 'a' | null, v as 'b' | undefined);
+
+equal(v as string, v as string & { tag: 'foo' } | undefined);
+equal(v as string & { tag: 'foo' } | undefined, v as string);

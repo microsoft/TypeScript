@@ -91,3 +91,35 @@ equal(v as B | undefined, v as B)
 >v : Symbol(v, Decl(inferenceOfNullableObjectTypesWithCommonBase.ts, 2, 3))
 >B : Symbol(B, Decl(inferenceOfNullableObjectTypesWithCommonBase.ts, 2, 14))
 
+equal(v as 'a' | undefined, v as 'b');
+>equal : Symbol(equal, Decl(inferenceOfNullableObjectTypesWithCommonBase.ts, 0, 0))
+>v : Symbol(v, Decl(inferenceOfNullableObjectTypesWithCommonBase.ts, 2, 3))
+>v : Symbol(v, Decl(inferenceOfNullableObjectTypesWithCommonBase.ts, 2, 3))
+
+equal(v as 'a', v as 'b' | undefined);
+>equal : Symbol(equal, Decl(inferenceOfNullableObjectTypesWithCommonBase.ts, 0, 0))
+>v : Symbol(v, Decl(inferenceOfNullableObjectTypesWithCommonBase.ts, 2, 3))
+>v : Symbol(v, Decl(inferenceOfNullableObjectTypesWithCommonBase.ts, 2, 3))
+
+equal(v as 'a' | undefined, v as 'b' | null);
+>equal : Symbol(equal, Decl(inferenceOfNullableObjectTypesWithCommonBase.ts, 0, 0))
+>v : Symbol(v, Decl(inferenceOfNullableObjectTypesWithCommonBase.ts, 2, 3))
+>v : Symbol(v, Decl(inferenceOfNullableObjectTypesWithCommonBase.ts, 2, 3))
+
+equal(v as 'a' | null, v as 'b' | undefined);
+>equal : Symbol(equal, Decl(inferenceOfNullableObjectTypesWithCommonBase.ts, 0, 0))
+>v : Symbol(v, Decl(inferenceOfNullableObjectTypesWithCommonBase.ts, 2, 3))
+>v : Symbol(v, Decl(inferenceOfNullableObjectTypesWithCommonBase.ts, 2, 3))
+
+equal(v as string, v as string & { tag: 'foo' } | undefined);
+>equal : Symbol(equal, Decl(inferenceOfNullableObjectTypesWithCommonBase.ts, 0, 0))
+>v : Symbol(v, Decl(inferenceOfNullableObjectTypesWithCommonBase.ts, 2, 3))
+>v : Symbol(v, Decl(inferenceOfNullableObjectTypesWithCommonBase.ts, 2, 3))
+>tag : Symbol(tag, Decl(inferenceOfNullableObjectTypesWithCommonBase.ts, 30, 34))
+
+equal(v as string & { tag: 'foo' } | undefined, v as string);
+>equal : Symbol(equal, Decl(inferenceOfNullableObjectTypesWithCommonBase.ts, 0, 0))
+>v : Symbol(v, Decl(inferenceOfNullableObjectTypesWithCommonBase.ts, 2, 3))
+>tag : Symbol(tag, Decl(inferenceOfNullableObjectTypesWithCommonBase.ts, 31, 21))
+>v : Symbol(v, Decl(inferenceOfNullableObjectTypesWithCommonBase.ts, 2, 3))
+

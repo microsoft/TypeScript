@@ -100,3 +100,55 @@ equal(v as B | undefined, v as B)
 >v as B : B
 >v : never
 
+equal(v as 'a' | undefined, v as 'b');
+>equal(v as 'a' | undefined, v as 'b') : void
+>equal : <T>(a: T, b: T) => void
+>v as 'a' | undefined : "a" | undefined
+>v : never
+>v as 'b' : "b"
+>v : never
+
+equal(v as 'a', v as 'b' | undefined);
+>equal(v as 'a', v as 'b' | undefined) : void
+>equal : <T>(a: T, b: T) => void
+>v as 'a' : "a"
+>v : never
+>v as 'b' | undefined : "b" | undefined
+>v : never
+
+equal(v as 'a' | undefined, v as 'b' | null);
+>equal(v as 'a' | undefined, v as 'b' | null) : void
+>equal : <T>(a: T, b: T) => void
+>v as 'a' | undefined : "a" | undefined
+>v : never
+>v as 'b' | null : "b" | null
+>v : never
+>null : null
+
+equal(v as 'a' | null, v as 'b' | undefined);
+>equal(v as 'a' | null, v as 'b' | undefined) : void
+>equal : <T>(a: T, b: T) => void
+>v as 'a' | null : "a" | null
+>v : never
+>null : null
+>v as 'b' | undefined : "b" | undefined
+>v : never
+
+equal(v as string, v as string & { tag: 'foo' } | undefined);
+>equal(v as string, v as string & { tag: 'foo' } | undefined) : void
+>equal : <T>(a: T, b: T) => void
+>v as string : string
+>v : never
+>v as string & { tag: 'foo' } | undefined : (string & { tag: 'foo'; }) | undefined
+>v : never
+>tag : "foo"
+
+equal(v as string & { tag: 'foo' } | undefined, v as string);
+>equal(v as string & { tag: 'foo' } | undefined, v as string) : void
+>equal : <T>(a: T, b: T) => void
+>v as string & { tag: 'foo' } | undefined : (string & { tag: 'foo'; }) | undefined
+>v : never
+>tag : "foo"
+>v as string : string
+>v : never
+
