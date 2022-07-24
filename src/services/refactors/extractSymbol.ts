@@ -880,7 +880,9 @@ namespace ts.refactor.extractSymbol {
         usagesInScope.forEach((usage, name) => {
             let typeNode: TypeNode | undefined;
             if (!isJS) {
-                const type = checker.getTypeOfSymbolAtLocation(usage.symbol, usage.node);
+                let type = checker.getTypeOfSymbolAtLocation(usage.symbol, usage.node);
+                // Widen the type so we don't emit nonsense annotations like "function fn(x: 3) {"
+                type = checker.getBaseTypeOfLiteralType(type);
                 typeNode = codefix.typeToAutoImportableTypeNode(checker, importAdder, type, scope, scriptTarget, NodeBuilderFlags.NoTruncation);
             }
 

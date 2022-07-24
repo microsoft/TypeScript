@@ -377,9 +377,7 @@ namespace ts.codefix {
             : `T${index}`;
     }
 
-    export function typeToAutoImportableTypeNode(checker: TypeChecker, importAdder: ImportAdder, instanceType: Type, contextNode: Node | undefined, scriptTarget: ScriptTarget, flags?: NodeBuilderFlags, tracker?: SymbolTracker): TypeNode | undefined {
-        // Widen the type so we don't emit nonsense annotations like "function fn(x: 3) {"
-        const type = checker.getBaseTypeOfLiteralType(instanceType);
+    export function typeToAutoImportableTypeNode(checker: TypeChecker, importAdder: ImportAdder, type: Type, contextNode: Node | undefined, scriptTarget: ScriptTarget, flags?: NodeBuilderFlags, tracker?: SymbolTracker): TypeNode | undefined {
         let typeNode = checker.typeToTypeNode(type, contextNode, flags, tracker);
         if (typeNode && isImportTypeNode(typeNode)) {
             const importableReference = tryGetAutoImportableReferenceFromTypeNode(typeNode, scriptTarget);
@@ -442,7 +440,9 @@ namespace ts.codefix {
                 continue;
             }
 
-            const argumentTypeNode = typeToAutoImportableTypeNode(checker, importAdder, instanceType, contextNode, scriptTarget, flags, tracker);
+            // Widen the type so we don't emit nonsense annotations like "function fn(x: 3) {"
+            const widenedInstanceType = checker.getBaseTypeOfLiteralType(instanceType);
+            const argumentTypeNode = typeToAutoImportableTypeNode(checker, importAdder, widenedInstanceType, contextNode, scriptTarget, flags, tracker);
             if (!argumentTypeNode) {
                 continue;
             }
