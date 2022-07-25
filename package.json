@@ -117,9 +117,9 @@
         "source-map-support": false,
         "inspector": false
     },
-    "packageManager": "npm@8.14.0",
+    "packageManager": "npm@8.15.0",
     "volta": {
         "node": "14.20.0",
-        "npm": "8.14.0"
+        "npm": "8.15.0"
     }
 }
