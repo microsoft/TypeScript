@@ -1758,7 +1758,7 @@ namespace ts {
                 { version: fileInfo.version, signature: fileInfo.signature === false ? undefined : fileInfo.version, affectsGlobalScope: fileInfo.affectsGlobalScope, impliedFormat: fileInfo.impliedFormat };
     }
 
-    function getProgramBuildInfoFilePathDecoder(fileNames: readonly string[], buildInfoPath: string, currentDirectory: string, getCanonicalFileName: GetCanonicalFileName) {
+    export function getProgramBuildInfoFilePathDecoder(fileNames: readonly string[], buildInfoPath: string, currentDirectory: string, getCanonicalFileName: GetCanonicalFileName) {
         const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(buildInfoPath, currentDirectory));
         let filePaths: Path[] | undefined;
         let fileAbsolutePaths: string[] | undefined;
@@ -1890,33 +1890,39 @@ namespace ts {
 
     function createGetProgramOrOldBuildInfoProgramUndefined(state: ReusableBuilderProgramState, host: Pick<ReadBuildProgramHost, "fileExists">): () => Program | OldBuildInfoProgram | undefined {
         let oldProgram: OldBuildInfoProgram | undefined;
-        return () => state.program ?? oldProgram ?? (oldProgram = memoize(() => createOldBuildInfoProgram(state, host))());
+        return () => state.program ?? oldProgram ?? (oldProgram = memoize(() => createOldBuildInfoProgram(
+            state.compilerOptions,
+            state.cacheResolutions,
+            state.resuableCacheResolutions,
+            host,
+        ))());
     }
 
     export function createOldBuildInfoProgram(
-        state: ReusableBuilderProgramState,
+        compilerOptions: CompilerOptions,
+        cacheResolutions: ReusableBuilderProgramState["cacheResolutions"],
+        resuableCacheResolutions: ReusableBuilderProgramState["resuableCacheResolutions"],
         host: Pick<ReadBuildProgramHost, "fileExists">,
     ): OldBuildInfoProgram | undefined {
         if (!host.fileExists) return undefined;
-        if (!state.cacheResolutions && !state.resuableCacheResolutions) return undefined;
+        if (!cacheResolutions && !resuableCacheResolutions) return undefined;
 
-        const cacheResolutions = state.cacheResolutions;
-        const resuableCacheResolutions = state.cacheResolutions ? undefined : state.resuableCacheResolutions;
         const fileExistsMap = new Map<string, boolean>();
 
         type Resolution = ResolvedModuleWithFailedLookupLocations & ResolvedTypeReferenceDirectiveWithFailedLookupLocations;
         type ResolutionEntry = [name: string, resolutionId: ProgramBuildInfoResolutionId, mode: ResolutionMode];
         type DecodedResolvedMap = CacheWithRedirects<Path, ModeAwareCache<ProgramBuildInfoResolutionId>>;
-        const decodedResolvedModules: DecodedResolvedMap = createCacheWithRedirects(state.compilerOptions);
-        const decodedResolvedTypeRefs: DecodedResolvedMap = createCacheWithRedirects(state.compilerOptions);
-        const decodedModuleNameToDirectoryMap = createCacheWithRedirects<ModeAwareCacheKey, ESMap<Path, ProgramBuildInfoResolutionId>>(state.compilerOptions);
+        type DecodedModuleNameToDirectoryMap = CacheWithRedirects<ModeAwareCacheKey, ESMap<Path, ProgramBuildInfoResolutionId>>;
+        const decodedResolvedModules: DecodedResolvedMap = createCacheWithRedirects(compilerOptions);
+        const decodedResolvedTypeRefs: DecodedResolvedMap = createCacheWithRedirects(compilerOptions);
+        const decodedModuleNameToDirectoryMap: DecodedModuleNameToDirectoryMap = createCacheWithRedirects(compilerOptions);
 
         let resolutions: (Resolution | false)[] | undefined;
         let originalPathOrResolvedFileNames: string[] | undefined;
         let resolutionEntries: ResolutionEntry[] | undefined;
 
         return {
-            getCompilerOptions: () => state.compilerOptions,
+            getCompilerOptions: () => compilerOptions,
             getResolvedModule: (dirPath, name, mode, redirectedReference) => getResolvedFromCache(
                 cacheResolutions?.modules,
                 resuableCacheResolutions?.cache.modules,
@@ -1956,7 +1962,7 @@ namespace ts {
             mode: ResolutionMode,
             redirectedReference: ResolvedProjectReference | undefined,
             moduleNameToDirectoryMap: CacheWithRedirects<ModeAwareCacheKey, ESMap<Path, T>> | undefined,
-            decodedModuleNameToDirectoryMap: CacheWithRedirects<ModeAwareCacheKey, ESMap<Path, ProgramBuildInfoResolutionId>> | undefined,
+            decodedModuleNameToDirectoryMap: DecodedModuleNameToDirectoryMap | undefined,
         ): Resolution | undefined {
             // If we are using the cache, directly get from there
             const fromCache = cache?.getMapOfCacheRedirects(redirectedReference)?.get(dirPath)?.get(name, mode) ||
@@ -1972,10 +1978,10 @@ namespace ts {
             // Decode so we have maps for directories
             if (!decodedReusableCache.getOwnMap().size && !decodedReusableCache.redirectsKeyToCache.size) {
                 if (isArray(reusableCache)) {
-                    setBuildInfoResolutionEntries(decodedReusableCache, state.compilerOptions, reusableCache, decodedModuleNameToDirectoryMap);
+                    setBuildInfoResolutionEntries(decodedReusableCache, compilerOptions, reusableCache, decodedModuleNameToDirectoryMap);
                 }
                 else {
-                    if (reusableCache.own) setBuildInfoResolutionEntries(decodedReusableCache, state.compilerOptions, reusableCache.own, decodedModuleNameToDirectoryMap);
+                    if (reusableCache.own) setBuildInfoResolutionEntries(decodedReusableCache, compilerOptions, reusableCache.own, decodedModuleNameToDirectoryMap);
                     reusableCache.redirects.forEach(({ options, cache }) => setBuildInfoResolutionEntries(
                         decodedReusableCache,
                         options ? convertToOptionsWithAbsolutePaths(options, resuableCacheResolutions!.getProgramBuildInfoFilePathDecoder().toAbsolutePath) : {},
@@ -1994,7 +2000,7 @@ namespace ts {
             decodedReusableCache: DecodedResolvedMap,
             options: CompilerOptions,
             reusableCache: ProgramBuildInfoResolutionCache,
-            decodedModuleNameToDirectoryMap: CacheWithRedirects<ModeAwareCacheKey, ESMap<Path, ProgramBuildInfoResolutionId>> | undefined,
+            decodedModuleNameToDirectoryMap: DecodedModuleNameToDirectoryMap | undefined,
         ) {
             const map = decodedReusableCache.createMapForCompilerOptions(options);
             reusableCache.forEach(([dirId, entryId]) => {
@@ -2007,7 +2013,7 @@ namespace ts {
             entries: readonly ProgramBuildInfoResolutionEntryId[],
             dirPath: Path,
             options: CompilerOptions,
-            decodedModuleNameToDirectoryMap: CacheWithRedirects<ModeAwareCacheKey, ESMap<Path, ProgramBuildInfoResolutionId>> | undefined,
+            decodedModuleNameToDirectoryMap: DecodedModuleNameToDirectoryMap | undefined,
         ) {
             const modeAwareCache = createModeAwareCache<ProgramBuildInfoResolutionId>();
             entries.forEach(entryId => {

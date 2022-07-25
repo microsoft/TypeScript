@@ -61,22 +61,10 @@ Config: /user/username/projects/myproject/core/tsconfig.json : {
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/core/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/tests/tsconfig.json WatchType: Config file
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/core 1 undefined Config: /user/username/projects/myproject/core/tsconfig.json WatchType: Wild card directory
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/core 1 undefined Config: /user/username/projects/myproject/core/tsconfig.json WatchType: Wild card directory
-======== Resolving module '../logic' from '/user/username/projects/myproject/tests/index.ts'. ========
-Module resolution kind is not specified, using 'NodeJs'.
-Loading module as file / folder, candidate module location '/user/username/projects/myproject/logic', target file type 'TypeScript'.
-File '/user/username/projects/myproject/logic.ts' does not exist.
-File '/user/username/projects/myproject/logic.tsx' does not exist.
-File '/user/username/projects/myproject/logic.d.ts' does not exist.
-File '/user/username/projects/myproject/logic/package.json' does not exist.
-File '/user/username/projects/myproject/logic/index.ts' exist - use it as a name resolution result.
-======== Module name '../logic' was successfully resolved to '/user/username/projects/myproject/logic/index.ts'. ========
+Reusing resolution of module '../logic' from '/user/username/projects/myproject/tests/index.ts' found in cache from location '/user/username/projects/myproject/tests', it was successfully resolved to '/user/username/projects/myproject/logic/index.ts'.
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/logic/index.ts 500 undefined WatchType: Closed Script info
-======== Resolving module '../core/myClass' from '/user/username/projects/myproject/logic/index.ts'. ========
-Using compiler options of project reference redirect '/user/username/projects/myproject/logic/tsconfig.json'.
-Module resolution kind is not specified, using 'NodeJs'.
-Loading module as file / folder, candidate module location '/user/username/projects/myproject/core/myClass', target file type 'TypeScript'.
-File '/user/username/projects/myproject/core/myClass.ts' exist - use it as a name resolution result.
-======== Module name '../core/myClass' was successfully resolved to '/user/username/projects/myproject/core/myClass.ts'. ========
+Reusing resolution of module '../core/myClass' from '/user/username/projects/myproject/logic/index.ts' found in cache from location '/user/username/projects/myproject/logic', it was successfully resolved to '/user/username/projects/myproject/core/myClass.ts'.
+Reusing resolution of module '../core/anotherClass' from '/user/username/projects/myproject/logic/index.ts' found in cache from location '/user/username/projects/myproject/logic', it was successfully resolved to '/user/username/projects/myproject/core/anotherClass.ts'.
 ======== Resolving module '../core' from '/user/username/projects/myproject/logic/index.ts'. ========
 Using compiler options of project reference redirect '/user/username/projects/myproject/logic/tsconfig.json'.
 Module resolution kind is not specified, using 'NodeJs'.
@@ -87,12 +75,6 @@ File '/user/username/projects/myproject/core.d.ts' does not exist.
 File '/user/username/projects/myproject/core/package.json' does not exist.
 File '/user/username/projects/myproject/core/index.ts' exist - use it as a name resolution result.
 ======== Module name '../core' was successfully resolved to '/user/username/projects/myproject/core/index.ts'. ========
-======== Resolving module '../core/anotherClass' from '/user/username/projects/myproject/logic/index.ts'. ========
-Using compiler options of project reference redirect '/user/username/projects/myproject/logic/tsconfig.json'.
-Module resolution kind is not specified, using 'NodeJs'.
-Loading module as file / folder, candidate module location '/user/username/projects/myproject/core/anotherClass', target file type 'TypeScript'.
-File '/user/username/projects/myproject/core/anotherClass.ts' exist - use it as a name resolution result.
-======== Module name '../core/anotherClass' was successfully resolved to '/user/username/projects/myproject/core/anotherClass.ts'. ========
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/core/myClass.ts 500 undefined WatchType: Closed Script info
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/core/index.ts 500 undefined WatchType: Closed Script info
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/core/anotherClass.ts 500 undefined WatchType: Closed Script info
@@ -101,7 +83,7 @@ DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tests/no
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tests/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tests/tsconfig.json WatchType: Type roots
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tests/tsconfig.json WatchType: Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tests/tsconfig.json WatchType: Type roots
-Finishing updateGraphWorker: Project: /user/username/projects/myproject/tests/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Finishing updateGraphWorker: Project: /user/username/projects/myproject/tests/tsconfig.json Version: 1 structureChanged: true structureIsReused:: SafeModuleCache Elapsed:: *ms
 Project '/user/username/projects/myproject/tests/tsconfig.json' (Configured)
 	Files (6)
 	/a/lib/lib.d.ts

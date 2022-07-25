@@ -7,7 +7,9 @@ namespace ts {
         /*@internal*/
         getBuildInfo?(fileName: string, configFilePath: string | undefined): BuildInfo | undefined;
     }
-    export function readBuilderProgram(compilerOptions: CompilerOptions, host: ReadBuildProgramHost) {
+
+    /*@internal*/
+    export function readBuildInfoForProgram(compilerOptions: CompilerOptions, host: ReadBuildProgramHost) {
         const buildInfoPath = getTsBuildInfoEmitOutputFilePath(compilerOptions);
         if (!buildInfoPath) return undefined;
         let buildInfo;
@@ -23,7 +25,12 @@ namespace ts {
         }
         if (buildInfo.version !== version) return undefined;
         if (!buildInfo.program) return undefined;
-        return createBuilderProgramUsingProgramBuildInfo(buildInfo.program, buildInfoPath, host, compilerOptions.configFilePath);
+        return { buildInfo, buildInfoPath };
+    }
+
+    export function readBuilderProgram(compilerOptions: CompilerOptions, host: ReadBuildProgramHost) {
+        const result = readBuildInfoForProgram(compilerOptions, host);
+        return result && createBuilderProgramUsingProgramBuildInfo(result.buildInfo.program!, result.buildInfoPath, host, compilerOptions.configFilePath);
     }
 
     export function createIncrementalCompilerHost(options: CompilerOptions, system = sys): CompilerHost {

@@ -1272,6 +1272,28 @@ namespace ts {
             return sourceFile;
         }
 
+        function getOldProgram(options: CompilerOptions, compilerHost: CompilerHost): Program | OldBuildInfoProgram | undefined {
+            if (program) return program;
+            if (!options.cacheResolutions) return undefined;
+            const buildInfoResult = readBuildInfoForProgram(options, compilerHost);
+            if (!buildInfoResult?.buildInfo.program!.cacheResolutions) return undefined;
+
+            const buildInfoFilePathDecoder = getProgramBuildInfoFilePathDecoder(buildInfoResult.buildInfo.program.fileNames, buildInfoResult.buildInfoPath, host.getCurrentDirectory(), createGetCanonicalFileName(compilerHost.useCaseSensitiveFileNames()));
+            const compilerOptions = buildInfoResult.buildInfo.program.options ?
+                convertToOptionsWithAbsolutePaths(buildInfoResult.buildInfo.program.options, buildInfoFilePathDecoder.toAbsolutePath) :
+                {};
+            compilerOptions.configFilePath = options.configFilePath;
+            return createOldBuildInfoProgram(
+                compilerOptions,
+                /*cacheResolutions*/ undefined,
+                {
+                    cache: buildInfoResult.buildInfo.program.cacheResolutions,
+                    getProgramBuildInfoFilePathDecoder: () => buildInfoFilePathDecoder
+                },
+                host
+            );
+        }
+
         function synchronizeHostData(): void {
             Debug.assert(languageServiceMode !== LanguageServiceMode.Syntactic);
             // perform fast check if host supports it
@@ -1375,14 +1397,13 @@ namespace ts {
             // incremental parsing.
 
             const documentRegistryBucketKey = documentRegistry.getKeyForCompilationSettings(newSettings);
-            const options: CreateProgramOptions = {
+            program = createProgram({
                 rootNames: rootFileNames,
                 options: newSettings,
                 host: compilerHost,
-                oldProgram: program,
+                oldProgram: getOldProgram(newSettings, compilerHost),
                 projectReferences
-            };
-            program = createProgram(options);
+            });
 
             // 'getOrCreateSourceFile' depends on caching but should be used past this point.
             // After this point, the cache needs to be cleared to allow all collected snapshots to be released
