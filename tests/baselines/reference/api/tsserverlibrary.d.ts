@@ -5006,6 +5006,7 @@ declare namespace ts {
      * This assumes that any module id will have the same resolution for sibling files located in the same folder.
      */
     export interface PerDirectoryResolutionCache<T> {
+        getFromCache(directoryName: string, name: string, mode: ResolutionMode, redirectedReference?: ResolvedProjectReference): T | undefined;
         getOrCreateCacheForDirectory(directoryName: string, redirectedReference?: ResolvedProjectReference): ModeAwareCache<T>;
         clear(): void;
         /**
@@ -5022,7 +5023,7 @@ declare namespace ts {
      * We support only non-relative module names because resolution of relative module names is usually more deterministic and thus less expensive.
      */
     export interface NonRelativeModuleNameResolutionCache extends PackageJsonInfoCache {
-        getCacheForModuleName(nonRelativeModuleName: string, mode: ResolutionMode, redirectedReference?: ResolvedProjectReference): PerModuleNameCache | undefined;
+        getFromModuleNameCache(directory: string, nonRelativeModuleName: string, mode: ResolutionMode, redirectedReference: ResolvedProjectReference | undefined): ResolvedModuleWithFailedLookupLocations | undefined;
         getOrCreateCacheForModuleName(nonRelativeModuleName: string, mode: ResolutionMode, redirectedReference?: ResolvedProjectReference): PerModuleNameCache;
     }
     export interface PackageJsonInfoCache {

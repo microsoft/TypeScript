@@ -1359,6 +1359,7 @@ namespace ts {
                 trace: maybeBind(host, host.trace),
                 resolveModuleNames: maybeBind(host, host.resolveModuleNames),
                 getModuleResolutionCache: maybeBind(host, host.getModuleResolutionCache),
+                getTypeReferenceDirectiveResolutionCache: maybeBind(host, host.getTypeReferenceDirectiveResolutionCache),
                 resolveTypeReferenceDirectives: maybeBind(host, host.resolveTypeReferenceDirectives),
                 useSourceOfProjectReferenceRedirect: maybeBind(host, host.useSourceOfProjectReferenceRedirect),
                 getParsedCommandLine,

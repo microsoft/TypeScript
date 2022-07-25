@@ -298,6 +298,7 @@ namespace ts {
         compilerHost.resolveModuleNames = maybeBind(host, host.resolveModuleNames);
         compilerHost.resolveTypeReferenceDirectives = maybeBind(host, host.resolveTypeReferenceDirectives);
         compilerHost.getModuleResolutionCache = maybeBind(host, host.getModuleResolutionCache);
+        compilerHost.getTypeReferenceDirectiveResolutionCache = maybeBind(host, host.getTypeReferenceDirectiveResolutionCache);
         const moduleResolutionCache = !compilerHost.resolveModuleNames ? createModuleResolutionCache(currentDirectory, getCanonicalFileName) : undefined;
         const typeReferenceDirectiveResolutionCache = !compilerHost.resolveTypeReferenceDirectives ? createTypeReferenceDirectiveResolutionCache(currentDirectory, getCanonicalFileName, /*options*/ undefined, moduleResolutionCache?.getPackageJsonInfoCache()) : undefined;
         if (!compilerHost.resolveModuleNames) {
@@ -310,6 +311,7 @@ namespace ts {
             const loader = (moduleName: string, containingFile: string, redirectedReference: ResolvedProjectReference | undefined, containingFileMode: ResolutionMode) => resolveTypeReferenceDirective(moduleName, containingFile, state.projectCompilerOptions, compilerHost, redirectedReference, state.typeReferenceDirectiveResolutionCache, containingFileMode);
             compilerHost.resolveTypeReferenceDirectives = (typeReferenceDirectiveNames, containingFile, redirectedReference, _options, containingFileMode) =>
                 loadWithTypeDirectiveCache(typeReferenceDirectiveNames, containingFile, redirectedReference, containingFileMode, loader);
+            compilerHost.getTypeReferenceDirectiveResolutionCache = () => typeReferenceDirectiveResolutionCache;
         }
         compilerHost.getBuildInfo = (fileName, configFilePath) => getBuildInfo(state, fileName, toResolvedConfigFilePath(state, configFilePath as ResolvedConfigFileName), /*modifiedTime*/ undefined);
 

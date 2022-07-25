@@ -513,6 +513,11 @@ namespace ts.server {
             return this.resolutionCache.getModuleResolutionCache();
         }
 
+        /*@internal*/
+        getTypeReferenceDirectiveResolutionCache(): TypeReferenceDirectiveResolutionCache | undefined {
+            return this.resolutionCache.getTypeReferenceDirectiveResolutionCache();
+        }
+
         resolveTypeReferenceDirectives(typeDirectiveNames: string[] | FileReference[], containingFile: string, redirectedReference?: ResolvedProjectReference, _options?: CompilerOptions, containingFileMode?: ResolutionMode, partialResolutionInfo?: PartialResolutionInfo) {
             return this.resolutionCache.resolveTypeReferenceDirectives(typeDirectiveNames, containingFile, redirectedReference, containingFileMode, partialResolutionInfo);
         }
@@ -2342,6 +2347,11 @@ namespace ts.server {
         /*@internal*/
         getModuleResolutionCache() {
             return this.hostProject.getCurrentProgram()?.getModuleResolutionCache();
+        }
+
+        /*@internal*/
+        getTypeReferenceDirectiveResolutionCache() {
+            return this.hostProject.getCurrentProgram()?.getTypeReferenceDirectiveResolutionCache();
         }
     }
 

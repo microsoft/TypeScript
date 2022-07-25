@@ -63,18 +63,7 @@ Loading module 'pkg0' from 'node_modules' folder, target file type 'TypeScript'.
 Directory '/src/project/d/da/daa/daaa/x/y/z/node_modules' does not exist, skipping all lookups in it.
 Directory '/src/project/d/da/daa/daaa/x/y/node_modules' does not exist, skipping all lookups in it.
 Directory '/src/project/d/da/daa/daaa/x/node_modules' does not exist, skipping all lookups in it.
-Directory '/src/project/d/da/daa/daaa/node_modules' does not exist, skipping all lookups in it.
-Directory '/src/project/d/da/daa/node_modules' does not exist, skipping all lookups in it.
-Directory '/src/project/d/da/node_modules' does not exist, skipping all lookups in it.
-Directory '/src/project/d/node_modules' does not exist, skipping all lookups in it.
-File '/src/project/node_modules/pkg0/package.json' does not exist.
-File '/src/project/node_modules/pkg0.ts' does not exist.
-File '/src/project/node_modules/pkg0.tsx' does not exist.
-File '/src/project/node_modules/pkg0.d.ts' does not exist.
-File '/src/project/node_modules/pkg0/index.ts' does not exist.
-File '/src/project/node_modules/pkg0/index.tsx' does not exist.
-File '/src/project/node_modules/pkg0/index.d.ts' exist - use it as a name resolution result.
-Resolving real path for '/src/project/node_modules/pkg0/index.d.ts', result '/src/project/node_modules/pkg0/index.d.ts'.
+Resolution for module 'pkg0' was found in cache from location '/src/project/d/da/daa/daaa'.
 ======== Module name 'pkg0' was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'. ========
 Reusing resolution of module 'pkg0' from '/src/project/d/da/daa/daaa/fileWithImports.ts' found in cache from location '/src/project/d/da/daa/daaa', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
 Reusing resolution of module 'pkg0' from '/src/project/d/da/daa/fileWithImports.ts' found in cache from location '/src/project/d/da/daa', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.

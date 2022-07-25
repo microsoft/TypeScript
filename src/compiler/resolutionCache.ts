@@ -37,6 +37,7 @@ namespace ts {
         closeTypeRootsWatch(): void;
 
         getModuleResolutionCache(): ModuleResolutionCache;
+        getTypeReferenceDirectiveResolutionCache(): TypeReferenceDirectiveResolutionCache;
 
         clear(): void;
     }
@@ -225,6 +226,7 @@ namespace ts {
 
         return {
             getModuleResolutionCache: () => moduleResolutionCache,
+            getTypeReferenceDirectiveResolutionCache: () => typeReferenceDirectiveResolutionCache,
             startRecordingFilesWithChangedResolutions,
             finishRecordingFilesWithChangedResolutions,
             // perDirectoryResolvedModuleNames and perDirectoryResolvedTypeReferenceDirectives could be non empty if there was exception during program update

@@ -4170,6 +4170,8 @@ namespace ts {
         getMissingFilePaths(): readonly Path[];
         /* @internal */
         getModuleResolutionCache(): ModuleResolutionCache | undefined;
+        /*@internal*/
+        getTypeReferenceDirectiveResolutionCache(): TypeReferenceDirectiveResolutionCache | undefined;
         /* @internal */
         getFilesByNameMap(): ESMap<string, SourceFile | false | undefined>;
 
@@ -7005,6 +7007,7 @@ namespace ts {
          * Returns the module resolution cache used by a provided `resolveModuleNames` implementation so that any non-name module resolution operations (eg, package.json lookup) can reuse it
          */
         getModuleResolutionCache?(): ModuleResolutionCache | undefined;
+        /*@internal*/ getTypeReferenceDirectiveResolutionCache?(): TypeReferenceDirectiveResolutionCache | undefined;
         /**
          * This method is a companion for 'resolveModuleNames' and is used to resolve 'types' references to actual type declaration files
          */

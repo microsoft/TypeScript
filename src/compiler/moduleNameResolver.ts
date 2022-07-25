@@ -333,8 +333,7 @@ namespace ts {
         }
 
         const containingDirectory = containingFile ? getDirectoryPath(containingFile) : undefined;
-        const perFolderCache = containingDirectory ? cache && cache.getOrCreateCacheForDirectory(containingDirectory, redirectedReference) : undefined;
-        let result = perFolderCache && perFolderCache.get(typeReferenceDirectiveName, /*mode*/ resolutionMode);
+        let result = containingDirectory ? cache?.getFromCache(containingDirectory, typeReferenceDirectiveName, /*mode*/ resolutionMode, redirectedReference) : undefined;
         if (result) {
             if (traceEnabled) {
                 trace(host, Diagnostics.Resolving_type_reference_directive_0_containing_file_1, typeReferenceDirectiveName, containingFile);
@@ -420,7 +419,9 @@ namespace ts {
             affectingLocations: initializeResolutionField(affectingLocations),
             resolutionDiagnostics: initializeResolutionField(diagnostics),
         };
-        perFolderCache?.set(typeReferenceDirectiveName, /*mode*/ resolutionMode, result);
+        if (containingDirectory && cache) {
+            cache.getOrCreateCacheForDirectory(containingDirectory, redirectedReference).set(typeReferenceDirectiveName, /*mode*/ resolutionMode, result);
+        }
         if (traceEnabled) traceResult(result);
         return result;
 
@@ -585,6 +586,7 @@ namespace ts {
     export interface PerDirectoryResolutionCache<T> {
         /*@internal*/
         directoryToModuleNameMap: CacheWithRedirects<Path, ModeAwareCache<T>>;
+        getFromCache(directoryName: string, name: string, mode: ResolutionMode, redirectedReference?: ResolvedProjectReference): T | undefined;
         getOrCreateCacheForDirectory(directoryName: string, redirectedReference?: ResolvedProjectReference): ModeAwareCache<T>;
         clear(): void;
         /**
@@ -592,6 +594,12 @@ namespace ts {
          *  This updates the redirects map as well if needed so module resolutions are cached if they can across the projects
          */
         update(options: CompilerOptions): void;
+        /*@internal*/ setOldResolutionCache(cache: OldResolutionCache<T> | undefined): void;
+    }
+
+    /*@internal*/
+    export interface OldResolutionCache<T> {
+        getResolved(dirPath: Path, name: string, mode: ResolutionMode, redirectedReference: ResolvedProjectReference | undefined): T | undefined;
     }
 
     export interface ModuleResolutionCache extends PerDirectoryResolutionCache<ResolvedModuleWithFailedLookupLocations>, NonRelativeModuleNameResolutionCache, PackageJsonInfoCache {
@@ -604,7 +612,7 @@ namespace ts {
      * We support only non-relative module names because resolution of relative module names is usually more deterministic and thus less expensive.
      */
     export interface NonRelativeModuleNameResolutionCache extends PackageJsonInfoCache {
-        getCacheForModuleName(nonRelativeModuleName: string, mode: ResolutionMode, redirectedReference?: ResolvedProjectReference): PerModuleNameCache | undefined;
+        getFromModuleNameCache(directory: string, nonRelativeModuleName: string, mode: ResolutionMode, redirectedReference: ResolvedProjectReference | undefined): ResolvedModuleWithFailedLookupLocations | undefined;
         getOrCreateCacheForModuleName(nonRelativeModuleName: string, mode: ResolutionMode, redirectedReference?: ResolvedProjectReference): PerModuleNameCache;
     }
 
@@ -806,14 +814,18 @@ namespace ts {
 
     function createPerDirectoryResolutionCache<T>(currentDirectory: string, getCanonicalFileName: GetCanonicalFileName, options: CompilerOptions | undefined): PerDirectoryResolutionCache<T> {
         const directoryToModuleNameMap = createCacheWithRedirects<Path, ModeAwareCache<T>>(options);
+        let oldResolutionCache: OldResolutionCache<T> | undefined;
         return {
             directoryToModuleNameMap,
+            getFromCache,
             getOrCreateCacheForDirectory,
             clear,
             update,
+            setOldResolutionCache: cache => oldResolutionCache = cache
         };
 
         function clear() {
+            oldResolutionCache = undefined;
             directoryToModuleNameMap.clear();
         }
 
@@ -823,7 +835,17 @@ namespace ts {
 
         function getOrCreateCacheForDirectory(directoryName: string, redirectedReference?: ResolvedProjectReference) {
             const path = toPath(directoryName, currentDirectory, getCanonicalFileName);
-            return getOrCreateCache<Path, ModeAwareCache<T>>(directoryToModuleNameMap, redirectedReference, path, () => createModeAwareCache());
+            return getOrCreateCache<Path, ModeAwareCache<T>>(directoryToModuleNameMap, redirectedReference, path, createModeAwareCache);
+        }
+
+        function getFromCache(directoryName: string, name: string, mode: ResolutionMode, redirectedReference?: ResolvedProjectReference) {
+            const path = toPath(directoryName, currentDirectory, getCanonicalFileName);
+            const result = directoryToModuleNameMap.getMapOfCacheRedirects(redirectedReference)?.get(path)?.get(name, mode);
+            if (result) return result;
+
+            const resultFromOld = oldResolutionCache?.getResolved(path, name, mode, redirectedReference);
+            if (resultFromOld) getOrCreateCacheForDirectory(directoryName, redirectedReference).set(name, mode, resultFromOld);
+            return resultFromOld;
         }
     }
 
@@ -979,16 +1001,18 @@ namespace ts {
         const moduleNameToDirectoryMap = createCacheWithRedirects<ModeAwareCacheKey, PerModuleNameCache>(options);
         const perDirectoryResolutionCache = createPerDirectoryResolutionCache<ResolvedModuleWithFailedLookupLocations>(currentDirectory, getCanonicalFileName, options);
         const packageJsonInfoCache = createPackageJsonInfoCache(currentDirectory, getCanonicalFileName);
+        let oldResolutionCache: OldResolutionCache<ResolvedModuleWithFailedLookupLocations> | undefined;
 
         return {
             ...packageJsonInfoCache,
             ...perDirectoryResolutionCache,
             getOrCreateCacheForModuleName,
-            getCacheForModuleName,
+            getFromModuleNameCache,
             clear,
             update,
             getPackageJsonInfoCache: () => packageJsonInfoCache,
             clearAllExceptPackageJsonInfoCache,
+            setOldResolutionCache,
         };
 
         function clear() {
@@ -997,6 +1021,7 @@ namespace ts {
         }
 
         function clearAllExceptPackageJsonInfoCache() {
+            oldResolutionCache = undefined;
             perDirectoryResolutionCache.clear();
             moduleNameToDirectoryMap.clear();
         }
@@ -1006,9 +1031,19 @@ namespace ts {
             moduleNameToDirectoryMap.update(options);
         }
 
-        function getCacheForModuleName(nonRelativeModuleName: string, mode: ResolutionMode, redirectedReference?: ResolvedProjectReference): PerModuleNameCache | undefined {
+        function setOldResolutionCache(cache: OldResolutionCache<ResolvedModuleWithFailedLookupLocations> | undefined) {
+            oldResolutionCache = cache;
+            perDirectoryResolutionCache.setOldResolutionCache(cache);
+        }
+
+        function getFromModuleNameCache(directoryName: string, nonRelativeModuleName: string, mode: ResolutionMode, redirectedReference?: ResolvedProjectReference) {
             Debug.assert(!isExternalModuleNameRelative(nonRelativeModuleName));
-            return moduleNameToDirectoryMap.getMapOfCacheRedirects(redirectedReference)?.get(getModeAwareCacheKey(nonRelativeModuleName, mode));
+            const result = moduleNameToDirectoryMap.getMapOfCacheRedirects(redirectedReference)?.get(getModeAwareCacheKey(nonRelativeModuleName, mode))?.get(directoryName);
+            if (result) return result;
+
+            const fromOld = oldResolutionCache?.getResolved(toPath(directoryName), nonRelativeModuleName, mode, redirectedReference);
+            if (fromOld) getOrCreateCacheForModuleName(nonRelativeModuleName, mode, redirectedReference).set(directoryName, fromOld);
+            return fromOld;
         }
 
         function getOrCreateCacheForModuleName(nonRelativeModuleName: string, mode: ResolutionMode, redirectedReference?: ResolvedProjectReference): PerModuleNameCache {
@@ -1081,9 +1116,7 @@ namespace ts {
 
     export function resolveModuleNameFromCache(moduleName: string, containingFile: string, cache: ModuleResolutionCache, mode?: ResolutionMode): ResolvedModuleWithFailedLookupLocations | undefined {
         const containingDirectory = getDirectoryPath(containingFile);
-        const perFolderCache = cache && cache.getOrCreateCacheForDirectory(containingDirectory);
-        if (!perFolderCache) return undefined;
-        return perFolderCache.get(moduleName, mode);
+        return cache?.getFromCache(containingDirectory, moduleName, mode);
     }
 
     export function resolveModuleName(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference, resolutionMode?: ResolutionMode): ResolvedModuleWithFailedLookupLocations {
@@ -1098,9 +1131,7 @@ namespace ts {
             }
         }
         const containingDirectory = getDirectoryPath(containingFile);
-        const perFolderCache = cache && cache.getOrCreateCacheForDirectory(containingDirectory, redirectedReference);
-        let result = perFolderCache && perFolderCache.get(moduleName, resolutionMode);
-
+        let result = cache?.getFromCache(containingDirectory, moduleName, resolutionMode, redirectedReference);
         if (result) {
             if (traceEnabled) {
                 trace(host, Diagnostics.Resolution_for_module_0_was_found_in_cache_from_location_1, moduleName, containingDirectory);
@@ -1153,8 +1184,8 @@ namespace ts {
             if (result && result.resolvedModule) perfLogger.logInfoEvent(`Module "${moduleName}" resolved to "${result.resolvedModule.resolvedFileName}"`);
             perfLogger.logStopResolveModule((result && result.resolvedModule) ? "" + result.resolvedModule.resolvedFileName : "null");
 
-            if (perFolderCache) {
-                perFolderCache.set(moduleName, resolutionMode, result);
+            if (cache) {
+                cache.getOrCreateCacheForDirectory(containingDirectory, redirectedReference).set(moduleName, resolutionMode, result);
                 if (!isExternalModuleNameRelative(moduleName)) {
                     // put result in per-module name cache
                     cache.getOrCreateCacheForModuleName(moduleName, resolutionMode, redirectedReference).set(containingDirectory, result);
@@ -2490,10 +2521,10 @@ namespace ts {
     }
 
     function loadModuleFromNearestNodeModulesDirectoryWorker(extensions: Extensions, moduleName: string, directory: string, state: ModuleResolutionState, typesScopeOnly: boolean, cache: ModuleResolutionCache | undefined, redirectedReference: ResolvedProjectReference | undefined): SearchResult<Resolved> {
-        const perModuleNameCache = cache?.getCacheForModuleName(moduleName, state.features === 0 ? undefined : state.features & NodeResolutionFeatures.EsmMode ? ModuleKind.ESNext : ModuleKind.CommonJS, redirectedReference);
+        const mode: ResolutionMode = state.features === 0 ? undefined : state.features & NodeResolutionFeatures.EsmMode ? ModuleKind.ESNext : ModuleKind.CommonJS;
         return forEachAncestorDirectory(normalizeSlashes(directory), ancestorDirectory => {
             if (getBaseFileName(ancestorDirectory) !== "node_modules") {
-                const resolutionFromCache = tryFindNonRelativeModuleNameInCache(perModuleNameCache, moduleName, ancestorDirectory, state);
+                const resolutionFromCache = tryFindNonRelativeModuleNameInCache(cache, moduleName, mode, ancestorDirectory, redirectedReference, state);
                 if (resolutionFromCache) {
                     return resolutionFromCache;
                 }
@@ -2674,8 +2705,15 @@ namespace ts {
             typesPackageName;
     }
 
-    function tryFindNonRelativeModuleNameInCache(cache: PerModuleNameCache | undefined, moduleName: string, containingDirectory: string, state: ModuleResolutionState): SearchResult<Resolved> {
-        const result = cache && cache.get(containingDirectory);
+    function tryFindNonRelativeModuleNameInCache(
+        cache: NonRelativeModuleNameResolutionCache | undefined,
+        moduleName: string,
+        mode: ResolutionMode,
+        containingDirectory: string,
+        redirectedReference: ResolvedProjectReference | undefined,
+        state: ModuleResolutionState
+    ): SearchResult<Resolved> {
+        const result = cache?.getFromModuleNameCache(containingDirectory, moduleName, mode, redirectedReference);
         if (result) {
             if (state.traceEnabled) {
                 trace(state.host, Diagnostics.Resolution_for_module_0_was_found_in_cache_from_location_1, moduleName, containingDirectory);
@@ -2722,10 +2760,9 @@ namespace ts {
             }
 
             if (!isExternalModuleNameRelative(moduleName)) {
-                const perModuleNameCache = cache?.getCacheForModuleName(moduleName, /*mode*/ undefined, redirectedReference);
                 // Climb up parent directories looking for a module.
                 const resolved = forEachAncestorDirectory(containingDirectory, directory => {
-                    const resolutionFromCache = tryFindNonRelativeModuleNameInCache(perModuleNameCache, moduleName, directory, state);
+                    const resolutionFromCache = tryFindNonRelativeModuleNameInCache(cache, moduleName, /*mode*/ undefined, directory, redirectedReference, state);
                     if (resolutionFromCache) {
                         return resolutionFromCache;
                     }
