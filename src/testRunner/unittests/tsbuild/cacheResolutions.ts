@@ -131,6 +131,20 @@ namespace ts.tscWatch.cacheResolutions {
                     subScenario: "modify c/ca/caa/randomFileForImport by adding import",
                     modifyFs: fs => prependText(fs, "/src/project/c/ca/caa/randomFileForImport.ts", `import type { ImportInterface0 } from "pkg0";\n`),
                 },
+                {
+                    subScenario: "modify d/da/daa/daaa/x/y/z/randomFileForImport by adding import",
+                    modifyFs: fs => prependText(fs, "/src/project/d/da/daa/daaa/x/y/z/randomFileForImport.ts", `import type { ImportInterface0 } from "pkg0";\n`),
+                    discrepancyExplanation: () => [
+                        `Incremental is currently not reusing resolution so tsbuildinfo has two same resolutions instead of one TODO: (shkamat)`
+                    ]
+                },
+                {
+                    subScenario: "modify e/ea/eaa/eaaa/x/y/z/randomFileForImport by adding import",
+                    modifyFs: fs => prependText(fs, "/src/project/e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts", `import type { ImportInterface0 } from "pkg0";\n`),
+                    discrepancyExplanation: () => [
+                        `Incremental is currently not reusing resolution so tsbuildinfo has two same resolutions instead of one TODO: (shkamat)`
+                    ]
+                },
             ]
         });
     });
@@ -385,12 +399,14 @@ namespace ts.tscWatch.cacheResolutions {
                     "c/ca/caa/randomFileForImport.ts",
                     "c/ca/caa/caaa/fileWithImports.ts",
                     "c/cb/fileWithImports.ts",
+                    "d/da/daa/daaa/x/y/z/randomFileForImport.ts",
                     "d/da/daa/daaa/fileWithImports.ts",
                     "d/da/daa/fileWithImports.ts",
                     "d/da/fileWithImports.ts",
                     "e/ea/fileWithImports.ts",
                     "e/ea/eaa/fileWithImports.ts",
                     "e/ea/eaa/eaaa/fileWithImports.ts",
+                    "e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts",
                 ],
             }),
             "/src/project/fileWithImports.ts": Utils.dedent`
@@ -414,6 +430,7 @@ namespace ts.tscWatch.cacheResolutions {
             "/src/project/c/cb/fileWithImports.ts": Utils.dedent`
                 import type { ImportInterface0 } from "pkg0";
             `,
+            "/src/project/d/da/daa/daaa/x/y/z/randomFileForImport.ts": getRandomFileContent(),
             "/src/project/d/da/daa/daaa/fileWithImports.ts": Utils.dedent`
                 import type { ImportInterface0 } from "pkg0";
             `,
@@ -432,6 +449,7 @@ namespace ts.tscWatch.cacheResolutions {
             "/src/project/e/ea/eaa/eaaa/fileWithImports.ts": Utils.dedent`
                 import type { ImportInterface0 } from "pkg0";
             `,
+            "/src/project/e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts": getRandomFileContent(),
             "/src/project/node_modules/pkg0/index.d.ts": getPkgImportContent("Import", 0),
         };
     }

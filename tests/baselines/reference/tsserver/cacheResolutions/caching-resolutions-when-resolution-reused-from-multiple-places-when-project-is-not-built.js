@@ -15,12 +15,14 @@ Config: /src/project/tsconfig.json : {
   "/src/project/c/ca/caa/randomFileForImport.ts",
   "/src/project/c/ca/caa/caaa/fileWithImports.ts",
   "/src/project/c/cb/fileWithImports.ts",
+  "/src/project/d/da/daa/daaa/x/y/z/randomFileForImport.ts",
   "/src/project/d/da/daa/daaa/fileWithImports.ts",
   "/src/project/d/da/daa/fileWithImports.ts",
   "/src/project/d/da/fileWithImports.ts",
   "/src/project/e/ea/fileWithImports.ts",
   "/src/project/e/ea/eaa/fileWithImports.ts",
-  "/src/project/e/ea/eaa/eaaa/fileWithImports.ts"
+  "/src/project/e/ea/eaa/eaaa/fileWithImports.ts",
+  "/src/project/e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts"
  ],
  "options": {
   "composite": true,
@@ -38,12 +40,14 @@ FileWatcher:: Added:: WatchInfo: /src/project/c/ca/fileWithImports.ts 500 undefi
 FileWatcher:: Added:: WatchInfo: /src/project/c/ca/caa/randomFileForImport.ts 500 undefined WatchType: Closed Script info
 FileWatcher:: Added:: WatchInfo: /src/project/c/ca/caa/caaa/fileWithImports.ts 500 undefined WatchType: Closed Script info
 FileWatcher:: Added:: WatchInfo: /src/project/c/cb/fileWithImports.ts 500 undefined WatchType: Closed Script info
+FileWatcher:: Added:: WatchInfo: /src/project/d/da/daa/daaa/x/y/z/randomFileForImport.ts 500 undefined WatchType: Closed Script info
 FileWatcher:: Added:: WatchInfo: /src/project/d/da/daa/daaa/fileWithImports.ts 500 undefined WatchType: Closed Script info
 FileWatcher:: Added:: WatchInfo: /src/project/d/da/daa/fileWithImports.ts 500 undefined WatchType: Closed Script info
 FileWatcher:: Added:: WatchInfo: /src/project/d/da/fileWithImports.ts 500 undefined WatchType: Closed Script info
 FileWatcher:: Added:: WatchInfo: /src/project/e/ea/fileWithImports.ts 500 undefined WatchType: Closed Script info
 FileWatcher:: Added:: WatchInfo: /src/project/e/ea/eaa/fileWithImports.ts 500 undefined WatchType: Closed Script info
 FileWatcher:: Added:: WatchInfo: /src/project/e/ea/eaa/eaaa/fileWithImports.ts 500 undefined WatchType: Closed Script info
+FileWatcher:: Added:: WatchInfo: /src/project/e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts 500 undefined WatchType: Closed Script info
 Starting updateGraphWorker: Project: /src/project/tsconfig.json
 ======== Resolving module 'pkg0' from '/src/project/fileWithImports.ts'. ========
 Module resolution kind is not specified, using 'NodeJs'.
@@ -135,7 +139,7 @@ DirectoryWatcher:: Added:: WatchInfo: /src/project/node_modules/@types 1 undefin
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /src/project/node_modules/@types 1 undefined Project: /src/project/tsconfig.json WatchType: Type roots
 Finishing updateGraphWorker: Project: /src/project/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Project '/src/project/tsconfig.json' (Configured)
-	Files (17)
+	Files (19)
 	/a/lib/lib.d.ts
 	/src/project/node_modules/pkg0/index.d.ts
 	/src/project/fileWithImports.ts
@@ -147,12 +151,14 @@ Project '/src/project/tsconfig.json' (Configured)
 	/src/project/c/ca/caa/randomFileForImport.ts
 	/src/project/c/ca/caa/caaa/fileWithImports.ts
 	/src/project/c/cb/fileWithImports.ts
+	/src/project/d/da/daa/daaa/x/y/z/randomFileForImport.ts
 	/src/project/d/da/daa/daaa/fileWithImports.ts
 	/src/project/d/da/daa/fileWithImports.ts
 	/src/project/d/da/fileWithImports.ts
 	/src/project/e/ea/fileWithImports.ts
 	/src/project/e/ea/eaa/fileWithImports.ts
 	/src/project/e/ea/eaa/eaaa/fileWithImports.ts
+	/src/project/e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts
 
 
 	../../a/lib/lib.d.ts
@@ -188,6 +194,8 @@ Project '/src/project/tsconfig.json' (Configured)
 	  Part of 'files' list in tsconfig.json
 	c/cb/fileWithImports.ts
 	  Part of 'files' list in tsconfig.json
+	d/da/daa/daaa/x/y/z/randomFileForImport.ts
+	  Part of 'files' list in tsconfig.json
 	d/da/daa/daaa/fileWithImports.ts
 	  Part of 'files' list in tsconfig.json
 	d/da/daa/fileWithImports.ts
@@ -200,12 +208,14 @@ Project '/src/project/tsconfig.json' (Configured)
 	  Part of 'files' list in tsconfig.json
 	e/ea/eaa/eaaa/fileWithImports.ts
 	  Part of 'files' list in tsconfig.json
+	e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts
+	  Part of 'files' list in tsconfig.json
 
 -----------------------------------------------
 Search path: /src/project
 For info: /src/project/tsconfig.json :: No config files found.
 Project '/src/project/tsconfig.json' (Configured)
-	Files (17)
+	Files (19)
 
 -----------------------------------------------
 Open files: 
@@ -219,7 +229,7 @@ For info: /src/project/b/randomFileForImport.ts :: Config file name: /src/projec
 Search path: /src/project
 For info: /src/project/tsconfig.json :: No config files found.
 Project '/src/project/tsconfig.json' (Configured)
-	Files (17)
+	Files (19)
 
 -----------------------------------------------
 Open files: 
@@ -235,7 +245,7 @@ For info: /src/project/c/ca/caa/randomFileForImport.ts :: Config file name: /src
 Search path: /src/project
 For info: /src/project/tsconfig.json :: No config files found.
 Project '/src/project/tsconfig.json' (Configured)
-	Files (17)
+	Files (19)
 
 -----------------------------------------------
 Open files: 
@@ -244,6 +254,48 @@ Open files:
 	FileName: /src/project/b/randomFileForImport.ts ProjectRootPath: undefined
 		Projects: /src/project/tsconfig.json
 	FileName: /src/project/c/ca/caa/randomFileForImport.ts ProjectRootPath: undefined
+		Projects: /src/project/tsconfig.json
+response:{"responseRequired":false}
+request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/src/project/d/da/daa/daaa/x/y/z/randomFileForImport.ts"}}
+FileWatcher:: Close:: WatchInfo: /src/project/d/da/daa/daaa/x/y/z/randomFileForImport.ts 500 undefined WatchType: Closed Script info
+Search path: /src/project/d/da/daa/daaa/x/y/z
+For info: /src/project/d/da/daa/daaa/x/y/z/randomFileForImport.ts :: Config file name: /src/project/tsconfig.json
+Search path: /src/project
+For info: /src/project/tsconfig.json :: No config files found.
+Project '/src/project/tsconfig.json' (Configured)
+	Files (19)
+
+-----------------------------------------------
+Open files: 
+	FileName: /src/project/randomFileForImport.ts ProjectRootPath: undefined
+		Projects: /src/project/tsconfig.json
+	FileName: /src/project/b/randomFileForImport.ts ProjectRootPath: undefined
+		Projects: /src/project/tsconfig.json
+	FileName: /src/project/c/ca/caa/randomFileForImport.ts ProjectRootPath: undefined
+		Projects: /src/project/tsconfig.json
+	FileName: /src/project/d/da/daa/daaa/x/y/z/randomFileForImport.ts ProjectRootPath: undefined
+		Projects: /src/project/tsconfig.json
+response:{"responseRequired":false}
+request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/src/project/e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts"}}
+FileWatcher:: Close:: WatchInfo: /src/project/e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts 500 undefined WatchType: Closed Script info
+Search path: /src/project/e/ea/eaa/eaaa/x/y/z
+For info: /src/project/e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts :: Config file name: /src/project/tsconfig.json
+Search path: /src/project
+For info: /src/project/tsconfig.json :: No config files found.
+Project '/src/project/tsconfig.json' (Configured)
+	Files (19)
+
+-----------------------------------------------
+Open files: 
+	FileName: /src/project/randomFileForImport.ts ProjectRootPath: undefined
+		Projects: /src/project/tsconfig.json
+	FileName: /src/project/b/randomFileForImport.ts ProjectRootPath: undefined
+		Projects: /src/project/tsconfig.json
+	FileName: /src/project/c/ca/caa/randomFileForImport.ts ProjectRootPath: undefined
+		Projects: /src/project/tsconfig.json
+	FileName: /src/project/d/da/daa/daaa/x/y/z/randomFileForImport.ts ProjectRootPath: undefined
+		Projects: /src/project/tsconfig.json
+	FileName: /src/project/e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts ProjectRootPath: undefined
 		Projects: /src/project/tsconfig.json
 response:{"responseRequired":false}
 modify randomFileForImport by adding import
@@ -342,4 +394,85 @@ Reusing resolution of module 'pkg0' from '/src/project/e/ea/fileWithImports.ts' 
 Reusing resolution of module 'pkg0' from '/src/project/e/ea/eaa/fileWithImports.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
 Reusing resolution of module 'pkg0' from '/src/project/e/ea/eaa/eaaa/fileWithImports.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
 Finishing updateGraphWorker: Project: /src/project/tsconfig.json Version: 4 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
+Different program with same set of files
+modify d/da/daa/daaa/x/y/z/randomFileForImport by adding import
+request:{"command":"change","arguments":{"file":"/src/project/d/da/daa/daaa/x/y/z/randomFileForImport.ts","line":1,"offset":1,"endLine":1,"endOffset":1,"insertString":"import type { ImportInterface0 } from \"pkg0\";\n"},"seq":4,"type":"request"}
+response:{"responseRequired":false}
+Starting updateGraphWorker: Project: /src/project/tsconfig.json
+Reusing resolution of module 'pkg0' from '/src/project/fileWithImports.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Reusing resolution of module 'pkg0' from '/src/project/randomFileForImport.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Reusing resolution of module 'pkg0' from '/src/project/a/fileWithImports.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Reusing resolution of module 'pkg0' from '/src/project/b/ba/fileWithImports.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Reusing resolution of module 'pkg0' from '/src/project/b/randomFileForImport.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Reusing resolution of module 'pkg0' from '/src/project/c/ca/fileWithImports.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Reusing resolution of module 'pkg0' from '/src/project/c/ca/caa/randomFileForImport.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Reusing resolution of module 'pkg0' from '/src/project/c/ca/caa/caaa/fileWithImports.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Reusing resolution of module 'pkg0' from '/src/project/c/cb/fileWithImports.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+======== Resolving module 'pkg0' from '/src/project/d/da/daa/daaa/x/y/z/randomFileForImport.ts'. ========
+Module resolution kind is not specified, using 'NodeJs'.
+Loading module 'pkg0' from 'node_modules' folder, target file type 'TypeScript'.
+Directory '/src/project/d/da/daa/daaa/x/y/z/node_modules' does not exist, skipping all lookups in it.
+Directory '/src/project/d/da/daa/daaa/x/y/node_modules' does not exist, skipping all lookups in it.
+Directory '/src/project/d/da/daa/daaa/x/node_modules' does not exist, skipping all lookups in it.
+Directory '/src/project/d/da/daa/daaa/node_modules' does not exist, skipping all lookups in it.
+Directory '/src/project/d/da/daa/node_modules' does not exist, skipping all lookups in it.
+Directory '/src/project/d/da/node_modules' does not exist, skipping all lookups in it.
+Directory '/src/project/d/node_modules' does not exist, skipping all lookups in it.
+File '/src/project/node_modules/pkg0/package.json' does not exist according to earlier cached lookups.
+File '/src/project/node_modules/pkg0.ts' does not exist.
+File '/src/project/node_modules/pkg0.tsx' does not exist.
+File '/src/project/node_modules/pkg0.d.ts' does not exist.
+File '/src/project/node_modules/pkg0/index.ts' does not exist.
+File '/src/project/node_modules/pkg0/index.tsx' does not exist.
+File '/src/project/node_modules/pkg0/index.d.ts' exist - use it as a name resolution result.
+Resolving real path for '/src/project/node_modules/pkg0/index.d.ts', result '/src/project/node_modules/pkg0/index.d.ts'.
+======== Module name 'pkg0' was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'. ========
+Reusing resolution of module 'pkg0' from '/src/project/d/da/daa/daaa/fileWithImports.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Reusing resolution of module 'pkg0' from '/src/project/d/da/daa/fileWithImports.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Reusing resolution of module 'pkg0' from '/src/project/d/da/fileWithImports.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Reusing resolution of module 'pkg0' from '/src/project/e/ea/fileWithImports.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Reusing resolution of module 'pkg0' from '/src/project/e/ea/eaa/fileWithImports.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Reusing resolution of module 'pkg0' from '/src/project/e/ea/eaa/eaaa/fileWithImports.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Finishing updateGraphWorker: Project: /src/project/tsconfig.json Version: 5 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
+Different program with same set of files
+modify e/ea/eaa/eaaa/x/y/z/randomFileForImport by adding import
+request:{"command":"change","arguments":{"file":"/src/project/e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts","line":1,"offset":1,"endLine":1,"endOffset":1,"insertString":"import type { ImportInterface0 } from \"pkg0\";\n"},"seq":5,"type":"request"}
+response:{"responseRequired":false}
+Starting updateGraphWorker: Project: /src/project/tsconfig.json
+Reusing resolution of module 'pkg0' from '/src/project/fileWithImports.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Reusing resolution of module 'pkg0' from '/src/project/randomFileForImport.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Reusing resolution of module 'pkg0' from '/src/project/a/fileWithImports.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Reusing resolution of module 'pkg0' from '/src/project/b/ba/fileWithImports.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Reusing resolution of module 'pkg0' from '/src/project/b/randomFileForImport.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Reusing resolution of module 'pkg0' from '/src/project/c/ca/fileWithImports.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Reusing resolution of module 'pkg0' from '/src/project/c/ca/caa/randomFileForImport.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Reusing resolution of module 'pkg0' from '/src/project/c/ca/caa/caaa/fileWithImports.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Reusing resolution of module 'pkg0' from '/src/project/c/cb/fileWithImports.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Reusing resolution of module 'pkg0' from '/src/project/d/da/daa/daaa/x/y/z/randomFileForImport.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Reusing resolution of module 'pkg0' from '/src/project/d/da/daa/daaa/fileWithImports.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Reusing resolution of module 'pkg0' from '/src/project/d/da/daa/fileWithImports.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Reusing resolution of module 'pkg0' from '/src/project/d/da/fileWithImports.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Reusing resolution of module 'pkg0' from '/src/project/e/ea/fileWithImports.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Reusing resolution of module 'pkg0' from '/src/project/e/ea/eaa/fileWithImports.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Reusing resolution of module 'pkg0' from '/src/project/e/ea/eaa/eaaa/fileWithImports.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+======== Resolving module 'pkg0' from '/src/project/e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts'. ========
+Module resolution kind is not specified, using 'NodeJs'.
+Loading module 'pkg0' from 'node_modules' folder, target file type 'TypeScript'.
+Directory '/src/project/e/ea/eaa/eaaa/x/y/z/node_modules' does not exist, skipping all lookups in it.
+Directory '/src/project/e/ea/eaa/eaaa/x/y/node_modules' does not exist, skipping all lookups in it.
+Directory '/src/project/e/ea/eaa/eaaa/x/node_modules' does not exist, skipping all lookups in it.
+Directory '/src/project/e/ea/eaa/eaaa/node_modules' does not exist, skipping all lookups in it.
+Directory '/src/project/e/ea/eaa/node_modules' does not exist, skipping all lookups in it.
+Directory '/src/project/e/ea/node_modules' does not exist, skipping all lookups in it.
+Directory '/src/project/e/node_modules' does not exist, skipping all lookups in it.
+File '/src/project/node_modules/pkg0/package.json' does not exist according to earlier cached lookups.
+File '/src/project/node_modules/pkg0.ts' does not exist.
+File '/src/project/node_modules/pkg0.tsx' does not exist.
+File '/src/project/node_modules/pkg0.d.ts' does not exist.
+File '/src/project/node_modules/pkg0/index.ts' does not exist.
+File '/src/project/node_modules/pkg0/index.tsx' does not exist.
+File '/src/project/node_modules/pkg0/index.d.ts' exist - use it as a name resolution result.
+Resolving real path for '/src/project/node_modules/pkg0/index.d.ts', result '/src/project/node_modules/pkg0/index.d.ts'.
+======== Module name 'pkg0' was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'. ========
+Finishing updateGraphWorker: Project: /src/project/tsconfig.json Version: 6 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Different program with same set of files

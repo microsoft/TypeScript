@@ -44,6 +44,9 @@ import type { ImportInterface0 } from "pkg0";
 import type { ImportInterface0 } from "pkg0";
 
 
+//// [/src/project/d/da/daa/daaa/x/y/z/randomFileForImport.ts]
+export const x = 10;
+
 //// [/src/project/d/da/daa/fileWithImports.ts]
 import type { ImportInterface0 } from "pkg0";
 
@@ -55,6 +58,9 @@ import type { ImportInterface0 } from "pkg0";
 //// [/src/project/e/ea/eaa/eaaa/fileWithImports.ts]
 import type { ImportInterface0 } from "pkg0";
 
+
+//// [/src/project/e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts]
+export const x = 10;
 
 //// [/src/project/e/ea/eaa/fileWithImports.ts]
 import type { ImportInterface0 } from "pkg0";
@@ -75,7 +81,7 @@ export interface ImportInterface0 {}
 export const x = 10;
 
 //// [/src/project/tsconfig.json]
-{"compilerOptions":{"composite":true,"cacheResolutions":true,"traceResolution":true},"files":["fileWithImports.ts","randomFileForImport.ts","a/fileWithImports.ts","b/ba/fileWithImports.ts","b/randomFileForImport.ts","c/ca/fileWithImports.ts","c/ca/caa/randomFileForImport.ts","c/ca/caa/caaa/fileWithImports.ts","c/cb/fileWithImports.ts","d/da/daa/daaa/fileWithImports.ts","d/da/daa/fileWithImports.ts","d/da/fileWithImports.ts","e/ea/fileWithImports.ts","e/ea/eaa/fileWithImports.ts","e/ea/eaa/eaaa/fileWithImports.ts"]}
+{"compilerOptions":{"composite":true,"cacheResolutions":true,"traceResolution":true},"files":["fileWithImports.ts","randomFileForImport.ts","a/fileWithImports.ts","b/ba/fileWithImports.ts","b/randomFileForImport.ts","c/ca/fileWithImports.ts","c/ca/caa/randomFileForImport.ts","c/ca/caa/caaa/fileWithImports.ts","c/cb/fileWithImports.ts","d/da/daa/daaa/x/y/z/randomFileForImport.ts","d/da/daa/daaa/fileWithImports.ts","d/da/daa/fileWithImports.ts","d/da/fileWithImports.ts","e/ea/fileWithImports.ts","e/ea/eaa/fileWithImports.ts","e/ea/eaa/eaaa/fileWithImports.ts","e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts"]}
 
 
 
@@ -197,6 +203,8 @@ src/project/c/ca/caa/caaa/fileWithImports.ts
   Part of 'files' list in tsconfig.json
 src/project/c/cb/fileWithImports.ts
   Part of 'files' list in tsconfig.json
+src/project/d/da/daa/daaa/x/y/z/randomFileForImport.ts
+  Part of 'files' list in tsconfig.json
 src/project/d/da/daa/daaa/fileWithImports.ts
   Part of 'files' list in tsconfig.json
 src/project/d/da/daa/fileWithImports.ts
@@ -208,6 +216,8 @@ src/project/e/ea/fileWithImports.ts
 src/project/e/ea/eaa/fileWithImports.ts
   Part of 'files' list in tsconfig.json
 src/project/e/ea/eaa/eaaa/fileWithImports.ts
+  Part of 'files' list in tsconfig.json
+src/project/e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts
   Part of 'files' list in tsconfig.json
 exitCode:: ExitStatus.Success
 
@@ -288,6 +298,17 @@ export {};
 exports.__esModule = true;
 
 
+//// [/src/project/d/da/daa/daaa/x/y/z/randomFileForImport.d.ts]
+export declare const x = 10;
+
+
+//// [/src/project/d/da/daa/daaa/x/y/z/randomFileForImport.js]
+"use strict";
+exports.__esModule = true;
+exports.x = void 0;
+exports.x = 10;
+
+
 //// [/src/project/d/da/daa/fileWithImports.d.ts]
 export {};
 
@@ -313,6 +334,17 @@ export {};
 //// [/src/project/e/ea/eaa/eaaa/fileWithImports.js]
 "use strict";
 exports.__esModule = true;
+
+
+//// [/src/project/e/ea/eaa/eaaa/x/y/z/randomFileForImport.d.ts]
+export declare const x = 10;
+
+
+//// [/src/project/e/ea/eaa/eaaa/x/y/z/randomFileForImport.js]
+"use strict";
+exports.__esModule = true;
+exports.x = void 0;
+exports.x = 10;
 
 
 //// [/src/project/e/ea/eaa/fileWithImports.d.ts]
@@ -354,7 +386,7 @@ exports.x = 10;
 
 
 //// [/src/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","./node_modules/pkg0/index.d.ts","./filewithimports.ts","./randomfileforimport.ts","./a/filewithimports.ts","./b/ba/filewithimports.ts","./b/randomfileforimport.ts","./c/ca/filewithimports.ts","./c/ca/caa/randomfileforimport.ts","./c/ca/caa/caaa/filewithimports.ts","./c/cb/filewithimports.ts","./d/da/daa/daaa/filewithimports.ts","./d/da/daa/filewithimports.ts","./d/da/filewithimports.ts","./e/ea/filewithimports.ts","./e/ea/eaa/filewithimports.ts","./e/ea/eaa/eaaa/filewithimports.ts","./a","./b/ba","./c/ca/caa/caaa","./c/cb","./d/da/daa/daaa","./e/ea/eaa/eaaa"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"769951468-export interface ImportInterface0 {}",{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"-10726455937-export const x = 10;","signature":"-6057683066-export declare const x = 10;\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"-10726455937-export const x = 10;","signature":"-6057683066-export declare const x = 10;\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"-10726455937-export const x = 10;","signature":"-6057683066-export declare const x = 10;\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"}],"options":{"cacheResolutions":true,"composite":true},"fileIdsList":[[2]],"referencedMap":[[5,1],[6,1],[10,1],[8,1],[11,1],[12,1],[13,1],[14,1],[17,1],[16,1],[15,1],[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,5,6,7,10,9,8,11,12,13,14,17,16,15,3,2,4],"latestChangedDtsFile":"./e/ea/eaa/eaaa/fileWithImports.d.ts","cacheResolutions":{"resolutions":[{"resolvedModule":{"resolvedFileName":2,"isExternalLibraryImport":true}}],"names":["pkg0"],"resolutionEntries":[[1,1]],"modules":[[18,[1]],[19,[1]],[20,[1]],[21,[1]],[22,[1]],[23,[1]]]}},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","./node_modules/pkg0/index.d.ts","./filewithimports.ts","./randomfileforimport.ts","./a/filewithimports.ts","./b/ba/filewithimports.ts","./b/randomfileforimport.ts","./c/ca/filewithimports.ts","./c/ca/caa/randomfileforimport.ts","./c/ca/caa/caaa/filewithimports.ts","./c/cb/filewithimports.ts","./d/da/daa/daaa/x/y/z/randomfileforimport.ts","./d/da/daa/daaa/filewithimports.ts","./d/da/daa/filewithimports.ts","./d/da/filewithimports.ts","./e/ea/filewithimports.ts","./e/ea/eaa/filewithimports.ts","./e/ea/eaa/eaaa/filewithimports.ts","./e/ea/eaa/eaaa/x/y/z/randomfileforimport.ts","./a","./b/ba","./c/ca/caa/caaa","./c/cb","./d/da/daa/daaa","./e/ea/eaa/eaaa"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"769951468-export interface ImportInterface0 {}",{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"-10726455937-export const x = 10;","signature":"-6057683066-export declare const x = 10;\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"-10726455937-export const x = 10;","signature":"-6057683066-export declare const x = 10;\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"-10726455937-export const x = 10;","signature":"-6057683066-export declare const x = 10;\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"-10726455937-export const x = 10;","signature":"-6057683066-export declare const x = 10;\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"-10726455937-export const x = 10;","signature":"-6057683066-export declare const x = 10;\r\n"}],"options":{"cacheResolutions":true,"composite":true},"fileIdsList":[[2]],"referencedMap":[[5,1],[6,1],[10,1],[8,1],[11,1],[13,1],[14,1],[15,1],[18,1],[17,1],[16,1],[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,5,6,7,10,9,8,11,13,12,14,15,18,19,17,16,3,2,4],"latestChangedDtsFile":"./e/ea/eaa/eaaa/x/y/z/randomFileForImport.d.ts","cacheResolutions":{"resolutions":[{"resolvedModule":{"resolvedFileName":2,"isExternalLibraryImport":true}}],"names":["pkg0"],"resolutionEntries":[[1,1]],"modules":[[20,[1]],[21,[1]],[22,[1]],[23,[1]],[24,[1]],[25,[1]]]}},"version":"FakeTSVersion"}
 
 //// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -371,12 +403,14 @@ exports.x = 10;
       "./c/ca/caa/randomfileforimport.ts",
       "./c/ca/caa/caaa/filewithimports.ts",
       "./c/cb/filewithimports.ts",
+      "./d/da/daa/daaa/x/y/z/randomfileforimport.ts",
       "./d/da/daa/daaa/filewithimports.ts",
       "./d/da/daa/filewithimports.ts",
       "./d/da/filewithimports.ts",
       "./e/ea/filewithimports.ts",
       "./e/ea/eaa/filewithimports.ts",
       "./e/ea/eaa/eaaa/filewithimports.ts",
+      "./e/ea/eaa/eaaa/x/y/z/randomfileforimport.ts",
       "./a",
       "./b/ba",
       "./c/ca/caa/caaa",
@@ -435,6 +469,10 @@ exports.x = 10;
         "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
         "signature": "-4882119183-export {};\r\n"
       },
+      "./d/da/daa/daaa/x/y/z/randomfileforimport.ts": {
+        "version": "-10726455937-export const x = 10;",
+        "signature": "-6057683066-export declare const x = 10;\r\n"
+      },
       "./d/da/daa/daaa/filewithimports.ts": {
         "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
         "signature": "-4882119183-export {};\r\n"
@@ -458,6 +496,10 @@ exports.x = 10;
       "./e/ea/eaa/eaaa/filewithimports.ts": {
         "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
         "signature": "-4882119183-export {};\r\n"
+      },
+      "./e/ea/eaa/eaaa/x/y/z/randomfileforimport.ts": {
+        "version": "-10726455937-export const x = 10;",
+        "signature": "-6057683066-export declare const x = 10;\r\n"
       }
     },
     "options": {
@@ -513,16 +555,18 @@ exports.x = 10;
       "./c/ca/filewithimports.ts",
       "./c/cb/filewithimports.ts",
       "./d/da/daa/daaa/filewithimports.ts",
+      "./d/da/daa/daaa/x/y/z/randomfileforimport.ts",
       "./d/da/daa/filewithimports.ts",
       "./d/da/filewithimports.ts",
       "./e/ea/eaa/eaaa/filewithimports.ts",
+      "./e/ea/eaa/eaaa/x/y/z/randomfileforimport.ts",
       "./e/ea/eaa/filewithimports.ts",
       "./e/ea/filewithimports.ts",
       "./filewithimports.ts",
       "./node_modules/pkg0/index.d.ts",
       "./randomfileforimport.ts"
     ],
-    "latestChangedDtsFile": "./e/ea/eaa/eaaa/fileWithImports.d.ts",
+    "latestChangedDtsFile": "./e/ea/eaa/eaaa/x/y/z/randomFileForImport.d.ts",
     "cacheResolutions": {
       "resolutions": [
         {
@@ -643,7 +687,7 @@ exports.x = 10;
     }
   },
   "version": "FakeTSVersion",
-  "size": 3446
+  "size": 3770
 }
 
 
@@ -705,6 +749,8 @@ src/project/c/ca/caa/caaa/fileWithImports.ts
   Part of 'files' list in tsconfig.json
 src/project/c/cb/fileWithImports.ts
   Part of 'files' list in tsconfig.json
+src/project/d/da/daa/daaa/x/y/z/randomFileForImport.ts
+  Part of 'files' list in tsconfig.json
 src/project/d/da/daa/daaa/fileWithImports.ts
   Part of 'files' list in tsconfig.json
 src/project/d/da/daa/fileWithImports.ts
@@ -717,12 +763,14 @@ src/project/e/ea/eaa/fileWithImports.ts
   Part of 'files' list in tsconfig.json
 src/project/e/ea/eaa/eaaa/fileWithImports.ts
   Part of 'files' list in tsconfig.json
+src/project/e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts
+  Part of 'files' list in tsconfig.json
 exitCode:: ExitStatus.Success
 
 
 //// [/src/project/randomFileForImport.js] file written with same contents
 //// [/src/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","./node_modules/pkg0/index.d.ts","./filewithimports.ts","./randomfileforimport.ts","./a/filewithimports.ts","./b/ba/filewithimports.ts","./b/randomfileforimport.ts","./c/ca/filewithimports.ts","./c/ca/caa/randomfileforimport.ts","./c/ca/caa/caaa/filewithimports.ts","./c/cb/filewithimports.ts","./d/da/daa/daaa/filewithimports.ts","./d/da/daa/filewithimports.ts","./d/da/filewithimports.ts","./e/ea/filewithimports.ts","./e/ea/eaa/filewithimports.ts","./e/ea/eaa/eaaa/filewithimports.ts","./a","./b/ba","./c/ca/caa/caaa","./c/cb","./d/da/daa/daaa","./e/ea/eaa/eaaa"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"769951468-export interface ImportInterface0 {}",{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"10580737119-import type { ImportInterface0 } from \"pkg0\";\nexport const x = 10;","signature":"-6057683066-export declare const x = 10;\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"-10726455937-export const x = 10;","signature":"-6057683066-export declare const x = 10;\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"-10726455937-export const x = 10;","signature":"-6057683066-export declare const x = 10;\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"}],"options":{"cacheResolutions":true,"composite":true},"fileIdsList":[[2]],"referencedMap":[[5,1],[6,1],[10,1],[8,1],[11,1],[12,1],[13,1],[14,1],[17,1],[16,1],[15,1],[3,1],[4,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,5,6,7,10,9,8,11,12,13,14,17,16,15,3,2,4],"latestChangedDtsFile":"./e/ea/eaa/eaaa/fileWithImports.d.ts","cacheResolutions":{"resolutions":[{"resolvedModule":{"resolvedFileName":2,"isExternalLibraryImport":true}}],"names":["pkg0"],"resolutionEntries":[[1,1]],"modules":[[18,[1]],[19,[1]],[20,[1]],[21,[1]],[22,[1]],[23,[1]]]}},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","./node_modules/pkg0/index.d.ts","./filewithimports.ts","./randomfileforimport.ts","./a/filewithimports.ts","./b/ba/filewithimports.ts","./b/randomfileforimport.ts","./c/ca/filewithimports.ts","./c/ca/caa/randomfileforimport.ts","./c/ca/caa/caaa/filewithimports.ts","./c/cb/filewithimports.ts","./d/da/daa/daaa/x/y/z/randomfileforimport.ts","./d/da/daa/daaa/filewithimports.ts","./d/da/daa/filewithimports.ts","./d/da/filewithimports.ts","./e/ea/filewithimports.ts","./e/ea/eaa/filewithimports.ts","./e/ea/eaa/eaaa/filewithimports.ts","./e/ea/eaa/eaaa/x/y/z/randomfileforimport.ts","./a","./b/ba","./c/ca/caa/caaa","./c/cb","./d/da/daa/daaa","./e/ea/eaa/eaaa"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"769951468-export interface ImportInterface0 {}",{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"10580737119-import type { ImportInterface0 } from \"pkg0\";\nexport const x = 10;","signature":"-6057683066-export declare const x = 10;\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"-10726455937-export const x = 10;","signature":"-6057683066-export declare const x = 10;\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"-10726455937-export const x = 10;","signature":"-6057683066-export declare const x = 10;\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"-10726455937-export const x = 10;","signature":"-6057683066-export declare const x = 10;\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"-10726455937-export const x = 10;","signature":"-6057683066-export declare const x = 10;\r\n"}],"options":{"cacheResolutions":true,"composite":true},"fileIdsList":[[2]],"referencedMap":[[5,1],[6,1],[10,1],[8,1],[11,1],[13,1],[14,1],[15,1],[18,1],[17,1],[16,1],[3,1],[4,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,5,6,7,10,9,8,11,13,12,14,15,18,19,17,16,3,2,4],"latestChangedDtsFile":"./e/ea/eaa/eaaa/x/y/z/randomFileForImport.d.ts","cacheResolutions":{"resolutions":[{"resolvedModule":{"resolvedFileName":2,"isExternalLibraryImport":true}}],"names":["pkg0"],"resolutionEntries":[[1,1]],"modules":[[20,[1]],[21,[1]],[22,[1]],[23,[1]],[24,[1]],[25,[1]]]}},"version":"FakeTSVersion"}
 
 //// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -739,12 +787,14 @@ exitCode:: ExitStatus.Success
       "./c/ca/caa/randomfileforimport.ts",
       "./c/ca/caa/caaa/filewithimports.ts",
       "./c/cb/filewithimports.ts",
+      "./d/da/daa/daaa/x/y/z/randomfileforimport.ts",
       "./d/da/daa/daaa/filewithimports.ts",
       "./d/da/daa/filewithimports.ts",
       "./d/da/filewithimports.ts",
       "./e/ea/filewithimports.ts",
       "./e/ea/eaa/filewithimports.ts",
       "./e/ea/eaa/eaaa/filewithimports.ts",
+      "./e/ea/eaa/eaaa/x/y/z/randomfileforimport.ts",
       "./a",
       "./b/ba",
       "./c/ca/caa/caaa",
@@ -803,6 +853,10 @@ exitCode:: ExitStatus.Success
         "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
         "signature": "-4882119183-export {};\r\n"
       },
+      "./d/da/daa/daaa/x/y/z/randomfileforimport.ts": {
+        "version": "-10726455937-export const x = 10;",
+        "signature": "-6057683066-export declare const x = 10;\r\n"
+      },
       "./d/da/daa/daaa/filewithimports.ts": {
         "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
         "signature": "-4882119183-export {};\r\n"
@@ -826,6 +880,10 @@ exitCode:: ExitStatus.Success
       "./e/ea/eaa/eaaa/filewithimports.ts": {
         "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
         "signature": "-4882119183-export {};\r\n"
+      },
+      "./e/ea/eaa/eaaa/x/y/z/randomfileforimport.ts": {
+        "version": "-10726455937-export const x = 10;",
+        "signature": "-6057683066-export declare const x = 10;\r\n"
       }
     },
     "options": {
@@ -884,16 +942,18 @@ exitCode:: ExitStatus.Success
       "./c/ca/filewithimports.ts",
       "./c/cb/filewithimports.ts",
       "./d/da/daa/daaa/filewithimports.ts",
+      "./d/da/daa/daaa/x/y/z/randomfileforimport.ts",
       "./d/da/daa/filewithimports.ts",
       "./d/da/filewithimports.ts",
       "./e/ea/eaa/eaaa/filewithimports.ts",
+      "./e/ea/eaa/eaaa/x/y/z/randomfileforimport.ts",
       "./e/ea/eaa/filewithimports.ts",
       "./e/ea/filewithimports.ts",
       "./filewithimports.ts",
       "./node_modules/pkg0/index.d.ts",
       "./randomfileforimport.ts"
     ],
-    "latestChangedDtsFile": "./e/ea/eaa/eaaa/fileWithImports.d.ts",
+    "latestChangedDtsFile": "./e/ea/eaa/eaaa/x/y/z/randomFileForImport.d.ts",
     "cacheResolutions": {
       "resolutions": [
         {
@@ -1014,7 +1074,7 @@ exitCode:: ExitStatus.Success
     }
   },
   "version": "FakeTSVersion",
-  "size": 3500
+  "size": 3824
 }
 
 
@@ -1078,6 +1138,8 @@ src/project/c/ca/caa/caaa/fileWithImports.ts
   Part of 'files' list in tsconfig.json
 src/project/c/cb/fileWithImports.ts
   Part of 'files' list in tsconfig.json
+src/project/d/da/daa/daaa/x/y/z/randomFileForImport.ts
+  Part of 'files' list in tsconfig.json
 src/project/d/da/daa/daaa/fileWithImports.ts
   Part of 'files' list in tsconfig.json
 src/project/d/da/daa/fileWithImports.ts
@@ -1090,12 +1152,14 @@ src/project/e/ea/eaa/fileWithImports.ts
   Part of 'files' list in tsconfig.json
 src/project/e/ea/eaa/eaaa/fileWithImports.ts
   Part of 'files' list in tsconfig.json
+src/project/e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts
+  Part of 'files' list in tsconfig.json
 exitCode:: ExitStatus.Success
 
 
 //// [/src/project/b/randomFileForImport.js] file written with same contents
 //// [/src/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","./node_modules/pkg0/index.d.ts","./filewithimports.ts","./randomfileforimport.ts","./a/filewithimports.ts","./b/ba/filewithimports.ts","./b/randomfileforimport.ts","./c/ca/filewithimports.ts","./c/ca/caa/randomfileforimport.ts","./c/ca/caa/caaa/filewithimports.ts","./c/cb/filewithimports.ts","./d/da/daa/daaa/filewithimports.ts","./d/da/daa/filewithimports.ts","./d/da/filewithimports.ts","./e/ea/filewithimports.ts","./e/ea/eaa/filewithimports.ts","./e/ea/eaa/eaaa/filewithimports.ts","./a","./b/ba","./c/ca/caa/caaa","./c/cb","./d/da/daa/daaa","./e/ea/eaa/eaaa"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"769951468-export interface ImportInterface0 {}",{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"10580737119-import type { ImportInterface0 } from \"pkg0\";\nexport const x = 10;","signature":"-6057683066-export declare const x = 10;\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"10580737119-import type { ImportInterface0 } from \"pkg0\";\nexport const x = 10;","signature":"-6057683066-export declare const x = 10;\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"-10726455937-export const x = 10;","signature":"-6057683066-export declare const x = 10;\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"}],"options":{"cacheResolutions":true,"composite":true},"fileIdsList":[[2]],"referencedMap":[[5,1],[6,1],[7,1],[10,1],[8,1],[11,1],[12,1],[13,1],[14,1],[17,1],[16,1],[15,1],[3,1],[4,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,5,6,7,10,9,8,11,12,13,14,17,16,15,3,2,4],"latestChangedDtsFile":"./e/ea/eaa/eaaa/fileWithImports.d.ts","cacheResolutions":{"resolutions":[{"resolvedModule":{"resolvedFileName":2,"isExternalLibraryImport":true}}],"names":["pkg0"],"resolutionEntries":[[1,1]],"modules":[[18,[1]],[19,[1]],[20,[1]],[21,[1]],[22,[1]],[23,[1]]]}},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","./node_modules/pkg0/index.d.ts","./filewithimports.ts","./randomfileforimport.ts","./a/filewithimports.ts","./b/ba/filewithimports.ts","./b/randomfileforimport.ts","./c/ca/filewithimports.ts","./c/ca/caa/randomfileforimport.ts","./c/ca/caa/caaa/filewithimports.ts","./c/cb/filewithimports.ts","./d/da/daa/daaa/x/y/z/randomfileforimport.ts","./d/da/daa/daaa/filewithimports.ts","./d/da/daa/filewithimports.ts","./d/da/filewithimports.ts","./e/ea/filewithimports.ts","./e/ea/eaa/filewithimports.ts","./e/ea/eaa/eaaa/filewithimports.ts","./e/ea/eaa/eaaa/x/y/z/randomfileforimport.ts","./a","./b/ba","./c/ca/caa/caaa","./c/cb","./d/da/daa/daaa","./e/ea/eaa/eaaa"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"769951468-export interface ImportInterface0 {}",{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"10580737119-import type { ImportInterface0 } from \"pkg0\";\nexport const x = 10;","signature":"-6057683066-export declare const x = 10;\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"10580737119-import type { ImportInterface0 } from \"pkg0\";\nexport const x = 10;","signature":"-6057683066-export declare const x = 10;\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"-10726455937-export const x = 10;","signature":"-6057683066-export declare const x = 10;\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"-10726455937-export const x = 10;","signature":"-6057683066-export declare const x = 10;\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"-10726455937-export const x = 10;","signature":"-6057683066-export declare const x = 10;\r\n"}],"options":{"cacheResolutions":true,"composite":true},"fileIdsList":[[2]],"referencedMap":[[5,1],[6,1],[7,1],[10,1],[8,1],[11,1],[13,1],[14,1],[15,1],[18,1],[17,1],[16,1],[3,1],[4,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,5,6,7,10,9,8,11,13,12,14,15,18,19,17,16,3,2,4],"latestChangedDtsFile":"./e/ea/eaa/eaaa/x/y/z/randomFileForImport.d.ts","cacheResolutions":{"resolutions":[{"resolvedModule":{"resolvedFileName":2,"isExternalLibraryImport":true}}],"names":["pkg0"],"resolutionEntries":[[1,1]],"modules":[[20,[1]],[21,[1]],[22,[1]],[23,[1]],[24,[1]],[25,[1]]]}},"version":"FakeTSVersion"}
 
 //// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -1112,12 +1176,14 @@ exitCode:: ExitStatus.Success
       "./c/ca/caa/randomfileforimport.ts",
       "./c/ca/caa/caaa/filewithimports.ts",
       "./c/cb/filewithimports.ts",
+      "./d/da/daa/daaa/x/y/z/randomfileforimport.ts",
       "./d/da/daa/daaa/filewithimports.ts",
       "./d/da/daa/filewithimports.ts",
       "./d/da/filewithimports.ts",
       "./e/ea/filewithimports.ts",
       "./e/ea/eaa/filewithimports.ts",
       "./e/ea/eaa/eaaa/filewithimports.ts",
+      "./e/ea/eaa/eaaa/x/y/z/randomfileforimport.ts",
       "./a",
       "./b/ba",
       "./c/ca/caa/caaa",
@@ -1176,6 +1242,10 @@ exitCode:: ExitStatus.Success
         "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
         "signature": "-4882119183-export {};\r\n"
       },
+      "./d/da/daa/daaa/x/y/z/randomfileforimport.ts": {
+        "version": "-10726455937-export const x = 10;",
+        "signature": "-6057683066-export declare const x = 10;\r\n"
+      },
       "./d/da/daa/daaa/filewithimports.ts": {
         "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
         "signature": "-4882119183-export {};\r\n"
@@ -1199,6 +1269,10 @@ exitCode:: ExitStatus.Success
       "./e/ea/eaa/eaaa/filewithimports.ts": {
         "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
         "signature": "-4882119183-export {};\r\n"
+      },
+      "./e/ea/eaa/eaaa/x/y/z/randomfileforimport.ts": {
+        "version": "-10726455937-export const x = 10;",
+        "signature": "-6057683066-export declare const x = 10;\r\n"
       }
     },
     "options": {
@@ -1260,16 +1334,18 @@ exitCode:: ExitStatus.Success
       "./c/ca/filewithimports.ts",
       "./c/cb/filewithimports.ts",
       "./d/da/daa/daaa/filewithimports.ts",
+      "./d/da/daa/daaa/x/y/z/randomfileforimport.ts",
       "./d/da/daa/filewithimports.ts",
       "./d/da/filewithimports.ts",
       "./e/ea/eaa/eaaa/filewithimports.ts",
+      "./e/ea/eaa/eaaa/x/y/z/randomfileforimport.ts",
       "./e/ea/eaa/filewithimports.ts",
       "./e/ea/filewithimports.ts",
       "./filewithimports.ts",
       "./node_modules/pkg0/index.d.ts",
       "./randomfileforimport.ts"
     ],
-    "latestChangedDtsFile": "./e/ea/eaa/eaaa/fileWithImports.d.ts",
+    "latestChangedDtsFile": "./e/ea/eaa/eaaa/x/y/z/randomFileForImport.d.ts",
     "cacheResolutions": {
       "resolutions": [
         {
@@ -1390,7 +1466,7 @@ exitCode:: ExitStatus.Success
     }
   },
   "version": "FakeTSVersion",
-  "size": 3554
+  "size": 3878
 }
 
 
@@ -1456,6 +1532,8 @@ src/project/c/ca/caa/caaa/fileWithImports.ts
   Part of 'files' list in tsconfig.json
 src/project/c/cb/fileWithImports.ts
   Part of 'files' list in tsconfig.json
+src/project/d/da/daa/daaa/x/y/z/randomFileForImport.ts
+  Part of 'files' list in tsconfig.json
 src/project/d/da/daa/daaa/fileWithImports.ts
   Part of 'files' list in tsconfig.json
 src/project/d/da/daa/fileWithImports.ts
@@ -1468,12 +1546,14 @@ src/project/e/ea/eaa/fileWithImports.ts
   Part of 'files' list in tsconfig.json
 src/project/e/ea/eaa/eaaa/fileWithImports.ts
   Part of 'files' list in tsconfig.json
+src/project/e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts
+  Part of 'files' list in tsconfig.json
 exitCode:: ExitStatus.Success
 
 
 //// [/src/project/c/ca/caa/randomFileForImport.js] file written with same contents
 //// [/src/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","./node_modules/pkg0/index.d.ts","./filewithimports.ts","./randomfileforimport.ts","./a/filewithimports.ts","./b/ba/filewithimports.ts","./b/randomfileforimport.ts","./c/ca/filewithimports.ts","./c/ca/caa/randomfileforimport.ts","./c/ca/caa/caaa/filewithimports.ts","./c/cb/filewithimports.ts","./d/da/daa/daaa/filewithimports.ts","./d/da/daa/filewithimports.ts","./d/da/filewithimports.ts","./e/ea/filewithimports.ts","./e/ea/eaa/filewithimports.ts","./e/ea/eaa/eaaa/filewithimports.ts","./a","./b/ba","./c/ca/caa/caaa","./c/cb","./d/da/daa/daaa","./e/ea/eaa/eaaa"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"769951468-export interface ImportInterface0 {}",{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"10580737119-import type { ImportInterface0 } from \"pkg0\";\nexport const x = 10;","signature":"-6057683066-export declare const x = 10;\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"10580737119-import type { ImportInterface0 } from \"pkg0\";\nexport const x = 10;","signature":"-6057683066-export declare const x = 10;\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"10580737119-import type { ImportInterface0 } from \"pkg0\";\nexport const x = 10;","signature":"-6057683066-export declare const x = 10;\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"}],"options":{"cacheResolutions":true,"composite":true},"fileIdsList":[[2]],"referencedMap":[[5,1],[6,1],[7,1],[10,1],[9,1],[8,1],[11,1],[12,1],[13,1],[14,1],[17,1],[16,1],[15,1],[3,1],[4,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,5,6,7,10,9,8,11,12,13,14,17,16,15,3,2,4],"latestChangedDtsFile":"./e/ea/eaa/eaaa/fileWithImports.d.ts","cacheResolutions":{"resolutions":[{"resolvedModule":{"resolvedFileName":2,"isExternalLibraryImport":true}}],"names":["pkg0"],"resolutionEntries":[[1,1]],"modules":[[18,[1]],[19,[1]],[20,[1]],[21,[1]],[22,[1]],[23,[1]]]}},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","./node_modules/pkg0/index.d.ts","./filewithimports.ts","./randomfileforimport.ts","./a/filewithimports.ts","./b/ba/filewithimports.ts","./b/randomfileforimport.ts","./c/ca/filewithimports.ts","./c/ca/caa/randomfileforimport.ts","./c/ca/caa/caaa/filewithimports.ts","./c/cb/filewithimports.ts","./d/da/daa/daaa/x/y/z/randomfileforimport.ts","./d/da/daa/daaa/filewithimports.ts","./d/da/daa/filewithimports.ts","./d/da/filewithimports.ts","./e/ea/filewithimports.ts","./e/ea/eaa/filewithimports.ts","./e/ea/eaa/eaaa/filewithimports.ts","./e/ea/eaa/eaaa/x/y/z/randomfileforimport.ts","./a","./b/ba","./c/ca/caa/caaa","./c/cb","./d/da/daa/daaa","./e/ea/eaa/eaaa"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"769951468-export interface ImportInterface0 {}",{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"10580737119-import type { ImportInterface0 } from \"pkg0\";\nexport const x = 10;","signature":"-6057683066-export declare const x = 10;\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"10580737119-import type { ImportInterface0 } from \"pkg0\";\nexport const x = 10;","signature":"-6057683066-export declare const x = 10;\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"10580737119-import type { ImportInterface0 } from \"pkg0\";\nexport const x = 10;","signature":"-6057683066-export declare const x = 10;\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"-10726455937-export const x = 10;","signature":"-6057683066-export declare const x = 10;\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"-10726455937-export const x = 10;","signature":"-6057683066-export declare const x = 10;\r\n"}],"options":{"cacheResolutions":true,"composite":true},"fileIdsList":[[2]],"referencedMap":[[5,1],[6,1],[7,1],[10,1],[9,1],[8,1],[11,1],[13,1],[14,1],[15,1],[18,1],[17,1],[16,1],[3,1],[4,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,5,6,7,10,9,8,11,13,12,14,15,18,19,17,16,3,2,4],"latestChangedDtsFile":"./e/ea/eaa/eaaa/x/y/z/randomFileForImport.d.ts","cacheResolutions":{"resolutions":[{"resolvedModule":{"resolvedFileName":2,"isExternalLibraryImport":true}}],"names":["pkg0"],"resolutionEntries":[[1,1]],"modules":[[20,[1]],[21,[1]],[22,[1]],[23,[1]],[24,[1]],[25,[1]]]}},"version":"FakeTSVersion"}
 
 //// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -1490,12 +1570,14 @@ exitCode:: ExitStatus.Success
       "./c/ca/caa/randomfileforimport.ts",
       "./c/ca/caa/caaa/filewithimports.ts",
       "./c/cb/filewithimports.ts",
+      "./d/da/daa/daaa/x/y/z/randomfileforimport.ts",
       "./d/da/daa/daaa/filewithimports.ts",
       "./d/da/daa/filewithimports.ts",
       "./d/da/filewithimports.ts",
       "./e/ea/filewithimports.ts",
       "./e/ea/eaa/filewithimports.ts",
       "./e/ea/eaa/eaaa/filewithimports.ts",
+      "./e/ea/eaa/eaaa/x/y/z/randomfileforimport.ts",
       "./a",
       "./b/ba",
       "./c/ca/caa/caaa",
@@ -1554,6 +1636,10 @@ exitCode:: ExitStatus.Success
         "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
         "signature": "-4882119183-export {};\r\n"
       },
+      "./d/da/daa/daaa/x/y/z/randomfileforimport.ts": {
+        "version": "-10726455937-export const x = 10;",
+        "signature": "-6057683066-export declare const x = 10;\r\n"
+      },
       "./d/da/daa/daaa/filewithimports.ts": {
         "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
         "signature": "-4882119183-export {};\r\n"
@@ -1577,6 +1663,10 @@ exitCode:: ExitStatus.Success
       "./e/ea/eaa/eaaa/filewithimports.ts": {
         "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
         "signature": "-4882119183-export {};\r\n"
+      },
+      "./e/ea/eaa/eaaa/x/y/z/randomfileforimport.ts": {
+        "version": "-10726455937-export const x = 10;",
+        "signature": "-6057683066-export declare const x = 10;\r\n"
       }
     },
     "options": {
@@ -1641,16 +1731,18 @@ exitCode:: ExitStatus.Success
       "./c/ca/filewithimports.ts",
       "./c/cb/filewithimports.ts",
       "./d/da/daa/daaa/filewithimports.ts",
+      "./d/da/daa/daaa/x/y/z/randomfileforimport.ts",
       "./d/da/daa/filewithimports.ts",
       "./d/da/filewithimports.ts",
       "./e/ea/eaa/eaaa/filewithimports.ts",
+      "./e/ea/eaa/eaaa/x/y/z/randomfileforimport.ts",
       "./e/ea/eaa/filewithimports.ts",
       "./e/ea/filewithimports.ts",
       "./filewithimports.ts",
       "./node_modules/pkg0/index.d.ts",
       "./randomfileforimport.ts"
     ],
-    "latestChangedDtsFile": "./e/ea/eaa/eaaa/fileWithImports.d.ts",
+    "latestChangedDtsFile": "./e/ea/eaa/eaaa/x/y/z/randomFileForImport.d.ts",
     "cacheResolutions": {
       "resolutions": [
         {
@@ -1771,6 +1863,902 @@ exitCode:: ExitStatus.Success
     }
   },
   "version": "FakeTSVersion",
-  "size": 3608
+  "size": 3932
+}
+
+
+
+Change:: modify d/da/daa/daaa/x/y/z/randomFileForImport by adding import
+Input::
+//// [/src/project/d/da/daa/daaa/x/y/z/randomFileForImport.ts]
+import type { ImportInterface0 } from "pkg0";
+export const x = 10;
+
+
+
+Output::
+/lib/tsc -p /src/project --explainFiles
+Reusing resolution of module 'pkg0' from '/src/project/fileWithImports.ts' found in cache from location '/src/project', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Reusing resolution of module 'pkg0' from '/src/project/randomFileForImport.ts' found in cache from location '/src/project', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Reusing resolution of module 'pkg0' from '/src/project/a/fileWithImports.ts' found in cache from location '/src/project/a', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Reusing resolution of module 'pkg0' from '/src/project/b/ba/fileWithImports.ts' found in cache from location '/src/project/b/ba', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Reusing resolution of module 'pkg0' from '/src/project/b/randomFileForImport.ts' found in cache from location '/src/project/b', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Reusing resolution of module 'pkg0' from '/src/project/c/ca/fileWithImports.ts' found in cache from location '/src/project/c/ca', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Reusing resolution of module 'pkg0' from '/src/project/c/ca/caa/randomFileForImport.ts' found in cache from location '/src/project/c/ca/caa', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Reusing resolution of module 'pkg0' from '/src/project/c/ca/caa/caaa/fileWithImports.ts' found in cache from location '/src/project/c/ca/caa/caaa', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Reusing resolution of module 'pkg0' from '/src/project/c/cb/fileWithImports.ts' found in cache from location '/src/project/c/cb', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+======== Resolving module 'pkg0' from '/src/project/d/da/daa/daaa/x/y/z/randomFileForImport.ts'. ========
+Module resolution kind is not specified, using 'NodeJs'.
+Loading module 'pkg0' from 'node_modules' folder, target file type 'TypeScript'.
+Directory '/src/project/d/da/daa/daaa/x/y/z/node_modules' does not exist, skipping all lookups in it.
+Directory '/src/project/d/da/daa/daaa/x/y/node_modules' does not exist, skipping all lookups in it.
+Directory '/src/project/d/da/daa/daaa/x/node_modules' does not exist, skipping all lookups in it.
+Directory '/src/project/d/da/daa/daaa/node_modules' does not exist, skipping all lookups in it.
+Directory '/src/project/d/da/daa/node_modules' does not exist, skipping all lookups in it.
+Directory '/src/project/d/da/node_modules' does not exist, skipping all lookups in it.
+Directory '/src/project/d/node_modules' does not exist, skipping all lookups in it.
+File '/src/project/node_modules/pkg0/package.json' does not exist.
+File '/src/project/node_modules/pkg0.ts' does not exist.
+File '/src/project/node_modules/pkg0.tsx' does not exist.
+File '/src/project/node_modules/pkg0.d.ts' does not exist.
+File '/src/project/node_modules/pkg0/index.ts' does not exist.
+File '/src/project/node_modules/pkg0/index.tsx' does not exist.
+File '/src/project/node_modules/pkg0/index.d.ts' exist - use it as a name resolution result.
+Resolving real path for '/src/project/node_modules/pkg0/index.d.ts', result '/src/project/node_modules/pkg0/index.d.ts'.
+======== Module name 'pkg0' was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'. ========
+Reusing resolution of module 'pkg0' from '/src/project/d/da/daa/daaa/fileWithImports.ts' found in cache from location '/src/project/d/da/daa/daaa', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Reusing resolution of module 'pkg0' from '/src/project/d/da/daa/fileWithImports.ts' found in cache from location '/src/project/d/da/daa', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Reusing resolution of module 'pkg0' from '/src/project/d/da/fileWithImports.ts' found in cache from location '/src/project/d/da', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Reusing resolution of module 'pkg0' from '/src/project/e/ea/fileWithImports.ts' found in cache from location '/src/project/e/ea', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Reusing resolution of module 'pkg0' from '/src/project/e/ea/eaa/fileWithImports.ts' found in cache from location '/src/project/e/ea/eaa', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Reusing resolution of module 'pkg0' from '/src/project/e/ea/eaa/eaaa/fileWithImports.ts' found in cache from location '/src/project/e/ea/eaa/eaaa', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+lib/lib.d.ts
+  Default library for target 'es3'
+src/project/node_modules/pkg0/index.d.ts
+  Imported via "pkg0" from file 'src/project/fileWithImports.ts'
+  Imported via "pkg0" from file 'src/project/randomFileForImport.ts'
+  Imported via "pkg0" from file 'src/project/a/fileWithImports.ts'
+  Imported via "pkg0" from file 'src/project/b/ba/fileWithImports.ts'
+  Imported via "pkg0" from file 'src/project/b/randomFileForImport.ts'
+  Imported via "pkg0" from file 'src/project/c/ca/fileWithImports.ts'
+  Imported via "pkg0" from file 'src/project/c/ca/caa/randomFileForImport.ts'
+  Imported via "pkg0" from file 'src/project/c/ca/caa/caaa/fileWithImports.ts'
+  Imported via "pkg0" from file 'src/project/c/cb/fileWithImports.ts'
+  Imported via "pkg0" from file 'src/project/d/da/daa/daaa/x/y/z/randomFileForImport.ts'
+  Imported via "pkg0" from file 'src/project/d/da/daa/daaa/fileWithImports.ts'
+  Imported via "pkg0" from file 'src/project/d/da/daa/fileWithImports.ts'
+  Imported via "pkg0" from file 'src/project/d/da/fileWithImports.ts'
+  Imported via "pkg0" from file 'src/project/e/ea/fileWithImports.ts'
+  Imported via "pkg0" from file 'src/project/e/ea/eaa/fileWithImports.ts'
+  Imported via "pkg0" from file 'src/project/e/ea/eaa/eaaa/fileWithImports.ts'
+src/project/fileWithImports.ts
+  Part of 'files' list in tsconfig.json
+src/project/randomFileForImport.ts
+  Part of 'files' list in tsconfig.json
+src/project/a/fileWithImports.ts
+  Part of 'files' list in tsconfig.json
+src/project/b/ba/fileWithImports.ts
+  Part of 'files' list in tsconfig.json
+src/project/b/randomFileForImport.ts
+  Part of 'files' list in tsconfig.json
+src/project/c/ca/fileWithImports.ts
+  Part of 'files' list in tsconfig.json
+src/project/c/ca/caa/randomFileForImport.ts
+  Part of 'files' list in tsconfig.json
+src/project/c/ca/caa/caaa/fileWithImports.ts
+  Part of 'files' list in tsconfig.json
+src/project/c/cb/fileWithImports.ts
+  Part of 'files' list in tsconfig.json
+src/project/d/da/daa/daaa/x/y/z/randomFileForImport.ts
+  Part of 'files' list in tsconfig.json
+src/project/d/da/daa/daaa/fileWithImports.ts
+  Part of 'files' list in tsconfig.json
+src/project/d/da/daa/fileWithImports.ts
+  Part of 'files' list in tsconfig.json
+src/project/d/da/fileWithImports.ts
+  Part of 'files' list in tsconfig.json
+src/project/e/ea/fileWithImports.ts
+  Part of 'files' list in tsconfig.json
+src/project/e/ea/eaa/fileWithImports.ts
+  Part of 'files' list in tsconfig.json
+src/project/e/ea/eaa/eaaa/fileWithImports.ts
+  Part of 'files' list in tsconfig.json
+src/project/e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts
+  Part of 'files' list in tsconfig.json
+exitCode:: ExitStatus.Success
+
+
+//// [/src/project/d/da/daa/daaa/x/y/z/randomFileForImport.js] file written with same contents
+//// [/src/project/tsconfig.tsbuildinfo]
+{"program":{"fileNames":["../../lib/lib.d.ts","./node_modules/pkg0/index.d.ts","./filewithimports.ts","./randomfileforimport.ts","./a/filewithimports.ts","./b/ba/filewithimports.ts","./b/randomfileforimport.ts","./c/ca/filewithimports.ts","./c/ca/caa/randomfileforimport.ts","./c/ca/caa/caaa/filewithimports.ts","./c/cb/filewithimports.ts","./d/da/daa/daaa/x/y/z/randomfileforimport.ts","./d/da/daa/daaa/filewithimports.ts","./d/da/daa/filewithimports.ts","./d/da/filewithimports.ts","./e/ea/filewithimports.ts","./e/ea/eaa/filewithimports.ts","./e/ea/eaa/eaaa/filewithimports.ts","./e/ea/eaa/eaaa/x/y/z/randomfileforimport.ts","./a","./b/ba","./c/ca/caa/caaa","./c/cb","./d/da/daa/daaa/x/y/z","./e/ea/eaa/eaaa"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"769951468-export interface ImportInterface0 {}",{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"10580737119-import type { ImportInterface0 } from \"pkg0\";\nexport const x = 10;","signature":"-6057683066-export declare const x = 10;\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"10580737119-import type { ImportInterface0 } from \"pkg0\";\nexport const x = 10;","signature":"-6057683066-export declare const x = 10;\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"10580737119-import type { ImportInterface0 } from \"pkg0\";\nexport const x = 10;","signature":"-6057683066-export declare const x = 10;\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"10580737119-import type { ImportInterface0 } from \"pkg0\";\nexport const x = 10;","signature":"-6057683066-export declare const x = 10;\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"-10726455937-export const x = 10;","signature":"-6057683066-export declare const x = 10;\r\n"}],"options":{"cacheResolutions":true,"composite":true},"fileIdsList":[[2]],"referencedMap":[[5,1],[6,1],[7,1],[10,1],[9,1],[8,1],[11,1],[13,1],[12,1],[14,1],[15,1],[18,1],[17,1],[16,1],[3,1],[4,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,5,6,7,10,9,8,11,13,12,14,15,18,19,17,16,3,2,4],"latestChangedDtsFile":"./e/ea/eaa/eaaa/x/y/z/randomFileForImport.d.ts","cacheResolutions":{"resolutions":[{"resolvedModule":{"resolvedFileName":2,"isExternalLibraryImport":true}},{"resolvedModule":{"resolvedFileName":2,"isExternalLibraryImport":true}}],"names":["pkg0"],"resolutionEntries":[[1,1],[1,2]],"modules":[[20,[1]],[21,[1]],[22,[1]],[23,[1]],[24,[2]],[25,[1]]]}},"version":"FakeTSVersion"}
+
+//// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "program": {
+    "fileNames": [
+      "../../lib/lib.d.ts",
+      "./node_modules/pkg0/index.d.ts",
+      "./filewithimports.ts",
+      "./randomfileforimport.ts",
+      "./a/filewithimports.ts",
+      "./b/ba/filewithimports.ts",
+      "./b/randomfileforimport.ts",
+      "./c/ca/filewithimports.ts",
+      "./c/ca/caa/randomfileforimport.ts",
+      "./c/ca/caa/caaa/filewithimports.ts",
+      "./c/cb/filewithimports.ts",
+      "./d/da/daa/daaa/x/y/z/randomfileforimport.ts",
+      "./d/da/daa/daaa/filewithimports.ts",
+      "./d/da/daa/filewithimports.ts",
+      "./d/da/filewithimports.ts",
+      "./e/ea/filewithimports.ts",
+      "./e/ea/eaa/filewithimports.ts",
+      "./e/ea/eaa/eaaa/filewithimports.ts",
+      "./e/ea/eaa/eaaa/x/y/z/randomfileforimport.ts",
+      "./a",
+      "./b/ba",
+      "./c/ca/caa/caaa",
+      "./c/cb",
+      "./d/da/daa/daaa/x/y/z",
+      "./e/ea/eaa/eaaa"
+    ],
+    "fileNamesList": [
+      [
+        "./node_modules/pkg0/index.d.ts"
+      ]
+    ],
+    "fileInfos": {
+      "../../lib/lib.d.ts": {
+        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "affectsGlobalScope": true
+      },
+      "./node_modules/pkg0/index.d.ts": {
+        "version": "769951468-export interface ImportInterface0 {}",
+        "signature": "769951468-export interface ImportInterface0 {}"
+      },
+      "./filewithimports.ts": {
+        "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
+        "signature": "-4882119183-export {};\r\n"
+      },
+      "./randomfileforimport.ts": {
+        "version": "10580737119-import type { ImportInterface0 } from \"pkg0\";\nexport const x = 10;",
+        "signature": "-6057683066-export declare const x = 10;\r\n"
+      },
+      "./a/filewithimports.ts": {
+        "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
+        "signature": "-4882119183-export {};\r\n"
+      },
+      "./b/ba/filewithimports.ts": {
+        "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
+        "signature": "-4882119183-export {};\r\n"
+      },
+      "./b/randomfileforimport.ts": {
+        "version": "10580737119-import type { ImportInterface0 } from \"pkg0\";\nexport const x = 10;",
+        "signature": "-6057683066-export declare const x = 10;\r\n"
+      },
+      "./c/ca/filewithimports.ts": {
+        "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
+        "signature": "-4882119183-export {};\r\n"
+      },
+      "./c/ca/caa/randomfileforimport.ts": {
+        "version": "10580737119-import type { ImportInterface0 } from \"pkg0\";\nexport const x = 10;",
+        "signature": "-6057683066-export declare const x = 10;\r\n"
+      },
+      "./c/ca/caa/caaa/filewithimports.ts": {
+        "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
+        "signature": "-4882119183-export {};\r\n"
+      },
+      "./c/cb/filewithimports.ts": {
+        "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
+        "signature": "-4882119183-export {};\r\n"
+      },
+      "./d/da/daa/daaa/x/y/z/randomfileforimport.ts": {
+        "version": "10580737119-import type { ImportInterface0 } from \"pkg0\";\nexport const x = 10;",
+        "signature": "-6057683066-export declare const x = 10;\r\n"
+      },
+      "./d/da/daa/daaa/filewithimports.ts": {
+        "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
+        "signature": "-4882119183-export {};\r\n"
+      },
+      "./d/da/daa/filewithimports.ts": {
+        "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
+        "signature": "-4882119183-export {};\r\n"
+      },
+      "./d/da/filewithimports.ts": {
+        "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
+        "signature": "-4882119183-export {};\r\n"
+      },
+      "./e/ea/filewithimports.ts": {
+        "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
+        "signature": "-4882119183-export {};\r\n"
+      },
+      "./e/ea/eaa/filewithimports.ts": {
+        "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
+        "signature": "-4882119183-export {};\r\n"
+      },
+      "./e/ea/eaa/eaaa/filewithimports.ts": {
+        "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
+        "signature": "-4882119183-export {};\r\n"
+      },
+      "./e/ea/eaa/eaaa/x/y/z/randomfileforimport.ts": {
+        "version": "-10726455937-export const x = 10;",
+        "signature": "-6057683066-export declare const x = 10;\r\n"
+      }
+    },
+    "options": {
+      "cacheResolutions": true,
+      "composite": true
+    },
+    "referencedMap": {
+      "./a/filewithimports.ts": [
+        "./node_modules/pkg0/index.d.ts"
+      ],
+      "./b/ba/filewithimports.ts": [
+        "./node_modules/pkg0/index.d.ts"
+      ],
+      "./b/randomfileforimport.ts": [
+        "./node_modules/pkg0/index.d.ts"
+      ],
+      "./c/ca/caa/caaa/filewithimports.ts": [
+        "./node_modules/pkg0/index.d.ts"
+      ],
+      "./c/ca/caa/randomfileforimport.ts": [
+        "./node_modules/pkg0/index.d.ts"
+      ],
+      "./c/ca/filewithimports.ts": [
+        "./node_modules/pkg0/index.d.ts"
+      ],
+      "./c/cb/filewithimports.ts": [
+        "./node_modules/pkg0/index.d.ts"
+      ],
+      "./d/da/daa/daaa/filewithimports.ts": [
+        "./node_modules/pkg0/index.d.ts"
+      ],
+      "./d/da/daa/daaa/x/y/z/randomfileforimport.ts": [
+        "./node_modules/pkg0/index.d.ts"
+      ],
+      "./d/da/daa/filewithimports.ts": [
+        "./node_modules/pkg0/index.d.ts"
+      ],
+      "./d/da/filewithimports.ts": [
+        "./node_modules/pkg0/index.d.ts"
+      ],
+      "./e/ea/eaa/eaaa/filewithimports.ts": [
+        "./node_modules/pkg0/index.d.ts"
+      ],
+      "./e/ea/eaa/filewithimports.ts": [
+        "./node_modules/pkg0/index.d.ts"
+      ],
+      "./e/ea/filewithimports.ts": [
+        "./node_modules/pkg0/index.d.ts"
+      ],
+      "./filewithimports.ts": [
+        "./node_modules/pkg0/index.d.ts"
+      ],
+      "./randomfileforimport.ts": [
+        "./node_modules/pkg0/index.d.ts"
+      ]
+    },
+    "exportedModulesMap": {},
+    "semanticDiagnosticsPerFile": [
+      "../../lib/lib.d.ts",
+      "./a/filewithimports.ts",
+      "./b/ba/filewithimports.ts",
+      "./b/randomfileforimport.ts",
+      "./c/ca/caa/caaa/filewithimports.ts",
+      "./c/ca/caa/randomfileforimport.ts",
+      "./c/ca/filewithimports.ts",
+      "./c/cb/filewithimports.ts",
+      "./d/da/daa/daaa/filewithimports.ts",
+      "./d/da/daa/daaa/x/y/z/randomfileforimport.ts",
+      "./d/da/daa/filewithimports.ts",
+      "./d/da/filewithimports.ts",
+      "./e/ea/eaa/eaaa/filewithimports.ts",
+      "./e/ea/eaa/eaaa/x/y/z/randomfileforimport.ts",
+      "./e/ea/eaa/filewithimports.ts",
+      "./e/ea/filewithimports.ts",
+      "./filewithimports.ts",
+      "./node_modules/pkg0/index.d.ts",
+      "./randomfileforimport.ts"
+    ],
+    "latestChangedDtsFile": "./e/ea/eaa/eaaa/x/y/z/randomFileForImport.d.ts",
+    "cacheResolutions": {
+      "resolutions": [
+        {
+          "id": 1,
+          "resolvedModule": {
+            "resolvedFileName": "./node_modules/pkg0/index.d.ts",
+            "isExternalLibraryImport": true
+          }
+        },
+        {
+          "id": 2,
+          "resolvedModule": {
+            "resolvedFileName": "./node_modules/pkg0/index.d.ts",
+            "isExternalLibraryImport": true
+          }
+        }
+      ],
+      "names": [
+        "pkg0"
+      ],
+      "resolutionEntries": [
+        [
+          "pkg0",
+          {
+            "id": 1,
+            "resolvedModule": {
+              "resolvedFileName": "./node_modules/pkg0/index.d.ts",
+              "isExternalLibraryImport": true
+            }
+          }
+        ],
+        [
+          "pkg0",
+          {
+            "id": 2,
+            "resolvedModule": {
+              "resolvedFileName": "./node_modules/pkg0/index.d.ts",
+              "isExternalLibraryImport": true
+            }
+          }
+        ]
+      ],
+      "modules": [
+        [
+          "./a",
+          [
+            [
+              "pkg0",
+              {
+                "id": 1,
+                "resolvedModule": {
+                  "resolvedFileName": "./node_modules/pkg0/index.d.ts",
+                  "isExternalLibraryImport": true
+                }
+              }
+            ]
+          ]
+        ],
+        [
+          "./b/ba",
+          [
+            [
+              "pkg0",
+              {
+                "id": 1,
+                "resolvedModule": {
+                  "resolvedFileName": "./node_modules/pkg0/index.d.ts",
+                  "isExternalLibraryImport": true
+                }
+              }
+            ]
+          ]
+        ],
+        [
+          "./c/ca/caa/caaa",
+          [
+            [
+              "pkg0",
+              {
+                "id": 1,
+                "resolvedModule": {
+                  "resolvedFileName": "./node_modules/pkg0/index.d.ts",
+                  "isExternalLibraryImport": true
+                }
+              }
+            ]
+          ]
+        ],
+        [
+          "./c/cb",
+          [
+            [
+              "pkg0",
+              {
+                "id": 1,
+                "resolvedModule": {
+                  "resolvedFileName": "./node_modules/pkg0/index.d.ts",
+                  "isExternalLibraryImport": true
+                }
+              }
+            ]
+          ]
+        ],
+        [
+          "./d/da/daa/daaa/x/y/z",
+          [
+            [
+              "pkg0",
+              {
+                "id": 2,
+                "resolvedModule": {
+                  "resolvedFileName": "./node_modules/pkg0/index.d.ts",
+                  "isExternalLibraryImport": true
+                }
+              }
+            ]
+          ]
+        ],
+        [
+          "./e/ea/eaa/eaaa",
+          [
+            [
+              "pkg0",
+              {
+                "id": 1,
+                "resolvedModule": {
+                  "resolvedFileName": "./node_modules/pkg0/index.d.ts",
+                  "isExternalLibraryImport": true
+                }
+              }
+            ]
+          ]
+        ]
+      ]
+    }
+  },
+  "version": "FakeTSVersion",
+  "size": 4072
+}
+
+
+
+Change:: modify e/ea/eaa/eaaa/x/y/z/randomFileForImport by adding import
+Input::
+//// [/src/project/e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts]
+import type { ImportInterface0 } from "pkg0";
+export const x = 10;
+
+
+
+Output::
+/lib/tsc -p /src/project --explainFiles
+Reusing resolution of module 'pkg0' from '/src/project/fileWithImports.ts' found in cache from location '/src/project', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Reusing resolution of module 'pkg0' from '/src/project/randomFileForImport.ts' found in cache from location '/src/project', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Reusing resolution of module 'pkg0' from '/src/project/a/fileWithImports.ts' found in cache from location '/src/project/a', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Reusing resolution of module 'pkg0' from '/src/project/b/ba/fileWithImports.ts' found in cache from location '/src/project/b/ba', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Reusing resolution of module 'pkg0' from '/src/project/b/randomFileForImport.ts' found in cache from location '/src/project/b', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Reusing resolution of module 'pkg0' from '/src/project/c/ca/fileWithImports.ts' found in cache from location '/src/project/c/ca', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Reusing resolution of module 'pkg0' from '/src/project/c/ca/caa/randomFileForImport.ts' found in cache from location '/src/project/c/ca/caa', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Reusing resolution of module 'pkg0' from '/src/project/c/ca/caa/caaa/fileWithImports.ts' found in cache from location '/src/project/c/ca/caa/caaa', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Reusing resolution of module 'pkg0' from '/src/project/c/cb/fileWithImports.ts' found in cache from location '/src/project/c/cb', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Reusing resolution of module 'pkg0' from '/src/project/d/da/daa/daaa/x/y/z/randomFileForImport.ts' found in cache from location '/src/project/d/da/daa/daaa/x/y/z', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Reusing resolution of module 'pkg0' from '/src/project/d/da/daa/daaa/fileWithImports.ts' found in cache from location '/src/project/d/da/daa/daaa', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Reusing resolution of module 'pkg0' from '/src/project/d/da/daa/fileWithImports.ts' found in cache from location '/src/project/d/da/daa', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Reusing resolution of module 'pkg0' from '/src/project/d/da/fileWithImports.ts' found in cache from location '/src/project/d/da', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Reusing resolution of module 'pkg0' from '/src/project/e/ea/fileWithImports.ts' found in cache from location '/src/project/e/ea', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Reusing resolution of module 'pkg0' from '/src/project/e/ea/eaa/fileWithImports.ts' found in cache from location '/src/project/e/ea/eaa', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Reusing resolution of module 'pkg0' from '/src/project/e/ea/eaa/eaaa/fileWithImports.ts' found in cache from location '/src/project/e/ea/eaa/eaaa', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+======== Resolving module 'pkg0' from '/src/project/e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts'. ========
+Module resolution kind is not specified, using 'NodeJs'.
+Loading module 'pkg0' from 'node_modules' folder, target file type 'TypeScript'.
+Directory '/src/project/e/ea/eaa/eaaa/x/y/z/node_modules' does not exist, skipping all lookups in it.
+Directory '/src/project/e/ea/eaa/eaaa/x/y/node_modules' does not exist, skipping all lookups in it.
+Directory '/src/project/e/ea/eaa/eaaa/x/node_modules' does not exist, skipping all lookups in it.
+Directory '/src/project/e/ea/eaa/eaaa/node_modules' does not exist, skipping all lookups in it.
+Directory '/src/project/e/ea/eaa/node_modules' does not exist, skipping all lookups in it.
+Directory '/src/project/e/ea/node_modules' does not exist, skipping all lookups in it.
+Directory '/src/project/e/node_modules' does not exist, skipping all lookups in it.
+File '/src/project/node_modules/pkg0/package.json' does not exist.
+File '/src/project/node_modules/pkg0.ts' does not exist.
+File '/src/project/node_modules/pkg0.tsx' does not exist.
+File '/src/project/node_modules/pkg0.d.ts' does not exist.
+File '/src/project/node_modules/pkg0/index.ts' does not exist.
+File '/src/project/node_modules/pkg0/index.tsx' does not exist.
+File '/src/project/node_modules/pkg0/index.d.ts' exist - use it as a name resolution result.
+Resolving real path for '/src/project/node_modules/pkg0/index.d.ts', result '/src/project/node_modules/pkg0/index.d.ts'.
+======== Module name 'pkg0' was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'. ========
+lib/lib.d.ts
+  Default library for target 'es3'
+src/project/node_modules/pkg0/index.d.ts
+  Imported via "pkg0" from file 'src/project/fileWithImports.ts'
+  Imported via "pkg0" from file 'src/project/randomFileForImport.ts'
+  Imported via "pkg0" from file 'src/project/a/fileWithImports.ts'
+  Imported via "pkg0" from file 'src/project/b/ba/fileWithImports.ts'
+  Imported via "pkg0" from file 'src/project/b/randomFileForImport.ts'
+  Imported via "pkg0" from file 'src/project/c/ca/fileWithImports.ts'
+  Imported via "pkg0" from file 'src/project/c/ca/caa/randomFileForImport.ts'
+  Imported via "pkg0" from file 'src/project/c/ca/caa/caaa/fileWithImports.ts'
+  Imported via "pkg0" from file 'src/project/c/cb/fileWithImports.ts'
+  Imported via "pkg0" from file 'src/project/d/da/daa/daaa/x/y/z/randomFileForImport.ts'
+  Imported via "pkg0" from file 'src/project/d/da/daa/daaa/fileWithImports.ts'
+  Imported via "pkg0" from file 'src/project/d/da/daa/fileWithImports.ts'
+  Imported via "pkg0" from file 'src/project/d/da/fileWithImports.ts'
+  Imported via "pkg0" from file 'src/project/e/ea/fileWithImports.ts'
+  Imported via "pkg0" from file 'src/project/e/ea/eaa/fileWithImports.ts'
+  Imported via "pkg0" from file 'src/project/e/ea/eaa/eaaa/fileWithImports.ts'
+  Imported via "pkg0" from file 'src/project/e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts'
+src/project/fileWithImports.ts
+  Part of 'files' list in tsconfig.json
+src/project/randomFileForImport.ts
+  Part of 'files' list in tsconfig.json
+src/project/a/fileWithImports.ts
+  Part of 'files' list in tsconfig.json
+src/project/b/ba/fileWithImports.ts
+  Part of 'files' list in tsconfig.json
+src/project/b/randomFileForImport.ts
+  Part of 'files' list in tsconfig.json
+src/project/c/ca/fileWithImports.ts
+  Part of 'files' list in tsconfig.json
+src/project/c/ca/caa/randomFileForImport.ts
+  Part of 'files' list in tsconfig.json
+src/project/c/ca/caa/caaa/fileWithImports.ts
+  Part of 'files' list in tsconfig.json
+src/project/c/cb/fileWithImports.ts
+  Part of 'files' list in tsconfig.json
+src/project/d/da/daa/daaa/x/y/z/randomFileForImport.ts
+  Part of 'files' list in tsconfig.json
+src/project/d/da/daa/daaa/fileWithImports.ts
+  Part of 'files' list in tsconfig.json
+src/project/d/da/daa/fileWithImports.ts
+  Part of 'files' list in tsconfig.json
+src/project/d/da/fileWithImports.ts
+  Part of 'files' list in tsconfig.json
+src/project/e/ea/fileWithImports.ts
+  Part of 'files' list in tsconfig.json
+src/project/e/ea/eaa/fileWithImports.ts
+  Part of 'files' list in tsconfig.json
+src/project/e/ea/eaa/eaaa/fileWithImports.ts
+  Part of 'files' list in tsconfig.json
+src/project/e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts
+  Part of 'files' list in tsconfig.json
+exitCode:: ExitStatus.Success
+
+
+//// [/src/project/e/ea/eaa/eaaa/x/y/z/randomFileForImport.js] file written with same contents
+//// [/src/project/tsconfig.tsbuildinfo]
+{"program":{"fileNames":["../../lib/lib.d.ts","./node_modules/pkg0/index.d.ts","./filewithimports.ts","./randomfileforimport.ts","./a/filewithimports.ts","./b/ba/filewithimports.ts","./b/randomfileforimport.ts","./c/ca/filewithimports.ts","./c/ca/caa/randomfileforimport.ts","./c/ca/caa/caaa/filewithimports.ts","./c/cb/filewithimports.ts","./d/da/daa/daaa/x/y/z/randomfileforimport.ts","./d/da/daa/daaa/filewithimports.ts","./d/da/daa/filewithimports.ts","./d/da/filewithimports.ts","./e/ea/filewithimports.ts","./e/ea/eaa/filewithimports.ts","./e/ea/eaa/eaaa/filewithimports.ts","./e/ea/eaa/eaaa/x/y/z/randomfileforimport.ts","./a","./b/ba","./c/ca/caa/caaa","./c/cb","./d/da/daa/daaa/x/y/z","./e/ea/eaa/eaaa/x/y/z"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"769951468-export interface ImportInterface0 {}",{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"10580737119-import type { ImportInterface0 } from \"pkg0\";\nexport const x = 10;","signature":"-6057683066-export declare const x = 10;\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"10580737119-import type { ImportInterface0 } from \"pkg0\";\nexport const x = 10;","signature":"-6057683066-export declare const x = 10;\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"10580737119-import type { ImportInterface0 } from \"pkg0\";\nexport const x = 10;","signature":"-6057683066-export declare const x = 10;\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"10580737119-import type { ImportInterface0 } from \"pkg0\";\nexport const x = 10;","signature":"-6057683066-export declare const x = 10;\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-4882119183-export {};\r\n"},{"version":"10580737119-import type { ImportInterface0 } from \"pkg0\";\nexport const x = 10;","signature":"-6057683066-export declare const x = 10;\r\n"}],"options":{"cacheResolutions":true,"composite":true},"fileIdsList":[[2]],"referencedMap":[[5,1],[6,1],[7,1],[10,1],[9,1],[8,1],[11,1],[13,1],[12,1],[14,1],[15,1],[18,1],[19,1],[17,1],[16,1],[3,1],[4,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,5,6,7,10,9,8,11,13,12,14,15,18,19,17,16,3,2,4],"latestChangedDtsFile":"./e/ea/eaa/eaaa/x/y/z/randomFileForImport.d.ts","cacheResolutions":{"resolutions":[{"resolvedModule":{"resolvedFileName":2,"isExternalLibraryImport":true}},{"resolvedModule":{"resolvedFileName":2,"isExternalLibraryImport":true}},{"resolvedModule":{"resolvedFileName":2,"isExternalLibraryImport":true}}],"names":["pkg0"],"resolutionEntries":[[1,1],[1,2],[1,3]],"modules":[[20,[1]],[21,[1]],[22,[1]],[23,[1]],[24,[2]],[25,[3]]]}},"version":"FakeTSVersion"}
+
+//// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "program": {
+    "fileNames": [
+      "../../lib/lib.d.ts",
+      "./node_modules/pkg0/index.d.ts",
+      "./filewithimports.ts",
+      "./randomfileforimport.ts",
+      "./a/filewithimports.ts",
+      "./b/ba/filewithimports.ts",
+      "./b/randomfileforimport.ts",
+      "./c/ca/filewithimports.ts",
+      "./c/ca/caa/randomfileforimport.ts",
+      "./c/ca/caa/caaa/filewithimports.ts",
+      "./c/cb/filewithimports.ts",
+      "./d/da/daa/daaa/x/y/z/randomfileforimport.ts",
+      "./d/da/daa/daaa/filewithimports.ts",
+      "./d/da/daa/filewithimports.ts",
+      "./d/da/filewithimports.ts",
+      "./e/ea/filewithimports.ts",
+      "./e/ea/eaa/filewithimports.ts",
+      "./e/ea/eaa/eaaa/filewithimports.ts",
+      "./e/ea/eaa/eaaa/x/y/z/randomfileforimport.ts",
+      "./a",
+      "./b/ba",
+      "./c/ca/caa/caaa",
+      "./c/cb",
+      "./d/da/daa/daaa/x/y/z",
+      "./e/ea/eaa/eaaa/x/y/z"
+    ],
+    "fileNamesList": [
+      [
+        "./node_modules/pkg0/index.d.ts"
+      ]
+    ],
+    "fileInfos": {
+      "../../lib/lib.d.ts": {
+        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "affectsGlobalScope": true
+      },
+      "./node_modules/pkg0/index.d.ts": {
+        "version": "769951468-export interface ImportInterface0 {}",
+        "signature": "769951468-export interface ImportInterface0 {}"
+      },
+      "./filewithimports.ts": {
+        "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
+        "signature": "-4882119183-export {};\r\n"
+      },
+      "./randomfileforimport.ts": {
+        "version": "10580737119-import type { ImportInterface0 } from \"pkg0\";\nexport const x = 10;",
+        "signature": "-6057683066-export declare const x = 10;\r\n"
+      },
+      "./a/filewithimports.ts": {
+        "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
+        "signature": "-4882119183-export {};\r\n"
+      },
+      "./b/ba/filewithimports.ts": {
+        "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
+        "signature": "-4882119183-export {};\r\n"
+      },
+      "./b/randomfileforimport.ts": {
+        "version": "10580737119-import type { ImportInterface0 } from \"pkg0\";\nexport const x = 10;",
+        "signature": "-6057683066-export declare const x = 10;\r\n"
+      },
+      "./c/ca/filewithimports.ts": {
+        "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
+        "signature": "-4882119183-export {};\r\n"
+      },
+      "./c/ca/caa/randomfileforimport.ts": {
+        "version": "10580737119-import type { ImportInterface0 } from \"pkg0\";\nexport const x = 10;",
+        "signature": "-6057683066-export declare const x = 10;\r\n"
+      },
+      "./c/ca/caa/caaa/filewithimports.ts": {
+        "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
+        "signature": "-4882119183-export {};\r\n"
+      },
+      "./c/cb/filewithimports.ts": {
+        "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
+        "signature": "-4882119183-export {};\r\n"
+      },
+      "./d/da/daa/daaa/x/y/z/randomfileforimport.ts": {
+        "version": "10580737119-import type { ImportInterface0 } from \"pkg0\";\nexport const x = 10;",
+        "signature": "-6057683066-export declare const x = 10;\r\n"
+      },
+      "./d/da/daa/daaa/filewithimports.ts": {
+        "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
+        "signature": "-4882119183-export {};\r\n"
+      },
+      "./d/da/daa/filewithimports.ts": {
+        "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
+        "signature": "-4882119183-export {};\r\n"
+      },
+      "./d/da/filewithimports.ts": {
+        "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
+        "signature": "-4882119183-export {};\r\n"
+      },
+      "./e/ea/filewithimports.ts": {
+        "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
+        "signature": "-4882119183-export {};\r\n"
+      },
+      "./e/ea/eaa/filewithimports.ts": {
+        "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
+        "signature": "-4882119183-export {};\r\n"
+      },
+      "./e/ea/eaa/eaaa/filewithimports.ts": {
+        "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
+        "signature": "-4882119183-export {};\r\n"
+      },
+      "./e/ea/eaa/eaaa/x/y/z/randomfileforimport.ts": {
+        "version": "10580737119-import type { ImportInterface0 } from \"pkg0\";\nexport const x = 10;",
+        "signature": "-6057683066-export declare const x = 10;\r\n"
+      }
+    },
+    "options": {
+      "cacheResolutions": true,
+      "composite": true
+    },
+    "referencedMap": {
+      "./a/filewithimports.ts": [
+        "./node_modules/pkg0/index.d.ts"
+      ],
+      "./b/ba/filewithimports.ts": [
+        "./node_modules/pkg0/index.d.ts"
+      ],
+      "./b/randomfileforimport.ts": [
+        "./node_modules/pkg0/index.d.ts"
+      ],
+      "./c/ca/caa/caaa/filewithimports.ts": [
+        "./node_modules/pkg0/index.d.ts"
+      ],
+      "./c/ca/caa/randomfileforimport.ts": [
+        "./node_modules/pkg0/index.d.ts"
+      ],
+      "./c/ca/filewithimports.ts": [
+        "./node_modules/pkg0/index.d.ts"
+      ],
+      "./c/cb/filewithimports.ts": [
+        "./node_modules/pkg0/index.d.ts"
+      ],
+      "./d/da/daa/daaa/filewithimports.ts": [
+        "./node_modules/pkg0/index.d.ts"
+      ],
+      "./d/da/daa/daaa/x/y/z/randomfileforimport.ts": [
+        "./node_modules/pkg0/index.d.ts"
+      ],
+      "./d/da/daa/filewithimports.ts": [
+        "./node_modules/pkg0/index.d.ts"
+      ],
+      "./d/da/filewithimports.ts": [
+        "./node_modules/pkg0/index.d.ts"
+      ],
+      "./e/ea/eaa/eaaa/filewithimports.ts": [
+        "./node_modules/pkg0/index.d.ts"
+      ],
+      "./e/ea/eaa/eaaa/x/y/z/randomfileforimport.ts": [
+        "./node_modules/pkg0/index.d.ts"
+      ],
+      "./e/ea/eaa/filewithimports.ts": [
+        "./node_modules/pkg0/index.d.ts"
+      ],
+      "./e/ea/filewithimports.ts": [
+        "./node_modules/pkg0/index.d.ts"
+      ],
+      "./filewithimports.ts": [
+        "./node_modules/pkg0/index.d.ts"
+      ],
+      "./randomfileforimport.ts": [
+        "./node_modules/pkg0/index.d.ts"
+      ]
+    },
+    "exportedModulesMap": {},
+    "semanticDiagnosticsPerFile": [
+      "../../lib/lib.d.ts",
+      "./a/filewithimports.ts",
+      "./b/ba/filewithimports.ts",
+      "./b/randomfileforimport.ts",
+      "./c/ca/caa/caaa/filewithimports.ts",
+      "./c/ca/caa/randomfileforimport.ts",
+      "./c/ca/filewithimports.ts",
+      "./c/cb/filewithimports.ts",
+      "./d/da/daa/daaa/filewithimports.ts",
+      "./d/da/daa/daaa/x/y/z/randomfileforimport.ts",
+      "./d/da/daa/filewithimports.ts",
+      "./d/da/filewithimports.ts",
+      "./e/ea/eaa/eaaa/filewithimports.ts",
+      "./e/ea/eaa/eaaa/x/y/z/randomfileforimport.ts",
+      "./e/ea/eaa/filewithimports.ts",
+      "./e/ea/filewithimports.ts",
+      "./filewithimports.ts",
+      "./node_modules/pkg0/index.d.ts",
+      "./randomfileforimport.ts"
+    ],
+    "latestChangedDtsFile": "./e/ea/eaa/eaaa/x/y/z/randomFileForImport.d.ts",
+    "cacheResolutions": {
+      "resolutions": [
+        {
+          "id": 1,
+          "resolvedModule": {
+            "resolvedFileName": "./node_modules/pkg0/index.d.ts",
+            "isExternalLibraryImport": true
+          }
+        },
+        {
+          "id": 2,
+          "resolvedModule": {
+            "resolvedFileName": "./node_modules/pkg0/index.d.ts",
+            "isExternalLibraryImport": true
+          }
+        },
+        {
+          "id": 3,
+          "resolvedModule": {
+            "resolvedFileName": "./node_modules/pkg0/index.d.ts",
+            "isExternalLibraryImport": true
+          }
+        }
+      ],
+      "names": [
+        "pkg0"
+      ],
+      "resolutionEntries": [
+        [
+          "pkg0",
+          {
+            "id": 1,
+            "resolvedModule": {
+              "resolvedFileName": "./node_modules/pkg0/index.d.ts",
+              "isExternalLibraryImport": true
+            }
+          }
+        ],
+        [
+          "pkg0",
+          {
+            "id": 2,
+            "resolvedModule": {
+              "resolvedFileName": "./node_modules/pkg0/index.d.ts",
+              "isExternalLibraryImport": true
+            }
+          }
+        ],
+        [
+          "pkg0",
+          {
+            "id": 3,
+            "resolvedModule": {
+              "resolvedFileName": "./node_modules/pkg0/index.d.ts",
+              "isExternalLibraryImport": true
+            }
+          }
+        ]
+      ],
+      "modules": [
+        [
+          "./a",
+          [
+            [
+              "pkg0",
+              {
+                "id": 1,
+                "resolvedModule": {
+                  "resolvedFileName": "./node_modules/pkg0/index.d.ts",
+                  "isExternalLibraryImport": true
+                }
+              }
+            ]
+          ]
+        ],
+        [
+          "./b/ba",
+          [
+            [
+              "pkg0",
+              {
+                "id": 1,
+                "resolvedModule": {
+                  "resolvedFileName": "./node_modules/pkg0/index.d.ts",
+                  "isExternalLibraryImport": true
+                }
+              }
+            ]
+          ]
+        ],
+        [
+          "./c/ca/caa/caaa",
+          [
+            [
+              "pkg0",
+              {
+                "id": 1,
+                "resolvedModule": {
+                  "resolvedFileName": "./node_modules/pkg0/index.d.ts",
+                  "isExternalLibraryImport": true
+                }
+              }
+            ]
+          ]
+        ],
+        [
+          "./c/cb",
+          [
+            [
+              "pkg0",
+              {
+                "id": 1,
+                "resolvedModule": {
+                  "resolvedFileName": "./node_modules/pkg0/index.d.ts",
+                  "isExternalLibraryImport": true
+                }
+              }
+            ]
+          ]
+        ],
+        [
+          "./d/da/daa/daaa/x/y/z",
+          [
+            [
+              "pkg0",
+              {
+                "id": 2,
+                "resolvedModule": {
+                  "resolvedFileName": "./node_modules/pkg0/index.d.ts",
+                  "isExternalLibraryImport": true
+                }
+              }
+            ]
+          ]
+        ],
+        [
+          "./e/ea/eaa/eaaa/x/y/z",
+          [
+            [
+              "pkg0",
+              {
+                "id": 3,
+                "resolvedModule": {
+                  "resolvedFileName": "./node_modules/pkg0/index.d.ts",
+                  "isExternalLibraryImport": true
+                }
+              }
+            ]
+          ]
+        ]
+      ]
+    }
+  },
+  "version": "FakeTSVersion",
+  "size": 4212
 }
 

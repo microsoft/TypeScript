@@ -178,6 +178,20 @@ namespace ts.tscWatch.cacheResolutions {
                     subScenario: "modify c/ca/caa/randomFileForImport by adding import",
                     modifyFs: fs => prependText(fs, "/src/project/c/ca/caa/randomFileForImport.ts", `import type { ImportInterface0 } from "pkg0";\n`),
                 },
+                {
+                    subScenario: "modify d/da/daa/daaa/x/y/z/randomFileForImport by adding import",
+                    modifyFs: fs => prependText(fs, "/src/project/d/da/daa/daaa/x/y/z/randomFileForImport.ts", `import type { ImportInterface0 } from "pkg0";\n`),
+                    discrepancyExplanation: () => [
+                        `Incremental is currently not reusing resolution so tsbuildinfo has two same resolutions instead of one TODO: (shkamat)`
+                    ]
+                },
+                {
+                    subScenario: "modify e/ea/eaa/eaaa/x/y/z/randomFileForImport by adding import",
+                    modifyFs: fs => prependText(fs, "/src/project/e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts", `import type { ImportInterface0 } from "pkg0";\n`),
+                    discrepancyExplanation: () => [
+                        `Incremental is currently not reusing resolution so tsbuildinfo has two same resolutions instead of one TODO: (shkamat)`
+                    ]
+                },
             ]
         });
     });
