@@ -71,6 +71,7 @@ import {
     stringContains,
     StringLiteralLike,
     trace,
+    TypeReferenceDirectiveResolutionCache,
     updateResolutionField,
     WatchDirectoryFlags,
 } from "./_namespaces/ts";
@@ -123,6 +124,7 @@ export interface ResolutionCache {
     closeTypeRootsWatch(): void;
 
     getModuleResolutionCache(): ModuleResolutionCache;
+    getTypeReferenceDirectiveResolutionCache(): TypeReferenceDirectiveResolutionCache;
 
     clear(): void;
 }
@@ -319,6 +321,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
 
     return {
         getModuleResolutionCache: () => moduleResolutionCache,
+        getTypeReferenceDirectiveResolutionCache: () => typeReferenceDirectiveResolutionCache,
         startRecordingFilesWithChangedResolutions,
         finishRecordingFilesWithChangedResolutions,
         // perDirectoryResolvedModuleNames and perDirectoryResolvedTypeReferenceDirectives could be non empty if there was exception during program update

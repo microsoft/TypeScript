@@ -142,6 +142,7 @@ import {
     toPath,
     tracing,
     TypeAcquisition,
+    TypeReferenceDirectiveResolutionCache,
     updateErrorForNoInputFiles,
     updateMissingFilePathsWatch,
     WatchDirectoryFlags,
@@ -682,6 +683,11 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             containingSourceFile,
             reusedNames,
         );
+    }
+
+    /** @internal */
+    getTypeReferenceDirectiveResolutionCache(): TypeReferenceDirectiveResolutionCache | undefined {
+        return this.resolutionCache.getTypeReferenceDirectiveResolutionCache();
     }
 
     directoryExists(path: string): boolean {
@@ -2518,6 +2524,11 @@ export class AutoImportProviderProject extends Project {
     /** @internal */
     getModuleResolutionCache() {
         return this.hostProject.getCurrentProgram()?.getModuleResolutionCache();
+    }
+
+     /** @internal */
+     getTypeReferenceDirectiveResolutionCache() {
+        return this.hostProject.getCurrentProgram()?.getTypeReferenceDirectiveResolutionCache();
     }
 }
 

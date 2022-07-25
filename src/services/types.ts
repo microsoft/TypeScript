@@ -38,6 +38,7 @@ import {
     textChanges,
     TextRange,
     TextSpan,
+    TypeReferenceDirectiveResolutionCache,
     UserPreferences,
 } from "./_namespaces/ts";
 
@@ -384,6 +385,7 @@ export interface LanguageServiceHost extends GetEffectiveTypeRootsHost, MinimalR
     /** @internal */ getSymlinkCache?(files?: readonly SourceFile[]): SymlinkCache;
     /* Lets the Program from a AutoImportProviderProject use its host project's ModuleResolutionCache */
     /** @internal */ getModuleResolutionCache?(): ModuleResolutionCache | undefined;
+    /** @internal */ getTypeReferenceDirectiveResolutionCache?(): TypeReferenceDirectiveResolutionCache | undefined;
 
     /*
      * Required for full import and type reference completions.

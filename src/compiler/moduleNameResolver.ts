@@ -716,6 +716,12 @@ export interface PerDirectoryResolutionCache<T> {
      *  This updates the redirects map as well if needed so module resolutions are cached if they can across the projects
      */
     update(options: CompilerOptions): void;
+    /** @internal */ setOldResolutionCache(cache: OldResolutionCache<T> | undefined): void;
+}
+
+ /** @internal */
+ export interface OldResolutionCache<T> {
+    getResolved(name: string, mode: ResolutionMode, directory: Path, redirectedReference: ResolvedProjectReference | undefined): T | undefined;
 }
 
 export interface NonRelativeNameResolutionCache<T> {
@@ -729,6 +735,7 @@ export interface NonRelativeNameResolutionCache<T> {
      *  This updates the redirects map as well if needed so module resolutions are cached if they can across the projects
      */
     update(options: CompilerOptions): void;
+    /** @internal */ setOldResolutionCache(cache: OldResolutionCache<T> | undefined): void;
 }
 
 export interface PerNonRelativeNameCache<T> {
@@ -906,6 +913,7 @@ function getOrCreateCache<K, V>(cacheWithRedirects: CacheWithRedirects<K, V>, re
 
 function createPerDirectoryResolutionCache<T>(currentDirectory: string, getCanonicalFileName: GetCanonicalFileName, options: CompilerOptions | undefined): PerDirectoryResolutionCache<T> {
     const perDirectoryMap = createCacheWithRedirects<Path, ModeAwareCache<T>>(options);
+    let oldResolutionCache: OldResolutionCache<T> | undefined;
     return {
         perDirectoryMap,
         getFromDirectoryCache,
@@ -913,9 +921,11 @@ function createPerDirectoryResolutionCache<T>(currentDirectory: string, getCanon
         getOrCreateCacheForDirectoryWithPath,
         clear,
         update,
+        setOldResolutionCache: cache => oldResolutionCache = cache,
     };
 
     function clear() {
+        oldResolutionCache = undefined;
         perDirectoryMap.clear();
     }
 
@@ -936,7 +946,11 @@ function createPerDirectoryResolutionCache<T>(currentDirectory: string, getCanon
     }
 
     function getFromDirectoryCacheWithPath(name: string, mode: ResolutionMode, directory: Path, redirectedReference: ResolvedProjectReference | undefined) {
-        return perDirectoryMap.getMapOfCacheRedirects(redirectedReference)?.get(directory)?.get(name, mode);
+        let result = perDirectoryMap.getMapOfCacheRedirects(redirectedReference)?.get(directory)?.get(name, mode);
+        if (result) return result;
+        result = oldResolutionCache?.getResolved(name, mode, directory, redirectedReference);
+        if (result) getOrCreateCacheForDirectoryWithPath(directory, redirectedReference).set(name, mode, result);
+        return result;
     }
 }
 
@@ -1019,6 +1033,7 @@ function createNonRelativeNameResolutionCache<T>(
     getResolvedFileName: (result: T) => string | undefined,
 ): NonRelativeNameResolutionCache<T> {
     const nonRelativeNameResolutionsMap = createCacheWithRedirects<ModeAwareCacheKey, PerNonRelativeNameCache<T>>(options);
+    let oldResolutionCache: OldResolutionCache<T> | undefined;
     return {
         nonRelativeNameResolutionsMap,
         getFromNonRelativeNameCache,
@@ -1026,9 +1041,11 @@ function createNonRelativeNameResolutionCache<T>(
         getOrCreateCacheForNonRelativeName,
         clear,
         update,
+        setOldResolutionCache: cache => oldResolutionCache = cache,
     };
 
     function clear() {
+        oldResolutionCache = undefined;
         nonRelativeNameResolutionsMap.clear();
     }
 
@@ -1037,13 +1054,16 @@ function createNonRelativeNameResolutionCache<T>(
     }
 
     function getFromNonRelativeNameCache(nonRelativeModuleName: string, mode: ResolutionMode, directoryName: string, redirectedReference?: ResolvedProjectReference): T | undefined {
-        Debug.assert(!isExternalModuleNameRelative(nonRelativeModuleName));
-        return nonRelativeNameResolutionsMap.getMapOfCacheRedirects(redirectedReference)?.get(createModeAwareCacheKey(nonRelativeModuleName, mode))?.get(directoryName);
+        return getFromNonRelativeNameCacheWithPath(nonRelativeModuleName, mode, toPath(directoryName, currentDirectory, getCanonicalFileName), redirectedReference);
     }
 
     function getFromNonRelativeNameCacheWithPath(nonRelativeModuleName: string, mode: ResolutionMode, dirPath: Path, redirectedReference?: ResolvedProjectReference): T | undefined {
         Debug.assert(!isExternalModuleNameRelative(nonRelativeModuleName));
-        return nonRelativeNameResolutionsMap.getMapOfCacheRedirects(redirectedReference)?.get(createModeAwareCacheKey(nonRelativeModuleName, mode))?.getWithPath(dirPath);
+        let result = nonRelativeNameResolutionsMap.getMapOfCacheRedirects(redirectedReference)?.get(createModeAwareCacheKey(nonRelativeModuleName, mode))?.getWithPath(dirPath);
+        if (result) return result;
+        result = oldResolutionCache?.getResolved(nonRelativeModuleName, mode, dirPath, redirectedReference);
+        if (result) getOrCreateCacheForNonRelativeName(nonRelativeModuleName, mode, redirectedReference).setWithPath(dirPath, result, noop);
+        return result;
     }
 
     function getOrCreateCacheForNonRelativeName(nonRelativeModuleName: string, mode: ResolutionMode, redirectedReference?: ResolvedProjectReference): PerNonRelativeNameCache<T> {
@@ -1183,6 +1203,7 @@ function createModuleOrTypeReferenceResolutionCache<T>(
         update,
         getPackageJsonInfoCache: () => packageJsonInfoCache!,
         clearAllExceptPackageJsonInfoCache,
+        setOldResolutionCache,
     };
 
     function clear() {
@@ -1198,6 +1219,11 @@ function createModuleOrTypeReferenceResolutionCache<T>(
     function update(options: CompilerOptions) {
         perDirectory.update(options);
         perNonRelativeName.update(options);
+    }
+
+    function setOldResolutionCache(cache: OldResolutionCache<T> | undefined) {
+        perDirectory.setOldResolutionCache(cache);
+        perNonRelativeName.setOldResolutionCache(cache);
     }
 }
 

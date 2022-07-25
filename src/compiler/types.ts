@@ -16,6 +16,7 @@ import {
     ProgramBuildInfo,
     Push,
     SymlinkCache,
+    TypeReferenceDirectiveResolutionCache,
 } from "./_namespaces/ts";
 
 // branded string type used to store absolute, normalized and canonicalized paths
@@ -4444,6 +4445,8 @@ export interface Program extends ScriptReferenceHost {
     /** @internal */
     getModuleResolutionCache(): ModuleResolutionCache | undefined;
     /** @internal */
+    getTypeReferenceDirectiveResolutionCache(): TypeReferenceDirectiveResolutionCache | undefined;
+    /** @internal */
     getFilesByNameMap(): Map<string, SourceFile | false | undefined>;
 
     /**
@@ -7367,6 +7370,7 @@ export interface CompilerHost extends ModuleResolutionHost {
      * Returns the module resolution cache used by a provided `resolveModuleNames` implementation so that any non-name module resolution operations (eg, package.json lookup) can reuse it
      */
     getModuleResolutionCache?(): ModuleResolutionCache | undefined;
+    /** @internal */ getTypeReferenceDirectiveResolutionCache?(): TypeReferenceDirectiveResolutionCache | undefined;
     /**
      * @deprecated supply resolveTypeReferenceDirectiveReferences instead for resolution that can handle newer resolution modes like nodenext
      *

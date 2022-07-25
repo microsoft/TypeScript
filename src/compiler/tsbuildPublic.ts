@@ -433,6 +433,7 @@ function createSolutionBuilderState<T extends BuilderProgram>(watch: boolean, ho
     compilerHost.resolveModuleNames = maybeBind(host, host.resolveModuleNames);
     compilerHost.resolveTypeReferenceDirectives = maybeBind(host, host.resolveTypeReferenceDirectives);
     compilerHost.getModuleResolutionCache = maybeBind(host, host.getModuleResolutionCache);
+    compilerHost.getTypeReferenceDirectiveResolutionCache = maybeBind(host, host.getTypeReferenceDirectiveResolutionCache);
     let moduleResolutionCache: ModuleResolutionCache | undefined, typeReferenceDirectiveResolutionCache: TypeReferenceDirectiveResolutionCache | undefined;
     if (!compilerHost.resolveModuleNameLiterals && !compilerHost.resolveModuleNames) {
         moduleResolutionCache = createModuleResolutionCache(compilerHost.getCurrentDirectory(), compilerHost.getCanonicalFileName);
@@ -462,6 +463,7 @@ function createSolutionBuilderState<T extends BuilderProgram>(watch: boolean, ho
                 typeReferenceDirectiveResolutionCache,
                 createTypeReferenceResolutionLoader,
             );
+        compilerHost.getTypeReferenceDirectiveResolutionCache = () => typeReferenceDirectiveResolutionCache;
     }
     compilerHost.getBuildInfo = (fileName, configFilePath) => getBuildInfo(state, fileName, toResolvedConfigFilePath(state, configFilePath as ResolvedConfigFileName), /*modifiedTime*/ undefined);
 

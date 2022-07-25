@@ -718,31 +718,20 @@ Info 34   [00:03:29.000] Loading module 'pkg0' from 'node_modules' folder, targe
 Info 35   [00:03:30.000] Directory '/src/project/d/da/daa/daaa/x/y/z/node_modules' does not exist, skipping all lookups in it.
 Info 36   [00:03:31.000] Directory '/src/project/d/da/daa/daaa/x/y/node_modules' does not exist, skipping all lookups in it.
 Info 37   [00:03:32.000] Directory '/src/project/d/da/daa/daaa/x/node_modules' does not exist, skipping all lookups in it.
-Info 38   [00:03:33.000] Directory '/src/project/d/da/daa/daaa/node_modules' does not exist, skipping all lookups in it.
-Info 39   [00:03:34.000] Directory '/src/project/d/da/daa/node_modules' does not exist, skipping all lookups in it.
-Info 40   [00:03:35.000] Directory '/src/project/d/da/node_modules' does not exist, skipping all lookups in it.
-Info 41   [00:03:36.000] Directory '/src/project/d/node_modules' does not exist, skipping all lookups in it.
-Info 42   [00:03:37.000] File '/src/project/node_modules/pkg0/package.json' does not exist.
-Info 43   [00:03:38.000] File '/src/project/node_modules/pkg0.ts' does not exist.
-Info 44   [00:03:39.000] File '/src/project/node_modules/pkg0.tsx' does not exist.
-Info 45   [00:03:40.000] File '/src/project/node_modules/pkg0.d.ts' does not exist.
-Info 46   [00:03:41.000] File '/src/project/node_modules/pkg0/index.ts' does not exist.
-Info 47   [00:03:42.000] File '/src/project/node_modules/pkg0/index.tsx' does not exist.
-Info 48   [00:03:43.000] File '/src/project/node_modules/pkg0/index.d.ts' exist - use it as a name resolution result.
-Info 49   [00:03:44.000] Resolving real path for '/src/project/node_modules/pkg0/index.d.ts', result '/src/project/node_modules/pkg0/index.d.ts'.
-Info 50   [00:03:45.000] ======== Module name 'pkg0' was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'. ========
-Info 51   [00:03:46.000] Reusing resolution of module 'pkg0' from '/src/project/d/da/daa/daaa/fileWithImports.ts' found in cache from location '/src/project/d/da/daa/daaa', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
-Info 52   [00:03:47.000] Reusing resolution of module 'pkg0' from '/src/project/d/da/daa/fileWithImports.ts' found in cache from location '/src/project/d/da/daa', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
-Info 53   [00:03:48.000] Reusing resolution of module 'pkg0' from '/src/project/d/da/fileWithImports.ts' found in cache from location '/src/project/d/da', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
-Info 54   [00:03:49.000] Reusing resolution of module 'pkg0' from '/src/project/e/ea/fileWithImports.ts' found in cache from location '/src/project/e/ea', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
-Info 55   [00:03:50.000] Reusing resolution of module 'pkg0' from '/src/project/e/ea/eaa/fileWithImports.ts' found in cache from location '/src/project/e/ea/eaa', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
-Info 56   [00:03:51.000] Reusing resolution of module 'pkg0' from '/src/project/e/ea/eaa/eaaa/fileWithImports.ts' found in cache from location '/src/project/e/ea/eaa/eaaa', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
-Info 57   [00:03:52.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info 58   [00:03:53.000] DirectoryWatcher:: Added:: WatchInfo: /src/project/node_modules/@types 1 undefined Project: /src/project/tsconfig.json WatchType: Type roots
-Info 59   [00:03:54.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /src/project/node_modules/@types 1 undefined Project: /src/project/tsconfig.json WatchType: Type roots
-Info 60   [00:03:55.000] Finishing updateGraphWorker: Project: /src/project/tsconfig.json Version: 1 structureChanged: true structureIsReused:: SafeModuleCache Elapsed:: *ms
-Info 61   [00:03:56.000] Project '/src/project/tsconfig.json' (Configured)
-Info 62   [00:03:57.000] 	Files (19)
+Info 38   [00:03:33.000] Resolution for module 'pkg0' was found in cache from location '/src/project/d/da/daa/daaa'.
+Info 39   [00:03:34.000] ======== Module name 'pkg0' was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'. ========
+Info 40   [00:03:35.000] Reusing resolution of module 'pkg0' from '/src/project/d/da/daa/daaa/fileWithImports.ts' found in cache from location '/src/project/d/da/daa/daaa', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Info 41   [00:03:36.000] Reusing resolution of module 'pkg0' from '/src/project/d/da/daa/fileWithImports.ts' found in cache from location '/src/project/d/da/daa', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Info 42   [00:03:37.000] Reusing resolution of module 'pkg0' from '/src/project/d/da/fileWithImports.ts' found in cache from location '/src/project/d/da', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Info 43   [00:03:38.000] Reusing resolution of module 'pkg0' from '/src/project/e/ea/fileWithImports.ts' found in cache from location '/src/project/e/ea', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Info 44   [00:03:39.000] Reusing resolution of module 'pkg0' from '/src/project/e/ea/eaa/fileWithImports.ts' found in cache from location '/src/project/e/ea/eaa', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Info 45   [00:03:40.000] Reusing resolution of module 'pkg0' from '/src/project/e/ea/eaa/eaaa/fileWithImports.ts' found in cache from location '/src/project/e/ea/eaa/eaaa', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Info 46   [00:03:41.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info 47   [00:03:42.000] DirectoryWatcher:: Added:: WatchInfo: /src/project/node_modules/@types 1 undefined Project: /src/project/tsconfig.json WatchType: Type roots
+Info 48   [00:03:43.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /src/project/node_modules/@types 1 undefined Project: /src/project/tsconfig.json WatchType: Type roots
+Info 49   [00:03:44.000] Finishing updateGraphWorker: Project: /src/project/tsconfig.json Version: 1 structureChanged: true structureIsReused:: SafeModuleCache Elapsed:: *ms
+Info 50   [00:03:45.000] Project '/src/project/tsconfig.json' (Configured)
+Info 51   [00:03:46.000] 	Files (19)
 	/a/lib/lib.d.ts
 	/src/project/node_modules/pkg0/index.d.ts
 	/src/project/fileWithImports.ts
@@ -815,16 +804,16 @@ Info 62   [00:03:57.000] 	Files (19)
 	e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts
 	  Part of 'files' list in tsconfig.json
 
-Info 63   [00:03:58.000] -----------------------------------------------
-Info 64   [00:03:59.000] Search path: /src/project
-Info 65   [00:04:00.000] For info: /src/project/tsconfig.json :: No config files found.
-Info 66   [00:04:01.000] Project '/src/project/tsconfig.json' (Configured)
-Info 66   [00:04:02.000] 	Files (19)
+Info 52   [00:03:47.000] -----------------------------------------------
+Info 53   [00:03:48.000] Search path: /src/project
+Info 54   [00:03:49.000] For info: /src/project/tsconfig.json :: No config files found.
+Info 55   [00:03:50.000] Project '/src/project/tsconfig.json' (Configured)
+Info 55   [00:03:51.000] 	Files (19)
 
-Info 66   [00:04:03.000] -----------------------------------------------
-Info 66   [00:04:04.000] Open files: 
-Info 66   [00:04:05.000] 	FileName: /src/project/randomFileForImport.ts ProjectRootPath: undefined
-Info 66   [00:04:06.000] 		Projects: /src/project/tsconfig.json
+Info 55   [00:03:52.000] -----------------------------------------------
+Info 55   [00:03:53.000] Open files: 
+Info 55   [00:03:54.000] 	FileName: /src/project/randomFileForImport.ts ProjectRootPath: undefined
+Info 55   [00:03:55.000] 		Projects: /src/project/tsconfig.json
 After request
 
 PolledWatches::
@@ -873,7 +862,7 @@ FsWatchesRecursive::
 /src/project/node_modules:
   {}
 
-Info 66   [00:04:07.000] response:
+Info 55   [00:03:56.000] response:
     {
       "responseRequired": false
     }
