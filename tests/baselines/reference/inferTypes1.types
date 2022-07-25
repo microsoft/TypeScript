@@ -96,7 +96,7 @@ type T18 = ReturnType<Function>;  // Error
 >T18 : any
 
 type T19<T extends any[]> = ReturnType<(x: string, ...args: T) => T[]>;  // T[]
->T19 : T[]
+>T19 : T19<T>
 >x : string
 >args : T
 
@@ -121,12 +121,12 @@ type U15 = InstanceType<typeof Abstract>;  // Abstract
 >Abstract : typeof Abstract
 
 type U16<T extends any[]> = InstanceType<new (x: string, ...args: T) => T[]>;  // T[]
->U16 : T[]
+>U16 : U16<T>
 >x : string
 >args : T
 
 type U17<T extends any[]> = InstanceType<abstract new (x: string, ...args: T) => T[]>;  // T[]
->U17 : T[]
+>U17 : U17<T>
 >x : string
 >args : T
 
@@ -490,6 +490,6 @@ const result = invoker('test', true)({ test: (a: boolean) => 123 })
 >123 : 123
 
 type Foo2<A extends any[]> = ReturnType<(...args: A) => string>;
->Foo2 : string
+>Foo2 : Foo2<A>
 >args : A
 
