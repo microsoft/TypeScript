@@ -107,12 +107,12 @@ export let g = numNumNumNumNum.map(n => n * n);
 let numNumNumNumNumNum: [number, number, number, number, number, number] = [1, 2, 3, 4, 5, 6];
 >numNumNumNumNumNum : Symbol(numNumNumNumNumNum, Decl(mapOnTupleTypes01.ts, 38, 3))
 
-export let h = numNumNumNumNum.map(n => n * n);
+export let h = numNumNumNumNumNum.map(n => n * n);
 >h : Symbol(h, Decl(mapOnTupleTypes01.ts, 40, 10))
->numNumNumNumNum.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
->numNumNumNumNum : Symbol(numNumNumNumNum, Decl(mapOnTupleTypes01.ts, 31, 3))
+>numNumNumNumNumNum.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>numNumNumNumNumNum : Symbol(numNumNumNumNumNum, Decl(mapOnTupleTypes01.ts, 38, 3))
 >map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
->n : Symbol(n, Decl(mapOnTupleTypes01.ts, 40, 35))
->n : Symbol(n, Decl(mapOnTupleTypes01.ts, 40, 35))
->n : Symbol(n, Decl(mapOnTupleTypes01.ts, 40, 35))
+>n : Symbol(n, Decl(mapOnTupleTypes01.ts, 40, 38))
+>n : Symbol(n, Decl(mapOnTupleTypes01.ts, 40, 38))
+>n : Symbol(n, Decl(mapOnTupleTypes01.ts, 40, 38))
 

@@ -92,8 +92,8 @@ declare class MyArray<T> implements Array<T> {
 >array : T[]
 >thisArg : any
 
-    map<U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any): U[];
->map : <U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any) => U[]
+    map<U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any): { [P in keyof this]: U };
+>map : <U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any) => { [P in keyof this]: U; }
 >callbackfn : (value: T, index: number, array: T[]) => U
 >value : T
 >index : number

@@ -27,10 +27,10 @@ type FooBar = { foo: "hello"; bar: "world"; };
 >bar : "world"
 
 type WithIndex = Compute<FooBar & IndexObject>;   // { [x: string]: {}; foo: "hello"; bar: "world"; } <-- OK
->WithIndex : { [x: string]: {}; foo: "hello"; bar: "world"; }
+>WithIndex : { foo: "hello"; bar: "world"; } & { [x: string]: {}; }
 
 type WithoutIndex = OmitIndex<WithIndex, string>; // { foo: "hello"; bar: "world"; }                  <-- OK
->WithoutIndex : OmitIndex<{ [x: string]: {}; foo: "hello"; bar: "world"; }, string>
+>WithoutIndex : OmitIndex<{ foo: "hello"; bar: "world"; }, string> & OmitIndex<{ [x: string]: {}; }, string>
 
 type FooBarKey = keyof FooBar;             // "foo" | "bar"   <-- OK
 >FooBarKey : keyof FooBar
@@ -39,5 +39,5 @@ type WithIndexKey = keyof WithIndex;       // string | number <-- Expected: stri
 >WithIndexKey : string | number
 
 type WithoutIndexKey = keyof WithoutIndex; // number          <-- Expected: "foo" | "bar"
->WithoutIndexKey : "foo" | "bar"
+>WithoutIndexKey : keyof FooBar
 

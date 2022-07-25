@@ -1920,11 +1920,11 @@ class AnotherSampleClass<T> extends SampleClass<T & Foo> {
 
         this.props.foo.concat;
 >this.props.foo.concat : (...strings: string[]) => string
->this.props.foo : (T & Foo)["foo"]
+>this.props.foo : string
 >this.props : Readonly<T & Foo>
 >this : this
 >props : Readonly<T & Foo>
->foo : (T & Foo)["foo"]
+>foo : string
 >concat : (...strings: string[]) => string
     }
 }

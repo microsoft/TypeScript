@@ -32,7 +32,7 @@ const myHoc = <ComposedComponentProps extends any>(
 ><WrapperComponent {...props} myProp={'1000000'} /> : JSX.Element
 >WrapperComponent : React.ComponentClass<ComposedComponentProps & { myProp: string; }, any>
 >props : ComposedComponentProps
->myProp : "1000000"
+>myProp : string
 >'1000000' : "1000000"
 
     <WrapperComponent {...props} myProp={1000000} />;

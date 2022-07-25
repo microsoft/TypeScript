@@ -1,0 +1,96 @@
+=== tests/cases/compiler/mappedArrayLikeType.ts ===
+type Tuple<T> = [T, ...string[], T];
+>Tuple : Tuple<T>
+
+type ReadonlyTuple<T> = readonly [T, ...string[], T];
+>ReadonlyTuple : ReadonlyTuple<T>
+
+type Mapper<T extends readonly any[]> = { [P in keyof T]: `${P}_${T[P]}` };
+>Mapper : Mapper<T>
+
+type A = string[] & { foo };
+>A : string[] & { foo: any; }
+>foo : any
+
+type AMapped = Mapper<A>;
+>AMapped : `${number}_${string}`[] & Mapper<{ foo: any; }>
+
+type RA = readonly string[] & { foo };
+>RA : readonly string[] & { foo: any; }
+>foo : any
+
+type RAMapped = Mapper<RA>;
+>RAMapped : readonly `${number}_${string}`[] & Mapper<{ foo: any; }>
+
+type T = [number, ...string[], number] & { foo };
+>T : [number, ...string[], number] & { foo: any; }
+>foo : any
+
+type TMapped = Mapper<T>;
+>TMapped : [`0_${number}`, ...(`${number}_${string}` | `${number}_${number}`)[], `${number}_${string}` | `${number}_${number}`] & Mapper<{ foo: any; }>
+
+type RT = readonly [number, ...string[], number] & { foo };
+>RT : readonly [number, ...string[], number] & { foo: any; }
+>foo : any
+
+type RTMapped = Mapper<RT>;
+>RTMapped : readonly [`0_${number}`, ...(`${number}_${string}` | `${number}_${number}`)[], `${number}_${string}` | `${number}_${number}`] & Mapper<{ foo: any; }>
+
+interface AX<T> extends AY<T> {
+  0: T & {};
+>0 : T & {}
+
+  length: 1;
+>length : 1
+
+  foo: Mapper<this>;
+>foo : `${number}_${T}`[] & { 0: `0_${this["0"]}`; length: 1; }
+}
+interface AY<T> extends AZ<T> { bar }
+>bar : any
+
+interface AZ<T> extends Array<T> { baz }
+>baz : any
+
+interface RAX<T> extends RAY<T>  {
+  0: T & {};
+>0 : T & {}
+
+  length: 1;
+>length : 1
+
+  foo: Mapper<this>;
+>foo : readonly `${number}_${T}`[] & { 0: `0_${this["0"]}`; length: 1; }
+}
+interface RAY<T> extends RAZ<T> { bar }
+>bar : any
+
+interface RAZ<T> extends ReadonlyArray<T> { baz }
+>baz : any
+
+interface TX<T> extends TY<T>  {
+  0: T & {};
+>0 : T & {}
+
+  foo: Mapper<this>;
+>foo : [`0_${T}`, ...(`${number}_${string}` | `${number}_${T}`)[], `${number}_${string}` | `${number}_${T}`] & { 0: `0_${this["0"]}`; }
+}
+interface TY<T> extends TZ<T> { bar }
+>bar : any
+
+interface TZ<T> extends Tuple<T> { baz }
+>baz : any
+
+interface RTX<T> extends RTY<T>  {
+  0: T & {};
+>0 : T & {}
+
+  foo: Mapper<this>;
+>foo : readonly [`0_${T}`, ...(`${number}_${string}` | `${number}_${T}`)[], `${number}_${string}` | `${number}_${T}`] & { 0: `0_${this["0"]}`; }
+}
+interface RTY<T> extends RTZ<T> { bar }
+>bar : any
+
+interface RTZ<T> extends ReadonlyTuple<T> { baz }
+>baz : any
+

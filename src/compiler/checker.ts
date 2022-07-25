@@ -8734,6 +8734,22 @@ namespace ts {
             const spreadableProperties: Symbol[] = [];
             const unspreadableToRestKeys: Type[] = [];
 
+            if (isArrayType(source)) {
+                return createAnonymousType(undefined, createSymbolTable(), emptyArray, emptyArray, [createIndexInfo(numberType, getElementTypeOfArrayType(source)!, /*isReadonly*/ false)]);
+            }
+            if (isTupleType(source)) {
+                const symbols: Symbol[] = [];
+                for (let i = 0; i < source.target.fixedLength; i++) {
+                    if (!isTypeAssignableTo(getNumberLiteralType(i), omitKeyType)) {
+                        const symbol = createSymbol(SymbolFlags.Property | (source.target.elementFlags[i] & ElementFlags.Optional ? SymbolFlags.Optional : 0), "" + i as __String);
+                        symbol.type = getIndexedAccessType(source, getNumberLiteralType(i));
+                        symbols.push(symbol);
+                    }
+                }
+                const tupleRestType = getRestTypeOfTupleType(source);
+                return createAnonymousType(undefined, createSymbolTable(symbols), emptyArray, emptyArray, tupleRestType ? [createIndexInfo(numberType, tupleRestType, /*isReadonly*/ false)] : emptyArray);
+            }
+
             for (const prop of getPropertiesOfType(source)) {
                 const literalTypeFromProperty = getLiteralTypeFromProperty(prop, TypeFlags.StringOrNumberLiteralOrUnique);
                 if (!isTypeAssignableTo(literalTypeFromProperty, omitKeyType)
@@ -8903,7 +8919,7 @@ namespace ts {
                     // remaining tuple element types. Otherwise, the rest element has an array type with same
                     // element type as the parent type.
                     type = everyType(parentType, isTupleType) ?
-                        mapType(parentType, t => sliceTupleType(t as TupleTypeReference, index)) :
+                        mapType(parentType, t => sliceTupleType(t as TupleTypeReference, index), UnionReduction.Subtype) :
                         createArrayType(elementType);
                 }
                 else if (isArrayLikeType(parentType)) {
@@ -17108,20 +17124,20 @@ namespace ts {
                 if (typeVariable !== mappedTypeVariable) {
                     return mapTypeWithAlias(getReducedType(mappedTypeVariable), t => {
                         if (t.flags & (TypeFlags.AnyOrUnknown | TypeFlags.InstantiableNonPrimitive | TypeFlags.Object | TypeFlags.Intersection) && t !== wildcardType && !isErrorType(t)) {
-                            if (!type.declaration.nameType) {
-                                let constraint;
-                                if (isArrayType(t) || t.flags & TypeFlags.Any && findResolutionCycleStartIndex(typeVariable, TypeSystemPropertyName.ImmediateBaseConstraint) < 0 &&
-                                    (constraint = getConstraintOfTypeParameter(typeVariable)) && everyType(constraint, isArrayOrTupleType)) {
-                                    return instantiateMappedArrayType(t, type, prependTypeMapping(typeVariable, t, mapper));
-                                }
-                                if (isGenericTupleType(t)) {
-                                    return instantiateMappedGenericTupleType(t, type, typeVariable, mapper);
-                                }
-                                if (isTupleType(t)) {
-                                    return instantiateMappedTupleType(t, type, prependTypeMapping(typeVariable, t, mapper));
-                                }
+                            let constraint;
+                            if (isArrayType(t) || t.flags & TypeFlags.Any && findResolutionCycleStartIndex(typeVariable, TypeSystemPropertyName.ImmediateBaseConstraint) < 0 &&
+                                (constraint = getConstraintOfTypeParameter(typeVariable)) && everyType(constraint, isArrayOrTupleType)) {
+                                return instantiateMappedArrayType(t, type, prependTypeMapping(typeVariable, t, mapper));
                             }
-                            return instantiateAnonymousType(type, prependTypeMapping(typeVariable, t, mapper));
+                            if (isGenericTupleType(t)) {
+                                return instantiateMappedGenericTupleType(t, type, typeVariable, mapper);
+                            }
+                            if (isTupleType(t)) {
+                                return instantiateMappedTupleType(t, type, typeVariable, mapper);
+                            }
+                            return t.symbol && t.symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface) &&
+                                instantiateMappedClassOrInterfaceType(t as InterfaceType, type, typeVariable, mapper) ||
+                                instantiateAnonymousType(type, prependTypeMapping(typeVariable, t, mapper));
                         }
                         return t;
                     }, aliasSymbol, aliasTypeArguments);
@@ -17149,26 +17165,30 @@ namespace ts {
                 return instantiateMappedType(mappedType, prependTypeMapping(typeVariable, singleton, mapper));
             });
             const newReadonly = getModifiedReadonlyState(tupleType.target.readonly, getMappedTypeModifiers(mappedType));
-            return createTupleType(elementTypes, map(elementTypes, _ => ElementFlags.Variadic), newReadonly);
+            const result = createTupleType(elementTypes, map(elementTypes, _ => ElementFlags.Variadic), newReadonly);
+            return isTypeIdenticalTo(tupleType.target, result) ? tupleType : result;
         }
 
         function instantiateMappedArrayType(arrayType: Type, mappedType: MappedType, mapper: TypeMapper) {
             const elementType = instantiateMappedTypeTemplate(mappedType, numberType, /*isOptional*/ true, mapper);
-            return isErrorType(elementType) ? errorType :
+            const result = isErrorType(elementType) ? errorType :
                 createArrayType(elementType, getModifiedReadonlyState(isReadonlyArrayType(arrayType), getMappedTypeModifiers(mappedType)));
+            return isTypeIdenticalTo(arrayType, result) ? arrayType : result;
         }
 
-        function instantiateMappedTupleType(tupleType: TupleTypeReference, mappedType: MappedType, mapper: TypeMapper) {
+        function instantiateMappedTupleType(tupleType: TupleTypeReference, mappedType: MappedType, typeVariable: TypeVariable, mapper: TypeMapper) {
             const elementFlags = tupleType.target.elementFlags;
-            const elementTypes = map(getTypeArguments(tupleType), (_, i) =>
-                instantiateMappedTypeTemplate(mappedType, getStringLiteralType("" + i), !!(elementFlags[i] & ElementFlags.Optional), mapper));
+            const elementTypes = map(getTypeArguments(tupleType), (elementType, i) =>
+                instantiateMappedTypeTemplate(mappedType, i < tupleType.target.fixedLength ? getStringLiteralType("" + i) : numberType, !!(elementFlags[i] & ElementFlags.Optional),
+                appendTypeMapping(prependTypeMapping(typeVariable, tupleType, mapper), getIndexedAccessType(typeVariable, getTypeParameterFromMappedType(mappedType)), elementType)));
             const modifiers = getMappedTypeModifiers(mappedType);
             const newTupleModifiers = modifiers & MappedTypeModifiers.IncludeOptional ? map(elementFlags, f => f & ElementFlags.Required ? ElementFlags.Optional : f) :
                 modifiers & MappedTypeModifiers.ExcludeOptional ? map(elementFlags, f => f & ElementFlags.Optional ? ElementFlags.Required : f) :
                 elementFlags;
             const newReadonly = getModifiedReadonlyState(tupleType.target.readonly, modifiers);
-            return contains(elementTypes, errorType) ? errorType :
+            const result = contains(elementTypes, errorType) ? errorType :
                 createTupleType(elementTypes, newTupleModifiers, newReadonly, tupleType.target.labeledElementDeclarations);
+            return isTypeIdenticalTo(tupleType.target, result) ? tupleType : result;
         }
 
         function instantiateMappedTypeTemplate(type: MappedType, key: Type, isOptional: boolean, mapper: TypeMapper) {
@@ -17178,6 +17198,67 @@ namespace ts {
             return strictNullChecks && modifiers & MappedTypeModifiers.IncludeOptional && !maybeTypeOfKind(propType, TypeFlags.Undefined | TypeFlags.Void) ? getOptionalType(propType, /*isProperty*/ true) :
                 strictNullChecks && modifiers & MappedTypeModifiers.ExcludeOptional && isOptional ? getTypeWithFacts(propType, TypeFacts.NEUndefined) :
                 propType;
+        }
+
+        function classOrInterfaceTypeMappedTypeMapper(t: Type, type: MappedType, typeVariable: TypeVariable, mapper: TypeMapper): Type | undefined {
+            if (t.flags & TypeFlags.Intersection) {
+                const intersectionTypes = (t as IntersectionType).types;
+                const mappedTypes = flatMap(intersectionTypes, t => classOrInterfaceTypeMappedTypeMapper(t, type, typeVariable, mapper));
+                if (mappedTypes.length) {
+                    return getIntersectionType(mappedTypes, t.aliasSymbol, t.aliasTypeArguments);
+                }
+            }
+            else if (t.flags & TypeFlags.Union) {
+                const unionTypes = (t as UnionType).types;
+                const mappedTypes = flatMap(unionTypes, t => classOrInterfaceTypeMappedTypeMapper(t, type, typeVariable, mapper));
+                if (mappedTypes.length) {
+                    return getUnionType(mappedTypes, UnionReduction.Literal, t.aliasSymbol, t.aliasTypeArguments);
+                }
+            }
+            else if (t.flags & (TypeFlags.AnyOrUnknown | TypeFlags.InstantiableNonPrimitive | TypeFlags.Object) && t !== wildcardType && !isErrorType(t)) {
+                let constraint;
+                if (isArrayType(t) || t.flags & TypeFlags.Any && findResolutionCycleStartIndex(typeVariable, TypeSystemPropertyName.ImmediateBaseConstraint) < 0 &&
+                    (constraint = getConstraintOfTypeParameter(typeVariable)) && everyType(constraint, isArrayOrTupleType)) {
+                    return instantiateMappedArrayType(t, type, prependTypeMapping(typeVariable, t, mapper));
+                }
+                if (isGenericTupleType(t)) {
+                    return instantiateMappedGenericTupleType(t, type, typeVariable, mapper);
+                }
+                if (isTupleType(t)) {
+                    return instantiateMappedTupleType(t, type, typeVariable, mapper);
+                }
+                if (t.symbol && t.symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
+                    return instantiateMappedClassOrInterfaceType(t as InterfaceType, type, typeVariable, mapper);
+                }
+            }
+        }
+
+        function instantiateMappedClassOrInterfaceType(t: InterfaceType, type: MappedType, typeVariable: TypeVariable, mapper: TypeMapper): Type | undefined {
+            const baseTypes = getBaseTypes(t);
+            const mappedTypes = flatMap(baseTypes, t => classOrInterfaceTypeMappedTypeMapper(t, type, typeVariable, mapper));
+            if (mappedTypes.length) {
+                const interfaceType = resolveDeclaredMembers(t);
+                const arrayLengthType = getTypeOfPropertyOfType(t, "length" as __String);
+                const maxLength = arrayLengthType && arrayLengthType.flags & TypeFlags.NumberLiteral ? (arrayLengthType as NumberLiteralType).value : Infinity;
+                const symbols = flatMap(interfaceType.declaredProperties, symbol => {
+                    const name = symbol.escapedName;
+                    if (isValidNumberString(name as string, /*roundTripOnly*/ true)) {
+                        const n = +name;
+                        if (n === n >>> 0 && n < maxLength) {
+                            const newSymbol = createSymbol(symbol.flags, name, getCheckFlags(symbol));
+                            newSymbol.type = instantiateMappedTypeTemplate(type, getStringLiteralType(name as string), !!(symbol.flags & SymbolFlags.Optional), prependTypeMapping(typeVariable, t, mapper));
+                            return newSymbol;
+                        }
+                    }
+                    if (name === "length") {
+                        return symbol;
+                    }
+                });
+                if (symbols.length) {
+                    return getIntersectionType([...mappedTypes, createAnonymousType(undefined, createSymbolTable(symbols), emptyArray, emptyArray, emptyArray)]);
+                }
+                return getIntersectionType(mappedTypes);
+            }
         }
 
         function instantiateAnonymousType(type: AnonymousType, mapper: TypeMapper, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]): AnonymousType {
@@ -17297,6 +17378,10 @@ namespace ts {
                 return getStringMappingType((type as StringMappingType).symbol, instantiateType((type as StringMappingType).type, mapper));
             }
             if (flags & TypeFlags.IndexedAccess) {
+                const mappedType = getMappedType(type, mapper);
+                if (mappedType !== type) {
+                    return mappedType;
+                }
                 const newAliasSymbol = aliasSymbol || type.aliasSymbol;
                 const newAliasTypeArguments = aliasSymbol ? aliasTypeArguments : instantiateTypes(type.aliasTypeArguments, mapper);
                 return getIndexedAccessType(instantiateType((type as IndexedAccessType).objectType, mapper), instantiateType((type as IndexedAccessType).indexType, mapper), (type as IndexedAccessType).accessFlags, /*accessNode*/ undefined, newAliasSymbol, newAliasTypeArguments);
@@ -24031,9 +24116,9 @@ namespace ts {
         // Apply a mapping function to a type and return the resulting type. If the source type
         // is a union type, the mapping function is applied to each constituent type and a union
         // of the resulting types is returned.
-        function mapType(type: Type, mapper: (t: Type) => Type, noReductions?: boolean): Type;
-        function mapType(type: Type, mapper: (t: Type) => Type | undefined, noReductions?: boolean): Type | undefined;
-        function mapType(type: Type, mapper: (t: Type) => Type | undefined, noReductions?: boolean): Type | undefined {
+        function mapType(type: Type, mapper: (t: Type) => Type, unionReduction?: UnionReduction): Type;
+        function mapType(type: Type, mapper: (t: Type) => Type | undefined, unionReduction?: UnionReduction): Type | undefined;
+        function mapType(type: Type, mapper: (t: Type) => Type | undefined, unionReduction: UnionReduction = UnionReduction.Literal): Type | undefined {
             if (type.flags & TypeFlags.Never) {
                 return type;
             }
@@ -24045,7 +24130,7 @@ namespace ts {
             let mappedTypes: Type[] | undefined;
             let changed = false;
             for (const t of types) {
-                const mapped = t.flags & TypeFlags.Union ? mapType(t, mapper, noReductions) : mapper(t);
+                const mapped = t.flags & TypeFlags.Union ? mapType(t, mapper, unionReduction) : mapper(t);
                 changed ||= t !== mapped;
                 if (mapped) {
                     if (!mappedTypes) {
@@ -24056,12 +24141,14 @@ namespace ts {
                     }
                 }
             }
-            return changed ? mappedTypes && getUnionType(mappedTypes, noReductions ? UnionReduction.None : UnionReduction.Literal) : type;
+            return changed ? mappedTypes && getUnionType(mappedTypes, unionReduction) : type;
         }
 
         function mapTypeWithAlias(type: Type, mapper: (t: Type) => Type, aliasSymbol: Symbol | undefined, aliasTypeArguments: readonly Type[] | undefined) {
             return type.flags & TypeFlags.Union && aliasSymbol ?
                 getUnionType(map((type as UnionType).types, mapper), UnionReduction.Literal, aliasSymbol, aliasTypeArguments) :
+                type.flags & TypeFlags.Intersection && aliasSymbol ?
+                getIntersectionType(map((type as IntersectionType).types, mapper), aliasSymbol, aliasTypeArguments) :
                 mapType(type, mapper);
         }
 
@@ -27076,7 +27163,7 @@ namespace ts {
                     return concretePropertyType;
                 }
                 return getTypeOfApplicableIndexInfoOfContextualType(t);
-            }, /*noReductions*/ true);
+            }, UnionReduction.None);
 
             function getTypeOfConcretePropertyOfContextualType(t: Type) {
                 if (isGenericMappedType(t) && !t.declaration.nameType) {
@@ -27140,7 +27227,7 @@ namespace ts {
                 if (element.name) {
                     const nameType = getLiteralTypeFromPropertyName(element.name);
                     // We avoid calling getApplicableIndexInfo here because it performs potentially expensive intersection reduction.
-                    return mapType(type, t => findApplicableIndexInfo(getIndexInfosOfStructuredType(t), nameType)?.type, /*noReductions*/ true);
+                    return mapType(type, t => findApplicableIndexInfo(getIndexInfosOfStructuredType(t), nameType)?.type, UnionReduction.None);
                 }
             }
             return undefined;
@@ -27156,7 +27243,7 @@ namespace ts {
                 || mapType(
                     arrayContextualType,
                     t => getIteratedTypeOrElementType(IterationUse.Element, t, undefinedType, /*errorNode*/ undefined, /*checkAssignability*/ false),
-                    /*noReductions*/ true));
+                    UnionReduction.None));
         }
 
         // In a contextually typed conditional expression, the true/false expressions are contextually typed by the same type.
@@ -27182,7 +27269,7 @@ namespace ts {
                 else {
                     return t;
                 }
-            }, /*noReductions*/ true));
+            }, UnionReduction.None));
         }
 
         function getContextualTypeForJsxExpression(node: JsxExpression, contextFlags: ContextFlags | undefined): Type | undefined {
@@ -27276,7 +27363,7 @@ namespace ts {
                 getContextualType(node, contextFlags);
             const instantiatedType = instantiateContextualType(contextualType, node, contextFlags);
             if (instantiatedType && !(contextFlags && contextFlags & ContextFlags.NoConstraints && instantiatedType.flags & TypeFlags.TypeVariable)) {
-                const apparentType = mapType(instantiatedType, getApparentType, /*noReductions*/ true);
+                const apparentType = mapType(instantiatedType, getApparentType, UnionReduction.None);
                 return apparentType.flags & TypeFlags.Union && isObjectLiteralExpression(node) ? discriminateContextualTypeByObjectMembers(node, apparentType as UnionType) :
                     apparentType.flags & TypeFlags.Union && isJsxAttributes(node) ? discriminateContextualTypeByJSXAttributes(node, apparentType as UnionType) :
                     apparentType;
@@ -34050,8 +34137,11 @@ namespace ts {
             else {
                 leftType = checkExpression(left, checkMode);
             }
-
-            const rightType = checkExpression(right, checkMode);
+            const leftTypeIsTuple = isTupleType(leftType);
+            const rightType = checkExpression(right, checkMode, /*forceTuple*/ leftTypeIsTuple);
+            if (!leftTypeIsTuple && isTupleType(rightType)) {
+                leftType = checkExpression(left, checkMode, /*forceTuple*/ true);
+            }
             return checkBinaryLikeExpressionWorker(left, operatorToken, right, leftType, rightType, errorNode);
         }
 
@@ -34542,8 +34632,12 @@ namespace ts {
         function checkConditionalExpression(node: ConditionalExpression, checkMode?: CheckMode): Type {
             checkTruthinessExpression(node.condition);
             checkTestingKnownTruthyCallableOrAwaitableType(node.condition, node.whenTrue);
-            const type1 = checkExpression(node.whenTrue, checkMode);
-            const type2 = checkExpression(node.whenFalse, checkMode);
+            let type1 = checkExpression(node.whenTrue, checkMode);
+            const type1IsTuple = isTupleType(type1);
+            const type2 = checkExpression(node.whenFalse, checkMode, /*forceTuple*/ type1IsTuple);
+            if (!type1IsTuple && isTupleType(type2)) {
+                type1 = checkExpression(node.whenTrue, checkMode, /*forceTuple*/ true);
+            }
             return getUnionType([type1, type2], UnionReduction.Subtype);
         }
 

@@ -35,15 +35,15 @@ class CoachMarkAnchorDecorator {
 >anchor : AnchorType<P>
 
                 const anchorRef = this.props.anchorRef;
->anchorRef : (CoachMarkAnchorProps<AnchorType<P>> & P)["anchorRef"] | undefined
->this.props.anchorRef : (CoachMarkAnchorProps<AnchorType<P>> & P)["anchorRef"] | undefined
->this.props : Readonly<{ children?: unknown; }> & Readonly<CoachMarkAnchorProps<AnchorType<P>> & P>
+>anchorRef : ((anchor: AnchorType<P>) => void) | undefined
+>this.props.anchorRef : ((anchor: AnchorType<P>) => void) | undefined
+>this.props : Readonly<{ children?: unknown; }> & Readonly<CoachMarkAnchorProps<AnchorType<P>>> & Readonly<P>
 >this : this
->props : Readonly<{ children?: unknown; }> & Readonly<CoachMarkAnchorProps<AnchorType<P>> & P>
->anchorRef : (CoachMarkAnchorProps<AnchorType<P>> & P)["anchorRef"] | undefined
+>props : Readonly<{ children?: unknown; }> & Readonly<CoachMarkAnchorProps<AnchorType<P>>> & Readonly<P>
+>anchorRef : ((anchor: AnchorType<P>) => void) | undefined
 
                 if (anchorRef) {
->anchorRef : (CoachMarkAnchorProps<AnchorType<P>> & P)["anchorRef"] | undefined
+>anchorRef : ((anchor: AnchorType<P>) => void) | undefined
 
                     anchorRef(anchor);
 >anchorRef(anchor) : void

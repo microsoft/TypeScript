@@ -22,9 +22,9 @@ function f<P>(App: React.ComponentClass<P> | React.StatelessComponent<P>): void 
             return <App {...this.props} />;
 ><App {...this.props} /> : JSX.Element
 >App : React.ComponentClass<P, any> | React.StatelessComponent<P>
->this.props : Readonly<{ children?: React.ReactNode; }> & Readonly<P & { x: number; }>
+>this.props : Readonly<{ children?: React.ReactNode; }> & Readonly<P> & Readonly<{ x: number; }>
 >this : this
->props : Readonly<{ children?: React.ReactNode; }> & Readonly<P & { x: number; }>
+>props : Readonly<{ children?: React.ReactNode; }> & Readonly<P> & Readonly<{ x: number; }>
         }
     }
 }
