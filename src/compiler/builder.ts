@@ -821,7 +821,6 @@ namespace ts {
     export interface ProgramBuildInfoResolution {
         readonly resolvedModule: ProgramBuildInfoResolvedModuleFull | undefined;
         readonly resolvedTypeReferenceDirective: ProgramBuildInfoResolvedTypeReferenceDirective | undefined;
-        readonly failedLookupLocations: readonly ProgramBuildInfoAbsoluteFileId[] | undefined;
         readonly affectingLocations: readonly ProgramBuildInfoAbsoluteFileId[] | undefined;
         readonly resolutionDiagnostics: readonly ProgramBuildInfoResolutionDiagnostic[] | undefined;
     }
@@ -1210,7 +1209,6 @@ namespace ts {
             return {
                 resolvedModule: toProgramBuildInfoResolved((resolution as ResolvedModuleWithFailedLookupLocations).resolvedModule),
                 resolvedTypeReferenceDirective: toProgramBuildInfoResolved((resolution as ResolvedTypeReferenceDirectiveWithFailedLookupLocations).resolvedTypeReferenceDirective),
-                failedLookupLocations: toReadonlyArrayOrUndefined(resolution.failedLookupLocations, toAbsoluteFileId),
                 affectingLocations: toReadonlyArrayOrUndefined(resolution.affectingLocations, toAbsoluteFileId),
                 resolutionDiagnostics: toReadonlyArrayOrUndefined(resolution.resolutionDiagnostics, toProgramBuildInfoResolutionDiagnostic),
             };
@@ -2074,7 +2072,7 @@ namespace ts {
                 return resolutions[resolutionId - 1] = {
                     resolvedModule: toResolved(resolution.resolvedModule, resolvedFileName, extenstion),
                     resolvedTypeReferenceDirective: toResolved(resolution.resolvedTypeReferenceDirective, resolvedFileName, extenstion),
-                    failedLookupLocations: resolution.failedLookupLocations?.map(resuableCacheResolutions!.getProgramBuildInfoFilePathDecoder().toFileAbsolutePath) || [],
+                    failedLookupLocations: emptyArray,
                     affectingLocations: resolution.affectingLocations?.map(resuableCacheResolutions!.getProgramBuildInfoFilePathDecoder().toFileAbsolutePath),
                     resolutionDiagnostics: resolution.resolutionDiagnostics?.map(toResolutionDiagnostic)
                 };

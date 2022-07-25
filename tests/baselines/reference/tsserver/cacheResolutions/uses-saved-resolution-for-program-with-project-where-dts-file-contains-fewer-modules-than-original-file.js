@@ -70,10 +70,6 @@ File '/user/username/projects/myproject/logic.d.ts' does not exist.
 File '/user/username/projects/myproject/logic/package.json' does not exist.
 File '/user/username/projects/myproject/logic/index.ts' exist - use it as a name resolution result.
 ======== Module name '../logic' was successfully resolved to '/user/username/projects/myproject/logic/index.ts'. ========
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 0 undefined Project: /user/username/projects/myproject/tests/tsconfig.json WatchType: Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 0 undefined Project: /user/username/projects/myproject/tests/tsconfig.json WatchType: Failed Lookup Locations
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/logic 1 undefined Project: /user/username/projects/myproject/tests/tsconfig.json WatchType: Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/logic 1 undefined Project: /user/username/projects/myproject/tests/tsconfig.json WatchType: Failed Lookup Locations
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/logic/index.ts 500 undefined WatchType: Closed Script info
 ======== Resolving module '../core/myClass' from '/user/username/projects/myproject/logic/index.ts'. ========
 Using compiler options of project reference redirect '/user/username/projects/myproject/logic/tsconfig.json'.
@@ -91,8 +87,6 @@ File '/user/username/projects/myproject/core.d.ts' does not exist.
 File '/user/username/projects/myproject/core/package.json' does not exist.
 File '/user/username/projects/myproject/core/index.ts' exist - use it as a name resolution result.
 ======== Module name '../core' was successfully resolved to '/user/username/projects/myproject/core/index.ts'. ========
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/core 1 undefined Project: /user/username/projects/myproject/tests/tsconfig.json WatchType: Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/core 1 undefined Project: /user/username/projects/myproject/tests/tsconfig.json WatchType: Failed Lookup Locations
 ======== Resolving module '../core/anotherClass' from '/user/username/projects/myproject/logic/index.ts'. ========
 Using compiler options of project reference redirect '/user/username/projects/myproject/logic/tsconfig.json'.
 Module resolution kind is not specified, using 'NodeJs'.

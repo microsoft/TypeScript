@@ -62,15 +62,7 @@ CleanBuild:
           "resolvedModule": {
             "resolvedFileName": "./node_modules/pkg0/index.d.ts",
             "isExternalLibraryImport": true
-          },
-          "failedLookupLocations": [
-            "./node_modules/pkg0/package.json",
-            "./node_modules/pkg0.ts",
-            "./node_modules/pkg0.tsx",
-            "./node_modules/pkg0.d.ts",
-            "./node_modules/pkg0/index.ts",
-            "./node_modules/pkg0/index.tsx"
-          ]
+          }
         },
         {
           "resolvedModule": {
@@ -95,15 +87,7 @@ CleanBuild:
             "resolvedModule": {
               "resolvedFileName": "./node_modules/pkg0/index.d.ts",
               "isExternalLibraryImport": true
-            },
-            "failedLookupLocations": [
-              "./node_modules/pkg0/package.json",
-              "./node_modules/pkg0.ts",
-              "./node_modules/pkg0.tsx",
-              "./node_modules/pkg0.d.ts",
-              "./node_modules/pkg0/index.ts",
-              "./node_modules/pkg0/index.tsx"
-            ]
+            }
           }
         ],
         [
@@ -133,15 +117,7 @@ CleanBuild:
                 "resolvedModule": {
                   "resolvedFileName": "./node_modules/pkg0/index.d.ts",
                   "isExternalLibraryImport": true
-                },
-                "failedLookupLocations": [
-                  "./node_modules/pkg0/package.json",
-                  "./node_modules/pkg0.ts",
-                  "./node_modules/pkg0.tsx",
-                  "./node_modules/pkg0.d.ts",
-                  "./node_modules/pkg0/index.ts",
-                  "./node_modules/pkg0/index.tsx"
-                ]
+                }
               }
             ],
             [
@@ -235,15 +211,7 @@ IncrementalBuild:
           "resolvedModule": {
             "resolvedFileName": "./node_modules/pkg0/index.d.ts",
             "isExternalLibraryImport": true
-          },
-          "failedLookupLocations": [
-            "./node_modules/pkg0/package.json",
-            "./node_modules/pkg0.ts",
-            "./node_modules/pkg0.tsx",
-            "./node_modules/pkg0.d.ts",
-            "./node_modules/pkg0/index.ts",
-            "./node_modules/pkg0/index.tsx"
-          ]
+          }
         },
         {
           "resolvedModule": {
@@ -280,15 +248,7 @@ IncrementalBuild:
             "resolvedModule": {
               "resolvedFileName": "./node_modules/pkg0/index.d.ts",
               "isExternalLibraryImport": true
-            },
-            "failedLookupLocations": [
-              "./node_modules/pkg0/package.json",
-              "./node_modules/pkg0.ts",
-              "./node_modules/pkg0.tsx",
-              "./node_modules/pkg0.d.ts",
-              "./node_modules/pkg0/index.ts",
-              "./node_modules/pkg0/index.tsx"
-            ]
+            }
           }
         ],
         [
@@ -334,15 +294,7 @@ IncrementalBuild:
                 "resolvedModule": {
                   "resolvedFileName": "./node_modules/pkg0/index.d.ts",
                   "isExternalLibraryImport": true
-                },
-                "failedLookupLocations": [
-                  "./node_modules/pkg0/package.json",
-                  "./node_modules/pkg0.ts",
-                  "./node_modules/pkg0.tsx",
-                  "./node_modules/pkg0.d.ts",
-                  "./node_modules/pkg0/index.ts",
-                  "./node_modules/pkg0/index.tsx"
-                ]
+                }
               }
             ],
             [
@@ -535,15 +487,7 @@ CleanBuild:
           "resolvedModule": {
             "resolvedFileName": "./node_modules/pkg0/index.d.ts",
             "isExternalLibraryImport": true
-          },
-          "failedLookupLocations": [
-            "./node_modules/pkg0/package.json",
-            "./node_modules/pkg0.ts",
-            "./node_modules/pkg0.tsx",
-            "./node_modules/pkg0.d.ts",
-            "./node_modules/pkg0/index.ts",
-            "./node_modules/pkg0/index.tsx"
-          ]
+          }
         },
         {
           "resolvedModule": {
@@ -568,15 +512,7 @@ CleanBuild:
             "resolvedModule": {
               "resolvedFileName": "./node_modules/pkg0/index.d.ts",
               "isExternalLibraryImport": true
-            },
-            "failedLookupLocations": [
-              "./node_modules/pkg0/package.json",
-              "./node_modules/pkg0.ts",
-              "./node_modules/pkg0.tsx",
-              "./node_modules/pkg0.d.ts",
-              "./node_modules/pkg0/index.ts",
-              "./node_modules/pkg0/index.tsx"
-            ]
+            }
           }
         ],
         [
@@ -606,15 +542,7 @@ CleanBuild:
                 "resolvedModule": {
                   "resolvedFileName": "./node_modules/pkg0/index.d.ts",
                   "isExternalLibraryImport": true
-                },
-                "failedLookupLocations": [
-                  "./node_modules/pkg0/package.json",
-                  "./node_modules/pkg0.ts",
-                  "./node_modules/pkg0.tsx",
-                  "./node_modules/pkg0.d.ts",
-                  "./node_modules/pkg0/index.ts",
-                  "./node_modules/pkg0/index.tsx"
-                ]
+                }
               }
             ],
             [
@@ -711,15 +639,7 @@ IncrementalBuild:
           "resolvedModule": {
             "resolvedFileName": "./node_modules/pkg0/index.d.ts",
             "isExternalLibraryImport": true
-          },
-          "failedLookupLocations": [
-            "./node_modules/pkg0/package.json",
-            "./node_modules/pkg0.ts",
-            "./node_modules/pkg0.tsx",
-            "./node_modules/pkg0.d.ts",
-            "./node_modules/pkg0/index.ts",
-            "./node_modules/pkg0/index.tsx"
-          ]
+          }
         },
         {
           "resolvedModule": {
@@ -756,15 +676,7 @@ IncrementalBuild:
             "resolvedModule": {
               "resolvedFileName": "./node_modules/pkg0/index.d.ts",
               "isExternalLibraryImport": true
-            },
-            "failedLookupLocations": [
-              "./node_modules/pkg0/package.json",
-              "./node_modules/pkg0.ts",
-              "./node_modules/pkg0.tsx",
-              "./node_modules/pkg0.d.ts",
-              "./node_modules/pkg0/index.ts",
-              "./node_modules/pkg0/index.tsx"
-            ]
+            }
           }
         ],
         [
@@ -810,15 +722,7 @@ IncrementalBuild:
                 "resolvedModule": {
                   "resolvedFileName": "./node_modules/pkg0/index.d.ts",
                   "isExternalLibraryImport": true
-                },
-                "failedLookupLocations": [
-                  "./node_modules/pkg0/package.json",
-                  "./node_modules/pkg0.ts",
-                  "./node_modules/pkg0.tsx",
-                  "./node_modules/pkg0.d.ts",
-                  "./node_modules/pkg0/index.ts",
-                  "./node_modules/pkg0/index.tsx"
-                ]
+                }
               }
             ],
             [
@@ -1018,11 +922,7 @@ CleanBuild:
         {
           "resolvedModule": {
             "resolvedFileName": "./pkg0.d.ts"
-          },
-          "failedLookupLocations": [
-            "./pkg0.ts",
-            "./pkg0.tsx"
-          ]
+          }
         }
       ],
       "names": [
@@ -1043,11 +943,7 @@ CleanBuild:
           {
             "resolvedModule": {
               "resolvedFileName": "./pkg0.d.ts"
-            },
-            "failedLookupLocations": [
-              "./pkg0.ts",
-              "./pkg0.tsx"
-            ]
+            }
           }
         ]
       ],
@@ -1068,11 +964,7 @@ CleanBuild:
               {
                 "resolvedModule": {
                   "resolvedFileName": "./pkg0.d.ts"
-                },
-                "failedLookupLocations": [
-                  "./pkg0.ts",
-                  "./pkg0.tsx"
-                ]
+                }
               }
             ]
           ]
@@ -1173,25 +1065,13 @@ IncrementalBuild:
         {
           "resolvedModule": {
             "resolvedFileName": "./pkg0.d.ts"
-          },
-          "failedLookupLocations": [
-            "./pkg0.ts",
-            "./pkg0.tsx"
-          ]
+          }
         },
         {
           "resolvedModule": {
             "resolvedFileName": "./node_modules/pkg0/index.d.ts",
             "isExternalLibraryImport": true
-          },
-          "failedLookupLocations": [
-            "./node_modules/pkg0/package.json",
-            "./node_modules/pkg0.ts",
-            "./node_modules/pkg0.tsx",
-            "./node_modules/pkg0.d.ts",
-            "./node_modules/pkg0/index.ts",
-            "./node_modules/pkg0/index.tsx"
-          ]
+          }
         },
         {
           "resolvedModule": {
@@ -1236,11 +1116,7 @@ IncrementalBuild:
           {
             "resolvedModule": {
               "resolvedFileName": "./pkg0.d.ts"
-            },
-            "failedLookupLocations": [
-              "./pkg0.ts",
-              "./pkg0.tsx"
-            ]
+            }
           }
         ],
         [
@@ -1249,15 +1125,7 @@ IncrementalBuild:
             "resolvedModule": {
               "resolvedFileName": "./node_modules/pkg0/index.d.ts",
               "isExternalLibraryImport": true
-            },
-            "failedLookupLocations": [
-              "./node_modules/pkg0/package.json",
-              "./node_modules/pkg0.ts",
-              "./node_modules/pkg0.tsx",
-              "./node_modules/pkg0.d.ts",
-              "./node_modules/pkg0/index.ts",
-              "./node_modules/pkg0/index.tsx"
-            ]
+            }
           }
         ],
         [
@@ -1311,11 +1179,7 @@ IncrementalBuild:
                 {
                   "resolvedModule": {
                     "resolvedFileName": "./pkg0.d.ts"
-                  },
-                  "failedLookupLocations": [
-                    "./pkg0.ts",
-                    "./pkg0.tsx"
-                  ]
+                  }
                 }
               ]
             ]
@@ -1336,15 +1200,7 @@ IncrementalBuild:
                       "resolvedModule": {
                         "resolvedFileName": "./node_modules/pkg0/index.d.ts",
                         "isExternalLibraryImport": true
-                      },
-                      "failedLookupLocations": [
-                        "./node_modules/pkg0/package.json",
-                        "./node_modules/pkg0.ts",
-                        "./node_modules/pkg0.tsx",
-                        "./node_modules/pkg0.d.ts",
-                        "./node_modules/pkg0/index.ts",
-                        "./node_modules/pkg0/index.tsx"
-                      ]
+                      }
                     }
                   ],
                   [
@@ -1556,11 +1412,7 @@ CleanBuild:
         {
           "resolvedModule": {
             "resolvedFileName": "./pkg0.d.ts"
-          },
-          "failedLookupLocations": [
-            "./pkg0.ts",
-            "./pkg0.tsx"
-          ]
+          }
         }
       ],
       "names": [
@@ -1581,11 +1433,7 @@ CleanBuild:
           {
             "resolvedModule": {
               "resolvedFileName": "./pkg0.d.ts"
-            },
-            "failedLookupLocations": [
-              "./pkg0.ts",
-              "./pkg0.tsx"
-            ]
+            }
           }
         ]
       ],
@@ -1606,11 +1454,7 @@ CleanBuild:
               {
                 "resolvedModule": {
                   "resolvedFileName": "./pkg0.d.ts"
-                },
-                "failedLookupLocations": [
-                  "./pkg0.ts",
-                  "./pkg0.tsx"
-                ]
+                }
               }
             ]
           ]
@@ -1714,25 +1558,13 @@ IncrementalBuild:
         {
           "resolvedModule": {
             "resolvedFileName": "./pkg0.d.ts"
-          },
-          "failedLookupLocations": [
-            "./pkg0.ts",
-            "./pkg0.tsx"
-          ]
+          }
         },
         {
           "resolvedModule": {
             "resolvedFileName": "./node_modules/pkg0/index.d.ts",
             "isExternalLibraryImport": true
-          },
-          "failedLookupLocations": [
-            "./node_modules/pkg0/package.json",
-            "./node_modules/pkg0.ts",
-            "./node_modules/pkg0.tsx",
-            "./node_modules/pkg0.d.ts",
-            "./node_modules/pkg0/index.ts",
-            "./node_modules/pkg0/index.tsx"
-          ]
+          }
         },
         {
           "resolvedModule": {
@@ -1777,11 +1609,7 @@ IncrementalBuild:
           {
             "resolvedModule": {
               "resolvedFileName": "./pkg0.d.ts"
-            },
-            "failedLookupLocations": [
-              "./pkg0.ts",
-              "./pkg0.tsx"
-            ]
+            }
           }
         ],
         [
@@ -1790,15 +1618,7 @@ IncrementalBuild:
             "resolvedModule": {
               "resolvedFileName": "./node_modules/pkg0/index.d.ts",
               "isExternalLibraryImport": true
-            },
-            "failedLookupLocations": [
-              "./node_modules/pkg0/package.json",
-              "./node_modules/pkg0.ts",
-              "./node_modules/pkg0.tsx",
-              "./node_modules/pkg0.d.ts",
-              "./node_modules/pkg0/index.ts",
-              "./node_modules/pkg0/index.tsx"
-            ]
+            }
           }
         ],
         [
@@ -1852,11 +1672,7 @@ IncrementalBuild:
                 {
                   "resolvedModule": {
                     "resolvedFileName": "./pkg0.d.ts"
-                  },
-                  "failedLookupLocations": [
-                    "./pkg0.ts",
-                    "./pkg0.tsx"
-                  ]
+                  }
                 }
               ]
             ]
@@ -1877,15 +1693,7 @@ IncrementalBuild:
                       "resolvedModule": {
                         "resolvedFileName": "./node_modules/pkg0/index.d.ts",
                         "isExternalLibraryImport": true
-                      },
-                      "failedLookupLocations": [
-                        "./node_modules/pkg0/package.json",
-                        "./node_modules/pkg0.ts",
-                        "./node_modules/pkg0.tsx",
-                        "./node_modules/pkg0.d.ts",
-                        "./node_modules/pkg0/index.ts",
-                        "./node_modules/pkg0/index.tsx"
-                      ]
+                      }
                     }
                   ],
                   [

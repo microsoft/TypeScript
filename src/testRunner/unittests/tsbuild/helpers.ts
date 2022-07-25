@@ -213,7 +213,6 @@ interface Symbol {
     export type ReadableProgramBuildInfoResolution = Omit<ProgramBuildInfoResolution, "resolvedModule" | "resolvedTypeReferenceDirective" | "failedLookupLocations" | "affectingLocations" | "resolutionDiagnostics"> & {
         readonly resolvedModule: ReadableProgramBuildInfoResolvedModuleFull | undefined;
         readonly resolvedTypeReferenceDirective: ReadableProgramBuildInfoResolvedTypeReferenceDirective | undefined;
-        readonly failedLookupLocations: readonly string[] | undefined;
         readonly affectingLocations: readonly string[] | undefined;
         readonly resolutionDiagnostics: readonly ReadableProgramBuildInfoResolutionDiagnostic[] | undefined;
     };
@@ -382,7 +381,6 @@ interface Symbol {
                     ...resolution,
                     resolvedModule: toReadableProgramBuildInfoResolved(resolution.resolvedModule),
                     resolvedTypeReferenceDirective: toReadableProgramBuildInfoResolved(resolution.resolvedTypeReferenceDirective),
-                    failedLookupLocations: resolution.failedLookupLocations?.map(toFileName),
                     affectingLocations: resolution.affectingLocations?.map(toFileName),
                     resolutionDiagnostics: resolution.resolutionDiagnostics?.map(toReadableProgramBuildInfoResolutionDiagnostic),
                 };
