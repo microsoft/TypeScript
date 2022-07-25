@@ -5575,7 +5575,7 @@ interface GlobalEventHandlersEventMap {
     "focusout": FocusEvent;
     "formdata": FormDataEvent;
     "gotpointercapture": PointerEvent;
-    "input": Event;
+    "input": InputEvent;
     "invalid": Event;
     "keydown": KeyboardEvent;
     "keypress": KeyboardEvent;
