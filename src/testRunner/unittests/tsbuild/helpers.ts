@@ -211,6 +211,7 @@ interface Symbol {
         packagePath: string;
     };
     export type ReadableProgramBuildInfoResolution = Omit<ProgramBuildInfoResolution, "resolvedModule" | "resolvedTypeReferenceDirective" | "failedLookupLocations" | "affectingLocations" | "resolutionDiagnostics"> & {
+        readonly id: ProgramBuildInfoResolutionId;
         readonly resolvedModule: ReadableProgramBuildInfoResolvedModuleFull | undefined;
         readonly resolvedTypeReferenceDirective: ReadableProgramBuildInfoResolvedTypeReferenceDirective | undefined;
         readonly affectingLocations: readonly string[] | undefined;
@@ -374,16 +375,21 @@ interface Symbol {
             };
         }
 
-        function toReadableProgramBuildInfoResolution(resolution: ProgramBuildInfoResolution | ProgramBuildInfoResolutionId): ReadableProgramBuildInfoResolution {
-            return isNumber(resolution) ?
-                resolutions![resolution - 1] :
-                {
-                    ...resolution,
-                    resolvedModule: toReadableProgramBuildInfoResolved(resolution.resolvedModule),
-                    resolvedTypeReferenceDirective: toReadableProgramBuildInfoResolved(resolution.resolvedTypeReferenceDirective),
-                    affectingLocations: resolution.affectingLocations?.map(toFileName),
-                    resolutionDiagnostics: resolution.resolutionDiagnostics?.map(toReadableProgramBuildInfoResolutionDiagnostic),
-                };
+        function toReadableProgramBuildInfoResolution(resolution: ProgramBuildInfoResolution, index: number): ReadableProgramBuildInfoResolution;
+        function toReadableProgramBuildInfoResolution(resolutionId: ProgramBuildInfoResolutionId): ReadableProgramBuildInfoResolution;
+        function toReadableProgramBuildInfoResolution(resolution: ProgramBuildInfoResolution | ProgramBuildInfoResolutionId, index?: number): ReadableProgramBuildInfoResolution {
+            if (isNumber(resolution)) {
+                Debug.assert(resolutions![resolution - 1].id === resolution);
+                return resolutions![resolution - 1];
+            }
+            return {
+                id: index! + 1 as ProgramBuildInfoResolutionId,
+                ...resolution,
+                resolvedModule: toReadableProgramBuildInfoResolved(resolution.resolvedModule),
+                resolvedTypeReferenceDirective: toReadableProgramBuildInfoResolved(resolution.resolvedTypeReferenceDirective),
+                affectingLocations: resolution.affectingLocations?.map(toFileName),
+                resolutionDiagnostics: resolution.resolutionDiagnostics?.map(toReadableProgramBuildInfoResolutionDiagnostic),
+            };
         }
 
         function toReadableProgramBuildInfoResolved(resolved: ProgramBuildInfoResolvedModuleFull | undefined): ReadableProgramBuildInfoResolvedModuleFull | undefined;

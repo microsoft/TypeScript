@@ -474,17 +474,20 @@ export declare const y = 10;
     "cacheResolutions": {
       "resolutions": [
         {
+          "id": 1,
           "resolvedModule": {
             "resolvedFileName": "./node_modules/pkg0/index.d.ts",
             "isExternalLibraryImport": true
           }
         },
         {
+          "id": 2,
           "resolvedModule": {
             "resolvedFileName": "./aRandomFileForImport.ts"
           }
         },
         {
+          "id": 3,
           "resolvedModule": {
             "resolvedFileName": "./aRandomFileForImport2.ts"
           }
@@ -499,6 +502,7 @@ export declare const y = 10;
         [
           "pkg0",
           {
+            "id": 1,
             "resolvedModule": {
               "resolvedFileName": "./node_modules/pkg0/index.d.ts",
               "isExternalLibraryImport": true
@@ -508,6 +512,7 @@ export declare const y = 10;
         [
           "./aRandomFileForImport",
           {
+            "id": 2,
             "resolvedModule": {
               "resolvedFileName": "./aRandomFileForImport.ts"
             }
@@ -516,6 +521,7 @@ export declare const y = 10;
         [
           "./aRandomFileForImport2",
           {
+            "id": 3,
             "resolvedModule": {
               "resolvedFileName": "./aRandomFileForImport2.ts"
             }
@@ -529,6 +535,7 @@ export declare const y = 10;
             [
               "pkg0",
               {
+                "id": 1,
                 "resolvedModule": {
                   "resolvedFileName": "./node_modules/pkg0/index.d.ts",
                   "isExternalLibraryImport": true
@@ -538,6 +545,7 @@ export declare const y = 10;
             [
               "./aRandomFileForImport",
               {
+                "id": 2,
                 "resolvedModule": {
                   "resolvedFileName": "./aRandomFileForImport.ts"
                 }
@@ -546,6 +554,7 @@ export declare const y = 10;
             [
               "./aRandomFileForImport2",
               {
+                "id": 3,
                 "resolvedModule": {
                   "resolvedFileName": "./aRandomFileForImport2.ts"
                 }
@@ -718,26 +727,31 @@ export declare const x = 10;
     "cacheResolutions": {
       "resolutions": [
         {
+          "id": 1,
           "resolvedModule": {
             "resolvedFileName": "./aRandomFileForImport.ts"
           }
         },
         {
+          "id": 2,
           "resolvedModule": {
             "resolvedFileName": "./aRandomFileForImport2.ts"
           }
         },
         {
+          "id": 3,
           "resolvedModule": {
             "resolvedFileName": "./aFileWithImports.ts"
           }
         },
         {
+          "id": 4,
           "resolvedModule": {
             "resolvedFileName": "./bRandomFileForImport.ts"
           }
         },
         {
+          "id": 5,
           "resolvedModule": {
             "resolvedFileName": "./node_modules/pkg0/index.d.ts",
             "isExternalLibraryImport": true
@@ -755,6 +769,7 @@ export declare const x = 10;
         [
           "./aRandomFileForImport",
           {
+            "id": 1,
             "resolvedModule": {
               "resolvedFileName": "./aRandomFileForImport.ts"
             }
@@ -763,6 +778,7 @@ export declare const x = 10;
         [
           "./aRandomFileForImport2",
           {
+            "id": 2,
             "resolvedModule": {
               "resolvedFileName": "./aRandomFileForImport2.ts"
             }
@@ -771,6 +787,7 @@ export declare const x = 10;
         [
           "./aFileWithImports",
           {
+            "id": 3,
             "resolvedModule": {
               "resolvedFileName": "./aFileWithImports.ts"
             }
@@ -779,6 +796,7 @@ export declare const x = 10;
         [
           "./bRandomFileForImport",
           {
+            "id": 4,
             "resolvedModule": {
               "resolvedFileName": "./bRandomFileForImport.ts"
             }
@@ -787,6 +805,7 @@ export declare const x = 10;
         [
           "pkg0",
           {
+            "id": 5,
             "resolvedModule": {
               "resolvedFileName": "./node_modules/pkg0/index.d.ts",
               "isExternalLibraryImport": true
@@ -801,6 +820,7 @@ export declare const x = 10;
             [
               "./aRandomFileForImport",
               {
+                "id": 1,
                 "resolvedModule": {
                   "resolvedFileName": "./aRandomFileForImport.ts"
                 }
@@ -809,6 +829,7 @@ export declare const x = 10;
             [
               "./aRandomFileForImport2",
               {
+                "id": 2,
                 "resolvedModule": {
                   "resolvedFileName": "./aRandomFileForImport2.ts"
                 }
@@ -817,6 +838,7 @@ export declare const x = 10;
             [
               "./aFileWithImports",
               {
+                "id": 3,
                 "resolvedModule": {
                   "resolvedFileName": "./aFileWithImports.ts"
                 }
@@ -825,6 +847,7 @@ export declare const x = 10;
             [
               "./bRandomFileForImport",
               {
+                "id": 4,
                 "resolvedModule": {
                   "resolvedFileName": "./bRandomFileForImport.ts"
                 }
@@ -833,6 +856,7 @@ export declare const x = 10;
             [
               "pkg0",
               {
+                "id": 5,
                 "resolvedModule": {
                   "resolvedFileName": "./node_modules/pkg0/index.d.ts",
                   "isExternalLibraryImport": true
@@ -1011,31 +1035,37 @@ export declare const x = 10;
     "cacheResolutions": {
       "resolutions": [
         {
+          "id": 1,
           "resolvedModule": {
             "resolvedFileName": "./bFileWithImports.ts"
           }
         },
         {
+          "id": 2,
           "resolvedModule": {
             "resolvedFileName": "./pkg0.d.ts"
           }
         },
         {
+          "id": 3,
           "resolvedModule": {
             "resolvedFileName": "./aRandomFileForImport.ts"
           }
         },
         {
+          "id": 4,
           "resolvedModule": {
             "resolvedFileName": "./aRandomFileForImport2.ts"
           }
         },
         {
+          "id": 5,
           "resolvedModule": {
             "resolvedFileName": "./aFileWithImports.ts"
           }
         },
         {
+          "id": 6,
           "resolvedModule": {
             "resolvedFileName": "./bRandomFileForImport.ts"
           }
@@ -1053,6 +1083,7 @@ export declare const x = 10;
         [
           "./bFileWithImports",
           {
+            "id": 1,
             "resolvedModule": {
               "resolvedFileName": "./bFileWithImports.ts"
             }
@@ -1061,6 +1092,7 @@ export declare const x = 10;
         [
           "pkg0",
           {
+            "id": 2,
             "resolvedModule": {
               "resolvedFileName": "./pkg0.d.ts"
             }
@@ -1069,6 +1101,7 @@ export declare const x = 10;
         [
           "./aRandomFileForImport",
           {
+            "id": 3,
             "resolvedModule": {
               "resolvedFileName": "./aRandomFileForImport.ts"
             }
@@ -1077,6 +1110,7 @@ export declare const x = 10;
         [
           "./aRandomFileForImport2",
           {
+            "id": 4,
             "resolvedModule": {
               "resolvedFileName": "./aRandomFileForImport2.ts"
             }
@@ -1085,6 +1119,7 @@ export declare const x = 10;
         [
           "./aFileWithImports",
           {
+            "id": 5,
             "resolvedModule": {
               "resolvedFileName": "./aFileWithImports.ts"
             }
@@ -1093,6 +1128,7 @@ export declare const x = 10;
         [
           "./bRandomFileForImport",
           {
+            "id": 6,
             "resolvedModule": {
               "resolvedFileName": "./bRandomFileForImport.ts"
             }
@@ -1107,6 +1143,7 @@ export declare const x = 10;
               [
                 "./bFileWithImports",
                 {
+                  "id": 1,
                   "resolvedModule": {
                     "resolvedFileName": "./bFileWithImports.ts"
                   }
@@ -1115,6 +1152,7 @@ export declare const x = 10;
               [
                 "pkg0",
                 {
+                  "id": 2,
                   "resolvedModule": {
                     "resolvedFileName": "./pkg0.d.ts"
                   }
@@ -1135,6 +1173,7 @@ export declare const x = 10;
                   [
                     "./aRandomFileForImport",
                     {
+                      "id": 3,
                       "resolvedModule": {
                         "resolvedFileName": "./aRandomFileForImport.ts"
                       }
@@ -1143,6 +1182,7 @@ export declare const x = 10;
                   [
                     "./aRandomFileForImport2",
                     {
+                      "id": 4,
                       "resolvedModule": {
                         "resolvedFileName": "./aRandomFileForImport2.ts"
                       }
@@ -1151,6 +1191,7 @@ export declare const x = 10;
                   [
                     "./aFileWithImports",
                     {
+                      "id": 5,
                       "resolvedModule": {
                         "resolvedFileName": "./aFileWithImports.ts"
                       }
@@ -1159,6 +1200,7 @@ export declare const x = 10;
                   [
                     "./bRandomFileForImport",
                     {
+                      "id": 6,
                       "resolvedModule": {
                         "resolvedFileName": "./bRandomFileForImport.ts"
                       }
@@ -1479,17 +1521,20 @@ export declare const x = 10;
     "cacheResolutions": {
       "resolutions": [
         {
+          "id": 1,
           "resolvedModule": {
             "resolvedFileName": "./node_modules/pkg0/index.d.ts",
             "isExternalLibraryImport": true
           }
         },
         {
+          "id": 2,
           "resolvedModule": {
             "resolvedFileName": "./aRandomFileForImport.ts"
           }
         },
         {
+          "id": 3,
           "resolvedModule": {
             "resolvedFileName": "./aRandomFileForImport2.ts"
           }
@@ -1504,6 +1549,7 @@ export declare const x = 10;
         [
           "pkg0",
           {
+            "id": 1,
             "resolvedModule": {
               "resolvedFileName": "./node_modules/pkg0/index.d.ts",
               "isExternalLibraryImport": true
@@ -1513,6 +1559,7 @@ export declare const x = 10;
         [
           "./aRandomFileForImport",
           {
+            "id": 2,
             "resolvedModule": {
               "resolvedFileName": "./aRandomFileForImport.ts"
             }
@@ -1521,6 +1568,7 @@ export declare const x = 10;
         [
           "./aRandomFileForImport2",
           {
+            "id": 3,
             "resolvedModule": {
               "resolvedFileName": "./aRandomFileForImport2.ts"
             }
@@ -1534,6 +1582,7 @@ export declare const x = 10;
             [
               "pkg0",
               {
+                "id": 1,
                 "resolvedModule": {
                   "resolvedFileName": "./node_modules/pkg0/index.d.ts",
                   "isExternalLibraryImport": true
@@ -1543,6 +1592,7 @@ export declare const x = 10;
             [
               "./aRandomFileForImport",
               {
+                "id": 2,
                 "resolvedModule": {
                   "resolvedFileName": "./aRandomFileForImport.ts"
                 }
@@ -1551,6 +1601,7 @@ export declare const x = 10;
             [
               "./aRandomFileForImport2",
               {
+                "id": 3,
                 "resolvedModule": {
                   "resolvedFileName": "./aRandomFileForImport2.ts"
                 }
@@ -1684,27 +1735,32 @@ export declare const x = 10;
     "cacheResolutions": {
       "resolutions": [
         {
+          "id": 1,
           "resolvedModule": {
             "resolvedFileName": "./node_modules/pkg0/index.d.ts",
             "isExternalLibraryImport": true
           }
         },
         {
+          "id": 2,
           "resolvedModule": {
             "resolvedFileName": "./aRandomFileForImport.ts"
           }
         },
         {
+          "id": 3,
           "resolvedModule": {
             "resolvedFileName": "./aRandomFileForImport2.ts"
           }
         },
         {
+          "id": 4,
           "resolvedModule": {
             "resolvedFileName": "./aFileWithImports.ts"
           }
         },
         {
+          "id": 5,
           "resolvedModule": {
             "resolvedFileName": "./bRandomFileForImport.ts"
           }
@@ -1721,6 +1777,7 @@ export declare const x = 10;
         [
           "pkg0",
           {
+            "id": 1,
             "resolvedModule": {
               "resolvedFileName": "./node_modules/pkg0/index.d.ts",
               "isExternalLibraryImport": true
@@ -1730,6 +1787,7 @@ export declare const x = 10;
         [
           "./aRandomFileForImport",
           {
+            "id": 2,
             "resolvedModule": {
               "resolvedFileName": "./aRandomFileForImport.ts"
             }
@@ -1738,6 +1796,7 @@ export declare const x = 10;
         [
           "./aRandomFileForImport2",
           {
+            "id": 3,
             "resolvedModule": {
               "resolvedFileName": "./aRandomFileForImport2.ts"
             }
@@ -1746,6 +1805,7 @@ export declare const x = 10;
         [
           "./aFileWithImports",
           {
+            "id": 4,
             "resolvedModule": {
               "resolvedFileName": "./aFileWithImports.ts"
             }
@@ -1754,6 +1814,7 @@ export declare const x = 10;
         [
           "./bRandomFileForImport",
           {
+            "id": 5,
             "resolvedModule": {
               "resolvedFileName": "./bRandomFileForImport.ts"
             }
@@ -1767,6 +1828,7 @@ export declare const x = 10;
             [
               "pkg0",
               {
+                "id": 1,
                 "resolvedModule": {
                   "resolvedFileName": "./node_modules/pkg0/index.d.ts",
                   "isExternalLibraryImport": true
@@ -1776,6 +1838,7 @@ export declare const x = 10;
             [
               "./aRandomFileForImport",
               {
+                "id": 2,
                 "resolvedModule": {
                   "resolvedFileName": "./aRandomFileForImport.ts"
                 }
@@ -1784,6 +1847,7 @@ export declare const x = 10;
             [
               "./aRandomFileForImport2",
               {
+                "id": 3,
                 "resolvedModule": {
                   "resolvedFileName": "./aRandomFileForImport2.ts"
                 }
@@ -1792,6 +1856,7 @@ export declare const x = 10;
             [
               "./aFileWithImports",
               {
+                "id": 4,
                 "resolvedModule": {
                   "resolvedFileName": "./aFileWithImports.ts"
                 }
@@ -1800,6 +1865,7 @@ export declare const x = 10;
             [
               "./bRandomFileForImport",
               {
+                "id": 5,
                 "resolvedModule": {
                   "resolvedFileName": "./bRandomFileForImport.ts"
                 }
@@ -1955,37 +2021,44 @@ export declare const x = 10;
     "cacheResolutions": {
       "resolutions": [
         {
+          "id": 1,
           "resolvedModule": {
             "resolvedFileName": "./bFileWithImports.ts"
           }
         },
         {
+          "id": 2,
           "resolvedModule": {
             "resolvedFileName": "./pkg0.d.ts"
           }
         },
         {
+          "id": 3,
           "resolvedModule": {
             "resolvedFileName": "./node_modules/pkg0/index.d.ts",
             "isExternalLibraryImport": true
           }
         },
         {
+          "id": 4,
           "resolvedModule": {
             "resolvedFileName": "./aRandomFileForImport.ts"
           }
         },
         {
+          "id": 5,
           "resolvedModule": {
             "resolvedFileName": "./aRandomFileForImport2.ts"
           }
         },
         {
+          "id": 6,
           "resolvedModule": {
             "resolvedFileName": "./aFileWithImports.ts"
           }
         },
         {
+          "id": 7,
           "resolvedModule": {
             "resolvedFileName": "./bRandomFileForImport.ts"
           }
@@ -2003,6 +2076,7 @@ export declare const x = 10;
         [
           "./bFileWithImports",
           {
+            "id": 1,
             "resolvedModule": {
               "resolvedFileName": "./bFileWithImports.ts"
             }
@@ -2011,6 +2085,7 @@ export declare const x = 10;
         [
           "pkg0",
           {
+            "id": 2,
             "resolvedModule": {
               "resolvedFileName": "./pkg0.d.ts"
             }
@@ -2019,6 +2094,7 @@ export declare const x = 10;
         [
           "pkg0",
           {
+            "id": 3,
             "resolvedModule": {
               "resolvedFileName": "./node_modules/pkg0/index.d.ts",
               "isExternalLibraryImport": true
@@ -2028,6 +2104,7 @@ export declare const x = 10;
         [
           "./aRandomFileForImport",
           {
+            "id": 4,
             "resolvedModule": {
               "resolvedFileName": "./aRandomFileForImport.ts"
             }
@@ -2036,6 +2113,7 @@ export declare const x = 10;
         [
           "./aRandomFileForImport2",
           {
+            "id": 5,
             "resolvedModule": {
               "resolvedFileName": "./aRandomFileForImport2.ts"
             }
@@ -2044,6 +2122,7 @@ export declare const x = 10;
         [
           "./aFileWithImports",
           {
+            "id": 6,
             "resolvedModule": {
               "resolvedFileName": "./aFileWithImports.ts"
             }
@@ -2052,6 +2131,7 @@ export declare const x = 10;
         [
           "./bRandomFileForImport",
           {
+            "id": 7,
             "resolvedModule": {
               "resolvedFileName": "./bRandomFileForImport.ts"
             }
@@ -2066,6 +2146,7 @@ export declare const x = 10;
               [
                 "./bFileWithImports",
                 {
+                  "id": 1,
                   "resolvedModule": {
                     "resolvedFileName": "./bFileWithImports.ts"
                   }
@@ -2074,6 +2155,7 @@ export declare const x = 10;
               [
                 "pkg0",
                 {
+                  "id": 2,
                   "resolvedModule": {
                     "resolvedFileName": "./pkg0.d.ts"
                   }
@@ -2094,6 +2176,7 @@ export declare const x = 10;
                   [
                     "pkg0",
                     {
+                      "id": 3,
                       "resolvedModule": {
                         "resolvedFileName": "./node_modules/pkg0/index.d.ts",
                         "isExternalLibraryImport": true
@@ -2103,6 +2186,7 @@ export declare const x = 10;
                   [
                     "./aRandomFileForImport",
                     {
+                      "id": 4,
                       "resolvedModule": {
                         "resolvedFileName": "./aRandomFileForImport.ts"
                       }
@@ -2111,6 +2195,7 @@ export declare const x = 10;
                   [
                     "./aRandomFileForImport2",
                     {
+                      "id": 5,
                       "resolvedModule": {
                         "resolvedFileName": "./aRandomFileForImport2.ts"
                       }
@@ -2119,6 +2204,7 @@ export declare const x = 10;
                   [
                     "./aFileWithImports",
                     {
+                      "id": 6,
                       "resolvedModule": {
                         "resolvedFileName": "./aFileWithImports.ts"
                       }
@@ -2127,6 +2213,7 @@ export declare const x = 10;
                   [
                     "./bRandomFileForImport",
                     {
+                      "id": 7,
                       "resolvedModule": {
                         "resolvedFileName": "./bRandomFileForImport.ts"
                       }
@@ -2444,27 +2531,32 @@ export declare const x = 10;
     "cacheResolutions": {
       "resolutions": [
         {
+          "id": 1,
           "resolvedModule": {
             "resolvedFileName": "./node_modules/pkg0/index.d.ts",
             "isExternalLibraryImport": true
           }
         },
         {
+          "id": 2,
           "resolvedModule": {
             "resolvedFileName": "./aRandomFileForImport.ts"
           }
         },
         {
+          "id": 3,
           "resolvedModule": {
             "resolvedFileName": "./aRandomFileForImport2.ts"
           }
         },
         {
+          "id": 4,
           "resolvedModule": {
             "resolvedFileName": "./aFileWithImports.ts"
           }
         },
         {
+          "id": 5,
           "resolvedModule": {
             "resolvedFileName": "./bRandomFileForImport.ts"
           }
@@ -2481,6 +2573,7 @@ export declare const x = 10;
         [
           "pkg0",
           {
+            "id": 1,
             "resolvedModule": {
               "resolvedFileName": "./node_modules/pkg0/index.d.ts",
               "isExternalLibraryImport": true
@@ -2490,6 +2583,7 @@ export declare const x = 10;
         [
           "./aRandomFileForImport",
           {
+            "id": 2,
             "resolvedModule": {
               "resolvedFileName": "./aRandomFileForImport.ts"
             }
@@ -2498,6 +2592,7 @@ export declare const x = 10;
         [
           "./aRandomFileForImport2",
           {
+            "id": 3,
             "resolvedModule": {
               "resolvedFileName": "./aRandomFileForImport2.ts"
             }
@@ -2506,6 +2601,7 @@ export declare const x = 10;
         [
           "./aFileWithImports",
           {
+            "id": 4,
             "resolvedModule": {
               "resolvedFileName": "./aFileWithImports.ts"
             }
@@ -2514,6 +2610,7 @@ export declare const x = 10;
         [
           "./bRandomFileForImport",
           {
+            "id": 5,
             "resolvedModule": {
               "resolvedFileName": "./bRandomFileForImport.ts"
             }
@@ -2527,6 +2624,7 @@ export declare const x = 10;
             [
               "pkg0",
               {
+                "id": 1,
                 "resolvedModule": {
                   "resolvedFileName": "./node_modules/pkg0/index.d.ts",
                   "isExternalLibraryImport": true
@@ -2536,6 +2634,7 @@ export declare const x = 10;
             [
               "./aRandomFileForImport",
               {
+                "id": 2,
                 "resolvedModule": {
                   "resolvedFileName": "./aRandomFileForImport.ts"
                 }
@@ -2544,6 +2643,7 @@ export declare const x = 10;
             [
               "./aRandomFileForImport2",
               {
+                "id": 3,
                 "resolvedModule": {
                   "resolvedFileName": "./aRandomFileForImport2.ts"
                 }
@@ -2552,6 +2652,7 @@ export declare const x = 10;
             [
               "./aFileWithImports",
               {
+                "id": 4,
                 "resolvedModule": {
                   "resolvedFileName": "./aFileWithImports.ts"
                 }
@@ -2560,6 +2661,7 @@ export declare const x = 10;
             [
               "./bRandomFileForImport",
               {
+                "id": 5,
                 "resolvedModule": {
                   "resolvedFileName": "./bRandomFileForImport.ts"
                 }
@@ -2721,37 +2823,44 @@ export declare const x = 10;
     "cacheResolutions": {
       "resolutions": [
         {
+          "id": 1,
           "resolvedModule": {
             "resolvedFileName": "./bFileWithImports.ts"
           }
         },
         {
+          "id": 2,
           "resolvedModule": {
             "resolvedFileName": "./pkg0.d.ts"
           }
         },
         {
+          "id": 3,
           "resolvedModule": {
             "resolvedFileName": "./node_modules/pkg0/index.d.ts",
             "isExternalLibraryImport": true
           }
         },
         {
+          "id": 4,
           "resolvedModule": {
             "resolvedFileName": "./aRandomFileForImport.ts"
           }
         },
         {
+          "id": 5,
           "resolvedModule": {
             "resolvedFileName": "./aRandomFileForImport2.ts"
           }
         },
         {
+          "id": 6,
           "resolvedModule": {
             "resolvedFileName": "./aFileWithImports.ts"
           }
         },
         {
+          "id": 7,
           "resolvedModule": {
             "resolvedFileName": "./bRandomFileForImport.ts"
           }
@@ -2769,6 +2878,7 @@ export declare const x = 10;
         [
           "./bFileWithImports",
           {
+            "id": 1,
             "resolvedModule": {
               "resolvedFileName": "./bFileWithImports.ts"
             }
@@ -2777,6 +2887,7 @@ export declare const x = 10;
         [
           "pkg0",
           {
+            "id": 2,
             "resolvedModule": {
               "resolvedFileName": "./pkg0.d.ts"
             }
@@ -2785,6 +2896,7 @@ export declare const x = 10;
         [
           "pkg0",
           {
+            "id": 3,
             "resolvedModule": {
               "resolvedFileName": "./node_modules/pkg0/index.d.ts",
               "isExternalLibraryImport": true
@@ -2794,6 +2906,7 @@ export declare const x = 10;
         [
           "./aRandomFileForImport",
           {
+            "id": 4,
             "resolvedModule": {
               "resolvedFileName": "./aRandomFileForImport.ts"
             }
@@ -2802,6 +2915,7 @@ export declare const x = 10;
         [
           "./aRandomFileForImport2",
           {
+            "id": 5,
             "resolvedModule": {
               "resolvedFileName": "./aRandomFileForImport2.ts"
             }
@@ -2810,6 +2924,7 @@ export declare const x = 10;
         [
           "./aFileWithImports",
           {
+            "id": 6,
             "resolvedModule": {
               "resolvedFileName": "./aFileWithImports.ts"
             }
@@ -2818,6 +2933,7 @@ export declare const x = 10;
         [
           "./bRandomFileForImport",
           {
+            "id": 7,
             "resolvedModule": {
               "resolvedFileName": "./bRandomFileForImport.ts"
             }
@@ -2832,6 +2948,7 @@ export declare const x = 10;
               [
                 "./bFileWithImports",
                 {
+                  "id": 1,
                   "resolvedModule": {
                     "resolvedFileName": "./bFileWithImports.ts"
                   }
@@ -2840,6 +2957,7 @@ export declare const x = 10;
               [
                 "pkg0",
                 {
+                  "id": 2,
                   "resolvedModule": {
                     "resolvedFileName": "./pkg0.d.ts"
                   }
@@ -2860,6 +2978,7 @@ export declare const x = 10;
                   [
                     "pkg0",
                     {
+                      "id": 3,
                       "resolvedModule": {
                         "resolvedFileName": "./node_modules/pkg0/index.d.ts",
                         "isExternalLibraryImport": true
@@ -2869,6 +2988,7 @@ export declare const x = 10;
                   [
                     "./aRandomFileForImport",
                     {
+                      "id": 4,
                       "resolvedModule": {
                         "resolvedFileName": "./aRandomFileForImport.ts"
                       }
@@ -2877,6 +2997,7 @@ export declare const x = 10;
                   [
                     "./aRandomFileForImport2",
                     {
+                      "id": 5,
                       "resolvedModule": {
                         "resolvedFileName": "./aRandomFileForImport2.ts"
                       }
@@ -2885,6 +3006,7 @@ export declare const x = 10;
                   [
                     "./aFileWithImports",
                     {
+                      "id": 6,
                       "resolvedModule": {
                         "resolvedFileName": "./aFileWithImports.ts"
                       }
@@ -2893,6 +3015,7 @@ export declare const x = 10;
                   [
                     "./bRandomFileForImport",
                     {
+                      "id": 7,
                       "resolvedModule": {
                         "resolvedFileName": "./bRandomFileForImport.ts"
                       }
@@ -3187,37 +3310,44 @@ export declare const x = 10;
     "cacheResolutions": {
       "resolutions": [
         {
+          "id": 1,
           "resolvedModule": {
             "resolvedFileName": "./bFileWithImports.ts"
           }
         },
         {
+          "id": 2,
           "resolvedModule": {
             "resolvedFileName": "./pkg0.d.ts"
           }
         },
         {
+          "id": 3,
           "resolvedModule": {
             "resolvedFileName": "./node_modules/pkg0/index.d.ts",
             "isExternalLibraryImport": true
           }
         },
         {
+          "id": 4,
           "resolvedModule": {
             "resolvedFileName": "./aRandomFileForImport.ts"
           }
         },
         {
+          "id": 5,
           "resolvedModule": {
             "resolvedFileName": "./aRandomFileForImport2.ts"
           }
         },
         {
+          "id": 6,
           "resolvedModule": {
             "resolvedFileName": "./aFileWithImports.ts"
           }
         },
         {
+          "id": 7,
           "resolvedModule": {
             "resolvedFileName": "./bRandomFileForImport.ts"
           }
@@ -3235,6 +3365,7 @@ export declare const x = 10;
         [
           "./bFileWithImports",
           {
+            "id": 1,
             "resolvedModule": {
               "resolvedFileName": "./bFileWithImports.ts"
             }
@@ -3243,6 +3374,7 @@ export declare const x = 10;
         [
           "pkg0",
           {
+            "id": 2,
             "resolvedModule": {
               "resolvedFileName": "./pkg0.d.ts"
             }
@@ -3251,6 +3383,7 @@ export declare const x = 10;
         [
           "pkg0",
           {
+            "id": 3,
             "resolvedModule": {
               "resolvedFileName": "./node_modules/pkg0/index.d.ts",
               "isExternalLibraryImport": true
@@ -3260,6 +3393,7 @@ export declare const x = 10;
         [
           "./aRandomFileForImport",
           {
+            "id": 4,
             "resolvedModule": {
               "resolvedFileName": "./aRandomFileForImport.ts"
             }
@@ -3268,6 +3402,7 @@ export declare const x = 10;
         [
           "./aRandomFileForImport2",
           {
+            "id": 5,
             "resolvedModule": {
               "resolvedFileName": "./aRandomFileForImport2.ts"
             }
@@ -3276,6 +3411,7 @@ export declare const x = 10;
         [
           "./aFileWithImports",
           {
+            "id": 6,
             "resolvedModule": {
               "resolvedFileName": "./aFileWithImports.ts"
             }
@@ -3284,6 +3420,7 @@ export declare const x = 10;
         [
           "./bRandomFileForImport",
           {
+            "id": 7,
             "resolvedModule": {
               "resolvedFileName": "./bRandomFileForImport.ts"
             }
@@ -3298,6 +3435,7 @@ export declare const x = 10;
               [
                 "./bFileWithImports",
                 {
+                  "id": 1,
                   "resolvedModule": {
                     "resolvedFileName": "./bFileWithImports.ts"
                   }
@@ -3306,6 +3444,7 @@ export declare const x = 10;
               [
                 "pkg0",
                 {
+                  "id": 2,
                   "resolvedModule": {
                     "resolvedFileName": "./pkg0.d.ts"
                   }
@@ -3326,6 +3465,7 @@ export declare const x = 10;
                   [
                     "pkg0",
                     {
+                      "id": 3,
                       "resolvedModule": {
                         "resolvedFileName": "./node_modules/pkg0/index.d.ts",
                         "isExternalLibraryImport": true
@@ -3335,6 +3475,7 @@ export declare const x = 10;
                   [
                     "./aRandomFileForImport",
                     {
+                      "id": 4,
                       "resolvedModule": {
                         "resolvedFileName": "./aRandomFileForImport.ts"
                       }
@@ -3343,6 +3484,7 @@ export declare const x = 10;
                   [
                     "./aRandomFileForImport2",
                     {
+                      "id": 5,
                       "resolvedModule": {
                         "resolvedFileName": "./aRandomFileForImport2.ts"
                       }
@@ -3351,6 +3493,7 @@ export declare const x = 10;
                   [
                     "./aFileWithImports",
                     {
+                      "id": 6,
                       "resolvedModule": {
                         "resolvedFileName": "./aFileWithImports.ts"
                       }
@@ -3359,6 +3502,7 @@ export declare const x = 10;
                   [
                     "./bRandomFileForImport",
                     {
+                      "id": 7,
                       "resolvedModule": {
                         "resolvedFileName": "./bRandomFileForImport.ts"
                       }

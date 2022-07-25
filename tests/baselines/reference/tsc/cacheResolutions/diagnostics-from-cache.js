@@ -152,6 +152,7 @@ exports.x = 10;
     "cacheResolutions": {
       "resolutions": [
         {
+          "id": 1,
           "resolvedModule": {
             "resolvedFileName": "../index.ts",
             "isExternalLibraryImport": true
@@ -173,6 +174,7 @@ exports.x = 10;
         [
           "@this/package",
           {
+            "id": 1,
             "resolvedModule": {
               "resolvedFileName": "../index.ts",
               "isExternalLibraryImport": true
@@ -196,6 +198,7 @@ exports.x = 10;
             [
               "@this/package",
               {
+                "id": 1,
                 "resolvedModule": {
                   "resolvedFileName": "../index.ts",
                   "isExternalLibraryImport": true
@@ -335,6 +338,7 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
     "cacheResolutions": {
       "resolutions": [
         {
+          "id": 1,
           "resolvedModule": {
             "resolvedFileName": "../index.ts",
             "isExternalLibraryImport": true
@@ -356,6 +360,7 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
         [
           "@this/package",
           {
+            "id": 1,
             "resolvedModule": {
               "resolvedFileName": "../index.ts",
               "isExternalLibraryImport": true
@@ -379,6 +384,7 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
             [
               "@this/package",
               {
+                "id": 1,
                 "resolvedModule": {
                   "resolvedFileName": "../index.ts",
                   "isExternalLibraryImport": true

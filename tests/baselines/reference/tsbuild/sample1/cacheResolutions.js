@@ -370,11 +370,13 @@ exports.m = mod;
     "cacheResolutions": {
       "resolutions": [
         {
+          "id": 1,
           "resolvedModule": {
             "resolvedFileName": "../core/index.ts"
           }
         },
         {
+          "id": 2,
           "resolvedModule": {
             "resolvedFileName": "../core/anotherModule.ts"
           }
@@ -388,6 +390,7 @@ exports.m = mod;
         [
           "../core/index",
           {
+            "id": 1,
             "resolvedModule": {
               "resolvedFileName": "../core/index.ts"
             }
@@ -396,6 +399,7 @@ exports.m = mod;
         [
           "../core/anotherModule",
           {
+            "id": 2,
             "resolvedModule": {
               "resolvedFileName": "../core/anotherModule.ts"
             }
@@ -409,6 +413,7 @@ exports.m = mod;
             [
               "../core/index",
               {
+                "id": 1,
                 "resolvedModule": {
                   "resolvedFileName": "../core/index.ts"
                 }
@@ -417,6 +422,7 @@ exports.m = mod;
             [
               "../core/anotherModule",
               {
+                "id": 2,
                 "resolvedModule": {
                   "resolvedFileName": "../core/anotherModule.ts"
                 }
@@ -535,21 +541,25 @@ exports.m = mod;
     "cacheResolutions": {
       "resolutions": [
         {
+          "id": 1,
           "resolvedModule": {
             "resolvedFileName": "../core/anotherModule.ts"
           }
         },
         {
+          "id": 2,
           "resolvedModule": {
             "resolvedFileName": "../core/index.ts"
           }
         },
         {
+          "id": 3,
           "resolvedModule": {
             "resolvedFileName": "../logic/index.ts"
           }
         },
         {
+          "id": 4,
           "resolvedModule": {
             "resolvedFileName": "../core/anotherModule.ts"
           }
@@ -564,6 +574,7 @@ exports.m = mod;
         [
           "../core/anotherModule",
           {
+            "id": 1,
             "resolvedModule": {
               "resolvedFileName": "../core/anotherModule.ts"
             }
@@ -572,6 +583,7 @@ exports.m = mod;
         [
           "../core/index",
           {
+            "id": 2,
             "resolvedModule": {
               "resolvedFileName": "../core/index.ts"
             }
@@ -580,6 +592,7 @@ exports.m = mod;
         [
           "../logic/index",
           {
+            "id": 3,
             "resolvedModule": {
               "resolvedFileName": "../logic/index.ts"
             }
@@ -588,6 +601,7 @@ exports.m = mod;
         [
           "../core/anotherModule",
           {
+            "id": 4,
             "resolvedModule": {
               "resolvedFileName": "../core/anotherModule.ts"
             }
@@ -601,6 +615,7 @@ exports.m = mod;
             [
               "../core/anotherModule",
               {
+                "id": 1,
                 "resolvedModule": {
                   "resolvedFileName": "../core/anotherModule.ts"
                 }
@@ -614,6 +629,7 @@ exports.m = mod;
             [
               "../core/index",
               {
+                "id": 2,
                 "resolvedModule": {
                   "resolvedFileName": "../core/index.ts"
                 }
@@ -622,6 +638,7 @@ exports.m = mod;
             [
               "../logic/index",
               {
+                "id": 3,
                 "resolvedModule": {
                   "resolvedFileName": "../logic/index.ts"
                 }
@@ -630,6 +647,7 @@ exports.m = mod;
             [
               "../core/anotherModule",
               {
+                "id": 4,
                 "resolvedModule": {
                   "resolvedFileName": "../core/anotherModule.ts"
                 }
@@ -866,11 +884,13 @@ exports.someClass = someClass;
     "cacheResolutions": {
       "resolutions": [
         {
+          "id": 1,
           "resolvedModule": {
             "resolvedFileName": "../core/index.ts"
           }
         },
         {
+          "id": 2,
           "resolvedModule": {
             "resolvedFileName": "../core/anotherModule.ts"
           }
@@ -884,6 +904,7 @@ exports.someClass = someClass;
         [
           "../core/index",
           {
+            "id": 1,
             "resolvedModule": {
               "resolvedFileName": "../core/index.ts"
             }
@@ -892,6 +913,7 @@ exports.someClass = someClass;
         [
           "../core/anotherModule",
           {
+            "id": 2,
             "resolvedModule": {
               "resolvedFileName": "../core/anotherModule.ts"
             }
@@ -905,6 +927,7 @@ exports.someClass = someClass;
             [
               "../core/index",
               {
+                "id": 1,
                 "resolvedModule": {
                   "resolvedFileName": "../core/index.ts"
                 }
@@ -913,6 +936,7 @@ exports.someClass = someClass;
             [
               "../core/anotherModule",
               {
+                "id": 2,
                 "resolvedModule": {
                   "resolvedFileName": "../core/anotherModule.ts"
                 }
@@ -1015,21 +1039,25 @@ exports.someClass = someClass;
     "cacheResolutions": {
       "resolutions": [
         {
+          "id": 1,
           "resolvedModule": {
             "resolvedFileName": "../core/anotherModule.ts"
           }
         },
         {
+          "id": 2,
           "resolvedModule": {
             "resolvedFileName": "../core/index.ts"
           }
         },
         {
+          "id": 3,
           "resolvedModule": {
             "resolvedFileName": "../logic/index.ts"
           }
         },
         {
+          "id": 4,
           "resolvedModule": {
             "resolvedFileName": "../core/anotherModule.ts"
           }
@@ -1044,6 +1072,7 @@ exports.someClass = someClass;
         [
           "../core/anotherModule",
           {
+            "id": 1,
             "resolvedModule": {
               "resolvedFileName": "../core/anotherModule.ts"
             }
@@ -1052,6 +1081,7 @@ exports.someClass = someClass;
         [
           "../core/index",
           {
+            "id": 2,
             "resolvedModule": {
               "resolvedFileName": "../core/index.ts"
             }
@@ -1060,6 +1090,7 @@ exports.someClass = someClass;
         [
           "../logic/index",
           {
+            "id": 3,
             "resolvedModule": {
               "resolvedFileName": "../logic/index.ts"
             }
@@ -1068,6 +1099,7 @@ exports.someClass = someClass;
         [
           "../core/anotherModule",
           {
+            "id": 4,
             "resolvedModule": {
               "resolvedFileName": "../core/anotherModule.ts"
             }
@@ -1081,6 +1113,7 @@ exports.someClass = someClass;
             [
               "../core/anotherModule",
               {
+                "id": 1,
                 "resolvedModule": {
                   "resolvedFileName": "../core/anotherModule.ts"
                 }
@@ -1094,6 +1127,7 @@ exports.someClass = someClass;
             [
               "../core/index",
               {
+                "id": 2,
                 "resolvedModule": {
                   "resolvedFileName": "../core/index.ts"
                 }
@@ -1102,6 +1136,7 @@ exports.someClass = someClass;
             [
               "../logic/index",
               {
+                "id": 3,
                 "resolvedModule": {
                   "resolvedFileName": "../logic/index.ts"
                 }
@@ -1110,6 +1145,7 @@ exports.someClass = someClass;
             [
               "../core/anotherModule",
               {
+                "id": 4,
                 "resolvedModule": {
                   "resolvedFileName": "../core/anotherModule.ts"
                 }

@@ -139,6 +139,7 @@ exports.x = 10;
     "cacheResolutions": {
       "resolutions": [
         {
+          "id": 1,
           "resolvedModule": {
             "resolvedFileName": "./lib/pkg0/index.d.ts"
           }
@@ -151,6 +152,7 @@ exports.x = 10;
         [
           "pkg0",
           {
+            "id": 1,
             "resolvedModule": {
               "resolvedFileName": "./lib/pkg0/index.d.ts"
             }
@@ -164,6 +166,7 @@ exports.x = 10;
             [
               "pkg0",
               {
+                "id": 1,
                 "resolvedModule": {
                   "resolvedFileName": "./lib/pkg0/index.d.ts"
                 }
@@ -271,6 +274,7 @@ exitCode:: ExitStatus.Success
     "cacheResolutions": {
       "resolutions": [
         {
+          "id": 1,
           "resolvedModule": {
             "resolvedFileName": "./lib/pkg0/index.d.ts"
           }
@@ -283,6 +287,7 @@ exitCode:: ExitStatus.Success
         [
           "pkg0",
           {
+            "id": 1,
             "resolvedModule": {
               "resolvedFileName": "./lib/pkg0/index.d.ts"
             }
@@ -296,6 +301,7 @@ exitCode:: ExitStatus.Success
             [
               "pkg0",
               {
+                "id": 1,
                 "resolvedModule": {
                   "resolvedFileName": "./lib/pkg0/index.d.ts"
                 }

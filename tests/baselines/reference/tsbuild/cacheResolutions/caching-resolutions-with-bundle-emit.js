@@ -531,28 +531,33 @@ declare module "randomFileForTypeRef" {
     "cacheResolutions": {
       "resolutions": [
         {
+          "id": 1,
           "resolvedModule": {
             "resolvedFileName": "./src/project/pkg0.d.ts"
           }
         },
         {
+          "id": 2,
           "resolvedModule": {
             "resolvedFileName": "./src/project/pkg1.d.ts"
           }
         },
         {
+          "id": 3,
           "resolvedTypeReferenceDirective": {
             "resolvedFileName": "./src/project/node_modules/pkg2/index.d.ts",
             "isExternalLibraryImport": true
           }
         },
         {
+          "id": 4,
           "resolvedTypeReferenceDirective": {
             "resolvedFileName": "./src/project/node_modules/pkg3/index.d.ts",
             "isExternalLibraryImport": true
           }
         },
         {
+          "id": 5,
           "resolvedTypeReferenceDirective": {
             "primary": true,
             "resolvedFileName": "./src/project/node_modules/@types/pkg4/index.d.ts",
@@ -571,6 +576,7 @@ declare module "randomFileForTypeRef" {
         [
           "pkg0",
           {
+            "id": 1,
             "resolvedModule": {
               "resolvedFileName": "./src/project/pkg0.d.ts"
             }
@@ -579,6 +585,7 @@ declare module "randomFileForTypeRef" {
         [
           "pkg1",
           {
+            "id": 2,
             "resolvedModule": {
               "resolvedFileName": "./src/project/pkg1.d.ts"
             }
@@ -587,6 +594,7 @@ declare module "randomFileForTypeRef" {
         [
           "pkg2",
           {
+            "id": 3,
             "resolvedTypeReferenceDirective": {
               "resolvedFileName": "./src/project/node_modules/pkg2/index.d.ts",
               "isExternalLibraryImport": true
@@ -596,6 +604,7 @@ declare module "randomFileForTypeRef" {
         [
           "pkg3",
           {
+            "id": 4,
             "resolvedTypeReferenceDirective": {
               "resolvedFileName": "./src/project/node_modules/pkg3/index.d.ts",
               "isExternalLibraryImport": true
@@ -605,6 +614,7 @@ declare module "randomFileForTypeRef" {
         [
           "pkg4",
           {
+            "id": 5,
             "resolvedTypeReferenceDirective": {
               "primary": true,
               "resolvedFileName": "./src/project/node_modules/@types/pkg4/index.d.ts",
@@ -620,6 +630,7 @@ declare module "randomFileForTypeRef" {
             [
               "pkg0",
               {
+                "id": 1,
                 "resolvedModule": {
                   "resolvedFileName": "./src/project/pkg0.d.ts"
                 }
@@ -628,6 +639,7 @@ declare module "randomFileForTypeRef" {
             [
               "pkg1",
               {
+                "id": 2,
                 "resolvedModule": {
                   "resolvedFileName": "./src/project/pkg1.d.ts"
                 }
@@ -643,6 +655,7 @@ declare module "randomFileForTypeRef" {
             [
               "pkg2",
               {
+                "id": 3,
                 "resolvedTypeReferenceDirective": {
                   "resolvedFileName": "./src/project/node_modules/pkg2/index.d.ts",
                   "isExternalLibraryImport": true
@@ -652,6 +665,7 @@ declare module "randomFileForTypeRef" {
             [
               "pkg3",
               {
+                "id": 4,
                 "resolvedTypeReferenceDirective": {
                   "resolvedFileName": "./src/project/node_modules/pkg3/index.d.ts",
                   "isExternalLibraryImport": true
@@ -661,6 +675,7 @@ declare module "randomFileForTypeRef" {
             [
               "pkg4",
               {
+                "id": 5,
                 "resolvedTypeReferenceDirective": {
                   "primary": true,
                   "resolvedFileName": "./src/project/node_modules/@types/pkg4/index.d.ts",
@@ -785,28 +800,33 @@ exitCode:: ExitStatus.Success
     "cacheResolutions": {
       "resolutions": [
         {
+          "id": 1,
           "resolvedModule": {
             "resolvedFileName": "./src/project/pkg0.d.ts"
           }
         },
         {
+          "id": 2,
           "resolvedModule": {
             "resolvedFileName": "./src/project/pkg1.d.ts"
           }
         },
         {
+          "id": 3,
           "resolvedTypeReferenceDirective": {
             "resolvedFileName": "./src/project/node_modules/pkg2/index.d.ts",
             "isExternalLibraryImport": true
           }
         },
         {
+          "id": 4,
           "resolvedTypeReferenceDirective": {
             "resolvedFileName": "./src/project/node_modules/pkg3/index.d.ts",
             "isExternalLibraryImport": true
           }
         },
         {
+          "id": 5,
           "resolvedTypeReferenceDirective": {
             "primary": true,
             "resolvedFileName": "./src/project/node_modules/@types/pkg4/index.d.ts",
@@ -825,6 +845,7 @@ exitCode:: ExitStatus.Success
         [
           "pkg0",
           {
+            "id": 1,
             "resolvedModule": {
               "resolvedFileName": "./src/project/pkg0.d.ts"
             }
@@ -833,6 +854,7 @@ exitCode:: ExitStatus.Success
         [
           "pkg1",
           {
+            "id": 2,
             "resolvedModule": {
               "resolvedFileName": "./src/project/pkg1.d.ts"
             }
@@ -841,6 +863,7 @@ exitCode:: ExitStatus.Success
         [
           "pkg2",
           {
+            "id": 3,
             "resolvedTypeReferenceDirective": {
               "resolvedFileName": "./src/project/node_modules/pkg2/index.d.ts",
               "isExternalLibraryImport": true
@@ -850,6 +873,7 @@ exitCode:: ExitStatus.Success
         [
           "pkg3",
           {
+            "id": 4,
             "resolvedTypeReferenceDirective": {
               "resolvedFileName": "./src/project/node_modules/pkg3/index.d.ts",
               "isExternalLibraryImport": true
@@ -859,6 +883,7 @@ exitCode:: ExitStatus.Success
         [
           "pkg4",
           {
+            "id": 5,
             "resolvedTypeReferenceDirective": {
               "primary": true,
               "resolvedFileName": "./src/project/node_modules/@types/pkg4/index.d.ts",
@@ -874,6 +899,7 @@ exitCode:: ExitStatus.Success
             [
               "pkg0",
               {
+                "id": 1,
                 "resolvedModule": {
                   "resolvedFileName": "./src/project/pkg0.d.ts"
                 }
@@ -882,6 +908,7 @@ exitCode:: ExitStatus.Success
             [
               "pkg1",
               {
+                "id": 2,
                 "resolvedModule": {
                   "resolvedFileName": "./src/project/pkg1.d.ts"
                 }
@@ -897,6 +924,7 @@ exitCode:: ExitStatus.Success
             [
               "pkg2",
               {
+                "id": 3,
                 "resolvedTypeReferenceDirective": {
                   "resolvedFileName": "./src/project/node_modules/pkg2/index.d.ts",
                   "isExternalLibraryImport": true
@@ -906,6 +934,7 @@ exitCode:: ExitStatus.Success
             [
               "pkg3",
               {
+                "id": 4,
                 "resolvedTypeReferenceDirective": {
                   "resolvedFileName": "./src/project/node_modules/pkg3/index.d.ts",
                   "isExternalLibraryImport": true
@@ -915,6 +944,7 @@ exitCode:: ExitStatus.Success
             [
               "pkg4",
               {
+                "id": 5,
                 "resolvedTypeReferenceDirective": {
                   "primary": true,
                   "resolvedFileName": "./src/project/node_modules/@types/pkg4/index.d.ts",
@@ -1111,28 +1141,33 @@ declare module "randomFileForTypeRef" {
     "cacheResolutions": {
       "resolutions": [
         {
+          "id": 1,
           "resolvedModule": {
             "resolvedFileName": "./src/project/pkg0.d.ts"
           }
         },
         {
+          "id": 2,
           "resolvedModule": {
             "resolvedFileName": "./src/project/pkg1.d.ts"
           }
         },
         {
+          "id": 3,
           "resolvedTypeReferenceDirective": {
             "resolvedFileName": "./src/project/node_modules/pkg2/index.d.ts",
             "isExternalLibraryImport": true
           }
         },
         {
+          "id": 4,
           "resolvedTypeReferenceDirective": {
             "resolvedFileName": "./src/project/node_modules/pkg3/index.d.ts",
             "isExternalLibraryImport": true
           }
         },
         {
+          "id": 5,
           "resolvedTypeReferenceDirective": {
             "primary": true,
             "resolvedFileName": "./src/project/node_modules/@types/pkg4/index.d.ts",
@@ -1151,6 +1186,7 @@ declare module "randomFileForTypeRef" {
         [
           "pkg0",
           {
+            "id": 1,
             "resolvedModule": {
               "resolvedFileName": "./src/project/pkg0.d.ts"
             }
@@ -1159,6 +1195,7 @@ declare module "randomFileForTypeRef" {
         [
           "pkg1",
           {
+            "id": 2,
             "resolvedModule": {
               "resolvedFileName": "./src/project/pkg1.d.ts"
             }
@@ -1167,6 +1204,7 @@ declare module "randomFileForTypeRef" {
         [
           "pkg2",
           {
+            "id": 3,
             "resolvedTypeReferenceDirective": {
               "resolvedFileName": "./src/project/node_modules/pkg2/index.d.ts",
               "isExternalLibraryImport": true
@@ -1176,6 +1214,7 @@ declare module "randomFileForTypeRef" {
         [
           "pkg3",
           {
+            "id": 4,
             "resolvedTypeReferenceDirective": {
               "resolvedFileName": "./src/project/node_modules/pkg3/index.d.ts",
               "isExternalLibraryImport": true
@@ -1185,6 +1224,7 @@ declare module "randomFileForTypeRef" {
         [
           "pkg4",
           {
+            "id": 5,
             "resolvedTypeReferenceDirective": {
               "primary": true,
               "resolvedFileName": "./src/project/node_modules/@types/pkg4/index.d.ts",
@@ -1200,6 +1240,7 @@ declare module "randomFileForTypeRef" {
             [
               "pkg0",
               {
+                "id": 1,
                 "resolvedModule": {
                   "resolvedFileName": "./src/project/pkg0.d.ts"
                 }
@@ -1208,6 +1249,7 @@ declare module "randomFileForTypeRef" {
             [
               "pkg1",
               {
+                "id": 2,
                 "resolvedModule": {
                   "resolvedFileName": "./src/project/pkg1.d.ts"
                 }
@@ -1223,6 +1265,7 @@ declare module "randomFileForTypeRef" {
             [
               "pkg2",
               {
+                "id": 3,
                 "resolvedTypeReferenceDirective": {
                   "resolvedFileName": "./src/project/node_modules/pkg2/index.d.ts",
                   "isExternalLibraryImport": true
@@ -1232,6 +1275,7 @@ declare module "randomFileForTypeRef" {
             [
               "pkg3",
               {
+                "id": 4,
                 "resolvedTypeReferenceDirective": {
                   "resolvedFileName": "./src/project/node_modules/pkg3/index.d.ts",
                   "isExternalLibraryImport": true
@@ -1241,6 +1285,7 @@ declare module "randomFileForTypeRef" {
             [
               "pkg4",
               {
+                "id": 5,
                 "resolvedTypeReferenceDirective": {
                   "primary": true,
                   "resolvedFileName": "./src/project/node_modules/@types/pkg4/index.d.ts",
