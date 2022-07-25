@@ -113,7 +113,7 @@ export declare const y = 10;
 
 
 //// [/src/project/tsconfig.a.tsbuildinfo]
-{"program":{"fileNames":["../../a/lib/lib.d.ts","./node_modules/pkg0/index.d.ts","./arandomfileforimport.ts","./arandomfileforimport2.ts","./afilewithimports.ts","./","./node_modules/pkg0/package.json","./node_modules/pkg0.ts","./node_modules/pkg0.tsx","./node_modules/pkg0.d.ts","./node_modules/pkg0/index.ts","./node_modules/pkg0/index.tsx","./aRandomFileForImport.ts","./aRandomFileForImport2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"769951468-export interface ImportInterface0 {}",{"version":"-10726455937-export const x = 10;","signature":"-6821242887-export declare const x = 10;\n"},{"version":"-10726455937-export const x = 10;","signature":"-6821242887-export declare const x = 10;\n"},{"version":"25172849050-import type { ImportInterface0 } from \"pkg0\";\nexport { x } from \"./aRandomFileForImport\";\nexport { x as x2 } from \"./aRandomFileForImport2\";\nexport const y = 10;\n","signature":"-19407286966-export { x } from \"./aRandomFileForImport\";\nexport { x as x2 } from \"./aRandomFileForImport2\";\nexport declare const y = 10;\n"}],"options":{"cacheResolutions":true,"composite":true},"fileIdsList":[[2,3,4],[3,4]],"referencedMap":[[5,1]],"exportedModulesMap":[[5,2]],"semanticDiagnosticsPerFile":[1,5,3,4,2],"latestChangedDtsFile":"./aFileWithImports.d.ts","cacheResolutions":{"resolutions":[{"resolvedModule":{"resolvedFileName":2,"isExternalLibraryImport":true},"failedLookupLocations":[7,8,9,10,11,12]},{"resolvedModule":{"resolvedFileName":13}},{"resolvedModule":{"resolvedFileName":14}}],"names":["pkg0","./aRandomFileForImport","./aRandomFileForImport2"],"resolutionEntries":[[1,1],[2,2],[3,3]],"modules":[[6,[1,2,3]]]}},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../a/lib/lib.d.ts","./node_modules/pkg0/index.d.ts","./arandomfileforimport.ts","./arandomfileforimport2.ts","./afilewithimports.ts","./","./aRandomFileForImport.ts","./aRandomFileForImport2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"769951468-export interface ImportInterface0 {}",{"version":"-10726455937-export const x = 10;","signature":"-6821242887-export declare const x = 10;\n"},{"version":"-10726455937-export const x = 10;","signature":"-6821242887-export declare const x = 10;\n"},{"version":"25172849050-import type { ImportInterface0 } from \"pkg0\";\nexport { x } from \"./aRandomFileForImport\";\nexport { x as x2 } from \"./aRandomFileForImport2\";\nexport const y = 10;\n","signature":"-19407286966-export { x } from \"./aRandomFileForImport\";\nexport { x as x2 } from \"./aRandomFileForImport2\";\nexport declare const y = 10;\n"}],"options":{"cacheResolutions":true,"composite":true},"fileIdsList":[[2,3,4],[3,4]],"referencedMap":[[5,1]],"exportedModulesMap":[[5,2]],"semanticDiagnosticsPerFile":[1,5,3,4,2],"latestChangedDtsFile":"./aFileWithImports.d.ts","cacheResolutions":{"resolutions":[{"resolvedModule":{"resolvedFileName":2,"isExternalLibraryImport":true}},{"resolvedModule":{"resolvedFileName":7}},{"resolvedModule":{"resolvedFileName":8}}],"names":["pkg0","./aRandomFileForImport","./aRandomFileForImport2"],"resolutionEntries":[[1,1],[2,2],[3,3]],"modules":[[6,[1,2,3]]]}},"version":"FakeTSVersion"}
 
 //// [/src/project/tsconfig.a.tsbuildinfo.readable.baseline.txt]
 {
@@ -125,12 +125,6 @@ export declare const y = 10;
       "./arandomfileforimport2.ts",
       "./afilewithimports.ts",
       "./",
-      "./node_modules/pkg0/package.json",
-      "./node_modules/pkg0.ts",
-      "./node_modules/pkg0.tsx",
-      "./node_modules/pkg0.d.ts",
-      "./node_modules/pkg0/index.ts",
-      "./node_modules/pkg0/index.tsx",
       "./aRandomFileForImport.ts",
       "./aRandomFileForImport2.ts"
     ],
@@ -216,34 +210,18 @@ export declare const y = 10;
             "resolvedModule": {
               "resolvedFileName": 2,
               "isExternalLibraryImport": true
-            },
-            "failedLookupLocations": [
-              7,
-              8,
-              9,
-              10,
-              11,
-              12
-            ]
+            }
           },
           "resolutionId": 1,
           "resolvedModule": {
             "resolvedFileName": "./node_modules/pkg0/index.d.ts",
             "isExternalLibraryImport": true
-          },
-          "failedLookupLocations": [
-            "./node_modules/pkg0/package.json",
-            "./node_modules/pkg0.ts",
-            "./node_modules/pkg0.tsx",
-            "./node_modules/pkg0.d.ts",
-            "./node_modules/pkg0/index.ts",
-            "./node_modules/pkg0/index.tsx"
-          ]
+          }
         },
         {
           "original": {
             "resolvedModule": {
-              "resolvedFileName": 13
+              "resolvedFileName": 7
             }
           },
           "resolutionId": 2,
@@ -254,7 +232,7 @@ export declare const y = 10;
         {
           "original": {
             "resolvedModule": {
-              "resolvedFileName": 14
+              "resolvedFileName": 8
             }
           },
           "resolutionId": 3,
@@ -281,15 +259,7 @@ export declare const y = 10;
             "resolvedModule": {
               "resolvedFileName": "./node_modules/pkg0/index.d.ts",
               "isExternalLibraryImport": true
-            },
-            "failedLookupLocations": [
-              "./node_modules/pkg0/package.json",
-              "./node_modules/pkg0.ts",
-              "./node_modules/pkg0.tsx",
-              "./node_modules/pkg0.d.ts",
-              "./node_modules/pkg0/index.ts",
-              "./node_modules/pkg0/index.tsx"
-            ]
+            }
           }
         },
         {
@@ -333,15 +303,7 @@ export declare const y = 10;
                 "resolvedModule": {
                   "resolvedFileName": "./node_modules/pkg0/index.d.ts",
                   "isExternalLibraryImport": true
-                },
-                "failedLookupLocations": [
-                  "./node_modules/pkg0/package.json",
-                  "./node_modules/pkg0.ts",
-                  "./node_modules/pkg0.tsx",
-                  "./node_modules/pkg0.d.ts",
-                  "./node_modules/pkg0/index.ts",
-                  "./node_modules/pkg0/index.tsx"
-                ]
+                }
               }
             },
             {
@@ -370,7 +332,7 @@ export declare const y = 10;
     }
   },
   "version": "FakeTSVersion",
-  "size": 2053
+  "size": 1834
 }
 
 //// [/src/project/bRandomFileForImport.js]
@@ -411,7 +373,7 @@ export declare const x = 10;
 
 
 //// [/src/project/tsconfig.b.tsbuildinfo]
-{"program":{"fileNames":["../../a/lib/lib.d.ts","./arandomfileforimport.d.ts","./arandomfileforimport2.d.ts","./afilewithimports.d.ts","./brandomfileforimport.ts","./node_modules/pkg0/index.d.ts","./bfilewithimports.ts","./brandomfileforimport2.ts","./","./aRandomFileForImport.ts","./aRandomFileForImport2.ts","./aFileWithImports.ts","./bRandomFileForImport.ts","./node_modules/pkg0/package.json","./node_modules/pkg0.ts","./node_modules/pkg0.tsx","./node_modules/pkg0.d.ts","./node_modules/pkg0/index.ts","./node_modules/pkg0/index.tsx"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-6821242887-export declare const x = 10;\n","-6821242887-export declare const x = 10;\n","-19407286966-export { x } from \"./aRandomFileForImport\";\nexport { x as x2 } from \"./aRandomFileForImport2\";\nexport declare const y = 10;\n",{"version":"-10726455937-export const x = 10;","signature":"-6821242887-export declare const x = 10;\n"},"769951468-export interface ImportInterface0 {}",{"version":"-16966571634-export { y } from \"./aFileWithImports\";\nexport { x } from \"./bRandomFileForImport\";\nimport type { ImportInterface0 } from \"pkg0\";\n","signature":"-7362913554-export { y } from \"./aFileWithImports\";\nexport { x } from \"./bRandomFileForImport\";\n"},{"version":"-10726455937-export const x = 10;","signature":"-6821242887-export declare const x = 10;\n"}],"options":{"cacheResolutions":true,"composite":true},"fileIdsList":[[2,3],[4,5,6],[4,5]],"referencedMap":[[4,1],[7,2]],"exportedModulesMap":[[4,1],[7,3]],"semanticDiagnosticsPerFile":[1,4,2,3,7,5,8,6],"latestChangedDtsFile":"./bRandomFileForImport2.d.ts","cacheResolutions":{"resolutions":[{"resolvedModule":{"resolvedFileName":10}},{"resolvedModule":{"resolvedFileName":11}},{"resolvedModule":{"resolvedFileName":12}},{"resolvedModule":{"resolvedFileName":13}},{"resolvedModule":{"resolvedFileName":6,"isExternalLibraryImport":true},"failedLookupLocations":[14,15,16,17,18,19]}],"names":["./aRandomFileForImport","./aRandomFileForImport2","./aFileWithImports","./bRandomFileForImport","pkg0"],"resolutionEntries":[[1,1],[2,2],[3,3],[4,4],[5,5]],"modules":[[9,[1,2,3,4,5]]]}},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../a/lib/lib.d.ts","./arandomfileforimport.d.ts","./arandomfileforimport2.d.ts","./afilewithimports.d.ts","./brandomfileforimport.ts","./node_modules/pkg0/index.d.ts","./bfilewithimports.ts","./brandomfileforimport2.ts","./","./aRandomFileForImport.ts","./aRandomFileForImport2.ts","./aFileWithImports.ts","./bRandomFileForImport.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-6821242887-export declare const x = 10;\n","-6821242887-export declare const x = 10;\n","-19407286966-export { x } from \"./aRandomFileForImport\";\nexport { x as x2 } from \"./aRandomFileForImport2\";\nexport declare const y = 10;\n",{"version":"-10726455937-export const x = 10;","signature":"-6821242887-export declare const x = 10;\n"},"769951468-export interface ImportInterface0 {}",{"version":"-16966571634-export { y } from \"./aFileWithImports\";\nexport { x } from \"./bRandomFileForImport\";\nimport type { ImportInterface0 } from \"pkg0\";\n","signature":"-7362913554-export { y } from \"./aFileWithImports\";\nexport { x } from \"./bRandomFileForImport\";\n"},{"version":"-10726455937-export const x = 10;","signature":"-6821242887-export declare const x = 10;\n"}],"options":{"cacheResolutions":true,"composite":true},"fileIdsList":[[2,3],[4,5,6],[4,5]],"referencedMap":[[4,1],[7,2]],"exportedModulesMap":[[4,1],[7,3]],"semanticDiagnosticsPerFile":[1,4,2,3,7,5,8,6],"latestChangedDtsFile":"./bRandomFileForImport2.d.ts","cacheResolutions":{"resolutions":[{"resolvedModule":{"resolvedFileName":10}},{"resolvedModule":{"resolvedFileName":11}},{"resolvedModule":{"resolvedFileName":12}},{"resolvedModule":{"resolvedFileName":13}},{"resolvedModule":{"resolvedFileName":6,"isExternalLibraryImport":true}}],"names":["./aRandomFileForImport","./aRandomFileForImport2","./aFileWithImports","./bRandomFileForImport","pkg0"],"resolutionEntries":[[1,1],[2,2],[3,3],[4,4],[5,5]],"modules":[[9,[1,2,3,4,5]]]}},"version":"FakeTSVersion"}
 
 //// [/src/project/tsconfig.b.tsbuildinfo.readable.baseline.txt]
 {
@@ -429,13 +391,7 @@ export declare const x = 10;
       "./aRandomFileForImport.ts",
       "./aRandomFileForImport2.ts",
       "./aFileWithImports.ts",
-      "./bRandomFileForImport.ts",
-      "./node_modules/pkg0/package.json",
-      "./node_modules/pkg0.ts",
-      "./node_modules/pkg0.tsx",
-      "./node_modules/pkg0.d.ts",
-      "./node_modules/pkg0/index.ts",
-      "./node_modules/pkg0/index.tsx"
+      "./bRandomFileForImport.ts"
     ],
     "fileNamesList": [
       [
@@ -590,29 +546,13 @@ export declare const x = 10;
             "resolvedModule": {
               "resolvedFileName": 6,
               "isExternalLibraryImport": true
-            },
-            "failedLookupLocations": [
-              14,
-              15,
-              16,
-              17,
-              18,
-              19
-            ]
+            }
           },
           "resolutionId": 5,
           "resolvedModule": {
             "resolvedFileName": "./node_modules/pkg0/index.d.ts",
             "isExternalLibraryImport": true
-          },
-          "failedLookupLocations": [
-            "./node_modules/pkg0/package.json",
-            "./node_modules/pkg0.ts",
-            "./node_modules/pkg0.tsx",
-            "./node_modules/pkg0.d.ts",
-            "./node_modules/pkg0/index.ts",
-            "./node_modules/pkg0/index.tsx"
-          ]
+          }
         }
       ],
       "names": [
@@ -691,15 +631,7 @@ export declare const x = 10;
             "resolvedModule": {
               "resolvedFileName": "./node_modules/pkg0/index.d.ts",
               "isExternalLibraryImport": true
-            },
-            "failedLookupLocations": [
-              "./node_modules/pkg0/package.json",
-              "./node_modules/pkg0.ts",
-              "./node_modules/pkg0.tsx",
-              "./node_modules/pkg0.d.ts",
-              "./node_modules/pkg0/index.ts",
-              "./node_modules/pkg0/index.tsx"
-            ]
+            }
           }
         }
       ],
@@ -755,15 +687,7 @@ export declare const x = 10;
                 "resolvedModule": {
                   "resolvedFileName": "./node_modules/pkg0/index.d.ts",
                   "isExternalLibraryImport": true
-                },
-                "failedLookupLocations": [
-                  "./node_modules/pkg0/package.json",
-                  "./node_modules/pkg0.ts",
-                  "./node_modules/pkg0.tsx",
-                  "./node_modules/pkg0.d.ts",
-                  "./node_modules/pkg0/index.ts",
-                  "./node_modules/pkg0/index.tsx"
-                ]
+                }
               }
             }
           ]
@@ -772,7 +696,7 @@ export declare const x = 10;
     }
   },
   "version": "FakeTSVersion",
-  "size": 2535
+  "size": 2315
 }
 
 //// [/src/project/cFileWithImports.js]
@@ -813,7 +737,7 @@ export declare const x = 10;
 
 
 //// [/src/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../a/lib/lib.d.ts","./arandomfileforimport.d.ts","./arandomfileforimport2.d.ts","./afilewithimports.d.ts","./brandomfileforimport.d.ts","./bfilewithimports.d.ts","./pkg0.d.ts","./cfilewithimports.ts","./crandomfileforimport.ts","./crandomfileforimport2.ts","./","./bFileWithImports.ts","./pkg0.ts","./pkg0.tsx","./aRandomFileForImport.ts","./aRandomFileForImport2.ts","./aFileWithImports.ts","./bRandomFileForImport.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-6821242887-export declare const x = 10;\n","-6821242887-export declare const x = 10;\n","-19407286966-export { x } from \"./aRandomFileForImport\";\nexport { x as x2 } from \"./aRandomFileForImport2\";\nexport declare const y = 10;\n","-6821242887-export declare const x = 10;\n","-7362913554-export { y } from \"./aFileWithImports\";\nexport { x } from \"./bRandomFileForImport\";\n","769951468-export interface ImportInterface0 {}",{"version":"-1053334089-import { y } from \"./bFileWithImports\";\nimport type { ImportInterface0 } from \"pkg0\";\n","signature":"-3531856636-export {};\n"},{"version":"-10726455937-export const x = 10;","signature":"-6821242887-export declare const x = 10;\n"},{"version":"-10726455937-export const x = 10;","signature":"-6821242887-export declare const x = 10;\n"}],"options":{"cacheResolutions":true,"composite":true,"module":2},"fileIdsList":[[2,3],[4,5],[6,7]],"referencedMap":[[4,1],[6,2],[8,3]],"exportedModulesMap":[[4,1],[6,2]],"semanticDiagnosticsPerFile":[1,4,2,3,6,5,8,9,10,7],"latestChangedDtsFile":"./cRandomFileForImport2.d.ts","cacheResolutions":{"resolutions":[{"resolvedModule":{"resolvedFileName":12}},{"resolvedModule":{"resolvedFileName":7},"failedLookupLocations":[13,14]},{"resolvedModule":{"resolvedFileName":15}},{"resolvedModule":{"resolvedFileName":16}},{"resolvedModule":{"resolvedFileName":17}},{"resolvedModule":{"resolvedFileName":18}}],"names":["./bFileWithImports","pkg0","./aRandomFileForImport","./aRandomFileForImport2","./aFileWithImports","./bRandomFileForImport"],"resolutionEntries":[[1,1],[2,2],[3,3],[4,4],[5,5],[6,6]],"modules":{"own":[[11,[1,2]]],"redirects":[{"options":{"cacheResolutions":true},"cache":[[11,[3,4,5,6]]]}]}}},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../a/lib/lib.d.ts","./arandomfileforimport.d.ts","./arandomfileforimport2.d.ts","./afilewithimports.d.ts","./brandomfileforimport.d.ts","./bfilewithimports.d.ts","./pkg0.d.ts","./cfilewithimports.ts","./crandomfileforimport.ts","./crandomfileforimport2.ts","./","./bFileWithImports.ts","./aRandomFileForImport.ts","./aRandomFileForImport2.ts","./aFileWithImports.ts","./bRandomFileForImport.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-6821242887-export declare const x = 10;\n","-6821242887-export declare const x = 10;\n","-19407286966-export { x } from \"./aRandomFileForImport\";\nexport { x as x2 } from \"./aRandomFileForImport2\";\nexport declare const y = 10;\n","-6821242887-export declare const x = 10;\n","-7362913554-export { y } from \"./aFileWithImports\";\nexport { x } from \"./bRandomFileForImport\";\n","769951468-export interface ImportInterface0 {}",{"version":"-1053334089-import { y } from \"./bFileWithImports\";\nimport type { ImportInterface0 } from \"pkg0\";\n","signature":"-3531856636-export {};\n"},{"version":"-10726455937-export const x = 10;","signature":"-6821242887-export declare const x = 10;\n"},{"version":"-10726455937-export const x = 10;","signature":"-6821242887-export declare const x = 10;\n"}],"options":{"cacheResolutions":true,"composite":true,"module":2},"fileIdsList":[[2,3],[4,5],[6,7]],"referencedMap":[[4,1],[6,2],[8,3]],"exportedModulesMap":[[4,1],[6,2]],"semanticDiagnosticsPerFile":[1,4,2,3,6,5,8,9,10,7],"latestChangedDtsFile":"./cRandomFileForImport2.d.ts","cacheResolutions":{"resolutions":[{"resolvedModule":{"resolvedFileName":12}},{"resolvedModule":{"resolvedFileName":7}},{"resolvedModule":{"resolvedFileName":13}},{"resolvedModule":{"resolvedFileName":14}},{"resolvedModule":{"resolvedFileName":15}},{"resolvedModule":{"resolvedFileName":16}}],"names":["./bFileWithImports","pkg0","./aRandomFileForImport","./aRandomFileForImport2","./aFileWithImports","./bRandomFileForImport"],"resolutionEntries":[[1,1],[2,2],[3,3],[4,4],[5,5],[6,6]],"modules":{"own":[[11,[1,2]]],"redirects":[{"options":{"cacheResolutions":true},"cache":[[11,[3,4,5,6]]]}]}}},"version":"FakeTSVersion"}
 
 //// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -831,8 +755,6 @@ export declare const x = 10;
       "./crandomfileforimport2.ts",
       "./",
       "./bFileWithImports.ts",
-      "./pkg0.ts",
-      "./pkg0.tsx",
       "./aRandomFileForImport.ts",
       "./aRandomFileForImport2.ts",
       "./aFileWithImports.ts",
@@ -970,25 +892,17 @@ export declare const x = 10;
           "original": {
             "resolvedModule": {
               "resolvedFileName": 7
-            },
-            "failedLookupLocations": [
-              13,
-              14
-            ]
+            }
           },
           "resolutionId": 2,
           "resolvedModule": {
             "resolvedFileName": "./pkg0.d.ts"
-          },
-          "failedLookupLocations": [
-            "./pkg0.ts",
-            "./pkg0.tsx"
-          ]
+          }
         },
         {
           "original": {
             "resolvedModule": {
-              "resolvedFileName": 15
+              "resolvedFileName": 13
             }
           },
           "resolutionId": 3,
@@ -999,7 +913,7 @@ export declare const x = 10;
         {
           "original": {
             "resolvedModule": {
-              "resolvedFileName": 16
+              "resolvedFileName": 14
             }
           },
           "resolutionId": 4,
@@ -1010,7 +924,7 @@ export declare const x = 10;
         {
           "original": {
             "resolvedModule": {
-              "resolvedFileName": 17
+              "resolvedFileName": 15
             }
           },
           "resolutionId": 5,
@@ -1021,7 +935,7 @@ export declare const x = 10;
         {
           "original": {
             "resolvedModule": {
-              "resolvedFileName": 18
+              "resolvedFileName": 16
             }
           },
           "resolutionId": 6,
@@ -1064,11 +978,7 @@ export declare const x = 10;
             "resolutionId": 2,
             "resolvedModule": {
               "resolvedFileName": "./pkg0.d.ts"
-            },
-            "failedLookupLocations": [
-              "./pkg0.ts",
-              "./pkg0.tsx"
-            ]
+            }
           }
         },
         {
@@ -1150,11 +1060,7 @@ export declare const x = 10;
                   "resolutionId": 2,
                   "resolvedModule": {
                     "resolvedFileName": "./pkg0.d.ts"
-                  },
-                  "failedLookupLocations": [
-                    "./pkg0.ts",
-                    "./pkg0.tsx"
-                  ]
+                  }
                 }
               }
             ]
@@ -1218,7 +1124,7 @@ export declare const x = 10;
     }
   },
   "version": "FakeTSVersion",
-  "size": 2596
+  "size": 2539
 }
 
 
@@ -1353,15 +1259,11 @@ Info 70   [00:02:47.000] FileWatcher:: Added:: WatchInfo: /src/project/aRandomFi
 Info 71   [00:02:48.000] FileWatcher:: Added:: WatchInfo: /src/project/bRandomFileForImport.ts 500 undefined WatchType: Closed Script info
 Info 72   [00:02:49.000] FileWatcher:: Added:: WatchInfo: /src/project/pkg0.d.ts 500 undefined WatchType: Closed Script info
 Info 73   [00:02:50.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info 74   [00:02:51.000] DirectoryWatcher:: Added:: WatchInfo: /src/project 0 undefined Project: /src/project/tsconfig.json WatchType: Failed Lookup Locations
-Info 75   [00:02:52.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /src/project 0 undefined Project: /src/project/tsconfig.json WatchType: Failed Lookup Locations
-Info 76   [00:02:53.000] DirectoryWatcher:: Added:: WatchInfo: /src/project/node_modules 1 undefined Project: /src/project/tsconfig.json WatchType: Failed Lookup Locations
-Info 77   [00:02:54.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /src/project/node_modules 1 undefined Project: /src/project/tsconfig.json WatchType: Failed Lookup Locations
-Info 78   [00:02:55.000] DirectoryWatcher:: Added:: WatchInfo: /src/project/node_modules/@types 1 undefined Project: /src/project/tsconfig.json WatchType: Type roots
-Info 79   [00:02:56.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /src/project/node_modules/@types 1 undefined Project: /src/project/tsconfig.json WatchType: Type roots
-Info 80   [00:02:57.000] Finishing updateGraphWorker: Project: /src/project/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 81   [00:02:58.000] Project '/src/project/tsconfig.json' (Configured)
-Info 82   [00:02:59.000] 	Files (11)
+Info 74   [00:02:51.000] DirectoryWatcher:: Added:: WatchInfo: /src/project/node_modules/@types 1 undefined Project: /src/project/tsconfig.json WatchType: Type roots
+Info 75   [00:02:52.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /src/project/node_modules/@types 1 undefined Project: /src/project/tsconfig.json WatchType: Type roots
+Info 76   [00:02:53.000] Finishing updateGraphWorker: Project: /src/project/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 77   [00:02:54.000] Project '/src/project/tsconfig.json' (Configured)
+Info 78   [00:02:55.000] 	Files (11)
 	/a/lib/lib.d.ts
 	/src/project/node_modules/pkg0/index.d.ts
 	/src/project/aRandomFileForImport.ts
@@ -1399,16 +1301,16 @@ Info 82   [00:02:59.000] 	Files (11)
 	cRandomFileForImport2.ts
 	  Part of 'files' list in tsconfig.json
 
-Info 83   [00:03:00.000] -----------------------------------------------
-Info 84   [00:03:01.000] Search path: /src/project
-Info 85   [00:03:02.000] For info: /src/project/tsconfig.json :: No config files found.
-Info 86   [00:03:03.000] Project '/src/project/tsconfig.json' (Configured)
-Info 86   [00:03:04.000] 	Files (11)
+Info 79   [00:02:56.000] -----------------------------------------------
+Info 80   [00:02:57.000] Search path: /src/project
+Info 81   [00:02:58.000] For info: /src/project/tsconfig.json :: No config files found.
+Info 82   [00:02:59.000] Project '/src/project/tsconfig.json' (Configured)
+Info 82   [00:03:00.000] 	Files (11)
 
-Info 86   [00:03:05.000] -----------------------------------------------
-Info 86   [00:03:06.000] Open files: 
-Info 86   [00:03:07.000] 	FileName: /src/project/cRandomFileForImport.ts ProjectRootPath: undefined
-Info 86   [00:03:08.000] 		Projects: /src/project/tsconfig.json
+Info 82   [00:03:01.000] -----------------------------------------------
+Info 82   [00:03:02.000] Open files: 
+Info 82   [00:03:03.000] 	FileName: /src/project/cRandomFileForImport.ts ProjectRootPath: undefined
+Info 82   [00:03:04.000] 		Projects: /src/project/tsconfig.json
 After request
 
 PolledWatches::
@@ -1440,19 +1342,17 @@ FsWatches::
   {}
 /a/lib/lib.d.ts:
   {}
-/src/project:
-  {}
 
 FsWatchesRecursive::
 /src/project/node_modules:
   {}
 
-Info 86   [00:03:09.000] response:
+Info 82   [00:03:05.000] response:
     {
       "responseRequired": false
     }
-Info 87   [00:03:10.000] modify cRandomFileForImport by adding import
-Info 88   [00:03:11.000] request:
+Info 83   [00:03:06.000] modify cRandomFileForImport by adding import
+Info 84   [00:03:07.000] request:
     {
       "command": "change",
       "arguments": {
@@ -1497,8 +1397,6 @@ FsWatches::
   {}
 /a/lib/lib.d.ts:
   {}
-/src/project:
-  {}
 
 FsWatchesRecursive::
 /src/project/node_modules:
@@ -1535,31 +1433,29 @@ FsWatches::
   {}
 /a/lib/lib.d.ts:
   {}
-/src/project:
-  {}
 
 FsWatchesRecursive::
 /src/project/node_modules:
   {}
 
-Info 89   [00:03:12.000] response:
+Info 85   [00:03:08.000] response:
     {
       "responseRequired": false
     }
-Info 90   [00:03:13.000] Starting updateGraphWorker: Project: /src/project/tsconfig.json
-Info 91   [00:03:14.000] Reusing resolution of module './bFileWithImports' from '/src/project/cFileWithImports.ts' of old program, it was successfully resolved to '/src/project/bFileWithImports.ts'.
-Info 92   [00:03:15.000] Reusing resolution of module 'pkg0' from '/src/project/cFileWithImports.ts' of old program, it was successfully resolved to '/src/project/pkg0.d.ts'.
-Info 93   [00:03:16.000] Reusing resolution of module './aFileWithImports' from '/src/project/bFileWithImports.ts' of old program, it was successfully resolved to '/src/project/aFileWithImports.ts'.
-Info 94   [00:03:17.000] Reusing resolution of module './bRandomFileForImport' from '/src/project/bFileWithImports.ts' of old program, it was successfully resolved to '/src/project/bRandomFileForImport.ts'.
-Info 95   [00:03:18.000] Reusing resolution of module 'pkg0' from '/src/project/bFileWithImports.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
-Info 96   [00:03:19.000] Reusing resolution of module 'pkg0' from '/src/project/aFileWithImports.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
-Info 97   [00:03:20.000] Reusing resolution of module './aRandomFileForImport' from '/src/project/aFileWithImports.ts' of old program, it was successfully resolved to '/src/project/aRandomFileForImport.ts'.
-Info 98   [00:03:21.000] Reusing resolution of module './aRandomFileForImport2' from '/src/project/aFileWithImports.ts' of old program, it was successfully resolved to '/src/project/aRandomFileForImport2.ts'.
-Info 99   [00:03:22.000] ======== Resolving module 'pkg0' from '/src/project/cRandomFileForImport.ts'. ========
-Info 100  [00:03:23.000] Module resolution kind is not specified, using 'Classic'.
-Info 101  [00:03:24.000] File '/src/project/pkg0.ts' does not exist.
-Info 102  [00:03:25.000] File '/src/project/pkg0.tsx' does not exist.
-Info 103  [00:03:26.000] File '/src/project/pkg0.d.ts' exist - use it as a name resolution result.
-Info 104  [00:03:27.000] ======== Module name 'pkg0' was successfully resolved to '/src/project/pkg0.d.ts'. ========
-Info 105  [00:03:28.000] Finishing updateGraphWorker: Project: /src/project/tsconfig.json Version: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
-Info 106  [00:03:29.000] Different program with same set of files
+Info 86   [00:03:09.000] Starting updateGraphWorker: Project: /src/project/tsconfig.json
+Info 87   [00:03:10.000] Reusing resolution of module './bFileWithImports' from '/src/project/cFileWithImports.ts' of old program, it was successfully resolved to '/src/project/bFileWithImports.ts'.
+Info 88   [00:03:11.000] Reusing resolution of module 'pkg0' from '/src/project/cFileWithImports.ts' of old program, it was successfully resolved to '/src/project/pkg0.d.ts'.
+Info 89   [00:03:12.000] Reusing resolution of module './aFileWithImports' from '/src/project/bFileWithImports.ts' of old program, it was successfully resolved to '/src/project/aFileWithImports.ts'.
+Info 90   [00:03:13.000] Reusing resolution of module './bRandomFileForImport' from '/src/project/bFileWithImports.ts' of old program, it was successfully resolved to '/src/project/bRandomFileForImport.ts'.
+Info 91   [00:03:14.000] Reusing resolution of module 'pkg0' from '/src/project/bFileWithImports.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Info 92   [00:03:15.000] Reusing resolution of module 'pkg0' from '/src/project/aFileWithImports.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Info 93   [00:03:16.000] Reusing resolution of module './aRandomFileForImport' from '/src/project/aFileWithImports.ts' of old program, it was successfully resolved to '/src/project/aRandomFileForImport.ts'.
+Info 94   [00:03:17.000] Reusing resolution of module './aRandomFileForImport2' from '/src/project/aFileWithImports.ts' of old program, it was successfully resolved to '/src/project/aRandomFileForImport2.ts'.
+Info 95   [00:03:18.000] ======== Resolving module 'pkg0' from '/src/project/cRandomFileForImport.ts'. ========
+Info 96   [00:03:19.000] Module resolution kind is not specified, using 'Classic'.
+Info 97   [00:03:20.000] File '/src/project/pkg0.ts' does not exist.
+Info 98   [00:03:21.000] File '/src/project/pkg0.tsx' does not exist.
+Info 99   [00:03:22.000] File '/src/project/pkg0.d.ts' exist - use it as a name resolution result.
+Info 100  [00:03:23.000] ======== Module name 'pkg0' was successfully resolved to '/src/project/pkg0.d.ts'. ========
+Info 101  [00:03:24.000] Finishing updateGraphWorker: Project: /src/project/tsconfig.json Version: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
+Info 102  [00:03:25.000] Different program with same set of files

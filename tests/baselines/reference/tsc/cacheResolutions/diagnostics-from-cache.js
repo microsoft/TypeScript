@@ -415,7 +415,6 @@ resolvedModules:
     "isExternalLibraryImport": true,
     "extension": ".ts"
   },
-  "failedLookupLocations": [],
   "affectingLocations": [
     "/src/project/package.json"
   ],
@@ -468,7 +467,6 @@ resolvedModules:
     "isExternalLibraryImport": true,
     "extension": ".ts"
   },
-  "failedLookupLocations": [],
   "affectingLocations": [
     "/src/project/package.json"
   ],

@@ -195,7 +195,7 @@ export declare function returnAnotherClass(): anotherClass;
 
 
 //// [/user/username/projects/sample1/logic/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../core/myclass.d.ts","../core/index.d.ts","../core/anotherclass.d.ts","./index.ts","./","../core/myClass.ts","../core/index.ts","../core.ts","../core.tsx","../core.d.ts","../core/package.json","../core/anotherClass.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-7432826827-export declare class myClass {\n}\n","-4193260373-export declare function bar(): number;\n","-6928009824-export declare class anotherClass {\n}\n",{"version":"-9720705499-import { myClass } from \"../core/myClass\";\nimport { bar } from \"../core\";\nimport { anotherClass } from \"../core/anotherClass\";\nexport function returnMyClass() {\n    bar();\n    return new myClass();\n}\nexport function returnAnotherClass() {\n    return new anotherClass();\n}\n","signature":"-26318514585-import { myClass } from \"../core/myClass\";\nimport { anotherClass } from \"../core/anotherClass\";\nexport declare function returnMyClass(): myClass;\nexport declare function returnAnotherClass(): anotherClass;\n"}],"options":{"cacheResolutions":true,"composite":true},"fileIdsList":[[2,3,4],[2,4]],"referencedMap":[[5,1]],"exportedModulesMap":[[5,2]],"semanticDiagnosticsPerFile":[1,4,3,2,5],"latestChangedDtsFile":"./index.d.ts","cacheResolutions":{"resolutions":[{"resolvedModule":{"resolvedFileName":7}},{"resolvedModule":{"resolvedFileName":8},"failedLookupLocations":[9,10,11,12]},{"resolvedModule":{"resolvedFileName":13}}],"names":["../core/myClass","../core","../core/anotherClass"],"resolutionEntries":[[1,1],[2,2],[3,3]],"modules":[[6,[1,2,3]]]}},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../core/myclass.d.ts","../core/index.d.ts","../core/anotherclass.d.ts","./index.ts","./","../core/myClass.ts","../core/index.ts","../core/anotherClass.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-7432826827-export declare class myClass {\n}\n","-4193260373-export declare function bar(): number;\n","-6928009824-export declare class anotherClass {\n}\n",{"version":"-9720705499-import { myClass } from \"../core/myClass\";\nimport { bar } from \"../core\";\nimport { anotherClass } from \"../core/anotherClass\";\nexport function returnMyClass() {\n    bar();\n    return new myClass();\n}\nexport function returnAnotherClass() {\n    return new anotherClass();\n}\n","signature":"-26318514585-import { myClass } from \"../core/myClass\";\nimport { anotherClass } from \"../core/anotherClass\";\nexport declare function returnMyClass(): myClass;\nexport declare function returnAnotherClass(): anotherClass;\n"}],"options":{"cacheResolutions":true,"composite":true},"fileIdsList":[[2,3,4],[2,4]],"referencedMap":[[5,1]],"exportedModulesMap":[[5,2]],"semanticDiagnosticsPerFile":[1,4,3,2,5],"latestChangedDtsFile":"./index.d.ts","cacheResolutions":{"resolutions":[{"resolvedModule":{"resolvedFileName":7}},{"resolvedModule":{"resolvedFileName":8}},{"resolvedModule":{"resolvedFileName":9}}],"names":["../core/myClass","../core","../core/anotherClass"],"resolutionEntries":[[1,1],[2,2],[3,3]],"modules":[[6,[1,2,3]]]}},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/sample1/logic/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -209,10 +209,6 @@ export declare function returnAnotherClass(): anotherClass;
       "./",
       "../core/myClass.ts",
       "../core/index.ts",
-      "../core.ts",
-      "../core.tsx",
-      "../core.d.ts",
-      "../core/package.json",
       "../core/anotherClass.ts"
     ],
     "fileNamesList": [
@@ -299,29 +295,17 @@ export declare function returnAnotherClass(): anotherClass;
           "original": {
             "resolvedModule": {
               "resolvedFileName": 8
-            },
-            "failedLookupLocations": [
-              9,
-              10,
-              11,
-              12
-            ]
+            }
           },
           "resolutionId": 2,
           "resolvedModule": {
             "resolvedFileName": "../core/index.ts"
-          },
-          "failedLookupLocations": [
-            "../core.ts",
-            "../core.tsx",
-            "../core.d.ts",
-            "../core/package.json"
-          ]
+          }
         },
         {
           "original": {
             "resolvedModule": {
-              "resolvedFileName": 13
+              "resolvedFileName": 9
             }
           },
           "resolutionId": 3,
@@ -361,13 +345,7 @@ export declare function returnAnotherClass(): anotherClass;
             "resolutionId": 2,
             "resolvedModule": {
               "resolvedFileName": "../core/index.ts"
-            },
-            "failedLookupLocations": [
-              "../core.ts",
-              "../core.tsx",
-              "../core.d.ts",
-              "../core/package.json"
-            ]
+            }
           }
         },
         {
@@ -406,13 +384,7 @@ export declare function returnAnotherClass(): anotherClass;
                 "resolutionId": 2,
                 "resolvedModule": {
                   "resolvedFileName": "../core/index.ts"
-                },
-                "failedLookupLocations": [
-                  "../core.ts",
-                  "../core.tsx",
-                  "../core.d.ts",
-                  "../core/package.json"
-                ]
+                }
               }
             },
             {
@@ -431,7 +403,7 @@ export declare function returnAnotherClass(): anotherClass;
     }
   },
   "version": "FakeTSVersion",
-  "size": 1977
+  "size": 1874
 }
 
 //// [/user/username/projects/sample1/tests/index.js]
@@ -446,7 +418,7 @@ export {};
 
 
 //// [/user/username/projects/sample1/tests/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../core/myclass.d.ts","../core/anotherclass.d.ts","../logic/index.d.ts","./index.ts","../logic","../core/myClass.ts","../core/anotherClass.ts","./","../logic/index.ts","../logic.ts","../logic.tsx","../logic.d.ts","../logic/package.json"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-7432826827-export declare class myClass {\n}\n","-6928009824-export declare class anotherClass {\n}\n","-26318514585-import { myClass } from \"../core/myClass\";\nimport { anotherClass } from \"../core/anotherClass\";\nexport declare function returnMyClass(): myClass;\nexport declare function returnAnotherClass(): anotherClass;\n",{"version":"-1418876836-import { returnMyClass } from \"../logic\";\nreturnMyClass();\n","signature":"-3531856636-export {};\n"}],"options":{"cacheResolutions":true,"composite":true},"fileIdsList":[[2,3],[4]],"referencedMap":[[4,1],[5,2]],"exportedModulesMap":[[4,1]],"semanticDiagnosticsPerFile":[1,3,2,4,5],"latestChangedDtsFile":"./index.d.ts","cacheResolutions":{"resolutions":[{"resolvedModule":{"resolvedFileName":7}},{"resolvedModule":{"resolvedFileName":8}},{"resolvedModule":{"resolvedFileName":10},"failedLookupLocations":[11,12,13,14]}],"names":["../core/myClass","../core/anotherClass","../logic"],"resolutionEntries":[[1,1],[2,2],[3,3]],"modules":[[6,[1,2]],[9,[3]]]}},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../core/myclass.d.ts","../core/anotherclass.d.ts","../logic/index.d.ts","./index.ts","../logic","../core/myClass.ts","../core/anotherClass.ts","./","../logic/index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-7432826827-export declare class myClass {\n}\n","-6928009824-export declare class anotherClass {\n}\n","-26318514585-import { myClass } from \"../core/myClass\";\nimport { anotherClass } from \"../core/anotherClass\";\nexport declare function returnMyClass(): myClass;\nexport declare function returnAnotherClass(): anotherClass;\n",{"version":"-1418876836-import { returnMyClass } from \"../logic\";\nreturnMyClass();\n","signature":"-3531856636-export {};\n"}],"options":{"cacheResolutions":true,"composite":true},"fileIdsList":[[2,3],[4]],"referencedMap":[[4,1],[5,2]],"exportedModulesMap":[[4,1]],"semanticDiagnosticsPerFile":[1,3,2,4,5],"latestChangedDtsFile":"./index.d.ts","cacheResolutions":{"resolutions":[{"resolvedModule":{"resolvedFileName":7}},{"resolvedModule":{"resolvedFileName":8}},{"resolvedModule":{"resolvedFileName":10}}],"names":["../core/myClass","../core/anotherClass","../logic"],"resolutionEntries":[[1,1],[2,2],[3,3]],"modules":[[6,[1,2]],[9,[3]]]}},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/sample1/tests/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -461,11 +433,7 @@ export {};
       "../core/myClass.ts",
       "../core/anotherClass.ts",
       "./",
-      "../logic/index.ts",
-      "../logic.ts",
-      "../logic.tsx",
-      "../logic.d.ts",
-      "../logic/package.json"
+      "../logic/index.ts"
     ],
     "fileNamesList": [
       [
@@ -562,24 +530,12 @@ export {};
           "original": {
             "resolvedModule": {
               "resolvedFileName": 10
-            },
-            "failedLookupLocations": [
-              11,
-              12,
-              13,
-              14
-            ]
+            }
           },
           "resolutionId": 3,
           "resolvedModule": {
             "resolvedFileName": "../logic/index.ts"
-          },
-          "failedLookupLocations": [
-            "../logic.ts",
-            "../logic.tsx",
-            "../logic.d.ts",
-            "../logic/package.json"
-          ]
+          }
         }
       ],
       "names": [
@@ -627,13 +583,7 @@ export {};
             "resolutionId": 3,
             "resolvedModule": {
               "resolvedFileName": "../logic/index.ts"
-            },
-            "failedLookupLocations": [
-              "../logic.ts",
-              "../logic.tsx",
-              "../logic.d.ts",
-              "../logic/package.json"
-            ]
+            }
           }
         }
       ],
@@ -673,13 +623,7 @@ export {};
                 "resolutionId": 3,
                 "resolvedModule": {
                   "resolvedFileName": "../logic/index.ts"
-                },
-                "failedLookupLocations": [
-                  "../logic.ts",
-                  "../logic.tsx",
-                  "../logic.d.ts",
-                  "../logic/package.json"
-                ]
+                }
               }
             }
           ]
@@ -688,7 +632,7 @@ export {};
     }
   },
   "version": "FakeTSVersion",
-  "size": 1751
+  "size": 1644
 }
 
 
@@ -767,46 +711,40 @@ Info 23   [00:01:37.000] File '/user/username/projects/sample1/logic.d.ts' does 
 Info 24   [00:01:38.000] File '/user/username/projects/sample1/logic/package.json' does not exist.
 Info 25   [00:01:39.000] File '/user/username/projects/sample1/logic/index.ts' exist - use it as a name resolution result.
 Info 26   [00:01:40.000] ======== Module name '../logic' was successfully resolved to '/user/username/projects/sample1/logic/index.ts'. ========
-Info 27   [00:01:41.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/sample1 0 undefined Project: /user/username/projects/sample1/tests/tsconfig.json WatchType: Failed Lookup Locations
-Info 28   [00:01:42.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/sample1 0 undefined Project: /user/username/projects/sample1/tests/tsconfig.json WatchType: Failed Lookup Locations
-Info 29   [00:01:43.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/sample1/logic 1 undefined Project: /user/username/projects/sample1/tests/tsconfig.json WatchType: Failed Lookup Locations
-Info 30   [00:01:44.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/sample1/logic 1 undefined Project: /user/username/projects/sample1/tests/tsconfig.json WatchType: Failed Lookup Locations
-Info 31   [00:01:45.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/sample1/logic/index.ts 500 undefined WatchType: Closed Script info
-Info 32   [00:01:46.000] ======== Resolving module '../core/myClass' from '/user/username/projects/sample1/logic/index.ts'. ========
-Info 33   [00:01:47.000] Using compiler options of project reference redirect '/user/username/projects/sample1/logic/tsconfig.json'.
-Info 34   [00:01:48.000] Module resolution kind is not specified, using 'NodeJs'.
-Info 35   [00:01:49.000] Loading module as file / folder, candidate module location '/user/username/projects/sample1/core/myClass', target file types: TypeScript, Declaration.
-Info 36   [00:01:50.000] File '/user/username/projects/sample1/core/myClass.ts' exist - use it as a name resolution result.
-Info 37   [00:01:51.000] ======== Module name '../core/myClass' was successfully resolved to '/user/username/projects/sample1/core/myClass.ts'. ========
-Info 38   [00:01:52.000] ======== Resolving module '../core' from '/user/username/projects/sample1/logic/index.ts'. ========
-Info 39   [00:01:53.000] Using compiler options of project reference redirect '/user/username/projects/sample1/logic/tsconfig.json'.
-Info 40   [00:01:54.000] Module resolution kind is not specified, using 'NodeJs'.
-Info 41   [00:01:55.000] Loading module as file / folder, candidate module location '/user/username/projects/sample1/core', target file types: TypeScript, Declaration.
-Info 42   [00:01:56.000] File '/user/username/projects/sample1/core.ts' does not exist.
-Info 43   [00:01:57.000] File '/user/username/projects/sample1/core.tsx' does not exist.
-Info 44   [00:01:58.000] File '/user/username/projects/sample1/core.d.ts' does not exist.
-Info 45   [00:01:59.000] File '/user/username/projects/sample1/core/package.json' does not exist.
-Info 46   [00:02:00.000] File '/user/username/projects/sample1/core/index.ts' exist - use it as a name resolution result.
-Info 47   [00:02:01.000] ======== Module name '../core' was successfully resolved to '/user/username/projects/sample1/core/index.ts'. ========
-Info 48   [00:02:02.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/sample1/core 1 undefined Project: /user/username/projects/sample1/tests/tsconfig.json WatchType: Failed Lookup Locations
-Info 49   [00:02:03.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/sample1/core 1 undefined Project: /user/username/projects/sample1/tests/tsconfig.json WatchType: Failed Lookup Locations
-Info 50   [00:02:04.000] ======== Resolving module '../core/anotherClass' from '/user/username/projects/sample1/logic/index.ts'. ========
-Info 51   [00:02:05.000] Using compiler options of project reference redirect '/user/username/projects/sample1/logic/tsconfig.json'.
-Info 52   [00:02:06.000] Module resolution kind is not specified, using 'NodeJs'.
-Info 53   [00:02:07.000] Loading module as file / folder, candidate module location '/user/username/projects/sample1/core/anotherClass', target file types: TypeScript, Declaration.
-Info 54   [00:02:08.000] File '/user/username/projects/sample1/core/anotherClass.ts' exist - use it as a name resolution result.
-Info 55   [00:02:09.000] ======== Module name '../core/anotherClass' was successfully resolved to '/user/username/projects/sample1/core/anotherClass.ts'. ========
-Info 56   [00:02:10.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/sample1/core/myClass.ts 500 undefined WatchType: Closed Script info
-Info 57   [00:02:11.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/sample1/core/index.ts 500 undefined WatchType: Closed Script info
-Info 58   [00:02:12.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/sample1/core/anotherClass.ts 500 undefined WatchType: Closed Script info
-Info 59   [00:02:13.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info 60   [00:02:14.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/sample1/tests/node_modules/@types 1 undefined Project: /user/username/projects/sample1/tests/tsconfig.json WatchType: Type roots
-Info 61   [00:02:15.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/sample1/tests/node_modules/@types 1 undefined Project: /user/username/projects/sample1/tests/tsconfig.json WatchType: Type roots
-Info 62   [00:02:16.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/sample1/node_modules/@types 1 undefined Project: /user/username/projects/sample1/tests/tsconfig.json WatchType: Type roots
-Info 63   [00:02:17.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/sample1/node_modules/@types 1 undefined Project: /user/username/projects/sample1/tests/tsconfig.json WatchType: Type roots
-Info 64   [00:02:18.000] Finishing updateGraphWorker: Project: /user/username/projects/sample1/tests/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 65   [00:02:19.000] Project '/user/username/projects/sample1/tests/tsconfig.json' (Configured)
-Info 66   [00:02:20.000] 	Files (6)
+Info 27   [00:01:41.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/sample1/logic/index.ts 500 undefined WatchType: Closed Script info
+Info 28   [00:01:42.000] ======== Resolving module '../core/myClass' from '/user/username/projects/sample1/logic/index.ts'. ========
+Info 29   [00:01:43.000] Using compiler options of project reference redirect '/user/username/projects/sample1/logic/tsconfig.json'.
+Info 30   [00:01:44.000] Module resolution kind is not specified, using 'NodeJs'.
+Info 31   [00:01:45.000] Loading module as file / folder, candidate module location '/user/username/projects/sample1/core/myClass', target file types: TypeScript, Declaration.
+Info 32   [00:01:46.000] File '/user/username/projects/sample1/core/myClass.ts' exist - use it as a name resolution result.
+Info 33   [00:01:47.000] ======== Module name '../core/myClass' was successfully resolved to '/user/username/projects/sample1/core/myClass.ts'. ========
+Info 34   [00:01:48.000] ======== Resolving module '../core' from '/user/username/projects/sample1/logic/index.ts'. ========
+Info 35   [00:01:49.000] Using compiler options of project reference redirect '/user/username/projects/sample1/logic/tsconfig.json'.
+Info 36   [00:01:50.000] Module resolution kind is not specified, using 'NodeJs'.
+Info 37   [00:01:51.000] Loading module as file / folder, candidate module location '/user/username/projects/sample1/core', target file types: TypeScript, Declaration.
+Info 38   [00:01:52.000] File '/user/username/projects/sample1/core.ts' does not exist.
+Info 39   [00:01:53.000] File '/user/username/projects/sample1/core.tsx' does not exist.
+Info 40   [00:01:54.000] File '/user/username/projects/sample1/core.d.ts' does not exist.
+Info 41   [00:01:55.000] File '/user/username/projects/sample1/core/package.json' does not exist.
+Info 42   [00:01:56.000] File '/user/username/projects/sample1/core/index.ts' exist - use it as a name resolution result.
+Info 43   [00:01:57.000] ======== Module name '../core' was successfully resolved to '/user/username/projects/sample1/core/index.ts'. ========
+Info 44   [00:01:58.000] ======== Resolving module '../core/anotherClass' from '/user/username/projects/sample1/logic/index.ts'. ========
+Info 45   [00:01:59.000] Using compiler options of project reference redirect '/user/username/projects/sample1/logic/tsconfig.json'.
+Info 46   [00:02:00.000] Module resolution kind is not specified, using 'NodeJs'.
+Info 47   [00:02:01.000] Loading module as file / folder, candidate module location '/user/username/projects/sample1/core/anotherClass', target file types: TypeScript, Declaration.
+Info 48   [00:02:02.000] File '/user/username/projects/sample1/core/anotherClass.ts' exist - use it as a name resolution result.
+Info 49   [00:02:03.000] ======== Module name '../core/anotherClass' was successfully resolved to '/user/username/projects/sample1/core/anotherClass.ts'. ========
+Info 50   [00:02:04.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/sample1/core/myClass.ts 500 undefined WatchType: Closed Script info
+Info 51   [00:02:05.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/sample1/core/index.ts 500 undefined WatchType: Closed Script info
+Info 52   [00:02:06.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/sample1/core/anotherClass.ts 500 undefined WatchType: Closed Script info
+Info 53   [00:02:07.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info 54   [00:02:08.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/sample1/tests/node_modules/@types 1 undefined Project: /user/username/projects/sample1/tests/tsconfig.json WatchType: Type roots
+Info 55   [00:02:09.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/sample1/tests/node_modules/@types 1 undefined Project: /user/username/projects/sample1/tests/tsconfig.json WatchType: Type roots
+Info 56   [00:02:10.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/sample1/node_modules/@types 1 undefined Project: /user/username/projects/sample1/tests/tsconfig.json WatchType: Type roots
+Info 57   [00:02:11.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/sample1/node_modules/@types 1 undefined Project: /user/username/projects/sample1/tests/tsconfig.json WatchType: Type roots
+Info 58   [00:02:12.000] Finishing updateGraphWorker: Project: /user/username/projects/sample1/tests/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 59   [00:02:13.000] Project '/user/username/projects/sample1/tests/tsconfig.json' (Configured)
+Info 60   [00:02:14.000] 	Files (6)
 	/a/lib/lib.d.ts
 	/user/username/projects/sample1/core/myClass.ts
 	/user/username/projects/sample1/core/index.ts
@@ -828,16 +766,16 @@ Info 66   [00:02:20.000] 	Files (6)
 	index.ts
 	  Matched by default include pattern '**/*'
 
-Info 67   [00:02:21.000] -----------------------------------------------
-Info 68   [00:02:22.000] Search path: /user/username/projects/sample1/tests
-Info 69   [00:02:23.000] For info: /user/username/projects/sample1/tests/tsconfig.json :: No config files found.
-Info 70   [00:02:24.000] Project '/user/username/projects/sample1/tests/tsconfig.json' (Configured)
-Info 70   [00:02:25.000] 	Files (6)
+Info 61   [00:02:15.000] -----------------------------------------------
+Info 62   [00:02:16.000] Search path: /user/username/projects/sample1/tests
+Info 63   [00:02:17.000] For info: /user/username/projects/sample1/tests/tsconfig.json :: No config files found.
+Info 64   [00:02:18.000] Project '/user/username/projects/sample1/tests/tsconfig.json' (Configured)
+Info 64   [00:02:19.000] 	Files (6)
 
-Info 70   [00:02:26.000] -----------------------------------------------
-Info 70   [00:02:27.000] Open files: 
-Info 70   [00:02:28.000] 	FileName: /user/username/projects/sample1/tests/index.ts ProjectRootPath: undefined
-Info 70   [00:02:29.000] 		Projects: /user/username/projects/sample1/tests/tsconfig.json
+Info 64   [00:02:20.000] -----------------------------------------------
+Info 64   [00:02:21.000] Open files: 
+Info 64   [00:02:22.000] 	FileName: /user/username/projects/sample1/tests/index.ts ProjectRootPath: undefined
+Info 64   [00:02:23.000] 		Projects: /user/username/projects/sample1/tests/tsconfig.json
 After request
 
 PolledWatches::
@@ -852,8 +790,6 @@ FsWatches::
 /user/username/projects/sample1/logic/tsconfig.json:
   {}
 /user/username/projects/sample1/core/tsconfig.json:
-  {}
-/user/username/projects/sample1:
   {}
 /user/username/projects/sample1/logic/index.ts:
   {}
@@ -874,7 +810,7 @@ FsWatchesRecursive::
 /user/username/projects/sample1/core:
   {}
 
-Info 70   [00:02:30.000] response:
+Info 64   [00:02:24.000] response:
     {
       "responseRequired": false
     }

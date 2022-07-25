@@ -243,9 +243,6 @@ describe("unittests:: tsc:: cacheResolutions::", () => {
             {
                 caption: "modify c/ca/caa/randomFileForImport by adding import",
                 edit: fs => prependText(fs, "/src/project/c/ca/caa/randomFileForImport.ts", `import type { ImportInterface0 } from "pkg0";\n`),
-                discrepancyExplanation: () => [
-                    "Failed lookups shouldnt matter in cache resolution and should be ignored which is TODO (shkamat)"
-                ]
             },
         ]
     });

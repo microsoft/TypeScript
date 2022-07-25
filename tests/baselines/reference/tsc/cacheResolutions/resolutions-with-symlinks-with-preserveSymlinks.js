@@ -48,7 +48,7 @@ export declare const x = 10;
 
 
 //// [/src/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../a/lib/lib.d.ts","./node_modules/pkg0/index.d.ts","./main.ts","./randomfileforimport.ts","./","./node_modules/pkg0/package.json","./node_modules/pkg0.ts","./node_modules/pkg0.tsx","./node_modules/pkg0.d.ts","./node_modules/pkg0/index.ts","./node_modules/pkg0/index.tsx"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"769951468-export interface ImportInterface0 {}",{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-3531856636-export {};\n"},{"version":"-10726455937-export const x = 10;","signature":"-6821242887-export declare const x = 10;\n"}],"options":{"cacheResolutions":true,"composite":true},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,3,2,4],"latestChangedDtsFile":"./randomFileForImport.d.ts","cacheResolutions":{"resolutions":[{"resolvedModule":{"resolvedFileName":2,"isExternalLibraryImport":true},"failedLookupLocations":[6,7,8,9,10,11]}],"names":["pkg0"],"resolutionEntries":[[1,1]],"modules":[[5,[1]]]}},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../a/lib/lib.d.ts","./node_modules/pkg0/index.d.ts","./main.ts","./randomfileforimport.ts","./"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"769951468-export interface ImportInterface0 {}",{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-3531856636-export {};\n"},{"version":"-10726455937-export const x = 10;","signature":"-6821242887-export declare const x = 10;\n"}],"options":{"cacheResolutions":true,"composite":true},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,3,2,4],"latestChangedDtsFile":"./randomFileForImport.d.ts","cacheResolutions":{"resolutions":[{"resolvedModule":{"resolvedFileName":2,"isExternalLibraryImport":true}}],"names":["pkg0"],"resolutionEntries":[[1,1]],"modules":[[5,[1]]]}},"version":"FakeTSVersion"}
 
 //// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -58,13 +58,7 @@ export declare const x = 10;
       "./node_modules/pkg0/index.d.ts",
       "./main.ts",
       "./randomfileforimport.ts",
-      "./",
-      "./node_modules/pkg0/package.json",
-      "./node_modules/pkg0.ts",
-      "./node_modules/pkg0.tsx",
-      "./node_modules/pkg0.d.ts",
-      "./node_modules/pkg0/index.ts",
-      "./node_modules/pkg0/index.tsx"
+      "./"
     ],
     "fileNamesList": [
       [
@@ -126,29 +120,13 @@ export declare const x = 10;
             "resolvedModule": {
               "resolvedFileName": 2,
               "isExternalLibraryImport": true
-            },
-            "failedLookupLocations": [
-              6,
-              7,
-              8,
-              9,
-              10,
-              11
-            ]
+            }
           },
           "resolutionId": 1,
           "resolvedModule": {
             "resolvedFileName": "./node_modules/pkg0/index.d.ts",
             "isExternalLibraryImport": true
-          },
-          "failedLookupLocations": [
-            "./node_modules/pkg0/package.json",
-            "./node_modules/pkg0.ts",
-            "./node_modules/pkg0.tsx",
-            "./node_modules/pkg0.d.ts",
-            "./node_modules/pkg0/index.ts",
-            "./node_modules/pkg0/index.tsx"
-          ]
+          }
         }
       ],
       "names": [
@@ -167,15 +145,7 @@ export declare const x = 10;
             "resolvedModule": {
               "resolvedFileName": "./node_modules/pkg0/index.d.ts",
               "isExternalLibraryImport": true
-            },
-            "failedLookupLocations": [
-              "./node_modules/pkg0/package.json",
-              "./node_modules/pkg0.ts",
-              "./node_modules/pkg0.tsx",
-              "./node_modules/pkg0.d.ts",
-              "./node_modules/pkg0/index.ts",
-              "./node_modules/pkg0/index.tsx"
-            ]
+            }
           }
         }
       ],
@@ -191,15 +161,7 @@ export declare const x = 10;
                 "resolvedModule": {
                   "resolvedFileName": "./node_modules/pkg0/index.d.ts",
                   "isExternalLibraryImport": true
-                },
-                "failedLookupLocations": [
-                  "./node_modules/pkg0/package.json",
-                  "./node_modules/pkg0.ts",
-                  "./node_modules/pkg0.tsx",
-                  "./node_modules/pkg0.d.ts",
-                  "./node_modules/pkg0/index.ts",
-                  "./node_modules/pkg0/index.tsx"
-                ]
+                }
               }
             }
           ]
@@ -208,7 +170,7 @@ export declare const x = 10;
     }
   },
   "version": "FakeTSVersion",
-  "size": 1437
+  "size": 1221
 }
 
 
@@ -249,15 +211,7 @@ pkg0: {
     "resolvedFileName": "/src/project/node_modules/pkg0/index.d.ts",
     "isExternalLibraryImport": true,
     "extension": ".d.ts"
-  },
-  "failedLookupLocations": [
-    "/src/project/node_modules/pkg0/package.json",
-    "/src/project/node_modules/pkg0.ts",
-    "/src/project/node_modules/pkg0.tsx",
-    "/src/project/node_modules/pkg0.d.ts",
-    "/src/project/node_modules/pkg0/index.ts",
-    "/src/project/node_modules/pkg0/index.tsx"
-  ]
+  }
 }
 
 File: /src/project/randomFileForImport.ts
@@ -267,15 +221,7 @@ pkg0: {
     "resolvedFileName": "/src/project/node_modules/pkg0/index.d.ts",
     "isExternalLibraryImport": true,
     "extension": ".d.ts"
-  },
-  "failedLookupLocations": [
-    "/src/project/node_modules/pkg0/package.json",
-    "/src/project/node_modules/pkg0.ts",
-    "/src/project/node_modules/pkg0.tsx",
-    "/src/project/node_modules/pkg0.d.ts",
-    "/src/project/node_modules/pkg0/index.ts",
-    "/src/project/node_modules/pkg0/index.tsx"
-  ]
+  }
 }
 
 PolledWatches::
@@ -288,7 +234,7 @@ exitCode:: ExitStatus.Success
 
 //// [/src/project/randomFileForImport.js] file written with same contents
 //// [/src/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../a/lib/lib.d.ts","./node_modules/pkg0/index.d.ts","./main.ts","./randomfileforimport.ts","./","./node_modules/pkg0/package.json","./node_modules/pkg0.ts","./node_modules/pkg0.tsx","./node_modules/pkg0.d.ts","./node_modules/pkg0/index.ts","./node_modules/pkg0/index.tsx"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"769951468-export interface ImportInterface0 {}",{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-3531856636-export {};\n"},{"version":"10580737119-import type { ImportInterface0 } from \"pkg0\";\nexport const x = 10;","signature":"-6821242887-export declare const x = 10;\n"}],"options":{"cacheResolutions":true,"composite":true},"fileIdsList":[[2]],"referencedMap":[[3,1],[4,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,3,2,4],"latestChangedDtsFile":"./randomFileForImport.d.ts","cacheResolutions":{"resolutions":[{"resolvedModule":{"resolvedFileName":2,"isExternalLibraryImport":true},"failedLookupLocations":[6,7,8,9,10,11]}],"names":["pkg0"],"resolutionEntries":[[1,1]],"modules":[[5,[1]]]}},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../a/lib/lib.d.ts","./node_modules/pkg0/index.d.ts","./main.ts","./randomfileforimport.ts","./"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"769951468-export interface ImportInterface0 {}",{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-3531856636-export {};\n"},{"version":"10580737119-import type { ImportInterface0 } from \"pkg0\";\nexport const x = 10;","signature":"-6821242887-export declare const x = 10;\n"}],"options":{"cacheResolutions":true,"composite":true},"fileIdsList":[[2]],"referencedMap":[[3,1],[4,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,3,2,4],"latestChangedDtsFile":"./randomFileForImport.d.ts","cacheResolutions":{"resolutions":[{"resolvedModule":{"resolvedFileName":2,"isExternalLibraryImport":true}}],"names":["pkg0"],"resolutionEntries":[[1,1]],"modules":[[5,[1]]]}},"version":"FakeTSVersion"}
 
 //// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -298,13 +244,7 @@ exitCode:: ExitStatus.Success
       "./node_modules/pkg0/index.d.ts",
       "./main.ts",
       "./randomfileforimport.ts",
-      "./",
-      "./node_modules/pkg0/package.json",
-      "./node_modules/pkg0.ts",
-      "./node_modules/pkg0.tsx",
-      "./node_modules/pkg0.d.ts",
-      "./node_modules/pkg0/index.ts",
-      "./node_modules/pkg0/index.tsx"
+      "./"
     ],
     "fileNamesList": [
       [
@@ -369,29 +309,13 @@ exitCode:: ExitStatus.Success
             "resolvedModule": {
               "resolvedFileName": 2,
               "isExternalLibraryImport": true
-            },
-            "failedLookupLocations": [
-              6,
-              7,
-              8,
-              9,
-              10,
-              11
-            ]
+            }
           },
           "resolutionId": 1,
           "resolvedModule": {
             "resolvedFileName": "./node_modules/pkg0/index.d.ts",
             "isExternalLibraryImport": true
-          },
-          "failedLookupLocations": [
-            "./node_modules/pkg0/package.json",
-            "./node_modules/pkg0.ts",
-            "./node_modules/pkg0.tsx",
-            "./node_modules/pkg0.d.ts",
-            "./node_modules/pkg0/index.ts",
-            "./node_modules/pkg0/index.tsx"
-          ]
+          }
         }
       ],
       "names": [
@@ -410,15 +334,7 @@ exitCode:: ExitStatus.Success
             "resolvedModule": {
               "resolvedFileName": "./node_modules/pkg0/index.d.ts",
               "isExternalLibraryImport": true
-            },
-            "failedLookupLocations": [
-              "./node_modules/pkg0/package.json",
-              "./node_modules/pkg0.ts",
-              "./node_modules/pkg0.tsx",
-              "./node_modules/pkg0.d.ts",
-              "./node_modules/pkg0/index.ts",
-              "./node_modules/pkg0/index.tsx"
-            ]
+            }
           }
         }
       ],
@@ -434,15 +350,7 @@ exitCode:: ExitStatus.Success
                 "resolvedModule": {
                   "resolvedFileName": "./node_modules/pkg0/index.d.ts",
                   "isExternalLibraryImport": true
-                },
-                "failedLookupLocations": [
-                  "./node_modules/pkg0/package.json",
-                  "./node_modules/pkg0.ts",
-                  "./node_modules/pkg0.tsx",
-                  "./node_modules/pkg0.d.ts",
-                  "./node_modules/pkg0/index.ts",
-                  "./node_modules/pkg0/index.tsx"
-                ]
+                }
               }
             }
           ]
@@ -451,6 +359,6 @@ exitCode:: ExitStatus.Success
     }
   },
   "version": "FakeTSVersion",
-  "size": 1491
+  "size": 1275
 }
 

@@ -546,7 +546,6 @@ type ReadableProgramBuildInfoResolution = Omit<ts.ProgramBuildInfoResolution, "r
     readonly resolutionId: ts.ProgramBuildInfoResolutionId;
     readonly resolvedModule: ReadableProgramBuildInfoResolvedModuleFull | undefined;
     readonly resolvedTypeReferenceDirective: ReadableProgramBuildInfoResolvedTypeReferenceDirective | undefined;
-    readonly failedLookupLocations: readonly string[] | undefined;
     readonly affectingLocations: readonly string[] | undefined;
 };
 type ReadableWithOriginal<T, O> = T & {
@@ -773,7 +772,6 @@ function generateBuildInfoProgramBaseline(sys: ts.System, buildInfoPath: string,
             ...resolution,
             resolvedModule: toReadableProgramBuildInfoResolved(resolution.resolvedModule),
             resolvedTypeReferenceDirective: toReadableProgramBuildInfoResolved(resolution.resolvedTypeReferenceDirective),
-            failedLookupLocations: resolution.failedLookupLocations?.map(toFileName),
             affectingLocations: resolution.affectingLocations?.map(toFileName),
         };
     }

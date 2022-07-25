@@ -134,46 +134,40 @@ Info 23   [00:01:02.000] File '/user/username/projects/sample1/logic.d.ts' does 
 Info 24   [00:01:03.000] File '/user/username/projects/sample1/logic/package.json' does not exist.
 Info 25   [00:01:04.000] File '/user/username/projects/sample1/logic/index.ts' exist - use it as a name resolution result.
 Info 26   [00:01:05.000] ======== Module name '../logic' was successfully resolved to '/user/username/projects/sample1/logic/index.ts'. ========
-Info 27   [00:01:06.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/sample1 0 undefined Project: /user/username/projects/sample1/tests/tsconfig.json WatchType: Failed Lookup Locations
-Info 28   [00:01:07.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/sample1 0 undefined Project: /user/username/projects/sample1/tests/tsconfig.json WatchType: Failed Lookup Locations
-Info 29   [00:01:08.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/sample1/logic 1 undefined Project: /user/username/projects/sample1/tests/tsconfig.json WatchType: Failed Lookup Locations
-Info 30   [00:01:09.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/sample1/logic 1 undefined Project: /user/username/projects/sample1/tests/tsconfig.json WatchType: Failed Lookup Locations
-Info 31   [00:01:10.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/sample1/logic/index.ts 500 undefined WatchType: Closed Script info
-Info 32   [00:01:11.000] ======== Resolving module '../core/myClass' from '/user/username/projects/sample1/logic/index.ts'. ========
-Info 33   [00:01:12.000] Using compiler options of project reference redirect '/user/username/projects/sample1/logic/tsconfig.json'.
-Info 34   [00:01:13.000] Module resolution kind is not specified, using 'NodeJs'.
-Info 35   [00:01:14.000] Loading module as file / folder, candidate module location '/user/username/projects/sample1/core/myClass', target file types: TypeScript, Declaration.
-Info 36   [00:01:15.000] File '/user/username/projects/sample1/core/myClass.ts' exist - use it as a name resolution result.
-Info 37   [00:01:16.000] ======== Module name '../core/myClass' was successfully resolved to '/user/username/projects/sample1/core/myClass.ts'. ========
-Info 38   [00:01:17.000] ======== Resolving module '../core' from '/user/username/projects/sample1/logic/index.ts'. ========
-Info 39   [00:01:18.000] Using compiler options of project reference redirect '/user/username/projects/sample1/logic/tsconfig.json'.
-Info 40   [00:01:19.000] Module resolution kind is not specified, using 'NodeJs'.
-Info 41   [00:01:20.000] Loading module as file / folder, candidate module location '/user/username/projects/sample1/core', target file types: TypeScript, Declaration.
-Info 42   [00:01:21.000] File '/user/username/projects/sample1/core.ts' does not exist.
-Info 43   [00:01:22.000] File '/user/username/projects/sample1/core.tsx' does not exist.
-Info 44   [00:01:23.000] File '/user/username/projects/sample1/core.d.ts' does not exist.
-Info 45   [00:01:24.000] File '/user/username/projects/sample1/core/package.json' does not exist.
-Info 46   [00:01:25.000] File '/user/username/projects/sample1/core/index.ts' exist - use it as a name resolution result.
-Info 47   [00:01:26.000] ======== Module name '../core' was successfully resolved to '/user/username/projects/sample1/core/index.ts'. ========
-Info 48   [00:01:27.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/sample1/core 1 undefined Project: /user/username/projects/sample1/tests/tsconfig.json WatchType: Failed Lookup Locations
-Info 49   [00:01:28.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/sample1/core 1 undefined Project: /user/username/projects/sample1/tests/tsconfig.json WatchType: Failed Lookup Locations
-Info 50   [00:01:29.000] ======== Resolving module '../core/anotherClass' from '/user/username/projects/sample1/logic/index.ts'. ========
-Info 51   [00:01:30.000] Using compiler options of project reference redirect '/user/username/projects/sample1/logic/tsconfig.json'.
-Info 52   [00:01:31.000] Module resolution kind is not specified, using 'NodeJs'.
-Info 53   [00:01:32.000] Loading module as file / folder, candidate module location '/user/username/projects/sample1/core/anotherClass', target file types: TypeScript, Declaration.
-Info 54   [00:01:33.000] File '/user/username/projects/sample1/core/anotherClass.ts' exist - use it as a name resolution result.
-Info 55   [00:01:34.000] ======== Module name '../core/anotherClass' was successfully resolved to '/user/username/projects/sample1/core/anotherClass.ts'. ========
-Info 56   [00:01:35.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/sample1/core/myClass.ts 500 undefined WatchType: Closed Script info
-Info 57   [00:01:36.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/sample1/core/index.ts 500 undefined WatchType: Closed Script info
-Info 58   [00:01:37.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/sample1/core/anotherClass.ts 500 undefined WatchType: Closed Script info
-Info 59   [00:01:38.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info 60   [00:01:39.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/sample1/tests/node_modules/@types 1 undefined Project: /user/username/projects/sample1/tests/tsconfig.json WatchType: Type roots
-Info 61   [00:01:40.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/sample1/tests/node_modules/@types 1 undefined Project: /user/username/projects/sample1/tests/tsconfig.json WatchType: Type roots
-Info 62   [00:01:41.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/sample1/node_modules/@types 1 undefined Project: /user/username/projects/sample1/tests/tsconfig.json WatchType: Type roots
-Info 63   [00:01:42.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/sample1/node_modules/@types 1 undefined Project: /user/username/projects/sample1/tests/tsconfig.json WatchType: Type roots
-Info 64   [00:01:43.000] Finishing updateGraphWorker: Project: /user/username/projects/sample1/tests/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 65   [00:01:44.000] Project '/user/username/projects/sample1/tests/tsconfig.json' (Configured)
-Info 66   [00:01:45.000] 	Files (6)
+Info 27   [00:01:06.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/sample1/logic/index.ts 500 undefined WatchType: Closed Script info
+Info 28   [00:01:07.000] ======== Resolving module '../core/myClass' from '/user/username/projects/sample1/logic/index.ts'. ========
+Info 29   [00:01:08.000] Using compiler options of project reference redirect '/user/username/projects/sample1/logic/tsconfig.json'.
+Info 30   [00:01:09.000] Module resolution kind is not specified, using 'NodeJs'.
+Info 31   [00:01:10.000] Loading module as file / folder, candidate module location '/user/username/projects/sample1/core/myClass', target file types: TypeScript, Declaration.
+Info 32   [00:01:11.000] File '/user/username/projects/sample1/core/myClass.ts' exist - use it as a name resolution result.
+Info 33   [00:01:12.000] ======== Module name '../core/myClass' was successfully resolved to '/user/username/projects/sample1/core/myClass.ts'. ========
+Info 34   [00:01:13.000] ======== Resolving module '../core' from '/user/username/projects/sample1/logic/index.ts'. ========
+Info 35   [00:01:14.000] Using compiler options of project reference redirect '/user/username/projects/sample1/logic/tsconfig.json'.
+Info 36   [00:01:15.000] Module resolution kind is not specified, using 'NodeJs'.
+Info 37   [00:01:16.000] Loading module as file / folder, candidate module location '/user/username/projects/sample1/core', target file types: TypeScript, Declaration.
+Info 38   [00:01:17.000] File '/user/username/projects/sample1/core.ts' does not exist.
+Info 39   [00:01:18.000] File '/user/username/projects/sample1/core.tsx' does not exist.
+Info 40   [00:01:19.000] File '/user/username/projects/sample1/core.d.ts' does not exist.
+Info 41   [00:01:20.000] File '/user/username/projects/sample1/core/package.json' does not exist.
+Info 42   [00:01:21.000] File '/user/username/projects/sample1/core/index.ts' exist - use it as a name resolution result.
+Info 43   [00:01:22.000] ======== Module name '../core' was successfully resolved to '/user/username/projects/sample1/core/index.ts'. ========
+Info 44   [00:01:23.000] ======== Resolving module '../core/anotherClass' from '/user/username/projects/sample1/logic/index.ts'. ========
+Info 45   [00:01:24.000] Using compiler options of project reference redirect '/user/username/projects/sample1/logic/tsconfig.json'.
+Info 46   [00:01:25.000] Module resolution kind is not specified, using 'NodeJs'.
+Info 47   [00:01:26.000] Loading module as file / folder, candidate module location '/user/username/projects/sample1/core/anotherClass', target file types: TypeScript, Declaration.
+Info 48   [00:01:27.000] File '/user/username/projects/sample1/core/anotherClass.ts' exist - use it as a name resolution result.
+Info 49   [00:01:28.000] ======== Module name '../core/anotherClass' was successfully resolved to '/user/username/projects/sample1/core/anotherClass.ts'. ========
+Info 50   [00:01:29.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/sample1/core/myClass.ts 500 undefined WatchType: Closed Script info
+Info 51   [00:01:30.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/sample1/core/index.ts 500 undefined WatchType: Closed Script info
+Info 52   [00:01:31.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/sample1/core/anotherClass.ts 500 undefined WatchType: Closed Script info
+Info 53   [00:01:32.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info 54   [00:01:33.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/sample1/tests/node_modules/@types 1 undefined Project: /user/username/projects/sample1/tests/tsconfig.json WatchType: Type roots
+Info 55   [00:01:34.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/sample1/tests/node_modules/@types 1 undefined Project: /user/username/projects/sample1/tests/tsconfig.json WatchType: Type roots
+Info 56   [00:01:35.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/sample1/node_modules/@types 1 undefined Project: /user/username/projects/sample1/tests/tsconfig.json WatchType: Type roots
+Info 57   [00:01:36.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/sample1/node_modules/@types 1 undefined Project: /user/username/projects/sample1/tests/tsconfig.json WatchType: Type roots
+Info 58   [00:01:37.000] Finishing updateGraphWorker: Project: /user/username/projects/sample1/tests/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 59   [00:01:38.000] Project '/user/username/projects/sample1/tests/tsconfig.json' (Configured)
+Info 60   [00:01:39.000] 	Files (6)
 	/a/lib/lib.d.ts
 	/user/username/projects/sample1/core/myClass.ts
 	/user/username/projects/sample1/core/index.ts
@@ -195,16 +189,16 @@ Info 66   [00:01:45.000] 	Files (6)
 	index.ts
 	  Matched by default include pattern '**/*'
 
-Info 67   [00:01:46.000] -----------------------------------------------
-Info 68   [00:01:47.000] Search path: /user/username/projects/sample1/tests
-Info 69   [00:01:48.000] For info: /user/username/projects/sample1/tests/tsconfig.json :: No config files found.
-Info 70   [00:01:49.000] Project '/user/username/projects/sample1/tests/tsconfig.json' (Configured)
-Info 70   [00:01:50.000] 	Files (6)
+Info 61   [00:01:40.000] -----------------------------------------------
+Info 62   [00:01:41.000] Search path: /user/username/projects/sample1/tests
+Info 63   [00:01:42.000] For info: /user/username/projects/sample1/tests/tsconfig.json :: No config files found.
+Info 64   [00:01:43.000] Project '/user/username/projects/sample1/tests/tsconfig.json' (Configured)
+Info 64   [00:01:44.000] 	Files (6)
 
-Info 70   [00:01:51.000] -----------------------------------------------
-Info 70   [00:01:52.000] Open files: 
-Info 70   [00:01:53.000] 	FileName: /user/username/projects/sample1/tests/index.ts ProjectRootPath: undefined
-Info 70   [00:01:54.000] 		Projects: /user/username/projects/sample1/tests/tsconfig.json
+Info 64   [00:01:45.000] -----------------------------------------------
+Info 64   [00:01:46.000] Open files: 
+Info 64   [00:01:47.000] 	FileName: /user/username/projects/sample1/tests/index.ts ProjectRootPath: undefined
+Info 64   [00:01:48.000] 		Projects: /user/username/projects/sample1/tests/tsconfig.json
 After request
 
 PolledWatches::
@@ -219,8 +213,6 @@ FsWatches::
 /user/username/projects/sample1/logic/tsconfig.json:
   {}
 /user/username/projects/sample1/core/tsconfig.json:
-  {}
-/user/username/projects/sample1:
   {}
 /user/username/projects/sample1/logic/index.ts:
   {}
@@ -241,7 +233,7 @@ FsWatchesRecursive::
 /user/username/projects/sample1/core:
   {}
 
-Info 70   [00:01:55.000] response:
+Info 64   [00:01:49.000] response:
     {
       "responseRequired": false
     }
