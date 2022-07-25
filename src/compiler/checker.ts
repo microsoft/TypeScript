@@ -25428,8 +25428,12 @@ namespace ts {
                     const discriminant = keyPropertyName && getTypeOfPropertyOfType(c, keyPropertyName);
                     const matching = discriminant && getConstituentTypeForKeyType(type as UnionType, discriminant);
                     // For each constituent t in the current type, if t and and c are directly related, pick the most
-                    // specific of the two.
-                    const directlyRelated = mapType(matching || type, t => isRelated(t, c) ? t : isRelated(c, t) ? c : neverType);
+                    // specific of the two. When t and c are related in both directions, we prefer c for type predicates
+                    // because that is the asserted type, but t for `instanceof` because generics aren't reflected in
+                    // prototype object types.
+                    const directlyRelated = mapType(matching || type, checkDerived ?
+                        t => isTypeDerivedFrom(t, c) ? t : isTypeDerivedFrom(c, t) ? c : neverType :
+                        t => isTypeSubtypeOf(c, t) ? c : isTypeSubtypeOf(t, c) ? t : neverType);
                     // If no constituents are directly related, create intersections for any generic constituents that
                     // are related by constraint.
                     return directlyRelated.flags & TypeFlags.Never ?
