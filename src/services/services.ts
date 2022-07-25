@@ -36,11 +36,12 @@ import {
     Completions,
     computePositionOfLineAndCharacter,
     computeSuggestionDiagnostics,
+    convertToOptionsWithAbsolutePaths,
     createDocumentRegistry,
     createGetCanonicalFileName,
     createMultiMap,
+    createOldBuildInfoProgram,
     createProgram,
-    CreateProgramOptions,
     createSourceFile,
     CreateSourceFileOptions,
     createTextSpanFromBounds,
@@ -108,6 +109,7 @@ import {
     getNonAssignedNameOfDeclaration,
     getNormalizedAbsolutePath,
     getObjectFlags,
+    getProgramBuildInfoFilePathDecoder,
     getScriptKind,
     getSetExternalModuleIndicator,
     getSnapshotText,
@@ -183,8 +185,8 @@ import {
     isTagName,
     isTextWhiteSpaceLike,
     isThisTypeParameter,
-    JSDoc,
     JsDoc,
+    JSDoc,
     JSDocContainer,
     JSDocTagInfo,
     JsonSourceFile,
@@ -225,6 +227,7 @@ import {
     ObjectFlags,
     ObjectLiteralElement,
     ObjectLiteralExpression,
+    OldBuildInfoProgramConstructor,
     OperationCanceledException,
     OrganizeImports,
     OrganizeImportsArgs,
@@ -243,6 +246,7 @@ import {
     PropertyName,
     Push,
     QuickInfo,
+    readBuildInfoForProgram,
     refactor,
     RefactorContext,
     RefactorEditInfo,
@@ -1601,6 +1605,28 @@ export function createLanguageService(
         return sourceFile;
     }
 
+    function getOldProgram(options: CompilerOptions, compilerHost: CompilerHost): Program | OldBuildInfoProgramConstructor | undefined {
+        if (program) return program;
+        if (!options.cacheResolutions) return undefined;
+        const buildInfoResult = readBuildInfoForProgram(options, compilerHost);
+        if (!buildInfoResult?.buildInfo.program!.cacheResolutions) return undefined;
+
+        const buildInfoFilePathDecoder = getProgramBuildInfoFilePathDecoder(buildInfoResult.buildInfo.program.fileNames, buildInfoResult.buildInfoPath, host.getCurrentDirectory(), createGetCanonicalFileName(compilerHost.useCaseSensitiveFileNames()));
+        const compilerOptions = buildInfoResult.buildInfo.program.options ?
+            convertToOptionsWithAbsolutePaths(buildInfoResult.buildInfo.program.options, buildInfoFilePathDecoder.toAbsolutePath) :
+            {};
+        compilerOptions.configFilePath = options.configFilePath;
+        return host => createOldBuildInfoProgram(
+            host,
+            options,
+            /*cacheResolutions*/ undefined,
+            {
+                cache: buildInfoResult.buildInfo.program!.cacheResolutions!,
+                getProgramBuildInfoFilePathDecoder: () => buildInfoFilePathDecoder
+            },
+        );
+    }
+
     function synchronizeHostData(): void {
         Debug.assert(languageServiceMode !== LanguageServiceMode.Syntactic);
         // perform fast check if host supports it
@@ -1710,15 +1736,13 @@ export function createLanguageService(
         // instance.  If we cancel midway through, we may end up in an inconsistent state where
         // the program points to old source files that have been invalidated because of
         // incremental parsing.
-
-        const options: CreateProgramOptions = {
+        program = createProgram({
             rootNames: rootFileNames,
             options: newSettings,
             host: compilerHost,
-            oldProgram: program,
+            oldProgram: getOldProgram(newSettings, compilerHost),
             projectReferences
-        };
-        program = createProgram(options);
+        });
 
         // 'getOrCreateSourceFile' depends on caching but should be used past this point.
         // After this point, the cache needs to be cleared to allow all collected snapshots to be released

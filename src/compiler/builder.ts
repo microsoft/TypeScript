@@ -1941,7 +1941,8 @@ export interface ProgramBuildInfoPathDecoder {
     getCanonicalFileName: GetCanonicalFileName;
 }
 
-function getProgramBuildInfoFilePathDecoder(fileNames: readonly string[], buildInfoPath: string, currentDirectory: string, getCanonicalFileName: GetCanonicalFileName): ProgramBuildInfoPathDecoder {
+/** @internal */
+export function getProgramBuildInfoFilePathDecoder(fileNames: readonly string[], buildInfoPath: string, currentDirectory: string, getCanonicalFileName: GetCanonicalFileName): ProgramBuildInfoPathDecoder {
     const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(buildInfoPath, currentDirectory));
     let filePaths: Path[] | undefined;
     let fileAbsolutePaths: string[] | undefined;

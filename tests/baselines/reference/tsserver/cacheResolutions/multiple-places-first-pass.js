@@ -704,105 +704,45 @@ Info 20   [00:03:15.000] FileWatcher:: Added:: WatchInfo: /src/project/e/ea/eaa/
 Info 21   [00:03:16.000] FileWatcher:: Added:: WatchInfo: /src/project/e/ea/eaa/eaaa/fileWithImports.ts 500 undefined WatchType: Closed Script info
 Info 22   [00:03:17.000] FileWatcher:: Added:: WatchInfo: /src/project/e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts 500 undefined WatchType: Closed Script info
 Info 23   [00:03:18.000] Starting updateGraphWorker: Project: /src/project/tsconfig.json
-Info 24   [00:03:19.000] ======== Resolving module 'pkg0' from '/src/project/fileWithImports.ts'. ========
-Info 25   [00:03:20.000] Module resolution kind is not specified, using 'NodeJs'.
-Info 26   [00:03:21.000] Loading module 'pkg0' from 'node_modules' folder, target file types: TypeScript, Declaration.
-Info 27   [00:03:22.000] File '/src/project/node_modules/pkg0/package.json' does not exist.
-Info 28   [00:03:23.000] File '/src/project/node_modules/pkg0.ts' does not exist.
-Info 29   [00:03:24.000] File '/src/project/node_modules/pkg0.tsx' does not exist.
-Info 30   [00:03:25.000] File '/src/project/node_modules/pkg0.d.ts' does not exist.
-Info 31   [00:03:26.000] File '/src/project/node_modules/pkg0/index.ts' does not exist.
-Info 32   [00:03:27.000] File '/src/project/node_modules/pkg0/index.tsx' does not exist.
-Info 33   [00:03:28.000] File '/src/project/node_modules/pkg0/index.d.ts' exist - use it as a name resolution result.
-Info 34   [00:03:29.000] Resolving real path for '/src/project/node_modules/pkg0/index.d.ts', result '/src/project/node_modules/pkg0/index.d.ts'.
-Info 35   [00:03:30.000] ======== Module name 'pkg0' was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'. ========
-Info 36   [00:03:31.000] DirectoryWatcher:: Added:: WatchInfo: /src/project/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
-Info 37   [00:03:32.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /src/project/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
-Info 38   [00:03:33.000] ======== Resolving module 'pkg0' from '/src/project/a/fileWithImports.ts'. ========
-Info 39   [00:03:34.000] Module resolution kind is not specified, using 'NodeJs'.
-Info 40   [00:03:35.000] Loading module 'pkg0' from 'node_modules' folder, target file types: TypeScript, Declaration.
-Info 41   [00:03:36.000] Directory '/src/project/a/node_modules' does not exist, skipping all lookups in it.
-Info 42   [00:03:37.000] Resolution for module 'pkg0' was found in cache from location '/src/project'.
-Info 43   [00:03:38.000] ======== Module name 'pkg0' was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'. ========
-Info 44   [00:03:39.000] ======== Resolving module 'pkg0' from '/src/project/b/ba/fileWithImports.ts'. ========
-Info 45   [00:03:40.000] Module resolution kind is not specified, using 'NodeJs'.
-Info 46   [00:03:41.000] Loading module 'pkg0' from 'node_modules' folder, target file types: TypeScript, Declaration.
-Info 47   [00:03:42.000] Directory '/src/project/b/ba/node_modules' does not exist, skipping all lookups in it.
-Info 48   [00:03:43.000] Directory '/src/project/b/node_modules' does not exist, skipping all lookups in it.
-Info 49   [00:03:44.000] Resolution for module 'pkg0' was found in cache from location '/src/project'.
+Info 24   [00:03:19.000] Reusing resolution of module 'pkg0' from '/src/project/fileWithImports.ts' found in cache from location '/src/project', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Info 25   [00:03:20.000] DirectoryWatcher:: Added:: WatchInfo: /src/project/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
+Info 26   [00:03:21.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /src/project/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
+Info 27   [00:03:22.000] Reusing resolution of module 'pkg0' from '/src/project/a/fileWithImports.ts' found in cache from location '/src/project/a', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Info 28   [00:03:23.000] Reusing resolution of module 'pkg0' from '/src/project/b/ba/fileWithImports.ts' found in cache from location '/src/project/b/ba', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Info 29   [00:03:24.000] Reusing resolution of module 'pkg0' from '/src/project/c/ca/fileWithImports.ts' found in cache from location '/src/project/c/ca', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Info 30   [00:03:25.000] Reusing resolution of module 'pkg0' from '/src/project/c/ca/caa/caaa/fileWithImports.ts' found in cache from location '/src/project/c/ca/caa/caaa', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Info 31   [00:03:26.000] Reusing resolution of module 'pkg0' from '/src/project/c/cb/fileWithImports.ts' found in cache from location '/src/project/c/cb', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Info 32   [00:03:27.000] ======== Resolving module 'pkg0' from '/src/project/d/da/daa/daaa/x/y/z/randomFileForImport.ts'. ========
+Info 33   [00:03:28.000] Module resolution kind is not specified, using 'NodeJs'.
+Info 34   [00:03:29.000] Loading module 'pkg0' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Info 35   [00:03:30.000] Directory '/src/project/d/da/daa/daaa/x/y/z/node_modules' does not exist, skipping all lookups in it.
+Info 36   [00:03:31.000] Directory '/src/project/d/da/daa/daaa/x/y/node_modules' does not exist, skipping all lookups in it.
+Info 37   [00:03:32.000] Directory '/src/project/d/da/daa/daaa/x/node_modules' does not exist, skipping all lookups in it.
+Info 38   [00:03:33.000] Directory '/src/project/d/da/daa/daaa/node_modules' does not exist, skipping all lookups in it.
+Info 39   [00:03:34.000] Directory '/src/project/d/da/daa/node_modules' does not exist, skipping all lookups in it.
+Info 40   [00:03:35.000] Directory '/src/project/d/da/node_modules' does not exist, skipping all lookups in it.
+Info 41   [00:03:36.000] Directory '/src/project/d/node_modules' does not exist, skipping all lookups in it.
+Info 42   [00:03:37.000] File '/src/project/node_modules/pkg0/package.json' does not exist.
+Info 43   [00:03:38.000] File '/src/project/node_modules/pkg0.ts' does not exist.
+Info 44   [00:03:39.000] File '/src/project/node_modules/pkg0.tsx' does not exist.
+Info 45   [00:03:40.000] File '/src/project/node_modules/pkg0.d.ts' does not exist.
+Info 46   [00:03:41.000] File '/src/project/node_modules/pkg0/index.ts' does not exist.
+Info 47   [00:03:42.000] File '/src/project/node_modules/pkg0/index.tsx' does not exist.
+Info 48   [00:03:43.000] File '/src/project/node_modules/pkg0/index.d.ts' exist - use it as a name resolution result.
+Info 49   [00:03:44.000] Resolving real path for '/src/project/node_modules/pkg0/index.d.ts', result '/src/project/node_modules/pkg0/index.d.ts'.
 Info 50   [00:03:45.000] ======== Module name 'pkg0' was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'. ========
-Info 51   [00:03:46.000] ======== Resolving module 'pkg0' from '/src/project/c/ca/fileWithImports.ts'. ========
-Info 52   [00:03:47.000] Module resolution kind is not specified, using 'NodeJs'.
-Info 53   [00:03:48.000] Loading module 'pkg0' from 'node_modules' folder, target file types: TypeScript, Declaration.
-Info 54   [00:03:49.000] Directory '/src/project/c/ca/node_modules' does not exist, skipping all lookups in it.
-Info 55   [00:03:50.000] Directory '/src/project/c/node_modules' does not exist, skipping all lookups in it.
-Info 56   [00:03:51.000] Resolution for module 'pkg0' was found in cache from location '/src/project'.
-Info 57   [00:03:52.000] ======== Module name 'pkg0' was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'. ========
-Info 58   [00:03:53.000] ======== Resolving module 'pkg0' from '/src/project/c/ca/caa/caaa/fileWithImports.ts'. ========
-Info 59   [00:03:54.000] Module resolution kind is not specified, using 'NodeJs'.
-Info 60   [00:03:55.000] Loading module 'pkg0' from 'node_modules' folder, target file types: TypeScript, Declaration.
-Info 61   [00:03:56.000] Directory '/src/project/c/ca/caa/caaa/node_modules' does not exist, skipping all lookups in it.
-Info 62   [00:03:57.000] Directory '/src/project/c/ca/caa/node_modules' does not exist, skipping all lookups in it.
-Info 63   [00:03:58.000] Resolution for module 'pkg0' was found in cache from location '/src/project/c/ca'.
-Info 64   [00:03:59.000] ======== Module name 'pkg0' was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'. ========
-Info 65   [00:04:00.000] ======== Resolving module 'pkg0' from '/src/project/c/cb/fileWithImports.ts'. ========
-Info 66   [00:04:01.000] Module resolution kind is not specified, using 'NodeJs'.
-Info 67   [00:04:02.000] Loading module 'pkg0' from 'node_modules' folder, target file types: TypeScript, Declaration.
-Info 68   [00:04:03.000] Directory '/src/project/c/cb/node_modules' does not exist, skipping all lookups in it.
-Info 69   [00:04:04.000] Resolution for module 'pkg0' was found in cache from location '/src/project/c'.
-Info 70   [00:04:05.000] ======== Module name 'pkg0' was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'. ========
-Info 71   [00:04:06.000] ======== Resolving module 'pkg0' from '/src/project/d/da/daa/daaa/x/y/z/randomFileForImport.ts'. ========
-Info 72   [00:04:07.000] Module resolution kind is not specified, using 'NodeJs'.
-Info 73   [00:04:08.000] Loading module 'pkg0' from 'node_modules' folder, target file types: TypeScript, Declaration.
-Info 74   [00:04:09.000] Directory '/src/project/d/da/daa/daaa/x/y/z/node_modules' does not exist, skipping all lookups in it.
-Info 75   [00:04:10.000] Directory '/src/project/d/da/daa/daaa/x/y/node_modules' does not exist, skipping all lookups in it.
-Info 76   [00:04:11.000] Directory '/src/project/d/da/daa/daaa/x/node_modules' does not exist, skipping all lookups in it.
-Info 77   [00:04:12.000] Directory '/src/project/d/da/daa/daaa/node_modules' does not exist, skipping all lookups in it.
-Info 78   [00:04:13.000] Directory '/src/project/d/da/daa/node_modules' does not exist, skipping all lookups in it.
-Info 79   [00:04:14.000] Directory '/src/project/d/da/node_modules' does not exist, skipping all lookups in it.
-Info 80   [00:04:15.000] Directory '/src/project/d/node_modules' does not exist, skipping all lookups in it.
-Info 81   [00:04:16.000] Resolution for module 'pkg0' was found in cache from location '/src/project'.
-Info 82   [00:04:17.000] ======== Module name 'pkg0' was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'. ========
-Info 83   [00:04:18.000] ======== Resolving module 'pkg0' from '/src/project/d/da/daa/daaa/fileWithImports.ts'. ========
-Info 84   [00:04:19.000] Module resolution kind is not specified, using 'NodeJs'.
-Info 85   [00:04:20.000] Loading module 'pkg0' from 'node_modules' folder, target file types: TypeScript, Declaration.
-Info 86   [00:04:21.000] Resolution for module 'pkg0' was found in cache from location '/src/project/d/da/daa/daaa'.
-Info 87   [00:04:22.000] ======== Module name 'pkg0' was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'. ========
-Info 88   [00:04:23.000] ======== Resolving module 'pkg0' from '/src/project/d/da/daa/fileWithImports.ts'. ========
-Info 89   [00:04:24.000] Module resolution kind is not specified, using 'NodeJs'.
-Info 90   [00:04:25.000] Loading module 'pkg0' from 'node_modules' folder, target file types: TypeScript, Declaration.
-Info 91   [00:04:26.000] Resolution for module 'pkg0' was found in cache from location '/src/project/d/da/daa'.
-Info 92   [00:04:27.000] ======== Module name 'pkg0' was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'. ========
-Info 93   [00:04:28.000] ======== Resolving module 'pkg0' from '/src/project/d/da/fileWithImports.ts'. ========
-Info 94   [00:04:29.000] Module resolution kind is not specified, using 'NodeJs'.
-Info 95   [00:04:30.000] Loading module 'pkg0' from 'node_modules' folder, target file types: TypeScript, Declaration.
-Info 96   [00:04:31.000] Resolution for module 'pkg0' was found in cache from location '/src/project/d/da'.
-Info 97   [00:04:32.000] ======== Module name 'pkg0' was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'. ========
-Info 98   [00:04:33.000] ======== Resolving module 'pkg0' from '/src/project/e/ea/fileWithImports.ts'. ========
-Info 99   [00:04:34.000] Module resolution kind is not specified, using 'NodeJs'.
-Info 100  [00:04:35.000] Loading module 'pkg0' from 'node_modules' folder, target file types: TypeScript, Declaration.
-Info 101  [00:04:36.000] Directory '/src/project/e/ea/node_modules' does not exist, skipping all lookups in it.
-Info 102  [00:04:37.000] Directory '/src/project/e/node_modules' does not exist, skipping all lookups in it.
-Info 103  [00:04:38.000] Resolution for module 'pkg0' was found in cache from location '/src/project'.
-Info 104  [00:04:39.000] ======== Module name 'pkg0' was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'. ========
-Info 105  [00:04:40.000] ======== Resolving module 'pkg0' from '/src/project/e/ea/eaa/fileWithImports.ts'. ========
-Info 106  [00:04:41.000] Module resolution kind is not specified, using 'NodeJs'.
-Info 107  [00:04:42.000] Loading module 'pkg0' from 'node_modules' folder, target file types: TypeScript, Declaration.
-Info 108  [00:04:43.000] Directory '/src/project/e/ea/eaa/node_modules' does not exist, skipping all lookups in it.
-Info 109  [00:04:44.000] Resolution for module 'pkg0' was found in cache from location '/src/project/e/ea'.
-Info 110  [00:04:45.000] ======== Module name 'pkg0' was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'. ========
-Info 111  [00:04:46.000] ======== Resolving module 'pkg0' from '/src/project/e/ea/eaa/eaaa/fileWithImports.ts'. ========
-Info 112  [00:04:47.000] Module resolution kind is not specified, using 'NodeJs'.
-Info 113  [00:04:48.000] Loading module 'pkg0' from 'node_modules' folder, target file types: TypeScript, Declaration.
-Info 114  [00:04:49.000] Directory '/src/project/e/ea/eaa/eaaa/node_modules' does not exist, skipping all lookups in it.
-Info 115  [00:04:50.000] Resolution for module 'pkg0' was found in cache from location '/src/project/e/ea/eaa'.
-Info 116  [00:04:51.000] ======== Module name 'pkg0' was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'. ========
-Info 117  [00:04:52.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info 118  [00:04:53.000] DirectoryWatcher:: Added:: WatchInfo: /src/project/node_modules/@types 1 undefined Project: /src/project/tsconfig.json WatchType: Type roots
-Info 119  [00:04:54.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /src/project/node_modules/@types 1 undefined Project: /src/project/tsconfig.json WatchType: Type roots
-Info 120  [00:04:55.000] Finishing updateGraphWorker: Project: /src/project/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 121  [00:04:56.000] Project '/src/project/tsconfig.json' (Configured)
-Info 122  [00:04:57.000] 	Files (19)
+Info 51   [00:03:46.000] Reusing resolution of module 'pkg0' from '/src/project/d/da/daa/daaa/fileWithImports.ts' found in cache from location '/src/project/d/da/daa/daaa', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Info 52   [00:03:47.000] Reusing resolution of module 'pkg0' from '/src/project/d/da/daa/fileWithImports.ts' found in cache from location '/src/project/d/da/daa', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Info 53   [00:03:48.000] Reusing resolution of module 'pkg0' from '/src/project/d/da/fileWithImports.ts' found in cache from location '/src/project/d/da', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Info 54   [00:03:49.000] Reusing resolution of module 'pkg0' from '/src/project/e/ea/fileWithImports.ts' found in cache from location '/src/project/e/ea', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Info 55   [00:03:50.000] Reusing resolution of module 'pkg0' from '/src/project/e/ea/eaa/fileWithImports.ts' found in cache from location '/src/project/e/ea/eaa', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Info 56   [00:03:51.000] Reusing resolution of module 'pkg0' from '/src/project/e/ea/eaa/eaaa/fileWithImports.ts' found in cache from location '/src/project/e/ea/eaa/eaaa', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Info 57   [00:03:52.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info 58   [00:03:53.000] DirectoryWatcher:: Added:: WatchInfo: /src/project/node_modules/@types 1 undefined Project: /src/project/tsconfig.json WatchType: Type roots
+Info 59   [00:03:54.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /src/project/node_modules/@types 1 undefined Project: /src/project/tsconfig.json WatchType: Type roots
+Info 60   [00:03:55.000] Finishing updateGraphWorker: Project: /src/project/tsconfig.json Version: 1 structureChanged: true structureIsReused:: SafeModuleCache Elapsed:: *ms
+Info 61   [00:03:56.000] Project '/src/project/tsconfig.json' (Configured)
+Info 62   [00:03:57.000] 	Files (19)
 	/a/lib/lib.d.ts
 	/src/project/node_modules/pkg0/index.d.ts
 	/src/project/fileWithImports.ts
@@ -875,16 +815,16 @@ Info 122  [00:04:57.000] 	Files (19)
 	e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts
 	  Part of 'files' list in tsconfig.json
 
-Info 123  [00:04:58.000] -----------------------------------------------
-Info 124  [00:04:59.000] Search path: /src/project
-Info 125  [00:05:00.000] For info: /src/project/tsconfig.json :: No config files found.
-Info 126  [00:05:01.000] Project '/src/project/tsconfig.json' (Configured)
-Info 126  [00:05:02.000] 	Files (19)
+Info 63   [00:03:58.000] -----------------------------------------------
+Info 64   [00:03:59.000] Search path: /src/project
+Info 65   [00:04:00.000] For info: /src/project/tsconfig.json :: No config files found.
+Info 66   [00:04:01.000] Project '/src/project/tsconfig.json' (Configured)
+Info 66   [00:04:02.000] 	Files (19)
 
-Info 126  [00:05:03.000] -----------------------------------------------
-Info 126  [00:05:04.000] Open files: 
-Info 126  [00:05:05.000] 	FileName: /src/project/randomFileForImport.ts ProjectRootPath: undefined
-Info 126  [00:05:06.000] 		Projects: /src/project/tsconfig.json
+Info 66   [00:04:03.000] -----------------------------------------------
+Info 66   [00:04:04.000] Open files: 
+Info 66   [00:04:05.000] 	FileName: /src/project/randomFileForImport.ts ProjectRootPath: undefined
+Info 66   [00:04:06.000] 		Projects: /src/project/tsconfig.json
 After request
 
 PolledWatches::
@@ -933,7 +873,7 @@ FsWatchesRecursive::
 /src/project/node_modules:
   {}
 
-Info 126  [00:05:07.000] response:
+Info 66   [00:04:07.000] response:
     {
       "responseRequired": false
     }

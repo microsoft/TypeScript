@@ -1199,71 +1199,43 @@ Info 12   [00:01:49.000] Config: /src/project/tsconfig.b.json : {
  ]
 }
 Info 13   [00:01:50.000] FileWatcher:: Added:: WatchInfo: /src/project/tsconfig.b.json 2000 undefined Project: /src/project/tsconfig.json WatchType: Config file
-Info 14   [00:01:51.000] ======== Resolving module './bFileWithImports' from '/src/project/cFileWithImports.ts'. ========
-Info 15   [00:01:52.000] Module resolution kind is not specified, using 'Classic'.
-Info 16   [00:01:53.000] File '/src/project/bFileWithImports.ts' exist - use it as a name resolution result.
-Info 17   [00:01:54.000] ======== Module name './bFileWithImports' was successfully resolved to '/src/project/bFileWithImports.ts'. ========
-Info 18   [00:01:55.000] ======== Resolving module 'pkg0' from '/src/project/cFileWithImports.ts'. ========
-Info 19   [00:01:56.000] Module resolution kind is not specified, using 'Classic'.
-Info 20   [00:01:57.000] File '/src/project/pkg0.ts' does not exist.
-Info 21   [00:01:58.000] File '/src/project/pkg0.tsx' does not exist.
-Info 22   [00:01:59.000] File '/src/project/pkg0.d.ts' exist - use it as a name resolution result.
-Info 23   [00:02:00.000] ======== Module name 'pkg0' was successfully resolved to '/src/project/pkg0.d.ts'. ========
-Info 24   [00:02:01.000] FileWatcher:: Added:: WatchInfo: /src/project/bFileWithImports.ts 500 undefined WatchType: Closed Script info
-Info 25   [00:02:02.000] ======== Resolving module './aFileWithImports' from '/src/project/bFileWithImports.ts'. ========
-Info 26   [00:02:03.000] Using compiler options of project reference redirect '/src/project/tsconfig.b.json'.
-Info 27   [00:02:04.000] Module resolution kind is not specified, using 'NodeJs'.
-Info 28   [00:02:05.000] Loading module as file / folder, candidate module location '/src/project/aFileWithImports', target file types: TypeScript, Declaration.
-Info 29   [00:02:06.000] File '/src/project/aFileWithImports.ts' exist - use it as a name resolution result.
-Info 30   [00:02:07.000] ======== Module name './aFileWithImports' was successfully resolved to '/src/project/aFileWithImports.ts'. ========
-Info 31   [00:02:08.000] ======== Resolving module './bRandomFileForImport' from '/src/project/bFileWithImports.ts'. ========
-Info 32   [00:02:09.000] Using compiler options of project reference redirect '/src/project/tsconfig.b.json'.
-Info 33   [00:02:10.000] Module resolution kind is not specified, using 'NodeJs'.
-Info 34   [00:02:11.000] Loading module as file / folder, candidate module location '/src/project/bRandomFileForImport', target file types: TypeScript, Declaration.
-Info 35   [00:02:12.000] File '/src/project/bRandomFileForImport.ts' exist - use it as a name resolution result.
-Info 36   [00:02:13.000] ======== Module name './bRandomFileForImport' was successfully resolved to '/src/project/bRandomFileForImport.ts'. ========
-Info 37   [00:02:14.000] ======== Resolving module 'pkg0' from '/src/project/bFileWithImports.ts'. ========
-Info 38   [00:02:15.000] Using compiler options of project reference redirect '/src/project/tsconfig.b.json'.
-Info 39   [00:02:16.000] Module resolution kind is not specified, using 'NodeJs'.
-Info 40   [00:02:17.000] Loading module 'pkg0' from 'node_modules' folder, target file types: TypeScript, Declaration.
-Info 41   [00:02:18.000] File '/src/project/node_modules/pkg0/package.json' does not exist.
-Info 42   [00:02:19.000] File '/src/project/node_modules/pkg0.ts' does not exist.
-Info 43   [00:02:20.000] File '/src/project/node_modules/pkg0.tsx' does not exist.
-Info 44   [00:02:21.000] File '/src/project/node_modules/pkg0.d.ts' does not exist.
-Info 45   [00:02:22.000] File '/src/project/node_modules/pkg0/index.ts' does not exist.
-Info 46   [00:02:23.000] File '/src/project/node_modules/pkg0/index.tsx' does not exist.
-Info 47   [00:02:24.000] File '/src/project/node_modules/pkg0/index.d.ts' exist - use it as a name resolution result.
-Info 48   [00:02:25.000] Resolving real path for '/src/project/node_modules/pkg0/index.d.ts', result '/src/project/node_modules/pkg0/index.d.ts'.
-Info 49   [00:02:26.000] ======== Module name 'pkg0' was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'. ========
-Info 50   [00:02:27.000] FileWatcher:: Added:: WatchInfo: /src/project/aFileWithImports.ts 500 undefined WatchType: Closed Script info
-Info 51   [00:02:28.000] ======== Resolving module 'pkg0' from '/src/project/aFileWithImports.ts'. ========
-Info 52   [00:02:29.000] Using compiler options of project reference redirect '/src/project/tsconfig.a.json'.
-Info 53   [00:02:30.000] Resolution for module 'pkg0' was found in cache from location '/src/project'.
-Info 54   [00:02:31.000] ======== Module name 'pkg0' was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'. ========
-Info 55   [00:02:32.000] ======== Resolving module './aRandomFileForImport' from '/src/project/aFileWithImports.ts'. ========
-Info 56   [00:02:33.000] Using compiler options of project reference redirect '/src/project/tsconfig.a.json'.
-Info 57   [00:02:34.000] Module resolution kind is not specified, using 'NodeJs'.
-Info 58   [00:02:35.000] Loading module as file / folder, candidate module location '/src/project/aRandomFileForImport', target file types: TypeScript, Declaration.
-Info 59   [00:02:36.000] File '/src/project/aRandomFileForImport.ts' exist - use it as a name resolution result.
-Info 60   [00:02:37.000] ======== Module name './aRandomFileForImport' was successfully resolved to '/src/project/aRandomFileForImport.ts'. ========
-Info 61   [00:02:38.000] ======== Resolving module './aRandomFileForImport2' from '/src/project/aFileWithImports.ts'. ========
-Info 62   [00:02:39.000] Using compiler options of project reference redirect '/src/project/tsconfig.a.json'.
-Info 63   [00:02:40.000] Module resolution kind is not specified, using 'NodeJs'.
-Info 64   [00:02:41.000] Loading module as file / folder, candidate module location '/src/project/aRandomFileForImport2', target file types: TypeScript, Declaration.
-Info 65   [00:02:42.000] File '/src/project/aRandomFileForImport2.ts' exist - use it as a name resolution result.
-Info 66   [00:02:43.000] ======== Module name './aRandomFileForImport2' was successfully resolved to '/src/project/aRandomFileForImport2.ts'. ========
-Info 67   [00:02:44.000] DirectoryWatcher:: Added:: WatchInfo: /src/project/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
-Info 68   [00:02:45.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /src/project/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
-Info 69   [00:02:46.000] FileWatcher:: Added:: WatchInfo: /src/project/aRandomFileForImport.ts 500 undefined WatchType: Closed Script info
-Info 70   [00:02:47.000] FileWatcher:: Added:: WatchInfo: /src/project/aRandomFileForImport2.ts 500 undefined WatchType: Closed Script info
-Info 71   [00:02:48.000] FileWatcher:: Added:: WatchInfo: /src/project/bRandomFileForImport.ts 500 undefined WatchType: Closed Script info
-Info 72   [00:02:49.000] FileWatcher:: Added:: WatchInfo: /src/project/pkg0.d.ts 500 undefined WatchType: Closed Script info
-Info 73   [00:02:50.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info 74   [00:02:51.000] DirectoryWatcher:: Added:: WatchInfo: /src/project/node_modules/@types 1 undefined Project: /src/project/tsconfig.json WatchType: Type roots
-Info 75   [00:02:52.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /src/project/node_modules/@types 1 undefined Project: /src/project/tsconfig.json WatchType: Type roots
-Info 76   [00:02:53.000] Finishing updateGraphWorker: Project: /src/project/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 77   [00:02:54.000] Project '/src/project/tsconfig.json' (Configured)
-Info 78   [00:02:55.000] 	Files (11)
+Info 14   [00:01:51.000] Reusing resolution of module './bFileWithImports' from '/src/project/cFileWithImports.ts' found in cache from location '/src/project', it was successfully resolved to '/src/project/bFileWithImports.ts'.
+Info 15   [00:01:52.000] Reusing resolution of module 'pkg0' from '/src/project/cFileWithImports.ts' found in cache from location '/src/project', it was successfully resolved to '/src/project/pkg0.d.ts'.
+Info 16   [00:01:53.000] FileWatcher:: Added:: WatchInfo: /src/project/bFileWithImports.ts 500 undefined WatchType: Closed Script info
+Info 17   [00:01:54.000] Reusing resolution of module './aFileWithImports' from '/src/project/bFileWithImports.ts' found in cache from location '/src/project', it was successfully resolved to '/src/project/aFileWithImports.ts'.
+Info 18   [00:01:55.000] Reusing resolution of module './bRandomFileForImport' from '/src/project/bFileWithImports.ts' found in cache from location '/src/project', it was successfully resolved to '/src/project/bRandomFileForImport.ts'.
+Info 19   [00:01:56.000] ======== Resolving module 'pkg0' from '/src/project/bFileWithImports.ts'. ========
+Info 20   [00:01:57.000] Using compiler options of project reference redirect '/src/project/tsconfig.b.json'.
+Info 21   [00:01:58.000] Module resolution kind is not specified, using 'NodeJs'.
+Info 22   [00:01:59.000] Loading module 'pkg0' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Info 23   [00:02:00.000] File '/src/project/node_modules/pkg0/package.json' does not exist.
+Info 24   [00:02:01.000] File '/src/project/node_modules/pkg0.ts' does not exist.
+Info 25   [00:02:02.000] File '/src/project/node_modules/pkg0.tsx' does not exist.
+Info 26   [00:02:03.000] File '/src/project/node_modules/pkg0.d.ts' does not exist.
+Info 27   [00:02:04.000] File '/src/project/node_modules/pkg0/index.ts' does not exist.
+Info 28   [00:02:05.000] File '/src/project/node_modules/pkg0/index.tsx' does not exist.
+Info 29   [00:02:06.000] File '/src/project/node_modules/pkg0/index.d.ts' exist - use it as a name resolution result.
+Info 30   [00:02:07.000] Resolving real path for '/src/project/node_modules/pkg0/index.d.ts', result '/src/project/node_modules/pkg0/index.d.ts'.
+Info 31   [00:02:08.000] ======== Module name 'pkg0' was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'. ========
+Info 32   [00:02:09.000] FileWatcher:: Added:: WatchInfo: /src/project/aFileWithImports.ts 500 undefined WatchType: Closed Script info
+Info 33   [00:02:10.000] Reusing resolution of module './aRandomFileForImport' from '/src/project/aFileWithImports.ts' found in cache from location '/src/project', it was successfully resolved to '/src/project/aRandomFileForImport.ts'.
+Info 34   [00:02:11.000] Reusing resolution of module './aRandomFileForImport2' from '/src/project/aFileWithImports.ts' found in cache from location '/src/project', it was successfully resolved to '/src/project/aRandomFileForImport2.ts'.
+Info 35   [00:02:12.000] ======== Resolving module 'pkg0' from '/src/project/aFileWithImports.ts'. ========
+Info 36   [00:02:13.000] Using compiler options of project reference redirect '/src/project/tsconfig.a.json'.
+Info 37   [00:02:14.000] Resolution for module 'pkg0' was found in cache from location '/src/project'.
+Info 38   [00:02:15.000] ======== Module name 'pkg0' was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'. ========
+Info 39   [00:02:16.000] DirectoryWatcher:: Added:: WatchInfo: /src/project/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
+Info 40   [00:02:17.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /src/project/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
+Info 41   [00:02:18.000] FileWatcher:: Added:: WatchInfo: /src/project/aRandomFileForImport.ts 500 undefined WatchType: Closed Script info
+Info 42   [00:02:19.000] FileWatcher:: Added:: WatchInfo: /src/project/aRandomFileForImport2.ts 500 undefined WatchType: Closed Script info
+Info 43   [00:02:20.000] FileWatcher:: Added:: WatchInfo: /src/project/bRandomFileForImport.ts 500 undefined WatchType: Closed Script info
+Info 44   [00:02:21.000] FileWatcher:: Added:: WatchInfo: /src/project/pkg0.d.ts 500 undefined WatchType: Closed Script info
+Info 45   [00:02:22.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info 46   [00:02:23.000] DirectoryWatcher:: Added:: WatchInfo: /src/project/node_modules/@types 1 undefined Project: /src/project/tsconfig.json WatchType: Type roots
+Info 47   [00:02:24.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /src/project/node_modules/@types 1 undefined Project: /src/project/tsconfig.json WatchType: Type roots
+Info 48   [00:02:25.000] Finishing updateGraphWorker: Project: /src/project/tsconfig.json Version: 1 structureChanged: true structureIsReused:: SafeModuleCache Elapsed:: *ms
+Info 49   [00:02:26.000] Project '/src/project/tsconfig.json' (Configured)
+Info 50   [00:02:27.000] 	Files (11)
 	/a/lib/lib.d.ts
 	/src/project/node_modules/pkg0/index.d.ts
 	/src/project/aRandomFileForImport.ts
@@ -1301,16 +1273,16 @@ Info 78   [00:02:55.000] 	Files (11)
 	cRandomFileForImport2.ts
 	  Part of 'files' list in tsconfig.json
 
-Info 79   [00:02:56.000] -----------------------------------------------
-Info 80   [00:02:57.000] Search path: /src/project
-Info 81   [00:02:58.000] For info: /src/project/tsconfig.json :: No config files found.
-Info 82   [00:02:59.000] Project '/src/project/tsconfig.json' (Configured)
-Info 82   [00:03:00.000] 	Files (11)
+Info 51   [00:02:28.000] -----------------------------------------------
+Info 52   [00:02:29.000] Search path: /src/project
+Info 53   [00:02:30.000] For info: /src/project/tsconfig.json :: No config files found.
+Info 54   [00:02:31.000] Project '/src/project/tsconfig.json' (Configured)
+Info 54   [00:02:32.000] 	Files (11)
 
-Info 82   [00:03:01.000] -----------------------------------------------
-Info 82   [00:03:02.000] Open files: 
-Info 82   [00:03:03.000] 	FileName: /src/project/cRandomFileForImport.ts ProjectRootPath: undefined
-Info 82   [00:03:04.000] 		Projects: /src/project/tsconfig.json
+Info 54   [00:02:33.000] -----------------------------------------------
+Info 54   [00:02:34.000] Open files: 
+Info 54   [00:02:35.000] 	FileName: /src/project/cRandomFileForImport.ts ProjectRootPath: undefined
+Info 54   [00:02:36.000] 		Projects: /src/project/tsconfig.json
 After request
 
 PolledWatches::
@@ -1347,12 +1319,12 @@ FsWatchesRecursive::
 /src/project/node_modules:
   {}
 
-Info 82   [00:03:05.000] response:
+Info 54   [00:02:37.000] response:
     {
       "responseRequired": false
     }
-Info 83   [00:03:06.000] modify cRandomFileForImport by adding import
-Info 84   [00:03:07.000] request:
+Info 55   [00:02:38.000] modify cRandomFileForImport by adding import
+Info 56   [00:02:39.000] request:
     {
       "command": "change",
       "arguments": {
@@ -1438,24 +1410,24 @@ FsWatchesRecursive::
 /src/project/node_modules:
   {}
 
-Info 85   [00:03:08.000] response:
+Info 57   [00:02:40.000] response:
     {
       "responseRequired": false
     }
-Info 86   [00:03:09.000] Starting updateGraphWorker: Project: /src/project/tsconfig.json
-Info 87   [00:03:10.000] Reusing resolution of module './bFileWithImports' from '/src/project/cFileWithImports.ts' of old program, it was successfully resolved to '/src/project/bFileWithImports.ts'.
-Info 88   [00:03:11.000] Reusing resolution of module 'pkg0' from '/src/project/cFileWithImports.ts' of old program, it was successfully resolved to '/src/project/pkg0.d.ts'.
-Info 89   [00:03:12.000] Reusing resolution of module './aFileWithImports' from '/src/project/bFileWithImports.ts' of old program, it was successfully resolved to '/src/project/aFileWithImports.ts'.
-Info 90   [00:03:13.000] Reusing resolution of module './bRandomFileForImport' from '/src/project/bFileWithImports.ts' of old program, it was successfully resolved to '/src/project/bRandomFileForImport.ts'.
-Info 91   [00:03:14.000] Reusing resolution of module 'pkg0' from '/src/project/bFileWithImports.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
-Info 92   [00:03:15.000] Reusing resolution of module 'pkg0' from '/src/project/aFileWithImports.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
-Info 93   [00:03:16.000] Reusing resolution of module './aRandomFileForImport' from '/src/project/aFileWithImports.ts' of old program, it was successfully resolved to '/src/project/aRandomFileForImport.ts'.
-Info 94   [00:03:17.000] Reusing resolution of module './aRandomFileForImport2' from '/src/project/aFileWithImports.ts' of old program, it was successfully resolved to '/src/project/aRandomFileForImport2.ts'.
-Info 95   [00:03:18.000] ======== Resolving module 'pkg0' from '/src/project/cRandomFileForImport.ts'. ========
-Info 96   [00:03:19.000] Module resolution kind is not specified, using 'Classic'.
-Info 97   [00:03:20.000] File '/src/project/pkg0.ts' does not exist.
-Info 98   [00:03:21.000] File '/src/project/pkg0.tsx' does not exist.
-Info 99   [00:03:22.000] File '/src/project/pkg0.d.ts' exist - use it as a name resolution result.
-Info 100  [00:03:23.000] ======== Module name 'pkg0' was successfully resolved to '/src/project/pkg0.d.ts'. ========
-Info 101  [00:03:24.000] Finishing updateGraphWorker: Project: /src/project/tsconfig.json Version: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
-Info 102  [00:03:25.000] Different program with same set of files
+Info 58   [00:02:41.000] Starting updateGraphWorker: Project: /src/project/tsconfig.json
+Info 59   [00:02:42.000] Reusing resolution of module './bFileWithImports' from '/src/project/cFileWithImports.ts' of old program, it was successfully resolved to '/src/project/bFileWithImports.ts'.
+Info 60   [00:02:43.000] Reusing resolution of module 'pkg0' from '/src/project/cFileWithImports.ts' of old program, it was successfully resolved to '/src/project/pkg0.d.ts'.
+Info 61   [00:02:44.000] Reusing resolution of module './aFileWithImports' from '/src/project/bFileWithImports.ts' of old program, it was successfully resolved to '/src/project/aFileWithImports.ts'.
+Info 62   [00:02:45.000] Reusing resolution of module './bRandomFileForImport' from '/src/project/bFileWithImports.ts' of old program, it was successfully resolved to '/src/project/bRandomFileForImport.ts'.
+Info 63   [00:02:46.000] Reusing resolution of module 'pkg0' from '/src/project/bFileWithImports.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Info 64   [00:02:47.000] Reusing resolution of module 'pkg0' from '/src/project/aFileWithImports.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+Info 65   [00:02:48.000] Reusing resolution of module './aRandomFileForImport' from '/src/project/aFileWithImports.ts' of old program, it was successfully resolved to '/src/project/aRandomFileForImport.ts'.
+Info 66   [00:02:49.000] Reusing resolution of module './aRandomFileForImport2' from '/src/project/aFileWithImports.ts' of old program, it was successfully resolved to '/src/project/aRandomFileForImport2.ts'.
+Info 67   [00:02:50.000] ======== Resolving module 'pkg0' from '/src/project/cRandomFileForImport.ts'. ========
+Info 68   [00:02:51.000] Module resolution kind is not specified, using 'Classic'.
+Info 69   [00:02:52.000] File '/src/project/pkg0.ts' does not exist.
+Info 70   [00:02:53.000] File '/src/project/pkg0.tsx' does not exist.
+Info 71   [00:02:54.000] File '/src/project/pkg0.d.ts' exist - use it as a name resolution result.
+Info 72   [00:02:55.000] ======== Module name 'pkg0' was successfully resolved to '/src/project/pkg0.d.ts'. ========
+Info 73   [00:02:56.000] Finishing updateGraphWorker: Project: /src/project/tsconfig.json Version: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
+Info 74   [00:02:57.000] Different program with same set of files
