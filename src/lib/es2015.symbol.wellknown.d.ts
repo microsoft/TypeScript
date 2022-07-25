@@ -221,7 +221,7 @@ interface String {
     /**
      * Replaces one or more occurrences of substrings that match the method provided by `searchValue`.
      * @param searchValue An object that supports searching for and replacing matches within a string.
-     * @param replacer A function that returns the replacement text.
+     * @param replacer The replacement text.
      */
     replace(searchValue: { [Symbol.replace](string: string, replaceValue: string): string; }, replaceValue: string): string;
 
