@@ -3337,7 +3337,7 @@ namespace ts {
             //      BindingElement[?Yield,?Await]
 
             // Decorators are parsed in the outer [Await] context, the rest of the parameter is parsed in the function's [Await] context.
-            const decorators = inOuterAwaitContext ? doInAwaitContext(parseDecorators) : parseDecorators();
+            const decorators = inOuterAwaitContext ? doInAwaitContext(parseDecorators) : doOutsideOfAwaitContext(parseDecorators);
 
             if (token() === SyntaxKind.ThisKeyword) {
                 const node = factory.createParameterDeclaration(
