@@ -22,7 +22,8 @@ jobs:
       run: |
         git config user.email "typescriptbot@microsoft.com"
         git config user.name "TypeScript Bot"
-        npm install --package-lock-only --ignore-scripts # TODO: does this actually do anything in NPM 8?
+        rm package-lock.json
+        npm install --package-lock-only --ignore-scripts # This is a no-op if package-lock.json is present.
         git add -f package-lock.json
         if git commit -m "Update package-lock.json"; then
           git push
