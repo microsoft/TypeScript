@@ -202,11 +202,25 @@ describe("unittests:: tsserver:: cacheResolutions:: tsserverProjectSystem cachin
     describe("resolution reuse from multiple places", () => {
         verifyTsserverMultiPlaces("multiple places not built", getServerHostWithSameResolutionFromMultiplePlaces);
         verifyTsserverMultiPlaces("multiple places", getServerHostWithSameResolutionFromMultiplePlacesWithBuild);
+        it("multiple places first pass", () => {
+            const host = getServerHostWithSameResolutionFromMultiplePlacesWithBuild();
+            host.prependFile("/src/project/d/da/daa/daaa/x/y/z/randomFileForImport.ts", `import type { ImportInterface0 } from "pkg0";\n`);
+            fakes.patchHostForBuildInfoReadWrite(host);
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+            openFilesForSession(["/src/project/randomFileForImport.ts"], session);
+            baselineTsserverLogs("cacheResolutions", "multiple places first pass", session);
+        });
         function verifyTsserverMultiPlaces(scenario: string, createHost: () => TestServerHost) {
             it(scenario, () => {
                 const host = fakes.patchHostForBuildInfoReadWrite(createHost());
                 const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
-                openFilesForSession(["/src/project/randomFileForImport.ts", "/src/project/b/randomFileForImport.ts", "/src/project/c/ca/caa/randomFileForImport.ts"], session);
+                openFilesForSession([
+                    "/src/project/randomFileForImport.ts",
+                    "/src/project/b/randomFileForImport.ts",
+                    "/src/project/c/ca/caa/randomFileForImport.ts",
+                    "/src/project/d/da/daa/daaa/x/y/z/randomFileForImport.ts",
+                    "/src/project/e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts",
+                ], session);
 
                 session.logger.info("modify randomFileForImport by adding import");
                 session.executeCommandSeq<ts.server.protocol.ChangeRequest>({
@@ -241,6 +255,34 @@ describe("unittests:: tsserver:: cacheResolutions:: tsserverProjectSystem cachin
                     command: ts.server.protocol.CommandTypes.Change,
                     arguments: {
                         file: "/src/project/c/ca/caa/randomFileForImport.ts",
+                        line: 1,
+                        offset: 1,
+                        endLine: 1,
+                        endOffset: 1,
+                        insertString: `import type { ImportInterface0 } from "pkg0";\n`,
+                    }
+                });
+                ts.server.updateProjectIfDirty(session.getProjectService().configuredProjects.get("/src/project/tsconfig.json")!);
+
+                session.logger.info("modify d/da/daa/daaa/x/y/z/randomFileForImport by adding import");
+                session.executeCommandSeq<ts.server.protocol.ChangeRequest>({
+                    command: ts.server.protocol.CommandTypes.Change,
+                    arguments: {
+                        file: "/src/project/d/da/daa/daaa/x/y/z/randomFileForImport.ts",
+                        line: 1,
+                        offset: 1,
+                        endLine: 1,
+                        endOffset: 1,
+                        insertString: `import type { ImportInterface0 } from "pkg0";\n`,
+                    }
+                });
+                ts.server.updateProjectIfDirty(session.getProjectService().configuredProjects.get("/src/project/tsconfig.json")!);
+
+                session.logger.info("modify e/ea/eaa/eaaa/x/y/z/randomFileForImport by adding import");
+                session.executeCommandSeq<ts.server.protocol.ChangeRequest>({
+                    command: ts.server.protocol.CommandTypes.Change,
+                    arguments: {
+                        file: "/src/project/e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts",
                         line: 1,
                         offset: 1,
                         endLine: 1,

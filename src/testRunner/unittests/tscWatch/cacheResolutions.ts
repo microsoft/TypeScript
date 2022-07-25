@@ -168,6 +168,17 @@ describe("unittests:: tsc-watch:: cacheResolutions::", () => {
     describe("resolution reuse from multiple places", () => {
         verifyTscWatchMultiPlaces("multiple places", getWatchSystemWithSameResolutionFromMultiplePlaces);
         verifyTscWatchMultiPlaces("multiple places already built", getWatchSystemWithSameResolutionFromMultiplePlacesWithBuild);
+        verifyTscWatch({
+            scenario: "cacheResolutions",
+            subScenario: "multiple places first pass",
+            sys: () => {
+                const sys = getWatchSystemWithSameResolutionFromMultiplePlacesWithBuild();
+                sys.prependFile("/src/project/d/da/daa/daaa/x/y/z/randomFileForImport.ts", `import type { ImportInterface0 } from "pkg0";\n`);
+                return sys;
+            },
+            commandLineArgs: ["-w", "--explainFiles"],
+            baselineModulesAndTypeRefs: true,
+        });
         function verifyTscWatchMultiPlaces(subScenario: string, sys: () => TestServerHost) {
             verifyTscWatch({
                 scenario: "cacheResolutions",
@@ -189,6 +200,16 @@ describe("unittests:: tsc-watch:: cacheResolutions::", () => {
                     {
                         caption: "modify c/ca/caa/randomFileForImport by adding import",
                         edit: sys => sys.prependFile("/src/project/c/ca/caa/randomFileForImport.ts", `import type { ImportInterface0 } from "pkg0";\n`),
+                        timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                    },
+                    {
+                        caption: "modify d/da/daa/daaa/x/y/z/randomFileForImport by adding import",
+                        edit: sys => sys.prependFile("/src/project/d/da/daa/daaa/x/y/z/randomFileForImport.ts", `import type { ImportInterface0 } from "pkg0";\n`),
+                        timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                    },
+                    {
+                        caption: "modify e/ea/eaa/eaaa/x/y/z/randomFileForImport by adding import",
+                        edit: sys => sys.prependFile("/src/project/e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts", `import type { ImportInterface0 } from "pkg0";\n`),
                         timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                     },
                 ]

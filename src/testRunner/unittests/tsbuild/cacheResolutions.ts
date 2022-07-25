@@ -148,6 +148,20 @@ describe("unittests:: tsbuild:: cacheResolutions::", () => {
                 caption: "modify c/ca/caa/randomFileForImport by adding import",
                 edit: fs => prependText(fs, "/src/project/c/ca/caa/randomFileForImport.ts", `import type { ImportInterface0 } from "pkg0";\n`),
             },
+            {
+                caption: "modify d/da/daa/daaa/x/y/z/randomFileForImport by adding import",
+                edit: fs => prependText(fs, "/src/project/d/da/daa/daaa/x/y/z/randomFileForImport.ts", `import type { ImportInterface0 } from "pkg0";\n`),
+                discrepancyExplanation: () => [
+                    `Incremental is currently not reusing resolution so tsbuildinfo has two same resolutions instead of one TODO: (shkamat)`
+                ]
+            },
+            {
+                caption: "modify e/ea/eaa/eaaa/x/y/z/randomFileForImport by adding import",
+                edit: fs => prependText(fs, "/src/project/e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts", `import type { ImportInterface0 } from "pkg0";\n`),
+                discrepancyExplanation: () => [
+                    `Incremental is currently not reusing resolution so tsbuildinfo has two same resolutions instead of one TODO: (shkamat)`
+                ]
+            },
         ]
     });
 });
