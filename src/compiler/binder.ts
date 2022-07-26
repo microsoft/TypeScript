@@ -1665,9 +1665,7 @@ namespace ts {
             //   - `BindingElement: BindingPattern Initializer?`
             bind(node.dotDotDotToken);
             bind(node.propertyName);
-            bindOptionalFlow(() => {
-                bind(node.initializer);
-            });
+            bindInitializer(node.initializer);
             bind(node.name);
         }
 
@@ -1676,16 +1674,17 @@ namespace ts {
             bind(node.dotDotDotToken);
             bind(node.questionToken);
             bind(node.type);
-            bindOptionalFlow(() => {
-                bind(node.initializer);
-            });
+            bindInitializer(node.initializer);
             bind(node.name);
         }
 
         // a BindingElement/Parameter does not have side effects if initializers are not evaluated and used. (see GH#49759)
-        function bindOptionalFlow(cb: () => void) {
+        function bindInitializer(node: Expression | undefined) {
+            if (!node) {
+                return;
+            }
             const entryFlow = currentFlow;
-            cb();
+            bind(node);
             if (entryFlow === unreachableFlow || entryFlow === currentFlow) {
                 return;
             }
