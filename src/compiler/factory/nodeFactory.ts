@@ -14,6 +14,13 @@ namespace ts {
         NoOriginalNode = 1 << 3,
     }
 
+    const nodeFactoryPatchers: ((factory: NodeFactory) => void)[] = [];
+
+    /* @internal */
+    export function addNodeFactoryPatcher(fn: (factory: NodeFactory) => void) {
+        nodeFactoryPatchers.push(fn);
+    }
+
     /**
      * Creates a `NodeFactory` that can be used to create and update a syntax tree.
      * @param flags Flags that control factory behavior.
@@ -161,11 +168,11 @@ namespace ts {
             createObjectLiteralExpression,
             updateObjectLiteralExpression,
             createPropertyAccessExpression: flags & NodeFactoryFlags.NoIndentationOnFreshPropertyAccess ?
-                (expression, name) => setEmitFlags(createPropertyAccessExpression(expression, name), EmitFlags.NoIndentation) :
+                (expression: Expression, name: string | MemberName) => setEmitFlags(createPropertyAccessExpression(expression, name), EmitFlags.NoIndentation) :
                 createPropertyAccessExpression,
             updatePropertyAccessExpression,
             createPropertyAccessChain: flags & NodeFactoryFlags.NoIndentationOnFreshPropertyAccess ?
-                (expression, questionDotToken, name) => setEmitFlags(createPropertyAccessChain(expression, questionDotToken, name), EmitFlags.NoIndentation) :
+            (expression: Expression, questionDotToken: QuestionDotToken | undefined, name: string | MemberName) => setEmitFlags(createPropertyAccessChain(expression, questionDotToken, name), EmitFlags.NoIndentation) :
                 createPropertyAccessChain,
             updatePropertyAccessChain,
             createElementAccessExpression,
@@ -534,7 +541,9 @@ namespace ts {
             liftToBlock,
             mergeLexicalEnvironment,
             updateModifiers,
-        };
+        } as any;
+
+        forEach(nodeFactoryPatchers, fn => fn(factory));
 
         return factory;
 
