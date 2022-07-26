@@ -1497,6 +1497,10 @@
         "category": "Error",
         "code": 1477
     },
+    "Identifier or string literal expected.": {
+        "category": "Error",
+        "code": 1478
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
