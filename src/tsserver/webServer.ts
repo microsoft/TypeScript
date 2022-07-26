@@ -1,8 +1,12 @@
 /*@internal*/
-
-/// <reference lib="webworker" />
-
 namespace ts.server {
+    declare const addEventListener: any;
+    declare const postMessage: any;
+    declare const close: any;
+    declare const location: any;
+    declare const XMLHttpRequest: any;
+    declare const self: any;
+
     const nullLogger: Logger = {
         close: noop,
         hasLevel: returnFalse,
