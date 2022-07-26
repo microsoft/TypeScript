@@ -26,14 +26,13 @@ namespace ts.codefix {
         fixIds: [fixId],
         getAllCodeActions: context => {
             const { program, preferences, host } = context;
-            const seen = new Map<string, true>();
+            const seen = new Map<number, true>();
 
             return createCombinedCodeActions(textChanges.ChangeTracker.with(context, changes => {
                 eachDiagnostic(context, errorCodes, diag => {
                     const info = getInfo(program, diag.file, createTextSpan(diag.start, diag.length));
                     if (info) {
-                        const id = getNodeId(info.declaration) + "#" + info.token.getText();
-                        if (addToSeen(seen, id)) {
+                        if (addToSeen(seen, getNodeId(info.declaration))) {
                             return addMissingConstraint(changes, program, preferences, host, diag.file, info);
                         }
                     }
