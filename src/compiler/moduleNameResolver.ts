@@ -584,8 +584,6 @@ namespace ts {
      * This assumes that any module id will have the same resolution for sibling files located in the same folder.
      */
     export interface PerDirectoryResolutionCache<T> {
-        /*@internal*/
-        directoryToModuleNameMap: CacheWithRedirects<Path, ModeAwareCache<T>>;
         getFromCache(directoryName: string, name: string, mode: ResolutionMode, redirectedReference?: ResolvedProjectReference): T | undefined;
         getOrCreateCacheForDirectory(directoryName: string, redirectedReference?: ResolvedProjectReference): ModeAwareCache<T>;
         clear(): void;
@@ -816,7 +814,6 @@ namespace ts {
         const directoryToModuleNameMap = createCacheWithRedirects<Path, ModeAwareCache<T>>(options);
         let oldResolutionCache: OldResolutionCache<T> | undefined;
         return {
-            directoryToModuleNameMap,
             getFromCache,
             getOrCreateCacheForDirectory,
             clear,

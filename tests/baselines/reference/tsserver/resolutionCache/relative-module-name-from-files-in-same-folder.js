@@ -32,8 +32,12 @@ Module resolution kind is not specified, using 'NodeJs'.
 Loading module as file / folder, candidate module location '/user/username/projects/myproject/module2', target file type 'TypeScript'.
 File '/user/username/projects/myproject/module2.ts' exist - use it as a name resolution result.
 ======== Module name '../module2' was successfully resolved to '/user/username/projects/myproject/module2.ts'. ========
-Reusing resolution of module './module1' from '/user/username/projects/myproject/src/file2.ts' found in cache from location '/user/username/projects/myproject/src', it was successfully resolved to '/user/username/projects/myproject/src/module1.ts'.
-Reusing resolution of module '../module2' from '/user/username/projects/myproject/src/file2.ts' found in cache from location '/user/username/projects/myproject/src', it was successfully resolved to '/user/username/projects/myproject/module2.ts'.
+======== Resolving module './module1' from '/user/username/projects/myproject/src/file2.ts'. ========
+Resolution for module './module1' was found in cache from location '/user/username/projects/myproject/src'.
+======== Module name './module1' was successfully resolved to '/user/username/projects/myproject/src/module1.ts'. ========
+======== Resolving module '../module2' from '/user/username/projects/myproject/src/file2.ts'. ========
+Resolution for module '../module2' was found in cache from location '/user/username/projects/myproject/src'.
+======== Module name '../module2' was successfully resolved to '/user/username/projects/myproject/module2.ts'. ========
 FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots

@@ -416,8 +416,7 @@ namespace ts {
             names: readonly string[] | readonly FileReference[];
             containingFile: string;
             redirectedReference: ResolvedProjectReference | undefined;
-            cache: ESMap<Path, ModeAwareCache<T>>;
-            perDirectoryCacheWithRedirects: CacheWithRedirects<Path, ModeAwareCache<T>>;
+            perFileCache: ESMap<Path, ModeAwareCache<T>>;
             loader: (name: string, containingFile: string, options: CompilerOptions, host: ModuleResolutionHost, redirectedReference?: ResolvedProjectReference, containingSourceFile?: SourceFile, resolutionMode?: ResolutionMode) => T;
             getResolutionWithResolvedFileName: GetResolutionWithResolvedFileName<T, R>;
             shouldRetryResolution: (t: T) => boolean;
@@ -428,19 +427,12 @@ namespace ts {
         }
         function resolveNamesWithLocalCache<T extends ResolutionWithFailedLookupLocations, R extends ResolutionWithResolvedFileName>({
             names, containingFile, redirectedReference,
-            cache, perDirectoryCacheWithRedirects,
+            perFileCache,
             loader, getResolutionWithResolvedFileName,
             shouldRetryResolution, partialResolutionInfo, logChanges, containingSourceFile, containingSourceFileMode
         }: ResolveNamesWithLocalCacheInput<T, R>): T[] {
             const path = resolutionHost.toPath(containingFile);
-            const resolutionsInFile = cache.get(path) || cache.set(path, createModeAwareCache()).get(path)!;
-            const dirPath = getDirectoryPath(path);
-            const perDirectoryCache = perDirectoryCacheWithRedirects.getOrCreateMapOfCacheRedirects(redirectedReference);
-            let perDirectoryResolution = perDirectoryCache.get(dirPath);
-            if (!perDirectoryResolution) {
-                perDirectoryResolution = createModeAwareCache();
-                perDirectoryCache.set(dirPath, perDirectoryResolution);
-            }
+            const resolutionsInFile = perFileCache.get(path) || perFileCache.set(path, createModeAwareCache()).get(path)!;
             const resolvedModules: T[] = [];
             const compilerOptions = resolutionHost.getCompilationSettings();
             const hasInvalidatedNonRelativeUnresolvedImport = logChanges && isFileWithInvalidatedNonRelativeUnresolvedImports(path);
@@ -471,39 +463,9 @@ namespace ts {
                     // If the name is unresolved import that was invalidated, recalculate
                     (hasInvalidatedNonRelativeUnresolvedImport && !isExternalModuleNameRelative(name) && shouldRetryResolution(resolution))) {
                     const existingResolution = resolution;
-                    const resolutionInDirectory = perDirectoryResolution.get(name, mode);
-                    if (resolutionInDirectory) {
-                        resolution = resolutionInDirectory;
-                        const host = resolutionHost.getCompilerHost?.() || resolutionHost;
-                        if (isTraceEnabled(compilerOptions, host)) {
-                            const resolved = getResolutionWithResolvedFileName(resolution);
-                            trace(
-                                host,
-                                loader === resolveModuleName as unknown ?
-                                    resolved?.resolvedFileName ?
-                                        resolved.packageId ?
-                                            Diagnostics.Reusing_resolution_of_module_0_from_1_found_in_cache_from_location_2_it_was_successfully_resolved_to_3_with_Package_ID_4:
-                                            Diagnostics.Reusing_resolution_of_module_0_from_1_found_in_cache_from_location_2_it_was_successfully_resolved_to_3:
-                                        Diagnostics.Reusing_resolution_of_module_0_from_1_found_in_cache_from_location_2_it_was_not_resolved :
-                                    resolved?.resolvedFileName ?
-                                        resolved.packageId ?
-                                            Diagnostics.Reusing_resolution_of_type_reference_directive_0_from_1_found_in_cache_from_location_2_it_was_successfully_resolved_to_3_with_Package_ID_4 :
-                                            Diagnostics.Reusing_resolution_of_type_reference_directive_0_from_1_found_in_cache_from_location_2_it_was_successfully_resolved_to_3 :
-                                        Diagnostics.Reusing_resolution_of_type_reference_directive_0_from_1_found_in_cache_from_location_2_it_was_not_resolved,
-                                name,
-                                containingFile,
-                                getDirectoryPath(containingFile),
-                                resolved?.resolvedFileName,
-                                resolved?.packageId && packageIdToString(resolved.packageId)
-                            );
-                        }
-                    }
-                    else {
-                        resolution = loader(name, containingFile, compilerOptions, resolutionHost.getCompilerHost?.() || resolutionHost, redirectedReference, containingSourceFile, mode);
-                        perDirectoryResolution.set(name, mode, resolution);
-                        if (resolutionHost.onDiscoveredSymlink && resolutionIsSymlink(resolution)) {
-                            resolutionHost.onDiscoveredSymlink();
-                        }
+                    resolution = loader(name, containingFile, compilerOptions, resolutionHost.getCompilerHost?.() || resolutionHost, redirectedReference, containingSourceFile, mode);
+                    if (resolutionHost.onDiscoveredSymlink && resolutionIsSymlink(resolution)) {
+                        resolutionHost.onDiscoveredSymlink();
                     }
                     resolutionsInFile.set(name, mode, resolution);
                     watchFailedLookupLocationsOfExternalModuleResolutions(name, resolution, path, getResolutionWithResolvedFileName);
@@ -589,8 +551,7 @@ namespace ts {
                 names: typeDirectiveNames,
                 containingFile,
                 redirectedReference,
-                cache: resolvedTypeReferenceDirectives,
-                perDirectoryCacheWithRedirects: typeReferenceDirectiveResolutionCache.directoryToModuleNameMap,
+                perFileCache: resolvedTypeReferenceDirectives,
                 loader: resolveTypeReferenceDirective,
                 getResolutionWithResolvedFileName: getResolvedTypeReferenceDirective,
                 shouldRetryResolution: resolution => resolution.resolvedTypeReferenceDirective === undefined,
@@ -610,8 +571,7 @@ namespace ts {
                 names: moduleNames,
                 containingFile,
                 redirectedReference,
-                cache: resolvedModuleNames,
-                perDirectoryCacheWithRedirects: moduleResolutionCache.directoryToModuleNameMap,
+                perFileCache: resolvedModuleNames,
                 loader: resolveModuleName,
                 getResolutionWithResolvedFileName: getResolvedModule,
                 shouldRetryResolution: resolution => !resolution.resolvedModule || !resolutionExtensionIsTSOrJson(resolution.resolvedModule.extension),
