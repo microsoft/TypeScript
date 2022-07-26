@@ -1297,10 +1297,7 @@ namespace ts {
             automaticTypeDirectiveResolutions = createModeAwareCache();
             if (automaticTypeDirectiveNames.length) {
                 tracing?.push(tracing.Phase.Program, "processTypeReferences", { count: automaticTypeDirectiveNames.length });
-                // This containingFilename needs to match with the one used in managed-side
-                const containingDirectory = options.configFilePath ? getDirectoryPath(options.configFilePath) : host.getCurrentDirectory();
-                const containingFilename = combinePaths(containingDirectory, inferredTypesContainingFile);
-                const resolutions = resolveTypeReferenceDirectiveNamesReusingOldState(automaticTypeDirectiveNames, containingFilename);
+                const resolutions = resolveTypeReferenceDirectiveNamesReusingOldState(automaticTypeDirectiveNames, getAutomaticTypeDirectiveContainingFile());
                 for (let i = 0; i < automaticTypeDirectiveNames.length; i++) {
                     // under node16/nodenext module resolution, load `types`/ata include names as cjs resolution results by passing an `undefined` mode
                     automaticTypeDirectiveResolutions.set(automaticTypeDirectiveNames[i], /*mode*/ undefined, resolutions[i]);
@@ -1344,13 +1341,13 @@ namespace ts {
                 if (shouldCreateNewSourceFile || !newFile || newFile.impliedNodeFormat !== oldSourceFile.impliedNodeFormat ||
                     // old file wasn't redirect but new file is
                     (oldSourceFile.resolvedPath === oldSourceFile.path && newFile.resolvedPath !== oldSourceFile.path)) {
-                    host.onReleaseOldSourceFile(oldSourceFile, oldProgram.getCompilerOptions(), !!getSourceFileByPath(oldSourceFile.path));
+                    host.onReleaseOldSourceFile(oldSourceFile, oldProgram.getCompilerOptions());
                 }
             }
             if (!host.getParsedCommandLine) {
                 oldProgram.forEachResolvedProjectReference(resolvedProjectReference => {
                     if (!getResolvedProjectReferenceByPath(resolvedProjectReference.sourceFile.path)) {
-                        host.onReleaseOldSourceFile!(resolvedProjectReference.sourceFile, oldProgram!.getCompilerOptions(), /*hasSourceFileByPath*/ false);
+                        host.onReleaseOldSourceFile!(resolvedProjectReference.sourceFile, oldProgram!.getCompilerOptions());
                     }
                 });
             }
@@ -1412,6 +1409,7 @@ namespace ts {
             getResolvedTypeReferenceDirectives: () => resolvedTypeReferenceDirectives,
             getAutomaticTypeDirectiveNames: () => automaticTypeDirectiveNames!,
             getAutomaticTypeDirectiveResolutions: () => automaticTypeDirectiveResolutions,
+            getAutomaticTypeDirectiveContainingFile,
             isSourceFileFromExternalLibrary,
             isSourceFileDefaultLibrary,
             getSourceFileFromReference,
@@ -1464,6 +1462,12 @@ namespace ts {
         tracing?.pop();
 
         return program;
+
+        function getAutomaticTypeDirectiveContainingFile() {
+            // This containingFilename needs to match with the one used in managed-side
+            const containingDirectory = options.configFilePath ? getDirectoryPath(options.configFilePath) : host.getCurrentDirectory();
+            return combinePaths(containingDirectory, inferredTypesContainingFile);
+        }
 
         function addResolutionDiagnostics(resolution: ResolvedModuleWithFailedLookupLocations | ResolvedTypeReferenceDirectiveWithFailedLookupLocations) {
             if (!resolution.resolutionDiagnostics) return;

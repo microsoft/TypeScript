@@ -133,10 +133,10 @@ WatchedFiles::
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 /a/b/node_modules/@types:
   {"fileName":"/a/b/node_modules/@types","pollingInterval":500}
-/a/b/modulefile:
-  {"fileName":"/a/b/moduleFile","pollingInterval":500}
 /a/b/modulefile1.ts:
   {"fileName":"/a/b/moduleFile1.ts","pollingInterval":250}
+/a/b/modulefile:
+  {"fileName":"/a/b/moduleFile","pollingInterval":500}
 
 FsWatches::
 /a/b:

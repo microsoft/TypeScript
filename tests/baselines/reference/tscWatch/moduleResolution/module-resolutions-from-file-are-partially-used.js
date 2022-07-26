@@ -156,14 +156,14 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/node_modules/pkg/import.d.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/user/username/projects/myproject/node_modules/pkg/package.json:
-  {"fileName":"/user/username/projects/myproject/node_modules/pkg/package.json","pollingInterval":250}
-/user/username/projects/myproject/node_modules/pkg1/package.json:
-  {"fileName":"/user/username/projects/myproject/node_modules/pkg1/package.json","pollingInterval":250}
 /user/username/projects/myproject/package.json:
   {"fileName":"/user/username/projects/myproject/package.json","pollingInterval":250}
 /user/username/projects/package.json:
   {"fileName":"/user/username/projects/package.json","pollingInterval":250}
+/user/username/projects/myproject/node_modules/pkg/package.json:
+  {"fileName":"/user/username/projects/myproject/node_modules/pkg/package.json","pollingInterval":250}
+/user/username/projects/myproject/node_modules/pkg1/package.json:
+  {"fileName":"/user/username/projects/myproject/node_modules/pkg1/package.json","pollingInterval":250}
 /user/username/projects/myproject/node_modules/@types:
   {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
 
@@ -287,14 +287,14 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/node_modules/pkg/import.d.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/user/username/projects/myproject/node_modules/pkg/package.json:
-  {"fileName":"/user/username/projects/myproject/node_modules/pkg/package.json","pollingInterval":250}
-/user/username/projects/myproject/node_modules/pkg1/package.json:
-  {"fileName":"/user/username/projects/myproject/node_modules/pkg1/package.json","pollingInterval":250}
 /user/username/projects/myproject/package.json:
   {"fileName":"/user/username/projects/myproject/package.json","pollingInterval":250}
 /user/username/projects/package.json:
   {"fileName":"/user/username/projects/package.json","pollingInterval":250}
+/user/username/projects/myproject/node_modules/pkg/package.json:
+  {"fileName":"/user/username/projects/myproject/node_modules/pkg/package.json","pollingInterval":250}
+/user/username/projects/myproject/node_modules/pkg1/package.json:
+  {"fileName":"/user/username/projects/myproject/node_modules/pkg1/package.json","pollingInterval":250}
 /user/username/projects/myproject/node_modules/@types:
   {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
 

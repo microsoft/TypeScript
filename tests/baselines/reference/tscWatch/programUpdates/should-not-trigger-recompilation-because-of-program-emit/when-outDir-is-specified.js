@@ -184,10 +184,10 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/file1.ts","pollingInterval":250}
 /user/username/projects/myproject/src/file2.ts:
   {"fileName":"/user/username/projects/myproject/src/file2.ts","pollingInterval":250}
-/a/lib/lib.es2016.full.d.ts:
-  {"fileName":"/a/lib/lib.es2016.full.d.ts","pollingInterval":250}
 /user/username/projects/myproject/node_modules/@types:
   {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
+/a/lib/lib.es2016.full.d.ts:
+  {"fileName":"/a/lib/lib.es2016.full.d.ts","pollingInterval":250}
 
 FsWatches::
 
@@ -231,10 +231,10 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/file1.ts","pollingInterval":250}
 /user/username/projects/myproject/src/file2.ts:
   {"fileName":"/user/username/projects/myproject/src/file2.ts","pollingInterval":250}
-/a/lib/lib.es2016.full.d.ts:
-  {"fileName":"/a/lib/lib.es2016.full.d.ts","pollingInterval":250}
 /user/username/projects/myproject/node_modules/@types:
   {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
+/a/lib/lib.es2016.full.d.ts:
+  {"fileName":"/a/lib/lib.es2016.full.d.ts","pollingInterval":250}
 
 FsWatches::
 
@@ -311,10 +311,10 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/file1.ts","pollingInterval":250}
 /user/username/projects/myproject/src/file2.ts:
   {"fileName":"/user/username/projects/myproject/src/file2.ts","pollingInterval":250}
-/a/lib/lib.es2016.full.d.ts:
-  {"fileName":"/a/lib/lib.es2016.full.d.ts","pollingInterval":250}
 /user/username/projects/myproject/node_modules/@types:
   {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
+/a/lib/lib.es2016.full.d.ts:
+  {"fileName":"/a/lib/lib.es2016.full.d.ts","pollingInterval":250}
 /user/username/projects/myproject/src/file3.ts:
   {"fileName":"/user/username/projects/myproject/src/file3.ts","pollingInterval":250}
 
@@ -351,10 +351,10 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/file1.ts","pollingInterval":250}
 /user/username/projects/myproject/src/file2.ts:
   {"fileName":"/user/username/projects/myproject/src/file2.ts","pollingInterval":250}
-/a/lib/lib.es2016.full.d.ts:
-  {"fileName":"/a/lib/lib.es2016.full.d.ts","pollingInterval":250}
 /user/username/projects/myproject/node_modules/@types:
   {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
+/a/lib/lib.es2016.full.d.ts:
+  {"fileName":"/a/lib/lib.es2016.full.d.ts","pollingInterval":250}
 /user/username/projects/myproject/src/file3.ts:
   {"fileName":"/user/username/projects/myproject/src/file3.ts","pollingInterval":250}
 

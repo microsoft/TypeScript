@@ -56,10 +56,10 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
 /user/username/projects/myproject/a.ts:
   {"fileName":"/user/username/projects/myproject/a.ts","pollingInterval":250}
-/user/username/projects/myproject/data.json:
-  {"fileName":"/user/username/projects/myproject/data.json","pollingInterval":500}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/user/username/projects/myproject/data.json:
+  {"fileName":"/user/username/projects/myproject/data.json","pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
   {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
 
@@ -118,8 +118,8 @@ WatchedFiles::
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 /user/username/projects/myproject/data.json:
-  {"fileName":"/user/username/projects/myproject/data.json","pollingInterval":500}
   {"fileName":"/user/username/projects/myproject/data.json","pollingInterval":250}
+  {"fileName":"/user/username/projects/myproject/data.json","pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
   {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
 

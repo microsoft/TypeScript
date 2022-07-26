@@ -594,14 +594,14 @@ File '/a/lib/package.json' does not exist.
 File '/a/package.json' does not exist.
 File '/package.json' does not exist according to earlier cached lookups.
 FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 undefined Source file
+FileWatcher:: Added:: WatchInfo: /src/project/node_modules/pkg0/package.json 2000 undefined File location affecting resolution
 DirectoryWatcher:: Added:: WatchInfo: /src/project/node_modules 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /src/project/node_modules 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /src/project 0 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /src/project 0 undefined Failed Lookup Locations
 FileWatcher:: Added:: WatchInfo: /src/project/node_modules/pkg1/package.json 2000 undefined File location affecting resolution
-FileWatcher:: Added:: WatchInfo: /src/project/node_modules/pkg3/package.json 2000 undefined File location affecting resolution
-FileWatcher:: Added:: WatchInfo: /src/project/node_modules/pkg0/package.json 2000 undefined File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /src/project/node_modules/pkg2/package.json 2000 undefined File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /src/project/node_modules/pkg3/package.json 2000 undefined File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /src/project/node_modules/@types/pkg4/package.json 2000 undefined File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /src/project/node_modules/@types/package.json 2000 undefined File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /src/project/node_modules/package.json 2000 undefined File location affecting resolution
@@ -703,14 +703,14 @@ WatchedFiles::
   {"fileName":"/src/project/node_modules/@types/pkg4/index.d.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/src/project/node_modules/pkg1/package.json:
-  {"fileName":"/src/project/node_modules/pkg1/package.json","pollingInterval":250}
-/src/project/node_modules/pkg3/package.json:
-  {"fileName":"/src/project/node_modules/pkg3/package.json","pollingInterval":250}
 /src/project/node_modules/pkg0/package.json:
   {"fileName":"/src/project/node_modules/pkg0/package.json","pollingInterval":250}
+/src/project/node_modules/pkg1/package.json:
+  {"fileName":"/src/project/node_modules/pkg1/package.json","pollingInterval":250}
 /src/project/node_modules/pkg2/package.json:
   {"fileName":"/src/project/node_modules/pkg2/package.json","pollingInterval":250}
+/src/project/node_modules/pkg3/package.json:
+  {"fileName":"/src/project/node_modules/pkg3/package.json","pollingInterval":250}
 /src/project/node_modules/@types/pkg4/package.json:
   {"fileName":"/src/project/node_modules/@types/pkg4/package.json","pollingInterval":250}
 /src/project/node_modules/@types/package.json:
@@ -1223,14 +1223,14 @@ WatchedFiles::
   {"fileName":"/src/project/node_modules/@types/pkg4/index.d.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/src/project/node_modules/pkg1/package.json:
-  {"fileName":"/src/project/node_modules/pkg1/package.json","pollingInterval":250}
-/src/project/node_modules/pkg3/package.json:
-  {"fileName":"/src/project/node_modules/pkg3/package.json","pollingInterval":250}
 /src/project/node_modules/pkg0/package.json:
   {"fileName":"/src/project/node_modules/pkg0/package.json","pollingInterval":250}
+/src/project/node_modules/pkg1/package.json:
+  {"fileName":"/src/project/node_modules/pkg1/package.json","pollingInterval":250}
 /src/project/node_modules/pkg2/package.json:
   {"fileName":"/src/project/node_modules/pkg2/package.json","pollingInterval":250}
+/src/project/node_modules/pkg3/package.json:
+  {"fileName":"/src/project/node_modules/pkg3/package.json","pollingInterval":250}
 /src/project/node_modules/@types/pkg4/package.json:
   {"fileName":"/src/project/node_modules/@types/pkg4/package.json","pollingInterval":250}
 /src/project/node_modules/@types/package.json:
@@ -1701,14 +1701,14 @@ WatchedFiles::
   {"fileName":"/src/project/node_modules/@types/pkg4/index.d.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/src/project/node_modules/pkg1/package.json:
-  {"fileName":"/src/project/node_modules/pkg1/package.json","pollingInterval":250}
-/src/project/node_modules/pkg3/package.json:
-  {"fileName":"/src/project/node_modules/pkg3/package.json","pollingInterval":250}
 /src/project/node_modules/pkg0/package.json:
   {"fileName":"/src/project/node_modules/pkg0/package.json","pollingInterval":250}
+/src/project/node_modules/pkg1/package.json:
+  {"fileName":"/src/project/node_modules/pkg1/package.json","pollingInterval":250}
 /src/project/node_modules/pkg2/package.json:
   {"fileName":"/src/project/node_modules/pkg2/package.json","pollingInterval":250}
+/src/project/node_modules/pkg3/package.json:
+  {"fileName":"/src/project/node_modules/pkg3/package.json","pollingInterval":250}
 /src/project/node_modules/@types/pkg4/package.json:
   {"fileName":"/src/project/node_modules/@types/pkg4/package.json","pollingInterval":250}
 /src/project/node_modules/@types/package.json:
@@ -2074,19 +2074,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 File '/src/project/package.json' does not exist according to earlier cached lookups.
 File '/src/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-======== Resolving module 'pkg0' from '/src/project/fileWithImports.ts'. ========
-Explicitly specified module resolution kind: 'Node16'.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-Loading module 'pkg0' from 'node_modules' folder, target file type 'TypeScript'.
-File '/src/project/node_modules/pkg0/package.json' exists according to earlier cached lookups.
-File name '/src/project/node_modules/pkg0/import.js' has a '.js' extension - stripping it.
-File '/src/project/node_modules/pkg0/import.ts' does not exist.
-File '/src/project/node_modules/pkg0/import.tsx' does not exist.
-File '/src/project/node_modules/pkg0/import.d.ts' exist - use it as a name resolution result.
-Resolving real path for '/src/project/node_modules/pkg0/import.d.ts', result '/src/project/node_modules/pkg0/import.d.ts'.
-======== Module name 'pkg0' was successfully resolved to '/src/project/node_modules/pkg0/import.d.ts' with Package ID 'pkg0/import.d.ts@0.0.1'. ========
+Reusing resolution of module 'pkg0' from '/src/project/fileWithImports.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg0/import.d.ts' with Package ID 'pkg0/import.d.ts@0.0.1'.
 ======== Resolving module 'pkg1' from '/src/project/fileWithImports.ts'. ========
 Explicitly specified module resolution kind: 'Node16'.
 File '/src/project/package.json' does not exist according to earlier cached lookups.
@@ -2212,14 +2200,14 @@ WatchedFiles::
   {"fileName":"/src/project/node_modules/@types/pkg4/index.d.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/src/project/node_modules/pkg1/package.json:
-  {"fileName":"/src/project/node_modules/pkg1/package.json","pollingInterval":250}
-/src/project/node_modules/pkg3/package.json:
-  {"fileName":"/src/project/node_modules/pkg3/package.json","pollingInterval":250}
 /src/project/node_modules/pkg0/package.json:
   {"fileName":"/src/project/node_modules/pkg0/package.json","pollingInterval":250}
+/src/project/node_modules/pkg1/package.json:
+  {"fileName":"/src/project/node_modules/pkg1/package.json","pollingInterval":250}
 /src/project/node_modules/pkg2/package.json:
   {"fileName":"/src/project/node_modules/pkg2/package.json","pollingInterval":250}
+/src/project/node_modules/pkg3/package.json:
+  {"fileName":"/src/project/node_modules/pkg3/package.json","pollingInterval":250}
 /src/project/node_modules/@types/pkg4/package.json:
   {"fileName":"/src/project/node_modules/@types/pkg4/package.json","pollingInterval":250}
 /src/project/node_modules/@types/package.json:
@@ -2646,14 +2634,7 @@ File '/src/project/node_modules/pkg1/package.json' exists according to earlier c
 File '/src/project/package.json' does not exist according to earlier cached lookups.
 File '/src/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-======== Resolving type reference directive 'pkg2', containing file '/src/project/fileWithTypeRefs.ts', root directory '/src/project/node_modules/@types'. ========
-Resolving with primary search path '/src/project/node_modules/@types'.
-Looking up in 'node_modules' folder, initial location '/src/project'.
-File '/src/project/node_modules/pkg2/package.json' exists according to earlier cached lookups.
-File name '/src/project/node_modules/pkg2/import.js' has a '.js' extension - stripping it.
-File '/src/project/node_modules/pkg2/import.d.ts' exist - use it as a name resolution result.
-Resolving real path for '/src/project/node_modules/pkg2/import.d.ts', result '/src/project/node_modules/pkg2/import.d.ts'.
-======== Type reference directive 'pkg2' was successfully resolved to '/src/project/node_modules/pkg2/import.d.ts' with Package ID 'pkg2/import.d.ts@0.0.1', primary: false. ========
+Reusing resolution of type reference directive 'pkg2' from '/src/project/fileWithTypeRefs.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg2/import.d.ts' with Package ID 'pkg2/import.d.ts@0.0.1'.
 ======== Resolving type reference directive 'pkg3', containing file '/src/project/fileWithTypeRefs.ts', root directory '/src/project/node_modules/@types'. ========
 Resolving with primary search path '/src/project/node_modules/@types'.
 Looking up in 'node_modules' folder, initial location '/src/project'.
@@ -2777,14 +2758,14 @@ WatchedFiles::
   {"fileName":"/src/project/node_modules/@types/pkg4/index.d.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/src/project/node_modules/pkg1/package.json:
-  {"fileName":"/src/project/node_modules/pkg1/package.json","pollingInterval":250}
-/src/project/node_modules/pkg3/package.json:
-  {"fileName":"/src/project/node_modules/pkg3/package.json","pollingInterval":250}
 /src/project/node_modules/pkg0/package.json:
   {"fileName":"/src/project/node_modules/pkg0/package.json","pollingInterval":250}
+/src/project/node_modules/pkg1/package.json:
+  {"fileName":"/src/project/node_modules/pkg1/package.json","pollingInterval":250}
 /src/project/node_modules/pkg2/package.json:
   {"fileName":"/src/project/node_modules/pkg2/package.json","pollingInterval":250}
+/src/project/node_modules/pkg3/package.json:
+  {"fileName":"/src/project/node_modules/pkg3/package.json","pollingInterval":250}
 /src/project/node_modules/@types/pkg4/package.json:
   {"fileName":"/src/project/node_modules/@types/pkg4/package.json","pollingInterval":250}
 /src/project/node_modules/@types/package.json:
@@ -3323,12 +3304,12 @@ WatchedFiles::
   {"fileName":"/src/project/node_modules/@types/pkg4/index.d.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/src/project/node_modules/pkg3/package.json:
-  {"fileName":"/src/project/node_modules/pkg3/package.json","pollingInterval":250}
 /src/project/node_modules/pkg0/package.json:
   {"fileName":"/src/project/node_modules/pkg0/package.json","pollingInterval":250}
 /src/project/node_modules/pkg2/package.json:
   {"fileName":"/src/project/node_modules/pkg2/package.json","pollingInterval":250}
+/src/project/node_modules/pkg3/package.json:
+  {"fileName":"/src/project/node_modules/pkg3/package.json","pollingInterval":250}
 /src/project/node_modules/@types/pkg4/package.json:
   {"fileName":"/src/project/node_modules/@types/pkg4/package.json","pollingInterval":250}
 /src/project/node_modules/@types/package.json:

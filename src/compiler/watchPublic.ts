@@ -500,7 +500,6 @@ namespace ts {
             writeLog(`  options: ${JSON.stringify(compilerOptions)}`);
             if (projectReferences) writeLog(`  projectReferences: ${JSON.stringify(projectReferences)}`);
 
-            const needsUpdateInTypeRootWatch = hasChangedCompilerOptions || !getCurrentProgram();
             hasChangedCompilerOptions = false;
             hasChangedConfigFileParsingErrors = false;
             resolutionCache.startCachingPerDirectoryResolution();
@@ -512,9 +511,6 @@ namespace ts {
 
             // Update watches
             updateMissingFilePathsWatch(builderProgram.getProgram(), missingFilesMap || (missingFilesMap = new Map()), watchMissingFilePath);
-            if (needsUpdateInTypeRootWatch) {
-                resolutionCache.updateTypeRootsWatch();
-            }
 
             if (missingFilePathsRequestedForRelease) {
                 // These are the paths that program creater told us as not in use any more but were missing on the disk.
@@ -623,7 +619,7 @@ namespace ts {
             return !hostSourceFile || !hostSourceFile.version ? undefined : hostSourceFile.version;
         }
 
-        function onReleaseOldSourceFile(oldSourceFile: SourceFile, _oldOptions: CompilerOptions, hasSourceFileByPath: boolean) {
+        function onReleaseOldSourceFile(oldSourceFile: SourceFile) {
             const hostSourceFileInfo = sourceFilesCache.get(oldSourceFile.resolvedPath);
             // If this is the source file thats in the cache and new program doesnt need it,
             // remove the cached entry.
@@ -639,9 +635,6 @@ namespace ts {
                         hostSourceFileInfo.fileWatcher.close();
                     }
                     sourceFilesCache.delete(oldSourceFile.resolvedPath);
-                    if (!hasSourceFileByPath) {
-                        resolutionCache.removeResolutionsOfFile(oldSourceFile.path);
-                    }
                 }
             }
         }
@@ -969,7 +962,6 @@ namespace ts {
                                 // Reload config for the referenced projects and remove the resolutions from referenced projects since the config file changed
                                 const config = parsedConfigs?.get(projectPath);
                                 if (config) config.reloadLevel = ConfigFileProgramReloadLevel.Full;
-                                resolutionCache.removeResolutionsFromProjectReferenceRedirects(projectPath);
                             }
                             scheduleProgramUpdate();
                         });
@@ -990,7 +982,6 @@ namespace ts {
                     updateCachedSystemWithFile(configFileName, configPath, eventKind);
                     const config = parsedConfigs?.get(configPath);
                     if (config) config.reloadLevel = ConfigFileProgramReloadLevel.Full;
-                    resolutionCache.removeResolutionsFromProjectReferenceRedirects(configPath);
                     scheduleProgramUpdate();
                 },
                 PollingInterval.High,

@@ -66,10 +66,10 @@ WatchedFiles::
   {"fileName":"/a/b/commonFile1.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/a/b/commonfile3.ts:
-  {"fileName":"/a/b/commonfile3.ts","pollingInterval":250}
 /a/b/node_modules/@types:
   {"fileName":"/a/b/node_modules/@types","pollingInterval":500}
+/a/b/commonfile3.ts:
+  {"fileName":"/a/b/commonfile3.ts","pollingInterval":250}
 
 FsWatches::
 

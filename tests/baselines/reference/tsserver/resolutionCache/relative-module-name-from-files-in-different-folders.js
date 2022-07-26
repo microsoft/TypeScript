@@ -58,8 +58,6 @@ File '/user/username/projects/myproject/product/src/module1}.js' does not exist.
 File '/user/username/projects/myproject/product/src/module1}.jsx' does not exist.
 Directory '/user/username/projects/myproject/product/src/module1}' does not exist, skipping all lookups in it.
 ======== Module name '../src/module1}' was not resolved. ========
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/product 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/product 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
 ======== Resolving module '../module2' from '/user/username/projects/myproject/product/test/file4.ts'. ========
 Module resolution kind is not specified, using 'NodeJs'.
 Loading module as file / folder, candidate module location '/user/username/projects/myproject/product/module2', target file type 'TypeScript'.
@@ -76,6 +74,8 @@ Loading module as file / folder, candidate module location '/user/username/proje
 File '/user/username/projects/myproject/product/module2.ts' exist - use it as a name resolution result.
 ======== Module name '../../module2' was successfully resolved to '/user/username/projects/myproject/product/module2.ts'. ========
 FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/product 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/product 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
 Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms

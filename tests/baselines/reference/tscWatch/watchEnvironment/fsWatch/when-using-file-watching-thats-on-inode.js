@@ -34,9 +34,9 @@ CreatingProgramWith::
   options: {"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/foo.d.ts 250 {"watchFile":4} Source file
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/main.ts 250 {"watchFile":4} Source file
+FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 {"watchFile":4} Source file
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 0 {"watchFile":4} Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 0 {"watchFile":4} Failed Lookup Locations
-FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 {"watchFile":4} Source file
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 {"watchFile":4} Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 {"watchFile":4} Type roots
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/main.js :: WatchInfo: /user/username/projects/myproject 0 {"watchFile":4} Failed Lookup Locations
@@ -74,10 +74,10 @@ FsWatches::
   {"directoryName":"/user/username/projects/myproject/foo.d.ts","inode":9}
 /user/username/projects/myproject/main.ts:
   {"directoryName":"/user/username/projects/myproject/main.ts","inode":8}
-/user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","inode":7}
 /a/lib/lib.d.ts:
   {"directoryName":"/a/lib/lib.d.ts","inode":3}
+/user/username/projects/myproject:
+  {"directoryName":"/user/username/projects/myproject","inode":7}
 
 FsWatchesRecursive::
 
@@ -162,10 +162,10 @@ FsWatches::
   {"directoryName":"/user/username/projects/myproject/tsconfig.json","inode":10}
 /user/username/projects/myproject/main.ts:
   {"directoryName":"/user/username/projects/myproject/main.ts","inode":8}
-/user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","inode":7}
 /a/lib/lib.d.ts:
   {"directoryName":"/a/lib/lib.d.ts","inode":3}
+/user/username/projects/myproject:
+  {"directoryName":"/user/username/projects/myproject","inode":7}
 /user/username/projects/myproject/foo.d.ts:
   {"directoryName":"/user/username/projects/myproject/foo.d.ts","inode":12}
 
@@ -236,10 +236,10 @@ FsWatches::
   {"directoryName":"/user/username/projects/myproject/tsconfig.json","inode":10}
 /user/username/projects/myproject/main.ts:
   {"directoryName":"/user/username/projects/myproject/main.ts","inode":8}
-/user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","inode":7}
 /a/lib/lib.d.ts:
   {"directoryName":"/a/lib/lib.d.ts","inode":3}
+/user/username/projects/myproject:
+  {"directoryName":"/user/username/projects/myproject","inode":7}
 /user/username/projects/myproject/foo.d.ts:
   {"directoryName":"/user/username/projects/myproject/foo.d.ts","inode":13}
 

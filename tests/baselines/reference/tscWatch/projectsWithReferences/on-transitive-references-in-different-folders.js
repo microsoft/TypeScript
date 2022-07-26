@@ -250,12 +250,12 @@ FsWatches::
   {"directoryName":"/user/username/projects/transitiveReferences"}
 
 FsWatchesRecursive::
+/user/username/projects/transitivereferences/a:
+  {"directoryName":"/user/username/projects/transitiveReferences/a"}
 /user/username/projects/transitivereferences/b:
   {"directoryName":"/user/username/projects/transitiveReferences/b"}
 /user/username/projects/transitivereferences/refs:
   {"directoryName":"/user/username/projects/transitiveReferences/refs"}
-/user/username/projects/transitivereferences/a:
-  {"directoryName":"/user/username/projects/transitiveReferences/a"}
 
 exitCode:: ExitStatus.undefined
 
@@ -413,12 +413,12 @@ FsWatches::
   {"directoryName":"/user/username/projects/transitiveReferences"}
 
 FsWatchesRecursive::
+/user/username/projects/transitivereferences/a:
+  {"directoryName":"/user/username/projects/transitiveReferences/a"}
 /user/username/projects/transitivereferences/b:
   {"directoryName":"/user/username/projects/transitiveReferences/b"}
 /user/username/projects/transitivereferences/refs:
   {"directoryName":"/user/username/projects/transitiveReferences/refs"}
-/user/username/projects/transitivereferences/a:
-  {"directoryName":"/user/username/projects/transitiveReferences/a"}
 
 exitCode:: ExitStatus.undefined
 
@@ -509,12 +509,12 @@ FsWatches::
   {"directoryName":"/user/username/projects/transitiveReferences"}
 
 FsWatchesRecursive::
+/user/username/projects/transitivereferences/a:
+  {"directoryName":"/user/username/projects/transitiveReferences/a"}
 /user/username/projects/transitivereferences/b:
   {"directoryName":"/user/username/projects/transitiveReferences/b"}
 /user/username/projects/transitivereferences/nrefs:
   {"directoryName":"/user/username/projects/transitiveReferences/nrefs"}
-/user/username/projects/transitivereferences/a:
-  {"directoryName":"/user/username/projects/transitiveReferences/a"}
 
 exitCode:: ExitStatus.undefined
 
@@ -600,12 +600,12 @@ FsWatches::
   {"directoryName":"/user/username/projects/transitiveReferences"}
 
 FsWatchesRecursive::
+/user/username/projects/transitivereferences/a:
+  {"directoryName":"/user/username/projects/transitiveReferences/a"}
 /user/username/projects/transitivereferences/b:
   {"directoryName":"/user/username/projects/transitiveReferences/b"}
 /user/username/projects/transitivereferences/refs:
   {"directoryName":"/user/username/projects/transitiveReferences/refs"}
-/user/username/projects/transitivereferences/a:
-  {"directoryName":"/user/username/projects/transitiveReferences/a"}
 
 exitCode:: ExitStatus.undefined
 

@@ -42,10 +42,10 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/emit
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/emit-composite/src 1 undefined Config: /user/username/projects/myproject/packages/emit-composite/tsconfig.json WatchType: Wild card directory
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/emit-composite/src 1 undefined Config: /user/username/projects/myproject/packages/emit-composite/tsconfig.json WatchType: Wild card directory
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/emit-composite/src/index.js 500 undefined WatchType: Closed Script info
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/emit-composite 1 undefined Project: /user/username/projects/myproject/packages/consumer/tsconfig.json WatchType: Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/emit-composite 1 undefined Project: /user/username/projects/myproject/packages/consumer/tsconfig.json WatchType: Failed Lookup Locations
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/emit-composite/src/testModule.js 500 undefined WatchType: Closed Script info
 FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/emit-composite 1 undefined Project: /user/username/projects/myproject/packages/consumer/tsconfig.json WatchType: Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/emit-composite 1 undefined Project: /user/username/projects/myproject/packages/consumer/tsconfig.json WatchType: Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/consumer/src 1 undefined Project: /user/username/projects/myproject/packages/consumer/tsconfig.json WatchType: Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/consumer/src 1 undefined Project: /user/username/projects/myproject/packages/consumer/tsconfig.json WatchType: Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/packages/consumer/node_modules 1 undefined Project: /user/username/projects/myproject/packages/consumer/tsconfig.json WatchType: Failed Lookup Locations
