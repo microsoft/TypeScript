@@ -1,11 +1,11 @@
 tests/cases/conformance/parser/ecmascript5/parserRealSource5.ts(4,21): error TS6053: File 'tests/cases/conformance/parser/ecmascript5/typescript.ts' not found.
 tests/cases/conformance/parser/ecmascript5/parserRealSource5.ts(14,66): error TS2304: Cannot find name 'Parser'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource5.ts(27,17): error TS2304: Cannot find name 'CompilerDiagnostics'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource5.ts(52,38): error TS2304: Cannot find name 'AST'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource5.ts(52,51): error TS2304: Cannot find name 'AST'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource5.ts(52,38): error TS2552: Cannot find name 'AST'. Did you mean 'Cast'?
+tests/cases/conformance/parser/ecmascript5/parserRealSource5.ts(52,51): error TS2552: Cannot find name 'AST'. Did you mean 'Cast'?
 tests/cases/conformance/parser/ecmascript5/parserRealSource5.ts(52,64): error TS2304: Cannot find name 'IAstWalker'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource5.ts(61,39): error TS2304: Cannot find name 'AST'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource5.ts(61,52): error TS2304: Cannot find name 'AST'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource5.ts(61,39): error TS2552: Cannot find name 'AST'. Did you mean 'Cast'?
+tests/cases/conformance/parser/ecmascript5/parserRealSource5.ts(61,52): error TS2552: Cannot find name 'AST'. Did you mean 'Cast'?
 tests/cases/conformance/parser/ecmascript5/parserRealSource5.ts(61,65): error TS2304: Cannot find name 'IAstWalker'.
 
 
@@ -69,9 +69,9 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource5.ts(61,65): error TS
     
         export function prePrintAST(ast: AST, parent: AST, walker: IAstWalker) {
                                          ~~~
-!!! error TS2304: Cannot find name 'AST'.
+!!! error TS2552: Cannot find name 'AST'. Did you mean 'Cast'?
                                                       ~~~
-!!! error TS2304: Cannot find name 'AST'.
+!!! error TS2552: Cannot find name 'AST'. Did you mean 'Cast'?
                                                                    ~~~~~~~~~~
 !!! error TS2304: Cannot find name 'IAstWalker'.
             var pc: PrintContext = <PrintContext>walker.state;
@@ -84,9 +84,9 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource5.ts(61,65): error TS
     
         export function postPrintAST(ast: AST, parent: AST, walker: IAstWalker) {
                                           ~~~
-!!! error TS2304: Cannot find name 'AST'.
+!!! error TS2552: Cannot find name 'AST'. Did you mean 'Cast'?
                                                        ~~~
-!!! error TS2304: Cannot find name 'AST'.
+!!! error TS2552: Cannot find name 'AST'. Did you mean 'Cast'?
                                                                     ~~~~~~~~~~
 !!! error TS2304: Cannot find name 'IAstWalker'.
             var pc: PrintContext = <PrintContext>walker.state;

@@ -1184,7 +1184,7 @@ interface ReadonlyArray<T> {
      * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    every<S extends T>(predicate: (value: T, index: number, array: readonly T[]) => value is S, thisArg?: any): this is { [P in keyof this]: S };
+    every<S extends T>(predicate: (value: T, index: number, array: readonly T[]) => value is S, thisArg?: any): this is Cast<{ [P in keyof this]: S }, readonly S[]>;
     /**
      * Determines whether all the members of an array satisfy the specified test.
      * @param predicate A function that accepts up to three arguments. The every method calls
@@ -1214,7 +1214,7 @@ interface ReadonlyArray<T> {
      * @param callbackfn A function that accepts up to three arguments. The map method calls the callbackfn function one time for each element in the array.
      * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
      */
-    map<U>(callbackfn: (value: T, index: number, array: readonly T[]) => U, thisArg?: any): { -readonly [P in keyof this]: U };
+    map<U>(callbackfn: (value: T, index: number, array: readonly T[]) => U, thisArg?: any): Cast<{ -readonly [P in keyof this]: U }, U[]>;
     /**
      * Returns the elements of an array that meet the condition specified in a callback function.
      * @param predicate A function that accepts up to three arguments. The filter method calls the predicate function one time for each element in the array.
@@ -1375,7 +1375,7 @@ interface Array<T> {
      * @param thisArg An object to which the this keyword can refer in the predicate function.
      * If thisArg is omitted, undefined is used as the this value.
      */
-    every<S extends T>(predicate: (value: T, index: number, array: T[]) => value is S, thisArg?: any): this is { [P in keyof this]: S };
+    every<S extends T>(predicate: (value: T, index: number, array: T[]) => value is S, thisArg?: any): this is Cast<{ [P in keyof this]: S }, S[]>;
     /**
      * Determines whether all the members of an array satisfy the specified test.
      * @param predicate A function that accepts up to three arguments. The every method calls
@@ -1405,7 +1405,7 @@ interface Array<T> {
      * @param callbackfn A function that accepts up to three arguments. The map method calls the callbackfn function one time for each element in the array.
      * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
      */
-    map<U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any): { [P in keyof this]: U };
+    map<U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any): Cast<{ [P in keyof this]: U }, U[]>;
     /**
      * Returns the elements of an array that meet the condition specified in a callback function.
      * @param predicate A function that accepts up to three arguments. The filter method calls the predicate function one time for each element in the array.
@@ -1567,6 +1567,11 @@ type Exclude<T, U> = T extends U ? never : T;
  * Extract from T those types that are assignable to U
  */
 type Extract<T, U> = T extends U ? T : never;
+
+/**
+ * Make sure T is at least assignable to U
+ */
+type Cast<T, U> = T extends U ? T : U;
 
 /**
  * Construct a type with the properties of T except for those in type K.
