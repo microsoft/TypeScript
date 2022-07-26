@@ -80,15 +80,7 @@ namespace ts {
 
     // Patch `createNodeFactory` because it creates the factories that are provided to transformers
     // in the public API.
-
-    const prevCreateNodeFactory = createNodeFactory;
-
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-qualifier
-    ts.createNodeFactory = (flags, baseFactory) => {
-        const factory = prevCreateNodeFactory(flags, baseFactory);
-        patchNodeFactory(factory);
-        return factory;
-    };
+    addNodeFactoryPatcher(patchNodeFactory);
 
     // Patch `ts.factory` because its public
     patchNodeFactory(factory);
