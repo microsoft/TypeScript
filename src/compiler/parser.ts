@@ -2780,7 +2780,9 @@ namespace ts {
                 case ParsingContext.ImportOrExportSpecifiers: return parseErrorAtCurrentToken(Diagnostics.Identifier_expected);
                 case ParsingContext.JsxAttributes: return parseErrorAtCurrentToken(Diagnostics.Identifier_expected);
                 case ParsingContext.JsxChildren: return parseErrorAtCurrentToken(Diagnostics.Identifier_expected);
-                default: return [undefined!]; // TODO: GH#18217 `default: Debug.assertNever(context);`
+                case ParsingContext.AssertEntries: return parseErrorAtCurrentToken(Diagnostics.Identifier_or_string_literal_expected); // AssertionKey.
+                case ParsingContext.Count: return Debug.fail("ParsingContext.Count used as a context"); // Not a real context, only a marker.
+                default: Debug.assertNever(context);
             }
         }
 
@@ -3337,7 +3339,7 @@ namespace ts {
             //      BindingElement[?Yield,?Await]
 
             // Decorators are parsed in the outer [Await] context, the rest of the parameter is parsed in the function's [Await] context.
-            const decorators = inOuterAwaitContext ? doInAwaitContext(parseDecorators) : parseDecorators();
+            const decorators = inOuterAwaitContext ? doInAwaitContext(parseDecorators) : doOutsideOfAwaitContext(parseDecorators);
 
             if (token() === SyntaxKind.ThisKeyword) {
                 const node = factory.createParameterDeclaration(
@@ -5285,12 +5287,15 @@ namespace ts {
 
         function parseSuperExpression(): MemberExpression {
             const pos = getNodePos();
-            const expression = parseTokenNode<PrimaryExpression>();
+            let expression = parseTokenNode<MemberExpression>();
             if (token() === SyntaxKind.LessThanToken) {
                 const startPos = getNodePos();
                 const typeArguments = tryParse(parseTypeArgumentsInExpression);
                 if (typeArguments !== undefined) {
                     parseErrorAt(startPos, getNodePos(), Diagnostics.super_may_not_use_type_arguments);
+                    if (!isTemplateStartOfTaggedTemplate()) {
+                        expression = factory.createExpressionWithTypeArguments(expression, typeArguments);
+                    }
                 }
             }
 

@@ -2112,6 +2112,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";An_instantiation_expression_cannot_be_followed_by_a_property_access_1477" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[An instantiation expression cannot be followed by a property access.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[인스턴스화 식 뒤에 속성 액세스가 있을 수 없습니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";An_interface_can_only_extend_an_identifier_Slashqualified_name_with_optional_type_arguments_2499" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[An interface can only extend an identifier/qualified-name with optional type arguments.]]></Val>
@@ -14447,6 +14456,15 @@
           <Val><![CDATA[Type of computed property's value is '{0}', which is not assignable to type '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[계산된 속성 값의 형식은 '{1}' 형식에 할당할 수 없는 '{0}'입니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Type_of_instance_member_variable_0_cannot_reference_identifier_1_declared_in_the_constructor_2844" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Type of instance member variable '{0}' cannot reference identifier '{1}' declared in the constructor.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[인스턴스 멤버 변수 '{0}'의 형식은 생성자에 선언된 식별자 '{1}'을(를) 참조할 수 없습니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
