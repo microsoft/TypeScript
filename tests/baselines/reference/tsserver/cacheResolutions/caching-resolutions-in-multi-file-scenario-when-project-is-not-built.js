@@ -238,17 +238,7 @@ File '/src/project/package.json' does not exist according to earlier cached look
 File '/src/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 ======== Resolving module 'pkg0' from '/src/project/randomFileForImport.ts'. ========
-Explicitly specified module resolution kind: 'Node16'.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-Loading module 'pkg0' from 'node_modules' folder, target file type 'TypeScript'.
-File '/src/project/node_modules/pkg0/package.json' exists according to earlier cached lookups.
-File name '/src/project/node_modules/pkg0/import.js' has a '.js' extension - stripping it.
-File '/src/project/node_modules/pkg0/import.ts' does not exist.
-File '/src/project/node_modules/pkg0/import.tsx' does not exist.
-File '/src/project/node_modules/pkg0/import.d.ts' exist - use it as a name resolution result.
-Resolving real path for '/src/project/node_modules/pkg0/import.d.ts', result '/src/project/node_modules/pkg0/import.d.ts'.
+Resolution for module 'pkg0' was found in cache from location '/src/project'.
 ======== Module name 'pkg0' was successfully resolved to '/src/project/node_modules/pkg0/import.d.ts' with Package ID 'pkg0/import.d.ts@0.0.1'. ========
 File '/src/project/package.json' does not exist according to earlier cached lookups.
 File '/src/package.json' does not exist according to earlier cached lookups.
@@ -311,13 +301,8 @@ Reusing resolution of module 'pkg0' from '/src/project/randomFileForImport.ts' o
 File '/src/project/package.json' does not exist according to earlier cached lookups.
 File '/src/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-======== Resolving type reference directive 'pkg2', containing file '/src/project/randomFileForTypeRef.ts', root directory '/src/project/node_modules/@types'. ========
-Resolving with primary search path '/src/project/node_modules/@types'.
-Looking up in 'node_modules' folder, initial location '/src/project'.
-File '/src/project/node_modules/pkg2/package.json' exists according to earlier cached lookups.
-File name '/src/project/node_modules/pkg2/import.js' has a '.js' extension - stripping it.
-File '/src/project/node_modules/pkg2/import.d.ts' exist - use it as a name resolution result.
-Resolving real path for '/src/project/node_modules/pkg2/import.d.ts', result '/src/project/node_modules/pkg2/import.d.ts'.
+======== Resolving type reference directive 'pkg2', containing file '/src/project/randomFileForTypeRef.ts'. ========
+Resolution for type reference directive 'pkg2' was found in cache from location '/src/project'.
 ======== Type reference directive 'pkg2' was successfully resolved to '/src/project/node_modules/pkg2/import.d.ts' with Package ID 'pkg2/import.d.ts@0.0.1', primary: false. ========
 Reusing resolution of type reference directive 'pkg4' from '/src/project/__inferred type names__.ts' of old program, it was successfully resolved to '/src/project/node_modules/@types/pkg4/index.d.ts'.
 File '/src/project/node_modules/@types/pkg4/package.json' does not exist according to earlier cached lookups.

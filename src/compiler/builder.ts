@@ -1944,6 +1944,14 @@ namespace ts {
                 /*moduleNameToDirectoryMap*/ undefined,
                 /*decodedModuleNameToDirectoryMap*/ undefined,
             ),
+            clearRedirectsMap: () => {
+                cacheResolutions?.modules?.clearRedirectsMap();
+                cacheResolutions?.typeRefs?.clearRedirectsMap();
+                cacheResolutions?.moduleNameToDirectoryMap.clearRedirectsMap();
+                decodedResolvedModules.clearRedirectsMap();
+                decodedResolvedTypeRefs.clearRedirectsMap();
+                decodedModuleNameToDirectoryMap.clearRedirectsMap();
+            }
         };
 
         function fileExists(fileName: string) {
@@ -1977,17 +1985,24 @@ namespace ts {
             // Decode so we have maps for directories
             if (!decodedReusableCache.getOwnMap().size && !decodedReusableCache.redirectsKeyToCache.size) {
                 if (isArray(reusableCache)) {
-                    setBuildInfoResolutionEntries(decodedReusableCache, compilerOptions, reusableCache, decodedModuleNameToDirectoryMap);
+                    setBuildInfoResolutionEntries(decodedReusableCache, compilerOptions, /*optionsKey*/ undefined, reusableCache, decodedModuleNameToDirectoryMap);
                 }
                 else {
-                    if (reusableCache.own) setBuildInfoResolutionEntries(decodedReusableCache, compilerOptions, reusableCache.own, decodedModuleNameToDirectoryMap);
-                    reusableCache.redirects.forEach(({ options, cache }) => setBuildInfoResolutionEntries(
-                        decodedReusableCache,
-                        options ? convertToOptionsWithAbsolutePaths(options, resuableCacheResolutions!.getProgramBuildInfoFilePathDecoder().toAbsolutePath) : {},
-                        cache,
-                        decodedModuleNameToDirectoryMap
-                    ));
+                    if (reusableCache.own) setBuildInfoResolutionEntries(decodedReusableCache, compilerOptions, /*optionsKey*/ undefined, reusableCache.own, decodedModuleNameToDirectoryMap);
+                    reusableCache.redirects.forEach(({ options, cache }) => {
+                        const compilerOptions = options ? convertToOptionsWithAbsolutePaths(options, resuableCacheResolutions!.getProgramBuildInfoFilePathDecoder().toAbsolutePath) : {};
+                        setBuildInfoResolutionEntries(
+                            decodedReusableCache,
+                            compilerOptions,
+                            getRedirectsCacheKey(compilerOptions),
+                            cache,
+                            decodedModuleNameToDirectoryMap
+                        );
+                    });
                 }
+                // Ensure redirected reference verifies options before using redirects map
+                decodedReusableCache.clearRedirectsMap();
+                decodedModuleNameToDirectoryMap?.clearRedirectsMap();
             }
 
             const resolutionId = decodedReusableCache.getMapOfCacheRedirects(redirectedReference)?.get(dirPath)?.get(name, mode) ||
@@ -1998,13 +2013,14 @@ namespace ts {
         function setBuildInfoResolutionEntries(
             decodedReusableCache: DecodedResolvedMap,
             options: CompilerOptions,
+            optionsKey: RedirectsCacheKey | undefined,
             reusableCache: ProgramBuildInfoResolutionCache,
             decodedModuleNameToDirectoryMap: DecodedModuleNameToDirectoryMap | undefined,
         ) {
-            const map = decodedReusableCache.createMapForCompilerOptions(options);
+            const map = decodedReusableCache.createMapForCompilerOptions(options, optionsKey);
             reusableCache.forEach(([dirId, entryId]) => {
                 const dirPath = resuableCacheResolutions!.getProgramBuildInfoFilePathDecoder().toFilePath(dirId);
-                map.set(dirPath, toModeAwareCache(entryId, dirPath, options, decodedModuleNameToDirectoryMap));
+                map.set(dirPath, toModeAwareCache(entryId, dirPath, options, optionsKey, decodedModuleNameToDirectoryMap));
             });
         }
 
@@ -2012,6 +2028,7 @@ namespace ts {
             entries: readonly ProgramBuildInfoResolutionEntryId[],
             dirPath: Path,
             options: CompilerOptions,
+            optionsKey: RedirectsCacheKey | undefined,
             decodedModuleNameToDirectoryMap: DecodedModuleNameToDirectoryMap | undefined,
         ) {
             const modeAwareCache = createModeAwareCache<ProgramBuildInfoResolutionId>();
@@ -2019,7 +2036,7 @@ namespace ts {
                 const [name, resolutionId, mode] = toResolutionEntry(entryId);
                 modeAwareCache.set(name, mode, resolutionId);
                 if (!decodedModuleNameToDirectoryMap || isExternalModuleNameRelative(name)) return;
-                const mapForOptions = decodedModuleNameToDirectoryMap.createMapForCompilerOptions(options);
+                const mapForOptions = decodedModuleNameToDirectoryMap.createMapForCompilerOptions(options, optionsKey);
                 const key = getModeAwareCacheKey(name, mode);
                 let moduleNameMap = mapForOptions.get(key);;
                 if (!moduleNameMap) mapForOptions.set(key, moduleNameMap = new Map());

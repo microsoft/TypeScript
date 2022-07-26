@@ -244,13 +244,8 @@ File '/user/username/projects/package.json' does not exist according to earlier 
 File '/user/username/package.json' does not exist according to earlier cached lookups.
 File '/user/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-======== Resolving type reference directive 'pkg', containing file '/user/username/projects/myproject/a.ts', root directory '/user/username/projects/myproject/node_modules/@types'. ========
-Resolving with primary search path '/user/username/projects/myproject/node_modules/@types'.
-Looking up in 'node_modules' folder, initial location '/user/username/projects/myproject'.
-File '/user/username/projects/myproject/node_modules/pkg/package.json' exists according to earlier cached lookups.
-File name '/user/username/projects/myproject/node_modules/pkg/import.js' has a '.js' extension - stripping it.
-File '/user/username/projects/myproject/node_modules/pkg/import.d.ts' exist - use it as a name resolution result.
-Resolving real path for '/user/username/projects/myproject/node_modules/pkg/import.d.ts', result '/user/username/projects/myproject/node_modules/pkg/import.d.ts'.
+======== Resolving type reference directive 'pkg', containing file '/user/username/projects/myproject/a.ts'. ========
+Resolution for type reference directive 'pkg' was found in cache from location '/user/username/projects/myproject'.
 ======== Type reference directive 'pkg' was successfully resolved to '/user/username/projects/myproject/node_modules/pkg/import.d.ts' with Package ID 'pkg/import.d.ts@0.0.1', primary: false. ========
 File '/user/username/projects/myproject/node_modules/pkg/package.json' exists according to earlier cached lookups.
 File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.

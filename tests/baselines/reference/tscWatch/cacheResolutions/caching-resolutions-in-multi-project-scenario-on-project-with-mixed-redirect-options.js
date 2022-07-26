@@ -1121,10 +1121,7 @@ Reusing resolution of module './bRandomFileForImport' from '/src/project/bFileWi
 Reusing resolution of module './aRandomFileForImport' from '/src/project/aFileWithImports.ts' of old program, it was successfully resolved to '/src/project/aRandomFileForImport.ts'.
 Reusing resolution of module './aRandomFileForImport2' from '/src/project/aFileWithImports.ts' of old program, it was successfully resolved to '/src/project/aRandomFileForImport2.ts'.
 ======== Resolving module 'pkg0' from '/src/project/cRandomFileForImport.ts'. ========
-Module resolution kind is not specified, using 'Classic'.
-File '/src/project/pkg0.ts' does not exist.
-File '/src/project/pkg0.tsx' does not exist.
-File '/src/project/pkg0.d.ts' exist - use it as a name resolution result.
+Resolution for module 'pkg0' was found in cache from location '/src/project'.
 ======== Module name 'pkg0' was successfully resolved to '/src/project/pkg0.d.ts'. ========
 ../../a/lib/lib.d.ts
   Default library for target 'es3'

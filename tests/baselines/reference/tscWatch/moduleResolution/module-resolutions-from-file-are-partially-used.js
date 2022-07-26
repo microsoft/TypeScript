@@ -224,19 +224,7 @@ File '/user/username/package.json' does not exist according to earlier cached lo
 File '/user/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 ======== Resolving module 'pkg' from '/user/username/projects/myproject/a.ts'. ========
-Explicitly specified module resolution kind: 'Node16'.
-File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-Loading module 'pkg' from 'node_modules' folder, target file type 'TypeScript'.
-File '/user/username/projects/myproject/node_modules/pkg/package.json' exists according to earlier cached lookups.
-File name '/user/username/projects/myproject/node_modules/pkg/import.js' has a '.js' extension - stripping it.
-File '/user/username/projects/myproject/node_modules/pkg/import.ts' does not exist.
-File '/user/username/projects/myproject/node_modules/pkg/import.tsx' does not exist.
-File '/user/username/projects/myproject/node_modules/pkg/import.d.ts' exist - use it as a name resolution result.
-Resolving real path for '/user/username/projects/myproject/node_modules/pkg/import.d.ts', result '/user/username/projects/myproject/node_modules/pkg/import.d.ts'.
+Resolution for module 'pkg' was found in cache from location '/user/username/projects/myproject'.
 ======== Module name 'pkg' was successfully resolved to '/user/username/projects/myproject/node_modules/pkg/import.d.ts' with Package ID 'pkg/import.d.ts@0.0.1'. ========
 File '/user/username/projects/myproject/node_modules/pkg/package.json' exists according to earlier cached lookups.
 File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.

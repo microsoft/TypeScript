@@ -1255,7 +1255,7 @@ namespace ts.projectSystem {
             proj.updateGraph();
 
             assert.deepEqual(
-                proj.cachedUnresolvedImportsPerFile.get(f1.path as Path),
+                proj.cachedUnresolvedImportsPerFile.get(f1.path as Path)!.packages,
                 ["foo", "foo", "foo", "@bar/router", "@bar/common", "@bar/common"]
             );
 
@@ -2001,7 +2001,8 @@ namespace ts.projectSystem {
             host.runQueuedTimeoutCallbacks(); // Update the graph
             // Update the typing
             host.checkTimeoutQueueLength(0);
-            assert.isFalse(proj.resolutionCache.isFileWithInvalidatedNonRelativeUnresolvedImports(app.path as Path));
+            proj.resolutionCache.resolvedModuleNames.get(app.path as Path)?.cache.forEach(r => assert.isTrue(!r.isInvalidated));
+            proj.resolutionCache.resolvedTypeReferenceDirectives.get(app.path as Path)?.cache.forEach(r => assert.isTrue(!r.isInvalidated));
         }
 
         it("correctly invalidate the resolutions with typing names", () => {
@@ -2105,7 +2106,8 @@ declare module "stream" {
             checkProjectActualFiles(proj, [file.path, libFile.path, nodeTyping.path]);
             // Update the typing
             host.checkTimeoutQueueLength(0);
-            assert.isFalse(proj.resolutionCache.isFileWithInvalidatedNonRelativeUnresolvedImports(file.path as Path));
+            proj.resolutionCache.resolvedModuleNames.get(file.path as Path)?.cache.forEach(r => assert.isTrue(!r.isInvalidated));
+            proj.resolutionCache.resolvedTypeReferenceDirectives.get(file.path as Path)?.cache.forEach(r => assert.isTrue(!r.isInvalidated));
         });
     });
 

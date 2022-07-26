@@ -152,10 +152,7 @@ Reusing resolution of module 'pkg1' from '/src/project/fileWithImports.ts' of ol
 Reusing resolution of type reference directive 'pkg2' from '/src/project/fileWithTypeRefs.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg2/index.d.ts'.
 Reusing resolution of type reference directive 'pkg3' from '/src/project/fileWithTypeRefs.ts' of old program, it was not resolved.
 ======== Resolving module 'pkg0' from '/src/project/randomFileForImport.ts'. ========
-Module resolution kind is not specified, using 'Classic'.
-File '/src/project/pkg0.ts' does not exist.
-File '/src/project/pkg0.tsx' does not exist.
-File '/src/project/pkg0.d.ts' exist - use it as a name resolution result.
+Resolution for module 'pkg0' was found in cache from location '/src/project'.
 ======== Module name 'pkg0' was successfully resolved to '/src/project/pkg0.d.ts'. ========
 Reusing resolution of type reference directive 'pkg4' from '/src/project/__inferred type names__.ts' of old program, it was successfully resolved to '/src/project/node_modules/@types/pkg4/index.d.ts'.
 Finishing updateGraphWorker: Project: /src/project/tsconfig.json Version: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
@@ -169,13 +166,8 @@ Reusing resolution of module 'pkg1' from '/src/project/fileWithImports.ts' of ol
 Reusing resolution of type reference directive 'pkg2' from '/src/project/fileWithTypeRefs.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg2/index.d.ts'.
 Reusing resolution of type reference directive 'pkg3' from '/src/project/fileWithTypeRefs.ts' of old program, it was not resolved.
 Reusing resolution of module 'pkg0' from '/src/project/randomFileForImport.ts' of old program, it was successfully resolved to '/src/project/pkg0.d.ts'.
-======== Resolving type reference directive 'pkg2', containing file '/src/project/randomFileForTypeRef.ts', root directory '/src/project/node_modules/@types'. ========
-Resolving with primary search path '/src/project/node_modules/@types'.
-Looking up in 'node_modules' folder, initial location '/src/project'.
-File '/src/project/node_modules/pkg2/package.json' does not exist according to earlier cached lookups.
-File '/src/project/node_modules/pkg2.d.ts' does not exist.
-File '/src/project/node_modules/pkg2/index.d.ts' exist - use it as a name resolution result.
-Resolving real path for '/src/project/node_modules/pkg2/index.d.ts', result '/src/project/node_modules/pkg2/index.d.ts'.
+======== Resolving type reference directive 'pkg2', containing file '/src/project/randomFileForTypeRef.ts'. ========
+Resolution for type reference directive 'pkg2' was found in cache from location '/src/project'.
 ======== Type reference directive 'pkg2' was successfully resolved to '/src/project/node_modules/pkg2/index.d.ts', primary: false. ========
 Reusing resolution of type reference directive 'pkg4' from '/src/project/__inferred type names__.ts' of old program, it was successfully resolved to '/src/project/node_modules/@types/pkg4/index.d.ts'.
 Finishing updateGraphWorker: Project: /src/project/tsconfig.json Version: 3 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms

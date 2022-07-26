@@ -148,10 +148,8 @@ namespace ts.server {
         /*@internal*/
         /**
          * This is map from files to unresolved imports in it
-         * Maop does not contain entries for files that do not have unresolved imports
-         * This helps in containing the set of files to invalidate
          */
-        cachedUnresolvedImportsPerFile = new Map<Path, readonly string[]>();
+        cachedUnresolvedImportsPerFile = new Map<Path, UnresolvedImports>();
 
         /*@internal*/
         lastCachedUnresolvedImportsList: SortedReadonlyArray<string> | undefined;
@@ -1900,7 +1898,7 @@ namespace ts.server {
         }
     }
 
-    function getUnresolvedImports(program: Program, cachedUnresolvedImportsPerFile: ESMap<Path, readonly string[]>): SortedReadonlyArray<string> {
+    function getUnresolvedImports(program: Program, cachedUnresolvedImportsPerFile: ESMap<Path, UnresolvedImports>): SortedReadonlyArray<string> {
         const sourceFiles = program.getSourceFiles();
         tracing?.push(tracing.Phase.Session, "getUnresolvedImports", { count: sourceFiles.length });
         const ambientModules = program.getTypeChecker().getAmbientModules().map(mod => stripQuotes(mod.getName()));
@@ -1915,20 +1913,32 @@ namespace ts.server {
         tracing?.pop();
         return result;
     }
-    function extractUnresolvedImportsFromSourceFile(file: SourceFile, ambientModules: readonly string[], cachedUnresolvedImportsPerFile: ESMap<Path, readonly string[]>): readonly string[] {
-        return getOrUpdate(cachedUnresolvedImportsPerFile, file.path, () => {
-            if (!file.resolvedModules) return emptyArray;
-            let unresolvedImports: string[] | undefined;
-            file.resolvedModules.forEach(({ resolvedModule }, name) => {
-                // pick unresolved non-relative names
-                if ((!resolvedModule || !resolutionExtensionIsTSOrJson(resolvedModule.extension)) &&
-                    !isExternalModuleNameRelative(name) &&
-                    !ambientModules.some(m => m === name)) {
-                    unresolvedImports = append(unresolvedImports, parsePackageName(name).packageName);
-                }
-            });
-            return unresolvedImports || emptyArray;
+
+    const emptyUnresolvedImports: UnresolvedImports = {
+        packages: emptyArray,
+        imports: emptyArray,
+    };
+    function extractUnresolvedImportsFromSourceFile(file: SourceFile, ambientModules: readonly string[], cachedUnresolvedImportsPerFile: ESMap<Path, UnresolvedImports>): readonly string[] {
+        let result = cachedUnresolvedImportsPerFile.get(file.path);
+        if (result) return result.packages;
+        if (!file.resolvedModules?.size()) {
+            cachedUnresolvedImportsPerFile.set(file.path, emptyUnresolvedImports);
+            return emptyArray;
+        }
+
+        let packages: string[] | undefined;
+        let imports: { name: string; mode: ResolutionMode; }[] | undefined;
+        file.resolvedModules.forEach(({ resolvedModule }, name, mode) => {
+            // pick unresolved non-relative names
+            if ((!resolvedModule || !resolutionExtensionIsTSOrJson(resolvedModule.extension)) &&
+                !isExternalModuleNameRelative(name) &&
+                !ambientModules.some(m => m === name)) {
+                packages = append(packages, parsePackageName(name).packageName);
+                imports = append(imports, { name, mode });
+            }
         });
+        cachedUnresolvedImportsPerFile.set(file.path, result = packages ? { packages, imports: imports! } : emptyUnresolvedImports);
+        return result.packages;
     }
 
     /**
