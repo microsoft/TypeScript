@@ -691,6 +691,7 @@ namespace ts.formatting {
                 undecoratedParentStartLine: number,
                 isListItem: boolean,
                 isFirstListItem?: boolean): number {
+                Debug.assert(!nodeIsSynthesized(child));
 
                 if (nodeIsMissing(child)) {
                     return inheritedIndentation;
@@ -778,6 +779,7 @@ namespace ts.formatting {
                 parentStartLine: number,
                 parentDynamicIndentation: DynamicIndentation): void {
                 Debug.assert(isNodeArray(nodes));
+                Debug.assert(!nodeIsSynthesized(nodes));
 
                 const listStartToken = getOpenTokenForList(parent, nodes);
 

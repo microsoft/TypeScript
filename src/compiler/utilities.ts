@@ -5565,7 +5565,8 @@ namespace ts {
 
     export function getDeclarationModifierFlagsFromSymbol(s: Symbol, isWrite = false): ModifierFlags {
         if (s.valueDeclaration) {
-            const declaration = (isWrite && s.declarations && find(s.declarations, d => d.kind === SyntaxKind.SetAccessor)) || s.valueDeclaration;
+            const declaration = (isWrite && s.declarations && find(s.declarations, isSetAccessorDeclaration))
+                || (s.flags & SymbolFlags.GetAccessor && find(s.declarations, isGetAccessorDeclaration)) || s.valueDeclaration;
             const flags = getCombinedModifierFlags(declaration);
             return s.parent && s.parent.flags & SymbolFlags.Class ? flags : flags & ~ModifierFlags.AccessibilityModifier;
         }
@@ -6319,7 +6320,7 @@ namespace ts {
         // Excludes declaration files - they still require an explicit `export {}` or the like
         // for back compat purposes. The only non-declaration files _not_ forced to be a module are `.js` files
         // that aren't esm-mode (meaning not in a `type: module` scope).
-        return (file.impliedNodeFormat === ModuleKind.ESNext || (fileExtensionIsOneOf(file.fileName, [Extension.Cjs, Extension.Cts]))) && !file.isDeclarationFile ? true : undefined;
+        return (file.impliedNodeFormat === ModuleKind.ESNext || (fileExtensionIsOneOf(file.fileName, [Extension.Cjs, Extension.Cts, Extension.Mjs, Extension.Mts]))) && !file.isDeclarationFile ? true : undefined;
     }
 
     export function getSetExternalModuleIndicator(options: CompilerOptions): (file: SourceFile) => void {
@@ -6343,10 +6344,7 @@ namespace ts {
                 if (options.jsx === JsxEmit.ReactJSX || options.jsx === JsxEmit.ReactJSXDev) {
                     checks.push(isFileModuleFromUsingJSXTag);
                 }
-                const moduleKind = getEmitModuleKind(options);
-                if (moduleKind === ModuleKind.Node16 || moduleKind === ModuleKind.NodeNext) {
-                    checks.push(isFileForcedToBeModuleByFormat);
-                }
+                checks.push(isFileForcedToBeModuleByFormat);
                 const combined = or(...checks);
                 const callback = (file: SourceFile) => void (file.externalModuleIndicator = combined(file));
                 return callback;

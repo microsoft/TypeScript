@@ -62,9 +62,9 @@ namespace ts {
          */
         outSignature?: string;
         /**
-         * Time when d.ts was modified
+         * Name of the file whose dts was the latest to change
          */
-        dtsChangeTime: number | undefined;
+        latestChangedDtsFile: string | undefined;
     }
 
     export const enum BuilderFileEmit {
@@ -112,7 +112,7 @@ namespace ts {
         /**
          * Records if change in dts emit was detected
          */
-         hasChangedEmitSignature?: boolean;
+        hasChangedEmitSignature?: boolean;
         /**
          * Files pending to be emitted
          */
@@ -141,7 +141,7 @@ namespace ts {
         "programEmitComplete" |
         "emitSignatures" |
         "outSignature" |
-        "dtsChangeTime" |
+        "latestChangedDtsFile" |
         "hasChangedEmitSignature"
     > & { changedFilesSet: BuilderProgramState["changedFilesSet"] | undefined };
 
@@ -167,7 +167,7 @@ namespace ts {
             state.outSignature = oldState?.outSignature;
         }
         state.changedFilesSet = new Set();
-        state.dtsChangeTime = compilerOptions.composite ? oldState?.dtsChangeTime : undefined;
+        state.latestChangedDtsFile = compilerOptions.composite ? oldState?.latestChangedDtsFile : undefined;
 
         const useOldState = BuilderState.canReuseOldState(state.referencedMap, oldState);
         const oldCompilerOptions = useOldState ? oldState!.compilerOptions : undefined;
@@ -301,7 +301,7 @@ namespace ts {
             programEmitComplete: state.programEmitComplete,
             emitSignatures: state.emitSignatures && new Map(state.emitSignatures),
             outSignature: state.outSignature,
-            dtsChangeTime: state.dtsChangeTime,
+            latestChangedDtsFile: state.latestChangedDtsFile,
             hasChangedEmitSignature: state.hasChangedEmitSignature,
             changedFilesSet: outFilePath ? new Set(state.changedFilesSet) : undefined,
         };
@@ -315,7 +315,7 @@ namespace ts {
         state.programEmitComplete = savedEmitState.programEmitComplete;
         state.emitSignatures = savedEmitState.emitSignatures;
         state.outSignature = savedEmitState.outSignature;
-        state.dtsChangeTime = savedEmitState.dtsChangeTime;
+        state.latestChangedDtsFile = savedEmitState.latestChangedDtsFile;
         state.hasChangedEmitSignature = savedEmitState.hasChangedEmitSignature;
         if (savedEmitState.changedFilesSet) state.changedFilesSet = savedEmitState.changedFilesSet;
     }
@@ -795,7 +795,8 @@ namespace ts {
         affectedFilesPendingEmit?: ProgramBuilderInfoFilePendingEmit[];
         changeFileSet?: readonly ProgramBuildInfoFileId[];
         emitSignatures?: readonly ProgramBuildInfoEmitSignature[];
-        dtsChangeTime?: number;
+        // Because this is only output file in the program, we dont need fileId to deduplicate name
+        latestChangedDtsFile?: string;
     }
 
     export interface ProgramBundleEmitBuildInfo {
@@ -803,7 +804,7 @@ namespace ts {
         fileInfos: readonly string[];
         options: CompilerOptions | undefined;
         outSignature?: string;
-        dtsChangeTime?: number;
+        latestChangedDtsFile?: string;
     }
 
     export type ProgramBuildInfo = ProgramMultiFileEmitBuildInfo | ProgramBundleEmitBuildInfo;
@@ -815,13 +816,13 @@ namespace ts {
     /**
      * Gets the program information to be emitted in buildInfo so that we can use it to create new program
      */
-    function getProgramBuildInfo(state: BuilderProgramState, getCanonicalFileName: GetCanonicalFileName, host: BuilderProgramHost): ProgramBuildInfo | undefined {
+    function getProgramBuildInfo(state: BuilderProgramState, getCanonicalFileName: GetCanonicalFileName): ProgramBuildInfo | undefined {
         const outFilePath = outFile(state.compilerOptions);
         if (outFilePath && !state.compilerOptions.composite) return;
         const currentDirectory = Debug.checkDefined(state.program).getCurrentDirectory();
         const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(getTsBuildInfoEmitOutputFilePath(state.compilerOptions)!, currentDirectory));
-        // Update the dtsChange time in buildInfo
-        state.dtsChangeTime = state.hasChangedEmitSignature ? getCurrentTime(host).getTime() : state.dtsChangeTime;
+        // Convert the file name to Path here if we set the fileName instead to optimize multiple d.ts file emits and having to compute Canonical path
+        const latestChangedDtsFile = state.latestChangedDtsFile ? relativeToBuildInfoEnsuringAbsolutePath(state.latestChangedDtsFile) : undefined;
         if (outFilePath) {
             const fileNames: string[] = [];
             const fileInfos: string[] = [];
@@ -836,7 +837,7 @@ namespace ts {
                 fileInfos,
                 options: convertToProgramBuildInfoCompilerOptions(state.compilerOptions, "affectsBundleEmitBuildInfo"),
                 outSignature: state.outSignature,
-                dtsChangeTime: state.dtsChangeTime,
+                latestChangedDtsFile,
             };
             return result;
         }
@@ -939,7 +940,7 @@ namespace ts {
             affectedFilesPendingEmit,
             changeFileSet,
             emitSignatures,
-            dtsChangeTime: state.dtsChangeTime,
+            latestChangedDtsFile,
         };
         return result;
 
@@ -1137,7 +1138,7 @@ namespace ts {
          */
         const computeHash = maybeBind(host, host.createHash);
         const state = createBuilderProgramState(newProgram, getCanonicalFileName, oldState, host.disableUseFileVersionAsSignature);
-        newProgram.getProgramBuildInfo = () => getProgramBuildInfo(state, getCanonicalFileName, host);
+        newProgram.getProgramBuildInfo = () => getProgramBuildInfo(state, getCanonicalFileName);
 
         // To ensure that we arent storing any references to old program or new program without state
         newProgram = undefined!; // TODO: GH#18217
@@ -1149,6 +1150,7 @@ namespace ts {
         builderProgram.getState = getState;
         builderProgram.saveEmitState = () => backupBuilderProgramEmitState(state);
         builderProgram.restoreEmitState = (saved) => restoreBuilderProgramEmitState(state, saved);
+        builderProgram.hasChangedEmitSignature = () => !!state.hasChangedEmitSignature;
         builderProgram.getAllDependencies = sourceFile => BuilderState.getAllDependencies(state, Debug.checkDefined(state.program), sourceFile);
         builderProgram.getSemanticDiagnostics = getSemanticDiagnostics;
         builderProgram.emit = emit;
@@ -1279,18 +1281,20 @@ namespace ts {
                             const filePath = sourceFiles[0].resolvedPath;
                             const oldSignature = state.emitSignatures?.get(filePath);
                             emitSignature ??= computeSignature(text, computeHash, data);
-                            if (emitSignature !== oldSignature) {
-                                (state.emitSignatures ??= new Map()).set(filePath, emitSignature);
-                                state.hasChangedEmitSignature = true;
-                            }
+                            // Dont write dts files if they didn't change
+                            if (emitSignature === oldSignature) return;
+                            (state.emitSignatures ??= new Map()).set(filePath, emitSignature);
+                            state.hasChangedEmitSignature = true;
+                            state.latestChangedDtsFile = fileName;
                         }
                     }
                     else if (state.compilerOptions.composite) {
                         const newSignature = computeSignature(text, computeHash, data);
-                        if (newSignature !== state.outSignature) {
-                            state.outSignature = newSignature;
-                            state.hasChangedEmitSignature = true;
-                        }
+                        // Dont write dts files if they didn't change
+                        if (newSignature === state.outSignature) return;
+                        state.outSignature = newSignature;
+                        state.hasChangedEmitSignature = true;
+                        state.latestChangedDtsFile = fileName;
                     }
                 }
                 if (writeFile) writeFile(fileName, text, writeByteOrderMark, onError, sourceFiles, data);
@@ -1472,11 +1476,12 @@ namespace ts {
         let state: ReusableBuilderProgramState;
         let filePaths: Path[] | undefined;
         let filePathsSetList: Set<Path>[] | undefined;
+        const latestChangedDtsFile = program.latestChangedDtsFile ? toAbsolutePath(program.latestChangedDtsFile) : undefined;
         if (isProgramBundleEmitBuildInfo(program)) {
             state = {
                 fileInfos: new Map(),
                 compilerOptions: program.options ? convertToOptionsWithAbsolutePaths(program.options, toAbsolutePath) : {},
-                dtsChangeTime: program.dtsChangeTime,
+                latestChangedDtsFile,
                 outSignature: program.outSignature,
             };
         }
@@ -1506,7 +1511,7 @@ namespace ts {
                 affectedFilesPendingEmitKind: program.affectedFilesPendingEmit && arrayToMap(program.affectedFilesPendingEmit, value => toFilePath(value[0]), value => value[1]),
                 affectedFilesPendingEmitIndex: program.affectedFilesPendingEmit && 0,
                 changedFilesSet: new Set(map(program.changeFileSet, toFilePath)),
-                dtsChangeTime: program.dtsChangeTime,
+                latestChangedDtsFile,
                 emitSignatures: emitSignatures?.size ? emitSignatures : undefined,
             };
         }
@@ -1534,6 +1539,7 @@ namespace ts {
             getSemanticDiagnosticsOfNextAffectedFile: notImplemented,
             emitBuildInfo: notImplemented,
             close: noop,
+            hasChangedEmitSignature: returnFalse,
         };
 
         function toPath(path: string) {
