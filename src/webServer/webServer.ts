@@ -1,8 +1,9 @@
 /*@internal*/
-/// <reference lib="dom" />
-/// <reference lib="webworker.importscripts" />
 
 namespace ts.server {
+    declare const fetch: any;
+    declare const importScripts: any;
+
     export interface HostWithWriteMessage {
         writeMessage(s: any): void;
     }
@@ -112,8 +113,6 @@ namespace ts.server {
         }
     }
 
-    export declare const dynamicImport: ((id: string) => Promise<any>) | undefined;
-
     // Attempt to load `dynamicImport`
     if (typeof importScripts === "function") {
         try {
@@ -132,9 +131,10 @@ namespace ts.server {
         const getWebPath = (path: string) => startsWith(path, directorySeparator) ? path.replace(directorySeparator, getExecutingDirectoryPath()) : undefined;
 
         const dynamicImport = async (id: string): Promise<any> => {
+            const serverDynamicImport: ((id: string) => Promise<any>) | undefined = (server as any).dynamicImport;
             // Use syntactic dynamic import first, if available
-            if (server.dynamicImport) {
-                return server.dynamicImport(id);
+            if (serverDynamicImport) {
+                return serverDynamicImport(id);
             }
 
             throw new Error("Dynamic import not implemented");
