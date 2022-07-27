@@ -24,6 +24,26 @@ namespace ts.tscWatch.cacheResolutions {
                     subScenario: "modify randomFileForTypeRef by adding typeRef",
                     modifyFs: fs => prependText(fs, "/src/project/randomFileForTypeRef.ts", `/// <reference types="pkg2" resolution-mode="import"/>\n`),
                 },
+                {
+                    subScenario: "modify package.json and that should re-resolve and random edit",
+                    modifyFs: fs => {
+                        replaceText(fs, "/src/project/node_modules/pkg1/package.json", "./require.js", "./require1.js");
+                        appendText(fs, "/src/project/randomFileForImport.ts", `export const y = 10;`);
+                    },
+                    discrepancyExplanation: () => [
+                        `Affected locations are not checked which results in using incorrect resolution`
+                    ]
+                },
+                {
+                    subScenario: "write file not resolved by import and random edit",
+                    modifyFs: fs => {
+                        fs.writeFileSync("/src/project/node_modules/pkg1/require1.d.ts", getPkgImportContent("Require", 1));
+                        appendText(fs, "/src/project/randomFileForImport.ts", `export const z = 10;`);
+                    },
+                    discrepancyExplanation: () => [
+                        `Affected locations are not checked which results in using incorrect resolution`
+                    ]
+                },
             ]
         });
 
