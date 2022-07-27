@@ -12124,7 +12124,8 @@ namespace ts {
                         }
                     }
                 }
-                return getIntersectionType(constraints);
+                // The source types were normalized; ensure the result is normalized too.
+                return getNormalizedType(getIntersectionType(constraints), /*writing*/ false);
             }
             return undefined;
         }
