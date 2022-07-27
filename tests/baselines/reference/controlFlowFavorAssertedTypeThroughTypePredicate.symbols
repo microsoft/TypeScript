@@ -1,0 +1,47 @@
+=== tests/cases/compiler/controlFlowFavorAssertedTypeThroughTypePredicate.ts ===
+// repro 49988#issuecomment-1192016929
+
+declare function isObject(value: unknown): value is Record<string, unknown>;
+>isObject : Symbol(isObject, Decl(controlFlowFavorAssertedTypeThroughTypePredicate.ts, 0, 0))
+>value : Symbol(value, Decl(controlFlowFavorAssertedTypeThroughTypePredicate.ts, 2, 26))
+>value : Symbol(value, Decl(controlFlowFavorAssertedTypeThroughTypePredicate.ts, 2, 26))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+declare const obj1: {};
+>obj1 : Symbol(obj1, Decl(controlFlowFavorAssertedTypeThroughTypePredicate.ts, 4, 13))
+
+obj1;  // {}
+>obj1 : Symbol(obj1, Decl(controlFlowFavorAssertedTypeThroughTypePredicate.ts, 4, 13))
+
+if (isObject(obj1)) {
+>isObject : Symbol(isObject, Decl(controlFlowFavorAssertedTypeThroughTypePredicate.ts, 0, 0))
+>obj1 : Symbol(obj1, Decl(controlFlowFavorAssertedTypeThroughTypePredicate.ts, 4, 13))
+
+    obj1;  // Record<string, unknown>
+>obj1 : Symbol(obj1, Decl(controlFlowFavorAssertedTypeThroughTypePredicate.ts, 4, 13))
+
+    obj1['attr'];
+>obj1 : Symbol(obj1, Decl(controlFlowFavorAssertedTypeThroughTypePredicate.ts, 4, 13))
+}
+obj1;  // Record<string, unknown>
+>obj1 : Symbol(obj1, Decl(controlFlowFavorAssertedTypeThroughTypePredicate.ts, 4, 13))
+
+declare const obj2: {} | undefined;
+>obj2 : Symbol(obj2, Decl(controlFlowFavorAssertedTypeThroughTypePredicate.ts, 12, 13))
+
+obj2;  // {} | undefined
+>obj2 : Symbol(obj2, Decl(controlFlowFavorAssertedTypeThroughTypePredicate.ts, 12, 13))
+
+if (isObject(obj2)) {
+>isObject : Symbol(isObject, Decl(controlFlowFavorAssertedTypeThroughTypePredicate.ts, 0, 0))
+>obj2 : Symbol(obj2, Decl(controlFlowFavorAssertedTypeThroughTypePredicate.ts, 12, 13))
+
+    obj2;  // Record<string, unknown>
+>obj2 : Symbol(obj2, Decl(controlFlowFavorAssertedTypeThroughTypePredicate.ts, 12, 13))
+
+    obj2['attr'];
+>obj2 : Symbol(obj2, Decl(controlFlowFavorAssertedTypeThroughTypePredicate.ts, 12, 13))
+}
+obj2;  // Record<string, unknown> | undefined
+>obj2 : Symbol(obj2, Decl(controlFlowFavorAssertedTypeThroughTypePredicate.ts, 12, 13))
+

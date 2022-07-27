@@ -1,0 +1,51 @@
+=== tests/cases/compiler/controlFlowFavorAssertedTypeThroughTypePredicate.ts ===
+// repro 49988#issuecomment-1192016929
+
+declare function isObject(value: unknown): value is Record<string, unknown>;
+>isObject : (value: unknown) => value is Record<string, unknown>
+>value : unknown
+
+declare const obj1: {};
+>obj1 : {}
+
+obj1;  // {}
+>obj1 : {}
+
+if (isObject(obj1)) {
+>isObject(obj1) : boolean
+>isObject : (value: unknown) => value is Record<string, unknown>
+>obj1 : {}
+
+    obj1;  // Record<string, unknown>
+>obj1 : Record<string, unknown>
+
+    obj1['attr'];
+>obj1['attr'] : unknown
+>obj1 : Record<string, unknown>
+>'attr' : "attr"
+}
+obj1;  // Record<string, unknown>
+>obj1 : Record<string, unknown>
+
+declare const obj2: {} | undefined;
+>obj2 : {} | undefined
+
+obj2;  // {} | undefined
+>obj2 : {} | undefined
+
+if (isObject(obj2)) {
+>isObject(obj2) : boolean
+>isObject : (value: unknown) => value is Record<string, unknown>
+>obj2 : {} | undefined
+
+    obj2;  // Record<string, unknown>
+>obj2 : Record<string, unknown>
+
+    obj2['attr'];
+>obj2['attr'] : unknown
+>obj2 : Record<string, unknown>
+>'attr' : "attr"
+}
+obj2;  // Record<string, unknown> | undefined
+>obj2 : Record<string, unknown> | undefined
+
