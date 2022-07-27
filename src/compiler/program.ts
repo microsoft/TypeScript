@@ -1492,7 +1492,7 @@ namespace ts {
             return classifiableNames;
         }
 
-        function resolveModuleNamesReusingOldState(moduleNames: string[], file: SourceFile): readonly ResolvedModuleFull[] {
+        function resolveModuleNamesReusingOldState(moduleNames: string[], file: SourceFile): readonly (ResolvedModuleFull | undefined)[] {
             if (structureIsReused === StructureIsReused.Not && !file.ambientModuleNames.length) {
                 // If the old program state does not permit reusing resolutions and `file` does not contain locally defined ambient modules,
                 // the best we can do is fallback to the default logic.
@@ -1509,10 +1509,10 @@ namespace ts {
                 // which per above occurred during the current program creation.
                 // Since we assume the filesystem does not change during program creation,
                 // it is safe to reuse resolutions from the earlier call.
-                const result: ResolvedModuleFull[] = [];
+                const result: (ResolvedModuleFull | undefined)[] = [];
                 let i = 0;
                 for (const moduleName of moduleNames) {
-                    const resolvedModule = file.resolvedModules.get(moduleName, getModeForResolutionAtIndex(file, i))!;
+                    const resolvedModule = file.resolvedModules.get(moduleName, getModeForResolutionAtIndex(file, i));
                     i++;
                     result.push(resolvedModule);
                 }
@@ -1534,7 +1534,7 @@ namespace ts {
              * Needs to be reset to undefined before returning,
              * * ResolvedModuleFull instance: can be reused.
              */
-            let result: ResolvedModuleFull[] | undefined;
+            let result: (ResolvedModuleFull | undefined)[] | undefined;
             let reusedNames: string[] | undefined;
             /** A transient placeholder used to mark predicted resolution in the result list. */
             const predictedToResolveToAmbientModuleMarker: ResolvedModuleFull = {} as any;
@@ -1602,7 +1602,7 @@ namespace ts {
                     // `result[i]` is either a `ResolvedModuleFull` or a marker.
                     // If it is the former, we can leave it as is.
                     if (result[i] === predictedToResolveToAmbientModuleMarker) {
-                        result[i] = undefined!; // TODO: GH#18217
+                        result[i] = undefined;
                     }
                 }
                 else {
