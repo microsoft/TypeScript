@@ -3992,6 +3992,490 @@ pkg4: {
 
 
 
+Change:: modify package.json and that should re-resolve
+Input::
+//// [/src/project/node_modules/pkg1/package.json]
+{"name":"pkg1","version":"0.0.1","exports":{"import":"./import.js","require":"./require1.js"}}
+
+
+
+Output::
+/lib/tsc -p /src/project --explainFiles
+File '/src/project/package.json' does not exist.
+File '/src/package.json' does not exist.
+File '/package.json' does not exist.
+Reusing resolution of module 'pkg0' from '/src/project/fileWithImports.ts' found in cache from location '/src/project', it was successfully resolved to '/src/project/node_modules/pkg0/import.d.ts' with Package ID 'pkg0/import.d.ts@0.0.1'.
+Reusing resolution of module 'pkg1' from '/src/project/fileWithImports.ts' found in cache from location '/src/project', it was successfully resolved to '/src/project/node_modules/pkg1/require.d.ts' with Package ID 'pkg1/require.d.ts@0.0.1'.
+Found 'package.json' at '/src/project/node_modules/pkg0/package.json'.
+Found 'package.json' at '/src/project/node_modules/pkg1/package.json'.
+File '/src/project/package.json' does not exist according to earlier cached lookups.
+File '/src/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+Reusing resolution of type reference directive 'pkg2' from '/src/project/fileWithTypeRefs.ts' found in cache from location '/src/project', it was successfully resolved to '/src/project/node_modules/pkg2/import.d.ts' with Package ID 'pkg2/import.d.ts@0.0.1'.
+Reusing resolution of type reference directive 'pkg3' from '/src/project/fileWithTypeRefs.ts' found in cache from location '/src/project', it was successfully resolved to '/src/project/node_modules/pkg3/require.d.ts' with Package ID 'pkg3/require.d.ts@0.0.1'.
+Found 'package.json' at '/src/project/node_modules/pkg2/package.json'.
+Found 'package.json' at '/src/project/node_modules/pkg3/package.json'.
+File '/src/project/package.json' does not exist according to earlier cached lookups.
+File '/src/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+Reusing resolution of module 'pkg0' from '/src/project/randomFileForImport.ts' found in cache from location '/src/project', it was successfully resolved to '/src/project/node_modules/pkg0/import.d.ts' with Package ID 'pkg0/import.d.ts@0.0.1'.
+File '/src/project/package.json' does not exist according to earlier cached lookups.
+File '/src/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+Reusing resolution of type reference directive 'pkg2' from '/src/project/randomFileForTypeRef.ts' found in cache from location '/src/project', it was successfully resolved to '/src/project/node_modules/pkg2/import.d.ts' with Package ID 'pkg2/import.d.ts@0.0.1'.
+Reusing resolution of type reference directive 'pkg4' from '/src/project/__inferred type names__.ts' found in cache from location '/src/project', it was successfully resolved to '/src/project/node_modules/@types/pkg4/index.d.ts'.
+File '/src/project/node_modules/@types/pkg4/package.json' does not exist.
+File '/src/project/node_modules/@types/package.json' does not exist.
+File '/src/project/node_modules/package.json' does not exist.
+File '/src/project/package.json' does not exist according to earlier cached lookups.
+File '/src/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+File '/lib/package.json' does not exist.
+File '/package.json' does not exist according to earlier cached lookups.
+lib/lib.d.ts
+  Default library for target 'es5'
+src/project/node_modules/pkg0/import.d.ts
+  Imported via "pkg0" from file 'src/project/fileWithImports.ts' with packageId 'pkg0/import.d.ts@0.0.1'
+  Imported via "pkg0" from file 'src/project/randomFileForImport.ts' with packageId 'pkg0/import.d.ts@0.0.1'
+  File is CommonJS module because 'src/project/node_modules/pkg0/package.json' does not have field "type"
+src/project/node_modules/pkg1/require.d.ts
+  Imported via "pkg1" from file 'src/project/fileWithImports.ts' with packageId 'pkg1/require.d.ts@0.0.1'
+  File is CommonJS module because 'src/project/node_modules/pkg1/package.json' does not have field "type"
+src/project/fileWithImports.ts
+  Matched by include pattern '*.ts' in 'src/project/tsconfig.json'
+  File is CommonJS module because 'package.json' was not found
+src/project/node_modules/pkg2/import.d.ts
+  Type library referenced via 'pkg2' from file 'src/project/fileWithTypeRefs.ts' with packageId 'pkg2/import.d.ts@0.0.1'
+  File is CommonJS module because 'src/project/node_modules/pkg2/package.json' does not have field "type"
+src/project/node_modules/pkg3/require.d.ts
+  Type library referenced via 'pkg3' from file 'src/project/fileWithTypeRefs.ts' with packageId 'pkg3/require.d.ts@0.0.1'
+  File is CommonJS module because 'src/project/node_modules/pkg3/package.json' does not have field "type"
+src/project/fileWithTypeRefs.ts
+  Matched by include pattern '*.ts' in 'src/project/tsconfig.json'
+  File is CommonJS module because 'package.json' was not found
+src/project/randomFileForImport.ts
+  Matched by include pattern '*.ts' in 'src/project/tsconfig.json'
+  File is CommonJS module because 'package.json' was not found
+src/project/randomFileForTypeRef.ts
+  Matched by include pattern '*.ts' in 'src/project/tsconfig.json'
+  File is CommonJS module because 'package.json' was not found
+src/project/node_modules/@types/pkg4/index.d.ts
+  Entry point for implicit type library 'pkg4'
+  File is CommonJS module because 'package.json' was not found
+exitCode:: ExitStatus.Success
+File: /src/project/node_modules/pkg0/import.d.ts
+packageJsonScope:: {
+  "packageDirectory": "/src/project/node_modules/pkg0",
+  "contents": {
+    "packageJsonContent": {
+      "name": "pkg0",
+      "version": "0.0.1",
+      "exports": {
+        "import": "./import.js",
+        "require": "./require.js"
+      }
+    }
+  }
+}
+
+File: /src/project/node_modules/pkg1/require.d.ts
+packageJsonScope:: {
+  "packageDirectory": "/src/project/node_modules/pkg1",
+  "contents": {
+    "packageJsonContent": {
+      "name": "pkg1",
+      "version": "0.0.1",
+      "exports": {
+        "import": "./import.js",
+        "require": "./require1.js"
+      }
+    }
+  }
+}
+
+File: /src/project/fileWithImports.ts
+resolvedModules:
+pkg0: esnext: {
+  "resolvedModule": {
+    "resolvedFileName": "/src/project/node_modules/pkg0/import.d.ts",
+    "isExternalLibraryImport": true,
+    "packageId": {
+      "name": "pkg0",
+      "subModuleName": "import.d.ts",
+      "version": "0.0.1"
+    },
+    "extension": ".d.ts"
+  },
+  "affectingLocations": [
+    "/src/project/node_modules/pkg0/package.json"
+  ]
+}
+pkg1: commonjs: {
+  "resolvedModule": {
+    "resolvedFileName": "/src/project/node_modules/pkg1/require.d.ts",
+    "isExternalLibraryImport": true,
+    "packageId": {
+      "name": "pkg1",
+      "subModuleName": "require.d.ts",
+      "version": "0.0.1"
+    },
+    "extension": ".d.ts"
+  },
+  "affectingLocations": [
+    "/src/project/node_modules/pkg1/package.json"
+  ]
+}
+
+File: /src/project/node_modules/pkg2/import.d.ts
+packageJsonScope:: {
+  "packageDirectory": "/src/project/node_modules/pkg2",
+  "contents": {
+    "packageJsonContent": {
+      "name": "pkg2",
+      "version": "0.0.1",
+      "exports": {
+        "import": "./import.js",
+        "require": "./require.js"
+      }
+    }
+  }
+}
+
+File: /src/project/node_modules/pkg3/require.d.ts
+packageJsonScope:: {
+  "packageDirectory": "/src/project/node_modules/pkg3",
+  "contents": {
+    "packageJsonContent": {
+      "name": "pkg3",
+      "version": "0.0.1",
+      "exports": {
+        "import": "./import.js",
+        "require": "./require.js"
+      }
+    }
+  }
+}
+
+File: /src/project/fileWithTypeRefs.ts
+resolvedTypeReferenceDirectiveNames:
+pkg2: esnext: {
+  "resolvedTypeReferenceDirective": {
+    "resolvedFileName": "/src/project/node_modules/pkg2/import.d.ts",
+    "packageId": {
+      "name": "pkg2",
+      "subModuleName": "import.d.ts",
+      "version": "0.0.1"
+    },
+    "isExternalLibraryImport": true
+  },
+  "affectingLocations": [
+    "/src/project/node_modules/pkg2/package.json"
+  ]
+}
+pkg3: commonjs: {
+  "resolvedTypeReferenceDirective": {
+    "resolvedFileName": "/src/project/node_modules/pkg3/require.d.ts",
+    "packageId": {
+      "name": "pkg3",
+      "subModuleName": "require.d.ts",
+      "version": "0.0.1"
+    },
+    "isExternalLibraryImport": true
+  },
+  "affectingLocations": [
+    "/src/project/node_modules/pkg3/package.json"
+  ]
+}
+
+File: /src/project/randomFileForImport.ts
+resolvedModules:
+pkg0: esnext: {
+  "resolvedModule": {
+    "resolvedFileName": "/src/project/node_modules/pkg0/import.d.ts",
+    "isExternalLibraryImport": true,
+    "packageId": {
+      "name": "pkg0",
+      "subModuleName": "import.d.ts",
+      "version": "0.0.1"
+    },
+    "extension": ".d.ts"
+  },
+  "affectingLocations": [
+    "/src/project/node_modules/pkg0/package.json"
+  ]
+}
+
+File: /src/project/randomFileForTypeRef.ts
+resolvedTypeReferenceDirectiveNames:
+pkg2: esnext: {
+  "resolvedTypeReferenceDirective": {
+    "resolvedFileName": "/src/project/node_modules/pkg2/import.d.ts",
+    "packageId": {
+      "name": "pkg2",
+      "subModuleName": "import.d.ts",
+      "version": "0.0.1"
+    },
+    "isExternalLibraryImport": true
+  },
+  "affectingLocations": [
+    "/src/project/node_modules/pkg2/package.json"
+  ]
+}
+
+automaticTypeDirectiveResolutions:
+pkg4: {
+  "resolvedTypeReferenceDirective": {
+    "primary": true,
+    "resolvedFileName": "/src/project/node_modules/@types/pkg4/index.d.ts",
+    "isExternalLibraryImport": true
+  }
+}
+
+
+
+
+Change:: write file not resolved by import
+Input::
+//// [/src/project/node_modules/pkg1/require1.d.ts]
+export interface RequireInterface1 {}
+
+
+
+Output::
+/lib/tsc -p /src/project --explainFiles
+File '/src/project/package.json' does not exist.
+File '/src/package.json' does not exist.
+File '/package.json' does not exist.
+Reusing resolution of module 'pkg0' from '/src/project/fileWithImports.ts' found in cache from location '/src/project', it was successfully resolved to '/src/project/node_modules/pkg0/import.d.ts' with Package ID 'pkg0/import.d.ts@0.0.1'.
+Reusing resolution of module 'pkg1' from '/src/project/fileWithImports.ts' found in cache from location '/src/project', it was successfully resolved to '/src/project/node_modules/pkg1/require.d.ts' with Package ID 'pkg1/require.d.ts@0.0.1'.
+Found 'package.json' at '/src/project/node_modules/pkg0/package.json'.
+Found 'package.json' at '/src/project/node_modules/pkg1/package.json'.
+File '/src/project/package.json' does not exist according to earlier cached lookups.
+File '/src/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+Reusing resolution of type reference directive 'pkg2' from '/src/project/fileWithTypeRefs.ts' found in cache from location '/src/project', it was successfully resolved to '/src/project/node_modules/pkg2/import.d.ts' with Package ID 'pkg2/import.d.ts@0.0.1'.
+Reusing resolution of type reference directive 'pkg3' from '/src/project/fileWithTypeRefs.ts' found in cache from location '/src/project', it was successfully resolved to '/src/project/node_modules/pkg3/require.d.ts' with Package ID 'pkg3/require.d.ts@0.0.1'.
+Found 'package.json' at '/src/project/node_modules/pkg2/package.json'.
+Found 'package.json' at '/src/project/node_modules/pkg3/package.json'.
+File '/src/project/package.json' does not exist according to earlier cached lookups.
+File '/src/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+Reusing resolution of module 'pkg0' from '/src/project/randomFileForImport.ts' found in cache from location '/src/project', it was successfully resolved to '/src/project/node_modules/pkg0/import.d.ts' with Package ID 'pkg0/import.d.ts@0.0.1'.
+File '/src/project/package.json' does not exist according to earlier cached lookups.
+File '/src/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+Reusing resolution of type reference directive 'pkg2' from '/src/project/randomFileForTypeRef.ts' found in cache from location '/src/project', it was successfully resolved to '/src/project/node_modules/pkg2/import.d.ts' with Package ID 'pkg2/import.d.ts@0.0.1'.
+Reusing resolution of type reference directive 'pkg4' from '/src/project/__inferred type names__.ts' found in cache from location '/src/project', it was successfully resolved to '/src/project/node_modules/@types/pkg4/index.d.ts'.
+File '/src/project/node_modules/@types/pkg4/package.json' does not exist.
+File '/src/project/node_modules/@types/package.json' does not exist.
+File '/src/project/node_modules/package.json' does not exist.
+File '/src/project/package.json' does not exist according to earlier cached lookups.
+File '/src/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+File '/lib/package.json' does not exist.
+File '/package.json' does not exist according to earlier cached lookups.
+lib/lib.d.ts
+  Default library for target 'es5'
+src/project/node_modules/pkg0/import.d.ts
+  Imported via "pkg0" from file 'src/project/fileWithImports.ts' with packageId 'pkg0/import.d.ts@0.0.1'
+  Imported via "pkg0" from file 'src/project/randomFileForImport.ts' with packageId 'pkg0/import.d.ts@0.0.1'
+  File is CommonJS module because 'src/project/node_modules/pkg0/package.json' does not have field "type"
+src/project/node_modules/pkg1/require.d.ts
+  Imported via "pkg1" from file 'src/project/fileWithImports.ts' with packageId 'pkg1/require.d.ts@0.0.1'
+  File is CommonJS module because 'src/project/node_modules/pkg1/package.json' does not have field "type"
+src/project/fileWithImports.ts
+  Matched by include pattern '*.ts' in 'src/project/tsconfig.json'
+  File is CommonJS module because 'package.json' was not found
+src/project/node_modules/pkg2/import.d.ts
+  Type library referenced via 'pkg2' from file 'src/project/fileWithTypeRefs.ts' with packageId 'pkg2/import.d.ts@0.0.1'
+  File is CommonJS module because 'src/project/node_modules/pkg2/package.json' does not have field "type"
+src/project/node_modules/pkg3/require.d.ts
+  Type library referenced via 'pkg3' from file 'src/project/fileWithTypeRefs.ts' with packageId 'pkg3/require.d.ts@0.0.1'
+  File is CommonJS module because 'src/project/node_modules/pkg3/package.json' does not have field "type"
+src/project/fileWithTypeRefs.ts
+  Matched by include pattern '*.ts' in 'src/project/tsconfig.json'
+  File is CommonJS module because 'package.json' was not found
+src/project/randomFileForImport.ts
+  Matched by include pattern '*.ts' in 'src/project/tsconfig.json'
+  File is CommonJS module because 'package.json' was not found
+src/project/randomFileForTypeRef.ts
+  Matched by include pattern '*.ts' in 'src/project/tsconfig.json'
+  File is CommonJS module because 'package.json' was not found
+src/project/node_modules/@types/pkg4/index.d.ts
+  Entry point for implicit type library 'pkg4'
+  File is CommonJS module because 'package.json' was not found
+exitCode:: ExitStatus.Success
+File: /src/project/node_modules/pkg0/import.d.ts
+packageJsonScope:: {
+  "packageDirectory": "/src/project/node_modules/pkg0",
+  "contents": {
+    "packageJsonContent": {
+      "name": "pkg0",
+      "version": "0.0.1",
+      "exports": {
+        "import": "./import.js",
+        "require": "./require.js"
+      }
+    }
+  }
+}
+
+File: /src/project/node_modules/pkg1/require.d.ts
+packageJsonScope:: {
+  "packageDirectory": "/src/project/node_modules/pkg1",
+  "contents": {
+    "packageJsonContent": {
+      "name": "pkg1",
+      "version": "0.0.1",
+      "exports": {
+        "import": "./import.js",
+        "require": "./require1.js"
+      }
+    }
+  }
+}
+
+File: /src/project/fileWithImports.ts
+resolvedModules:
+pkg0: esnext: {
+  "resolvedModule": {
+    "resolvedFileName": "/src/project/node_modules/pkg0/import.d.ts",
+    "isExternalLibraryImport": true,
+    "packageId": {
+      "name": "pkg0",
+      "subModuleName": "import.d.ts",
+      "version": "0.0.1"
+    },
+    "extension": ".d.ts"
+  },
+  "affectingLocations": [
+    "/src/project/node_modules/pkg0/package.json"
+  ]
+}
+pkg1: commonjs: {
+  "resolvedModule": {
+    "resolvedFileName": "/src/project/node_modules/pkg1/require.d.ts",
+    "isExternalLibraryImport": true,
+    "packageId": {
+      "name": "pkg1",
+      "subModuleName": "require.d.ts",
+      "version": "0.0.1"
+    },
+    "extension": ".d.ts"
+  },
+  "affectingLocations": [
+    "/src/project/node_modules/pkg1/package.json"
+  ]
+}
+
+File: /src/project/node_modules/pkg2/import.d.ts
+packageJsonScope:: {
+  "packageDirectory": "/src/project/node_modules/pkg2",
+  "contents": {
+    "packageJsonContent": {
+      "name": "pkg2",
+      "version": "0.0.1",
+      "exports": {
+        "import": "./import.js",
+        "require": "./require.js"
+      }
+    }
+  }
+}
+
+File: /src/project/node_modules/pkg3/require.d.ts
+packageJsonScope:: {
+  "packageDirectory": "/src/project/node_modules/pkg3",
+  "contents": {
+    "packageJsonContent": {
+      "name": "pkg3",
+      "version": "0.0.1",
+      "exports": {
+        "import": "./import.js",
+        "require": "./require.js"
+      }
+    }
+  }
+}
+
+File: /src/project/fileWithTypeRefs.ts
+resolvedTypeReferenceDirectiveNames:
+pkg2: esnext: {
+  "resolvedTypeReferenceDirective": {
+    "resolvedFileName": "/src/project/node_modules/pkg2/import.d.ts",
+    "packageId": {
+      "name": "pkg2",
+      "subModuleName": "import.d.ts",
+      "version": "0.0.1"
+    },
+    "isExternalLibraryImport": true
+  },
+  "affectingLocations": [
+    "/src/project/node_modules/pkg2/package.json"
+  ]
+}
+pkg3: commonjs: {
+  "resolvedTypeReferenceDirective": {
+    "resolvedFileName": "/src/project/node_modules/pkg3/require.d.ts",
+    "packageId": {
+      "name": "pkg3",
+      "subModuleName": "require.d.ts",
+      "version": "0.0.1"
+    },
+    "isExternalLibraryImport": true
+  },
+  "affectingLocations": [
+    "/src/project/node_modules/pkg3/package.json"
+  ]
+}
+
+File: /src/project/randomFileForImport.ts
+resolvedModules:
+pkg0: esnext: {
+  "resolvedModule": {
+    "resolvedFileName": "/src/project/node_modules/pkg0/import.d.ts",
+    "isExternalLibraryImport": true,
+    "packageId": {
+      "name": "pkg0",
+      "subModuleName": "import.d.ts",
+      "version": "0.0.1"
+    },
+    "extension": ".d.ts"
+  },
+  "affectingLocations": [
+    "/src/project/node_modules/pkg0/package.json"
+  ]
+}
+
+File: /src/project/randomFileForTypeRef.ts
+resolvedTypeReferenceDirectiveNames:
+pkg2: esnext: {
+  "resolvedTypeReferenceDirective": {
+    "resolvedFileName": "/src/project/node_modules/pkg2/import.d.ts",
+    "packageId": {
+      "name": "pkg2",
+      "subModuleName": "import.d.ts",
+      "version": "0.0.1"
+    },
+    "isExternalLibraryImport": true
+  },
+  "affectingLocations": [
+    "/src/project/node_modules/pkg2/package.json"
+  ]
+}
+
+automaticTypeDirectiveResolutions:
+pkg4: {
+  "resolvedTypeReferenceDirective": {
+    "primary": true,
+    "resolvedFileName": "/src/project/node_modules/@types/pkg4/index.d.ts",
+    "isExternalLibraryImport": true
+  }
+}
+
+
+
+
 Change:: delete file with imports
 Input::
 //// [/src/project/fileWithImports.ts] unlink

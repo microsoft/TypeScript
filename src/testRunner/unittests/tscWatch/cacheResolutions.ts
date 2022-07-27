@@ -55,6 +55,22 @@ describe("unittests:: tsc-watch:: cacheResolutions::", () => {
                         }
                     },
                     {
+                        caption: "modify package.json and that should re-resolve",
+                        edit: sys => sys.replaceFileText("/src/project/node_modules/pkg1/package.json", "./require.js", "./require1.js"),
+                        timeouts: sys => {
+                            sys.runQueuedTimeoutCallbacks(); // failed lookup
+                            sys.runQueuedTimeoutCallbacks(); // actual update
+                        }
+                    },
+                    {
+                        caption: "write file not resolved by import",
+                        edit: sys => sys.writeFile("/src/project/node_modules/pkg1/require1.d.ts", getPkgImportContent("Require", 1)),
+                        timeouts: sys => {
+                            sys.runQueuedTimeoutCallbacks(); // failed lookup
+                            sys.runQueuedTimeoutCallbacks(); // actual update
+                        }
+                    },
+                    {
                         caption: "delete file with imports",
                         edit: sys => sys.deleteFile("/src/project/fileWithImports.ts"),
                         timeouts: sys => sys.runQueuedTimeoutCallbacks(),

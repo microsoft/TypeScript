@@ -60,6 +60,22 @@ describe("unittests:: tsbuildWatch:: watchMode:: cacheResolutions::", () => {
                         edit: sys => sys.appendFile("/src/project/randomFileForImport.ts", `export const k = 10;`),
                         timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                     },
+                    {
+                        caption: "modify package.json and that should re-resolve and random edit",
+                        edit: sys => {
+                            sys.replaceFileText("/src/project/node_modules/pkg1/package.json", "./require.js", "./require1.js");
+                            sys.appendFile("/src/project/randomFileForImport.ts", `export const y1 = 10;`);
+                        },
+                        timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                    },
+                    {
+                        caption: "write file not resolved by import and random edit",
+                        edit: sys => {
+                            sys.writeFile("/src/project/node_modules/pkg1/require1.d.ts", getPkgImportContent("Require", 1));
+                            sys.appendFile("/src/project/randomFileForImport.ts", `export const z1 = 10;`);
+                        },
+                        timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                    },
                 ]
             });
         }

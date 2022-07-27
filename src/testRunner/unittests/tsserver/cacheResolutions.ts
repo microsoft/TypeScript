@@ -77,6 +77,16 @@ describe("unittests:: tsserver:: cacheResolutions:: tsserverProjectSystem cachin
                 host.runQueuedTimeoutCallbacks(); // failed lookup
                 host.runQueuedTimeoutCallbacks(); // actual update
 
+                session.logger.info("modify package.json and that should re-resolve");
+                host.replaceFileText("/src/project/node_modules/pkg1/package.json", "./require.js", "./require1.js");
+                host.runQueuedTimeoutCallbacks(); // failed lookup
+                host.runQueuedTimeoutCallbacks(); // actual update
+
+                session.logger.info("write file not resolved by import");
+                host.writeFile("/src/project/node_modules/pkg1/require1.d.ts", getPkgImportContent("Require", 1));
+                host.runQueuedTimeoutCallbacks(); // failed lookup
+                host.runQueuedTimeoutCallbacks(); // actual update
+
                 session.logger.info("delete file with imports");
                 host.deleteFile("/src/project/fileWithImports.ts");
                 host.runQueuedTimeoutCallbacks();
