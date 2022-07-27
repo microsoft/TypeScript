@@ -85,7 +85,7 @@ function foo2(x: C1 | C2 | C3): string {
 
         return x.item;
 >x.item : string
->x : C1 | C3
+>x : C1
 >item : string
     }
     else if (isC2(x)) {
