@@ -269,6 +269,8 @@ function getFsMapWithSameResolutionFromMultiplePlaces(): { [path: string]: strin
                 "e/ea/eaa/fileWithImports.ts",
                 "e/ea/eaa/eaaa/fileWithImports.ts",
                 "e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts",
+                "f/fa/faa/x/y/z/randomFileForImport.ts",
+                "f/fa/faa/faaa/fileWithImports.ts",
             ],
         }),
         "/src/project/fileWithImports.ts": Utils.dedent`
@@ -324,6 +326,11 @@ function getFsMapWithSameResolutionFromMultiplePlaces(): { [path: string]: strin
             import type { ImportInterface1 } from "pkg1";
         `,
         "/src/project/e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts": getRandomFileContent(),
+        "/src/project/f/fa/faa/faaa/fileWithImports.ts": Utils.dedent`
+            import type { ImportInterface0 } from "pkg0";
+            import type { ImportInterface1 } from "pkg1";
+        `,
+        "/src/project/f/fa/faa/x/y/z/randomFileForImport.ts": getRandomFileContent(),
         "/src/project/node_modules/pkg0/index.d.ts": getPkgImportContent("Import", 0),
     };
 }

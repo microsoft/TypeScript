@@ -238,6 +238,16 @@ describe("unittests:: tsc-watch:: cacheResolutions::", () => {
                         timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                     },
                     {
+                        caption: "modify f/fa/faa/x/y/z/randomFileForImport by adding import",
+                        edit: sys => sys.prependFile("/src/project/f/fa/faa/x/y/z/randomFileForImport.ts", `import type { ImportInterface0 } from "pkg0";\n`),
+                        timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                    },
+                    {
+                        caption: "modify f/fa/faa/x/y/z/randomFileForImport by adding unresolved import",
+                        edit: sys => sys.prependFile("/src/project/f/fa/faa/x/y/z/randomFileForImport.ts", `import type { ImportInterface1 } from "pkg1";\n`),
+                        timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                    },
+                    {
                         caption: "add file for unresolved import and random edit",
                         edit: sys => {
                             sys.ensureFileOrFolder({ path: "/src/project/node_modules/pkg1/index.d.ts", content: getPkgImportContent("Import", 1) });

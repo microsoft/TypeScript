@@ -177,6 +177,14 @@ describe("unittests:: tsbuild:: cacheResolutions::", () => {
                 edit: fs => prependText(fs, "/src/project/e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts", `import type { ImportInterface1 } from "pkg1";\n`),
             },
             {
+                caption: "modify f/fa/faa/x/y/z/randomFileForImport by adding import",
+                edit: fs => prependText(fs, "/src/project/f/fa/faa/x/y/z/randomFileForImport.ts", `import type { ImportInterface0 } from "pkg0";\n`),
+            },
+            {
+                caption: "modify f/fa/faa/x/y/z/randomFileForImport by adding unresolved import",
+                edit: fs => prependText(fs, "/src/project/f/fa/faa/x/y/z/randomFileForImport.ts", `import type { ImportInterface1 } from "pkg1";\n`),
+            },
+            {
                 caption: "add file for unresolved import",
                 edit: fs => {
                     fs.mkdirpSync("/src/project/node_modules/pkg1");
