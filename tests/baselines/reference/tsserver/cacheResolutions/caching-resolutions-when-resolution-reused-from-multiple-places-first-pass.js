@@ -22,7 +22,9 @@ Config: /src/project/tsconfig.json : {
   "/src/project/e/ea/fileWithImports.ts",
   "/src/project/e/ea/eaa/fileWithImports.ts",
   "/src/project/e/ea/eaa/eaaa/fileWithImports.ts",
-  "/src/project/e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts"
+  "/src/project/e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts",
+  "/src/project/f/fa/faa/x/y/z/randomFileForImport.ts",
+  "/src/project/f/fa/faa/faaa/fileWithImports.ts"
  ],
  "options": {
   "composite": true,
@@ -48,6 +50,8 @@ FileWatcher:: Added:: WatchInfo: /src/project/e/ea/fileWithImports.ts 500 undefi
 FileWatcher:: Added:: WatchInfo: /src/project/e/ea/eaa/fileWithImports.ts 500 undefined WatchType: Closed Script info
 FileWatcher:: Added:: WatchInfo: /src/project/e/ea/eaa/eaaa/fileWithImports.ts 500 undefined WatchType: Closed Script info
 FileWatcher:: Added:: WatchInfo: /src/project/e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts 500 undefined WatchType: Closed Script info
+FileWatcher:: Added:: WatchInfo: /src/project/f/fa/faa/x/y/z/randomFileForImport.ts 500 undefined WatchType: Closed Script info
+FileWatcher:: Added:: WatchInfo: /src/project/f/fa/faa/faaa/fileWithImports.ts 500 undefined WatchType: Closed Script info
 Starting updateGraphWorker: Project: /src/project/tsconfig.json
 Reusing resolution of module 'pkg0' from '/src/project/fileWithImports.ts' found in cache from location '/src/project', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
 ======== Resolving module 'pkg1' from '/src/project/fileWithImports.ts'. ========
@@ -157,6 +161,16 @@ Loading module 'pkg1' from 'node_modules' folder, target file type 'TypeScript'.
 Directory '/src/project/e/ea/eaa/eaaa/node_modules' does not exist, skipping all lookups in it.
 Resolution for module 'pkg1' was found in cache from location '/src/project/e/ea/eaa'.
 ======== Module name 'pkg1' was not resolved. ========
+Reusing resolution of module 'pkg0' from '/src/project/f/fa/faa/faaa/fileWithImports.ts' found in cache from location '/src/project/f/fa/faa/faaa', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+======== Resolving module 'pkg1' from '/src/project/f/fa/faa/faaa/fileWithImports.ts'. ========
+Module resolution kind is not specified, using 'NodeJs'.
+Loading module 'pkg1' from 'node_modules' folder, target file type 'TypeScript'.
+Directory '/src/project/f/fa/faa/faaa/node_modules' does not exist, skipping all lookups in it.
+Directory '/src/project/f/fa/faa/node_modules' does not exist, skipping all lookups in it.
+Directory '/src/project/f/fa/node_modules' does not exist, skipping all lookups in it.
+Directory '/src/project/f/node_modules' does not exist, skipping all lookups in it.
+Resolution for module 'pkg1' was found in cache from location '/src/project'.
+======== Module name 'pkg1' was not resolved. ========
 FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
 DirectoryWatcher:: Added:: WatchInfo: /src/project/node_modules 1 undefined Project: /src/project/tsconfig.json WatchType: Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /src/project/node_modules 1 undefined Project: /src/project/tsconfig.json WatchType: Failed Lookup Locations
@@ -170,11 +184,13 @@ DirectoryWatcher:: Added:: WatchInfo: /src/project/d 1 undefined Project: /src/p
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /src/project/d 1 undefined Project: /src/project/tsconfig.json WatchType: Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /src/project/e 1 undefined Project: /src/project/tsconfig.json WatchType: Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /src/project/e 1 undefined Project: /src/project/tsconfig.json WatchType: Failed Lookup Locations
+DirectoryWatcher:: Added:: WatchInfo: /src/project/f 1 undefined Project: /src/project/tsconfig.json WatchType: Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /src/project/f 1 undefined Project: /src/project/tsconfig.json WatchType: Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /src/project/node_modules/@types 1 undefined Project: /src/project/tsconfig.json WatchType: Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /src/project/node_modules/@types 1 undefined Project: /src/project/tsconfig.json WatchType: Type roots
 Finishing updateGraphWorker: Project: /src/project/tsconfig.json Version: 1 structureChanged: true structureIsReused:: SafeModuleCache Elapsed:: *ms
 Project '/src/project/tsconfig.json' (Configured)
-	Files (19)
+	Files (21)
 	/a/lib/lib.d.ts
 	/src/project/node_modules/pkg0/index.d.ts
 	/src/project/fileWithImports.ts
@@ -194,6 +210,8 @@ Project '/src/project/tsconfig.json' (Configured)
 	/src/project/e/ea/eaa/fileWithImports.ts
 	/src/project/e/ea/eaa/eaaa/fileWithImports.ts
 	/src/project/e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts
+	/src/project/f/fa/faa/x/y/z/randomFileForImport.ts
+	/src/project/f/fa/faa/faaa/fileWithImports.ts
 
 
 	../../a/lib/lib.d.ts
@@ -212,6 +230,7 @@ Project '/src/project/tsconfig.json' (Configured)
 	  Imported via "pkg0" from file 'e/ea/fileWithImports.ts'
 	  Imported via "pkg0" from file 'e/ea/eaa/fileWithImports.ts'
 	  Imported via "pkg0" from file 'e/ea/eaa/eaaa/fileWithImports.ts'
+	  Imported via "pkg0" from file 'f/fa/faa/faaa/fileWithImports.ts'
 	fileWithImports.ts
 	  Part of 'files' list in tsconfig.json
 	randomFileForImport.ts
@@ -246,12 +265,16 @@ Project '/src/project/tsconfig.json' (Configured)
 	  Part of 'files' list in tsconfig.json
 	e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts
 	  Part of 'files' list in tsconfig.json
+	f/fa/faa/x/y/z/randomFileForImport.ts
+	  Part of 'files' list in tsconfig.json
+	f/fa/faa/faaa/fileWithImports.ts
+	  Part of 'files' list in tsconfig.json
 
 -----------------------------------------------
 Search path: /src/project
 For info: /src/project/tsconfig.json :: No config files found.
 Project '/src/project/tsconfig.json' (Configured)
-	Files (19)
+	Files (21)
 
 -----------------------------------------------
 Open files: 

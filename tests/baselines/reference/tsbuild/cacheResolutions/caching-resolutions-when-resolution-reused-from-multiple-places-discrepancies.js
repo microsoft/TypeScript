@@ -36,6 +36,9 @@ Incremental: {
   "./e/ea/filewithimports.ts": [
     "./node_modules/pkg0/index.d.ts"
   ],
+  "./f/fa/faa/faaa/filewithimports.ts": [
+    "./node_modules/pkg0/index.d.ts"
+  ],
   "./filewithimports.ts": [
     "./node_modules/pkg0/index.d.ts"
   ]
@@ -77,6 +80,9 @@ Incremental: {
     "./node_modules/pkg0/index.d.ts"
   ],
   "./e/ea/filewithimports.ts": [
+    "./node_modules/pkg0/index.d.ts"
+  ],
+  "./f/fa/faa/faaa/filewithimports.ts": [
     "./node_modules/pkg0/index.d.ts"
   ],
   "./filewithimports.ts": [
@@ -122,6 +128,9 @@ Incremental: {
   "./e/ea/filewithimports.ts": [
     "./node_modules/pkg0/index.d.ts"
   ],
+  "./f/fa/faa/faaa/filewithimports.ts": [
+    "./node_modules/pkg0/index.d.ts"
+  ],
   "./filewithimports.ts": [
     "./node_modules/pkg0/index.d.ts"
   ]
@@ -163,6 +172,9 @@ Incremental: {
     "./node_modules/pkg0/index.d.ts"
   ],
   "./e/ea/filewithimports.ts": [
+    "./node_modules/pkg0/index.d.ts"
+  ],
+  "./f/fa/faa/faaa/filewithimports.ts": [
     "./node_modules/pkg0/index.d.ts"
   ],
   "./filewithimports.ts": [
@@ -208,6 +220,9 @@ Incremental: {
   "./e/ea/filewithimports.ts": [
     "./node_modules/pkg0/index.d.ts"
   ],
+  "./f/fa/faa/faaa/filewithimports.ts": [
+    "./node_modules/pkg0/index.d.ts"
+  ],
   "./filewithimports.ts": [
     "./node_modules/pkg0/index.d.ts"
   ]
@@ -249,6 +264,9 @@ Incremental: {
     "./node_modules/pkg0/index.d.ts"
   ],
   "./e/ea/filewithimports.ts": [
+    "./node_modules/pkg0/index.d.ts"
+  ],
+  "./f/fa/faa/faaa/filewithimports.ts": [
     "./node_modules/pkg0/index.d.ts"
   ],
   "./filewithimports.ts": [
@@ -294,6 +312,9 @@ Incremental: {
   "./e/ea/filewithimports.ts": [
     "./node_modules/pkg0/index.d.ts"
   ],
+  "./f/fa/faa/faaa/filewithimports.ts": [
+    "./node_modules/pkg0/index.d.ts"
+  ],
   "./filewithimports.ts": [
     "./node_modules/pkg0/index.d.ts"
   ]
@@ -335,6 +356,9 @@ Incremental: {
     "./node_modules/pkg0/index.d.ts"
   ],
   "./e/ea/filewithimports.ts": [
+    "./node_modules/pkg0/index.d.ts"
+  ],
+  "./f/fa/faa/faaa/filewithimports.ts": [
     "./node_modules/pkg0/index.d.ts"
   ],
   "./filewithimports.ts": [
@@ -380,6 +404,9 @@ Incremental: {
   "./e/ea/filewithimports.ts": [
     "./node_modules/pkg0/index.d.ts"
   ],
+  "./f/fa/faa/faaa/filewithimports.ts": [
+    "./node_modules/pkg0/index.d.ts"
+  ],
   "./filewithimports.ts": [
     "./node_modules/pkg0/index.d.ts"
   ]
@@ -421,6 +448,101 @@ Incremental: {
     "./node_modules/pkg0/index.d.ts"
   ],
   "./e/ea/filewithimports.ts": [
+    "./node_modules/pkg0/index.d.ts"
+  ],
+  "./f/fa/faa/faaa/filewithimports.ts": [
+    "./node_modules/pkg0/index.d.ts"
+  ],
+  "./filewithimports.ts": [
+    "./node_modules/pkg0/index.d.ts"
+  ]
+}
+Clean: {}
+10:: modify f/fa/faa/x/y/z/randomFileForImport by adding import
+Incremental build did not emit and has .ts as signature so exports has all imported modules/referenced files
+Clean build always uses d.ts for signature for testing thus does not contain non exported modules/referenced files that arent needed
+Incremental and clean size of maps do not match:: exportedModulesMap:: File:: /src/project/tsconfig.tsbuildinfo.readable.baseline.txt
+Incremental: {
+  "./a/filewithimports.ts": [
+    "./node_modules/pkg0/index.d.ts"
+  ],
+  "./b/ba/filewithimports.ts": [
+    "./node_modules/pkg0/index.d.ts"
+  ],
+  "./c/ca/caa/caaa/filewithimports.ts": [
+    "./node_modules/pkg0/index.d.ts"
+  ],
+  "./c/ca/filewithimports.ts": [
+    "./node_modules/pkg0/index.d.ts"
+  ],
+  "./c/cb/filewithimports.ts": [
+    "./node_modules/pkg0/index.d.ts"
+  ],
+  "./d/da/daa/daaa/filewithimports.ts": [
+    "./node_modules/pkg0/index.d.ts"
+  ],
+  "./d/da/daa/filewithimports.ts": [
+    "./node_modules/pkg0/index.d.ts"
+  ],
+  "./d/da/filewithimports.ts": [
+    "./node_modules/pkg0/index.d.ts"
+  ],
+  "./e/ea/eaa/eaaa/filewithimports.ts": [
+    "./node_modules/pkg0/index.d.ts"
+  ],
+  "./e/ea/eaa/filewithimports.ts": [
+    "./node_modules/pkg0/index.d.ts"
+  ],
+  "./e/ea/filewithimports.ts": [
+    "./node_modules/pkg0/index.d.ts"
+  ],
+  "./f/fa/faa/faaa/filewithimports.ts": [
+    "./node_modules/pkg0/index.d.ts"
+  ],
+  "./filewithimports.ts": [
+    "./node_modules/pkg0/index.d.ts"
+  ]
+}
+Clean: {}
+11:: modify f/fa/faa/x/y/z/randomFileForImport by adding unresolved import
+Incremental build did not emit and has .ts as signature so exports has all imported modules/referenced files
+Clean build always uses d.ts for signature for testing thus does not contain non exported modules/referenced files that arent needed
+Incremental and clean size of maps do not match:: exportedModulesMap:: File:: /src/project/tsconfig.tsbuildinfo.readable.baseline.txt
+Incremental: {
+  "./a/filewithimports.ts": [
+    "./node_modules/pkg0/index.d.ts"
+  ],
+  "./b/ba/filewithimports.ts": [
+    "./node_modules/pkg0/index.d.ts"
+  ],
+  "./c/ca/caa/caaa/filewithimports.ts": [
+    "./node_modules/pkg0/index.d.ts"
+  ],
+  "./c/ca/filewithimports.ts": [
+    "./node_modules/pkg0/index.d.ts"
+  ],
+  "./c/cb/filewithimports.ts": [
+    "./node_modules/pkg0/index.d.ts"
+  ],
+  "./d/da/daa/daaa/filewithimports.ts": [
+    "./node_modules/pkg0/index.d.ts"
+  ],
+  "./d/da/daa/filewithimports.ts": [
+    "./node_modules/pkg0/index.d.ts"
+  ],
+  "./d/da/filewithimports.ts": [
+    "./node_modules/pkg0/index.d.ts"
+  ],
+  "./e/ea/eaa/eaaa/filewithimports.ts": [
+    "./node_modules/pkg0/index.d.ts"
+  ],
+  "./e/ea/eaa/filewithimports.ts": [
+    "./node_modules/pkg0/index.d.ts"
+  ],
+  "./e/ea/filewithimports.ts": [
+    "./node_modules/pkg0/index.d.ts"
+  ],
+  "./f/fa/faa/faaa/filewithimports.ts": [
     "./node_modules/pkg0/index.d.ts"
   ],
   "./filewithimports.ts": [

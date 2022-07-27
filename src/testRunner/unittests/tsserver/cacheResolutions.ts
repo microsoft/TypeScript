@@ -343,6 +343,34 @@ namespace ts.projectSystem {
                     });
                     server.updateProjectIfDirty(session.getProjectService().configuredProjects.get("/src/project/tsconfig.json")!);
 
+                    logger.info("modify f/fa/faa/x/y/z/randomFileForImport by adding import");
+                    session.executeCommandSeq<protocol.ChangeRequest>({
+                        command: protocol.CommandTypes.Change,
+                        arguments: {
+                            file: "/src/project/f/fa/faa/x/y/z/randomFileForImport.ts",
+                            line: 1,
+                            offset: 1,
+                            endLine: 1,
+                            endOffset: 1,
+                            insertString: `import type { ImportInterface0 } from "pkg0";\n`,
+                        }
+                    });
+                    server.updateProjectIfDirty(session.getProjectService().configuredProjects.get("/src/project/tsconfig.json")!);
+
+                    logger.info("modify f/fa/faa/x/y/z/randomFileForImport by adding unresolved import");
+                    session.executeCommandSeq<protocol.ChangeRequest>({
+                        command: protocol.CommandTypes.Change,
+                        arguments: {
+                            file: "/src/project/f/fa/faa/x/y/z/randomFileForImport.ts",
+                            line: 1,
+                            offset: 1,
+                            endLine: 1,
+                            endOffset: 1,
+                            insertString: `import type { ImportInterface1 } from "pkg1";\n`,
+                        }
+                    });
+                    server.updateProjectIfDirty(session.getProjectService().configuredProjects.get("/src/project/tsconfig.json")!);
+
                     logger.info("add file for unresolved import and random edit");
                     host.ensureFileOrFolder({ path: "/src/project/node_modules/pkg1/index.d.ts", content: tscWatch.cacheResolutions.getPkgImportContent("Import", 1) });
                     host.appendFile("/src/project/randomFileForImport.ts", `export const y = 10;`);

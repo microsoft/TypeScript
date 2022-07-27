@@ -1,6 +1,6 @@
 Input::
 //// [/src/project/tsconfig.json]
-{"compilerOptions":{"composite":true,"cacheResolutions":true,"traceResolution":true},"files":["fileWithImports.ts","randomFileForImport.ts","a/fileWithImports.ts","b/ba/fileWithImports.ts","b/randomFileForImport.ts","c/ca/fileWithImports.ts","c/ca/caa/randomFileForImport.ts","c/ca/caa/caaa/fileWithImports.ts","c/cb/fileWithImports.ts","d/da/daa/daaa/x/y/z/randomFileForImport.ts","d/da/daa/daaa/fileWithImports.ts","d/da/daa/fileWithImports.ts","d/da/fileWithImports.ts","e/ea/fileWithImports.ts","e/ea/eaa/fileWithImports.ts","e/ea/eaa/eaaa/fileWithImports.ts","e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts"]}
+{"compilerOptions":{"composite":true,"cacheResolutions":true,"traceResolution":true},"files":["fileWithImports.ts","randomFileForImport.ts","a/fileWithImports.ts","b/ba/fileWithImports.ts","b/randomFileForImport.ts","c/ca/fileWithImports.ts","c/ca/caa/randomFileForImport.ts","c/ca/caa/caaa/fileWithImports.ts","c/cb/fileWithImports.ts","d/da/daa/daaa/x/y/z/randomFileForImport.ts","d/da/daa/daaa/fileWithImports.ts","d/da/daa/fileWithImports.ts","d/da/fileWithImports.ts","e/ea/fileWithImports.ts","e/ea/eaa/fileWithImports.ts","e/ea/eaa/eaaa/fileWithImports.ts","e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts","f/fa/faa/x/y/z/randomFileForImport.ts","f/fa/faa/faaa/fileWithImports.ts"]}
 
 //// [/src/project/fileWithImports.ts]
 import type { ImportInterface0 } from "pkg0";
@@ -78,6 +78,14 @@ import type { ImportInterface1 } from "pkg1";
 //// [/src/project/e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts]
 export const x = 10;
 
+//// [/src/project/f/fa/faa/faaa/fileWithImports.ts]
+import type { ImportInterface0 } from "pkg0";
+import type { ImportInterface1 } from "pkg1";
+
+
+//// [/src/project/f/fa/faa/x/y/z/randomFileForImport.ts]
+export const x = 10;
+
 //// [/src/project/node_modules/pkg0/index.d.ts]
 export interface ImportInterface0 {}
 
@@ -95,7 +103,7 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [/src/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../a/lib/lib.d.ts","./node_modules/pkg0/index.d.ts","./filewithimports.ts","./randomfileforimport.ts","./a/filewithimports.ts","./b/ba/filewithimports.ts","./b/randomfileforimport.ts","./c/ca/filewithimports.ts","./c/ca/caa/randomfileforimport.ts","./c/ca/caa/caaa/filewithimports.ts","./c/cb/filewithimports.ts","./d/da/daa/daaa/x/y/z/randomfileforimport.ts","./d/da/daa/daaa/filewithimports.ts","./d/da/daa/filewithimports.ts","./d/da/filewithimports.ts","./e/ea/filewithimports.ts","./e/ea/eaa/filewithimports.ts","./e/ea/eaa/eaaa/filewithimports.ts","./e/ea/eaa/eaaa/x/y/z/randomfileforimport.ts","./a","./b/ba","./c/ca/caa/caaa","./c/cb","./d/da/daa/daaa","./e/ea/eaa/eaaa"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"769951468-export interface ImportInterface0 {}","9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n","-10726455937-export const x = 10;","9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n","9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n","-10726455937-export const x = 10;","9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n","-10726455937-export const x = 10;","9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n","9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n","-10726455937-export const x = 10;","9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n","9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n","9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n","9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n","9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n","9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n","-10726455937-export const x = 10;"],"options":{"cacheResolutions":true,"composite":true},"fileIdsList":[[2]],"referencedMap":[[5,1],[6,1],[10,1],[8,1],[11,1],[13,1],[14,1],[15,1],[18,1],[17,1],[16,1],[3,1]],"exportedModulesMap":[[5,1],[6,1],[10,1],[8,1],[11,1],[13,1],[14,1],[15,1],[18,1],[17,1],[16,1],[3,1]],"semanticDiagnosticsPerFile":[1,[5,[{"file":"./a/filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],[6,[{"file":"./b/ba/filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],7,[10,[{"file":"./c/ca/caa/caaa/filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],9,[8,[{"file":"./c/ca/filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],[11,[{"file":"./c/cb/filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],[13,[{"file":"./d/da/daa/daaa/filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],12,[14,[{"file":"./d/da/daa/filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],[15,[{"file":"./d/da/filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],[18,[{"file":"./e/ea/eaa/eaaa/filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],19,[17,[{"file":"./e/ea/eaa/filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],[16,[{"file":"./e/ea/filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],[3,[{"file":"./filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],2,4],"affectedFilesPendingEmit":[[5,1],[6,1],[7,1],[10,1],[9,1],[8,1],[11,1],[13,1],[12,1],[14,1],[15,1],[18,1],[19,1],[17,1],[16,1],[3,1],[2,1],[4,1]],"emitSignatures":[3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19],"cacheResolutions":{"resolutions":[{"resolvedModule":{"resolvedFileName":2,"isExternalLibraryImport":true}}],"names":["pkg0"],"resolutionEntries":[[1,1]],"modules":[[20,[1]],[21,[1]],[22,[1]],[23,[1]],[24,[1]],[25,[1]]]}},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../a/lib/lib.d.ts","./node_modules/pkg0/index.d.ts","./filewithimports.ts","./randomfileforimport.ts","./a/filewithimports.ts","./b/ba/filewithimports.ts","./b/randomfileforimport.ts","./c/ca/filewithimports.ts","./c/ca/caa/randomfileforimport.ts","./c/ca/caa/caaa/filewithimports.ts","./c/cb/filewithimports.ts","./d/da/daa/daaa/x/y/z/randomfileforimport.ts","./d/da/daa/daaa/filewithimports.ts","./d/da/daa/filewithimports.ts","./d/da/filewithimports.ts","./e/ea/filewithimports.ts","./e/ea/eaa/filewithimports.ts","./e/ea/eaa/eaaa/filewithimports.ts","./e/ea/eaa/eaaa/x/y/z/randomfileforimport.ts","./f/fa/faa/x/y/z/randomfileforimport.ts","./f/fa/faa/faaa/filewithimports.ts","./a","./b/ba","./c/ca/caa/caaa","./c/cb","./d/da/daa/daaa","./e/ea/eaa/eaaa","./f/fa/faa/faaa"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"769951468-export interface ImportInterface0 {}","9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n","-10726455937-export const x = 10;","9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n","9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n","-10726455937-export const x = 10;","9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n","-10726455937-export const x = 10;","9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n","9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n","-10726455937-export const x = 10;","9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n","9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n","9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n","9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n","9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n","9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n","-10726455937-export const x = 10;","-10726455937-export const x = 10;","9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n"],"options":{"cacheResolutions":true,"composite":true},"fileIdsList":[[2]],"referencedMap":[[5,1],[6,1],[10,1],[8,1],[11,1],[13,1],[14,1],[15,1],[18,1],[17,1],[16,1],[21,1],[3,1]],"exportedModulesMap":[[5,1],[6,1],[10,1],[8,1],[11,1],[13,1],[14,1],[15,1],[18,1],[17,1],[16,1],[21,1],[3,1]],"semanticDiagnosticsPerFile":[1,[5,[{"file":"./a/filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],[6,[{"file":"./b/ba/filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],7,[10,[{"file":"./c/ca/caa/caaa/filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],9,[8,[{"file":"./c/ca/filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],[11,[{"file":"./c/cb/filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],[13,[{"file":"./d/da/daa/daaa/filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],12,[14,[{"file":"./d/da/daa/filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],[15,[{"file":"./d/da/filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],[18,[{"file":"./e/ea/eaa/eaaa/filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],19,[17,[{"file":"./e/ea/eaa/filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],[16,[{"file":"./e/ea/filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],[21,[{"file":"./f/fa/faa/faaa/filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],20,[3,[{"file":"./filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],2,4],"affectedFilesPendingEmit":[[5,1],[6,1],[7,1],[10,1],[9,1],[8,1],[11,1],[13,1],[12,1],[14,1],[15,1],[18,1],[19,1],[17,1],[16,1],[21,1],[20,1],[3,1],[2,1],[4,1]],"emitSignatures":[3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21],"cacheResolutions":{"resolutions":[{"resolvedModule":{"resolvedFileName":2,"isExternalLibraryImport":true}}],"names":["pkg0"],"resolutionEntries":[[1,1]],"modules":[[22,[1]],[23,[1]],[24,[1]],[25,[1]],[26,[1]],[27,[1]],[28,[1]]]}},"version":"FakeTSVersion"}
 
 //// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -120,12 +128,15 @@ interface Array<T> { length: number; [n: number]: T; }
       "./e/ea/eaa/filewithimports.ts",
       "./e/ea/eaa/eaaa/filewithimports.ts",
       "./e/ea/eaa/eaaa/x/y/z/randomfileforimport.ts",
+      "./f/fa/faa/x/y/z/randomfileforimport.ts",
+      "./f/fa/faa/faaa/filewithimports.ts",
       "./a",
       "./b/ba",
       "./c/ca/caa/caaa",
       "./c/cb",
       "./d/da/daa/daaa",
-      "./e/ea/eaa/eaaa"
+      "./e/ea/eaa/eaaa",
+      "./f/fa/faa/faaa"
     ],
     "fileNamesList": [
       [
@@ -209,6 +220,14 @@ interface Array<T> { length: number; [n: number]: T; }
       "./e/ea/eaa/eaaa/x/y/z/randomfileforimport.ts": {
         "version": "-10726455937-export const x = 10;",
         "signature": "-10726455937-export const x = 10;"
+      },
+      "./f/fa/faa/x/y/z/randomfileforimport.ts": {
+        "version": "-10726455937-export const x = 10;",
+        "signature": "-10726455937-export const x = 10;"
+      },
+      "./f/fa/faa/faaa/filewithimports.ts": {
+        "version": "9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n",
+        "signature": "9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n"
       }
     },
     "options": {
@@ -249,6 +268,9 @@ interface Array<T> { length: number; [n: number]: T; }
       "./e/ea/filewithimports.ts": [
         "./node_modules/pkg0/index.d.ts"
       ],
+      "./f/fa/faa/faaa/filewithimports.ts": [
+        "./node_modules/pkg0/index.d.ts"
+      ],
       "./filewithimports.ts": [
         "./node_modules/pkg0/index.d.ts"
       ]
@@ -285,6 +307,9 @@ interface Array<T> { length: number; [n: number]: T; }
         "./node_modules/pkg0/index.d.ts"
       ],
       "./e/ea/filewithimports.ts": [
+        "./node_modules/pkg0/index.d.ts"
+      ],
+      "./f/fa/faa/faaa/filewithimports.ts": [
         "./node_modules/pkg0/index.d.ts"
       ],
       "./filewithimports.ts": [
@@ -441,6 +466,20 @@ interface Array<T> { length: number; [n: number]: T; }
         ]
       ],
       [
+        "./f/fa/faa/faaa/filewithimports.ts",
+        [
+          {
+            "file": "./f/fa/faa/faaa/filewithimports.ts",
+            "start": 84,
+            "length": 6,
+            "messageText": "Cannot find module 'pkg1' or its corresponding type declarations.",
+            "category": 1,
+            "code": 2307
+          }
+        ]
+      ],
+      "./f/fa/faa/x/y/z/randomfileforimport.ts",
+      [
         "./filewithimports.ts",
         [
           {
@@ -518,6 +557,14 @@ interface Array<T> { length: number; [n: number]: T; }
         "Full"
       ],
       [
+        "./f/fa/faa/faaa/filewithimports.ts",
+        "Full"
+      ],
+      [
+        "./f/fa/faa/x/y/z/randomfileforimport.ts",
+        "Full"
+      ],
+      [
         "./filewithimports.ts",
         "Full"
       ],
@@ -547,7 +594,9 @@ interface Array<T> { length: number; [n: number]: T; }
       "./e/ea/filewithimports.ts",
       "./e/ea/eaa/filewithimports.ts",
       "./e/ea/eaa/eaaa/filewithimports.ts",
-      "./e/ea/eaa/eaaa/x/y/z/randomfileforimport.ts"
+      "./e/ea/eaa/eaaa/x/y/z/randomfileforimport.ts",
+      "./f/fa/faa/x/y/z/randomfileforimport.ts",
+      "./f/fa/faa/faaa/filewithimports.ts"
     ],
     "cacheResolutions": {
       "resolutions": [
@@ -664,12 +713,27 @@ interface Array<T> { length: number; [n: number]: T; }
               }
             ]
           ]
+        ],
+        [
+          "./f/fa/faa/faaa",
+          [
+            [
+              "pkg0",
+              {
+                "id": 1,
+                "resolvedModule": {
+                  "resolvedFileName": "./node_modules/pkg0/index.d.ts",
+                  "isExternalLibraryImport": true
+                }
+              }
+            ]
+          ]
         ]
       ]
     }
   },
   "version": "FakeTSVersion",
-  "size": 5573
+  "size": 6046
 }
 
 
@@ -844,6 +908,24 @@ Loading module 'pkg1' from 'node_modules' folder, target file type 'TypeScript'.
 Directory '/src/project/e/ea/eaa/eaaa/node_modules' does not exist, skipping all lookups in it.
 Resolution for module 'pkg1' was found in cache from location '/src/project/e/ea/eaa'.
 ======== Module name 'pkg1' was not resolved. ========
+======== Resolving module 'pkg0' from '/src/project/f/fa/faa/faaa/fileWithImports.ts'. ========
+Module resolution kind is not specified, using 'NodeJs'.
+Loading module 'pkg0' from 'node_modules' folder, target file type 'TypeScript'.
+Directory '/src/project/f/fa/faa/faaa/node_modules' does not exist, skipping all lookups in it.
+Directory '/src/project/f/fa/faa/node_modules' does not exist, skipping all lookups in it.
+Directory '/src/project/f/fa/node_modules' does not exist, skipping all lookups in it.
+Directory '/src/project/f/node_modules' does not exist, skipping all lookups in it.
+Resolution for module 'pkg0' was found in cache from location '/src/project'.
+======== Module name 'pkg0' was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'. ========
+======== Resolving module 'pkg1' from '/src/project/f/fa/faa/faaa/fileWithImports.ts'. ========
+Module resolution kind is not specified, using 'NodeJs'.
+Loading module 'pkg1' from 'node_modules' folder, target file type 'TypeScript'.
+Directory '/src/project/f/fa/faa/faaa/node_modules' does not exist, skipping all lookups in it.
+Directory '/src/project/f/fa/faa/node_modules' does not exist, skipping all lookups in it.
+Directory '/src/project/f/fa/node_modules' does not exist, skipping all lookups in it.
+Directory '/src/project/f/node_modules' does not exist, skipping all lookups in it.
+Resolution for module 'pkg1' was found in cache from location '/src/project'.
+======== Module name 'pkg1' was not resolved. ========
 [96mfileWithImports.ts[0m:[93m2[0m:[93m39[0m - [91merror[0m[90m TS2307: [0mCannot find module 'pkg1' or its corresponding type declarations.
 
 [7m2[0m import type { ImportInterface1 } from "pkg1";
@@ -904,9 +986,14 @@ Resolution for module 'pkg1' was found in cache from location '/src/project/e/ea
 [7m2[0m import type { ImportInterface1 } from "pkg1";
 [7m [0m [91m                                      ~~~~~~[0m
 
+[96mf/fa/faa/faaa/fileWithImports.ts[0m:[93m2[0m:[93m39[0m - [91merror[0m[90m TS2307: [0mCannot find module 'pkg1' or its corresponding type declarations.
+
+[7m2[0m import type { ImportInterface1 } from "pkg1";
+[7m [0m [91m                                      ~~~~~~[0m
+
 
 >> Screen clear
-[[90m12:01:46 AM[0m] Starting compilation in watch mode...
+[[90m12:02:04 AM[0m] Starting compilation in watch mode...
 
 Reusing resolution of module 'pkg0' from '/src/project/fileWithImports.ts' found in cache from location '/src/project', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
 ======== Resolving module 'pkg1' from '/src/project/fileWithImports.ts'. ========
@@ -1014,6 +1101,16 @@ Loading module 'pkg1' from 'node_modules' folder, target file type 'TypeScript'.
 Directory '/src/project/e/ea/eaa/eaaa/node_modules' does not exist, skipping all lookups in it.
 Resolution for module 'pkg1' was found in cache from location '/src/project/e/ea/eaa'.
 ======== Module name 'pkg1' was not resolved. ========
+Reusing resolution of module 'pkg0' from '/src/project/f/fa/faa/faaa/fileWithImports.ts' found in cache from location '/src/project/f/fa/faa/faaa', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+======== Resolving module 'pkg1' from '/src/project/f/fa/faa/faaa/fileWithImports.ts'. ========
+Module resolution kind is not specified, using 'NodeJs'.
+Loading module 'pkg1' from 'node_modules' folder, target file type 'TypeScript'.
+Directory '/src/project/f/fa/faa/faaa/node_modules' does not exist, skipping all lookups in it.
+Directory '/src/project/f/fa/faa/node_modules' does not exist, skipping all lookups in it.
+Directory '/src/project/f/fa/node_modules' does not exist, skipping all lookups in it.
+Directory '/src/project/f/node_modules' does not exist, skipping all lookups in it.
+Resolution for module 'pkg1' was found in cache from location '/src/project'.
+======== Module name 'pkg1' was not resolved. ========
 [96mfileWithImports.ts[0m:[93m2[0m:[93m39[0m - [91merror[0m[90m TS2307: [0mCannot find module 'pkg1' or its corresponding type declarations.
 
 [7m2[0m import type { ImportInterface1 } from "pkg1";
@@ -1074,6 +1171,11 @@ Resolution for module 'pkg1' was found in cache from location '/src/project/e/ea
 [7m2[0m import type { ImportInterface1 } from "pkg1";
 [7m [0m [91m                                      ~~~~~~[0m
 
+[96mf/fa/faa/faaa/fileWithImports.ts[0m:[93m2[0m:[93m39[0m - [91merror[0m[90m TS2307: [0mCannot find module 'pkg1' or its corresponding type declarations.
+
+[7m2[0m import type { ImportInterface1 } from "pkg1";
+[7m [0m [91m                                      ~~~~~~[0m
+
 ../../a/lib/lib.d.ts
   Default library for target 'es3'
 node_modules/pkg0/index.d.ts
@@ -1090,6 +1192,7 @@ node_modules/pkg0/index.d.ts
   Imported via "pkg0" from file 'e/ea/fileWithImports.ts'
   Imported via "pkg0" from file 'e/ea/eaa/fileWithImports.ts'
   Imported via "pkg0" from file 'e/ea/eaa/eaaa/fileWithImports.ts'
+  Imported via "pkg0" from file 'f/fa/faa/faaa/fileWithImports.ts'
 fileWithImports.ts
   Part of 'files' list in tsconfig.json
 randomFileForImport.ts
@@ -1124,11 +1227,15 @@ e/ea/eaa/eaaa/fileWithImports.ts
   Part of 'files' list in tsconfig.json
 e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts
   Part of 'files' list in tsconfig.json
-[[90m12:01:54 AM[0m] Found 12 errors. Watching for file changes.
+f/fa/faa/x/y/z/randomFileForImport.ts
+  Part of 'files' list in tsconfig.json
+f/fa/faa/faaa/fileWithImports.ts
+  Part of 'files' list in tsconfig.json
+[[90m12:02:12 AM[0m] Found 13 errors. Watching for file changes.
 
 
 
-Program root files: ["/src/project/fileWithImports.ts","/src/project/randomFileForImport.ts","/src/project/a/fileWithImports.ts","/src/project/b/ba/fileWithImports.ts","/src/project/b/randomFileForImport.ts","/src/project/c/ca/fileWithImports.ts","/src/project/c/ca/caa/randomFileForImport.ts","/src/project/c/ca/caa/caaa/fileWithImports.ts","/src/project/c/cb/fileWithImports.ts","/src/project/d/da/daa/daaa/x/y/z/randomFileForImport.ts","/src/project/d/da/daa/daaa/fileWithImports.ts","/src/project/d/da/daa/fileWithImports.ts","/src/project/d/da/fileWithImports.ts","/src/project/e/ea/fileWithImports.ts","/src/project/e/ea/eaa/fileWithImports.ts","/src/project/e/ea/eaa/eaaa/fileWithImports.ts","/src/project/e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts"]
+Program root files: ["/src/project/fileWithImports.ts","/src/project/randomFileForImport.ts","/src/project/a/fileWithImports.ts","/src/project/b/ba/fileWithImports.ts","/src/project/b/randomFileForImport.ts","/src/project/c/ca/fileWithImports.ts","/src/project/c/ca/caa/randomFileForImport.ts","/src/project/c/ca/caa/caaa/fileWithImports.ts","/src/project/c/cb/fileWithImports.ts","/src/project/d/da/daa/daaa/x/y/z/randomFileForImport.ts","/src/project/d/da/daa/daaa/fileWithImports.ts","/src/project/d/da/daa/fileWithImports.ts","/src/project/d/da/fileWithImports.ts","/src/project/e/ea/fileWithImports.ts","/src/project/e/ea/eaa/fileWithImports.ts","/src/project/e/ea/eaa/eaaa/fileWithImports.ts","/src/project/e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts","/src/project/f/fa/faa/x/y/z/randomFileForImport.ts","/src/project/f/fa/faa/faaa/fileWithImports.ts"]
 Program options: {"composite":true,"cacheResolutions":true,"traceResolution":true,"watch":true,"explainFiles":true,"configFilePath":"/src/project/tsconfig.json"}
 Program structureReused: SafeModuleCache
 Program files::
@@ -1151,6 +1258,8 @@ Program files::
 /src/project/e/ea/eaa/fileWithImports.ts
 /src/project/e/ea/eaa/eaaa/fileWithImports.ts
 /src/project/e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts
+/src/project/f/fa/faa/x/y/z/randomFileForImport.ts
+/src/project/f/fa/faa/faaa/fileWithImports.ts
 
 Semantic diagnostics in builder refreshed for::
 /src/project/d/da/daa/daaa/x/y/z/randomFileForImport.ts
@@ -1195,6 +1304,10 @@ WatchedFiles::
   {"fileName":"/src/project/e/ea/eaa/eaaa/fileWithImports.ts","pollingInterval":250}
 /src/project/e/ea/eaa/eaaa/x/y/z/randomfileforimport.ts:
   {"fileName":"/src/project/e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts","pollingInterval":250}
+/src/project/f/fa/faa/x/y/z/randomfileforimport.ts:
+  {"fileName":"/src/project/f/fa/faa/x/y/z/randomFileForImport.ts","pollingInterval":250}
+/src/project/f/fa/faa/faaa/filewithimports.ts:
+  {"fileName":"/src/project/f/fa/faa/faaa/fileWithImports.ts","pollingInterval":250}
 /src/project/node_modules/pkg1/package.json:
   {"fileName":"/src/project/node_modules/pkg1/package.json","pollingInterval":250}
 
@@ -1205,7 +1318,7 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 //// [/src/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../a/lib/lib.d.ts","./node_modules/pkg0/index.d.ts","./filewithimports.ts","./randomfileforimport.ts","./a/filewithimports.ts","./b/ba/filewithimports.ts","./b/randomfileforimport.ts","./c/ca/filewithimports.ts","./c/ca/caa/randomfileforimport.ts","./c/ca/caa/caaa/filewithimports.ts","./c/cb/filewithimports.ts","./d/da/daa/daaa/x/y/z/randomfileforimport.ts","./d/da/daa/daaa/filewithimports.ts","./d/da/daa/filewithimports.ts","./d/da/filewithimports.ts","./e/ea/filewithimports.ts","./e/ea/eaa/filewithimports.ts","./e/ea/eaa/eaaa/filewithimports.ts","./e/ea/eaa/eaaa/x/y/z/randomfileforimport.ts","./a","./b/ba","./c/ca/caa/caaa","./c/cb","./d/da/daa/daaa/x/y/z","./e/ea/eaa/eaaa"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"769951468-export interface ImportInterface0 {}","9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n","-10726455937-export const x = 10;","9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n","9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n","-10726455937-export const x = 10;","9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n","-10726455937-export const x = 10;","9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n","9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n",{"version":"10580737119-import type { ImportInterface0 } from \"pkg0\";\nexport const x = 10;","signature":"-6821242887-export declare const x = 10;\n"},"9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n","9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n","9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n","9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n","9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n","9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n","-10726455937-export const x = 10;"],"options":{"cacheResolutions":true,"composite":true},"fileIdsList":[[2]],"referencedMap":[[5,1],[6,1],[10,1],[8,1],[11,1],[13,1],[12,1],[14,1],[15,1],[18,1],[17,1],[16,1],[3,1]],"exportedModulesMap":[[5,1],[6,1],[10,1],[8,1],[11,1],[13,1],[14,1],[15,1],[18,1],[17,1],[16,1],[3,1]],"semanticDiagnosticsPerFile":[1,[5,[{"file":"./a/filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],[6,[{"file":"./b/ba/filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],7,[10,[{"file":"./c/ca/caa/caaa/filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],9,[8,[{"file":"./c/ca/filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],[11,[{"file":"./c/cb/filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],[13,[{"file":"./d/da/daa/daaa/filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],12,[14,[{"file":"./d/da/daa/filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],[15,[{"file":"./d/da/filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],[18,[{"file":"./e/ea/eaa/eaaa/filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],19,[17,[{"file":"./e/ea/eaa/filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],[16,[{"file":"./e/ea/filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],[3,[{"file":"./filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],2,4],"affectedFilesPendingEmit":[[5,1],[6,1],[7,1],[10,1],[9,1],[8,1],[11,1],[13,1],[12,1],[14,1],[15,1],[18,1],[19,1],[17,1],[16,1],[3,1],[2,1],[4,1]],"emitSignatures":[3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19],"cacheResolutions":{"resolutions":[{"resolvedModule":{"resolvedFileName":2,"isExternalLibraryImport":true}}],"names":["pkg0"],"resolutionEntries":[[1,1]],"modules":[[20,[1]],[21,[1]],[22,[1]],[23,[1]],[24,[1]],[25,[1]]]}},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../a/lib/lib.d.ts","./node_modules/pkg0/index.d.ts","./filewithimports.ts","./randomfileforimport.ts","./a/filewithimports.ts","./b/ba/filewithimports.ts","./b/randomfileforimport.ts","./c/ca/filewithimports.ts","./c/ca/caa/randomfileforimport.ts","./c/ca/caa/caaa/filewithimports.ts","./c/cb/filewithimports.ts","./d/da/daa/daaa/x/y/z/randomfileforimport.ts","./d/da/daa/daaa/filewithimports.ts","./d/da/daa/filewithimports.ts","./d/da/filewithimports.ts","./e/ea/filewithimports.ts","./e/ea/eaa/filewithimports.ts","./e/ea/eaa/eaaa/filewithimports.ts","./e/ea/eaa/eaaa/x/y/z/randomfileforimport.ts","./f/fa/faa/x/y/z/randomfileforimport.ts","./f/fa/faa/faaa/filewithimports.ts","./a","./b/ba","./c/ca/caa/caaa","./c/cb","./d/da/daa/daaa/x/y/z","./e/ea/eaa/eaaa","./f/fa/faa/faaa"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"769951468-export interface ImportInterface0 {}","9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n","-10726455937-export const x = 10;","9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n","9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n","-10726455937-export const x = 10;","9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n","-10726455937-export const x = 10;","9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n","9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n",{"version":"10580737119-import type { ImportInterface0 } from \"pkg0\";\nexport const x = 10;","signature":"-6821242887-export declare const x = 10;\n"},"9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n","9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n","9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n","9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n","9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n","9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n","-10726455937-export const x = 10;","-10726455937-export const x = 10;","9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n"],"options":{"cacheResolutions":true,"composite":true},"fileIdsList":[[2]],"referencedMap":[[5,1],[6,1],[10,1],[8,1],[11,1],[13,1],[12,1],[14,1],[15,1],[18,1],[17,1],[16,1],[21,1],[3,1]],"exportedModulesMap":[[5,1],[6,1],[10,1],[8,1],[11,1],[13,1],[14,1],[15,1],[18,1],[17,1],[16,1],[21,1],[3,1]],"semanticDiagnosticsPerFile":[1,[5,[{"file":"./a/filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],[6,[{"file":"./b/ba/filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],7,[10,[{"file":"./c/ca/caa/caaa/filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],9,[8,[{"file":"./c/ca/filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],[11,[{"file":"./c/cb/filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],[13,[{"file":"./d/da/daa/daaa/filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],12,[14,[{"file":"./d/da/daa/filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],[15,[{"file":"./d/da/filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],[18,[{"file":"./e/ea/eaa/eaaa/filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],19,[17,[{"file":"./e/ea/eaa/filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],[16,[{"file":"./e/ea/filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],[21,[{"file":"./f/fa/faa/faaa/filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],20,[3,[{"file":"./filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],2,4],"affectedFilesPendingEmit":[[5,1],[6,1],[7,1],[10,1],[9,1],[8,1],[11,1],[13,1],[12,1],[14,1],[15,1],[18,1],[19,1],[17,1],[16,1],[21,1],[20,1],[3,1],[2,1],[4,1]],"emitSignatures":[3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21],"cacheResolutions":{"resolutions":[{"resolvedModule":{"resolvedFileName":2,"isExternalLibraryImport":true}}],"names":["pkg0"],"resolutionEntries":[[1,1]],"modules":[[22,[1]],[23,[1]],[24,[1]],[25,[1]],[26,[1]],[27,[1]],[28,[1]]]}},"version":"FakeTSVersion"}
 
 //// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -1230,12 +1343,15 @@ exitCode:: ExitStatus.undefined
       "./e/ea/eaa/filewithimports.ts",
       "./e/ea/eaa/eaaa/filewithimports.ts",
       "./e/ea/eaa/eaaa/x/y/z/randomfileforimport.ts",
+      "./f/fa/faa/x/y/z/randomfileforimport.ts",
+      "./f/fa/faa/faaa/filewithimports.ts",
       "./a",
       "./b/ba",
       "./c/ca/caa/caaa",
       "./c/cb",
       "./d/da/daa/daaa/x/y/z",
-      "./e/ea/eaa/eaaa"
+      "./e/ea/eaa/eaaa",
+      "./f/fa/faa/faaa"
     ],
     "fileNamesList": [
       [
@@ -1319,6 +1435,14 @@ exitCode:: ExitStatus.undefined
       "./e/ea/eaa/eaaa/x/y/z/randomfileforimport.ts": {
         "version": "-10726455937-export const x = 10;",
         "signature": "-10726455937-export const x = 10;"
+      },
+      "./f/fa/faa/x/y/z/randomfileforimport.ts": {
+        "version": "-10726455937-export const x = 10;",
+        "signature": "-10726455937-export const x = 10;"
+      },
+      "./f/fa/faa/faaa/filewithimports.ts": {
+        "version": "9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n",
+        "signature": "9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n"
       }
     },
     "options": {
@@ -1362,6 +1486,9 @@ exitCode:: ExitStatus.undefined
       "./e/ea/filewithimports.ts": [
         "./node_modules/pkg0/index.d.ts"
       ],
+      "./f/fa/faa/faaa/filewithimports.ts": [
+        "./node_modules/pkg0/index.d.ts"
+      ],
       "./filewithimports.ts": [
         "./node_modules/pkg0/index.d.ts"
       ]
@@ -1398,6 +1525,9 @@ exitCode:: ExitStatus.undefined
         "./node_modules/pkg0/index.d.ts"
       ],
       "./e/ea/filewithimports.ts": [
+        "./node_modules/pkg0/index.d.ts"
+      ],
+      "./f/fa/faa/faaa/filewithimports.ts": [
         "./node_modules/pkg0/index.d.ts"
       ],
       "./filewithimports.ts": [
@@ -1554,6 +1684,20 @@ exitCode:: ExitStatus.undefined
         ]
       ],
       [
+        "./f/fa/faa/faaa/filewithimports.ts",
+        [
+          {
+            "file": "./f/fa/faa/faaa/filewithimports.ts",
+            "start": 84,
+            "length": 6,
+            "messageText": "Cannot find module 'pkg1' or its corresponding type declarations.",
+            "category": 1,
+            "code": 2307
+          }
+        ]
+      ],
+      "./f/fa/faa/x/y/z/randomfileforimport.ts",
+      [
         "./filewithimports.ts",
         [
           {
@@ -1631,6 +1775,14 @@ exitCode:: ExitStatus.undefined
         "Full"
       ],
       [
+        "./f/fa/faa/faaa/filewithimports.ts",
+        "Full"
+      ],
+      [
+        "./f/fa/faa/x/y/z/randomfileforimport.ts",
+        "Full"
+      ],
+      [
         "./filewithimports.ts",
         "Full"
       ],
@@ -1660,7 +1812,9 @@ exitCode:: ExitStatus.undefined
       "./e/ea/filewithimports.ts",
       "./e/ea/eaa/filewithimports.ts",
       "./e/ea/eaa/eaaa/filewithimports.ts",
-      "./e/ea/eaa/eaaa/x/y/z/randomfileforimport.ts"
+      "./e/ea/eaa/eaaa/x/y/z/randomfileforimport.ts",
+      "./f/fa/faa/x/y/z/randomfileforimport.ts",
+      "./f/fa/faa/faaa/filewithimports.ts"
     ],
     "cacheResolutions": {
       "resolutions": [
@@ -1777,11 +1931,26 @@ exitCode:: ExitStatus.undefined
               }
             ]
           ]
+        ],
+        [
+          "./f/fa/faa/faaa",
+          [
+            [
+              "pkg0",
+              {
+                "id": 1,
+                "resolvedModule": {
+                  "resolvedFileName": "./node_modules/pkg0/index.d.ts",
+                  "isExternalLibraryImport": true
+                }
+              }
+            ]
+          ]
         ]
       ]
     }
   },
   "version": "FakeTSVersion",
-  "size": 5703
+  "size": 6176
 }
 
