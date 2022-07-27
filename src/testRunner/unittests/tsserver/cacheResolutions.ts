@@ -273,6 +273,82 @@ namespace ts.projectSystem {
                     });
                     server.updateProjectIfDirty(session.getProjectService().configuredProjects.get("/src/project/tsconfig.json")!);
 
+                    logger.info("modify randomFileForImport by adding unresolved import");
+                    session.executeCommandSeq<protocol.ChangeRequest>({
+                        command: protocol.CommandTypes.Change,
+                        arguments: {
+                            file: "/src/project/randomFileForImport.ts",
+                            line: 1,
+                            offset: 1,
+                            endLine: 1,
+                            endOffset: 1,
+                            insertString: `import type { ImportInterface1 } from "pkg1";\n`,
+                        }
+                    });
+                    server.updateProjectIfDirty(session.getProjectService().configuredProjects.get("/src/project/tsconfig.json")!);
+
+                    logger.info("modify b/randomFileForImport by adding unresolved import");
+                    session.executeCommandSeq<protocol.ChangeRequest>({
+                        command: protocol.CommandTypes.Change,
+                        arguments: {
+                            file: "/src/project/b/randomFileForImport.ts",
+                            line: 1,
+                            offset: 1,
+                            endLine: 1,
+                            endOffset: 1,
+                            insertString: `import type { ImportInterface1 } from "pkg1";\n`,
+                        }
+                    });
+                    server.updateProjectIfDirty(session.getProjectService().configuredProjects.get("/src/project/tsconfig.json")!);
+
+                    logger.info("modify c/ca/caa/randomFileForImport by adding unresolved import");
+                    session.executeCommandSeq<protocol.ChangeRequest>({
+                        command: protocol.CommandTypes.Change,
+                        arguments: {
+                            file: "/src/project/c/ca/caa/randomFileForImport.ts",
+                            line: 1,
+                            offset: 1,
+                            endLine: 1,
+                            endOffset: 1,
+                            insertString: `import type { ImportInterface1 } from "pkg1";\n`,
+                        }
+                    });
+                    server.updateProjectIfDirty(session.getProjectService().configuredProjects.get("/src/project/tsconfig.json")!);
+
+                    logger.info("modify d/da/daa/daaa/x/y/z/randomFileForImport by adding unresolved import");
+                    session.executeCommandSeq<protocol.ChangeRequest>({
+                        command: protocol.CommandTypes.Change,
+                        arguments: {
+                            file: "/src/project/d/da/daa/daaa/x/y/z/randomFileForImport.ts",
+                            line: 1,
+                            offset: 1,
+                            endLine: 1,
+                            endOffset: 1,
+                            insertString: `import type { ImportInterface1 } from "pkg1";\n`,
+                        }
+                    });
+                    server.updateProjectIfDirty(session.getProjectService().configuredProjects.get("/src/project/tsconfig.json")!);
+
+                    logger.info("modify e/ea/eaa/eaaa/x/y/z/randomFileForImport by adding unresolved import");
+                    session.executeCommandSeq<protocol.ChangeRequest>({
+                        command: protocol.CommandTypes.Change,
+                        arguments: {
+                            file: "/src/project/e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts",
+                            line: 1,
+                            offset: 1,
+                            endLine: 1,
+                            endOffset: 1,
+                            insertString: `import type { ImportInterface1 } from "pkg1";\n`,
+                        }
+                    });
+                    server.updateProjectIfDirty(session.getProjectService().configuredProjects.get("/src/project/tsconfig.json")!);
+
+                    logger.info("add file for unresolved import and random edit");
+                    host.ensureFileOrFolder({ path: "/src/project/node_modules/pkg1/index.d.ts", content: tscWatch.cacheResolutions.getPkgImportContent("Import", 1) });
+                    host.appendFile("/src/project/randomFileForImport.ts", `export const y = 10;`);
+                    host.runQueuedTimeoutCallbacks(); // Failed lookups
+                    host.runQueuedTimeoutCallbacks(); // actual update
+
                     baselineTsserverLogs("cacheResolutions", scenario, session);
                 });
             }

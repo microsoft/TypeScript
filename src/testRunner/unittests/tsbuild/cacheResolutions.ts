@@ -122,22 +122,59 @@ namespace ts.tscWatch.cacheResolutions {
                 {
                     subScenario: "modify randomFileForImport by adding import",
                     modifyFs: fs => prependText(fs, "/src/project/randomFileForImport.ts", `import type { ImportInterface0 } from "pkg0";\n`),
+                    discrepancyExplanation: noChangeWithExportsDiscrepancyRun.discrepancyExplanation
                 },
                 {
                     subScenario: "modify b/randomFileForImport by adding import",
                     modifyFs: fs => prependText(fs, "/src/project/b/randomFileForImport.ts", `import type { ImportInterface0 } from "pkg0";\n`),
+                    discrepancyExplanation: noChangeWithExportsDiscrepancyRun.discrepancyExplanation
                 },
                 {
                     subScenario: "modify c/ca/caa/randomFileForImport by adding import",
                     modifyFs: fs => prependText(fs, "/src/project/c/ca/caa/randomFileForImport.ts", `import type { ImportInterface0 } from "pkg0";\n`),
+                    discrepancyExplanation: noChangeWithExportsDiscrepancyRun.discrepancyExplanation
                 },
                 {
                     subScenario: "modify d/da/daa/daaa/x/y/z/randomFileForImport by adding import",
                     modifyFs: fs => prependText(fs, "/src/project/d/da/daa/daaa/x/y/z/randomFileForImport.ts", `import type { ImportInterface0 } from "pkg0";\n`),
+                    discrepancyExplanation: noChangeWithExportsDiscrepancyRun.discrepancyExplanation
                 },
                 {
                     subScenario: "modify e/ea/eaa/eaaa/x/y/z/randomFileForImport by adding import",
                     modifyFs: fs => prependText(fs, "/src/project/e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts", `import type { ImportInterface0 } from "pkg0";\n`),
+                    discrepancyExplanation: noChangeWithExportsDiscrepancyRun.discrepancyExplanation
+                },
+                {
+                    subScenario: "modify randomFileForImport by adding unresolved import",
+                    modifyFs: fs => prependText(fs, "/src/project/randomFileForImport.ts", `import type { ImportInterface1 } from "pkg1";\n`),
+                    discrepancyExplanation: noChangeWithExportsDiscrepancyRun.discrepancyExplanation
+                },
+                {
+                    subScenario: "modify b/randomFileForImport by adding unresolved import",
+                    modifyFs: fs => prependText(fs, "/src/project/b/randomFileForImport.ts", `import type { ImportInterface1 } from "pkg1";\n`),
+                    discrepancyExplanation: noChangeWithExportsDiscrepancyRun.discrepancyExplanation
+                },
+                {
+                    subScenario: "modify c/ca/caa/randomFileForImport by adding unresolved import",
+                    modifyFs: fs => prependText(fs, "/src/project/c/ca/caa/randomFileForImport.ts", `import type { ImportInterface1 } from "pkg1";\n`),
+                    discrepancyExplanation: noChangeWithExportsDiscrepancyRun.discrepancyExplanation
+                },
+                {
+                    subScenario: "modify d/da/daa/daaa/x/y/z/randomFileForImport by adding unresolved import",
+                    modifyFs: fs => prependText(fs, "/src/project/d/da/daa/daaa/x/y/z/randomFileForImport.ts", `import type { ImportInterface1 } from "pkg1";\n`),
+                    discrepancyExplanation: noChangeWithExportsDiscrepancyRun.discrepancyExplanation
+                },
+                {
+                    subScenario: "modify e/ea/eaa/eaaa/x/y/z/randomFileForImport by adding unresolved import",
+                    modifyFs: fs => prependText(fs, "/src/project/e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts", `import type { ImportInterface1 } from "pkg1";\n`),
+                    discrepancyExplanation: noChangeWithExportsDiscrepancyRun.discrepancyExplanation
+                },
+                {
+                    subScenario: "add file for unresolved import",
+                    modifyFs: fs => {
+                        fs.mkdirpSync("/src/project/node_modules/pkg1");
+                        fs.writeFileSync("/src/project/node_modules/pkg1/index.d.ts", getPkgImportContent("Import", 1));
+                    },
                 },
             ]
         });
@@ -405,43 +442,55 @@ namespace ts.tscWatch.cacheResolutions {
             }),
             "/src/project/fileWithImports.ts": Utils.dedent`
                 import type { ImportInterface0 } from "pkg0";
+                import type { ImportInterface1 } from "pkg1";
             `,
             "/src/project/randomFileForImport.ts": getRandomFileContent(),
             "/src/project/a/fileWithImports.ts": Utils.dedent`
                 import type { ImportInterface0 } from "pkg0";
+                import type { ImportInterface1 } from "pkg1";
             `,
             "/src/project/b/ba/fileWithImports.ts": Utils.dedent`
                 import type { ImportInterface0 } from "pkg0";
+                import type { ImportInterface1 } from "pkg1";
             `,
             "/src/project/b/randomFileForImport.ts": getRandomFileContent(),
             "/src/project/c/ca/fileWithImports.ts": Utils.dedent`
                 import type { ImportInterface0 } from "pkg0";
+                import type { ImportInterface1 } from "pkg1";
             `,
             "/src/project/c/ca/caa/randomFileForImport.ts": getRandomFileContent(),
             "/src/project/c/ca/caa/caaa/fileWithImports.ts": Utils.dedent`
                 import type { ImportInterface0 } from "pkg0";
+                import type { ImportInterface1 } from "pkg1";
             `,
             "/src/project/c/cb/fileWithImports.ts": Utils.dedent`
                 import type { ImportInterface0 } from "pkg0";
+                import type { ImportInterface1 } from "pkg1";
             `,
             "/src/project/d/da/daa/daaa/x/y/z/randomFileForImport.ts": getRandomFileContent(),
             "/src/project/d/da/daa/daaa/fileWithImports.ts": Utils.dedent`
                 import type { ImportInterface0 } from "pkg0";
+                import type { ImportInterface1 } from "pkg1";
             `,
             "/src/project/d/da/daa/fileWithImports.ts": Utils.dedent`
                 import type { ImportInterface0 } from "pkg0";
+                import type { ImportInterface1 } from "pkg1";
             `,
             "/src/project/d/da/fileWithImports.ts": Utils.dedent`
                 import type { ImportInterface0 } from "pkg0";
+                import type { ImportInterface1 } from "pkg1";
             `,
             "/src/project/e/ea/fileWithImports.ts": Utils.dedent`
                 import type { ImportInterface0 } from "pkg0";
+                import type { ImportInterface1 } from "pkg1";
             `,
             "/src/project/e/ea/eaa/fileWithImports.ts": Utils.dedent`
                 import type { ImportInterface0 } from "pkg0";
+                import type { ImportInterface1 } from "pkg1";
             `,
             "/src/project/e/ea/eaa/eaaa/fileWithImports.ts": Utils.dedent`
                 import type { ImportInterface0 } from "pkg0";
+                import type { ImportInterface1 } from "pkg1";
             `,
             "/src/project/e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts": getRandomFileContent(),
             "/src/project/node_modules/pkg0/index.d.ts": getPkgImportContent("Import", 0),
