@@ -1,5 +1,9 @@
 /*@internal*/
 namespace ts {
+    interface ClassLexicalEnvironment extends BaseClassLexicalEnvironment<BasePrivateIdentifierEnvironment<BasePrivateIdentifierInfo>> {
+        containsPrivateFieldAccessInDecorator?: boolean;
+    }
+
     export function transformLegacyDecorators(context: TransformationContext) {
         const {
             factory,
@@ -22,6 +26,12 @@ namespace ts {
          * with the double-binding behavior of classes.
          */
         let classAliases: Identifier[];
+        let inExpressionOfDecorator = false;
+
+        const classLexicalEnvironmentStack = new ClassLexicalEnvironmentStack(
+            identity,
+            (base): ClassLexicalEnvironment => ({ ...base }),
+        );
 
         return chainBundle(context, transformSourceFile);
 
@@ -35,9 +45,32 @@ namespace ts {
             return isDecorator(node) ? undefined : node;
         }
 
+        function trackPrivateFieldAccess(node: Node) {
+            const name =
+                isPrivateIdentifierPropertyAccessExpression(node) ? node.name :
+                isBinaryExpression(node) && node.operatorToken.kind === SyntaxKind.InKeyword && isPrivateIdentifier(node.left) ? node.left :
+                undefined;
+
+            if (name) {
+                const env = classLexicalEnvironmentStack.accessPrivateIdentifier(name)?.env;
+                if (env) {
+                    env.containsPrivateFieldAccessInDecorator = true;
+                }
+            }
+        }
+
+        function classFieldsVisitor(node: Node): VisitResult<Node> {
+            if (!inExpressionOfDecorator || !(node.transformFlags & TransformFlags.ContainsClassFields)) {
+                return node;
+            }
+
+            trackPrivateFieldAccess(node);
+            return visitEachChild(node, classFieldsVisitor, context);
+        }
+
         function visitor(node: Node): VisitResult<Node> {
             if (!(node.transformFlags & TransformFlags.ContainsDecorators)) {
-                return node;
+                return classFieldsVisitor(node);
             }
 
             switch (node.kind) {
@@ -61,28 +94,41 @@ namespace ts {
                 case SyntaxKind.Parameter:
                     return visitParameterDeclaration(node as ParameterDeclaration);
                 default:
+                    trackPrivateFieldAccess(node);
                     return visitEachChild(node, visitor, context);
             }
         }
 
-        function visitClassDeclaration(node: ClassDeclaration): VisitResult<Statement> {
-            if (!(classOrConstructorParameterIsDecorated(node) || childIsDecorated(node))) return visitEachChild(node, visitor, context);
+        function declarePrivateMembers(node: ClassLikeDeclaration) {
+            for (const member of node.members) {
+                if (isPrivateIdentifierClassElementDeclaration(member)) {
+                    classLexicalEnvironmentStack.declarePrivateIdentifier(member.name, {
+                        isStatic: isStatic(member),
+                        kind: isPropertyDeclaration(member) ? PrivateIdentifierKind.Field :
+                            isGetOrSetAccessorDeclaration(member) ? PrivateIdentifierKind.Accessor :
+                            PrivateIdentifierKind.Method
+                    });
+                }
+            }
+        }
 
-            const classStatement = hasDecorators(node) ?
+        function visitClassDeclaration(node: ClassDeclaration): VisitResult<Statement> {
+            if (!(node.transformFlags & TransformFlags.ContainsDecorators) || !(classOrConstructorParameterIsDecorated(node) || childIsDecorated(node))) {
+                classLexicalEnvironmentStack.startClassLexicalEnvironment();
+                declarePrivateMembers(node);
+                const visited = visitEachChild(node, visitor, context);
+                classLexicalEnvironmentStack.endClassLexicalEnvironment();
+                return visited;
+            }
+
+            const statements = hasDecorators(node) ?
                 createClassDeclarationHeadWithDecorators(node, node.name) :
                 createClassDeclarationHeadWithoutDecorators(node, node.name);
-
-            const statements: Statement[] = [classStatement];
-
-            // Write any decorators of the node.
-            addClassElementDecorationStatements(statements, node, /*isStatic*/ false);
-            addClassElementDecorationStatements(statements, node, /*isStatic*/ true);
-            addConstructorDecorationStatement(statements, node);
 
             if (statements.length > 1) {
                 // Add a DeclarationMarker as a marker for the end of the declaration
                 statements.push(factory.createEndOfDeclarationMarker(node));
-                setEmitFlags(classStatement, getEmitFlags(classStatement) | EmitFlags.HasEndOfDeclarationMarker);
+                setEmitFlags(statements[0], getEmitFlags(statements[0]) | EmitFlags.HasEndOfDeclarationMarker);
             }
 
             return singleOrMany(statements);
@@ -99,14 +145,52 @@ namespace ts {
             //      ${members}
             //  }
 
-            return factory.updateClassDeclaration(
+            // modifiers and heritage clauses are evaluated outside of the class lexical environment
+            const modifiers = visitNodes(node.modifiers, modifierVisitor, isModifier);
+            const heritageClauses = visitNodes(node.heritageClauses, visitor, isHeritageClause);
+
+            // members are evaluated inside of the class lexical environment
+            classLexicalEnvironmentStack.startClassLexicalEnvironment();
+            declarePrivateMembers(node);
+
+            let members = visitNodes(node.members, visitor, isClassElement);
+
+            // transform decorators of class members
+            const savedInExpressionOfDecorator = inExpressionOfDecorator;
+            inExpressionOfDecorator = true;
+
+            let classElementDecorationStatements: Statement[] | undefined = [];
+            addClassElementDecorationStatements(classElementDecorationStatements, node, /*isStatic*/ false);
+            addClassElementDecorationStatements(classElementDecorationStatements, node, /*isStatic*/ true);
+            inExpressionOfDecorator = savedInExpressionOfDecorator;
+
+            // If a member decorator contains private field access, we must scope the member decorators to a `static {}` block
+            if (some(classElementDecorationStatements) && classLexicalEnvironmentStack.classLexicalEnvironment?.containsPrivateFieldAccessInDecorator) {
+                members = setTextRange(
+                    factory.createNodeArray([
+                        ...members,
+                        factory.createClassStaticBlockDeclaration(
+                            factory.createBlock(classElementDecorationStatements, /*multiline*/ true)
+                        )
+                    ]),
+                    members);
+                classElementDecorationStatements = undefined;
+            }
+
+            classLexicalEnvironmentStack.endClassLexicalEnvironment();
+
+            const classDecl = factory.updateClassDeclaration(
                 node,
-                visitNodes(node.modifiers, modifierVisitor, isModifier),
+                modifiers,
                 name,
                 /*typeParameters*/ undefined,
-                visitNodes(node.heritageClauses, visitor, isHeritageClause),
-                visitNodes(node.members, visitor, isClassElement)
+                heritageClauses,
+                members
             );
+
+            const statements: Statement[] = [classDecl];
+            addRange(statements, classElementDecorationStatements);
+            return statements;
         }
 
         /**
@@ -213,8 +297,40 @@ namespace ts {
             //      ${members}
             //  }
             const heritageClauses = visitNodes(node.heritageClauses, visitor, isHeritageClause);
-            const members = visitNodes(node.members, visitor, isClassElement);
-            const classExpression = factory.createClassExpression(/*modifiers*/ undefined, name, /*typeParameters*/ undefined, heritageClauses, members);
+
+            classLexicalEnvironmentStack.startClassLexicalEnvironment();
+            declarePrivateMembers(node);
+
+            let members = visitNodes(node.members, visitor, isClassElement);
+
+            const savedInExpressionOfDecorator = inExpressionOfDecorator;
+            inExpressionOfDecorator = true;
+
+            let classElementDecorationStatements: Statement[] | undefined = [];
+            addClassElementDecorationStatements(classElementDecorationStatements, node, /*isStatic*/ false);
+            addClassElementDecorationStatements(classElementDecorationStatements, node, /*isStatic*/ true);
+            inExpressionOfDecorator = savedInExpressionOfDecorator;
+
+            // If a member decorator contains private field access, we must scope the member decorators to a `static {}` block
+            if (some(classElementDecorationStatements) && classLexicalEnvironmentStack.classLexicalEnvironment?.containsPrivateFieldAccessInDecorator) {
+                members = setTextRange(
+                    factory.createNodeArray([
+                        ...members,
+                        factory.createClassStaticBlockDeclaration(
+                            factory.createBlock(classElementDecorationStatements, /*multiline*/ true)
+                        )
+                    ]),
+                    members);
+                classElementDecorationStatements = undefined;
+            }
+
+            classLexicalEnvironmentStack.endClassLexicalEnvironment();
+
+            const classExpression = factory.createClassExpression(
+                /*modifiers*/ undefined,
+                name, /*typeParameters*/ undefined,
+                heritageClauses,
+                members);
             setOriginalNode(classExpression, node);
             setTextRange(classExpression, location);
 
@@ -234,12 +350,18 @@ namespace ts {
             setOriginalNode(statement, node);
             setTextRange(statement, location);
             setCommentRange(statement, node);
-            return statement;
+
+            const statements: Statement[] = [statement];
+            addRange(statements, classElementDecorationStatements);
+            addConstructorDecorationStatement(statements, node);
+            return statements;
         }
 
         function visitClassExpression(node: ClassExpression) {
+            classLexicalEnvironmentStack.startClassLexicalEnvironment();
+            declarePrivateMembers(node);
             // Legacy decorators were not supported on class expressions
-            return factory.updateClassExpression(
+            const visited = factory.updateClassExpression(
                 node,
                 visitNodes(node.modifiers, modifierVisitor, isModifier),
                 node.name,
@@ -247,6 +369,8 @@ namespace ts {
                 visitNodes(node.heritageClauses, visitor, isHeritageClause),
                 visitNodes(node.members, visitor, isClassElement)
             );
+            classLexicalEnvironmentStack.endClassLexicalEnvironment();
+            return visited;
         }
 
         function visitConstructorDeclaration(node: ConstructorDeclaration) {
