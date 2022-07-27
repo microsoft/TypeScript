@@ -14,14 +14,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/setup-node@v3
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         ref: ${{ github.event.inputs.branch_name || github.event.client_payload.branch_name }}
         fetch-depth: 0
     # This does a test post-merge and only pushes the result if the test succeeds
     # required client_payload members:
     # branch_name - the target branch
+    - uses: actions/setup-node@v3
+      with:
+        cache: npm
     - run: |
         git config user.email "typescriptbot@microsoft.com"
         git config user.name "TypeScript Bot"

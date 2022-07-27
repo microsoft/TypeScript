@@ -9,8 +9,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/setup-node@v3
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         ref: ${{ github.event.client_payload.branch_name }}
     # notably, this is essentially the same script as `new-release-branch.yaml` (with fewer inputs), but it assumes the branch already exists
@@ -20,6 +19,9 @@ jobs:
     # branch_name - the target branch
     # package_version - the full version string (eg, `3.9.1-rc` or `3.9.2`)
     # core_major_minor - the major.minor pair associated with the desired package_version (eg, `3.9` for `3.9.3`)
+    - uses: actions/setup-node@v3
+      with:
+        cache: npm
     - run: |
         sed -i -e 's/"version": ".*"/"version": "${{ github.event.client_payload.package_version }}"/g' package.json
         sed -i -e 's/const versionMajorMinor = ".*"/const versionMajorMinor = "${{ github.event.client_payload.core_major_minor }}"/g' src/compiler/corePublic.ts

@@ -31,6 +31,20 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         check-latest: true
+    # We use all of this instead of "cache: npm" above to avoid mixing npm 6 caches with npm 8+ caches.
+    # TODO: Remove this once we stop running CI on Node 14.
+    - name: Get npm cache directory
+      id: npm-cache-info
+      run: |
+        echo "::set-output name=dir::$(npm config get cache)"
+        echo "::set-output name=key::$(npm --version | grep -q '^6' && echo "node14" || echo "node")"
+    - uses: actions/cache@v3
+      id: npm-cache
+      with:
+        path: ${{ steps.npm-cache-info.outputs.dir }}
+        key: ${{ runner.os }}-${{ steps.npm-cache-info.outputs.key }}-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-${{ steps.npm-cache-info.outputs.key }}-
     - run:  npm ci
 
     # Re: https://github.com/actions/setup-node/pull/125

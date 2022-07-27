@@ -24,6 +24,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/setup-node@v3
+      with:
+        cache: npm # TODO(jakebailey): No checkout; remove?
     - uses: microsoft/TypeScript-Twoslash-Repro-Action@master
       with:
         github-token: ${{ secrets.TS_BOT_GITHUB_TOKEN }}
@@ -36,6 +38,8 @@ jobs:
       with:
         fetch-depth: 0
     - uses: actions/setup-node@v3
+      with:
+        cache: npm
     - uses: microsoft/TypeScript-Twoslash-Repro-Action@master
       with:
         github-token: ${{ secrets.TS_BOT_GITHUB_TOKEN }}

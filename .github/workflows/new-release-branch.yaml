@@ -9,10 +9,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/setup-node@v3
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         fetch-depth: 5
+    - uses: actions/setup-node@v3
+      with:
+        cache: npm
     - run: |
         git checkout -b ${{ github.event.client_payload.branch_name }}
         sed -i -e 's/"version": ".*"/"version": "${{ github.event.client_payload.package_version }}"/g' package.json
