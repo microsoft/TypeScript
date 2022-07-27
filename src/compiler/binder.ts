@@ -1670,7 +1670,7 @@ namespace ts {
         }
 
         function bindParameterFlow(node: ParameterDeclaration) {
-            node.modifiers?.forEach(bind);
+            bindEach(node.modifiers);
             bind(node.dotDotDotToken);
             bind(node.questionToken);
             bind(node.type);
