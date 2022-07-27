@@ -202,6 +202,39 @@ describe("unittests:: tsbuildWatch:: watchMode:: cacheResolutions::", () => {
                         edit: sys => sys.prependFile("/src/project/e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts", `import type { ImportInterface0 } from "pkg0";\n`),
                         timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                     },
+                    {
+                        caption: "modify randomFileForImport by adding unresolved import",
+                        edit: sys => sys.prependFile("/src/project/randomFileForImport.ts", `import type { ImportInterface1 } from "pkg1";\n`),
+                        timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                    },
+                    {
+                        caption: "modify b/randomFileForImport by adding unresolved import",
+                        edit: sys => sys.prependFile("/src/project/b/randomFileForImport.ts", `import type { ImportInterface1 } from "pkg1";\n`),
+                        timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                    },
+                    {
+                        caption: "modify c/ca/caa/randomFileForImport by adding unresolved import",
+                        edit: sys => sys.prependFile("/src/project/c/ca/caa/randomFileForImport.ts", `import type { ImportInterface1 } from "pkg1";\n`),
+                        timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                    },
+                    {
+                        caption: "modify d/da/daa/daaa/x/y/z/randomFileForImport by adding unresolved import",
+                        edit: sys => sys.prependFile("/src/project/d/da/daa/daaa/x/y/z/randomFileForImport.ts", `import type { ImportInterface1 } from "pkg1";\n`),
+                        timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                    },
+                    {
+                        caption: "modify e/ea/eaa/eaaa/x/y/z/randomFileForImport by adding unresolved import",
+                        edit: sys => sys.prependFile("/src/project/e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts", `import type { ImportInterface1 } from "pkg1";\n`),
+                        timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                    },
+                    {
+                        caption: "add file for unresolved import and random edit",
+                        edit: sys => {
+                            sys.ensureFileOrFolder({ path: "/src/project/node_modules/pkg1/index.d.ts", content: getPkgImportContent("Import", 1) });
+                            sys.appendFile("/src/project/randomFileForImport.ts", `export const y = 10;`);
+                        },
+                        timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                    },
                 ]
             });
         }

@@ -273,43 +273,55 @@ function getFsMapWithSameResolutionFromMultiplePlaces(): { [path: string]: strin
         }),
         "/src/project/fileWithImports.ts": Utils.dedent`
             import type { ImportInterface0 } from "pkg0";
+            import type { ImportInterface1 } from "pkg1";
         `,
         "/src/project/randomFileForImport.ts": getRandomFileContent(),
         "/src/project/a/fileWithImports.ts": Utils.dedent`
             import type { ImportInterface0 } from "pkg0";
+            import type { ImportInterface1 } from "pkg1";
         `,
         "/src/project/b/ba/fileWithImports.ts": Utils.dedent`
             import type { ImportInterface0 } from "pkg0";
+            import type { ImportInterface1 } from "pkg1";
         `,
         "/src/project/b/randomFileForImport.ts": getRandomFileContent(),
         "/src/project/c/ca/fileWithImports.ts": Utils.dedent`
             import type { ImportInterface0 } from "pkg0";
+            import type { ImportInterface1 } from "pkg1";
         `,
         "/src/project/c/ca/caa/randomFileForImport.ts": getRandomFileContent(),
         "/src/project/c/ca/caa/caaa/fileWithImports.ts": Utils.dedent`
             import type { ImportInterface0 } from "pkg0";
+            import type { ImportInterface1 } from "pkg1";
         `,
         "/src/project/c/cb/fileWithImports.ts": Utils.dedent`
             import type { ImportInterface0 } from "pkg0";
+            import type { ImportInterface1 } from "pkg1";
         `,
         "/src/project/d/da/daa/daaa/x/y/z/randomFileForImport.ts": getRandomFileContent(),
         "/src/project/d/da/daa/daaa/fileWithImports.ts": Utils.dedent`
             import type { ImportInterface0 } from "pkg0";
+            import type { ImportInterface1 } from "pkg1";
         `,
         "/src/project/d/da/daa/fileWithImports.ts": Utils.dedent`
             import type { ImportInterface0 } from "pkg0";
+            import type { ImportInterface1 } from "pkg1";
         `,
         "/src/project/d/da/fileWithImports.ts": Utils.dedent`
             import type { ImportInterface0 } from "pkg0";
+            import type { ImportInterface1 } from "pkg1";
         `,
         "/src/project/e/ea/fileWithImports.ts": Utils.dedent`
             import type { ImportInterface0 } from "pkg0";
+            import type { ImportInterface1 } from "pkg1";
         `,
         "/src/project/e/ea/eaa/fileWithImports.ts": Utils.dedent`
             import type { ImportInterface0 } from "pkg0";
+            import type { ImportInterface1 } from "pkg1";
         `,
         "/src/project/e/ea/eaa/eaaa/fileWithImports.ts": Utils.dedent`
             import type { ImportInterface0 } from "pkg0";
+            import type { ImportInterface1 } from "pkg1";
         `,
         "/src/project/e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts": getRandomFileContent(),
         "/src/project/node_modules/pkg0/index.d.ts": getPkgImportContent("Import", 0),

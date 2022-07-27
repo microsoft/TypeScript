@@ -4,6 +4,7 @@ Input::
 
 //// [/src/project/fileWithImports.ts]
 import type { ImportInterface0 } from "pkg0";
+import type { ImportInterface1 } from "pkg1";
 
 
 //// [/src/project/randomFileForImport.ts]
@@ -11,10 +12,12 @@ export const x = 10;
 
 //// [/src/project/a/fileWithImports.ts]
 import type { ImportInterface0 } from "pkg0";
+import type { ImportInterface1 } from "pkg1";
 
 
 //// [/src/project/b/ba/fileWithImports.ts]
 import type { ImportInterface0 } from "pkg0";
+import type { ImportInterface1 } from "pkg1";
 
 
 //// [/src/project/b/randomFileForImport.ts]
@@ -22,6 +25,7 @@ export const x = 10;
 
 //// [/src/project/c/ca/fileWithImports.ts]
 import type { ImportInterface0 } from "pkg0";
+import type { ImportInterface1 } from "pkg1";
 
 
 //// [/src/project/c/ca/caa/randomFileForImport.ts]
@@ -29,10 +33,12 @@ export const x = 10;
 
 //// [/src/project/c/ca/caa/caaa/fileWithImports.ts]
 import type { ImportInterface0 } from "pkg0";
+import type { ImportInterface1 } from "pkg1";
 
 
 //// [/src/project/c/cb/fileWithImports.ts]
 import type { ImportInterface0 } from "pkg0";
+import type { ImportInterface1 } from "pkg1";
 
 
 //// [/src/project/d/da/daa/daaa/x/y/z/randomFileForImport.ts]
@@ -41,26 +47,32 @@ export const x = 10;
 
 //// [/src/project/d/da/daa/daaa/fileWithImports.ts]
 import type { ImportInterface0 } from "pkg0";
+import type { ImportInterface1 } from "pkg1";
 
 
 //// [/src/project/d/da/daa/fileWithImports.ts]
 import type { ImportInterface0 } from "pkg0";
+import type { ImportInterface1 } from "pkg1";
 
 
 //// [/src/project/d/da/fileWithImports.ts]
 import type { ImportInterface0 } from "pkg0";
+import type { ImportInterface1 } from "pkg1";
 
 
 //// [/src/project/e/ea/fileWithImports.ts]
 import type { ImportInterface0 } from "pkg0";
+import type { ImportInterface1 } from "pkg1";
 
 
 //// [/src/project/e/ea/eaa/fileWithImports.ts]
 import type { ImportInterface0 } from "pkg0";
+import type { ImportInterface1 } from "pkg1";
 
 
 //// [/src/project/e/ea/eaa/eaaa/fileWithImports.ts]
 import type { ImportInterface0 } from "pkg0";
+import type { ImportInterface1 } from "pkg1";
 
 
 //// [/src/project/e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts]
@@ -82,171 +94,8 @@ interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
-//// [/src/project/fileWithImports.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-
-
-//// [/src/project/fileWithImports.d.ts]
-export {};
-
-
-//// [/src/project/randomFileForImport.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.x = void 0;
-exports.x = 10;
-
-
-//// [/src/project/randomFileForImport.d.ts]
-export declare const x = 10;
-
-
-//// [/src/project/a/fileWithImports.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-
-
-//// [/src/project/a/fileWithImports.d.ts]
-export {};
-
-
-//// [/src/project/b/ba/fileWithImports.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-
-
-//// [/src/project/b/ba/fileWithImports.d.ts]
-export {};
-
-
-//// [/src/project/b/randomFileForImport.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.x = void 0;
-exports.x = 10;
-
-
-//// [/src/project/b/randomFileForImport.d.ts]
-export declare const x = 10;
-
-
-//// [/src/project/c/ca/fileWithImports.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-
-
-//// [/src/project/c/ca/fileWithImports.d.ts]
-export {};
-
-
-//// [/src/project/c/ca/caa/randomFileForImport.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.x = void 0;
-exports.x = 10;
-
-
-//// [/src/project/c/ca/caa/randomFileForImport.d.ts]
-export declare const x = 10;
-
-
-//// [/src/project/c/ca/caa/caaa/fileWithImports.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-
-
-//// [/src/project/c/ca/caa/caaa/fileWithImports.d.ts]
-export {};
-
-
-//// [/src/project/c/cb/fileWithImports.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-
-
-//// [/src/project/c/cb/fileWithImports.d.ts]
-export {};
-
-
-//// [/src/project/d/da/daa/daaa/x/y/z/randomFileForImport.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.x = void 0;
-exports.x = 10;
-
-
-//// [/src/project/d/da/daa/daaa/x/y/z/randomFileForImport.d.ts]
-export declare const x = 10;
-
-
-//// [/src/project/d/da/daa/daaa/fileWithImports.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-
-
-//// [/src/project/d/da/daa/daaa/fileWithImports.d.ts]
-export {};
-
-
-//// [/src/project/d/da/daa/fileWithImports.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-
-
-//// [/src/project/d/da/daa/fileWithImports.d.ts]
-export {};
-
-
-//// [/src/project/d/da/fileWithImports.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-
-
-//// [/src/project/d/da/fileWithImports.d.ts]
-export {};
-
-
-//// [/src/project/e/ea/fileWithImports.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-
-
-//// [/src/project/e/ea/fileWithImports.d.ts]
-export {};
-
-
-//// [/src/project/e/ea/eaa/fileWithImports.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-
-
-//// [/src/project/e/ea/eaa/fileWithImports.d.ts]
-export {};
-
-
-//// [/src/project/e/ea/eaa/eaaa/fileWithImports.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-
-
-//// [/src/project/e/ea/eaa/eaaa/fileWithImports.d.ts]
-export {};
-
-
-//// [/src/project/e/ea/eaa/eaaa/x/y/z/randomFileForImport.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.x = void 0;
-exports.x = 10;
-
-
-//// [/src/project/e/ea/eaa/eaaa/x/y/z/randomFileForImport.d.ts]
-export declare const x = 10;
-
-
 //// [/src/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../a/lib/lib.d.ts","./node_modules/pkg0/index.d.ts","./filewithimports.ts","./randomfileforimport.ts","./a/filewithimports.ts","./b/ba/filewithimports.ts","./b/randomfileforimport.ts","./c/ca/filewithimports.ts","./c/ca/caa/randomfileforimport.ts","./c/ca/caa/caaa/filewithimports.ts","./c/cb/filewithimports.ts","./d/da/daa/daaa/x/y/z/randomfileforimport.ts","./d/da/daa/daaa/filewithimports.ts","./d/da/daa/filewithimports.ts","./d/da/filewithimports.ts","./e/ea/filewithimports.ts","./e/ea/eaa/filewithimports.ts","./e/ea/eaa/eaaa/filewithimports.ts","./e/ea/eaa/eaaa/x/y/z/randomfileforimport.ts","./a","./b/ba","./c/ca/caa/caaa","./c/cb","./d/da/daa/daaa","./e/ea/eaa/eaaa"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"769951468-export interface ImportInterface0 {}",{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-3531856636-export {};\n"},{"version":"-10726455937-export const x = 10;","signature":"-6821242887-export declare const x = 10;\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-3531856636-export {};\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-3531856636-export {};\n"},{"version":"-10726455937-export const x = 10;","signature":"-6821242887-export declare const x = 10;\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-3531856636-export {};\n"},{"version":"-10726455937-export const x = 10;","signature":"-6821242887-export declare const x = 10;\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-3531856636-export {};\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-3531856636-export {};\n"},{"version":"-10726455937-export const x = 10;","signature":"-6821242887-export declare const x = 10;\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-3531856636-export {};\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-3531856636-export {};\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-3531856636-export {};\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-3531856636-export {};\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-3531856636-export {};\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-3531856636-export {};\n"},{"version":"-10726455937-export const x = 10;","signature":"-6821242887-export declare const x = 10;\n"}],"options":{"cacheResolutions":true,"composite":true},"fileIdsList":[[2]],"referencedMap":[[5,1],[6,1],[10,1],[8,1],[11,1],[13,1],[14,1],[15,1],[18,1],[17,1],[16,1],[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,5,6,7,10,9,8,11,13,12,14,15,18,19,17,16,3,2,4],"latestChangedDtsFile":"./e/ea/eaa/eaaa/x/y/z/randomFileForImport.d.ts","cacheResolutions":{"resolutions":[{"resolvedModule":{"resolvedFileName":2,"isExternalLibraryImport":true}}],"names":["pkg0"],"resolutionEntries":[[1,1]],"modules":[[20,[1]],[21,[1]],[22,[1]],[23,[1]],[24,[1]],[25,[1]]]}},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../a/lib/lib.d.ts","./node_modules/pkg0/index.d.ts","./filewithimports.ts","./randomfileforimport.ts","./a/filewithimports.ts","./b/ba/filewithimports.ts","./b/randomfileforimport.ts","./c/ca/filewithimports.ts","./c/ca/caa/randomfileforimport.ts","./c/ca/caa/caaa/filewithimports.ts","./c/cb/filewithimports.ts","./d/da/daa/daaa/x/y/z/randomfileforimport.ts","./d/da/daa/daaa/filewithimports.ts","./d/da/daa/filewithimports.ts","./d/da/filewithimports.ts","./e/ea/filewithimports.ts","./e/ea/eaa/filewithimports.ts","./e/ea/eaa/eaaa/filewithimports.ts","./e/ea/eaa/eaaa/x/y/z/randomfileforimport.ts","./a","./b/ba","./c/ca/caa/caaa","./c/cb","./d/da/daa/daaa","./e/ea/eaa/eaaa"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"769951468-export interface ImportInterface0 {}","9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n","-10726455937-export const x = 10;","9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n","9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n","-10726455937-export const x = 10;","9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n","-10726455937-export const x = 10;","9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n","9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n","-10726455937-export const x = 10;","9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n","9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n","9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n","9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n","9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n","9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n","-10726455937-export const x = 10;"],"options":{"cacheResolutions":true,"composite":true},"fileIdsList":[[2]],"referencedMap":[[5,1],[6,1],[10,1],[8,1],[11,1],[13,1],[14,1],[15,1],[18,1],[17,1],[16,1],[3,1]],"exportedModulesMap":[[5,1],[6,1],[10,1],[8,1],[11,1],[13,1],[14,1],[15,1],[18,1],[17,1],[16,1],[3,1]],"semanticDiagnosticsPerFile":[1,[5,[{"file":"./a/filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],[6,[{"file":"./b/ba/filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],7,[10,[{"file":"./c/ca/caa/caaa/filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],9,[8,[{"file":"./c/ca/filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],[11,[{"file":"./c/cb/filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],[13,[{"file":"./d/da/daa/daaa/filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],12,[14,[{"file":"./d/da/daa/filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],[15,[{"file":"./d/da/filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],[18,[{"file":"./e/ea/eaa/eaaa/filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],19,[17,[{"file":"./e/ea/eaa/filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],[16,[{"file":"./e/ea/filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],[3,[{"file":"./filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],2,4],"affectedFilesPendingEmit":[5,6,7,10,9,8,11,13,12,14,15,18,19,17,16,3,4],"emitSignatures":[3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19],"cacheResolutions":{"resolutions":[{"resolvedModule":{"resolvedFileName":2,"isExternalLibraryImport":true}}],"names":["pkg0"],"resolutionEntries":[[1,1]],"modules":[[20,[1]],[21,[1]],[22,[1]],[23,[1]],[24,[1]],[25,[1]]]}},"version":"FakeTSVersion"}
 
 //// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -298,140 +147,72 @@ export declare const x = 10;
         "signature": "769951468-export interface ImportInterface0 {}"
       },
       "./filewithimports.ts": {
-        "original": {
-          "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
-          "signature": "-3531856636-export {};\n"
-        },
-        "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
-        "signature": "-3531856636-export {};\n"
+        "version": "9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n",
+        "signature": "9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n"
       },
       "./randomfileforimport.ts": {
-        "original": {
-          "version": "-10726455937-export const x = 10;",
-          "signature": "-6821242887-export declare const x = 10;\n"
-        },
         "version": "-10726455937-export const x = 10;",
-        "signature": "-6821242887-export declare const x = 10;\n"
+        "signature": "-10726455937-export const x = 10;"
       },
       "./a/filewithimports.ts": {
-        "original": {
-          "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
-          "signature": "-3531856636-export {};\n"
-        },
-        "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
-        "signature": "-3531856636-export {};\n"
+        "version": "9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n",
+        "signature": "9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n"
       },
       "./b/ba/filewithimports.ts": {
-        "original": {
-          "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
-          "signature": "-3531856636-export {};\n"
-        },
-        "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
-        "signature": "-3531856636-export {};\n"
+        "version": "9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n",
+        "signature": "9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n"
       },
       "./b/randomfileforimport.ts": {
-        "original": {
-          "version": "-10726455937-export const x = 10;",
-          "signature": "-6821242887-export declare const x = 10;\n"
-        },
         "version": "-10726455937-export const x = 10;",
-        "signature": "-6821242887-export declare const x = 10;\n"
+        "signature": "-10726455937-export const x = 10;"
       },
       "./c/ca/filewithimports.ts": {
-        "original": {
-          "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
-          "signature": "-3531856636-export {};\n"
-        },
-        "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
-        "signature": "-3531856636-export {};\n"
+        "version": "9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n",
+        "signature": "9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n"
       },
       "./c/ca/caa/randomfileforimport.ts": {
-        "original": {
-          "version": "-10726455937-export const x = 10;",
-          "signature": "-6821242887-export declare const x = 10;\n"
-        },
         "version": "-10726455937-export const x = 10;",
-        "signature": "-6821242887-export declare const x = 10;\n"
+        "signature": "-10726455937-export const x = 10;"
       },
       "./c/ca/caa/caaa/filewithimports.ts": {
-        "original": {
-          "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
-          "signature": "-3531856636-export {};\n"
-        },
-        "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
-        "signature": "-3531856636-export {};\n"
+        "version": "9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n",
+        "signature": "9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n"
       },
       "./c/cb/filewithimports.ts": {
-        "original": {
-          "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
-          "signature": "-3531856636-export {};\n"
-        },
-        "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
-        "signature": "-3531856636-export {};\n"
+        "version": "9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n",
+        "signature": "9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n"
       },
       "./d/da/daa/daaa/x/y/z/randomfileforimport.ts": {
-        "original": {
-          "version": "-10726455937-export const x = 10;",
-          "signature": "-6821242887-export declare const x = 10;\n"
-        },
         "version": "-10726455937-export const x = 10;",
-        "signature": "-6821242887-export declare const x = 10;\n"
+        "signature": "-10726455937-export const x = 10;"
       },
       "./d/da/daa/daaa/filewithimports.ts": {
-        "original": {
-          "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
-          "signature": "-3531856636-export {};\n"
-        },
-        "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
-        "signature": "-3531856636-export {};\n"
+        "version": "9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n",
+        "signature": "9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n"
       },
       "./d/da/daa/filewithimports.ts": {
-        "original": {
-          "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
-          "signature": "-3531856636-export {};\n"
-        },
-        "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
-        "signature": "-3531856636-export {};\n"
+        "version": "9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n",
+        "signature": "9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n"
       },
       "./d/da/filewithimports.ts": {
-        "original": {
-          "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
-          "signature": "-3531856636-export {};\n"
-        },
-        "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
-        "signature": "-3531856636-export {};\n"
+        "version": "9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n",
+        "signature": "9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n"
       },
       "./e/ea/filewithimports.ts": {
-        "original": {
-          "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
-          "signature": "-3531856636-export {};\n"
-        },
-        "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
-        "signature": "-3531856636-export {};\n"
+        "version": "9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n",
+        "signature": "9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n"
       },
       "./e/ea/eaa/filewithimports.ts": {
-        "original": {
-          "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
-          "signature": "-3531856636-export {};\n"
-        },
-        "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
-        "signature": "-3531856636-export {};\n"
+        "version": "9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n",
+        "signature": "9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n"
       },
       "./e/ea/eaa/eaaa/filewithimports.ts": {
-        "original": {
-          "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
-          "signature": "-3531856636-export {};\n"
-        },
-        "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
-        "signature": "-3531856636-export {};\n"
+        "version": "9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n",
+        "signature": "9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n"
       },
       "./e/ea/eaa/eaaa/x/y/z/randomfileforimport.ts": {
-        "original": {
-          "version": "-10726455937-export const x = 10;",
-          "signature": "-6821242887-export declare const x = 10;\n"
-        },
         "version": "-10726455937-export const x = 10;",
-        "signature": "-6821242887-export declare const x = 10;\n"
+        "signature": "-10726455937-export const x = 10;"
       }
     },
     "options": {
@@ -476,29 +257,298 @@ export declare const x = 10;
         "./node_modules/pkg0/index.d.ts"
       ]
     },
-    "exportedModulesMap": {},
+    "exportedModulesMap": {
+      "./a/filewithimports.ts": [
+        "./node_modules/pkg0/index.d.ts"
+      ],
+      "./b/ba/filewithimports.ts": [
+        "./node_modules/pkg0/index.d.ts"
+      ],
+      "./c/ca/caa/caaa/filewithimports.ts": [
+        "./node_modules/pkg0/index.d.ts"
+      ],
+      "./c/ca/filewithimports.ts": [
+        "./node_modules/pkg0/index.d.ts"
+      ],
+      "./c/cb/filewithimports.ts": [
+        "./node_modules/pkg0/index.d.ts"
+      ],
+      "./d/da/daa/daaa/filewithimports.ts": [
+        "./node_modules/pkg0/index.d.ts"
+      ],
+      "./d/da/daa/filewithimports.ts": [
+        "./node_modules/pkg0/index.d.ts"
+      ],
+      "./d/da/filewithimports.ts": [
+        "./node_modules/pkg0/index.d.ts"
+      ],
+      "./e/ea/eaa/eaaa/filewithimports.ts": [
+        "./node_modules/pkg0/index.d.ts"
+      ],
+      "./e/ea/eaa/filewithimports.ts": [
+        "./node_modules/pkg0/index.d.ts"
+      ],
+      "./e/ea/filewithimports.ts": [
+        "./node_modules/pkg0/index.d.ts"
+      ],
+      "./filewithimports.ts": [
+        "./node_modules/pkg0/index.d.ts"
+      ]
+    },
     "semanticDiagnosticsPerFile": [
       "../../a/lib/lib.d.ts",
-      "./a/filewithimports.ts",
-      "./b/ba/filewithimports.ts",
+      [
+        "./a/filewithimports.ts",
+        [
+          {
+            "file": "./a/filewithimports.ts",
+            "start": 84,
+            "length": 6,
+            "messageText": "Cannot find module 'pkg1' or its corresponding type declarations.",
+            "category": 1,
+            "code": 2307
+          }
+        ]
+      ],
+      [
+        "./b/ba/filewithimports.ts",
+        [
+          {
+            "file": "./b/ba/filewithimports.ts",
+            "start": 84,
+            "length": 6,
+            "messageText": "Cannot find module 'pkg1' or its corresponding type declarations.",
+            "category": 1,
+            "code": 2307
+          }
+        ]
+      ],
       "./b/randomfileforimport.ts",
-      "./c/ca/caa/caaa/filewithimports.ts",
+      [
+        "./c/ca/caa/caaa/filewithimports.ts",
+        [
+          {
+            "file": "./c/ca/caa/caaa/filewithimports.ts",
+            "start": 84,
+            "length": 6,
+            "messageText": "Cannot find module 'pkg1' or its corresponding type declarations.",
+            "category": 1,
+            "code": 2307
+          }
+        ]
+      ],
       "./c/ca/caa/randomfileforimport.ts",
-      "./c/ca/filewithimports.ts",
-      "./c/cb/filewithimports.ts",
-      "./d/da/daa/daaa/filewithimports.ts",
+      [
+        "./c/ca/filewithimports.ts",
+        [
+          {
+            "file": "./c/ca/filewithimports.ts",
+            "start": 84,
+            "length": 6,
+            "messageText": "Cannot find module 'pkg1' or its corresponding type declarations.",
+            "category": 1,
+            "code": 2307
+          }
+        ]
+      ],
+      [
+        "./c/cb/filewithimports.ts",
+        [
+          {
+            "file": "./c/cb/filewithimports.ts",
+            "start": 84,
+            "length": 6,
+            "messageText": "Cannot find module 'pkg1' or its corresponding type declarations.",
+            "category": 1,
+            "code": 2307
+          }
+        ]
+      ],
+      [
+        "./d/da/daa/daaa/filewithimports.ts",
+        [
+          {
+            "file": "./d/da/daa/daaa/filewithimports.ts",
+            "start": 84,
+            "length": 6,
+            "messageText": "Cannot find module 'pkg1' or its corresponding type declarations.",
+            "category": 1,
+            "code": 2307
+          }
+        ]
+      ],
       "./d/da/daa/daaa/x/y/z/randomfileforimport.ts",
-      "./d/da/daa/filewithimports.ts",
-      "./d/da/filewithimports.ts",
-      "./e/ea/eaa/eaaa/filewithimports.ts",
+      [
+        "./d/da/daa/filewithimports.ts",
+        [
+          {
+            "file": "./d/da/daa/filewithimports.ts",
+            "start": 84,
+            "length": 6,
+            "messageText": "Cannot find module 'pkg1' or its corresponding type declarations.",
+            "category": 1,
+            "code": 2307
+          }
+        ]
+      ],
+      [
+        "./d/da/filewithimports.ts",
+        [
+          {
+            "file": "./d/da/filewithimports.ts",
+            "start": 84,
+            "length": 6,
+            "messageText": "Cannot find module 'pkg1' or its corresponding type declarations.",
+            "category": 1,
+            "code": 2307
+          }
+        ]
+      ],
+      [
+        "./e/ea/eaa/eaaa/filewithimports.ts",
+        [
+          {
+            "file": "./e/ea/eaa/eaaa/filewithimports.ts",
+            "start": 84,
+            "length": 6,
+            "messageText": "Cannot find module 'pkg1' or its corresponding type declarations.",
+            "category": 1,
+            "code": 2307
+          }
+        ]
+      ],
       "./e/ea/eaa/eaaa/x/y/z/randomfileforimport.ts",
-      "./e/ea/eaa/filewithimports.ts",
-      "./e/ea/filewithimports.ts",
-      "./filewithimports.ts",
+      [
+        "./e/ea/eaa/filewithimports.ts",
+        [
+          {
+            "file": "./e/ea/eaa/filewithimports.ts",
+            "start": 84,
+            "length": 6,
+            "messageText": "Cannot find module 'pkg1' or its corresponding type declarations.",
+            "category": 1,
+            "code": 2307
+          }
+        ]
+      ],
+      [
+        "./e/ea/filewithimports.ts",
+        [
+          {
+            "file": "./e/ea/filewithimports.ts",
+            "start": 84,
+            "length": 6,
+            "messageText": "Cannot find module 'pkg1' or its corresponding type declarations.",
+            "category": 1,
+            "code": 2307
+          }
+        ]
+      ],
+      [
+        "./filewithimports.ts",
+        [
+          {
+            "file": "./filewithimports.ts",
+            "start": 84,
+            "length": 6,
+            "messageText": "Cannot find module 'pkg1' or its corresponding type declarations.",
+            "category": 1,
+            "code": 2307
+          }
+        ]
+      ],
       "./node_modules/pkg0/index.d.ts",
       "./randomfileforimport.ts"
     ],
-    "latestChangedDtsFile": "./e/ea/eaa/eaaa/x/y/z/randomFileForImport.d.ts",
+    "affectedFilesPendingEmit": [
+      [
+        "./a/filewithimports.ts",
+        "Js | Dts"
+      ],
+      [
+        "./b/ba/filewithimports.ts",
+        "Js | Dts"
+      ],
+      [
+        "./b/randomfileforimport.ts",
+        "Js | Dts"
+      ],
+      [
+        "./c/ca/caa/caaa/filewithimports.ts",
+        "Js | Dts"
+      ],
+      [
+        "./c/ca/caa/randomfileforimport.ts",
+        "Js | Dts"
+      ],
+      [
+        "./c/ca/filewithimports.ts",
+        "Js | Dts"
+      ],
+      [
+        "./c/cb/filewithimports.ts",
+        "Js | Dts"
+      ],
+      [
+        "./d/da/daa/daaa/filewithimports.ts",
+        "Js | Dts"
+      ],
+      [
+        "./d/da/daa/daaa/x/y/z/randomfileforimport.ts",
+        "Js | Dts"
+      ],
+      [
+        "./d/da/daa/filewithimports.ts",
+        "Js | Dts"
+      ],
+      [
+        "./d/da/filewithimports.ts",
+        "Js | Dts"
+      ],
+      [
+        "./e/ea/eaa/eaaa/filewithimports.ts",
+        "Js | Dts"
+      ],
+      [
+        "./e/ea/eaa/eaaa/x/y/z/randomfileforimport.ts",
+        "Js | Dts"
+      ],
+      [
+        "./e/ea/eaa/filewithimports.ts",
+        "Js | Dts"
+      ],
+      [
+        "./e/ea/filewithimports.ts",
+        "Js | Dts"
+      ],
+      [
+        "./filewithimports.ts",
+        "Js | Dts"
+      ],
+      [
+        "./randomfileforimport.ts",
+        "Js | Dts"
+      ]
+    ],
+    "emitSignatures": [
+      "./filewithimports.ts",
+      "./randomfileforimport.ts",
+      "./a/filewithimports.ts",
+      "./b/ba/filewithimports.ts",
+      "./b/randomfileforimport.ts",
+      "./c/ca/filewithimports.ts",
+      "./c/ca/caa/randomfileforimport.ts",
+      "./c/ca/caa/caaa/filewithimports.ts",
+      "./c/cb/filewithimports.ts",
+      "./d/da/daa/daaa/x/y/z/randomfileforimport.ts",
+      "./d/da/daa/daaa/filewithimports.ts",
+      "./d/da/daa/filewithimports.ts",
+      "./d/da/filewithimports.ts",
+      "./e/ea/filewithimports.ts",
+      "./e/ea/eaa/filewithimports.ts",
+      "./e/ea/eaa/eaaa/filewithimports.ts",
+      "./e/ea/eaa/eaaa/x/y/z/randomfileforimport.ts"
+    ],
     "cacheResolutions": {
       "resolutions": [
         {
@@ -636,7 +686,7 @@ export declare const x = 10;
     }
   },
   "version": "FakeTSVersion",
-  "size": 3658
+  "size": 5499
 }
 
 
@@ -654,12 +704,33 @@ File '/src/project/node_modules/pkg0/index.tsx' does not exist.
 File '/src/project/node_modules/pkg0/index.d.ts' exist - use it as a name resolution result.
 Resolving real path for '/src/project/node_modules/pkg0/index.d.ts', result '/src/project/node_modules/pkg0/index.d.ts'.
 ======== Module name 'pkg0' was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'. ========
+======== Resolving module 'pkg1' from '/src/project/fileWithImports.ts'. ========
+Module resolution kind is not specified, using 'NodeJs'.
+Loading module 'pkg1' from 'node_modules' folder, target file types: TypeScript, Declaration.
+File '/src/project/node_modules/pkg1.ts' does not exist.
+File '/src/project/node_modules/pkg1.tsx' does not exist.
+File '/src/project/node_modules/pkg1.d.ts' does not exist.
+Directory '/src/project/node_modules/@types' does not exist, skipping all lookups in it.
+Directory '/src/node_modules' does not exist, skipping all lookups in it.
+Directory '/node_modules' does not exist, skipping all lookups in it.
+Loading module 'pkg1' from 'node_modules' folder, target file types: JavaScript.
+File '/src/project/node_modules/pkg1.js' does not exist.
+File '/src/project/node_modules/pkg1.jsx' does not exist.
+Directory '/src/node_modules' does not exist, skipping all lookups in it.
+Directory '/node_modules' does not exist, skipping all lookups in it.
+======== Module name 'pkg1' was not resolved. ========
 ======== Resolving module 'pkg0' from '/src/project/a/fileWithImports.ts'. ========
 Module resolution kind is not specified, using 'NodeJs'.
 Loading module 'pkg0' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Directory '/src/project/a/node_modules' does not exist, skipping all lookups in it.
 Resolution for module 'pkg0' was found in cache from location '/src/project'.
 ======== Module name 'pkg0' was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'. ========
+======== Resolving module 'pkg1' from '/src/project/a/fileWithImports.ts'. ========
+Module resolution kind is not specified, using 'NodeJs'.
+Loading module 'pkg1' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Directory '/src/project/a/node_modules' does not exist, skipping all lookups in it.
+Resolution for module 'pkg1' was found in cache from location '/src/project'.
+======== Module name 'pkg1' was not resolved. ========
 ======== Resolving module 'pkg0' from '/src/project/b/ba/fileWithImports.ts'. ========
 Module resolution kind is not specified, using 'NodeJs'.
 Loading module 'pkg0' from 'node_modules' folder, target file types: TypeScript, Declaration.
@@ -667,6 +738,13 @@ Directory '/src/project/b/ba/node_modules' does not exist, skipping all lookups 
 Directory '/src/project/b/node_modules' does not exist, skipping all lookups in it.
 Resolution for module 'pkg0' was found in cache from location '/src/project'.
 ======== Module name 'pkg0' was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'. ========
+======== Resolving module 'pkg1' from '/src/project/b/ba/fileWithImports.ts'. ========
+Module resolution kind is not specified, using 'NodeJs'.
+Loading module 'pkg1' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Directory '/src/project/b/ba/node_modules' does not exist, skipping all lookups in it.
+Directory '/src/project/b/node_modules' does not exist, skipping all lookups in it.
+Resolution for module 'pkg1' was found in cache from location '/src/project'.
+======== Module name 'pkg1' was not resolved. ========
 ======== Resolving module 'pkg0' from '/src/project/c/ca/fileWithImports.ts'. ========
 Module resolution kind is not specified, using 'NodeJs'.
 Loading module 'pkg0' from 'node_modules' folder, target file types: TypeScript, Declaration.
@@ -674,6 +752,13 @@ Directory '/src/project/c/ca/node_modules' does not exist, skipping all lookups 
 Directory '/src/project/c/node_modules' does not exist, skipping all lookups in it.
 Resolution for module 'pkg0' was found in cache from location '/src/project'.
 ======== Module name 'pkg0' was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'. ========
+======== Resolving module 'pkg1' from '/src/project/c/ca/fileWithImports.ts'. ========
+Module resolution kind is not specified, using 'NodeJs'.
+Loading module 'pkg1' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Directory '/src/project/c/ca/node_modules' does not exist, skipping all lookups in it.
+Directory '/src/project/c/node_modules' does not exist, skipping all lookups in it.
+Resolution for module 'pkg1' was found in cache from location '/src/project'.
+======== Module name 'pkg1' was not resolved. ========
 ======== Resolving module 'pkg0' from '/src/project/c/ca/caa/caaa/fileWithImports.ts'. ========
 Module resolution kind is not specified, using 'NodeJs'.
 Loading module 'pkg0' from 'node_modules' folder, target file types: TypeScript, Declaration.
@@ -681,12 +766,25 @@ Directory '/src/project/c/ca/caa/caaa/node_modules' does not exist, skipping all
 Directory '/src/project/c/ca/caa/node_modules' does not exist, skipping all lookups in it.
 Resolution for module 'pkg0' was found in cache from location '/src/project/c/ca'.
 ======== Module name 'pkg0' was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'. ========
+======== Resolving module 'pkg1' from '/src/project/c/ca/caa/caaa/fileWithImports.ts'. ========
+Module resolution kind is not specified, using 'NodeJs'.
+Loading module 'pkg1' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Directory '/src/project/c/ca/caa/caaa/node_modules' does not exist, skipping all lookups in it.
+Directory '/src/project/c/ca/caa/node_modules' does not exist, skipping all lookups in it.
+Resolution for module 'pkg1' was found in cache from location '/src/project/c/ca'.
+======== Module name 'pkg1' was not resolved. ========
 ======== Resolving module 'pkg0' from '/src/project/c/cb/fileWithImports.ts'. ========
 Module resolution kind is not specified, using 'NodeJs'.
 Loading module 'pkg0' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Directory '/src/project/c/cb/node_modules' does not exist, skipping all lookups in it.
 Resolution for module 'pkg0' was found in cache from location '/src/project/c'.
 ======== Module name 'pkg0' was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'. ========
+======== Resolving module 'pkg1' from '/src/project/c/cb/fileWithImports.ts'. ========
+Module resolution kind is not specified, using 'NodeJs'.
+Loading module 'pkg1' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Directory '/src/project/c/cb/node_modules' does not exist, skipping all lookups in it.
+Resolution for module 'pkg1' was found in cache from location '/src/project/c'.
+======== Module name 'pkg1' was not resolved. ========
 ======== Resolving module 'pkg0' from '/src/project/d/da/daa/daaa/fileWithImports.ts'. ========
 Module resolution kind is not specified, using 'NodeJs'.
 Loading module 'pkg0' from 'node_modules' folder, target file types: TypeScript, Declaration.
@@ -696,16 +794,35 @@ Directory '/src/project/d/da/node_modules' does not exist, skipping all lookups 
 Directory '/src/project/d/node_modules' does not exist, skipping all lookups in it.
 Resolution for module 'pkg0' was found in cache from location '/src/project'.
 ======== Module name 'pkg0' was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'. ========
+======== Resolving module 'pkg1' from '/src/project/d/da/daa/daaa/fileWithImports.ts'. ========
+Module resolution kind is not specified, using 'NodeJs'.
+Loading module 'pkg1' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Directory '/src/project/d/da/daa/daaa/node_modules' does not exist, skipping all lookups in it.
+Directory '/src/project/d/da/daa/node_modules' does not exist, skipping all lookups in it.
+Directory '/src/project/d/da/node_modules' does not exist, skipping all lookups in it.
+Directory '/src/project/d/node_modules' does not exist, skipping all lookups in it.
+Resolution for module 'pkg1' was found in cache from location '/src/project'.
+======== Module name 'pkg1' was not resolved. ========
 ======== Resolving module 'pkg0' from '/src/project/d/da/daa/fileWithImports.ts'. ========
 Module resolution kind is not specified, using 'NodeJs'.
 Loading module 'pkg0' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Resolution for module 'pkg0' was found in cache from location '/src/project/d/da/daa'.
 ======== Module name 'pkg0' was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'. ========
+======== Resolving module 'pkg1' from '/src/project/d/da/daa/fileWithImports.ts'. ========
+Module resolution kind is not specified, using 'NodeJs'.
+Loading module 'pkg1' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Resolution for module 'pkg1' was found in cache from location '/src/project/d/da/daa'.
+======== Module name 'pkg1' was not resolved. ========
 ======== Resolving module 'pkg0' from '/src/project/d/da/fileWithImports.ts'. ========
 Module resolution kind is not specified, using 'NodeJs'.
 Loading module 'pkg0' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Resolution for module 'pkg0' was found in cache from location '/src/project/d/da'.
 ======== Module name 'pkg0' was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'. ========
+======== Resolving module 'pkg1' from '/src/project/d/da/fileWithImports.ts'. ========
+Module resolution kind is not specified, using 'NodeJs'.
+Loading module 'pkg1' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Resolution for module 'pkg1' was found in cache from location '/src/project/d/da'.
+======== Module name 'pkg1' was not resolved. ========
 ======== Resolving module 'pkg0' from '/src/project/e/ea/fileWithImports.ts'. ========
 Module resolution kind is not specified, using 'NodeJs'.
 Loading module 'pkg0' from 'node_modules' folder, target file types: TypeScript, Declaration.
@@ -713,28 +830,155 @@ Directory '/src/project/e/ea/node_modules' does not exist, skipping all lookups 
 Directory '/src/project/e/node_modules' does not exist, skipping all lookups in it.
 Resolution for module 'pkg0' was found in cache from location '/src/project'.
 ======== Module name 'pkg0' was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'. ========
+======== Resolving module 'pkg1' from '/src/project/e/ea/fileWithImports.ts'. ========
+Module resolution kind is not specified, using 'NodeJs'.
+Loading module 'pkg1' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Directory '/src/project/e/ea/node_modules' does not exist, skipping all lookups in it.
+Directory '/src/project/e/node_modules' does not exist, skipping all lookups in it.
+Resolution for module 'pkg1' was found in cache from location '/src/project'.
+======== Module name 'pkg1' was not resolved. ========
 ======== Resolving module 'pkg0' from '/src/project/e/ea/eaa/fileWithImports.ts'. ========
 Module resolution kind is not specified, using 'NodeJs'.
 Loading module 'pkg0' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Directory '/src/project/e/ea/eaa/node_modules' does not exist, skipping all lookups in it.
 Resolution for module 'pkg0' was found in cache from location '/src/project/e/ea'.
 ======== Module name 'pkg0' was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'. ========
+======== Resolving module 'pkg1' from '/src/project/e/ea/eaa/fileWithImports.ts'. ========
+Module resolution kind is not specified, using 'NodeJs'.
+Loading module 'pkg1' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Directory '/src/project/e/ea/eaa/node_modules' does not exist, skipping all lookups in it.
+Resolution for module 'pkg1' was found in cache from location '/src/project/e/ea'.
+======== Module name 'pkg1' was not resolved. ========
 ======== Resolving module 'pkg0' from '/src/project/e/ea/eaa/eaaa/fileWithImports.ts'. ========
 Module resolution kind is not specified, using 'NodeJs'.
 Loading module 'pkg0' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Directory '/src/project/e/ea/eaa/eaaa/node_modules' does not exist, skipping all lookups in it.
 Resolution for module 'pkg0' was found in cache from location '/src/project/e/ea/eaa'.
 ======== Module name 'pkg0' was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'. ========
+======== Resolving module 'pkg1' from '/src/project/e/ea/eaa/eaaa/fileWithImports.ts'. ========
+Module resolution kind is not specified, using 'NodeJs'.
+Loading module 'pkg1' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Directory '/src/project/e/ea/eaa/eaaa/node_modules' does not exist, skipping all lookups in it.
+Resolution for module 'pkg1' was found in cache from location '/src/project/e/ea/eaa'.
+======== Module name 'pkg1' was not resolved. ========
+[96mfileWithImports.ts[0m:[93m2[0m:[93m39[0m - [91merror[0m[90m TS2307: [0mCannot find module 'pkg1' or its corresponding type declarations.
+
+[7m2[0m import type { ImportInterface1 } from "pkg1";
+[7m [0m [91m                                      ~~~~~~[0m
+
+[96ma/fileWithImports.ts[0m:[93m2[0m:[93m39[0m - [91merror[0m[90m TS2307: [0mCannot find module 'pkg1' or its corresponding type declarations.
+
+[7m2[0m import type { ImportInterface1 } from "pkg1";
+[7m [0m [91m                                      ~~~~~~[0m
+
+[96mb/ba/fileWithImports.ts[0m:[93m2[0m:[93m39[0m - [91merror[0m[90m TS2307: [0mCannot find module 'pkg1' or its corresponding type declarations.
+
+[7m2[0m import type { ImportInterface1 } from "pkg1";
+[7m [0m [91m                                      ~~~~~~[0m
+
+[96mc/ca/fileWithImports.ts[0m:[93m2[0m:[93m39[0m - [91merror[0m[90m TS2307: [0mCannot find module 'pkg1' or its corresponding type declarations.
+
+[7m2[0m import type { ImportInterface1 } from "pkg1";
+[7m [0m [91m                                      ~~~~~~[0m
+
+[96mc/ca/caa/caaa/fileWithImports.ts[0m:[93m2[0m:[93m39[0m - [91merror[0m[90m TS2307: [0mCannot find module 'pkg1' or its corresponding type declarations.
+
+[7m2[0m import type { ImportInterface1 } from "pkg1";
+[7m [0m [91m                                      ~~~~~~[0m
+
+[96mc/cb/fileWithImports.ts[0m:[93m2[0m:[93m39[0m - [91merror[0m[90m TS2307: [0mCannot find module 'pkg1' or its corresponding type declarations.
+
+[7m2[0m import type { ImportInterface1 } from "pkg1";
+[7m [0m [91m                                      ~~~~~~[0m
+
+[96md/da/daa/daaa/fileWithImports.ts[0m:[93m2[0m:[93m39[0m - [91merror[0m[90m TS2307: [0mCannot find module 'pkg1' or its corresponding type declarations.
+
+[7m2[0m import type { ImportInterface1 } from "pkg1";
+[7m [0m [91m                                      ~~~~~~[0m
+
+[96md/da/daa/fileWithImports.ts[0m:[93m2[0m:[93m39[0m - [91merror[0m[90m TS2307: [0mCannot find module 'pkg1' or its corresponding type declarations.
+
+[7m2[0m import type { ImportInterface1 } from "pkg1";
+[7m [0m [91m                                      ~~~~~~[0m
+
+[96md/da/fileWithImports.ts[0m:[93m2[0m:[93m39[0m - [91merror[0m[90m TS2307: [0mCannot find module 'pkg1' or its corresponding type declarations.
+
+[7m2[0m import type { ImportInterface1 } from "pkg1";
+[7m [0m [91m                                      ~~~~~~[0m
+
+[96me/ea/fileWithImports.ts[0m:[93m2[0m:[93m39[0m - [91merror[0m[90m TS2307: [0mCannot find module 'pkg1' or its corresponding type declarations.
+
+[7m2[0m import type { ImportInterface1 } from "pkg1";
+[7m [0m [91m                                      ~~~~~~[0m
+
+[96me/ea/eaa/fileWithImports.ts[0m:[93m2[0m:[93m39[0m - [91merror[0m[90m TS2307: [0mCannot find module 'pkg1' or its corresponding type declarations.
+
+[7m2[0m import type { ImportInterface1 } from "pkg1";
+[7m [0m [91m                                      ~~~~~~[0m
+
+[96me/ea/eaa/eaaa/fileWithImports.ts[0m:[93m2[0m:[93m39[0m - [91merror[0m[90m TS2307: [0mCannot find module 'pkg1' or its corresponding type declarations.
+
+[7m2[0m import type { ImportInterface1 } from "pkg1";
+[7m [0m [91m                                      ~~~~~~[0m
+
 
 >> Screen clear
-[[90m12:02:54 AM[0m] Starting compilation in watch mode...
+[[90m12:01:46 AM[0m] Starting compilation in watch mode...
 
 Reusing resolution of module 'pkg0' from '/src/project/fileWithImports.ts' found in cache from location '/src/project', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+======== Resolving module 'pkg1' from '/src/project/fileWithImports.ts'. ========
+Module resolution kind is not specified, using 'NodeJs'.
+Loading module 'pkg1' from 'node_modules' folder, target file types: TypeScript, Declaration.
+File '/src/project/node_modules/pkg1.ts' does not exist.
+File '/src/project/node_modules/pkg1.tsx' does not exist.
+File '/src/project/node_modules/pkg1.d.ts' does not exist.
+Directory '/src/project/node_modules/@types' does not exist, skipping all lookups in it.
+Directory '/src/node_modules' does not exist, skipping all lookups in it.
+Directory '/node_modules' does not exist, skipping all lookups in it.
+Loading module 'pkg1' from 'node_modules' folder, target file types: JavaScript.
+File '/src/project/node_modules/pkg1.js' does not exist.
+File '/src/project/node_modules/pkg1.jsx' does not exist.
+Directory '/src/node_modules' does not exist, skipping all lookups in it.
+Directory '/node_modules' does not exist, skipping all lookups in it.
+======== Module name 'pkg1' was not resolved. ========
 Reusing resolution of module 'pkg0' from '/src/project/a/fileWithImports.ts' found in cache from location '/src/project/a', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+======== Resolving module 'pkg1' from '/src/project/a/fileWithImports.ts'. ========
+Module resolution kind is not specified, using 'NodeJs'.
+Loading module 'pkg1' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Directory '/src/project/a/node_modules' does not exist, skipping all lookups in it.
+Resolution for module 'pkg1' was found in cache from location '/src/project'.
+======== Module name 'pkg1' was not resolved. ========
 Reusing resolution of module 'pkg0' from '/src/project/b/ba/fileWithImports.ts' found in cache from location '/src/project/b/ba', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+======== Resolving module 'pkg1' from '/src/project/b/ba/fileWithImports.ts'. ========
+Module resolution kind is not specified, using 'NodeJs'.
+Loading module 'pkg1' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Directory '/src/project/b/ba/node_modules' does not exist, skipping all lookups in it.
+Directory '/src/project/b/node_modules' does not exist, skipping all lookups in it.
+Resolution for module 'pkg1' was found in cache from location '/src/project'.
+======== Module name 'pkg1' was not resolved. ========
 Reusing resolution of module 'pkg0' from '/src/project/c/ca/fileWithImports.ts' found in cache from location '/src/project/c/ca', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+======== Resolving module 'pkg1' from '/src/project/c/ca/fileWithImports.ts'. ========
+Module resolution kind is not specified, using 'NodeJs'.
+Loading module 'pkg1' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Directory '/src/project/c/ca/node_modules' does not exist, skipping all lookups in it.
+Directory '/src/project/c/node_modules' does not exist, skipping all lookups in it.
+Resolution for module 'pkg1' was found in cache from location '/src/project'.
+======== Module name 'pkg1' was not resolved. ========
 Reusing resolution of module 'pkg0' from '/src/project/c/ca/caa/caaa/fileWithImports.ts' found in cache from location '/src/project/c/ca/caa/caaa', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+======== Resolving module 'pkg1' from '/src/project/c/ca/caa/caaa/fileWithImports.ts'. ========
+Module resolution kind is not specified, using 'NodeJs'.
+Loading module 'pkg1' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Directory '/src/project/c/ca/caa/caaa/node_modules' does not exist, skipping all lookups in it.
+Directory '/src/project/c/ca/caa/node_modules' does not exist, skipping all lookups in it.
+Resolution for module 'pkg1' was found in cache from location '/src/project/c/ca'.
+======== Module name 'pkg1' was not resolved. ========
 Reusing resolution of module 'pkg0' from '/src/project/c/cb/fileWithImports.ts' found in cache from location '/src/project/c/cb', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+======== Resolving module 'pkg1' from '/src/project/c/cb/fileWithImports.ts'. ========
+Module resolution kind is not specified, using 'NodeJs'.
+Loading module 'pkg1' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Directory '/src/project/c/cb/node_modules' does not exist, skipping all lookups in it.
+Resolution for module 'pkg1' was found in cache from location '/src/project/c'.
+======== Module name 'pkg1' was not resolved. ========
 ======== Resolving module 'pkg0' from '/src/project/d/da/daa/daaa/x/y/z/randomFileForImport.ts'. ========
 Module resolution kind is not specified, using 'NodeJs'.
 Loading module 'pkg0' from 'node_modules' folder, target file types: TypeScript, Declaration.
@@ -744,11 +988,109 @@ Directory '/src/project/d/da/daa/daaa/x/node_modules' does not exist, skipping a
 Resolution for module 'pkg0' was found in cache from location '/src/project/d/da/daa/daaa'.
 ======== Module name 'pkg0' was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'. ========
 Reusing resolution of module 'pkg0' from '/src/project/d/da/daa/daaa/fileWithImports.ts' found in cache from location '/src/project/d/da/daa/daaa', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+======== Resolving module 'pkg1' from '/src/project/d/da/daa/daaa/fileWithImports.ts'. ========
+Module resolution kind is not specified, using 'NodeJs'.
+Loading module 'pkg1' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Directory '/src/project/d/da/daa/daaa/node_modules' does not exist, skipping all lookups in it.
+Directory '/src/project/d/da/daa/node_modules' does not exist, skipping all lookups in it.
+Directory '/src/project/d/da/node_modules' does not exist, skipping all lookups in it.
+Directory '/src/project/d/node_modules' does not exist, skipping all lookups in it.
+Resolution for module 'pkg1' was found in cache from location '/src/project'.
+======== Module name 'pkg1' was not resolved. ========
 Reusing resolution of module 'pkg0' from '/src/project/d/da/daa/fileWithImports.ts' found in cache from location '/src/project/d/da/daa', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+======== Resolving module 'pkg1' from '/src/project/d/da/daa/fileWithImports.ts'. ========
+Module resolution kind is not specified, using 'NodeJs'.
+Loading module 'pkg1' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Resolution for module 'pkg1' was found in cache from location '/src/project/d/da/daa'.
+======== Module name 'pkg1' was not resolved. ========
 Reusing resolution of module 'pkg0' from '/src/project/d/da/fileWithImports.ts' found in cache from location '/src/project/d/da', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+======== Resolving module 'pkg1' from '/src/project/d/da/fileWithImports.ts'. ========
+Module resolution kind is not specified, using 'NodeJs'.
+Loading module 'pkg1' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Resolution for module 'pkg1' was found in cache from location '/src/project/d/da'.
+======== Module name 'pkg1' was not resolved. ========
 Reusing resolution of module 'pkg0' from '/src/project/e/ea/fileWithImports.ts' found in cache from location '/src/project/e/ea', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+======== Resolving module 'pkg1' from '/src/project/e/ea/fileWithImports.ts'. ========
+Module resolution kind is not specified, using 'NodeJs'.
+Loading module 'pkg1' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Directory '/src/project/e/ea/node_modules' does not exist, skipping all lookups in it.
+Directory '/src/project/e/node_modules' does not exist, skipping all lookups in it.
+Resolution for module 'pkg1' was found in cache from location '/src/project'.
+======== Module name 'pkg1' was not resolved. ========
 Reusing resolution of module 'pkg0' from '/src/project/e/ea/eaa/fileWithImports.ts' found in cache from location '/src/project/e/ea/eaa', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+======== Resolving module 'pkg1' from '/src/project/e/ea/eaa/fileWithImports.ts'. ========
+Module resolution kind is not specified, using 'NodeJs'.
+Loading module 'pkg1' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Directory '/src/project/e/ea/eaa/node_modules' does not exist, skipping all lookups in it.
+Resolution for module 'pkg1' was found in cache from location '/src/project/e/ea'.
+======== Module name 'pkg1' was not resolved. ========
 Reusing resolution of module 'pkg0' from '/src/project/e/ea/eaa/eaaa/fileWithImports.ts' found in cache from location '/src/project/e/ea/eaa/eaaa', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
+======== Resolving module 'pkg1' from '/src/project/e/ea/eaa/eaaa/fileWithImports.ts'. ========
+Module resolution kind is not specified, using 'NodeJs'.
+Loading module 'pkg1' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Directory '/src/project/e/ea/eaa/eaaa/node_modules' does not exist, skipping all lookups in it.
+Resolution for module 'pkg1' was found in cache from location '/src/project/e/ea/eaa'.
+======== Module name 'pkg1' was not resolved. ========
+[96ma/fileWithImports.ts[0m:[93m2[0m:[93m39[0m - [91merror[0m[90m TS2307: [0mCannot find module 'pkg1' or its corresponding type declarations.
+
+[7m2[0m import type { ImportInterface1 } from "pkg1";
+[7m [0m [91m                                      ~~~~~~[0m
+
+[96mb/ba/fileWithImports.ts[0m:[93m2[0m:[93m39[0m - [91merror[0m[90m TS2307: [0mCannot find module 'pkg1' or its corresponding type declarations.
+
+[7m2[0m import type { ImportInterface1 } from "pkg1";
+[7m [0m [91m                                      ~~~~~~[0m
+
+[96mc/ca/caa/caaa/fileWithImports.ts[0m:[93m2[0m:[93m39[0m - [91merror[0m[90m TS2307: [0mCannot find module 'pkg1' or its corresponding type declarations.
+
+[7m2[0m import type { ImportInterface1 } from "pkg1";
+[7m [0m [91m                                      ~~~~~~[0m
+
+[96mc/ca/fileWithImports.ts[0m:[93m2[0m:[93m39[0m - [91merror[0m[90m TS2307: [0mCannot find module 'pkg1' or its corresponding type declarations.
+
+[7m2[0m import type { ImportInterface1 } from "pkg1";
+[7m [0m [91m                                      ~~~~~~[0m
+
+[96mc/cb/fileWithImports.ts[0m:[93m2[0m:[93m39[0m - [91merror[0m[90m TS2307: [0mCannot find module 'pkg1' or its corresponding type declarations.
+
+[7m2[0m import type { ImportInterface1 } from "pkg1";
+[7m [0m [91m                                      ~~~~~~[0m
+
+[96md/da/daa/daaa/fileWithImports.ts[0m:[93m2[0m:[93m39[0m - [91merror[0m[90m TS2307: [0mCannot find module 'pkg1' or its corresponding type declarations.
+
+[7m2[0m import type { ImportInterface1 } from "pkg1";
+[7m [0m [91m                                      ~~~~~~[0m
+
+[96md/da/daa/fileWithImports.ts[0m:[93m2[0m:[93m39[0m - [91merror[0m[90m TS2307: [0mCannot find module 'pkg1' or its corresponding type declarations.
+
+[7m2[0m import type { ImportInterface1 } from "pkg1";
+[7m [0m [91m                                      ~~~~~~[0m
+
+[96md/da/fileWithImports.ts[0m:[93m2[0m:[93m39[0m - [91merror[0m[90m TS2307: [0mCannot find module 'pkg1' or its corresponding type declarations.
+
+[7m2[0m import type { ImportInterface1 } from "pkg1";
+[7m [0m [91m                                      ~~~~~~[0m
+
+[96me/ea/eaa/eaaa/fileWithImports.ts[0m:[93m2[0m:[93m39[0m - [91merror[0m[90m TS2307: [0mCannot find module 'pkg1' or its corresponding type declarations.
+
+[7m2[0m import type { ImportInterface1 } from "pkg1";
+[7m [0m [91m                                      ~~~~~~[0m
+
+[96me/ea/eaa/fileWithImports.ts[0m:[93m2[0m:[93m39[0m - [91merror[0m[90m TS2307: [0mCannot find module 'pkg1' or its corresponding type declarations.
+
+[7m2[0m import type { ImportInterface1 } from "pkg1";
+[7m [0m [91m                                      ~~~~~~[0m
+
+[96me/ea/fileWithImports.ts[0m:[93m2[0m:[93m39[0m - [91merror[0m[90m TS2307: [0mCannot find module 'pkg1' or its corresponding type declarations.
+
+[7m2[0m import type { ImportInterface1 } from "pkg1";
+[7m [0m [91m                                      ~~~~~~[0m
+
+[96mfileWithImports.ts[0m:[93m2[0m:[93m39[0m - [91merror[0m[90m TS2307: [0mCannot find module 'pkg1' or its corresponding type declarations.
+
+[7m2[0m import type { ImportInterface1 } from "pkg1";
+[7m [0m [91m                                      ~~~~~~[0m
+
 ../../a/lib/lib.d.ts
   Default library for target 'es5'
 node_modules/pkg0/index.d.ts
@@ -799,7 +1141,7 @@ e/ea/eaa/eaaa/fileWithImports.ts
   Part of 'files' list in tsconfig.json
 e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts
   Part of 'files' list in tsconfig.json
-[[90m12:03:01 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:02:58 AM[0m] Found 12 errors. Watching for file changes.
 
 
 
@@ -842,6 +1184,215 @@ pkg0: {
     "extension": ".d.ts"
   }
 }
+pkg1: {
+  "failedLookupLocations": [
+    "/src/project/node_modules/pkg1/package.json",
+    "/src/project/node_modules/pkg1.ts",
+    "/src/project/node_modules/pkg1.tsx",
+    "/src/project/node_modules/pkg1.d.ts",
+    "/src/project/node_modules/pkg1/index.ts",
+    "/src/project/node_modules/pkg1/index.tsx",
+    "/src/project/node_modules/pkg1/index.d.ts",
+    "/src/project/node_modules/@types/pkg1/package.json",
+    "/src/project/node_modules/@types/pkg1.d.ts",
+    "/src/project/node_modules/@types/pkg1/index.d.ts",
+    "/src/node_modules/pkg1/package.json",
+    "/src/node_modules/pkg1.ts",
+    "/src/node_modules/pkg1.tsx",
+    "/src/node_modules/pkg1.d.ts",
+    "/src/node_modules/pkg1/index.ts",
+    "/src/node_modules/pkg1/index.tsx",
+    "/src/node_modules/pkg1/index.d.ts",
+    "/src/node_modules/@types/pkg1/package.json",
+    "/src/node_modules/@types/pkg1.d.ts",
+    "/src/node_modules/@types/pkg1/index.d.ts",
+    "/node_modules/pkg1/package.json",
+    "/node_modules/pkg1.ts",
+    "/node_modules/pkg1.tsx",
+    "/node_modules/pkg1.d.ts",
+    "/node_modules/pkg1/index.ts",
+    "/node_modules/pkg1/index.tsx",
+    "/node_modules/pkg1/index.d.ts",
+    "/node_modules/@types/pkg1/package.json",
+    "/node_modules/@types/pkg1.d.ts",
+    "/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/node_modules/pkg1/package.json",
+    "/src/project/node_modules/pkg1.js",
+    "/src/project/node_modules/pkg1.jsx",
+    "/src/project/node_modules/pkg1/index.js",
+    "/src/project/node_modules/pkg1/index.jsx",
+    "/src/node_modules/pkg1/package.json",
+    "/src/node_modules/pkg1.js",
+    "/src/node_modules/pkg1.jsx",
+    "/src/node_modules/pkg1/index.js",
+    "/src/node_modules/pkg1/index.jsx",
+    "/node_modules/pkg1/package.json",
+    "/node_modules/pkg1.js",
+    "/node_modules/pkg1.jsx",
+    "/node_modules/pkg1/index.js",
+    "/node_modules/pkg1/index.jsx",
+    "/src/project/a/node_modules/pkg1/package.json",
+    "/src/project/a/node_modules/pkg1.ts",
+    "/src/project/a/node_modules/pkg1.tsx",
+    "/src/project/a/node_modules/pkg1.d.ts",
+    "/src/project/a/node_modules/pkg1/index.ts",
+    "/src/project/a/node_modules/pkg1/index.tsx",
+    "/src/project/a/node_modules/pkg1/index.d.ts",
+    "/src/project/a/node_modules/@types/pkg1/package.json",
+    "/src/project/a/node_modules/@types/pkg1.d.ts",
+    "/src/project/a/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/b/ba/node_modules/pkg1/package.json",
+    "/src/project/b/ba/node_modules/pkg1.ts",
+    "/src/project/b/ba/node_modules/pkg1.tsx",
+    "/src/project/b/ba/node_modules/pkg1.d.ts",
+    "/src/project/b/ba/node_modules/pkg1/index.ts",
+    "/src/project/b/ba/node_modules/pkg1/index.tsx",
+    "/src/project/b/ba/node_modules/pkg1/index.d.ts",
+    "/src/project/b/ba/node_modules/@types/pkg1/package.json",
+    "/src/project/b/ba/node_modules/@types/pkg1.d.ts",
+    "/src/project/b/ba/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/b/node_modules/pkg1/package.json",
+    "/src/project/b/node_modules/pkg1.ts",
+    "/src/project/b/node_modules/pkg1.tsx",
+    "/src/project/b/node_modules/pkg1.d.ts",
+    "/src/project/b/node_modules/pkg1/index.ts",
+    "/src/project/b/node_modules/pkg1/index.tsx",
+    "/src/project/b/node_modules/pkg1/index.d.ts",
+    "/src/project/b/node_modules/@types/pkg1/package.json",
+    "/src/project/b/node_modules/@types/pkg1.d.ts",
+    "/src/project/b/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/c/ca/node_modules/pkg1/package.json",
+    "/src/project/c/ca/node_modules/pkg1.ts",
+    "/src/project/c/ca/node_modules/pkg1.tsx",
+    "/src/project/c/ca/node_modules/pkg1.d.ts",
+    "/src/project/c/ca/node_modules/pkg1/index.ts",
+    "/src/project/c/ca/node_modules/pkg1/index.tsx",
+    "/src/project/c/ca/node_modules/pkg1/index.d.ts",
+    "/src/project/c/ca/node_modules/@types/pkg1/package.json",
+    "/src/project/c/ca/node_modules/@types/pkg1.d.ts",
+    "/src/project/c/ca/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/c/node_modules/pkg1/package.json",
+    "/src/project/c/node_modules/pkg1.ts",
+    "/src/project/c/node_modules/pkg1.tsx",
+    "/src/project/c/node_modules/pkg1.d.ts",
+    "/src/project/c/node_modules/pkg1/index.ts",
+    "/src/project/c/node_modules/pkg1/index.tsx",
+    "/src/project/c/node_modules/pkg1/index.d.ts",
+    "/src/project/c/node_modules/@types/pkg1/package.json",
+    "/src/project/c/node_modules/@types/pkg1.d.ts",
+    "/src/project/c/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1/package.json",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1.ts",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1.tsx",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1.d.ts",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1/index.ts",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1/index.tsx",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1/index.d.ts",
+    "/src/project/c/ca/caa/caaa/node_modules/@types/pkg1/package.json",
+    "/src/project/c/ca/caa/caaa/node_modules/@types/pkg1.d.ts",
+    "/src/project/c/ca/caa/caaa/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/c/ca/caa/node_modules/pkg1/package.json",
+    "/src/project/c/ca/caa/node_modules/pkg1.ts",
+    "/src/project/c/ca/caa/node_modules/pkg1.tsx",
+    "/src/project/c/ca/caa/node_modules/pkg1.d.ts",
+    "/src/project/c/ca/caa/node_modules/pkg1/index.ts",
+    "/src/project/c/ca/caa/node_modules/pkg1/index.tsx",
+    "/src/project/c/ca/caa/node_modules/pkg1/index.d.ts",
+    "/src/project/c/ca/caa/node_modules/@types/pkg1/package.json",
+    "/src/project/c/ca/caa/node_modules/@types/pkg1.d.ts",
+    "/src/project/c/ca/caa/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/c/cb/node_modules/pkg1/package.json",
+    "/src/project/c/cb/node_modules/pkg1.ts",
+    "/src/project/c/cb/node_modules/pkg1.tsx",
+    "/src/project/c/cb/node_modules/pkg1.d.ts",
+    "/src/project/c/cb/node_modules/pkg1/index.ts",
+    "/src/project/c/cb/node_modules/pkg1/index.tsx",
+    "/src/project/c/cb/node_modules/pkg1/index.d.ts",
+    "/src/project/c/cb/node_modules/@types/pkg1/package.json",
+    "/src/project/c/cb/node_modules/@types/pkg1.d.ts",
+    "/src/project/c/cb/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1/package.json",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1.ts",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1.tsx",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1.d.ts",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1/index.ts",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1/index.tsx",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1/index.d.ts",
+    "/src/project/d/da/daa/daaa/node_modules/@types/pkg1/package.json",
+    "/src/project/d/da/daa/daaa/node_modules/@types/pkg1.d.ts",
+    "/src/project/d/da/daa/daaa/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/d/da/daa/node_modules/pkg1/package.json",
+    "/src/project/d/da/daa/node_modules/pkg1.ts",
+    "/src/project/d/da/daa/node_modules/pkg1.tsx",
+    "/src/project/d/da/daa/node_modules/pkg1.d.ts",
+    "/src/project/d/da/daa/node_modules/pkg1/index.ts",
+    "/src/project/d/da/daa/node_modules/pkg1/index.tsx",
+    "/src/project/d/da/daa/node_modules/pkg1/index.d.ts",
+    "/src/project/d/da/daa/node_modules/@types/pkg1/package.json",
+    "/src/project/d/da/daa/node_modules/@types/pkg1.d.ts",
+    "/src/project/d/da/daa/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/d/da/node_modules/pkg1/package.json",
+    "/src/project/d/da/node_modules/pkg1.ts",
+    "/src/project/d/da/node_modules/pkg1.tsx",
+    "/src/project/d/da/node_modules/pkg1.d.ts",
+    "/src/project/d/da/node_modules/pkg1/index.ts",
+    "/src/project/d/da/node_modules/pkg1/index.tsx",
+    "/src/project/d/da/node_modules/pkg1/index.d.ts",
+    "/src/project/d/da/node_modules/@types/pkg1/package.json",
+    "/src/project/d/da/node_modules/@types/pkg1.d.ts",
+    "/src/project/d/da/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/d/node_modules/pkg1/package.json",
+    "/src/project/d/node_modules/pkg1.ts",
+    "/src/project/d/node_modules/pkg1.tsx",
+    "/src/project/d/node_modules/pkg1.d.ts",
+    "/src/project/d/node_modules/pkg1/index.ts",
+    "/src/project/d/node_modules/pkg1/index.tsx",
+    "/src/project/d/node_modules/pkg1/index.d.ts",
+    "/src/project/d/node_modules/@types/pkg1/package.json",
+    "/src/project/d/node_modules/@types/pkg1.d.ts",
+    "/src/project/d/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/e/ea/node_modules/pkg1/package.json",
+    "/src/project/e/ea/node_modules/pkg1.ts",
+    "/src/project/e/ea/node_modules/pkg1.tsx",
+    "/src/project/e/ea/node_modules/pkg1.d.ts",
+    "/src/project/e/ea/node_modules/pkg1/index.ts",
+    "/src/project/e/ea/node_modules/pkg1/index.tsx",
+    "/src/project/e/ea/node_modules/pkg1/index.d.ts",
+    "/src/project/e/ea/node_modules/@types/pkg1/package.json",
+    "/src/project/e/ea/node_modules/@types/pkg1.d.ts",
+    "/src/project/e/ea/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/e/node_modules/pkg1/package.json",
+    "/src/project/e/node_modules/pkg1.ts",
+    "/src/project/e/node_modules/pkg1.tsx",
+    "/src/project/e/node_modules/pkg1.d.ts",
+    "/src/project/e/node_modules/pkg1/index.ts",
+    "/src/project/e/node_modules/pkg1/index.tsx",
+    "/src/project/e/node_modules/pkg1/index.d.ts",
+    "/src/project/e/node_modules/@types/pkg1/package.json",
+    "/src/project/e/node_modules/@types/pkg1.d.ts",
+    "/src/project/e/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/e/ea/eaa/node_modules/pkg1/package.json",
+    "/src/project/e/ea/eaa/node_modules/pkg1.ts",
+    "/src/project/e/ea/eaa/node_modules/pkg1.tsx",
+    "/src/project/e/ea/eaa/node_modules/pkg1.d.ts",
+    "/src/project/e/ea/eaa/node_modules/pkg1/index.ts",
+    "/src/project/e/ea/eaa/node_modules/pkg1/index.tsx",
+    "/src/project/e/ea/eaa/node_modules/pkg1/index.d.ts",
+    "/src/project/e/ea/eaa/node_modules/@types/pkg1/package.json",
+    "/src/project/e/ea/eaa/node_modules/@types/pkg1.d.ts",
+    "/src/project/e/ea/eaa/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1/package.json",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1.ts",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1.tsx",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1.d.ts",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1/index.ts",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1/index.tsx",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1/index.d.ts",
+    "/src/project/e/ea/eaa/eaaa/node_modules/@types/pkg1/package.json",
+    "/src/project/e/ea/eaa/eaaa/node_modules/@types/pkg1.d.ts",
+    "/src/project/e/ea/eaa/eaaa/node_modules/@types/pkg1/index.d.ts"
+  ]
+}
 
 File: /src/project/a/fileWithImports.ts
 resolvedModules:
@@ -851,6 +1402,215 @@ pkg0: {
     "isExternalLibraryImport": true,
     "extension": ".d.ts"
   }
+}
+pkg1: {
+  "failedLookupLocations": [
+    "/src/project/node_modules/pkg1/package.json",
+    "/src/project/node_modules/pkg1.ts",
+    "/src/project/node_modules/pkg1.tsx",
+    "/src/project/node_modules/pkg1.d.ts",
+    "/src/project/node_modules/pkg1/index.ts",
+    "/src/project/node_modules/pkg1/index.tsx",
+    "/src/project/node_modules/pkg1/index.d.ts",
+    "/src/project/node_modules/@types/pkg1/package.json",
+    "/src/project/node_modules/@types/pkg1.d.ts",
+    "/src/project/node_modules/@types/pkg1/index.d.ts",
+    "/src/node_modules/pkg1/package.json",
+    "/src/node_modules/pkg1.ts",
+    "/src/node_modules/pkg1.tsx",
+    "/src/node_modules/pkg1.d.ts",
+    "/src/node_modules/pkg1/index.ts",
+    "/src/node_modules/pkg1/index.tsx",
+    "/src/node_modules/pkg1/index.d.ts",
+    "/src/node_modules/@types/pkg1/package.json",
+    "/src/node_modules/@types/pkg1.d.ts",
+    "/src/node_modules/@types/pkg1/index.d.ts",
+    "/node_modules/pkg1/package.json",
+    "/node_modules/pkg1.ts",
+    "/node_modules/pkg1.tsx",
+    "/node_modules/pkg1.d.ts",
+    "/node_modules/pkg1/index.ts",
+    "/node_modules/pkg1/index.tsx",
+    "/node_modules/pkg1/index.d.ts",
+    "/node_modules/@types/pkg1/package.json",
+    "/node_modules/@types/pkg1.d.ts",
+    "/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/node_modules/pkg1/package.json",
+    "/src/project/node_modules/pkg1.js",
+    "/src/project/node_modules/pkg1.jsx",
+    "/src/project/node_modules/pkg1/index.js",
+    "/src/project/node_modules/pkg1/index.jsx",
+    "/src/node_modules/pkg1/package.json",
+    "/src/node_modules/pkg1.js",
+    "/src/node_modules/pkg1.jsx",
+    "/src/node_modules/pkg1/index.js",
+    "/src/node_modules/pkg1/index.jsx",
+    "/node_modules/pkg1/package.json",
+    "/node_modules/pkg1.js",
+    "/node_modules/pkg1.jsx",
+    "/node_modules/pkg1/index.js",
+    "/node_modules/pkg1/index.jsx",
+    "/src/project/a/node_modules/pkg1/package.json",
+    "/src/project/a/node_modules/pkg1.ts",
+    "/src/project/a/node_modules/pkg1.tsx",
+    "/src/project/a/node_modules/pkg1.d.ts",
+    "/src/project/a/node_modules/pkg1/index.ts",
+    "/src/project/a/node_modules/pkg1/index.tsx",
+    "/src/project/a/node_modules/pkg1/index.d.ts",
+    "/src/project/a/node_modules/@types/pkg1/package.json",
+    "/src/project/a/node_modules/@types/pkg1.d.ts",
+    "/src/project/a/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/b/ba/node_modules/pkg1/package.json",
+    "/src/project/b/ba/node_modules/pkg1.ts",
+    "/src/project/b/ba/node_modules/pkg1.tsx",
+    "/src/project/b/ba/node_modules/pkg1.d.ts",
+    "/src/project/b/ba/node_modules/pkg1/index.ts",
+    "/src/project/b/ba/node_modules/pkg1/index.tsx",
+    "/src/project/b/ba/node_modules/pkg1/index.d.ts",
+    "/src/project/b/ba/node_modules/@types/pkg1/package.json",
+    "/src/project/b/ba/node_modules/@types/pkg1.d.ts",
+    "/src/project/b/ba/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/b/node_modules/pkg1/package.json",
+    "/src/project/b/node_modules/pkg1.ts",
+    "/src/project/b/node_modules/pkg1.tsx",
+    "/src/project/b/node_modules/pkg1.d.ts",
+    "/src/project/b/node_modules/pkg1/index.ts",
+    "/src/project/b/node_modules/pkg1/index.tsx",
+    "/src/project/b/node_modules/pkg1/index.d.ts",
+    "/src/project/b/node_modules/@types/pkg1/package.json",
+    "/src/project/b/node_modules/@types/pkg1.d.ts",
+    "/src/project/b/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/c/ca/node_modules/pkg1/package.json",
+    "/src/project/c/ca/node_modules/pkg1.ts",
+    "/src/project/c/ca/node_modules/pkg1.tsx",
+    "/src/project/c/ca/node_modules/pkg1.d.ts",
+    "/src/project/c/ca/node_modules/pkg1/index.ts",
+    "/src/project/c/ca/node_modules/pkg1/index.tsx",
+    "/src/project/c/ca/node_modules/pkg1/index.d.ts",
+    "/src/project/c/ca/node_modules/@types/pkg1/package.json",
+    "/src/project/c/ca/node_modules/@types/pkg1.d.ts",
+    "/src/project/c/ca/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/c/node_modules/pkg1/package.json",
+    "/src/project/c/node_modules/pkg1.ts",
+    "/src/project/c/node_modules/pkg1.tsx",
+    "/src/project/c/node_modules/pkg1.d.ts",
+    "/src/project/c/node_modules/pkg1/index.ts",
+    "/src/project/c/node_modules/pkg1/index.tsx",
+    "/src/project/c/node_modules/pkg1/index.d.ts",
+    "/src/project/c/node_modules/@types/pkg1/package.json",
+    "/src/project/c/node_modules/@types/pkg1.d.ts",
+    "/src/project/c/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1/package.json",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1.ts",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1.tsx",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1.d.ts",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1/index.ts",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1/index.tsx",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1/index.d.ts",
+    "/src/project/c/ca/caa/caaa/node_modules/@types/pkg1/package.json",
+    "/src/project/c/ca/caa/caaa/node_modules/@types/pkg1.d.ts",
+    "/src/project/c/ca/caa/caaa/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/c/ca/caa/node_modules/pkg1/package.json",
+    "/src/project/c/ca/caa/node_modules/pkg1.ts",
+    "/src/project/c/ca/caa/node_modules/pkg1.tsx",
+    "/src/project/c/ca/caa/node_modules/pkg1.d.ts",
+    "/src/project/c/ca/caa/node_modules/pkg1/index.ts",
+    "/src/project/c/ca/caa/node_modules/pkg1/index.tsx",
+    "/src/project/c/ca/caa/node_modules/pkg1/index.d.ts",
+    "/src/project/c/ca/caa/node_modules/@types/pkg1/package.json",
+    "/src/project/c/ca/caa/node_modules/@types/pkg1.d.ts",
+    "/src/project/c/ca/caa/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/c/cb/node_modules/pkg1/package.json",
+    "/src/project/c/cb/node_modules/pkg1.ts",
+    "/src/project/c/cb/node_modules/pkg1.tsx",
+    "/src/project/c/cb/node_modules/pkg1.d.ts",
+    "/src/project/c/cb/node_modules/pkg1/index.ts",
+    "/src/project/c/cb/node_modules/pkg1/index.tsx",
+    "/src/project/c/cb/node_modules/pkg1/index.d.ts",
+    "/src/project/c/cb/node_modules/@types/pkg1/package.json",
+    "/src/project/c/cb/node_modules/@types/pkg1.d.ts",
+    "/src/project/c/cb/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1/package.json",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1.ts",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1.tsx",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1.d.ts",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1/index.ts",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1/index.tsx",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1/index.d.ts",
+    "/src/project/d/da/daa/daaa/node_modules/@types/pkg1/package.json",
+    "/src/project/d/da/daa/daaa/node_modules/@types/pkg1.d.ts",
+    "/src/project/d/da/daa/daaa/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/d/da/daa/node_modules/pkg1/package.json",
+    "/src/project/d/da/daa/node_modules/pkg1.ts",
+    "/src/project/d/da/daa/node_modules/pkg1.tsx",
+    "/src/project/d/da/daa/node_modules/pkg1.d.ts",
+    "/src/project/d/da/daa/node_modules/pkg1/index.ts",
+    "/src/project/d/da/daa/node_modules/pkg1/index.tsx",
+    "/src/project/d/da/daa/node_modules/pkg1/index.d.ts",
+    "/src/project/d/da/daa/node_modules/@types/pkg1/package.json",
+    "/src/project/d/da/daa/node_modules/@types/pkg1.d.ts",
+    "/src/project/d/da/daa/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/d/da/node_modules/pkg1/package.json",
+    "/src/project/d/da/node_modules/pkg1.ts",
+    "/src/project/d/da/node_modules/pkg1.tsx",
+    "/src/project/d/da/node_modules/pkg1.d.ts",
+    "/src/project/d/da/node_modules/pkg1/index.ts",
+    "/src/project/d/da/node_modules/pkg1/index.tsx",
+    "/src/project/d/da/node_modules/pkg1/index.d.ts",
+    "/src/project/d/da/node_modules/@types/pkg1/package.json",
+    "/src/project/d/da/node_modules/@types/pkg1.d.ts",
+    "/src/project/d/da/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/d/node_modules/pkg1/package.json",
+    "/src/project/d/node_modules/pkg1.ts",
+    "/src/project/d/node_modules/pkg1.tsx",
+    "/src/project/d/node_modules/pkg1.d.ts",
+    "/src/project/d/node_modules/pkg1/index.ts",
+    "/src/project/d/node_modules/pkg1/index.tsx",
+    "/src/project/d/node_modules/pkg1/index.d.ts",
+    "/src/project/d/node_modules/@types/pkg1/package.json",
+    "/src/project/d/node_modules/@types/pkg1.d.ts",
+    "/src/project/d/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/e/ea/node_modules/pkg1/package.json",
+    "/src/project/e/ea/node_modules/pkg1.ts",
+    "/src/project/e/ea/node_modules/pkg1.tsx",
+    "/src/project/e/ea/node_modules/pkg1.d.ts",
+    "/src/project/e/ea/node_modules/pkg1/index.ts",
+    "/src/project/e/ea/node_modules/pkg1/index.tsx",
+    "/src/project/e/ea/node_modules/pkg1/index.d.ts",
+    "/src/project/e/ea/node_modules/@types/pkg1/package.json",
+    "/src/project/e/ea/node_modules/@types/pkg1.d.ts",
+    "/src/project/e/ea/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/e/node_modules/pkg1/package.json",
+    "/src/project/e/node_modules/pkg1.ts",
+    "/src/project/e/node_modules/pkg1.tsx",
+    "/src/project/e/node_modules/pkg1.d.ts",
+    "/src/project/e/node_modules/pkg1/index.ts",
+    "/src/project/e/node_modules/pkg1/index.tsx",
+    "/src/project/e/node_modules/pkg1/index.d.ts",
+    "/src/project/e/node_modules/@types/pkg1/package.json",
+    "/src/project/e/node_modules/@types/pkg1.d.ts",
+    "/src/project/e/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/e/ea/eaa/node_modules/pkg1/package.json",
+    "/src/project/e/ea/eaa/node_modules/pkg1.ts",
+    "/src/project/e/ea/eaa/node_modules/pkg1.tsx",
+    "/src/project/e/ea/eaa/node_modules/pkg1.d.ts",
+    "/src/project/e/ea/eaa/node_modules/pkg1/index.ts",
+    "/src/project/e/ea/eaa/node_modules/pkg1/index.tsx",
+    "/src/project/e/ea/eaa/node_modules/pkg1/index.d.ts",
+    "/src/project/e/ea/eaa/node_modules/@types/pkg1/package.json",
+    "/src/project/e/ea/eaa/node_modules/@types/pkg1.d.ts",
+    "/src/project/e/ea/eaa/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1/package.json",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1.ts",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1.tsx",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1.d.ts",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1/index.ts",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1/index.tsx",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1/index.d.ts",
+    "/src/project/e/ea/eaa/eaaa/node_modules/@types/pkg1/package.json",
+    "/src/project/e/ea/eaa/eaaa/node_modules/@types/pkg1.d.ts",
+    "/src/project/e/ea/eaa/eaaa/node_modules/@types/pkg1/index.d.ts"
+  ]
 }
 
 File: /src/project/b/ba/fileWithImports.ts
@@ -862,6 +1622,215 @@ pkg0: {
     "extension": ".d.ts"
   }
 }
+pkg1: {
+  "failedLookupLocations": [
+    "/src/project/node_modules/pkg1/package.json",
+    "/src/project/node_modules/pkg1.ts",
+    "/src/project/node_modules/pkg1.tsx",
+    "/src/project/node_modules/pkg1.d.ts",
+    "/src/project/node_modules/pkg1/index.ts",
+    "/src/project/node_modules/pkg1/index.tsx",
+    "/src/project/node_modules/pkg1/index.d.ts",
+    "/src/project/node_modules/@types/pkg1/package.json",
+    "/src/project/node_modules/@types/pkg1.d.ts",
+    "/src/project/node_modules/@types/pkg1/index.d.ts",
+    "/src/node_modules/pkg1/package.json",
+    "/src/node_modules/pkg1.ts",
+    "/src/node_modules/pkg1.tsx",
+    "/src/node_modules/pkg1.d.ts",
+    "/src/node_modules/pkg1/index.ts",
+    "/src/node_modules/pkg1/index.tsx",
+    "/src/node_modules/pkg1/index.d.ts",
+    "/src/node_modules/@types/pkg1/package.json",
+    "/src/node_modules/@types/pkg1.d.ts",
+    "/src/node_modules/@types/pkg1/index.d.ts",
+    "/node_modules/pkg1/package.json",
+    "/node_modules/pkg1.ts",
+    "/node_modules/pkg1.tsx",
+    "/node_modules/pkg1.d.ts",
+    "/node_modules/pkg1/index.ts",
+    "/node_modules/pkg1/index.tsx",
+    "/node_modules/pkg1/index.d.ts",
+    "/node_modules/@types/pkg1/package.json",
+    "/node_modules/@types/pkg1.d.ts",
+    "/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/node_modules/pkg1/package.json",
+    "/src/project/node_modules/pkg1.js",
+    "/src/project/node_modules/pkg1.jsx",
+    "/src/project/node_modules/pkg1/index.js",
+    "/src/project/node_modules/pkg1/index.jsx",
+    "/src/node_modules/pkg1/package.json",
+    "/src/node_modules/pkg1.js",
+    "/src/node_modules/pkg1.jsx",
+    "/src/node_modules/pkg1/index.js",
+    "/src/node_modules/pkg1/index.jsx",
+    "/node_modules/pkg1/package.json",
+    "/node_modules/pkg1.js",
+    "/node_modules/pkg1.jsx",
+    "/node_modules/pkg1/index.js",
+    "/node_modules/pkg1/index.jsx",
+    "/src/project/a/node_modules/pkg1/package.json",
+    "/src/project/a/node_modules/pkg1.ts",
+    "/src/project/a/node_modules/pkg1.tsx",
+    "/src/project/a/node_modules/pkg1.d.ts",
+    "/src/project/a/node_modules/pkg1/index.ts",
+    "/src/project/a/node_modules/pkg1/index.tsx",
+    "/src/project/a/node_modules/pkg1/index.d.ts",
+    "/src/project/a/node_modules/@types/pkg1/package.json",
+    "/src/project/a/node_modules/@types/pkg1.d.ts",
+    "/src/project/a/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/b/ba/node_modules/pkg1/package.json",
+    "/src/project/b/ba/node_modules/pkg1.ts",
+    "/src/project/b/ba/node_modules/pkg1.tsx",
+    "/src/project/b/ba/node_modules/pkg1.d.ts",
+    "/src/project/b/ba/node_modules/pkg1/index.ts",
+    "/src/project/b/ba/node_modules/pkg1/index.tsx",
+    "/src/project/b/ba/node_modules/pkg1/index.d.ts",
+    "/src/project/b/ba/node_modules/@types/pkg1/package.json",
+    "/src/project/b/ba/node_modules/@types/pkg1.d.ts",
+    "/src/project/b/ba/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/b/node_modules/pkg1/package.json",
+    "/src/project/b/node_modules/pkg1.ts",
+    "/src/project/b/node_modules/pkg1.tsx",
+    "/src/project/b/node_modules/pkg1.d.ts",
+    "/src/project/b/node_modules/pkg1/index.ts",
+    "/src/project/b/node_modules/pkg1/index.tsx",
+    "/src/project/b/node_modules/pkg1/index.d.ts",
+    "/src/project/b/node_modules/@types/pkg1/package.json",
+    "/src/project/b/node_modules/@types/pkg1.d.ts",
+    "/src/project/b/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/c/ca/node_modules/pkg1/package.json",
+    "/src/project/c/ca/node_modules/pkg1.ts",
+    "/src/project/c/ca/node_modules/pkg1.tsx",
+    "/src/project/c/ca/node_modules/pkg1.d.ts",
+    "/src/project/c/ca/node_modules/pkg1/index.ts",
+    "/src/project/c/ca/node_modules/pkg1/index.tsx",
+    "/src/project/c/ca/node_modules/pkg1/index.d.ts",
+    "/src/project/c/ca/node_modules/@types/pkg1/package.json",
+    "/src/project/c/ca/node_modules/@types/pkg1.d.ts",
+    "/src/project/c/ca/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/c/node_modules/pkg1/package.json",
+    "/src/project/c/node_modules/pkg1.ts",
+    "/src/project/c/node_modules/pkg1.tsx",
+    "/src/project/c/node_modules/pkg1.d.ts",
+    "/src/project/c/node_modules/pkg1/index.ts",
+    "/src/project/c/node_modules/pkg1/index.tsx",
+    "/src/project/c/node_modules/pkg1/index.d.ts",
+    "/src/project/c/node_modules/@types/pkg1/package.json",
+    "/src/project/c/node_modules/@types/pkg1.d.ts",
+    "/src/project/c/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1/package.json",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1.ts",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1.tsx",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1.d.ts",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1/index.ts",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1/index.tsx",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1/index.d.ts",
+    "/src/project/c/ca/caa/caaa/node_modules/@types/pkg1/package.json",
+    "/src/project/c/ca/caa/caaa/node_modules/@types/pkg1.d.ts",
+    "/src/project/c/ca/caa/caaa/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/c/ca/caa/node_modules/pkg1/package.json",
+    "/src/project/c/ca/caa/node_modules/pkg1.ts",
+    "/src/project/c/ca/caa/node_modules/pkg1.tsx",
+    "/src/project/c/ca/caa/node_modules/pkg1.d.ts",
+    "/src/project/c/ca/caa/node_modules/pkg1/index.ts",
+    "/src/project/c/ca/caa/node_modules/pkg1/index.tsx",
+    "/src/project/c/ca/caa/node_modules/pkg1/index.d.ts",
+    "/src/project/c/ca/caa/node_modules/@types/pkg1/package.json",
+    "/src/project/c/ca/caa/node_modules/@types/pkg1.d.ts",
+    "/src/project/c/ca/caa/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/c/cb/node_modules/pkg1/package.json",
+    "/src/project/c/cb/node_modules/pkg1.ts",
+    "/src/project/c/cb/node_modules/pkg1.tsx",
+    "/src/project/c/cb/node_modules/pkg1.d.ts",
+    "/src/project/c/cb/node_modules/pkg1/index.ts",
+    "/src/project/c/cb/node_modules/pkg1/index.tsx",
+    "/src/project/c/cb/node_modules/pkg1/index.d.ts",
+    "/src/project/c/cb/node_modules/@types/pkg1/package.json",
+    "/src/project/c/cb/node_modules/@types/pkg1.d.ts",
+    "/src/project/c/cb/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1/package.json",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1.ts",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1.tsx",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1.d.ts",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1/index.ts",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1/index.tsx",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1/index.d.ts",
+    "/src/project/d/da/daa/daaa/node_modules/@types/pkg1/package.json",
+    "/src/project/d/da/daa/daaa/node_modules/@types/pkg1.d.ts",
+    "/src/project/d/da/daa/daaa/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/d/da/daa/node_modules/pkg1/package.json",
+    "/src/project/d/da/daa/node_modules/pkg1.ts",
+    "/src/project/d/da/daa/node_modules/pkg1.tsx",
+    "/src/project/d/da/daa/node_modules/pkg1.d.ts",
+    "/src/project/d/da/daa/node_modules/pkg1/index.ts",
+    "/src/project/d/da/daa/node_modules/pkg1/index.tsx",
+    "/src/project/d/da/daa/node_modules/pkg1/index.d.ts",
+    "/src/project/d/da/daa/node_modules/@types/pkg1/package.json",
+    "/src/project/d/da/daa/node_modules/@types/pkg1.d.ts",
+    "/src/project/d/da/daa/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/d/da/node_modules/pkg1/package.json",
+    "/src/project/d/da/node_modules/pkg1.ts",
+    "/src/project/d/da/node_modules/pkg1.tsx",
+    "/src/project/d/da/node_modules/pkg1.d.ts",
+    "/src/project/d/da/node_modules/pkg1/index.ts",
+    "/src/project/d/da/node_modules/pkg1/index.tsx",
+    "/src/project/d/da/node_modules/pkg1/index.d.ts",
+    "/src/project/d/da/node_modules/@types/pkg1/package.json",
+    "/src/project/d/da/node_modules/@types/pkg1.d.ts",
+    "/src/project/d/da/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/d/node_modules/pkg1/package.json",
+    "/src/project/d/node_modules/pkg1.ts",
+    "/src/project/d/node_modules/pkg1.tsx",
+    "/src/project/d/node_modules/pkg1.d.ts",
+    "/src/project/d/node_modules/pkg1/index.ts",
+    "/src/project/d/node_modules/pkg1/index.tsx",
+    "/src/project/d/node_modules/pkg1/index.d.ts",
+    "/src/project/d/node_modules/@types/pkg1/package.json",
+    "/src/project/d/node_modules/@types/pkg1.d.ts",
+    "/src/project/d/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/e/ea/node_modules/pkg1/package.json",
+    "/src/project/e/ea/node_modules/pkg1.ts",
+    "/src/project/e/ea/node_modules/pkg1.tsx",
+    "/src/project/e/ea/node_modules/pkg1.d.ts",
+    "/src/project/e/ea/node_modules/pkg1/index.ts",
+    "/src/project/e/ea/node_modules/pkg1/index.tsx",
+    "/src/project/e/ea/node_modules/pkg1/index.d.ts",
+    "/src/project/e/ea/node_modules/@types/pkg1/package.json",
+    "/src/project/e/ea/node_modules/@types/pkg1.d.ts",
+    "/src/project/e/ea/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/e/node_modules/pkg1/package.json",
+    "/src/project/e/node_modules/pkg1.ts",
+    "/src/project/e/node_modules/pkg1.tsx",
+    "/src/project/e/node_modules/pkg1.d.ts",
+    "/src/project/e/node_modules/pkg1/index.ts",
+    "/src/project/e/node_modules/pkg1/index.tsx",
+    "/src/project/e/node_modules/pkg1/index.d.ts",
+    "/src/project/e/node_modules/@types/pkg1/package.json",
+    "/src/project/e/node_modules/@types/pkg1.d.ts",
+    "/src/project/e/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/e/ea/eaa/node_modules/pkg1/package.json",
+    "/src/project/e/ea/eaa/node_modules/pkg1.ts",
+    "/src/project/e/ea/eaa/node_modules/pkg1.tsx",
+    "/src/project/e/ea/eaa/node_modules/pkg1.d.ts",
+    "/src/project/e/ea/eaa/node_modules/pkg1/index.ts",
+    "/src/project/e/ea/eaa/node_modules/pkg1/index.tsx",
+    "/src/project/e/ea/eaa/node_modules/pkg1/index.d.ts",
+    "/src/project/e/ea/eaa/node_modules/@types/pkg1/package.json",
+    "/src/project/e/ea/eaa/node_modules/@types/pkg1.d.ts",
+    "/src/project/e/ea/eaa/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1/package.json",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1.ts",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1.tsx",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1.d.ts",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1/index.ts",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1/index.tsx",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1/index.d.ts",
+    "/src/project/e/ea/eaa/eaaa/node_modules/@types/pkg1/package.json",
+    "/src/project/e/ea/eaa/eaaa/node_modules/@types/pkg1.d.ts",
+    "/src/project/e/ea/eaa/eaaa/node_modules/@types/pkg1/index.d.ts"
+  ]
+}
 
 File: /src/project/c/ca/fileWithImports.ts
 resolvedModules:
@@ -871,6 +1840,215 @@ pkg0: {
     "isExternalLibraryImport": true,
     "extension": ".d.ts"
   }
+}
+pkg1: {
+  "failedLookupLocations": [
+    "/src/project/node_modules/pkg1/package.json",
+    "/src/project/node_modules/pkg1.ts",
+    "/src/project/node_modules/pkg1.tsx",
+    "/src/project/node_modules/pkg1.d.ts",
+    "/src/project/node_modules/pkg1/index.ts",
+    "/src/project/node_modules/pkg1/index.tsx",
+    "/src/project/node_modules/pkg1/index.d.ts",
+    "/src/project/node_modules/@types/pkg1/package.json",
+    "/src/project/node_modules/@types/pkg1.d.ts",
+    "/src/project/node_modules/@types/pkg1/index.d.ts",
+    "/src/node_modules/pkg1/package.json",
+    "/src/node_modules/pkg1.ts",
+    "/src/node_modules/pkg1.tsx",
+    "/src/node_modules/pkg1.d.ts",
+    "/src/node_modules/pkg1/index.ts",
+    "/src/node_modules/pkg1/index.tsx",
+    "/src/node_modules/pkg1/index.d.ts",
+    "/src/node_modules/@types/pkg1/package.json",
+    "/src/node_modules/@types/pkg1.d.ts",
+    "/src/node_modules/@types/pkg1/index.d.ts",
+    "/node_modules/pkg1/package.json",
+    "/node_modules/pkg1.ts",
+    "/node_modules/pkg1.tsx",
+    "/node_modules/pkg1.d.ts",
+    "/node_modules/pkg1/index.ts",
+    "/node_modules/pkg1/index.tsx",
+    "/node_modules/pkg1/index.d.ts",
+    "/node_modules/@types/pkg1/package.json",
+    "/node_modules/@types/pkg1.d.ts",
+    "/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/node_modules/pkg1/package.json",
+    "/src/project/node_modules/pkg1.js",
+    "/src/project/node_modules/pkg1.jsx",
+    "/src/project/node_modules/pkg1/index.js",
+    "/src/project/node_modules/pkg1/index.jsx",
+    "/src/node_modules/pkg1/package.json",
+    "/src/node_modules/pkg1.js",
+    "/src/node_modules/pkg1.jsx",
+    "/src/node_modules/pkg1/index.js",
+    "/src/node_modules/pkg1/index.jsx",
+    "/node_modules/pkg1/package.json",
+    "/node_modules/pkg1.js",
+    "/node_modules/pkg1.jsx",
+    "/node_modules/pkg1/index.js",
+    "/node_modules/pkg1/index.jsx",
+    "/src/project/a/node_modules/pkg1/package.json",
+    "/src/project/a/node_modules/pkg1.ts",
+    "/src/project/a/node_modules/pkg1.tsx",
+    "/src/project/a/node_modules/pkg1.d.ts",
+    "/src/project/a/node_modules/pkg1/index.ts",
+    "/src/project/a/node_modules/pkg1/index.tsx",
+    "/src/project/a/node_modules/pkg1/index.d.ts",
+    "/src/project/a/node_modules/@types/pkg1/package.json",
+    "/src/project/a/node_modules/@types/pkg1.d.ts",
+    "/src/project/a/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/b/ba/node_modules/pkg1/package.json",
+    "/src/project/b/ba/node_modules/pkg1.ts",
+    "/src/project/b/ba/node_modules/pkg1.tsx",
+    "/src/project/b/ba/node_modules/pkg1.d.ts",
+    "/src/project/b/ba/node_modules/pkg1/index.ts",
+    "/src/project/b/ba/node_modules/pkg1/index.tsx",
+    "/src/project/b/ba/node_modules/pkg1/index.d.ts",
+    "/src/project/b/ba/node_modules/@types/pkg1/package.json",
+    "/src/project/b/ba/node_modules/@types/pkg1.d.ts",
+    "/src/project/b/ba/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/b/node_modules/pkg1/package.json",
+    "/src/project/b/node_modules/pkg1.ts",
+    "/src/project/b/node_modules/pkg1.tsx",
+    "/src/project/b/node_modules/pkg1.d.ts",
+    "/src/project/b/node_modules/pkg1/index.ts",
+    "/src/project/b/node_modules/pkg1/index.tsx",
+    "/src/project/b/node_modules/pkg1/index.d.ts",
+    "/src/project/b/node_modules/@types/pkg1/package.json",
+    "/src/project/b/node_modules/@types/pkg1.d.ts",
+    "/src/project/b/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/c/ca/node_modules/pkg1/package.json",
+    "/src/project/c/ca/node_modules/pkg1.ts",
+    "/src/project/c/ca/node_modules/pkg1.tsx",
+    "/src/project/c/ca/node_modules/pkg1.d.ts",
+    "/src/project/c/ca/node_modules/pkg1/index.ts",
+    "/src/project/c/ca/node_modules/pkg1/index.tsx",
+    "/src/project/c/ca/node_modules/pkg1/index.d.ts",
+    "/src/project/c/ca/node_modules/@types/pkg1/package.json",
+    "/src/project/c/ca/node_modules/@types/pkg1.d.ts",
+    "/src/project/c/ca/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/c/node_modules/pkg1/package.json",
+    "/src/project/c/node_modules/pkg1.ts",
+    "/src/project/c/node_modules/pkg1.tsx",
+    "/src/project/c/node_modules/pkg1.d.ts",
+    "/src/project/c/node_modules/pkg1/index.ts",
+    "/src/project/c/node_modules/pkg1/index.tsx",
+    "/src/project/c/node_modules/pkg1/index.d.ts",
+    "/src/project/c/node_modules/@types/pkg1/package.json",
+    "/src/project/c/node_modules/@types/pkg1.d.ts",
+    "/src/project/c/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1/package.json",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1.ts",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1.tsx",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1.d.ts",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1/index.ts",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1/index.tsx",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1/index.d.ts",
+    "/src/project/c/ca/caa/caaa/node_modules/@types/pkg1/package.json",
+    "/src/project/c/ca/caa/caaa/node_modules/@types/pkg1.d.ts",
+    "/src/project/c/ca/caa/caaa/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/c/ca/caa/node_modules/pkg1/package.json",
+    "/src/project/c/ca/caa/node_modules/pkg1.ts",
+    "/src/project/c/ca/caa/node_modules/pkg1.tsx",
+    "/src/project/c/ca/caa/node_modules/pkg1.d.ts",
+    "/src/project/c/ca/caa/node_modules/pkg1/index.ts",
+    "/src/project/c/ca/caa/node_modules/pkg1/index.tsx",
+    "/src/project/c/ca/caa/node_modules/pkg1/index.d.ts",
+    "/src/project/c/ca/caa/node_modules/@types/pkg1/package.json",
+    "/src/project/c/ca/caa/node_modules/@types/pkg1.d.ts",
+    "/src/project/c/ca/caa/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/c/cb/node_modules/pkg1/package.json",
+    "/src/project/c/cb/node_modules/pkg1.ts",
+    "/src/project/c/cb/node_modules/pkg1.tsx",
+    "/src/project/c/cb/node_modules/pkg1.d.ts",
+    "/src/project/c/cb/node_modules/pkg1/index.ts",
+    "/src/project/c/cb/node_modules/pkg1/index.tsx",
+    "/src/project/c/cb/node_modules/pkg1/index.d.ts",
+    "/src/project/c/cb/node_modules/@types/pkg1/package.json",
+    "/src/project/c/cb/node_modules/@types/pkg1.d.ts",
+    "/src/project/c/cb/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1/package.json",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1.ts",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1.tsx",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1.d.ts",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1/index.ts",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1/index.tsx",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1/index.d.ts",
+    "/src/project/d/da/daa/daaa/node_modules/@types/pkg1/package.json",
+    "/src/project/d/da/daa/daaa/node_modules/@types/pkg1.d.ts",
+    "/src/project/d/da/daa/daaa/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/d/da/daa/node_modules/pkg1/package.json",
+    "/src/project/d/da/daa/node_modules/pkg1.ts",
+    "/src/project/d/da/daa/node_modules/pkg1.tsx",
+    "/src/project/d/da/daa/node_modules/pkg1.d.ts",
+    "/src/project/d/da/daa/node_modules/pkg1/index.ts",
+    "/src/project/d/da/daa/node_modules/pkg1/index.tsx",
+    "/src/project/d/da/daa/node_modules/pkg1/index.d.ts",
+    "/src/project/d/da/daa/node_modules/@types/pkg1/package.json",
+    "/src/project/d/da/daa/node_modules/@types/pkg1.d.ts",
+    "/src/project/d/da/daa/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/d/da/node_modules/pkg1/package.json",
+    "/src/project/d/da/node_modules/pkg1.ts",
+    "/src/project/d/da/node_modules/pkg1.tsx",
+    "/src/project/d/da/node_modules/pkg1.d.ts",
+    "/src/project/d/da/node_modules/pkg1/index.ts",
+    "/src/project/d/da/node_modules/pkg1/index.tsx",
+    "/src/project/d/da/node_modules/pkg1/index.d.ts",
+    "/src/project/d/da/node_modules/@types/pkg1/package.json",
+    "/src/project/d/da/node_modules/@types/pkg1.d.ts",
+    "/src/project/d/da/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/d/node_modules/pkg1/package.json",
+    "/src/project/d/node_modules/pkg1.ts",
+    "/src/project/d/node_modules/pkg1.tsx",
+    "/src/project/d/node_modules/pkg1.d.ts",
+    "/src/project/d/node_modules/pkg1/index.ts",
+    "/src/project/d/node_modules/pkg1/index.tsx",
+    "/src/project/d/node_modules/pkg1/index.d.ts",
+    "/src/project/d/node_modules/@types/pkg1/package.json",
+    "/src/project/d/node_modules/@types/pkg1.d.ts",
+    "/src/project/d/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/e/ea/node_modules/pkg1/package.json",
+    "/src/project/e/ea/node_modules/pkg1.ts",
+    "/src/project/e/ea/node_modules/pkg1.tsx",
+    "/src/project/e/ea/node_modules/pkg1.d.ts",
+    "/src/project/e/ea/node_modules/pkg1/index.ts",
+    "/src/project/e/ea/node_modules/pkg1/index.tsx",
+    "/src/project/e/ea/node_modules/pkg1/index.d.ts",
+    "/src/project/e/ea/node_modules/@types/pkg1/package.json",
+    "/src/project/e/ea/node_modules/@types/pkg1.d.ts",
+    "/src/project/e/ea/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/e/node_modules/pkg1/package.json",
+    "/src/project/e/node_modules/pkg1.ts",
+    "/src/project/e/node_modules/pkg1.tsx",
+    "/src/project/e/node_modules/pkg1.d.ts",
+    "/src/project/e/node_modules/pkg1/index.ts",
+    "/src/project/e/node_modules/pkg1/index.tsx",
+    "/src/project/e/node_modules/pkg1/index.d.ts",
+    "/src/project/e/node_modules/@types/pkg1/package.json",
+    "/src/project/e/node_modules/@types/pkg1.d.ts",
+    "/src/project/e/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/e/ea/eaa/node_modules/pkg1/package.json",
+    "/src/project/e/ea/eaa/node_modules/pkg1.ts",
+    "/src/project/e/ea/eaa/node_modules/pkg1.tsx",
+    "/src/project/e/ea/eaa/node_modules/pkg1.d.ts",
+    "/src/project/e/ea/eaa/node_modules/pkg1/index.ts",
+    "/src/project/e/ea/eaa/node_modules/pkg1/index.tsx",
+    "/src/project/e/ea/eaa/node_modules/pkg1/index.d.ts",
+    "/src/project/e/ea/eaa/node_modules/@types/pkg1/package.json",
+    "/src/project/e/ea/eaa/node_modules/@types/pkg1.d.ts",
+    "/src/project/e/ea/eaa/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1/package.json",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1.ts",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1.tsx",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1.d.ts",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1/index.ts",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1/index.tsx",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1/index.d.ts",
+    "/src/project/e/ea/eaa/eaaa/node_modules/@types/pkg1/package.json",
+    "/src/project/e/ea/eaa/eaaa/node_modules/@types/pkg1.d.ts",
+    "/src/project/e/ea/eaa/eaaa/node_modules/@types/pkg1/index.d.ts"
+  ]
 }
 
 File: /src/project/c/ca/caa/caaa/fileWithImports.ts
@@ -882,6 +2060,215 @@ pkg0: {
     "extension": ".d.ts"
   }
 }
+pkg1: {
+  "failedLookupLocations": [
+    "/src/project/node_modules/pkg1/package.json",
+    "/src/project/node_modules/pkg1.ts",
+    "/src/project/node_modules/pkg1.tsx",
+    "/src/project/node_modules/pkg1.d.ts",
+    "/src/project/node_modules/pkg1/index.ts",
+    "/src/project/node_modules/pkg1/index.tsx",
+    "/src/project/node_modules/pkg1/index.d.ts",
+    "/src/project/node_modules/@types/pkg1/package.json",
+    "/src/project/node_modules/@types/pkg1.d.ts",
+    "/src/project/node_modules/@types/pkg1/index.d.ts",
+    "/src/node_modules/pkg1/package.json",
+    "/src/node_modules/pkg1.ts",
+    "/src/node_modules/pkg1.tsx",
+    "/src/node_modules/pkg1.d.ts",
+    "/src/node_modules/pkg1/index.ts",
+    "/src/node_modules/pkg1/index.tsx",
+    "/src/node_modules/pkg1/index.d.ts",
+    "/src/node_modules/@types/pkg1/package.json",
+    "/src/node_modules/@types/pkg1.d.ts",
+    "/src/node_modules/@types/pkg1/index.d.ts",
+    "/node_modules/pkg1/package.json",
+    "/node_modules/pkg1.ts",
+    "/node_modules/pkg1.tsx",
+    "/node_modules/pkg1.d.ts",
+    "/node_modules/pkg1/index.ts",
+    "/node_modules/pkg1/index.tsx",
+    "/node_modules/pkg1/index.d.ts",
+    "/node_modules/@types/pkg1/package.json",
+    "/node_modules/@types/pkg1.d.ts",
+    "/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/node_modules/pkg1/package.json",
+    "/src/project/node_modules/pkg1.js",
+    "/src/project/node_modules/pkg1.jsx",
+    "/src/project/node_modules/pkg1/index.js",
+    "/src/project/node_modules/pkg1/index.jsx",
+    "/src/node_modules/pkg1/package.json",
+    "/src/node_modules/pkg1.js",
+    "/src/node_modules/pkg1.jsx",
+    "/src/node_modules/pkg1/index.js",
+    "/src/node_modules/pkg1/index.jsx",
+    "/node_modules/pkg1/package.json",
+    "/node_modules/pkg1.js",
+    "/node_modules/pkg1.jsx",
+    "/node_modules/pkg1/index.js",
+    "/node_modules/pkg1/index.jsx",
+    "/src/project/a/node_modules/pkg1/package.json",
+    "/src/project/a/node_modules/pkg1.ts",
+    "/src/project/a/node_modules/pkg1.tsx",
+    "/src/project/a/node_modules/pkg1.d.ts",
+    "/src/project/a/node_modules/pkg1/index.ts",
+    "/src/project/a/node_modules/pkg1/index.tsx",
+    "/src/project/a/node_modules/pkg1/index.d.ts",
+    "/src/project/a/node_modules/@types/pkg1/package.json",
+    "/src/project/a/node_modules/@types/pkg1.d.ts",
+    "/src/project/a/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/b/ba/node_modules/pkg1/package.json",
+    "/src/project/b/ba/node_modules/pkg1.ts",
+    "/src/project/b/ba/node_modules/pkg1.tsx",
+    "/src/project/b/ba/node_modules/pkg1.d.ts",
+    "/src/project/b/ba/node_modules/pkg1/index.ts",
+    "/src/project/b/ba/node_modules/pkg1/index.tsx",
+    "/src/project/b/ba/node_modules/pkg1/index.d.ts",
+    "/src/project/b/ba/node_modules/@types/pkg1/package.json",
+    "/src/project/b/ba/node_modules/@types/pkg1.d.ts",
+    "/src/project/b/ba/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/b/node_modules/pkg1/package.json",
+    "/src/project/b/node_modules/pkg1.ts",
+    "/src/project/b/node_modules/pkg1.tsx",
+    "/src/project/b/node_modules/pkg1.d.ts",
+    "/src/project/b/node_modules/pkg1/index.ts",
+    "/src/project/b/node_modules/pkg1/index.tsx",
+    "/src/project/b/node_modules/pkg1/index.d.ts",
+    "/src/project/b/node_modules/@types/pkg1/package.json",
+    "/src/project/b/node_modules/@types/pkg1.d.ts",
+    "/src/project/b/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/c/ca/node_modules/pkg1/package.json",
+    "/src/project/c/ca/node_modules/pkg1.ts",
+    "/src/project/c/ca/node_modules/pkg1.tsx",
+    "/src/project/c/ca/node_modules/pkg1.d.ts",
+    "/src/project/c/ca/node_modules/pkg1/index.ts",
+    "/src/project/c/ca/node_modules/pkg1/index.tsx",
+    "/src/project/c/ca/node_modules/pkg1/index.d.ts",
+    "/src/project/c/ca/node_modules/@types/pkg1/package.json",
+    "/src/project/c/ca/node_modules/@types/pkg1.d.ts",
+    "/src/project/c/ca/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/c/node_modules/pkg1/package.json",
+    "/src/project/c/node_modules/pkg1.ts",
+    "/src/project/c/node_modules/pkg1.tsx",
+    "/src/project/c/node_modules/pkg1.d.ts",
+    "/src/project/c/node_modules/pkg1/index.ts",
+    "/src/project/c/node_modules/pkg1/index.tsx",
+    "/src/project/c/node_modules/pkg1/index.d.ts",
+    "/src/project/c/node_modules/@types/pkg1/package.json",
+    "/src/project/c/node_modules/@types/pkg1.d.ts",
+    "/src/project/c/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1/package.json",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1.ts",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1.tsx",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1.d.ts",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1/index.ts",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1/index.tsx",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1/index.d.ts",
+    "/src/project/c/ca/caa/caaa/node_modules/@types/pkg1/package.json",
+    "/src/project/c/ca/caa/caaa/node_modules/@types/pkg1.d.ts",
+    "/src/project/c/ca/caa/caaa/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/c/ca/caa/node_modules/pkg1/package.json",
+    "/src/project/c/ca/caa/node_modules/pkg1.ts",
+    "/src/project/c/ca/caa/node_modules/pkg1.tsx",
+    "/src/project/c/ca/caa/node_modules/pkg1.d.ts",
+    "/src/project/c/ca/caa/node_modules/pkg1/index.ts",
+    "/src/project/c/ca/caa/node_modules/pkg1/index.tsx",
+    "/src/project/c/ca/caa/node_modules/pkg1/index.d.ts",
+    "/src/project/c/ca/caa/node_modules/@types/pkg1/package.json",
+    "/src/project/c/ca/caa/node_modules/@types/pkg1.d.ts",
+    "/src/project/c/ca/caa/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/c/cb/node_modules/pkg1/package.json",
+    "/src/project/c/cb/node_modules/pkg1.ts",
+    "/src/project/c/cb/node_modules/pkg1.tsx",
+    "/src/project/c/cb/node_modules/pkg1.d.ts",
+    "/src/project/c/cb/node_modules/pkg1/index.ts",
+    "/src/project/c/cb/node_modules/pkg1/index.tsx",
+    "/src/project/c/cb/node_modules/pkg1/index.d.ts",
+    "/src/project/c/cb/node_modules/@types/pkg1/package.json",
+    "/src/project/c/cb/node_modules/@types/pkg1.d.ts",
+    "/src/project/c/cb/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1/package.json",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1.ts",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1.tsx",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1.d.ts",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1/index.ts",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1/index.tsx",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1/index.d.ts",
+    "/src/project/d/da/daa/daaa/node_modules/@types/pkg1/package.json",
+    "/src/project/d/da/daa/daaa/node_modules/@types/pkg1.d.ts",
+    "/src/project/d/da/daa/daaa/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/d/da/daa/node_modules/pkg1/package.json",
+    "/src/project/d/da/daa/node_modules/pkg1.ts",
+    "/src/project/d/da/daa/node_modules/pkg1.tsx",
+    "/src/project/d/da/daa/node_modules/pkg1.d.ts",
+    "/src/project/d/da/daa/node_modules/pkg1/index.ts",
+    "/src/project/d/da/daa/node_modules/pkg1/index.tsx",
+    "/src/project/d/da/daa/node_modules/pkg1/index.d.ts",
+    "/src/project/d/da/daa/node_modules/@types/pkg1/package.json",
+    "/src/project/d/da/daa/node_modules/@types/pkg1.d.ts",
+    "/src/project/d/da/daa/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/d/da/node_modules/pkg1/package.json",
+    "/src/project/d/da/node_modules/pkg1.ts",
+    "/src/project/d/da/node_modules/pkg1.tsx",
+    "/src/project/d/da/node_modules/pkg1.d.ts",
+    "/src/project/d/da/node_modules/pkg1/index.ts",
+    "/src/project/d/da/node_modules/pkg1/index.tsx",
+    "/src/project/d/da/node_modules/pkg1/index.d.ts",
+    "/src/project/d/da/node_modules/@types/pkg1/package.json",
+    "/src/project/d/da/node_modules/@types/pkg1.d.ts",
+    "/src/project/d/da/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/d/node_modules/pkg1/package.json",
+    "/src/project/d/node_modules/pkg1.ts",
+    "/src/project/d/node_modules/pkg1.tsx",
+    "/src/project/d/node_modules/pkg1.d.ts",
+    "/src/project/d/node_modules/pkg1/index.ts",
+    "/src/project/d/node_modules/pkg1/index.tsx",
+    "/src/project/d/node_modules/pkg1/index.d.ts",
+    "/src/project/d/node_modules/@types/pkg1/package.json",
+    "/src/project/d/node_modules/@types/pkg1.d.ts",
+    "/src/project/d/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/e/ea/node_modules/pkg1/package.json",
+    "/src/project/e/ea/node_modules/pkg1.ts",
+    "/src/project/e/ea/node_modules/pkg1.tsx",
+    "/src/project/e/ea/node_modules/pkg1.d.ts",
+    "/src/project/e/ea/node_modules/pkg1/index.ts",
+    "/src/project/e/ea/node_modules/pkg1/index.tsx",
+    "/src/project/e/ea/node_modules/pkg1/index.d.ts",
+    "/src/project/e/ea/node_modules/@types/pkg1/package.json",
+    "/src/project/e/ea/node_modules/@types/pkg1.d.ts",
+    "/src/project/e/ea/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/e/node_modules/pkg1/package.json",
+    "/src/project/e/node_modules/pkg1.ts",
+    "/src/project/e/node_modules/pkg1.tsx",
+    "/src/project/e/node_modules/pkg1.d.ts",
+    "/src/project/e/node_modules/pkg1/index.ts",
+    "/src/project/e/node_modules/pkg1/index.tsx",
+    "/src/project/e/node_modules/pkg1/index.d.ts",
+    "/src/project/e/node_modules/@types/pkg1/package.json",
+    "/src/project/e/node_modules/@types/pkg1.d.ts",
+    "/src/project/e/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/e/ea/eaa/node_modules/pkg1/package.json",
+    "/src/project/e/ea/eaa/node_modules/pkg1.ts",
+    "/src/project/e/ea/eaa/node_modules/pkg1.tsx",
+    "/src/project/e/ea/eaa/node_modules/pkg1.d.ts",
+    "/src/project/e/ea/eaa/node_modules/pkg1/index.ts",
+    "/src/project/e/ea/eaa/node_modules/pkg1/index.tsx",
+    "/src/project/e/ea/eaa/node_modules/pkg1/index.d.ts",
+    "/src/project/e/ea/eaa/node_modules/@types/pkg1/package.json",
+    "/src/project/e/ea/eaa/node_modules/@types/pkg1.d.ts",
+    "/src/project/e/ea/eaa/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1/package.json",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1.ts",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1.tsx",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1.d.ts",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1/index.ts",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1/index.tsx",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1/index.d.ts",
+    "/src/project/e/ea/eaa/eaaa/node_modules/@types/pkg1/package.json",
+    "/src/project/e/ea/eaa/eaaa/node_modules/@types/pkg1.d.ts",
+    "/src/project/e/ea/eaa/eaaa/node_modules/@types/pkg1/index.d.ts"
+  ]
+}
 
 File: /src/project/c/cb/fileWithImports.ts
 resolvedModules:
@@ -891,6 +2278,215 @@ pkg0: {
     "isExternalLibraryImport": true,
     "extension": ".d.ts"
   }
+}
+pkg1: {
+  "failedLookupLocations": [
+    "/src/project/node_modules/pkg1/package.json",
+    "/src/project/node_modules/pkg1.ts",
+    "/src/project/node_modules/pkg1.tsx",
+    "/src/project/node_modules/pkg1.d.ts",
+    "/src/project/node_modules/pkg1/index.ts",
+    "/src/project/node_modules/pkg1/index.tsx",
+    "/src/project/node_modules/pkg1/index.d.ts",
+    "/src/project/node_modules/@types/pkg1/package.json",
+    "/src/project/node_modules/@types/pkg1.d.ts",
+    "/src/project/node_modules/@types/pkg1/index.d.ts",
+    "/src/node_modules/pkg1/package.json",
+    "/src/node_modules/pkg1.ts",
+    "/src/node_modules/pkg1.tsx",
+    "/src/node_modules/pkg1.d.ts",
+    "/src/node_modules/pkg1/index.ts",
+    "/src/node_modules/pkg1/index.tsx",
+    "/src/node_modules/pkg1/index.d.ts",
+    "/src/node_modules/@types/pkg1/package.json",
+    "/src/node_modules/@types/pkg1.d.ts",
+    "/src/node_modules/@types/pkg1/index.d.ts",
+    "/node_modules/pkg1/package.json",
+    "/node_modules/pkg1.ts",
+    "/node_modules/pkg1.tsx",
+    "/node_modules/pkg1.d.ts",
+    "/node_modules/pkg1/index.ts",
+    "/node_modules/pkg1/index.tsx",
+    "/node_modules/pkg1/index.d.ts",
+    "/node_modules/@types/pkg1/package.json",
+    "/node_modules/@types/pkg1.d.ts",
+    "/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/node_modules/pkg1/package.json",
+    "/src/project/node_modules/pkg1.js",
+    "/src/project/node_modules/pkg1.jsx",
+    "/src/project/node_modules/pkg1/index.js",
+    "/src/project/node_modules/pkg1/index.jsx",
+    "/src/node_modules/pkg1/package.json",
+    "/src/node_modules/pkg1.js",
+    "/src/node_modules/pkg1.jsx",
+    "/src/node_modules/pkg1/index.js",
+    "/src/node_modules/pkg1/index.jsx",
+    "/node_modules/pkg1/package.json",
+    "/node_modules/pkg1.js",
+    "/node_modules/pkg1.jsx",
+    "/node_modules/pkg1/index.js",
+    "/node_modules/pkg1/index.jsx",
+    "/src/project/a/node_modules/pkg1/package.json",
+    "/src/project/a/node_modules/pkg1.ts",
+    "/src/project/a/node_modules/pkg1.tsx",
+    "/src/project/a/node_modules/pkg1.d.ts",
+    "/src/project/a/node_modules/pkg1/index.ts",
+    "/src/project/a/node_modules/pkg1/index.tsx",
+    "/src/project/a/node_modules/pkg1/index.d.ts",
+    "/src/project/a/node_modules/@types/pkg1/package.json",
+    "/src/project/a/node_modules/@types/pkg1.d.ts",
+    "/src/project/a/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/b/ba/node_modules/pkg1/package.json",
+    "/src/project/b/ba/node_modules/pkg1.ts",
+    "/src/project/b/ba/node_modules/pkg1.tsx",
+    "/src/project/b/ba/node_modules/pkg1.d.ts",
+    "/src/project/b/ba/node_modules/pkg1/index.ts",
+    "/src/project/b/ba/node_modules/pkg1/index.tsx",
+    "/src/project/b/ba/node_modules/pkg1/index.d.ts",
+    "/src/project/b/ba/node_modules/@types/pkg1/package.json",
+    "/src/project/b/ba/node_modules/@types/pkg1.d.ts",
+    "/src/project/b/ba/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/b/node_modules/pkg1/package.json",
+    "/src/project/b/node_modules/pkg1.ts",
+    "/src/project/b/node_modules/pkg1.tsx",
+    "/src/project/b/node_modules/pkg1.d.ts",
+    "/src/project/b/node_modules/pkg1/index.ts",
+    "/src/project/b/node_modules/pkg1/index.tsx",
+    "/src/project/b/node_modules/pkg1/index.d.ts",
+    "/src/project/b/node_modules/@types/pkg1/package.json",
+    "/src/project/b/node_modules/@types/pkg1.d.ts",
+    "/src/project/b/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/c/ca/node_modules/pkg1/package.json",
+    "/src/project/c/ca/node_modules/pkg1.ts",
+    "/src/project/c/ca/node_modules/pkg1.tsx",
+    "/src/project/c/ca/node_modules/pkg1.d.ts",
+    "/src/project/c/ca/node_modules/pkg1/index.ts",
+    "/src/project/c/ca/node_modules/pkg1/index.tsx",
+    "/src/project/c/ca/node_modules/pkg1/index.d.ts",
+    "/src/project/c/ca/node_modules/@types/pkg1/package.json",
+    "/src/project/c/ca/node_modules/@types/pkg1.d.ts",
+    "/src/project/c/ca/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/c/node_modules/pkg1/package.json",
+    "/src/project/c/node_modules/pkg1.ts",
+    "/src/project/c/node_modules/pkg1.tsx",
+    "/src/project/c/node_modules/pkg1.d.ts",
+    "/src/project/c/node_modules/pkg1/index.ts",
+    "/src/project/c/node_modules/pkg1/index.tsx",
+    "/src/project/c/node_modules/pkg1/index.d.ts",
+    "/src/project/c/node_modules/@types/pkg1/package.json",
+    "/src/project/c/node_modules/@types/pkg1.d.ts",
+    "/src/project/c/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1/package.json",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1.ts",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1.tsx",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1.d.ts",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1/index.ts",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1/index.tsx",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1/index.d.ts",
+    "/src/project/c/ca/caa/caaa/node_modules/@types/pkg1/package.json",
+    "/src/project/c/ca/caa/caaa/node_modules/@types/pkg1.d.ts",
+    "/src/project/c/ca/caa/caaa/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/c/ca/caa/node_modules/pkg1/package.json",
+    "/src/project/c/ca/caa/node_modules/pkg1.ts",
+    "/src/project/c/ca/caa/node_modules/pkg1.tsx",
+    "/src/project/c/ca/caa/node_modules/pkg1.d.ts",
+    "/src/project/c/ca/caa/node_modules/pkg1/index.ts",
+    "/src/project/c/ca/caa/node_modules/pkg1/index.tsx",
+    "/src/project/c/ca/caa/node_modules/pkg1/index.d.ts",
+    "/src/project/c/ca/caa/node_modules/@types/pkg1/package.json",
+    "/src/project/c/ca/caa/node_modules/@types/pkg1.d.ts",
+    "/src/project/c/ca/caa/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/c/cb/node_modules/pkg1/package.json",
+    "/src/project/c/cb/node_modules/pkg1.ts",
+    "/src/project/c/cb/node_modules/pkg1.tsx",
+    "/src/project/c/cb/node_modules/pkg1.d.ts",
+    "/src/project/c/cb/node_modules/pkg1/index.ts",
+    "/src/project/c/cb/node_modules/pkg1/index.tsx",
+    "/src/project/c/cb/node_modules/pkg1/index.d.ts",
+    "/src/project/c/cb/node_modules/@types/pkg1/package.json",
+    "/src/project/c/cb/node_modules/@types/pkg1.d.ts",
+    "/src/project/c/cb/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1/package.json",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1.ts",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1.tsx",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1.d.ts",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1/index.ts",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1/index.tsx",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1/index.d.ts",
+    "/src/project/d/da/daa/daaa/node_modules/@types/pkg1/package.json",
+    "/src/project/d/da/daa/daaa/node_modules/@types/pkg1.d.ts",
+    "/src/project/d/da/daa/daaa/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/d/da/daa/node_modules/pkg1/package.json",
+    "/src/project/d/da/daa/node_modules/pkg1.ts",
+    "/src/project/d/da/daa/node_modules/pkg1.tsx",
+    "/src/project/d/da/daa/node_modules/pkg1.d.ts",
+    "/src/project/d/da/daa/node_modules/pkg1/index.ts",
+    "/src/project/d/da/daa/node_modules/pkg1/index.tsx",
+    "/src/project/d/da/daa/node_modules/pkg1/index.d.ts",
+    "/src/project/d/da/daa/node_modules/@types/pkg1/package.json",
+    "/src/project/d/da/daa/node_modules/@types/pkg1.d.ts",
+    "/src/project/d/da/daa/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/d/da/node_modules/pkg1/package.json",
+    "/src/project/d/da/node_modules/pkg1.ts",
+    "/src/project/d/da/node_modules/pkg1.tsx",
+    "/src/project/d/da/node_modules/pkg1.d.ts",
+    "/src/project/d/da/node_modules/pkg1/index.ts",
+    "/src/project/d/da/node_modules/pkg1/index.tsx",
+    "/src/project/d/da/node_modules/pkg1/index.d.ts",
+    "/src/project/d/da/node_modules/@types/pkg1/package.json",
+    "/src/project/d/da/node_modules/@types/pkg1.d.ts",
+    "/src/project/d/da/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/d/node_modules/pkg1/package.json",
+    "/src/project/d/node_modules/pkg1.ts",
+    "/src/project/d/node_modules/pkg1.tsx",
+    "/src/project/d/node_modules/pkg1.d.ts",
+    "/src/project/d/node_modules/pkg1/index.ts",
+    "/src/project/d/node_modules/pkg1/index.tsx",
+    "/src/project/d/node_modules/pkg1/index.d.ts",
+    "/src/project/d/node_modules/@types/pkg1/package.json",
+    "/src/project/d/node_modules/@types/pkg1.d.ts",
+    "/src/project/d/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/e/ea/node_modules/pkg1/package.json",
+    "/src/project/e/ea/node_modules/pkg1.ts",
+    "/src/project/e/ea/node_modules/pkg1.tsx",
+    "/src/project/e/ea/node_modules/pkg1.d.ts",
+    "/src/project/e/ea/node_modules/pkg1/index.ts",
+    "/src/project/e/ea/node_modules/pkg1/index.tsx",
+    "/src/project/e/ea/node_modules/pkg1/index.d.ts",
+    "/src/project/e/ea/node_modules/@types/pkg1/package.json",
+    "/src/project/e/ea/node_modules/@types/pkg1.d.ts",
+    "/src/project/e/ea/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/e/node_modules/pkg1/package.json",
+    "/src/project/e/node_modules/pkg1.ts",
+    "/src/project/e/node_modules/pkg1.tsx",
+    "/src/project/e/node_modules/pkg1.d.ts",
+    "/src/project/e/node_modules/pkg1/index.ts",
+    "/src/project/e/node_modules/pkg1/index.tsx",
+    "/src/project/e/node_modules/pkg1/index.d.ts",
+    "/src/project/e/node_modules/@types/pkg1/package.json",
+    "/src/project/e/node_modules/@types/pkg1.d.ts",
+    "/src/project/e/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/e/ea/eaa/node_modules/pkg1/package.json",
+    "/src/project/e/ea/eaa/node_modules/pkg1.ts",
+    "/src/project/e/ea/eaa/node_modules/pkg1.tsx",
+    "/src/project/e/ea/eaa/node_modules/pkg1.d.ts",
+    "/src/project/e/ea/eaa/node_modules/pkg1/index.ts",
+    "/src/project/e/ea/eaa/node_modules/pkg1/index.tsx",
+    "/src/project/e/ea/eaa/node_modules/pkg1/index.d.ts",
+    "/src/project/e/ea/eaa/node_modules/@types/pkg1/package.json",
+    "/src/project/e/ea/eaa/node_modules/@types/pkg1.d.ts",
+    "/src/project/e/ea/eaa/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1/package.json",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1.ts",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1.tsx",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1.d.ts",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1/index.ts",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1/index.tsx",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1/index.d.ts",
+    "/src/project/e/ea/eaa/eaaa/node_modules/@types/pkg1/package.json",
+    "/src/project/e/ea/eaa/eaaa/node_modules/@types/pkg1.d.ts",
+    "/src/project/e/ea/eaa/eaaa/node_modules/@types/pkg1/index.d.ts"
+  ]
 }
 
 File: /src/project/d/da/daa/daaa/x/y/z/randomFileForImport.ts
@@ -912,6 +2508,215 @@ pkg0: {
     "extension": ".d.ts"
   }
 }
+pkg1: {
+  "failedLookupLocations": [
+    "/src/project/node_modules/pkg1/package.json",
+    "/src/project/node_modules/pkg1.ts",
+    "/src/project/node_modules/pkg1.tsx",
+    "/src/project/node_modules/pkg1.d.ts",
+    "/src/project/node_modules/pkg1/index.ts",
+    "/src/project/node_modules/pkg1/index.tsx",
+    "/src/project/node_modules/pkg1/index.d.ts",
+    "/src/project/node_modules/@types/pkg1/package.json",
+    "/src/project/node_modules/@types/pkg1.d.ts",
+    "/src/project/node_modules/@types/pkg1/index.d.ts",
+    "/src/node_modules/pkg1/package.json",
+    "/src/node_modules/pkg1.ts",
+    "/src/node_modules/pkg1.tsx",
+    "/src/node_modules/pkg1.d.ts",
+    "/src/node_modules/pkg1/index.ts",
+    "/src/node_modules/pkg1/index.tsx",
+    "/src/node_modules/pkg1/index.d.ts",
+    "/src/node_modules/@types/pkg1/package.json",
+    "/src/node_modules/@types/pkg1.d.ts",
+    "/src/node_modules/@types/pkg1/index.d.ts",
+    "/node_modules/pkg1/package.json",
+    "/node_modules/pkg1.ts",
+    "/node_modules/pkg1.tsx",
+    "/node_modules/pkg1.d.ts",
+    "/node_modules/pkg1/index.ts",
+    "/node_modules/pkg1/index.tsx",
+    "/node_modules/pkg1/index.d.ts",
+    "/node_modules/@types/pkg1/package.json",
+    "/node_modules/@types/pkg1.d.ts",
+    "/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/node_modules/pkg1/package.json",
+    "/src/project/node_modules/pkg1.js",
+    "/src/project/node_modules/pkg1.jsx",
+    "/src/project/node_modules/pkg1/index.js",
+    "/src/project/node_modules/pkg1/index.jsx",
+    "/src/node_modules/pkg1/package.json",
+    "/src/node_modules/pkg1.js",
+    "/src/node_modules/pkg1.jsx",
+    "/src/node_modules/pkg1/index.js",
+    "/src/node_modules/pkg1/index.jsx",
+    "/node_modules/pkg1/package.json",
+    "/node_modules/pkg1.js",
+    "/node_modules/pkg1.jsx",
+    "/node_modules/pkg1/index.js",
+    "/node_modules/pkg1/index.jsx",
+    "/src/project/a/node_modules/pkg1/package.json",
+    "/src/project/a/node_modules/pkg1.ts",
+    "/src/project/a/node_modules/pkg1.tsx",
+    "/src/project/a/node_modules/pkg1.d.ts",
+    "/src/project/a/node_modules/pkg1/index.ts",
+    "/src/project/a/node_modules/pkg1/index.tsx",
+    "/src/project/a/node_modules/pkg1/index.d.ts",
+    "/src/project/a/node_modules/@types/pkg1/package.json",
+    "/src/project/a/node_modules/@types/pkg1.d.ts",
+    "/src/project/a/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/b/ba/node_modules/pkg1/package.json",
+    "/src/project/b/ba/node_modules/pkg1.ts",
+    "/src/project/b/ba/node_modules/pkg1.tsx",
+    "/src/project/b/ba/node_modules/pkg1.d.ts",
+    "/src/project/b/ba/node_modules/pkg1/index.ts",
+    "/src/project/b/ba/node_modules/pkg1/index.tsx",
+    "/src/project/b/ba/node_modules/pkg1/index.d.ts",
+    "/src/project/b/ba/node_modules/@types/pkg1/package.json",
+    "/src/project/b/ba/node_modules/@types/pkg1.d.ts",
+    "/src/project/b/ba/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/b/node_modules/pkg1/package.json",
+    "/src/project/b/node_modules/pkg1.ts",
+    "/src/project/b/node_modules/pkg1.tsx",
+    "/src/project/b/node_modules/pkg1.d.ts",
+    "/src/project/b/node_modules/pkg1/index.ts",
+    "/src/project/b/node_modules/pkg1/index.tsx",
+    "/src/project/b/node_modules/pkg1/index.d.ts",
+    "/src/project/b/node_modules/@types/pkg1/package.json",
+    "/src/project/b/node_modules/@types/pkg1.d.ts",
+    "/src/project/b/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/c/ca/node_modules/pkg1/package.json",
+    "/src/project/c/ca/node_modules/pkg1.ts",
+    "/src/project/c/ca/node_modules/pkg1.tsx",
+    "/src/project/c/ca/node_modules/pkg1.d.ts",
+    "/src/project/c/ca/node_modules/pkg1/index.ts",
+    "/src/project/c/ca/node_modules/pkg1/index.tsx",
+    "/src/project/c/ca/node_modules/pkg1/index.d.ts",
+    "/src/project/c/ca/node_modules/@types/pkg1/package.json",
+    "/src/project/c/ca/node_modules/@types/pkg1.d.ts",
+    "/src/project/c/ca/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/c/node_modules/pkg1/package.json",
+    "/src/project/c/node_modules/pkg1.ts",
+    "/src/project/c/node_modules/pkg1.tsx",
+    "/src/project/c/node_modules/pkg1.d.ts",
+    "/src/project/c/node_modules/pkg1/index.ts",
+    "/src/project/c/node_modules/pkg1/index.tsx",
+    "/src/project/c/node_modules/pkg1/index.d.ts",
+    "/src/project/c/node_modules/@types/pkg1/package.json",
+    "/src/project/c/node_modules/@types/pkg1.d.ts",
+    "/src/project/c/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1/package.json",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1.ts",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1.tsx",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1.d.ts",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1/index.ts",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1/index.tsx",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1/index.d.ts",
+    "/src/project/c/ca/caa/caaa/node_modules/@types/pkg1/package.json",
+    "/src/project/c/ca/caa/caaa/node_modules/@types/pkg1.d.ts",
+    "/src/project/c/ca/caa/caaa/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/c/ca/caa/node_modules/pkg1/package.json",
+    "/src/project/c/ca/caa/node_modules/pkg1.ts",
+    "/src/project/c/ca/caa/node_modules/pkg1.tsx",
+    "/src/project/c/ca/caa/node_modules/pkg1.d.ts",
+    "/src/project/c/ca/caa/node_modules/pkg1/index.ts",
+    "/src/project/c/ca/caa/node_modules/pkg1/index.tsx",
+    "/src/project/c/ca/caa/node_modules/pkg1/index.d.ts",
+    "/src/project/c/ca/caa/node_modules/@types/pkg1/package.json",
+    "/src/project/c/ca/caa/node_modules/@types/pkg1.d.ts",
+    "/src/project/c/ca/caa/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/c/cb/node_modules/pkg1/package.json",
+    "/src/project/c/cb/node_modules/pkg1.ts",
+    "/src/project/c/cb/node_modules/pkg1.tsx",
+    "/src/project/c/cb/node_modules/pkg1.d.ts",
+    "/src/project/c/cb/node_modules/pkg1/index.ts",
+    "/src/project/c/cb/node_modules/pkg1/index.tsx",
+    "/src/project/c/cb/node_modules/pkg1/index.d.ts",
+    "/src/project/c/cb/node_modules/@types/pkg1/package.json",
+    "/src/project/c/cb/node_modules/@types/pkg1.d.ts",
+    "/src/project/c/cb/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1/package.json",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1.ts",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1.tsx",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1.d.ts",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1/index.ts",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1/index.tsx",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1/index.d.ts",
+    "/src/project/d/da/daa/daaa/node_modules/@types/pkg1/package.json",
+    "/src/project/d/da/daa/daaa/node_modules/@types/pkg1.d.ts",
+    "/src/project/d/da/daa/daaa/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/d/da/daa/node_modules/pkg1/package.json",
+    "/src/project/d/da/daa/node_modules/pkg1.ts",
+    "/src/project/d/da/daa/node_modules/pkg1.tsx",
+    "/src/project/d/da/daa/node_modules/pkg1.d.ts",
+    "/src/project/d/da/daa/node_modules/pkg1/index.ts",
+    "/src/project/d/da/daa/node_modules/pkg1/index.tsx",
+    "/src/project/d/da/daa/node_modules/pkg1/index.d.ts",
+    "/src/project/d/da/daa/node_modules/@types/pkg1/package.json",
+    "/src/project/d/da/daa/node_modules/@types/pkg1.d.ts",
+    "/src/project/d/da/daa/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/d/da/node_modules/pkg1/package.json",
+    "/src/project/d/da/node_modules/pkg1.ts",
+    "/src/project/d/da/node_modules/pkg1.tsx",
+    "/src/project/d/da/node_modules/pkg1.d.ts",
+    "/src/project/d/da/node_modules/pkg1/index.ts",
+    "/src/project/d/da/node_modules/pkg1/index.tsx",
+    "/src/project/d/da/node_modules/pkg1/index.d.ts",
+    "/src/project/d/da/node_modules/@types/pkg1/package.json",
+    "/src/project/d/da/node_modules/@types/pkg1.d.ts",
+    "/src/project/d/da/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/d/node_modules/pkg1/package.json",
+    "/src/project/d/node_modules/pkg1.ts",
+    "/src/project/d/node_modules/pkg1.tsx",
+    "/src/project/d/node_modules/pkg1.d.ts",
+    "/src/project/d/node_modules/pkg1/index.ts",
+    "/src/project/d/node_modules/pkg1/index.tsx",
+    "/src/project/d/node_modules/pkg1/index.d.ts",
+    "/src/project/d/node_modules/@types/pkg1/package.json",
+    "/src/project/d/node_modules/@types/pkg1.d.ts",
+    "/src/project/d/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/e/ea/node_modules/pkg1/package.json",
+    "/src/project/e/ea/node_modules/pkg1.ts",
+    "/src/project/e/ea/node_modules/pkg1.tsx",
+    "/src/project/e/ea/node_modules/pkg1.d.ts",
+    "/src/project/e/ea/node_modules/pkg1/index.ts",
+    "/src/project/e/ea/node_modules/pkg1/index.tsx",
+    "/src/project/e/ea/node_modules/pkg1/index.d.ts",
+    "/src/project/e/ea/node_modules/@types/pkg1/package.json",
+    "/src/project/e/ea/node_modules/@types/pkg1.d.ts",
+    "/src/project/e/ea/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/e/node_modules/pkg1/package.json",
+    "/src/project/e/node_modules/pkg1.ts",
+    "/src/project/e/node_modules/pkg1.tsx",
+    "/src/project/e/node_modules/pkg1.d.ts",
+    "/src/project/e/node_modules/pkg1/index.ts",
+    "/src/project/e/node_modules/pkg1/index.tsx",
+    "/src/project/e/node_modules/pkg1/index.d.ts",
+    "/src/project/e/node_modules/@types/pkg1/package.json",
+    "/src/project/e/node_modules/@types/pkg1.d.ts",
+    "/src/project/e/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/e/ea/eaa/node_modules/pkg1/package.json",
+    "/src/project/e/ea/eaa/node_modules/pkg1.ts",
+    "/src/project/e/ea/eaa/node_modules/pkg1.tsx",
+    "/src/project/e/ea/eaa/node_modules/pkg1.d.ts",
+    "/src/project/e/ea/eaa/node_modules/pkg1/index.ts",
+    "/src/project/e/ea/eaa/node_modules/pkg1/index.tsx",
+    "/src/project/e/ea/eaa/node_modules/pkg1/index.d.ts",
+    "/src/project/e/ea/eaa/node_modules/@types/pkg1/package.json",
+    "/src/project/e/ea/eaa/node_modules/@types/pkg1.d.ts",
+    "/src/project/e/ea/eaa/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1/package.json",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1.ts",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1.tsx",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1.d.ts",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1/index.ts",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1/index.tsx",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1/index.d.ts",
+    "/src/project/e/ea/eaa/eaaa/node_modules/@types/pkg1/package.json",
+    "/src/project/e/ea/eaa/eaaa/node_modules/@types/pkg1.d.ts",
+    "/src/project/e/ea/eaa/eaaa/node_modules/@types/pkg1/index.d.ts"
+  ]
+}
 
 File: /src/project/d/da/daa/fileWithImports.ts
 resolvedModules:
@@ -921,6 +2726,215 @@ pkg0: {
     "isExternalLibraryImport": true,
     "extension": ".d.ts"
   }
+}
+pkg1: {
+  "failedLookupLocations": [
+    "/src/project/node_modules/pkg1/package.json",
+    "/src/project/node_modules/pkg1.ts",
+    "/src/project/node_modules/pkg1.tsx",
+    "/src/project/node_modules/pkg1.d.ts",
+    "/src/project/node_modules/pkg1/index.ts",
+    "/src/project/node_modules/pkg1/index.tsx",
+    "/src/project/node_modules/pkg1/index.d.ts",
+    "/src/project/node_modules/@types/pkg1/package.json",
+    "/src/project/node_modules/@types/pkg1.d.ts",
+    "/src/project/node_modules/@types/pkg1/index.d.ts",
+    "/src/node_modules/pkg1/package.json",
+    "/src/node_modules/pkg1.ts",
+    "/src/node_modules/pkg1.tsx",
+    "/src/node_modules/pkg1.d.ts",
+    "/src/node_modules/pkg1/index.ts",
+    "/src/node_modules/pkg1/index.tsx",
+    "/src/node_modules/pkg1/index.d.ts",
+    "/src/node_modules/@types/pkg1/package.json",
+    "/src/node_modules/@types/pkg1.d.ts",
+    "/src/node_modules/@types/pkg1/index.d.ts",
+    "/node_modules/pkg1/package.json",
+    "/node_modules/pkg1.ts",
+    "/node_modules/pkg1.tsx",
+    "/node_modules/pkg1.d.ts",
+    "/node_modules/pkg1/index.ts",
+    "/node_modules/pkg1/index.tsx",
+    "/node_modules/pkg1/index.d.ts",
+    "/node_modules/@types/pkg1/package.json",
+    "/node_modules/@types/pkg1.d.ts",
+    "/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/node_modules/pkg1/package.json",
+    "/src/project/node_modules/pkg1.js",
+    "/src/project/node_modules/pkg1.jsx",
+    "/src/project/node_modules/pkg1/index.js",
+    "/src/project/node_modules/pkg1/index.jsx",
+    "/src/node_modules/pkg1/package.json",
+    "/src/node_modules/pkg1.js",
+    "/src/node_modules/pkg1.jsx",
+    "/src/node_modules/pkg1/index.js",
+    "/src/node_modules/pkg1/index.jsx",
+    "/node_modules/pkg1/package.json",
+    "/node_modules/pkg1.js",
+    "/node_modules/pkg1.jsx",
+    "/node_modules/pkg1/index.js",
+    "/node_modules/pkg1/index.jsx",
+    "/src/project/a/node_modules/pkg1/package.json",
+    "/src/project/a/node_modules/pkg1.ts",
+    "/src/project/a/node_modules/pkg1.tsx",
+    "/src/project/a/node_modules/pkg1.d.ts",
+    "/src/project/a/node_modules/pkg1/index.ts",
+    "/src/project/a/node_modules/pkg1/index.tsx",
+    "/src/project/a/node_modules/pkg1/index.d.ts",
+    "/src/project/a/node_modules/@types/pkg1/package.json",
+    "/src/project/a/node_modules/@types/pkg1.d.ts",
+    "/src/project/a/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/b/ba/node_modules/pkg1/package.json",
+    "/src/project/b/ba/node_modules/pkg1.ts",
+    "/src/project/b/ba/node_modules/pkg1.tsx",
+    "/src/project/b/ba/node_modules/pkg1.d.ts",
+    "/src/project/b/ba/node_modules/pkg1/index.ts",
+    "/src/project/b/ba/node_modules/pkg1/index.tsx",
+    "/src/project/b/ba/node_modules/pkg1/index.d.ts",
+    "/src/project/b/ba/node_modules/@types/pkg1/package.json",
+    "/src/project/b/ba/node_modules/@types/pkg1.d.ts",
+    "/src/project/b/ba/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/b/node_modules/pkg1/package.json",
+    "/src/project/b/node_modules/pkg1.ts",
+    "/src/project/b/node_modules/pkg1.tsx",
+    "/src/project/b/node_modules/pkg1.d.ts",
+    "/src/project/b/node_modules/pkg1/index.ts",
+    "/src/project/b/node_modules/pkg1/index.tsx",
+    "/src/project/b/node_modules/pkg1/index.d.ts",
+    "/src/project/b/node_modules/@types/pkg1/package.json",
+    "/src/project/b/node_modules/@types/pkg1.d.ts",
+    "/src/project/b/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/c/ca/node_modules/pkg1/package.json",
+    "/src/project/c/ca/node_modules/pkg1.ts",
+    "/src/project/c/ca/node_modules/pkg1.tsx",
+    "/src/project/c/ca/node_modules/pkg1.d.ts",
+    "/src/project/c/ca/node_modules/pkg1/index.ts",
+    "/src/project/c/ca/node_modules/pkg1/index.tsx",
+    "/src/project/c/ca/node_modules/pkg1/index.d.ts",
+    "/src/project/c/ca/node_modules/@types/pkg1/package.json",
+    "/src/project/c/ca/node_modules/@types/pkg1.d.ts",
+    "/src/project/c/ca/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/c/node_modules/pkg1/package.json",
+    "/src/project/c/node_modules/pkg1.ts",
+    "/src/project/c/node_modules/pkg1.tsx",
+    "/src/project/c/node_modules/pkg1.d.ts",
+    "/src/project/c/node_modules/pkg1/index.ts",
+    "/src/project/c/node_modules/pkg1/index.tsx",
+    "/src/project/c/node_modules/pkg1/index.d.ts",
+    "/src/project/c/node_modules/@types/pkg1/package.json",
+    "/src/project/c/node_modules/@types/pkg1.d.ts",
+    "/src/project/c/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1/package.json",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1.ts",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1.tsx",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1.d.ts",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1/index.ts",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1/index.tsx",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1/index.d.ts",
+    "/src/project/c/ca/caa/caaa/node_modules/@types/pkg1/package.json",
+    "/src/project/c/ca/caa/caaa/node_modules/@types/pkg1.d.ts",
+    "/src/project/c/ca/caa/caaa/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/c/ca/caa/node_modules/pkg1/package.json",
+    "/src/project/c/ca/caa/node_modules/pkg1.ts",
+    "/src/project/c/ca/caa/node_modules/pkg1.tsx",
+    "/src/project/c/ca/caa/node_modules/pkg1.d.ts",
+    "/src/project/c/ca/caa/node_modules/pkg1/index.ts",
+    "/src/project/c/ca/caa/node_modules/pkg1/index.tsx",
+    "/src/project/c/ca/caa/node_modules/pkg1/index.d.ts",
+    "/src/project/c/ca/caa/node_modules/@types/pkg1/package.json",
+    "/src/project/c/ca/caa/node_modules/@types/pkg1.d.ts",
+    "/src/project/c/ca/caa/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/c/cb/node_modules/pkg1/package.json",
+    "/src/project/c/cb/node_modules/pkg1.ts",
+    "/src/project/c/cb/node_modules/pkg1.tsx",
+    "/src/project/c/cb/node_modules/pkg1.d.ts",
+    "/src/project/c/cb/node_modules/pkg1/index.ts",
+    "/src/project/c/cb/node_modules/pkg1/index.tsx",
+    "/src/project/c/cb/node_modules/pkg1/index.d.ts",
+    "/src/project/c/cb/node_modules/@types/pkg1/package.json",
+    "/src/project/c/cb/node_modules/@types/pkg1.d.ts",
+    "/src/project/c/cb/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1/package.json",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1.ts",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1.tsx",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1.d.ts",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1/index.ts",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1/index.tsx",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1/index.d.ts",
+    "/src/project/d/da/daa/daaa/node_modules/@types/pkg1/package.json",
+    "/src/project/d/da/daa/daaa/node_modules/@types/pkg1.d.ts",
+    "/src/project/d/da/daa/daaa/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/d/da/daa/node_modules/pkg1/package.json",
+    "/src/project/d/da/daa/node_modules/pkg1.ts",
+    "/src/project/d/da/daa/node_modules/pkg1.tsx",
+    "/src/project/d/da/daa/node_modules/pkg1.d.ts",
+    "/src/project/d/da/daa/node_modules/pkg1/index.ts",
+    "/src/project/d/da/daa/node_modules/pkg1/index.tsx",
+    "/src/project/d/da/daa/node_modules/pkg1/index.d.ts",
+    "/src/project/d/da/daa/node_modules/@types/pkg1/package.json",
+    "/src/project/d/da/daa/node_modules/@types/pkg1.d.ts",
+    "/src/project/d/da/daa/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/d/da/node_modules/pkg1/package.json",
+    "/src/project/d/da/node_modules/pkg1.ts",
+    "/src/project/d/da/node_modules/pkg1.tsx",
+    "/src/project/d/da/node_modules/pkg1.d.ts",
+    "/src/project/d/da/node_modules/pkg1/index.ts",
+    "/src/project/d/da/node_modules/pkg1/index.tsx",
+    "/src/project/d/da/node_modules/pkg1/index.d.ts",
+    "/src/project/d/da/node_modules/@types/pkg1/package.json",
+    "/src/project/d/da/node_modules/@types/pkg1.d.ts",
+    "/src/project/d/da/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/d/node_modules/pkg1/package.json",
+    "/src/project/d/node_modules/pkg1.ts",
+    "/src/project/d/node_modules/pkg1.tsx",
+    "/src/project/d/node_modules/pkg1.d.ts",
+    "/src/project/d/node_modules/pkg1/index.ts",
+    "/src/project/d/node_modules/pkg1/index.tsx",
+    "/src/project/d/node_modules/pkg1/index.d.ts",
+    "/src/project/d/node_modules/@types/pkg1/package.json",
+    "/src/project/d/node_modules/@types/pkg1.d.ts",
+    "/src/project/d/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/e/ea/node_modules/pkg1/package.json",
+    "/src/project/e/ea/node_modules/pkg1.ts",
+    "/src/project/e/ea/node_modules/pkg1.tsx",
+    "/src/project/e/ea/node_modules/pkg1.d.ts",
+    "/src/project/e/ea/node_modules/pkg1/index.ts",
+    "/src/project/e/ea/node_modules/pkg1/index.tsx",
+    "/src/project/e/ea/node_modules/pkg1/index.d.ts",
+    "/src/project/e/ea/node_modules/@types/pkg1/package.json",
+    "/src/project/e/ea/node_modules/@types/pkg1.d.ts",
+    "/src/project/e/ea/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/e/node_modules/pkg1/package.json",
+    "/src/project/e/node_modules/pkg1.ts",
+    "/src/project/e/node_modules/pkg1.tsx",
+    "/src/project/e/node_modules/pkg1.d.ts",
+    "/src/project/e/node_modules/pkg1/index.ts",
+    "/src/project/e/node_modules/pkg1/index.tsx",
+    "/src/project/e/node_modules/pkg1/index.d.ts",
+    "/src/project/e/node_modules/@types/pkg1/package.json",
+    "/src/project/e/node_modules/@types/pkg1.d.ts",
+    "/src/project/e/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/e/ea/eaa/node_modules/pkg1/package.json",
+    "/src/project/e/ea/eaa/node_modules/pkg1.ts",
+    "/src/project/e/ea/eaa/node_modules/pkg1.tsx",
+    "/src/project/e/ea/eaa/node_modules/pkg1.d.ts",
+    "/src/project/e/ea/eaa/node_modules/pkg1/index.ts",
+    "/src/project/e/ea/eaa/node_modules/pkg1/index.tsx",
+    "/src/project/e/ea/eaa/node_modules/pkg1/index.d.ts",
+    "/src/project/e/ea/eaa/node_modules/@types/pkg1/package.json",
+    "/src/project/e/ea/eaa/node_modules/@types/pkg1.d.ts",
+    "/src/project/e/ea/eaa/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1/package.json",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1.ts",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1.tsx",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1.d.ts",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1/index.ts",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1/index.tsx",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1/index.d.ts",
+    "/src/project/e/ea/eaa/eaaa/node_modules/@types/pkg1/package.json",
+    "/src/project/e/ea/eaa/eaaa/node_modules/@types/pkg1.d.ts",
+    "/src/project/e/ea/eaa/eaaa/node_modules/@types/pkg1/index.d.ts"
+  ]
 }
 
 File: /src/project/d/da/fileWithImports.ts
@@ -932,6 +2946,215 @@ pkg0: {
     "extension": ".d.ts"
   }
 }
+pkg1: {
+  "failedLookupLocations": [
+    "/src/project/node_modules/pkg1/package.json",
+    "/src/project/node_modules/pkg1.ts",
+    "/src/project/node_modules/pkg1.tsx",
+    "/src/project/node_modules/pkg1.d.ts",
+    "/src/project/node_modules/pkg1/index.ts",
+    "/src/project/node_modules/pkg1/index.tsx",
+    "/src/project/node_modules/pkg1/index.d.ts",
+    "/src/project/node_modules/@types/pkg1/package.json",
+    "/src/project/node_modules/@types/pkg1.d.ts",
+    "/src/project/node_modules/@types/pkg1/index.d.ts",
+    "/src/node_modules/pkg1/package.json",
+    "/src/node_modules/pkg1.ts",
+    "/src/node_modules/pkg1.tsx",
+    "/src/node_modules/pkg1.d.ts",
+    "/src/node_modules/pkg1/index.ts",
+    "/src/node_modules/pkg1/index.tsx",
+    "/src/node_modules/pkg1/index.d.ts",
+    "/src/node_modules/@types/pkg1/package.json",
+    "/src/node_modules/@types/pkg1.d.ts",
+    "/src/node_modules/@types/pkg1/index.d.ts",
+    "/node_modules/pkg1/package.json",
+    "/node_modules/pkg1.ts",
+    "/node_modules/pkg1.tsx",
+    "/node_modules/pkg1.d.ts",
+    "/node_modules/pkg1/index.ts",
+    "/node_modules/pkg1/index.tsx",
+    "/node_modules/pkg1/index.d.ts",
+    "/node_modules/@types/pkg1/package.json",
+    "/node_modules/@types/pkg1.d.ts",
+    "/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/node_modules/pkg1/package.json",
+    "/src/project/node_modules/pkg1.js",
+    "/src/project/node_modules/pkg1.jsx",
+    "/src/project/node_modules/pkg1/index.js",
+    "/src/project/node_modules/pkg1/index.jsx",
+    "/src/node_modules/pkg1/package.json",
+    "/src/node_modules/pkg1.js",
+    "/src/node_modules/pkg1.jsx",
+    "/src/node_modules/pkg1/index.js",
+    "/src/node_modules/pkg1/index.jsx",
+    "/node_modules/pkg1/package.json",
+    "/node_modules/pkg1.js",
+    "/node_modules/pkg1.jsx",
+    "/node_modules/pkg1/index.js",
+    "/node_modules/pkg1/index.jsx",
+    "/src/project/a/node_modules/pkg1/package.json",
+    "/src/project/a/node_modules/pkg1.ts",
+    "/src/project/a/node_modules/pkg1.tsx",
+    "/src/project/a/node_modules/pkg1.d.ts",
+    "/src/project/a/node_modules/pkg1/index.ts",
+    "/src/project/a/node_modules/pkg1/index.tsx",
+    "/src/project/a/node_modules/pkg1/index.d.ts",
+    "/src/project/a/node_modules/@types/pkg1/package.json",
+    "/src/project/a/node_modules/@types/pkg1.d.ts",
+    "/src/project/a/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/b/ba/node_modules/pkg1/package.json",
+    "/src/project/b/ba/node_modules/pkg1.ts",
+    "/src/project/b/ba/node_modules/pkg1.tsx",
+    "/src/project/b/ba/node_modules/pkg1.d.ts",
+    "/src/project/b/ba/node_modules/pkg1/index.ts",
+    "/src/project/b/ba/node_modules/pkg1/index.tsx",
+    "/src/project/b/ba/node_modules/pkg1/index.d.ts",
+    "/src/project/b/ba/node_modules/@types/pkg1/package.json",
+    "/src/project/b/ba/node_modules/@types/pkg1.d.ts",
+    "/src/project/b/ba/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/b/node_modules/pkg1/package.json",
+    "/src/project/b/node_modules/pkg1.ts",
+    "/src/project/b/node_modules/pkg1.tsx",
+    "/src/project/b/node_modules/pkg1.d.ts",
+    "/src/project/b/node_modules/pkg1/index.ts",
+    "/src/project/b/node_modules/pkg1/index.tsx",
+    "/src/project/b/node_modules/pkg1/index.d.ts",
+    "/src/project/b/node_modules/@types/pkg1/package.json",
+    "/src/project/b/node_modules/@types/pkg1.d.ts",
+    "/src/project/b/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/c/ca/node_modules/pkg1/package.json",
+    "/src/project/c/ca/node_modules/pkg1.ts",
+    "/src/project/c/ca/node_modules/pkg1.tsx",
+    "/src/project/c/ca/node_modules/pkg1.d.ts",
+    "/src/project/c/ca/node_modules/pkg1/index.ts",
+    "/src/project/c/ca/node_modules/pkg1/index.tsx",
+    "/src/project/c/ca/node_modules/pkg1/index.d.ts",
+    "/src/project/c/ca/node_modules/@types/pkg1/package.json",
+    "/src/project/c/ca/node_modules/@types/pkg1.d.ts",
+    "/src/project/c/ca/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/c/node_modules/pkg1/package.json",
+    "/src/project/c/node_modules/pkg1.ts",
+    "/src/project/c/node_modules/pkg1.tsx",
+    "/src/project/c/node_modules/pkg1.d.ts",
+    "/src/project/c/node_modules/pkg1/index.ts",
+    "/src/project/c/node_modules/pkg1/index.tsx",
+    "/src/project/c/node_modules/pkg1/index.d.ts",
+    "/src/project/c/node_modules/@types/pkg1/package.json",
+    "/src/project/c/node_modules/@types/pkg1.d.ts",
+    "/src/project/c/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1/package.json",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1.ts",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1.tsx",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1.d.ts",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1/index.ts",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1/index.tsx",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1/index.d.ts",
+    "/src/project/c/ca/caa/caaa/node_modules/@types/pkg1/package.json",
+    "/src/project/c/ca/caa/caaa/node_modules/@types/pkg1.d.ts",
+    "/src/project/c/ca/caa/caaa/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/c/ca/caa/node_modules/pkg1/package.json",
+    "/src/project/c/ca/caa/node_modules/pkg1.ts",
+    "/src/project/c/ca/caa/node_modules/pkg1.tsx",
+    "/src/project/c/ca/caa/node_modules/pkg1.d.ts",
+    "/src/project/c/ca/caa/node_modules/pkg1/index.ts",
+    "/src/project/c/ca/caa/node_modules/pkg1/index.tsx",
+    "/src/project/c/ca/caa/node_modules/pkg1/index.d.ts",
+    "/src/project/c/ca/caa/node_modules/@types/pkg1/package.json",
+    "/src/project/c/ca/caa/node_modules/@types/pkg1.d.ts",
+    "/src/project/c/ca/caa/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/c/cb/node_modules/pkg1/package.json",
+    "/src/project/c/cb/node_modules/pkg1.ts",
+    "/src/project/c/cb/node_modules/pkg1.tsx",
+    "/src/project/c/cb/node_modules/pkg1.d.ts",
+    "/src/project/c/cb/node_modules/pkg1/index.ts",
+    "/src/project/c/cb/node_modules/pkg1/index.tsx",
+    "/src/project/c/cb/node_modules/pkg1/index.d.ts",
+    "/src/project/c/cb/node_modules/@types/pkg1/package.json",
+    "/src/project/c/cb/node_modules/@types/pkg1.d.ts",
+    "/src/project/c/cb/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1/package.json",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1.ts",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1.tsx",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1.d.ts",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1/index.ts",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1/index.tsx",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1/index.d.ts",
+    "/src/project/d/da/daa/daaa/node_modules/@types/pkg1/package.json",
+    "/src/project/d/da/daa/daaa/node_modules/@types/pkg1.d.ts",
+    "/src/project/d/da/daa/daaa/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/d/da/daa/node_modules/pkg1/package.json",
+    "/src/project/d/da/daa/node_modules/pkg1.ts",
+    "/src/project/d/da/daa/node_modules/pkg1.tsx",
+    "/src/project/d/da/daa/node_modules/pkg1.d.ts",
+    "/src/project/d/da/daa/node_modules/pkg1/index.ts",
+    "/src/project/d/da/daa/node_modules/pkg1/index.tsx",
+    "/src/project/d/da/daa/node_modules/pkg1/index.d.ts",
+    "/src/project/d/da/daa/node_modules/@types/pkg1/package.json",
+    "/src/project/d/da/daa/node_modules/@types/pkg1.d.ts",
+    "/src/project/d/da/daa/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/d/da/node_modules/pkg1/package.json",
+    "/src/project/d/da/node_modules/pkg1.ts",
+    "/src/project/d/da/node_modules/pkg1.tsx",
+    "/src/project/d/da/node_modules/pkg1.d.ts",
+    "/src/project/d/da/node_modules/pkg1/index.ts",
+    "/src/project/d/da/node_modules/pkg1/index.tsx",
+    "/src/project/d/da/node_modules/pkg1/index.d.ts",
+    "/src/project/d/da/node_modules/@types/pkg1/package.json",
+    "/src/project/d/da/node_modules/@types/pkg1.d.ts",
+    "/src/project/d/da/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/d/node_modules/pkg1/package.json",
+    "/src/project/d/node_modules/pkg1.ts",
+    "/src/project/d/node_modules/pkg1.tsx",
+    "/src/project/d/node_modules/pkg1.d.ts",
+    "/src/project/d/node_modules/pkg1/index.ts",
+    "/src/project/d/node_modules/pkg1/index.tsx",
+    "/src/project/d/node_modules/pkg1/index.d.ts",
+    "/src/project/d/node_modules/@types/pkg1/package.json",
+    "/src/project/d/node_modules/@types/pkg1.d.ts",
+    "/src/project/d/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/e/ea/node_modules/pkg1/package.json",
+    "/src/project/e/ea/node_modules/pkg1.ts",
+    "/src/project/e/ea/node_modules/pkg1.tsx",
+    "/src/project/e/ea/node_modules/pkg1.d.ts",
+    "/src/project/e/ea/node_modules/pkg1/index.ts",
+    "/src/project/e/ea/node_modules/pkg1/index.tsx",
+    "/src/project/e/ea/node_modules/pkg1/index.d.ts",
+    "/src/project/e/ea/node_modules/@types/pkg1/package.json",
+    "/src/project/e/ea/node_modules/@types/pkg1.d.ts",
+    "/src/project/e/ea/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/e/node_modules/pkg1/package.json",
+    "/src/project/e/node_modules/pkg1.ts",
+    "/src/project/e/node_modules/pkg1.tsx",
+    "/src/project/e/node_modules/pkg1.d.ts",
+    "/src/project/e/node_modules/pkg1/index.ts",
+    "/src/project/e/node_modules/pkg1/index.tsx",
+    "/src/project/e/node_modules/pkg1/index.d.ts",
+    "/src/project/e/node_modules/@types/pkg1/package.json",
+    "/src/project/e/node_modules/@types/pkg1.d.ts",
+    "/src/project/e/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/e/ea/eaa/node_modules/pkg1/package.json",
+    "/src/project/e/ea/eaa/node_modules/pkg1.ts",
+    "/src/project/e/ea/eaa/node_modules/pkg1.tsx",
+    "/src/project/e/ea/eaa/node_modules/pkg1.d.ts",
+    "/src/project/e/ea/eaa/node_modules/pkg1/index.ts",
+    "/src/project/e/ea/eaa/node_modules/pkg1/index.tsx",
+    "/src/project/e/ea/eaa/node_modules/pkg1/index.d.ts",
+    "/src/project/e/ea/eaa/node_modules/@types/pkg1/package.json",
+    "/src/project/e/ea/eaa/node_modules/@types/pkg1.d.ts",
+    "/src/project/e/ea/eaa/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1/package.json",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1.ts",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1.tsx",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1.d.ts",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1/index.ts",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1/index.tsx",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1/index.d.ts",
+    "/src/project/e/ea/eaa/eaaa/node_modules/@types/pkg1/package.json",
+    "/src/project/e/ea/eaa/eaaa/node_modules/@types/pkg1.d.ts",
+    "/src/project/e/ea/eaa/eaaa/node_modules/@types/pkg1/index.d.ts"
+  ]
+}
 
 File: /src/project/e/ea/fileWithImports.ts
 resolvedModules:
@@ -941,6 +3164,215 @@ pkg0: {
     "isExternalLibraryImport": true,
     "extension": ".d.ts"
   }
+}
+pkg1: {
+  "failedLookupLocations": [
+    "/src/project/node_modules/pkg1/package.json",
+    "/src/project/node_modules/pkg1.ts",
+    "/src/project/node_modules/pkg1.tsx",
+    "/src/project/node_modules/pkg1.d.ts",
+    "/src/project/node_modules/pkg1/index.ts",
+    "/src/project/node_modules/pkg1/index.tsx",
+    "/src/project/node_modules/pkg1/index.d.ts",
+    "/src/project/node_modules/@types/pkg1/package.json",
+    "/src/project/node_modules/@types/pkg1.d.ts",
+    "/src/project/node_modules/@types/pkg1/index.d.ts",
+    "/src/node_modules/pkg1/package.json",
+    "/src/node_modules/pkg1.ts",
+    "/src/node_modules/pkg1.tsx",
+    "/src/node_modules/pkg1.d.ts",
+    "/src/node_modules/pkg1/index.ts",
+    "/src/node_modules/pkg1/index.tsx",
+    "/src/node_modules/pkg1/index.d.ts",
+    "/src/node_modules/@types/pkg1/package.json",
+    "/src/node_modules/@types/pkg1.d.ts",
+    "/src/node_modules/@types/pkg1/index.d.ts",
+    "/node_modules/pkg1/package.json",
+    "/node_modules/pkg1.ts",
+    "/node_modules/pkg1.tsx",
+    "/node_modules/pkg1.d.ts",
+    "/node_modules/pkg1/index.ts",
+    "/node_modules/pkg1/index.tsx",
+    "/node_modules/pkg1/index.d.ts",
+    "/node_modules/@types/pkg1/package.json",
+    "/node_modules/@types/pkg1.d.ts",
+    "/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/node_modules/pkg1/package.json",
+    "/src/project/node_modules/pkg1.js",
+    "/src/project/node_modules/pkg1.jsx",
+    "/src/project/node_modules/pkg1/index.js",
+    "/src/project/node_modules/pkg1/index.jsx",
+    "/src/node_modules/pkg1/package.json",
+    "/src/node_modules/pkg1.js",
+    "/src/node_modules/pkg1.jsx",
+    "/src/node_modules/pkg1/index.js",
+    "/src/node_modules/pkg1/index.jsx",
+    "/node_modules/pkg1/package.json",
+    "/node_modules/pkg1.js",
+    "/node_modules/pkg1.jsx",
+    "/node_modules/pkg1/index.js",
+    "/node_modules/pkg1/index.jsx",
+    "/src/project/a/node_modules/pkg1/package.json",
+    "/src/project/a/node_modules/pkg1.ts",
+    "/src/project/a/node_modules/pkg1.tsx",
+    "/src/project/a/node_modules/pkg1.d.ts",
+    "/src/project/a/node_modules/pkg1/index.ts",
+    "/src/project/a/node_modules/pkg1/index.tsx",
+    "/src/project/a/node_modules/pkg1/index.d.ts",
+    "/src/project/a/node_modules/@types/pkg1/package.json",
+    "/src/project/a/node_modules/@types/pkg1.d.ts",
+    "/src/project/a/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/b/ba/node_modules/pkg1/package.json",
+    "/src/project/b/ba/node_modules/pkg1.ts",
+    "/src/project/b/ba/node_modules/pkg1.tsx",
+    "/src/project/b/ba/node_modules/pkg1.d.ts",
+    "/src/project/b/ba/node_modules/pkg1/index.ts",
+    "/src/project/b/ba/node_modules/pkg1/index.tsx",
+    "/src/project/b/ba/node_modules/pkg1/index.d.ts",
+    "/src/project/b/ba/node_modules/@types/pkg1/package.json",
+    "/src/project/b/ba/node_modules/@types/pkg1.d.ts",
+    "/src/project/b/ba/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/b/node_modules/pkg1/package.json",
+    "/src/project/b/node_modules/pkg1.ts",
+    "/src/project/b/node_modules/pkg1.tsx",
+    "/src/project/b/node_modules/pkg1.d.ts",
+    "/src/project/b/node_modules/pkg1/index.ts",
+    "/src/project/b/node_modules/pkg1/index.tsx",
+    "/src/project/b/node_modules/pkg1/index.d.ts",
+    "/src/project/b/node_modules/@types/pkg1/package.json",
+    "/src/project/b/node_modules/@types/pkg1.d.ts",
+    "/src/project/b/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/c/ca/node_modules/pkg1/package.json",
+    "/src/project/c/ca/node_modules/pkg1.ts",
+    "/src/project/c/ca/node_modules/pkg1.tsx",
+    "/src/project/c/ca/node_modules/pkg1.d.ts",
+    "/src/project/c/ca/node_modules/pkg1/index.ts",
+    "/src/project/c/ca/node_modules/pkg1/index.tsx",
+    "/src/project/c/ca/node_modules/pkg1/index.d.ts",
+    "/src/project/c/ca/node_modules/@types/pkg1/package.json",
+    "/src/project/c/ca/node_modules/@types/pkg1.d.ts",
+    "/src/project/c/ca/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/c/node_modules/pkg1/package.json",
+    "/src/project/c/node_modules/pkg1.ts",
+    "/src/project/c/node_modules/pkg1.tsx",
+    "/src/project/c/node_modules/pkg1.d.ts",
+    "/src/project/c/node_modules/pkg1/index.ts",
+    "/src/project/c/node_modules/pkg1/index.tsx",
+    "/src/project/c/node_modules/pkg1/index.d.ts",
+    "/src/project/c/node_modules/@types/pkg1/package.json",
+    "/src/project/c/node_modules/@types/pkg1.d.ts",
+    "/src/project/c/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1/package.json",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1.ts",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1.tsx",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1.d.ts",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1/index.ts",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1/index.tsx",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1/index.d.ts",
+    "/src/project/c/ca/caa/caaa/node_modules/@types/pkg1/package.json",
+    "/src/project/c/ca/caa/caaa/node_modules/@types/pkg1.d.ts",
+    "/src/project/c/ca/caa/caaa/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/c/ca/caa/node_modules/pkg1/package.json",
+    "/src/project/c/ca/caa/node_modules/pkg1.ts",
+    "/src/project/c/ca/caa/node_modules/pkg1.tsx",
+    "/src/project/c/ca/caa/node_modules/pkg1.d.ts",
+    "/src/project/c/ca/caa/node_modules/pkg1/index.ts",
+    "/src/project/c/ca/caa/node_modules/pkg1/index.tsx",
+    "/src/project/c/ca/caa/node_modules/pkg1/index.d.ts",
+    "/src/project/c/ca/caa/node_modules/@types/pkg1/package.json",
+    "/src/project/c/ca/caa/node_modules/@types/pkg1.d.ts",
+    "/src/project/c/ca/caa/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/c/cb/node_modules/pkg1/package.json",
+    "/src/project/c/cb/node_modules/pkg1.ts",
+    "/src/project/c/cb/node_modules/pkg1.tsx",
+    "/src/project/c/cb/node_modules/pkg1.d.ts",
+    "/src/project/c/cb/node_modules/pkg1/index.ts",
+    "/src/project/c/cb/node_modules/pkg1/index.tsx",
+    "/src/project/c/cb/node_modules/pkg1/index.d.ts",
+    "/src/project/c/cb/node_modules/@types/pkg1/package.json",
+    "/src/project/c/cb/node_modules/@types/pkg1.d.ts",
+    "/src/project/c/cb/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1/package.json",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1.ts",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1.tsx",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1.d.ts",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1/index.ts",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1/index.tsx",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1/index.d.ts",
+    "/src/project/d/da/daa/daaa/node_modules/@types/pkg1/package.json",
+    "/src/project/d/da/daa/daaa/node_modules/@types/pkg1.d.ts",
+    "/src/project/d/da/daa/daaa/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/d/da/daa/node_modules/pkg1/package.json",
+    "/src/project/d/da/daa/node_modules/pkg1.ts",
+    "/src/project/d/da/daa/node_modules/pkg1.tsx",
+    "/src/project/d/da/daa/node_modules/pkg1.d.ts",
+    "/src/project/d/da/daa/node_modules/pkg1/index.ts",
+    "/src/project/d/da/daa/node_modules/pkg1/index.tsx",
+    "/src/project/d/da/daa/node_modules/pkg1/index.d.ts",
+    "/src/project/d/da/daa/node_modules/@types/pkg1/package.json",
+    "/src/project/d/da/daa/node_modules/@types/pkg1.d.ts",
+    "/src/project/d/da/daa/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/d/da/node_modules/pkg1/package.json",
+    "/src/project/d/da/node_modules/pkg1.ts",
+    "/src/project/d/da/node_modules/pkg1.tsx",
+    "/src/project/d/da/node_modules/pkg1.d.ts",
+    "/src/project/d/da/node_modules/pkg1/index.ts",
+    "/src/project/d/da/node_modules/pkg1/index.tsx",
+    "/src/project/d/da/node_modules/pkg1/index.d.ts",
+    "/src/project/d/da/node_modules/@types/pkg1/package.json",
+    "/src/project/d/da/node_modules/@types/pkg1.d.ts",
+    "/src/project/d/da/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/d/node_modules/pkg1/package.json",
+    "/src/project/d/node_modules/pkg1.ts",
+    "/src/project/d/node_modules/pkg1.tsx",
+    "/src/project/d/node_modules/pkg1.d.ts",
+    "/src/project/d/node_modules/pkg1/index.ts",
+    "/src/project/d/node_modules/pkg1/index.tsx",
+    "/src/project/d/node_modules/pkg1/index.d.ts",
+    "/src/project/d/node_modules/@types/pkg1/package.json",
+    "/src/project/d/node_modules/@types/pkg1.d.ts",
+    "/src/project/d/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/e/ea/node_modules/pkg1/package.json",
+    "/src/project/e/ea/node_modules/pkg1.ts",
+    "/src/project/e/ea/node_modules/pkg1.tsx",
+    "/src/project/e/ea/node_modules/pkg1.d.ts",
+    "/src/project/e/ea/node_modules/pkg1/index.ts",
+    "/src/project/e/ea/node_modules/pkg1/index.tsx",
+    "/src/project/e/ea/node_modules/pkg1/index.d.ts",
+    "/src/project/e/ea/node_modules/@types/pkg1/package.json",
+    "/src/project/e/ea/node_modules/@types/pkg1.d.ts",
+    "/src/project/e/ea/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/e/node_modules/pkg1/package.json",
+    "/src/project/e/node_modules/pkg1.ts",
+    "/src/project/e/node_modules/pkg1.tsx",
+    "/src/project/e/node_modules/pkg1.d.ts",
+    "/src/project/e/node_modules/pkg1/index.ts",
+    "/src/project/e/node_modules/pkg1/index.tsx",
+    "/src/project/e/node_modules/pkg1/index.d.ts",
+    "/src/project/e/node_modules/@types/pkg1/package.json",
+    "/src/project/e/node_modules/@types/pkg1.d.ts",
+    "/src/project/e/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/e/ea/eaa/node_modules/pkg1/package.json",
+    "/src/project/e/ea/eaa/node_modules/pkg1.ts",
+    "/src/project/e/ea/eaa/node_modules/pkg1.tsx",
+    "/src/project/e/ea/eaa/node_modules/pkg1.d.ts",
+    "/src/project/e/ea/eaa/node_modules/pkg1/index.ts",
+    "/src/project/e/ea/eaa/node_modules/pkg1/index.tsx",
+    "/src/project/e/ea/eaa/node_modules/pkg1/index.d.ts",
+    "/src/project/e/ea/eaa/node_modules/@types/pkg1/package.json",
+    "/src/project/e/ea/eaa/node_modules/@types/pkg1.d.ts",
+    "/src/project/e/ea/eaa/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1/package.json",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1.ts",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1.tsx",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1.d.ts",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1/index.ts",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1/index.tsx",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1/index.d.ts",
+    "/src/project/e/ea/eaa/eaaa/node_modules/@types/pkg1/package.json",
+    "/src/project/e/ea/eaa/eaaa/node_modules/@types/pkg1.d.ts",
+    "/src/project/e/ea/eaa/eaaa/node_modules/@types/pkg1/index.d.ts"
+  ]
 }
 
 File: /src/project/e/ea/eaa/fileWithImports.ts
@@ -952,6 +3384,215 @@ pkg0: {
     "extension": ".d.ts"
   }
 }
+pkg1: {
+  "failedLookupLocations": [
+    "/src/project/node_modules/pkg1/package.json",
+    "/src/project/node_modules/pkg1.ts",
+    "/src/project/node_modules/pkg1.tsx",
+    "/src/project/node_modules/pkg1.d.ts",
+    "/src/project/node_modules/pkg1/index.ts",
+    "/src/project/node_modules/pkg1/index.tsx",
+    "/src/project/node_modules/pkg1/index.d.ts",
+    "/src/project/node_modules/@types/pkg1/package.json",
+    "/src/project/node_modules/@types/pkg1.d.ts",
+    "/src/project/node_modules/@types/pkg1/index.d.ts",
+    "/src/node_modules/pkg1/package.json",
+    "/src/node_modules/pkg1.ts",
+    "/src/node_modules/pkg1.tsx",
+    "/src/node_modules/pkg1.d.ts",
+    "/src/node_modules/pkg1/index.ts",
+    "/src/node_modules/pkg1/index.tsx",
+    "/src/node_modules/pkg1/index.d.ts",
+    "/src/node_modules/@types/pkg1/package.json",
+    "/src/node_modules/@types/pkg1.d.ts",
+    "/src/node_modules/@types/pkg1/index.d.ts",
+    "/node_modules/pkg1/package.json",
+    "/node_modules/pkg1.ts",
+    "/node_modules/pkg1.tsx",
+    "/node_modules/pkg1.d.ts",
+    "/node_modules/pkg1/index.ts",
+    "/node_modules/pkg1/index.tsx",
+    "/node_modules/pkg1/index.d.ts",
+    "/node_modules/@types/pkg1/package.json",
+    "/node_modules/@types/pkg1.d.ts",
+    "/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/node_modules/pkg1/package.json",
+    "/src/project/node_modules/pkg1.js",
+    "/src/project/node_modules/pkg1.jsx",
+    "/src/project/node_modules/pkg1/index.js",
+    "/src/project/node_modules/pkg1/index.jsx",
+    "/src/node_modules/pkg1/package.json",
+    "/src/node_modules/pkg1.js",
+    "/src/node_modules/pkg1.jsx",
+    "/src/node_modules/pkg1/index.js",
+    "/src/node_modules/pkg1/index.jsx",
+    "/node_modules/pkg1/package.json",
+    "/node_modules/pkg1.js",
+    "/node_modules/pkg1.jsx",
+    "/node_modules/pkg1/index.js",
+    "/node_modules/pkg1/index.jsx",
+    "/src/project/a/node_modules/pkg1/package.json",
+    "/src/project/a/node_modules/pkg1.ts",
+    "/src/project/a/node_modules/pkg1.tsx",
+    "/src/project/a/node_modules/pkg1.d.ts",
+    "/src/project/a/node_modules/pkg1/index.ts",
+    "/src/project/a/node_modules/pkg1/index.tsx",
+    "/src/project/a/node_modules/pkg1/index.d.ts",
+    "/src/project/a/node_modules/@types/pkg1/package.json",
+    "/src/project/a/node_modules/@types/pkg1.d.ts",
+    "/src/project/a/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/b/ba/node_modules/pkg1/package.json",
+    "/src/project/b/ba/node_modules/pkg1.ts",
+    "/src/project/b/ba/node_modules/pkg1.tsx",
+    "/src/project/b/ba/node_modules/pkg1.d.ts",
+    "/src/project/b/ba/node_modules/pkg1/index.ts",
+    "/src/project/b/ba/node_modules/pkg1/index.tsx",
+    "/src/project/b/ba/node_modules/pkg1/index.d.ts",
+    "/src/project/b/ba/node_modules/@types/pkg1/package.json",
+    "/src/project/b/ba/node_modules/@types/pkg1.d.ts",
+    "/src/project/b/ba/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/b/node_modules/pkg1/package.json",
+    "/src/project/b/node_modules/pkg1.ts",
+    "/src/project/b/node_modules/pkg1.tsx",
+    "/src/project/b/node_modules/pkg1.d.ts",
+    "/src/project/b/node_modules/pkg1/index.ts",
+    "/src/project/b/node_modules/pkg1/index.tsx",
+    "/src/project/b/node_modules/pkg1/index.d.ts",
+    "/src/project/b/node_modules/@types/pkg1/package.json",
+    "/src/project/b/node_modules/@types/pkg1.d.ts",
+    "/src/project/b/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/c/ca/node_modules/pkg1/package.json",
+    "/src/project/c/ca/node_modules/pkg1.ts",
+    "/src/project/c/ca/node_modules/pkg1.tsx",
+    "/src/project/c/ca/node_modules/pkg1.d.ts",
+    "/src/project/c/ca/node_modules/pkg1/index.ts",
+    "/src/project/c/ca/node_modules/pkg1/index.tsx",
+    "/src/project/c/ca/node_modules/pkg1/index.d.ts",
+    "/src/project/c/ca/node_modules/@types/pkg1/package.json",
+    "/src/project/c/ca/node_modules/@types/pkg1.d.ts",
+    "/src/project/c/ca/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/c/node_modules/pkg1/package.json",
+    "/src/project/c/node_modules/pkg1.ts",
+    "/src/project/c/node_modules/pkg1.tsx",
+    "/src/project/c/node_modules/pkg1.d.ts",
+    "/src/project/c/node_modules/pkg1/index.ts",
+    "/src/project/c/node_modules/pkg1/index.tsx",
+    "/src/project/c/node_modules/pkg1/index.d.ts",
+    "/src/project/c/node_modules/@types/pkg1/package.json",
+    "/src/project/c/node_modules/@types/pkg1.d.ts",
+    "/src/project/c/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1/package.json",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1.ts",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1.tsx",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1.d.ts",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1/index.ts",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1/index.tsx",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1/index.d.ts",
+    "/src/project/c/ca/caa/caaa/node_modules/@types/pkg1/package.json",
+    "/src/project/c/ca/caa/caaa/node_modules/@types/pkg1.d.ts",
+    "/src/project/c/ca/caa/caaa/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/c/ca/caa/node_modules/pkg1/package.json",
+    "/src/project/c/ca/caa/node_modules/pkg1.ts",
+    "/src/project/c/ca/caa/node_modules/pkg1.tsx",
+    "/src/project/c/ca/caa/node_modules/pkg1.d.ts",
+    "/src/project/c/ca/caa/node_modules/pkg1/index.ts",
+    "/src/project/c/ca/caa/node_modules/pkg1/index.tsx",
+    "/src/project/c/ca/caa/node_modules/pkg1/index.d.ts",
+    "/src/project/c/ca/caa/node_modules/@types/pkg1/package.json",
+    "/src/project/c/ca/caa/node_modules/@types/pkg1.d.ts",
+    "/src/project/c/ca/caa/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/c/cb/node_modules/pkg1/package.json",
+    "/src/project/c/cb/node_modules/pkg1.ts",
+    "/src/project/c/cb/node_modules/pkg1.tsx",
+    "/src/project/c/cb/node_modules/pkg1.d.ts",
+    "/src/project/c/cb/node_modules/pkg1/index.ts",
+    "/src/project/c/cb/node_modules/pkg1/index.tsx",
+    "/src/project/c/cb/node_modules/pkg1/index.d.ts",
+    "/src/project/c/cb/node_modules/@types/pkg1/package.json",
+    "/src/project/c/cb/node_modules/@types/pkg1.d.ts",
+    "/src/project/c/cb/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1/package.json",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1.ts",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1.tsx",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1.d.ts",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1/index.ts",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1/index.tsx",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1/index.d.ts",
+    "/src/project/d/da/daa/daaa/node_modules/@types/pkg1/package.json",
+    "/src/project/d/da/daa/daaa/node_modules/@types/pkg1.d.ts",
+    "/src/project/d/da/daa/daaa/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/d/da/daa/node_modules/pkg1/package.json",
+    "/src/project/d/da/daa/node_modules/pkg1.ts",
+    "/src/project/d/da/daa/node_modules/pkg1.tsx",
+    "/src/project/d/da/daa/node_modules/pkg1.d.ts",
+    "/src/project/d/da/daa/node_modules/pkg1/index.ts",
+    "/src/project/d/da/daa/node_modules/pkg1/index.tsx",
+    "/src/project/d/da/daa/node_modules/pkg1/index.d.ts",
+    "/src/project/d/da/daa/node_modules/@types/pkg1/package.json",
+    "/src/project/d/da/daa/node_modules/@types/pkg1.d.ts",
+    "/src/project/d/da/daa/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/d/da/node_modules/pkg1/package.json",
+    "/src/project/d/da/node_modules/pkg1.ts",
+    "/src/project/d/da/node_modules/pkg1.tsx",
+    "/src/project/d/da/node_modules/pkg1.d.ts",
+    "/src/project/d/da/node_modules/pkg1/index.ts",
+    "/src/project/d/da/node_modules/pkg1/index.tsx",
+    "/src/project/d/da/node_modules/pkg1/index.d.ts",
+    "/src/project/d/da/node_modules/@types/pkg1/package.json",
+    "/src/project/d/da/node_modules/@types/pkg1.d.ts",
+    "/src/project/d/da/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/d/node_modules/pkg1/package.json",
+    "/src/project/d/node_modules/pkg1.ts",
+    "/src/project/d/node_modules/pkg1.tsx",
+    "/src/project/d/node_modules/pkg1.d.ts",
+    "/src/project/d/node_modules/pkg1/index.ts",
+    "/src/project/d/node_modules/pkg1/index.tsx",
+    "/src/project/d/node_modules/pkg1/index.d.ts",
+    "/src/project/d/node_modules/@types/pkg1/package.json",
+    "/src/project/d/node_modules/@types/pkg1.d.ts",
+    "/src/project/d/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/e/ea/node_modules/pkg1/package.json",
+    "/src/project/e/ea/node_modules/pkg1.ts",
+    "/src/project/e/ea/node_modules/pkg1.tsx",
+    "/src/project/e/ea/node_modules/pkg1.d.ts",
+    "/src/project/e/ea/node_modules/pkg1/index.ts",
+    "/src/project/e/ea/node_modules/pkg1/index.tsx",
+    "/src/project/e/ea/node_modules/pkg1/index.d.ts",
+    "/src/project/e/ea/node_modules/@types/pkg1/package.json",
+    "/src/project/e/ea/node_modules/@types/pkg1.d.ts",
+    "/src/project/e/ea/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/e/node_modules/pkg1/package.json",
+    "/src/project/e/node_modules/pkg1.ts",
+    "/src/project/e/node_modules/pkg1.tsx",
+    "/src/project/e/node_modules/pkg1.d.ts",
+    "/src/project/e/node_modules/pkg1/index.ts",
+    "/src/project/e/node_modules/pkg1/index.tsx",
+    "/src/project/e/node_modules/pkg1/index.d.ts",
+    "/src/project/e/node_modules/@types/pkg1/package.json",
+    "/src/project/e/node_modules/@types/pkg1.d.ts",
+    "/src/project/e/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/e/ea/eaa/node_modules/pkg1/package.json",
+    "/src/project/e/ea/eaa/node_modules/pkg1.ts",
+    "/src/project/e/ea/eaa/node_modules/pkg1.tsx",
+    "/src/project/e/ea/eaa/node_modules/pkg1.d.ts",
+    "/src/project/e/ea/eaa/node_modules/pkg1/index.ts",
+    "/src/project/e/ea/eaa/node_modules/pkg1/index.tsx",
+    "/src/project/e/ea/eaa/node_modules/pkg1/index.d.ts",
+    "/src/project/e/ea/eaa/node_modules/@types/pkg1/package.json",
+    "/src/project/e/ea/eaa/node_modules/@types/pkg1.d.ts",
+    "/src/project/e/ea/eaa/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1/package.json",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1.ts",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1.tsx",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1.d.ts",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1/index.ts",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1/index.tsx",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1/index.d.ts",
+    "/src/project/e/ea/eaa/eaaa/node_modules/@types/pkg1/package.json",
+    "/src/project/e/ea/eaa/eaaa/node_modules/@types/pkg1.d.ts",
+    "/src/project/e/ea/eaa/eaaa/node_modules/@types/pkg1/index.d.ts"
+  ]
+}
 
 File: /src/project/e/ea/eaa/eaaa/fileWithImports.ts
 resolvedModules:
@@ -961,6 +3602,215 @@ pkg0: {
     "isExternalLibraryImport": true,
     "extension": ".d.ts"
   }
+}
+pkg1: {
+  "failedLookupLocations": [
+    "/src/project/node_modules/pkg1/package.json",
+    "/src/project/node_modules/pkg1.ts",
+    "/src/project/node_modules/pkg1.tsx",
+    "/src/project/node_modules/pkg1.d.ts",
+    "/src/project/node_modules/pkg1/index.ts",
+    "/src/project/node_modules/pkg1/index.tsx",
+    "/src/project/node_modules/pkg1/index.d.ts",
+    "/src/project/node_modules/@types/pkg1/package.json",
+    "/src/project/node_modules/@types/pkg1.d.ts",
+    "/src/project/node_modules/@types/pkg1/index.d.ts",
+    "/src/node_modules/pkg1/package.json",
+    "/src/node_modules/pkg1.ts",
+    "/src/node_modules/pkg1.tsx",
+    "/src/node_modules/pkg1.d.ts",
+    "/src/node_modules/pkg1/index.ts",
+    "/src/node_modules/pkg1/index.tsx",
+    "/src/node_modules/pkg1/index.d.ts",
+    "/src/node_modules/@types/pkg1/package.json",
+    "/src/node_modules/@types/pkg1.d.ts",
+    "/src/node_modules/@types/pkg1/index.d.ts",
+    "/node_modules/pkg1/package.json",
+    "/node_modules/pkg1.ts",
+    "/node_modules/pkg1.tsx",
+    "/node_modules/pkg1.d.ts",
+    "/node_modules/pkg1/index.ts",
+    "/node_modules/pkg1/index.tsx",
+    "/node_modules/pkg1/index.d.ts",
+    "/node_modules/@types/pkg1/package.json",
+    "/node_modules/@types/pkg1.d.ts",
+    "/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/node_modules/pkg1/package.json",
+    "/src/project/node_modules/pkg1.js",
+    "/src/project/node_modules/pkg1.jsx",
+    "/src/project/node_modules/pkg1/index.js",
+    "/src/project/node_modules/pkg1/index.jsx",
+    "/src/node_modules/pkg1/package.json",
+    "/src/node_modules/pkg1.js",
+    "/src/node_modules/pkg1.jsx",
+    "/src/node_modules/pkg1/index.js",
+    "/src/node_modules/pkg1/index.jsx",
+    "/node_modules/pkg1/package.json",
+    "/node_modules/pkg1.js",
+    "/node_modules/pkg1.jsx",
+    "/node_modules/pkg1/index.js",
+    "/node_modules/pkg1/index.jsx",
+    "/src/project/a/node_modules/pkg1/package.json",
+    "/src/project/a/node_modules/pkg1.ts",
+    "/src/project/a/node_modules/pkg1.tsx",
+    "/src/project/a/node_modules/pkg1.d.ts",
+    "/src/project/a/node_modules/pkg1/index.ts",
+    "/src/project/a/node_modules/pkg1/index.tsx",
+    "/src/project/a/node_modules/pkg1/index.d.ts",
+    "/src/project/a/node_modules/@types/pkg1/package.json",
+    "/src/project/a/node_modules/@types/pkg1.d.ts",
+    "/src/project/a/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/b/ba/node_modules/pkg1/package.json",
+    "/src/project/b/ba/node_modules/pkg1.ts",
+    "/src/project/b/ba/node_modules/pkg1.tsx",
+    "/src/project/b/ba/node_modules/pkg1.d.ts",
+    "/src/project/b/ba/node_modules/pkg1/index.ts",
+    "/src/project/b/ba/node_modules/pkg1/index.tsx",
+    "/src/project/b/ba/node_modules/pkg1/index.d.ts",
+    "/src/project/b/ba/node_modules/@types/pkg1/package.json",
+    "/src/project/b/ba/node_modules/@types/pkg1.d.ts",
+    "/src/project/b/ba/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/b/node_modules/pkg1/package.json",
+    "/src/project/b/node_modules/pkg1.ts",
+    "/src/project/b/node_modules/pkg1.tsx",
+    "/src/project/b/node_modules/pkg1.d.ts",
+    "/src/project/b/node_modules/pkg1/index.ts",
+    "/src/project/b/node_modules/pkg1/index.tsx",
+    "/src/project/b/node_modules/pkg1/index.d.ts",
+    "/src/project/b/node_modules/@types/pkg1/package.json",
+    "/src/project/b/node_modules/@types/pkg1.d.ts",
+    "/src/project/b/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/c/ca/node_modules/pkg1/package.json",
+    "/src/project/c/ca/node_modules/pkg1.ts",
+    "/src/project/c/ca/node_modules/pkg1.tsx",
+    "/src/project/c/ca/node_modules/pkg1.d.ts",
+    "/src/project/c/ca/node_modules/pkg1/index.ts",
+    "/src/project/c/ca/node_modules/pkg1/index.tsx",
+    "/src/project/c/ca/node_modules/pkg1/index.d.ts",
+    "/src/project/c/ca/node_modules/@types/pkg1/package.json",
+    "/src/project/c/ca/node_modules/@types/pkg1.d.ts",
+    "/src/project/c/ca/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/c/node_modules/pkg1/package.json",
+    "/src/project/c/node_modules/pkg1.ts",
+    "/src/project/c/node_modules/pkg1.tsx",
+    "/src/project/c/node_modules/pkg1.d.ts",
+    "/src/project/c/node_modules/pkg1/index.ts",
+    "/src/project/c/node_modules/pkg1/index.tsx",
+    "/src/project/c/node_modules/pkg1/index.d.ts",
+    "/src/project/c/node_modules/@types/pkg1/package.json",
+    "/src/project/c/node_modules/@types/pkg1.d.ts",
+    "/src/project/c/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1/package.json",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1.ts",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1.tsx",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1.d.ts",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1/index.ts",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1/index.tsx",
+    "/src/project/c/ca/caa/caaa/node_modules/pkg1/index.d.ts",
+    "/src/project/c/ca/caa/caaa/node_modules/@types/pkg1/package.json",
+    "/src/project/c/ca/caa/caaa/node_modules/@types/pkg1.d.ts",
+    "/src/project/c/ca/caa/caaa/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/c/ca/caa/node_modules/pkg1/package.json",
+    "/src/project/c/ca/caa/node_modules/pkg1.ts",
+    "/src/project/c/ca/caa/node_modules/pkg1.tsx",
+    "/src/project/c/ca/caa/node_modules/pkg1.d.ts",
+    "/src/project/c/ca/caa/node_modules/pkg1/index.ts",
+    "/src/project/c/ca/caa/node_modules/pkg1/index.tsx",
+    "/src/project/c/ca/caa/node_modules/pkg1/index.d.ts",
+    "/src/project/c/ca/caa/node_modules/@types/pkg1/package.json",
+    "/src/project/c/ca/caa/node_modules/@types/pkg1.d.ts",
+    "/src/project/c/ca/caa/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/c/cb/node_modules/pkg1/package.json",
+    "/src/project/c/cb/node_modules/pkg1.ts",
+    "/src/project/c/cb/node_modules/pkg1.tsx",
+    "/src/project/c/cb/node_modules/pkg1.d.ts",
+    "/src/project/c/cb/node_modules/pkg1/index.ts",
+    "/src/project/c/cb/node_modules/pkg1/index.tsx",
+    "/src/project/c/cb/node_modules/pkg1/index.d.ts",
+    "/src/project/c/cb/node_modules/@types/pkg1/package.json",
+    "/src/project/c/cb/node_modules/@types/pkg1.d.ts",
+    "/src/project/c/cb/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1/package.json",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1.ts",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1.tsx",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1.d.ts",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1/index.ts",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1/index.tsx",
+    "/src/project/d/da/daa/daaa/node_modules/pkg1/index.d.ts",
+    "/src/project/d/da/daa/daaa/node_modules/@types/pkg1/package.json",
+    "/src/project/d/da/daa/daaa/node_modules/@types/pkg1.d.ts",
+    "/src/project/d/da/daa/daaa/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/d/da/daa/node_modules/pkg1/package.json",
+    "/src/project/d/da/daa/node_modules/pkg1.ts",
+    "/src/project/d/da/daa/node_modules/pkg1.tsx",
+    "/src/project/d/da/daa/node_modules/pkg1.d.ts",
+    "/src/project/d/da/daa/node_modules/pkg1/index.ts",
+    "/src/project/d/da/daa/node_modules/pkg1/index.tsx",
+    "/src/project/d/da/daa/node_modules/pkg1/index.d.ts",
+    "/src/project/d/da/daa/node_modules/@types/pkg1/package.json",
+    "/src/project/d/da/daa/node_modules/@types/pkg1.d.ts",
+    "/src/project/d/da/daa/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/d/da/node_modules/pkg1/package.json",
+    "/src/project/d/da/node_modules/pkg1.ts",
+    "/src/project/d/da/node_modules/pkg1.tsx",
+    "/src/project/d/da/node_modules/pkg1.d.ts",
+    "/src/project/d/da/node_modules/pkg1/index.ts",
+    "/src/project/d/da/node_modules/pkg1/index.tsx",
+    "/src/project/d/da/node_modules/pkg1/index.d.ts",
+    "/src/project/d/da/node_modules/@types/pkg1/package.json",
+    "/src/project/d/da/node_modules/@types/pkg1.d.ts",
+    "/src/project/d/da/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/d/node_modules/pkg1/package.json",
+    "/src/project/d/node_modules/pkg1.ts",
+    "/src/project/d/node_modules/pkg1.tsx",
+    "/src/project/d/node_modules/pkg1.d.ts",
+    "/src/project/d/node_modules/pkg1/index.ts",
+    "/src/project/d/node_modules/pkg1/index.tsx",
+    "/src/project/d/node_modules/pkg1/index.d.ts",
+    "/src/project/d/node_modules/@types/pkg1/package.json",
+    "/src/project/d/node_modules/@types/pkg1.d.ts",
+    "/src/project/d/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/e/ea/node_modules/pkg1/package.json",
+    "/src/project/e/ea/node_modules/pkg1.ts",
+    "/src/project/e/ea/node_modules/pkg1.tsx",
+    "/src/project/e/ea/node_modules/pkg1.d.ts",
+    "/src/project/e/ea/node_modules/pkg1/index.ts",
+    "/src/project/e/ea/node_modules/pkg1/index.tsx",
+    "/src/project/e/ea/node_modules/pkg1/index.d.ts",
+    "/src/project/e/ea/node_modules/@types/pkg1/package.json",
+    "/src/project/e/ea/node_modules/@types/pkg1.d.ts",
+    "/src/project/e/ea/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/e/node_modules/pkg1/package.json",
+    "/src/project/e/node_modules/pkg1.ts",
+    "/src/project/e/node_modules/pkg1.tsx",
+    "/src/project/e/node_modules/pkg1.d.ts",
+    "/src/project/e/node_modules/pkg1/index.ts",
+    "/src/project/e/node_modules/pkg1/index.tsx",
+    "/src/project/e/node_modules/pkg1/index.d.ts",
+    "/src/project/e/node_modules/@types/pkg1/package.json",
+    "/src/project/e/node_modules/@types/pkg1.d.ts",
+    "/src/project/e/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/e/ea/eaa/node_modules/pkg1/package.json",
+    "/src/project/e/ea/eaa/node_modules/pkg1.ts",
+    "/src/project/e/ea/eaa/node_modules/pkg1.tsx",
+    "/src/project/e/ea/eaa/node_modules/pkg1.d.ts",
+    "/src/project/e/ea/eaa/node_modules/pkg1/index.ts",
+    "/src/project/e/ea/eaa/node_modules/pkg1/index.tsx",
+    "/src/project/e/ea/eaa/node_modules/pkg1/index.d.ts",
+    "/src/project/e/ea/eaa/node_modules/@types/pkg1/package.json",
+    "/src/project/e/ea/eaa/node_modules/@types/pkg1.d.ts",
+    "/src/project/e/ea/eaa/node_modules/@types/pkg1/index.d.ts",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1/package.json",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1.ts",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1.tsx",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1.d.ts",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1/index.ts",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1/index.tsx",
+    "/src/project/e/ea/eaa/eaaa/node_modules/pkg1/index.d.ts",
+    "/src/project/e/ea/eaa/eaaa/node_modules/@types/pkg1/package.json",
+    "/src/project/e/ea/eaa/eaaa/node_modules/@types/pkg1.d.ts",
+    "/src/project/e/ea/eaa/eaaa/node_modules/@types/pkg1/index.d.ts"
+  ]
 }
 
 PolledWatches::
@@ -1010,12 +3860,23 @@ FsWatches::
   {}
 
 FsWatchesRecursive::
+/src/project/node_modules:
+  {}
+/src/project/a:
+  {}
+/src/project/b:
+  {}
+/src/project/c:
+  {}
+/src/project/d:
+  {}
+/src/project/e:
+  {}
 
 exitCode:: ExitStatus.undefined
 
-//// [/src/project/d/da/daa/daaa/x/y/z/randomFileForImport.js] file written with same contents
 //// [/src/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../a/lib/lib.d.ts","./node_modules/pkg0/index.d.ts","./filewithimports.ts","./randomfileforimport.ts","./a/filewithimports.ts","./b/ba/filewithimports.ts","./b/randomfileforimport.ts","./c/ca/filewithimports.ts","./c/ca/caa/randomfileforimport.ts","./c/ca/caa/caaa/filewithimports.ts","./c/cb/filewithimports.ts","./d/da/daa/daaa/x/y/z/randomfileforimport.ts","./d/da/daa/daaa/filewithimports.ts","./d/da/daa/filewithimports.ts","./d/da/filewithimports.ts","./e/ea/filewithimports.ts","./e/ea/eaa/filewithimports.ts","./e/ea/eaa/eaaa/filewithimports.ts","./e/ea/eaa/eaaa/x/y/z/randomfileforimport.ts","./a","./b/ba","./c/ca/caa/caaa","./c/cb","./d/da/daa/daaa/x/y/z","./e/ea/eaa/eaaa"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"769951468-export interface ImportInterface0 {}",{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-3531856636-export {};\n"},{"version":"-10726455937-export const x = 10;","signature":"-6821242887-export declare const x = 10;\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-3531856636-export {};\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-3531856636-export {};\n"},{"version":"-10726455937-export const x = 10;","signature":"-6821242887-export declare const x = 10;\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-3531856636-export {};\n"},{"version":"-10726455937-export const x = 10;","signature":"-6821242887-export declare const x = 10;\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-3531856636-export {};\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-3531856636-export {};\n"},{"version":"10580737119-import type { ImportInterface0 } from \"pkg0\";\nexport const x = 10;","signature":"-6821242887-export declare const x = 10;\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-3531856636-export {};\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-3531856636-export {};\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-3531856636-export {};\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-3531856636-export {};\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-3531856636-export {};\n"},{"version":"7372004325-import type { ImportInterface0 } from \"pkg0\";\n","signature":"-3531856636-export {};\n"},{"version":"-10726455937-export const x = 10;","signature":"-6821242887-export declare const x = 10;\n"}],"options":{"cacheResolutions":true,"composite":true},"fileIdsList":[[2]],"referencedMap":[[5,1],[6,1],[10,1],[8,1],[11,1],[13,1],[12,1],[14,1],[15,1],[18,1],[17,1],[16,1],[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,5,6,7,10,9,8,11,13,12,14,15,18,19,17,16,3,2,4],"latestChangedDtsFile":"./e/ea/eaa/eaaa/x/y/z/randomFileForImport.d.ts","cacheResolutions":{"resolutions":[{"resolvedModule":{"resolvedFileName":2,"isExternalLibraryImport":true}}],"names":["pkg0"],"resolutionEntries":[[1,1]],"modules":[[20,[1]],[21,[1]],[22,[1]],[23,[1]],[24,[1]],[25,[1]]]}},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../a/lib/lib.d.ts","./node_modules/pkg0/index.d.ts","./filewithimports.ts","./randomfileforimport.ts","./a/filewithimports.ts","./b/ba/filewithimports.ts","./b/randomfileforimport.ts","./c/ca/filewithimports.ts","./c/ca/caa/randomfileforimport.ts","./c/ca/caa/caaa/filewithimports.ts","./c/cb/filewithimports.ts","./d/da/daa/daaa/x/y/z/randomfileforimport.ts","./d/da/daa/daaa/filewithimports.ts","./d/da/daa/filewithimports.ts","./d/da/filewithimports.ts","./e/ea/filewithimports.ts","./e/ea/eaa/filewithimports.ts","./e/ea/eaa/eaaa/filewithimports.ts","./e/ea/eaa/eaaa/x/y/z/randomfileforimport.ts","./a","./b/ba","./c/ca/caa/caaa","./c/cb","./d/da/daa/daaa/x/y/z","./e/ea/eaa/eaaa"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"769951468-export interface ImportInterface0 {}",{"version":"9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n","signature":"-3531856636-export {};\n"},{"version":"-10726455937-export const x = 10;","signature":"-6821242887-export declare const x = 10;\n"},{"version":"9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n","signature":"-3531856636-export {};\n"},{"version":"9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n","signature":"-3531856636-export {};\n"},{"version":"-10726455937-export const x = 10;","signature":"-6821242887-export declare const x = 10;\n"},{"version":"9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n","signature":"-3531856636-export {};\n"},{"version":"-10726455937-export const x = 10;","signature":"-6821242887-export declare const x = 10;\n"},{"version":"9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n","signature":"-3531856636-export {};\n"},{"version":"9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n","signature":"-3531856636-export {};\n"},{"version":"10580737119-import type { ImportInterface0 } from \"pkg0\";\nexport const x = 10;","signature":"-6821242887-export declare const x = 10;\n"},{"version":"9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n","signature":"-3531856636-export {};\n"},{"version":"9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n","signature":"-3531856636-export {};\n"},{"version":"9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n","signature":"-3531856636-export {};\n"},{"version":"9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n","signature":"-3531856636-export {};\n"},{"version":"9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n","signature":"-3531856636-export {};\n"},{"version":"9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n","signature":"-3531856636-export {};\n"},{"version":"-10726455937-export const x = 10;","signature":"-6821242887-export declare const x = 10;\n"}],"options":{"cacheResolutions":true,"composite":true},"fileIdsList":[[2]],"referencedMap":[[5,1],[6,1],[10,1],[8,1],[11,1],[13,1],[12,1],[14,1],[15,1],[18,1],[17,1],[16,1],[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,[5,[{"file":"./a/filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],[6,[{"file":"./b/ba/filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],7,[10,[{"file":"./c/ca/caa/caaa/filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],9,[8,[{"file":"./c/ca/filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],[11,[{"file":"./c/cb/filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],[13,[{"file":"./d/da/daa/daaa/filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],12,[14,[{"file":"./d/da/daa/filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],[15,[{"file":"./d/da/filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],[18,[{"file":"./e/ea/eaa/eaaa/filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],19,[17,[{"file":"./e/ea/eaa/filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],[16,[{"file":"./e/ea/filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],[3,[{"file":"./filewithimports.ts","start":84,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],2,4],"latestChangedDtsFile":"./randomFileForImport.d.ts","cacheResolutions":{"resolutions":[{"resolvedModule":{"resolvedFileName":2,"isExternalLibraryImport":true}}],"names":["pkg0"],"resolutionEntries":[[1,1]],"modules":[[20,[1]],[21,[1]],[22,[1]],[23,[1]],[24,[1]],[25,[1]]]}},"version":"FakeTSVersion"}
 
 //// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -1068,10 +3929,10 @@ exitCode:: ExitStatus.undefined
       },
       "./filewithimports.ts": {
         "original": {
-          "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
+          "version": "9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n",
           "signature": "-3531856636-export {};\n"
         },
-        "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
+        "version": "9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n",
         "signature": "-3531856636-export {};\n"
       },
       "./randomfileforimport.ts": {
@@ -1084,18 +3945,18 @@ exitCode:: ExitStatus.undefined
       },
       "./a/filewithimports.ts": {
         "original": {
-          "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
+          "version": "9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n",
           "signature": "-3531856636-export {};\n"
         },
-        "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
+        "version": "9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n",
         "signature": "-3531856636-export {};\n"
       },
       "./b/ba/filewithimports.ts": {
         "original": {
-          "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
+          "version": "9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n",
           "signature": "-3531856636-export {};\n"
         },
-        "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
+        "version": "9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n",
         "signature": "-3531856636-export {};\n"
       },
       "./b/randomfileforimport.ts": {
@@ -1108,10 +3969,10 @@ exitCode:: ExitStatus.undefined
       },
       "./c/ca/filewithimports.ts": {
         "original": {
-          "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
+          "version": "9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n",
           "signature": "-3531856636-export {};\n"
         },
-        "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
+        "version": "9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n",
         "signature": "-3531856636-export {};\n"
       },
       "./c/ca/caa/randomfileforimport.ts": {
@@ -1124,18 +3985,18 @@ exitCode:: ExitStatus.undefined
       },
       "./c/ca/caa/caaa/filewithimports.ts": {
         "original": {
-          "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
+          "version": "9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n",
           "signature": "-3531856636-export {};\n"
         },
-        "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
+        "version": "9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n",
         "signature": "-3531856636-export {};\n"
       },
       "./c/cb/filewithimports.ts": {
         "original": {
-          "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
+          "version": "9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n",
           "signature": "-3531856636-export {};\n"
         },
-        "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
+        "version": "9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n",
         "signature": "-3531856636-export {};\n"
       },
       "./d/da/daa/daaa/x/y/z/randomfileforimport.ts": {
@@ -1148,50 +4009,50 @@ exitCode:: ExitStatus.undefined
       },
       "./d/da/daa/daaa/filewithimports.ts": {
         "original": {
-          "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
+          "version": "9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n",
           "signature": "-3531856636-export {};\n"
         },
-        "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
+        "version": "9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n",
         "signature": "-3531856636-export {};\n"
       },
       "./d/da/daa/filewithimports.ts": {
         "original": {
-          "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
+          "version": "9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n",
           "signature": "-3531856636-export {};\n"
         },
-        "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
+        "version": "9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n",
         "signature": "-3531856636-export {};\n"
       },
       "./d/da/filewithimports.ts": {
         "original": {
-          "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
+          "version": "9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n",
           "signature": "-3531856636-export {};\n"
         },
-        "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
+        "version": "9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n",
         "signature": "-3531856636-export {};\n"
       },
       "./e/ea/filewithimports.ts": {
         "original": {
-          "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
+          "version": "9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n",
           "signature": "-3531856636-export {};\n"
         },
-        "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
+        "version": "9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n",
         "signature": "-3531856636-export {};\n"
       },
       "./e/ea/eaa/filewithimports.ts": {
         "original": {
-          "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
+          "version": "9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n",
           "signature": "-3531856636-export {};\n"
         },
-        "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
+        "version": "9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n",
         "signature": "-3531856636-export {};\n"
       },
       "./e/ea/eaa/eaaa/filewithimports.ts": {
         "original": {
-          "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
+          "version": "9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n",
           "signature": "-3531856636-export {};\n"
         },
-        "version": "7372004325-import type { ImportInterface0 } from \"pkg0\";\n",
+        "version": "9626982695-import type { ImportInterface0 } from \"pkg0\";\nimport type { ImportInterface1 } from \"pkg1\";\n",
         "signature": "-3531856636-export {};\n"
       },
       "./e/ea/eaa/eaaa/x/y/z/randomfileforimport.ts": {
@@ -1251,26 +4112,170 @@ exitCode:: ExitStatus.undefined
     "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
       "../../a/lib/lib.d.ts",
-      "./a/filewithimports.ts",
-      "./b/ba/filewithimports.ts",
+      [
+        "./a/filewithimports.ts",
+        [
+          {
+            "file": "./a/filewithimports.ts",
+            "start": 84,
+            "length": 6,
+            "messageText": "Cannot find module 'pkg1' or its corresponding type declarations.",
+            "category": 1,
+            "code": 2307
+          }
+        ]
+      ],
+      [
+        "./b/ba/filewithimports.ts",
+        [
+          {
+            "file": "./b/ba/filewithimports.ts",
+            "start": 84,
+            "length": 6,
+            "messageText": "Cannot find module 'pkg1' or its corresponding type declarations.",
+            "category": 1,
+            "code": 2307
+          }
+        ]
+      ],
       "./b/randomfileforimport.ts",
-      "./c/ca/caa/caaa/filewithimports.ts",
+      [
+        "./c/ca/caa/caaa/filewithimports.ts",
+        [
+          {
+            "file": "./c/ca/caa/caaa/filewithimports.ts",
+            "start": 84,
+            "length": 6,
+            "messageText": "Cannot find module 'pkg1' or its corresponding type declarations.",
+            "category": 1,
+            "code": 2307
+          }
+        ]
+      ],
       "./c/ca/caa/randomfileforimport.ts",
-      "./c/ca/filewithimports.ts",
-      "./c/cb/filewithimports.ts",
-      "./d/da/daa/daaa/filewithimports.ts",
+      [
+        "./c/ca/filewithimports.ts",
+        [
+          {
+            "file": "./c/ca/filewithimports.ts",
+            "start": 84,
+            "length": 6,
+            "messageText": "Cannot find module 'pkg1' or its corresponding type declarations.",
+            "category": 1,
+            "code": 2307
+          }
+        ]
+      ],
+      [
+        "./c/cb/filewithimports.ts",
+        [
+          {
+            "file": "./c/cb/filewithimports.ts",
+            "start": 84,
+            "length": 6,
+            "messageText": "Cannot find module 'pkg1' or its corresponding type declarations.",
+            "category": 1,
+            "code": 2307
+          }
+        ]
+      ],
+      [
+        "./d/da/daa/daaa/filewithimports.ts",
+        [
+          {
+            "file": "./d/da/daa/daaa/filewithimports.ts",
+            "start": 84,
+            "length": 6,
+            "messageText": "Cannot find module 'pkg1' or its corresponding type declarations.",
+            "category": 1,
+            "code": 2307
+          }
+        ]
+      ],
       "./d/da/daa/daaa/x/y/z/randomfileforimport.ts",
-      "./d/da/daa/filewithimports.ts",
-      "./d/da/filewithimports.ts",
-      "./e/ea/eaa/eaaa/filewithimports.ts",
+      [
+        "./d/da/daa/filewithimports.ts",
+        [
+          {
+            "file": "./d/da/daa/filewithimports.ts",
+            "start": 84,
+            "length": 6,
+            "messageText": "Cannot find module 'pkg1' or its corresponding type declarations.",
+            "category": 1,
+            "code": 2307
+          }
+        ]
+      ],
+      [
+        "./d/da/filewithimports.ts",
+        [
+          {
+            "file": "./d/da/filewithimports.ts",
+            "start": 84,
+            "length": 6,
+            "messageText": "Cannot find module 'pkg1' or its corresponding type declarations.",
+            "category": 1,
+            "code": 2307
+          }
+        ]
+      ],
+      [
+        "./e/ea/eaa/eaaa/filewithimports.ts",
+        [
+          {
+            "file": "./e/ea/eaa/eaaa/filewithimports.ts",
+            "start": 84,
+            "length": 6,
+            "messageText": "Cannot find module 'pkg1' or its corresponding type declarations.",
+            "category": 1,
+            "code": 2307
+          }
+        ]
+      ],
       "./e/ea/eaa/eaaa/x/y/z/randomfileforimport.ts",
-      "./e/ea/eaa/filewithimports.ts",
-      "./e/ea/filewithimports.ts",
-      "./filewithimports.ts",
+      [
+        "./e/ea/eaa/filewithimports.ts",
+        [
+          {
+            "file": "./e/ea/eaa/filewithimports.ts",
+            "start": 84,
+            "length": 6,
+            "messageText": "Cannot find module 'pkg1' or its corresponding type declarations.",
+            "category": 1,
+            "code": 2307
+          }
+        ]
+      ],
+      [
+        "./e/ea/filewithimports.ts",
+        [
+          {
+            "file": "./e/ea/filewithimports.ts",
+            "start": 84,
+            "length": 6,
+            "messageText": "Cannot find module 'pkg1' or its corresponding type declarations.",
+            "category": 1,
+            "code": 2307
+          }
+        ]
+      ],
+      [
+        "./filewithimports.ts",
+        [
+          {
+            "file": "./filewithimports.ts",
+            "start": 84,
+            "length": 6,
+            "messageText": "Cannot find module 'pkg1' or its corresponding type declarations.",
+            "category": 1,
+            "code": 2307
+          }
+        ]
+      ],
       "./node_modules/pkg0/index.d.ts",
       "./randomfileforimport.ts"
     ],
-    "latestChangedDtsFile": "./e/ea/eaa/eaaa/x/y/z/randomFileForImport.d.ts",
+    "latestChangedDtsFile": "./randomFileForImport.d.ts",
     "cacheResolutions": {
       "resolutions": [
         {
@@ -1408,6 +4413,169 @@ exitCode:: ExitStatus.undefined
     }
   },
   "version": "FakeTSVersion",
-  "size": 3719
+  "size": 6354
 }
+
+//// [/src/project/a/fileWithImports.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+
+
+//// [/src/project/a/fileWithImports.d.ts]
+export {};
+
+
+//// [/src/project/b/ba/fileWithImports.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+
+
+//// [/src/project/b/ba/fileWithImports.d.ts]
+export {};
+
+
+//// [/src/project/b/randomFileForImport.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.x = void 0;
+exports.x = 10;
+
+
+//// [/src/project/b/randomFileForImport.d.ts]
+export declare const x = 10;
+
+
+//// [/src/project/c/ca/caa/caaa/fileWithImports.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+
+
+//// [/src/project/c/ca/caa/caaa/fileWithImports.d.ts]
+export {};
+
+
+//// [/src/project/c/ca/caa/randomFileForImport.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.x = void 0;
+exports.x = 10;
+
+
+//// [/src/project/c/ca/caa/randomFileForImport.d.ts]
+export declare const x = 10;
+
+
+//// [/src/project/c/ca/fileWithImports.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+
+
+//// [/src/project/c/ca/fileWithImports.d.ts]
+export {};
+
+
+//// [/src/project/c/cb/fileWithImports.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+
+
+//// [/src/project/c/cb/fileWithImports.d.ts]
+export {};
+
+
+//// [/src/project/d/da/daa/daaa/fileWithImports.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+
+
+//// [/src/project/d/da/daa/daaa/fileWithImports.d.ts]
+export {};
+
+
+//// [/src/project/d/da/daa/daaa/x/y/z/randomFileForImport.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.x = void 0;
+exports.x = 10;
+
+
+//// [/src/project/d/da/daa/daaa/x/y/z/randomFileForImport.d.ts]
+export declare const x = 10;
+
+
+//// [/src/project/d/da/daa/fileWithImports.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+
+
+//// [/src/project/d/da/daa/fileWithImports.d.ts]
+export {};
+
+
+//// [/src/project/d/da/fileWithImports.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+
+
+//// [/src/project/d/da/fileWithImports.d.ts]
+export {};
+
+
+//// [/src/project/e/ea/eaa/eaaa/fileWithImports.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+
+
+//// [/src/project/e/ea/eaa/eaaa/fileWithImports.d.ts]
+export {};
+
+
+//// [/src/project/e/ea/eaa/eaaa/x/y/z/randomFileForImport.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.x = void 0;
+exports.x = 10;
+
+
+//// [/src/project/e/ea/eaa/eaaa/x/y/z/randomFileForImport.d.ts]
+export declare const x = 10;
+
+
+//// [/src/project/e/ea/eaa/fileWithImports.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+
+
+//// [/src/project/e/ea/eaa/fileWithImports.d.ts]
+export {};
+
+
+//// [/src/project/e/ea/fileWithImports.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+
+
+//// [/src/project/e/ea/fileWithImports.d.ts]
+export {};
+
+
+//// [/src/project/fileWithImports.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+
+
+//// [/src/project/fileWithImports.d.ts]
+export {};
+
+
+//// [/src/project/randomFileForImport.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.x = void 0;
+exports.x = 10;
+
+
+//// [/src/project/randomFileForImport.d.ts]
+export declare const x = 10;
+
 

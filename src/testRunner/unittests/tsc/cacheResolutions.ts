@@ -252,6 +252,33 @@ describe("unittests:: tsc:: cacheResolutions::", () => {
                 caption: "modify e/ea/eaa/eaaa/x/y/z/randomFileForImport by adding import",
                 edit: fs => prependText(fs, "/src/project/e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts", `import type { ImportInterface0 } from "pkg0";\n`),
             },
+            {
+                caption: "modify randomFileForImport by adding unresolved import",
+                edit: fs => prependText(fs, "/src/project/randomFileForImport.ts", `import type { ImportInterface1 } from "pkg1";\n`),
+            },
+            {
+                caption: "modify b/randomFileForImport by adding unresolved import",
+                edit: fs => prependText(fs, "/src/project/b/randomFileForImport.ts", `import type { ImportInterface1 } from "pkg1";\n`),
+            },
+            {
+                caption: "modify c/ca/caa/randomFileForImport by adding unresolved import",
+                edit: fs => prependText(fs, "/src/project/c/ca/caa/randomFileForImport.ts", `import type { ImportInterface1 } from "pkg1";\n`),
+            },
+            {
+                caption: "modify d/da/daa/daaa/x/y/z/randomFileForImport by adding unresolved import",
+                edit: fs => prependText(fs, "/src/project/d/da/daa/daaa/x/y/z/randomFileForImport.ts", `import type { ImportInterface1 } from "pkg1";\n`),
+            },
+            {
+                caption: "modify e/ea/eaa/eaaa/x/y/z/randomFileForImport by adding unresolved import",
+                edit: fs => prependText(fs, "/src/project/e/ea/eaa/eaaa/x/y/z/randomFileForImport.ts", `import type { ImportInterface1 } from "pkg1";\n`),
+            },
+            {
+                caption: "add file for unresolved import",
+                edit: fs => {
+                    fs.mkdirpSync("/src/project/node_modules/pkg1");
+                    fs.writeFileSync("/src/project/node_modules/pkg1/index.d.ts", getPkgImportContent("Import", 1));
+                },
+            },
         ]
     });
 });
