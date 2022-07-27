@@ -1191,7 +1191,7 @@ namespace ts.projectSystem {
 
             const typeNames: readonly string[] = ["commander"];
             const typePath = (name: string): string => `${cachePath}/node_modules/@types/${name}/index.d.ts`;
-            const host = createServerHost([file, commanderJS]);
+            const host = TestFSWithWatch.changeToHostTrackingWrittenFiles(createServerHost([file, commanderJS]));
             const installer = new (class extends Installer {
                 constructor() {
                     super(host, { globalTypingsCacheLocation: cachePath, typesRegistry: createTypesRegistry(...typeNames) });
@@ -1206,13 +1206,21 @@ namespace ts.projectSystem {
                 typingsInstaller: installer,
                 logger: createLoggerWithInMemoryLogs(),
             });
+            service.setCompilerOptionsForInferredProjects({ traceResolution: true });
+            let snap = logTestServerHost(host, service, /*base*/ undefined);
+            service.logger.info(`Opening file ${file.path}`);
             service.openClientFile(file.path);
 
+            service.logger.info(`Installing typing`);
             installer.installAll(/*expectedCount*/1);
-            for (const name of typeNames) {
-                assert.isTrue(host.fileExists(typePath(name)), `typings for '${name}' should be created`);
-            }
+            snap = logTestServerHost(host, service, snap);
+
+            service.logger.info(`Expecting timeouts from installing typings`);
             host.checkTimeoutQueueLengthAndRun(2);
+
+            service.logger.info(`Expecting timeouts from setting typings = emptyArray after the project resolves from typing installer cache`);
+            host.checkTimeoutQueueLengthAndRun(2);
+            host.checkTimeoutQueueLength(0);
             baselineTsserverLogs("typingsInstaller", "redo resolutions pointing to js on typing install", service);
         });
 

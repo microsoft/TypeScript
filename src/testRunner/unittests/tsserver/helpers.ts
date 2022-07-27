@@ -114,6 +114,14 @@ namespace ts.projectSystem {
         };
     }
 
+    export function logTestServerHost(host: TestServerHost, sessionOrService: { logger: Logger; }, base: ReturnType<TestServerHost["snap"]> | undefined) {
+        const baseline: string[] = [];
+        baseline.push("TestServerHost::");
+        host.diff(baseline, base);
+        sessionOrService.logger.info(baseline.join("\r\n"));
+        return host.snap();
+    }
+
     export function baselineTsserverLogs(scenario: string, subScenario: string, sessionOrService: { logger: Logger; }) {
         Debug.assert(sessionOrService.logger.logs.length); // Ensure caller used in memory logger
         Harness.Baseline.runBaseline(`tsserver/${scenario}/${subScenario.split(" ").join("-")}.js`, sessionOrService.logger.logs.join("\r\n"));
