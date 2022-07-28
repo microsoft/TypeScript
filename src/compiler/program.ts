@@ -127,6 +127,7 @@ import {
     getNormalizedPathComponents,
     getOutputDeclarationFileName,
     getOutputPathsForBundle,
+    getPackageJsonInfo,
     getPackageScopeForPath,
     getPathFromPathComponents,
     getPositionOfLineAndCharacter,
@@ -1580,9 +1581,12 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     let oldProgram = typeof oldProgramOrOldBuildInfoProgramConstructor === "object" ? oldProgramOrOldBuildInfoProgramConstructor : undefined;
     let oldBuildInfoProgram: OldBuildInfoProgram | undefined;
     if (!oldProgram && typeof oldProgramOrOldBuildInfoProgramConstructor === "function") {
+        const state = getTemporaryModuleResolutionState(moduleResolutionCache?.getPackageJsonInfoCache(), host, options);
         oldBuildInfoProgram = oldProgramOrOldBuildInfoProgramConstructor({
             fileExists: fileName => host.fileExists(fileName),
             getCompilerOptions: () => options,
+            createHash: maybeBind(host, host.createHash),
+            getPackageJsonInfo: fileName => getPackageJsonInfo(getDirectoryPath(fileName), /*onlyRecordFailures*/ false, state),
         });
         if (oldBuildInfoProgram) {
             moduleResolutionCache?.setOldResolutionCache({

@@ -38,6 +38,7 @@ import {
     emitSkippedWithNoDiagnostics,
     emptyArray,
     ensurePathIsNonModuleName,
+    every,
     Extension,
     extensionFromPath,
     filterSemanticDiagnostics,
@@ -75,6 +76,7 @@ import {
     OldBuildInfoProgramHost,
     outFile,
     PackageJsonInfo,
+    PackageJsonInfoCache,
     Path,
     PerDirectoryAndNonRelativeNameCache,
     Program,
@@ -180,7 +182,7 @@ export interface ReusableBuilderProgramState extends BuilderState {
     cacheResolutions?: {
         modules: PerDirectoryAndNonRelativeNameCache<ResolvedModuleWithFailedLookupLocations> | undefined;
         typeRefs: PerDirectoryAndNonRelativeNameCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations> | undefined;
-        packageJsonCache: Map<Path, PackageJsonInfo | boolean> | undefined;
+        packageJsonCache: PackageJsonInfoCache | undefined;
     };
     resuableCacheResolutions?: {
         cache: ProgramBuildInfoCacheResolutions;
@@ -1457,11 +1459,10 @@ function getCacheResolutions(state: BuilderProgramState) {
         const containingPath = toPath(state.program!.getAutomaticTypeDirectiveContainingFile(), state.program!.getCurrentDirectory(), state.program!.getCanonicalFileName);
         typeRefs = toPerDirectoryAndNonRelativeNameCache(state, typeRefs, getOriginalOrResolvedTypeReferenceFileName, state.program!.getAutomaticTypeDirectiveResolutions(), containingPath);
     }
-    const packageJsonMap = state.program!.getModuleResolutionCache()?.getPackageJsonInfoCache().getInternalMap();
     return state.cacheResolutions = {
         modules,
         typeRefs,
-        packageJsonCache: packageJsonMap && new Map(packageJsonMap),
+        packageJsonCache: state.program!.getModuleResolutionCache()?.getPackageJsonInfoCache().clone(),
     };
 }
 
@@ -2119,6 +2120,7 @@ export function createOldBuildInfoProgram(
 ): OldBuildInfoProgram | undefined {
     if (!cacheResolutions && !resuableCacheResolutions) return undefined;
     const fileExistsMap = new Map<string, boolean>();
+    const affectingLoationsSameMap = new Map<string, boolean>();
 
     type Resolution = ResolvedModuleWithFailedLookupLocations & ResolvedTypeReferenceDirectiveWithFailedLookupLocations;
     type ResolutionEntry = [name: string, resolutionId: ProgramBuildInfoResolutionId, mode: ResolutionMode];
@@ -2128,6 +2130,7 @@ export function createOldBuildInfoProgram(
     }
     const reusableResolvedModules = intializeReusableResolutionsCache(resuableCacheResolutions?.cache.modules);
     const reusableResolvedTypeRefs = intializeReusableResolutionsCache(resuableCacheResolutions?.cache.typeRefs);
+    let decodedHashes: Map<ProgramBuildInfoAbsoluteFileId, string | undefined> | undefined;
     let resolutions: (Resolution | false)[] | undefined;
     let originalPathOrResolvedFileNames: string[] | undefined;
     let resolutionEntries: ResolutionEntry[] | undefined;
@@ -2165,6 +2168,25 @@ export function createOldBuildInfoProgram(
         return result;
     }
 
+    function affectingLocationsSame(
+        fileName: string,
+        expected: PackageJsonInfo | boolean | string | undefined
+    ): boolean {
+        let result = affectingLoationsSameMap.get(fileName);
+        if (result !== undefined) return result;
+        const packageJsonInfo = host.getPackageJsonInfo(fileName);
+        const currentText = typeof packageJsonInfo === "object" ? packageJsonInfo.contents.packageJsonText : undefined;
+        if (isString(expected)) {
+            result = !!currentText && (host.createHash ?? generateDjb2Hash)(currentText) === expected;
+        }
+        else {
+            const expectedText = typeof expected === "object" ? expected.contents.packageJsonText : undefined;
+            result = currentText === expectedText;
+        }
+        affectingLoationsSameMap.set(fileName, result);
+        return result;
+    }
+
     function getResolvedFromCache<T extends ResolvedModuleWithFailedLookupLocations | ResolvedTypeReferenceDirectiveWithFailedLookupLocations>(
         cache: PerDirectoryAndNonRelativeNameCache<T> | undefined,
         getResolvedFileName: (resolution: T) => string | undefined,
@@ -2182,7 +2204,13 @@ export function createOldBuildInfoProgram(
         if (fromCache) {
             // TODO:: symlinks
             const resolvedFileName = getResolvedFileName(fromCache);
-            return resolvedFileName && fileExists(resolvedFileName) ? fromCache : undefined;
+            return resolvedFileName && fileExists(resolvedFileName) && every(
+                fromCache.affectingLocations,
+                fileName => affectingLocationsSame(
+                    fileName,
+                    cacheResolutions!.packageJsonCache?.getPackageJsonInfo(fileName)
+                )
+            ) ? fromCache : undefined;
         }
         if (!reusableResolutionsCache) return undefined;
         if (!reusableResolutionsCache.decoded) {
@@ -2269,6 +2297,15 @@ export function createOldBuildInfoProgram(
             ));
     }
 
+    function toAffectingFileLocation(fileId: ProgramBuildInfoAbsoluteFileId) {
+        if (!decodedHashes && resuableCacheResolutions!.cache.hash) {
+            decodedHashes = arrayToMap(resuableCacheResolutions!.cache.hash, hash => isArray(hash) ? hash[0] : hash, hash => isArray(hash) ? hash[1] : undefined);
+        }
+        const hash = decodedHashes?.get(fileId);
+        const file = resuableCacheResolutions!.getProgramBuildInfoFilePathDecoder().toFileAbsolutePath(fileId);
+        return affectingLocationsSame(file, hash) ? file : undefined;
+    }
+
     function toResolution(resolutionId: ProgramBuildInfoResolutionId): Resolution | undefined {
         const existing = resolutions?.[resolutionId - 1];
         if (existing !== undefined) return existing || undefined;
@@ -2277,13 +2314,18 @@ export function createOldBuildInfoProgram(
         const resolvedFileName = resuableCacheResolutions!.getProgramBuildInfoFilePathDecoder().toFileAbsolutePath(
             resolution.resolvedModule?.resolvedFileName || resolution.resolvedTypeReferenceDirective!.resolvedFileName
         );
-        if (fileExists(resolvedFileName)) {
+        let affectingLocations: string[] | undefined;
+        if (fileExists(resolvedFileName) && every(resolution.affectingLocations, fileId => {
+            const file = toAffectingFileLocation(fileId);
+            if (file) (affectingLocations ??= []).push(file);
+            return !!file;
+        })) {
             // Type Ref doesnt need extension
             const extenstion = resolution.resolvedModule ? extensionFromPath(resolvedFileName) : undefined!;
             return resolutions[resolutionId - 1] = {
                 resolvedModule: toResolved(resolution.resolvedModule, resolvedFileName, extenstion),
                 resolvedTypeReferenceDirective: toResolved(resolution.resolvedTypeReferenceDirective, resolvedFileName, extenstion),
-                affectingLocations: resolution.affectingLocations?.map(resuableCacheResolutions!.getProgramBuildInfoFilePathDecoder().toFileAbsolutePath),
+                affectingLocations,
                 resolutionDiagnostics: resolution.resolutionDiagnostics?.length ? convertToDiagnostics(resolution.resolutionDiagnostics, /*newProgram*/ undefined!) as Diagnostic[] : undefined
             };
         }

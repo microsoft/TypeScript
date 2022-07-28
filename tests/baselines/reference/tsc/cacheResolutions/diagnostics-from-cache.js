@@ -376,6 +376,7 @@ export const x = 10;
 Output::
 /lib/tsc -p /src/project --incremental --explainFiles
 Found 'package.json' at '/src/project/package.json'.
+File '/src/project/package.json' exists according to earlier cached lookups.
 Reusing resolution of module '@this/package' from '/src/project/index.ts' found in cache from location '/src/project', it was successfully resolved to '/src/project/index.ts'.
 File '/src/project/package.json' exists according to earlier cached lookups.
 File '/src/project/package.json' exists according to earlier cached lookups.

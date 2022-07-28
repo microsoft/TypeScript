@@ -50,16 +50,10 @@ describe("unittests:: tsc:: cacheResolutions::", () => {
             {
                 caption: "modify package.json and that should re-resolve",
                 edit: fs => replaceText(fs, "/src/project/node_modules/pkg1/package.json", "./require.js", "./require1.js"),
-                discrepancyExplanation: () => [
-                    `Affected locations are not checked which results in using incorrect resolution`
-                ]
             },
             {
                 caption: "write file not resolved by import",
                 edit: fs => fs.writeFileSync("/src/project/node_modules/pkg1/require1.d.ts", getPkgImportContent("Require", 1)),
-                discrepancyExplanation: () => [
-                    `Affected locations are not checked which results in using incorrect resolution`
-                ]
             },
             {
                 caption: "delete file with imports",
