@@ -2360,6 +2360,10 @@
         "category": "Error",
         "code": 2513
     },
+    "A tuple type cannot be indexed with a negative value.": {
+        "category": "Error",
+        "code": 2514
+    },
     "Non-abstract class '{0}' does not implement inherited abstract member '{1}' from class '{2}'.": {
         "category": "Error",
         "code": 2515

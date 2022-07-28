@@ -15584,10 +15584,15 @@ namespace ts {
                         getFlowTypeOfReference(accessExpression, propType) :
                         propType;
                 }
-                if (everyType(objectType, isTupleType) && isNumericLiteralName(propName) && +propName >= 0) {
+                if (everyType(objectType, isTupleType) && isNumericLiteralName(propName)) {
+                    const index = +propName;
                     if (accessNode && everyType(objectType, t => !(t as TupleTypeReference).target.hasRestElement) && !(accessFlags & AccessFlags.NoTupleBoundsCheck)) {
                         const indexNode = getIndexNodeForAccessExpression(accessNode);
                         if (isTupleType(objectType)) {
+                            if (index < 0) {
+                                error(indexNode, Diagnostics.A_tuple_type_cannot_be_indexed_with_a_negative_value);
+                                return undefinedType;
+                            }
                             error(indexNode, Diagnostics.Tuple_type_0_of_length_1_has_no_element_at_index_2,
                                 typeToString(objectType), getTypeReferenceArity(objectType), unescapeLeadingUnderscores(propName));
                         }
@@ -15595,11 +15600,13 @@ namespace ts {
                             error(indexNode, Diagnostics.Property_0_does_not_exist_on_type_1, unescapeLeadingUnderscores(propName), typeToString(objectType));
                         }
                     }
-                    errorIfWritingToReadonlyIndex(getIndexInfoOfType(objectType, numberType));
-                    return mapType(objectType, t => {
-                        const restType = getRestTypeOfTupleType(t as TupleTypeReference) || undefinedType;
-                        return accessFlags & AccessFlags.IncludeUndefined ? getUnionType([restType, undefinedType]) : restType;
-                    });
+                    if (index >= 0) {
+                        errorIfWritingToReadonlyIndex(getIndexInfoOfType(objectType, numberType));
+                        return mapType(objectType, t => {
+                            const restType = getRestTypeOfTupleType(t as TupleTypeReference) || undefinedType;
+                            return accessFlags & AccessFlags.IncludeUndefined ? getUnionType([restType, undefinedType]) : restType;
+                        });
+                    }
                 }
             }
             if (!(indexType.flags & TypeFlags.Nullable) && isTypeAssignableToKind(indexType, TypeFlags.StringLike | TypeFlags.NumberLike | TypeFlags.ESSymbolLike)) {
