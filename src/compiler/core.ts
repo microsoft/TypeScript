@@ -1724,6 +1724,11 @@ namespace ts {
     /** Does nothing. */
     export function noop(_?: unknown): void { }
 
+    export const noopPush: Push<any> = {
+        push: noop,
+        length: 0
+    };
+
     /** Do nothing and return false */
     export function returnFalse(): false {
         return false;
