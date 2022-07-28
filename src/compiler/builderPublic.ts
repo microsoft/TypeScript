@@ -51,7 +51,7 @@ namespace ts {
          * Returns current program that could be undefined if the program was released, or cached build info program (currently module and type ref cache)
          */
         /*@internal*/
-        getProgramOrOldBuildInfoProgramUndefined(): Program | OldBuildInfoProgram | undefined;
+        getProgramOrOldBuildInfoProgramUndefined(): Program | OldBuildInfoProgramConstructor | undefined;
         /**
          * Releases reference to the program, making all the other operations that need program to fail.
          */

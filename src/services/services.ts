@@ -1272,7 +1272,7 @@ namespace ts {
             return sourceFile;
         }
 
-        function getOldProgram(options: CompilerOptions, compilerHost: CompilerHost): Program | OldBuildInfoProgram | undefined {
+        function getOldProgram(options: CompilerOptions, compilerHost: CompilerHost): Program | OldBuildInfoProgramConstructor | undefined {
             if (program) return program;
             if (!options.cacheResolutions) return undefined;
             const buildInfoResult = readBuildInfoForProgram(options, compilerHost);
@@ -1283,11 +1283,12 @@ namespace ts {
                 convertToOptionsWithAbsolutePaths(buildInfoResult.buildInfo.program.options, buildInfoFilePathDecoder.toAbsolutePath) :
                 {};
             compilerOptions.configFilePath = options.configFilePath;
-            return createOldBuildInfoProgram(
+            return host => createOldBuildInfoProgram(
+                host,
                 compilerOptions,
                 /*cacheResolutions*/ undefined,
                 {
-                    cache: buildInfoResult.buildInfo.program.cacheResolutions,
+                    cache: buildInfoResult.buildInfo.program!.cacheResolutions!,
                     getProgramBuildInfoFilePathDecoder: () => buildInfoFilePathDecoder,
                 },
             );

@@ -1895,17 +1895,22 @@ namespace ts {
         }
     }
 
-    function createGetProgramOrOldBuildInfoProgramUndefined(state: ReusableBuilderProgramState): () => Program | OldBuildInfoProgram | undefined {
-        let oldProgram: OldBuildInfoProgram | undefined;
-        return () => state.program ?? oldProgram ?? (oldProgram = memoize(() => createOldBuildInfoProgram(
-            state.compilerOptions,
-            state.cacheResolutions,
-            // Prefer cached resolutions over serialized format
-            !state.cacheResolutions ? state.resuableCacheResolutions : undefined,
-        ))());
+    function createGetProgramOrOldBuildInfoProgramUndefined(state: ReusableBuilderProgramState): () => Program | OldBuildInfoProgramConstructor | undefined {
+        return () => state.program ??
+            (state.cacheResolutions || state.resuableCacheResolutions ?
+                (host => createOldBuildInfoProgram(
+                    host,
+                    state.compilerOptions,
+                    state.cacheResolutions,
+                    // Prefer cached resolutions over serialized format
+                    !state.cacheResolutions ? state.resuableCacheResolutions : undefined,
+                )) :
+                undefined
+            );
     }
 
     export function createOldBuildInfoProgram(
+        host: OldBuildInfoProgramHost,
         compilerOptions: CompilerOptions,
         cacheResolutions: ReusableBuilderProgramState["cacheResolutions"],
         resuableCacheResolutions: ReusableBuilderProgramState["resuableCacheResolutions"],
@@ -1929,8 +1934,7 @@ namespace ts {
 
         return {
             getCompilerOptions: () => compilerOptions,
-            getResolvedModule: (host, dirPath, name, mode, redirectedReference) => getResolvedFromCache(
-                host,
+            getResolvedModule: (dirPath, name, mode, redirectedReference) => getResolvedFromCache(
                 cacheResolutions?.modules,
                 resuableCacheResolutions?.cache.modules,
                 decodedResolvedModules,
@@ -1941,8 +1945,7 @@ namespace ts {
                 cacheResolutions?.moduleNameToDirectoryMap,
                 decodedModuleNameToDirectoryMap,
             ),
-            getResolvedTypeReferenceDirective: (host, dirPath, name, mode, redirectedReference) => getResolvedFromCache(
-                host,
+            getResolvedTypeReferenceDirective: (dirPath, name, mode, redirectedReference) => getResolvedFromCache(
                 cacheResolutions?.typeRefs,
                 resuableCacheResolutions?.cache.typeRefs,
                 decodedResolvedTypeRefs,
@@ -1953,24 +1956,15 @@ namespace ts {
                 /*moduleNameToDirectoryMap*/ undefined,
                 /*decodedModuleNameToDirectoryMap*/ undefined,
             ),
-            clearRedirectsMap: () => {
-                cacheResolutions?.modules?.clearRedirectsMap();
-                cacheResolutions?.typeRefs?.clearRedirectsMap();
-                cacheResolutions?.moduleNameToDirectoryMap.clearRedirectsMap();
-                decodedResolvedModules.clearRedirectsMap();
-                decodedResolvedTypeRefs.clearRedirectsMap();
-                decodedModuleNameToDirectoryMap.clearRedirectsMap();
-            }
         };
 
-        function fileExists(host: OldBuildInfoProgramResolutionHost, fileName: string) {
+        function fileExists(fileName: string) {
             let result = fileExistsMap.get(fileName);
             if (result === undefined) fileExistsMap.set(fileName, result = host.fileExists(fileName));
             return result;
         }
 
         function affectingLocationsSame(
-            host: OldBuildInfoProgramResolutionHost,
             fileName: string,
             expected: PackageJsonInfo | boolean | string | undefined
         ): boolean {
@@ -1990,7 +1984,6 @@ namespace ts {
         }
 
         function getResolvedFromCache<T extends ResolvedModuleWithFailedLookupLocations | ResolvedTypeReferenceDirectiveWithFailedLookupLocations>(
-            host: OldBuildInfoProgramResolutionHost,
             cache: CacheWithRedirects<Path, ModeAwareCache<T>> | undefined,
             reusableCache: ProgramBuildInfoResolutionCacheWithRedirects | undefined,
             decodedReusableCache: DecodedResolvedMap,
@@ -2006,14 +1999,11 @@ namespace ts {
                 moduleNameToDirectoryMap?.getMapOfCacheRedirects(redirectedReference)?.get(getModeAwareCacheKey(name, mode))?.get(dirPath);
             if (fromCache) {
                 return fileExists(
-                    host,
                     (fromCache as ResolvedModuleWithFailedLookupLocations).resolvedModule?.resolvedFileName ||
                     (fromCache as ResolvedTypeReferenceDirectiveWithFailedLookupLocations).resolvedTypeReferenceDirective!.resolvedFileName!
                 ) && every(
                     fromCache.affectingLocations,
-                    fileName => affectingLocationsSame(
-                        host, fileName, cacheResolutions!.packageJsonCache?.getPackageJsonInfo(fileName)
-                    )
+                    fileName => affectingLocationsSame(fileName, cacheResolutions!.packageJsonCache?.getPackageJsonInfo(fileName))
                 ) ? fromCache as Resolution : undefined;
             }
             if (!reusableCache) return undefined;
@@ -2043,7 +2033,7 @@ namespace ts {
 
             const resolutionId = decodedReusableCache.getMapOfCacheRedirects(redirectedReference)?.get(dirPath)?.get(name, mode) ||
                 decodedModuleNameToDirectoryMap?.getMapOfCacheRedirects(redirectedReference)?.get(getModeAwareCacheKey(name, mode))?.get(dirPath);
-            return resolutionId ? toResolution(host, resolutionId) : undefined;
+            return resolutionId ? toResolution(resolutionId) : undefined;
         }
 
         function setBuildInfoResolutionEntries(
@@ -2116,16 +2106,16 @@ namespace ts {
                 ));
         }
 
-        function toAffectingFileLocation(host: OldBuildInfoProgramResolutionHost, fileId: ProgramBuildInfoAbsoluteFileId) {
+        function toAffectingFileLocation(fileId: ProgramBuildInfoAbsoluteFileId) {
             if (!decodedHashes && resuableCacheResolutions!.cache.hash) {
                 decodedHashes = arrayToMap(resuableCacheResolutions!.cache.hash, hash => isArray(hash) ? hash[0] : hash, hash => isArray(hash) ? hash[1] : undefined);
             }
             const hash = decodedHashes?.get(fileId);
             const file = resuableCacheResolutions!.getProgramBuildInfoFilePathDecoder().toFileAbsolutePath(fileId);
-            return affectingLocationsSame(host, file, hash) ? file : undefined;
+            return affectingLocationsSame(file, hash) ? file : undefined;
         }
 
-        function toResolution(host: OldBuildInfoProgramResolutionHost, resolutionId: ProgramBuildInfoResolutionId): Resolution | undefined {
+        function toResolution(resolutionId: ProgramBuildInfoResolutionId): Resolution | undefined {
             const existing = resolutions?.[resolutionId - 1];
             if (existing !== undefined) return existing || undefined;
             resolutions ??= new Array(resuableCacheResolutions!.cache.resolutions.length);
@@ -2134,8 +2124,8 @@ namespace ts {
                 resolution.resolvedModule?.resolvedFileName || resolution.resolvedTypeReferenceDirective!.resolvedFileName
             );
             let affectingLocations: string[] | undefined;
-            if (fileExists(host, resolvedFileName) && every(resolution.affectingLocations, fileId => {
-                const file = toAffectingFileLocation(host, fileId);
+            if (fileExists(resolvedFileName) && every(resolution.affectingLocations, fileId => {
+                const file = toAffectingFileLocation(fileId);
                 if (file) (affectingLocations ??= []).push(file);
                 return !!file;
             })) {

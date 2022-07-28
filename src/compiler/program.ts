@@ -998,7 +998,7 @@ namespace ts {
         return optionsHaveChanges(program.getCompilerOptions(), newOptions, sourceFileAffectingCompilerOptions);
     }
 
-    function createCreateProgramOptions(rootNames: readonly string[], options: CompilerOptions, host?: CompilerHost, oldProgram?: Program | OldBuildInfoProgram, configFileParsingDiagnostics?: readonly Diagnostic[]): CreateProgramOptionsWithOldBuildInfoProgram {
+    function createCreateProgramOptions(rootNames: readonly string[], options: CompilerOptions, host?: CompilerHost, oldProgram?: Program | OldBuildInfoProgramConstructor, configFileParsingDiagnostics?: readonly Diagnostic[]): CreateProgramOptionsWithOldBuildInfoProgramConstructor {
         return {
             rootNames,
             options,
@@ -1006,10 +1006,6 @@ namespace ts {
             oldProgram,
             configFileParsingDiagnostics
         };
-    }
-
-    function isOldBuildInfoProgram(program: Program | OldBuildInfoProgram | undefined): program is OldBuildInfoProgram {
-        return !!(program as OldBuildInfoProgram | undefined)?.getResolvedModule;
     }
 
     /**
@@ -1024,7 +1020,7 @@ namespace ts {
      */
     export function createProgram(createProgramOptions: CreateProgramOptions): Program;
     /*@internal*/
-    export function createProgram(createProgramOptions: CreateProgramOptionsWithOldBuildInfoProgram): Program; // eslint-disable-line @typescript-eslint/unified-signatures
+    export function createProgram(createProgramOptions: CreateProgramOptionsWithOldBuildInfoProgramConstructor): Program; // eslint-disable-line @typescript-eslint/unified-signatures
     /**
      * Create a new 'Program' instance. A Program is an immutable collection of 'SourceFile's and a 'CompilerOptions'
      * that represent a compilation unit.
@@ -1040,12 +1036,10 @@ namespace ts {
      * @returns A 'Program' object.
      */
     export function createProgram(rootNames: readonly string[], options: CompilerOptions, host?: CompilerHost, oldProgram?: Program, configFileParsingDiagnostics?: readonly Diagnostic[]): Program;
-    export function createProgram(rootNamesOrOptions: readonly string[] | CreateProgramOptionsWithOldBuildInfoProgram, _options?: CompilerOptions, _host?: CompilerHost, _oldProgram?: Program, _configFileParsingDiagnostics?: readonly Diagnostic[]): Program {
+    export function createProgram(rootNamesOrOptions: readonly string[] | CreateProgramOptionsWithOldBuildInfoProgramConstructor, _options?: CompilerOptions, _host?: CompilerHost, _oldProgram?: Program, _configFileParsingDiagnostics?: readonly Diagnostic[]): Program {
         const createProgramOptions = isArray(rootNamesOrOptions) ? createCreateProgramOptions(rootNamesOrOptions, _options!, _host, _oldProgram, _configFileParsingDiagnostics) : rootNamesOrOptions; // TODO: GH#18217
         const { rootNames, options, configFileParsingDiagnostics, projectReferences } = createProgramOptions;
-        let { oldProgram: oldProgramOrOldBuildInfoProgram } = createProgramOptions;
-        let oldProgram = isOldBuildInfoProgram(oldProgramOrOldBuildInfoProgram) ? undefined : oldProgramOrOldBuildInfoProgram;
-        let oldBuildInfoProgram = isOldBuildInfoProgram(oldProgramOrOldBuildInfoProgram) ? oldProgramOrOldBuildInfoProgram : undefined;
+        let { oldProgram: oldProgramOrOldBuildInfoProgramConstructor } = createProgramOptions;
 
         let processingDefaultLibFiles: SourceFile[] | undefined;
         let processingOtherFiles: SourceFile[] | undefined;
@@ -1193,8 +1187,9 @@ namespace ts {
                 loadWithTypeDirectiveCache(typeReferenceDirectiveNames, containingFile, redirectedReference, containingFileMode, loader);
         }
 
-        let oldBuildInfoProgramResolutionHost: OldBuildInfoProgramResolutionHost | undefined;
-        if (oldBuildInfoProgram) {
+        let oldProgram = typeof oldProgramOrOldBuildInfoProgramConstructor === "object" ? oldProgramOrOldBuildInfoProgramConstructor : undefined;
+        let oldBuildInfoProgram: OldBuildInfoProgram | undefined;
+        if (!oldProgram && typeof oldProgramOrOldBuildInfoProgramConstructor === "function") {
             const state: ModuleResolutionState = {
                 host,
                 compilerOptions: options,
@@ -1207,21 +1202,22 @@ namespace ts {
                 requestContainingDirectory: undefined,
                 reportResolutionDiagnostic: noop
             };
-            oldBuildInfoProgramResolutionHost = {
+            oldBuildInfoProgram = oldProgramOrOldBuildInfoProgramConstructor({
                 fileExists: fileName => host.fileExists(fileName),
                 createHash: maybeBind(host, host.createHash),
                 getPackageJsonInfo: fileName => getPackageJsonInfo(getDirectoryPath(fileName), /*onlyRecordFailures*/ false, state),
-            };
-            // Ensure redirected references are verified before using existing cache
-            oldBuildInfoProgram.clearRedirectsMap();
-            moduleResolutionCache?.setOldResolutionCache({
-                getResolved: (dirPath, name, mode, redirectedReference) =>
-                    oldBuildInfoProgram?.getResolvedModule(oldBuildInfoProgramResolutionHost!, dirPath, name, mode, redirectedReference)
             });
-            typeReferenceDirectiveResolutionCache?.setOldResolutionCache({
-                getResolved: (dirPath, name, mode, redirectedReference) =>
-                    oldBuildInfoProgram?.getResolvedTypeReferenceDirective(oldBuildInfoProgramResolutionHost!, dirPath, name, mode, redirectedReference)
-            });
+            if (oldBuildInfoProgram) {
+                // Ensure redirected references are verified before using existing cache
+                moduleResolutionCache?.setOldResolutionCache({
+                    getResolved: (dirPath, name, mode, redirectedReference) =>
+                        oldBuildInfoProgram?.getResolvedModule(dirPath, name, mode, redirectedReference)
+                });
+                typeReferenceDirectiveResolutionCache?.setOldResolutionCache({
+                    getResolved: (dirPath, name, mode, redirectedReference) =>
+                        oldBuildInfoProgram?.getResolvedTypeReferenceDirective(dirPath, name, mode, redirectedReference)
+                });
+            }
         }
 
         // Map from a stringified PackageId to the source file with that id.
@@ -1395,7 +1391,7 @@ namespace ts {
         // unconditionally set oldProgram to undefined to prevent it from being captured in closure
         oldProgram = undefined;
         oldBuildInfoProgram = undefined;
-        oldProgramOrOldBuildInfoProgram = undefined;
+        oldProgramOrOldBuildInfoProgramConstructor = undefined;
 
         const program: Program = {
             getRootFileNames: () => rootNames,
@@ -1665,7 +1661,6 @@ namespace ts {
                     const oldResolution = !oldBuildInfoProgram ?
                         oldSourceFile?.resolvedModules?.get(moduleName, mode) :
                         oldBuildInfoProgram.getResolvedModule(
-                            oldBuildInfoProgramResolutionHost!,
                             getDirectoryPath(file.path),
                             moduleName,
                             mode,
@@ -1839,7 +1834,6 @@ namespace ts {
                     const oldResolution = !oldBuildInfoProgram ?
                         (containingSourceFile ? oldSourceFile?.resolvedTypeReferenceDirectiveNames : oldProgram?.getAutomaticTypeDirectiveResolutions())?.get(typeDirectiveName, mode) :
                         oldBuildInfoProgram.getResolvedTypeReferenceDirective(
-                            oldBuildInfoProgramResolutionHost!,
                             getDirectoryPath(containingSourceFile? containingSourceFile.path : toPath(inferredTypeFile!)),
                             typeDirectiveName,
                             mode,
@@ -1928,13 +1922,13 @@ namespace ts {
         function tryReuseStructureFromOldProgram(): StructureIsReused {
             // check properties that can affect structure of the program or module resolution strategy
             // if any of these properties has changed - structure cannot be reused
-            const oldOptions = oldProgramOrOldBuildInfoProgram?.getCompilerOptions();
+            const oldOptions = oldProgram?.getCompilerOptions() || oldBuildInfoProgram?.getCompilerOptions();
             if (!oldOptions || changesAffectModuleResolution(oldOptions, options)) {
                 return StructureIsReused.Not;
             }
 
             const result = tryReuseStructureFromOldProgramWorker();
-            return options.cacheResolutions && oldProgramOrOldBuildInfoProgram && result === StructureIsReused.Not ?
+            return options.cacheResolutions && (oldProgram || oldBuildInfoProgram) && result === StructureIsReused.Not ?
                 StructureIsReused.SafeModuleCache :
                 result;
         }
