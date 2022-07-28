@@ -403,6 +403,7 @@ namespace ts.formatting {
 
         // formatting context is used by rules provider
         const formattingContext = new FormattingContext(sourceFile, requestKind, options);
+        let previousRangeTriviaEnd: number;
         let previousRange: TextRangeWithKind;
         let previousParent: Node;
         let previousRangeStartLine: number;
@@ -439,12 +440,32 @@ namespace ts.formatting {
         }
 
         if (previousRange! && formattingScanner.getStartPos() >= originalRange.end) {
+            // Formatting edits happen by looking at pairs of contiguous tokens (see `processPair`),
+            // typically inserting or deleting whitespace between them. The recursive `processNode`
+            // logic above bails out as soon as it encounters a token that is beyond the end of the
+            // range we're supposed to format (or if we reach the end of the file). But this potentially
+            // leaves out an edit that would occur *inside* the requested range but cannot be discovered
+            // without looking at one token *beyond* the end of the range: consider the line `x = { }`
+            // with a selection from the beginning of the line to the space inside the curly braces,
+            // inclusive. We would expect a format-selection would delete the space (if rules apply),
+            // but in order to do that, we need to process the pair ["{", "}"], but we stopped processing
+            // just before getting there. This block handles this trailing edit.
             const tokenInfo =
                 formattingScanner.isOnEOF() ? formattingScanner.readEOFTokenRange() :
                 formattingScanner.isOnToken() ? formattingScanner.readTokenInfo(enclosingNode).token :
                 undefined;
 
-            if (tokenInfo) {
+            if (tokenInfo && tokenInfo.pos === previousRangeTriviaEnd!) {
+                // We need to check that tokenInfo and previousRange are contiguous: the `originalRange`
+                // may have ended in the middle of a token, which means we will have stopped formatting
+                // on that token, leaving `previousRange` pointing to the token before it, but already
+                // having moved the formatting scanner (where we just got `tokenInfo`) to the next token.
+                // If this happens, our supposed pair [previousRange, tokenInfo] actually straddles the
+                // token that intersects the end of the range we're supposed to format, so the pair will
+                // produce bogus edits if we try to `processPair`. Recall that the point of this logic is
+                // to perform a trailing edit at the end of the selection range: but there can be no valid
+                // edit in the middle of a token where the range ended, so if we have a non-contiguous
+                // pair here, we're already done and we can ignore it.
                 const parent = findPrecedingToken(tokenInfo.end, sourceFile, enclosingNode)?.parent || previousParent!;
                 processPair(
                     tokenInfo,
@@ -888,6 +909,7 @@ namespace ts.formatting {
                 }
 
                 if (currentTokenInfo.trailingTrivia) {
+                    previousRangeTriviaEnd = last(currentTokenInfo.trailingTrivia).end;
                     processTrivia(currentTokenInfo.trailingTrivia, parent, childContextNode, dynamicIndentation);
                 }
 
@@ -976,6 +998,7 @@ namespace ts.formatting {
             }
 
             previousRange = range;
+            previousRangeTriviaEnd = range.end;
             previousParent = parent;
             previousRangeStartLine = rangeStart.line;
 
