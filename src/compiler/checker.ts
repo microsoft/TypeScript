@@ -11719,6 +11719,11 @@ namespace ts {
                 forEachMappedTypePropertyKeyTypeAndIndexSignatureKeyType(modifiersType, include, keyofStringsOnly, addMemberForKeyType);
             }
             else {
+                forEachType(constraintType, t => {
+                    if (t.flags & include) {
+                        addMemberForKeyType(t);
+                    }
+                });
                 forEachType(getLowerBoundOfKeyType(constraintType), addMemberForKeyType);
             }
             setStructuredTypeMembers(type, members, emptyArray, emptyArray, indexInfos || emptyArray);
