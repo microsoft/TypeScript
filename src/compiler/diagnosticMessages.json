@@ -2416,15 +2416,15 @@
         "category": "Error",
         "code": 2530
     },
-    "'{0}' is possibly 'null'.": {
+    "Object is possibly 'null'.": {
         "category": "Error",
         "code": 2531
     },
-    "'{0}' is possibly 'undefined'.": {
+    "Object is possibly 'undefined'.": {
         "category": "Error",
         "code": 2532
     },
-    "'{0}' is possibly 'null' or 'undefined'.": {
+    "Object is possibly 'null' or 'undefined'.": {
         "category": "Error",
         "code": 2533
     },
@@ -2561,7 +2561,7 @@
         "category": "Error",
         "code": 2570
     },
-    "'{0}' is of type 'unknown'.": {
+    "Object is of type 'unknown'.": {
         "category": "Error",
         "code": 2571
     },
@@ -7421,5 +7421,21 @@
     "'{0}' is automatically exported here.": {
         "category": "Message",
         "code": 18044
+    },
+    "'{0}' is of type 'unknown'.": {
+        "category": "Error",
+        "code": 18045
+    },
+    "'{0}' is possibly 'null'.": {
+        "category": "Error",
+        "code": 18046
+    },
+    "'{0}' is possibly 'undefined'.": {
+        "category": "Error",
+        "code": 18047
+    },
+    "'{0}' is possibly 'null' or 'undefined'.": {
+        "category": "Error",
+        "code": 18048
     }
 }

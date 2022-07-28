@@ -28948,13 +28948,22 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
         }
 
         function reportObjectPossiblyNullOrUndefinedError(node: Node, facts: TypeFacts) {
-            const source = getSourceFileOfNode(node);
-            const text = getSourceTextOfNodeFromSourceFile(source, node);
+            if (isEntityNameExpression(node)) {
+                const nodeText = entityNameToString(node);
+                if (nodeText.length < 100) {
+                    error(node, facts & TypeFacts.IsUndefined ? facts & TypeFacts.IsNull ?
+                        Diagnostics._0_is_possibly_null_or_undefined :
+                        Diagnostics._0_is_possibly_undefined :
+                        Diagnostics._0_is_possibly_null,
+                        nodeText
+                    );
+                    return;
+                }
+            }
             error(node, facts & TypeFacts.IsUndefined ? facts & TypeFacts.IsNull ?
-                Diagnostics._0_is_possibly_null_or_undefined :
-                Diagnostics._0_is_possibly_undefined :
-                Diagnostics._0_is_possibly_null,
-                text
+                Diagnostics.Object_is_possibly_null_or_undefined :
+                Diagnostics.Object_is_possibly_undefined :
+                Diagnostics.Object_is_possibly_null
             );
         }
 
@@ -28972,9 +28981,14 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
             reportError: (node: Node, facts: TypeFacts) => void
         ): Type {
             if (strictNullChecks && type.flags & TypeFlags.Unknown) {
-                const source = getSourceFileOfNode(node);
-                const text = getSourceTextOfNodeFromSourceFile(source, node);
-                error(node, Diagnostics._0_is_of_type_unknown, text);
+                if (isEntityNameExpression(node)) {
+                    const nodeText = entityNameToString(node);
+                    if (nodeText.length < 100) {
+                        error(node, Diagnostics._0_is_of_type_unknown, nodeText);
+                        return errorType;
+                    }
+                }
+                error(node, Diagnostics.Object_is_of_type_unknown);
                 return errorType;
             }
             const facts = getTypeFacts(type);
@@ -28991,11 +29005,16 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
         }
 
         function checkNonNullNonVoidType(type: Type, node: Node): Type {
-            const source = getSourceFileOfNode(node);
-            const text = getSourceTextOfNodeFromSourceFile(source, node);
             const nonNullType = checkNonNullType(type, node);
             if (nonNullType.flags & TypeFlags.Void) {
-                error(node, Diagnostics._0_is_possibly_undefined, text);
+                if (isEntityNameExpression(node)) {
+                    const nodeText = entityNameToString(node);
+                    if (nodeText.length < 100) {
+                        error(node, Diagnostics._0_is_possibly_undefined, nodeText);
+                        return nonNullType;
+                    }
+                }
+                error(node, Diagnostics.Object_is_possibly_undefined);
             }
             return nonNullType;
         }
