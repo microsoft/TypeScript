@@ -92,10 +92,10 @@ Scheduled: /user/username/projects/myproject/src/tsconfig.json
 Scheduled: *ensureProjectForOpenFiles*
 Running: /user/username/projects/myproject/src/tsconfig.json
 Starting updateGraphWorker: Project: /user/username/projects/myproject/src/tsconfig.json
-File '/a/lib/package.json' does not exist.
-File '/a/package.json' does not exist.
-File '/package.json' does not exist.
-File '/user/username/projects/myproject/src/package.json' does not exist.
+File '/a/lib/package.json' does not exist according to earlier cached lookups.
+File '/a/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+File '/user/username/projects/myproject/src/package.json' does not exist according to earlier cached lookups.
 Found 'package.json' at '/user/username/projects/myproject/package.json'.
 'package.json' does not have a 'typesVersions' field.
 File '/user/username/projects/myproject/src/package.json' does not exist according to earlier cached lookups.
@@ -154,10 +154,10 @@ Scheduled: /user/username/projects/myproject/src/tsconfig.json
 Scheduled: *ensureProjectForOpenFiles*
 Running: /user/username/projects/myproject/src/tsconfig.json
 Starting updateGraphWorker: Project: /user/username/projects/myproject/src/tsconfig.json
-File '/a/lib/package.json' does not exist.
-File '/a/package.json' does not exist.
-File '/package.json' does not exist.
-File '/user/username/projects/myproject/src/package.json' does not exist.
+File '/a/lib/package.json' does not exist according to earlier cached lookups.
+File '/a/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+File '/user/username/projects/myproject/src/package.json' does not exist according to earlier cached lookups.
 Found 'package.json' at '/user/username/projects/myproject/package.json'.
 'package.json' does not have a 'typesVersions' field.
 File '/user/username/projects/myproject/src/package.json' does not exist according to earlier cached lookups.
@@ -220,10 +220,10 @@ Scheduled: /user/username/projects/myproject/src/tsconfig.json
 Scheduled: *ensureProjectForOpenFiles*
 Running: /user/username/projects/myproject/src/tsconfig.json
 Starting updateGraphWorker: Project: /user/username/projects/myproject/src/tsconfig.json
-File '/a/lib/package.json' does not exist.
-File '/a/package.json' does not exist.
-File '/package.json' does not exist.
-File '/user/username/projects/myproject/src/package.json' does not exist.
+File '/a/lib/package.json' does not exist according to earlier cached lookups.
+File '/a/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+File '/user/username/projects/myproject/src/package.json' does not exist according to earlier cached lookups.
 File '/user/username/projects/myproject/package.json' does not exist.
 File '/user/username/projects/package.json' does not exist.
 File '/user/username/package.json' does not exist.
@@ -281,10 +281,10 @@ Scheduled: /user/username/projects/myproject/src/tsconfig.json
 Scheduled: *ensureProjectForOpenFiles*
 Running: /user/username/projects/myproject/src/tsconfig.json
 Starting updateGraphWorker: Project: /user/username/projects/myproject/src/tsconfig.json
-File '/a/lib/package.json' does not exist.
-File '/a/package.json' does not exist.
-File '/package.json' does not exist.
-File '/user/username/projects/myproject/src/package.json' does not exist.
+File '/a/lib/package.json' does not exist according to earlier cached lookups.
+File '/a/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+File '/user/username/projects/myproject/src/package.json' does not exist according to earlier cached lookups.
 Found 'package.json' at '/user/username/projects/myproject/package.json'.
 'package.json' does not have a 'typesVersions' field.
 File '/user/username/projects/myproject/src/package.json' does not exist according to earlier cached lookups.
@@ -334,14 +334,14 @@ Scheduled: /user/username/projects/myproject/src/tsconfig.json
 Scheduled: *ensureProjectForOpenFiles*
 Running: /user/username/projects/myproject/src/tsconfig.json
 Starting updateGraphWorker: Project: /user/username/projects/myproject/src/tsconfig.json
-File '/a/lib/package.json' does not exist.
-File '/a/package.json' does not exist.
-File '/package.json' does not exist.
-File '/user/username/projects/myproject/src/package.json' does not exist.
+File '/a/lib/package.json' does not exist according to earlier cached lookups.
+File '/a/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+File '/user/username/projects/myproject/src/package.json' does not exist according to earlier cached lookups.
 File '/user/username/projects/myproject/package.json' does not exist.
-File '/user/username/projects/package.json' does not exist.
-File '/user/username/package.json' does not exist.
-File '/user/package.json' does not exist.
+File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
+File '/user/username/package.json' does not exist according to earlier cached lookups.
+File '/user/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 File '/user/username/projects/myproject/src/package.json' does not exist according to earlier cached lookups.
 File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
