@@ -49,13 +49,7 @@
       "documentation": [],
       "tags": [
         {
-          "name": "throws",
-          "text": [
-            {
-              "text": "{E}",
-              "kind": "text"
-            }
-          ]
+          "name": "throws"
         }
       ]
     }
@@ -112,14 +106,6 @@
         {
           "name": "throws",
           "text": [
-            {
-              "text": "{E}",
-              "kind": "text"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
             {
               "text": "description",
               "kind": "text"

@@ -308,6 +308,21 @@ namespace ts {
   * @throws {Error} description
   */`);
 
+                parsesCorrectly("exceptionTag1",
+                    `/**
+  * @exception {Error}
+  */`);
+
+                parsesCorrectly("exceptionTag2",
+                    `/**
+  * @exception free-form description
+  */`);
+
+                parsesCorrectly("exceptionTag3",
+                    `/**
+  * @exception {Error} description
+  */`);
+
                 parsesCorrectly("typedefTagWithChildrenTags",
                     `/**
   * @typedef People

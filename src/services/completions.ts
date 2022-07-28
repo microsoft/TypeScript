@@ -2249,7 +2249,14 @@ namespace ts.Completions {
             flags,
         };
 
-        type JSDocTagWithTypeExpression = JSDocParameterTag | JSDocPropertyTag | JSDocReturnTag | JSDocTypeTag | JSDocTypedefTag | JSDocTemplateTag;
+        type JSDocTagWithTypeExpression =
+            | JSDocParameterTag
+            | JSDocPropertyTag
+            | JSDocReturnTag
+            | JSDocTypeTag
+            | JSDocTypedefTag
+            | JSDocTemplateTag
+            | JSDocThrowsTag;
 
         function isTagWithTypeExpression(tag: JSDocTag): tag is JSDocTagWithTypeExpression {
             switch (tag.kind) {
@@ -2258,6 +2265,7 @@ namespace ts.Completions {
                 case SyntaxKind.JSDocReturnTag:
                 case SyntaxKind.JSDocTypeTag:
                 case SyntaxKind.JSDocTypedefTag:
+                case SyntaxKind.JSDocThrowsTag:
                     return true;
                 case SyntaxKind.JSDocTemplateTag:
                     return !!(tag as JSDocTemplateTag).constraint;

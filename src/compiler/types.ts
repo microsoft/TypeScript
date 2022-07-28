@@ -3576,7 +3576,7 @@ namespace ts {
 
     export interface JSDocThrowsTag extends JSDocTag {
         readonly kind: SyntaxKind.JSDocThrowsTag;
-        readonly name?: JSDocNameReference;
+        readonly typeExpression?: JSDocTypeExpression;
     }
 
     export interface JSDocSignature extends JSDocType, Declaration {
@@ -7849,8 +7849,8 @@ namespace ts {
         updateJSDocDeprecatedTag(node: JSDocDeprecatedTag, tagName: Identifier, comment?: string | NodeArray<JSDocComment>): JSDocDeprecatedTag;
         createJSDocOverrideTag(tagName: Identifier, comment?: string | NodeArray<JSDocComment>): JSDocOverrideTag;
         updateJSDocOverrideTag(node: JSDocOverrideTag, tagName: Identifier, comment?: string | NodeArray<JSDocComment>): JSDocOverrideTag;
-        createJSDocThrowsTag(tagName: Identifier, name?: JSDocNameReference, comment?: string | NodeArray<JSDocComment>): JSDocThrowsTag;
-        updateJSDocThrowsTag(node: JSDocThrowsTag, tagName: Identifier | undefined, name?: JSDocNameReference | undefined, comment?: string | NodeArray<JSDocComment> | undefined): JSDocThrowsTag;
+        createJSDocThrowsTag(tagName: Identifier, typeExpression: JSDocTypeExpression | undefined, comment?: string | NodeArray<JSDocComment>): JSDocThrowsTag;
+        updateJSDocThrowsTag(node: JSDocThrowsTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression | undefined, comment?: string | NodeArray<JSDocComment> | undefined): JSDocThrowsTag;
         createJSDocText(text: string): JSDocText;
         updateJSDocText(node: JSDocText, text: string): JSDocText;
         createJSDocComment(comment?: string | NodeArray<JSDocComment> | undefined, tags?: readonly JSDocTag[] | undefined): JSDoc;

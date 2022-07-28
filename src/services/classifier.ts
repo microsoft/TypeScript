@@ -768,7 +768,9 @@ namespace ts {
                             commentStart = (tag as JSDocImplementsTag | JSDocAugmentsTag).class.end;
                             break;
                         case SyntaxKind.JSDocThrowsTag:
-                            commentStart = (tag as JSDocThrowsTag).name?.end || commentStart;
+                            processElement((tag as JSDocThrowsTag).typeExpression);
+                            pos = tag.end;
+                            commentStart = (tag as JSDocThrowsTag).typeExpression?.end || commentStart;
                             break;
                     }
                     if (typeof tag.comment === "object") {

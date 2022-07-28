@@ -20,19 +20,26 @@
                 "transformFlags": 0,
                 "escapedText": "throws"
             },
-            "name": {
-                "kind": "JSDocNameReference",
+            "typeExpression": {
+                "kind": "JSDocTypeExpression",
                 "pos": 16,
                 "end": 23,
                 "modifierFlagsCache": 0,
                 "transformFlags": 0,
-                "name": {
-                    "kind": "Identifier",
+                "type": {
+                    "kind": "TypeReference",
                     "pos": 17,
                     "end": 22,
                     "modifierFlagsCache": 0,
-                    "transformFlags": 0,
-                    "escapedText": "Error"
+                    "transformFlags": 1,
+                    "typeName": {
+                        "kind": "Identifier",
+                        "pos": 17,
+                        "end": 22,
+                        "modifierFlagsCache": 0,
+                        "transformFlags": 0,
+                        "escapedText": "Error"
+                    }
                 }
             }
         },
