@@ -544,7 +544,7 @@ namespace ts {
                             // `types-publisher` sometimes creates packages with `"typings": null` for packages that don't provide their own types.
                             // See `createNotNeededPackageJSON` in the types-publisher` repo.
                             // eslint-disable-next-line no-null/no-null
-                            const isNotNeededPackage = host.fileExists(packageJsonPath) && (readJson(packageJsonPath, host) as PackageJson).typings === null;
+                            const isNotNeededPackage = host.fileExists(packageJsonPath) && (readJsonIgnoringErrors(packageJsonPath, host) as PackageJson).typings === null;
                             if (!isNotNeededPackage) {
                                 const baseFileName = getBaseFileName(normalized);
 
@@ -1966,6 +1966,7 @@ namespace ts {
     /*@internal*/
     export interface PackageJsonInfo {
         packageDirectory: string;
+        packageJsonText: string | undefined,
         packageJsonContent: PackageJsonPathFields;
         versionPaths: VersionPaths | undefined;
         /** false: resolved to nothing. undefined: not yet resolved */
@@ -2013,12 +2014,13 @@ namespace ts {
         }
         const directoryExists = directoryProbablyExists(packageDirectory, host);
         if (directoryExists && host.fileExists(packageJsonPath)) {
-            const packageJsonContent = readJson(packageJsonPath, host) as PackageJson;
+            const packageJsonText = host.readFile(packageJsonPath);
+            const packageJsonContent = readJsonIgnoringErrorsFromText(packageJsonPath, packageJsonText) as PackageJson;
             if (traceEnabled) {
                 trace(host, Diagnostics.Found_package_json_at_0, packageJsonPath);
             }
             const versionPaths = readPackageJsonTypesVersionPaths(packageJsonContent, state);
-            const result = { packageDirectory, packageJsonContent, versionPaths, resolvedEntrypoints: undefined };
+            const result: PackageJsonInfo = { packageDirectory, packageJsonText, packageJsonContent, versionPaths, resolvedEntrypoints: undefined };
             state.packageJsonInfoCache?.setPackageJsonInfo(packageJsonPath, result);
             state.affectingLocations.push(packageJsonPath);
             return result;

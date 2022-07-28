@@ -487,7 +487,7 @@ namespace ts.Completions.StringCompletions {
         // check for a version redirect
         const packageJsonPath = findPackageJson(baseDirectory, host);
         if (packageJsonPath) {
-            const packageJson = readJson(packageJsonPath, host as { readFile: (filename: string) => string | undefined });
+            const packageJson = readJsonIgnoringErrors(packageJsonPath, host as { readFile: (filename: string) => string | undefined });
             const typesVersions = (packageJson as any).typesVersions;
             if (typeof typesVersions === "object") {
                 const versionPaths = getPackageJsonTypesVersionsPaths(typesVersions)?.paths;
@@ -695,7 +695,7 @@ namespace ts.Completions.StringCompletions {
                         const packageDirectory = combinePaths(ancestor, "node_modules", packagePath);
                         const packageFile = combinePaths(packageDirectory, "package.json");
                         if (tryFileExists(host, packageFile)) {
-                            const packageJson = readJson(packageFile, host);
+                            const packageJson = readJsonIgnoringErrors(packageFile, host);
                             const exports = (packageJson as any).exports;
                             if (exports) {
                                 if (typeof exports !== "object" || exports === null) { // eslint-disable-line no-null/no-null
@@ -930,7 +930,7 @@ namespace ts.Completions.StringCompletions {
 
         const result: string[] = [];
         for (const packageJson of findPackageJsons(scriptPath, host)) {
-            const contents = readJson(packageJson, host as { readFile: (filename: string) => string | undefined }); // Cast to assert that readFile is defined
+            const contents = readJsonIgnoringErrors(packageJson, host as { readFile: (filename: string) => string | undefined }); // Cast to assert that readFile is defined
             // Provide completions for all non @types dependencies
             for (const key of nodeModulesDependencyKeys) {
                 const dependencies: object | undefined = (contents as any)[key];

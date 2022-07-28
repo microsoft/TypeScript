@@ -69,6 +69,7 @@ namespace ts {
             modules: CacheWithRedirects<Path, ModeAwareCache<ResolvedModuleWithFailedLookupLocations>> | undefined;
             typeRefs: CacheWithRedirects<Path, ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>> | undefined;
             moduleNameToDirectoryMap: CacheWithRedirects<ModeAwareCacheKey, ESMap<Path, ResolvedModuleWithFailedLookupLocations>>;
+            packageJsonCache: ESMap<Path, PackageJsonInfo | boolean> | undefined;
         };
         resuableCacheResolutions?: {
             cache: ProgramBuildInfoCacheResolutions;
@@ -824,7 +825,7 @@ namespace ts {
         readonly affectingLocations: readonly ProgramBuildInfoAbsoluteFileId[] | undefined;
         readonly resolutionDiagnostics: readonly ProgramBuildInfoResolutionDiagnostic[] | undefined;
     }
-
+    export type ProgramBuildInfoHash = ProgramBuildInfoAbsoluteFileId | [fileId: ProgramBuildInfoAbsoluteFileId, hash: string];
     export type ProgramBuildInfoResolutionId = number & { __programBuildInfoResolutionIdBrand: any };
     export type ProgramBuildInfoResolutionNameId = number & { __programBuildInfoResolutionNameIdBrand: any };
     export type ProgramBuildInfoResolutionEntry = [nameId: ProgramBuildInfoResolutionNameId, resolutionId: ProgramBuildInfoResolutionId, mode?: ResolutionMode];
@@ -841,6 +842,7 @@ namespace ts {
     export interface ProgramBuildInfoCacheResolutions {
         resolutions: readonly ProgramBuildInfoResolution[];
         names: readonly string[];
+        hash: readonly ProgramBuildInfoHash[] | undefined;
         resolutionEntries: ProgramBuildInfoResolutionEntry[];
         modules?: ProgramBuildInfoResolutionCacheWithRedirects;
         typeRefs?: ProgramBuildInfoResolutionCacheWithRedirects;
@@ -880,7 +882,11 @@ namespace ts {
     /**
      * Gets the program information to be emitted in buildInfo so that we can use it to create new program
      */
-    function getProgramBuildInfo(state: BuilderProgramState, getCanonicalFileName: GetCanonicalFileName): ProgramBuildInfo | undefined {
+    function getProgramBuildInfo(
+        state: BuilderProgramState,
+        computeHash: BuilderState.ComputeHash | undefined,
+        getCanonicalFileName: GetCanonicalFileName
+    ): ProgramBuildInfo | undefined {
         const outFilePath = outFile(state.compilerOptions);
         if (outFilePath && !state.compilerOptions.composite && !state.compilerOptions.cacheResolutions) return;
         const currentDirectory = Debug.checkDefined(state.program).getCurrentDirectory();
@@ -896,6 +902,7 @@ namespace ts {
         let resolutionNameToResolutionNameId: Map<ProgramBuildInfoResolutionNameId> | undefined;
         let resolutionEntries: ProgramBuildInfoResolutionEntry[] | undefined;
         let resolutionEntryToResolutionEntryId: Map<ProgramBuildInfoResolutionEntryId> | undefined;
+        let affectedFilesHash: ESMap<ProgramBuildInfoAbsoluteFileId, string | undefined> | undefined;
         if (outFilePath) {
             let fileInfos: string[] | undefined;
             if (state.compilerOptions.composite) {
@@ -1132,6 +1139,7 @@ namespace ts {
                 cache: {
                     resolutions: resolutions.map(toProgramBuildInfoResolution),
                     names,
+                    hash: toProgramBuildInfoHashes(),
                     resolutionEntries,
                     modules,
                     typeRefs,
@@ -1209,9 +1217,30 @@ namespace ts {
             return {
                 resolvedModule: toProgramBuildInfoResolved((resolution as ResolvedModuleWithFailedLookupLocations).resolvedModule),
                 resolvedTypeReferenceDirective: toProgramBuildInfoResolved((resolution as ResolvedTypeReferenceDirectiveWithFailedLookupLocations).resolvedTypeReferenceDirective),
-                affectingLocations: toReadonlyArrayOrUndefined(resolution.affectingLocations, toAbsoluteFileId),
+                affectingLocations: toReadonlyArrayOrUndefined(resolution.affectingLocations, toAffectedFileId),
                 resolutionDiagnostics: toReadonlyArrayOrUndefined(resolution.resolutionDiagnostics, toProgramBuildInfoResolutionDiagnostic),
             };
+        }
+
+        function toProgramBuildInfoHashes(): readonly ProgramBuildInfoHash[] | undefined {
+            if (!affectedFilesHash) return undefined;
+            const hashes: ProgramBuildInfoHash[] = [];
+            for (const key of arrayFrom(affectedFilesHash.keys()).sort(compareValues)) {
+                const value = affectedFilesHash.get(key);
+                hashes.push(value ? [key, value] : key);
+            }
+            return hashes;
+        }
+
+        function toAffectedFileId(file: string) {
+            const fileId = toAbsoluteFileId(file);
+            if (!affectedFilesHash?.has(fileId)) {
+                // Store the file hash
+                const packageJsonInfo = state.program!.getModuleResolutionCache()?.getPackageJsonInfo(file);
+                const text = typeof packageJsonInfo === "object" ? packageJsonInfo.packageJsonText : undefined;
+                (affectedFilesHash ??= new Map()).set(fileId, text ? (computeHash ?? generateDjb2Hash)(text) : undefined);
+            }
+            return fileId;
         }
 
         function toProgramBuildInfoResolved(resolved: ResolvedModuleFull | undefined): ProgramBuildInfoResolvedModuleFull | undefined;
@@ -1251,7 +1280,13 @@ namespace ts {
             const containingPath = toPath(state.program!.getAutomaticTypeDirectiveContainingFile(), currentDirectory, getCanonicalFileName);
             typeRefs = toPerDirectoryCache(state, getCanonicalFileName, typeRefs, containingPath, state.program!.getAutomaticTypeDirectiveResolutions());
         }
-        return state.cacheResolutions = { modules, typeRefs, moduleNameToDirectoryMap };
+        const packageJsonMap = state.program!.getModuleResolutionCache()?.getPackageJsonInfoCache().getInternalMap();
+        return state.cacheResolutions = {
+            modules,
+            typeRefs,
+            moduleNameToDirectoryMap,
+            packageJsonCache: packageJsonMap && new Map(packageJsonMap),
+        };
      }
 
     function toPerDirectoryCache(
@@ -1425,7 +1460,7 @@ namespace ts {
          */
         const computeHash = maybeBind(host, host.createHash);
         const state = createBuilderProgramState(newProgram, getCanonicalFileName, oldState, host.disableUseFileVersionAsSignature);
-        newProgram.getProgramBuildInfo = () => getProgramBuildInfo(state, getCanonicalFileName);
+        newProgram.getProgramBuildInfo = () => getProgramBuildInfo(state, computeHash, getCanonicalFileName);
 
         // To ensure that we arent storing any references to old program or new program without state
         newProgram = undefined!; // TODO: GH#18217

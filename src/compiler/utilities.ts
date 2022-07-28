@@ -5363,20 +5363,17 @@ namespace ts {
         return getStringFromExpandedCharCodes(expandedCharCodes);
     }
 
-    export function readJson(path: string, host: { readFile(fileName: string): string | undefined }): object {
-        try {
-            const jsonText = host.readFile(path);
-            if (!jsonText) return {};
-            const result = parseConfigFileTextToJson(path, jsonText);
-            if (result.error) {
-                return {};
-            }
-            return result.config;
-        }
-        catch (e) {
-            // gracefully handle if readFile fails or returns not JSON
+    export function readJsonIgnoringErrors(path: string, host: { readFile(fileName: string): string | undefined }): object {
+        return readJsonIgnoringErrorsFromText(path, host.readFile(path));
+    }
+
+    export function readJsonIgnoringErrorsFromText(path: string, jsonText: string | undefined): object {
+        if (!jsonText) return {};
+        const result = parseConfigFileTextToJson(path, jsonText);
+        if (result.error) {
             return {};
         }
+        return result.config;
     }
 
     export function directoryProbablyExists(directoryName: string, host: { directoryExists?: (directoryName: string) => boolean }): boolean {

@@ -227,9 +227,11 @@ interface Symbol {
         own: ReadableProgramBuildInfoResolutionCache | undefined;
         redirects: readonly ReadableProgramBuildInfoResolutionRedirectsCache[];
     };
+    export type ReadableProgramBuildInfoHash = string | [file: string, hash: string];
     export interface ReadableProgramBuildInfoCacheResolutions {
         resolutions: readonly ReadableProgramBuildInfoResolution[];
         names: readonly string[];
+        hash: readonly ReadableProgramBuildInfoHash[] | undefined,
         resolutionEntries: ReadableProgramBuildInfoResolutionEntry[];
         modules?: ReadableProgramBuildInfoResolutionCacheWithRedirects;
         typeRefs?: ReadableProgramBuildInfoResolutionCacheWithRedirects;
@@ -371,8 +373,13 @@ interface Symbol {
                 resolutions,
                 resolutionEntries,
                 modules: toReadableProgramBuildInfoResolutionCacheWithRedirects(cacheResolutions.modules),
-                typeRefs: toReadableProgramBuildInfoResolutionCacheWithRedirects(cacheResolutions.typeRefs)
+                typeRefs: toReadableProgramBuildInfoResolutionCacheWithRedirects(cacheResolutions.typeRefs),
+                hash: cacheResolutions.hash?.map(toReadableProgramBuildInfoHash),
             };
+        }
+
+        function toReadableProgramBuildInfoHash(hash: ProgramBuildInfoHash): ReadableProgramBuildInfoHash {
+            return isArray(hash) ? [toFileName(hash[0]), hash[1]] : toFileName(hash);
         }
 
         function toReadableProgramBuildInfoResolution(resolution: ProgramBuildInfoResolution, index: number): ReadableProgramBuildInfoResolution;

@@ -151,6 +151,20 @@ CleanBuild:
         "pkg3",
         "pkg4"
       ],
+      "hash": [
+        [
+          "./node_modules/pkg0/package.json",
+          "9838425114-{\"name\":\"pkg0\",\"version\":\"0.0.1\",\"exports\":{\"import\":\"./import.js\",\"require\":\"./require.js\"}}"
+        ],
+        [
+          "./node_modules/pkg2/package.json",
+          "21696956444-{\"name\":\"pkg2\",\"version\":\"0.0.1\",\"exports\":{\"import\":\"./import.js\",\"require\":\"./require.js\"}}"
+        ],
+        [
+          "./node_modules/pkg3/package.json",
+          "1856418333-{\"name\":\"pkg3\",\"version\":\"0.0.1\",\"exports\":{\"import\":\"./import.js\",\"require\":\"./require.js\"}}"
+        ]
+      ],
       "resolutionEntries": [
         [
           "pkg0",
@@ -466,6 +480,24 @@ IncrementalBuild:
         "pkg2",
         "pkg3",
         "pkg4"
+      ],
+      "hash": [
+        [
+          "./node_modules/pkg0/package.json",
+          "9838425114-{\"name\":\"pkg0\",\"version\":\"0.0.1\",\"exports\":{\"import\":\"./import.js\",\"require\":\"./require.js\"}}"
+        ],
+        [
+          "./node_modules/pkg1/package.json",
+          "-10002112997-{\"name\":\"pkg1\",\"version\":\"0.0.1\",\"exports\":{\"import\":\"./import.js\",\"require\":\"./require.js\"}}"
+        ],
+        [
+          "./node_modules/pkg2/package.json",
+          "21696956444-{\"name\":\"pkg2\",\"version\":\"0.0.1\",\"exports\":{\"import\":\"./import.js\",\"require\":\"./require.js\"}}"
+        ],
+        [
+          "./node_modules/pkg3/package.json",
+          "1856418333-{\"name\":\"pkg3\",\"version\":\"0.0.1\",\"exports\":{\"import\":\"./import.js\",\"require\":\"./require.js\"}}"
+        ]
       ],
       "resolutionEntries": [
         [
@@ -930,6 +962,24 @@ CleanBuild:
         "pkg3",
         "pkg4"
       ],
+      "hash": [
+        [
+          "./node_modules/pkg0/package.json",
+          "9838425114-{\"name\":\"pkg0\",\"version\":\"0.0.1\",\"exports\":{\"import\":\"./import.js\",\"require\":\"./require.js\"}}"
+        ],
+        [
+          "./node_modules/pkg1/package.json",
+          "-10723730036-{\"name\":\"pkg1\",\"version\":\"0.0.1\",\"exports\":{\"import\":\"./import.js\",\"require\":\"./require1.js\"}}"
+        ],
+        [
+          "./node_modules/pkg2/package.json",
+          "21696956444-{\"name\":\"pkg2\",\"version\":\"0.0.1\",\"exports\":{\"import\":\"./import.js\",\"require\":\"./require.js\"}}"
+        ],
+        [
+          "./node_modules/pkg3/package.json",
+          "1856418333-{\"name\":\"pkg3\",\"version\":\"0.0.1\",\"exports\":{\"import\":\"./import.js\",\"require\":\"./require.js\"}}"
+        ]
+      ],
       "resolutionEntries": [
         [
           "pkg0",
@@ -1283,6 +1333,24 @@ IncrementalBuild:
         "pkg2",
         "pkg3",
         "pkg4"
+      ],
+      "hash": [
+        [
+          "./node_modules/pkg0/package.json",
+          "9838425114-{\"name\":\"pkg0\",\"version\":\"0.0.1\",\"exports\":{\"import\":\"./import.js\",\"require\":\"./require.js\"}}"
+        ],
+        [
+          "./node_modules/pkg1/package.json",
+          "-10002112997-{\"name\":\"pkg1\",\"version\":\"0.0.1\",\"exports\":{\"import\":\"./import.js\",\"require\":\"./require.js\"}}"
+        ],
+        [
+          "./node_modules/pkg2/package.json",
+          "21696956444-{\"name\":\"pkg2\",\"version\":\"0.0.1\",\"exports\":{\"import\":\"./import.js\",\"require\":\"./require.js\"}}"
+        ],
+        [
+          "./node_modules/pkg3/package.json",
+          "1856418333-{\"name\":\"pkg3\",\"version\":\"0.0.1\",\"exports\":{\"import\":\"./import.js\",\"require\":\"./require.js\"}}"
+        ]
       ],
       "resolutionEntries": [
         [
