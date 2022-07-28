@@ -148,11 +148,6 @@ namespace ts {
             return false;
         }
 
-        /**
-         * Compute the hash to store the shape of the file
-         */
-        export type ComputeHash = ((data: string) => string) | undefined;
-
         function getReferencedFilesFromImportedModuleSymbol(symbol: Symbol): Path[] {
             return mapDefined(symbol.declarations, declaration => getSourceFileOfNode(declaration)?.resolvedPath);
         }
@@ -262,11 +257,12 @@ namespace ts {
         /**
          * Creates the state of file references and signature for the new program from oldState if it is safe
          */
-        export function create(newProgram: Program, getCanonicalFileName: GetCanonicalFileName, oldState?: Readonly<BuilderState>, disableUseFileVersionAsSignature?: boolean): BuilderState {
+        export function create(newProgram: Program, oldState?: Readonly<BuilderState>, disableUseFileVersionAsSignature?: boolean): BuilderState {
             const fileInfos = new Map<Path, FileInfo>();
             const referencedMap = newProgram.getCompilerOptions().module !== ModuleKind.None ? createManyToManyPathMap() : undefined;
             const exportedModulesMap = referencedMap ? createManyToManyPathMap() : undefined;
             const useOldState = canReuseOldState(referencedMap, oldState);
+            const getCanonicalFileName = createGetCanonicalFileName(newProgram.useCaseSensitiveFileNames());
 
             // Ensure source files have parent pointers set
             newProgram.getTypeChecker();
@@ -326,16 +322,14 @@ namespace ts {
             programOfThisState: Program,
             path: Path,
             cancellationToken: CancellationToken | undefined,
-            computeHash: ComputeHash,
-            getCanonicalFileName: GetCanonicalFileName,
+            host: HostForComputeHash,
         ): readonly SourceFile[] {
             const result = getFilesAffectedByWithOldState(
                 state,
                 programOfThisState,
                 path,
                 cancellationToken,
-                computeHash,
-                getCanonicalFileName,
+                host,
             );
             state.oldSignatures?.clear();
             state.oldExportedModulesMap?.clear();
@@ -347,19 +341,18 @@ namespace ts {
             programOfThisState: Program,
             path: Path,
             cancellationToken: CancellationToken | undefined,
-            computeHash: ComputeHash,
-            getCanonicalFileName: GetCanonicalFileName,
+            host: HostForComputeHash,
         ): readonly SourceFile[] {
             const sourceFile = programOfThisState.getSourceFileByPath(path);
             if (!sourceFile) {
                 return emptyArray;
             }
 
-            if (!updateShapeSignature(state, programOfThisState, sourceFile, cancellationToken, computeHash, getCanonicalFileName)) {
+            if (!updateShapeSignature(state, programOfThisState, sourceFile, cancellationToken, host)) {
                 return [sourceFile];
             }
 
-            return (state.referencedMap ? getFilesAffectedByUpdatedShapeWhenModuleEmit : getFilesAffectedByUpdatedShapeWhenNonModuleEmit)(state, programOfThisState, sourceFile, cancellationToken, computeHash, getCanonicalFileName);
+            return (state.referencedMap ? getFilesAffectedByUpdatedShapeWhenModuleEmit : getFilesAffectedByUpdatedShapeWhenNonModuleEmit)(state, programOfThisState, sourceFile, cancellationToken, host);
         }
 
         export function updateSignatureOfFile(state: BuilderState, signature: string | undefined, path: Path) {
@@ -375,8 +368,7 @@ namespace ts {
             programOfThisState: Program,
             sourceFile: SourceFile,
             cancellationToken: CancellationToken | undefined,
-            computeHash: ComputeHash,
-            getCanonicalFileName: GetCanonicalFileName,
+            host: HostForComputeHash,
             useFileVersionAsSignature = state.useFileVersionAsSignature
         ) {
             // If we have cached the result for this file, that means hence forth we should assume file shape is uptodate
@@ -393,8 +385,8 @@ namespace ts {
                         latestSignature = computeSignatureWithDiagnostics(
                             sourceFile,
                             text,
-                            computeHash,
-                            getCanonicalFileName,
+                            host,
+                            createGetCanonicalFileName(programOfThisState.useCaseSensitiveFileNames()),
                             data,
                         );
                         if (latestSignature !== prevSignature) {
@@ -590,8 +582,7 @@ namespace ts {
             programOfThisState: Program,
             sourceFileWithUpdatedShape: SourceFile,
             cancellationToken: CancellationToken | undefined,
-            computeHash: ComputeHash,
-            getCanonicalFileName: GetCanonicalFileName,
+            host: HostForComputeHash,
         ) {
             if (isFileAffectingGlobalScope(sourceFileWithUpdatedShape)) {
                 return getAllFilesExcludingDefaultLibraryFile(state, programOfThisState, sourceFileWithUpdatedShape);
@@ -615,7 +606,7 @@ namespace ts {
                 if (!seenFileNamesMap.has(currentPath)) {
                     const currentSourceFile = programOfThisState.getSourceFileByPath(currentPath)!;
                     seenFileNamesMap.set(currentPath, currentSourceFile);
-                    if (currentSourceFile && updateShapeSignature(state, programOfThisState, currentSourceFile, cancellationToken, computeHash, getCanonicalFileName)) {
+                    if (currentSourceFile && updateShapeSignature(state, programOfThisState, currentSourceFile, cancellationToken, host)) {
                         queue.push(...getReferencedByPaths(state, currentSourceFile.resolvedPath));
                     }
                 }

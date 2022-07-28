@@ -72,7 +72,7 @@ namespace ts {
     });
 
     function makeAssertChanges(getProgram: () => Program): (fileNames: readonly string[]) => void {
-        const host: BuilderProgramHost = { useCaseSensitiveFileNames: returnTrue };
+        const host: BuilderProgramHost = {};
         let builderProgram: EmitAndSemanticDiagnosticsBuilderProgram | undefined;
         return fileNames => {
             const program = getProgram();
@@ -86,7 +86,7 @@ namespace ts {
     }
 
     function makeAssertChangesWithCancellationToken(getProgram: () => Program): (fileNames: readonly string[], cancelAfterEmitLength?: number) => void {
-        const host: BuilderProgramHost = { useCaseSensitiveFileNames: returnTrue };
+        const host: BuilderProgramHost = {};
         let builderProgram: EmitAndSemanticDiagnosticsBuilderProgram | undefined;
         let cancel = false;
         const cancellationToken: CancellationToken = {

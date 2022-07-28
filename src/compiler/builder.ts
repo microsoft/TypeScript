@@ -65,12 +65,19 @@ namespace ts {
          * Name of the file whose dts was the latest to change
          */
         latestChangedDtsFile: string | undefined;
+        /**
+         * Resolutions collected from the program are stored here
+         * This allows for not having to have reference to program
+         */
         cacheResolutions?: {
             modules: CacheWithRedirects<Path, ModeAwareCache<ResolvedModuleWithFailedLookupLocations>> | undefined;
             typeRefs: CacheWithRedirects<Path, ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>> | undefined;
             moduleNameToDirectoryMap: CacheWithRedirects<ModeAwareCacheKey, ESMap<Path, ResolvedModuleWithFailedLookupLocations>>;
             packageJsonCache: PackageJsonInfoCache | undefined;
         };
+        /**
+         * Resolutions that are converted to serializable format for buildinfo
+         */
         resuableCacheResolutions?: {
             cache: ProgramBuildInfoCacheResolutions;
             getProgramBuildInfoFilePathDecoder: () => ReturnType<typeof getProgramBuildInfoFilePathDecoder>;
@@ -163,8 +170,8 @@ namespace ts {
     /**
      * Create the state so that we can iterate on changedFiles/affected files
      */
-    function createBuilderProgramState(newProgram: Program, getCanonicalFileName: GetCanonicalFileName, oldState: Readonly<ReusableBuilderProgramState> | undefined, disableUseFileVersionAsSignature: boolean | undefined): BuilderProgramState {
-        const state = BuilderState.create(newProgram, getCanonicalFileName, oldState, disableUseFileVersionAsSignature) as BuilderProgramState;
+    function createBuilderProgramState(newProgram: Program, oldState: Readonly<ReusableBuilderProgramState> | undefined, disableUseFileVersionAsSignature: boolean | undefined): BuilderProgramState {
+        const state = BuilderState.create(newProgram, oldState, disableUseFileVersionAsSignature) as BuilderProgramState;
         state.program = newProgram;
         const compilerOptions = newProgram.getCompilerOptions();
         state.compilerOptions = compilerOptions;
@@ -231,7 +238,7 @@ namespace ts {
                 // Unchanged file copy diagnostics
                 const diagnostics = oldState!.semanticDiagnosticsPerFile!.get(sourceFilePath);
                 if (diagnostics) {
-                    state.semanticDiagnosticsPerFile!.set(sourceFilePath, oldState!.hasReusableDiagnostic ? convertToDiagnostics(diagnostics as readonly ReusableDiagnostic[], newProgram, getCanonicalFileName) : diagnostics as readonly Diagnostic[]);
+                    state.semanticDiagnosticsPerFile!.set(sourceFilePath, oldState!.hasReusableDiagnostic ? convertToDiagnostics(diagnostics as readonly ReusableDiagnostic[], newProgram) : diagnostics as readonly Diagnostic[]);
                     if (!state.semanticDiagnosticsFromOldState) {
                         state.semanticDiagnosticsFromOldState = new Set();
                     }
@@ -262,9 +269,10 @@ namespace ts {
         return state;
     }
 
-    function convertToDiagnostics(diagnostics: readonly ReusableDiagnostic[], newProgram: Program | undefined, getCanonicalFileName: GetCanonicalFileName | undefined): readonly Diagnostic[] {
+    function convertToDiagnostics(diagnostics: readonly ReusableDiagnostic[], newProgram: Program): readonly Diagnostic[] {
         if (!diagnostics.length) return emptyArray;
         let buildInfoDirectory: string | undefined;
+        let getCanonicalFileName: GetCanonicalFileName | undefined;
         return diagnostics.map(diagnostic => {
             const result: Diagnostic = convertToDiagnosticRelatedInformation(diagnostic, newProgram, toPath);
             result.reportsUnnecessary = diagnostic.reportsUnnecessary;
@@ -281,26 +289,26 @@ namespace ts {
         });
 
         function toPath(path: string) {
-            buildInfoDirectory ??= getDirectoryPath(getNormalizedAbsolutePath(getTsBuildInfoEmitOutputFilePath(newProgram!.getCompilerOptions())!, newProgram!.getCurrentDirectory()));
-            return ts.toPath(path, buildInfoDirectory, getCanonicalFileName!);
+            buildInfoDirectory ??= getDirectoryPath(getNormalizedAbsolutePath(getTsBuildInfoEmitOutputFilePath(newProgram.getCompilerOptions())!, newProgram.getCurrentDirectory()));
+            return ts.toPath(path, buildInfoDirectory, getCanonicalFileName ??= createGetCanonicalFileName(newProgram.useCaseSensitiveFileNames()));
         }
     }
 
-    function convertToDiagnosticRelatedInformation(diagnostic: ReusableDiagnosticRelatedInformation, newProgram: Program | undefined, toPath: (path: string) => Path): DiagnosticRelatedInformation {
+    function convertToDiagnosticRelatedInformation(diagnostic: ReusableDiagnosticRelatedInformation, newProgram: Program, toPath: (path: string) => Path): DiagnosticRelatedInformation {
         const { file } = diagnostic;
         return {
             ...diagnostic,
-            file: file ? newProgram!.getSourceFileByPath(toPath(file)) : undefined
+            file: file ? newProgram.getSourceFileByPath(toPath(file)) : undefined
         };
     }
 
     /**
      * Releases program and other related not needed properties
      */
-    function releaseCache(state: BuilderProgramState, getCanonicalFileName: GetCanonicalFileName) {
+    function releaseCache(state: BuilderProgramState) {
         BuilderState.releaseCache(state);
         // Store the resolutions if possible
-        if (!state.resuableCacheResolutions) getCacheResolutions(state, getCanonicalFileName);
+        if (!state.resuableCacheResolutions) getCacheResolutions(state);
         state.program = undefined;
     }
 
@@ -351,8 +359,6 @@ namespace ts {
     function getNextAffectedFile(
         state: BuilderProgramState,
         cancellationToken: CancellationToken | undefined,
-        computeHash: BuilderState.ComputeHash,
-        getCanonicalFileName: GetCanonicalFileName,
         host: BuilderProgramHost
     ): SourceFile | Program | undefined {
         while (true) {
@@ -369,8 +375,6 @@ namespace ts {
                             state,
                             affectedFile,
                             cancellationToken,
-                            computeHash,
-                            getCanonicalFileName,
                             host
                         );
                         return affectedFile;
@@ -409,8 +413,7 @@ namespace ts {
                 program,
                 nextKey.value,
                 cancellationToken,
-                computeHash,
-                getCanonicalFileName,
+                host,
             );
             state.currentChangedFilePath = nextKey.value;
             state.affectedFilesIndex = 0;
@@ -469,8 +472,6 @@ namespace ts {
         state: BuilderProgramState,
         affectedFile: SourceFile,
         cancellationToken: CancellationToken | undefined,
-        computeHash: BuilderState.ComputeHash,
-        getCanonicalFileName: GetCanonicalFileName,
         host: BuilderProgramHost,
     ) {
         removeSemanticDiagnosticsOf(state, affectedFile.resolvedPath);
@@ -486,8 +487,7 @@ namespace ts {
                 Debug.checkDefined(state.program),
                 affectedFile,
                 cancellationToken,
-                computeHash,
-                getCanonicalFileName,
+                host,
             );
             return;
         }
@@ -496,8 +496,6 @@ namespace ts {
             state,
             affectedFile,
             cancellationToken,
-            computeHash,
-            getCanonicalFileName,
             host,
         );
     }
@@ -510,8 +508,6 @@ namespace ts {
         state: BuilderProgramState,
         path: Path,
         cancellationToken: CancellationToken | undefined,
-        computeHash: BuilderState.ComputeHash,
-        getCanonicalFileName: GetCanonicalFileName,
         host: BuilderProgramHost
     ): void {
         removeSemanticDiagnosticsOf(state, path);
@@ -530,8 +526,7 @@ namespace ts {
                     program,
                     sourceFile,
                     cancellationToken,
-                    computeHash,
-                    getCanonicalFileName,
+                    host,
                     !host.disableUseFileVersionAsSignature
                 );
                 // If not dts emit, nothing more to do
@@ -565,8 +560,6 @@ namespace ts {
         state: BuilderProgramState,
         filePath: Path,
         cancellationToken: CancellationToken | undefined,
-        computeHash: BuilderState.ComputeHash,
-        getCanonicalFileName: GetCanonicalFileName,
         host: BuilderProgramHost,
     ): boolean {
         if (!state.fileInfos.get(filePath)?.affectsGlobalScope) return false;
@@ -576,8 +569,6 @@ namespace ts {
                 state,
                 file.resolvedPath,
                 cancellationToken,
-                computeHash,
-                getCanonicalFileName,
                 host,
             ));
         removeDiagnosticsOfLibraryFiles(state);
@@ -591,8 +582,6 @@ namespace ts {
         state: BuilderProgramState,
         affectedFile: SourceFile,
         cancellationToken: CancellationToken | undefined,
-        computeHash: BuilderState.ComputeHash,
-        getCanonicalFileName: GetCanonicalFileName,
         host: BuilderProgramHost
     ) {
         // If there was change in signature (dts output) for the changed file,
@@ -610,8 +599,8 @@ namespace ts {
                 const currentPath = queue.pop()!;
                 if (!seenFileNamesMap.has(currentPath)) {
                     seenFileNamesMap.set(currentPath, true);
-                    if (handleDtsMayChangeOfGlobalScope(state, currentPath, cancellationToken, computeHash, getCanonicalFileName, host)) return;
-                    handleDtsMayChangeOf(state, currentPath, cancellationToken, computeHash, getCanonicalFileName, host);
+                    if (handleDtsMayChangeOfGlobalScope(state, currentPath, cancellationToken, host)) return;
+                    handleDtsMayChangeOf(state, currentPath, cancellationToken, host);
                     if (isChangedSignature(state, currentPath)) {
                         const currentSourceFile = Debug.checkDefined(state.program).getSourceFileByPath(currentPath)!;
                         queue.push(...BuilderState.getReferencedByPaths(state, currentSourceFile.resolvedPath));
@@ -624,7 +613,7 @@ namespace ts {
         // Go through exported modules from cache first
         // If exported modules has path, all files referencing file exported from are affected
         state.exportedModulesMap.getKeys(affectedFile.resolvedPath)?.forEach(exportedFromPath => {
-            if (handleDtsMayChangeOfGlobalScope(state, exportedFromPath, cancellationToken, computeHash, getCanonicalFileName, host)) return true;
+            if (handleDtsMayChangeOfGlobalScope(state, exportedFromPath, cancellationToken, host)) return true;
             const references = state.referencedMap!.getKeys(exportedFromPath);
             return references && forEachKey(references, filePath =>
                 handleDtsMayChangeOfFileAndExportsOfFile(
@@ -632,8 +621,6 @@ namespace ts {
                     filePath,
                     seenFileAndExportsOfFile,
                     cancellationToken,
-                    computeHash,
-                    getCanonicalFileName,
                     host,
                 )
             );
@@ -649,14 +636,12 @@ namespace ts {
         filePath: Path,
         seenFileAndExportsOfFile: Set<string>,
         cancellationToken: CancellationToken | undefined,
-        computeHash: BuilderState.ComputeHash,
-        getCanonicalFileName: GetCanonicalFileName,
         host: BuilderProgramHost,
     ): boolean | undefined {
         if (!tryAddToSet(seenFileAndExportsOfFile, filePath)) return undefined;
 
-        if (handleDtsMayChangeOfGlobalScope(state, filePath, cancellationToken, computeHash, getCanonicalFileName, host)) return true;
-        handleDtsMayChangeOf(state, filePath, cancellationToken, computeHash, getCanonicalFileName, host);
+        if (handleDtsMayChangeOfGlobalScope(state, filePath, cancellationToken, host)) return true;
+        handleDtsMayChangeOf(state, filePath, cancellationToken, host);
 
         // If exported modules has path, all files referencing file exported from are affected
         state.exportedModulesMap!.getKeys(filePath)?.forEach(exportedFromPath =>
@@ -665,8 +650,6 @@ namespace ts {
                 exportedFromPath,
                 seenFileAndExportsOfFile,
                 cancellationToken,
-                computeHash,
-                getCanonicalFileName,
                 host,
             )
         );
@@ -678,8 +661,6 @@ namespace ts {
                 state,
                 referencingFilePath,
                 cancellationToken,
-                computeHash,
-                getCanonicalFileName,
                 host,
             )
         );
@@ -884,12 +865,12 @@ namespace ts {
      */
     function getProgramBuildInfo(
         state: BuilderProgramState,
-        computeHash: BuilderState.ComputeHash | undefined,
-        getCanonicalFileName: GetCanonicalFileName
+        host: HostForComputeHash,
     ): ProgramBuildInfo | undefined {
         const outFilePath = outFile(state.compilerOptions);
         if (outFilePath && !state.compilerOptions.composite && !state.compilerOptions.cacheResolutions) return;
         const currentDirectory = Debug.checkDefined(state.program).getCurrentDirectory();
+        const getCanonicalFileName = createGetCanonicalFileName(state.program!.useCaseSensitiveFileNames());
         const buildInfoPath = getNormalizedAbsolutePath(getTsBuildInfoEmitOutputFilePath(state.compilerOptions)!, currentDirectory);
         const buildInfoDirectory = getDirectoryPath(buildInfoPath);
         // Convert the file name to Path here if we set the fileName instead to optimize multiple d.ts file emits and having to compute Canonical path
@@ -1129,7 +1110,7 @@ namespace ts {
         }
 
         function toProgramBuildInfoCacheResolutions(): ProgramBuildInfoCacheResolutions | undefined {
-            const cacheResolutions = getCacheResolutions(state, getCanonicalFileName);
+            const cacheResolutions = getCacheResolutions(state);
             const modules = toProgramBuildInfoResolutionCacheWithRedirects(cacheResolutions?.modules);
             const typeRefs = toProgramBuildInfoResolutionCacheWithRedirects(cacheResolutions?.typeRefs);
             if (!resolutions) return;
@@ -1238,7 +1219,7 @@ namespace ts {
                 // Store the file hash
                 const packageJsonInfo = state.program!.getModuleResolutionCache()?.getPackageJsonInfo(file);
                 const text = typeof packageJsonInfo === "object" ? packageJsonInfo.packageJsonText : undefined;
-                (affectedFilesHash ??= new Map()).set(fileId, text ? (computeHash ?? generateDjb2Hash)(text) : undefined);
+                (affectedFilesHash ??= new Map()).set(fileId, text ? computeSignature(text, host) : undefined);
             }
             return fileId;
         }
@@ -1265,11 +1246,12 @@ namespace ts {
         }
     }
 
-    function getCacheResolutions(state: BuilderProgramState, getCanonicalFileName: GetCanonicalFileName) {
+    function getCacheResolutions(state: BuilderProgramState) {
         if (state.cacheResolutions || !state.compilerOptions.cacheResolutions) return state.cacheResolutions;
         let modules: CacheWithRedirects<Path, ModeAwareCache<ResolvedModuleWithFailedLookupLocations>> | undefined;
         let typeRefs: CacheWithRedirects<Path, ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>> | undefined;
         const moduleNameToDirectoryMap = createCacheWithRedirects<ModeAwareCacheKey, ESMap<Path, ResolvedModuleWithFailedLookupLocations>>(state.compilerOptions);
+        const getCanonicalFileName = createGetCanonicalFileName(state.program!.useCaseSensitiveFileNames());
         state.program!.getSourceFiles().forEach(f => {
             modules = toPerDirectoryCache(state, getCanonicalFileName, modules, f, f.resolvedModules, moduleNameToDirectoryMap);
             typeRefs = toPerDirectoryCache(state, getCanonicalFileName, typeRefs, f, f.resolvedTypeReferenceDirectiveNames);
@@ -1405,7 +1387,7 @@ namespace ts {
     export function computeSignatureWithDiagnostics(
         sourceFile: SourceFile,
         text: string,
-        computeHash: BuilderState.ComputeHash | undefined,
+        host: HostForComputeHash,
         getCanonicalFileName: GetCanonicalFileName,
         data: WriteFileCallbackData | undefined
     ) {
@@ -1416,7 +1398,7 @@ namespace ts {
                 `${locationInfo(diagnostic)}${DiagnosticCategory[diagnostic.category]}${diagnostic.code}: ${flattenDiagnosticMessageText(diagnostic.messageText)}`
             ).join("\n");
         }
-        return (computeHash ?? generateDjb2Hash)(text);
+        return (host.createHash ?? generateDjb2Hash)(text);
 
         function flattenDiagnosticMessageText(diagnostic: string | DiagnosticMessageChain | undefined): string {
             return isString(diagnostic) ?
@@ -1435,8 +1417,8 @@ namespace ts {
         }
     }
 
-    export function computeSignature(text: string, computeHash: BuilderState.ComputeHash | undefined, data?: WriteFileCallbackData) {
-        return (computeHash ?? generateDjb2Hash)(getTextHandlingSourceMapForSignature(text, data));
+    export function computeSignature(text: string, host: HostForComputeHash, data?: WriteFileCallbackData) {
+        return (host.createHash ?? generateDjb2Hash)(getTextHandlingSourceMapForSignature(text, data));
     }
 
     export function createBuilderProgram(kind: BuilderProgramKind.SemanticDiagnosticsBuilderProgram, builderCreationParameters: BuilderCreationParameters): SemanticDiagnosticsBuilderProgram;
@@ -1450,16 +1432,8 @@ namespace ts {
             return oldProgram;
         }
 
-        /**
-         * Create the canonical file name for identity
-         */
-        const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
-        /**
-         * Computing hash to for signature verification
-         */
-        const computeHash = maybeBind(host, host.createHash);
-        const state = createBuilderProgramState(newProgram, getCanonicalFileName, oldState, host.disableUseFileVersionAsSignature);
-        newProgram.getProgramBuildInfo = () => getProgramBuildInfo(state, computeHash, getCanonicalFileName);
+        const state = createBuilderProgramState(newProgram, oldState, host.disableUseFileVersionAsSignature);
+        newProgram.getProgramBuildInfo = () => getProgramBuildInfo(state, host);
 
         // To ensure that we arent storing any references to old program or new program without state
         newProgram = undefined!; // TODO: GH#18217
@@ -1475,7 +1449,7 @@ namespace ts {
         builderProgram.getAllDependencies = sourceFile => BuilderState.getAllDependencies(state, Debug.checkDefined(state.program), sourceFile);
         builderProgram.getSemanticDiagnostics = getSemanticDiagnostics;
         builderProgram.emit = emit;
-        builderProgram.releaseProgram = () => releaseCache(state, getCanonicalFileName);
+        builderProgram.releaseProgram = () => releaseCache(state);
         builderProgram.getProgramOrOldBuildInfoProgramUndefined = createGetProgramOrOldBuildInfoProgramUndefined(state);
 
         if (kind === BuilderProgramKind.SemanticDiagnosticsBuilderProgram) {
@@ -1507,7 +1481,7 @@ namespace ts {
          * in that order would be used to write the files
          */
         function emitNextAffectedFile(writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): AffectedFileResult<EmitResult> {
-            let affected = getNextAffectedFile(state, cancellationToken, computeHash, getCanonicalFileName, host);
+            let affected = getNextAffectedFile(state, cancellationToken, host);
             let emitKind = BuilderFileEmit.Full;
             let isPendingEmitFile = false;
             if (!affected) {
@@ -1572,8 +1546,8 @@ namespace ts {
                                 const signature = computeSignatureWithDiagnostics(
                                     file,
                                     text,
-                                    computeHash,
-                                    getCanonicalFileName,
+                                    host,
+                                    createGetCanonicalFileName(state.program!.useCaseSensitiveFileNames()),
                                     data,
                                 );
                                 // With d.ts diagnostics they are also part of the signature so emitSignature will be different from it since its just hash of d.ts
@@ -1602,7 +1576,7 @@ namespace ts {
                         if (state.compilerOptions.composite) {
                             const filePath = sourceFiles[0].resolvedPath;
                             const oldSignature = state.emitSignatures?.get(filePath);
-                            emitSignature ??= computeSignature(text, computeHash, data);
+                            emitSignature ??= computeSignature(text, host, data);
                             // Dont write dts files if they didn't change
                             if (emitSignature === oldSignature) return;
                             (state.emitSignatures ??= new Map()).set(filePath, emitSignature);
@@ -1611,7 +1585,7 @@ namespace ts {
                         }
                     }
                     else if (state.compilerOptions.composite) {
-                        const newSignature = computeSignature(text, computeHash, data);
+                        const newSignature = computeSignature(text, host, data);
                         // Dont write dts files if they didn't change
                         if (newSignature === state.outSignature) return;
                         state.outSignature = newSignature;
@@ -1696,7 +1670,7 @@ namespace ts {
          */
         function getSemanticDiagnosticsOfNextAffectedFile(cancellationToken?: CancellationToken, ignoreSourceFile?: (sourceFile: SourceFile) => boolean): AffectedFileResult<readonly Diagnostic[]> {
             while (true) {
-                const affected = getNextAffectedFile(state, cancellationToken, computeHash, getCanonicalFileName, host);
+                const affected = getNextAffectedFile(state, cancellationToken, host);
                 if (!affected) {
                     // Done
                     return undefined;
@@ -1926,7 +1900,8 @@ namespace ts {
         return () => state.program ?? oldProgram ?? (oldProgram = memoize(() => createOldBuildInfoProgram(
             state.compilerOptions,
             state.cacheResolutions,
-            state.resuableCacheResolutions,
+            // Prefer cached resolutions over serialized format
+            !state.cacheResolutions ? state.resuableCacheResolutions : undefined,
         ))());
     }
 
