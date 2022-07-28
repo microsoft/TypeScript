@@ -1193,14 +1193,34 @@ namespace ts {
                 loadWithTypeDirectiveCache(typeReferenceDirectiveNames, containingFile, redirectedReference, containingFileMode, loader);
         }
 
+        let oldBuildInfoProgramResolutionHost: OldBuildInfoProgramResolutionHost | undefined;
         if (oldBuildInfoProgram) {
+            const state: ModuleResolutionState = {
+                host,
+                compilerOptions: options,
+                traceEnabled: isTraceEnabled(options, host),
+                failedLookupLocations: [],
+                affectingLocations: [],
+                packageJsonInfoCache: moduleResolutionCache?.getPackageJsonInfoCache(),
+                features: 0,
+                conditions: [],
+                requestContainingDirectory: undefined,
+                reportResolutionDiagnostic: noop
+            };
+            oldBuildInfoProgramResolutionHost = {
+                fileExists: fileName => host.fileExists(fileName),
+                createHash: maybeBind(host, host.createHash),
+                getPackageJsonInfo: fileName => getPackageJsonInfo(getDirectoryPath(fileName), /*onlyRecordFailures*/ false, state),
+            };
             // Ensure redirected references are verified before using existing cache
             oldBuildInfoProgram.clearRedirectsMap();
             moduleResolutionCache?.setOldResolutionCache({
-                getResolved: (dirPath, name, mode, redirectedReference) => oldBuildInfoProgram?.getResolvedModule(dirPath, name, mode, redirectedReference)
+                getResolved: (dirPath, name, mode, redirectedReference) =>
+                    oldBuildInfoProgram?.getResolvedModule(oldBuildInfoProgramResolutionHost!, dirPath, name, mode, redirectedReference)
             });
             typeReferenceDirectiveResolutionCache?.setOldResolutionCache({
-                getResolved: (dirPath, name, mode, redirectedReference) => oldBuildInfoProgram?.getResolvedTypeReferenceDirective(dirPath, name, mode, redirectedReference)
+                getResolved: (dirPath, name, mode, redirectedReference) =>
+                    oldBuildInfoProgram?.getResolvedTypeReferenceDirective(oldBuildInfoProgramResolutionHost!, dirPath, name, mode, redirectedReference)
             });
         }
 
@@ -1645,6 +1665,7 @@ namespace ts {
                     const oldResolution = !oldBuildInfoProgram ?
                         oldSourceFile?.resolvedModules?.get(moduleName, mode) :
                         oldBuildInfoProgram.getResolvedModule(
+                            oldBuildInfoProgramResolutionHost!,
                             getDirectoryPath(file.path),
                             moduleName,
                             mode,
@@ -1818,6 +1839,7 @@ namespace ts {
                     const oldResolution = !oldBuildInfoProgram ?
                         (containingSourceFile ? oldSourceFile?.resolvedTypeReferenceDirectiveNames : oldProgram?.getAutomaticTypeDirectiveResolutions())?.get(typeDirectiveName, mode) :
                         oldBuildInfoProgram.getResolvedTypeReferenceDirective(
+                            oldBuildInfoProgramResolutionHost!,
                             getDirectoryPath(containingSourceFile? containingSourceFile.path : toPath(inferredTypeFile!)),
                             typeDirectiveName,
                             mode,

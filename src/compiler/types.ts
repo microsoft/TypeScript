@@ -6609,11 +6609,29 @@ namespace ts {
     }
 
     /*@internal*/
+    export interface OldBuildInfoProgramResolutionHost {
+        fileExists(fileName: string): boolean;
+        createHash?(data: string): string;
+        getPackageJsonInfo(fileName: string): PackageJsonInfo | undefined;
+    }
+    /*@internal*/
     export interface OldBuildInfoProgram {
         getCompilerOptions(): CompilerOptions;
         clearRedirectsMap(): void;
-        getResolvedModule(dirPath: Path, name: string, mode: ResolutionMode, redirectedReference: ResolvedProjectReference | undefined): ResolvedModuleWithFailedLookupLocations | undefined;
-        getResolvedTypeReferenceDirective(dirPath: Path, name: string, mode: ResolutionMode, redirectedReference: ResolvedProjectReference | undefined): ResolvedTypeReferenceDirectiveWithFailedLookupLocations | undefined;
+        getResolvedModule(
+            host: OldBuildInfoProgramResolutionHost,
+            dirPath: Path,
+            name: string,
+            mode: ResolutionMode,
+            redirectedReference: ResolvedProjectReference | undefined,
+        ): ResolvedModuleWithFailedLookupLocations | undefined;
+        getResolvedTypeReferenceDirective(
+            host: OldBuildInfoProgramResolutionHost,
+            dirPath: Path,
+            name: string,
+            mode: ResolutionMode,
+            redirectedReference: ResolvedProjectReference | undefined,
+        ): ResolvedTypeReferenceDirectiveWithFailedLookupLocations | undefined;
     }
 
     /*@internal*/

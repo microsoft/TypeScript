@@ -31,8 +31,9 @@ namespace ts.tscWatch.cacheResolutions {
                         appendText(fs, "/src/project/randomFileForImport.ts", `export const y = 10;`);
                     },
                     discrepancyExplanation: () => [
-                        `Affected locations are not checked which results in using incorrect resolution`
-                    ]
+                        `Clean build doesnt emit files so it doesnt have emit signatures and latestChangedDtsFile`,
+                        `Incremental build has this information from previous pass`,
+                    ],
                 },
                 {
                     subScenario: "write file not resolved by import and random edit",
@@ -40,9 +41,6 @@ namespace ts.tscWatch.cacheResolutions {
                         fs.writeFileSync("/src/project/node_modules/pkg1/require1.d.ts", getPkgImportContent("Require", 1));
                         appendText(fs, "/src/project/randomFileForImport.ts", `export const z = 10;`);
                     },
-                    discrepancyExplanation: () => [
-                        `Affected locations are not checked which results in using incorrect resolution`
-                    ]
                 },
             ]
         });

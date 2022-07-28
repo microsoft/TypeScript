@@ -122,7 +122,7 @@ namespace ts {
     }
 
     /*@internal*/
-    interface ModuleResolutionState {
+    export interface ModuleResolutionState {
         host: ModuleResolutionHost;
         compilerOptions: CompilerOptions;
         traceEnabled: boolean;
@@ -619,6 +619,7 @@ namespace ts {
         /*@internal*/ setPackageJsonInfo(packageJsonPath: string, info: PackageJsonInfo | boolean): void;
         /*@internal*/ entries(): [Path, PackageJsonInfo | boolean][];
         /*@internal*/ getInternalMap(): ESMap<Path, PackageJsonInfo | boolean> | undefined;
+        /*@internal*/ clone(): PackageJsonInfoCache;
         clear(): void;
     }
 
@@ -783,9 +784,8 @@ namespace ts {
         }
     }
 
-    function createPackageJsonInfoCache(currentDirectory: string, getCanonicalFileName: (s: string) => string): PackageJsonInfoCache {
-        let cache: ESMap<Path, PackageJsonInfo | boolean> | undefined;
-        return { getPackageJsonInfo, setPackageJsonInfo, clear, entries, getInternalMap };
+    function createPackageJsonInfoCache(currentDirectory: string, getCanonicalFileName: (s: string) => string, cache?: ESMap<Path, PackageJsonInfo | boolean>): PackageJsonInfoCache {
+        return { getPackageJsonInfo, setPackageJsonInfo, clear, entries, getInternalMap, clone };
         function getPackageJsonInfo(packageJsonPath: string) {
             return cache?.get(toPath(packageJsonPath, currentDirectory, getCanonicalFileName));
         }
@@ -801,6 +801,9 @@ namespace ts {
         }
         function getInternalMap() {
             return cache;
+        }
+        function clone() {
+            return createPackageJsonInfoCache(currentDirectory, getCanonicalFileName, cache && new Map(cache));
         }
     }
 

@@ -1288,9 +1288,8 @@ namespace ts {
                 /*cacheResolutions*/ undefined,
                 {
                     cache: buildInfoResult.buildInfo.program.cacheResolutions,
-                    getProgramBuildInfoFilePathDecoder: () => buildInfoFilePathDecoder
+                    getProgramBuildInfoFilePathDecoder: () => buildInfoFilePathDecoder,
                 },
-                host
             );
         }
 
@@ -1360,6 +1359,7 @@ namespace ts {
                 resolveModuleNames: maybeBind(host, host.resolveModuleNames),
                 getModuleResolutionCache: maybeBind(host, host.getModuleResolutionCache),
                 getTypeReferenceDirectiveResolutionCache: maybeBind(host, host.getTypeReferenceDirectiveResolutionCache),
+                createHash: maybeBind(host, host.createHash),
                 resolveTypeReferenceDirectives: maybeBind(host, host.resolveTypeReferenceDirectives),
                 useSourceOfProjectReferenceRedirect: maybeBind(host, host.useSourceOfProjectReferenceRedirect),
                 getParsedCommandLine,

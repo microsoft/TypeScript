@@ -293,6 +293,8 @@ namespace ts.server {
         autoImportProviderHost: AutoImportProviderProject | false | undefined;
         /*@internal*/
         protected typeAcquisition: TypeAcquisition | undefined;
+        /*@internal*/
+        createHash = maybeBind(this.projectService.host, this.projectService.host.createHash);
 
         /*@internal*/
         constructor(
