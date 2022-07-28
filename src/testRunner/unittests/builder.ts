@@ -74,7 +74,7 @@ describe("unittests:: builder", () => {
 });
 
 function makeAssertChanges(getProgram: () => ts.Program): (fileNames: readonly string[]) => void {
-    const host: ts.BuilderProgramHost = { useCaseSensitiveFileNames: ts.returnTrue };
+    const host: ts.BuilderProgramHost = { };
     let builderProgram: ts.EmitAndSemanticDiagnosticsBuilderProgram | undefined;
     return fileNames => {
         const program = getProgram();
@@ -88,7 +88,7 @@ function makeAssertChanges(getProgram: () => ts.Program): (fileNames: readonly s
 }
 
 function makeAssertChangesWithCancellationToken(getProgram: () => ts.Program): (fileNames: readonly string[], cancelAfterEmitLength?: number) => void {
-    const host: ts.BuilderProgramHost = { useCaseSensitiveFileNames: ts.returnTrue };
+    const host: ts.BuilderProgramHost = { };
     let builderProgram: ts.EmitAndSemanticDiagnosticsBuilderProgram | undefined;
     let cancel = false;
     const cancellationToken: ts.CancellationToken = {
