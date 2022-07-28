@@ -25,6 +25,10 @@ namespace ts {
         return r && { path: r.path, extension: r.ext, packageId };
     }
 
+    function createLoaderWithNoPackageId<P extends any[]>(loader: (...args: P) => PathAndExtension | undefined): (...args: P) => Resolved | undefined {
+        return (...args) => noPackageId(loader(...args));
+    }
+
     function noPackageId(r: PathAndExtension | undefined): Resolved | undefined {
         return withPackageId(/*packageInfo*/ undefined, r);
     }
@@ -1013,6 +1017,9 @@ namespace ts {
                 case ModuleResolutionKind.Classic:
                     result = classicNameResolver(moduleName, containingFile, compilerOptions, host, cache, redirectedReference);
                     break;
+                case ModuleResolutionKind.Minimal:
+                    result = minimalModuleNameResolver(moduleName, containingFile, compilerOptions, host);
+                    break;
                 default:
                     return Debug.fail(`Unexpected moduleResolution: ${moduleResolution}`);
             }
@@ -1550,7 +1557,10 @@ namespace ts {
     function loadModuleFromFileNoImplicitExtensions(extensions: Extensions, candidate: string, onlyRecordFailures: boolean, state: ModuleResolutionState): PathAndExtension | undefined {
         // If that didn't work, try stripping a ".js" or ".jsx" extension and replacing it with a TypeScript one;
         // e.g. "./foo.js" can be matched by "./foo.ts" or "./foo.d.ts"
-        if (hasJSFileExtension(candidate) || (fileExtensionIs(candidate, Extension.Json) && state.compilerOptions.resolveJsonModule)) {
+        if (hasJSFileExtension(candidate) ||
+            (state.compilerOptions.resolveJsonModule && fileExtensionIs(candidate, Extension.Json)) ||
+            (shouldResolveTsExtension(state.compilerOptions) && fileExtensionIsOneOf(candidate, supportedTSExtensionsFlat))
+        ) {
             const extensionless = removeFileExtension(candidate);
             const extension = candidate.substring(extensionless.length);
             if (state.traceEnabled) {
@@ -1610,6 +1620,13 @@ namespace ts {
                     case Extension.Json:
                         candidate += Extension.Json;
                         return useDts ? tryExtension(Extension.Dts) : undefined;
+                    case Extension.Ts:
+                    case Extension.Tsx:
+                    case Extension.Dts:
+                        if (shouldResolveTsExtension(state.compilerOptions)) {
+                            return tryExtension(originalExtension);
+                        }
+                        // falls through
                     default:
                         return tryExtension(Extension.Ts) || tryExtension(Extension.Tsx) || (useDts ? tryExtension(Extension.Dts) : undefined);
                 }
@@ -2634,6 +2651,54 @@ namespace ts {
                 return toSearchResult(loadModuleFromFileNoPackageId(extensions, candidate, /*onlyRecordFailures*/ false, state));
             }
         }
+    }
+
+    export function minimalModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations {
+        const traceEnabled = isTraceEnabled(compilerOptions, host);
+        const failedLookupLocations: string[] = [];
+        const affectingLocations: string[] = [];
+        const containingDirectory = getDirectoryPath(containingFile);
+        const diagnostics: Diagnostic[] = [];
+        const state: ModuleResolutionState = {
+            compilerOptions,
+            host,
+            traceEnabled,
+            failedLookupLocations,
+            affectingLocations,
+            packageJsonInfoCache: undefined,
+            features: NodeResolutionFeatures.None,
+            conditions: [],
+            requestContainingDirectory: containingDirectory,
+            reportDiagnostic: diag => void diagnostics.push(diag),
+        };
+
+        const candidate = normalizePath(combinePaths(containingDirectory, moduleName));
+        return createResolvedModuleWithFailedLookupLocations(
+            tryResolve(Extensions.TypeScript) || tryResolve(Extensions.JavaScript),
+            /*isExternalLibraryImport*/ false,
+            failedLookupLocations,
+            affectingLocations,
+            diagnostics,
+            state.resultFromCache);
+
+        function tryResolve(extensions: Extensions) {
+            const resolvedUsingSettings = tryLoadModuleUsingOptionalResolutionSettings(extensions, moduleName, containingDirectory, createLoaderWithNoPackageId(loadModuleFromFileNoImplicitExtensions), state);
+            if (resolvedUsingSettings) {
+                return resolvedUsingSettings;
+            }
+            const resolvedRelative = loadModuleFromFileNoImplicitExtensions(extensions, candidate, /*onlyRecordFailures*/ false, state);
+            if (resolvedRelative) {
+                return noPackageId(resolvedRelative);
+            }
+        }
+    }
+
+    export function shouldResolveTsExtension(compilerOptions: CompilerOptions) {
+      return getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Minimal;
+    }
+
+    export function shouldAllowTsExtension(compilerOptions: CompilerOptions) {
+        return shouldResolveTsExtension(compilerOptions) && !!compilerOptions.noEmit;
     }
 
     /**

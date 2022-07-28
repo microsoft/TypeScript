@@ -835,6 +835,7 @@ namespace ts {
                 classic: ModuleResolutionKind.Classic,
                 node16: ModuleResolutionKind.Node16,
                 nodenext: ModuleResolutionKind.NodeNext,
+                minimal: ModuleResolutionKind.Minimal,
             })),
             affectsModuleResolution: true,
             paramType: Diagnostics.STRATEGY,

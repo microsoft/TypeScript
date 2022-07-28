@@ -121,6 +121,7 @@ namespace Harness {
             "moduleDetection",
             "target",
             "jsx",
+            "noEmit",
             "removeComments",
             "importHelpers",
             "importHelpers",
