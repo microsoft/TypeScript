@@ -1469,7 +1469,7 @@
         "category": "Error",
         "code": 1470
     },
-    "Module '{0}' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.": {
+    "Module '{0}' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.": {
         "category": "Error",
         "code": 1471
     },
@@ -1500,6 +1500,18 @@
     "Identifier or string literal expected.": {
         "category": "Error",
         "code": 1478
+    },
+    "The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import(\"{0}\")' call instead.": {
+        "category": "Error",
+        "code": 1479
+    },
+    "To convert this file to an ECMAScript module, change its file extension to '{0}'.": {
+        "category": "Message",
+        "code": 1480
+    },
+    "To convert this file to an ECMAScript module, change its file extension to '{0}', or add `\"type\": \"module\"` to its package.json file with path '{1}'.": {
+        "category": "Message",
+        "code": 1481
     },
 
     "The types of '{0}' are incompatible between these types.": {

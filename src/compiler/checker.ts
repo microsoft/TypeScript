@@ -3581,7 +3581,32 @@ namespace ts {
                         // An override clause will take effect for type-only imports and import types, and allows importing the types across formats, regardless of
                         // normal mode restrictions
                         if (isSyncImport && sourceFile.impliedNodeFormat === ModuleKind.ESNext && !getResolutionModeOverrideForClause(overrideClause)) {
-                            error(errorNode, Diagnostics.Module_0_cannot_be_imported_using_this_construct_The_specifier_only_resolves_to_an_ES_module_which_cannot_be_imported_synchronously_Use_dynamic_import_instead, moduleReference);
+                            if (findAncestor(location, isImportEqualsDeclaration)) {
+                                // ImportEquals in a ESM file resolving to another ESM file
+                                error(errorNode, Diagnostics.Module_0_cannot_be_imported_using_this_construct_The_specifier_only_resolves_to_an_ES_module_which_cannot_be_imported_with_require_Use_an_ECMAScript_import_instead, moduleReference);
+                            }
+                            else {
+                                // CJS file resolving to an ESM file
+                                const diag = error(errorNode, Diagnostics.The_current_file_is_a_CommonJS_module_whose_imports_will_produce_require_calls_however_the_referenced_file_is_an_ECMAScript_module_and_cannot_be_imported_with_require_Consider_writing_a_dynamic_import_0_call_instead, moduleReference);
+                                const ext = tryGetExtensionFromPath(currentSourceFile.fileName);
+                                if (ext === Extension.Ts || ext === Extension.Js) {
+                                    const scope = host.getPackageScopeForPath(currentSourceFile.path);
+                                    const targetExt = ext === Extension.Ts ? Extension.Mts : Extension.Mjs;
+                                    if (scope && !scope.packageJsonContent.type) {
+                                        addRelatedInfo(diag, createDiagnosticForNode(
+                                            errorNode,
+                                            Diagnostics.To_convert_this_file_to_an_ECMAScript_module_change_its_file_extension_to_0_or_add_type_Colon_module_to_its_package_json_file_with_path_1,
+                                            targetExt,
+                                            combinePaths(scope.packageDirectory, "package.json")));
+                                    }
+                                    else {
+                                        addRelatedInfo(diag, createDiagnosticForNode(
+                                            errorNode,
+                                            Diagnostics.To_convert_this_file_to_an_ECMAScript_module_change_its_file_extension_to_0,
+                                            targetExt));
+                                    }
+                                }
+                            }
                         }
                     }
                     // merged symbol is module declaration symbol combined with all augmentations

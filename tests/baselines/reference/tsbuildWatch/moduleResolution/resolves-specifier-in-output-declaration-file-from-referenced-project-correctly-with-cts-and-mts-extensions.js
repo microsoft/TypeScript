@@ -315,12 +315,73 @@ File '/user/username/projects/myproject/packages/pkg2/build/const.d.cts' exist -
 File '/a/lib/package.json' does not exist.
 File '/a/package.json' does not exist.
 File '/package.json' does not exist.
-[96mpackages/pkg1/index.ts[0m:[93m1[0m:[93m29[0m - [91merror[0m[90m TS1471: [0mModule 'pkg2' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+File '/user/username/projects/myproject/packages/pkg1/package.json' exists according to earlier cached lookups.
+File '/user/username/projects/myproject/packages/pkg1/package.json' exists according to earlier cached lookups.
+File '/user/username/projects/myproject/packages/pkg1/package.json' exists according to earlier cached lookups.
+File '/user/username/projects/myproject/packages/pkg1/package.json' exists according to earlier cached lookups.
+File '/user/username/projects/myproject/packages/pkg1/package.json' exists according to earlier cached lookups.
+File '/user/username/projects/myproject/packages/pkg1/package.json' exists according to earlier cached lookups.
+[96mpackages/pkg1/index.ts[0m:[93m1[0m:[93m29[0m - [91merror[0m[90m TS1479: [0mThe current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("pkg2")' call instead.
 
 [7m1[0m import type { TheNum } from 'pkg2'
 [7m [0m [91m                            ~~~~~~[0m
 
-[[90m12:01:16 AM[0m] Found 1 error. Watching for file changes.
+  [96mpackages/pkg1/index.ts[0m:[93m1[0m:[93m29[0m
+    [7m1[0m import type { TheNum } from 'pkg2'
+    [7m [0m [96m                            ~~~~~~[0m
+    To convert this file to an ECMAScript module, change its file extension to '.mts'.
+
+[96mpackages/pkg1/index.ts[0m:[93m1[0m:[93m29[0m - [91merror[0m[90m TS1479: [0mThe current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("pkg2")' call instead.
+
+[7m1[0m import type { TheNum } from 'pkg2'
+[7m [0m [91m                            ~~~~~~[0m
+
+  [96mpackages/pkg1/index.ts[0m:[93m1[0m:[93m29[0m
+    [7m1[0m import type { TheNum } from 'pkg2'
+    [7m [0m [96m                            ~~~~~~[0m
+    To convert this file to an ECMAScript module, change its file extension to '.mts'.
+
+[96mpackages/pkg1/index.ts[0m:[93m1[0m:[93m29[0m - [91merror[0m[90m TS1479: [0mThe current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("pkg2")' call instead.
+
+[7m1[0m import type { TheNum } from 'pkg2'
+[7m [0m [91m                            ~~~~~~[0m
+
+  [96mpackages/pkg1/index.ts[0m:[93m1[0m:[93m29[0m
+    [7m1[0m import type { TheNum } from 'pkg2'
+    [7m [0m [96m                            ~~~~~~[0m
+    To convert this file to an ECMAScript module, change its file extension to '.mts'.
+
+[96mpackages/pkg1/index.ts[0m:[93m1[0m:[93m29[0m - [91merror[0m[90m TS1479: [0mThe current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("pkg2")' call instead.
+
+[7m1[0m import type { TheNum } from 'pkg2'
+[7m [0m [91m                            ~~~~~~[0m
+
+  [96mpackages/pkg1/index.ts[0m:[93m1[0m:[93m29[0m
+    [7m1[0m import type { TheNum } from 'pkg2'
+    [7m [0m [96m                            ~~~~~~[0m
+    To convert this file to an ECMAScript module, change its file extension to '.mts'.
+
+[96mpackages/pkg1/index.ts[0m:[93m1[0m:[93m29[0m - [91merror[0m[90m TS1479: [0mThe current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("pkg2")' call instead.
+
+[7m1[0m import type { TheNum } from 'pkg2'
+[7m [0m [91m                            ~~~~~~[0m
+
+  [96mpackages/pkg1/index.ts[0m:[93m1[0m:[93m29[0m
+    [7m1[0m import type { TheNum } from 'pkg2'
+    [7m [0m [96m                            ~~~~~~[0m
+    To convert this file to an ECMAScript module, change its file extension to '.mts'.
+
+[96mpackages/pkg1/index.ts[0m:[93m1[0m:[93m29[0m - [91merror[0m[90m TS1479: [0mThe current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("pkg2")' call instead.
+
+[7m1[0m import type { TheNum } from 'pkg2'
+[7m [0m [91m                            ~~~~~~[0m
+
+  [96mpackages/pkg1/index.ts[0m:[93m1[0m:[93m29[0m
+    [7m1[0m import type { TheNum } from 'pkg2'
+    [7m [0m [96m                            ~~~~~~[0m
+    To convert this file to an ECMAScript module, change its file extension to '.mts'.
+
+[[90m12:01:16 AM[0m] Found 6 errors. Watching for file changes.
 
 
 
@@ -537,12 +598,73 @@ File '/user/username/projects/myproject/packages/pkg2/build/const.d.cts' exist -
 File '/a/lib/package.json' does not exist.
 File '/a/package.json' does not exist.
 File '/package.json' does not exist.
-[96mpackages/pkg1/index.ts[0m:[93m1[0m:[93m29[0m - [91merror[0m[90m TS1471: [0mModule 'pkg2' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+File '/user/username/projects/myproject/packages/pkg1/package.json' exists according to earlier cached lookups.
+File '/user/username/projects/myproject/packages/pkg1/package.json' exists according to earlier cached lookups.
+File '/user/username/projects/myproject/packages/pkg1/package.json' exists according to earlier cached lookups.
+File '/user/username/projects/myproject/packages/pkg1/package.json' exists according to earlier cached lookups.
+File '/user/username/projects/myproject/packages/pkg1/package.json' exists according to earlier cached lookups.
+File '/user/username/projects/myproject/packages/pkg1/package.json' exists according to earlier cached lookups.
+[96mpackages/pkg1/index.ts[0m:[93m1[0m:[93m29[0m - [91merror[0m[90m TS1479: [0mThe current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("pkg2")' call instead.
 
 [7m1[0m import type { TheNum } from 'pkg2'
 [7m [0m [91m                            ~~~~~~[0m
 
-[[90m12:01:34 AM[0m] Found 1 error. Watching for file changes.
+  [96mpackages/pkg1/index.ts[0m:[93m1[0m:[93m29[0m
+    [7m1[0m import type { TheNum } from 'pkg2'
+    [7m [0m [96m                            ~~~~~~[0m
+    To convert this file to an ECMAScript module, change its file extension to '.mts'.
+
+[96mpackages/pkg1/index.ts[0m:[93m1[0m:[93m29[0m - [91merror[0m[90m TS1479: [0mThe current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("pkg2")' call instead.
+
+[7m1[0m import type { TheNum } from 'pkg2'
+[7m [0m [91m                            ~~~~~~[0m
+
+  [96mpackages/pkg1/index.ts[0m:[93m1[0m:[93m29[0m
+    [7m1[0m import type { TheNum } from 'pkg2'
+    [7m [0m [96m                            ~~~~~~[0m
+    To convert this file to an ECMAScript module, change its file extension to '.mts'.
+
+[96mpackages/pkg1/index.ts[0m:[93m1[0m:[93m29[0m - [91merror[0m[90m TS1479: [0mThe current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("pkg2")' call instead.
+
+[7m1[0m import type { TheNum } from 'pkg2'
+[7m [0m [91m                            ~~~~~~[0m
+
+  [96mpackages/pkg1/index.ts[0m:[93m1[0m:[93m29[0m
+    [7m1[0m import type { TheNum } from 'pkg2'
+    [7m [0m [96m                            ~~~~~~[0m
+    To convert this file to an ECMAScript module, change its file extension to '.mts'.
+
+[96mpackages/pkg1/index.ts[0m:[93m1[0m:[93m29[0m - [91merror[0m[90m TS1479: [0mThe current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("pkg2")' call instead.
+
+[7m1[0m import type { TheNum } from 'pkg2'
+[7m [0m [91m                            ~~~~~~[0m
+
+  [96mpackages/pkg1/index.ts[0m:[93m1[0m:[93m29[0m
+    [7m1[0m import type { TheNum } from 'pkg2'
+    [7m [0m [96m                            ~~~~~~[0m
+    To convert this file to an ECMAScript module, change its file extension to '.mts'.
+
+[96mpackages/pkg1/index.ts[0m:[93m1[0m:[93m29[0m - [91merror[0m[90m TS1479: [0mThe current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("pkg2")' call instead.
+
+[7m1[0m import type { TheNum } from 'pkg2'
+[7m [0m [91m                            ~~~~~~[0m
+
+  [96mpackages/pkg1/index.ts[0m:[93m1[0m:[93m29[0m
+    [7m1[0m import type { TheNum } from 'pkg2'
+    [7m [0m [96m                            ~~~~~~[0m
+    To convert this file to an ECMAScript module, change its file extension to '.mts'.
+
+[96mpackages/pkg1/index.ts[0m:[93m1[0m:[93m29[0m - [91merror[0m[90m TS1479: [0mThe current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("pkg2")' call instead.
+
+[7m1[0m import type { TheNum } from 'pkg2'
+[7m [0m [91m                            ~~~~~~[0m
+
+  [96mpackages/pkg1/index.ts[0m:[93m1[0m:[93m29[0m
+    [7m1[0m import type { TheNum } from 'pkg2'
+    [7m [0m [96m                            ~~~~~~[0m
+    To convert this file to an ECMAScript module, change its file extension to '.mts'.
+
+[[90m12:01:34 AM[0m] Found 6 errors. Watching for file changes.
 
 
 

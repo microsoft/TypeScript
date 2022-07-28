@@ -4185,11 +4185,11 @@ namespace ts.server {
         }
 
         /*@internal*/
-        getPackageJsonsVisibleToFile(fileName: string, rootDir?: string): readonly PackageJsonInfo[] {
+        getPackageJsonsVisibleToFile(fileName: string, rootDir?: string): readonly ProjectPackageJsonInfo[] {
             const packageJsonCache = this.packageJsonCache;
             const rootPath = rootDir && this.toPath(rootDir);
             const filePath = this.toPath(fileName);
-            const result: PackageJsonInfo[] = [];
+            const result: ProjectPackageJsonInfo[] = [];
             const processDirectory = (directory: Path): boolean | undefined => {
                 switch (packageJsonCache.directoryHasPackageJson(directory)) {
                     // Sync and check same directory again
