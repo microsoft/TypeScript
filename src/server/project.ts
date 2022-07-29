@@ -1172,7 +1172,7 @@ namespace ts.server {
         }
 
         private updateGraphWorker() {
-            const oldProgram = this.program;
+            const oldProgram = this.languageService.getCurrentProgram();
             Debug.assert(!this.isClosed(), "Called update graph worker of closed project");
             this.writeLog(`Starting updateGraphWorker: Project: ${this.getProjectName()}`);
             const start = timestamp();
@@ -1181,7 +1181,7 @@ namespace ts.server {
             this.program = this.languageService.getProgram(); // TODO: GH#18217
             this.dirty = false;
             tracing?.push(tracing.Phase.Session, "finishCachingPerDirectoryResolution");
-            this.resolutionCache.finishCachingPerDirectoryResolution();
+            this.resolutionCache.finishCachingPerDirectoryResolution(this.program, oldProgram);
             tracing?.pop();
 
             Debug.assert(oldProgram === undefined || this.program !== undefined);

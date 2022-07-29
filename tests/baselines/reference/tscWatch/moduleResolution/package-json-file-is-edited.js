@@ -59,6 +59,8 @@ File '/a/lib/package.json' does not exist.
 File '/a/package.json' does not exist.
 File '/package.json' does not exist.
 FileWatcher:: Added:: WatchInfo: /a/lib/lib.es2016.full.d.ts 250 undefined Source file
+FileWatcher:: Added:: WatchInfo: /project/src/package.json 2000 undefined File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /project/package.json 2000 undefined File location affecting resolution
 DirectoryWatcher:: Added:: WatchInfo: /project/src/node_modules/@types 1 undefined Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /project/src/node_modules/@types 1 undefined Type roots
 [96msrc/fileA.ts[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS1471: [0mModule './fileB.mjs' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
@@ -107,6 +109,10 @@ WatchedFiles::
   {"fileName":"/project/src/fileB.mts","pollingInterval":250}
 /a/lib/lib.es2016.full.d.ts:
   {"fileName":"/a/lib/lib.es2016.full.d.ts","pollingInterval":250}
+/project/src/package.json:
+  {"fileName":"/project/src/package.json","pollingInterval":250}
+/project/package.json:
+  {"fileName":"/project/package.json","pollingInterval":250}
 /project/src/node_modules/@types:
   {"fileName":"/project/src/node_modules/@types","pollingInterval":500}
 
@@ -141,6 +147,56 @@ Input::
 
 
 Output::
+FileWatcher:: Triggered with /project/package.json 1:: WatchInfo: /project/package.json 2000 undefined File location affecting resolution
+Scheduling invalidateFailedLookup
+Elapsed:: *ms FileWatcher:: Triggered with /project/package.json 1:: WatchInfo: /project/package.json 2000 undefined File location affecting resolution
+Scheduling update
+Synchronizing program
+[[90m12:00:33 AM[0m] File change detected. Starting incremental compilation...
+
+CreatingProgramWith::
+  roots: ["/project/src/fileA.ts","/project/src/fileB.mts"]
+  options: {"target":3,"module":100,"outDir":"/project/out","watch":true,"project":"/project/src/tsconfig.json","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"configFilePath":"/project/src/tsconfig.json"}
+File '/a/lib/package.json' does not exist.
+File '/a/package.json' does not exist.
+File '/package.json' does not exist.
+File '/project/src/package.json' does not exist.
+Found 'package.json' at '/project/package.json'.
+'package.json' does not have a 'typesVersions' field.
+File '/project/src/package.json' does not exist according to earlier cached lookups.
+File '/project/package.json' exists according to earlier cached lookups.
+Reusing resolution of module './fileB.mjs' from '/project/src/fileA.ts' of old program, it was successfully resolved to '/project/src/fileB.mts'.
+File '/a/lib/package.json' does not exist according to earlier cached lookups.
+File '/a/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+[96msrc/fileA.ts[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS1471: [0mModule './fileB.mjs' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+
+[7m1[0m import { foo } from "./fileB.mjs";
+[7m [0m [91m                    ~~~~~~~~~~~~~[0m
+
+../a/lib/lib.es2016.full.d.ts
+  Default library for target 'es2016'
+src/fileB.mts
+  Imported via "./fileB.mjs" from file 'src/fileA.ts'
+  Matched by default include pattern '**/*'
+src/fileA.ts
+  Matched by default include pattern '**/*'
+  File is CommonJS module because 'package.json' does have field "type" or it's value is not "module"
+[[90m12:00:34 AM[0m] Found 1 error. Watching for file changes.
+
+
+
+Program root files: ["/project/src/fileA.ts","/project/src/fileB.mts"]
+Program options: {"target":3,"module":100,"outDir":"/project/out","watch":true,"project":"/project/src/tsconfig.json","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"configFilePath":"/project/src/tsconfig.json"}
+Program structureReused: SafeModules
+Program files::
+/a/lib/lib.es2016.full.d.ts
+/project/src/fileB.mts
+/project/src/fileA.ts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
 
 WatchedFiles::
 /project/src/tsconfig.json:
@@ -151,6 +207,10 @@ WatchedFiles::
   {"fileName":"/project/src/fileB.mts","pollingInterval":250}
 /a/lib/lib.es2016.full.d.ts:
   {"fileName":"/a/lib/lib.es2016.full.d.ts","pollingInterval":250}
+/project/src/package.json:
+  {"fileName":"/project/src/package.json","pollingInterval":250}
+/project/package.json:
+  {"fileName":"/project/package.json","pollingInterval":250}
 /project/src/node_modules/@types:
   {"fileName":"/project/src/node_modules/@types","pollingInterval":500}
 
@@ -173,6 +233,56 @@ Input::
 
 
 Output::
+FileWatcher:: Triggered with /project/package.json 1:: WatchInfo: /project/package.json 2000 undefined File location affecting resolution
+Scheduling invalidateFailedLookup
+Elapsed:: *ms FileWatcher:: Triggered with /project/package.json 1:: WatchInfo: /project/package.json 2000 undefined File location affecting resolution
+Scheduling update
+Synchronizing program
+[[90m12:00:39 AM[0m] File change detected. Starting incremental compilation...
+
+CreatingProgramWith::
+  roots: ["/project/src/fileA.ts","/project/src/fileB.mts"]
+  options: {"target":3,"module":100,"outDir":"/project/out","watch":true,"project":"/project/src/tsconfig.json","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"configFilePath":"/project/src/tsconfig.json"}
+File '/a/lib/package.json' does not exist.
+File '/a/package.json' does not exist.
+File '/package.json' does not exist.
+File '/project/src/package.json' does not exist.
+Found 'package.json' at '/project/package.json'.
+'package.json' does not have a 'typesVersions' field.
+File '/project/src/package.json' does not exist according to earlier cached lookups.
+File '/project/package.json' exists according to earlier cached lookups.
+Reusing resolution of module './fileB.mjs' from '/project/src/fileA.ts' of old program, it was successfully resolved to '/project/src/fileB.mts'.
+File '/a/lib/package.json' does not exist according to earlier cached lookups.
+File '/a/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+[96msrc/fileA.ts[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS1471: [0mModule './fileB.mjs' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+
+[7m1[0m import { foo } from "./fileB.mjs";
+[7m [0m [91m                    ~~~~~~~~~~~~~[0m
+
+../a/lib/lib.es2016.full.d.ts
+  Default library for target 'es2016'
+src/fileB.mts
+  Imported via "./fileB.mjs" from file 'src/fileA.ts'
+  Matched by default include pattern '**/*'
+src/fileA.ts
+  Matched by default include pattern '**/*'
+  File is CommonJS module because 'package.json' does have field "type" or it's value is not "module"
+[[90m12:00:40 AM[0m] Found 1 error. Watching for file changes.
+
+
+
+Program root files: ["/project/src/fileA.ts","/project/src/fileB.mts"]
+Program options: {"target":3,"module":100,"outDir":"/project/out","watch":true,"project":"/project/src/tsconfig.json","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"configFilePath":"/project/src/tsconfig.json"}
+Program structureReused: SafeModules
+Program files::
+/a/lib/lib.es2016.full.d.ts
+/project/src/fileB.mts
+/project/src/fileA.ts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
 
 WatchedFiles::
 /project/src/tsconfig.json:
@@ -183,6 +293,10 @@ WatchedFiles::
   {"fileName":"/project/src/fileB.mts","pollingInterval":250}
 /a/lib/lib.es2016.full.d.ts:
   {"fileName":"/a/lib/lib.es2016.full.d.ts","pollingInterval":250}
+/project/src/package.json:
+  {"fileName":"/project/src/package.json","pollingInterval":250}
+/project/package.json:
+  {"fileName":"/project/package.json","pollingInterval":250}
 /project/src/node_modules/@types:
   {"fileName":"/project/src/node_modules/@types","pollingInterval":500}
 
@@ -203,6 +317,57 @@ Input::
 //// [/project/package.json] deleted
 
 Output::
+FileWatcher:: Triggered with /project/package.json 2:: WatchInfo: /project/package.json 2000 undefined File location affecting resolution
+Scheduling invalidateFailedLookup
+Elapsed:: *ms FileWatcher:: Triggered with /project/package.json 2:: WatchInfo: /project/package.json 2000 undefined File location affecting resolution
+Scheduling update
+Synchronizing program
+[[90m12:00:42 AM[0m] File change detected. Starting incremental compilation...
+
+CreatingProgramWith::
+  roots: ["/project/src/fileA.ts","/project/src/fileB.mts"]
+  options: {"target":3,"module":100,"outDir":"/project/out","watch":true,"project":"/project/src/tsconfig.json","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"configFilePath":"/project/src/tsconfig.json"}
+File '/a/lib/package.json' does not exist.
+File '/a/package.json' does not exist.
+File '/package.json' does not exist.
+File '/project/src/package.json' does not exist.
+File '/project/package.json' does not exist.
+File '/package.json' does not exist according to earlier cached lookups.
+File '/project/src/package.json' does not exist according to earlier cached lookups.
+File '/project/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+Reusing resolution of module './fileB.mjs' from '/project/src/fileA.ts' of old program, it was successfully resolved to '/project/src/fileB.mts'.
+File '/a/lib/package.json' does not exist according to earlier cached lookups.
+File '/a/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+[96msrc/fileA.ts[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS1471: [0mModule './fileB.mjs' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+
+[7m1[0m import { foo } from "./fileB.mjs";
+[7m [0m [91m                    ~~~~~~~~~~~~~[0m
+
+../a/lib/lib.es2016.full.d.ts
+  Default library for target 'es2016'
+src/fileB.mts
+  Imported via "./fileB.mjs" from file 'src/fileA.ts'
+  Matched by default include pattern '**/*'
+src/fileA.ts
+  Matched by default include pattern '**/*'
+  File is CommonJS module because 'package.json' does have field "type" or it's value is not "module"
+[[90m12:00:43 AM[0m] Found 1 error. Watching for file changes.
+
+
+
+Program root files: ["/project/src/fileA.ts","/project/src/fileB.mts"]
+Program options: {"target":3,"module":100,"outDir":"/project/out","watch":true,"project":"/project/src/tsconfig.json","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"configFilePath":"/project/src/tsconfig.json"}
+Program structureReused: SafeModules
+Program files::
+/a/lib/lib.es2016.full.d.ts
+/project/src/fileB.mts
+/project/src/fileA.ts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
 
 WatchedFiles::
 /project/src/tsconfig.json:
@@ -213,6 +378,10 @@ WatchedFiles::
   {"fileName":"/project/src/fileB.mts","pollingInterval":250}
 /a/lib/lib.es2016.full.d.ts:
   {"fileName":"/a/lib/lib.es2016.full.d.ts","pollingInterval":250}
+/project/src/package.json:
+  {"fileName":"/project/src/package.json","pollingInterval":250}
+/project/package.json:
+  {"fileName":"/project/package.json","pollingInterval":250}
 /project/src/node_modules/@types:
   {"fileName":"/project/src/node_modules/@types","pollingInterval":500}
 
@@ -235,6 +404,56 @@ Input::
 
 
 Output::
+FileWatcher:: Triggered with /project/package.json 0:: WatchInfo: /project/package.json 2000 undefined File location affecting resolution
+Scheduling invalidateFailedLookup
+Elapsed:: *ms FileWatcher:: Triggered with /project/package.json 0:: WatchInfo: /project/package.json 2000 undefined File location affecting resolution
+Scheduling update
+Synchronizing program
+[[90m12:00:47 AM[0m] File change detected. Starting incremental compilation...
+
+CreatingProgramWith::
+  roots: ["/project/src/fileA.ts","/project/src/fileB.mts"]
+  options: {"target":3,"module":100,"outDir":"/project/out","watch":true,"project":"/project/src/tsconfig.json","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"configFilePath":"/project/src/tsconfig.json"}
+File '/a/lib/package.json' does not exist.
+File '/a/package.json' does not exist.
+File '/package.json' does not exist.
+File '/project/src/package.json' does not exist.
+Found 'package.json' at '/project/package.json'.
+'package.json' does not have a 'typesVersions' field.
+File '/project/src/package.json' does not exist according to earlier cached lookups.
+File '/project/package.json' exists according to earlier cached lookups.
+Reusing resolution of module './fileB.mjs' from '/project/src/fileA.ts' of old program, it was successfully resolved to '/project/src/fileB.mts'.
+File '/a/lib/package.json' does not exist according to earlier cached lookups.
+File '/a/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+[96msrc/fileA.ts[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS1471: [0mModule './fileB.mjs' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+
+[7m1[0m import { foo } from "./fileB.mjs";
+[7m [0m [91m                    ~~~~~~~~~~~~~[0m
+
+../a/lib/lib.es2016.full.d.ts
+  Default library for target 'es2016'
+src/fileB.mts
+  Imported via "./fileB.mjs" from file 'src/fileA.ts'
+  Matched by default include pattern '**/*'
+src/fileA.ts
+  Matched by default include pattern '**/*'
+  File is CommonJS module because 'package.json' does have field "type" or it's value is not "module"
+[[90m12:00:48 AM[0m] Found 1 error. Watching for file changes.
+
+
+
+Program root files: ["/project/src/fileA.ts","/project/src/fileB.mts"]
+Program options: {"target":3,"module":100,"outDir":"/project/out","watch":true,"project":"/project/src/tsconfig.json","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"configFilePath":"/project/src/tsconfig.json"}
+Program structureReused: SafeModules
+Program files::
+/a/lib/lib.es2016.full.d.ts
+/project/src/fileB.mts
+/project/src/fileA.ts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
 
 WatchedFiles::
 /project/src/tsconfig.json:
@@ -245,6 +464,10 @@ WatchedFiles::
   {"fileName":"/project/src/fileB.mts","pollingInterval":250}
 /a/lib/lib.es2016.full.d.ts:
   {"fileName":"/a/lib/lib.es2016.full.d.ts","pollingInterval":250}
+/project/src/package.json:
+  {"fileName":"/project/src/package.json","pollingInterval":250}
+/project/package.json:
+  {"fileName":"/project/package.json","pollingInterval":250}
 /project/src/node_modules/@types:
   {"fileName":"/project/src/node_modules/@types","pollingInterval":500}
 
@@ -265,6 +488,57 @@ Input::
 //// [/project/package.json] deleted
 
 Output::
+FileWatcher:: Triggered with /project/package.json 2:: WatchInfo: /project/package.json 2000 undefined File location affecting resolution
+Scheduling invalidateFailedLookup
+Elapsed:: *ms FileWatcher:: Triggered with /project/package.json 2:: WatchInfo: /project/package.json 2000 undefined File location affecting resolution
+Scheduling update
+Synchronizing program
+[[90m12:00:50 AM[0m] File change detected. Starting incremental compilation...
+
+CreatingProgramWith::
+  roots: ["/project/src/fileA.ts","/project/src/fileB.mts"]
+  options: {"target":3,"module":100,"outDir":"/project/out","watch":true,"project":"/project/src/tsconfig.json","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"configFilePath":"/project/src/tsconfig.json"}
+File '/a/lib/package.json' does not exist.
+File '/a/package.json' does not exist.
+File '/package.json' does not exist.
+File '/project/src/package.json' does not exist.
+File '/project/package.json' does not exist.
+File '/package.json' does not exist according to earlier cached lookups.
+File '/project/src/package.json' does not exist according to earlier cached lookups.
+File '/project/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+Reusing resolution of module './fileB.mjs' from '/project/src/fileA.ts' of old program, it was successfully resolved to '/project/src/fileB.mts'.
+File '/a/lib/package.json' does not exist according to earlier cached lookups.
+File '/a/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+[96msrc/fileA.ts[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS1471: [0mModule './fileB.mjs' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+
+[7m1[0m import { foo } from "./fileB.mjs";
+[7m [0m [91m                    ~~~~~~~~~~~~~[0m
+
+../a/lib/lib.es2016.full.d.ts
+  Default library for target 'es2016'
+src/fileB.mts
+  Imported via "./fileB.mjs" from file 'src/fileA.ts'
+  Matched by default include pattern '**/*'
+src/fileA.ts
+  Matched by default include pattern '**/*'
+  File is CommonJS module because 'package.json' does have field "type" or it's value is not "module"
+[[90m12:00:51 AM[0m] Found 1 error. Watching for file changes.
+
+
+
+Program root files: ["/project/src/fileA.ts","/project/src/fileB.mts"]
+Program options: {"target":3,"module":100,"outDir":"/project/out","watch":true,"project":"/project/src/tsconfig.json","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"configFilePath":"/project/src/tsconfig.json"}
+Program structureReused: SafeModules
+Program files::
+/a/lib/lib.es2016.full.d.ts
+/project/src/fileB.mts
+/project/src/fileA.ts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
 
 WatchedFiles::
 /project/src/tsconfig.json:
@@ -275,6 +549,10 @@ WatchedFiles::
   {"fileName":"/project/src/fileB.mts","pollingInterval":250}
 /a/lib/lib.es2016.full.d.ts:
   {"fileName":"/a/lib/lib.es2016.full.d.ts","pollingInterval":250}
+/project/src/package.json:
+  {"fileName":"/project/src/package.json","pollingInterval":250}
+/project/package.json:
+  {"fileName":"/project/package.json","pollingInterval":250}
 /project/src/node_modules/@types:
   {"fileName":"/project/src/node_modules/@types","pollingInterval":500}
 

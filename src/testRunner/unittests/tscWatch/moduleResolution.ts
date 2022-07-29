@@ -161,29 +161,44 @@ namespace ts.tscWatch {
                         change: sys => sys.writeFile("/project/package.json", JSON.stringify({
                             name: "app", version: "1.0.0", type: "module",
                         })),
-                        timeouts: runQueuedTimeoutCallbacks,
+                        timeouts: host => {
+                            host.runQueuedTimeoutCallbacks(); // Failed lookup updates
+                            host.runQueuedTimeoutCallbacks(); // Actual update
+                        },
                     },
                     {
                         caption: "Modify package.json file to remove type module",
                         change: sys => sys.writeFile("/project/package.json", JSON.stringify({ name: "app", version: "1.0.0" })),
-                        timeouts: runQueuedTimeoutCallbacks,
+                        timeouts: host => {
+                            host.runQueuedTimeoutCallbacks(); // Failed lookup updates
+                            host.runQueuedTimeoutCallbacks(); // Actual update
+                        },
                     },
                     {
                         caption: "Delete package.json",
                         change: sys => sys.deleteFile("/project/package.json"),
-                        timeouts: runQueuedTimeoutCallbacks,
+                        timeouts: host => {
+                            host.runQueuedTimeoutCallbacks(); // Failed lookup updates
+                            host.runQueuedTimeoutCallbacks(); // Actual update
+                        },
                     },
                     {
                         caption: "Modify package json file to add type module",
                         change: sys => sys.writeFile("/project/package.json", JSON.stringify({
                             name: "app", version: "1.0.0", type: "module",
                         })),
-                        timeouts: runQueuedTimeoutCallbacks,
+                        timeouts: host => {
+                            host.runQueuedTimeoutCallbacks(); // Failed lookup updates
+                            host.runQueuedTimeoutCallbacks(); // Actual update
+                        },
                     },
                     {
                         caption: "Delete package.json",
                         change: sys => sys.deleteFile("/project/package.json"),
-                        timeouts: runQueuedTimeoutCallbacks,
+                        timeouts: host => {
+                            host.runQueuedTimeoutCallbacks(); // Failed lookup updates
+                            host.runQueuedTimeoutCallbacks(); // Actual update
+                        },
                     },
                 ],
             });
@@ -199,29 +214,44 @@ namespace ts.tscWatch {
                     {
                         caption: "Modify package.json file to remove type module",
                         change: sys => sys.writeFile("/project/package.json", JSON.stringify({ name: "app", version: "1.0.0" })),
-                        timeouts: runQueuedTimeoutCallbacks,
+                        timeouts: host => {
+                            host.runQueuedTimeoutCallbacks(); // Failed lookup updates
+                            host.runQueuedTimeoutCallbacks(); // Actual update
+                        },
                     },
                     {
                         caption: "Modify package json file to add type module",
                         change: sys => sys.writeFile("/project/package.json", JSON.stringify({
                             name: "app", version: "1.0.0", type: "module",
                         })),
-                        timeouts: runQueuedTimeoutCallbacks,
+                        timeouts: host => {
+                            host.runQueuedTimeoutCallbacks(); // Failed lookup updates
+                            host.runQueuedTimeoutCallbacks(); // Actual update
+                        },
                     },
                     {
                         caption: "Delete package.json",
                         change: sys => sys.deleteFile("/project/package.json"),
-                        timeouts: runQueuedTimeoutCallbacks,
+                        timeouts: host => {
+                            host.runQueuedTimeoutCallbacks(); // Failed lookup updates
+                            host.runQueuedTimeoutCallbacks(); // Actual update
+                        },
                     },
                     {
                         caption: "Modify package json file to without type module",
                         change: sys => sys.writeFile("/project/package.json", JSON.stringify({ name: "app", version: "1.0.0" })),
-                        timeouts: runQueuedTimeoutCallbacks,
+                        timeouts: host => {
+                            host.runQueuedTimeoutCallbacks(); // Failed lookup updates
+                            host.runQueuedTimeoutCallbacks(); // Actual update
+                        },
                     },
                     {
                         caption: "Delete package.json",
                         change: sys => sys.deleteFile("/project/package.json"),
-                        timeouts: runQueuedTimeoutCallbacks,
+                        timeouts: host => {
+                            host.runQueuedTimeoutCallbacks(); // Failed lookup updates
+                            host.runQueuedTimeoutCallbacks(); // Actual update
+                        },
                     },
                 ],
             });

@@ -485,8 +485,9 @@ namespace ts {
             resolutionCache.startCachingPerDirectoryResolution();
             compilerHost.hasInvalidatedResolution = hasInvalidatedResolution;
             compilerHost.hasChangedAutomaticTypeDirectiveNames = hasChangedAutomaticTypeDirectiveNames;
+            const oldProgram = getCurrentProgram();
             builderProgram = createProgram(rootFileNames, compilerOptions, compilerHost, builderProgram, configFileParsingDiagnostics, projectReferences);
-            resolutionCache.finishCachingPerDirectoryResolution();
+            resolutionCache.finishCachingPerDirectoryResolution(builderProgram.getProgram(), oldProgram);
 
             // Update watches
             updateMissingFilePathsWatch(builderProgram.getProgram(), missingFilesMap || (missingFilesMap = new Map()), watchMissingFilePath);

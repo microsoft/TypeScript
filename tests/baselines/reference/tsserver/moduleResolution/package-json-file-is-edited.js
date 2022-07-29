@@ -42,6 +42,8 @@ File '/a/lib/package.json' does not exist.
 File '/a/package.json' does not exist.
 File '/package.json' does not exist.
 FileWatcher:: Added:: WatchInfo: /a/lib/lib.es2016.full.d.ts 500 undefined WatchType: Closed Script info
+FileWatcher:: Added:: WatchInfo: /project/src/package.json 2000 undefined Project: /project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /project/package.json 2000 undefined Project: /project/src/tsconfig.json WatchType: File location affecting resolution
 DirectoryWatcher:: Added:: WatchInfo: /project/src/node_modules/@types 1 undefined Project: /project/src/tsconfig.json WatchType: Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /project/src/node_modules/@types 1 undefined Project: /project/src/tsconfig.json WatchType: Type roots
 Finishing updateGraphWorker: Project: /project/src/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
@@ -78,8 +80,50 @@ Open files:
 		Projects: /project/src/tsconfig.json
 response:{"responseRequired":false}
 Modify package json file to add type module
+FileWatcher:: Triggered with /project/package.json 1:: WatchInfo: /project/package.json 2000 undefined Project: /project/src/tsconfig.json WatchType: File location affecting resolution
+Scheduled: /project/src/tsconfig.jsonFailedLookupInvalidation
+Elapsed:: *ms FileWatcher:: Triggered with /project/package.json 1:: WatchInfo: /project/package.json 2000 undefined Project: /project/src/tsconfig.json WatchType: File location affecting resolution
 FileWatcher:: Triggered with /project/package.json 1:: WatchInfo: /project/package.json 250 undefined WatchType: package.json file
 Elapsed:: *ms FileWatcher:: Triggered with /project/package.json 1:: WatchInfo: /project/package.json 250 undefined WatchType: package.json file
+Running: /project/src/tsconfig.jsonFailedLookupInvalidation
+Scheduled: /project/src/tsconfig.json
+Scheduled: *ensureProjectForOpenFiles*
+Running: /project/src/tsconfig.json
+Starting updateGraphWorker: Project: /project/src/tsconfig.json
+File '/a/lib/package.json' does not exist.
+File '/a/package.json' does not exist.
+File '/package.json' does not exist.
+File '/project/src/package.json' does not exist.
+Found 'package.json' at '/project/package.json'.
+'package.json' does not have a 'typesVersions' field.
+File '/project/src/package.json' does not exist according to earlier cached lookups.
+File '/project/package.json' exists according to earlier cached lookups.
+Reusing resolution of module './fileB.mjs' from '/project/src/fileA.ts' of old program, it was successfully resolved to '/project/src/fileB.mts'.
+File '/a/lib/package.json' does not exist according to earlier cached lookups.
+File '/a/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+Finishing updateGraphWorker: Project: /project/src/tsconfig.json Version: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
+Different program with same set of files
+Running: *ensureProjectForOpenFiles*
+Before ensureProjectForOpenFiles:
+Project '/project/src/tsconfig.json' (Configured)
+	Files (3)
+
+-----------------------------------------------
+Open files: 
+	FileName: /project/src/fileA.ts ProjectRootPath: undefined
+		Projects: /project/src/tsconfig.json
+After ensureProjectForOpenFiles:
+Project '/project/src/tsconfig.json' (Configured)
+	Files (3)
+
+-----------------------------------------------
+Open files: 
+	FileName: /project/src/fileA.ts ProjectRootPath: undefined
+		Projects: /project/src/tsconfig.json
+got projects updated in background, updating diagnostics for /project/src/fileA.ts
+event:
+    {"seq":0,"type":"event","event":"projectsUpdatedInBackground","body":{"openFiles":["/project/src/fileA.ts"]}}
 request:{"command":"geterr","arguments":{"delay":0,"files":["/project/src/fileA.ts"]},"seq":1,"type":"request"}
 response:{"responseRequired":false}
 event:
@@ -91,8 +135,50 @@ event:
 event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":1}}
 Modify package json file to remove type module
+FileWatcher:: Triggered with /project/package.json 1:: WatchInfo: /project/package.json 2000 undefined Project: /project/src/tsconfig.json WatchType: File location affecting resolution
+Scheduled: /project/src/tsconfig.jsonFailedLookupInvalidation
+Elapsed:: *ms FileWatcher:: Triggered with /project/package.json 1:: WatchInfo: /project/package.json 2000 undefined Project: /project/src/tsconfig.json WatchType: File location affecting resolution
 FileWatcher:: Triggered with /project/package.json 1:: WatchInfo: /project/package.json 250 undefined WatchType: package.json file
 Elapsed:: *ms FileWatcher:: Triggered with /project/package.json 1:: WatchInfo: /project/package.json 250 undefined WatchType: package.json file
+Running: /project/src/tsconfig.jsonFailedLookupInvalidation
+Scheduled: /project/src/tsconfig.json
+Scheduled: *ensureProjectForOpenFiles*
+Running: /project/src/tsconfig.json
+Starting updateGraphWorker: Project: /project/src/tsconfig.json
+File '/a/lib/package.json' does not exist.
+File '/a/package.json' does not exist.
+File '/package.json' does not exist.
+File '/project/src/package.json' does not exist.
+Found 'package.json' at '/project/package.json'.
+'package.json' does not have a 'typesVersions' field.
+File '/project/src/package.json' does not exist according to earlier cached lookups.
+File '/project/package.json' exists according to earlier cached lookups.
+Reusing resolution of module './fileB.mjs' from '/project/src/fileA.ts' of old program, it was successfully resolved to '/project/src/fileB.mts'.
+File '/a/lib/package.json' does not exist according to earlier cached lookups.
+File '/a/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+Finishing updateGraphWorker: Project: /project/src/tsconfig.json Version: 3 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
+Different program with same set of files
+Running: *ensureProjectForOpenFiles*
+Before ensureProjectForOpenFiles:
+Project '/project/src/tsconfig.json' (Configured)
+	Files (3)
+
+-----------------------------------------------
+Open files: 
+	FileName: /project/src/fileA.ts ProjectRootPath: undefined
+		Projects: /project/src/tsconfig.json
+After ensureProjectForOpenFiles:
+Project '/project/src/tsconfig.json' (Configured)
+	Files (3)
+
+-----------------------------------------------
+Open files: 
+	FileName: /project/src/fileA.ts ProjectRootPath: undefined
+		Projects: /project/src/tsconfig.json
+got projects updated in background, updating diagnostics for /project/src/fileA.ts
+event:
+    {"seq":0,"type":"event","event":"projectsUpdatedInBackground","body":{"openFiles":["/project/src/fileA.ts"]}}
 request:{"command":"geterr","arguments":{"delay":0,"files":["/project/src/fileA.ts"]},"seq":2,"type":"request"}
 response:{"responseRequired":false}
 event:
@@ -104,9 +190,52 @@ event:
 event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":2}}
 Delete package.json
+FileWatcher:: Triggered with /project/package.json 2:: WatchInfo: /project/package.json 2000 undefined Project: /project/src/tsconfig.json WatchType: File location affecting resolution
+Scheduled: /project/src/tsconfig.jsonFailedLookupInvalidation
+Elapsed:: *ms FileWatcher:: Triggered with /project/package.json 2:: WatchInfo: /project/package.json 2000 undefined Project: /project/src/tsconfig.json WatchType: File location affecting resolution
 FileWatcher:: Triggered with /project/package.json 2:: WatchInfo: /project/package.json 250 undefined WatchType: package.json file
 FileWatcher:: Close:: WatchInfo: /project/package.json 250 undefined WatchType: package.json file
 Elapsed:: *ms FileWatcher:: Triggered with /project/package.json 2:: WatchInfo: /project/package.json 250 undefined WatchType: package.json file
+Running: /project/src/tsconfig.jsonFailedLookupInvalidation
+Scheduled: /project/src/tsconfig.json
+Scheduled: *ensureProjectForOpenFiles*
+Running: /project/src/tsconfig.json
+Starting updateGraphWorker: Project: /project/src/tsconfig.json
+File '/a/lib/package.json' does not exist.
+File '/a/package.json' does not exist.
+File '/package.json' does not exist.
+File '/project/src/package.json' does not exist.
+File '/project/package.json' does not exist.
+File '/package.json' does not exist according to earlier cached lookups.
+File '/project/src/package.json' does not exist according to earlier cached lookups.
+File '/project/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+Reusing resolution of module './fileB.mjs' from '/project/src/fileA.ts' of old program, it was successfully resolved to '/project/src/fileB.mts'.
+File '/a/lib/package.json' does not exist according to earlier cached lookups.
+File '/a/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+Finishing updateGraphWorker: Project: /project/src/tsconfig.json Version: 4 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
+Different program with same set of files
+Running: *ensureProjectForOpenFiles*
+Before ensureProjectForOpenFiles:
+Project '/project/src/tsconfig.json' (Configured)
+	Files (3)
+
+-----------------------------------------------
+Open files: 
+	FileName: /project/src/fileA.ts ProjectRootPath: undefined
+		Projects: /project/src/tsconfig.json
+After ensureProjectForOpenFiles:
+Project '/project/src/tsconfig.json' (Configured)
+	Files (3)
+
+-----------------------------------------------
+Open files: 
+	FileName: /project/src/fileA.ts ProjectRootPath: undefined
+		Projects: /project/src/tsconfig.json
+got projects updated in background, updating diagnostics for /project/src/fileA.ts
+event:
+    {"seq":0,"type":"event","event":"projectsUpdatedInBackground","body":{"openFiles":["/project/src/fileA.ts"]}}
 request:{"command":"geterr","arguments":{"delay":0,"files":["/project/src/fileA.ts"]},"seq":3,"type":"request"}
 response:{"responseRequired":false}
 event:
@@ -118,6 +247,48 @@ event:
 event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":3}}
 Modify package json file to add type module
+FileWatcher:: Triggered with /project/package.json 0:: WatchInfo: /project/package.json 2000 undefined Project: /project/src/tsconfig.json WatchType: File location affecting resolution
+Scheduled: /project/src/tsconfig.jsonFailedLookupInvalidation
+Elapsed:: *ms FileWatcher:: Triggered with /project/package.json 0:: WatchInfo: /project/package.json 2000 undefined Project: /project/src/tsconfig.json WatchType: File location affecting resolution
+Running: /project/src/tsconfig.jsonFailedLookupInvalidation
+Scheduled: /project/src/tsconfig.json
+Scheduled: *ensureProjectForOpenFiles*
+Running: /project/src/tsconfig.json
+Starting updateGraphWorker: Project: /project/src/tsconfig.json
+File '/a/lib/package.json' does not exist.
+File '/a/package.json' does not exist.
+File '/package.json' does not exist.
+File '/project/src/package.json' does not exist.
+Found 'package.json' at '/project/package.json'.
+'package.json' does not have a 'typesVersions' field.
+File '/project/src/package.json' does not exist according to earlier cached lookups.
+File '/project/package.json' exists according to earlier cached lookups.
+Reusing resolution of module './fileB.mjs' from '/project/src/fileA.ts' of old program, it was successfully resolved to '/project/src/fileB.mts'.
+File '/a/lib/package.json' does not exist according to earlier cached lookups.
+File '/a/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+Finishing updateGraphWorker: Project: /project/src/tsconfig.json Version: 5 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
+Different program with same set of files
+Running: *ensureProjectForOpenFiles*
+Before ensureProjectForOpenFiles:
+Project '/project/src/tsconfig.json' (Configured)
+	Files (3)
+
+-----------------------------------------------
+Open files: 
+	FileName: /project/src/fileA.ts ProjectRootPath: undefined
+		Projects: /project/src/tsconfig.json
+After ensureProjectForOpenFiles:
+Project '/project/src/tsconfig.json' (Configured)
+	Files (3)
+
+-----------------------------------------------
+Open files: 
+	FileName: /project/src/fileA.ts ProjectRootPath: undefined
+		Projects: /project/src/tsconfig.json
+got projects updated in background, updating diagnostics for /project/src/fileA.ts
+event:
+    {"seq":0,"type":"event","event":"projectsUpdatedInBackground","body":{"openFiles":["/project/src/fileA.ts"]}}
 request:{"command":"geterr","arguments":{"delay":0,"files":["/project/src/fileA.ts"]},"seq":4,"type":"request"}
 response:{"responseRequired":false}
 event:
@@ -129,6 +300,49 @@ event:
 event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":4}}
 Delete package.json
+FileWatcher:: Triggered with /project/package.json 2:: WatchInfo: /project/package.json 2000 undefined Project: /project/src/tsconfig.json WatchType: File location affecting resolution
+Scheduled: /project/src/tsconfig.jsonFailedLookupInvalidation
+Elapsed:: *ms FileWatcher:: Triggered with /project/package.json 2:: WatchInfo: /project/package.json 2000 undefined Project: /project/src/tsconfig.json WatchType: File location affecting resolution
+Running: /project/src/tsconfig.jsonFailedLookupInvalidation
+Scheduled: /project/src/tsconfig.json
+Scheduled: *ensureProjectForOpenFiles*
+Running: /project/src/tsconfig.json
+Starting updateGraphWorker: Project: /project/src/tsconfig.json
+File '/a/lib/package.json' does not exist.
+File '/a/package.json' does not exist.
+File '/package.json' does not exist.
+File '/project/src/package.json' does not exist.
+File '/project/package.json' does not exist.
+File '/package.json' does not exist according to earlier cached lookups.
+File '/project/src/package.json' does not exist according to earlier cached lookups.
+File '/project/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+Reusing resolution of module './fileB.mjs' from '/project/src/fileA.ts' of old program, it was successfully resolved to '/project/src/fileB.mts'.
+File '/a/lib/package.json' does not exist according to earlier cached lookups.
+File '/a/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+Finishing updateGraphWorker: Project: /project/src/tsconfig.json Version: 6 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
+Different program with same set of files
+Running: *ensureProjectForOpenFiles*
+Before ensureProjectForOpenFiles:
+Project '/project/src/tsconfig.json' (Configured)
+	Files (3)
+
+-----------------------------------------------
+Open files: 
+	FileName: /project/src/fileA.ts ProjectRootPath: undefined
+		Projects: /project/src/tsconfig.json
+After ensureProjectForOpenFiles:
+Project '/project/src/tsconfig.json' (Configured)
+	Files (3)
+
+-----------------------------------------------
+Open files: 
+	FileName: /project/src/fileA.ts ProjectRootPath: undefined
+		Projects: /project/src/tsconfig.json
+got projects updated in background, updating diagnostics for /project/src/fileA.ts
+event:
+    {"seq":0,"type":"event","event":"projectsUpdatedInBackground","body":{"openFiles":["/project/src/fileA.ts"]}}
 request:{"command":"geterr","arguments":{"delay":0,"files":["/project/src/fileA.ts"]},"seq":5,"type":"request"}
 response:{"responseRequired":false}
 event:
