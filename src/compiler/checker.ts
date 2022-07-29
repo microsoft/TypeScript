@@ -25989,7 +25989,7 @@ namespace ts {
 
             // TODO: refactor this
             // when non null and an automatic type are involved, we should get the flow type and then remove optionality
-            const createFlowType = (initialType: Type) => getFlowTypeOfReference(node, type, initialType, flowContainer)
+            const createFlowType = (initialType: Type) => getFlowTypeOfReference(node, type, initialType, flowContainer);
             let flowType: Type | undefined;
             if (node.parent.kind === SyntaxKind.NonNullExpression && (type === autoType || type === autoArrayType)) {
                 const initialType = undefinedType;
