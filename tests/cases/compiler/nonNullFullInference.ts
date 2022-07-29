@@ -12,6 +12,6 @@ function testNonNullInference(numbers: number[]) {
         last = n;
     }
 
-    last; // number | undefined
+    last; // number
     last!; // number
 }

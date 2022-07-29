@@ -12,10 +12,9 @@ function testNonNullInference(numbers: number[]) {
         last = n;
     }
 
-    last; // number | undefined
+    last; // number
     last!; // number
 }
-
 
 //// [nonNullFullInference.js]
 // https://github.com/microsoft/TypeScript/issues/19577
@@ -28,6 +27,6 @@ function testNonNullInference(numbers) {
         }
         last = n;
     }
-    last; // number | undefined
+    last; // number
     last; // number
 }

@@ -27,11 +27,10 @@ function testNonNullInference(numbers: number[]) {
 >n : number
     }
 
-    last; // number | undefined
->last : number | undefined
+    last; // number
+>last : number
 
     last!; // number
 >last! : number
->last : number | undefined
+>last : number
 }
-

@@ -24,10 +24,9 @@ function testNonNullInference(numbers: number[]) {
 >n : Symbol(n, Decl(nonNullFullInference.ts, 5, 14))
     }
 
-    last; // number | undefined
+    last; // number
 >last : Symbol(last, Decl(nonNullFullInference.ts, 3, 7))
 
     last!; // number
 >last : Symbol(last, Decl(nonNullFullInference.ts, 3, 7))
 }
-
