@@ -1,0 +1,37 @@
+=== tests/cases/compiler/nonNullFullInference.ts ===
+// https://github.com/microsoft/TypeScript/issues/19577
+
+function testNonNullInference(numbers: number[]) {
+>testNonNullInference : (numbers: number[]) => number
+>numbers : number[]
+
+    let last;
+>last : any
+
+    for (const n of numbers) {
+>n : number
+>numbers : number[]
+
+        if (n % 2) {
+>n % 2 : number
+>n : number
+>2 : 2
+
+            return n;
+>n : number
+        }
+
+        last = n;
+>last = n : number
+>last : any
+>n : number
+    }
+
+    last; // number | undefined
+>last : number | undefined
+
+    last!; // number
+>last! : number
+>last : number | undefined
+}
+
