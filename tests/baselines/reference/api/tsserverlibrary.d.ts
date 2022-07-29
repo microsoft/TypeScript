@@ -2926,7 +2926,8 @@ declare namespace ts {
         Classic = 1,
         NodeJs = 2,
         Node16 = 3,
-        NodeNext = 99
+        NodeNext = 99,
+        Minimal = 100
     }
     export enum ModuleDetectionKind {
         /**
@@ -3221,6 +3222,11 @@ declare namespace ts {
         resolvedFileName: string;
         /** True if `resolvedFileName` comes from `node_modules`. */
         isExternalLibraryImport?: boolean;
+        /**
+         * True if the original module reference used a .ts extension to refer directly to a .ts file,
+         * which should produce an error during checking if emit is enabled.
+         */
+        resolvedUsingTsExtension: boolean;
     }
     /**
      * ResolvedModule with an explicitly provided `extension` property.
@@ -5028,6 +5034,9 @@ declare namespace ts {
     export function resolveModuleName(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference, resolutionMode?: ModuleKind.CommonJS | ModuleKind.ESNext): ResolvedModuleWithFailedLookupLocations;
     export function nodeModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference): ResolvedModuleWithFailedLookupLocations;
     export function classicNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: NonRelativeModuleNameResolutionCache, redirectedReference?: ResolvedProjectReference): ResolvedModuleWithFailedLookupLocations;
+    export function minimalModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations;
+    export function shouldResolveTsExtension(compilerOptions: CompilerOptions): boolean;
+    export function shouldAllowTsExtension(compilerOptions: CompilerOptions): boolean;
     export {};
 }
 declare namespace ts {

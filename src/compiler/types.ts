@@ -6853,6 +6853,11 @@ namespace ts {
         resolvedFileName: string;
         /** True if `resolvedFileName` comes from `node_modules`. */
         isExternalLibraryImport?: boolean;
+        /**
+         * True if the original module reference used a .ts extension to refer directly to a .ts file,
+         * which should produce an error during checking if emit is enabled.
+         */
+        resolvedUsingTsExtension: boolean;
     }
 
     /**

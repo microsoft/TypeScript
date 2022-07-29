@@ -35,6 +35,7 @@ namespace ts.tscWatch {
                     resolvedFileName: resolvedModule.resolvedFileName,
                     isExternalLibraryImport: resolvedModule.isExternalLibraryImport,
                     originalFileName: resolvedModule.originalPath,
+                    resolvedUsingTsExtension: false,
                 };
             });
             const watch = createWatchProgram(host);

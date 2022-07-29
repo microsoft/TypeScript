@@ -1,0 +1,38 @@
+=== /project/a.ts ===
+export {};
+No type information for this code.
+No type information for this code.=== /project/b.ts ===
+export {};
+No type information for this code.
+No type information for this code.=== /project/b.d.ts ===
+export {};
+No type information for this code.
+No type information for this code.=== /project/c.ts ===
+export {};
+No type information for this code.
+No type information for this code.=== /project/c.tsx ===
+export {};
+No type information for this code.
+No type information for this code.=== /project/d/index.ts ===
+export {};
+No type information for this code.
+No type information for this code.=== /project/main.ts ===
+import {} from "./a";
+No type information for this code.import {} from "./a.js";
+No type information for this code.import {} from "./a.ts";
+No type information for this code.
+No type information for this code.import {} from "./b";
+No type information for this code.import {} from "./b.js";
+No type information for this code.import {} from "./b.ts";
+No type information for this code.import {} from "./b.d.ts";
+No type information for this code.
+No type information for this code.import {} from "./c.ts";
+No type information for this code.import {} from "./c.tsx";
+No type information for this code.
+No type information for this code.import {} from "./d";
+No type information for this code.import {} from "./d/index";
+No type information for this code.import {} from "./d/index.ts";
+No type information for this code.
+No type information for this code.import {} from "./e";
+No type information for this code.
+No type information for this code.
