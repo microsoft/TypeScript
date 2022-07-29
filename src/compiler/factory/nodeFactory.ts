@@ -2331,7 +2331,7 @@ namespace ts {
                 propagateChildFlags(node.expression) |
                 (isIdentifier(node.name) ?
                     propagateIdentifierNameFlags(node.name) :
-                    propagateChildFlags(node.name));
+                    propagateChildFlags(node.name) | TransformFlags.ContainsPrivateIdentifierInExpression);
             if (isSuperKeyword(expression)) {
                 // super method calls require a lexical 'this'
                 // super method calls require 'super' hoisting in ES2017 and ES2018 async functions and async generators
@@ -2366,7 +2366,7 @@ namespace ts {
                 propagateChildFlags(node.questionDotToken) |
                 (isIdentifier(node.name) ?
                     propagateIdentifierNameFlags(node.name) :
-                    propagateChildFlags(node.name));
+                    propagateChildFlags(node.name) | TransformFlags.ContainsPrivateIdentifierInExpression);
             return node;
         }
 
@@ -2850,6 +2850,9 @@ namespace ts {
             }
             else if (isLogicalOrCoalescingAssignmentOperator(operatorKind)) {
                 node.transformFlags |= TransformFlags.ContainsES2021;
+            }
+            if (operatorKind === SyntaxKind.InKeyword && isPrivateIdentifier(node.left)) {
+                node.transformFlags |= TransformFlags.ContainsPrivateIdentifierInExpression;
             }
             return node;
         }
