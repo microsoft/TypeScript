@@ -558,7 +558,7 @@ namespace ts.server {
                 cb,
                 PollingInterval.High,
                 this.projectService.getWatchOptions(this),
-                WatchType.PackageJson,
+                WatchType.AffectingFileLocation,
                 this
             );
         }
