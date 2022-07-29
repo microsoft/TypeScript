@@ -4504,6 +4504,11 @@ namespace ts {
                             shouldDecreaseIndentAfterEmit = true;
                         }
 
+                        if (shouldEmitInterveningComments && hasTrailingCommentsAtPosition(child.pos)) {
+                            const commentRange = getCommentRange(child);
+                            emitTrailingCommentsOfPosition(commentRange.pos, /*prefixSpace*/ true, /*forceNoNewLine*/ true);
+                        }
+
                         writeLine(separatingLineTerminatorCount);
                         shouldEmitInterveningComments = false;
                     }
