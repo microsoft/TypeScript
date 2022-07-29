@@ -25969,6 +25969,8 @@ namespace ts {
             const isOuterVariable = flowContainer !== declarationContainer;
             const isSpreadDestructuringAssignmentTarget = node.parent && node.parent.parent && isSpreadAssignment(node.parent) && isDestructuringAssignmentTarget(node.parent.parent);
             const isModuleExports = symbol.flags & SymbolFlags.ModuleExports;
+            const typeIsAutomatic = type === autoType || type === autoArrayType;
+            const isAutomaticTypeInNonNull = typeIsAutomatic && node.parent.kind === SyntaxKind.NonNullExpression;
             // When the control flow originates in a function expression or arrow function and we are referencing
             // a const variable or parameter from an outer function, we extend the origin of the control flow
             // analysis to include the immediately enclosing function.
@@ -25986,27 +25988,15 @@ namespace ts {
                 node.parent.kind === SyntaxKind.NonNullExpression ||
                 declaration.kind === SyntaxKind.VariableDeclaration && (declaration as VariableDeclaration).exclamationToken ||
                 declaration.flags & NodeFlags.Ambient;
-
-            // TODO: refactor this
-            // when non null and an automatic type are involved, we should get the flow type and then remove optionality
-            const createFlowType = (initialType: Type) => getFlowTypeOfReference(node, type, initialType, flowContainer);
-            let flowType: Type | undefined;
-            if (node.parent.kind === SyntaxKind.NonNullExpression && (type === autoType || type === autoArrayType)) {
-                const initialType = undefinedType;
-                flowType = createFlowType(initialType);
-                flowType = getNonNullableType(flowType);
-            }
-            else {
-                const initialType = assumeInitialized ? (isParameter ? removeOptionalityFromDeclaredType(type, declaration as VariableLikeDeclaration) : type) :
-                    type === autoType || type === autoArrayType ? undefinedType :
-                    getOptionalType(type);
-                flowType = createFlowType(initialType);
-            }
-
+            const initialType = isAutomaticTypeInNonNull ? undefinedType :
+                assumeInitialized ? (isParameter ? removeOptionalityFromDeclaredType(type, declaration as VariableLikeDeclaration) : type) :
+                typeIsAutomatic ? undefinedType : getOptionalType(type);
+            const flowType = isAutomaticTypeInNonNull ? getNonNullableType(getFlowTypeOfReference(node, type, initialType, flowContainer)) :
+                getFlowTypeOfReference(node, type, initialType, flowContainer);
             // A variable is considered uninitialized when it is possible to analyze the entire control flow graph
             // from declaration to use, and when the variable's declared type doesn't include undefined but the
             // control flow based type does include undefined.
-            if (!isEvolvingArrayOperationTarget(node) && (type === autoType || type === autoArrayType)) {
+            if (!isEvolvingArrayOperationTarget(node) && typeIsAutomatic) {
                 if (flowType === autoType || flowType === autoArrayType) {
                     if (noImplicitAny) {
                         error(getNameOfDeclaration(declaration), Diagnostics.Variable_0_implicitly_has_type_1_in_some_locations_where_its_type_cannot_be_determined, symbolToString(symbol), typeToString(flowType));
