@@ -3595,7 +3595,7 @@ namespace ts {
                                     if (scope && !scope.packageJsonContent.type) {
                                         addRelatedInfo(diag, createDiagnosticForNode(
                                             errorNode,
-                                            Diagnostics.To_convert_this_file_to_an_ECMAScript_module_change_its_file_extension_to_0_or_add_type_Colon_module_to_its_package_json_file_with_path_1,
+                                            Diagnostics.To_convert_this_file_to_an_ECMAScript_module_change_its_file_extension_to_0_or_add_the_field_type_Colon_module_to_1,
                                             targetExt,
                                             combinePaths(scope.packageDirectory, "package.json")));
                                     }

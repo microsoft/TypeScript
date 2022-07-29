@@ -1509,7 +1509,7 @@
         "category": "Message",
         "code": 1480
     },
-    "To convert this file to an ECMAScript module, change its file extension to '{0}', or add `\"type\": \"module\"` to its package.json file with path '{1}'.": {
+    "To convert this file to an ECMAScript module, change its file extension to '{0}', or add the field `\"type\": \"module\"` to '{1}'.": {
         "category": "Message",
         "code": 1481
     },

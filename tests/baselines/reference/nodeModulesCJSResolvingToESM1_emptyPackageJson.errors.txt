@@ -13,13 +13,13 @@
     import {} from "./module.mjs";
                    ~~~~~~~~~~~~~~
 !!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./module.mjs")' call instead.
-!!! related TS1481 /tsExtension.ts:1:16: To convert this file to an ECMAScript module, change its file extension to '.mts', or add `"type": "module"` to its package.json file with path '/package.json'.
+!!! related TS1481 /tsExtension.ts:1:16: To convert this file to an ECMAScript module, change its file extension to '.mts', or add the field `"type": "module"` to '/package.json'.
     
 ==== /jsExtension.js (1 errors) ====
     import {} from "./module.mjs";
                    ~~~~~~~~~~~~~~
 !!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./module.mjs")' call instead.
-!!! related TS1481 /jsExtension.js:1:16: To convert this file to an ECMAScript module, change its file extension to '.mjs', or add `"type": "module"` to its package.json file with path '/package.json'.
+!!! related TS1481 /jsExtension.js:1:16: To convert this file to an ECMAScript module, change its file extension to '.mjs', or add the field `"type": "module"` to '/package.json'.
     
 ==== /ctsExtension.cts (1 errors) ====
     import {} from "./module.mjs";
