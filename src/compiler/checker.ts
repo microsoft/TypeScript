@@ -35230,7 +35230,7 @@ namespace ts {
                     error(node.name, Diagnostics.constructor_cannot_be_used_as_a_parameter_property_name);
                 }
             }
-            if (node.questionToken && isBindingPattern(node.name) && (func as FunctionLikeDeclaration).body) {
+            if ((node.questionToken || isJSDocOptionalParameter(node)) && isBindingPattern(node.name) && (func as FunctionLikeDeclaration).body) {
                 error(node, Diagnostics.A_binding_pattern_parameter_cannot_be_optional_in_an_implementation_signature);
             }
             if (node.name && isIdentifier(node.name) && (node.name.escapedText === "this" || node.name.escapedText === "new")) {
