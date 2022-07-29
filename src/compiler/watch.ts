@@ -224,25 +224,56 @@ namespace ts {
         for (const file of program.getSourceFiles()) {
             write(`${toFileName(file, relativeFileName)}`);
             reasons.get(file.path)?.forEach(reason => write(`  ${fileIncludeReasonToDiagnostics(program, reason, relativeFileName).messageText}`));
-            explainIfFileIsRedirect(file, relativeFileName)?.forEach(d => write(`  ${d.messageText}`));
+            explainIfFileIsRedirectAndImpliedFormat(file, relativeFileName)?.forEach(d => write(`  ${d.messageText}`));
         }
     }
 
-    export function explainIfFileIsRedirect(file: SourceFile, fileNameConvertor?: (fileName: string) => string): DiagnosticMessageChain[] | undefined {
+    export function explainIfFileIsRedirectAndImpliedFormat(
+        file: SourceFile,
+        fileNameConvertor?: (fileName: string) => string,
+    ): DiagnosticMessageChain[] | undefined {
         let result: DiagnosticMessageChain[] | undefined;
         if (file.path !== file.resolvedPath) {
-            (result ||= []).push(chainDiagnosticMessages(
+            (result ??= []).push(chainDiagnosticMessages(
                 /*details*/ undefined,
                 Diagnostics.File_is_output_of_project_reference_source_0,
                 toFileName(file.originalFileName, fileNameConvertor)
             ));
         }
         if (file.redirectInfo) {
-            (result ||= []).push(chainDiagnosticMessages(
+            (result ??= []).push(chainDiagnosticMessages(
                 /*details*/ undefined,
                 Diagnostics.File_redirects_to_file_0,
                 toFileName(file.redirectInfo.redirectTarget, fileNameConvertor)
             ));
+        }
+        if (isExternalOrCommonJsModule(file)) {
+            switch (file.impliedNodeFormat) {
+                case ModuleKind.ESNext:
+                    if (file.affectingFileLocations?.length) {
+                        (result ??= []).push(chainDiagnosticMessages(
+                        /*details*/ undefined,
+                            Diagnostics.File_is_ECMAScript_module_because_0_has_field_type_with_value_module,
+                            toFileName(file.affectingFileLocations[0], fileNameConvertor)
+                        ));
+                    }
+                    break;
+                case ModuleKind.CommonJS:
+                    if (file.affectingFileLocations?.length) {
+                        (result ??= []).push(chainDiagnosticMessages(
+                        /*details*/ undefined,
+                            Diagnostics.File_is_CommonJS_module_because_0_does_have_field_type_or_it_s_value_is_not_module,
+                            toFileName(file.affectingFileLocations[0], fileNameConvertor)
+                        ));
+                    }
+                    else if (file.failedLookupLocations?.length) {
+                        (result ??= []).push(chainDiagnosticMessages(
+                        /*details*/ undefined,
+                            Diagnostics.File_is_CommonJS_module_because_package_json_was_not_found,
+                        ));
+                    }
+                    break;
+            }
         }
         return result;
     }

@@ -63,6 +63,7 @@ src/fileB.mts
   Matched by default include pattern '**/*'
 src/fileA.ts
   Matched by default include pattern '**/*'
+  File is ECMAScript module because 'package.json' has field "type" with value "module"
 [[90m12:00:29 AM[0m] Found 0 errors. Watching for file changes.
 
 DirectoryWatcher:: Added:: WatchInfo: /project/src 1 undefined Wild card directory

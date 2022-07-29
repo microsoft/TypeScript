@@ -59,6 +59,7 @@ Project '/project/src/tsconfig.json' (Configured)
 	  Matched by default include pattern '**/*'
 	fileA.ts
 	  Matched by default include pattern '**/*'
+	  File is CommonJS module because '../package.json' does have field "type" or it's value is not "module"
 
 -----------------------------------------------
 FileWatcher:: Added:: WatchInfo: /project/package.json 250 undefined WatchType: package.json file

@@ -54,6 +54,7 @@ Project '/project/src/tsconfig.json' (Configured)
 	  Matched by default include pattern '**/*'
 	fileA.ts
 	  Matched by default include pattern '**/*'
+	  File is ECMAScript module because '../package.json' has field "type" with value "module"
 
 -----------------------------------------------
 FileWatcher:: Added:: WatchInfo: /project/package.json 250 undefined WatchType: package.json file

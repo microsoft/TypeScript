@@ -73,6 +73,7 @@ src/fileB.mts
   Matched by default include pattern '**/*'
 src/fileA.ts
   Matched by default include pattern '**/*'
+  File is CommonJS module because 'package.json' does have field "type" or it's value is not "module"
 [[90m12:00:29 AM[0m] Found 1 error. Watching for file changes.
 
 DirectoryWatcher:: Added:: WatchInfo: /project/src 1 undefined Wild card directory

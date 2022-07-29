@@ -3718,7 +3718,7 @@ namespace ts {
             if (locationReason && fileIncludeReasons?.length === 1) fileIncludeReasons = undefined;
             const location = locationReason && getReferencedFileLocation(getSourceFileByPath, locationReason);
             const fileIncludeReasonDetails = fileIncludeReasons && chainDiagnosticMessages(fileIncludeReasons, Diagnostics.The_file_is_in_the_program_because_Colon);
-            const redirectInfo = file && explainIfFileIsRedirect(file);
+            const redirectInfo = file && explainIfFileIsRedirectAndImpliedFormat(file);
             const chain = chainDiagnosticMessages(redirectInfo ? fileIncludeReasonDetails ? [fileIncludeReasonDetails, ...redirectInfo] : redirectInfo : fileIncludeReasonDetails, diagnostic, ...args || emptyArray);
             return location && isReferenceFileLocation(location) ?
                 createFileDiagnosticFromMessageChain(location.file, location.pos, location.end - location.pos, chain, relatedInfo) :
