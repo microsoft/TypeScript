@@ -37,7 +37,9 @@ namespace ts {
             compilationSettingsOrHost: CompilerOptions | MinimalResolutionCacheHost,
             scriptSnapshot: IScriptSnapshot,
             version: string,
-            scriptKind?: ScriptKind): SourceFile;
+            scriptKind?: ScriptKind,
+            sourceFileOptions?: CreateSourceFileOptions | ScriptTarget,
+        ): SourceFile;
 
         acquireDocumentWithKey(
             fileName: string,
@@ -46,7 +48,9 @@ namespace ts {
             key: DocumentRegistryBucketKey,
             scriptSnapshot: IScriptSnapshot,
             version: string,
-            scriptKind?: ScriptKind): SourceFile;
+            scriptKind?: ScriptKind,
+            sourceFileOptions?: CreateSourceFileOptions | ScriptTarget,
+        ): SourceFile;
 
         /**
          * Request an updated version of an already existing SourceFile with a given fileName
@@ -68,7 +72,9 @@ namespace ts {
             compilationSettingsOrHost: CompilerOptions | MinimalResolutionCacheHost,
             scriptSnapshot: IScriptSnapshot,
             version: string,
-            scriptKind?: ScriptKind): SourceFile;
+            scriptKind?: ScriptKind,
+            sourceFileOptions?: CreateSourceFileOptions | ScriptTarget,
+        ): SourceFile;
 
         updateDocumentWithKey(
             fileName: string,
@@ -77,7 +83,9 @@ namespace ts {
             key: DocumentRegistryBucketKey,
             scriptSnapshot: IScriptSnapshot,
             version: string,
-            scriptKind?: ScriptKind): SourceFile;
+            scriptKind?: ScriptKind,
+            sourceFileOptions?: CreateSourceFileOptions | ScriptTarget,
+        ): SourceFile;
 
         getKeyForCompilationSettings(settings: CompilerOptions): DocumentRegistryBucketKey;
         /**
@@ -178,24 +186,24 @@ namespace ts {
             return settingsOrHost as CompilerOptions;
         }
 
-        function acquireDocument(fileName: string, compilationSettings: CompilerOptions | MinimalResolutionCacheHost, scriptSnapshot: IScriptSnapshot, version: string, scriptKind?: ScriptKind): SourceFile {
+        function acquireDocument(fileName: string, compilationSettings: CompilerOptions | MinimalResolutionCacheHost, scriptSnapshot: IScriptSnapshot, version: string, scriptKind?: ScriptKind, languageVersionOrOptions?: CreateSourceFileOptions | ScriptTarget): SourceFile {
             const path = toPath(fileName, currentDirectory, getCanonicalFileName);
             const key = getKeyForCompilationSettings(getCompilationSettings(compilationSettings));
-            return acquireDocumentWithKey(fileName, path, compilationSettings, key, scriptSnapshot, version, scriptKind);
+            return acquireDocumentWithKey(fileName, path, compilationSettings, key, scriptSnapshot, version, scriptKind, languageVersionOrOptions);
         }
 
-        function acquireDocumentWithKey(fileName: string, path: Path, compilationSettings: CompilerOptions | MinimalResolutionCacheHost, key: DocumentRegistryBucketKey, scriptSnapshot: IScriptSnapshot, version: string, scriptKind?: ScriptKind): SourceFile {
-            return acquireOrUpdateDocument(fileName, path, compilationSettings, key, scriptSnapshot, version, /*acquiring*/ true, scriptKind);
+        function acquireDocumentWithKey(fileName: string, path: Path, compilationSettings: CompilerOptions | MinimalResolutionCacheHost, key: DocumentRegistryBucketKey, scriptSnapshot: IScriptSnapshot, version: string, scriptKind?: ScriptKind, languageVersionOrOptions?: CreateSourceFileOptions | ScriptTarget): SourceFile {
+            return acquireOrUpdateDocument(fileName, path, compilationSettings, key, scriptSnapshot, version, /*acquiring*/ true, scriptKind, languageVersionOrOptions);
         }
 
-        function updateDocument(fileName: string, compilationSettings: CompilerOptions | MinimalResolutionCacheHost, scriptSnapshot: IScriptSnapshot, version: string, scriptKind?: ScriptKind): SourceFile {
+        function updateDocument(fileName: string, compilationSettings: CompilerOptions | MinimalResolutionCacheHost, scriptSnapshot: IScriptSnapshot, version: string, scriptKind?: ScriptKind, languageVersionOrOptions?: CreateSourceFileOptions | ScriptTarget): SourceFile {
             const path = toPath(fileName, currentDirectory, getCanonicalFileName);
             const key = getKeyForCompilationSettings(getCompilationSettings(compilationSettings));
-            return updateDocumentWithKey(fileName, path, compilationSettings, key, scriptSnapshot, version, scriptKind);
+            return updateDocumentWithKey(fileName, path, compilationSettings, key, scriptSnapshot, version, scriptKind, languageVersionOrOptions);
         }
 
-        function updateDocumentWithKey(fileName: string, path: Path, compilationSettings: CompilerOptions | MinimalResolutionCacheHost, key: DocumentRegistryBucketKey, scriptSnapshot: IScriptSnapshot, version: string, scriptKind?: ScriptKind): SourceFile {
-            return acquireOrUpdateDocument(fileName, path, getCompilationSettings(compilationSettings), key, scriptSnapshot, version, /*acquiring*/ false, scriptKind);
+        function updateDocumentWithKey(fileName: string, path: Path, compilationSettings: CompilerOptions | MinimalResolutionCacheHost, key: DocumentRegistryBucketKey, scriptSnapshot: IScriptSnapshot, version: string, scriptKind?: ScriptKind, languageVersionOrOptions?: CreateSourceFileOptions | ScriptTarget): SourceFile {
+            return acquireOrUpdateDocument(fileName, path, getCompilationSettings(compilationSettings), key, scriptSnapshot, version, /*acquiring*/ false, scriptKind, languageVersionOrOptions);
         }
 
         function getDocumentRegistryEntry(bucketEntry: BucketEntry, scriptKind: ScriptKind | undefined) {
@@ -212,17 +220,24 @@ namespace ts {
             scriptSnapshot: IScriptSnapshot,
             version: string,
             acquiring: boolean,
-            scriptKind?: ScriptKind): SourceFile {
+            scriptKind: ScriptKind | undefined,
+            languageVersionOrOptions: CreateSourceFileOptions | ScriptTarget | undefined,
+        ): SourceFile {
             scriptKind = ensureScriptKind(fileName, scriptKind);
             const compilationSettings = getCompilationSettings(compilationSettingsOrHost);
             const host: MinimalResolutionCacheHost | undefined = compilationSettingsOrHost === compilationSettings ? undefined : compilationSettingsOrHost as MinimalResolutionCacheHost;
             const scriptTarget = scriptKind === ScriptKind.JSON ? ScriptTarget.JSON : getEmitScriptTarget(compilationSettings);
-            const sourceFileOptions: CreateSourceFileOptions = {
-                languageVersion: scriptTarget,
-                impliedNodeFormat: host && getImpliedNodeFormatForFile(path, host.getCompilerHost?.()?.getModuleResolutionCache?.()?.getPackageJsonInfoCache(), host, compilationSettings),
-                setExternalModuleIndicator: getSetExternalModuleIndicator(compilationSettings)
-            };
 
+            const sourceFileOptions: CreateSourceFileOptions = typeof languageVersionOrOptions === "object" ?
+                languageVersionOrOptions :
+                host ?
+                    getCreateSourceFileOptions(path, host.getCompilerHost?.()?.getModuleResolutionCache?.(), host, compilationSettings) :
+                    {
+                        languageVersion: scriptTarget,
+                        impliedNodeFormat: undefined,
+                        setExternalModuleIndicator: getSetExternalModuleIndicator(compilationSettings),
+                    };
+            sourceFileOptions.languageVersion = scriptTarget;
             const oldBucketCount = buckets.size;
             const bucket = getOrUpdate(buckets, key, () => new Map());
             if (tracing) {

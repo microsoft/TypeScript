@@ -27,8 +27,6 @@ Starting updateGraphWorker: Project: /project/src/tsconfig.json
 File '/project/src/package.json' does not exist.
 Found 'package.json' at '/project/package.json'.
 'package.json' does not have a 'typesVersions' field.
-File '/project/src/package.json' does not exist according to earlier cached lookups.
-File '/project/package.json' exists according to earlier cached lookups.
 ======== Resolving module './fileB.mjs' from '/project/src/fileA.ts'. ========
 Module resolution kind is not specified, using 'Node16'.
 Loading module as file / folder, candidate module location '/project/src/fileB.mjs', target file type 'TypeScript'.
@@ -44,9 +42,6 @@ File '/a/lib/package.json' does not exist.
 File '/a/package.json' does not exist.
 File '/package.json' does not exist.
 FileWatcher:: Added:: WatchInfo: /a/lib/lib.es2016.full.d.ts 500 undefined WatchType: Closed Script info
-File '/a/lib/package.json' does not exist according to earlier cached lookups.
-File '/a/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
 DirectoryWatcher:: Added:: WatchInfo: /project/src/node_modules/@types 1 undefined Project: /project/src/tsconfig.json WatchType: Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /project/src/node_modules/@types 1 undefined Project: /project/src/tsconfig.json WatchType: Type roots
 Finishing updateGraphWorker: Project: /project/src/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms

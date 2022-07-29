@@ -268,6 +268,35 @@ namespace ts {
         };
     }
 
+    /*@internal*/
+    export function getCreateSourceFileOptions(
+        filePath: Path,
+        moduleResolutionCache: ModuleResolutionCache | undefined,
+        host: ModuleResolutionHost,
+        options: CompilerOptions
+    ): CreateSourceFileOptions {
+        // It's a _little odd_ that we can't set `impliedNodeFormat` until the program step - but it's the first and only time we have a resolution cache
+        // and a freshly made source file node on hand at the same time, and we need both to set the field. Persisting the resolution cache all the way
+        // to the check and emit steps would be bad - so we much prefer detecting and storing the format information on the source file node upfront.
+        const result = getImpliedNodeFormatForFileWorker(filePath, moduleResolutionCache?.getPackageJsonInfoCache(), host, options);
+        let impliedNodeFormat: ModuleKind.ESNext | ModuleKind.CommonJS | undefined, failedLookupLocations: readonly string[] | undefined, affectingFileLocations: readonly string[] | undefined;
+        if (typeof result === "object") {
+            impliedNodeFormat = result.mode;
+            failedLookupLocations = result.failedLookupLocations;
+            affectingFileLocations = result.affectingLocations;
+        }
+        else {
+            impliedNodeFormat = result;
+        }
+        return {
+            languageVersion: getEmitScriptTarget(options),
+            impliedNodeFormat,
+            setExternalModuleIndicator: getSetExternalModuleIndicator(options),
+            failedLookupLocations,
+            affectingFileLocations,
+        };
+    }
+
     export function getPreEmitDiagnostics(program: Program, sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly Diagnostic[];
     /*@internal*/ export function getPreEmitDiagnostics(program: BuilderProgram, sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly Diagnostic[]; // eslint-disable-line @typescript-eslint/unified-signatures
     export function getPreEmitDiagnostics(program: Program | BuilderProgram, sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly Diagnostic[] {
@@ -843,6 +872,17 @@ namespace ts {
      * @returns `undefined` if the path has no relevant implied format, `ModuleKind.ESNext` for esm format, and `ModuleKind.CommonJS` for cjs format
      */
     export function getImpliedNodeFormatForFile(fileName: Path, packageJsonInfoCache: PackageJsonInfoCache | undefined, host: ModuleResolutionHost, options: CompilerOptions): ModuleKind.ESNext | ModuleKind.CommonJS | undefined {
+        const result = getImpliedNodeFormatForFileWorker(fileName, packageJsonInfoCache, host, options);
+        return typeof result === "object" ? result.mode : result;
+    }
+
+    /*@internal*/
+    export function getImpliedNodeFormatForFileWorker(
+        fileName: Path,
+        packageJsonInfoCache: PackageJsonInfoCache | undefined,
+        host: ModuleResolutionHost,
+        options: CompilerOptions,
+    ) {
         switch (getEmitModuleResolutionKind(options)) {
             case ModuleResolutionKind.Node16:
             case ModuleResolutionKind.NodeNext:
@@ -853,10 +893,19 @@ namespace ts {
             default:
                 return undefined;
         }
-        function lookupFromPackageJson(): ModuleKind.ESNext | ModuleKind.CommonJS {
-            const scope = getPackageScopeForPath(fileName, getTemporaryModuleResolutionState(packageJsonInfoCache, host, options));
-            return scope?.packageJsonContent.type === "module" ? ModuleKind.ESNext : ModuleKind.CommonJS;
-
+        function lookupFromPackageJson(): {
+            mode: ModuleKind.ESNext | ModuleKind.CommonJS;
+            failedLookupLocations: string[];
+            affectingLocations: string[];
+        } {
+            const state = getTemporaryModuleResolutionState(packageJsonInfoCache, host, options);
+            const failedLookupLocations: string[] = [];
+            const affectingLocations: string[] = [];
+            state.failedLookupLocations = failedLookupLocations;
+            state.affectingLocations = affectingLocations;
+            const scope = getPackageScopeForPath(fileName, state);
+            const mode = scope?.packageJsonContent.type === "module" ? ModuleKind.ESNext : ModuleKind.CommonJS;
+            return { mode, failedLookupLocations, affectingLocations };
         }
     }
 
@@ -2804,16 +2853,8 @@ namespace ts {
             return result;
         }
 
-        function getCreateSourceFileOptions(fileName: string, moduleResolutionCache: ModuleResolutionCache | undefined, host: CompilerHost, options: CompilerOptions) {
-            // It's a _little odd_ that we can't set `impliedNodeFormat` until the program step - but it's the first and only time we have a resolution cache
-            // and a freshly made source file node on hand at the same time, and we need both to set the field. Persisting the resolution cache all the way
-            // to the check and emit steps would be bad - so we much prefer detecting and storing the format information on the source file node upfront.
-            const impliedNodeFormat = getImpliedNodeFormatForFile(toPath(fileName), moduleResolutionCache?.getPackageJsonInfoCache(), host, options);
-            return {
-                languageVersion: getEmitScriptTarget(options),
-                impliedNodeFormat,
-                setExternalModuleIndicator: getSetExternalModuleIndicator(options)
-            };
+        function getCreateSourceFileOptions(fileName: string, moduleResolutionCache: ModuleResolutionCache | undefined, host: CompilerHost, options: CompilerOptions): CreateSourceFileOptions {
+            return ts.getCreateSourceFileOptions(toPath(fileName), moduleResolutionCache, host, options);
         }
 
         function findSourceFileWorker(fileName: string, isDefaultLib: boolean, ignoreNoDefaultLib: boolean, reason: FileIncludeReason, packageId: PackageId | undefined): SourceFile | undefined {
