@@ -892,13 +892,13 @@ namespace ts.server {
         }
 
         /*@internal*/
-        setDocument(key: DocumentRegistryBucketKey, path: Path, sourceFile: SourceFile) {
+        setDocument(key: DocumentRegistryBucketKeyWithMode, path: Path, sourceFile: SourceFile) {
             const info = Debug.checkDefined(this.getScriptInfoForPath(path));
             info.cacheSourceFile = { key, sourceFile };
         }
 
         /*@internal*/
-        getDocument(key: DocumentRegistryBucketKey, path: Path): SourceFile | undefined {
+        getDocument(key: DocumentRegistryBucketKeyWithMode, path: Path): SourceFile | undefined {
             const info = this.getScriptInfoForPath(path);
             return info && info.cacheSourceFile && info.cacheSourceFile.key === key ? info.cacheSourceFile.sourceFile : undefined;
         }

@@ -61,7 +61,7 @@ Project '/project/src/tsconfig.json' (Configured)
 	  Matched by default include pattern '**/*'
 	fileA.ts
 	  Matched by default include pattern '**/*'
-	  File is CommonJS module because '../package.json' does have field "type" or it's value is not "module"
+	  File is CommonJS module because '../package.json' does not have field "type"
 
 -----------------------------------------------
 FileWatcher:: Added:: WatchInfo: /project/package.json 250 undefined WatchType: package.json file
@@ -98,10 +98,17 @@ Found 'package.json' at '/project/package.json'.
 'package.json' does not have a 'typesVersions' field.
 File '/project/src/package.json' does not exist according to earlier cached lookups.
 File '/project/package.json' exists according to earlier cached lookups.
-Reusing resolution of module './fileB.mjs' from '/project/src/fileA.ts' of old program, it was successfully resolved to '/project/src/fileB.mts'.
+======== Resolving module './fileB.mjs' from '/project/src/fileA.ts'. ========
+Module resolution kind is not specified, using 'Node16'.
+Loading module as file / folder, candidate module location '/project/src/fileB.mjs', target file type 'TypeScript'.
+File name '/project/src/fileB.mjs' has a '.mjs' extension - stripping it.
+File '/project/src/fileB.mts' exist - use it as a name resolution result.
+======== Module name './fileB.mjs' was successfully resolved to '/project/src/fileB.mts'. ========
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
+DirectoryWatcher:: Close:: WatchInfo: /project/src 0 undefined Project: /project/src/tsconfig.json WatchType: Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /project/src 0 undefined Project: /project/src/tsconfig.json WatchType: Failed Lookup Locations
 Finishing updateGraphWorker: Project: /project/src/tsconfig.json Version: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Different program with same set of files
 Running: *ensureProjectForOpenFiles*
@@ -129,7 +136,7 @@ response:{"responseRequired":false}
 event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/project/src/fileA.ts","diagnostics":[]}}
 event:
-    {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/project/src/fileA.ts","diagnostics":[{"start":{"line":1,"offset":21},"end":{"line":1,"offset":34},"text":"Module './fileB.mjs' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.","code":1471,"category":"error"}]}}
+    {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/project/src/fileA.ts","diagnostics":[]}}
 event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/project/src/fileA.ts","diagnostics":[]}}
 event:
@@ -153,7 +160,17 @@ Found 'package.json' at '/project/package.json'.
 'package.json' does not have a 'typesVersions' field.
 File '/project/src/package.json' does not exist according to earlier cached lookups.
 File '/project/package.json' exists according to earlier cached lookups.
-Reusing resolution of module './fileB.mjs' from '/project/src/fileA.ts' of old program, it was successfully resolved to '/project/src/fileB.mts'.
+======== Resolving module './fileB.mjs' from '/project/src/fileA.ts'. ========
+Module resolution kind is not specified, using 'Node16'.
+Loading module as file / folder, candidate module location '/project/src/fileB.mjs', target file type 'TypeScript'.
+File '/project/src/fileB.mjs.ts' does not exist.
+File '/project/src/fileB.mjs.tsx' does not exist.
+File '/project/src/fileB.mjs.d.ts' does not exist.
+File name '/project/src/fileB.mjs' has a '.mjs' extension - stripping it.
+File '/project/src/fileB.mts' exist - use it as a name resolution result.
+======== Module name './fileB.mjs' was successfully resolved to '/project/src/fileB.mts'. ========
+DirectoryWatcher:: Added:: WatchInfo: /project/src 0 undefined Project: /project/src/tsconfig.json WatchType: Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /project/src 0 undefined Project: /project/src/tsconfig.json WatchType: Failed Lookup Locations
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
@@ -214,6 +231,7 @@ Reusing resolution of module './fileB.mjs' from '/project/src/fileA.ts' of old p
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
+FileWatcher:: Added:: WatchInfo: /package.json 2000 undefined Project: /project/src/tsconfig.json WatchType: File location affecting resolution
 Finishing updateGraphWorker: Project: /project/src/tsconfig.json Version: 4 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Different program with same set of files
 Running: *ensureProjectForOpenFiles*
@@ -263,10 +281,10 @@ Found 'package.json' at '/project/package.json'.
 'package.json' does not have a 'typesVersions' field.
 File '/project/src/package.json' does not exist according to earlier cached lookups.
 File '/project/package.json' exists according to earlier cached lookups.
-Reusing resolution of module './fileB.mjs' from '/project/src/fileA.ts' of old program, it was successfully resolved to '/project/src/fileB.mts'.
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
+FileWatcher:: Close:: WatchInfo: /package.json 2000 undefined Project: /project/src/tsconfig.json WatchType: File location affecting resolution
 Finishing updateGraphWorker: Project: /project/src/tsconfig.json Version: 5 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Different program with same set of files
 Running: *ensureProjectForOpenFiles*
@@ -294,7 +312,7 @@ response:{"responseRequired":false}
 event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/project/src/fileA.ts","diagnostics":[]}}
 event:
-    {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/project/src/fileA.ts","diagnostics":[{"start":{"line":1,"offset":21},"end":{"line":1,"offset":34},"text":"Module './fileB.mjs' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.","code":1471,"category":"error"}]}}
+    {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/project/src/fileA.ts","diagnostics":[]}}
 event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/project/src/fileA.ts","diagnostics":[]}}
 event:
@@ -317,10 +335,10 @@ File '/package.json' does not exist according to earlier cached lookups.
 File '/project/src/package.json' does not exist according to earlier cached lookups.
 File '/project/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-Reusing resolution of module './fileB.mjs' from '/project/src/fileA.ts' of old program, it was successfully resolved to '/project/src/fileB.mts'.
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
+FileWatcher:: Added:: WatchInfo: /package.json 2000 undefined Project: /project/src/tsconfig.json WatchType: File location affecting resolution
 Finishing updateGraphWorker: Project: /project/src/tsconfig.json Version: 6 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Different program with same set of files
 Running: *ensureProjectForOpenFiles*

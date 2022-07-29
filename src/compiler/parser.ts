@@ -746,8 +746,8 @@ namespace ts {
          * check specified by `isFileProbablyExternalModule` will be used to set the field.
          */
         setExternalModuleIndicator?: (file: SourceFile) => void;
-        /*@internal*/ failedLookupLocations?: readonly string[];
-        /*@internal*/ affectingFileLocations?: readonly string[];
+        /*@internal*/ packageJsonLocations?: readonly string[];
+        /*@internal*/ packageJsonScope?: ReturnType<typeof getPackageScopeForPath>;
     }
 
     function setExternalModuleIndicator(sourceFile: SourceFile) {
@@ -763,9 +763,7 @@ namespace ts {
         const {
             languageVersion,
             setExternalModuleIndicator: overrideSetExternalModuleIndicator,
-            impliedNodeFormat: format,
-            failedLookupLocations,
-            affectingFileLocations,
+            impliedNodeFormat: format
         } = typeof languageVersionOrOptions === "object" ? languageVersionOrOptions : ({ languageVersion: languageVersionOrOptions } as CreateSourceFileOptions);
         if (languageVersion === ScriptTarget.JSON) {
             result = Parser.parseSourceFile(fileName, sourceText, languageVersion, /*syntaxCursor*/ undefined, setParentNodes, ScriptKind.JSON, noop);
@@ -777,8 +775,6 @@ namespace ts {
             };
             result = Parser.parseSourceFile(fileName, sourceText, languageVersion, /*syntaxCursor*/ undefined, setParentNodes, scriptKind, setIndicator);
         }
-        if (failedLookupLocations?.length) result.failedLookupLocations = failedLookupLocations;
-        if (affectingFileLocations?.length) result.affectingFileLocations = affectingFileLocations;
         perfLogger.logStopParseSourceFile();
 
         performance.mark("afterParse");

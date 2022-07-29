@@ -250,25 +250,27 @@ namespace ts {
         if (isExternalOrCommonJsModule(file)) {
             switch (file.impliedNodeFormat) {
                 case ModuleKind.ESNext:
-                    if (file.affectingFileLocations?.length) {
+                    if (file.packageJsonScope) {
                         (result ??= []).push(chainDiagnosticMessages(
-                        /*details*/ undefined,
+                            /*details*/ undefined,
                             Diagnostics.File_is_ECMAScript_module_because_0_has_field_type_with_value_module,
-                            toFileName(file.affectingFileLocations[0], fileNameConvertor)
+                            toFileName(last(file.packageJsonLocations!), fileNameConvertor)
                         ));
                     }
                     break;
                 case ModuleKind.CommonJS:
-                    if (file.affectingFileLocations?.length) {
+                    if (file.packageJsonScope) {
                         (result ??= []).push(chainDiagnosticMessages(
-                        /*details*/ undefined,
-                            Diagnostics.File_is_CommonJS_module_because_0_does_have_field_type_or_it_s_value_is_not_module,
-                            toFileName(file.affectingFileLocations[0], fileNameConvertor)
+                            /*details*/ undefined,
+                            file.packageJsonScope.packageJsonContent.type ?
+                                Diagnostics.File_is_CommonJS_module_because_0_has_field_type_whose_value_is_not_module :
+                                Diagnostics.File_is_CommonJS_module_because_0_does_not_have_field_type,
+                            toFileName(last(file.packageJsonLocations!), fileNameConvertor)
                         ));
                     }
-                    else if (file.failedLookupLocations?.length) {
+                    else if (file.packageJsonLocations?.length) {
                         (result ??= []).push(chainDiagnosticMessages(
-                        /*details*/ undefined,
+                            /*details*/ undefined,
                             Diagnostics.File_is_CommonJS_module_because_package_json_was_not_found,
                         ));
                     }

@@ -1110,8 +1110,6 @@ namespace ts {
             languageVersion: sourceFile.languageVersion,
             impliedNodeFormat: sourceFile.impliedNodeFormat,
             setExternalModuleIndicator: sourceFile.setExternalModuleIndicator,
-            failedLookupLocations: sourceFile.failedLookupLocations,
-            affectingFileLocations: sourceFile.affectingFileLocations,
         };
         // Otherwise, just create a new source file.
         return createLanguageServiceSourceFile(sourceFile.fileName, scriptSnapshot, options, version, /*setNodeParents*/ true, sourceFile.scriptKind);
@@ -1441,7 +1439,7 @@ namespace ts {
             // not part of the new program.
             function onReleaseOldSourceFile(oldSourceFile: SourceFile, oldOptions: CompilerOptions) {
                 const oldSettingsKey = documentRegistry.getKeyForCompilationSettings(oldOptions);
-                documentRegistry.releaseDocumentWithKey(oldSourceFile.resolvedPath, oldSettingsKey, oldSourceFile.scriptKind);
+                documentRegistry.releaseDocumentWithKey(oldSourceFile.resolvedPath, oldSettingsKey, oldSourceFile.scriptKind, oldSourceFile.impliedNodeFormat);
             }
 
             function getOrCreateSourceFile(fileName: string, languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined {
@@ -1498,7 +1496,7 @@ namespace ts {
                         }
                         else {
                             // Release old source file and fall through to aquire new file with new script kind
-                            documentRegistry.releaseDocumentWithKey(oldSourceFile.resolvedPath, documentRegistry.getKeyForCompilationSettings(program.getCompilerOptions()), oldSourceFile.scriptKind);
+                            documentRegistry.releaseDocumentWithKey(oldSourceFile.resolvedPath, documentRegistry.getKeyForCompilationSettings(program.getCompilerOptions()), oldSourceFile.scriptKind, oldSourceFile.impliedNodeFormat);
                         }
                     }
 
@@ -1591,7 +1589,7 @@ namespace ts {
                 // Use paths to ensure we are using correct key and paths as document registry could be created with different current directory than host
                 const key = documentRegistry.getKeyForCompilationSettings(program.getCompilerOptions());
                 forEach(program.getSourceFiles(), f =>
-                    documentRegistry.releaseDocumentWithKey(f.resolvedPath, key, f.scriptKind));
+                    documentRegistry.releaseDocumentWithKey(f.resolvedPath, key, f.scriptKind, f.impliedNodeFormat));
                 program = undefined!; // TODO: GH#18217
             }
             host = undefined!;

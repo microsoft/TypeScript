@@ -6930,9 +6930,10 @@ declare namespace ts {
          *
          * @param fileName The name of the file to be released
          * @param compilationSettings The compilation settings used to acquire the file
+         * @param scriptKind The script kind of the file to be released
          */
-        /**@deprecated pass scriptKind for correctness */
-        releaseDocument(fileName: string, compilationSettings: CompilerOptions): void;
+        /**@deprecated pass scriptKind and impliedNodeFormat for correctness */
+        releaseDocument(fileName: string, compilationSettings: CompilerOptions, scriptKind?: ScriptKind): void;
         /**
          * Informs the DocumentRegistry that a file is not needed any longer.
          *
@@ -6942,12 +6943,13 @@ declare namespace ts {
          * @param fileName The name of the file to be released
          * @param compilationSettings The compilation settings used to acquire the file
          * @param scriptKind The script kind of the file to be released
+         * @param impliedNodeFormat The implied source file format of the file to be released
          */
-        releaseDocument(fileName: string, compilationSettings: CompilerOptions, scriptKind: ScriptKind): void;
+        releaseDocument(fileName: string, compilationSettings: CompilerOptions, scriptKind: ScriptKind, impliedNodeFormat: SourceFile["impliedNodeFormat"]): void;
         /**
-         * @deprecated pass scriptKind for correctness */
-        releaseDocumentWithKey(path: Path, key: DocumentRegistryBucketKey): void;
-        releaseDocumentWithKey(path: Path, key: DocumentRegistryBucketKey, scriptKind: ScriptKind): void;
+         * @deprecated pass scriptKind for and impliedNodeFormat correctness */
+        releaseDocumentWithKey(path: Path, key: DocumentRegistryBucketKey, scriptKind?: ScriptKind): void;
+        releaseDocumentWithKey(path: Path, key: DocumentRegistryBucketKey, scriptKind: ScriptKind, impliedNodeFormat: SourceFile["impliedNodeFormat"]): void;
         reportStats(): string;
     }
     type DocumentRegistryBucketKey = string & {

@@ -165,6 +165,7 @@ namespace ts {
         const resolutionsWithFailedLookups: ResolutionWithFailedLookupLocations[] = [];
         const resolutionsWithOnlyAffectingLocations: ResolutionWithFailedLookupLocations[] = [];
         const resolvedFileToResolution = createMultiMap<ResolutionWithFailedLookupLocations>();
+        const impliedFormatPackageJsons = new Map<Path, readonly string[]>();
 
         let hasChangedAutomaticTypeDirectiveNames = false;
         let affectingPathChecksForFile: Set<string> | undefined;
@@ -323,18 +324,27 @@ namespace ts {
             filesWithInvalidatedNonRelativeUnresolvedImports = undefined;
             nonRelativeExternalModuleResolutions.forEach(watchFailedLookupLocationOfNonRelativeModuleResolutions);
             nonRelativeExternalModuleResolutions.clear();
-            // Program files update
-            if (newProgram !== oldProgram && newProgram?.structureIsReused !== StructureIsReused.Completely) {
+            // Update file watches
+            if (newProgram !== oldProgram) {
                 newProgram?.getSourceFiles().forEach(newFile => {
-                    const oldFile = oldProgram?.getSourceFileByPath(newFile.path);
-                    if (newFile !== oldFile) {
-                        watchLocationsAffectingFile(newFile);
-                        if (oldFile) stopWatchingLocationsAffectingFile(oldFile);
+                    const expected = isExternalOrCommonJsModule(newFile) ? newFile.packageJsonLocations?.length ?? 0 : 0;
+                    const existing = impliedFormatPackageJsons.get(newFile.path) ?? emptyArray;
+                    for (let i = existing.length; i < expected; i++) {
+                        createFileWatcherOfAffectingLocation(newFile.packageJsonLocations![i], /*forResolution*/ false);
                     }
+                    if (existing.length > expected) {
+                        for (let i = expected; i < existing.length; i++) {
+                            fileWatchesOfAffectingLocations.get(existing[i])!.files--;
+                        }
+                    }
+                    if (expected) impliedFormatPackageJsons.set(newFile.path, newFile.packageJsonLocations!);
+                    else impliedFormatPackageJsons.delete(newFile.path);
                 });
-
-                oldProgram?.getSourceFiles().forEach(oldFile => {
-                    if (!newProgram?.getSourceFileByPath(oldFile.path)) stopWatchingLocationsAffectingFile(oldFile);
+                impliedFormatPackageJsons.forEach((existing, path) => {
+                    if (!newProgram?.getSourceFileByPath(path)) {
+                        existing.forEach(location => fileWatchesOfAffectingLocations.get(location)!.files--);
+                        impliedFormatPackageJsons.delete(path);
+                    }
                 });
             }
             directoryWatchesOfFailedLookups.forEach((watcher, path) => {
@@ -778,20 +788,6 @@ namespace ts {
             }
         }
 
-        function watchLocationsAffectingFile(file: SourceFile) {
-            if (isExternalOrCommonJsModule(file)) {
-                file.failedLookupLocations?.forEach(location => createFileWatcherOfAffectingLocation(location, /*forResolution*/ false));
-                file.affectingFileLocations?.forEach(location => createFileWatcherOfAffectingLocation(location, /*forResolution*/ false));
-            }
-        }
-
-        function stopWatchingLocationsAffectingFile(file: SourceFile) {
-            if (isExternalOrCommonJsModule(file)) {
-                file.failedLookupLocations?.forEach(location => fileWatchesOfAffectingLocations.get(location)!.files--);
-                file.affectingFileLocations?.forEach(location => fileWatchesOfAffectingLocations.get(location)!.files--);
-            }
-        }
-
         function watchFailedLookupLocationOfNonRelativeModuleResolutions(resolutions: ResolutionWithFailedLookupLocations[], name: string) {
             const program = resolutionHost.getCurrentProgram();
             if (!program || !program.getTypeChecker().tryFindAmbientModuleWithoutAugmentations(name)) {
@@ -1001,8 +997,7 @@ namespace ts {
             let invalidated = false;
             if (affectingPathChecksForFile) {
                 resolutionHost.getCurrentProgram()?.getSourceFiles().forEach(f => {
-                    if (some(f.failedLookupLocations, location => affectingPathChecksForFile!.has(location)) ||
-                        some(f.affectingFileLocations, location => affectingPathChecksForFile!.has(location))) {
+                    if (some(f.packageJsonLocations, location => affectingPathChecksForFile!.has(location))) {
                         (filesWithInvalidatedResolutions ??= new Set()).add(f.path);
                         invalidated = true;
                     }
