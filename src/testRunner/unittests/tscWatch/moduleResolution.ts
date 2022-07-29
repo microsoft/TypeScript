@@ -114,5 +114,117 @@ namespace ts.tscWatch {
             commandLineArgs: ["-w", "--traceResolution"],
             changes: emptyArray
         });
+
+        describe("package json file is edited", () => {
+            function getSys(packageFileContents: string) {
+                const configFile: File = {
+                    path: "/project/src/tsconfig.json",
+                    content: JSON.stringify({
+                        compilerOptions: {
+                            target: "es2016",
+                            module: "Node16",
+                            outDir: "../out"
+                        }
+                    })
+                };
+                const packageFile: File = {
+                    path: "/project/package.json",
+                    content: packageFileContents
+                };
+                const fileA: File = {
+                    path: "/project/src/fileA.ts",
+                    content: Utils.dedent`
+                        import { foo } from "./fileB.mjs";
+                        foo();
+                    `
+                };
+                const fileB: File = {
+                    path: "/project/src/fileB.mts",
+                    content: Utils.dedent`
+                        export function foo() {
+                        }
+                    `
+                };
+                return createWatchedSystem(
+                    [configFile, fileA, fileB, packageFile, { ...libFile, path: "/a/lib/lib.es2016.full.d.ts" }],
+                    { currentDirectory: "/project" }
+                );
+            }
+            verifyTscWatch({
+                scenario: "moduleResolution",
+                subScenario: "package json file is edited",
+                commandLineArgs: ["--w", "--p", "/project/src/tsconfig.json", "--extendedDiagnostics", "-traceResolution", "--explainFiles"],
+                sys: () => getSys(JSON.stringify({ name: "app", version: "1.0.0" })),
+                changes: [
+                    {
+                        caption: "Modify package json file to add type module",
+                        change: sys => sys.writeFile("/project/package.json", JSON.stringify({
+                            name: "app", version: "1.0.0", type: "module",
+                        })),
+                        timeouts: runQueuedTimeoutCallbacks,
+                    },
+                    {
+                        caption: "Modify package.json file to remove type module",
+                        change: sys => sys.writeFile("/project/package.json", JSON.stringify({ name: "app", version: "1.0.0" })),
+                        timeouts: runQueuedTimeoutCallbacks,
+                    },
+                    {
+                        caption: "Delete package.json",
+                        change: sys => sys.deleteFile("/project/package.json"),
+                        timeouts: runQueuedTimeoutCallbacks,
+                    },
+                    {
+                        caption: "Modify package json file to add type module",
+                        change: sys => sys.writeFile("/project/package.json", JSON.stringify({
+                            name: "app", version: "1.0.0", type: "module",
+                        })),
+                        timeouts: runQueuedTimeoutCallbacks,
+                    },
+                    {
+                        caption: "Delete package.json",
+                        change: sys => sys.deleteFile("/project/package.json"),
+                        timeouts: runQueuedTimeoutCallbacks,
+                    },
+                ],
+            });
+
+            verifyTscWatch({
+                scenario: "moduleResolution",
+                subScenario: "package json file is edited when package json with type module exists",
+                commandLineArgs: ["--w", "--p", "/project/src/tsconfig.json", "--extendedDiagnostics", "-traceResolution", "--explainFiles"],
+                sys: () => getSys(JSON.stringify({
+                    name: "app", version: "1.0.0", type: "module",
+                })),
+                changes: [
+                    {
+                        caption: "Modify package.json file to remove type module",
+                        change: sys => sys.writeFile("/project/package.json", JSON.stringify({ name: "app", version: "1.0.0" })),
+                        timeouts: runQueuedTimeoutCallbacks,
+                    },
+                    {
+                        caption: "Modify package json file to add type module",
+                        change: sys => sys.writeFile("/project/package.json", JSON.stringify({
+                            name: "app", version: "1.0.0", type: "module",
+                        })),
+                        timeouts: runQueuedTimeoutCallbacks,
+                    },
+                    {
+                        caption: "Delete package.json",
+                        change: sys => sys.deleteFile("/project/package.json"),
+                        timeouts: runQueuedTimeoutCallbacks,
+                    },
+                    {
+                        caption: "Modify package json file to without type module",
+                        change: sys => sys.writeFile("/project/package.json", JSON.stringify({ name: "app", version: "1.0.0" })),
+                        timeouts: runQueuedTimeoutCallbacks,
+                    },
+                    {
+                        caption: "Delete package.json",
+                        change: sys => sys.deleteFile("/project/package.json"),
+                        timeouts: runQueuedTimeoutCallbacks,
+                    },
+                ],
+            });
+        });
     });
 }
