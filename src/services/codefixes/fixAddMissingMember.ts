@@ -15,6 +15,15 @@ namespace ts.codefix {
         Diagnostics.Cannot_find_name_0.code
     ];
 
+    enum InfoKind {
+        TypeLikeDeclaration,
+        Enum,
+        Function,
+        ObjectLiteral,
+        JsxAttributes,
+        Signature,
+    }
+
     registerCodeFix({
         errorCodes,
         getCodeActions(context) {
@@ -32,8 +41,7 @@ namespace ts.codefix {
                 return [createCodeFixAction(fixMissingAttributes, changes, Diagnostics.Add_missing_attributes, fixMissingAttributes, Diagnostics.Add_all_missing_attributes)];
             }
             if (info.kind === InfoKind.Function || info.kind === InfoKind.Signature) {
-                const changes = textChanges.ChangeTracker.with(context, t =>
-                    info.kind === InfoKind.Signature ? addFunctionDeclarationFromSignature(t, context, info) : addFunctionDeclaration(t, context, info));
+                const changes = textChanges.ChangeTracker.with(context, t => addFunctionDeclaration(t, context, info));
                 return [createCodeFixAction(fixMissingFunctionDeclaration, changes, [Diagnostics.Add_missing_function_declaration_0, info.token.text], fixMissingFunctionDeclaration, Diagnostics.Add_all_missing_function_declarations)];
             }
             if (info.kind === InfoKind.Enum) {
@@ -56,12 +64,7 @@ namespace ts.codefix {
                         return;
                     }
                     if (fixId === fixMissingFunctionDeclaration && (info.kind === InfoKind.Function || info.kind === InfoKind.Signature)) {
-                        if (info.kind === InfoKind.Signature) {
-                            addFunctionDeclarationFromSignature(changes, context, info);
-                        }
-                        else {
-                            addFunctionDeclaration(changes, context, info);
-                        }
+                        addFunctionDeclaration(changes, context, info);
                     }
                     else if (fixId === fixMissingProperties && info.kind === InfoKind.ObjectLiteral) {
                         addObjectLiteralProperties(changes, context, info);
@@ -112,7 +115,6 @@ namespace ts.codefix {
         },
     });
 
-    const enum InfoKind { TypeLikeDeclaration, Enum, Function, ObjectLiteral, JsxAttributes, Signature }
     type Info = TypeLikeDeclarationInfo | EnumInfo | FunctionInfo | ObjectLiteralInfo | JsxAttributesInfo | SignatureInfo;
 
     interface EnumInfo {
@@ -137,7 +139,7 @@ namespace ts.codefix {
         readonly token: Identifier;
         readonly sourceFile: SourceFile;
         readonly modifierFlags: ModifierFlags;
-        readonly parentDeclaration: SourceFile | ModuleDeclaration;
+        readonly parentDeclaration: SourceFile | ModuleDeclaration | ReturnStatement;
     }
 
     interface ObjectLiteralInfo {
@@ -208,10 +210,10 @@ namespace ts.codefix {
             if (type && getObjectFlags(type) & ObjectFlags.Anonymous) {
                 const signature = firstOrUndefined(checker.getSignaturesOfType(type, SignatureKind.Call));
                 if (signature === undefined) return undefined;
-                return { kind: InfoKind.Signature, token, signature, sourceFile, parentDeclaration: token.parent };
+                return { kind: InfoKind.Signature, token, signature, sourceFile, parentDeclaration: findScope(token) };
             }
             if (isCallExpression(parent)) {
-                return { kind: InfoKind.Function, token, call: parent, sourceFile, modifierFlags: ModifierFlags.None, parentDeclaration: sourceFile };
+                return { kind: InfoKind.Function, token, call: parent, sourceFile, modifierFlags: ModifierFlags.None, parentDeclaration: findScope(token) };
             }
         }
 
@@ -472,28 +474,19 @@ namespace ts.codefix {
         });
     }
 
-    function addFunctionDeclaration(changes: textChanges.ChangeTracker, context: CodeFixContextBase, info: FunctionInfo) {
-        const importAdder = createImportAdder(context.sourceFile, context.program, context.preferences, context.host);
-        const functionDeclaration = createSignatureDeclarationFromCallExpression(SyntaxKind.FunctionDeclaration, context, importAdder, info.call, idText(info.token), info.modifierFlags, info.parentDeclaration) as FunctionDeclaration;
-        changes.insertNodeAtEndOfScope(info.sourceFile, info.parentDeclaration, functionDeclaration);
-        importAdder.writeFixes(changes);
-    }
-
-    function addFunctionDeclarationFromSignature(changes: textChanges.ChangeTracker, context: CodeFixContextBase, info: SignatureInfo) {
+    function addFunctionDeclaration(changes: textChanges.ChangeTracker, context: CodeFixContextBase, info: FunctionInfo | SignatureInfo) {
         const quotePreference = getQuotePreference(context.sourceFile, context.preferences);
         const importAdder = createImportAdder(context.sourceFile, context.program, context.preferences, context.host);
-        const functionDeclaration = createSignatureDeclarationFromSignature(SyntaxKind.FunctionExpression, context, quotePreference, info.signature,
-            createStubbedBody(Diagnostics.Function_not_implemented.message, quotePreference), info.token, /*modifiers*/ undefined, /*optional*/ undefined, /*enclosingDeclaration*/ undefined, importAdder);
+        const functionDeclaration = info.kind === InfoKind.Function
+            ? createSignatureDeclarationFromCallExpression(SyntaxKind.FunctionDeclaration, context, importAdder, info.call, idText(info.token), info.modifierFlags, info.parentDeclaration)
+            : createSignatureDeclarationFromSignature(SyntaxKind.FunctionDeclaration, context, quotePreference, info.signature, createStubbedBody(Diagnostics.Function_not_implemented.message, quotePreference), info.token, /*modifiers*/ undefined, /*optional*/ undefined, /*enclosingDeclaration*/ undefined, importAdder);
         if (functionDeclaration === undefined) {
             Debug.fail("fixMissingFunctionDeclaration codefix got unexpected error.");
         }
-        const returnStatement = isJsxExpression(info.parentDeclaration) ? findAncestor(info.parentDeclaration, isReturnStatement) : undefined;
-        if (returnStatement) {
-            changes.insertNodeBefore(info.sourceFile, returnStatement, functionDeclaration, /*blankLineBetween*/ true);
-        }
-        else {
-            changes.insertNodeAtEndOfScope(info.sourceFile, info.sourceFile, functionDeclaration);
-        }
+
+        isReturnStatement(info.parentDeclaration)
+            ? changes.insertNodeBefore(info.sourceFile, info.parentDeclaration, functionDeclaration, /*blankLineBetween*/ true)
+            : changes.insertNodeAtEndOfScope(info.sourceFile, info.parentDeclaration, functionDeclaration);
         importAdder.writeFixes(changes);
     }
 
@@ -656,5 +649,13 @@ namespace ts.codefix {
             }
         }
         return createPropertyNameNodeForIdentifierOrLiteral(symbol.name, target, quotePreference === QuotePreference.Single);
+    }
+
+    function findScope(node: Node) {
+        if (findAncestor(node, isJsxExpression)) {
+            const returnStatement = findAncestor(node.parent, isReturnStatement);
+            if (returnStatement) return returnStatement;
+        }
+        return getSourceFileOfNode(node);
     }
 }
