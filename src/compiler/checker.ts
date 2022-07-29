@@ -3570,10 +3570,23 @@ namespace ts {
                 if (resolutionDiagnostic) {
                     error(errorNode, resolutionDiagnostic, moduleReference, resolvedModule.resolvedFileName);
                 }
-                if (resolvedModule.resolvedUsingTsExtension && !shouldAllowTsExtension(compilerOptions)) {
+
+                if (resolvedModule.resolvedUsingTsExtension && isDeclarationFileName(moduleReference)) {
+                    const importOrExport =
+                        findAncestor(location, isImportDeclaration)?.importClause ||
+                        findAncestor(location, or(isImportEqualsDeclaration, isExportDeclaration)) as ImportEqualsDeclaration | ExportDeclaration | undefined;
+                    if (importOrExport && !importOrExport.isTypeOnly || findAncestor(location, isImportCall)) {
+                        error(
+                            errorNode,
+                            Diagnostics.A_declaration_file_cannot_be_imported_without_import_type_Did_you_mean_to_import_an_implementation_file_0_instead,
+                            getSuggestedImportSource(Debug.checkDefined(tryExtractTSExtension(moduleReference))));
+                    }
+                }
+                else if (resolvedModule.resolvedUsingTsExtension && !shouldAllowTsExtension(compilerOptions)) {
                     const tsExtension = Debug.checkDefined(tryExtractTSExtension(moduleReference));
                     errorOnTSExtensionImport(tsExtension);
                 }
+
                 if (sourceFile.symbol) {
                     if (resolvedModule.isExternalLibraryImport && !resolutionExtensionIsTSOrJson(resolvedModule.extension)) {
                         errorOnImplicitAnyModule(/*isError*/ false, errorNode, resolvedModule, moduleReference);
@@ -3675,16 +3688,19 @@ namespace ts {
 
             function errorOnTSExtensionImport(tsExtension: string) {
                 const diag = Diagnostics.An_import_path_cannot_end_with_a_0_extension_Consider_importing_1_instead;
+                error(errorNode, diag, tsExtension, getSuggestedImportSource(tsExtension));
+            }
+
+            function getSuggestedImportSource(tsExtension: string) {
                 const importSourceWithoutExtension = removeExtension(moduleReference, tsExtension);
-                let replacedImportSource = importSourceWithoutExtension;
                 /**
                  * Direct users to import source with .js extension if outputting an ES module.
                  * @see https://github.com/microsoft/TypeScript/issues/42151
                  */
                 if (moduleKind >= ModuleKind.ES2015 || getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Minimal) {
-                    replacedImportSource += tsExtension === Extension.Mts ? ".mjs" : tsExtension === Extension.Cts ? ".cjs" : ".js";
+                    return importSourceWithoutExtension + (tsExtension === Extension.Mts ? ".mjs" : tsExtension === Extension.Cts ? ".cjs" : ".js");
                 }
-                error(errorNode, diag, tsExtension, replacedImportSource);
+                return importSourceWithoutExtension;
             }
         }
 

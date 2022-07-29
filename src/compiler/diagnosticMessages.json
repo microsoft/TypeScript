@@ -3515,6 +3515,10 @@
         "category": "Error",
         "code": 2844
     },
+    "A declaration file cannot be imported without 'import type'. Did you mean to import an implementation file '{0}' instead?": {
+        "category": "Error",
+        "code": 2845
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

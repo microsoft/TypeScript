@@ -6,10 +6,11 @@ error TS6504: File '/project/b.js' is a JavaScript file. Did you mean to enable 
     Root file specified for compilation
 /project/main.ts(1,16): error TS2307: Cannot find module './a' or its corresponding type declarations.
 /project/main.ts(5,16): error TS2307: Cannot find module './b' or its corresponding type declarations.
-/project/main.ts(11,16): error TS6142: Module './c.tsx' was resolved to '/project/c.tsx', but '--jsx' is not set.
-/project/main.ts(13,16): error TS2307: Cannot find module './d' or its corresponding type declarations.
-/project/main.ts(14,16): error TS2307: Cannot find module './d/index' or its corresponding type declarations.
-/project/main.ts(17,16): error TS2307: Cannot find module './e' or its corresponding type declarations.
+/project/main.ts(8,16): error TS2845: A declaration file cannot be imported without 'import type'. Did you mean to import an implementation file './b.js' instead?
+/project/main.ts(12,16): error TS6142: Module './c.tsx' was resolved to '/project/c.tsx', but '--jsx' is not set.
+/project/main.ts(14,16): error TS2307: Cannot find module './d' or its corresponding type declarations.
+/project/main.ts(15,16): error TS2307: Cannot find module './d/index' or its corresponding type declarations.
+/project/main.ts(18,16): error TS2307: Cannot find module './e' or its corresponding type declarations.
 
 
 !!! error TS6231: Could not resolve the path '/project/e' with the extensions: '.ts', '.tsx', '.d.ts', '.cts', '.d.cts', '.mts', '.d.mts'.
@@ -42,7 +43,7 @@ error TS6504: File '/project/b.js' is a JavaScript file. Did you mean to enable 
 ==== /project/e (0 errors) ====
     export {};
     
-==== /project/main.ts (6 errors) ====
+==== /project/main.ts (7 errors) ====
     import {} from "./a";
                    ~~~~~
 !!! error TS2307: Cannot find module './a' or its corresponding type declarations.
@@ -55,6 +56,9 @@ error TS6504: File '/project/b.js' is a JavaScript file. Did you mean to enable 
     import {} from "./b.js";
     import {} from "./b.ts";
     import {} from "./b.d.ts";
+                   ~~~~~~~~~~
+!!! error TS2845: A declaration file cannot be imported without 'import type'. Did you mean to import an implementation file './b.js' instead?
+    import type {} from "./b.d.ts";
     
     import {} from "./c.ts";
     import {} from "./c.tsx";

@@ -9,14 +9,14 @@ error TS6504: File '/project/b.js' is a JavaScript file. Did you mean to enable 
 /project/main.ts(3,16): error TS2691: An import path cannot end with a '.ts' extension. Consider importing './a.js' instead.
 /project/main.ts(5,16): error TS2307: Cannot find module './b' or its corresponding type declarations.
 /project/main.ts(7,16): error TS2691: An import path cannot end with a '.ts' extension. Consider importing './b.js' instead.
-/project/main.ts(8,16): error TS2691: An import path cannot end with a '.d.ts' extension. Consider importing './b.js' instead.
-/project/main.ts(10,16): error TS2691: An import path cannot end with a '.ts' extension. Consider importing './c.js' instead.
-/project/main.ts(11,16): error TS2691: An import path cannot end with a '.tsx' extension. Consider importing './c.js' instead.
-/project/main.ts(11,16): error TS6142: Module './c.tsx' was resolved to '/project/c.tsx', but '--jsx' is not set.
-/project/main.ts(13,16): error TS2307: Cannot find module './d' or its corresponding type declarations.
-/project/main.ts(14,16): error TS2307: Cannot find module './d/index' or its corresponding type declarations.
-/project/main.ts(15,16): error TS2691: An import path cannot end with a '.ts' extension. Consider importing './d/index.js' instead.
-/project/main.ts(17,16): error TS2307: Cannot find module './e' or its corresponding type declarations.
+/project/main.ts(8,16): error TS2845: A declaration file cannot be imported without 'import type'. Did you mean to import an implementation file './b.js' instead?
+/project/main.ts(11,16): error TS2691: An import path cannot end with a '.ts' extension. Consider importing './c.js' instead.
+/project/main.ts(12,16): error TS2691: An import path cannot end with a '.tsx' extension. Consider importing './c.js' instead.
+/project/main.ts(12,16): error TS6142: Module './c.tsx' was resolved to '/project/c.tsx', but '--jsx' is not set.
+/project/main.ts(14,16): error TS2307: Cannot find module './d' or its corresponding type declarations.
+/project/main.ts(15,16): error TS2307: Cannot find module './d/index' or its corresponding type declarations.
+/project/main.ts(16,16): error TS2691: An import path cannot end with a '.ts' extension. Consider importing './d/index.js' instead.
+/project/main.ts(18,16): error TS2307: Cannot find module './e' or its corresponding type declarations.
 
 
 !!! error TS5056: Cannot write file 'dist/c.js' because it would be overwritten by multiple input files.
@@ -68,7 +68,8 @@ error TS6504: File '/project/b.js' is a JavaScript file. Did you mean to enable 
 !!! error TS2691: An import path cannot end with a '.ts' extension. Consider importing './b.js' instead.
     import {} from "./b.d.ts";
                    ~~~~~~~~~~
-!!! error TS2691: An import path cannot end with a '.d.ts' extension. Consider importing './b.js' instead.
+!!! error TS2845: A declaration file cannot be imported without 'import type'. Did you mean to import an implementation file './b.js' instead?
+    import type {} from "./b.d.ts";
     
     import {} from "./c.ts";
                    ~~~~~~~~

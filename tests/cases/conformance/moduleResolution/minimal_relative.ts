@@ -36,6 +36,7 @@ import {} from "./b";
 import {} from "./b.js";
 import {} from "./b.ts";
 import {} from "./b.d.ts";
+import type {} from "./b.d.ts";
 
 import {} from "./c.ts";
 import {} from "./c.tsx";
