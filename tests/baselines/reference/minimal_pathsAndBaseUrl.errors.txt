@@ -1,0 +1,38 @@
+/main.ts(4,16): error TS2307: Cannot find module 'hello' or its corresponding type declarations.
+
+
+==== /tsconfig.json (0 errors) ====
+    {
+      "compilerOptions": {
+        "moduleResolution": "minimal",
+        "noEmit": true,
+        "baseUrl": ".",
+        "paths": {
+          "*": [
+            "*",
+            "./vendor/*",
+            "./vendor/*/index.d.ts",
+            "./apps/*"
+          ]
+        }
+      }
+    }
+    
+==== /vendor/foo/index.d.ts (0 errors) ====
+    export {};
+    
+==== /apps/hello.ts (0 errors) ====
+    export {};
+    
+==== /foo.ts (0 errors) ====
+    export {};
+    
+==== /main.ts (1 errors) ====
+    import {} from "foo";
+    import {} from "foo/index.js";
+    import {} from "hello.ts";
+    import {} from "hello";
+                   ~~~~~~~
+!!! error TS2307: Cannot find module 'hello' or its corresponding type declarations.
+    import {} from "foo.js";
+    
