@@ -854,7 +854,7 @@ namespace ts {
                 return undefined;
         }
         function lookupFromPackageJson(): ModuleKind.ESNext | ModuleKind.CommonJS {
-            const scope = getPackageScopeForPath(fileName, packageJsonInfoCache, host, options);
+            const scope = getPackageScopeForPath(fileName, getTemporaryModuleResolutionState(packageJsonInfoCache, host, options));
             return scope?.packageJsonContent.type === "module" ? ModuleKind.ESNext : ModuleKind.CommonJS;
 
         }
