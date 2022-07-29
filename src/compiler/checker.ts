@@ -25986,10 +25986,23 @@ namespace ts {
                 node.parent.kind === SyntaxKind.NonNullExpression ||
                 declaration.kind === SyntaxKind.VariableDeclaration && (declaration as VariableDeclaration).exclamationToken ||
                 declaration.flags & NodeFlags.Ambient;
-            const initialType = assumeInitialized ? (isParameter ? removeOptionalityFromDeclaredType(type, declaration as VariableLikeDeclaration) : type) :
-                type === autoType || type === autoArrayType ? undefinedType :
-                getOptionalType(type);
-            const flowType = getFlowTypeOfReference(node, type, initialType, flowContainer);
+
+            // TODO: refactor this
+            // when non null and an automatic type are involved, we should get the flow type and then remove optionality
+            const createFlowType = (initialType: Type) => getFlowTypeOfReference(node, type, initialType, flowContainer)
+            let flowType: Type | undefined;
+            if (node.parent.kind === SyntaxKind.NonNullExpression && (type === autoType || type === autoArrayType)) {
+                const initialType = undefinedType;
+                flowType = createFlowType(initialType);
+                flowType = getNonNullableType(flowType);
+            }
+            else {
+                const initialType = assumeInitialized ? (isParameter ? removeOptionalityFromDeclaredType(type, declaration as VariableLikeDeclaration) : type) :
+                    type === autoType || type === autoArrayType ? undefinedType :
+                    getOptionalType(type);
+                flowType = createFlowType(initialType);
+            }
+
             // A variable is considered uninitialized when it is possible to analyze the entire control flow graph
             // from declaration to use, and when the variable's declared type doesn't include undefined but the
             // control flow based type does include undefined.
