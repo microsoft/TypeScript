@@ -4913,6 +4913,13 @@ namespace ts {
             }
 
             function typeToTypeNodeHelper(type: Type, context: NodeBuilderContext): TypeNode {
+                const savedFlags = context.flags;
+                const typeNode = typeToTypeNodeWorker(type, context);
+                context.flags = savedFlags;
+                return typeNode;
+            }
+
+            function typeToTypeNodeWorker(type: Type, context: NodeBuilderContext): TypeNode {
                 if (cancellationToken && cancellationToken.throwIfCancellationRequested) {
                     cancellationToken.throwIfCancellationRequested();
                 }
