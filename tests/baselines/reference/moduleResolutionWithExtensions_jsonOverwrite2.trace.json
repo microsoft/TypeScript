@@ -1,0 +1,9 @@
+[
+    "======== Resolving module './hello.locstring.json' from '/a.ts'. ========",
+    "Module resolution kind is not specified, using 'NodeJs'.",
+    "Loading module as file / folder, candidate module location '/hello.locstring.json', target file type 'TypeScript'.",
+    "File '/hello.locstring.json.ts' does not exist.",
+    "File '/hello.locstring.json.tsx' does not exist.",
+    "File '/hello.locstring.json.d.ts' exist - use it as a name resolution result.",
+    "======== Module name './hello.locstring.json' was successfully resolved to '/hello.locstring.json.d.ts'. ========"
+]

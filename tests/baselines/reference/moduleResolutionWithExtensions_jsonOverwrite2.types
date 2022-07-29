@@ -1,0 +1,36 @@
+=== /hello.locstring.json.d.ts ===
+declare const _default: {
+>_default : { hello: number; }
+
+    hello: number;
+>hello : number
+
+};
+export default _default;
+>_default : { hello: number; }
+
+=== /types.d.ts ===
+type ResourceId = string & { __ResourceId: void };
+>ResourceId : string & { __ResourceId: void; }
+>__ResourceId : void
+
+declare module "*.locstring.json" {
+>"*.locstring.json" : typeof import("*.locstring.json")
+
+    const value: { [key: string]: ResourceId };
+>value : { [key: string]: ResourceId; }
+>key : string
+
+    export default value;
+>value : { [key: string]: ResourceId; }
+}
+
+=== /a.ts ===
+import strings from './hello.locstring.json';
+>strings : { hello: number; }
+
+strings.hello;
+>strings.hello : number
+>strings : { hello: number; }
+>hello : number
+

@@ -3561,6 +3561,12 @@ namespace ts {
                     (isLiteralImportTypeNode(location) ? location : undefined)?.argument.literal;
             const mode = contextSpecifier && isStringLiteralLike(contextSpecifier) ? getModeForUsageLocation(currentSourceFile, contextSpecifier) : currentSourceFile.impliedNodeFormat;
             const resolvedModule = getResolvedModule(currentSourceFile, moduleReference, mode);
+            if (resolvedModule?.extension === Extension.Json) {
+                const mod = findMatchingPatternAmbientModule(moduleReference);
+                if (mod) {
+                    return mod;
+                }
+            }
             const resolutionDiagnostic = resolvedModule && getResolutionDiagnostic(compilerOptions, resolvedModule);
             const sourceFile = resolvedModule
                 && (!resolutionDiagnostic || resolutionDiagnostic === Diagnostics.Module_0_was_resolved_to_1_but_jsx_is_not_set)
@@ -3594,18 +3600,11 @@ namespace ts {
                 return undefined;
             }
 
-            if (patternAmbientModules) {
-                const pattern = findBestPatternMatch(patternAmbientModules, _ => _.pattern, moduleReference);
-                if (pattern) {
-                    // If the module reference matched a pattern ambient module ('*.foo') but there's also a
-                    // module augmentation by the specific name requested ('a.foo'), we store the merged symbol
-                    // by the augmentation name ('a.foo'), because asking for *.foo should not give you exports
-                    // from a.foo.
-                    const augmentation = patternAmbientModuleAugmentations && patternAmbientModuleAugmentations.get(moduleReference);
-                    if (augmentation) {
-                        return getMergedSymbol(augmentation);
-                    }
-                    return getMergedSymbol(pattern.symbol);
+            // JSON files have been tried before, no need to try again.
+            if (resolvedModule?.extension !== Extension.Json) {
+                const mod = findMatchingPatternAmbientModule(moduleReference);
+                if (mod) {
+                    return mod;
                 }
             }
 
@@ -3679,6 +3678,26 @@ namespace ts {
             }
             return undefined;
         }
+
+        function findMatchingPatternAmbientModule(moduleReference: string): Symbol | undefined {
+            if (!patternAmbientModules) {
+                return;
+            }
+            const pattern = findBestPatternMatch(patternAmbientModules, _ => _.pattern, moduleReference);
+            if (!pattern) {
+                return;
+            }
+            // If the module reference matched a pattern ambient module ('*.foo') but there's also a
+            // module augmentation by the specific name requested ('a.foo'), we store the merged symbol
+            // by the augmentation name ('a.foo'), because asking for *.foo should not give you exports
+            // from a.foo.
+            const augmentation = patternAmbientModuleAugmentations && patternAmbientModuleAugmentations.get(moduleReference);
+            if (augmentation) {
+                return getMergedSymbol(augmentation);
+            }
+            return getMergedSymbol(pattern.symbol);
+        }
+
 
         function errorOnImplicitAnyModule(isError: boolean, errorNode: Node, { packageId, resolvedFileName }: ResolvedModuleFull, moduleReference: string): void {
             const errorInfo = !isExternalModuleNameRelative(moduleReference) && packageId

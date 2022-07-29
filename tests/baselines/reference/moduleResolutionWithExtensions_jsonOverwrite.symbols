@@ -1,0 +1,28 @@
+=== /hello.locstring.json ===
+{ "hello": "Hello World" }
+>"hello" : Symbol("hello", Decl(hello.locstring.json, 0, 1))
+
+=== /types.d.ts ===
+type ResourceId = string & { __ResourceId: void };
+>ResourceId : Symbol(ResourceId, Decl(types.d.ts, 0, 0))
+>__ResourceId : Symbol(__ResourceId, Decl(types.d.ts, 0, 28))
+
+declare module "*.locstring.json" {
+>"*.locstring.json" : Symbol("*.locstring.json", Decl(types.d.ts, 0, 50))
+
+    const value: { [key: string]: ResourceId };
+>value : Symbol(value, Decl(types.d.ts, 2, 9))
+>key : Symbol(key, Decl(types.d.ts, 2, 20))
+>ResourceId : Symbol(ResourceId, Decl(types.d.ts, 0, 0))
+
+    export default value;
+>value : Symbol(value, Decl(types.d.ts, 2, 9))
+}
+
+=== /a.ts ===
+import strings from './hello.locstring.json';
+>strings : Symbol(strings, Decl(a.ts, 0, 6))
+
+strings.hello;
+>strings : Symbol(strings, Decl(a.ts, 0, 6))
+
