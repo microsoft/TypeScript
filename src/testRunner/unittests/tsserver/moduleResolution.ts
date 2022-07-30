@@ -3,7 +3,7 @@ namespace ts.projectSystem {
         describe("package json file is edited", () => {
             function setup(packageFileContents: string) {
                 const configFile: File = {
-                    path: "/project/src/tsconfig.json",
+                    path: `${tscWatch.projectRoot}/src/tsconfig.json`,
                     content: JSON.stringify({
                         compilerOptions: {
                             target: "es2016",
@@ -14,18 +14,18 @@ namespace ts.projectSystem {
                     })
                 };
                 const packageFile: File = {
-                    path: "/project/package.json",
+                    path: `${tscWatch.projectRoot}/package.json`,
                     content: packageFileContents
                 };
                 const fileA: File = {
-                    path: "/project/src/fileA.ts",
+                    path: `${tscWatch.projectRoot}/src/fileA.ts`,
                     content: Utils.dedent`
                         import { foo } from "./fileB.mjs";
                         foo();
                     `
                 };
                 const fileB: File = {
-                    path: "/project/src/fileB.mts",
+                    path: `${tscWatch.projectRoot}/src/fileB.mts`,
                     content: Utils.dedent`
                         export function foo() {
                         }

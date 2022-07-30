@@ -1,18 +1,18 @@
 Input::
-//// [/project/src/tsconfig.json]
+//// [/user/username/projects/myproject/src/tsconfig.json]
 {"compilerOptions":{"target":"es2016","module":"Node16","outDir":"../out"}}
 
-//// [/project/src/fileA.ts]
+//// [/user/username/projects/myproject/src/fileA.ts]
 import { foo } from "./fileB.mjs";
 foo();
 
 
-//// [/project/src/fileB.mts]
+//// [/user/username/projects/myproject/project/src/fileB.mts]
 export function foo() {
 }
 
 
-//// [/project/package.json]
+//// [/user/username/projects/myproject/package.json]
 {"name":"app","version":"1.0.0"}
 
 //// [/a/lib/lib.es2016.full.d.ts]
@@ -29,109 +29,111 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-/a/lib/tsc.js --w --p /project/src/tsconfig.json --extendedDiagnostics -traceResolution --explainFiles
+/a/lib/tsc.js --w --p src --extendedDiagnostics -traceResolution --explainFiles
 Output::
-[[90m12:00:21 AM[0m] Starting compilation in watch mode...
+[[90m12:00:31 AM[0m] Starting compilation in watch mode...
 
-Current directory: /project CaseSensitiveFileNames: false
-FileWatcher:: Added:: WatchInfo: /project/src/tsconfig.json 2000 undefined Config file
+Current directory: /user/username/projects/myproject CaseSensitiveFileNames: false
+FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/tsconfig.json 2000 undefined Config file
 Synchronizing program
 CreatingProgramWith::
-  roots: ["/project/src/fileA.ts","/project/src/fileB.mts"]
-  options: {"target":3,"module":100,"outDir":"/project/out","watch":true,"project":"/project/src/tsconfig.json","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"configFilePath":"/project/src/tsconfig.json"}
-File '/project/src/package.json' does not exist.
-Found 'package.json' at '/project/package.json'.
+  roots: ["/user/username/projects/myproject/src/fileA.ts"]
+  options: {"target":3,"module":100,"outDir":"/user/username/projects/myproject/out","watch":true,"project":"/user/username/projects/myproject/src","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/myproject/src/tsconfig.json"}
+File '/user/username/projects/myproject/src/package.json' does not exist.
+Found 'package.json' at '/user/username/projects/myproject/package.json'.
 'package.json' does not have a 'typesVersions' field.
-FileWatcher:: Added:: WatchInfo: /project/src/fileA.ts 250 undefined Source file
-======== Resolving module './fileB.mjs' from '/project/src/fileA.ts'. ========
+FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/fileA.ts 250 undefined Source file
+======== Resolving module './fileB.mjs' from '/user/username/projects/myproject/src/fileA.ts'. ========
 Module resolution kind is not specified, using 'Node16'.
-Loading module as file / folder, candidate module location '/project/src/fileB.mjs', target file type 'TypeScript'.
-File '/project/src/fileB.mjs.ts' does not exist.
-File '/project/src/fileB.mjs.tsx' does not exist.
-File '/project/src/fileB.mjs.d.ts' does not exist.
-File name '/project/src/fileB.mjs' has a '.mjs' extension - stripping it.
-File '/project/src/fileB.mts' exist - use it as a name resolution result.
-======== Module name './fileB.mjs' was successfully resolved to '/project/src/fileB.mts'. ========
-DirectoryWatcher:: Added:: WatchInfo: /project/src 0 undefined Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /project/src 0 undefined Failed Lookup Locations
-FileWatcher:: Added:: WatchInfo: /project/src/fileB.mts 250 undefined Source file
+Loading module as file / folder, candidate module location '/user/username/projects/myproject/src/fileB.mjs', target file type 'TypeScript'.
+File '/user/username/projects/myproject/src/fileB.mjs.ts' does not exist.
+File '/user/username/projects/myproject/src/fileB.mjs.tsx' does not exist.
+File '/user/username/projects/myproject/src/fileB.mjs.d.ts' does not exist.
+File name '/user/username/projects/myproject/src/fileB.mjs' has a '.mjs' extension - stripping it.
+File '/user/username/projects/myproject/src/fileB.mts' does not exist.
+File '/user/username/projects/myproject/src/fileB.d.mts' does not exist.
+Directory '/user/username/projects/myproject/src/fileB.mjs' does not exist, skipping all lookups in it.
+Loading module as file / folder, candidate module location '/user/username/projects/myproject/src/fileB.mjs', target file type 'JavaScript'.
+File '/user/username/projects/myproject/src/fileB.mjs.js' does not exist.
+File '/user/username/projects/myproject/src/fileB.mjs.jsx' does not exist.
+File name '/user/username/projects/myproject/src/fileB.mjs' has a '.mjs' extension - stripping it.
+File '/user/username/projects/myproject/src/fileB.mjs' does not exist.
+Directory '/user/username/projects/myproject/src/fileB.mjs' does not exist, skipping all lookups in it.
+======== Module name './fileB.mjs' was not resolved. ========
+DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/fileB.mjs 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/fileB.mjs 1 undefined Failed Lookup Locations
+DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 0 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 0 undefined Failed Lookup Locations
 File '/a/lib/package.json' does not exist.
 File '/a/package.json' does not exist.
 File '/package.json' does not exist.
 FileWatcher:: Added:: WatchInfo: /a/lib/lib.es2016.full.d.ts 250 undefined Source file
-FileWatcher:: Added:: WatchInfo: /project/src/package.json 2000 undefined File location affecting resolution
-FileWatcher:: Added:: WatchInfo: /project/package.json 2000 undefined File location affecting resolution
-DirectoryWatcher:: Added:: WatchInfo: /project/src/node_modules/@types 1 undefined Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /project/src/node_modules/@types 1 undefined Type roots
-[96msrc/fileA.ts[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS1471: [0mModule './fileB.mjs' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/package.json 2000 undefined File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/package.json 2000 undefined File location affecting resolution
+DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/node_modules/@types 1 undefined Type roots
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/node_modules/@types 1 undefined Type roots
+DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Type roots
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Type roots
+[96msrc/fileA.ts[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS2307: [0mCannot find module './fileB.mjs' or its corresponding type declarations.
 
 [7m1[0m import { foo } from "./fileB.mjs";
 [7m [0m [91m                    ~~~~~~~~~~~~~[0m
 
-../a/lib/lib.es2016.full.d.ts
+../../../../a/lib/lib.es2016.full.d.ts
   Default library for target 'es2016'
-src/fileB.mts
-  Imported via "./fileB.mjs" from file 'src/fileA.ts'
-  Matched by default include pattern '**/*'
 src/fileA.ts
   Matched by default include pattern '**/*'
   File is CommonJS module because 'package.json' does not have field "type"
-[[90m12:00:29 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:00:37 AM[0m] Found 1 error. Watching for file changes.
 
-DirectoryWatcher:: Added:: WatchInfo: /project/src 1 undefined Wild card directory
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /project/src 1 undefined Wild card directory
+DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 undefined Wild card directory
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 undefined Wild card directory
 
 
-Program root files: ["/project/src/fileA.ts","/project/src/fileB.mts"]
-Program options: {"target":3,"module":100,"outDir":"/project/out","watch":true,"project":"/project/src/tsconfig.json","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"configFilePath":"/project/src/tsconfig.json"}
+Program root files: ["/user/username/projects/myproject/src/fileA.ts"]
+Program options: {"target":3,"module":100,"outDir":"/user/username/projects/myproject/out","watch":true,"project":"/user/username/projects/myproject/src","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/myproject/src/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.es2016.full.d.ts
-/project/src/fileB.mts
-/project/src/fileA.ts
+/user/username/projects/myproject/src/fileA.ts
 
 Semantic diagnostics in builder refreshed for::
 /a/lib/lib.es2016.full.d.ts
-/project/src/fileB.mts
-/project/src/fileA.ts
+/user/username/projects/myproject/src/fileA.ts
 
 Shape signatures in builder refreshed for::
 /a/lib/lib.es2016.full.d.ts (used version)
-/project/src/fileb.mts (used version)
-/project/src/filea.ts (used version)
+/user/username/projects/myproject/src/filea.ts (used version)
 
 WatchedFiles::
-/project/src/tsconfig.json:
-  {"fileName":"/project/src/tsconfig.json","pollingInterval":250}
-/project/src/filea.ts:
-  {"fileName":"/project/src/fileA.ts","pollingInterval":250}
-/project/src/fileb.mts:
-  {"fileName":"/project/src/fileB.mts","pollingInterval":250}
+/user/username/projects/myproject/src/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/src/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/src/filea.ts:
+  {"fileName":"/user/username/projects/myproject/src/fileA.ts","pollingInterval":250}
+/user/username/projects/myproject/src/fileb.mjs:
+  {"fileName":"/user/username/projects/myproject/src/fileB.mjs","pollingInterval":500}
 /a/lib/lib.es2016.full.d.ts:
   {"fileName":"/a/lib/lib.es2016.full.d.ts","pollingInterval":250}
-/project/src/package.json:
-  {"fileName":"/project/src/package.json","pollingInterval":250}
-/project/package.json:
-  {"fileName":"/project/package.json","pollingInterval":250}
-/project/src/node_modules/@types:
-  {"fileName":"/project/src/node_modules/@types","pollingInterval":500}
+/user/username/projects/myproject/src/package.json:
+  {"fileName":"/user/username/projects/myproject/src/package.json","pollingInterval":250}
+/user/username/projects/myproject/package.json:
+  {"fileName":"/user/username/projects/myproject/package.json","pollingInterval":250}
+/user/username/projects/myproject/src/node_modules/@types:
+  {"fileName":"/user/username/projects/myproject/src/node_modules/@types","pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
 
 FsWatches::
-/project/src:
-  {"directoryName":"/project/src"}
+/user/username/projects/myproject/src:
+  {"directoryName":"/user/username/projects/myproject/src"}
 
 FsWatchesRecursive::
-/project/src:
-  {"directoryName":"/project/src"}
+/user/username/projects/myproject/src:
+  {"directoryName":"/user/username/projects/myproject/src"}
 
 exitCode:: ExitStatus.undefined
 
-//// [/project/out/fileB.mjs]
-export function foo() {
-}
-
-
-//// [/project/out/fileA.js]
+//// [/user/username/projects/myproject/out/fileA.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const fileB_mjs_1 = require("./fileB.mjs");
@@ -142,91 +144,100 @@ const fileB_mjs_1 = require("./fileB.mjs");
 Change:: Modify package json file to add type module
 
 Input::
-//// [/project/package.json]
+//// [/user/username/projects/myproject/package.json]
 {"name":"app","version":"1.0.0","type":"module"}
 
 
 Output::
-FileWatcher:: Triggered with /project/package.json 1:: WatchInfo: /project/package.json 2000 undefined File location affecting resolution
+FileWatcher:: Triggered with /user/username/projects/myproject/package.json 1:: WatchInfo: /user/username/projects/myproject/package.json 2000 undefined File location affecting resolution
 Scheduling invalidateFailedLookup
-Elapsed:: *ms FileWatcher:: Triggered with /project/package.json 1:: WatchInfo: /project/package.json 2000 undefined File location affecting resolution
+Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/package.json 1:: WatchInfo: /user/username/projects/myproject/package.json 2000 undefined File location affecting resolution
 Scheduling update
 Synchronizing program
-[[90m12:00:33 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:41 AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
-  roots: ["/project/src/fileA.ts","/project/src/fileB.mts"]
-  options: {"target":3,"module":100,"outDir":"/project/out","watch":true,"project":"/project/src/tsconfig.json","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"configFilePath":"/project/src/tsconfig.json"}
+  roots: ["/user/username/projects/myproject/src/fileA.ts"]
+  options: {"target":3,"module":100,"outDir":"/user/username/projects/myproject/out","watch":true,"project":"/user/username/projects/myproject/src","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/myproject/src/tsconfig.json"}
 File '/a/lib/package.json' does not exist.
 File '/a/package.json' does not exist.
 File '/package.json' does not exist.
-File '/project/src/package.json' does not exist.
-Found 'package.json' at '/project/package.json'.
+File '/user/username/projects/myproject/src/package.json' does not exist.
+Found 'package.json' at '/user/username/projects/myproject/package.json'.
 'package.json' does not have a 'typesVersions' field.
-File '/project/src/package.json' does not exist according to earlier cached lookups.
-File '/project/package.json' exists according to earlier cached lookups.
-======== Resolving module './fileB.mjs' from '/project/src/fileA.ts'. ========
+File '/user/username/projects/myproject/src/package.json' does not exist according to earlier cached lookups.
+File '/user/username/projects/myproject/package.json' exists according to earlier cached lookups.
+======== Resolving module './fileB.mjs' from '/user/username/projects/myproject/src/fileA.ts'. ========
 Module resolution kind is not specified, using 'Node16'.
-Loading module as file / folder, candidate module location '/project/src/fileB.mjs', target file type 'TypeScript'.
-File name '/project/src/fileB.mjs' has a '.mjs' extension - stripping it.
-File '/project/src/fileB.mts' exist - use it as a name resolution result.
-======== Module name './fileB.mjs' was successfully resolved to '/project/src/fileB.mts'. ========
+Loading module as file / folder, candidate module location '/user/username/projects/myproject/src/fileB.mjs', target file type 'TypeScript'.
+File name '/user/username/projects/myproject/src/fileB.mjs' has a '.mjs' extension - stripping it.
+File '/user/username/projects/myproject/src/fileB.mts' does not exist.
+File '/user/username/projects/myproject/src/fileB.d.mts' does not exist.
+Directory '/user/username/projects/myproject/src/fileB.mjs' does not exist, skipping all lookups in it.
+Loading module as file / folder, candidate module location '/user/username/projects/myproject/src/fileB.mjs', target file type 'JavaScript'.
+File name '/user/username/projects/myproject/src/fileB.mjs' has a '.mjs' extension - stripping it.
+File '/user/username/projects/myproject/src/fileB.mjs' does not exist.
+Directory '/user/username/projects/myproject/src/fileB.mjs' does not exist, skipping all lookups in it.
+======== Module name './fileB.mjs' was not resolved. ========
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-DirectoryWatcher:: Close:: WatchInfo: /project/src 0 undefined Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /project/src 0 undefined Failed Lookup Locations
-../a/lib/lib.es2016.full.d.ts
+DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/src/fileB.mjs 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/src/fileB.mjs 1 undefined Failed Lookup Locations
+[96msrc/fileA.ts[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS2307: [0mCannot find module './fileB.mjs' or its corresponding type declarations.
+
+[7m1[0m import { foo } from "./fileB.mjs";
+[7m [0m [91m                    ~~~~~~~~~~~~~[0m
+
+../../../../a/lib/lib.es2016.full.d.ts
   Default library for target 'es2016'
-src/fileB.mts
-  Imported via "./fileB.mjs" from file 'src/fileA.ts'
-  Matched by default include pattern '**/*'
 src/fileA.ts
   Matched by default include pattern '**/*'
   File is ECMAScript module because 'package.json' has field "type" with value "module"
-[[90m12:00:37 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:45 AM[0m] Found 1 error. Watching for file changes.
 
 
 
-Program root files: ["/project/src/fileA.ts","/project/src/fileB.mts"]
-Program options: {"target":3,"module":100,"outDir":"/project/out","watch":true,"project":"/project/src/tsconfig.json","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"configFilePath":"/project/src/tsconfig.json"}
+Program root files: ["/user/username/projects/myproject/src/fileA.ts"]
+Program options: {"target":3,"module":100,"outDir":"/user/username/projects/myproject/out","watch":true,"project":"/user/username/projects/myproject/src","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/myproject/src/tsconfig.json"}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.es2016.full.d.ts
-/project/src/fileB.mts
-/project/src/fileA.ts
+/user/username/projects/myproject/src/fileA.ts
 
 Semantic diagnostics in builder refreshed for::
-/project/src/fileA.ts
+/user/username/projects/myproject/src/fileA.ts
 
 Shape signatures in builder refreshed for::
-/project/src/filea.ts (computed .d.ts)
+/user/username/projects/myproject/src/filea.ts (computed .d.ts)
 
 WatchedFiles::
-/project/src/tsconfig.json:
-  {"fileName":"/project/src/tsconfig.json","pollingInterval":250}
-/project/src/filea.ts:
-  {"fileName":"/project/src/fileA.ts","pollingInterval":250}
-/project/src/fileb.mts:
-  {"fileName":"/project/src/fileB.mts","pollingInterval":250}
+/user/username/projects/myproject/src/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/src/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/src/filea.ts:
+  {"fileName":"/user/username/projects/myproject/src/fileA.ts","pollingInterval":250}
 /a/lib/lib.es2016.full.d.ts:
   {"fileName":"/a/lib/lib.es2016.full.d.ts","pollingInterval":250}
-/project/src/package.json:
-  {"fileName":"/project/src/package.json","pollingInterval":250}
-/project/package.json:
-  {"fileName":"/project/package.json","pollingInterval":250}
-/project/src/node_modules/@types:
-  {"fileName":"/project/src/node_modules/@types","pollingInterval":500}
+/user/username/projects/myproject/src/package.json:
+  {"fileName":"/user/username/projects/myproject/src/package.json","pollingInterval":250}
+/user/username/projects/myproject/package.json:
+  {"fileName":"/user/username/projects/myproject/package.json","pollingInterval":250}
+/user/username/projects/myproject/src/node_modules/@types:
+  {"fileName":"/user/username/projects/myproject/src/node_modules/@types","pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
 
 FsWatches::
+/user/username/projects/myproject/src:
+  {"directoryName":"/user/username/projects/myproject/src"}
 
 FsWatchesRecursive::
-/project/src:
-  {"directoryName":"/project/src"}
+/user/username/projects/myproject/src:
+  {"directoryName":"/user/username/projects/myproject/src"}
 
 exitCode:: ExitStatus.undefined
 
-//// [/project/out/fileA.js]
+//// [/user/username/projects/myproject/out/fileA.js]
 import { foo } from "./fileB.mjs";
 foo();
 
@@ -235,101 +246,107 @@ foo();
 Change:: Modify package.json file to remove type module
 
 Input::
-//// [/project/package.json]
+//// [/user/username/projects/myproject/package.json]
 {"name":"app","version":"1.0.0"}
 
 
 Output::
-FileWatcher:: Triggered with /project/package.json 1:: WatchInfo: /project/package.json 2000 undefined File location affecting resolution
+FileWatcher:: Triggered with /user/username/projects/myproject/package.json 1:: WatchInfo: /user/username/projects/myproject/package.json 2000 undefined File location affecting resolution
 Scheduling invalidateFailedLookup
-Elapsed:: *ms FileWatcher:: Triggered with /project/package.json 1:: WatchInfo: /project/package.json 2000 undefined File location affecting resolution
+Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/package.json 1:: WatchInfo: /user/username/projects/myproject/package.json 2000 undefined File location affecting resolution
 Scheduling update
 Synchronizing program
-[[90m12:00:42 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:50 AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
-  roots: ["/project/src/fileA.ts","/project/src/fileB.mts"]
-  options: {"target":3,"module":100,"outDir":"/project/out","watch":true,"project":"/project/src/tsconfig.json","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"configFilePath":"/project/src/tsconfig.json"}
+  roots: ["/user/username/projects/myproject/src/fileA.ts"]
+  options: {"target":3,"module":100,"outDir":"/user/username/projects/myproject/out","watch":true,"project":"/user/username/projects/myproject/src","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/myproject/src/tsconfig.json"}
 File '/a/lib/package.json' does not exist.
 File '/a/package.json' does not exist.
 File '/package.json' does not exist.
-File '/project/src/package.json' does not exist.
-Found 'package.json' at '/project/package.json'.
+File '/user/username/projects/myproject/src/package.json' does not exist.
+Found 'package.json' at '/user/username/projects/myproject/package.json'.
 'package.json' does not have a 'typesVersions' field.
-File '/project/src/package.json' does not exist according to earlier cached lookups.
-File '/project/package.json' exists according to earlier cached lookups.
-======== Resolving module './fileB.mjs' from '/project/src/fileA.ts'. ========
+File '/user/username/projects/myproject/src/package.json' does not exist according to earlier cached lookups.
+File '/user/username/projects/myproject/package.json' exists according to earlier cached lookups.
+======== Resolving module './fileB.mjs' from '/user/username/projects/myproject/src/fileA.ts'. ========
 Module resolution kind is not specified, using 'Node16'.
-Loading module as file / folder, candidate module location '/project/src/fileB.mjs', target file type 'TypeScript'.
-File '/project/src/fileB.mjs.ts' does not exist.
-File '/project/src/fileB.mjs.tsx' does not exist.
-File '/project/src/fileB.mjs.d.ts' does not exist.
-File name '/project/src/fileB.mjs' has a '.mjs' extension - stripping it.
-File '/project/src/fileB.mts' exist - use it as a name resolution result.
-======== Module name './fileB.mjs' was successfully resolved to '/project/src/fileB.mts'. ========
-DirectoryWatcher:: Added:: WatchInfo: /project/src 0 undefined Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /project/src 0 undefined Failed Lookup Locations
+Loading module as file / folder, candidate module location '/user/username/projects/myproject/src/fileB.mjs', target file type 'TypeScript'.
+File '/user/username/projects/myproject/src/fileB.mjs.ts' does not exist.
+File '/user/username/projects/myproject/src/fileB.mjs.tsx' does not exist.
+File '/user/username/projects/myproject/src/fileB.mjs.d.ts' does not exist.
+File name '/user/username/projects/myproject/src/fileB.mjs' has a '.mjs' extension - stripping it.
+File '/user/username/projects/myproject/src/fileB.mts' does not exist.
+File '/user/username/projects/myproject/src/fileB.d.mts' does not exist.
+Directory '/user/username/projects/myproject/src/fileB.mjs' does not exist, skipping all lookups in it.
+Loading module as file / folder, candidate module location '/user/username/projects/myproject/src/fileB.mjs', target file type 'JavaScript'.
+File '/user/username/projects/myproject/src/fileB.mjs.js' does not exist.
+File '/user/username/projects/myproject/src/fileB.mjs.jsx' does not exist.
+File name '/user/username/projects/myproject/src/fileB.mjs' has a '.mjs' extension - stripping it.
+File '/user/username/projects/myproject/src/fileB.mjs' does not exist.
+Directory '/user/username/projects/myproject/src/fileB.mjs' does not exist, skipping all lookups in it.
+======== Module name './fileB.mjs' was not resolved. ========
+DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/fileB.mjs 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/fileB.mjs 1 undefined Failed Lookup Locations
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-[96msrc/fileA.ts[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS1471: [0mModule './fileB.mjs' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+[96msrc/fileA.ts[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS2307: [0mCannot find module './fileB.mjs' or its corresponding type declarations.
 
 [7m1[0m import { foo } from "./fileB.mjs";
 [7m [0m [91m                    ~~~~~~~~~~~~~[0m
 
-../a/lib/lib.es2016.full.d.ts
+../../../../a/lib/lib.es2016.full.d.ts
   Default library for target 'es2016'
-src/fileB.mts
-  Imported via "./fileB.mjs" from file 'src/fileA.ts'
-  Matched by default include pattern '**/*'
 src/fileA.ts
   Matched by default include pattern '**/*'
   File is CommonJS module because 'package.json' does not have field "type"
-[[90m12:00:46 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:00:54 AM[0m] Found 1 error. Watching for file changes.
 
 
 
-Program root files: ["/project/src/fileA.ts","/project/src/fileB.mts"]
-Program options: {"target":3,"module":100,"outDir":"/project/out","watch":true,"project":"/project/src/tsconfig.json","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"configFilePath":"/project/src/tsconfig.json"}
+Program root files: ["/user/username/projects/myproject/src/fileA.ts"]
+Program options: {"target":3,"module":100,"outDir":"/user/username/projects/myproject/out","watch":true,"project":"/user/username/projects/myproject/src","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/myproject/src/tsconfig.json"}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.es2016.full.d.ts
-/project/src/fileB.mts
-/project/src/fileA.ts
+/user/username/projects/myproject/src/fileA.ts
 
 Semantic diagnostics in builder refreshed for::
-/project/src/fileA.ts
+/user/username/projects/myproject/src/fileA.ts
 
 Shape signatures in builder refreshed for::
-/project/src/filea.ts (computed .d.ts)
+/user/username/projects/myproject/src/filea.ts (computed .d.ts)
 
 WatchedFiles::
-/project/src/tsconfig.json:
-  {"fileName":"/project/src/tsconfig.json","pollingInterval":250}
-/project/src/filea.ts:
-  {"fileName":"/project/src/fileA.ts","pollingInterval":250}
-/project/src/fileb.mts:
-  {"fileName":"/project/src/fileB.mts","pollingInterval":250}
+/user/username/projects/myproject/src/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/src/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/src/filea.ts:
+  {"fileName":"/user/username/projects/myproject/src/fileA.ts","pollingInterval":250}
 /a/lib/lib.es2016.full.d.ts:
   {"fileName":"/a/lib/lib.es2016.full.d.ts","pollingInterval":250}
-/project/src/package.json:
-  {"fileName":"/project/src/package.json","pollingInterval":250}
-/project/package.json:
-  {"fileName":"/project/package.json","pollingInterval":250}
-/project/src/node_modules/@types:
-  {"fileName":"/project/src/node_modules/@types","pollingInterval":500}
+/user/username/projects/myproject/src/package.json:
+  {"fileName":"/user/username/projects/myproject/src/package.json","pollingInterval":250}
+/user/username/projects/myproject/package.json:
+  {"fileName":"/user/username/projects/myproject/package.json","pollingInterval":250}
+/user/username/projects/myproject/src/node_modules/@types:
+  {"fileName":"/user/username/projects/myproject/src/node_modules/@types","pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
+/user/username/projects/myproject/src/fileb.mjs:
+  {"fileName":"/user/username/projects/myproject/src/fileB.mjs","pollingInterval":500}
 
 FsWatches::
-/project/src:
-  {"directoryName":"/project/src"}
+/user/username/projects/myproject/src:
+  {"directoryName":"/user/username/projects/myproject/src"}
 
 FsWatchesRecursive::
-/project/src:
-  {"directoryName":"/project/src"}
+/user/username/projects/myproject/src:
+  {"directoryName":"/user/username/projects/myproject/src"}
 
 exitCode:: ExitStatus.undefined
 
-//// [/project/out/fileA.js]
+//// [/user/username/projects/myproject/out/fileA.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const fileB_mjs_1 = require("./fileB.mjs");
@@ -340,87 +357,100 @@ const fileB_mjs_1 = require("./fileB.mjs");
 Change:: Delete package.json
 
 Input::
-//// [/project/package.json] deleted
+//// [/user/username/projects/myproject/package.json] deleted
 
 Output::
-FileWatcher:: Triggered with /project/package.json 2:: WatchInfo: /project/package.json 2000 undefined File location affecting resolution
+FileWatcher:: Triggered with /user/username/projects/myproject/package.json 2:: WatchInfo: /user/username/projects/myproject/package.json 2000 undefined File location affecting resolution
 Scheduling invalidateFailedLookup
-Elapsed:: *ms FileWatcher:: Triggered with /project/package.json 2:: WatchInfo: /project/package.json 2000 undefined File location affecting resolution
+Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/package.json 2:: WatchInfo: /user/username/projects/myproject/package.json 2000 undefined File location affecting resolution
 Scheduling update
 Synchronizing program
-[[90m12:00:48 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:56 AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
-  roots: ["/project/src/fileA.ts","/project/src/fileB.mts"]
-  options: {"target":3,"module":100,"outDir":"/project/out","watch":true,"project":"/project/src/tsconfig.json","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"configFilePath":"/project/src/tsconfig.json"}
+  roots: ["/user/username/projects/myproject/src/fileA.ts"]
+  options: {"target":3,"module":100,"outDir":"/user/username/projects/myproject/out","watch":true,"project":"/user/username/projects/myproject/src","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/myproject/src/tsconfig.json"}
 File '/a/lib/package.json' does not exist.
 File '/a/package.json' does not exist.
 File '/package.json' does not exist.
-File '/project/src/package.json' does not exist.
-File '/project/package.json' does not exist.
+File '/user/username/projects/myproject/src/package.json' does not exist.
+File '/user/username/projects/myproject/package.json' does not exist.
+File '/user/username/projects/package.json' does not exist.
+File '/user/username/package.json' does not exist.
+File '/user/package.json' does not exist.
 File '/package.json' does not exist according to earlier cached lookups.
-File '/project/src/package.json' does not exist according to earlier cached lookups.
-File '/project/package.json' does not exist according to earlier cached lookups.
+File '/user/username/projects/myproject/src/package.json' does not exist according to earlier cached lookups.
+File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
+File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
+File '/user/username/package.json' does not exist according to earlier cached lookups.
+File '/user/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-Reusing resolution of module './fileB.mjs' from '/project/src/fileA.ts' of old program, it was successfully resolved to '/project/src/fileB.mts'.
+Reusing resolution of module './fileB.mjs' from '/user/username/projects/myproject/src/fileA.ts' of old program, it was not resolved.
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
+FileWatcher:: Added:: WatchInfo: /user/username/projects/package.json 2000 undefined File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /user/username/package.json 2000 undefined File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /user/package.json 2000 undefined File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /package.json 2000 undefined File location affecting resolution
-[96msrc/fileA.ts[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS1471: [0mModule './fileB.mjs' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+[96msrc/fileA.ts[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS2307: [0mCannot find module './fileB.mjs' or its corresponding type declarations.
 
 [7m1[0m import { foo } from "./fileB.mjs";
 [7m [0m [91m                    ~~~~~~~~~~~~~[0m
 
-../a/lib/lib.es2016.full.d.ts
+../../../../a/lib/lib.es2016.full.d.ts
   Default library for target 'es2016'
-src/fileB.mts
-  Imported via "./fileB.mjs" from file 'src/fileA.ts'
-  Matched by default include pattern '**/*'
 src/fileA.ts
   Matched by default include pattern '**/*'
   File is CommonJS module because 'package.json' was not found
-[[90m12:00:49 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:00:57 AM[0m] Found 1 error. Watching for file changes.
 
 
 
-Program root files: ["/project/src/fileA.ts","/project/src/fileB.mts"]
-Program options: {"target":3,"module":100,"outDir":"/project/out","watch":true,"project":"/project/src/tsconfig.json","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"configFilePath":"/project/src/tsconfig.json"}
+Program root files: ["/user/username/projects/myproject/src/fileA.ts"]
+Program options: {"target":3,"module":100,"outDir":"/user/username/projects/myproject/out","watch":true,"project":"/user/username/projects/myproject/src","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/myproject/src/tsconfig.json"}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.es2016.full.d.ts
-/project/src/fileB.mts
-/project/src/fileA.ts
+/user/username/projects/myproject/src/fileA.ts
 
 Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
 WatchedFiles::
-/project/src/tsconfig.json:
-  {"fileName":"/project/src/tsconfig.json","pollingInterval":250}
-/project/src/filea.ts:
-  {"fileName":"/project/src/fileA.ts","pollingInterval":250}
-/project/src/fileb.mts:
-  {"fileName":"/project/src/fileB.mts","pollingInterval":250}
+/user/username/projects/myproject/src/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/src/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/src/filea.ts:
+  {"fileName":"/user/username/projects/myproject/src/fileA.ts","pollingInterval":250}
 /a/lib/lib.es2016.full.d.ts:
   {"fileName":"/a/lib/lib.es2016.full.d.ts","pollingInterval":250}
-/project/src/package.json:
-  {"fileName":"/project/src/package.json","pollingInterval":250}
-/project/package.json:
-  {"fileName":"/project/package.json","pollingInterval":250}
-/project/src/node_modules/@types:
-  {"fileName":"/project/src/node_modules/@types","pollingInterval":500}
+/user/username/projects/myproject/src/package.json:
+  {"fileName":"/user/username/projects/myproject/src/package.json","pollingInterval":250}
+/user/username/projects/myproject/package.json:
+  {"fileName":"/user/username/projects/myproject/package.json","pollingInterval":250}
+/user/username/projects/myproject/src/node_modules/@types:
+  {"fileName":"/user/username/projects/myproject/src/node_modules/@types","pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
+/user/username/projects/myproject/src/fileb.mjs:
+  {"fileName":"/user/username/projects/myproject/src/fileB.mjs","pollingInterval":500}
+/user/username/projects/package.json:
+  {"fileName":"/user/username/projects/package.json","pollingInterval":250}
+/user/username/package.json:
+  {"fileName":"/user/username/package.json","pollingInterval":250}
+/user/package.json:
+  {"fileName":"/user/package.json","pollingInterval":250}
 /package.json:
   {"fileName":"/package.json","pollingInterval":250}
 
 FsWatches::
-/project/src:
-  {"directoryName":"/project/src"}
+/user/username/projects/myproject/src:
+  {"directoryName":"/user/username/projects/myproject/src"}
 
 FsWatchesRecursive::
-/project/src:
-  {"directoryName":"/project/src"}
+/user/username/projects/myproject/src:
+  {"directoryName":"/user/username/projects/myproject/src"}
 
 exitCode:: ExitStatus.undefined
 
@@ -428,92 +458,104 @@ exitCode:: ExitStatus.undefined
 Change:: Modify package json file to add type module
 
 Input::
-//// [/project/package.json]
+//// [/user/username/projects/myproject/package.json]
 {"name":"app","version":"1.0.0","type":"module"}
 
 
 Output::
-FileWatcher:: Triggered with /project/package.json 0:: WatchInfo: /project/package.json 2000 undefined File location affecting resolution
+FileWatcher:: Triggered with /user/username/projects/myproject/package.json 0:: WatchInfo: /user/username/projects/myproject/package.json 2000 undefined File location affecting resolution
 Scheduling invalidateFailedLookup
-Elapsed:: *ms FileWatcher:: Triggered with /project/package.json 0:: WatchInfo: /project/package.json 2000 undefined File location affecting resolution
+Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/package.json 0:: WatchInfo: /user/username/projects/myproject/package.json 2000 undefined File location affecting resolution
 Scheduling update
 Synchronizing program
-[[90m12:00:53 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:01 AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
-  roots: ["/project/src/fileA.ts","/project/src/fileB.mts"]
-  options: {"target":3,"module":100,"outDir":"/project/out","watch":true,"project":"/project/src/tsconfig.json","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"configFilePath":"/project/src/tsconfig.json"}
+  roots: ["/user/username/projects/myproject/src/fileA.ts"]
+  options: {"target":3,"module":100,"outDir":"/user/username/projects/myproject/out","watch":true,"project":"/user/username/projects/myproject/src","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/myproject/src/tsconfig.json"}
 File '/a/lib/package.json' does not exist.
 File '/a/package.json' does not exist.
 File '/package.json' does not exist.
-File '/project/src/package.json' does not exist.
-Found 'package.json' at '/project/package.json'.
+File '/user/username/projects/myproject/src/package.json' does not exist.
+Found 'package.json' at '/user/username/projects/myproject/package.json'.
 'package.json' does not have a 'typesVersions' field.
-File '/project/src/package.json' does not exist according to earlier cached lookups.
-File '/project/package.json' exists according to earlier cached lookups.
-======== Resolving module './fileB.mjs' from '/project/src/fileA.ts'. ========
+File '/user/username/projects/myproject/src/package.json' does not exist according to earlier cached lookups.
+File '/user/username/projects/myproject/package.json' exists according to earlier cached lookups.
+======== Resolving module './fileB.mjs' from '/user/username/projects/myproject/src/fileA.ts'. ========
 Module resolution kind is not specified, using 'Node16'.
-Loading module as file / folder, candidate module location '/project/src/fileB.mjs', target file type 'TypeScript'.
-File name '/project/src/fileB.mjs' has a '.mjs' extension - stripping it.
-File '/project/src/fileB.mts' exist - use it as a name resolution result.
-======== Module name './fileB.mjs' was successfully resolved to '/project/src/fileB.mts'. ========
+Loading module as file / folder, candidate module location '/user/username/projects/myproject/src/fileB.mjs', target file type 'TypeScript'.
+File name '/user/username/projects/myproject/src/fileB.mjs' has a '.mjs' extension - stripping it.
+File '/user/username/projects/myproject/src/fileB.mts' does not exist.
+File '/user/username/projects/myproject/src/fileB.d.mts' does not exist.
+Directory '/user/username/projects/myproject/src/fileB.mjs' does not exist, skipping all lookups in it.
+Loading module as file / folder, candidate module location '/user/username/projects/myproject/src/fileB.mjs', target file type 'JavaScript'.
+File name '/user/username/projects/myproject/src/fileB.mjs' has a '.mjs' extension - stripping it.
+File '/user/username/projects/myproject/src/fileB.mjs' does not exist.
+Directory '/user/username/projects/myproject/src/fileB.mjs' does not exist, skipping all lookups in it.
+======== Module name './fileB.mjs' was not resolved. ========
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-DirectoryWatcher:: Close:: WatchInfo: /project/src 0 undefined Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /project/src 0 undefined Failed Lookup Locations
+DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/src/fileB.mjs 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/src/fileB.mjs 1 undefined Failed Lookup Locations
+FileWatcher:: Close:: WatchInfo: /user/username/projects/package.json 2000 undefined File location affecting resolution
+FileWatcher:: Close:: WatchInfo: /user/username/package.json 2000 undefined File location affecting resolution
+FileWatcher:: Close:: WatchInfo: /user/package.json 2000 undefined File location affecting resolution
 FileWatcher:: Close:: WatchInfo: /package.json 2000 undefined File location affecting resolution
-../a/lib/lib.es2016.full.d.ts
+[96msrc/fileA.ts[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS2307: [0mCannot find module './fileB.mjs' or its corresponding type declarations.
+
+[7m1[0m import { foo } from "./fileB.mjs";
+[7m [0m [91m                    ~~~~~~~~~~~~~[0m
+
+../../../../a/lib/lib.es2016.full.d.ts
   Default library for target 'es2016'
-src/fileB.mts
-  Imported via "./fileB.mjs" from file 'src/fileA.ts'
-  Matched by default include pattern '**/*'
 src/fileA.ts
   Matched by default include pattern '**/*'
   File is ECMAScript module because 'package.json' has field "type" with value "module"
-[[90m12:00:57 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:05 AM[0m] Found 1 error. Watching for file changes.
 
 
 
-Program root files: ["/project/src/fileA.ts","/project/src/fileB.mts"]
-Program options: {"target":3,"module":100,"outDir":"/project/out","watch":true,"project":"/project/src/tsconfig.json","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"configFilePath":"/project/src/tsconfig.json"}
+Program root files: ["/user/username/projects/myproject/src/fileA.ts"]
+Program options: {"target":3,"module":100,"outDir":"/user/username/projects/myproject/out","watch":true,"project":"/user/username/projects/myproject/src","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/myproject/src/tsconfig.json"}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.es2016.full.d.ts
-/project/src/fileB.mts
-/project/src/fileA.ts
+/user/username/projects/myproject/src/fileA.ts
 
 Semantic diagnostics in builder refreshed for::
-/project/src/fileA.ts
+/user/username/projects/myproject/src/fileA.ts
 
 Shape signatures in builder refreshed for::
-/project/src/filea.ts (computed .d.ts)
+/user/username/projects/myproject/src/filea.ts (computed .d.ts)
 
 WatchedFiles::
-/project/src/tsconfig.json:
-  {"fileName":"/project/src/tsconfig.json","pollingInterval":250}
-/project/src/filea.ts:
-  {"fileName":"/project/src/fileA.ts","pollingInterval":250}
-/project/src/fileb.mts:
-  {"fileName":"/project/src/fileB.mts","pollingInterval":250}
+/user/username/projects/myproject/src/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/src/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/src/filea.ts:
+  {"fileName":"/user/username/projects/myproject/src/fileA.ts","pollingInterval":250}
 /a/lib/lib.es2016.full.d.ts:
   {"fileName":"/a/lib/lib.es2016.full.d.ts","pollingInterval":250}
-/project/src/package.json:
-  {"fileName":"/project/src/package.json","pollingInterval":250}
-/project/package.json:
-  {"fileName":"/project/package.json","pollingInterval":250}
-/project/src/node_modules/@types:
-  {"fileName":"/project/src/node_modules/@types","pollingInterval":500}
+/user/username/projects/myproject/src/package.json:
+  {"fileName":"/user/username/projects/myproject/src/package.json","pollingInterval":250}
+/user/username/projects/myproject/package.json:
+  {"fileName":"/user/username/projects/myproject/package.json","pollingInterval":250}
+/user/username/projects/myproject/src/node_modules/@types:
+  {"fileName":"/user/username/projects/myproject/src/node_modules/@types","pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
 
 FsWatches::
+/user/username/projects/myproject/src:
+  {"directoryName":"/user/username/projects/myproject/src"}
 
 FsWatchesRecursive::
-/project/src:
-  {"directoryName":"/project/src"}
+/user/username/projects/myproject/src:
+  {"directoryName":"/user/username/projects/myproject/src"}
 
 exitCode:: ExitStatus.undefined
 
-//// [/project/out/fileA.js]
+//// [/user/username/projects/myproject/out/fileA.js]
 import { foo } from "./fileB.mjs";
 foo();
 
@@ -522,103 +564,124 @@ foo();
 Change:: Delete package.json
 
 Input::
-//// [/project/package.json] deleted
+//// [/user/username/projects/myproject/package.json] deleted
 
 Output::
-FileWatcher:: Triggered with /project/package.json 2:: WatchInfo: /project/package.json 2000 undefined File location affecting resolution
+FileWatcher:: Triggered with /user/username/projects/myproject/package.json 2:: WatchInfo: /user/username/projects/myproject/package.json 2000 undefined File location affecting resolution
 Scheduling invalidateFailedLookup
-Elapsed:: *ms FileWatcher:: Triggered with /project/package.json 2:: WatchInfo: /project/package.json 2000 undefined File location affecting resolution
+Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/package.json 2:: WatchInfo: /user/username/projects/myproject/package.json 2000 undefined File location affecting resolution
 Scheduling update
 Synchronizing program
-[[90m12:00:59 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:07 AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
-  roots: ["/project/src/fileA.ts","/project/src/fileB.mts"]
-  options: {"target":3,"module":100,"outDir":"/project/out","watch":true,"project":"/project/src/tsconfig.json","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"configFilePath":"/project/src/tsconfig.json"}
+  roots: ["/user/username/projects/myproject/src/fileA.ts"]
+  options: {"target":3,"module":100,"outDir":"/user/username/projects/myproject/out","watch":true,"project":"/user/username/projects/myproject/src","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/myproject/src/tsconfig.json"}
 File '/a/lib/package.json' does not exist.
 File '/a/package.json' does not exist.
 File '/package.json' does not exist.
-File '/project/src/package.json' does not exist.
-File '/project/package.json' does not exist.
+File '/user/username/projects/myproject/src/package.json' does not exist.
+File '/user/username/projects/myproject/package.json' does not exist.
+File '/user/username/projects/package.json' does not exist.
+File '/user/username/package.json' does not exist.
+File '/user/package.json' does not exist.
 File '/package.json' does not exist according to earlier cached lookups.
-File '/project/src/package.json' does not exist according to earlier cached lookups.
-File '/project/package.json' does not exist according to earlier cached lookups.
+File '/user/username/projects/myproject/src/package.json' does not exist according to earlier cached lookups.
+File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
+File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
+File '/user/username/package.json' does not exist according to earlier cached lookups.
+File '/user/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-======== Resolving module './fileB.mjs' from '/project/src/fileA.ts'. ========
+======== Resolving module './fileB.mjs' from '/user/username/projects/myproject/src/fileA.ts'. ========
 Module resolution kind is not specified, using 'Node16'.
-Loading module as file / folder, candidate module location '/project/src/fileB.mjs', target file type 'TypeScript'.
-File '/project/src/fileB.mjs.ts' does not exist.
-File '/project/src/fileB.mjs.tsx' does not exist.
-File '/project/src/fileB.mjs.d.ts' does not exist.
-File name '/project/src/fileB.mjs' has a '.mjs' extension - stripping it.
-File '/project/src/fileB.mts' exist - use it as a name resolution result.
-======== Module name './fileB.mjs' was successfully resolved to '/project/src/fileB.mts'. ========
-DirectoryWatcher:: Added:: WatchInfo: /project/src 0 undefined Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /project/src 0 undefined Failed Lookup Locations
+Loading module as file / folder, candidate module location '/user/username/projects/myproject/src/fileB.mjs', target file type 'TypeScript'.
+File '/user/username/projects/myproject/src/fileB.mjs.ts' does not exist.
+File '/user/username/projects/myproject/src/fileB.mjs.tsx' does not exist.
+File '/user/username/projects/myproject/src/fileB.mjs.d.ts' does not exist.
+File name '/user/username/projects/myproject/src/fileB.mjs' has a '.mjs' extension - stripping it.
+File '/user/username/projects/myproject/src/fileB.mts' does not exist.
+File '/user/username/projects/myproject/src/fileB.d.mts' does not exist.
+Directory '/user/username/projects/myproject/src/fileB.mjs' does not exist, skipping all lookups in it.
+Loading module as file / folder, candidate module location '/user/username/projects/myproject/src/fileB.mjs', target file type 'JavaScript'.
+File '/user/username/projects/myproject/src/fileB.mjs.js' does not exist.
+File '/user/username/projects/myproject/src/fileB.mjs.jsx' does not exist.
+File name '/user/username/projects/myproject/src/fileB.mjs' has a '.mjs' extension - stripping it.
+File '/user/username/projects/myproject/src/fileB.mjs' does not exist.
+Directory '/user/username/projects/myproject/src/fileB.mjs' does not exist, skipping all lookups in it.
+======== Module name './fileB.mjs' was not resolved. ========
+DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/fileB.mjs 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/fileB.mjs 1 undefined Failed Lookup Locations
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
+FileWatcher:: Added:: WatchInfo: /user/username/projects/package.json 2000 undefined File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /user/username/package.json 2000 undefined File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /user/package.json 2000 undefined File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /package.json 2000 undefined File location affecting resolution
-[96msrc/fileA.ts[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS1471: [0mModule './fileB.mjs' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+[96msrc/fileA.ts[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS2307: [0mCannot find module './fileB.mjs' or its corresponding type declarations.
 
 [7m1[0m import { foo } from "./fileB.mjs";
 [7m [0m [91m                    ~~~~~~~~~~~~~[0m
 
-../a/lib/lib.es2016.full.d.ts
+../../../../a/lib/lib.es2016.full.d.ts
   Default library for target 'es2016'
-src/fileB.mts
-  Imported via "./fileB.mjs" from file 'src/fileA.ts'
-  Matched by default include pattern '**/*'
 src/fileA.ts
   Matched by default include pattern '**/*'
   File is CommonJS module because 'package.json' was not found
-[[90m12:01:03 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:01:11 AM[0m] Found 1 error. Watching for file changes.
 
 
 
-Program root files: ["/project/src/fileA.ts","/project/src/fileB.mts"]
-Program options: {"target":3,"module":100,"outDir":"/project/out","watch":true,"project":"/project/src/tsconfig.json","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"configFilePath":"/project/src/tsconfig.json"}
+Program root files: ["/user/username/projects/myproject/src/fileA.ts"]
+Program options: {"target":3,"module":100,"outDir":"/user/username/projects/myproject/out","watch":true,"project":"/user/username/projects/myproject/src","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/myproject/src/tsconfig.json"}
 Program structureReused: SafeModules
 Program files::
 /a/lib/lib.es2016.full.d.ts
-/project/src/fileB.mts
-/project/src/fileA.ts
+/user/username/projects/myproject/src/fileA.ts
 
 Semantic diagnostics in builder refreshed for::
-/project/src/fileA.ts
+/user/username/projects/myproject/src/fileA.ts
 
 Shape signatures in builder refreshed for::
-/project/src/filea.ts (computed .d.ts)
+/user/username/projects/myproject/src/filea.ts (computed .d.ts)
 
 WatchedFiles::
-/project/src/tsconfig.json:
-  {"fileName":"/project/src/tsconfig.json","pollingInterval":250}
-/project/src/filea.ts:
-  {"fileName":"/project/src/fileA.ts","pollingInterval":250}
-/project/src/fileb.mts:
-  {"fileName":"/project/src/fileB.mts","pollingInterval":250}
+/user/username/projects/myproject/src/tsconfig.json:
+  {"fileName":"/user/username/projects/myproject/src/tsconfig.json","pollingInterval":250}
+/user/username/projects/myproject/src/filea.ts:
+  {"fileName":"/user/username/projects/myproject/src/fileA.ts","pollingInterval":250}
 /a/lib/lib.es2016.full.d.ts:
   {"fileName":"/a/lib/lib.es2016.full.d.ts","pollingInterval":250}
-/project/src/package.json:
-  {"fileName":"/project/src/package.json","pollingInterval":250}
-/project/package.json:
-  {"fileName":"/project/package.json","pollingInterval":250}
-/project/src/node_modules/@types:
-  {"fileName":"/project/src/node_modules/@types","pollingInterval":500}
+/user/username/projects/myproject/src/package.json:
+  {"fileName":"/user/username/projects/myproject/src/package.json","pollingInterval":250}
+/user/username/projects/myproject/package.json:
+  {"fileName":"/user/username/projects/myproject/package.json","pollingInterval":250}
+/user/username/projects/myproject/src/node_modules/@types:
+  {"fileName":"/user/username/projects/myproject/src/node_modules/@types","pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
+/user/username/projects/myproject/src/fileb.mjs:
+  {"fileName":"/user/username/projects/myproject/src/fileB.mjs","pollingInterval":500}
+/user/username/projects/package.json:
+  {"fileName":"/user/username/projects/package.json","pollingInterval":250}
+/user/username/package.json:
+  {"fileName":"/user/username/package.json","pollingInterval":250}
+/user/package.json:
+  {"fileName":"/user/package.json","pollingInterval":250}
 /package.json:
   {"fileName":"/package.json","pollingInterval":250}
 
 FsWatches::
-/project/src:
-  {"directoryName":"/project/src"}
+/user/username/projects/myproject/src:
+  {"directoryName":"/user/username/projects/myproject/src"}
 
 FsWatchesRecursive::
-/project/src:
-  {"directoryName":"/project/src"}
+/user/username/projects/myproject/src:
+  {"directoryName":"/user/username/projects/myproject/src"}
 
 exitCode:: ExitStatus.undefined
 
-//// [/project/out/fileA.js]
+//// [/user/username/projects/myproject/out/fileA.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const fileB_mjs_1 = require("./fileB.mjs");
