@@ -110,7 +110,7 @@ namespace ts {
      * "c:/", "c:/users", "c:/users/username", "c:/users/username/folderAtRoot", "c:/folderAtRoot"
      * @param dirPath
      */
-    export function canWatchDirectory(dirPath: Path) {
+    export function canWatchDirectoryOrFile(dirPath: Path) {
         const rootLength = getRootLength(dirPath);
         if (dirPath.length === rootLength) {
             // Ignore "/", "c:/"
@@ -644,7 +644,7 @@ namespace ts {
 
             // If the directory is node_modules use it to watch, always watch it recursively
             if (isNodeModulesDirectory(dirPath)) {
-                return canWatchDirectory(getDirectoryPath(dirPath)) ? { dir, dirPath } : undefined;
+                return canWatchDirectoryOrFile(getDirectoryPath(dirPath)) ? { dir, dirPath } : undefined;
             }
 
             let nonRecursive = true;
@@ -664,7 +664,7 @@ namespace ts {
                 }
             }
 
-            return canWatchDirectory(dirPath) ? { dir: subDirectory || dir, dirPath: subDirectoryPath || dirPath, nonRecursive } : undefined;
+            return canWatchDirectoryOrFile(dirPath) ? { dir: subDirectory || dir, dirPath: subDirectoryPath || dirPath, nonRecursive } : undefined;
         }
 
         function isPathWithDefaultFailedLookupExtension(path: Path) {
@@ -769,14 +769,15 @@ namespace ts {
             const paths = new Set<string>();
             paths.add(locationToWatch);
             const watcher: FileWatcherOfAffectingLocation = {
-                watcher: resolutionHost.watchAffectingFileLocation(locationToWatch, (fileName, eventKind) => {
-                    cachedDirectoryStructureHost?.addOrDeleteFile(fileName, resolutionHost.toPath(locationToWatch), eventKind);
-                    paths.forEach(path => {
-                        if (watcher.resolutions) (affectingPathChecks ??= new Set()).add(path);
-                        if (watcher.files) (affectingPathChecksForFile ??= new Set()).add(path);
-                    });
-                    resolutionHost.scheduleInvalidateResolutionsOfFailedLookupLocations();
-                }),
+                watcher: canWatchDirectoryOrFile(resolutionHost.toPath(locationToWatch)) ?
+                    resolutionHost.watchAffectingFileLocation(locationToWatch, (fileName, eventKind) => {
+                        cachedDirectoryStructureHost?.addOrDeleteFile(fileName, resolutionHost.toPath(locationToWatch), eventKind);
+                        paths.forEach(path => {
+                            if (watcher.resolutions) (affectingPathChecks ??= new Set()).add(path);
+                            if (watcher.files) (affectingPathChecksForFile ??= new Set()).add(path);
+                        });
+                        resolutionHost.scheduleInvalidateResolutionsOfFailedLookupLocations();
+                    }) : noopFileWatcher,
                 resolutions: forResolution ? 1 : 0,
                 files: forResolution ? 0 : 1,
                 paths,
@@ -1108,7 +1109,7 @@ namespace ts {
         function directoryExistsForTypeRootWatch(nodeTypesDirectory: string) {
             const dir = getDirectoryPath(getDirectoryPath(nodeTypesDirectory));
             const dirPath = resolutionHost.toPath(dir);
-            return dirPath === rootPath || canWatchDirectory(dirPath);
+            return dirPath === rootPath || canWatchDirectoryOrFile(dirPath);
         }
     }
 

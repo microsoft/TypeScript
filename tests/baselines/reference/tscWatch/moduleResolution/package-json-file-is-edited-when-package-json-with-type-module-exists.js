@@ -397,9 +397,6 @@ File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 FileWatcher:: Added:: WatchInfo: /user/username/projects/package.json 2000 undefined File location affecting resolution
-FileWatcher:: Added:: WatchInfo: /user/username/package.json 2000 undefined File location affecting resolution
-FileWatcher:: Added:: WatchInfo: /user/package.json 2000 undefined File location affecting resolution
-FileWatcher:: Added:: WatchInfo: /package.json 2000 undefined File location affecting resolution
 [96msrc/fileA.ts[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS2307: [0mCannot find module './fileB.mjs' or its corresponding type declarations.
 
 [7m1[0m import { foo } from "./fileB.mjs";
@@ -446,12 +443,6 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/src/fileB.mjs","pollingInterval":500}
 /user/username/projects/package.json:
   {"fileName":"/user/username/projects/package.json","pollingInterval":250}
-/user/username/package.json:
-  {"fileName":"/user/username/package.json","pollingInterval":250}
-/user/package.json:
-  {"fileName":"/user/package.json","pollingInterval":250}
-/package.json:
-  {"fileName":"/package.json","pollingInterval":250}
 
 FsWatches::
 /user/username/projects/myproject/src:
@@ -502,9 +493,6 @@ File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 FileWatcher:: Close:: WatchInfo: /user/username/projects/package.json 2000 undefined File location affecting resolution
-FileWatcher:: Close:: WatchInfo: /user/username/package.json 2000 undefined File location affecting resolution
-FileWatcher:: Close:: WatchInfo: /user/package.json 2000 undefined File location affecting resolution
-FileWatcher:: Close:: WatchInfo: /package.json 2000 undefined File location affecting resolution
 [96msrc/fileA.ts[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS2307: [0mCannot find module './fileB.mjs' or its corresponding type declarations.
 
 [7m1[0m import { foo } from "./fileB.mjs";
@@ -595,9 +583,6 @@ File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 FileWatcher:: Added:: WatchInfo: /user/username/projects/package.json 2000 undefined File location affecting resolution
-FileWatcher:: Added:: WatchInfo: /user/username/package.json 2000 undefined File location affecting resolution
-FileWatcher:: Added:: WatchInfo: /user/package.json 2000 undefined File location affecting resolution
-FileWatcher:: Added:: WatchInfo: /package.json 2000 undefined File location affecting resolution
 [96msrc/fileA.ts[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS2307: [0mCannot find module './fileB.mjs' or its corresponding type declarations.
 
 [7m1[0m import { foo } from "./fileB.mjs";
@@ -642,12 +627,6 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/src/fileB.mjs","pollingInterval":500}
 /user/username/projects/package.json:
   {"fileName":"/user/username/projects/package.json","pollingInterval":250}
-/user/username/package.json:
-  {"fileName":"/user/username/package.json","pollingInterval":250}
-/user/package.json:
-  {"fileName":"/user/package.json","pollingInterval":250}
-/package.json:
-  {"fileName":"/package.json","pollingInterval":250}
 
 FsWatches::
 /user/username/projects/myproject/src:
