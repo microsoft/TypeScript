@@ -2385,7 +2385,11 @@ namespace ts {
                 if (text) parts.push(linkTextPart(text));
             }
             else {
-                parts.push(linkTextPart(name + (suffix || text.indexOf("://") === 0 ? "" : " ") + text));
+                const pos = text.indexOf(String.fromCharCode(CharacterCodes.bar));
+                const namePath = pos >= 0 ? text.slice(0, pos) : text;
+                const namePathText = pos >= 0 ? skipSeparatorFromLinkText(text.slice(pos)) : undefined;
+                parts.push(linkTextPart(name + (suffix || text.indexOf("://") === 0 ? "" : " ") + namePath));
+                if (namePathText) parts.push(linkTextPart(namePathText));
             }
         }
         parts.push(linkPart("}"));
