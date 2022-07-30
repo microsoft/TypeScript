@@ -8978,10 +8978,7 @@ namespace ts {
             }
 
             const isProperty = isPropertyDeclaration(declaration) || isPropertySignature(declaration) || isJSDocPropertyTag(declaration);
-            const isOptional = includeOptionality && (
-                (isPropertyDeclaration(declaration) || isPropertySignature(declaration)) && !!declaration.questionToken ||
-                isParameter(declaration) && (!!declaration.questionToken || isJSDocOptionalParameter(declaration)) ||
-                isOptionalJSDocPropertyLikeTag(declaration));
+            const isOptional = includeOptionality && isOptionalDeclaration(declaration);
 
             // Use type from type annotation if one is present
             const declaredType = tryGetTypeFromEffectiveTypeNode(declaration);
@@ -12767,14 +12764,6 @@ namespace ts {
             return result;
         }
 
-        function isJSDocOptionalParameter(node: ParameterDeclaration) {
-            return isInJSFile(node) && (
-                // node.type should only be a JSDocOptionalType when node is a parameter of a JSDocFunctionType
-                node.type && node.type.kind === SyntaxKind.JSDocOptionalType
-                || getJSDocParameterTags(node).some(({ isBracketed, typeExpression }) =>
-                    isBracketed || !!typeExpression && typeExpression.type.kind === SyntaxKind.JSDocOptionalType));
-        }
-
         function tryFindAmbientModule(moduleName: string, withAugmentations: boolean) {
             if (isExternalModuleNameRelative(moduleName)) {
                 return undefined;
@@ -12810,14 +12799,6 @@ namespace ts {
 
         function isOptionalPropertyDeclaration(node: Declaration) {
             return isPropertyDeclaration(node) && node.questionToken;
-        }
-
-        function isOptionalJSDocPropertyLikeTag(node: Node): node is JSDocPropertyLikeTag {
-            if (!isJSDocPropertyLikeTag(node)) {
-                return false;
-            }
-            const { isBracketed, typeExpression } = node;
-            return isBracketed || !!typeExpression && typeExpression.type.kind === SyntaxKind.JSDocOptionalType;
         }
 
         function createTypePredicate(kind: TypePredicateKind, parameterName: string | undefined, parameterIndex: number | undefined, type: Type | undefined): TypePredicate {

@@ -7745,4 +7745,35 @@ namespace ts {
     export function getParameterTypeNode(parameter: ParameterDeclaration | JSDocParameterTag) {
         return parameter.kind === SyntaxKind.JSDocParameterTag ? parameter.typeExpression?.type : parameter.type;
     }
+
+    export function isJSDocOptionalParameter(node: ParameterDeclaration) {
+        return isInJSFile(node) && (
+            // node.type should only be a JSDocOptionalType when node is a parameter of a JSDocFunctionType
+            node.type && node.type.kind === SyntaxKind.JSDocOptionalType
+            || getJSDocParameterTags(node).some(({ isBracketed, typeExpression }) =>
+                isBracketed || !!typeExpression && typeExpression.type.kind === SyntaxKind.JSDocOptionalType));
+    }
+
+    export function isOptionalJSDocPropertyLikeTag(node: Node): node is JSDocPropertyLikeTag {
+        if (!isJSDocPropertyLikeTag(node)) {
+            return false;
+        }
+        const { isBracketed, typeExpression } = node;
+        return isBracketed || !!typeExpression && typeExpression.type.kind === SyntaxKind.JSDocOptionalType;
+    }
+
+    export function isOptionalDeclaration(declaration: Declaration): boolean {
+        switch (declaration.kind) {
+            case SyntaxKind.PropertyDeclaration:
+            case SyntaxKind.PropertySignature:
+                return !!(declaration as PropertyDeclaration | PropertySignature).questionToken;
+            case SyntaxKind.Parameter:
+                return !!(declaration as ParameterDeclaration).questionToken || isJSDocOptionalParameter(declaration as ParameterDeclaration);
+            case SyntaxKind.JSDocPropertyTag:
+            case SyntaxKind.JSDocParameterTag:
+                return isOptionalJSDocPropertyLikeTag(declaration);
+            default:
+                return false;
+        }
+    }
 }
