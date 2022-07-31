@@ -12,6 +12,23 @@ function testNonNullInference(numbers: number[]) {
         last = n;
     }
 
-    last; // number
-    last!; // number
+    last;
+    last!;
+}
+
+function testNonNullInferenceWithArrays(numbers: number[]) {
+    let result;
+    const arr = [];
+
+    for (const n of numbers) {
+        if (n % 2) {
+            return [n];
+        }
+
+        arr.push(n);
+        result = arr;
+    }
+
+    result;
+    result!;
 }

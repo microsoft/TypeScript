@@ -12,8 +12,25 @@ function testNonNullInference(numbers: number[]) {
         last = n;
     }
 
-    last; // number
-    last!; // number
+    last;
+    last!;
+}
+
+function testNonNullInferenceWithArrays(numbers: number[]) {
+    let result;
+    const arr = [];
+
+    for (const n of numbers) {
+        if (n % 2) {
+            return [n];
+        }
+
+        arr.push(n);
+        result = arr;
+    }
+
+    result;
+    result!;
 }
 
 //// [nonNullFullInference.js]
@@ -27,6 +44,20 @@ function testNonNullInference(numbers) {
         }
         last = n;
     }
-    last; // number
-    last; // number
+    last;
+    last;
+}
+function testNonNullInferenceWithArrays(numbers) {
+    var result;
+    var arr = [];
+    for (var _i = 0, numbers_2 = numbers; _i < numbers_2.length; _i++) {
+        var n = numbers_2[_i];
+        if (n % 2) {
+            return [n];
+        }
+        arr.push(n);
+        result = arr;
+    }
+    result;
+    result;
 }
