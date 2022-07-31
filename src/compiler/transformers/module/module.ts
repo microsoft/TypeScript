@@ -862,8 +862,6 @@ namespace ts {
                     /*parameters*/ [],
                     /*type*/ undefined,
                     factory.createBlock([factory.createReturnStatement(requireCall)]));
-                // Note: because non-literal expressions are already evaluated
-                // synchronously, we don't need to capture `this`.
             }
 
             const downleveledImport = factory.createCallExpression(factory.createPropertyAccessExpression(promiseResolveCall, "then"), /*typeArguments*/ undefined, [func]);
