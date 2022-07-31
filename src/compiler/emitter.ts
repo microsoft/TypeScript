@@ -4504,7 +4504,7 @@ namespace ts {
                             shouldDecreaseIndentAfterEmit = true;
                         }
 
-                        if (shouldEmitInterveningComments && format & ListFormat.DelimitersMask) {
+                        if (shouldEmitInterveningComments && format & ListFormat.DelimitersMask && !positionIsSynthesized(child.pos)) {
                             const commentRange = getCommentRange(child);
                             emitTrailingCommentsOfPosition(commentRange.pos, /*prefixSpace*/ !!(format & ListFormat.SpaceBetweenSiblings), /*forceNoNewLine*/ true);
                         }
