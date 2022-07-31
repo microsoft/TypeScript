@@ -51,9 +51,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     // https://github.com/microsoft/TypeScript/issues/36780
     function func() {
         return __awaiter(this, void 0, void 0, function* () {
-            var _a, _b;
+            var _a;
             const packageName = '.';
-            const packageJson = yield (_a = packageName + '/package.json', __syncRequire ? (_b = _a, Promise.resolve().then(() => require(_b))) : new Promise((resolve_1, reject_1) => { require([_a], resolve_1, reject_1); }));
+            const packageJson = yield (_a = packageName + '/package.json', __syncRequire ? Promise.resolve().then(() => require(_a)) : new Promise((resolve_1, reject_1) => { require([_a], resolve_1, reject_1); }));
         });
     }
 });

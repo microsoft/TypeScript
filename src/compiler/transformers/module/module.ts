@@ -755,7 +755,7 @@ namespace ts {
                 return factory.createComma(factory.createAssignment(temp, arg), factory.createConditionalExpression(
                     /*condition*/ factory.createIdentifier("__syncRequire"),
                     /*questionToken*/ undefined,
-                    /*whenTrue*/ createImportCallExpressionCommonJS(temp),
+                    /*whenTrue*/ createImportCallExpressionCommonJS(temp, /* isInlineable */ true),
                     /*colonToken*/ undefined,
                     /*whenFalse*/ createImportCallExpressionAMD(temp, containsLexicalThis)
                 ));
@@ -820,7 +820,7 @@ namespace ts {
             return promise;
         }
 
-        function createImportCallExpressionCommonJS(arg: Expression | undefined): Expression {
+        function createImportCallExpressionCommonJS(arg: Expression | undefined, isInlineable?: boolean): Expression {
             // import(x)
             // emit as
             // var _a;
@@ -828,7 +828,7 @@ namespace ts {
             // We have to wrap require in then callback so that require is done in asynchronously
             // if we simply do require in resolve callback in Promise constructor. We will execute the loading immediately
             // If the arg is not inlineable, we have to evaluate it in the current scope with a temp var
-            const temp = arg && !isSimpleInlineableExpression(arg) ? factory.createTempVariable(hoistVariableDeclaration) : undefined;
+            const temp = arg && !isSimpleInlineableExpression(arg) && !isInlineable ? factory.createTempVariable(hoistVariableDeclaration) : undefined;
             const promiseResolveCall = factory.createCallExpression(
                 factory.createPropertyAccessExpression(factory.createIdentifier("Promise"), "resolve"),
                 /*typeArguments*/ undefined,
