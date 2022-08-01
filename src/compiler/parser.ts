@@ -747,7 +747,7 @@ namespace ts {
          */
         setExternalModuleIndicator?: (file: SourceFile) => void;
         /*@internal*/ packageJsonLocations?: readonly string[];
-        /*@internal*/ packageJsonScope?: ReturnType<typeof getPackageScopeForPath>;
+        /*@internal*/ packageJsonScope?: PackageJsonInfo;
     }
 
     function setExternalModuleIndicator(sourceFile: SourceFile) {

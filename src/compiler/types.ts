@@ -3800,7 +3800,7 @@ namespace ts {
          */
         impliedNodeFormat?: ModuleKind.ESNext | ModuleKind.CommonJS;
         /*@internal*/ packageJsonLocations?: readonly string[];
-        /*@internal*/ packageJsonScope?: ReturnType<typeof getPackageScopeForPath>;
+        /*@internal*/ packageJsonScope?: PackageJsonInfo;
 
         /* @internal */ scriptKind: ScriptKind;
 

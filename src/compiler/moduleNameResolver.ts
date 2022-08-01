@@ -1802,7 +1802,7 @@ namespace ts {
     }
 
     /*@internal*/
-    interface PackageJsonInfo {
+    export interface PackageJsonInfo {
         packageDirectory: string;
         packageJsonContent: PackageJsonPathFields;
         versionPaths: VersionPaths | undefined;
