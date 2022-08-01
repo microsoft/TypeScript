@@ -2382,7 +2382,7 @@ namespace ts {
     /// assignments we treat as special in the binder
     export function getAssignmentDeclarationKind(expr: BinaryExpression | CallExpression): AssignmentDeclarationKind {
         const special = getAssignmentDeclarationKindWorker(expr);
-        return special === AssignmentDeclarationKind.Property || isInJSFile(expr) ? special : AssignmentDeclarationKind.None;
+        return special === AssignmentDeclarationKind.Property ? special : AssignmentDeclarationKind.None;
     }
 
     export function isBindableObjectDefinePropertyCall(expr: CallExpression): expr is BindableObjectDefinePropertyCall {
