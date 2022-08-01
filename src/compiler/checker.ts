@@ -3099,11 +3099,6 @@ namespace ts {
             return getNodeLinks(expression).resolvedSymbol;
         }
 
-        function getTargetOfPropertyAssignment(node: PropertyAssignment, dontRecursivelyResolve: boolean): Symbol | undefined {
-            const expression = node.initializer;
-            return getTargetOfAliasLikeExpression(expression, dontRecursivelyResolve);
-        }
-
         function getTargetOfAccessExpression(node: AccessExpression, dontRecursivelyResolve: boolean): Symbol | undefined {
             if (!(isBinaryExpression(node.parent) && node.parent.left === node && node.parent.operatorToken.kind === SyntaxKind.EqualsToken)) {
                 return undefined;
@@ -3136,7 +3131,7 @@ namespace ts {
                 case SyntaxKind.ShorthandPropertyAssignment:
                     return resolveEntityName((node as ShorthandPropertyAssignment).name, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace, /*ignoreErrors*/ true, dontRecursivelyResolve);
                 case SyntaxKind.PropertyAssignment:
-                    return getTargetOfPropertyAssignment(node as PropertyAssignment, dontRecursivelyResolve);
+                    return getTargetOfAliasLikeExpression((node as PropertyAssignment).initializer, dontRecursivelyResolve);
                 case SyntaxKind.ElementAccessExpression:
                 case SyntaxKind.PropertyAccessExpression:
                     return getTargetOfAccessExpression(node as AccessExpression, dontRecursivelyResolve);
@@ -9353,7 +9348,7 @@ namespace ts {
                 }
                 (resolvedSymbol || symbol).exports!.forEach((s, name) => {
                     const exportedMember = members.get(name)!;
-                    if (exportedMember && exportedMember !== s) {
+                    if (exportedMember && exportedMember !== s && !(s.flags & SymbolFlags.Alias)) {
                         if (s.flags & SymbolFlags.Value && exportedMember.flags & SymbolFlags.Value) {
                             // If the member has an additional value-like declaration, union the types from the two declarations,
                             // but issue an error if they occurred in two different files. The purpose is to support a JS file with
@@ -16298,6 +16293,7 @@ namespace ts {
                     links.resolvedSymbol = unknownSymbol;
                     return links.resolvedType = errorType;
                 }
+                const isExportEquals = !!innerModuleSymbol.exports?.get(InternalSymbolName.ExportEquals);
                 const moduleSymbol = resolveExternalModuleSymbol(innerModuleSymbol, /*dontResolveAlias*/ false);
                 if (!nodeIsMissing(node.qualifier)) {
                     const nameStack: Identifier[] = getIdentifierChain(node.qualifier!);
@@ -16309,9 +16305,11 @@ namespace ts {
                         // That, in turn, ultimately uses `getPropertyOfType` on the type of the symbol, which differs slightly from
                         // the `exports` lookup process that only looks up namespace members which is used for most type references
                         const mergedResolvedSymbol = getMergedSymbol(resolveSymbol(currentNamespace));
-                        const next = node.isTypeOf
+                        const symbolFromVariable = node.isTypeOf || isInJSFile(node) && isExportEquals
                             ? getPropertyOfType(getTypeOfSymbol(mergedResolvedSymbol), current.escapedText, /*skipObjectFunctionPropertyAugment*/ false, /*includeTypeOnlyMembers*/ true)
-                            : getSymbol(getExportsOfSymbol(mergedResolvedSymbol), current.escapedText, meaning);
+                            : undefined;
+                        const symbolFromModule = node.isTypeOf ? undefined : getSymbol(getExportsOfSymbol(mergedResolvedSymbol), current.escapedText, meaning);
+                        const next = symbolFromModule ?? symbolFromVariable;
                         if (!next) {
                             error(current, Diagnostics.Namespace_0_has_no_exported_member_1, getFullyQualifiedName(currentNamespace), declarationNameToString(current));
                             return links.resolvedType = errorType;
