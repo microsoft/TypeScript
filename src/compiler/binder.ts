@@ -3260,6 +3260,7 @@ namespace ts {
                 if (isInJSFile(node) &&
                     isVariableDeclarationInitializedToBareOrAccessedRequire(possibleVariableDecl) &&
                     !getJSDocTypeTag(node) &&
+                    !(lookupSymbolForName(container, "require" as __String)) &&
                     !(getCombinedModifierFlags(node) & ModifierFlags.Export)
                 ) {
                     declareSymbolAndAddToSymbolTable(node as Declaration, SymbolFlags.Alias, SymbolFlags.AliasExcludes);

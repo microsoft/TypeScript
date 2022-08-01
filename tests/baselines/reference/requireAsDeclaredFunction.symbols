@@ -1,0 +1,63 @@
+=== tests/cases/conformance/salsa/first.js ===
+/**
+ * @param {string} str
+ * @return {number}
+ */
+function require(str) { return str.length }
+>require : Symbol(require, Decl(first.js, 0, 0))
+>str : Symbol(str, Decl(first.js, 4, 17))
+>str.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>str : Symbol(str, Decl(first.js, 4, 17))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+const someModule = require("google-closure-compiler");
+>someModule : Symbol(someModule, Decl(first.js, 5, 5))
+>require : Symbol(require, Decl(first.js, 0, 0))
+
+export {someModule};
+>someModule : Symbol(someModule, Decl(first.js, 6, 8))
+
+=== tests/cases/conformance/salsa/last.js ===
+const someModule = require("google-closure-compiler");
+>someModule : Symbol(someModule, Decl(last.js, 0, 5))
+>require : Symbol(require, Decl(last.js, 0, 54))
+
+/**
+ * @param {string} str
+ * @return {number}
+ */
+function require(str) { return str.length }
+>require : Symbol(require, Decl(last.js, 0, 54))
+>str : Symbol(str, Decl(last.js, 5, 17))
+>str.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>str : Symbol(str, Decl(last.js, 5, 17))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+export {someModule};
+>someModule : Symbol(someModule, Decl(last.js, 6, 8))
+
+=== tests/cases/conformance/salsa/global.js ===
+/**
+ * @param {string} str
+ * @return {number}
+ */
+function require(str) { return str.length }
+>require : Symbol(require, Decl(global.js, 0, 0))
+>str : Symbol(str, Decl(global.js, 4, 17))
+>str.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>str : Symbol(str, Decl(global.js, 4, 17))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+const someModule = require("google-closure-compiler");
+>someModule : Symbol(someModule, Decl(global.js, 5, 5))
+>require : Symbol(require, Decl(global.js, 0, 0))
+
+=== tests/cases/conformance/salsa/main.ts ===
+import { someModule as m1 } from './first'
+>someModule : Symbol(someModule, Decl(first.js, 6, 8))
+>m1 : Symbol(m1, Decl(main.ts, 0, 8))
+
+import { someModule as m2 } from './last'
+>someModule : Symbol(someModule, Decl(last.js, 6, 8))
+>m2 : Symbol(m2, Decl(main.ts, 1, 8))
+

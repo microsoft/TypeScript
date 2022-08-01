@@ -1,0 +1,39 @@
+tests/cases/conformance/salsa/first.js(5,10): error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of a module.
+tests/cases/conformance/salsa/global.js(5,10): error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of a module.
+tests/cases/conformance/salsa/last.js(6,10): error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of a module.
+
+
+==== tests/cases/conformance/salsa/first.js (1 errors) ====
+    /**
+     * @param {string} str
+     * @return {number}
+     */
+    function require(str) { return str.length }
+             ~~~~~~~
+!!! error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of a module.
+    const someModule = require("google-closure-compiler");
+    export {someModule};
+==== tests/cases/conformance/salsa/last.js (1 errors) ====
+    const someModule = require("google-closure-compiler");
+    /**
+     * @param {string} str
+     * @return {number}
+     */
+    function require(str) { return str.length }
+             ~~~~~~~
+!!! error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of a module.
+    export {someModule};
+==== tests/cases/conformance/salsa/global.js (1 errors) ====
+    /**
+     * @param {string} str
+     * @return {number}
+     */
+    function require(str) { return str.length }
+             ~~~~~~~
+!!! error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of a module.
+    const someModule = require("google-closure-compiler");
+    
+==== tests/cases/conformance/salsa/main.ts (0 errors) ====
+    import { someModule as m1 } from './first'
+    import { someModule as m2 } from './last'
+    

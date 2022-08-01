@@ -1,0 +1,69 @@
+=== tests/cases/conformance/salsa/first.js ===
+/**
+ * @param {string} str
+ * @return {number}
+ */
+function require(str) { return str.length }
+>require : (str: string) => number
+>str : string
+>str.length : number
+>str : string
+>length : number
+
+const someModule = require("google-closure-compiler");
+>someModule : number
+>require("google-closure-compiler") : number
+>require : (str: string) => number
+>"google-closure-compiler" : "google-closure-compiler"
+
+export {someModule};
+>someModule : number
+
+=== tests/cases/conformance/salsa/last.js ===
+const someModule = require("google-closure-compiler");
+>someModule : number
+>require("google-closure-compiler") : number
+>require : (str: string) => number
+>"google-closure-compiler" : "google-closure-compiler"
+
+/**
+ * @param {string} str
+ * @return {number}
+ */
+function require(str) { return str.length }
+>require : (str: string) => number
+>str : string
+>str.length : number
+>str : string
+>length : number
+
+export {someModule};
+>someModule : number
+
+=== tests/cases/conformance/salsa/global.js ===
+/**
+ * @param {string} str
+ * @return {number}
+ */
+function require(str) { return str.length }
+>require : (str: string) => number
+>str : string
+>str.length : number
+>str : string
+>length : number
+
+const someModule = require("google-closure-compiler");
+>someModule : number
+>require("google-closure-compiler") : number
+>require : (str: string) => number
+>"google-closure-compiler" : "google-closure-compiler"
+
+=== tests/cases/conformance/salsa/main.ts ===
+import { someModule as m1 } from './first'
+>someModule : number
+>m1 : number
+
+import { someModule as m2 } from './last'
+>someModule : number
+>m2 : number
+
