@@ -36710,9 +36710,11 @@ namespace ts {
             // We only need `Awaited<T>` if `T` contains possibly non-primitive types.
             if (isGenericObjectType(type)) {
                 const baseConstraint = getBaseConstraintOfType(type);
-                // We only need `Awaited<T>` if `T` has no base constraint, or the base constraint of `T` is `any`, `unknown`, `{}`, `object`,
+                // We only need `Awaited<T>` if `T` is a type variable that has no base constraint, or the base constraint of `T` is `any`, `unknown`, `{}`, `object`,
                 // or is promise-like.
-                if (!baseConstraint || (baseConstraint.flags & TypeFlags.AnyOrUnknown) || isEmptyObjectType(baseConstraint) || isThenableType(baseConstraint)) {
+                if (baseConstraint ?
+                    baseConstraint.flags & TypeFlags.AnyOrUnknown || isEmptyObjectType(baseConstraint) || isThenableType(baseConstraint) :
+                    maybeTypeOfKind(type, TypeFlags.TypeVariable)) {
                     return true;
                 }
             }
