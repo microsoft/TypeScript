@@ -2256,7 +2256,7 @@ namespace FourSlash {
                     this.languageServiceAdapterHost,
                     this.languageService.getProgram()?.getCompilerOptions() || {}
                 ),
-                setExternalModuleIndicator: ts.getSetExternalModuleIndicator(this.languageService.getProgram()?.getCompilerOptions() || {})
+                setExternalModuleIndicator: ts.getSetExternalModuleIndicator(this.languageService.getProgram()?.getCompilerOptions() || {}),
             };
             const referenceSourceFile = ts.createLanguageServiceSourceFile(
                 this.activeFile.fileName, createScriptSnapShot(content), options, /*version:*/ "0", /*setNodeParents:*/ false);
