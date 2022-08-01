@@ -3791,6 +3791,12 @@ namespace ts {
          * It is _public_ so that (pre)transformers can set this field,
          * since it switches the builtin `node` module transform. Generally speaking, if unset,
          * the field is treated as though it is `ModuleKind.CommonJS`.
+         *
+         * Note that this field is only set by the module resolution process when
+         * `moduleResolution` is `Node16` or `NodeNext`, which is implied by the `module` setting
+         * of `Node16` or `NodeNext`, respectively, but may be overriden (eg, by a `moduleResolution`
+         * of `node`). If so, this field will be unset and source files will be considered to be
+         * CommonJS-output-format by the node module transformer and type checker, regardless of extension or context.
          */
         impliedNodeFormat?: ModuleKind.ESNext | ModuleKind.CommonJS;
 
@@ -4664,10 +4670,11 @@ namespace ts {
         UseAliasDefinedOutsideCurrentScope      = 1 << 14,  // Allow non-visible aliases
         UseSingleQuotesForStringLiteralType     = 1 << 28,  // Use single quotes for string literal type
         NoTypeReduction                         = 1 << 29,  // Don't call getReducedType
+        OmitThisParameter                       = 1 << 25,
 
         // Error handling
         AllowThisInObjectLiteral                = 1 << 15,
-        AllowQualifiedNameInPlaceOfIdentifier    = 1 << 16,
+        AllowQualifiedNameInPlaceOfIdentifier   = 1 << 16,
         /** @deprecated AllowQualifedNameInPlaceOfIdentifier. Use AllowQualifiedNameInPlaceOfIdentifier instead. */
         AllowQualifedNameInPlaceOfIdentifier    = AllowQualifiedNameInPlaceOfIdentifier,
         AllowAnonymousIdentifier                = 1 << 17,
@@ -4709,6 +4716,7 @@ namespace ts {
         UseAliasDefinedOutsideCurrentScope      = 1 << 14, // For a `type T = ... ` defined in a different file, write `T` instead of its value, even though `T` can't be accessed in the current scope.
         UseSingleQuotesForStringLiteralType     = 1 << 28, // Use single quotes for string literal type
         NoTypeReduction                         = 1 << 29, // Don't call getReducedType
+        OmitThisParameter                       = 1 << 25,
 
         // Error Handling
         AllowUniqueESSymbolType                 = 1 << 20, // This is bit 20 to align with the same bit in `NodeBuilderFlags`
@@ -4728,7 +4736,7 @@ namespace ts {
         NodeBuilderFlagsMask = NoTruncation | WriteArrayAsGenericType | UseStructuralFallback | WriteTypeArgumentsOfSignature |
             UseFullyQualifiedType | SuppressAnyReturnType | MultilineObjectLiterals | WriteClassExpressionAsTypeLiteral |
             UseTypeOfFunction | OmitParameterModifiers | UseAliasDefinedOutsideCurrentScope | AllowUniqueESSymbolType | InTypeAlias |
-            UseSingleQuotesForStringLiteralType | NoTypeReduction,
+            UseSingleQuotesForStringLiteralType | NoTypeReduction | OmitThisParameter
     }
 
     export const enum SymbolFormatFlags {

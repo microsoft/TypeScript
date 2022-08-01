@@ -1,0 +1,138 @@
+=== tests/cases/compiler/nonInferrableTypePropagation1.ts ===
+type Op<I, O> = (thing: Thing<I>) => Thing<O>;
+>Op : Symbol(Op, Decl(nonInferrableTypePropagation1.ts, 0, 0))
+>I : Symbol(I, Decl(nonInferrableTypePropagation1.ts, 0, 8))
+>O : Symbol(O, Decl(nonInferrableTypePropagation1.ts, 0, 10))
+>thing : Symbol(thing, Decl(nonInferrableTypePropagation1.ts, 0, 17))
+>Thing : Symbol(Thing, Decl(nonInferrableTypePropagation1.ts, 0, 46))
+>I : Symbol(I, Decl(nonInferrableTypePropagation1.ts, 0, 8))
+>Thing : Symbol(Thing, Decl(nonInferrableTypePropagation1.ts, 0, 46))
+>O : Symbol(O, Decl(nonInferrableTypePropagation1.ts, 0, 10))
+
+type Thing<T> = {
+>Thing : Symbol(Thing, Decl(nonInferrableTypePropagation1.ts, 0, 46))
+>T : Symbol(T, Decl(nonInferrableTypePropagation1.ts, 1, 11))
+
+    value: T;
+>value : Symbol(value, Decl(nonInferrableTypePropagation1.ts, 1, 17))
+>T : Symbol(T, Decl(nonInferrableTypePropagation1.ts, 1, 11))
+
+    pipe<A, B>(
+>pipe : Symbol(pipe, Decl(nonInferrableTypePropagation1.ts, 2, 13))
+>A : Symbol(A, Decl(nonInferrableTypePropagation1.ts, 3, 9))
+>B : Symbol(B, Decl(nonInferrableTypePropagation1.ts, 3, 11))
+
+        opA: Op<T, A>,
+>opA : Symbol(opA, Decl(nonInferrableTypePropagation1.ts, 3, 15))
+>Op : Symbol(Op, Decl(nonInferrableTypePropagation1.ts, 0, 0))
+>T : Symbol(T, Decl(nonInferrableTypePropagation1.ts, 1, 11))
+>A : Symbol(A, Decl(nonInferrableTypePropagation1.ts, 3, 9))
+
+        opB: Op<A, B>,
+>opB : Symbol(opB, Decl(nonInferrableTypePropagation1.ts, 4, 22))
+>Op : Symbol(Op, Decl(nonInferrableTypePropagation1.ts, 0, 0))
+>A : Symbol(A, Decl(nonInferrableTypePropagation1.ts, 3, 9))
+>B : Symbol(B, Decl(nonInferrableTypePropagation1.ts, 3, 11))
+
+    ): Thing<B>;
+>Thing : Symbol(Thing, Decl(nonInferrableTypePropagation1.ts, 0, 46))
+>B : Symbol(B, Decl(nonInferrableTypePropagation1.ts, 3, 11))
+
+};
+type Box<V> = { data: V };
+>Box : Symbol(Box, Decl(nonInferrableTypePropagation1.ts, 7, 2))
+>V : Symbol(V, Decl(nonInferrableTypePropagation1.ts, 8, 9))
+>data : Symbol(data, Decl(nonInferrableTypePropagation1.ts, 8, 15))
+>V : Symbol(V, Decl(nonInferrableTypePropagation1.ts, 8, 9))
+
+declare const thing: Thing<number>;
+>thing : Symbol(thing, Decl(nonInferrableTypePropagation1.ts, 10, 13))
+>Thing : Symbol(Thing, Decl(nonInferrableTypePropagation1.ts, 0, 46))
+
+declare function map<T, R>(project: (value: T) => R): Op<T, R>;
+>map : Symbol(map, Decl(nonInferrableTypePropagation1.ts, 10, 35))
+>T : Symbol(T, Decl(nonInferrableTypePropagation1.ts, 12, 21))
+>R : Symbol(R, Decl(nonInferrableTypePropagation1.ts, 12, 23))
+>project : Symbol(project, Decl(nonInferrableTypePropagation1.ts, 12, 27))
+>value : Symbol(value, Decl(nonInferrableTypePropagation1.ts, 12, 37))
+>T : Symbol(T, Decl(nonInferrableTypePropagation1.ts, 12, 21))
+>R : Symbol(R, Decl(nonInferrableTypePropagation1.ts, 12, 23))
+>Op : Symbol(Op, Decl(nonInferrableTypePropagation1.ts, 0, 0))
+>T : Symbol(T, Decl(nonInferrableTypePropagation1.ts, 12, 21))
+>R : Symbol(R, Decl(nonInferrableTypePropagation1.ts, 12, 23))
+
+declare function tap<T>(next: (value: T) => void): Op<T, T>;
+>tap : Symbol(tap, Decl(nonInferrableTypePropagation1.ts, 12, 63))
+>T : Symbol(T, Decl(nonInferrableTypePropagation1.ts, 13, 21))
+>next : Symbol(next, Decl(nonInferrableTypePropagation1.ts, 13, 24))
+>value : Symbol(value, Decl(nonInferrableTypePropagation1.ts, 13, 31))
+>T : Symbol(T, Decl(nonInferrableTypePropagation1.ts, 13, 21))
+>Op : Symbol(Op, Decl(nonInferrableTypePropagation1.ts, 0, 0))
+>T : Symbol(T, Decl(nonInferrableTypePropagation1.ts, 13, 21))
+>T : Symbol(T, Decl(nonInferrableTypePropagation1.ts, 13, 21))
+
+declare function box<V>(data: V): Box<V>;
+>box : Symbol(box, Decl(nonInferrableTypePropagation1.ts, 13, 60))
+>V : Symbol(V, Decl(nonInferrableTypePropagation1.ts, 14, 21))
+>data : Symbol(data, Decl(nonInferrableTypePropagation1.ts, 14, 24))
+>V : Symbol(V, Decl(nonInferrableTypePropagation1.ts, 14, 21))
+>Box : Symbol(Box, Decl(nonInferrableTypePropagation1.ts, 7, 2))
+>V : Symbol(V, Decl(nonInferrableTypePropagation1.ts, 14, 21))
+
+declare function createAndUnbox<V>(factory: () => Thing<V | Box<V>>): Thing<V>;
+>createAndUnbox : Symbol(createAndUnbox, Decl(nonInferrableTypePropagation1.ts, 14, 41))
+>V : Symbol(V, Decl(nonInferrableTypePropagation1.ts, 15, 32))
+>factory : Symbol(factory, Decl(nonInferrableTypePropagation1.ts, 15, 35))
+>Thing : Symbol(Thing, Decl(nonInferrableTypePropagation1.ts, 0, 46))
+>V : Symbol(V, Decl(nonInferrableTypePropagation1.ts, 15, 32))
+>Box : Symbol(Box, Decl(nonInferrableTypePropagation1.ts, 7, 2))
+>V : Symbol(V, Decl(nonInferrableTypePropagation1.ts, 15, 32))
+>Thing : Symbol(Thing, Decl(nonInferrableTypePropagation1.ts, 0, 46))
+>V : Symbol(V, Decl(nonInferrableTypePropagation1.ts, 15, 32))
+
+declare function log(value: any): void;
+>log : Symbol(log, Decl(nonInferrableTypePropagation1.ts, 15, 79))
+>value : Symbol(value, Decl(nonInferrableTypePropagation1.ts, 16, 21))
+
+const result1 = createAndUnbox(() => thing.pipe(
+>result1 : Symbol(result1, Decl(nonInferrableTypePropagation1.ts, 18, 5))
+>createAndUnbox : Symbol(createAndUnbox, Decl(nonInferrableTypePropagation1.ts, 14, 41))
+>thing.pipe : Symbol(pipe, Decl(nonInferrableTypePropagation1.ts, 2, 13))
+>thing : Symbol(thing, Decl(nonInferrableTypePropagation1.ts, 10, 13))
+>pipe : Symbol(pipe, Decl(nonInferrableTypePropagation1.ts, 2, 13))
+
+    map((data) => box(data)),
+>map : Symbol(map, Decl(nonInferrableTypePropagation1.ts, 10, 35))
+>data : Symbol(data, Decl(nonInferrableTypePropagation1.ts, 19, 9))
+>box : Symbol(box, Decl(nonInferrableTypePropagation1.ts, 13, 60))
+>data : Symbol(data, Decl(nonInferrableTypePropagation1.ts, 19, 9))
+
+    tap((v) => log(v)),
+>tap : Symbol(tap, Decl(nonInferrableTypePropagation1.ts, 12, 63))
+>v : Symbol(v, Decl(nonInferrableTypePropagation1.ts, 20, 9))
+>log : Symbol(log, Decl(nonInferrableTypePropagation1.ts, 15, 79))
+>v : Symbol(v, Decl(nonInferrableTypePropagation1.ts, 20, 9))
+
+));
+
+const result2 = createAndUnbox(() => thing.pipe(
+>result2 : Symbol(result2, Decl(nonInferrableTypePropagation1.ts, 23, 5))
+>createAndUnbox : Symbol(createAndUnbox, Decl(nonInferrableTypePropagation1.ts, 14, 41))
+>thing.pipe : Symbol(pipe, Decl(nonInferrableTypePropagation1.ts, 2, 13))
+>thing : Symbol(thing, Decl(nonInferrableTypePropagation1.ts, 10, 13))
+>pipe : Symbol(pipe, Decl(nonInferrableTypePropagation1.ts, 2, 13))
+
+    tap((v) => log(v)),
+>tap : Symbol(tap, Decl(nonInferrableTypePropagation1.ts, 12, 63))
+>v : Symbol(v, Decl(nonInferrableTypePropagation1.ts, 24, 9))
+>log : Symbol(log, Decl(nonInferrableTypePropagation1.ts, 15, 79))
+>v : Symbol(v, Decl(nonInferrableTypePropagation1.ts, 24, 9))
+
+    map((data) => box(data)),
+>map : Symbol(map, Decl(nonInferrableTypePropagation1.ts, 10, 35))
+>data : Symbol(data, Decl(nonInferrableTypePropagation1.ts, 25, 9))
+>box : Symbol(box, Decl(nonInferrableTypePropagation1.ts, 13, 60))
+>data : Symbol(data, Decl(nonInferrableTypePropagation1.ts, 25, 9))
+
+));
+

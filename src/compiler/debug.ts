@@ -394,6 +394,22 @@ namespace ts {
             return formatEnum(flags, (ts as any).FlowFlags, /*isFlags*/ true);
         }
 
+        export function formatRelationComparisonResult(result: RelationComparisonResult | undefined): string {
+            return formatEnum(result, (ts as any).RelationComparisonResult, /*isFlags*/ true);
+        }
+
+        export function formatCheckMode(mode: CheckMode | undefined): string {
+            return formatEnum(mode, (ts as any).CheckMode, /*isFlags*/ true);
+        }
+
+        export function formatSignatureCheckMode(mode: SignatureCheckMode | undefined): string {
+            return formatEnum(mode, (ts as any).SignatureCheckMode, /*isFlags*/ true);
+        }
+
+        export function formatTypeFacts(facts: TypeFacts | undefined): string {
+            return formatEnum(facts, (ts as any).TypeFacts, /*isFlags*/ true);
+        }
+
         let isDebugInfoEnabled = false;
 
         interface ExtendedDebugModule {
@@ -764,6 +780,37 @@ namespace ts {
                 result += " (unreliable)";
             }
             return result;
+        }
+
+        export type DebugType = Type & { __debugTypeToString(): string }; // eslint-disable-line @typescript-eslint/naming-convention
+        export class DebugTypeMapper {
+            declare kind: TypeMapKind;
+            __debugToString(): string { // eslint-disable-line @typescript-eslint/naming-convention
+                type<TypeMapper>(this);
+                switch (this.kind) {
+                    case TypeMapKind.Function: return this.debugInfo?.() || "(function mapper)";
+                    case TypeMapKind.Simple: return `${(this.source as DebugType).__debugTypeToString()} -> ${(this.target as DebugType).__debugTypeToString()}`;
+                    case TypeMapKind.Array: return zipWith<DebugType, DebugType | string, unknown>(
+                        this.sources as readonly DebugType[],
+                        this.targets as readonly DebugType[] || map(this.sources, () => "any"),
+                        (s, t) => `${s.__debugTypeToString()} -> ${typeof t === "string" ? t : t.__debugTypeToString()}`).join(", ");
+                    case TypeMapKind.Deferred: return zipWith(
+                        this.sources,
+                        this.targets,
+                        (s, t) => `${(s as DebugType).__debugTypeToString()} -> ${(t() as DebugType).__debugTypeToString()}`).join(", ");
+                    case TypeMapKind.Merged:
+                    case TypeMapKind.Composite: return `m1: ${(this.mapper1 as unknown as DebugTypeMapper).__debugToString().split("\n").join("\n    ")}
+m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n").join("\n    ")}`;
+                    default: return assertNever(this);
+                }
+            }
+        }
+
+        export function attachDebugPrototypeIfDebug(mapper: TypeMapper): TypeMapper {
+            if (isDebugging) {
+                return Object.setPrototypeOf(mapper, DebugTypeMapper.prototype);
+            }
+            return mapper;
         }
     }
 }

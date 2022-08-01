@@ -52,13 +52,24 @@ namespace ts.SmartSelectionRange {
                     // selected from open to close, including whitespace but not including the braces/etc. themselves.
                     const isBetweenMultiLineBookends = isSyntaxList(node) && isListOpener(prevNode) && isListCloser(nextNode)
                         && !positionsAreOnSameLine(prevNode.getStart(), nextNode.getStart(), sourceFile);
-                    const start = isBetweenMultiLineBookends ? prevNode.getEnd() : node.getStart();
+                    let start = isBetweenMultiLineBookends ? prevNode.getEnd() : node.getStart();
                     const end = isBetweenMultiLineBookends ? nextNode.getStart() : getEndPos(sourceFile, node);
 
                     if (hasJSDocNodes(node) && node.jsDoc?.length) {
                         pushSelectionRange(first(node.jsDoc).getStart(), end);
                     }
 
+                    // (#39618 & #49807)
+                    // When the node is a SyntaxList and its first child has a JSDoc comment, then the node's
+                    // `start` (which usually is the result of calling `node.getStart()`) points to the first
+                    // token after the JSDoc comment. So, we have to make sure we'd pushed the selection
+                    // covering the JSDoc comment before diving further.
+                    if (isSyntaxList(node)) {
+                        const firstChild = node.getChildren()[0];
+                        if (firstChild && hasJSDocNodes(firstChild) && firstChild.jsDoc?.length && firstChild.getStart() !== node.pos) {
+                            start = Math.min(start, first(firstChild.jsDoc).getStart());
+                        }
+                    }
                     pushSelectionRange(start, end);
 
                     // String literals should have a stop both inside and outside their quotes.
@@ -184,7 +195,10 @@ namespace ts.SmartSelectionRange {
         if (isPropertySignature(node)) {
             const children = groupChildren(node.getChildren(), child =>
                 child === node.name || contains(node.modifiers, child));
-            return splitChildren(children, ({ kind }) => kind === SyntaxKind.ColonToken);
+            const firstJSDocChild = children[0]?.kind === SyntaxKind.JSDoc ? children[0] : undefined;
+            const withJSDocSeparated = firstJSDocChild? children.slice(1) : children;
+            const splittedChildren = splitChildren(withJSDocSeparated, ({ kind }) => kind === SyntaxKind.ColonToken);
+            return firstJSDocChild? [firstJSDocChild, createSyntaxList(splittedChildren)] : splittedChildren;
         }
 
         // Group the parameter name with its `...`, then that group with its `?`, then pivot on `=`.

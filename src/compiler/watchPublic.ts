@@ -283,7 +283,6 @@ namespace ts {
         let parsedConfigs: ESMap<Path, ParsedConfig> | undefined;           // Parsed commandline and watching cached for referenced projects
         let sharedExtendedConfigFileWatchers: ESMap<Path, SharedExtendedConfigFileWatcher<Path>>; // Map of file watchers for extended files, shared between different referenced projects
         let extendedConfigCache = host.extendedConfigCache;                 // Cache for extended config evaluation
-        let changesAffectResolution = false;                                // Flag for indicating non-config changes affect module resolution
         let reportFileChangeDetectedOnCreateProgram = false;                // True if synchronizeProgram should report "File change detected..." when a new program is created
 
         const sourceFilesCache = new Map<string, HostFileInfo>();           // Cache that stores the source file and version info
@@ -434,13 +433,13 @@ namespace ts {
             const program = getCurrentBuilderProgram();
             if (hasChangedCompilerOptions) {
                 newLine = updateNewLine();
-                if (program && (changesAffectResolution || changesAffectModuleResolution(program.getCompilerOptions(), compilerOptions))) {
+                if (program && changesAffectModuleResolution(program.getCompilerOptions(), compilerOptions)) {
                     resolutionCache.clear();
                 }
             }
 
             // All resolutions are invalid if user provided resolutions
-            const hasInvalidatedResolution = resolutionCache.createHasInvalidatedResolution(userProvidedResolution || changesAffectResolution);
+            const hasInvalidatedResolution = resolutionCache.createHasInvalidatedResolution(userProvidedResolution);
             if (isProgramUptoDate(getCurrentProgram(), rootFileNames, compilerOptions, getSourceVersion, fileExists, hasInvalidatedResolution, hasChangedAutomaticTypeDirectiveNames, getParsedCommandLine, projectReferences)) {
                 if (hasChangedConfigFileParsingErrors) {
                     if (reportFileChangeDetectedOnCreateProgram) {
@@ -457,7 +456,6 @@ namespace ts {
                 createNewProgram(hasInvalidatedResolution);
             }
 
-            changesAffectResolution = false; // reset for next sync
             reportFileChangeDetectedOnCreateProgram = false;
 
             if (host.afterProgramCreate && program !== builderProgram) {

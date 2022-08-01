@@ -1,4 +1,4 @@
-tests/cases/conformance/async/es2017/asyncArrowFunction/asyncArrowFunction10_es2017.ts(3,11): error TS2304: Cannot find name 'await'.
+tests/cases/conformance/async/es2017/asyncArrowFunction/asyncArrowFunction10_es2017.ts(3,11): error TS2552: Cannot find name 'await'. Did you mean 'Awaited'?
 
 
 ==== tests/cases/conformance/async/es2017/asyncArrowFunction/asyncArrowFunction10_es2017.ts (1 errors) ====
@@ -6,6 +6,6 @@ tests/cases/conformance/async/es2017/asyncArrowFunction/asyncArrowFunction10_es2
        // Legal to use 'await' in a type context.
        var v: await;
               ~~~~~
-!!! error TS2304: Cannot find name 'await'.
+!!! error TS2552: Cannot find name 'await'. Did you mean 'Awaited'?
     }
     

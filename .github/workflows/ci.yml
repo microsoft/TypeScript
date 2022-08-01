@@ -31,10 +31,6 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         check-latest: true
-    - name: Remove existing TypeScript
-      run: |
-        npm uninstall typescript --no-save
-        npm uninstall tslint --no-save
     - run:  npm ci
 
     # Re: https://github.com/actions/setup-node/pull/125

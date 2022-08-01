@@ -1088,14 +1088,16 @@ namespace ts {
                 lastDirectoryPart = lastDirectoryPartWithDirectorySeparator.slice(directorySeparator.length);
             }
             /** Watcher for the file system entry depending on whether it is missing or present */
-            let watcher = !fileSystemEntryExists(fileOrDirectory, entryKind) ?
+            let watcher: FileWatcher | undefined = !fileSystemEntryExists(fileOrDirectory, entryKind) ?
                 watchMissingFileSystemEntry() :
                 watchPresentFileSystemEntry();
             return {
                 close: () => {
                     // Close the watcher (either existing file system entry watcher or missing file system entry watcher)
-                    watcher.close();
-                    watcher = undefined!;
+                    if (watcher) {
+                        watcher.close();
+                        watcher = undefined;
+                    }
                 }
             };
 

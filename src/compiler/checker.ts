@@ -61,7 +61,7 @@ namespace ts {
         GeneratorYield,
     }
 
-    const enum TypeFacts {
+    export const enum TypeFacts {
         None = 0,
         TypeofEQString = 1 << 0,      // typeof x === "string"
         TypeofEQNumber = 1 << 1,      // typeof x === "number"
@@ -169,7 +169,7 @@ namespace ts {
         WriteType,
     }
 
-    const enum CheckMode {
+    export const enum CheckMode {
         Normal = 0,                                     // Normal type checking
         Contextual = 1 << 0,                            // Explicitly assigned contextual type, therefore not cacheable
         Inferential = 1 << 1,                           // Inferential typing
@@ -182,7 +182,7 @@ namespace ts {
                                                         //   we need to preserve generic types instead of substituting them for constraints
     }
 
-    const enum SignatureCheckMode {
+    export const enum SignatureCheckMode {
         BivariantCallback = 1 << 0,
         StrictCallback    = 1 << 1,
         IgnoreReturnTypes = 1 << 2,
@@ -340,23 +340,6 @@ namespace ts {
         const Symbol = objectAllocator.getSymbolConstructor();
         const Type = objectAllocator.getTypeConstructor();
         const Signature = objectAllocator.getSignatureConstructor();
-        type DebugType = Type & { __debugTypeToString(): string }; // eslint-disable-line @typescript-eslint/naming-convention
-        class DebugTypeMapper {
-            declare kind: TypeMapKind;
-            __debugToString(): string { // eslint-disable-line @typescript-eslint/naming-convention
-                Debug.type<TypeMapper>(this);
-                switch (this.kind) {
-                    case TypeMapKind.Function: return this.debugInfo?.() || "(function mapper)";
-                    case TypeMapKind.Simple: return `${(this.source as DebugType).__debugTypeToString()} -> ${(this.target as DebugType).__debugTypeToString()}`;
-                    case TypeMapKind.Array: return zipWith(this.sources, this.targets || map(this.sources, () => anyType), (s, t) => `${(s as DebugType).__debugTypeToString()} -> ${(t as DebugType).__debugTypeToString()}`).join(", ");
-                    case TypeMapKind.Deferred: return zipWith(this.sources, this.targets, (s, t) => `${(s as DebugType).__debugTypeToString()} -> ${(t() as DebugType).__debugTypeToString()}`).join(", ");
-                    case TypeMapKind.Merged:
-                    case TypeMapKind.Composite: return `m1: ${(this.mapper1 as unknown as DebugTypeMapper).__debugToString().split("\n").join("\n    ")}
-m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n").join("\n    ")}`;
-                    default: return Debug.assertNever(this);
-                }
-            }
-        }
 
         let typeCount = 0;
         let symbolCount = 0;
@@ -559,7 +542,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
             },
             getContextualTypeForObjectLiteralElement: nodeIn => {
                 const node = getParseTreeNode(nodeIn, isObjectLiteralElementLike);
-                return node ? getContextualTypeForObjectLiteralElement(node) : undefined;
+                return node ? getContextualTypeForObjectLiteralElement(node, /*contextFlags*/ undefined) : undefined;
             },
             getContextualTypeForArgumentAtIndex: (nodeIn, argIndex) => {
                 const node = getParseTreeNode(nodeIn, isCallLikeExpression);
@@ -567,7 +550,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
             },
             getContextualTypeForJsxAttribute: (nodeIn) => {
                 const node = getParseTreeNode(nodeIn, isJsxAttributeLike);
-                return node && getContextualTypeForJsxAttribute(node);
+                return node && getContextualTypeForJsxAttribute(node, /*contextFlags*/ undefined);
             },
             isContextSensitive,
             getTypeOfPropertyOfContextualType,
@@ -791,6 +774,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
         const stringMappingTypes = new Map<string, StringMappingType>();
         const substitutionTypes = new Map<string, SubstitutionType>();
         const subtypeReductionCache = new Map<string, Type[]>();
+        const cachedTypes = new Map<string, Type>();
         const evolvingArrayTypes: EvolvingArrayType[] = [];
         const undefinedProperties: SymbolTable = new Map();
         const markerTypes = new Set<number>();
@@ -801,11 +785,10 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
         const errorTypes = new Map<string, Type>();
 
         const anyType = createIntrinsicType(TypeFlags.Any, "any");
-        const autoType = createIntrinsicType(TypeFlags.Any, "any");
+        const autoType = createIntrinsicType(TypeFlags.Any, "any", ObjectFlags.NonInferrableType);
         const wildcardType = createIntrinsicType(TypeFlags.Any, "any");
         const errorType = createIntrinsicType(TypeFlags.Any, "error");
         const unresolvedType = createIntrinsicType(TypeFlags.Any, "unresolved");
-        const nonInferrableAnyType = createIntrinsicType(TypeFlags.Any, "any", ObjectFlags.ContainsWideningType);
         const intrinsicMarkerType = createIntrinsicType(TypeFlags.Any, "intrinsic");
         const unknownType = createIntrinsicType(TypeFlags.Unknown, "unknown");
         const nonNullUnknownType = createIntrinsicType(TypeFlags.Unknown, "unknown");
@@ -834,8 +817,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
         const esSymbolType = createIntrinsicType(TypeFlags.ESSymbol, "symbol");
         const voidType = createIntrinsicType(TypeFlags.Void, "void");
         const neverType = createIntrinsicType(TypeFlags.Never, "never");
-        const silentNeverType = createIntrinsicType(TypeFlags.Never, "never");
-        const nonInferrableType = createIntrinsicType(TypeFlags.Never, "never", ObjectFlags.NonInferrableType);
+        const silentNeverType = createIntrinsicType(TypeFlags.Never, "never", ObjectFlags.NonInferrableType);
         const implicitNeverType = createIntrinsicType(TypeFlags.Never, "never");
         const unreachableNeverType = createIntrinsicType(TypeFlags.Never, "never");
         const nonPrimitiveType = createIntrinsicType(TypeFlags.NonPrimitive, "object");
@@ -1089,6 +1071,15 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
         initializeTypeChecker();
 
         return checker;
+
+        function getCachedType(key: string | undefined) {
+            return key ? cachedTypes.get(key) : undefined;
+        }
+
+        function setCachedType(key: string | undefined, type: Type) {
+            if (key) cachedTypes.set(key, type);
+            return type;
+        }
 
         function getJsxNamespace(location: Node | undefined): __String {
             if (location) {
@@ -1864,7 +1855,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
             let result: Symbol | undefined;
             let lastLocation: Node | undefined;
             let lastSelfReferenceLocation: Node | undefined;
-            let propertyWithInvalidInitializer: Node | undefined;
+            let propertyWithInvalidInitializer: PropertyDeclaration | undefined;
             let associatedDeclarationForContainingInitializerOrBindingName: ParameterDeclaration | BindingElement | undefined;
             let withinDeferredContext = false;
             const errorLocation = location;
@@ -1998,6 +1989,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                             if (ctor && ctor.locals) {
                                 if (lookup(ctor.locals, name, meaning & SymbolFlags.Value)) {
                                     // Remember the property node, it will be used later to report appropriate error
+                                    Debug.assertNode(location, isPropertyDeclaration);
                                     propertyWithInvalidInitializer = location;
                                 }
                             }
@@ -2194,11 +2186,31 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                     }
                 }
             }
+
+            // The invalid initializer error is needed in two situation:
+            // 1. When result is undefined, after checking for a missing "this."
+            // 2. When result is defined
+            function checkAndReportErrorForInvalidInitializer() {
+                if (propertyWithInvalidInitializer && !(useDefineForClassFields && getEmitScriptTarget(compilerOptions) >= ScriptTarget.ES2022)) {
+                    // We have a match, but the reference occurred within a property initializer and the identifier also binds
+                    // to a local variable in the constructor where the code will be emitted. Note that this is actually allowed
+                    // with ESNext+useDefineForClassFields because the scope semantics are different.
+                    error(errorLocation,
+                        errorLocation && propertyWithInvalidInitializer.type && textRangeContainsPositionInclusive(propertyWithInvalidInitializer.type, errorLocation.pos)
+                            ? Diagnostics.Type_of_instance_member_variable_0_cannot_reference_identifier_1_declared_in_the_constructor
+                            : Diagnostics.Initializer_of_instance_member_variable_0_cannot_reference_identifier_1_declared_in_the_constructor,
+                        declarationNameToString(propertyWithInvalidInitializer.name), diagnosticName(nameArg!));
+                    return true;
+                }
+                return false;
+            }
+
             if (!result) {
                 if (nameNotFoundMessage) {
                     addLazyDiagnostic(() => {
                         if (!errorLocation ||
                             !checkAndReportErrorForMissingPrefix(errorLocation, name, nameArg!) && // TODO: GH#18217
+                            !checkAndReportErrorForInvalidInitializer() &&
                             !checkAndReportErrorForExtendingInterface(errorLocation) &&
                             !checkAndReportErrorForUsingTypeAsNamespace(errorLocation, name, meaning) &&
                             !checkAndReportErrorForExportingPrimitiveType(errorLocation, name) &&
@@ -2206,7 +2218,16 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                             !checkAndReportErrorForUsingNamespaceModuleAsValue(errorLocation, name, meaning) &&
                             !checkAndReportErrorForUsingValueAsType(errorLocation, name, meaning)) {
                             let suggestion: Symbol | undefined;
-                            if (getSpellingSuggestions && suggestionCount < maximumSuggestionCount) {
+                            let suggestedLib: string | undefined;
+                            // Report missing lib first
+                            if (nameArg) {
+                                suggestedLib = getSuggestedLibForNonExistentName(nameArg);
+                                if (suggestedLib) {
+                                    error(errorLocation, nameNotFoundMessage, diagnosticName(nameArg), suggestedLib);
+                                }
+                            }
+                            // then spelling suggestions
+                            if (!suggestedLib && getSpellingSuggestions && suggestionCount < maximumSuggestionCount) {
                                 suggestion = getSuggestedSymbolForNonexistentSymbol(originalLocation, name, meaning);
                                 const isGlobalScopeAugmentationDeclaration = suggestion?.valueDeclaration && isAmbientModule(suggestion.valueDeclaration) && isGlobalScopeAugmentation(suggestion.valueDeclaration);
                                 if (isGlobalScopeAugmentationDeclaration) {
@@ -2228,16 +2249,9 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                                     }
                                 }
                             }
-                            if (!suggestion) {
-                                if (nameArg) {
-                                    const lib = getSuggestedLibForNonExistentName(nameArg);
-                                    if (lib) {
-                                        error(errorLocation, nameNotFoundMessage, diagnosticName(nameArg), lib);
-                                    }
-                                    else {
-                                        error(errorLocation, nameNotFoundMessage, diagnosticName(nameArg));
-                                    }
-                                }
+                            // And then fall back to unspecified "not found"
+                            if (!suggestion && !suggestedLib && nameArg) {
+                                error(errorLocation, nameNotFoundMessage, diagnosticName(nameArg));
                             }
                             suggestionCount++;
                         }
@@ -2245,14 +2259,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                 }
                 return undefined;
             }
-
-            if (propertyWithInvalidInitializer && !(getEmitScriptTarget(compilerOptions) === ScriptTarget.ESNext && useDefineForClassFields)) {
-                // We have a match, but the reference occurred within a property initializer and the identifier also binds
-                // to a local variable in the constructor where the code will be emitted. Note that this is actually allowed
-                // with ESNext+useDefineForClassFields because the scope semantics are different.
-                const propertyName = (propertyWithInvalidInitializer as PropertyDeclaration).name;
-                error(errorLocation, Diagnostics.Initializer_of_instance_member_variable_0_cannot_reference_identifier_1_declared_in_the_constructor,
-                    declarationNameToString(propertyName), diagnosticName(nameArg!));
+            else if (checkAndReportErrorForInvalidInitializer()) {
                 return undefined;
             }
 
@@ -4645,13 +4652,25 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                         && isDeclarationVisible(declaration.parent)) {
                         return addVisibleAlias(declaration, declaration);
                     }
-                    else if (symbol.flags & SymbolFlags.Alias && isBindingElement(declaration) && isInJSFile(declaration) && declaration.parent?.parent // exported import-like top-level JS require statement
-                        && isVariableDeclaration(declaration.parent.parent)
-                        && declaration.parent.parent.parent?.parent && isVariableStatement(declaration.parent.parent.parent.parent)
-                        && !hasSyntacticModifier(declaration.parent.parent.parent.parent, ModifierFlags.Export)
-                        && declaration.parent.parent.parent.parent.parent // check if the thing containing the variable statement is visible (ie, the file)
-                        && isDeclarationVisible(declaration.parent.parent.parent.parent.parent)) {
-                        return addVisibleAlias(declaration, declaration.parent.parent.parent.parent);
+                    else if (isBindingElement(declaration)) {
+                        if (symbol.flags & SymbolFlags.Alias && isInJSFile(declaration) && declaration.parent?.parent // exported import-like top-level JS require statement
+                            && isVariableDeclaration(declaration.parent.parent)
+                            && declaration.parent.parent.parent?.parent && isVariableStatement(declaration.parent.parent.parent.parent)
+                            && !hasSyntacticModifier(declaration.parent.parent.parent.parent, ModifierFlags.Export)
+                            && declaration.parent.parent.parent.parent.parent // check if the thing containing the variable statement is visible (ie, the file)
+                            && isDeclarationVisible(declaration.parent.parent.parent.parent.parent)) {
+                            return addVisibleAlias(declaration, declaration.parent.parent.parent.parent);
+                        }
+                        else if (symbol.flags & SymbolFlags.BlockScopedVariable) {
+                            const variableStatement = findAncestor(declaration, isVariableStatement)!;
+                            if (hasSyntacticModifier(variableStatement, ModifierFlags.Export)) {
+                                return true;
+                            }
+                            if (!isDeclarationVisible(variableStatement.parent)) {
+                                return false;
+                            }
+                            return addVisibleAlias(declaration, variableStatement);
+                        }
                     }
 
                     // Declaration is not visible
@@ -4894,6 +4913,13 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
             }
 
             function typeToTypeNodeHelper(type: Type, context: NodeBuilderContext): TypeNode {
+                const savedFlags = context.flags;
+                const typeNode = typeToTypeNodeWorker(type, context);
+                context.flags = savedFlags;
+                return typeNode;
+            }
+
+            function typeToTypeNodeWorker(type: Type, context: NodeBuilderContext): TypeNode {
                 if (cancellationToken && cancellationToken.throwIfCancellationRequested) {
                     cancellationToken.throwIfCancellationRequested();
                 }
@@ -5207,6 +5233,11 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                     return typeToTypeNodeHelper(type, context);
                 }
 
+                function isHomomorphicMappedTypeWithNonHomomorphicInstantiation(type: MappedType) {
+                    return isMappedTypeWithKeyofConstraintDeclaration(type)
+                        && !(getModifiersTypeFromMappedType(type).flags & TypeFlags.TypeParameter);
+                }
+
                 function createMappedTypeNodeFromType(type: MappedType) {
                     Debug.assert(!!(type.flags & TypeFlags.Object));
                     const readonlyToken = type.declaration.readonlyToken ? factory.createToken(type.declaration.readonlyToken.kind) as ReadonlyKeyword | PlusToken | MinusToken : undefined;
@@ -5216,7 +5247,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                     if (isMappedTypeWithKeyofConstraintDeclaration(type)) {
                         // We have a { [P in keyof T]: X }
                         // We do this to ensure we retain the toplevel keyof-ness of the type which may be lost due to keyof distribution during `getConstraintTypeFromMappedType`
-                        if (!(getModifiersTypeFromMappedType(type).flags & TypeFlags.TypeParameter) && context.flags & NodeBuilderFlags.GenerateNamesForShadowedTypeParams) {
+                        if (isHomomorphicMappedTypeWithNonHomomorphicInstantiation(type) && context.flags & NodeBuilderFlags.GenerateNamesForShadowedTypeParams) {
                             const newParam = createTypeParameter(createSymbol(SymbolFlags.TypeParameter, "T" as __String));
                             const name = typeParameterToName(newParam, context);
                             newTypeVariable = factory.createTypeReferenceNode(name);
@@ -5232,13 +5263,14 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                     const mappedTypeNode = factory.createMappedTypeNode(readonlyToken, typeParameterNode, nameTypeNode, questionToken, templateTypeNode, /*members*/ undefined);
                     context.approximateLength += 10;
                     const result = setEmitFlags(mappedTypeNode, EmitFlags.SingleLine);
-                    if (isMappedTypeWithKeyofConstraintDeclaration(type) && !(getModifiersTypeFromMappedType(type).flags & TypeFlags.TypeParameter) && context.flags & NodeBuilderFlags.GenerateNamesForShadowedTypeParams) {
+                    if (isHomomorphicMappedTypeWithNonHomomorphicInstantiation(type) && context.flags & NodeBuilderFlags.GenerateNamesForShadowedTypeParams) {
                         // homomorphic mapped type with a non-homomorphic naive inlining
                         // wrap it with a conditional like `SomeModifiersType extends infer U ? {..the mapped type...} : never` to ensure the resulting
                         // type stays homomorphic
+                        const originalConstraint = instantiateType(getConstraintOfTypeParameter(getTypeFromTypeNode((type.declaration.typeParameter.constraint! as TypeOperatorNode).type) as TypeParameter) || unknownType, type.mapper);
                         return factory.createConditionalTypeNode(
                             typeToTypeNodeHelper(getModifiersTypeFromMappedType(type), context),
-                            factory.createInferTypeNode(factory.createTypeParameterDeclaration(/*modifiers*/ undefined, factory.cloneNode(newTypeVariable!.typeName) as Identifier)),
+                            factory.createInferTypeNode(factory.createTypeParameterDeclaration(/*modifiers*/ undefined, factory.cloneNode(newTypeVariable!.typeName) as Identifier, originalConstraint.flags & TypeFlags.Unknown ? undefined : typeToTypeNodeHelper(originalConstraint, context))),
                             result,
                             factory.createKeywordTypeNode(SyntaxKind.NeverKeyword)
                         );
@@ -5858,7 +5890,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                 const expandedParams = getExpandedParameters(signature, /*skipUnionExpanding*/ true)[0];
                 // If the expanded parameter list had a variadic in a non-trailing position, don't expand it
                 const parameters = (some(expandedParams, p => p !== expandedParams[expandedParams.length - 1] && !!(getCheckFlags(p) & CheckFlags.RestParameter)) ? signature.parameters : expandedParams).map(parameter => symbolToParameterDeclaration(parameter, context, kind === SyntaxKind.Constructor, options?.privateSymbolVisitor, options?.bundledImports));
-                const thisParameter = tryGetThisParameterDeclaration(signature, context);
+                const thisParameter = context.flags & NodeBuilderFlags.OmitThisParameter ? undefined : tryGetThisParameterDeclaration(signature, context);
                 if (thisParameter) {
                     parameters.unshift(thisParameter);
                 }
@@ -7081,7 +7113,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                     }
                 }
 
-                function serializeSymbol(symbol: Symbol, isPrivate: boolean, propertyAsAlias: boolean) {
+                function serializeSymbol(symbol: Symbol, isPrivate: boolean, propertyAsAlias: boolean): void {
                     // cache visited list based on merged symbol, since we want to use the unmerged top-level symbol, but
                     // still skip reserializing it if we encounter the merged product later on
                     const visitedSym = getMergedSymbol(symbol);
@@ -7094,12 +7126,11 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                     if (skipMembershipCheck || (!!length(symbol.declarations) && some(symbol.declarations, d => !!findAncestor(d, n => n === enclosingDeclaration)))) {
                         const oldContext = context;
                         context = cloneNodeBuilderContext(context);
-                        const result = serializeSymbolWorker(symbol, isPrivate, propertyAsAlias);
+                        serializeSymbolWorker(symbol, isPrivate, propertyAsAlias);
                         if (context.reportedDiagnostic) {
                             oldcontext.reportedDiagnostic = context.reportedDiagnostic; // hoist diagnostic result into outer context
                         }
                         context = oldContext;
-                        return result;
                     }
                 }
 
@@ -7113,7 +7144,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                 // If it's a property: emit `export default _default` with a `_default` prop
                 // If it's a class/interface/function: emit a class/interface/function with a `default` modifier
                 // These forms can merge, eg (`export default 12; export default interface A {}`)
-                function serializeSymbolWorker(symbol: Symbol, isPrivate: boolean, propertyAsAlias: boolean) {
+                function serializeSymbolWorker(symbol: Symbol, isPrivate: boolean, propertyAsAlias: boolean): void {
                     const symbolName = unescapeLeadingUnderscores(symbol.escapedName);
                     const isDefault = symbol.escapedName === InternalSymbolName.Default;
                     if (isPrivate && !(context.flags & NodeBuilderFlags.AllowAnonymousIdentifier) && isStringANonContextualKeyword(symbolName) && !isDefault) {
@@ -9430,11 +9461,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
             if (reportErrors && !declarationBelongsToPrivateAmbientMember(element)) {
                 reportImplicitAny(element, anyType);
             }
-            // When we're including the pattern in the type (an indication we're obtaining a contextual type), we
-            // use the non-inferrable any type. Inference will never directly infer this type, but it is possible
-            // to infer a type that contains it, e.g. for a binding pattern like [foo] or { foo }. In such cases,
-            // widening of the binding pattern type substitutes a regular any for the non-inferrable any.
-            return includePatternInType ? nonInferrableAnyType : anyType;
+            return anyType;
         }
 
         // Return the type implied by an object binding pattern
@@ -10489,7 +10516,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                         error(declaration.typeExpression.type, Diagnostics.Type_alias_0_circularly_references_itself, symbolToString(symbol));
                     }
                     else {
-                        error(isNamedDeclaration(declaration) ? declaration.name : declaration || declaration, Diagnostics.Type_alias_0_circularly_references_itself, symbolToString(symbol));
+                        error(isNamedDeclaration(declaration) ? declaration.name || declaration : declaration, Diagnostics.Type_alias_0_circularly_references_itself, symbolToString(symbol));
                     }
                 }
                 links.declaredType = type;
@@ -11876,12 +11903,18 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                     else if ((type as MappedType).objectFlags & ObjectFlags.Mapped) {
                         resolveMappedTypeMembers(type as MappedType);
                     }
+                    else {
+                        Debug.fail("Unhandled object type " + Debug.formatObjectFlags(type.objectFlags));
+                    }
                 }
                 else if (type.flags & TypeFlags.Union) {
                     resolveUnionTypeMembers(type as UnionType);
                 }
                 else if (type.flags & TypeFlags.Intersection) {
                     resolveIntersectionTypeMembers(type as IntersectionType);
+                }
+                else {
+                    Debug.fail("Unhandled type " + Debug.formatTypeFlags(type.flags));
                 }
             }
             return type as ResolvedType;
@@ -12098,7 +12131,8 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                         }
                     }
                 }
-                return getIntersectionType(constraints);
+                // The source types were normalized; ensure the result is normalized too.
+                return getNormalizedType(getIntersectionType(constraints), /*writing*/ false);
             }
             return undefined;
         }
@@ -12723,12 +12757,14 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
 
         // Return list of type parameters with duplicates removed (duplicate identifier errors are generated in the actual
         // type checking functions).
-        function getTypeParametersFromDeclaration(declaration: DeclarationWithTypeParameters): TypeParameter[] | undefined {
+        function getTypeParametersFromDeclaration(declaration: DeclarationWithTypeParameters): readonly TypeParameter[] | undefined {
             let result: TypeParameter[] | undefined;
             for (const node of getEffectiveTypeParameterDeclarations(declaration)) {
                 result = appendIfUnique(result, getDeclaredTypeOfTypeParameter(node.symbol));
             }
-            return result;
+            return result?.length ? result
+                : isFunctionDeclaration(declaration) ? getSignatureOfTypeTag(declaration)?.typeParameters
+                : undefined;
         }
 
         function symbolsToArray(symbols: SymbolTable): Symbol[] {
@@ -13473,12 +13509,12 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
 
         // This function is used to propagate certain flags when creating new object type references and union types.
         // It is only necessary to do so if a constituent type might be the undefined type, the null type, the type
-        // of an object literal or the anyFunctionType. This is because there are operations in the type checker
+        // of an object literal or a non-inferrable type. This is because there are operations in the type checker
         // that care about the presence of such types at arbitrary depth in a containing type.
-        function getPropagatingFlagsOfTypes(types: readonly Type[], excludeKinds: TypeFlags): ObjectFlags {
+        function getPropagatingFlagsOfTypes(types: readonly Type[], excludeKinds?: TypeFlags): ObjectFlags {
             let result: ObjectFlags = 0;
             for (const type of types) {
-                if (!(type.flags & excludeKinds)) {
+                if (excludeKinds === undefined || !(type.flags & excludeKinds)) {
                     result |= getObjectFlags(type);
                 }
             }
@@ -13491,7 +13527,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
             if (!type) {
                 type = createObjectType(ObjectFlags.Reference, target.symbol) as TypeReference;
                 target.instantiations.set(id, type);
-                type.objectFlags |= typeArguments ? getPropagatingFlagsOfTypes(typeArguments, /*excludeKinds*/ 0) : 0;
+                type.objectFlags |= typeArguments ? getPropagatingFlagsOfTypes(typeArguments) : 0;
                 type.target = target;
                 type.resolvedTypeArguments = typeArguments;
             }
@@ -15269,20 +15305,24 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
          * type parameters in the union with a special never type that is treated as a literal in `getReducedType`, we can cause the `getReducedType` logic
          * to reduce the resulting type if possible (since only intersections with conflicting literal-typed properties are reducible).
          */
-        function isPossiblyReducibleByInstantiation(type: UnionType): boolean {
-            return some(type.types, t => {
-                const uniqueFilled = getUniqueLiteralFilledInstantiation(t);
-                return getReducedType(uniqueFilled) !== uniqueFilled;
-            });
+        function isPossiblyReducibleByInstantiation(type: Type): boolean {
+            const uniqueFilled = getUniqueLiteralFilledInstantiation(type);
+            return getReducedType(uniqueFilled) !== uniqueFilled;
+        }
+
+        function shouldDeferIndexType(type: Type) {
+            return !!(type.flags & TypeFlags.InstantiableNonPrimitive ||
+                isGenericTupleType(type) ||
+                isGenericMappedType(type) && !hasDistributiveNameType(type) ||
+                type.flags & TypeFlags.Union && some((type as UnionType).types, isPossiblyReducibleByInstantiation) ||
+                type.flags & TypeFlags.Intersection && maybeTypeOfKind(type, TypeFlags.Instantiable) && some((type as IntersectionType).types, isEmptyAnonymousObjectType));
         }
 
         function getIndexType(type: Type, stringsOnly = keyofStringsOnly, noIndexSignatures?: boolean): Type {
             type = getReducedType(type);
-            return type.flags & TypeFlags.Union ? isPossiblyReducibleByInstantiation(type as UnionType)
-                    ? getIndexTypeForGenericType(type as InstantiableType | UnionOrIntersectionType, stringsOnly)
-                    : getIntersectionType(map((type as UnionType).types, t => getIndexType(t, stringsOnly, noIndexSignatures))) :
+            return shouldDeferIndexType(type) ? getIndexTypeForGenericType(type as InstantiableType | UnionOrIntersectionType, stringsOnly) :
+                type.flags & TypeFlags.Union ? getIntersectionType(map((type as UnionType).types, t => getIndexType(t, stringsOnly, noIndexSignatures))) :
                 type.flags & TypeFlags.Intersection ? getUnionType(map((type as IntersectionType).types, t => getIndexType(t, stringsOnly, noIndexSignatures))) :
-                type.flags & TypeFlags.InstantiableNonPrimitive || isGenericTupleType(type) || isGenericMappedType(type) && !hasDistributiveNameType(type) ? getIndexTypeForGenericType(type as InstantiableType | UnionOrIntersectionType, stringsOnly) :
                 getObjectFlags(type) & ObjectFlags.Mapped ? getIndexTypeForMappedType(type as MappedType, stringsOnly, noIndexSignatures) :
                 type === wildcardType ? wildcardType :
                 type.flags & TypeFlags.Unknown ? neverType :
@@ -15551,10 +15591,15 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                         getFlowTypeOfReference(accessExpression, propType) :
                         propType;
                 }
-                if (everyType(objectType, isTupleType) && isNumericLiteralName(propName) && +propName >= 0) {
+                if (everyType(objectType, isTupleType) && isNumericLiteralName(propName)) {
+                    const index = +propName;
                     if (accessNode && everyType(objectType, t => !(t as TupleTypeReference).target.hasRestElement) && !(accessFlags & AccessFlags.NoTupleBoundsCheck)) {
                         const indexNode = getIndexNodeForAccessExpression(accessNode);
                         if (isTupleType(objectType)) {
+                            if (index < 0) {
+                                error(indexNode, Diagnostics.A_tuple_type_cannot_be_indexed_with_a_negative_value);
+                                return undefinedType;
+                            }
                             error(indexNode, Diagnostics.Tuple_type_0_of_length_1_has_no_element_at_index_2,
                                 typeToString(objectType), getTypeReferenceArity(objectType), unescapeLeadingUnderscores(propName));
                         }
@@ -15562,11 +15607,13 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                             error(indexNode, Diagnostics.Property_0_does_not_exist_on_type_1, unescapeLeadingUnderscores(propName), typeToString(objectType));
                         }
                     }
-                    errorIfWritingToReadonlyIndex(getIndexInfoOfType(objectType, numberType));
-                    return mapType(objectType, t => {
-                        const restType = getRestTypeOfTupleType(t as TupleTypeReference) || undefinedType;
-                        return accessFlags & AccessFlags.IncludeUndefined ? getUnionType([restType, undefinedType]) : restType;
-                    });
+                    if (index >= 0) {
+                        errorIfWritingToReadonlyIndex(getIndexInfoOfType(objectType, numberType));
+                        return mapType(objectType, t => {
+                            const restType = getRestTypeOfTupleType(t as TupleTypeReference) || undefinedType;
+                            return accessFlags & AccessFlags.IncludeUndefined ? getUnionType([restType, undefinedType]) : restType;
+                        });
+                    }
                 }
             }
             if (!(indexType.flags & TypeFlags.Nullable) && isTypeAssignableToKind(indexType, TypeFlags.StringLike | TypeFlags.NumberLike | TypeFlags.ESSymbolLike)) {
@@ -16834,31 +16881,24 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
             }
         }
 
-        function attachDebugPrototypeIfDebug(mapper: TypeMapper): TypeMapper {
-            if (Debug.isDebugging) {
-                return Object.setPrototypeOf(mapper, DebugTypeMapper.prototype);
-            }
-            return mapper;
-        }
-
         function makeUnaryTypeMapper(source: Type, target: Type): TypeMapper {
-            return attachDebugPrototypeIfDebug({ kind: TypeMapKind.Simple, source, target });
+            return Debug.attachDebugPrototypeIfDebug({ kind: TypeMapKind.Simple, source, target });
         }
 
         function makeArrayTypeMapper(sources: readonly TypeParameter[], targets: readonly Type[] | undefined): TypeMapper {
-            return attachDebugPrototypeIfDebug({ kind: TypeMapKind.Array, sources, targets });
+            return Debug.attachDebugPrototypeIfDebug({ kind: TypeMapKind.Array, sources, targets });
         }
 
         function makeFunctionTypeMapper(func: (t: Type) => Type, debugInfo: () => string): TypeMapper {
-            return attachDebugPrototypeIfDebug({ kind: TypeMapKind.Function, func, debugInfo: Debug.isDebugging ? debugInfo : undefined });
+            return Debug.attachDebugPrototypeIfDebug({ kind: TypeMapKind.Function, func, debugInfo: Debug.isDebugging ? debugInfo : undefined });
         }
 
         function makeDeferredTypeMapper(sources: readonly TypeParameter[], targets: (() => Type)[]) {
-            return attachDebugPrototypeIfDebug({ kind: TypeMapKind.Deferred, sources, targets });
+            return Debug.attachDebugPrototypeIfDebug({ kind: TypeMapKind.Deferred, sources, targets });
         }
 
         function makeCompositeTypeMapper(kind: TypeMapKind.Composite | TypeMapKind.Merged, mapper1: TypeMapper, mapper2: TypeMapper): TypeMapper {
-            return attachDebugPrototypeIfDebug({ kind, mapper1, mapper2 });
+            return Debug.attachDebugPrototypeIfDebug({ kind, mapper1, mapper2 });
         }
 
         function createTypeEraser(sources: readonly TypeParameter[]): TypeMapper {
@@ -17173,6 +17213,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
             result.mapper = mapper;
             result.aliasSymbol = aliasSymbol || type.aliasSymbol;
             result.aliasTypeArguments = aliasSymbol ? aliasTypeArguments : instantiateTypes(type.aliasTypeArguments, mapper);
+            result.objectFlags |= result.aliasTypeArguments ? getPropagatingFlagsOfTypes(result.aliasTypeArguments) : 0;
             return result;
         }
 
@@ -19341,13 +19382,21 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
             }
 
             function structuredTypeRelatedTo(source: Type, target: Type, reportErrors: boolean, intersectionState: IntersectionState): Ternary {
+                const saveErrorInfo = captureErrorCalculationState();
+                const result = structuredTypeRelatedToWorker(source, target, reportErrors, intersectionState, saveErrorInfo);
+                if (result) {
+                    resetErrorInfo(saveErrorInfo);
+                }
+                return result;
+            }
+
+            function structuredTypeRelatedToWorker(source: Type, target: Type, reportErrors: boolean, intersectionState: IntersectionState, saveErrorInfo: ReturnType<typeof captureErrorCalculationState>): Ternary {
                 if (intersectionState & IntersectionState.PropertyCheck) {
                     return propertiesRelatedTo(source, target, reportErrors, /*excludedProperties*/ undefined, IntersectionState.None);
                 }
                 let result: Ternary;
                 let originalErrorInfo: DiagnosticMessageChain | undefined;
                 let varianceCheckFailed = false;
-                const saveErrorInfo = captureErrorCalculationState();
                 let sourceFlags = source.flags;
                 const targetFlags = target.flags;
                 if (relation === identityRelation) {
@@ -19411,7 +19460,6 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                         if (constraint && everyType(constraint, c => c !== source)) { // Skip comparison if expansion contains the source itself
                             // TODO: Stack errors so we get a pyramid for the "normal" comparison above, _and_ a second for this
                             if (result = isRelatedTo(constraint, target, RecursionFlags.Source, /*reportErrors*/ false, /*headMessage*/ undefined, intersectionState)) {
-                                resetErrorInfo(saveErrorInfo);
                                 return result;
                             }
                         }
@@ -19545,7 +19593,6 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                             result &= isRelatedTo((source as IndexedAccessType).indexType, (target as IndexedAccessType).indexType, RecursionFlags.Both, reportErrors);
                         }
                         if (result) {
-                            resetErrorInfo(saveErrorInfo);
                             return result;
                         }
                         if (reportErrors) {
@@ -19650,7 +19697,6 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                     // If we reach 10 levels of nesting for the same conditional type, assume it is an infinitely expanding recursive
                     // conditional type and bail out with a Ternary.Maybe result.
                     if (isDeeplyNestedType(target, targetStack, targetDepth, 10)) {
-                        resetErrorInfo(saveErrorInfo);
                         return Ternary.Maybe;
                     }
                     const c = target as ConditionalType;
@@ -19665,7 +19711,6 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                         if (result = skipTrue ? Ternary.True : isRelatedTo(source, getTrueTypeFromConditionalType(c), RecursionFlags.Target, /*reportErrors*/ false)) {
                             result &= skipFalse ? Ternary.True : isRelatedTo(source, getFalseTypeFromConditionalType(c), RecursionFlags.Target, /*reportErrors*/ false);
                             if (result) {
-                                resetErrorInfo(saveErrorInfo);
                                 return result;
                             }
                         }
@@ -19698,12 +19743,10 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                         const constraint = getConstraintOfType(source as TypeVariable) || unknownType;
                         // hi-speed no-this-instantiation check (less accurate, but avoids costly `this`-instantiation when the constraint will suffice), see #28231 for report on why this is needed
                         if (result = isRelatedTo(constraint, target, RecursionFlags.Source, /*reportErrors*/ false, /*headMessage*/ undefined, intersectionState)) {
-                            resetErrorInfo(saveErrorInfo);
                             return result;
                         }
                         // slower, fuller, this-instantiated check (necessary when comparing raw `this` types from base classes), see `subclassWithPolymorphicThisIsAssignable.ts` test for example
                         else if (result = isRelatedTo(getTypeWithThisArgument(constraint, source), target, RecursionFlags.Source, reportErrors && constraint !== unknownType && !(targetFlags & sourceFlags & TypeFlags.TypeParameter), /*headMessage*/ undefined, intersectionState)) {
-                            resetErrorInfo(saveErrorInfo);
                             return result;
                         }
                         if (isMappedTypeGenericIndexedAccess(source)) {
@@ -19712,7 +19755,6 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                             const indexConstraint = getConstraintOfType((source as IndexedAccessType).indexType);
                             if (indexConstraint) {
                                 if (result = isRelatedTo(getIndexedAccessType((source as IndexedAccessType).objectType, indexConstraint), target, RecursionFlags.Source, reportErrors)) {
-                                    resetErrorInfo(saveErrorInfo);
                                     return result;
                                 }
                             }
@@ -19721,7 +19763,6 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                 }
                 else if (sourceFlags & TypeFlags.Index) {
                     if (result = isRelatedTo(keyofConstraintType, target, RecursionFlags.Source, reportErrors)) {
-                        resetErrorInfo(saveErrorInfo);
                         return result;
                     }
                 }
@@ -19729,7 +19770,6 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                     if (!(targetFlags & TypeFlags.TemplateLiteral)) {
                         const constraint = getBaseConstraintOfType(source);
                         if (constraint && constraint !== source && (result = isRelatedTo(constraint, target, RecursionFlags.Source, reportErrors))) {
-                            resetErrorInfo(saveErrorInfo);
                             return result;
                         }
                     }
@@ -19740,14 +19780,12 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                             return Ternary.False;
                         }
                         if (result = isRelatedTo((source as StringMappingType).type, (target as StringMappingType).type, RecursionFlags.Both, reportErrors)) {
-                            resetErrorInfo(saveErrorInfo);
                             return result;
                         }
                     }
                     else {
                         const constraint = getBaseConstraintOfType(source);
                         if (constraint && (result = isRelatedTo(constraint, target, RecursionFlags.Source, reportErrors))) {
-                            resetErrorInfo(saveErrorInfo);
                             return result;
                         }
                     }
@@ -19756,7 +19794,6 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                     // If we reach 10 levels of nesting for the same conditional type, assume it is an infinitely expanding recursive
                     // conditional type and bail out with a Ternary.Maybe result.
                     if (isDeeplyNestedType(source, sourceStack, sourceDepth, 10)) {
-                        resetErrorInfo(saveErrorInfo);
                         return Ternary.Maybe;
                     }
                     if (targetFlags & TypeFlags.Conditional) {
@@ -19779,7 +19816,6 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                                 result &= isRelatedTo(getFalseTypeFromConditionalType(source as ConditionalType), getFalseTypeFromConditionalType(target as ConditionalType), RecursionFlags.Both, reportErrors);
                             }
                             if (result) {
-                                resetErrorInfo(saveErrorInfo);
                                 return result;
                             }
                         }
@@ -19790,7 +19826,6 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                         const distributiveConstraint = hasNonCircularBaseConstraint(source) ? getConstraintOfDistributiveConditionalType(source as ConditionalType) : undefined;
                         if (distributiveConstraint) {
                             if (result = isRelatedTo(distributiveConstraint, target, RecursionFlags.Source, reportErrors)) {
-                                resetErrorInfo(saveErrorInfo);
                                 return result;
                             }
                         }
@@ -19801,7 +19836,6 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                     const defaultConstraint = getDefaultConstraintOfConditionalType(source as ConditionalType);
                     if (defaultConstraint) {
                         if (result = isRelatedTo(defaultConstraint, target, RecursionFlags.Source, reportErrors)) {
-                            resetErrorInfo(saveErrorInfo);
                             return result;
                         }
                     }
@@ -19814,7 +19848,6 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                     if (isGenericMappedType(target)) {
                         if (isGenericMappedType(source)) {
                             if (result = mappedTypeRelatedTo(source, target, reportErrors)) {
-                                resetErrorInfo(saveErrorInfo);
                                 return result;
                             }
                         }
@@ -21180,39 +21213,35 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
         function literalTypesWithSameBaseType(types: Type[]): boolean {
             let commonBaseType: Type | undefined;
             for (const t of types) {
-                const baseType = getBaseTypeOfLiteralType(t);
-                if (!commonBaseType) {
-                    commonBaseType = baseType;
-                }
-                if (baseType === t || baseType !== commonBaseType) {
-                    return false;
+                if (!(t.flags & TypeFlags.Never)) {
+                    const baseType = getBaseTypeOfLiteralType(t);
+                    commonBaseType ??= baseType;
+                    if (baseType === t || baseType !== commonBaseType) {
+                        return false;
+                    }
                 }
             }
             return true;
         }
 
-        // When the candidate types are all literal types with the same base type, return a union
-        // of those literal types. Otherwise, return the leftmost type for which no type to the
-        // right is a supertype.
-        function getSupertypeOrUnion(types: Type[]): Type {
-            if (types.length === 1) {
-                return types[0];
-            }
-            return literalTypesWithSameBaseType(types) ?
-                getUnionType(types) :
-                reduceLeft(types, (s, t) => isTypeSubtypeOf(s, t) ? t : s)!;
+        function getCombinedTypeFlags(types: Type[]): TypeFlags {
+            return reduceLeft(types, (flags, t) => flags | (t.flags & TypeFlags.Union ? getCombinedTypeFlags((t as UnionType).types) : t.flags), 0);
         }
 
         function getCommonSupertype(types: Type[]): Type {
-            if (!strictNullChecks) {
-                return getSupertypeOrUnion(types);
+            if (types.length === 1) {
+                return types[0];
             }
-            const primaryTypes = filter(types, t => !(t.flags & TypeFlags.Nullable));
-            if (primaryTypes.length) {
-                const supertypeOrUnion = getSupertypeOrUnion(primaryTypes);
-                return primaryTypes === types ? supertypeOrUnion : getUnionType([supertypeOrUnion, ...filter(types, t => !!(t.flags & TypeFlags.Nullable))]);
-            }
-            return getUnionType(types, UnionReduction.Subtype);
+            // Remove nullable types from each of the candidates.
+            const primaryTypes = strictNullChecks ? sameMap(types, t => filterType(t, u => !(u.flags & TypeFlags.Nullable))) : types;
+            // When the candidate types are all literal types with the same base type, return a union
+            // of those literal types. Otherwise, return the leftmost type for which no type to the
+            // right is a supertype.
+            const superTypeOrUnion = literalTypesWithSameBaseType(primaryTypes) ?
+                getUnionType(primaryTypes) :
+                reduceLeft(primaryTypes, (s, t) => isTypeSubtypeOf(s, t) ? t : s)!;
+            // Add any nullable types that occurred in the candidates back to the result.
+            return primaryTypes === types ? superTypeOrUnion : getNullableType(superTypeOrUnion, getCombinedTypeFlags(types) & TypeFlags.Nullable);
         }
 
         // Return the leftmost type for which no type to the right is a subtype.
@@ -21335,8 +21364,13 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                 type.flags & TypeFlags.NumberLiteral ? numberType :
                 type.flags & TypeFlags.BigIntLiteral ? bigintType :
                 type.flags & TypeFlags.BooleanLiteral ? booleanType :
-                type.flags & TypeFlags.Union ? mapType(type as UnionType, getBaseTypeOfLiteralType) :
+                type.flags & TypeFlags.Union ? getBaseTypeOfLiteralTypeUnion(type as UnionType) :
                 type;
+        }
+
+        function getBaseTypeOfLiteralTypeUnion(type: UnionType) {
+            const key = `B${getTypeId(type)}`;
+            return getCachedType(key) ?? setCachedType(key, mapType(type, getBaseTypeOfLiteralType));
         }
 
         function getWidenedLiteralType(type: Type): Type {
@@ -22402,10 +22436,13 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                     propagationType = savePropagationType;
                     return;
                 }
-                if (source.aliasSymbol && source.aliasTypeArguments && source.aliasSymbol === target.aliasSymbol) {
-                    // Source and target are types originating in the same generic type alias declaration.
-                    // Simply infer from source type arguments to target type arguments.
-                    inferFromTypeArguments(source.aliasTypeArguments, target.aliasTypeArguments!, getAliasVariances(source.aliasSymbol));
+                if (source.aliasSymbol && source.aliasSymbol === target.aliasSymbol) {
+                    if (source.aliasTypeArguments) {
+                        // Source and target are types originating in the same generic type alias declaration.
+                        // Simply infer from source type arguments to target type arguments.
+                        inferFromTypeArguments(source.aliasTypeArguments, target.aliasTypeArguments!, getAliasVariances(source.aliasSymbol));
+                    }
+                    // And if there weren't any type arguments, there's no reason to run inference as the types must be the same.
                     return;
                 }
                 if (source === target && source.flags & TypeFlags.UnionOrIntersection) {
@@ -22461,18 +22498,26 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                     target = getActualTypeVariable(target);
                 }
                 if (target.flags & TypeFlags.TypeVariable) {
-                    // If target is a type parameter, make an inference, unless the source type contains
-                    // the anyFunctionType (the wildcard type that's used to avoid contextually typing functions).
-                    // Because the anyFunctionType is internal, it should not be exposed to the user by adding
-                    // it as an inference candidate. Hopefully, a better candidate will come along that does
-                    // not contain anyFunctionType when we come back to this argument for its second round
-                    // of inference. Also, we exclude inferences for silentNeverType (which is used as a wildcard
-                    // when constructing types from type parameters that had no inference candidates).
-                    if (source === nonInferrableAnyType || source === silentNeverType || (priority & InferencePriority.ReturnType && (source === autoType || source === autoArrayType)) || isFromInferenceBlockedSource(source)) {
+                    // Skip inference if the source is "blocked", which is used by the language service to
+                    // prevent inference on nodes currently being edited.
+                    if (isFromInferenceBlockedSource(source)) {
                         return;
                     }
                     const inference = getInferenceInfoForType(target);
                     if (inference) {
+                        // If target is a type parameter, make an inference, unless the source type contains
+                        // a "non-inferrable" type. Types with this flag set are markers used to prevent inference.
+                        //
+                        // For example:
+                        //     - anyFunctionType is a wildcard type that's used to avoid contextually typing functions;
+                        //       it's internal, so should not be exposed to the user by adding it as a candidate.
+                        //     - autoType (and autoArrayType) is a special "any" used in control flow; like anyFunctionType,
+                        //       it's internal and should not be observable.
+                        //     - silentNeverType is returned by getInferredType when instantiating a generic function for
+                        //       inference (and a type variable has no mapping).
+                        //
+                        // This flag is infectious; if we produce Box<never> (where never is silentNeverType), Box<never> is
+                        // also non-inferrable.
                         if (getObjectFlags(source) & ObjectFlags.NonInferrableType) {
                             return;
                         }
@@ -22530,15 +22575,11 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                     inferFromTypeArguments(getTypeArguments(source as TypeReference), getTypeArguments(target as TypeReference), getVariances((source as TypeReference).target));
                 }
                 else if (source.flags & TypeFlags.Index && target.flags & TypeFlags.Index) {
-                    contravariant = !contravariant;
-                    inferFromTypes((source as IndexType).type, (target as IndexType).type);
-                    contravariant = !contravariant;
+                    inferFromContravariantTypes((source as IndexType).type, (target as IndexType).type);
                 }
                 else if ((isLiteralType(source) || source.flags & TypeFlags.String) && target.flags & TypeFlags.Index) {
                     const empty = createEmptyObjectTypeFromStringLiteral(source);
-                    contravariant = !contravariant;
-                    inferWithPriority(empty, (target as IndexType).type, InferencePriority.LiteralKeyof);
-                    contravariant = !contravariant;
+                    inferFromContravariantTypesWithPriority(empty, (target as IndexType).type, InferencePriority.LiteralKeyof);
                 }
                 else if (source.flags & TypeFlags.IndexedAccess && target.flags & TypeFlags.IndexedAccess) {
                     inferFromTypes((source as IndexedAccessType).objectType, (target as IndexedAccessType).objectType);
@@ -22551,10 +22592,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                 }
                 else if (source.flags & TypeFlags.Substitution) {
                     inferFromTypes((source as SubstitutionType).baseType, target);
-                    const oldPriority = priority;
-                    priority |= InferencePriority.SubstituteSource;
-                    inferFromTypes((source as SubstitutionType).substitute, target); // Make substitute inference at a lower priority
-                    priority = oldPriority;
+                    inferWithPriority((source as SubstitutionType).substitute, target, InferencePriority.SubstituteSource); // Make substitute inference at a lower priority
                 }
                 else if (target.flags & TypeFlags.Conditional) {
                     invokeOnce(source, target, inferToConditionalType);
@@ -22602,6 +22640,20 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                 const savePriority = priority;
                 priority |= newPriority;
                 inferFromTypes(source, target);
+                priority = savePriority;
+            }
+
+            function inferFromContravariantTypesWithPriority(source: Type, target: Type, newPriority: InferencePriority) {
+                const savePriority = priority;
+                priority |= newPriority;
+                inferFromContravariantTypes(source, target);
+                priority = savePriority;
+            }
+
+            function inferToMultipleTypesWithPriority(source: Type, targets: Type[], targetFlags: TypeFlags, newPriority: InferencePriority) {
+                const savePriority = priority;
+                priority |= newPriority;
+                inferToMultipleTypes(source, targets, targetFlags);
                 priority = savePriority;
             }
 
@@ -22668,10 +22720,14 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
             }
 
             function inferFromContravariantTypes(source: Type, target: Type) {
+                contravariant = !contravariant;
+                inferFromTypes(source, target);
+                contravariant = !contravariant;
+            }
+
+            function inferFromContravariantTypesIfStrictFunctionTypes(source: Type, target: Type) {
                 if (strictFunctionTypes || priority & InferencePriority.AlwaysStrict) {
-                    contravariant = !contravariant;
-                    inferFromTypes(source, target);
-                    contravariant = !contravariant;
+                    inferFromContravariantTypes(source, target);
                 }
                 else {
                     inferFromTypes(source, target);
@@ -22834,11 +22890,8 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                     inferFromTypes(getFalseTypeFromConditionalType(source as ConditionalType), getFalseTypeFromConditionalType(target));
                 }
                 else {
-                    const savePriority = priority;
-                    priority |= contravariant ? InferencePriority.ContravariantConditional : 0;
                     const targetTypes = [getTrueTypeFromConditionalType(target), getFalseTypeFromConditionalType(target)];
-                    inferToMultipleTypes(source, targetTypes, target.flags);
-                    priority = savePriority;
+                    inferToMultipleTypesWithPriority(source, targetTypes, target.flags, contravariant ? InferencePriority.ContravariantConditional : 0);
                 }
             }
 
@@ -23023,21 +23076,18 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                 const sourceLen = sourceSignatures.length;
                 const targetLen = targetSignatures.length;
                 const len = sourceLen < targetLen ? sourceLen : targetLen;
-                const skipParameters = !!(getObjectFlags(source) & ObjectFlags.NonInferrableType);
                 for (let i = 0; i < len; i++) {
-                    inferFromSignature(getBaseSignature(sourceSignatures[sourceLen - len + i]), getErasedSignature(targetSignatures[targetLen - len + i]), skipParameters);
+                    inferFromSignature(getBaseSignature(sourceSignatures[sourceLen - len + i]), getErasedSignature(targetSignatures[targetLen - len + i]));
                 }
             }
 
-            function inferFromSignature(source: Signature, target: Signature, skipParameters: boolean) {
-                if (!skipParameters) {
-                    const saveBivariant = bivariant;
-                    const kind = target.declaration ? target.declaration.kind : SyntaxKind.Unknown;
-                    // Once we descend into a bivariant signature we remain bivariant for all nested inferences
-                    bivariant = bivariant || kind === SyntaxKind.MethodDeclaration || kind === SyntaxKind.MethodSignature || kind === SyntaxKind.Constructor;
-                    applyToParameterTypes(source, target, inferFromContravariantTypes);
-                    bivariant = saveBivariant;
-                }
+            function inferFromSignature(source: Signature, target: Signature) {
+                const saveBivariant = bivariant;
+                const kind = target.declaration ? target.declaration.kind : SyntaxKind.Unknown;
+                // Once we descend into a bivariant signature we remain bivariant for all nested inferences
+                bivariant = bivariant || kind === SyntaxKind.MethodDeclaration || kind === SyntaxKind.MethodSignature || kind === SyntaxKind.Constructor;
+                applyToParameterTypes(source, target, inferFromContravariantTypesIfStrictFunctionTypes);
+                bivariant = saveBivariant;
                 applyToReturnTypes(source, target, inferFromTypes);
             }
 
@@ -23308,6 +23358,15 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                         const key = getFlowCacheKey((node as AccessExpression).expression, declaredType, initialType, flowContainer);
                         return key && key + "." + propName;
                     }
+                    break;
+                case SyntaxKind.ObjectBindingPattern:
+                case SyntaxKind.ArrayBindingPattern:
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.ArrowFunction:
+                case SyntaxKind.MethodDeclaration:
+                    // Handle pseudo-references originating in getNarrowedTypeOfSymbol.
+                    return `${getNodeId(node)}#${getTypeId(declaredType)}`;
             }
             return undefined;
         }
@@ -23574,23 +23633,25 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
         // For example, when a variable of type number | string | boolean is assigned a value of type number | boolean,
         // we remove type string.
         function getAssignmentReducedType(declaredType: UnionType, assignedType: Type) {
-            if (declaredType !== assignedType) {
-                if (assignedType.flags & TypeFlags.Never) {
-                    return assignedType;
-                }
-                let reducedType = filterType(declaredType, t => typeMaybeAssignableTo(assignedType, t));
-                if (assignedType.flags & TypeFlags.BooleanLiteral && isFreshLiteralType(assignedType)) {
-                    reducedType = mapType(reducedType, getFreshTypeOfLiteralType); // Ensure that if the assignment is a fresh type, that we narrow to fresh types
-                }
-                // Our crude heuristic produces an invalid result in some cases: see GH#26130.
-                // For now, when that happens, we give up and don't narrow at all.  (This also
-                // means we'll never narrow for erroneous assignments where the assigned type
-                // is not assignable to the declared type.)
-                if (isTypeAssignableTo(assignedType, reducedType)) {
-                    return reducedType;
-                }
+            if (declaredType === assignedType) {
+                return declaredType;
             }
-            return declaredType;
+            if (assignedType.flags & TypeFlags.Never) {
+                return assignedType;
+            }
+            const key = `A${getTypeId(declaredType)},${getTypeId(assignedType)}`;
+            return getCachedType(key) ?? setCachedType(key, getAssignmentReducedTypeWorker(declaredType, assignedType));
+        }
+
+        function getAssignmentReducedTypeWorker(declaredType: UnionType, assignedType: Type) {
+            const filteredType = filterType(declaredType, t => typeMaybeAssignableTo(assignedType, t));
+            // Ensure that we narrow to fresh types if the assignment is a fresh boolean literal type.
+            const reducedType = assignedType.flags & TypeFlags.BooleanLiteral && isFreshLiteralType(assignedType) ? mapType(filteredType, getFreshTypeOfLiteralType) : filteredType;
+            // Our crude heuristic produces an invalid result in some cases: see GH#26130.
+            // For now, when that happens, we give up and don't narrow at all.  (This also
+            // means we'll never narrow for erroneous assignments where the assigned type
+            // is not assignable to the declared type.)
+            return isTypeAssignableTo(assignedType, reducedType) ? reducedType : declaredType;
         }
 
         function isFunctionObjectType(type: ObjectType): boolean {
@@ -24579,7 +24640,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                 }
                 // for (const _ in ref) acts as a nonnull on ref
                 if (isVariableDeclaration(node) && node.parent.parent.kind === SyntaxKind.ForInStatement && isMatchingReference(reference, node.parent.parent.expression)) {
-                    return getNonNullableTypeIfNeeded(getTypeFromFlowType(getTypeAtFlowNode(flow.antecedent)));
+                    return getNonNullableTypeIfNeeded(finalizeEvolvingArrayType(getTypeFromFlowType(getTypeAtFlowNode(flow.antecedent))));
                 }
                 // Assignment doesn't affect reference
                 return undefined;
@@ -25084,7 +25145,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                 const targetType = hasStaticModifier(Debug.checkDefined(symbol.valueDeclaration, "should always have a declaration"))
                     ? getTypeOfSymbol(classSymbol) as InterfaceType
                     : getDeclaredTypeOfSymbol(classSymbol);
-                return getNarrowedType(type, targetType, assumeTrue, isTypeDerivedFrom);
+                return getNarrowedType(type, targetType, assumeTrue, /*checkDerived*/ true);
             }
 
             function narrowTypeByOptionalChainContainment(type: Type, operator: SyntaxKind, value: Expression, assumeTrue: boolean): Type {
@@ -25358,31 +25419,49 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                     if (!nonConstructorTypeInUnion) return type;
                 }
 
-                return getNarrowedType(type, targetType, assumeTrue, isTypeDerivedFrom);
+                return getNarrowedType(type, targetType, assumeTrue, /*checkDerived*/ true);
             }
 
-            function getNarrowedType(type: Type, candidate: Type, assumeTrue: boolean, isRelated: (source: Type, target: Type) => boolean) {
+            function getNarrowedType(type: Type, candidate: Type, assumeTrue: boolean, checkDerived: boolean) {
+                const key = type.flags & TypeFlags.Union ? `N${getTypeId(type)},${getTypeId(candidate)},${(assumeTrue ? 1 : 0) | (checkDerived ? 2 : 0)}` : undefined;
+                return getCachedType(key) ?? setCachedType(key, getNarrowedTypeWorker(type, candidate, assumeTrue, checkDerived));
+            }
+
+            function getNarrowedTypeWorker(type: Type, candidate: Type, assumeTrue: boolean, checkDerived: boolean) {
+                const isRelated = checkDerived ? isTypeDerivedFrom : isTypeSubtypeOf;
                 if (!assumeTrue) {
                     return filterType(type, t => !isRelated(t, candidate));
                 }
-                // If the current type is a union type, remove all constituents that couldn't be instances of
-                // the candidate type. If one or more constituents remain, return a union of those.
-                if (type.flags & TypeFlags.Union) {
-                    const assignableType = filterType(type, t => isRelated(t, candidate));
-                    if (!(assignableType.flags & TypeFlags.Never)) {
-                        return assignableType;
-                    }
+                if (type.flags & TypeFlags.AnyOrUnknown) {
+                    return candidate;
                 }
-
-                // If the candidate type is a subtype of the target type, narrow to the candidate type.
-                // Otherwise, if the target type is assignable to the candidate type, keep the target type.
-                // Otherwise, if the candidate type is assignable to the target type, narrow to the candidate
-                // type. Otherwise, the types are completely unrelated, so narrow to an intersection of the
-                // two types.
-                return isTypeSubtypeOf(candidate, type) ? candidate :
-                     isTypeAssignableTo(type, candidate) ? type :
-                     isTypeAssignableTo(candidate, type) ? candidate :
-                     getIntersectionType([type, candidate]);
+                // We first attempt to filter the current type, narrowing constituents as appropriate and removing
+                // constituents that are unrelated to the candidate.
+                const keyPropertyName = type.flags & TypeFlags.Union ? getKeyPropertyName(type as UnionType) : undefined;
+                const narrowedType = mapType(candidate, c => {
+                    // If a discriminant property is available, use that to reduce the type.
+                    const discriminant = keyPropertyName && getTypeOfPropertyOfType(c, keyPropertyName);
+                    const matching = discriminant && getConstituentTypeForKeyType(type as UnionType, discriminant);
+                    // For each constituent t in the current type, if t and and c are directly related, pick the most
+                    // specific of the two. When t and c are related in both directions, we prefer c for type predicates
+                    // because that is the asserted type, but t for `instanceof` because generics aren't reflected in
+                    // prototype object types.
+                    const directlyRelated = mapType(matching || type, checkDerived ?
+                        t => isTypeDerivedFrom(t, c) ? t : isTypeDerivedFrom(c, t) ? c : neverType :
+                        t => isTypeSubtypeOf(c, t) ? c : isTypeSubtypeOf(t, c) ? t : neverType);
+                    // If no constituents are directly related, create intersections for any generic constituents that
+                    // are related by constraint.
+                    return directlyRelated.flags & TypeFlags.Never ?
+                        mapType(type, t => maybeTypeOfKind(t, TypeFlags.Instantiable) && isRelated(c, getBaseConstraintOfType(t) || unknownType) ? getIntersectionType([t, c]) : neverType) :
+                        directlyRelated;
+                });
+                // If filtering produced a non-empty type, return that. Otherwise, pick the most specific of the two
+                // based on assignability, or as a last resort produce an intersection.
+                return !(narrowedType.flags & TypeFlags.Never) ? narrowedType :
+                    isTypeSubtypeOf(candidate, type) ? candidate :
+                    isTypeAssignableTo(type, candidate) ? type :
+                    isTypeAssignableTo(candidate, type) ? candidate :
+                    getIntersectionType([type, candidate]);
             }
 
             function narrowTypeByCallExpression(type: Type, callExpression: CallExpression, assumeTrue: boolean): Type {
@@ -25412,7 +25491,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                     const predicateArgument = getTypePredicateArgument(predicate, callExpression);
                     if (predicateArgument) {
                         if (isMatchingReference(reference, predicateArgument)) {
-                            return getNarrowedType(type, predicate.type, assumeTrue, isTypeSubtypeOf);
+                            return getNarrowedType(type, predicate.type, assumeTrue, /*checkDerived*/ false);
                         }
                         if (strictNullChecks && assumeTrue && optionalChainContainsReference(predicateArgument, reference) &&
                             !(getTypeFacts(predicate.type) & TypeFacts.EQUndefined)) {
@@ -25420,7 +25499,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                         }
                         const access = getDiscriminantPropertyAccess(predicateArgument, type);
                         if (access) {
-                            return narrowTypeByDiscriminant(type, access, t => getNarrowedType(t, predicate.type!, assumeTrue, isTypeSubtypeOf));
+                            return narrowTypeByDiscriminant(type, access, t => getNarrowedType(t, predicate.type!, assumeTrue, /*checkDerived*/ false));
                         }
                     }
                 }
@@ -25610,7 +25689,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                 !((isJsxOpeningElement(node.parent) || isJsxSelfClosingElement(node.parent)) && node.parent.tagName === node) &&
                 (checkMode && checkMode & CheckMode.RestBindingElement ?
                     getContextualType(node, ContextFlags.SkipBindingPatterns)
-                    : getContextualType(node));
+                    : getContextualType(node, /*contextFlags*/ undefined));
             return contextualType && !isGenericType(contextualType);
         }
 
@@ -25783,9 +25862,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                 return getTypeOfSymbol(symbol);
             }
 
-            // We should only mark aliases as referenced if there isn't a local value declaration
-            // for the symbol. Also, don't mark any property access expression LHS - checkPropertyAccessExpression will handle that
-            if (!(node.parent && isPropertyAccessExpression(node.parent) && node.parent.expression === node)) {
+            if (shouldMarkIdentifierAliasReferenced(node)) {
                 markAliasReferenced(symbol, node);
             }
 
@@ -25931,6 +26008,25 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                 return type;
             }
             return assignmentKind ? getBaseTypeOfLiteralType(flowType) : flowType;
+        }
+
+        function shouldMarkIdentifierAliasReferenced(node: Identifier): boolean {
+            const parent = node.parent;
+            if (parent) {
+                // A property access expression LHS? checkPropertyAccessExpression will handle that.
+                if (isPropertyAccessExpression(parent) && parent.expression === node) {
+                    return false;
+                }
+                // Next two check for an identifier inside a type only export.
+                if (isExportSpecifier(parent) && parent.isTypeOnly) {
+                    return false;
+                }
+                const greatGrandparent = parent.parent?.parent;
+                if (greatGrandparent && isExportDeclaration(greatGrandparent) && greatGrandparent.isTypeOnly) {
+                    return false;
+                }
+            }
+            return true;
         }
 
         function isInsideFunctionOrInstancePropertyInitializer(node: Node, threshold: Node): boolean {
@@ -26542,7 +26638,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                     // We have an object literal method. Check if the containing object literal has a contextual type
                     // that includes a ThisType<T>. If so, T is the contextual type for 'this'. We continue looking in
                     // any directly enclosing object literals.
-                    const contextualType = getApparentTypeOfContextualType(containingLiteral);
+                    const contextualType = getApparentTypeOfContextualType(containingLiteral, /*contextFlags*/ undefined);
                     let literal = containingLiteral;
                     let type = contextualType;
                     while (type) {
@@ -26554,7 +26650,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                             break;
                         }
                         literal = literal.parent.parent as ObjectLiteralExpression;
-                        type = getApparentTypeOfContextualType(literal);
+                        type = getApparentTypeOfContextualType(literal, /*contextFlags*/ undefined);
                     }
                     // There was no contextual ThisType<T> for the containing object literal, so the contextual type
                     // for 'this' is the non-null form of the contextual type for the containing object literal or
@@ -26614,7 +26710,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
             }
         }
 
-        function getContextualTypeForVariableLikeDeclaration(declaration: VariableLikeDeclaration): Type | undefined {
+        function getContextualTypeForVariableLikeDeclaration(declaration: VariableLikeDeclaration, contextFlags: ContextFlags | undefined): Type | undefined {
             const typeNode = getEffectiveTypeAnnotationNode(declaration);
             if (typeNode) {
                 return getTypeFromTypeNode(typeNode);
@@ -26623,19 +26719,19 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                 case SyntaxKind.Parameter:
                     return getContextuallyTypedParameterType(declaration);
                 case SyntaxKind.BindingElement:
-                    return getContextualTypeForBindingElement(declaration);
+                    return getContextualTypeForBindingElement(declaration, contextFlags);
                 case SyntaxKind.PropertyDeclaration:
                     if (isStatic(declaration)) {
-                        return getContextualTypeForStaticPropertyDeclaration(declaration);
+                        return getContextualTypeForStaticPropertyDeclaration(declaration, contextFlags);
                     }
                 // By default, do nothing and return undefined - only the above cases have context implied by a parent
             }
         }
 
-        function getContextualTypeForBindingElement(declaration: BindingElement): Type | undefined {
+        function getContextualTypeForBindingElement(declaration: BindingElement, contextFlags: ContextFlags | undefined): Type | undefined {
             const parent = declaration.parent.parent;
             const name = declaration.propertyName || declaration.name;
-            const parentType = getContextualTypeForVariableLikeDeclaration(parent) ||
+            const parentType = getContextualTypeForVariableLikeDeclaration(parent, contextFlags) ||
                 parent.kind !== SyntaxKind.BindingElement && parent.initializer && checkDeclarationInitializer(parent, declaration.dotDotDotToken ? CheckMode.RestBindingElement : CheckMode.Normal);
             if (!parentType || isBindingPattern(name) || isComputedNonLiteralName(name)) return undefined;
             if (parent.name.kind === SyntaxKind.ArrayBindingPattern) {
@@ -26650,8 +26746,8 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
             }
         }
 
-        function getContextualTypeForStaticPropertyDeclaration(declaration: PropertyDeclaration): Type | undefined {
-            const parentType = isExpression(declaration.parent) && getContextualType(declaration.parent);
+        function getContextualTypeForStaticPropertyDeclaration(declaration: PropertyDeclaration, contextFlags: ContextFlags | undefined): Type | undefined {
+            const parentType = isExpression(declaration.parent) && getContextualType(declaration.parent, contextFlags);
             if (!parentType) return undefined;
             return getTypeOfPropertyOfContextualType(parentType, getSymbolOfNode(declaration).escapedName);
         }
@@ -26664,10 +26760,10 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
         //   the contextual type of an initializer expression is the type implied by the binding pattern.
         // Otherwise, in a binding pattern inside a variable or parameter declaration,
         //   the contextual type of an initializer expression is the type annotation of the containing declaration, if present.
-        function getContextualTypeForInitializerExpression(node: Expression, contextFlags?: ContextFlags): Type | undefined {
+        function getContextualTypeForInitializerExpression(node: Expression, contextFlags: ContextFlags | undefined): Type | undefined {
             const declaration = node.parent as VariableLikeDeclaration;
             if (hasInitializer(declaration) && node === declaration.initializer) {
-                const result = getContextualTypeForVariableLikeDeclaration(declaration);
+                const result = getContextualTypeForVariableLikeDeclaration(declaration, contextFlags);
                 if (result) {
                     return result;
                 }
@@ -26678,10 +26774,10 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
             return undefined;
         }
 
-        function getContextualTypeForReturnExpression(node: Expression): Type | undefined {
+        function getContextualTypeForReturnExpression(node: Expression, contextFlags: ContextFlags | undefined): Type | undefined {
             const func = getContainingFunction(node);
             if (func) {
-                let contextualReturnType = getContextualReturnType(func);
+                let contextualReturnType = getContextualReturnType(func, contextFlags);
                 if (contextualReturnType) {
                     const functionFlags = getFunctionFlags(func);
                     if (functionFlags & FunctionFlags.Generator) { // Generator or AsyncGenerator function
@@ -26706,7 +26802,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
             return undefined;
         }
 
-        function getContextualTypeForAwaitOperand(node: AwaitExpression, contextFlags?: ContextFlags): Type | undefined {
+        function getContextualTypeForAwaitOperand(node: AwaitExpression, contextFlags: ContextFlags | undefined): Type | undefined {
             const contextualType = getContextualType(node, contextFlags);
             if (contextualType) {
                 const contextualAwaitedType = getAwaitedTypeNoAlias(contextualType);
@@ -26715,11 +26811,11 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
             return undefined;
         }
 
-        function getContextualTypeForYieldOperand(node: YieldExpression): Type | undefined {
+        function getContextualTypeForYieldOperand(node: YieldExpression, contextFlags: ContextFlags | undefined): Type | undefined {
             const func = getContainingFunction(node);
             if (func) {
                 const functionFlags = getFunctionFlags(func);
-                const contextualReturnType = getContextualReturnType(func);
+                const contextualReturnType = getContextualReturnType(func, contextFlags);
                 if (contextualReturnType) {
                     return node.asteriskToken
                         ? contextualReturnType
@@ -26748,7 +26844,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
 
         function getContextualIterationType(kind: IterationTypeKind, functionDecl: SignatureDeclaration): Type | undefined {
             const isAsync = !!(getFunctionFlags(functionDecl) & FunctionFlags.Async);
-            const contextualReturnType = getContextualReturnType(functionDecl);
+            const contextualReturnType = getContextualReturnType(functionDecl, /*contextFlags*/ undefined);
             if (contextualReturnType) {
                 return getIterationTypeOfGeneratorFunctionReturnType(kind, contextualReturnType, isAsync)
                     || undefined;
@@ -26757,7 +26853,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
             return undefined;
         }
 
-        function getContextualReturnType(functionDecl: SignatureDeclaration): Type | undefined {
+        function getContextualReturnType(functionDecl: SignatureDeclaration, contextFlags: ContextFlags | undefined): Type | undefined {
             // If the containing function has a return type annotation, is a constructor, or is a get accessor whose
             // corresponding set accessor has a type annotation, return statements in the function are contextually typed
             const returnType = getReturnTypeFromAnnotation(functionDecl);
@@ -26772,7 +26868,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
             }
             const iife = getImmediatelyInvokedFunctionExpression(functionDecl);
             if (iife) {
-                return getContextualType(iife);
+                return getContextualType(iife, contextFlags);
             }
             return undefined;
         }
@@ -26812,7 +26908,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
             return undefined;
         }
 
-        function getContextualTypeForBinaryOperand(node: Expression, contextFlags?: ContextFlags): Type | undefined {
+        function getContextualTypeForBinaryOperand(node: Expression, contextFlags: ContextFlags | undefined): Type | undefined {
             const binaryExpression = node.parent as BinaryExpression;
             const { left, operatorToken, right } = binaryExpression;
             switch (operatorToken.kind) {
@@ -26853,6 +26949,14 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
             if (isPropertyAccessExpression(e)) {
                 const lhsType = getTypeOfExpression(e.expression);
                 return isPrivateIdentifier(e.name) ? tryGetPrivateIdentifierPropertyOfType(lhsType, e.name) : getPropertyOfType(lhsType, e.name.escapedText);
+            }
+            if (isElementAccessExpression(e)) {
+                const propType = checkExpressionCached(e.argumentExpression);
+                if (!isTypeUsableAsPropertyName(propType)) {
+                    return undefined;
+                }
+                const lhsType = getTypeOfExpression(e.expression);
+                return getPropertyOfType(lhsType, getPropertyNameFromType(propType));
             }
             return undefined;
 
@@ -27028,7 +27132,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
         // In an object literal contextually typed by a type T, the contextual type of a property assignment is the type of
         // the matching property in T, if one exists. Otherwise, it is the type of the numeric index signature in T, if one
         // exists. Otherwise, it is the type of the string index signature in T, if one exists.
-        function getContextualTypeForObjectLiteralMethod(node: MethodDeclaration, contextFlags?: ContextFlags): Type | undefined {
+        function getContextualTypeForObjectLiteralMethod(node: MethodDeclaration, contextFlags: ContextFlags | undefined): Type | undefined {
             Debug.assert(isObjectLiteralMethod(node));
             if (node.flags & NodeFlags.InWithStatement) {
                 // We cannot answer semantic questions within a with block, do not proceed any further
@@ -27037,9 +27141,9 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
             return getContextualTypeForObjectLiteralElement(node, contextFlags);
         }
 
-        function getContextualTypeForObjectLiteralElement(element: ObjectLiteralElementLike, contextFlags?: ContextFlags) {
+        function getContextualTypeForObjectLiteralElement(element: ObjectLiteralElementLike, contextFlags: ContextFlags | undefined) {
             const objectLiteral = element.parent as ObjectLiteralExpression;
-            const propertyAssignmentType = isPropertyAssignment(element) && getContextualTypeForVariableLikeDeclaration(element);
+            const propertyAssignmentType = isPropertyAssignment(element) && getContextualTypeForVariableLikeDeclaration(element, contextFlags);
             if (propertyAssignmentType) {
                 return propertyAssignmentType;
             }
@@ -27075,12 +27179,12 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
         }
 
         // In a contextually typed conditional expression, the true/false expressions are contextually typed by the same type.
-        function getContextualTypeForConditionalOperand(node: Expression, contextFlags?: ContextFlags): Type | undefined {
+        function getContextualTypeForConditionalOperand(node: Expression, contextFlags: ContextFlags | undefined): Type | undefined {
             const conditional = node.parent as ConditionalExpression;
             return node === conditional.whenTrue || node === conditional.whenFalse ? getContextualType(conditional, contextFlags) : undefined;
         }
 
-        function getContextualTypeForChildJsxExpression(node: JsxElement, child: JsxChild, contextFlags?: ContextFlags) {
+        function getContextualTypeForChildJsxExpression(node: JsxElement, child: JsxChild, contextFlags: ContextFlags | undefined) {
             const attributesType = getApparentTypeOfContextualType(node.openingElement.tagName, contextFlags);
             // JSX expression is in children of JSX Element, we will look for an "children" attribute (we get the name from JSX.ElementAttributesProperty)
             const jsxChildrenPropertyName = getJsxElementChildrenPropertyName(getJsxNamespaceAt(node));
@@ -27100,7 +27204,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
             }, /*noReductions*/ true));
         }
 
-        function getContextualTypeForJsxExpression(node: JsxExpression, contextFlags?: ContextFlags): Type | undefined {
+        function getContextualTypeForJsxExpression(node: JsxExpression, contextFlags: ContextFlags | undefined): Type | undefined {
             const exprParent = node.parent;
             return isJsxAttributeLike(exprParent)
                 ? getContextualType(node, contextFlags)
@@ -27109,7 +27213,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                     : undefined;
         }
 
-        function getContextualTypeForJsxAttribute(attribute: JsxAttribute | JsxSpreadAttribute, contextFlags?: ContextFlags): Type | undefined {
+        function getContextualTypeForJsxAttribute(attribute: JsxAttribute | JsxSpreadAttribute, contextFlags: ContextFlags | undefined): Type | undefined {
             // When we trying to resolve JsxOpeningLikeElement as a stateless function element, we will already give its attributes a contextual type
             // which is a type of the parameter of the signature we are trying out.
             // If there is no contextual type (e.g. we are trying to resolve stateful component), get attributes type from resolving element's tagName
@@ -27185,7 +27289,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
 
         // Return the contextual type for a given expression node. During overload resolution, a contextual type may temporarily
         // be "pushed" onto a node using the contextualType property.
-        function getApparentTypeOfContextualType(node: Expression | MethodDeclaration, contextFlags?: ContextFlags): Type | undefined {
+        function getApparentTypeOfContextualType(node: Expression | MethodDeclaration, contextFlags: ContextFlags | undefined): Type | undefined {
             const contextualType = isObjectLiteralMethod(node) ?
                 getContextualTypeForObjectLiteralMethod(node, contextFlags) :
                 getContextualType(node, contextFlags);
@@ -27200,7 +27304,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
 
         // If the given contextual type contains instantiable types and if a mapper representing
         // return type inferences is available, instantiate those types using that mapper.
-        function instantiateContextualType(contextualType: Type | undefined, node: Node, contextFlags?: ContextFlags): Type | undefined {
+        function instantiateContextualType(contextualType: Type | undefined, node: Node, contextFlags: ContextFlags | undefined): Type | undefined {
             if (contextualType && maybeTypeOfKind(contextualType, TypeFlags.Instantiable)) {
                 const inferenceContext = getInferenceContext(node);
                 // If no inferences have been made, nothing is gained from instantiating as type parameters
@@ -27257,7 +27361,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
          * @param node the expression whose contextual type will be returned.
          * @returns the contextual type of an expression.
          */
-        function getContextualType(node: Expression, contextFlags?: ContextFlags): Type | undefined {
+        function getContextualType(node: Expression, contextFlags: ContextFlags | undefined): Type | undefined {
             if (node.flags & NodeFlags.InWithStatement) {
                 // We cannot answer semantic questions within a with block, do not proceed any further
                 return undefined;
@@ -27275,9 +27379,9 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                     return getContextualTypeForInitializerExpression(node, contextFlags);
                 case SyntaxKind.ArrowFunction:
                 case SyntaxKind.ReturnStatement:
-                    return getContextualTypeForReturnExpression(node);
+                    return getContextualTypeForReturnExpression(node, contextFlags);
                 case SyntaxKind.YieldExpression:
-                    return getContextualTypeForYieldOperand(parent as YieldExpression);
+                    return getContextualTypeForYieldOperand(parent as YieldExpression, contextFlags);
                 case SyntaxKind.AwaitExpression:
                     return getContextualTypeForAwaitOperand(parent as AwaitExpression, contextFlags);
                 case SyntaxKind.CallExpression:
@@ -27326,7 +27430,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
             return undefined;
 
             function tryFindWhenConstTypeReference(node: Expression) {
-                return getContextualType(node);
+                return getContextualType(node, contextFlags);
             }
         }
 
@@ -27335,7 +27439,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
             return ancestor && ancestor.inferenceContext!;
         }
 
-        function getContextualJsxElementAttributesType(node: JsxOpeningLikeElement, contextFlags?: ContextFlags) {
+        function getContextualJsxElementAttributesType(node: JsxOpeningLikeElement, contextFlags: ContextFlags | undefined) {
             if (isJsxOpeningElement(node) && node.parent.contextualType && contextFlags !== ContextFlags.Completions) {
                 // Contextually applied type is moved from attributes up to the outer jsx attributes so when walking up from the children they get hit
                 // _However_ to hit them from the _attributes_ we must look for them here; otherwise we'll used the declared type
@@ -27667,7 +27771,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
             const elementCount = elements.length;
             const elementTypes: Type[] = [];
             const elementFlags: ElementFlags[] = [];
-            const contextualType = getApparentTypeOfContextualType(node);
+            const contextualType = getApparentTypeOfContextualType(node, /*contextFlags*/ undefined);
             const inDestructuringPattern = isAssignmentTarget(node);
             const inConstContext = isConstContext(node);
             let hasOmittedExpression = false;
@@ -27848,7 +27952,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
             let propertiesArray: Symbol[] = [];
             let spread: Type = emptyObjectType;
 
-            const contextualType = getApparentTypeOfContextualType(node);
+            const contextualType = getApparentTypeOfContextualType(node, /*contextFlags*/ undefined);
             const contextualTypeHasPattern = contextualType && contextualType.pattern &&
                 (contextualType.pattern.kind === SyntaxKind.ObjectBindingPattern || contextualType.pattern.kind === SyntaxKind.ObjectLiteralExpression);
             const inConstContext = isConstContext(node);
@@ -28217,7 +28321,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                         error(attributes, Diagnostics._0_are_specified_twice_The_attribute_named_0_will_be_overwritten, unescapeLeadingUnderscores(jsxChildrenPropertyName));
                     }
 
-                    const contextualType = getApparentTypeOfContextualType(openingLikeElement.attributes);
+                    const contextualType = getApparentTypeOfContextualType(openingLikeElement.attributes, /*contextFlags*/ undefined);
                     const childrenContextualType = contextualType && getTypeOfPropertyOfContextualType(contextualType, jsxChildrenPropertyName);
                     // If there are children in the body of JSX element, create dummy attribute "children" with the union of children types so that it will pass the attribute checking process
                     const childrenPropSymbol = createSymbol(SymbolFlags.Property, jsxChildrenPropertyName);
@@ -30691,7 +30795,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
 
             let typeArguments: NodeArray<TypeNode> | undefined;
 
-            if (!isDecorator) {
+            if (!isDecorator && !isSuperCall(node)) {
                 typeArguments = (node as CallExpression).typeArguments;
 
                 // We already perform checking on the type arguments on the class declaration itself.
@@ -30965,7 +31069,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                         argCheckMode = checkMode & CheckMode.IsForStringLiteralArgumentCompletions;
                         if (inferenceContext) {
                             const typeArgumentTypes = inferTypeArguments(node, candidate, args, argCheckMode, inferenceContext);
-                            checkCandidate = getSignatureInstantiation(candidate, typeArgumentTypes, isInJSFile(candidate.declaration), inferenceContext && inferenceContext.inferredTypeParameters);
+                            checkCandidate = getSignatureInstantiation(candidate, typeArgumentTypes, isInJSFile(candidate.declaration), inferenceContext.inferredTypeParameters);
                             // If the original signature has a generic rest type, instantiation may produce a
                             // signature with different arity and we need to perform another arity check.
                             if (getNonArrayRestType(candidate) && !hasCorrectArity(node, args, checkCandidate, signatureHelpTrailingComma)) {
@@ -31210,7 +31314,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
             // returns a function type, we choose to defer processing. This narrowly permits function composition
             // operators to flow inferences through return types, but otherwise processes calls right away. We
             // use the resolvingSignature singleton to indicate that we deferred processing. This result will be
-            // propagated out and eventually turned into nonInferrableType (a type that is assignable to anything and
+            // propagated out and eventually turned into silentNeverType (a type that is assignable to anything and
             // from which we never make inferences).
             if (checkMode & CheckMode.SkipGenericFunctions && !node.typeArguments && callSignatures.some(isGenericFunctionReturningFunction)) {
                 skippedGenericFunction(node, checkMode);
@@ -31845,8 +31949,8 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
             const signature = getResolvedSignature(node, /*candidatesOutArray*/ undefined, checkMode);
             if (signature === resolvingSignature) {
                 // CheckMode.SkipGenericFunctions is enabled and this is a call to a generic function that
-                // returns a function type. We defer checking and return nonInferrableType.
-                return nonInferrableType;
+                // returns a function type. We defer checking and return silentNeverType.
+                return silentNeverType;
             }
 
             checkDeprecatedSignature(signature, node);
@@ -32515,17 +32619,6 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                     }
                 }
             }
-            const restType = getEffectiveRestType(context);
-            if (restType && restType.flags & TypeFlags.TypeParameter) {
-                // The contextual signature has a generic rest parameter. We first instantiate the contextual
-                // signature (without fixing type parameters) and assign types to contextually typed parameters.
-                const instantiatedContext = instantiateSignature(context, inferenceContext.nonFixingMapper);
-                assignContextualParameterTypes(signature, instantiatedContext);
-                // We then infer from a tuple type representing the parameters that correspond to the contextual
-                // rest parameter.
-                const restPos = getParameterCount(context) - 1;
-                inferTypes(inferenceContext.inferences, getRestTypeAtPosition(signature, restPos), restType);
-            }
         }
 
         function assignContextualParameterTypes(signature: Signature, context: Signature) {
@@ -32732,7 +32825,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                     const contextualSignature = getContextualSignatureForFunctionLikeDeclaration(func);
                     const contextualType = !contextualSignature ? undefined :
                         contextualSignature === getSignatureFromDeclaration(func) ? isGenerator ? undefined : returnType :
-                        instantiateContextualType(getReturnTypeOfSignature(contextualSignature), func);
+                        instantiateContextualType(getReturnTypeOfSignature(contextualSignature), func, /*contextFlags*/ undefined);
                     if (isGenerator) {
                         yieldType = getWidenedLiteralLikeTypeForContextualIterationTypeIfNeeded(yieldType, contextualType, IterationTypeKind.Yield, isAsync);
                         returnType = getWidenedLiteralLikeTypeForContextualIterationTypeIfNeeded(returnType, contextualType, IterationTypeKind.Return, isAsync);
@@ -32814,7 +32907,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                     nextType = iterationTypes && iterationTypes.nextType;
                 }
                 else {
-                    nextType = getContextualType(yieldExpression);
+                    nextType = getContextualType(yieldExpression, /*contextFlags*/ undefined);
                 }
                 if (nextType) pushIfUnique(nextTypes, nextType);
             });
@@ -33041,10 +33134,15 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                     if (isContextSensitive(node)) {
                         if (contextualSignature) {
                             const inferenceContext = getInferenceContext(node);
+                            let instantiatedContextualSignature: Signature | undefined;
                             if (checkMode && checkMode & CheckMode.Inferential) {
                                 inferFromAnnotatedParameters(signature, contextualSignature, inferenceContext!);
+                                const restType = getEffectiveRestType(contextualSignature);
+                                if (restType && restType.flags & TypeFlags.TypeParameter) {
+                                    instantiatedContextualSignature = instantiateSignature(contextualSignature, inferenceContext!.nonFixingMapper);
+                                }
                             }
-                            const instantiatedContextualSignature = inferenceContext ?
+                            instantiatedContextualSignature ||= inferenceContext ?
                                 instantiateSignature(contextualSignature, inferenceContext.mapper) : contextualSignature;
                             assignContextualParameterTypes(signature, instantiatedContextualSignature);
                         }
@@ -33372,7 +33470,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                         error(node.operand, Diagnostics.The_0_operator_cannot_be_applied_to_type_symbol, tokenToString(node.operator));
                     }
                     if (node.operator === SyntaxKind.PlusToken) {
-                        if (maybeTypeOfKind(operandType, TypeFlags.BigIntLike)) {
+                        if (maybeTypeOfKindConsideringBaseConstraint(operandType, TypeFlags.BigIntLike)) {
                             error(node.operand, Diagnostics.Operator_0_cannot_be_applied_to_type_1, tokenToString(node.operator), typeToString(getBaseTypeOfLiteralType(operandType)));
                         }
                         return numberType;
@@ -33872,7 +33970,11 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                     const operator = operatorToken.kind;
                     if (operator === SyntaxKind.AmpersandAmpersandToken || operator === SyntaxKind.BarBarToken || operator === SyntaxKind.QuestionQuestionToken) {
                         if (operator === SyntaxKind.AmpersandAmpersandToken) {
-                            const parent = walkUpParenthesizedExpressions(node.parent);
+                            let parent = node.parent;
+                            while (parent.kind === SyntaxKind.ParenthesizedExpression
+                                || isBinaryExpression(parent) && (parent.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken || parent.operatorToken.kind === SyntaxKind.BarBarToken)) {
+                                parent = parent.parent;
+                            }
                             checkTestingKnownTruthyCallableOrAwaitableType(node.left, isIfStatement(parent) ? parent.thenStatement : undefined);
                         }
                         checkTruthinessOfType(leftType, node.left);
@@ -34436,7 +34538,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                 type = anyType;
                 addLazyDiagnostic(() => {
                     if (noImplicitAny && !expressionResultIsUnused(node)) {
-                        const contextualType = getContextualType(node);
+                        const contextualType = getContextualType(node, /*contextFlags*/ undefined);
                         if (!contextualType || isTypeAny(contextualType)) {
                             error(node, Diagnostics.yield_expression_implicitly_results_in_an_any_type_because_its_containing_generator_lacks_a_return_type_annotation);
                         }
@@ -34481,7 +34583,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                 texts.push(span.literal.text);
                 types.push(isTypeAssignableTo(type, templateConstraintType) ? type : stringType);
             }
-            return isConstContext(node) || isTemplateLiteralContext(node) || someType(getContextualType(node) || unknownType, isTemplateLiteralContextualType) ? getTemplateLiteralType(texts, types) : stringType;
+            return isConstContext(node) || isTemplateLiteralContext(node) || someType(getContextualType(node, /*contextFlags*/ undefined) || unknownType, isTemplateLiteralContextualType) ? getTemplateLiteralType(texts, types) : stringType;
         }
 
         function isTemplateLiteralContextualType(type: Type): boolean {
@@ -34512,7 +34614,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                 // We strip literal freshness when an appropriate contextual type is present such that contextually typed
                 // literals always preserve their literal types (otherwise they might widen during type inference). An alternative
                 // here would be to not mark contextually typed literals as fresh in the first place.
-                const result = maybeTypeOfKind(type, TypeFlags.Literal) && isLiteralOfContextualType(type, instantiateContextualType(contextualType, node)) ?
+                const result = maybeTypeOfKind(type, TypeFlags.Literal) && isLiteralOfContextualType(type, instantiateContextualType(contextualType, node, /*contextFlags*/ undefined)) ?
                     getRegularTypeOfLiteralType(type) : type;
                 return result;
             }
@@ -34639,7 +34741,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
             const type = checkExpression(node, checkMode, forceTuple);
             return isConstContext(node) || isCommonJsExportedExpression(node) ? getRegularTypeOfLiteralType(type) :
                 isTypeAssertion(node) ? type :
-                getWidenedLiteralLikeTypeForContextualType(type, instantiateContextualType(arguments.length === 2 ? getContextualType(node) : contextualType, node));
+                getWidenedLiteralLikeTypeForContextualType(type, instantiateContextualType(arguments.length === 2 ? getContextualType(node, /*contextFlags*/ undefined) : contextualType, node, /*contextFlags*/ undefined));
         }
 
         function checkPropertyAssignment(node: PropertyAssignment, checkMode?: CheckMode): Type {
@@ -36601,6 +36703,37 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                 type;
         }
 
+        function isAwaitedTypeNeeded(type: Type) {
+            // If this is already an `Awaited<T>`, we shouldn't wrap it. This helps to avoid `Awaited<Awaited<T>>` in higher-order.
+            if (isTypeAny(type) || isAwaitedTypeInstantiation(type)) {
+                return false;
+            }
+
+            // We only need `Awaited<T>` if `T` contains possibly non-primitive types.
+            if (isGenericObjectType(type)) {
+                const baseConstraint = getBaseConstraintOfType(type);
+                // We only need `Awaited<T>` if `T` has no base constraint, or the base constraint of `T` is `any`, `unknown`, `{}`, `object`,
+                // or is promise-like.
+                if (!baseConstraint || (baseConstraint.flags & TypeFlags.AnyOrUnknown) || isEmptyObjectType(baseConstraint) || isThenableType(baseConstraint)) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        function tryCreateAwaitedType(type: Type): Type | undefined {
+            // Nothing to do if `Awaited<T>` doesn't exist
+            const awaitedSymbol = getGlobalAwaitedSymbol(/*reportErrors*/ true);
+            if (awaitedSymbol) {
+                // Unwrap unions that may contain `Awaited<T>`, otherwise its possible to manufacture an `Awaited<Awaited<T> | U>` where
+                // an `Awaited<T | U>` would suffice.
+                return getTypeAliasInstantiation(awaitedSymbol, [unwrapAwaitedType(type)]);
+            }
+
+            return undefined;
+        }
+
         function createAwaitedTypeIfNeeded(type: Type): Type {
             // We wrap type `T` in `Awaited<T>` based on the following conditions:
             // - `T` is not already an `Awaited<U>`, and
@@ -36610,28 +36743,10 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
             //   - The base constraint of `T` is `any`, `unknown`, `object`, or `{}`, or
             //   - The base constraint of `T` is an object type with a callable `then` method.
 
-            if (isTypeAny(type)) {
-                return type;
-            }
-
-            // If this is already an `Awaited<T>`, just return it. This helps to avoid `Awaited<Awaited<T>>` in higher-order.
-            if (isAwaitedTypeInstantiation(type)) {
-                return type;
-            }
-
-            // Only instantiate `Awaited<T>` if `T` contains possibly non-primitive types.
-            if (isGenericObjectType(type)) {
-                const baseConstraint = getBaseConstraintOfType(type);
-                // Only instantiate `Awaited<T>` if `T` has no base constraint, or the base constraint of `T` is `any`, `unknown`, `{}`, `object`,
-                // or is promise-like.
-                if (!baseConstraint || (baseConstraint.flags & TypeFlags.AnyOrUnknown) || isEmptyObjectType(baseConstraint) || isThenableType(baseConstraint)) {
-                    // Nothing to do if `Awaited<T>` doesn't exist
-                    const awaitedSymbol = getGlobalAwaitedSymbol(/*reportErrors*/ true);
-                    if (awaitedSymbol) {
-                        // Unwrap unions that may contain `Awaited<T>`, otherwise its possible to manufacture an `Awaited<Awaited<T> | U>` where
-                        // an `Awaited<T | U>` would suffice.
-                        return getTypeAliasInstantiation(awaitedSymbol, [unwrapAwaitedType(type)]);
-                    }
+            if (isAwaitedTypeNeeded(type)) {
+                const awaitedType = tryCreateAwaitedType(type);
+                if (awaitedType) {
+                    return awaitedType;
                 }
             }
 
@@ -36691,6 +36806,11 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                 awaitedTypeStack.pop();
 
                 return typeAsAwaitable.awaitedTypeOfType = mapped;
+            }
+
+            // If `type` is generic and should be wrapped in `Awaited<T>`, return it.
+            if (isAwaitedTypeNeeded(type)) {
+                return typeAsAwaitable.awaitedTypeOfType = type;
             }
 
             const thisTypeForErrorOut: { value: Type | undefined } = { value: undefined };
@@ -39200,9 +39320,14 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
         function unwrapReturnType(returnType: Type, functionFlags: FunctionFlags) {
             const isGenerator = !!(functionFlags & FunctionFlags.Generator);
             const isAsync = !!(functionFlags & FunctionFlags.Async);
-            return isGenerator ? getIterationTypeOfGeneratorFunctionReturnType(IterationTypeKind.Return, returnType, isAsync) || errorType :
-                isAsync ? getAwaitedTypeNoAlias(returnType) || errorType :
-                returnType;
+            if (isGenerator) {
+                const returnIterationType = getIterationTypeOfGeneratorFunctionReturnType(IterationTypeKind.Return, returnType, isAsync);
+                if (!returnIterationType) {
+                    return errorType;
+                }
+                return isAsync ? getAwaitedTypeNoAlias(unwrapAwaitedType(returnIterationType)) : returnIterationType;
+            }
+            return isAsync ? getAwaitedTypeNoAlias(returnType) || errorType : returnType;
         }
 
         function isUnwrappedReturnTypeVoidOrAny(func: SignatureDeclaration, returnType: Type): boolean {
@@ -39441,8 +39566,9 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
             }
             const indexInfos = getApplicableIndexInfos(type, propNameType);
             const interfaceDeclaration = getObjectFlags(type) & ObjectFlags.Interface ? getDeclarationOfKind(type.symbol, SyntaxKind.InterfaceDeclaration) : undefined;
-            const localPropDeclaration = declaration && declaration.kind === SyntaxKind.BinaryExpression ||
-                name && name.kind === SyntaxKind.ComputedPropertyName || getParentOfSymbol(prop) === type.symbol ? declaration : undefined;
+            const propDeclaration = declaration && declaration.kind === SyntaxKind.BinaryExpression ||
+                name && name.kind === SyntaxKind.ComputedPropertyName ? declaration : undefined;
+            const localPropDeclaration = getParentOfSymbol(prop) === type.symbol ? declaration : undefined;
             for (const info of indexInfos) {
                 const localIndexDeclaration = info.declaration && getParentOfSymbol(getSymbolOfNode(info.declaration)) === type.symbol ? info.declaration : undefined;
                 // We check only when (a) the property is declared in the containing type, or (b) the applicable index signature is declared
@@ -39451,8 +39577,12 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                 const errorNode = localPropDeclaration || localIndexDeclaration ||
                     (interfaceDeclaration && !some(getBaseTypes(type as InterfaceType), base => !!getPropertyOfObjectType(base, prop.escapedName) && !!getIndexTypeOfType(base, info.keyType)) ? interfaceDeclaration : undefined);
                 if (errorNode && !isTypeAssignableTo(propType, info.type)) {
-                    error(errorNode, Diagnostics.Property_0_of_type_1_is_not_assignable_to_2_index_type_3,
+                    const diagnostic = createError(errorNode, Diagnostics.Property_0_of_type_1_is_not_assignable_to_2_index_type_3,
                         symbolToString(prop), typeToString(propType), typeToString(info.keyType), typeToString(info.type));
+                    if (propDeclaration && errorNode !== propDeclaration) {
+                        addRelatedInfo(diagnostic, createDiagnosticForNode(propDeclaration, Diagnostics._0_is_declared_here, symbolToString(prop)));
+                    }
+                    diagnostics.add(diagnostic);
                 }
             }
         }
@@ -41289,7 +41419,9 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                     error(exportedName, Diagnostics.Cannot_export_0_Only_local_declarations_can_be_exported_from_a_module, idText(exportedName));
                 }
                 else {
-                    markExportAsReferenced(node);
+                    if (!node.isTypeOnly && !node.parent.parent.isTypeOnly) {
+                        markExportAsReferenced(node);
+                    }
                     const target = symbol && (symbol.flags & SymbolFlags.Alias ? resolveAlias(symbol) : symbol);
                     if (!target || target === unknownSymbol || target.flags & SymbolFlags.Value) {
                         checkExpressionCached(node.propertyName || node.name);
@@ -44955,9 +45087,6 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                     }
                 }
                 else {
-                    return grammarErrorOnNode(initializer, Diagnostics.Initializers_are_not_allowed_in_ambient_contexts);
-                }
-                if (!isConstOrReadonly || isInvalidInitializer) {
                     return grammarErrorOnNode(initializer, Diagnostics.Initializers_are_not_allowed_in_ambient_contexts);
                 }
             }

@@ -28,7 +28,6 @@
     "engines": {
         "node": ">=4.2.0"
     },
-    "packageManager": "npm@6.14.15",
     "devDependencies": {
         "@octokit/rest": "latest",
         "@types/chai": "latest",
@@ -118,7 +117,9 @@
         "source-map-support": false,
         "inspector": false
     },
+    "packageManager": "npm@8.15.0",
     "volta": {
-        "node": "14.15.5"
+        "node": "14.20.0",
+        "npm": "8.15.0"
     }
 }

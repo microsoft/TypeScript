@@ -344,6 +344,8 @@ namespace ts.server {
     function getDefinitionLocation(defaultProject: Project, initialLocation: DocumentPosition, isForRename: boolean): DocumentPosition | undefined {
         const infos = defaultProject.getLanguageService().getDefinitionAtPosition(initialLocation.fileName, initialLocation.pos, /*searchOtherFilesOnly*/ false, /*stopAtAlias*/ isForRename);
         const info = infos && firstOrUndefined(infos);
+        // Note that the value of `isLocal` may depend on whether or not the checker has run on the containing file
+        // (implying that FAR cascading behavior may depend on request order)
         return info && !info.isLocal ? { fileName: info.fileName, pos: info.textSpan.start } : undefined;
     }
 
@@ -1378,7 +1380,7 @@ namespace ts.server {
                     const packageDirectory = fileName.substring(0, nodeModulesPathParts.packageRootIndex);
                     const packageJsonCache = project.getModuleResolutionCache()?.getPackageJsonInfoCache();
                     const compilerOptions = project.getCompilationSettings();
-                    const packageJson = getPackageScopeForPath(project.toPath(packageDirectory + "/package.json"), packageJsonCache, project, compilerOptions);
+                    const packageJson = getPackageScopeForPath(project.toPath(packageDirectory + "/package.json"), getTemporaryModuleResolutionState(packageJsonCache, project, compilerOptions));
                     if (!packageJson) return undefined;
                     // Use fake options instead of actual compiler options to avoid following export map if the project uses node16 or nodenext -
                     // Mapping from an export map entry across packages is out of scope for now. Returned entrypoints will only be what can be

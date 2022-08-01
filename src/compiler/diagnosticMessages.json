@@ -1497,6 +1497,10 @@
         "category": "Error",
         "code": 1477
     },
+    "Identifier or string literal expected.": {
+        "category": "Error",
+        "code": 1478
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
@@ -2355,6 +2359,10 @@
     "Abstract method '{0}' in class '{1}' cannot be accessed via super expression.": {
         "category": "Error",
         "code": 2513
+    },
+    "A tuple type cannot be indexed with a negative value.": {
+        "category": "Error",
+        "code": 2514
     },
     "Non-abstract class '{0}' does not implement inherited abstract member '{1}' from class '{2}'.": {
         "category": "Error",
@@ -3506,6 +3514,10 @@
     "We can only write a type for '{0}' by adding a type for the entire parameter here.": {
         "category": "Error",
         "code": 2843
+    },
+    "Type of instance member variable '{0}' cannot reference identifier '{1}' declared in the constructor.": {
+        "category": "Error",
+        "code": 2844
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {

@@ -379,7 +379,7 @@ namespace ts {
             }
 
             // Make sure not to write js file and source map file if any of them cannot be written
-            if ((jsFilePath && host.isEmitBlocked(jsFilePath)) || compilerOptions.noEmit) {
+            if (host.isEmitBlocked(jsFilePath) || compilerOptions.noEmit) {
                 emitSkipped = true;
                 return;
             }
