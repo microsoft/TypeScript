@@ -267,7 +267,6 @@ namespace ts {
             resolvedModuleNames.clear();
             resolvedTypeReferenceDirectives.clear();
             resolvedFileToResolution.clear();
-            nonRelativeExternalModuleResolutions.clear();
             resolutionsWithFailedLookups.length = 0;
             resolutionsWithOnlyAffectingLocations.length = 0;
             failedLookupChecks = undefined;
@@ -275,8 +274,6 @@ namespace ts {
             isInDirectoryChecks = undefined;
             affectingPathChecks = undefined;
             affectingPathChecksForFile = undefined;
-            // perDirectoryResolvedModuleNames and perDirectoryResolvedTypeReferenceDirectives could be non empty if there was exception during program update
-            // (between startCachingPerDirectoryResolution and finishCachingPerDirectoryResolution)
             moduleResolutionCache.clear();
             typeReferenceDirectiveResolutionCache.clear();
             impliedFormatPackageJsons.clear();
@@ -320,6 +317,10 @@ namespace ts {
         function startCachingPerDirectoryResolution() {
             moduleResolutionCache.clearAllExceptPackageJsonInfoCache();
             typeReferenceDirectiveResolutionCache.clearAllExceptPackageJsonInfoCache();
+            // perDirectoryResolvedModuleNames and perDirectoryResolvedTypeReferenceDirectives could be non empty if there was exception during program update
+            // (between startCachingPerDirectoryResolution and finishCachingPerDirectoryResolution)
+            nonRelativeExternalModuleResolutions.forEach(watchFailedLookupLocationOfNonRelativeModuleResolutions);
+            nonRelativeExternalModuleResolutions.clear();
         }
 
         function finishCachingPerDirectoryResolution(newProgram: Program | undefined, oldProgram: Program | undefined) {
