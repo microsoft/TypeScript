@@ -1,0 +1,133 @@
+// === /tests/cases/fourslash/server/referencesToClassPropertiesInTS.ts ===
+// class Foo {
+//   constructor() {
+//     this.[|bar|] = false;
+//     this./*FIND ALL REFS*/[|bar|] = true;
+//   }
+// 
+//   get [|bar|]() {
+//     return true;
+//   }
+// 
+//   set [|bar|](value) {
+//     // Do something with value
+//   }
+// }
+// 
+// const items: Foo[] = [];
+// 
+// for (const item of items) {
+//   item.[|bar|] = true;
+// }
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/server/referencesToClassPropertiesInTS.ts",
+      "kind": "property",
+      "name": "(property) Foo.bar: boolean",
+      "textSpan": {
+        "start": 84,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Foo",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "bar",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "boolean",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 80,
+        "length": 32
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 39,
+          "length": 3
+        },
+        "fileName": "/tests/cases/fourslash/server/referencesToClassPropertiesInTS.ts",
+        "isWriteAccess": true
+      },
+      {
+        "textSpan": {
+          "start": 61,
+          "length": 3
+        },
+        "fileName": "/tests/cases/fourslash/server/referencesToClassPropertiesInTS.ts",
+        "isWriteAccess": true
+      },
+      {
+        "textSpan": {
+          "start": 84,
+          "length": 3
+        },
+        "fileName": "/tests/cases/fourslash/server/referencesToClassPropertiesInTS.ts",
+        "contextSpan": {
+          "start": 80,
+          "length": 32
+        },
+        "isWriteAccess": true
+      },
+      {
+        "textSpan": {
+          "start": 120,
+          "length": 3
+        },
+        "fileName": "/tests/cases/fourslash/server/referencesToClassPropertiesInTS.ts",
+        "contextSpan": {
+          "start": 116,
+          "length": 51
+        },
+        "isWriteAccess": true
+      },
+      {
+        "textSpan": {
+          "start": 232,
+          "length": 3
+        },
+        "fileName": "/tests/cases/fourslash/server/referencesToClassPropertiesInTS.ts",
+        "isWriteAccess": true
+      }
+    ]
+  }
+]

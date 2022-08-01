@@ -1,0 +1,138 @@
+// === /my-test-file.js ===
+// export class Foo {
+// 	constructor() {
+//     this.[|bar|] = false;
+// 		this.[|bar|] = true;
+// 	}
+// 
+// 	get [|bar|]() {
+// 		return true
+// 	}
+// 
+// 	set [|bar|](value) {
+// 		// Do something with value
+// 	}
+// }
+// 
+// /** @type {Foo[]} */
+// const items = [];
+// 
+// for (const item of items) {
+//     item./*FIND ALL REFS*/[|bar|] = true;
+// }
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/my-test-file.js",
+      "kind": "property",
+      "name": "(property) Foo.bar: boolean",
+      "textSpan": {
+        "start": 86,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Foo",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "bar",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "boolean",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 82,
+        "length": 28
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 45,
+          "length": 3
+        },
+        "fileName": "/my-test-file.js",
+        "isWriteAccess": true
+      },
+      {
+        "textSpan": {
+          "start": 65,
+          "length": 3
+        },
+        "fileName": "/my-test-file.js",
+        "isWriteAccess": true
+      },
+      {
+        "textSpan": {
+          "start": 86,
+          "length": 3
+        },
+        "fileName": "/my-test-file.js",
+        "contextSpan": {
+          "start": 82,
+          "length": 28
+        },
+        "isWriteAccess": true
+      },
+      {
+        "textSpan": {
+          "start": 117,
+          "length": 3
+        },
+        "fileName": "/my-test-file.js",
+        "contextSpan": {
+          "start": 113,
+          "length": 48
+        },
+        "isWriteAccess": true
+      },
+      {
+        "textSpan": {
+          "start": 242,
+          "length": 3
+        },
+        "fileName": "/my-test-file.js",
+        "contextSpan": {
+          "start": 237,
+          "length": 16
+        },
+        "isWriteAccess": true
+      }
+    ]
+  }
+]
