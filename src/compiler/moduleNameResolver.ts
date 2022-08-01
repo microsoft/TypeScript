@@ -930,12 +930,12 @@ namespace ts {
         packageJsonInfoCache?: PackageJsonInfoCache | undefined,
         directoryToModuleNameMap?: CacheWithRedirects<ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>>,
     ): TypeReferenceDirectiveResolutionCache {
-        const preDirectoryResolutionCache = createPerDirectoryResolutionCache(currentDirectory, getCanonicalFileName, directoryToModuleNameMap ||= createCacheWithRedirects(options));
+        const perDirectoryResolutionCache = createPerDirectoryResolutionCache(currentDirectory, getCanonicalFileName, directoryToModuleNameMap ||= createCacheWithRedirects(options));
         packageJsonInfoCache ||= createPackageJsonInfoCache(currentDirectory, getCanonicalFileName);
 
         return {
             ...packageJsonInfoCache,
-            ...preDirectoryResolutionCache,
+            ...perDirectoryResolutionCache,
             clear,
             clearAllExceptPackageJsonInfoCache,
         };
@@ -946,7 +946,7 @@ namespace ts {
         }
 
         function clearAllExceptPackageJsonInfoCache() {
-            preDirectoryResolutionCache.clear();
+            perDirectoryResolutionCache.clear();
         }
     }
 
