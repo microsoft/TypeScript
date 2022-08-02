@@ -570,14 +570,16 @@ type ReadableProgramBuildInfoResolutionCacheWithRedirects = ReadableProgramBuild
     redirects: readonly ReadableProgramBuildInfoResolutionRedirectsCache[];
 };
 type ReadableProgramBuildInfoHash = string | [file: string, hash: string];
+type ReadableProgramBuildInfoPackageJson = string | [dir: string, packageJson: string];
 type ReadableProgramBuildInfoCacheResolutions = Omit<ts.ProgramBuildInfoCacheResolutions,
-    "resolutions" | "hash" | "resolutionEntries" | "modules" | "typeRefs"
+    "resolutions" | "hash" | "resolutionEntries" | "modules" | "typeRefs" | "packageJsons"
 > & {
     resolutions: readonly ReadableWithOriginal<ReadableProgramBuildInfoResolution, ts.ProgramBuildInfoResolution>[];
     hash: readonly ReadableProgramBuildInfoHash[] | undefined;
     resolutionEntries: readonly ReadableWithOriginal<ReadableProgramBuildInfoResolutionEntry, ts.ProgramBuildInfoResolutionEntry>[];
     modules: ReadableProgramBuildInfoResolutionCacheWithRedirects | undefined;
     typeRefs: ReadableProgramBuildInfoResolutionCacheWithRedirects | undefined;
+    packageJsons: readonly ReadableProgramBuildInfoPackageJson[] | undefined;
 };
 
 type ReadableProgramMultiFileEmitBuildInfo = Omit<ts.ProgramMultiFileEmitBuildInfo,
@@ -755,8 +757,15 @@ function generateBuildInfoProgramBaseline(sys: ts.System, buildInfoPath: string,
             resolutionEntries: resolutionEntries.withOriginals,
             modules: toReadableProgramBuildInfoResolutionCacheWithRedirects(cacheResolutions.modules),
             typeRefs: toReadableProgramBuildInfoResolutionCacheWithRedirects(cacheResolutions.typeRefs),
+            packageJsons: cacheResolutions.packageJsons?.map(toReadableProgramBuildInfoPackageJson),
             hash: cacheResolutions.hash?.map(toReadableProgramBuildInfoHash),
         };
+    }
+
+    function toReadableProgramBuildInfoPackageJson(entry: ts.ProgramBuildInfoPackageJson): ReadableProgramBuildInfoPackageJson {
+        return ts.isArray(entry) ?
+            [toFileName(entry[0]), toFileName(entry[1])] :
+            toFileName(entry);
     }
 
     function toReadableProgramBuildInfoHash(hash: ts.ProgramBuildInfoHash): ReadableProgramBuildInfoHash {

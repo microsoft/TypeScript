@@ -1033,6 +1033,90 @@ export function getOriginalOrResolvedTypeReferenceFileName(result: ResolvedTypeR
         (result.resolvedTypeReferenceDirective.originalPath || result.resolvedTypeReferenceDirective.resolvedFileName);
 }
 
+/** @internal */
+export function createPerNonRelativeNameCache<T>(
+    currentDirectory: string,
+    getCanonicalFileName: (s: string) => string,
+    getResolvedFileName: (result: T) => string | undefined,
+): PerNonRelativeNameCache<T> {
+    const directoryPathMap = new Map<Path, T>();
+
+    return { get, set, getWithPath, setWithPath };
+
+    function get(directory: string): T | undefined {
+        return getWithPath(toPath(directory, currentDirectory, getCanonicalFileName));
+    }
+
+    function set(directory: string, result: T): void {
+        return setWithPath(toPath(directory, currentDirectory, getCanonicalFileName), result, noop);
+    }
+
+    function getWithPath(directory: Path): T | undefined {
+        return directoryPathMap.get(directory);
+    }
+
+    /**
+     * At first this function add entry directory -> module resolution result to the table.
+     * Then it computes the set of parent folders for 'directory' that should have the same module resolution result
+     * and for every parent folder in set it adds entry: parent -> module resolution. .
+     * Lets say we first directory name: /a/b/c/d/e and resolution result is: /a/b/bar.ts.
+     * Set of parent folders that should have the same result will be:
+     * [
+     *     /a/b/c/d, /a/b/c, /a/b
+     * ]
+     * this means that request for module resolution from file in any of these folder will be immediately found in cache.
+     */
+    function setWithPath(path: Path, result: T, ancestoryWorker: (directory: Path) => void): void {
+        // if entry is already in cache do nothing
+        if (directoryPathMap.has(path)) return;
+        directoryPathMap.set(path, result);
+
+        const resolvedFileName = getResolvedFileName(result);
+        // find common prefix between directory and resolved file name
+        // this common prefix should be the shortest path that has the same resolution
+        // directory: /a/b/c/d/e
+        // resolvedFileName: /a/b/foo.d.ts
+        // commonPrefix: /a/b
+        // for failed lookups cache the result for every directory up to root
+        const commonPrefix = resolvedFileName && getCommonPrefix(path, resolvedFileName);
+        let current = path;
+        while (current !== commonPrefix) {
+            const parent = getDirectoryPath(current);
+            if (parent === current) break;
+            if (directoryPathMap.has(parent)) {
+                ancestoryWorker(parent);
+                break;
+            }
+            directoryPathMap.set(parent, result);
+            ancestoryWorker(parent);
+            current = parent;
+        }
+    }
+
+    function getCommonPrefix(directory: Path, resolution: string) {
+        const resolutionDirectory = toPath(getDirectoryPath(resolution), currentDirectory, getCanonicalFileName);
+
+        // find first position where directory and resolution differs
+        let i = 0;
+        const limit = Math.min(directory.length, resolutionDirectory.length);
+        while (i < limit && directory.charCodeAt(i) === resolutionDirectory.charCodeAt(i)) {
+            i++;
+        }
+        if (i === directory.length && (resolutionDirectory.length === i || resolutionDirectory[i] === directorySeparator)) {
+            return directory;
+        }
+        const rootLength = getRootLength(directory);
+        if (i < rootLength) {
+            return undefined;
+        }
+        const sep = directory.lastIndexOf(directorySeparator, i - 1);
+        if (sep === -1) {
+            return undefined;
+        }
+        return directory.substr(0, Math.max(sep, rootLength));
+    }
+}
+
 function createNonRelativeNameResolutionCache<T>(
     currentDirectory: string,
     getCanonicalFileName: (s: string) => string,
@@ -1079,82 +1163,7 @@ function createNonRelativeNameResolutionCache<T>(
     }
 
     function createPerModuleNameCache(): PerNonRelativeNameCache<T> {
-        const directoryPathMap = new Map<Path, T>();
-
-        return { get, set, getWithPath, setWithPath };
-
-        function get(directory: string): T | undefined {
-            return getWithPath(toPath(directory, currentDirectory, getCanonicalFileName));
-        }
-
-        function set(directory: string, result: T): void {
-            return setWithPath(toPath(directory, currentDirectory, getCanonicalFileName), result, noop);
-        }
-
-        function getWithPath(directory: Path): T | undefined {
-            return directoryPathMap.get(directory);
-        }
-
-        /**
-         * At first this function add entry directory -> module resolution result to the table.
-         * Then it computes the set of parent folders for 'directory' that should have the same module resolution result
-         * and for every parent folder in set it adds entry: parent -> module resolution. .
-         * Lets say we first directory name: /a/b/c/d/e and resolution result is: /a/b/bar.ts.
-         * Set of parent folders that should have the same result will be:
-         * [
-         *     /a/b/c/d, /a/b/c, /a/b
-         * ]
-         * this means that request for module resolution from file in any of these folder will be immediately found in cache.
-         */
-        function setWithPath(path: Path, result: T, ancestoryWorker: (directory: Path) => void): void {
-            // if entry is already in cache do nothing
-            if (directoryPathMap.has(path)) return;
-            directoryPathMap.set(path, result);
-
-            const resolvedFileName = getResolvedFileName(result);
-            // find common prefix between directory and resolved file name
-            // this common prefix should be the shortest path that has the same resolution
-            // directory: /a/b/c/d/e
-            // resolvedFileName: /a/b/foo.d.ts
-            // commonPrefix: /a/b
-            // for failed lookups cache the result for every directory up to root
-            const commonPrefix = resolvedFileName && getCommonPrefix(path, resolvedFileName);
-            let current = path;
-            while (current !== commonPrefix) {
-                const parent = getDirectoryPath(current);
-                if (parent === current) break;
-                if (directoryPathMap.has(parent)) {
-                    ancestoryWorker(parent);
-                    break;
-                }
-                directoryPathMap.set(parent, result);
-                ancestoryWorker(parent);
-                current = parent;
-            }
-        }
-
-        function getCommonPrefix(directory: Path, resolution: string) {
-            const resolutionDirectory = toPath(getDirectoryPath(resolution), currentDirectory, getCanonicalFileName);
-
-            // find first position where directory and resolution differs
-            let i = 0;
-            const limit = Math.min(directory.length, resolutionDirectory.length);
-            while (i < limit && directory.charCodeAt(i) === resolutionDirectory.charCodeAt(i)) {
-                i++;
-            }
-            if (i === directory.length && (resolutionDirectory.length === i || resolutionDirectory[i] === directorySeparator)) {
-                return directory;
-            }
-            const rootLength = getRootLength(directory);
-            if (i < rootLength) {
-                return undefined;
-            }
-            const sep = directory.lastIndexOf(directorySeparator, i - 1);
-            if (sep === -1) {
-                return undefined;
-            }
-            return directory.substr(0, Math.max(sep, rootLength));
-        }
+        return createPerNonRelativeNameCache(currentDirectory, getCanonicalFileName, getResolvedFileName);
     }
 }
 

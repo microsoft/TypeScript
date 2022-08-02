@@ -24,6 +24,7 @@ import {
     createBuildInfo,
     createGetCanonicalFileName,
     createPerDirectoryAndNonRelativeNameCache,
+    createPerNonRelativeNameCache,
     createProgram,
     CustomTransformers,
     Debug,
@@ -58,12 +59,14 @@ import {
     getTsBuildInfoEmitOutputFilePath,
     handleNoEmitOptions,
     HostForComputeHash,
+    identity,
     isArray,
     isDeclarationFileName,
     isExternalModuleNameRelative,
     isJsonSourceFile,
     isNumber,
     isString,
+    last,
     map,
     mapDefined,
     maybeBind,
@@ -79,6 +82,7 @@ import {
     PackageJsonInfoCache,
     Path,
     PerDirectoryAndNonRelativeNameCache,
+    PerNonRelativeNameCache,
     Program,
     ProjectReference,
     ReadBuildProgramHost,
@@ -182,6 +186,7 @@ export interface ReusableBuilderProgramState extends BuilderState {
     cacheResolutions?: {
         modules: PerDirectoryAndNonRelativeNameCache<ResolvedModuleWithFailedLookupLocations> | undefined;
         typeRefs: PerDirectoryAndNonRelativeNameCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations> | undefined;
+        packageJsons: Map<Path, string> | undefined;
         packageJsonCache: PackageJsonInfoCache | undefined;
     };
     resuableCacheResolutions?: {
@@ -986,6 +991,8 @@ export type ProgramBuildInfoResolutionCacheWithRedirects = ProgramBuildInfoResol
     redirects: readonly ProgramBuildInfoResolutionRedirectsCache[];
 };
 /** @internal */
+export type ProgramBuildInfoPackageJson = ProgramBuildInfoAbsoluteFileId | [dirId: ProgramBuildInfoFileId, packageJson: ProgramBuildInfoAbsoluteFileId];
+/** @internal */
 export interface ProgramBuildInfoCacheResolutions {
     resolutions: readonly ProgramBuildInfoResolution[];
     names: readonly string[];
@@ -993,6 +1000,7 @@ export interface ProgramBuildInfoCacheResolutions {
     resolutionEntries: readonly ProgramBuildInfoResolutionEntry[];
     modules: ProgramBuildInfoResolutionCacheWithRedirects | undefined;
     typeRefs: ProgramBuildInfoResolutionCacheWithRedirects | undefined;
+    packageJsons: readonly ProgramBuildInfoPackageJson[] | undefined;
 }
 /** @internal */
 export interface ProgramMultiFileEmitBuildInfo {
@@ -1313,6 +1321,7 @@ function getBuildInfo(state: BuilderProgramState, host: BuilderProgramHost, bund
         if (!resolutions) return;
         Debug.assertIsDefined(names);
         Debug.assertIsDefined(resolutionEntries);
+        const packageJsons = toProgramBuildInfoPackageJsons(cacheResolutions?.packageJsons);
         state.resuableCacheResolutions = {
             cache: {
                 resolutions,
@@ -1321,6 +1330,7 @@ function getBuildInfo(state: BuilderProgramState, host: BuilderProgramHost, bund
                 resolutionEntries,
                 modules,
                 typeRefs,
+                packageJsons,
             },
             getProgramBuildInfoFilePathDecoder: memoize(() => getProgramBuildInfoFilePathDecoder(
                 fileNames,
@@ -1330,6 +1340,20 @@ function getBuildInfo(state: BuilderProgramState, host: BuilderProgramHost, bund
             )),
         };
         return state.resuableCacheResolutions.cache;
+    }
+
+    function toProgramBuildInfoPackageJsons(cache: Map<Path, string> | undefined): readonly ProgramBuildInfoPackageJson[] | undefined {
+        let result: ProgramBuildInfoPackageJson[] | undefined;
+        cache?.forEach((packageJson, dirPath) => {
+            const packageJsonDirPath = getDirectoryPath(toPath(packageJson, currentDirectory, state.program!.getCanonicalFileName));
+            (result ??= []).push(packageJsonDirPath === dirPath ?
+                toAbsoluteFileId(packageJson) :
+                [
+                    toFileId(dirPath),
+                    toAbsoluteFileId(packageJson),
+                ]);
+        });
+        return result;
     }
 
     function toProgramBuildInfoResolutionCacheWithRedirects<T extends ResolvedModuleWithFailedLookupLocations | ResolvedTypeReferenceDirectiveWithFailedLookupLocations>(
@@ -1450,9 +1474,23 @@ function getCacheResolutions(state: BuilderProgramState) {
     if (state.cacheResolutions || !state.compilerOptions.cacheResolutions) return state.cacheResolutions;
     let modules: PerDirectoryAndNonRelativeNameCache<ResolvedModuleWithFailedLookupLocations> | undefined;
     let typeRefs: PerDirectoryAndNonRelativeNameCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations> | undefined;
+    let packageJsons: Map<Path, string> | undefined;
+    let nonRelativePackageJsons: PerNonRelativeNameCache<string> | undefined;
     for (const f of state.program!.getSourceFiles()) {
         modules = toPerDirectoryAndNonRelativeNameCache(state, modules, getOriginalOrResolvedModuleFileName, f.resolvedModules, f);
         typeRefs = toPerDirectoryAndNonRelativeNameCache(state, typeRefs, getOriginalOrResolvedTypeReferenceFileName, f.resolvedTypeReferenceDirectiveNames, f);
+        if (f.packageJsonScope) {
+            const dirPath = getDirectoryPath(f.resolvedPath);
+            if (!nonRelativePackageJsons?.getWithPath(dirPath)) {
+                const result = last(f.packageJsonLocations!);
+                (packageJsons ??= new Map()).set(dirPath, result);
+                (nonRelativePackageJsons ??= createPerNonRelativeNameCache(
+                    state.program!.getCurrentDirectory(),
+                    state.program!.getCanonicalFileName,
+                    identity,
+                )).setWithPath(dirPath, result, ancestorPath => packageJsons!.delete(ancestorPath));
+            }
+        }
     }
     const automaticTypeDirectiveNames = state.program!.getAutomaticTypeDirectiveNames();
     if (automaticTypeDirectiveNames.length) {
@@ -1462,6 +1500,7 @@ function getCacheResolutions(state: BuilderProgramState) {
     return state.cacheResolutions = {
         modules,
         typeRefs,
+        packageJsons,
         packageJsonCache: state.program!.getModuleResolutionCache()?.getPackageJsonInfoCache().clone(),
     };
 }

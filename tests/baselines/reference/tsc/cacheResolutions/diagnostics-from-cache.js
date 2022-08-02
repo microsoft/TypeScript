@@ -168,7 +168,7 @@ exports.x = 10;
 
 
 //// [/src/project/dist/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../lib/lib.d.ts","../index.ts","../index2.ts","../randomfileforimport.ts","..","../package.json"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"5618920854-import * as me from \"@this/package\";\nme.thing()\nexport function thing(): void {}\n","signature":"-4018078458-export declare function thing(): void;\r\n","impliedFormat":99},{"version":"5871974342-export function thing(): void {}\n","signature":"-4018078458-export declare function thing(): void;\r\n","impliedFormat":99},{"version":"-10726455937-export const x = 10;","signature":"-6057683066-export declare const x = 10;\r\n","impliedFormat":99}],"options":{"cacheResolutions":true,"declaration":true,"declarationDir":"../types","moduleResolution":99,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[2,1]],"exportedModulesMap":[],"cacheResolutions":{"resolutions":[{"resolvedModule":{"resolvedFileName":2,"isExternalLibraryImport":true},"affectingLocations":[6],"resolutionDiagnostics":[{"messageText":"The project root is ambiguous, but is required to resolve export map entry '.' in file '/src/project/package.json'. Supply the `rootDir` compiler option to disambiguate.","category":1,"code":2209}]}],"names":["@this/package"],"hash":[[6,"25383995153-{\"name\":\"@this/package\",\"type\":\"module\",\"exports\":{\".\":{\"default\":\"./dist/index.js\",\"types\":\"./types/index.d.ts\"}}}"]],"resolutionEntries":[[1,1,99]],"modules":[[5,[1]]]}},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../lib/lib.d.ts","../index.ts","../index2.ts","../randomfileforimport.ts","..","../package.json"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"5618920854-import * as me from \"@this/package\";\nme.thing()\nexport function thing(): void {}\n","signature":"-4018078458-export declare function thing(): void;\r\n","impliedFormat":99},{"version":"5871974342-export function thing(): void {}\n","signature":"-4018078458-export declare function thing(): void;\r\n","impliedFormat":99},{"version":"-10726455937-export const x = 10;","signature":"-6057683066-export declare const x = 10;\r\n","impliedFormat":99}],"options":{"cacheResolutions":true,"declaration":true,"declarationDir":"../types","moduleResolution":99,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[2,1]],"exportedModulesMap":[],"cacheResolutions":{"resolutions":[{"resolvedModule":{"resolvedFileName":2,"isExternalLibraryImport":true},"affectingLocations":[6],"resolutionDiagnostics":[{"messageText":"The project root is ambiguous, but is required to resolve export map entry '.' in file '/src/project/package.json'. Supply the `rootDir` compiler option to disambiguate.","category":1,"code":2209}]}],"names":["@this/package"],"hash":[[6,"25383995153-{\"name\":\"@this/package\",\"type\":\"module\",\"exports\":{\".\":{\"default\":\"./dist/index.js\",\"types\":\"./types/index.d.ts\"}}}"]],"resolutionEntries":[[1,1,99]],"modules":[[5,[1]]],"packageJsons":[6]}},"version":"FakeTSVersion"}
 
 //// [/src/project/dist/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -344,11 +344,14 @@ exports.x = 10;
             }
           ]
         }
+      ],
+      "packageJsons": [
+        "../package.json"
       ]
     }
   },
   "version": "FakeTSVersion",
-  "size": 1943
+  "size": 1962
 }
 
 //// [/src/project/types/index.d.ts]
@@ -495,7 +498,7 @@ resolvedModules:
 
 //// [/src/project/dist/randomFileForImport.js] file written with same contents
 //// [/src/project/dist/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../lib/lib.d.ts","../index.ts","../index2.ts","../randomfileforimport.ts","..","../package.json"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"5618920854-import * as me from \"@this/package\";\nme.thing()\nexport function thing(): void {}\n","signature":"-4018078458-export declare function thing(): void;\r\n","impliedFormat":99},{"version":"5871974342-export function thing(): void {}\n","signature":"-4018078458-export declare function thing(): void;\r\n","impliedFormat":99},{"version":"4314805146-import * as me from \"@this/package\";\nexport const x = 10;","signature":"-6057683066-export declare const x = 10;\r\n","impliedFormat":99}],"options":{"cacheResolutions":true,"declaration":true,"declarationDir":"../types","moduleResolution":99,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[2,1],[4,1]],"exportedModulesMap":[],"cacheResolutions":{"resolutions":[{"resolvedModule":{"resolvedFileName":2,"isExternalLibraryImport":true},"affectingLocations":[6],"resolutionDiagnostics":[{"messageText":"The project root is ambiguous, but is required to resolve export map entry '.' in file '/src/project/package.json'. Supply the `rootDir` compiler option to disambiguate.","category":1,"code":2209}]}],"names":["@this/package"],"hash":[[6,"25383995153-{\"name\":\"@this/package\",\"type\":\"module\",\"exports\":{\".\":{\"default\":\"./dist/index.js\",\"types\":\"./types/index.d.ts\"}}}"]],"resolutionEntries":[[1,1,99]],"modules":[[5,[1]]]}},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../lib/lib.d.ts","../index.ts","../index2.ts","../randomfileforimport.ts","..","../package.json"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"5618920854-import * as me from \"@this/package\";\nme.thing()\nexport function thing(): void {}\n","signature":"-4018078458-export declare function thing(): void;\r\n","impliedFormat":99},{"version":"5871974342-export function thing(): void {}\n","signature":"-4018078458-export declare function thing(): void;\r\n","impliedFormat":99},{"version":"4314805146-import * as me from \"@this/package\";\nexport const x = 10;","signature":"-6057683066-export declare const x = 10;\r\n","impliedFormat":99}],"options":{"cacheResolutions":true,"declaration":true,"declarationDir":"../types","moduleResolution":99,"outDir":"./"},"fileIdsList":[[2]],"referencedMap":[[2,1],[4,1]],"exportedModulesMap":[],"cacheResolutions":{"resolutions":[{"resolvedModule":{"resolvedFileName":2,"isExternalLibraryImport":true},"affectingLocations":[6],"resolutionDiagnostics":[{"messageText":"The project root is ambiguous, but is required to resolve export map entry '.' in file '/src/project/package.json'. Supply the `rootDir` compiler option to disambiguate.","category":1,"code":2209}]}],"names":["@this/package"],"hash":[[6,"25383995153-{\"name\":\"@this/package\",\"type\":\"module\",\"exports\":{\".\":{\"default\":\"./dist/index.js\",\"types\":\"./types/index.d.ts\"}}}"]],"resolutionEntries":[[1,1,99]],"modules":[[5,[1]]],"packageJsons":[6]}},"version":"FakeTSVersion"}
 
 //// [/src/project/dist/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -674,11 +677,14 @@ resolvedModules:
             }
           ]
         }
+      ],
+      "packageJsons": [
+        "../package.json"
       ]
     }
   },
   "version": "FakeTSVersion",
-  "size": 1987
+  "size": 2006
 }
 
 //// [/src/project/types/randomFileForImport.d.ts] file written with same contents
