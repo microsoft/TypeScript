@@ -210,6 +210,40 @@ CleanBuild:
             ]
           ]
         ]
+      ],
+      "packageJsons": [
+        [
+          "../src/a",
+          "../package.json"
+        ],
+        [
+          "../src/b/ba",
+          "../package.json"
+        ],
+        [
+          "../src/c/ca/caa/caaa",
+          "../package.json"
+        ],
+        [
+          "../src/c/cb",
+          "../package.json"
+        ],
+        [
+          "../src/d/da/daa/daaa/x/y/z",
+          "../package.json"
+        ],
+        [
+          "../src/e/ea/eaa/eaaa/x/y/z",
+          "../package.json"
+        ],
+        [
+          "../src/f/fa/faa/x/y/z",
+          "../package.json"
+        ],
+        [
+          "../src/f/fa/faa/faaa",
+          "../package.json"
+        ]
       ]
     }
   },
@@ -398,6 +432,40 @@ IncrementalBuild:
               "commonjs"
             ]
           ]
+        ]
+      ],
+      "packageJsons": [
+        [
+          "../src/a",
+          "../package.json"
+        ],
+        [
+          "../src/b/ba",
+          "../package.json"
+        ],
+        [
+          "../src/c/ca/caa/caaa",
+          "../package.json"
+        ],
+        [
+          "../src/c/cb",
+          "../package.json"
+        ],
+        [
+          "../src/d/da/daa/daaa/x/y/z",
+          "../package.json"
+        ],
+        [
+          "../src/e/ea/eaa/eaaa/x/y/z",
+          "../package.json"
+        ],
+        [
+          "../src/f/fa/faa/x/y/z",
+          "../package.json"
+        ],
+        [
+          "../src/f/fa/faa/faaa",
+          "../package.json"
         ]
       ]
     }
@@ -794,6 +862,40 @@ IncrementalBuild:
               "commonjs"
             ]
           ]
+        ]
+      ],
+      "packageJsons": [
+        [
+          "../src/a",
+          "../package.json"
+        ],
+        [
+          "../src/b/ba",
+          "../package.json"
+        ],
+        [
+          "../src/c/ca/caa/caaa",
+          "../package.json"
+        ],
+        [
+          "../src/c/cb",
+          "../package.json"
+        ],
+        [
+          "../src/d/da/daa/daaa/x/y/z",
+          "../package.json"
+        ],
+        [
+          "../src/e/ea/eaa/eaaa/x/y/z",
+          "../package.json"
+        ],
+        [
+          "../src/f/fa/faa/x/y/z",
+          "../package.json"
+        ],
+        [
+          "../src/f/fa/faa/faaa",
+          "../package.json"
         ]
       ]
     }

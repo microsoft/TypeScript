@@ -253,6 +253,9 @@ namespace ts.tscWatch.cacheResolutions {
                 {
                     subScenario: "Delete package.json",
                     modifyFs: fs => fs.unlinkSync(`/src/projects/project/package.json`),
+                    discrepancyExplanation: () => [
+                        `Buildinfo is not re-written so it has package.json map from before in incremental and no package.json map in clean build`
+                    ]
                 },
                 {
                     subScenario: "Add package json file with type module",

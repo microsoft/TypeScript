@@ -229,13 +229,15 @@ interface Symbol {
         redirects: readonly ReadableProgramBuildInfoResolutionRedirectsCache[];
     };
     export type ReadableProgramBuildInfoHash = string | [file: string, hash: string];
+    export type ReadableProgramBuildInfoPackageJsons = (string | [dir: string, packageJson: string])[];
     export interface ReadableProgramBuildInfoCacheResolutions {
         resolutions: readonly ReadableProgramBuildInfoResolution[];
         names: readonly string[];
         hash: readonly ReadableProgramBuildInfoHash[] | undefined,
         resolutionEntries: ReadableProgramBuildInfoResolutionEntry[];
-        modules?: ReadableProgramBuildInfoResolutionCacheWithRedirects;
-        typeRefs?: ReadableProgramBuildInfoResolutionCacheWithRedirects;
+        modules: ReadableProgramBuildInfoResolutionCacheWithRedirects | undefined;
+        typeRefs: ReadableProgramBuildInfoResolutionCacheWithRedirects | undefined;
+        packageJsons: ReadableProgramBuildInfoPackageJsons | undefined;
     }
 
     type ReadableProgramMultiFileEmitBuildInfo = Omit<ProgramMultiFileEmitBuildInfo,
@@ -375,6 +377,7 @@ interface Symbol {
                 resolutionEntries,
                 modules: toReadableProgramBuildInfoResolutionCacheWithRedirects(cacheResolutions.modules),
                 typeRefs: toReadableProgramBuildInfoResolutionCacheWithRedirects(cacheResolutions.typeRefs),
+                packageJsons: toReadableProgramBuildInfoPackageJsons(cacheResolutions.packageJsons),
                 hash: cacheResolutions.hash?.map(toReadableProgramBuildInfoHash),
             };
         }
@@ -445,6 +448,13 @@ interface Symbol {
                         redirects: cache.redirects.map(r => ({ ...r, cache: toReadableProgramBuildInfoResolutionCache(r.cache)! }))
                     }
                 : undefined;
+        }
+
+        function toReadableProgramBuildInfoPackageJsons(cache: ProgramBuildInfoPackageJsons | undefined): ReadableProgramBuildInfoPackageJsons | undefined {
+            return cache?.map((dirOrDirAndPackageJsonDir) => isArray(dirOrDirAndPackageJsonDir) ?
+                [toFileName(dirOrDirAndPackageJsonDir[0]), toFileName(dirOrDirAndPackageJsonDir[1])] :
+                toFileName(dirOrDirAndPackageJsonDir)
+            );
         }
     }
 
