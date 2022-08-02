@@ -53,7 +53,7 @@ function require(str) { return str.length }
 >length : number
 
 const someModule = require("google-closure-compiler");
->someModule : number
+>someModule : any
 >require("google-closure-compiler") : number
 >require : (str: string) => number
 >"google-closure-compiler" : "google-closure-compiler"
