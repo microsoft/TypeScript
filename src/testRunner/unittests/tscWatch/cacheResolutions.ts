@@ -6,6 +6,8 @@ import {
     getWatchSystemWithNode16WithBuild,
     getWatchSystemWithOut,
     getWatchSystemWithOutWithBuild,
+    getWatchSystemWithPackageJsonEdits,
+    getWatchSystemWithPackageJsonEditsWithBuild,
     getWatchSystemWithSameResolutionFromMultiplePlaces,
     getWatchSystemWithSameResolutionFromMultiplePlacesWithBuild,
 } from "../tsbuild/cacheResolutionsHelper";
@@ -275,6 +277,70 @@ describe("unittests:: tsc-watch:: cacheResolutions::", () => {
                         },
                     },
                 ]
+            });
+        }
+    });
+
+    describe("packageJson edited", () => {
+        verifyTscWatchPackageJsonEdits("packageJson edited", getWatchSystemWithPackageJsonEdits);
+        verifyTscWatchPackageJsonEdits("packageJson edited already built", getWatchSystemWithPackageJsonEditsWithBuild);
+        function verifyTscWatchPackageJsonEdits(subScenario: string, sys: () => TestServerHost) {
+            verifyTscWatch({
+                scenario: "cacheResolutions",
+                subScenario,
+                commandLineArgs: ["--p", "src", "-w", "--explainFiles", "--extendedDiagnostics"],
+                baselineModulesAndTypeRefs: true,
+                sys,
+                edits: [
+                    {
+                        caption: "random edit",
+                        edit: sys => sys.appendFile("/src/projects/project/src/randomFile.ts", `export const y = 10;`),
+                        timeouts: sys => {
+                            sys.runQueuedTimeoutCallbacks(); // Failed lookups
+                            sys.runQueuedTimeoutCallbacks(); // actual update
+                        },
+                    },
+                    {
+                        caption: "Modify package json file to add type module",
+                        edit: sys => sys.writeFile(`/src/projects/project/package.json`, JSON.stringify({ name: "app", version: "1.0.0", type: "module" })),
+                        timeouts: sys => {
+                            sys.runQueuedTimeoutCallbacks(); // Failed lookups
+                            sys.runQueuedTimeoutCallbacks(); // actual update
+                        },
+                    },
+                    {
+                        caption: "Modify package.json file to remove type module",
+                        edit: sys => sys.writeFile(`/src/projects/project/package.json`, JSON.stringify({ name: "app", version: "1.0.0" })),
+                        timeouts: sys => {
+                            sys.runQueuedTimeoutCallbacks(); // Failed lookups
+                            sys.runQueuedTimeoutCallbacks(); // actual update
+                        },
+                    },
+                    {
+                        caption: "Delete package.json",
+                        edit: sys => sys.deleteFile(`/src/projects/project/package.json`),
+                        timeouts: sys => {
+                            sys.runQueuedTimeoutCallbacks(); // Failed lookups
+                            sys.runQueuedTimeoutCallbacks(); // actual update
+                        },
+                    },
+                    {
+                        caption: "Add package json file with type module",
+                        edit: sys => sys.writeFile(`/src/projects/project/package.json`, JSON.stringify({ name: "app", version: "1.0.0", type: "module" })),
+                        timeouts: sys => {
+                            sys.runQueuedTimeoutCallbacks(); // Failed lookups
+                            sys.runQueuedTimeoutCallbacks(); // actual update
+                        },
+                    },
+                    {
+                        caption: "Delete package.json",
+                        edit: sys => sys.deleteFile(`/src/projects/project/package.json`),
+                        timeouts: sys => {
+                            sys.runQueuedTimeoutCallbacks(); // Failed lookups
+                            sys.runQueuedTimeoutCallbacks(); // actual update
+                        },
+                    },
+                ],
             });
         }
     });

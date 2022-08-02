@@ -25,6 +25,8 @@ import {
     getServerHostWithNode16WithBuild,
     getServerHostWithOut,
     getServerHostWithOutWithBuild,
+    getServerHostWithPackageJsonEdits,
+    getServerHostWithPackageJsonEditsWithBuild,
     getServerHostWithSameResolutionFromMultiplePlaces,
     getServerHostWithSameResolutionFromMultiplePlacesWithBuild,
 } from "../tsbuild/cacheResolutionsHelper";
@@ -404,6 +406,59 @@ describe("unittests:: tsserver:: cacheResolutions:: tsserverProjectSystem cachin
                 host.ensureFileOrFolder({ path: "/src/project/node_modules/pkg1/index.d.ts", content: getPkgImportContent("Import", 1) });
                 host.appendFile("/src/project/randomFileForImport.ts", `export const y = 10;`);
                 host.runQueuedTimeoutCallbacks(); // Failed lookups
+                host.runQueuedTimeoutCallbacks(); // actual update
+
+                baselineTsserverLogs("cacheResolutions", scenario, session);
+            });
+        }
+    });
+
+    describe("packageJson edited", () => {
+        verifyTscWatchPackageJsonEdits("packageJson edited", getServerHostWithPackageJsonEdits);
+        verifyTscWatchPackageJsonEdits("packageJson edited already built", getServerHostWithPackageJsonEditsWithBuild);
+        function verifyTscWatchPackageJsonEdits(scenario: string, createHost: () => TestServerHost) {
+            it(scenario, () => {
+                const host = fakes.patchHostForBuildInfoReadWrite(createHost());
+                const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+                openFilesForSession(["/src/projects/project/src/randomFile.ts"], session);
+
+                session.logger.info("random edit");
+                session.executeCommandSeq<ts.server.protocol.ChangeRequest>({
+                    command: ts.server.protocol.CommandTypes.Change,
+                    arguments: {
+                        file: "/src/projects/project/src/randomFile.ts",
+                        line: 1,
+                        offset: 1,
+                        endLine: 1,
+                        endOffset: 1,
+                        insertString: `export cont y = 10;\n`,
+                    }
+                });
+                ts.server.updateProjectIfDirty(session.getProjectService().configuredProjects.get("/src/projects/project/src/tsconfig.json")!);
+
+                session.logger.info("Modify package json file to add type module");
+                host.writeFile(`/src/projects/project/package.json`, JSON.stringify({ name: "app", version: "1.0.0", type: "module" }));
+                host.runQueuedTimeoutCallbacks(); // failed lookup
+                host.runQueuedTimeoutCallbacks(); // actual update
+
+                session.logger.info("Modify package.json file to remove type module");
+                host.writeFile(`/src/projects/project/package.json`, JSON.stringify({ name: "app", version: "1.0.0" }));
+                host.runQueuedTimeoutCallbacks(); // failed lookup
+                host.runQueuedTimeoutCallbacks(); // actual update
+
+                session.logger.info("Delete package.json");
+                host.deleteFile(`/src/projects/project/package.json`);
+                host.runQueuedTimeoutCallbacks(); // failed lookup
+                host.runQueuedTimeoutCallbacks(); // actual update
+
+                session.logger.info("Add package json file with type module");
+                host.writeFile(`/src/projects/project/package.json`, JSON.stringify({ name: "app", version: "1.0.0", type: "module" }));
+                host.runQueuedTimeoutCallbacks(); // failed lookup
+                host.runQueuedTimeoutCallbacks(); // actual update
+
+                session.logger.info("Delete package.json");
+                host.deleteFile(`/src/projects/project/package.json`);
+                host.runQueuedTimeoutCallbacks(); // failed lookup
                 host.runQueuedTimeoutCallbacks(); // actual update
 
                 baselineTsserverLogs("cacheResolutions", scenario, session);

@@ -10,6 +10,7 @@ import {
     getFsWithMultipleProjects,
     getFsWithNode16,
     getFsWithOut,
+    getFsWithPackageJsonEdits,
     getFsWithSameResolutionFromMultiplePlaces,
     getPkgImportContent,
     getPkgTypeRefContent,
@@ -212,5 +213,54 @@ describe("unittests:: tsbuild:: cacheResolutions::", () => {
                 },
             },
         ]
+    });
+
+    verifyTsc({
+        scenario: "cacheResolutions",
+        subScenario: "packageJson edited",
+        commandLineArgs: ["--b", "/src/projects/project/src", "--explainFiles"],
+        fs: getFsWithPackageJsonEdits,
+        baselineModulesAndTypeRefs: true,
+        edits: [
+            {
+                caption: "random edit",
+                edit: fs => appendText(fs, "/src/projects/project/src/randomFile.ts", `export const y = 10;`),
+            },
+            {
+                caption: "Modify package json file to add type module",
+                edit: fs => fs.writeFileSync(`/src/projects/project/package.json`, JSON.stringify({ name: "app", version: "1.0.0", type: "module" })),
+            },
+            {
+                caption: "Modify package.json file to remove type module and randmon edit",
+                edit: fs => {
+                    fs.writeFileSync(`/src/projects/project/package.json`, JSON.stringify({ name: "app", version: "1.0.0" }));
+                    appendText(fs, "/src/projects/project/src/randomFile.ts", `export const z = 10;`);
+                },
+                discrepancyExplanation: () => [
+                    `Clean build and incremental build differ in emit signature and latestChangedDtsFile since incremental persists it from previous build and clean has errors`
+                ]
+            },
+            {
+                caption: "Delete package.json",
+                edit: fs => fs.unlinkSync(`/src/projects/project/package.json`),
+                discrepancyExplanation: () => [
+                    `Clean build and incremental build differ in emit signature and latestChangedDtsFile since incremental persists it from previous build and clean has errors`
+                ]
+            },
+            {
+                caption: "Add package json file with type module",
+                edit: fs => fs.writeFileSync(`/src/projects/project/package.json`, JSON.stringify({ name: "app", version: "1.0.0", type: "module" })),
+            },
+            {
+                caption: "Delete package.json and random edit",
+                edit: fs => {
+                    fs.unlinkSync(`/src/projects/project/package.json`);
+                    appendText(fs, "/src/projects/project/src/randomFile.ts", `export const k = 10;`);
+                },
+                discrepancyExplanation: () => [
+                    `Clean build and incremental build differ in emit signature and latestChangedDtsFile since incremental persists it from previous build and clean has errors`
+                ]
+            },
+        ],
     });
 });

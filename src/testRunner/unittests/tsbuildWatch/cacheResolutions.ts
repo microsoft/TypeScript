@@ -10,6 +10,8 @@ import {
     getWatchSystemWithNode16WithBuild,
     getWatchSystemWithOut,
     getWatchSystemWithOutWithBuild,
+    getWatchSystemWithPackageJsonEdits,
+    getWatchSystemWithPackageJsonEditsWithBuild,
     getWatchSystemWithSameResolutionFromMultiplePlaces,
     getWatchSystemWithSameResolutionFromMultiplePlacesWithBuild,
 } from "../tsbuild/cacheResolutionsHelper";
@@ -262,6 +264,58 @@ describe("unittests:: tsbuildWatch:: watchMode:: cacheResolutions::", () => {
                         timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                     },
                 ]
+            });
+        }
+    });
+
+    describe("packageJson edited", () => {
+        verifyTscWatchPackageJsonEdits("packageJson edited", getWatchSystemWithPackageJsonEdits);
+        verifyTscWatchPackageJsonEdits("packageJson edited already built", getWatchSystemWithPackageJsonEditsWithBuild);
+        function verifyTscWatchPackageJsonEdits(subScenario: string, sys: () => TestServerHost) {
+            verifyTscWatch({
+                scenario: "cacheResolutions",
+                subScenario,
+                commandLineArgs: ["--b", "src", "-w", "--explainFiles", "--extendedDiagnostics"],
+                baselineModulesAndTypeRefs: true,
+                sys,
+                edits: [
+                    {
+                        caption: "random edit",
+                        edit: sys => sys.appendFile("/src/projects/project/src/randomFile.ts", `export const y = 10;`),
+                        timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                    },
+                    {
+                        caption: "Modify package json file to add type module",
+                        edit: sys => sys.writeFile(`/src/projects/project/package.json`, JSON.stringify({ name: "app", version: "1.0.0", type: "module" })),
+                        timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                    },
+                    {
+                        caption: "Modify package.json file to remove type module and random edit",
+                        edit: sys => {
+                            sys.writeFile(`/src/projects/project/package.json`, JSON.stringify({ name: "app", version: "1.0.0" }));
+                            sys.appendFile("/src/projects/project/src/randomFile.ts", `export const z = 10;`);
+                        },
+                        timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                    },
+                    {
+                        caption: "Delete package.json",
+                        edit: sys => sys.deleteFile(`/src/projects/project/package.json`),
+                        timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                    },
+                    {
+                        caption: "Add package json file with type module",
+                        edit: sys => sys.writeFile(`/src/projects/project/package.json`, JSON.stringify({ name: "app", version: "1.0.0", type: "module" })),
+                        timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                    },
+                    {
+                        caption: "Delete package.json and random edit and random edit",
+                        edit: sys => {
+                            sys.deleteFile(`/src/projects/project/package.json`);
+                            sys.appendFile("/src/projects/project/src/randomFile.ts", `export const k = 10;`);
+                        },
+                        timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                    },
+                ],
             });
         }
     });

@@ -6,11 +6,13 @@ import {
 import {
     getFsWithNode16,
     getFsWithOut,
+    getFsWithPackageJsonEdits,
     getFsWithSameResolutionFromMultiplePlaces,
     getPkgImportContent,
     getPkgTypeRefContent,
 } from "../tsbuild/cacheResolutionsHelper";
 import {
+    appendText,
     loadProjectFromFiles,
     noChangeRun,
     prependText,
@@ -297,5 +299,39 @@ describe("unittests:: tsc:: cacheResolutions::", () => {
                 },
             },
         ]
+    });
+
+    verifyTsc({
+        scenario: "cacheResolutions",
+        subScenario: "packageJson edited",
+        commandLineArgs: ["--p", "/src/projects/project/src", "--explainFiles"],
+        baselineModulesAndTypeRefs: true,
+        fs: getFsWithPackageJsonEdits,
+        edits: [
+            {
+                caption: "random edit",
+                edit: fs => appendText(fs, "/src/projects/project/src/randomFile.ts", `export const y = 10;`),
+            },
+            {
+                caption: "Modify package json file to add type module",
+                edit: fs => fs.writeFileSync(`/src/projects/project/package.json`, JSON.stringify({ name: "app", version: "1.0.0", type: "module" })),
+            },
+            {
+                caption: "Modify package.json file to remove type module",
+                edit: fs => fs.writeFileSync(`/src/projects/project/package.json`, JSON.stringify({ name: "app", version: "1.0.0" })),
+            },
+            {
+                caption: "Delete package.json",
+                edit: fs => fs.unlinkSync(`/src/projects/project/package.json`),
+            },
+            {
+                caption: "Add package json file with type module",
+                edit: fs => fs.writeFileSync(`/src/projects/project/package.json`, JSON.stringify({ name: "app", version: "1.0.0", type: "module" })),
+            },
+            {
+                caption: "Delete package.json and random edit",
+                edit: fs => fs.unlinkSync(`/src/projects/project/package.json`)
+            },
+        ],
     });
 });
