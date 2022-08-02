@@ -772,10 +772,11 @@ namespace ts {
             let actualWatcher = canWatchDirectoryOrFile(resolutionHost.toPath(locationToWatch)) ?
                 resolutionHost.watchAffectingFileLocation(locationToWatch, (fileName, eventKind) => {
                     cachedDirectoryStructureHost?.addOrDeleteFile(fileName, resolutionHost.toPath(locationToWatch), eventKind);
+                    const packageJsonMap = moduleResolutionCache.getPackageJsonInfoCache().getInternalMap();
                     paths.forEach(path => {
                         if (watcher.resolutions) (affectingPathChecks ??= new Set()).add(path);
                         if (watcher.files) (affectingPathChecksForFile ??= new Set()).add(path);
-                        moduleResolutionCache.getPackageJsonInfoCache().getInternalMap()?.delete(resolutionHost.toPath(path));
+                        packageJsonMap?.delete(resolutionHost.toPath(path));
                     });
                     resolutionHost.scheduleInvalidateResolutionsOfFailedLookupLocations();
                 }) : noopFileWatcher;

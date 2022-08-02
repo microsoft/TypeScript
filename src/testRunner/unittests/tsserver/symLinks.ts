@@ -136,7 +136,7 @@ new C();`
                         const config = JSON.parse(host.readFile(recognizerDateTimeTsconfigPath)!);
                         host.writeFile(recognizerDateTimeTsconfigPath, JSON.stringify({
                             ...config,
-                            compilerOptions: { ...(config.compilerOptions || {}), resolveJsonModule: true }
+                            compilerOptions: { ...config.compilerOptions, resolveJsonModule: true }
                         }));
                         host.runQueuedTimeoutCallbacks(); // Scheduled invalidation of resolutions
                         host.runQueuedTimeoutCallbacks(); // Actual update
