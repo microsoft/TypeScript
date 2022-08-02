@@ -27022,7 +27022,9 @@ namespace ts {
                 case AssignmentDeclarationKind.ExportsProperty:
                 case AssignmentDeclarationKind.Prototype:
                 case AssignmentDeclarationKind.PrototypeProperty:
-                    let valueDeclaration = binaryExpression.left.symbol?.valueDeclaration;
+                    // TODO: this crashes in ES6
+                    // eslint-disable-next-line no-var
+                    var valueDeclaration = binaryExpression.left.symbol?.valueDeclaration;
                     // falls through
                 case AssignmentDeclarationKind.ModuleExports:
                     valueDeclaration ||= binaryExpression.symbol?.valueDeclaration;

@@ -1374,7 +1374,9 @@ namespace ts {
             // the program points to old source files that have been invalidated because of
             // incremental parsing.
 
-            const documentRegistryBucketKey = documentRegistry.getKeyForCompilationSettings(newSettings);
+            // TODO: this crashes in ES6
+            // eslint-disable-next-line no-var
+            var documentRegistryBucketKey = documentRegistry.getKeyForCompilationSettings(newSettings);
             const options: CreateProgramOptions = {
                 rootNames: rootFileNames,
                 options: newSettings,
