@@ -1,3 +1,5 @@
+tests/cases/conformance/node/allowJs/index.js(2,10): error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of a module.
+tests/cases/conformance/node/allowJs/index.js(3,7): error TS2441: Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of a module.
 tests/cases/conformance/node/allowJs/subfolder/index.js(2,10): error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of a module.
 tests/cases/conformance/node/allowJs/subfolder/index.js(3,7): error TS2441: Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of a module.
 tests/cases/conformance/node/allowJs/subfolder/index.js(4,7): error TS2725: Class name cannot be 'Object' when targeting ES5 with module Node16.
@@ -19,10 +21,14 @@ tests/cases/conformance/node/allowJs/subfolder/index.js(5,14): error TS1216: Ide
                  ~~~~~~~~~~
 !!! error TS1216: Identifier expected. '__esModule' is reserved as an exported marker when transforming ECMAScript modules.
     export {require, exports, Object};
-==== tests/cases/conformance/node/allowJs/index.js (0 errors) ====
+==== tests/cases/conformance/node/allowJs/index.js (2 errors) ====
     // esm format file
     function require() {}
+             ~~~~~~~
+!!! error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of a module.
     const exports = {};
+          ~~~~~~~
+!!! error TS2441: Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of a module.
     class Object {}
     export const __esModule = false;
     export {require, exports, Object};

@@ -37845,7 +37845,7 @@ namespace ts {
 
         function checkCollisionWithRequireExportsInGeneratedCode(node: Node, name: Identifier | undefined) {
             // No need to check for require or exports for ES6 modules and later
-            if (moduleKind >= ModuleKind.ES2015 && !(moduleKind >= ModuleKind.Node16 && getSourceFileOfNode(node).impliedNodeFormat === ModuleKind.CommonJS)) {
+            if (moduleKind >= ModuleKind.ES2015 && !isInJSFile(node) && !(moduleKind >= ModuleKind.Node16 && getSourceFileOfNode(node).impliedNodeFormat === ModuleKind.CommonJS)) {
                 return;
             }
 
@@ -37862,8 +37862,14 @@ namespace ts {
             const parent = getDeclarationContainer(node);
             if (parent.kind === SyntaxKind.SourceFile && isExternalOrCommonJsModule(parent as SourceFile)) {
                 // If the declaration happens to be in external module, report error that require and exports are reserved keywords
-                errorSkippedOn("noEmit", name, Diagnostics.Duplicate_identifier_0_Compiler_reserves_name_1_in_top_level_scope_of_a_module,
-                    declarationNameToString(name), declarationNameToString(name));
+                if (isInJSFile(node)) {
+                    error(name, Diagnostics.Duplicate_identifier_0_Compiler_reserves_name_1_in_top_level_scope_of_a_module,
+                        declarationNameToString(name), declarationNameToString(name));
+                }
+                else {
+                    errorSkippedOn("noEmit", name, Diagnostics.Duplicate_identifier_0_Compiler_reserves_name_1_in_top_level_scope_of_a_module,
+                        declarationNameToString(name), declarationNameToString(name));
+                }
             }
         }
 
