@@ -843,6 +843,17 @@ namespace ts {
      * @returns `undefined` if the path has no relevant implied format, `ModuleKind.ESNext` for esm format, and `ModuleKind.CommonJS` for cjs format
      */
     export function getImpliedNodeFormatForFile(fileName: Path, packageJsonInfoCache: PackageJsonInfoCache | undefined, host: ModuleResolutionHost, options: CompilerOptions): ModuleKind.ESNext | ModuleKind.CommonJS | undefined {
+        const result = getImpliedNodeFormatForFileWorker(fileName, packageJsonInfoCache, host, options);
+        return typeof result === "object" ? result.impliedNodeFormat : result;
+    }
+
+    /*@internal*/
+    export function getImpliedNodeFormatForFileWorker(
+        fileName: Path,
+        packageJsonInfoCache: PackageJsonInfoCache | undefined,
+        host: ModuleResolutionHost,
+        options: CompilerOptions,
+    ) {
         switch (getEmitModuleResolutionKind(options)) {
             case ModuleResolutionKind.Node16:
             case ModuleResolutionKind.NodeNext:
@@ -853,10 +864,14 @@ namespace ts {
             default:
                 return undefined;
         }
-        function lookupFromPackageJson(): ModuleKind.ESNext | ModuleKind.CommonJS {
-            const scope = getPackageScopeForPath(fileName, getTemporaryModuleResolutionState(packageJsonInfoCache, host, options));
-            return scope?.packageJsonContent.type === "module" ? ModuleKind.ESNext : ModuleKind.CommonJS;
-
+        function lookupFromPackageJson(): Partial<CreateSourceFileOptions> {
+            const state = getTemporaryModuleResolutionState(packageJsonInfoCache, host, options);
+            const packageJsonLocations: string[] = [];
+            state.failedLookupLocations = packageJsonLocations;
+            state.affectingLocations = packageJsonLocations;
+            const packageJsonScope = getPackageScopeForPath(fileName, state);
+            const impliedNodeFormat = packageJsonScope?.packageJsonContent.type === "module" ? ModuleKind.ESNext : ModuleKind.CommonJS;
+            return { impliedNodeFormat, packageJsonLocations, packageJsonScope };
         }
     }
 
@@ -1236,7 +1251,7 @@ namespace ts {
             const oldSourceFiles = oldProgram.getSourceFiles();
             for (const oldSourceFile of oldSourceFiles) {
                 const newFile = getSourceFileByPath(oldSourceFile.resolvedPath);
-                if (shouldCreateNewSourceFile || !newFile ||
+                if (shouldCreateNewSourceFile || !newFile || newFile.impliedNodeFormat !== oldSourceFile.impliedNodeFormat ||
                     // old file wasn't redirect but new file is
                     (oldSourceFile.resolvedPath === oldSourceFile.path && newFile.resolvedPath !== oldSourceFile.path)) {
                     host.onReleaseOldSourceFile(oldSourceFile, oldProgram.getCompilerOptions(), !!getSourceFileByPath(oldSourceFile.path));
@@ -1711,13 +1726,16 @@ namespace ts {
             const seenPackageNames = new Map<string, SeenPackageName>();
 
             for (const oldSourceFile of oldSourceFiles) {
+                const sourceFileOptions = getCreateSourceFileOptions(oldSourceFile.fileName, moduleResolutionCache, host, options);
                 let newSourceFile = host.getSourceFileByPath
-                    ? host.getSourceFileByPath(oldSourceFile.fileName, oldSourceFile.resolvedPath, getCreateSourceFileOptions(oldSourceFile.fileName, moduleResolutionCache, host, options), /*onError*/ undefined, shouldCreateNewSourceFile)
-                    : host.getSourceFile(oldSourceFile.fileName, getCreateSourceFileOptions(oldSourceFile.fileName, moduleResolutionCache, host, options), /*onError*/ undefined, shouldCreateNewSourceFile); // TODO: GH#18217
+                    ? host.getSourceFileByPath(oldSourceFile.fileName, oldSourceFile.resolvedPath, sourceFileOptions, /*onError*/ undefined, shouldCreateNewSourceFile || sourceFileOptions.impliedNodeFormat !== oldSourceFile.impliedNodeFormat)
+                    : host.getSourceFile(oldSourceFile.fileName, sourceFileOptions, /*onError*/ undefined, shouldCreateNewSourceFile || sourceFileOptions.impliedNodeFormat !== oldSourceFile.impliedNodeFormat); // TODO: GH#18217
 
                 if (!newSourceFile) {
                     return StructureIsReused.Not;
                 }
+                newSourceFile.packageJsonLocations = sourceFileOptions.packageJsonLocations?.length ? sourceFileOptions.packageJsonLocations : undefined;
+                newSourceFile.packageJsonScope = sourceFileOptions.packageJsonScope;
 
                 Debug.assert(!newSourceFile.redirectInfo, "Host should not return a redirect source file from `getSourceFile`");
 
@@ -1762,43 +1780,43 @@ namespace ts {
                 }
 
                 if (fileChanged) {
+                    if (oldSourceFile.impliedNodeFormat !== newSourceFile.impliedNodeFormat) {
+                        structureIsReused = StructureIsReused.SafeModules;
+                    }
                     // The `newSourceFile` object was created for the new program.
-
-                    if (!arrayIsEqualTo(oldSourceFile.libReferenceDirectives, newSourceFile.libReferenceDirectives, fileReferenceIsEqualTo)) {
+                    else if (!arrayIsEqualTo(oldSourceFile.libReferenceDirectives, newSourceFile.libReferenceDirectives, fileReferenceIsEqualTo)) {
                         // 'lib' references has changed. Matches behavior in changesAffectModuleResolution
                         structureIsReused = StructureIsReused.SafeModules;
                     }
-
-                    if (oldSourceFile.hasNoDefaultLib !== newSourceFile.hasNoDefaultLib) {
+                    else if (oldSourceFile.hasNoDefaultLib !== newSourceFile.hasNoDefaultLib) {
                         // value of no-default-lib has changed
                         // this will affect if default library is injected into the list of files
                         structureIsReused = StructureIsReused.SafeModules;
                     }
-
                     // check tripleslash references
-                    if (!arrayIsEqualTo(oldSourceFile.referencedFiles, newSourceFile.referencedFiles, fileReferenceIsEqualTo)) {
+                    else if (!arrayIsEqualTo(oldSourceFile.referencedFiles, newSourceFile.referencedFiles, fileReferenceIsEqualTo)) {
                         // tripleslash references has changed
                         structureIsReused = StructureIsReused.SafeModules;
                     }
-
-                    // check imports and module augmentations
-                    collectExternalModuleReferences(newSourceFile);
-                    if (!arrayIsEqualTo(oldSourceFile.imports, newSourceFile.imports, moduleNameIsEqualTo)) {
-                        // imports has changed
-                        structureIsReused = StructureIsReused.SafeModules;
-                    }
-                    if (!arrayIsEqualTo(oldSourceFile.moduleAugmentations, newSourceFile.moduleAugmentations, moduleNameIsEqualTo)) {
-                        // moduleAugmentations has changed
-                        structureIsReused = StructureIsReused.SafeModules;
-                    }
-                    if ((oldSourceFile.flags & NodeFlags.PermanentlySetIncrementalFlags) !== (newSourceFile.flags & NodeFlags.PermanentlySetIncrementalFlags)) {
-                        // dynamicImport has changed
-                        structureIsReused = StructureIsReused.SafeModules;
-                    }
-
-                    if (!arrayIsEqualTo(oldSourceFile.typeReferenceDirectives, newSourceFile.typeReferenceDirectives, fileReferenceIsEqualTo)) {
-                        // 'types' references has changed
-                        structureIsReused = StructureIsReused.SafeModules;
+                    else {
+                        // check imports and module augmentations
+                        collectExternalModuleReferences(newSourceFile);
+                        if (!arrayIsEqualTo(oldSourceFile.imports, newSourceFile.imports, moduleNameIsEqualTo)) {
+                            // imports has changed
+                            structureIsReused = StructureIsReused.SafeModules;
+                        }
+                        else if (!arrayIsEqualTo(oldSourceFile.moduleAugmentations, newSourceFile.moduleAugmentations, moduleNameIsEqualTo)) {
+                            // moduleAugmentations has changed
+                            structureIsReused = StructureIsReused.SafeModules;
+                        }
+                        else if ((oldSourceFile.flags & NodeFlags.PermanentlySetIncrementalFlags) !== (newSourceFile.flags & NodeFlags.PermanentlySetIncrementalFlags)) {
+                            // dynamicImport has changed
+                            structureIsReused = StructureIsReused.SafeModules;
+                        }
+                        else if (!arrayIsEqualTo(oldSourceFile.typeReferenceDirectives, newSourceFile.typeReferenceDirectives, fileReferenceIsEqualTo)) {
+                            // 'types' references has changed
+                            structureIsReused = StructureIsReused.SafeModules;
+                        }
                     }
 
                     // tentatively approve the file
@@ -2771,13 +2789,15 @@ namespace ts {
             }
         }
 
-        function createRedirectSourceFile(redirectTarget: SourceFile, unredirected: SourceFile, fileName: string, path: Path, resolvedPath: Path, originalFileName: string): SourceFile {
+        function createRedirectSourceFile(redirectTarget: SourceFile, unredirected: SourceFile, fileName: string, path: Path, resolvedPath: Path, originalFileName: string, sourceFileOptions: CreateSourceFileOptions): SourceFile {
             const redirect: SourceFile = Object.create(redirectTarget);
             redirect.fileName = fileName;
             redirect.path = path;
             redirect.resolvedPath = resolvedPath;
             redirect.originalFileName = originalFileName;
             redirect.redirectInfo = { redirectTarget, unredirected };
+            redirect.packageJsonLocations = sourceFileOptions.packageJsonLocations?.length ? sourceFileOptions.packageJsonLocations : undefined;
+            redirect.packageJsonScope = sourceFileOptions.packageJsonScope;
             sourceFilesFoundSearchingNodeModules.set(path, currentNodeModulesDepth > 0);
             Object.defineProperties(redirect, {
                 id: {
@@ -2804,16 +2824,16 @@ namespace ts {
             return result;
         }
 
-        function getCreateSourceFileOptions(fileName: string, moduleResolutionCache: ModuleResolutionCache | undefined, host: CompilerHost, options: CompilerOptions) {
+        function getCreateSourceFileOptions(fileName: string, moduleResolutionCache: ModuleResolutionCache | undefined, host: CompilerHost, options: CompilerOptions): CreateSourceFileOptions {
             // It's a _little odd_ that we can't set `impliedNodeFormat` until the program step - but it's the first and only time we have a resolution cache
             // and a freshly made source file node on hand at the same time, and we need both to set the field. Persisting the resolution cache all the way
             // to the check and emit steps would be bad - so we much prefer detecting and storing the format information on the source file node upfront.
-            const impliedNodeFormat = getImpliedNodeFormatForFile(toPath(fileName), moduleResolutionCache?.getPackageJsonInfoCache(), host, options);
-            return {
-                languageVersion: getEmitScriptTarget(options),
-                impliedNodeFormat,
-                setExternalModuleIndicator: getSetExternalModuleIndicator(options)
-            };
+            const result = getImpliedNodeFormatForFileWorker(toPath(fileName), moduleResolutionCache?.getPackageJsonInfoCache(), host, options);
+            const languageVersion = getEmitScriptTarget(options);
+            const setExternalModuleIndicator = getSetExternalModuleIndicator(options);
+            return typeof result === "object" ?
+                { ...result, languageVersion, setExternalModuleIndicator } :
+                { languageVersion, impliedNodeFormat: result, setExternalModuleIndicator };
         }
 
         function findSourceFileWorker(fileName: string, isDefaultLib: boolean, ignoreNoDefaultLib: boolean, reason: FileIncludeReason, packageId: PackageId | undefined): SourceFile | undefined {
@@ -2906,11 +2926,12 @@ namespace ts {
             }
 
             // We haven't looked for this file, do so now and cache result
+            const sourceFileOptions = getCreateSourceFileOptions(fileName, moduleResolutionCache, host, options);
             const file = host.getSourceFile(
                 fileName,
-                getCreateSourceFileOptions(fileName, moduleResolutionCache, host, options),
+                sourceFileOptions,
                 hostErrorMessage => addFilePreprocessingFileExplainingDiagnostic(/*file*/ undefined, reason, Diagnostics.Cannot_read_file_0_Colon_1, [fileName, hostErrorMessage]),
-                shouldCreateNewSourceFile
+                shouldCreateNewSourceFile || (oldProgram?.getSourceFileByPath(toPath(fileName))?.impliedNodeFormat !== sourceFileOptions.impliedNodeFormat)
             );
 
             if (packageId) {
@@ -2919,7 +2940,7 @@ namespace ts {
                 if (fileFromPackageId) {
                     // Some other SourceFile already exists with this package name and version.
                     // Instead of creating a duplicate, just redirect to the existing one.
-                    const dupFile = createRedirectSourceFile(fileFromPackageId, file!, fileName, path, toPath(fileName), originalFileName); // TODO: GH#18217
+                    const dupFile = createRedirectSourceFile(fileFromPackageId, file!, fileName, path, toPath(fileName), originalFileName, sourceFileOptions);
                     redirectTargetsMap.add(fileFromPackageId.path, fileName);
                     addFileToFilesByName(dupFile, path, redirectedPath);
                     addFileIncludeReason(dupFile, reason);
@@ -2941,6 +2962,8 @@ namespace ts {
                 file.path = path;
                 file.resolvedPath = toPath(fileName);
                 file.originalFileName = originalFileName;
+                file.packageJsonLocations = sourceFileOptions.packageJsonLocations?.length ? sourceFileOptions.packageJsonLocations : undefined;
+                file.packageJsonScope = sourceFileOptions.packageJsonScope;
                 addFileIncludeReason(file, reason);
 
                 if (host.useCaseSensitiveFileNames()) {
@@ -3677,7 +3700,7 @@ namespace ts {
             if (locationReason && fileIncludeReasons?.length === 1) fileIncludeReasons = undefined;
             const location = locationReason && getReferencedFileLocation(getSourceFileByPath, locationReason);
             const fileIncludeReasonDetails = fileIncludeReasons && chainDiagnosticMessages(fileIncludeReasons, Diagnostics.The_file_is_in_the_program_because_Colon);
-            const redirectInfo = file && explainIfFileIsRedirect(file);
+            const redirectInfo = file && explainIfFileIsRedirectAndImpliedFormat(file);
             const chain = chainDiagnosticMessages(redirectInfo ? fileIncludeReasonDetails ? [fileIncludeReasonDetails, ...redirectInfo] : redirectInfo : fileIncludeReasonDetails, diagnostic, ...args || emptyArray);
             return location && isReferenceFileLocation(location) ?
                 createFileDiagnosticFromMessageChain(location.file, location.pos, location.end - location.pos, chain, relatedInfo) :

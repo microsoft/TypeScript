@@ -3799,6 +3799,8 @@ namespace ts {
          * CommonJS-output-format by the node module transformer and type checker, regardless of extension or context.
          */
         impliedNodeFormat?: ModuleKind.ESNext | ModuleKind.CommonJS;
+        /*@internal*/ packageJsonLocations?: readonly string[];
+        /*@internal*/ packageJsonScope?: PackageJsonInfo;
 
         /* @internal */ scriptKind: ScriptKind;
 

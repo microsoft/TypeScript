@@ -20,7 +20,7 @@ namespace ts {
 
 
         startCachingPerDirectoryResolution(): void;
-        finishCachingPerDirectoryResolution(): void;
+        finishCachingPerDirectoryResolution(newProgram: Program | undefined, oldProgram: Program | undefined): void;
 
         updateTypeRootsWatch(): void;
         closeTypeRootsWatch(): void;
@@ -70,18 +70,19 @@ namespace ts {
         onDiscoveredSymlink?(): void;
     }
 
-    interface WatcherWithRefCount {
+    interface FileWatcherOfAffectingLocation {
+        /** watcher for the lookup */
+        watcher: FileWatcher;
+        resolutions: number;
+        files: number;
+        paths: Set<string>;
+    }
+
+    interface DirectoryWatchesOfFailedLookup {
         /** watcher for the lookup */
         watcher: FileWatcher;
         /** ref count keeping this watch alive */
         refCount: number;
-    }
-
-    interface FileWatcherOfAffectingLocation extends WatcherWithRefCount {
-        paths: Set<Path>;
-    }
-
-    interface DirectoryWatchesOfFailedLookup extends WatcherWithRefCount {
         /** is the directory watched being non recursive */
         nonRecursive?: boolean;
     }
@@ -109,7 +110,7 @@ namespace ts {
      * "c:/", "c:/users", "c:/users/username", "c:/users/username/folderAtRoot", "c:/folderAtRoot"
      * @param dirPath
      */
-    export function canWatchDirectory(dirPath: Path) {
+    export function canWatchDirectoryOrFile(dirPath: Path) {
         const rootLength = getRootLength(dirPath);
         if (dirPath.length === rootLength) {
             // Ignore "/", "c:/"
@@ -164,9 +165,11 @@ namespace ts {
         const resolutionsWithFailedLookups: ResolutionWithFailedLookupLocations[] = [];
         const resolutionsWithOnlyAffectingLocations: ResolutionWithFailedLookupLocations[] = [];
         const resolvedFileToResolution = createMultiMap<ResolutionWithFailedLookupLocations>();
+        const impliedFormatPackageJsons = new Map<Path, readonly string[]>();
 
         let hasChangedAutomaticTypeDirectiveNames = false;
-        let affectingPathChecks: Set<Path> | undefined;
+        let affectingPathChecksForFile: Set<string> | undefined;
+        let affectingPathChecks: Set<string> | undefined;
         let failedLookupChecks: Set<Path> | undefined;
         let startsWithPathChecks: Set<Path> | undefined;
         let isInDirectoryChecks: Set<Path> | undefined;
@@ -222,7 +225,7 @@ namespace ts {
             finishRecordingFilesWithChangedResolutions,
             // perDirectoryResolvedModuleNames and perDirectoryResolvedTypeReferenceDirectives could be non empty if there was exception during program update
             // (between startCachingPerDirectoryResolution and finishCachingPerDirectoryResolution)
-            startCachingPerDirectoryResolution: clearPerDirectoryResolutions,
+            startCachingPerDirectoryResolution,
             finishCachingPerDirectoryResolution,
             resolveModuleNames,
             getResolvedModuleWithFailedLookupLocationsFromCache,
@@ -270,9 +273,10 @@ namespace ts {
             startsWithPathChecks = undefined;
             isInDirectoryChecks = undefined;
             affectingPathChecks = undefined;
-            // perDirectoryResolvedModuleNames and perDirectoryResolvedTypeReferenceDirectives could be non empty if there was exception during program update
-            // (between startCachingPerDirectoryResolution and finishCachingPerDirectoryResolution)
-            clearPerDirectoryResolutions();
+            affectingPathChecksForFile = undefined;
+            moduleResolutionCache.clear();
+            typeReferenceDirectiveResolutionCache.clear();
+            impliedFormatPackageJsons.clear();
             hasChangedAutomaticTypeDirectiveNames = false;
         }
 
@@ -310,16 +314,42 @@ namespace ts {
                 isFileWithInvalidatedNonRelativeUnresolvedImports(path);
         }
 
-        function clearPerDirectoryResolutions() {
-            moduleResolutionCache.clear();
-            typeReferenceDirectiveResolutionCache.clear();
+        function startCachingPerDirectoryResolution() {
+            moduleResolutionCache.clearAllExceptPackageJsonInfoCache();
+            typeReferenceDirectiveResolutionCache.clearAllExceptPackageJsonInfoCache();
+            // perDirectoryResolvedModuleNames and perDirectoryResolvedTypeReferenceDirectives could be non empty if there was exception during program update
+            // (between startCachingPerDirectoryResolution and finishCachingPerDirectoryResolution)
             nonRelativeExternalModuleResolutions.forEach(watchFailedLookupLocationOfNonRelativeModuleResolutions);
             nonRelativeExternalModuleResolutions.clear();
         }
 
-        function finishCachingPerDirectoryResolution() {
+        function finishCachingPerDirectoryResolution(newProgram: Program | undefined, oldProgram: Program | undefined) {
             filesWithInvalidatedNonRelativeUnresolvedImports = undefined;
-            clearPerDirectoryResolutions();
+            nonRelativeExternalModuleResolutions.forEach(watchFailedLookupLocationOfNonRelativeModuleResolutions);
+            nonRelativeExternalModuleResolutions.clear();
+            // Update file watches
+            if (newProgram !== oldProgram) {
+                newProgram?.getSourceFiles().forEach(newFile => {
+                    const expected = isExternalOrCommonJsModule(newFile) ? newFile.packageJsonLocations?.length ?? 0 : 0;
+                    const existing = impliedFormatPackageJsons.get(newFile.path) ?? emptyArray;
+                    for (let i = existing.length; i < expected; i++) {
+                        createFileWatcherOfAffectingLocation(newFile.packageJsonLocations![i], /*forResolution*/ false);
+                    }
+                    if (existing.length > expected) {
+                        for (let i = expected; i < existing.length; i++) {
+                            fileWatchesOfAffectingLocations.get(existing[i])!.files--;
+                        }
+                    }
+                    if (expected) impliedFormatPackageJsons.set(newFile.path, newFile.packageJsonLocations!);
+                    else impliedFormatPackageJsons.delete(newFile.path);
+                });
+                impliedFormatPackageJsons.forEach((existing, path) => {
+                    if (!newProgram?.getSourceFileByPath(path)) {
+                        existing.forEach(location => fileWatchesOfAffectingLocations.get(location)!.files--);
+                        impliedFormatPackageJsons.delete(path);
+                    }
+                });
+            }
             directoryWatchesOfFailedLookups.forEach((watcher, path) => {
                 if (watcher.refCount === 0) {
                     directoryWatchesOfFailedLookups.delete(path);
@@ -327,7 +357,7 @@ namespace ts {
                 }
             });
             fileWatchesOfAffectingLocations.forEach((watcher, path) => {
-                if (watcher.refCount === 0) {
+                if (watcher.files === 0 && watcher.resolutions === 0) {
                     fileWatchesOfAffectingLocations.delete(path);
                     watcher.watcher.close();
                     // Ensure when watching symlinked package.json, we can close the actual file watcher only once
@@ -617,7 +647,7 @@ namespace ts {
 
             // If the directory is node_modules use it to watch, always watch it recursively
             if (isNodeModulesDirectory(dirPath)) {
-                return canWatchDirectory(getDirectoryPath(dirPath)) ? { dir, dirPath } : undefined;
+                return canWatchDirectoryOrFile(getDirectoryPath(dirPath)) ? { dir, dirPath } : undefined;
             }
 
             let nonRecursive = true;
@@ -637,7 +667,7 @@ namespace ts {
                 }
             }
 
-            return canWatchDirectory(dirPath) ? { dir: subDirectory || dir, dirPath: subDirectoryPath || dirPath, nonRecursive } : undefined;
+            return canWatchDirectoryOrFile(dirPath) ? { dir: subDirectory || dir, dirPath: subDirectoryPath || dirPath, nonRecursive } : undefined;
         }
 
         function isPathWithDefaultFailedLookupExtension(path: Path) {
@@ -714,47 +744,52 @@ namespace ts {
             if (addToResolutionsWithOnlyAffectingLocations) resolutionsWithOnlyAffectingLocations.push(resolution);
             // Watch package json
             for (const affectingLocation of affectingLocations) {
-                createFileWatcherOfAffectingLocation(affectingLocation);
+                createFileWatcherOfAffectingLocation(affectingLocation, /*forResolution*/ true);
             }
         }
 
-        function createFileWatcherOfAffectingLocation(affectingLocation: string) {
-            const path = resolutionHost.toPath(affectingLocation);
-            const fileWatcher = fileWatchesOfAffectingLocations.get(path);
+        function createFileWatcherOfAffectingLocation(affectingLocation: string, forResolution: boolean) {
+            const fileWatcher = fileWatchesOfAffectingLocations.get(affectingLocation);
             if (fileWatcher) {
-                fileWatcher.refCount++;
+                if (forResolution) fileWatcher.resolutions++;
+                else fileWatcher.files++;
                 return;
             }
             let locationToWatch = affectingLocation;
-            let locationToWatchPath = path;
             if (resolutionHost.realpath) {
                 locationToWatch = resolutionHost.realpath(affectingLocation);
-                locationToWatchPath = resolutionHost.toPath(locationToWatch);
-                if (path !== locationToWatchPath) {
-                    const fileWatcher = fileWatchesOfAffectingLocations.get(locationToWatchPath);
+                if (affectingLocation !== locationToWatch) {
+                    const fileWatcher = fileWatchesOfAffectingLocations.get(locationToWatch);
                     if (fileWatcher) {
-                        fileWatcher.refCount++;
-                        fileWatcher.paths.add(path);
-                        fileWatchesOfAffectingLocations.set(path, fileWatcher);
+                        if (forResolution) fileWatcher.resolutions++;
+                        else fileWatcher.files++;
+                        fileWatcher.paths.add(affectingLocation);
+                        fileWatchesOfAffectingLocations.set(affectingLocation, fileWatcher);
                         return;
                     }
                 }
             }
-            const paths = new Set<Path>();
-            paths.add(locationToWatchPath);
+            const paths = new Set<string>();
+            paths.add(locationToWatch);
             const watcher: FileWatcherOfAffectingLocation = {
-                watcher: resolutionHost.watchAffectingFileLocation(locationToWatch, (fileName, eventKind) => {
-                    cachedDirectoryStructureHost?.addOrDeleteFile(fileName, path, eventKind);
-                    paths.forEach(path => (affectingPathChecks ||= new Set()).add(path));
-                    resolutionHost.scheduleInvalidateResolutionsOfFailedLookupLocations();
-                }),
-                refCount: 1,
+                watcher: canWatchDirectoryOrFile(resolutionHost.toPath(locationToWatch)) ?
+                    resolutionHost.watchAffectingFileLocation(locationToWatch, (fileName, eventKind) => {
+                        cachedDirectoryStructureHost?.addOrDeleteFile(fileName, resolutionHost.toPath(locationToWatch), eventKind);
+                        paths.forEach(path => {
+                            if (watcher.resolutions) (affectingPathChecks ??= new Set()).add(path);
+                            if (watcher.files) (affectingPathChecksForFile ??= new Set()).add(path);
+                            moduleResolutionCache.getPackageJsonInfoCache().getInternalMap()?.delete(resolutionHost.toPath(path));
+                        });
+                        resolutionHost.scheduleInvalidateResolutionsOfFailedLookupLocations();
+                    }) : noopFileWatcher,
+                resolutions: forResolution ? 1 : 0,
+                files: forResolution ? 0 : 1,
                 paths,
             };
-            fileWatchesOfAffectingLocations.set(locationToWatchPath, watcher);
-            if (path !== locationToWatchPath) {
-                fileWatchesOfAffectingLocations.set(path, watcher);
-                paths.add(path);
+            fileWatchesOfAffectingLocations.set(locationToWatch, watcher);
+            if (affectingLocation !== locationToWatch) {
+                fileWatchesOfAffectingLocations.set(affectingLocation, watcher);
+                paths.add(affectingLocation);
             }
         }
 
@@ -830,8 +865,8 @@ namespace ts {
             }
 
             for (const affectingLocation of affectingLocations) {
-                const watcher = fileWatchesOfAffectingLocations.get(resolutionHost.toPath(affectingLocation))!;
-                watcher.refCount--;
+                const watcher = fileWatchesOfAffectingLocations.get(affectingLocation)!;
+                watcher.resolutions--;
             }
         }
 
@@ -892,7 +927,7 @@ namespace ts {
                 if (resolution.isInvalidated || !canInvalidate(resolution)) continue;
                 resolution.isInvalidated = invalidated = true;
                 for (const containingFilePath of Debug.checkDefined(resolution.files)) {
-                    (filesWithInvalidatedResolutions || (filesWithInvalidatedResolutions = new Set())).add(containingFilePath);
+                    (filesWithInvalidatedResolutions ??= new Set()).add(containingFilePath);
                     // When its a file with inferred types resolution, invalidate type reference directive resolution
                     hasChangedAutomaticTypeDirectiveNames = hasChangedAutomaticTypeDirectiveNames || endsWith(containingFilePath, inferredTypesContainingFile);
                 }
@@ -964,11 +999,26 @@ namespace ts {
         }
 
         function invalidateResolutionsOfFailedLookupLocations() {
-            if (!failedLookupChecks && !startsWithPathChecks && !isInDirectoryChecks && !affectingPathChecks) {
-                return false;
+            let invalidated = false;
+            if (affectingPathChecksForFile) {
+                resolutionHost.getCurrentProgram()?.getSourceFiles().forEach(f => {
+                    if (some(f.packageJsonLocations, location => affectingPathChecksForFile!.has(location))) {
+                        (filesWithInvalidatedResolutions ??= new Set()).add(f.path);
+                        invalidated = true;
+                    }
+                });
+                affectingPathChecksForFile = undefined;
             }
 
-            let invalidated = invalidateResolutions(resolutionsWithFailedLookups, canInvalidateFailedLookupResolution);
+            if (!failedLookupChecks && !startsWithPathChecks && !isInDirectoryChecks && !affectingPathChecks) {
+                return invalidated;
+            }
+
+            invalidated = invalidateResolutions(resolutionsWithFailedLookups, canInvalidateFailedLookupResolution) || invalidated;
+            const packageJsonMap = moduleResolutionCache.getPackageJsonInfoCache().getInternalMap();
+            if (packageJsonMap && (failedLookupChecks || startsWithPathChecks || isInDirectoryChecks)) {
+                packageJsonMap.forEach((_value, path) => isInvalidatedFailedLookup(path) ? packageJsonMap.delete(path) : undefined);
+            }
             failedLookupChecks = undefined;
             startsWithPathChecks = undefined;
             isInDirectoryChecks = undefined;
@@ -980,17 +1030,17 @@ namespace ts {
         function canInvalidateFailedLookupResolution(resolution: ResolutionWithFailedLookupLocations) {
             if (canInvalidatedFailedLookupResolutionWithAffectingLocation(resolution)) return true;
             if (!failedLookupChecks && !startsWithPathChecks && !isInDirectoryChecks) return false;
-            return resolution.failedLookupLocations.some(location => {
-                const locationPath = resolutionHost.toPath(location);
-                return failedLookupChecks?.has(locationPath) ||
-                    firstDefinedIterator(startsWithPathChecks?.keys() || emptyIterator, fileOrDirectoryPath => startsWith(locationPath, fileOrDirectoryPath) ? true : undefined) ||
-                    firstDefinedIterator(isInDirectoryChecks?.keys() || emptyIterator, fileOrDirectoryPath => isInDirectoryPath(fileOrDirectoryPath, locationPath) ? true : undefined);
-            });
+            return resolution.failedLookupLocations.some(location => isInvalidatedFailedLookup(resolutionHost.toPath(location)));
+        }
+
+        function isInvalidatedFailedLookup(locationPath: Path) {
+            return failedLookupChecks?.has(locationPath) ||
+                firstDefinedIterator(startsWithPathChecks?.keys() || emptyIterator, fileOrDirectoryPath => startsWith(locationPath, fileOrDirectoryPath) ? true : undefined) ||
+                firstDefinedIterator(isInDirectoryChecks?.keys() || emptyIterator, fileOrDirectoryPath => isInDirectoryPath(fileOrDirectoryPath, locationPath) ? true : undefined);
         }
 
         function canInvalidatedFailedLookupResolutionWithAffectingLocation(resolution: ResolutionWithFailedLookupLocations) {
-            return !!affectingPathChecks && resolution.affectingLocations.some(location =>
-                affectingPathChecks!.has(resolutionHost.toPath(location)));
+            return !!affectingPathChecks && resolution.affectingLocations.some(location => affectingPathChecks!.has(location));
         }
 
         function closeTypeRootsWatch() {
@@ -1068,7 +1118,7 @@ namespace ts {
         function directoryExistsForTypeRootWatch(nodeTypesDirectory: string) {
             const dir = getDirectoryPath(getDirectoryPath(nodeTypesDirectory));
             const dirPath = resolutionHost.toPath(dir);
-            return dirPath === rootPath || canWatchDirectory(dirPath);
+            return dirPath === rootPath || canWatchDirectoryOrFile(dirPath);
         }
     }
 

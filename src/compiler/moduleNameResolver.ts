@@ -543,6 +543,7 @@ namespace ts {
     }
 
     export interface TypeReferenceDirectiveResolutionCache extends PerDirectoryResolutionCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>, PackageJsonInfoCache {
+        /*@internal*/ clearAllExceptPackageJsonInfoCache(): void;
     }
 
     export interface ModeAwareCache<T> {
@@ -570,6 +571,7 @@ namespace ts {
 
     export interface ModuleResolutionCache extends PerDirectoryResolutionCache<ResolvedModuleWithFailedLookupLocations>, NonRelativeModuleNameResolutionCache, PackageJsonInfoCache {
         getPackageJsonInfoCache(): PackageJsonInfoCache;
+        /*@internal*/ clearAllExceptPackageJsonInfoCache(): void;
     }
 
     /**
@@ -584,6 +586,7 @@ namespace ts {
         /*@internal*/ getPackageJsonInfo(packageJsonPath: string): PackageJsonInfo | boolean | undefined;
         /*@internal*/ setPackageJsonInfo(packageJsonPath: string, info: PackageJsonInfo | boolean): void;
         /*@internal*/ entries(): [Path, PackageJsonInfo | boolean][];
+        /*@internal*/ getInternalMap(): ESMap<Path, PackageJsonInfo | boolean> | undefined;
         clear(): void;
     }
 
@@ -649,7 +652,7 @@ namespace ts {
 
     function createPackageJsonInfoCache(currentDirectory: string, getCanonicalFileName: (s: string) => string): PackageJsonInfoCache {
         let cache: ESMap<Path, PackageJsonInfo | boolean> | undefined;
-        return { getPackageJsonInfo, setPackageJsonInfo, clear, entries };
+        return { getPackageJsonInfo, setPackageJsonInfo, clear, entries, getInternalMap };
         function getPackageJsonInfo(packageJsonPath: string) {
             return cache?.get(toPath(packageJsonPath, currentDirectory, getCanonicalFileName));
         }
@@ -662,6 +665,9 @@ namespace ts {
         function entries() {
             const iter = cache?.entries();
             return iter ? arrayFrom(iter) : [];
+        }
+        function getInternalMap() {
+            return cache;
         }
     }
 
@@ -797,23 +803,28 @@ namespace ts {
         directoryToModuleNameMap?: CacheWithRedirects<ModeAwareCache<ResolvedModuleWithFailedLookupLocations>>,
         moduleNameToDirectoryMap?: CacheWithRedirects<PerModuleNameCache>,
     ): ModuleResolutionCache {
-        const preDirectoryResolutionCache = createPerDirectoryResolutionCache(currentDirectory, getCanonicalFileName, directoryToModuleNameMap ||= createCacheWithRedirects(options));
+        const perDirectoryResolutionCache = createPerDirectoryResolutionCache(currentDirectory, getCanonicalFileName, directoryToModuleNameMap ||= createCacheWithRedirects(options));
         moduleNameToDirectoryMap ||= createCacheWithRedirects(options);
         const packageJsonInfoCache = createPackageJsonInfoCache(currentDirectory, getCanonicalFileName);
 
         return {
             ...packageJsonInfoCache,
-            ...preDirectoryResolutionCache,
+            ...perDirectoryResolutionCache,
             getOrCreateCacheForModuleName,
             clear,
             update,
             getPackageJsonInfoCache: () => packageJsonInfoCache,
+            clearAllExceptPackageJsonInfoCache,
         };
 
         function clear() {
-            preDirectoryResolutionCache.clear();
-            moduleNameToDirectoryMap!.clear();
+            clearAllExceptPackageJsonInfoCache();
             packageJsonInfoCache.clear();
+        }
+
+        function clearAllExceptPackageJsonInfoCache() {
+            perDirectoryResolutionCache.clear();
+            moduleNameToDirectoryMap!.clear();
         }
 
         function update(options: CompilerOptions) {
@@ -919,18 +930,23 @@ namespace ts {
         packageJsonInfoCache?: PackageJsonInfoCache | undefined,
         directoryToModuleNameMap?: CacheWithRedirects<ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>>,
     ): TypeReferenceDirectiveResolutionCache {
-        const preDirectoryResolutionCache = createPerDirectoryResolutionCache(currentDirectory, getCanonicalFileName, directoryToModuleNameMap ||= createCacheWithRedirects(options));
+        const perDirectoryResolutionCache = createPerDirectoryResolutionCache(currentDirectory, getCanonicalFileName, directoryToModuleNameMap ||= createCacheWithRedirects(options));
         packageJsonInfoCache ||= createPackageJsonInfoCache(currentDirectory, getCanonicalFileName);
 
         return {
             ...packageJsonInfoCache,
-            ...preDirectoryResolutionCache,
+            ...perDirectoryResolutionCache,
             clear,
+            clearAllExceptPackageJsonInfoCache,
         };
 
         function clear() {
-            preDirectoryResolutionCache.clear();
+            clearAllExceptPackageJsonInfoCache();
             packageJsonInfoCache!.clear();
+        }
+
+        function clearAllExceptPackageJsonInfoCache() {
+            perDirectoryResolutionCache.clear();
         }
     }
 
@@ -1786,7 +1802,7 @@ namespace ts {
     }
 
     /*@internal*/
-    interface PackageJsonInfo {
+    export interface PackageJsonInfo {
         packageDirectory: string;
         packageJsonContent: PackageJsonPathFields;
         versionPaths: VersionPaths | undefined;
