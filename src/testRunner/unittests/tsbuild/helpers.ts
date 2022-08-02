@@ -117,20 +117,21 @@ interface Symbol {
      */
     export function loadProjectFromFiles(
         files: vfs.FileSet,
-        libContentToAppend?: string
+        libContentToAppend?: string,
+        libPath?: string,
     ): vfs.FileSystem {
         const fs = new vfs.FileSystem(/*ignoreCase*/ true, {
             files,
             cwd: "/",
             meta: { defaultLibLocation: "/lib" },
         });
-        addLibAndMakeReadonly(fs, libContentToAppend);
+        addLibAndMakeReadonly(fs, libContentToAppend, libPath);
         return fs;
     }
 
-    function addLibAndMakeReadonly(fs: vfs.FileSystem, libContentToAppend?: string) {
+    function addLibAndMakeReadonly(fs: vfs.FileSystem, libContentToAppend?: string, libPath?: string) {
         fs.mkdirSync("/lib");
-        fs.writeFileSync("/lib/lib.d.ts", libContentToAppend ? `${libContent}${libContentToAppend}` : libContent);
+        fs.writeFileSync(libPath || "/lib/lib.d.ts", libContentToAppend ? `${libContent}${libContentToAppend}` : libContent);
         fs.makeReadonly();
     }
 

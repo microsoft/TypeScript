@@ -508,5 +508,60 @@ namespace ts.projectSystem {
                 baselineTsserverLogs("cacheResolutions", "creates new resolutions for program if tsbuildinfo is not present with project where dts file contains fewer modules than original file", session);
             });
         });
+
+        describe("package json file is edited", () => {
+            verifyTscWatchPackageJsonEdits("package json file is edited", tscWatch.cacheResolutions.getServerHostWithPackageJsonEdits);
+            verifyTscWatchPackageJsonEdits("package json file is edited when already built", tscWatch.cacheResolutions.getServerHostWithPackageJsonEditsWithBuild);
+            function verifyTscWatchPackageJsonEdits(scenario: string, createHost: () => TestServerHost) {
+                it(scenario, () => {
+                    const host = createHost();
+                    fakes.patchHostForBuildInfoReadWrite(host);
+                    const logger = createLoggerWithInMemoryLogs();
+                    const session = createSession(host, { logger });
+                    openFilesForSession(["/src/projects/project/src/randomFile.ts"], session);
+
+                    logger.info("random edit");
+                    session.executeCommandSeq<protocol.ChangeRequest>({
+                        command: protocol.CommandTypes.Change,
+                        arguments: {
+                            file: "/src/projects/project/src/randomFile.ts",
+                            line: 1,
+                            offset: 1,
+                            endLine: 1,
+                            endOffset: 1,
+                            insertString: `export cont y = 10;\n`,
+                        }
+                    });
+                    server.updateProjectIfDirty(session.getProjectService().configuredProjects.get("/src/projects/project/src/tsconfig.json")!);
+
+                    logger.info("Modify package json file to add type module");
+                    host.writeFile(`/src/projects/project/package.json`, JSON.stringify({ name: "app", version: "1.0.0", type: "module" }));
+                    host.runQueuedTimeoutCallbacks(); // failed lookup
+                    host.runQueuedTimeoutCallbacks(); // actual update
+
+                    logger.info("Modify package.json file to remove type module");
+                    host.writeFile(`/src/projects/project/package.json`, JSON.stringify({ name: "app", version: "1.0.0" }));
+                    host.runQueuedTimeoutCallbacks(); // failed lookup
+                    host.runQueuedTimeoutCallbacks(); // actual update
+
+                    logger.info("Delete package.json");
+                    host.deleteFile(`/src/projects/project/package.json`);
+                    host.runQueuedTimeoutCallbacks(); // failed lookup
+                    host.runQueuedTimeoutCallbacks(); // actual update
+
+                    logger.info("Add package json file with type module");
+                    host.writeFile(`/src/projects/project/package.json`, JSON.stringify({ name: "app", version: "1.0.0", type: "module" }));
+                    host.runQueuedTimeoutCallbacks(); // failed lookup
+                    host.runQueuedTimeoutCallbacks(); // actual update
+
+                    logger.info("Delete package.json");
+                    host.deleteFile(`/src/projects/project/package.json`);
+                    host.runQueuedTimeoutCallbacks(); // failed lookup
+                    host.runQueuedTimeoutCallbacks(); // actual update
+
+                    baselineTsserverLogs("cacheResolutions", scenario, session);
+                });
+            }
+        });
     });
 }

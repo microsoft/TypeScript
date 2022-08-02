@@ -206,6 +206,55 @@ namespace ts.tscWatch.cacheResolutions {
                 },
             ]
         });
+
+        verifyTscWithEdits({
+            scenario: "cacheResolutions",
+            subScenario: "package json file is edited",
+            commandLineArgs: ["--b", "/src/projects/project/src", "--explainFiles"],
+            fs: getFsWithPackageJsonEdits,
+            edits: [
+                {
+                    subScenario: "random edit",
+                    modifyFs: fs => appendText(fs, "/src/projects/project/src/randomFile.ts", `export const y = 10;`),
+                    discrepancyExplanation: noChangeWithExportsDiscrepancyRun.discrepancyExplanation,
+                },
+                {
+                    subScenario: "Modify package json file to add type module",
+                    modifyFs: fs => fs.writeFileSync(`/src/projects/project/package.json`, JSON.stringify({ name: "app", version: "1.0.0", type: "module" })),
+                },
+                {
+                    subScenario: "Modify package.json file to remove type module and randmon edit",
+                    modifyFs: fs => {
+                        fs.writeFileSync(`/src/projects/project/package.json`, JSON.stringify({ name: "app", version: "1.0.0" }));
+                        appendText(fs, "/src/projects/project/src/randomFile.ts", `export const z = 10;`);
+                    },
+                    discrepancyExplanation: () => [
+                        `Clean build and incremental build differ in emit signature and latestChangedDtsFile since incremental persists it from previous build and clean has errors`
+                    ]
+                },
+                {
+                    subScenario: "Delete package.json",
+                    modifyFs: fs => fs.unlinkSync(`/src/projects/project/package.json`),
+                    discrepancyExplanation: () => [
+                        `Clean build and incremental build differ in emit signature and latestChangedDtsFile since incremental persists it from previous build and clean has errors`
+                    ]
+                },
+                {
+                    subScenario: "Add package json file with type module",
+                    modifyFs: fs => fs.writeFileSync(`/src/projects/project/package.json`, JSON.stringify({ name: "app", version: "1.0.0", type: "module" })),
+                },
+                {
+                    subScenario: "Delete package.json and random edit",
+                    modifyFs: fs => {
+                        fs.unlinkSync(`/src/projects/project/package.json`);
+                        appendText(fs, "/src/projects/project/src/randomFile.ts", `export const k = 10;`);
+                    },
+                    discrepancyExplanation: () => [
+                        `Clean build and incremental build differ in emit signature and latestChangedDtsFile since incremental persists it from previous build and clean has errors`
+                    ]
+                },
+            ],
+        });
     });
 
     function getRandomFileContent() {
@@ -557,6 +606,95 @@ namespace ts.tscWatch.cacheResolutions {
     export function getServerHostWithSameResolutionFromMultiplePlacesWithBuild() {
         const system = getServerHostWithSameResolutionFromMultiplePlaces();
         solutionBuildWithBaseline(system, ["/src/project"]);
+        return system;
+    }
+
+    function getFsMapWithPackageJsonEdits(): { [path: string]: string; } {
+        return {
+            "/src/projects/project/src/tsconfig.json": JSON.stringify({
+                compilerOptions: {
+                    target: "es2016",
+                    composite: true,
+                    module: "node16",
+                    outDir: "../out",
+                    cacheResolutions: true,
+                    traceResolution: true,
+                },
+                files: [
+                    "fileA.ts",
+                    "fileB.mts",
+                    "randomFile.ts",
+                    "a/randomFile.ts",
+                    "b/ba/randomFile.ts",
+                    "b/randomFile.ts",
+                    "c/ca/randomFile.ts",
+                    "c/ca/caa/randomFile.ts",
+                    "c/ca/caa/caaa/randomFile.ts",
+                    "c/cb/randomFile.ts",
+                    "d/da/daa/daaa/x/y/z/randomFile.ts",
+                    "d/da/daa/daaa/randomFile.ts",
+                    "d/da/daa/randomFile.ts",
+                    "d/da/randomFile.ts",
+                    "e/ea/randomFile.ts",
+                    "e/ea/eaa/randomFile.ts",
+                    "e/ea/eaa/eaaa/randomFile.ts",
+                    "e/ea/eaa/eaaa/x/y/z/randomFile.ts",
+                    "f/fa/faa/x/y/z/randomFile.ts",
+                    "f/fa/faa/faaa/randomFile.ts",
+                ],
+            }),
+            "/src/projects/project/src/fileA.ts": Utils.dedent`
+                import { foo } from "./fileB.mjs";
+                foo();
+            `,
+            "/src/projects/project/src/fileB.mts": `export function foo() {}`,
+            "/src/projects/project/src/randomFile.ts": getRandomFileContent(),
+            "/src/projects/project/src/a/randomFile.ts": getRandomFileContent(),
+            "/src/projects/project/src/b/ba/randomFile.ts": getRandomFileContent(),
+            "/src/projects/project/src/b/randomFile.ts": getRandomFileContent(),
+            "/src/projects/project/src/c/ca/randomFile.ts": getRandomFileContent(),
+            "/src/projects/project/src/c/ca/caa/randomFile.ts": getRandomFileContent(),
+            "/src/projects/project/src/c/ca/caa/caaa/randomFile.ts": getRandomFileContent(),
+            "/src/projects/project/src/c/cb/randomFile.ts": getRandomFileContent(),
+            "/src/projects/project/src/d/da/daa/daaa/x/y/z/randomFile.ts": getRandomFileContent(),
+            "/src/projects/project/src/d/da/daa/daaa/randomFile.ts": getRandomFileContent(),
+            "/src/projects/project/src/d/da/daa/randomFile.ts": getRandomFileContent(),
+            "/src/projects/project/src/d/da/randomFile.ts": getRandomFileContent(),
+            "/src/projects/project/src/e/ea/randomFile.ts": getRandomFileContent(),
+            "/src/projects/project/src/e/ea/eaa/randomFile.ts": getRandomFileContent(),
+            "/src/projects/project/src/e/ea/eaa/eaaa/randomFile.ts": getRandomFileContent(),
+            "/src/projects/project/src/e/ea/eaa/eaaa/x/y/z/randomFile.ts": getRandomFileContent(),
+            "/src/projects/project/src/f/fa/faa/faaa/randomFile.ts": getRandomFileContent(),
+            "/src/projects/project/src/f/fa/faa/x/y/z/randomFile.ts": getRandomFileContent(),
+            "/src/projects/project/package.json": JSON.stringify({ name: "app", version: "1.0.0" }),
+        };
+    }
+
+    export function getFsWithPackageJsonEdits() {
+        return loadProjectFromFiles(getFsMapWithPackageJsonEdits(), /*libContentsToAppend*/ undefined, "/lib/lib.es2016.full.d.ts");
+    }
+
+    export function getWatchSystemWithPackageJsonEdits() {
+        const system = createWatchedSystem(getFsMapWithPackageJsonEdits(), { currentDirectory: "/src/projects/project" });
+        system.ensureFileOrFolder({ ...libFile, path: "/a/lib/lib.es2016.full.d.ts" });
+        return system;
+    }
+
+    export function getServerHostWithPackageJsonEdits() {
+        const system = TestFSWithWatch.createServerHost(getFsMapWithPackageJsonEdits(), { currentDirectory: "/src/projects/project" });
+        system.ensureFileOrFolder({ ...libFile, path: "/a/lib/lib.es2016.full.d.ts" });
+        return system;
+    }
+
+    export function getWatchSystemWithPackageJsonEditsWithBuild() {
+        const system = getWatchSystemWithPackageJsonEdits();
+        solutionBuildWithBaseline(system, ["/src/project/src"]);
+        return system;
+    }
+
+    export function getServerHostWithPackageJsonEditsWithBuild() {
+        const system = getServerHostWithPackageJsonEdits();
+        solutionBuildWithBaseline(system, ["/src/project/src"]);
         return system;
     }
 }

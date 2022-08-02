@@ -231,5 +231,38 @@ namespace ts.tscWatch.cacheResolutions {
                 },
             ]
         });
+
+        verifyTscWithEdits({
+            scenario: "cacheResolutions",
+            subScenario: "package json file is edited",
+            commandLineArgs: ["--p", "/src/projects/project/src", "--explainFiles"],
+            fs: getFsWithPackageJsonEdits,
+            edits: [
+                {
+                    subScenario: "random edit",
+                    modifyFs: fs => appendText(fs, "/src/projects/project/src/randomFile.ts", `export const y = 10;`),
+                },
+                {
+                    subScenario: "Modify package json file to add type module",
+                    modifyFs: fs => fs.writeFileSync(`/src/projects/project/package.json`, JSON.stringify({ name: "app", version: "1.0.0", type: "module" })),
+                },
+                {
+                    subScenario: "Modify package.json file to remove type module",
+                    modifyFs: fs => fs.writeFileSync(`/src/projects/project/package.json`, JSON.stringify({ name: "app", version: "1.0.0" })),
+                },
+                {
+                    subScenario: "Delete package.json",
+                    modifyFs: fs => fs.unlinkSync(`/src/projects/project/package.json`),
+                },
+                {
+                    subScenario: "Add package json file with type module",
+                    modifyFs: fs => fs.writeFileSync(`/src/projects/project/package.json`, JSON.stringify({ name: "app", version: "1.0.0", type: "module" })),
+                },
+                {
+                    subScenario: "Delete package.json and random edit",
+                    modifyFs: fs => fs.unlinkSync(`/src/projects/project/package.json`)
+                },
+            ],
+        });
     });
 }
