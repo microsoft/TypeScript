@@ -39,15 +39,15 @@ namespace ts {
     interface MutableFileSystemEntries {
         readonly files: string[];
         readonly directories: string[];
-        sortedAndCanonicalizedFiles?: undefined | Canonicalized[]
-        sortedAndCanonicalizedDirectories?: undefined | Canonicalized[]
+        sortedAndCanonicalizedFiles?: undefined | SortedArray<Canonicalized>
+        sortedAndCanonicalizedDirectories?: undefined | SortedArray<Canonicalized>
     }
 
     interface SortedAndCanonicalizedMutableFileSystemEntries {
         readonly files: string[];
         readonly directories: string[];
-        readonly sortedAndCanonicalizedFiles: Canonicalized[]
-        readonly sortedAndCanonicalizedDirectories: Canonicalized[]
+        readonly sortedAndCanonicalizedFiles: SortedArray<Canonicalized>
+        readonly sortedAndCanonicalizedDirectories: SortedArray<Canonicalized>
     }
 
     export function createCachedDirectoryStructureHost(host: DirectoryStructureHost, currentDirectory: string, useCaseSensitiveFileNames: boolean): CachedDirectoryStructureHost | undefined {
@@ -88,8 +88,8 @@ namespace ts {
 
             // If we're looking for the base directory, we're definitely going to search the entries
             if (!entries.sortedAndCanonicalizedFiles) {
-                entries.sortedAndCanonicalizedFiles = entries.files.map(getCanonicalFileName).sort();
-                entries.sortedAndCanonicalizedDirectories = entries.directories.map(getCanonicalFileName).sort();
+                entries.sortedAndCanonicalizedFiles = entries.files.map(getCanonicalFileName).sort() as SortedArray<Canonicalized>;
+                entries.sortedAndCanonicalizedDirectories = entries.directories.map(getCanonicalFileName).sort() as SortedArray<Canonicalized>;
             }
             return entries as SortedAndCanonicalizedMutableFileSystemEntries;
         }
@@ -141,7 +141,7 @@ namespace ts {
             }
         }
 
-        function hasEntry(entries: readonly Canonicalized[], name: Canonicalized) {
+        function hasEntry(entries: SortedReadonlyArray<Canonicalized>, name: Canonicalized) {
             // Case-sensitive comparison since already canonicalized
             const index = binarySearch(entries, name, identity, compareStringsCaseSensitive);
             return index >= 0;
