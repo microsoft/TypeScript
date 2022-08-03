@@ -36,7 +36,7 @@ interface IterableIterator<T> extends Iterator<T> {
 }
 
 interface ArrayLikeOrIterableTypes<T> {
-    iterable: Iterable<T>
+    iterable: Iterable<T>;
 }
 
 interface Array<T> {

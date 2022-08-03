@@ -1,0 +1,156 @@
+=== tests/cases/compiler/isArrayConformance.ts ===
+function f1(a: any) {
+>f1 : Symbol(f1, Decl(isArrayConformance.ts, 0, 0))
+>a : Symbol(a, Decl(isArrayConformance.ts, 0, 12))
+
+	if (Array.isArray(a)) {
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 3 more)
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(isArrayConformance.ts, 0, 12))
+
+		a; // Expected: any[]
+>a : Symbol(a, Decl(isArrayConformance.ts, 0, 12))
+	}
+}
+
+function f2(a: unknown) {
+>f2 : Symbol(f2, Decl(isArrayConformance.ts, 4, 1))
+>a : Symbol(a, Decl(isArrayConformance.ts, 6, 12))
+
+	if (Array.isArray(a)) {
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 3 more)
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(isArrayConformance.ts, 6, 12))
+
+		a; // Expected: unknown[]
+>a : Symbol(a, Decl(isArrayConformance.ts, 6, 12))
+	}
+}
+
+function f3(a: string | readonly string[] | number[]) {
+>f3 : Symbol(f3, Decl(isArrayConformance.ts, 10, 1))
+>a : Symbol(a, Decl(isArrayConformance.ts, 12, 12))
+
+	if (Array.isArray(a)) {
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 3 more)
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(isArrayConformance.ts, 12, 12))
+
+		var b: readonly string[] | number[] = a; // OK
+>b : Symbol(b, Decl(isArrayConformance.ts, 14, 5))
+>a : Symbol(a, Decl(isArrayConformance.ts, 12, 12))
+
+		a[0]; // Expected: string | number
+>a : Symbol(a, Decl(isArrayConformance.ts, 12, 12))
+	}
+}
+
+function f4<T extends string | readonly string[] | number[]>(a: T) {
+>f4 : Symbol(f4, Decl(isArrayConformance.ts, 17, 1))
+>T : Symbol(T, Decl(isArrayConformance.ts, 19, 12))
+>a : Symbol(a, Decl(isArrayConformance.ts, 19, 61))
+>T : Symbol(T, Decl(isArrayConformance.ts, 19, 12))
+
+	if (Array.isArray(a)) {
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 3 more)
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(isArrayConformance.ts, 19, 61))
+
+		var b: readonly string[] | number[] = a; // OK
+>b : Symbol(b, Decl(isArrayConformance.ts, 21, 5))
+>a : Symbol(a, Decl(isArrayConformance.ts, 19, 61))
+
+		a[0]; // Expected: string | number
+>a : Symbol(a, Decl(isArrayConformance.ts, 19, 61))
+	}
+}
+
+// Repro from #41808
+
+function f5<T extends string | undefined | string[]>(a: T) {
+>f5 : Symbol(f5, Decl(isArrayConformance.ts, 24, 1))
+>T : Symbol(T, Decl(isArrayConformance.ts, 28, 12))
+>a : Symbol(a, Decl(isArrayConformance.ts, 28, 53))
+>T : Symbol(T, Decl(isArrayConformance.ts, 28, 12))
+
+	if (Array.isArray(a)) {
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 3 more)
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(isArrayConformance.ts, 28, 53))
+
+		a[0]; // Expected: string
+>a : Symbol(a, Decl(isArrayConformance.ts, 28, 53))
+	}
+}
+
+function f6(a: (number[] | null | "loading")[]) {
+>f6 : Symbol(f6, Decl(isArrayConformance.ts, 32, 1))
+>a : Symbol(a, Decl(isArrayConformance.ts, 34, 12))
+
+	a.filter(Array.isArray); // Expected: number[][]
+>a.filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(isArrayConformance.ts, 34, 12))
+>filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 3 more)
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+}
+
+function f7(a: {} | null) {
+>f7 : Symbol(f7, Decl(isArrayConformance.ts, 36, 1))
+>a : Symbol(a, Decl(isArrayConformance.ts, 38, 12))
+
+	if (Array.isArray(a)) {
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 3 more)
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(isArrayConformance.ts, 38, 12))
+
+		a; // Expected: unknown[]
+>a : Symbol(a, Decl(isArrayConformance.ts, 38, 12))
+	}
+}
+
+function f8<T extends ArrayLike<number> | Iterable<boolean> | readonly string[] | null>(a: T) {
+>f8 : Symbol(f8, Decl(isArrayConformance.ts, 42, 1))
+>T : Symbol(T, Decl(isArrayConformance.ts, 44, 12))
+>ArrayLike : Symbol(ArrayLike, Decl(lib.es5.d.ts, --, --))
+>Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
+>a : Symbol(a, Decl(isArrayConformance.ts, 44, 88))
+>T : Symbol(T, Decl(isArrayConformance.ts, 44, 12))
+
+	if (Array.isArray(a)) {
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 3 more)
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(isArrayConformance.ts, 44, 88))
+
+		var b: readonly string[] | number[] | boolean[] = a; // OK
+>b : Symbol(b, Decl(isArrayConformance.ts, 46, 5))
+>a : Symbol(a, Decl(isArrayConformance.ts, 44, 88))
+
+		a[0]; // Expected: string | number | boolean
+>a : Symbol(a, Decl(isArrayConformance.ts, 44, 88))
+	}
+}
+
+function f9(a: number | null) {
+>f9 : Symbol(f9, Decl(isArrayConformance.ts, 49, 1))
+>a : Symbol(a, Decl(isArrayConformance.ts, 51, 12))
+
+	if (Array.isArray(a)) {
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 3 more)
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(isArrayConformance.ts, 51, 12))
+
+		a; // Expected: never
+>a : Symbol(a, Decl(isArrayConformance.ts, 51, 12))
+	}
+}
+

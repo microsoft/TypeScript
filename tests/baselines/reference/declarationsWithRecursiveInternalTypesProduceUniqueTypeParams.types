@@ -67,9 +67,9 @@ export const updateIfChanged = <T>(t: T) => {
 >assign : { <T extends {}>(target: T): T; <T extends {}, U>(target: T, source: U): T & Writable<U>; <T extends {}, U, V>(target: T, source1: U, source2: V): T & Writable<U> & Writable<V>; <T extends {}, U, V, W>(target: T, source1: U, source2: V, source3: W): T & Writable<U> & Writable<V> & Writable<W>; (target: {}, ...sources: any[]): any; }
 >Array.isArray(u) ? [] : {} : undefined[] | {}
 >Array.isArray(u) : boolean
->Array.isArray : (arg: any) => arg is any[]
+>Array.isArray : <T>(arg: T) => arg is T extends unknown ? true extends false & T ? Cast<any[], T> : T extends readonly any[] ? T : T extends string ? never : T extends ArrayLikeOrIterable<infer U> ? Cast<U[], T> : unknown[] extends T ? unknown[] : never : never
 >Array : ArrayConstructor
->isArray : (arg: any) => arg is any[]
+>isArray : <T>(arg: T) => arg is T extends unknown ? true extends false & T ? Cast<any[], T> : T extends readonly any[] ? T : T extends string ? never : T extends ArrayLikeOrIterable<infer U> ? Cast<U[], T> : unknown[] extends T ? unknown[] : never : never
 >u : U
 >[] : undefined[]
 >{} : {}

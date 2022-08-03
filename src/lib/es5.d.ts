@@ -1495,7 +1495,15 @@ interface ArrayConstructor {
     (arrayLength?: number): any[];
     <T>(arrayLength: number): T[];
     <T>(...items: T[]): T[];
-    isArray(arg: any): arg is any[];
+    isArray<T>(arg: T): arg is
+        T extends unknown ?
+            true extends false & T ? Cast<any[], T> :
+            T extends readonly any[] ? T :
+            T extends string ? never :
+            T extends ArrayLikeOrIterable<infer U> ? Cast<U[], T> :
+            unknown[] extends T ? unknown[] :
+            never
+        : never;
     readonly prototype: any[];
 }
 
@@ -1620,6 +1628,11 @@ type Exclude<T, U> = T extends U ? never : T;
  * Extract from T those types that are assignable to U
  */
 type Extract<T, U> = T extends U ? T : never;
+
+/**
+ * Make sure T is at least assignable to U
+ */
+type Cast<T, U> = T extends U ? T : U;
 
 /**
  * Construct a type with the properties of T except for those in type K.

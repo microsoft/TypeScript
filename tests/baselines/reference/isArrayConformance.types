@@ -1,0 +1,169 @@
+=== tests/cases/compiler/isArrayConformance.ts ===
+function f1(a: any) {
+>f1 : (a: any) => void
+>a : any
+
+	if (Array.isArray(a)) {
+>Array.isArray(a) : boolean
+>Array.isArray : <T>(arg: T) => arg is T extends unknown ? true extends false & T ? Cast<any[], T> : T extends readonly any[] ? T : T extends string ? never : T extends ArrayLikeOrIterable<infer U> ? Cast<U[], T> : unknown[] extends T ? unknown[] : never : never
+>Array : ArrayConstructor
+>isArray : <T>(arg: T) => arg is T extends unknown ? true extends false & T ? Cast<any[], T> : T extends readonly any[] ? T : T extends string ? never : T extends ArrayLikeOrIterable<infer U> ? Cast<U[], T> : unknown[] extends T ? unknown[] : never : never
+>a : any
+
+		a; // Expected: any[]
+>a : any[]
+	}
+}
+
+function f2(a: unknown) {
+>f2 : (a: unknown) => void
+>a : unknown
+
+	if (Array.isArray(a)) {
+>Array.isArray(a) : boolean
+>Array.isArray : <T>(arg: T) => arg is T extends unknown ? true extends false & T ? Cast<any[], T> : T extends readonly any[] ? T : T extends string ? never : T extends ArrayLikeOrIterable<infer U> ? Cast<U[], T> : unknown[] extends T ? unknown[] : never : never
+>Array : ArrayConstructor
+>isArray : <T>(arg: T) => arg is T extends unknown ? true extends false & T ? Cast<any[], T> : T extends readonly any[] ? T : T extends string ? never : T extends ArrayLikeOrIterable<infer U> ? Cast<U[], T> : unknown[] extends T ? unknown[] : never : never
+>a : unknown
+
+		a; // Expected: unknown[]
+>a : unknown[]
+	}
+}
+
+function f3(a: string | readonly string[] | number[]) {
+>f3 : (a: string | readonly string[] | number[]) => void
+>a : string | readonly string[] | number[]
+
+	if (Array.isArray(a)) {
+>Array.isArray(a) : boolean
+>Array.isArray : <T>(arg: T) => arg is T extends unknown ? true extends false & T ? Cast<any[], T> : T extends readonly any[] ? T : T extends string ? never : T extends ArrayLikeOrIterable<infer U> ? Cast<U[], T> : unknown[] extends T ? unknown[] : never : never
+>Array : ArrayConstructor
+>isArray : <T>(arg: T) => arg is T extends unknown ? true extends false & T ? Cast<any[], T> : T extends readonly any[] ? T : T extends string ? never : T extends ArrayLikeOrIterable<infer U> ? Cast<U[], T> : unknown[] extends T ? unknown[] : never : never
+>a : string | readonly string[] | number[]
+
+		var b: readonly string[] | number[] = a; // OK
+>b : readonly string[] | number[]
+>a : readonly string[] | number[]
+
+		a[0]; // Expected: string | number
+>a[0] : string | number
+>a : readonly string[] | number[]
+>0 : 0
+	}
+}
+
+function f4<T extends string | readonly string[] | number[]>(a: T) {
+>f4 : <T extends string | readonly string[] | number[]>(a: T) => void
+>a : T
+
+	if (Array.isArray(a)) {
+>Array.isArray(a) : boolean
+>Array.isArray : <T>(arg: T) => arg is T extends unknown ? true extends false & T ? Cast<any[], T> : T extends readonly any[] ? T : T extends string ? never : T extends ArrayLikeOrIterable<infer U> ? Cast<U[], T> : unknown[] extends T ? unknown[] : never : never
+>Array : ArrayConstructor
+>isArray : <T>(arg: T) => arg is T extends unknown ? true extends false & T ? Cast<any[], T> : T extends readonly any[] ? T : T extends string ? never : T extends ArrayLikeOrIterable<infer U> ? Cast<U[], T> : unknown[] extends T ? unknown[] : never : never
+>a : T
+
+		var b: readonly string[] | number[] = a; // OK
+>b : readonly string[] | number[]
+>a : T extends unknown ? true extends false & T ? Cast<any[], T> : T extends readonly any[] ? T : T extends string ? never : T extends ArrayLikeOrIterable<infer U> ? Cast<U[], T> : unknown[] extends T ? T & unknown[] : never : never
+
+		a[0]; // Expected: string | number
+>a[0] : string | number
+>a : T extends unknown ? true extends false & T ? Cast<any[], T> : T extends readonly any[] ? T : T extends string ? never : T extends ArrayLikeOrIterable<infer U> ? Cast<U[], T> : unknown[] extends T ? T & unknown[] : never : never
+>0 : 0
+	}
+}
+
+// Repro from #41808
+
+function f5<T extends string | undefined | string[]>(a: T) {
+>f5 : <T extends string | string[]>(a: T) => void
+>a : T
+
+	if (Array.isArray(a)) {
+>Array.isArray(a) : boolean
+>Array.isArray : <T>(arg: T) => arg is T extends unknown ? true extends false & T ? Cast<any[], T> : T extends readonly any[] ? T : T extends string ? never : T extends ArrayLikeOrIterable<infer U> ? Cast<U[], T> : unknown[] extends T ? unknown[] : never : never
+>Array : ArrayConstructor
+>isArray : <T>(arg: T) => arg is T extends unknown ? true extends false & T ? Cast<any[], T> : T extends readonly any[] ? T : T extends string ? never : T extends ArrayLikeOrIterable<infer U> ? Cast<U[], T> : unknown[] extends T ? unknown[] : never : never
+>a : T
+
+		a[0]; // Expected: string
+>a[0] : string
+>a : T extends unknown ? true extends false & T ? Cast<any[], T> : T extends readonly any[] ? T : T extends string ? never : T extends ArrayLikeOrIterable<infer U> ? Cast<U[], T> : unknown[] extends T ? T & unknown[] : never : never
+>0 : 0
+	}
+}
+
+function f6(a: (number[] | null | "loading")[]) {
+>f6 : (a: (number[] | null | "loading")[]) => void
+>a : (number[] | "loading")[]
+>null : null
+
+	a.filter(Array.isArray); // Expected: number[][]
+>a.filter(Array.isArray) : number[][]
+>a.filter : { <S extends number[] | "loading">(predicate: (value: number[] | "loading", index: number, array: (number[] | "loading")[]) => value is S, thisArg?: any): S[]; (predicate: (value: number[] | "loading", index: number, array: (number[] | "loading")[]) => unknown, thisArg?: any): (number[] | "loading")[]; }
+>a : (number[] | "loading")[]
+>filter : { <S extends number[] | "loading">(predicate: (value: number[] | "loading", index: number, array: (number[] | "loading")[]) => value is S, thisArg?: any): S[]; (predicate: (value: number[] | "loading", index: number, array: (number[] | "loading")[]) => unknown, thisArg?: any): (number[] | "loading")[]; }
+>Array.isArray : <T>(arg: T) => arg is T extends unknown ? true extends false & T ? Cast<any[], T> : T extends readonly any[] ? T : T extends string ? never : T extends ArrayLikeOrIterable<infer U> ? Cast<U[], T> : unknown[] extends T ? unknown[] : never : never
+>Array : ArrayConstructor
+>isArray : <T>(arg: T) => arg is T extends unknown ? true extends false & T ? Cast<any[], T> : T extends readonly any[] ? T : T extends string ? never : T extends ArrayLikeOrIterable<infer U> ? Cast<U[], T> : unknown[] extends T ? unknown[] : never : never
+}
+
+function f7(a: {} | null) {
+>f7 : (a: {} | null) => void
+>a : {}
+>null : null
+
+	if (Array.isArray(a)) {
+>Array.isArray(a) : boolean
+>Array.isArray : <T>(arg: T) => arg is T extends unknown ? true extends false & T ? Cast<any[], T> : T extends readonly any[] ? T : T extends string ? never : T extends ArrayLikeOrIterable<infer U> ? Cast<U[], T> : unknown[] extends T ? unknown[] : never : never
+>Array : ArrayConstructor
+>isArray : <T>(arg: T) => arg is T extends unknown ? true extends false & T ? Cast<any[], T> : T extends readonly any[] ? T : T extends string ? never : T extends ArrayLikeOrIterable<infer U> ? Cast<U[], T> : unknown[] extends T ? unknown[] : never : never
+>a : {}
+
+		a; // Expected: unknown[]
+>a : unknown[]
+	}
+}
+
+function f8<T extends ArrayLike<number> | Iterable<boolean> | readonly string[] | null>(a: T) {
+>f8 : <T extends readonly string[] | ArrayLike<number> | Iterable<boolean>>(a: T) => void
+>null : null
+>a : T
+
+	if (Array.isArray(a)) {
+>Array.isArray(a) : boolean
+>Array.isArray : <T>(arg: T) => arg is T extends unknown ? true extends false & T ? Cast<any[], T> : T extends readonly any[] ? T : T extends string ? never : T extends ArrayLikeOrIterable<infer U> ? Cast<U[], T> : unknown[] extends T ? unknown[] : never : never
+>Array : ArrayConstructor
+>isArray : <T>(arg: T) => arg is T extends unknown ? true extends false & T ? Cast<any[], T> : T extends readonly any[] ? T : T extends string ? never : T extends ArrayLikeOrIterable<infer U> ? Cast<U[], T> : unknown[] extends T ? unknown[] : never : never
+>a : T
+
+		var b: readonly string[] | number[] | boolean[] = a; // OK
+>b : readonly string[] | number[] | boolean[]
+>a : T extends unknown ? true extends false & T ? Cast<any[], T> : T extends readonly any[] ? T : T extends string ? never : T extends ArrayLikeOrIterable<infer U> ? Cast<U[], T> : unknown[] extends T ? T & unknown[] : never : never
+
+		a[0]; // Expected: string | number | boolean
+>a[0] : string | number | boolean
+>a : T extends unknown ? true extends false & T ? Cast<any[], T> : T extends readonly any[] ? T : T extends string ? never : T extends ArrayLikeOrIterable<infer U> ? Cast<U[], T> : unknown[] extends T ? T & unknown[] : never : never
+>0 : 0
+	}
+}
+
+function f9(a: number | null) {
+>f9 : (a: number | null) => void
+>a : number
+>null : null
+
+	if (Array.isArray(a)) {
+>Array.isArray(a) : boolean
+>Array.isArray : <T>(arg: T) => arg is T extends unknown ? true extends false & T ? Cast<any[], T> : T extends readonly any[] ? T : T extends string ? never : T extends ArrayLikeOrIterable<infer U> ? Cast<U[], T> : unknown[] extends T ? unknown[] : never : never
+>Array : ArrayConstructor
+>isArray : <T>(arg: T) => arg is T extends unknown ? true extends false & T ? Cast<any[], T> : T extends readonly any[] ? T : T extends string ? never : T extends ArrayLikeOrIterable<infer U> ? Cast<U[], T> : unknown[] extends T ? unknown[] : never : never
+>a : number
+
+		a; // Expected: never
+>a : never
+	}
+}
+
