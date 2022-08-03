@@ -1188,7 +1188,7 @@ namespace ts {
         // @api
         function createDecorator(expression: Expression) {
             const node = createBaseNode<Decorator>(SyntaxKind.Decorator);
-            node.expression = parenthesizerRules().parenthesizeLeftSideOfAccess(expression);
+            node.expression = parenthesizerRules().parenthesizeLeftSideOfAccess(expression, /*optionalChain*/ false);
             node.transformFlags |=
                 propagateChildFlags(node.expression) |
                 TransformFlags.ContainsTypeScript |
@@ -2325,7 +2325,7 @@ namespace ts {
         // @api
         function createPropertyAccessExpression(expression: Expression, name: string | Identifier | PrivateIdentifier) {
             const node = createBaseExpression<PropertyAccessExpression>(SyntaxKind.PropertyAccessExpression);
-            node.expression = parenthesizerRules().parenthesizeLeftSideOfAccess(expression);
+            node.expression = parenthesizerRules().parenthesizeLeftSideOfAccess(expression, /*optionalChain*/ false);
             node.name = asName(name);
             node.transformFlags =
                 propagateChildFlags(node.expression) |
@@ -2357,7 +2357,7 @@ namespace ts {
         function createPropertyAccessChain(expression: Expression, questionDotToken: QuestionDotToken | undefined, name: string | Identifier | PrivateIdentifier) {
             const node = createBaseExpression<PropertyAccessChain>(SyntaxKind.PropertyAccessExpression);
             node.flags |= NodeFlags.OptionalChain;
-            node.expression = parenthesizerRules().parenthesizeLeftSideOfAccess(expression);
+            node.expression = parenthesizerRules().parenthesizeLeftSideOfAccess(expression, /*optionalChain*/ true);
             node.questionDotToken = questionDotToken;
             node.name = asName(name);
             node.transformFlags |=
@@ -2385,7 +2385,7 @@ namespace ts {
         // @api
         function createElementAccessExpression(expression: Expression, index: number | Expression) {
             const node = createBaseExpression<ElementAccessExpression>(SyntaxKind.ElementAccessExpression);
-            node.expression = parenthesizerRules().parenthesizeLeftSideOfAccess(expression);
+            node.expression = parenthesizerRules().parenthesizeLeftSideOfAccess(expression, /*optionalChain*/ false);
             node.argumentExpression = asExpression(index);
             node.transformFlags |=
                 propagateChildFlags(node.expression) |
@@ -2415,7 +2415,7 @@ namespace ts {
         function createElementAccessChain(expression: Expression, questionDotToken: QuestionDotToken | undefined, index: number | Expression) {
             const node = createBaseExpression<ElementAccessChain>(SyntaxKind.ElementAccessExpression);
             node.flags |= NodeFlags.OptionalChain;
-            node.expression = parenthesizerRules().parenthesizeLeftSideOfAccess(expression);
+            node.expression = parenthesizerRules().parenthesizeLeftSideOfAccess(expression, /*optionalChain*/ true);
             node.questionDotToken = questionDotToken;
             node.argumentExpression = asExpression(index);
             node.transformFlags |=
@@ -2441,7 +2441,7 @@ namespace ts {
         // @api
         function createCallExpression(expression: Expression, typeArguments: readonly TypeNode[] | undefined, argumentsArray: readonly Expression[] | undefined) {
             const node = createBaseExpression<CallExpression>(SyntaxKind.CallExpression);
-            node.expression = parenthesizerRules().parenthesizeLeftSideOfAccess(expression);
+            node.expression = parenthesizerRules().parenthesizeLeftSideOfAccess(expression, /*optionalChain*/ false);
             node.typeArguments = asNodeArray(typeArguments);
             node.arguments = parenthesizerRules().parenthesizeExpressionsOfCommaDelimitedList(createNodeArray(argumentsArray));
             node.transformFlags |=
@@ -2476,7 +2476,7 @@ namespace ts {
         function createCallChain(expression: Expression, questionDotToken: QuestionDotToken | undefined, typeArguments: readonly TypeNode[] | undefined, argumentsArray: readonly Expression[] | undefined) {
             const node = createBaseExpression<CallChain>(SyntaxKind.CallExpression);
             node.flags |= NodeFlags.OptionalChain;
-            node.expression = parenthesizerRules().parenthesizeLeftSideOfAccess(expression);
+            node.expression = parenthesizerRules().parenthesizeLeftSideOfAccess(expression, /*optionalChain*/ true);
             node.questionDotToken = questionDotToken;
             node.typeArguments = asNodeArray(typeArguments);
             node.arguments = parenthesizerRules().parenthesizeExpressionsOfCommaDelimitedList(createNodeArray(argumentsArray));
@@ -2535,7 +2535,7 @@ namespace ts {
         // @api
         function createTaggedTemplateExpression(tag: Expression, typeArguments: readonly TypeNode[] | undefined, template: TemplateLiteral) {
             const node = createBaseExpression<TaggedTemplateExpression>(SyntaxKind.TaggedTemplateExpression);
-            node.tag = parenthesizerRules().parenthesizeLeftSideOfAccess(tag);
+            node.tag = parenthesizerRules().parenthesizeLeftSideOfAccess(tag, /*optionalChain*/ false);
             node.typeArguments = asNodeArray(typeArguments);
             node.template = template;
             node.transformFlags |=
@@ -3085,7 +3085,7 @@ namespace ts {
         // @api
         function createExpressionWithTypeArguments(expression: Expression, typeArguments: readonly TypeNode[] | undefined) {
             const node = createBaseNode<ExpressionWithTypeArguments>(SyntaxKind.ExpressionWithTypeArguments);
-            node.expression = parenthesizerRules().parenthesizeLeftSideOfAccess(expression);
+            node.expression = parenthesizerRules().parenthesizeLeftSideOfAccess(expression, /*optionalChain*/ false);
             node.typeArguments = typeArguments && parenthesizerRules().parenthesizeTypeArguments(typeArguments);
             node.transformFlags |=
                 propagateChildFlags(node.expression) |
@@ -3125,7 +3125,7 @@ namespace ts {
         // @api
         function createNonNullExpression(expression: Expression) {
             const node = createBaseExpression<NonNullExpression>(SyntaxKind.NonNullExpression);
-            node.expression = parenthesizerRules().parenthesizeLeftSideOfAccess(expression);
+            node.expression = parenthesizerRules().parenthesizeLeftSideOfAccess(expression, /*optionalChain*/ false);
             node.transformFlags |=
                 propagateChildFlags(node.expression) |
                 TransformFlags.ContainsTypeScript;
@@ -3146,7 +3146,7 @@ namespace ts {
         function createNonNullChain(expression: Expression) {
             const node = createBaseExpression<NonNullChain>(SyntaxKind.NonNullExpression);
             node.flags |= NodeFlags.OptionalChain;
-            node.expression = parenthesizerRules().parenthesizeLeftSideOfAccess(expression);
+            node.expression = parenthesizerRules().parenthesizeLeftSideOfAccess(expression, /*optionalChain*/ true);
             node.transformFlags |=
                 propagateChildFlags(node.expression) |
                 TransformFlags.ContainsTypeScript;
@@ -5824,7 +5824,7 @@ namespace ts {
             }
             else if (getEmitFlags(callee) & EmitFlags.HelperName) {
                 thisArg = createVoidZero();
-                target = parenthesizerRules().parenthesizeLeftSideOfAccess(callee);
+                target = parenthesizerRules().parenthesizeLeftSideOfAccess(callee, /*optionalChain*/ false);
             }
             else if (isPropertyAccessExpression(callee)) {
                 if (shouldBeCapturedInTempVariable(callee.expression, cacheIdentifiers)) {
@@ -5871,7 +5871,7 @@ namespace ts {
             else {
                 // for `a()` target is `a` and thisArg is `void 0`
                 thisArg = createVoidZero();
-                target = parenthesizerRules().parenthesizeLeftSideOfAccess(expression);
+                target = parenthesizerRules().parenthesizeLeftSideOfAccess(expression, /*optionalChain*/ false);
             }
 
             return { target, thisArg };
