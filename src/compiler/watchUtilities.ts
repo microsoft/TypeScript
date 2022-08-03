@@ -175,9 +175,8 @@ namespace ts {
                 const baseName = getBaseNameOfFileName(dirPath);
                 const canonicalizedBaseName = getCanonicalFileName(baseName);
                 const canonicalizedDirectories = result.sortedAndCanonicalizedDirectories;
-                const index = binarySearch(canonicalizedDirectories, canonicalizedBaseName, identity, compareStringsCaseSensitive); // Case-sensitive comparison since already canonicalized
-                if (index < 0) {
-                    canonicalizedDirectories.splice(~index, 0, canonicalizedBaseName);
+                // Case-sensitive comparison since already canonicalized
+                if (insertSorted(canonicalizedDirectories, canonicalizedBaseName, compareStringsCaseSensitive)) {
                     result.files.push(baseName);
                 }
             }
@@ -282,17 +281,20 @@ namespace ts {
         function updateFilesOfFileSystemEntry(parentResult: SortedAndCanonicalizedMutableFileSystemEntries, baseName: string, fileExists: boolean): void {
             const canonicalizedFiles = parentResult.sortedAndCanonicalizedFiles;
             const canonicalizedBaseName = getCanonicalFileName(baseName);
-            const index = binarySearch(canonicalizedFiles, canonicalizedBaseName, identity, compareStringsCaseSensitive); // Case-sensitive comparison since already canonicalized
-            if (index >= 0) {
-                if (!fileExists) {
-                    canonicalizedFiles.splice(index, 1);
+            if (fileExists) {
+                // Case-sensitive comparison since already canonicalized
+                if (insertSorted(canonicalizedFiles, canonicalizedBaseName, compareStringsCaseSensitive)) {
+                    parentResult.files.push(baseName);
+                }
+            }
+            else {
+                // Case-sensitive comparison since already canonicalized
+                const sortedIndex = binarySearch(canonicalizedFiles, canonicalizedBaseName, identity, compareStringsCaseSensitive);
+                if (sortedIndex >= 0) {
+                    canonicalizedFiles.splice(sortedIndex, 1);
                     const unsortedIndex = parentResult.files.findIndex(entry => getCanonicalFileName(entry) === canonicalizedBaseName);
                     parentResult.files.splice(unsortedIndex, 1);
                 }
-            }
-            else if (fileExists) {
-                canonicalizedFiles.splice(~index, 0, canonicalizedBaseName);
-                parentResult.files.push(baseName);
             }
         }
 
