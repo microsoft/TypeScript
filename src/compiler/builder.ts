@@ -73,6 +73,7 @@ namespace ts {
             modules: CacheWithRedirects<Path, ModeAwareCache<ResolvedModuleWithFailedLookupLocations>> | undefined;
             typeRefs: CacheWithRedirects<Path, ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>> | undefined;
             moduleNameToDirectoryMap: CacheWithRedirects<ModeAwareCacheKey, ESMap<Path, ResolvedModuleWithFailedLookupLocations>>;
+            dirToPackageJsonMap: ESMap<Path, string>;
             perDirPackageJsonMap: ESMap<Path, string> | undefined;
             packageJsonCache: PackageJsonInfoCache | undefined;
         };
@@ -1302,6 +1303,7 @@ namespace ts {
             modules,
             typeRefs,
             moduleNameToDirectoryMap,
+            dirToPackageJsonMap,
             perDirPackageJsonMap,
             packageJsonCache: state.program!.getModuleResolutionCache()?.getPackageJsonInfoCache().clone(),
         };
@@ -1963,6 +1965,7 @@ namespace ts {
         const decodedResolvedModules: DecodedResolvedMap = createCacheWithRedirects(compilerOptions);
         const decodedResolvedTypeRefs: DecodedResolvedMap = createCacheWithRedirects(compilerOptions);
         const decodedModuleNameToDirectoryMap: DecodedModuleNameToDirectoryMap = createCacheWithRedirects(compilerOptions);
+        let decodedPackageJsonMap: ESMap<Path, string> | undefined;
         let decodedHashes: ESMap<ProgramBuildInfoAbsoluteFileId, string | undefined> | undefined;
 
         let resolutions: (Resolution | false)[] | undefined;
@@ -1993,6 +1996,7 @@ namespace ts {
                 /*moduleNameToDirectoryMap*/ undefined,
                 /*decodedModuleNameToDirectoryMap*/ undefined,
             ),
+            getPackageJsonPath,
         };
 
         function fileExists(fileName: string) {
@@ -2018,6 +2022,39 @@ namespace ts {
             }
             affectingLoationsSameMap.set(fileName, result);
             return result;
+        }
+
+        function getPackageJsonPath(dirPath: Path) {
+            const fromCache = cacheResolutions?.dirToPackageJsonMap?.get(dirPath);
+            if (fromCache) {
+                return fileExists(fromCache) ? fromCache : undefined;
+            }
+            if (!resuableCacheResolutions?.cache.packageJsons) return;
+            if (!decodedPackageJsonMap) {
+                decodedPackageJsonMap = new Map();
+                const filePathDecoder = resuableCacheResolutions.getProgramBuildInfoFilePathDecoder();
+                for (const dirIdOrDirAndPackageJson of resuableCacheResolutions.cache.packageJsons) {
+                    let dirPath: Path, packageJson: string;
+                    if (isArray(dirIdOrDirAndPackageJson)) {
+                        dirPath = filePathDecoder.toFilePath(dirIdOrDirAndPackageJson[0]);
+                        packageJson = filePathDecoder.toFileAbsolutePath(dirIdOrDirAndPackageJson[1]);
+                    }
+                    else {
+                        packageJson = filePathDecoder.toFileAbsolutePath(dirIdOrDirAndPackageJson);
+                        dirPath = getDirectoryPath(toPath(packageJson, filePathDecoder.currentDirectory, filePathDecoder.getCanonicalFileName));
+                    }
+                    moduleNameToDirectorySet(
+                        decodedPackageJsonMap,
+                        dirPath,
+                        packageJson,
+                        identity,
+                        fileName => toPath(fileName, filePathDecoder.currentDirectory, filePathDecoder.getCanonicalFileName),
+                        noop
+                    );
+                }
+            }
+            const fromDecoded = decodedPackageJsonMap.get(dirPath);
+            return fromDecoded && fileExists(fromDecoded) ? fromDecoded : undefined;
         }
 
         function getResolvedFromCache<T extends ResolvedModuleWithFailedLookupLocations | ResolvedTypeReferenceDirectiveWithFailedLookupLocations>(

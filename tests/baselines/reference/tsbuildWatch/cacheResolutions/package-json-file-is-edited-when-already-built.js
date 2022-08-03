@@ -914,102 +914,26 @@ FileWatcher:: Triggered with /src/projects/project/src/randomFile.ts 1:: WatchIn
 Elapsed:: *ms FileWatcher:: Triggered with /src/projects/project/src/randomFile.ts 1:: WatchInfo: /src/projects/project/src/randomFile.ts 250 undefined Source file /src/projects/project/src/tsconfig.json
 [[90m12:02:11 AM[0m] File change detected. Starting incremental compilation...
 
-File '/src/projects/project/src/package.json' does not exist.
 Found 'package.json' at '/src/projects/project/package.json'.
 'package.json' does not have a 'typesVersions' field.
 Reusing resolution of module './fileB.mjs' from '/src/projects/project/src/fileA.ts' found in cache from location '/src/projects/project/src', it was successfully resolved to '/src/projects/project/src/fileB.mts'.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
 File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/src/a/package.json' does not exist.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
 File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/src/b/ba/package.json' does not exist.
-File '/src/projects/project/src/b/package.json' does not exist.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
 File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/src/b/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
 File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/src/c/ca/package.json' does not exist.
-File '/src/projects/project/src/c/package.json' does not exist.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
 File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/src/c/ca/caa/package.json' does not exist.
-File '/src/projects/project/src/c/ca/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/c/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
 File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/src/c/ca/caa/caaa/package.json' does not exist.
-File '/src/projects/project/src/c/ca/caa/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/c/ca/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/c/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
 File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/src/c/cb/package.json' does not exist.
-File '/src/projects/project/src/c/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
 File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/src/d/da/daa/daaa/x/y/z/package.json' does not exist.
-File '/src/projects/project/src/d/da/daa/daaa/x/y/package.json' does not exist.
-File '/src/projects/project/src/d/da/daa/daaa/x/package.json' does not exist.
-File '/src/projects/project/src/d/da/daa/daaa/package.json' does not exist.
-File '/src/projects/project/src/d/da/daa/package.json' does not exist.
-File '/src/projects/project/src/d/da/package.json' does not exist.
-File '/src/projects/project/src/d/package.json' does not exist.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
 File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/src/d/da/daa/daaa/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/d/da/daa/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/d/da/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/d/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
 File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/src/d/da/daa/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/d/da/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/d/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
 File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/src/d/da/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/d/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
 File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/src/e/ea/package.json' does not exist.
-File '/src/projects/project/src/e/package.json' does not exist.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
 File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/src/e/ea/eaa/package.json' does not exist.
-File '/src/projects/project/src/e/ea/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/e/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
 File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/src/e/ea/eaa/eaaa/package.json' does not exist.
-File '/src/projects/project/src/e/ea/eaa/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/e/ea/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/e/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
 File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/src/e/ea/eaa/eaaa/x/y/z/package.json' does not exist.
-File '/src/projects/project/src/e/ea/eaa/eaaa/x/y/package.json' does not exist.
-File '/src/projects/project/src/e/ea/eaa/eaaa/x/package.json' does not exist.
-File '/src/projects/project/src/e/ea/eaa/eaaa/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/e/ea/eaa/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/e/ea/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/e/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
 File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/src/f/fa/faa/x/y/z/package.json' does not exist.
-File '/src/projects/project/src/f/fa/faa/x/y/package.json' does not exist.
-File '/src/projects/project/src/f/fa/faa/x/package.json' does not exist.
-File '/src/projects/project/src/f/fa/faa/package.json' does not exist.
-File '/src/projects/project/src/f/fa/package.json' does not exist.
-File '/src/projects/project/src/f/package.json' does not exist.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
 File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/src/f/fa/faa/faaa/package.json' does not exist.
-File '/src/projects/project/src/f/fa/faa/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/f/fa/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/f/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
 File '/src/projects/project/package.json' exists according to earlier cached lookups.
 File '/a/lib/package.json' does not exist.
 File '/a/package.json' does not exist.
@@ -1638,7 +1562,6 @@ FileWatcher:: Triggered with /src/projects/project/package.json 1:: WatchInfo: /
 Elapsed:: *ms FileWatcher:: Triggered with /src/projects/project/package.json 1:: WatchInfo: /src/projects/project/package.json 2000 undefined package.json file /src/projects/project/src/tsconfig.json
 [[90m12:02:23 AM[0m] File change detected. Starting incremental compilation...
 
-File '/src/projects/project/src/package.json' does not exist.
 Found 'package.json' at '/src/projects/project/package.json'.
 'package.json' does not have a 'typesVersions' field.
 ======== Resolving module './fileB.mjs' from '/src/projects/project/src/fileA.ts'. ========
@@ -1647,98 +1570,23 @@ Loading module as file / folder, candidate module location '/src/projects/projec
 File name '/src/projects/project/src/fileB.mjs' has a '.mjs' extension - stripping it.
 File '/src/projects/project/src/fileB.mts' exist - use it as a name resolution result.
 ======== Module name './fileB.mjs' was successfully resolved to '/src/projects/project/src/fileB.mts'. ========
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
 File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/src/a/package.json' does not exist.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
 File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/src/b/ba/package.json' does not exist.
-File '/src/projects/project/src/b/package.json' does not exist.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
 File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/src/b/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
 File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/src/c/ca/package.json' does not exist.
-File '/src/projects/project/src/c/package.json' does not exist.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
 File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/src/c/ca/caa/package.json' does not exist.
-File '/src/projects/project/src/c/ca/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/c/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
 File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/src/c/ca/caa/caaa/package.json' does not exist.
-File '/src/projects/project/src/c/ca/caa/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/c/ca/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/c/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
 File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/src/c/cb/package.json' does not exist.
-File '/src/projects/project/src/c/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
 File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/src/d/da/daa/daaa/x/y/z/package.json' does not exist.
-File '/src/projects/project/src/d/da/daa/daaa/x/y/package.json' does not exist.
-File '/src/projects/project/src/d/da/daa/daaa/x/package.json' does not exist.
-File '/src/projects/project/src/d/da/daa/daaa/package.json' does not exist.
-File '/src/projects/project/src/d/da/daa/package.json' does not exist.
-File '/src/projects/project/src/d/da/package.json' does not exist.
-File '/src/projects/project/src/d/package.json' does not exist.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
 File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/src/d/da/daa/daaa/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/d/da/daa/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/d/da/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/d/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
 File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/src/d/da/daa/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/d/da/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/d/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
 File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/src/d/da/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/d/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
 File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/src/e/ea/package.json' does not exist.
-File '/src/projects/project/src/e/package.json' does not exist.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
 File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/src/e/ea/eaa/package.json' does not exist.
-File '/src/projects/project/src/e/ea/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/e/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
 File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/src/e/ea/eaa/eaaa/package.json' does not exist.
-File '/src/projects/project/src/e/ea/eaa/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/e/ea/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/e/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
 File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/src/e/ea/eaa/eaaa/x/y/z/package.json' does not exist.
-File '/src/projects/project/src/e/ea/eaa/eaaa/x/y/package.json' does not exist.
-File '/src/projects/project/src/e/ea/eaa/eaaa/x/package.json' does not exist.
-File '/src/projects/project/src/e/ea/eaa/eaaa/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/e/ea/eaa/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/e/ea/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/e/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
 File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/src/f/fa/faa/x/y/z/package.json' does not exist.
-File '/src/projects/project/src/f/fa/faa/x/y/package.json' does not exist.
-File '/src/projects/project/src/f/fa/faa/x/package.json' does not exist.
-File '/src/projects/project/src/f/fa/faa/package.json' does not exist.
-File '/src/projects/project/src/f/fa/package.json' does not exist.
-File '/src/projects/project/src/f/package.json' does not exist.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
 File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/src/f/fa/faa/faaa/package.json' does not exist.
-File '/src/projects/project/src/f/fa/faa/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/f/fa/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/f/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
 File '/src/projects/project/package.json' exists according to earlier cached lookups.
 File '/a/lib/package.json' does not exist.
 File '/a/package.json' does not exist.
@@ -2447,7 +2295,6 @@ FileWatcher:: Triggered with /src/projects/project/src/randomFile.ts 1:: WatchIn
 Elapsed:: *ms FileWatcher:: Triggered with /src/projects/project/src/randomFile.ts 1:: WatchInfo: /src/projects/project/src/randomFile.ts 250 undefined Source file /src/projects/project/src/tsconfig.json
 [[90m12:05:08 AM[0m] File change detected. Starting incremental compilation...
 
-File '/src/projects/project/src/package.json' does not exist.
 Found 'package.json' at '/src/projects/project/package.json'.
 'package.json' does not have a 'typesVersions' field.
 ======== Resolving module './fileB.mjs' from '/src/projects/project/src/fileA.ts'. ========
@@ -2459,98 +2306,23 @@ File '/src/projects/project/src/fileB.mjs.d.ts' does not exist.
 File name '/src/projects/project/src/fileB.mjs' has a '.mjs' extension - stripping it.
 File '/src/projects/project/src/fileB.mts' exist - use it as a name resolution result.
 ======== Module name './fileB.mjs' was successfully resolved to '/src/projects/project/src/fileB.mts'. ========
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
 File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/src/a/package.json' does not exist.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
 File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/src/b/ba/package.json' does not exist.
-File '/src/projects/project/src/b/package.json' does not exist.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
 File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/src/b/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
 File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/src/c/ca/package.json' does not exist.
-File '/src/projects/project/src/c/package.json' does not exist.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
 File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/src/c/ca/caa/package.json' does not exist.
-File '/src/projects/project/src/c/ca/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/c/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
 File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/src/c/ca/caa/caaa/package.json' does not exist.
-File '/src/projects/project/src/c/ca/caa/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/c/ca/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/c/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
 File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/src/c/cb/package.json' does not exist.
-File '/src/projects/project/src/c/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
 File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/src/d/da/daa/daaa/x/y/z/package.json' does not exist.
-File '/src/projects/project/src/d/da/daa/daaa/x/y/package.json' does not exist.
-File '/src/projects/project/src/d/da/daa/daaa/x/package.json' does not exist.
-File '/src/projects/project/src/d/da/daa/daaa/package.json' does not exist.
-File '/src/projects/project/src/d/da/daa/package.json' does not exist.
-File '/src/projects/project/src/d/da/package.json' does not exist.
-File '/src/projects/project/src/d/package.json' does not exist.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
 File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/src/d/da/daa/daaa/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/d/da/daa/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/d/da/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/d/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
 File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/src/d/da/daa/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/d/da/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/d/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
 File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/src/d/da/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/d/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
 File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/src/e/ea/package.json' does not exist.
-File '/src/projects/project/src/e/package.json' does not exist.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
 File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/src/e/ea/eaa/package.json' does not exist.
-File '/src/projects/project/src/e/ea/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/e/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
 File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/src/e/ea/eaa/eaaa/package.json' does not exist.
-File '/src/projects/project/src/e/ea/eaa/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/e/ea/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/e/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
 File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/src/e/ea/eaa/eaaa/x/y/z/package.json' does not exist.
-File '/src/projects/project/src/e/ea/eaa/eaaa/x/y/package.json' does not exist.
-File '/src/projects/project/src/e/ea/eaa/eaaa/x/package.json' does not exist.
-File '/src/projects/project/src/e/ea/eaa/eaaa/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/e/ea/eaa/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/e/ea/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/e/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
 File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/src/f/fa/faa/x/y/z/package.json' does not exist.
-File '/src/projects/project/src/f/fa/faa/x/y/package.json' does not exist.
-File '/src/projects/project/src/f/fa/faa/x/package.json' does not exist.
-File '/src/projects/project/src/f/fa/faa/package.json' does not exist.
-File '/src/projects/project/src/f/fa/package.json' does not exist.
-File '/src/projects/project/src/f/package.json' does not exist.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
 File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/src/f/fa/faa/faaa/package.json' does not exist.
-File '/src/projects/project/src/f/fa/faa/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/f/fa/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/f/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
 File '/src/projects/project/package.json' exists according to earlier cached lookups.
 File '/a/lib/package.json' does not exist.
 File '/a/package.json' does not exist.

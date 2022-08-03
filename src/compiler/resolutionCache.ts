@@ -360,18 +360,7 @@ namespace ts {
                         /*moduleNameToDirectoryMap*/ undefined,
                     );
                 }
-                const expected = isExternalOrCommonJsModule(newFile) ? newFile.packageJsonLocations?.length ?? 0 : 0;
-                const existing = impliedFormatPackageJsons.get(newFile.path) ?? emptyArray;
-                for (let i = existing.length; i < expected; i++) {
-                    createFileWatcherOfAffectingLocation(newFile.packageJsonLocations![i], /*forResolution*/ false);
-                }
-                if (existing.length > expected) {
-                    for (let i = expected; i < existing.length; i++) {
-                        fileWatchesOfAffectingLocations.get(existing[i])!.files--;
-                    }
-                }
-                if (expected) impliedFormatPackageJsons.set(newFile.path, newFile.packageJsonLocations!);
-                else impliedFormatPackageJsons.delete(newFile.path);
+                ensurePackageJsonWatchesForFile(newProgram, newFile);
             }
             if (needsResolutionUpdate) {
                 const newProgramAutoTypeRefContainingFile = resolutionHost.toPath(newProgram.getAutomaticTypeDirectiveContainingFile());
@@ -417,6 +406,36 @@ namespace ts {
                     watcher.watcher.close();
                 }
             });
+        }
+
+        function ensurePackageJsonWatchesForFile(newProgram: Program, newFile: SourceFile) {
+            const options = newProgram.getCompilerOptions();
+            const existing = impliedFormatPackageJsons.get(newFile.path) ?? emptyArray;
+            let expected = isExternalOrCommonJsModule(newFile) ? newFile.packageJsonLocations ?? emptyArray : emptyArray;
+            if (!options.cacheResolutions) {
+                for (let i = existing.length; i < expected.length; i++) {
+                    createFileWatcherOfAffectingLocation(expected[i], /*forResolution*/ false);
+                }
+                if (existing.length > expected.length) {
+                    for (let i = expected.length; i < existing.length; i++) {
+                        fileWatchesOfAffectingLocations.get(existing[i])!.files--;
+                    }
+                }
+            }
+            else {
+                // Do not watch failed lookups for source file's package.json when caching resolutions
+                expected = expected.length && newFile.packageJsonScope ? [last(expected)] : expected;
+                if (expected.length !== 1 || existing.length !== 1 || expected[0] !== existing[0]) {
+                    for (const location of expected) {
+                        createFileWatcherOfAffectingLocation(location, /*forResolution*/ false);
+                    }
+                    for (const location of existing) {
+                        fileWatchesOfAffectingLocations.get(location)!.files--;
+                    }
+                }
+            }
+            if (expected.length) impliedFormatPackageJsons.set(newFile.path, expected);
+            else impliedFormatPackageJsons.delete(newFile.path);
         }
 
         function ensureResolutionsOfFile<T extends ResolutionWithFailedLookupLocations, R extends ResolutionWithResolvedFileName>(

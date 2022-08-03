@@ -167,37 +167,7 @@ File '/a/lib/package.json' does not exist.
 File '/a/package.json' does not exist.
 File '/package.json' does not exist.
 FileWatcher:: Added:: WatchInfo: /a/lib/lib.es2016.full.d.ts 500 undefined WatchType: Closed Script info
-FileWatcher:: Added:: WatchInfo: /src/projects/project/src/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /src/projects/project/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
-FileWatcher:: Added:: WatchInfo: /src/projects/project/src/a/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
-FileWatcher:: Added:: WatchInfo: /src/projects/project/src/b/ba/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
-FileWatcher:: Added:: WatchInfo: /src/projects/project/src/b/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
-FileWatcher:: Added:: WatchInfo: /src/projects/project/src/c/ca/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
-FileWatcher:: Added:: WatchInfo: /src/projects/project/src/c/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
-FileWatcher:: Added:: WatchInfo: /src/projects/project/src/c/ca/caa/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
-FileWatcher:: Added:: WatchInfo: /src/projects/project/src/c/ca/caa/caaa/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
-FileWatcher:: Added:: WatchInfo: /src/projects/project/src/c/cb/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
-FileWatcher:: Added:: WatchInfo: /src/projects/project/src/d/da/daa/daaa/x/y/z/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
-FileWatcher:: Added:: WatchInfo: /src/projects/project/src/d/da/daa/daaa/x/y/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
-FileWatcher:: Added:: WatchInfo: /src/projects/project/src/d/da/daa/daaa/x/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
-FileWatcher:: Added:: WatchInfo: /src/projects/project/src/d/da/daa/daaa/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
-FileWatcher:: Added:: WatchInfo: /src/projects/project/src/d/da/daa/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
-FileWatcher:: Added:: WatchInfo: /src/projects/project/src/d/da/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
-FileWatcher:: Added:: WatchInfo: /src/projects/project/src/d/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
-FileWatcher:: Added:: WatchInfo: /src/projects/project/src/e/ea/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
-FileWatcher:: Added:: WatchInfo: /src/projects/project/src/e/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
-FileWatcher:: Added:: WatchInfo: /src/projects/project/src/e/ea/eaa/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
-FileWatcher:: Added:: WatchInfo: /src/projects/project/src/e/ea/eaa/eaaa/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
-FileWatcher:: Added:: WatchInfo: /src/projects/project/src/e/ea/eaa/eaaa/x/y/z/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
-FileWatcher:: Added:: WatchInfo: /src/projects/project/src/e/ea/eaa/eaaa/x/y/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
-FileWatcher:: Added:: WatchInfo: /src/projects/project/src/e/ea/eaa/eaaa/x/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
-FileWatcher:: Added:: WatchInfo: /src/projects/project/src/f/fa/faa/x/y/z/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
-FileWatcher:: Added:: WatchInfo: /src/projects/project/src/f/fa/faa/x/y/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
-FileWatcher:: Added:: WatchInfo: /src/projects/project/src/f/fa/faa/x/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
-FileWatcher:: Added:: WatchInfo: /src/projects/project/src/f/fa/faa/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
-FileWatcher:: Added:: WatchInfo: /src/projects/project/src/f/fa/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
-FileWatcher:: Added:: WatchInfo: /src/projects/project/src/f/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
-FileWatcher:: Added:: WatchInfo: /src/projects/project/src/f/fa/faa/faaa/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
 DirectoryWatcher:: Added:: WatchInfo: /src/projects/project/src/node_modules/@types 1 undefined Project: /src/projects/project/src/tsconfig.json WatchType: Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /src/projects/project/src/node_modules/@types 1 undefined Project: /src/projects/project/src/tsconfig.json WatchType: Type roots
 Finishing updateGraphWorker: Project: /src/projects/project/src/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
@@ -1197,6 +1167,36 @@ File '/package.json' does not exist according to earlier cached lookups.
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
+FileWatcher:: Added:: WatchInfo: /src/projects/project/src/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /src/projects/project/src/a/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /src/projects/project/src/b/ba/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /src/projects/project/src/b/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /src/projects/project/src/c/ca/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /src/projects/project/src/c/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /src/projects/project/src/c/ca/caa/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /src/projects/project/src/c/ca/caa/caaa/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /src/projects/project/src/c/cb/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /src/projects/project/src/d/da/daa/daaa/x/y/z/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /src/projects/project/src/d/da/daa/daaa/x/y/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /src/projects/project/src/d/da/daa/daaa/x/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /src/projects/project/src/d/da/daa/daaa/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /src/projects/project/src/d/da/daa/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /src/projects/project/src/d/da/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /src/projects/project/src/d/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /src/projects/project/src/e/ea/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /src/projects/project/src/e/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /src/projects/project/src/e/ea/eaa/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /src/projects/project/src/e/ea/eaa/eaaa/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /src/projects/project/src/e/ea/eaa/eaaa/x/y/z/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /src/projects/project/src/e/ea/eaa/eaaa/x/y/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /src/projects/project/src/e/ea/eaa/eaaa/x/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /src/projects/project/src/f/fa/faa/x/y/z/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /src/projects/project/src/f/fa/faa/x/y/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /src/projects/project/src/f/fa/faa/x/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /src/projects/project/src/f/fa/faa/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /src/projects/project/src/f/fa/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /src/projects/project/src/f/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /src/projects/project/src/f/fa/faa/faaa/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
 Finishing updateGraphWorker: Project: /src/projects/project/src/tsconfig.json Version: 5 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Different program with same set of files
 Running: *ensureProjectForOpenFiles*
@@ -1422,6 +1422,36 @@ File '/src/projects/project/package.json' exists according to earlier cached loo
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
+FileWatcher:: Close:: WatchInfo: /src/projects/project/src/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Close:: WatchInfo: /src/projects/project/src/a/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Close:: WatchInfo: /src/projects/project/src/b/ba/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Close:: WatchInfo: /src/projects/project/src/b/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Close:: WatchInfo: /src/projects/project/src/c/ca/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Close:: WatchInfo: /src/projects/project/src/c/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Close:: WatchInfo: /src/projects/project/src/c/ca/caa/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Close:: WatchInfo: /src/projects/project/src/c/ca/caa/caaa/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Close:: WatchInfo: /src/projects/project/src/c/cb/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Close:: WatchInfo: /src/projects/project/src/d/da/daa/daaa/x/y/z/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Close:: WatchInfo: /src/projects/project/src/d/da/daa/daaa/x/y/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Close:: WatchInfo: /src/projects/project/src/d/da/daa/daaa/x/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Close:: WatchInfo: /src/projects/project/src/d/da/daa/daaa/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Close:: WatchInfo: /src/projects/project/src/d/da/daa/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Close:: WatchInfo: /src/projects/project/src/d/da/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Close:: WatchInfo: /src/projects/project/src/d/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Close:: WatchInfo: /src/projects/project/src/e/ea/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Close:: WatchInfo: /src/projects/project/src/e/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Close:: WatchInfo: /src/projects/project/src/e/ea/eaa/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Close:: WatchInfo: /src/projects/project/src/e/ea/eaa/eaaa/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Close:: WatchInfo: /src/projects/project/src/e/ea/eaa/eaaa/x/y/z/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Close:: WatchInfo: /src/projects/project/src/e/ea/eaa/eaaa/x/y/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Close:: WatchInfo: /src/projects/project/src/e/ea/eaa/eaaa/x/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Close:: WatchInfo: /src/projects/project/src/f/fa/faa/x/y/z/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Close:: WatchInfo: /src/projects/project/src/f/fa/faa/x/y/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Close:: WatchInfo: /src/projects/project/src/f/fa/faa/x/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Close:: WatchInfo: /src/projects/project/src/f/fa/faa/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Close:: WatchInfo: /src/projects/project/src/f/fa/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Close:: WatchInfo: /src/projects/project/src/f/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Close:: WatchInfo: /src/projects/project/src/f/fa/faa/faaa/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
 Finishing updateGraphWorker: Project: /src/projects/project/src/tsconfig.json Version: 6 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Different program with same set of files
 Running: *ensureProjectForOpenFiles*
@@ -1760,6 +1790,36 @@ File '/package.json' does not exist according to earlier cached lookups.
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
+FileWatcher:: Added:: WatchInfo: /src/projects/project/src/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /src/projects/project/src/a/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /src/projects/project/src/b/ba/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /src/projects/project/src/b/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /src/projects/project/src/c/ca/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /src/projects/project/src/c/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /src/projects/project/src/c/ca/caa/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /src/projects/project/src/c/ca/caa/caaa/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /src/projects/project/src/c/cb/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /src/projects/project/src/d/da/daa/daaa/x/y/z/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /src/projects/project/src/d/da/daa/daaa/x/y/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /src/projects/project/src/d/da/daa/daaa/x/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /src/projects/project/src/d/da/daa/daaa/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /src/projects/project/src/d/da/daa/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /src/projects/project/src/d/da/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /src/projects/project/src/d/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /src/projects/project/src/e/ea/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /src/projects/project/src/e/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /src/projects/project/src/e/ea/eaa/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /src/projects/project/src/e/ea/eaa/eaaa/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /src/projects/project/src/e/ea/eaa/eaaa/x/y/z/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /src/projects/project/src/e/ea/eaa/eaaa/x/y/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /src/projects/project/src/e/ea/eaa/eaaa/x/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /src/projects/project/src/f/fa/faa/x/y/z/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /src/projects/project/src/f/fa/faa/x/y/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /src/projects/project/src/f/fa/faa/x/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /src/projects/project/src/f/fa/faa/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /src/projects/project/src/f/fa/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /src/projects/project/src/f/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /src/projects/project/src/f/fa/faa/faaa/package.json 2000 undefined Project: /src/projects/project/src/tsconfig.json WatchType: File location affecting resolution
 Finishing updateGraphWorker: Project: /src/projects/project/src/tsconfig.json Version: 7 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Different program with same set of files
 Running: *ensureProjectForOpenFiles*

@@ -3799,8 +3799,6 @@ namespace ts {
          * CommonJS-output-format by the node module transformer and type checker, regardless of extension or context.
          */
         impliedNodeFormat?: ResolutionMode;
-        /*@internal*/ packageJsonLocations?: readonly string[];
-        /*@internal*/ packageJsonScope?: PackageJsonInfo;
 
         /* @internal */ scriptKind: ScriptKind;
 
@@ -3866,6 +3864,10 @@ namespace ts {
 
         /* @internal */ exportedModulesFromDeclarationEmit?: ExportedModulesFromDeclarationEmit;
         /* @internal */ endFlowNode?: FlowNode;
+    }
+
+    /*@internal*/
+    export interface SourceFile extends SourceFilePackageJsonInfo {
     }
 
     /* @internal */
@@ -6629,6 +6631,7 @@ namespace ts {
             mode: ResolutionMode,
             redirectedReference: ResolvedProjectReference | undefined,
         ): ResolvedTypeReferenceDirectiveWithFailedLookupLocations | undefined;
+        getPackageJsonPath(dirPath: Path): string | undefined;
     }
 
     /*@internal*/
