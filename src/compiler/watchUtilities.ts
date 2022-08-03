@@ -177,7 +177,7 @@ namespace ts {
                 const canonicalizedDirectories = result.sortedAndCanonicalizedDirectories;
                 // Case-sensitive comparison since already canonicalized
                 if (insertSorted(canonicalizedDirectories, canonicalizedBaseName, compareStringsCaseSensitive)) {
-                    result.files.push(baseName);
+                    result.directories.push(baseName);
                 }
             }
             host.createDirectory!(dirPath);
