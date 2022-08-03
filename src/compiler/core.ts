@@ -778,19 +778,23 @@ namespace ts {
         return [] as any as SortedArray<T>; // TODO: GH#19873
     }
 
-    export function insertSorted<T>(array: SortedArray<T>, insert: T, compare: Comparer<T>, allowDuplicates?: boolean): void {
+    export function insertSorted<T, U>(array: SortedArray<T>, insert: T, keySelector: (v: T) => U, keyComparer: Comparer<U>, allowDuplicates?: boolean): boolean {
         if (array.length === 0) {
             array.push(insert);
-            return;
+            return true;
         }
 
-        const insertIndex = binarySearch(array, insert, identity, compare);
+        const insertIndex = binarySearch(array, insert, keySelector, keyComparer);
         if (insertIndex < 0) {
             array.splice(~insertIndex, 0, insert);
+            return true;
         }
         else if (allowDuplicates) {
             array.splice(insertIndex, 0, insert);
+            return true;
         }
+
+        return false;
     }
 
     export function sortAndDeduplicate<T>(array: readonly string[]): SortedReadonlyArray<string>;

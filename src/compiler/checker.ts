@@ -773,7 +773,7 @@ namespace ts {
         const templateLiteralTypes = new Map<string, TemplateLiteralType>();
         const stringMappingTypes = new Map<string, StringMappingType>();
         const substitutionTypes = new Map<string, SubstitutionType>();
-        const subtypeReductionCache = new Map<string, Type[]>();
+        const subtypeReductionCache = new Map<string, SortedArray<Type>>();
         const cachedTypes = new Map<string, Type>();
         const evolvingArrayTypes: EvolvingArrayType[] = [];
         const undefinedProperties: SymbolTable = new Map();
@@ -14525,16 +14525,11 @@ namespace ts {
             return binarySearch(types, type, getTypeId, compareValues) >= 0;
         }
 
-        function insertType(types: Type[], type: Type): boolean {
-            const index = binarySearch(types, type, getTypeId, compareValues);
-            if (index < 0) {
-                types.splice(~index, 0, type);
-                return true;
-            }
-            return false;
+        function insertType(types: SortedArray<Type>, type: Type): boolean {
+            return insertSorted(types, type, getTypeId, compareValues);
         }
 
-        function addTypeToUnion(typeSet: Type[], includes: TypeFlags, type: Type) {
+        function addTypeToUnion(typeSet: SortedArray<Type>, includes: TypeFlags, type: Type) {
             const flags = type.flags;
             if (flags & TypeFlags.Union) {
                 return addTypesToUnion(typeSet, includes | (isNamedUnionType(type) ? TypeFlags.Union : 0), (type as UnionType).types);
@@ -14548,11 +14543,7 @@ namespace ts {
                     if (!(getObjectFlags(type) & ObjectFlags.ContainsWideningType)) includes |= TypeFlags.IncludesNonWideningType;
                 }
                 else {
-                    const len = typeSet.length;
-                    const index = len && type.id > typeSet[len - 1].id ? ~len : binarySearch(typeSet, type, getTypeId, compareValues);
-                    if (index < 0) {
-                        typeSet.splice(~index, 0, type);
-                    }
+                    insertSorted(typeSet, type, getTypeId, compareValues);
                 }
             }
             return includes;
@@ -14560,14 +14551,14 @@ namespace ts {
 
         // Add the given types to the given type set. Order is preserved, duplicates are removed,
         // and nested types of the given kind are flattened into the set.
-        function addTypesToUnion(typeSet: Type[], includes: TypeFlags, types: readonly Type[]): TypeFlags {
+        function addTypesToUnion(typeSet: SortedArray<Type>, includes: TypeFlags, types: readonly Type[]): TypeFlags {
             for (const type of types) {
                 includes = addTypeToUnion(typeSet, includes, type);
             }
             return includes;
         }
 
-        function removeSubtypes(types: Type[], hasObjectTypes: boolean): Type[] | undefined {
+        function removeSubtypes(types: SortedArray<Type>, hasObjectTypes: boolean): SortedArray<Type> | undefined {
             // [] and [T] immediately reduce to [] and [T] respectively
             if (types.length < 2) {
                 return types;
@@ -14704,7 +14695,7 @@ namespace ts {
             if (types.length === 1) {
                 return types[0];
             }
-            let typeSet: Type[] | undefined = [];
+            let typeSet: SortedArray<Type> | undefined = createSortedArray();
             const includes = addTypesToUnion(typeSet, 0, types);
             if (unionReduction !== UnionReduction.None) {
                 if (includes & TypeFlags.AnyOrUnknown) {
@@ -14739,7 +14730,7 @@ namespace ts {
             if (!origin && includes & TypeFlags.Union) {
                 const namedUnions: Type[] = [];
                 addNamedUnions(namedUnions, types);
-                const reducedTypes: Type[] = [];
+                const reducedTypes: SortedArray<Type> = createSortedArray();
                 for (const t of typeSet) {
                     if (!some(namedUnions, union => containsType((union as UnionType).types, t))) {
                         reducedTypes.push(t);
@@ -14983,8 +14974,8 @@ namespace ts {
             // We have more than one union of primitive types, now intersect them. For each
             // type in each union we check if the type is matched in every union and if so
             // we include it in the result.
-            const checked: Type[] = [];
-            const result: Type[] = [];
+            const checked: SortedArray<Type> = createSortedArray();
+            const result: SortedArray<Type> = createSortedArray();
             for (const u of unionTypes) {
                 for (const t of u.types) {
                     if (insertType(checked, t)) {

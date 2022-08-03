@@ -3931,7 +3931,7 @@ namespace ts {
                 if (!diagnostics) {
                     diagnostics = [] as Diagnostic[] as SortedArray<DiagnosticWithLocation>; // See GH#19873
                     fileDiagnostics.set(diagnostic.file.fileName, diagnostics as SortedArray<DiagnosticWithLocation>);
-                    insertSorted(filesWithDiagnostics, diagnostic.file.fileName, compareStringsCaseSensitive);
+                    insertSorted(filesWithDiagnostics, diagnostic.file.fileName, identity, compareStringsCaseSensitive);
                 }
             }
             else {
@@ -3944,7 +3944,7 @@ namespace ts {
                 diagnostics = nonFileDiagnostics;
             }
 
-            insertSorted(diagnostics, diagnostic, compareDiagnostics);
+            insertSorted(diagnostics, diagnostic, identity, compareDiagnostics);
         }
 
         function getGlobalDiagnostics(): Diagnostic[] {
