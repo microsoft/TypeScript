@@ -15,6 +15,7 @@ import {
     Pattern,
     ProgramBuildInfo,
     Push,
+    SourceFilePackageJsonInfo,
     SymlinkCache,
     TypeReferenceDirectiveResolutionCache,
 } from "./_namespaces/ts";
@@ -4062,8 +4063,6 @@ export interface SourceFile extends Declaration {
      * CommonJS-output-format by the node module transformer and type checker, regardless of extension or context.
      */
     impliedNodeFormat?: ResolutionMode;
-    /** @internal */ packageJsonLocations?: readonly string[];
-    /** @internal */ packageJsonScope?: PackageJsonInfo;
 
     /** @internal */ scriptKind: ScriptKind;
 
@@ -4133,6 +4132,10 @@ export interface SourceFile extends Declaration {
 
     /** @internal */ exportedModulesFromDeclarationEmit?: ExportedModulesFromDeclarationEmit;
     /** @internal */ endFlowNode?: FlowNode;
+}
+
+/** @internal */
+export interface SourceFile extends SourceFilePackageJsonInfo {
 }
 
 /** @internal */
@@ -6979,6 +6982,7 @@ export interface OldBuildInfoProgram {
     getCompilerOptions(): CompilerOptions;
     getResolvedModule(name: string, mode: ResolutionMode, dirPath: Path, redirectedReference: ResolvedProjectReference | undefined): ResolvedModuleWithFailedLookupLocations | undefined;
     getResolvedTypeReferenceDirective(name: string, mode: ResolutionMode, dirPath: Path, redirectedReference: ResolvedProjectReference | undefined): ResolvedTypeReferenceDirectiveWithFailedLookupLocations | undefined;
+    getPackageJsonPath(dir: string): string | undefined;
 }
 
 /** @internal */

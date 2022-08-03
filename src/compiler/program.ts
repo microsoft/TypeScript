@@ -1253,7 +1253,7 @@ export function getConfigFileParsingDiagnostics(configFileParseResult: ParsedCom
  * @returns `undefined` if the path has no relevant implied format, `ModuleKind.ESNext` for esm format, and `ModuleKind.CommonJS` for cjs format
  */
 export function getImpliedNodeFormatForFile(fileName: Path, packageJsonInfoCache: PackageJsonInfoCache | undefined, host: ModuleResolutionHost, options: CompilerOptions): ResolutionMode {
-    const result = getImpliedNodeFormatForFileWorker(fileName, packageJsonInfoCache, host, options);
+    const result = getImpliedNodeFormatForFileWorker(fileName, packageJsonInfoCache, host, options, /*oldBuildInfoProgram*/ undefined);
     return typeof result === "object" ? result.impliedNodeFormat : result;
 }
 
@@ -1263,6 +1263,7 @@ export function getImpliedNodeFormatForFileWorker(
     packageJsonInfoCache: PackageJsonInfoCache | undefined,
     host: ModuleResolutionHost,
     options: CompilerOptions,
+    oldBuildInfoProgram: OldBuildInfoProgram | undefined,
 ) {
     switch (getEmitModuleResolutionKind(options)) {
         case ModuleResolutionKind.Node16:
@@ -1279,9 +1280,16 @@ export function getImpliedNodeFormatForFileWorker(
         const packageJsonLocations: string[] = [];
         state.failedLookupLocations = packageJsonLocations;
         state.affectingLocations = packageJsonLocations;
-        const packageJsonScope = getPackageScopeForPath(fileName, state);
+        const fromOld = oldBuildInfoProgram?.getPackageJsonPath(getDirectoryPath(fileName));
+        const packageJsonScope = fromOld ?
+                getPackageJsonInfo(getDirectoryPath(fromOld), /*onlyRecordFailures*/ false, state) :
+                getPackageScopeForPath(fileName, state);
         const impliedNodeFormat = packageJsonScope?.contents.packageJsonContent.type === "module" ? ModuleKind.ESNext : ModuleKind.CommonJS;
-        return { impliedNodeFormat, packageJsonLocations, packageJsonScope };
+        return {
+            impliedNodeFormat,
+            packageJsonLocations: packageJsonLocations.length ? packageJsonLocations : undefined,
+            packageJsonScope
+        };
     }
 }
 
@@ -2374,7 +2382,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             if (!newSourceFile) {
                 return StructureIsReused.Not;
             }
-            newSourceFile.packageJsonLocations = sourceFileOptions.packageJsonLocations?.length ? sourceFileOptions.packageJsonLocations : undefined;
+            newSourceFile.packageJsonLocations = sourceFileOptions.packageJsonLocations;
             newSourceFile.packageJsonScope = sourceFileOptions.packageJsonScope;
 
             Debug.assert(!newSourceFile.redirectInfo, "Host should not return a redirect source file from `getSourceFile`");
@@ -3452,7 +3460,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         redirect.resolvedPath = resolvedPath;
         redirect.originalFileName = originalFileName;
         redirect.redirectInfo = { redirectTarget, unredirected };
-        redirect.packageJsonLocations = sourceFileOptions.packageJsonLocations?.length ? sourceFileOptions.packageJsonLocations : undefined;
+        redirect.packageJsonLocations = sourceFileOptions.packageJsonLocations;
         redirect.packageJsonScope = sourceFileOptions.packageJsonScope;
         sourceFilesFoundSearchingNodeModules.set(path, currentNodeModulesDepth > 0);
         Object.defineProperties(redirect, {
@@ -3484,7 +3492,13 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         // It's a _little odd_ that we can't set `impliedNodeFormat` until the program step - but it's the first and only time we have a resolution cache
         // and a freshly made source file node on hand at the same time, and we need both to set the field. Persisting the resolution cache all the way
         // to the check and emit steps would be bad - so we much prefer detecting and storing the format information on the source file node upfront.
-        const result = getImpliedNodeFormatForFileWorker(getNormalizedAbsolutePath(fileName, currentDirectory), moduleResolutionCache?.getPackageJsonInfoCache(), host, options);
+        const result = getImpliedNodeFormatForFileWorker(
+            getNormalizedAbsolutePath(fileName, currentDirectory),
+            moduleResolutionCache?.getPackageJsonInfoCache(),
+            host,
+            options,
+            oldBuildInfoProgram,
+        );
         const languageVersion = getEmitScriptTarget(options);
         const setExternalModuleIndicator = getSetExternalModuleIndicator(options);
         return typeof result === "object" ?
@@ -3618,7 +3632,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             file.path = path;
             file.resolvedPath = toPath(fileName);
             file.originalFileName = originalFileName;
-            file.packageJsonLocations = sourceFileOptions.packageJsonLocations?.length ? sourceFileOptions.packageJsonLocations : undefined;
+            file.packageJsonLocations = sourceFileOptions.packageJsonLocations;
             file.packageJsonScope = sourceFileOptions.packageJsonScope;
             addFileIncludeReason(file, reason);
 

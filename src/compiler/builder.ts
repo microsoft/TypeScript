@@ -187,6 +187,7 @@ export interface ReusableBuilderProgramState extends BuilderState {
         modules: PerDirectoryAndNonRelativeNameCache<ResolvedModuleWithFailedLookupLocations> | undefined;
         typeRefs: PerDirectoryAndNonRelativeNameCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations> | undefined;
         packageJsons: Map<Path, string> | undefined;
+        nonRelativePackageJsonsCache: PerNonRelativeNameCache<string> | undefined;
         packageJsonCache: PackageJsonInfoCache | undefined;
     };
     resuableCacheResolutions?: {
@@ -1475,16 +1476,16 @@ function getCacheResolutions(state: BuilderProgramState) {
     let modules: PerDirectoryAndNonRelativeNameCache<ResolvedModuleWithFailedLookupLocations> | undefined;
     let typeRefs: PerDirectoryAndNonRelativeNameCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations> | undefined;
     let packageJsons: Map<Path, string> | undefined;
-    let nonRelativePackageJsons: PerNonRelativeNameCache<string> | undefined;
+    let nonRelativePackageJsonsCache: PerNonRelativeNameCache<string> | undefined;
     for (const f of state.program!.getSourceFiles()) {
         modules = toPerDirectoryAndNonRelativeNameCache(state, modules, getOriginalOrResolvedModuleFileName, f.resolvedModules, f);
         typeRefs = toPerDirectoryAndNonRelativeNameCache(state, typeRefs, getOriginalOrResolvedTypeReferenceFileName, f.resolvedTypeReferenceDirectiveNames, f);
         if (f.packageJsonScope) {
             const dirPath = getDirectoryPath(f.resolvedPath);
-            if (!nonRelativePackageJsons?.getWithPath(dirPath)) {
+            if (!nonRelativePackageJsonsCache?.getWithPath(dirPath)) {
                 const result = last(f.packageJsonLocations!);
                 (packageJsons ??= new Map()).set(dirPath, result);
-                (nonRelativePackageJsons ??= createPerNonRelativeNameCache(
+                (nonRelativePackageJsonsCache ??= createPerNonRelativeNameCache(
                     state.program!.getCurrentDirectory(),
                     state.program!.getCanonicalFileName,
                     identity,
@@ -1501,6 +1502,7 @@ function getCacheResolutions(state: BuilderProgramState) {
         modules,
         typeRefs,
         packageJsons,
+        nonRelativePackageJsonsCache,
         packageJsonCache: state.program!.getModuleResolutionCache()?.getPackageJsonInfoCache().clone(),
     };
 }
@@ -2169,6 +2171,7 @@ export function createOldBuildInfoProgram(
     }
     const reusableResolvedModules = intializeReusableResolutionsCache(resuableCacheResolutions?.cache.modules);
     const reusableResolvedTypeRefs = intializeReusableResolutionsCache(resuableCacheResolutions?.cache.typeRefs);
+    let decodedPackageJsons: PerNonRelativeNameCache<string> | undefined;
     let decodedHashes: Map<ProgramBuildInfoAbsoluteFileId, string | undefined> | undefined;
     let resolutions: (Resolution | false)[] | undefined;
     let originalPathOrResolvedFileNames: string[] | undefined;
@@ -2195,6 +2198,7 @@ export function createOldBuildInfoProgram(
             dirPath,
             redirectedReference,
         ),
+        getPackageJsonPath,
     };
 
     function intializeReusableResolutionsCache(reusable: ProgramBuildInfoResolutionCacheWithRedirects | undefined): ReusableResolutionsCache | undefined {
@@ -2224,6 +2228,36 @@ export function createOldBuildInfoProgram(
         }
         affectingLoationsSameMap.set(fileName, result);
         return result;
+    }
+
+    function getPackageJsonPath(dir: string) {
+        const fromCache = cacheResolutions?.nonRelativePackageJsonsCache?.get(dir);
+        if (fromCache) {
+            return fileExists(fromCache) ? fromCache : undefined;
+        }
+        if (!resuableCacheResolutions?.cache.packageJsons) return;
+        if (!decodedPackageJsons) {
+            decodedPackageJsons = createPerNonRelativeNameCache(
+                resuableCacheResolutions.getProgramBuildInfoFilePathDecoder().currentDirectory,
+                resuableCacheResolutions.getProgramBuildInfoFilePathDecoder().getCanonicalFileName,
+                identity,
+            );
+            const filePathDecoder = resuableCacheResolutions.getProgramBuildInfoFilePathDecoder();
+            for (const dirIdOrDirAndPackageJson of resuableCacheResolutions.cache.packageJsons) {
+                let dirPath: Path, packageJson: string;
+                if (isArray(dirIdOrDirAndPackageJson)) {
+                    dirPath = filePathDecoder.toFilePath(dirIdOrDirAndPackageJson[0]);
+                    packageJson = filePathDecoder.toFileAbsolutePath(dirIdOrDirAndPackageJson[1]);
+                }
+                else {
+                    packageJson = filePathDecoder.toFileAbsolutePath(dirIdOrDirAndPackageJson);
+                    dirPath = getDirectoryPath(toPath(packageJson, filePathDecoder.currentDirectory, filePathDecoder.getCanonicalFileName));
+                }
+                decodedPackageJsons.setWithPath(dirPath, packageJson, noop);
+            }
+        }
+        const fromDecoded = decodedPackageJsons.get(dir);
+        return fromDecoded && fileExists(fromDecoded) ? fromDecoded : undefined;
     }
 
     function getResolvedFromCache<T extends ResolvedModuleWithFailedLookupLocations | ResolvedTypeReferenceDirectiveWithFailedLookupLocations>(

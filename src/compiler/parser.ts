@@ -1301,6 +1301,12 @@ function gatherPossibleChildren(node: Node) {
     }
 }
 
+ /** @internal */
+ export interface SourceFilePackageJsonInfo {
+    packageJsonLocations?: readonly string[];
+    packageJsonScope?: PackageJsonInfo;
+}
+
 export interface CreateSourceFileOptions {
     languageVersion: ScriptTarget;
     /**
@@ -1315,8 +1321,10 @@ export interface CreateSourceFileOptions {
      * check specified by `isFileProbablyExternalModule` will be used to set the field.
      */
     setExternalModuleIndicator?: (file: SourceFile) => void;
-    /** @internal */ packageJsonLocations?: readonly string[];
-    /** @internal */ packageJsonScope?: PackageJsonInfo;
+}
+
+ /** @internal */
+ export interface CreateSourceFileOptions extends SourceFilePackageJsonInfo {
 }
 
 function setExternalModuleIndicator(sourceFile: SourceFile) {
