@@ -88,6 +88,7 @@
         "typescript": "^4.5.5",
         "vinyl": "latest",
         "vinyl-sourcemaps-apply": "latest",
+        "which": "^2.0.2",
         "xml2js": "^0.4.23"
     },
     "overrides": {

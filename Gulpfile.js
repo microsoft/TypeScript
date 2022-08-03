@@ -364,7 +364,6 @@ const eslint = (folder) => async () => {
         "--cache-location", `${folder}/.eslintcache`,
         "--format", formatter,
         "--rulesdir", "scripts/eslint/built/rules",
-        "--ext", ".ts",
     ];
 
     if (cmdLineOptions.fix) {
