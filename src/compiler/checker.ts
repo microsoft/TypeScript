@@ -3597,7 +3597,7 @@ namespace ts {
                                     else {
                                         addRelatedInfo(diag, createDiagnosticForNode(
                                             errorNode,
-                                            Diagnostics.To_convert_this_file_to_an_ECMAScript_module_change_its_file_extension_to_0,
+                                            Diagnostics.To_convert_this_file_to_an_ECMAScript_module_change_its_file_extension_to_0_or_create_a_local_package_json_file_with_type_Colon_module,
                                             targetExt));
                                     }
                                 }

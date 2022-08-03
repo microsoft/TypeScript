@@ -1521,7 +1521,7 @@
         "category": "Error",
         "code": 1479
     },
-    "To convert this file to an ECMAScript module, change its file extension to '{0}'.": {
+    "To convert this file to an ECMAScript module, change its file extension to '{0}' or create a local package.json file with `{ \"type\": \"module\" }`.": {
         "category": "Message",
         "code": 1480
     },
