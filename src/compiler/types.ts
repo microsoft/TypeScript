@@ -4355,7 +4355,6 @@ namespace ts {
         getResolvedTypeReferenceDirectives(): ModeAwareCache<ResolvedTypeReferenceDirective | undefined>;
         getProjectReferenceRedirect(fileName: string): string | undefined;
         isSourceOfProjectReferenceRedirect(fileName: string): boolean;
-        getPackageScopeForPath(path: Path): PackageJsonInfo | undefined;
 
         readonly redirectTargetsMap: RedirectTargetsMap;
     }

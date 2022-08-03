@@ -1340,7 +1340,6 @@ namespace ts {
             directoryExists,
             getSymlinkCache,
             realpath: host.realpath?.bind(host),
-            getPackageScopeForPath: path => getPackageScopeForPath(path, getTemporaryModuleResolutionState(moduleResolutionCache?.getPackageJsonInfoCache(), host, options)),
             useCaseSensitiveFileNames: () => host.useCaseSensitiveFileNames(),
             getFileIncludeReasons: () => fileReasons,
             structureIsReused,

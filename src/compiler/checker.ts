@@ -3585,7 +3585,7 @@ namespace ts {
                                 const diag = error(errorNode, Diagnostics.The_current_file_is_a_CommonJS_module_whose_imports_will_produce_require_calls_however_the_referenced_file_is_an_ECMAScript_module_and_cannot_be_imported_with_require_Consider_writing_a_dynamic_import_0_call_instead, moduleReference);
                                 const ext = tryGetExtensionFromPath(currentSourceFile.fileName);
                                 if (ext === Extension.Ts || ext === Extension.Js) {
-                                    const scope = host.getPackageScopeForPath(currentSourceFile.path);
+                                    const scope = currentSourceFile.packageJsonScope;
                                     const targetExt = ext === Extension.Ts ? Extension.Mts : Extension.Mjs;
                                     if (scope && !scope.packageJsonContent.type) {
                                         addRelatedInfo(diag, createDiagnosticForNode(
