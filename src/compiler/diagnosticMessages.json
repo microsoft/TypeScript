@@ -1464,6 +1464,22 @@
         "category": "Message",
         "code": 1457
     },
+    "File is ECMAScript module because '{0}' has field \"type\" with value \"module\"": {
+        "category": "Message",
+        "code": 1458
+    },
+    "File is CommonJS module because '{0}' has field \"type\" whose value is not \"module\"": {
+        "category": "Message",
+        "code": 1459
+    },
+    "File is CommonJS module because '{0}' does not have field \"type\"": {
+        "category": "Message",
+        "code": 1460
+    },
+    "File is CommonJS module because 'package.json' was not found": {
+        "category": "Message",
+        "code": 1461
+    },
 
     "The 'import.meta' meta-property is not allowed in files which will build into CommonJS output.": {
         "category": "Error",
