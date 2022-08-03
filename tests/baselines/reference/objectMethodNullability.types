@@ -48,10 +48,10 @@ Object.getOwnPropertyDescriptor(undefined, "foo");
 >"foo" : "foo"
 
 Object.getOwnPropertyDescriptors(undefined);
->Object.getOwnPropertyDescriptors(undefined) : {} & { [x: string]: PropertyDescriptor; }
->Object.getOwnPropertyDescriptors : <T extends {}>(o: T) => { [P in keyof T]: TypedPropertyDescriptor<T[P]>; } & { [x: string]: PropertyDescriptor; }
+>Object.getOwnPropertyDescriptors(undefined) : {} & PropertyDescriptorMap
+>Object.getOwnPropertyDescriptors : <T extends {}>(o: T) => { [P in keyof T]: TypedPropertyDescriptor<T[P]>; } & PropertyDescriptorMap
 >Object : ObjectConstructor
->getOwnPropertyDescriptors : <T extends {}>(o: T) => { [P in keyof T]: TypedPropertyDescriptor<T[P]>; } & { [x: string]: PropertyDescriptor; }
+>getOwnPropertyDescriptors : <T extends {}>(o: T) => { [P in keyof T]: TypedPropertyDescriptor<T[P]>; } & PropertyDescriptorMap
 >undefined : undefined
 
 Object.getOwnPropertyNames(undefined);
@@ -154,10 +154,10 @@ Object.getOwnPropertyDescriptor(0, "foo");
 >"foo" : "foo"
 
 Object.getOwnPropertyDescriptors(0);
->Object.getOwnPropertyDescriptors(0) : number & { [x: string]: PropertyDescriptor; }
->Object.getOwnPropertyDescriptors : <T extends {}>(o: T) => { [P in keyof T]: TypedPropertyDescriptor<T[P]>; } & { [x: string]: PropertyDescriptor; }
+>Object.getOwnPropertyDescriptors(0) : number & PropertyDescriptorMap
+>Object.getOwnPropertyDescriptors : <T extends {}>(o: T) => { [P in keyof T]: TypedPropertyDescriptor<T[P]>; } & PropertyDescriptorMap
 >Object : ObjectConstructor
->getOwnPropertyDescriptors : <T extends {}>(o: T) => { [P in keyof T]: TypedPropertyDescriptor<T[P]>; } & { [x: string]: PropertyDescriptor; }
+>getOwnPropertyDescriptors : <T extends {}>(o: T) => { [P in keyof T]: TypedPropertyDescriptor<T[P]>; } & PropertyDescriptorMap
 >0 : 0
 
 Object.getOwnPropertyNames(0);
