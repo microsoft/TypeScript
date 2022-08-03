@@ -59,7 +59,7 @@ interface ArrayConstructor {
      * Creates an array from an array-like or iterable object.
      * @param source An array-like or iterable object to convert to an array.
      */
-    from<T>(source: ArrayLike<T>): T[];
+    from<T>(source: ArrayLikeOrIterable<T>): T[];
 
     /**
      * Creates an array from an array-like or iterable object.
@@ -67,7 +67,7 @@ interface ArrayConstructor {
      * @param mapfn A mapping function to call on every element of the array.
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
-    from<T, U>(source: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[];
+    from<T, U>(source: ArrayLikeOrIterable<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[];
 
     /**
      * Returns a new array from a set of elements.

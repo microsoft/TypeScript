@@ -1165,6 +1165,8 @@ namespace FourSlashInterface {
             interfaceEntry("Promise"),
             typeEntry("Awaited"),
             interfaceEntry("ArrayLike"),
+            interfaceEntry("ArrayLikeOrIterableTypes"),
+            typeEntry("ArrayLikeOrIterable"),
             typeEntry("Partial"),
             typeEntry("Required"),
             typeEntry("Readonly"),
