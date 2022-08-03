@@ -39,8 +39,8 @@ namespace ts {
     interface MutableFileSystemEntries {
         readonly files: string[];
         readonly directories: string[];
-        sortedAndCanonicalizedFiles?: undefined | SortedArray<Canonicalized>
-        sortedAndCanonicalizedDirectories?: undefined | SortedArray<Canonicalized>
+        sortedAndCanonicalizedFiles?: SortedArray<Canonicalized>
+        sortedAndCanonicalizedDirectories?: SortedArray<Canonicalized>
     }
 
     interface SortedAndCanonicalizedMutableFileSystemEntries {
