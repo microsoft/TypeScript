@@ -90,6 +90,9 @@
         "vinyl-sourcemaps-apply": "latest",
         "xml2js": "^0.4.23"
     },
+    "overrides": {
+        "es5-ext": "0.10.53"
+    },
     "scripts": {
         "prepare": "gulp build-eslint-rules",
         "pretest": "gulp tests",
