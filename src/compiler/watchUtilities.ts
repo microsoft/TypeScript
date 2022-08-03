@@ -34,9 +34,20 @@ namespace ts {
         clearCache(): void;
     }
 
+    type Canonicalized = string & { __canonicalized: void };
+
     interface MutableFileSystemEntries {
         readonly files: string[];
         readonly directories: string[];
+        sortedAndCanonicalizedFiles?: undefined | Canonicalized[]
+        sortedAndCanonicalizedDirectories?: undefined | Canonicalized[]
+    }
+
+    interface SortedAndCanonicalizedMutableFileSystemEntries {
+        readonly files: string[];
+        readonly directories: string[];
+        readonly sortedAndCanonicalizedFiles: Canonicalized[]
+        readonly sortedAndCanonicalizedDirectories: Canonicalized[]
     }
 
     export function createCachedDirectoryStructureHost(host: DirectoryStructureHost, currentDirectory: string, useCaseSensitiveFileNames: boolean): CachedDirectoryStructureHost | undefined {
@@ -45,7 +56,7 @@ namespace ts {
         }
 
         const cachedReadDirectoryResult = new Map<string, MutableFileSystemEntries | false>();
-        const getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
+        const getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames) as ((name: string) => Canonicalized);
         return {
             useCaseSensitiveFileNames,
             fileExists,
@@ -70,7 +81,17 @@ namespace ts {
         }
 
         function getCachedFileSystemEntriesForBaseDir(path: Path) {
-            return getCachedFileSystemEntries(getDirectoryPath(path));
+            const entries = getCachedFileSystemEntries(getDirectoryPath(path));
+            if (!entries) {
+                return entries;
+            }
+
+            // If we're looking for the base directory, we're definitely going to search the entries
+            if (!entries.sortedAndCanonicalizedFiles) {
+                entries.sortedAndCanonicalizedFiles = entries.files.map(getCanonicalFileName).sort();
+                entries.sortedAndCanonicalizedDirectories = entries.directories.map(getCanonicalFileName).sort();
+            }
+            return entries as SortedAndCanonicalizedMutableFileSystemEntries;
         }
 
         function getBaseNameOfFileName(fileName: string) {
@@ -120,23 +141,10 @@ namespace ts {
             }
         }
 
-        function fileNameEqual(name1: string, name2: string) {
-            return getCanonicalFileName(name1) === getCanonicalFileName(name2);
-        }
-
-        function hasEntry(entries: readonly string[], name: string) {
-            return some(entries, file => fileNameEqual(file, name));
-        }
-
-        function updateFileSystemEntry(entries: string[], baseName: string, isValid: boolean) {
-            if (hasEntry(entries, baseName)) {
-                if (!isValid) {
-                    return filterMutate(entries, entry => !fileNameEqual(entry, baseName));
-                }
-            }
-            else if (isValid) {
-                return entries.push(baseName);
-            }
+        function hasEntry(entries: readonly Canonicalized[], name: Canonicalized) {
+            // Case-sensitive comparison since already canonicalized
+            const index = binarySearch(entries, name, identity, compareStringsCaseSensitive);
+            return index >= 0;
         }
 
         function writeFile(fileName: string, data: string, writeByteOrderMark?: boolean): void {
@@ -151,7 +159,7 @@ namespace ts {
         function fileExists(fileName: string): boolean {
             const path = toPath(fileName);
             const result = getCachedFileSystemEntriesForBaseDir(path);
-            return result && hasEntry(result.files, getBaseNameOfFileName(fileName)) ||
+            return result && hasEntry(result.sortedAndCanonicalizedFiles, getCanonicalFileName(getBaseNameOfFileName(fileName))) ||
                 host.fileExists(fileName);
         }
 
@@ -163,9 +171,15 @@ namespace ts {
         function createDirectory(dirPath: string) {
             const path = toPath(dirPath);
             const result = getCachedFileSystemEntriesForBaseDir(path);
-            const baseFileName = getBaseNameOfFileName(dirPath);
             if (result) {
-                updateFileSystemEntry(result.directories, baseFileName, /*isValid*/ true);
+                const baseName = getBaseNameOfFileName(dirPath);
+                const canonicalizedBaseName = getCanonicalFileName(baseName);
+                const canonicalizedDirectories = result.sortedAndCanonicalizedDirectories;
+                const index = binarySearch(canonicalizedDirectories, canonicalizedBaseName, identity, compareStringsCaseSensitive); // Case-sensitive comparison since already canonicalized
+                if (index < 0) {
+                    canonicalizedDirectories.splice(~index, 0, canonicalizedBaseName);
+                    result.files.push(baseName);
+                }
             }
             host.createDirectory!(dirPath);
         }
@@ -242,7 +256,7 @@ namespace ts {
                 fileExists: host.fileExists(fileOrDirectoryPath),
                 directoryExists: host.directoryExists(fileOrDirectoryPath)
             };
-            if (fsQueryResult.directoryExists || hasEntry(parentResult.directories, baseName)) {
+            if (fsQueryResult.directoryExists || hasEntry(parentResult.sortedAndCanonicalizedDirectories, getCanonicalFileName(baseName))) {
                 // Folder added or removed, clear the cache instead of updating the folder and its structure
                 clearCache();
             }
@@ -265,8 +279,21 @@ namespace ts {
             }
         }
 
-        function updateFilesOfFileSystemEntry(parentResult: MutableFileSystemEntries, baseName: string, fileExists: boolean) {
-            updateFileSystemEntry(parentResult.files, baseName, fileExists);
+        function updateFilesOfFileSystemEntry(parentResult: SortedAndCanonicalizedMutableFileSystemEntries, baseName: string, fileExists: boolean): void {
+            const canonicalizedFiles = parentResult.sortedAndCanonicalizedFiles;
+            const canonicalizedBaseName = getCanonicalFileName(baseName);
+            const index = binarySearch(canonicalizedFiles, canonicalizedBaseName, identity, compareStringsCaseSensitive); // Case-sensitive comparison since already canonicalized
+            if (index >= 0) {
+                if (!fileExists) {
+                    canonicalizedFiles.splice(index, 1);
+                    const unsortedIndex = parentResult.files.findIndex(entry => getCanonicalFileName(entry) === canonicalizedBaseName);
+                    parentResult.files.splice(unsortedIndex, 1);
+                }
+            }
+            else if (fileExists) {
+                canonicalizedFiles.splice(~index, 0, canonicalizedBaseName);
+                parentResult.files.push(baseName);
+            }
         }
 
         function clearCache() {
