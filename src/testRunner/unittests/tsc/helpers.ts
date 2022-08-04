@@ -570,7 +570,7 @@ type ReadableProgramBuildInfoResolutionCacheWithRedirects = ReadableProgramBuild
     redirects: readonly ReadableProgramBuildInfoResolutionRedirectsCache[];
 };
 type ReadableProgramBuildInfoHash = string | [file: string, hash: string];
-type ReadableProgramBuildInfoPackageJson = string | [dir: string, packageJson: string];
+type ReadableProgramBuildInfoPackageJson = [dir: string, packageJson: string];
 type ReadableProgramBuildInfoCacheResolutions = Omit<ts.ProgramBuildInfoCacheResolutions,
     "resolutions" | "hash" | "resolutionEntries" | "modules" | "typeRefs" | "packageJsons"
 > & {
@@ -763,9 +763,7 @@ function generateBuildInfoProgramBaseline(sys: ts.System, buildInfoPath: string,
     }
 
     function toReadableProgramBuildInfoPackageJson(entry: ts.ProgramBuildInfoPackageJson): ReadableProgramBuildInfoPackageJson {
-        return ts.isArray(entry) ?
-            [toFileName(entry[0]), toFileName(entry[1])] :
-            toFileName(entry);
+        return [toFileName(entry[0]), toFileName(entry[1])];
     }
 
     function toReadableProgramBuildInfoHash(hash: ts.ProgramBuildInfoHash): ReadableProgramBuildInfoHash {

@@ -992,7 +992,7 @@ export type ProgramBuildInfoResolutionCacheWithRedirects = ProgramBuildInfoResol
     redirects: readonly ProgramBuildInfoResolutionRedirectsCache[];
 };
 /** @internal */
-export type ProgramBuildInfoPackageJson = ProgramBuildInfoAbsoluteFileId | [dirId: ProgramBuildInfoFileId, packageJson: ProgramBuildInfoAbsoluteFileId];
+export type ProgramBuildInfoPackageJson = [dirId: ProgramBuildInfoFileId, packageJson: ProgramBuildInfoAbsoluteFileId];
 /** @internal */
 export interface ProgramBuildInfoCacheResolutions {
     resolutions: readonly ProgramBuildInfoResolution[];
@@ -1347,12 +1347,8 @@ function getBuildInfo(state: BuilderProgramState, host: BuilderProgramHost, bund
         let result: ProgramBuildInfoPackageJson[] | undefined;
         cache?.forEach((packageJson, dirPath) => {
             const packageJsonDirPath = getDirectoryPath(toPath(packageJson, currentDirectory, state.program!.getCanonicalFileName));
-            (result ??= []).push(packageJsonDirPath === dirPath ?
-                toAbsoluteFileId(packageJson) :
-                [
-                    toFileId(dirPath),
-                    toAbsoluteFileId(packageJson),
-                ]);
+            // Dont need to store package json found in same directory
+            if (packageJsonDirPath !== dirPath) (result ??= []).push([toFileId(dirPath), toAbsoluteFileId(packageJson)]);
         });
         return result;
     }
