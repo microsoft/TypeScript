@@ -1,6 +1,6 @@
 error TS2210: The project root is ambiguous, but is required to resolve import map entry '.' in file 'tests/cases/conformance/node/allowJs/package.json'. Supply the `rootDir` compiler option to disambiguate.
-tests/cases/conformance/node/allowJs/index.cjs(3,22): error TS1471: Module '#mjs' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
-tests/cases/conformance/node/allowJs/index.cjs(4,23): error TS1471: Module '#type' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+tests/cases/conformance/node/allowJs/index.cjs(3,22): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("#mjs")' call instead.
+tests/cases/conformance/node/allowJs/index.cjs(4,23): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("#type")' call instead.
 
 
 !!! error TS2210: The project root is ambiguous, but is required to resolve import map entry '.' in file 'tests/cases/conformance/node/allowJs/package.json'. Supply the `rootDir` compiler option to disambiguate.
@@ -25,10 +25,10 @@ tests/cases/conformance/node/allowJs/index.cjs(4,23): error TS1471: Module '#typ
     import * as cjs from "#cjs";
     import * as mjs from "#mjs";
                          ~~~~~~
-!!! error TS1471: Module '#mjs' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("#mjs")' call instead.
     import * as type from "#type";
                           ~~~~~~~
-!!! error TS1471: Module '#type' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("#type")' call instead.
     cjs;
     mjs;
     type;
