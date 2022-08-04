@@ -27023,9 +27023,11 @@ namespace ts {
                 case AssignmentDeclarationKind.Prototype:
                 case AssignmentDeclarationKind.PrototypeProperty:
                 case AssignmentDeclarationKind.ModuleExports:
-                    const valueDeclaration = kind !== AssignmentDeclarationKind.ModuleExports
-                        ? binaryExpression.left.symbol?.valueDeclaration
-                        : binaryExpression.symbol?.valueDeclaration;
+                    let valueDeclaration: Declaration | undefined;
+                    if (kind !== AssignmentDeclarationKind.ModuleExports) {
+                        valueDeclaration = binaryExpression.left.symbol?.valueDeclaration;
+                    }
+                    valueDeclaration ||= binaryExpression.symbol?.valueDeclaration;
                     const annotated = valueDeclaration && getEffectiveTypeAnnotationNode(valueDeclaration);
                     return annotated ? getTypeFromTypeNode(annotated) : undefined;
                 case AssignmentDeclarationKind.ObjectDefinePropertyValue:
