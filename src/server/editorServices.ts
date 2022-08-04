@@ -892,13 +892,13 @@ namespace ts.server {
         }
 
         /*@internal*/
-        setDocument(key: DocumentRegistryBucketKey, path: Path, sourceFile: SourceFile) {
+        setDocument(key: DocumentRegistryBucketKeyWithMode, path: Path, sourceFile: SourceFile) {
             const info = Debug.checkDefined(this.getScriptInfoForPath(path));
             info.cacheSourceFile = { key, sourceFile };
         }
 
         /*@internal*/
-        getDocument(key: DocumentRegistryBucketKey, path: Path): SourceFile | undefined {
+        getDocument(key: DocumentRegistryBucketKeyWithMode, path: Path): SourceFile | undefined {
             const info = this.getScriptInfoForPath(path);
             return info && info.cacheSourceFile && info.cacheSourceFile.key === key ? info.cacheSourceFile.sourceFile : undefined;
         }
@@ -1709,7 +1709,7 @@ namespace ts.server {
                 // created when any of the script infos are added as root of inferred project
                 if (this.configFileExistenceImpactsRootOfInferredProject(configFileExistenceInfo)) {
                     // If we cannot watch config file existence without configured project, close the configured file watcher
-                    if (!canWatchDirectory(getDirectoryPath(canonicalConfigFilePath) as Path)) {
+                    if (!canWatchDirectoryOrFile(getDirectoryPath(canonicalConfigFilePath) as Path)) {
                         configFileExistenceInfo.watcher!.close();
                         configFileExistenceInfo.watcher = noopConfigFileWatcher;
                     }
@@ -1794,7 +1794,7 @@ namespace ts.server {
                 (configFileExistenceInfo.openFilesImpactedByConfigFile ||= new Map()).set(info.path, true);
 
                 // If there is no configured project for this config file, add the file watcher
-                configFileExistenceInfo.watcher ||= canWatchDirectory(getDirectoryPath(canonicalConfigFilePath) as Path) ?
+                configFileExistenceInfo.watcher ||= canWatchDirectoryOrFile(getDirectoryPath(canonicalConfigFilePath) as Path) ?
                     this.watchFactory.watchFile(
                         configFileName,
                         (_filename, eventKind) => this.onConfigFileChanged(canonicalConfigFilePath, eventKind),
@@ -4185,11 +4185,11 @@ namespace ts.server {
         }
 
         /*@internal*/
-        getPackageJsonsVisibleToFile(fileName: string, rootDir?: string): readonly PackageJsonInfo[] {
+        getPackageJsonsVisibleToFile(fileName: string, rootDir?: string): readonly ProjectPackageJsonInfo[] {
             const packageJsonCache = this.packageJsonCache;
             const rootPath = rootDir && this.toPath(rootDir);
             const filePath = this.toPath(fileName);
-            const result: PackageJsonInfo[] = [];
+            const result: ProjectPackageJsonInfo[] = [];
             const processDirectory = (directory: Path): boolean | undefined => {
                 switch (packageJsonCache.directoryHasPackageJson(directory)) {
                     // Sync and check same directory again

@@ -1147,13 +1147,20 @@ namespace ts {
                 // position and whose end is greater than the position.
 
 
+                // There are more sophisticated end tests later, but this one is very fast
+                // and allows us to skip a bunch of work
+                const end = children[middle].getEnd();
+                if (end < position) {
+                    return Comparison.LessThan;
+                }
+
                 const start = allowPositionInLeadingTrivia ? children[middle].getFullStart() : children[middle].getStart(sourceFile, /*includeJsDoc*/ true);
                 if (start > position) {
                     return Comparison.GreaterThan;
                 }
 
                 // first element whose start position is before the input and whose end position is after or equal to the input
-                if (nodeContainsPosition(children[middle])) {
+                if (nodeContainsPosition(children[middle], start, end)) {
                     if (children[middle - 1]) {
                         // we want the _first_ element that contains the position, so left-recur if the prior node also contains the position
                         if (nodeContainsPosition(children[middle - 1])) {
@@ -1181,13 +1188,16 @@ namespace ts {
             return current;
         }
 
-        function nodeContainsPosition(node: Node) {
-            const start = allowPositionInLeadingTrivia ? node.getFullStart() : node.getStart(sourceFile, /*includeJsDoc*/ true);
+        function nodeContainsPosition(node: Node, start?: number, end?: number) {
+            end ??= node.getEnd();
+            if (end < position) {
+                return false;
+            }
+            start ??= allowPositionInLeadingTrivia ? node.getFullStart() : node.getStart(sourceFile, /*includeJsDoc*/ true);
             if (start > position) {
                 // If this child begins after position, then all subsequent children will as well.
                 return false;
             }
-            const end = node.getEnd();
             if (position < end || (position === end && (node.kind === SyntaxKind.EndOfFileToken || includeEndPosition))) {
                 return true;
             }
@@ -2647,7 +2657,7 @@ namespace ts {
             Debug.assert(fileName === renameFilename);
             for (const change of textChanges) {
                 const { span, newText } = change;
-                const index = indexInTextChange(newText, name);
+                const index = indexInTextChange(newText, escapeString(name));
                 if (index !== -1) {
                     lastPos = span.start + delta + index;
 
@@ -2994,12 +3004,12 @@ namespace ts {
         return packageJson;
     }
 
-    export function getPackageJsonsVisibleToFile(fileName: string, host: LanguageServiceHost): readonly PackageJsonInfo[] {
+    export function getPackageJsonsVisibleToFile(fileName: string, host: LanguageServiceHost): readonly ProjectPackageJsonInfo[] {
         if (!host.fileExists) {
             return [];
         }
 
-        const packageJsons: PackageJsonInfo[] = [];
+        const packageJsons: ProjectPackageJsonInfo[] = [];
         forEachAncestorDirectory(getDirectoryPath(fileName), ancestor => {
             const packageJsonFileName = combinePaths(ancestor, "package.json");
             if (host.fileExists(packageJsonFileName)) {
@@ -3013,7 +3023,7 @@ namespace ts {
         return packageJsons;
     }
 
-    export function createPackageJsonInfo(fileName: string, host: { readFile?(fileName: string): string | undefined }): PackageJsonInfo | undefined {
+    export function createPackageJsonInfo(fileName: string, host: { readFile?(fileName: string): string | undefined }): ProjectPackageJsonInfo | undefined {
         if (!host.readFile) {
             return undefined;
         }
@@ -3022,7 +3032,7 @@ namespace ts {
         const dependencyKeys = ["dependencies", "devDependencies", "optionalDependencies", "peerDependencies"] as const;
         const stringContent = host.readFile(fileName) || "";
         const content = tryParseJson(stringContent) as PackageJsonRaw | undefined;
-        const info: Pick<PackageJsonInfo, typeof dependencyKeys[number]> = {};
+        const info: Pick<ProjectPackageJsonInfo, typeof dependencyKeys[number]> = {};
         if (content) {
             for (const key of dependencyKeys) {
                 const dependencies = content[key];

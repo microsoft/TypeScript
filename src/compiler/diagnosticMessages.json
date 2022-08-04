@@ -1464,6 +1464,22 @@
         "category": "Message",
         "code": 1457
     },
+    "File is ECMAScript module because '{0}' has field \"type\" with value \"module\"": {
+        "category": "Message",
+        "code": 1458
+    },
+    "File is CommonJS module because '{0}' has field \"type\" whose value is not \"module\"": {
+        "category": "Message",
+        "code": 1459
+    },
+    "File is CommonJS module because '{0}' does not have field \"type\"": {
+        "category": "Message",
+        "code": 1460
+    },
+    "File is CommonJS module because 'package.json' was not found": {
+        "category": "Message",
+        "code": 1461
+    },
 
     "The 'import.meta' meta-property is not allowed in files which will build into CommonJS output.": {
         "category": "Error",
@@ -1492,6 +1508,14 @@
     "\"auto\": Treat files with imports, exports, import.meta, jsx (with jsx: react-jsx), or esm format (with module: node16+) as modules.": {
         "category": "Message",
         "code": 1476
+    },
+    "An instantiation expression cannot be followed by a property access.": {
+        "category": "Error",
+        "code": 1477
+    },
+    "Identifier or string literal expected.": {
+        "category": "Error",
+        "code": 1478
     },
 
     "The types of '{0}' are incompatible between these types.": {
@@ -2351,6 +2375,10 @@
     "Abstract method '{0}' in class '{1}' cannot be accessed via super expression.": {
         "category": "Error",
         "code": 2513
+    },
+    "A tuple type cannot be indexed with a negative value.": {
+        "category": "Error",
+        "code": 2514
     },
     "Non-abstract class '{0}' does not implement inherited abstract member '{1}' from class '{2}'.": {
         "category": "Error",
@@ -3498,10 +3526,14 @@
     "'{0}' is an unused renaming of '{1}'. Did you intend to use it as a type annotation?": {
         "category": "Error",
         "code": 2842
-    }, 
+    },
     "We can only write a type for '{0}' by adding a type for the entire parameter here.": {
         "category": "Error",
         "code": 2843
+    },
+    "Type of instance member variable '{0}' cannot reference identifier '{1}' declared in the constructor.": {
+        "category": "Error",
+        "code": 2844
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -7405,5 +7437,17 @@
     "A 'return' statement cannot be used inside a class static block.": {
         "category": "Error",
         "code": 18041
+    },
+    "'{0}' is a type and cannot be imported in JavaScript files. Use '{1}' in a JSDoc type annotation.": {
+        "category": "Error",
+        "code": 18042
+    },
+    "Types cannot appear in export declarations in JavaScript files.": {
+        "category": "Error",
+        "code": 18043
+    },
+    "'{0}' is automatically exported here.": {
+        "category": "Message",
+        "code": 18044
     }
 }

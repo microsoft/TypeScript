@@ -558,7 +558,7 @@ namespace ts.server {
                 cb,
                 PollingInterval.High,
                 this.projectService.getWatchOptions(this),
-                WatchType.PackageJson,
+                WatchType.AffectingFileLocation,
                 this
             );
         }
@@ -709,7 +709,8 @@ namespace ts.server {
                     this.program!,
                     scriptInfo.path,
                     this.cancellationToken,
-                    maybeBind(this.projectService.host, this.projectService.host.createHash)
+                    maybeBind(this.projectService.host, this.projectService.host.createHash),
+                    this.getCanonicalFileName,
                 ),
                 sourceFile => this.shouldEmitFile(this.projectService.getScriptInfoForPath(sourceFile.path)) ? sourceFile.fileName : undefined
             );
@@ -1171,7 +1172,7 @@ namespace ts.server {
         }
 
         private updateGraphWorker() {
-            const oldProgram = this.program;
+            const oldProgram = this.languageService.getCurrentProgram();
             Debug.assert(!this.isClosed(), "Called update graph worker of closed project");
             this.writeLog(`Starting updateGraphWorker: Project: ${this.getProjectName()}`);
             const start = timestamp();
@@ -1180,7 +1181,7 @@ namespace ts.server {
             this.program = this.languageService.getProgram(); // TODO: GH#18217
             this.dirty = false;
             tracing?.push(tracing.Phase.Session, "finishCachingPerDirectoryResolution");
-            this.resolutionCache.finishCachingPerDirectoryResolution();
+            this.resolutionCache.finishCachingPerDirectoryResolution(this.program, oldProgram);
             tracing?.pop();
 
             Debug.assert(oldProgram === undefined || this.program !== undefined);
@@ -1750,7 +1751,7 @@ namespace ts.server {
         }
 
         /*@internal*/
-        getPackageJsonsVisibleToFile(fileName: string, rootDir?: string): readonly PackageJsonInfo[] {
+        getPackageJsonsVisibleToFile(fileName: string, rootDir?: string): readonly ProjectPackageJsonInfo[] {
             if (this.projectService.serverMode !== LanguageServiceMode.Semantic) return emptyArray;
             return this.projectService.getPackageJsonsVisibleToFile(fileName, rootDir);
         }
@@ -1761,7 +1762,7 @@ namespace ts.server {
         }
 
         /*@internal*/
-        getPackageJsonsForAutoImport(rootDir?: string): readonly PackageJsonInfo[] {
+        getPackageJsonsForAutoImport(rootDir?: string): readonly ProjectPackageJsonInfo[] {
             const packageJsons = this.getPackageJsonsVisibleToFile(combinePaths(this.currentDirectory, inferredTypesContainingFile), rootDir);
             this.packageJsonsForAutoImport = new Set(packageJsons.map(p => p.fileName));
             return packageJsons;
@@ -2176,7 +2177,6 @@ namespace ts.server {
                 }
             }
 
-            type PackageJsonInfo = NonNullable<ReturnType<typeof resolvePackageNameToPackageJson>>;
             function getRootNamesFromPackageJson(packageJson: PackageJsonInfo, program: Program, symlinkCache: SymlinkCache, resolveJs?: boolean) {
                 const entrypoints = getEntrypointsFromPackageJsonInfo(
                     packageJson,

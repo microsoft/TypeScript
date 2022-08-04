@@ -1,0 +1,195 @@
+=== tests/cases/conformance/salsa/mod.js ===
+class Thing  { x = 1 }
+>Thing : Symbol(Thing, Decl(mod.js, 0, 0))
+>x : Symbol(Thing.x, Decl(mod.js, 0, 14))
+
+class AnotherThing { y = 2  }
+>AnotherThing : Symbol(AnotherThing, Decl(mod.js, 0, 22))
+>y : Symbol(AnotherThing.y, Decl(mod.js, 1, 20))
+
+function foo() { return 3 }
+>foo : Symbol(foo, Decl(mod.js, 1, 29))
+
+function bar() { return 4 }
+>bar : Symbol(bar, Decl(mod.js, 2, 27))
+
+/** @typedef {() => number} buz */
+module.exports = {
+>module.exports : Symbol(module.exports, Decl(mod.js, 0, 0))
+>module : Symbol(export=, Decl(mod.js, 3, 27))
+>exports : Symbol(export=, Decl(mod.js, 3, 27))
+
+    Thing,
+>Thing : Symbol(Thing, Decl(mod.js, 5, 18))
+
+    AnotherThing,
+>AnotherThing : Symbol(AnotherThing, Decl(mod.js, 6, 10))
+
+    foo,
+>foo : Symbol(foo, Decl(mod.js, 7, 17))
+
+    qux: bar,
+>qux : Symbol(qux, Decl(mod.js, 8, 8))
+>bar : Symbol(bar, Decl(mod.js, 2, 27))
+
+    baz() { return 5 },
+>baz : Symbol(baz, Decl(mod.js, 9, 13))
+
+    literal: "",
+>literal : Symbol(literal, Decl(mod.js, 10, 23))
+}
+=== tests/cases/conformance/salsa/main.js ===
+/**
+ * @param {import("./mod").Thing} a
+ * @param {import("./mod").AnotherThing} b
+ * @param {import("./mod").foo} c
+ * @param {import("./mod").qux} d
+ * @param {import("./mod").baz} e
+ * @param {import("./mod").buz} f
+ * @param {import("./mod").literal} g
+ */
+function jstypes(a, b, c, d, e, f, g) {
+>jstypes : Symbol(jstypes, Decl(main.js, 0, 0))
+>a : Symbol(a, Decl(main.js, 9, 17))
+>b : Symbol(b, Decl(main.js, 9, 19))
+>c : Symbol(c, Decl(main.js, 9, 22))
+>d : Symbol(d, Decl(main.js, 9, 25))
+>e : Symbol(e, Decl(main.js, 9, 28))
+>f : Symbol(f, Decl(main.js, 9, 31))
+>g : Symbol(g, Decl(main.js, 9, 34))
+
+    return a.x + b.y + c() + d() + e() + f() + g.length
+>a.x : Symbol(Thing.x, Decl(mod.js, 0, 14))
+>a : Symbol(a, Decl(main.js, 9, 17))
+>x : Symbol(Thing.x, Decl(mod.js, 0, 14))
+>b.y : Symbol(AnotherThing.y, Decl(mod.js, 1, 20))
+>b : Symbol(b, Decl(main.js, 9, 19))
+>y : Symbol(AnotherThing.y, Decl(mod.js, 1, 20))
+>c : Symbol(c, Decl(main.js, 9, 22))
+>d : Symbol(d, Decl(main.js, 9, 25))
+>e : Symbol(e, Decl(main.js, 9, 28))
+>f : Symbol(f, Decl(main.js, 9, 31))
+>g.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>g : Symbol(g, Decl(main.js, 9, 34))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+}
+
+/**
+ * @param {typeof import("./mod").Thing} a
+ * @param {typeof import("./mod").AnotherThing} b
+ * @param {typeof import("./mod").foo} c
+ * @param {typeof import("./mod").qux} d
+ * @param {typeof import("./mod").baz} e
+ * @param {typeof import("./mod").buz} f
+ * @param {typeof import("./mod").literal} g
+ */
+function jsvalues(a, b, c, d, e, f, g) {
+>jsvalues : Symbol(jsvalues, Decl(main.js, 11, 1))
+>a : Symbol(a, Decl(main.js, 22, 18))
+>b : Symbol(b, Decl(main.js, 22, 20))
+>c : Symbol(c, Decl(main.js, 22, 23))
+>d : Symbol(d, Decl(main.js, 22, 26))
+>e : Symbol(e, Decl(main.js, 22, 29))
+>f : Symbol(f, Decl(main.js, 22, 32))
+>g : Symbol(g, Decl(main.js, 22, 35))
+
+    return a.length + b.length + c() + d() + e() + f() + g.length
+>a.length : Symbol(Function.length, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(main.js, 22, 18))
+>length : Symbol(Function.length, Decl(lib.es5.d.ts, --, --))
+>b.length : Symbol(Function.length, Decl(lib.es5.d.ts, --, --))
+>b : Symbol(b, Decl(main.js, 22, 20))
+>length : Symbol(Function.length, Decl(lib.es5.d.ts, --, --))
+>c : Symbol(c, Decl(main.js, 22, 23))
+>d : Symbol(d, Decl(main.js, 22, 26))
+>e : Symbol(e, Decl(main.js, 22, 29))
+>f : Symbol(f, Decl(main.js, 22, 32))
+>g.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>g : Symbol(g, Decl(main.js, 22, 35))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+}
+
+=== tests/cases/conformance/salsa/index.ts ===
+function types(
+>types : Symbol(types, Decl(index.ts, 0, 0))
+
+    a: import('./mod').Thing,
+>a : Symbol(a, Decl(index.ts, 0, 15))
+
+    b: import('./mod').AnotherThing,
+>b : Symbol(b, Decl(index.ts, 1, 29))
+
+    c: import('./mod').foo,
+>c : Symbol(c, Decl(index.ts, 2, 36))
+
+    d: import('./mod').qux,
+>d : Symbol(d, Decl(index.ts, 3, 27))
+
+    e: import('./mod').baz,
+>e : Symbol(e, Decl(index.ts, 4, 27))
+
+    f: import('./mod').buz,
+>f : Symbol(f, Decl(index.ts, 5, 27))
+>buz : Symbol(buz, Decl(mod.js, 4, 4))
+
+    g: import('./mod').literal,
+>g : Symbol(g, Decl(index.ts, 6, 27))
+
+) {
+    return a.x + b.y + c() + d() + e() + f() + g.length
+>a : Symbol(a, Decl(index.ts, 0, 15))
+>b : Symbol(b, Decl(index.ts, 1, 29))
+>c : Symbol(c, Decl(index.ts, 2, 36))
+>d : Symbol(d, Decl(index.ts, 3, 27))
+>e : Symbol(e, Decl(index.ts, 4, 27))
+>f : Symbol(f, Decl(index.ts, 5, 27))
+>g : Symbol(g, Decl(index.ts, 6, 27))
+}
+
+function values(
+>values : Symbol(values, Decl(index.ts, 10, 1))
+
+    a: typeof import('./mod').Thing,
+>a : Symbol(a, Decl(index.ts, 12, 16))
+>Thing : Symbol(Thing, Decl(mod.js, 5, 18))
+
+    b: typeof import('./mod').AnotherThing,
+>b : Symbol(b, Decl(index.ts, 13, 36))
+>AnotherThing : Symbol(AnotherThing, Decl(mod.js, 6, 10))
+
+    c: typeof import('./mod').foo,
+>c : Symbol(c, Decl(index.ts, 14, 43))
+>foo : Symbol(foo, Decl(mod.js, 7, 17))
+
+    d: typeof import('./mod').qux,
+>d : Symbol(d, Decl(index.ts, 15, 34))
+>qux : Symbol(qux, Decl(mod.js, 8, 8))
+
+    e: typeof import('./mod').baz,
+>e : Symbol(e, Decl(index.ts, 16, 34))
+>baz : Symbol(baz, Decl(mod.js, 9, 13))
+
+    f: typeof import('./mod').buz,
+>f : Symbol(f, Decl(index.ts, 17, 34))
+
+    g: typeof import('./mod').literal,
+>g : Symbol(g, Decl(index.ts, 18, 34))
+>literal : Symbol(literal, Decl(mod.js, 10, 23))
+
+) {
+    return a.length + b.length + c() + d() + e() + f() + g.length
+>a.length : Symbol(Function.length, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(index.ts, 12, 16))
+>length : Symbol(Function.length, Decl(lib.es5.d.ts, --, --))
+>b.length : Symbol(Function.length, Decl(lib.es5.d.ts, --, --))
+>b : Symbol(b, Decl(index.ts, 13, 36))
+>length : Symbol(Function.length, Decl(lib.es5.d.ts, --, --))
+>c : Symbol(c, Decl(index.ts, 14, 43))
+>d : Symbol(d, Decl(index.ts, 15, 34))
+>e : Symbol(e, Decl(index.ts, 16, 34))
+>f : Symbol(f, Decl(index.ts, 17, 34))
+>g.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>g : Symbol(g, Decl(index.ts, 18, 34))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+}
+

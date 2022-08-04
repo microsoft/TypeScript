@@ -194,7 +194,7 @@ namespace ts.server {
             }
         };
 
-        const pending: Buffer[] = [];
+        const pending = createQueue<Buffer>();
         let canWrite = true;
 
         if (useWatchGuard) {
@@ -334,7 +334,7 @@ namespace ts.server {
 
         function writeMessage(buf: Buffer) {
             if (!canWrite) {
-                pending.push(buf);
+                pending.enqueue(buf);
             }
             else {
                 canWrite = false;
@@ -344,8 +344,8 @@ namespace ts.server {
 
         function setCanWriteFlagAndWriteMessageIfNecessary() {
             canWrite = true;
-            if (pending.length) {
-                writeMessage(pending.shift()!);
+            if (!pending.isEmpty()) {
+                writeMessage(pending.dequeue());
             }
         }
 
@@ -430,7 +430,7 @@ namespace ts.server {
             private installer!: NodeChildProcess;
             private projectService!: ProjectService;
             private activeRequestCount = 0;
-            private requestQueue: QueuedOperation[] = [];
+            private requestQueue = createQueue<QueuedOperation>();
             private requestMap = new Map<string, QueuedOperation>(); // Maps operation ID to newest requestQueue entry with that ID
             /** We will lazily request the types registry on the first call to `isKnownTypesPackageName` and store it in `typesRegistryCache`. */
             private requestedRegistry = false;
@@ -567,7 +567,7 @@ namespace ts.server {
                     if (this.logger.hasLevel(LogLevel.verbose)) {
                         this.logger.info(`Deferring request for: ${operationId}`);
                     }
-                    this.requestQueue.push(queuedRequest);
+                    this.requestQueue.enqueue(queuedRequest);
                     this.requestMap.set(operationId, queuedRequest);
                 }
             }
@@ -649,8 +649,8 @@ namespace ts.server {
                             Debug.fail("Received too many responses");
                         }
 
-                        while (this.requestQueue.length > 0) {
-                            const queuedRequest = this.requestQueue.shift()!;
+                        while (!this.requestQueue.isEmpty()) {
+                            const queuedRequest = this.requestQueue.dequeue();
                             if (this.requestMap.get(queuedRequest.operationId) === queuedRequest) {
                                 this.requestMap.delete(queuedRequest.operationId);
                                 this.scheduleRequest(queuedRequest);
