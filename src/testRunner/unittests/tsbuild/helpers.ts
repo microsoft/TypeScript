@@ -229,7 +229,7 @@ interface Symbol {
         redirects: readonly ReadableProgramBuildInfoResolutionRedirectsCache[];
     };
     export type ReadableProgramBuildInfoHash = string | [file: string, hash: string];
-    export type ReadableProgramBuildInfoPackageJsons = (string | [dir: string, packageJson: string])[];
+    export type ReadableProgramBuildInfoPackageJsons = [dir: string, packageJson: string][];
     export interface ReadableProgramBuildInfoCacheResolutions {
         resolutions: readonly ReadableProgramBuildInfoResolution[];
         names: readonly string[];
@@ -451,10 +451,10 @@ interface Symbol {
         }
 
         function toReadableProgramBuildInfoPackageJsons(cache: ProgramBuildInfoPackageJsons | undefined): ReadableProgramBuildInfoPackageJsons | undefined {
-            return cache?.map((dirOrDirAndPackageJsonDir) => isArray(dirOrDirAndPackageJsonDir) ?
-                [toFileName(dirOrDirAndPackageJsonDir[0]), toFileName(dirOrDirAndPackageJsonDir[1])] :
-                toFileName(dirOrDirAndPackageJsonDir)
-            );
+            return cache?.map((dirOrDirAndPackageJsonDir) => [
+                toFileName(dirOrDirAndPackageJsonDir[0]),
+                toFileName(dirOrDirAndPackageJsonDir[1])
+            ]);
         }
     }
 

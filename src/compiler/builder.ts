@@ -822,7 +822,7 @@ namespace ts {
         own: ProgramBuildInfoResolutionCache | undefined;
         redirects: readonly ProgramBuildInfoResolutionRedirectsCache[];
     };
-    export type ProgramBuildInfoPackageJsons = (ProgramBuildInfoAbsoluteFileId | [dirId: ProgramBuildInfoFileId, packageJson: ProgramBuildInfoAbsoluteFileId])[];
+    export type ProgramBuildInfoPackageJsons = [dirId: ProgramBuildInfoFileId, packageJson: ProgramBuildInfoAbsoluteFileId][];
     export interface ProgramBuildInfoCacheResolutions {
         resolutions: readonly ProgramBuildInfoResolution[];
         names: readonly string[];
@@ -1140,12 +1140,13 @@ namespace ts {
             let result: ProgramBuildInfoPackageJsons | undefined;
             cache?.forEach((packageJson, dirPath) => {
                 const packageJsonDirPath = getDirectoryPath(toPath(packageJson, currentDirectory, getCanonicalFileName));
-                (result ??= []).push(packageJsonDirPath === dirPath ?
-                    toAbsoluteFileId(packageJson) :
-                    [
+                // Dont need to store package json found in same directory
+                if (packageJsonDirPath !== dirPath) {
+                    (result ??= []).push([
                         toFileId(dirPath),
                         toAbsoluteFileId(packageJson),
                     ]);
+                }
             });
             return result;
         }
@@ -2034,15 +2035,8 @@ namespace ts {
                 decodedPackageJsonMap = new Map();
                 const filePathDecoder = resuableCacheResolutions.getProgramBuildInfoFilePathDecoder();
                 for (const dirIdOrDirAndPackageJson of resuableCacheResolutions.cache.packageJsons) {
-                    let dirPath: Path, packageJson: string;
-                    if (isArray(dirIdOrDirAndPackageJson)) {
-                        dirPath = filePathDecoder.toFilePath(dirIdOrDirAndPackageJson[0]);
-                        packageJson = filePathDecoder.toFileAbsolutePath(dirIdOrDirAndPackageJson[1]);
-                    }
-                    else {
-                        packageJson = filePathDecoder.toFileAbsolutePath(dirIdOrDirAndPackageJson);
-                        dirPath = getDirectoryPath(toPath(packageJson, filePathDecoder.currentDirectory, filePathDecoder.getCanonicalFileName));
-                    }
+                    const dirPath = filePathDecoder.toFilePath(dirIdOrDirAndPackageJson[0]);
+                    const packageJson = filePathDecoder.toFileAbsolutePath(dirIdOrDirAndPackageJson[1]);
                     moduleNameToDirectorySet(
                         decodedPackageJsonMap,
                         dirPath,
