@@ -26777,11 +26777,9 @@ namespace ts {
                 if (contextualReturnType) {
                     const functionFlags = getFunctionFlags(func);
                     if (functionFlags & FunctionFlags.Generator) { // Generator or AsyncGenerator function
+                        const isAsyncGenerator = (functionFlags & FunctionFlags.Async) !== 0;
                         if (contextualReturnType.flags & TypeFlags.Union) {
-                            contextualReturnType = filterType(contextualReturnType, type => {
-                                const generator = createGeneratorReturnType(anyType, anyType, anyType, (functionFlags & FunctionFlags.Async) !== 0);
-                                return checkTypeAssignableTo(generator, type, /*errorNode*/ undefined);
-                            });
+                            contextualReturnType = filterType(contextualReturnType, type => !!getIterationTypeOfGeneratorFunctionReturnType(IterationTypeKind.Return, type, isAsyncGenerator));
                         }
                         const iterationReturnType = getIterationTypeOfGeneratorFunctionReturnType(IterationTypeKind.Return, contextualReturnType, (functionFlags & FunctionFlags.Async) !== 0);
                         if (!iterationReturnType) {
@@ -26816,16 +26814,11 @@ namespace ts {
             const func = getContainingFunction(node);
             if (func) {
                 const functionFlags = getFunctionFlags(func);
-                // let contextualReturnType = getContextualReturnType(func);
-                // const contextualReturnType = getContextualReturnType(func, contextFlags);
                 let contextualReturnType = getContextualReturnType(func, contextFlags);
                 if (contextualReturnType) {
                     const isAsyncGenerator = (functionFlags & FunctionFlags.Async) !== 0;
                     if (!node.asteriskToken && contextualReturnType.flags & TypeFlags.Union) {
-                        contextualReturnType = filterType(contextualReturnType, type => {
-                            const generator = createGeneratorReturnType(anyType, anyType, anyType, isAsyncGenerator);
-                            return checkTypeAssignableTo(generator, type, /*errorNode*/ undefined);
-                        });
+                        contextualReturnType = filterType(contextualReturnType, type => !!getIterationTypeOfGeneratorFunctionReturnType(IterationTypeKind.Return, type, isAsyncGenerator));
                     }
                     return node.asteriskToken
                         ? contextualReturnType
