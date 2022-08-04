@@ -3582,40 +3582,44 @@ namespace ts {
                             }
                             else {
                                 // CJS file resolving to an ESM file
-                                const diag = error(errorNode, Diagnostics.The_current_file_is_a_CommonJS_module_whose_imports_will_produce_require_calls_however_the_referenced_file_is_an_ECMAScript_module_and_cannot_be_imported_with_require_Consider_writing_a_dynamic_import_0_call_instead, moduleReference);
+                                let diagnosticDetails;
                                 const ext = tryGetExtensionFromPath(currentSourceFile.fileName);
                                 if (ext === Extension.Ts || ext === Extension.Js || ext === Extension.Tsx || ext === Extension.Jsx) {
                                     const scope = currentSourceFile.packageJsonScope;
                                     const targetExt = ext === Extension.Ts ? Extension.Mts : ext === Extension.Js ? Extension.Mjs : undefined;
                                     if (scope && !scope.packageJsonContent.type) {
                                         if (targetExt) {
-                                            addRelatedInfo(diag, createDiagnosticForNode(
-                                                errorNode,
+                                            diagnosticDetails = chainDiagnosticMessages(
+                                                /*details*/ undefined,
                                                 Diagnostics.To_convert_this_file_to_an_ECMAScript_module_change_its_file_extension_to_0_or_add_the_field_type_Colon_module_to_1,
                                                 targetExt,
-                                                combinePaths(scope.packageDirectory, "package.json")));
+                                                combinePaths(scope.packageDirectory, "package.json"));
                                         }
                                         else {
-                                            addRelatedInfo(diag, createDiagnosticForNode(
-                                                errorNode,
+                                            diagnosticDetails = chainDiagnosticMessages(
+                                                /*details*/ undefined,
                                                 Diagnostics.To_convert_this_file_to_an_ECMAScript_module_add_the_field_type_Colon_module_to_0,
-                                                combinePaths(scope.packageDirectory, "package.json")));
+                                                combinePaths(scope.packageDirectory, "package.json"));
                                         }
                                     }
                                     else {
                                         if (targetExt) {
-                                            addRelatedInfo(diag, createDiagnosticForNode(
-                                                errorNode,
+                                            diagnosticDetails = chainDiagnosticMessages(
+                                                /*details*/ undefined,
                                                 Diagnostics.To_convert_this_file_to_an_ECMAScript_module_change_its_file_extension_to_0_or_create_a_local_package_json_file_with_type_Colon_module,
-                                                targetExt));
+                                                targetExt);
                                         }
                                         else {
-                                            addRelatedInfo(diag, createDiagnosticForNode(
-                                                errorNode,
-                                                Diagnostics.To_convert_this_file_to_an_ECMAScript_module_create_a_local_package_json_file_with_type_Colon_module));
+                                            diagnosticDetails = chainDiagnosticMessages(
+                                                /*details*/ undefined,
+                                                Diagnostics.To_convert_this_file_to_an_ECMAScript_module_create_a_local_package_json_file_with_type_Colon_module);
                                         }
                                     }
                                 }
+                                diagnostics.add(createDiagnosticForNodeFromMessageChain(errorNode, chainDiagnosticMessages(
+                                    diagnosticDetails,
+                                    Diagnostics.The_current_file_is_a_CommonJS_module_whose_imports_will_produce_require_calls_however_the_referenced_file_is_an_ECMAScript_module_and_cannot_be_imported_with_require_Consider_writing_a_dynamic_import_0_call_instead,
+                                    moduleReference)));
                             }
                         }
                     }
