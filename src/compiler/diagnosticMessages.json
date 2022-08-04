@@ -1529,6 +1529,14 @@
         "category": "Message",
         "code": 1481
     },
+    "To convert this file to an ECMAScript module, add the field `\"type\": \"module\"` to '{0}'.": {
+        "category": "Message",
+        "code": 1482
+    },
+    "To convert this file to an ECMAScript module, create a local package.json file with `{ \"type\": \"module\" }`.": {
+        "category": "Message",
+        "code": 1483
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",

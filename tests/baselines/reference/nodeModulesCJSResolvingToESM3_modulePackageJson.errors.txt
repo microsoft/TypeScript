@@ -17,3 +17,7 @@
     import {} from "./module.mjs";
                    ~~~~~~~~~~~~~~
 !!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./module.mjs")' call instead.
+    
+==== /tsxExtension.tsx (0 errors) ====
+    import {} from "./module.mjs";
+    
