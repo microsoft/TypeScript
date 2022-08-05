@@ -185,6 +185,10 @@ ${newComment.split("\n").map(c => ` * ${c}`).join("\n")}
         if (!containingDecl) {
             return;
         }
+        if (isFunctionLikeDeclaration(containingDecl) && containingDecl.body && rangeContainsPosition(containingDecl.body, startPosition)) {
+            return;
+        }
+
         const checker = program.getTypeChecker();
         const signatureSymbol = containingDecl.symbol;
         if (!signatureSymbol) {

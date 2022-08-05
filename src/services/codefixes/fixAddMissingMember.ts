@@ -212,7 +212,7 @@ namespace ts.codefix {
                 if (signature === undefined) return undefined;
                 return { kind: InfoKind.Signature, token, signature, sourceFile, parentDeclaration: findScope(token) };
             }
-            if (isCallExpression(parent)) {
+            if (isCallExpression(parent) && parent.expression === token) {
                 return { kind: InfoKind.Function, token, call: parent, sourceFile, modifierFlags: ModifierFlags.None, parentDeclaration: findScope(token) };
             }
         }

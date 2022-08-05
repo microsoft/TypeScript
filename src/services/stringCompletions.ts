@@ -167,9 +167,9 @@ namespace ts.Completions.StringCompletions {
             case SyntaxKind.LiteralType: {
                 const grandParent = walkUpParentheses(parent.parent);
                 switch (grandParent.kind) {
+                    case SyntaxKind.ExpressionWithTypeArguments:
                     case SyntaxKind.TypeReference: {
-                        const typeReference = grandParent as TypeReferenceNode;
-                        const typeArgument = findAncestor(parent, n => n.parent === typeReference) as LiteralTypeNode;
+                        const typeArgument = findAncestor(parent, n => n.parent === grandParent) as LiteralTypeNode;
                         if (typeArgument) {
                             return { kind: StringLiteralCompletionKind.Types, types: getStringLiteralTypes(typeChecker.getTypeArgumentConstraint(typeArgument)), isNewIdentifier: false };
                         }
