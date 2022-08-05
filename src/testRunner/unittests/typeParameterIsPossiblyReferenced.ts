@@ -1,23 +1,8 @@
-/*
-/// <reference path="..\..\..\src\compiler\program.ts" />
-/// <reference path="..\..\..\src\compiler\types.ts" />
-/// <reference path="..\..\..\src\harness\fakeHosts.ts" />
-*/
-
 // namespace ts {
     describe("unittests :: internalApi :: typeParameterIsPossiblyReferenced", () => {
             it("with type parameter aliasing", () => {
                 const content = `
-                function f<T>() {
-                    const a: T = null as any;
-                    function g<T>() {
-                        const something: typeof a = null as any;
-                        type SomeType = typeof something;
-                        const thing2: SomeType = null as any;
-                        return thing2;
-                    }
-                    return g;
-                }
+                declare function foo<T>(b: T, f: <T>(a: typeof b) => typeof a): typeof f;
                 `;
                 const host = new fakes.CompilerHost(vfs.createFromFileSystem(
                     Harness.IO,
@@ -36,16 +21,15 @@
                 });
                 const checker = program.getTypeChecker();
                 const file = program.getSourceFile("/file.ts")!;
-                const fNode = file.statements[0] as ts.FunctionDeclaration; // function f<T>
-                const node = ((fNode // function f<T>
-                    .body!.statements[1] as ts.FunctionDeclaration) // function g<T>
-                    .body!.statements[1] as ts.TypeAliasDeclaration) // type SomeType
-                    .type; // typeof something
-                const typeParamDecl = fNode.typeParameters![0];
-                const typeParameter = checker.getTypeAtLocation(typeParamDecl) as ts.TypeParameter;
-                const isReferenced = checker.isTypeParameterPossiblyReferenced(typeParameter, node);
+                const typeQueryNode = (((file.statements[0] as ts.FunctionDeclaration) // function f<T>
+                    .parameters[1] // f
+                    .type! as ts.FunctionTypeNode) // <T>(a: typeof b) => typeof a
+                    .type as ts.TypeQueryNode) // typeof a
+                    ;
+                const typeParameterDecl = (file.statements[0] as ts.FunctionDeclaration).typeParameters![0]; // T in f<T>
+                const typeParameter = checker.getTypeAtLocation(typeParameterDecl)! as ts.TypeParameter;
+                const isReferenced = checker.isTypeParameterPossiblyReferenced(typeParameter, typeQueryNode);
                 assert.ok(isReferenced, "Type parameter is referenced in type query node");
-                // validateMatches(expected, json, caseInsensitiveHost, caseInsensitiveBasePath);
             });
     });
 // }

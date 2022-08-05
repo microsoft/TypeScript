@@ -17071,7 +17071,7 @@ namespace ts {
                     case SyntaxKind.TypeQuery:
                         // return false;
                         const entityName = (node as TypeQueryNode).exprName;
-                        const firstIdentifierDeclaration = getSymbolAtLocation(getFirstIdentifier(entityName))?.valueDeclaration;
+                        const firstIdentifierDeclaration = getSymbolAtLocation(getFirstIdentifier(entityName))?.valueDeclaration; // TODO: change to check if single declaration
                         if (firstIdentifierDeclaration) {
                             const foundSymbol = resolveName(firstIdentifierDeclaration, tp.symbol.escapedName, SymbolFlags.Type, undefined, undefined, false);
                             if (tp.symbol && foundSymbol !== tp.symbol && !(node as TypeQueryNode).typeArguments) {
