@@ -1153,7 +1153,7 @@ namespace ts {
             affectsProgramStructure: true,
             category: Diagnostics.Editor_Support,
             description: Diagnostics.Remove_the_20mb_cap_on_total_source_code_size_for_JavaScript_files_in_the_TypeScript_language_server,
-            defaultValueDescription: false,
+            defaultValueDescription: true,
         },
         {
             name: "disableSourceOfProjectReferenceRedirect",

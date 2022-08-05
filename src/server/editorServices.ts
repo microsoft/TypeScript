@@ -1959,7 +1959,8 @@ namespace ts.server {
 
         /** Get a filename if the language service exceeds the maximum allowed program size; otherwise returns undefined. */
         private getFilenameForExceededTotalSizeLimitForNonTsFiles<T>(name: string, options: CompilerOptions | undefined, fileNames: T[], propertyReader: FilePropertyReader<T>): string | undefined {
-            if (options && options.disableSizeLimit || !this.host.getFileSize) {
+            // Size limit is disabled if option is not specified
+            if (options?.disableSizeLimit !== false || !this.host.getFileSize) {
                 return;
             }
 
