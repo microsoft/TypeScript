@@ -139,9 +139,20 @@ CleanBuild:
             "file": "../src/filea.ts",
             "start": 20,
             "length": 13,
-            "messageText": "Module './fileB.mjs' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.",
+            "code": 1479,
             "category": 1,
-            "code": 1471
+            "messageText": {
+              "messageText": "The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import(\"./fileB.mjs\")' call instead.",
+              "category": 1,
+              "code": 1479,
+              "next": [
+                {
+                  "messageText": "To convert this file to an ECMAScript module, change its file extension to '.mts', or add the field `\"type\": \"module\"` to '/src/projects/project/package.json'.",
+                  "category": 3,
+                  "code": 1481
+                }
+              ]
+            }
           }
         ]
       ],
@@ -377,9 +388,20 @@ IncrementalBuild:
             "file": "../src/filea.ts",
             "start": 20,
             "length": 13,
-            "messageText": "Module './fileB.mjs' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.",
+            "code": 1479,
             "category": 1,
-            "code": 1471
+            "messageText": {
+              "messageText": "The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import(\"./fileB.mjs\")' call instead.",
+              "category": 1,
+              "code": 1479,
+              "next": [
+                {
+                  "messageText": "To convert this file to an ECMAScript module, change its file extension to '.mts', or add the field `\"type\": \"module\"` to '/src/projects/project/package.json'.",
+                  "category": 3,
+                  "code": 1481
+                }
+              ]
+            }
           }
         ]
       ],
@@ -603,9 +625,20 @@ CleanBuild:
             "file": "../src/filea.ts",
             "start": 20,
             "length": 13,
-            "messageText": "Module './fileB.mjs' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.",
+            "code": 1479,
             "category": 1,
-            "code": 1471
+            "messageText": {
+              "messageText": "The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import(\"./fileB.mjs\")' call instead.",
+              "category": 1,
+              "code": 1479,
+              "next": [
+                {
+                  "messageText": "To convert this file to an ECMAScript module, change its file extension to '.mts' or create a local package.json file with `{ \"type\": \"module\" }`.",
+                  "category": 3,
+                  "code": 1480
+                }
+              ]
+            }
           }
         ]
       ],
@@ -807,9 +840,20 @@ IncrementalBuild:
             "file": "../src/filea.ts",
             "start": 20,
             "length": 13,
-            "messageText": "Module './fileB.mjs' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.",
+            "code": 1479,
             "category": 1,
-            "code": 1471
+            "messageText": {
+              "messageText": "The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import(\"./fileB.mjs\")' call instead.",
+              "category": 1,
+              "code": 1479,
+              "next": [
+                {
+                  "messageText": "To convert this file to an ECMAScript module, change its file extension to '.mts', or add the field `\"type\": \"module\"` to '/src/projects/project/package.json'.",
+                  "category": 3,
+                  "code": 1481
+                }
+              ]
+            }
           }
         ]
       ],
@@ -1033,9 +1077,20 @@ CleanBuild:
             "file": "../src/filea.ts",
             "start": 20,
             "length": 13,
-            "messageText": "Module './fileB.mjs' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.",
+            "code": 1479,
             "category": 1,
-            "code": 1471
+            "messageText": {
+              "messageText": "The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import(\"./fileB.mjs\")' call instead.",
+              "category": 1,
+              "code": 1479,
+              "next": [
+                {
+                  "messageText": "To convert this file to an ECMAScript module, change its file extension to '.mts' or create a local package.json file with `{ \"type\": \"module\" }`.",
+                  "category": 3,
+                  "code": 1480
+                }
+              ]
+            }
           }
         ]
       ],
@@ -1237,9 +1292,20 @@ IncrementalBuild:
             "file": "../src/filea.ts",
             "start": 20,
             "length": 13,
-            "messageText": "Module './fileB.mjs' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.",
+            "code": 1479,
             "category": 1,
-            "code": 1471
+            "messageText": {
+              "messageText": "The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import(\"./fileB.mjs\")' call instead.",
+              "category": 1,
+              "code": 1479,
+              "next": [
+                {
+                  "messageText": "To convert this file to an ECMAScript module, change its file extension to '.mts' or create a local package.json file with `{ \"type\": \"module\" }`.",
+                  "category": 3,
+                  "code": 1480
+                }
+              ]
+            }
           }
         ]
       ],
