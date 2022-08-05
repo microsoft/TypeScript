@@ -717,7 +717,7 @@ namespace ts.projectSystem {
             };
             const config = {
                 path: "/a/jsconfig.json",
-                content: "{}"
+                content: `{ "compilerOptions": { "disableSizeLimit": false } }`
             };
             const host = createServerHost([f1, f2, config]);
             const originalGetFileSize = host.getFileSize;

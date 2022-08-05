@@ -233,7 +233,7 @@ namespace ts.projectSystem {
 
         it("detects whether language service was disabled", () => {
             const file = makeFile("/a.js");
-            const tsconfig = makeFile("/jsconfig.json", {});
+            const tsconfig = makeFile("/jsconfig.json", { compilerOptions: { disableSizeLimit: false } });
             const et = new TestServerEventManager([tsconfig, file]);
             const fileSize = server.maxProgramSizeForNonTsFiles + 1;
             et.host.getFileSize = () => fileSize;
@@ -241,7 +241,7 @@ namespace ts.projectSystem {
             et.getEvent<server.ProjectLanguageServiceStateEvent>(server.ProjectLanguageServiceStateEvent);
             et.assertProjectInfoTelemetryEvent({
                 fileStats: fileStats({ js: 1, jsSize: fileSize }),
-                compilerOptions: autoJsCompilerOptions,
+                compilerOptions: { ...autoJsCompilerOptions, disableSizeLimit: false },
                 configFileName: "jsconfig.json",
                 typeAcquisition: {
                     enable: true,

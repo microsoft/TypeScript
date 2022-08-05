@@ -470,11 +470,12 @@ namespace ts.projectSystem {
 
             const service = createProjectService(host);
             const projectFileName = "/a/proj.csproj";
+            const options = { disableSizeLimit: false };
 
             service.openExternalProject({
                 projectFileName,
                 rootFiles: toExternalFiles([f1.path, f2.path]),
-                options: {}
+                options,
             });
             service.checkNumberOfProjects({ externalProjects: 1 });
             assert.isFalse(service.externalProjects[0].languageServiceEnabled, "language service should be disabled - 1");
@@ -482,7 +483,7 @@ namespace ts.projectSystem {
             service.openExternalProject({
                 projectFileName,
                 rootFiles: toExternalFiles([f1.path]),
-                options: {}
+                options,
             });
             service.checkNumberOfProjects({ externalProjects: 1 });
             assert.isTrue(service.externalProjects[0].languageServiceEnabled, "language service should be enabled");
@@ -490,7 +491,7 @@ namespace ts.projectSystem {
             service.openExternalProject({
                 projectFileName,
                 rootFiles: toExternalFiles([f1.path, f2.path]),
-                options: {}
+                options,
             });
             service.checkNumberOfProjects({ externalProjects: 1 });
             assert.isFalse(service.externalProjects[0].languageServiceEnabled, "language service should be disabled - 2");

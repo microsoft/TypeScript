@@ -77,15 +77,17 @@ namespace ts.projectSystem {
             const host = createServerHost([file1, file2, file3]);
             const projectService = createProjectService(host);
 
-            projectService.openExternalProject({ rootFiles: toExternalFiles([file1.path]), options: {}, projectFileName: proj1name });
+            const options = { disableSizeLimit: false };
+
+            projectService.openExternalProject({ rootFiles: toExternalFiles([file1.path]), options, projectFileName: proj1name });
             const proj1 = projectService.findProject(proj1name)!;
             assert.isTrue(proj1.languageServiceEnabled);
 
-            projectService.openExternalProject({ rootFiles: toExternalFiles([file2.path]), options: {}, projectFileName: proj2name });
+            projectService.openExternalProject({ rootFiles: toExternalFiles([file2.path]), options, projectFileName: proj2name });
             const proj2 = projectService.findProject(proj2name)!;
             assert.isTrue(proj2.languageServiceEnabled);
 
-            projectService.openExternalProject({ rootFiles: toExternalFiles([file3.path]), options: {}, projectFileName: proj3name });
+            projectService.openExternalProject({ rootFiles: toExternalFiles([file3.path]), options, projectFileName: proj3name });
             const proj3 = projectService.findProject(proj3name)!;
             assert.isFalse(proj3.languageServiceEnabled);
         });
@@ -107,7 +109,7 @@ namespace ts.projectSystem {
             const host = createServerHost([file1, file2]);
             const projectService = createProjectService(host, { useSingleInferredProject: true, eventHandler: noop });
 
-            projectService.openExternalProject({ rootFiles: toExternalFiles([file1.path, file2.path]), options: {}, projectFileName: projName });
+            projectService.openExternalProject({ rootFiles: toExternalFiles([file1.path, file2.path]), options: { disableSizeLimit: false }, projectFileName: projName });
             const proj1 = projectService.findProject(projName)!;
             assert.isFalse(proj1.languageServiceEnabled);
 

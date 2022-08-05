@@ -11,7 +11,7 @@ namespace ts.projectSystem {
             };
             const config = {
                 path: "/a/jsconfig.json",
-                content: "{}"
+                content: `{ "compilerOptions": { "disableSizeLimit": false } }`
             };
             const configWithExclude = {
                 path: config.path,
@@ -65,7 +65,7 @@ namespace ts.projectSystem {
             };
             const config = {
                 path: "/a/jsconfig.json",
-                content: "{}"
+                content: `{ "compilerOptions": { "disableSizeLimit": false } }`
             };
             const host = createServerHost([f1, f2, f3, libFile, config]);
             const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs() });
