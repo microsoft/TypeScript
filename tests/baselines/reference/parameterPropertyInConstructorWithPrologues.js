@@ -1,6 +1,8 @@
 //// [parameterPropertyInConstructorWithPrologues.ts]
 // https://github.com/microsoft/TypeScript/issues/48671
 
+class C {}
+
 class Foo1 {
   constructor(private A: string) {
     "ngInject1";
@@ -44,9 +46,64 @@ class Foo6 {
   }
 }
 
+class Foo7 extends C {
+  constructor(
+    private member: boolean,
+  ) {
+    "ngInject1";
+    super();
+    console.log("hi");
+  }
+}
+
+class Foo8 extends C {
+  constructor(
+    private member: boolean,
+  ) {
+    "ngInject1";
+    super();
+    this.m();
+    console.log("hi");
+  }
+
+  m() {}
+}
+
+class Foo9 extends C {
+  constructor() {
+    "ngInject1";
+    "ngInject2";
+    super();
+    this.m();
+    console.log("hi");
+  }
+
+  m() {}
+}
+
 
 //// [parameterPropertyInConstructorWithPrologues.js]
 // https://github.com/microsoft/TypeScript/issues/48671
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());
 var Foo1 = /** @class */ (function () {
     function Foo1(A) {
         "ngInject1";
@@ -102,3 +159,40 @@ var Foo6 = /** @class */ (function () {
     }
     return Foo6;
 }());
+var Foo7 = /** @class */ (function (_super) {
+    __extends(Foo7, _super);
+    function Foo7(member) {
+        "ngInject1";
+        var _this = _super.call(this) || this;
+        _this.member = member;
+        console.log("hi");
+        return _this;
+    }
+    return Foo7;
+}(C));
+var Foo8 = /** @class */ (function (_super) {
+    __extends(Foo8, _super);
+    function Foo8(member) {
+        "ngInject1";
+        var _this = _super.call(this) || this;
+        _this.member = member;
+        _this.m();
+        console.log("hi");
+        return _this;
+    }
+    Foo8.prototype.m = function () { };
+    return Foo8;
+}(C));
+var Foo9 = /** @class */ (function (_super) {
+    __extends(Foo9, _super);
+    function Foo9() {
+        "ngInject1";
+        "ngInject2";
+        var _this = _super.call(this) || this;
+        _this.m();
+        console.log("hi");
+        return _this;
+    }
+    Foo9.prototype.m = function () { };
+    return Foo9;
+}(C));

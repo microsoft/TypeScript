@@ -240,18 +240,18 @@ namespace ts.FindAllReferences {
         ) {
             referenceEntries = entries && [...entries];
         }
-        else {
-            const queue = entries && [...entries];
+        else if (entries) {
+            const queue = createQueue(entries);
             const seenNodes = new Map<number, true>();
-            while (queue && queue.length) {
-                const entry = queue.shift() as NodeEntry;
+            while (!queue.isEmpty()) {
+                const entry = queue.dequeue() as NodeEntry;
                 if (!addToSeen(seenNodes, getNodeId(entry.node))) {
                     continue;
                 }
                 referenceEntries = append(referenceEntries, entry);
                 const entries = getImplementationReferenceEntries(program, cancellationToken, sourceFiles, entry.node, entry.node.pos);
                 if (entries) {
-                    queue.push(...entries);
+                    queue.enqueue(...entries);
                 }
             }
         }

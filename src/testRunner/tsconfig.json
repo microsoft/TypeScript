@@ -205,6 +205,7 @@
         "unittests/tsserver/languageService.ts",
         "unittests/tsserver/maxNodeModuleJsDepth.ts",
         "unittests/tsserver/metadataInResponse.ts",
+        "unittests/tsserver/moduleResolution.ts",
         "unittests/tsserver/moduleSpecifierCache.ts",
         "unittests/tsserver/navTo.ts",
         "unittests/tsserver/occurences.ts",

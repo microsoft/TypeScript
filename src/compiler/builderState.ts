@@ -3,8 +3,8 @@ namespace ts {
     export function getFileEmitOutput(program: Program, sourceFile: SourceFile, emitOnlyDtsFiles: boolean,
         cancellationToken?: CancellationToken, customTransformers?: CustomTransformers, forceDtsEmit?: boolean): EmitOutput {
         const outputFiles: OutputFile[] = [];
-        const { emitSkipped, diagnostics, exportedModulesFromDeclarationEmit } = program.emit(sourceFile, writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers, forceDtsEmit);
-        return { outputFiles, emitSkipped, diagnostics, exportedModulesFromDeclarationEmit };
+        const { emitSkipped, diagnostics } = program.emit(sourceFile, writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers, forceDtsEmit);
+        return { outputFiles, emitSkipped, diagnostics };
 
         function writeFile(fileName: string, text: string, writeByteOrderMark: boolean) {
             outputFiles.push({ name: fileName, writeByteOrderMark, text });
@@ -321,24 +321,45 @@ namespace ts {
         /**
          * Gets the files affected by the path from the program
          */
-        export function getFilesAffectedBy(state: BuilderState, programOfThisState: Program, path: Path, cancellationToken: CancellationToken | undefined, computeHash: ComputeHash): readonly SourceFile[] {
-            const result = getFilesAffectedByWithOldState(state, programOfThisState, path, cancellationToken, computeHash);
+        export function getFilesAffectedBy(
+            state: BuilderState,
+            programOfThisState: Program,
+            path: Path,
+            cancellationToken: CancellationToken | undefined,
+            computeHash: ComputeHash,
+            getCanonicalFileName: GetCanonicalFileName,
+        ): readonly SourceFile[] {
+            const result = getFilesAffectedByWithOldState(
+                state,
+                programOfThisState,
+                path,
+                cancellationToken,
+                computeHash,
+                getCanonicalFileName,
+            );
             state.oldSignatures?.clear();
             state.oldExportedModulesMap?.clear();
             return result;
         }
 
-        export function getFilesAffectedByWithOldState(state: BuilderState, programOfThisState: Program, path: Path, cancellationToken: CancellationToken | undefined, computeHash: ComputeHash): readonly SourceFile[] {
+        export function getFilesAffectedByWithOldState(
+            state: BuilderState,
+            programOfThisState: Program,
+            path: Path,
+            cancellationToken: CancellationToken | undefined,
+            computeHash: ComputeHash,
+            getCanonicalFileName: GetCanonicalFileName,
+        ): readonly SourceFile[] {
             const sourceFile = programOfThisState.getSourceFileByPath(path);
             if (!sourceFile) {
                 return emptyArray;
             }
 
-            if (!updateShapeSignature(state, programOfThisState, sourceFile, cancellationToken, computeHash)) {
+            if (!updateShapeSignature(state, programOfThisState, sourceFile, cancellationToken, computeHash, getCanonicalFileName)) {
                 return [sourceFile];
             }
 
-            return (state.referencedMap ? getFilesAffectedByUpdatedShapeWhenModuleEmit : getFilesAffectedByUpdatedShapeWhenNonModuleEmit)(state, programOfThisState, sourceFile, cancellationToken, computeHash);
+            return (state.referencedMap ? getFilesAffectedByUpdatedShapeWhenModuleEmit : getFilesAffectedByUpdatedShapeWhenNonModuleEmit)(state, programOfThisState, sourceFile, cancellationToken, computeHash, getCanonicalFileName);
         }
 
         export function updateSignatureOfFile(state: BuilderState, signature: string | undefined, path: Path) {
@@ -349,7 +370,15 @@ namespace ts {
         /**
          * Returns if the shape of the signature has changed since last emit
          */
-        export function updateShapeSignature(state: BuilderState, programOfThisState: Program, sourceFile: SourceFile, cancellationToken: CancellationToken | undefined, computeHash: ComputeHash, useFileVersionAsSignature = state.useFileVersionAsSignature) {
+        export function updateShapeSignature(
+            state: BuilderState,
+            programOfThisState: Program,
+            sourceFile: SourceFile,
+            cancellationToken: CancellationToken | undefined,
+            computeHash: ComputeHash,
+            getCanonicalFileName: GetCanonicalFileName,
+            useFileVersionAsSignature = state.useFileVersionAsSignature
+        ) {
             // If we have cached the result for this file, that means hence forth we should assume file shape is uptodate
             if (state.hasCalledUpdateShapeSignature?.has(sourceFile.resolvedPath)) return false;
 
@@ -357,22 +386,26 @@ namespace ts {
             const prevSignature = info.signature;
             let latestSignature: string | undefined;
             if (!sourceFile.isDeclarationFile && !useFileVersionAsSignature) {
-                const emitOutput = getFileEmitOutput(
-                    programOfThisState,
+                programOfThisState.emit(
                     sourceFile,
-                    /*emitOnlyDtsFiles*/ true,
+                    (fileName, text, _writeByteOrderMark, _onError, sourceFiles, data) => {
+                        Debug.assert(isDeclarationFileName(fileName), `File extension for signature expected to be dts: Got:: ${fileName}`);
+                        latestSignature = computeSignatureWithDiagnostics(
+                            sourceFile,
+                            text,
+                            computeHash,
+                            getCanonicalFileName,
+                            data,
+                        );
+                        if (latestSignature !== prevSignature) {
+                            updateExportedModules(state, sourceFile, sourceFiles![0].exportedModulesFromDeclarationEmit);
+                        }
+                    },
                     cancellationToken,
+                    /*emitOnlyDtsFiles*/ true,
                     /*customTransformers*/ undefined,
                     /*forceDtsEmit*/ true
                 );
-                const firstDts = firstOrUndefined(emitOutput.outputFiles);
-                if (firstDts) {
-                    Debug.assert(isDeclarationFileName(firstDts.name), "File extension for signature expected to be dts", () => `Found: ${getAnyExtensionFromPath(firstDts.name)} for ${firstDts.name}:: All output files: ${JSON.stringify(emitOutput.outputFiles.map(f => f.name))}`);
-                    latestSignature = computeSignature(firstDts.text, computeHash);
-                    if (latestSignature !== prevSignature) {
-                        updateExportedModules(state, sourceFile, emitOutput.exportedModulesFromDeclarationEmit);
-                    }
-                }
             }
             // Default is to use file version as signature
             if (latestSignature === undefined) {
@@ -393,10 +426,6 @@ namespace ts {
             (state.hasCalledUpdateShapeSignature ||= new Set()).add(sourceFile.resolvedPath);
             info.signature = latestSignature;
             return latestSignature !== prevSignature;
-        }
-
-        export function computeSignature(text: string, computeHash: ComputeHash | undefined) {
-            return (computeHash || generateDjb2Hash)(text);
         }
 
         /**
@@ -556,7 +585,14 @@ namespace ts {
         /**
          * When program emits modular code, gets the files affected by the sourceFile whose shape has changed
          */
-        function getFilesAffectedByUpdatedShapeWhenModuleEmit(state: BuilderState, programOfThisState: Program, sourceFileWithUpdatedShape: SourceFile, cancellationToken: CancellationToken | undefined, computeHash: ComputeHash) {
+        function getFilesAffectedByUpdatedShapeWhenModuleEmit(
+            state: BuilderState,
+            programOfThisState: Program,
+            sourceFileWithUpdatedShape: SourceFile,
+            cancellationToken: CancellationToken | undefined,
+            computeHash: ComputeHash,
+            getCanonicalFileName: GetCanonicalFileName,
+        ) {
             if (isFileAffectingGlobalScope(sourceFileWithUpdatedShape)) {
                 return getAllFilesExcludingDefaultLibraryFile(state, programOfThisState, sourceFileWithUpdatedShape);
             }
@@ -579,7 +615,7 @@ namespace ts {
                 if (!seenFileNamesMap.has(currentPath)) {
                     const currentSourceFile = programOfThisState.getSourceFileByPath(currentPath)!;
                     seenFileNamesMap.set(currentPath, currentSourceFile);
-                    if (currentSourceFile && updateShapeSignature(state, programOfThisState, currentSourceFile, cancellationToken, computeHash)) {
+                    if (currentSourceFile && updateShapeSignature(state, programOfThisState, currentSourceFile, cancellationToken, computeHash, getCanonicalFileName)) {
                         queue.push(...getReferencedByPaths(state, currentSourceFile.resolvedPath));
                     }
                 }

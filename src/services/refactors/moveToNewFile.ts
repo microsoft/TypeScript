@@ -62,7 +62,7 @@ namespace ts.refactor {
 
         const currentDirectory = getDirectoryPath(oldFile.fileName);
         const extension = extensionFromPath(oldFile.fileName);
-        const newModuleName = makeUniqueModuleName(getNewModuleName(usage.movedSymbols), extension, currentDirectory, host);
+        const newModuleName = makeUniqueModuleName(getNewModuleName(usage.oldFileImportsFromNewFile, usage.movedSymbols), extension, currentDirectory, host);
         const newFileNameWithExtension = newModuleName + extension;
 
         // If previous file was global, this is easy.
@@ -478,8 +478,8 @@ namespace ts.refactor {
         }
     }
 
-    function getNewModuleName(movedSymbols: ReadonlySymbolSet): string {
-        return movedSymbols.forEachEntry(symbolNameNoDefault) || "newFile";
+    function getNewModuleName(importsFromNewFile: ReadonlySymbolSet, movedSymbols: ReadonlySymbolSet): string {
+        return importsFromNewFile.forEachEntry(symbolNameNoDefault) || movedSymbols.forEachEntry(symbolNameNoDefault) || "newFile";
     }
 
     interface UsageInfo {

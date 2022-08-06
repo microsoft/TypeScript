@@ -21,7 +21,7 @@ tests/cases/conformance/scanner/ecmascript5/scannerS7.3_A1.1_T2.ts(17,3): error 
       $ERROR('#1: var\\nx\\n=\\n1\\n; x === 1. Actual: ' + (x));
       ~~~~~~
 !!! error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
-!!! related TS2728 /.ts/lib.es5.d.ts:1039:13: 'Error' is declared here.
+!!! related TS2728 /.ts/lib.es5.d.ts:1051:13: 'Error' is declared here.
     }
     
     

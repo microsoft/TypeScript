@@ -30,7 +30,6 @@ namespace ts {
         host.createHash = maybeBind(system, system.createHash);
         host.disableUseFileVersionAsSignature = system.disableUseFileVersionAsSignature;
         host.storeFilesChangingSignatureDuringEmit = system.storeFilesChangingSignatureDuringEmit;
-        host.now = maybeBind(system, system.now);
         setGetSourceFileAsHashVersioned(host, system);
         changeCompilerHostLikeToUseCache(host, fileName => toPath(fileName, host.getCurrentDirectory(), host.getCanonicalFileName));
         return host;
@@ -115,6 +114,10 @@ namespace ts {
         resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile?: SourceFile): (ResolvedModule | undefined)[];
         /** If provided, used to resolve type reference directives, otherwise typescript's default resolution */
         resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[] | readonly FileReference[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingFileMode?: SourceFile["impliedNodeFormat"] | undefined): (ResolvedTypeReferenceDirective | undefined)[];
+        /**
+         * Returns the module resolution cache used by a provided `resolveModuleNames` implementation so that any non-name module resolution operations (eg, package.json lookup) can reuse it
+         */
+        getModuleResolutionCache?(): ModuleResolutionCache | undefined;
     }
     /** Internal interface used to wire emit through same host */
 
@@ -284,7 +287,6 @@ namespace ts {
         let parsedConfigs: ESMap<Path, ParsedConfig> | undefined;           // Parsed commandline and watching cached for referenced projects
         let sharedExtendedConfigFileWatchers: ESMap<Path, SharedExtendedConfigFileWatcher<Path>>; // Map of file watchers for extended files, shared between different referenced projects
         let extendedConfigCache = host.extendedConfigCache;                 // Cache for extended config evaluation
-        let changesAffectResolution = false;                                // Flag for indicating non-config changes affect module resolution
         let reportFileChangeDetectedOnCreateProgram = false;                // True if synchronizeProgram should report "File change detected..." when a new program is created
 
         const sourceFilesCache = new Map<string, HostFileInfo>();           // Cache that stores the source file and version info
@@ -342,7 +344,7 @@ namespace ts {
         compilerHost.getCompilationSettings = () => compilerOptions;
         compilerHost.useSourceOfProjectReferenceRedirect = maybeBind(host, host.useSourceOfProjectReferenceRedirect);
         compilerHost.watchDirectoryOfFailedLookupLocation = (dir, cb, flags) => watchDirectory(dir, cb, flags, watchOptions, WatchType.FailedLookupLocations);
-        compilerHost.watchAffectingFileLocation = (file, cb) => watchFile(file, cb, PollingInterval.High, watchOptions, WatchType.PackageJson);
+        compilerHost.watchAffectingFileLocation = (file, cb) => watchFile(file, cb, PollingInterval.High, watchOptions, WatchType.AffectingFileLocation);
         compilerHost.watchTypeRootsDirectory = (dir, cb, flags) => watchDirectory(dir, cb, flags, watchOptions, WatchType.TypeRoots);
         compilerHost.getCachedDirectoryStructureHost = () => cachedDirectoryStructureHost;
         compilerHost.scheduleInvalidateResolutionsOfFailedLookupLocations = scheduleInvalidateResolutionsOfFailedLookupLocations;
@@ -367,6 +369,9 @@ namespace ts {
         compilerHost.resolveTypeReferenceDirectives = host.resolveTypeReferenceDirectives ?
             ((...args) => host.resolveTypeReferenceDirectives!(...args)) :
             ((typeDirectiveNames, containingFile, redirectedReference, _options, containingFileMode) => resolutionCache.resolveTypeReferenceDirectives(typeDirectiveNames, containingFile, redirectedReference, containingFileMode));
+        compilerHost.getModuleResolutionCache = host.resolveModuleNames ?
+            maybeBind(host, host.getModuleResolutionCache) :
+            (() => resolutionCache.getModuleResolutionCache());
         const userProvidedResolution = !!host.resolveModuleNames || !!host.resolveTypeReferenceDirectives;
 
         builderProgram = readBuilderProgram(compilerOptions, compilerHost) as any as T;
@@ -435,13 +440,13 @@ namespace ts {
             const program = getCurrentBuilderProgram();
             if (hasChangedCompilerOptions) {
                 newLine = updateNewLine();
-                if (program && (changesAffectResolution || changesAffectModuleResolution(program.getCompilerOptions(), compilerOptions))) {
+                if (program && changesAffectModuleResolution(program.getCompilerOptions(), compilerOptions)) {
                     resolutionCache.clear();
                 }
             }
 
             // All resolutions are invalid if user provided resolutions
-            const hasInvalidatedResolution = resolutionCache.createHasInvalidatedResolution(userProvidedResolution || changesAffectResolution);
+            const hasInvalidatedResolution = resolutionCache.createHasInvalidatedResolution(userProvidedResolution);
             if (isProgramUptoDate(getCurrentProgram(), rootFileNames, compilerOptions, getSourceVersion, fileExists, hasInvalidatedResolution, hasChangedAutomaticTypeDirectiveNames, getParsedCommandLine, projectReferences)) {
                 if (hasChangedConfigFileParsingErrors) {
                     if (reportFileChangeDetectedOnCreateProgram) {
@@ -458,7 +463,6 @@ namespace ts {
                 createNewProgram(hasInvalidatedResolution);
             }
 
-            changesAffectResolution = false; // reset for next sync
             reportFileChangeDetectedOnCreateProgram = false;
 
             if (host.afterProgramCreate && program !== builderProgram) {
@@ -481,8 +485,9 @@ namespace ts {
             resolutionCache.startCachingPerDirectoryResolution();
             compilerHost.hasInvalidatedResolution = hasInvalidatedResolution;
             compilerHost.hasChangedAutomaticTypeDirectiveNames = hasChangedAutomaticTypeDirectiveNames;
+            const oldProgram = getCurrentProgram();
             builderProgram = createProgram(rootFileNames, compilerOptions, compilerHost, builderProgram, configFileParsingDiagnostics, projectReferences);
-            resolutionCache.finishCachingPerDirectoryResolution();
+            resolutionCache.finishCachingPerDirectoryResolution(builderProgram.getProgram(), oldProgram);
 
             // Update watches
             updateMissingFilePathsWatch(builderProgram.getProgram(), missingFilesMap || (missingFilesMap = new Map()), watchMissingFilePath);
@@ -573,9 +578,6 @@ namespace ts {
                     else {
                         sourceFilesCache.set(path, false);
                     }
-                }
-                if (sourceFile) {
-                    sourceFile.impliedNodeFormat = getImpliedNodeFormatForFile(path, resolutionCache.getModuleResolutionCache().getPackageJsonInfoCache(), compilerHost, compilerHost.getCompilationSettings());
                 }
                 return sourceFile;
             }

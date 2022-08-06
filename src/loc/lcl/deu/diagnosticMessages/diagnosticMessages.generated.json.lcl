@@ -897,6 +897,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";A_tuple_type_cannot_be_indexed_with_a_negative_value_2514" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[A tuple type cannot be indexed with a negative value.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Ein Tupeltyp kann nicht mit einem negativen Wert indiziert werden.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";A_type_assertion_expression_is_not_allowed_in_the_left_hand_side_of_an_exponentiation_expression_Con_17007" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[A type assertion expression is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.]]></Val>
@@ -1235,6 +1244,24 @@
           <Val><![CDATA[Add 'export {}' to make this file into a module]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA["export {}" hinzufügen, um diese Datei in ein Modul umzuwandeln]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Add_extends_constraint_2211" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Add `extends` constraint.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA["extends"-Einschränkung hinzufügen]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Add_extends_constraint_to_all_type_parameters_2212" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Add `extends` constraint to all type parameters]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA["extends"-Einschränkung zu allen Typparametern hinzufügen]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2087,6 +2114,15 @@
           <Val><![CDATA[An index signature parameter type must be 'string', 'number', 'symbol', or a template literal type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Ein Parametertyp für die Indexsignatur muss "string", "number", "symbol" oder ein Vorlagenliteraltyp sein.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";An_instantiation_expression_cannot_be_followed_by_a_property_access_1477" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[An instantiation expression cannot be followed by a property access.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Auf einen Instanziierungsausdruck kann kein Eigenschaftenzugriff folgen.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6495,6 +6531,42 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";File_is_CommonJS_module_because_0_does_not_have_field_type_1460" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[File is CommonJS module because '{0}' does not have field "type"]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Die Datei ist ein CommonJS-Modul, da '{0}' nicht das Feld „Typ“ aufweist]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";File_is_CommonJS_module_because_0_has_field_type_whose_value_is_not_module_1459" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[File is CommonJS module because '{0}' has field "type" whose value is not "module"]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Die Datei ist ein CommonJS-Modul, da '{0}' das Feld „Typ“ aufweist, dessen Wert nicht „Modul“ ist]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";File_is_CommonJS_module_because_package_json_was_not_found_1461" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[File is CommonJS module because 'package.json' was not found]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Die Datei ist ein CommonJS-Modul, da „package.json“ nicht gefunden wurde]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";File_is_ECMAScript_module_because_0_has_field_type_with_value_module_1458" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[File is ECMAScript module because '{0}' has field "type" with value "module"]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Die Datei ist ein ECMAScript-Modul, da '{0}' das Feld „Typ“ mit dem Wert „Modul“ aufweist.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";File_is_a_CommonJS_module_it_may_be_converted_to_an_ES_module_80001" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[File is a CommonJS module; it may be converted to an ES module.]]></Val>
@@ -7169,6 +7241,15 @@
           <Val><![CDATA[Identifier expected. '__esModule' is reserved as an exported marker when transforming ECMAScript modules.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Bezeichner erwartet. "__esModule" ist als exportierter Marker für die Umwandlung von ECMAScript-Modulen reserviert.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Identifier_or_string_literal_expected_1478" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Identifier or string literal expected.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Bezeichner oder Zeichenfolgenliteral erwartet.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13824,11 +13905,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";This_type_parameter_probably_needs_an_extends_object_constraint_2208" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";This_type_parameter_might_need_an_extends_0_constraint_2208" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[This type parameter probably needs an `extends object` constraint.]]></Val>
+          <Val><![CDATA[This type parameter might need an `extends {0}` constraint.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Dieser Typparameter benötigt wahrscheinlich eine „extends object“-Einschränkung.]]></Val>
+            <Val><![CDATA[Für diesen Typparameter ist möglicherweise die Einschränkung "extends {0}" erforderlich.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14427,6 +14508,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Type_of_instance_member_variable_0_cannot_reference_identifier_1_declared_in_the_constructor_2844" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Type of instance member variable '{0}' cannot reference identifier '{1}' declared in the constructor.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Der Typ der Instanzmembervariablen „{0}“ darf nicht auf den im Konstruktor deklarierten Bezeichner „{1}“ verweisen.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Type_of_iterated_elements_of_a_yield_Asterisk_operand_must_either_be_a_valid_promise_or_must_not_con_1322" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Type of iterated elements of a 'yield*' operand must either be a valid promise or must not contain a callable 'then' member.]]></Val>
@@ -14669,6 +14759,15 @@
           <Val><![CDATA[======== Type reference directive '{0}' was successfully resolved to '{1}' with Package ID '{2}', primary: {3}. ========]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[======== Die Typverweisdirektive "{0}" wurde erfolgreich in "{1}" mit Paket-ID "{2}" aufgelöst. Primär: {3}. ========]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Types_cannot_appear_in_export_declarations_in_JavaScript_files_18043" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Types cannot appear in export declarations in JavaScript files.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Typen können in Exportdeklarationen in JavaScript-Dateien nicht angezeigt werden.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15369,6 +15468,24 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";You_cannot_rename_elements_that_are_defined_in_a_node_modules_folder_8035" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[You cannot rename elements that are defined in a 'node_modules' folder.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Elemente, die in einem Ordner "node_modules" definiert sind, können nicht umbenannt werden.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";You_cannot_rename_elements_that_are_defined_in_another_node_modules_folder_8036" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[You cannot rename elements that are defined in another 'node_modules' folder.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Elemente, die in einem anderen Ordner "node_modules" definiert sind, können nicht umbenannt werden.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";You_cannot_rename_elements_that_are_defined_in_the_standard_TypeScript_library_8001" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[You cannot rename elements that are defined in the standard TypeScript library.]]></Val>
@@ -15612,6 +15729,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";_0_is_a_type_and_cannot_be_imported_in_JavaScript_files_Use_1_in_a_JSDoc_type_annotation_18042" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' is a type and cannot be imported in JavaScript files. Use '{1}' in a JSDoc type annotation.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA["{0}" ist ein Typ und kann nicht in JavaScript-Dateien importiert werden. Verwenden Sie "{1}" in einer JSDoc-Typanmerkung.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";_0_is_a_type_and_must_be_imported_using_a_type_only_import_when_preserveValueImports_and_isolatedMod_1444" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA['{0}' is a type and must be imported using a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.]]></Val>
@@ -15635,6 +15761,15 @@
           <Val><![CDATA['{0}' is assignable to the constraint of type '{1}', but '{1}' could be instantiated with a different subtype of constraint '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA["{0}" kann der Einschränkung vom Typ "{1}" zugewiesen werden, aber "{1}" könnte mit einem anderen Untertyp der Einschränkung "{2}" instanziiert werden.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";_0_is_automatically_exported_here_18044" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' is automatically exported here.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA["{0}" wird hier automatisch exportiert.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
