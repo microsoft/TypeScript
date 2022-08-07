@@ -1,14 +1,14 @@
 tests/cases/conformance/parser/ecmascript5/parserRealSource13.ts(4,21): error TS6053: File 'tests/cases/conformance/parser/ecmascript5/typescript.ts' not found.
-tests/cases/conformance/parser/ecmascript5/parserRealSource13.ts(8,35): error TS2552: Cannot find name 'AST'. Did you mean 'Cast'?
-tests/cases/conformance/parser/ecmascript5/parserRealSource13.ts(9,39): error TS2552: Cannot find name 'AST'. Did you mean 'Cast'?
-tests/cases/conformance/parser/ecmascript5/parserRealSource13.ts(10,34): error TS2552: Cannot find name 'AST'. Did you mean 'Cast'?
-tests/cases/conformance/parser/ecmascript5/parserRealSource13.ts(11,35): error TS2552: Cannot find name 'AST'. Did you mean 'Cast'?
-tests/cases/conformance/parser/ecmascript5/parserRealSource13.ts(12,34): error TS2552: Cannot find name 'AST'. Did you mean 'Cast'?
-tests/cases/conformance/parser/ecmascript5/parserRealSource13.ts(13,35): error TS2552: Cannot find name 'AST'. Did you mean 'Cast'?
-tests/cases/conformance/parser/ecmascript5/parserRealSource13.ts(14,37): error TS2552: Cannot find name 'AST'. Did you mean 'Cast'?
-tests/cases/conformance/parser/ecmascript5/parserRealSource13.ts(15,35): error TS2552: Cannot find name 'AST'. Did you mean 'Cast'?
-tests/cases/conformance/parser/ecmascript5/parserRealSource13.ts(16,34): error TS2552: Cannot find name 'AST'. Did you mean 'Cast'?
-tests/cases/conformance/parser/ecmascript5/parserRealSource13.ts(17,38): error TS2552: Cannot find name 'AST'. Did you mean 'Cast'?
+tests/cases/conformance/parser/ecmascript5/parserRealSource13.ts(8,35): error TS2304: Cannot find name 'AST'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource13.ts(9,39): error TS2304: Cannot find name 'AST'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource13.ts(10,34): error TS2304: Cannot find name 'AST'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource13.ts(11,35): error TS2304: Cannot find name 'AST'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource13.ts(12,34): error TS2304: Cannot find name 'AST'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource13.ts(13,35): error TS2304: Cannot find name 'AST'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource13.ts(14,37): error TS2304: Cannot find name 'AST'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource13.ts(15,35): error TS2304: Cannot find name 'AST'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource13.ts(16,34): error TS2304: Cannot find name 'AST'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource13.ts(17,38): error TS2304: Cannot find name 'AST'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource13.ts(18,39): error TS2304: Cannot find name 'AST'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource13.ts(19,34): error TS2304: Cannot find name 'AST'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource13.ts(20,35): error TS2304: Cannot find name 'AST'.
@@ -128,34 +128,34 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource13.ts(135,36): error 
         export interface AstWalkerDetailCallback {
             EmptyCallback? (pre, ast: AST): boolean;
                                       ~~~
-!!! error TS2552: Cannot find name 'AST'. Did you mean 'Cast'?
+!!! error TS2304: Cannot find name 'AST'.
             EmptyExprCallback? (pre, ast: AST): boolean;
                                           ~~~
-!!! error TS2552: Cannot find name 'AST'. Did you mean 'Cast'?
+!!! error TS2304: Cannot find name 'AST'.
             TrueCallback? (pre, ast: AST): boolean;
                                      ~~~
-!!! error TS2552: Cannot find name 'AST'. Did you mean 'Cast'?
+!!! error TS2304: Cannot find name 'AST'.
             FalseCallback? (pre, ast: AST): boolean;
                                       ~~~
-!!! error TS2552: Cannot find name 'AST'. Did you mean 'Cast'?
+!!! error TS2304: Cannot find name 'AST'.
             ThisCallback? (pre, ast: AST): boolean;
                                      ~~~
-!!! error TS2552: Cannot find name 'AST'. Did you mean 'Cast'?
+!!! error TS2304: Cannot find name 'AST'.
             SuperCallback? (pre, ast: AST): boolean;
                                       ~~~
-!!! error TS2552: Cannot find name 'AST'. Did you mean 'Cast'?
+!!! error TS2304: Cannot find name 'AST'.
             QStringCallback? (pre, ast: AST): boolean;
                                         ~~~
-!!! error TS2552: Cannot find name 'AST'. Did you mean 'Cast'?
+!!! error TS2304: Cannot find name 'AST'.
             RegexCallback? (pre, ast: AST): boolean;
                                       ~~~
-!!! error TS2552: Cannot find name 'AST'. Did you mean 'Cast'?
+!!! error TS2304: Cannot find name 'AST'.
             NullCallback? (pre, ast: AST): boolean;
                                      ~~~
-!!! error TS2552: Cannot find name 'AST'. Did you mean 'Cast'?
+!!! error TS2304: Cannot find name 'AST'.
             ArrayLitCallback? (pre, ast: AST): boolean;
                                          ~~~
-!!! error TS2552: Cannot find name 'AST'. Did you mean 'Cast'?
+!!! error TS2304: Cannot find name 'AST'.
             ObjectLitCallback? (pre, ast: AST): boolean;
                                           ~~~
 !!! error TS2304: Cannot find name 'AST'.

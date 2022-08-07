@@ -3,7 +3,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(8,24): error TS2
 tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(10,41): error TS2304: Cannot find name 'ScopeChain'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(10,69): error TS2304: Cannot find name 'TypeChecker'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(15,22): error TS2304: Cannot find name 'Type'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(16,21): error TS2552: Cannot find name 'AST'. Did you mean 'Cast'?
+tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(16,21): error TS2304: Cannot find name 'AST'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(17,23): error TS2304: Cannot find name 'SymbolScope'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(18,30): error TS2304: Cannot find name 'AstWalkOptions'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(20,35): error TS2304: Cannot find name 'TypeFlow'.
@@ -88,7 +88,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(215,20): error T
 !!! error TS2304: Cannot find name 'Type'.
             public ast: AST = null;
                         ~~~
-!!! error TS2552: Cannot find name 'AST'. Did you mean 'Cast'?
+!!! error TS2304: Cannot find name 'AST'.
             public scope: SymbolScope;
                           ~~~~~~~~~~~
 !!! error TS2304: Cannot find name 'SymbolScope'.

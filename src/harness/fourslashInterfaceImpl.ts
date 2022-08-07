@@ -1175,7 +1175,6 @@ namespace FourSlashInterface {
             typeEntry("Record"),
             typeEntry("Exclude"),
             typeEntry("Extract"),
-            typeEntry("Cast"),
             typeEntry("Omit"),
             typeEntry("NonNullable"),
             typeEntry("Parameters"),

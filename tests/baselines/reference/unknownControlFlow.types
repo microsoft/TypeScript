@@ -660,14 +660,14 @@ function deepEquals<T>(a: T, b: T): boolean {
     if (Array.isArray(a) || Array.isArray(b)) {
 >Array.isArray(a) || Array.isArray(b) : boolean
 >Array.isArray(a) : boolean
->Array.isArray : <T>(arg: T) => arg is T extends unknown ? true extends false & T ? Cast<any[], T> : T extends readonly any[] ? T : T extends string ? never : T extends ArrayLike<infer U> ? Cast<U[], T> : unknown[] extends T ? unknown[] : never : never
+>Array.isArray : <T>(arg: T) => arg is T extends any ? Extract<true extends false & T ? any[] : T extends readonly any[] ? T : T extends string ? never : T extends ArrayLike<infer U> ? U[] : unknown[], T> : never
 >Array : ArrayConstructor
->isArray : <T>(arg: T) => arg is T extends unknown ? true extends false & T ? Cast<any[], T> : T extends readonly any[] ? T : T extends string ? never : T extends ArrayLike<infer U> ? Cast<U[], T> : unknown[] extends T ? unknown[] : never : never
+>isArray : <T>(arg: T) => arg is T extends any ? Extract<true extends false & T ? any[] : T extends readonly any[] ? T : T extends string ? never : T extends ArrayLike<infer U> ? U[] : unknown[], T> : never
 >a : T & object
 >Array.isArray(b) : boolean
->Array.isArray : <T>(arg: T) => arg is T extends unknown ? true extends false & T ? Cast<any[], T> : T extends readonly any[] ? T : T extends string ? never : T extends ArrayLike<infer U> ? Cast<U[], T> : unknown[] extends T ? unknown[] : never : never
+>Array.isArray : <T>(arg: T) => arg is T extends any ? Extract<true extends false & T ? any[] : T extends readonly any[] ? T : T extends string ? never : T extends ArrayLike<infer U> ? U[] : unknown[], T> : never
 >Array : ArrayConstructor
->isArray : <T>(arg: T) => arg is T extends unknown ? true extends false & T ? Cast<any[], T> : T extends readonly any[] ? T : T extends string ? never : T extends ArrayLike<infer U> ? Cast<U[], T> : unknown[] extends T ? unknown[] : never : never
+>isArray : <T>(arg: T) => arg is T extends any ? Extract<true extends false & T ? any[] : T extends readonly any[] ? T : T extends string ? never : T extends ArrayLike<infer U> ? U[] : unknown[], T> : never
 >b : T & object
 
         return false;

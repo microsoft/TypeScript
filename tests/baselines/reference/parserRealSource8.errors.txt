@@ -9,7 +9,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(19,14): error TS
 tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(21,25): error TS2304: Cannot find name 'ScopeChain'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(33,33): error TS2339: Property 'isInstanceProperty' does not exist on type 'Symbol'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(42,18): error TS2339: Property 'isInstanceProperty' does not exist on type 'Symbol'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(69,48): error TS2552: Cannot find name 'AST'. Did you mean 'Cast'?
+tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(69,48): error TS2304: Cannot find name 'AST'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(70,27): error TS2304: Cannot find name 'ModuleDeclaration'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(71,26): error TS2304: Cannot find name 'SymbolTableScope'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(72,23): error TS2304: Cannot find name 'SymbolAggregateScope'.
@@ -223,7 +223,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(454,35): error T
     
         export function preAssignModuleScopes(ast: AST, context: AssignScopeContext) {
                                                    ~~~
-!!! error TS2552: Cannot find name 'AST'. Did you mean 'Cast'?
+!!! error TS2304: Cannot find name 'AST'.
             var moduleDecl = <ModuleDeclaration>ast;
                               ~~~~~~~~~~~~~~~~~
 !!! error TS2304: Cannot find name 'ModuleDeclaration'.

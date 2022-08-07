@@ -1109,9 +1109,9 @@ define(function () {
 >Array : ArrayConstructor
 
         Array.isArray : function (value) { return Object.prototype.toString.call(value) === '[object Array]'; };
->Array.isArray : <T>(arg: T) => arg is T extends unknown ? true extends false & T ? Cast<any[], T> : T extends readonly any[] ? T : T extends string ? never : T extends ArrayLike<infer U> ? Cast<U[], T> : unknown[] extends T ? unknown[] : never : never
+>Array.isArray : <T>(arg: T) => arg is T extends any ? Extract<true extends false & T ? any[] : T extends readonly any[] ? T : T extends string ? never : T extends ArrayLike<infer U> ? U[] : unknown[], T> : never
 >Array : ArrayConstructor
->isArray : <T>(arg: T) => arg is T extends unknown ? true extends false & T ? Cast<any[], T> : T extends readonly any[] ? T : T extends string ? never : T extends ArrayLike<infer U> ? Cast<U[], T> : unknown[] extends T ? unknown[] : never : never
+>isArray : <T>(arg: T) => arg is T extends any ? Extract<true extends false & T ? any[] : T extends readonly any[] ? T : T extends string ? never : T extends ArrayLike<infer U> ? U[] : unknown[], T> : never
 >function (value) { return Object.prototype.toString.call(value) === '[object Array]'; } : (value: any) => boolean
 >value : any
 >Object.prototype.toString.call(value) === '[object Array]' : boolean
@@ -1150,9 +1150,9 @@ define(function () {
 >'[object Array]' : "[object Array]"
 
         : Array.isArray;
->Array.isArray : <T>(arg: T) => arg is T extends unknown ? true extends false & T ? Cast<any[], T> : T extends readonly any[] ? T : T extends string ? never : T extends ArrayLike<infer U> ? Cast<U[], T> : unknown[] extends T ? unknown[] : never : never
+>Array.isArray : <T>(arg: T) => arg is T extends any ? Extract<true extends false & T ? any[] : T extends readonly any[] ? T : T extends string ? never : T extends ArrayLike<infer U> ? U[] : unknown[], T> : never
 >Array : ArrayConstructor
->isArray : <T>(arg: T) => arg is T extends unknown ? true extends false & T ? Cast<any[], T> : T extends readonly any[] ? T : T extends string ? never : T extends ArrayLike<infer U> ? Cast<U[], T> : unknown[] extends T ? unknown[] : never : never
+>isArray : <T>(arg: T) => arg is T extends any ? Extract<true extends false & T ? any[] : T extends readonly any[] ? T : T extends string ? never : T extends ArrayLike<infer U> ? U[] : unknown[], T> : never
 
     function equalIC(a, b) {
 >equalIC : (a: any, b: any) => boolean
