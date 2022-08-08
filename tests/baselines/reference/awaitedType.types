@@ -392,3 +392,28 @@ async function f17_usage() {
 >{ x } : { x: 123; }
 >x : 123
 }
+
+// https://github.com/microsoft/TypeScript/issues/47144
+type GenericStructure<
+>GenericStructure : GenericStructure<AcceptableKeyType>
+
+  AcceptableKeyType extends string = string
+> = Record<AcceptableKeyType, number>;
+
+async function brokenExample<AcceptableKeyType extends string = string>(structurePromise: Promise<GenericStructure<AcceptableKeyType>>, key: AcceptableKeyType): Promise<void> {
+>brokenExample : <AcceptableKeyType extends string = string>(structurePromise: Promise<GenericStructure<AcceptableKeyType>>, key: AcceptableKeyType) => Promise<void>
+>structurePromise : Promise<GenericStructure<AcceptableKeyType>>
+>key : AcceptableKeyType
+
+  const structure = await structurePromise;
+>structure : GenericStructure<AcceptableKeyType>
+>await structurePromise : GenericStructure<AcceptableKeyType>
+>structurePromise : Promise<GenericStructure<AcceptableKeyType>>
+
+  structure[key] = 1;
+>structure[key] = 1 : 1
+>structure[key] : GenericStructure<AcceptableKeyType>[AcceptableKeyType]
+>structure : GenericStructure<AcceptableKeyType>
+>key : AcceptableKeyType
+>1 : 1
+}

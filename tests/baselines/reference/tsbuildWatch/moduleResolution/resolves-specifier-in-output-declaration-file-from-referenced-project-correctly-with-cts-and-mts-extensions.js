@@ -315,7 +315,8 @@ File '/user/username/projects/myproject/packages/pkg2/build/const.d.cts' exist -
 File '/a/lib/package.json' does not exist.
 File '/a/package.json' does not exist.
 File '/package.json' does not exist.
-[96mpackages/pkg1/index.ts[0m:[93m1[0m:[93m29[0m - [91merror[0m[90m TS1471: [0mModule 'pkg2' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+[96mpackages/pkg1/index.ts[0m:[93m1[0m:[93m29[0m - [91merror[0m[90m TS1479: [0mThe current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("pkg2")' call instead.
+  To convert this file to an ECMAScript module, change its file extension to '.mts' or create a local package.json file with `{ "type": "module" }`.
 
 [7m1[0m import type { TheNum } from 'pkg2'
 [7m [0m [91m                            ~~~~~~[0m
@@ -537,7 +538,8 @@ File '/user/username/projects/myproject/packages/pkg2/build/const.d.cts' exist -
 File '/a/lib/package.json' does not exist.
 File '/a/package.json' does not exist.
 File '/package.json' does not exist.
-[96mpackages/pkg1/index.ts[0m:[93m1[0m:[93m29[0m - [91merror[0m[90m TS1471: [0mModule 'pkg2' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+[96mpackages/pkg1/index.ts[0m:[93m1[0m:[93m29[0m - [91merror[0m[90m TS1479: [0mThe current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("pkg2")' call instead.
+  To convert this file to an ECMAScript module, change its file extension to '.mts' or create a local package.json file with `{ "type": "module" }`.
 
 [7m1[0m import type { TheNum } from 'pkg2'
 [7m [0m [91m                            ~~~~~~[0m

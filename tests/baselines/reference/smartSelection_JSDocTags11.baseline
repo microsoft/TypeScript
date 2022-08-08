@@ -1,0 +1,83 @@
+const x = 1;
+type Foo = {
+  /** comment */
+  /**/readonly status: number;
+};
+
+
+  readonly                
+
+
+  readonly status         
+
+
+  readonly status: number;
+
+
+  /** comment */
+  readonly status: number;
+
+
+            ↲
+••/** comment */
+  readonly status: number;↲
+
+
+           {
+  /** comment */
+  readonly status: number;
+} 
+
+type Foo = {
+  /** comment */
+  readonly status: number;
+};
+
+const x = 1;
+type Foo = {
+  /** comment */
+  readonly status: number;
+};
+
+================================================================================
+
+const x = 1;
+type Foo = {
+  /** comment */
+  readonly /**/status: number;
+};
+
+
+           status         
+
+
+  readonly status         
+
+
+  readonly status: number;
+
+
+  /** comment */
+  readonly status: number;
+
+
+            ↲
+••/** comment */
+  readonly status: number;↲
+
+
+           {
+  /** comment */
+  readonly status: number;
+} 
+
+type Foo = {
+  /** comment */
+  readonly status: number;
+};
+
+const x = 1;
+type Foo = {
+  /** comment */
+  readonly status: number;
+};

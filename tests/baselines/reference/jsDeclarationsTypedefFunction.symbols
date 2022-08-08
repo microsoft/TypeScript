@@ -1,0 +1,28 @@
+=== tests/cases/conformance/jsdoc/declarations/foo.js ===
+/**
+ * @typedef {{
+ *   [id: string]: [Function, Function];
+ * }} ResolveRejectMap
+ */
+
+let id = 0
+>id : Symbol(id, Decl(foo.js, 6, 3))
+
+/**
+ * @param {ResolveRejectMap} handlers
+ * @returns {Promise<any>}
+ */
+const send = handlers => new Promise((resolve, reject) => {
+>send : Symbol(send, Decl(foo.js, 12, 5))
+>handlers : Symbol(handlers, Decl(foo.js, 12, 12))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(resolve, Decl(foo.js, 12, 38))
+>reject : Symbol(reject, Decl(foo.js, 12, 46))
+
+  handlers[++id] = [resolve, reject]
+>handlers : Symbol(handlers, Decl(foo.js, 12, 12))
+>id : Symbol(id, Decl(foo.js, 6, 3))
+>resolve : Symbol(resolve, Decl(foo.js, 12, 38))
+>reject : Symbol(reject, Decl(foo.js, 12, 46))
+
+})

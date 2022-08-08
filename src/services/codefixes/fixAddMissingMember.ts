@@ -190,7 +190,7 @@ namespace ts.codefix {
             return { kind: InfoKind.JsxAttributes, token, attributes, parentDeclaration: token.parent };
         }
 
-        if (isIdentifier(token) && isCallExpression(parent)) {
+        if (isIdentifier(token) && isCallExpression(parent) && parent.expression === token) {
             return { kind: InfoKind.Function, token, call: parent, sourceFile, modifierFlags: ModifierFlags.None, parentDeclaration: sourceFile };
         }
 
