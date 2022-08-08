@@ -25762,10 +25762,11 @@ namespace ts {
                         if (!(links.flags & NodeCheckFlags.InCheckIdentifier)) {
                             links.flags |= NodeCheckFlags.InCheckIdentifier;
                             const parentType = getTypeForBindingElementParent(parent, CheckMode.Normal);
+                            const parentTypeConstraint = parentType && mapType(parentType, getBaseConstraintOrType);
                             links.flags &= ~NodeCheckFlags.InCheckIdentifier;
-                            if (parentType && parentType.flags & TypeFlags.Union && !(parent.kind === SyntaxKind.Parameter && isSymbolAssigned(symbol))) {
+                            if (parentTypeConstraint && parentTypeConstraint.flags & TypeFlags.Union && !(parent.kind === SyntaxKind.Parameter && isSymbolAssigned(symbol))) {
                                 const pattern = declaration.parent;
-                                const narrowedType = getFlowTypeOfReference(pattern, parentType, parentType, /*flowContainer*/ undefined, location.flowNode);
+                                const narrowedType = getFlowTypeOfReference(pattern, parentTypeConstraint, parentTypeConstraint, /*flowContainer*/ undefined, location.flowNode);
                                 if (narrowedType.flags & TypeFlags.Never) {
                                     return neverType;
                                 }
