@@ -1068,6 +1068,70 @@ namespace ts {
             [".json", ".json"],
         ];
 
+        const checkExpressionWorkerTable = new Array<(node: any, checkMode: CheckMode | undefined, forceTuple: boolean | undefined) => Type>(SyntaxKind.Count);
+        checkExpressionWorkerTable[SyntaxKind.Identifier] = checkIdentifier;
+        checkExpressionWorkerTable[SyntaxKind.PrivateIdentifier] = checkPrivateIdentifierExpression;
+        checkExpressionWorkerTable[SyntaxKind.ThisKeyword] = checkThisExpression;
+        checkExpressionWorkerTable[SyntaxKind.SuperKeyword] = checkSuperExpression;
+        checkExpressionWorkerTable[SyntaxKind.NullKeyword] = (_node, _checkMode, _forceTuple) => nullWideningType;
+        checkExpressionWorkerTable[SyntaxKind.NoSubstitutionTemplateLiteral] = checkExpressionWorkerTable[SyntaxKind.StringLiteral] =
+            (node: StringLiteralLike, _checkMode) => getFreshTypeOfLiteralType(getStringLiteralType(node.text));
+        checkExpressionWorkerTable[SyntaxKind.NumericLiteral] = (node: NumericLiteral, _checkMode, _forceTuple) => {
+            checkGrammarNumericLiteral(node);
+            return getFreshTypeOfLiteralType(getNumberLiteralType(+(node).text));
+        };
+        checkExpressionWorkerTable[SyntaxKind.BigIntLiteral] = (node: BigIntLiteral, _checkMode, _forceTuple) => {
+            checkGrammarBigIntLiteral(node);
+            return getFreshTypeOfLiteralType(getBigIntLiteralType({
+                negative: false,
+                base10Value: parsePseudoBigInt((node).text)
+            }));
+        };
+        checkExpressionWorkerTable[SyntaxKind.TrueKeyword] = (_node, _checkMode) => trueType;
+        checkExpressionWorkerTable[SyntaxKind.FalseKeyword] = (_node, _checkMode) => falseType;
+        checkExpressionWorkerTable[SyntaxKind.TemplateExpression] = checkTemplateExpression;
+        checkExpressionWorkerTable[SyntaxKind.RegularExpressionLiteral] = (_node, _checkMode) => globalRegExpType;
+        checkExpressionWorkerTable[SyntaxKind.ArrayLiteralExpression] = checkArrayLiteral;
+        checkExpressionWorkerTable[SyntaxKind.ObjectLiteralExpression] = checkObjectLiteral;
+        checkExpressionWorkerTable[SyntaxKind.PropertyAccessExpression] = checkPropertyAccessExpression;
+        checkExpressionWorkerTable[SyntaxKind.QualifiedName] = checkQualifiedName;
+        checkExpressionWorkerTable[SyntaxKind.ElementAccessExpression] = checkIndexedAccess;
+        checkExpressionWorkerTable[SyntaxKind.CallExpression] = (node: CallExpression, checkMode) => {
+            if (node.expression.kind === SyntaxKind.ImportKeyword) {
+                return checkImportCallExpression(node as ImportCall);
+            };
+            return checkCallExpression(node, checkMode);
+        };
+        checkExpressionWorkerTable[SyntaxKind.NewExpression] = checkCallExpression;
+        checkExpressionWorkerTable[SyntaxKind.TaggedTemplateExpression] = checkTaggedTemplateExpression;
+        checkExpressionWorkerTable[SyntaxKind.ParenthesizedExpression] = checkParenthesizedExpression;
+        checkExpressionWorkerTable[SyntaxKind.ClassExpression] = checkClassExpression;
+        checkExpressionWorkerTable[SyntaxKind.FunctionExpression] =
+            checkExpressionWorkerTable[SyntaxKind.ArrowFunction] = checkFunctionExpressionOrObjectLiteralMethod;
+        checkExpressionWorkerTable[SyntaxKind.TypeOfExpression] = checkTypeOfExpression;
+        checkExpressionWorkerTable[SyntaxKind.TypeAssertionExpression] =
+            checkExpressionWorkerTable[SyntaxKind.AsExpression] = checkAssertion;
+        checkExpressionWorkerTable[SyntaxKind.NonNullExpression] = checkNonNullAssertion;
+        checkExpressionWorkerTable[SyntaxKind.ExpressionWithTypeArguments] = checkExpressionWithTypeArguments;
+        checkExpressionWorkerTable[SyntaxKind.MetaProperty] = checkMetaProperty;
+        checkExpressionWorkerTable[SyntaxKind.DeleteExpression] = checkDeleteExpression;
+        checkExpressionWorkerTable[SyntaxKind.VoidExpression] = checkVoidExpression;
+        checkExpressionWorkerTable[SyntaxKind.AwaitExpression] = checkAwaitExpression;
+        checkExpressionWorkerTable[SyntaxKind.PrefixUnaryExpression] = checkPrefixUnaryExpression;
+        checkExpressionWorkerTable[SyntaxKind.PostfixUnaryExpression] = checkPostfixUnaryExpression;
+        checkExpressionWorkerTable[SyntaxKind.BinaryExpression] = checkBinaryExpression;
+        checkExpressionWorkerTable[SyntaxKind.ConditionalExpression] = checkConditionalExpression;
+        checkExpressionWorkerTable[SyntaxKind.SpreadElement] = checkSpreadExpression;
+        checkExpressionWorkerTable[SyntaxKind.OmittedExpression] = (_node, _checkMode) => undefinedWideningType;
+        checkExpressionWorkerTable[SyntaxKind.YieldExpression] = checkYieldExpression;
+        checkExpressionWorkerTable[SyntaxKind.SyntheticExpression] = checkSyntheticExpression;
+        checkExpressionWorkerTable[SyntaxKind.JsxExpression] = checkJsxExpression;
+        checkExpressionWorkerTable[SyntaxKind.JsxElement] = checkJsxElement;
+        checkExpressionWorkerTable[SyntaxKind.JsxSelfClosingElement] = checkJsxSelfClosingElement;
+        checkExpressionWorkerTable[SyntaxKind.JsxFragment] = checkJsxFragment;
+        checkExpressionWorkerTable[SyntaxKind.JsxAttributes] = checkJsxAttributes;
+        checkExpressionWorkerTable[SyntaxKind.JsxOpeningElement] = (_node, _checkMode) => Debug.fail("Shouldn't ever directly check a JsxOpeningElement");
+
         initializeTypeChecker();
 
         return checker;
@@ -35105,110 +35169,8 @@ namespace ts {
                         cancellationToken.throwIfCancellationRequested();
                 }
             }
-            switch (kind) {
-                case SyntaxKind.Identifier:
-                    return checkIdentifier(node as Identifier, checkMode);
-                case SyntaxKind.PrivateIdentifier:
-                    return checkPrivateIdentifierExpression(node as PrivateIdentifier);
-                case SyntaxKind.ThisKeyword:
-                    return checkThisExpression(node);
-                case SyntaxKind.SuperKeyword:
-                    return checkSuperExpression(node);
-                case SyntaxKind.NullKeyword:
-                    return nullWideningType;
-                case SyntaxKind.NoSubstitutionTemplateLiteral:
-                case SyntaxKind.StringLiteral:
-                    return getFreshTypeOfLiteralType(getStringLiteralType((node as StringLiteralLike).text));
-                case SyntaxKind.NumericLiteral:
-                    checkGrammarNumericLiteral(node as NumericLiteral);
-                    return getFreshTypeOfLiteralType(getNumberLiteralType(+(node as NumericLiteral).text));
-                case SyntaxKind.BigIntLiteral:
-                    checkGrammarBigIntLiteral(node as BigIntLiteral);
-                    return getFreshTypeOfLiteralType(getBigIntLiteralType({
-                        negative: false,
-                        base10Value: parsePseudoBigInt((node as BigIntLiteral).text)
-                    }));
-                case SyntaxKind.TrueKeyword:
-                    return trueType;
-                case SyntaxKind.FalseKeyword:
-                    return falseType;
-                case SyntaxKind.TemplateExpression:
-                    return checkTemplateExpression(node as TemplateExpression);
-                case SyntaxKind.RegularExpressionLiteral:
-                    return globalRegExpType;
-                case SyntaxKind.ArrayLiteralExpression:
-                    return checkArrayLiteral(node as ArrayLiteralExpression, checkMode, forceTuple);
-                case SyntaxKind.ObjectLiteralExpression:
-                    return checkObjectLiteral(node as ObjectLiteralExpression, checkMode);
-                case SyntaxKind.PropertyAccessExpression:
-                    return checkPropertyAccessExpression(node as PropertyAccessExpression, checkMode);
-                case SyntaxKind.QualifiedName:
-                    return checkQualifiedName(node as QualifiedName, checkMode);
-                case SyntaxKind.ElementAccessExpression:
-                    return checkIndexedAccess(node as ElementAccessExpression, checkMode);
-                case SyntaxKind.CallExpression:
-                    if ((node as CallExpression).expression.kind === SyntaxKind.ImportKeyword) {
-                        return checkImportCallExpression(node as ImportCall);
-                    }
-                    // falls through
-                case SyntaxKind.NewExpression:
-                    return checkCallExpression(node as CallExpression, checkMode);
-                case SyntaxKind.TaggedTemplateExpression:
-                    return checkTaggedTemplateExpression(node as TaggedTemplateExpression);
-                case SyntaxKind.ParenthesizedExpression:
-                    return checkParenthesizedExpression(node as ParenthesizedExpression, checkMode);
-                case SyntaxKind.ClassExpression:
-                    return checkClassExpression(node as ClassExpression);
-                case SyntaxKind.FunctionExpression:
-                case SyntaxKind.ArrowFunction:
-                    return checkFunctionExpressionOrObjectLiteralMethod(node as FunctionExpression | ArrowFunction, checkMode);
-                case SyntaxKind.TypeOfExpression:
-                    return checkTypeOfExpression(node as TypeOfExpression);
-                case SyntaxKind.TypeAssertionExpression:
-                case SyntaxKind.AsExpression:
-                    return checkAssertion(node as AssertionExpression);
-                case SyntaxKind.NonNullExpression:
-                    return checkNonNullAssertion(node as NonNullExpression);
-                case SyntaxKind.ExpressionWithTypeArguments:
-                    return checkExpressionWithTypeArguments(node as ExpressionWithTypeArguments);
-                case SyntaxKind.MetaProperty:
-                    return checkMetaProperty(node as MetaProperty);
-                case SyntaxKind.DeleteExpression:
-                    return checkDeleteExpression(node as DeleteExpression);
-                case SyntaxKind.VoidExpression:
-                    return checkVoidExpression(node as VoidExpression);
-                case SyntaxKind.AwaitExpression:
-                    return checkAwaitExpression(node as AwaitExpression);
-                case SyntaxKind.PrefixUnaryExpression:
-                    return checkPrefixUnaryExpression(node as PrefixUnaryExpression);
-                case SyntaxKind.PostfixUnaryExpression:
-                    return checkPostfixUnaryExpression(node as PostfixUnaryExpression);
-                case SyntaxKind.BinaryExpression:
-                    return checkBinaryExpression(node as BinaryExpression, checkMode);
-                case SyntaxKind.ConditionalExpression:
-                    return checkConditionalExpression(node as ConditionalExpression, checkMode);
-                case SyntaxKind.SpreadElement:
-                    return checkSpreadExpression(node as SpreadElement, checkMode);
-                case SyntaxKind.OmittedExpression:
-                    return undefinedWideningType;
-                case SyntaxKind.YieldExpression:
-                    return checkYieldExpression(node as YieldExpression);
-                case SyntaxKind.SyntheticExpression:
-                    return checkSyntheticExpression(node as SyntheticExpression);
-                case SyntaxKind.JsxExpression:
-                    return checkJsxExpression(node as JsxExpression, checkMode);
-                case SyntaxKind.JsxElement:
-                    return checkJsxElement(node as JsxElement, checkMode);
-                case SyntaxKind.JsxSelfClosingElement:
-                    return checkJsxSelfClosingElement(node as JsxSelfClosingElement, checkMode);
-                case SyntaxKind.JsxFragment:
-                    return checkJsxFragment(node as JsxFragment);
-                case SyntaxKind.JsxAttributes:
-                    return checkJsxAttributes(node as JsxAttributes, checkMode);
-                case SyntaxKind.JsxOpeningElement:
-                    Debug.fail("Shouldn't ever directly check a JsxOpeningElement");
-            }
-            return errorType;
+            const result = checkExpressionWorkerTable[kind]?.(node, checkMode, forceTuple);
+            return result ?? errorType;
         }
 
         // DECLARATION AND STATEMENT TYPE CHECKING
