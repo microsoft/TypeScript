@@ -47,55 +47,6 @@ function f1() {
 >1 : 1
 >[1] : [number]
 >1 : 1
-
-    function fn1([a1, b1 = a1] = [1]) { };
->fn1 : ([a1, b1]?: [number, any?]) => void
->a1 : number
->b1 : any
->a1 : number
->[1] : [number]
->1 : 1
-
-    function fn2([a2, b2 = 1 + a2] = [1]) { };
->fn2 : ([a2, b2]?: [number, any?]) => void
->a2 : number
->b2 : any
->1 + a2 : number
->1 : 1
->a2 : number
->[1] : [number]
->1 : 1
-
-    function fn3([a3, b3 = (() => 1 + a3)()] = [1]) { };
->fn3 : ([a3, b3]?: [number, any?]) => void
->a3 : number
->b3 : any
->(() => 1 + a3)() : number
->(() => 1 + a3) : () => number
->() => 1 + a3 : () => number
->1 + a3 : number
->1 : 1
->a3 : number
->[1] : [number]
->1 : 1
-
-    function fn4([a4, b4 = (() => (() => 1 + a4)() + 1)()] = [1]) { };
->fn4 : ([a4, b4]?: [number, any?]) => void
->a4 : number
->b4 : any
->(() => (() => 1 + a4)() + 1)() : number
->(() => (() => 1 + a4)() + 1) : () => number
->() => (() => 1 + a4)() + 1 : () => number
->(() => 1 + a4)() + 1 : number
->(() => 1 + a4)() : number
->(() => 1 + a4) : () => number
->() => 1 + a4 : () => number
->1 + a4 : number
->1 : 1
->a4 : number
->1 : 1
->[1] : [number]
->1 : 1
 }
 
 // To be inferred as `string`

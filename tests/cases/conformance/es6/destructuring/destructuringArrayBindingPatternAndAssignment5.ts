@@ -1,3 +1,5 @@
+// @noImplicitAny: true
+
 // To be inferred as `number`
 function f1() {
     const [a1, b1 = a1] = [1];

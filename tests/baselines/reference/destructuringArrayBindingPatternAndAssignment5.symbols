@@ -22,91 +22,67 @@ function f1() {
 >a4 : Symbol(a4, Decl(destructuringArrayBindingPatternAndAssignment5.ts, 5, 11))
 >b4 : Symbol(b4, Decl(destructuringArrayBindingPatternAndAssignment5.ts, 5, 14))
 >a4 : Symbol(a4, Decl(destructuringArrayBindingPatternAndAssignment5.ts, 5, 11))
-
-    function fn1([a1, b1 = a1] = [1]) { };
->fn1 : Symbol(fn1, Decl(destructuringArrayBindingPatternAndAssignment5.ts, 5, 58))
->a1 : Symbol(a1, Decl(destructuringArrayBindingPatternAndAssignment5.ts, 7, 18))
->b1 : Symbol(b1, Decl(destructuringArrayBindingPatternAndAssignment5.ts, 7, 21))
->a1 : Symbol(a1, Decl(destructuringArrayBindingPatternAndAssignment5.ts, 7, 18))
-
-    function fn2([a2, b2 = 1 + a2] = [1]) { };
->fn2 : Symbol(fn2, Decl(destructuringArrayBindingPatternAndAssignment5.ts, 7, 42))
->a2 : Symbol(a2, Decl(destructuringArrayBindingPatternAndAssignment5.ts, 8, 18))
->b2 : Symbol(b2, Decl(destructuringArrayBindingPatternAndAssignment5.ts, 8, 21))
->a2 : Symbol(a2, Decl(destructuringArrayBindingPatternAndAssignment5.ts, 8, 18))
-
-    function fn3([a3, b3 = (() => 1 + a3)()] = [1]) { };
->fn3 : Symbol(fn3, Decl(destructuringArrayBindingPatternAndAssignment5.ts, 8, 46))
->a3 : Symbol(a3, Decl(destructuringArrayBindingPatternAndAssignment5.ts, 9, 18))
->b3 : Symbol(b3, Decl(destructuringArrayBindingPatternAndAssignment5.ts, 9, 21))
->a3 : Symbol(a3, Decl(destructuringArrayBindingPatternAndAssignment5.ts, 9, 18))
-
-    function fn4([a4, b4 = (() => (() => 1 + a4)() + 1)()] = [1]) { };
->fn4 : Symbol(fn4, Decl(destructuringArrayBindingPatternAndAssignment5.ts, 9, 56))
->a4 : Symbol(a4, Decl(destructuringArrayBindingPatternAndAssignment5.ts, 10, 18))
->b4 : Symbol(b4, Decl(destructuringArrayBindingPatternAndAssignment5.ts, 10, 21))
->a4 : Symbol(a4, Decl(destructuringArrayBindingPatternAndAssignment5.ts, 10, 18))
 }
 
 // To be inferred as `string`
 function f2() {
->f2 : Symbol(f2, Decl(destructuringArrayBindingPatternAndAssignment5.ts, 11, 1))
+>f2 : Symbol(f2, Decl(destructuringArrayBindingPatternAndAssignment5.ts, 6, 1))
 
     const [a1, b1 = a1] = ['hi'];
->a1 : Symbol(a1, Decl(destructuringArrayBindingPatternAndAssignment5.ts, 15, 11))
->b1 : Symbol(b1, Decl(destructuringArrayBindingPatternAndAssignment5.ts, 15, 14))
->a1 : Symbol(a1, Decl(destructuringArrayBindingPatternAndAssignment5.ts, 15, 11))
+>a1 : Symbol(a1, Decl(destructuringArrayBindingPatternAndAssignment5.ts, 10, 11))
+>b1 : Symbol(b1, Decl(destructuringArrayBindingPatternAndAssignment5.ts, 10, 14))
+>a1 : Symbol(a1, Decl(destructuringArrayBindingPatternAndAssignment5.ts, 10, 11))
 
     const [a2, b2 = [a2, '!'].join()] = ['hi'];
->a2 : Symbol(a2, Decl(destructuringArrayBindingPatternAndAssignment5.ts, 16, 11))
->b2 : Symbol(b2, Decl(destructuringArrayBindingPatternAndAssignment5.ts, 16, 14))
+>a2 : Symbol(a2, Decl(destructuringArrayBindingPatternAndAssignment5.ts, 11, 11))
+>b2 : Symbol(b2, Decl(destructuringArrayBindingPatternAndAssignment5.ts, 11, 14))
 >[a2, '!'].join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
->a2 : Symbol(a2, Decl(destructuringArrayBindingPatternAndAssignment5.ts, 16, 11))
+>a2 : Symbol(a2, Decl(destructuringArrayBindingPatternAndAssignment5.ts, 11, 11))
 >join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
 
     const [a3, b3 = (() => [a3, '!'].join())()] = ['hi'];
->a3 : Symbol(a3, Decl(destructuringArrayBindingPatternAndAssignment5.ts, 17, 11))
->b3 : Symbol(b3, Decl(destructuringArrayBindingPatternAndAssignment5.ts, 17, 14))
+>a3 : Symbol(a3, Decl(destructuringArrayBindingPatternAndAssignment5.ts, 12, 11))
+>b3 : Symbol(b3, Decl(destructuringArrayBindingPatternAndAssignment5.ts, 12, 14))
 >[a3, '!'].join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
->a3 : Symbol(a3, Decl(destructuringArrayBindingPatternAndAssignment5.ts, 17, 11))
+>a3 : Symbol(a3, Decl(destructuringArrayBindingPatternAndAssignment5.ts, 12, 11))
 >join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
 
     const [a4, b4 = (() => (() => [a4, '!'].join())() + '!')()] = ['hi'];
->a4 : Symbol(a4, Decl(destructuringArrayBindingPatternAndAssignment5.ts, 18, 11))
->b4 : Symbol(b4, Decl(destructuringArrayBindingPatternAndAssignment5.ts, 18, 14))
+>a4 : Symbol(a4, Decl(destructuringArrayBindingPatternAndAssignment5.ts, 13, 11))
+>b4 : Symbol(b4, Decl(destructuringArrayBindingPatternAndAssignment5.ts, 13, 14))
 >[a4, '!'].join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
->a4 : Symbol(a4, Decl(destructuringArrayBindingPatternAndAssignment5.ts, 18, 11))
+>a4 : Symbol(a4, Decl(destructuringArrayBindingPatternAndAssignment5.ts, 13, 11))
 >join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
 }
 
 // To be inferred as `string | number`
 function f3() {
->f3 : Symbol(f3, Decl(destructuringArrayBindingPatternAndAssignment5.ts, 19, 1))
+>f3 : Symbol(f3, Decl(destructuringArrayBindingPatternAndAssignment5.ts, 14, 1))
 
     const [a1, b1 = a1] = ['hi', 1];
->a1 : Symbol(a1, Decl(destructuringArrayBindingPatternAndAssignment5.ts, 23, 11))
->b1 : Symbol(b1, Decl(destructuringArrayBindingPatternAndAssignment5.ts, 23, 14))
->a1 : Symbol(a1, Decl(destructuringArrayBindingPatternAndAssignment5.ts, 23, 11))
+>a1 : Symbol(a1, Decl(destructuringArrayBindingPatternAndAssignment5.ts, 18, 11))
+>b1 : Symbol(b1, Decl(destructuringArrayBindingPatternAndAssignment5.ts, 18, 14))
+>a1 : Symbol(a1, Decl(destructuringArrayBindingPatternAndAssignment5.ts, 18, 11))
 
     const [a2, b2 = [a2, '!'].join()] = ['hi', 1];
->a2 : Symbol(a2, Decl(destructuringArrayBindingPatternAndAssignment5.ts, 24, 11))
->b2 : Symbol(b2, Decl(destructuringArrayBindingPatternAndAssignment5.ts, 24, 14))
+>a2 : Symbol(a2, Decl(destructuringArrayBindingPatternAndAssignment5.ts, 19, 11))
+>b2 : Symbol(b2, Decl(destructuringArrayBindingPatternAndAssignment5.ts, 19, 14))
 >[a2, '!'].join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
->a2 : Symbol(a2, Decl(destructuringArrayBindingPatternAndAssignment5.ts, 24, 11))
+>a2 : Symbol(a2, Decl(destructuringArrayBindingPatternAndAssignment5.ts, 19, 11))
 >join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
 
     const [a3, b3 = (() => [a3, '!'].join())()] = ['hi', 1];
->a3 : Symbol(a3, Decl(destructuringArrayBindingPatternAndAssignment5.ts, 25, 11))
->b3 : Symbol(b3, Decl(destructuringArrayBindingPatternAndAssignment5.ts, 25, 14))
+>a3 : Symbol(a3, Decl(destructuringArrayBindingPatternAndAssignment5.ts, 20, 11))
+>b3 : Symbol(b3, Decl(destructuringArrayBindingPatternAndAssignment5.ts, 20, 14))
 >[a3, '!'].join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
->a3 : Symbol(a3, Decl(destructuringArrayBindingPatternAndAssignment5.ts, 25, 11))
+>a3 : Symbol(a3, Decl(destructuringArrayBindingPatternAndAssignment5.ts, 20, 11))
 >join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
 
     const [a4, b4 = (() => (() => [a4, '!'].join())() + '!')()] = ['hi', 1];
->a4 : Symbol(a4, Decl(destructuringArrayBindingPatternAndAssignment5.ts, 26, 11))
->b4 : Symbol(b4, Decl(destructuringArrayBindingPatternAndAssignment5.ts, 26, 14))
+>a4 : Symbol(a4, Decl(destructuringArrayBindingPatternAndAssignment5.ts, 21, 11))
+>b4 : Symbol(b4, Decl(destructuringArrayBindingPatternAndAssignment5.ts, 21, 14))
 >[a4, '!'].join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
->a4 : Symbol(a4, Decl(destructuringArrayBindingPatternAndAssignment5.ts, 26, 11))
+>a4 : Symbol(a4, Decl(destructuringArrayBindingPatternAndAssignment5.ts, 21, 11))
 >join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
 }
 
