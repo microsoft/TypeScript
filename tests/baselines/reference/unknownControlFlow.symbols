@@ -636,3 +636,88 @@ function foo<T>(x: T | null) {
     }
 }
 
+// We allow an unconstrained object of a generic type `T` to be indexed by a key of type `keyof T`
+// without a check that the object is non-undefined and non-null. This is safe because `keyof T`
+// is `never` (meaning no possible keys) for any `T` that includes `undefined` or `null`.
+
+function ff1<T>(t: T, k: keyof T) {
+>ff1 : Symbol(ff1, Decl(unknownControlFlow.ts, 267, 1))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 273, 13))
+>t : Symbol(t, Decl(unknownControlFlow.ts, 273, 16))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 273, 13))
+>k : Symbol(k, Decl(unknownControlFlow.ts, 273, 21))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 273, 13))
+
+    t[k];
+>t : Symbol(t, Decl(unknownControlFlow.ts, 273, 16))
+>k : Symbol(k, Decl(unknownControlFlow.ts, 273, 21))
+}
+
+function ff2<T>(t: T & {}, k: keyof T) {
+>ff2 : Symbol(ff2, Decl(unknownControlFlow.ts, 275, 1))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 277, 13))
+>t : Symbol(t, Decl(unknownControlFlow.ts, 277, 16))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 277, 13))
+>k : Symbol(k, Decl(unknownControlFlow.ts, 277, 26))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 277, 13))
+
+    t[k];
+>t : Symbol(t, Decl(unknownControlFlow.ts, 277, 16))
+>k : Symbol(k, Decl(unknownControlFlow.ts, 277, 26))
+}
+
+function ff3<T>(t: T, k: keyof (T & {})) {
+>ff3 : Symbol(ff3, Decl(unknownControlFlow.ts, 279, 1))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 281, 13))
+>t : Symbol(t, Decl(unknownControlFlow.ts, 281, 16))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 281, 13))
+>k : Symbol(k, Decl(unknownControlFlow.ts, 281, 21))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 281, 13))
+
+    t[k];  // Error
+>t : Symbol(t, Decl(unknownControlFlow.ts, 281, 16))
+>k : Symbol(k, Decl(unknownControlFlow.ts, 281, 21))
+}
+
+function ff4<T>(t: T & {}, k: keyof (T & {})) {
+>ff4 : Symbol(ff4, Decl(unknownControlFlow.ts, 283, 1))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 285, 13))
+>t : Symbol(t, Decl(unknownControlFlow.ts, 285, 16))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 285, 13))
+>k : Symbol(k, Decl(unknownControlFlow.ts, 285, 26))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 285, 13))
+
+    t[k];
+>t : Symbol(t, Decl(unknownControlFlow.ts, 285, 16))
+>k : Symbol(k, Decl(unknownControlFlow.ts, 285, 26))
+}
+
+ff1(null, 'foo');  // Error
+>ff1 : Symbol(ff1, Decl(unknownControlFlow.ts, 267, 1))
+
+ff2(null, 'foo');  // Error
+>ff2 : Symbol(ff2, Decl(unknownControlFlow.ts, 275, 1))
+
+ff3(null, 'foo');
+>ff3 : Symbol(ff3, Decl(unknownControlFlow.ts, 279, 1))
+
+ff4(null, 'foo');  // Error
+>ff4 : Symbol(ff4, Decl(unknownControlFlow.ts, 283, 1))
+
+// Repro from #49681
+
+type Foo = { [key: string]: unknown };
+>Foo : Symbol(Foo, Decl(unknownControlFlow.ts, 292, 17))
+>key : Symbol(key, Decl(unknownControlFlow.ts, 296, 14))
+
+type NullableFoo = Foo | undefined;
+>NullableFoo : Symbol(NullableFoo, Decl(unknownControlFlow.ts, 296, 38))
+>Foo : Symbol(Foo, Decl(unknownControlFlow.ts, 292, 17))
+
+type Bar<T extends NullableFoo> = NonNullable<T>[string];
+>Bar : Symbol(Bar, Decl(unknownControlFlow.ts, 297, 35))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 299, 9))
+>NullableFoo : Symbol(NullableFoo, Decl(unknownControlFlow.ts, 296, 38))
+>NonNullable : Symbol(NonNullable, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(unknownControlFlow.ts, 299, 9))
+
