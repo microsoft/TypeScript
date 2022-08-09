@@ -113,7 +113,7 @@ var AnotherMixedClass = (0, MixinClass_1.MyMixin)(FinalClass_1.MyExtendedClass);
 
 
 //// [BaseClass.d.ts]
-export declare type Constructor<T> = new (...args: any[]) => T;
+export type Constructor<T> = new (...args: any[]) => T;
 export declare class MyBaseClass<T> {
     baseProperty: string;
     constructor(value: T);

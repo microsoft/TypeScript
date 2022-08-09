@@ -155,7 +155,7 @@ var Thing3 = /** @class */ (function (_super) {
 
 
 //// [mixinClassesAnnotated.d.ts]
-declare type Constructor<T> = new (...args: any[]) => T;
+type Constructor<T> = new (...args: any[]) => T;
 declare class Base {
     x: number;
     y: number;
