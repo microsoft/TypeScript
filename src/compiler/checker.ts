@@ -1068,35 +1068,34 @@ namespace ts {
             [".json", ".json"],
         ];
 
-        const checkExpressionWorkerTable = new Array<(node: any, checkMode: CheckMode | undefined, forceTuple: boolean | undefined) => Type>(SyntaxKind.Count);
+        const checkExpressionWorkerTable = new Array<(node: any, checkMode: CheckMode | undefined) => Type>(SyntaxKind.Count);
         checkExpressionWorkerTable[SyntaxKind.Identifier] = checkIdentifier;
         checkExpressionWorkerTable[SyntaxKind.PrivateIdentifier] = checkPrivateIdentifierExpression;
         checkExpressionWorkerTable[SyntaxKind.ThisKeyword] = checkThisExpression;
         checkExpressionWorkerTable[SyntaxKind.SuperKeyword] = checkSuperExpression;
-        checkExpressionWorkerTable[SyntaxKind.NullKeyword] = (_node, _checkMode, _forceTuple) => nullWideningType;
+        checkExpressionWorkerTable[SyntaxKind.NullKeyword] = (_node, _checkMode) => nullWideningType;
         checkExpressionWorkerTable[SyntaxKind.NoSubstitutionTemplateLiteral] = checkExpressionWorkerTable[SyntaxKind.StringLiteral] =
-            (node: StringLiteralLike, _checkMode, _forceTuple) => getFreshTypeOfLiteralType(getStringLiteralType(node.text));
-        checkExpressionWorkerTable[SyntaxKind.NumericLiteral] = (node: NumericLiteral, _checkMode, _forceTuple) => {
+            (node: StringLiteralLike, _checkMode) => getFreshTypeOfLiteralType(getStringLiteralType(node.text));
+        checkExpressionWorkerTable[SyntaxKind.NumericLiteral] = (node: NumericLiteral, _checkMode) => {
             checkGrammarNumericLiteral(node);
             return getFreshTypeOfLiteralType(getNumberLiteralType(+(node).text));
         };
-        checkExpressionWorkerTable[SyntaxKind.BigIntLiteral] = (node: BigIntLiteral, _checkMode, _forceTuple) => {
+        checkExpressionWorkerTable[SyntaxKind.BigIntLiteral] = (node: BigIntLiteral, _checkMode) => {
             checkGrammarBigIntLiteral(node);
             return getFreshTypeOfLiteralType(getBigIntLiteralType({
                 negative: false,
                 base10Value: parsePseudoBigInt((node).text)
             }));
         };
-        checkExpressionWorkerTable[SyntaxKind.TrueKeyword] = (_node, _checkMode, _forceTuple) => trueType;
-        checkExpressionWorkerTable[SyntaxKind.FalseKeyword] = (_node, _checkMode, _forceTuple) => falseType;
+        checkExpressionWorkerTable[SyntaxKind.TrueKeyword] = (_node, _checkMode) => trueType;
+        checkExpressionWorkerTable[SyntaxKind.FalseKeyword] = (_node, _checkMode) => falseType;
         checkExpressionWorkerTable[SyntaxKind.TemplateExpression] = checkTemplateExpression;
-        checkExpressionWorkerTable[SyntaxKind.RegularExpressionLiteral] = (_node, _checkMode, _forceTuple) => globalRegExpType;
-        checkExpressionWorkerTable[SyntaxKind.ArrayLiteralExpression] = checkArrayLiteral;
+        checkExpressionWorkerTable[SyntaxKind.RegularExpressionLiteral] = (_node, _checkMode) => globalRegExpType;
         checkExpressionWorkerTable[SyntaxKind.ObjectLiteralExpression] = checkObjectLiteral;
         checkExpressionWorkerTable[SyntaxKind.PropertyAccessExpression] = checkPropertyAccessExpression;
         checkExpressionWorkerTable[SyntaxKind.QualifiedName] = checkQualifiedName;
         checkExpressionWorkerTable[SyntaxKind.ElementAccessExpression] = checkIndexedAccess;
-        checkExpressionWorkerTable[SyntaxKind.CallExpression] = (node: CallExpression, checkMode, _forceTuple) => {
+        checkExpressionWorkerTable[SyntaxKind.CallExpression] = (node: CallExpression, checkMode) => {
             if (node.expression.kind === SyntaxKind.ImportKeyword) {
                 return checkImportCallExpression(node as ImportCall);
             };
@@ -1122,7 +1121,7 @@ namespace ts {
         checkExpressionWorkerTable[SyntaxKind.BinaryExpression] = checkBinaryExpression;
         checkExpressionWorkerTable[SyntaxKind.ConditionalExpression] = checkConditionalExpression;
         checkExpressionWorkerTable[SyntaxKind.SpreadElement] = checkSpreadExpression;
-        checkExpressionWorkerTable[SyntaxKind.OmittedExpression] = (_node, _checkMode, _forceTuple) => undefinedWideningType;
+        checkExpressionWorkerTable[SyntaxKind.OmittedExpression] = (_node, _checkMode) => undefinedWideningType;
         checkExpressionWorkerTable[SyntaxKind.YieldExpression] = checkYieldExpression;
         checkExpressionWorkerTable[SyntaxKind.SyntheticExpression] = checkSyntheticExpression;
         checkExpressionWorkerTable[SyntaxKind.JsxExpression] = checkJsxExpression;
@@ -1130,7 +1129,7 @@ namespace ts {
         checkExpressionWorkerTable[SyntaxKind.JsxSelfClosingElement] = checkJsxSelfClosingElement;
         checkExpressionWorkerTable[SyntaxKind.JsxFragment] = checkJsxFragment;
         checkExpressionWorkerTable[SyntaxKind.JsxAttributes] = checkJsxAttributes;
-        checkExpressionWorkerTable[SyntaxKind.JsxOpeningElement] = (_node, _checkMode, _forceTuple) => Debug.fail("Shouldn't ever directly check a JsxOpeningElement");
+        checkExpressionWorkerTable[SyntaxKind.JsxOpeningElement] = (_node, _checkMode) => Debug.fail("Shouldn't ever directly check a JsxOpeningElement");
 
         initializeTypeChecker();
 
@@ -14073,7 +14072,7 @@ namespace ts {
                 // The expression is processed as an identifier expression (section 4.3)
                 // or property access expression(section 4.10),
                 // the widened type(section 3.9) of which becomes the result.
-                const type = checkExpressionWithTypeArguments(node, /*checkMode*/ undefined, /*forceTuple*/ undefined);
+                const type = checkExpressionWithTypeArguments(node, /*checkMode*/ undefined);
                 links.resolvedType = getRegularTypeOfLiteralType(getWidenedType(type));
             }
             return links.resolvedType;
@@ -24343,7 +24342,7 @@ namespace ts {
                     case SyntaxKind.ThisKeyword:
                         return getExplicitThisType(node);
                     case SyntaxKind.SuperKeyword:
-                        return checkSuperExpression(node, /*checkMode*/ undefined, /*forceTuple*/ undefined);
+                        return checkSuperExpression(node, /*checkMode*/ undefined);
                     case SyntaxKind.PropertyAccessExpression: {
                         const type = getTypeOfDottedName((node as PropertyAccessExpression).expression, diagnostic);
                         if (type) {
@@ -25930,9 +25929,9 @@ namespace ts {
             return getTypeOfSymbol(symbol);
         }
 
-        function checkIdentifier(node: Identifier, checkMode: CheckMode | undefined, forceTuple: boolean | undefined): Type {
+        function checkIdentifier(node: Identifier, checkMode: CheckMode | undefined): Type {
             if (isThisInTypeQuery(node)) {
-                return checkThisExpression(node, checkMode, forceTuple);
+                return checkThisExpression(node, checkMode);
             }
 
             const symbol = getResolvedSymbol(node);
@@ -26290,7 +26289,7 @@ namespace ts {
             }
         }
 
-        function checkThisExpression(node: Node, _checkMode: CheckMode | undefined, _forceTuple: boolean | undefined): Type {
+        function checkThisExpression(node: Node, _checkMode: CheckMode | undefined): Type {
             const isNodeInTypeQuery = isInTypeQuery(node);
             // Stop at the first arrow function so that we can
             // tell whether 'this' needs to be captured.
@@ -26488,7 +26487,7 @@ namespace ts {
             return !!findAncestor(node, n => isFunctionLikeDeclaration(n) ? "quit" : n.kind === SyntaxKind.Parameter && n.parent === constructorDecl);
         }
 
-        function checkSuperExpression(node: Node, _checkMode: CheckMode | undefined, _forceTuple: boolean | undefined): Type {
+        function checkSuperExpression(node: Node, _checkMode: CheckMode | undefined): Type {
             const isCallExpression = node.parent.kind === SyntaxKind.CallExpression && (node.parent as CallExpression).expression === node;
 
             const immediateContainer = getSuperContainer(node, /*stopOnFunctions*/ true);
@@ -27177,7 +27176,7 @@ namespace ts {
             if (!isObjectLiteralMethod(getThisContainer(thisAccess.expression, /*includeArrowFunctions*/ false))) {
                 return undefined;
             }
-            const thisType = checkThisExpression(thisAccess.expression, /*checkMode*/ undefined, /*forceTuple*/ undefined);
+            const thisType = checkThisExpression(thisAccess.expression, /*checkMode*/ undefined);
             const nameStr = getElementOrPropertyAccessName(thisAccess);
             return nameStr !== undefined && getTypeOfPropertyOfContextualType(thisType, nameStr) || undefined;
 
@@ -27859,7 +27858,7 @@ namespace ts {
             }
         }
 
-        function checkSpreadExpression(node: SpreadElement, checkMode: CheckMode | undefined, _forceTuple: boolean | undefined): Type {
+        function checkSpreadExpression(node: SpreadElement, checkMode: CheckMode | undefined): Type {
             if (languageVersion < ScriptTarget.ES2015) {
                 checkExternalEmitHelpers(node, compilerOptions.downlevelIteration ? ExternalEmitHelpers.SpreadIncludes : ExternalEmitHelpers.SpreadArray);
             }
@@ -27868,7 +27867,7 @@ namespace ts {
             return checkIteratedTypeOrElementType(IterationUse.Spread, arrayOrIterableType, undefinedType, node.expression);
         }
 
-        function checkSyntheticExpression(node: SyntheticExpression, _checkMode: CheckMode | undefined, _forceTuple: boolean | undefined): Type {
+        function checkSyntheticExpression(node: SyntheticExpression, _checkMode: CheckMode | undefined): Type {
             return node.isSpread ? getIndexedAccessType(node.type, numberType) : node.type;
         }
 
@@ -28289,7 +28288,7 @@ namespace ts {
             checkJsxOpeningLikeElementOrOpeningFragment(node);
         }
 
-        function checkJsxSelfClosingElement(node: JsxSelfClosingElement, _checkMode: CheckMode | undefined, _forceTuple: boolean | undefined): Type {
+        function checkJsxSelfClosingElement(node: JsxSelfClosingElement, _checkMode: CheckMode | undefined): Type {
             checkNodeDeferred(node);
             return getJsxElementTypeAt(node) || anyType;
         }
@@ -28309,13 +28308,13 @@ namespace ts {
             checkJsxChildren(node);
         }
 
-        function checkJsxElement(node: JsxElement, _checkMode: CheckMode | undefined, _forceTuple: boolean | undefined): Type {
+        function checkJsxElement(node: JsxElement, _checkMode: CheckMode | undefined): Type {
             checkNodeDeferred(node);
 
             return getJsxElementTypeAt(node) || anyType;
         }
 
-        function checkJsxFragment(node: JsxFragment, _checkMode: CheckMode | undefined, _forceTuple: boolean | undefined): Type {
+        function checkJsxFragment(node: JsxFragment, _checkMode: CheckMode | undefined): Type {
             checkJsxOpeningLikeElementOrOpeningFragment(node.openingFragment);
 
             // by default, jsx:'react' will use jsxFactory = React.createElement and jsxFragmentFactory = React.Fragment
@@ -28509,7 +28508,7 @@ namespace ts {
          * (See "checkApplicableSignatureForJsxOpeningLikeElement" for how the function is used)
          * @param node a JSXAttributes to be resolved of its type
          */
-        function checkJsxAttributes(node: JsxAttributes, checkMode: CheckMode | undefined, _forceTuple: boolean | undefined) {
+        function checkJsxAttributes(node: JsxAttributes, checkMode: CheckMode | undefined) {
             return createJsxAttributesTypeFromAttributesProperty(node.parent, checkMode);
         }
 
@@ -28906,7 +28905,7 @@ namespace ts {
                 type.flags & TypeFlags.Intersection && every((type as IntersectionType).types, isExcessPropertyCheckTarget));
         }
 
-        function checkJsxExpression(node: JsxExpression, checkMode: CheckMode | undefined, _forceTuple: boolean | undefined) {
+        function checkJsxExpression(node: JsxExpression, checkMode: CheckMode | undefined) {
             checkGrammarJsxExpression(node);
             if (node.expression) {
                 const type = checkExpression(node.expression, checkMode);
@@ -29182,7 +29181,7 @@ namespace ts {
         }
 
         function checkQualifiedName(node: QualifiedName, checkMode: CheckMode | undefined) {
-            const leftType = isPartOfTypeQuery(node) && isThisIdentifier(node.left) ? checkNonNullType(checkThisExpression(node.left, checkMode, /*forceTuple*/ undefined), node.left) : checkNonNullExpression(node.left);
+            const leftType = isPartOfTypeQuery(node) && isThisIdentifier(node.left) ? checkNonNullType(checkThisExpression(node.left, checkMode), node.left) : checkNonNullExpression(node.left);
             return checkPropertyAccessExpressionOrQualifiedName(node, node.left, leftType, node.right, checkMode);
         }
 
@@ -29224,7 +29223,7 @@ namespace ts {
             return false;
         }
 
-        function checkPrivateIdentifierExpression(privId: PrivateIdentifier, _checkMode: CheckMode | undefined, _forceTuple: boolean | undefined): Type {
+        function checkPrivateIdentifierExpression(privId: PrivateIdentifier, _checkMode: CheckMode | undefined): Type {
             checkGrammarPrivateIdentifierExpression(privId);
             const symbol = getSymbolForPrivateIdentifierExpression(privId);
             if (symbol) {
@@ -31330,7 +31329,7 @@ namespace ts {
 
         function resolveCallExpression(node: CallExpression, candidatesOutArray: Signature[] | undefined, checkMode: CheckMode): Signature {
             if (node.expression.kind === SyntaxKind.SuperKeyword) {
-                const superType = checkSuperExpression(node.expression, checkMode, /*forceTuple*/ undefined);
+                const superType = checkSuperExpression(node.expression, checkMode);
                 if (isTypeAny(superType)) {
                     for (const arg of node.arguments) {
                         checkExpression(arg); // Still visit arguments so they get marked for visibility, etc
@@ -32054,7 +32053,7 @@ namespace ts {
          * @param node The call/new expression to be checked.
          * @returns On success, the expression's signature's return type. On failure, anyType.
          */
-        function checkCallExpression(node: CallExpression | NewExpression, checkMode?: CheckMode, _forceTuple?: boolean): Type {
+        function checkCallExpression(node: CallExpression | NewExpression, checkMode?: CheckMode): Type {
             checkGrammarTypeArguments(node, node.typeArguments);
 
             const signature = getResolvedSignature(node, /*candidatesOutArray*/ undefined, checkMode);
@@ -32287,7 +32286,7 @@ namespace ts {
             return false;
         }
 
-        function checkTaggedTemplateExpression(node: TaggedTemplateExpression, _checkMode: CheckMode | undefined, _forceTuple: boolean | undefined): Type {
+        function checkTaggedTemplateExpression(node: TaggedTemplateExpression, _checkMode: CheckMode | undefined): Type {
             if (!checkGrammarTaggedTemplateChain(node)) checkGrammarTypeArguments(node, node.typeArguments);
             if (languageVersion < ScriptTarget.ES2015) {
                 checkExternalEmitHelpers(node, ExternalEmitHelpers.MakeTemplateObject);
@@ -32297,7 +32296,7 @@ namespace ts {
             return getReturnTypeOfSignature(signature);
         }
 
-        function checkAssertion(node: AssertionExpression, _checkMode: CheckMode | undefined, _forceTuple: boolean | undefined) {
+        function checkAssertion(node: AssertionExpression, _checkMode: CheckMode | undefined) {
             if (node.kind === SyntaxKind.TypeAssertionExpression) {
                 const file = getSourceFileOfNode(node);
                 if (file && fileExtensionIsOneOf(file.fileName, [Extension.Cts, Extension.Mts])) {
@@ -32367,15 +32366,15 @@ namespace ts {
             return propagateOptionalTypeMarker(getNonNullableType(nonOptionalType), node, nonOptionalType !== leftType);
         }
 
-        function checkNonNullAssertion(node: NonNullExpression, _checkMode: CheckMode | undefined, _forceTuple: boolean | undefined) {
+        function checkNonNullAssertion(node: NonNullExpression, _checkMode: CheckMode | undefined) {
             return node.flags & NodeFlags.OptionalChain ? checkNonNullChain(node as NonNullChain) :
                 getNonNullableType(checkExpression(node.expression));
         }
 
-        function checkExpressionWithTypeArguments(node: ExpressionWithTypeArguments | TypeQueryNode, checkMode: CheckMode | undefined, _forceTuple: boolean | undefined) {
+        function checkExpressionWithTypeArguments(node: ExpressionWithTypeArguments | TypeQueryNode, checkMode: CheckMode | undefined) {
             checkGrammarExpressionWithTypeArguments(node);
             const exprType = node.kind === SyntaxKind.ExpressionWithTypeArguments ? checkExpression(node.expression) :
-                isThisIdentifier(node.exprName) ? checkThisExpression(node.exprName, checkMode, _forceTuple) :
+                isThisIdentifier(node.exprName) ? checkThisExpression(node.exprName, checkMode) :
                 checkExpression(node.exprName);
             const typeArguments = node.typeArguments;
             if (exprType === silentNeverType || isErrorType(exprType) || !some(typeArguments)) {
@@ -32442,7 +32441,7 @@ namespace ts {
             }
         }
 
-        function checkMetaProperty(node: MetaProperty, _checkMode: CheckMode | undefined, _forceTuple: boolean | undefined): Type {
+        function checkMetaProperty(node: MetaProperty, _checkMode: CheckMode | undefined): Type {
             checkGrammarMetaProperty(node);
 
             if (node.keywordToken === SyntaxKind.NewKeyword) {
@@ -33188,7 +33187,7 @@ namespace ts {
             }
         }
 
-        function checkFunctionExpressionOrObjectLiteralMethod(node: FunctionExpression | ArrowFunction | MethodDeclaration, checkMode?: CheckMode, _forceTuple?: boolean): Type {
+        function checkFunctionExpressionOrObjectLiteralMethod(node: FunctionExpression | ArrowFunction | MethodDeclaration, checkMode?: CheckMode): Type {
             Debug.assert(node.kind !== SyntaxKind.MethodDeclaration || isObjectLiteralMethod(node));
             checkNodeDeferred(node);
 
@@ -33433,7 +33432,7 @@ namespace ts {
             return true;
         }
 
-        function checkDeleteExpression(node: DeleteExpression, _checkMode: CheckMode | undefined, _forceTuple: boolean | undefined): Type {
+        function checkDeleteExpression(node: DeleteExpression, _checkMode: CheckMode | undefined): Type {
             checkExpression(node.expression);
             const expr = skipParentheses(node.expression);
             if (!isAccessExpression(expr)) {
@@ -33463,12 +33462,12 @@ namespace ts {
             }
         }
 
-        function checkTypeOfExpression(node: TypeOfExpression, _checkMode: CheckMode | undefined, _forceTuple: boolean | undefined): Type {
+        function checkTypeOfExpression(node: TypeOfExpression, _checkMode: CheckMode | undefined): Type {
             checkExpression(node.expression);
             return typeofType;
         }
 
-        function checkVoidExpression(node: VoidExpression, _checkMode: CheckMode | undefined, _forceTuple: boolean | undefined): Type {
+        function checkVoidExpression(node: VoidExpression, _checkMode: CheckMode | undefined): Type {
             checkExpression(node.expression);
             return undefinedWideningType;
         }
@@ -33539,7 +33538,7 @@ namespace ts {
             }
         }
 
-        function checkAwaitExpression(node: AwaitExpression, _checkMode: CheckMode | undefined, _forceTuple: boolean | undefined): Type {
+        function checkAwaitExpression(node: AwaitExpression, _checkMode: CheckMode | undefined): Type {
             addLazyDiagnostic(() => checkAwaitExpressionGrammar(node));
 
             const operandType = checkExpression(node.expression);
@@ -33550,7 +33549,7 @@ namespace ts {
             return awaitedType;
         }
 
-        function checkPrefixUnaryExpression(node: PrefixUnaryExpression, _checkMode: CheckMode | undefined, _forceTuple: boolean | undefined): Type {
+        function checkPrefixUnaryExpression(node: PrefixUnaryExpression, _checkMode: CheckMode | undefined): Type {
             const operandType = checkExpression(node.operand);
             if (operandType === silentNeverType) {
                 return silentNeverType;
@@ -33609,7 +33608,7 @@ namespace ts {
             return errorType;
         }
 
-        function checkPostfixUnaryExpression(node: PostfixUnaryExpression, _checkMode: CheckMode | undefined, _forceTuple: boolean | undefined): Type {
+        function checkPostfixUnaryExpression(node: PostfixUnaryExpression, _checkMode: CheckMode | undefined): Type {
             const operandType = checkExpression(node.operand);
             if (operandType === silentNeverType) {
                 return silentNeverType;
@@ -33907,7 +33906,7 @@ namespace ts {
             }
 
             if (target.kind === SyntaxKind.BinaryExpression && (target as BinaryExpression).operatorToken.kind === SyntaxKind.EqualsToken) {
-                checkBinaryExpression(target as BinaryExpression, checkMode, /*forceTuple*/ undefined);
+                checkBinaryExpression(target as BinaryExpression, checkMode);
                 target = (target as BinaryExpression).left;
                 // A default value is specified, so remove undefined from the final type.
                 if (strictNullChecks) {
@@ -34026,7 +34025,7 @@ namespace ts {
 
             const trampoline = createBinaryExpressionTrampoline(onEnter, onLeft, onOperator, onRight, onExit, foldState);
 
-            return (node: BinaryExpression, checkMode: CheckMode | undefined, _forceTuple: boolean | undefined) => {
+            return (node: BinaryExpression, checkMode: CheckMode | undefined) => {
                 const result = trampoline(node, checkMode);
                 Debug.assertIsDefined(result);
                 return result;
@@ -34595,7 +34594,7 @@ namespace ts {
             return [ effectiveLeft, effectiveRight ];
         }
 
-        function checkYieldExpression(node: YieldExpression, _checkMode: CheckMode | undefined, _forceTuple: boolean | undefined): Type {
+        function checkYieldExpression(node: YieldExpression, _checkMode: CheckMode | undefined): Type {
             addLazyDiagnostic(checkYieldExpressionGrammar);
 
             const func = getContainingFunction(node);
@@ -34669,7 +34668,7 @@ namespace ts {
             }
         }
 
-        function checkConditionalExpression(node: ConditionalExpression, checkMode: CheckMode | undefined, _forceTuple: boolean | undefined): Type {
+        function checkConditionalExpression(node: ConditionalExpression, checkMode: CheckMode | undefined): Type {
             checkTruthinessExpression(node.condition);
             checkTestingKnownTruthyCallableOrAwaitableType(node.condition, node.whenTrue);
             const type1 = checkExpression(node.whenTrue, checkMode);
@@ -35149,7 +35148,7 @@ namespace ts {
             }
         }
 
-        function checkParenthesizedExpression(node: ParenthesizedExpression, checkMode: CheckMode | undefined, _forceTuple: boolean | undefined): Type {
+        function checkParenthesizedExpression(node: ParenthesizedExpression, checkMode: CheckMode | undefined): Type {
             if (hasJSDocNodes(node) && isJSDocTypeAssertion(node)) {
                 const type = getJSDocTypeAssertionType(node);
                 return checkAssertionWorker(type, type, node.expression, checkMode);
@@ -35169,7 +35168,12 @@ namespace ts {
                         cancellationToken.throwIfCancellationRequested();
                 }
             }
-            const result = checkExpressionWorkerTable[kind]?.(node, checkMode, forceTuple);
+
+            /** Special case array literals, since {@link checkArrayLiteral} is the only function that needs {@link forceTuple}. */
+            if (kind === SyntaxKind.ArrayLiteralExpression) {
+                return checkArrayLiteral(node as ArrayLiteralExpression, checkMode, forceTuple);
+            }
+            const result = checkExpressionWorkerTable[kind]?.(node, checkMode);
             return result ?? errorType;
         }
 
@@ -39872,7 +39876,7 @@ namespace ts {
             return true;
         }
 
-        function checkClassExpression(node: ClassExpression, _checkMode: CheckMode | undefined, _forceTuple: boolean | undefined): Type {
+        function checkClassExpression(node: ClassExpression, _checkMode: CheckMode | undefined): Type {
             checkClassLikeDeclaration(node);
             checkNodeDeferred(node);
             return getTypeOfSymbol(getSymbolOfNode(node));
