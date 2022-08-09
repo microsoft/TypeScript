@@ -41,7 +41,7 @@ interface PromiseConstructor {
     all<T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]> }>;
 
     // see: lib.es2015.iterable.d.ts
-    // all<T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>;
+    // all<T>(values: Iterable<T | PromiseLike<T>>): Promise<T[]>;
 
     /**
      * Creates a Promise that is resolved or rejected when any of the provided Promises are resolved
@@ -52,7 +52,7 @@ interface PromiseConstructor {
     race<T extends readonly unknown[] | []>(values: T): Promise<Awaited<T[number]>>;
 
     // see: lib.es2015.iterable.d.ts
-    // race<T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>>;
+    // race<T>(values: Iterable<T>): Promise<T extends PromiseLike<infer U> ? U : T>;
 
     /**
      * Creates a new rejected promise for the provided reason.
@@ -66,18 +66,13 @@ interface PromiseConstructor {
      * @returns A resolved promise.
      */
     resolve(): Promise<void>;
+
     /**
      * Creates a new resolved promise for the provided value.
      * @param value A promise.
      * @returns A promise whose internal state matches the provided promise.
      */
-    resolve<T>(value: T): Promise<Awaited<T>>;
-    /**
-     * Creates a new resolved promise for the provided value.
-     * @param value A promise.
-     * @returns A promise whose internal state matches the provided promise.
-     */
-    resolve<T>(value: T | PromiseLike<T>): Promise<Awaited<T>>;
+    resolve<T>(value: T | PromiseLike<T>): Promise<T>;
 }
 
 declare var Promise: PromiseConstructor;
