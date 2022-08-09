@@ -1,0 +1,222 @@
+=== tests/cases/conformance/es6/destructuring/destructuringArrayBindingPatternAndAssignment5.ts ===
+// To be inferred as `number`
+function f1() {
+>f1 : () => void
+
+    const [a1, b1 = a1] = [1];
+>a1 : number
+>b1 : number
+>a1 : number
+>[1] : [number]
+>1 : 1
+
+    const [a2, b2 = 1 + a2] = [1];
+>a2 : number
+>b2 : number
+>1 + a2 : number
+>1 : 1
+>a2 : number
+>[1] : [number]
+>1 : 1
+
+    const [a3, b3 = (() => 1 + a3)()] = [1];
+>a3 : number
+>b3 : number
+>(() => 1 + a3)() : number
+>(() => 1 + a3) : () => number
+>() => 1 + a3 : () => number
+>1 + a3 : number
+>1 : 1
+>a3 : number
+>[1] : [number]
+>1 : 1
+
+    const [a4, b4 = (() => (() => 1 + a4)() + 1)()] = [1];
+>a4 : number
+>b4 : number
+>(() => (() => 1 + a4)() + 1)() : number
+>(() => (() => 1 + a4)() + 1) : () => number
+>() => (() => 1 + a4)() + 1 : () => number
+>(() => 1 + a4)() + 1 : number
+>(() => 1 + a4)() : number
+>(() => 1 + a4) : () => number
+>() => 1 + a4 : () => number
+>1 + a4 : number
+>1 : 1
+>a4 : number
+>1 : 1
+>[1] : [number]
+>1 : 1
+
+    function fn1([a1, b1 = a1] = [1]) { };
+>fn1 : ([a1, b1]?: [number, any?]) => void
+>a1 : number
+>b1 : any
+>a1 : number
+>[1] : [number]
+>1 : 1
+
+    function fn2([a2, b2 = 1 + a2] = [1]) { };
+>fn2 : ([a2, b2]?: [number, any?]) => void
+>a2 : number
+>b2 : any
+>1 + a2 : number
+>1 : 1
+>a2 : number
+>[1] : [number]
+>1 : 1
+
+    function fn3([a3, b3 = (() => 1 + a3)()] = [1]) { };
+>fn3 : ([a3, b3]?: [number, any?]) => void
+>a3 : number
+>b3 : any
+>(() => 1 + a3)() : number
+>(() => 1 + a3) : () => number
+>() => 1 + a3 : () => number
+>1 + a3 : number
+>1 : 1
+>a3 : number
+>[1] : [number]
+>1 : 1
+
+    function fn4([a4, b4 = (() => (() => 1 + a4)() + 1)()] = [1]) { };
+>fn4 : ([a4, b4]?: [number, any?]) => void
+>a4 : number
+>b4 : any
+>(() => (() => 1 + a4)() + 1)() : number
+>(() => (() => 1 + a4)() + 1) : () => number
+>() => (() => 1 + a4)() + 1 : () => number
+>(() => 1 + a4)() + 1 : number
+>(() => 1 + a4)() : number
+>(() => 1 + a4) : () => number
+>() => 1 + a4 : () => number
+>1 + a4 : number
+>1 : 1
+>a4 : number
+>1 : 1
+>[1] : [number]
+>1 : 1
+}
+
+// To be inferred as `string`
+function f2() {
+>f2 : () => void
+
+    const [a1, b1 = a1] = ['hi'];
+>a1 : string
+>b1 : string
+>a1 : string
+>['hi'] : [string]
+>'hi' : "hi"
+
+    const [a2, b2 = [a2, '!'].join()] = ['hi'];
+>a2 : string
+>b2 : string
+>[a2, '!'].join() : string
+>[a2, '!'].join : (separator?: string) => string
+>[a2, '!'] : string[]
+>a2 : string
+>'!' : "!"
+>join : (separator?: string) => string
+>['hi'] : [string]
+>'hi' : "hi"
+
+    const [a3, b3 = (() => [a3, '!'].join())()] = ['hi'];
+>a3 : string
+>b3 : string
+>(() => [a3, '!'].join())() : string
+>(() => [a3, '!'].join()) : () => string
+>() => [a3, '!'].join() : () => string
+>[a3, '!'].join() : string
+>[a3, '!'].join : (separator?: string) => string
+>[a3, '!'] : string[]
+>a3 : string
+>'!' : "!"
+>join : (separator?: string) => string
+>['hi'] : [string]
+>'hi' : "hi"
+
+    const [a4, b4 = (() => (() => [a4, '!'].join())() + '!')()] = ['hi'];
+>a4 : string
+>b4 : string
+>(() => (() => [a4, '!'].join())() + '!')() : string
+>(() => (() => [a4, '!'].join())() + '!') : () => string
+>() => (() => [a4, '!'].join())() + '!' : () => string
+>(() => [a4, '!'].join())() + '!' : string
+>(() => [a4, '!'].join())() : string
+>(() => [a4, '!'].join()) : () => string
+>() => [a4, '!'].join() : () => string
+>[a4, '!'].join() : string
+>[a4, '!'].join : (separator?: string) => string
+>[a4, '!'] : string[]
+>a4 : string
+>'!' : "!"
+>join : (separator?: string) => string
+>'!' : "!"
+>['hi'] : [string]
+>'hi' : "hi"
+}
+
+// To be inferred as `string | number`
+function f3() {
+>f3 : () => void
+
+    const [a1, b1 = a1] = ['hi', 1];
+>a1 : string
+>b1 : string | number
+>a1 : string
+>['hi', 1] : [string, number]
+>'hi' : "hi"
+>1 : 1
+
+    const [a2, b2 = [a2, '!'].join()] = ['hi', 1];
+>a2 : string
+>b2 : string | number
+>[a2, '!'].join() : string
+>[a2, '!'].join : (separator?: string) => string
+>[a2, '!'] : string[]
+>a2 : string
+>'!' : "!"
+>join : (separator?: string) => string
+>['hi', 1] : [string, number]
+>'hi' : "hi"
+>1 : 1
+
+    const [a3, b3 = (() => [a3, '!'].join())()] = ['hi', 1];
+>a3 : string
+>b3 : string | number
+>(() => [a3, '!'].join())() : string
+>(() => [a3, '!'].join()) : () => string
+>() => [a3, '!'].join() : () => string
+>[a3, '!'].join() : string
+>[a3, '!'].join : (separator?: string) => string
+>[a3, '!'] : string[]
+>a3 : string
+>'!' : "!"
+>join : (separator?: string) => string
+>['hi', 1] : [string, number]
+>'hi' : "hi"
+>1 : 1
+
+    const [a4, b4 = (() => (() => [a4, '!'].join())() + '!')()] = ['hi', 1];
+>a4 : string
+>b4 : string | number
+>(() => (() => [a4, '!'].join())() + '!')() : string
+>(() => (() => [a4, '!'].join())() + '!') : () => string
+>() => (() => [a4, '!'].join())() + '!' : () => string
+>(() => [a4, '!'].join())() + '!' : string
+>(() => [a4, '!'].join())() : string
+>(() => [a4, '!'].join()) : () => string
+>() => [a4, '!'].join() : () => string
+>[a4, '!'].join() : string
+>[a4, '!'].join : (separator?: string) => string
+>[a4, '!'] : string[]
+>a4 : string
+>'!' : "!"
+>join : (separator?: string) => string
+>'!' : "!"
+>['hi', 1] : [string, number]
+>'hi' : "hi"
+>1 : 1
+}
+
