@@ -6631,7 +6631,7 @@ namespace ts {
             mode: ResolutionMode,
             redirectedReference: ResolvedProjectReference | undefined,
         ): ResolvedTypeReferenceDirectiveWithFailedLookupLocations | undefined;
-        getPackageJsonPath(dirPath: Path): string | undefined;
+        getPackageJsonScope(dirPath: Path): PackageJsonScope | undefined;
     }
 
     /*@internal*/

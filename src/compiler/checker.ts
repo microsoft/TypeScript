@@ -3585,7 +3585,7 @@ namespace ts {
                                 let diagnosticDetails;
                                 const ext = tryGetExtensionFromPath(currentSourceFile.fileName);
                                 if (ext === Extension.Ts || ext === Extension.Js || ext === Extension.Tsx || ext === Extension.Jsx) {
-                                    const scope = currentSourceFile.packageJsonScope;
+                                    const scope = currentSourceFile.packageJsonScope?.info;
                                     const targetExt = ext === Extension.Ts ? Extension.Mts : ext === Extension.Js ? Extension.Mjs : undefined;
                                     if (scope && !scope.packageJsonContent.type) {
                                         if (targetExt) {

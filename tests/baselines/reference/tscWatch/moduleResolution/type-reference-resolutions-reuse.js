@@ -66,11 +66,7 @@ File '/user/username/projects/package.json' does not exist.
 File '/user/username/package.json' does not exist.
 File '/user/package.json' does not exist.
 File '/package.json' does not exist.
-File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/user/username/projects/myproject' has no containing package.json scope according to cache.
 ======== Resolving type reference directive 'pkg', containing file '/user/username/projects/myproject/index.ts', root directory '/user/username/projects/myproject/node_modules/@types'. ========
 Resolving with primary search path '/user/username/projects/myproject/node_modules/@types'.
 Looking up in 'node_modules' folder, initial location '/user/username/projects/myproject'.
@@ -103,14 +99,10 @@ Resolving real path for '/user/username/projects/myproject/node_modules/@types/p
 File '/user/username/projects/myproject/node_modules/@types/pkg2/package.json' does not exist according to earlier cached lookups.
 File '/user/username/projects/myproject/node_modules/@types/package.json' does not exist.
 File '/user/username/projects/myproject/node_modules/package.json' does not exist.
-File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/user/username/projects/myproject' has no containing package.json scope according to cache.
 File '/a/lib/package.json' does not exist.
 File '/a/package.json' does not exist.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/' has no containing package.json scope according to cache.
 [96mindex.ts[0m:[93m2[0m:[93m23[0m - [91merror[0m[90m TS2688: [0mCannot find type definition file for 'pkg1'.
 
 [7m2[0m /// <reference types="pkg1" resolution-mode="require"/>
@@ -166,16 +158,16 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/package.json","pollingInterval":250}
 /user/username/projects/package.json:
   {"fileName":"/user/username/projects/package.json","pollingInterval":250}
-/user/username/projects/myproject/node_modules/pkg/package.json:
-  {"fileName":"/user/username/projects/myproject/node_modules/pkg/package.json","pollingInterval":250}
-/user/username/projects/myproject/node_modules/pkg1/package.json:
-  {"fileName":"/user/username/projects/myproject/node_modules/pkg1/package.json","pollingInterval":250}
 /user/username/projects/myproject/node_modules/@types/pkg2/package.json:
   {"fileName":"/user/username/projects/myproject/node_modules/@types/pkg2/package.json","pollingInterval":250}
 /user/username/projects/myproject/node_modules/@types/package.json:
   {"fileName":"/user/username/projects/myproject/node_modules/@types/package.json","pollingInterval":250}
 /user/username/projects/myproject/node_modules/package.json:
   {"fileName":"/user/username/projects/myproject/node_modules/package.json","pollingInterval":250}
+/user/username/projects/myproject/node_modules/pkg/package.json:
+  {"fileName":"/user/username/projects/myproject/node_modules/pkg/package.json","pollingInterval":250}
+/user/username/projects/myproject/node_modules/pkg1/package.json:
+  {"fileName":"/user/username/projects/myproject/node_modules/pkg1/package.json","pollingInterval":250}
 
 FsWatches::
 
@@ -219,54 +211,22 @@ Output::
 
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/myproject/node_modules/pkg/package.json' exists according to earlier cached lookups.
-File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/myproject/node_modules/@types/pkg2/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/myproject/node_modules/@types/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/myproject/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/' has no containing package.json scope according to cache.
+Directory '/user/username/projects/myproject' has no containing package.json scope according to cache.
+Directory '/user/username/projects/myproject/node_modules/pkg' resolves to '/user/username/projects/myproject/node_modules/pkg/package.json' scope according to cache.
+Directory '/user/username/projects/myproject' has no containing package.json scope according to cache.
+Directory '/user/username/projects/myproject/node_modules/@types/pkg2' has no containing package.json scope according to cache.
+Directory '/user/username/projects/myproject' has no containing package.json scope according to cache.
 ======== Resolving type reference directive 'pkg', containing file '/user/username/projects/myproject/a.ts'. ========
 Resolution for type reference directive 'pkg' was found in cache from location '/user/username/projects/myproject'.
 ======== Type reference directive 'pkg' was successfully resolved to '/user/username/projects/myproject/node_modules/pkg/import.d.ts' with Package ID 'pkg/import.d.ts@0.0.1', primary: false. ========
-File '/user/username/projects/myproject/node_modules/pkg/package.json' exists according to earlier cached lookups.
-File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/user/username/projects/myproject/node_modules/pkg' resolves to '/user/username/projects/myproject/node_modules/pkg/package.json' scope according to cache.
+Directory '/user/username/projects/myproject' has no containing package.json scope according to cache.
 Reusing resolution of type reference directive 'pkg' from '/user/username/projects/myproject/index.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/node_modules/pkg/import.d.ts' with Package ID 'pkg/import.d.ts@0.0.1'.
 Reusing resolution of type reference directive 'pkg1' from '/user/username/projects/myproject/index.ts' of old program, it was not resolved.
 Reusing resolution of type reference directive 'pkg2' from '/user/username/projects/myproject/__inferred type names__.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/node_modules/@types/pkg2/index.d.ts'.
-File '/user/username/projects/myproject/node_modules/@types/pkg2/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/myproject/node_modules/@types/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/myproject/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/a/lib/package.json' does not exist according to earlier cached lookups.
-File '/a/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/user/username/projects/myproject/node_modules/@types/pkg2' has no containing package.json scope according to cache.
+Directory '/a/lib' has no containing package.json scope according to cache.
 [96mindex.ts[0m:[93m2[0m:[93m23[0m - [91merror[0m[90m TS2688: [0mCannot find type definition file for 'pkg1'.
 
 [7m2[0m /// <reference types="pkg1" resolution-mode="require"/>
@@ -314,16 +274,16 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/package.json","pollingInterval":250}
 /user/username/projects/package.json:
   {"fileName":"/user/username/projects/package.json","pollingInterval":250}
-/user/username/projects/myproject/node_modules/pkg/package.json:
-  {"fileName":"/user/username/projects/myproject/node_modules/pkg/package.json","pollingInterval":250}
-/user/username/projects/myproject/node_modules/pkg1/package.json:
-  {"fileName":"/user/username/projects/myproject/node_modules/pkg1/package.json","pollingInterval":250}
 /user/username/projects/myproject/node_modules/@types/pkg2/package.json:
   {"fileName":"/user/username/projects/myproject/node_modules/@types/pkg2/package.json","pollingInterval":250}
 /user/username/projects/myproject/node_modules/@types/package.json:
   {"fileName":"/user/username/projects/myproject/node_modules/@types/package.json","pollingInterval":250}
 /user/username/projects/myproject/node_modules/package.json:
   {"fileName":"/user/username/projects/myproject/node_modules/package.json","pollingInterval":250}
+/user/username/projects/myproject/node_modules/pkg/package.json:
+  {"fileName":"/user/username/projects/myproject/node_modules/pkg/package.json","pollingInterval":250}
+/user/username/projects/myproject/node_modules/pkg1/package.json:
+  {"fileName":"/user/username/projects/myproject/node_modules/pkg1/package.json","pollingInterval":250}
 
 FsWatches::
 

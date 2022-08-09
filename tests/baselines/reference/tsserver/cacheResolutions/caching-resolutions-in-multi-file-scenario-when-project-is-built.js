@@ -61,9 +61,7 @@ Directory '/node_modules' does not exist, skipping all lookups in it.
 File '/src/project/node_modules/pkg0/package.json' exists according to earlier cached lookups.
 DirectoryWatcher:: Added:: WatchInfo: /src/project/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /src/project/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/src/project' has no containing package.json scope according to cache.
 Found 'package.json' at '/src/project/node_modules/pkg2/package.json'.
 'package.json' does not have a 'typesVersions' field.
 Reusing resolution of type reference directive 'pkg2' from '/src/project/fileWithTypeRefs.ts' found in cache from location '/src/project', it was successfully resolved to '/src/project/node_modules/pkg2/import.d.ts' with Package ID 'pkg2/import.d.ts@0.0.1'.
@@ -79,22 +77,16 @@ Directory '/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Type reference directive 'pkg3' was not resolved. ========
 File '/src/project/node_modules/pkg2/package.json' exists according to earlier cached lookups.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/src/project' has no containing package.json scope according to cache.
+Directory '/src/project' has no containing package.json scope according to cache.
 Reusing resolution of type reference directive 'pkg4' from '/src/project/__inferred type names__.ts' found in cache from location '/src/project', it was successfully resolved to '/src/project/node_modules/@types/pkg4/index.d.ts'.
 File '/src/project/node_modules/@types/pkg4/package.json' does not exist.
 File '/src/project/node_modules/@types/package.json' does not exist.
 File '/src/project/node_modules/package.json' does not exist.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/src/project' has no containing package.json scope according to cache.
 File '/a/lib/package.json' does not exist.
 File '/a/package.json' does not exist.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/' has no containing package.json scope according to cache.
 FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
 FileWatcher:: Added:: WatchInfo: /src/project/node_modules/pkg0/package.json 2000 undefined Project: /src/project/tsconfig.json WatchType: File location affecting resolution
 DirectoryWatcher:: Added:: WatchInfo: /src/project/node_modules 1 undefined Project: /src/project/tsconfig.json WatchType: Failed Lookup Locations
@@ -102,11 +94,11 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /src/project/node_modules 1 
 DirectoryWatcher:: Added:: WatchInfo: /src/project 0 undefined Project: /src/project/tsconfig.json WatchType: Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /src/project 0 undefined Project: /src/project/tsconfig.json WatchType: Failed Lookup Locations
 FileWatcher:: Added:: WatchInfo: /src/project/node_modules/pkg1/package.json 2000 undefined Project: /src/project/tsconfig.json WatchType: File location affecting resolution
-FileWatcher:: Added:: WatchInfo: /src/project/node_modules/pkg2/package.json 2000 undefined Project: /src/project/tsconfig.json WatchType: File location affecting resolution
-FileWatcher:: Added:: WatchInfo: /src/project/node_modules/pkg3/package.json 2000 undefined Project: /src/project/tsconfig.json WatchType: File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /src/project/node_modules/@types/pkg4/package.json 2000 undefined Project: /src/project/tsconfig.json WatchType: File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /src/project/node_modules/@types/package.json 2000 undefined Project: /src/project/tsconfig.json WatchType: File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /src/project/node_modules/package.json 2000 undefined Project: /src/project/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /src/project/node_modules/pkg2/package.json 2000 undefined Project: /src/project/tsconfig.json WatchType: File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /src/project/node_modules/pkg3/package.json 2000 undefined Project: /src/project/tsconfig.json WatchType: File location affecting resolution
 DirectoryWatcher:: Added:: WatchInfo: /src/project/node_modules/@types 1 undefined Project: /src/project/tsconfig.json WatchType: Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /src/project/node_modules/@types 1 undefined Project: /src/project/tsconfig.json WatchType: Type roots
 Finishing updateGraphWorker: Project: /src/project/tsconfig.json Version: 1 structureChanged: true structureIsReused:: SafeModuleCache Elapsed:: *ms
@@ -179,58 +171,30 @@ response:{"responseRequired":false}
 Starting updateGraphWorker: Project: /src/project/tsconfig.json
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/src/project/node_modules/pkg0/package.json' exists according to earlier cached lookups.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/src/project/node_modules/pkg2/package.json' exists according to earlier cached lookups.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/src/project/node_modules/@types/pkg4/package.json' does not exist according to earlier cached lookups.
-File '/src/project/node_modules/@types/package.json' does not exist according to earlier cached lookups.
-File '/src/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/' has no containing package.json scope according to cache.
+Directory '/src/project/node_modules/pkg0' resolves to '/src/project/node_modules/pkg0/package.json' scope according to cache.
+Directory '/src/project' has no containing package.json scope according to cache.
+Directory '/src/project/node_modules/pkg2' resolves to '/src/project/node_modules/pkg2/package.json' scope according to cache.
+Directory '/src/project' has no containing package.json scope according to cache.
+Directory '/src/project' has no containing package.json scope according to cache.
+Directory '/src/project' has no containing package.json scope according to cache.
+Directory '/src/project/node_modules/@types/pkg4' has no containing package.json scope according to cache.
+Directory '/src/project' has no containing package.json scope according to cache.
 Reusing resolution of module 'pkg0' from '/src/project/fileWithImports.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg0/import.d.ts' with Package ID 'pkg0/import.d.ts@0.0.1'.
 Reusing resolution of module 'pkg1' from '/src/project/fileWithImports.ts' of old program, it was not resolved.
-File '/src/project/node_modules/pkg0/package.json' exists according to earlier cached lookups.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/src/project/node_modules/pkg0' resolves to '/src/project/node_modules/pkg0/package.json' scope according to cache.
+Directory '/src/project' has no containing package.json scope according to cache.
 Reusing resolution of type reference directive 'pkg2' from '/src/project/fileWithTypeRefs.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg2/import.d.ts' with Package ID 'pkg2/import.d.ts@0.0.1'.
 Reusing resolution of type reference directive 'pkg3' from '/src/project/fileWithTypeRefs.ts' of old program, it was not resolved.
-File '/src/project/node_modules/pkg2/package.json' exists according to earlier cached lookups.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/src/project/node_modules/pkg2' resolves to '/src/project/node_modules/pkg2/package.json' scope according to cache.
+Directory '/src/project' has no containing package.json scope according to cache.
 ======== Resolving module 'pkg0' from '/src/project/randomFileForImport.ts'. ========
 Resolution for module 'pkg0' was found in cache from location '/src/project'.
 ======== Module name 'pkg0' was successfully resolved to '/src/project/node_modules/pkg0/import.d.ts' with Package ID 'pkg0/import.d.ts@0.0.1'. ========
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/src/project' has no containing package.json scope according to cache.
 Reusing resolution of type reference directive 'pkg4' from '/src/project/__inferred type names__.ts' of old program, it was successfully resolved to '/src/project/node_modules/@types/pkg4/index.d.ts'.
-File '/src/project/node_modules/@types/pkg4/package.json' does not exist according to earlier cached lookups.
-File '/src/project/node_modules/@types/package.json' does not exist according to earlier cached lookups.
-File '/src/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/a/lib/package.json' does not exist according to earlier cached lookups.
-File '/a/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/src/project/node_modules/@types/pkg4' has no containing package.json scope according to cache.
+Directory '/a/lib' has no containing package.json scope according to cache.
 Finishing updateGraphWorker: Project: /src/project/tsconfig.json Version: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Different program with same set of files
 modify randomFileForTypeRef by adding typeRef
@@ -239,59 +203,31 @@ response:{"responseRequired":false}
 Starting updateGraphWorker: Project: /src/project/tsconfig.json
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/src/project/node_modules/pkg0/package.json' exists according to earlier cached lookups.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/src/project/node_modules/pkg2/package.json' exists according to earlier cached lookups.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/src/project/node_modules/@types/pkg4/package.json' does not exist according to earlier cached lookups.
-File '/src/project/node_modules/@types/package.json' does not exist according to earlier cached lookups.
-File '/src/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/' has no containing package.json scope according to cache.
+Directory '/src/project/node_modules/pkg0' resolves to '/src/project/node_modules/pkg0/package.json' scope according to cache.
+Directory '/src/project' has no containing package.json scope according to cache.
+Directory '/src/project/node_modules/pkg2' resolves to '/src/project/node_modules/pkg2/package.json' scope according to cache.
+Directory '/src/project' has no containing package.json scope according to cache.
+Directory '/src/project' has no containing package.json scope according to cache.
+Directory '/src/project' has no containing package.json scope according to cache.
+Directory '/src/project/node_modules/@types/pkg4' has no containing package.json scope according to cache.
+Directory '/src/project' has no containing package.json scope according to cache.
 Reusing resolution of module 'pkg0' from '/src/project/fileWithImports.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg0/import.d.ts' with Package ID 'pkg0/import.d.ts@0.0.1'.
 Reusing resolution of module 'pkg1' from '/src/project/fileWithImports.ts' of old program, it was not resolved.
-File '/src/project/node_modules/pkg0/package.json' exists according to earlier cached lookups.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/src/project/node_modules/pkg0' resolves to '/src/project/node_modules/pkg0/package.json' scope according to cache.
+Directory '/src/project' has no containing package.json scope according to cache.
 Reusing resolution of type reference directive 'pkg2' from '/src/project/fileWithTypeRefs.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg2/import.d.ts' with Package ID 'pkg2/import.d.ts@0.0.1'.
 Reusing resolution of type reference directive 'pkg3' from '/src/project/fileWithTypeRefs.ts' of old program, it was not resolved.
-File '/src/project/node_modules/pkg2/package.json' exists according to earlier cached lookups.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/src/project/node_modules/pkg2' resolves to '/src/project/node_modules/pkg2/package.json' scope according to cache.
+Directory '/src/project' has no containing package.json scope according to cache.
 Reusing resolution of module 'pkg0' from '/src/project/randomFileForImport.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg0/import.d.ts' with Package ID 'pkg0/import.d.ts@0.0.1'.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/src/project' has no containing package.json scope according to cache.
 ======== Resolving type reference directive 'pkg2', containing file '/src/project/randomFileForTypeRef.ts'. ========
 Resolution for type reference directive 'pkg2' was found in cache from location '/src/project'.
 ======== Type reference directive 'pkg2' was successfully resolved to '/src/project/node_modules/pkg2/import.d.ts' with Package ID 'pkg2/import.d.ts@0.0.1', primary: false. ========
 Reusing resolution of type reference directive 'pkg4' from '/src/project/__inferred type names__.ts' of old program, it was successfully resolved to '/src/project/node_modules/@types/pkg4/index.d.ts'.
-File '/src/project/node_modules/@types/pkg4/package.json' does not exist according to earlier cached lookups.
-File '/src/project/node_modules/@types/package.json' does not exist according to earlier cached lookups.
-File '/src/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/a/lib/package.json' does not exist according to earlier cached lookups.
-File '/a/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/src/project/node_modules/@types/pkg4' has no containing package.json scope according to cache.
+Directory '/a/lib' has no containing package.json scope according to cache.
 Finishing updateGraphWorker: Project: /src/project/tsconfig.json Version: 3 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Different program with same set of files
 write file not resolved by import
@@ -307,30 +243,15 @@ Running: /src/project/tsconfig.json
 Starting updateGraphWorker: Project: /src/project/tsconfig.json
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/src/project/node_modules/pkg0/package.json' exists according to earlier cached lookups.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/src/project/node_modules/pkg2/package.json' exists according to earlier cached lookups.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/src/project/node_modules/@types/pkg4/package.json' does not exist according to earlier cached lookups.
-File '/src/project/node_modules/@types/package.json' does not exist according to earlier cached lookups.
-File '/src/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/' has no containing package.json scope according to cache.
+Directory '/src/project/node_modules/pkg0' resolves to '/src/project/node_modules/pkg0/package.json' scope according to cache.
+Directory '/src/project' has no containing package.json scope according to cache.
+Directory '/src/project/node_modules/pkg2' resolves to '/src/project/node_modules/pkg2/package.json' scope according to cache.
+Directory '/src/project' has no containing package.json scope according to cache.
+Directory '/src/project' has no containing package.json scope according to cache.
+Directory '/src/project' has no containing package.json scope according to cache.
+Directory '/src/project/node_modules/@types/pkg4' has no containing package.json scope according to cache.
+Directory '/src/project' has no containing package.json scope according to cache.
 Reusing resolution of module 'pkg0' from '/src/project/fileWithImports.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg0/import.d.ts' with Package ID 'pkg0/import.d.ts@0.0.1'.
 ======== Resolving module 'pkg1' from '/src/project/fileWithImports.ts'. ========
 Explicitly specified module resolution kind: 'Node16'.
@@ -346,32 +267,19 @@ File '/src/project/node_modules/pkg1/require.tsx' does not exist.
 File '/src/project/node_modules/pkg1/require.d.ts' exist - use it as a name resolution result.
 Resolving real path for '/src/project/node_modules/pkg1/require.d.ts', result '/src/project/node_modules/pkg1/require.d.ts'.
 ======== Module name 'pkg1' was successfully resolved to '/src/project/node_modules/pkg1/require.d.ts' with Package ID 'pkg1/require.d.ts@0.0.1'. ========
-File '/src/project/node_modules/pkg0/package.json' exists according to earlier cached lookups.
+Directory '/src/project/node_modules/pkg0' resolves to '/src/project/node_modules/pkg0/package.json' scope according to cache.
 File '/src/project/node_modules/pkg1/package.json' exists according to earlier cached lookups.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/src/project' has no containing package.json scope according to cache.
 Reusing resolution of type reference directive 'pkg2' from '/src/project/fileWithTypeRefs.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg2/import.d.ts' with Package ID 'pkg2/import.d.ts@0.0.1'.
 Reusing resolution of type reference directive 'pkg3' from '/src/project/fileWithTypeRefs.ts' of old program, it was not resolved.
-File '/src/project/node_modules/pkg2/package.json' exists according to earlier cached lookups.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/src/project/node_modules/pkg2' resolves to '/src/project/node_modules/pkg2/package.json' scope according to cache.
+Directory '/src/project' has no containing package.json scope according to cache.
 Reusing resolution of module 'pkg0' from '/src/project/randomFileForImport.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg0/import.d.ts' with Package ID 'pkg0/import.d.ts@0.0.1'.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/src/project' has no containing package.json scope according to cache.
 Reusing resolution of type reference directive 'pkg2' from '/src/project/randomFileForTypeRef.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg2/import.d.ts' with Package ID 'pkg2/import.d.ts@0.0.1'.
 Reusing resolution of type reference directive 'pkg4' from '/src/project/__inferred type names__.ts' of old program, it was successfully resolved to '/src/project/node_modules/@types/pkg4/index.d.ts'.
-File '/src/project/node_modules/@types/pkg4/package.json' does not exist according to earlier cached lookups.
-File '/src/project/node_modules/@types/package.json' does not exist according to earlier cached lookups.
-File '/src/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/a/lib/package.json' does not exist according to earlier cached lookups.
-File '/a/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/src/project/node_modules/@types/pkg4' has no containing package.json scope according to cache.
+Directory '/a/lib' has no containing package.json scope according to cache.
 DirectoryWatcher:: Close:: WatchInfo: /src/project 0 undefined Project: /src/project/tsconfig.json WatchType: Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /src/project 0 undefined Project: /src/project/tsconfig.json WatchType: Failed Lookup Locations
 Finishing updateGraphWorker: Project: /src/project/tsconfig.json Version: 4 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
@@ -451,38 +359,21 @@ Running: /src/project/tsconfig.json
 Starting updateGraphWorker: Project: /src/project/tsconfig.json
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/src/project/node_modules/pkg0/package.json' exists according to earlier cached lookups.
-File '/src/project/node_modules/pkg1/package.json' exists according to earlier cached lookups.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/src/project/node_modules/pkg2/package.json' exists according to earlier cached lookups.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/src/project/node_modules/@types/pkg4/package.json' does not exist according to earlier cached lookups.
-File '/src/project/node_modules/@types/package.json' does not exist according to earlier cached lookups.
-File '/src/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/' has no containing package.json scope according to cache.
+Directory '/src/project/node_modules/pkg0' resolves to '/src/project/node_modules/pkg0/package.json' scope according to cache.
+Directory '/src/project/node_modules/pkg1' resolves to '/src/project/node_modules/pkg1/package.json' scope according to cache.
+Directory '/src/project' has no containing package.json scope according to cache.
+Directory '/src/project/node_modules/pkg2' resolves to '/src/project/node_modules/pkg2/package.json' scope according to cache.
+Directory '/src/project' has no containing package.json scope according to cache.
+Directory '/src/project' has no containing package.json scope according to cache.
+Directory '/src/project' has no containing package.json scope according to cache.
+Directory '/src/project/node_modules/@types/pkg4' has no containing package.json scope according to cache.
+Directory '/src/project' has no containing package.json scope according to cache.
 Reusing resolution of module 'pkg0' from '/src/project/fileWithImports.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg0/import.d.ts' with Package ID 'pkg0/import.d.ts@0.0.1'.
 Reusing resolution of module 'pkg1' from '/src/project/fileWithImports.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg1/require.d.ts' with Package ID 'pkg1/require.d.ts@0.0.1'.
-File '/src/project/node_modules/pkg0/package.json' exists according to earlier cached lookups.
-File '/src/project/node_modules/pkg1/package.json' exists according to earlier cached lookups.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/src/project/node_modules/pkg0' resolves to '/src/project/node_modules/pkg0/package.json' scope according to cache.
+Directory '/src/project/node_modules/pkg1' resolves to '/src/project/node_modules/pkg1/package.json' scope according to cache.
+Directory '/src/project' has no containing package.json scope according to cache.
 Reusing resolution of type reference directive 'pkg2' from '/src/project/fileWithTypeRefs.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg2/import.d.ts' with Package ID 'pkg2/import.d.ts@0.0.1'.
 ======== Resolving type reference directive 'pkg3', containing file '/src/project/fileWithTypeRefs.ts', root directory '/src/project/node_modules/@types'. ========
 Resolving with primary search path '/src/project/node_modules/@types'.
@@ -493,26 +384,15 @@ File name '/src/project/node_modules/pkg3/require.js' has a '.js' extension - st
 File '/src/project/node_modules/pkg3/require.d.ts' exist - use it as a name resolution result.
 Resolving real path for '/src/project/node_modules/pkg3/require.d.ts', result '/src/project/node_modules/pkg3/require.d.ts'.
 ======== Type reference directive 'pkg3' was successfully resolved to '/src/project/node_modules/pkg3/require.d.ts' with Package ID 'pkg3/require.d.ts@0.0.1', primary: false. ========
-File '/src/project/node_modules/pkg2/package.json' exists according to earlier cached lookups.
+Directory '/src/project/node_modules/pkg2' resolves to '/src/project/node_modules/pkg2/package.json' scope according to cache.
 File '/src/project/node_modules/pkg3/package.json' exists according to earlier cached lookups.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/src/project' has no containing package.json scope according to cache.
 Reusing resolution of module 'pkg0' from '/src/project/randomFileForImport.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg0/import.d.ts' with Package ID 'pkg0/import.d.ts@0.0.1'.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/src/project' has no containing package.json scope according to cache.
 Reusing resolution of type reference directive 'pkg2' from '/src/project/randomFileForTypeRef.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg2/import.d.ts' with Package ID 'pkg2/import.d.ts@0.0.1'.
 Reusing resolution of type reference directive 'pkg4' from '/src/project/__inferred type names__.ts' of old program, it was successfully resolved to '/src/project/node_modules/@types/pkg4/index.d.ts'.
-File '/src/project/node_modules/@types/pkg4/package.json' does not exist according to earlier cached lookups.
-File '/src/project/node_modules/@types/package.json' does not exist according to earlier cached lookups.
-File '/src/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/a/lib/package.json' does not exist according to earlier cached lookups.
-File '/a/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/src/project/node_modules/@types/pkg4' has no containing package.json scope according to cache.
+Directory '/a/lib' has no containing package.json scope according to cache.
 DirectoryWatcher:: Close:: WatchInfo: /src/project/node_modules 1 undefined Project: /src/project/tsconfig.json WatchType: Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /src/project/node_modules 1 undefined Project: /src/project/tsconfig.json WatchType: Failed Lookup Locations
 Finishing updateGraphWorker: Project: /src/project/tsconfig.json Version: 5 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
@@ -594,33 +474,19 @@ Running: /src/project/tsconfig.json
 Starting updateGraphWorker: Project: /src/project/tsconfig.json
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/src/project/node_modules/pkg0/package.json' exists according to earlier cached lookups.
+Directory '/' has no containing package.json scope according to cache.
+Directory '/src/project/node_modules/pkg0' resolves to '/src/project/node_modules/pkg0/package.json' scope according to cache.
 Found 'package.json' at '/src/project/node_modules/pkg1/package.json'.
 'package.json' does not have a 'typesVersions' field.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/src/project/node_modules/pkg2/package.json' exists according to earlier cached lookups.
-File '/src/project/node_modules/pkg3/package.json' exists according to earlier cached lookups.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/src/project/node_modules/@types/pkg4/package.json' does not exist according to earlier cached lookups.
-File '/src/project/node_modules/@types/package.json' does not exist according to earlier cached lookups.
-File '/src/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/src/project/node_modules/pkg1' resolves to '/src/project/node_modules/pkg1/package.json' scope according to cache.
+Directory '/src/project' has no containing package.json scope according to cache.
+Directory '/src/project/node_modules/pkg2' resolves to '/src/project/node_modules/pkg2/package.json' scope according to cache.
+Directory '/src/project/node_modules/pkg3' resolves to '/src/project/node_modules/pkg3/package.json' scope according to cache.
+Directory '/src/project' has no containing package.json scope according to cache.
+Directory '/src/project' has no containing package.json scope according to cache.
+Directory '/src/project' has no containing package.json scope according to cache.
+Directory '/src/project/node_modules/@types/pkg4' has no containing package.json scope according to cache.
+Directory '/src/project' has no containing package.json scope according to cache.
 Reusing resolution of module 'pkg0' from '/src/project/fileWithImports.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg0/import.d.ts' with Package ID 'pkg0/import.d.ts@0.0.1'.
 ======== Resolving module 'pkg1' from '/src/project/fileWithImports.ts'. ========
 Explicitly specified module resolution kind: 'Node16'.
@@ -647,32 +513,19 @@ File '/src/project/node_modules/pkg1/require1.jsx' does not exist.
 Directory '/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name 'pkg1' was not resolved. ========
-File '/src/project/node_modules/pkg0/package.json' exists according to earlier cached lookups.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/src/project/node_modules/pkg0' resolves to '/src/project/node_modules/pkg0/package.json' scope according to cache.
+Directory '/src/project' has no containing package.json scope according to cache.
 Reusing resolution of type reference directive 'pkg2' from '/src/project/fileWithTypeRefs.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg2/import.d.ts' with Package ID 'pkg2/import.d.ts@0.0.1'.
 Reusing resolution of type reference directive 'pkg3' from '/src/project/fileWithTypeRefs.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg3/require.d.ts' with Package ID 'pkg3/require.d.ts@0.0.1'.
-File '/src/project/node_modules/pkg2/package.json' exists according to earlier cached lookups.
-File '/src/project/node_modules/pkg3/package.json' exists according to earlier cached lookups.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/src/project/node_modules/pkg2' resolves to '/src/project/node_modules/pkg2/package.json' scope according to cache.
+Directory '/src/project/node_modules/pkg3' resolves to '/src/project/node_modules/pkg3/package.json' scope according to cache.
+Directory '/src/project' has no containing package.json scope according to cache.
 Reusing resolution of module 'pkg0' from '/src/project/randomFileForImport.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg0/import.d.ts' with Package ID 'pkg0/import.d.ts@0.0.1'.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/src/project' has no containing package.json scope according to cache.
 Reusing resolution of type reference directive 'pkg2' from '/src/project/randomFileForTypeRef.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg2/import.d.ts' with Package ID 'pkg2/import.d.ts@0.0.1'.
 Reusing resolution of type reference directive 'pkg4' from '/src/project/__inferred type names__.ts' of old program, it was successfully resolved to '/src/project/node_modules/@types/pkg4/index.d.ts'.
-File '/src/project/node_modules/@types/pkg4/package.json' does not exist according to earlier cached lookups.
-File '/src/project/node_modules/@types/package.json' does not exist according to earlier cached lookups.
-File '/src/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/a/lib/package.json' does not exist according to earlier cached lookups.
-File '/a/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/src/project/node_modules/@types/pkg4' has no containing package.json scope according to cache.
+Directory '/a/lib' has no containing package.json scope according to cache.
 DirectoryWatcher:: Added:: WatchInfo: /src/project/node_modules 1 undefined Project: /src/project/tsconfig.json WatchType: Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /src/project/node_modules 1 undefined Project: /src/project/tsconfig.json WatchType: Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /src/project 0 undefined Project: /src/project/tsconfig.json WatchType: Failed Lookup Locations
@@ -754,31 +607,16 @@ Running: /src/project/tsconfig.json
 Starting updateGraphWorker: Project: /src/project/tsconfig.json
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/src/project/node_modules/pkg0/package.json' exists according to earlier cached lookups.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/src/project/node_modules/pkg2/package.json' exists according to earlier cached lookups.
-File '/src/project/node_modules/pkg3/package.json' exists according to earlier cached lookups.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/src/project/node_modules/@types/pkg4/package.json' does not exist according to earlier cached lookups.
-File '/src/project/node_modules/@types/package.json' does not exist according to earlier cached lookups.
-File '/src/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/' has no containing package.json scope according to cache.
+Directory '/src/project/node_modules/pkg0' resolves to '/src/project/node_modules/pkg0/package.json' scope according to cache.
+Directory '/src/project' has no containing package.json scope according to cache.
+Directory '/src/project/node_modules/pkg2' resolves to '/src/project/node_modules/pkg2/package.json' scope according to cache.
+Directory '/src/project/node_modules/pkg3' resolves to '/src/project/node_modules/pkg3/package.json' scope according to cache.
+Directory '/src/project' has no containing package.json scope according to cache.
+Directory '/src/project' has no containing package.json scope according to cache.
+Directory '/src/project' has no containing package.json scope according to cache.
+Directory '/src/project/node_modules/@types/pkg4' has no containing package.json scope according to cache.
+Directory '/src/project' has no containing package.json scope according to cache.
 Reusing resolution of module 'pkg0' from '/src/project/fileWithImports.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg0/import.d.ts' with Package ID 'pkg0/import.d.ts@0.0.1'.
 ======== Resolving module 'pkg1' from '/src/project/fileWithImports.ts'. ========
 Explicitly specified module resolution kind: 'Node16'.
@@ -794,33 +632,20 @@ File '/src/project/node_modules/pkg1/require1.tsx' does not exist.
 File '/src/project/node_modules/pkg1/require1.d.ts' exist - use it as a name resolution result.
 Resolving real path for '/src/project/node_modules/pkg1/require1.d.ts', result '/src/project/node_modules/pkg1/require1.d.ts'.
 ======== Module name 'pkg1' was successfully resolved to '/src/project/node_modules/pkg1/require1.d.ts' with Package ID 'pkg1/require1.d.ts@0.0.1'. ========
-File '/src/project/node_modules/pkg0/package.json' exists according to earlier cached lookups.
+Directory '/src/project/node_modules/pkg0' resolves to '/src/project/node_modules/pkg0/package.json' scope according to cache.
 File '/src/project/node_modules/pkg1/package.json' exists according to earlier cached lookups.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/src/project' has no containing package.json scope according to cache.
 Reusing resolution of type reference directive 'pkg2' from '/src/project/fileWithTypeRefs.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg2/import.d.ts' with Package ID 'pkg2/import.d.ts@0.0.1'.
 Reusing resolution of type reference directive 'pkg3' from '/src/project/fileWithTypeRefs.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg3/require.d.ts' with Package ID 'pkg3/require.d.ts@0.0.1'.
-File '/src/project/node_modules/pkg2/package.json' exists according to earlier cached lookups.
-File '/src/project/node_modules/pkg3/package.json' exists according to earlier cached lookups.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/src/project/node_modules/pkg2' resolves to '/src/project/node_modules/pkg2/package.json' scope according to cache.
+Directory '/src/project/node_modules/pkg3' resolves to '/src/project/node_modules/pkg3/package.json' scope according to cache.
+Directory '/src/project' has no containing package.json scope according to cache.
 Reusing resolution of module 'pkg0' from '/src/project/randomFileForImport.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg0/import.d.ts' with Package ID 'pkg0/import.d.ts@0.0.1'.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/src/project' has no containing package.json scope according to cache.
 Reusing resolution of type reference directive 'pkg2' from '/src/project/randomFileForTypeRef.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg2/import.d.ts' with Package ID 'pkg2/import.d.ts@0.0.1'.
 Reusing resolution of type reference directive 'pkg4' from '/src/project/__inferred type names__.ts' of old program, it was successfully resolved to '/src/project/node_modules/@types/pkg4/index.d.ts'.
-File '/src/project/node_modules/@types/pkg4/package.json' does not exist according to earlier cached lookups.
-File '/src/project/node_modules/@types/package.json' does not exist according to earlier cached lookups.
-File '/src/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/a/lib/package.json' does not exist according to earlier cached lookups.
-File '/a/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/src/project/node_modules/@types/pkg4' has no containing package.json scope according to cache.
+Directory '/a/lib' has no containing package.json scope according to cache.
 DirectoryWatcher:: Close:: WatchInfo: /src/project/node_modules 1 undefined Project: /src/project/tsconfig.json WatchType: Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /src/project/node_modules 1 undefined Project: /src/project/tsconfig.json WatchType: Failed Lookup Locations
 DirectoryWatcher:: Close:: WatchInfo: /src/project 0 undefined Project: /src/project/tsconfig.json WatchType: Failed Lookup Locations
@@ -905,32 +730,21 @@ Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Elapsed:: *ms DirectoryWatcher:: Triggered with /src/project/fileWithImports.ts :: WatchInfo: /src/project 0 undefined Config: /src/project/tsconfig.json WatchType: Wild card directory
 Running: /src/project/tsconfig.json
 Starting updateGraphWorker: Project: /src/project/tsconfig.json
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/src/project' has no containing package.json scope according to cache.
 Reusing resolution of type reference directive 'pkg2' from '/src/project/fileWithTypeRefs.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg2/import.d.ts' with Package ID 'pkg2/import.d.ts@0.0.1'.
 Reusing resolution of type reference directive 'pkg3' from '/src/project/fileWithTypeRefs.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg3/require.d.ts' with Package ID 'pkg3/require.d.ts@0.0.1'.
-File '/src/project/node_modules/pkg2/package.json' exists according to earlier cached lookups.
-File '/src/project/node_modules/pkg3/package.json' exists according to earlier cached lookups.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/src/project/node_modules/pkg2' resolves to '/src/project/node_modules/pkg2/package.json' scope according to cache.
+Directory '/src/project/node_modules/pkg3' resolves to '/src/project/node_modules/pkg3/package.json' scope according to cache.
+Directory '/src/project' has no containing package.json scope according to cache.
 Reusing resolution of module 'pkg0' from '/src/project/randomFileForImport.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg0/import.d.ts' with Package ID 'pkg0/import.d.ts@0.0.1'.
-File '/src/project/node_modules/pkg0/package.json' exists according to earlier cached lookups.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/src/project/node_modules/pkg0' resolves to '/src/project/node_modules/pkg0/package.json' scope according to cache.
+Directory '/src/project' has no containing package.json scope according to cache.
 Reusing resolution of type reference directive 'pkg2' from '/src/project/randomFileForTypeRef.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg2/import.d.ts' with Package ID 'pkg2/import.d.ts@0.0.1'.
 Reusing resolution of type reference directive 'pkg4' from '/src/project/__inferred type names__.ts' of old program, it was successfully resolved to '/src/project/node_modules/@types/pkg4/index.d.ts'.
-File '/src/project/node_modules/@types/pkg4/package.json' does not exist according to earlier cached lookups.
-File '/src/project/node_modules/@types/package.json' does not exist according to earlier cached lookups.
-File '/src/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/src/project/node_modules/@types/pkg4' has no containing package.json scope according to cache.
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/' has no containing package.json scope according to cache.
 FileWatcher:: Close:: WatchInfo: /src/project/node_modules/pkg1/package.json 2000 undefined Project: /src/project/tsconfig.json WatchType: File location affecting resolution
 Finishing updateGraphWorker: Project: /src/project/tsconfig.json Version: 8 structureChanged: true structureIsReused:: SafeModuleCache Elapsed:: *ms
 Project '/src/project/tsconfig.json' (Configured)
@@ -1003,26 +817,17 @@ Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Elapsed:: *ms DirectoryWatcher:: Triggered with /src/project/fileWithTypeRefs.ts :: WatchInfo: /src/project 0 undefined Config: /src/project/tsconfig.json WatchType: Wild card directory
 Running: /src/project/tsconfig.json
 Starting updateGraphWorker: Project: /src/project/tsconfig.json
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/src/project' has no containing package.json scope according to cache.
 Reusing resolution of module 'pkg0' from '/src/project/randomFileForImport.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg0/import.d.ts' with Package ID 'pkg0/import.d.ts@0.0.1'.
-File '/src/project/node_modules/pkg0/package.json' exists according to earlier cached lookups.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/src/project/node_modules/pkg0' resolves to '/src/project/node_modules/pkg0/package.json' scope according to cache.
+Directory '/src/project' has no containing package.json scope according to cache.
 Reusing resolution of type reference directive 'pkg2' from '/src/project/randomFileForTypeRef.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg2/import.d.ts' with Package ID 'pkg2/import.d.ts@0.0.1'.
-File '/src/project/node_modules/pkg2/package.json' exists according to earlier cached lookups.
+Directory '/src/project/node_modules/pkg2' resolves to '/src/project/node_modules/pkg2/package.json' scope according to cache.
 Reusing resolution of type reference directive 'pkg4' from '/src/project/__inferred type names__.ts' of old program, it was successfully resolved to '/src/project/node_modules/@types/pkg4/index.d.ts'.
-File '/src/project/node_modules/@types/pkg4/package.json' does not exist according to earlier cached lookups.
-File '/src/project/node_modules/@types/package.json' does not exist according to earlier cached lookups.
-File '/src/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/src/project/node_modules/@types/pkg4' has no containing package.json scope according to cache.
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/' has no containing package.json scope according to cache.
 FileWatcher:: Close:: WatchInfo: /src/project/node_modules/pkg3/package.json 2000 undefined Project: /src/project/tsconfig.json WatchType: File location affecting resolution
 Finishing updateGraphWorker: Project: /src/project/tsconfig.json Version: 9 structureChanged: true structureIsReused:: SafeModuleCache Elapsed:: *ms
 Project '/src/project/tsconfig.json' (Configured)
@@ -1084,11 +889,9 @@ Running: /src/project/tsconfig.json
 Starting updateGraphWorker: Project: /src/project/tsconfig.json
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/src/project/node_modules/pkg0/package.json' exists according to earlier cached lookups.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/' has no containing package.json scope according to cache.
+Directory '/src/project/node_modules/pkg0' resolves to '/src/project/node_modules/pkg0/package.json' scope according to cache.
+Directory '/src/project' has no containing package.json scope according to cache.
 ======== Resolving module 'pkg0' from '/src/project/randomFileForImport.ts'. ========
 Explicitly specified module resolution kind: 'Node16'.
 File '/src/project/package.json' does not exist according to earlier cached lookups.
@@ -1113,21 +916,12 @@ File '/src/project/node_modules/pkg0/import.jsx' does not exist.
 Directory '/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name 'pkg0' was not resolved. ========
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/src/project' has no containing package.json scope according to cache.
 Reusing resolution of type reference directive 'pkg2' from '/src/project/randomFileForTypeRef.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg2/import.d.ts' with Package ID 'pkg2/import.d.ts@0.0.1'.
-File '/src/project/node_modules/pkg2/package.json' exists according to earlier cached lookups.
+Directory '/src/project/node_modules/pkg2' resolves to '/src/project/node_modules/pkg2/package.json' scope according to cache.
 Reusing resolution of type reference directive 'pkg4' from '/src/project/__inferred type names__.ts' of old program, it was successfully resolved to '/src/project/node_modules/@types/pkg4/index.d.ts'.
-File '/src/project/node_modules/@types/pkg4/package.json' does not exist according to earlier cached lookups.
-File '/src/project/node_modules/@types/package.json' does not exist according to earlier cached lookups.
-File '/src/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/a/lib/package.json' does not exist according to earlier cached lookups.
-File '/a/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/src/project/node_modules/@types/pkg4' has no containing package.json scope according to cache.
+Directory '/a/lib' has no containing package.json scope according to cache.
 DirectoryWatcher:: Added:: WatchInfo: /src/project/node_modules 1 undefined Project: /src/project/tsconfig.json WatchType: Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /src/project/node_modules 1 undefined Project: /src/project/tsconfig.json WatchType: Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /src/project 0 undefined Project: /src/project/tsconfig.json WatchType: Failed Lookup Locations
@@ -1191,38 +985,25 @@ Running: /src/project/tsconfig.json
 Starting updateGraphWorker: Project: /src/project/tsconfig.json
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-Found 'package.json' at '/src/project/node_modules/pkg2/package.json'.
-'package.json' does not have a 'typesVersions' field.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/' has no containing package.json scope according to cache.
+Directory '/src/project' has no containing package.json scope according to cache.
+Directory '/src/project/node_modules/pkg2' resolves to '/src/project/node_modules/pkg2/package.json' scope according to cache.
+Directory '/src/project' has no containing package.json scope according to cache.
 Reusing resolution of module 'pkg0' from '/src/project/randomFileForImport.ts' of old program, it was not resolved.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/src/project' has no containing package.json scope according to cache.
 ======== Resolving type reference directive 'pkg2', containing file '/src/project/randomFileForTypeRef.ts', root directory '/src/project/node_modules/@types'. ========
 Resolving with primary search path '/src/project/node_modules/@types'.
 Looking up in 'node_modules' folder, initial location '/src/project'.
-File '/src/project/node_modules/pkg2/package.json' exists according to earlier cached lookups.
+Found 'package.json' at '/src/project/node_modules/pkg2/package.json'.
+'package.json' does not have a 'typesVersions' field.
 File name '/src/project/node_modules/pkg2/import.js' has a '.js' extension - stripping it.
 File '/src/project/node_modules/pkg2/import.d.ts' does not exist.
 Directory '/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Type reference directive 'pkg2' was not resolved. ========
 Reusing resolution of type reference directive 'pkg4' from '/src/project/__inferred type names__.ts' of old program, it was successfully resolved to '/src/project/node_modules/@types/pkg4/index.d.ts'.
-File '/src/project/node_modules/@types/pkg4/package.json' does not exist according to earlier cached lookups.
-File '/src/project/node_modules/@types/package.json' does not exist according to earlier cached lookups.
-File '/src/project/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/src/project/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/a/lib/package.json' does not exist according to earlier cached lookups.
-File '/a/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/src/project/node_modules/@types/pkg4' has no containing package.json scope according to cache.
+Directory '/a/lib' has no containing package.json scope according to cache.
 Finishing updateGraphWorker: Project: /src/project/tsconfig.json Version: 11 structureChanged: true structureIsReused:: SafeModuleCache Elapsed:: *ms
 Project '/src/project/tsconfig.json' (Configured)
 	Files (4)

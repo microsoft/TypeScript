@@ -98,17 +98,14 @@ File '/package.json' does not exist according to earlier cached lookups.
 File '/user/username/projects/myproject/src/package.json' does not exist according to earlier cached lookups.
 Found 'package.json' at '/user/username/projects/myproject/package.json'.
 'package.json' does not have a 'typesVersions' field.
-File '/user/username/projects/myproject/src/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/myproject/package.json' exists according to earlier cached lookups.
+Directory '/user/username/projects/myproject/src' resolves to '/user/username/projects/myproject/package.json' scope according to cache.
 ======== Resolving module './fileB.mjs' from '/user/username/projects/myproject/src/fileA.ts'. ========
 Module resolution kind is not specified, using 'Node16'.
 Loading module as file / folder, candidate module location '/user/username/projects/myproject/src/fileB.mjs', target file type 'TypeScript'.
 File name '/user/username/projects/myproject/src/fileB.mjs' has a '.mjs' extension - stripping it.
 File '/user/username/projects/myproject/src/fileB.mts' exist - use it as a name resolution result.
 ======== Module name './fileB.mjs' was successfully resolved to '/user/username/projects/myproject/src/fileB.mts'. ========
-File '/a/lib/package.json' does not exist according to earlier cached lookups.
-File '/a/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/a/lib' has no containing package.json scope according to cache.
 DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/src 0 undefined Project: /user/username/projects/myproject/src/tsconfig.json WatchType: Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/src 0 undefined Project: /user/username/projects/myproject/src/tsconfig.json WatchType: Failed Lookup Locations
 Finishing updateGraphWorker: Project: /user/username/projects/myproject/src/tsconfig.json Version: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
@@ -160,8 +157,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 File '/user/username/projects/myproject/src/package.json' does not exist according to earlier cached lookups.
 Found 'package.json' at '/user/username/projects/myproject/package.json'.
 'package.json' does not have a 'typesVersions' field.
-File '/user/username/projects/myproject/src/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/myproject/package.json' exists according to earlier cached lookups.
+Directory '/user/username/projects/myproject/src' resolves to '/user/username/projects/myproject/package.json' scope according to cache.
 ======== Resolving module './fileB.mjs' from '/user/username/projects/myproject/src/fileA.ts'. ========
 Module resolution kind is not specified, using 'Node16'.
 Loading module as file / folder, candidate module location '/user/username/projects/myproject/src/fileB.mjs', target file type 'TypeScript'.
@@ -171,9 +167,7 @@ File '/user/username/projects/myproject/src/fileB.mjs.d.ts' does not exist.
 File name '/user/username/projects/myproject/src/fileB.mjs' has a '.mjs' extension - stripping it.
 File '/user/username/projects/myproject/src/fileB.mts' exist - use it as a name resolution result.
 ======== Module name './fileB.mjs' was successfully resolved to '/user/username/projects/myproject/src/fileB.mts'. ========
-File '/a/lib/package.json' does not exist according to earlier cached lookups.
-File '/a/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/a/lib' has no containing package.json scope according to cache.
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 0 undefined Project: /user/username/projects/myproject/src/tsconfig.json WatchType: Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 0 undefined Project: /user/username/projects/myproject/src/tsconfig.json WatchType: Failed Lookup Locations
 Finishing updateGraphWorker: Project: /user/username/projects/myproject/src/tsconfig.json Version: 3 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
@@ -228,17 +222,10 @@ File '/user/username/projects/myproject/package.json' does not exist.
 File '/user/username/projects/package.json' does not exist.
 File '/user/username/package.json' does not exist.
 File '/user/package.json' does not exist.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/myproject/src/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/' has no containing package.json scope according to cache.
+Directory '/user/username/projects/myproject/src' has no containing package.json scope according to cache.
 Reusing resolution of module './fileB.mjs' from '/user/username/projects/myproject/src/fileA.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/src/fileB.mts'.
-File '/a/lib/package.json' does not exist according to earlier cached lookups.
-File '/a/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/a/lib' has no containing package.json scope according to cache.
 FileWatcher:: Added:: WatchInfo: /user/username/projects/package.json 2000 undefined Project: /user/username/projects/myproject/src/tsconfig.json WatchType: File location affecting resolution
 Finishing updateGraphWorker: Project: /user/username/projects/myproject/src/tsconfig.json Version: 4 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Different program with same set of files
@@ -287,11 +274,8 @@ File '/package.json' does not exist according to earlier cached lookups.
 File '/user/username/projects/myproject/src/package.json' does not exist according to earlier cached lookups.
 Found 'package.json' at '/user/username/projects/myproject/package.json'.
 'package.json' does not have a 'typesVersions' field.
-File '/user/username/projects/myproject/src/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/myproject/package.json' exists according to earlier cached lookups.
-File '/a/lib/package.json' does not exist according to earlier cached lookups.
-File '/a/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/user/username/projects/myproject/src' resolves to '/user/username/projects/myproject/package.json' scope according to cache.
+Directory '/a/lib' has no containing package.json scope according to cache.
 DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/src 0 undefined Project: /user/username/projects/myproject/src/tsconfig.json WatchType: Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/src 0 undefined Project: /user/username/projects/myproject/src/tsconfig.json WatchType: Failed Lookup Locations
 FileWatcher:: Close:: WatchInfo: /user/username/projects/package.json 2000 undefined Project: /user/username/projects/myproject/src/tsconfig.json WatchType: File location affecting resolution
@@ -344,16 +328,9 @@ File '/user/username/projects/myproject/package.json' does not exist.
 File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
 File '/user/username/package.json' does not exist according to earlier cached lookups.
 File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/myproject/src/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/a/lib/package.json' does not exist according to earlier cached lookups.
-File '/a/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/' has no containing package.json scope according to cache.
+Directory '/user/username/projects/myproject/src' has no containing package.json scope according to cache.
+Directory '/a/lib' has no containing package.json scope according to cache.
 FileWatcher:: Added:: WatchInfo: /user/username/projects/package.json 2000 undefined Project: /user/username/projects/myproject/src/tsconfig.json WatchType: File location affecting resolution
 Finishing updateGraphWorker: Project: /user/username/projects/myproject/src/tsconfig.json Version: 6 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Different program with same set of files

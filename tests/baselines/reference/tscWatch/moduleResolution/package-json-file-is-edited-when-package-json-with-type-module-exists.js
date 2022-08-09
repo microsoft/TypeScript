@@ -154,8 +154,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 File '/user/username/projects/myproject/src/package.json' does not exist according to earlier cached lookups.
 Found 'package.json' at '/user/username/projects/myproject/package.json'.
 'package.json' does not have a 'typesVersions' field.
-File '/user/username/projects/myproject/src/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/myproject/package.json' exists according to earlier cached lookups.
+Directory '/user/username/projects/myproject/src' resolves to '/user/username/projects/myproject/package.json' scope according to cache.
 ======== Resolving module './fileB.mjs' from '/user/username/projects/myproject/src/fileA.ts'. ========
 Module resolution kind is not specified, using 'Node16'.
 Loading module as file / folder, candidate module location '/user/username/projects/myproject/src/fileB.mjs', target file type 'TypeScript'.
@@ -173,9 +172,7 @@ File name '/user/username/projects/myproject/src/fileB.mjs' has a '.mjs' extensi
 File '/user/username/projects/myproject/src/fileB.mjs' does not exist.
 Directory '/user/username/projects/myproject/src/fileB.mjs' does not exist, skipping all lookups in it.
 ======== Module name './fileB.mjs' was not resolved. ========
-File '/a/lib/package.json' does not exist according to earlier cached lookups.
-File '/a/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/a/lib' has no containing package.json scope according to cache.
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/fileB.mjs 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/fileB.mjs 1 undefined Failed Lookup Locations
 [96msrc/fileA.ts[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS2307: [0mCannot find module './fileB.mjs' or its corresponding type declarations.
@@ -265,8 +262,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 File '/user/username/projects/myproject/src/package.json' does not exist according to earlier cached lookups.
 Found 'package.json' at '/user/username/projects/myproject/package.json'.
 'package.json' does not have a 'typesVersions' field.
-File '/user/username/projects/myproject/src/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/myproject/package.json' exists according to earlier cached lookups.
+Directory '/user/username/projects/myproject/src' resolves to '/user/username/projects/myproject/package.json' scope according to cache.
 ======== Resolving module './fileB.mjs' from '/user/username/projects/myproject/src/fileA.ts'. ========
 Module resolution kind is not specified, using 'Node16'.
 Loading module as file / folder, candidate module location '/user/username/projects/myproject/src/fileB.mjs', target file type 'TypeScript'.
@@ -279,9 +275,7 @@ File name '/user/username/projects/myproject/src/fileB.mjs' has a '.mjs' extensi
 File '/user/username/projects/myproject/src/fileB.mjs' does not exist.
 Directory '/user/username/projects/myproject/src/fileB.mjs' does not exist, skipping all lookups in it.
 ======== Module name './fileB.mjs' was not resolved. ========
-File '/a/lib/package.json' does not exist according to earlier cached lookups.
-File '/a/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/a/lib' has no containing package.json scope according to cache.
 DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/src/fileB.mjs 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/src/fileB.mjs 1 undefined Failed Lookup Locations
 [96msrc/fileA.ts[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS2307: [0mCannot find module './fileB.mjs' or its corresponding type declarations.
@@ -367,13 +361,8 @@ File '/user/username/projects/myproject/package.json' does not exist.
 File '/user/username/projects/package.json' does not exist.
 File '/user/username/package.json' does not exist.
 File '/user/package.json' does not exist.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/myproject/src/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/' has no containing package.json scope according to cache.
+Directory '/user/username/projects/myproject/src' has no containing package.json scope according to cache.
 ======== Resolving module './fileB.mjs' from '/user/username/projects/myproject/src/fileA.ts'. ========
 Module resolution kind is not specified, using 'Node16'.
 Loading module as file / folder, candidate module location '/user/username/projects/myproject/src/fileB.mjs', target file type 'TypeScript'.
@@ -391,9 +380,7 @@ File name '/user/username/projects/myproject/src/fileB.mjs' has a '.mjs' extensi
 File '/user/username/projects/myproject/src/fileB.mjs' does not exist.
 Directory '/user/username/projects/myproject/src/fileB.mjs' does not exist, skipping all lookups in it.
 ======== Module name './fileB.mjs' was not resolved. ========
-File '/a/lib/package.json' does not exist according to earlier cached lookups.
-File '/a/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/a/lib' has no containing package.json scope according to cache.
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/fileB.mjs 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/fileB.mjs 1 undefined Failed Lookup Locations
 FileWatcher:: Added:: WatchInfo: /user/username/projects/package.json 2000 undefined File location affecting resolution
@@ -486,12 +473,9 @@ File '/package.json' does not exist according to earlier cached lookups.
 File '/user/username/projects/myproject/src/package.json' does not exist according to earlier cached lookups.
 Found 'package.json' at '/user/username/projects/myproject/package.json'.
 'package.json' does not have a 'typesVersions' field.
-File '/user/username/projects/myproject/src/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/myproject/package.json' exists according to earlier cached lookups.
+Directory '/user/username/projects/myproject/src' resolves to '/user/username/projects/myproject/package.json' scope according to cache.
 Reusing resolution of module './fileB.mjs' from '/user/username/projects/myproject/src/fileA.ts' of old program, it was not resolved.
-File '/a/lib/package.json' does not exist according to earlier cached lookups.
-File '/a/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/a/lib' has no containing package.json scope according to cache.
 FileWatcher:: Close:: WatchInfo: /user/username/projects/package.json 2000 undefined File location affecting resolution
 [96msrc/fileA.ts[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS2307: [0mCannot find module './fileB.mjs' or its corresponding type declarations.
 
@@ -571,17 +555,10 @@ File '/user/username/projects/myproject/package.json' does not exist.
 File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
 File '/user/username/package.json' does not exist according to earlier cached lookups.
 File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/myproject/src/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/' has no containing package.json scope according to cache.
+Directory '/user/username/projects/myproject/src' has no containing package.json scope according to cache.
 Reusing resolution of module './fileB.mjs' from '/user/username/projects/myproject/src/fileA.ts' of old program, it was not resolved.
-File '/a/lib/package.json' does not exist according to earlier cached lookups.
-File '/a/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/a/lib' has no containing package.json scope according to cache.
 FileWatcher:: Added:: WatchInfo: /user/username/projects/package.json 2000 undefined File location affecting resolution
 [96msrc/fileA.ts[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS2307: [0mCannot find module './fileB.mjs' or its corresponding type declarations.
 

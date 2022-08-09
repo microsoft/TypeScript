@@ -51,11 +51,7 @@ File '/user/username/projects/package.json' does not exist.
 File '/user/username/package.json' does not exist.
 File '/user/package.json' does not exist.
 File '/package.json' does not exist.
-File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/user/username/projects/myproject' has no containing package.json scope according to cache.
 ======== Resolving module 'pkg' from '/user/username/projects/myproject/index.ts'. ========
 Explicitly specified module resolution kind: 'Node16'.
 File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
@@ -114,7 +110,7 @@ File '/user/username/projects/myproject/a.ts' exist - use it as a name resolutio
 File '/user/username/projects/myproject/node_modules/pkg/package.json' exists according to earlier cached lookups.
 File '/a/lib/package.json' does not exist.
 File '/a/package.json' does not exist.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/' has no containing package.json scope according to cache.
 [96mindex.ts[0m:[93m2[0m:[93m39[0m - [91merror[0m[90m TS2307: [0mCannot find module 'pkg1' or its corresponding type declarations.
 
 [7m2[0m import type { RequireInterface } from "pkg1" assert { "resolution-mode": "require" };
@@ -206,38 +202,20 @@ Output::
 
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/myproject/node_modules/pkg/package.json' exists according to earlier cached lookups.
-File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/' has no containing package.json scope according to cache.
+Directory '/user/username/projects/myproject' has no containing package.json scope according to cache.
+Directory '/user/username/projects/myproject/node_modules/pkg' resolves to '/user/username/projects/myproject/node_modules/pkg/package.json' scope according to cache.
+Directory '/user/username/projects/myproject' has no containing package.json scope according to cache.
+Directory '/user/username/projects/myproject' has no containing package.json scope according to cache.
 ======== Resolving module 'pkg' from '/user/username/projects/myproject/a.ts'. ========
 Resolution for module 'pkg' was found in cache from location '/user/username/projects/myproject'.
 ======== Module name 'pkg' was successfully resolved to '/user/username/projects/myproject/node_modules/pkg/import.d.ts' with Package ID 'pkg/import.d.ts@0.0.1'. ========
-File '/user/username/projects/myproject/node_modules/pkg/package.json' exists according to earlier cached lookups.
-File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/user/username/projects/myproject/node_modules/pkg' resolves to '/user/username/projects/myproject/node_modules/pkg/package.json' scope according to cache.
+Directory '/user/username/projects/myproject' has no containing package.json scope according to cache.
 Reusing resolution of module 'pkg' from '/user/username/projects/myproject/index.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/node_modules/pkg/import.d.ts' with Package ID 'pkg/import.d.ts@0.0.1'.
 Reusing resolution of module './a' from '/user/username/projects/myproject/index.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/a.ts'.
 Reusing resolution of module 'pkg1' from '/user/username/projects/myproject/index.ts' of old program, it was not resolved.
-File '/a/lib/package.json' does not exist according to earlier cached lookups.
-File '/a/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/a/lib' has no containing package.json scope according to cache.
 [96mindex.ts[0m:[93m2[0m:[93m39[0m - [91merror[0m[90m TS2307: [0mCannot find module 'pkg1' or its corresponding type declarations.
 
 [7m2[0m import type { RequireInterface } from "pkg1" assert { "resolution-mode": "require" };

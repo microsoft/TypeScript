@@ -734,8 +734,7 @@ namespace ts {
 
     /*@internal*/
     export interface SourceFilePackageJsonInfo {
-        packageJsonLocations?: readonly string[];
-        packageJsonScope?: PackageJsonInfo;
+        packageJsonScope?: PackageJsonScope;
     }
 
     export interface CreateSourceFileOptions {

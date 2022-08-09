@@ -45,8 +45,8 @@ File '/src/project/package.json' exists according to earlier cached lookups.
 File '/src/project/index.ts' exist - use it as a name resolution result.
 Resolving real path for '/src/project/index.ts', result '/src/project/index.ts'.
 ======== Module name '@this/package' was successfully resolved to '/src/project/index.ts'. ========
-File '/src/project/package.json' exists according to earlier cached lookups.
-File '/src/project/package.json' exists according to earlier cached lookups.
+Directory '/src/project' resolves to '/src/project/package.json' scope according to cache.
+Directory '/src/project' resolves to '/src/project/package.json' scope according to cache.
 File '/lib/package.json' does not exist.
 File '/package.json' does not exist.
 [91merror[0m[90m TS2209: [0mThe project root is ambiguous, but is required to resolve export map entry '.' in file '/src/project/package.json'. Supply the `rootDir` compiler option to disambiguate.
@@ -257,8 +257,8 @@ Found 'package.json' at '/src/project/package.json'.
 'package.json' does not have a 'typesVersions' field.
 File '/src/project/package.json' exists according to earlier cached lookups.
 Reusing resolution of module '@this/package' from '/src/project/index.ts' found in cache from location '/src/project', it was successfully resolved to '/src/project/index.ts'.
-File '/src/project/package.json' exists according to earlier cached lookups.
-File '/src/project/package.json' exists according to earlier cached lookups.
+Directory '/src/project' resolves to '/src/project/package.json' scope according to cache.
+Directory '/src/project' resolves to '/src/project/package.json' scope according to cache.
 Reusing resolution of module '@this/package' from '/src/project/randomFileForImport.ts' found in cache from location '/src/project', it was successfully resolved to '/src/project/index.ts'.
 File '/lib/package.json' does not exist.
 File '/package.json' does not exist.

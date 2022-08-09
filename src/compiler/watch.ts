@@ -250,25 +250,25 @@ namespace ts {
         if (isExternalOrCommonJsModule(file)) {
             switch (file.impliedNodeFormat) {
                 case ModuleKind.ESNext:
-                    if (file.packageJsonScope) {
+                    if (file.packageJsonScope?.info) {
                         (result ??= []).push(chainDiagnosticMessages(
                             /*details*/ undefined,
                             Diagnostics.File_is_ECMAScript_module_because_0_has_field_type_with_value_module,
-                            toFileName(last(file.packageJsonLocations!), fileNameConvertor)
+                            toFileName(getPackageJsconLocationFromScope(file.packageJsonScope)!, fileNameConvertor)
                         ));
                     }
                     break;
                 case ModuleKind.CommonJS:
-                    if (file.packageJsonScope) {
+                    if (file.packageJsonScope?.info) {
                         (result ??= []).push(chainDiagnosticMessages(
                             /*details*/ undefined,
-                            file.packageJsonScope.packageJsonContent.type ?
+                            file.packageJsonScope.info.packageJsonContent.type ?
                                 Diagnostics.File_is_CommonJS_module_because_0_has_field_type_whose_value_is_not_module :
                                 Diagnostics.File_is_CommonJS_module_because_0_does_not_have_field_type,
-                            toFileName(last(file.packageJsonLocations!), fileNameConvertor)
+                            toFileName(getPackageJsconLocationFromScope(file.packageJsonScope)!, fileNameConvertor)
                         ));
                     }
-                    else if (file.packageJsonLocations?.length) {
+                    else if (file.packageJsonScope) {
                         (result ??= []).push(chainDiagnosticMessages(
                             /*details*/ undefined,
                             Diagnostics.File_is_CommonJS_module_because_package_json_was_not_found,
