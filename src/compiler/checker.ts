@@ -1068,6 +1068,111 @@ namespace ts {
             [".json", ".json"],
         ];
 
+        const checkSourceElementWorkerTable = new Array<undefined | ((node: any) => void)>(SyntaxKind.Count);
+        checkSourceElementWorkerTable[SyntaxKind.TypeParameter] = checkTypeParameter;
+        checkSourceElementWorkerTable[SyntaxKind.Parameter] = checkParameter;
+        checkSourceElementWorkerTable[SyntaxKind.PropertyDeclaration] = checkPropertyDeclaration;
+        checkSourceElementWorkerTable[SyntaxKind.PropertySignature] = checkPropertySignature;
+        checkSourceElementWorkerTable[SyntaxKind.ConstructorType] =
+        checkSourceElementWorkerTable[SyntaxKind.FunctionType] =
+        checkSourceElementWorkerTable[SyntaxKind.CallSignature] =
+        checkSourceElementWorkerTable[SyntaxKind.ConstructSignature] =
+        checkSourceElementWorkerTable[SyntaxKind.IndexSignature] = checkSignatureDeclaration;
+        checkSourceElementWorkerTable[SyntaxKind.MethodDeclaration] =
+        checkSourceElementWorkerTable[SyntaxKind.MethodSignature] = checkMethodDeclaration;
+        checkSourceElementWorkerTable[SyntaxKind.ClassStaticBlockDeclaration] = checkClassStaticBlockDeclaration;
+        checkSourceElementWorkerTable[SyntaxKind.Constructor] = checkConstructorDeclaration;
+        checkSourceElementWorkerTable[SyntaxKind.GetAccessor] =
+        checkSourceElementWorkerTable[SyntaxKind.SetAccessor] = checkAccessorDeclaration;
+        checkSourceElementWorkerTable[SyntaxKind.TypeReference] = checkTypeReferenceNode;
+        checkSourceElementWorkerTable[SyntaxKind.TypePredicate] = checkTypePredicate;
+        checkSourceElementWorkerTable[SyntaxKind.TypeQuery] = checkTypeQuery;
+        checkSourceElementWorkerTable[SyntaxKind.TypeLiteral] = checkTypeLiteral;
+        checkSourceElementWorkerTable[SyntaxKind.ArrayType] = checkArrayType;
+        checkSourceElementWorkerTable[SyntaxKind.TupleType] = checkTupleType;
+        checkSourceElementWorkerTable[SyntaxKind.UnionType] =
+        checkSourceElementWorkerTable[SyntaxKind.IntersectionType] = checkUnionOrIntersectionType;
+        checkSourceElementWorkerTable[SyntaxKind.ParenthesizedType] =
+        checkSourceElementWorkerTable[SyntaxKind.OptionalType] =
+        checkSourceElementWorkerTable[SyntaxKind.RestType] = (node: ParenthesizedTypeNode | OptionalTypeNode | RestTypeNode) => checkSourceElement(node.type);
+        checkSourceElementWorkerTable[SyntaxKind.ThisType] = checkThisType;
+        checkSourceElementWorkerTable[SyntaxKind.TypeOperator] = checkTypeOperator;
+        checkSourceElementWorkerTable[SyntaxKind.ConditionalType] = checkConditionalType;
+        checkSourceElementWorkerTable[SyntaxKind.InferType] = checkInferType;
+        checkSourceElementWorkerTable[SyntaxKind.TemplateLiteralType] = checkTemplateLiteralType;
+        checkSourceElementWorkerTable[SyntaxKind.ImportType] = checkImportType;
+        checkSourceElementWorkerTable[SyntaxKind.NamedTupleMember] = checkNamedTupleMember;
+        checkSourceElementWorkerTable[SyntaxKind.JSDocAugmentsTag] = checkJSDocAugmentsTag;
+        checkSourceElementWorkerTable[SyntaxKind.JSDocImplementsTag] = checkJSDocImplementsTag;
+        checkSourceElementWorkerTable[SyntaxKind.JSDocTypedefTag] =
+        checkSourceElementWorkerTable[SyntaxKind.JSDocCallbackTag] =
+        checkSourceElementWorkerTable[SyntaxKind.JSDocEnumTag] = checkJSDocTypeAliasTag;
+        checkSourceElementWorkerTable[SyntaxKind.JSDocTemplateTag] = checkJSDocTemplateTag;
+        checkSourceElementWorkerTable[SyntaxKind.JSDocTypeTag] = checkJSDocTypeTag;
+        checkSourceElementWorkerTable[SyntaxKind.JSDocLink] =
+        checkSourceElementWorkerTable[SyntaxKind.JSDocLinkCode] =
+        checkSourceElementWorkerTable[SyntaxKind.JSDocLinkPlain] = checkJSDocLinkLikeTag;
+        checkSourceElementWorkerTable[SyntaxKind.JSDocParameterTag] = checkJSDocParameterTag;
+        checkSourceElementWorkerTable[SyntaxKind.JSDocPropertyTag] = checkJSDocPropertyTag;
+        checkSourceElementWorkerTable[SyntaxKind.JSDocFunctionType] = (node: JSDocFunctionType) => {
+            checkJSDocFunctionType(node);
+            checkJSDocTypeIsInJsFile(node);
+            forEachChild(node, checkSourceElement);
+            return;
+        };
+        checkSourceElementWorkerTable[SyntaxKind.JSDocNonNullableType] =
+        checkSourceElementWorkerTable[SyntaxKind.JSDocNullableType] =
+        checkSourceElementWorkerTable[SyntaxKind.JSDocAllType] =
+        checkSourceElementWorkerTable[SyntaxKind.JSDocUnknownType] =
+        checkSourceElementWorkerTable[SyntaxKind.JSDocTypeLiteral] = (node: JSDocNonNullableType | JSDocNullableType | JSDocAllType | JSDocUnknownType | JSDocTypeLiteral) => {
+            checkJSDocTypeIsInJsFile(node);
+            forEachChild(node, checkSourceElement);
+            return;
+        };
+        checkSourceElementWorkerTable[SyntaxKind.JSDocVariadicType] = checkJSDocVariadicType;
+        checkSourceElementWorkerTable[SyntaxKind.JSDocTypeExpression] = (node: JSDocTypeExpression) => checkSourceElement(node.type);
+        checkSourceElementWorkerTable[SyntaxKind.JSDocPublicTag] =
+        checkSourceElementWorkerTable[SyntaxKind.JSDocProtectedTag] =
+        checkSourceElementWorkerTable[SyntaxKind.JSDocPrivateTag] = checkJSDocAccessibilityModifiers;
+        checkSourceElementWorkerTable[SyntaxKind.IndexedAccessType] = checkIndexedAccessType;
+        checkSourceElementWorkerTable[SyntaxKind.MappedType] = checkMappedType;
+        checkSourceElementWorkerTable[SyntaxKind.FunctionDeclaration] = checkFunctionDeclaration;
+        checkSourceElementWorkerTable[SyntaxKind.Block] =
+        checkSourceElementWorkerTable[SyntaxKind.ModuleBlock] = checkBlock;
+        checkSourceElementWorkerTable[SyntaxKind.VariableStatement] = checkVariableStatement;
+        checkSourceElementWorkerTable[SyntaxKind.ExpressionStatement] = checkExpressionStatement;
+        checkSourceElementWorkerTable[SyntaxKind.IfStatement] = checkIfStatement;
+        checkSourceElementWorkerTable[SyntaxKind.DoStatement] = checkDoStatement;
+        checkSourceElementWorkerTable[SyntaxKind.WhileStatement] = checkWhileStatement;
+        checkSourceElementWorkerTable[SyntaxKind.ForStatement] = checkForStatement;
+        checkSourceElementWorkerTable[SyntaxKind.ForInStatement] = checkForInStatement;
+        checkSourceElementWorkerTable[SyntaxKind.ForOfStatement] = checkForOfStatement;
+        checkSourceElementWorkerTable[SyntaxKind.ContinueStatement] =
+        checkSourceElementWorkerTable[SyntaxKind.BreakStatement] = checkBreakOrContinueStatement;
+        checkSourceElementWorkerTable[SyntaxKind.ReturnStatement] = checkReturnStatement;
+        checkSourceElementWorkerTable[SyntaxKind.WithStatement] = checkWithStatement;
+        checkSourceElementWorkerTable[SyntaxKind.SwitchStatement] = checkSwitchStatement;
+        checkSourceElementWorkerTable[SyntaxKind.LabeledStatement] = checkLabeledStatement;
+        checkSourceElementWorkerTable[SyntaxKind.ThrowStatement] = checkThrowStatement;
+        checkSourceElementWorkerTable[SyntaxKind.TryStatement] = checkTryStatement;
+        checkSourceElementWorkerTable[SyntaxKind.VariableDeclaration] = checkVariableDeclaration;
+        checkSourceElementWorkerTable[SyntaxKind.BindingElement] = checkBindingElement;
+        checkSourceElementWorkerTable[SyntaxKind.ClassDeclaration] = checkClassDeclaration;
+        checkSourceElementWorkerTable[SyntaxKind.InterfaceDeclaration] = checkInterfaceDeclaration;
+        checkSourceElementWorkerTable[SyntaxKind.TypeAliasDeclaration] = checkTypeAliasDeclaration;
+        checkSourceElementWorkerTable[SyntaxKind.EnumDeclaration] = checkEnumDeclaration;
+        checkSourceElementWorkerTable[SyntaxKind.ModuleDeclaration] = checkModuleDeclaration;
+        checkSourceElementWorkerTable[SyntaxKind.ImportDeclaration] = checkImportDeclaration;
+        checkSourceElementWorkerTable[SyntaxKind.ImportEqualsDeclaration] = checkImportEqualsDeclaration;
+        checkSourceElementWorkerTable[SyntaxKind.ExportDeclaration] = checkExportDeclaration;
+        checkSourceElementWorkerTable[SyntaxKind.ExportAssignment] = checkExportAssignment;
+        checkSourceElementWorkerTable[SyntaxKind.EmptyStatement] =
+        checkSourceElementWorkerTable[SyntaxKind.DebuggerStatement] = (node: EmptyStatement | DebuggerStatement) => {
+            checkGrammarStatementInAmbientContext(node);
+            return;
+        };
+        checkSourceElementWorkerTable[SyntaxKind.MissingDeclaration] = checkMissingDeclaration;
+
         initializeTypeChecker();
 
         return checker;
@@ -41714,173 +41819,7 @@ namespace ts {
                 errorOrSuggestion(compilerOptions.allowUnreachableCode === false, node, Diagnostics.Unreachable_code_detected);
             }
 
-            switch (kind) {
-                case SyntaxKind.TypeParameter:
-                    return checkTypeParameter(node as TypeParameterDeclaration);
-                case SyntaxKind.Parameter:
-                    return checkParameter(node as ParameterDeclaration);
-                case SyntaxKind.PropertyDeclaration:
-                    return checkPropertyDeclaration(node as PropertyDeclaration);
-                case SyntaxKind.PropertySignature:
-                    return checkPropertySignature(node as PropertySignature);
-                case SyntaxKind.ConstructorType:
-                case SyntaxKind.FunctionType:
-                case SyntaxKind.CallSignature:
-                case SyntaxKind.ConstructSignature:
-                case SyntaxKind.IndexSignature:
-                    return checkSignatureDeclaration(node as SignatureDeclaration);
-                case SyntaxKind.MethodDeclaration:
-                case SyntaxKind.MethodSignature:
-                    return checkMethodDeclaration(node as MethodDeclaration | MethodSignature);
-                case SyntaxKind.ClassStaticBlockDeclaration:
-                    return checkClassStaticBlockDeclaration(node as ClassStaticBlockDeclaration);
-                case SyntaxKind.Constructor:
-                    return checkConstructorDeclaration(node as ConstructorDeclaration);
-                case SyntaxKind.GetAccessor:
-                case SyntaxKind.SetAccessor:
-                    return checkAccessorDeclaration(node as AccessorDeclaration);
-                case SyntaxKind.TypeReference:
-                    return checkTypeReferenceNode(node as TypeReferenceNode);
-                case SyntaxKind.TypePredicate:
-                    return checkTypePredicate(node as TypePredicateNode);
-                case SyntaxKind.TypeQuery:
-                    return checkTypeQuery(node as TypeQueryNode);
-                case SyntaxKind.TypeLiteral:
-                    return checkTypeLiteral(node as TypeLiteralNode);
-                case SyntaxKind.ArrayType:
-                    return checkArrayType(node as ArrayTypeNode);
-                case SyntaxKind.TupleType:
-                    return checkTupleType(node as TupleTypeNode);
-                case SyntaxKind.UnionType:
-                case SyntaxKind.IntersectionType:
-                    return checkUnionOrIntersectionType(node as UnionOrIntersectionTypeNode);
-                case SyntaxKind.ParenthesizedType:
-                case SyntaxKind.OptionalType:
-                case SyntaxKind.RestType:
-                    return checkSourceElement((node as ParenthesizedTypeNode | OptionalTypeNode | RestTypeNode).type);
-                case SyntaxKind.ThisType:
-                    return checkThisType(node as ThisTypeNode);
-                case SyntaxKind.TypeOperator:
-                    return checkTypeOperator(node as TypeOperatorNode);
-                case SyntaxKind.ConditionalType:
-                    return checkConditionalType(node as ConditionalTypeNode);
-                case SyntaxKind.InferType:
-                    return checkInferType(node as InferTypeNode);
-                case SyntaxKind.TemplateLiteralType:
-                    return checkTemplateLiteralType(node as TemplateLiteralTypeNode);
-                case SyntaxKind.ImportType:
-                    return checkImportType(node as ImportTypeNode);
-                case SyntaxKind.NamedTupleMember:
-                    return checkNamedTupleMember(node as NamedTupleMember);
-                case SyntaxKind.JSDocAugmentsTag:
-                    return checkJSDocAugmentsTag(node as JSDocAugmentsTag);
-                case SyntaxKind.JSDocImplementsTag:
-                    return checkJSDocImplementsTag(node as JSDocImplementsTag);
-                case SyntaxKind.JSDocTypedefTag:
-                case SyntaxKind.JSDocCallbackTag:
-                case SyntaxKind.JSDocEnumTag:
-                    return checkJSDocTypeAliasTag(node as JSDocTypedefTag);
-                case SyntaxKind.JSDocTemplateTag:
-                    return checkJSDocTemplateTag(node as JSDocTemplateTag);
-                case SyntaxKind.JSDocTypeTag:
-                    return checkJSDocTypeTag(node as JSDocTypeTag);
-                case SyntaxKind.JSDocLink:
-                case SyntaxKind.JSDocLinkCode:
-                case SyntaxKind.JSDocLinkPlain:
-                    return checkJSDocLinkLikeTag(node as JSDocLink | JSDocLinkCode | JSDocLinkPlain);
-                case SyntaxKind.JSDocParameterTag:
-                    return checkJSDocParameterTag(node as JSDocParameterTag);
-                case SyntaxKind.JSDocPropertyTag:
-                    return checkJSDocPropertyTag(node as JSDocPropertyTag);
-                case SyntaxKind.JSDocFunctionType:
-                    checkJSDocFunctionType(node as JSDocFunctionType);
-                    // falls through
-                case SyntaxKind.JSDocNonNullableType:
-                case SyntaxKind.JSDocNullableType:
-                case SyntaxKind.JSDocAllType:
-                case SyntaxKind.JSDocUnknownType:
-                case SyntaxKind.JSDocTypeLiteral:
-                    checkJSDocTypeIsInJsFile(node);
-                    forEachChild(node, checkSourceElement);
-                    return;
-                case SyntaxKind.JSDocVariadicType:
-                    checkJSDocVariadicType(node as JSDocVariadicType);
-                    return;
-                case SyntaxKind.JSDocTypeExpression:
-                    return checkSourceElement((node as JSDocTypeExpression).type);
-                case SyntaxKind.JSDocPublicTag:
-                case SyntaxKind.JSDocProtectedTag:
-                case SyntaxKind.JSDocPrivateTag:
-                    return checkJSDocAccessibilityModifiers(node as JSDocPublicTag | JSDocProtectedTag | JSDocPrivateTag);
-                case SyntaxKind.IndexedAccessType:
-                    return checkIndexedAccessType(node as IndexedAccessTypeNode);
-                case SyntaxKind.MappedType:
-                    return checkMappedType(node as MappedTypeNode);
-                case SyntaxKind.FunctionDeclaration:
-                    return checkFunctionDeclaration(node as FunctionDeclaration);
-                case SyntaxKind.Block:
-                case SyntaxKind.ModuleBlock:
-                    return checkBlock(node as Block);
-                case SyntaxKind.VariableStatement:
-                    return checkVariableStatement(node as VariableStatement);
-                case SyntaxKind.ExpressionStatement:
-                    return checkExpressionStatement(node as ExpressionStatement);
-                case SyntaxKind.IfStatement:
-                    return checkIfStatement(node as IfStatement);
-                case SyntaxKind.DoStatement:
-                    return checkDoStatement(node as DoStatement);
-                case SyntaxKind.WhileStatement:
-                    return checkWhileStatement(node as WhileStatement);
-                case SyntaxKind.ForStatement:
-                    return checkForStatement(node as ForStatement);
-                case SyntaxKind.ForInStatement:
-                    return checkForInStatement(node as ForInStatement);
-                case SyntaxKind.ForOfStatement:
-                    return checkForOfStatement(node as ForOfStatement);
-                case SyntaxKind.ContinueStatement:
-                case SyntaxKind.BreakStatement:
-                    return checkBreakOrContinueStatement(node as BreakOrContinueStatement);
-                case SyntaxKind.ReturnStatement:
-                    return checkReturnStatement(node as ReturnStatement);
-                case SyntaxKind.WithStatement:
-                    return checkWithStatement(node as WithStatement);
-                case SyntaxKind.SwitchStatement:
-                    return checkSwitchStatement(node as SwitchStatement);
-                case SyntaxKind.LabeledStatement:
-                    return checkLabeledStatement(node as LabeledStatement);
-                case SyntaxKind.ThrowStatement:
-                    return checkThrowStatement(node as ThrowStatement);
-                case SyntaxKind.TryStatement:
-                    return checkTryStatement(node as TryStatement);
-                case SyntaxKind.VariableDeclaration:
-                    return checkVariableDeclaration(node as VariableDeclaration);
-                case SyntaxKind.BindingElement:
-                    return checkBindingElement(node as BindingElement);
-                case SyntaxKind.ClassDeclaration:
-                    return checkClassDeclaration(node as ClassDeclaration);
-                case SyntaxKind.InterfaceDeclaration:
-                    return checkInterfaceDeclaration(node as InterfaceDeclaration);
-                case SyntaxKind.TypeAliasDeclaration:
-                    return checkTypeAliasDeclaration(node as TypeAliasDeclaration);
-                case SyntaxKind.EnumDeclaration:
-                    return checkEnumDeclaration(node as EnumDeclaration);
-                case SyntaxKind.ModuleDeclaration:
-                    return checkModuleDeclaration(node as ModuleDeclaration);
-                case SyntaxKind.ImportDeclaration:
-                    return checkImportDeclaration(node as ImportDeclaration);
-                case SyntaxKind.ImportEqualsDeclaration:
-                    return checkImportEqualsDeclaration(node as ImportEqualsDeclaration);
-                case SyntaxKind.ExportDeclaration:
-                    return checkExportDeclaration(node as ExportDeclaration);
-                case SyntaxKind.ExportAssignment:
-                    return checkExportAssignment(node as ExportAssignment);
-                case SyntaxKind.EmptyStatement:
-                case SyntaxKind.DebuggerStatement:
-                    checkGrammarStatementInAmbientContext(node);
-                    return;
-                case SyntaxKind.MissingDeclaration:
-                    return checkMissingDeclaration(node);
-            }
+            return checkSourceElementWorkerTable[kind]?.(node);
         }
 
         function checkJSDocCommentWorker(node: string | readonly JSDocComment[] | undefined) {
