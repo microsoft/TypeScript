@@ -9445,8 +9445,33 @@ namespace ts {
                 // The type implied by a binding pattern is independent of context, so we check the initializer with no
                 // contextual type or, if the element itself is a binding pattern, with the type implied by that binding
                 // pattern.
-                const contextualType = isBindingPattern(element.name) ? getTypeFromBindingPattern(element.name, /*includePatternInType*/ true, /*reportErrors*/ false) : unknownType;
-                return addOptionality(widenTypeInferredFromInitializer(element, checkDeclarationInitializer(element, CheckMode.Normal, contextualType)));
+                if (isBindingPattern(element.name)) {
+                    const contextualType = getTypeFromBindingPattern(element.name, /*includePatternInType*/ true, /*reportErrors*/ false);
+                    return addOptionality(widenTypeInferredFromInitializer(element, checkDeclarationInitializer(element, CheckMode.Normal, contextualType)));
+                }
+
+                // (#49989)
+                // In cases where the intitializer is an identifier referencing a sibling symbol (i.e., one that is
+                // defined in the same declaration) a false circular relationship will be concluded. For example, take
+                // the declarations below:
+                //
+                //   const [a, b = a] = [1];
+                //   const {a, b = a} = {a: 1};
+                //
+                // Here, when the `element` is the second binding element (i.e., `b = a`) the initializer is `a` which
+                // itself is defined within the same binding pattern.
+                //
+                // So, we check the initializer expression for any references to sibling symbols and if any, then we'd
+                // conclude the binding element type as `unknownType` and thus skip further circulations in type
+                // checking.
+                const siblings = mapDefined(element.parent.elements, x => x !== element && isBindingElement(x) && isIdentifier(x.name) ? x : undefined);
+                const checkIsSiblingInvolved = (node: Node) => {
+                    const declaration = isIdentifier(node) && getReferencedValueDeclaration(node);
+                    return declaration && isBindingElement(declaration) && siblings.includes(declaration);
+                };
+                const isSiblingElementInvolded = checkIsSiblingInvolved(element.initializer) || forEachChildRecursively(element.initializer, checkIsSiblingInvolved);
+                return isSiblingElementInvolded ? anyType
+                    : addOptionality(widenTypeInferredFromInitializer(element, checkDeclarationInitializer(element, CheckMode.Normal, unknownType)));
             }
             if (isBindingPattern(element.name)) {
                 return getTypeFromBindingPattern(element.name, includePatternInType, reportErrors);
