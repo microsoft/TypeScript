@@ -97,7 +97,7 @@ namespace ts {
 
     type ForEachChildFunction = <T>(node: any, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) => T | undefined;
 
-    const forEachChildTable: (ForEachChildFunction | undefined)[] = [];
+    const forEachChildTable: ForEachChildFunction[] = [];
     const forEachChildNoOpFn: ForEachChildFunction = (_node, _cbNode, _cbNodes) => undefined;
     for (let i = 0; i < SyntaxKind.Count; i++) forEachChildTable.push(forEachChildNoOpFn);
     forEachChildTable[SyntaxKind.QualifiedName] = forEachChildInQualifiedName;
@@ -1088,7 +1088,7 @@ namespace ts {
             return;
         }
 
-        return forEachChildTable[node.kind]?.(node, cbNode, cbNodes);
+        return forEachChildTable[node.kind](node, cbNode, cbNodes);
     }
 
     /** @internal */
