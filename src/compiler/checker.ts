@@ -28163,16 +28163,31 @@ namespace ts {
             // If object literal is contextually typed by the implied type of a binding pattern, augment the result
             // type with those properties for which the binding pattern specifies a default value.
             // If the object literal is spread into another object literal, skip this step and let the top-level object
-            // literal handle it instead.
-            if (contextualTypeHasPattern && node.parent.kind !== SyntaxKind.SpreadAssignment) {
-                for (const prop of getPropertiesOfType(contextualType)) {
-                    if (!propertiesTable.get(prop.escapedName) && !getPropertyOfType(spread, prop.escapedName)) {
-                        if (!(prop.flags & SymbolFlags.Optional)) {
-                            error(prop.valueDeclaration || (prop as TransientSymbol).bindingElement,
-                                Diagnostics.Initializer_provides_no_value_for_this_binding_element_and_the_binding_element_has_no_default_value);
+            // literal handle it instead. Note that this might require full traversal to the root pattern's parent
+            // as it's the guaranteed to be the common ancestor of the pattern node and the current object node.
+            // It's not possible to check if the immediate parent node is a spread assignment
+            // since the type flows in non-obvious ways through conditional expressions, IIFEs and more.
+            if (contextualTypeHasPattern) {
+                const rootPatternParent = findAncestor(contextualType.pattern!.parent, n =>
+                    n.kind === SyntaxKind.VariableDeclaration ||
+                    n.kind === SyntaxKind.BinaryExpression ||
+                    n.kind === SyntaxKind.Parameter
+                );
+                const spreadOrOutsideRootObject = findAncestor(node, n =>
+                    n === rootPatternParent ||
+                    n.kind === SyntaxKind.SpreadAssignment
+                )!;
+
+                if (spreadOrOutsideRootObject.kind !== SyntaxKind.SpreadAssignment) {
+                    for (const prop of getPropertiesOfType(contextualType)) {
+                        if (!propertiesTable.get(prop.escapedName) && !getPropertyOfType(spread, prop.escapedName)) {
+                            if (!(prop.flags & SymbolFlags.Optional)) {
+                                error(prop.valueDeclaration || (prop as TransientSymbol).bindingElement,
+                                    Diagnostics.Initializer_provides_no_value_for_this_binding_element_and_the_binding_element_has_no_default_value);
+                            }
+                            propertiesTable.set(prop.escapedName, prop);
+                            propertiesArray.push(prop);
                         }
-                        propertiesTable.set(prop.escapedName, prop);
-                        propertiesArray.push(prop);
                     }
                 }
             }
