@@ -351,7 +351,7 @@ tests/cases/compiler/promisePermutations2.ts(159,21): error TS2345: Argument of 
                                        ~~~~~~~~~
 !!! error TS2345: Argument of type '(x: any) => IPromise<string>' is not assignable to parameter of type '(error: any) => Promise<number>'.
 !!! error TS2345:   Property 'catch' is missing in type 'IPromise<string>' but required in type 'Promise<number>'.
-!!! related TS2728 /.ts/lib.es5.d.ts:1527:5: 'catch' is declared here.
+!!! related TS2728 /.ts/lib.es5.d.ts:1537:5: 'catch' is declared here.
     var s10g = s10.then(testFunctionP, nIPromise, sIPromise).then(sPromise, sIPromise, sIPromise); // ok
     
     var r11: IPromise<number>;
