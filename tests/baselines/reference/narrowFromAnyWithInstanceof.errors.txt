@@ -22,7 +22,7 @@ tests/cases/conformance/types/any/narrowFromAnyWithInstanceof.ts(22,7): error TS
         x.mesage;
           ~~~~~~
 !!! error TS2551: Property 'mesage' does not exist on type 'Error'. Did you mean 'message'?
-!!! related TS2728 /.ts/lib.es5.d.ts:1041:5: 'message' is declared here.
+!!! related TS2728 /.ts/lib.es5.d.ts:1051:5: 'message' is declared here.
     }
     
     if (x instanceof Date) {

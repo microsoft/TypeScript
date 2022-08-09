@@ -169,13 +169,17 @@ namespace ts.codefix {
         }
 
         function outputMethod(quotePreference: QuotePreference, signature: Signature, modifiers: NodeArray<Modifier> | undefined, name: PropertyName, body?: Block): void {
-            const method = createSignatureDeclarationFromSignature(SyntaxKind.MethodDeclaration, context, quotePreference, signature, body, name, modifiers, optional && !!(preserveOptional & PreserveOptionalFlags.Method), enclosingDeclaration, importAdder);
+            const method = createSignatureDeclarationFromSignature(SyntaxKind.MethodDeclaration, context, quotePreference, signature, body, name, modifiers, optional && !!(preserveOptional & PreserveOptionalFlags.Method), enclosingDeclaration, importAdder) as MethodDeclaration;
             if (method) addClassElement(method);
         }
     }
 
     export function createSignatureDeclarationFromSignature(
-        kind: SyntaxKind.MethodDeclaration | SyntaxKind.FunctionExpression | SyntaxKind.ArrowFunction,
+        kind:
+            | SyntaxKind.MethodDeclaration
+            | SyntaxKind.FunctionExpression
+            | SyntaxKind.ArrowFunction
+            | SyntaxKind.FunctionDeclaration,
         context: TypeConstructionContext,
         quotePreference: QuotePreference,
         signature: Signature,
@@ -185,7 +189,7 @@ namespace ts.codefix {
         optional: boolean | undefined,
         enclosingDeclaration: Node | undefined,
         importAdder: ImportAdder | undefined
-     ) {
+    ) {
         const program = context.program;
         const checker = program.getTypeChecker();
         const scriptTarget = getEmitScriptTarget(program.getCompilerOptions());
@@ -194,7 +198,7 @@ namespace ts.codefix {
             | NodeBuilderFlags.SuppressAnyReturnType
             | NodeBuilderFlags.AllowEmptyTuple
             | (quotePreference === QuotePreference.Single ? NodeBuilderFlags.UseSingleQuotesForStringLiteralType : NodeBuilderFlags.None);
-        const signatureDeclaration = checker.signatureToSignatureDeclaration(signature, kind, enclosingDeclaration, flags, getNoopSymbolTrackerWithResolver(context)) as ArrowFunction | FunctionExpression | MethodDeclaration;
+        const signatureDeclaration = checker.signatureToSignatureDeclaration(signature, kind, enclosingDeclaration, flags, getNoopSymbolTrackerWithResolver(context)) as ArrowFunction | FunctionExpression | MethodDeclaration | FunctionDeclaration;
         if (!signatureDeclaration) {
             return undefined;
         }
@@ -272,6 +276,9 @@ namespace ts.codefix {
         }
         if (isMethodDeclaration(signatureDeclaration)) {
             return factory.updateMethodDeclaration(signatureDeclaration, modifiers, asteriskToken, name ?? factory.createIdentifier(""), questionToken, typeParameters, parameters, type, body);
+        }
+        if (isFunctionDeclaration(signatureDeclaration)) {
+            return factory.updateFunctionDeclaration(signatureDeclaration, modifiers, signatureDeclaration.asteriskToken, tryCast(name, isIdentifier), typeParameters, parameters, type, body ?? signatureDeclaration.body);
         }
         return undefined;
     }
