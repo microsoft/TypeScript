@@ -100,181 +100,181 @@ namespace ts {
     const forEachChildTable: (ForEachChildFunction | undefined)[] = [];
     const forEachChildNoOpFn: ForEachChildFunction = (_node, _cbNode, _cbNodes) => undefined;
     for (let i = 0; i < SyntaxKind.Count; i++) forEachChildTable.push(forEachChildNoOpFn);
-    forEachChildTable[SyntaxKind.QualifiedName] = forEachQualifiedName;
-    forEachChildTable[SyntaxKind.TypeParameter] = forEachTypeParameter;
-    forEachChildTable[SyntaxKind.ShorthandPropertyAssignment] = forEachShorthandPropertyAssignment;
-    forEachChildTable[SyntaxKind.SpreadAssignment] = forEachSpreadAssignment;
-    forEachChildTable[SyntaxKind.Parameter] = forEachParameter;
-    forEachChildTable[SyntaxKind.PropertyDeclaration] = forEachPropertyDeclaration;
-    forEachChildTable[SyntaxKind.PropertySignature] = forEachPropertySignature;
-    forEachChildTable[SyntaxKind.PropertyAssignment] = forEachPropertyAssignment;
-    forEachChildTable[SyntaxKind.VariableDeclaration] = forEachVariableDeclaration;
-    forEachChildTable[SyntaxKind.BindingElement] = forEachBindingElement;
-    forEachChildTable[SyntaxKind.IndexSignature] = forEachIndexSignature;
-    forEachChildTable[SyntaxKind.ConstructorType] = forEachConstructorType;
-    forEachChildTable[SyntaxKind.FunctionType] = forEachFunctionType;
-    forEachChildTable[SyntaxKind.CallSignature] = forEachCallOrConstructSignature;
-    forEachChildTable[SyntaxKind.ConstructSignature] = forEachCallOrConstructSignature;
-    forEachChildTable[SyntaxKind.MethodDeclaration] = forEachMethodDeclaration;
-    forEachChildTable[SyntaxKind.MethodSignature] = forEachMethodSignature;
-    forEachChildTable[SyntaxKind.Constructor] = forEachConstructor;
-    forEachChildTable[SyntaxKind.GetAccessor] = forEachGetAccessor;
-    forEachChildTable[SyntaxKind.SetAccessor] = forEachSetAccessor;
-    forEachChildTable[SyntaxKind.FunctionDeclaration] = forEachFunctionDeclaration;
-    forEachChildTable[SyntaxKind.FunctionExpression] = forEachFunctionExpression;
-    forEachChildTable[SyntaxKind.ArrowFunction] = forEachArrowFunction;
-    forEachChildTable[SyntaxKind.ClassStaticBlockDeclaration] = forEachClassStaticBlockDeclaration;
-    forEachChildTable[SyntaxKind.TypeReference] = forEachTypeReference;
-    forEachChildTable[SyntaxKind.TypePredicate] = forEachTypePredicate;
-    forEachChildTable[SyntaxKind.TypeQuery] = forEachTypeQuery;
-    forEachChildTable[SyntaxKind.TypeLiteral] = forEachTypeLiteral;
-    forEachChildTable[SyntaxKind.ArrayType] = forEachArrayType;
-    forEachChildTable[SyntaxKind.TupleType] = forEachTupleType;
-    forEachChildTable[SyntaxKind.UnionType] = forEachUnionOrIntersectionType;
-    forEachChildTable[SyntaxKind.IntersectionType] = forEachUnionOrIntersectionType;
-    forEachChildTable[SyntaxKind.ConditionalType] = forEachConditionalType;
-    forEachChildTable[SyntaxKind.InferType] = forEachInferType;
-    forEachChildTable[SyntaxKind.ImportType] = forEachImportType;
-    forEachChildTable[SyntaxKind.ImportTypeAssertionContainer] = forEachImportTypeAssertionContainer;
-    forEachChildTable[SyntaxKind.ParenthesizedType] = forEachParenthesizedTypeOrTypeOperator;
-    forEachChildTable[SyntaxKind.TypeOperator] = forEachParenthesizedTypeOrTypeOperator;
-    forEachChildTable[SyntaxKind.IndexedAccessType] = forEachIndexedAccessType;
-    forEachChildTable[SyntaxKind.MappedType] = forEachMappedType;
-    forEachChildTable[SyntaxKind.LiteralType] = forEachLiteralType;
-    forEachChildTable[SyntaxKind.NamedTupleMember] = forEachNamedTupleMember;
-    forEachChildTable[SyntaxKind.ObjectBindingPattern] = forEachObjectOrArrayBindingPattern;
-    forEachChildTable[SyntaxKind.ArrayBindingPattern] = forEachObjectOrArrayBindingPattern;
-    forEachChildTable[SyntaxKind.ArrayLiteralExpression] = forEachArrayLiteralExpression;
-    forEachChildTable[SyntaxKind.ObjectLiteralExpression] = forEachObjectLiteralExpression;
-    forEachChildTable[SyntaxKind.PropertyAccessExpression] = forEachPropertyAccessExpression;
-    forEachChildTable[SyntaxKind.ElementAccessExpression] = forEachElementAccessExpression;
-    forEachChildTable[SyntaxKind.CallExpression] = forEachCallExpression;
-    forEachChildTable[SyntaxKind.NewExpression] = forEachCallExpression;
-    forEachChildTable[SyntaxKind.TaggedTemplateExpression] = forEachTaggedTemplateExpression;
-    forEachChildTable[SyntaxKind.TypeAssertionExpression] = forEachTypeAssertionExpression;
-    forEachChildTable[SyntaxKind.ParenthesizedExpression] = forEachParenthesizedExpression;
-    forEachChildTable[SyntaxKind.DeleteExpression] = forEachDeleteExpression;
-    forEachChildTable[SyntaxKind.TypeOfExpression] = forEachTypeOfExpression;
-    forEachChildTable[SyntaxKind.VoidExpression] = forEachVoidExpression;
-    forEachChildTable[SyntaxKind.PrefixUnaryExpression] = forEachPrefixUnaryExpression;
-    forEachChildTable[SyntaxKind.YieldExpression] = forEachYieldExpression;
-    forEachChildTable[SyntaxKind.AwaitExpression] = forEachAwaitExpression;
-    forEachChildTable[SyntaxKind.PostfixUnaryExpression] = forEachPostfixUnaryExpression;
-    forEachChildTable[SyntaxKind.BinaryExpression] = forEachBinaryExpression;
-    forEachChildTable[SyntaxKind.AsExpression] = forEachAsExpression;
-    forEachChildTable[SyntaxKind.NonNullExpression] = forEachNonNullExpression;
-    forEachChildTable[SyntaxKind.MetaProperty] = forEachMetaProperty;
-    forEachChildTable[SyntaxKind.ConditionalExpression] = forEachConditionalExpression;
-    forEachChildTable[SyntaxKind.SpreadElement] = forEachSpreadElement;
-    forEachChildTable[SyntaxKind.Block] = forEachBlock;
-    forEachChildTable[SyntaxKind.ModuleBlock] = forEachBlock;
-    forEachChildTable[SyntaxKind.SourceFile] = forEachSourceFile;
-    forEachChildTable[SyntaxKind.VariableStatement] = forEachVariableStatement;
-    forEachChildTable[SyntaxKind.VariableDeclarationList] = forEachVariableDeclarationList;
-    forEachChildTable[SyntaxKind.ExpressionStatement] = forEachExpressionStatement;
-    forEachChildTable[SyntaxKind.IfStatement] = forEachIfStatement;
-    forEachChildTable[SyntaxKind.DoStatement] = forEachDoStatement;
-    forEachChildTable[SyntaxKind.WhileStatement] = forEachWhileStatement;
-    forEachChildTable[SyntaxKind.ForStatement] = forEachForStatement;
-    forEachChildTable[SyntaxKind.ForInStatement] = forEachForInStatement;
-    forEachChildTable[SyntaxKind.ForOfStatement] = forEachForOfStatement;
-    forEachChildTable[SyntaxKind.ContinueStatement] = forEachContinueStatement;
-    forEachChildTable[SyntaxKind.BreakStatement] = forEachContinueStatement;
-    forEachChildTable[SyntaxKind.ReturnStatement] = forEachReturnStatement;
-    forEachChildTable[SyntaxKind.WithStatement] = forEachWithStatement;
-    forEachChildTable[SyntaxKind.SwitchStatement] = forEachSwitchStatement;
-    forEachChildTable[SyntaxKind.CaseBlock] = forEachCaseBlock;
-    forEachChildTable[SyntaxKind.CaseClause] = forEachCaseClause;
-    forEachChildTable[SyntaxKind.DefaultClause] = forEachDefaultClause;
-    forEachChildTable[SyntaxKind.LabeledStatement] = forEachLabeledStatement;
-    forEachChildTable[SyntaxKind.ThrowStatement] = forEachThrowStatement;
-    forEachChildTable[SyntaxKind.TryStatement] = forEachTryStatement;
-    forEachChildTable[SyntaxKind.CatchClause] = forEachCatchClause;
-    forEachChildTable[SyntaxKind.Decorator] = forEachDecorator;
-    forEachChildTable[SyntaxKind.ClassDeclaration] = forEachClassDeclarationOrExpression;
-    forEachChildTable[SyntaxKind.ClassExpression] = forEachClassDeclarationOrExpression;
-    forEachChildTable[SyntaxKind.InterfaceDeclaration] = forEachInterfaceDeclaration;
-    forEachChildTable[SyntaxKind.TypeAliasDeclaration] = forEachTypeAliasDeclaration;
-    forEachChildTable[SyntaxKind.EnumDeclaration] = forEachEnumDeclaration;
-    forEachChildTable[SyntaxKind.EnumMember] = forEachEnumMember;
-    forEachChildTable[SyntaxKind.ModuleDeclaration] = forEachModuleDeclaration;
-    forEachChildTable[SyntaxKind.ImportEqualsDeclaration] = forEachImportEqualsDeclaration;
-    forEachChildTable[SyntaxKind.ImportDeclaration] = forEachImportDeclaration;
-    forEachChildTable[SyntaxKind.ImportClause] = forEachImportClause;
-    forEachChildTable[SyntaxKind.AssertClause] = forEachAssertClause;
-    forEachChildTable[SyntaxKind.AssertEntry] = forEachAssertEntry;
-    forEachChildTable[SyntaxKind.NamespaceExportDeclaration] = forEachNamespaceExportDeclaration;
-    forEachChildTable[SyntaxKind.NamespaceImport] = forEachNamespaceImport;
-    forEachChildTable[SyntaxKind.NamespaceExport] = forEachNamespaceExport;
-    forEachChildTable[SyntaxKind.NamedImports] = forEachNamedImportsOrExports;
-    forEachChildTable[SyntaxKind.NamedExports] = forEachNamedImportsOrExports;
-    forEachChildTable[SyntaxKind.ExportDeclaration] = forEachExportDeclaration;
-    forEachChildTable[SyntaxKind.ImportSpecifier] = forEachImportOrExportSpecifier;
-    forEachChildTable[SyntaxKind.ExportSpecifier] = forEachImportOrExportSpecifier;
-    forEachChildTable[SyntaxKind.ExportAssignment] = forEachExportAssignment;
-    forEachChildTable[SyntaxKind.TemplateExpression] = forEachTemplateExpression;
-    forEachChildTable[SyntaxKind.TemplateSpan] = forEachTemplateSpan;
-    forEachChildTable[SyntaxKind.TemplateLiteralType] = forEachTemplateLiteralType;
-    forEachChildTable[SyntaxKind.TemplateLiteralTypeSpan] = forEachTemplateLiteralTypeSpan;
-    forEachChildTable[SyntaxKind.ComputedPropertyName] = forEachComputedPropertyName;
-    forEachChildTable[SyntaxKind.HeritageClause] = forEachHeritageClause;
-    forEachChildTable[SyntaxKind.ExpressionWithTypeArguments] = forEachExpressionWithTypeArguments;
-    forEachChildTable[SyntaxKind.ExternalModuleReference] = forEachExternalModuleReference;
-    forEachChildTable[SyntaxKind.MissingDeclaration] = forEachMissingDeclaration;
-    forEachChildTable[SyntaxKind.CommaListExpression] = forEachCommaListExpression;
-    forEachChildTable[SyntaxKind.JsxElement] = forEachJsxElement;
-    forEachChildTable[SyntaxKind.JsxFragment] = forEachJsxFragment;
-    forEachChildTable[SyntaxKind.JsxSelfClosingElement] = forEachJsxOpeningOrSelfClosingElement;
-    forEachChildTable[SyntaxKind.JsxOpeningElement] = forEachJsxOpeningOrSelfClosingElement;
-    forEachChildTable[SyntaxKind.JsxAttributes] = forEachJsxAttributes;
-    forEachChildTable[SyntaxKind.JsxAttribute] = forEachJsxAttribute;
-    forEachChildTable[SyntaxKind.JsxSpreadAttribute] = forEachJsxSpreadAttribute;
-    forEachChildTable[SyntaxKind.JsxExpression] = forEachJsxExpression;
-    forEachChildTable[SyntaxKind.JsxClosingElement] = forEachJsxClosingElement;
-    forEachChildTable[SyntaxKind.OptionalType] = forEachOptionalRestOrJSDocParameterModifier;
-    forEachChildTable[SyntaxKind.RestType] = forEachOptionalRestOrJSDocParameterModifier;
-    forEachChildTable[SyntaxKind.JSDocTypeExpression] = forEachOptionalRestOrJSDocParameterModifier;
-    forEachChildTable[SyntaxKind.JSDocNonNullableType] = forEachOptionalRestOrJSDocParameterModifier;
-    forEachChildTable[SyntaxKind.JSDocNullableType] = forEachOptionalRestOrJSDocParameterModifier;
-    forEachChildTable[SyntaxKind.JSDocOptionalType] = forEachOptionalRestOrJSDocParameterModifier;
-    forEachChildTable[SyntaxKind.JSDocVariadicType] = forEachOptionalRestOrJSDocParameterModifier;
-    forEachChildTable[SyntaxKind.JSDocFunctionType] = forEachJSDocFunctionType;
-    forEachChildTable[SyntaxKind.JSDoc] = forEachJSDoc;
-    forEachChildTable[SyntaxKind.JSDocSeeTag] = forEachJSDocSeeTag;
-    forEachChildTable[SyntaxKind.JSDocNameReference] = forEachJSDocNameReference;
-    forEachChildTable[SyntaxKind.JSDocMemberName] = forEachJSDocMemberName;
-    forEachChildTable[SyntaxKind.JSDocParameterTag] = forEachJSDocParameterOrPropertyTag;
-    forEachChildTable[SyntaxKind.JSDocPropertyTag] = forEachJSDocParameterOrPropertyTag;
-    forEachChildTable[SyntaxKind.JSDocAuthorTag] = forEachJSDocAuthorTag;
-    forEachChildTable[SyntaxKind.JSDocImplementsTag] = forEachJSDocImplementsTag;
-    forEachChildTable[SyntaxKind.JSDocAugmentsTag] = forEachJSDocAugmentsTag;
-    forEachChildTable[SyntaxKind.JSDocTemplateTag] = forEachJSDocTemplateTag;
-    forEachChildTable[SyntaxKind.JSDocTypedefTag] = forEachJSDocTypedefTag;
-    forEachChildTable[SyntaxKind.JSDocCallbackTag] = forEachJSDocCallbackTag;
-    forEachChildTable[SyntaxKind.JSDocReturnTag] = forEachJSDocReturnTag;
-    forEachChildTable[SyntaxKind.JSDocTypeTag] = forEachJSDocReturnTag;
-    forEachChildTable[SyntaxKind.JSDocThisTag] = forEachJSDocReturnTag;
-    forEachChildTable[SyntaxKind.JSDocEnumTag] = forEachJSDocReturnTag;
-    forEachChildTable[SyntaxKind.JSDocSignature] = forEachJSDocSignature;
-    forEachChildTable[SyntaxKind.JSDocLink] = forEachJSDocLinkCodeOrPlain;
-    forEachChildTable[SyntaxKind.JSDocLinkCode] = forEachJSDocLinkCodeOrPlain;
-    forEachChildTable[SyntaxKind.JSDocLinkPlain] = forEachJSDocLinkCodeOrPlain;
-    forEachChildTable[SyntaxKind.JSDocTypeLiteral] = forEachJSDocTypeLiteral;
-    forEachChildTable[SyntaxKind.JSDocTag] = forEachJSDocTag;
-    forEachChildTable[SyntaxKind.JSDocClassTag] = forEachJSDocTag;
-    forEachChildTable[SyntaxKind.JSDocPublicTag] = forEachJSDocTag;
-    forEachChildTable[SyntaxKind.JSDocPrivateTag] = forEachJSDocTag;
-    forEachChildTable[SyntaxKind.JSDocProtectedTag] = forEachJSDocTag;
-    forEachChildTable[SyntaxKind.JSDocReadonlyTag] = forEachJSDocTag;
-    forEachChildTable[SyntaxKind.JSDocDeprecatedTag] = forEachJSDocTag;
-    forEachChildTable[SyntaxKind.PartiallyEmittedExpression] = forEachPartiallyEmittedExpression;
+    forEachChildTable[SyntaxKind.QualifiedName] = forEachChildInQualifiedName;
+    forEachChildTable[SyntaxKind.TypeParameter] = forEachChildInTypeParameter;
+    forEachChildTable[SyntaxKind.ShorthandPropertyAssignment] = forEachChildInShorthandPropertyAssignment;
+    forEachChildTable[SyntaxKind.SpreadAssignment] = forEachChildInSpreadAssignment;
+    forEachChildTable[SyntaxKind.Parameter] = forEachChildInParameter;
+    forEachChildTable[SyntaxKind.PropertyDeclaration] = forEachChildInPropertyDeclaration;
+    forEachChildTable[SyntaxKind.PropertySignature] = forEachChildInPropertySignature;
+    forEachChildTable[SyntaxKind.PropertyAssignment] = forEachChildInPropertyAssignment;
+    forEachChildTable[SyntaxKind.VariableDeclaration] = forEachChildInVariableDeclaration;
+    forEachChildTable[SyntaxKind.BindingElement] = forEachChildInBindingElement;
+    forEachChildTable[SyntaxKind.IndexSignature] = forEachChildInIndexSignature;
+    forEachChildTable[SyntaxKind.ConstructorType] = forEachChildInConstructorType;
+    forEachChildTable[SyntaxKind.FunctionType] = forEachChildInFunctionType;
+    forEachChildTable[SyntaxKind.CallSignature] = forEachChildInCallOrConstructSignature;
+    forEachChildTable[SyntaxKind.ConstructSignature] = forEachChildInCallOrConstructSignature;
+    forEachChildTable[SyntaxKind.MethodDeclaration] = forEachChildInMethodDeclaration;
+    forEachChildTable[SyntaxKind.MethodSignature] = forEachChildInMethodSignature;
+    forEachChildTable[SyntaxKind.Constructor] = forEachChildInConstructor;
+    forEachChildTable[SyntaxKind.GetAccessor] = forEachChildInGetAccessor;
+    forEachChildTable[SyntaxKind.SetAccessor] = forEachChildInSetAccessor;
+    forEachChildTable[SyntaxKind.FunctionDeclaration] = forEachChildInFunctionDeclaration;
+    forEachChildTable[SyntaxKind.FunctionExpression] = forEachChildInFunctionExpression;
+    forEachChildTable[SyntaxKind.ArrowFunction] = forEachChildInArrowFunction;
+    forEachChildTable[SyntaxKind.ClassStaticBlockDeclaration] = forEachChildInClassStaticBlockDeclaration;
+    forEachChildTable[SyntaxKind.TypeReference] = forEachChildInTypeReference;
+    forEachChildTable[SyntaxKind.TypePredicate] = forEachChildInTypePredicate;
+    forEachChildTable[SyntaxKind.TypeQuery] = forEachChildInTypeQuery;
+    forEachChildTable[SyntaxKind.TypeLiteral] = forEachChildInTypeLiteral;
+    forEachChildTable[SyntaxKind.ArrayType] = forEachChildInArrayType;
+    forEachChildTable[SyntaxKind.TupleType] = forEachChildInTupleType;
+    forEachChildTable[SyntaxKind.UnionType] = forEachChildInUnionOrIntersectionType;
+    forEachChildTable[SyntaxKind.IntersectionType] = forEachChildInUnionOrIntersectionType;
+    forEachChildTable[SyntaxKind.ConditionalType] = forEachChildInConditionalType;
+    forEachChildTable[SyntaxKind.InferType] = forEachChildInInferType;
+    forEachChildTable[SyntaxKind.ImportType] = forEachChildInImportType;
+    forEachChildTable[SyntaxKind.ImportTypeAssertionContainer] = forEachChildInImportTypeAssertionContainer;
+    forEachChildTable[SyntaxKind.ParenthesizedType] = forEachChildInParenthesizedTypeOrTypeOperator;
+    forEachChildTable[SyntaxKind.TypeOperator] = forEachChildInParenthesizedTypeOrTypeOperator;
+    forEachChildTable[SyntaxKind.IndexedAccessType] = forEachChildInIndexedAccessType;
+    forEachChildTable[SyntaxKind.MappedType] = forEachChildInMappedType;
+    forEachChildTable[SyntaxKind.LiteralType] = forEachChildInLiteralType;
+    forEachChildTable[SyntaxKind.NamedTupleMember] = forEachChildInNamedTupleMember;
+    forEachChildTable[SyntaxKind.ObjectBindingPattern] = forEachChildInObjectOrArrayBindingPattern;
+    forEachChildTable[SyntaxKind.ArrayBindingPattern] = forEachChildInObjectOrArrayBindingPattern;
+    forEachChildTable[SyntaxKind.ArrayLiteralExpression] = forEachChildInArrayLiteralExpression;
+    forEachChildTable[SyntaxKind.ObjectLiteralExpression] = forEachChildInObjectLiteralExpression;
+    forEachChildTable[SyntaxKind.PropertyAccessExpression] = forEachChildInPropertyAccessExpression;
+    forEachChildTable[SyntaxKind.ElementAccessExpression] = forEachChildInElementAccessExpression;
+    forEachChildTable[SyntaxKind.CallExpression] = forEachChildInCallExpression;
+    forEachChildTable[SyntaxKind.NewExpression] = forEachChildInCallExpression;
+    forEachChildTable[SyntaxKind.TaggedTemplateExpression] = forEachChildInTaggedTemplateExpression;
+    forEachChildTable[SyntaxKind.TypeAssertionExpression] = forEachChildInTypeAssertionExpression;
+    forEachChildTable[SyntaxKind.ParenthesizedExpression] = forEachChildInParenthesizedExpression;
+    forEachChildTable[SyntaxKind.DeleteExpression] = forEachChildInDeleteExpression;
+    forEachChildTable[SyntaxKind.TypeOfExpression] = forEachChildInTypeOfExpression;
+    forEachChildTable[SyntaxKind.VoidExpression] = forEachChildInVoidExpression;
+    forEachChildTable[SyntaxKind.PrefixUnaryExpression] = forEachChildInPrefixUnaryExpression;
+    forEachChildTable[SyntaxKind.YieldExpression] = forEachChildInYieldExpression;
+    forEachChildTable[SyntaxKind.AwaitExpression] = forEachChildInAwaitExpression;
+    forEachChildTable[SyntaxKind.PostfixUnaryExpression] = forEachChildInPostfixUnaryExpression;
+    forEachChildTable[SyntaxKind.BinaryExpression] = forEachChildInBinaryExpression;
+    forEachChildTable[SyntaxKind.AsExpression] = forEachChildInAsExpression;
+    forEachChildTable[SyntaxKind.NonNullExpression] = forEachChildInNonNullExpression;
+    forEachChildTable[SyntaxKind.MetaProperty] = forEachChildInMetaProperty;
+    forEachChildTable[SyntaxKind.ConditionalExpression] = forEachChildInConditionalExpression;
+    forEachChildTable[SyntaxKind.SpreadElement] = forEachChildInSpreadElement;
+    forEachChildTable[SyntaxKind.Block] = forEachChildInBlock;
+    forEachChildTable[SyntaxKind.ModuleBlock] = forEachChildInBlock;
+    forEachChildTable[SyntaxKind.SourceFile] = forEachChildInSourceFile;
+    forEachChildTable[SyntaxKind.VariableStatement] = forEachChildInVariableStatement;
+    forEachChildTable[SyntaxKind.VariableDeclarationList] = forEachChildInVariableDeclarationList;
+    forEachChildTable[SyntaxKind.ExpressionStatement] = forEachChildInExpressionStatement;
+    forEachChildTable[SyntaxKind.IfStatement] = forEachChildInIfStatement;
+    forEachChildTable[SyntaxKind.DoStatement] = forEachChildInDoStatement;
+    forEachChildTable[SyntaxKind.WhileStatement] = forEachChildInWhileStatement;
+    forEachChildTable[SyntaxKind.ForStatement] = forEachChildInForStatement;
+    forEachChildTable[SyntaxKind.ForInStatement] = forEachChildInForInStatement;
+    forEachChildTable[SyntaxKind.ForOfStatement] = forEachChildInForOfStatement;
+    forEachChildTable[SyntaxKind.ContinueStatement] = forEachChildInContinueStatement;
+    forEachChildTable[SyntaxKind.BreakStatement] = forEachChildInContinueStatement;
+    forEachChildTable[SyntaxKind.ReturnStatement] = forEachChildInReturnStatement;
+    forEachChildTable[SyntaxKind.WithStatement] = forEachChildInWithStatement;
+    forEachChildTable[SyntaxKind.SwitchStatement] = forEachChildInSwitchStatement;
+    forEachChildTable[SyntaxKind.CaseBlock] = forEachChildInCaseBlock;
+    forEachChildTable[SyntaxKind.CaseClause] = forEachChildInCaseClause;
+    forEachChildTable[SyntaxKind.DefaultClause] = forEachChildInDefaultClause;
+    forEachChildTable[SyntaxKind.LabeledStatement] = forEachChildInLabeledStatement;
+    forEachChildTable[SyntaxKind.ThrowStatement] = forEachChildInThrowStatement;
+    forEachChildTable[SyntaxKind.TryStatement] = forEachChildInTryStatement;
+    forEachChildTable[SyntaxKind.CatchClause] = forEachChildInCatchClause;
+    forEachChildTable[SyntaxKind.Decorator] = forEachChildInDecorator;
+    forEachChildTable[SyntaxKind.ClassDeclaration] = forEachChildInClassDeclarationOrExpression;
+    forEachChildTable[SyntaxKind.ClassExpression] = forEachChildInClassDeclarationOrExpression;
+    forEachChildTable[SyntaxKind.InterfaceDeclaration] = forEachChildInInterfaceDeclaration;
+    forEachChildTable[SyntaxKind.TypeAliasDeclaration] = forEachChildInTypeAliasDeclaration;
+    forEachChildTable[SyntaxKind.EnumDeclaration] = forEachChildInEnumDeclaration;
+    forEachChildTable[SyntaxKind.EnumMember] = forEachChildInEnumMember;
+    forEachChildTable[SyntaxKind.ModuleDeclaration] = forEachChildInModuleDeclaration;
+    forEachChildTable[SyntaxKind.ImportEqualsDeclaration] = forEachChildInImportEqualsDeclaration;
+    forEachChildTable[SyntaxKind.ImportDeclaration] = forEachChildInImportDeclaration;
+    forEachChildTable[SyntaxKind.ImportClause] = forEachChildInImportClause;
+    forEachChildTable[SyntaxKind.AssertClause] = forEachChildInAssertClause;
+    forEachChildTable[SyntaxKind.AssertEntry] = forEachChildInAssertEntry;
+    forEachChildTable[SyntaxKind.NamespaceExportDeclaration] = forEachChildInNamespaceExportDeclaration;
+    forEachChildTable[SyntaxKind.NamespaceImport] = forEachChildInNamespaceImport;
+    forEachChildTable[SyntaxKind.NamespaceExport] = forEachChildInNamespaceExport;
+    forEachChildTable[SyntaxKind.NamedImports] = forEachChildInNamedImportsOrExports;
+    forEachChildTable[SyntaxKind.NamedExports] = forEachChildInNamedImportsOrExports;
+    forEachChildTable[SyntaxKind.ExportDeclaration] = forEachChildInExportDeclaration;
+    forEachChildTable[SyntaxKind.ImportSpecifier] = forEachChildInImportOrExportSpecifier;
+    forEachChildTable[SyntaxKind.ExportSpecifier] = forEachChildInImportOrExportSpecifier;
+    forEachChildTable[SyntaxKind.ExportAssignment] = forEachChildInExportAssignment;
+    forEachChildTable[SyntaxKind.TemplateExpression] = forEachChildInTemplateExpression;
+    forEachChildTable[SyntaxKind.TemplateSpan] = forEachChildInTemplateSpan;
+    forEachChildTable[SyntaxKind.TemplateLiteralType] = forEachChildInTemplateLiteralType;
+    forEachChildTable[SyntaxKind.TemplateLiteralTypeSpan] = forEachChildInTemplateLiteralTypeSpan;
+    forEachChildTable[SyntaxKind.ComputedPropertyName] = forEachChildInComputedPropertyName;
+    forEachChildTable[SyntaxKind.HeritageClause] = forEachChildInHeritageClause;
+    forEachChildTable[SyntaxKind.ExpressionWithTypeArguments] = forEachChildInExpressionWithTypeArguments;
+    forEachChildTable[SyntaxKind.ExternalModuleReference] = forEachChildInExternalModuleReference;
+    forEachChildTable[SyntaxKind.MissingDeclaration] = forEachChildInMissingDeclaration;
+    forEachChildTable[SyntaxKind.CommaListExpression] = forEachChildInCommaListExpression;
+    forEachChildTable[SyntaxKind.JsxElement] = forEachChildInJsxElement;
+    forEachChildTable[SyntaxKind.JsxFragment] = forEachChildInJsxFragment;
+    forEachChildTable[SyntaxKind.JsxSelfClosingElement] = forEachChildInJsxOpeningOrSelfClosingElement;
+    forEachChildTable[SyntaxKind.JsxOpeningElement] = forEachChildInJsxOpeningOrSelfClosingElement;
+    forEachChildTable[SyntaxKind.JsxAttributes] = forEachChildInJsxAttributes;
+    forEachChildTable[SyntaxKind.JsxAttribute] = forEachChildInJsxAttribute;
+    forEachChildTable[SyntaxKind.JsxSpreadAttribute] = forEachChildInJsxSpreadAttribute;
+    forEachChildTable[SyntaxKind.JsxExpression] = forEachChildInJsxExpression;
+    forEachChildTable[SyntaxKind.JsxClosingElement] = forEachChildInJsxClosingElement;
+    forEachChildTable[SyntaxKind.OptionalType] = forEachChildInOptionalRestOrJSDocParameterModifier;
+    forEachChildTable[SyntaxKind.RestType] = forEachChildInOptionalRestOrJSDocParameterModifier;
+    forEachChildTable[SyntaxKind.JSDocTypeExpression] = forEachChildInOptionalRestOrJSDocParameterModifier;
+    forEachChildTable[SyntaxKind.JSDocNonNullableType] = forEachChildInOptionalRestOrJSDocParameterModifier;
+    forEachChildTable[SyntaxKind.JSDocNullableType] = forEachChildInOptionalRestOrJSDocParameterModifier;
+    forEachChildTable[SyntaxKind.JSDocOptionalType] = forEachChildInOptionalRestOrJSDocParameterModifier;
+    forEachChildTable[SyntaxKind.JSDocVariadicType] = forEachChildInOptionalRestOrJSDocParameterModifier;
+    forEachChildTable[SyntaxKind.JSDocFunctionType] = forEachChildInJSDocFunctionType;
+    forEachChildTable[SyntaxKind.JSDoc] = forEachChildInJSDoc;
+    forEachChildTable[SyntaxKind.JSDocSeeTag] = forEachChildInJSDocSeeTag;
+    forEachChildTable[SyntaxKind.JSDocNameReference] = forEachChildInJSDocNameReference;
+    forEachChildTable[SyntaxKind.JSDocMemberName] = forEachChildInJSDocMemberName;
+    forEachChildTable[SyntaxKind.JSDocParameterTag] = forEachChildInJSDocParameterOrPropertyTag;
+    forEachChildTable[SyntaxKind.JSDocPropertyTag] = forEachChildInJSDocParameterOrPropertyTag;
+    forEachChildTable[SyntaxKind.JSDocAuthorTag] = forEachChildInJSDocAuthorTag;
+    forEachChildTable[SyntaxKind.JSDocImplementsTag] = forEachChildInJSDocImplementsTag;
+    forEachChildTable[SyntaxKind.JSDocAugmentsTag] = forEachChildInJSDocAugmentsTag;
+    forEachChildTable[SyntaxKind.JSDocTemplateTag] = forEachChildInJSDocTemplateTag;
+    forEachChildTable[SyntaxKind.JSDocTypedefTag] = forEachChildInJSDocTypedefTag;
+    forEachChildTable[SyntaxKind.JSDocCallbackTag] = forEachChildInJSDocCallbackTag;
+    forEachChildTable[SyntaxKind.JSDocReturnTag] = forEachChildInJSDocReturnTag;
+    forEachChildTable[SyntaxKind.JSDocTypeTag] = forEachChildInJSDocReturnTag;
+    forEachChildTable[SyntaxKind.JSDocThisTag] = forEachChildInJSDocReturnTag;
+    forEachChildTable[SyntaxKind.JSDocEnumTag] = forEachChildInJSDocReturnTag;
+    forEachChildTable[SyntaxKind.JSDocSignature] = forEachChildInJSDocSignature;
+    forEachChildTable[SyntaxKind.JSDocLink] = forEachChildInJSDocLinkCodeOrPlain;
+    forEachChildTable[SyntaxKind.JSDocLinkCode] = forEachChildInJSDocLinkCodeOrPlain;
+    forEachChildTable[SyntaxKind.JSDocLinkPlain] = forEachChildInJSDocLinkCodeOrPlain;
+    forEachChildTable[SyntaxKind.JSDocTypeLiteral] = forEachChildInJSDocTypeLiteral;
+    forEachChildTable[SyntaxKind.JSDocTag] = forEachChildInJSDocTag;
+    forEachChildTable[SyntaxKind.JSDocClassTag] = forEachChildInJSDocTag;
+    forEachChildTable[SyntaxKind.JSDocPublicTag] = forEachChildInJSDocTag;
+    forEachChildTable[SyntaxKind.JSDocPrivateTag] = forEachChildInJSDocTag;
+    forEachChildTable[SyntaxKind.JSDocProtectedTag] = forEachChildInJSDocTag;
+    forEachChildTable[SyntaxKind.JSDocReadonlyTag] = forEachChildInJSDocTag;
+    forEachChildTable[SyntaxKind.JSDocDeprecatedTag] = forEachChildInJSDocTag;
+    forEachChildTable[SyntaxKind.PartiallyEmittedExpression] = forEachChildInPartiallyEmittedExpression;
 
-    function forEachQualifiedName<T>(node: QualifiedName, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInQualifiedName<T>(node: QualifiedName, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.left) ||
             visitNode(cbNode, node.right);
     }
 
-    function forEachTypeParameter<T>(node: TypeParameterDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInTypeParameter<T>(node: TypeParameterDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNodes(cbNode, cbNodes, node.modifiers) ||
             visitNode(cbNode, node.name) ||
             visitNode(cbNode, node.constraint) ||
@@ -282,7 +282,7 @@ namespace ts {
             visitNode(cbNode, node.expression);
     }
 
-    function forEachShorthandPropertyAssignment<T>(node: ShorthandPropertyAssignment, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInShorthandPropertyAssignment<T>(node: ShorthandPropertyAssignment, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNodes(cbNode, cbNodes, node.decorators) ||
             visitNodes(cbNode, cbNodes, node.modifiers) ||
             visitNode(cbNode, node.name) ||
@@ -292,11 +292,11 @@ namespace ts {
             visitNode(cbNode, node.objectAssignmentInitializer);
     }
 
-    function forEachSpreadAssignment<T>(node: SpreadAssignment, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInSpreadAssignment<T>(node: SpreadAssignment, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.expression);
     }
 
-    function forEachParameter<T>(node: ParameterDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInParameter<T>(node: ParameterDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNodes(cbNode, cbNodes, node.modifiers) ||
             visitNode(cbNode, node.dotDotDotToken) ||
             visitNode(cbNode, node.name) ||
@@ -305,7 +305,7 @@ namespace ts {
             visitNode(cbNode, node.initializer);
     }
 
-    function forEachPropertyDeclaration<T>(node: PropertyDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInPropertyDeclaration<T>(node: PropertyDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNodes(cbNode, cbNodes, node.modifiers) ||
             visitNode(cbNode, node.name) ||
             visitNode(cbNode, node.questionToken) ||
@@ -314,7 +314,7 @@ namespace ts {
             visitNode(cbNode, node.initializer);
     }
 
-    function forEachPropertySignature<T>(node: PropertySignature, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInPropertySignature<T>(node: PropertySignature, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNodes(cbNode, cbNodes, node.modifiers) ||
             visitNode(cbNode, node.name) ||
             visitNode(cbNode, node.questionToken) ||
@@ -322,7 +322,7 @@ namespace ts {
             visitNode(cbNode, node.initializer);
     }
 
-    function forEachPropertyAssignment<T>(node: PropertyAssignment, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInPropertyAssignment<T>(node: PropertyAssignment, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNodes(cbNode, cbNodes, node.decorators) ||
             visitNodes(cbNode, cbNodes, node.modifiers) ||
             visitNode(cbNode, node.name) ||
@@ -331,48 +331,48 @@ namespace ts {
             visitNode(cbNode, node.initializer);
     }
 
-    function forEachVariableDeclaration<T>(node: VariableDeclaration, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInVariableDeclaration<T>(node: VariableDeclaration, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.name) ||
             visitNode(cbNode, node.exclamationToken) ||
             visitNode(cbNode, node.type) ||
             visitNode(cbNode, node.initializer);
     }
 
-    function forEachBindingElement<T>(node: BindingElement, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInBindingElement<T>(node: BindingElement, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.dotDotDotToken) ||
             visitNode(cbNode, node.propertyName) ||
             visitNode(cbNode, node.name) ||
             visitNode(cbNode, node.initializer);
     }
 
-    function forEachIndexSignature<T>(node: IndexSignatureDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInIndexSignature<T>(node: IndexSignatureDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNodes(cbNode, cbNodes, node.decorators) ||
             visitNodes(cbNode, cbNodes, node.modifiers) ||
             visitNodes(cbNode, cbNodes, node.typeParameters) ||
             visitNodes(cbNode, cbNodes, node.parameters) ||
             visitNode(cbNode, node.type);
     }
-    function forEachConstructorType<T>(node: ConstructorTypeNode, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInConstructorType<T>(node: ConstructorTypeNode, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNodes(cbNode, cbNodes, node.modifiers) ||
             visitNodes(cbNode, cbNodes, node.typeParameters) ||
             visitNodes(cbNode, cbNodes, node.parameters) ||
             visitNode(cbNode, node.type);
     }
 
-    function forEachFunctionType<T>(node: FunctionTypeNode, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInFunctionType<T>(node: FunctionTypeNode, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNodes(cbNode, cbNodes, node.modifiers) ||
             visitNodes(cbNode, cbNodes, node.typeParameters) ||
             visitNodes(cbNode, cbNodes, node.parameters) ||
             visitNode(cbNode, node.type);
     }
 
-    function forEachCallOrConstructSignature<T>(node: CallSignatureDeclaration | ConstructSignatureDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInCallOrConstructSignature<T>(node: CallSignatureDeclaration | ConstructSignatureDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNodes(cbNode, cbNodes, node.typeParameters) ||
             visitNodes(cbNode, cbNodes, node.parameters) ||
             visitNode(cbNode, node.type);
     }
 
-    function forEachMethodDeclaration<T>(node: MethodDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInMethodDeclaration<T>(node: MethodDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNodes(cbNode, cbNodes, node.modifiers) ||
             visitNode(cbNode, node.asteriskToken) ||
             visitNode(cbNode, node.name) ||
@@ -384,7 +384,7 @@ namespace ts {
             visitNode(cbNode, node.body);
     }
 
-    function forEachMethodSignature<T>(node: MethodSignature, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInMethodSignature<T>(node: MethodSignature, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNodes(cbNode, cbNodes, node.modifiers) ||
             visitNode(cbNode, node.name) ||
             visitNode(cbNode, node.questionToken) ||
@@ -393,7 +393,7 @@ namespace ts {
             visitNode(cbNode, node.type);
     }
 
-    function forEachConstructor<T>(node: ConstructorDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInConstructor<T>(node: ConstructorDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNodes(cbNode, cbNodes, node.decorators) ||
             visitNodes(cbNode, cbNodes, node.modifiers) ||
             visitNode(cbNode, node.name) ||
@@ -403,7 +403,7 @@ namespace ts {
             visitNode(cbNode, node.body);
     }
 
-    function forEachGetAccessor<T>(node: GetAccessorDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInGetAccessor<T>(node: GetAccessorDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNodes(cbNode, cbNodes, node.modifiers) ||
             visitNode(cbNode, node.name) ||
             visitNodes(cbNode, cbNodes, node.typeParameters) ||
@@ -412,7 +412,7 @@ namespace ts {
             visitNode(cbNode, node.body);
     }
 
-    function forEachSetAccessor<T>(node: SetAccessorDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInSetAccessor<T>(node: SetAccessorDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNodes(cbNode, cbNodes, node.modifiers) ||
             visitNode(cbNode, node.name) ||
             visitNodes(cbNode, cbNodes, node.typeParameters) ||
@@ -421,7 +421,7 @@ namespace ts {
             visitNode(cbNode, node.body);
     }
 
-    function forEachFunctionDeclaration<T>(node: FunctionDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInFunctionDeclaration<T>(node: FunctionDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNodes(cbNode, cbNodes, node.decorators) ||
             visitNodes(cbNode, cbNodes, node.modifiers) ||
             visitNode(cbNode, node.asteriskToken) ||
@@ -432,7 +432,7 @@ namespace ts {
             visitNode(cbNode, node.body);
     }
 
-    function forEachFunctionExpression<T>(node: FunctionExpression, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInFunctionExpression<T>(node: FunctionExpression, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNodes(cbNode, cbNodes, node.modifiers) ||
             visitNode(cbNode, node.asteriskToken) ||
             visitNode(cbNode, node.name) ||
@@ -442,7 +442,7 @@ namespace ts {
             visitNode(cbNode, node.body);
     }
 
-    function forEachArrowFunction<T>(node: ArrowFunction, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInArrowFunction<T>(node: ArrowFunction, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNodes(cbNode, cbNodes, node.modifiers) ||
             visitNodes(cbNode, cbNodes, node.typeParameters) ||
             visitNodes(cbNode, cbNodes, node.parameters) ||
@@ -451,76 +451,76 @@ namespace ts {
             visitNode(cbNode, node.body);
     }
 
-    function forEachClassStaticBlockDeclaration<T>(node: ClassStaticBlockDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInClassStaticBlockDeclaration<T>(node: ClassStaticBlockDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNodes(cbNode, cbNodes, node.decorators) ||
             visitNodes(cbNode, cbNodes, node.modifiers) ||
             visitNode(cbNode, node.body);
     }
 
-    function forEachTypeReference<T>(node: TypeReferenceNode, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInTypeReference<T>(node: TypeReferenceNode, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.typeName) ||
             visitNodes(cbNode, cbNodes, node.typeArguments);
     }
 
-    function forEachTypePredicate<T>(node: TypePredicateNode, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInTypePredicate<T>(node: TypePredicateNode, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.assertsModifier) ||
             visitNode(cbNode, node.parameterName) ||
             visitNode(cbNode, node.type);
     }
 
-    function forEachTypeQuery<T>(node: TypeQueryNode, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInTypeQuery<T>(node: TypeQueryNode, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.exprName) ||
             visitNodes(cbNode, cbNodes, node.typeArguments);
     }
 
-    function forEachTypeLiteral<T>(node: TypeLiteralNode, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInTypeLiteral<T>(node: TypeLiteralNode, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNodes(cbNode, cbNodes, node.members);
     }
 
-    function forEachArrayType<T>(node: ArrayTypeNode, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInArrayType<T>(node: ArrayTypeNode, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.elementType);
     }
 
-    function forEachTupleType<T>(node: TupleTypeNode, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInTupleType<T>(node: TupleTypeNode, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNodes(cbNode, cbNodes, node.elements);
     }
 
-    function forEachUnionOrIntersectionType<T>(node: UnionTypeNode, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInUnionOrIntersectionType<T>(node: UnionTypeNode, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNodes(cbNode, cbNodes, node.types);
     }
 
-    function forEachConditionalType<T>(node: ConditionalTypeNode, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInConditionalType<T>(node: ConditionalTypeNode, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.checkType) ||
             visitNode(cbNode, node.extendsType) ||
             visitNode(cbNode, node.trueType) ||
             visitNode(cbNode, node.falseType);
     }
 
-    function forEachInferType<T>(node: InferTypeNode, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInInferType<T>(node: InferTypeNode, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.typeParameter);
     }
 
-    function forEachImportType<T>(node: ImportTypeNode, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInImportType<T>(node: ImportTypeNode, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.argument) ||
             visitNode(cbNode, node.assertions) ||
             visitNode(cbNode, node.qualifier) ||
             visitNodes(cbNode, cbNodes, node.typeArguments);
     }
 
-    function forEachImportTypeAssertionContainer<T>(node: ImportTypeAssertionContainer, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInImportTypeAssertionContainer<T>(node: ImportTypeAssertionContainer, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.assertClause);
     }
 
-    function forEachParenthesizedTypeOrTypeOperator<T>(node: ParenthesizedTypeNode, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInParenthesizedTypeOrTypeOperator<T>(node: ParenthesizedTypeNode, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, (node as ParenthesizedTypeNode | TypeOperatorNode).type);
     }
 
-    function forEachIndexedAccessType<T>(node: IndexedAccessTypeNode, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInIndexedAccessType<T>(node: IndexedAccessTypeNode, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.objectType) ||
             visitNode(cbNode, node.indexType);
     }
 
-    function forEachMappedType<T>(node: MappedTypeNode, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInMappedType<T>(node: MappedTypeNode, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.readonlyToken) ||
             visitNode(cbNode, node.typeParameter) ||
             visitNode(cbNode, node.nameType) ||
@@ -529,113 +529,113 @@ namespace ts {
             visitNodes(cbNode, cbNodes, node.members);
     }
 
-    function forEachLiteralType<T>(node: LiteralTypeNode, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInLiteralType<T>(node: LiteralTypeNode, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.literal);
     }
 
-    function forEachNamedTupleMember<T>(node: NamedTupleMember, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInNamedTupleMember<T>(node: NamedTupleMember, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.dotDotDotToken) ||
             visitNode(cbNode, node.name) ||
             visitNode(cbNode, node.questionToken) ||
             visitNode(cbNode, node.type);
     }
 
-    function forEachObjectOrArrayBindingPattern<T>(node: ObjectBindingPattern, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInObjectOrArrayBindingPattern<T>(node: ObjectBindingPattern, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNodes(cbNode, cbNodes, node.elements);
     }
 
-    function forEachArrayLiteralExpression<T>(node: ArrayLiteralExpression, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInArrayLiteralExpression<T>(node: ArrayLiteralExpression, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNodes(cbNode, cbNodes, node.elements);
     }
 
-    function forEachObjectLiteralExpression<T>(node: ObjectLiteralExpression, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInObjectLiteralExpression<T>(node: ObjectLiteralExpression, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNodes(cbNode, cbNodes, node.properties);
     }
 
-    function forEachPropertyAccessExpression<T>(node: PropertyAccessExpression, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInPropertyAccessExpression<T>(node: PropertyAccessExpression, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.expression) ||
             visitNode(cbNode, node.questionDotToken) ||
             visitNode(cbNode, node.name);
     }
 
-    function forEachElementAccessExpression<T>(node: ElementAccessExpression, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInElementAccessExpression<T>(node: ElementAccessExpression, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.expression) ||
             visitNode(cbNode, node.questionDotToken) ||
             visitNode(cbNode, node.argumentExpression);
     }
 
-    function forEachCallExpression<T>(node: CallExpression, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInCallExpression<T>(node: CallExpression, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.expression) ||
             visitNode(cbNode, node.questionDotToken) ||
             visitNodes(cbNode, cbNodes, node.typeArguments) ||
             visitNodes(cbNode, cbNodes, node.arguments);
     }
 
-    function forEachTaggedTemplateExpression<T>(node: TaggedTemplateExpression, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInTaggedTemplateExpression<T>(node: TaggedTemplateExpression, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.tag) ||
             visitNode(cbNode, node.questionDotToken) ||
             visitNodes(cbNode, cbNodes, node.typeArguments) ||
             visitNode(cbNode, node.template);
     }
 
-    function forEachTypeAssertionExpression<T>(node: TypeAssertion, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInTypeAssertionExpression<T>(node: TypeAssertion, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.type) ||
             visitNode(cbNode, node.expression);
     }
 
-    function forEachParenthesizedExpression<T>(node: ParenthesizedExpression, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInParenthesizedExpression<T>(node: ParenthesizedExpression, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.expression);
     }
 
-    function forEachDeleteExpression<T>(node: DeleteExpression, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInDeleteExpression<T>(node: DeleteExpression, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.expression);
     }
 
-    function forEachTypeOfExpression<T>(node: TypeOfExpression, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInTypeOfExpression<T>(node: TypeOfExpression, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.expression);
     }
 
-    function forEachVoidExpression<T>(node: VoidExpression, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInVoidExpression<T>(node: VoidExpression, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.expression);
     }
 
-    function forEachPrefixUnaryExpression<T>(node: PrefixUnaryExpression, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInPrefixUnaryExpression<T>(node: PrefixUnaryExpression, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.operand);
     }
 
-    function forEachYieldExpression<T>(node: YieldExpression, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInYieldExpression<T>(node: YieldExpression, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.asteriskToken) ||
             visitNode(cbNode, node.expression);
     }
 
-    function forEachAwaitExpression<T>(node: AwaitExpression, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInAwaitExpression<T>(node: AwaitExpression, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.expression);
     }
 
-    function forEachPostfixUnaryExpression<T>(node: PostfixUnaryExpression, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInPostfixUnaryExpression<T>(node: PostfixUnaryExpression, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.operand);
     }
 
-    function forEachBinaryExpression<T>(node: BinaryExpression, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInBinaryExpression<T>(node: BinaryExpression, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.left) ||
             visitNode(cbNode, node.operatorToken) ||
             visitNode(cbNode, node.right);
     }
 
-    function forEachAsExpression<T>(node: AsExpression, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInAsExpression<T>(node: AsExpression, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.expression) ||
             visitNode(cbNode, node.type);
     }
 
-    function forEachNonNullExpression<T>(node: NonNullExpression, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInNonNullExpression<T>(node: NonNullExpression, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.expression);
     }
 
-    function forEachMetaProperty<T>(node: MetaProperty, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInMetaProperty<T>(node: MetaProperty, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.name);
     }
 
-    function forEachConditionalExpression<T>(node: ConditionalExpression, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInConditionalExpression<T>(node: ConditionalExpression, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.condition) ||
             visitNode(cbNode, node.questionToken) ||
             visitNode(cbNode, node.whenTrue) ||
@@ -643,125 +643,125 @@ namespace ts {
             visitNode(cbNode, node.whenFalse);
     }
 
-    function forEachSpreadElement<T>(node: SpreadElement, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInSpreadElement<T>(node: SpreadElement, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.expression);
     }
 
-    function forEachBlock<T>(node: Block, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInBlock<T>(node: Block, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNodes(cbNode, cbNodes, node.statements);
     }
 
-    function forEachSourceFile<T>(node: SourceFile, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInSourceFile<T>(node: SourceFile, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNodes(cbNode, cbNodes, node.statements) ||
             visitNode(cbNode, node.endOfFileToken);
     }
 
-    function forEachVariableStatement<T>(node: VariableStatement, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInVariableStatement<T>(node: VariableStatement, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNodes(cbNode, cbNodes, node.decorators) ||
             visitNodes(cbNode, cbNodes, node.modifiers) ||
             visitNode(cbNode, node.declarationList);
     }
 
-    function forEachVariableDeclarationList<T>(node: VariableDeclarationList, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInVariableDeclarationList<T>(node: VariableDeclarationList, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNodes(cbNode, cbNodes, node.declarations);
     }
 
-    function forEachExpressionStatement<T>(node: ExpressionStatement, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInExpressionStatement<T>(node: ExpressionStatement, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.expression);
     }
 
-    function forEachIfStatement<T>(node: IfStatement, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInIfStatement<T>(node: IfStatement, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.expression) ||
             visitNode(cbNode, node.thenStatement) ||
             visitNode(cbNode, node.elseStatement);
     }
 
-    function forEachDoStatement<T>(node: DoStatement, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInDoStatement<T>(node: DoStatement, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.statement) ||
             visitNode(cbNode, node.expression);
     }
 
-    function forEachWhileStatement<T>(node: WhileStatement, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInWhileStatement<T>(node: WhileStatement, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.expression) ||
             visitNode(cbNode, node.statement);
     }
 
-    function forEachForStatement<T>(node: ForStatement, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInForStatement<T>(node: ForStatement, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.initializer) ||
             visitNode(cbNode, node.condition) ||
             visitNode(cbNode, node.incrementor) ||
             visitNode(cbNode, node.statement);
     }
 
-    function forEachForInStatement<T>(node: ForInStatement, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInForInStatement<T>(node: ForInStatement, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.initializer) ||
             visitNode(cbNode, node.expression) ||
             visitNode(cbNode, node.statement);
     }
 
-    function forEachForOfStatement<T>(node: ForOfStatement, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInForOfStatement<T>(node: ForOfStatement, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.awaitModifier) ||
             visitNode(cbNode, node.initializer) ||
             visitNode(cbNode, node.expression) ||
             visitNode(cbNode, node.statement);
     }
 
-    function forEachContinueStatement<T>(node: ContinueStatement, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInContinueStatement<T>(node: ContinueStatement, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.label);
     }
 
-    function forEachReturnStatement<T>(node: ReturnStatement, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInReturnStatement<T>(node: ReturnStatement, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.expression);
     }
 
-    function forEachWithStatement<T>(node: WithStatement, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInWithStatement<T>(node: WithStatement, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.expression) ||
             visitNode(cbNode, node.statement);
     }
 
-    function forEachSwitchStatement<T>(node: SwitchStatement, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInSwitchStatement<T>(node: SwitchStatement, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.expression) ||
             visitNode(cbNode, node.caseBlock);
     }
 
-    function forEachCaseBlock<T>(node: CaseBlock, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInCaseBlock<T>(node: CaseBlock, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNodes(cbNode, cbNodes, node.clauses);
     }
 
-    function forEachCaseClause<T>(node: CaseClause, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInCaseClause<T>(node: CaseClause, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.expression) ||
             visitNodes(cbNode, cbNodes, node.statements);
     }
 
-    function forEachDefaultClause<T>(node: DefaultClause, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInDefaultClause<T>(node: DefaultClause, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNodes(cbNode, cbNodes, node.statements);
     }
 
-    function forEachLabeledStatement<T>(node: LabeledStatement, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInLabeledStatement<T>(node: LabeledStatement, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.label) ||
             visitNode(cbNode, node.statement);
     }
 
-    function forEachThrowStatement<T>(node: ThrowStatement, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInThrowStatement<T>(node: ThrowStatement, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.expression);
     }
 
-    function forEachTryStatement<T>(node: TryStatement, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInTryStatement<T>(node: TryStatement, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.tryBlock) ||
             visitNode(cbNode, node.catchClause) ||
             visitNode(cbNode, node.finallyBlock);
     }
 
-    function forEachCatchClause<T>(node: CatchClause, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInCatchClause<T>(node: CatchClause, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.variableDeclaration) ||
             visitNode(cbNode, node.block);
     }
 
-    function forEachDecorator<T>(node: Decorator, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInDecorator<T>(node: Decorator, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.expression);
     }
 
-    function forEachClassDeclarationOrExpression<T>(node: ClassDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInClassDeclarationOrExpression<T>(node: ClassDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNodes(cbNode, cbNodes, node.modifiers) ||
             visitNode(cbNode, node.name) ||
             visitNodes(cbNode, cbNodes, node.typeParameters) ||
@@ -769,7 +769,7 @@ namespace ts {
             visitNodes(cbNode, cbNodes, node.members);
     }
 
-    function forEachInterfaceDeclaration<T>(node: InterfaceDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInInterfaceDeclaration<T>(node: InterfaceDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNodes(cbNode, cbNodes, node.decorators) ||
             visitNodes(cbNode, cbNodes, node.modifiers) ||
             visitNode(cbNode, node.name) ||
@@ -778,7 +778,7 @@ namespace ts {
             visitNodes(cbNode, cbNodes, node.members);
     }
 
-    function forEachTypeAliasDeclaration<T>(node: TypeAliasDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInTypeAliasDeclaration<T>(node: TypeAliasDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNodes(cbNode, cbNodes, node.decorators) ||
             visitNodes(cbNode, cbNodes, node.modifiers) ||
             visitNode(cbNode, node.name) ||
@@ -786,33 +786,33 @@ namespace ts {
             visitNode(cbNode, node.type);
     }
 
-    function forEachEnumDeclaration<T>(node: EnumDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInEnumDeclaration<T>(node: EnumDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNodes(cbNode, cbNodes, node.decorators) ||
             visitNodes(cbNode, cbNodes, node.modifiers) ||
             visitNode(cbNode, node.name) ||
             visitNodes(cbNode, cbNodes, node.members);
     }
 
-    function forEachEnumMember<T>(node: EnumMember, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInEnumMember<T>(node: EnumMember, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.name) ||
             visitNode(cbNode, node.initializer);
     }
 
-    function forEachModuleDeclaration<T>(node: ModuleDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInModuleDeclaration<T>(node: ModuleDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNodes(cbNode, cbNodes, node.decorators) ||
             visitNodes(cbNode, cbNodes, node.modifiers) ||
             visitNode(cbNode, node.name) ||
             visitNode(cbNode, node.body);
     }
 
-    function forEachImportEqualsDeclaration<T>(node: ImportEqualsDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInImportEqualsDeclaration<T>(node: ImportEqualsDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNodes(cbNode, cbNodes, node.decorators) ||
             visitNodes(cbNode, cbNodes, node.modifiers) ||
             visitNode(cbNode, node.name) ||
             visitNode(cbNode, node.moduleReference);
     }
 
-    function forEachImportDeclaration<T>(node: ImportDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInImportDeclaration<T>(node: ImportDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNodes(cbNode, cbNodes, node.decorators) ||
             visitNodes(cbNode, cbNodes, node.modifiers) ||
             visitNode(cbNode, node.importClause) ||
@@ -820,38 +820,38 @@ namespace ts {
             visitNode(cbNode, node.assertClause);
     }
 
-    function forEachImportClause<T>(node: ImportClause, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInImportClause<T>(node: ImportClause, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.name) ||
             visitNode(cbNode, node.namedBindings);
     }
 
-    function forEachAssertClause<T>(node: AssertClause, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInAssertClause<T>(node: AssertClause, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNodes(cbNode, cbNodes, node.elements);
     }
 
-    function forEachAssertEntry<T>(node: AssertEntry, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInAssertEntry<T>(node: AssertEntry, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.name) ||
             visitNode(cbNode, node.value);
     }
 
-    function forEachNamespaceExportDeclaration<T>(node: NamespaceExportDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInNamespaceExportDeclaration<T>(node: NamespaceExportDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNodes(cbNode, cbNodes, node.decorators) ||
             visitNode(cbNode, node.name);
     }
 
-    function forEachNamespaceImport<T>(node: NamespaceImport, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInNamespaceImport<T>(node: NamespaceImport, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.name);
     }
 
-    function forEachNamespaceExport<T>(node: NamespaceExport, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInNamespaceExport<T>(node: NamespaceExport, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.name);
     }
 
-    function forEachNamedImportsOrExports<T>(node: NamedImports, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInNamedImportsOrExports<T>(node: NamedImports, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNodes(cbNode, cbNodes, node.elements);
     }
 
-    function forEachExportDeclaration<T>(node: ExportDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInExportDeclaration<T>(node: ExportDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNodes(cbNode, cbNodes, node.decorators) ||
             visitNodes(cbNode, cbNodes, node.modifiers) ||
             visitNode(cbNode, node.exportClause) ||
@@ -859,135 +859,135 @@ namespace ts {
             visitNode(cbNode, node.assertClause);
     }
 
-    function forEachImportOrExportSpecifier<T>(node: ImportSpecifier, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInImportOrExportSpecifier<T>(node: ImportSpecifier, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.propertyName) ||
             visitNode(cbNode, node.name);
     }
 
-    function forEachExportAssignment<T>(node: ExportAssignment, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInExportAssignment<T>(node: ExportAssignment, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNodes(cbNode, cbNodes, node.decorators) ||
             visitNodes(cbNode, cbNodes, node.modifiers) ||
             visitNode(cbNode, node.expression);
     }
 
-    function forEachTemplateExpression<T>(node: TemplateExpression, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInTemplateExpression<T>(node: TemplateExpression, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.head) ||
             visitNodes(cbNode, cbNodes, node.templateSpans);
     }
 
-    function forEachTemplateSpan<T>(node: TemplateSpan, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInTemplateSpan<T>(node: TemplateSpan, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.expression) ||
             visitNode(cbNode, node.literal);
     }
 
-    function forEachTemplateLiteralType<T>(node: TemplateLiteralTypeNode, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInTemplateLiteralType<T>(node: TemplateLiteralTypeNode, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.head) ||
             visitNodes(cbNode, cbNodes, node.templateSpans);
     }
 
-    function forEachTemplateLiteralTypeSpan<T>(node: TemplateLiteralTypeSpan, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInTemplateLiteralTypeSpan<T>(node: TemplateLiteralTypeSpan, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.type) ||
             visitNode(cbNode, node.literal);
     }
 
-    function forEachComputedPropertyName<T>(node: ComputedPropertyName, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInComputedPropertyName<T>(node: ComputedPropertyName, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.expression);
     }
 
-    function forEachHeritageClause<T>(node: HeritageClause, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInHeritageClause<T>(node: HeritageClause, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNodes(cbNode, cbNodes, node.types);
     }
 
-    function forEachExpressionWithTypeArguments<T>(node: ExpressionWithTypeArguments, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInExpressionWithTypeArguments<T>(node: ExpressionWithTypeArguments, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.expression) ||
             visitNodes(cbNode, cbNodes, node.typeArguments);
     }
 
-    function forEachExternalModuleReference<T>(node: ExternalModuleReference, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInExternalModuleReference<T>(node: ExternalModuleReference, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.expression);
     }
 
-    function forEachMissingDeclaration<T>(node: MissingDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInMissingDeclaration<T>(node: MissingDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNodes(cbNode, cbNodes, node.decorators) ||
             visitNodes(cbNode, cbNodes, node.modifiers);
     }
 
-    function forEachCommaListExpression<T>(node: CommaListExpression, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInCommaListExpression<T>(node: CommaListExpression, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNodes(cbNode, cbNodes, node.elements);
     }
 
 
-    function forEachJsxElement<T>(node: JsxElement, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInJsxElement<T>(node: JsxElement, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.openingElement) ||
             visitNodes(cbNode, cbNodes, node.children) ||
             visitNode(cbNode, node.closingElement);
     }
 
-    function forEachJsxFragment<T>(node: JsxFragment, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInJsxFragment<T>(node: JsxFragment, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.openingFragment) ||
             visitNodes(cbNode, cbNodes, node.children) ||
             visitNode(cbNode, node.closingFragment);
     }
 
-    function forEachJsxOpeningOrSelfClosingElement<T>(node: JsxOpeningLikeElement, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInJsxOpeningOrSelfClosingElement<T>(node: JsxOpeningLikeElement, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.tagName) ||
             visitNodes(cbNode, cbNodes, node.typeArguments) ||
             visitNode(cbNode, node.attributes);
     }
 
-    function forEachJsxAttributes<T>(node: JsxAttributes, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInJsxAttributes<T>(node: JsxAttributes, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNodes(cbNode, cbNodes, node.properties);
     }
 
-    function forEachJsxAttribute<T>(node: JsxAttribute, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInJsxAttribute<T>(node: JsxAttribute, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.name) ||
             visitNode(cbNode, node.initializer);
     }
 
-    function forEachJsxSpreadAttribute<T>(node: JsxSpreadAttribute, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInJsxSpreadAttribute<T>(node: JsxSpreadAttribute, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.expression);
     }
 
-    function forEachJsxExpression<T>(node: JsxExpression, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInJsxExpression<T>(node: JsxExpression, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.dotDotDotToken) ||
             visitNode(cbNode, node.expression);
     }
 
-    function forEachJsxClosingElement<T>(node: JsxClosingElement, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInJsxClosingElement<T>(node: JsxClosingElement, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.tagName);
     }
 
 
-    function forEachOptionalRestOrJSDocParameterModifier<T>(node: OptionalTypeNode | RestTypeNode | JSDocTypeExpression | JSDocTypeReferencingNode, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInOptionalRestOrJSDocParameterModifier<T>(node: OptionalTypeNode | RestTypeNode | JSDocTypeExpression | JSDocTypeReferencingNode, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.type);
     }
 
-    function forEachJSDocFunctionType<T>(node: JSDocFunctionType, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInJSDocFunctionType<T>(node: JSDocFunctionType, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNodes(cbNode, cbNodes, node.parameters) ||
             visitNode(cbNode, node.type);
     }
 
-    function forEachJSDoc<T>(node: JSDoc, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInJSDoc<T>(node: JSDoc, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment))
             || visitNodes(cbNode, cbNodes, node.tags);
     }
 
-    function forEachJSDocSeeTag<T>(node: JSDocSeeTag, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInJSDocSeeTag<T>(node: JSDocSeeTag, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.tagName) ||
             visitNode(cbNode, node.name) ||
             (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment));
     }
 
-    function forEachJSDocNameReference<T>(node: JSDocNameReference, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInJSDocNameReference<T>(node: JSDocNameReference, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.name);
     }
 
-    function forEachJSDocMemberName<T>(node: JSDocMemberName, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInJSDocMemberName<T>(node: JSDocMemberName, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.left) ||
             visitNode(cbNode, node.right);
     }
 
-    function forEachJSDocParameterOrPropertyTag<T>(node: JSDocParameterTag | JSDocPropertyTag, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInJSDocParameterOrPropertyTag<T>(node: JSDocParameterTag | JSDocPropertyTag, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.tagName) ||
             (node.isNameFirst
                 ? visitNode(cbNode, node.name) ||
@@ -998,31 +998,31 @@ namespace ts {
                 (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment)));
     }
 
-    function forEachJSDocAuthorTag<T>(node: JSDocAuthorTag, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInJSDocAuthorTag<T>(node: JSDocAuthorTag, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.tagName) ||
             (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment));
     }
 
-    function forEachJSDocImplementsTag<T>(node: JSDocImplementsTag, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
-        return visitNode(cbNode, node.tagName) ||
-            visitNode(cbNode, node.class) ||
-            (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment));
-    }
-
-    function forEachJSDocAugmentsTag<T>(node: JSDocAugmentsTag, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInJSDocImplementsTag<T>(node: JSDocImplementsTag, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.tagName) ||
             visitNode(cbNode, node.class) ||
             (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment));
     }
 
-    function forEachJSDocTemplateTag<T>(node: JSDocTemplateTag, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInJSDocAugmentsTag<T>(node: JSDocAugmentsTag, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        return visitNode(cbNode, node.tagName) ||
+            visitNode(cbNode, node.class) ||
+            (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment));
+    }
+
+    function forEachChildInJSDocTemplateTag<T>(node: JSDocTemplateTag, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.tagName) ||
             visitNode(cbNode, node.constraint) ||
             visitNodes(cbNode, cbNodes, node.typeParameters) ||
             (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment));
     }
 
-    function forEachJSDocTypedefTag<T>(node: JSDocTypedefTag, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInJSDocTypedefTag<T>(node: JSDocTypedefTag, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.tagName) ||
             (node.typeExpression &&
                 node.typeExpression.kind === SyntaxKind.JSDocTypeExpression
@@ -1034,39 +1034,39 @@ namespace ts {
                 (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment)));
     }
 
-    function forEachJSDocCallbackTag<T>(node: JSDocCallbackTag, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInJSDocCallbackTag<T>(node: JSDocCallbackTag, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.tagName) ||
             visitNode(cbNode, node.fullName) ||
             visitNode(cbNode, node.typeExpression) ||
             (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment));
     }
 
-    function forEachJSDocReturnTag<T>(node: JSDocReturnTag | JSDocTypeTag | JSDocThisTag | JSDocEnumTag, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInJSDocReturnTag<T>(node: JSDocReturnTag | JSDocTypeTag | JSDocThisTag | JSDocEnumTag, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.tagName) ||
             visitNode(cbNode, node.typeExpression) ||
             (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment));
     }
 
-    function forEachJSDocSignature<T>(node: JSDocSignature, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInJSDocSignature<T>(node: JSDocSignature, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return forEach(node.typeParameters, cbNode) ||
             forEach(node.parameters, cbNode) ||
             visitNode(cbNode, node.type);
     }
-    function forEachJSDocLinkCodeOrPlain<T>(node: JSDocLink | JSDocLinkCode | JSDocLinkPlain, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInJSDocLinkCodeOrPlain<T>(node: JSDocLink | JSDocLinkCode | JSDocLinkPlain, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
             return visitNode(cbNode, node.name);
     }
 
-    function forEachJSDocTypeLiteral<T>(node: JSDocTypeLiteral, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInJSDocTypeLiteral<T>(node: JSDocTypeLiteral, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return forEach(node.jsDocPropertyTags, cbNode);
     }
 
 
-    function forEachJSDocTag<T>(node: JSDocTag | JSDocClassTag | JSDocPublicTag | JSDocPrivateTag | JSDocProtectedTag | JSDocReadonlyTag | JSDocDeprecatedTag, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInJSDocTag<T>(node: JSDocTag | JSDocClassTag | JSDocPublicTag | JSDocPrivateTag | JSDocProtectedTag | JSDocReadonlyTag | JSDocDeprecatedTag, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.tagName)
             || (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment));
     }
 
-    function forEachPartiallyEmittedExpression<T>(node: PartiallyEmittedExpression, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined) {
+    function forEachChildInPartiallyEmittedExpression<T>(node: PartiallyEmittedExpression, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.expression);
     }
 
