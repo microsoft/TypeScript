@@ -197,7 +197,7 @@ namespace ts {
     }
 
     /* @internal */
-    export interface PackageJsonInfo {
+    export interface ProjectPackageJsonInfo {
         fileName: string;
         parseable: boolean;
         dependencies?: ESMap<string, string>;
@@ -311,9 +311,9 @@ namespace ts {
 
         /* @internal */ getDocumentPositionMapper?(generatedFileName: string, sourceFileName?: string): DocumentPositionMapper | undefined;
         /* @internal */ getSourceFileLike?(fileName: string): SourceFileLike | undefined;
-        /* @internal */ getPackageJsonsVisibleToFile?(fileName: string, rootDir?: string): readonly PackageJsonInfo[];
+        /* @internal */ getPackageJsonsVisibleToFile?(fileName: string, rootDir?: string): readonly ProjectPackageJsonInfo[];
         /* @internal */ getNearestAncestorDirectoryWithPackageJson?(fileName: string): string | undefined;
-        /* @internal */ getPackageJsonsForAutoImport?(rootDir?: string): readonly PackageJsonInfo[];
+        /* @internal */ getPackageJsonsForAutoImport?(rootDir?: string): readonly ProjectPackageJsonInfo[];
         /* @internal */ getCachedExportInfoMap?(): ExportInfoMap;
         /* @internal */ getModuleSpecifierCache?(): ModuleSpecifierCache;
         /* @internal */ setCompilerHost?(host: CompilerHost): void;
@@ -551,6 +551,7 @@ namespace ts {
         getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean, forceDtsEmit?: boolean): EmitOutput;
 
         getProgram(): Program | undefined;
+        /*@internal*/ getCurrentProgram(): Program | undefined;
 
         /* @internal */ getNonBoundSourceFile(fileName: string): SourceFile;
         /* @internal */ getAutoImportProvider(): Program | undefined;
