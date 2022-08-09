@@ -1,5 +1,5 @@
 //// [decoratorOnClassProperty13.ts]
-declare function dec(target: any, propertyKey: string): void;
+declare function dec(target: any, propertyKey: string, desc: PropertyDescriptor): void;
 
 class C {
     @dec accessor prop;
@@ -25,6 +25,9 @@ var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (
 };
 var _C_prop_accessor_storage;
 class C {
+    constructor() {
+        _C_prop_accessor_storage.set(this, void 0);
+    }
     get prop() { return __classPrivateFieldGet(this, _C_prop_accessor_storage, "f"); }
     set prop(value) { __classPrivateFieldSet(this, _C_prop_accessor_storage, value, "f"); }
 }

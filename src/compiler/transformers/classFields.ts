@@ -145,7 +145,8 @@ namespace ts {
 
         // We need to transform class field initializers when not using Define, or when using
         // Define and targeting < ES2022.
-        const shouldTransformInitializers = !useDefineForClassFields || languageVersion < ScriptTarget.ES2022;
+        const shouldTransformInitializersUsingSet = !useDefineForClassFields || languageVersion < ScriptTarget.ES2022;
+        const shouldTransformInitializersUsingDefine = useDefineForClassFields || languageVersion < ScriptTarget.ES2022;
 
         // We need to transform `accessor` fields when targeting < ESNext
         const shouldTransformAutoAccessors = languageVersion < ScriptTarget.ESNext;
@@ -161,7 +162,7 @@ namespace ts {
         // the es2015 transformation handles those.
         const shouldTransformSuperInStaticInitializers = shouldTransformThisInStaticInitializers && languageVersion >= ScriptTarget.ES2015;
 
-        const shouldTransformAnything = shouldTransformInitializers || shouldTransformAutoAccessors;
+        const shouldTransformAnything = shouldTransformInitializersUsingSet || shouldTransformAutoAccessors;
 
         const previousOnSubstituteNode = context.onSubstituteNode;
         context.onSubstituteNode = onSubstituteNode;
@@ -218,7 +219,7 @@ namespace ts {
                     return visitClassLikeDeclaration(node as ClassLikeDeclaration);
             }
 
-            if (shouldTransformInitializers) {
+            if (shouldTransformInitializersUsingSet) {
                 if (node.transformFlags & TransformFlags.ContainsClassFields) {
                     switch (node.kind) {
                         case SyntaxKind.PropertyDeclaration:
@@ -354,7 +355,7 @@ namespace ts {
          * @param node The node to visit.
          */
         function classElementVisitor(node: Node): VisitResult<Node> {
-            if (shouldTransformInitializers) {
+            if (shouldTransformInitializersUsingSet) {
                 switch (node.kind) {
                     case SyntaxKind.Constructor:
                         // Constructors for classes using class fields are transformed in
@@ -600,7 +601,7 @@ namespace ts {
         function transformFieldInitializer(node: PropertyDeclaration) {
             Debug.assert(!hasDecorators(node));
 
-            if (!shouldTransformInitializers) {
+            if (!shouldTransformInitializersUsingSet) {
                 return visitEachChild(node, classElementVisitor, context);
             }
 
@@ -1083,7 +1084,7 @@ namespace ts {
          * Set up the environment for a class.
          */
         function visitClassLikeDeclaration(node: ClassLikeDeclaration) {
-            const shouldTransform = shouldTransformInitializers
+            const shouldTransform = shouldTransformInitializersUsingSet
                 && node.transformFlags & TransformFlags.ContainsClassFields
                 && forEach(node.members, doesClassElementNeedTransform);
 
@@ -1392,28 +1393,28 @@ namespace ts {
         }
 
         function isClassElementThatRequiresConstructorStatement(member: ClassElement) {
-            if (isStatic(member) || hasSyntacticModifier(getOriginalNode(member), ModifierFlags.Abstract)) {
+            if (isStatic(member) || hasAbstractModifier(getOriginalNode(member))) {
                 return false;
             }
-            if (useDefineForClassFields) {
-                // If we are using define semantics and targeting ESNext or higher,
-                // then we don't need to transform any class properties.
-                return languageVersion < ScriptTarget.ES2022;
-            }
-            return isInitializedProperty(member) || shouldTransformPrivateElementsOrClassStaticBlocks && isPrivateIdentifierClassElementDeclaration(member);
+
+            return shouldTransformInitializersUsingDefine && isPropertyDeclaration(member) ||
+                shouldTransformInitializersUsingSet && isInitializedProperty(member) ||
+                shouldTransformPrivateElementsOrClassStaticBlocks && isPrivateIdentifierClassElementDeclaration(member) ||
+                shouldTransformPrivateElementsOrClassStaticBlocks && shouldTransformAutoAccessors && isAutoAccessorPropertyDeclaration(member);
         }
 
         function transformConstructor(node: ClassDeclaration | ClassExpression, isDerivedClass: boolean) {
             const constructor = visitNode(getFirstConstructorWithBody(node), visitor, isConstructorDeclaration);
-            const elements = node.members.filter(isClassElementThatRequiresConstructorStatement);
-            if (!some(elements)) {
+            if (!some(node.members, isClassElementThatRequiresConstructorStatement)) {
                 return constructor;
             }
+
             const parameters = visitParameterList(constructor ? constructor.parameters : undefined, visitor, context);
             const body = transformConstructorBody(node, constructor, isDerivedClass);
             if (!body) {
                 return undefined;
             }
+
             return startOnNewLine(
                 setOriginalNode(
                     setTextRange(
@@ -1544,13 +1545,21 @@ namespace ts {
 
             statements = factory.mergeLexicalEnvironment(statements, endLexicalEnvironment());
 
+            if (statements.length === 0 && !constructor) {
+                return undefined;
+            }
+
+            const multiLine = constructor?.body && constructor.body.statements.length >= statements.length ?
+                constructor.body.multiLine ?? statements.length > 0 :
+                statements.length > 0;
+
             return setTextRange(
                 factory.createBlock(
                     setTextRange(
                         factory.createNodeArray(statements),
                         /*location*/ constructor ? constructor.body!.statements : node.members
                     ),
-                    /*multiLine*/ true
+                    multiLine
                 ),
                 /*location*/ constructor ? constructor.body : undefined
             );

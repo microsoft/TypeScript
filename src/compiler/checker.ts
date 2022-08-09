@@ -30773,7 +30773,7 @@ namespace ts {
                     // A method or accessor declaration decorator will have two or three arguments (see
                     // `PropertyDecorator` and `MethodDecorator` in core.d.ts). If we are emitting decorators
                     // for ES3, we will only pass two arguments.
-                    const hasPropDesc = parent.kind !== SyntaxKind.PropertyDeclaration && languageVersion !== ScriptTarget.ES3;
+                    const hasPropDesc = languageVersion !== ScriptTarget.ES3 && (!isPropertyDeclaration(parent) || hasAccessorModifier(parent));
                     return [
                         createSyntheticExpression(expr, getParentTypeOfClassElement(parent as ClassElement)),
                         createSyntheticExpression(expr, getClassElementPropertyKeyType(parent as ClassElement)),
@@ -30792,7 +30792,7 @@ namespace ts {
                 case SyntaxKind.ClassExpression:
                     return 1;
                 case SyntaxKind.PropertyDeclaration:
-                    return 2;
+                    return hasAccessorModifier(node.parent) ? 3 : 2;
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:

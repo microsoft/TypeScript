@@ -456,24 +456,18 @@ function Field() {
     _A_Field_StaticField_foo_1 = { value: "foo" };
     // Error
     class A_Field_StaticMethod {
-        constructor() {
-        }
         #foo = "foo";
         static #foo() { }
     }
     _b = A_Field_StaticMethod, _A_Field_StaticMethod_foo = new WeakMap();
     // Error
     class A_Field_StaticGetter {
-        constructor() {
-        }
         #foo = "foo";
         static get #foo() { return ""; }
     }
     _c = A_Field_StaticGetter, _A_Field_StaticGetter_foo = new WeakMap();
     // Error
     class A_Field_StaticSetter {
-        constructor() {
-        }
         #foo = "foo";
         static set #foo(value) { }
     }
