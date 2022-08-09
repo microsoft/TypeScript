@@ -47,9 +47,9 @@ async function* f3(): AsyncGenerator<any, { x: 'x' }, any> {
 
   return Promise.resolve({ x: 'x' });
 >Promise.resolve({ x: 'x' }) : Promise<{ x: "x"; }>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise.resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
 >{ x: 'x' } : { x: "x"; }
 >x : "x"
 >'x' : "x"
@@ -61,9 +61,9 @@ async function* g3(): AsyncIterator<any, { x: 'x' }, any> {
 
   return Promise.resolve({ x: 'x' });
 >Promise.resolve({ x: 'x' }) : Promise<{ x: "x"; }>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise.resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
 >{ x: 'x' } : { x: "x"; }
 >x : "x"
 >'x' : "x"
@@ -81,9 +81,9 @@ async function* f4(): AsyncGenerator<any, { x: 'x' }, any> {
 
   return Promise.resolve(ret); // Error
 >Promise.resolve(ret) : Promise<{ x: string; }>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise.resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
 >ret : { x: string; }
 }
 
@@ -99,9 +99,9 @@ async function* g4(): AsyncIterator<any, { x: 'x' }, any> {
 
   return Promise.resolve(ret); // Error
 >Promise.resolve(ret) : Promise<{ x: string; }>
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>Promise.resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
 >Promise : PromiseConstructor
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
 >ret : { x: string; }
 }
 
