@@ -81,5 +81,28 @@ namespace ts {
                 checkRhs(SyntaxKind.QuestionQuestionEqualsToken, /*expectParens*/ false);
             });
         });
+
+        describe("deprecatedCompat/mergeDecoratorsAndModifiers", () => {
+            it("supports deprecated createConstructorDeclaration/updateConstructorDeclaration functions", () => {
+                const body = factory.createBlock([]);
+                const ctor = factory.createConstructorDeclaration(
+                    /*decorators*/ undefined,
+                    /*modifiers*/ undefined,
+                    /*parameters*/ [],
+                    /*body*/ body,
+                );
+
+                const newBody = factory.createBlock([]);
+                const updatedCtor = factory.updateConstructorDeclaration(
+                    ctor,
+                    /*decorators*/ ctor.decorators,
+                    /*modifiers*/ ctor.modifiers?.filter(isModifier),
+                    /*parameters*/ ctor.parameters,
+                    /*body*/ newBody,
+                );
+
+                assert.strictEqual(updatedCtor.body, newBody);
+            });
+        });
     });
 }
