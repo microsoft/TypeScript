@@ -97,176 +97,178 @@ namespace ts {
 
     type ForEachChildFunction = <T>(node: any, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) => T | undefined;
 
-    const forEachChildTable: (ForEachChildFunction | undefined)[] = [];
-    for (let i = 0; i < SyntaxKind.Count; i++) forEachChildTable.push(undefined);
-    forEachChildTable[SyntaxKind.QualifiedName] = forEachChildInQualifiedName;
-    forEachChildTable[SyntaxKind.TypeParameter] = forEachChildInTypeParameter;
-    forEachChildTable[SyntaxKind.ShorthandPropertyAssignment] = forEachChildInShorthandPropertyAssignment;
-    forEachChildTable[SyntaxKind.SpreadAssignment] = forEachChildInSpreadAssignment;
-    forEachChildTable[SyntaxKind.Parameter] = forEachChildInParameter;
-    forEachChildTable[SyntaxKind.PropertyDeclaration] = forEachChildInPropertyDeclaration;
-    forEachChildTable[SyntaxKind.PropertySignature] = forEachChildInPropertySignature;
-    forEachChildTable[SyntaxKind.PropertyAssignment] = forEachChildInPropertyAssignment;
-    forEachChildTable[SyntaxKind.VariableDeclaration] = forEachChildInVariableDeclaration;
-    forEachChildTable[SyntaxKind.BindingElement] = forEachChildInBindingElement;
-    forEachChildTable[SyntaxKind.IndexSignature] = forEachChildInIndexSignature;
-    forEachChildTable[SyntaxKind.ConstructorType] = forEachChildInConstructorType;
-    forEachChildTable[SyntaxKind.FunctionType] = forEachChildInFunctionType;
-    forEachChildTable[SyntaxKind.CallSignature] = forEachChildInCallOrConstructSignature;
-    forEachChildTable[SyntaxKind.ConstructSignature] = forEachChildInCallOrConstructSignature;
-    forEachChildTable[SyntaxKind.MethodDeclaration] = forEachChildInMethodDeclaration;
-    forEachChildTable[SyntaxKind.MethodSignature] = forEachChildInMethodSignature;
-    forEachChildTable[SyntaxKind.Constructor] = forEachChildInConstructor;
-    forEachChildTable[SyntaxKind.GetAccessor] = forEachChildInGetAccessor;
-    forEachChildTable[SyntaxKind.SetAccessor] = forEachChildInSetAccessor;
-    forEachChildTable[SyntaxKind.FunctionDeclaration] = forEachChildInFunctionDeclaration;
-    forEachChildTable[SyntaxKind.FunctionExpression] = forEachChildInFunctionExpression;
-    forEachChildTable[SyntaxKind.ArrowFunction] = forEachChildInArrowFunction;
-    forEachChildTable[SyntaxKind.ClassStaticBlockDeclaration] = forEachChildInClassStaticBlockDeclaration;
-    forEachChildTable[SyntaxKind.TypeReference] = forEachChildInTypeReference;
-    forEachChildTable[SyntaxKind.TypePredicate] = forEachChildInTypePredicate;
-    forEachChildTable[SyntaxKind.TypeQuery] = forEachChildInTypeQuery;
-    forEachChildTable[SyntaxKind.TypeLiteral] = forEachChildInTypeLiteral;
-    forEachChildTable[SyntaxKind.ArrayType] = forEachChildInArrayType;
-    forEachChildTable[SyntaxKind.TupleType] = forEachChildInTupleType;
-    forEachChildTable[SyntaxKind.UnionType] = forEachChildInUnionOrIntersectionType;
-    forEachChildTable[SyntaxKind.IntersectionType] = forEachChildInUnionOrIntersectionType;
-    forEachChildTable[SyntaxKind.ConditionalType] = forEachChildInConditionalType;
-    forEachChildTable[SyntaxKind.InferType] = forEachChildInInferType;
-    forEachChildTable[SyntaxKind.ImportType] = forEachChildInImportType;
-    forEachChildTable[SyntaxKind.ImportTypeAssertionContainer] = forEachChildInImportTypeAssertionContainer;
-    forEachChildTable[SyntaxKind.ParenthesizedType] = forEachChildInParenthesizedTypeOrTypeOperator;
-    forEachChildTable[SyntaxKind.TypeOperator] = forEachChildInParenthesizedTypeOrTypeOperator;
-    forEachChildTable[SyntaxKind.IndexedAccessType] = forEachChildInIndexedAccessType;
-    forEachChildTable[SyntaxKind.MappedType] = forEachChildInMappedType;
-    forEachChildTable[SyntaxKind.LiteralType] = forEachChildInLiteralType;
-    forEachChildTable[SyntaxKind.NamedTupleMember] = forEachChildInNamedTupleMember;
-    forEachChildTable[SyntaxKind.ObjectBindingPattern] = forEachChildInObjectOrArrayBindingPattern;
-    forEachChildTable[SyntaxKind.ArrayBindingPattern] = forEachChildInObjectOrArrayBindingPattern;
-    forEachChildTable[SyntaxKind.ArrayLiteralExpression] = forEachChildInArrayLiteralExpression;
-    forEachChildTable[SyntaxKind.ObjectLiteralExpression] = forEachChildInObjectLiteralExpression;
-    forEachChildTable[SyntaxKind.PropertyAccessExpression] = forEachChildInPropertyAccessExpression;
-    forEachChildTable[SyntaxKind.ElementAccessExpression] = forEachChildInElementAccessExpression;
-    forEachChildTable[SyntaxKind.CallExpression] = forEachChildInCallExpression;
-    forEachChildTable[SyntaxKind.NewExpression] = forEachChildInCallExpression;
-    forEachChildTable[SyntaxKind.TaggedTemplateExpression] = forEachChildInTaggedTemplateExpression;
-    forEachChildTable[SyntaxKind.TypeAssertionExpression] = forEachChildInTypeAssertionExpression;
-    forEachChildTable[SyntaxKind.ParenthesizedExpression] = forEachChildInParenthesizedExpression;
-    forEachChildTable[SyntaxKind.DeleteExpression] = forEachChildInDeleteExpression;
-    forEachChildTable[SyntaxKind.TypeOfExpression] = forEachChildInTypeOfExpression;
-    forEachChildTable[SyntaxKind.VoidExpression] = forEachChildInVoidExpression;
-    forEachChildTable[SyntaxKind.PrefixUnaryExpression] = forEachChildInPrefixUnaryExpression;
-    forEachChildTable[SyntaxKind.YieldExpression] = forEachChildInYieldExpression;
-    forEachChildTable[SyntaxKind.AwaitExpression] = forEachChildInAwaitExpression;
-    forEachChildTable[SyntaxKind.PostfixUnaryExpression] = forEachChildInPostfixUnaryExpression;
-    forEachChildTable[SyntaxKind.BinaryExpression] = forEachChildInBinaryExpression;
-    forEachChildTable[SyntaxKind.AsExpression] = forEachChildInAsExpression;
-    forEachChildTable[SyntaxKind.NonNullExpression] = forEachChildInNonNullExpression;
-    forEachChildTable[SyntaxKind.MetaProperty] = forEachChildInMetaProperty;
-    forEachChildTable[SyntaxKind.ConditionalExpression] = forEachChildInConditionalExpression;
-    forEachChildTable[SyntaxKind.SpreadElement] = forEachChildInSpreadElement;
-    forEachChildTable[SyntaxKind.Block] = forEachChildInBlock;
-    forEachChildTable[SyntaxKind.ModuleBlock] = forEachChildInBlock;
-    forEachChildTable[SyntaxKind.SourceFile] = forEachChildInSourceFile;
-    forEachChildTable[SyntaxKind.VariableStatement] = forEachChildInVariableStatement;
-    forEachChildTable[SyntaxKind.VariableDeclarationList] = forEachChildInVariableDeclarationList;
-    forEachChildTable[SyntaxKind.ExpressionStatement] = forEachChildInExpressionStatement;
-    forEachChildTable[SyntaxKind.IfStatement] = forEachChildInIfStatement;
-    forEachChildTable[SyntaxKind.DoStatement] = forEachChildInDoStatement;
-    forEachChildTable[SyntaxKind.WhileStatement] = forEachChildInWhileStatement;
-    forEachChildTable[SyntaxKind.ForStatement] = forEachChildInForStatement;
-    forEachChildTable[SyntaxKind.ForInStatement] = forEachChildInForInStatement;
-    forEachChildTable[SyntaxKind.ForOfStatement] = forEachChildInForOfStatement;
-    forEachChildTable[SyntaxKind.ContinueStatement] = forEachChildInContinueStatement;
-    forEachChildTable[SyntaxKind.BreakStatement] = forEachChildInContinueStatement;
-    forEachChildTable[SyntaxKind.ReturnStatement] = forEachChildInReturnStatement;
-    forEachChildTable[SyntaxKind.WithStatement] = forEachChildInWithStatement;
-    forEachChildTable[SyntaxKind.SwitchStatement] = forEachChildInSwitchStatement;
-    forEachChildTable[SyntaxKind.CaseBlock] = forEachChildInCaseBlock;
-    forEachChildTable[SyntaxKind.CaseClause] = forEachChildInCaseClause;
-    forEachChildTable[SyntaxKind.DefaultClause] = forEachChildInDefaultClause;
-    forEachChildTable[SyntaxKind.LabeledStatement] = forEachChildInLabeledStatement;
-    forEachChildTable[SyntaxKind.ThrowStatement] = forEachChildInThrowStatement;
-    forEachChildTable[SyntaxKind.TryStatement] = forEachChildInTryStatement;
-    forEachChildTable[SyntaxKind.CatchClause] = forEachChildInCatchClause;
-    forEachChildTable[SyntaxKind.Decorator] = forEachChildInDecorator;
-    forEachChildTable[SyntaxKind.ClassDeclaration] = forEachChildInClassDeclarationOrExpression;
-    forEachChildTable[SyntaxKind.ClassExpression] = forEachChildInClassDeclarationOrExpression;
-    forEachChildTable[SyntaxKind.InterfaceDeclaration] = forEachChildInInterfaceDeclaration;
-    forEachChildTable[SyntaxKind.TypeAliasDeclaration] = forEachChildInTypeAliasDeclaration;
-    forEachChildTable[SyntaxKind.EnumDeclaration] = forEachChildInEnumDeclaration;
-    forEachChildTable[SyntaxKind.EnumMember] = forEachChildInEnumMember;
-    forEachChildTable[SyntaxKind.ModuleDeclaration] = forEachChildInModuleDeclaration;
-    forEachChildTable[SyntaxKind.ImportEqualsDeclaration] = forEachChildInImportEqualsDeclaration;
-    forEachChildTable[SyntaxKind.ImportDeclaration] = forEachChildInImportDeclaration;
-    forEachChildTable[SyntaxKind.ImportClause] = forEachChildInImportClause;
-    forEachChildTable[SyntaxKind.AssertClause] = forEachChildInAssertClause;
-    forEachChildTable[SyntaxKind.AssertEntry] = forEachChildInAssertEntry;
-    forEachChildTable[SyntaxKind.NamespaceExportDeclaration] = forEachChildInNamespaceExportDeclaration;
-    forEachChildTable[SyntaxKind.NamespaceImport] = forEachChildInNamespaceImport;
-    forEachChildTable[SyntaxKind.NamespaceExport] = forEachChildInNamespaceExport;
-    forEachChildTable[SyntaxKind.NamedImports] = forEachChildInNamedImportsOrExports;
-    forEachChildTable[SyntaxKind.NamedExports] = forEachChildInNamedImportsOrExports;
-    forEachChildTable[SyntaxKind.ExportDeclaration] = forEachChildInExportDeclaration;
-    forEachChildTable[SyntaxKind.ImportSpecifier] = forEachChildInImportOrExportSpecifier;
-    forEachChildTable[SyntaxKind.ExportSpecifier] = forEachChildInImportOrExportSpecifier;
-    forEachChildTable[SyntaxKind.ExportAssignment] = forEachChildInExportAssignment;
-    forEachChildTable[SyntaxKind.TemplateExpression] = forEachChildInTemplateExpression;
-    forEachChildTable[SyntaxKind.TemplateSpan] = forEachChildInTemplateSpan;
-    forEachChildTable[SyntaxKind.TemplateLiteralType] = forEachChildInTemplateLiteralType;
-    forEachChildTable[SyntaxKind.TemplateLiteralTypeSpan] = forEachChildInTemplateLiteralTypeSpan;
-    forEachChildTable[SyntaxKind.ComputedPropertyName] = forEachChildInComputedPropertyName;
-    forEachChildTable[SyntaxKind.HeritageClause] = forEachChildInHeritageClause;
-    forEachChildTable[SyntaxKind.ExpressionWithTypeArguments] = forEachChildInExpressionWithTypeArguments;
-    forEachChildTable[SyntaxKind.ExternalModuleReference] = forEachChildInExternalModuleReference;
-    forEachChildTable[SyntaxKind.MissingDeclaration] = forEachChildInMissingDeclaration;
-    forEachChildTable[SyntaxKind.CommaListExpression] = forEachChildInCommaListExpression;
-    forEachChildTable[SyntaxKind.JsxElement] = forEachChildInJsxElement;
-    forEachChildTable[SyntaxKind.JsxFragment] = forEachChildInJsxFragment;
-    forEachChildTable[SyntaxKind.JsxSelfClosingElement] = forEachChildInJsxOpeningOrSelfClosingElement;
-    forEachChildTable[SyntaxKind.JsxOpeningElement] = forEachChildInJsxOpeningOrSelfClosingElement;
-    forEachChildTable[SyntaxKind.JsxAttributes] = forEachChildInJsxAttributes;
-    forEachChildTable[SyntaxKind.JsxAttribute] = forEachChildInJsxAttribute;
-    forEachChildTable[SyntaxKind.JsxSpreadAttribute] = forEachChildInJsxSpreadAttribute;
-    forEachChildTable[SyntaxKind.JsxExpression] = forEachChildInJsxExpression;
-    forEachChildTable[SyntaxKind.JsxClosingElement] = forEachChildInJsxClosingElement;
-    forEachChildTable[SyntaxKind.OptionalType] = forEachChildInOptionalRestOrJSDocParameterModifier;
-    forEachChildTable[SyntaxKind.RestType] = forEachChildInOptionalRestOrJSDocParameterModifier;
-    forEachChildTable[SyntaxKind.JSDocTypeExpression] = forEachChildInOptionalRestOrJSDocParameterModifier;
-    forEachChildTable[SyntaxKind.JSDocNonNullableType] = forEachChildInOptionalRestOrJSDocParameterModifier;
-    forEachChildTable[SyntaxKind.JSDocNullableType] = forEachChildInOptionalRestOrJSDocParameterModifier;
-    forEachChildTable[SyntaxKind.JSDocOptionalType] = forEachChildInOptionalRestOrJSDocParameterModifier;
-    forEachChildTable[SyntaxKind.JSDocVariadicType] = forEachChildInOptionalRestOrJSDocParameterModifier;
-    forEachChildTable[SyntaxKind.JSDocFunctionType] = forEachChildInJSDocFunctionType;
-    forEachChildTable[SyntaxKind.JSDoc] = forEachChildInJSDoc;
-    forEachChildTable[SyntaxKind.JSDocSeeTag] = forEachChildInJSDocSeeTag;
-    forEachChildTable[SyntaxKind.JSDocNameReference] = forEachChildInJSDocNameReference;
-    forEachChildTable[SyntaxKind.JSDocMemberName] = forEachChildInJSDocMemberName;
-    forEachChildTable[SyntaxKind.JSDocParameterTag] = forEachChildInJSDocParameterOrPropertyTag;
-    forEachChildTable[SyntaxKind.JSDocPropertyTag] = forEachChildInJSDocParameterOrPropertyTag;
-    forEachChildTable[SyntaxKind.JSDocAuthorTag] = forEachChildInJSDocAuthorTag;
-    forEachChildTable[SyntaxKind.JSDocImplementsTag] = forEachChildInJSDocImplementsTag;
-    forEachChildTable[SyntaxKind.JSDocAugmentsTag] = forEachChildInJSDocAugmentsTag;
-    forEachChildTable[SyntaxKind.JSDocTemplateTag] = forEachChildInJSDocTemplateTag;
-    forEachChildTable[SyntaxKind.JSDocTypedefTag] = forEachChildInJSDocTypedefTag;
-    forEachChildTable[SyntaxKind.JSDocCallbackTag] = forEachChildInJSDocCallbackTag;
-    forEachChildTable[SyntaxKind.JSDocReturnTag] = forEachChildInJSDocReturnTag;
-    forEachChildTable[SyntaxKind.JSDocTypeTag] = forEachChildInJSDocReturnTag;
-    forEachChildTable[SyntaxKind.JSDocThisTag] = forEachChildInJSDocReturnTag;
-    forEachChildTable[SyntaxKind.JSDocEnumTag] = forEachChildInJSDocReturnTag;
-    forEachChildTable[SyntaxKind.JSDocSignature] = forEachChildInJSDocSignature;
-    forEachChildTable[SyntaxKind.JSDocLink] = forEachChildInJSDocLinkCodeOrPlain;
-    forEachChildTable[SyntaxKind.JSDocLinkCode] = forEachChildInJSDocLinkCodeOrPlain;
-    forEachChildTable[SyntaxKind.JSDocLinkPlain] = forEachChildInJSDocLinkCodeOrPlain;
-    forEachChildTable[SyntaxKind.JSDocTypeLiteral] = forEachChildInJSDocTypeLiteral;
-    forEachChildTable[SyntaxKind.JSDocTag] = forEachChildInJSDocTag;
-    forEachChildTable[SyntaxKind.JSDocClassTag] = forEachChildInJSDocTag;
-    forEachChildTable[SyntaxKind.JSDocPublicTag] = forEachChildInJSDocTag;
-    forEachChildTable[SyntaxKind.JSDocPrivateTag] = forEachChildInJSDocTag;
-    forEachChildTable[SyntaxKind.JSDocProtectedTag] = forEachChildInJSDocTag;
-    forEachChildTable[SyntaxKind.JSDocReadonlyTag] = forEachChildInJSDocTag;
-    forEachChildTable[SyntaxKind.JSDocDeprecatedTag] = forEachChildInJSDocTag;
-    forEachChildTable[SyntaxKind.PartiallyEmittedExpression] = forEachChildInPartiallyEmittedExpression;
+    const forEachChildTable: Partial<Record<SyntaxKind, ForEachChildFunction>> = {
+        // @ts-ignore
+        __proto__: null, // eslint-disable-line no-null/no-null
+        [SyntaxKind.QualifiedName]: forEachChildInQualifiedName,
+        [SyntaxKind.TypeParameter]: forEachChildInTypeParameter,
+        [SyntaxKind.ShorthandPropertyAssignment]: forEachChildInShorthandPropertyAssignment,
+        [SyntaxKind.SpreadAssignment]: forEachChildInSpreadAssignment,
+        [SyntaxKind.Parameter]: forEachChildInParameter,
+        [SyntaxKind.PropertyDeclaration]: forEachChildInPropertyDeclaration,
+        [SyntaxKind.PropertySignature]: forEachChildInPropertySignature,
+        [SyntaxKind.PropertyAssignment]: forEachChildInPropertyAssignment,
+        [SyntaxKind.VariableDeclaration]: forEachChildInVariableDeclaration,
+        [SyntaxKind.BindingElement]: forEachChildInBindingElement,
+        [SyntaxKind.IndexSignature]: forEachChildInIndexSignature,
+        [SyntaxKind.ConstructorType]: forEachChildInConstructorType,
+        [SyntaxKind.FunctionType]: forEachChildInFunctionType,
+        [SyntaxKind.CallSignature]: forEachChildInCallOrConstructSignature,
+        [SyntaxKind.ConstructSignature]: forEachChildInCallOrConstructSignature,
+        [SyntaxKind.MethodDeclaration]: forEachChildInMethodDeclaration,
+        [SyntaxKind.MethodSignature]: forEachChildInMethodSignature,
+        [SyntaxKind.Constructor]: forEachChildInConstructor,
+        [SyntaxKind.GetAccessor]: forEachChildInGetAccessor,
+        [SyntaxKind.SetAccessor]: forEachChildInSetAccessor,
+        [SyntaxKind.FunctionDeclaration]: forEachChildInFunctionDeclaration,
+        [SyntaxKind.FunctionExpression]: forEachChildInFunctionExpression,
+        [SyntaxKind.ArrowFunction]: forEachChildInArrowFunction,
+        [SyntaxKind.ClassStaticBlockDeclaration]: forEachChildInClassStaticBlockDeclaration,
+        [SyntaxKind.TypeReference]: forEachChildInTypeReference,
+        [SyntaxKind.TypePredicate]: forEachChildInTypePredicate,
+        [SyntaxKind.TypeQuery]: forEachChildInTypeQuery,
+        [SyntaxKind.TypeLiteral]: forEachChildInTypeLiteral,
+        [SyntaxKind.ArrayType]: forEachChildInArrayType,
+        [SyntaxKind.TupleType]: forEachChildInTupleType,
+        [SyntaxKind.UnionType]: forEachChildInUnionOrIntersectionType,
+        [SyntaxKind.IntersectionType]: forEachChildInUnionOrIntersectionType,
+        [SyntaxKind.ConditionalType]: forEachChildInConditionalType,
+        [SyntaxKind.InferType]: forEachChildInInferType,
+        [SyntaxKind.ImportType]: forEachChildInImportType,
+        [SyntaxKind.ImportTypeAssertionContainer]: forEachChildInImportTypeAssertionContainer,
+        [SyntaxKind.ParenthesizedType]: forEachChildInParenthesizedTypeOrTypeOperator,
+        [SyntaxKind.TypeOperator]: forEachChildInParenthesizedTypeOrTypeOperator,
+        [SyntaxKind.IndexedAccessType]: forEachChildInIndexedAccessType,
+        [SyntaxKind.MappedType]: forEachChildInMappedType,
+        [SyntaxKind.LiteralType]: forEachChildInLiteralType,
+        [SyntaxKind.NamedTupleMember]: forEachChildInNamedTupleMember,
+        [SyntaxKind.ObjectBindingPattern]: forEachChildInObjectOrArrayBindingPattern,
+        [SyntaxKind.ArrayBindingPattern]: forEachChildInObjectOrArrayBindingPattern,
+        [SyntaxKind.ArrayLiteralExpression]: forEachChildInArrayLiteralExpression,
+        [SyntaxKind.ObjectLiteralExpression]: forEachChildInObjectLiteralExpression,
+        [SyntaxKind.PropertyAccessExpression]: forEachChildInPropertyAccessExpression,
+        [SyntaxKind.ElementAccessExpression]: forEachChildInElementAccessExpression,
+        [SyntaxKind.CallExpression]: forEachChildInCallExpression,
+        [SyntaxKind.NewExpression]: forEachChildInCallExpression,
+        [SyntaxKind.TaggedTemplateExpression]: forEachChildInTaggedTemplateExpression,
+        [SyntaxKind.TypeAssertionExpression]: forEachChildInTypeAssertionExpression,
+        [SyntaxKind.ParenthesizedExpression]: forEachChildInParenthesizedExpression,
+        [SyntaxKind.DeleteExpression]: forEachChildInDeleteExpression,
+        [SyntaxKind.TypeOfExpression]: forEachChildInTypeOfExpression,
+        [SyntaxKind.VoidExpression]: forEachChildInVoidExpression,
+        [SyntaxKind.PrefixUnaryExpression]: forEachChildInPrefixUnaryExpression,
+        [SyntaxKind.YieldExpression]: forEachChildInYieldExpression,
+        [SyntaxKind.AwaitExpression]: forEachChildInAwaitExpression,
+        [SyntaxKind.PostfixUnaryExpression]: forEachChildInPostfixUnaryExpression,
+        [SyntaxKind.BinaryExpression]: forEachChildInBinaryExpression,
+        [SyntaxKind.AsExpression]: forEachChildInAsExpression,
+        [SyntaxKind.NonNullExpression]: forEachChildInNonNullExpression,
+        [SyntaxKind.MetaProperty]: forEachChildInMetaProperty,
+        [SyntaxKind.ConditionalExpression]: forEachChildInConditionalExpression,
+        [SyntaxKind.SpreadElement]: forEachChildInSpreadElement,
+        [SyntaxKind.Block]: forEachChildInBlock,
+        [SyntaxKind.ModuleBlock]: forEachChildInBlock,
+        [SyntaxKind.SourceFile]: forEachChildInSourceFile,
+        [SyntaxKind.VariableStatement]: forEachChildInVariableStatement,
+        [SyntaxKind.VariableDeclarationList]: forEachChildInVariableDeclarationList,
+        [SyntaxKind.ExpressionStatement]: forEachChildInExpressionStatement,
+        [SyntaxKind.IfStatement]: forEachChildInIfStatement,
+        [SyntaxKind.DoStatement]: forEachChildInDoStatement,
+        [SyntaxKind.WhileStatement]: forEachChildInWhileStatement,
+        [SyntaxKind.ForStatement]: forEachChildInForStatement,
+        [SyntaxKind.ForInStatement]: forEachChildInForInStatement,
+        [SyntaxKind.ForOfStatement]: forEachChildInForOfStatement,
+        [SyntaxKind.ContinueStatement]: forEachChildInContinueStatement,
+        [SyntaxKind.BreakStatement]: forEachChildInContinueStatement,
+        [SyntaxKind.ReturnStatement]: forEachChildInReturnStatement,
+        [SyntaxKind.WithStatement]: forEachChildInWithStatement,
+        [SyntaxKind.SwitchStatement]: forEachChildInSwitchStatement,
+        [SyntaxKind.CaseBlock]: forEachChildInCaseBlock,
+        [SyntaxKind.CaseClause]: forEachChildInCaseClause,
+        [SyntaxKind.DefaultClause]: forEachChildInDefaultClause,
+        [SyntaxKind.LabeledStatement]: forEachChildInLabeledStatement,
+        [SyntaxKind.ThrowStatement]: forEachChildInThrowStatement,
+        [SyntaxKind.TryStatement]: forEachChildInTryStatement,
+        [SyntaxKind.CatchClause]: forEachChildInCatchClause,
+        [SyntaxKind.Decorator]: forEachChildInDecorator,
+        [SyntaxKind.ClassDeclaration]: forEachChildInClassDeclarationOrExpression,
+        [SyntaxKind.ClassExpression]: forEachChildInClassDeclarationOrExpression,
+        [SyntaxKind.InterfaceDeclaration]: forEachChildInInterfaceDeclaration,
+        [SyntaxKind.TypeAliasDeclaration]: forEachChildInTypeAliasDeclaration,
+        [SyntaxKind.EnumDeclaration]: forEachChildInEnumDeclaration,
+        [SyntaxKind.EnumMember]: forEachChildInEnumMember,
+        [SyntaxKind.ModuleDeclaration]: forEachChildInModuleDeclaration,
+        [SyntaxKind.ImportEqualsDeclaration]: forEachChildInImportEqualsDeclaration,
+        [SyntaxKind.ImportDeclaration]: forEachChildInImportDeclaration,
+        [SyntaxKind.ImportClause]: forEachChildInImportClause,
+        [SyntaxKind.AssertClause]: forEachChildInAssertClause,
+        [SyntaxKind.AssertEntry]: forEachChildInAssertEntry,
+        [SyntaxKind.NamespaceExportDeclaration]: forEachChildInNamespaceExportDeclaration,
+        [SyntaxKind.NamespaceImport]: forEachChildInNamespaceImport,
+        [SyntaxKind.NamespaceExport]: forEachChildInNamespaceExport,
+        [SyntaxKind.NamedImports]: forEachChildInNamedImportsOrExports,
+        [SyntaxKind.NamedExports]: forEachChildInNamedImportsOrExports,
+        [SyntaxKind.ExportDeclaration]: forEachChildInExportDeclaration,
+        [SyntaxKind.ImportSpecifier]: forEachChildInImportOrExportSpecifier,
+        [SyntaxKind.ExportSpecifier]: forEachChildInImportOrExportSpecifier,
+        [SyntaxKind.ExportAssignment]: forEachChildInExportAssignment,
+        [SyntaxKind.TemplateExpression]: forEachChildInTemplateExpression,
+        [SyntaxKind.TemplateSpan]: forEachChildInTemplateSpan,
+        [SyntaxKind.TemplateLiteralType]: forEachChildInTemplateLiteralType,
+        [SyntaxKind.TemplateLiteralTypeSpan]: forEachChildInTemplateLiteralTypeSpan,
+        [SyntaxKind.ComputedPropertyName]: forEachChildInComputedPropertyName,
+        [SyntaxKind.HeritageClause]: forEachChildInHeritageClause,
+        [SyntaxKind.ExpressionWithTypeArguments]: forEachChildInExpressionWithTypeArguments,
+        [SyntaxKind.ExternalModuleReference]: forEachChildInExternalModuleReference,
+        [SyntaxKind.MissingDeclaration]: forEachChildInMissingDeclaration,
+        [SyntaxKind.CommaListExpression]: forEachChildInCommaListExpression,
+        [SyntaxKind.JsxElement]: forEachChildInJsxElement,
+        [SyntaxKind.JsxFragment]: forEachChildInJsxFragment,
+        [SyntaxKind.JsxSelfClosingElement]: forEachChildInJsxOpeningOrSelfClosingElement,
+        [SyntaxKind.JsxOpeningElement]: forEachChildInJsxOpeningOrSelfClosingElement,
+        [SyntaxKind.JsxAttributes]: forEachChildInJsxAttributes,
+        [SyntaxKind.JsxAttribute]: forEachChildInJsxAttribute,
+        [SyntaxKind.JsxSpreadAttribute]: forEachChildInJsxSpreadAttribute,
+        [SyntaxKind.JsxExpression]: forEachChildInJsxExpression,
+        [SyntaxKind.JsxClosingElement]: forEachChildInJsxClosingElement,
+        [SyntaxKind.OptionalType]: forEachChildInOptionalRestOrJSDocParameterModifier,
+        [SyntaxKind.RestType]: forEachChildInOptionalRestOrJSDocParameterModifier,
+        [SyntaxKind.JSDocTypeExpression]: forEachChildInOptionalRestOrJSDocParameterModifier,
+        [SyntaxKind.JSDocNonNullableType]: forEachChildInOptionalRestOrJSDocParameterModifier,
+        [SyntaxKind.JSDocNullableType]: forEachChildInOptionalRestOrJSDocParameterModifier,
+        [SyntaxKind.JSDocOptionalType]: forEachChildInOptionalRestOrJSDocParameterModifier,
+        [SyntaxKind.JSDocVariadicType]: forEachChildInOptionalRestOrJSDocParameterModifier,
+        [SyntaxKind.JSDocFunctionType]: forEachChildInJSDocFunctionType,
+        [SyntaxKind.JSDoc]: forEachChildInJSDoc,
+        [SyntaxKind.JSDocSeeTag]: forEachChildInJSDocSeeTag,
+        [SyntaxKind.JSDocNameReference]: forEachChildInJSDocNameReference,
+        [SyntaxKind.JSDocMemberName]: forEachChildInJSDocMemberName,
+        [SyntaxKind.JSDocParameterTag]: forEachChildInJSDocParameterOrPropertyTag,
+        [SyntaxKind.JSDocPropertyTag]: forEachChildInJSDocParameterOrPropertyTag,
+        [SyntaxKind.JSDocAuthorTag]: forEachChildInJSDocAuthorTag,
+        [SyntaxKind.JSDocImplementsTag]: forEachChildInJSDocImplementsTag,
+        [SyntaxKind.JSDocAugmentsTag]: forEachChildInJSDocAugmentsTag,
+        [SyntaxKind.JSDocTemplateTag]: forEachChildInJSDocTemplateTag,
+        [SyntaxKind.JSDocTypedefTag]: forEachChildInJSDocTypedefTag,
+        [SyntaxKind.JSDocCallbackTag]: forEachChildInJSDocCallbackTag,
+        [SyntaxKind.JSDocReturnTag]: forEachChildInJSDocReturnTag,
+        [SyntaxKind.JSDocTypeTag]: forEachChildInJSDocReturnTag,
+        [SyntaxKind.JSDocThisTag]: forEachChildInJSDocReturnTag,
+        [SyntaxKind.JSDocEnumTag]: forEachChildInJSDocReturnTag,
+        [SyntaxKind.JSDocSignature]: forEachChildInJSDocSignature,
+        [SyntaxKind.JSDocLink]: forEachChildInJSDocLinkCodeOrPlain,
+        [SyntaxKind.JSDocLinkCode]: forEachChildInJSDocLinkCodeOrPlain,
+        [SyntaxKind.JSDocLinkPlain]: forEachChildInJSDocLinkCodeOrPlain,
+        [SyntaxKind.JSDocTypeLiteral]: forEachChildInJSDocTypeLiteral,
+        [SyntaxKind.JSDocTag]: forEachChildInJSDocTag,
+        [SyntaxKind.JSDocClassTag]: forEachChildInJSDocTag,
+        [SyntaxKind.JSDocPublicTag]: forEachChildInJSDocTag,
+        [SyntaxKind.JSDocPrivateTag]: forEachChildInJSDocTag,
+        [SyntaxKind.JSDocProtectedTag]: forEachChildInJSDocTag,
+        [SyntaxKind.JSDocReadonlyTag]: forEachChildInJSDocTag,
+        [SyntaxKind.JSDocDeprecatedTag]: forEachChildInJSDocTag,
+        [SyntaxKind.PartiallyEmittedExpression]: forEachChildInPartiallyEmittedExpression,
+    };
 
     function forEachChildInQualifiedName<T>(node: QualifiedName, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.left) ||
