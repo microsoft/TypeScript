@@ -630,9 +630,9 @@ namespace ts {
             case SyntaxKind.NamedTupleMember:
                 Debug.type<NamedTupleMember>(node);
                 return factory.updateNamedTupleMember(node,
-                    nodeVisitor(node.dotDotDotToken, visitor, isDotDotDotToken),
+                    nodeVisitor(node.dotDotDotToken, tokenVisitor, isDotDotDotToken),
                     nodeVisitor(node.name, visitor, isIdentifier),
-                    nodeVisitor(node.questionToken, visitor, isQuestionToken),
+                    nodeVisitor(node.questionToken, tokenVisitor, isQuestionToken),
                     nodeVisitor(node.type, visitor, isTypeNode),
                 );
 
