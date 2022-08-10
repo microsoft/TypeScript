@@ -371,7 +371,7 @@ function f1x(obj) {
 
 
 //// [narrowingUnionToUnion.d.ts]
-declare type Falsy = false | 0 | 0n | '' | null | undefined;
+type Falsy = false | 0 | 0n | '' | null | undefined;
 declare function isFalsy(value: unknown): value is Falsy;
 declare function fx1(x: string | number | undefined): void;
 declare function fx2<T>(x: T | undefined): void;
@@ -411,7 +411,7 @@ declare function isMaybeZero(value: number | null | undefined): value is 0 | nul
 declare function isEmptyArray<T>(value: T[]): value is [];
 declare function isMaybeEmptyArray<T>(value: T[] | null | undefined): value is [] | null | undefined;
 declare const TEST_CASES: (((value: string) => void) | ((value: number) => void) | ((value: string[]) => void))[];
-declare type EmptyString = '' | null | undefined;
+type EmptyString = '' | null | undefined;
 declare function isEmpty(value: string | EmptyString): value is EmptyString;
 declare let test: string | null | undefined;
 declare function assert<T>(value: any): asserts value is T;
