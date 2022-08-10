@@ -17071,11 +17071,12 @@ namespace ts {
                     case SyntaxKind.TypeQuery:
                         // return false;
                         const entityName = (node as TypeQueryNode).exprName;
-                        const firstIdentifierDeclaration = getSymbolAtLocation(getFirstIdentifier(entityName))?.valueDeclaration; // TODO: change to check if single declaration
-                        if (firstIdentifierDeclaration) {
-                            const foundSymbol = resolveName(firstIdentifierDeclaration, tp.symbol.escapedName, SymbolFlags.Type, undefined, undefined, false);
-                            if (tp.symbol && foundSymbol !== tp.symbol && !(node as TypeQueryNode).typeArguments) {
-                                return false;
+                        const firstIdentifier = getSymbolAtLocation(getFirstIdentifier(entityName));
+                        if (firstIdentifier?.declarations && firstIdentifier.declarations.length === 1 && tp.symbol) {
+                            const symbols = getSymbolsInScope(firstIdentifier.declarations[0], SymbolFlags.All, /*allowDuplicates*/ true);
+                            if (!symbols.find(sym => sym === tp.symbol)) {
+                                const typeArguments = (node as TypeQueryNode).typeArguments;
+                                return typeArguments? !!forEach(typeArguments, containsReference) : false;
                             }
                         }
                         return true;
@@ -42084,19 +42085,26 @@ namespace ts {
 
         // Language service support
 
-        function getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[] {
+        function getSymbolsInScope(location: Node, meaning: SymbolFlags, allowDuplicates = false): Symbol[] {
             if (location.flags & NodeFlags.InWithStatement) {
                 // We cannot answer semantic questions within a with block, do not proceed any further
                 return [];
             }
 
-            const symbols = createSymbolTable();
+            const symbols = new Map<__String, Symbol[]>();
             let isStaticSymbol = false;
 
             populateSymbols();
 
             symbols.delete(InternalSymbolName.This); // Not a symbol, a keyword
-            return symbolsToArray(symbols);
+
+            const result: Symbol[] = [];
+            symbols.forEach((symbolArray, id) => {
+                if (!isReservedMemberName(id)) {
+                    result.push(...symbolArray);
+                }
+            });
+            return result;
 
             function populateSymbols() {
                 while (location) {
@@ -42165,8 +42173,14 @@ namespace ts {
                     // We will copy all symbol regardless of its reserved name because
                     // symbolsToArray will check whether the key is a reserved name and
                     // it will not copy symbol with reserved name to the array
-                    if (!symbols.has(id)) {
-                        symbols.set(id, symbol);
+                    if (allowDuplicates) {
+                        if (!symbols.has(id)) {
+                            symbols.set(id, []);
+                        }
+                        symbols.get(id)!.push(symbol);
+                    }
+                    else if (!symbols.has(id)) {
+                        symbols.set(id, [symbol]);
                     }
                 }
             }
