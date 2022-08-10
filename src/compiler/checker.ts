@@ -1426,7 +1426,7 @@ namespace ts {
         function mergeSymbolTable(target: SymbolTable, source: SymbolTable, unidirectional = false) {
             source.forEach((sourceSymbol, id) => {
                 const targetSymbol = target.get(id);
-                target.set(id, targetSymbol ? mergeSymbol(targetSymbol, sourceSymbol, unidirectional) : sourceSymbol);
+                target.set(id, targetSymbol ? mergeSymbol(targetSymbol, sourceSymbol, unidirectional) : getMergedSymbol(sourceSymbol));
             });
         }
 
@@ -9065,10 +9065,8 @@ namespace ts {
                         return getReturnTypeOfSignature(getterSignature);
                     }
                 }
-                if (isInJSFile(declaration)) {
-                    const type = getParameterTypeOfTypeTag(func, declaration);
-                    if (type) return type;
-                }
+                const parameterTypeOfTypeTag = getParameterTypeOfTypeTag(func, declaration);
+                if (parameterTypeOfTypeTag) return parameterTypeOfTypeTag;
                 // Use contextual parameter type if one is available
                 const type = declaration.symbol.escapedName === InternalSymbolName.This ? getContextualThisParameterType(func) : getContextuallyTypedParameterType(declaration);
                 if (type) {
@@ -13117,7 +13115,14 @@ namespace ts {
                         continue;
                     }
                 }
-                result.push(getSignatureFromDeclaration(decl));
+                // If this is a function or method declaration, get the signature from the @type tag for the sake of optional parameters.
+                // Exclude contextually-typed kinds because we already apply the @type tag to the context, plus applying it here to the initializer would supress checks that the two are compatible.
+                result.push(
+                    (!isFunctionExpressionOrArrowFunction(decl) &&
+                        !isObjectLiteralMethod(decl) &&
+                        getSignatureOfTypeTag(decl)) ||
+                        getSignatureFromDeclaration(decl)
+                );
             }
             return result;
         }
@@ -13152,7 +13157,7 @@ namespace ts {
                 else {
                     const type = signature.declaration && getEffectiveReturnTypeNode(signature.declaration);
                     let jsdocPredicate: TypePredicate | undefined;
-                    if (!type && isInJSFile(signature.declaration)) {
+                    if (!type) {
                         const jsdocSignature = getSignatureOfTypeTag(signature.declaration!);
                         if (jsdocSignature && signature !== jsdocSignature) {
                             jsdocPredicate = getTypePredicateOfSignature(jsdocSignature);
@@ -17470,8 +17475,7 @@ namespace ts {
         }
 
         function isContextSensitiveFunctionLikeDeclaration(node: FunctionLikeDeclaration): boolean {
-            return (!isFunctionDeclaration(node) || isInJSFile(node) && !!getTypeForDeclarationFromJSDocComment(node)) &&
-                (hasContextSensitiveParameters(node) || hasContextSensitiveReturnExpression(node));
+            return hasContextSensitiveParameters(node) || hasContextSensitiveReturnExpression(node);
         }
 
         function hasContextSensitiveReturnExpression(node: FunctionLikeDeclaration) {
@@ -17480,7 +17484,7 @@ namespace ts {
         }
 
         function isContextSensitiveFunctionOrObjectLiteralMethod(func: Node): func is FunctionExpression | ArrowFunction | MethodDeclaration {
-            return (isInJSFile(func) && isFunctionDeclaration(func) || isFunctionExpressionOrArrowFunction(func) || isObjectLiteralMethod(func)) &&
+            return (isFunctionExpressionOrArrowFunction(func) || isObjectLiteralMethod(func)) &&
                 isContextSensitiveFunctionLikeDeclaration(func);
         }
 
@@ -28163,16 +28167,31 @@ namespace ts {
             // If object literal is contextually typed by the implied type of a binding pattern, augment the result
             // type with those properties for which the binding pattern specifies a default value.
             // If the object literal is spread into another object literal, skip this step and let the top-level object
-            // literal handle it instead.
-            if (contextualTypeHasPattern && node.parent.kind !== SyntaxKind.SpreadAssignment) {
-                for (const prop of getPropertiesOfType(contextualType)) {
-                    if (!propertiesTable.get(prop.escapedName) && !getPropertyOfType(spread, prop.escapedName)) {
-                        if (!(prop.flags & SymbolFlags.Optional)) {
-                            error(prop.valueDeclaration || (prop as TransientSymbol).bindingElement,
-                                Diagnostics.Initializer_provides_no_value_for_this_binding_element_and_the_binding_element_has_no_default_value);
+            // literal handle it instead. Note that this might require full traversal to the root pattern's parent
+            // as it's the guaranteed to be the common ancestor of the pattern node and the current object node.
+            // It's not possible to check if the immediate parent node is a spread assignment
+            // since the type flows in non-obvious ways through conditional expressions, IIFEs and more.
+            if (contextualTypeHasPattern) {
+                const rootPatternParent = findAncestor(contextualType.pattern!.parent, n =>
+                    n.kind === SyntaxKind.VariableDeclaration ||
+                    n.kind === SyntaxKind.BinaryExpression ||
+                    n.kind === SyntaxKind.Parameter
+                );
+                const spreadOrOutsideRootObject = findAncestor(node, n =>
+                    n === rootPatternParent ||
+                    n.kind === SyntaxKind.SpreadAssignment
+                )!;
+
+                if (spreadOrOutsideRootObject.kind !== SyntaxKind.SpreadAssignment) {
+                    for (const prop of getPropertiesOfType(contextualType)) {
+                        if (!propertiesTable.get(prop.escapedName) && !getPropertyOfType(spread, prop.escapedName)) {
+                            if (!(prop.flags & SymbolFlags.Optional)) {
+                                error(prop.valueDeclaration || (prop as TransientSymbol).bindingElement,
+                                    Diagnostics.Initializer_provides_no_value_for_this_binding_element_and_the_binding_element_has_no_default_value);
+                            }
+                            propertiesTable.set(prop.escapedName, prop);
+                            propertiesArray.push(prop);
                         }
-                        propertiesTable.set(prop.escapedName, prop);
-                        propertiesArray.push(prop);
                     }
                 }
             }
@@ -42531,6 +42550,12 @@ namespace ts {
                         const container = findAncestor(name, or(isClassLike, isInterfaceDeclaration));
                         if (container) {
                             return resolveJSDocMemberName(name, /*ignoreErrors*/ false, getSymbolOfNode(container));
+                        }
+                    }
+                    if (result && isJSDoc) {
+                        const container = getJSDocHost(name);
+                        if (container && isEnumMember(container) && container === result.valueDeclaration) {
+                            return resolveEntityName(name, meaning, /*ignoreErrors*/ true, /* dontResolveAlias */ true, getSourceFileOfNode(container)) || result;
                         }
                     }
                     return result;

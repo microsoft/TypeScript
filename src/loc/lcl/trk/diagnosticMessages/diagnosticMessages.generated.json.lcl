@@ -8554,10 +8554,13 @@
       </Item>
       <Item ItemId=";Module_0_cannot_be_imported_using_this_construct_The_specifier_only_resolves_to_an_ES_module_which_c_1471" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Module '{0}' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.]]></Val>
+          <Val><![CDATA[Module '{0}' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{0}' modülü bu yapı kullanılarak içeri aktarılamaz. Tanımlayıcı yalnızca eşzamanlı olarak içeri aktarılamayan bir ES modülüne çözümleniyor. Bunun yerine dinamik içeri aktarma kullanın.]]></Val>
+            <Val><![CDATA['{0}' modülü bu yapı kullanılarak içe aktarılamaz. Belirtici yalnızca 'require' ile içe aktarılamayan bir ES modülüne çözümlenir. Bunun yerine bir ECMAScript içe aktarma kullanın.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Module '{0}' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -12833,6 +12836,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";The_current_file_is_a_CommonJS_module_whose_imports_will_produce_require_calls_however_the_reference_1479" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("{0}")' call instead.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Geçerli dosya, içe aktarma işlemlerinin 'require' çağrıları üreteceği bir CommonJS modülüdür; ancak başvurulan dosya bir ECMAScript modülüdür ve 'require' ile içe aktarılamaz. Bunun yerine dinamik bir 'import("{0}")' çağrısı yazmayı deneyin.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";The_current_host_does_not_support_the_0_option_5001" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The current host does not support the '{0}' option.]]></Val>
@@ -13918,6 +13930,42 @@
           <Val><![CDATA[This use of 'import' is invalid. 'import()' calls can be written, but they must have parentheses and cannot have type arguments.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA['import' çağrısının bu kullanımı geçersiz. 'import()' çağrıları yazılabilir ancak ayraç içermeleri gerekir ve tür bağımsız değişkenleri içeremezler.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";To_convert_this_file_to_an_ECMAScript_module_add_the_field_type_Colon_module_to_0_1482" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[To convert this file to an ECMAScript module, add the field `"type": "module"` to '{0}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Bu dosyayı bir ECMAScript modülüne dönüştürmek için, '{0}' dizinine `"type": "module"` alanı ekleyin.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";To_convert_this_file_to_an_ECMAScript_module_change_its_file_extension_to_0_or_add_the_field_type_Co_1481" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[To convert this file to an ECMAScript module, change its file extension to '{0}', or add the field `"type": "module"` to '{1}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Bu dosyayı bir ECMAScript modülüne dönüştürmek için dosya uzantısını '{0}' olarak değiştirin veya '{1}' dizinine ''type': 'module'' alanı ekleyin.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";To_convert_this_file_to_an_ECMAScript_module_change_its_file_extension_to_0_or_create_a_local_packag_1480" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[To convert this file to an ECMAScript module, change its file extension to '{0}' or create a local package.json file with `{ "type": "module" }`.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Bu dosyayı bir ECMAScript modülüne dönüştürmek için dosya uzantısını '{0}' olarak değiştirin veya `{ "type": "module" }` ile yerel bir package.json dosyası oluşturun.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";To_convert_this_file_to_an_ECMAScript_module_create_a_local_package_json_file_with_type_Colon_module_1483" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[To convert this file to an ECMAScript module, create a local package.json file with `{ "type": "module" }`.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Bu dosyayı bir ECMAScript modülüne dönüştürmek için, `{ "type": "module" }` ile yerel bir package.json dosyası oluşturun.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

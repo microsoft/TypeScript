@@ -415,7 +415,7 @@ declare let obj1: {
     readonly d: number;
     e: string;
 };
-declare type Point = {
+type Point = {
     x: number;
     y: number;
     z?: number;
@@ -427,7 +427,7 @@ declare let p3: Point | undefined;
 declare let p4: Point | null | undefined;
 declare function f1(p: Point): void;
 declare function f2(p: Point | null | undefined): void;
-declare type ObjectDescriptor<D, M> = {
+type ObjectDescriptor<D, M> = {
     data?: D;
     methods?: M & ThisType<D & M>;
 };
@@ -438,7 +438,7 @@ declare let x1: {
 } & {
     moveBy(dx: number, dy: number): void;
 };
-declare type ObjectDescriptor2<D, M> = ThisType<D & M> & {
+type ObjectDescriptor2<D, M> = ThisType<D & M> & {
     data?: D;
     methods?: M;
 };
@@ -449,12 +449,12 @@ declare let x2: {
 } & {
     moveBy(dx: number, dy: number): void;
 };
-declare type PropDesc<T> = {
+type PropDesc<T> = {
     value?: T;
     get?(): T;
     set?(value: T): void;
 };
-declare type PropDescMap<T> = {
+type PropDescMap<T> = {
     [K in keyof T]: PropDesc<T[K]>;
 };
 declare function defineProp<T, K extends string, U>(obj: T, name: K, desc: PropDesc<U> & ThisType<T>): T & Record<K, U>;
@@ -465,17 +465,17 @@ declare let p12: Point & {
     foo: number;
     bar: number;
 };
-declare type Accessors<T> = {
+type Accessors<T> = {
     [K in keyof T]: (() => T[K]) | Computed<T[K]>;
 };
-declare type Dictionary<T> = {
+type Dictionary<T> = {
     [x: string]: T;
 };
-declare type Computed<T> = {
+type Computed<T> = {
     get?(): T;
     set?(value: T): void;
 };
-declare type VueOptions<D, M, P> = ThisType<D & M & P> & {
+type VueOptions<D, M, P> = ThisType<D & M & P> & {
     data?: D | (() => D);
     methods?: M;
     computed?: Accessors<P>;
