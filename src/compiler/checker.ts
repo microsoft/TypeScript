@@ -27075,9 +27075,11 @@ namespace ts {
                 case AssignmentDeclarationKind.ExportsProperty:
                 case AssignmentDeclarationKind.Prototype:
                 case AssignmentDeclarationKind.PrototypeProperty:
-                    let valueDeclaration = binaryExpression.left.symbol?.valueDeclaration;
-                    // falls through
                 case AssignmentDeclarationKind.ModuleExports:
+                    let valueDeclaration: Declaration | undefined;
+                    if (kind !== AssignmentDeclarationKind.ModuleExports) {
+                        valueDeclaration = binaryExpression.left.symbol?.valueDeclaration;
+                    }
                     valueDeclaration ||= binaryExpression.symbol?.valueDeclaration;
                     const annotated = valueDeclaration && getEffectiveTypeAnnotationNode(valueDeclaration);
                     return annotated ? getTypeFromTypeNode(annotated) : undefined;
@@ -27612,12 +27614,16 @@ namespace ts {
                 if (!isErrorType(intrinsicClassAttribs)) {
                     const typeParams = getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(intrinsicClassAttribs.symbol);
                     const hostClassType = getReturnTypeOfSignature(sig);
-                    apparentAttributesType = intersectTypes(
-                        typeParams
-                            ? createTypeReference(intrinsicClassAttribs as GenericType, fillMissingTypeArguments([hostClassType], typeParams, getMinTypeArgumentCount(typeParams), isInJSFile(context)))
-                            : intrinsicClassAttribs,
-                        apparentAttributesType
-                    );
+                    let libraryManagedAttributeType: Type | undefined;
+                    if (typeParams && typeParams.length === 1) {
+                        const inferredArgs = fillMissingTypeArguments([hostClassType], typeParams, getMinTypeArgumentCount(typeParams), isInJSFile(context));
+                        libraryManagedAttributeType = instantiateType(intrinsicClassAttribs, createTypeMapper(typeParams, inferredArgs));
+                    }
+                    else if (typeParams) libraryManagedAttributeType = undefined;
+                    else libraryManagedAttributeType = intrinsicClassAttribs;
+                    if (libraryManagedAttributeType) {
+                        apparentAttributesType = intersectTypes(libraryManagedAttributeType, apparentAttributesType);
+                    }
                 }
 
                 const intrinsicAttribs = getJsxType(JsxNames.IntrinsicAttributes, context);
@@ -31902,11 +31908,14 @@ namespace ts {
                 return false;
             }
             const func = isFunctionDeclaration(node) || isFunctionExpression(node) ? node :
-                isVariableDeclaration(node) && node.initializer && isFunctionExpression(node.initializer) ? node.initializer :
+                (isVariableDeclaration(node) || isPropertyAssignment(node)) && node.initializer && isFunctionExpression(node.initializer) ? node.initializer :
                 undefined;
             if (func) {
-                // If the node has a @class tag, treat it like a constructor.
+                // If the node has a @class or @constructor tag, treat it like a constructor.
                 if (getJSDocClassTag(node)) return true;
+
+                // If the node is a property of an object literal.
+                if (isPropertyAssignment(walkUpParenthesizedExpressions(func.parent))) return false;
 
                 // If the symbol of the node has members, treat it like a constructor.
                 const symbol = getSymbolOfNode(func);

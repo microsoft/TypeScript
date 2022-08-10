@@ -168,6 +168,21 @@ namespace ts {
                 commandLineArgs: ["--b", "/src/tests", "--verbose", "--force"],
             });
 
+            verifyTscWithEdits({
+                scenario: "sample1",
+                subScenario: "tsbuildinfo has error",
+                fs: () => loadProjectFromFiles({
+                    "/src/project/main.ts": "export const x = 10;",
+                    "/src/project/tsconfig.json": "{}",
+                    "/src/project/tsconfig.tsbuildinfo": "Some random string",
+                }),
+                commandLineArgs: ["--b", "src/project", "-i", "-v"],
+                edits: [{
+                    subScenario: "tsbuildinfo written has error",
+                    modifyFs: fs => prependText(fs, "/src/project/tsconfig.tsbuildinfo", "Some random string"),
+                }]
+            });
+
             verifyTscCompileLike(testTscCompileLike, {
                 scenario: "sample1",
                 subScenario: "rebuilds completely when version in tsbuildinfo doesnt match ts version",
