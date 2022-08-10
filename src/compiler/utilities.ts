@@ -5360,20 +5360,16 @@ namespace ts {
         return getStringFromExpandedCharCodes(expandedCharCodes);
     }
 
+    export function readJsonOrUndefined(path: string, hostOrText: { readFile(fileName: string): string | undefined } | string): object | undefined {
+        const jsonText = isString(hostOrText) ? hostOrText : hostOrText.readFile(path);
+        if (!jsonText) return undefined;
+        // gracefully handle if readFile fails or returns not JSON
+        const result = parseConfigFileTextToJson(path, jsonText);
+        return !result.error ? result.config : undefined;
+    }
+
     export function readJson(path: string, host: { readFile(fileName: string): string | undefined }): object {
-        try {
-            const jsonText = host.readFile(path);
-            if (!jsonText) return {};
-            const result = parseConfigFileTextToJson(path, jsonText);
-            if (result.error) {
-                return {};
-            }
-            return result.config;
-        }
-        catch (e) {
-            // gracefully handle if readFile fails or returns not JSON
-            return {};
-        }
+        return readJsonOrUndefined(path, host) || {};
     }
 
     export function directoryProbablyExists(directoryName: string, host: { directoryExists?: (directoryName: string) => boolean }): boolean {

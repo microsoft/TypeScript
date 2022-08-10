@@ -1110,11 +1110,11 @@ namespace ts {
             const emitterDiagnostics = createDiagnosticCollection();
             const emittedOutputs = new Map<Path, string>();
             let resultFlags = BuildResultFlags.DeclarationOutputUnchanged;
-            const existingBuildInfo = state.buildInfoCache.get(projectPath)!.buildInfo as BuildInfo;
+            const existingBuildInfo = state.buildInfoCache.get(projectPath)!.buildInfo || undefined;
             outputFiles.forEach(({ name, text, writeByteOrderMark, buildInfo }) => {
                 emittedOutputs.set(toPath(state, name), name);
                 if (buildInfo) {
-                    if ((buildInfo.program as ProgramBundleEmitBuildInfo)?.outSignature !== (existingBuildInfo.program as ProgramBundleEmitBuildInfo)?.outSignature) {
+                    if ((buildInfo.program as ProgramBundleEmitBuildInfo)?.outSignature !== (existingBuildInfo?.program as ProgramBundleEmitBuildInfo)?.outSignature) {
                         resultFlags &= ~BuildResultFlags.DeclarationOutputUnchanged;
                     }
                     setBuildInfo(state, buildInfo, projectPath, config.options, resultFlags);
@@ -1496,8 +1496,7 @@ namespace ts {
             return existing.buildInfo || undefined;
         }
         const value = state.readFileWithCache(buildInfoPath);
-        const buildInfo = value ? ts.getBuildInfo(value) : undefined;
-        Debug.assert(modifiedTime || !buildInfo);
+        const buildInfo = value ? ts.getBuildInfo(buildInfoPath, value) : undefined;
         state.buildInfoCache.set(resolvedConfigPath, { path, buildInfo: buildInfo || false, modifiedTime: modifiedTime || missingFileModifiedTime });
         return buildInfo;
     }
@@ -1587,7 +1586,14 @@ namespace ts {
                 };
             }
 
-            const buildInfo = Debug.checkDefined(getBuildInfo(state, buildInfoPath, resolvedPath, buildInfoTime));
+            const buildInfo = getBuildInfo(state, buildInfoPath, resolvedPath, buildInfoTime);
+            if (!buildInfo) {
+                // Error reading buildInfo
+                return {
+                    type: UpToDateStatusType.ErrorReadingFile,
+                    fileName: buildInfoPath
+                };
+            }
             if ((buildInfo.bundle || buildInfo.program) && buildInfo.version !== version) {
                 return {
                     type: UpToDateStatusType.TsVersionOutputOfDate,
@@ -2343,6 +2349,13 @@ namespace ts {
                     Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist,
                     relName(state, configFileName),
                     relName(state, status.missingOutputFileName)
+                );
+            case UpToDateStatusType.ErrorReadingFile:
+                return reportStatus(
+                    state,
+                    Diagnostics.Project_0_is_out_of_date_because_there_was_error_reading_file_1,
+                    relName(state, configFileName),
+                    relName(state, status.fileName)
                 );
             case UpToDateStatusType.OutOfDateBuildInfo:
                 return reportStatus(

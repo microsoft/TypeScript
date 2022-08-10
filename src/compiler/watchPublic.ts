@@ -13,15 +13,13 @@ namespace ts {
         if (host.getBuildInfo) {
             // host provides buildinfo, get it from there. This allows host to cache it
             buildInfo = host.getBuildInfo(buildInfoPath, compilerOptions.configFilePath);
-            if (!buildInfo) return undefined;
         }
         else {
             const content = host.readFile(buildInfoPath);
             if (!content) return undefined;
-            buildInfo = getBuildInfo(content);
+            buildInfo = getBuildInfo(buildInfoPath, content);
         }
-        if (buildInfo.version !== version) return undefined;
-        if (!buildInfo.program) return undefined;
+        if (!buildInfo || buildInfo.version !== version || !buildInfo.program) return undefined;
         return createBuilderProgramUsingProgramBuildInfo(buildInfo.program, buildInfoPath, host);
     }
 
