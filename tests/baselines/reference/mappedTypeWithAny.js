@@ -80,10 +80,10 @@ var def = stringifyPair(void 0);
 
 
 //// [mappedTypeWithAny.d.ts]
-declare type Item = {
+type Item = {
     value: string;
 };
-declare type ItemMap<T> = {
+type ItemMap<T> = {
     [P in keyof T]: Item;
 };
 declare let x0: keyof any;
@@ -97,20 +97,20 @@ declare let x3: {
     [P in keyof any]: Item;
 };
 declare let x4: ItemMap<any>;
-declare type Data = {
+type Data = {
     value: string;
 };
-declare type StrictDataMap<T> = {
+type StrictDataMap<T> = {
     [P in keyof T]: Data;
 };
 declare let z: StrictDataMap<any>;
-declare type Arrayish<T extends unknown[]> = {
+type Arrayish<T extends unknown[]> = {
     [K in keyof T]: T[K];
 };
-declare type Objectish<T extends unknown> = {
+type Objectish<T extends unknown> = {
     [K in keyof T]: T[K];
 };
-declare type IndirectArrayish<U extends unknown[]> = Objectish<U>;
+type IndirectArrayish<U extends unknown[]> = Objectish<U>;
 declare function bar(arrayish: Arrayish<any>, objectish: Objectish<any>, indirectArrayish: IndirectArrayish<any>): void;
 declare function stringifyArray<T extends readonly any[]>(arr: T): {
     -readonly [K in keyof T]: string;
@@ -120,9 +120,9 @@ declare function stringifyPair<T extends readonly [any, any]>(arr: T): {
     -readonly [K in keyof T]: string;
 };
 declare let def: [any, any];
-declare type Evolvable<E extends Evolver> = {
+type Evolvable<E extends Evolver> = {
     [P in keyof E]: never;
 };
-declare type Evolver<T extends Evolvable<any> = any> = {
+type Evolver<T extends Evolvable<any> = any> = {
     [key in keyof Partial<T>]: never;
 };
