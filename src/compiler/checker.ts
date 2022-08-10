@@ -17069,7 +17069,6 @@ namespace ts {
                         return !tp.isThisType && isPartOfTypeNode(node) && maybeTypeParameterReference(node) &&
                             getTypeFromTypeNodeWorker(node as TypeNode) === tp; // use worker because we're looking for === equality
                     case SyntaxKind.TypeQuery:
-                        // return false;
                         const entityName = (node as TypeQueryNode).exprName;
                         const firstIdentifier = getSymbolAtLocation(getFirstIdentifier(entityName));
                         if (firstIdentifier?.declarations && firstIdentifier.declarations.length === 1 && tp.symbol) {
