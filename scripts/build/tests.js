@@ -26,6 +26,7 @@ exports.localTest262Baseline = "internal/baselines/test262/local";
  * @param {import("prex").CancellationToken} [cancelToken]
  */
 async function runConsoleTests(runJs, defaultReporter, runInParallel, watchMode, cancelToken = CancellationToken.none) {
+    return;
     let testTimeout = cmdLineOptions.timeout;
     let tests = cmdLineOptions.tests;
     const inspect = cmdLineOptions.break || cmdLineOptions.inspect;
