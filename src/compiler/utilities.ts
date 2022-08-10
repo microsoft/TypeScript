@@ -2018,7 +2018,7 @@ namespace ts {
             case SyntaxKind.MetaProperty:
                 return true;
             case SyntaxKind.ExpressionWithTypeArguments:
-                return !isHeritageClause(node.parent);
+                return !isHeritageClause(node.parent) && !isJSDocAugmentsTag(node.parent);
             case SyntaxKind.QualifiedName:
                 while (node.parent.kind === SyntaxKind.QualifiedName) {
                     node = node.parent;
@@ -5075,11 +5075,18 @@ namespace ts {
         readonly isImplements: boolean;
     }
     export function tryGetClassImplementingOrExtendingExpressionWithTypeArguments(node: Node): ClassImplementingOrExtendingExpressionWithTypeArguments | undefined {
-        return isExpressionWithTypeArguments(node)
-            && isHeritageClause(node.parent)
-            && isClassLike(node.parent.parent)
-            ? { class: node.parent.parent, isImplements: node.parent.token === SyntaxKind.ImplementsKeyword }
-            : undefined;
+        if (isExpressionWithTypeArguments(node)) {
+            if (isHeritageClause(node.parent) && isClassLike(node.parent.parent)) {
+                return { class: node.parent.parent, isImplements: node.parent.token === SyntaxKind.ImplementsKeyword };
+            }
+            if (isJSDocAugmentsTag(node.parent)) {
+                const host = getEffectiveJSDocHost(node.parent);
+                if (host && isClassDeclaration(host)) {
+                    return { class: host, isImplements: false };
+                }
+            }
+        }
+        return undefined;
     }
 
     export function isAssignmentExpression(node: Node, excludeCompoundAssignment: true): node is AssignmentExpression<EqualsToken>;
