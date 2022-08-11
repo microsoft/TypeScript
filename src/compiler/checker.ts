@@ -27614,16 +27614,15 @@ namespace ts {
                 if (!isErrorType(intrinsicClassAttribs)) {
                     const typeParams = getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(intrinsicClassAttribs.symbol);
                     const hostClassType = getReturnTypeOfSignature(sig);
-                    let libraryManagedAttributeType: Type | undefined;
-                    if (typeParams && typeParams.length === 1) {
+                    let libraryManagedAttributeType: Type;
+                    if (typeParams) {
+                        // apply JSX.IntrinsicClassElements<hostClassType, ...>
                         const inferredArgs = fillMissingTypeArguments([hostClassType], typeParams, getMinTypeArgumentCount(typeParams), isInJSFile(context));
                         libraryManagedAttributeType = instantiateType(intrinsicClassAttribs, createTypeMapper(typeParams, inferredArgs));
                     }
-                    else if (typeParams) libraryManagedAttributeType = undefined;
+                    // or JSX.IntrinsicClassElements has no generics.
                     else libraryManagedAttributeType = intrinsicClassAttribs;
-                    if (libraryManagedAttributeType) {
-                        apparentAttributesType = intersectTypes(libraryManagedAttributeType, apparentAttributesType);
-                    }
+                    apparentAttributesType = intersectTypes(libraryManagedAttributeType, apparentAttributesType);
                 }
 
                 const intrinsicAttribs = getJsxType(JsxNames.IntrinsicAttributes, context);
