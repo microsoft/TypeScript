@@ -653,18 +653,18 @@ namespace ts.SymbolDisplay {
                 symbolToDisplay = alias;
             }
             const fullSymbolDisplayParts = symbolToDisplayParts(typeChecker, symbolToDisplay, enclosingDeclaration || sourceFile, /*meaning*/ undefined,
-            SymbolFormatFlags.WriteTypeParametersOrArguments | SymbolFormatFlags.UseOnlyExternalAliasing | SymbolFormatFlags.AllowAnyNodeKind);
-            if(symbolToDisplay.flags & SymbolFlags.Signature){
-                if(indexInfos){
+                SymbolFormatFlags.WriteTypeParametersOrArguments | SymbolFormatFlags.UseOnlyExternalAliasing | SymbolFormatFlags.AllowAnyNodeKind);
+            if (symbolToDisplay.flags & SymbolFlags.Signature) {
+                if (indexInfos) {
                     let index = 1;
                     fullSymbolDisplayParts[index++] = punctuationPart(SyntaxKind.OpenBracketToken);
-                    if(length(indexInfos)){
+                    if (length(indexInfos)) {
                         //Needed to handle more than one type of index
-                        for(let info=0; info<indexInfos.length; info++){
+                        for (let info = 0; info < indexInfos.length; info++) {
                             const indexTypeDisplayParts = typeToDisplayParts(typeChecker, indexInfos[info].keyType);
                             //Needed to handle template literals
                             for (const part of indexTypeDisplayParts) fullSymbolDisplayParts[index++] = part;
-                            if(info !== indexInfos.length-1){
+                            if (info !== indexInfos.length - 1) {
                                 fullSymbolDisplayParts[index++] = spacePart();
                                 fullSymbolDisplayParts[index++] = punctuationPart(SyntaxKind.BarToken);
                                 fullSymbolDisplayParts[index++] = spacePart();
@@ -673,8 +673,8 @@ namespace ts.SymbolDisplay {
                         fullSymbolDisplayParts[index] = punctuationPart(SyntaxKind.CloseBracketToken);
                     }
                 }
-                else{
-                    fullSymbolDisplayParts[2] = textOrKeywordPart(TypeFlags[`1`]); //This is the fallback in case else fails
+                else {
+                    fullSymbolDisplayParts[2] = textOrKeywordPart("Any"); //This is the fallback in case else fails
                 }
             }
             addRange(displayParts, fullSymbolDisplayParts);
