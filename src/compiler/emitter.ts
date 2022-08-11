@@ -947,6 +947,353 @@ namespace ts {
         const emitBinaryExpression = createEmitBinaryExpression();
 
         reset();
+
+        const _emitWithUnspecifiedHintWorkerTable: (undefined | ((node: any) => void))[] = [];
+        for (let i = 0; i < SyntaxKind.Count; i++) _emitWithUnspecifiedHintWorkerTable.push(undefined);
+
+        // Pseudo-literals
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.TemplateHead] =
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.TemplateMiddle] =
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.TemplateTail] =
+            (node: LiteralExpression) => emitLiteral(node, /*jsxAttributeEscape*/ false);
+
+        // Identifiers
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.Identifier] =
+            emitIdentifier;
+
+        // PrivateIdentifiers
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.PrivateIdentifier] =
+            emitPrivateIdentifier;
+
+        // Parse tree nodes
+        // Names
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.QualifiedName] =
+            emitQualifiedName;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.ComputedPropertyName] =
+            emitComputedPropertyName;
+
+        // Signature elements
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.TypeParameter] =
+            emitTypeParameter;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.Parameter] =
+            emitParameter;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.Decorator] =
+            emitDecorator;
+
+        // Type members
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.PropertySignature] =
+            emitPropertySignature;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.PropertyDeclaration] =
+            emitPropertyDeclaration;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.MethodSignature] =
+            emitMethodSignature;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.MethodDeclaration] =
+            emitMethodDeclaration;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.ClassStaticBlockDeclaration] =
+            emitClassStaticBlockDeclaration;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.Constructor] =
+            emitConstructor;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.GetAccessor] =
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.SetAccessor] =
+            emitAccessorDeclaration;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.CallSignature] =
+            emitCallSignature;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.ConstructSignature] =
+            emitConstructSignature;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.IndexSignature] =
+            emitIndexSignature;
+
+        // Types
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.TypePredicate] =
+            emitTypePredicate;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.TypeReference] =
+            emitTypeReference;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.FunctionType] =
+            emitFunctionType;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.ConstructorType] =
+            emitConstructorType;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.TypeQuery] =
+            emitTypeQuery;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.TypeLiteral] =
+            emitTypeLiteral;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.ArrayType] =
+            emitArrayType;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.TupleType] =
+            emitTupleType;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.OptionalType] =
+            emitOptionalType;
+        // SyntaxKind.RestType is handled below
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.UnionType] =
+            emitUnionType;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.IntersectionType] =
+            emitIntersectionType;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.ConditionalType] =
+            emitConditionalType;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.InferType] =
+            emitInferType;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.ParenthesizedType] =
+            emitParenthesizedType;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.ExpressionWithTypeArguments] =
+            emitExpressionWithTypeArguments;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.ThisType] =
+            emitThisType;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.TypeOperator] =
+            emitTypeOperator;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.IndexedAccessType] =
+            emitIndexedAccessType;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.MappedType] =
+            emitMappedType;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.LiteralType] =
+            emitLiteralType;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.NamedTupleMember] =
+            emitNamedTupleMember;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.TemplateLiteralType] =
+            emitTemplateType;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.TemplateLiteralTypeSpan] =
+            emitTemplateTypeSpan;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.ImportType] =
+            emitImportTypeNode;
+
+        // Binding patterns
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.ObjectBindingPattern] =
+            emitObjectBindingPattern;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.ArrayBindingPattern] =
+            emitArrayBindingPattern;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.BindingElement] =
+            emitBindingElement;
+
+        // Misc
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.TemplateSpan] =
+            emitTemplateSpan;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.SemicolonClassElement] =
+            emitSemicolonClassElement;
+
+        // Statements
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.Block] =
+            emitBlock;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.VariableStatement] =
+            emitVariableStatement;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.EmptyStatement] =
+            emitEmptyStatement;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.ExpressionStatement] =
+            emitExpressionStatement;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.IfStatement] =
+            emitIfStatement;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.DoStatement] =
+            emitDoStatement;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.WhileStatement] =
+            emitWhileStatement;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.ForStatement] =
+            emitForStatement;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.ForInStatement] =
+            emitForInStatement;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.ForOfStatement] =
+            emitForOfStatement;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.ContinueStatement] =
+            emitContinueStatement;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.BreakStatement] =
+            emitBreakStatement;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.ReturnStatement] =
+            emitReturnStatement;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.WithStatement] =
+            emitWithStatement;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.SwitchStatement] =
+            emitSwitchStatement;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.LabeledStatement] =
+            emitLabeledStatement;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.ThrowStatement] =
+            emitThrowStatement;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.TryStatement] =
+            emitTryStatement;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.DebuggerStatement] =
+            emitDebuggerStatement;
+
+        // Declarations
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.VariableDeclaration] =
+            emitVariableDeclaration;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.VariableDeclarationList] =
+            emitVariableDeclarationList;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.FunctionDeclaration] =
+            emitFunctionDeclaration;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.ClassDeclaration] =
+            emitClassDeclaration;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.InterfaceDeclaration] =
+            emitInterfaceDeclaration;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.TypeAliasDeclaration] =
+            emitTypeAliasDeclaration;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.EnumDeclaration] =
+            emitEnumDeclaration;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.ModuleDeclaration] =
+            emitModuleDeclaration;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.ModuleBlock] =
+            emitModuleBlock;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.CaseBlock] =
+            emitCaseBlock;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.NamespaceExportDeclaration] =
+            emitNamespaceExportDeclaration;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.ImportEqualsDeclaration] =
+            emitImportEqualsDeclaration;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.ImportDeclaration] =
+            emitImportDeclaration;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.ImportClause] =
+            emitImportClause;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.NamespaceImport] =
+            emitNamespaceImport;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.NamespaceExport] =
+            emitNamespaceExport;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.NamedImports] =
+            emitNamedImports;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.ImportSpecifier] =
+            emitImportSpecifier;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.ExportAssignment] =
+            emitExportAssignment;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.ExportDeclaration] =
+            emitExportDeclaration;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.NamedExports] =
+            emitNamedExports;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.ExportSpecifier] =
+            emitExportSpecifier;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.AssertClause] =
+            emitAssertClause;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.AssertEntry] =
+            emitAssertEntry;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.MissingDeclaration] =
+            noop;
+
+        // Module references
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.ExternalModuleReference] =
+            emitExternalModuleReference;
+
+        // JSX (non-expression)
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.JsxText] =
+            emitJsxText;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.JsxOpeningElement] =
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.JsxOpeningFragment] =
+            emitJsxOpeningElementOrFragment;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.JsxClosingElement] =
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.JsxClosingFragment] =
+            emitJsxClosingElementOrFragment;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.JsxAttribute] =
+            emitJsxAttribute;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.JsxAttributes] =
+            emitJsxAttributes;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.JsxSpreadAttribute] =
+            emitJsxSpreadAttribute;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.JsxExpression] =
+            emitJsxExpression;
+
+        // Clauses
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.CaseClause] =
+            emitCaseClause;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.DefaultClause] =
+            emitDefaultClause;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.HeritageClause] =
+            emitHeritageClause;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.CatchClause] =
+            emitCatchClause;
+
+        // Property assignments
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.PropertyAssignment] =
+            emitPropertyAssignment;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.ShorthandPropertyAssignment] =
+            emitShorthandPropertyAssignment;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.SpreadAssignment] =
+            emitSpreadAssignment;
+
+        // Enum
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.EnumMember] =
+            emitEnumMember;
+
+        // Unparsed
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.UnparsedPrologue] =
+            writeUnparsedNode;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.UnparsedSource] =
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.UnparsedPrepend] =
+            emitUnparsedSourceOrPrepend;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.UnparsedText] =
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.UnparsedInternalText] =
+            emitUnparsedTextLike;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.UnparsedSyntheticReference] =
+            emitUnparsedSyntheticReference;
+
+        // Top-level nodes
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.SourceFile] =
+            emitSourceFile;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.Bundle] =
+            _ => Debug.fail("Bundles should be printed using printBundle");
+        // SyntaxKind.UnparsedSource (handled above)
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.InputFiles] =
+            _ => Debug.fail("InputFiles should not be printed");
+
+        // JSDoc nodes (only used in codefixes currently)
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.JSDocTypeExpression] =
+            emitJSDocTypeExpression;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.JSDocNameReference] =
+            emitJSDocNameReference;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.JSDocAllType] =
+            _ => writePunctuation("*");
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.JSDocUnknownType] =
+            _ => writePunctuation("?");
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.JSDocNullableType] =
+            emitJSDocNullableType;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.JSDocNonNullableType] =
+            emitJSDocNonNullableType;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.JSDocOptionalType] =
+            emitJSDocOptionalType;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.JSDocFunctionType] =
+            emitJSDocFunctionType;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.RestType] =
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.JSDocVariadicType] =
+            emitRestOrJSDocVariadicType;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.JSDocNamepathType] =
+            noop;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.JSDoc] =
+            emitJSDoc;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.JSDocTypeLiteral] =
+            emitJSDocTypeLiteral;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.JSDocSignature] =
+            emitJSDocSignature;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.JSDocTag] =
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.JSDocClassTag] =
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.JSDocOverrideTag] =
+            emitJSDocSimpleTag;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.JSDocAugmentsTag] =
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.JSDocImplementsTag] =
+            emitJSDocHeritageTag;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.JSDocAuthorTag] =
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.JSDocDeprecatedTag] =
+            noop;
+        // SyntaxKind.JSDocClassTag (see JSDocTag, above)
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.JSDocPublicTag] =
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.JSDocPrivateTag] =
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.JSDocProtectedTag] =
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.JSDocReadonlyTag] =
+            noop;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.JSDocCallbackTag] =
+            emitJSDocCallbackTag;
+        // SyntaxKind.JSDocEnumTag (see below)
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.JSDocParameterTag] =
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.JSDocPropertyTag] =
+            emitJSDocPropertyLikeTag;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.JSDocEnumTag] =
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.JSDocReturnTag] =
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.JSDocThisTag] =
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.JSDocTypeTag] =
+            emitJSDocSimpleTypedTag;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.JSDocTemplateTag] =
+            emitJSDocTemplateTag;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.JSDocTypedefTag] =
+            emitJSDocTypedefTag;
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.JSDocSeeTag] =
+            emitJSDocSeeTag;
+        // SyntaxKind.JSDocPropertyTag (see JSDocParameterTag, above)
+
+        // Transformation nodes
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.NotEmittedStatement] =
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.EndOfDeclarationMarker] =
+        _emitWithUnspecifiedHintWorkerTable[SyntaxKind.MergeDeclarationMarker] =
+            noop;
+
         return {
             // public API
             printNode,
@@ -1334,349 +1681,9 @@ namespace ts {
                 return emitEmptyStatement(/*isEmbeddedStatement*/ true);
             }
             if (hint === EmitHint.Unspecified) {
-                switch (node.kind) {
-                    // Pseudo-literals
-                    case SyntaxKind.TemplateHead:
-                    case SyntaxKind.TemplateMiddle:
-                    case SyntaxKind.TemplateTail:
-                        return emitLiteral(node as LiteralExpression, /*jsxAttributeEscape*/ false);
-
-                    // Identifiers
-                    case SyntaxKind.Identifier:
-                        return emitIdentifier(node as Identifier);
-
-                    // PrivateIdentifiers
-                    case SyntaxKind.PrivateIdentifier:
-                        return emitPrivateIdentifier(node as PrivateIdentifier);
-
-                    // Parse tree nodes
-                    // Names
-                    case SyntaxKind.QualifiedName:
-                        return emitQualifiedName(node as QualifiedName);
-                    case SyntaxKind.ComputedPropertyName:
-                        return emitComputedPropertyName(node as ComputedPropertyName);
-
-                    // Signature elements
-                    case SyntaxKind.TypeParameter:
-                        return emitTypeParameter(node as TypeParameterDeclaration);
-                    case SyntaxKind.Parameter:
-                        return emitParameter(node as ParameterDeclaration);
-                    case SyntaxKind.Decorator:
-                        return emitDecorator(node as Decorator);
-
-                    // Type members
-                    case SyntaxKind.PropertySignature:
-                        return emitPropertySignature(node as PropertySignature);
-                    case SyntaxKind.PropertyDeclaration:
-                        return emitPropertyDeclaration(node as PropertyDeclaration);
-                    case SyntaxKind.MethodSignature:
-                        return emitMethodSignature(node as MethodSignature);
-                    case SyntaxKind.MethodDeclaration:
-                        return emitMethodDeclaration(node as MethodDeclaration);
-                    case SyntaxKind.ClassStaticBlockDeclaration:
-                        return emitClassStaticBlockDeclaration(node as ClassStaticBlockDeclaration);
-                    case SyntaxKind.Constructor:
-                        return emitConstructor(node as ConstructorDeclaration);
-                    case SyntaxKind.GetAccessor:
-                    case SyntaxKind.SetAccessor:
-                        return emitAccessorDeclaration(node as AccessorDeclaration);
-                    case SyntaxKind.CallSignature:
-                        return emitCallSignature(node as CallSignatureDeclaration);
-                    case SyntaxKind.ConstructSignature:
-                        return emitConstructSignature(node as ConstructSignatureDeclaration);
-                    case SyntaxKind.IndexSignature:
-                        return emitIndexSignature(node as IndexSignatureDeclaration);
-
-                    // Types
-                    case SyntaxKind.TypePredicate:
-                        return emitTypePredicate(node as TypePredicateNode);
-                    case SyntaxKind.TypeReference:
-                        return emitTypeReference(node as TypeReferenceNode);
-                    case SyntaxKind.FunctionType:
-                        return emitFunctionType(node as FunctionTypeNode);
-                    case SyntaxKind.ConstructorType:
-                        return emitConstructorType(node as ConstructorTypeNode);
-                    case SyntaxKind.TypeQuery:
-                        return emitTypeQuery(node as TypeQueryNode);
-                    case SyntaxKind.TypeLiteral:
-                        return emitTypeLiteral(node as TypeLiteralNode);
-                    case SyntaxKind.ArrayType:
-                        return emitArrayType(node as ArrayTypeNode);
-                    case SyntaxKind.TupleType:
-                        return emitTupleType(node as TupleTypeNode);
-                    case SyntaxKind.OptionalType:
-                        return emitOptionalType(node as OptionalTypeNode);
-                    // SyntaxKind.RestType is handled below
-                    case SyntaxKind.UnionType:
-                        return emitUnionType(node as UnionTypeNode);
-                    case SyntaxKind.IntersectionType:
-                        return emitIntersectionType(node as IntersectionTypeNode);
-                    case SyntaxKind.ConditionalType:
-                        return emitConditionalType(node as ConditionalTypeNode);
-                    case SyntaxKind.InferType:
-                        return emitInferType(node as InferTypeNode);
-                    case SyntaxKind.ParenthesizedType:
-                        return emitParenthesizedType(node as ParenthesizedTypeNode);
-                    case SyntaxKind.ExpressionWithTypeArguments:
-                        return emitExpressionWithTypeArguments(node as ExpressionWithTypeArguments);
-                    case SyntaxKind.ThisType:
-                        return emitThisType();
-                    case SyntaxKind.TypeOperator:
-                        return emitTypeOperator(node as TypeOperatorNode);
-                    case SyntaxKind.IndexedAccessType:
-                        return emitIndexedAccessType(node as IndexedAccessTypeNode);
-                    case SyntaxKind.MappedType:
-                        return emitMappedType(node as MappedTypeNode);
-                    case SyntaxKind.LiteralType:
-                        return emitLiteralType(node as LiteralTypeNode);
-                    case SyntaxKind.NamedTupleMember:
-                        return emitNamedTupleMember(node as NamedTupleMember);
-                    case SyntaxKind.TemplateLiteralType:
-                        return emitTemplateType(node as TemplateLiteralTypeNode);
-                    case SyntaxKind.TemplateLiteralTypeSpan:
-                        return emitTemplateTypeSpan(node as TemplateLiteralTypeSpan);
-                    case SyntaxKind.ImportType:
-                        return emitImportTypeNode(node as ImportTypeNode);
-
-                    // Binding patterns
-                    case SyntaxKind.ObjectBindingPattern:
-                        return emitObjectBindingPattern(node as ObjectBindingPattern);
-                    case SyntaxKind.ArrayBindingPattern:
-                        return emitArrayBindingPattern(node as ArrayBindingPattern);
-                    case SyntaxKind.BindingElement:
-                        return emitBindingElement(node as BindingElement);
-
-                    // Misc
-                    case SyntaxKind.TemplateSpan:
-                        return emitTemplateSpan(node as TemplateSpan);
-                    case SyntaxKind.SemicolonClassElement:
-                        return emitSemicolonClassElement();
-
-                    // Statements
-                    case SyntaxKind.Block:
-                        return emitBlock(node as Block);
-                    case SyntaxKind.VariableStatement:
-                        return emitVariableStatement(node as VariableStatement);
-                    case SyntaxKind.EmptyStatement:
-                        return emitEmptyStatement(/*isEmbeddedStatement*/ false);
-                    case SyntaxKind.ExpressionStatement:
-                        return emitExpressionStatement(node as ExpressionStatement);
-                    case SyntaxKind.IfStatement:
-                        return emitIfStatement(node as IfStatement);
-                    case SyntaxKind.DoStatement:
-                        return emitDoStatement(node as DoStatement);
-                    case SyntaxKind.WhileStatement:
-                        return emitWhileStatement(node as WhileStatement);
-                    case SyntaxKind.ForStatement:
-                        return emitForStatement(node as ForStatement);
-                    case SyntaxKind.ForInStatement:
-                        return emitForInStatement(node as ForInStatement);
-                    case SyntaxKind.ForOfStatement:
-                        return emitForOfStatement(node as ForOfStatement);
-                    case SyntaxKind.ContinueStatement:
-                        return emitContinueStatement(node as ContinueStatement);
-                    case SyntaxKind.BreakStatement:
-                        return emitBreakStatement(node as BreakStatement);
-                    case SyntaxKind.ReturnStatement:
-                        return emitReturnStatement(node as ReturnStatement);
-                    case SyntaxKind.WithStatement:
-                        return emitWithStatement(node as WithStatement);
-                    case SyntaxKind.SwitchStatement:
-                        return emitSwitchStatement(node as SwitchStatement);
-                    case SyntaxKind.LabeledStatement:
-                        return emitLabeledStatement(node as LabeledStatement);
-                    case SyntaxKind.ThrowStatement:
-                        return emitThrowStatement(node as ThrowStatement);
-                    case SyntaxKind.TryStatement:
-                        return emitTryStatement(node as TryStatement);
-                    case SyntaxKind.DebuggerStatement:
-                        return emitDebuggerStatement(node as DebuggerStatement);
-
-                    // Declarations
-                    case SyntaxKind.VariableDeclaration:
-                        return emitVariableDeclaration(node as VariableDeclaration);
-                    case SyntaxKind.VariableDeclarationList:
-                        return emitVariableDeclarationList(node as VariableDeclarationList);
-                    case SyntaxKind.FunctionDeclaration:
-                        return emitFunctionDeclaration(node as FunctionDeclaration);
-                    case SyntaxKind.ClassDeclaration:
-                        return emitClassDeclaration(node as ClassDeclaration);
-                    case SyntaxKind.InterfaceDeclaration:
-                        return emitInterfaceDeclaration(node as InterfaceDeclaration);
-                    case SyntaxKind.TypeAliasDeclaration:
-                        return emitTypeAliasDeclaration(node as TypeAliasDeclaration);
-                    case SyntaxKind.EnumDeclaration:
-                        return emitEnumDeclaration(node as EnumDeclaration);
-                    case SyntaxKind.ModuleDeclaration:
-                        return emitModuleDeclaration(node as ModuleDeclaration);
-                    case SyntaxKind.ModuleBlock:
-                        return emitModuleBlock(node as ModuleBlock);
-                    case SyntaxKind.CaseBlock:
-                        return emitCaseBlock(node as CaseBlock);
-                    case SyntaxKind.NamespaceExportDeclaration:
-                        return emitNamespaceExportDeclaration(node as NamespaceExportDeclaration);
-                    case SyntaxKind.ImportEqualsDeclaration:
-                        return emitImportEqualsDeclaration(node as ImportEqualsDeclaration);
-                    case SyntaxKind.ImportDeclaration:
-                        return emitImportDeclaration(node as ImportDeclaration);
-                    case SyntaxKind.ImportClause:
-                        return emitImportClause(node as ImportClause);
-                    case SyntaxKind.NamespaceImport:
-                        return emitNamespaceImport(node as NamespaceImport);
-                    case SyntaxKind.NamespaceExport:
-                        return emitNamespaceExport(node as NamespaceExport);
-                    case SyntaxKind.NamedImports:
-                        return emitNamedImports(node as NamedImports);
-                    case SyntaxKind.ImportSpecifier:
-                        return emitImportSpecifier(node as ImportSpecifier);
-                    case SyntaxKind.ExportAssignment:
-                        return emitExportAssignment(node as ExportAssignment);
-                    case SyntaxKind.ExportDeclaration:
-                        return emitExportDeclaration(node as ExportDeclaration);
-                    case SyntaxKind.NamedExports:
-                        return emitNamedExports(node as NamedExports);
-                    case SyntaxKind.ExportSpecifier:
-                        return emitExportSpecifier(node as ExportSpecifier);
-                    case SyntaxKind.AssertClause:
-                        return emitAssertClause(node as AssertClause);
-                    case SyntaxKind.AssertEntry:
-                        return emitAssertEntry(node as AssertEntry);
-                    case SyntaxKind.MissingDeclaration:
-                        return;
-
-                    // Module references
-                    case SyntaxKind.ExternalModuleReference:
-                        return emitExternalModuleReference(node as ExternalModuleReference);
-
-                    // JSX (non-expression)
-                    case SyntaxKind.JsxText:
-                        return emitJsxText(node as JsxText);
-                    case SyntaxKind.JsxOpeningElement:
-                    case SyntaxKind.JsxOpeningFragment:
-                        return emitJsxOpeningElementOrFragment(node as JsxOpeningElement);
-                    case SyntaxKind.JsxClosingElement:
-                    case SyntaxKind.JsxClosingFragment:
-                        return emitJsxClosingElementOrFragment(node as JsxClosingElement);
-                    case SyntaxKind.JsxAttribute:
-                        return emitJsxAttribute(node as JsxAttribute);
-                    case SyntaxKind.JsxAttributes:
-                        return emitJsxAttributes(node as JsxAttributes);
-                    case SyntaxKind.JsxSpreadAttribute:
-                        return emitJsxSpreadAttribute(node as JsxSpreadAttribute);
-                    case SyntaxKind.JsxExpression:
-                        return emitJsxExpression(node as JsxExpression);
-
-                    // Clauses
-                    case SyntaxKind.CaseClause:
-                        return emitCaseClause(node as CaseClause);
-                    case SyntaxKind.DefaultClause:
-                        return emitDefaultClause(node as DefaultClause);
-                    case SyntaxKind.HeritageClause:
-                        return emitHeritageClause(node as HeritageClause);
-                    case SyntaxKind.CatchClause:
-                        return emitCatchClause(node as CatchClause);
-
-                    // Property assignments
-                    case SyntaxKind.PropertyAssignment:
-                        return emitPropertyAssignment(node as PropertyAssignment);
-                    case SyntaxKind.ShorthandPropertyAssignment:
-                        return emitShorthandPropertyAssignment(node as ShorthandPropertyAssignment);
-                    case SyntaxKind.SpreadAssignment:
-                        return emitSpreadAssignment(node as SpreadAssignment);
-
-                    // Enum
-                    case SyntaxKind.EnumMember:
-                        return emitEnumMember(node as EnumMember);
-
-                    // Unparsed
-                    case SyntaxKind.UnparsedPrologue:
-                        return writeUnparsedNode(node as UnparsedNode);
-                    case SyntaxKind.UnparsedSource:
-                    case SyntaxKind.UnparsedPrepend:
-                        return emitUnparsedSourceOrPrepend(node as UnparsedSource);
-                    case SyntaxKind.UnparsedText:
-                    case SyntaxKind.UnparsedInternalText:
-                        return emitUnparsedTextLike(node as UnparsedTextLike);
-                    case SyntaxKind.UnparsedSyntheticReference:
-                        return emitUnparsedSyntheticReference(node as UnparsedSyntheticReference);
-
-                    // Top-level nodes
-                    case SyntaxKind.SourceFile:
-                        return emitSourceFile(node as SourceFile);
-                    case SyntaxKind.Bundle:
-                        return Debug.fail("Bundles should be printed using printBundle");
-                    // SyntaxKind.UnparsedSource (handled above)
-                    case SyntaxKind.InputFiles:
-                        return Debug.fail("InputFiles should not be printed");
-
-                    // JSDoc nodes (only used in codefixes currently)
-                    case SyntaxKind.JSDocTypeExpression:
-                        return emitJSDocTypeExpression(node as JSDocTypeExpression);
-                    case SyntaxKind.JSDocNameReference:
-                        return emitJSDocNameReference(node as JSDocNameReference);
-                    case SyntaxKind.JSDocAllType:
-                        return writePunctuation("*");
-                    case SyntaxKind.JSDocUnknownType:
-                        return writePunctuation("?");
-                    case SyntaxKind.JSDocNullableType:
-                        return emitJSDocNullableType(node as JSDocNullableType);
-                    case SyntaxKind.JSDocNonNullableType:
-                        return emitJSDocNonNullableType(node as JSDocNonNullableType);
-                    case SyntaxKind.JSDocOptionalType:
-                        return emitJSDocOptionalType(node as JSDocOptionalType);
-                    case SyntaxKind.JSDocFunctionType:
-                        return emitJSDocFunctionType(node as JSDocFunctionType);
-                    case SyntaxKind.RestType:
-                    case SyntaxKind.JSDocVariadicType:
-                        return emitRestOrJSDocVariadicType(node as RestTypeNode | JSDocVariadicType);
-                    case SyntaxKind.JSDocNamepathType:
-                        return;
-                    case SyntaxKind.JSDoc:
-                        return emitJSDoc(node as JSDoc);
-                    case SyntaxKind.JSDocTypeLiteral:
-                        return emitJSDocTypeLiteral(node as JSDocTypeLiteral);
-                    case SyntaxKind.JSDocSignature:
-                        return emitJSDocSignature(node as JSDocSignature);
-                    case SyntaxKind.JSDocTag:
-                    case SyntaxKind.JSDocClassTag:
-                    case SyntaxKind.JSDocOverrideTag:
-                        return emitJSDocSimpleTag(node as JSDocTag);
-                    case SyntaxKind.JSDocAugmentsTag:
-                    case SyntaxKind.JSDocImplementsTag:
-                        return emitJSDocHeritageTag(node as JSDocImplementsTag | JSDocAugmentsTag);
-                    case SyntaxKind.JSDocAuthorTag:
-                    case SyntaxKind.JSDocDeprecatedTag:
-                        return;
-                    // SyntaxKind.JSDocClassTag (see JSDocTag, above)
-                    case SyntaxKind.JSDocPublicTag:
-                    case SyntaxKind.JSDocPrivateTag:
-                    case SyntaxKind.JSDocProtectedTag:
-                    case SyntaxKind.JSDocReadonlyTag:
-                        return;
-                    case SyntaxKind.JSDocCallbackTag:
-                        return emitJSDocCallbackTag(node as JSDocCallbackTag);
-                    // SyntaxKind.JSDocEnumTag (see below)
-                    case SyntaxKind.JSDocParameterTag:
-                    case SyntaxKind.JSDocPropertyTag:
-                        return emitJSDocPropertyLikeTag(node as JSDocPropertyLikeTag);
-                    case SyntaxKind.JSDocEnumTag:
-                    case SyntaxKind.JSDocReturnTag:
-                    case SyntaxKind.JSDocThisTag:
-                    case SyntaxKind.JSDocTypeTag:
-                        return emitJSDocSimpleTypedTag(node as JSDocTypeTag);
-                    case SyntaxKind.JSDocTemplateTag:
-                        return emitJSDocTemplateTag(node as JSDocTemplateTag);
-                    case SyntaxKind.JSDocTypedefTag:
-                        return emitJSDocTypedefTag(node as JSDocTypedefTag);
-                    case SyntaxKind.JSDocSeeTag:
-                        return emitJSDocSeeTag(node as JSDocSeeTag);
-                    // SyntaxKind.JSDocPropertyTag (see JSDocParameterTag, above)
-
-                    // Transformation nodes
-                    case SyntaxKind.NotEmittedStatement:
-                    case SyntaxKind.EndOfDeclarationMarker:
-                    case SyntaxKind.MergeDeclarationMarker:
-                        return;
+                const fn = _emitWithUnspecifiedHintWorkerTable[node.kind];
+                if (fn !== undefined) {
+                    return fn(node);
                 }
                 if (isExpression(node)) {
                     hint = EmitHint.Expression;
