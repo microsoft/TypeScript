@@ -15,6 +15,15 @@ namespace ts.codefix {
         Diagnostics.Cannot_find_name_0.code
     ];
 
+    enum InfoKind {
+        TypeLikeDeclaration,
+        Enum,
+        Function,
+        ObjectLiteral,
+        JsxAttributes,
+        Signature,
+    }
+
     registerCodeFix({
         errorCodes,
         getCodeActions(context) {
@@ -31,7 +40,7 @@ namespace ts.codefix {
                 const changes = textChanges.ChangeTracker.with(context, t => addJsxAttributes(t, context, info));
                 return [createCodeFixAction(fixMissingAttributes, changes, Diagnostics.Add_missing_attributes, fixMissingAttributes, Diagnostics.Add_all_missing_attributes)];
             }
-            if (info.kind === InfoKind.Function) {
+            if (info.kind === InfoKind.Function || info.kind === InfoKind.Signature) {
                 const changes = textChanges.ChangeTracker.with(context, t => addFunctionDeclaration(t, context, info));
                 return [createCodeFixAction(fixMissingFunctionDeclaration, changes, [Diagnostics.Add_missing_function_declaration_0, info.token.text], fixMissingFunctionDeclaration, Diagnostics.Add_all_missing_function_declarations)];
             }
@@ -54,8 +63,7 @@ namespace ts.codefix {
                     if (!info || !addToSeen(seen, getNodeId(info.parentDeclaration) + "#" + info.token.text)) {
                         return;
                     }
-
-                    if (fixId === fixMissingFunctionDeclaration && info.kind === InfoKind.Function) {
+                    if (fixId === fixMissingFunctionDeclaration && (info.kind === InfoKind.Function || info.kind === InfoKind.Signature)) {
                         addFunctionDeclaration(changes, context, info);
                     }
                     else if (fixId === fixMissingProperties && info.kind === InfoKind.ObjectLiteral) {
@@ -107,8 +115,7 @@ namespace ts.codefix {
         },
     });
 
-    const enum InfoKind { TypeLikeDeclaration, Enum, Function, ObjectLiteral, JsxAttributes }
-    type Info = TypeLikeDeclarationInfo | EnumInfo | FunctionInfo | ObjectLiteralInfo | JsxAttributesInfo;
+    type Info = TypeLikeDeclarationInfo | EnumInfo | FunctionInfo | ObjectLiteralInfo | JsxAttributesInfo | SignatureInfo;
 
     interface EnumInfo {
         readonly kind: InfoKind.Enum;
@@ -132,7 +139,7 @@ namespace ts.codefix {
         readonly token: Identifier;
         readonly sourceFile: SourceFile;
         readonly modifierFlags: ModifierFlags;
-        readonly parentDeclaration: SourceFile | ModuleDeclaration;
+        readonly parentDeclaration: SourceFile | ModuleDeclaration | ReturnStatement;
     }
 
     interface ObjectLiteralInfo {
@@ -148,6 +155,14 @@ namespace ts.codefix {
         readonly token: Identifier;
         readonly attributes: Symbol[];
         readonly parentDeclaration: JsxOpeningLikeElement;
+    }
+
+    interface SignatureInfo {
+        readonly kind: InfoKind.Signature;
+        readonly token: Identifier;
+        readonly signature: Signature;
+        readonly sourceFile: SourceFile;
+        readonly parentDeclaration: Node;
     }
 
     function getInfo(sourceFile: SourceFile, tokenPos: number, errorCode: number, checker: TypeChecker, program: Program): Info | undefined {
@@ -190,8 +205,16 @@ namespace ts.codefix {
             return { kind: InfoKind.JsxAttributes, token, attributes, parentDeclaration: token.parent };
         }
 
-        if (isIdentifier(token) && isCallExpression(parent)) {
-            return { kind: InfoKind.Function, token, call: parent, sourceFile, modifierFlags: ModifierFlags.None, parentDeclaration: sourceFile };
+        if (isIdentifier(token)) {
+            const type = checker.getContextualType(token);
+            if (type && getObjectFlags(type) & ObjectFlags.Anonymous) {
+                const signature = firstOrUndefined(checker.getSignaturesOfType(type, SignatureKind.Call));
+                if (signature === undefined) return undefined;
+                return { kind: InfoKind.Signature, token, signature, sourceFile, parentDeclaration: findScope(token) };
+            }
+            if (isCallExpression(parent) && parent.expression === token) {
+                return { kind: InfoKind.Function, token, call: parent, sourceFile, modifierFlags: ModifierFlags.None, parentDeclaration: findScope(token) };
+            }
         }
 
         if (!isPropertyAccessExpression(parent)) return undefined;
@@ -278,7 +301,6 @@ namespace ts.codefix {
         }
         else if (isPrivateIdentifier(token)) {
             const property = factory.createPropertyDeclaration(
-                /*decorators*/ undefined,
                 /*modifiers*/ undefined,
                 tokenName,
                 /*questionToken*/ undefined,
@@ -345,7 +367,7 @@ namespace ts.codefix {
         const modifiers = modifierFlags ? factory.createNodeArray(factory.createModifiersFromModifierFlags(modifierFlags)) : undefined;
 
         const property = isClassLike(node)
-            ? factory.createPropertyDeclaration(/*decorators*/ undefined, modifiers, tokenName, /*questionToken*/ undefined, typeNode, /*initializer*/ undefined)
+            ? factory.createPropertyDeclaration(modifiers, tokenName, /*questionToken*/ undefined, typeNode, /*initializer*/ undefined)
             : factory.createPropertySignature(/*modifiers*/ undefined, tokenName, /*questionToken*/ undefined, typeNode);
 
         const lastProp = getNodeToInsertPropertyAfter(node);
@@ -371,7 +393,6 @@ namespace ts.codefix {
         // Index signatures cannot have the static modifier.
         const stringTypeNode = factory.createKeywordTypeNode(SyntaxKind.StringKeyword);
         const indexingParameter = factory.createParameterDeclaration(
-            /*decorators*/ undefined,
             /*modifiers*/ undefined,
             /*dotDotDotToken*/ undefined,
             "x",
@@ -379,7 +400,6 @@ namespace ts.codefix {
             stringTypeNode,
             /*initializer*/ undefined);
         const indexSignature = factory.createIndexSignature(
-            /*decorators*/ undefined,
             /*modifiers*/ undefined,
             [indexingParameter],
             typeNode);
@@ -445,7 +465,6 @@ namespace ts.codefix {
         const enumMember = factory.createEnumMember(token, hasStringInitializer ? factory.createStringLiteral(token.text) : undefined);
         changes.replaceNode(parentDeclaration.getSourceFile(), parentDeclaration, factory.updateEnumDeclaration(
             parentDeclaration,
-            parentDeclaration.decorators,
             parentDeclaration.modifiers,
             parentDeclaration.name,
             concatenate(parentDeclaration.members, singleElementArray(enumMember))
@@ -455,10 +474,19 @@ namespace ts.codefix {
         });
     }
 
-    function addFunctionDeclaration(changes: textChanges.ChangeTracker, context: CodeFixContextBase, info: FunctionInfo) {
+    function addFunctionDeclaration(changes: textChanges.ChangeTracker, context: CodeFixContextBase, info: FunctionInfo | SignatureInfo) {
+        const quotePreference = getQuotePreference(context.sourceFile, context.preferences);
         const importAdder = createImportAdder(context.sourceFile, context.program, context.preferences, context.host);
-        const functionDeclaration = createSignatureDeclarationFromCallExpression(SyntaxKind.FunctionDeclaration, context, importAdder, info.call, idText(info.token), info.modifierFlags, info.parentDeclaration) as FunctionDeclaration;
-        changes.insertNodeAtEndOfScope(info.sourceFile, info.parentDeclaration, functionDeclaration);
+        const functionDeclaration = info.kind === InfoKind.Function
+            ? createSignatureDeclarationFromCallExpression(SyntaxKind.FunctionDeclaration, context, importAdder, info.call, idText(info.token), info.modifierFlags, info.parentDeclaration)
+            : createSignatureDeclarationFromSignature(SyntaxKind.FunctionDeclaration, context, quotePreference, info.signature, createStubbedBody(Diagnostics.Function_not_implemented.message, quotePreference), info.token, /*modifiers*/ undefined, /*optional*/ undefined, /*enclosingDeclaration*/ undefined, importAdder);
+        if (functionDeclaration === undefined) {
+            Debug.fail("fixMissingFunctionDeclaration codefix got unexpected error.");
+        }
+
+        isReturnStatement(info.parentDeclaration)
+            ? changes.insertNodeBefore(info.sourceFile, info.parentDeclaration, functionDeclaration, /*blankLineBetween*/ true)
+            : changes.insertNodeAtEndOfScope(info.sourceFile, info.parentDeclaration, functionDeclaration);
         importAdder.writeFixes(changes);
     }
 
@@ -489,7 +517,7 @@ namespace ts.codefix {
         const checker = context.program.getTypeChecker();
         const props = map(info.properties, prop => {
             const initializer = tryGetValueFromType(context, checker, importAdder, quotePreference, checker.getTypeOfSymbol(prop), info.parentDeclaration);
-            return factory.createPropertyAssignment(createPropertyNameNodeForIdentifierOrLiteral(prop.name, target, quotePreference === QuotePreference.Single), initializer);
+            return factory.createPropertyAssignment(createPropertyNameFromSymbol(prop, target, quotePreference, checker), initializer);
         });
         const options = {
             leadingTriviaOption: textChanges.LeadingTriviaOption.Exclude,
@@ -611,5 +639,23 @@ namespace ts.codefix {
         }
         const declaration = findAncestor(callExpression, n => isMethodDeclaration(n) || isConstructorDeclaration(n));
         return declaration && declaration.parent === node ? declaration : undefined;
+    }
+
+    function createPropertyNameFromSymbol(symbol: Symbol, target: ScriptTarget, quotePreference: QuotePreference, checker: TypeChecker) {
+        if (isTransientSymbol(symbol) && symbol.nameType && symbol.nameType.flags & TypeFlags.UniqueESSymbol) {
+            const expression = checker.symbolToExpression((symbol.nameType as UniqueESSymbolType).symbol, SymbolFlags.Value, symbol.valueDeclaration, NodeBuilderFlags.AllowUniqueESSymbolType);
+            if (expression) {
+                return factory.createComputedPropertyName(expression);
+            }
+        }
+        return createPropertyNameNodeForIdentifierOrLiteral(symbol.name, target, quotePreference === QuotePreference.Single);
+    }
+
+    function findScope(node: Node) {
+        if (findAncestor(node, isJsxExpression)) {
+            const returnStatement = findAncestor(node.parent, isReturnStatement);
+            if (returnStatement) return returnStatement;
+        }
+        return getSourceFileOfNode(node);
     }
 }

@@ -55,6 +55,7 @@ tests/cases/conformance/types/conditional/conditionalTypes2.ts(75,12): error TS2
 !!! error TS2322: Type 'Covariant<A>' is not assignable to type 'Covariant<B>'.
 !!! error TS2322:   Type 'A' is not assignable to type 'B'.
 !!! error TS2322:     'B' could be instantiated with an arbitrary type which could be unrelated to 'A'.
+!!! related TS2208 tests/cases/conformance/types/conditional/conditionalTypes2.ts:13:13: This type parameter might need an `extends B` constraint.
     }
     
     function f2<A, B extends A>(a: Contravariant<A>, b: Contravariant<B>) {
@@ -63,6 +64,7 @@ tests/cases/conformance/types/conditional/conditionalTypes2.ts(75,12): error TS2
 !!! error TS2322: Type 'Contravariant<B>' is not assignable to type 'Contravariant<A>'.
 !!! error TS2322:   Type 'A' is not assignable to type 'B'.
 !!! error TS2322:     'B' could be instantiated with an arbitrary type which could be unrelated to 'A'.
+!!! related TS2208 tests/cases/conformance/types/conditional/conditionalTypes2.ts:18:13: This type parameter might need an `extends B` constraint.
         b = a;
     }
     
@@ -91,6 +93,8 @@ tests/cases/conformance/types/conditional/conditionalTypes2.ts(75,12): error TS2
 !!! error TS2322:         Type 'A' is not assignable to type 'B extends string ? keyof B : B'.
 !!! error TS2322:           Type 'A' is not assignable to type 'B'.
 !!! error TS2322:             'B' could be instantiated with an arbitrary type which could be unrelated to 'A'.
+!!! related TS2208 tests/cases/conformance/types/conditional/conditionalTypes2.ts:23:13: This type parameter might need an `extends B` constraint.
+!!! related TS2208 tests/cases/conformance/types/conditional/conditionalTypes2.ts:23:13: This type parameter might need an `extends B extends string ? keyof B : B` constraint.
     }
     
     // Extract<T, Function> is a T that is known to be a Function

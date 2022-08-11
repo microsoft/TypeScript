@@ -64,12 +64,12 @@ WatchedFiles::
   {"fileName":"/a/b/commonFile2.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/a/b/node_modules/@types:
+  {"fileName":"/a/b/node_modules/@types","pollingInterval":500}
 
 FsWatches::
 
 FsWatchesRecursive::
-/a/b/node_modules/@types:
-  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 
@@ -93,7 +93,7 @@ Output::
 >> Screen clear
 [[90m12:00:29 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:30 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:36 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -121,6 +121,8 @@ WatchedFiles::
   {"fileName":"/a/b/commonFile2.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/a/b/node_modules/@types:
+  {"fileName":"/a/b/node_modules/@types","pollingInterval":500}
 /a/b/second.tsconfig.json:
   {"fileName":"/a/b/second.tsconfig.json","pollingInterval":250}
 /a/b/first.tsconfig.json:
@@ -129,10 +131,18 @@ WatchedFiles::
 FsWatches::
 
 FsWatchesRecursive::
-/a/b/node_modules/@types:
-  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+
+//// [/a/b/commonFile1.js]
+"use strict";
+var x = 1;
+
+
+//// [/a/b/commonFile2.js]
+"use strict";
+var y = 1;
+
 
 
 Change:: Change first extended config
@@ -144,9 +154,9 @@ Input::
 
 Output::
 >> Screen clear
-[[90m12:00:33 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:39 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:34 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:46 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -174,6 +184,8 @@ WatchedFiles::
   {"fileName":"/a/b/commonFile2.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/a/b/node_modules/@types:
+  {"fileName":"/a/b/node_modules/@types","pollingInterval":500}
 /a/b/second.tsconfig.json:
   {"fileName":"/a/b/second.tsconfig.json","pollingInterval":250}
 /a/b/first.tsconfig.json:
@@ -182,10 +194,16 @@ WatchedFiles::
 FsWatches::
 
 FsWatchesRecursive::
-/a/b/node_modules/@types:
-  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
+
+//// [/a/b/commonFile1.js]
+var x = 1;
+
+
+//// [/a/b/commonFile2.js]
+var y = 1;
+
 
 
 Change:: Change second extended config
@@ -197,9 +215,9 @@ Input::
 
 Output::
 >> Screen clear
-[[90m12:00:37 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:49 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:38 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:50 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -227,6 +245,8 @@ WatchedFiles::
   {"fileName":"/a/b/commonFile2.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/a/b/node_modules/@types:
+  {"fileName":"/a/b/node_modules/@types","pollingInterval":500}
 /a/b/second.tsconfig.json:
   {"fileName":"/a/b/second.tsconfig.json","pollingInterval":250}
 /a/b/first.tsconfig.json:
@@ -235,8 +255,6 @@ WatchedFiles::
 FsWatches::
 
 FsWatchesRecursive::
-/a/b/node_modules/@types:
-  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 
@@ -250,9 +268,9 @@ Input::
 
 Output::
 >> Screen clear
-[[90m12:00:42 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:54 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:43 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:55 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -280,12 +298,12 @@ WatchedFiles::
   {"fileName":"/a/b/commonFile2.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/a/b/node_modules/@types:
+  {"fileName":"/a/b/node_modules/@types","pollingInterval":500}
 
 FsWatches::
 
 FsWatchesRecursive::
-/a/b/node_modules/@types:
-  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 

@@ -344,6 +344,8 @@ namespace ts.server {
     function getDefinitionLocation(defaultProject: Project, initialLocation: DocumentPosition, isForRename: boolean): DocumentPosition | undefined {
         const infos = defaultProject.getLanguageService().getDefinitionAtPosition(initialLocation.fileName, initialLocation.pos, /*searchOtherFilesOnly*/ false, /*stopAtAlias*/ isForRename);
         const info = infos && firstOrUndefined(infos);
+        // Note that the value of `isLocal` may depend on whether or not the checker has run on the containing file
+        // (implying that FAR cascading behavior may depend on request order)
         return info && !info.isLocal ? { fileName: info.fileName, pos: info.textSpan.start } : undefined;
     }
 
@@ -380,7 +382,7 @@ namespace ts.server {
         // correct results to all other projects.
 
         const defaultProjectResults = perProjectResults.get(defaultProject);
-        if (defaultProjectResults?.[0].references[0]?.isDefinition === undefined) {
+        if (defaultProjectResults?.[0]?.references[0]?.isDefinition === undefined) {
             // Clear all isDefinition properties
             perProjectResults.forEach(projectResults => {
                 for (const referencedSymbol of projectResults) {
@@ -504,18 +506,18 @@ namespace ts.server {
         // If `getResultsForPosition` returns results for a project, they go in here
         const resultsMap = new Map<Project, readonly TResult[]>();
 
-        const queue: ProjectAndLocation[] = [];
+        const queue = createQueue<ProjectAndLocation>();
 
         // In order to get accurate isDefinition values for `defaultProject`,
         // we need to ensure that it is searched from `initialLocation`.
         // The easiest way to do this is to search it first.
-        queue.push({ project: defaultProject, location: initialLocation });
+        queue.enqueue({ project: defaultProject, location: initialLocation });
 
         // This will queue `defaultProject` a second time, but it will be dropped
         // as a dup when it is dequeued.
         forEachProjectInProjects(projects, initialLocation.fileName, (project, path) => {
             const location = { fileName: path!, pos: initialLocation.pos };
-            queue.push({ project, location });
+            queue.enqueue({ project, location });
         });
 
         const projectService = defaultProject.projectService;
@@ -531,26 +533,23 @@ namespace ts.server {
             defaultDefinition :
             defaultProject.getLanguageService().getSourceMapper().tryGetSourcePosition(defaultDefinition!));
 
-        // Track which projects we have already searched so that we don't repeat searches.
-        // We store the project key, rather than the project, because that's what `loadAncestorProjectTree` wants.
-        // (For that same reason, we don't use `resultsMap` for this check.)
-        const searchedProjects = new Set<string>();
+        // The keys of resultsMap allow us to check which projects have already been searched, but we also
+        // maintain a set of strings because that's what `loadAncestorProjectTree` wants.
+        const searchedProjectKeys = new Set<string>();
 
         onCancellation:
-        while (queue.length) {
-            while (queue.length) {
+        while (!queue.isEmpty()) {
+            while (!queue.isEmpty()) {
                 if (cancellationToken.isCancellationRequested()) break onCancellation;
 
-                const { project, location } = queue.shift()!;
+                const { project, location } = queue.dequeue();
 
+                if (resultsMap.has(project)) continue;
                 if (isLocationProjectReferenceRedirect(project, location)) continue;
 
-                if (!tryAddToSet(searchedProjects, getProjectKey(project))) continue;
-
                 const projectResults = searchPosition(project, location);
-                if (projectResults) {
-                    resultsMap.set(project, projectResults);
-                }
+                resultsMap.set(project, projectResults ?? emptyArray);
+                searchedProjectKeys.add(getProjectKey(project));
             }
 
             // At this point, we know about all projects passed in as arguments and any projects in which
@@ -559,13 +558,13 @@ namespace ts.server {
             // containing `initialLocation`.
             if (defaultDefinition) {
                 // This seems to mean "load all projects downstream from any member of `seenProjects`".
-                projectService.loadAncestorProjectTree(searchedProjects);
+                projectService.loadAncestorProjectTree(searchedProjectKeys);
                 projectService.forEachEnabledProject(project => {
                     if (cancellationToken.isCancellationRequested()) return; // There's no mechanism for skipping the remaining projects
-                    if (searchedProjects.has(getProjectKey(project))) return; // Can loop forever without this (enqueue here, dequeue above, repeat)
+                    if (resultsMap.has(project)) return; // Can loop forever without this (enqueue here, dequeue above, repeat)
                     const location = mapDefinitionInProject(defaultDefinition, project, getGeneratedDefinition, getSourceDefinition);
                     if (location) {
-                        queue.push({ project, location });
+                        queue.enqueue({ project, location });
                     }
                 });
             }
@@ -573,9 +572,10 @@ namespace ts.server {
 
         // In the common case where there's only one project, return a simpler result to make
         // it easier for the caller to skip post-processing.
-        if (searchedProjects.size === 1) {
+        if (resultsMap.size === 1) {
             const it = resultsMap.values().next();
-            return it.done ? emptyArray : it.value; // There may not be any results at all
+            Debug.assert(!it.done);
+            return it.value;
         }
 
         return resultsMap;
@@ -593,8 +593,8 @@ namespace ts.server {
                     const originalScriptInfo = projectService.getScriptInfo(originalLocation.fileName)!;
 
                     for (const project of originalScriptInfo.containingProjects) {
-                        if (!project.isOrphan()) {
-                            queue.push({ project, location: originalLocation });
+                        if (!project.isOrphan() && !resultsMap.has(project)) { // Optimization: don't enqueue if will be discarded
+                            queue.enqueue({ project, location: originalLocation });
                         }
                     }
 
@@ -602,8 +602,8 @@ namespace ts.server {
                     if (symlinkedProjectsMap) {
                         symlinkedProjectsMap.forEach((symlinkedProjects, symlinkedPath) => {
                             for (const symlinkedProject of symlinkedProjects) {
-                                if (!symlinkedProject.isOrphan()) {
-                                    queue.push({ project: symlinkedProject, location: { fileName: symlinkedPath as string, pos: originalLocation.pos } });
+                                if (!symlinkedProject.isOrphan() && !resultsMap.has(symlinkedProject)) { // Optimization: don't enqueue if will be discarded
+                                    queue.enqueue({ project: symlinkedProject, location: { fileName: symlinkedPath as string, pos: originalLocation.pos } });
                                 }
                             }
                         });
@@ -696,7 +696,6 @@ namespace ts.server {
         CommandNames.OrganizeImportsFull,
         CommandNames.GetEditsForFileRename,
         CommandNames.GetEditsForFileRenameFull,
-        CommandNames.ConfigurePlugin,
         CommandNames.PrepareCallHierarchy,
         CommandNames.ProvideCallHierarchyIncomingCalls,
         CommandNames.ProvideCallHierarchyOutgoingCalls,
@@ -1379,7 +1378,7 @@ namespace ts.server {
                     const packageDirectory = fileName.substring(0, nodeModulesPathParts.packageRootIndex);
                     const packageJsonCache = project.getModuleResolutionCache()?.getPackageJsonInfoCache();
                     const compilerOptions = project.getCompilationSettings();
-                    const packageJson = getPackageScopeForPath(project.toPath(packageDirectory + "/package.json"), packageJsonCache, project, compilerOptions);
+                    const packageJson = getPackageScopeForPath(project.toPath(packageDirectory + "/package.json"), getTemporaryModuleResolutionState(packageJsonCache, project, compilerOptions));
                     if (!packageJson) return undefined;
                     // Use fake options instead of actual compiler options to avoid following export map if the project uses node16 or nodenext -
                     // Mapping from an export map entry across packages is out of scope for now. Returned entrypoints will only be what can be
@@ -1698,7 +1697,8 @@ namespace ts.server {
         private getRenameInfo(args: protocol.FileLocationRequestArgs): RenameInfo {
             const { file, project } = this.getFileAndProject(args);
             const position = this.getPositionInFile(args, file);
-            return project.getLanguageService().getRenameInfo(file, position, { allowRenameOfImportPath: this.getPreferences(file).allowRenameOfImportPath });
+            const preferences = this.getPreferences(file);
+            return project.getLanguageService().getRenameInfo(file, position, preferences);
         }
 
         private getProjects(args: protocol.FileRequestArgs, getScriptInfoEnsuringProjectsUptoDate?: boolean, ignoreNoProjectError?: boolean): Projects {
@@ -1750,8 +1750,9 @@ namespace ts.server {
             const position = this.getPositionInFile(args, file);
             const projects = this.getProjects(args);
             const defaultProject = this.getDefaultProject(args);
+            const preferences = this.getPreferences(file);
             const renameInfo: protocol.RenameInfo = this.mapRenameInfo(
-                defaultProject.getLanguageService().getRenameInfo(file, position, { allowRenameOfImportPath: this.getPreferences(file).allowRenameOfImportPath }), Debug.checkDefined(this.projectService.getScriptInfo(file)));
+                defaultProject.getLanguageService().getRenameInfo(file, position, preferences), Debug.checkDefined(this.projectService.getScriptInfo(file)));
 
             if (!renameInfo.canRename) return simplifiedResult ? { info: renameInfo, locs: [] } : [];
 
@@ -1761,7 +1762,7 @@ namespace ts.server {
                 { fileName: args.file, pos: position },
                 !!args.findInStrings,
                 !!args.findInComments,
-                this.getPreferences(file)
+                preferences,
             );
             if (!simplifiedResult) return locations;
             return { info: renameInfo, locs: this.toSpanGroups(locations) };
@@ -3344,7 +3345,9 @@ namespace ts.server {
         public executeCommand(request: protocol.Request): HandlerResponse {
             const handler = this.handlers.get(request.command);
             if (handler) {
-                return this.executeWithRequestId(request.seq, () => handler(request));
+                const response = this.executeWithRequestId(request.seq, () => handler(request));
+                this.projectService.enableRequestedPlugins();
+                return response;
             }
             else {
                 this.logger.msg(`Unrecognized JSON command:${stringifyIndented(request)}`, Msg.Err);

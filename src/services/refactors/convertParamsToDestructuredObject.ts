@@ -404,7 +404,7 @@ namespace ts.refactor.convertParamsToDestructuredObject {
             const type = checker.getTypeAtLocation(parameterDeclaration);
             if (!checker.isArrayType(type) && !checker.isTupleType(type)) return false;
         }
-        return !parameterDeclaration.modifiers && !parameterDeclaration.decorators && isIdentifier(parameterDeclaration.name);
+        return !parameterDeclaration.modifiers && isIdentifier(parameterDeclaration.name);
     }
 
     function isValidVariableDeclaration(node: Node): node is ValidVariableDeclaration {
@@ -474,7 +474,6 @@ namespace ts.refactor.convertParamsToDestructuredObject {
         }
 
         const objectParameter = factory.createParameterDeclaration(
-            /*decorators*/ undefined,
             /*modifiers*/ undefined,
             /*dotDotDotToken*/ undefined,
             objectParameterName,
@@ -485,7 +484,6 @@ namespace ts.refactor.convertParamsToDestructuredObject {
         if (hasThisParameter(functionDeclaration.parameters)) {
             const thisParameter = functionDeclaration.parameters[0];
             const newThisParameter = factory.createParameterDeclaration(
-                /*decorators*/ undefined,
                 /*modifiers*/ undefined,
                 /*dotDotDotToken*/ undefined,
                 thisParameter.name,

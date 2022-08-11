@@ -197,7 +197,7 @@ namespace ts {
     }
 
     /* @internal */
-    export interface PackageJsonInfo {
+    export interface ProjectPackageJsonInfo {
         fileName: string;
         parseable: boolean;
         dependencies?: ESMap<string, string>;
@@ -311,9 +311,9 @@ namespace ts {
 
         /* @internal */ getDocumentPositionMapper?(generatedFileName: string, sourceFileName?: string): DocumentPositionMapper | undefined;
         /* @internal */ getSourceFileLike?(fileName: string): SourceFileLike | undefined;
-        /* @internal */ getPackageJsonsVisibleToFile?(fileName: string, rootDir?: string): readonly PackageJsonInfo[];
+        /* @internal */ getPackageJsonsVisibleToFile?(fileName: string, rootDir?: string): readonly ProjectPackageJsonInfo[];
         /* @internal */ getNearestAncestorDirectoryWithPackageJson?(fileName: string): string | undefined;
-        /* @internal */ getPackageJsonsForAutoImport?(rootDir?: string): readonly PackageJsonInfo[];
+        /* @internal */ getPackageJsonsForAutoImport?(rootDir?: string): readonly ProjectPackageJsonInfo[];
         /* @internal */ getCachedExportInfoMap?(): ExportInfoMap;
         /* @internal */ getModuleSpecifierCache?(): ModuleSpecifierCache;
         /* @internal */ setCompilerHost?(host: CompilerHost): void;
@@ -467,7 +467,10 @@ namespace ts {
 
         getSignatureHelpItems(fileName: string, position: number, options: SignatureHelpItemsOptions | undefined): SignatureHelpItems | undefined;
 
+        getRenameInfo(fileName: string, position: number, preferences: UserPreferences): RenameInfo;
+        /** @deprecated Use the signature with `UserPreferences` instead. */
         getRenameInfo(fileName: string, position: number, options?: RenameInfoOptions): RenameInfo;
+
         findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, providePrefixAndSuffixTextForRename?: boolean): readonly RenameLocation[] | undefined;
 
         getSmartSelectionRange(fileName: string, position: number): SelectionRange;
@@ -548,6 +551,7 @@ namespace ts {
         getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean, forceDtsEmit?: boolean): EmitOutput;
 
         getProgram(): Program | undefined;
+        /*@internal*/ getCurrentProgram(): Program | undefined;
 
         /* @internal */ getNonBoundSourceFile(fileName: string): SourceFile;
         /* @internal */ getAutoImportProvider(): Program | undefined;
@@ -944,7 +948,7 @@ namespace ts {
         Remove = "remove",
     }
 
-    /* @deprecated - consider using EditorSettings instead */
+    /** @deprecated - consider using EditorSettings instead */
     export interface EditorOptions {
         BaseIndentSize?: number;
         IndentSize: number;
@@ -965,7 +969,7 @@ namespace ts {
         trimTrailingWhitespace?: boolean;
     }
 
-    /* @deprecated - consider using FormatCodeSettings instead */
+    /** @deprecated - consider using FormatCodeSettings instead */
     export interface FormatCodeOptions extends EditorOptions {
         InsertSpaceAfterCommaDelimiter: boolean;
         InsertSpaceAfterSemicolonInForStatements: boolean;
@@ -1042,7 +1046,12 @@ namespace ts {
         containerKind: ScriptElementKind;
         containerName: string;
         unverified?: boolean;
-        /* @internal */ isLocal?: boolean;
+        /** @internal
+         * Initially, this value is determined syntactically, but it is updated by the checker to cover
+         * cases like declarations that are exported in subsequent statements.  As a result, the value
+         * may be "incomplete" if this span has yet to be checked.
+         */
+        isLocal?: boolean;
         /* @internal */ isAmbient?: boolean;
         /* @internal */ failedAliasResolution?: boolean;
     }
@@ -1135,6 +1144,9 @@ namespace ts {
         localizedErrorMessage: string;
     }
 
+    /**
+     * @deprecated Use `UserPreferences` instead.
+     */
     export interface RenameInfoOptions {
         readonly allowRenameOfImportPath?: boolean;
     }

@@ -645,6 +645,18 @@ namespace ts {
         }
     }
 
+    export function getDecorators(node: HasDecorators): readonly Decorator[] | undefined {
+        if (hasDecorators(node)) {
+            return filter(node.modifiers, isDecorator);
+        }
+    }
+
+    export function getModifiers(node: HasModifiers): readonly Modifier[] | undefined {
+        if (hasSyntacticModifier(node, ModifierFlags.Modifier)) {
+            return filter(node.modifiers, isModifier);
+        }
+    }
+
     function getJSDocParameterTagsWorker(param: ParameterDeclaration, noCache?: boolean): readonly JSDocParameterTag[] {
         if (param.name) {
             if (isIdentifier(param.name)) {
@@ -920,6 +932,12 @@ namespace ts {
     /**
      * Gets the effective type parameters. If the node was parsed in a
      * JavaScript file, gets the type parameters from the `@template` tag from JSDoc.
+     *
+     * This does *not* return type parameters from a jsdoc reference to a generic type, eg
+     *
+     * type Id = <T>(x: T) => T
+     * /** @type {Id} /
+     * function id(x) { return x }
      */
     export function getEffectiveTypeParameterDeclarations(node: DeclarationWithTypeParameters): readonly TypeParameterDeclaration[] {
         if (isJSDocSignature(node)) {
@@ -930,6 +948,9 @@ namespace ts {
             return flatMap(node.parent.tags, tag => isJSDocTemplateTag(tag) ? tag.typeParameters : undefined);
         }
         if (node.typeParameters) {
+            return node.typeParameters;
+        }
+        if (canHaveIllegalTypeParameters(node) && node.typeParameters) {
             return node.typeParameters;
         }
         if (isInJSFile(node)) {
@@ -1341,6 +1362,10 @@ namespace ts {
     }
 
     // Type members
+
+    export function isModifierLike(node: Node): node is ModifierLike {
+        return isModifier(node) || isDecorator(node);
+    }
 
     export function isTypeElement(node: Node): node is TypeElement {
         const kind = node.kind;
@@ -1978,7 +2003,6 @@ namespace ts {
             case SyntaxKind.VariableDeclaration:
             case SyntaxKind.Parameter:
             case SyntaxKind.BindingElement:
-            case SyntaxKind.PropertySignature:
             case SyntaxKind.PropertyDeclaration:
             case SyntaxKind.PropertyAssignment:
             case SyntaxKind.EnumMember:

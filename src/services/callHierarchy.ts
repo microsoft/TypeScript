@@ -77,7 +77,7 @@ namespace ts.CallHierarchy {
     }
 
     /** Gets the node that can be used as a reference to a call hierarchy declaration. */
-    function getCallHierarchyDeclarationReferenceNode(node: CallHierarchyDeclaration) {
+    function getCallHierarchyDeclarationReferenceNode(node: Exclude<CallHierarchyDeclaration, ClassStaticBlockDeclaration>) {
         if (isSourceFile(node)) return node;
         if (isNamedDeclaration(node)) return node.name;
         if (isConstNamedExpression(node)) return node.parent.name;
@@ -89,7 +89,7 @@ namespace ts.CallHierarchy {
     }
 
     /** Gets the symbol for a call hierarchy declaration. */
-    function getSymbolOfCallHierarchyDeclaration(typeChecker: TypeChecker, node: CallHierarchyDeclaration) {
+    function getSymbolOfCallHierarchyDeclaration(typeChecker: TypeChecker, node: Exclude<CallHierarchyDeclaration, ClassStaticBlockDeclaration>) {
         const location = getCallHierarchyDeclarationReferenceNode(node);
         return location && typeChecker.getSymbolAtLocation(location);
     }
@@ -187,7 +187,7 @@ namespace ts.CallHierarchy {
         return node;
     }
 
-    function findAllInitialDeclarations(typeChecker: TypeChecker, node: CallHierarchyDeclaration) {
+    function findAllInitialDeclarations(typeChecker: TypeChecker, node: Exclude<CallHierarchyDeclaration, ClassStaticBlockDeclaration>) {
         const symbol = getSymbolOfCallHierarchyDeclaration(typeChecker, node);
         let declarations: CallHierarchyDeclaration[] | undefined;
         if (symbol && symbol.declarations) {
@@ -484,13 +484,15 @@ namespace ts.CallHierarchy {
     }
 
     function collectCallSitesOfClassLikeDeclaration(node: ClassLikeDeclaration, collect: (node: Node | undefined) => void) {
-        forEach(node.decorators, collect);
+        forEach(node.modifiers, collect);
         const heritage = getClassExtendsHeritageElement(node);
         if (heritage) {
             collect(heritage.expression);
         }
         for (const member of node.members) {
-            forEach(member.decorators, collect);
+            if (canHaveModifiers(member)) {
+                forEach(member.modifiers, collect);
+            }
             if (isPropertyDeclaration(member)) {
                 collect(member.initializer);
             }

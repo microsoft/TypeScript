@@ -89,6 +89,7 @@ tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(168,5): error TS
 !!! error TS2322: Type 'T[keyof T]' is not assignable to type 'U[keyof T]'.
 !!! error TS2322:   Type 'T' is not assignable to type 'U'.
 !!! error TS2322:     'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+!!! related TS2208 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts:9:13: This type parameter might need an `extends U` constraint.
     }
     
     function f4<T, U extends T, K extends keyof T>(x: T, y: U, k: K) {
@@ -98,6 +99,7 @@ tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(168,5): error TS
 !!! error TS2322: Type 'T[K]' is not assignable to type 'U[K]'.
 !!! error TS2322:   Type 'T' is not assignable to type 'U'.
 !!! error TS2322:     'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+!!! related TS2208 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts:14:13: This type parameter might need an `extends U` constraint.
     }
     
     function f5<T, U extends T>(x: T, y: U, k: keyof U) {
@@ -180,6 +182,7 @@ tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(168,5): error TS
 !!! error TS2322: Type 'T[keyof T]' is not assignable to type 'U[keyof T]'.
 !!! error TS2322:   Type 'T' is not assignable to type 'U'.
 !!! error TS2322:     'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+!!! related TS2208 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts:59:14: This type parameter might need an `extends U` constraint.
         ~~~~
 !!! error TS2542: Index signature in type 'Readonly<U>' only permits reading.
     }
@@ -191,6 +194,7 @@ tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(168,5): error TS
 !!! error TS2322: Type 'T[K]' is not assignable to type 'U[K]'.
 !!! error TS2322:   Type 'T' is not assignable to type 'U'.
 !!! error TS2322:     'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+!!! related TS2208 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts:64:14: This type parameter might need an `extends U` constraint.
         ~~~~
 !!! error TS2542: Index signature in type 'Readonly<U>' only permits reading.
     }
@@ -284,6 +288,7 @@ tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(168,5): error TS
 !!! error TS2322:   Type 'T[P]' is not assignable to type 'U[P]'.
 !!! error TS2322:     Type 'T' is not assignable to type 'U'.
 !!! error TS2322:       'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+!!! related TS2208 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts:141:14: This type parameter might need an `extends U` constraint.
     }
     
     function f72<T, U extends T>(x: { [P in keyof T]: T[P] }, y: { [P in keyof U]: U[P] }) {
@@ -343,6 +348,7 @@ tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(168,5): error TS
 !!! error TS2322:   Type 'T[P]' is not assignable to type 'U[P]'.
 !!! error TS2322:     Type 'T' is not assignable to type 'U'.
 !!! error TS2322:       'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+!!! related TS2208 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts:166:14: This type parameter might need an `extends U` constraint.
     }
     
     function f80<T>(t: T): Partial<T> {

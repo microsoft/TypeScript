@@ -1464,12 +1464,28 @@
         "category": "Message",
         "code": 1457
     },
+    "File is ECMAScript module because '{0}' has field \"type\" with value \"module\"": {
+        "category": "Message",
+        "code": 1458
+    },
+    "File is CommonJS module because '{0}' has field \"type\" whose value is not \"module\"": {
+        "category": "Message",
+        "code": 1459
+    },
+    "File is CommonJS module because '{0}' does not have field \"type\"": {
+        "category": "Message",
+        "code": 1460
+    },
+    "File is CommonJS module because 'package.json' was not found": {
+        "category": "Message",
+        "code": 1461
+    },
 
     "The 'import.meta' meta-property is not allowed in files which will build into CommonJS output.": {
         "category": "Error",
         "code": 1470
     },
-    "Module '{0}' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.": {
+    "Module '{0}' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.": {
         "category": "Error",
         "code": 1471
     },
@@ -1492,6 +1508,34 @@
     "\"auto\": Treat files with imports, exports, import.meta, jsx (with jsx: react-jsx), or esm format (with module: node16+) as modules.": {
         "category": "Message",
         "code": 1476
+    },
+    "An instantiation expression cannot be followed by a property access.": {
+        "category": "Error",
+        "code": 1477
+    },
+    "Identifier or string literal expected.": {
+        "category": "Error",
+        "code": 1478
+    },
+    "The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import(\"{0}\")' call instead.": {
+        "category": "Error",
+        "code": 1479
+    },
+    "To convert this file to an ECMAScript module, change its file extension to '{0}' or create a local package.json file with `{ \"type\": \"module\" }`.": {
+        "category": "Message",
+        "code": 1480
+    },
+    "To convert this file to an ECMAScript module, change its file extension to '{0}', or add the field `\"type\": \"module\"` to '{1}'.": {
+        "category": "Message",
+        "code": 1481
+    },
+    "To convert this file to an ECMAScript module, add the field `\"type\": \"module\"` to '{0}'.": {
+        "category": "Message",
+        "code": 1482
+    },
+    "To convert this file to an ECMAScript module, create a local package.json file with `{ \"type\": \"module\" }`.": {
+        "category": "Message",
+        "code": 1483
     },
 
     "The types of '{0}' are incompatible between these types.": {
@@ -1530,7 +1574,7 @@
         "category": "Error",
         "code": 2207
     },
-    "This type parameter probably needs an `extends object` constraint.": {
+    "This type parameter might need an `extends {0}` constraint.": {
         "category": "Error",
         "code": 2208
     },
@@ -1542,6 +1586,14 @@
     "The project root is ambiguous, but is required to resolve import map entry '{0}' in file '{1}'. Supply the `rootDir` compiler option to disambiguate.": {
         "category": "Error",
         "code": 2210
+    },
+    "Add `extends` constraint.": {
+        "category": "Message",
+        "code": 2211
+    },
+    "Add `extends` constraint to all type parameters": {
+        "category": "Message",
+        "code": 2212
     },
 
     "Duplicate identifier '{0}'.": {
@@ -2343,6 +2395,10 @@
     "Abstract method '{0}' in class '{1}' cannot be accessed via super expression.": {
         "category": "Error",
         "code": 2513
+    },
+    "A tuple type cannot be indexed with a negative value.": {
+        "category": "Error",
+        "code": 2514
     },
     "Non-abstract class '{0}' does not implement inherited abstract member '{1}' from class '{2}'.": {
         "category": "Error",
@@ -3486,6 +3542,18 @@
     "The type of this expression cannot be named without a 'resolution-mode' assertion, which is an unstable feature. Use nightly TypeScript to silence this error. Try updating with 'npm install -D typescript@next'.": {
         "category": "Error",
         "code": 2841
+    },
+    "'{0}' is an unused renaming of '{1}'. Did you intend to use it as a type annotation?": {
+        "category": "Error",
+        "code": 2842
+    },
+    "We can only write a type for '{0}' by adding a type for the entire parameter here.": {
+        "category": "Error",
+        "code": 2843
+    },
+    "Type of instance member variable '{0}' cannot reference identifier '{1}' declared in the constructor.": {
+        "category": "Error",
+        "code": 2844
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -5140,11 +5208,11 @@
         "category": "Error",
         "code": 6310
     },
-    "Project '{0}' is out of date because oldest output '{1}' is older than newest input '{2}'": {
+    "Project '{0}' is out of date because output '{1}' is older than input '{2}'": {
         "category": "Message",
         "code": 6350
     },
-    "Project '{0}' is up to date because newest input '{1}' is older than oldest output '{2}'": {
+    "Project '{0}' is up to date because newest input '{1}' is older than output '{2}'": {
         "category": "Message",
         "code": 6351
     },
@@ -5321,6 +5389,18 @@
     "Reusing resolution of type reference directive '{0}' from '{1}' found in cache from location '{2}', it was not resolved.": {
         "category": "Message",
         "code": 6398
+    },
+    "Project '{0}' is out of date because buildinfo file '{1}' indicates that some of the changes were not emitted": {
+        "category": "Message",
+        "code": 6399
+    },
+    "Project '{0}' is up to date but needs to update timestamps of output files that are older than input files": {
+        "category": "Message",
+        "code": 6400
+    },
+    "Project '{0}' is out of date because there was error reading file '{1}'": {
+        "category": "Message",
+        "code": 6401
     },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {
@@ -6288,6 +6368,15 @@
         "category": "Error",
         "code": 8034
     },
+    "You cannot rename elements that are defined in a 'node_modules' folder.": {
+        "category": "Error",
+        "code": 8035
+    },
+    "You cannot rename elements that are defined in another 'node_modules' folder.": {
+        "category": "Error",
+        "code": 8036
+    },
+
     "Declaration emit for this file requires using private name '{0}'. An explicit type annotation may unblock declaration emit.": {
         "category": "Error",
         "code": 9005
@@ -7372,5 +7461,17 @@
     "A 'return' statement cannot be used inside a class static block.": {
         "category": "Error",
         "code": 18041
+    },
+    "'{0}' is a type and cannot be imported in JavaScript files. Use '{1}' in a JSDoc type annotation.": {
+        "category": "Error",
+        "code": 18042
+    },
+    "Types cannot appear in export declarations in JavaScript files.": {
+        "category": "Error",
+        "code": 18043
+    },
+    "'{0}' is automatically exported here.": {
+        "category": "Message",
+        "code": 18044
     }
 }

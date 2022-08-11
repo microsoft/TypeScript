@@ -55,7 +55,7 @@ FsWatches::
 
 FsWatchesRecursive::
 /a:
-  {"directoryName":"/a","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a"}
 
 exitCode:: ExitStatus.undefined
 

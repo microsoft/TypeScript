@@ -198,7 +198,7 @@ namespace ts.projectSystem {
 
         describe("when using event handler", () => {
             verifyProjectLoadingStartAndFinish(host => {
-                const { session, events } = createSessionWithEventTracking<server.ProjectLoadingStartEvent | server.ProjectLoadingFinishEvent>(host, server.ProjectLoadingStartEvent, server.ProjectLoadingFinishEvent);
+                const { session, events } = createSessionWithEventTracking<server.ProjectLoadingStartEvent | server.ProjectLoadingFinishEvent>(host, [server.ProjectLoadingStartEvent, server.ProjectLoadingFinishEvent]);
                 return {
                     session,
                     getNumberOfEvents: () => events.length,

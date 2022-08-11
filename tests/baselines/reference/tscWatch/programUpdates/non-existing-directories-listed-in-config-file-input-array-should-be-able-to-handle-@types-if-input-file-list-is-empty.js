@@ -56,7 +56,7 @@ FsWatches::
 
 FsWatchesRecursive::
 /a/node_modules/@types:
-  {"directoryName":"/a/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a/node_modules/@types"}
 
 exitCode:: ExitStatus.undefined
 

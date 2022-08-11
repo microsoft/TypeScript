@@ -52,7 +52,7 @@ var y = 20;
 
 
 //// [/users/username/projects/project/out.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file1.ts","./file2.ts"],"js":{"sections":[{"pos":0,"end":24,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file1.ts","./file2.ts"],"js":{"sections":[{"pos":0,"end":24,"kind":"text"}],"hash":"-5596233073-var x = 10;\nvar y = 20;\n"}},"version":"FakeTSVersion"}
 
 //// [/users/username/projects/project/out.tsbuildinfo.readable.baseline.txt]
 {
@@ -69,11 +69,12 @@ var y = 20;
           "end": 24,
           "kind": "text"
         }
-      ]
+      ],
+      "hash": "-5596233073-var x = 10;\nvar y = 20;\n"
     }
   },
   "version": "FakeTSVersion",
-  "size": 162
+  "size": 210
 }
 
 //// [/users/username/projects/project/out.tsbuildinfo.baseline.txt]

@@ -4,7 +4,7 @@ namespace ts {
     // Compound nodes
 
     export function createEmptyExports(factory: NodeFactory) {
-        return factory.createExportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*isTypeOnly*/ false, factory.createNamedExports([]), /*moduleSpecifier*/ undefined);
+        return factory.createExportDeclaration(/*modifiers*/ undefined, /*isTypeOnly*/ false, factory.createNamedExports([]), /*moduleSpecifier*/ undefined);
     }
 
     export function createMemberAccessForPropertyName(factory: NodeFactory, target: Expression, memberName: PropertyName, location?: TextRange): MemberExpression {
@@ -197,7 +197,7 @@ namespace ts {
                         get: getAccessor && setTextRange(
                             setOriginalNode(
                                 factory.createFunctionExpression(
-                                    getAccessor.modifiers,
+                                    getModifiers(getAccessor),
                                     /*asteriskToken*/ undefined,
                                     /*name*/ undefined,
                                     /*typeParameters*/ undefined,
@@ -212,7 +212,7 @@ namespace ts {
                         set: setAccessor && setTextRange(
                             setOriginalNode(
                                 factory.createFunctionExpression(
-                                    setAccessor.modifiers,
+                                    getModifiers(setAccessor),
                                     /*asteriskToken*/ undefined,
                                     /*name*/ undefined,
                                     /*typeParameters*/ undefined,
@@ -267,7 +267,7 @@ namespace ts {
                     setOriginalNode(
                         setTextRange(
                             factory.createFunctionExpression(
-                                method.modifiers,
+                                getModifiers(method),
                                 method.asteriskToken,
                                 /*name*/ undefined,
                                 /*typeParameters*/ undefined,
@@ -519,7 +519,6 @@ namespace ts {
             }
             if (namedBindings) {
                 const externalHelpersImportDeclaration = nodeFactory.createImportDeclaration(
-                    /*decorators*/ undefined,
                     /*modifiers*/ undefined,
                     nodeFactory.createImportClause(/*isTypeOnly*/ false, /*name*/ undefined, namedBindings),
                     nodeFactory.createStringLiteral(externalHelpersModuleNameText),
@@ -865,9 +864,55 @@ namespace ts {
         }
     }
 
-    export function canHaveModifiers(node: Node): node is HasModifiers {
+    export function canHaveIllegalType(node: Node): node is HasIllegalType {
+        const kind = node.kind;
+        return kind === SyntaxKind.Constructor
+            || kind === SyntaxKind.SetAccessor;
+    }
+
+    export function canHaveIllegalTypeParameters(node: Node): node is HasIllegalTypeParameters {
+        const kind = node.kind;
+        return kind === SyntaxKind.Constructor
+            || kind === SyntaxKind.GetAccessor
+            || kind === SyntaxKind.SetAccessor;
+    }
+
+    export function canHaveDecorators(node: Node): node is HasDecorators {
         const kind = node.kind;
         return kind === SyntaxKind.Parameter
+            || kind === SyntaxKind.PropertyDeclaration
+            || kind === SyntaxKind.MethodDeclaration
+            || kind === SyntaxKind.GetAccessor
+            || kind === SyntaxKind.SetAccessor
+            || kind === SyntaxKind.ClassExpression
+            || kind === SyntaxKind.ClassDeclaration;
+    }
+
+    export function canHaveIllegalDecorators(node: Node): node is HasIllegalDecorators {
+        const kind = node.kind;
+        return kind === SyntaxKind.PropertyAssignment
+            || kind === SyntaxKind.ShorthandPropertyAssignment
+            || kind === SyntaxKind.FunctionDeclaration
+            || kind === SyntaxKind.Constructor
+            || kind === SyntaxKind.IndexSignature
+            || kind === SyntaxKind.ClassStaticBlockDeclaration
+            || kind === SyntaxKind.MissingDeclaration
+            || kind === SyntaxKind.VariableStatement
+            || kind === SyntaxKind.InterfaceDeclaration
+            || kind === SyntaxKind.TypeAliasDeclaration
+            || kind === SyntaxKind.EnumDeclaration
+            || kind === SyntaxKind.ModuleDeclaration
+            || kind === SyntaxKind.ImportEqualsDeclaration
+            || kind === SyntaxKind.ImportDeclaration
+            || kind === SyntaxKind.NamespaceExportDeclaration
+            || kind === SyntaxKind.ExportDeclaration
+            || kind === SyntaxKind.ExportAssignment;
+    }
+
+    export function canHaveModifiers(node: Node): node is HasModifiers {
+        const kind = node.kind;
+        return kind === SyntaxKind.TypeParameter
+            || kind === SyntaxKind.Parameter
             || kind === SyntaxKind.PropertySignature
             || kind === SyntaxKind.PropertyDeclaration
             || kind === SyntaxKind.MethodSignature
@@ -876,6 +921,7 @@ namespace ts {
             || kind === SyntaxKind.GetAccessor
             || kind === SyntaxKind.SetAccessor
             || kind === SyntaxKind.IndexSignature
+            || kind === SyntaxKind.ConstructorType
             || kind === SyntaxKind.FunctionExpression
             || kind === SyntaxKind.ArrowFunction
             || kind === SyntaxKind.ClassExpression
@@ -890,6 +936,16 @@ namespace ts {
             || kind === SyntaxKind.ImportDeclaration
             || kind === SyntaxKind.ExportAssignment
             || kind === SyntaxKind.ExportDeclaration;
+    }
+
+    export function canHaveIllegalModifiers(node: Node): node is HasIllegalModifiers {
+        const kind = node.kind;
+        return kind === SyntaxKind.ClassStaticBlockDeclaration
+            || kind === SyntaxKind.PropertyAssignment
+            || kind === SyntaxKind.ShorthandPropertyAssignment
+            || kind === SyntaxKind.FunctionType
+            || kind === SyntaxKind.MissingDeclaration
+            || kind === SyntaxKind.NamespaceExportDeclaration;
     }
 
     export const isTypeNodeOrTypeParameterDeclaration = or(isTypeNode, isTypeParameterDeclaration) as (node: Node) => node is TypeNode | TypeParameterDeclaration;

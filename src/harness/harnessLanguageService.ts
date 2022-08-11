@@ -511,8 +511,8 @@ namespace Harness.LanguageService {
         getSignatureHelpItems(fileName: string, position: number, options: ts.SignatureHelpItemsOptions | undefined): ts.SignatureHelpItems {
             return unwrapJSONCallResult(this.shim.getSignatureHelpItems(fileName, position, options));
         }
-        getRenameInfo(fileName: string, position: number, options?: ts.RenameInfoOptions): ts.RenameInfo {
-            return unwrapJSONCallResult(this.shim.getRenameInfo(fileName, position, options));
+        getRenameInfo(fileName: string, position: number, preferences: ts.UserPreferences): ts.RenameInfo {
+            return unwrapJSONCallResult(this.shim.getRenameInfo(fileName, position, preferences));
         }
         getSmartSelectionRange(fileName: string, position: number): ts.SelectionRange {
             return unwrapJSONCallResult(this.shim.getSmartSelectionRange(fileName, position));
@@ -625,6 +625,9 @@ namespace Harness.LanguageService {
             return unwrapJSONCallResult(this.shim.getEmitOutput(fileName));
         }
         getProgram(): ts.Program {
+            throw new Error("Program can not be marshaled across the shim layer.");
+        }
+        getCurrentProgram(): ts.Program | undefined {
             throw new Error("Program can not be marshaled across the shim layer.");
         }
         getAutoImportProvider(): ts.Program | undefined {

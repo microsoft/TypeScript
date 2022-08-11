@@ -79,33 +79,29 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/packages/B/src/bar/foo.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/user/username/projects/myproject/packages/b/lib/foo/package.json:
-  {"fileName":"/user/username/projects/myproject/packages/b/lib/foo/package.json","pollingInterval":250}
+/user/username/projects/myproject/packages/a/node_modules:
+  {"fileName":"/user/username/projects/myproject/packages/A/node_modules","pollingInterval":500}
+/user/username/projects/myproject/packages/node_modules:
+  {"fileName":"/user/username/projects/myproject/packages/node_modules","pollingInterval":500}
 /user/username/projects/myproject/packages/b/package.json:
-  {"fileName":"/user/username/projects/myproject/packages/b/package.json","pollingInterval":250}
-/user/username/projects/myproject/packages/b/lib/bar/foo/package.json:
-  {"fileName":"/user/username/projects/myproject/packages/b/lib/bar/foo/package.json","pollingInterval":250}
+  {"fileName":"/user/username/projects/myproject/packages/B/package.json","pollingInterval":250}
+/user/username/projects/myproject/packages/a/node_modules/@types:
+  {"fileName":"/user/username/projects/myproject/packages/A/node_modules/@types","pollingInterval":500}
+/user/username/projects/myproject/packages/node_modules/@types:
+  {"fileName":"/user/username/projects/myproject/packages/node_modules/@types","pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/myproject/packages/b/src:
-  {"directoryName":"/user/username/projects/myproject/packages/b/src","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/packages/b/src"}
 /user/username/projects/myproject/packages/a/src:
-  {"directoryName":"/user/username/projects/myproject/packages/A/src","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-  {"directoryName":"/user/username/projects/myproject/packages/a/src","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/packages/a/node_modules:
-  {"directoryName":"/user/username/projects/myproject/packages/A/node_modules","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/packages/node_modules:
-  {"directoryName":"/user/username/projects/myproject/packages/node_modules","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/packages/A/src"}
+  {"directoryName":"/user/username/projects/myproject/packages/a/src"}
 /user/username/projects/myproject/node_modules:
-  {"directoryName":"/user/username/projects/myproject/node_modules","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/packages/a/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/packages/A/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/packages/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/packages/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject/node_modules"}
 
 exitCode:: ExitStatus.undefined
 
@@ -123,7 +119,7 @@ export {};
 
 
 //// [/user/username/projects/myproject/packages/A/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../b/src/foo.ts","../b/src/bar/foo.ts","./src/test.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"4646078106-export function foo() { }","1045484683-export function bar() { }",{"version":"-20350237855-import { foo } from '@issue/b/lib/foo';\nimport { bar } from '@issue/b/lib/bar/foo';\nfoo();\nbar();\n","signature":"-3531856636-export {};\n"}],"options":{"composite":true,"outDir":"./lib","rootDir":"./src"},"fileIdsList":[[2,3]],"referencedMap":[[4,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,4,3,2]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../b/src/foo.ts","../b/src/bar/foo.ts","./src/test.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"4646078106-export function foo() { }","1045484683-export function bar() { }",{"version":"-20350237855-import { foo } from '@issue/b/lib/foo';\nimport { bar } from '@issue/b/lib/bar/foo';\nfoo();\nbar();\n","signature":"-3531856636-export {};\n"}],"options":{"composite":true,"outDir":"./lib","rootDir":"./src"},"fileIdsList":[[2,3]],"referencedMap":[[4,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,4,3,2],"latestChangedDtsFile":"./lib/test.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/packages/A/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -176,9 +172,10 @@ export {};
       "./src/test.ts",
       "../b/src/bar/foo.ts",
       "../b/src/foo.ts"
-    ]
+    ],
+    "latestChangedDtsFile": "./lib/test.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 977
+  "size": 1018
 }
 

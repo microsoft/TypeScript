@@ -65,7 +65,7 @@ function f3(bb) {
 declare class Box<P> {
     value: P;
 }
-declare type Boxified<T> = {
+type Boxified<T> = {
     [K in keyof T]: Box<T[K]>;
 };
 declare function boxify<T>(obj: T): Boxified<T>;

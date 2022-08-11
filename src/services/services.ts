@@ -343,20 +343,25 @@ namespace ts {
         }
 
         getContextualDocumentationComment(context: Node | undefined, checker: TypeChecker | undefined): SymbolDisplayPart[] {
-            switch (context?.kind) {
-                case SyntaxKind.GetAccessor:
+            if (context) {
+                if (isGetAccessor(context)) {
                     if (!this.contextualGetAccessorDocumentationComment) {
                         this.contextualGetAccessorDocumentationComment = getDocumentationComment(filter(this.declarations, isGetAccessor), checker);
                     }
-                    return this.contextualGetAccessorDocumentationComment;
-                case SyntaxKind.SetAccessor:
+                    if (length(this.contextualGetAccessorDocumentationComment)) {
+                        return this.contextualGetAccessorDocumentationComment;
+                    }
+                }
+                if (isSetAccessor(context)) {
                     if (!this.contextualSetAccessorDocumentationComment) {
                         this.contextualSetAccessorDocumentationComment = getDocumentationComment(filter(this.declarations, isSetAccessor), checker);
                     }
-                    return this.contextualSetAccessorDocumentationComment;
-                default:
-                    return this.getDocumentationComment(checker);
+                    if (length(this.contextualSetAccessorDocumentationComment)) {
+                        return this.contextualSetAccessorDocumentationComment;
+                    }
+                }
             }
+            return this.getDocumentationComment(checker);
         }
 
         getJsDocTags(checker?: TypeChecker): JSDocTagInfo[] {
@@ -368,20 +373,25 @@ namespace ts {
         }
 
         getContextualJsDocTags(context: Node | undefined, checker: TypeChecker | undefined): JSDocTagInfo[] {
-            switch (context?.kind) {
-                case SyntaxKind.GetAccessor:
+            if (context) {
+                if (isGetAccessor(context)) {
                     if (!this.contextualGetAccessorTags) {
                         this.contextualGetAccessorTags = getJsDocTagsOfDeclarations(filter(this.declarations, isGetAccessor), checker);
                     }
-                    return this.contextualGetAccessorTags;
-                case SyntaxKind.SetAccessor:
+                    if (length(this.contextualGetAccessorTags)) {
+                        return this.contextualGetAccessorTags;
+                    }
+                }
+                if (isSetAccessor(context)) {
                     if (!this.contextualSetAccessorTags) {
                         this.contextualSetAccessorTags = getJsDocTagsOfDeclarations(filter(this.declarations, isSetAccessor), checker);
                     }
-                    return this.contextualSetAccessorTags;
-                default:
-                    return this.getJsDocTags(checker);
+                    if (length(this.contextualSetAccessorTags)) {
+                        return this.contextualSetAccessorTags;
+                    }
+                }
             }
+            return this.getJsDocTags(checker);
         }
     }
 
@@ -1283,7 +1293,10 @@ namespace ts {
                 lastTypesRootVersion = typeRootsVersion;
             }
 
-            const rootFileNames = host.getScriptFileNames();
+            // This array is retained by the program and will be used to determine if the program is up to date,
+            // so we need to make a copy in case the host mutates the underlying array - otherwise it would look
+            // like every program always has the host's current list of root files.
+            const rootFileNames = host.getScriptFileNames().slice();
 
             // Get a fresh cache of the host information
             const newSettings = host.getCompilationSettings() || getDefaultCompilerOptions();
@@ -1350,6 +1363,11 @@ namespace ts {
                 onUnRecoverableConfigFileDiagnostic: noop,
             };
 
+            // The call to isProgramUptoDate below may refer back to documentRegistryBucketKey;
+            // calculate this early so it's not undefined if downleveled to a var (or, if emitted
+            // as a const variable without downleveling, doesn't crash).
+            const documentRegistryBucketKey = documentRegistry.getKeyForCompilationSettings(newSettings);
+
             // If the program is already up-to-date, we can reuse it
             if (isProgramUptoDate(program, rootFileNames, newSettings, (_path, fileName) => host.getScriptVersion(fileName), fileName => compilerHost!.fileExists(fileName), hasInvalidatedResolution, hasChangedAutomaticTypeDirectiveNames, getParsedCommandLine, projectReferences)) {
                 return;
@@ -1361,7 +1379,6 @@ namespace ts {
             // the program points to old source files that have been invalidated because of
             // incremental parsing.
 
-            const documentRegistryBucketKey = documentRegistry.getKeyForCompilationSettings(newSettings);
             const options: CreateProgramOptions = {
                 rootNames: rootFileNames,
                 options: newSettings,
@@ -1426,14 +1443,14 @@ namespace ts {
             // not part of the new program.
             function onReleaseOldSourceFile(oldSourceFile: SourceFile, oldOptions: CompilerOptions) {
                 const oldSettingsKey = documentRegistry.getKeyForCompilationSettings(oldOptions);
-                documentRegistry.releaseDocumentWithKey(oldSourceFile.resolvedPath, oldSettingsKey, oldSourceFile.scriptKind);
+                documentRegistry.releaseDocumentWithKey(oldSourceFile.resolvedPath, oldSettingsKey, oldSourceFile.scriptKind, oldSourceFile.impliedNodeFormat);
             }
 
-            function getOrCreateSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined {
-                return getOrCreateSourceFileByPath(fileName, toPath(fileName, currentDirectory, getCanonicalFileName), languageVersion, onError, shouldCreateNewSourceFile);
+            function getOrCreateSourceFile(fileName: string, languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined {
+                return getOrCreateSourceFileByPath(fileName, toPath(fileName, currentDirectory, getCanonicalFileName), languageVersionOrOptions, onError, shouldCreateNewSourceFile);
             }
 
-            function getOrCreateSourceFileByPath(fileName: string, path: Path, _languageVersion: ScriptTarget, _onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined {
+            function getOrCreateSourceFileByPath(fileName: string, path: Path, languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions, _onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined {
                 Debug.assert(compilerHost, "getOrCreateSourceFileByPath called after typical CompilerHost lifetime, check the callstack something with a reference to an old host.");
                 // The program is asking for this file, check first if the host can locate it.
                 // If the host can not locate the file, then it does not exist. return undefined
@@ -1479,11 +1496,11 @@ namespace ts {
                         // file's script kind, i.e. in one project some file is treated as ".ts"
                         // and in another as ".js"
                         if (scriptKind === oldSourceFile.scriptKind) {
-                            return documentRegistry.updateDocumentWithKey(fileName, path, host, documentRegistryBucketKey, scriptSnapshot, scriptVersion, scriptKind);
+                            return documentRegistry.updateDocumentWithKey(fileName, path, host, documentRegistryBucketKey, scriptSnapshot, scriptVersion, scriptKind, languageVersionOrOptions);
                         }
                         else {
                             // Release old source file and fall through to aquire new file with new script kind
-                            documentRegistry.releaseDocumentWithKey(oldSourceFile.resolvedPath, documentRegistry.getKeyForCompilationSettings(program.getCompilerOptions()), oldSourceFile.scriptKind);
+                            documentRegistry.releaseDocumentWithKey(oldSourceFile.resolvedPath, documentRegistry.getKeyForCompilationSettings(program.getCompilerOptions()), oldSourceFile.scriptKind, oldSourceFile.impliedNodeFormat);
                         }
                     }
 
@@ -1491,7 +1508,7 @@ namespace ts {
                 }
 
                 // Could not find this file in the old program, create a new SourceFile for it.
-                return documentRegistry.acquireDocumentWithKey(fileName, path, host, documentRegistryBucketKey, scriptSnapshot, scriptVersion, scriptKind);
+                return documentRegistry.acquireDocumentWithKey(fileName, path, host, documentRegistryBucketKey, scriptSnapshot, scriptVersion, scriptKind, languageVersionOrOptions);
             }
         }
 
@@ -1576,7 +1593,7 @@ namespace ts {
                 // Use paths to ensure we are using correct key and paths as document registry could be created with different current directory than host
                 const key = documentRegistry.getKeyForCompilationSettings(program.getCompilerOptions());
                 forEach(program.getSourceFiles(), f =>
-                    documentRegistry.releaseDocumentWithKey(f.resolvedPath, key, f.scriptKind));
+                    documentRegistry.releaseDocumentWithKey(f.resolvedPath, key, f.scriptKind, f.impliedNodeFormat));
                 program = undefined!; // TODO: GH#18217
             }
             host = undefined!;
@@ -2537,9 +2554,9 @@ namespace ts {
             }
         }
 
-        function getRenameInfo(fileName: string, position: number, options?: RenameInfoOptions): RenameInfo {
+        function getRenameInfo(fileName: string, position: number, preferences: UserPreferences | RenameInfoOptions | undefined): RenameInfo {
             synchronizeHostData();
-            return Rename.getRenameInfo(program, getValidSourceFile(fileName), position, options);
+            return Rename.getRenameInfo(program, getValidSourceFile(fileName), position, preferences || {});
         }
 
         function getRefactorContext(file: SourceFile, positionOrRange: number | TextRange, preferences: UserPreferences, formatOptions?: FormatCodeSettings, triggerReason?: RefactorTriggerReason, kind?: string): RefactorContext {
@@ -2681,6 +2698,7 @@ namespace ts {
             getEmitOutput,
             getNonBoundSourceFile,
             getProgram,
+            getCurrentProgram: () => program,
             getAutoImportProvider,
             updateIsDefinitionOfReferencedSymbols,
             getApplicableRefactors,

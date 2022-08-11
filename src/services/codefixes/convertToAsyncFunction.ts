@@ -82,11 +82,8 @@ namespace ts.codefix {
             return;
         }
 
-        const pos = functionToConvert.modifiers ? functionToConvert.modifiers.end :
-            functionToConvert.decorators ? skipTrivia(sourceFile.text, functionToConvert.decorators.end) :
-                functionToConvert.getStart(sourceFile);
-        const options = functionToConvert.modifiers ? { prefix: " " } : { suffix: " " };
-        changes.insertModifierAt(sourceFile, pos, SyntaxKind.AsyncKeyword, options);
+        const pos = skipTrivia(sourceFile.text, moveRangePastModifiers(functionToConvert).pos);
+        changes.insertModifierAt(sourceFile, pos, SyntaxKind.AsyncKeyword, { suffix: " " });
 
         for (const returnStatement of returnStatements) {
             forEachChild(returnStatement, function visit(node) {

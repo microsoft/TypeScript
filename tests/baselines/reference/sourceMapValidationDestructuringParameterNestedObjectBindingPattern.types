@@ -34,7 +34,7 @@ var robotA: Robot = { name: "mower", skills: { primary: "mowing", secondary: "no
 >"none" : "none"
 
 function foo1({ skills: { primary: primaryA, secondary: secondaryA } }: Robot) {
->foo1 : ({ skills: { primary: primaryA, secondary: secondaryA } }: Robot) => void
+>foo1 : ({ skills: { primary, secondary } }: Robot) => void
 >skills : any
 >primary : any
 >primaryA : string
@@ -49,7 +49,7 @@ function foo1({ skills: { primary: primaryA, secondary: secondaryA } }: Robot) {
 >primaryA : string
 }
 function foo2({ name: nameC, skills: { primary: primaryB, secondary: secondaryB } }: Robot) {
->foo2 : ({ name: nameC, skills: { primary: primaryB, secondary: secondaryB } }: Robot) => void
+>foo2 : ({ name, skills: { primary, secondary } }: Robot) => void
 >name : any
 >nameC : string
 >skills : any
@@ -81,12 +81,12 @@ function foo3({ skills }: Robot) {
 
 foo1(robotA);
 >foo1(robotA) : void
->foo1 : ({ skills: { primary: primaryA, secondary: secondaryA } }: Robot) => void
+>foo1 : ({ skills: { primary, secondary } }: Robot) => void
 >robotA : Robot
 
 foo1({ name: "Edger", skills: { primary: "edging", secondary: "branch trimming" } });
 >foo1({ name: "Edger", skills: { primary: "edging", secondary: "branch trimming" } }) : void
->foo1 : ({ skills: { primary: primaryA, secondary: secondaryA } }: Robot) => void
+>foo1 : ({ skills: { primary, secondary } }: Robot) => void
 >{ name: "Edger", skills: { primary: "edging", secondary: "branch trimming" } } : { name: string; skills: { primary: string; secondary: string; }; }
 >name : string
 >"Edger" : "Edger"
@@ -99,12 +99,12 @@ foo1({ name: "Edger", skills: { primary: "edging", secondary: "branch trimming" 
 
 foo2(robotA);
 >foo2(robotA) : void
->foo2 : ({ name: nameC, skills: { primary: primaryB, secondary: secondaryB } }: Robot) => void
+>foo2 : ({ name, skills: { primary, secondary } }: Robot) => void
 >robotA : Robot
 
 foo2({ name: "Edger", skills: { primary: "edging", secondary: "branch trimming" } });
 >foo2({ name: "Edger", skills: { primary: "edging", secondary: "branch trimming" } }) : void
->foo2 : ({ name: nameC, skills: { primary: primaryB, secondary: secondaryB } }: Robot) => void
+>foo2 : ({ name, skills: { primary, secondary } }: Robot) => void
 >{ name: "Edger", skills: { primary: "edging", secondary: "branch trimming" } } : { name: string; skills: { primary: string; secondary: string; }; }
 >name : string
 >"Edger" : "Edger"

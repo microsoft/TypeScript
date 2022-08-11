@@ -162,7 +162,7 @@ namespace ts {
         return sourceFile && sourceFile.resolvedModules && sourceFile.resolvedModules.get(moduleNameText, mode);
     }
 
-    export function setResolvedModule(sourceFile: SourceFile, moduleNameText: string, resolvedModule: ResolvedModuleFull, mode: ModuleKind.CommonJS | ModuleKind.ESNext | undefined): void {
+    export function setResolvedModule(sourceFile: SourceFile, moduleNameText: string, resolvedModule: ResolvedModuleFull | undefined, mode: ModuleKind.CommonJS | ModuleKind.ESNext | undefined): void {
         if (!sourceFile.resolvedModules) {
             sourceFile.resolvedModules = createModeAwareCache();
         }
@@ -502,11 +502,12 @@ namespace ts {
     }
 
     export function getNonDecoratorTokenPosOfNode(node: Node, sourceFile?: SourceFileLike): number {
-        if (nodeIsMissing(node) || !node.decorators) {
+        const lastDecorator = !nodeIsMissing(node) && canHaveModifiers(node) ? findLast(node.modifiers, isDecorator) : undefined;
+        if (!lastDecorator) {
             return getTokenPosOfNode(node, sourceFile);
         }
 
-        return skipTrivia((sourceFile || getSourceFileOfNode(node)).text, node.decorators.end);
+        return skipTrivia((sourceFile || getSourceFileOfNode(node)).text, lastDecorator.end);
     }
 
     export function getSourceTextOfNodeFromSourceFile(sourceFile: SourceFile, node: Node, includeTrivia = false): string {
@@ -1936,7 +1937,7 @@ namespace ts {
     export function nodeIsDecorated(node: ClassElement, parent: Node): boolean;
     export function nodeIsDecorated(node: Node, parent: Node, grandparent: Node): boolean;
     export function nodeIsDecorated(node: Node, parent?: Node, grandparent?: Node): boolean {
-        return node.decorators !== undefined
+        return hasDecorators(node)
             && nodeCanBeDecorated(node, parent!, grandparent!); // TODO: GH#18217
     }
 
@@ -4920,6 +4921,10 @@ namespace ts {
         return hasEffectiveModifier(node, ModifierFlags.Readonly);
     }
 
+    export function hasDecorators(node: Node): boolean {
+        return hasSyntacticModifier(node, ModifierFlags.Decorator);
+    }
+
     export function getSelectedEffectiveModifierFlags(node: Node, flags: ModifierFlags): ModifierFlags {
         return getEffectiveModifierFlags(node) & flags;
     }
@@ -4997,14 +5002,14 @@ namespace ts {
      * NOTE: This function does not use `parent` pointers and will not include modifiers from JSDoc.
      */
     export function getSyntacticModifierFlagsNoCache(node: Node): ModifierFlags {
-        let flags = modifiersToFlags(node.modifiers);
+        let flags = canHaveModifiers(node) ? modifiersToFlags(node.modifiers) : ModifierFlags.None;
         if (node.flags & NodeFlags.NestedNamespace || (node.kind === SyntaxKind.Identifier && (node as Identifier).isInJSDocNamespace)) {
             flags |= ModifierFlags.Export;
         }
         return flags;
     }
 
-    export function modifiersToFlags(modifiers: readonly Modifier[] | undefined) {
+    export function modifiersToFlags(modifiers: readonly ModifierLike[] | undefined) {
         let flags = ModifierFlags.None;
         if (modifiers) {
             for (const modifier of modifiers) {
@@ -5030,6 +5035,7 @@ namespace ts {
             case SyntaxKind.OverrideKeyword: return ModifierFlags.Override;
             case SyntaxKind.InKeyword: return ModifierFlags.In;
             case SyntaxKind.OutKeyword: return ModifierFlags.Out;
+            case SyntaxKind.Decorator: return ModifierFlags.Decorator;
         }
         return ModifierFlags.None;
     }
@@ -5354,20 +5360,16 @@ namespace ts {
         return getStringFromExpandedCharCodes(expandedCharCodes);
     }
 
+    export function readJsonOrUndefined(path: string, hostOrText: { readFile(fileName: string): string | undefined } | string): object | undefined {
+        const jsonText = isString(hostOrText) ? hostOrText : hostOrText.readFile(path);
+        if (!jsonText) return undefined;
+        // gracefully handle if readFile fails or returns not JSON
+        const result = parseConfigFileTextToJson(path, jsonText);
+        return !result.error ? result.config : undefined;
+    }
+
     export function readJson(path: string, host: { readFile(fileName: string): string | undefined }): object {
-        try {
-            const jsonText = host.readFile(path);
-            if (!jsonText) return {};
-            const result = parseConfigFileTextToJson(path, jsonText);
-            if (result.error) {
-                return {};
-            }
-            return result.config;
-        }
-        catch (e) {
-            // gracefully handle if readFile fails or returns not JSON
-            return {};
-        }
+        return readJsonOrUndefined(path, host) || {};
     }
 
     export function directoryProbablyExists(directoryName: string, host: { directoryExists?: (directoryName: string) => boolean }): boolean {
@@ -5422,8 +5424,9 @@ namespace ts {
      * Moves the start position of a range past any decorators.
      */
     export function moveRangePastDecorators(node: Node): TextRange {
-        return node.decorators && !positionIsSynthesized(node.decorators.end)
-            ? moveRangePos(node, node.decorators.end)
+        const lastDecorator = canHaveModifiers(node) ? findLast(node.modifiers, isDecorator) : undefined;
+        return lastDecorator && !positionIsSynthesized(lastDecorator.end)
+            ? moveRangePos(node, lastDecorator.end)
             : node;
     }
 
@@ -5431,8 +5434,9 @@ namespace ts {
      * Moves the start position of a range past any decorators or modifiers.
      */
     export function moveRangePastModifiers(node: Node): TextRange {
-        return node.modifiers && !positionIsSynthesized(node.modifiers.end)
-            ? moveRangePos(node, node.modifiers.end)
+        const lastModifier = canHaveModifiers(node) ? lastOrUndefined(node.modifiers) : undefined;
+        return lastModifier && !positionIsSynthesized(lastModifier.end)
+            ? moveRangePos(node, lastModifier.end)
             : moveRangePastDecorators(node);
     }
 
@@ -5557,7 +5561,8 @@ namespace ts {
 
     export function getDeclarationModifierFlagsFromSymbol(s: Symbol, isWrite = false): ModifierFlags {
         if (s.valueDeclaration) {
-            const declaration = (isWrite && s.declarations && find(s.declarations, d => d.kind === SyntaxKind.SetAccessor)) || s.valueDeclaration;
+            const declaration = (isWrite && s.declarations && find(s.declarations, isSetAccessorDeclaration))
+                || (s.flags & SymbolFlags.GetAccessor && find(s.declarations, isGetAccessorDeclaration)) || s.valueDeclaration;
             const flags = getCombinedModifierFlags(declaration);
             return s.parent && s.parent.flags & SymbolFlags.Class ? flags : flags & ~ModifierFlags.AccessibilityModifier;
         }
@@ -6311,7 +6316,7 @@ namespace ts {
         // Excludes declaration files - they still require an explicit `export {}` or the like
         // for back compat purposes. The only non-declaration files _not_ forced to be a module are `.js` files
         // that aren't esm-mode (meaning not in a `type: module` scope).
-        return (file.impliedNodeFormat === ModuleKind.ESNext || (fileExtensionIsOneOf(file.fileName, [Extension.Cjs, Extension.Cts]))) && !file.isDeclarationFile ? true : undefined;
+        return (file.impliedNodeFormat === ModuleKind.ESNext || (fileExtensionIsOneOf(file.fileName, [Extension.Cjs, Extension.Cts, Extension.Mjs, Extension.Mts]))) && !file.isDeclarationFile ? true : undefined;
     }
 
     export function getSetExternalModuleIndicator(options: CompilerOptions): (file: SourceFile) => void {
@@ -6335,10 +6340,7 @@ namespace ts {
                 if (options.jsx === JsxEmit.ReactJSX || options.jsx === JsxEmit.ReactJSXDev) {
                     checks.push(isFileModuleFromUsingJSXTag);
                 }
-                const moduleKind = getEmitModuleKind(options);
-                if (moduleKind === ModuleKind.Node16 || moduleKind === ModuleKind.NodeNext) {
-                    checks.push(isFileForcedToBeModuleByFormat);
-                }
+                checks.push(isFileForcedToBeModuleByFormat);
                 const combined = or(...checks);
                 const callback = (file: SourceFile) => void (file.externalModuleIndicator = combined(file));
                 return callback;
@@ -6473,6 +6475,10 @@ namespace ts {
 
     export function compilerOptionsAffectEmit(newOptions: CompilerOptions, oldOptions: CompilerOptions): boolean {
         return optionsHaveChanges(oldOptions, newOptions, affectsEmitOptionDeclarations);
+    }
+
+    export function compilerOptionsAffectDeclarationPath(newOptions: CompilerOptions, oldOptions: CompilerOptions): boolean {
+        return optionsHaveChanges(oldOptions, newOptions, affectsDeclarationPathOptionDeclarations);
     }
 
     export function getCompilerOptionValue(options: CompilerOptions, option: CommandLineOption): unknown {
@@ -7533,8 +7539,12 @@ namespace ts {
                 return (node as TemplateLiteralTypeSpan).parent.templateSpans;
             case SyntaxKind.TemplateSpan:
                 return (node as TemplateSpan).parent.templateSpans;
-            case SyntaxKind.Decorator:
-                return (node as Decorator).parent.decorators;
+            case SyntaxKind.Decorator: {
+                const { parent } = node as Decorator;
+                return canHaveDecorators(parent) ? parent.modifiers :
+                    canHaveIllegalDecorators(parent) ? parent.decorators :
+                    undefined;
+            }
             case SyntaxKind.HeritageClause:
                 return (node as HeritageClause).parent.heritageClauses;
         }
