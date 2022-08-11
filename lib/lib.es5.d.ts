@@ -907,8 +907,8 @@ interface DateConstructor {
 declare var Date: DateConstructor;
 
 interface RegExpMatchArray extends Array<string> {
-    index?: number;
-    input?: string;
+    index: number;
+    input: string;
 }
 
 interface RegExpExecArray extends Array<string> {
