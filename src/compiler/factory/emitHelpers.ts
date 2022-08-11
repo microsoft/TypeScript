@@ -705,7 +705,7 @@ namespace ts {
     //          - The verb (`next`, `throw`, or `return` method) to delegate to the expression
     //            of a `yield*`.
     //          - The result of evaluating the verb delegated to the expression of a `yield*`.
-    // d        `Object.defineProperty` with fallback.
+    //  d       `Object.defineProperty` with fallback.
     //
     // functions:
     //  verb(n)     Creates a bound callback to the `step` function for opcode `n`.
