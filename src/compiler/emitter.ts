@@ -749,6 +749,21 @@ namespace ts {
         getCommandLine: (ref: ProjectReference) => ParsedCommandLine | undefined,
         customTransformers?: CustomTransformers
     ): EmitUsingBuildInfoResult {
+        tracing?.push(tracing.Phase.Emit, "emitUsingBuildInfo", {}, /*separateBeginAndEnd*/ true);
+        performance.mark("beforeEmit");
+        const result = emitUsingBuildInfoWorker(config, host, getCommandLine, customTransformers);
+        performance.mark("afterEmit");
+        performance.measure("Emit", "beforeEmit", "afterEmit");
+        tracing?.pop();
+        return result;
+    }
+
+    function emitUsingBuildInfoWorker(
+        config: ParsedCommandLine,
+        host: EmitUsingBuildInfoHost,
+        getCommandLine: (ref: ProjectReference) => ParsedCommandLine | undefined,
+        customTransformers?: CustomTransformers
+    ): EmitUsingBuildInfoResult {
         const createHash = maybeBind(host, host.createHash);
         const { buildInfoPath, jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath } = getOutputPathsForBundle(config.options, /*forceDtsPaths*/ false);
         let buildInfo: BuildInfo | undefined;
