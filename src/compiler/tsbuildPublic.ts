@@ -1815,10 +1815,10 @@ namespace ts {
             return prior;
         }
 
-        performance.mark("SolutionBuilder::beforeUpToDateCheckTime");
+        performance.mark("SolutionBuilder::beforeUpToDateCheck");
         const actual = getUpToDateStatusWorker(state, project, resolvedPath);
-        performance.mark("SolutionBuilder::afterUpToDateCheckTime");
-        performance.measure("SolutionBuilder::Up-to-date check time", "SolutionBuilder::beforeUpToDateCheckTime", "SolutionBuilder::afterUpToDateCheckTime");
+        performance.mark("SolutionBuilder::afterUpToDateCheck");
+        performance.measure("SolutionBuilder::Up-to-date check", "SolutionBuilder::beforeUpToDateCheck", "SolutionBuilder::afterUpToDateCheck");
         state.projectStatus.set(resolvedPath, actual);
         return actual;
     }
