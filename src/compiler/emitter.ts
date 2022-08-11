@@ -948,6 +948,7 @@ namespace ts {
 
         reset();
 
+        // #region unspecifiedHintWorkerJumpTable
         const _emitWithUnspecifiedHintWorkerTable: (undefined | ((node: any) => void))[] = [];
         for (let i = 0; i < SyntaxKind.Count; i++) _emitWithUnspecifiedHintWorkerTable.push(undefined);
 
@@ -1293,6 +1294,115 @@ namespace ts {
         _emitWithUnspecifiedHintWorkerTable[SyntaxKind.EndOfDeclarationMarker] =
         _emitWithUnspecifiedHintWorkerTable[SyntaxKind.MergeDeclarationMarker] =
             noop;
+
+        // #endregion
+
+        // #region expressionHintWorkerJumpTable
+
+        const _emitWithExpressionHintTable: (undefined | ((node: any) => void))[] = [];
+        for (let i = 0; i < SyntaxKind.Count; i++) _emitWithExpressionHintTable.push(undefined);
+        // Literals
+        _emitWithExpressionHintTable[SyntaxKind.NumericLiteral] =
+        _emitWithExpressionHintTable[SyntaxKind.BigIntLiteral] =
+            emitNumericOrBigIntLiteral;
+
+        _emitWithExpressionHintTable[SyntaxKind.StringLiteral] =
+        _emitWithExpressionHintTable[SyntaxKind.RegularExpressionLiteral] =
+        _emitWithExpressionHintTable[SyntaxKind.NoSubstitutionTemplateLiteral] =
+            (node: LiteralExpression) => emitLiteral(node, /*jsxAttributeEscape*/ false);
+
+        // Identifiers
+        _emitWithExpressionHintTable[SyntaxKind.Identifier] =
+            emitIdentifier;
+        _emitWithExpressionHintTable[SyntaxKind.PrivateIdentifier] =
+            emitPrivateIdentifier;
+
+        // Expressions
+        _emitWithExpressionHintTable[SyntaxKind.ArrayLiteralExpression] =
+            emitArrayLiteralExpression;
+        _emitWithExpressionHintTable[SyntaxKind.ObjectLiteralExpression] =
+            emitObjectLiteralExpression;
+        _emitWithExpressionHintTable[SyntaxKind.PropertyAccessExpression] =
+            emitPropertyAccessExpression;
+        _emitWithExpressionHintTable[SyntaxKind.ElementAccessExpression] =
+            emitElementAccessExpression;
+        _emitWithExpressionHintTable[SyntaxKind.CallExpression] =
+            emitCallExpression;
+        _emitWithExpressionHintTable[SyntaxKind.NewExpression] =
+            emitNewExpression;
+        _emitWithExpressionHintTable[SyntaxKind.TaggedTemplateExpression] =
+            emitTaggedTemplateExpression;
+        _emitWithExpressionHintTable[SyntaxKind.TypeAssertionExpression] =
+            emitTypeAssertionExpression;
+        _emitWithExpressionHintTable[SyntaxKind.ParenthesizedExpression] =
+            emitParenthesizedExpression;
+        _emitWithExpressionHintTable[SyntaxKind.FunctionExpression] =
+            emitFunctionExpression;
+        _emitWithExpressionHintTable[SyntaxKind.ArrowFunction] =
+            emitArrowFunction;
+        _emitWithExpressionHintTable[SyntaxKind.DeleteExpression] =
+            emitDeleteExpression;
+        _emitWithExpressionHintTable[SyntaxKind.TypeOfExpression] =
+            emitTypeOfExpression;
+        _emitWithExpressionHintTable[SyntaxKind.VoidExpression] =
+            emitVoidExpression;
+        _emitWithExpressionHintTable[SyntaxKind.AwaitExpression] =
+            emitAwaitExpression;
+        _emitWithExpressionHintTable[SyntaxKind.PrefixUnaryExpression] =
+            emitPrefixUnaryExpression;
+        _emitWithExpressionHintTable[SyntaxKind.PostfixUnaryExpression] =
+            emitPostfixUnaryExpression;
+        _emitWithExpressionHintTable[SyntaxKind.BinaryExpression] =
+            emitBinaryExpression;
+        _emitWithExpressionHintTable[SyntaxKind.ConditionalExpression] =
+            emitConditionalExpression;
+        _emitWithExpressionHintTable[SyntaxKind.TemplateExpression] =
+            emitTemplateExpression;
+        _emitWithExpressionHintTable[SyntaxKind.YieldExpression] =
+            emitYieldExpression;
+        _emitWithExpressionHintTable[SyntaxKind.SpreadElement] =
+            emitSpreadElement;
+        _emitWithExpressionHintTable[SyntaxKind.ClassExpression] =
+            emitClassExpression;
+        _emitWithExpressionHintTable[SyntaxKind.OmittedExpression] =
+            noop;
+        _emitWithExpressionHintTable[SyntaxKind.AsExpression] =
+            emitAsExpression;
+        _emitWithExpressionHintTable[SyntaxKind.NonNullExpression] =
+            emitNonNullExpression;
+        _emitWithExpressionHintTable[SyntaxKind.ExpressionWithTypeArguments] =
+            emitExpressionWithTypeArguments;
+        _emitWithExpressionHintTable[SyntaxKind.MetaProperty] =
+            emitMetaProperty;
+        _emitWithExpressionHintTable[SyntaxKind.SyntheticExpression] =
+            _ => Debug.fail("SyntheticExpression should never be printed.");
+
+        // JSX
+        _emitWithExpressionHintTable[SyntaxKind.JsxElement] =
+            emitJsxElement;
+        _emitWithExpressionHintTable[SyntaxKind.JsxSelfClosingElement] =
+            emitJsxSelfClosingElement;
+        _emitWithExpressionHintTable[SyntaxKind.JsxFragment] =
+            emitJsxFragment;
+
+        // Synthesized list
+        _emitWithExpressionHintTable[SyntaxKind.SyntaxList] =
+            _ => Debug.fail("SyntaxList should not be printed");
+
+        // Transformation nodes
+        _emitWithExpressionHintTable[SyntaxKind.NotEmittedStatement] =
+            noop;
+        _emitWithExpressionHintTable[SyntaxKind.PartiallyEmittedExpression] =
+            emitPartiallyEmittedExpression;
+        _emitWithExpressionHintTable[SyntaxKind.CommaListExpression] =
+            emitCommaList;
+        _emitWithExpressionHintTable[SyntaxKind.MergeDeclarationMarker] =
+        _emitWithExpressionHintTable[SyntaxKind.EndOfDeclarationMarker] =
+            noop;
+        _emitWithExpressionHintTable[SyntaxKind.SyntheticReferenceExpression] =
+            _ => Debug.fail("SyntheticReferenceExpression should not be printed");
+
+        // #endregion
 
         return {
             // public API
@@ -1699,107 +1809,9 @@ namespace ts {
                 }
             }
             if (hint === EmitHint.Expression) {
-                switch (node.kind) {
-                    // Literals
-                    case SyntaxKind.NumericLiteral:
-                    case SyntaxKind.BigIntLiteral:
-                        return emitNumericOrBigIntLiteral(node as NumericLiteral | BigIntLiteral);
-
-                    case SyntaxKind.StringLiteral:
-                    case SyntaxKind.RegularExpressionLiteral:
-                    case SyntaxKind.NoSubstitutionTemplateLiteral:
-                        return emitLiteral(node as LiteralExpression, /*jsxAttributeEscape*/ false);
-
-                    // Identifiers
-                    case SyntaxKind.Identifier:
-                        return emitIdentifier(node as Identifier);
-                    case SyntaxKind.PrivateIdentifier:
-                        return emitPrivateIdentifier(node as PrivateIdentifier);
-
-                    // Expressions
-                    case SyntaxKind.ArrayLiteralExpression:
-                        return emitArrayLiteralExpression(node as ArrayLiteralExpression);
-                    case SyntaxKind.ObjectLiteralExpression:
-                        return emitObjectLiteralExpression(node as ObjectLiteralExpression);
-                    case SyntaxKind.PropertyAccessExpression:
-                        return emitPropertyAccessExpression(node as PropertyAccessExpression);
-                    case SyntaxKind.ElementAccessExpression:
-                        return emitElementAccessExpression(node as ElementAccessExpression);
-                    case SyntaxKind.CallExpression:
-                        return emitCallExpression(node as CallExpression);
-                    case SyntaxKind.NewExpression:
-                        return emitNewExpression(node as NewExpression);
-                    case SyntaxKind.TaggedTemplateExpression:
-                        return emitTaggedTemplateExpression(node as TaggedTemplateExpression);
-                    case SyntaxKind.TypeAssertionExpression:
-                        return emitTypeAssertionExpression(node as TypeAssertion);
-                    case SyntaxKind.ParenthesizedExpression:
-                        return emitParenthesizedExpression(node as ParenthesizedExpression);
-                    case SyntaxKind.FunctionExpression:
-                        return emitFunctionExpression(node as FunctionExpression);
-                    case SyntaxKind.ArrowFunction:
-                        return emitArrowFunction(node as ArrowFunction);
-                    case SyntaxKind.DeleteExpression:
-                        return emitDeleteExpression(node as DeleteExpression);
-                    case SyntaxKind.TypeOfExpression:
-                        return emitTypeOfExpression(node as TypeOfExpression);
-                    case SyntaxKind.VoidExpression:
-                        return emitVoidExpression(node as VoidExpression);
-                    case SyntaxKind.AwaitExpression:
-                        return emitAwaitExpression(node as AwaitExpression);
-                    case SyntaxKind.PrefixUnaryExpression:
-                        return emitPrefixUnaryExpression(node as PrefixUnaryExpression);
-                    case SyntaxKind.PostfixUnaryExpression:
-                        return emitPostfixUnaryExpression(node as PostfixUnaryExpression);
-                    case SyntaxKind.BinaryExpression:
-                        return emitBinaryExpression(node as BinaryExpression);
-                    case SyntaxKind.ConditionalExpression:
-                        return emitConditionalExpression(node as ConditionalExpression);
-                    case SyntaxKind.TemplateExpression:
-                        return emitTemplateExpression(node as TemplateExpression);
-                    case SyntaxKind.YieldExpression:
-                        return emitYieldExpression(node as YieldExpression);
-                    case SyntaxKind.SpreadElement:
-                        return emitSpreadElement(node as SpreadElement);
-                    case SyntaxKind.ClassExpression:
-                        return emitClassExpression(node as ClassExpression);
-                    case SyntaxKind.OmittedExpression:
-                        return;
-                    case SyntaxKind.AsExpression:
-                        return emitAsExpression(node as AsExpression);
-                    case SyntaxKind.NonNullExpression:
-                        return emitNonNullExpression(node as NonNullExpression);
-                    case SyntaxKind.ExpressionWithTypeArguments:
-                        return emitExpressionWithTypeArguments(node as ExpressionWithTypeArguments);
-                    case SyntaxKind.MetaProperty:
-                        return emitMetaProperty(node as MetaProperty);
-                    case SyntaxKind.SyntheticExpression:
-                        return Debug.fail("SyntheticExpression should never be printed.");
-
-                    // JSX
-                    case SyntaxKind.JsxElement:
-                        return emitJsxElement(node as JsxElement);
-                    case SyntaxKind.JsxSelfClosingElement:
-                        return emitJsxSelfClosingElement(node as JsxSelfClosingElement);
-                    case SyntaxKind.JsxFragment:
-                        return emitJsxFragment(node as JsxFragment);
-
-                    // Synthesized list
-                    case SyntaxKind.SyntaxList:
-                        return Debug.fail("SyntaxList should not be printed");
-
-                    // Transformation nodes
-                    case SyntaxKind.NotEmittedStatement:
-                        return;
-                    case SyntaxKind.PartiallyEmittedExpression:
-                        return emitPartiallyEmittedExpression(node as PartiallyEmittedExpression);
-                    case SyntaxKind.CommaListExpression:
-                        return emitCommaList(node as CommaListExpression);
-                    case SyntaxKind.MergeDeclarationMarker:
-                    case SyntaxKind.EndOfDeclarationMarker:
-                        return;
-                    case SyntaxKind.SyntheticReferenceExpression:
-                        return Debug.fail("SyntheticReferenceExpression should not be printed");
+                const f = _emitWithExpressionHintTable[node.kind];
+                if (f !== undefined) {
+                    return f(node);
                 }
             }
             if (isKeyword(node.kind)) return writeTokenNode(node, writeKeyword);
