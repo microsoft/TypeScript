@@ -596,26 +596,18 @@ namespace ts {
         const useCaseSensitiveFileNames = host.useCaseSensitiveFileNames();
         const hostGetNewLine = memoize(() => host.getNewLine());
         return {
-            getSourceFile: (fileName, languageVersionOrOptions, onError) => {
-                let text: string | undefined;
-                try {
-                    performance.mark("beforeIORead");
-                    text = host.readFile(fileName, getCompilerOptions().charset);
-                    performance.mark("afterIORead");
-                    performance.measure("I/O Read", "beforeIORead", "afterIORead");
-                }
-                catch (e) {
-                    if (onError) {
-                        onError(e.message);
-                    }
-                    text = "";
-                }
-
-                return text !== undefined ? createSourceFile(fileName, text, languageVersionOrOptions) : undefined;
-            },
+            getSourceFile: createGetSourceFile(
+                (fileName, encoding) => host.readFile(fileName, encoding),
+                getCompilerOptions,
+                /*setParentNodes*/ undefined
+            ),
             getDefaultLibLocation: maybeBind(host, host.getDefaultLibLocation),
             getDefaultLibFileName: options => host.getDefaultLibFileName(options),
-            writeFile,
+            writeFile: createWriteFileMeasuringIO(
+                (path, data, writeByteOrderMark) => host.writeFile!(path, data, writeByteOrderMark),
+                path => host.createDirectory!(path),
+                path => host.directoryExists!(path)
+            ),
             getCurrentDirectory: memoize(() => host.getCurrentDirectory()),
             useCaseSensitiveFileNames: () => useCaseSensitiveFileNames,
             getCanonicalFileName: createGetCanonicalFileName(useCaseSensitiveFileNames),
@@ -632,31 +624,6 @@ namespace ts {
             disableUseFileVersionAsSignature: host.disableUseFileVersionAsSignature,
             storeFilesChangingSignatureDuringEmit: host.storeFilesChangingSignatureDuringEmit,
         };
-
-        function writeFile(fileName: string, text: string, writeByteOrderMark: boolean, onError: (message: string) => void) {
-            try {
-                performance.mark("beforeIOWrite");
-
-                // NOTE: If patchWriteFileEnsuringDirectory has been called,
-                // the host.writeFile will do its own directory creation and
-                // the ensureDirectoriesExist call will always be redundant.
-                writeFileEnsuringDirectories(
-                    fileName,
-                    text,
-                    writeByteOrderMark,
-                    (path, data, writeByteOrderMark) => host.writeFile!(path, data, writeByteOrderMark),
-                    path => host.createDirectory!(path),
-                    path => host.directoryExists!(path));
-
-                performance.mark("afterIOWrite");
-                performance.measure("I/O Write", "beforeIOWrite", "afterIOWrite");
-            }
-            catch (e) {
-                if (onError) {
-                    onError(e.message);
-                }
-            }
-        }
     }
 
     export function setGetSourceFileAsHashVersioned(compilerHost: CompilerHost, host: { createHash?(data: string): string; }) {
