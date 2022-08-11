@@ -112,13 +112,13 @@ namespace ts.performance {
     }
 
     export function clearMeasures(name?: string) {
-        if (name) durations.delete(name);
+        if (name === undefined) durations.delete(name);
         else durations.clear();
         performanceImpl?.clearMeasures(name);
     }
 
     export function clearMarks(name?: string) {
-        if (name) {
+        if (name === undefined) {
             counts.delete(name);
             marks.delete(name);
         }
