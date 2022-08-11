@@ -13,6 +13,14 @@
     "plugins": [
         "@typescript-eslint", "jsdoc", "no-null", "import"
     ],
+    "overrides": [
+        // By default, the ESLint CLI only looks at .js files. But, it will also look at
+        // any files which are referenced in an override config. Most users of typescript-eslint
+        // get this behavior by defauly by extending the recommended TS config, which happens
+        // to override some core ESLint rules for TS files. We don't extend from the recommended
+        // config, so explicitly include TS files here.
+        { "files": ["*.ts"] }
+    ],
     "rules": {
         "@typescript-eslint/adjacent-overload-signatures": "error",
         "@typescript-eslint/array-type": "error",
