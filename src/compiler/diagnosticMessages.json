@@ -5398,6 +5398,10 @@
         "category": "Message",
         "code": 6400
     },
+    "Project '{0}' is out of date because there was error reading file '{1}'": {
+        "category": "Message",
+        "code": 6401
+    },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {
         "category": "Message",
