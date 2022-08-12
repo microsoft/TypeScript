@@ -2021,7 +2021,8 @@ namespace ts {
                     const path = toPath(fileName);
                     const sourceFile = getSourceFileByPath(path);
                     return sourceFile ? sourceFile.text : filesByName.has(path) ? undefined : host.readFile(path);
-                }
+                },
+                host,
             );
         }
 
@@ -4311,7 +4312,12 @@ namespace ts {
     }
 
     /* @internal */
-    export function createPrependNodes(projectReferences: readonly ProjectReference[] | undefined, getCommandLine: (ref: ProjectReference, index: number) => ParsedCommandLine | undefined, readFile: (path: string) => string | undefined) {
+    export function createPrependNodes(
+        projectReferences: readonly ProjectReference[] | undefined,
+        getCommandLine: (ref: ProjectReference, index: number) => ParsedCommandLine | undefined,
+        readFile: (path: string) => string | undefined,
+        host: CompilerHost,
+    ) {
         if (!projectReferences) return emptyArray;
         let nodes: InputFiles[] | undefined;
         for (let i = 0; i < projectReferences.length; i++) {
@@ -4323,7 +4329,7 @@ namespace ts {
                 if (!out) continue;
 
                 const { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, buildInfoPath } = getOutputPathsForBundle(resolvedRefOpts.options, /*forceDtsPaths*/ true);
-                const node = createInputFiles(readFile, jsFilePath!, sourceMapFilePath, declarationFilePath!, declarationMapPath, buildInfoPath);
+                const node = createInputFiles(readFile, jsFilePath!, sourceMapFilePath, declarationFilePath!, declarationMapPath, buildInfoPath, host, resolvedRefOpts.options);
                 (nodes || (nodes = [])).push(node);
             }
         }
