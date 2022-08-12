@@ -623,6 +623,7 @@ namespace ts {
             readDirectory: maybeBind(host, host.readDirectory),
             disableUseFileVersionAsSignature: host.disableUseFileVersionAsSignature,
             storeFilesChangingSignatureDuringEmit: host.storeFilesChangingSignatureDuringEmit,
+            buildInfoCallbacks: host.buildInfoCallbacks,
         };
     }
 

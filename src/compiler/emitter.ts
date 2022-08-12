@@ -365,8 +365,10 @@ namespace ts {
             }
             const version = ts.version; // Extracted into a const so the form is stable between namespace and module
             const buildInfo: BuildInfo = { bundle, program, version };
+            const buildInfoText = getBuildInfoText(buildInfo);
+            host.buildInfoCallbacks?.onWrite(buildInfoText.length);
             // Pass buildinfo as additional data to avoid having to reparse
-            writeFile(host, emitterDiagnostics, buildInfoPath, getBuildInfoText(buildInfo), /*writeByteOrderMark*/ false, /*sourceFiles*/ undefined, { buildInfo });
+            writeFile(host, emitterDiagnostics, buildInfoPath, buildInfoText, /*writeByteOrderMark*/ false, /*sourceFiles*/ undefined, { buildInfo });
         }
 
         function emitJsFileOrBundle(
@@ -712,7 +714,8 @@ namespace ts {
         useCaseSensitiveFileNames(): boolean;
         getNewLine(): string;
         createHash?(data: string): string;
-        getBuildInfo?(fileName: string, configFilePath: string | undefined): BuildInfo | undefined;
+        getBuildInfo?(fileName: string, options: CompilerOptions): BuildInfo | undefined;
+        buildInfoCallbacks?: BuildInfoCallbacks;
     }
 
     function createSourceFilesFromBundleBuildInfo(bundle: BundleBuildInfo, buildInfoDirectory: string, host: EmitUsingBuildInfoHost): readonly SourceFile[] {
@@ -769,11 +772,12 @@ namespace ts {
         let buildInfo: BuildInfo | undefined;
         if (host.getBuildInfo) {
             // If host directly provides buildinfo we can get it directly. This allows host to cache the buildinfo
-            buildInfo = host.getBuildInfo(buildInfoPath!, config.options.configFilePath);
+            buildInfo = host.getBuildInfo(buildInfoPath!, config.options);
         }
         else {
             const buildInfoText = host.readFile(buildInfoPath!);
             if (!buildInfoText) return buildInfoPath!;
+            host.buildInfoCallbacks?.onRead(buildInfoText.length, config.options);
             buildInfo = getBuildInfo(buildInfoPath!, buildInfoText);
         }
         if (!buildInfo) return buildInfoPath!;
@@ -812,7 +816,7 @@ namespace ts {
             /*onlyOwnText*/ true
         );
         const outputFiles: OutputFile[] = [];
-        const prependNodes = createPrependNodes(config.projectReferences, getCommandLine, f => host.readFile(f));
+        const prependNodes = createPrependNodes(config.projectReferences, getCommandLine, f => host.readFile(f), host.buildInfoCallbacks);
         const sourceFilesForJsEmit = createSourceFilesFromBundleBuildInfo(buildInfo.bundle, buildInfoDirectory, host);
         let changedDtsText: string | undefined;
         let changedDtsData: WriteFileCallbackData | undefined;
@@ -853,7 +857,9 @@ namespace ts {
                             newBuildInfo.bundle!.dts!.sources = dts.sources;
                         }
                         newBuildInfo.bundle!.sourceFiles = sourceFiles;
-                        outputFiles.push({ name, text: getBuildInfoText(newBuildInfo), writeByteOrderMark, buildInfo: newBuildInfo });
+                        const newBuildInfoText = getBuildInfoText(newBuildInfo);
+                        host.buildInfoCallbacks?.onWrite(newBuildInfoText.length);
+                        outputFiles.push({ name, text: newBuildInfoText, writeByteOrderMark, buildInfo: newBuildInfo });
                         return;
                     case declarationFilePath:
                         if (declarationText === text) return;
@@ -877,6 +883,7 @@ namespace ts {
             redirectTargetsMap: createMultiMap(),
             getFileIncludeReasons: notImplemented,
             createHash,
+            buildInfoCallbacks: host.buildInfoCallbacks,
         };
         emitFiles(
             notImplementedResolver,

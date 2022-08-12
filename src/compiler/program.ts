@@ -1968,6 +1968,7 @@ namespace ts {
                 redirectTargetsMap,
                 getFileIncludeReasons: program.getFileIncludeReasons,
                 createHash: maybeBind(host, host.createHash),
+                buildInfoCallbacks: host.buildInfoCallbacks,
             };
         }
 
@@ -2017,7 +2018,8 @@ namespace ts {
                     const path = toPath(fileName);
                     const sourceFile = getSourceFileByPath(path);
                     return sourceFile ? sourceFile.text : filesByName.has(path) ? undefined : host.readFile(path);
-                }
+                },
+                host.buildInfoCallbacks,
             );
         }
 
@@ -4300,7 +4302,12 @@ namespace ts {
     }
 
     /* @internal */
-    export function createPrependNodes(projectReferences: readonly ProjectReference[] | undefined, getCommandLine: (ref: ProjectReference, index: number) => ParsedCommandLine | undefined, readFile: (path: string) => string | undefined) {
+    export function createPrependNodes(
+        projectReferences: readonly ProjectReference[] | undefined,
+        getCommandLine: (ref: ProjectReference, index: number) => ParsedCommandLine | undefined,
+        readFile: (path: string) => string | undefined,
+        buildInfoCallbacks: BuildInfoCallbacks | undefined,
+    ) {
         if (!projectReferences) return emptyArray;
         let nodes: InputFiles[] | undefined;
         for (let i = 0; i < projectReferences.length; i++) {
@@ -4312,7 +4319,7 @@ namespace ts {
                 if (!out) continue;
 
                 const { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, buildInfoPath } = getOutputPathsForBundle(resolvedRefOpts.options, /*forceDtsPaths*/ true);
-                const node = createInputFiles(readFile, jsFilePath!, sourceMapFilePath, declarationFilePath!, declarationMapPath, buildInfoPath);
+                const node = createInputFiles(readFile, jsFilePath!, sourceMapFilePath, declarationFilePath!, declarationMapPath, buildInfoPath, buildInfoCallbacks);
                 (nodes || (nodes = [])).push(node);
             }
         }

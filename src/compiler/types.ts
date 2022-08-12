@@ -6948,6 +6948,14 @@ namespace ts {
     /* @internal */
     export type HasChangedAutomaticTypeDirectiveNames = () => boolean;
 
+    /*@internal*/
+    export interface BuildInfoCallbacks {
+        onRead(size: number, compilerOptions: CompilerOptions | undefined): void;
+        onWrite(size: number): void;
+        revertLastWrite(): void;
+        clearLastWrite(): void;
+    }
+
     export interface CompilerHost extends ModuleResolutionHost {
         getSourceFile(fileName: string, languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined;
         getSourceFileByPath?(fileName: string, path: Path, languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined;
@@ -6993,6 +7001,7 @@ namespace ts {
         // For testing:
         /*@internal*/ disableUseFileVersionAsSignature?: boolean;
         /*@internal*/ storeFilesChangingSignatureDuringEmit?: boolean;
+        /*@internal*/ buildInfoCallbacks?: BuildInfoCallbacks;
     }
 
     /** true if --out otherwise source file name */
@@ -7296,6 +7305,7 @@ namespace ts {
         getSourceFileFromReference: Program["getSourceFileFromReference"];
         readonly redirectTargetsMap: RedirectTargetsMap;
         createHash?(data: string): string;
+        buildInfoCallbacks: BuildInfoCallbacks | undefined;
     }
 
     /* @internal */

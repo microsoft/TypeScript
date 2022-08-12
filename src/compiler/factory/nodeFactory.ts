@@ -6679,6 +6679,16 @@ namespace ts {
         declarationMapPath: string | undefined,
         buildInfoPath: string | undefined
     ): InputFiles;
+    /*@internal*/
+    export function createInputFiles(
+        readFileText: (path: string) => string | undefined,
+        javascriptPath: string,
+        javascriptMapPath: string | undefined,
+        declarationPath: string,
+        declarationMapPath: string | undefined,
+        buildInfoPath: string | undefined,
+        buildInfoCallbacks: BuildInfoCallbacks | undefined, // eslint-disable-line @typescript-eslint/unified-signatures
+    ): InputFiles;
     export function createInputFiles(
         javascriptText: string,
         declarationText: string,
@@ -6708,7 +6718,7 @@ namespace ts {
         javascriptMapTextOrDeclarationPath?: string,
         declarationMapPath?: string,
         declarationMapTextOrBuildInfoPath?: string,
-        javascriptPath?: string | undefined,
+        javascriptPathOrBuildInfoCallbacks?: string | BuildInfoCallbacks | undefined,
         declarationPath?: string | undefined,
         buildInfoPath?: string | undefined,
         buildInfo?: BuildInfo,
@@ -6717,6 +6727,7 @@ namespace ts {
         const node = parseNodeFactory.createInputFiles();
         if (!isString(javascriptTextOrReadFileText)) {
             const cache = new Map<string, string | false>();
+            const buildInfoCallbacks = javascriptPathOrBuildInfoCallbacks as BuildInfoCallbacks | undefined;
             const textGetter = (path: string | undefined) => {
                 if (path === undefined) return undefined;
                 let value = cache.get(path);
@@ -6734,6 +6745,7 @@ namespace ts {
             const getAndCacheBuildInfo = (getText: () => string | undefined) => {
                 if (buildInfo === undefined) {
                     const result = getText();
+                    if (result) buildInfoCallbacks?.onRead(result.length, /*compilerOptions*/ undefined);
                     buildInfo = result !== undefined ? getBuildInfo(node.buildInfoPath!, result) ?? false : false;
                 }
                 return buildInfo || undefined;
@@ -6758,7 +6770,7 @@ namespace ts {
             node.declarationText = declarationTextOrJavascriptPath;
             node.declarationMapPath = declarationMapPath;
             node.declarationMapText = declarationMapTextOrBuildInfoPath;
-            node.javascriptPath = javascriptPath;
+            node.javascriptPath = javascriptPathOrBuildInfoCallbacks as string | undefined;
             node.declarationPath = declarationPath;
             node.buildInfoPath = buildInfoPath;
             node.buildInfo = buildInfo;
