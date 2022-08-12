@@ -17,7 +17,7 @@ interface SharedArrayBuffer {
 interface SharedArrayBufferConstructor {
     readonly prototype: SharedArrayBuffer;
     new (byteLength: number): SharedArrayBuffer;
-    readonly [Symbol.species]: SharedArrayBuffer;
+    readonly [Symbol.species]: SharedArrayBufferConstructor;
 }
 declare var SharedArrayBuffer: SharedArrayBufferConstructor;
 
