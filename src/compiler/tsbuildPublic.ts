@@ -407,6 +407,7 @@ namespace ts {
             return isParsedCommandLine(value) ? value : undefined;
         }
 
+        performance.mark("SolutionBuilder::beforeConfigFileParsing");
         let diagnostic: Diagnostic | undefined;
         const { parseConfigFileHost, baseCompilerOptions, baseWatchOptions, extendedConfigCache, host } = state;
         let parsed: ParsedCommandLine | undefined;
@@ -420,6 +421,8 @@ namespace ts {
             parseConfigFileHost.onUnRecoverableConfigFileDiagnostic = noop;
         }
         configFileCache.set(configFilePath, parsed || diagnostic!);
+        performance.mark("SolutionBuilder::afterConfigFileParsing");
+        performance.measure("SolutionBuilder::Config file parsing", "SolutionBuilder::beforeConfigFileParsing", "SolutionBuilder::afterConfigFileParsing");
         return parsed;
     }
 
@@ -737,6 +740,7 @@ namespace ts {
                 if (updateOutputFileStampsPending) {
                     updateOutputTimestamps(state, config, projectPath);
                 }
+                performance.mark("SolutionBuilder::Timestamps only updates");
                 return doneInvalidatedProject(state, projectPath);
             }
         };
@@ -850,6 +854,8 @@ namespace ts {
 
         function done(cancellationToken?: CancellationToken, writeFile?: WriteFileCallback, customTransformers?: CustomTransformers) {
             executeSteps(BuildStep.Done, cancellationToken, writeFile, customTransformers);
+            if (kind === InvalidatedProjectKind.Build) performance.mark("SolutionBuilder::Projects built");
+            else performance.mark("SolutionBuilder::Bundles updated");
             return doneInvalidatedProject(state, projectPath);
         }
 
@@ -1812,7 +1818,10 @@ namespace ts {
             return prior;
         }
 
+        performance.mark("SolutionBuilder::beforeUpToDateCheck");
         const actual = getUpToDateStatusWorker(state, project, resolvedPath);
+        performance.mark("SolutionBuilder::afterUpToDateCheck");
+        performance.measure("SolutionBuilder::Up-to-date check", "SolutionBuilder::beforeUpToDateCheck", "SolutionBuilder::afterUpToDateCheck");
         state.projectStatus.set(resolvedPath, actual);
         return actual;
     }
@@ -1961,6 +1970,14 @@ namespace ts {
     }
 
     function build(state: SolutionBuilderState, project?: string, cancellationToken?: CancellationToken, writeFile?: WriteFileCallback, getCustomTransformers?: (project: string) => CustomTransformers, onlyReferences?: boolean): ExitStatus {
+        performance.mark("SolutionBuilder::beforeBuild");
+        const result = buildWorker(state, project, cancellationToken, writeFile, getCustomTransformers, onlyReferences);
+        performance.mark("SolutionBuilder::afterBuild");
+        performance.measure("SolutionBuilder::Build", "SolutionBuilder::beforeBuild", "SolutionBuilder::afterBuild");
+        return result;
+    }
+
+    function buildWorker(state: SolutionBuilderState, project: string | undefined, cancellationToken: CancellationToken | undefined, writeFile: WriteFileCallback | undefined, getCustomTransformers: ((project: string) => CustomTransformers) | undefined, onlyReferences: boolean | undefined): ExitStatus {
         const buildOrder = getBuildOrderFor(state, project, onlyReferences);
         if (!buildOrder) return ExitStatus.InvalidProject_OutputsSkipped;
 
@@ -1989,7 +2006,15 @@ namespace ts {
                     : ExitStatus.DiagnosticsPresent_OutputsSkipped;
     }
 
-    function clean(state: SolutionBuilderState, project?: string, onlyReferences?: boolean) {
+    function clean(state: SolutionBuilderState, project?: string, onlyReferences?: boolean): ExitStatus {
+        performance.mark("SolutionBuilder::beforeClean");
+        const result = cleanWorker(state, project, onlyReferences);
+        performance.mark("SolutionBuilder::afterClean");
+        performance.measure("SolutionBuilder::Clean", "SolutionBuilder::beforeClean", "SolutionBuilder::afterClean");
+        return result;
+    }
+
+    function cleanWorker(state: SolutionBuilderState, project: string | undefined, onlyReferences: boolean | undefined) {
         const buildOrder = getBuildOrderFor(state, project, onlyReferences);
         if (!buildOrder) return ExitStatus.InvalidProject_OutputsSkipped;
 
@@ -2066,6 +2091,14 @@ namespace ts {
     }
 
     function buildNextInvalidatedProject(state: SolutionBuilderState, changeDetected: boolean) {
+        performance.mark("SolutionBuilder::beforeBuild");
+        const buildOrder = buildNextInvalidatedProjectWorker(state, changeDetected);
+        performance.mark("SolutionBuilder::afterBuild");
+        performance.measure("SolutionBuilder::Build", "SolutionBuilder::beforeBuild", "SolutionBuilder::afterBuild");
+        if (buildOrder) reportErrorSummary(state, buildOrder);
+    }
+
+    function buildNextInvalidatedProjectWorker(state: SolutionBuilderState, changeDetected: boolean) {
         state.timerToBuildInvalidatedProject = undefined;
         if (state.reportFileChangeDetected) {
             state.reportFileChangeDetected = false;
@@ -2095,7 +2128,7 @@ namespace ts {
             }
         }
         disableCache(state);
-        reportErrorSummary(state, buildOrder);
+        return buildOrder;
     }
 
     function watchConfigFile(state: SolutionBuilderState, resolved: ResolvedConfigFileName, resolvedPath: ResolvedConfigFilePath, parsed: ParsedCommandLine | undefined) {
@@ -2202,6 +2235,7 @@ namespace ts {
 
     function startWatching(state: SolutionBuilderState, buildOrder: AnyBuildOrder) {
         if (!state.watchAllProjectsPending) return;
+        performance.mark("SolutionBuilder::beforeWatcherCreation");
         state.watchAllProjectsPending = false;
         for (const resolved of getBuildOrderFromAnyBuildOrder(buildOrder)) {
             const resolvedPath = toResolvedConfigFilePath(state, resolved);
@@ -2220,6 +2254,8 @@ namespace ts {
                 watchPackageJsonFiles(state, resolved, resolvedPath, cfg);
             }
         }
+        performance.mark("SolutionBuilder::afterWatcherCreation");
+        performance.measure("SolutionBuilder::Watcher creation", "SolutionBuilder::beforeWatcherCreation", "SolutionBuilder::afterWatcherCreation");
     }
 
     function stopWatching(state: SolutionBuilderState) {
