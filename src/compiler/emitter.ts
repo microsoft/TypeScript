@@ -707,18 +707,7 @@ namespace ts {
     /** File that isnt present resulting in error or output files */
     export type EmitUsingBuildInfoResult = string | readonly OutputFile[];
 
-    /*@internal*/
-    export interface EmitUsingBuildInfoHost extends ModuleResolutionHost {
-        getCurrentDirectory(): string;
-        getCanonicalFileName(fileName: string): string;
-        useCaseSensitiveFileNames(): boolean;
-        getNewLine(): string;
-        createHash?(data: string): string;
-        getBuildInfo?(fileName: string, options: CompilerOptions): BuildInfo | undefined;
-        buildInfoCallbacks?: BuildInfoCallbacks;
-    }
-
-    function createSourceFilesFromBundleBuildInfo(bundle: BundleBuildInfo, buildInfoDirectory: string, host: EmitUsingBuildInfoHost): readonly SourceFile[] {
+    function createSourceFilesFromBundleBuildInfo(bundle: BundleBuildInfo, buildInfoDirectory: string, host: CompilerHost): readonly SourceFile[] {
         const jsBundle = Debug.checkDefined(bundle.js);
         const prologueMap = jsBundle.sources?.prologues && arrayToMap(jsBundle.sources.prologues, prologueInfo => prologueInfo.file);
         return bundle.sourceFiles.map((fileName, index) => {
@@ -748,7 +737,7 @@ namespace ts {
     /*@internal*/
     export function emitUsingBuildInfo(
         config: ParsedCommandLine,
-        host: EmitUsingBuildInfoHost,
+        host: CompilerHost,
         getCommandLine: (ref: ProjectReference) => ParsedCommandLine | undefined,
         customTransformers?: CustomTransformers
     ): EmitUsingBuildInfoResult {
@@ -763,23 +752,14 @@ namespace ts {
 
     function emitUsingBuildInfoWorker(
         config: ParsedCommandLine,
-        host: EmitUsingBuildInfoHost,
+        host: CompilerHost,
         getCommandLine: (ref: ProjectReference) => ParsedCommandLine | undefined,
         customTransformers?: CustomTransformers
     ): EmitUsingBuildInfoResult {
         const createHash = maybeBind(host, host.createHash);
         const { buildInfoPath, jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath } = getOutputPathsForBundle(config.options, /*forceDtsPaths*/ false);
-        let buildInfo: BuildInfo | undefined;
-        if (host.getBuildInfo) {
-            // If host directly provides buildinfo we can get it directly. This allows host to cache the buildinfo
-            buildInfo = host.getBuildInfo(buildInfoPath!, config.options);
-        }
-        else {
-            const buildInfoText = host.readFile(buildInfoPath!);
-            if (!buildInfoText) return buildInfoPath!;
-            host.buildInfoCallbacks?.onRead(buildInfoText.length, config.options);
-            buildInfo = getBuildInfo(buildInfoPath!, buildInfoText);
-        }
+        // If host directly provides buildinfo we can get it directly. This allows host to cache the buildinfo
+        const buildInfo = host.getBuildInfo!(buildInfoPath!, config.options);
         if (!buildInfo) return buildInfoPath!;
         if (!buildInfo.bundle || !buildInfo.bundle.js || (declarationFilePath && !buildInfo.bundle.dts)) return buildInfoPath!;
 
@@ -816,14 +796,14 @@ namespace ts {
             /*onlyOwnText*/ true
         );
         const outputFiles: OutputFile[] = [];
-        const prependNodes = createPrependNodes(config.projectReferences, getCommandLine, f => host.readFile(f), host.buildInfoCallbacks);
+        const prependNodes = createPrependNodes(config.projectReferences, getCommandLine, f => host.readFile(f), host);
         const sourceFilesForJsEmit = createSourceFilesFromBundleBuildInfo(buildInfo.bundle, buildInfoDirectory, host);
         let changedDtsText: string | undefined;
         let changedDtsData: WriteFileCallbackData | undefined;
         const emitHost: EmitHost = {
             getPrependNodes: memoize(() => [...prependNodes, ownPrependInput]),
             getCanonicalFileName: host.getCanonicalFileName,
-            getCommonSourceDirectory: () => getNormalizedAbsolutePath(buildInfo!.bundle!.commonSourceDirectory, buildInfoDirectory),
+            getCommonSourceDirectory: () => getNormalizedAbsolutePath(buildInfo.bundle!.commonSourceDirectory, buildInfoDirectory),
             getCompilerOptions: () => config.options,
             getCurrentDirectory: () => host.getCurrentDirectory(),
             getNewLine: () => host.getNewLine(),
@@ -845,20 +825,19 @@ namespace ts {
                         break;
                     case buildInfoPath:
                         const newBuildInfo = data!.buildInfo!;
-                        newBuildInfo.program = buildInfo!.program;
+                        newBuildInfo.program = buildInfo.program;
                         if (newBuildInfo.program && changedDtsText !== undefined && config.options.composite) {
                             // Update the output signature
                             (newBuildInfo.program as ProgramBundleEmitBuildInfo).outSignature = computeSignature(changedDtsText, createHash, changedDtsData);
                         }
                         // Update sourceFileInfo
-                        const { js, dts, sourceFiles } = buildInfo!.bundle!;
+                        const { js, dts, sourceFiles } = buildInfo.bundle!;
                         newBuildInfo.bundle!.js!.sources = js!.sources;
                         if (dts) {
                             newBuildInfo.bundle!.dts!.sources = dts.sources;
                         }
                         newBuildInfo.bundle!.sourceFiles = sourceFiles;
                         const newBuildInfoText = getBuildInfoText(newBuildInfo);
-                        host.buildInfoCallbacks?.onWrite(newBuildInfoText.length);
                         outputFiles.push({ name, text: newBuildInfoText, writeByteOrderMark, buildInfo: newBuildInfo });
                         return;
                     case declarationFilePath:

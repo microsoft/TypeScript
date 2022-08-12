@@ -2019,7 +2019,7 @@ namespace ts {
                     const sourceFile = getSourceFileByPath(path);
                     return sourceFile ? sourceFile.text : filesByName.has(path) ? undefined : host.readFile(path);
                 },
-                host.buildInfoCallbacks,
+                host,
             );
         }
 
@@ -4306,7 +4306,7 @@ namespace ts {
         projectReferences: readonly ProjectReference[] | undefined,
         getCommandLine: (ref: ProjectReference, index: number) => ParsedCommandLine | undefined,
         readFile: (path: string) => string | undefined,
-        buildInfoCallbacks: BuildInfoCallbacks | undefined,
+        host: CompilerHost,
     ) {
         if (!projectReferences) return emptyArray;
         let nodes: InputFiles[] | undefined;
@@ -4319,7 +4319,7 @@ namespace ts {
                 if (!out) continue;
 
                 const { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, buildInfoPath } = getOutputPathsForBundle(resolvedRefOpts.options, /*forceDtsPaths*/ true);
-                const node = createInputFiles(readFile, jsFilePath!, sourceMapFilePath, declarationFilePath!, declarationMapPath, buildInfoPath, buildInfoCallbacks);
+                const node = createInputFiles(readFile, jsFilePath!, sourceMapFilePath, declarationFilePath!, declarationMapPath, buildInfoPath, host, resolvedRefOpts.options);
                 (nodes || (nodes = [])).push(node);
             }
         }

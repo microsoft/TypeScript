@@ -252,7 +252,7 @@ namespace ts {
         readonly projectPendingBuild: ESMap<ResolvedConfigFilePath, ConfigFileProgramReloadLevel>;
         readonly projectErrorsReported: ESMap<ResolvedConfigFilePath, true>;
 
-        readonly compilerHost: CompilerHost;
+        readonly compilerHost: CompilerHost & ReadBuildProgramHost;
         readonly moduleResolutionCache: ModuleResolutionCache | undefined;
         readonly typeReferenceDirectiveResolutionCache: TypeReferenceDirectiveResolutionCache | undefined;
 
@@ -309,7 +309,7 @@ namespace ts {
             compilerHost.resolveTypeReferenceDirectives = (typeReferenceDirectiveNames, containingFile, redirectedReference, _options, containingFileMode) =>
                 loadWithTypeDirectiveCache<ResolvedTypeReferenceDirective>(Debug.checkEachDefined(typeReferenceDirectiveNames), containingFile, redirectedReference, containingFileMode, loader);
         }
-        compilerHost.getBuildInfo = (fileName, options) => getBuildInfo(state, fileName, options, toResolvedConfigFilePath(state, options.con as ResolvedConfigFileName), /*modifiedTime*/ undefined);
+        compilerHost.getBuildInfo = (fileName, options) => getBuildInfo(state, fileName, options, toResolvedConfigFilePath(state, options.configFilePath as ResolvedConfigFileName), /*modifiedTime*/ undefined);
 
         const { watchFile, watchDirectory, writeLog } = createWatchFactory<ResolvedConfigFileName>(hostWithWatch, options);
 

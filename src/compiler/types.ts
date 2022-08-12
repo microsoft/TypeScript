@@ -7002,6 +7002,7 @@ namespace ts {
         /*@internal*/ disableUseFileVersionAsSignature?: boolean;
         /*@internal*/ storeFilesChangingSignatureDuringEmit?: boolean;
         /*@internal*/ buildInfoCallbacks?: BuildInfoCallbacks;
+        /*@internal*/ getBuildInfo?(fileName: string, options: CompilerOptions): BuildInfo | undefined;
     }
 
     /** true if --out otherwise source file name */
