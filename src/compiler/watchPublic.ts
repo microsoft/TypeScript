@@ -141,7 +141,7 @@ namespace ts {
         getParsedCommandLine?(fileName: string): ParsedCommandLine | undefined;
 
         /** If provided, callback to invoke after every new program creation */
-        afterProgramCreate?(program: T, host: CompilerHost): void;
+        afterProgramCreate?(program: T, host?: CompilerHost): void;
     }
 
     /**

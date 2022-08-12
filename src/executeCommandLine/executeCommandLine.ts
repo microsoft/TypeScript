@@ -873,7 +873,7 @@ namespace ts {
         host.createProgram = (rootNames, options, host, oldProgram, configFileParsingDiagnostics, projectReferences) => {
             Debug.assert(rootNames !== undefined || (options === undefined && !!oldProgram));
             if (options !== undefined) {
-                enableStatisticsAndTracing(sys, options, host!, isBuildMode);
+                enableStatisticsAndTracing(sys, options, host, isBuildMode);
             }
             return compileUsingBuilder(rootNames, options, host, oldProgram, configFileParsingDiagnostics, projectReferences);
         };
@@ -1059,7 +1059,7 @@ namespace ts {
         return system === sys && compilerOptions.generateTrace;
     }
 
-    function enableStatisticsAndTracing(system: System, compilerOptions: CompilerOptions, host: CompilerHost, isBuildMode: boolean) {
+    function enableStatisticsAndTracing(system: System, compilerOptions: CompilerOptions, host: CompilerHost | undefined, isBuildMode: boolean) {
         if (canReportDiagnostics(system, compilerOptions)) {
             performance.enable(system);
         }
@@ -1067,7 +1067,7 @@ namespace ts {
             startTracing(isBuildMode ? "build" : "project",
                 compilerOptions.generateTrace!, compilerOptions.configFilePath);
         }
-        if (system === sys) {
+        if (system === sys && host) {
             if (compilerOptions.extendedDiagnostics && isIncrementalCompilation(compilerOptions)) {
                 createBuildInfoCallbacks(host, compilerOptions);
             }
@@ -1212,7 +1212,7 @@ namespace ts {
         return !(programOrConfig as ParsedCommandLine).options;
     }
 
-    function reportStatistics(sys: System, programOrConfig: Program | ParsedCommandLine, host: CompilerHost, solutionPerformance: SolutionPerformance | undefined) {
+    function reportStatistics(sys: System, programOrConfig: Program | ParsedCommandLine, host: CompilerHost | undefined, solutionPerformance: SolutionPerformance | undefined) {
         const program = isProgram(programOrConfig) ? programOrConfig : undefined;
         const config = isProgram(programOrConfig) ? undefined : programOrConfig;
         const compilerOptions = program ? program.getCompilerOptions() : config!.options;
@@ -1260,7 +1260,7 @@ namespace ts {
                     reportCountStatistic("Subtype cache size", caches.subtype);
                     reportCountStatistic("Strict subtype cache size", caches.strictSubtype);
                 }
-                if (host.buildInfoCallbacks) {
+                if (host?.buildInfoCallbacks) {
                     reportBuildInfoReadOrWriteStatistic(host.buildInfoCallbacks.getRead(), "read");
                     reportBuildInfoReadOrWriteStatistic(host.buildInfoCallbacks.getWrite(), "write");
                     host.buildInfoCallbacks.close(host);

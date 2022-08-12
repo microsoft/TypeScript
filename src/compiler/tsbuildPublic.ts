@@ -98,7 +98,7 @@ namespace ts {
         reportDiagnostic: DiagnosticReporter; // Technically we want to move it out and allow steps of actions on Solution, but for now just merge stuff in build host here
         reportSolutionBuilderStatus: DiagnosticReporter;
 
-        afterProgramEmitAndDiagnostics?(program: T, host: CompilerHost): void;
+        afterProgramEmitAndDiagnostics?(program: T, host?: CompilerHost): void;
         /*@internal*/ beforeEmitBundle?(config: ParsedCommandLine, host: CompilerHost): void;
         /*@internal*/ afterEmitBundle?(config: ParsedCommandLine, host: CompilerHost): void;
 
