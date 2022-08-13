@@ -2,5 +2,5 @@
 // @lib: es6,es2017.sharedmemory
 
 var foge = new SharedArrayBuffer(1024);
-var species = foge.constructor[Symbol.species];
+var species = SharedArrayBuffer[Symbol.species];
 var stringTag = foge[Symbol.toStringTag];
