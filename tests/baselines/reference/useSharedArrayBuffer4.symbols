@@ -9,7 +9,7 @@ var bar = foge.slice(1, 10);
 >foge : Symbol(foge, Decl(useSharedArrayBuffer4.ts, 0, 3))
 >slice : Symbol(SharedArrayBuffer.slice, Decl(lib.es2017.sharedmemory.d.ts, --, --))
 
-var species = foge[Symbol.species];
+var species = SharedArrayBuffer[Symbol.species];
 >species : Symbol(species, Decl(useSharedArrayBuffer4.ts, 2, 3))
 >foge : Symbol(foge, Decl(useSharedArrayBuffer4.ts, 0, 3))
 >Symbol.species : Symbol(SymbolConstructor.species, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
