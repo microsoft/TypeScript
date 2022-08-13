@@ -9,6 +9,7 @@ namespace ts {
         time,
         count,
         memory,
+        size,
     }
 
     function countLines(program: Program): Map<number> {
@@ -749,18 +750,23 @@ namespace ts {
                 createBuilderStatusReporter(sys, shouldBePretty(sys, buildOptions)),
                 createWatchStatusReporter(sys, buildOptions)
             );
-            const solutionPerformance = enableSolutionPerformance(sys, buildOptions);
+            const solutionPerformance = enableSolutionPerformance(sys, buildOptions, buildHost);
             updateSolutionBuilderHost(sys, cb, buildHost, solutionPerformance);
             const onWatchStatusChange = buildHost.onWatchStatusChange;
+            let reportBuildStatistics = false;
             buildHost.onWatchStatusChange = (d, newLine, options, errorCount) => {
                 onWatchStatusChange?.(d, newLine, options, errorCount);
-                if (d.code === Diagnostics.Found_0_errors_Watching_for_file_changes.code ||
-                    d.code === Diagnostics.Found_1_error_Watching_for_file_changes.code) {
+                if (reportBuildStatistics && (
+                    d.code === Diagnostics.Found_0_errors_Watching_for_file_changes.code ||
+                    d.code === Diagnostics.Found_1_error_Watching_for_file_changes.code
+                )) {
                     reportSolutionBuilderTimes(builder, solutionPerformance);
                 }
             };
             const builder = createSolutionBuilderWithWatch(buildHost, projects, buildOptions, watchOptions);
             builder.build();
+            reportSolutionBuilderTimes(builder, solutionPerformance);
+            reportBuildStatistics = true;
             return builder;
         }
 
@@ -771,7 +777,7 @@ namespace ts {
             createBuilderStatusReporter(sys, shouldBePretty(sys, buildOptions)),
             createReportErrorSummary(sys, buildOptions)
         );
-        const solutionPerformance = enableSolutionPerformance(sys, buildOptions);
+        const solutionPerformance = enableSolutionPerformance(sys, buildOptions, buildHost);
         updateSolutionBuilderHost(sys, cb, buildHost, solutionPerformance);
         const builder = createSolutionBuilder(buildHost, projects, buildOptions);
         const exitStatus = buildOptions.clean ? builder.clean() : builder.build();
@@ -797,7 +803,7 @@ namespace ts {
         const currentDirectory = host.getCurrentDirectory();
         const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
         changeCompilerHostLikeToUseCache(host, fileName => toPath(fileName, currentDirectory, getCanonicalFileName));
-        enableStatisticsAndTracing(sys, options, /*isBuildMode*/ false);
+        enableStatisticsAndTracing(sys, options, host, /*isBuildMode*/ false);
 
         const programOptions: CreateProgramOptions = {
             rootNames: fileNames,
@@ -813,7 +819,7 @@ namespace ts {
             s => sys.write(s + sys.newLine),
             createReportErrorSummary(sys, options)
         );
-        reportStatistics(sys, program, /*builder*/ undefined);
+        reportStatistics(sys, program, host, /*builder*/ undefined);
         cb(program);
         return sys.exit(exitStatus);
     }
@@ -825,8 +831,8 @@ namespace ts {
         config: ParsedCommandLine
     ) {
         const { options, fileNames, projectReferences } = config;
-        enableStatisticsAndTracing(sys, options, /*isBuildMode*/ false);
         const host = createIncrementalCompilerHost(options, sys);
+        enableStatisticsAndTracing(sys, options, host, /*isBuildMode*/ false);
         const exitStatus = ts.performIncrementalCompilation({
             host,
             system: sys,
@@ -837,7 +843,7 @@ namespace ts {
             reportDiagnostic,
             reportErrorSummary: createReportErrorSummary(sys, options),
             afterProgramEmitAndDiagnostics: builderProgram => {
-                reportStatistics(sys, builderProgram.getProgram(), /*builder*/ undefined);
+                reportStatistics(sys, builderProgram.getProgram(), host, /*builder*/ undefined);
                 cb(builderProgram);
             }
         });
@@ -851,11 +857,15 @@ namespace ts {
         solutionPerformance: SolutionPerformance | undefined,
     ) {
         updateCreateProgram(sys, buildHost, /*isBuildMode*/ true);
-        buildHost.afterProgramEmitAndDiagnostics = program => {
-            reportStatistics(sys, program.getProgram(), solutionPerformance);
+        buildHost.afterProgramEmitAndDiagnostics = (program, host) => {
+            reportStatistics(sys, program.getProgram(), host, solutionPerformance);
             cb(program);
         };
-        buildHost.afterEmitBundle = cb;
+        buildHost.beforeEmitBundle = (config, host) => enableStatisticsAndTracing(sys, config.options, host, /*isBuildMode*/ true);
+        buildHost.afterEmitBundle = (config, host) => {
+            reportStatistics(sys, config, host, solutionPerformance);
+            cb(config);
+        };
     }
 
     function updateCreateProgram<T extends BuilderProgram>(sys: System, host: { createProgram: CreateProgram<T>; }, isBuildMode: boolean) {
@@ -863,22 +873,26 @@ namespace ts {
         host.createProgram = (rootNames, options, host, oldProgram, configFileParsingDiagnostics, projectReferences) => {
             Debug.assert(rootNames !== undefined || (options === undefined && !!oldProgram));
             if (options !== undefined) {
-                enableStatisticsAndTracing(sys, options, isBuildMode);
+                enableStatisticsAndTracing(sys, options, host, isBuildMode);
             }
             return compileUsingBuilder(rootNames, options, host, oldProgram, configFileParsingDiagnostics, projectReferences);
         };
     }
 
     function updateWatchCompilationHost(
-        sys: System,
+        system: System,
         cb: ExecuteCommandLineCallbacks,
         watchCompilerHost: WatchCompilerHost<EmitAndSemanticDiagnosticsBuilderProgram>,
+        options: CompilerOptions
     ) {
-        updateCreateProgram(sys, watchCompilerHost, /*isBuildMode*/ false);
+        updateCreateProgram(system, watchCompilerHost, /*isBuildMode*/ false);
+        if (system === sys && options.extendedDiagnostics) {
+            createBuildInfoCallbacks(watchCompilerHost, options);
+        }
         const emitFilesUsingBuilder = watchCompilerHost.afterProgramCreate!; // TODO: GH#18217
-        watchCompilerHost.afterProgramCreate = builderProgram => {
-            emitFilesUsingBuilder(builderProgram);
-            reportStatistics(sys, builderProgram.getProgram(), /*builder*/ undefined);
+        watchCompilerHost.afterProgramCreate = (builderProgram, host) => {
+            emitFilesUsingBuilder(builderProgram, host);
+            reportStatistics(system, builderProgram.getProgram(), host, /*builder*/ undefined);
             cb(builderProgram);
         };
     }
@@ -904,7 +918,7 @@ namespace ts {
             reportDiagnostic,
             reportWatchStatus: createWatchStatusReporter(system, configParseResult.options)
         });
-        updateWatchCompilationHost(system, cb, watchCompilerHost);
+        updateWatchCompilationHost(system, cb, watchCompilerHost, configParseResult.options);
         watchCompilerHost.configFileParsingResult = configParseResult;
         watchCompilerHost.extendedConfigCache = extendedConfigCache;
         return createWatchProgram(watchCompilerHost);
@@ -926,29 +940,34 @@ namespace ts {
             reportDiagnostic,
             reportWatchStatus: createWatchStatusReporter(system, options)
         });
-        updateWatchCompilationHost(system, cb, watchCompilerHost);
+        updateWatchCompilationHost(system, cb, watchCompilerHost, options);
         return createWatchProgram(watchCompilerHost);
     }
 
     interface SolutionPerformance {
         addAggregateStatistic(s: Statistic): void;
+        hasStatistics(name: string): boolean;
         forEachAggregateStatistics(cb: (s: Statistic) => void): void;
+        buildInfoCallbacks: BuildInfoCallbacks;
         clear(): void;
     }
 
-    function enableSolutionPerformance(system: System, options: BuildOptions) {
+    function enableSolutionPerformance(system: System, options: BuildOptions, buildHost: SolutionBuilderHostBase<EmitAndSemanticDiagnosticsBuilderProgram>) {
         if (system === sys && options.extendedDiagnostics) {
             performance.enable();
-            return createSolutionPerfomrance();
+            return createSolutionPerfomrance(buildHost);
         }
     }
 
-    function createSolutionPerfomrance(): SolutionPerformance {
+    function createSolutionPerfomrance(buildHost: SolutionBuilderHostBase<EmitAndSemanticDiagnosticsBuilderProgram>): SolutionPerformance {
         let statistics: ESMap<string, Statistic> | undefined;
+        const buildInfoCallbacks = createBuildInfoCallbacks(buildHost, /*options*/ undefined);
         return {
             addAggregateStatistic,
-            forEachAggregateStatistics: forEachAggreateStatistics,
+            hasStatistics,
+            forEachAggregateStatistics,
             clear,
+            buildInfoCallbacks,
         };
 
         function addAggregateStatistic(s: Statistic) {
@@ -962,12 +981,17 @@ namespace ts {
             }
         }
 
-        function forEachAggreateStatistics(cb: (s: Statistic) => void) {
+        function hasStatistics(name: string) {
+            return !!statistics?.has(name);
+        }
+
+        function forEachAggregateStatistics(cb: (s: Statistic) => void) {
             statistics?.forEach(cb);
         }
 
         function clear() {
             statistics = undefined;
+            buildInfoCallbacks.clear();
         }
     }
 
@@ -988,6 +1012,8 @@ namespace ts {
         reportSolutionBuilderCountStatistic("SolutionBuilder::Projects built");
         reportSolutionBuilderCountStatistic("SolutionBuilder::Timestamps only updates");
         reportSolutionBuilderCountStatistic("SolutionBuilder::Bundles updated");
+        reportBuildInfoReadOrWriteStatistic(solutionPerformance.buildInfoCallbacks.getRead(), "read");
+        reportBuildInfoReadOrWriteStatistic(solutionPerformance.buildInfoCallbacks.getWrite(), "write");
         solutionPerformance.forEachAggregateStatistics(s => {
             s.name = `Aggregate ${s.name}`;
             statistics.push(s);
@@ -997,6 +1023,7 @@ namespace ts {
         });
         performance.disable();
         performance.enable();
+        solutionPerformance.clear();
 
         reportAllStatistics(sys, statistics);
 
@@ -1010,6 +1037,18 @@ namespace ts {
         function getNameFromSolutionBuilderMarkOrMeasure(name: string) {
             return name.replace("SolutionBuilder::", "");
         }
+
+        function reportBuildInfoReadOrWriteStatistic(s: CountAndSize, type: "read" | "write") {
+            if (s.count) {
+                const countStatisticName = `BuildInfo ${type}`;
+                if (s.count !== 1) statistics.push({ name: countStatisticName, value: s.count, type: StatisticType.count });
+                statistics.push({ name: `BuildInfo ${type} size`, value: s.size, type: StatisticType.size });
+                if (solutionPerformance!.hasStatistics(countStatisticName)) {
+                    solutionPerformance!.addAggregateStatistic({ name: countStatisticName, value: s.count, type: StatisticType.count });
+                    solutionPerformance!.addAggregateStatistic({ name: `BuildInfo ${type} size`, value: s.size, type: StatisticType.size });
+                }
+            }
+        }
     }
 
     function canReportDiagnostics(system: System, compilerOptions: CompilerOptions) {
@@ -1020,23 +1059,163 @@ namespace ts {
         return system === sys && compilerOptions.generateTrace;
     }
 
-    function enableStatisticsAndTracing(system: System, compilerOptions: CompilerOptions, isBuildMode: boolean) {
+    function enableStatisticsAndTracing(system: System, compilerOptions: CompilerOptions, host: CompilerHost | undefined, isBuildMode: boolean) {
         if (canReportDiagnostics(system, compilerOptions)) {
             performance.enable(system);
         }
-
         if (canTrace(system, compilerOptions)) {
             startTracing(isBuildMode ? "build" : "project",
                 compilerOptions.generateTrace!, compilerOptions.configFilePath);
         }
+        if (system === sys && host) {
+            if (compilerOptions.extendedDiagnostics && isIncrementalCompilation(compilerOptions)) {
+                createBuildInfoCallbacks(host, compilerOptions);
+            }
+            else {
+                createNoOpBuildInfoCallbacks(host);
+            }
+        }
+    }
+
+    interface CountAndSize {
+        count: number;
+        size: number;
+    }
+    interface LastRead {
+        size: number;
+        compilerOptions: CompilerOptions;
+    }
+    export interface BuildInfoCallbacks {
+        getRead(): CountAndSize;
+        getWrite(): CountAndSize;
+        getLastRead(): LastRead | undefined;
+        onTransferLastRead(): void;
+        clearLastRead(): void;
+        close(host: CompilerHost): void;
+        clear(): void;
+    }
+    export interface CompilerHost {
+        buildInfoCallbacks?: BuildInfoCallbacks;
+    }
+
+    const zeroCount: CountAndSize = { count: 0, size: 0 };
+
+    function createNoOpBuildInfoCallbacks(host: CompilerHost) {
+        const oldCallbacks = host.buildInfoCallbacks;
+        oldCallbacks?.clearLastRead();
+        return host.buildInfoCallbacks = {
+            onRead: noop,
+            onWrite: noop,
+            getRead: () => zeroCount,
+            getWrite: () => zeroCount,
+            getLastRead:returnUndefined,
+            onTransferLastRead: noop,
+            clearLastRead: noop,
+            revertLastWrite: noop,
+            clearLastWrite: noop,
+            close: host => host.buildInfoCallbacks = oldCallbacks,
+            clear: noop,
+        };
+    }
+
+    function createBuildInfoCallbacks(
+        host: CompilerHost | SolutionBuilderHostBase<EmitAndSemanticDiagnosticsBuilderProgram> | WatchCompilerHost<EmitAndSemanticDiagnosticsBuilderProgram>,
+        options: CompilerOptions | undefined
+    ) {
+        const read = initializedCountAndSize();
+        const write = initializedCountAndSize();
+        let lastRead: LastRead | undefined;
+        let lastWrite: number | undefined;
+        const oldCallbacks = host.buildInfoCallbacks;
+        if (oldCallbacks) {
+            // Transfer read of build info to new callbacks
+            // This is needed to ensure that we report buildinfo read of program since its done before program is created
+            const oldLastRead = oldCallbacks.getLastRead();
+            if (oldLastRead && oldLastRead.compilerOptions === options) {
+                onReadOrWrite(read, oldLastRead.size);
+                oldCallbacks.onTransferLastRead();
+            }
+            else {
+                oldCallbacks.clearLastRead();
+            }
+        }
+        return host.buildInfoCallbacks = {
+            onRead,
+            onWrite,
+            getRead: () => read,
+            getWrite: () => write,
+            getLastRead: () => lastRead,
+            onTransferLastRead,
+            clearLastRead: () => lastRead = undefined,
+            revertLastWrite,
+            clearLastWrite: () => lastWrite = undefined,
+            close: host => host.buildInfoCallbacks = oldCallbacks,
+            clear,
+        };
+
+        function clear() {
+            Debug.assert(!oldCallbacks);
+            clearReadOrWrite(read);
+            clearReadOrWrite(write);
+            lastRead = undefined;
+            lastWrite = undefined;
+        }
+
+        function clearReadOrWrite(countAndSize: CountAndSize) {
+            countAndSize.count = 0;
+            countAndSize.size = 0;
+        }
+
+        function onTransferLastRead() {
+            revertReadOrWrite(read, lastRead!.size);
+            lastRead = undefined;
+        }
+
+        function revertLastWrite() {
+            if (lastWrite) {
+                revertReadOrWrite(write, lastWrite);
+                lastWrite = undefined;
+            }
+        }
+
+        function revertReadOrWrite(countAndSize: CountAndSize, size: number) {
+            countAndSize.count--;
+            countAndSize.size -= size;
+        }
+
+        function onRead(size: number, compilerOptions: CompilerOptions | undefined) {
+            onReadOrWrite(read, size);
+            if (compilerOptions) lastRead = { size, compilerOptions };
+            else lastRead = undefined;
+        }
+
+        function onWrite(size: number) {
+            onReadOrWrite(write, size);
+            lastWrite = size;
+        }
+
+        function onReadOrWrite(countAndSize: CountAndSize, size: number) {
+            countAndSize.count++;
+            countAndSize.size += size;
+        }
+    }
+
+    function initializedCountAndSize(): CountAndSize {
+        return { count: 0, size: 0 };
     }
 
     function isSolutionMarkOrMeasure(name: string) {
         return startsWith(name, "SolutionBuilder::");
     }
 
-    function reportStatistics(sys: System, program: Program, solutionPerformance: SolutionPerformance | undefined) {
-        const compilerOptions = program.getCompilerOptions();
+    function isProgram(programOrConfig: Program | ParsedCommandLine): programOrConfig is Program {
+        return !(programOrConfig as ParsedCommandLine).options;
+    }
+
+    function reportStatistics(sys: System, programOrConfig: Program | ParsedCommandLine, host: CompilerHost | undefined, solutionPerformance: SolutionPerformance | undefined) {
+        const program = isProgram(programOrConfig) ? programOrConfig : undefined;
+        const config = isProgram(programOrConfig) ? undefined : programOrConfig;
+        const compilerOptions = program ? program.getCompilerOptions() : config!.options;
 
         if (canTrace(sys, compilerOptions)) {
             tracing?.stopTracing();
@@ -1046,23 +1225,24 @@ namespace ts {
         if (canReportDiagnostics(sys, compilerOptions)) {
             statistics = [];
             const memoryUsed = sys.getMemoryUsage ? sys.getMemoryUsage() : -1;
-            reportCountStatistic("Files", program.getSourceFiles().length);
+            if (program) {
+                reportCountStatistic("Files", program.getSourceFiles().length);
 
-            const lineCounts = countLines(program);
-            if (compilerOptions.extendedDiagnostics) {
-                for (const key of arrayFrom(lineCounts.keys())) {
-                    reportCountStatistic("Lines of " + key, lineCounts.get(key)!);
+                const lineCounts = countLines(program);
+                if (compilerOptions.extendedDiagnostics) {
+                    for (const key of arrayFrom(lineCounts.keys())) {
+                        reportCountStatistic("Lines of " + key, lineCounts.get(key)!);
+                    }
                 }
-            }
-            else {
-                reportCountStatistic("Lines", reduceLeftIterator(lineCounts.values(), (sum, count) => sum + count, 0));
-            }
+                else {
+                    reportCountStatistic("Lines", reduceLeftIterator(lineCounts.values(), (sum, count) => sum + count, 0));
+                }
 
-            reportCountStatistic("Identifiers", program.getIdentifierCount());
-            reportCountStatistic("Symbols", program.getSymbolCount());
-            reportCountStatistic("Types", program.getTypeCount());
-            reportCountStatistic("Instantiations", program.getInstantiationCount());
-
+                reportCountStatistic("Identifiers", program.getIdentifierCount());
+                reportCountStatistic("Symbols", program.getSymbolCount());
+                reportCountStatistic("Types", program.getTypeCount());
+                reportCountStatistic("Instantiations", program.getInstantiationCount());
+            }
             if (memoryUsed >= 0) {
                 reportStatisticalValue({ name: "Memory used", value: memoryUsed, type: StatisticType.memory }, /*aggregate*/ true);
             }
@@ -1073,11 +1253,18 @@ namespace ts {
             const checkTime = isPerformanceEnabled ? performance.getDuration("Check") : 0;
             const emitTime = isPerformanceEnabled ? performance.getDuration("Emit") : 0;
             if (compilerOptions.extendedDiagnostics) {
-                const caches = program.getRelationCacheSizes();
-                reportCountStatistic("Assignability cache size", caches.assignable);
-                reportCountStatistic("Identity cache size", caches.identity);
-                reportCountStatistic("Subtype cache size", caches.subtype);
-                reportCountStatistic("Strict subtype cache size", caches.strictSubtype);
+                if (program) {
+                    const caches = program.getRelationCacheSizes();
+                    reportCountStatistic("Assignability cache size", caches.assignable);
+                    reportCountStatistic("Identity cache size", caches.identity);
+                    reportCountStatistic("Subtype cache size", caches.subtype);
+                    reportCountStatistic("Strict subtype cache size", caches.strictSubtype);
+                }
+                if (host?.buildInfoCallbacks) {
+                    reportBuildInfoReadOrWriteStatistic(host.buildInfoCallbacks.getRead(), "read");
+                    reportBuildInfoReadOrWriteStatistic(host.buildInfoCallbacks.getWrite(), "write");
+                    host.buildInfoCallbacks.close(host);
+                }
                 if (isPerformanceEnabled) {
                     performance.forEachMeasure((name, duration) => {
                         if (!isSolutionMarkOrMeasure(name)) reportTimeStatistic(`${name} time`, duration, /*aggregate*/ true);
@@ -1131,6 +1318,18 @@ namespace ts {
         function reportTimeStatistic(name: string, time: number, aggregate: boolean) {
             reportStatisticalValue({ name, value: time, type: StatisticType.time }, aggregate);
         }
+
+        function reportBuildInfoReadOrWriteStatistic(s: CountAndSize, type: "read" | "write") {
+            if (s.count) {
+                if (s.count === 1) {
+                    solutionPerformance?.addAggregateStatistic({ name: `BuildInfo ${type}`, value: s.count, type: StatisticType.count });
+                }
+                else {
+                    reportCountStatistic(`BuildInfo ${type}`, s.count);
+                }
+                reportStatisticalValue({ name: `BuildInfo ${type} size`, value: s.size, type: StatisticType.size }, /*aggregate*/ true);
+            }
+        }
     }
 
     function reportAllStatistics(sys: System, statistics: Statistic[]) {
@@ -1159,6 +1358,7 @@ namespace ts {
             case StatisticType.time:
                 return (s.value / 1000).toFixed(2) + "s";
             case StatisticType.memory:
+            case StatisticType.size:
                 return Math.round(s.value / 1000) + "K";
             default:
                 Debug.assertNever(s.type);
