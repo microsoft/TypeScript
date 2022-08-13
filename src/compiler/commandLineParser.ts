@@ -3237,7 +3237,7 @@ namespace ts {
     function getDefaultCompilerOptions(configFileName?: string) {
         const options: CompilerOptions = configFileName && getBaseFileName(configFileName) === "jsconfig.json"
             ? { allowJs: true, maxNodeModuleJsDepth: 2, allowSyntheticDefaultImports: true, skipLibCheck: true, noEmit: true }
-            : {};
+            : { cacheResolutions: true };
         return options;
     }
 
