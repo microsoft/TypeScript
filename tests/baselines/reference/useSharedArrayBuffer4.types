@@ -16,7 +16,7 @@ var bar = foge.slice(1, 10);
 
 var species = SharedArrayBuffer[Symbol.species];
 >species : SharedArrayBuffer
->foge[Symbol.species] : SharedArrayBuffer
+>SharedArrayBuffer[Symbol.species] : SharedArrayBufferConstructor
 >foge : SharedArrayBuffer
 >Symbol.species : unique symbol
 >Symbol : SymbolConstructor
