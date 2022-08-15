@@ -252,9 +252,7 @@ FsWatches::
 FsWatchesRecursive::
 /user/username/projects/transitivereferences/b:
   {}
-  {}
 /user/username/projects/transitivereferences/a:
-  {}
   {}
 /user/username/projects/transitivereferences/refs:
   {}
@@ -419,9 +417,7 @@ FsWatches::
 FsWatchesRecursive::
 /user/username/projects/transitivereferences/b:
   {}
-  {}
 /user/username/projects/transitivereferences/a:
-  {}
   {}
 /user/username/projects/transitivereferences/refs:
   {}
@@ -519,9 +515,7 @@ FsWatches::
 FsWatchesRecursive::
 /user/username/projects/transitivereferences/b:
   {}
-  {}
 /user/username/projects/transitivereferences/a:
-  {}
   {}
 /user/username/projects/transitivereferences/c:
   {}
@@ -614,9 +608,7 @@ FsWatches::
 FsWatchesRecursive::
 /user/username/projects/transitivereferences/b:
   {}
-  {}
 /user/username/projects/transitivereferences/a:
-  {}
   {}
 /user/username/projects/transitivereferences/c:
   {}
@@ -709,7 +701,6 @@ FsWatches::
 FsWatchesRecursive::
 /user/username/projects/transitivereferences/b:
   {}
-  {}
 /user/username/projects/transitivereferences/a:
   {}
 /user/username/projects/transitivereferences/c:
@@ -794,7 +785,6 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/transitivereferences/b:
-  {}
   {}
 /user/username/projects/transitivereferences/a:
   {}
@@ -976,13 +966,11 @@ FsWatches::
 FsWatchesRecursive::
 /user/username/projects/transitivereferences/b:
   {}
-  {}
 /user/username/projects/transitivereferences/c:
   {}
 /user/username/projects/transitivereferences/refs:
   {}
 /user/username/projects/transitivereferences/a:
-  {}
   {}
 
 exitCode:: ExitStatus.undefined
@@ -1073,7 +1061,6 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/transitivereferences/b:
-  {}
   {}
 /user/username/projects/transitivereferences/c:
   {}
@@ -1170,13 +1157,11 @@ FsWatches::
 FsWatchesRecursive::
 /user/username/projects/transitivereferences/b:
   {}
-  {}
 /user/username/projects/transitivereferences/c:
   {}
 /user/username/projects/transitivereferences/refs:
   {}
 /user/username/projects/transitivereferences/a:
-  {}
   {}
 
 exitCode:: ExitStatus.undefined

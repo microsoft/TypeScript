@@ -115,12 +115,9 @@ PolledWatches::
 FsWatches::
 /a/c/f2.ts:
   {}
-  {}
 /a/d/f3.ts:
   {}
-  {}
 /a/lib/lib.d.ts:
-  {}
   {}
 /a/b/f1.ts:
   {}

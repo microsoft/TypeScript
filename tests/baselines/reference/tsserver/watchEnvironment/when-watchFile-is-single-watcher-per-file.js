@@ -61,7 +61,6 @@ PolledWatches::
 FsWatches::
 /user/username/projects/myproject/tsconfig.json:
   {}
-  {}
 /user/username/projects/myproject:
   {}
 /a/lib/lib.d.ts:

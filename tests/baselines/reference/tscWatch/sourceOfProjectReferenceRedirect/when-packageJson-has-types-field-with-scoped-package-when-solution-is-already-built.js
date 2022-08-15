@@ -239,7 +239,6 @@ FsWatchesRecursive::
   {}
 /user/username/projects/myproject/packages/a/src:
   {}
-  {}
 /user/username/projects/myproject/node_modules:
   {}
 

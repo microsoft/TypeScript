@@ -418,50 +418,41 @@ namespace ts {
         }
     }
 
-    function createSingleFileWatcherPerName(
-        watchFile: HostWatchFile,
-        useCaseSensitiveFileNames: boolean
-    ): HostWatchFile {
-        interface SingleFileWatcher {
-            watcher: FileWatcher;
-            refCount: number;
-        }
-        const cache = new Map<string, SingleFileWatcher>();
-        const callbacksCache = createMultiMap<FileWatcherCallback>();
+    interface SingleFileWatcher<T extends FileWatcherCallback | FsWatchCallback>{
+        watcher: FileWatcher;
+        callbacks: T[];
+    }
+    function createSingleWatcherPerName<T extends FileWatcherCallback | FsWatchCallback>(
+        cache: Map<SingleFileWatcher<T>>,
+        useCaseSensitiveFileNames: boolean,
+        name: string,
+        callback: T,
+        createWatcher: (callback: T) => FileWatcher,
+    ): FileWatcher {
         const toCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
+        const path = toCanonicalFileName(name);
+        const existing = cache.get(path);
+        if (existing) {
+            existing.callbacks.push(callback);
+        }
+        else {
+            cache.set(path, {
+                watcher: createWatcher((
+                    // Cant infer types correctly so lets satisfy checker
+                    (param1: any, param2: never, param3: any) => cache.get(path)?.callbacks.slice().forEach(cb => cb(param1, param2, param3))
+                ) as T),
+                callbacks: [callback]
+            });
+        }
 
-        return (fileName, callback, pollingInterval, options) => {
-            const path = toCanonicalFileName(fileName);
-            const existing = cache.get(path);
-            if (existing) {
-                existing.refCount++;
+        return {
+            close: () => {
+                const watcher = cache.get(path);
+                if (!watcher) return;
+                if (!orderedRemoveItem(watcher.callbacks, callback) || watcher.callbacks.length) return;
+                cache.delete(path);
+                closeFileWatcherOf(watcher);
             }
-            else {
-                cache.set(path, {
-                    watcher: watchFile(
-                        fileName,
-                        (fileName, eventKind, modifiedTime) => forEach(
-                            callbacksCache.get(path),
-                            cb => cb(fileName, eventKind, modifiedTime)
-                        ),
-                        pollingInterval,
-                        options
-                    ),
-                    refCount: 1
-                });
-            }
-            callbacksCache.add(path, callback);
-
-            return {
-                close: () => {
-                    const watcher = Debug.checkDefined(cache.get(path));
-                    callbacksCache.remove(path, callback);
-                    watcher.refCount--;
-                    if (watcher.refCount) return;
-                    cache.delete(path);
-                    closeFileWatcherOf(watcher);
-                }
-            };
         };
     }
 
@@ -886,7 +877,9 @@ namespace ts {
         inodeWatching,
         sysLog,
     }: CreateSystemWatchFunctions): { watchFile: HostWatchFile; watchDirectory: HostWatchDirectory; } {
-        const pollingWatchFile = createSingleFileWatcherPerName(pollingWatchFileWorker, useCaseSensitiveFileNames);
+        const pollingWatches = new Map<string, SingleFileWatcher<FileWatcherCallback>>();
+        const fsWatches = new Map<string, SingleFileWatcher<FsWatchCallback>>();
+        const fsWatchesRecursive = new Map<string, SingleFileWatcher<FsWatchCallback>>();
         let dynamicPollingWatchFile: HostWatchFile | undefined;
         let fixedChunkSizePollingWatchFile: HostWatchFile | undefined;
         let nonPollingWatchFile: HostWatchFile | undefined;
@@ -1064,7 +1057,33 @@ namespace ts {
             }
         }
 
+        function pollingWatchFile(fileName: string, callback: FileWatcherCallback, pollingInterval: PollingInterval, options: WatchOptions | undefined) {
+            return createSingleWatcherPerName(
+                pollingWatches,
+                useCaseSensitiveFileNames,
+                fileName,
+                callback,
+                cb => pollingWatchFileWorker(fileName, cb, pollingInterval, options),
+            );
+        }
         function fsWatch(
+            fileOrDirectory: string,
+            entryKind: FileSystemEntryKind,
+            callback: FsWatchCallback,
+            recursive: boolean,
+            fallbackPollingInterval: PollingInterval,
+            fallbackOptions: WatchOptions | undefined
+        ): FileWatcher {
+            return createSingleWatcherPerName(
+                recursive ? fsWatchesRecursive : fsWatches,
+                useCaseSensitiveFileNames,
+                fileOrDirectory,
+                callback,
+                cb => fsWatchHandlingPresence(fileOrDirectory, entryKind, cb, recursive, fallbackPollingInterval, fallbackOptions),
+            );
+        }
+
+        function fsWatchHandlingPresence(
             fileOrDirectory: string,
             entryKind: FileSystemEntryKind,
             callback: FsWatchCallback,

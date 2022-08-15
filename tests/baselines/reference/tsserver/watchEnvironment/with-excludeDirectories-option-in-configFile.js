@@ -66,6 +66,5 @@ FsWatches::
 FsWatchesRecursive::
 /user/username/projects/myproject/src:
   {}
-  {}
 /user/username/projects/myproject/node_modules:
   {}

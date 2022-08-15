@@ -66,4 +66,3 @@ FsWatches::
 FsWatchesRecursive::
 /user/username/projects/myproject/src:
   {}
-  {}
