@@ -2819,7 +2819,7 @@ namespace ts {
                         if (exportAssignment) {
                             addRelatedInfo(err, createDiagnosticForNode(
                                 exportAssignment,
-                                Diagnostics.This_module_is_declared_with_using_export_and_can_only_be_used_with_a_default_import_when_using_the_0_flag,
+                                Diagnostics.This_module_is_declared_with_export_and_can_only_be_used_with_a_default_import_when_using_the_0_flag,
                                 compilerOptionName
                             ));
                         }
