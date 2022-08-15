@@ -17070,13 +17070,11 @@ namespace ts {
                             getTypeFromTypeNodeWorker(node as TypeNode) === tp; // use worker because we're looking for === equality
                     case SyntaxKind.TypeQuery:
                         const entityName = (node as TypeQueryNode).exprName;
-                        const firstIdentifier = getSymbolAtLocation(getFirstIdentifier(entityName));
-                        if (firstIdentifier?.declarations && firstIdentifier.declarations.length === 1 && tp.symbol) {
-                            const symbols = getSymbolsInScope(firstIdentifier.declarations[0], SymbolFlags.All, /*allowDuplicates*/ true);
-                            if (!symbols.find(sym => sym === tp.symbol)) {
-                                const typeArguments = (node as TypeQueryNode).typeArguments;
-                                return typeArguments? !!forEach(typeArguments, containsReference) : false;
-                            }
+                        const firstIdentifier = getFirstIdentifier(entityName);
+                        const firstIdentifierSymbol = getResolvedSymbol(firstIdentifier);
+                        if (firstIdentifierSymbol.declarations) {
+                            return !!forEach(firstIdentifierSymbol.declarations, idDecl => isNodeDescendantOf(idDecl, tp.symbol.declarations![0].parent)) ||
+                                !!forEach((node as TypeQueryNode).typeArguments, containsReference);
                         }
                         return true;
                     case SyntaxKind.MethodDeclaration:
@@ -42084,26 +42082,19 @@ namespace ts {
 
         // Language service support
 
-        function getSymbolsInScope(location: Node, meaning: SymbolFlags, allowDuplicates = false): Symbol[] {
+        function getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[] {
             if (location.flags & NodeFlags.InWithStatement) {
                 // We cannot answer semantic questions within a with block, do not proceed any further
                 return [];
             }
 
-            const symbols = new Map<__String, Symbol[]>();
+            const symbols = createSymbolTable();
             let isStaticSymbol = false;
 
             populateSymbols();
 
             symbols.delete(InternalSymbolName.This); // Not a symbol, a keyword
-
-            const result: Symbol[] = [];
-            symbols.forEach((symbolArray, id) => {
-                if (!isReservedMemberName(id)) {
-                    result.push(...symbolArray);
-                }
-            });
-            return result;
+            return symbolsToArray(symbols);
 
             function populateSymbols() {
                 while (location) {
@@ -42172,14 +42163,8 @@ namespace ts {
                     // We will copy all symbol regardless of its reserved name because
                     // symbolsToArray will check whether the key is a reserved name and
                     // it will not copy symbol with reserved name to the array
-                    if (allowDuplicates) {
-                        if (!symbols.has(id)) {
-                            symbols.set(id, []);
-                        }
-                        symbols.get(id)!.push(symbol);
-                    }
-                    else if (!symbols.has(id)) {
-                        symbols.set(id, [symbol]);
+                    if (!symbols.has(id)) {
+                        symbols.set(id, symbol);
                     }
                 }
             }
