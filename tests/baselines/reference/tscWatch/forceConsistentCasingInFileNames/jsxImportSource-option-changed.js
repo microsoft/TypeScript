@@ -77,7 +77,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/node_modules/react/jsx-runtime/index.d.ts (used version)
 /user/username/projects/myproject/index.tsx (used version)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/myproject/node_modules/react/jsx-runtime/index.d.ts:

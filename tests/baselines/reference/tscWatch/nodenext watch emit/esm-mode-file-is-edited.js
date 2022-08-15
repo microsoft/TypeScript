@@ -54,7 +54,7 @@ Shape signatures in builder refreshed for::
 /project/src/deps.d.ts (used version)
 /project/src/index.ts (used version)
 
-WatchedFiles::
+PolledWatches::
 /project/tsconfig.json:
   {"pollingInterval":250}
 /project/src/deps.d.ts:
@@ -110,7 +110,7 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /project/src/index.ts (computed .d.ts)
 
-WatchedFiles::
+PolledWatches::
 /project/tsconfig.json:
   {"pollingInterval":250}
 /project/src/deps.d.ts:

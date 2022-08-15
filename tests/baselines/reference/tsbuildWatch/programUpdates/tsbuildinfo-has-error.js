@@ -46,7 +46,7 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /src/project/main.ts (used version)
 
-WatchedFiles::
+PolledWatches::
 /src/project/tsconfig.json:
   {"pollingInterval":250}
 /src/project/main.ts:

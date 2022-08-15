@@ -53,7 +53,7 @@ Open files:
 	FileName: /a/b/commonFile1.ts ProjectRootPath: /a/b
 		Projects: /a/b/tsconfig.json
 response:{"responseRequired":false}
-WatchedFiles::
+PolledWatches::
 /a/b/tsconfig.json:
   {"pollingInterval":250}
 /a/b:

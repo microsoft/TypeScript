@@ -234,7 +234,7 @@ Dependencies for::
   /user/username/projects/transitiveReferences/b.d.ts
   /user/username/projects/transitiveReferences/a.d.ts
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/transitivereferences/tsconfig.c.json:
   {"pollingInterval":250}
 /user/username/projects/transitivereferences/tsconfig.b.json:

@@ -29,7 +29,7 @@ Project '/dev/null/inferredProject1*' (Inferred)
 Open files: 
 	FileName: c:/myprojects/project/x.js ProjectRootPath: undefined
 		Projects: /dev/null/inferredProject1*
-WatchedFiles::
+PolledWatches::
 c:/myprojects/project/tsconfig.json:
   {"pollingInterval":250}
 c:/myprojects/project/jsconfig.json:
@@ -74,7 +74,7 @@ Project '/dev/null/inferredProject1*' (Inferred)
 Open files: 
 	FileName: //vda1cs4850/myprojects/project/x.js ProjectRootPath: undefined
 		Projects: /dev/null/inferredProject1*
-WatchedFiles::
+PolledWatches::
 //vda1cs4850/myprojects/project/tsconfig.json:
   {"pollingInterval":250}
 //vda1cs4850/myprojects/project/jsconfig.json:
@@ -119,7 +119,7 @@ Project '/dev/null/inferredProject1*' (Inferred)
 Open files: 
 	FileName: //vda1cs4850/c$/myprojects/project/x.js ProjectRootPath: undefined
 		Projects: /dev/null/inferredProject1*
-WatchedFiles::
+PolledWatches::
 //vda1cs4850/c$/myprojects/project/tsconfig.json:
   {"pollingInterval":250}
 //vda1cs4850/c$/myprojects/project/jsconfig.json:
@@ -164,7 +164,7 @@ Project '/dev/null/inferredProject1*' (Inferred)
 Open files: 
 	FileName: c:/users/username/myprojects/project/x.js ProjectRootPath: undefined
 		Projects: /dev/null/inferredProject1*
-WatchedFiles::
+PolledWatches::
 c:/users/username/myprojects/project/tsconfig.json:
   {"pollingInterval":250}
 c:/users/username/myprojects/project/jsconfig.json:
@@ -209,7 +209,7 @@ Project '/dev/null/inferredProject1*' (Inferred)
 Open files: 
 	FileName: //vda1cs4850/c$/users/username/myprojects/project/x.js ProjectRootPath: undefined
 		Projects: /dev/null/inferredProject1*
-WatchedFiles::
+PolledWatches::
 //vda1cs4850/c$/users/username/myprojects/project/tsconfig.json:
   {"pollingInterval":250}
 //vda1cs4850/c$/users/username/myprojects/project/jsconfig.json:

@@ -49,7 +49,7 @@ Shape signatures in builder refreshed for::
 /a/b/app.ts (used version)
 /a/b/node_modules/@types/node/index.d.ts (used version)
 
-WatchedFiles::
+PolledWatches::
 /a/b/tsconfig.json:
   {"pollingInterval":250}
 /a/b/app.ts:

@@ -49,7 +49,7 @@ Shape signatures in builder refreshed for::
 /a/b.ts (used version)
 /a/lib/lib.d.ts (used version)
 
-WatchedFiles::
+PolledWatches::
 /a/tsconfig.json:
   {"pollingInterval":250}
 /a/a.ts:
@@ -110,7 +110,7 @@ Shape signatures in builder refreshed for::
 /a/a.ts (computed .d.ts)
 /a/b.ts (computed .d.ts)
 
-WatchedFiles::
+PolledWatches::
 /a/tsconfig.json:
   {"pollingInterval":250}
 /a/a.ts:
@@ -168,7 +168,7 @@ Shape signatures in builder refreshed for::
 /a/a.ts (computed .d.ts)
 /a/b.ts (computed .d.ts)
 
-WatchedFiles::
+PolledWatches::
 /a/tsconfig.json:
   {"pollingInterval":250}
 /a/a.ts:

@@ -45,7 +45,7 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /a/foo.ts (used version)
 
-WatchedFiles::
+PolledWatches::
 /a/foo.ts:
   {"pollingInterval":250}
 /a/lib/lib.d.ts:
@@ -105,7 +105,7 @@ Shape signatures in builder refreshed for::
 /a/bar.d.ts (used version)
 /a/foo.ts (computed .d.ts)
 
-WatchedFiles::
+PolledWatches::
 /a/foo.ts:
   {"pollingInterval":250}
 /a/lib/lib.d.ts:

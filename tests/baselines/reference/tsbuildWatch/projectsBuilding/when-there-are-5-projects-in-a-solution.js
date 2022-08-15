@@ -158,7 +158,7 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /user/username/projects/myproject/pkg4/index.ts (computed .d.ts during emit)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/pkg0/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/myproject/pkg0/index.ts:
@@ -482,7 +482,7 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/pkg0/index.ts (computed .d.ts)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/pkg0/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/myproject/pkg0/index.ts:
@@ -577,7 +577,7 @@ Input::
 
 Output::
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/pkg0/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/myproject/pkg0/index.ts:
@@ -648,7 +648,7 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/pkg0/index.ts (computed .d.ts)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/pkg0/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/myproject/pkg0/index.ts:
@@ -816,7 +816,7 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/pkg0/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/myproject/pkg0/index.ts:
@@ -867,7 +867,7 @@ Input::
 
 Output::
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/pkg0/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/myproject/pkg0/index.ts:

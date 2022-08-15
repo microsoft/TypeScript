@@ -49,7 +49,7 @@ Shape signatures in builder refreshed for::
 /a/b/f1.ts (used version)
 /a/b/f2.ts (used version)
 
-WatchedFiles::
+PolledWatches::
 /a/b/tsconfig.json:
   {"pollingInterval":250}
 /a/b/f1.ts:
@@ -103,7 +103,7 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-WatchedFiles::
+PolledWatches::
 /a/b/tsconfig.json:
   {"pollingInterval":250}
 /a/b/f1.ts:

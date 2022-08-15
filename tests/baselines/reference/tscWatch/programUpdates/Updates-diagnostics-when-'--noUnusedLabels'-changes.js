@@ -43,7 +43,7 @@ Shape signatures in builder refreshed for::
 /a.ts (used version)
 /a/lib/lib.d.ts (used version)
 
-WatchedFiles::
+PolledWatches::
 /tsconfig.json:
   {"pollingInterval":250}
 /a.ts:
@@ -97,7 +97,7 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-WatchedFiles::
+PolledWatches::
 /tsconfig.json:
   {"pollingInterval":250}
 /a.ts:
@@ -142,7 +142,7 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-WatchedFiles::
+PolledWatches::
 /tsconfig.json:
   {"pollingInterval":250}
 /a.ts:

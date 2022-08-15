@@ -128,7 +128,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/packages/pkg2/build/index.d.ts (used version)
 /user/username/projects/myproject/packages/pkg1/index.ts (used version)
 
-WatchedFiles::
+PolledWatches::
 
 FsWatches::
 

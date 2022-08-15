@@ -40,7 +40,7 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /a/compile (used version)
 
-WatchedFiles::
+PolledWatches::
 /a/compile:
   {"pollingInterval":250}
 /a/lib/lib.d.ts:

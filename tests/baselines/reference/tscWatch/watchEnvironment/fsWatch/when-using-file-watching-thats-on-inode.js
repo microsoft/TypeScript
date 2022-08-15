@@ -63,7 +63,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/foo.d.ts (used version)
 /user/username/projects/myproject/main.ts (used version)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
 
@@ -153,7 +153,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/foo.d.ts (used version)
 /user/username/projects/myproject/main.ts (computed .d.ts)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
 
@@ -227,7 +227,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/foo.d.ts (used version)
 /user/username/projects/myproject/main.ts (computed .d.ts)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
 

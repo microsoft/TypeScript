@@ -147,7 +147,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/pkg3/index.ts (used version)
 /user/username/projects/myproject/typings/xterm.d.ts (used version)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/pkg0/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/myproject/pkg0/index.ts:
@@ -307,7 +307,7 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/typings/xterm.d.ts (used version)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/pkg0/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/myproject/pkg0/index.ts:
@@ -363,7 +363,7 @@ Output::
 
 
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/pkg0/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/myproject/pkg0/index.ts:
@@ -469,7 +469,7 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/typings/xterm.d.ts (used version)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/pkg0/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/myproject/pkg0/index.ts:
@@ -523,7 +523,7 @@ Output::
 
 
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/tsconfig.json:
   {"pollingInterval":250}
 
@@ -543,7 +543,7 @@ export const typing = 10;export const typing1 = 10;
 
 Output::
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/tsconfig.json:
   {"pollingInterval":250}
 

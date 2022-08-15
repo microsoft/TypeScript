@@ -85,7 +85,7 @@ Shape signatures in builder refreshed for::
 /home/user/projects/myproject/node_modules/reala/index.d.ts (used version)
 /home/user/projects/myproject/src/file.ts (used version)
 
-WatchedFiles::
+PolledWatches::
 /home/user/projects/myproject/tsconfig.json:
   {"pollingInterval":250}
 /home/user/projects/myproject/src/file.ts:

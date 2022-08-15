@@ -51,7 +51,7 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/globals.d.ts (used version)
 /users/username/projects/project/index.ts (used version)
 
-WatchedFiles::
+PolledWatches::
 /users/username/projects/project/tsconfig.json:
   {"pollingInterval":250}
 /users/username/projects/project/globals.d.ts:
@@ -148,7 +148,7 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /users/username/projects/project/index.ts (computed .d.ts)
 
-WatchedFiles::
+PolledWatches::
 /users/username/projects/project/tsconfig.json:
   {"pollingInterval":250}
 /users/username/projects/project/index.ts:

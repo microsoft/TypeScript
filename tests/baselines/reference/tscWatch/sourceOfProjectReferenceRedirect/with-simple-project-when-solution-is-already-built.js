@@ -342,7 +342,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/demo/core/utilities.ts (computed .d.ts)
 /user/username/projects/demo/animals/dog.ts (computed .d.ts)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/demo/animals/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/demo/core/tsconfig.json:

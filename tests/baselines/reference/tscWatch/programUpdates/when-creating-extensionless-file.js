@@ -54,7 +54,7 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /user/username/projects/myproject/index.ts (used version)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/myproject/index.ts:
@@ -91,7 +91,7 @@ Reloading new file names and options
 Synchronizing program
 
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/myproject/index.ts:

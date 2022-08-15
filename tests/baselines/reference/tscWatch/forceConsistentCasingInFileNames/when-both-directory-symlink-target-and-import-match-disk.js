@@ -62,7 +62,7 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/myproject/b.ts:
@@ -172,7 +172,7 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/myproject/b.ts:

@@ -105,7 +105,7 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.es2016.full.d.ts (used version)
 /user/username/projects/myproject/src/filea.ts (used version)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/src/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/myproject/src/filea.ts:
@@ -211,7 +211,7 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/src/filea.ts (computed .d.ts)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/src/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/myproject/src/filea.ts:
@@ -318,7 +318,7 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/src/filea.ts (computed .d.ts)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/src/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/myproject/src/filea.ts:
@@ -415,7 +415,7 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/src/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/myproject/src/filea.ts:
@@ -517,7 +517,7 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/src/filea.ts (computed .d.ts)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/src/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/myproject/src/filea.ts:
@@ -630,7 +630,7 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/src/filea.ts (computed .d.ts)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/src/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/myproject/src/filea.ts:

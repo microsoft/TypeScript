@@ -59,7 +59,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/settings.json (used version)
 /user/username/projects/myproject/index.ts (used version)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/myproject/index.ts:

@@ -52,7 +52,7 @@ Open files:
 	FileName: /a/username/project/src/index.ts ProjectRootPath: undefined
 		Projects: /a/username/project/tsconfig.json
 Completion Entries:: ["file1"]
-WatchedFiles::
+PolledWatches::
 /a/username/project/tsconfig.json:
   {"pollingInterval":250}
 /a/username/project/src/file1.ts:
@@ -118,7 +118,7 @@ Open files:
 	FileName: /a/username/project/src/index.ts ProjectRootPath: undefined
 		Projects: /a/username/project/tsconfig.json
 Completion Entries:: ["file1","file2"]
-WatchedFiles::
+PolledWatches::
 /a/username/project/tsconfig.json:
   {"pollingInterval":250}
 /a/username/project/src/file1.ts:

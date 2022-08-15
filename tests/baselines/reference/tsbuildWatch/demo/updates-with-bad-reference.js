@@ -245,7 +245,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/demo/animals/index.ts (used version)
 /user/username/projects/demo/core/utilities.ts (used version)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/demo/core/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/demo/tsconfig-base.json:
@@ -521,7 +521,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/demo/animals/dog.ts (computed .d.ts)
 /user/username/projects/demo/animals/index.ts (computed .d.ts)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/demo/core/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/demo/tsconfig-base.json:

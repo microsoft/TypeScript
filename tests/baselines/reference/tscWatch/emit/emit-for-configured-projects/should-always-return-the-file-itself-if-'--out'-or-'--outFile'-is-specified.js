@@ -55,7 +55,7 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-WatchedFiles::
+PolledWatches::
 /a/b/tsconfig.json:
   {"pollingInterval":250}
 /a/b/file1consumer1.ts:
@@ -160,7 +160,7 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-WatchedFiles::
+PolledWatches::
 /a/b/tsconfig.json:
   {"pollingInterval":250}
 /a/b/file1consumer1.ts:

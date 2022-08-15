@@ -92,7 +92,7 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /a/b/other.ts (computed .d.ts during emit)
 
-WatchedFiles::
+PolledWatches::
 /a/b/project1.tsconfig.json:
   {"pollingInterval":250}
 /a/b/alpha.tsconfig.json:
@@ -242,7 +242,7 @@ Output::
 
 
 
-WatchedFiles::
+PolledWatches::
 /a/b/project1.tsconfig.json:
   {"pollingInterval":250}
 /a/b/alpha.tsconfig.json:

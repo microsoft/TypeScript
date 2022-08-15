@@ -223,7 +223,7 @@ Dependencies for::
   /user/username/projects/transitiveReferences/b/index.d.ts
   /user/username/projects/transitiveReferences/a/index.d.ts
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/transitivereferences/c/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/transitivereferences/b/tsconfig.json:
@@ -390,7 +390,7 @@ Dependencies for::
   /user/username/projects/transitiveReferences/b/index.d.ts
   /user/username/projects/transitiveReferences/a/index.d.ts
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/transitivereferences/c/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/transitivereferences/b/tsconfig.json:
@@ -490,7 +490,7 @@ Dependencies for::
   /user/username/projects/transitiveReferences/b/index.d.ts
   /user/username/projects/transitiveReferences/a/index.d.ts
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/transitivereferences/c/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/transitivereferences/b/tsconfig.json:
@@ -585,7 +585,7 @@ Dependencies for::
   /user/username/projects/transitiveReferences/b/index.d.ts
   /user/username/projects/transitiveReferences/a/index.d.ts
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/transitivereferences/c/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/transitivereferences/b/tsconfig.json:
@@ -680,7 +680,7 @@ Dependencies for::
   /user/username/projects/transitiveReferences/b/index.d.ts
   /user/username/projects/transitiveReferences/nrefs/a.d.ts
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/transitivereferences/c/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/transitivereferences/b/tsconfig.json:
@@ -768,7 +768,7 @@ Dependencies for::
   /user/username/projects/transitiveReferences/refs/a.d.ts
   /user/username/projects/transitiveReferences/b/index.d.ts
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/transitivereferences/c/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/transitivereferences/b/tsconfig.json:
@@ -857,7 +857,7 @@ Dependencies for::
   /user/username/projects/transitiveReferences/refs/a.d.ts
   /user/username/projects/transitiveReferences/b/index.ts
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/transitivereferences/c/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/transitivereferences/b/tsconfig.json:
@@ -947,7 +947,7 @@ Dependencies for::
   /user/username/projects/transitiveReferences/b/index.d.ts
   /user/username/projects/transitiveReferences/a/index.d.ts
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/transitivereferences/c/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/transitivereferences/b/tsconfig.json:
@@ -1045,7 +1045,7 @@ Dependencies for::
   /user/username/projects/transitiveReferences/b/index.d.ts
   /user/username/projects/transitiveReferences/a/index.ts
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/transitivereferences/c/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/transitivereferences/b/tsconfig.json:
@@ -1141,7 +1141,7 @@ Dependencies for::
   /user/username/projects/transitiveReferences/b/index.d.ts
   /user/username/projects/transitiveReferences/a/index.d.ts
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/transitivereferences/c/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/transitivereferences/b/tsconfig.json:

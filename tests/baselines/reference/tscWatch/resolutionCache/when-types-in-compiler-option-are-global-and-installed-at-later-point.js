@@ -50,7 +50,7 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /user/username/projects/myproject/lib/app.ts (used version)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/myproject/lib/app.ts:
@@ -113,7 +113,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/node_modules/@myapp/ts-types/types/somefile.define.d.ts (used version)
 /user/username/projects/myproject/lib/app.ts (computed .d.ts)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/myproject/lib/app.ts:
@@ -143,7 +143,7 @@ Input::
 
 Output::
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/myproject/lib/app.ts:

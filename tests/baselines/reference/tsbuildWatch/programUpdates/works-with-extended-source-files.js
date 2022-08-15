@@ -88,7 +88,7 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /a/b/other.ts (computed .d.ts during emit)
 
-WatchedFiles::
+PolledWatches::
 /a/b/project1.tsconfig.json:
   {"pollingInterval":250}
 /a/b/alpha.tsconfig.json:
@@ -248,7 +248,7 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-WatchedFiles::
+PolledWatches::
 /a/b/project1.tsconfig.json:
   {"pollingInterval":250}
 /a/b/alpha.tsconfig.json:
@@ -352,7 +352,7 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-WatchedFiles::
+PolledWatches::
 /a/b/project1.tsconfig.json:
   {"pollingInterval":250}
 /a/b/alpha.tsconfig.json:
@@ -450,7 +450,7 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-WatchedFiles::
+PolledWatches::
 /a/b/project1.tsconfig.json:
   {"pollingInterval":250}
 /a/b/alpha.tsconfig.json:
@@ -554,7 +554,7 @@ Shape signatures in builder refreshed for::
 /a/b/commonfile2.ts (computed .d.ts)
 /a/b/other.ts (computed .d.ts)
 
-WatchedFiles::
+PolledWatches::
 /a/b/project1.tsconfig.json:
   {"pollingInterval":250}
 /a/b/alpha.tsconfig.json:
@@ -616,7 +616,7 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-WatchedFiles::
+PolledWatches::
 /a/b/project1.tsconfig.json:
   {"pollingInterval":250}
 /a/b/alpha.tsconfig.json:
@@ -721,7 +721,7 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-WatchedFiles::
+PolledWatches::
 /a/b/project1.tsconfig.json:
   {"pollingInterval":250}
 /a/b/alpha.tsconfig.json:

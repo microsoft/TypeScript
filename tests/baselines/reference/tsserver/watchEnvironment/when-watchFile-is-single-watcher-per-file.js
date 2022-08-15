@@ -52,7 +52,7 @@ Open files:
 	FileName: /user/username/projects/myproject/index.ts ProjectRootPath: undefined
 		Projects: /user/username/projects/myproject/tsconfig.json
 response:{"responseRequired":false}
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/tsconfig.json:
   {"pollingInterval":250}
 /a/lib/lib.d.ts:

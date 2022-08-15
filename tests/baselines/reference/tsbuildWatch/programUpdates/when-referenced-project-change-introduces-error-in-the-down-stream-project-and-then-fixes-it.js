@@ -79,7 +79,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/sample1/library/library.d.ts (used version)
 /user/username/projects/sample1/app/app.ts (used version)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/sample1/library/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/sample1/library/library.ts:
@@ -228,7 +228,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/sample1/library/library.d.ts (used version)
 /user/username/projects/sample1/app/app.ts (computed .d.ts)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/sample1/library/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/sample1/library/library.ts:
@@ -360,7 +360,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/sample1/library/library.d.ts (used version)
 /user/username/projects/sample1/app/app.ts (computed .d.ts)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/sample1/library/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/sample1/library/library.ts:

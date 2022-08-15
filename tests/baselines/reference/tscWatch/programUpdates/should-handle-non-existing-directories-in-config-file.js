@@ -43,7 +43,7 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /a/src/app.ts (used version)
 
-WatchedFiles::
+PolledWatches::
 /a/tsconfig.json:
   {"pollingInterval":250}
 /a/src/app.ts:

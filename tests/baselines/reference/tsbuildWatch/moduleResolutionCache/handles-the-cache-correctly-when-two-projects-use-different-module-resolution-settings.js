@@ -107,7 +107,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/project2/index.ts (computed .d.ts during emit)
 /user/username/projects/myproject/node_modules/@types/foo/index.d.ts (used version)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/project1/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/myproject/project1/index.ts:
@@ -305,7 +305,7 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/project1/index.ts (computed .d.ts)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/project1/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/myproject/project1/index.ts:

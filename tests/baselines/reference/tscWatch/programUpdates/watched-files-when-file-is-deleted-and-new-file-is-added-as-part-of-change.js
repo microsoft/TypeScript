@@ -43,7 +43,7 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /home/username/project/src/file1.ts (used version)
 
-WatchedFiles::
+PolledWatches::
 /home/username/project/tsconfig.json:
   {"pollingInterval":250}
 /home/username/project/src/file1.ts:
@@ -96,7 +96,7 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /home/username/project/src/file2.ts (computed .d.ts)
 
-WatchedFiles::
+PolledWatches::
 /home/username/project/tsconfig.json:
   {"pollingInterval":250}
 /a/lib/lib.d.ts:

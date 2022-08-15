@@ -57,7 +57,7 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/sample1/core/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/sample1/core/index.ts:
@@ -291,7 +291,7 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/sample1/core/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/sample1/core/index.ts:
@@ -410,7 +410,7 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/sample1/core/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/sample1/core/index.ts:
@@ -575,7 +575,7 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/sample1/core/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/sample1/core/index.ts:
@@ -677,7 +677,7 @@ Output::
 
 
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/sample1/core/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/sample1/core/index.ts:

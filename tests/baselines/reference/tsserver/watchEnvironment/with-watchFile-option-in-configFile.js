@@ -50,7 +50,7 @@ Open files:
 	FileName: /a/b/commonFile1.ts ProjectRootPath: /a/b
 		Projects: /a/b/tsconfig.json
 response:{"responseRequired":false}
-WatchedFiles::
+PolledWatches::
 /a/b/commonfile2.ts:
   {"pollingInterval":250}
 /a/lib/lib.d.ts:

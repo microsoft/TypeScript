@@ -134,7 +134,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/demo/core/utilities.ts (used version)
 /user/username/projects/demo/animals/dog.ts (computed .d.ts during emit)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/demo/animals/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/demo/core/tsconfig.json:

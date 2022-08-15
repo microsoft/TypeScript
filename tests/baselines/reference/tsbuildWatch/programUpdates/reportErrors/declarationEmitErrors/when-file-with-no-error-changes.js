@@ -57,7 +57,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/solution/app/filewitherror.ts (used version)
 /user/username/projects/solution/app/filewithouterror.ts (computed .d.ts during emit)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/solution/app/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/solution/app/filewitherror.ts:
@@ -108,7 +108,7 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/solution/app/filewithouterror.ts (computed .d.ts)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/solution/app/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/solution/app/filewitherror.ts:

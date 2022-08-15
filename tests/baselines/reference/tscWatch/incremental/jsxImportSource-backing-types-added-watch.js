@@ -50,7 +50,7 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /users/username/projects/project/index.tsx (used version)
 
-WatchedFiles::
+PolledWatches::
 /users/username/projects/project/tsconfig.json:
   {"pollingInterval":250}
 /users/username/projects/project/index.tsx:
@@ -174,7 +174,7 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/node_modules/react/jsx-runtime/index.d.ts (used version)
 /users/username/projects/project/index.tsx (computed .d.ts)
 
-WatchedFiles::
+PolledWatches::
 /users/username/projects/project/tsconfig.json:
   {"pollingInterval":250}
 /users/username/projects/project/index.tsx:

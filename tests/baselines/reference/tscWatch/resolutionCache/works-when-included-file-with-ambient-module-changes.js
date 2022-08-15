@@ -60,7 +60,7 @@ Shape signatures in builder refreshed for::
 /a/b/foo.ts (used version)
 /a/b/bar.d.ts (used version)
 
-WatchedFiles::
+PolledWatches::
 /a/b/foo.ts:
   {"pollingInterval":250}
 /a/b/bar.d.ts:
@@ -127,7 +127,7 @@ Shape signatures in builder refreshed for::
 /a/b/bar.d.ts (used version)
 /a/b/foo.ts (computed .d.ts)
 
-WatchedFiles::
+PolledWatches::
 /a/b/foo.ts:
   {"pollingInterval":250}
 /a/b/bar.d.ts:

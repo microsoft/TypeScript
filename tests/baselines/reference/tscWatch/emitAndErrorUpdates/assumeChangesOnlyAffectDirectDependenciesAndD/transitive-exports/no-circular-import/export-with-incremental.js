@@ -88,7 +88,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/lib2/public.ts (computed .d.ts during emit)
 /user/username/projects/myproject/app.ts (computed .d.ts during emit)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/myproject/app.ts:
@@ -392,7 +392,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/lib1/tools/tools.interface.ts (computed .d.ts)
 /user/username/projects/myproject/lib1/tools/public.ts (computed .d.ts)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/myproject/app.ts:
@@ -577,7 +577,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/lib1/tools/tools.interface.ts (computed .d.ts)
 /user/username/projects/myproject/lib1/tools/public.ts (computed .d.ts)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/myproject/app.ts:
@@ -762,7 +762,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/lib1/tools/tools.interface.ts (computed .d.ts)
 /user/username/projects/myproject/lib1/tools/public.ts (computed .d.ts)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/myproject/app.ts:

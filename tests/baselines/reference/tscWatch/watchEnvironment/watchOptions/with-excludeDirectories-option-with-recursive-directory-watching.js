@@ -61,7 +61,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/node_modules/bar/index.d.ts (used version)
 /user/username/projects/myproject/src/main.ts (used version)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/myproject/src/main.ts:
@@ -103,7 +103,7 @@ Input::
 
 Output::
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/myproject/src/main.ts:
@@ -141,7 +141,7 @@ export function temp(): string;
 
 Output::
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/myproject/src/main.ts:

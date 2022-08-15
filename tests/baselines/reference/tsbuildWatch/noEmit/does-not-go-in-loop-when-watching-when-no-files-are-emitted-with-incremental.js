@@ -58,7 +58,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/a.js (used version)
 /user/username/projects/myproject/b.ts (used version)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/myproject/a.js:
@@ -152,7 +152,7 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/myproject/a.js:
@@ -205,7 +205,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/a.js (computed .d.ts)
 /user/username/projects/myproject/b.ts (used version)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/myproject/a.js:

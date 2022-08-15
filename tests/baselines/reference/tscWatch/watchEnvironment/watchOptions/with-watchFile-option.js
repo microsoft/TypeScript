@@ -49,7 +49,7 @@ Shape signatures in builder refreshed for::
 /a/b/commonfile1.ts (used version)
 /a/b/commonfile2.ts (used version)
 
-WatchedFiles::
+PolledWatches::
 /a/b/node_modules/@types:
   {"pollingInterval":500}
 

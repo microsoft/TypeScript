@@ -167,7 +167,7 @@ Output::
 
 
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/demo/animals/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/demo/tsconfig-base.json:
@@ -298,7 +298,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/demo/lib/animals/index.d.ts (used version)
 /user/username/projects/demo/zoo/zoo.ts (computed .d.ts during emit)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/demo/animals/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/demo/tsconfig-base.json:

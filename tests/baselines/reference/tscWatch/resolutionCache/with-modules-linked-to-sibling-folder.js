@@ -59,7 +59,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/linked-package/dist/index.d.ts (used version)
 /user/username/projects/myproject/main/index.ts (used version)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/main/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/myproject/main/index.ts:

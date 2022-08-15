@@ -39,7 +39,7 @@ Project '/user/username/projects/myproject/project.csproj' (External)
 Open files: 
 	FileName: /user/username/projects/myproject/src/main.ts ProjectRootPath: undefined
 		Projects: /user/username/projects/myproject/project.csproj
-WatchedFiles::
+PolledWatches::
 /a/lib/lib.d.ts:
   {"pollingInterval":250}
 

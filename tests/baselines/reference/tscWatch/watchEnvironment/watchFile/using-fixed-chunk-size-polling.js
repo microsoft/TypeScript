@@ -49,7 +49,7 @@ Shape signatures in builder refreshed for::
 /a/b/commonfile1.ts (used version)
 /a/b/commonfile2.ts (used version)
 
-WatchedFiles::
+PolledWatches::
 /a/b/node_modules/@types:
   {"pollingInterval":500}
 
@@ -76,7 +76,7 @@ Input::
 
 Output::
 
-WatchedFiles::
+PolledWatches::
 /a/b/node_modules/@types:
   {"pollingInterval":500}
 
@@ -98,7 +98,7 @@ var zz30 = 100;
 
 Output::
 
-WatchedFiles::
+PolledWatches::
 /a/b/node_modules/@types:
   {"pollingInterval":500}
 
@@ -140,7 +140,7 @@ Shape signatures in builder refreshed for::
 /a/b/commonfile1.ts (computed .d.ts)
 /a/b/commonfile2.ts (computed .d.ts)
 
-WatchedFiles::
+PolledWatches::
 /a/b/node_modules/@types:
   {"pollingInterval":500}
 
@@ -164,7 +164,7 @@ Input::
 
 Output::
 
-WatchedFiles::
+PolledWatches::
 /a/b/node_modules/@types:
   {"pollingInterval":500}
 

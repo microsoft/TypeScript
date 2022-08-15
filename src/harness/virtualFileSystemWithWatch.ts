@@ -1047,7 +1047,7 @@ interface Array<T> { length: number; [n: number]: T; }`
         }
 
         serializeWatches(baseline: string[] = []) {
-            serializeMultiMap(baseline, "WatchedFiles", this.watchedFiles);
+            serializeMultiMap(baseline, "PolledWatches", this.watchedFiles);
             baseline.push("");
             serializeMultiMap(baseline, "FsWatches", this.fsWatches);
             baseline.push("");

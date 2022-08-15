@@ -406,7 +406,7 @@ Dependencies for::
   /user/username/projects/sample1/logic/index.d.ts
   /user/username/projects/sample1/core/index.d.ts
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/sample1/tests/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/sample1/core/tsconfig.json:
@@ -540,7 +540,7 @@ function foo() { }
 
 Output::
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/sample1/tests/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/sample1/core/tsconfig.json:
@@ -727,7 +727,7 @@ Dependencies for::
   /user/username/projects/sample1/logic/index.d.ts
   /user/username/projects/sample1/core/index.d.ts
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/sample1/tests/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/sample1/core/tsconfig.json:
@@ -987,7 +987,7 @@ Dependencies for::
   /user/username/projects/sample1/logic/decls/index.d.ts
   /user/username/projects/sample1/core/index.d.ts
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/sample1/tests/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/sample1/core/tsconfig.json:

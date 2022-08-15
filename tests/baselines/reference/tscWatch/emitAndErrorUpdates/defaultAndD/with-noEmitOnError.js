@@ -74,7 +74,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/noemitonerror/src/main.ts (used version)
 /user/username/projects/noemitonerror/src/other.ts (used version)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/noemitonerror/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/noemitonerror/shared/types/db.ts:
@@ -128,7 +128,7 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/noemitonerror/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/noemitonerror/shared/types/db.ts:
@@ -184,7 +184,7 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/noemitonerror/src/main.ts (computed .d.ts)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/noemitonerror/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/noemitonerror/shared/types/db.ts:
@@ -276,7 +276,7 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/noemitonerror/src/main.ts (computed .d.ts)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/noemitonerror/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/noemitonerror/shared/types/db.ts:
@@ -330,7 +330,7 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/noemitonerror/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/noemitonerror/shared/types/db.ts:
@@ -384,7 +384,7 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/noemitonerror/src/main.ts (computed .d.ts)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/noemitonerror/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/noemitonerror/shared/types/db.ts:
@@ -440,7 +440,7 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/noemitonerror/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/noemitonerror/shared/types/db.ts:

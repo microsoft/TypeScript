@@ -174,7 +174,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/sample1/logic/index.d.ts (used version)
 /user/username/projects/sample1/tests/index.ts (computed .d.ts during emit)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/sample1/core/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/sample1/core/anothermodule.ts:
@@ -503,7 +503,7 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/sample1/core/index.ts (computed .d.ts)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/sample1/core/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/sample1/core/anothermodule.ts:

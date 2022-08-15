@@ -65,7 +65,7 @@ c:/a/lib/lib.d.ts (used version)
 c:/project/a.ts (used version)
 c:/project/b.ts (used version)
 
-WatchedFiles::
+PolledWatches::
 c:/project/tsconfig.json:
   {"pollingInterval":250}
 c:/project/a.ts:
@@ -146,7 +146,7 @@ Shape signatures in builder refreshed for::
 c:/project/a.ts (computed .d.ts)
 c:/project/b.ts (computed .d.ts)
 
-WatchedFiles::
+PolledWatches::
 c:/project/tsconfig.json:
   {"pollingInterval":250}
 c:/project/a.ts:

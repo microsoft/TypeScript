@@ -46,7 +46,7 @@ Shape signatures in builder refreshed for::
 /a/b/modulefile.ts (used version)
 /a/b/file1.ts (used version)
 
-WatchedFiles::
+PolledWatches::
 /a/b/file1.ts:
   {"pollingInterval":250}
 /a/b/modulefile.ts:
@@ -112,7 +112,7 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /a/b/file1.ts (computed .d.ts)
 
-WatchedFiles::
+PolledWatches::
 /a/b/file1.ts:
   {"pollingInterval":250}
 /a/lib/lib.d.ts:
@@ -160,7 +160,7 @@ Shape signatures in builder refreshed for::
 /a/b/modulefile.ts (computed .d.ts)
 /a/b/file1.ts (computed .d.ts)
 
-WatchedFiles::
+PolledWatches::
 /a/b/file1.ts:
   {"pollingInterval":250}
 /a/lib/lib.d.ts:

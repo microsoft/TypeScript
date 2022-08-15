@@ -73,7 +73,7 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/noemitonerror/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/noemitonerror/shared/types/db.ts:
@@ -180,7 +180,7 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/noemitonerror/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/noemitonerror/shared/types/db.ts:
@@ -242,7 +242,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/noemitonerror/src/main.ts (computed .d.ts)
 /user/username/projects/noemitonerror/src/other.ts (computed .d.ts)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/noemitonerror/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/noemitonerror/shared/types/db.ts:
@@ -377,7 +377,7 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/noemitonerror/src/main.ts (computed .d.ts)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/noemitonerror/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/noemitonerror/shared/types/db.ts:
@@ -506,7 +506,7 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/noemitonerror/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/noemitonerror/shared/types/db.ts:
@@ -560,7 +560,7 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/noemitonerror/src/main.ts (computed .d.ts)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/noemitonerror/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/noemitonerror/shared/types/db.ts:
@@ -659,7 +659,7 @@ Output::
 
 
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/noemitonerror/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/noemitonerror/shared/types/db.ts:

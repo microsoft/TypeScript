@@ -176,7 +176,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/file1.ts (used version)
 /user/username/projects/myproject/src/file2.ts (used version)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/myproject/file1.ts:
@@ -223,7 +223,7 @@ Input::
 
 Output::
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/myproject/file1.ts:
@@ -303,7 +303,7 @@ No cached semantic diagnostics in the builder::
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/src/file3.ts (computed .d.ts)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/myproject/file1.ts:
@@ -343,7 +343,7 @@ Input::
 
 Output::
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/myproject/file1.ts:

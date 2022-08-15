@@ -125,7 +125,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/reexport/out/pure/index.d.ts (used version)
 /user/username/projects/reexport/src/main/index.ts (used version)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/reexport/src/pure/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/reexport/src/pure/index.ts:
@@ -325,7 +325,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/reexport/out/pure/index.d.ts (used version)
 /user/username/projects/reexport/src/main/index.ts (used version)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/reexport/src/pure/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/reexport/src/pure/index.ts:
@@ -482,7 +482,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/reexport/out/pure/index.d.ts (used version)
 /user/username/projects/reexport/src/main/index.ts (used version)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/reexport/src/pure/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/reexport/src/pure/index.ts:

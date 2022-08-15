@@ -55,7 +55,7 @@ Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 Open files: 
 	FileName: /user/username/projects/myproject/src/main.ts ProjectRootPath: undefined
 		Projects: /user/username/projects/myproject/tsconfig.json
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/tsconfig.json:
   {"pollingInterval":250}
 /a/lib/lib.d.ts:

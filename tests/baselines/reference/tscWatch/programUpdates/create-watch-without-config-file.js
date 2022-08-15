@@ -59,7 +59,7 @@ Shape signatures in builder refreshed for::
 /a/b/c/module.d.ts (used version)
 /a/b/c/app.ts (used version)
 
-WatchedFiles::
+PolledWatches::
 /a/b/c/app.ts:
   {"pollingInterval":250}
 /a/b/c/module.d.ts:

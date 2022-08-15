@@ -206,7 +206,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/packages/a/src/test.ts (computed .d.ts)
 /user/username/projects/myproject/packages/b/src/bar/foo.ts (used version)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/packages/a/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/myproject/packages/b/tsconfig.json:

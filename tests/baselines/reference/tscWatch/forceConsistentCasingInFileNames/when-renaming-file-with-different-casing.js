@@ -49,7 +49,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/logger.ts (used version)
 /user/username/projects/myproject/another.ts (used version)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/myproject/another.ts:
@@ -122,7 +122,7 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/myproject/another.ts:

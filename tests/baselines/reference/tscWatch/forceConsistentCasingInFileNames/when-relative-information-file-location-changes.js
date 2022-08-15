@@ -93,7 +93,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/modulea.ts (used version)
 /user/username/projects/myproject/moduleb.ts (used version)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/myproject/modulea.ts:
@@ -202,7 +202,7 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/modulea.ts (computed .d.ts)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/myproject/modulea.ts:

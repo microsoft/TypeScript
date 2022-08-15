@@ -57,7 +57,7 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/src/index.ts (used version)
 /users/username/projects/project/src/types/classnames.d.ts (used version)
 
-WatchedFiles::
+PolledWatches::
 /users/username/projects/project/tsconfig.json:
   {"pollingInterval":250}
 /users/username/projects/project/src/index.ts:
@@ -200,7 +200,7 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/src/types/classnames.d.ts (used version)
 /users/username/projects/project/src/index.ts (computed .d.ts)
 
-WatchedFiles::
+PolledWatches::
 /users/username/projects/project/tsconfig.json:
   {"pollingInterval":250}
 /users/username/projects/project/src/index.ts:

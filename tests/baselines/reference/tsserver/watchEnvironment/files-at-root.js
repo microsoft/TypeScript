@@ -43,7 +43,7 @@ Project 'c:/project/tsconfig.json' (Configured)
 Open files: 
 	FileName: c:/project/file1.ts ProjectRootPath: undefined
 		Projects: c:/project/tsconfig.json
-WatchedFiles::
+PolledWatches::
 c:/project/tsconfig.json:
   {"pollingInterval":250}
 c:/project/file2.ts:

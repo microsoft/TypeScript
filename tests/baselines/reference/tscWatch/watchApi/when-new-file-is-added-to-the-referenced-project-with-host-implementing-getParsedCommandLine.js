@@ -76,7 +76,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/projects/project1/class1.ts (used version)
 /user/username/projects/myproject/projects/project2/class2.ts (computed .d.ts during emit)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/projects/project2/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/myproject/projects/project1/tsconfig.json:
@@ -205,7 +205,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/projects/project1/class1.ts (computed .d.ts)
 /user/username/projects/myproject/projects/project2/class2.ts (computed .d.ts)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/projects/project2/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/myproject/projects/project1/tsconfig.json:
@@ -303,7 +303,7 @@ Project: /user/username/projects/myproject/projects/project1/tsconfig.json Detec
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/temp/file.d.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Wild card directory of referenced project
 
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/projects/project2/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/myproject/projects/project1/tsconfig.json:
@@ -347,7 +347,7 @@ Project: /user/username/projects/myproject/projects/project1/tsconfig.json Detec
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Wild card directory of referenced project
 
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/projects/project2/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/myproject/projects/project1/tsconfig.json:

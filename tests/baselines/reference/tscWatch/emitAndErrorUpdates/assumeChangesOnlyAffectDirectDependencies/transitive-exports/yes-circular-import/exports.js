@@ -97,7 +97,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/lib2/public.ts (used version)
 /user/username/projects/myproject/app.ts (used version)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/myproject/app.ts:
@@ -289,7 +289,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/app.ts (computed .d.ts)
 /user/username/projects/myproject/lib2/data2.ts (computed .d.ts)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/myproject/app.ts:
@@ -369,7 +369,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/lib1/tools/tools.interface.ts (computed .d.ts)
 /user/username/projects/myproject/lib1/tools/public.ts (computed .d.ts)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/myproject/app.ts:
@@ -444,7 +444,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/lib1/tools/tools.interface.ts (computed .d.ts)
 /user/username/projects/myproject/lib1/tools/public.ts (computed .d.ts)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/myproject/app.ts:

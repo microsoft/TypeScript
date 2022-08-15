@@ -64,7 +64,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/client/folder1/module1.ts (used version)
 /user/username/projects/myproject/client/linktofolder2/module2.ts (used version)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/myproject/client/folder1/module1.ts:
@@ -145,7 +145,7 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/client/linktofolder2/module3.ts (computed .d.ts)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/myproject/client/folder1/module1.ts:

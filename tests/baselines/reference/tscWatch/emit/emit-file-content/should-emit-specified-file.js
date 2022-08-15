@@ -55,7 +55,7 @@ Shape signatures in builder refreshed for::
 /a/b/f2.ts (used version)
 /a/b/f3.ts (used version)
 
-WatchedFiles::
+PolledWatches::
 /a/b/tsconfig.json:
   {"pollingInterval":250}
 /a/b/f1.ts:
@@ -135,7 +135,7 @@ Shape signatures in builder refreshed for::
 /a/b/f2.ts (computed .d.ts)
 /a/b/f3.ts (computed .d.ts)
 
-WatchedFiles::
+PolledWatches::
 /a/b/tsconfig.json:
   {"pollingInterval":250}
 /a/b/f1.ts:
@@ -202,7 +202,7 @@ Shape signatures in builder refreshed for::
 /a/b/f1.ts (computed .d.ts)
 /a/b/f2.ts (computed .d.ts)
 
-WatchedFiles::
+PolledWatches::
 /a/b/tsconfig.json:
   {"pollingInterval":250}
 /a/b/f1.ts:

@@ -148,7 +148,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/packages/pkg2/build/index.d.ts (used version)
 /user/username/projects/myproject/packages/pkg1/index.ts (used version)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/packages/pkg2/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/myproject/packages/pkg2/const.ts:
@@ -336,7 +336,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/packages/pkg2/build/other.d.ts (used version)
 /user/username/projects/myproject/packages/pkg1/index.ts (computed .d.ts)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/packages/pkg2/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/myproject/packages/pkg2/const.ts:
@@ -438,7 +438,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/packages/pkg2/build/index.d.ts (used version)
 /user/username/projects/myproject/packages/pkg1/index.ts (computed .d.ts)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/packages/pkg2/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/myproject/packages/pkg2/const.ts:

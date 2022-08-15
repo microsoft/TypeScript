@@ -52,7 +52,7 @@ Shape signatures in builder refreshed for::
 /compiler/lib.es5.d.ts (used version)
 /src/app.ts (used version)
 
-WatchedFiles::
+PolledWatches::
 /src/tsconfig.json:
   {"pollingInterval":250}
 /src/app.ts:
@@ -107,7 +107,7 @@ Shape signatures in builder refreshed for::
 /compiler/lib.es2015.promise.d.ts (used version)
 /src/app.ts (computed .d.ts)
 
-WatchedFiles::
+PolledWatches::
 /src/tsconfig.json:
   {"pollingInterval":250}
 /src/app.ts:

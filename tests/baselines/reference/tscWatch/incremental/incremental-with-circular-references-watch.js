@@ -76,7 +76,7 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/a.ts (used version)
 /users/username/projects/project/index.ts (used version)
 
-WatchedFiles::
+PolledWatches::
 /users/username/projects/project/tsconfig.json:
   {"pollingInterval":250}
 /users/username/projects/project/a.ts:
@@ -272,7 +272,7 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/c.ts (used version)
 /users/username/projects/project/b.ts (used version)
 
-WatchedFiles::
+PolledWatches::
 /users/username/projects/project/tsconfig.json:
   {"pollingInterval":250}
 /users/username/projects/project/a.ts:

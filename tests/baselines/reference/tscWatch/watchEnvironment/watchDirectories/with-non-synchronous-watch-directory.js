@@ -49,7 +49,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/node_modules/file2/index.d.ts (used version)
 /user/username/projects/myproject/src/file1.ts (used version)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/myproject/src/file1.ts:
@@ -87,7 +87,7 @@ Input::
 
 Output::
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/myproject/src/file1.ts:
@@ -145,7 +145,7 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/src/file1.ts (computed .d.ts)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/myproject/src/file1.ts:
@@ -197,7 +197,7 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/myproject/src/file1.ts:
@@ -226,7 +226,7 @@ Input::
 
 Output::
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/myproject/src/file1.ts:
@@ -255,7 +255,7 @@ Input::
 
 Output::
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/myproject/src/file1.ts:
@@ -287,7 +287,7 @@ export const x = 10;
 
 Output::
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/myproject/src/file1.ts:
@@ -316,7 +316,7 @@ Input::
 
 Output::
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/myproject/src/file1.ts:
@@ -347,7 +347,7 @@ Input::
 
 Output::
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/myproject/src/file1.ts:
@@ -400,7 +400,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/node_modules/file2/index.d.ts (used version)
 /user/username/projects/myproject/src/file1.ts (computed .d.ts)
 
-WatchedFiles::
+PolledWatches::
 /user/username/projects/myproject/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/myproject/src/file1.ts:

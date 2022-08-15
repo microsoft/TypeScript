@@ -30,7 +30,7 @@ Project '/dev/null/inferredProject1*' (Inferred)
 Open files: 
 	FileName: /User/userName/Projects/i/foo.ts ProjectRootPath: /User/userName/Projects/i
 		Projects: /dev/null/inferredProject1*
-WatchedFiles::
+PolledWatches::
 /user/username/projects/i/tsconfig.json:
   {"pollingInterval":250}
 /user/username/projects/i/jsconfig.json:

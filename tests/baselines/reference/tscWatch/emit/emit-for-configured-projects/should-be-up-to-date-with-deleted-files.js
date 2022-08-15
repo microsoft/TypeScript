@@ -67,7 +67,7 @@ Shape signatures in builder refreshed for::
 /a/b/globalfile3.ts (used version)
 /a/b/modulefile2.ts (used version)
 
-WatchedFiles::
+PolledWatches::
 /a/b/tsconfig.json:
   {"pollingInterval":250}
 /a/b/file1consumer1.ts:
@@ -160,7 +160,7 @@ Shape signatures in builder refreshed for::
 /a/b/modulefile1.ts (computed .d.ts)
 /a/b/file1consumer1.ts (computed .d.ts)
 
-WatchedFiles::
+PolledWatches::
 /a/b/tsconfig.json:
   {"pollingInterval":250}
 /a/b/file1consumer1.ts:
