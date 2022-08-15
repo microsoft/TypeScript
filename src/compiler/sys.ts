@@ -35,8 +35,7 @@ namespace ts {
 
     export type FileWatcherCallback = (fileName: string, eventKind: FileWatcherEventKind, modifiedTime?: Date) => void;
     export type DirectoryWatcherCallback = (fileName: string) => void;
-    /*@internal*/
-    export interface WatchedFile {
+    interface WatchedFile {
         readonly fileName: string;
         readonly callback: FileWatcherCallback;
         mtime: Date;
@@ -81,8 +80,7 @@ namespace ts {
     /* @internal */
     export let unchangedPollThresholds = createPollingIntervalBasedLevels(defaultChunkLevels);
 
-    /* @internal */
-    export function setCustomPollingValues(system: System) {
+    function setCustomPollingValues(system: System) {
         if (!system.getEnvironmentVariable) {
             return;
         }
@@ -189,31 +187,28 @@ namespace ts {
         }
     }
 
-    /* @internal */
-    export function createDynamicPriorityPollingWatchFile(host: {
+    interface WatchedFileWithUnchangedPolls extends WatchedFileWithIsClosed {
+        unchangedPolls: number;
+    }
+    function createDynamicPriorityPollingWatchFile(host: {
         getModifiedTime: NonNullable<System["getModifiedTime"]>;
         setTimeout: NonNullable<System["setTimeout"]>;
     }): HostWatchFile {
-        interface WatchedFile extends ts.WatchedFile {
-            isClosed?: boolean;
-            unchangedPolls: number;
-        }
-
-        interface PollingIntervalQueue extends Array<WatchedFile> {
+        interface PollingIntervalQueue extends Array<WatchedFileWithUnchangedPolls> {
             pollingInterval: PollingInterval;
             pollIndex: number;
             pollScheduled: boolean;
         }
 
-        const watchedFiles: WatchedFile[] = [];
-        const changedFilesInLastPoll: WatchedFile[] = [];
+        const watchedFiles: WatchedFileWithUnchangedPolls[] = [];
+        const changedFilesInLastPoll: WatchedFileWithUnchangedPolls[] = [];
         const lowPollingIntervalQueue = createPollingIntervalQueue(PollingInterval.Low);
         const mediumPollingIntervalQueue = createPollingIntervalQueue(PollingInterval.Medium);
         const highPollingIntervalQueue = createPollingIntervalQueue(PollingInterval.High);
         return watchFile;
 
         function watchFile(fileName: string, callback: FileWatcherCallback, defaultPollingInterval: PollingInterval): FileWatcher {
-            const file: WatchedFile = {
+            const file: WatchedFileWithUnchangedPolls = {
                 fileName,
                 callback,
                 unchangedPolls: 0,
@@ -233,7 +228,7 @@ namespace ts {
         }
 
         function createPollingIntervalQueue(pollingInterval: PollingInterval): PollingIntervalQueue {
-            const queue = [] as WatchedFile[] as PollingIntervalQueue;
+            const queue = [] as WatchedFileWithUnchangedPolls[] as PollingIntervalQueue;
             queue.pollingInterval = pollingInterval;
             queue.pollIndex = 0;
             queue.pollScheduled = false;
@@ -265,7 +260,7 @@ namespace ts {
             }
         }
 
-        function pollQueue(queue: (WatchedFile | undefined)[], pollingInterval: PollingInterval, pollIndex: number, chunkSize: number) {
+        function pollQueue(queue: (WatchedFileWithUnchangedPolls | undefined)[], pollingInterval: PollingInterval, pollIndex: number, chunkSize: number) {
             return pollWatchedFileQueue(
                 host,
                 queue,
@@ -274,7 +269,7 @@ namespace ts {
                 onWatchFileStat
             );
 
-            function onWatchFileStat(watchedFile: WatchedFile, pollIndex: number, fileChanged: boolean) {
+            function onWatchFileStat(watchedFile: WatchedFileWithUnchangedPolls, pollIndex: number, fileChanged: boolean) {
                 if (fileChanged) {
                     watchedFile.unchangedPolls = 0;
                     // Changed files go to changedFilesInLastPoll queue
@@ -311,12 +306,12 @@ namespace ts {
             }
         }
 
-        function addToPollingIntervalQueue(file: WatchedFile, pollingInterval: PollingInterval) {
+        function addToPollingIntervalQueue(file: WatchedFileWithUnchangedPolls, pollingInterval: PollingInterval) {
             pollingIntervalQueue(pollingInterval).push(file);
             scheduleNextPollIfNotAlreadyScheduled(pollingInterval);
         }
 
-        function addChangedFileToLowPollingIntervalQueue(file: WatchedFile) {
+        function addChangedFileToLowPollingIntervalQueue(file: WatchedFileWithUnchangedPolls) {
             changedFilesInLastPoll.push(file);
             scheduleNextPollIfNotAlreadyScheduled(PollingInterval.Low);
         }
@@ -423,8 +418,7 @@ namespace ts {
         }
     }
 
-    /* @internal */
-    export function createSingleFileWatcherPerName(
+    function createSingleFileWatcherPerName(
         watchFile: HostWatchFile,
         useCaseSensitiveFileNames: boolean
     ): HostWatchFile {
@@ -474,8 +468,7 @@ namespace ts {
     /**
      * Returns true if file status changed
      */
-    /*@internal*/
-    export function onWatchedFileStat(watchedFile: WatchedFile, modifiedTime: Date): boolean {
+    function onWatchedFileStat(watchedFile: WatchedFile, modifiedTime: Date): boolean {
         const oldTime = watchedFile.mtime.getTime();
         const newTime = modifiedTime.getTime();
         if (oldTime !== newTime) {
@@ -512,8 +505,7 @@ namespace ts {
         curSysLog = logger;
     }
 
-    /*@internal*/
-    export interface RecursiveDirectoryWatcherHost {
+    interface RecursiveDirectoryWatcherHost {
         watchDirectory: HostWatchDirectory;
         useCaseSensitiveFileNames: boolean;
         getCurrentDirectory: System["getCurrentDirectory"];
@@ -529,8 +521,7 @@ namespace ts {
      * that means if this is recursive watcher, watch the children directories as well
      * (eg on OS that dont support recursive watch using fs.watch use fs.watchFile)
      */
-    /*@internal*/
-    export function createDirectoryWatcherSupportingRecursive({
+    function createDirectoryWatcherSupportingRecursive({
         watchDirectory,
         useCaseSensitiveFileNames,
         getCurrentDirectory,
@@ -792,8 +783,7 @@ namespace ts {
         Directory,
     }
 
-    /*@internal*/
-    export function createFileWatcherCallback(callback: FsWatchCallback): FileWatcherCallback {
+    function createFileWatcherCallback(callback: FsWatchCallback): FileWatcherCallback {
         return (_fileName, eventKind, modifiedTime) => callback(eventKind === FileWatcherEventKind.Changed ? "change" : "rename", "", modifiedTime);
     }
 
@@ -854,7 +844,7 @@ namespace ts {
     /*@internal*/
     export interface CreateSystemWatchFunctions {
         // Polling watch file
-        pollingWatchFile: HostWatchFile;
+        pollingWatchFileWorker: HostWatchFile;
         // For dynamic polling watch file
         getModifiedTime: NonNullable<System["getModifiedTime"]>;
         setTimeout: NonNullable<System["setTimeout"]>;
@@ -878,7 +868,7 @@ namespace ts {
 
     /*@internal*/
     export function createSystemWatchFunctions({
-        pollingWatchFile,
+        pollingWatchFileWorker,
         getModifiedTime,
         setTimeout,
         clearTimeout,
@@ -896,6 +886,7 @@ namespace ts {
         inodeWatching,
         sysLog,
     }: CreateSystemWatchFunctions): { watchFile: HostWatchFile; watchDirectory: HostWatchDirectory; } {
+        const pollingWatchFile = createSingleFileWatcherPerName(pollingWatchFileWorker, useCaseSensitiveFileNames);
         let dynamicPollingWatchFile: HostWatchFile | undefined;
         let fixedChunkSizePollingWatchFile: HostWatchFile | undefined;
         let nonPollingWatchFile: HostWatchFile | undefined;
@@ -1445,7 +1436,7 @@ namespace ts {
             const fsSupportsRecursiveFsWatch = isNode4OrLater && (process.platform === "win32" || process.platform === "darwin");
             const getCurrentDirectory = memoize(() => process.cwd());
             const { watchFile, watchDirectory } = createSystemWatchFunctions({
-                pollingWatchFile: createSingleFileWatcherPerName(fsWatchFileWorker, useCaseSensitiveFileNames),
+                pollingWatchFileWorker: fsWatchFileWorker,
                 getModifiedTime,
                 setTimeout,
                 clearTimeout,

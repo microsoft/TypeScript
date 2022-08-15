@@ -308,7 +308,6 @@ interface Array<T> { length: number; [n: number]: T; }`
 
     export enum Tsc_WatchFile {
         DynamicPolling = "DynamicPriorityPolling",
-        SingleFileWatcherPerName = "SingleFileWatcherPerName"
     }
 
     export enum Tsc_WatchDirectory {
@@ -386,12 +385,7 @@ interface Array<T> { length: number; [n: number]: T; }`
                 // We dont have polling watch file
                 // it is essentially fsWatch but lets get that separate from fsWatch and
                 // into watchedFiles for easier testing
-                pollingWatchFile: tscWatchFile === Tsc_WatchFile.SingleFileWatcherPerName ?
-                    createSingleFileWatcherPerName(
-                        this.watchFileWorker.bind(this),
-                        this.useCaseSensitiveFileNames
-                    ) :
-                    this.watchFileWorker.bind(this),
+                pollingWatchFileWorker: this.watchFileWorker.bind(this),
                 getModifiedTime: this.getModifiedTime.bind(this),
                 setTimeout: this.setTimeout.bind(this),
                 clearTimeout: this.clearTimeout.bind(this),
