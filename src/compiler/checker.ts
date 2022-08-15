@@ -19658,7 +19658,7 @@ namespace ts {
                                     // create a new chain for the constraint error
                                     resetErrorInfo(saveErrorInfo);
                                 }
-                                if (result = isRelatedTo(source, constraint, RecursionFlags.Target, reportErrors)) {
+                                if (result = isRelatedTo(source, constraint, RecursionFlags.Target, reportErrors, /* headMessage */ undefined, intersectionState)) {
                                     return result;
                                 }
                                 // prefer the shorter chain of the constraint comparison chain, and the direct comparison chain
