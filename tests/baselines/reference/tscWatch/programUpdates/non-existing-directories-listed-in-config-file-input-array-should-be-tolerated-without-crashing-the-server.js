@@ -44,15 +44,15 @@ No shapes updated in the builder::
 
 WatchedFiles::
 /a/b/tsconfig.json:
-  {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /a/b/node_modules/@types:
-  {"fileName":"/a/b/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 /a/b/app:
-  {"fileName":"/a/b/app","pollingInterval":500}
+  {"pollingInterval":500}
 /a/b/test:
-  {"fileName":"/a/b/test","pollingInterval":500}
+  {"pollingInterval":500}
 /a/b/something:
-  {"fileName":"/a/b/something","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
 

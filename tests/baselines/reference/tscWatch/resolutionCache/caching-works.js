@@ -58,17 +58,17 @@ Shape signatures in builder refreshed for::
 
 WatchedFiles::
 /a/d/f0.ts:
-  {"fileName":"/a/d/f0.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/f1.ts:
-  {"fileName":"/a/f1.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+  {"pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /a:
-  {"directoryName":"/a"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -131,17 +131,17 @@ Shape signatures in builder refreshed for::
 
 WatchedFiles::
 /a/d/f0.ts:
-  {"fileName":"/a/d/f0.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/f1.ts:
-  {"fileName":"/a/f1.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+  {"pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /a:
-  {"directoryName":"/a"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -189,19 +189,19 @@ Shape signatures in builder refreshed for::
 
 WatchedFiles::
 /a/d/f0.ts:
-  {"fileName":"/a/d/f0.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /node_modules:
-  {"fileName":"/node_modules","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
 /:
-  {"directoryName":""}
+  {}
 
 FsWatchesRecursive::
 /a:
-  {"directoryName":"/a"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -257,17 +257,17 @@ Shape signatures in builder refreshed for::
 
 WatchedFiles::
 /a/d/f0.ts:
-  {"fileName":"/a/d/f0.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/f1.ts:
-  {"fileName":"/a/f1.ts","pollingInterval":250}
+  {"pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /a:
-  {"directoryName":"/a"}
+  {}
 
 exitCode:: ExitStatus.undefined
 

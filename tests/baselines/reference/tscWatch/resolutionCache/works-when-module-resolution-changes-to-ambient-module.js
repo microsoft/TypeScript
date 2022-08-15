@@ -47,13 +47,13 @@ Shape signatures in builder refreshed for::
 
 WatchedFiles::
 /a/b/foo.ts:
-  {"fileName":"/a/b/foo.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/b/node_modules:
-  {"fileName":"/a/b/node_modules","pollingInterval":500}
+  {"pollingInterval":500}
 /a/b/node_modules/@types:
-  {"fileName":"/a/b/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
 
@@ -115,19 +115,19 @@ Shape signatures in builder refreshed for::
 
 WatchedFiles::
 /a/b/foo.ts:
-  {"fileName":"/a/b/foo.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/b/node_modules/@types/node/index.d.ts:
-  {"fileName":"/a/b/node_modules/@types/node/index.d.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/b/node_modules/@types/node/package.json:
-  {"fileName":"/a/b/node_modules/@types/node/package.json","pollingInterval":250}
+  {"pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /a/b/node_modules/@types:
-  {"directoryName":"/a/b/node_modules/@types"}
+  {}
 
 exitCode:: ExitStatus.undefined
 

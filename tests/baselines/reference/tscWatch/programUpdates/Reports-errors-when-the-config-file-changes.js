@@ -45,19 +45,19 @@ Shape signatures in builder refreshed for::
 
 WatchedFiles::
 /a/b/tsconfig.json:
-  {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /a/b/app.ts:
-  {"fileName":"/a/b/app.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/b/node_modules/@types:
-  {"fileName":"/a/b/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
 
 FsWatchesRecursive::
 /a/b:
-  {"directoryName":"/a/b"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -103,19 +103,19 @@ No shapes updated in the builder::
 
 WatchedFiles::
 /a/b/tsconfig.json:
-  {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /a/b/app.ts:
-  {"fileName":"/a/b/app.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/b/node_modules/@types:
-  {"fileName":"/a/b/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
 
 FsWatchesRecursive::
 /a/b:
-  {"directoryName":"/a/b"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -151,19 +151,19 @@ No shapes updated in the builder::
 
 WatchedFiles::
 /a/b/tsconfig.json:
-  {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /a/b/app.ts:
-  {"fileName":"/a/b/app.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/b/node_modules/@types:
-  {"fileName":"/a/b/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
 
 FsWatchesRecursive::
 /a/b:
-  {"directoryName":"/a/b"}
+  {}
 
 exitCode:: ExitStatus.undefined
 

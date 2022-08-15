@@ -45,21 +45,21 @@ Shape signatures in builder refreshed for::
 
 WatchedFiles::
 /user/username/projects/myproject/project/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/Project/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/project/file1.ts:
-  {"fileName":"/user/username/projects/myproject/Project/file1.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/project/node_modules/@types:
-  {"fileName":"/user/username/projects/myproject/Project/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
-  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/myproject/project:
-  {"directoryName":"/user/username/projects/myproject/project"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -102,23 +102,23 @@ Shape signatures in builder refreshed for::
 
 WatchedFiles::
 /user/username/projects/myproject/project/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/Project/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/project/file1.ts:
-  {"fileName":"/user/username/projects/myproject/Project/file1.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/project/node_modules/@types:
-  {"fileName":"/user/username/projects/myproject/Project/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
-  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 /user/username/projects/myproject/project/file2.ts:
-  {"fileName":"/user/username/projects/myproject/Project/file2.ts","pollingInterval":250}
+  {"pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/myproject/project:
-  {"directoryName":"/user/username/projects/myproject/project"}
+  {}
 
 exitCode:: ExitStatus.undefined
 

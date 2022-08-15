@@ -47,18 +47,18 @@ Open files:
 		Projects: c:/myfolder/allproject/project/tsconfig.json
 WatchedFiles::
 c:/myfolder/allproject/project/tsconfig.json:
-  {"fileName":"c:/myfolder/allproject/project/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 c:/myfolder/allproject/project/file2.ts:
-  {"fileName":"c:/myfolder/allproject/project/file2.ts","pollingInterval":250}
+  {"pollingInterval":250}
 c:/a/lib/lib.d.ts:
-  {"fileName":"c:/a/lib/lib.d.ts","pollingInterval":250}
+  {"pollingInterval":250}
 c:/myfolder/allproject/project/node_modules/@types:
-  {"fileName":"c:/myfolder/allproject/project/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 c:/myfolder/allproject/node_modules/@types:
-  {"fileName":"c:/myfolder/allproject/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
 
 FsWatchesRecursive::
 c:/myfolder/allproject/project:
-  {"directoryName":"c:/myfolder/allproject/project"}
+  {}

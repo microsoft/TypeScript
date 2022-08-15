@@ -51,21 +51,21 @@ Shape signatures in builder refreshed for::
 
 WatchedFiles::
 /a/b/tsconfig.json:
-  {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /a/b/app.ts:
-  {"fileName":"/a/b/app.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/b/node_modules/@types/node/index.d.ts:
-  {"fileName":"/a/b/node_modules/@types/node/index.d.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+  {"pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /a/b/node_modules:
-  {"directoryName":"/a/b/node_modules"}
+  {}
 /a/b:
-  {"directoryName":"/a/b"}
+  {}
 
 exitCode:: ExitStatus.undefined
 

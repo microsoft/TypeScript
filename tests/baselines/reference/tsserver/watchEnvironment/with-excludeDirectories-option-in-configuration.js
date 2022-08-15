@@ -57,13 +57,13 @@ Open files:
 		Projects: /user/username/projects/myproject/tsconfig.json
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+  {"pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/myproject/src:
-  {"directoryName":"/user/username/projects/myproject/src"}
-  {"directoryName":"/user/username/projects/myproject/src"}
+  {}
+  {}

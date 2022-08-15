@@ -62,15 +62,15 @@ Shape signatures in builder refreshed for::
 
 WatchedFiles::
 /a/b/foo.ts:
-  {"fileName":"/a/b/foo.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/b/bar.d.ts:
-  {"fileName":"/a/b/bar.d.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/b/node_modules:
-  {"fileName":"/a/b/node_modules","pollingInterval":500}
+  {"pollingInterval":500}
 /a/b/node_modules/@types:
-  {"fileName":"/a/b/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
 
@@ -129,15 +129,15 @@ Shape signatures in builder refreshed for::
 
 WatchedFiles::
 /a/b/foo.ts:
-  {"fileName":"/a/b/foo.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/b/bar.d.ts:
-  {"fileName":"/a/b/bar.d.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/b/node_modules:
-  {"fileName":"/a/b/node_modules","pollingInterval":500}
+  {"pollingInterval":500}
 /a/b/node_modules/@types:
-  {"fileName":"/a/b/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
 

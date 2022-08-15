@@ -54,13 +54,13 @@ Shape signatures in builder refreshed for::
 
 WatchedFiles::
 /user/someone/projects/myproject/file3.ts:
-  {"fileName":"/user/someone/projects/myproject/file3.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/someone/projects/myproject/file2.ts:
-  {"fileName":"/user/someone/projects/myproject/file2.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/someone/projects/myproject/file1.ts:
-  {"fileName":"/user/someone/projects/myproject/file1.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+  {"pollingInterval":250}
 
 FsWatches::
 
@@ -117,13 +117,13 @@ Shape signatures in builder refreshed for::
 
 WatchedFiles::
 /user/someone/projects/myproject/file3.ts:
-  {"fileName":"/user/someone/projects/myproject/file3.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/someone/projects/myproject/file2.ts:
-  {"fileName":"/user/someone/projects/myproject/file2.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/someone/projects/myproject/file1.ts:
-  {"fileName":"/user/someone/projects/myproject/file1.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+  {"pollingInterval":250}
 
 FsWatches::
 

@@ -56,21 +56,21 @@ Shape signatures in builder refreshed for::
 
 WatchedFiles::
 /a/b/tsconfig.json:
-  {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /a/b/referencefile1.ts:
-  {"fileName":"/a/b/referenceFile1.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/b/modulefile2.ts:
-  {"fileName":"/a/b/modulefile2.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/b/node_modules/@types:
-  {"fileName":"/a/b/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
 
 FsWatchesRecursive::
 /a/b:
-  {"directoryName":"/a/b"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -129,21 +129,21 @@ Shape signatures in builder refreshed for::
 
 WatchedFiles::
 /a/b/tsconfig.json:
-  {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /a/b/referencefile1.ts:
-  {"fileName":"/a/b/referenceFile1.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/b/modulefile2.ts:
-  {"fileName":"/a/b/modulefile2.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/b/node_modules/@types:
-  {"fileName":"/a/b/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
 
 FsWatchesRecursive::
 /a/b:
-  {"directoryName":"/a/b"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -200,21 +200,21 @@ Shape signatures in builder refreshed for::
 
 WatchedFiles::
 /a/b/tsconfig.json:
-  {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /a/b/referencefile1.ts:
-  {"fileName":"/a/b/referenceFile1.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/b/node_modules/@types:
-  {"fileName":"/a/b/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 /a/b/modulefile2.ts:
-  {"fileName":"/a/b/moduleFile2.ts","pollingInterval":250}
+  {"pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /a/b:
-  {"directoryName":"/a/b"}
+  {}
 
 exitCode:: ExitStatus.undefined
 

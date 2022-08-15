@@ -32,15 +32,15 @@ Open files:
 		Projects: /dev/null/inferredProject1*
 WatchedFiles::
 /user/username/projects/i/tsconfig.json:
-  {"fileName":"/User/userName/Projects/i/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/i/jsconfig.json:
-  {"fileName":"/User/userName/Projects/i/jsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/i/node_modules:
-  {"fileName":"/User/userName/Projects/i/node_modules","pollingInterval":500}
+  {"pollingInterval":500}
 /user/username/projects/i/node_modules/@types:
-  {"fileName":"/User/userName/Projects/i/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
 

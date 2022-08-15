@@ -45,11 +45,11 @@ Shape signatures in builder refreshed for::
 
 WatchedFiles::
 /a/username/project/tsconfig.json:
-  {"fileName":"/a/username/project/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /a/username/project/src/file1.ts:
-  {"fileName":"/a/username/project/src/file1.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+  {"pollingInterval":250}
 
 FsWatches::
 
@@ -92,11 +92,11 @@ Shape signatures in builder refreshed for::
 
 WatchedFiles::
 /a/username/project/tsconfig.json:
-  {"fileName":"/a/username/project/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/username/project/src/file2.ts:
-  {"fileName":"/a/username/project/src/file2.ts","pollingInterval":250}
+  {"pollingInterval":250}
 
 FsWatches::
 

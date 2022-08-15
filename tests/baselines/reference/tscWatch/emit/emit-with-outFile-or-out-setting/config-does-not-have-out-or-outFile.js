@@ -51,21 +51,21 @@ Shape signatures in builder refreshed for::
 
 WatchedFiles::
 /a/tsconfig.json:
-  {"fileName":"/a/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /a/a.ts:
-  {"fileName":"/a/a.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/b.ts:
-  {"fileName":"/a/b.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/node_modules/@types:
-  {"fileName":"/a/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
 
 FsWatchesRecursive::
 /a:
-  {"directoryName":"/a"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -112,21 +112,21 @@ Shape signatures in builder refreshed for::
 
 WatchedFiles::
 /a/tsconfig.json:
-  {"fileName":"/a/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /a/a.ts:
-  {"fileName":"/a/a.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/b.ts:
-  {"fileName":"/a/b.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/node_modules/@types:
-  {"fileName":"/a/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
 
 FsWatchesRecursive::
 /a:
-  {"directoryName":"/a"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -170,21 +170,21 @@ Shape signatures in builder refreshed for::
 
 WatchedFiles::
 /a/tsconfig.json:
-  {"fileName":"/a/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /a/a.ts:
-  {"fileName":"/a/a.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/b.ts:
-  {"fileName":"/a/b.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/node_modules/@types:
-  {"fileName":"/a/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
 
 FsWatchesRecursive::
 /a:
-  {"directoryName":"/a"}
+  {}
 
 exitCode:: ExitStatus.undefined
 

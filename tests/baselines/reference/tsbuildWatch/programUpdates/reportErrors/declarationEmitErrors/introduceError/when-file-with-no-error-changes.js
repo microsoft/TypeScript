@@ -54,17 +54,17 @@ Shape signatures in builder refreshed for::
 
 WatchedFiles::
 /user/username/projects/solution/app/tsconfig.json:
-  {"fileName":"/user/username/projects/solution/app/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/solution/app/filewitherror.ts:
-  {"fileName":"/user/username/projects/solution/app/fileWithError.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/solution/app/filewithouterror.ts:
-  {"fileName":"/user/username/projects/solution/app/fileWithoutError.ts","pollingInterval":250}
+  {"pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/solution/app:
-  {"directoryName":"/user/username/projects/solution/app"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -187,17 +187,17 @@ Shape signatures in builder refreshed for::
 
 WatchedFiles::
 /user/username/projects/solution/app/tsconfig.json:
-  {"fileName":"/user/username/projects/solution/app/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/solution/app/filewitherror.ts:
-  {"fileName":"/user/username/projects/solution/app/fileWithError.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/solution/app/filewithouterror.ts:
-  {"fileName":"/user/username/projects/solution/app/fileWithoutError.ts","pollingInterval":250}
+  {"pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/solution/app:
-  {"directoryName":"/user/username/projects/solution/app"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -238,17 +238,17 @@ Shape signatures in builder refreshed for::
 
 WatchedFiles::
 /user/username/projects/solution/app/tsconfig.json:
-  {"fileName":"/user/username/projects/solution/app/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/solution/app/filewitherror.ts:
-  {"fileName":"/user/username/projects/solution/app/fileWithError.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/solution/app/filewithouterror.ts:
-  {"fileName":"/user/username/projects/solution/app/fileWithoutError.ts","pollingInterval":250}
+  {"pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/solution/app:
-  {"directoryName":"/user/username/projects/solution/app"}
+  {}
 
 exitCode:: ExitStatus.undefined
 

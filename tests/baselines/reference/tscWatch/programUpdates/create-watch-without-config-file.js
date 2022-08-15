@@ -61,17 +61,17 @@ Shape signatures in builder refreshed for::
 
 WatchedFiles::
 /a/b/c/app.ts:
-  {"fileName":"/a/b/c/app.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/b/c/module.d.ts:
-  {"fileName":"/a/b/c/module.d.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+  {"pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /a:
-  {"directoryName":"/a"}
+  {}
 
 exitCode:: ExitStatus.undefined
 

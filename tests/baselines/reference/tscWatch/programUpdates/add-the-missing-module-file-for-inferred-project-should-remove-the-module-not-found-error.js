@@ -47,15 +47,15 @@ Shape signatures in builder refreshed for::
 
 WatchedFiles::
 /a/b/file1.ts:
-  {"fileName":"/a/b/file1.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+  {"pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /a:
-  {"directoryName":"/a"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -100,11 +100,11 @@ Shape signatures in builder refreshed for::
 
 WatchedFiles::
 /a/b/file1.ts:
-  {"fileName":"/a/b/file1.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/b/modulefile.ts:
-  {"fileName":"/a/b/moduleFile.ts","pollingInterval":250}
+  {"pollingInterval":250}
 
 FsWatches::
 

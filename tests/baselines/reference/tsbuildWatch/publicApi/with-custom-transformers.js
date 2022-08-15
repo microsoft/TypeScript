@@ -87,23 +87,23 @@ Shape signatures in builder refreshed for::
 
 WatchedFiles::
 /user/username/projects/myproject/shared/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/shared/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/shared/index.ts:
-  {"fileName":"/user/username/projects/myproject/shared/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/webpack/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/webpack/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/webpack/index.ts:
-  {"fileName":"/user/username/projects/myproject/webpack/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/myproject/shared:
-  {"directoryName":"/user/username/projects/myproject/shared"}
+  {}
 /user/username/projects/myproject/webpack:
-  {"directoryName":"/user/username/projects/myproject/webpack"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -313,23 +313,23 @@ No shapes updated in the builder::
 
 WatchedFiles::
 /user/username/projects/myproject/shared/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/shared/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/shared/index.ts:
-  {"fileName":"/user/username/projects/myproject/shared/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/webpack/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/webpack/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/webpack/index.ts:
-  {"fileName":"/user/username/projects/myproject/webpack/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/myproject/shared:
-  {"directoryName":"/user/username/projects/myproject/shared"}
+  {}
 /user/username/projects/myproject/webpack:
-  {"directoryName":"/user/username/projects/myproject/webpack"}
+  {}
 
 exitCode:: ExitStatus.undefined
 

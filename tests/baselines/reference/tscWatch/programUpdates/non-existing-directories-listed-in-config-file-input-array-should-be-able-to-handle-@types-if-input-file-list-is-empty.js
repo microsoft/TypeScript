@@ -50,13 +50,13 @@ No shapes updated in the builder::
 
 WatchedFiles::
 /a/tsconfig.json:
-  {"fileName":"/a/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /a/node_modules/@types:
-  {"directoryName":"/a/node_modules/@types"}
+  {}
 
 exitCode:: ExitStatus.undefined
 

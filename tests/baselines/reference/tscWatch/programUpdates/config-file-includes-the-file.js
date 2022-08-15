@@ -57,17 +57,17 @@ Shape signatures in builder refreshed for::
 
 WatchedFiles::
 /a/c/tsconfig.json:
-  {"fileName":"/a/c/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /a/c/f2.ts:
-  {"fileName":"/a/c/f2.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/b/f1.ts:
-  {"fileName":"/a/b/f1.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/c/f3.ts:
-  {"fileName":"/a/c/f3.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/c/node_modules/@types:
-  {"fileName":"/a/c/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
 

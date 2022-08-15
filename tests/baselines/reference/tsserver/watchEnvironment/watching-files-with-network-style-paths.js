@@ -31,13 +31,13 @@ Open files:
 		Projects: /dev/null/inferredProject1*
 WatchedFiles::
 c:/myprojects/project/tsconfig.json:
-  {"fileName":"c:/myprojects/project/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 c:/myprojects/project/jsconfig.json:
-  {"fileName":"c:/myprojects/project/jsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 c:/a/lib/lib.d.ts:
-  {"fileName":"c:/a/lib/lib.d.ts","pollingInterval":250}
+  {"pollingInterval":250}
 c:/myprojects/project/node_modules/@types:
-  {"fileName":"c:/myprojects/project/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
 
@@ -76,13 +76,13 @@ Open files:
 		Projects: /dev/null/inferredProject1*
 WatchedFiles::
 //vda1cs4850/myprojects/project/tsconfig.json:
-  {"fileName":"//vda1cs4850/myprojects/project/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 //vda1cs4850/myprojects/project/jsconfig.json:
-  {"fileName":"//vda1cs4850/myprojects/project/jsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 //vda1cs4850/a/lib/lib.d.ts:
-  {"fileName":"//vda1cs4850/a/lib/lib.d.ts","pollingInterval":250}
+  {"pollingInterval":250}
 //vda1cs4850/myprojects/project/node_modules/@types:
-  {"fileName":"//vda1cs4850/myprojects/project/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
 
@@ -121,13 +121,13 @@ Open files:
 		Projects: /dev/null/inferredProject1*
 WatchedFiles::
 //vda1cs4850/c$/myprojects/project/tsconfig.json:
-  {"fileName":"//vda1cs4850/c$/myprojects/project/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 //vda1cs4850/c$/myprojects/project/jsconfig.json:
-  {"fileName":"//vda1cs4850/c$/myprojects/project/jsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 //vda1cs4850/a/lib/lib.d.ts:
-  {"fileName":"//vda1cs4850/a/lib/lib.d.ts","pollingInterval":250}
+  {"pollingInterval":250}
 //vda1cs4850/c$/myprojects/project/node_modules/@types:
-  {"fileName":"//vda1cs4850/c$/myprojects/project/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
 
@@ -166,13 +166,13 @@ Open files:
 		Projects: /dev/null/inferredProject1*
 WatchedFiles::
 c:/users/username/myprojects/project/tsconfig.json:
-  {"fileName":"c:/users/username/myprojects/project/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 c:/users/username/myprojects/project/jsconfig.json:
-  {"fileName":"c:/users/username/myprojects/project/jsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 c:/a/lib/lib.d.ts:
-  {"fileName":"c:/a/lib/lib.d.ts","pollingInterval":250}
+  {"pollingInterval":250}
 c:/users/username/myprojects/project/node_modules/@types:
-  {"fileName":"c:/users/username/myprojects/project/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
 
@@ -211,13 +211,13 @@ Open files:
 		Projects: /dev/null/inferredProject1*
 WatchedFiles::
 //vda1cs4850/c$/users/username/myprojects/project/tsconfig.json:
-  {"fileName":"//vda1cs4850/c$/users/username/myprojects/project/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 //vda1cs4850/c$/users/username/myprojects/project/jsconfig.json:
-  {"fileName":"//vda1cs4850/c$/users/username/myprojects/project/jsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 //vda1cs4850/a/lib/lib.d.ts:
-  {"fileName":"//vda1cs4850/a/lib/lib.d.ts","pollingInterval":250}
+  {"pollingInterval":250}
 //vda1cs4850/c$/users/username/myprojects/project/node_modules/@types:
-  {"fileName":"//vda1cs4850/c$/users/username/myprojects/project/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
 

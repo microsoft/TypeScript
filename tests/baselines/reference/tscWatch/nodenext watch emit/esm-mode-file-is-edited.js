@@ -56,21 +56,21 @@ Shape signatures in builder refreshed for::
 
 WatchedFiles::
 /project/tsconfig.json:
-  {"fileName":"/project/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /project/src/deps.d.ts:
-  {"fileName":"/project/src/deps.d.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /project/src/index.ts:
-  {"fileName":"/project/src/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/lib/lib.es2020.full.d.ts:
-  {"fileName":"/a/lib/lib.es2020.full.d.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /project/node_modules/@types:
-  {"fileName":"/project/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
 
 FsWatchesRecursive::
 /project:
-  {"directoryName":"/project"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -112,21 +112,21 @@ Shape signatures in builder refreshed for::
 
 WatchedFiles::
 /project/tsconfig.json:
-  {"fileName":"/project/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /project/src/deps.d.ts:
-  {"fileName":"/project/src/deps.d.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /project/src/index.ts:
-  {"fileName":"/project/src/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/lib/lib.es2020.full.d.ts:
-  {"fileName":"/a/lib/lib.es2020.full.d.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /project/node_modules/@types:
-  {"fileName":"/project/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
 
 FsWatchesRecursive::
 /project:
-  {"directoryName":"/project"}
+  {}
 
 exitCode:: ExitStatus.undefined
 

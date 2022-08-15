@@ -76,23 +76,23 @@ Shape signatures in builder refreshed for::
 
 WatchedFiles::
 /user/username/projects/noemitonerror/tsconfig.json:
-  {"fileName":"/user/username/projects/noEmitOnError/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/noemitonerror/shared/types/db.ts:
-  {"fileName":"/user/username/projects/noEmitOnError/shared/types/db.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/noemitonerror/src/main.ts:
-  {"fileName":"/user/username/projects/noEmitOnError/src/main.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/noemitonerror/src/other.ts:
-  {"fileName":"/user/username/projects/noEmitOnError/src/other.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/noemitonerror/node_modules/@types:
-  {"fileName":"/user/username/projects/noEmitOnError/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/noemitonerror:
-  {"directoryName":"/user/username/projects/noemitonerror"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -130,23 +130,23 @@ No shapes updated in the builder::
 
 WatchedFiles::
 /user/username/projects/noemitonerror/tsconfig.json:
-  {"fileName":"/user/username/projects/noEmitOnError/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/noemitonerror/shared/types/db.ts:
-  {"fileName":"/user/username/projects/noEmitOnError/shared/types/db.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/noemitonerror/src/main.ts:
-  {"fileName":"/user/username/projects/noEmitOnError/src/main.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/noemitonerror/src/other.ts:
-  {"fileName":"/user/username/projects/noEmitOnError/src/other.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/noemitonerror/node_modules/@types:
-  {"fileName":"/user/username/projects/noEmitOnError/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/noemitonerror:
-  {"directoryName":"/user/username/projects/noemitonerror"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -186,23 +186,23 @@ Shape signatures in builder refreshed for::
 
 WatchedFiles::
 /user/username/projects/noemitonerror/tsconfig.json:
-  {"fileName":"/user/username/projects/noEmitOnError/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/noemitonerror/shared/types/db.ts:
-  {"fileName":"/user/username/projects/noEmitOnError/shared/types/db.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/noemitonerror/src/main.ts:
-  {"fileName":"/user/username/projects/noEmitOnError/src/main.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/noemitonerror/src/other.ts:
-  {"fileName":"/user/username/projects/noEmitOnError/src/other.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/noemitonerror/node_modules/@types:
-  {"fileName":"/user/username/projects/noEmitOnError/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/noemitonerror:
-  {"directoryName":"/user/username/projects/noemitonerror"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -264,23 +264,23 @@ Shape signatures in builder refreshed for::
 
 WatchedFiles::
 /user/username/projects/noemitonerror/tsconfig.json:
-  {"fileName":"/user/username/projects/noEmitOnError/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/noemitonerror/shared/types/db.ts:
-  {"fileName":"/user/username/projects/noEmitOnError/shared/types/db.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/noemitonerror/src/main.ts:
-  {"fileName":"/user/username/projects/noEmitOnError/src/main.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/noemitonerror/src/other.ts:
-  {"fileName":"/user/username/projects/noEmitOnError/src/other.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/noemitonerror/node_modules/@types:
-  {"fileName":"/user/username/projects/noEmitOnError/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/noemitonerror:
-  {"directoryName":"/user/username/projects/noemitonerror"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -318,23 +318,23 @@ No shapes updated in the builder::
 
 WatchedFiles::
 /user/username/projects/noemitonerror/tsconfig.json:
-  {"fileName":"/user/username/projects/noEmitOnError/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/noemitonerror/shared/types/db.ts:
-  {"fileName":"/user/username/projects/noEmitOnError/shared/types/db.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/noemitonerror/src/main.ts:
-  {"fileName":"/user/username/projects/noEmitOnError/src/main.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/noemitonerror/src/other.ts:
-  {"fileName":"/user/username/projects/noEmitOnError/src/other.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/noemitonerror/node_modules/@types:
-  {"fileName":"/user/username/projects/noEmitOnError/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/noemitonerror:
-  {"directoryName":"/user/username/projects/noemitonerror"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -372,23 +372,23 @@ Shape signatures in builder refreshed for::
 
 WatchedFiles::
 /user/username/projects/noemitonerror/tsconfig.json:
-  {"fileName":"/user/username/projects/noEmitOnError/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/noemitonerror/shared/types/db.ts:
-  {"fileName":"/user/username/projects/noEmitOnError/shared/types/db.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/noemitonerror/src/main.ts:
-  {"fileName":"/user/username/projects/noEmitOnError/src/main.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/noemitonerror/src/other.ts:
-  {"fileName":"/user/username/projects/noEmitOnError/src/other.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/noemitonerror/node_modules/@types:
-  {"fileName":"/user/username/projects/noEmitOnError/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/noemitonerror:
-  {"directoryName":"/user/username/projects/noemitonerror"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -427,23 +427,23 @@ No shapes updated in the builder::
 
 WatchedFiles::
 /user/username/projects/noemitonerror/tsconfig.json:
-  {"fileName":"/user/username/projects/noEmitOnError/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/noemitonerror/shared/types/db.ts:
-  {"fileName":"/user/username/projects/noEmitOnError/shared/types/db.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/noemitonerror/src/main.ts:
-  {"fileName":"/user/username/projects/noEmitOnError/src/main.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/noemitonerror/src/other.ts:
-  {"fileName":"/user/username/projects/noEmitOnError/src/other.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/noemitonerror/node_modules/@types:
-  {"fileName":"/user/username/projects/noEmitOnError/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/noemitonerror:
-  {"directoryName":"/user/username/projects/noemitonerror"}
+  {}
 
 exitCode:: ExitStatus.undefined
 

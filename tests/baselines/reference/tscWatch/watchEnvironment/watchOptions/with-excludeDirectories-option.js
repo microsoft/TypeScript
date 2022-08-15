@@ -63,23 +63,23 @@ Shape signatures in builder refreshed for::
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/src/main.ts:
-  {"fileName":"/user/username/projects/myproject/src/main.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/node_modules/bar/index.d.ts:
-  {"fileName":"/user/username/projects/myproject/node_modules/bar/index.d.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/node_modules/bar/foo.d.ts:
-  {"fileName":"/user/username/projects/myproject/node_modules/bar/foo.d.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+  {"pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/myproject/src:
-  {"directoryName":"/user/username/projects/myproject/src"}
+  {}
 /user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -100,23 +100,23 @@ Output::
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/src/main.ts:
-  {"fileName":"/user/username/projects/myproject/src/main.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/node_modules/bar/index.d.ts:
-  {"fileName":"/user/username/projects/myproject/node_modules/bar/index.d.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/node_modules/bar/foo.d.ts:
-  {"fileName":"/user/username/projects/myproject/node_modules/bar/foo.d.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+  {"pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/myproject/src:
-  {"directoryName":"/user/username/projects/myproject/src"}
+  {}
 /user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject"}
+  {}
 
 exitCode:: ExitStatus.undefined
 

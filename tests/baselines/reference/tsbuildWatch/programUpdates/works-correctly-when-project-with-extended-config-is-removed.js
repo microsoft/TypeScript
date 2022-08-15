@@ -94,21 +94,21 @@ Shape signatures in builder refreshed for::
 
 WatchedFiles::
 /a/b/project1.tsconfig.json:
-  {"fileName":"/a/b/project1.tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /a/b/alpha.tsconfig.json:
-  {"fileName":"/a/b/alpha.tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /a/b/commonfile1.ts:
-  {"fileName":"/a/b/commonFile1.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/b/commonfile2.ts:
-  {"fileName":"/a/b/commonFile2.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/b/project2.tsconfig.json:
-  {"fileName":"/a/b/project2.tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /a/b/bravo.tsconfig.json:
-  {"fileName":"/a/b/bravo.tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /a/b/other.ts:
-  {"fileName":"/a/b/other.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/b/tsconfig.json:
-  {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 
 FsWatches::
 
@@ -244,15 +244,15 @@ Output::
 
 WatchedFiles::
 /a/b/project1.tsconfig.json:
-  {"fileName":"/a/b/project1.tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /a/b/alpha.tsconfig.json:
-  {"fileName":"/a/b/alpha.tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /a/b/commonfile1.ts:
-  {"fileName":"/a/b/commonFile1.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/b/commonfile2.ts:
-  {"fileName":"/a/b/commonFile2.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/b/tsconfig.json:
-  {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 
 FsWatches::
 

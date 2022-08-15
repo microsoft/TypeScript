@@ -238,59 +238,59 @@ Shape signatures in builder refreshed for::
 
 WatchedFiles::
 /user/username/projects/myproject/pkg0/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg0/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg0/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg0/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg1/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg1/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg1/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg1/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg2/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg2/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg2/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg2/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg3/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg3/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg3/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg3/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg4/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg4/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg4/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg4/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg5/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg5/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg5/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg5/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg6/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg6/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg6/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg6/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg7/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg7/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg7/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg7/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/myproject/pkg0:
-  {"directoryName":"/user/username/projects/myproject/pkg0"}
+  {}
 /user/username/projects/myproject/pkg1:
-  {"directoryName":"/user/username/projects/myproject/pkg1"}
+  {}
 /user/username/projects/myproject/pkg2:
-  {"directoryName":"/user/username/projects/myproject/pkg2"}
+  {}
 /user/username/projects/myproject/pkg3:
-  {"directoryName":"/user/username/projects/myproject/pkg3"}
+  {}
 /user/username/projects/myproject/pkg4:
-  {"directoryName":"/user/username/projects/myproject/pkg4"}
+  {}
 /user/username/projects/myproject/pkg5:
-  {"directoryName":"/user/username/projects/myproject/pkg5"}
+  {}
 /user/username/projects/myproject/pkg6:
-  {"directoryName":"/user/username/projects/myproject/pkg6"}
+  {}
 /user/username/projects/myproject/pkg7:
-  {"directoryName":"/user/username/projects/myproject/pkg7"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -733,59 +733,59 @@ Shape signatures in builder refreshed for::
 
 WatchedFiles::
 /user/username/projects/myproject/pkg0/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg0/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg0/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg0/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg1/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg1/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg1/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg1/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg2/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg2/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg2/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg2/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg3/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg3/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg3/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg3/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg4/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg4/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg4/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg4/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg5/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg5/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg5/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg5/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg6/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg6/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg6/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg6/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg7/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg7/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg7/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg7/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/myproject/pkg0:
-  {"directoryName":"/user/username/projects/myproject/pkg0"}
+  {}
 /user/username/projects/myproject/pkg1:
-  {"directoryName":"/user/username/projects/myproject/pkg1"}
+  {}
 /user/username/projects/myproject/pkg2:
-  {"directoryName":"/user/username/projects/myproject/pkg2"}
+  {}
 /user/username/projects/myproject/pkg3:
-  {"directoryName":"/user/username/projects/myproject/pkg3"}
+  {}
 /user/username/projects/myproject/pkg4:
-  {"directoryName":"/user/username/projects/myproject/pkg4"}
+  {}
 /user/username/projects/myproject/pkg5:
-  {"directoryName":"/user/username/projects/myproject/pkg5"}
+  {}
 /user/username/projects/myproject/pkg6:
-  {"directoryName":"/user/username/projects/myproject/pkg6"}
+  {}
 /user/username/projects/myproject/pkg7:
-  {"directoryName":"/user/username/projects/myproject/pkg7"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -849,59 +849,59 @@ Output::
 
 WatchedFiles::
 /user/username/projects/myproject/pkg0/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg0/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg0/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg0/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg1/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg1/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg1/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg1/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg2/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg2/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg2/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg2/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg3/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg3/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg3/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg3/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg4/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg4/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg4/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg4/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg5/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg5/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg5/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg5/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg6/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg6/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg6/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg6/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg7/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg7/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg7/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg7/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/myproject/pkg0:
-  {"directoryName":"/user/username/projects/myproject/pkg0"}
+  {}
 /user/username/projects/myproject/pkg1:
-  {"directoryName":"/user/username/projects/myproject/pkg1"}
+  {}
 /user/username/projects/myproject/pkg2:
-  {"directoryName":"/user/username/projects/myproject/pkg2"}
+  {}
 /user/username/projects/myproject/pkg3:
-  {"directoryName":"/user/username/projects/myproject/pkg3"}
+  {}
 /user/username/projects/myproject/pkg4:
-  {"directoryName":"/user/username/projects/myproject/pkg4"}
+  {}
 /user/username/projects/myproject/pkg5:
-  {"directoryName":"/user/username/projects/myproject/pkg5"}
+  {}
 /user/username/projects/myproject/pkg6:
-  {"directoryName":"/user/username/projects/myproject/pkg6"}
+  {}
 /user/username/projects/myproject/pkg7:
-  {"directoryName":"/user/username/projects/myproject/pkg7"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -938,59 +938,59 @@ Shape signatures in builder refreshed for::
 
 WatchedFiles::
 /user/username/projects/myproject/pkg0/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg0/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg0/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg0/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg1/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg1/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg1/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg1/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg2/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg2/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg2/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg2/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg3/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg3/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg3/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg3/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg4/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg4/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg4/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg4/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg5/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg5/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg5/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg5/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg6/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg6/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg6/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg6/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg7/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg7/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg7/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg7/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/myproject/pkg0:
-  {"directoryName":"/user/username/projects/myproject/pkg0"}
+  {}
 /user/username/projects/myproject/pkg1:
-  {"directoryName":"/user/username/projects/myproject/pkg1"}
+  {}
 /user/username/projects/myproject/pkg2:
-  {"directoryName":"/user/username/projects/myproject/pkg2"}
+  {}
 /user/username/projects/myproject/pkg3:
-  {"directoryName":"/user/username/projects/myproject/pkg3"}
+  {}
 /user/username/projects/myproject/pkg4:
-  {"directoryName":"/user/username/projects/myproject/pkg4"}
+  {}
 /user/username/projects/myproject/pkg5:
-  {"directoryName":"/user/username/projects/myproject/pkg5"}
+  {}
 /user/username/projects/myproject/pkg6:
-  {"directoryName":"/user/username/projects/myproject/pkg6"}
+  {}
 /user/username/projects/myproject/pkg7:
-  {"directoryName":"/user/username/projects/myproject/pkg7"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -1139,59 +1139,59 @@ No shapes updated in the builder::
 
 WatchedFiles::
 /user/username/projects/myproject/pkg0/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg0/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg0/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg0/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg1/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg1/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg1/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg1/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg2/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg2/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg2/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg2/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg3/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg3/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg3/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg3/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg4/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg4/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg4/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg4/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg5/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg5/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg5/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg5/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg6/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg6/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg6/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg6/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg7/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg7/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg7/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg7/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/myproject/pkg0:
-  {"directoryName":"/user/username/projects/myproject/pkg0"}
+  {}
 /user/username/projects/myproject/pkg1:
-  {"directoryName":"/user/username/projects/myproject/pkg1"}
+  {}
 /user/username/projects/myproject/pkg2:
-  {"directoryName":"/user/username/projects/myproject/pkg2"}
+  {}
 /user/username/projects/myproject/pkg3:
-  {"directoryName":"/user/username/projects/myproject/pkg3"}
+  {}
 /user/username/projects/myproject/pkg4:
-  {"directoryName":"/user/username/projects/myproject/pkg4"}
+  {}
 /user/username/projects/myproject/pkg5:
-  {"directoryName":"/user/username/projects/myproject/pkg5"}
+  {}
 /user/username/projects/myproject/pkg6:
-  {"directoryName":"/user/username/projects/myproject/pkg6"}
+  {}
 /user/username/projects/myproject/pkg7:
-  {"directoryName":"/user/username/projects/myproject/pkg7"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -1246,59 +1246,59 @@ No shapes updated in the builder::
 
 WatchedFiles::
 /user/username/projects/myproject/pkg0/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg0/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg0/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg0/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg1/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg1/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg1/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg1/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg2/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg2/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg2/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg2/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg3/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg3/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg3/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg3/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg4/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg4/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg4/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg4/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg5/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg5/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg5/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg5/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg6/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg6/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg6/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg6/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg7/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg7/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg7/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg7/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/myproject/pkg0:
-  {"directoryName":"/user/username/projects/myproject/pkg0"}
+  {}
 /user/username/projects/myproject/pkg1:
-  {"directoryName":"/user/username/projects/myproject/pkg1"}
+  {}
 /user/username/projects/myproject/pkg2:
-  {"directoryName":"/user/username/projects/myproject/pkg2"}
+  {}
 /user/username/projects/myproject/pkg3:
-  {"directoryName":"/user/username/projects/myproject/pkg3"}
+  {}
 /user/username/projects/myproject/pkg4:
-  {"directoryName":"/user/username/projects/myproject/pkg4"}
+  {}
 /user/username/projects/myproject/pkg5:
-  {"directoryName":"/user/username/projects/myproject/pkg5"}
+  {}
 /user/username/projects/myproject/pkg6:
-  {"directoryName":"/user/username/projects/myproject/pkg6"}
+  {}
 /user/username/projects/myproject/pkg7:
-  {"directoryName":"/user/username/projects/myproject/pkg7"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -1313,59 +1313,59 @@ Output::
 
 WatchedFiles::
 /user/username/projects/myproject/pkg0/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg0/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg0/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg0/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg1/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg1/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg1/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg1/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg2/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg2/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg2/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg2/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg3/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg3/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg3/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg3/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg4/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg4/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg4/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg4/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg5/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg5/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg5/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg5/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg6/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg6/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg6/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg6/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg7/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg7/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg7/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg7/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/myproject/pkg0:
-  {"directoryName":"/user/username/projects/myproject/pkg0"}
+  {}
 /user/username/projects/myproject/pkg1:
-  {"directoryName":"/user/username/projects/myproject/pkg1"}
+  {}
 /user/username/projects/myproject/pkg2:
-  {"directoryName":"/user/username/projects/myproject/pkg2"}
+  {}
 /user/username/projects/myproject/pkg3:
-  {"directoryName":"/user/username/projects/myproject/pkg3"}
+  {}
 /user/username/projects/myproject/pkg4:
-  {"directoryName":"/user/username/projects/myproject/pkg4"}
+  {}
 /user/username/projects/myproject/pkg5:
-  {"directoryName":"/user/username/projects/myproject/pkg5"}
+  {}
 /user/username/projects/myproject/pkg6:
-  {"directoryName":"/user/username/projects/myproject/pkg6"}
+  {}
 /user/username/projects/myproject/pkg7:
-  {"directoryName":"/user/username/projects/myproject/pkg7"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -1402,59 +1402,59 @@ Shape signatures in builder refreshed for::
 
 WatchedFiles::
 /user/username/projects/myproject/pkg0/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg0/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg0/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg0/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg1/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg1/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg1/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg1/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg2/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg2/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg2/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg2/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg3/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg3/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg3/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg3/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg4/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg4/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg4/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg4/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg5/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg5/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg5/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg5/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg6/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg6/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg6/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg6/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg7/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg7/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg7/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg7/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/myproject/pkg0:
-  {"directoryName":"/user/username/projects/myproject/pkg0"}
+  {}
 /user/username/projects/myproject/pkg1:
-  {"directoryName":"/user/username/projects/myproject/pkg1"}
+  {}
 /user/username/projects/myproject/pkg2:
-  {"directoryName":"/user/username/projects/myproject/pkg2"}
+  {}
 /user/username/projects/myproject/pkg3:
-  {"directoryName":"/user/username/projects/myproject/pkg3"}
+  {}
 /user/username/projects/myproject/pkg4:
-  {"directoryName":"/user/username/projects/myproject/pkg4"}
+  {}
 /user/username/projects/myproject/pkg5:
-  {"directoryName":"/user/username/projects/myproject/pkg5"}
+  {}
 /user/username/projects/myproject/pkg6:
-  {"directoryName":"/user/username/projects/myproject/pkg6"}
+  {}
 /user/username/projects/myproject/pkg7:
-  {"directoryName":"/user/username/projects/myproject/pkg7"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -1605,59 +1605,59 @@ No shapes updated in the builder::
 
 WatchedFiles::
 /user/username/projects/myproject/pkg0/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg0/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg0/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg0/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg1/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg1/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg1/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg1/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg2/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg2/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg2/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg2/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg3/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg3/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg3/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg3/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg4/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg4/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg4/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg4/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg5/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg5/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg5/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg5/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg6/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg6/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg6/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg6/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg7/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg7/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg7/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg7/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/myproject/pkg0:
-  {"directoryName":"/user/username/projects/myproject/pkg0"}
+  {}
 /user/username/projects/myproject/pkg1:
-  {"directoryName":"/user/username/projects/myproject/pkg1"}
+  {}
 /user/username/projects/myproject/pkg2:
-  {"directoryName":"/user/username/projects/myproject/pkg2"}
+  {}
 /user/username/projects/myproject/pkg3:
-  {"directoryName":"/user/username/projects/myproject/pkg3"}
+  {}
 /user/username/projects/myproject/pkg4:
-  {"directoryName":"/user/username/projects/myproject/pkg4"}
+  {}
 /user/username/projects/myproject/pkg5:
-  {"directoryName":"/user/username/projects/myproject/pkg5"}
+  {}
 /user/username/projects/myproject/pkg6:
-  {"directoryName":"/user/username/projects/myproject/pkg6"}
+  {}
 /user/username/projects/myproject/pkg7:
-  {"directoryName":"/user/username/projects/myproject/pkg7"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -1719,59 +1719,59 @@ Shape signatures in builder refreshed for::
 
 WatchedFiles::
 /user/username/projects/myproject/pkg0/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg0/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg0/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg0/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg1/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg1/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg1/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg1/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg2/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg2/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg2/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg2/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg3/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg3/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg3/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg3/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg4/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg4/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg4/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg4/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg5/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg5/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg5/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg5/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg6/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg6/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg6/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg6/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg7/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg7/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg7/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg7/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/myproject/pkg0:
-  {"directoryName":"/user/username/projects/myproject/pkg0"}
+  {}
 /user/username/projects/myproject/pkg1:
-  {"directoryName":"/user/username/projects/myproject/pkg1"}
+  {}
 /user/username/projects/myproject/pkg2:
-  {"directoryName":"/user/username/projects/myproject/pkg2"}
+  {}
 /user/username/projects/myproject/pkg3:
-  {"directoryName":"/user/username/projects/myproject/pkg3"}
+  {}
 /user/username/projects/myproject/pkg4:
-  {"directoryName":"/user/username/projects/myproject/pkg4"}
+  {}
 /user/username/projects/myproject/pkg5:
-  {"directoryName":"/user/username/projects/myproject/pkg5"}
+  {}
 /user/username/projects/myproject/pkg6:
-  {"directoryName":"/user/username/projects/myproject/pkg6"}
+  {}
 /user/username/projects/myproject/pkg7:
-  {"directoryName":"/user/username/projects/myproject/pkg7"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -1873,59 +1873,59 @@ No shapes updated in the builder::
 
 WatchedFiles::
 /user/username/projects/myproject/pkg0/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg0/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg0/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg0/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg1/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg1/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg1/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg1/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg2/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg2/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg2/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg2/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg3/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg3/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg3/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg3/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg4/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg4/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg4/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg4/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg5/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg5/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg5/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg5/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg6/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg6/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg6/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg6/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg7/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg7/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg7/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg7/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/myproject/pkg0:
-  {"directoryName":"/user/username/projects/myproject/pkg0"}
+  {}
 /user/username/projects/myproject/pkg1:
-  {"directoryName":"/user/username/projects/myproject/pkg1"}
+  {}
 /user/username/projects/myproject/pkg2:
-  {"directoryName":"/user/username/projects/myproject/pkg2"}
+  {}
 /user/username/projects/myproject/pkg3:
-  {"directoryName":"/user/username/projects/myproject/pkg3"}
+  {}
 /user/username/projects/myproject/pkg4:
-  {"directoryName":"/user/username/projects/myproject/pkg4"}
+  {}
 /user/username/projects/myproject/pkg5:
-  {"directoryName":"/user/username/projects/myproject/pkg5"}
+  {}
 /user/username/projects/myproject/pkg6:
-  {"directoryName":"/user/username/projects/myproject/pkg6"}
+  {}
 /user/username/projects/myproject/pkg7:
-  {"directoryName":"/user/username/projects/myproject/pkg7"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -1940,59 +1940,59 @@ Output::
 
 WatchedFiles::
 /user/username/projects/myproject/pkg0/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg0/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg0/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg0/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg1/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg1/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg1/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg1/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg2/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg2/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg2/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg2/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg3/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg3/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg3/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg3/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg4/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg4/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg4/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg4/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg5/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg5/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg5/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg5/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg6/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg6/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg6/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg6/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg7/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg7/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/pkg7/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg7/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/myproject/pkg0:
-  {"directoryName":"/user/username/projects/myproject/pkg0"}
+  {}
 /user/username/projects/myproject/pkg1:
-  {"directoryName":"/user/username/projects/myproject/pkg1"}
+  {}
 /user/username/projects/myproject/pkg2:
-  {"directoryName":"/user/username/projects/myproject/pkg2"}
+  {}
 /user/username/projects/myproject/pkg3:
-  {"directoryName":"/user/username/projects/myproject/pkg3"}
+  {}
 /user/username/projects/myproject/pkg4:
-  {"directoryName":"/user/username/projects/myproject/pkg4"}
+  {}
 /user/username/projects/myproject/pkg5:
-  {"directoryName":"/user/username/projects/myproject/pkg5"}
+  {}
 /user/username/projects/myproject/pkg6:
-  {"directoryName":"/user/username/projects/myproject/pkg6"}
+  {}
 /user/username/projects/myproject/pkg7:
-  {"directoryName":"/user/username/projects/myproject/pkg7"}
+  {}
 
 exitCode:: ExitStatus.undefined
 

@@ -62,17 +62,17 @@ Shape signatures in builder refreshed for::
 
 WatchedFiles::
 /user/username/projects/sample1/core/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/core/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/sample1/core/anothermodule.ts:
-  {"fileName":"/user/username/projects/sample1/core/anotherModule.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/sample1/core/index.ts:
-  {"fileName":"/user/username/projects/sample1/core/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/sample1/core:
-  {"directoryName":"/user/username/projects/sample1/core"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -156,17 +156,17 @@ Output::
 
 WatchedFiles::
 /user/username/projects/sample1/core/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/core/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/sample1/core/anothermodule.ts:
-  {"fileName":"/user/username/projects/sample1/core/anotherModule.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/sample1/core/index.ts:
-  {"fileName":"/user/username/projects/sample1/core/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/sample1/core:
-  {"directoryName":"/user/username/projects/sample1/core"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -207,19 +207,19 @@ Shape signatures in builder refreshed for::
 
 WatchedFiles::
 /user/username/projects/sample1/core/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/core/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/sample1/core/anothermodule.ts:
-  {"fileName":"/user/username/projects/sample1/core/anotherModule.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/sample1/core/index.ts:
-  {"fileName":"/user/username/projects/sample1/core/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/sample1/core/file3.ts:
-  {"fileName":"/user/username/projects/sample1/core/file3.ts","pollingInterval":250}
+  {"pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/sample1/core:
-  {"directoryName":"/user/username/projects/sample1/core"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -292,19 +292,19 @@ Output::
 
 WatchedFiles::
 /user/username/projects/sample1/core/tsconfig.json:
-  {"fileName":"/user/username/projects/sample1/core/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/sample1/core/anothermodule.ts:
-  {"fileName":"/user/username/projects/sample1/core/anotherModule.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/sample1/core/index.ts:
-  {"fileName":"/user/username/projects/sample1/core/index.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /user/username/projects/sample1/core/file3.ts:
-  {"fileName":"/user/username/projects/sample1/core/file3.ts","pollingInterval":250}
+  {"pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/sample1/core:
-  {"directoryName":"/user/username/projects/sample1/core"}
+  {}
 
 exitCode:: ExitStatus.undefined
 

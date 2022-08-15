@@ -48,19 +48,19 @@ Shape signatures in builder refreshed for::
 
 WatchedFiles::
 /src/project/tsconfig.json:
-  {"fileName":"/src/project/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":250}
 /src/project/main.ts:
-  {"fileName":"/src/project/main.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+  {"pollingInterval":250}
 /src/project/node_modules/@types:
-  {"fileName":"/src/project/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
 
 FsWatchesRecursive::
 /src/project:
-  {"directoryName":"/src/project"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
