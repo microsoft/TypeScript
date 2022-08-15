@@ -90,7 +90,7 @@ async function copyFromBuiltLocal(fileName: string) {
 }
 
 async function copyFilesWithGlob(pattern: string) {
-    const files = glob.sync(path.join(source, pattern)).map(f => path.basename(f));
+    const files = glob.sync(pattern, { cwd: source }).map(f => path.basename(f));
     for (const f of files) {
         await copyFromBuiltLocal(f);
     }

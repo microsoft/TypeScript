@@ -124,45 +124,34 @@ namespace ts {
         /**
          * Returns the native Map implementation if it is available and compatible (i.e. supports iteration).
          */
-        export function tryGetNativeMap(): MapConstructor | undefined {
+        export function tryGetNativeMap(): MapConstructor {
             // Internet Explorer's Map doesn't support iteration, so don't use it.
             const gMap = globals?.Map;
             // eslint-disable-next-line no-in-operator
-            return typeof gMap !== "undefined" && "entries" in gMap.prototype && new gMap([[0, 0]]).size === 1 ? gMap : undefined;
+            const constructor = typeof gMap !== "undefined" && "entries" in gMap.prototype && new gMap([[0, 0]]).size === 1 ? gMap : undefined;
+            if (!constructor) {
+                throw new Error("No compatible Map implementation found.");
+            }
+            return constructor;
         }
 
         /**
          * Returns the native Set implementation if it is available and compatible (i.e. supports iteration).
          */
-        export function tryGetNativeSet(): SetConstructor | undefined {
+        export function tryGetNativeSet(): SetConstructor {
             // Internet Explorer's Set doesn't support iteration, so don't use it.
             const gSet = globals?.Set;
             // eslint-disable-next-line no-in-operator
-            return typeof gSet !== "undefined" && "entries" in gSet.prototype && new gSet([0]).size === 1 ? gSet : undefined;
+            const constructor = typeof gSet !== "undefined" && "entries" in gSet.prototype && new gSet([0]).size === 1 ? gSet : undefined;
+            if (!constructor) {
+                throw new Error("No compatible Set implementation found.");
+            }
+            return constructor;
         }
     }
 
     /* @internal */
-    export const Map = getCollectionImplementation("Map", "tryGetNativeMap", "createMapShim");
+    export const Map = NativeCollections.tryGetNativeMap();
     /* @internal */
-    export const Set = getCollectionImplementation("Set", "tryGetNativeSet", "createSetShim");
-
-    /* @internal */
-    type GetIteratorCallback = <I extends readonly any[] | ReadonlySet<any> | ReadonlyESMap<any, any> | undefined>(iterable: I) => Iterator<
-        I extends ReadonlyESMap<infer K, infer V> ? [K, V] :
-        I extends ReadonlySet<infer T> ? T :
-        I extends readonly (infer T)[] ? T :
-        I extends undefined ? undefined :
-        never>;
-
-    /* @internal */
-    function getCollectionImplementation<
-        K1 extends MatchingKeys<typeof NativeCollections, () => any>,
-        K2 extends MatchingKeys<typeof ShimCollections, (getIterator?: GetIteratorCallback) => ReturnType<(typeof NativeCollections)[K1]>>
-    >(name: string, nativeFactory: K1, shimFactory: K2): NonNullable<ReturnType<(typeof NativeCollections)[K1]>> {
-        // NOTE: ts.ShimCollections will be defined for typescriptServices.js but not for tsc.js, so we must test for it.
-        const constructor = NativeCollections[nativeFactory]() ?? ShimCollections?.[shimFactory](getIterator);
-        if (constructor) return constructor as NonNullable<ReturnType<(typeof NativeCollections)[K1]>>;
-        throw new Error(`TypeScript requires an environment that provides a compatible native ${name} implementation.`);
-    }
+    export const Set = NativeCollections.tryGetNativeSet();
 }
