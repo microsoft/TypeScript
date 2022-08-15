@@ -126,22 +126,22 @@ Shape signatures in builder refreshed for::
 /user/username/projects/reexport/src/main/index.ts (used version)
 
 PolledWatches::
-/user/username/projects/reexport/src/pure/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/reexport/src/pure/index.ts:
-  {"pollingInterval":250}
-/user/username/projects/reexport/src/pure/session.ts:
-  {"pollingInterval":250}
-/user/username/projects/reexport/src/main/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/reexport/src/main/index.ts:
-  {"pollingInterval":250}
 /user/username/projects/reexport/src/pure/package.json:
-  {"pollingInterval":250}
-/user/username/projects/reexport/src/tsconfig.json:
-  {"pollingInterval":250}
+  {"pollingInterval":2000}
 
 FsWatches::
+/user/username/projects/reexport/src/pure/tsconfig.json:
+  {}
+/user/username/projects/reexport/src/pure/index.ts:
+  {}
+/user/username/projects/reexport/src/pure/session.ts:
+  {}
+/user/username/projects/reexport/src/main/tsconfig.json:
+  {}
+/user/username/projects/reexport/src/main/index.ts:
+  {}
+/user/username/projects/reexport/src/tsconfig.json:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/reexport/src/pure:
@@ -326,22 +326,22 @@ Shape signatures in builder refreshed for::
 /user/username/projects/reexport/src/main/index.ts (used version)
 
 PolledWatches::
-/user/username/projects/reexport/src/pure/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/reexport/src/pure/index.ts:
-  {"pollingInterval":250}
-/user/username/projects/reexport/src/pure/session.ts:
-  {"pollingInterval":250}
-/user/username/projects/reexport/src/main/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/reexport/src/main/index.ts:
-  {"pollingInterval":250}
 /user/username/projects/reexport/src/pure/package.json:
-  {"pollingInterval":250}
-/user/username/projects/reexport/src/tsconfig.json:
-  {"pollingInterval":250}
+  {"pollingInterval":2000}
 
 FsWatches::
+/user/username/projects/reexport/src/pure/tsconfig.json:
+  {}
+/user/username/projects/reexport/src/pure/index.ts:
+  {}
+/user/username/projects/reexport/src/pure/session.ts:
+  {}
+/user/username/projects/reexport/src/main/tsconfig.json:
+  {}
+/user/username/projects/reexport/src/main/index.ts:
+  {}
+/user/username/projects/reexport/src/tsconfig.json:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/reexport/src/pure:
@@ -483,22 +483,22 @@ Shape signatures in builder refreshed for::
 /user/username/projects/reexport/src/main/index.ts (used version)
 
 PolledWatches::
-/user/username/projects/reexport/src/pure/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/reexport/src/pure/index.ts:
-  {"pollingInterval":250}
-/user/username/projects/reexport/src/pure/session.ts:
-  {"pollingInterval":250}
-/user/username/projects/reexport/src/main/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/reexport/src/main/index.ts:
-  {"pollingInterval":250}
 /user/username/projects/reexport/src/pure/package.json:
-  {"pollingInterval":250}
-/user/username/projects/reexport/src/tsconfig.json:
-  {"pollingInterval":250}
+  {"pollingInterval":2000}
 
 FsWatches::
+/user/username/projects/reexport/src/pure/tsconfig.json:
+  {}
+/user/username/projects/reexport/src/pure/index.ts:
+  {}
+/user/username/projects/reexport/src/pure/session.ts:
+  {}
+/user/username/projects/reexport/src/main/tsconfig.json:
+  {}
+/user/username/projects/reexport/src/main/index.ts:
+  {}
+/user/username/projects/reexport/src/tsconfig.json:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/reexport/src/pure:

@@ -42,17 +42,17 @@ Open files:
 		Projects: /dev/null/inferredProject1*
 PolledWatches::
 /user/username/projects/myproject/src/tsconfig.json:
-  {"pollingInterval":250}
+  {"pollingInterval":2000}
 /user/username/projects/myproject/src/jsconfig.json:
-  {"pollingInterval":250}
+  {"pollingInterval":2000}
 /user/username/projects/myproject/tsconfig.json:
-  {"pollingInterval":250}
+  {"pollingInterval":2000}
 /user/username/projects/myproject/jsconfig.json:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
+  {"pollingInterval":2000}
 
 FsWatches::
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject/node_modules:

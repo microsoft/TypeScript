@@ -80,16 +80,16 @@ Shape signatures in builder refreshed for::
 /user/username/projects/sample1/app/app.ts (used version)
 
 PolledWatches::
-/user/username/projects/sample1/library/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/sample1/library/library.ts:
-  {"pollingInterval":250}
-/user/username/projects/sample1/app/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/sample1/app/app.ts:
-  {"pollingInterval":250}
 
 FsWatches::
+/user/username/projects/sample1/library/tsconfig.json:
+  {}
+/user/username/projects/sample1/library/library.ts:
+  {}
+/user/username/projects/sample1/app/tsconfig.json:
+  {}
+/user/username/projects/sample1/app/app.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/sample1/library:
@@ -229,16 +229,16 @@ Shape signatures in builder refreshed for::
 /user/username/projects/sample1/app/app.ts (computed .d.ts)
 
 PolledWatches::
-/user/username/projects/sample1/library/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/sample1/library/library.ts:
-  {"pollingInterval":250}
-/user/username/projects/sample1/app/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/sample1/app/app.ts:
-  {"pollingInterval":250}
 
 FsWatches::
+/user/username/projects/sample1/library/tsconfig.json:
+  {}
+/user/username/projects/sample1/library/library.ts:
+  {}
+/user/username/projects/sample1/app/tsconfig.json:
+  {}
+/user/username/projects/sample1/app/app.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/sample1/library:
@@ -361,16 +361,16 @@ Shape signatures in builder refreshed for::
 /user/username/projects/sample1/app/app.ts (computed .d.ts)
 
 PolledWatches::
-/user/username/projects/sample1/library/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/sample1/library/library.ts:
-  {"pollingInterval":250}
-/user/username/projects/sample1/app/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/sample1/app/app.ts:
-  {"pollingInterval":250}
 
 FsWatches::
+/user/username/projects/sample1/library/tsconfig.json:
+  {}
+/user/username/projects/sample1/library/library.ts:
+  {}
+/user/username/projects/sample1/app/tsconfig.json:
+  {}
+/user/username/projects/sample1/app/app.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/sample1/library:

@@ -47,14 +47,14 @@ Shape signatures in builder refreshed for::
 /a/foo.ts (used version)
 
 PolledWatches::
-/a/foo.ts:
-  {"pollingInterval":250}
-/a/bar.d.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
 
 FsWatches::
+/a/foo.ts:
+  {}
+/a/bar.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 /a:
@@ -102,14 +102,14 @@ Shape signatures in builder refreshed for::
 /a/foo.ts (computed .d.ts)
 
 PolledWatches::
-/a/foo.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
 /node_modules:
   {"pollingInterval":500}
 
 FsWatches::
+/a/foo.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 /:
   {}
 
@@ -153,14 +153,14 @@ Shape signatures in builder refreshed for::
 /a/foo.ts (computed .d.ts)
 
 PolledWatches::
-/a/foo.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
-/a/bar.d.ts:
-  {"pollingInterval":250}
 
 FsWatches::
+/a/foo.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/a/bar.d.ts:
+  {}
 
 FsWatchesRecursive::
 /a:

@@ -45,16 +45,16 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/index.tsx (used version)
 
 PolledWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/myproject/index.tsx:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/index.tsx:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject:
@@ -94,16 +94,16 @@ Semantic diagnostics in builder refreshed for::
 No shapes updated in the builder::
 
 PolledWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/myproject/index.tsx:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/index.tsx:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject:

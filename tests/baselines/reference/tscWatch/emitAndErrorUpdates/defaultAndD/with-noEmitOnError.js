@@ -75,20 +75,20 @@ Shape signatures in builder refreshed for::
 /user/username/projects/noemitonerror/src/other.ts (used version)
 
 PolledWatches::
-/user/username/projects/noemitonerror/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/noemitonerror/shared/types/db.ts:
-  {"pollingInterval":250}
-/user/username/projects/noemitonerror/src/main.ts:
-  {"pollingInterval":250}
-/user/username/projects/noemitonerror/src/other.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
 /user/username/projects/noemitonerror/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/noemitonerror/tsconfig.json:
+  {}
+/user/username/projects/noemitonerror/shared/types/db.ts:
+  {}
+/user/username/projects/noemitonerror/src/main.ts:
+  {}
+/user/username/projects/noemitonerror/src/other.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/noemitonerror:
@@ -129,20 +129,20 @@ Semantic diagnostics in builder refreshed for::
 No shapes updated in the builder::
 
 PolledWatches::
-/user/username/projects/noemitonerror/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/noemitonerror/shared/types/db.ts:
-  {"pollingInterval":250}
-/user/username/projects/noemitonerror/src/main.ts:
-  {"pollingInterval":250}
-/user/username/projects/noemitonerror/src/other.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
 /user/username/projects/noemitonerror/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/noemitonerror/tsconfig.json:
+  {}
+/user/username/projects/noemitonerror/shared/types/db.ts:
+  {}
+/user/username/projects/noemitonerror/src/main.ts:
+  {}
+/user/username/projects/noemitonerror/src/other.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/noemitonerror:
@@ -185,20 +185,20 @@ Shape signatures in builder refreshed for::
 /user/username/projects/noemitonerror/src/main.ts (computed .d.ts)
 
 PolledWatches::
-/user/username/projects/noemitonerror/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/noemitonerror/shared/types/db.ts:
-  {"pollingInterval":250}
-/user/username/projects/noemitonerror/src/main.ts:
-  {"pollingInterval":250}
-/user/username/projects/noemitonerror/src/other.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
 /user/username/projects/noemitonerror/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/noemitonerror/tsconfig.json:
+  {}
+/user/username/projects/noemitonerror/shared/types/db.ts:
+  {}
+/user/username/projects/noemitonerror/src/main.ts:
+  {}
+/user/username/projects/noemitonerror/src/other.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/noemitonerror:
@@ -277,20 +277,20 @@ Shape signatures in builder refreshed for::
 /user/username/projects/noemitonerror/src/main.ts (computed .d.ts)
 
 PolledWatches::
-/user/username/projects/noemitonerror/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/noemitonerror/shared/types/db.ts:
-  {"pollingInterval":250}
-/user/username/projects/noemitonerror/src/main.ts:
-  {"pollingInterval":250}
-/user/username/projects/noemitonerror/src/other.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
 /user/username/projects/noemitonerror/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/noemitonerror/tsconfig.json:
+  {}
+/user/username/projects/noemitonerror/shared/types/db.ts:
+  {}
+/user/username/projects/noemitonerror/src/main.ts:
+  {}
+/user/username/projects/noemitonerror/src/other.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/noemitonerror:
@@ -331,20 +331,20 @@ Semantic diagnostics in builder refreshed for::
 No shapes updated in the builder::
 
 PolledWatches::
-/user/username/projects/noemitonerror/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/noemitonerror/shared/types/db.ts:
-  {"pollingInterval":250}
-/user/username/projects/noemitonerror/src/main.ts:
-  {"pollingInterval":250}
-/user/username/projects/noemitonerror/src/other.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
 /user/username/projects/noemitonerror/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/noemitonerror/tsconfig.json:
+  {}
+/user/username/projects/noemitonerror/shared/types/db.ts:
+  {}
+/user/username/projects/noemitonerror/src/main.ts:
+  {}
+/user/username/projects/noemitonerror/src/other.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/noemitonerror:
@@ -385,20 +385,20 @@ Shape signatures in builder refreshed for::
 /user/username/projects/noemitonerror/src/main.ts (computed .d.ts)
 
 PolledWatches::
-/user/username/projects/noemitonerror/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/noemitonerror/shared/types/db.ts:
-  {"pollingInterval":250}
-/user/username/projects/noemitonerror/src/main.ts:
-  {"pollingInterval":250}
-/user/username/projects/noemitonerror/src/other.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
 /user/username/projects/noemitonerror/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/noemitonerror/tsconfig.json:
+  {}
+/user/username/projects/noemitonerror/shared/types/db.ts:
+  {}
+/user/username/projects/noemitonerror/src/main.ts:
+  {}
+/user/username/projects/noemitonerror/src/other.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/noemitonerror:
@@ -441,20 +441,20 @@ Semantic diagnostics in builder refreshed for::
 No shapes updated in the builder::
 
 PolledWatches::
-/user/username/projects/noemitonerror/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/noemitonerror/shared/types/db.ts:
-  {"pollingInterval":250}
-/user/username/projects/noemitonerror/src/main.ts:
-  {"pollingInterval":250}
-/user/username/projects/noemitonerror/src/other.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
 /user/username/projects/noemitonerror/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/noemitonerror/tsconfig.json:
+  {}
+/user/username/projects/noemitonerror/shared/types/db.ts:
+  {}
+/user/username/projects/noemitonerror/src/main.ts:
+  {}
+/user/username/projects/noemitonerror/src/other.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/noemitonerror:

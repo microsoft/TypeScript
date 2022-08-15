@@ -43,8 +43,6 @@ No cached semantic diagnostics in the builder::
 No shapes updated in the builder::
 
 PolledWatches::
-/a/b/tsconfig.json:
-  {"pollingInterval":250}
 /a/b/node_modules/@types:
   {"pollingInterval":500}
 /a/b/app:
@@ -55,6 +53,8 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
+/a/b/tsconfig.json:
+  {}
 
 FsWatchesRecursive::
 

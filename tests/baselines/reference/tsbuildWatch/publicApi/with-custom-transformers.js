@@ -86,18 +86,18 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/webpack/index.ts (used version)
 
 PolledWatches::
-/user/username/projects/myproject/shared/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/myproject/shared/index.ts:
-  {"pollingInterval":250}
-/user/username/projects/myproject/webpack/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/myproject/webpack/index.ts:
-  {"pollingInterval":250}
-/user/username/projects/myproject/tsconfig.json:
-  {"pollingInterval":250}
 
 FsWatches::
+/user/username/projects/myproject/shared/tsconfig.json:
+  {}
+/user/username/projects/myproject/shared/index.ts:
+  {}
+/user/username/projects/myproject/webpack/tsconfig.json:
+  {}
+/user/username/projects/myproject/webpack/index.ts:
+  {}
+/user/username/projects/myproject/tsconfig.json:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject/shared:
@@ -312,18 +312,18 @@ Semantic diagnostics in builder refreshed for::
 No shapes updated in the builder::
 
 PolledWatches::
-/user/username/projects/myproject/shared/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/myproject/shared/index.ts:
-  {"pollingInterval":250}
-/user/username/projects/myproject/webpack/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/myproject/webpack/index.ts:
-  {"pollingInterval":250}
-/user/username/projects/myproject/tsconfig.json:
-  {"pollingInterval":250}
 
 FsWatches::
+/user/username/projects/myproject/shared/tsconfig.json:
+  {}
+/user/username/projects/myproject/shared/index.ts:
+  {}
+/user/username/projects/myproject/webpack/tsconfig.json:
+  {}
+/user/username/projects/myproject/webpack/index.ts:
+  {}
+/user/username/projects/myproject/tsconfig.json:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject/shared:

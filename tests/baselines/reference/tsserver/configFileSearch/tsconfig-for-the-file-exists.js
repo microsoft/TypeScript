@@ -104,6 +104,12 @@ Creating configuration project /a/b/projects/project/tsconfig.json
 Scheduled: /a/b/projects/project/tsconfig.json
 Scheduled: *ensureProjectForOpenFiles*
 Elapsed:: *ms FileWatcher:: Triggered with /a/b/projects/project/tsconfig.json 0:: WatchInfo: /a/b/projects/project/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+FileWatcher:: Triggered with /a/b/projects/project/tsconfig.json 0:: WatchInfo: /a/b/projects/project/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Search path: /a/b/projects/project/src
+For info: /a/b/projects/project/src/index.ts :: Config file name: /a/b/projects/project/tsconfig.json
+Scheduled: /a/b/projects/project/tsconfig.json, Cancelled earlier one
+Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
+Elapsed:: *ms FileWatcher:: Triggered with /a/b/projects/project/tsconfig.json 0:: WatchInfo: /a/b/projects/project/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Running: /a/b/projects/project/tsconfig.json
 Loading configured project /a/b/projects/project/tsconfig.json
 Config: /a/b/projects/project/tsconfig.json : {

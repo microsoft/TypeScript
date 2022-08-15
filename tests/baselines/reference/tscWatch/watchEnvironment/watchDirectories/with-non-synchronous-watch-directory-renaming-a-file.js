@@ -50,18 +50,18 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/src/file1.ts (used version)
 
 PolledWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/myproject/src/file1.ts:
-  {"pollingInterval":250}
-/user/username/projects/myproject/src/file2.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/file1.ts:
+  {}
+/user/username/projects/myproject/src/file2.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 /user/username/projects/myproject:
   {}
 /user/username/projects/myproject/dist:
@@ -93,18 +93,18 @@ Input::
 Output::
 
 PolledWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/myproject/src/file1.ts:
-  {"pollingInterval":250}
-/user/username/projects/myproject/src/file2.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/file1.ts:
+  {}
+/user/username/projects/myproject/src/file2.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 /user/username/projects/myproject:
   {}
 /user/username/projects/myproject/dist:
@@ -151,18 +151,18 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/src/file1.ts (computed .d.ts)
 
 PolledWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/myproject/src/file1.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/myproject/src/file2.ts:
-  {"pollingInterval":250}
+  {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/file1.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 /user/username/projects/myproject:
   {}
 /user/username/projects/myproject/dist:
@@ -209,23 +209,23 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/src/renamed.ts (computed .d.ts)
 
 PolledWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/myproject/src/file1.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/src/renamed.ts:
-  {"pollingInterval":250}
 
 FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/file1.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 /user/username/projects/myproject:
   {}
 /user/username/projects/myproject/dist:
   {}
 /user/username/projects/myproject/src:
+  {}
+/user/username/projects/myproject/src/renamed.ts:
   {}
 
 FsWatchesRecursive::

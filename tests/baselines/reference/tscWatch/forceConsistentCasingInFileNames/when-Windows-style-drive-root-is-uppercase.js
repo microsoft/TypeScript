@@ -66,18 +66,18 @@ c:/project/a.ts (used version)
 c:/project/b.ts (used version)
 
 PolledWatches::
-c:/project/tsconfig.json:
-  {"pollingInterval":250}
-c:/project/a.ts:
-  {"pollingInterval":250}
-c:/project/b.ts:
-  {"pollingInterval":250}
-c:/a/lib/lib.d.ts:
-  {"pollingInterval":250}
 c:/project/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
+c:/project/tsconfig.json:
+  {}
+c:/project/a.ts:
+  {}
+c:/project/b.ts:
+  {}
+c:/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 c:/project:
@@ -147,18 +147,18 @@ c:/project/a.ts (computed .d.ts)
 c:/project/b.ts (computed .d.ts)
 
 PolledWatches::
-c:/project/tsconfig.json:
-  {"pollingInterval":250}
-c:/project/a.ts:
-  {"pollingInterval":250}
-c:/project/b.ts:
-  {"pollingInterval":250}
-c:/a/lib/lib.d.ts:
-  {"pollingInterval":250}
 c:/project/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
+c:/project/tsconfig.json:
+  {}
+c:/project/a.ts:
+  {}
+c:/project/b.ts:
+  {}
+c:/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 c:/project:

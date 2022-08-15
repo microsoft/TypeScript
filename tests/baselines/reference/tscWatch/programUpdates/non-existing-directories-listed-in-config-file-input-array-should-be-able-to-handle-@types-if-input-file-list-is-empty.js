@@ -49,10 +49,10 @@ No cached semantic diagnostics in the builder::
 No shapes updated in the builder::
 
 PolledWatches::
-/a/tsconfig.json:
-  {"pollingInterval":250}
 
 FsWatches::
+/a/tsconfig.json:
+  {}
 
 FsWatchesRecursive::
 /a/node_modules/@types:

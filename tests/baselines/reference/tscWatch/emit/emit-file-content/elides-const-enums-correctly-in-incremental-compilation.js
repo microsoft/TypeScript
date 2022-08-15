@@ -53,16 +53,16 @@ Shape signatures in builder refreshed for::
 /user/someone/projects/myproject/file3.ts (used version)
 
 PolledWatches::
-/user/someone/projects/myproject/file3.ts:
-  {"pollingInterval":250}
-/user/someone/projects/myproject/file2.ts:
-  {"pollingInterval":250}
-/user/someone/projects/myproject/file1.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
 
 FsWatches::
+/user/someone/projects/myproject/file3.ts:
+  {}
+/user/someone/projects/myproject/file2.ts:
+  {}
+/user/someone/projects/myproject/file1.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 
@@ -116,16 +116,16 @@ Shape signatures in builder refreshed for::
 /user/someone/projects/myproject/file3.ts (computed .d.ts)
 
 PolledWatches::
-/user/someone/projects/myproject/file3.ts:
-  {"pollingInterval":250}
-/user/someone/projects/myproject/file2.ts:
-  {"pollingInterval":250}
-/user/someone/projects/myproject/file1.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
 
 FsWatches::
+/user/someone/projects/myproject/file3.ts:
+  {}
+/user/someone/projects/myproject/file2.ts:
+  {}
+/user/someone/projects/myproject/file1.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 

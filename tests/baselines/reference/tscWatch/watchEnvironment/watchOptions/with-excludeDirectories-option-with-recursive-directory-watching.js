@@ -62,23 +62,23 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/src/main.ts (used version)
 
 PolledWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/myproject/src/main.ts:
-  {"pollingInterval":250}
-/user/username/projects/myproject/node_modules/bar/index.d.ts:
-  {"pollingInterval":250}
-/user/username/projects/myproject/node_modules/bar/foo.d.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/main.ts:
+  {}
+/user/username/projects/myproject/node_modules/bar/index.d.ts:
+  {}
 /user/username/projects/myproject/node_modules:
   {}
 /user/username/projects/myproject/node_modules/bar:
+  {}
+/user/username/projects/myproject/node_modules/bar/foo.d.ts:
+  {}
+/a/lib/lib.d.ts:
   {}
 /user/username/projects/myproject/src:
   {}
@@ -104,23 +104,23 @@ Input::
 Output::
 
 PolledWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/myproject/src/main.ts:
-  {"pollingInterval":250}
-/user/username/projects/myproject/node_modules/bar/index.d.ts:
-  {"pollingInterval":250}
-/user/username/projects/myproject/node_modules/bar/foo.d.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/main.ts:
+  {}
+/user/username/projects/myproject/node_modules/bar/index.d.ts:
+  {}
 /user/username/projects/myproject/node_modules:
   {}
 /user/username/projects/myproject/node_modules/bar:
+  {}
+/user/username/projects/myproject/node_modules/bar/foo.d.ts:
+  {}
+/a/lib/lib.d.ts:
   {}
 /user/username/projects/myproject/src:
   {}
@@ -142,23 +142,23 @@ export function temp(): string;
 Output::
 
 PolledWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/myproject/src/main.ts:
-  {"pollingInterval":250}
-/user/username/projects/myproject/node_modules/bar/index.d.ts:
-  {"pollingInterval":250}
-/user/username/projects/myproject/node_modules/bar/foo.d.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/main.ts:
+  {}
+/user/username/projects/myproject/node_modules/bar/index.d.ts:
+  {}
 /user/username/projects/myproject/node_modules:
   {}
 /user/username/projects/myproject/node_modules/bar:
+  {}
+/user/username/projects/myproject/node_modules/bar/foo.d.ts:
+  {}
+/a/lib/lib.d.ts:
   {}
 /user/username/projects/myproject/src:
   {}

@@ -69,6 +69,14 @@ Search path: /user/username/projects/myproject
 For info: /user/username/projects/myproject/commonFile2.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
 Scheduled: *ensureProjectForOpenFiles*
 Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/tsconfig.json 0:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+FileWatcher:: Triggered with /user/username/projects/myproject/tsconfig.json 0:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Search path: /user/username/projects/myproject
+For info: /user/username/projects/myproject/commonFile1.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
+Scheduled: /user/username/projects/myproject/tsconfig.json, Cancelled earlier one
+Search path: /user/username/projects/myproject
+For info: /user/username/projects/myproject/commonFile2.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
+Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
+Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/tsconfig.json 0:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Running: /user/username/projects/myproject/tsconfig.json
 Loading configured project /user/username/projects/myproject/tsconfig.json
 Config: /user/username/projects/myproject/tsconfig.json : {

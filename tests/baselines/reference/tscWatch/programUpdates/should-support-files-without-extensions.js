@@ -41,12 +41,12 @@ Shape signatures in builder refreshed for::
 /a/compile (used version)
 
 PolledWatches::
-/a/compile:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
 
 FsWatches::
+/a/compile:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 

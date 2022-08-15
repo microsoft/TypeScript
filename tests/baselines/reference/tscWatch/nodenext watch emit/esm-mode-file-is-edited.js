@@ -55,18 +55,18 @@ Shape signatures in builder refreshed for::
 /project/src/index.ts (used version)
 
 PolledWatches::
-/project/tsconfig.json:
-  {"pollingInterval":250}
-/project/src/deps.d.ts:
-  {"pollingInterval":250}
-/project/src/index.ts:
-  {"pollingInterval":250}
-/a/lib/lib.es2020.full.d.ts:
-  {"pollingInterval":250}
 /project/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
+/project/tsconfig.json:
+  {}
+/project/src/deps.d.ts:
+  {}
+/project/src/index.ts:
+  {}
+/a/lib/lib.es2020.full.d.ts:
+  {}
 
 FsWatchesRecursive::
 /project:
@@ -111,18 +111,18 @@ Shape signatures in builder refreshed for::
 /project/src/index.ts (computed .d.ts)
 
 PolledWatches::
-/project/tsconfig.json:
-  {"pollingInterval":250}
-/project/src/deps.d.ts:
-  {"pollingInterval":250}
-/project/src/index.ts:
-  {"pollingInterval":250}
-/a/lib/lib.es2020.full.d.ts:
-  {"pollingInterval":250}
 /project/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
+/project/tsconfig.json:
+  {}
+/project/src/deps.d.ts:
+  {}
+/project/src/index.ts:
+  {}
+/a/lib/lib.es2020.full.d.ts:
+  {}
 
 FsWatchesRecursive::
 /project:

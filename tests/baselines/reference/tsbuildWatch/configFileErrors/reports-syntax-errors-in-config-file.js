@@ -57,14 +57,14 @@ No cached semantic diagnostics in the builder::
 No shapes updated in the builder::
 
 PolledWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/myproject/a.ts:
-  {"pollingInterval":250}
-/user/username/projects/myproject/b.ts:
-  {"pollingInterval":250}
 
 FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/a.ts:
+  {}
+/user/username/projects/myproject/b.ts:
+  {}
 
 FsWatchesRecursive::
 
@@ -151,14 +151,14 @@ No cached semantic diagnostics in the builder::
 No shapes updated in the builder::
 
 PolledWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/myproject/a.ts:
-  {"pollingInterval":250}
-/user/username/projects/myproject/b.ts:
-  {"pollingInterval":250}
 
 FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/a.ts:
+  {}
+/user/username/projects/myproject/b.ts:
+  {}
 
 FsWatchesRecursive::
 
@@ -198,14 +198,14 @@ No cached semantic diagnostics in the builder::
 No shapes updated in the builder::
 
 PolledWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/myproject/a.ts:
-  {"pollingInterval":250}
-/user/username/projects/myproject/b.ts:
-  {"pollingInterval":250}
 
 FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/a.ts:
+  {}
+/user/username/projects/myproject/b.ts:
+  {}
 
 FsWatchesRecursive::
 
@@ -243,14 +243,14 @@ No cached semantic diagnostics in the builder::
 No shapes updated in the builder::
 
 PolledWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/myproject/a.ts:
-  {"pollingInterval":250}
-/user/username/projects/myproject/b.ts:
-  {"pollingInterval":250}
 
 FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/a.ts:
+  {}
+/user/username/projects/myproject/b.ts:
+  {}
 
 FsWatchesRecursive::
 
@@ -291,14 +291,14 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/b.ts (computed .d.ts)
 
 PolledWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/myproject/a.ts:
-  {"pollingInterval":250}
-/user/username/projects/myproject/b.ts:
-  {"pollingInterval":250}
 
 FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/a.ts:
+  {}
+/user/username/projects/myproject/b.ts:
+  {}
 
 FsWatchesRecursive::
 

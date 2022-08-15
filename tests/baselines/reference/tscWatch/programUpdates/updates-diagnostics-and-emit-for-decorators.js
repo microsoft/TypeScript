@@ -64,16 +64,16 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 
 PolledWatches::
-/tsconfig.json:
-  {"pollingInterval":250}
-/a.ts:
-  {"pollingInterval":250}
-/b.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
 
 FsWatches::
+/tsconfig.json:
+  {}
+/a.ts:
+  {}
+/b.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 /:
@@ -140,16 +140,16 @@ Semantic diagnostics in builder refreshed for::
 No shapes updated in the builder::
 
 PolledWatches::
-/tsconfig.json:
-  {"pollingInterval":250}
-/a.ts:
-  {"pollingInterval":250}
-/b.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
 
 FsWatches::
+/tsconfig.json:
+  {}
+/a.ts:
+  {}
+/b.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 /:
@@ -189,16 +189,16 @@ Semantic diagnostics in builder refreshed for::
 No shapes updated in the builder::
 
 PolledWatches::
-/tsconfig.json:
-  {"pollingInterval":250}
-/a.ts:
-  {"pollingInterval":250}
-/b.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
 
 FsWatches::
+/tsconfig.json:
+  {}
+/a.ts:
+  {}
+/b.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 /:

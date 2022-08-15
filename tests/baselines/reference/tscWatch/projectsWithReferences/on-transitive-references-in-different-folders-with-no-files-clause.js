@@ -224,29 +224,29 @@ Dependencies for::
   /user/username/projects/transitiveReferences/a/index.d.ts
 
 PolledWatches::
-/user/username/projects/transitivereferences/c/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/transitivereferences/b/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/transitivereferences/a/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/transitivereferences/c/index.ts:
-  {"pollingInterval":250}
-/user/username/projects/transitivereferences/b/index.d.ts:
-  {"pollingInterval":250}
-/user/username/projects/transitivereferences/a/index.d.ts:
-  {"pollingInterval":250}
-/user/username/projects/transitivereferences/refs/a.d.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
 /user/username/projects/transitivereferences/c/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/transitivereferences/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/transitivereferences/c/tsconfig.json:
+  {}
+/user/username/projects/transitivereferences/b/tsconfig.json:
+  {}
+/user/username/projects/transitivereferences/a/tsconfig.json:
+  {}
+/user/username/projects/transitivereferences/c/index.ts:
+  {}
 /user/username/projects/transitivereferences:
+  {}
+/user/username/projects/transitivereferences/b/index.d.ts:
+  {}
+/user/username/projects/transitivereferences/a/index.d.ts:
+  {}
+/user/username/projects/transitivereferences/refs/a.d.ts:
+  {}
+/a/lib/lib.d.ts:
   {}
 
 FsWatchesRecursive::
@@ -391,29 +391,29 @@ Dependencies for::
   /user/username/projects/transitiveReferences/a/index.d.ts
 
 PolledWatches::
-/user/username/projects/transitivereferences/c/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/transitivereferences/b/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/transitivereferences/a/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/transitivereferences/c/index.ts:
-  {"pollingInterval":250}
-/user/username/projects/transitivereferences/b/index.d.ts:
-  {"pollingInterval":250}
-/user/username/projects/transitivereferences/a/index.d.ts:
-  {"pollingInterval":250}
-/user/username/projects/transitivereferences/refs/a.d.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
 /user/username/projects/transitivereferences/c/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/transitivereferences/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/transitivereferences/c/tsconfig.json:
+  {}
+/user/username/projects/transitivereferences/b/tsconfig.json:
+  {}
+/user/username/projects/transitivereferences/a/tsconfig.json:
+  {}
+/user/username/projects/transitivereferences/c/index.ts:
+  {}
 /user/username/projects/transitivereferences:
+  {}
+/user/username/projects/transitivereferences/b/index.d.ts:
+  {}
+/user/username/projects/transitivereferences/a/index.d.ts:
+  {}
+/user/username/projects/transitivereferences/refs/a.d.ts:
+  {}
+/a/lib/lib.d.ts:
   {}
 
 FsWatchesRecursive::
@@ -491,29 +491,29 @@ Dependencies for::
   /user/username/projects/transitiveReferences/a/index.d.ts
 
 PolledWatches::
-/user/username/projects/transitivereferences/c/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/transitivereferences/b/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/transitivereferences/a/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/transitivereferences/c/index.ts:
-  {"pollingInterval":250}
-/user/username/projects/transitivereferences/b/index.d.ts:
-  {"pollingInterval":250}
-/user/username/projects/transitivereferences/a/index.d.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
-/user/username/projects/transitivereferences/nrefs/a.d.ts:
-  {"pollingInterval":250}
 /user/username/projects/transitivereferences/c/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/transitivereferences/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/transitivereferences/c/tsconfig.json:
+  {}
+/user/username/projects/transitivereferences/b/tsconfig.json:
+  {}
+/user/username/projects/transitivereferences/a/tsconfig.json:
+  {}
+/user/username/projects/transitivereferences/c/index.ts:
+  {}
+/user/username/projects/transitivereferences/b/index.d.ts:
+  {}
+/user/username/projects/transitivereferences/a/index.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 /user/username/projects/transitivereferences:
+  {}
+/user/username/projects/transitivereferences/nrefs/a.d.ts:
   {}
 
 FsWatchesRecursive::
@@ -586,29 +586,29 @@ Dependencies for::
   /user/username/projects/transitiveReferences/a/index.d.ts
 
 PolledWatches::
-/user/username/projects/transitivereferences/c/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/transitivereferences/b/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/transitivereferences/a/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/transitivereferences/c/index.ts:
-  {"pollingInterval":250}
-/user/username/projects/transitivereferences/b/index.d.ts:
-  {"pollingInterval":250}
-/user/username/projects/transitivereferences/a/index.d.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
-/user/username/projects/transitivereferences/refs/a.d.ts:
-  {"pollingInterval":250}
 /user/username/projects/transitivereferences/c/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/transitivereferences/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/transitivereferences/c/tsconfig.json:
+  {}
+/user/username/projects/transitivereferences/b/tsconfig.json:
+  {}
+/user/username/projects/transitivereferences/a/tsconfig.json:
+  {}
+/user/username/projects/transitivereferences/c/index.ts:
+  {}
+/user/username/projects/transitivereferences/b/index.d.ts:
+  {}
+/user/username/projects/transitivereferences/a/index.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 /user/username/projects/transitivereferences:
+  {}
+/user/username/projects/transitivereferences/refs/a.d.ts:
   {}
 
 FsWatchesRecursive::
@@ -681,29 +681,29 @@ Dependencies for::
   /user/username/projects/transitiveReferences/nrefs/a.d.ts
 
 PolledWatches::
-/user/username/projects/transitivereferences/c/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/transitivereferences/b/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/transitivereferences/a/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/transitivereferences/c/index.ts:
-  {"pollingInterval":250}
-/user/username/projects/transitivereferences/b/index.d.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
-/user/username/projects/transitivereferences/refs/a.d.ts:
-  {"pollingInterval":250}
 /user/username/projects/transitivereferences/c/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/transitivereferences/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/transitivereferences/nrefs/a.d.ts:
-  {"pollingInterval":250}
 
 FsWatches::
+/user/username/projects/transitivereferences/c/tsconfig.json:
+  {}
+/user/username/projects/transitivereferences/b/tsconfig.json:
+  {}
+/user/username/projects/transitivereferences/a/tsconfig.json:
+  {}
+/user/username/projects/transitivereferences/c/index.ts:
+  {}
+/user/username/projects/transitivereferences/b/index.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 /user/username/projects/transitivereferences:
+  {}
+/user/username/projects/transitivereferences/refs/a.d.ts:
+  {}
+/user/username/projects/transitivereferences/nrefs/a.d.ts:
   {}
 
 FsWatchesRecursive::
@@ -769,27 +769,27 @@ Dependencies for::
   /user/username/projects/transitiveReferences/b/index.d.ts
 
 PolledWatches::
-/user/username/projects/transitivereferences/c/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/transitivereferences/b/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/transitivereferences/a/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/transitivereferences/c/index.ts:
-  {"pollingInterval":250}
-/user/username/projects/transitivereferences/b/index.d.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
-/user/username/projects/transitivereferences/refs/a.d.ts:
-  {"pollingInterval":250}
 /user/username/projects/transitivereferences/c/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/transitivereferences/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/transitivereferences/c/tsconfig.json:
+  {}
+/user/username/projects/transitivereferences/b/tsconfig.json:
+  {}
+/user/username/projects/transitivereferences/a/tsconfig.json:
+  {}
+/user/username/projects/transitivereferences/c/index.ts:
+  {}
+/user/username/projects/transitivereferences/b/index.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 /user/username/projects/transitivereferences:
+  {}
+/user/username/projects/transitivereferences/refs/a.d.ts:
   {}
 
 FsWatchesRecursive::
@@ -858,25 +858,25 @@ Dependencies for::
   /user/username/projects/transitiveReferences/b/index.ts
 
 PolledWatches::
-/user/username/projects/transitivereferences/c/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/transitivereferences/b/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/transitivereferences/c/index.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
-/user/username/projects/transitivereferences/refs/a.d.ts:
-  {"pollingInterval":250}
 /user/username/projects/transitivereferences/c/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/transitivereferences/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/transitivereferences/b/index.ts:
-  {"pollingInterval":250}
 
 FsWatches::
+/user/username/projects/transitivereferences/c/tsconfig.json:
+  {}
+/user/username/projects/transitivereferences/b/tsconfig.json:
+  {}
+/user/username/projects/transitivereferences/c/index.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 /user/username/projects/transitivereferences:
+  {}
+/user/username/projects/transitivereferences/refs/a.d.ts:
+  {}
+/user/username/projects/transitivereferences/b/index.ts:
   {}
 
 FsWatchesRecursive::
@@ -948,29 +948,29 @@ Dependencies for::
   /user/username/projects/transitiveReferences/a/index.d.ts
 
 PolledWatches::
-/user/username/projects/transitivereferences/c/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/transitivereferences/b/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/transitivereferences/c/index.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
-/user/username/projects/transitivereferences/refs/a.d.ts:
-  {"pollingInterval":250}
 /user/username/projects/transitivereferences/c/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/transitivereferences/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/transitivereferences/a/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/transitivereferences/b/index.d.ts:
-  {"pollingInterval":250}
-/user/username/projects/transitivereferences/a/index.d.ts:
-  {"pollingInterval":250}
 
 FsWatches::
+/user/username/projects/transitivereferences/c/tsconfig.json:
+  {}
+/user/username/projects/transitivereferences/b/tsconfig.json:
+  {}
+/user/username/projects/transitivereferences/c/index.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 /user/username/projects/transitivereferences:
+  {}
+/user/username/projects/transitivereferences/refs/a.d.ts:
+  {}
+/user/username/projects/transitivereferences/a/tsconfig.json:
+  {}
+/user/username/projects/transitivereferences/b/index.d.ts:
+  {}
+/user/username/projects/transitivereferences/a/index.d.ts:
   {}
 
 FsWatchesRecursive::
@@ -1046,29 +1046,29 @@ Dependencies for::
   /user/username/projects/transitiveReferences/a/index.ts
 
 PolledWatches::
-/user/username/projects/transitivereferences/c/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/transitivereferences/b/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/transitivereferences/c/index.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
-/user/username/projects/transitivereferences/refs/a.d.ts:
-  {"pollingInterval":250}
 /user/username/projects/transitivereferences/c/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/transitivereferences/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/transitivereferences/a/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/transitivereferences/b/index.d.ts:
-  {"pollingInterval":250}
-/user/username/projects/transitivereferences/a/index.ts:
-  {"pollingInterval":250}
 
 FsWatches::
+/user/username/projects/transitivereferences/c/tsconfig.json:
+  {}
+/user/username/projects/transitivereferences/b/tsconfig.json:
+  {}
+/user/username/projects/transitivereferences/c/index.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 /user/username/projects/transitivereferences:
+  {}
+/user/username/projects/transitivereferences/refs/a.d.ts:
+  {}
+/user/username/projects/transitivereferences/a/tsconfig.json:
+  {}
+/user/username/projects/transitivereferences/b/index.d.ts:
+  {}
+/user/username/projects/transitivereferences/a/index.ts:
   {}
 
 FsWatchesRecursive::
@@ -1142,29 +1142,29 @@ Dependencies for::
   /user/username/projects/transitiveReferences/a/index.d.ts
 
 PolledWatches::
-/user/username/projects/transitivereferences/c/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/transitivereferences/b/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/transitivereferences/c/index.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
-/user/username/projects/transitivereferences/refs/a.d.ts:
-  {"pollingInterval":250}
 /user/username/projects/transitivereferences/c/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/transitivereferences/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/transitivereferences/a/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/transitivereferences/b/index.d.ts:
-  {"pollingInterval":250}
-/user/username/projects/transitivereferences/a/index.d.ts:
-  {"pollingInterval":250}
 
 FsWatches::
+/user/username/projects/transitivereferences/c/tsconfig.json:
+  {}
+/user/username/projects/transitivereferences/b/tsconfig.json:
+  {}
+/user/username/projects/transitivereferences/c/index.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 /user/username/projects/transitivereferences:
+  {}
+/user/username/projects/transitivereferences/refs/a.d.ts:
+  {}
+/user/username/projects/transitivereferences/a/tsconfig.json:
+  {}
+/user/username/projects/transitivereferences/b/index.d.ts:
+  {}
+/user/username/projects/transitivereferences/a/index.d.ts:
   {}
 
 FsWatchesRecursive::

@@ -57,14 +57,14 @@ Shape signatures in builder refreshed for::
 /a/d/f0.ts (used version)
 
 PolledWatches::
-/a/d/f0.ts:
-  {"pollingInterval":250}
-/a/f1.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
 
 FsWatches::
+/a/d/f0.ts:
+  {}
+/a/f1.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 /a:
@@ -130,14 +130,14 @@ Shape signatures in builder refreshed for::
 /a/d/f0.ts (computed .d.ts)
 
 PolledWatches::
-/a/d/f0.ts:
-  {"pollingInterval":250}
-/a/f1.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
 
 FsWatches::
+/a/d/f0.ts:
+  {}
+/a/f1.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 /a:
@@ -188,14 +188,14 @@ Shape signatures in builder refreshed for::
 /a/d/f0.ts (computed .d.ts)
 
 PolledWatches::
-/a/d/f0.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
 /node_modules:
   {"pollingInterval":500}
 
 FsWatches::
+/a/d/f0.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 /:
   {}
 
@@ -256,14 +256,14 @@ Shape signatures in builder refreshed for::
 /a/d/f0.ts (computed .d.ts)
 
 PolledWatches::
-/a/d/f0.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
-/a/f1.ts:
-  {"pollingInterval":250}
 
 FsWatches::
+/a/d/f0.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/a/f1.ts:
+  {}
 
 FsWatchesRecursive::
 /a:

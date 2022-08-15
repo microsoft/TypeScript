@@ -52,13 +52,13 @@ Open files:
 response:{"responseRequired":false}
 PolledWatches::
 /a/b/tsconfig.json:
-  {"pollingInterval":250}
+  {"pollingInterval":2000}
 /a/b:
   {"pollingInterval":500}
 /a/b/commonfile2.ts:
-  {"pollingInterval":250}
+  {"pollingInterval":500}
 /a/lib/lib.d.ts:
-  {"pollingInterval":250}
+  {"pollingInterval":500}
 /a/b/node_modules/@types:
   {"pollingInterval":500}
 

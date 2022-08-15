@@ -89,22 +89,22 @@ Shape signatures in builder refreshed for::
 /a/b/other.ts (computed .d.ts during emit)
 
 PolledWatches::
-/a/b/project1.tsconfig.json:
-  {"pollingInterval":250}
-/a/b/alpha.tsconfig.json:
-  {"pollingInterval":250}
-/a/b/commonfile1.ts:
-  {"pollingInterval":250}
-/a/b/commonfile2.ts:
-  {"pollingInterval":250}
-/a/b/project2.tsconfig.json:
-  {"pollingInterval":250}
-/a/b/bravo.tsconfig.json:
-  {"pollingInterval":250}
-/a/b/other.ts:
-  {"pollingInterval":250}
 
 FsWatches::
+/a/b/project1.tsconfig.json:
+  {}
+/a/b/alpha.tsconfig.json:
+  {}
+/a/b/commonfile1.ts:
+  {}
+/a/b/commonfile2.ts:
+  {}
+/a/b/project2.tsconfig.json:
+  {}
+/a/b/bravo.tsconfig.json:
+  {}
+/a/b/other.ts:
+  {}
 
 FsWatchesRecursive::
 
@@ -249,22 +249,22 @@ Semantic diagnostics in builder refreshed for::
 No shapes updated in the builder::
 
 PolledWatches::
-/a/b/project1.tsconfig.json:
-  {"pollingInterval":250}
-/a/b/alpha.tsconfig.json:
-  {"pollingInterval":250}
-/a/b/commonfile1.ts:
-  {"pollingInterval":250}
-/a/b/commonfile2.ts:
-  {"pollingInterval":250}
-/a/b/project2.tsconfig.json:
-  {"pollingInterval":250}
-/a/b/bravo.tsconfig.json:
-  {"pollingInterval":250}
-/a/b/other.ts:
-  {"pollingInterval":250}
 
 FsWatches::
+/a/b/project1.tsconfig.json:
+  {}
+/a/b/alpha.tsconfig.json:
+  {}
+/a/b/commonfile1.ts:
+  {}
+/a/b/commonfile2.ts:
+  {}
+/a/b/project2.tsconfig.json:
+  {}
+/a/b/bravo.tsconfig.json:
+  {}
+/a/b/other.ts:
+  {}
 
 FsWatchesRecursive::
 
@@ -353,22 +353,22 @@ Semantic diagnostics in builder refreshed for::
 No shapes updated in the builder::
 
 PolledWatches::
-/a/b/project1.tsconfig.json:
-  {"pollingInterval":250}
-/a/b/alpha.tsconfig.json:
-  {"pollingInterval":250}
-/a/b/commonfile1.ts:
-  {"pollingInterval":250}
-/a/b/commonfile2.ts:
-  {"pollingInterval":250}
-/a/b/project2.tsconfig.json:
-  {"pollingInterval":250}
-/a/b/bravo.tsconfig.json:
-  {"pollingInterval":250}
-/a/b/other.ts:
-  {"pollingInterval":250}
 
 FsWatches::
+/a/b/project1.tsconfig.json:
+  {}
+/a/b/alpha.tsconfig.json:
+  {}
+/a/b/commonfile1.ts:
+  {}
+/a/b/commonfile2.ts:
+  {}
+/a/b/project2.tsconfig.json:
+  {}
+/a/b/bravo.tsconfig.json:
+  {}
+/a/b/other.ts:
+  {}
 
 FsWatchesRecursive::
 
@@ -451,22 +451,22 @@ Semantic diagnostics in builder refreshed for::
 No shapes updated in the builder::
 
 PolledWatches::
-/a/b/project1.tsconfig.json:
-  {"pollingInterval":250}
-/a/b/alpha.tsconfig.json:
-  {"pollingInterval":250}
-/a/b/commonfile1.ts:
-  {"pollingInterval":250}
-/a/b/commonfile2.ts:
-  {"pollingInterval":250}
-/a/b/project2.tsconfig.json:
-  {"pollingInterval":250}
-/a/b/bravo.tsconfig.json:
-  {"pollingInterval":250}
-/a/b/other.ts:
-  {"pollingInterval":250}
 
 FsWatches::
+/a/b/project1.tsconfig.json:
+  {}
+/a/b/alpha.tsconfig.json:
+  {}
+/a/b/commonfile1.ts:
+  {}
+/a/b/commonfile2.ts:
+  {}
+/a/b/project2.tsconfig.json:
+  {}
+/a/b/bravo.tsconfig.json:
+  {}
+/a/b/other.ts:
+  {}
 
 FsWatchesRecursive::
 
@@ -555,20 +555,20 @@ Shape signatures in builder refreshed for::
 /a/b/other.ts (computed .d.ts)
 
 PolledWatches::
-/a/b/project1.tsconfig.json:
-  {"pollingInterval":250}
-/a/b/alpha.tsconfig.json:
-  {"pollingInterval":250}
-/a/b/commonfile1.ts:
-  {"pollingInterval":250}
-/a/b/commonfile2.ts:
-  {"pollingInterval":250}
-/a/b/project2.tsconfig.json:
-  {"pollingInterval":250}
-/a/b/other.ts:
-  {"pollingInterval":250}
 
 FsWatches::
+/a/b/project1.tsconfig.json:
+  {}
+/a/b/alpha.tsconfig.json:
+  {}
+/a/b/commonfile1.ts:
+  {}
+/a/b/commonfile2.ts:
+  {}
+/a/b/project2.tsconfig.json:
+  {}
+/a/b/other.ts:
+  {}
 
 FsWatchesRecursive::
 /a/b:
@@ -617,20 +617,20 @@ Semantic diagnostics in builder refreshed for::
 No shapes updated in the builder::
 
 PolledWatches::
-/a/b/project1.tsconfig.json:
-  {"pollingInterval":250}
-/a/b/alpha.tsconfig.json:
-  {"pollingInterval":250}
-/a/b/commonfile1.ts:
-  {"pollingInterval":250}
-/a/b/commonfile2.ts:
-  {"pollingInterval":250}
-/a/b/project2.tsconfig.json:
-  {"pollingInterval":250}
-/a/b/other.ts:
-  {"pollingInterval":250}
 
 FsWatches::
+/a/b/project1.tsconfig.json:
+  {}
+/a/b/alpha.tsconfig.json:
+  {}
+/a/b/commonfile1.ts:
+  {}
+/a/b/commonfile2.ts:
+  {}
+/a/b/project2.tsconfig.json:
+  {}
+/a/b/other.ts:
+  {}
 
 FsWatchesRecursive::
 /a/b:
@@ -722,20 +722,20 @@ Semantic diagnostics in builder refreshed for::
 No shapes updated in the builder::
 
 PolledWatches::
-/a/b/project1.tsconfig.json:
-  {"pollingInterval":250}
-/a/b/alpha.tsconfig.json:
-  {"pollingInterval":250}
-/a/b/commonfile1.ts:
-  {"pollingInterval":250}
-/a/b/commonfile2.ts:
-  {"pollingInterval":250}
-/a/b/project2.tsconfig.json:
-  {"pollingInterval":250}
-/a/b/other.ts:
-  {"pollingInterval":250}
 
 FsWatches::
+/a/b/project1.tsconfig.json:
+  {}
+/a/b/alpha.tsconfig.json:
+  {}
+/a/b/commonfile1.ts:
+  {}
+/a/b/commonfile2.ts:
+  {}
+/a/b/project2.tsconfig.json:
+  {}
+/a/b/other.ts:
+  {}
 
 FsWatchesRecursive::
 /a/b:

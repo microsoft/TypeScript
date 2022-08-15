@@ -68,14 +68,14 @@ Shape signatures in builder refreshed for::
 /user/username/projects/sample1/core/index.ts (computed .d.ts during emit)
 
 PolledWatches::
-/user/username/projects/sample1/core/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/sample1/core/anothermodule.ts:
-  {"pollingInterval":250}
-/user/username/projects/sample1/core/index.ts:
-  {"pollingInterval":250}
 
 FsWatches::
+/user/username/projects/sample1/core/tsconfig.json:
+  {}
+/user/username/projects/sample1/core/anothermodule.ts:
+  {}
+/user/username/projects/sample1/core/index.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/sample1/core:
@@ -170,14 +170,14 @@ Input::
 Output::
 
 PolledWatches::
-/user/username/projects/sample1/core/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/sample1/core/anothermodule.ts:
-  {"pollingInterval":250}
-/user/username/projects/sample1/core/index.ts:
-  {"pollingInterval":250}
 
 FsWatches::
+/user/username/projects/sample1/core/tsconfig.json:
+  {}
+/user/username/projects/sample1/core/anothermodule.ts:
+  {}
+/user/username/projects/sample1/core/index.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/sample1/core:
@@ -221,16 +221,16 @@ Shape signatures in builder refreshed for::
 /user/username/projects/sample1/core/file3.ts (computed .d.ts)
 
 PolledWatches::
-/user/username/projects/sample1/core/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/sample1/core/anothermodule.ts:
-  {"pollingInterval":250}
-/user/username/projects/sample1/core/index.ts:
-  {"pollingInterval":250}
-/user/username/projects/sample1/core/file3.ts:
-  {"pollingInterval":250}
 
 FsWatches::
+/user/username/projects/sample1/core/tsconfig.json:
+  {}
+/user/username/projects/sample1/core/anothermodule.ts:
+  {}
+/user/username/projects/sample1/core/index.ts:
+  {}
+/user/username/projects/sample1/core/file3.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/sample1/core:
@@ -311,16 +311,16 @@ Input::
 Output::
 
 PolledWatches::
-/user/username/projects/sample1/core/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/sample1/core/anothermodule.ts:
-  {"pollingInterval":250}
-/user/username/projects/sample1/core/index.ts:
-  {"pollingInterval":250}
-/user/username/projects/sample1/core/file3.ts:
-  {"pollingInterval":250}
 
 FsWatches::
+/user/username/projects/sample1/core/tsconfig.json:
+  {}
+/user/username/projects/sample1/core/anothermodule.ts:
+  {}
+/user/username/projects/sample1/core/index.ts:
+  {}
+/user/username/projects/sample1/core/file3.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/sample1/core:

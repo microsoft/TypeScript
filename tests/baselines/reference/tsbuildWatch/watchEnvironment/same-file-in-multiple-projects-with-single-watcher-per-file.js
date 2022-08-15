@@ -148,28 +148,28 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/typings/xterm.d.ts (used version)
 
 PolledWatches::
-/user/username/projects/myproject/pkg0/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/myproject/pkg0/index.ts:
-  {"pollingInterval":250}
-/user/username/projects/myproject/typings/xterm.d.ts:
-  {"pollingInterval":250}
-/user/username/projects/myproject/pkg1/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/myproject/pkg1/index.ts:
-  {"pollingInterval":250}
-/user/username/projects/myproject/pkg2/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/myproject/pkg2/index.ts:
-  {"pollingInterval":250}
-/user/username/projects/myproject/pkg3/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/myproject/pkg3/index.ts:
-  {"pollingInterval":250}
-/user/username/projects/myproject/tsconfig.json:
-  {"pollingInterval":250}
 
 FsWatches::
+/user/username/projects/myproject/pkg0/tsconfig.json:
+  {}
+/user/username/projects/myproject/pkg0/index.ts:
+  {}
+/user/username/projects/myproject/typings/xterm.d.ts:
+  {}
+/user/username/projects/myproject/pkg1/tsconfig.json:
+  {}
+/user/username/projects/myproject/pkg1/index.ts:
+  {}
+/user/username/projects/myproject/pkg2/tsconfig.json:
+  {}
+/user/username/projects/myproject/pkg2/index.ts:
+  {}
+/user/username/projects/myproject/pkg3/tsconfig.json:
+  {}
+/user/username/projects/myproject/pkg3/index.ts:
+  {}
+/user/username/projects/myproject/tsconfig.json:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject/pkg0:
@@ -308,28 +308,28 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/typings/xterm.d.ts (used version)
 
 PolledWatches::
-/user/username/projects/myproject/pkg0/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/myproject/pkg0/index.ts:
-  {"pollingInterval":250}
-/user/username/projects/myproject/typings/xterm.d.ts:
-  {"pollingInterval":250}
-/user/username/projects/myproject/pkg1/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/myproject/pkg1/index.ts:
-  {"pollingInterval":250}
-/user/username/projects/myproject/pkg2/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/myproject/pkg2/index.ts:
-  {"pollingInterval":250}
-/user/username/projects/myproject/pkg3/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/myproject/pkg3/index.ts:
-  {"pollingInterval":250}
-/user/username/projects/myproject/tsconfig.json:
-  {"pollingInterval":250}
 
 FsWatches::
+/user/username/projects/myproject/pkg0/tsconfig.json:
+  {}
+/user/username/projects/myproject/pkg0/index.ts:
+  {}
+/user/username/projects/myproject/typings/xterm.d.ts:
+  {}
+/user/username/projects/myproject/pkg1/tsconfig.json:
+  {}
+/user/username/projects/myproject/pkg1/index.ts:
+  {}
+/user/username/projects/myproject/pkg2/tsconfig.json:
+  {}
+/user/username/projects/myproject/pkg2/index.ts:
+  {}
+/user/username/projects/myproject/pkg3/tsconfig.json:
+  {}
+/user/username/projects/myproject/pkg3/index.ts:
+  {}
+/user/username/projects/myproject/tsconfig.json:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject/pkg0:
@@ -364,24 +364,24 @@ Output::
 
 
 PolledWatches::
-/user/username/projects/myproject/pkg0/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/myproject/pkg0/index.ts:
-  {"pollingInterval":250}
-/user/username/projects/myproject/typings/xterm.d.ts:
-  {"pollingInterval":250}
-/user/username/projects/myproject/pkg1/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/myproject/pkg1/index.ts:
-  {"pollingInterval":250}
-/user/username/projects/myproject/pkg2/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/myproject/pkg2/index.ts:
-  {"pollingInterval":250}
-/user/username/projects/myproject/tsconfig.json:
-  {"pollingInterval":250}
 
 FsWatches::
+/user/username/projects/myproject/pkg0/tsconfig.json:
+  {}
+/user/username/projects/myproject/pkg0/index.ts:
+  {}
+/user/username/projects/myproject/typings/xterm.d.ts:
+  {}
+/user/username/projects/myproject/pkg1/tsconfig.json:
+  {}
+/user/username/projects/myproject/pkg1/index.ts:
+  {}
+/user/username/projects/myproject/pkg2/tsconfig.json:
+  {}
+/user/username/projects/myproject/pkg2/index.ts:
+  {}
+/user/username/projects/myproject/tsconfig.json:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject/pkg0:
@@ -470,24 +470,24 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/typings/xterm.d.ts (used version)
 
 PolledWatches::
-/user/username/projects/myproject/pkg0/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/myproject/pkg0/index.ts:
-  {"pollingInterval":250}
-/user/username/projects/myproject/typings/xterm.d.ts:
-  {"pollingInterval":250}
-/user/username/projects/myproject/pkg1/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/myproject/pkg1/index.ts:
-  {"pollingInterval":250}
-/user/username/projects/myproject/pkg2/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/myproject/pkg2/index.ts:
-  {"pollingInterval":250}
-/user/username/projects/myproject/tsconfig.json:
-  {"pollingInterval":250}
 
 FsWatches::
+/user/username/projects/myproject/pkg0/tsconfig.json:
+  {}
+/user/username/projects/myproject/pkg0/index.ts:
+  {}
+/user/username/projects/myproject/typings/xterm.d.ts:
+  {}
+/user/username/projects/myproject/pkg1/tsconfig.json:
+  {}
+/user/username/projects/myproject/pkg1/index.ts:
+  {}
+/user/username/projects/myproject/pkg2/tsconfig.json:
+  {}
+/user/username/projects/myproject/pkg2/index.ts:
+  {}
+/user/username/projects/myproject/tsconfig.json:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject/pkg0:
@@ -524,10 +524,10 @@ Output::
 
 
 PolledWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {"pollingInterval":250}
 
 FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
 
 FsWatchesRecursive::
 
@@ -544,10 +544,10 @@ export const typing = 10;export const typing1 = 10;
 Output::
 
 PolledWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {"pollingInterval":250}
 
 FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
 
 FsWatchesRecursive::
 

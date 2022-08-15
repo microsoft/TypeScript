@@ -94,20 +94,20 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/moduleb.ts (used version)
 
 PolledWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/myproject/modulea.ts:
-  {"pollingInterval":250}
-/user/username/projects/myproject/modulec.ts:
-  {"pollingInterval":250}
-/user/username/projects/myproject/moduleb.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/modulea.ts:
+  {}
+/user/username/projects/myproject/modulec.ts:
+  {}
+/user/username/projects/myproject/moduleb.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject:
@@ -203,20 +203,20 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/modulea.ts (computed .d.ts)
 
 PolledWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/myproject/modulea.ts:
-  {"pollingInterval":250}
-/user/username/projects/myproject/modulec.ts:
-  {"pollingInterval":250}
-/user/username/projects/myproject/moduleb.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/modulea.ts:
+  {}
+/user/username/projects/myproject/modulec.ts:
+  {}
+/user/username/projects/myproject/moduleb.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject:

@@ -102,22 +102,10 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/packages/pkg1/index.ts (used version)
 
 PolledWatches::
-/user/username/projects/myproject/packages/pkg1/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/myproject/packages/pkg1/index.ts:
-  {"pollingInterval":250}
-/user/username/projects/myproject/packages/pkg2/build/index.d.ts:
-  {"pollingInterval":250}
-/user/username/projects/myproject/packages/pkg2/build/const.d.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
 /user/username/projects/myproject/packages/pkg1/node_modules:
   {"pollingInterval":500}
 /user/username/projects/myproject/packages/node_modules:
   {"pollingInterval":500}
-/user/username/projects/myproject/packages/pkg2/package.json:
-  {"pollingInterval":250}
 /user/username/projects/myproject/packages/pkg1/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/myproject/packages/node_modules/@types:
@@ -126,6 +114,18 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/myproject/packages/pkg1/tsconfig.json:
+  {}
+/user/username/projects/myproject/packages/pkg1/index.ts:
+  {}
+/user/username/projects/myproject/packages/pkg2/build/index.d.ts:
+  {}
+/user/username/projects/myproject/packages/pkg2/build/const.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/packages/pkg2/package.json:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject/packages/pkg2:
@@ -206,28 +206,28 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/packages/pkg1/index.ts (computed .d.ts)
 
 PolledWatches::
-/user/username/projects/myproject/packages/pkg1/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/myproject/packages/pkg1/index.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
 /user/username/projects/myproject/packages/pkg1/node_modules:
   {"pollingInterval":500}
 /user/username/projects/myproject/packages/node_modules:
   {"pollingInterval":500}
-/user/username/projects/myproject/packages/pkg2/package.json:
-  {"pollingInterval":250}
 /user/username/projects/myproject/packages/pkg1/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/myproject/packages/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/packages/pkg2/build/other.d.ts:
-  {"pollingInterval":250}
 
 FsWatches::
+/user/username/projects/myproject/packages/pkg1/tsconfig.json:
+  {}
+/user/username/projects/myproject/packages/pkg1/index.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/packages/pkg2/package.json:
+  {}
+/user/username/projects/myproject/packages/pkg2/build/other.d.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject/node_modules:
@@ -309,30 +309,30 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/packages/pkg1/index.ts (computed .d.ts)
 
 PolledWatches::
-/user/username/projects/myproject/packages/pkg1/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/myproject/packages/pkg1/index.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
 /user/username/projects/myproject/packages/pkg1/node_modules:
   {"pollingInterval":500}
 /user/username/projects/myproject/packages/node_modules:
   {"pollingInterval":500}
-/user/username/projects/myproject/packages/pkg2/package.json:
-  {"pollingInterval":250}
 /user/username/projects/myproject/packages/pkg1/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/myproject/packages/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/packages/pkg2/build/index.d.ts:
-  {"pollingInterval":250}
-/user/username/projects/myproject/packages/pkg2/build/const.d.ts:
-  {"pollingInterval":250}
 
 FsWatches::
+/user/username/projects/myproject/packages/pkg1/tsconfig.json:
+  {}
+/user/username/projects/myproject/packages/pkg1/index.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/packages/pkg2/package.json:
+  {}
+/user/username/projects/myproject/packages/pkg2/build/index.d.ts:
+  {}
+/user/username/projects/myproject/packages/pkg2/build/const.d.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject/node_modules:

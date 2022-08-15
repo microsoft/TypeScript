@@ -40,10 +40,10 @@ Open files:
 	FileName: /user/username/projects/myproject/src/main.ts ProjectRootPath: undefined
 		Projects: /user/username/projects/myproject/project.csproj
 PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
 
 FsWatches::
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject/node_modules:

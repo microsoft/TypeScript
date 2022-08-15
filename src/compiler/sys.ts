@@ -968,7 +968,7 @@ namespace ts {
                         // Use notifications from FS to watch with falling back to fs.watchFile
                         generateWatchFileOptions(WatchFileKind.UseFsEventsOnParentDirectory, PollingWatchKind.PriorityInterval, options) :
                         // Default to do not use fixed polling interval
-                        { watchFile: defaultWatchFileKind?.() || WatchFileKind.FixedPollingInterval };
+                        { watchFile: defaultWatchFileKind?.() || WatchFileKind.UseFsEvents };
             }
         }
 

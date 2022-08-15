@@ -86,18 +86,18 @@ Shape signatures in builder refreshed for::
 /home/user/projects/myproject/src/file.ts (used version)
 
 PolledWatches::
-/home/user/projects/myproject/tsconfig.json:
-  {"pollingInterval":250}
-/home/user/projects/myproject/src/file.ts:
-  {"pollingInterval":250}
-/home/user/projects/myproject/node_modules/reala/index.d.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
 /home/user/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
+/home/user/projects/myproject/tsconfig.json:
+  {}
+/home/user/projects/myproject/src/file.ts:
+  {}
+/home/user/projects/myproject/node_modules/reala/index.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 /home/user/projects/myproject/src:
   {}
 /home/user/projects/myproject/node_modules:

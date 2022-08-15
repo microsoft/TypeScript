@@ -175,22 +175,22 @@ Shape signatures in builder refreshed for::
 /user/username/projects/sample1/tests/index.ts (computed .d.ts during emit)
 
 PolledWatches::
-/user/username/projects/sample1/core/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/sample1/core/anothermodule.ts:
-  {"pollingInterval":250}
-/user/username/projects/sample1/core/index.ts:
-  {"pollingInterval":250}
-/user/username/projects/sample1/logic/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/sample1/logic/index.ts:
-  {"pollingInterval":250}
-/user/username/projects/sample1/tests/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/sample1/tests/index.ts:
-  {"pollingInterval":250}
 
 FsWatches::
+/user/username/projects/sample1/core/tsconfig.json:
+  {}
+/user/username/projects/sample1/core/anothermodule.ts:
+  {}
+/user/username/projects/sample1/core/index.ts:
+  {}
+/user/username/projects/sample1/logic/tsconfig.json:
+  {}
+/user/username/projects/sample1/logic/index.ts:
+  {}
+/user/username/projects/sample1/tests/tsconfig.json:
+  {}
+/user/username/projects/sample1/tests/index.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/sample1/core:
@@ -499,24 +499,24 @@ Shape signatures in builder refreshed for::
 /user/username/projects/sample1/core/newfile.ts (computed .d.ts)
 
 PolledWatches::
-/user/username/projects/sample1/core/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/sample1/core/anothermodule.ts:
-  {"pollingInterval":250}
-/user/username/projects/sample1/core/index.ts:
-  {"pollingInterval":250}
-/user/username/projects/sample1/logic/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/sample1/logic/index.ts:
-  {"pollingInterval":250}
-/user/username/projects/sample1/tests/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/sample1/tests/index.ts:
-  {"pollingInterval":250}
-/user/username/projects/sample1/core/newfile.ts:
-  {"pollingInterval":250}
 
 FsWatches::
+/user/username/projects/sample1/core/tsconfig.json:
+  {}
+/user/username/projects/sample1/core/anothermodule.ts:
+  {}
+/user/username/projects/sample1/core/index.ts:
+  {}
+/user/username/projects/sample1/logic/tsconfig.json:
+  {}
+/user/username/projects/sample1/logic/index.ts:
+  {}
+/user/username/projects/sample1/tests/tsconfig.json:
+  {}
+/user/username/projects/sample1/tests/index.ts:
+  {}
+/user/username/projects/sample1/core/newfile.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/sample1/core:
@@ -629,24 +629,24 @@ Semantic diagnostics in builder refreshed for::
 No shapes updated in the builder::
 
 PolledWatches::
-/user/username/projects/sample1/core/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/sample1/core/anothermodule.ts:
-  {"pollingInterval":250}
-/user/username/projects/sample1/core/index.ts:
-  {"pollingInterval":250}
-/user/username/projects/sample1/logic/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/sample1/logic/index.ts:
-  {"pollingInterval":250}
-/user/username/projects/sample1/tests/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/sample1/tests/index.ts:
-  {"pollingInterval":250}
-/user/username/projects/sample1/core/newfile.ts:
-  {"pollingInterval":250}
 
 FsWatches::
+/user/username/projects/sample1/core/tsconfig.json:
+  {}
+/user/username/projects/sample1/core/anothermodule.ts:
+  {}
+/user/username/projects/sample1/core/index.ts:
+  {}
+/user/username/projects/sample1/logic/tsconfig.json:
+  {}
+/user/username/projects/sample1/logic/index.ts:
+  {}
+/user/username/projects/sample1/tests/tsconfig.json:
+  {}
+/user/username/projects/sample1/tests/index.ts:
+  {}
+/user/username/projects/sample1/core/newfile.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/sample1/core:
@@ -689,24 +689,24 @@ Shape signatures in builder refreshed for::
 /user/username/projects/sample1/core/newfile.ts (computed .d.ts)
 
 PolledWatches::
-/user/username/projects/sample1/core/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/sample1/core/anothermodule.ts:
-  {"pollingInterval":250}
-/user/username/projects/sample1/core/index.ts:
-  {"pollingInterval":250}
-/user/username/projects/sample1/logic/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/sample1/logic/index.ts:
-  {"pollingInterval":250}
-/user/username/projects/sample1/tests/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/sample1/tests/index.ts:
-  {"pollingInterval":250}
-/user/username/projects/sample1/core/newfile.ts:
-  {"pollingInterval":250}
 
 FsWatches::
+/user/username/projects/sample1/core/tsconfig.json:
+  {}
+/user/username/projects/sample1/core/anothermodule.ts:
+  {}
+/user/username/projects/sample1/core/index.ts:
+  {}
+/user/username/projects/sample1/logic/tsconfig.json:
+  {}
+/user/username/projects/sample1/logic/index.ts:
+  {}
+/user/username/projects/sample1/tests/tsconfig.json:
+  {}
+/user/username/projects/sample1/tests/index.ts:
+  {}
+/user/username/projects/sample1/core/newfile.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/sample1/core:
@@ -827,24 +827,24 @@ Semantic diagnostics in builder refreshed for::
 No shapes updated in the builder::
 
 PolledWatches::
-/user/username/projects/sample1/core/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/sample1/core/anothermodule.ts:
-  {"pollingInterval":250}
-/user/username/projects/sample1/core/index.ts:
-  {"pollingInterval":250}
-/user/username/projects/sample1/logic/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/sample1/logic/index.ts:
-  {"pollingInterval":250}
-/user/username/projects/sample1/tests/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/sample1/tests/index.ts:
-  {"pollingInterval":250}
-/user/username/projects/sample1/core/newfile.ts:
-  {"pollingInterval":250}
 
 FsWatches::
+/user/username/projects/sample1/core/tsconfig.json:
+  {}
+/user/username/projects/sample1/core/anothermodule.ts:
+  {}
+/user/username/projects/sample1/core/index.ts:
+  {}
+/user/username/projects/sample1/logic/tsconfig.json:
+  {}
+/user/username/projects/sample1/logic/index.ts:
+  {}
+/user/username/projects/sample1/tests/tsconfig.json:
+  {}
+/user/username/projects/sample1/tests/index.ts:
+  {}
+/user/username/projects/sample1/core/newfile.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/sample1/core:

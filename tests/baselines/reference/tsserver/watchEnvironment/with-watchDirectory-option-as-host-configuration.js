@@ -51,17 +51,17 @@ Open files:
 		Projects: /a/b/tsconfig.json
 response:{"responseRequired":false}
 PolledWatches::
-/a/b/tsconfig.json:
-  {"pollingInterval":250}
-/a/b/commonfile2.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
 /a/b/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
+/a/b/tsconfig.json:
+  {}
 /a/b:
+  {}
+/a/b/commonfile2.ts:
+  {}
+/a/lib/lib.d.ts:
   {}
 
 FsWatchesRecursive::

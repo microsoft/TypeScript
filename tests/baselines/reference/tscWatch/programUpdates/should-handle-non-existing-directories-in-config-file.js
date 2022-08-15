@@ -44,18 +44,18 @@ Shape signatures in builder refreshed for::
 /a/src/app.ts (used version)
 
 PolledWatches::
-/a/tsconfig.json:
-  {"pollingInterval":250}
-/a/src/app.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
 /a/node_modules/@types:
   {"pollingInterval":500}
 /a/notexistingfolder:
   {"pollingInterval":500}
 
 FsWatches::
+/a/tsconfig.json:
+  {}
+/a/src/app.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 /a/src:

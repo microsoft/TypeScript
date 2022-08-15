@@ -50,18 +50,18 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/src/file1.ts (used version)
 
 PolledWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/myproject/src/file1.ts:
-  {"pollingInterval":250}
-/user/username/projects/myproject/node_modules/file2/index.d.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/file1.ts:
+  {}
+/user/username/projects/myproject/node_modules/file2/index.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 /user/username/projects/myproject/src:
   {}
 /user/username/projects/myproject/node_modules:
@@ -88,18 +88,18 @@ Input::
 Output::
 
 PolledWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/myproject/src/file1.ts:
-  {"pollingInterval":250}
-/user/username/projects/myproject/node_modules/file2/index.d.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/file1.ts:
+  {}
+/user/username/projects/myproject/node_modules/file2/index.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 /user/username/projects/myproject/src:
   {}
 /user/username/projects/myproject/node_modules:
@@ -146,16 +146,16 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/src/file1.ts (computed .d.ts)
 
 PolledWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/myproject/src/file1.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/file1.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 /user/username/projects/myproject/src:
   {}
 /user/username/projects/myproject/node_modules:
@@ -198,16 +198,16 @@ Semantic diagnostics in builder refreshed for::
 No shapes updated in the builder::
 
 PolledWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/myproject/src/file1.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/file1.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 /user/username/projects/myproject/src:
   {}
 /user/username/projects/myproject/node_modules:
@@ -227,16 +227,16 @@ Input::
 Output::
 
 PolledWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/myproject/src/file1.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/file1.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 /user/username/projects/myproject/src:
   {}
 /user/username/projects/myproject/node_modules:
@@ -256,16 +256,16 @@ Input::
 Output::
 
 PolledWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/myproject/src/file1.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/file1.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 /user/username/projects/myproject/src:
   {}
 /user/username/projects/myproject/node_modules:
@@ -288,16 +288,16 @@ export const x = 10;
 Output::
 
 PolledWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/myproject/src/file1.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/file1.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 /user/username/projects/myproject/src:
   {}
 /user/username/projects/myproject/node_modules:
@@ -317,16 +317,16 @@ Input::
 Output::
 
 PolledWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/myproject/src/file1.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/file1.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 /user/username/projects/myproject/src:
   {}
 /user/username/projects/myproject/node_modules:
@@ -348,16 +348,16 @@ Input::
 Output::
 
 PolledWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/myproject/src/file1.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/file1.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 /user/username/projects/myproject/src:
   {}
 /user/username/projects/myproject/node_modules:
@@ -401,18 +401,16 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/src/file1.ts (computed .d.ts)
 
 PolledWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/myproject/src/file1.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/file2/index.d.ts:
-  {"pollingInterval":250}
 
 FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/file1.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 /user/username/projects/myproject/src:
   {}
 /user/username/projects/myproject/node_modules:
@@ -420,6 +418,8 @@ FsWatches::
 /user/username/projects/myproject:
   {}
 /user/username/projects/myproject/node_modules/file2:
+  {}
+/user/username/projects/myproject/node_modules/file2/index.d.ts:
   {}
 
 FsWatchesRecursive::

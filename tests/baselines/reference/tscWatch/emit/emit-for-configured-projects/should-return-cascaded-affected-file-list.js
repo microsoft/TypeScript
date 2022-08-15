@@ -74,26 +74,26 @@ Shape signatures in builder refreshed for::
 /a/b/modulefile2.ts (used version)
 
 PolledWatches::
-/a/b/tsconfig.json:
-  {"pollingInterval":250}
-/a/b/file1consumer1.ts:
-  {"pollingInterval":250}
-/a/b/modulefile1.ts:
-  {"pollingInterval":250}
-/a/b/file1consumer1consumer1.ts:
-  {"pollingInterval":250}
-/a/b/file1consumer2.ts:
-  {"pollingInterval":250}
-/a/b/globalfile3.ts:
-  {"pollingInterval":250}
-/a/b/modulefile2.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
 /a/b/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
+/a/b/tsconfig.json:
+  {}
+/a/b/file1consumer1.ts:
+  {}
+/a/b/modulefile1.ts:
+  {}
+/a/b/file1consumer1consumer1.ts:
+  {}
+/a/b/file1consumer2.ts:
+  {}
+/a/b/globalfile3.ts:
+  {}
+/a/b/modulefile2.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 /a/b:
@@ -175,26 +175,26 @@ Shape signatures in builder refreshed for::
 /a/b/file1consumer1consumer1.ts (computed .d.ts)
 
 PolledWatches::
-/a/b/tsconfig.json:
-  {"pollingInterval":250}
-/a/b/file1consumer1.ts:
-  {"pollingInterval":250}
-/a/b/modulefile1.ts:
-  {"pollingInterval":250}
-/a/b/file1consumer1consumer1.ts:
-  {"pollingInterval":250}
-/a/b/file1consumer2.ts:
-  {"pollingInterval":250}
-/a/b/globalfile3.ts:
-  {"pollingInterval":250}
-/a/b/modulefile2.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
 /a/b/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
+/a/b/tsconfig.json:
+  {}
+/a/b/file1consumer1.ts:
+  {}
+/a/b/modulefile1.ts:
+  {}
+/a/b/file1consumer1consumer1.ts:
+  {}
+/a/b/file1consumer2.ts:
+  {}
+/a/b/globalfile3.ts:
+  {}
+/a/b/modulefile2.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 /a/b:
@@ -249,26 +249,26 @@ Shape signatures in builder refreshed for::
 /a/b/file1consumer1.ts (computed .d.ts)
 
 PolledWatches::
-/a/b/tsconfig.json:
-  {"pollingInterval":250}
-/a/b/file1consumer1.ts:
-  {"pollingInterval":250}
-/a/b/modulefile1.ts:
-  {"pollingInterval":250}
-/a/b/file1consumer1consumer1.ts:
-  {"pollingInterval":250}
-/a/b/file1consumer2.ts:
-  {"pollingInterval":250}
-/a/b/globalfile3.ts:
-  {"pollingInterval":250}
-/a/b/modulefile2.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
 /a/b/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
+/a/b/tsconfig.json:
+  {}
+/a/b/file1consumer1.ts:
+  {}
+/a/b/modulefile1.ts:
+  {}
+/a/b/file1consumer1consumer1.ts:
+  {}
+/a/b/file1consumer2.ts:
+  {}
+/a/b/globalfile3.ts:
+  {}
+/a/b/modulefile2.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 /a/b:
@@ -331,26 +331,26 @@ Shape signatures in builder refreshed for::
 /a/b/file1consumer1consumer1.ts (computed .d.ts)
 
 PolledWatches::
-/a/b/tsconfig.json:
-  {"pollingInterval":250}
-/a/b/file1consumer1.ts:
-  {"pollingInterval":250}
-/a/b/modulefile1.ts:
-  {"pollingInterval":250}
-/a/b/file1consumer1consumer1.ts:
-  {"pollingInterval":250}
-/a/b/file1consumer2.ts:
-  {"pollingInterval":250}
-/a/b/globalfile3.ts:
-  {"pollingInterval":250}
-/a/b/modulefile2.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
 /a/b/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
+/a/b/tsconfig.json:
+  {}
+/a/b/file1consumer1.ts:
+  {}
+/a/b/modulefile1.ts:
+  {}
+/a/b/file1consumer1consumer1.ts:
+  {}
+/a/b/file1consumer2.ts:
+  {}
+/a/b/globalfile3.ts:
+  {}
+/a/b/modulefile2.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 /a/b:

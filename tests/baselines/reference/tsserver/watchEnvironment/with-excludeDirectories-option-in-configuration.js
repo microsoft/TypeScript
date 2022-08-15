@@ -56,12 +56,12 @@ Open files:
 	FileName: /user/username/projects/myproject/src/main.ts ProjectRootPath: undefined
 		Projects: /user/username/projects/myproject/tsconfig.json
 PolledWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
 
 FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject/src:

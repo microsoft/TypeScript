@@ -77,16 +77,6 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/projects/project2/class2.ts (computed .d.ts during emit)
 
 PolledWatches::
-/user/username/projects/myproject/projects/project2/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/myproject/projects/project1/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/myproject/projects/project1/class1.ts:
-  {"pollingInterval":250}
-/user/username/projects/myproject/projects/project2/class2.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
 /user/username/projects/myproject/projects/project2/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/myproject/projects/node_modules/@types:
@@ -95,6 +85,16 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/myproject/projects/project2/tsconfig.json:
+  {}
+/user/username/projects/myproject/projects/project1/tsconfig.json:
+  {}
+/user/username/projects/myproject/projects/project1/class1.ts:
+  {}
+/user/username/projects/myproject/projects/project2/class2.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject/projects/project1:
@@ -206,26 +206,26 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/projects/project2/class2.ts (computed .d.ts)
 
 PolledWatches::
-/user/username/projects/myproject/projects/project2/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/myproject/projects/project1/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/myproject/projects/project1/class1.ts:
-  {"pollingInterval":250}
-/user/username/projects/myproject/projects/project2/class2.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
 /user/username/projects/myproject/projects/project2/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/myproject/projects/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/projects/project1/class3.ts:
-  {"pollingInterval":250}
 
 FsWatches::
+/user/username/projects/myproject/projects/project2/tsconfig.json:
+  {}
+/user/username/projects/myproject/projects/project1/tsconfig.json:
+  {}
+/user/username/projects/myproject/projects/project1/class1.ts:
+  {}
+/user/username/projects/myproject/projects/project2/class2.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/projects/project1/class3.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject/projects/project1:
@@ -304,26 +304,26 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myprojec
 
 
 PolledWatches::
-/user/username/projects/myproject/projects/project2/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/myproject/projects/project1/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/myproject/projects/project1/class1.ts:
-  {"pollingInterval":250}
-/user/username/projects/myproject/projects/project2/class2.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
 /user/username/projects/myproject/projects/project2/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/myproject/projects/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/projects/project1/class3.ts:
-  {"pollingInterval":250}
 
 FsWatches::
+/user/username/projects/myproject/projects/project2/tsconfig.json:
+  {}
+/user/username/projects/myproject/projects/project1/tsconfig.json:
+  {}
+/user/username/projects/myproject/projects/project1/class1.ts:
+  {}
+/user/username/projects/myproject/projects/project2/class2.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/projects/project1/class3.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject/projects/project1:
@@ -348,26 +348,26 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myprojec
 
 
 PolledWatches::
-/user/username/projects/myproject/projects/project2/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/myproject/projects/project1/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/myproject/projects/project1/class1.ts:
-  {"pollingInterval":250}
-/user/username/projects/myproject/projects/project2/class2.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
 /user/username/projects/myproject/projects/project2/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/myproject/projects/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/projects/project1/class3.ts:
-  {"pollingInterval":250}
 
 FsWatches::
+/user/username/projects/myproject/projects/project2/tsconfig.json:
+  {}
+/user/username/projects/myproject/projects/project1/tsconfig.json:
+  {}
+/user/username/projects/myproject/projects/project1/class1.ts:
+  {}
+/user/username/projects/myproject/projects/project2/class2.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/projects/project1/class3.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject/projects/project1:

@@ -407,28 +407,28 @@ Dependencies for::
   /user/username/projects/sample1/core/index.d.ts
 
 PolledWatches::
-/user/username/projects/sample1/tests/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/sample1/core/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/sample1/logic/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/sample1/tests/index.ts:
-  {"pollingInterval":250}
-/user/username/projects/sample1/core/index.d.ts:
-  {"pollingInterval":250}
-/user/username/projects/sample1/logic/index.d.ts:
-  {"pollingInterval":250}
-/user/username/projects/sample1/core/anothermodule.d.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
 /user/username/projects/sample1/tests/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/sample1/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/sample1/tests/tsconfig.json:
+  {}
+/user/username/projects/sample1/core/tsconfig.json:
+  {}
+/user/username/projects/sample1/logic/tsconfig.json:
+  {}
+/user/username/projects/sample1/tests/index.ts:
+  {}
+/user/username/projects/sample1/core/index.d.ts:
+  {}
+/user/username/projects/sample1/logic/index.d.ts:
+  {}
+/user/username/projects/sample1/core/anothermodule.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/sample1/core:
@@ -541,28 +541,28 @@ function foo() { }
 Output::
 
 PolledWatches::
-/user/username/projects/sample1/tests/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/sample1/core/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/sample1/logic/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/sample1/tests/index.ts:
-  {"pollingInterval":250}
-/user/username/projects/sample1/core/index.d.ts:
-  {"pollingInterval":250}
-/user/username/projects/sample1/logic/index.d.ts:
-  {"pollingInterval":250}
-/user/username/projects/sample1/core/anothermodule.d.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
 /user/username/projects/sample1/tests/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/sample1/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/sample1/tests/tsconfig.json:
+  {}
+/user/username/projects/sample1/core/tsconfig.json:
+  {}
+/user/username/projects/sample1/logic/tsconfig.json:
+  {}
+/user/username/projects/sample1/tests/index.ts:
+  {}
+/user/username/projects/sample1/core/index.d.ts:
+  {}
+/user/username/projects/sample1/logic/index.d.ts:
+  {}
+/user/username/projects/sample1/core/anothermodule.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/sample1/core:
@@ -728,28 +728,28 @@ Dependencies for::
   /user/username/projects/sample1/core/index.d.ts
 
 PolledWatches::
-/user/username/projects/sample1/tests/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/sample1/core/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/sample1/logic/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/sample1/tests/index.ts:
-  {"pollingInterval":250}
-/user/username/projects/sample1/core/index.d.ts:
-  {"pollingInterval":250}
-/user/username/projects/sample1/logic/index.d.ts:
-  {"pollingInterval":250}
-/user/username/projects/sample1/core/anothermodule.d.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
 /user/username/projects/sample1/tests/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/sample1/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/sample1/tests/tsconfig.json:
+  {}
+/user/username/projects/sample1/core/tsconfig.json:
+  {}
+/user/username/projects/sample1/logic/tsconfig.json:
+  {}
+/user/username/projects/sample1/tests/index.ts:
+  {}
+/user/username/projects/sample1/core/index.d.ts:
+  {}
+/user/username/projects/sample1/logic/index.d.ts:
+  {}
+/user/username/projects/sample1/core/anothermodule.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/sample1/core:
@@ -988,28 +988,28 @@ Dependencies for::
   /user/username/projects/sample1/core/index.d.ts
 
 PolledWatches::
-/user/username/projects/sample1/tests/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/sample1/core/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/sample1/logic/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/sample1/tests/index.ts:
-  {"pollingInterval":250}
-/user/username/projects/sample1/core/index.d.ts:
-  {"pollingInterval":250}
-/user/username/projects/sample1/core/anothermodule.d.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
 /user/username/projects/sample1/tests/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/sample1/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/sample1/logic/decls/index.d.ts:
-  {"pollingInterval":250}
 
 FsWatches::
+/user/username/projects/sample1/tests/tsconfig.json:
+  {}
+/user/username/projects/sample1/core/tsconfig.json:
+  {}
+/user/username/projects/sample1/logic/tsconfig.json:
+  {}
+/user/username/projects/sample1/tests/index.ts:
+  {}
+/user/username/projects/sample1/core/index.d.ts:
+  {}
+/user/username/projects/sample1/core/anothermodule.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/sample1/logic/decls/index.d.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/sample1/core:

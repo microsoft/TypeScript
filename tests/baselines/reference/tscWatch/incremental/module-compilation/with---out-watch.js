@@ -44,18 +44,18 @@ No cached semantic diagnostics in the builder::
 No shapes updated in the builder::
 
 PolledWatches::
-/users/username/projects/project/tsconfig.json:
-  {"pollingInterval":250}
-/users/username/projects/project/file1.ts:
-  {"pollingInterval":250}
-/users/username/projects/project/file2.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
 /users/username/projects/project/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
+/users/username/projects/project/tsconfig.json:
+  {}
+/users/username/projects/project/file1.ts:
+  {}
+/users/username/projects/project/file2.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 /users/username/projects/project:

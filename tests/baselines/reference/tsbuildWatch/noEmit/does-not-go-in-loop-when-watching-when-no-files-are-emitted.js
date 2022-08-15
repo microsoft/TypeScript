@@ -59,14 +59,14 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/b.ts (used version)
 
 PolledWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/myproject/a.js:
-  {"pollingInterval":250}
-/user/username/projects/myproject/b.ts:
-  {"pollingInterval":250}
 
 FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/a.js:
+  {}
+/user/username/projects/myproject/b.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject:
@@ -105,14 +105,14 @@ Semantic diagnostics in builder refreshed for::
 No shapes updated in the builder::
 
 PolledWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/myproject/a.js:
-  {"pollingInterval":250}
-/user/username/projects/myproject/b.ts:
-  {"pollingInterval":250}
 
 FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/a.js:
+  {}
+/user/username/projects/myproject/b.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject:
@@ -158,14 +158,14 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/b.ts (used version)
 
 PolledWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/myproject/a.js:
-  {"pollingInterval":250}
-/user/username/projects/myproject/b.ts:
-  {"pollingInterval":250}
 
 FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/a.js:
+  {}
+/user/username/projects/myproject/b.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject:

@@ -46,12 +46,12 @@ Shape signatures in builder refreshed for::
 /a/b/file1.ts (used version)
 
 PolledWatches::
-/a/b/file1.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
 
 FsWatches::
+/a/b/file1.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 /a:
@@ -99,14 +99,14 @@ Shape signatures in builder refreshed for::
 /a/b/file1.ts (computed .d.ts)
 
 PolledWatches::
-/a/b/file1.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
-/a/b/modulefile.ts:
-  {"pollingInterval":250}
 
 FsWatches::
+/a/b/file1.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/a/b/modulefile.ts:
+  {}
 
 FsWatchesRecursive::
 

@@ -60,26 +60,26 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/main/index.ts (used version)
 
 PolledWatches::
-/user/username/projects/myproject/main/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/myproject/main/index.ts:
-  {"pollingInterval":250}
-/user/username/projects/myproject/linked-package/dist/index.d.ts:
-  {"pollingInterval":250}
-/user/username/projects/myproject/linked-package/dist/other.d.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
 /user/username/projects/myproject/main/@scoped:
   {"pollingInterval":500}
-/user/username/projects/myproject/linked-package/package.json:
-  {"pollingInterval":250}
 /user/username/projects/myproject/main/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/myproject/main/tsconfig.json:
+  {}
+/user/username/projects/myproject/main/index.ts:
+  {}
+/user/username/projects/myproject/linked-package/dist/index.d.ts:
+  {}
+/user/username/projects/myproject/linked-package/dist/other.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/linked-package/package.json:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject/linked-package:

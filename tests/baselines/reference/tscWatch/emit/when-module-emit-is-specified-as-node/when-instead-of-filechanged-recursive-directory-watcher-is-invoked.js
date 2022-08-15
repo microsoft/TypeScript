@@ -50,18 +50,18 @@ Shape signatures in builder refreshed for::
 /a/rootfolder/project/scripts/typescript.ts (used version)
 
 PolledWatches::
-/a/rootfolder/project/tsconfig.json:
-  {"pollingInterval":250}
-/a/rootfolder/project/scripts/javascript.js:
-  {"pollingInterval":250}
-/a/rootfolder/project/scripts/typescript.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
 /a/rootfolder/project/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
+/a/rootfolder/project/tsconfig.json:
+  {}
+/a/rootfolder/project/scripts/javascript.js:
+  {}
+/a/rootfolder/project/scripts/typescript.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 /a/rootfolder/project/scripts:
@@ -111,18 +111,18 @@ Shape signatures in builder refreshed for::
 /a/rootfolder/project/scripts/javascript.js (computed .d.ts)
 
 PolledWatches::
-/a/rootfolder/project/tsconfig.json:
-  {"pollingInterval":250}
-/a/rootfolder/project/scripts/javascript.js:
-  {"pollingInterval":250}
-/a/rootfolder/project/scripts/typescript.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
 /a/rootfolder/project/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
+/a/rootfolder/project/tsconfig.json:
+  {}
+/a/rootfolder/project/scripts/javascript.js:
+  {}
+/a/rootfolder/project/scripts/typescript.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 /a/rootfolder/project/scripts:

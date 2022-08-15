@@ -51,16 +51,16 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/lib/app.ts (used version)
 
 PolledWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/myproject/lib/app.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
 /user/username/projects/myproject/node_modules:
   {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/lib/app.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject:
@@ -114,18 +114,18 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/lib/app.ts (computed .d.ts)
 
 PolledWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/myproject/lib/app.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
-/user/username/projects/myproject/node_modules/@myapp/ts-types/types/somefile.define.d.ts:
-  {"pollingInterval":250}
-/user/username/projects/myproject/node_modules/@myapp/ts-types/package.json:
-  {"pollingInterval":250}
 
 FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/lib/app.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/node_modules/@myapp/ts-types/types/somefile.define.d.ts:
+  {}
+/user/username/projects/myproject/node_modules/@myapp/ts-types/package.json:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject:
@@ -144,18 +144,18 @@ Input::
 Output::
 
 PolledWatches::
-/user/username/projects/myproject/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/myproject/lib/app.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
-/user/username/projects/myproject/node_modules/@myapp/ts-types/types/somefile.define.d.ts:
-  {"pollingInterval":250}
-/user/username/projects/myproject/node_modules/@myapp/ts-types/package.json:
-  {"pollingInterval":250}
 
 FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/lib/app.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/node_modules/@myapp/ts-types/types/somefile.define.d.ts:
+  {}
+/user/username/projects/myproject/node_modules/@myapp/ts-types/package.json:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject:

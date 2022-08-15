@@ -53,14 +53,14 @@ Shape signatures in builder refreshed for::
 /user/username/projects/solution/app/filewithouterror.ts (computed .d.ts during emit)
 
 PolledWatches::
-/user/username/projects/solution/app/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/solution/app/filewitherror.ts:
-  {"pollingInterval":250}
-/user/username/projects/solution/app/filewithouterror.ts:
-  {"pollingInterval":250}
 
 FsWatches::
+/user/username/projects/solution/app/tsconfig.json:
+  {}
+/user/username/projects/solution/app/filewitherror.ts:
+  {}
+/user/username/projects/solution/app/filewithouterror.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/solution/app:
@@ -186,14 +186,14 @@ Shape signatures in builder refreshed for::
 /user/username/projects/solution/app/filewitherror.ts (computed .d.ts)
 
 PolledWatches::
-/user/username/projects/solution/app/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/solution/app/filewitherror.ts:
-  {"pollingInterval":250}
-/user/username/projects/solution/app/filewithouterror.ts:
-  {"pollingInterval":250}
 
 FsWatches::
+/user/username/projects/solution/app/tsconfig.json:
+  {}
+/user/username/projects/solution/app/filewitherror.ts:
+  {}
+/user/username/projects/solution/app/filewithouterror.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/solution/app:
@@ -221,14 +221,14 @@ Output::
 
 
 PolledWatches::
-/user/username/projects/solution/app/tsconfig.json:
-  {"pollingInterval":250}
-/user/username/projects/solution/app/filewitherror.ts:
-  {"pollingInterval":250}
-/user/username/projects/solution/app/filewithouterror.ts:
-  {"pollingInterval":250}
 
 FsWatches::
+/user/username/projects/solution/app/tsconfig.json:
+  {}
+/user/username/projects/solution/app/filewitherror.ts:
+  {}
+/user/username/projects/solution/app/filewithouterror.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/solution/app:
