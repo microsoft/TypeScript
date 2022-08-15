@@ -1,0 +1,73 @@
+=== tests/cases/compiler/contextualTypeFunctionObjectPropertyIntersection.ts ===
+type Action<TEvent extends { type: string }> = (ev: TEvent) => void;
+>Action : Action<TEvent>
+>type : string
+>ev : TEvent
+
+interface MachineConfig<TEvent extends { type: string }> {
+>type : string
+
+  schema: {
+>schema : { events: TEvent; }
+
+    events: TEvent;
+>events : TEvent
+
+  };
+  on?: {
+>on : ({ [K in TEvent["type"]]?: Action<TEvent extends { type: K; } ? TEvent : never> | undefined; } & { "*"?: Action<TEvent> | undefined; }) | undefined
+
+    [K in TEvent["type"]]?: Action<TEvent extends { type: K } ? TEvent : never>;
+>type : K
+
+  } & {
+    "*"?: Action<TEvent>;
+>"*" : Action<TEvent> | undefined
+
+  };
+}
+
+declare function createMachine<TEvent extends { type: string }>(
+>createMachine : <TEvent extends { type: string; }>(config: MachineConfig<TEvent>) => void
+>type : string
+
+  config: MachineConfig<TEvent>
+>config : MachineConfig<TEvent>
+
+): void;
+
+createMachine({
+>createMachine({  schema: {    events: {} as { type: "FOO" } | { type: "BAR" },  },  on: {    FOO: (ev) => {      ev.type; // should be 'FOO'    },  },}) : void
+>createMachine : <TEvent extends { type: string; }>(config: MachineConfig<TEvent>) => void
+>{  schema: {    events: {} as { type: "FOO" } | { type: "BAR" },  },  on: {    FOO: (ev) => {      ev.type; // should be 'FOO'    },  },} : { schema: { events: { type: "FOO"; } | { type: "BAR"; }; }; on: { FOO: (ev: { type: "FOO"; }) => void; }; }
+
+  schema: {
+>schema : { events: { type: "FOO"; } | { type: "BAR"; }; }
+>{    events: {} as { type: "FOO" } | { type: "BAR" },  } : { events: { type: "FOO"; } | { type: "BAR"; }; }
+
+    events: {} as { type: "FOO" } | { type: "BAR" },
+>events : { type: "FOO"; } | { type: "BAR"; }
+>{} as { type: "FOO" } | { type: "BAR" } : { type: "FOO"; } | { type: "BAR"; }
+>{} : {}
+>type : "FOO"
+>type : "BAR"
+
+  },
+  on: {
+>on : { FOO: (ev: { type: "FOO"; }) => void; }
+>{    FOO: (ev) => {      ev.type; // should be 'FOO'    },  } : { FOO: (ev: { type: "FOO"; }) => void; }
+
+    FOO: (ev) => {
+>FOO : (ev: { type: "FOO"; }) => void
+>(ev) => {      ev.type; // should be 'FOO'    } : (ev: { type: "FOO"; }) => void
+>ev : { type: "FOO"; }
+
+      ev.type; // should be 'FOO'
+>ev.type : "FOO"
+>ev : { type: "FOO"; }
+>type : "FOO"
+
+    },
+  },
+});
+
