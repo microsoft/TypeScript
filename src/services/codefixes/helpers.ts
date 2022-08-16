@@ -63,6 +63,21 @@ namespace ts.codefix {
         const declaration = declarations?.[0];
         const checker = context.program.getTypeChecker();
         const scriptTarget = getEmitScriptTarget(context.program.getCompilerOptions());
+
+        /**
+         * (#49811)
+         * Note that there are cases in which the symbol declaration is not present. For example, in the code below both
+         * `MappedIndirect.ax` and `MappedIndirect.ay` have no declaration node attached (due to their mapped-type
+         * parent):
+         *
+         * >>> ```ts
+         * >>> type Base = { ax: number; ay: string };
+         * >>> type BaseKeys = keyof Base;
+         * >>> type MappedIndirect = { [K in BaseKeys]: boolean };
+         * >>> ```
+         *
+         * In such cases, we assume the declaration to be a `PropertySignature`.
+         */
         const kind = declaration?.kind ?? SyntaxKind.PropertySignature;
         const name = getSynthesizedDeepClone(getNameOfDeclaration(declaration), /*includeTrivia*/ false) as PropertyName;
         const visibilityModifier = createVisibilityModifier(declaration ? getEffectiveModifierFlags(declaration) : ModifierFlags.None);
