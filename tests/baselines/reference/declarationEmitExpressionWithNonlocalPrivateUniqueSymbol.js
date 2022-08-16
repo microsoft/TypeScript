@@ -21,7 +21,7 @@ exports.A1 = a_1.A;
 
 
 //// [a.d.ts]
-declare type AX = {
+type AX = {
     readonly A: unique symbol;
 };
 export declare const A: AX;

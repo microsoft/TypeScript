@@ -576,10 +576,11 @@ namespace ts {
 
         function visitPreOrPostfixUnaryExpression(node: PrefixUnaryExpression | PostfixUnaryExpression, valueIsDiscarded: boolean) {
             if (node.operator === SyntaxKind.PlusPlusToken || node.operator === SyntaxKind.MinusMinusToken) {
-                if (shouldTransformPrivateElementsOrClassStaticBlocks && isPrivateIdentifierPropertyAccessExpression(node.operand)) {
+                const operand = skipParentheses(node.operand);
+                if (shouldTransformPrivateElementsOrClassStaticBlocks && isPrivateIdentifierPropertyAccessExpression(operand)) {
                     let info: PrivateIdentifierInfo | undefined;
-                    if (info = accessPrivateIdentifier(node.operand.name)) {
-                        const receiver = visitNode(node.operand.expression, visitor, isExpression);
+                    if (info = accessPrivateIdentifier(operand.name)) {
+                        const receiver = visitNode(operand.expression, visitor, isExpression);
                         const { readExpression, initializeExpression } = createCopiableReceiverExpr(receiver);
 
                         let expression: Expression = createPrivateIdentifierAccess(info, readExpression);
@@ -601,7 +602,7 @@ namespace ts {
                     }
                 }
                 else if (shouldTransformSuperInStaticInitializers &&
-                    isSuperProperty(node.operand) &&
+                    isSuperProperty(operand) &&
                     currentStaticPropertyDeclarationOrStaticBlock &&
                     currentClassLexicalEnvironment) {
                     // converts `++super.a` into `(Reflect.set(_baseTemp, "a", (_a = Reflect.get(_baseTemp, "a", _classTemp), _b = ++_a), _classTemp), _b)`
@@ -614,31 +615,31 @@ namespace ts {
                     // converts `super[f()]--` into `(Reflect.set(_baseTemp, _a = f(), (_b = Reflect.get(_baseTemp, _a, _classTemp), _c = _b--), _classTemp), _c)`
                     const { classConstructor, superClassReference, facts } = currentClassLexicalEnvironment;
                     if (facts & ClassFacts.ClassWasDecorated) {
-                        const operand = visitInvalidSuperProperty(node.operand);
+                        const expression = visitInvalidSuperProperty(operand);
                         return isPrefixUnaryExpression(node) ?
-                            factory.updatePrefixUnaryExpression(node, operand) :
-                            factory.updatePostfixUnaryExpression(node, operand);
+                            factory.updatePrefixUnaryExpression(node, expression) :
+                            factory.updatePostfixUnaryExpression(node, expression);
                     }
                     if (classConstructor && superClassReference) {
                         let setterName: Expression | undefined;
                         let getterName: Expression | undefined;
-                        if (isPropertyAccessExpression(node.operand)) {
-                            if (isIdentifier(node.operand.name)) {
-                                getterName = setterName = factory.createStringLiteralFromNode(node.operand.name);
+                        if (isPropertyAccessExpression(operand)) {
+                            if (isIdentifier(operand.name)) {
+                                getterName = setterName = factory.createStringLiteralFromNode(operand.name);
                             }
                         }
                         else {
-                            if (isSimpleInlineableExpression(node.operand.argumentExpression)) {
-                                getterName = setterName = node.operand.argumentExpression;
+                            if (isSimpleInlineableExpression(operand.argumentExpression)) {
+                                getterName = setterName = operand.argumentExpression;
                             }
                             else {
                                 getterName = factory.createTempVariable(hoistVariableDeclaration);
-                                setterName = factory.createAssignment(getterName, visitNode(node.operand.argumentExpression, visitor, isExpression));
+                                setterName = factory.createAssignment(getterName, visitNode(operand.argumentExpression, visitor, isExpression));
                             }
                         }
                         if (setterName && getterName) {
                             let expression: Expression = factory.createReflectGetCall(superClassReference, getterName, classConstructor);
-                            setTextRange(expression, node.operand);
+                            setTextRange(expression, operand);
 
                             const temp = valueIsDiscarded ? undefined : factory.createTempVariable(hoistVariableDeclaration);
                             expression = expandPreOrPostfixIncrementOrDecrementExpression(factory, node, expression, hoistVariableDeclaration, temp);

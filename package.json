@@ -2,7 +2,7 @@
     "name": "typescript",
     "author": "Microsoft Corp.",
     "homepage": "https://www.typescriptlang.org/",
-    "version": "4.8.0",
+    "version": "4.9.0",
     "license": "Apache-2.0",
     "description": "TypeScript is a language for application scale JavaScript development",
     "keywords": [
@@ -28,7 +28,6 @@
     "engines": {
         "node": ">=4.2.0"
     },
-    "packageManager": "npm@6.14.15",
     "devDependencies": {
         "@octokit/rest": "latest",
         "@types/chai": "latest",
@@ -89,7 +88,11 @@
         "typescript": "^4.5.5",
         "vinyl": "latest",
         "vinyl-sourcemaps-apply": "latest",
+        "which": "^2.0.2",
         "xml2js": "^0.4.23"
+    },
+    "overrides": {
+        "es5-ext": "0.10.53"
     },
     "scripts": {
         "prepare": "gulp build-eslint-rules",
@@ -118,7 +121,9 @@
         "source-map-support": false,
         "inspector": false
     },
+    "packageManager": "npm@8.15.0",
     "volta": {
-        "node": "14.15.5"
+        "node": "14.20.0",
+        "npm": "8.15.0"
     }
 }

@@ -14,7 +14,6 @@
         ]
     },
     "references": [
-        { "path": "../shims", "prepend": true },
         { "path": "../compiler", "prepend": true },
         { "path": "../executeCommandLine", "prepend": true },
         { "path": "../services", "prepend": true },
@@ -76,8 +75,6 @@
         "unittests/publicApi.ts",
         "unittests/reuseProgramStructure.ts",
         "unittests/semver.ts",
-        "unittests/createMapShim.ts",
-        "unittests/createSetShim.ts",
         "unittests/transform.ts",
         "unittests/config/commandLineParsing.ts",
         "unittests/config/configurationExtension.ts",
@@ -205,6 +202,7 @@
         "unittests/tsserver/languageService.ts",
         "unittests/tsserver/maxNodeModuleJsDepth.ts",
         "unittests/tsserver/metadataInResponse.ts",
+        "unittests/tsserver/moduleResolution.ts",
         "unittests/tsserver/moduleSpecifierCache.ts",
         "unittests/tsserver/navTo.ts",
         "unittests/tsserver/occurences.ts",
