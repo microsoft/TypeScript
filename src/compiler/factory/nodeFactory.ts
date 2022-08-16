@@ -6734,7 +6734,7 @@ namespace ts {
             const getAndCacheBuildInfo = (getText: () => string | undefined) => {
                 if (buildInfo === undefined) {
                     const result = getText();
-                    buildInfo = result !== undefined ? getBuildInfo(result) : false;
+                    buildInfo = result !== undefined ? getBuildInfo(node.buildInfoPath!, result) ?? false : false;
                 }
                 return buildInfo || undefined;
             };

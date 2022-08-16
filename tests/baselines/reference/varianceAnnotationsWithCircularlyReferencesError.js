@@ -7,5 +7,5 @@ type T2<out out> = T2 // Error: circularly references
 
 
 //// [varianceAnnotationsWithCircularlyReferencesError.d.ts]
-declare type T1<in , > = T1;
-declare type T2<out out> = T2;
+type T1<in , > = T1;
+type T2<out out> = T2;

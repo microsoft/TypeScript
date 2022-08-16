@@ -13,6 +13,11 @@
     const bb: 9 = b;
 }
 {
+    let a: 0 | 1 | 2 = 1;
+    const [{ [a]: b } = [9, a = 0, 5] as const] = [];
+    const bb: 0 | 9 = b;
+}
+{
     let a: 0 | 1 = 0;
     const [{ [(a = 1)]: b } = [9, a] as const] = [[9, 8] as const];
     const bb: 0 | 8 = b;

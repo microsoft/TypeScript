@@ -1,6 +1,5 @@
 // @ts-check
 const stream = require("stream");
-const Vinyl = require("vinyl");
 const ts = require("../../lib/typescript");
 const fs = require("fs");
 const { base64VLQFormatEncode } = require("./sourcemaps");
@@ -43,13 +42,14 @@ function prepend(data) {
                         sourcesContent: input.sourcesContent
                     };
                 }
+                // eslint-disable-next-line boolean-trivia, no-null/no-null
                 return cb(null, output);
             }
             catch (e) {
                 return cb(e);
             }
         }
-    })
+    });
 }
 exports.prepend = prepend;
 
@@ -59,6 +59,6 @@ exports.prepend = prepend;
 function prependFile(file) {
     const data = typeof file === "string" ? fs.readFileSync(file, "utf8") :
         vinyl => fs.readFileSync(file(vinyl), "utf8");
-    return prepend(data)
+    return prepend(data);
 }
 exports.prependFile = prependFile;

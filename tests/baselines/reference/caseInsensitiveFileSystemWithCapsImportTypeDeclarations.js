@@ -48,15 +48,15 @@ exports.Broken = Broken;
 
 
 //// [types.d.ts]
-export declare type Merge<T, U> = T & U;
+export type Merge<T, U> = T & U;
 //// [type-a.d.ts]
-export declare type TypeA = {
+export type TypeA = {
     a: string;
 };
 //// [type-b.d.ts]
 import { Merge } from './types';
 import { TypeA } from './type-a';
-export declare type TypeB = Merge<TypeA, {
+export type TypeB = Merge<TypeA, {
     b: string;
 }>;
 //// [index.d.ts]

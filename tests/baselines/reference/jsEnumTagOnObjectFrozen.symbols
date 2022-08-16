@@ -42,9 +42,9 @@ cbThing(type => {
 /** @enum {string} */
 const Thing = Object.freeze({
 >Thing : Symbol(Thing, Decl(index.js, 1, 5), Decl(index.js, 0, 4))
->Object.freeze : Symbol(ObjectConstructor.freeze, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object.freeze : Symbol(ObjectConstructor.freeze, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->freeze : Symbol(ObjectConstructor.freeze, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>freeze : Symbol(ObjectConstructor.freeze, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     a: "thing",
 >a : Symbol(a, Decl(index.js, 1, 29))

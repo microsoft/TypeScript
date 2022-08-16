@@ -12,6 +12,6 @@ exports.y = y;
 
 
 //// [declarationEmitTypeAliasWithTypeParameters1.d.ts]
-export declare type Bar<X, Y> = () => [X, Y];
-export declare type Foo<Y> = Bar<any, Y>;
+export type Bar<X, Y> = () => [X, Y];
+export type Foo<Y> = Bar<any, Y>;
 export declare const y: (x: Foo<string>) => number;

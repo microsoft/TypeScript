@@ -6,7 +6,6 @@
     },
 
     "references": [
-        { "path": "../shims" }
     ],
 
     "files": [
