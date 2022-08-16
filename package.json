@@ -107,8 +107,8 @@
         "gulp": "gulp",
         "lint": "gulp lint",
         "lint:ci": "gulp lint --ci",
-        "lint:compiler": "gulp lint-compiler",
-        "lint:scripts": "gulp lint-scripts",
+        "lint:compiler": "gulp lint",
+        "lint:scripts": "gulp lint",
         "setup-hooks": "node scripts/link-hooks.js"
     },
     "browser": {

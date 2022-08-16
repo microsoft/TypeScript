@@ -383,9 +383,12 @@ task("lint-compiler").flags = {
     "   --ci": "Runs eslint additional rules",
 };
 
-const lint = series([buildEslintRules, lintScripts, lintCompiler]);
+const lintRoot = eslint(".");
+lintRoot.displayName = "lint-root";
+
+const lint = series([buildEslintRules, lintRoot]);
 lint.displayName = "lint";
-task("lint", series([buildEslintRules, lint]));
+task("lint", lint);
 task("lint").description = "Runs eslint on the compiler and scripts sources.";
 task("lint").flags = {
     "   --ci": "Runs eslint additional rules",
