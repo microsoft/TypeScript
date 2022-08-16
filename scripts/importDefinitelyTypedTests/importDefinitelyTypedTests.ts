@@ -1,6 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
 import * as childProcess from "child_process";
+import assert = require("assert");
 
 
 interface Map<T> {
@@ -46,7 +47,7 @@ function copyFileSync(source: string, destination: string) {
     fs.writeFileSync(destination, text);
 }
 
-function importDefinitelyTypedTest(tscPath: string, rwcTestPath: string, testCaseName: string, testFiles: string[], responseFile: string) {
+function importDefinitelyTypedTest(tscPath: string, rwcTestPath: string, testCaseName: string, testFiles: string[], responseFile: string | undefined) {
     let cmd = "node " + tscPath + " --module commonjs " + testFiles.join(" ");
     if (responseFile) {
         cmd += " @" + responseFile;
@@ -122,7 +123,7 @@ function importDefinitelyTypedTests(tscPath: string, rwcTestPath: string, defini
 
                     const tsFiles: string[] = [];
                     const testFiles: string[] = [];
-                    let paramFile: string;
+                    let paramFile: string | undefined;
 
                     for (const filePath of files.map(f => path.join(directoryPath, f))) {
                         if (filePathEndsWith(filePath, ".ts")) {
