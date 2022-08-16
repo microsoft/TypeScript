@@ -2,9 +2,9 @@
 const PUPPETEER_REVISIONS = Object.freeze({
 >PUPPETEER_REVISIONS : Readonly<{ chromium: "1011831"; firefox: "latest"; }>
 >Object.freeze({  chromium: '1011831',  firefox: 'latest',}) : Readonly<{ chromium: "1011831"; firefox: "latest"; }>
->Object.freeze : { <T>(a: T[]): readonly T[]; <T extends Function>(f: T): T; <T extends { [idx: string]: object | U; }, U extends string | number | bigint | boolean | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
+>Object.freeze : { <T extends Function>(f: T): T; <T extends { [idx: string]: object | U; }, U extends string | number | bigint | boolean | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
 >Object : ObjectConstructor
->freeze : { <T>(a: T[]): readonly T[]; <T extends Function>(f: T): T; <T extends { [idx: string]: object | U; }, U extends string | number | bigint | boolean | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
+>freeze : { <T extends Function>(f: T): T; <T extends { [idx: string]: object | U; }, U extends string | number | bigint | boolean | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
 >{  chromium: '1011831',  firefox: 'latest',} : { chromium: "1011831"; firefox: "latest"; }
 
   chromium: '1011831',
