@@ -42101,6 +42101,9 @@ namespace ts {
                     if (!node.isDeclarationFile) {
                         checkPotentialUncheckedRenamedBindingElementsInTypes();
                     }
+
+                    const diag = createFileDiagnostic(node, 0, 1, Diagnostics.We_can_only_write_a_type_for_0_by_adding_a_type_for_the_entire_parameter_here, "amcasey");
+                    diagnostics.add(diag);
                 });
 
                 if (compilerOptions.importsNotUsedAsValues === ImportsNotUsedAsValues.Error &&
