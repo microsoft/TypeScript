@@ -71,7 +71,7 @@ exports.CONTROLLER_CLASS = context_1.BindingKey.create(null); // line in questio
 
 
 //// [value-promise.d.ts]
-export declare type Constructor<T> = (...args: any[]) => T;
+export type Constructor<T> = (...args: any[]) => T;
 //// [bindingkey.d.ts]
 import { Constructor } from "@loopback/context";
 export declare class BindingKey<T> {
@@ -83,7 +83,7 @@ export * from "./src/value-promise";
 export * from "./src/bindingkey";
 //// [application.d.ts]
 import { Constructor } from "@loopback/context";
-export declare type ControllerClass = Constructor<any>;
+export type ControllerClass = Constructor<any>;
 //// [usage.d.ts]
 import { ControllerClass } from './application';
 import { BindingKey } from '@loopback/context';

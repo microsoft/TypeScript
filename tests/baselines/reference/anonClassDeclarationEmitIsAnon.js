@@ -122,7 +122,7 @@ export declare function wrapClass(param: any): {
         foo(): any;
     };
 };
-export declare type Constructor<T = {}> = new (...args: any[]) => T;
+export type Constructor<T = {}> = new (...args: any[]) => T;
 export declare function Timestamped<TBase extends Constructor>(Base: TBase): {
     new (...args: any[]): {
         timestamp: number;

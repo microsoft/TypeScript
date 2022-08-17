@@ -1464,12 +1464,28 @@
         "category": "Message",
         "code": 1457
     },
+    "File is ECMAScript module because '{0}' has field \"type\" with value \"module\"": {
+        "category": "Message",
+        "code": 1458
+    },
+    "File is CommonJS module because '{0}' has field \"type\" whose value is not \"module\"": {
+        "category": "Message",
+        "code": 1459
+    },
+    "File is CommonJS module because '{0}' does not have field \"type\"": {
+        "category": "Message",
+        "code": 1460
+    },
+    "File is CommonJS module because 'package.json' was not found": {
+        "category": "Message",
+        "code": 1461
+    },
 
     "The 'import.meta' meta-property is not allowed in files which will build into CommonJS output.": {
         "category": "Error",
         "code": 1470
     },
-    "Module '{0}' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.": {
+    "Module '{0}' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.": {
         "category": "Error",
         "code": 1471
     },
@@ -1500,6 +1516,26 @@
     "Identifier or string literal expected.": {
         "category": "Error",
         "code": 1478
+    },
+    "The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import(\"{0}\")' call instead.": {
+        "category": "Error",
+        "code": 1479
+    },
+    "To convert this file to an ECMAScript module, change its file extension to '{0}' or create a local package.json file with `{ \"type\": \"module\" }`.": {
+        "category": "Message",
+        "code": 1480
+    },
+    "To convert this file to an ECMAScript module, change its file extension to '{0}', or add the field `\"type\": \"module\"` to '{1}'.": {
+        "category": "Message",
+        "code": 1481
+    },
+    "To convert this file to an ECMAScript module, add the field `\"type\": \"module\"` to '{0}'.": {
+        "category": "Message",
+        "code": 1482
+    },
+    "To convert this file to an ECMAScript module, create a local package.json file with `{ \"type\": \"module\" }`.": {
+        "category": "Message",
+        "code": 1483
     },
 
     "The types of '{0}' are incompatible between these types.": {
@@ -2360,6 +2396,10 @@
         "category": "Error",
         "code": 2513
     },
+    "A tuple type cannot be indexed with a negative value.": {
+        "category": "Error",
+        "code": 2514
+    },
     "Non-abstract class '{0}' does not implement inherited abstract member '{1}' from class '{2}'.": {
         "category": "Error",
         "code": 2515
@@ -2637,7 +2677,7 @@
         "category": "Error",
         "code": 2593
     },
-    "This module is declared with using 'export =', and can only be used with a default import when using the '{0}' flag.": {
+    "This module is declared with 'export =', and can only be used with a default import when using the '{0}' flag.": {
         "category": "Error",
         "code": 2594
     },
@@ -5357,6 +5397,10 @@
     "Project '{0}' is up to date but needs to update timestamps of output files that are older than input files": {
         "category": "Message",
         "code": 6400
+    },
+    "Project '{0}' is out of date because there was error reading file '{1}'": {
+        "category": "Message",
+        "code": 6401
     },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {

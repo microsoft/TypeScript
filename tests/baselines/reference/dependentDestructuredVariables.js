@@ -690,7 +690,7 @@ const fa3 = (guard, value) => {
 
 
 //// [dependentDestructuredVariables.d.ts]
-declare type Action = {
+type Action = {
     kind: 'A';
     payload: number;
 } | {
@@ -702,7 +702,7 @@ declare function f11(action: Action): void;
 declare function f12({ kind, payload }: Action): void;
 declare function f13<T extends Action>({ kind, payload }: T): void;
 declare function f14<T extends Action>(t: T): void;
-declare type Action2 = {
+type Action2 = {
     kind: 'A';
     payload: number | undefined;
 } | {
@@ -713,7 +713,7 @@ declare function f20({ kind, payload }: Action2): void;
 declare function f21(action: Action2): void;
 declare function f22(action: Action2): void;
 declare function f23({ kind, payload }: Action2): void;
-declare type Foo = {
+type Foo = {
     kind: 'A';
     isA: true;
 } | {
@@ -724,7 +724,7 @@ declare type Foo = {
     isA: false;
 };
 declare function f30({ kind, isA }: Foo): void;
-declare type Args = ['A', number] | ['B', string];
+type Args = ['A', number] | ['B', string];
 declare function f40(...[kind, data]: Args): void;
 interface A<T> {
     variant: 'a';
@@ -734,11 +734,11 @@ interface B<T> {
     variant: 'b';
     value: Array<T>;
 }
-declare type AB<T> = A<T> | B<T>;
+type AB<T> = A<T> | B<T>;
 declare function printValue<T>(t: T): void;
 declare function printValueList<T>(t: Array<T>): void;
 declare function unrefined1<T>(ab: AB<T>): void;
-declare type Action3 = {
+type Action3 = {
     type: 'add';
     payload: {
         toAdd: number;
@@ -756,7 +756,7 @@ declare function f50(cb: (...args: Args) => void): void;
 declare const f51: (...args: ['A', number] | ['B', string]) => void;
 declare const f52: (...args: ['A', number] | ['B']) => void;
 declare function readFile(path: string, callback: (...args: [err: null, data: unknown[]] | [err: Error, data: undefined]) => void): void;
-declare type ReducerArgs = ["add", {
+type ReducerArgs = ["add", {
     a: number;
     b: number;
 }] | ["concat", {
@@ -764,7 +764,7 @@ declare type ReducerArgs = ["add", {
     secondArr: any[];
 }];
 declare const reducer: (...args: ReducerArgs) => void;
-declare type FooMethod = {
+type FooMethod = {
     method(...args: [
         type: "str",
         cb: (e: string) => void
@@ -774,7 +774,7 @@ declare type FooMethod = {
     ]): void;
 };
 declare let fooM: FooMethod;
-declare type FooAsyncMethod = {
+type FooAsyncMethod = {
     method(...args: [
         type: "str",
         cb: (e: string) => void
@@ -784,7 +784,7 @@ declare type FooAsyncMethod = {
     ]): Promise<any>;
 };
 declare let fooAsyncM: FooAsyncMethod;
-declare type FooGenMethod = {
+type FooGenMethod = {
     method(...args: [
         type: "str",
         cb: (e: string) => void
@@ -794,7 +794,7 @@ declare type FooGenMethod = {
     ]): Generator<any, any, any>;
 };
 declare let fooGenM: FooGenMethod;
-declare type FooAsyncGenMethod = {
+type FooAsyncGenMethod = {
     method(...args: [
         type: "str",
         cb: (e: string) => void
@@ -804,7 +804,7 @@ declare type FooAsyncGenMethod = {
     ]): AsyncGenerator<any, any, any>;
 };
 declare let fooAsyncGenM: FooAsyncGenMethod;
-declare type Func = <T extends ["a", number] | ["b", string]>(...args: T) => void;
+type Func = <T extends ["a", number] | ["b", string]>(...args: T) => void;
 declare const f60: Func;
 declare function foo({ value1, test1, test2, test3, test4, test5, test6, test7, test8, test9 }: {
     value1: any;

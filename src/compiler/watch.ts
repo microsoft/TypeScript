@@ -224,25 +224,58 @@ namespace ts {
         for (const file of program.getSourceFiles()) {
             write(`${toFileName(file, relativeFileName)}`);
             reasons.get(file.path)?.forEach(reason => write(`  ${fileIncludeReasonToDiagnostics(program, reason, relativeFileName).messageText}`));
-            explainIfFileIsRedirect(file, relativeFileName)?.forEach(d => write(`  ${d.messageText}`));
+            explainIfFileIsRedirectAndImpliedFormat(file, relativeFileName)?.forEach(d => write(`  ${d.messageText}`));
         }
     }
 
-    export function explainIfFileIsRedirect(file: SourceFile, fileNameConvertor?: (fileName: string) => string): DiagnosticMessageChain[] | undefined {
+    export function explainIfFileIsRedirectAndImpliedFormat(
+        file: SourceFile,
+        fileNameConvertor?: (fileName: string) => string,
+    ): DiagnosticMessageChain[] | undefined {
         let result: DiagnosticMessageChain[] | undefined;
         if (file.path !== file.resolvedPath) {
-            (result ||= []).push(chainDiagnosticMessages(
+            (result ??= []).push(chainDiagnosticMessages(
                 /*details*/ undefined,
                 Diagnostics.File_is_output_of_project_reference_source_0,
                 toFileName(file.originalFileName, fileNameConvertor)
             ));
         }
         if (file.redirectInfo) {
-            (result ||= []).push(chainDiagnosticMessages(
+            (result ??= []).push(chainDiagnosticMessages(
                 /*details*/ undefined,
                 Diagnostics.File_redirects_to_file_0,
                 toFileName(file.redirectInfo.redirectTarget, fileNameConvertor)
             ));
+        }
+        if (isExternalOrCommonJsModule(file)) {
+            switch (file.impliedNodeFormat) {
+                case ModuleKind.ESNext:
+                    if (file.packageJsonScope) {
+                        (result ??= []).push(chainDiagnosticMessages(
+                            /*details*/ undefined,
+                            Diagnostics.File_is_ECMAScript_module_because_0_has_field_type_with_value_module,
+                            toFileName(last(file.packageJsonLocations!), fileNameConvertor)
+                        ));
+                    }
+                    break;
+                case ModuleKind.CommonJS:
+                    if (file.packageJsonScope) {
+                        (result ??= []).push(chainDiagnosticMessages(
+                            /*details*/ undefined,
+                            file.packageJsonScope.packageJsonContent.type ?
+                                Diagnostics.File_is_CommonJS_module_because_0_has_field_type_whose_value_is_not_module :
+                                Diagnostics.File_is_CommonJS_module_because_0_does_not_have_field_type,
+                            toFileName(last(file.packageJsonLocations!), fileNameConvertor)
+                        ));
+                    }
+                    else if (file.packageJsonLocations?.length) {
+                        (result ??= []).push(chainDiagnosticMessages(
+                            /*details*/ undefined,
+                            Diagnostics.File_is_CommonJS_module_because_package_json_was_not_found,
+                        ));
+                    }
+                    break;
+            }
         }
         return result;
     }
@@ -508,6 +541,7 @@ namespace ts {
         MissingFile: "Missing file",
         WildcardDirectory: "Wild card directory",
         FailedLookupLocations: "Failed Lookup Locations",
+        AffectingFileLocation: "File location affecting resolution",
         TypeRoots: "Type roots",
         ConfigFileOfReferencedProject: "Config file of referened project",
         ExtendedConfigOfReferencedProject: "Extended config file of referenced project",
@@ -529,6 +563,7 @@ namespace ts {
         MissingFile: "Missing file",
         WildcardDirectory: "Wild card directory",
         FailedLookupLocations: "Failed Lookup Locations",
+        AffectingFileLocation: "File location affecting resolution",
         TypeRoots: "Type roots",
         ConfigFileOfReferencedProject: "Config file of referened project",
         ExtendedConfigOfReferencedProject: "Extended config file of referenced project",

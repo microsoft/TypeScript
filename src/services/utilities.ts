@@ -3004,12 +3004,12 @@ namespace ts {
         return packageJson;
     }
 
-    export function getPackageJsonsVisibleToFile(fileName: string, host: LanguageServiceHost): readonly PackageJsonInfo[] {
+    export function getPackageJsonsVisibleToFile(fileName: string, host: LanguageServiceHost): readonly ProjectPackageJsonInfo[] {
         if (!host.fileExists) {
             return [];
         }
 
-        const packageJsons: PackageJsonInfo[] = [];
+        const packageJsons: ProjectPackageJsonInfo[] = [];
         forEachAncestorDirectory(getDirectoryPath(fileName), ancestor => {
             const packageJsonFileName = combinePaths(ancestor, "package.json");
             if (host.fileExists(packageJsonFileName)) {
@@ -3023,7 +3023,7 @@ namespace ts {
         return packageJsons;
     }
 
-    export function createPackageJsonInfo(fileName: string, host: { readFile?(fileName: string): string | undefined }): PackageJsonInfo | undefined {
+    export function createPackageJsonInfo(fileName: string, host: { readFile?(fileName: string): string | undefined }): ProjectPackageJsonInfo | undefined {
         if (!host.readFile) {
             return undefined;
         }
@@ -3032,7 +3032,7 @@ namespace ts {
         const dependencyKeys = ["dependencies", "devDependencies", "optionalDependencies", "peerDependencies"] as const;
         const stringContent = host.readFile(fileName) || "";
         const content = tryParseJson(stringContent) as PackageJsonRaw | undefined;
-        const info: Pick<PackageJsonInfo, typeof dependencyKeys[number]> = {};
+        const info: Pick<ProjectPackageJsonInfo, typeof dependencyKeys[number]> = {};
         if (content) {
             for (const key of dependencyKeys) {
                 const dependencies = content[key];
