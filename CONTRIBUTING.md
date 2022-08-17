@@ -144,6 +144,8 @@ gulp
 
 The files in `lib/` are used to bootstrap compilation and usually **should not** be updated unless publishing a new version or updating the LKG.
 
+NOTE: Although LKG isn't updated on every change, CI will still verify that changes work if LKG is regenerated. So, you may want to run `gulp lkg` and `gulp local` as part of testing to uncover potential bugs.
+
 ### Modifying generated library files
 
 The files `src/lib/dom.generated.d.ts` and `src/lib/webworker.generated.d.ts` both represent type declarations for the DOM and are auto-generated. To make any modifications to them, you will have to direct changes to https://github.com/Microsoft/TSJS-lib-generator
