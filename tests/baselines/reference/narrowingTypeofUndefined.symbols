@@ -1,0 +1,23 @@
+=== tests/cases/compiler/narrowingTypeofUndefined.ts ===
+declare const a: { error: { a: string }, result: undefined } | { error: undefined, result: { b: number } }
+>a : Symbol(a, Decl(narrowingTypeofUndefined.ts, 0, 13))
+>error : Symbol(error, Decl(narrowingTypeofUndefined.ts, 0, 18))
+>a : Symbol(a, Decl(narrowingTypeofUndefined.ts, 0, 27))
+>result : Symbol(result, Decl(narrowingTypeofUndefined.ts, 0, 40))
+>error : Symbol(error, Decl(narrowingTypeofUndefined.ts, 0, 64))
+>result : Symbol(result, Decl(narrowingTypeofUndefined.ts, 0, 82))
+>b : Symbol(b, Decl(narrowingTypeofUndefined.ts, 0, 92))
+
+if (typeof a.error === 'undefined') {
+>a.error : Symbol(error, Decl(narrowingTypeofUndefined.ts, 0, 18), Decl(narrowingTypeofUndefined.ts, 0, 64))
+>a : Symbol(a, Decl(narrowingTypeofUndefined.ts, 0, 13))
+>error : Symbol(error, Decl(narrowingTypeofUndefined.ts, 0, 18), Decl(narrowingTypeofUndefined.ts, 0, 64))
+
+    a.result.b; // ok
+>a.result.b : Symbol(b, Decl(narrowingTypeofUndefined.ts, 0, 92))
+>a.result : Symbol(result, Decl(narrowingTypeofUndefined.ts, 0, 40), Decl(narrowingTypeofUndefined.ts, 0, 82))
+>a : Symbol(a, Decl(narrowingTypeofUndefined.ts, 0, 13))
+>result : Symbol(result, Decl(narrowingTypeofUndefined.ts, 0, 40), Decl(narrowingTypeofUndefined.ts, 0, 82))
+>b : Symbol(b, Decl(narrowingTypeofUndefined.ts, 0, 92))
+}
+

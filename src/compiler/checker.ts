@@ -25260,11 +25260,19 @@ namespace ts {
                 }
                 const target = getReferenceCandidate(typeOfExpr.expression);
                 if (!isMatchingReference(reference, target)) {
+                    const propertyAccess = getDiscriminantPropertyAccess(typeOfExpr.expression, type);
+                    if (propertyAccess) {
+                        return narrowTypeByDiscriminant(type, propertyAccess, t => narrowTypeByLiteralExpression(t, literal, assumeTrue));
+                    }
                     if (strictNullChecks && optionalChainContainsReference(target, reference) && assumeTrue === (literal.text !== "undefined")) {
                         return getAdjustedTypeWithFacts(type, TypeFacts.NEUndefinedOrNull);
                     }
                     return type;
                 }
+                return narrowTypeByLiteralExpression(type, literal, assumeTrue);
+            }
+
+            function narrowTypeByLiteralExpression(type: Type, literal: LiteralExpression, assumeTrue: boolean) {
                 return assumeTrue ?
                     narrowTypeByTypeName(type, literal.text) :
                     getTypeWithFacts(type, typeofNEFacts.get(literal.text) || TypeFacts.TypeofNEHostObject);
