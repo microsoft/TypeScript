@@ -477,7 +477,7 @@ namespace ts {
                     (decorators === undefined || !some(decorators, isModifier)) &&
                     (modifiers === undefined || !some(modifiers, isParameter)) &&
                     (parameters === undefined || isArray(parameters)) &&
-                    (body === undefined || !isBlock(body)),
+                    (body === undefined || isBlock(body)),
             })
             .deprecate({
                 1: DISALLOW_DECORATORS
@@ -505,7 +505,7 @@ namespace ts {
                     (decorators === undefined || !some(decorators, isModifier)) &&
                     (modifiers === undefined || !some(modifiers, isParameter)) &&
                     (parameters === undefined || isArray(parameters)) &&
-                    (body === undefined || !isBlock(body)),
+                    (body === undefined || isBlock(body)),
             })
             .deprecate({
                 1: DISALLOW_DECORATORS
