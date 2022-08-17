@@ -487,7 +487,7 @@ namespace ts {
                 this.shimHost.useCaseSensitiveFileNames!(), this.shimHost.getCurrentDirectory()); // TODO: GH#18217
             return JSON.parse(this.shimHost.readDirectory(
                 path,
-                JSON.stringify(extensions),
+                JSON.stringify(extensions ?? []),
                 JSON.stringify(pattern.basePaths),
                 pattern.excludePattern,
                 pattern.includeFilePattern,
