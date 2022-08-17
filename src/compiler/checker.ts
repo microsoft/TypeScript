@@ -18809,6 +18809,39 @@ namespace ts {
                     return Ternary.False;
                 }
 
+                // Before normalization: Intersections applied to unions create an explosion of types when normalized -
+                // handling those inner intersections can be very costly, so it can be beneficial to factor them out early.
+                // If both the source and target are intersections, we can remove the common types from them before formal normalization,
+                // and run a simplified comparison without those common members.
+                if (originalSource.flags & originalTarget.flags & TypeFlags.Intersection) {
+                    const combinedTypeSet = new Map<number, number>();
+                    forEach((originalSource as IntersectionType).types, t => combinedTypeSet.set(getTypeId(t), 1));
+                    let hasOverlap = false;
+                    forEach((originalTarget as IntersectionType).types, t => {
+                        const id = getTypeId(t);
+                        if (combinedTypeSet.has(id)) {
+                            combinedTypeSet.set(getTypeId(t), 2);
+                            hasOverlap = true;
+                        }
+                    });
+                    if (hasOverlap) {
+                        const filteredSource = filter((originalSource as IntersectionType).types, t => combinedTypeSet.get(getTypeId(t)) !== 2);
+                        const filteredTarget = filter((originalTarget as IntersectionType).types, t => combinedTypeSet.get(getTypeId(t)) !== 2);
+                        if (!length(filteredTarget)) {
+                            return Ternary.True; // Source has all parts of target
+                        }
+                        if (length(filteredSource)) {
+                            let result: Ternary;
+                            if (result = isRelatedTo(getIntersectionType(filteredSource), getIntersectionType(filteredTarget), recursionFlags, /*reportErrors*/ false, /*headMessage*/ undefined, intersectionState)) {
+                                return result;
+                            }
+                            // In the false case, we may still be assignable at the structural level, rather than the algebraic level
+                        }
+                        // Even if every member of the source is in the target but the target still has members left, the source may still be assignable
+                        // to the target, either if some member of the original source is assignable to the other members of the target, or if there is structural assignability
+                    }
+                }
+
                 // Normalize the source and target types: Turn fresh literal types into regular literal types,
                 // turn deferred type references into regular type references, simplify indexed access and
                 // conditional types, and resolve substitution types to either the substitution (on the source
@@ -19309,6 +19342,9 @@ namespace ts {
             // equal and infinitely expanding. Fourth, if we have reached a depth of 100 nested comparisons, assume we have runaway recursion
             // and issue an error. Otherwise, actually compare the structure of the two types.
             function recursiveTypeRelatedTo(source: Type, target: Type, reportErrors: boolean, intersectionState: IntersectionState, recursionFlags: RecursionFlags): Ternary {
+                if (relation.size > 2 ** 20) {
+                    debugger;
+                }
                 if (overflow) {
                     return Ternary.False;
                 }
