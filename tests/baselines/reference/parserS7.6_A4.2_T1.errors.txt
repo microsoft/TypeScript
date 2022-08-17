@@ -50,70 +50,70 @@ tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(142,3): error T
       $ERROR('#А');
       ~~~~~~
 !!! error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
-!!! related TS2728 /.ts/lib.es5.d.ts:1061:13: 'Error' is declared here.
+!!! related TS2728 /.ts/lib.es5.d.ts:1059:13: 'Error' is declared here.
     }
     var \u0411 = 1;
     if (Б !== 1) {
       $ERROR('#Б');
       ~~~~~~
 !!! error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
-!!! related TS2728 /.ts/lib.es5.d.ts:1061:13: 'Error' is declared here.
+!!! related TS2728 /.ts/lib.es5.d.ts:1059:13: 'Error' is declared here.
     }
     var \u0412 = 1;
     if (В !== 1) {
       $ERROR('#В');
       ~~~~~~
 !!! error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
-!!! related TS2728 /.ts/lib.es5.d.ts:1061:13: 'Error' is declared here.
+!!! related TS2728 /.ts/lib.es5.d.ts:1059:13: 'Error' is declared here.
     }
     var \u0413 = 1;
     if (Г !== 1) {
       $ERROR('#Г');
       ~~~~~~
 !!! error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
-!!! related TS2728 /.ts/lib.es5.d.ts:1061:13: 'Error' is declared here.
+!!! related TS2728 /.ts/lib.es5.d.ts:1059:13: 'Error' is declared here.
     }
     var \u0414 = 1;
     if (Д !== 1) {
       $ERROR('#Д');
       ~~~~~~
 !!! error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
-!!! related TS2728 /.ts/lib.es5.d.ts:1061:13: 'Error' is declared here.
+!!! related TS2728 /.ts/lib.es5.d.ts:1059:13: 'Error' is declared here.
     }
     var \u0415 = 1;
     if (Е !== 1) {
       $ERROR('#Е');
       ~~~~~~
 !!! error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
-!!! related TS2728 /.ts/lib.es5.d.ts:1061:13: 'Error' is declared here.
+!!! related TS2728 /.ts/lib.es5.d.ts:1059:13: 'Error' is declared here.
     }
     var \u0416 = 1;
     if (Ж !== 1) {
       $ERROR('#Ж');
       ~~~~~~
 !!! error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
-!!! related TS2728 /.ts/lib.es5.d.ts:1061:13: 'Error' is declared here.
+!!! related TS2728 /.ts/lib.es5.d.ts:1059:13: 'Error' is declared here.
     }
     var \u0417 = 1;
     if (З !== 1) {
       $ERROR('#З');
       ~~~~~~
 !!! error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
-!!! related TS2728 /.ts/lib.es5.d.ts:1061:13: 'Error' is declared here.
+!!! related TS2728 /.ts/lib.es5.d.ts:1059:13: 'Error' is declared here.
     }
     var \u0418 = 1;
     if (И !== 1) {
       $ERROR('#И');
       ~~~~~~
 !!! error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
-!!! related TS2728 /.ts/lib.es5.d.ts:1061:13: 'Error' is declared here.
+!!! related TS2728 /.ts/lib.es5.d.ts:1059:13: 'Error' is declared here.
     }
     var \u0419 = 1;
     if (Й !== 1) {
       $ERROR('#Й');
       ~~~~~~
 !!! error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
-!!! related TS2728 /.ts/lib.es5.d.ts:1061:13: 'Error' is declared here.
+!!! related TS2728 /.ts/lib.es5.d.ts:1059:13: 'Error' is declared here.
     }
     var \u041A = 1;
     if (К !== 1) {

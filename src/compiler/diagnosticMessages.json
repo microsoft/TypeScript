@@ -2677,7 +2677,7 @@
         "category": "Error",
         "code": 2593
     },
-    "This module is declared with using 'export =', and can only be used with a default import when using the '{0}' flag.": {
+    "This module is declared with 'export =', and can only be used with a default import when using the '{0}' flag.": {
         "category": "Error",
         "code": 2594
     },
@@ -5397,6 +5397,10 @@
     "Project '{0}' is up to date but needs to update timestamps of output files that are older than input files": {
         "category": "Message",
         "code": 6400
+    },
+    "Project '{0}' is out of date because there was error reading file '{1}'": {
+        "category": "Message",
+        "code": 6401
     },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {

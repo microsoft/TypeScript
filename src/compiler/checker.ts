@@ -2819,7 +2819,7 @@ namespace ts {
                         if (exportAssignment) {
                             addRelatedInfo(err, createDiagnosticForNode(
                                 exportAssignment,
-                                Diagnostics.This_module_is_declared_with_using_export_and_can_only_be_used_with_a_default_import_when_using_the_0_flag,
+                                Diagnostics.This_module_is_declared_with_export_and_can_only_be_used_with_a_default_import_when_using_the_0_flag,
                                 compilerOptionName
                             ));
                         }
@@ -18861,7 +18861,8 @@ namespace ts {
                         }
                     }
 
-                    const isPerformingCommonPropertyChecks = relation !== comparableRelation && !(intersectionState & IntersectionState.Target) &&
+                    const isPerformingCommonPropertyChecks = (relation !== comparableRelation || relation === comparableRelation && isLiteralType(source)) &&
+                        !(intersectionState & IntersectionState.Target) &&
                         source.flags & (TypeFlags.Primitive | TypeFlags.Object | TypeFlags.Intersection) && source !== globalObjectType &&
                         target.flags & (TypeFlags.Object | TypeFlags.Intersection) && isWeakType(target) &&
                         (getPropertiesOfType(source).length > 0 || typeHasCallOrConstructSignatures(source));
@@ -19658,7 +19659,7 @@ namespace ts {
                                     // create a new chain for the constraint error
                                     resetErrorInfo(saveErrorInfo);
                                 }
-                                if (result = isRelatedTo(source, constraint, RecursionFlags.Target, reportErrors)) {
+                                if (result = isRelatedTo(source, constraint, RecursionFlags.Target, reportErrors, /* headMessage */ undefined, intersectionState)) {
                                     return result;
                                 }
                                 // prefer the shorter chain of the constraint comparison chain, and the direct comparison chain
@@ -21437,7 +21438,7 @@ namespace ts {
             if (!isLiteralOfContextualType(type, contextualType)) {
                 type = getWidenedUniqueESSymbolType(getWidenedLiteralType(type));
             }
-            return type;
+            return getRegularTypeOfLiteralType(type);
         }
 
         function getWidenedLiteralLikeTypeForContextualReturnTypeIfNeeded(type: Type | undefined, contextualSignatureReturnType: Type | undefined, isAsync: boolean) {
@@ -27130,27 +27131,7 @@ namespace ts {
         }
 
         function getTypeOfPropertyOfContextualType(type: Type, name: __String, nameType?: Type) {
-            return mapType(type, (t): Type | undefined => {
-                if (t.flags & TypeFlags.Intersection) {
-                    const intersection = t as IntersectionType;
-                    let newTypes = mapDefined(intersection.types, getTypeOfConcretePropertyOfContextualType);
-                    if (newTypes.length > 0) {
-                        return getIntersectionType(newTypes);
-                    }
-                    newTypes = mapDefined(intersection.types, getTypeOfApplicableIndexInfoOfContextualType);
-                    if (newTypes.length > 0) {
-                        return getIntersectionType(newTypes);
-                    }
-                    return undefined;
-                }
-                const concretePropertyType = getTypeOfConcretePropertyOfContextualType(t);
-                if (concretePropertyType) {
-                    return concretePropertyType;
-                }
-                return getTypeOfApplicableIndexInfoOfContextualType(t);
-            }, /*noReductions*/ true);
-
-            function getTypeOfConcretePropertyOfContextualType(t: Type) {
+            return mapType(type, t => {
                 if (isGenericMappedType(t) && !t.declaration.nameType) {
                     const constraint = getConstraintTypeFromMappedType(t);
                     const constraintOfConstraint = getBaseConstraintOfType(constraint) || constraint;
@@ -27158,9 +27139,8 @@ namespace ts {
                     if (isTypeAssignableTo(propertyNameType, constraintOfConstraint)) {
                         return substituteIndexedMappedType(t, propertyNameType);
                     }
-                    return undefined;
                 }
-                if (t.flags & TypeFlags.StructuredType) {
+                else if (t.flags & TypeFlags.StructuredType) {
                     const prop = getPropertyOfType(t, name);
                     if (prop) {
                         return isCircularMappedProperty(prop) ? undefined : getTypeOfSymbol(prop);
@@ -27171,15 +27151,10 @@ namespace ts {
                             return restType;
                         }
                     }
+                    return findApplicableIndexInfo(getIndexInfosOfStructuredType(t), nameType || getStringLiteralType(unescapeLeadingUnderscores(name)))?.type;
                 }
                 return undefined;
-            }
-            function getTypeOfApplicableIndexInfoOfContextualType(t: Type) {
-                if (!(t.flags & TypeFlags.StructuredType)) {
-                    return undefined;
-                }
-                return findApplicableIndexInfo(getIndexInfosOfStructuredType(t), nameType || getStringLiteralType(unescapeLeadingUnderscores(name)))?.type;
-            }
+            }, /*noReductions*/ true);
         }
 
         // In an object literal contextually typed by a type T, the contextual type of a property assignment is the type of
@@ -27614,16 +27589,15 @@ namespace ts {
                 if (!isErrorType(intrinsicClassAttribs)) {
                     const typeParams = getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(intrinsicClassAttribs.symbol);
                     const hostClassType = getReturnTypeOfSignature(sig);
-                    let libraryManagedAttributeType: Type | undefined;
-                    if (typeParams && typeParams.length === 1) {
+                    let libraryManagedAttributeType: Type;
+                    if (typeParams) {
+                        // apply JSX.IntrinsicClassElements<hostClassType, ...>
                         const inferredArgs = fillMissingTypeArguments([hostClassType], typeParams, getMinTypeArgumentCount(typeParams), isInJSFile(context));
                         libraryManagedAttributeType = instantiateType(intrinsicClassAttribs, createTypeMapper(typeParams, inferredArgs));
                     }
-                    else if (typeParams) libraryManagedAttributeType = undefined;
+                    // or JSX.IntrinsicClassElements has no generics.
                     else libraryManagedAttributeType = intrinsicClassAttribs;
-                    if (libraryManagedAttributeType) {
-                        apparentAttributesType = intersectTypes(libraryManagedAttributeType, apparentAttributesType);
-                    }
+                    apparentAttributesType = intersectTypes(libraryManagedAttributeType, apparentAttributesType);
                 }
 
                 const intrinsicAttribs = getJsxType(JsxNames.IntrinsicAttributes, context);
