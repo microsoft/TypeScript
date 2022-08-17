@@ -653,7 +653,7 @@ namespace ts.refactor.convertParamsToDestructuredObject {
     interface ValidParameterDeclaration extends ParameterDeclaration {
         name: Identifier;
         modifiers: undefined;
-        decorators: undefined;
+        _decorators: undefined;
     }
 
     interface GroupedReferences {
