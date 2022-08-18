@@ -6,7 +6,6 @@
     ],
     "eslint.options": {
         "rulePaths": ["./scripts/eslint/built/rules/"],
-        "extensions": [".ts"]
     },
     // To use the last-known-good (LKG) compiler version:
     // "typescript.tsdk": "lib"

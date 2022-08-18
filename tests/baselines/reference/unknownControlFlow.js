@@ -268,6 +268,38 @@ function foo<T>(x: T | null) {
     }
 }
 
+// We allow an unconstrained object of a generic type `T` to be indexed by a key of type `keyof T`
+// without a check that the object is non-undefined and non-null. This is safe because `keyof T`
+// is `never` (meaning no possible keys) for any `T` that includes `undefined` or `null`.
+
+function ff1<T>(t: T, k: keyof T) {
+    t[k];
+}
+
+function ff2<T>(t: T & {}, k: keyof T) {
+    t[k];
+}
+
+function ff3<T>(t: T, k: keyof (T & {})) {
+    t[k];  // Error
+}
+
+function ff4<T>(t: T & {}, k: keyof (T & {})) {
+    t[k];
+}
+
+ff1(null, 'foo');  // Error
+ff2(null, 'foo');  // Error
+ff3(null, 'foo');
+ff4(null, 'foo');  // Error
+
+// Repro from #49681
+
+type Foo = { [key: string]: unknown };
+type NullableFoo = Foo | undefined;
+
+type Bar<T extends NullableFoo> = NonNullable<T>[string];
+
 
 //// [unknownControlFlow.js]
 "use strict";
@@ -501,24 +533,43 @@ function foo(x) {
         y;
     }
 }
+// We allow an unconstrained object of a generic type `T` to be indexed by a key of type `keyof T`
+// without a check that the object is non-undefined and non-null. This is safe because `keyof T`
+// is `never` (meaning no possible keys) for any `T` that includes `undefined` or `null`.
+function ff1(t, k) {
+    t[k];
+}
+function ff2(t, k) {
+    t[k];
+}
+function ff3(t, k) {
+    t[k]; // Error
+}
+function ff4(t, k) {
+    t[k];
+}
+ff1(null, 'foo'); // Error
+ff2(null, 'foo'); // Error
+ff3(null, 'foo');
+ff4(null, 'foo'); // Error
 
 
 //// [unknownControlFlow.d.ts]
-declare type T01 = {} & string;
-declare type T02 = {} & 'a';
-declare type T03 = {} & object;
-declare type T04 = {} & {
+type T01 = {} & string;
+type T02 = {} & 'a';
+type T03 = {} & object;
+type T04 = {} & {
     x: number;
 };
-declare type T05 = {} & null;
-declare type T06 = {} & undefined;
-declare type T07 = undefined & void;
-declare type T10 = string & {};
-declare type T11 = number & {};
-declare type T12 = bigint & {};
-declare type ThisNode = {};
-declare type ThatNode = {};
-declare type ThisOrThatNode = ThisNode | ThatNode;
+type T05 = {} & null;
+type T06 = {} & undefined;
+type T07 = undefined & void;
+type T10 = string & {};
+type T11 = number & {};
+type T12 = bigint & {};
+type ThisNode = {};
+type ThatNode = {};
+type ThisOrThatNode = ThisNode | ThatNode;
 declare function f01(u: unknown): void;
 declare function f10(x: unknown): void;
 declare function f11<T>(x: T): void;
@@ -537,7 +588,16 @@ declare function ensureNotNull<T>(x: T): T & ({} | undefined);
 declare function ensureNotUndefined<T>(x: T): T & ({} | null);
 declare function ensureNotNullOrUndefined<T>(x: T): T & {};
 declare function f40(a: string | undefined, b: number | null | undefined): void;
-declare type QQ<T> = NonNullable<NonNullable<NonNullable<T>>>;
+type QQ<T> = NonNullable<NonNullable<NonNullable<T>>>;
 declare function f41<T>(a: T): void;
 declare function deepEquals<T>(a: T, b: T): boolean;
 declare function foo<T>(x: T | null): void;
+declare function ff1<T>(t: T, k: keyof T): void;
+declare function ff2<T>(t: T & {}, k: keyof T): void;
+declare function ff3<T>(t: T, k: keyof (T & {})): void;
+declare function ff4<T>(t: T & {}, k: keyof (T & {})): void;
+type Foo = {
+    [key: string]: unknown;
+};
+type NullableFoo = Foo | undefined;
+type Bar<T extends NullableFoo> = NonNullable<T>[string];

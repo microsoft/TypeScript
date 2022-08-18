@@ -885,6 +885,144 @@ namespace ts {
         /* @internal */ jsDocCache?: readonly JSDocTag[];     // Cache for getJSDocTags
     }
 
+    /* @internal */
+    export type HasChildren =
+        | Identifier
+        | QualifiedName
+        | ComputedPropertyName
+        | TypeParameterDeclaration
+        | ParameterDeclaration
+        | Decorator
+        | PropertySignature
+        | PropertyDeclaration
+        | MethodSignature
+        | MethodDeclaration
+        | ConstructorDeclaration
+        | GetAccessorDeclaration
+        | SetAccessorDeclaration
+        | ClassStaticBlockDeclaration
+        | CallSignatureDeclaration
+        | ConstructSignatureDeclaration
+        | IndexSignatureDeclaration
+        | TypePredicateNode
+        | TypeReferenceNode
+        | FunctionTypeNode
+        | ConstructorTypeNode
+        | TypeQueryNode
+        | TypeLiteralNode
+        | ArrayTypeNode
+        | TupleTypeNode
+        | OptionalTypeNode
+        | RestTypeNode
+        | UnionTypeNode
+        | IntersectionTypeNode
+        | ConditionalTypeNode
+        | InferTypeNode
+        | ImportTypeNode
+        | ImportTypeAssertionContainer
+        | NamedTupleMember
+        | ParenthesizedTypeNode
+        | TypeOperatorNode
+        | IndexedAccessTypeNode
+        | MappedTypeNode
+        | LiteralTypeNode
+        | TemplateLiteralTypeNode
+        | TemplateLiteralTypeSpan
+        | ObjectBindingPattern
+        | ArrayBindingPattern
+        | BindingElement
+        | ArrayLiteralExpression
+        | ObjectLiteralExpression
+        | PropertyAccessExpression
+        | ElementAccessExpression
+        | CallExpression
+        | NewExpression
+        | TaggedTemplateExpression
+        | TypeAssertion
+        | ParenthesizedExpression
+        | FunctionExpression
+        | ArrowFunction
+        | DeleteExpression
+        | TypeOfExpression
+        | VoidExpression
+        | AwaitExpression
+        | PrefixUnaryExpression
+        | PostfixUnaryExpression
+        | BinaryExpression
+        | ConditionalExpression
+        | TemplateExpression
+        | YieldExpression
+        | SpreadElement
+        | ClassExpression
+        | ExpressionWithTypeArguments
+        | AsExpression
+        | NonNullExpression
+        | MetaProperty
+        | TemplateSpan
+        | Block
+        | VariableStatement
+        | ExpressionStatement
+        | IfStatement
+        | DoStatement
+        | WhileStatement
+        | ForStatement
+        | ForInStatement
+        | ForOfStatement
+        | ContinueStatement
+        | BreakStatement
+        | ReturnStatement
+        | WithStatement
+        | SwitchStatement
+        | LabeledStatement
+        | ThrowStatement
+        | TryStatement
+        | VariableDeclaration
+        | VariableDeclarationList
+        | FunctionDeclaration
+        | ClassDeclaration
+        | InterfaceDeclaration
+        | TypeAliasDeclaration
+        | EnumDeclaration
+        | ModuleDeclaration
+        | ModuleBlock
+        | CaseBlock
+        | NamespaceExportDeclaration
+        | ImportEqualsDeclaration
+        | ImportDeclaration
+        | AssertClause
+        | AssertEntry
+        | ImportClause
+        | NamespaceImport
+        | NamespaceExport
+        | NamedImports
+        | ImportSpecifier
+        | ExportAssignment
+        | ExportDeclaration
+        | NamedExports
+        | ExportSpecifier
+        | ExternalModuleReference
+        | JsxElement
+        | JsxSelfClosingElement
+        | JsxOpeningElement
+        | JsxClosingElement
+        | JsxFragment
+        | JsxAttribute
+        | JsxAttributes
+        | JsxSpreadAttribute
+        | JsxExpression
+        | CaseClause
+        | DefaultClause
+        | HeritageClause
+        | CatchClause
+        | PropertyAssignment
+        | ShorthandPropertyAssignment
+        | SpreadAssignment
+        | EnumMember
+        | SourceFile
+        | PartiallyEmittedExpression
+        | CommaListExpression
+        ;
+
     export type HasJSDoc =
         | ParameterDeclaration
         | CallSignatureDeclaration
@@ -3791,8 +3929,16 @@ namespace ts {
          * It is _public_ so that (pre)transformers can set this field,
          * since it switches the builtin `node` module transform. Generally speaking, if unset,
          * the field is treated as though it is `ModuleKind.CommonJS`.
+         *
+         * Note that this field is only set by the module resolution process when
+         * `moduleResolution` is `Node16` or `NodeNext`, which is implied by the `module` setting
+         * of `Node16` or `NodeNext`, respectively, but may be overriden (eg, by a `moduleResolution`
+         * of `node`). If so, this field will be unset and source files will be considered to be
+         * CommonJS-output-format by the node module transformer and type checker, regardless of extension or context.
          */
         impliedNodeFormat?: ModuleKind.ESNext | ModuleKind.CommonJS;
+        /*@internal*/ packageJsonLocations?: readonly string[];
+        /*@internal*/ packageJsonScope?: PackageJsonInfo;
 
         /* @internal */ scriptKind: ScriptKind;
 
@@ -4664,10 +4810,11 @@ namespace ts {
         UseAliasDefinedOutsideCurrentScope      = 1 << 14,  // Allow non-visible aliases
         UseSingleQuotesForStringLiteralType     = 1 << 28,  // Use single quotes for string literal type
         NoTypeReduction                         = 1 << 29,  // Don't call getReducedType
+        OmitThisParameter                       = 1 << 25,
 
         // Error handling
         AllowThisInObjectLiteral                = 1 << 15,
-        AllowQualifiedNameInPlaceOfIdentifier    = 1 << 16,
+        AllowQualifiedNameInPlaceOfIdentifier   = 1 << 16,
         /** @deprecated AllowQualifedNameInPlaceOfIdentifier. Use AllowQualifiedNameInPlaceOfIdentifier instead. */
         AllowQualifedNameInPlaceOfIdentifier    = AllowQualifiedNameInPlaceOfIdentifier,
         AllowAnonymousIdentifier                = 1 << 17,
@@ -4709,6 +4856,7 @@ namespace ts {
         UseAliasDefinedOutsideCurrentScope      = 1 << 14, // For a `type T = ... ` defined in a different file, write `T` instead of its value, even though `T` can't be accessed in the current scope.
         UseSingleQuotesForStringLiteralType     = 1 << 28, // Use single quotes for string literal type
         NoTypeReduction                         = 1 << 29, // Don't call getReducedType
+        OmitThisParameter                       = 1 << 25,
 
         // Error Handling
         AllowUniqueESSymbolType                 = 1 << 20, // This is bit 20 to align with the same bit in `NodeBuilderFlags`
@@ -4728,7 +4876,7 @@ namespace ts {
         NodeBuilderFlagsMask = NoTruncation | WriteArrayAsGenericType | UseStructuralFallback | WriteTypeArgumentsOfSignature |
             UseFullyQualifiedType | SuppressAnyReturnType | MultilineObjectLiterals | WriteClassExpressionAsTypeLiteral |
             UseTypeOfFunction | OmitParameterModifiers | UseAliasDefinedOutsideCurrentScope | AllowUniqueESSymbolType | InTypeAlias |
-            UseSingleQuotesForStringLiteralType | NoTypeReduction,
+            UseSingleQuotesForStringLiteralType | NoTypeReduction | OmitThisParameter
     }
 
     export const enum SymbolFormatFlags {
@@ -6025,6 +6173,7 @@ namespace ts {
     export const enum TypeMapKind {
         Simple,
         Array,
+        Deferred,
         Function,
         Composite,
         Merged,
@@ -6034,7 +6183,8 @@ namespace ts {
     export type TypeMapper =
         | { kind: TypeMapKind.Simple, source: Type, target: Type }
         | { kind: TypeMapKind.Array, sources: readonly Type[], targets: readonly Type[] | undefined }
-        | { kind: TypeMapKind.Function, func: (t: Type) => Type }
+        | { kind: TypeMapKind.Deferred, sources: readonly Type[], targets: (() => Type)[] }
+        | { kind: TypeMapKind.Function, func: (t: Type) => Type, debugInfo?: () => string }
         | { kind: TypeMapKind.Composite | TypeMapKind.Merged, mapper1: TypeMapper, mapper2: TypeMapper };
 
     export const enum InferencePriority {
@@ -6981,7 +7131,6 @@ namespace ts {
         // For testing:
         /*@internal*/ disableUseFileVersionAsSignature?: boolean;
         /*@internal*/ storeFilesChangingSignatureDuringEmit?: boolean;
-        /*@internal*/ now?(): Date;
     }
 
     /** true if --out otherwise source file name */
@@ -7032,10 +7181,9 @@ namespace ts {
         ContainsPossibleTopLevelAwait = 1 << 26,
         ContainsLexicalSuper = 1 << 27,
         ContainsUpdateExpressionForIdentifier = 1 << 28,
-        // Please leave this as 1 << 29.
-        // It is the maximum bit we can set before we outgrow the size of a v8 small integer (SMI) on an x86 system.
-        // It is a good reminder of how much room we have left
-        HasComputedFlags = 1 << 29, // Transform flags have been computed.
+        ContainsPrivateIdentifierInExpression = 1 << 29,
+
+        HasComputedFlags = 1 << 31, // Transform flags have been computed.
 
         // Assertions
         // - Bitmasks that are used to assert facts about the syntax of a node and its subtree.
@@ -7337,7 +7485,7 @@ namespace ts {
         parenthesizeBranchOfConditionalExpression(branch: Expression): Expression;
         parenthesizeExpressionOfExportDefault(expression: Expression): Expression;
         parenthesizeExpressionOfNew(expression: Expression): LeftHandSideExpression;
-        parenthesizeLeftSideOfAccess(expression: Expression): LeftHandSideExpression;
+        parenthesizeLeftSideOfAccess(expression: Expression, optionalChain?: boolean): LeftHandSideExpression;
         parenthesizeOperandOfPostfixUnary(operand: Expression): LeftHandSideExpression;
         parenthesizeOperandOfPrefixUnary(operand: Expression): UnaryExpression;
         parenthesizeExpressionsOfCommaDelimitedList(elements: readonly Expression[]): NodeArray<Expression>;

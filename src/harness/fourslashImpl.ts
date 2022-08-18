@@ -2256,7 +2256,7 @@ namespace FourSlash {
                     this.languageServiceAdapterHost,
                     this.languageService.getProgram()?.getCompilerOptions() || {}
                 ),
-                setExternalModuleIndicator: ts.getSetExternalModuleIndicator(this.languageService.getProgram()?.getCompilerOptions() || {})
+                setExternalModuleIndicator: ts.getSetExternalModuleIndicator(this.languageService.getProgram()?.getCompilerOptions() || {}),
             };
             const referenceSourceFile = ts.createLanguageServiceSourceFile(
                 this.activeFile.fileName, createScriptSnapShot(content), options, /*version:*/ "0", /*setNodeParents:*/ false);
@@ -2747,6 +2747,13 @@ namespace FourSlash {
             // const testfile = fs.readFileSync(testfilePath, "utf8");
             // const newfile = testfile.replace("verify.replaceWithSemanticClassifications(\"2020\")", replacement.join("\n"));
             // fs.writeFileSync(testfilePath, newfile);
+        }
+
+        public verifyEncodedSyntacticClassificationsLength(expected: number) {
+            const actual = this.languageService.getEncodedSyntacticClassifications(this.activeFile.fileName, ts.createTextSpan(0, this.activeFile.content.length));
+            if (actual.spans.length !== expected) {
+                this.raiseError(`encodedSyntacticClassificationsLength failed - expected total spans to be ${expected} got ${actual.spans.length}`);
+            }
         }
 
         public verifyEncodedSemanticClassificationsLength(format: ts.SemanticClassificationFormat, expected: number) {

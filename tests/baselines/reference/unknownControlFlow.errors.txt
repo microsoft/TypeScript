@@ -1,7 +1,11 @@
 tests/cases/conformance/types/unknown/unknownControlFlow.ts(18,9): error TS2322: Type 'unknown' is not assignable to type '{}'.
+tests/cases/conformance/types/unknown/unknownControlFlow.ts(283,5): error TS2536: Type 'keyof (T & {})' cannot be used to index type 'T'.
+tests/cases/conformance/types/unknown/unknownControlFlow.ts(290,11): error TS2345: Argument of type 'string' is not assignable to parameter of type 'never'.
+tests/cases/conformance/types/unknown/unknownControlFlow.ts(291,5): error TS2345: Argument of type 'null' is not assignable to parameter of type 'never'.
+tests/cases/conformance/types/unknown/unknownControlFlow.ts(293,5): error TS2345: Argument of type 'null' is not assignable to parameter of type 'never'.
 
 
-==== tests/cases/conformance/types/unknown/unknownControlFlow.ts (1 errors) ====
+==== tests/cases/conformance/types/unknown/unknownControlFlow.ts (5 errors) ====
     type T01 = {} & string;  // string
     type T02 = {} & 'a';  // 'a'
     type T03 = {} & object;  // object
@@ -272,4 +276,44 @@ tests/cases/conformance/types/unknown/unknownControlFlow.ts(18,9): error TS2322:
             y;
         }
     }
+    
+    // We allow an unconstrained object of a generic type `T` to be indexed by a key of type `keyof T`
+    // without a check that the object is non-undefined and non-null. This is safe because `keyof T`
+    // is `never` (meaning no possible keys) for any `T` that includes `undefined` or `null`.
+    
+    function ff1<T>(t: T, k: keyof T) {
+        t[k];
+    }
+    
+    function ff2<T>(t: T & {}, k: keyof T) {
+        t[k];
+    }
+    
+    function ff3<T>(t: T, k: keyof (T & {})) {
+        t[k];  // Error
+        ~~~~
+!!! error TS2536: Type 'keyof (T & {})' cannot be used to index type 'T'.
+    }
+    
+    function ff4<T>(t: T & {}, k: keyof (T & {})) {
+        t[k];
+    }
+    
+    ff1(null, 'foo');  // Error
+              ~~~~~
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'never'.
+    ff2(null, 'foo');  // Error
+        ~~~~
+!!! error TS2345: Argument of type 'null' is not assignable to parameter of type 'never'.
+    ff3(null, 'foo');
+    ff4(null, 'foo');  // Error
+        ~~~~
+!!! error TS2345: Argument of type 'null' is not assignable to parameter of type 'never'.
+    
+    // Repro from #49681
+    
+    type Foo = { [key: string]: unknown };
+    type NullableFoo = Foo | undefined;
+    
+    type Bar<T extends NullableFoo> = NonNullable<T>[string];
     

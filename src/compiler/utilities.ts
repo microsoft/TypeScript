@@ -162,7 +162,7 @@ namespace ts {
         return sourceFile && sourceFile.resolvedModules && sourceFile.resolvedModules.get(moduleNameText, mode);
     }
 
-    export function setResolvedModule(sourceFile: SourceFile, moduleNameText: string, resolvedModule: ResolvedModuleFull, mode: ModuleKind.CommonJS | ModuleKind.ESNext | undefined): void {
+    export function setResolvedModule(sourceFile: SourceFile, moduleNameText: string, resolvedModule: ResolvedModuleFull | undefined, mode: ModuleKind.CommonJS | ModuleKind.ESNext | undefined): void {
         if (!sourceFile.resolvedModules) {
             sourceFile.resolvedModules = createModeAwareCache();
         }
@@ -3944,7 +3944,7 @@ namespace ts {
                 diagnostics = nonFileDiagnostics;
             }
 
-            insertSorted(diagnostics, diagnostic, compareDiagnostics);
+            insertSorted(diagnostics, diagnostic, compareDiagnosticsSkipRelatedInformation);
         }
 
         function getGlobalDiagnostics(): Diagnostic[] {
@@ -5360,20 +5360,16 @@ namespace ts {
         return getStringFromExpandedCharCodes(expandedCharCodes);
     }
 
+    export function readJsonOrUndefined(path: string, hostOrText: { readFile(fileName: string): string | undefined } | string): object | undefined {
+        const jsonText = isString(hostOrText) ? hostOrText : hostOrText.readFile(path);
+        if (!jsonText) return undefined;
+        // gracefully handle if readFile fails or returns not JSON
+        const result = parseConfigFileTextToJson(path, jsonText);
+        return !result.error ? result.config : undefined;
+    }
+
     export function readJson(path: string, host: { readFile(fileName: string): string | undefined }): object {
-        try {
-            const jsonText = host.readFile(path);
-            if (!jsonText) return {};
-            const result = parseConfigFileTextToJson(path, jsonText);
-            if (result.error) {
-                return {};
-            }
-            return result.config;
-        }
-        catch (e) {
-            // gracefully handle if readFile fails or returns not JSON
-            return {};
-        }
+        return readJsonOrUndefined(path, host) || {};
     }
 
     export function directoryProbablyExists(directoryName: string, host: { directoryExists?: (directoryName: string) => boolean }): boolean {
@@ -5565,7 +5561,8 @@ namespace ts {
 
     export function getDeclarationModifierFlagsFromSymbol(s: Symbol, isWrite = false): ModifierFlags {
         if (s.valueDeclaration) {
-            const declaration = (isWrite && s.declarations && find(s.declarations, d => d.kind === SyntaxKind.SetAccessor)) || s.valueDeclaration;
+            const declaration = (isWrite && s.declarations && find(s.declarations, isSetAccessorDeclaration))
+                || (s.flags & SymbolFlags.GetAccessor && find(s.declarations, isGetAccessorDeclaration)) || s.valueDeclaration;
             const flags = getCombinedModifierFlags(declaration);
             return s.parent && s.parent.flags & SymbolFlags.Class ? flags : flags & ~ModifierFlags.AccessibilityModifier;
         }
@@ -6319,7 +6316,7 @@ namespace ts {
         // Excludes declaration files - they still require an explicit `export {}` or the like
         // for back compat purposes. The only non-declaration files _not_ forced to be a module are `.js` files
         // that aren't esm-mode (meaning not in a `type: module` scope).
-        return (file.impliedNodeFormat === ModuleKind.ESNext || (fileExtensionIsOneOf(file.fileName, [Extension.Cjs, Extension.Cts]))) && !file.isDeclarationFile ? true : undefined;
+        return (file.impliedNodeFormat === ModuleKind.ESNext || (fileExtensionIsOneOf(file.fileName, [Extension.Cjs, Extension.Cts, Extension.Mjs, Extension.Mts]))) && !file.isDeclarationFile ? true : undefined;
     }
 
     export function getSetExternalModuleIndicator(options: CompilerOptions): (file: SourceFile) => void {
@@ -6343,10 +6340,7 @@ namespace ts {
                 if (options.jsx === JsxEmit.ReactJSX || options.jsx === JsxEmit.ReactJSXDev) {
                     checks.push(isFileModuleFromUsingJSXTag);
                 }
-                const moduleKind = getEmitModuleKind(options);
-                if (moduleKind === ModuleKind.Node16 || moduleKind === ModuleKind.NodeNext) {
-                    checks.push(isFileForcedToBeModuleByFormat);
-                }
+                checks.push(isFileForcedToBeModuleByFormat);
                 const combined = or(...checks);
                 const callback = (file: SourceFile) => void (file.externalModuleIndicator = combined(file));
                 return callback;

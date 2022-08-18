@@ -73,6 +73,21 @@ namespace ts {
             edits: noChangeOnlyRuns
         });
 
+        verifyTscWithEdits({
+            scenario: "incremental",
+            subScenario: "tsbuildinfo has error",
+            fs: () => loadProjectFromFiles({
+                "/src/project/main.ts": "export const x = 10;",
+                "/src/project/tsconfig.json": "{}",
+                "/src/project/tsconfig.tsbuildinfo": "Some random string",
+            }),
+            commandLineArgs: ["--p", "src/project", "-i"],
+            edits: [{
+                subScenario: "tsbuildinfo written has error",
+                modifyFs: fs => prependText(fs, "/src/project/tsconfig.tsbuildinfo", "Some random string"),
+            }]
+        });
+
         describe("with noEmitOnError", () => {
             let projFs: vfs.FileSystem;
             before(() => {
@@ -125,8 +140,8 @@ const a: string = 10;`, "utf-8"),
             function verifyNoEmitChanges(compilerOptions: CompilerOptions) {
                 const discrepancyExplanation = () => [
                     ...noChangeWithExportsDiscrepancyRun.discrepancyExplanation!(),
-                    "Clean build will not have dtsChangeTime as there was no emit and emitSignatures as undefined for files",
-                    "Incremental will store the past dtsChangeTime and emitSignatures",
+                    "Clean build will not have latestChangedDtsFile as there was no emit and emitSignatures as undefined for files",
+                    "Incremental will store the past latestChangedDtsFile and emitSignatures",
                 ];
                 const discrepancyIfNoDtsEmit = getEmitDeclarations(compilerOptions) ?
                     undefined :

@@ -1,9 +1,9 @@
 /// <reference types="node" />
 
-import childProcess = require("child_process");
-import fs = require("fs-extra");
-import path = require("path");
-import glob = require("glob");
+import * as childProcess from "child_process";
+import * as fs from "fs-extra";
+import * as path from "path";
+import * as glob from "glob";
 
 const root = path.join(__dirname, "..");
 const source = path.join(root, "built/local");
@@ -90,7 +90,7 @@ async function copyFromBuiltLocal(fileName: string) {
 }
 
 async function copyFilesWithGlob(pattern: string) {
-    const files = glob.sync(path.join(source, pattern)).map(f => path.basename(f));
+    const files = glob.sync(pattern, { cwd: source }).map(f => path.basename(f));
     for (const f of files) {
         await copyFromBuiltLocal(f);
     }

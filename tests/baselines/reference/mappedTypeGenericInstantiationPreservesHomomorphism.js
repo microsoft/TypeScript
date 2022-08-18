@@ -30,7 +30,7 @@ exports.mappedUnionWithPrivateType = mappedUnionWithPrivateType;
 
 //// [internal.d.ts]
 export declare function usePrivateType<T extends unknown[]>(...args: T): PrivateMapped<T[any]>;
-declare type PrivateMapped<Obj> = {
+type PrivateMapped<Obj> = {
     [K in keyof Obj]: Obj[K];
 };
 export {};

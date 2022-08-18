@@ -1,6 +1,6 @@
-import fs = require("fs");
-import path = require("path");
-import childProcess = require("child_process");
+import * as fs from "fs";
+import * as path from "path";
+import * as childProcess from "child_process";
 
 interface Author {
     displayNames: string[];
@@ -120,10 +120,10 @@ namespace Commands {
         const authors: { name: string, email: string, knownAuthor?: Author }[] = [];
         const {output: [error, stdout, stderr]} = childProcess.spawnSync(`git`, ["shortlog", "-se", ...specs], { cwd: path.resolve(__dirname, "../") });
         if (error) {
-            console.log(stderr.toString());
+            console.log(stderr!.toString());
         }
         else {
-            const output = stdout.toString();
+            const output = stdout!.toString();
             const lines = output.split("\n");
             lines.forEach(line => {
                 if (line) {
