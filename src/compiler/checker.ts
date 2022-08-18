@@ -2802,7 +2802,7 @@ namespace ts {
             }
         }
 
-        function getTargetofModuleDefault(moduleSymbol: Symbol, node: TypeOnlyCompatibleAliasDeclaration, dontResolveAlias: boolean) {
+        function getTargetofModuleDefault(moduleSymbol: Symbol, node: ImportClause | ImportOrExportSpecifier, dontResolveAlias: boolean) {
             let exportDefaultSymbol: Symbol | undefined;
             if (isShorthandAmbientModuleSymbol(moduleSymbol)) {
                 exportDefaultSymbol = moduleSymbol;
@@ -2812,7 +2812,7 @@ namespace ts {
             }
 
             const file = moduleSymbol.declarations?.find(isSourceFile);
-            const specifier = getModuleSpecifierForTypeOnlyCompatibleAliasDeclaration(node);
+            const specifier = getModuleSpecifierForImportOrExport(node);
             if (!specifier) {
                 return exportDefaultSymbol;
             }
@@ -2850,7 +2850,7 @@ namespace ts {
             return exportDefaultSymbol;
         }
 
-        function getModuleSpecifierForTypeOnlyCompatibleAliasDeclaration(node: TypeOnlyCompatibleAliasDeclaration): Expression | undefined {
+        function getModuleSpecifierForImportOrExport(node: ImportEqualsDeclaration | ImportClause | NamespaceImport | ImportOrExportSpecifier): Expression | undefined {
             switch (node.kind) {
                 case SyntaxKind.ImportClause: return node.parent.moduleSpecifier;
                 case SyntaxKind.ImportEqualsDeclaration: return isExternalModuleReference(node.moduleReference) ? node.moduleReference.expression : undefined;
@@ -3073,7 +3073,7 @@ namespace ts {
 
         function getTargetOfImportSpecifier(node: ImportSpecifier | BindingElement, dontResolveAlias: boolean): Symbol | undefined {
             if (isImportSpecifier(node) && idText(node.propertyName || node.name) === InternalSymbolName.Default) {
-                const specifier = getModuleSpecifierForTypeOnlyCompatibleAliasDeclaration(node);
+                const specifier = getModuleSpecifierForImportOrExport(node);
                 const moduleSymbol = specifier && resolveExternalModuleName(node, specifier);
                 if (moduleSymbol) {
                     return getTargetofModuleDefault(moduleSymbol, node, dontResolveAlias);
@@ -3104,7 +3104,7 @@ namespace ts {
 
         function getTargetOfExportSpecifier(node: ExportSpecifier, meaning: SymbolFlags, dontResolveAlias?: boolean) {
             if (idText(node.propertyName || node.name) === InternalSymbolName.Default) {
-                const specifier = getModuleSpecifierForTypeOnlyCompatibleAliasDeclaration(node);
+                const specifier = getModuleSpecifierForImportOrExport(node);
                 const moduleSymbol = specifier && resolveExternalModuleName(node, specifier);
                 if (moduleSymbol) {
                     return getTargetofModuleDefault(moduleSymbol, node, !!dontResolveAlias);
