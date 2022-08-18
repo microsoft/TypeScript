@@ -106,9 +106,7 @@ namespace ts.projectSystem {
         describe("when root file is file from referenced project", () => {
             function verify(disableSourceOfProjectReferenceRedirect: boolean) {
                 const projectLocation = `/user/username/projects/project`;
-                const commonConfig: File = {
-                    path: `${projectLocation}/src/common/tsconfig.json`,
-                    content: JSON.stringify({
+                const commonConfigObj ={
                         compilerOptions: {
                             composite: true,
                             declarationMap: true,
@@ -117,7 +115,10 @@ namespace ts.projectSystem {
                             disableSourceOfProjectReferenceRedirect
                         },
                         include: ["./**/*"]
-                    })
+                    };
+                const commonConfig: File = {
+                    path: `${projectLocation}/src/common/tsconfig.json`,
+                    content: JSON.stringify(commonConfigObj)
                 };
                 const keyboardTs: File = {
                     path: `${projectLocation}/src/common/input/keyboard.ts`,
@@ -132,9 +133,7 @@ function testEvaluateKeyboardEvent() {
 }
 `
                 };
-                const srcConfig: File = {
-                    path: `${projectLocation}/src/tsconfig.json`,
-                    content: JSON.stringify({
+                const srcConfigObj ={
                         compilerOptions: {
                             composite: true,
                             declarationMap: true,
@@ -150,7 +149,10 @@ function testEvaluateKeyboardEvent() {
                         references: [
                             { path: "./common" }
                         ]
-                    })
+                    };
+                const srcConfig: File = {
+                    path: `${projectLocation}/src/tsconfig.json`,
+                    content: JSON.stringify(srcConfigObj)
                 };
                 const terminalTs: File = {
                     path: `${projectLocation}/src/terminal.ts`,
@@ -229,9 +231,7 @@ function foo() {
         });
 
         it("reusing d.ts files from composite and non composite projects", () => {
-            const configA: File = {
-                path: `${tscWatch.projectRoot}/compositea/tsconfig.json`,
-                content: JSON.stringify({
+            const aObj ={
                     compilerOptions: {
                         composite: true,
                         outDir: "../dist/",
@@ -239,7 +239,10 @@ function foo() {
                         baseUrl: "../",
                         paths: { "@ref/*": ["./dist/*"] }
                     }
-                })
+                };
+            const configA: File = {
+                path: `${tscWatch.projectRoot}/compositea/tsconfig.json`,
+                content: JSON.stringify(aObj)
             };
             const aTs: File = {
                 path: `${tscWatch.projectRoot}/compositea/a.ts`,
@@ -261,9 +264,7 @@ function foo() {
                 path: `${tscWatch.projectRoot}/dist/compositeb/b.d.ts`,
                 content: "export declare function b(): void;"
             };
-            const configC: File = {
-                path: `${tscWatch.projectRoot}/compositec/tsconfig.json`,
-                content: JSON.stringify({
+            const cObj ={
                     compilerOptions: {
                         composite: true,
                         outDir: "../dist/",
@@ -272,7 +273,10 @@ function foo() {
                         paths: { "@ref/*": ["./*"] }
                     },
                     references: [{ path: "../compositeb" }]
-                })
+                };
+            const configC: File = {
+                path: `${tscWatch.projectRoot}/compositec/tsconfig.json`,
+                content: JSON.stringify(cObj)
             };
             const cTs: File = {
                 path: `${tscWatch.projectRoot}/compositec/c.ts`,
@@ -362,9 +366,7 @@ function foo() {
             }
 
             function config(packageName: string, extraOptions: CompilerOptions, references?: string[]): File {
-                return {
-                    path: `${tscWatch.projectRoot}/packages/${packageName}/tsconfig.json`,
-                    content: JSON.stringify({
+                const configObj ={
                         compilerOptions: {
                             outDir: "lib",
                             rootDir: "src",
@@ -373,7 +375,10 @@ function foo() {
                         },
                         include: ["src"],
                         ...(references ? { references: references.map(path => ({ path })) } : {})
-                    })
+                    };
+                return {
+                    path: `${tscWatch.projectRoot}/packages/${packageName}/tsconfig.json`,
+                    content: JSON.stringify(configObj)
                 };
             }
 
@@ -385,13 +390,14 @@ function foo() {
             }
 
             function verifyMonoRepoLike(scope = "") {
+                const bObj ={
+                            main: "lib/index.js",
+                            types: "lib/index.d.ts"
+                        };
                 verifySymlinkScenario(`when packageJson has types field and has index.ts${scope ? " with scoped package" : ""}`, () => ({
                     bPackageJson: {
                         path: `${tscWatch.projectRoot}/packages/B/package.json`,
-                        content: JSON.stringify({
-                            main: "lib/index.js",
-                            types: "lib/index.d.ts"
-                        })
+                        content: JSON.stringify(bObj)
                     },
                     aTest: file("A", "index.ts", `import { foo } from '${scope}b';
 import { bar } from '${scope}b/lib/bar';
@@ -434,9 +440,7 @@ bar();
         });
 
         it("when the referenced projects have allowJs and emitDeclarationOnly", () => {
-            const compositeConfig: File = {
-                path: `${tscWatch.projectRoot}/packages/emit-composite/tsconfig.json`,
-                content: JSON.stringify({
+            const compositeConfigObj ={
                     compilerOptions: {
                         composite: true,
                         allowJs: true,
@@ -445,16 +449,20 @@ bar();
                         rootDir: "src"
                     },
                     include: ["src"]
-                })
+                };
+            const compositeConfig: File = {
+                path: `${tscWatch.projectRoot}/packages/emit-composite/tsconfig.json`,
+                content: JSON.stringify(compositeConfigObj)
             };
-            const compositePackageJson: File = {
-                path: `${tscWatch.projectRoot}/packages/emit-composite/package.json`,
-                content: JSON.stringify({
+            const compositePackageObj ={
                     name: "emit-composite",
                     version: "1.0.0",
                     main: "src/index.js",
                     typings: "lib/index.d.ts"
-                })
+                };
+            const compositePackageJson: File = {
+                path: `${tscWatch.projectRoot}/packages/emit-composite/package.json`,
+                content: JSON.stringify(compositePackageObj)
             };
             const compositeIndex: File = {
                 path: `${tscWatch.projectRoot}/packages/emit-composite/src/index.js`,
@@ -474,12 +482,13 @@ module.exports = {
     testCompositeFunction
 }`
             };
-            const consumerConfig: File = {
-                path: `${tscWatch.projectRoot}/packages/consumer/tsconfig.json`,
-                content: JSON.stringify({
+            const consumerConfigObj ={
                     include: ["src"],
                     references: [{ path: "../emit-composite" }]
-                })
+                };
+            const consumerConfig: File = {
+                path: `${tscWatch.projectRoot}/packages/consumer/tsconfig.json`,
+                content: JSON.stringify(consumerConfigObj)
             };
             const consumerIndex: File = {
                 path: `${tscWatch.projectRoot}/packages/consumer/src/index.ts`,
@@ -500,26 +509,28 @@ testCompositeFunction('why hello there', 42);`
 
         it("when finding local reference doesnt load ancestor/sibling projects", () => {
             const solutionLocation = "/user/username/projects/solution";
-            const solution: File = {
-                path: `${solutionLocation}/tsconfig.json`,
-                content: JSON.stringify({
+            const solutionObj ={
                     files: [],
                     include: [],
                     references: [
                         { path: "./compiler" },
                         { path: "./services" },
                     ]
-                })
+                };
+            const solution: File = {
+                path: `${solutionLocation}/tsconfig.json`,
+                content: JSON.stringify(solutionObj)
             };
-            const compilerConfig: File = {
-                path: `${solutionLocation}/compiler/tsconfig.json`,
-                content: JSON.stringify({
+            const compilerConfigObj ={
                     compilerOptions: {
                         composite: true,
                         module: "none"
                     },
                     files: ["./types.ts", "./program.ts"]
-                })
+                };
+            const compilerConfig: File = {
+                path: `${solutionLocation}/compiler/tsconfig.json`,
+                content: JSON.stringify(compilerConfigObj)
             };
             const typesFile: File = {
                 path: `${solutionLocation}/compiler/types.ts`,
@@ -540,9 +551,7 @@ testCompositeFunction('why hello there', 42);`
                     function getSourceFile() { return "something"; }
                 }`
             };
-            const servicesConfig: File = {
-                path: `${solutionLocation}/services/tsconfig.json`,
-                content: JSON.stringify({
+            const servicesConfigObj ={
                     compilerOptions: {
                         composite: true
                     },
@@ -550,7 +559,10 @@ testCompositeFunction('why hello there', 42);`
                     references: [
                         { path: "../compiler" }
                     ]
-                })
+                };
+            const servicesConfig: File = {
+                path: `${solutionLocation}/services/tsconfig.json`,
+                content: JSON.stringify(servicesConfigObj)
             };
             const servicesFile: File = {
                 path: `${solutionLocation}/services/services.ts`,
@@ -583,9 +595,7 @@ testCompositeFunction('why hello there', 42);`
 
         it("when finding references in overlapping projects", () => {
             const solutionLocation = "/user/username/projects/solution";
-            const solutionConfig: File = {
-                path: `${solutionLocation}/tsconfig.json`,
-                content: JSON.stringify({
+            const solutionConfigObj ={
                     files: [],
                     include: [],
                     references: [
@@ -594,17 +604,21 @@ testCompositeFunction('why hello there', 42);`
                         { path: "./c" },
                         { path: "./d" },
                     ]
-                })
+                };
+            const solutionConfig: File = {
+                path: `${solutionLocation}/tsconfig.json`,
+                content: JSON.stringify(solutionConfigObj)
             };
-            const aConfig: File = {
-                path: `${solutionLocation}/a/tsconfig.json`,
-                content: JSON.stringify({
+            const aObj ={
                     compilerOptions: {
                         composite: true,
                         module: "none"
                     },
                     files: ["./index.ts"]
-                })
+                };
+            const aConfig: File = {
+                path: `${solutionLocation}/a/tsconfig.json`,
+                content: JSON.stringify(aObj)
             };
             const aFile: File = {
                 path: `${solutionLocation}/a/index.ts`,
@@ -614,9 +628,7 @@ testCompositeFunction('why hello there', 42);`
                 }`
             };
 
-            const bConfig: File = {
-                path: `${solutionLocation}/b/tsconfig.json`,
-                content: JSON.stringify({
+            const bObj ={
                     compilerOptions: {
                         composite: true
                     },
@@ -624,7 +636,10 @@ testCompositeFunction('why hello there', 42);`
                     references: [
                         { path: "../a" }
                     ]
-                })
+                };
+            const bConfig: File = {
+                path: `${solutionLocation}/b/tsconfig.json`,
+                content: JSON.stringify(bObj)
             };
             const bFile: File = {
                 path: `${solutionLocation}/b/index.ts`,
@@ -636,9 +651,7 @@ testCompositeFunction('why hello there', 42);`
                 }`
             };
 
-            const cConfig: File = {
-                path: `${solutionLocation}/c/tsconfig.json`,
-                content: JSON.stringify({
+const cObj ={
                     compilerOptions: {
                         composite: true
                     },
@@ -646,7 +659,10 @@ testCompositeFunction('why hello there', 42);`
                     references: [
                         { path: "../b" }
                     ]
-                })
+                };
+            const cConfig: File = {
+                path: `${solutionLocation}/c/tsconfig.json`,
+                content: JSON.stringify(cObj)
             };
             const cFile: File = {
                 path: `${solutionLocation}/c/index.ts`,
@@ -658,9 +674,7 @@ testCompositeFunction('why hello there', 42);`
                 `
             };
 
-            const dConfig: File = {
-                path: `${solutionLocation}/d/tsconfig.json`,
-                content: JSON.stringify({
+const dObj ={
                     compilerOptions: {
                         composite: true
                     },
@@ -668,7 +682,10 @@ testCompositeFunction('why hello there', 42);`
                     references: [
                         { path: "../c" }
                     ]
-                })
+                };
+            const dConfig: File = {
+                path: `${solutionLocation}/d/tsconfig.json`,
+                content: JSON.stringify(dObj)
             };
             const dFile: File = {
                 path: `${solutionLocation}/d/index.ts`,
@@ -705,19 +722,18 @@ testCompositeFunction('why hello there', 42);`
             function verify(scenario: string, definition: string, usage: string, referenceTerm: string) {
                 it(scenario, () => {
                     const solutionLocation = "/user/username/projects/solution";
-                    const solution: File = {
-                        path: `${solutionLocation}/tsconfig.json`,
-                        content: JSON.stringify({
+                    const solutionObj ={
                             files: [],
                             references: [
                                 { path: "./api" },
                                 { path: "./app" },
                             ]
-                        })
+                        };
+                    const solution: File = {
+                        path: `${solutionLocation}/tsconfig.json`,
+                        content: JSON.stringify(solutionObj)
                     };
-                    const apiConfig: File = {
-                        path: `${solutionLocation}/api/tsconfig.json`,
-                        content: JSON.stringify({
+                    const apiConfigObj ={
                             compilerOptions: {
                                 composite: true,
                                 outDir: "dist",
@@ -725,7 +741,10 @@ testCompositeFunction('why hello there', 42);`
                             },
                             include: ["src"],
                             references: [{ path: "../shared" }]
-                        })
+                        };
+                    const apiConfig: File = {
+                        path: `${solutionLocation}/api/tsconfig.json`,
+                        content: JSON.stringify(apiConfigObj)
                     };
                     const apiFile: File = {
                         path: `${solutionLocation}/api/src/server.ts`,
@@ -740,16 +759,17 @@ ${usage}`
                         path: `${solutionLocation}/app/src/app.ts`,
                         content: apiFile.content
                     };
-                    const sharedConfig: File = {
-                        path: `${solutionLocation}/shared/tsconfig.json`,
-                        content: JSON.stringify({
+                    const sharedConfigObj ={
                             compilerOptions: {
                                 composite: true,
                                 outDir: "dist",
                                 rootDir: "src",
                             },
                             include: ["src"]
-                        })
+                        };
+                    const sharedConfig: File = {
+                        path: `${solutionLocation}/shared/tsconfig.json`,
+                        content: JSON.stringify(sharedConfigObj)
                     };
                     const sharedFile: File = {
                         path: `${solutionLocation}/shared/src/index.ts`,
@@ -811,27 +831,29 @@ export const foo = local;`,
 
         it("when disableSolutionSearching is true, solution and siblings are not loaded", () => {
             const solutionLocation = "/user/username/projects/solution";
-            const solution: File = {
-                path: `${solutionLocation}/tsconfig.json`,
-                content: JSON.stringify({
+            const solutionObj ={
                     files: [],
                     include: [],
                     references: [
                         { path: "./compiler" },
                         { path: "./services" },
                     ]
-                })
+                };
+            const solution: File = {
+                path: `${solutionLocation}/tsconfig.json`,
+                content: JSON.stringify(solutionObj)
             };
-            const compilerConfig: File = {
-                path: `${solutionLocation}/compiler/tsconfig.json`,
-                content: JSON.stringify({
+            const compilerConfigObj ={
                     compilerOptions: {
                         composite: true,
                         module: "none",
                         disableSolutionSearching: true
                     },
                     files: ["./types.ts", "./program.ts"]
-                })
+                };
+            const compilerConfig: File = {
+                path: `${solutionLocation}/compiler/tsconfig.json`,
+                content: JSON.stringify(compilerConfigObj)
             };
             const typesFile: File = {
                 path: `${solutionLocation}/compiler/types.ts`,
@@ -852,9 +874,7 @@ export const foo = local;`,
                     function getSourceFile() { return "something"; }
                 }`
             };
-            const servicesConfig: File = {
-                path: `${solutionLocation}/services/tsconfig.json`,
-                content: JSON.stringify({
+            const servicesConfigObj ={
                     compilerOptions: {
                         composite: true
                     },
@@ -862,7 +882,10 @@ export const foo = local;`,
                     references: [
                         { path: "../compiler" }
                     ]
-                })
+                };
+            const servicesConfig: File = {
+                path: `${solutionLocation}/services/tsconfig.json`,
+                content: JSON.stringify(servicesConfigObj)
             };
             const servicesFile: File = {
                 path: `${solutionLocation}/services/services.ts`,
@@ -922,13 +945,14 @@ export { foo };
                 path: `${tscWatch.projectRoot}/target/src/helpers/functions.d.ts.map`,
                 content: `{"version":3,"file":"functions.d.ts","sourceRoot":"","sources":["../../../src/helpers/functions.ts"],"names":[],"mappings":"AAAA,eAAO,MAAM,GAAG,IAAI,CAAC"}`
             };
-            const tsconfigIndirect3: File = {
-                path: `${tscWatch.projectRoot}/indirect3/tsconfig.json`,
-                content: JSON.stringify({
+            const tsconfigIndirectObj3 ={
                     compilerOptions: {
                         baseUrl: "../target/src/"
                     },
-                })
+                };
+            const tsconfigIndirect3: File = {
+                path: `${tscWatch.projectRoot}/indirect3/tsconfig.json`,
+                content: JSON.stringify(tsconfigIndirectObj3)
             };
             const fileResolvingToMainDts: File = {
                 path: `${tscWatch.projectRoot}/indirect3/main.ts`,
@@ -940,24 +964,26 @@ export function bar() {}`
             const tsconfigPath = `${tscWatch.projectRoot}/tsconfig.json`;
             const dummyFilePath = "/dummy/dummy.ts";
             function setup({ solutionFiles, solutionOptions, configRefs, additionalFiles }: Setup) {
-                const tsconfigSrc: File = {
-                    path: tsconfigSrcPath,
-                    content: JSON.stringify({
+                const tsconfigSrcObj ={
                         compilerOptions: {
                             composite: true,
                             outDir: "./target/",
                             baseUrl: "./src/"
                         },
                         include: ["./src/**/*"]
-                    })
+                    };
+                const tsconfigSrc: File = {
+                    path: tsconfigSrcPath,
+                    content: JSON.stringify(tsconfigSrcObj)
                 };
-                const tsconfig: File = {
-                    path: tsconfigPath,
-                    content: JSON.stringify({
+                const tsconfigObj ={
                         ... (solutionOptions ? { compilerOptions: solutionOptions } : {}),
                         references: configRefs.map(path => ({ path })),
                         files: solutionFiles || []
-                    })
+                    };
+                const tsconfig: File = {
+                    path: tsconfigPath,
+                    content: JSON.stringify(tsconfigObj)
                 };
                 const dummyFile: File = {
                     path: dummyFilePath,
@@ -1022,9 +1048,7 @@ export function bar() {}`
             }
 
             function getIndirectProject(postfix: string, optionsToExtend?: CompilerOptions) {
-                const tsconfigIndirect: File = {
-                    path: `${tscWatch.projectRoot}/tsconfig-indirect${postfix}.json`,
-                    content: JSON.stringify({
+                const tsconfigIndirectObj ={
                         compilerOptions: {
                             composite: true,
                             outDir: "./target/",
@@ -1033,7 +1057,10 @@ export function bar() {}`
                         },
                         files: [`./indirect${postfix}/main.ts`],
                         references: [{ path: "./tsconfig-src.json" }]
-                    })
+                    };
+                const tsconfigIndirect: File = {
+                    path: `${tscWatch.projectRoot}/tsconfig-indirect${postfix}.json`,
+                    content: JSON.stringify(tsconfigIndirectObj)
                 };
                 const indirect: File = {
                     path: `${tscWatch.projectRoot}/indirect${postfix}/main.ts`,
@@ -1210,15 +1237,16 @@ bar;`
 
         describe("when new file is added to the referenced project", () => {
             function setup(extendOptionsProject2?: CompilerOptions) {
-                const config1: File = {
-                    path: `${tscWatch.projectRoot}/projects/project1/tsconfig.json`,
-                    content: JSON.stringify({
+                const obj1 ={
                         compilerOptions: {
                             module: "none",
                             composite: true
                         },
                         exclude: ["temp"]
-                    })
+                    };
+                const config1: File = {
+                    path: `${tscWatch.projectRoot}/projects/project1/tsconfig.json`,
+                    content: JSON.stringify(obj1)
                 };
                 const class1: File = {
                     path: `${tscWatch.projectRoot}/projects/project1/class1.ts`,
@@ -1228,9 +1256,7 @@ bar;`
                     path: `${tscWatch.projectRoot}/projects/project1/class1.d.ts`,
                     content: `declare class class1 {}`
                 };
-                const config2: File = {
-                    path: `${tscWatch.projectRoot}/projects/project2/tsconfig.json`,
-                    content: JSON.stringify({
+                const obj2 ={
                         compilerOptions: {
                             module: "none",
                             composite: true,
@@ -1239,7 +1265,10 @@ bar;`
                         references: [
                             { path: "../project1" }
                         ]
-                    })
+                    };
+                const config2: File = {
+                    path: `${tscWatch.projectRoot}/projects/project2/tsconfig.json`,
+                    content: JSON.stringify(obj2)
                 };
                 const class2: File = {
                     path: `${tscWatch.projectRoot}/projects/project2/class2.ts`,
@@ -1338,41 +1367,42 @@ bar;`
 
         describe("auto import with referenced project", () => {
             function verifyAutoImport(built: boolean, disableSourceOfProjectReferenceRedirect?: boolean) {
-                const solnConfig: File = {
-                    path: `${tscWatch.projectRoot}/tsconfig.json`,
-                    content: JSON.stringify({
+                const solnObj ={
                         files: [],
                         references: [
                             { path: "shared/src/library" },
                             { path: "app/src/program" }
                         ]
-                    })
+                    };
+                const solnConfig: File = {
+                    path: `${tscWatch.projectRoot}/tsconfig.json`,
+                    content: JSON.stringify(solnObj)
                 };
-                const sharedConfig: File = {
-                    path: `${tscWatch.projectRoot}/shared/src/library/tsconfig.json`,
-                    content: JSON.stringify({
+                const sharedConfigObj ={
                         compilerOptions: {
                             composite: true,
                             outDir: "../../bld/library"
                         }
-                    })
+                    };
+                const sharedConfig: File = {
+                    path: `${tscWatch.projectRoot}/shared/src/library/tsconfig.json`,
+                    content: JSON.stringify(sharedConfigObj)
                 };
                 const sharedIndex: File = {
                     path: `${tscWatch.projectRoot}/shared/src/library/index.ts`,
                     content: `export function foo() {}`
                 };
-                const sharedPackage: File = {
-                    path: `${tscWatch.projectRoot}/shared/package.json`,
-                    content: JSON.stringify({
+                const sharedPackageObj ={
                         name: "shared",
                         version: "1.0.0",
                         main: "bld/library/index.js",
                         types: "bld/library/index.d.ts"
-                    })
+                    };
+                const sharedPackage: File = {
+                    path: `${tscWatch.projectRoot}/shared/package.json`,
+                    content: JSON.stringify(sharedPackageObj)
                 };
-                const appConfig: File = {
-                    path: `${tscWatch.projectRoot}/app/src/program/tsconfig.json`,
-                    content: JSON.stringify({
+                const appConfigObj ={
                         compilerOptions: {
                             composite: true,
                             outDir: "../../bld/program",
@@ -1381,7 +1411,10 @@ bar;`
                         references: [
                             { path: "../../../shared/src/library" }
                         ]
-                    })
+                    };
+                const appConfig: File = {
+                    path: `${tscWatch.projectRoot}/app/src/program/tsconfig.json`,
+                    content: JSON.stringify(appConfigObj)
                 };
                 const appBar: File = {
                     path: `${tscWatch.projectRoot}/app/src/program/bar.ts`,
@@ -1434,12 +1467,13 @@ bar;`
                     path: `${tscWatch.projectRoot}/${packageName}/src/file1.ts`,
                     content: `export const ${packageName}Const = 10;`
                 };
-                const config: File = {
-                    path: `${tscWatch.projectRoot}/${packageName}/tsconfig.json`,
-                    content: JSON.stringify({
+                const obj ={
                         compilerOptions: { composite: true, ...optionsToExtend || {} },
                         references: references?.map(path => ({ path: `../${path}` }))
-                    })
+                    };
+                const config: File = {
+                    path: `${tscWatch.projectRoot}/${packageName}/tsconfig.json`,
+                    content: JSON.stringify(obj)
                 };
                 return [file, config];
             }

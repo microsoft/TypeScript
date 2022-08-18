@@ -9,9 +9,10 @@ namespace ts.projectSystem {
             path: `${tscWatch.projectRoot}/module1.d.ts`,
             content: "export const a: number;"
         };
+        const configObj ={ files: ["index.ts"] };
         const configFile: File = {
             path: `${tscWatch.projectRoot}/tsconfig.json`,
-            content: JSON.stringify({ files: ["index.ts"] })
+            content: JSON.stringify(configObj)
         };
 
         function getProject(service: TestProjectService) {

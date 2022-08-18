@@ -129,7 +129,7 @@ namespace ts.tscWatch {
                     caption: "write imported file",
                     change: sys => {
                         fileExistsCalledForBar = false;
-                        sys.writeFile(root.path,`import {y} from "bar"`);
+                        sys.writeFile(root.path, `import {y} from "bar"`);
                         sys.writeFile(imported.path, imported.content);
                     },
                     timeouts: sys => {
@@ -303,17 +303,18 @@ declare module "fs" {
                     path: "/a/b/projects/myProject/node_modules/module1/index.js",
                     content: "module.exports = options => { return options.toString(); }"
                 };
+                const configObj = {
+                    compilerOptions: {
+                        allowJs: true,
+                        rootDir: ".",
+                        outDir: "../dist",
+                        moduleResolution: "node",
+                        maxNodeModuleJsDepth: 1
+                    }
+                };
                 const configFile: File = {
                     path: configDir + "tsconfig.json",
-                    content: JSON.stringify({
-                        compilerOptions: {
-                            allowJs: true,
-                            rootDir: ".",
-                            outDir: "../dist",
-                            moduleResolution: "node",
-                            maxNodeModuleJsDepth: 1
-                        }
-                    })
+                    content: JSON.stringify(configObj)
                 };
                 return createWatchedSystem([file1, file2, module1, libFile, configFile], { currentDirectory: "/a/b/projects/myProject/" });
             },
@@ -352,6 +353,7 @@ declare module "fs" {
 
         describe("ignores files/folder changes in node_modules that start with '.'", () => {
             function verifyIgnore(subScenario: string, commandLineArgs: readonly string[]) {
+                const changeObj = { something: 10 };
                 verifyTscWatch({
                     scenario,
                     subScenario: `ignores changes in node_modules that start with dot/${subScenario}`,
@@ -376,7 +378,7 @@ declare module "fs" {
                             caption: "npm install file and folder that start with '.'",
                             change: sys => sys.ensureFileOrFolder({
                                 path: `${projectRoot}/node_modules/.cache/babel-loader/89c02171edab901b9926470ba6d5677e.ts`,
-                                content: JSON.stringify({ something: 10 })
+                                content: JSON.stringify(changeObj)
                             }),
                             timeouts: sys => sys.checkTimeoutQueueLength(0),
                         }
@@ -387,6 +389,10 @@ declare module "fs" {
             verifyIgnore("watch with configFile", ["--w", "-p", `${projectRoot}/tsconfig.json`]);
         });
 
+        const packageObj = {
+            version: "1.65.1",
+            types: "types/somefile.define.d.ts"
+        };
         verifyTscWatch({
             scenario,
             subScenario: "when types in compiler option are global and installed at later point",
@@ -396,14 +402,15 @@ declare module "fs" {
                     path: `${projectRoot}/lib/app.ts`,
                     content: `myapp.component("hello");`
                 };
+                const tsconfigObj = {
+                    compilerOptions: {
+                        module: "none",
+                        types: ["@myapp/ts-types"]
+                    }
+                };
                 const tsconfig: File = {
                     path: `${projectRoot}/tsconfig.json`,
-                    content: JSON.stringify({
-                        compilerOptions: {
-                            module: "none",
-                            types: ["@myapp/ts-types"]
-                        }
-                    })
+                    content: JSON.stringify(tsconfigObj)
                 };
                 return createWatchedSystem([app, tsconfig, libFile]);
             },
@@ -413,10 +420,7 @@ declare module "fs" {
                     change: sys => {
                         sys.ensureFileOrFolder({
                             path: `${projectRoot}/node_modules/@myapp/ts-types/package.json`,
-                            content: JSON.stringify({
-                                version: "1.65.1",
-                                types: "types/somefile.define.d.ts"
-                            })
+                            content: JSON.stringify(packageObj)
                         });
                         sys.ensureFileOrFolder({
                             path: `${projectRoot}/node_modules/@myapp/ts-types/types/somefile.define.d.ts`,
@@ -455,20 +459,22 @@ declare namespace myapp {
                     path: `${mainPackageRoot}/index.ts`,
                     content: "import { Foo } from '@scoped/linked-package'"
                 };
+                const configObj = {
+                    compilerOptions: { module: "commonjs", moduleResolution: "node", baseUrl: ".", rootDir: "." },
+                    files: ["index.ts"]
+                };
                 const config: File = {
                     path: `${mainPackageRoot}/tsconfig.json`,
-                    content: JSON.stringify({
-                        compilerOptions: { module: "commonjs", moduleResolution: "node", baseUrl: ".", rootDir: "." },
-                        files: ["index.ts"]
-                    })
+                    content: JSON.stringify(configObj)
                 };
                 const linkedPackageInMain: SymLink = {
                     path: `${mainPackageRoot}/node_modules/@scoped/linked-package`,
                     symLink: `${linkedPackageRoot}`
                 };
+                const linkedPackageObj = { name: "@scoped/linked-package", version: "0.0.1", types: "dist/index.d.ts", main: "dist/index.js" };
                 const linkedPackageJson: File = {
                     path: `${linkedPackageRoot}/package.json`,
-                    content: JSON.stringify({ name: "@scoped/linked-package", version: "0.0.1", types: "dist/index.d.ts", main: "dist/index.js" })
+                    content: JSON.stringify(linkedPackageObj)
                 };
                 const linkedPackageIndex: File = {
                     path: `${linkedPackageRoot}/dist/index.d.ts`,

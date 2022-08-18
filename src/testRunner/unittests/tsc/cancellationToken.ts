@@ -31,9 +31,10 @@ namespace ts.tscWatch {
                     path: `${projectRoot}/d.ts`,
                     content: "export class D { }"
                 };
+                const configObj = { compilerOptions: { incremental: true, declaration: true } };
                 const config: File = {
                     path: `${projectRoot}/tsconfig.json`,
-                    content: JSON.stringify({ compilerOptions: { incremental: true, declaration: true } })
+                    content: JSON.stringify(configObj)
                 };
                 const { sys, baseline, oldSnap: originalSnap } = createBaseline(createWatchedSystem(
                     [aFile, bFile, cFile, dFile, config, libFile],

@@ -3,55 +3,60 @@ namespace ts.tscWatch {
         verifyTscWatch({
             scenario: "moduleResolution",
             subScenario: `watches for changes to package-json main fields`,
-            sys: () => createWatchedSystem([
-                {
-                    path: `${projectRoot}/packages/pkg1/package.json`,
-                    content: JSON.stringify({
-                        name: "pkg1",
-                        version: "1.0.0",
-                        main: "build/index.js",
-                    })
-                },
-                {
-                    path: `${projectRoot}/packages/pkg1/index.ts`,
-                    content: Utils.dedent`
+            sys: () => {
+                const package1 = {
+                    name: "pkg1",
+                    version: "1.0.0",
+                    main: "build/index.js",
+                };
+                const tsconfig1 = {
+                    compilerOptions: {
+                        outDir: "build",
+                    },
+                };
+                const package2 = {
+                    name: "pkg2",
+                    version: "1.0.0",
+                    main: "build/index.js",
+                };
+                return createWatchedSystem([
+                    {
+                        path: `${projectRoot}/packages/pkg1/package.json`,
+                        content: JSON.stringify(package1)
+                    },
+                    {
+                        path: `${projectRoot}/packages/pkg1/index.ts`,
+                        content: Utils.dedent`
             import type { TheNum } from 'pkg2'
             export const theNum: TheNum = 42;`
-                },
-                {
-                    path: `${projectRoot}/packages/pkg1/tsconfig.json`,
-                    content: JSON.stringify({
-                        compilerOptions: {
-                            outDir: "build",
-                        },
-                    })
-                },
-                {
-                    path: `${projectRoot}/packages/pkg2/build/const.d.ts`,
-                    content: `export type TheNum = 42;`
-                },
-                {
-                    path: `${projectRoot}/packages/pkg2/build/index.d.ts`,
-                    content: `export type { TheNum } from './const.js';`
-                },
-                {
-                    path: `${projectRoot}/packages/pkg2/build/other.d.ts`,
-                    content: `export type TheStr = string;`
-                },
-                {
-                    path: `${projectRoot}/packages/pkg2/package.json`,
-                    content: JSON.stringify({
-                        name: "pkg2",
-                        version: "1.0.0",
-                        main: "build/index.js",
-                    })
-                },
-                {
-                    path: `${projectRoot}/node_modules/pkg2`,
-                    symLink: `${projectRoot}/packages/pkg2`,
-                },
-                libFile
-            ], { currentDirectory: projectRoot }),
+                    },
+                    {
+                        path: `${projectRoot}/packages/pkg1/tsconfig.json`,
+                        content: JSON.stringify(tsconfig1)
+                    },
+                    {
+                        path: `${projectRoot}/packages/pkg2/build/const.d.ts`,
+                        content: `export type TheNum = 42;`
+                    },
+                    {
+                        path: `${projectRoot}/packages/pkg2/build/index.d.ts`,
+                        content: `export type { TheNum } from './const.js';`
+                    },
+                    {
+                        path: `${projectRoot}/packages/pkg2/build/other.d.ts`,
+                        content: `export type TheStr = string;`
+                    },
+                    {
+                        path: `${projectRoot}/packages/pkg2/package.json`,
+                        content: JSON.stringify(package2)
+                    },
+                    {
+                        path: `${projectRoot}/node_modules/pkg2`,
+                        symLink: `${projectRoot}/packages/pkg2`,
+                    },
+                    libFile
+                ], { currentDirectory: projectRoot });
+            },
             commandLineArgs: ["--project", "./packages/pkg1/tsconfig.json", "-w", "--traceResolution"],
             changes: [
                 {
@@ -76,56 +81,61 @@ namespace ts.tscWatch {
         verifyTscWatch({
             scenario: "moduleResolution",
             subScenario: "diagnostics from cache",
-            sys: () => createWatchedSystem([
-                {
-                    path: `${projectRoot}/tsconfig.json`,
-                    content: JSON.stringify({
-                        compilerOptions: {
-                            moduleResolution: "nodenext",
-                            outDir: "./dist",
-                            declaration: true,
-                            declarationDir: "./types"
-                        },
-                    })
-                },
-                {
-                    path: `${projectRoot}/package.json`,
-                    content: JSON.stringify({
-                        name: "@this/package",
-                        type: "module",
-                        exports: {
-                            ".": {
-                                default: "./dist/index.js",
-                                types: "./types/index.d.ts"
-                            }
+            sys: () => {
+                const tsconfig = {
+                    compilerOptions: {
+                        moduleResolution: "nodenext",
+                        outDir: "./dist",
+                        declaration: true,
+                        declarationDir: "./types"
+                    },
+                };
+                const pkg = {
+                    name: "@this/package",
+                    type: "module",
+                    exports: {
+                        ".": {
+                            default: "./dist/index.js",
+                            types: "./types/index.d.ts"
                         }
-                    })
-                },
-                {
-                    path: `${projectRoot}/index.ts`,
-                    content: Utils.dedent`
+                    }
+                };
+                return createWatchedSystem([
+                    {
+                        path: `${projectRoot}/tsconfig.json`,
+                        content: JSON.stringify(tsconfig)
+                    },
+                    {
+                        path: `${projectRoot}/package.json`,
+                        content: JSON.stringify(pkg)
+                    },
+                    {
+                        path: `${projectRoot}/index.ts`,
+                        content: Utils.dedent`
                         import * as me from "@this/package";
                         me.thing()
                         export function thing(): void {}
                     `
-                },
-                libFile
-            ], { currentDirectory: projectRoot }),
+                    },
+                    libFile
+                ], { currentDirectory: projectRoot });
+            },
             commandLineArgs: ["-w", "--traceResolution"],
             changes: emptyArray
         });
 
         describe("package json file is edited", () => {
             function getSys(packageFileContents: string) {
+                const configObj = {
+                    compilerOptions: {
+                        target: "es2016",
+                        module: "Node16",
+                        outDir: "../out"
+                    }
+                };
                 const configFile: File = {
                     path: `${projectRoot}/src/tsconfig.json`,
-                    content: JSON.stringify({
-                        compilerOptions: {
-                            target: "es2016",
-                            module: "Node16",
-                            outDir: "../out"
-                        }
-                    })
+                    content: JSON.stringify(configObj)
                 };
                 const packageFile: File = {
                     path: `${projectRoot}/package.json`,
@@ -154,13 +164,19 @@ namespace ts.tscWatch {
                 scenario: "moduleResolution",
                 subScenario: "package json file is edited",
                 commandLineArgs: ["--w", "--p", "src", "--extendedDiagnostics", "-traceResolution", "--explainFiles"],
-                sys: () => getSys(JSON.stringify({ name: "app", version: "1.0.0" })),
+                sys: () => {
+                    const obj = { name: "app", version: "1.0.0" };
+                    return getSys(JSON.stringify(obj));
+                },
                 changes: [
                     {
                         caption: "Modify package json file to add type module",
-                        change: sys => sys.writeFile(`${projectRoot}/package.json`, JSON.stringify({
-                            name: "app", version: "1.0.0", type: "module",
-                        })),
+                        change: sys => {
+                            const changeObj = {
+                                name: "app", version: "1.0.0", type: "module",
+                            };
+                            return sys.writeFile(`${projectRoot}/package.json`, JSON.stringify(changeObj));
+                        },
                         timeouts: host => {
                             host.runQueuedTimeoutCallbacks(); // Failed lookup updates
                             host.runQueuedTimeoutCallbacks(); // Actual update
@@ -168,7 +184,10 @@ namespace ts.tscWatch {
                     },
                     {
                         caption: "Modify package.json file to remove type module",
-                        change: sys => sys.writeFile(`${projectRoot}/package.json`, JSON.stringify({ name: "app", version: "1.0.0" })),
+                        change: sys => {
+                            const changeObj = { name: "app", version: "1.0.0" };
+                            return sys.writeFile(`${projectRoot}/package.json`, JSON.stringify(changeObj));
+                        },
                         timeouts: host => {
                             host.runQueuedTimeoutCallbacks(); // Failed lookup updates
                             host.runQueuedTimeoutCallbacks(); // Actual update
@@ -184,9 +203,12 @@ namespace ts.tscWatch {
                     },
                     {
                         caption: "Modify package json file to add type module",
-                        change: sys => sys.writeFile(`${projectRoot}/package.json`, JSON.stringify({
-                            name: "app", version: "1.0.0", type: "module",
-                        })),
+                        change: sys => {
+                            const changeObj = {
+                                name: "app", version: "1.0.0", type: "module",
+                            };
+                            return sys.writeFile(`${projectRoot}/package.json`, JSON.stringify(changeObj));
+                        },
                         timeouts: host => {
                             host.runQueuedTimeoutCallbacks(); // Failed lookup updates
                             host.runQueuedTimeoutCallbacks(); // Actual update
@@ -207,13 +229,19 @@ namespace ts.tscWatch {
                 scenario: "moduleResolution",
                 subScenario: "package json file is edited when package json with type module exists",
                 commandLineArgs: ["--w", "--p", "src", "--extendedDiagnostics", "-traceResolution", "--explainFiles"],
-                sys: () => getSys(JSON.stringify({
-                    name: "app", version: "1.0.0", type: "module",
-                })),
+                sys: () => {
+                    const pkgObj = {
+                        name: "app", version: "1.0.0", type: "module",
+                    };
+                    return getSys(JSON.stringify(pkgObj));
+                },
                 changes: [
                     {
                         caption: "Modify package.json file to remove type module",
-                        change: sys => sys.writeFile(`${projectRoot}/package.json`, JSON.stringify({ name: "app", version: "1.0.0" })),
+                        change: sys => {
+                            const changeObj = { name: "app", version: "1.0.0" };
+                            return sys.writeFile(`${projectRoot}/package.json`, JSON.stringify(changeObj));
+                        },
                         timeouts: host => {
                             host.runQueuedTimeoutCallbacks(); // Failed lookup updates
                             host.runQueuedTimeoutCallbacks(); // Actual update
@@ -221,9 +249,12 @@ namespace ts.tscWatch {
                     },
                     {
                         caption: "Modify package json file to add type module",
-                        change: sys => sys.writeFile(`${projectRoot}/package.json`, JSON.stringify({
-                            name: "app", version: "1.0.0", type: "module",
-                        })),
+                        change: sys => {
+                            const changeObj = {
+                                name: "app", version: "1.0.0", type: "module",
+                            };
+                            return sys.writeFile(`${projectRoot}/package.json`, JSON.stringify(changeObj));
+                        },
                         timeouts: host => {
                             host.runQueuedTimeoutCallbacks(); // Failed lookup updates
                             host.runQueuedTimeoutCallbacks(); // Actual update
@@ -239,7 +270,10 @@ namespace ts.tscWatch {
                     },
                     {
                         caption: "Modify package json file to without type module",
-                        change: sys => sys.writeFile(`${projectRoot}/package.json`, JSON.stringify({ name: "app", version: "1.0.0" })),
+                        change: sys => {
+                            const changeObj = { name: "app", version: "1.0.0" };
+                            return sys.writeFile(`${projectRoot}/package.json`, JSON.stringify(changeObj));
+                        },
                         timeouts: host => {
                             host.runQueuedTimeoutCallbacks(); // Failed lookup updates
                             host.runQueuedTimeoutCallbacks(); // Actual update

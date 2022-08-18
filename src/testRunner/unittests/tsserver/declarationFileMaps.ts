@@ -51,7 +51,8 @@ namespace ts.projectSystem {
             declarationMap: true,
             composite: true,
         };
-        const configContent = JSON.stringify({ compilerOptions });
+        const configObj ={ compilerOptions };
+        const configContent = JSON.stringify(configObj);
         const aTsconfig: File = { path: "/a/tsconfig.json", content: configContent };
 
         const aDtsMapContent: RawSourceMap = {
@@ -111,12 +112,13 @@ namespace ts.projectSystem {
             content: 'import * as a from "../a/a";\nimport * as b from "../b/b";\nexport function fnUser() { a.fnA(); b.fnB(); a.instanceA; }',
         };
 
+        const userTsconfigObj = {
+            file: ["user.ts"],
+            references: [{ path: "../a" }, { path: "../b" }]
+        };
         const userTsconfig: File = {
             path: "/user/tsconfig.json",
-            content: JSON.stringify({
-                file: ["user.ts"],
-                references: [{ path: "../a" }, { path: "../b" }]
-            })
+            content: JSON.stringify(userTsconfigObj)
         };
 
         function makeSampleProjects(addUserTsConfig?: boolean, keepAllFiles?: boolean) {
@@ -464,16 +466,19 @@ namespace ts.projectSystem {
 
         it("findAllReferencesFull definition is in mapped file", () => {
             const aTs: File = { path: "/a/a.ts", content: `function f() {}` };
+            const aObj ={ compilerOptions: { declaration: true, declarationMap: true, outFile: "../bin/a.js" } };
             const aTsconfig: File = {
                 path: "/a/tsconfig.json",
-                content: JSON.stringify({ compilerOptions: { declaration: true, declarationMap: true, outFile: "../bin/a.js" } }),
+                content: JSON.stringify(aObj),
             };
             const bTs: File = { path: "/b/b.ts", content: `f();` };
-            const bTsconfig: File = { path: "/b/tsconfig.json", content: JSON.stringify({ references: [{ path: "../a" }] }) };
+            const bObj ={ references: [{ path: "../a" }] };
+            const bTsconfig: File = { path: "/b/tsconfig.json", content: JSON.stringify(bObj) };
             const aDts: File = { path: "/bin/a.d.ts", content: `declare function f(): void;\n//# sourceMappingURL=a.d.ts.map` };
+            const aDtsMapObj ={ version: 3, file: "a.d.ts", sourceRoot: "", sources: ["../a/a.ts"], names: [], mappings: "AAAA,iBAAS,CAAC,SAAK" };
             const aDtsMap: File = {
                 path: "/bin/a.d.ts.map",
-                content: JSON.stringify({ version: 3, file: "a.d.ts", sourceRoot: "", sources: ["../a/a.ts"], names: [], mappings: "AAAA,iBAAS,CAAC,SAAK" }),
+                content: JSON.stringify(aDtsMapObj),
             };
 
             const session = createSession(createServerHost([aTs, aTsconfig, bTs, bTsconfig, aDts, aDtsMap]));
@@ -676,28 +681,30 @@ namespace ts.projectSystem {
 
         it("getEditsForFileRename when referencing project doesnt include file and its renamed", () => {
             const aTs: File = { path: "/a/src/a.ts", content: "" };
-            const aTsconfig: File = {
-                path: "/a/tsconfig.json",
-                content: JSON.stringify({
+            const aObj ={
                     compilerOptions: {
                         composite: true,
                         declaration: true,
                         declarationMap: true,
                         outDir: "./build",
                     }
-                }),
+                };
+            const aTsconfig: File = {
+                path: "/a/tsconfig.json",
+                content: JSON.stringify(aObj),
             };
             const bTs: File = { path: "/b/src/b.ts", content: "" };
-            const bTsconfig: File = {
-                path: "/b/tsconfig.json",
-                content: JSON.stringify({
+            const bObj ={
                     compilerOptions: {
                         composite: true,
                         outDir: "./build",
                     },
                     include: ["./src"],
                     references: [{ path: "../a" }],
-                }),
+                };
+            const bTsconfig: File = {
+                path: "/b/tsconfig.json",
+                content: JSON.stringify(bObj),
             };
 
             const host = createServerHost([aTs, aTsconfig, bTs, bTsconfig]);

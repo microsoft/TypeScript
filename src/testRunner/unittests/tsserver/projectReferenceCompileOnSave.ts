@@ -8,12 +8,13 @@ namespace ts.projectSystem {
 export function fn2() { }
 `
         };
-        const dependencyConfig: File = {
-            path: `${dependecyLocation}/tsconfig.json`,
-            content: JSON.stringify({
+        const dependencyConfigObj ={
                 compilerOptions: { composite: true, declarationDir: "../decls" },
                 compileOnSave: true
-            })
+            };
+        const dependencyConfig: File = {
+            path: `${dependecyLocation}/tsconfig.json`,
+            content: JSON.stringify(dependencyConfigObj)
         };
         const usageTs: File = {
             path: `${usageLocation}/usage.ts`,
@@ -25,12 +26,13 @@ fn1();
 fn2();
 `
         };
-        const usageConfig: File = {
-            path: `${usageLocation}/tsconfig.json`,
-            content: JSON.stringify({
+        const usageConfigObj ={
                 compileOnSave: true,
                 references: [{ path: "../dependency" }]
-            })
+            };
+        const usageConfig: File = {
+            path: `${usageLocation}/tsconfig.json`,
+            content: JSON.stringify(usageConfigObj)
         };
 
         const localChange = "function fn3() { }";
@@ -2239,26 +2241,28 @@ ${appendDts}`
 
     describe("unittests:: tsserver:: with project references and compile on save with external projects", () => {
         it("compile on save emits same output as project build", () => {
-            const tsbaseJson: File = {
-                path: `${tscWatch.projectRoot}/tsbase.json`,
-                content: JSON.stringify({
+            const tsbaseObj ={
                     compileOnSave: true,
                     compilerOptions: {
                         module: "none",
                         composite: true
                     }
-                })
+                };
+            const tsbaseJson: File = {
+                path: `${tscWatch.projectRoot}/tsbase.json`,
+                content: JSON.stringify(tsbaseObj)
             };
             const buttonClass = `${tscWatch.projectRoot}/buttonClass`;
-            const buttonConfig: File = {
-                path: `${buttonClass}/tsconfig.json`,
-                content: JSON.stringify({
+            const buttonConfigObj ={
                     extends: "../tsbase.json",
                     compilerOptions: {
                         outFile: "Source.js"
                     },
                     files: ["Source.ts"]
-                })
+                };
+            const buttonConfig: File = {
+                path: `${buttonClass}/tsconfig.json`,
+                content: JSON.stringify(buttonConfigObj)
             };
             const buttonSource: File = {
                 path: `${buttonClass}/Source.ts`,
@@ -2271,9 +2275,7 @@ ${appendDts}`
             };
 
             const siblingClass = `${tscWatch.projectRoot}/SiblingClass`;
-            const siblingConfig: File = {
-                path: `${siblingClass}/tsconfig.json`,
-                content: JSON.stringify({
+            const siblingConfigObj ={
                     extends: "../tsbase.json",
                     references: [{
                         path: "../buttonClass/"
@@ -2282,7 +2284,10 @@ ${appendDts}`
                         outFile: "Source.js"
                     },
                     files: ["Source.ts"]
-                })
+                };
+            const siblingConfig: File = {
+                path: `${siblingClass}/tsconfig.json`,
+                content: JSON.stringify(siblingConfigObj)
             };
             const siblingSource: File = {
                 path: `${siblingClass}/Source.ts`,

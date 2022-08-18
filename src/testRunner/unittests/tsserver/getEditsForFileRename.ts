@@ -40,9 +40,10 @@ namespace ts.projectSystem {
                 path: "/a/old.ts",
                 content: "export const x = 0;",
             };
+            const aObj={ files: ["./old.ts", "./user.ts"] };
             const aTsconfig: File = {
                 path: "/a/tsconfig.json",
-                content: JSON.stringify({ files: ["./old.ts", "./user.ts"] }),
+                content: JSON.stringify(aObj),
             };
             const bUserTs: File = {
                 path: "/b/user.ts",
@@ -80,7 +81,8 @@ namespace ts.projectSystem {
         it("works with file moved to inferred project", () => {
             const aTs: File = { path: "/a.ts", content: 'import {} from "./b";' };
             const cTs: File = { path: "/c.ts", content: "export {};" };
-            const tsconfig: File = { path: "/tsconfig.json", content: JSON.stringify({ files: ["./a.ts", "./b.ts"] }) };
+            const tsconfigObj ={ files: ["./a.ts", "./b.ts"] };
+            const tsconfig: File = { path: "/tsconfig.json", content: JSON.stringify(tsconfigObj) };
 
             const host = createServerHost([aTs, cTs, tsconfig]);
             const session = createSession(host);

@@ -37,11 +37,12 @@ namespace ts.tscWatch {
                     path: "/a/b/app.ts",
                     content: "let x = 1"
                 };
+                const configObj = {
+                    include: ["app.ts"]
+                };
                 const config = {
                     path: configFilePath,
-                    content: JSON.stringify({
-                        include: ["app.ts"]
-                    })
+                    content: JSON.stringify(configObj)
                 };
                 return createWatchedSystem([f1, libFile, config], { useCaseSensitiveFileNames: false });
             },
@@ -227,27 +228,34 @@ namespace ts.tscWatch {
                     path: "/a.ts",
                     content: "label: while (1) {}"
                 };
+                const tsconfigObj = {
+                    compilerOptions: { allowUnusedLabels: true }
+                };
                 const tsconfig: File = {
                     path: "/tsconfig.json",
-                    content: JSON.stringify({
-                        compilerOptions: { allowUnusedLabels: true }
-                    })
+                    content: JSON.stringify(tsconfigObj)
                 };
                 return createWatchedSystem([libFile, aTs, tsconfig]);
             },
             changes: [
                 {
                     caption: "Disable  allowUnsusedLabels",
-                    change: sys => sys.modifyFile("/tsconfig.json", JSON.stringify({
-                        compilerOptions: { allowUnusedLabels: false }
-                    })),
+                    change: sys => {
+                        const changeObj = {
+                            compilerOptions: { allowUnusedLabels: false }
+                        };
+                        return sys.modifyFile("/tsconfig.json", JSON.stringify(changeObj));
+                    },
                     timeouts: checkSingleTimeoutQueueLengthAndRun
                 },
                 {
                     caption: "Enable  allowUnsusedLabels",
-                    change: sys => sys.modifyFile("/tsconfig.json", JSON.stringify({
-                        compilerOptions: { allowUnusedLabels: true }
-                    })),
+                    change: sys => {
+                        const tsconfigObj = {
+                            compilerOptions: { allowUnusedLabels: true }
+                        };
+                        return sys.modifyFile("/tsconfig.json", JSON.stringify(tsconfigObj));
+                    },
                     timeouts: checkSingleTimeoutQueueLengthAndRun,
                 }
             ]
@@ -270,28 +278,35 @@ export class A {
                     path: "/b.ts",
                     content: `export class B {}`,
                 };
+                const tsconfigObj = {
+                    compilerOptions: { target: "es6", importsNotUsedAsValues: "error" }
+                };
                 const tsconfig: File = {
                     path: "/tsconfig.json",
-                    content: JSON.stringify({
-                        compilerOptions: { target: "es6", importsNotUsedAsValues: "error" }
-                    })
+                    content: JSON.stringify(tsconfigObj)
                 };
                 return createWatchedSystem([libFile, aTs, bTs, tsconfig]);
             },
             changes: [
                 {
                     caption: "Enable experimentalDecorators",
-                    change: sys => sys.modifyFile("/tsconfig.json", JSON.stringify({
-                        compilerOptions: { target: "es6", importsNotUsedAsValues: "error", experimentalDecorators: true }
-                    })),
+                    change: sys => {
+                        const changeObj = {
+                            compilerOptions: { target: "es6", importsNotUsedAsValues: "error", experimentalDecorators: true }
+                        };
+                        return sys.modifyFile("/tsconfig.json", JSON.stringify(changeObj));
+                    },
                     timeouts: checkSingleTimeoutQueueLengthAndRun,
 
                 },
                 {
                     caption: "Enable emitDecoratorMetadata",
-                    change: sys => sys.modifyFile("/tsconfig.json", JSON.stringify({
-                        compilerOptions: { target: "es6", importsNotUsedAsValues: "error", experimentalDecorators: true, emitDecoratorMetadata: true }
-                    })),
+                    change: sys => {
+                        const changeObj = {
+                            compilerOptions: { target: "es6", importsNotUsedAsValues: "error", experimentalDecorators: true, emitDecoratorMetadata: true }
+                        };
+                        return sys.modifyFile("/tsconfig.json", JSON.stringify(changeObj));
+                    },
                     timeouts: checkSingleTimeoutQueueLengthAndRun,
                 }
             ]
@@ -482,9 +497,10 @@ export class A {
                     path: "/a/c/f3.ts",
                     content: "export let y = 1"
                 };
+                const configObj = { compilerOptions: {}, files: ["f2.ts", "f3.ts"] };
                 const configFile = {
                     path: "/a/c/tsconfig.json",
-                    content: JSON.stringify({ compilerOptions: {}, files: ["f2.ts", "f3.ts"] })
+                    content: JSON.stringify(configObj)
                 };
                 return createWatchedSystem([file1, file2, file3, libFile, configFile]);
             },
@@ -506,7 +522,8 @@ export class A {
                 caption: "change `module` to 'none'",
                 timeouts: checkSingleTimeoutQueueLengthAndRun,
                 change: sys => {
-                    sys.writeFile(configFilePath, JSON.stringify({ compilerOptions: { module: "none" } }));
+                    const changeObj = { compilerOptions: { module: "none" } };
+                    sys.writeFile(configFilePath, JSON.stringify(changeObj));
                 }
             }]
         });
@@ -544,11 +561,11 @@ export class A {
                 oldSnap,
             });
 
-            const {cb: cb2, getPrograms: getPrograms2 } = commandLineCallbacks(sys);
+            const { cb: cb2, getPrograms: getPrograms2 } = commandLineCallbacks(sys);
             const oldSnap2 = sys.snap();
             baseline.push("createing separate watcher");
             createWatchProgram(createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline({
-                rootFiles:[file1.path],
+                rootFiles: [file1.path],
                 system: sys,
                 options: { allowNonTsExtensions: true },
                 cb: cb2,
@@ -601,16 +618,20 @@ export class A {
                     path: "/a/b/f2.ts",
                     content: "let y = 1"
                 };
+                const configObj = { compilerOptions: {}, files: ["f1.ts"] };
                 const configFile = {
                     path: configFilePath,
-                    content: JSON.stringify({ compilerOptions: {}, files: ["f1.ts"] })
+                    content: JSON.stringify(configObj)
                 };
                 return createWatchedSystem([file1, file2, libFile, configFile]);
             },
             changes: [
                 {
                     caption: "Modify config to make f2 as root too",
-                    change: sys => sys.writeFile(configFilePath, JSON.stringify({ compilerOptions: {}, files: ["f1.ts", "f2.ts"] })),
+                    change: sys => {
+                        const changeObj = { compilerOptions: {}, files: ["f1.ts", "f2.ts"] };
+                        return sys.writeFile(configFilePath, JSON.stringify(changeObj));
+                    },
                     timeouts: checkSingleTimeoutQueueLengthAndRun,
                 }
             ]
@@ -629,9 +650,10 @@ export class A {
                     path: `${projectRoot}/f2.ts`,
                     content: "export const y = 1"
                 };
+                const configObj = { compilerOptions: { composite: true }, include: ["./", "./**/*.json"] };
                 const configFile = {
                     path: `${projectRoot}/tsconfig.json`,
-                    content: JSON.stringify({ compilerOptions: { composite: true }, include: ["./", "./**/*.json"] })
+                    content: JSON.stringify(configObj)
                 };
                 return createWatchedSystem([file1, file2, libFile, configFile], { currentDirectory: projectRoot });
             },
@@ -658,9 +680,10 @@ export class A {
                     path: `${projectRoot}/Project/file1.ts`,
                     content: "export const x = 10;"
                 };
+                const configObj = { include: [".", "./**/*.json"] };
                 const configFile = {
                     path: `${projectRoot}/Project/tsconfig.json`,
-                    content: JSON.stringify({ include: [".", "./**/*.json"] })
+                    content: JSON.stringify(configObj)
                 };
                 return createWatchedSystem([file1, libFile, configFile], { currentDirectory: `${projectRoot}/Project` });
             },
@@ -686,16 +709,20 @@ export class A {
                     path: "/a/b/f2.ts",
                     content: "let y = 1"
                 };
+                const configObj = { compilerOptions: {}, files: ["f1.ts", "f2.ts"] };
                 const configFile = {
                     path: configFilePath,
-                    content: JSON.stringify({ compilerOptions: {}, files: ["f1.ts", "f2.ts"] })
+                    content: JSON.stringify(configObj)
                 };
                 return createWatchedSystem([file1, file2, libFile, configFile]);
             },
             changes: [
                 {
                     caption: "Modify config to set outFile option",
-                    change: sys => sys.writeFile(configFilePath, JSON.stringify({ compilerOptions: { outFile: "out.js" }, files: ["f1.ts", "f2.ts"] })),
+                    change: sys => {
+                        const changeObj = { compilerOptions: { outFile: "out.js" }, files: ["f1.ts", "f2.ts"] };
+                        return sys.writeFile(configFilePath, JSON.stringify(changeObj));
+                    },
                     timeouts: checkSingleTimeoutQueueLengthAndRun,
                 }
             ]
@@ -714,9 +741,10 @@ export class A {
                     path: "/a/b/f2.ts",
                     content: "let y = 1"
                 };
+                const configObj = { compilerOptions: {}, files: ["f1.ts", "f2.ts"] };
                 const configFile = {
                     path: configFilePath,
-                    content: JSON.stringify({ compilerOptions: {}, files: ["f1.ts", "f2.ts"] })
+                    content: JSON.stringify(configObj)
                 };
                 return createWatchedSystem([file1, file2, libFile, configFile]);
             },
@@ -789,28 +817,29 @@ declare const eval: any`
                     path: "/src/app.ts",
                     content: "var x: Promise<string>;"
                 };
+                const obj1 = {
+                    compilerOptions: {
+                        module: "commonjs",
+                        target: "es5",
+                        noImplicitAny: true,
+                        sourceMap: false,
+                        lib: [
+                            "es5"
+                        ]
+                    }
+                };
                 const config1 = {
                     path: "/src/tsconfig.json",
                     content: JSON.stringify(
-                        {
-                            compilerOptions: {
-                                module: "commonjs",
-                                target: "es5",
-                                noImplicitAny: true,
-                                sourceMap: false,
-                                lib: [
-                                    "es5"
-                                ]
-                            }
-                        })
+                        obj1)
                 };
                 return createWatchedSystem([libES5, libES2015Promise, app, config1], { executingFilePath: "/compiler/tsc.js" });
             },
             changes: [
                 {
                     caption: "Change the lib in config",
-                    change: sys => sys.writeFile("/src/tsconfig.json", JSON.stringify(
-                        {
+                    change: sys => {
+                        const changeObj = {
                             compilerOptions: {
                                 module: "commonjs",
                                 target: "es5",
@@ -821,8 +850,11 @@ declare const eval: any`
                                     "es2015.promise"
                                 ]
                             }
-                        })
-                    ),
+                        };
+                        return sys.writeFile("/src/tsconfig.json", JSON.stringify(
+                            changeObj)
+                        );
+                    },
                     timeouts: checkSingleTimeoutQueueLengthAndRun,
                 }
             ]
@@ -837,15 +869,16 @@ declare const eval: any`
                     path: "/a/src/app.ts",
                     content: "let x = 1;"
                 };
+                const configObj = {
+                    compilerOptions: {},
+                    include: [
+                        "src/**/*",
+                        "notexistingfolder/*"
+                    ]
+                };
                 const config = {
                     path: "/a/tsconfig.json",
-                    content: JSON.stringify({
-                        compilerOptions: {},
-                        include: [
-                            "src/**/*",
-                            "notexistingfolder/*"
-                        ]
-                    })
+                    content: JSON.stringify(configObj)
                 };
                 return createWatchedSystem([f, config, libFile]);
             },
@@ -922,9 +955,10 @@ declare const eval: any`
                     path: "/a/b/app.ts",
                     content: "let x = 1"
                 };
+                const configObj = { compilerOptions: { types: ["node"], typeRoots: [] } };
                 const config = {
                     path: configFilePath,
-                    content: JSON.stringify({ compilerOptions: { types: ["node"], typeRoots: [] } })
+                    content: JSON.stringify(configObj)
                 };
                 const node = {
                     path: "/a/b/node_modules/@types/node/index.d.ts",
@@ -1063,12 +1097,13 @@ declare const eval: any`
                     path: "/a/app.ts",
                     content: "let x = 1"
                 };
+                const configObj = {
+                    compiler: {},
+                    files: []
+                };
                 const config = {
                     path: "/a/tsconfig.json",
-                    content: JSON.stringify({
-                        compiler: {},
-                        files: []
-                    })
+                    content: JSON.stringify(configObj)
                 };
                 const t1 = {
                     path: "/a/node_modules/@types/typings/index.d.ts",
@@ -1292,15 +1327,16 @@ test(4, 5);`
 }
 export default test;`
                 };
+                const tsconfigObj = {
+                    compilerOptions: {
+                        module: "commonjs",
+                        noEmit: true,
+                        strict: true,
+                    }
+                };
                 const tsconfigFile: File = {
                     path: `${projectRoot}/tsconfig.json`,
-                    content: JSON.stringify({
-                        compilerOptions: {
-                            module: "commonjs",
-                            noEmit: true,
-                            strict: true,
-                        }
-                    })
+                    content: JSON.stringify(tsconfigObj)
                 };
                 return createWatchedSystem([aFile, bFile, libFile, tsconfigFile], { currentDirectory: projectRoot });
             },
@@ -1322,26 +1358,36 @@ export default test;`
                     content: `declare function foo(): null | { hello: any };
 foo().hello`
                 };
+                const configObj = { compilerOptions: {} };
                 const config: File = {
                     path: `${projectRoot}/tsconfig.json`,
-                    content: JSON.stringify({ compilerOptions: {} })
+                    content: JSON.stringify(configObj)
                 };
                 return createWatchedSystem([aFile, config, libFile], { currentDirectory: projectRoot });
             },
             changes: [
                 {
                     caption: "Enable strict null checks",
-                    change: sys => sys.writeFile(`${projectRoot}/tsconfig.json`, JSON.stringify({ compilerOptions: { strictNullChecks: true } })),
+                    change: sys => {
+                        const changeObj = { compilerOptions: { strictNullChecks: true } };
+                        return sys.writeFile(`${projectRoot}/tsconfig.json`, JSON.stringify(changeObj));
+                    },
                     timeouts: runQueuedTimeoutCallbacks,
                 },
                 {
                     caption: "Set always strict false",
-                    change: sys => sys.writeFile(`${projectRoot}/tsconfig.json`, JSON.stringify({ compilerOptions: { strict: true, alwaysStrict: false } })), // Avoid changing 'alwaysStrict' or must re-bind
+                    change: sys => {
+                        const changeObj = { compilerOptions: { strict: true, alwaysStrict: false } };
+                        return sys.writeFile(`${projectRoot}/tsconfig.json`, JSON.stringify(changeObj));
+                    }, // Avoid changing 'alwaysStrict' or must re-bind
                     timeouts: runQueuedTimeoutCallbacks,
                 },
                 {
                     caption: "Disable strict",
-                    change: sys => sys.writeFile(`${projectRoot}/tsconfig.json`, JSON.stringify({ compilerOptions: {} })),
+                    change: sys => {
+                        const changeObj = { compilerOptions: {} };
+                        return sys.writeFile(`${projectRoot}/tsconfig.json`, JSON.stringify(changeObj));
+                    },
                     timeouts: runQueuedTimeoutCallbacks,
                 },
             ]
@@ -1365,16 +1411,20 @@ foo().hello`
 };
 v === 'foo';`
                 };
+                const configObj = { compilerOptions: {} };
                 const config: File = {
                     path: `${projectRoot}/tsconfig.json`,
-                    content: JSON.stringify({ compilerOptions: {} })
+                    content: JSON.stringify(configObj)
                 };
                 return createWatchedSystem([aFile, config, libFile], { currentDirectory: projectRoot });
             },
             changes: [
                 {
                     caption: "Enable noErrorTruncation",
-                    change: sys => sys.writeFile(`${projectRoot}/tsconfig.json`, JSON.stringify({ compilerOptions: { noErrorTruncation: true } })),
+                    change: sys => {
+                        const changeObj = { compilerOptions: { noErrorTruncation: true } };
+                        return sys.writeFile(`${projectRoot}/tsconfig.json`, JSON.stringify(changeObj));
+                    },
                     timeouts: runQueuedTimeoutCallbacks,
                 },
             ]
@@ -1390,16 +1440,20 @@ v === 'foo';`
                     content: `class C { get prop() { return 1; } }
 class D extends C { prop = 1; }`
                 };
+                const configObj = { compilerOptions: { target: "es6" } };
                 const config: File = {
                     path: `/tsconfig.json`,
-                    content: JSON.stringify({ compilerOptions: { target: "es6" } })
+                    content: JSON.stringify(configObj)
                 };
                 return createWatchedSystem([aFile, config, libFile]);
             },
             changes: [
                 {
                     caption: "Enable useDefineForClassFields",
-                    change: sys => sys.writeFile(`/tsconfig.json`, JSON.stringify({ compilerOptions: { target: "es6", useDefineForClassFields: true } })),
+                    change: sys => {
+                        const changeObj = { compilerOptions: { target: "es6", useDefineForClassFields: true } };
+                        return sys.writeFile(`/tsconfig.json`, JSON.stringify(changeObj));
+                    },
                     timeouts: runQueuedTimeoutCallbacks,
                 },
             ]
@@ -1419,26 +1473,36 @@ class D extends C { prop = 1; }`
                     content: `import {C} from './a';
 export function f(p: C) { return p; }`
                 };
+                const configObj = { compilerOptions: {} };
                 const config: File = {
                     path: `${projectRoot}/tsconfig.json`,
-                    content: JSON.stringify({ compilerOptions: {} })
+                    content: JSON.stringify(configObj)
                 };
                 return createWatchedSystem([aFile, bFile, config, libFile], { currentDirectory: projectRoot });
             },
             changes: [
                 {
                     caption: 'Set to "remove"',
-                    change: sys => sys.writeFile(`${projectRoot}/tsconfig.json`, JSON.stringify({ compilerOptions: { importsNotUsedAsValues: "remove" } })),
+                    change: sys => {
+                        const changeObj = { compilerOptions: { importsNotUsedAsValues: "remove" } };
+                        return sys.writeFile(`${projectRoot}/tsconfig.json`, JSON.stringify(changeObj));
+                    },
                     timeouts: runQueuedTimeoutCallbacks,
                 },
                 {
                     caption: 'Set to "error"',
-                    change: sys => sys.writeFile(`${projectRoot}/tsconfig.json`, JSON.stringify({ compilerOptions: { importsNotUsedAsValues: "error" } })),
+                    change: sys => {
+                        const changeObj = { compilerOptions: { importsNotUsedAsValues: "error" } };
+                        return sys.writeFile(`${projectRoot}/tsconfig.json`, JSON.stringify(changeObj));
+                    },
                     timeouts: runQueuedTimeoutCallbacks,
                 },
                 {
                     caption: 'Set to "preserve"',
-                    change: sys => sys.writeFile(`${projectRoot}/tsconfig.json`, JSON.stringify({ compilerOptions: { importsNotUsedAsValues: "preserve" } })),
+                    change: sys => {
+                        const changeObj = { compilerOptions: { importsNotUsedAsValues: "preserve" } };
+                        return sys.writeFile(`${projectRoot}/tsconfig.json`, JSON.stringify(changeObj));
+                    },
                     timeouts: runQueuedTimeoutCallbacks,
                 },
             ]
@@ -1458,16 +1522,20 @@ export function f(p: C) { return p; }`
                     path: `/b.ts`,
                     content: `import {C} from './a'; import * as A from './A';`
                 };
+                const configObj = { compilerOptions: {} };
                 const config: File = {
                     path: `/tsconfig.json`,
-                    content: JSON.stringify({ compilerOptions: {} })
+                    content: JSON.stringify(configObj)
                 };
                 return createWatchedSystem([aFile, bFile, config, libFile], { useCaseSensitiveFileNames: false });
             },
             changes: [
                 {
                     caption: "Enable forceConsistentCasingInFileNames",
-                    change: sys => sys.writeFile(`/tsconfig.json`, JSON.stringify({ compilerOptions: { forceConsistentCasingInFileNames: true } })),
+                    change: sys => {
+                        const changeObj = { compilerOptions: { forceConsistentCasingInFileNames: true } };
+                        return sys.writeFile(`/tsconfig.json`, JSON.stringify(changeObj));
+                    },
                     timeouts: runQueuedTimeoutCallbacks,
                 },
             ]
@@ -1486,16 +1554,20 @@ export function f(p: C) { return p; }`
                     path: `${projectRoot}/data.json`,
                     content: `{ "foo": 1 }`
                 };
+                const configObj = { compilerOptions: { moduleResolution: "node" } };
                 const config: File = {
                     path: `${projectRoot}/tsconfig.json`,
-                    content: JSON.stringify({ compilerOptions: { moduleResolution: "node" } })
+                    content: JSON.stringify(configObj)
                 };
                 return createWatchedSystem([aFile, jsonFile, config, libFile], { currentDirectory: projectRoot });
             },
             changes: [
                 {
                     caption: "Enable resolveJsonModule",
-                    change: sys => sys.writeFile(`${projectRoot}/tsconfig.json`, JSON.stringify({ compilerOptions: { moduleResolution: "node", resolveJsonModule: true } })),
+                    change: sys => {
+                        const changeObj = { compilerOptions: { moduleResolution: "node", resolveJsonModule: true } };
+                        return sys.writeFile(`${projectRoot}/tsconfig.json`, JSON.stringify(changeObj));
+                    },
                     timeouts: runQueuedTimeoutCallbacks,
                 },
             ]
@@ -1599,7 +1671,8 @@ var y: number;
         });
 
         function changeWhenLibCheckChanges(compilerOptions: CompilerOptions): TscWatchCompileChange {
-            const configFileContent = JSON.stringify({ compilerOptions });
+            const configObj = { compilerOptions };
+            const configFileContent = JSON.stringify(configObj);
             return {
                 caption: `Changing config to ${configFileContent}`,
                 change: sys => sys.writeFile(`${projectRoot}/tsconfig.json`, configFileContent),
@@ -1662,13 +1735,14 @@ interface Document {
                     content: `import { a } from "./a";
 const b: string = a;`
                 };
+                const configObj = {
+                    compilerOptions: {
+                        isolatedModules: true
+                    }
+                };
                 const configFile: File = {
                     path: `${projectRoot}/tsconfig.json`,
-                    content: JSON.stringify({
-                        compilerOptions: {
-                            isolatedModules: true
-                        }
-                    })
+                    content: JSON.stringify(configObj)
                 };
                 return createWatchedSystem([aFile, bFile, configFile, libFile], { currentDirectory: projectRoot });
             },
@@ -1694,14 +1768,15 @@ const b: string = a;`
                     path: `/user/username/projects/b.ts`,
                     content: `export const x = 10;`
                 };
+                const configObj = {
+                    compilerOptions: {
+                        rootDir: ".",
+                        outDir: "lib"
+                    }
+                };
                 const configFile: File = {
                     path: `${projectRoot}/tsconfig.json`,
-                    content: JSON.stringify({
-                        compilerOptions: {
-                            rootDir: ".",
-                            outDir: "lib"
-                        }
-                    })
+                    content: JSON.stringify(configObj)
                 };
                 return createWatchedSystem([aFile, bFile, configFile, libFile], { currentDirectory: projectRoot });
             },
@@ -1725,13 +1800,14 @@ import { x } from "../b";`),
                     path: `${projectRoot}/index.tsx`,
                     content: `declare var React: any;\nconst d = <div />;`
                 };
+                const configObj = {
+                    compilerOptions: {
+                        jsx: "preserve"
+                    }
+                };
                 const configFile: File = {
                     path: `${projectRoot}/tsconfig.json`,
-                    content: JSON.stringify({
-                        compilerOptions: {
-                            jsx: "preserve"
-                        }
-                    })
+                    content: JSON.stringify(configObj)
                 };
                 return createWatchedSystem([index, configFile, libFile], { currentDirectory: projectRoot });
             },
@@ -1749,26 +1825,29 @@ import { x } from "../b";`),
             subScenario: "extended source files are watched",
             commandLineArgs: ["-w", "-p", configFilePath],
             sys: () => {
+                const firstConfigObj = {
+                    compilerOptions: {
+                        strict: true
+                    }
+                };
                 const firstExtendedConfigFile: File = {
                     path: "/a/b/first.tsconfig.json",
-                    content: JSON.stringify({
-                        compilerOptions: {
-                            strict: true
-                        }
-                    })
+                    content: JSON.stringify(firstConfigObj)
+                };
+                const secondConfigObj = {
+                    extends: "./first.tsconfig.json"
                 };
                 const secondExtendedConfigFile: File = {
                     path: "/a/b/second.tsconfig.json",
-                    content: JSON.stringify({
-                        extends: "./first.tsconfig.json"
-                    })
+                    content: JSON.stringify(secondConfigObj)
+                };
+                const configObj = {
+                    compilerOptions: {},
+                    files: [commonFile1.path, commonFile2.path]
                 };
                 const configFile: File = {
                     path: configFilePath,
-                    content: JSON.stringify({
-                        compilerOptions: {},
-                        files: [commonFile1.path, commonFile2.path]
-                    })
+                    content: JSON.stringify(configObj)
                 };
                 return createWatchedSystem([
                     libFile, commonFile1, commonFile2, configFile, firstExtendedConfigFile, secondExtendedConfigFile
@@ -1777,38 +1856,50 @@ import { x } from "../b";`),
             changes: [
                 {
                     caption: "Change config to extend another config",
-                    change: sys => sys.modifyFile(configFilePath, JSON.stringify({
-                        extends: "./second.tsconfig.json",
-                        compilerOptions: {},
-                        files: [commonFile1.path, commonFile2.path]
-                    })),
+                    change: sys => {
+                        const changeObj = {
+                            extends: "./second.tsconfig.json",
+                            compilerOptions: {},
+                            files: [commonFile1.path, commonFile2.path]
+                        };
+                        return sys.modifyFile(configFilePath, JSON.stringify(changeObj));
+                    },
                     timeouts: checkSingleTimeoutQueueLengthAndRun,
                 },
                 {
                     caption: "Change first extended config",
-                    change: sys => sys.modifyFile("/a/b/first.tsconfig.json", JSON.stringify({
-                        compilerOptions: {
-                            strict: false,
-                        }
-                    })),
+                    change: sys => {
+                        const changeObj = {
+                            compilerOptions: {
+                                strict: false,
+                            }
+                        };
+                        return sys.modifyFile("/a/b/first.tsconfig.json", JSON.stringify(changeObj));
+                    },
                     timeouts: checkSingleTimeoutQueueLengthAndRun,
                 },
                 {
                     caption: "Change second extended config",
-                    change: sys => sys.modifyFile("/a/b/second.tsconfig.json", JSON.stringify({
-                        extends: "./first.tsconfig.json",
-                        compilerOptions: {
-                            strictNullChecks: true,
-                        }
-                    })),
+                    change: sys => {
+                        const changeObj = {
+                            extends: "./first.tsconfig.json",
+                            compilerOptions: {
+                                strictNullChecks: true,
+                            }
+                        };
+                        return sys.modifyFile("/a/b/second.tsconfig.json", JSON.stringify(changeObj));
+                    },
                     timeouts: checkSingleTimeoutQueueLengthAndRun,
                 },
                 {
                     caption: "Change config to stop extending another config",
-                    change: sys => sys.modifyFile(configFilePath, JSON.stringify({
-                        compilerOptions: {},
-                        files: [commonFile1.path, commonFile2.path]
-                    })),
+                    change: sys => {
+                        const changeObj = {
+                            compilerOptions: {},
+                            files: [commonFile1.path, commonFile2.path]
+                        };
+                        return sys.modifyFile(configFilePath, JSON.stringify(changeObj));
+                    },
                     timeouts: checkSingleTimeoutQueueLengthAndRun,
                 },
             ]
@@ -1831,15 +1922,16 @@ import { x } from "../b";`),
                     path: `${projectRoot}/client/linktofolder2`,
                     symLink: `${projectRoot}/folder2`,
                 };
+                const configObj = {
+                    compilerOptions: {
+                        baseUrl: "client",
+                        paths: { "*": ["*"] },
+                    },
+                    include: ["client/**/*", "folder2"]
+                };
                 const config: File = {
                     path: `${projectRoot}/tsconfig.json`,
-                    content: JSON.stringify({
-                        compilerOptions: {
-                            baseUrl: "client",
-                            paths: { "*": ["*"] },
-                        },
-                        include: ["client/**/*", "folder2"]
-                    })
+                    content: JSON.stringify(configObj)
                 };
                 return createWatchedSystem([module1, module2, symlink, config, libFile], { currentDirectory: projectRoot });
             },
@@ -1857,15 +1949,16 @@ import { x } from "../b";`),
             subScenario: "when new file is added to the referenced project",
             commandLineArgs: ["-w", "-p", `${projectRoot}/projects/project2/tsconfig.json`, "--extendedDiagnostics"],
             sys: () => {
+                const obj1 = {
+                    compilerOptions: {
+                        module: "none",
+                        composite: true
+                    },
+                    exclude: ["temp"]
+                };
                 const config1: File = {
                     path: `${projectRoot}/projects/project1/tsconfig.json`,
-                    content: JSON.stringify({
-                        compilerOptions: {
-                            module: "none",
-                            composite: true
-                        },
-                        exclude: ["temp"]
-                    })
+                    content: JSON.stringify(obj1)
                 };
                 const class1: File = {
                     path: `${projectRoot}/projects/project1/class1.ts`,
@@ -1876,17 +1969,18 @@ import { x } from "../b";`),
                     path: `${projectRoot}/projects/project1/class1.d.ts`,
                     content: `declare class class1 {}`
                 };
+                const obj2 = {
+                    compilerOptions: {
+                        module: "none",
+                        composite: true
+                    },
+                    references: [
+                        { path: "../project1" }
+                    ]
+                };
                 const config2: File = {
                     path: `${projectRoot}/projects/project2/tsconfig.json`,
-                    content: JSON.stringify({
-                        compilerOptions: {
-                            module: "none",
-                            composite: true
-                        },
-                        references: [
-                            { path: "../project1" }
-                        ]
-                    })
+                    content: JSON.stringify(obj2)
                 };
                 const class2: File = {
                     path: `${projectRoot}/projects/project2/class2.ts`,

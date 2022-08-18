@@ -35,14 +35,15 @@ declare class TestLib {
     }
 }`
             };
+            const testObj = {
+                compilerOptions: {
+                    module: "amd",
+                    typeRoots: ["../lib/@types", "../lib/@app"]
+                }
+            };
             const testConfig: File = {
                 path: `${testProjectLocation}/tsconfig.json`,
-                content: JSON.stringify({
-                    compilerOptions: {
-                        module: "amd",
-                        typeRoots: ["../lib/@types", "../lib/@app"]
-                    }
-                })
+                content: JSON.stringify(testObj)
             };
 
             const files = [typeLib, appLib, testFile, testConfig, libFile];
@@ -62,15 +63,16 @@ declare class TestLib {
                 path: `${projectPath}/a.ts`,
                 content: "let x = 10;"
             };
+            const tsconfigObj = {
+                compilerOptions: {
+                    types: [
+                        "../typedefs/filesystem"
+                    ]
+                }
+            };
             const tsconfig: File = {
                 path: `${projectPath}/tsconfig.json`,
-                content: JSON.stringify({
-                    compilerOptions: {
-                        types: [
-                            "../typedefs/filesystem"
-                        ]
-                    }
-                })
+                content: JSON.stringify(tsconfigObj)
             };
             const filesystem: File = {
                 path: `${tscWatch.projectRoot}/typedefs/filesystem.d.ts`,

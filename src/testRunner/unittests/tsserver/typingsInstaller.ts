@@ -62,12 +62,13 @@ namespace ts.projectSystem {
                 path: typesCache + "/node_modules/@types/config/index.d.ts",
                 content: "export let y: number;"
             };
+            const configObj = {
+                compilerOptions: { moduleResolution: "commonjs" },
+                typeAcquisition: { enable: true }
+            };
             const config = {
                 path: "/a/jsconfig.json",
-                content: JSON.stringify({
-                    compilerOptions: { moduleResolution: "commonjs" },
-                    typeAcquisition: { enable: true }
-                })
+                content: JSON.stringify(configObj)
             };
             const host = createServerHost([f1, f2, config, typesConfig]);
             const installer = new (class extends Installer {
@@ -92,25 +93,27 @@ namespace ts.projectSystem {
                 path: "/a/b/app.js",
                 content: ""
             };
+            const configObj = {
+                compilerOptions: {
+                    allowJs: true
+                },
+                typeAcquisition: {
+                    enable: true
+                }
+            };
             const tsconfig = {
                 path: "/a/b/tsconfig.json",
-                content: JSON.stringify({
-                    compilerOptions: {
-                        allowJs: true
-                    },
-                    typeAcquisition: {
-                        enable: true
-                    }
-                })
+                content: JSON.stringify(configObj)
+            };
+            const packageObj = {
+                name: "test",
+                dependencies: {
+                    jquery: "^3.1.0"
+                }
             };
             const packageJson = {
                 path: "/a/b/package.json",
-                content: JSON.stringify({
-                    name: "test",
-                    dependencies: {
-                        jquery: "^3.1.0"
-                    }
-                })
+                content: JSON.stringify(packageObj)
             };
 
             const jquery = {
@@ -147,14 +150,15 @@ namespace ts.projectSystem {
                 path: "/a/b/app.js",
                 content: ""
             };
+            const packageObj = {
+                name: "test",
+                dependencies: {
+                    jquery: "^3.1.0"
+                }
+            };
             const packageJson = {
                 path: "/a/b/package.json",
-                content: JSON.stringify({
-                    name: "test",
-                    dependencies: {
-                        jquery: "^3.1.0"
-                    }
-                })
+                content: JSON.stringify(packageObj)
             };
 
             const jquery = {
@@ -404,7 +408,7 @@ namespace ts.projectSystem {
                 projectFileName,
                 options: { allowJS: true, moduleResolution: ModuleResolutionKind.NodeJs },
                 rootFiles: [toExternalFile(lodashJs.path), toExternalFile(file2Jsx.path), toExternalFile(file3dts.path)],
-                typeAcquisition: { }
+                typeAcquisition: {}
             });
 
             const p = projectService.externalProjects[0];
@@ -566,14 +570,15 @@ namespace ts.projectSystem {
                 path: "/a/b/file3.d.ts",
                 content: ""
             };
+            const packageObj = {
+                name: "test",
+                dependencies: {
+                    express: "^3.1.0"
+                }
+            };
             const packageJson = {
                 path: "/a/b/package.json",
-                content: JSON.stringify({
-                    name: "test",
-                    dependencies: {
-                        express: "^3.1.0"
-                    }
-                })
+                content: JSON.stringify(packageObj)
             };
 
             const commander = {
@@ -644,14 +649,15 @@ namespace ts.projectSystem {
                 path: "/a/b/file3.d.ts",
                 content: ""
             };
+            const packageObj = {
+                name: "test",
+                dependencies: {
+                    express: "^3.1.0"
+                }
+            };
             const packageJson = {
                 path: "/a/b/package.json",
-                content: JSON.stringify({
-                    name: "test",
-                    dependencies: {
-                        express: "^3.1.0"
-                    }
-                })
+                content: JSON.stringify(packageObj)
             };
 
             const commander = {
@@ -818,36 +824,40 @@ namespace ts.projectSystem {
                 path: "/app.js",
                 content: ""
             };
+            const pkgObj = {
+                dependencies: {
+                    "@zkat/cacache": "1.0.0"
+                }
+            };
             const pkgJson = {
                 path: "/package.json",
-                content: JSON.stringify({
-                    dependencies: {
-                        "@zkat/cacache": "1.0.0"
-                    }
-                })
+                content: JSON.stringify(pkgObj)
             };
+            const jsconfigObj = {};
             const jsconfig = {
                 path: "/jsconfig.json",
-                content: JSON.stringify({})
+                content: JSON.stringify(jsconfigObj)
             };
             // Should only accept direct dependencies.
             const commander = {
                 path: "/node_modules/commander/index.js",
                 content: ""
             };
+            const commanderObj = {
+                name: "commander",
+            };
             const commanderPackage = {
                 path: "/node_modules/commander/package.json",
-                content: JSON.stringify({
-                    name: "commander",
-                })
+                content: JSON.stringify(commanderObj)
             };
             const cacache = {
                 path: "/node_modules/@zkat/cacache/index.js",
                 content: ""
             };
+            const ccacheObj = { name: "@zkat/cacache" };
             const cacachePackage = {
                 path: "/node_modules/@zkat/cacache/package.json",
-                content: JSON.stringify({ name: "@zkat/cacache" })
+                content: JSON.stringify(ccacheObj)
             };
             const cacacheDTS = {
                 path: "/tmp/node_modules/@types/zkat__cacache/index.d.ts",
@@ -886,45 +896,50 @@ namespace ts.projectSystem {
             jQueryJsInProjectBeforeInstall?: boolean,
             jQueryDtsInProjectAfterInstall?: boolean,
         } = {}) {
-        const app = {
-            path: "/app.js",
+            const app = {
+                path: "/app.js",
                 content: appJsContent || ""
+            };
+            const pkgObj = {
+                dependencies: {
+                    jquery: "1.0.0"
+                }
             };
             const pkgJson = {
                 path: "/package.json",
-                content: JSON.stringify({
-                    dependencies: {
-                        jquery: "1.0.0"
-                    }
-                })
+                content: JSON.stringify(pkgObj)
             };
+            const jsconfigObj = jsconfigContent ?? {};
             const jsconfig = {
                 path: "/jsconfig.json",
-                content: JSON.stringify(jsconfigContent || {})
+                content: JSON.stringify(jsconfigObj)
             };
             // Should only accept direct dependencies.
             const commander = {
                 path: "/node_modules/commander/index.js",
                 content: ""
             };
+            const commanderObj = {
+                name: "commander",
+            };
             const commanderPackage = {
                 path: "/node_modules/commander/package.json",
-                content: JSON.stringify({
-                    name: "commander",
-                })
+                content: JSON.stringify(commanderObj)
             };
             const jquery = {
                 path: "/node_modules/jquery/index.js",
                 content: ""
             };
+            const jqueryObj = { name: "jquery" };
             const jqueryPackage = {
                 path: "/node_modules/jquery/package.json",
-                content: JSON.stringify({ name: "jquery" })
+                content: JSON.stringify(jqueryObj)
             };
             // Should not search deeply in node_modules.
+            const nestedObj = { name: "nested" };
             const nestedPackage = {
                 path: "/node_modules/jquery/nested/package.json",
-                content: JSON.stringify({ name: "nested" }),
+                content: JSON.stringify(nestedObj),
             };
             const jqueryDTS = {
                 path: "/tmp/node_modules/@types/jquery/index.d.ts",
@@ -998,17 +1013,19 @@ namespace ts.projectSystem {
                 path: "/app.js",
                 content: ""
             };
+            const jsconfigObj = {};
             const jsconfig = {
                 path: "/jsconfig.json",
-                content: JSON.stringify({})
+                content: JSON.stringify(jsconfigObj)
             };
             const jquery = {
                 path: "/bower_components/jquery/index.js",
                 content: ""
             };
+            const jqueryObj = { name: "jquery" };
             const jqueryPackage = {
                 path: "/bower_components/jquery/bower.json",
-                content: JSON.stringify({ name: "jquery" })
+                content: JSON.stringify(jqueryObj)
             };
             const jqueryDTS = {
                 path: "/tmp/node_modules/@types/jquery/index.d.ts",
@@ -1044,17 +1061,19 @@ namespace ts.projectSystem {
                 path: "/app.js",
                 content: ""
             };
+            const jsconfigObj = {};
             const jsconfig = {
                 path: "/jsconfig.json",
-                content: JSON.stringify({})
+                content: JSON.stringify(jsconfigObj)
+            };
+            const bowerObj = {
+                dependencies: {
+                    jquery: "^3.1.0"
+                }
             };
             const bowerJson = {
                 path: "/bower.json",
-                content: JSON.stringify({
-                    dependencies: {
-                        jquery: "^3.1.0"
-                    }
-                })
+                content: JSON.stringify(bowerObj)
             };
             const jqueryDTS = {
                 path: "/tmp/node_modules/@types/jquery/index.d.ts",
@@ -1305,39 +1324,42 @@ namespace ts.projectSystem {
                 path: "/a/b/app.js",
                 content: ""
             };
+            const packageObj = {
+                name: "test",
+                dependencies: {
+                    jquery: "^3.1.0"
+                }
+            };
             const packageJson = {
                 path: "/a/b/package.json",
-                content: JSON.stringify({
-                    name: "test",
-                    dependencies: {
-                        jquery: "^3.1.0"
-                    }
-                })
+                content: JSON.stringify(packageObj)
             };
             const jquery = {
                 path: "/a/data/node_modules/@types/jquery/index.d.ts",
                 content: "declare const $: { x: number }"
             };
+            const cacheConfigObj = {
+                dependencies: {
+                    "types-registry": "^0.1.317"
+                },
+                devDependencies: {
+                    "@types/jquery": "^1.0.0"
+                }
+            };
             const cacheConfig = {
                 path: "/a/data/package.json",
-                content: JSON.stringify({
-                    dependencies: {
-                        "types-registry": "^0.1.317"
-                    },
-                    devDependencies: {
-                        "@types/jquery": "^1.0.0"
+                content: JSON.stringify(cacheConfigObj)
+            };
+            const cacheLockConfigObj = {
+                dependencies: {
+                    "@types/jquery": {
+                        version: "1.0.0"
                     }
-                })
+                }
             };
             const cacheLockConfig = {
                 path: "/a/data/package-lock.json",
-                content: JSON.stringify({
-                    dependencies: {
-                        "@types/jquery": {
-                            version: "1.0.0"
-                        }
-                    }
-                })
+                content: JSON.stringify(cacheLockConfigObj)
             };
             const host = createServerHost([file1, packageJson, jquery, cacheConfig, cacheLockConfig]);
             const installer = new (class extends Installer {
@@ -1369,43 +1391,47 @@ namespace ts.projectSystem {
                 path: "/a/b/app.js",
                 content: ""
             };
+            const packageObj = {
+                name: "test",
+                dependencies: {
+                    jquery: "^3.1.0"
+                }
+            };
             const packageJson = {
                 path: "/a/b/package.json",
-                content: JSON.stringify({
-                    name: "test",
-                    dependencies: {
-                        jquery: "^3.1.0"
-                    }
-                })
+                content: JSON.stringify(packageObj)
+            };
+            const timestampsObj = {
+                entries: {
+                    "@types/jquery": Date.now()
+                }
             };
             const timestamps = {
                 path: "/a/data/timestamps.json",
-                content: JSON.stringify({
-                    entries: {
-                        "@types/jquery": Date.now()
-                    }
-                })
+                content: JSON.stringify(timestampsObj)
+            };
+            const cacheConfigObj = {
+                dependencies: {
+                    "types-registry": "^0.1.317"
+                },
+                devDependencies: {
+                    "@types/jquery": "^1.3.0"
+                }
             };
             const cacheConfig = {
                 path: "/a/data/package.json",
-                content: JSON.stringify({
-                    dependencies: {
-                        "types-registry": "^0.1.317"
-                    },
-                    devDependencies: {
-                        "@types/jquery": "^1.3.0"
+                content: JSON.stringify(cacheConfigObj)
+            };
+            const cacheLockConfigObj = {
+                dependencies: {
+                    "@types/jquery": {
+                        version: "1.3.0"
                     }
-                })
+                }
             };
             const cacheLockConfig = {
                 path: "/a/data/package-lock.json",
-                content: JSON.stringify({
-                    dependencies: {
-                        "@types/jquery": {
-                            version: "1.3.0"
-                        }
-                    }
-                })
+                content: JSON.stringify(cacheLockConfigObj)
             };
             const jquery = {
                 path: "/a/data/node_modules/@types/jquery/index.d.ts",
@@ -1490,13 +1516,14 @@ namespace ts.projectSystem {
                 path: "/a/b/app.js",
                 content: "let x = 1"
             };
+            const packageObj = {
+                dependencies: {
+                    "; say ‘Hello from TypeScript!’ #": "0.0.x"
+                }
+            };
             const packageJson = {
                 path: "/a/b/package.json",
-                content: JSON.stringify({
-                    dependencies: {
-                        "; say ‘Hello from TypeScript!’ #": "0.0.x"
-                    }
-                })
+                content: JSON.stringify(packageObj)
             };
             const messages: string[] = [];
             const host = createServerHost([f1, packageJson]);
@@ -1614,18 +1641,20 @@ namespace ts.projectSystem {
                 path: "/app.js",
                 content: "",
             };
+            const aObj = { name: "a" };
             const a = {
                 path: "/node_modules/a/package.json",
-                content: JSON.stringify({ name: "a" }),
+                content: JSON.stringify(aObj),
             };
+            const bObj = { name: "b" };
             const b = {
                 path: "/node_modules/a/b/package.json",
-                content: JSON.stringify({ name: "b" }),
+                content: JSON.stringify(bObj),
             };
             const host = createServerHost([app, a, b]);
             const cache = new Map<string, JsTyping.CachedTyping>();
             const logger = trackingLogger();
-            const result = JsTyping.discoverTypings(host, logger.log, [app.path], getDirectoryPath(app.path as Path), emptySafeList, cache, { enable: true }, /*unresolvedImports*/ [], emptyMap, emptyOptions);
+            const result = JsTyping.discoverTypings(host, logger.log, [app.path], getDirectoryPath(app.path as Path), emptySafeList, cache, { enable: true }, /*unresolvedImports*/[], emptyMap, emptyOptions);
             assert.deepEqual(logger.finish(), [
                 'Searching for typing names in /node_modules; all files: ["/node_modules/a/package.json"]',
                 '    Found package names: ["a"]',
@@ -1644,14 +1673,15 @@ namespace ts.projectSystem {
                 path: "/app.js",
                 content: "",
             };
+            const aObj = { name: "@a/b" };
             const a = {
                 path: "/node_modules/@a/b/package.json",
-                content: JSON.stringify({ name: "@a/b" }),
+                content: JSON.stringify(aObj),
             };
             const host = createServerHost([app, a]);
             const cache = new Map<string, JsTyping.CachedTyping>();
             const logger = trackingLogger();
-            const result = JsTyping.discoverTypings(host, logger.log, [app.path], getDirectoryPath(app.path as Path), emptySafeList, cache, { enable: true }, /*unresolvedImports*/ [], emptyMap, emptyOptions);
+            const result = JsTyping.discoverTypings(host, logger.log, [app.path], getDirectoryPath(app.path as Path), emptySafeList, cache, { enable: true }, /*unresolvedImports*/[], emptyMap, emptyOptions);
             assert.deepEqual(logger.finish(), [
                 'Searching for typing names in /node_modules; all files: ["/node_modules/@a/b/package.json"]',
                 '    Found package names: ["@a/b"]',
@@ -1759,9 +1789,10 @@ namespace ts.projectSystem {
                 path: "/a/app.js",
                 content: ""
             };
+            const packageObj = { dependencies: { commander: "1.0.0" } };
             const packageFile = {
                 path: "/a/package.json",
-                content: JSON.stringify({ dependencies: { commander: "1.0.0" } })
+                content: JSON.stringify(packageObj)
             };
             const cachePath = "/a/cache/";
             const commander = {
@@ -1809,19 +1840,21 @@ namespace ts.projectSystem {
                 path: "/a/app.js",
                 content: ""
             };
+            const packageObj = { dependencies: { commander: "1.0.0" } };
             const packageFile = {
                 path: "/a/package.json",
-                content: JSON.stringify({ dependencies: { commander: "1.0.0" } })
+                content: JSON.stringify(packageObj)
+            };
+            const packageLockObj = {
+                dependencies: {
+                    "@types/commander": {
+                        version: "1.0.0"
+                    }
+                }
             };
             const packageLockFile = {
                 path: "/a/cache/package-lock.json",
-                content: JSON.stringify({
-                    dependencies: {
-                        "@types/commander": {
-                            version: "1.0.0"
-                        }
-                    }
-                })
+                content: JSON.stringify(packageLockObj)
             };
             const cachePath = "/a/cache/";
             const commander = {
@@ -1871,9 +1904,10 @@ namespace ts.projectSystem {
                 path: "/a/app.js",
                 content: ""
             };
+            const packageObj = { dependencies: { commander: "1.0.0" } };
             const packageFile = {
                 path: "/a/package.json",
-                content: JSON.stringify({ dependencies: { commander: "1.0.0" } })
+                content: JSON.stringify(packageObj)
             };
             const cachePath = "/a/cache/";
             const host = createServerHost([f1, packageFile]);
@@ -2111,21 +2145,23 @@ declare module "stream" {
             };
 
             const currentDirectory = `${projects}/anotherProject`;
+            const packageObjInCurrentDirectory = {
+                devDependencies: {
+                    pkgcurrentdirectory: ""
+                },
+            };
             const packageJsonInCurrentDirectory: File = {
                 path: `${currentDirectory}/package.json`,
-                content: JSON.stringify({
-                    devDependencies: {
-                        pkgcurrentdirectory: ""
-                    },
-                })
+                content: JSON.stringify(packageObjInCurrentDirectory)
+            };
+            const packageObjOfPkgcurrentdirectory = {
+                name: "pkgcurrentdirectory",
+                main: "index.js",
+                typings: "index.d.ts"
             };
             const packageJsonOfPkgcurrentdirectory: File = {
                 path: `${currentDirectory}/node_modules/pkgcurrentdirectory/package.json`,
-                content: JSON.stringify({
-                    name: "pkgcurrentdirectory",
-                    main: "index.js",
-                    typings: "index.d.ts"
-                })
+                content: JSON.stringify(packageObjOfPkgcurrentdirectory)
             };
             const indexOfPkgcurrentdirectory: File = {
                 path: `${currentDirectory}/node_modules/pkgcurrentdirectory/index.d.ts`,
@@ -2133,19 +2169,21 @@ declare module "stream" {
             };
 
             const typingsCache = `/users/username/Library/Caches/typescript/2.7`;
+            const typingsCachePackageObj = {
+                devDependencies: {
+                },
+            };
             const typingsCachePackageJson: File = {
                 path: `${typingsCache}/package.json`,
-                content: JSON.stringify({
-                    devDependencies: {
-                    },
-                })
+                content: JSON.stringify(typingsCachePackageObj)
+            };
+            const typingsCachePackageLockObj = {
+                dependencies: {
+                },
             };
             const typingsCachePackageLockJson: File = {
                 path: `${typingsCache}/package-lock.json`,
-                content: JSON.stringify({
-                    dependencies: {
-                    },
-                })
+                content: JSON.stringify(typingsCachePackageLockObj)
             };
 
             const files = [file, packageJsonInCurrentDirectory, packageJsonOfPkgcurrentdirectory, indexOfPkgcurrentdirectory, typingsCachePackageJson, typingsCachePackageLockJson];

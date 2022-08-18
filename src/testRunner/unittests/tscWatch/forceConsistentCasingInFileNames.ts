@@ -8,11 +8,12 @@ namespace ts.tscWatch {
             path: `${projectRoot}/another.ts`,
             content: `import { logger } from "./logger"; new logger();`
         };
+        const tsconfigObj = {
+            compilerOptions: { forceConsistentCasingInFileNames: true }
+        };
         const tsconfig: File = {
             path: `${projectRoot}/tsconfig.json`,
-            content: JSON.stringify({
-                compilerOptions: { forceConsistentCasingInFileNames: true }
-            })
+            content: JSON.stringify(tsconfigObj)
         };
 
         function verifyConsistentFileNames({ subScenario, changes }: { subScenario: string; changes: TscWatchCompileChange[]; }) {
@@ -64,9 +65,10 @@ namespace ts.tscWatch {
                     path: `${projectRoot}/moduleC.ts`,
                     content: `export const x = 10;`
                 };
+                const tsconfigObj = { compilerOptions: { forceConsistentCasingInFileNames: true } };
                 const tsconfig: File = {
                     path: `${projectRoot}/tsconfig.json`,
-                    content: JSON.stringify({ compilerOptions: { forceConsistentCasingInFileNames: true } })
+                    content: JSON.stringify(tsconfigObj)
                 };
                 return createWatchedSystem([moduleA, moduleB, moduleC, libFile, tsconfig], { currentDirectory: projectRoot });
             },
@@ -84,11 +86,17 @@ namespace ts.tscWatch {
             scenario: "forceConsistentCasingInFileNames",
             subScenario: "jsxImportSource option changed",
             commandLineArgs: ["--w", "--p", ".", "--explainFiles"],
-            sys: () => createWatchedSystem([
-                libFile,
-                {
-                    path: `${projectRoot}/node_modules/react/Jsx-runtime/index.d.ts`,
-                    content: `export namespace JSX {
+            sys: () => {
+                const react = { name: "react", version: "0.0.1" };
+                const tsconfig = {
+                    compilerOptions: { jsx: "react-jsx", jsxImportSource: "react", forceConsistentCasingInFileNames: true },
+                    files: ["node_modules/react/jsx-Runtime/index.d.ts", "index.tsx"] // NB: casing does not match disk
+                };
+                return createWatchedSystem([
+                    libFile,
+                    {
+                        path: `${projectRoot}/node_modules/react/Jsx-runtime/index.d.ts`,
+                        content: `export namespace JSX {
     interface Element {}
     interface IntrinsicElements {
         div: {
@@ -100,23 +108,21 @@ export function jsx(...args: any[]): void;
 export function jsxs(...args: any[]): void;
 export const Fragment: unique symbol;
 `,
-                },
-                {
-                    path: `${projectRoot}/node_modules/react/package.json`,
-                    content: JSON.stringify({ name: "react", version: "0.0.1" })
-                },
-                {
-                    path: `${projectRoot}/index.tsx`,
-                    content: `export const App = () => <div propA={true}></div>;`
-                },
-                {
-                    path: `${projectRoot}/tsconfig.json`,
-                    content: JSON.stringify({
-                        compilerOptions: { jsx: "react-jsx", jsxImportSource: "react", forceConsistentCasingInFileNames: true },
-                        files: ["node_modules/react/jsx-Runtime/index.d.ts", "index.tsx"] // NB: casing does not match disk
-                    })
-                }
-            ], { currentDirectory: projectRoot }),
+                    },
+                    {
+                        path: `${projectRoot}/node_modules/react/package.json`,
+                        content: JSON.stringify(react)
+                    },
+                    {
+                        path: `${projectRoot}/index.tsx`,
+                        content: `export const App = () => <div propA={true}></div>;`
+                    },
+                    {
+                        path: `${projectRoot}/tsconfig.json`,
+                        content: JSON.stringify(tsconfig)
+                    }
+                ], { currentDirectory: projectRoot });
+            },
             changes: emptyArray,
         });
 
@@ -142,9 +148,10 @@ import { b } from "${windowsStyleRoot.toLocaleLowerCase()}/${projectRootRelative
 a;b;
 `
                     };
+                    const tsconfigObj = { compilerOptions: { forceConsistentCasingInFileNames: true } };
                     const tsconfig: File = {
                         path: `${windowsStyleRoot}/${projectRootRelative}/tsconfig.json`,
-                        content: JSON.stringify({ compilerOptions: { forceConsistentCasingInFileNames: true } })
+                        content: JSON.stringify(tsconfigObj)
                     };
                     return createWatchedSystem([moduleA, moduleB, libFile, tsconfig], { windowsStyleRoot, useCaseSensitiveFileNames: false });
                 },
@@ -189,9 +196,10 @@ import { b } from "./link";
 a;b;
 `
                     };
+                    const tsconfigObj = { compilerOptions: { forceConsistentCasingInFileNames: true } };
                     const tsconfig: File = {
                         path: `${projectRoot}/tsconfig.json`,
-                        content: JSON.stringify({ compilerOptions: { forceConsistentCasingInFileNames: true } })
+                        content: JSON.stringify(tsconfigObj)
                     };
                     return createWatchedSystem([moduleA, symlinkA, moduleB, libFile, tsconfig], { currentDirectory: projectRoot });
                 },
@@ -239,10 +247,11 @@ import { b } from "./link/a";
 a;b;
 `
                     };
+                    const tsconfigObj = { compilerOptions: { forceConsistentCasingInFileNames: true, outFile: "out.js", module: "system" } };
                     const tsconfig: File = {
                         path: `${projectRoot}/tsconfig.json`,
                         // Use outFile because otherwise the real and linked files will have the same output path
-                        content: JSON.stringify({ compilerOptions: { forceConsistentCasingInFileNames: true, outFile: "out.js", module: "system" } })
+                        content: JSON.stringify(tsconfigObj)
                     };
                     return createWatchedSystem([moduleA, symlinkA, moduleB, libFile, tsconfig], { currentDirectory: projectRoot });
                 },

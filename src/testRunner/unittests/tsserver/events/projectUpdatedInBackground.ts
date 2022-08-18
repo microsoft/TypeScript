@@ -72,11 +72,12 @@ namespace ts.projectSystem {
 
             describe("with --out or --outFile setting", () => {
                 function verifyEventWithOutSettings(compilerOptions: CompilerOptions = {}) {
+                    const configObj ={
+                            compilerOptions
+                        };
                     const config: File = {
                         path: "/a/tsconfig.json",
-                        content: JSON.stringify({
-                            compilerOptions
-                        })
+                        content: JSON.stringify(configObj)
                     };
 
                     const f1: File = {
@@ -168,9 +169,10 @@ namespace ts.projectSystem {
                     };
 
                     const additionalFiles = getAdditionalFileOrFolder ? getAdditionalFileOrFolder() : [];
-                    const configFile = {
+                    const configObjFixed: object = configObj || { compilerOptions: {} };
+                    const configFile: File = {
                         path: configFilePath,
-                        content: JSON.stringify(configObj || { compilerOptions: {} })
+                        content: JSON.stringify(configObjFixed)
                     };
 
                     const files: File[] = [file1Consumer1, moduleFile1, file1Consumer2, moduleFile2, ...additionalFiles, globalFile3, libFile, configFile];
@@ -430,9 +432,10 @@ namespace ts.projectSystem {
                             path: rootFolder + "a/b/project/file3.ts",
                             content: "export class c { }"
                         };
+                        const configObj ={ compilerOptions: { typeRoots: [] } };
                         const configFile: File = {
                             path: rootFolder + "a/b/project/tsconfig.json",
-                            content: JSON.stringify({ compilerOptions: { typeRoots: [] } })
+                            content: JSON.stringify(configObj)
                         };
 
                         const openFiles = [file1.path];
@@ -486,7 +489,8 @@ namespace ts.projectSystem {
                 };
 
                 function eventToString(event: server.ProjectsUpdatedInBackgroundEvent) {
-                    return JSON.stringify(event && { eventName: event.eventName, data: event.data });
+                    const eventFixed =event && { eventName: event.eventName, data: event.data };
+                    return JSON.stringify(eventFixed);
                 }
 
                 function eventsToString(events: readonly server.ProjectsUpdatedInBackgroundEvent[]) {

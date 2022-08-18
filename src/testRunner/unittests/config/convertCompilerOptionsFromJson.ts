@@ -31,14 +31,15 @@ namespace ts {
             const { options: actualCompilerOptions, errors: actualErrors } = convertCompilerOptionsFromJson(json.compilerOptions, "/apath/", configFileName);
 
             const parsedCompilerOptions = JSON.stringify(actualCompilerOptions);
-            const expectedCompilerOptions = JSON.stringify({ ...expectedResult.compilerOptions, configFilePath: configFileName });
+            const expectedCompilerOptionsObj = { ...expectedResult.compilerOptions, configFilePath: configFileName };
+            const expectedCompilerOptions = JSON.stringify(expectedCompilerOptionsObj);
             assert.equal(parsedCompilerOptions, expectedCompilerOptions);
 
             verifyErrors(actualErrors, expectedResult.errors, /*ignoreLocation*/ true);
         }
 
         function assertCompilerOptionsWithJsonNode(json: any, configFileName: string, expectedResult: ExpectedResultWithParsingSuccess) {
-            assertCompilerOptionsWithJsonText(JSON.stringify(json), configFileName, expectedResult);
+            assertCompilerOptionsWithJsonText(JSON.stringify(json as object), configFileName, expectedResult);
         }
 
         function assertCompilerOptionsWithJsonText(fileText: string, configFileName: string, expectedResult: ExpectedResult) {
@@ -657,15 +658,15 @@ namespace ts {
   }
 }
 `,
-            "tsconfig.json",
-            {
-                compilerOptions: {
-                    target: undefined,
-                    module: ModuleKind.ESNext,
-                    experimentalDecorators: true,
-                },
-                hasParseErrors: true
-            });
+                "tsconfig.json",
+                {
+                    compilerOptions: {
+                        target: undefined,
+                        module: ModuleKind.ESNext,
+                        experimentalDecorators: true,
+                    },
+                    hasParseErrors: true
+                });
         });
 
         it("Convert a tsconfig file with stray trailing characters", () => {

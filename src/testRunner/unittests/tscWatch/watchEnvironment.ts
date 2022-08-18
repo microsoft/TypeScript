@@ -71,13 +71,14 @@ namespace ts.tscWatch {
             subScenario: "watchFile/using fixed chunk size polling",
             commandLineArgs: ["-w", "-p", "/a/b/tsconfig.json"],
             sys: () => {
+                const configObj = {
+                    watchOptions: {
+                        watchFile: "FixedChunkSizePolling"
+                    }
+                };
                 const configFile: File = {
                     path: "/a/b/tsconfig.json",
-                    content: JSON.stringify({
-                        watchOptions: {
-                            watchFile: "FixedChunkSizePolling"
-                        }
-                    })
+                    content: JSON.stringify(configObj)
                 };
                 const files = [libFile, commonFile1, commonFile2, configFile];
                 return createWatchedSystem(files);
@@ -154,13 +155,14 @@ namespace ts.tscWatch {
             function verifyRenamingFileInSubFolder(subScenario: string, tscWatchDirectory: Tsc_WatchDirectory) {
                 const projectFolder = "/a/username/project";
                 const projectSrcFolder = `${projectFolder}/src`;
+                const configObj = {
+                    watchOptions: {
+                        synchronousWatchDirectory: true
+                    }
+                };
                 const configFile: File = {
                     path: `${projectFolder}/tsconfig.json`,
-                    content: JSON.stringify({
-                        watchOptions: {
-                            synchronousWatchDirectory: true
-                        }
-                    })
+                    content: JSON.stringify(configObj)
                 };
                 const file: File = {
                     path: `${projectSrcFolder}/file1.ts`,
@@ -343,9 +345,10 @@ namespace ts.tscWatch {
                 subScenario: "watchDirectories/with non synchronous watch directory with outDir and declaration enabled",
                 commandLineArgs: ["--w", "-p", `${projectRoot}/tsconfig.json`],
                 sys: () => {
+                    const configObj = { compilerOptions: { outDir: "dist", declaration: true } };
                     const configFile: File = {
                         path: `${projectRoot}/tsconfig.json`,
-                        content: JSON.stringify({ compilerOptions: { outDir: "dist", declaration: true } })
+                        content: JSON.stringify(configObj)
                     };
                     const file1: File = {
                         path: `${projectRoot}/src/file1.ts`,
@@ -384,9 +387,10 @@ namespace ts.tscWatch {
                 subScenario: "watchDirectories/with non synchronous watch directory renaming a file",
                 commandLineArgs: ["--w", "-p", `${projectRoot}/tsconfig.json`],
                 sys: () => {
+                    const configObj = { compilerOptions: { outDir: "dist" } };
                     const configFile: File = {
                         path: `${projectRoot}/tsconfig.json`,
-                        content: JSON.stringify({ compilerOptions: { outDir: "dist" } })
+                        content: JSON.stringify(configObj)
                     };
                     const file1: File = {
                         path: `${projectRoot}/src/file1.ts`,
@@ -429,13 +433,14 @@ namespace ts.tscWatch {
                 subScenario: "watchOptions/with watchFile option",
                 commandLineArgs: ["-w", "-p", "/a/b/tsconfig.json"],
                 sys: () => {
+                    const configObj = {
+                        watchOptions: {
+                            watchFile: "UseFsEvents"
+                        }
+                    };
                     const configFile: File = {
                         path: "/a/b/tsconfig.json",
-                        content: JSON.stringify({
-                            watchOptions: {
-                                watchFile: "UseFsEvents"
-                            }
-                        })
+                        content: JSON.stringify(configObj)
                     };
                     const files = [libFile, commonFile1, commonFile2, configFile];
                     return createWatchedSystem(files);
@@ -448,13 +453,14 @@ namespace ts.tscWatch {
                 subScenario: "watchOptions/with watchDirectory option",
                 commandLineArgs: ["-w", "-p", "/a/b/tsconfig.json"],
                 sys: () => {
+                    const configObj = {
+                        watchOptions: {
+                            watchDirectory: "UseFsEvents"
+                        }
+                    };
                     const configFile: File = {
                         path: "/a/b/tsconfig.json",
-                        content: JSON.stringify({
-                            watchOptions: {
-                                watchDirectory: "UseFsEvents"
-                            }
-                        })
+                        content: JSON.stringify(configObj)
                     };
                     const files = [libFile, commonFile1, commonFile2, configFile];
                     return createWatchedSystem(files, { runWithoutRecursiveWatches: true });
@@ -467,13 +473,14 @@ namespace ts.tscWatch {
                 subScenario: "watchOptions/with fallbackPolling option",
                 commandLineArgs: ["-w", "-p", "/a/b/tsconfig.json"],
                 sys: () => {
+                    const configObj = {
+                        watchOptions: {
+                            fallbackPolling: "PriorityInterval"
+                        }
+                    };
                     const configFile: File = {
                         path: "/a/b/tsconfig.json",
-                        content: JSON.stringify({
-                            watchOptions: {
-                                fallbackPolling: "PriorityInterval"
-                            }
-                        })
+                        content: JSON.stringify(configObj)
                     };
                     const files = [libFile, commonFile1, commonFile2, configFile];
                     return createWatchedSystem(files, { runWithoutRecursiveWatches: true, runWithFallbackPolling: true });
@@ -498,9 +505,10 @@ namespace ts.tscWatch {
 
             describe("exclude options", () => {
                 function sys(watchOptions: WatchOptions, runWithoutRecursiveWatches?: boolean): WatchedSystem {
+                    const configObj = { exclude: ["node_modules"], watchOptions };
                     const configFile: File = {
                         path: `${projectRoot}/tsconfig.json`,
-                        content: JSON.stringify({ exclude: ["node_modules"], watchOptions })
+                        content: JSON.stringify(configObj)
                     };
                     const main: File = {
                         path: `${projectRoot}/src/main.ts`,
@@ -550,7 +558,8 @@ namespace ts.tscWatch {
                             {
                                 caption: "delete fooBar",
                                 change: sys => sys.deleteFile(`${projectRoot}/node_modules/bar/fooBar.d.ts`),
-                                timeouts: sys => sys.checkTimeoutQueueLength(0),                            }
+                                timeouts: sys => sys.checkTimeoutQueueLength(0),
+                            }
                         ]
                     });
 
@@ -586,18 +595,21 @@ namespace ts.tscWatch {
             scenario,
             subScenario: `fsWatch/when using file watching thats when rename occurs when file is still on the disk`,
             commandLineArgs: ["-w", "--extendedDiagnostics"],
-            sys: () => createWatchedSystem(
-                {
-                    [libFile.path]: libFile.content,
-                    [`${projectRoot}/main.ts`]: `import { foo } from "./foo"; foo();`,
-                    [`${projectRoot}/foo.ts`]: `export declare function foo(): string;`,
-                    [`${projectRoot}/tsconfig.json`]: JSON.stringify({
-                        watchOptions: { watchFile: "useFsEvents" },
-                        files: ["foo.ts", "main.ts"]
-                    }),
-                },
-                { currentDirectory: projectRoot, }
-            ),
+            sys: () => {
+                const configObj = {
+                    watchOptions: { watchFile: "useFsEvents" },
+                    files: ["foo.ts", "main.ts"]
+                };
+                return createWatchedSystem(
+                    {
+                        [libFile.path]: libFile.content,
+                        [`${projectRoot}/main.ts`]: `import { foo } from "./foo"; foo();`,
+                        [`${projectRoot}/foo.ts`]: `export declare function foo(): string;`,
+                        [`${projectRoot}/tsconfig.json`]: JSON.stringify(configObj),
+                    },
+                    { currentDirectory: projectRoot, }
+                );
+            },
             changes: [
                 {
                     caption: "Introduce error such that when callback happens file is already appeared",
@@ -622,18 +634,21 @@ namespace ts.tscWatch {
                 scenario,
                 subScenario: `fsWatch/when using file watching thats on inode`,
                 commandLineArgs: ["-w", "--extendedDiagnostics"],
-                sys: () => createWatchedSystem(
-                    {
-                        [libFile.path]: libFile.content,
-                        [`${projectRoot}/main.ts`]: `import { foo } from "./foo"; foo();`,
-                        [`${projectRoot}/foo.d.ts`]: `export function foo(): string;`,
-                        [`${projectRoot}/tsconfig.json`]: JSON.stringify({ watchOptions: { watchFile: "useFsEvents" }, files: ["foo.d.ts", "main.ts"] }),
-                    },
-                    {
-                        currentDirectory: projectRoot,
-                        inodeWatching: true
-                    }
-                ),
+                sys: () => {
+                    const configObj = { watchOptions: { watchFile: "useFsEvents" }, files: ["foo.d.ts", "main.ts"] };
+                    return createWatchedSystem(
+                        {
+                            [libFile.path]: libFile.content,
+                            [`${projectRoot}/main.ts`]: `import { foo } from "./foo"; foo();`,
+                            [`${projectRoot}/foo.d.ts`]: `export function foo(): string;`,
+                            [`${projectRoot}/tsconfig.json`]: JSON.stringify(configObj),
+                        },
+                        {
+                            currentDirectory: projectRoot,
+                            inodeWatching: true
+                        }
+                    );
+                },
                 changes: [
                     {
                         caption: "Replace file with rename event that introduces error",
@@ -652,18 +667,21 @@ namespace ts.tscWatch {
                 scenario,
                 subScenario: `fsWatch/when using file watching thats on inode when rename event ends with tilde`,
                 commandLineArgs: ["-w", "--extendedDiagnostics"],
-                sys: () => createWatchedSystem(
-                    {
-                        [libFile.path]: libFile.content,
-                        [`${projectRoot}/main.ts`]: `import { foo } from "./foo"; foo();`,
-                        [`${projectRoot}/foo.d.ts`]: `export function foo(): string;`,
-                        [`${projectRoot}/tsconfig.json`]: JSON.stringify({ watchOptions: { watchFile: "useFsEvents" }, files: ["foo.d.ts", "main.ts"] }),
-                    },
-                    {
-                        currentDirectory: projectRoot,
-                        inodeWatching: true
-                    }
-                ),
+                sys: () => {
+                    const configObj = { watchOptions: { watchFile: "useFsEvents" }, files: ["foo.d.ts", "main.ts"] };
+                    return createWatchedSystem(
+                        {
+                            [libFile.path]: libFile.content,
+                            [`${projectRoot}/main.ts`]: `import { foo } from "./foo"; foo();`,
+                            [`${projectRoot}/foo.d.ts`]: `export function foo(): string;`,
+                            [`${projectRoot}/tsconfig.json`]: JSON.stringify(configObj),
+                        },
+                        {
+                            currentDirectory: projectRoot,
+                            inodeWatching: true
+                        }
+                    );
+                },
                 changes: [
                     {
                         caption: "Replace file with rename event that introduces error",
@@ -682,21 +700,24 @@ namespace ts.tscWatch {
                 scenario,
                 subScenario: `fsWatch/when using file watching thats on inode when rename occurs when file is still on the disk`,
                 commandLineArgs: ["-w", "--extendedDiagnostics"],
-                sys: () => createWatchedSystem(
-                    {
-                        [libFile.path]: libFile.content,
-                        [`${projectRoot}/main.ts`]: `import { foo } from "./foo"; foo();`,
-                        [`${projectRoot}/foo.ts`]: `export declare function foo(): string;`,
-                        [`${projectRoot}/tsconfig.json`]: JSON.stringify({
-                            watchOptions: { watchFile: "useFsEvents" },
-                            files: ["foo.ts", "main.ts"]
-                        }),
-                    },
-                    {
-                        currentDirectory: projectRoot,
-                        inodeWatching: true,
-                    }
-                ),
+                sys: () => {
+                    const configObj = {
+                        watchOptions: { watchFile: "useFsEvents" },
+                        files: ["foo.ts", "main.ts"]
+                    };
+                    return createWatchedSystem(
+                        {
+                            [libFile.path]: libFile.content,
+                            [`${projectRoot}/main.ts`]: `import { foo } from "./foo"; foo();`,
+                            [`${projectRoot}/foo.ts`]: `export declare function foo(): string;`,
+                            [`${projectRoot}/tsconfig.json`]: JSON.stringify(configObj),
+                        },
+                        {
+                            currentDirectory: projectRoot,
+                            inodeWatching: true,
+                        }
+                    );
+                },
                 changes: [
                     {
                         caption: "Introduce error such that when callback happens file is already appeared",

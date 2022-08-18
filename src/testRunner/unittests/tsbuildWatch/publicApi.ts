@@ -1,20 +1,22 @@
 namespace ts.tscWatch {
     it("unittests:: tsbuildWatch:: watchMode:: Public API with custom transformers", () => {
+        const solutionObj = {
+            references: [
+                { path: "./shared/tsconfig.json" },
+                { path: "./webpack/tsconfig.json" }
+            ],
+            files: []
+        };
         const solution: File = {
             path: `${projectRoot}/tsconfig.json`,
-            content: JSON.stringify({
-                references: [
-                    { path: "./shared/tsconfig.json" },
-                    { path: "./webpack/tsconfig.json" }
-                ],
-                files: []
-            })
+            content: JSON.stringify(solutionObj)
+        };
+        const sharedObj = {
+            compilerOptions: { composite: true },
         };
         const sharedConfig: File = {
             path: `${projectRoot}/shared/tsconfig.json`,
-            content: JSON.stringify({
-                compilerOptions: { composite: true },
-            })
+            content: JSON.stringify(sharedObj)
         };
         const sharedIndex: File = {
             path: `${projectRoot}/shared/index.ts`,
@@ -24,12 +26,13 @@ export enum e { }
 // leading
 export function f2() { } // trailing`
         };
+        const webpackObj = {
+            compilerOptions: { composite: true, },
+            references: [{ path: "../shared/tsconfig.json" }]
+        };
         const webpackConfig: File = {
             path: `${projectRoot}/webpack/tsconfig.json`,
-            content: JSON.stringify({
-                compilerOptions: { composite: true, },
-                references: [{ path: "../shared/tsconfig.json" }]
-            })
+            content: JSON.stringify(webpackObj)
         };
         const webpackIndex: File = {
             path: `${projectRoot}/webpack/index.ts`,

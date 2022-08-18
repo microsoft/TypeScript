@@ -77,11 +77,12 @@ namespace ts.projectSystem {
                     path: bTsPath,
                     content: "export class B {}"
                 };
+                const bObj ={
+                        extends: "../a/tsconfig.json",
+                    };
                 const configB: File = {
                     path: configBPath,
-                    content: JSON.stringify({
-                        extends: "../a/tsconfig.json",
-                    })
+                    content: JSON.stringify(bObj)
                 };
                 const { host, verifyEvent, verifyEventWithOpenTs, service } = createSessionToVerifyEvent(files.concat(bTs, configB));
                 verifyEventWithOpenTs(bTs, configB.path, 1);
@@ -117,16 +118,17 @@ namespace ts.projectSystem {
                         path: bTsPath,
                         content: `import {A} from "../a/a"; new A();`
                     };
-                    const configB: File = {
-                        path: configBPath,
-                        content: JSON.stringify({
+                    const bObj ={
                             ...(disableSourceOfProjectReferenceRedirect && {
                                 compilerOptions: {
                                     disableSourceOfProjectReferenceRedirect
                                 }
                             }),
                             references: [{ path: "../a" }]
-                        })
+                        };
+                    const configB: File = {
+                        path: configBPath,
+                        content: JSON.stringify(bObj)
                     };
 
                     const { service, session, verifyEventWithOpenTs, verifyEvent } = createSessionToVerifyEvent(files.concat(aDTs, aDTsMap, bTs, configB));

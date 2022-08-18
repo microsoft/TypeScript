@@ -38,9 +38,10 @@ namespace ts.projectSystem {
                     path: `${tscWatch.projectRoot}/src/file.ts`,
                     content: "export var y = 10;"
                 };
+                const tsconfigObj ={ files: ["src/file.ts", getLargeFile(useLargeTsFile)], compilerOptions: { target: 1, allowJs: true } };
                 const tsconfig: File = {
                     path: `${tscWatch.projectRoot}/tsconfig.json`,
-                    content: JSON.stringify({ files: ["src/file.ts", getLargeFile(useLargeTsFile)], compilerOptions: { target: 1, allowJs: true } })
+                    content: JSON.stringify(tsconfigObj)
                 };
                 const files = [file, libFile, tsconfig];
                 const { session, verifyLargeFile } = createSessionWithEventHandler(files, useLargeTsFile);

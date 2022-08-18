@@ -1,6 +1,6 @@
 namespace ts.tscWatch {
     describe("unittests:: tsc-watch:: watchAPI:: tsc-watch with custom module resolution", () => {
-        const configFileJson: any = {
+        const configFileJson: object = {
             compilerOptions: { module: "commonjs", resolveJsonModule: true },
             files: ["index.ts"]
         };
@@ -12,9 +12,10 @@ namespace ts.tscWatch {
             path: `${projectRoot}/tsconfig.json`,
             content: JSON.stringify(configFileJson)
         };
+        const settingsObj = { content: "Print this" };
         const settingsJson: File = {
             path: `${projectRoot}/settings.json`,
-            content: JSON.stringify({ content: "Print this" })
+            content: JSON.stringify(settingsObj)
         };
 
         it("verify that module resolution with json extension works when returned without extension", () => {
@@ -54,12 +55,13 @@ namespace ts.tscWatch {
 
     describe("unittests:: tsc-watch:: watchAPI:: tsc-watch expose error count to watch status reporter", () => {
         it("verify that the error count is correctly passed down to the watch status reporter", () => {
+            const configObj = {
+                compilerOptions: { module: "commonjs" },
+                files: ["index.ts"]
+            };
             const config: File = {
                 path: `${projectRoot}/tsconfig.json`,
-                content: JSON.stringify({
-                    compilerOptions: { module: "commonjs" },
-                    files: ["index.ts"]
-                })
+                content: JSON.stringify(configObj)
             };
             const mainFile: File = {
                 path: `${projectRoot}/index.ts`,
@@ -300,7 +302,8 @@ namespace ts.tscWatch {
             let baseline: string[];
             let emitBaseline: string[];
             before(() => {
-                const configText = JSON.stringify({ compilerOptions: { composite: true } });
+                const configObj = { compilerOptions: { composite: true } };
+                const configText = JSON.stringify(configObj);
                 const mainText = "export const x = 10;";
                 const result = createSystemForBuilderTest(configText, mainText);
                 baseline = result.baseline;
@@ -344,7 +347,8 @@ namespace ts.tscWatch {
             let baseline: string[];
             let emitBaseline: string[];
             before(() => {
-                const configText = JSON.stringify({ compilerOptions: { composite: true, noEmitOnError: true } });
+                const configObj = { compilerOptions: { composite: true, noEmitOnError: true } };
+                const configText = JSON.stringify(configObj);
                 const mainText = "export const x: string = 10;";
                 const result = createSystemForBuilderTest(configText, mainText);
                 baseline = result.baseline;
@@ -378,7 +382,8 @@ namespace ts.tscWatch {
 
         it("SemanticDiagnosticsBuilderProgram emitDtsOnly does not update affected files pending emit", () => {
             // Initial
-            const { sys, baseline, config, mainFile } = createSystem(JSON.stringify({ compilerOptions: { composite: true, noEmitOnError: true } }), "export const x: string = 10;");
+            const configObj = { compilerOptions: { composite: true, noEmitOnError: true } };
+            const { sys, baseline, config, mainFile } = createSystem(JSON.stringify(configObj), "export const x: string = 10;");
             createWatch(baseline, config, sys, createSemanticDiagnosticsBuilderProgram);
 
             // Fix error and emit
@@ -422,15 +427,16 @@ namespace ts.tscWatch {
 
     describe("unittests:: tsc-watch:: watchAPI:: when getParsedCommandLine is implemented", () => {
         function setup(useSourceOfProjectReferenceRedirect?: () => boolean) {
+            const obj1 = {
+                compilerOptions: {
+                    module: "none",
+                    composite: true
+                },
+                exclude: ["temp"]
+            };
             const config1: File = {
                 path: `${projectRoot}/projects/project1/tsconfig.json`,
-                content: JSON.stringify({
-                    compilerOptions: {
-                        module: "none",
-                        composite: true
-                    },
-                    exclude: ["temp"]
-                })
+                content: JSON.stringify(obj1)
             };
             const class1: File = {
                 path: `${projectRoot}/projects/project1/class1.ts`,
@@ -440,17 +446,18 @@ namespace ts.tscWatch {
                 path: `${projectRoot}/projects/project1/class1.d.ts`,
                 content: `declare class class1 {}`
             };
+            const obj2 = {
+                compilerOptions: {
+                    module: "none",
+                    composite: true
+                },
+                references: [
+                    { path: "../project1" }
+                ]
+            };
             const config2: File = {
                 path: `${projectRoot}/projects/project2/tsconfig.json`,
-                content: JSON.stringify({
-                    compilerOptions: {
-                        module: "none",
-                        composite: true
-                    },
-                    references: [
-                        { path: "../project1" }
-                    ]
-                })
+                content: JSON.stringify(obj2)
             };
             const class2: File = {
                 path: `${projectRoot}/projects/project2/class2.ts`,

@@ -14,20 +14,22 @@ namespace ts.projectSystem {
                 path: `${rootPath}/types/file2/index.d.ts`,
                 content: "export declare const x: string;",
             };
-            const tsconfigAll: File = {
-                path: `${rootPath}/tsconfig.all.json`,
-                content: JSON.stringify({
+            const tsconfigAllObj ={
                     compilerOptions: {
                         baseUrl: ".",
                         paths: { file2: ["./file2.js"] },
                         typeRoots: ["./types"],
                         forceConsistentCasingInFileNames: true,
                     },
-                }),
+                };
+            const tsconfigAll: File = {
+                path: `${rootPath}/tsconfig.all.json`,
+                content: JSON.stringify(tsconfigAllObj),
             };
+            const tsconfigObj ={ extends: "./tsconfig.all.json" };
             const tsconfig: File = {
                 path: `${rootPath}/tsconfig.json`,
-                content: JSON.stringify({ extends: "./tsconfig.all.json" }),
+                content: JSON.stringify(tsconfigObj),
             };
 
             const host = createServerHost([file1, file2, file2Dts, libFile, tsconfig, tsconfigAll], { useCaseSensitiveFileNames: false });
@@ -51,11 +53,12 @@ namespace ts.projectSystem {
                 path: `${tscWatch.projectRoot}/another.ts`,
                 content: `import { logger } from "./Logger"; new logger();`
             };
+            const tsconfigObj ={
+                    compilerOptions: { forceConsistentCasingInFileNames: true }
+                };
             const tsconfig: File = {
                 path: `${tscWatch.projectRoot}/tsconfig.json`,
-                content: JSON.stringify({
-                    compilerOptions: { forceConsistentCasingInFileNames: true }
-                })
+                content: JSON.stringify(tsconfigObj)
             };
 
             const host = createServerHost([loggerFile, anotherFile, tsconfig, libFile, tsconfig]);
@@ -100,11 +103,12 @@ namespace ts.projectSystem {
                 path: `${tscWatch.projectRoot}/another.ts`,
                 content: `import { logger } from "./Logger"; new logger();`
             };
+            const tsconfigObj ={
+                    compilerOptions: { forceConsistentCasingInFileNames: true }
+                };
             const tsconfig: File = {
                 path: `${tscWatch.projectRoot}/tsconfig.json`,
-                content: JSON.stringify({
-                    compilerOptions: { forceConsistentCasingInFileNames: true }
-                })
+                content: JSON.stringify(tsconfigObj)
             };
 
             const host = createServerHost([loggerFile, anotherFile, tsconfig, libFile, tsconfig]);

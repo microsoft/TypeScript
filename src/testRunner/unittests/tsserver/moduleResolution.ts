@@ -2,16 +2,17 @@ namespace ts.projectSystem {
     describe("unittests:: tsserver:: moduleResolution", () => {
         describe("package json file is edited", () => {
             function setup(packageFileContents: string) {
-                const configFile: File = {
-                    path: `${tscWatch.projectRoot}/src/tsconfig.json`,
-                    content: JSON.stringify({
+                const configObj ={
                         compilerOptions: {
                             target: "es2016",
                             module: "Node16",
                             outDir: "../out",
                             traceResolution: true,
                         }
-                    })
+                    };
+                const configFile: File = {
+                    path: `${tscWatch.projectRoot}/src/tsconfig.json`,
+                    content: JSON.stringify(configObj)
                 };
                 const packageFile: File = {
                     path: `${tscWatch.projectRoot}/package.json`,
@@ -40,12 +41,14 @@ namespace ts.projectSystem {
                 };
             }
             it("package json file is edited", () => {
-                const { host, session, packageFile, verifyErr } = setup(JSON.stringify({ name: "app", version: "1.0.0" }));
+                const packageObj1 ={ name: "app", version: "1.0.0" };
+                const { host, session, packageFile, verifyErr } = setup(JSON.stringify(packageObj1));
 
                 session.logger.info("Modify package json file to add type module");
-                host.writeFile(packageFile.path, JSON.stringify({
+                const packageObj2 ={
                     name: "app", version: "1.0.0", type: "module",
-                }));
+                };
+                host.writeFile(packageFile.path, JSON.stringify(packageObj2));
                 host.runQueuedTimeoutCallbacks(); // Failed lookup updates
                 host.runQueuedTimeoutCallbacks(); // Actual update
                 verifyErr();
@@ -62,10 +65,11 @@ namespace ts.projectSystem {
                 host.runQueuedTimeoutCallbacks(); // Actual update
                 verifyErr();
 
-                session.logger.info("Modify package json file to add type module");
-                host.writeFile(packageFile.path, JSON.stringify({
+                const packageObj3 ={
                     name: "app", version: "1.0.0", type: "module",
-                }));
+                };
+                session.logger.info("Modify package json file to add type module");
+                host.writeFile(packageFile.path, JSON.stringify(packageObj3));
                 host.runQueuedTimeoutCallbacks(); // Failed lookup updates
                 host.runQueuedTimeoutCallbacks(); // Actual update
                 verifyErr();
@@ -80,12 +84,14 @@ namespace ts.projectSystem {
             });
 
             it("package json file is edited when package json with type module exists", () => {
-                const { host, session, packageFile, verifyErr } = setup(JSON.stringify({
+                const packageObj1 ={
                     name: "app", version: "1.0.0", type: "module",
-                }));
+                };
+                const { host, session, packageFile, verifyErr } = setup(JSON.stringify(packageObj1));
 
+const packageObj2 ={ name: "app", version: "1.0.0" };
                 session.logger.info("Modify package json file to remove type module");
-                host.writeFile(packageFile.path, JSON.stringify({ name: "app", version: "1.0.0" }));
+                host.writeFile(packageFile.path, JSON.stringify(packageObj2));
                 host.runQueuedTimeoutCallbacks(); // Failed lookup updates
                 host.runQueuedTimeoutCallbacks(); // Actual update
                 verifyErr();
@@ -102,8 +108,9 @@ namespace ts.projectSystem {
                 host.runQueuedTimeoutCallbacks(); // Actual update
                 verifyErr();
 
+    const packageObj3 ={ name: "app", version: "1.0.0" };
                 session.logger.info("Modify package json file to without type module");
-                host.writeFile(packageFile.path, JSON.stringify({ name: "app", version: "1.0.0" }));
+                host.writeFile(packageFile.path, JSON.stringify(packageObj3));
                 host.runQueuedTimeoutCallbacks(); // Failed lookup updates
                 host.runQueuedTimeoutCallbacks(); // Actual update
                 verifyErr();

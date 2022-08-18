@@ -230,12 +230,13 @@ getPoint().c.x;`
             });
         });
         describe("updates errors when file transitively exported file changes", () => {
+            const configObj = {
+                files: ["app.ts"],
+                compilerOptions: { baseUrl: "." }
+            };
             const config: File = {
                 path: `${projectRoot}/tsconfig.json`,
-                content: JSON.stringify({
-                    files: ["app.ts"],
-                    compilerOptions: { baseUrl: "." }
-                })
+                content: JSON.stringify(configObj)
             };
             const app: File = {
                 path: `${projectRoot}/app.ts`,

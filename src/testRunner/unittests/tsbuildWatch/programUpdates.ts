@@ -182,12 +182,13 @@ export class someClass2 { }`),
                     "with circular project reference",
                     () => {
                         const [coreTsconfig, ...otherCoreFiles] = core;
+                        const circularCoreObj = {
+                            compilerOptions: { composite: true, declaration: true },
+                            references: [{ path: "../tests", circular: true }]
+                        };
                         const circularCoreConfig: File = {
                             path: coreTsconfig.path,
-                            content: JSON.stringify({
-                                compilerOptions: { composite: true, declaration: true },
-                                references: [{ path: "../tests", circular: true }]
-                            })
+                            content: JSON.stringify(circularCoreObj)
                         };
                         return [libFile, circularCoreConfig, ...otherCoreFiles, ...logic, ...tests];
                     }
@@ -240,18 +241,20 @@ export class someClass2 { }`),
                 subScenario: "when referenced using prepend builds referencing project even for non local change",
                 commandLineArgs: ["-b", "-w", `sample1/${SubProject.logic}`],
                 sys: () => {
+                    const coreTsConfigObj = {
+                        compilerOptions: { composite: true, declaration: true, outFile: "index.js" }
+                    };
                     const coreTsConfig: File = {
                         path: core[0].path,
-                        content: JSON.stringify({
-                            compilerOptions: { composite: true, declaration: true, outFile: "index.js" }
-                        })
+                        content: JSON.stringify(coreTsConfigObj)
+                    };
+                    const logicTsConfigObj = {
+                        compilerOptions: { composite: true, declaration: true, outFile: "index.js" },
+                        references: [{ path: "../core", prepend: true }]
                     };
                     const logicTsConfig: File = {
                         path: logic[0].path,
-                        content: JSON.stringify({
-                            compilerOptions: { composite: true, declaration: true, outFile: "index.js" },
-                            references: [{ path: "../core", prepend: true }]
-                        })
+                        content: JSON.stringify(logicTsConfigObj)
                     };
                     const logicIndex: File = {
                         path: logic[1].path,

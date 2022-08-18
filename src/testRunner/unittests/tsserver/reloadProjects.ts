@@ -1,10 +1,11 @@
 namespace ts.projectSystem {
     describe("unittests:: tsserver:: reloadProjects", () => {
+        const configObj = {
+            watchOptions: { excludeDirectories: ["node_modules"] }
+        };
         const configFile: File = {
             path: `${tscWatch.projectRoot}/tsconfig.json`,
-            content: JSON.stringify({
-                watchOptions: { excludeDirectories: ["node_modules"] }
-            })
+            content: JSON.stringify(configObj)
         };
         const file1: File = {
             path: `${tscWatch.projectRoot}/file1.ts`,

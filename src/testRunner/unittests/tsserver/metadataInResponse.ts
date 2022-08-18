@@ -18,11 +18,12 @@ namespace ts.projectSystem {
         }
 
         const aTs: File = { path: "/a.ts", content: `class c { prop = "hello"; foo() { return this.prop; } }` };
+        const tsconfigObj ={
+                compilerOptions: { plugins: [{ name: "myplugin" }] }
+            };
         const tsconfig: File = {
             path: "/tsconfig.json",
-            content: JSON.stringify({
-                compilerOptions: { plugins: [{ name: "myplugin" }] }
-            })
+            content: JSON.stringify(tsconfigObj)
         };
         function createHostWithPlugin(files: readonly File[]) {
             const host = createServerHost(files);

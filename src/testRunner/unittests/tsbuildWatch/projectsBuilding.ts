@@ -11,6 +11,12 @@ namespace ts.tscWatch {
             return { path: `./pkg${index}` };
         }
         function pkgFiles(index: number): File[] {
+            const tsconfig = {
+                compilerOptions: { composite: true },
+                references: index === 0 ?
+                    undefined :
+                    [{ path: `../pkg0` }]
+            };
             return [
                 {
                     path: `${projectRoot}/pkg${index}/index.ts`,
@@ -18,22 +24,18 @@ namespace ts.tscWatch {
                 },
                 {
                     path: `${projectRoot}/pkg${index}/tsconfig.json`,
-                    content: JSON.stringify({
-                        compilerOptions: { composite: true },
-                        references: index === 0 ?
-                            undefined :
-                            [{ path: `../pkg0` }]
-                    })
+                    content: JSON.stringify(tsconfig)
                 }
             ];
         }
         function solution(maxPkgs: number): File {
+            const tsconfig = {
+                references: pkgs(createPkgReference, maxPkgs),
+                files: [],
+            };
             return {
                 path: `${projectRoot}/tsconfig.json`,
-                content: JSON.stringify({
-                    references: pkgs(createPkgReference, maxPkgs),
-                    files: [],
-                })
+                content: JSON.stringify(tsconfig)
             };
         }
         function checkBuildPkg(startIndex: number, count: number): TscWatchCompileChange {

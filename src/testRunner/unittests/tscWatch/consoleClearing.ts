@@ -31,9 +31,10 @@ namespace ts.tscWatch {
             const compilerOptions: CompilerOptions = {
                 preserveWatchOutput: true
             };
+            const configObj = { compilerOptions };
             const configFile: File = {
                 path: "/tsconfig.json",
-                content: JSON.stringify({ compilerOptions })
+                content: JSON.stringify(configObj)
             };
             const files = [file, configFile, libFile];
             it("using createWatchOfConfigFile ", () => {

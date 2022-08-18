@@ -2,9 +2,10 @@ namespace ts.tscWatch {
     describe("unittests:: tsc-watch:: emit file --incremental", () => {
         const project = "/users/username/projects/project";
 
+        const configObj = { compilerOptions: { incremental: true } };
         const configFile: File = {
             path: `${project}/tsconfig.json`,
-            content: JSON.stringify({ compilerOptions: { incremental: true } })
+            content: JSON.stringify(configObj)
         };
 
         interface VerifyIncrementalWatchEmitInput {
@@ -92,10 +93,13 @@ namespace ts.tscWatch {
             });
 
             verifyIncrementalWatchEmit({
-                files: () => [libFile, file1, file2, {
-                    path: configFile.path,
-                    content: JSON.stringify({ compilerOptions: { incremental: true, outFile: "out.js" } })
-                }],
+                files: () => {
+                    const configObj = { compilerOptions: { incremental: true, outFile: "out.js" } };
+                    return [libFile, file1, file2, {
+                        path: configFile.path,
+                        content: JSON.stringify(configObj)
+                    }];
+                },
                 subScenario: "with --out",
             });
         });
@@ -109,9 +113,10 @@ namespace ts.tscWatch {
                 path: `${project}/file2.ts`,
                 content: "export const y = 20;"
             };
+            const configObj = { compilerOptions: { incremental: true, module: "amd" } };
             const config: File = {
                 path: configFile.path,
-                content: JSON.stringify({ compilerOptions: { incremental: true, module: "amd" } })
+                content: JSON.stringify(configObj)
             };
 
             verifyIncrementalWatchEmit({
@@ -206,27 +211,31 @@ namespace ts.tscWatch {
             });
 
             verifyIncrementalWatchEmit({
-                files: () => [libFile, file1, file2, {
-                    path: configFile.path,
-                    content: JSON.stringify({ compilerOptions: { incremental: true, module: "amd", outFile: "out.js" } })
-                }],
+                files: () => {
+                    const configObj = { compilerOptions: { incremental: true, module: "amd", outFile: "out.js" } };
+                    return [libFile, file1, file2, {
+                        path: configFile.path,
+                        content: JSON.stringify(configObj)
+                    }];
+                },
                 subScenario: "module compilation/with --out",
             });
         });
 
         verifyIncrementalWatchEmit({
             files: () => {
+                const configObj = {
+                    compilerOptions: {
+                        incremental: true,
+                        target: "es5",
+                        module: "commonjs",
+                        declaration: true,
+                        emitDeclarationOnly: true
+                    }
+                };
                 const config: File = {
                     path: configFile.path,
-                    content: JSON.stringify({
-                        compilerOptions: {
-                            incremental: true,
-                            target: "es5",
-                            module: "commonjs",
-                            declaration: true,
-                            emitDeclarationOnly: true
-                        }
-                    })
+                    content: JSON.stringify(configObj)
                 };
                 const aTs: File = {
                     path: `${project}/a.ts`,
@@ -272,12 +281,15 @@ export interface A {
 
         verifyIncrementalWatchEmit({
             subScenario: "when file with ambient global declaration file is deleted",
-            files: () => [
-                { path: libFile.path, content: libContent },
-                { path: `${project}/globals.d.ts`, content: `declare namespace Config { const value: string;} ` },
-                { path: `${project}/index.ts`, content: `console.log(Config.value);` },
-                { path: configFile.path, content: JSON.stringify({ compilerOptions: { incremental: true, } }) }
-            ],
+            files: () => {
+                const configObj = { compilerOptions: { incremental: true, } };
+                return [
+                    { path: libFile.path, content: libContent },
+                    { path: `${project}/globals.d.ts`, content: `declare namespace Config { const value: string;} ` },
+                    { path: `${project}/index.ts`, content: `console.log(Config.value);` },
+                    { path: configFile.path, content: JSON.stringify(configObj) }
+                ];
+            },
             modifyFs: host => host.deleteFile(`${project}/globals.d.ts`)
         });
 
@@ -298,44 +310,60 @@ export const Fragment: unique symbol;
 
             verifyIncrementalWatchEmit({
                 subScenario: "jsxImportSource option changed",
-                files: () => [
-                    { path: libFile.path, content: libContent },
-                    { path: `${project}/node_modules/react/jsx-runtime/index.d.ts`, content: jsxLibraryContent },
-                    { path: `${project}/node_modules/react/package.json`, content: JSON.stringify({ name: "react", version: "0.0.1" }) },
-                    { path: `${project}/node_modules/preact/jsx-runtime/index.d.ts`, content: jsxLibraryContent.replace("propA", "propB") },
-                    { path: `${project}/node_modules/preact/package.json`, content: JSON.stringify({ name: "preact", version: "0.0.1" }) },
-                    { path: `${project}/index.tsx`, content: `export const App = () => <div propA={true}></div>;` },
-                    { path: configFile.path, content: JSON.stringify({ compilerOptions: jsxImportSourceOptions }) }
-                ],
-                modifyFs: host => host.writeFile(configFile.path, JSON.stringify({ compilerOptions: { ...jsxImportSourceOptions, jsxImportSource: "preact" } })),
+                files: () => {
+                    const react = { name: "react", version: "0.0.1" };
+                    const preact = { name: "preact", version: "0.0.1" };
+                    const tsconfig = { compilerOptions: jsxImportSourceOptions };
+                    return [
+                        { path: libFile.path, content: libContent },
+                        { path: `${project}/node_modules/react/jsx-runtime/index.d.ts`, content: jsxLibraryContent },
+                        { path: `${project}/node_modules/react/package.json`, content: JSON.stringify(react) },
+                        { path: `${project}/node_modules/preact/jsx-runtime/index.d.ts`, content: jsxLibraryContent.replace("propA", "propB") },
+                        { path: `${project}/node_modules/preact/package.json`, content: JSON.stringify(preact) },
+                        { path: `${project}/index.tsx`, content: `export const App = () => <div propA={true}></div>;` },
+                        { path: configFile.path, content: JSON.stringify(tsconfig) }
+                    ];
+                },
+                modifyFs: host => {
+                    const configObj = { compilerOptions: { ...jsxImportSourceOptions, jsxImportSource: "preact" } };
+                    return host.writeFile(configFile.path, JSON.stringify(configObj));
+                },
                 optionsToExtend: ["--explainFiles"]
             });
 
             verifyIncrementalWatchEmit({
                 subScenario: "jsxImportSource backing types added",
-                files: () => [
-                    { path: libFile.path, content: libContent },
-                    { path: `${project}/index.tsx`, content: `export const App = () => <div propA={true}></div>;` },
-                    { path: configFile.path, content: JSON.stringify({ compilerOptions: jsxImportSourceOptions }) }
-                ],
+                files: () => {
+                    const configObj = { compilerOptions: jsxImportSourceOptions };
+                    return [
+                        { path: libFile.path, content: libContent },
+                        { path: `${project}/index.tsx`, content: `export const App = () => <div propA={true}></div>;` },
+                        { path: configFile.path, content: JSON.stringify(configObj) }
+                    ];
+                },
                 modifyFs: host => {
+                    const react = { name: "react", version: "0.0.1" };
                     host.createDirectory(`${project}/node_modules`);
                     host.createDirectory(`${project}/node_modules/react`);
                     host.createDirectory(`${project}/node_modules/react/jsx-runtime`);
                     host.writeFile(`${project}/node_modules/react/jsx-runtime/index.d.ts`, jsxLibraryContent);
-                    host.writeFile(`${project}/node_modules/react/package.json`, JSON.stringify({ name: "react", version: "0.0.1" }));
+                    host.writeFile(`${project}/node_modules/react/package.json`, JSON.stringify(react));
                 }
             });
 
             verifyIncrementalWatchEmit({
                 subScenario: "jsxImportSource backing types removed",
-                files: () => [
-                    { path: libFile.path, content: libContent },
-                    { path: `${project}/node_modules/react/jsx-runtime/index.d.ts`, content: jsxLibraryContent },
-                    { path: `${project}/node_modules/react/package.json`, content: JSON.stringify({ name: "react", version: "0.0.1" }) },
-                    { path: `${project}/index.tsx`, content: `export const App = () => <div propA={true}></div>;` },
-                    { path: configFile.path, content: JSON.stringify({ compilerOptions: jsxImportSourceOptions }) }
-                ],
+                files: () => {
+                    const react = { name: "react", version: "0.0.1" };
+                    const tsconfig = { compilerOptions: jsxImportSourceOptions };
+                    return [
+                        { path: libFile.path, content: libContent },
+                        { path: `${project}/node_modules/react/jsx-runtime/index.d.ts`, content: jsxLibraryContent },
+                        { path: `${project}/node_modules/react/package.json`, content: JSON.stringify(react) },
+                        { path: `${project}/index.tsx`, content: `export const App = () => <div propA={true}></div>;` },
+                        { path: configFile.path, content: JSON.stringify(tsconfig) }
+                    ];
+                },
                 modifyFs: host => {
                     host.deleteFile(`${project}/node_modules/react/jsx-runtime/index.d.ts`);
                     host.deleteFile(`${project}/node_modules/react/package.json`);
@@ -344,13 +372,17 @@ export const Fragment: unique symbol;
 
             verifyIncrementalWatchEmit({
                 subScenario: "importHelpers backing types removed",
-                files: () => [
-                    { path: libFile.path, content: libContent },
-                    { path: `${project}/node_modules/tslib/index.d.ts`, content: "export function __assign(...args: any[]): any;" },
-                    { path: `${project}/node_modules/tslib/package.json`, content: JSON.stringify({ name: "tslib", version: "0.0.1" }) },
-                    { path: `${project}/index.tsx`, content: `export const x = {...{}};` },
-                    { path: configFile.path, content: JSON.stringify({ compilerOptions: { importHelpers: true } }) }
-                ],
+                files: () => {
+                    const tslib = { name: "tslib", version: "0.0.1" };
+                    const tsconfig = { compilerOptions: { importHelpers: true } };
+                    return [
+                        { path: libFile.path, content: libContent },
+                        { path: `${project}/node_modules/tslib/index.d.ts`, content: "export function __assign(...args: any[]): any;" },
+                        { path: `${project}/node_modules/tslib/package.json`, content: JSON.stringify(tslib) },
+                        { path: `${project}/index.tsx`, content: `export const x = {...{}};` },
+                        { path: configFile.path, content: JSON.stringify(tsconfig) }
+                    ];
+                },
                 modifyFs: host => {
                     host.deleteFile(`${project}/node_modules/tslib/index.d.ts`);
                     host.deleteFile(`${project}/node_modules/tslib/package.json`);
@@ -361,13 +393,16 @@ export const Fragment: unique symbol;
         describe("editing module augmentation", () => {
             verifyIncrementalWatchEmit({
                 subScenario: "editing module augmentation",
-                files: () => [
-                    { path: libFile.path, content: libContent },
-                    { path: `${project}/node_modules/classnames/index.d.ts`, content: `export interface Result {} export default function classNames(): Result;` },
-                    { path: `${project}/src/types/classnames.d.ts`, content: `export {}; declare module "classnames" { interface Result { foo } }` },
-                    { path: `${project}/src/index.ts`, content: `import classNames from "classnames"; classNames().foo;` },
-                    { path: configFile.path, content: JSON.stringify({ compilerOptions: { module: "commonjs", incremental: true } }) },
-                ],
+                files: () => {
+                    const configObj = { compilerOptions: { module: "commonjs", incremental: true } };
+                    return [
+                        { path: libFile.path, content: libContent },
+                        { path: `${project}/node_modules/classnames/index.d.ts`, content: `export interface Result {} export default function classNames(): Result;` },
+                        { path: `${project}/src/types/classnames.d.ts`, content: `export {}; declare module "classnames" { interface Result { foo } }` },
+                        { path: `${project}/src/index.ts`, content: `import classNames from "classnames"; classNames().foo;` },
+                        { path: configFile.path, content: JSON.stringify(configObj) },
+                    ];
+                },
                 modifyFs: host => {
                     // delete 'foo'
                     host.writeFile(`${project}/src/types/classnames.d.ts`, `export {}; declare module "classnames" { interface Result {} }`);

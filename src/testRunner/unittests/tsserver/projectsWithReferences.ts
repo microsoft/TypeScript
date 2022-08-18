@@ -23,38 +23,42 @@ namespace ts.projectSystem {
             host.checkTimeoutQueueLengthAndRun(2);
 
             // change in project reference config file
-            host.writeFile(logicConfig.path, JSON.stringify({
+            const logicConfigObj ={
                 compilerOptions: { composite: true, declaration: true, declarationDir: "decls" },
                 references: [{ path: "../core" }]
-            }));
+            };
+            host.writeFile(logicConfig.path, JSON.stringify(logicConfigObj));
             host.checkTimeoutQueueLengthAndRun(2);
             baselineTsserverLogs("projectsWithReferences", "sample project", service);
         });
 
         describe("on transitive references in different folders", () => {
             function createService() {
-                const aConfig: File = {
-                    path: `${tscWatch.projectRoot}/a/tsconfig.json`,
-                    content: JSON.stringify({
+                const aObj ={
                         compilerOptions: { composite: true },
                         files: ["index.ts"]
-                    }),
+                    };
+                const aConfig: File = {
+                    path: `${tscWatch.projectRoot}/a/tsconfig.json`,
+                    content: JSON.stringify(aObj),
                 };
-                const bConfig: File = {
-                    path: `${tscWatch.projectRoot}/b/tsconfig.json`,
-                    content: JSON.stringify({
+                const bObj ={
                         compilerOptions: { composite: true, baseUrl: "./", paths: { "@ref/*": ["../*"] } },
                         files: ["index.ts"],
                         references: [{ path: `../a` }]
-                    }),
+                    };
+                const bConfig: File = {
+                    path: `${tscWatch.projectRoot}/b/tsconfig.json`,
+                    content: JSON.stringify(bObj),
                 };
-                const cConfig: File = {
-                    path: `${tscWatch.projectRoot}/c/tsconfig.json`,
-                    content: JSON.stringify({
+                const cObj ={
                         compilerOptions: { baseUrl: "./", paths: { "@ref/*": ["../refs/*"] } },
                         files: ["index.ts"],
                         references: [{ path: `../b` }]
-                    }),
+                    };
+                const cConfig: File = {
+                    path: `${tscWatch.projectRoot}/c/tsconfig.json`,
+                    content: JSON.stringify(cObj),
                 };
                 const aTs: File = {
                     path: `${tscWatch.projectRoot}/a/index.ts`,
@@ -102,7 +106,7 @@ export class A {}`
                 const cTsConfigJson = JSON.parse(cConfig.content);
                 host.ensureFileOrFolder(nRefsTs);
                 cTsConfigJson.compilerOptions.paths = { "@ref/*": ["../nrefs/*"] };
-                host.writeFile(cConfig.path, JSON.stringify(cTsConfigJson));
+                host.writeFile(cConfig.path, JSON.stringify(cTsConfigJson as object));
                 host.checkTimeoutQueueLengthAndRun(2);
 
                 // revert the edit on config file
@@ -120,7 +124,7 @@ export class A {}`
                 const bTsConfigJson = JSON.parse(bConfig.content);
                 host.ensureFileOrFolder(nRefsTs);
                 bTsConfigJson.compilerOptions.paths = { "@ref/*": ["../nrefs/*"] };
-                host.writeFile(bConfig.path, JSON.stringify(bTsConfigJson));
+                host.writeFile(bConfig.path, JSON.stringify(bTsConfigJson as object));
                 host.checkTimeoutQueueLengthAndRun(2);
 
                 // revert the edit on config file
@@ -154,23 +158,26 @@ export class A {}`
 
         describe("on transitive references in different folders without files", () => {
             function createService() {
+                const aObj ={ compilerOptions: { composite: true } };
                 const aConfig: File = {
                     path: `${tscWatch.projectRoot}/a/tsconfig.json`,
-                    content: JSON.stringify({ compilerOptions: { composite: true } }),
+                    content: JSON.stringify(aObj),
                 };
-                const bConfig: File = {
-                    path: `${tscWatch.projectRoot}/b/tsconfig.json`,
-                    content: JSON.stringify({
+                const bObj ={
                         compilerOptions: { composite: true, baseUrl: "./", paths: { "@ref/*": ["../*"] } },
                         references: [{ path: `../a` }]
-                    }),
+                    };
+                const bConfig: File = {
+                    path: `${tscWatch.projectRoot}/b/tsconfig.json`,
+                    content: JSON.stringify(bObj),
                 };
-                const cConfig: File = {
-                    path: `${tscWatch.projectRoot}/c/tsconfig.json`,
-                    content: JSON.stringify({
+                const cObj ={
                         compilerOptions: { baseUrl: "./", paths: { "@ref/*": ["../refs/*"] } },
                         references: [{ path: `../b` }]
-                    }),
+                    };
+                const cConfig: File = {
+                    path: `${tscWatch.projectRoot}/c/tsconfig.json`,
+                    content: JSON.stringify(cObj),
                 };
                 const aTs: File = {
                     path: `${tscWatch.projectRoot}/a/index.ts`,
@@ -217,7 +224,7 @@ export class A {}`
                 const cTsConfigJson = JSON.parse(cConfig.content);
                 host.ensureFileOrFolder(nRefsTs);
                 cTsConfigJson.compilerOptions.paths = { "@ref/*": ["../nrefs/*"] };
-                host.writeFile(cConfig.path, JSON.stringify(cTsConfigJson));
+                host.writeFile(cConfig.path, JSON.stringify(cTsConfigJson as object));
                 host.checkTimeoutQueueLengthAndRun(2);
 
                 // revert the edit on config file
@@ -235,7 +242,7 @@ export class A {}`
                 const bTsConfigJson = JSON.parse(bConfig.content);
                 host.ensureFileOrFolder(nRefsTs);
                 bTsConfigJson.compilerOptions.paths = { "@ref/*": ["../nrefs/*"] };
-                host.writeFile(bConfig.path, JSON.stringify(bTsConfigJson));
+                host.writeFile(bConfig.path, JSON.stringify(bTsConfigJson as object));
                 host.checkTimeoutQueueLengthAndRun(2);
 
                 // revert the edit on config file

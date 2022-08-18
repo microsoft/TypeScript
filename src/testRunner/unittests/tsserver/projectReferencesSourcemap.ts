@@ -12,9 +12,10 @@ export function fn4() { }
 export function fn5() { }
 `
         };
+        const dependencyObj ={ compilerOptions: { composite: true, declarationMap: true, declarationDir: "../decls" } };
         const dependencyConfig: File = {
             path: `${dependecyLocation}/tsconfig.json`,
-            content: JSON.stringify({ compilerOptions: { composite: true, declarationMap: true, declarationDir: "../decls" } })
+            content: JSON.stringify(dependencyObj)
         };
 
         const mainTs: File = {
@@ -34,12 +35,13 @@ fn4();
 fn5();
 `
         };
-        const mainConfig: File = {
-            path: `${mainLocation}/tsconfig.json`,
-            content: JSON.stringify({
+        const mainObj ={
                 compilerOptions: { composite: true, declarationMap: true },
                 references: [{ path: "../dependency" }]
-            })
+            };
+        const mainConfig: File = {
+            path: `${mainLocation}/tsconfig.json`,
+            content: JSON.stringify(mainObj)
         };
 
         const randomFile: File = {
@@ -211,10 +213,11 @@ fn5();
 
         function createSessionWithoutProjectReferences(onHostCreate?: OnHostCreate) {
             const host = createHostWithSolutionBuild(files, [mainConfig.path]);
-            // Erase project reference
-            host.writeFile(mainConfig.path, JSON.stringify({
+            const configObj ={
                 compilerOptions: { composite: true, declarationMap: true }
-            }));
+            };
+            // Erase project reference
+            host.writeFile(mainConfig.path, JSON.stringify(configObj));
             onHostCreate?.(host);
             const session = createSession(host, { logger: createLoggerWithInMemoryLogs() });
             return { host, session };
@@ -230,14 +233,15 @@ fn5();
         function createSessionWithDisabledProjectReferences(onHostCreate?: OnHostCreate) {
             const host = createHostWithSolutionBuild(files, [mainConfig.path]);
             // Erase project reference
-            host.writeFile(mainConfig.path, JSON.stringify({
+            const configObj ={
                 compilerOptions: {
                     composite: true,
                     declarationMap: true,
                     disableSourceOfProjectReferenceRedirect: true
                 },
                 references: [{ path: "../dependency" }]
-            }));
+            };
+            host.writeFile(mainConfig.path, JSON.stringify(configObj));
             onHostCreate?.(host);
             const session = createSession(host, { logger: createLoggerWithInMemoryLogs() });
             return { host, session };

@@ -94,6 +94,13 @@ namespace ts.tscWatch {
                     return { path: `./pkg${index}` };
                 }
                 function pkgFiles(index: number): File[] {
+                    const tsconfigObj = {
+                        complerOptions: { composite: true },
+                        include: [
+                            "**/*.ts",
+                            "../typings/xterm.d.ts"
+                        ]
+                    };
                     return [
                         {
                             path: `${project}/pkg${index}/index.ts`,
@@ -101,22 +108,17 @@ namespace ts.tscWatch {
                         },
                         {
                             path: `${project}/pkg${index}/tsconfig.json`,
-                            content: JSON.stringify({
-                                complerOptions: { composite: true },
-                                include: [
-                                    "**/*.ts",
-                                    "../typings/xterm.d.ts"
-                                ]
-                            })
+                            content: JSON.stringify(tsconfigObj)
                         }
                     ];
                 }
                 function writePkgReferences(system: TestFSWithWatch.TestServerHost) {
-                    system.writeFile(configPath, JSON.stringify({
+                    const config = {
                         files: [],
                         include: [],
                         references: pkgs(createPkgReference)
-                    }));
+                    };
+                    system.writeFile(configPath, JSON.stringify(config));
                 }
             });
         }

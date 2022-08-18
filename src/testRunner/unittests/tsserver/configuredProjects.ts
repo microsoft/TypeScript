@@ -404,9 +404,10 @@ namespace ts.projectSystem {
                 path: `${tscWatch.projectRoot}/a/c/f3.ts`,
                 content: "export let y = 1"
             };
+            const configObj ={ compilerOptions: {}, files: ["f2.ts", "f3.ts"] };
             const configFile = {
                 path: `${tscWatch.projectRoot}/a/c/tsconfig.json`,
-                content: JSON.stringify({ compilerOptions: {}, files: ["f2.ts", "f3.ts"] })
+                content: JSON.stringify(configObj)
             };
 
             const host = createServerHost([file1, file2, file3]);
@@ -438,9 +439,10 @@ namespace ts.projectSystem {
                 path: "/a/b/f2.ts",
                 content: "let y = 1"
             };
+            const configObj ={ compilerOptions: {} };
             const configFile = {
                 path: "/a/b/tsconfig.json",
-                content: JSON.stringify({ compilerOptions: {} })
+                content: JSON.stringify(configObj)
             };
 
             const host = createServerHost([file1, configFile]);
@@ -467,9 +469,10 @@ namespace ts.projectSystem {
                 path: "/a/b/f2.ts",
                 content: "let y = 1"
             };
+            const configObj1 ={ compilerOptions: {}, files: ["f1.ts"] };
             const configFile = {
                 path: "/a/b/tsconfig.json",
-                content: JSON.stringify({ compilerOptions: {}, files: ["f1.ts"] })
+                content: JSON.stringify(configObj1)
             };
 
             const host = createServerHost([file1, file2, configFile]);
@@ -479,7 +482,8 @@ namespace ts.projectSystem {
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             checkProjectActualFiles(configuredProjectAt(projectService, 0), [file1.path, configFile.path]);
 
-            host.writeFile(configFile.path, JSON.stringify({ compilerOptions: {}, files: ["f1.ts", "f2.ts"] }));
+            const configObj2 = { compilerOptions: {}, files: ["f1.ts", "f2.ts"] };
+            host.writeFile(configFile.path, JSON.stringify(configObj2));
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             host.checkTimeoutQueueLengthAndRun(2);
@@ -495,9 +499,10 @@ namespace ts.projectSystem {
                 path: "/a/b/f2.ts",
                 content: "let y = 1"
             };
+            const configObj1 ={ compilerOptions: {}, files: ["f1.ts", "f2.ts"] };
             const configFile = {
                 path: "/a/b/tsconfig.json",
-                content: JSON.stringify({ compilerOptions: {}, files: ["f1.ts", "f2.ts"] })
+                content: JSON.stringify(configObj1)
             };
 
             const host = createServerHost([file1, file2, configFile]);
@@ -507,7 +512,8 @@ namespace ts.projectSystem {
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             checkProjectActualFiles(configuredProjectAt(projectService, 0), [file1.path, file2.path, configFile.path]);
 
-            host.writeFile(configFile.path, JSON.stringify({ compilerOptions: { outFile: "out.js" }, files: ["f1.ts", "f2.ts"] }));
+            const configObj2 ={ compilerOptions: { outFile: "out.js" }, files: ["f1.ts", "f2.ts"] };
+            host.writeFile(configFile.path, JSON.stringify(configObj2));
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             checkProjectRootFiles(configuredProjectAt(projectService, 0), [file1.path, file2.path]);
@@ -530,9 +536,10 @@ namespace ts.projectSystem {
                 path: "/a/file4.ts",
                 content: "let z = 1;"
             };
+            const configObj ={ files: ["src/file1.ts", "file3.ts"] };
             const configFile = {
                 path: "/a/b/tsconfig.json",
-                content: JSON.stringify({ files: ["src/file1.ts", "file3.ts"] })
+                content: JSON.stringify(configObj)
             };
 
             const files = [file1, file2, file3, file4];
@@ -599,9 +606,10 @@ namespace ts.projectSystem {
                 path: "/a/file4.ts",
                 content: "let z = 1;"
             };
+            const configObj ={ files: ["src/file1.ts", "file3.ts"] };
             const configFile = {
                 path: "/a/b/tsconfig.json",
-                content: JSON.stringify({ files: ["src/file1.ts", "file3.ts"] })
+                content: JSON.stringify(configObj)
             };
 
             const files = [file1, file2, file3];
@@ -661,9 +669,10 @@ namespace ts.projectSystem {
                 path: "/a/lib.js",
                 content: "var x = 1"
             };
+            const configObj ={ compilerOptions: { allowJs: true } };
             const config = {
                 path: "/a/tsconfig.json",
-                content: JSON.stringify({ compilerOptions: { allowJs: true } })
+                content: JSON.stringify(configObj)
             };
             const host = createServerHost([f1, f2, f3, config]);
             const originalGetFileSize = host.getFileSize;
@@ -745,14 +754,15 @@ namespace ts.projectSystem {
         });
 
         it("when multiple projects are open, detects correct default project", () => {
-            const barConfig: File = {
-                path: `${tscWatch.projectRoot}/bar/tsconfig.json`,
-                content: JSON.stringify({
+            const barConfigObj ={
                     include: ["index.ts"],
                     compilerOptions: {
                         lib: ["dom", "es2017"]
                     }
-                })
+                };
+            const barConfig: File = {
+                path: `${tscWatch.projectRoot}/bar/tsconfig.json`,
+                content: JSON.stringify(barConfigObj)
             };
             const barIndex: File = {
                 path: `${tscWatch.projectRoot}/bar/index.ts`,
@@ -761,14 +771,15 @@ export function bar() {
   console.log("hello world");
 }`
             };
-            const fooConfig: File = {
-                path: `${tscWatch.projectRoot}/foo/tsconfig.json`,
-                content: JSON.stringify({
+            const fooConfigObj ={
                     include: ["index.ts"],
                     compilerOptions: {
                         lib: ["es2017"]
                     }
-                })
+                };
+            const fooConfig: File = {
+                path: `${tscWatch.projectRoot}/foo/tsconfig.json`,
+                content: JSON.stringify(fooConfigObj)
             };
             const fooIndex: File = {
                 path: `${tscWatch.projectRoot}/foo/index.ts`,
@@ -826,26 +837,28 @@ declare var console: {
                 path: `${tscWatch.projectRoot}/src/bar.ts`,
                 content: "export function bar() { }"
             };
+            const configObj ={
+                    include: ["./src"]
+                };
             const config: File = {
                 path: `${tscWatch.projectRoot}/tsconfig.json`,
-                content: JSON.stringify({
-                    include: ["./src"]
-                })
+                content: JSON.stringify(configObj)
             };
             const fooBar: File = {
                 path: `${tscWatch.projectRoot}/src/sub/fooBar.ts`,
                 content: "export function fooBar() { }"
             };
             function verifySessionWorker({ withExclude, openFileBeforeCreating }: VerifySession, errorOnNewFileBeforeOldFile: boolean) {
+                const configObj ={
+                                include: ["./src"],
+                                exclude: ["./src/sub"]
+                            };
                 const host = createServerHost([
                     foo, bar, libFile, { path: `${tscWatch.projectRoot}/src/sub` },
                     withExclude ?
                         {
                             path: config.path,
-                            content: JSON.stringify({
-                                include: ["./src"],
-                                exclude: ["./src/sub"]
-                            })
+                            content: JSON.stringify(configObj)
                         } :
                         config
                 ]);
@@ -941,15 +954,16 @@ foo();`
                 path: `${tscWatch.projectRoot}/foobar/index.ts`,
                 content: barIndex.content
             };
-            const fooConfig: File = {
-                path: `${tscWatch.projectRoot}/foo/tsconfig.json`,
-                content: JSON.stringify({
+            const fooConfigObj ={
                     include: ["index.ts"],
                     compilerOptions: {
                         declaration: true,
                         outDir: "lib"
                     }
-                })
+                };
+            const fooConfig: File = {
+                path: `${tscWatch.projectRoot}/foo/tsconfig.json`,
+                content: JSON.stringify(fooConfigObj)
             };
             const fooIndex: File = {
                 path: `${tscWatch.projectRoot}/foo/index.ts`,
@@ -987,29 +1001,32 @@ foo();`
                     path: `${tscWatch.projectRoot}/extended/alpha.tsconfig.json`,
                     content: "{}"
                 };
+                const bravoExtendedConfigObj ={
+                        extends: "./alpha.tsconfig.json"
+                    };
                 const bravoExtendedConfig: File = {
                     path: `${tscWatch.projectRoot}/extended/bravo.tsconfig.json`,
-                    content: JSON.stringify({
-                        extends: "./alpha.tsconfig.json"
-                    })
+                    content: JSON.stringify(bravoExtendedConfigObj)
                 };
-                const aConfig: File = {
-                    path: `${tscWatch.projectRoot}/a/tsconfig.json`,
-                    content: JSON.stringify({
+                const aObj ={
                         extends: "../extended/alpha.tsconfig.json",
                         files: ["a.ts"]
-                    })
+                    };
+                const aConfig: File = {
+                    path: `${tscWatch.projectRoot}/a/tsconfig.json`,
+                    content: JSON.stringify(aObj)
                 };
                 const aFile: File = {
                     path: `${tscWatch.projectRoot}/a/a.ts`,
                     content: `let a = 1;`
                 };
-                const bConfig: File = {
-                    path: `${tscWatch.projectRoot}/b/tsconfig.json`,
-                    content: JSON.stringify({
+                const bObj ={
                         extends: "../extended/bravo.tsconfig.json",
                         files: ["b.ts"]
-                    })
+                    };
+                const bConfig: File = {
+                    path: `${tscWatch.projectRoot}/b/tsconfig.json`,
+                    content: JSON.stringify(bObj)
                 };
                 const bFile: File = {
                     path: `${tscWatch.projectRoot}/b/b.ts`,
@@ -1027,24 +1044,27 @@ foo();`
                 projectService.openClientFile(aFile.path);
                 projectService.openClientFile(bFile.path);
 
-                host.writeFile(alphaExtendedConfig.path, JSON.stringify({
+                const alphaObj ={
                     compilerOptions: {
                         strict: true
                     }
-                }));
+                };
+                host.writeFile(alphaExtendedConfig.path, JSON.stringify(alphaObj));
                 host.checkTimeoutQueueLengthAndRun(3);
 
-                host.writeFile(bravoExtendedConfig.path, JSON.stringify({
+                const bravoObj= {
                     extends: "./alpha.tsconfig.json",
                     compilerOptions: {
                         strict: false
                     }
-                }));
+                };
+                host.writeFile(bravoExtendedConfig.path, JSON.stringify(bravoObj));
                 host.checkTimeoutQueueLengthAndRun(2);
 
-                host.writeFile(bConfig.path, JSON.stringify({
+                const bObj ={
                     extends: "../extended/alpha.tsconfig.json",
-                }));
+                };
+                host.writeFile(bConfig.path, JSON.stringify(bObj));
                 host.checkTimeoutQueueLengthAndRun(2);
 
                 host.writeFile(alphaExtendedConfig.path, "{}");
@@ -1111,12 +1131,13 @@ foo();`
                 path: "/a/app.ts",
                 content: "let x = 1"
             };
-            const config = {
-                path: "/a/tsconfig.json",
-                content: JSON.stringify({
+            const configObj ={
                     compiler: {},
                     files: []
-                })
+                };
+            const config = {
+                path: "/a/tsconfig.json",
+                content: JSON.stringify(configObj)
             };
             const t1 = {
                 path: "/a/node_modules/@types/typings/index.d.ts",
@@ -1139,9 +1160,7 @@ foo();`
                 path: `${tscWatch.projectRoot}/src/server/index.ts`,
                 content: "let x = 1"
             };
-            const config = {
-                path: `${tscWatch.projectRoot}/src/server/tsconfig.json`,
-                content: JSON.stringify({
+            const configObj ={
                     compiler: {
                         module: "commonjs",
                         outDir: "../../build"
@@ -1149,7 +1168,10 @@ foo();`
                     include: [
                         "../src/**/*.ts"
                     ]
-                })
+                };
+            const config = {
+                path: `${tscWatch.projectRoot}/src/server/tsconfig.json`,
+                content: JSON.stringify(configObj)
             };
             const host = createServerHost([f, config, libFile], { useCaseSensitiveFileNames: true });
             const projectService = createProjectService(host);
@@ -1172,9 +1194,10 @@ foo();`
                 path: "/a/b/file2.ts",
                 content: "export classc { method2() { return 10; } }"
             };
+            const configObj ={ files: [file1.path], compilerOptions: { module: "amd" } };
             const configFile: File = {
                 path: "/a/b/tsconfig.json",
-                content: JSON.stringify({ files: [file1.path], compilerOptions: { module: "amd" } })
+                content: JSON.stringify(configObj)
             };
             const files = [file1, file2a, configFile, libFile];
             const host = createServerHost(files);
@@ -1209,9 +1232,10 @@ foo();`
                 path: "/a/b/node_modules/module/node_modules/module3/index.d.ts",
                 content: "export class3 { method2() { return 10; } }"
             };
+            const configObj ={ files: ["file1.ts"] };
             const configFile: File = {
                 path: "/a/b/src/tsconfig.json",
-                content: JSON.stringify({ files: ["file1.ts"] })
+                content: JSON.stringify(configObj)
             };
             const nonLibFiles = [file1, module1, module2, module3, configFile];
             nonLibFiles.forEach(f => f.path = root + f.path);

@@ -11,13 +11,14 @@ namespace ts.projectSystem {
             it(scenario, () => {
                 const projectFolder = "/a/username/project";
                 const projectSrcFolder = `${projectFolder}/src`;
+                const configObj = {
+                    watchOptions: {
+                        synchronousWatchDirectory: true
+                    }
+                };
                 const configFile: File = {
                     path: `${projectFolder}/tsconfig.json`,
-                    content: JSON.stringify({
-                        watchOptions: {
-                            synchronousWatchDirectory: true
-                        }
-                    })
+                    content: JSON.stringify(configObj)
                 };
                 const index: File = {
                     path: `${projectSrcFolder}/index.ts`,
@@ -263,13 +264,14 @@ namespace ts.projectSystem {
         });
 
         it("with watchFile option in configFile", () => {
+            const configObj = {
+                watchOptions: {
+                    watchFile: "UseFsEvents"
+                }
+            };
             const configFile: File = {
                 path: "/a/b/tsconfig.json",
-                content: JSON.stringify({
-                    watchOptions: {
-                        watchFile: "UseFsEvents"
-                    }
-                })
+                content: JSON.stringify(configObj)
             };
             const files = [libFile, commonFile2, configFile];
             const host = createServerHost(files.concat(commonFile1));
@@ -281,13 +283,14 @@ namespace ts.projectSystem {
         });
 
         it("with watchDirectory option in configFile", () => {
+            const configObj = {
+                watchOptions: {
+                    watchDirectory: "UseFsEvents"
+                }
+            };
             const configFile: File = {
                 path: "/a/b/tsconfig.json",
-                content: JSON.stringify({
-                    watchOptions: {
-                        watchDirectory: "UseFsEvents"
-                    }
-                })
+                content: JSON.stringify(configObj)
             };
             const files = [libFile, commonFile2, configFile];
             const host = createServerHost(files.concat(commonFile1), { runWithoutRecursiveWatches: true });
@@ -299,13 +302,14 @@ namespace ts.projectSystem {
         });
 
         it("with fallbackPolling option in configFile", () => {
+            const configObj = {
+                watchOptions: {
+                    fallbackPolling: "PriorityInterval"
+                }
+            };
             const configFile: File = {
                 path: "/a/b/tsconfig.json",
-                content: JSON.stringify({
-                    watchOptions: {
-                        fallbackPolling: "PriorityInterval"
-                    }
-                })
+                content: JSON.stringify(configObj)
             };
             const files = [libFile, commonFile2, configFile];
             const host = createServerHost(files.concat(commonFile1), { runWithoutRecursiveWatches: true, runWithFallbackPolling: true });
@@ -349,9 +353,10 @@ namespace ts.projectSystem {
                 }
             }
             function setup(configureHost?: boolean) {
+                const configObj = { include: ["src"], watchOptions: { excludeDirectories: ["node_modules"] } };
                 const configFile: File = {
                     path: `${tscWatch.projectRoot}/tsconfig.json`,
-                    content: JSON.stringify({ include: ["src"], watchOptions: { excludeDirectories: ["node_modules"] } })
+                    content: JSON.stringify(configObj)
                 };
                 const { main, bar, foo } = setupFiles();
                 const files = [libFile, main, bar, foo, configFile];
@@ -501,14 +506,15 @@ namespace ts.projectSystem {
     describe("unittests:: tsserver:: watchEnvironment:: watchFile is single watcher per file", () => {
         function verifyWatchFile(scenario: string, environmentVariables?: ESMap<string, string>) {
             it(scenario, () => {
+                const configObj = {
+                    compilerOptions: {
+                        composite: true,
+                        resolveJsonModule: true,
+                    },
+                };
                 const config: File = {
                     path: `${tscWatch.projectRoot}/tsconfig.json`,
-                    content: JSON.stringify({
-                        compilerOptions: {
-                            composite: true,
-                            resolveJsonModule: true,
-                        },
-                    })
+                    content: JSON.stringify(configObj)
                 };
                 const index: File = {
                     path: `${tscWatch.projectRoot}/index.ts`,

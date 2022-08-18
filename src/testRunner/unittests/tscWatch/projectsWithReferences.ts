@@ -43,10 +43,11 @@ namespace ts.tscWatch {
                 {
                     caption: "change in project reference config file builds correctly",
                     change: sys => {
-                        sys.writeFile(TestFSWithWatch.getTsBuildProjectFilePath("sample1", "logic/tsconfig.json"), JSON.stringify({
+                        const logicConfigObj = {
                             compilerOptions: { composite: true, declaration: true, declarationDir: "decls" },
                             references: [{ path: "../core" }]
-                        }));
+                        };
+                        sys.writeFile(TestFSWithWatch.getTsBuildProjectFilePath("sample1", "logic/tsconfig.json"), JSON.stringify(logicConfigObj));
                         const solutionBuilder = createSolutionBuilder(sys, ["logic"]);
                         solutionBuilder.build();
                     },
@@ -59,7 +60,7 @@ namespace ts.tscWatch {
         function changeCompilerOpitonsPaths(sys: WatchedSystem, config: string, newPaths: object) {
             const configJson = JSON.parse(sys.readFile(config)!);
             configJson.compilerOptions.paths = newPaths;
-            sys.writeFile(config, JSON.stringify(configJson));
+            sys.writeFile(config, JSON.stringify(configJson as object));
         }
 
         verifyTscWatch({
@@ -143,30 +144,33 @@ namespace ts.tscWatch {
         verifyTscWatch({
             scenario: "projectsWithReferences",
             subScenario: "when referenced project uses different module resolution",
-            sys: () => createSystemWithSolutionBuild(
-                ["tsconfig.c.json"],
-                [
-                    libFile,
-                    TestFSWithWatch.getTsBuildProjectFile("transitiveReferences", "tsconfig.a.json"),
-                    {
-                        path: TestFSWithWatch.getTsBuildProjectFilePath("transitiveReferences", "tsconfig.b.json"),
-                        content: JSON.stringify({
-                            compilerOptions: { composite: true, moduleResolution: "classic" },
-                            files: ["b.ts"],
-                            references: [{ path: "tsconfig.a.json" }]
-                        })
-                    },
-                    TestFSWithWatch.getTsBuildProjectFile("transitiveReferences", "tsconfig.c.json"),
-                    TestFSWithWatch.getTsBuildProjectFile("transitiveReferences", "a.ts"),
-                    {
-                        path: TestFSWithWatch.getTsBuildProjectFilePath("transitiveReferences", "b.ts"),
-                        content: `import {A} from "a";export const b = new A();`
-                    },
-                    TestFSWithWatch.getTsBuildProjectFile("transitiveReferences", "c.ts"),
-                    TestFSWithWatch.getTsBuildProjectFile("transitiveReferences", "refs/a.d.ts"),
-                ],
-                { currentDirectory: `${TestFSWithWatch.tsbuildProjectsLocation}/transitiveReferences` }
-            ),
+            sys: () => {
+                const tsconfigObj = {
+                    compilerOptions: { composite: true, moduleResolution: "classic" },
+                    files: ["b.ts"],
+                    references: [{ path: "tsconfig.a.json" }]
+                };
+                return createSystemWithSolutionBuild(
+                    ["tsconfig.c.json"],
+                    [
+                        libFile,
+                        TestFSWithWatch.getTsBuildProjectFile("transitiveReferences", "tsconfig.a.json"),
+                        {
+                            path: TestFSWithWatch.getTsBuildProjectFilePath("transitiveReferences", "tsconfig.b.json"),
+                            content: JSON.stringify(tsconfigObj)
+                        },
+                        TestFSWithWatch.getTsBuildProjectFile("transitiveReferences", "tsconfig.c.json"),
+                        TestFSWithWatch.getTsBuildProjectFile("transitiveReferences", "a.ts"),
+                        {
+                            path: TestFSWithWatch.getTsBuildProjectFilePath("transitiveReferences", "b.ts"),
+                            content: `import {A} from "a";export const b = new A();`
+                        },
+                        TestFSWithWatch.getTsBuildProjectFile("transitiveReferences", "c.ts"),
+                        TestFSWithWatch.getTsBuildProjectFile("transitiveReferences", "refs/a.d.ts"),
+                    ],
+                    { currentDirectory: `${TestFSWithWatch.tsbuildProjectsLocation}/transitiveReferences` }
+                );
+            },
             commandLineArgs: ["-w", "-p", "tsconfig.c.json"],
             changes: emptyArray,
             baselineDependencies: true,
@@ -175,53 +179,58 @@ namespace ts.tscWatch {
         verifyTscWatch({
             scenario: "projectsWithReferences",
             subScenario: "on transitive references in different folders",
-            sys: () => createSystemWithSolutionBuild(
-                ["c"],
-                [
-                    libFile,
-                    {
-                        path: TestFSWithWatch.getTsBuildProjectFilePath("transitiveReferences", "a/tsconfig.json"),
-                        content: JSON.stringify({
-                            compilerOptions: { composite: true },
-                            files: ["index.ts"]
-                        }),
-                    },
-                    {
-                        path: TestFSWithWatch.getTsBuildProjectFilePath("transitiveReferences", "b/tsconfig.json"),
-                        content: JSON.stringify({
-                            compilerOptions: { composite: true, baseUrl: "./", paths: { "@ref/*": ["../*"] } },
-                            files: ["index.ts"],
-                            references: [{ path: `../a` }]
-                        }),
-                    },
-                    {
-                        path: TestFSWithWatch.getTsBuildProjectFilePath("transitiveReferences", "c/tsconfig.json"),
-                        content: JSON.stringify({
-                            compilerOptions: { baseUrl: "./", paths: { "@ref/*": ["../refs/*"] } },
-                            files: ["index.ts"],
-                            references: [{ path: `../b` }]
-                        }),
-                    },
-                    {
-                        path: TestFSWithWatch.getTsBuildProjectFilePath("transitiveReferences", "a/index.ts"),
-                        content: `export class A {}`,
-                    },
-                    {
-                        path: TestFSWithWatch.getTsBuildProjectFilePath("transitiveReferences", "b/index.ts"),
-                        content: `import {A} from '@ref/a';
+            sys: () => {
+                const aObj = {
+                    compilerOptions: { composite: true },
+                    files: ["index.ts"]
+                };
+                const bObj = {
+                    compilerOptions: { composite: true, baseUrl: "./", paths: { "@ref/*": ["../*"] } },
+                    files: ["index.ts"],
+                    references: [{ path: `../a` }]
+                };
+                const cObj = {
+                    compilerOptions: { baseUrl: "./", paths: { "@ref/*": ["../refs/*"] } },
+                    files: ["index.ts"],
+                    references: [{ path: `../b` }]
+                };
+                return createSystemWithSolutionBuild(
+                    ["c"],
+                    [
+                        libFile,
+                        {
+                            path: TestFSWithWatch.getTsBuildProjectFilePath("transitiveReferences", "a/tsconfig.json"),
+                            content: JSON.stringify(aObj),
+                        },
+                        {
+                            path: TestFSWithWatch.getTsBuildProjectFilePath("transitiveReferences", "b/tsconfig.json"),
+                            content: JSON.stringify(bObj),
+                        },
+                        {
+                            path: TestFSWithWatch.getTsBuildProjectFilePath("transitiveReferences", "c/tsconfig.json"),
+                            content: JSON.stringify(cObj),
+                        },
+                        {
+                            path: TestFSWithWatch.getTsBuildProjectFilePath("transitiveReferences", "a/index.ts"),
+                            content: `export class A {}`,
+                        },
+                        {
+                            path: TestFSWithWatch.getTsBuildProjectFilePath("transitiveReferences", "b/index.ts"),
+                            content: `import {A} from '@ref/a';
 export const b = new A();`,
-                    },
-                    {
-                        path: TestFSWithWatch.getTsBuildProjectFilePath("transitiveReferences", "c/index.ts"),
-                        content: `import {b} from '../b';
+                        },
+                        {
+                            path: TestFSWithWatch.getTsBuildProjectFilePath("transitiveReferences", "c/index.ts"),
+                            content: `import {b} from '../b';
 import {X} from "@ref/a";
 b;
 X;`,
-                    },
-                    TestFSWithWatch.getTsBuildProjectFile("transitiveReferences", "refs/a.d.ts"),
-                ],
-                { currentDirectory: `${TestFSWithWatch.tsbuildProjectsLocation}/transitiveReferences` }
-            ),
+                        },
+                        TestFSWithWatch.getTsBuildProjectFile("transitiveReferences", "refs/a.d.ts"),
+                    ],
+                    { currentDirectory: `${TestFSWithWatch.tsbuildProjectsLocation}/transitiveReferences` }
+                );
+            },
             commandLineArgs: ["-w", "-p", "c"],
             changes: [
                 {
@@ -266,14 +275,17 @@ X;`,
                 },
                 {
                     caption: "Revert deleting referenced config file",
-                    change: sys => sys.writeFile(
-                        TestFSWithWatch.getTsBuildProjectFilePath("transitiveReferences", "b/tsconfig.json"),
-                        JSON.stringify({
+                    change: sys => {
+                        const bObj = {
                             compilerOptions: { composite: true, baseUrl: "./", paths: { "@ref/*": ["../*"] } },
                             files: ["index.ts"],
                             references: [{ path: `../a` }]
-                        })
-                    ),
+                        };
+                        return sys.writeFile(
+                            TestFSWithWatch.getTsBuildProjectFilePath("transitiveReferences", "b/tsconfig.json"),
+                            JSON.stringify(bObj)
+                        );
+                    },
                     timeouts: sys => sys.checkTimeoutQueueLengthAndRun(2)
                 },
                 {
@@ -283,13 +295,16 @@ X;`,
                 },
                 {
                     caption: "Revert deleting transitively referenced config file",
-                    change: sys => sys.writeFile(
-                        TestFSWithWatch.getTsBuildProjectFilePath("transitiveReferences", "a/tsconfig.json"),
-                        JSON.stringify({
+                    change: sys => {
+                        const aObj = {
                             compilerOptions: { composite: true },
                             files: ["index.ts"]
-                        }),
-                    ),
+                        };
+                        return sys.writeFile(
+                            TestFSWithWatch.getTsBuildProjectFilePath("transitiveReferences", "a/tsconfig.json"),
+                            JSON.stringify(aObj),
+                        );
+                    },
                     timeouts: sys => sys.checkTimeoutQueueLengthAndRun(2)
                 },
             ],
@@ -299,48 +314,53 @@ X;`,
         verifyTscWatch({
             scenario: "projectsWithReferences",
             subScenario: "on transitive references in different folders with no files clause",
-            sys: () => createSystemWithSolutionBuild(
-                ["c"],
-                [
-                    libFile,
-                    {
-                        path: TestFSWithWatch.getTsBuildProjectFilePath("transitiveReferences", "a/tsconfig.json"),
-                        content: JSON.stringify({ compilerOptions: { composite: true } }),
-                    },
-                    {
-                        path: TestFSWithWatch.getTsBuildProjectFilePath("transitiveReferences", "b/tsconfig.json"),
-                        content: JSON.stringify({
-                            compilerOptions: { composite: true, baseUrl: "./", paths: { "@ref/*": ["../*"] } },
-                            references: [{ path: `../a` }]
-                        }),
-                    },
-                    {
-                        path: TestFSWithWatch.getTsBuildProjectFilePath("transitiveReferences", "c/tsconfig.json"),
-                        content: JSON.stringify({
-                            compilerOptions: { baseUrl: "./", paths: { "@ref/*": ["../refs/*"] } },
-                            references: [{ path: `../b` }]
-                        }),
-                    },
-                    {
-                        path: TestFSWithWatch.getTsBuildProjectFilePath("transitiveReferences", "a/index.ts"),
-                        content: `export class A {}`,
-                    },
-                    {
-                        path: TestFSWithWatch.getTsBuildProjectFilePath("transitiveReferences", "b/index.ts"),
-                        content: `import {A} from '@ref/a';
+            sys: () => {
+                const aObj = { compilerOptions: { composite: true } };
+                const bObj = {
+                    compilerOptions: { composite: true, baseUrl: "./", paths: { "@ref/*": ["../*"] } },
+                    references: [{ path: `../a` }]
+                };
+                const cObj = {
+                    compilerOptions: { baseUrl: "./", paths: { "@ref/*": ["../refs/*"] } },
+                    references: [{ path: `../b` }]
+                };
+                return createSystemWithSolutionBuild(
+                    ["c"],
+                    [
+                        libFile,
+                        {
+                            path: TestFSWithWatch.getTsBuildProjectFilePath("transitiveReferences", "a/tsconfig.json"),
+                            content: JSON.stringify(aObj),
+                        },
+                        {
+                            path: TestFSWithWatch.getTsBuildProjectFilePath("transitiveReferences", "b/tsconfig.json"),
+                            content: JSON.stringify(bObj),
+                        },
+                        {
+                            path: TestFSWithWatch.getTsBuildProjectFilePath("transitiveReferences", "c/tsconfig.json"),
+                            content: JSON.stringify(cObj),
+                        },
+                        {
+                            path: TestFSWithWatch.getTsBuildProjectFilePath("transitiveReferences", "a/index.ts"),
+                            content: `export class A {}`,
+                        },
+                        {
+                            path: TestFSWithWatch.getTsBuildProjectFilePath("transitiveReferences", "b/index.ts"),
+                            content: `import {A} from '@ref/a';
 export const b = new A();`,
-                    },
-                    {
-                        path: TestFSWithWatch.getTsBuildProjectFilePath("transitiveReferences", "c/index.ts"),
-                        content: `import {b} from '../b';
+                        },
+                        {
+                            path: TestFSWithWatch.getTsBuildProjectFilePath("transitiveReferences", "c/index.ts"),
+                            content: `import {b} from '../b';
 import {X} from "@ref/a";
 b;
 X;`,
-                    },
-                    TestFSWithWatch.getTsBuildProjectFile("transitiveReferences", "refs/a.d.ts"),
-                ],
-                { currentDirectory: `${TestFSWithWatch.tsbuildProjectsLocation}/transitiveReferences` }
-            ),
+                        },
+                        TestFSWithWatch.getTsBuildProjectFile("transitiveReferences", "refs/a.d.ts"),
+                    ],
+                    { currentDirectory: `${TestFSWithWatch.tsbuildProjectsLocation}/transitiveReferences` }
+                );
+            },
             commandLineArgs: ["-w", "-p", "c"],
             changes: [
                 {
@@ -385,13 +405,16 @@ X;`,
                 },
                 {
                     caption: "Revert deleting referenced config file",
-                    change: sys => sys.writeFile(
-                        TestFSWithWatch.getTsBuildProjectFilePath("transitiveReferences", "b/tsconfig.json"),
-                        JSON.stringify({
+                    change: sys => {
+                        const bObj = {
                             compilerOptions: { composite: true, baseUrl: "./", paths: { "@ref/*": ["../*"] } },
                             references: [{ path: `../a` }]
-                        })
-                    ),
+                        };
+                        return sys.writeFile(
+                            TestFSWithWatch.getTsBuildProjectFilePath("transitiveReferences", "b/tsconfig.json"),
+                            JSON.stringify(bObj)
+                        );
+                    },
                     timeouts: sys => sys.checkTimeoutQueueLengthAndRun(2)
                 },
                 {
@@ -401,10 +424,13 @@ X;`,
                 },
                 {
                     caption: "Revert deleting transitively referenced config file",
-                    change: sys => sys.writeFile(
-                        TestFSWithWatch.getTsBuildProjectFilePath("transitiveReferences", "a/tsconfig.json"),
-                        JSON.stringify({ compilerOptions: { composite: true } }),
-                    ),
+                    change: sys => {
+                        const aObj = { compilerOptions: { composite: true } };
+                        return sys.writeFile(
+                            TestFSWithWatch.getTsBuildProjectFilePath("transitiveReferences", "a/tsconfig.json"),
+                            JSON.stringify(aObj),
+                        );
+                    },
                     timeouts: sys => sys.checkTimeoutQueueLengthAndRun(2)
                 },
             ],

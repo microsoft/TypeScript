@@ -585,15 +585,18 @@ namespace ts {
     function forwardCall<T>(logger: Logger, actionDescription: string, returnJson: boolean, action: () => T, logPerformance: boolean): T | string {
         try {
             const result = simpleForwardCall(logger, actionDescription, action, logPerformance);
-            return returnJson ? JSON.stringify({ result }) : result as T;
+            const resultObj = { result };
+            return returnJson ? JSON.stringify(resultObj) : result as T;
         }
         catch (err) {
             if (err instanceof OperationCanceledException) {
-                return JSON.stringify({ canceled: true });
+                const canceledObj = { canceled: true };
+                return JSON.stringify(canceledObj);
             }
             logInternalError(logger, err);
             err.description = actionDescription;
-            return JSON.stringify({ error: err });
+            const errorObj = { error: err };
+            return JSON.stringify(errorObj);
         }
     }
 

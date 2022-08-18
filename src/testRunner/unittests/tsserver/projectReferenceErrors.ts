@@ -71,9 +71,10 @@ export function fn2() { }
 // Error in dependency ts file
 export let x: string = 10;`
             };
+            const dependencyConfigObj ={ compilerOptions: { composite: true, declarationDir: "../decls" } };
             const dependencyConfig: File = {
                 path: `${dependecyLocation}/tsconfig.json`,
-                content: JSON.stringify({ compilerOptions: { composite: true, declarationDir: "../decls" } })
+                content: JSON.stringify(dependencyConfigObj)
             };
             const usageTs: File = {
                 path: `${usageLocation}/usage.ts`,
@@ -87,12 +88,13 @@ fn2();
 fnErr();
 `
             };
-            const usageConfig: File = {
-                path: `${usageLocation}/tsconfig.json`,
-                content: JSON.stringify({
+            const usageConfigObj ={
                     compilerOptions: { composite: true },
                     references: [{ path: "../dependency" }]
-                })
+                };
+            const usageConfig: File = {
+                path: `${usageLocation}/tsconfig.json`,
+                content: JSON.stringify(usageConfigObj)
             };
             verifyUsageAndDependency("with module scenario", dependencyTs, dependencyConfig, usageTs, usageConfig);
         });
@@ -107,9 +109,10 @@ function fn2() { }
 // Error in dependency ts file
 let x: string = 10;`
             };
+            const dependencyConfigObj ={ compilerOptions: { composite: true, outFile: "../dependency.js" } };
             const dependencyConfig: File = {
                 path: `${dependecyLocation}/tsconfig.json`,
-                content: JSON.stringify({ compilerOptions: { composite: true, outFile: "../dependency.js" } })
+                content: JSON.stringify(dependencyConfigObj)
             };
             const usageTs: File = {
                 path: `${usageLocation}/usage.ts`,
@@ -118,12 +121,13 @@ fn2();
 fnErr();
 `
             };
-            const usageConfig: File = {
-                path: `${usageLocation}/tsconfig.json`,
-                content: JSON.stringify({
+            const usageConfigObj ={
                     compilerOptions: { composite: true, outFile: "../usage.js" },
                     references: [{ path: "../dependency" }]
-                })
+                };
+            const usageConfig: File = {
+                path: `${usageLocation}/tsconfig.json`,
+                content: JSON.stringify(usageConfigObj)
             };
             verifyUsageAndDependency("with non module", dependencyTs, dependencyConfig, usageTs, usageConfig);
         });

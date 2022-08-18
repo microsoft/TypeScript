@@ -3,7 +3,8 @@ namespace ts.projectSystem {
         // Tests that 'moduleSpecifiers.ts' will import from the redirecting file, and not from the file it redirects to, if that can provide a global module specifier.
         it("works with import fixes", () => {
             const packageContent = "export const foo: number;";
-            const packageJsonContent = JSON.stringify({ name: "foo", version: "1.2.3" });
+            const packageObj ={ name: "foo", version: "1.2.3" };
+            const packageJsonContent = JSON.stringify(packageObj);
             const aFooIndex: File = { path: "/a/node_modules/foo/index.d.ts", content: packageContent };
             const aFooPackage: File = { path: "/a/node_modules/foo/package.json", content: packageJsonContent };
             const bFooIndex: File = { path: "/b/node_modules/foo/index.d.ts", content: packageContent };

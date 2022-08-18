@@ -71,12 +71,13 @@ export const ghijkl = a.abcdef;`
         });
 
         it("should de-duplicate symbols when searching all projects", () => {
-            const solutionConfig: File = {
-                path: "/tsconfig.json",
-                content: JSON.stringify({
+            const solutionObj ={
                     references: [{ path: "./a" }, { path: "./b" }],
                     files: [],
-                })
+                };
+            const solutionConfig: File = {
+                path: "/tsconfig.json",
+                content: JSON.stringify(solutionObj)
             };
             const configFile1: File = {
                 path: "/a/tsconfig.json",

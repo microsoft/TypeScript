@@ -148,7 +148,7 @@ namespace Utils {
         }
     }
 
-    function isNodeOrArray(a: any): boolean {
+    function isNodeOrArray(a: any): a is ts.Node {
         return a !== undefined && typeof a.pos === "number";
     }
 

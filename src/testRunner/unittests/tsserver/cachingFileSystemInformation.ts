@@ -171,9 +171,7 @@ namespace ts.projectSystem {
                     export class Vessel extends Bookshelf {}
                 `
             };
-            const tsconfigFile: File = {
-                path: "/a/b/tsconfig.json",
-                content: JSON.stringify({
+            const tsconfigObj ={
                     compilerOptions: {
                         target: "es6",
                         module: "es6",
@@ -191,7 +189,10 @@ namespace ts.projectSystem {
                         "sql_updates",
                         "tests.build"
                     ]
-                })
+                };
+            const tsconfigFile: File = {
+                path: "/a/b/tsconfig.json",
+                content: JSON.stringify(tsconfigObj)
             };
             const projectFiles = [clientFile, anotherModuleFile, moduleFile, tsconfigFile];
             const host = createServerHost(projectFiles);
@@ -238,9 +239,7 @@ namespace ts.projectSystem {
                     };
                     const typeRoots = ["types", "node_modules/@types"];
                     const types = ["node", "jest"];
-                    const tsconfigFile: File = {
-                        path: `${frontendDir}/tsconfig.json`,
-                        content: JSON.stringify({
+                    const tsconfigObj ={
                             compilerOptions: {
                                 strict: true,
                                 strictNullChecks: true,
@@ -269,7 +268,10 @@ namespace ts.projectSystem {
                                 "node_modules",
                                 "compiled"
                             ]
-                        })
+                        };
+                    const tsconfigFile: File = {
+                        path: `${frontendDir}/tsconfig.json`,
+                        content: JSON.stringify(tsconfigObj)
                     };
                     const projectFiles = [file1, file2, es2016LibFile, tsconfigFile];
                     const host = createServerHost(projectFiles, { useCaseSensitiveFileNames });
@@ -303,12 +305,13 @@ namespace ts.projectSystem {
                     path: `${projectLocation}/foo/boo/moo/app.ts`,
                     content: `import * as debug from "debug"`
                 };
-                const tsconfig: File = {
-                    path: `${projectLocation}/tsconfig.json`,
-                    content: JSON.stringify({
+                const tsconfigObj ={
                         files: ["foo/boo/app.ts", "foo/boo/moo/app.ts"],
                         moduleResolution: resolution
-                    })
+                    };
+                const tsconfig: File = {
+                    path: `${projectLocation}/tsconfig.json`,
+                    content: JSON.stringify(tsconfigObj)
                 };
 
                 const files = [file1, file2, tsconfig, libFile];
@@ -551,15 +554,16 @@ namespace ts.projectSystem {
                 path: `${tscWatch.projectRoot}/client/linktofolder2`,
                 symLink: `${tscWatch.projectRoot}/folder2`,
             };
-            const config: File = {
-                path: `${tscWatch.projectRoot}/tsconfig.json`,
-                content: JSON.stringify({
+            const configObj ={
                     compilerOptions: {
                         baseUrl: "client",
                         paths: { "*": ["*"] },
                     },
                     include: ["client/**/*", "folder2"]
-                })
+                };
+            const config: File = {
+                path: `${tscWatch.projectRoot}/tsconfig.json`,
+                content: JSON.stringify(configObj)
             };
             const host = createServerHost([module1, module2, symlink, config, libFile]);
             const service = createProjectService(host);

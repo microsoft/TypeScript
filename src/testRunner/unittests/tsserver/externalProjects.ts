@@ -6,11 +6,12 @@ namespace ts.projectSystem {
                     path: "/a/b/app.ts",
                     content: "let x = 1"
                 };
+                const configObj ={
+                        include: []
+                    };
                 const config = {
                     path: "/a/b/tsconfig.json",
-                    content: JSON.stringify({
-                        include: []
-                    })
+                    content: JSON.stringify(configObj)
                 };
 
                 const host = createServerHost([f1, config], { useCaseSensitiveFileNames: false });
@@ -253,27 +254,29 @@ namespace ts.projectSystem {
                 path: "/a/b/f1.ts",
                 content: "let x =1;"
             };
-            const config1 = {
-                path: "/a/b/tsconfig.json",
-                content: JSON.stringify(
+            const obj1 =
                     {
                         compilerOptions: {},
                         files: ["f1.ts"]
-                    }
+                    };
+            const config1 = {
+                path: "/a/b/tsconfig.json",
+                content: JSON.stringify(obj1
                 )
             };
             const file2 = {
                 path: "/a/c/f2.ts",
                 content: "let y =1;"
             };
-            const config2 = {
-                path: "/a/c/tsconfig.json",
-                content: JSON.stringify(
+            const obj2 =
                     {
                         compilerOptions: {},
                         files: ["f2.ts"]
-                    }
-                )
+                    };
+            const config2 = {
+                path: "/a/c/tsconfig.json",
+                content: JSON.stringify(
+obj2)
             };
             const file3 = {
                 path: "/a/d/f3.ts",
@@ -334,9 +337,10 @@ namespace ts.projectSystem {
                 path: "/a/b/f1.ts",
                 content: "let x = 1"
             };
+            const configObj ={ compilerOptions: {} };
             const configFile = {
                 path: "/a/b/tsconfig.json",
-                content: JSON.stringify({ compilerOptions: {} })
+                content: JSON.stringify(configObj)
             };
             const externalProjectName = "externalproject";
             const host = createServerHost([file1, configFile]);
@@ -370,9 +374,10 @@ namespace ts.projectSystem {
                 path: "/a/f2.ts",
                 content: "let x = 1"
             };
+            const configObj ={ compilerOptions: {} };
             const configFile = {
                 path: "/a/b/tsconfig.json",
-                content: JSON.stringify({ compilerOptions: {} })
+                content: JSON.stringify(configObj)
             };
             const externalProjectName = "externalproject";
             const host = createServerHost([file1, file2, libFile, configFile]);
@@ -723,10 +728,7 @@ namespace ts.projectSystem {
                 path: "/src/app.ts",
                 content: "var x: Promise<string>;"
             };
-            const config1 = {
-                path: "/src/tsconfig.json",
-                content: JSON.stringify(
-                    {
+            const obj1 =                    {
                         compilerOptions: {
                             module: "commonjs",
                             target: "es5",
@@ -736,12 +738,13 @@ namespace ts.projectSystem {
                                 "es5"
                             ]
                         }
-                    })
-            };
-            const config2 = {
-                path: config1.path,
+                    };
+            const config1 = {
+                path: "/src/tsconfig.json",
                 content: JSON.stringify(
-                    {
+obj1)
+            };
+            const obj2 =                    {
                         compilerOptions: {
                             module: "commonjs",
                             target: "es5",
@@ -752,7 +755,11 @@ namespace ts.projectSystem {
                                 "es2015.promise"
                             ]
                         }
-                    })
+                    };
+            const config2 = {
+                path: config1.path,
+                content: JSON.stringify(
+obj2)
             };
             const host = createServerHost([libES5, libES2015Promise, app, config1], { executingFilePath: "/compiler/tsc.js" });
             const projectService = createProjectService(host);
@@ -773,15 +780,16 @@ namespace ts.projectSystem {
                 path: "/a/src/app.ts",
                 content: "let x = 1;"
             };
-            const config = {
-                path: "/a/tsconfig.json",
-                content: JSON.stringify({
+            const configObj ={
                     compilerOptions: {},
                     include: [
                         "src/**/*",
                         "notexistingfolder/*"
                     ]
-                })
+                };
+            const config = {
+                path: "/a/tsconfig.json",
+                content: JSON.stringify(configObj)
             };
             const host = createServerHost([f, config]);
             const projectService = createProjectService(host);
@@ -808,9 +816,10 @@ namespace ts.projectSystem {
                 path: "/a/b/app.ts",
                 content: "let x = 1"
             };
+            const configObj = {};
             const config = {
                 path: "/a/b/tsconfig.json",
-                content: JSON.stringify({})
+                content: JSON.stringify(configObj)
             };
             const projectFileName = "/a/b/project.csproj";
             const host = createServerHost([f1, config]);

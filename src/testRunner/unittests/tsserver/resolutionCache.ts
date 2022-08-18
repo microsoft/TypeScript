@@ -35,12 +35,13 @@ namespace ts.projectSystem {
                 path: "/a/b/node_modules/@types/lib2/index.d.ts",
                 content: "export let b: number"
             };
+            const tsconfigObj = {
+                compilerOptions: {},
+                exclude: ["node_modules"]
+            };
             const tsconfig = {
                 path: "/a/b/tsconfig.json",
-                content: JSON.stringify({
-                    compilerOptions: {},
-                    exclude: ["node_modules"]
-                })
+                content: JSON.stringify(tsconfigObj)
             };
             const host = createServerHost([f1, t1, tsconfig]);
             const projectService = createProjectService(host);
@@ -316,9 +317,10 @@ namespace ts.projectSystem {
                 path: "/a/b/app.ts",
                 content: "let x = 1"
             };
+            const configObj = { compilerOptions: { types: ["node"], typeRoots: [] } };
             const config = {
                 path: "/a/b/tsconfig.json",
-                content: JSON.stringify({ compilerOptions: { types: ["node"], typeRoots: [] } })
+                content: JSON.stringify(configObj)
             };
             const node = {
                 path: "/a/b/node_modules/@types/node/index.d.ts",
@@ -336,9 +338,10 @@ namespace ts.projectSystem {
     });
 
     describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem module resolution caching", () => {
+        const configObj = { compilerOptions: { traceResolution: true } };
         const configFile: File = {
             path: `${tscWatch.projectRoot}/tsconfig.json`,
-            content: JSON.stringify({ compilerOptions: { traceResolution: true } })
+            content: JSON.stringify(configObj)
         };
 
         function getModules(module1Path: string, module2Path: string) {
@@ -510,18 +513,19 @@ const y = x;`
                         content: `
 export const x = 10;`
                     };
+                    const configObj = {
+                        compilerOptions: {
+                            module: "amd",
+                            moduleResolution: "classic",
+                            target: "es5",
+                            outDir: "../out",
+                            baseUrl: "./",
+                            typeRoots: ["typings"]
+                        }
+                    };
                     const configFile: File = {
                         path: `${tscWatch.projectRoot}/src/tsconfig.json`,
-                        content: JSON.stringify({
-                            compilerOptions: {
-                                module: "amd",
-                                moduleResolution: "classic",
-                                target: "es5",
-                                outDir: "../out",
-                                baseUrl: "./",
-                                typeRoots: ["typings"]
-                            }
-                        })
+                        content: JSON.stringify(configObj)
                     };
 
                     const files = [...(useNodeFile ? [nodeFile] : []), electronFile, srcFile, moduleFile, configFile, libFile];
@@ -536,9 +540,10 @@ export const x = 10;`
         });
 
         describe("ignores files/folder changes in node_modules that start with '.'", () => {
+            const npmCacheObj = { something: 10 };
             const npmCacheFile: File = {
                 path: `${tscWatch.projectRoot}/node_modules/.cache/babel-loader/89c02171edab901b9926470ba6d5677e.ts`,
-                content: JSON.stringify({ something: 10 })
+                content: JSON.stringify(npmCacheObj)
             };
             const file1: File = {
                 path: `${tscWatch.projectRoot}/test.ts`,

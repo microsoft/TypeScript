@@ -38,10 +38,11 @@ namespace ts.projectSystem {
             assert.ok(packageJsonInfo.optionalDependencies);
 
             // Edit package.json
-            host.writeFile(packageJson.path, JSON.stringify({
+            const packageObj ={
                 ...packageJsonContent,
                 dependencies: undefined
-            }));
+            };
+            host.writeFile(packageJson.path, JSON.stringify(packageObj));
             packageJsonInfo = projectService.packageJsonCache.getInDirectory("/" as Path)!;
             assert.isUndefined(packageJsonInfo.dependencies);
         });

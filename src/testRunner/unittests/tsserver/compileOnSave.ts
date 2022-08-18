@@ -495,12 +495,13 @@ namespace ts.projectSystem {
                     path: "/a/b.ts",
                     content: tsFileContents
                 };
-                const config = {
-                    path: "/a/tsconfig.json",
-                    content: JSON.stringify({
+                const configObj ={
                         compilerOptions: opts,
                         compileOnSave: true
-                    })
+                    };
+                const config = {
+                    path: "/a/tsconfig.json",
+                    content: JSON.stringify(configObj)
                 };
                 const host = createServerHost([dtsFile, f2, config]);
                 const session = createSession(host);
@@ -601,12 +602,13 @@ namespace ts.projectSystem {
                     path: "/a/b.ts",
                     content: "let y = 1"
                 };
-                const config = {
-                    path: "/a/tsconfig.json",
-                    content: JSON.stringify({
+                const configObj ={
                         compilerOptions: opts,
                         compileOnSave: true
-                    })
+                    };
+                const config = {
+                    path: "/a/tsconfig.json",
+                    content: JSON.stringify(configObj)
                 };
                 const host = createServerHost([f1, f2, config]);
                 const session = createSession(host);
@@ -794,9 +796,7 @@ namespace ts.projectSystem {
             });
 
             function verify(richResponse: boolean | undefined) {
-                const config: File = {
-                    path: `${tscWatch.projectRoot}/tsconfig.json`,
-                    content: JSON.stringify({
+                const configObj ={
                         compileOnSave: true,
                         compilerOptions: {
                             outDir: "test",
@@ -804,7 +804,10 @@ namespace ts.projectSystem {
                             declaration: true,
                         },
                         exclude: ["node_modules"]
-                    })
+                    };
+                const config: File = {
+                    path: `${tscWatch.projectRoot}/tsconfig.json`,
+                    content: JSON.stringify(configObj)
                 };
                 const file1: File = {
                     path: `${tscWatch.projectRoot}/file1.ts`,
@@ -882,15 +885,16 @@ namespace ts.projectSystem {
                 });
             });
             function verifyGlobalSave(declaration: boolean,hasModule: boolean) {
-                const config: File = {
-                    path: `${tscWatch.projectRoot}/tsconfig.json`,
-                    content: JSON.stringify({
+                const configObj ={
                         compileOnSave: true,
                         compilerOptions: {
                             declaration,
                             module: hasModule ? undefined : "none"
                         },
-                    })
+                    };
+                const config: File = {
+                    path: `${tscWatch.projectRoot}/tsconfig.json`,
+                    content: JSON.stringify(configObj)
                 };
                 const file1: File = {
                     path: `${tscWatch.projectRoot}/file1.ts`,
@@ -1003,21 +1007,23 @@ function bar() {
             path: `${tscWatch.projectRoot}/app2/app.ts`,
             content: "let y = 10;"
         };
+        const app1ConfigObj ={
+                files: ["app.ts", "../core/core.ts"],
+                compilerOptions: { outFile: "build/output.js" },
+                compileOnSave: true
+            };
         const app1Config: File = {
             path: `${tscWatch.projectRoot}/app1/tsconfig.json`,
-            content: JSON.stringify({
+            content: JSON.stringify(app1ConfigObj)
+        };
+        const app2ConfigObj ={
                 files: ["app.ts", "../core/core.ts"],
                 compilerOptions: { outFile: "build/output.js" },
                 compileOnSave: true
-            })
-        };
+            };
         const app2Config: File = {
             path: `${tscWatch.projectRoot}/app2/tsconfig.json`,
-            content: JSON.stringify({
-                files: ["app.ts", "../core/core.ts"],
-                compilerOptions: { outFile: "build/output.js" },
-                compileOnSave: true
-            })
+            content: JSON.stringify(app2ConfigObj)
         };
         const files = [libFile, core, app1, app2, app1Config, app2Config];
 

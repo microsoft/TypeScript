@@ -120,14 +120,13 @@ namespace ts.projectSystem {
                     path: "/a/b/f1.ts",
                     content: "let x =1;"
                 };
-                const config1 = {
-                    path: "/a/b/tsconfig.json",
-                    content: JSON.stringify(
-                        {
+                const obj1 = {
                             compilerOptions: {},
                             files: ["f1.ts"]
-                        }
-                    )
+                        };
+                const config1 = {
+                    path: "/a/b/tsconfig.json",
+                    content: JSON.stringify(obj1)
                 };
 
                 const externalProjectName = "externalproject";
@@ -151,13 +150,14 @@ namespace ts.projectSystem {
                     path: "/a/b/f1.ts",
                     content: "let x =1;"
                 };
-                const config1 = {
-                    path: "/a/b/tsconfig.json",
-                    content: JSON.stringify(
+                const obj1 =
                         {
                             compilerOptions: {},
                             files: ["f1.ts"]
-                        }
+                        };
+                const config1 = {
+                    path: "/a/b/tsconfig.json",
+                    content: JSON.stringify(obj1
                     )
                 };
 
@@ -177,13 +177,14 @@ namespace ts.projectSystem {
                     path: "/a/b/f1.ts",
                     content: "let x =1;"
                 };
-                const config1 = {
-                    path: "/a/b/tsconfig.json",
-                    content: JSON.stringify(
+                const obj1 =
                         {
                             compilerOptions: {},
                             files: ["f1.ts"]
-                        }
+                        };
+                const config1 = {
+                    path: "/a/b/tsconfig.json",
+                    content: JSON.stringify(obj1
                     )
                 };
 
@@ -385,7 +386,7 @@ namespace ts.projectSystem {
             const projectName = "project";
             const projectService = createProjectService(host, { typingsInstaller });
             projectService.openExternalProject({ projectFileName: projectName, options: {}, rootFiles: toExternalFiles([file1.path, constructorFile.path, bliss.path]) });
-            assert.equal(request, JSON.stringify({
+            const requestObj ={
                 projectName,
                 fileNames: [libFile.path, file1.path, constructorFile.path, bliss.path],
                 compilerOptions: { allowNonTsExtensions: true, noEmitForJsFiles: true },
@@ -394,7 +395,8 @@ namespace ts.projectSystem {
                 projectRootPath: "/",
                 cachePath,
                 kind: "discover"
-            }));
+            };
+            assert.equal(request, JSON.stringify(requestObj));
             const response = JSON.parse(request!);
             request = undefined;
             projectService.updateTypingsForProject({
@@ -588,9 +590,10 @@ namespace ts.projectSystem {
                 path: "/a/b/f2.ts",
                 content: "let y = 2;"
             };
+            const configObj ={ compilerOptions: {} };
             const config = {
                 path: "/a/b/tsconfig.json",
-                content: JSON.stringify({ compilerOptions: {} })
+                content: JSON.stringify(configObj)
             };
             const host = createServerHost([file1, file2, config]);
             const projectService = createProjectService(host);
@@ -623,11 +626,12 @@ namespace ts.projectSystem {
                 path: "/main.js",
                 content: "var y = 1"
             };
+            const configObj ={
+                    compilerOptions: { allowJs: true }
+                };
             const config = {
                 path: "/a/tsconfig.json",
-                content: JSON.stringify({
-                    compilerOptions: { allowJs: true }
-                })
+                content: JSON.stringify(configObj)
             };
             const host = createServerHost([f1, f2, f3, config]);
             const projectService = createProjectService(host);
@@ -665,9 +669,10 @@ namespace ts.projectSystem {
                 path: "/a/b/f2.html",
                 content: `var hello = "hello";`
             };
+            const configObj ={ compilerOptions: { allowJs: true } };
             const config = {
                 path: "/a/b/tsconfig.json",
-                content: JSON.stringify({ compilerOptions: { allowJs: true } })
+                content: JSON.stringify(configObj)
             };
             const host = createServerHost([file1, file2, config]);
             const session = createSession(host);
@@ -731,9 +736,10 @@ namespace ts.projectSystem {
                 path: "/a/b/f2.html",
                 content: `var hello = "hello";`
             };
+            const obj1 ={ compilerOptions: { allowJs: true } };
             const config1 = {
                 path: "/a/b/tsconfig.json",
-                content: JSON.stringify({ compilerOptions: { allowJs: true } })
+                content: JSON.stringify(obj1)
             };
 
             let host = createServerHost([file1, file2, config1, libFile], { executingFilePath: combinePaths(getDirectoryPath(libFile.path), "tsc.js") });
@@ -753,9 +759,10 @@ namespace ts.projectSystem {
             assert.deepEqual(diagnostics, []);
 
             //  #2. Ensure no errors when allowJs is false
+            const obj2 ={ compilerOptions: { allowJs: false } };
             const config2 = {
                 path: "/a/b/tsconfig.json",
-                content: JSON.stringify({ compilerOptions: { allowJs: false } })
+                content: JSON.stringify(obj2)
             };
 
             host = createServerHost([file1, file2, config2, libFile], { executingFilePath: combinePaths(getDirectoryPath(libFile.path), "tsc.js") });
@@ -772,9 +779,10 @@ namespace ts.projectSystem {
             assert.deepEqual(diagnostics, []);
 
             //  #3. Ensure no errors when compiler options aren't specified
+            const obj3 ={};
             const config3 = {
                 path: "/a/b/tsconfig.json",
-                content: JSON.stringify({})
+                content: JSON.stringify(obj3)
             };
 
             host = createServerHost([file1, file2, config3, libFile], { executingFilePath: combinePaths(getDirectoryPath(libFile.path), "tsc.js") });
@@ -791,9 +799,10 @@ namespace ts.projectSystem {
             assert.deepEqual(diagnostics, []);
 
             //  #4. Ensure no errors when files are explicitly specified in tsconfig
+            const obj4 ={ compilerOptions: { allowJs: true }, files: [file1.path, file2.path] };
             const config4 = {
                 path: "/a/b/tsconfig.json",
-                content: JSON.stringify({ compilerOptions: { allowJs: true }, files: [file1.path, file2.path] })
+                content: JSON.stringify(obj4)
             };
 
             host = createServerHost([file1, file2, config4, libFile], { executingFilePath: combinePaths(getDirectoryPath(libFile.path), "tsc.js") });
@@ -810,9 +819,10 @@ namespace ts.projectSystem {
             assert.deepEqual(diagnostics, []);
 
             //  #4. Ensure no errors when files are explicitly excluded in tsconfig
+            const obj5 ={ compilerOptions: { allowJs: true }, exclude: [file2.path] };
             const config5 = {
                 path: "/a/b/tsconfig.json",
-                content: JSON.stringify({ compilerOptions: { allowJs: true }, exclude: [file2.path] })
+                content: JSON.stringify(obj5)
             };
 
             host = createServerHost([file1, file2, config5, libFile], { executingFilePath: combinePaths(getDirectoryPath(libFile.path), "tsc.js") });
@@ -1000,9 +1010,10 @@ namespace ts.projectSystem {
                 path: "/a/b/app.ts",
                 content: "let x = 1;"
             };
+            const configObj ={ compilerOptions: {} };
             const config = {
                 path: "/a/b/tsconfig.json",
-                content: JSON.stringify({ compilerOptions: {} })
+                content: JSON.stringify(configObj)
             };
             const host = createServerHost([f1, libFile, config]);
             const session = createSession(host, { logger: createLoggerWithInMemoryLogs() });
@@ -1029,14 +1040,15 @@ namespace ts.projectSystem {
         });
 
         it("Properly handle Windows-style outDir", () => {
-            const configFile: File = {
-                path: "C:\\a\\tsconfig.json",
-                content: JSON.stringify({
+            const configObj ={
                     compilerOptions: {
                         outDir: `C:\\a\\b`
                     },
                     include: ["*.ts"]
-                })
+                };
+            const configFile: File = {
+                path: "C:\\a\\tsconfig.json",
+                content: JSON.stringify(configObj)
             };
             const file1: File = {
                 path: "C:\\a\\f1.ts",
@@ -1239,9 +1251,10 @@ namespace ts.projectSystem {
                 path: `${tscWatch.projectRoot}/src/file2.ts`,
                 content: "export let y = 10;"
             };
-            const configContent1 = JSON.stringify({
+            const configObj1 ={
                 files: ["src/file1.ts", "src/file2.ts"]
-            });
+            };
+            const configContent1 = JSON.stringify(configObj1);
             const config: File = {
                 path: `${tscWatch.projectRoot}/tsconfig.json`,
                 content: configContent1
@@ -1252,9 +1265,10 @@ namespace ts.projectSystem {
             service.openClientFile(file1.path);
             checkProjectActualFiles(service.configuredProjects.get(config.path)!, [file1.path, file2.path, libFile.path, config.path]);
 
-            const configContent2 = JSON.stringify({
+const configObj2 ={
                 files: ["src/file1.ts"]
-            });
+            };
+            const configContent2 = JSON.stringify(configObj2);
             config.content = configContent2;
             host.writeFile(config.path, config.content);
             host.runQueuedTimeoutCallbacks();
@@ -1470,9 +1484,10 @@ namespace ts.projectSystem {
                 path: `${tscWatch.projectRoot}/index.ts`,
                 content: "export const foo = 5;"
             };
+            const configObj ={ extends: "./tsconfig_base.json" };
             const config: File = {
                 path: `${tscWatch.projectRoot}/tsconfig.json`,
-                content: JSON.stringify({ extends: "./tsconfig_base.json" })
+                content: JSON.stringify(configObj)
             };
             const host = createServerHost([file, config, libFile]);
             const projectService = createProjectService(host);
@@ -1491,9 +1506,10 @@ namespace ts.projectSystem {
                 path: `${tscWatch.projectRoot}/index.ts`,
                 content: "export const foo = 5;"
             };
+            const configObj ={ extends: "./tsconfig_base.json" };
             const config: File = {
                 path: `${tscWatch.projectRoot}/tsconfig.json`,
-                content: JSON.stringify({ extends: "./tsconfig_base.json" })
+                content: JSON.stringify(configObj)
             };
             const host = createServerHost([file, config, libFile]);
             const projectService = createProjectService(host);

@@ -1341,7 +1341,7 @@ namespace FourSlash {
             }));
         }
 
-        public verifyQuickInfoAt(markerName: string | Range, expectedText: string, expectedDocumentation?: string, expectedTags?: {name: string; text: string;}[]) {
+        public verifyQuickInfoAt(markerName: string | Range, expectedText: string, expectedDocumentation?: string, expectedTags?: { name: string; text: string; }[]) {
             if (typeof markerName === "string") this.goToMarker(markerName);
             else this.goToRangeStart(markerName);
 
@@ -2622,7 +2622,7 @@ namespace FourSlash {
             Harness.IO.log(this.spanInfoToString(this.getNameOrDottedNameSpan(pos)!, "**"));
         }
 
-        private classificationToIdentifier(classification: number){
+        private classificationToIdentifier(classification: number) {
 
             const tokenTypes: string[] = [];
             tokenTypes[ts.classifier.v2020.TokenType.class] = "class";
@@ -2664,7 +2664,7 @@ namespace FourSlash {
             return [tokenTypes[typeIdx], ...tokenModifiers.filter((_, i) => modSet & 1 << i)].join(".");
         }
 
-        private verifyClassifications(expected: { classificationType: string | number, text?: string; textSpan?: TextSpan }[], actual: (ts.ClassifiedSpan | ts.ClassifiedSpan2020)[] , sourceFileText: string) {
+        private verifyClassifications(expected: { classificationType: string | number, text?: string; textSpan?: TextSpan }[], actual: (ts.ClassifiedSpan | ts.ClassifiedSpan2020)[], sourceFileText: string) {
             if (actual.length !== expected.length) {
                 this.raiseError("verifyClassifications failed - expected total classifications to be " + expected.length +
                     ", but was " + actual.length +
@@ -2673,7 +2673,7 @@ namespace FourSlash {
 
             ts.zipWith(expected, actual, (expectedClassification, actualClassification) => {
                 const expectedType = expectedClassification.classificationType;
-                const actualType = typeof actualClassification.classificationType === "number"  ? this.classificationToIdentifier(actualClassification.classificationType) : actualClassification.classificationType;
+                const actualType = typeof actualClassification.classificationType === "number" ? this.classificationToIdentifier(actualClassification.classificationType) : actualClassification.classificationType;
 
                 if (expectedType !== actualType) {
                     this.raiseError("verifyClassifications failed - expected classifications type to be " +
@@ -2732,7 +2732,7 @@ namespace FourSlash {
         public replaceWithSemanticClassifications(format: ts.SemanticClassificationFormat.TwentyTwenty) {
             const actual = this.languageService.getSemanticClassifications(this.activeFile.fileName,
                 ts.createTextSpan(0, this.activeFile.content.length), format);
-            const replacement = [`const c2 = classification("2020");`,`verify.semanticClassificationsAre("2020",`];
+            const replacement = [`const c2 = classification("2020");`, `verify.semanticClassificationsAre("2020",`];
             for (const a of actual) {
                 const identifier = this.classificationToIdentifier(a.classificationType as number);
                 const text = this.activeFile.content.slice(a.textSpan.start, a.textSpan.start + a.textSpan.length);
@@ -2786,7 +2786,7 @@ namespace FourSlash {
 
             const reverseSpans = allSpanInsets.sort((l, r) => r.pos - l.pos);
             ts.forEach(reverseSpans, span => {
-               annotated = annotated.slice(0, span.pos) + span.text + annotated.slice(span.pos);
+                annotated = annotated.slice(0, span.pos) + span.text + annotated.slice(span.pos);
             });
             Harness.IO.log(`\nMockup:\n${annotated}`);
         }
@@ -3088,9 +3088,9 @@ namespace FourSlash {
 
                 // Undo changes to perform next fix
                 const span = change.textChanges[0].span;
-                 const deletedText = originalContent.substr(span.start, change.textChanges[0].span.length);
-                 const insertedText = change.textChanges[0].newText;
-                 this.editScriptAndUpdateMarkers(fileName, span.start, span.start + insertedText.length, deletedText);
+                const deletedText = originalContent.substr(span.start, change.textChanges[0].span.length);
+                const insertedText = change.textChanges[0].newText;
+                this.editScriptAndUpdateMarkers(fileName, span.start, span.start + insertedText.length, deletedText);
             }
             if (expectedTextArray.length !== actualTextArray.length) {
                 this.raiseError(`Expected ${expectedTextArray.length} import fixes, got ${actualTextArray.length}:\n\n${actualTextArray.join("\n\n" + "-".repeat(20) + "\n\n")}`);
@@ -4504,8 +4504,8 @@ namespace FourSlash {
         };
     }
 
-    function stringify(data: any, replacer?: (key: string, value: any) => any): string {
-        return JSON.stringify(data, replacer, 2);
+    function stringify(data: unknown, replacer?: (key: string, value: unknown) => unknown): string {
+        return JSON.stringify(data, replacer, 2) ?? "undefined";
     }
 
     /** Collects an array of unique outputs. */
@@ -4575,13 +4575,13 @@ namespace FourSlash {
                 if (doesAddToIndex) {
                     closestIndex.length = closestIndex.length + 1;
                 }
+                else {
+                    ranges.push({ start: index - 1, length: 1 });
+                }
+            }
             else {
                 ranges.push({ start: index - 1, length: 1 });
             }
-          }
-          else {
-                ranges.push({ start: index - 1, length: 1 });
-          }
         };
 
         for (let index = 0; index < Math.max(source.length, target.length); index++) {
@@ -4591,10 +4591,10 @@ namespace FourSlash {
         }
 
         return ranges;
-      }
+    }
 
-      // Adds an _ when the source string and the target string have a whitespace difference
-      function highlightDifferenceBetweenStrings(source: string, target: string) {
+    // Adds an _ when the source string and the target string have a whitespace difference
+    function highlightDifferenceBetweenStrings(source: string, target: string) {
         const ranges = rangesOfDiffBetweenTwoStrings(source, target);
         let emTarget = target;
         ranges.forEach((range, index) => {
@@ -4606,9 +4606,9 @@ namespace FourSlash {
                 range.start + 1 + additionalOffset,
                 range.start + range.length + 1 + additionalOffset
             );
-             const after = emTarget.slice(range.start + range.length + 1 + additionalOffset, emTarget.length);
+            const after = emTarget.slice(range.start + range.length + 1 + additionalOffset, emTarget.length);
             emTarget = before + lhs + between + rhs + after;
         });
         return emTarget;
-      }
+    }
 }

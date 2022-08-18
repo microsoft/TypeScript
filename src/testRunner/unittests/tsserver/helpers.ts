@@ -130,7 +130,8 @@ namespace ts.projectSystem {
         logs.push("");
         logs.push(`Project: ${project.getProjectName()}`);
         project.getCurrentProgram()?.getSourceFiles().forEach(f => {
-            logs.push(JSON.stringify({ fileName: f.fileName, version: f.version }));
+            const logObj = { fileName: f.fileName, version: f.version };
+            logs.push(JSON.stringify(logObj));
             logs.push(f.text);
             logs.push("");
         });
@@ -204,7 +205,8 @@ namespace ts.projectSystem {
         for (const typing of installedTypings) {
             dependencies[typing] = "1.0.0";
         }
-        return JSON.stringify({ dependencies });
+        const dependenciesObj ={ dependencies };
+        return JSON.stringify(dependenciesObj);
     }
 
     export function createTypesRegistry(...list: string[]): ESMap<string, MapLike<string>> {

@@ -138,16 +138,17 @@ namespace ts.projectSystem {
 
         it("works when files are included from two different drives of windows", () => {
             const projectRoot = "e:/myproject";
-            const appPackage: File = {
-                path: `${projectRoot}/package.json`,
-                content: JSON.stringify({
+            const appPackageObj ={
                     name: "test",
                     version: "0.1.0",
                     dependencies: {
                         "react": "^16.12.0",
                         "react-router-dom": "^5.1.2",
                     }
-                })
+                };
+            const appPackage: File = {
+                path: `${projectRoot}/package.json`,
+                content: JSON.stringify(appPackageObj)
             };
             const appFile: File = {
                 path: `${projectRoot}/src/app.js`,
@@ -159,35 +160,38 @@ import {
             };
             const localNodeModules = `${projectRoot}/node_modules`;
             const localAtTypes = `${localNodeModules}/@types`;
-            const localReactPackage: File = {
-                path: `${localAtTypes}/react/package.json`,
-                content: JSON.stringify({
+            const localReactPackageObj ={
                     name: "@types/react",
                     version: "16.9.14",
-                })
+                };
+            const localReactPackage: File = {
+                path: `${localAtTypes}/react/package.json`,
+                content: JSON.stringify(localReactPackageObj)
             };
             const localReact: File = {
                 path: `${localAtTypes}/react/index.d.ts`,
                 content: `import * as PropTypes from 'prop-types';
 `
             };
-            const localReactRouterDomPackage: File = {
-                path: `${localNodeModules}/react-router-dom/package.json`,
-                content: JSON.stringify({
+            const localReactRouterDomPackageObj ={
                     name: "react-router-dom",
                     version: "5.1.2",
-                })
+                };
+            const localReactRouterDomPackage: File = {
+                path: `${localNodeModules}/react-router-dom/package.json`,
+                content: JSON.stringify(localReactRouterDomPackageObj)
             };
             const localReactRouterDom: File = {
                 path: `${localNodeModules}/react-router-dom/index.js`,
                 content: `export function foo() {}`
             };
-            const localPropTypesPackage: File = {
-                path: `${localAtTypes}/prop-types/package.json`,
-                content: JSON.stringify({
+            const localPropTypesPackageObj ={
                     name: "@types/prop-types",
                     version: "15.7.3",
-                })
+                };
+            const localPropTypesPackage: File = {
+                path: `${localAtTypes}/prop-types/package.json`,
+                content: JSON.stringify(localPropTypesPackageObj)
             };
             const localPropTypes: File = {
                 path: `${localAtTypes}/prop-types/index.d.ts`,
@@ -200,12 +204,13 @@ import {
 
             const globalCacheLocation = `c:/typescript`;
             const globalAtTypes = `${globalCacheLocation}/node_modules/@types`;
-            const globalReactRouterDomPackage: File = {
-                path: `${globalAtTypes}/react-router-dom/package.json`,
-                content: JSON.stringify({
+            const globalReactRouterDomPackageObj ={
                     name: "@types/react-router-dom",
                     version: "5.1.2",
-                })
+                };
+            const globalReactRouterDomPackage: File = {
+                path: `${globalAtTypes}/react-router-dom/package.json`,
+                content: JSON.stringify(globalReactRouterDomPackageObj)
             };
             const globalReactRouterDom: File = {
                 path: `${globalAtTypes}/react-router-dom/index.d.ts`,

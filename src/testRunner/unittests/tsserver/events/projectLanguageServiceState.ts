@@ -13,9 +13,10 @@ namespace ts.projectSystem {
                 path: "/a/jsconfig.json",
                 content: "{}"
             };
+            const objWithExclude ={ exclude: ["largefile.js"] };
             const configWithExclude = {
                 path: config.path,
-                content: JSON.stringify({ exclude: ["largefile.js"] })
+                content: JSON.stringify(objWithExclude)
             };
             const host = createServerHost([f1, f2, config]);
             const originalGetFileSize = host.getFileSize;

@@ -32,16 +32,17 @@ namespace ts.projectSystem {
             const expectedToLoad = ["@myscoped/plugin", "unscopedPlugin"];
             const notToLoad = ["../myPlugin", "myPlugin/../malicious"];
             const aTs: File = { path: "/a.ts", content: `class c { prop = "hello"; foo() { return this.prop; } }` };
-            const tsconfig: File = {
-                path: "/tsconfig.json",
-                content: JSON.stringify({
+            const tsconfigObj ={
                     compilerOptions: {
                         plugins: [
                             ...[...expectedToLoad, ...notToLoad].map(name => ({ name })),
                             { transform: "some-transform" }
                         ]
                     }
-                })
+                };
+            const tsconfig: File = {
+                path: "/tsconfig.json",
+                content: JSON.stringify(tsconfigObj)
             };
             const { host, pluginsLoaded } = createHostWithPlugin([aTs, tsconfig, libFile]);
             const service = createProjectService(host);
@@ -67,15 +68,16 @@ namespace ts.projectSystem {
             const pluginName = "some-plugin";
             const expectedToLoad = [pluginName];
             const aTs: File = { path: "/a.ts", content: `class c { prop = "hello"; foo() { return this.prop; } }` };
-            const tsconfig: File = {
-                path: "/tsconfig.json",
-                content: JSON.stringify({
+            const tsconfigObj ={
                     compilerOptions: {
                         plugins: [
                             { name: pluginName }
                         ]
                     }
-                })
+                };
+            const tsconfig: File = {
+                path: "/tsconfig.json",
+                content: JSON.stringify(tsconfigObj)
             };
 
             const { host, pluginsLoaded, protocolHandlerRequests } = createHostWithPlugin([aTs, tsconfig, libFile]);

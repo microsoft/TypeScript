@@ -7,9 +7,10 @@ namespace ts.projectSystem {
                 path: `${folderA}/a.ts`,
                 content: `import {C} from "./c/fc"; console.log(C)`
             };
+            const aObj = { compilerOptions: { module: "commonjs" } };
             const aTsconfig: File = {
                 path: `${folderA}/tsconfig.json`,
-                content: JSON.stringify({ compilerOptions: { module: "commonjs" } })
+                content: JSON.stringify(aObj)
             };
             const aC: SymLink = {
                 path: `${folderA}/c`,
@@ -22,9 +23,10 @@ namespace ts.projectSystem {
                 path: `${folderB}/b.ts`,
                 content: `import {C} from "./c/fc"; console.log(C)`
             };
+            const bObj = { compilerOptions: { module: "commonjs" } };
             const bTsconfig: File = {
                 path: `${folderB}/tsconfig.json`,
-                content: JSON.stringify({ compilerOptions: { module: "commonjs" } })
+                content: JSON.stringify(bObj)
             };
             const bC: SymLink = {
                 path: `${folderB}/c`,
@@ -67,24 +69,26 @@ namespace ts.projectSystem {
 new C();`
             };
             const recognizerDateTimeTsconfigPath = `${recognizersDateTime}/tsconfig.json`;
+            const recognizerDateTimeTsconfigObjWithoutPathMapping = {
+                include: ["src"]
+            };
             const recognizerDateTimeTsconfigWithoutPathMapping: File = {
                 path: recognizerDateTimeTsconfigPath,
-                content: JSON.stringify({
-                    include: ["src"]
-                })
+                content: JSON.stringify(recognizerDateTimeTsconfigObjWithoutPathMapping)
+            };
+            const recognizerDateTimeTsconfigObjWithPathMapping = {
+                compilerOptions: {
+                    rootDir: "src",
+                    baseUrl: "./",
+                    paths: {
+                        "@microsoft/*": ["../*"]
+                    }
+                },
+                include: ["src"]
             };
             const recognizerDateTimeTsconfigWithPathMapping: File = {
                 path: recognizerDateTimeTsconfigPath,
-                content: JSON.stringify({
-                    compilerOptions: {
-                        rootDir: "src",
-                        baseUrl: "./",
-                        paths: {
-                            "@microsoft/*": ["../*"]
-                        }
-                    },
-                    include: ["src"]
-                })
+                content: JSON.stringify(recognizerDateTimeTsconfigObjWithPathMapping)
             };
             const nodeModulesRecorgnizersText: SymLink = {
                 path: `${recognizersDateTime}/node_modules/@microsoft/recognizers-text`,
@@ -98,11 +102,12 @@ new C();`
                 path: `${recognizersTextDist}/types/recognizers-text.d.ts`,
                 content: `export class C { method(): number; }`
             };
+            const recognizerTextPackageObj = {
+                typings: "dist/types/recognizers-text.d.ts"
+            };
             const recongnizerTextPackageJson: File = {
                 path: `${recognizersText}/package.json`,
-                content: JSON.stringify({
-                    typings: "dist/types/recognizers-text.d.ts"
-                })
+                content: JSON.stringify(recognizerTextPackageObj)
             };
 
             function createSessionAndOpenFile(host: TestServerHost) {
@@ -133,11 +138,12 @@ new C();`
                         verifyGetErrRequest({ session, host, files: [recognizersDateTimeSrcFile] });
 
                         // Change config file's module resolution affecting option
-                        const config = JSON.parse(host.readFile(recognizerDateTimeTsconfigPath)!);
-                        host.writeFile(recognizerDateTimeTsconfigPath, JSON.stringify({
-                            ...config,
-                            compilerOptions: { ...config.compilerOptions, resolveJsonModule: true }
-                        }));
+                        const configIn = JSON.parse(host.readFile(recognizerDateTimeTsconfigPath)!);
+                        const configOut: object = {
+                            ...configIn,
+                            compilerOptions: { ...configIn.compilerOptions, resolveJsonModule: true }
+                        };
+                        host.writeFile(recognizerDateTimeTsconfigPath, JSON.stringify(configOut));
                         host.runQueuedTimeoutCallbacks(); // Scheduled invalidation of resolutions
                         host.runQueuedTimeoutCallbacks(); // Actual update
 

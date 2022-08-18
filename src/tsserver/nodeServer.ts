@@ -790,7 +790,7 @@ namespace ts.server {
             }
 
             protected toStringMessage(message: any) {
-                return JSON.stringify(message, undefined, 2);
+                return JSON.stringify(message, undefined, 2) ?? "undefined";
             }
 
             public listen() {

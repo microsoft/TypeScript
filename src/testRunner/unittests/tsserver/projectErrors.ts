@@ -83,9 +83,10 @@ namespace ts.projectSystem {
                 path: "/a/b/applib.ts",
                 content: ""
             };
+            const obj ={ files: [file1, file2].map(f => getBaseFileName(f.path)) };
             const config = {
                 path: "/a/b/tsconfig.json",
-                content: JSON.stringify({ files: [file1, file2].map(f => getBaseFileName(f.path)) })
+                content: JSON.stringify(obj)
             };
             const host = createServerHost([file1, config, libFile]);
             const session = createSession(host);
@@ -118,9 +119,10 @@ namespace ts.projectSystem {
                 path: "/a/b/lib.ts",
                 content: ""
             };
+            const correctObj ={ files: [file1, file2].map(f => getBaseFileName(f.path)) };
             const correctConfig = {
                 path: "/a/b/tsconfig.json",
-                content: JSON.stringify({ files: [file1, file2].map(f => getBaseFileName(f.path)) })
+                content: JSON.stringify(correctObj)
             };
             const corruptedConfig = {
                 path: correctConfig.path,
@@ -163,9 +165,10 @@ namespace ts.projectSystem {
                 path: "/a/b/lib.ts",
                 content: ""
             };
+            const correctObj ={ files: [file1, file2].map(f => getBaseFileName(f.path)) };
             const correctConfig = {
                 path: "/a/b/tsconfig.json",
-                content: JSON.stringify({ files: [file1, file2].map(f => getBaseFileName(f.path)) })
+                content: JSON.stringify(correctObj)
             };
             const corruptedConfig = {
                 path: correctConfig.path,
@@ -275,9 +278,10 @@ namespace ts.projectSystem {
                 path: `${projectDir}/foo/foo.ts`,
                 content: "declare namespace foo { interface Foo { get2(): number; getFoo(): string; } }"
             };
+            const configObj ={ compilerOptions: { module: "none", targer: "es5" }, exclude: ["node_modules"] };
             const configFile: File = {
                 path: `${projectDir}/tsconfig.json`,
-                content: JSON.stringify({ compilerOptions: { module: "none", targer: "es5" }, exclude: ["node_modules"] })
+                content: JSON.stringify(configObj)
             };
             const host = createServerHost([app, foo, configFile]);
             const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs() });
@@ -348,9 +352,10 @@ function foo() {
   // hello
 }`
             };
+            const configObj ={ include: ["src"] };
             const config: File = {
                 path: `${projectRootPath}/tsconfig.json`,
-                content: JSON.stringify({ include: ["src"] })
+                content: JSON.stringify(configObj)
             };
             const plugin: File = {
                 path: `${projectRootPath}/node_modules/@custom/plugin/index.d.ts`,
@@ -776,15 +781,16 @@ console.log(blabla);`
                 path: `${tscWatch.projectRoot}/src/blabla.json`,
                 content: "{}"
             };
-            const tsconfig: File = {
-                path: `${tscWatch.projectRoot}/tsconfig.json`,
-                content: JSON.stringify({
+            const tsconfigObj ={
                     compilerOptions: {
                         resolveJsonModule: true,
                         composite: true
                     },
                     include
-                })
+                };
+            const tsconfig: File = {
+                path: `${tscWatch.projectRoot}/tsconfig.json`,
+                content: JSON.stringify(tsconfigObj)
             };
 
             const host = createServerHost([test, blabla, libFile, tsconfig]);

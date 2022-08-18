@@ -5,27 +5,29 @@ namespace ts.tscWatch {
             subScenario: "esm-mode file is edited",
             commandLineArgs: ["--w", "--p", "/project/tsconfig.json"],
             sys: () => {
+                const configObj = {
+                    compilerOptions: {
+                        strict: true,
+                        target: "es2020",
+                        module: "nodenext",
+                        moduleResolution: "nodenext",
+                        outDir: "../dist"
+                    }
+                };
                 const configFile: File = {
                     path: "/project/tsconfig.json",
-                    content: JSON.stringify({
-                        compilerOptions: {
-                            strict: true,
-                            target: "es2020",
-                            module: "nodenext",
-                            moduleResolution: "nodenext",
-                            outDir: "../dist"
-                        }
-                    })
+                    content: JSON.stringify(configObj)
+                };
+                const packageObj = {
+                    name: "some-proj",
+                    version: "1.0.0",
+                    description: "",
+                    type: "module",
+                    main: "index.js",
                 };
                 const packageFile: File = {
                     path: "/project/package.json",
-                    content: JSON.stringify({
-                        name: "some-proj",
-                        version: "1.0.0",
-                        description: "",
-                        type: "module",
-                        main: "index.js",
-                    })
+                    content: JSON.stringify(packageObj)
                 };
                 const file1: File = {
                     path: "/project/src/index.ts",

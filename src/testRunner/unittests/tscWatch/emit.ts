@@ -6,12 +6,15 @@ namespace ts.tscWatch {
                 scenario,
                 subScenario: `emit with outFile or out setting/${subScenario}`,
                 commandLineArgs: ["--w", "-p", "/a/tsconfig.json"],
-                sys: () => createWatchedSystem({
-                    "/a/a.ts": "let x = 1",
-                    "/a/b.ts": "let y = 1",
-                    "/a/tsconfig.json": JSON.stringify({ compilerOptions: { out, outFile } }),
-                    [libFile.path]: libFile.content,
-                }),
+                sys: () => {
+                    const configObj = { compilerOptions: { out, outFile } };
+                    return createWatchedSystem({
+                        "/a/a.ts": "let x = 1",
+                        "/a/b.ts": "let y = 1",
+                        "/a/tsconfig.json": JSON.stringify(configObj),
+                        [libFile.path]: libFile.content,
+                    });
+                },
                 changes: [
                     {
                         caption: "Make change in the file",
@@ -52,14 +55,15 @@ namespace ts.tscWatch {
                         path: "/a/b/project/src/main2.ts",
                         content: "namespace main.file4 { import DynamicMenu = Common.SomeComponent.DynamicMenu; export function foo(a: DynamicMenu.z) {  } }"
                     };
+                    const configObj = {
+                        compilerOptions: useOutFile ?
+                            { outFile: "../output/common.js", target: "es5" } :
+                            { outDir: "../output", target: "es5" },
+                        files: [file1.path, file2.path, file3.path, file4.path]
+                    };
                     const configFile: File = {
                         path: "/a/b/project/tsconfig.json",
-                        content: JSON.stringify({
-                            compilerOptions: useOutFile ?
-                                { outFile: "../output/common.js", target: "es5" } :
-                                { outDir: "../output", target: "es5" },
-                            files: [file1.path, file2.path, file3.path, file4.path]
-                        })
+                        content: JSON.stringify(configObj)
                     };
                     return createWatchedSystem([file1, file2, file3, file4, libFile, configFile]);
                 },
@@ -123,9 +127,10 @@ namespace ts.tscWatch {
                         path: globalFilePath,
                         content: `interface GlobalFoo { age: number }`
                     };
+                    const configObjFixed: object = configObj || {};
                     const configFile: File = {
                         path: configFilePath,
-                        content: JSON.stringify(configObj || {})
+                        content: JSON.stringify(configObjFixed)
                     };
                     const additionalFiles = getAdditionalFileOrFolder?.() || emptyArray;
                     const files = [moduleFile1, file1Consumer1, file1Consumer2, globalFile3, moduleFile2, configFile, libFile, ...additionalFiles];
@@ -454,13 +459,14 @@ export var x = Foo();`
                     path: `${projectLocation}/app/file.ts`,
                     content: "var a = 10;"
                 };
+                const configObj = {
+                    include: [
+                        "app/**/*.ts"
+                    ]
+                };
                 const configFile: File = {
                     path: `${projectLocation}/tsconfig.json`,
-                    content: JSON.stringify({
-                        include: [
-                            "app/**/*.ts"
-                        ]
-                    })
+                    content: JSON.stringify(configObj)
                 };
                 const files = [file, configFile, libFile];
                 return createWatchedSystem(files, { currentDirectory: projectLocation, useCaseSensitiveFileNames: true });
@@ -481,18 +487,19 @@ export var x = Foo();`
             subScenario: "when module emit is specified as node/when instead of filechanged recursive directory watcher is invoked",
             commandLineArgs: ["--w", "--p", "/a/rootFolder/project/tsconfig.json"],
             sys: () => {
+                const configObj = {
+                    compilerOptions: {
+                        module: "none",
+                        allowJs: true,
+                        outDir: "Static/scripts/"
+                    },
+                    include: [
+                        "Scripts/**/*"
+                    ],
+                };
                 const configFile: File = {
                     path: "/a/rootFolder/project/tsconfig.json",
-                    content: JSON.stringify({
-                        compilerOptions: {
-                            module: "none",
-                            allowJs: true,
-                            outDir: "Static/scripts/"
-                        },
-                        include: [
-                            "Scripts/**/*"
-                        ],
-                    })
+                    content: JSON.stringify(configObj)
                 };
                 const file1: File = {
                     path: "/a/rootFolder/project/Scripts/TypeScript.ts",

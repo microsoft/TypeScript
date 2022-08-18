@@ -94,18 +94,19 @@ namespace ts.tscWatch {
             }
 
             function config(packageName: string, extraOptions: CompilerOptions, references?: string[]): File {
+                const configObj = {
+                    compilerOptions: {
+                        outDir: "lib",
+                        rootDir: "src",
+                        composite: true,
+                        ...extraOptions
+                    },
+                    include: ["src"],
+                    ...(references ? { references: references.map(path => ({ path })) } : {})
+                };
                 return {
                     path: `${projectRoot}/packages/${packageName}/tsconfig.json`,
-                    content: JSON.stringify({
-                        compilerOptions: {
-                            outDir: "lib",
-                            rootDir: "src",
-                            composite: true,
-                            ...extraOptions
-                        },
-                        include: ["src"],
-                        ...(references ? { references: references.map(path => ({ path })) } : {})
-                    })
+                    content: JSON.stringify(configObj)
                 };
             }
 
@@ -118,27 +119,30 @@ namespace ts.tscWatch {
 
             function verifyMonoRepoLike(scope = "") {
                 describe("when packageJson has types field", () => {
-                    verifySymlinkScenario(() => ({
-                        bPackageJson: {
-                            path: `${projectRoot}/packages/B/package.json`,
-                            content: JSON.stringify({
-                                main: "lib/index.js",
-                                types: "lib/index.d.ts"
-                            })
-                        },
-                        aTest: file("A", "index.ts", `import { foo } from '${scope}b';
+                    verifySymlinkScenario(() => {
+                        const bPackageObj = {
+                            main: "lib/index.js",
+                            types: "lib/index.d.ts"
+                        };
+                        return ({
+                            bPackageJson: {
+                                path: `${projectRoot}/packages/B/package.json`,
+                                content: JSON.stringify(bPackageObj)
+                            },
+                            aTest: file("A", "index.ts", `import { foo } from '${scope}b';
 import { bar } from '${scope}b/lib/bar';
 foo();
 bar();
 `),
-                        bFoo: file("B", "index.ts", `export function foo() { }`),
-                        bBar: file("B", "bar.ts", `export function bar() { }`),
-                        bSymlink: {
-                            path: `${projectRoot}/node_modules/${scope}b`,
-                            symLink: `${projectRoot}/packages/B`
-                        },
-                        subScenario: `when packageJson has types field${scope ? " with scoped package" : ""}`
-                    }));
+                            bFoo: file("B", "index.ts", `export function foo() { }`),
+                            bBar: file("B", "bar.ts", `export function bar() { }`),
+                            bSymlink: {
+                                path: `${projectRoot}/node_modules/${scope}b`,
+                                symLink: `${projectRoot}/packages/B`
+                            },
+                            subScenario: `when packageJson has types field${scope ? " with scoped package" : ""}`
+                        });
+                    });
                 });
 
                 describe("when referencing file from subFolder", () => {
