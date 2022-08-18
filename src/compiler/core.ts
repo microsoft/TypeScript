@@ -1119,6 +1119,13 @@ namespace ts {
     }
 
     /**
+     * Returns the only element of an array if it contains only one element; throws otherwise.
+     */
+    export function single<T>(array: readonly T[]): T {
+        return Debug.checkDefined(singleOrUndefined(array));
+    }
+
+    /**
      * Returns the only element of an array if it contains only one element; otherwise, returns the
      * array.
      */
