@@ -350,7 +350,6 @@ task("run-eslint-rules-tests").description = "Runs the eslint rule tests";
 
 /** @type { (folder: string) => { (): Promise<any>; displayName?: string } } */
 const eslint = (folder) => async () => {
-
     const formatter = cmdLineOptions.ci ? "stylish" : "autolinkable-stylish";
     const args = [
         "node_modules/eslint/bin/eslint",
@@ -370,21 +369,8 @@ const eslint = (folder) => async () => {
     return exec(process.execPath, args);
 };
 
-const lintScripts = eslint("scripts");
-lintScripts.displayName = "lint-scripts";
-task("lint-scripts", series([buildEslintRules, lintScripts]));
-task("lint-scripts").description = "Runs eslint on the scripts sources.";
-
-const lintCompiler = eslint("src");
-lintCompiler.displayName = "lint-compiler";
-task("lint-compiler", series([buildEslintRules, lintCompiler]));
-task("lint-compiler").description = "Runs eslint on the compiler sources.";
-task("lint-compiler").flags = {
-    "   --ci": "Runs eslint additional rules",
-};
-
 const lintRoot = eslint(".");
-lintRoot.displayName = "lint-root";
+lintRoot.displayName = "lint";
 
 const lint = series([buildEslintRules, lintRoot]);
 lint.displayName = "lint";
