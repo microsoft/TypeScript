@@ -343,9 +343,12 @@ namespace ts {
     /**
      * Visits an iteration body, adding any block-scoped variables required by the transformation.
      */
-    export function visitIterationBody(body: Statement, visitor: Visitor, context: TransformationContext): Statement {
+    export function visitIterationBody(body: Statement, visitor: Visitor, context: TransformationContext): Statement;
+    /* @internal */
+    export function visitIterationBody(body: Statement, visitor: Visitor, context: TransformationContext, nodeVisitor?: NodeVisitor): Statement; // eslint-disable-line @typescript-eslint/unified-signatures
+    export function visitIterationBody(body: Statement, visitor: Visitor, context: TransformationContext, nodeVisitor: NodeVisitor = visitNode): Statement {
         context.startBlockScope();
-        const updated = visitNode(body, visitor, isStatement, context.factory.liftToBlock);
+        const updated = nodeVisitor(body, visitor, isStatement, context.factory.liftToBlock);
         const declarations = context.endBlockScope();
         if (some(declarations)) {
             if (isBlock(updated)) {
@@ -459,7 +462,7 @@ namespace ts {
                 nodesVisitor(node.modifiers, visitor, isModifierLike),
                 nodeVisitor(node.name, visitor, isPropertyName),
                 // QuestionToken and ExclamationToken are mutually exclusive in PropertyDeclaration
-                nodeVisitor(node.questionToken || node.exclamationToken, tokenVisitor, isQuestionOrExclamationToken),
+                nodeVisitor(node.questionToken ?? node.exclamationToken, tokenVisitor, isQuestionOrExclamationToken),
                 nodeVisitor(node.type, visitor, isTypeNode),
                 nodeVisitor(node.initializer, visitor, isExpression));
         },
@@ -624,7 +627,7 @@ namespace ts {
         [SyntaxKind.ImportType]: function visitEachChildOfImportTypeNode(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
             return context.factory.updateImportTypeNode(node,
                 nodeVisitor(node.argument, visitor, isTypeNode),
-                nodeVisitor(node.assertions, visitor, isNode),
+                nodeVisitor(node.assertions, visitor, isImportTypeAssertionContainer),
                 nodeVisitor(node.qualifier, visitor, isEntityName),
                 nodesVisitor(node.typeArguments, visitor, isTypeNode),
                 node.isTypeOf
@@ -633,7 +636,7 @@ namespace ts {
 
         [SyntaxKind.ImportTypeAssertionContainer]: function visitEachChildOfImportTypeAssertionContainer(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
             return context.factory.updateImportTypeAssertionContainer(node,
-                nodeVisitor(node.assertClause, visitor, isNode),
+                nodeVisitor(node.assertClause, visitor, isAssertClause),
                 node.multiLine
             );
         },
@@ -931,14 +934,14 @@ namespace ts {
 
         [SyntaxKind.DoStatement]: function visitEachChildOfDoStatement(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
             return context.factory.updateDoStatement(node,
-                visitIterationBody(node.statement, visitor, context),
+                visitIterationBody(node.statement, visitor, context, nodeVisitor),
                 nodeVisitor(node.expression, visitor, isExpression));
         },
 
         [SyntaxKind.WhileStatement]: function visitEachChildOfWhileStatement(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
             return context.factory.updateWhileStatement(node,
                 nodeVisitor(node.expression, visitor, isExpression),
-                visitIterationBody(node.statement, visitor, context));
+                visitIterationBody(node.statement, visitor, context, nodeVisitor));
         },
 
         [SyntaxKind.ForStatement]: function visitEachChildOfForStatement(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
@@ -946,14 +949,14 @@ namespace ts {
                 nodeVisitor(node.initializer, visitor, isForInitializer),
                 nodeVisitor(node.condition, visitor, isExpression),
                 nodeVisitor(node.incrementor, visitor, isExpression),
-                visitIterationBody(node.statement, visitor, context));
+                visitIterationBody(node.statement, visitor, context, nodeVisitor));
         },
 
         [SyntaxKind.ForInStatement]: function visitEachChildOfForInStatement(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
             return context.factory.updateForInStatement(node,
                 nodeVisitor(node.initializer, visitor, isForInitializer),
                 nodeVisitor(node.expression, visitor, isExpression),
-                visitIterationBody(node.statement, visitor, context));
+                visitIterationBody(node.statement, visitor, context, nodeVisitor));
         },
 
         [SyntaxKind.ForOfStatement]: function visitEachChildOfForOfStatement(node, visitor, context, _nodesVisitor, nodeVisitor, tokenVisitor) {
@@ -961,7 +964,7 @@ namespace ts {
                 nodeVisitor(node.awaitModifier, tokenVisitor, isAwaitKeyword),
                 nodeVisitor(node.initializer, visitor, isForInitializer),
                 nodeVisitor(node.expression, visitor, isExpression),
-                visitIterationBody(node.statement, visitor, context));
+                visitIterationBody(node.statement, visitor, context, nodeVisitor));
         },
 
         [SyntaxKind.ContinueStatement]: function visitEachChildOfContinueStatement(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
@@ -1113,7 +1116,7 @@ namespace ts {
         [SyntaxKind.AssertEntry]: function visitEachChildOfAssertEntry(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
             return context.factory.updateAssertEntry(node,
                 nodeVisitor(node.name, visitor, isAssertionKey),
-                nodeVisitor(node.value, visitor, isExpressionNode));
+                nodeVisitor(node.value, visitor, isExpression));
         },
 
         [SyntaxKind.ImportClause]: function visitEachChildOfImportClause(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
@@ -1282,9 +1285,9 @@ namespace ts {
         },
 
         // Top-level nodes
-        [SyntaxKind.SourceFile]: function visitEachChildOfSourceFile(node, visitor, context, _nodesVisitor, _nodeVisitor, _tokenVisitor) {
+        [SyntaxKind.SourceFile]: function visitEachChildOfSourceFile(node, visitor, context, nodesVisitor, _nodeVisitor, _tokenVisitor) {
             return context.factory.updateSourceFile(node,
-                visitLexicalEnvironment(node.statements, visitor, context));
+                visitLexicalEnvironment(node.statements, visitor, context, /*start*/ undefined, /*ensureUseStrict*/ undefined, nodesVisitor));
         },
 
         // Transformation nodes
