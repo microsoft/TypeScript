@@ -107,6 +107,28 @@ namespace ts.performance {
         durations.forEach((duration, measureName) => cb(measureName, duration));
     }
 
+    export function forEachMark(cb: (markName: string) => void) {
+        marks.forEach((_time, markName) => cb(markName));
+    }
+
+    export function clearMeasures(name?: string) {
+        if (name !== undefined) durations.delete(name);
+        else durations.clear();
+        performanceImpl?.clearMeasures(name);
+    }
+
+    export function clearMarks(name?: string) {
+        if (name !== undefined) {
+            counts.delete(name);
+            marks.delete(name);
+        }
+        else {
+            counts.clear();
+            marks.clear();
+        }
+        performanceImpl?.clearMarks(name);
+    }
+
     /**
      * Indicates whether the performance API is enabled.
      */

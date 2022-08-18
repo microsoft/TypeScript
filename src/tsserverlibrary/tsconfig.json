@@ -7,7 +7,6 @@
         "tsserverlibrary.ts"
     ],
     "references": [
-        { "path": "../shims", "prepend": true },
         { "path": "../compiler", "prepend": true },
         { "path": "../jsTyping", "prepend": true },
         { "path": "../services", "prepend": true },
