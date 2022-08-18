@@ -25,11 +25,7 @@ interface ObjectConstructor {
      * Returns an object created by key-value entries for properties and methods
      * @param entries An iterable object that contains key-value entries for properties and methods.
      */
-    <KeyValue extends readonly [PropertyKey, any]>(
-      entries: Iterable<KeyValue>,
-    ) => [KeyValue] extends [[PropertyKey, any]]
-      ? { [k: string]: KeyValue[1] }
-      : { [K in KeyValue[0]]: KeyValue extends readonly [K, infer V] ? V : never };
+    fromEntries<T = any>(entries: Iterable<readonly [PropertyKey, T]>): { [k: string]: T };
 
     /**
      * Returns an object created by key-value entries for properties and methods
