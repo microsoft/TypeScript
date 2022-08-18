@@ -151,6 +151,7 @@
         "unittests/tsc/cancellationToken.ts",
         "unittests/tsc/composite.ts",
         "unittests/tsc/declarationEmit.ts",
+        "unittests/tsc/forceConsistentCasingInFileNames.ts",
         "unittests/tsc/incremental.ts",
         "unittests/tsc/listFilesOnly.ts",
         "unittests/tsc/projectReferences.ts",
