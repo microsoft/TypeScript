@@ -405,69 +405,77 @@ namespace ts {
     // NOTE: Before you can add a new method to `visitEachChildTable`, you must first ensure the `Node` subtype you
     //       wish to add is defined in the `HasChildren` union in types.ts.
     const visitEachChildTable: VisitEachChildTable = {
+        [SyntaxKind.Identifier]: function visitEachChildOfIdentifier(node, visitor, context, nodesVisitor, _nodeVisitor, _tokenVisitor) {
+            return context.factory.updateIdentifier(node,
+                nodesVisitor(node.typeArguments, visitor, isTypeNodeOrTypeParameterDeclaration));
+        },
 
-        [SyntaxKind.Identifier]: (node, visitor, _context, nodesVisitor, _nodeVisitor, _tokenVisitor) =>
-            factory.updateIdentifier(node,
-                nodesVisitor(node.typeArguments, visitor, isTypeNodeOrTypeParameterDeclaration)),
-
-        [SyntaxKind.QualifiedName]: (node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateQualifiedName(node,
+        [SyntaxKind.QualifiedName]: function visitEachChildOfQualifiedName(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateQualifiedName(node,
                 nodeVisitor(node.left, visitor, isEntityName),
-                nodeVisitor(node.right, visitor, isIdentifier)),
+                nodeVisitor(node.right, visitor, isIdentifier));
+        },
 
-        [SyntaxKind.ComputedPropertyName]: (node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateComputedPropertyName(node,
-                nodeVisitor(node.expression, visitor, isExpression)),
+        [SyntaxKind.ComputedPropertyName]: function visitEachChildOfComputedPropertyName(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateComputedPropertyName(node,
+                nodeVisitor(node.expression, visitor, isExpression));
+        },
 
         // Signature elements
-        [SyntaxKind.TypeParameter]: (node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateTypeParameterDeclaration(node,
+        [SyntaxKind.TypeParameter]: function visitEachChildOfTypeParameterDeclaration(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateTypeParameterDeclaration(node,
                 nodesVisitor(node.modifiers, visitor, isModifier),
                 nodeVisitor(node.name, visitor, isIdentifier),
                 nodeVisitor(node.constraint, visitor, isTypeNode),
-                nodeVisitor(node.default, visitor, isTypeNode)),
+                nodeVisitor(node.default, visitor, isTypeNode));
+        },
 
-        [SyntaxKind.Parameter]: (node, visitor, context, nodesVisitor, nodeVisitor, tokenVisitor) =>
-            context.factory.updateParameterDeclaration(node,
+        [SyntaxKind.Parameter]: function visitEachChildOfParameterDeclaration(node, visitor, context, nodesVisitor, nodeVisitor, tokenVisitor) {
+            return context.factory.updateParameterDeclaration(node,
                 nodesVisitor(node.modifiers, visitor, isModifierLike),
                 nodeVisitor(node.dotDotDotToken, tokenVisitor, isDotDotDotToken),
                 nodeVisitor(node.name, visitor, isBindingName),
                 nodeVisitor(node.questionToken, tokenVisitor, isQuestionToken),
                 nodeVisitor(node.type, visitor, isTypeNode),
-                nodeVisitor(node.initializer, visitor, isExpression)),
+                nodeVisitor(node.initializer, visitor, isExpression));
+        },
 
-        [SyntaxKind.Decorator]: (node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateDecorator(node,
-                nodeVisitor(node.expression, visitor, isExpression)),
+        [SyntaxKind.Decorator]: function visitEachChildOfDecorator(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateDecorator(node,
+                nodeVisitor(node.expression, visitor, isExpression));
+        },
 
         // Type elements
-        [SyntaxKind.PropertySignature]: (node, visitor, context, nodesVisitor, nodeVisitor, tokenVisitor) =>
-            context.factory.updatePropertySignature(node,
+        [SyntaxKind.PropertySignature]: function visitEachChildOfPropertySignature(node, visitor, context, nodesVisitor, nodeVisitor, tokenVisitor) {
+            return context.factory.updatePropertySignature(node,
                 nodesVisitor(node.modifiers, visitor, isModifier),
                 nodeVisitor(node.name, visitor, isPropertyName),
                 nodeVisitor(node.questionToken, tokenVisitor, isToken),
-                nodeVisitor(node.type, visitor, isTypeNode)),
+                nodeVisitor(node.type, visitor, isTypeNode));
+        },
 
-        [SyntaxKind.PropertyDeclaration]: (node, visitor, context, nodesVisitor, nodeVisitor, tokenVisitor) =>
-            context.factory.updatePropertyDeclaration(node,
+        [SyntaxKind.PropertyDeclaration]: function visitEachChildOfPropertyDeclaration(node, visitor, context, nodesVisitor, nodeVisitor, tokenVisitor) {
+            return context.factory.updatePropertyDeclaration(node,
                 nodesVisitor(node.modifiers, visitor, isModifierLike),
                 nodeVisitor(node.name, visitor, isPropertyName),
                 // QuestionToken and ExclamationToken are mutually exclusive in PropertyDeclaration
                 nodeVisitor(node.questionToken || node.exclamationToken, tokenVisitor, isQuestionOrExclamationToken),
                 nodeVisitor(node.type, visitor, isTypeNode),
-                nodeVisitor(node.initializer, visitor, isExpression)),
+                nodeVisitor(node.initializer, visitor, isExpression));
+        },
 
-        [SyntaxKind.MethodSignature]: (node, visitor, context, nodesVisitor, nodeVisitor, tokenVisitor) =>
-            context.factory.updateMethodSignature(node,
+        [SyntaxKind.MethodSignature]: function visitEachChildOfMethodSignature(node, visitor, context, nodesVisitor, nodeVisitor, tokenVisitor) {
+            return context.factory.updateMethodSignature(node,
                 nodesVisitor(node.modifiers, visitor, isModifier),
                 nodeVisitor(node.name, visitor, isPropertyName),
                 nodeVisitor(node.questionToken, tokenVisitor, isQuestionToken),
                 nodesVisitor(node.typeParameters, visitor, isTypeParameterDeclaration),
                 nodesVisitor(node.parameters, visitor, isParameterDeclaration),
-                nodeVisitor(node.type, visitor, isTypeNode)),
+                nodeVisitor(node.type, visitor, isTypeNode));
+        },
 
-        [SyntaxKind.MethodDeclaration]: (node, visitor, context, nodesVisitor, nodeVisitor, tokenVisitor) =>
-            context.factory.updateMethodDeclaration(node,
+        [SyntaxKind.MethodDeclaration]: function visitEachChildOfMethodDeclaration(node, visitor, context, nodesVisitor, nodeVisitor, tokenVisitor) {
+            return context.factory.updateMethodDeclaration(node,
                 nodesVisitor(node.modifiers, visitor, isModifierLike),
                 nodeVisitor(node.asteriskToken, tokenVisitor, isAsteriskToken),
                 nodeVisitor(node.name, visitor, isPropertyName),
@@ -475,229 +483,267 @@ namespace ts {
                 nodesVisitor(node.typeParameters, visitor, isTypeParameterDeclaration),
                 visitParameterList(node.parameters, visitor, context, nodesVisitor),
                 nodeVisitor(node.type, visitor, isTypeNode),
-                visitFunctionBody(node.body!, visitor, context, nodeVisitor)),
+                visitFunctionBody(node.body!, visitor, context, nodeVisitor));
+        },
 
-        [SyntaxKind.Constructor]: (node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateConstructorDeclaration(node,
+        [SyntaxKind.Constructor]: function visitEachChildOfConstructorDeclaration(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateConstructorDeclaration(node,
                 nodesVisitor(node.modifiers, visitor, isModifier),
                 visitParameterList(node.parameters, visitor, context, nodesVisitor),
-                visitFunctionBody(node.body!, visitor, context, nodeVisitor)),
+                visitFunctionBody(node.body!, visitor, context, nodeVisitor));
+        },
 
-        [SyntaxKind.GetAccessor]: (node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateGetAccessorDeclaration(node,
+        [SyntaxKind.GetAccessor]: function visitEachChildOfGetAccessorDeclaration(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateGetAccessorDeclaration(node,
                 nodesVisitor(node.modifiers, visitor, isModifierLike),
                 nodeVisitor(node.name, visitor, isPropertyName),
                 visitParameterList(node.parameters, visitor, context, nodesVisitor),
                 nodeVisitor(node.type, visitor, isTypeNode),
-                visitFunctionBody(node.body!, visitor, context, nodeVisitor)),
+                visitFunctionBody(node.body!, visitor, context, nodeVisitor));
+        },
 
-        [SyntaxKind.SetAccessor]: (node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateSetAccessorDeclaration(node,
+        [SyntaxKind.SetAccessor]: function visitEachChildOfSetAccessorDeclaration(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateSetAccessorDeclaration(node,
                 nodesVisitor(node.modifiers, visitor, isModifierLike),
                 nodeVisitor(node.name, visitor, isPropertyName),
                 visitParameterList(node.parameters, visitor, context, nodesVisitor),
-                visitFunctionBody(node.body!, visitor, context, nodeVisitor)),
+                visitFunctionBody(node.body!, visitor, context, nodeVisitor));
+        },
 
-        [SyntaxKind.ClassStaticBlockDeclaration]: (node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) => {
+        [SyntaxKind.ClassStaticBlockDeclaration]: function visitEachChildOfClassStaticBlockDeclaration(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
             context.startLexicalEnvironment();
             context.suspendLexicalEnvironment();
             return context.factory.updateClassStaticBlockDeclaration(node,
                 visitFunctionBody(node.body, visitor, context, nodeVisitor));
         },
 
-        [SyntaxKind.CallSignature]: (node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateCallSignature(node,
+        [SyntaxKind.CallSignature]: function visitEachChildOfCallSignatureDeclaration(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateCallSignature(node,
                 nodesVisitor(node.typeParameters, visitor, isTypeParameterDeclaration),
                 nodesVisitor(node.parameters, visitor, isParameterDeclaration),
-                nodeVisitor(node.type, visitor, isTypeNode)),
+                nodeVisitor(node.type, visitor, isTypeNode));
+        },
 
-        [SyntaxKind.ConstructSignature]: (node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateConstructSignature(node,
+        [SyntaxKind.ConstructSignature]: function visitEachChildOfConstructSignatureDeclaration(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateConstructSignature(node,
                 nodesVisitor(node.typeParameters, visitor, isTypeParameterDeclaration),
                 nodesVisitor(node.parameters, visitor, isParameterDeclaration),
-                nodeVisitor(node.type, visitor, isTypeNode)),
+                nodeVisitor(node.type, visitor, isTypeNode));
+        },
 
-        [SyntaxKind.IndexSignature]: (node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateIndexSignature(node,
+        [SyntaxKind.IndexSignature]: function visitEachChildOfIndexSignatureDeclaration(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateIndexSignature(node,
                 nodesVisitor(node.modifiers, visitor, isModifier),
                 nodesVisitor(node.parameters, visitor, isParameterDeclaration),
-                nodeVisitor(node.type, visitor, isTypeNode)),
+                nodeVisitor(node.type, visitor, isTypeNode));
+        },
 
         // Types
-        [SyntaxKind.TypePredicate]: (node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateTypePredicateNode(node,
+        [SyntaxKind.TypePredicate]: function visitEachChildOfTypePredicateNode(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateTypePredicateNode(node,
                 nodeVisitor(node.assertsModifier, visitor, isAssertsKeyword),
                 nodeVisitor(node.parameterName, visitor, isIdentifierOrThisTypeNode),
-                nodeVisitor(node.type, visitor, isTypeNode)),
+                nodeVisitor(node.type, visitor, isTypeNode));
+        },
 
-        [SyntaxKind.TypeReference]: (node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateTypeReferenceNode(node,
+        [SyntaxKind.TypeReference]: function visitEachChildOfTypeReferenceNode(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateTypeReferenceNode(node,
                 nodeVisitor(node.typeName, visitor, isEntityName),
-                nodesVisitor(node.typeArguments, visitor, isTypeNode)),
+                nodesVisitor(node.typeArguments, visitor, isTypeNode));
+        },
 
-        [SyntaxKind.FunctionType]: (node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateFunctionTypeNode(node,
+        [SyntaxKind.FunctionType]: function visitEachChildOfFunctionTypeNode(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateFunctionTypeNode(node,
                 nodesVisitor(node.typeParameters, visitor, isTypeParameterDeclaration),
                 nodesVisitor(node.parameters, visitor, isParameterDeclaration),
-                nodeVisitor(node.type, visitor, isTypeNode)),
+                nodeVisitor(node.type, visitor, isTypeNode));
+        },
 
-        [SyntaxKind.ConstructorType]: (node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateConstructorTypeNode(node,
+        [SyntaxKind.ConstructorType]: function visitEachChildOfConstructorTypeNode(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateConstructorTypeNode(node,
                 nodesVisitor(node.modifiers, visitor, isModifier),
                 nodesVisitor(node.typeParameters, visitor, isTypeParameterDeclaration),
                 nodesVisitor(node.parameters, visitor, isParameterDeclaration),
-                nodeVisitor(node.type, visitor, isTypeNode)),
+                nodeVisitor(node.type, visitor, isTypeNode));
+        },
 
-        [SyntaxKind.TypeQuery]: (node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateTypeQueryNode(node,
+        [SyntaxKind.TypeQuery]: function visitEachChildOfTypeQueryNode(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateTypeQueryNode(node,
                 nodeVisitor(node.exprName, visitor, isEntityName),
-                nodesVisitor(node.typeArguments, visitor, isTypeNode)),
+                nodesVisitor(node.typeArguments, visitor, isTypeNode));
+        },
 
-        [SyntaxKind.TypeLiteral]: (node, visitor, context, nodesVisitor, _nodeVisitor, _tokenVisitor) =>
-            context.factory.updateTypeLiteralNode(node,
-                nodesVisitor(node.members, visitor, isTypeElement)),
+        [SyntaxKind.TypeLiteral]: function visitEachChildOfTypeLiteralNode(node, visitor, context, nodesVisitor, _nodeVisitor, _tokenVisitor) {
+            return context.factory.updateTypeLiteralNode(node,
+                nodesVisitor(node.members, visitor, isTypeElement));
+        },
 
-        [SyntaxKind.ArrayType]: (node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateArrayTypeNode(node,
-                nodeVisitor(node.elementType, visitor, isTypeNode)),
+        [SyntaxKind.ArrayType]: function visitEachChildOfArrayTypeNode(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateArrayTypeNode(node,
+                nodeVisitor(node.elementType, visitor, isTypeNode));
+        },
 
-        [SyntaxKind.TupleType]: (node, visitor, context, nodesVisitor, _nodeVisitor, _tokenVisitor) =>
-            context.factory.updateTupleTypeNode(node,
-                nodesVisitor(node.elements, visitor, isTypeNode)),
+        [SyntaxKind.TupleType]: function visitEachChildOfTupleTypeNode(node, visitor, context, nodesVisitor, _nodeVisitor, _tokenVisitor) {
+            return context.factory.updateTupleTypeNode(node,
+                nodesVisitor(node.elements, visitor, isTypeNode));
+        },
 
-        [SyntaxKind.OptionalType]: (node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateOptionalTypeNode(node,
-                nodeVisitor(node.type, visitor, isTypeNode)),
+        [SyntaxKind.OptionalType]: function visitEachChildOfOptionalTypeNode(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateOptionalTypeNode(node,
+                nodeVisitor(node.type, visitor, isTypeNode));
+        },
 
-        [SyntaxKind.RestType]: (node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateRestTypeNode(node,
-                nodeVisitor(node.type, visitor, isTypeNode)),
+        [SyntaxKind.RestType]: function visitEachChildOfRestTypeNode(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateRestTypeNode(node,
+                nodeVisitor(node.type, visitor, isTypeNode));
+        },
 
-        [SyntaxKind.UnionType]: (node, visitor, context, nodesVisitor, _nodeVisitor, _tokenVisitor) =>
-            context.factory.updateUnionTypeNode(node,
-                nodesVisitor(node.types, visitor, isTypeNode)),
+        [SyntaxKind.UnionType]: function visitEachChildOfUnionTypeNode(node, visitor, context, nodesVisitor, _nodeVisitor, _tokenVisitor) {
+            return context.factory.updateUnionTypeNode(node,
+                nodesVisitor(node.types, visitor, isTypeNode));
+        },
 
-        [SyntaxKind.IntersectionType]: (node, visitor, context, nodesVisitor, _nodeVisitor, _tokenVisitor) =>
-            context.factory.updateIntersectionTypeNode(node,
-                nodesVisitor(node.types, visitor, isTypeNode)),
+        [SyntaxKind.IntersectionType]: function visitEachChildOfIntersectionTypeNode(node, visitor, context, nodesVisitor, _nodeVisitor, _tokenVisitor) {
+            return context.factory.updateIntersectionTypeNode(node,
+                nodesVisitor(node.types, visitor, isTypeNode));
+        },
 
-        [SyntaxKind.ConditionalType]: (node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateConditionalTypeNode(node,
+        [SyntaxKind.ConditionalType]: function visitEachChildOfConditionalTypeNode(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateConditionalTypeNode(node,
                 nodeVisitor(node.checkType, visitor, isTypeNode),
                 nodeVisitor(node.extendsType, visitor, isTypeNode),
                 nodeVisitor(node.trueType, visitor, isTypeNode),
-                nodeVisitor(node.falseType, visitor, isTypeNode)),
+                nodeVisitor(node.falseType, visitor, isTypeNode));
+        },
 
-        [SyntaxKind.InferType]: (node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateInferTypeNode(node,
-                nodeVisitor(node.typeParameter, visitor, isTypeParameterDeclaration)),
+        [SyntaxKind.InferType]: function visitEachChildOfInferTypeNode(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateInferTypeNode(node,
+                nodeVisitor(node.typeParameter, visitor, isTypeParameterDeclaration));
+        },
 
-        [SyntaxKind.ImportType]: (node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateImportTypeNode(node,
+        [SyntaxKind.ImportType]: function visitEachChildOfImportTypeNode(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateImportTypeNode(node,
                 nodeVisitor(node.argument, visitor, isTypeNode),
                 nodeVisitor(node.assertions, visitor, isNode),
                 nodeVisitor(node.qualifier, visitor, isEntityName),
                 nodesVisitor(node.typeArguments, visitor, isTypeNode),
                 node.isTypeOf
-            ),
+            );
+        },
 
-        [SyntaxKind.ImportTypeAssertionContainer]: (node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateImportTypeAssertionContainer(node,
+        [SyntaxKind.ImportTypeAssertionContainer]: function visitEachChildOfImportTypeAssertionContainer(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateImportTypeAssertionContainer(node,
                 nodeVisitor(node.assertClause, visitor, isNode),
                 node.multiLine
-            ),
+            );
+        },
 
-        [SyntaxKind.NamedTupleMember]: (node, visitor, context, _nodesVisitor, nodeVisitor, tokenVisitor) =>
-            context.factory.updateNamedTupleMember(node,
+        [SyntaxKind.NamedTupleMember]: function visitEachChildOfNamedTupleMember(node, visitor, context, _nodesVisitor, nodeVisitor, tokenVisitor) {
+            return context.factory.updateNamedTupleMember(node,
                 nodeVisitor(node.dotDotDotToken, tokenVisitor, isDotDotDotToken),
                 nodeVisitor(node.name, visitor, isIdentifier),
                 nodeVisitor(node.questionToken, tokenVisitor, isQuestionToken),
                 nodeVisitor(node.type, visitor, isTypeNode),
-            ),
+            );
+        },
 
-        [SyntaxKind.ParenthesizedType]: (node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateParenthesizedType(node,
-                nodeVisitor(node.type, visitor, isTypeNode)),
+        [SyntaxKind.ParenthesizedType]: function visitEachChildOfParenthesizedType(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateParenthesizedType(node,
+                nodeVisitor(node.type, visitor, isTypeNode));
+        },
 
-        [SyntaxKind.TypeOperator]: (node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateTypeOperatorNode(node,
-                nodeVisitor(node.type, visitor, isTypeNode)),
+        [SyntaxKind.TypeOperator]: function visitEachChildOfTypeOperatorNode(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateTypeOperatorNode(node,
+                nodeVisitor(node.type, visitor, isTypeNode));
+        },
 
-        [SyntaxKind.IndexedAccessType]: (node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateIndexedAccessTypeNode(node,
+        [SyntaxKind.IndexedAccessType]: function visitEachChildOfIndexedAccessType(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateIndexedAccessTypeNode(node,
                 nodeVisitor(node.objectType, visitor, isTypeNode),
-                nodeVisitor(node.indexType, visitor, isTypeNode)),
+                nodeVisitor(node.indexType, visitor, isTypeNode));
+        },
 
-        [SyntaxKind.MappedType]: (node, visitor, context, nodesVisitor, nodeVisitor, tokenVisitor) =>
-            context.factory.updateMappedTypeNode(node,
+        [SyntaxKind.MappedType]: function visitEachChildOfMappedType(node, visitor, context, nodesVisitor, nodeVisitor, tokenVisitor) {
+            return context.factory.updateMappedTypeNode(node,
                 nodeVisitor(node.readonlyToken, tokenVisitor, isReadonlyKeywordOrPlusOrMinusToken),
                 nodeVisitor(node.typeParameter, visitor, isTypeParameterDeclaration),
                 nodeVisitor(node.nameType, visitor, isTypeNode),
                 nodeVisitor(node.questionToken, tokenVisitor, isQuestionOrPlusOrMinusToken),
                 nodeVisitor(node.type, visitor, isTypeNode),
-                nodesVisitor(node.members, visitor, isTypeElement)),
+                nodesVisitor(node.members, visitor, isTypeElement));
+        },
 
-        [SyntaxKind.LiteralType]: (node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateLiteralTypeNode(node,
-                nodeVisitor(node.literal, visitor, isExpression)),
+        [SyntaxKind.LiteralType]: function visitEachChildOfLiteralTypeNode(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateLiteralTypeNode(node,
+                nodeVisitor(node.literal, visitor, isExpression));
+        },
 
-        [SyntaxKind.TemplateLiteralType]: (node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateTemplateLiteralType(node,
+        [SyntaxKind.TemplateLiteralType]: function visitEachChildOfTemplateLiteralType(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateTemplateLiteralType(node,
                 nodeVisitor(node.head, visitor, isTemplateHead),
-                nodesVisitor(node.templateSpans, visitor, isTemplateLiteralTypeSpan)),
+                nodesVisitor(node.templateSpans, visitor, isTemplateLiteralTypeSpan));
+        },
 
-        [SyntaxKind.TemplateLiteralTypeSpan]: (node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateTemplateLiteralTypeSpan(node,
+        [SyntaxKind.TemplateLiteralTypeSpan]: function visitEachChildOfTemplateLiteralTypeSpan(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateTemplateLiteralTypeSpan(node,
                 nodeVisitor(node.type, visitor, isTypeNode),
-                nodeVisitor(node.literal, visitor, isTemplateMiddleOrTemplateTail)),
+                nodeVisitor(node.literal, visitor, isTemplateMiddleOrTemplateTail));
+        },
 
         // Binding patterns
-        [SyntaxKind.ObjectBindingPattern]: (node, visitor, context, nodesVisitor, _nodeVisitor, _tokenVisitor) =>
-            context.factory.updateObjectBindingPattern(node,
-                nodesVisitor(node.elements, visitor, isBindingElement)),
+        [SyntaxKind.ObjectBindingPattern]: function visitEachChildOfObjectBindingPattern(node, visitor, context, nodesVisitor, _nodeVisitor, _tokenVisitor) {
+            return context.factory.updateObjectBindingPattern(node,
+                nodesVisitor(node.elements, visitor, isBindingElement));
+        },
 
-        [SyntaxKind.ArrayBindingPattern]: (node, visitor, context, nodesVisitor, _nodeVisitor, _tokenVisitor) =>
-            context.factory.updateArrayBindingPattern(node,
-                nodesVisitor(node.elements, visitor, isArrayBindingElement)),
+        [SyntaxKind.ArrayBindingPattern]: function visitEachChildOfArrayBindingPattern(node, visitor, context, nodesVisitor, _nodeVisitor, _tokenVisitor) {
+            return context.factory.updateArrayBindingPattern(node,
+                nodesVisitor(node.elements, visitor, isArrayBindingElement));
+        },
 
-        [SyntaxKind.BindingElement]: (node, visitor, context, _nodesVisitor, nodeVisitor, tokenVisitor) =>
-            context.factory.updateBindingElement(node,
+        [SyntaxKind.BindingElement]: function visitEachChildOfBindingElement(node, visitor, context, _nodesVisitor, nodeVisitor, tokenVisitor) {
+            return context.factory.updateBindingElement(node,
                 nodeVisitor(node.dotDotDotToken, tokenVisitor, isDotDotDotToken),
                 nodeVisitor(node.propertyName, visitor, isPropertyName),
                 nodeVisitor(node.name, visitor, isBindingName),
-                nodeVisitor(node.initializer, visitor, isExpression)),
+                nodeVisitor(node.initializer, visitor, isExpression));
+        },
 
         // Expression
-        [SyntaxKind.ArrayLiteralExpression]: (node, visitor, context, nodesVisitor, _nodeVisitor, _tokenVisitor) =>
-            context.factory.updateArrayLiteralExpression(node,
-                nodesVisitor(node.elements, visitor, isExpression)),
+        [SyntaxKind.ArrayLiteralExpression]: function visitEachChildOfArrayLiteralExpression(node, visitor, context, nodesVisitor, _nodeVisitor, _tokenVisitor) {
+            return context.factory.updateArrayLiteralExpression(node,
+                nodesVisitor(node.elements, visitor, isExpression));
+        },
 
-        [SyntaxKind.ObjectLiteralExpression]: (node, visitor, context, nodesVisitor, _nodeVisitor, _tokenVisitor) =>
-            context.factory.updateObjectLiteralExpression(node,
-                nodesVisitor(node.properties, visitor, isObjectLiteralElementLike)),
+        [SyntaxKind.ObjectLiteralExpression]: function visitEachChildOfObjectLiteralExpression(node, visitor, context, nodesVisitor, _nodeVisitor, _tokenVisitor) {
+            return context.factory.updateObjectLiteralExpression(node,
+                nodesVisitor(node.properties, visitor, isObjectLiteralElementLike));
+        },
 
-        [SyntaxKind.PropertyAccessExpression]: (node, visitor, context, _nodesVisitor, nodeVisitor, tokenVisitor) =>
-            isPropertyAccessChain(node) ?
+        [SyntaxKind.PropertyAccessExpression]: function visitEachChildOfPropertyAccessExpression(node, visitor, context, _nodesVisitor, nodeVisitor, tokenVisitor) {
+            return isPropertyAccessChain(node) ?
                 context.factory.updatePropertyAccessChain(node,
                     nodeVisitor(node.expression, visitor, isExpression),
                     nodeVisitor(node.questionDotToken, tokenVisitor, isQuestionDotToken),
                     nodeVisitor(node.name, visitor, isMemberName)) :
                 context.factory.updatePropertyAccessExpression(node,
                     nodeVisitor(node.expression, visitor, isExpression),
-                    nodeVisitor(node.name, visitor, isMemberName)),
+                    nodeVisitor(node.name, visitor, isMemberName));
+        },
 
-        [SyntaxKind.ElementAccessExpression]: (node, visitor, context, _nodesVisitor, nodeVisitor, tokenVisitor) =>
-            isElementAccessChain(node) ?
+        [SyntaxKind.ElementAccessExpression]: function visitEachChildOfElementAccessExpression(node, visitor, context, _nodesVisitor, nodeVisitor, tokenVisitor) {
+            return isElementAccessChain(node) ?
                 context.factory.updateElementAccessChain(node,
                     nodeVisitor(node.expression, visitor, isExpression),
                     nodeVisitor(node.questionDotToken, tokenVisitor, isQuestionDotToken),
                     nodeVisitor(node.argumentExpression, visitor, isExpression)) :
                 context.factory.updateElementAccessExpression(node,
                     nodeVisitor(node.expression, visitor, isExpression),
-                    nodeVisitor(node.argumentExpression, visitor, isExpression)),
+                    nodeVisitor(node.argumentExpression, visitor, isExpression));
+        },
 
-        [SyntaxKind.CallExpression]: (node, visitor, context, nodesVisitor, nodeVisitor, tokenVisitor) =>
-            isCallChain(node) ?
+        [SyntaxKind.CallExpression]: function visitEachChildOfCallExpression(node, visitor, context, nodesVisitor, nodeVisitor, tokenVisitor) {
+            return isCallChain(node) ?
                 context.factory.updateCallChain(node,
                     nodeVisitor(node.expression, visitor, isExpression),
                     nodeVisitor(node.questionDotToken, tokenVisitor, isQuestionDotToken),
@@ -706,465 +752,551 @@ namespace ts {
                 context.factory.updateCallExpression(node,
                     nodeVisitor(node.expression, visitor, isExpression),
                     nodesVisitor(node.typeArguments, visitor, isTypeNode),
-                    nodesVisitor(node.arguments, visitor, isExpression)),
+                    nodesVisitor(node.arguments, visitor, isExpression));
+        },
 
-        [SyntaxKind.NewExpression]: (node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateNewExpression(node,
+        [SyntaxKind.NewExpression]: function visitEachChildOfNewExpression(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateNewExpression(node,
                 nodeVisitor(node.expression, visitor, isExpression),
                 nodesVisitor(node.typeArguments, visitor, isTypeNode),
-                nodesVisitor(node.arguments, visitor, isExpression)),
+                nodesVisitor(node.arguments, visitor, isExpression));
+        },
 
-        [SyntaxKind.TaggedTemplateExpression]: (node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateTaggedTemplateExpression(node,
+        [SyntaxKind.TaggedTemplateExpression]: function visitEachChildOfTaggedTemplateExpression(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateTaggedTemplateExpression(node,
                 nodeVisitor(node.tag, visitor, isExpression),
                 nodesVisitor(node.typeArguments, visitor, isTypeNode),
-                nodeVisitor(node.template, visitor, isTemplateLiteral)),
+                nodeVisitor(node.template, visitor, isTemplateLiteral));
+        },
 
-        [SyntaxKind.TypeAssertionExpression]: (node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateTypeAssertion(node,
+        [SyntaxKind.TypeAssertionExpression]: function visitEachChildOfTypeAssertionExpression(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateTypeAssertion(node,
                 nodeVisitor(node.type, visitor, isTypeNode),
-                nodeVisitor(node.expression, visitor, isExpression)),
+                nodeVisitor(node.expression, visitor, isExpression));
+        },
 
-        [SyntaxKind.ParenthesizedExpression]: (node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateParenthesizedExpression(node,
-                nodeVisitor(node.expression, visitor, isExpression)),
+        [SyntaxKind.ParenthesizedExpression]: function visitEachChildOfParenthesizedExpression(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateParenthesizedExpression(node,
+                nodeVisitor(node.expression, visitor, isExpression));
+        },
 
-        [SyntaxKind.FunctionExpression]: (node, visitor, context, nodesVisitor, nodeVisitor, tokenVisitor) =>
-            context.factory.updateFunctionExpression(node,
+        [SyntaxKind.FunctionExpression]: function visitEachChildOfFunctionExpression(node, visitor, context, nodesVisitor, nodeVisitor, tokenVisitor) {
+            return context.factory.updateFunctionExpression(node,
                 nodesVisitor(node.modifiers, visitor, isModifier),
                 nodeVisitor(node.asteriskToken, tokenVisitor, isAsteriskToken),
                 nodeVisitor(node.name, visitor, isIdentifier),
                 nodesVisitor(node.typeParameters, visitor, isTypeParameterDeclaration),
                 visitParameterList(node.parameters, visitor, context, nodesVisitor),
                 nodeVisitor(node.type, visitor, isTypeNode),
-                visitFunctionBody(node.body, visitor, context, nodeVisitor)),
+                visitFunctionBody(node.body, visitor, context, nodeVisitor));
+        },
 
-        [SyntaxKind.ArrowFunction]: (node, visitor, context, nodesVisitor, nodeVisitor, tokenVisitor) =>
-            context.factory.updateArrowFunction(node,
+        [SyntaxKind.ArrowFunction]: function visitEachChildOfArrowFunction(node, visitor, context, nodesVisitor, nodeVisitor, tokenVisitor) {
+            return context.factory.updateArrowFunction(node,
                 nodesVisitor(node.modifiers, visitor, isModifier),
                 nodesVisitor(node.typeParameters, visitor, isTypeParameterDeclaration),
                 visitParameterList(node.parameters, visitor, context, nodesVisitor),
                 nodeVisitor(node.type, visitor, isTypeNode),
                 nodeVisitor(node.equalsGreaterThanToken, tokenVisitor, isEqualsGreaterThanToken),
-                visitFunctionBody(node.body, visitor, context, nodeVisitor)),
+                visitFunctionBody(node.body, visitor, context, nodeVisitor));
+        },
 
-        [SyntaxKind.DeleteExpression]: (node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateDeleteExpression(node,
-                nodeVisitor(node.expression, visitor, isExpression)),
+        [SyntaxKind.DeleteExpression]: function visitEachChildOfDeleteExpression(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateDeleteExpression(node,
+                nodeVisitor(node.expression, visitor, isExpression));
+        },
 
-        [SyntaxKind.TypeOfExpression]: (node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateTypeOfExpression(node,
-                nodeVisitor(node.expression, visitor, isExpression)),
+        [SyntaxKind.TypeOfExpression]: function visitEachChildOfTypeOfExpression(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateTypeOfExpression(node,
+                nodeVisitor(node.expression, visitor, isExpression));
+        },
 
-        [SyntaxKind.VoidExpression]: (node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateVoidExpression(node,
-                nodeVisitor(node.expression, visitor, isExpression)),
+        [SyntaxKind.VoidExpression]: function visitEachChildOfVoidExpression(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateVoidExpression(node,
+                nodeVisitor(node.expression, visitor, isExpression));
+        },
 
-        [SyntaxKind.AwaitExpression]: (node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateAwaitExpression(node,
-                nodeVisitor(node.expression, visitor, isExpression)),
+        [SyntaxKind.AwaitExpression]: function visitEachChildOfAwaitExpression(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateAwaitExpression(node,
+                nodeVisitor(node.expression, visitor, isExpression));
+        },
 
-        [SyntaxKind.PrefixUnaryExpression]: (node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updatePrefixUnaryExpression(node,
-                nodeVisitor(node.operand, visitor, isExpression)),
+        [SyntaxKind.PrefixUnaryExpression]: function visitEachChildOfPrefixUnaryExpression(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updatePrefixUnaryExpression(node,
+                nodeVisitor(node.operand, visitor, isExpression));
+        },
 
-        [SyntaxKind.PostfixUnaryExpression]: (node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updatePostfixUnaryExpression(node,
-                nodeVisitor(node.operand, visitor, isExpression)),
+        [SyntaxKind.PostfixUnaryExpression]: function visitEachChildOfPostfixUnaryExpression(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updatePostfixUnaryExpression(node,
+                nodeVisitor(node.operand, visitor, isExpression));
+        },
 
-        [SyntaxKind.BinaryExpression]: (node, visitor, context, _nodesVisitor, nodeVisitor, tokenVisitor) =>
-            context.factory.updateBinaryExpression(node,
+        [SyntaxKind.BinaryExpression]: function visitEachChildOfBinaryExpression(node, visitor, context, _nodesVisitor, nodeVisitor, tokenVisitor) {
+            return context.factory.updateBinaryExpression(node,
                 nodeVisitor(node.left, visitor, isExpression),
                 nodeVisitor(node.operatorToken, tokenVisitor, isBinaryOperatorToken),
-                nodeVisitor(node.right, visitor, isExpression)),
+                nodeVisitor(node.right, visitor, isExpression));
+        },
 
-        [SyntaxKind.ConditionalExpression]: (node, visitor, context, _nodesVisitor, nodeVisitor, tokenVisitor) =>
-            context.factory.updateConditionalExpression(node,
+        [SyntaxKind.ConditionalExpression]: function visitEachChildOfConditionalExpression(node, visitor, context, _nodesVisitor, nodeVisitor, tokenVisitor) {
+            return context.factory.updateConditionalExpression(node,
                 nodeVisitor(node.condition, visitor, isExpression),
                 nodeVisitor(node.questionToken, tokenVisitor, isQuestionToken),
                 nodeVisitor(node.whenTrue, visitor, isExpression),
                 nodeVisitor(node.colonToken, tokenVisitor, isColonToken),
-                nodeVisitor(node.whenFalse, visitor, isExpression)),
+                nodeVisitor(node.whenFalse, visitor, isExpression));
+        },
 
-        [SyntaxKind.TemplateExpression]: (node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateTemplateExpression(node,
+        [SyntaxKind.TemplateExpression]: function visitEachChildOfTemplateExpression(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateTemplateExpression(node,
                 nodeVisitor(node.head, visitor, isTemplateHead),
-                nodesVisitor(node.templateSpans, visitor, isTemplateSpan)),
+                nodesVisitor(node.templateSpans, visitor, isTemplateSpan));
+        },
 
-        [SyntaxKind.YieldExpression]: (node, visitor, context, _nodesVisitor, nodeVisitor, tokenVisitor) =>
-            context.factory.updateYieldExpression(node,
+        [SyntaxKind.YieldExpression]: function visitEachChildOfYieldExpression(node, visitor, context, _nodesVisitor, nodeVisitor, tokenVisitor) {
+            return context.factory.updateYieldExpression(node,
                 nodeVisitor(node.asteriskToken, tokenVisitor, isAsteriskToken),
-                nodeVisitor(node.expression, visitor, isExpression)),
+                nodeVisitor(node.expression, visitor, isExpression));
+        },
 
-        [SyntaxKind.SpreadElement]: (node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateSpreadElement(node,
-                nodeVisitor(node.expression, visitor, isExpression)),
+        [SyntaxKind.SpreadElement]: function visitEachChildOfSpreadElement(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateSpreadElement(node,
+                nodeVisitor(node.expression, visitor, isExpression));
+        },
 
-        [SyntaxKind.ClassExpression]: (node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateClassExpression(node,
+        [SyntaxKind.ClassExpression]: function visitEachChildOfClassExpression(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateClassExpression(node,
                 nodesVisitor(node.modifiers, visitor, isModifierLike),
                 nodeVisitor(node.name, visitor, isIdentifier),
                 nodesVisitor(node.typeParameters, visitor, isTypeParameterDeclaration),
                 nodesVisitor(node.heritageClauses, visitor, isHeritageClause),
-                nodesVisitor(node.members, visitor, isClassElement)),
+                nodesVisitor(node.members, visitor, isClassElement));
+        },
 
-        [SyntaxKind.ExpressionWithTypeArguments]: (node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateExpressionWithTypeArguments(node,
+        [SyntaxKind.ExpressionWithTypeArguments]: function visitEachChildOfExpressionWithTypeArguments(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateExpressionWithTypeArguments(node,
                 nodeVisitor(node.expression, visitor, isExpression),
-                nodesVisitor(node.typeArguments, visitor, isTypeNode)),
+                nodesVisitor(node.typeArguments, visitor, isTypeNode));
+        },
 
-        [SyntaxKind.AsExpression]: (node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateAsExpression(node,
+        [SyntaxKind.AsExpression]: function visitEachChildOfAsExpression(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateAsExpression(node,
                 nodeVisitor(node.expression, visitor, isExpression),
-                nodeVisitor(node.type, visitor, isTypeNode)),
+                nodeVisitor(node.type, visitor, isTypeNode));
+        },
 
-        [SyntaxKind.NonNullExpression]: (node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            isOptionalChain(node) ?
+        [SyntaxKind.NonNullExpression]: function visitEachChildOfNonNullExpression(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return isOptionalChain(node) ?
                 context.factory.updateNonNullChain(node,
                     nodeVisitor(node.expression, visitor, isExpression)) :
                 context.factory.updateNonNullExpression(node,
-                    nodeVisitor(node.expression, visitor, isExpression)),
+                    nodeVisitor(node.expression, visitor, isExpression));
+            },
 
-        [SyntaxKind.MetaProperty]: (node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateMetaProperty(node,
-                nodeVisitor(node.name, visitor, isIdentifier)),
+        [SyntaxKind.MetaProperty]: function visitEachChildOfMetaProperty(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateMetaProperty(node,
+                nodeVisitor(node.name, visitor, isIdentifier));
+        },
 
         // Misc
-        [SyntaxKind.TemplateSpan]: (node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateTemplateSpan(node,
+        [SyntaxKind.TemplateSpan]: function visitEachChildOfTemplateSpan(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateTemplateSpan(node,
                 nodeVisitor(node.expression, visitor, isExpression),
-                nodeVisitor(node.literal, visitor, isTemplateMiddleOrTemplateTail)),
+                nodeVisitor(node.literal, visitor, isTemplateMiddleOrTemplateTail));
+        },
 
         // Element
-        [SyntaxKind.Block]: (node, visitor, context, nodesVisitor, _nodeVisitor, _tokenVisitor) =>
-            context.factory.updateBlock(node,
-                nodesVisitor(node.statements, visitor, isStatement)),
+        [SyntaxKind.Block]: function visitEachChildOfBlock(node, visitor, context, nodesVisitor, _nodeVisitor, _tokenVisitor) {
+            return context.factory.updateBlock(node,
+                nodesVisitor(node.statements, visitor, isStatement));
+        },
 
-        [SyntaxKind.VariableStatement]: (node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateVariableStatement(node,
+        [SyntaxKind.VariableStatement]: function visitEachChildOfVariableStatement(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateVariableStatement(node,
                 nodesVisitor(node.modifiers, visitor, isModifier),
-                nodeVisitor(node.declarationList, visitor, isVariableDeclarationList)),
+                nodeVisitor(node.declarationList, visitor, isVariableDeclarationList));
+        },
 
-        [SyntaxKind.ExpressionStatement]: (node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateExpressionStatement(node,
-                nodeVisitor(node.expression, visitor, isExpression)),
+        [SyntaxKind.ExpressionStatement]: function visitEachChildOfExpressionStatement(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateExpressionStatement(node,
+                nodeVisitor(node.expression, visitor, isExpression));
+        },
 
-        [SyntaxKind.IfStatement]: (node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateIfStatement(node,
+        [SyntaxKind.IfStatement]: function visitEachChildOfIfStatement(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateIfStatement(node,
                 nodeVisitor(node.expression, visitor, isExpression),
                 nodeVisitor(node.thenStatement, visitor, isStatement, context.factory.liftToBlock),
-                nodeVisitor(node.elseStatement, visitor, isStatement, context.factory.liftToBlock)),
+                nodeVisitor(node.elseStatement, visitor, isStatement, context.factory.liftToBlock));
+        },
 
-        [SyntaxKind.DoStatement]: (node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateDoStatement(node,
+        [SyntaxKind.DoStatement]: function visitEachChildOfDoStatement(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateDoStatement(node,
                 visitIterationBody(node.statement, visitor, context),
-                nodeVisitor(node.expression, visitor, isExpression)),
+                nodeVisitor(node.expression, visitor, isExpression));
+        },
 
-        [SyntaxKind.WhileStatement]: (node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateWhileStatement(node,
+        [SyntaxKind.WhileStatement]: function visitEachChildOfWhileStatement(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateWhileStatement(node,
                 nodeVisitor(node.expression, visitor, isExpression),
-                visitIterationBody(node.statement, visitor, context)),
+                visitIterationBody(node.statement, visitor, context));
+        },
 
-        [SyntaxKind.ForStatement]: (node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateForStatement(node,
+        [SyntaxKind.ForStatement]: function visitEachChildOfForStatement(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateForStatement(node,
                 nodeVisitor(node.initializer, visitor, isForInitializer),
                 nodeVisitor(node.condition, visitor, isExpression),
                 nodeVisitor(node.incrementor, visitor, isExpression),
-                visitIterationBody(node.statement, visitor, context)),
+                visitIterationBody(node.statement, visitor, context));
+        },
 
-        [SyntaxKind.ForInStatement]: (node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateForInStatement(node,
+        [SyntaxKind.ForInStatement]: function visitEachChildOfForInStatement(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateForInStatement(node,
                 nodeVisitor(node.initializer, visitor, isForInitializer),
                 nodeVisitor(node.expression, visitor, isExpression),
-                visitIterationBody(node.statement, visitor, context)),
+                visitIterationBody(node.statement, visitor, context));
+        },
 
-        [SyntaxKind.ForOfStatement]: (node, visitor, context, _nodesVisitor, nodeVisitor, tokenVisitor) =>
-            context.factory.updateForOfStatement(node,
+        [SyntaxKind.ForOfStatement]: function visitEachChildOfForOfStatement(node, visitor, context, _nodesVisitor, nodeVisitor, tokenVisitor) {
+            return context.factory.updateForOfStatement(node,
                 nodeVisitor(node.awaitModifier, tokenVisitor, isAwaitKeyword),
                 nodeVisitor(node.initializer, visitor, isForInitializer),
                 nodeVisitor(node.expression, visitor, isExpression),
-                visitIterationBody(node.statement, visitor, context)),
+                visitIterationBody(node.statement, visitor, context));
+        },
 
-        [SyntaxKind.ContinueStatement]: (node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateContinueStatement(node,
-                nodeVisitor(node.label, visitor, isIdentifier)),
+        [SyntaxKind.ContinueStatement]: function visitEachChildOfContinueStatement(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateContinueStatement(node,
+                nodeVisitor(node.label, visitor, isIdentifier));
+        },
 
-        [SyntaxKind.BreakStatement]: (node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateBreakStatement(node,
-                nodeVisitor(node.label, visitor, isIdentifier)),
+        [SyntaxKind.BreakStatement]: function visitEachChildOfBreakStatement(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateBreakStatement(node,
+                nodeVisitor(node.label, visitor, isIdentifier));
+        },
 
-        [SyntaxKind.ReturnStatement]: (node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateReturnStatement(node,
-                nodeVisitor(node.expression, visitor, isExpression)),
+        [SyntaxKind.ReturnStatement]: function visitEachChildOfReturnStatement(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateReturnStatement(node,
+                nodeVisitor(node.expression, visitor, isExpression));
+        },
 
-        [SyntaxKind.WithStatement]: (node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateWithStatement(node,
+        [SyntaxKind.WithStatement]: function visitEachChildOfWithStatement(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateWithStatement(node,
                 nodeVisitor(node.expression, visitor, isExpression),
-                nodeVisitor(node.statement, visitor, isStatement, context.factory.liftToBlock)),
+                nodeVisitor(node.statement, visitor, isStatement, context.factory.liftToBlock));
+        },
 
-        [SyntaxKind.SwitchStatement]: (node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateSwitchStatement(node,
+        [SyntaxKind.SwitchStatement]: function visitEachChildOfSwitchStatement(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateSwitchStatement(node,
                 nodeVisitor(node.expression, visitor, isExpression),
-                nodeVisitor(node.caseBlock, visitor, isCaseBlock)),
+                nodeVisitor(node.caseBlock, visitor, isCaseBlock));
+        },
 
-        [SyntaxKind.LabeledStatement]: (node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateLabeledStatement(node,
+        [SyntaxKind.LabeledStatement]: function visitEachChildOfLabeledStatement(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateLabeledStatement(node,
                 nodeVisitor(node.label, visitor, isIdentifier),
-                nodeVisitor(node.statement, visitor, isStatement, context.factory.liftToBlock)),
+                nodeVisitor(node.statement, visitor, isStatement, context.factory.liftToBlock));
+        },
 
-        [SyntaxKind.ThrowStatement]: (node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateThrowStatement(node,
-                nodeVisitor(node.expression, visitor, isExpression)),
+        [SyntaxKind.ThrowStatement]: function visitEachChildOfThrowStatement(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateThrowStatement(node,
+                nodeVisitor(node.expression, visitor, isExpression));
+        },
 
-        [SyntaxKind.TryStatement]: (node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateTryStatement(node,
+        [SyntaxKind.TryStatement]: function visitEachChildOfTryStatement(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateTryStatement(node,
                 nodeVisitor(node.tryBlock, visitor, isBlock),
                 nodeVisitor(node.catchClause, visitor, isCatchClause),
-                nodeVisitor(node.finallyBlock, visitor, isBlock)),
+                nodeVisitor(node.finallyBlock, visitor, isBlock));
+        },
 
-        [SyntaxKind.VariableDeclaration]: (node, visitor, context, _nodesVisitor, nodeVisitor, tokenVisitor) =>
-            context.factory.updateVariableDeclaration(node,
+        [SyntaxKind.VariableDeclaration]: function visitEachChildOfVariableDeclaration(node, visitor, context, _nodesVisitor, nodeVisitor, tokenVisitor) {
+            return context.factory.updateVariableDeclaration(node,
                 nodeVisitor(node.name, visitor, isBindingName),
                 nodeVisitor(node.exclamationToken, tokenVisitor, isExclamationToken),
                 nodeVisitor(node.type, visitor, isTypeNode),
-                nodeVisitor(node.initializer, visitor, isExpression)),
+                nodeVisitor(node.initializer, visitor, isExpression));
+        },
 
-        [SyntaxKind.VariableDeclarationList]: (node, visitor, context, nodesVisitor, _nodeVisitor, _tokenVisitor) =>
-            context.factory.updateVariableDeclarationList(node,
-                nodesVisitor(node.declarations, visitor, isVariableDeclaration)),
+        [SyntaxKind.VariableDeclarationList]: function visitEachChildOfVariableDeclarationList(node, visitor, context, nodesVisitor, _nodeVisitor, _tokenVisitor) {
+            return context.factory.updateVariableDeclarationList(node,
+                nodesVisitor(node.declarations, visitor, isVariableDeclaration));
+        },
 
-        [SyntaxKind.FunctionDeclaration]: (node, visitor, context, nodesVisitor, nodeVisitor, tokenVisitor) =>
-            context.factory.updateFunctionDeclaration(node,
+        [SyntaxKind.FunctionDeclaration]: function visitEachChildOfFunctionDeclaration(node, visitor, context, nodesVisitor, nodeVisitor, tokenVisitor) {
+            return context.factory.updateFunctionDeclaration(node,
                 nodesVisitor(node.modifiers, visitor, isModifier),
                 nodeVisitor(node.asteriskToken, tokenVisitor, isAsteriskToken),
                 nodeVisitor(node.name, visitor, isIdentifier),
                 nodesVisitor(node.typeParameters, visitor, isTypeParameterDeclaration),
                 visitParameterList(node.parameters, visitor, context, nodesVisitor),
                 nodeVisitor(node.type, visitor, isTypeNode),
-                visitFunctionBody(node.body, visitor, context, nodeVisitor)),
+                visitFunctionBody(node.body, visitor, context, nodeVisitor));
+        },
 
-        [SyntaxKind.ClassDeclaration]: (node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateClassDeclaration(node,
+        [SyntaxKind.ClassDeclaration]: function visitEachChildOfClassDeclaration(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateClassDeclaration(node,
                 nodesVisitor(node.modifiers, visitor, isModifierLike),
                 nodeVisitor(node.name, visitor, isIdentifier),
                 nodesVisitor(node.typeParameters, visitor, isTypeParameterDeclaration),
                 nodesVisitor(node.heritageClauses, visitor, isHeritageClause),
-                nodesVisitor(node.members, visitor, isClassElement)),
+                nodesVisitor(node.members, visitor, isClassElement));
+        },
 
-        [SyntaxKind.InterfaceDeclaration]: (node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateInterfaceDeclaration(node,
+        [SyntaxKind.InterfaceDeclaration]: function visitEachChildOfInterfaceDeclaration(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateInterfaceDeclaration(node,
                 nodesVisitor(node.modifiers, visitor, isModifier),
                 nodeVisitor(node.name, visitor, isIdentifier),
                 nodesVisitor(node.typeParameters, visitor, isTypeParameterDeclaration),
                 nodesVisitor(node.heritageClauses, visitor, isHeritageClause),
-                nodesVisitor(node.members, visitor, isTypeElement)),
+                nodesVisitor(node.members, visitor, isTypeElement));
+        },
 
-        [SyntaxKind.TypeAliasDeclaration]: (node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateTypeAliasDeclaration(node,
+        [SyntaxKind.TypeAliasDeclaration]: function visitEachChildOfTypeAliasDeclaration(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateTypeAliasDeclaration(node,
                 nodesVisitor(node.modifiers, visitor, isModifier),
                 nodeVisitor(node.name, visitor, isIdentifier),
                 nodesVisitor(node.typeParameters, visitor, isTypeParameterDeclaration),
-                nodeVisitor(node.type, visitor, isTypeNode)),
+                nodeVisitor(node.type, visitor, isTypeNode));
+        },
 
-        [SyntaxKind.EnumDeclaration]: (node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateEnumDeclaration(node,
+        [SyntaxKind.EnumDeclaration]: function visitEachChildOfEnumDeclaration(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateEnumDeclaration(node,
                 nodesVisitor(node.modifiers, visitor, isModifier),
                 nodeVisitor(node.name, visitor, isIdentifier),
-                nodesVisitor(node.members, visitor, isEnumMember)),
+                nodesVisitor(node.members, visitor, isEnumMember));
+        },
 
-        [SyntaxKind.ModuleDeclaration]: (node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateModuleDeclaration(node,
+        [SyntaxKind.ModuleDeclaration]: function visitEachChildOfModuleDeclaration(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateModuleDeclaration(node,
                 nodesVisitor(node.modifiers, visitor, isModifier),
                 nodeVisitor(node.name, visitor, isModuleName),
-                nodeVisitor(node.body, visitor, isModuleBody)),
+                nodeVisitor(node.body, visitor, isModuleBody));
+        },
 
-        [SyntaxKind.ModuleBlock]: (node, visitor, context, nodesVisitor, _nodeVisitor, _tokenVisitor) =>
-            context.factory.updateModuleBlock(node,
-                nodesVisitor(node.statements, visitor, isStatement)),
+        [SyntaxKind.ModuleBlock]: function visitEachChildOfModuleBlock(node, visitor, context, nodesVisitor, _nodeVisitor, _tokenVisitor) {
+            return context.factory.updateModuleBlock(node,
+                nodesVisitor(node.statements, visitor, isStatement));
+        },
 
-        [SyntaxKind.CaseBlock]: (node, visitor, context, nodesVisitor, _nodeVisitor, _tokenVisitor) =>
-            context.factory.updateCaseBlock(node,
-                nodesVisitor(node.clauses, visitor, isCaseOrDefaultClause)),
+        [SyntaxKind.CaseBlock]: function visitEachChildOfCaseBlock(node, visitor, context, nodesVisitor, _nodeVisitor, _tokenVisitor) {
+            return context.factory.updateCaseBlock(node,
+                nodesVisitor(node.clauses, visitor, isCaseOrDefaultClause));
+        },
 
-        [SyntaxKind.NamespaceExportDeclaration]: (node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateNamespaceExportDeclaration(node,
-                nodeVisitor(node.name, visitor, isIdentifier)),
+        [SyntaxKind.NamespaceExportDeclaration]: function visitEachChildOfNamespaceExportDeclaration(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateNamespaceExportDeclaration(node,
+                nodeVisitor(node.name, visitor, isIdentifier));
+        },
 
-        [SyntaxKind.ImportEqualsDeclaration]: (node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateImportEqualsDeclaration(node,
+        [SyntaxKind.ImportEqualsDeclaration]: function visitEachChildOfImportEqualsDeclaration(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateImportEqualsDeclaration(node,
                 nodesVisitor(node.modifiers, visitor, isModifier),
                 node.isTypeOnly,
                 nodeVisitor(node.name, visitor, isIdentifier),
-                nodeVisitor(node.moduleReference, visitor, isModuleReference)),
+                nodeVisitor(node.moduleReference, visitor, isModuleReference));
+        },
 
-        [SyntaxKind.ImportDeclaration]: (node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateImportDeclaration(node,
+        [SyntaxKind.ImportDeclaration]: function visitEachChildOfImportDeclaration(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateImportDeclaration(node,
                 nodesVisitor(node.modifiers, visitor, isModifier),
                 nodeVisitor(node.importClause, visitor, isImportClause),
                 nodeVisitor(node.moduleSpecifier, visitor, isExpression),
-                nodeVisitor(node.assertClause, visitor, isAssertClause)),
+                nodeVisitor(node.assertClause, visitor, isAssertClause));
+        },
 
-        [SyntaxKind.AssertClause]: (node, visitor, context, nodesVisitor, _nodeVisitor, _tokenVisitor) =>
-            context.factory.updateAssertClause(node,
+        [SyntaxKind.AssertClause]: function visitEachChildOfAssertClause(node, visitor, context, nodesVisitor, _nodeVisitor, _tokenVisitor) {
+            return context.factory.updateAssertClause(node,
                 nodesVisitor(node.elements, visitor, isAssertEntry),
-                node.multiLine),
+                node.multiLine);
+        },
 
-        [SyntaxKind.AssertEntry]: (node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateAssertEntry(node,
+        [SyntaxKind.AssertEntry]: function visitEachChildOfAssertEntry(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateAssertEntry(node,
                 nodeVisitor(node.name, visitor, isAssertionKey),
-                nodeVisitor(node.value, visitor, isExpressionNode)),
+                nodeVisitor(node.value, visitor, isExpressionNode));
+        },
 
-        [SyntaxKind.ImportClause]: (node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateImportClause(node,
+        [SyntaxKind.ImportClause]: function visitEachChildOfImportClause(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateImportClause(node,
                 node.isTypeOnly,
                 nodeVisitor(node.name, visitor, isIdentifier),
-                nodeVisitor(node.namedBindings, visitor, isNamedImportBindings)),
+                nodeVisitor(node.namedBindings, visitor, isNamedImportBindings));
+        },
 
-        [SyntaxKind.NamespaceImport]: (node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateNamespaceImport(node,
-                nodeVisitor(node.name, visitor, isIdentifier)),
+        [SyntaxKind.NamespaceImport]: function visitEachChildOfNamespaceImport(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateNamespaceImport(node,
+                nodeVisitor(node.name, visitor, isIdentifier));
+        },
 
-        [SyntaxKind.NamespaceExport]: (node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateNamespaceExport(node,
-                nodeVisitor(node.name, visitor, isIdentifier)),
+        [SyntaxKind.NamespaceExport]: function visitEachChildOfNamespaceExport(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateNamespaceExport(node,
+                nodeVisitor(node.name, visitor, isIdentifier));
+        },
 
-        [SyntaxKind.NamedImports]: (node, visitor, context, nodesVisitor, _nodeVisitor, _tokenVisitor) =>
-            context.factory.updateNamedImports(node,
-                nodesVisitor(node.elements, visitor, isImportSpecifier)),
+        [SyntaxKind.NamedImports]: function visitEachChildOfNamedImports(node, visitor, context, nodesVisitor, _nodeVisitor, _tokenVisitor) {
+            return context.factory.updateNamedImports(node,
+                nodesVisitor(node.elements, visitor, isImportSpecifier));
+        },
 
-        [SyntaxKind.ImportSpecifier]: (node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateImportSpecifier(node,
+        [SyntaxKind.ImportSpecifier]: function visitEachChildOfImportSpecifier(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateImportSpecifier(node,
                 node.isTypeOnly,
                 nodeVisitor(node.propertyName, visitor, isIdentifier),
-                nodeVisitor(node.name, visitor, isIdentifier)),
+                nodeVisitor(node.name, visitor, isIdentifier));
+        },
 
-        [SyntaxKind.ExportAssignment]: (node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateExportAssignment(node,
+        [SyntaxKind.ExportAssignment]: function visitEachChildOfExportAssignment(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateExportAssignment(node,
                 nodesVisitor(node.modifiers, visitor, isModifier),
-                nodeVisitor(node.expression, visitor, isExpression)),
+                nodeVisitor(node.expression, visitor, isExpression));
+        },
 
-        [SyntaxKind.ExportDeclaration]: (node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateExportDeclaration(node,
+        [SyntaxKind.ExportDeclaration]: function visitEachChildOfExportDeclaration(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateExportDeclaration(node,
                 nodesVisitor(node.modifiers, visitor, isModifier),
                 node.isTypeOnly,
                 nodeVisitor(node.exportClause, visitor, isNamedExportBindings),
                 nodeVisitor(node.moduleSpecifier, visitor, isExpression),
-                nodeVisitor(node.assertClause, visitor, isAssertClause)),
+                nodeVisitor(node.assertClause, visitor, isAssertClause));
+        },
 
-        [SyntaxKind.NamedExports]: (node, visitor, context, nodesVisitor, _nodeVisitor, _tokenVisitor) =>
-            context.factory.updateNamedExports(node,
-                nodesVisitor(node.elements, visitor, isExportSpecifier)),
+        [SyntaxKind.NamedExports]: function visitEachChildOfNamedExports(node, visitor, context, nodesVisitor, _nodeVisitor, _tokenVisitor) {
+            return context.factory.updateNamedExports(node,
+                nodesVisitor(node.elements, visitor, isExportSpecifier));
+        },
 
-        [SyntaxKind.ExportSpecifier]: (node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateExportSpecifier(node,
+        [SyntaxKind.ExportSpecifier]: function visitEachChildOfExportSpecifier(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateExportSpecifier(node,
                 node.isTypeOnly,
                 nodeVisitor(node.propertyName, visitor, isIdentifier),
-                nodeVisitor(node.name, visitor, isIdentifier)),
+                nodeVisitor(node.name, visitor, isIdentifier));
+        },
 
         // Module references
-        [SyntaxKind.ExternalModuleReference]: (node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateExternalModuleReference(node,
-                nodeVisitor(node.expression, visitor, isExpression)),
+        [SyntaxKind.ExternalModuleReference]: function visitEachChildOfExternalModuleReference(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateExternalModuleReference(node,
+                nodeVisitor(node.expression, visitor, isExpression));
+        },
 
         // JSX
-        [SyntaxKind.JsxElement]: (node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateJsxElement(node,
+        [SyntaxKind.JsxElement]: function visitEachChildOfJsxElement(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateJsxElement(node,
                 nodeVisitor(node.openingElement, visitor, isJsxOpeningElement),
                 nodesVisitor(node.children, visitor, isJsxChild),
-                nodeVisitor(node.closingElement, visitor, isJsxClosingElement)),
+                nodeVisitor(node.closingElement, visitor, isJsxClosingElement));
+        },
 
-        [SyntaxKind.JsxSelfClosingElement]: (node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateJsxSelfClosingElement(node,
+        [SyntaxKind.JsxSelfClosingElement]: function visitEachChildOfJsxSelfClosingElement(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateJsxSelfClosingElement(node,
                 nodeVisitor(node.tagName, visitor, isJsxTagNameExpression),
                 nodesVisitor(node.typeArguments, visitor, isTypeNode),
-                nodeVisitor(node.attributes, visitor, isJsxAttributes)),
+                nodeVisitor(node.attributes, visitor, isJsxAttributes));
+        },
 
-        [SyntaxKind.JsxOpeningElement]: (node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateJsxOpeningElement(node,
+        [SyntaxKind.JsxOpeningElement]: function visitEachChildOfJsxOpeningElement(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateJsxOpeningElement(node,
                 nodeVisitor(node.tagName, visitor, isJsxTagNameExpression),
                 nodesVisitor(node.typeArguments, visitor, isTypeNode),
-                nodeVisitor(node.attributes, visitor, isJsxAttributes)),
+                nodeVisitor(node.attributes, visitor, isJsxAttributes));
+        },
 
-        [SyntaxKind.JsxClosingElement]: (node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateJsxClosingElement(node,
-                nodeVisitor(node.tagName, visitor, isJsxTagNameExpression)),
+        [SyntaxKind.JsxClosingElement]: function visitEachChildOfJsxClosingElement(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateJsxClosingElement(node,
+                nodeVisitor(node.tagName, visitor, isJsxTagNameExpression));
+        },
 
-        [SyntaxKind.JsxFragment]: (node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateJsxFragment(node,
+        [SyntaxKind.JsxFragment]: function visitEachChildOfJsxFragment(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateJsxFragment(node,
                 nodeVisitor(node.openingFragment, visitor, isJsxOpeningFragment),
                 nodesVisitor(node.children, visitor, isJsxChild),
-                nodeVisitor(node.closingFragment, visitor, isJsxClosingFragment)),
+                nodeVisitor(node.closingFragment, visitor, isJsxClosingFragment));
+        },
 
-        [SyntaxKind.JsxAttribute]: (node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateJsxAttribute(node,
+        [SyntaxKind.JsxAttribute]: function visitEachChildOfJsxAttribute(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateJsxAttribute(node,
                 nodeVisitor(node.name, visitor, isIdentifier),
-                nodeVisitor(node.initializer, visitor, isStringLiteralOrJsxExpression)),
+                nodeVisitor(node.initializer, visitor, isStringLiteralOrJsxExpression));
+        },
 
-        [SyntaxKind.JsxAttributes]: (node, visitor, context, nodesVisitor, _nodeVisitor, _tokenVisitor) =>
-            context.factory.updateJsxAttributes(node,
-                nodesVisitor(node.properties, visitor, isJsxAttributeLike)),
+        [SyntaxKind.JsxAttributes]: function visitEachChildOfJsxAttributes(node, visitor, context, nodesVisitor, _nodeVisitor, _tokenVisitor) {
+            return context.factory.updateJsxAttributes(node,
+                nodesVisitor(node.properties, visitor, isJsxAttributeLike));
+        },
 
-        [SyntaxKind.JsxSpreadAttribute]: (node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateJsxSpreadAttribute(node,
-                nodeVisitor(node.expression, visitor, isExpression)),
+        [SyntaxKind.JsxSpreadAttribute]: function visitEachChildOfJsxSpreadAttribute(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateJsxSpreadAttribute(node,
+                nodeVisitor(node.expression, visitor, isExpression));
+        },
 
-        [SyntaxKind.JsxExpression]: (node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateJsxExpression(node,
-                nodeVisitor(node.expression, visitor, isExpression)),
+        [SyntaxKind.JsxExpression]: function visitEachChildOfJsxExpression(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateJsxExpression(node,
+                nodeVisitor(node.expression, visitor, isExpression));
+        },
 
         // Clauses
-        [SyntaxKind.CaseClause]: (node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateCaseClause(node,
+        [SyntaxKind.CaseClause]: function visitEachChildOfCaseClause(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateCaseClause(node,
                 nodeVisitor(node.expression, visitor, isExpression),
-                nodesVisitor(node.statements, visitor, isStatement)),
+                nodesVisitor(node.statements, visitor, isStatement));
+        },
 
-        [SyntaxKind.DefaultClause]: (node, visitor, context, nodesVisitor, _nodeVisitor, _tokenVisitor) =>
-            context.factory.updateDefaultClause(node,
-                nodesVisitor(node.statements, visitor, isStatement)),
+        [SyntaxKind.DefaultClause]: function visitEachChildOfDefaultClause(node, visitor, context, nodesVisitor, _nodeVisitor, _tokenVisitor) {
+            return context.factory.updateDefaultClause(node,
+                nodesVisitor(node.statements, visitor, isStatement));
+        },
 
-        [SyntaxKind.HeritageClause]: (node, visitor, context, nodesVisitor, _nodeVisitor, _tokenVisitor) =>
-            context.factory.updateHeritageClause(node,
-                nodesVisitor(node.types, visitor, isExpressionWithTypeArguments)),
+        [SyntaxKind.HeritageClause]: function visitEachChildOfHeritageClause(node, visitor, context, nodesVisitor, _nodeVisitor, _tokenVisitor) {
+            return context.factory.updateHeritageClause(node,
+                nodesVisitor(node.types, visitor, isExpressionWithTypeArguments));
+        },
 
-        [SyntaxKind.CatchClause]: (node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateCatchClause(node,
+        [SyntaxKind.CatchClause]: function visitEachChildOfCatchClause(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateCatchClause(node,
                 nodeVisitor(node.variableDeclaration, visitor, isVariableDeclaration),
-                nodeVisitor(node.block, visitor, isBlock)),
+                nodeVisitor(node.block, visitor, isBlock));
+        },
 
         // Property assignments
-        [SyntaxKind.PropertyAssignment]: (node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updatePropertyAssignment(node,
+        [SyntaxKind.PropertyAssignment]: function visitEachChildOfPropertyAssignment(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updatePropertyAssignment(node,
                 nodeVisitor(node.name, visitor, isPropertyName),
-                nodeVisitor(node.initializer, visitor, isExpression)),
+                nodeVisitor(node.initializer, visitor, isExpression));
+        },
 
-        [SyntaxKind.ShorthandPropertyAssignment]: (node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateShorthandPropertyAssignment(node,
+        [SyntaxKind.ShorthandPropertyAssignment]: function visitEachChildOfShorthandPropertyAssignment(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateShorthandPropertyAssignment(node,
                 nodeVisitor(node.name, visitor, isIdentifier),
-                nodeVisitor(node.objectAssignmentInitializer, visitor, isExpression)),
+                nodeVisitor(node.objectAssignmentInitializer, visitor, isExpression));
+        },
 
-        [SyntaxKind.SpreadAssignment]: (node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateSpreadAssignment(node,
-                nodeVisitor(node.expression, visitor, isExpression)),
+        [SyntaxKind.SpreadAssignment]: function visitEachChildOfSpreadAssignment(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateSpreadAssignment(node,
+                nodeVisitor(node.expression, visitor, isExpression));
+        },
 
         // Enum
-        [SyntaxKind.EnumMember]: (node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updateEnumMember(node,
+        [SyntaxKind.EnumMember]: function visitEachChildOfEnumMember(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateEnumMember(node,
                 nodeVisitor(node.name, visitor, isPropertyName),
-                nodeVisitor(node.initializer, visitor, isExpression)),
+                nodeVisitor(node.initializer, visitor, isExpression));
+        },
 
         // Top-level nodes
-        [SyntaxKind.SourceFile]: (node, visitor, context, _nodesVisitor, _nodeVisitor, _tokenVisitor) =>
-            context.factory.updateSourceFile(node,
-                visitLexicalEnvironment(node.statements, visitor, context)),
+        [SyntaxKind.SourceFile]: function visitEachChildOfSourceFile(node, visitor, context, _nodesVisitor, _nodeVisitor, _tokenVisitor) {
+            return context.factory.updateSourceFile(node,
+                visitLexicalEnvironment(node.statements, visitor, context));
+        },
 
         // Transformation nodes
-        [SyntaxKind.PartiallyEmittedExpression]: (node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) =>
-            context.factory.updatePartiallyEmittedExpression(node,
-                nodeVisitor(node.expression, visitor, isExpression)),
+        [SyntaxKind.PartiallyEmittedExpression]: function visitEachChildOfPartiallyEmittedExpression(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updatePartiallyEmittedExpression(node,
+                nodeVisitor(node.expression, visitor, isExpression));
+        },
 
-        [SyntaxKind.CommaListExpression]: (node, visitor, context, nodesVisitor, _nodeVisitor, _tokenVisitor) =>
-            context.factory.updateCommaListExpression(node,
-                nodesVisitor(node.elements, visitor, isExpression)),
+        [SyntaxKind.CommaListExpression]: function visitEachChildOfCommaListExpression(node, visitor, context, nodesVisitor, _nodeVisitor, _tokenVisitor) {
+            return context.factory.updateCommaListExpression(node,
+                nodesVisitor(node.elements, visitor, isExpression));
+        },
     };
 
     /**
