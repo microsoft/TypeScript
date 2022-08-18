@@ -30,6 +30,7 @@
     },
     "devDependencies": {
         "@octokit/rest": "latest",
+        "@types/async": "latest",
         "@types/chai": "latest",
         "@types/convert-source-map": "latest",
         "@types/fs-extra": "^9.0.13",
