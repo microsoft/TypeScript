@@ -61,7 +61,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A bigint literal cannot use exponential notation.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[bigint 文本不能使用指数符号。]]></Val>
+            <Val><![CDATA[BigInt 字面量中不能使用指数符号。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -70,7 +70,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A bigint literal must be an integer.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[bigint 文本必须是整数。]]></Val>
+            <Val><![CDATA[BigInt 字面量必须是整数。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -217,7 +217,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A 'const' assertions can only be applied to references to enum members, or string, number, boolean, array, or object literals.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA["const" 断言只能用于引用枚举成员、字符串、数字、布尔值、数组或对象文本。]]></Val>
+            <Val><![CDATA['const' 断言只能作用于枚举成员、字符串、数字、布尔值、数组或对象字面量。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -388,7 +388,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A function that is called with the 'new' keyword cannot have a 'this' type that is 'void'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[使用 "new" 关键字调用的函数不可具有“失效”的 "this" 类型。]]></Val>
+            <Val><![CDATA[使用 'new' 关键字调用的函数的 'this' 类型不能为 'void'。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -568,7 +568,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A non-dry build would update output of project '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[非干燥生成将更新项目 "{0}" 的输出]]></Val>
+            <Val><![CDATA[非 dry 生成将更新项目 '{0}' 的输出]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -577,7 +577,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A non-dry build would update timestamps for output of project '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[非干燥生成将更新项目 "{0}" 的输出的时间戳]]></Val>
+            <Val><![CDATA[非 dry 生成将更新项目 '{0}' 的输出的时间戳]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -622,7 +622,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A promise must have a 'then' method.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[承诺必须具有 "then" 方法。]]></Val>
+            <Val><![CDATA['Promise' 必须具有 'then' 方法。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
