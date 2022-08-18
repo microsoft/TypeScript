@@ -4298,18 +4298,17 @@ namespace ts.Completions {
             }
             return undefined;
         }
-
     }
 
     function getSingleLineReplacementSpanForImportCompletionNode(node: ImportDeclaration | ImportEqualsDeclaration | ImportSpecifier | Token<SyntaxKind.ImportKeyword> | undefined) {
         if (!node) return undefined;
-        const top = (findAncestor(node, or(isImportDeclaration, isImportEqualsDeclaration)) || node) as ImportDeclaration | ImportEqualsDeclaration | Token<SyntaxKind.ImportKeyword>;
+        const top = findAncestor(node, or(isImportDeclaration, isImportEqualsDeclaration)) ?? node;
         const sourceFile = top.getSourceFile();
         if (rangeIsOnSingleLine(top, sourceFile)) {
             return createTextSpanFromNode(top, sourceFile);
         }
-        // Import keyword alone was necessarily on one line
-        Debug.assert(top.kind !== SyntaxKind.ImportKeyword);
+        // ImportKeyword was necessarily on one line; ImportSpecifier was necessarily parented in an ImportDeclaration
+        Debug.assert(top.kind !== SyntaxKind.ImportKeyword && top.kind !== SyntaxKind.ImportSpecifier);
         const withoutModuleSpecifier: TextRange = {
             pos: top.getFirstToken()!.getStart(),
             end: top.kind === SyntaxKind.ImportDeclaration ? top.moduleSpecifier.pos : top.moduleReference.pos,
