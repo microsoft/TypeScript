@@ -1,8 +1,7 @@
 /// <reference lib="esnext.asynciterable" />
 /// <reference lib="es2015.promise" />
-import octokit = require("@octokit/rest");
-import Octokit = octokit.Octokit;
-import minimist = require("minimist");
+import { Octokit } from "@octokit/rest";
+import * as minimist from "minimist";
 
 const options = minimist(process.argv.slice(2), {
     boolean: ["help"],
