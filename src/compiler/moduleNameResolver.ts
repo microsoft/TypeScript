@@ -392,10 +392,11 @@ namespace ts {
         if (resolved) {
             const { fileName, packageId } = resolved;
             const resolvedFileName = options.preserveSymlinks ? fileName : realPath(fileName, host, traceEnabled);
+            const pathsAreEqual = arePathsEqual(fileName, resolvedFileName, host);
             resolvedTypeReferenceDirective = {
                 primary,
-                resolvedFileName,
-                originalPath: arePathsEqual(fileName, resolvedFileName, host) ? undefined : fileName,
+                resolvedFileName: pathsAreEqual ? fileName : resolvedFileName,
+                originalPath: pathsAreEqual ? undefined : fileName,
                 packageId,
                 isExternalLibraryImport: pathContainsNodeModules(fileName),
             };
@@ -1406,8 +1407,9 @@ namespace ts {
                 let resolvedValue = resolved.value;
                 if (!compilerOptions.preserveSymlinks && resolvedValue && !resolvedValue.originalPath) {
                     const path = realPath(resolvedValue.path, host, traceEnabled);
-                    const originalPath = arePathsEqual(path, resolvedValue.path, host) ? undefined : resolvedValue.path;
-                    resolvedValue = { ...resolvedValue, path, originalPath };
+                    const pathsAreEqual = arePathsEqual(path, resolvedValue.path, host);
+                    const originalPath = pathsAreEqual ? undefined : resolvedValue.path;
+                    resolvedValue = { ...resolvedValue, path: pathsAreEqual ? resolvedValue.path : path, originalPath };
                 }
                 // For node_modules lookups, get the real path so that multiple accesses to an `npm link`-ed module do not create duplicate files.
                 return { value: resolvedValue && { resolved: resolvedValue, isExternalLibraryImport: true } };
