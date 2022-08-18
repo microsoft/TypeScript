@@ -395,6 +395,7 @@ namespace ts {
             const pathsAreEqual = arePathsEqual(fileName, resolvedFileName, host);
             resolvedTypeReferenceDirective = {
                 primary,
+                // If the fileName and realpath are differing only in casing prefer fileName so that we can issue correct errors for casing under forceConsistentCasingInFileNames
                 resolvedFileName: pathsAreEqual ? fileName : resolvedFileName,
                 originalPath: pathsAreEqual ? undefined : fileName,
                 packageId,
@@ -1409,6 +1410,7 @@ namespace ts {
                     const path = realPath(resolvedValue.path, host, traceEnabled);
                     const pathsAreEqual = arePathsEqual(path, resolvedValue.path, host);
                     const originalPath = pathsAreEqual ? undefined : resolvedValue.path;
+                    // If the path and realpath are differing only in casing prefer path so that we can issue correct errors for casing under forceConsistentCasingInFileNames
                     resolvedValue = { ...resolvedValue, path: pathsAreEqual ? resolvedValue.path : path, originalPath };
                 }
                 // For node_modules lookups, get the real path so that multiple accesses to an `npm link`-ed module do not create duplicate files.
