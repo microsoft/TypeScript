@@ -751,7 +751,7 @@ namespace ts.Completions {
 
         if (originIsResolvedExport(origin)) {
             sourceDisplay = [textPart(origin.moduleSpecifier)];
-            if (importStatementCompletion?.replacementSpan) {
+            if (importStatementCompletion) {
                 ({ insertText, replacementSpan } = getInsertTextAndReplacementSpanForImportCompletion(name, importStatementCompletion, origin, useSemicolons, sourceFile, options, preferences));
                 isSnippet = preferences.includeCompletionsWithSnippetText ? true : undefined;
             }
@@ -816,7 +816,7 @@ namespace ts.Completions {
 
         if (originIsExport(origin) || originIsResolvedExport(origin)) {
             data = originToCompletionEntryData(origin);
-            hasAction = !importStatementCompletion?.replacementSpan;
+            hasAction = !importStatementCompletion;
         }
 
         // TODO(drosen): Right now we just permit *all* semantic meanings when calling
@@ -841,7 +841,7 @@ namespace ts.Completions {
             labelDetails,
             isSnippet,
             isPackageJsonImport: originIsPackageJsonImport(origin) || undefined,
-            isImportStatementCompletion: !!importStatementCompletion?.replacementSpan || undefined,
+            isImportStatementCompletion: !!importStatementCompletion || undefined,
             data,
         };
     }
@@ -2017,27 +2017,28 @@ namespace ts.Completions {
         let flags = CompletionInfoFlags.None;
 
         if (contextToken) {
-            importStatementCompletion = getImportStatementCompletionInfo(contextToken);
-            isNewIdentifierLocation = importStatementCompletion.isNewIdentifierLocation;
-            if (importStatementCompletion.keywordCompletion) {
-                if (importStatementCompletion.isKeywordOnlyCompletion) {
+            const importStatementCompletionInfo = getImportStatementCompletionInfo(contextToken);
+            if (importStatementCompletionInfo.keywordCompletion) {
+                if (importStatementCompletionInfo.isKeywordOnlyCompletion) {
                     return {
                         kind: CompletionDataKind.Keywords,
-                        keywordCompletions: [keywordToCompletionEntry(importStatementCompletion.keywordCompletion)],
-                        isNewIdentifierLocation,
+                        keywordCompletions: [keywordToCompletionEntry(importStatementCompletionInfo.keywordCompletion)],
+                        isNewIdentifierLocation: importStatementCompletionInfo.isNewIdentifierLocation,
                     };
                 }
-                keywordFilters = keywordFiltersFromSyntaxKind(importStatementCompletion.keywordCompletion);
+                keywordFilters = keywordFiltersFromSyntaxKind(importStatementCompletionInfo.keywordCompletion);
             }
-            if (importStatementCompletion.replacementSpan && preferences.includeCompletionsForImportStatements && preferences.includeCompletionsWithInsertText) {
+            if (importStatementCompletionInfo.replacementSpan && preferences.includeCompletionsForImportStatements && preferences.includeCompletionsWithInsertText) {
                 // Import statement completions use `insertText`, and also require the `data` property of `CompletionEntryIdentifier`
                 // added in TypeScript 4.3 to be sent back from the client during `getCompletionEntryDetails`. Since this feature
                 // is not backward compatible with older clients, the language service defaults to disabling it, allowing newer clients
                 // to opt in with the `includeCompletionsForImportStatements` user preference.
                 flags |= CompletionInfoFlags.IsImportStatementCompletion;
+                importStatementCompletion = importStatementCompletionInfo;
+                isNewIdentifierLocation = importStatementCompletionInfo.isNewIdentifierLocation;
             }
             // Bail out if this is a known invalid completion location
-            if (!importStatementCompletion?.replacementSpan && isCompletionListBlocker(contextToken)) {
+            if (!importStatementCompletionInfo.replacementSpan && isCompletionListBlocker(contextToken)) {
                 log("Returning an empty list because completion was requested in an invalid position.");
                 return keywordFilters
                     ? keywordCompletionData(keywordFilters, isJsOnlyLocation, isNewIdentifierDefinitionLocation())
@@ -2084,7 +2085,7 @@ namespace ts.Completions {
                         return undefined;
                 }
             }
-            else if (!importStatementCompletion?.replacementSpan && sourceFile.languageVariant === LanguageVariant.JSX) {
+            else if (!importStatementCompletion) {
                 // <UI.Test /* completion position */ />
                 // If the tagname is a property access expression, we will then walk up to the top most of property access expression.
                 // Then, try to get a JSX container and its associated attributes type.
@@ -2517,7 +2518,7 @@ namespace ts.Completions {
         }
 
         function tryGetImportCompletionSymbols(): GlobalsSearch {
-            if (!importStatementCompletion?.replacementSpan) return GlobalsSearch.Continue;
+            if (!importStatementCompletion) return GlobalsSearch.Continue;
             isNewIdentifierLocation = true;
             collectAutoImports();
             return GlobalsSearch.Success;
@@ -2606,7 +2607,7 @@ namespace ts.Completions {
 
         function shouldOfferImportCompletions(): boolean {
             // If already typing an import statement, provide completions for it.
-            if (importStatementCompletion?.replacementSpan) return true;
+            if (importStatementCompletion) return true;
             // If current completion is for non-contextual Object literal shortahands, ignore auto-import symbols
             if (isNonContextualObjectLiteral) return false;
             // If not already a module, must have modules enabled.
@@ -2633,7 +2634,7 @@ namespace ts.Completions {
 
         function isTypeOnlyCompletion(): boolean {
             return insideJsDocTagTypeExpression
-                || !!importStatementCompletion?.replacementSpan && isTypeOnlyImportOrExportDeclaration(location.parent)
+                || !!importStatementCompletion && isTypeOnlyImportOrExportDeclaration(location.parent)
                 || !isContextTokenValueLocation(contextToken) &&
                 (isPossiblyTypeArgumentPosition(contextToken, sourceFile, typeChecker)
                     || isPartOfTypeNode(location)
@@ -2687,7 +2688,7 @@ namespace ts.Completions {
             flags |= CompletionInfoFlags.MayIncludeAutoImports;
             // import { type | -> token text should be blank
             const isAfterTypeOnlyImportSpecifierModifier = previousToken === contextToken
-                && importStatementCompletion?.couldBeTypeOnlyImportSpecifier;
+                && importStatementCompletion;
 
             const lowerCaseTokenText =
                 isAfterTypeOnlyImportSpecifierModifier ? "" :
@@ -2705,7 +2706,7 @@ namespace ts.Completions {
                 program,
                 position,
                 preferences,
-                !!importStatementCompletion?.replacementSpan,
+                !!importStatementCompletion,
                 isValidTypeOnlyAliasUseSite(location),
                 context => {
                     exportInfo.search(
@@ -2714,7 +2715,7 @@ namespace ts.Completions {
                         (symbolName, targetFlags) => {
                             if (!isIdentifierText(symbolName, getEmitScriptTarget(host.getCompilationSettings()))) return false;
                             if (!detailsEntryId && isStringANonContextualKeyword(symbolName)) return false;
-                            if (!isTypeOnlyLocation && !importStatementCompletion?.replacementSpan && !(targetFlags & SymbolFlags.Value)) return false;
+                            if (!isTypeOnlyLocation && !importStatementCompletion && !(targetFlags & SymbolFlags.Value)) return false;
                             if (isTypeOnlyLocation && !(targetFlags & (SymbolFlags.Module | SymbolFlags.Type))) return false;
                             // Do not try to auto-import something with a lowercase first letter for a JSX tag
                             const firstChar = symbolName.charCodeAt(0);
@@ -2808,7 +2809,7 @@ namespace ts.Completions {
                 return;
             }
             symbolToOriginInfoMap[symbols.length] = origin;
-            symbolToSortTextMap[symbolId] = importStatementCompletion?.replacementSpan ? SortText.LocationPriority : SortText.AutoImportSuggestions;
+            symbolToSortTextMap[symbolId] = importStatementCompletion ? SortText.LocationPriority : SortText.AutoImportSuggestions;
             symbols.push(symbol);
         }
 
@@ -4252,7 +4253,7 @@ namespace ts.Completions {
             isNewIdentifierLocation: !!(candidate || keywordCompletion === SyntaxKind.TypeKeyword),
             isTopLevelTypeOnly: !!tryCast(candidate, isImportDeclaration)?.importClause?.isTypeOnly || !!tryCast(candidate, isImportEqualsDeclaration)?.isTypeOnly,
             couldBeTypeOnlyImportSpecifier: !!candidate && couldBeTypeOnlyImportSpecifier(candidate, contextToken),
-            replacementSpan: getSingleLinereplacementSpanForImportCompletionNode(candidate),
+            replacementSpan: getSingleLineReplacementSpanForImportCompletionNode(candidate),
         };
 
         function getCandidate() {
@@ -4300,7 +4301,7 @@ namespace ts.Completions {
 
     }
 
-    function getSingleLinereplacementSpanForImportCompletionNode(node: ImportDeclaration | ImportEqualsDeclaration | ImportSpecifier | Token<SyntaxKind.ImportKeyword> | undefined) {
+    function getSingleLineReplacementSpanForImportCompletionNode(node: ImportDeclaration | ImportEqualsDeclaration | ImportSpecifier | Token<SyntaxKind.ImportKeyword> | undefined) {
         if (!node) return undefined;
         const top = (findAncestor(node, or(isImportDeclaration, isImportEqualsDeclaration)) || node) as ImportDeclaration | ImportEqualsDeclaration | Token<SyntaxKind.ImportKeyword>;
         const sourceFile = top.getSourceFile();
