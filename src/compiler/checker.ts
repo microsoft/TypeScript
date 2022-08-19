@@ -2819,7 +2819,7 @@ namespace ts {
                         if (exportAssignment) {
                             addRelatedInfo(err, createDiagnosticForNode(
                                 exportAssignment,
-                                Diagnostics.This_module_is_declared_with_using_export_and_can_only_be_used_with_a_default_import_when_using_the_0_flag,
+                                Diagnostics.This_module_is_declared_with_export_and_can_only_be_used_with_a_default_import_when_using_the_0_flag,
                                 compilerOptionName
                             ));
                         }
@@ -18861,7 +18861,8 @@ namespace ts {
                         }
                     }
 
-                    const isPerformingCommonPropertyChecks = relation !== comparableRelation && !(intersectionState & IntersectionState.Target) &&
+                    const isPerformingCommonPropertyChecks = (relation !== comparableRelation || relation === comparableRelation && isLiteralType(source)) &&
+                        !(intersectionState & IntersectionState.Target) &&
                         source.flags & (TypeFlags.Primitive | TypeFlags.Object | TypeFlags.Intersection) && source !== globalObjectType &&
                         target.flags & (TypeFlags.Object | TypeFlags.Intersection) && isWeakType(target) &&
                         (getPropertiesOfType(source).length > 0 || typeHasCallOrConstructSignatures(source));
@@ -19658,7 +19659,7 @@ namespace ts {
                                     // create a new chain for the constraint error
                                     resetErrorInfo(saveErrorInfo);
                                 }
-                                if (result = isRelatedTo(source, constraint, RecursionFlags.Target, reportErrors)) {
+                                if (result = isRelatedTo(source, constraint, RecursionFlags.Target, reportErrors, /* headMessage */ undefined, intersectionState)) {
                                     return result;
                                 }
                                 // prefer the shorter chain of the constraint comparison chain, and the direct comparison chain
@@ -21437,7 +21438,7 @@ namespace ts {
             if (!isLiteralOfContextualType(type, contextualType)) {
                 type = getWidenedUniqueESSymbolType(getWidenedLiteralType(type));
             }
-            return type;
+            return getRegularTypeOfLiteralType(type);
         }
 
         function getWidenedLiteralLikeTypeForContextualReturnTypeIfNeeded(type: Type | undefined, contextualSignatureReturnType: Type | undefined, isAsync: boolean) {

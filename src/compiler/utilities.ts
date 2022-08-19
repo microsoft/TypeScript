@@ -3947,7 +3947,7 @@ namespace ts {
                 diagnostics = nonFileDiagnostics;
             }
 
-            insertSorted(diagnostics, diagnostic, compareDiagnostics);
+            insertSorted(diagnostics, diagnostic, compareDiagnosticsSkipRelatedInformation);
         }
 
         function getGlobalDiagnostics(): Diagnostic[] {
