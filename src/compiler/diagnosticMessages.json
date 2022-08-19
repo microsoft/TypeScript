@@ -6239,6 +6239,10 @@
         "category": "Error",
         "code": 7061
     },
+    "This source element is ultimately responsible for {0} million type comparisons. It is likely very slow, and may impact editor performance. Simplify the types in use.": {
+        "category": "Error",
+        "code": 7062
+    },
 
     "You cannot rename this element.": {
         "category": "Error",

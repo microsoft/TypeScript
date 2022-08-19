@@ -347,6 +347,7 @@ namespace ts {
         let totalInstantiationCount = 0;
         let instantiationCount = 0;
         let instantiationDepth = 0;
+        let nestedElementCacheContribution = 0;
         let inlineLevel = 0;
         let currentNode: Node | undefined;
         let varianceTypeParameter: TypeParameter | undefined;
@@ -41723,8 +41724,27 @@ namespace ts {
                 const saveCurrentNode = currentNode;
                 currentNode = node;
                 instantiationCount = 0;
+                const saveNestedElementCacheContribution = nestedElementCacheContribution;
+                nestedElementCacheContribution = 0;
+                const startCacheSize = assignableRelation.size;
                 checkSourceElementWorker(node);
+                const rawAssignabilityCacheContribution = assignableRelation.size - startCacheSize;
+                const assignabilityCacheContribution = rawAssignabilityCacheContribution - nestedElementCacheContribution;
+                nestedElementCacheContribution = saveNestedElementCacheContribution + assignabilityCacheContribution;
                 currentNode = saveCurrentNode;
+
+                // If a single source element triggers pulling in 4 million comparions, editor perf is likely very bad.
+                // Surprisingly, the choice of 4 million is not arbitrary - it's just under 2^22, the number of comparisons
+                // required to compare two 2^11-element unions naively in the worst case. That is juuust large enough to take
+                // a few seconds to check on a laptop, and thus for things to not *obviously* be wrong without an error.
+                // Two 2^12 unions takes about a minute. Larger powers of two aren't worth waiting for, and cause an obvious hang.
+                // The error is sometimes safe to `//@ts-ignore` if the perf is still OK, but does indicate a location
+                // that is likely triggering a performance problem. The types may be able to be restructured to
+                // get better perf, or the constructs in use may be a good candidate for specialized optimizations
+                // in the compiler itself to reduce the amount of work required.
+                if (assignabilityCacheContribution > 4_000_000) {
+                    error(node, Diagnostics.This_source_element_is_ultimately_responsible_for_0_million_type_comparisons_It_is_likely_very_slow_and_may_impact_editor_performance_Simplify_the_types_in_use, Math.floor(assignabilityCacheContribution / 1_000_000));
+                }
             }
         }
 
