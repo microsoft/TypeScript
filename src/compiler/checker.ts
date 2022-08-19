@@ -1042,8 +1042,8 @@ namespace ts {
         let _jsxNamespace: __String;
         let _jsxFactoryEntity: EntityName | undefined;
 
-        class InfiniMap<K, V> {
-            private next?: InfiniMap<K, V>;
+        class ExpandableRelationshipCache<K, V> {
+            private next?: ExpandableRelationshipCache<K, V>;
             private inner: ESMap<K, V>;
             constructor() {
                 this.inner = new Map();
@@ -1051,9 +1051,14 @@ namespace ts {
             get(key: K): V | undefined {
                 return this.inner.has(key) ? this.inner.get(key) : this.next?.get(key);
             }
+            /**
+             * Unlike a normal map, this expects `set` to be called exactly once for a given key, and then never again
+             * - the caller should always be checking if the cache `.has` the member it would set.
+             */
             set(key: K, value: V): this {
+                Debug.assert(!this.inner.has(key));
                 if (this.inner.size > ((2 ** 24) - 1)) {
-                    this.next ||= new InfiniMap();
+                    this.next ||= new ExpandableRelationshipCache();
                     this.next.set(key, value);
                 }
                 else {
@@ -1072,7 +1077,7 @@ namespace ts {
             delete(key: K): boolean {
                 return this.inner.delete(key) || !!this.next?.delete(key);
             }
-            forEach(callbackfn: (value: V, key: K, map: InfiniMap<K, V>) => void): void {
+            forEach(callbackfn: (value: V, key: K, map: ExpandableRelationshipCache<K, V>) => void): void {
                 this.inner.forEach((v, k) => callbackfn(v, k, this));
                 this.next?.forEach((v, k) => callbackfn(v, k, this));
             }
@@ -1081,13 +1086,13 @@ namespace ts {
             }
         }
 
-        type RelationCache = InfiniMap<string, RelationComparisonResult>;
-        const subtypeRelation = new InfiniMap<string, RelationComparisonResult>();
-        const strictSubtypeRelation = new InfiniMap<string, RelationComparisonResult>();
-        const assignableRelation = new InfiniMap<string, RelationComparisonResult>();
-        const comparableRelation = new InfiniMap<string, RelationComparisonResult>();
-        const identityRelation = new InfiniMap<string, RelationComparisonResult>();
-        const enumRelation = new InfiniMap<string, RelationComparisonResult>();
+        type RelationCache = ExpandableRelationshipCache<string, RelationComparisonResult>;
+        const subtypeRelation = new ExpandableRelationshipCache<string, RelationComparisonResult>();
+        const strictSubtypeRelation = new ExpandableRelationshipCache<string, RelationComparisonResult>();
+        const assignableRelation = new ExpandableRelationshipCache<string, RelationComparisonResult>();
+        const comparableRelation = new ExpandableRelationshipCache<string, RelationComparisonResult>();
+        const identityRelation = new ExpandableRelationshipCache<string, RelationComparisonResult>();
+        const enumRelation = new ExpandableRelationshipCache<string, RelationComparisonResult>();
 
         const builtinGlobals = createSymbolTable();
         builtinGlobals.set(undefinedSymbol.escapedName, undefinedSymbol);
