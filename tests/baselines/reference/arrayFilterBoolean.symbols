@@ -1,0 +1,12 @@
+=== tests/cases/compiler/arrayFilterBoolean.ts ===
+const mixed = [undefined, "string", null]
+>mixed : Symbol(mixed, Decl(arrayFilterBoolean.ts, 0, 5))
+>undefined : Symbol(undefined)
+
+const result = mixed.filter(Boolean)
+>result : Symbol(result, Decl(arrayFilterBoolean.ts, 1, 5))
+>mixed.filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>mixed : Symbol(mixed, Decl(arrayFilterBoolean.ts, 0, 5))
+>filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Boolean : Symbol(Boolean, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+

@@ -1,0 +1,16 @@
+=== tests/cases/compiler/arrayFilterBoolean.ts ===
+const mixed = [undefined, "string", null]
+>mixed : string[]
+>[undefined, "string", null] : string[]
+>undefined : undefined
+>"string" : "string"
+>null : null
+
+const result = mixed.filter(Boolean)
+>result : string[]
+>mixed.filter(Boolean) : string[]
+>mixed.filter : { <S extends string>(predicate: (value: string, index: number, array: string[]) => value is S, thisArg?: any): S[]; (predicate: (value: string, index: number, array: string[]) => unknown, thisArg?: any): string[]; }
+>mixed : string[]
+>filter : { <S extends string>(predicate: (value: string, index: number, array: string[]) => value is S, thisArg?: any): S[]; (predicate: (value: string, index: number, array: string[]) => unknown, thisArg?: any): string[]; }
+>Boolean : BooleanConstructor
+
