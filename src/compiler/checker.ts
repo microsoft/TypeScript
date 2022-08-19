@@ -41742,7 +41742,7 @@ namespace ts {
                 // that is likely triggering a performance problem. The types may be able to be restructured to
                 // get better perf, or the constructs in use may be a good candidate for specialized optimizations
                 // in the compiler itself to reduce the amount of work required.
-                if (assignabilityCacheContribution > 4_000_000) {
+                if (assignabilityCacheContribution > 1_000_000) {
                     error(node, Diagnostics.This_source_element_is_ultimately_responsible_for_0_million_type_comparisons_It_is_likely_very_slow_and_may_impact_editor_performance_Simplify_the_types_in_use, Math.floor(assignabilityCacheContribution / 1_000_000));
                 }
             }

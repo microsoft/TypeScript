@@ -1,14 +1,14 @@
 tests/cases/compiler/comparisonCountLimits.ts(9,17): error TS2590: Expression produces a union type that is too complex to represent.
-tests/cases/compiler/comparisonCountLimits.ts(25,1): error TS7062: This source element is ultimately responsible for 4 million type comparisons. It is likely very slow, and may impact editor performance. Simplify the types in use.
+tests/cases/compiler/comparisonCountLimits.ts(25,1): error TS7062: This source element is ultimately responsible for 1 million type comparisons. It is likely very slow, and may impact editor performance. Simplify the types in use.
 
 
 ==== tests/cases/compiler/comparisonCountLimits.ts (2 errors) ====
-    function get11BitsOf<T extends string, U extends string, FallbackPrefix extends string>() {
+    function get10BitsOf<T extends string, U extends string, FallbackPrefix extends string>() {
         type Bit = T | U; // 2^1
         type HalfNibble = `${Bit}${Bit}`; // 2^2
         type Nibble = `${HalfNibble}${HalfNibble}`; // 2^4
         type Byte = `${Nibble}${Nibble}`; // 2^8
-        type ElevenBits = `${Byte}${HalfNibble}${Bit}`; // 2^11 (approx. 4 million comparisons if compared naively)
+        type TenBits = `${Byte}${HalfNibble}`; // 2^10 (approx. 1 million comparisons if compared naively)
     
         type HalfWord = `${Byte}${Byte}`; // 2^16 // allowed, but test takes way too long if used
         type Word = `${HalfWord}${HalfWord}`; // 2^32 (throws, too large)
@@ -23,12 +23,12 @@ tests/cases/compiler/comparisonCountLimits.ts(25,1): error TS7062: This source e
         // By manufacturing the fallback in here, we guarantee it has a higher typeid than the bit strings,
         // and thus is sorted to the end of the union, guaranteeing relationship checking passes with a maximal
         // number of comparisons when a naive comparison is done (guaranteeing this test is slow)
-        return null as any as Box<ElevenBits | (FallbackPrefix extends never ? never : `${FallbackPrefix}${string}`)>; // return type is a union
+        return null as any as Box<TenBits | (FallbackPrefix extends never ? never : `${FallbackPrefix}${string}`)>; // return type is a union
     }
     
-    let a = get11BitsOf<"0", "1", "a" | "b">();
-    const b = get11BitsOf<"a", "b", never>();
+    let a = get10BitsOf<"0", "1", "a" | "b">();
+    const b = get10BitsOf<"a", "b", never>();
     
     a = b;
     ~~~~~~
-!!! error TS7062: This source element is ultimately responsible for 4 million type comparisons. It is likely very slow, and may impact editor performance. Simplify the types in use.
+!!! error TS7062: This source element is ultimately responsible for 1 million type comparisons. It is likely very slow, and may impact editor performance. Simplify the types in use.
