@@ -18814,6 +18814,7 @@ namespace ts {
                 // If both the source and target are intersections, we can remove the common types from them before formal normalization,
                 // and run a simplified comparison without those common members.
                 if (originalSource.flags & originalTarget.flags & TypeFlags.Intersection) {
+                    // Set 1 for elements occuring in the source, then 2 for elements occuring in both source and target
                     const combinedTypeSet = new Map<number, number>();
                     forEach((originalSource as IntersectionType).types, t => combinedTypeSet.set(getTypeId(t), 1));
                     let hasOverlap = false;
@@ -19342,9 +19343,6 @@ namespace ts {
             // equal and infinitely expanding. Fourth, if we have reached a depth of 100 nested comparisons, assume we have runaway recursion
             // and issue an error. Otherwise, actually compare the structure of the two types.
             function recursiveTypeRelatedTo(source: Type, target: Type, reportErrors: boolean, intersectionState: IntersectionState, recursionFlags: RecursionFlags): Ternary {
-                if (relation.size > 2 ** 20) {
-                    debugger;
-                }
                 if (overflow) {
                     return Ternary.False;
                 }
