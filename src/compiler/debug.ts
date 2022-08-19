@@ -30,6 +30,7 @@ namespace ts {
         export let currentLogLevel = LogLevel.Warning;
         export let isDebugging = false;
         export let loggingHost: LoggingHost | undefined;
+        export let enableDeprecationWarnings = true;
         /* eslint-enable prefer-const */
 
         type AssertionKeys = MatchingKeys<typeof Debug, AnyFunction>;
@@ -732,7 +733,7 @@ namespace ts {
         function createWarningDeprecation(name: string, errorAfter: Version | undefined, since: Version | undefined, message: string | undefined) {
             let hasWrittenDeprecation = false;
             return () => {
-                if (!hasWrittenDeprecation) {
+                if (enableDeprecationWarnings && !hasWrittenDeprecation) {
                     log.warn(formatDeprecationMessage(name, /*error*/ false, errorAfter, since, message));
                     hasWrittenDeprecation = true;
                 }
