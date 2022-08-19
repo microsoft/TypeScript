@@ -1051,10 +1051,6 @@ namespace ts {
             get(key: K): V | undefined {
                 return this.inner.has(key) ? this.inner.get(key) : this.next?.get(key);
             }
-            /**
-             * Unlike a normal map, this expects `set` to be called exactly once for a given key, and then never again
-             * - the caller should always be checking if the cache `.has` the member it would set.
-             */
             set(key: K, value: V): this {
                 if (this.inner.size > ((2 ** 24) - 1) && !this.inner.has(key)) {
                     this.next ||= new ExpandableRelationshipCache();
