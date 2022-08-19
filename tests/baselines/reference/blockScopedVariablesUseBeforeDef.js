@@ -123,6 +123,14 @@ function foo16() {
     let [a] = (() => a)();
 }
 
+function foo17() {
+    let a = (() => Enum.Yes)();
+    enum Enum {
+        No = 0,
+        Yes = 1,
+    }
+}
+
 
 //// [blockScopedVariablesUseBeforeDef.js]
 function foo0() {
@@ -253,4 +261,12 @@ function foo15() {
 }
 function foo16() {
     var a = (function () { return a; })()[0];
+}
+function foo17() {
+    var a = (function () { return Enum.Yes; })();
+    var Enum;
+    (function (Enum) {
+        Enum[Enum["No"] = 0] = "No";
+        Enum[Enum["Yes"] = 1] = "Yes";
+    })(Enum || (Enum = {}));
 }

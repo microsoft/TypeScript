@@ -1682,7 +1682,7 @@ namespace ts {
                         return "quit";
                     }
                     if (isFunctionLike(current)) {
-                        return true;
+                        return !getImmediatelyInvokedFunctionExpression(current);
                     }
                     if (isClassStaticBlockDeclaration(current)) {
                         return declaration.pos < usage.pos;

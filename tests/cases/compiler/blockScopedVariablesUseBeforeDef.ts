@@ -122,3 +122,11 @@ function foo15() {
 function foo16() {
     let [a] = (() => a)();
 }
+
+function foo17() {
+    let a = (() => Enum.Yes)();
+    enum Enum {
+        No = 0,
+        Yes = 1,
+    }
+}

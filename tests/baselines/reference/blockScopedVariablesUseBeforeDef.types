@@ -287,3 +287,28 @@ function foo16() {
 >a : any
 }
 
+function foo17() {
+>foo17 : () => void
+
+    let a = (() => Enum.Yes)();
+>a : Enum
+>(() => Enum.Yes)() : Enum
+>(() => Enum.Yes) : () => Enum
+>() => Enum.Yes : () => Enum
+>Enum.Yes : Enum.Yes
+>Enum : typeof Enum
+>Yes : Enum.Yes
+
+    enum Enum {
+>Enum : Enum
+
+        No = 0,
+>No : Enum.No
+>0 : 0
+
+        Yes = 1,
+>Yes : Enum.Yes
+>1 : 1
+    }
+}
+
