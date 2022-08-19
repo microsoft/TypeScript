@@ -7913,20 +7913,20 @@ declare namespace ts {
 declare namespace ts {
     interface Node {
         /**
-         * @deprecated `decorators` has been merged with `modifiers` on the declarations that support decorators.
-         * To test whether a `Node` can legally have decorators, use the `ts.canHaveDecorators()` function. To read the
-         * decorators of a `Node` that can legally have decorators, use the `ts.getDecorators()` function.
+         * @deprecated `decorators` has been removed from `Node` and merged with `modifiers` on the `Node` subtypes that support them.
+         * Use `ts.canHaveDecorators()` to test whether a `Node` can have decorators.
+         * Use `ts.getDecorators()` to get the decorators of a `Node`.
          *
          * For example:
          * ```ts
          * const decorators = ts.canHaveDecorators(node) ? ts.getDecorators(node) : undefined;
          * ```
          */
-        readonly decorators: never;
+        readonly decorators?: undefined;
         /**
-         * @deprecated `modifiers` has been removed from `Node` and moved to the specific `Node` subtypes that support them.
-         * To test whether a `Node` can legally have modifiers, use the `ts.canHaveModifiers()` function. To read the modifiers
-         * of a `Node` that can legally have modifiers, use the `ts.getModifiers()` function.
+         * @deprecated `modifiers` has been removed from `Node` and moved to the `Node` subtypes that support them.
+         * Use `ts.canHaveModifiers()` to test whether a `Node` can have modifiers.
+         * Use `ts.getModifiers()` to get the modifiers of a `Node`.
          *
          * For example:
          * ```ts
