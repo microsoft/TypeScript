@@ -389,7 +389,7 @@ namespace ts {
             return visitNode(cbNode, node.expression) ||
                 visitNode(cbNode, node.type);
         },
-        [SyntaxKind.NonNullExpression]:  function forEachChildInNonNullExpression<T>(node: NonNullExpression, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        [SyntaxKind.NonNullExpression]: function forEachChildInNonNullExpression<T>(node: NonNullExpression, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
             return visitNode(cbNode, node.expression);
         },
         [SyntaxKind.MetaProperty]: function forEachChildInMetaProperty<T>(node: MetaProperty, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
@@ -744,9 +744,9 @@ namespace ts {
     function forEachChildInUnionOrIntersectionType<T>(node: UnionTypeNode | IntersectionTypeNode, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNodes(cbNode, cbNodes, node.types);
     }
-    
+
     function forEachChildInParenthesizedTypeOrTypeOperator<T>(node: ParenthesizedTypeNode | TypeOperatorNode, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        return visitNode(cbNode, (node as ParenthesizedTypeNode | TypeOperatorNode).type);
+        return visitNode(cbNode, node.type);
     }
 
     function forEachChildInObjectOrArrayBindingPattern<T>(node: BindingPattern, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
@@ -799,12 +799,9 @@ namespace ts {
     function forEachChildInJSDocParameterOrPropertyTag<T>(node: JSDocParameterTag | JSDocPropertyTag, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.tagName) ||
             (node.isNameFirst
-                ? visitNode(cbNode, node.name) ||
-                visitNode(cbNode, node.typeExpression) ||
-                (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment))
-                : visitNode(cbNode, node.typeExpression) ||
-                visitNode(cbNode, node.name) ||
-                (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment)));
+                ? visitNode(cbNode, node.name) || visitNode(cbNode, node.typeExpression)
+                : visitNode(cbNode, node.typeExpression) || visitNode(cbNode, node.name)) ||
+            (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment));
     }
 
     function forEachChildInJSDocReturnTag<T>(node: JSDocReturnTag | JSDocTypeTag | JSDocThisTag | JSDocEnumTag, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
@@ -816,7 +813,7 @@ namespace ts {
     function forEachChildInJSDocLinkCodeOrPlain<T>(node: JSDocLink | JSDocLinkCode | JSDocLinkPlain, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
             return visitNode(cbNode, node.name);
     }
-    
+
     function forEachChildInJSDocTag<T>(node: JSDocUnknownTag | JSDocClassTag | JSDocPublicTag | JSDocPrivateTag | JSDocProtectedTag | JSDocReadonlyTag | JSDocDeprecatedTag, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.tagName)
             || (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment));
