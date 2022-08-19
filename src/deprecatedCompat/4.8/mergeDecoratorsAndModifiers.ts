@@ -15,7 +15,7 @@ namespace ts {
          * const decorators = ts.canHaveDecorators(node) ? ts.getDecorators(node) : undefined;
          * ```
          */
-        readonly decorators: never;
+        readonly decorators?: undefined;
 
         /**
          * @deprecated `modifiers` has been removed from `Node` and moved to the `Node` subtypes that support them.
