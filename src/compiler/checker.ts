@@ -1056,8 +1056,7 @@ namespace ts {
              * - the caller should always be checking if the cache `.has` the member it would set.
              */
             set(key: K, value: V): this {
-                Debug.assert(!this.inner.has(key));
-                if (this.inner.size > ((2 ** 24) - 1)) {
+                if (!this.inner.has(key) && this.inner.size > ((2 ** 24) - 1)) {
                     this.next ||= new ExpandableRelationshipCache();
                     this.next.set(key, value);
                 }
