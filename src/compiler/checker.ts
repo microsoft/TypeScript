@@ -41733,9 +41733,9 @@ namespace ts {
                 nestedElementCacheContribution = saveNestedElementCacheContribution + assignabilityCacheContribution;
                 currentNode = saveCurrentNode;
 
-                // If a single source element triggers pulling in 4 million comparions, editor perf is likely very bad.
-                // Surprisingly, the choice of 4 million is not arbitrary - it's just under 2^22, the number of comparisons
-                // required to compare two 2^11-element unions naively in the worst case. That is juuust large enough to take
+                // If a single source element triggers pulling in 1 million comparions, editor perf is likely very bad.
+                // Surprisingly, the choice of 1 million is not arbitrary - it's just under 2^20, the number of comparisons
+                // required to compare two 2^10-element unions naively in the worst case. That is juuust large enough to take
                 // a few seconds to check on a laptop, and thus for things to not *obviously* be wrong without an error.
                 // Two 2^12 unions takes about a minute. Larger powers of two aren't worth waiting for, and cause an obvious hang.
                 // The error is sometimes safe to `//@ts-ignore` if the perf is still OK, but does indicate a location
