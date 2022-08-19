@@ -689,8 +689,7 @@ namespace ts.SymbolDisplay {
                 pushSymbolKind(symbolKind);
                 if (symbol && !some(symbol.declarations, d => isArrowFunction(d) || (isFunctionExpression(d) || isClassExpression(d)) && !d.name)) {
                     displayParts.push(spacePart());
-                    const enclosingDeclaration = undefined;
-                    addFullSymbolName(symbol, enclosingDeclaration, indexInfos);
+                    addFullSymbolName(symbol, /*enclosingDeclaration*/ undefined, indexInfos);
                 }
             }
         }
