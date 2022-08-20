@@ -21,6 +21,7 @@ module.exports = createRule({
         }],
         type: "suggestion",
     },
+    /** @type {[{ allowNamedFunctions?: boolean; allowDeclarations?: boolean }]} */
     defaultOptions: [{
         allowNamedFunctions: false,
         allowDeclarations: false,
