@@ -109,7 +109,7 @@ namespace ts {
                 visitNode(cbNode, node.expression);
         },
         [SyntaxKind.ShorthandPropertyAssignment]: function forEachChildInShorthandPropertyAssignment<T>(node: ShorthandPropertyAssignment, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-            return visitNodes(cbNode, cbNodes, node.decorators) ||
+            return visitNodes(cbNode, cbNodes, node.illegalDecorators) ||
                 visitNodes(cbNode, cbNodes, node.modifiers) ||
                 visitNode(cbNode, node.name) ||
                 visitNode(cbNode, node.questionToken) ||
@@ -144,7 +144,7 @@ namespace ts {
                 visitNode(cbNode, node.initializer);
         },
         [SyntaxKind.PropertyAssignment]: function forEachChildInPropertyAssignment<T>(node: PropertyAssignment, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-            return visitNodes(cbNode, cbNodes, node.decorators) ||
+            return visitNodes(cbNode, cbNodes, node.illegalDecorators) ||
                 visitNodes(cbNode, cbNodes, node.modifiers) ||
                 visitNode(cbNode, node.name) ||
                 visitNode(cbNode, node.questionToken) ||
@@ -164,7 +164,7 @@ namespace ts {
                 visitNode(cbNode, node.initializer);
         },
         [SyntaxKind.IndexSignature]: function forEachChildInIndexSignature<T>(node: IndexSignatureDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-            return visitNodes(cbNode, cbNodes, node.decorators) ||
+            return visitNodes(cbNode, cbNodes, node.illegalDecorators) ||
                 visitNodes(cbNode, cbNodes, node.modifiers) ||
                 visitNodes(cbNode, cbNodes, node.typeParameters) ||
                 visitNodes(cbNode, cbNodes, node.parameters) ||
@@ -204,7 +204,7 @@ namespace ts {
                 visitNode(cbNode, node.type);
         },
         [SyntaxKind.Constructor]: function forEachChildInConstructor<T>(node: ConstructorDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-            return visitNodes(cbNode, cbNodes, node.decorators) ||
+            return visitNodes(cbNode, cbNodes, node.illegalDecorators) ||
                 visitNodes(cbNode, cbNodes, node.modifiers) ||
                 visitNode(cbNode, node.name) ||
                 visitNodes(cbNode, cbNodes, node.typeParameters) ||
@@ -229,7 +229,7 @@ namespace ts {
                 visitNode(cbNode, node.body);
         },
         [SyntaxKind.FunctionDeclaration]: function forEachChildInFunctionDeclaration<T>(node: FunctionDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-            return visitNodes(cbNode, cbNodes, node.decorators) ||
+            return visitNodes(cbNode, cbNodes, node.illegalDecorators) ||
                 visitNodes(cbNode, cbNodes, node.modifiers) ||
                 visitNode(cbNode, node.asteriskToken) ||
                 visitNode(cbNode, node.name) ||
@@ -256,7 +256,7 @@ namespace ts {
                 visitNode(cbNode, node.body);
         },
         [SyntaxKind.ClassStaticBlockDeclaration]: function forEachChildInClassStaticBlockDeclaration<T>(node: ClassStaticBlockDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-            return visitNodes(cbNode, cbNodes, node.decorators) ||
+            return visitNodes(cbNode, cbNodes, node.illegalDecorators) ||
                 visitNodes(cbNode, cbNodes, node.modifiers) ||
                 visitNode(cbNode, node.body);
         },
@@ -412,7 +412,7 @@ namespace ts {
                 visitNode(cbNode, node.endOfFileToken);
         },
         [SyntaxKind.VariableStatement]: function forEachChildInVariableStatement<T>(node: VariableStatement, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-            return visitNodes(cbNode, cbNodes, node.decorators) ||
+            return visitNodes(cbNode, cbNodes, node.illegalDecorators) ||
                 visitNodes(cbNode, cbNodes, node.modifiers) ||
                 visitNode(cbNode, node.declarationList);
         },
@@ -497,7 +497,7 @@ namespace ts {
         [SyntaxKind.ClassDeclaration]: forEachChildInClassDeclarationOrExpression,
         [SyntaxKind.ClassExpression]: forEachChildInClassDeclarationOrExpression,
         [SyntaxKind.InterfaceDeclaration]: function forEachChildInInterfaceDeclaration<T>(node: InterfaceDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-            return visitNodes(cbNode, cbNodes, node.decorators) ||
+            return visitNodes(cbNode, cbNodes, node.illegalDecorators) ||
                 visitNodes(cbNode, cbNodes, node.modifiers) ||
                 visitNode(cbNode, node.name) ||
                 visitNodes(cbNode, cbNodes, node.typeParameters) ||
@@ -505,14 +505,14 @@ namespace ts {
                 visitNodes(cbNode, cbNodes, node.members);
         },
         [SyntaxKind.TypeAliasDeclaration]: function forEachChildInTypeAliasDeclaration<T>(node: TypeAliasDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-            return visitNodes(cbNode, cbNodes, node.decorators) ||
+            return visitNodes(cbNode, cbNodes, node.illegalDecorators) ||
                 visitNodes(cbNode, cbNodes, node.modifiers) ||
                 visitNode(cbNode, node.name) ||
                 visitNodes(cbNode, cbNodes, node.typeParameters) ||
                 visitNode(cbNode, node.type);
         },
         [SyntaxKind.EnumDeclaration]: function forEachChildInEnumDeclaration<T>(node: EnumDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-            return visitNodes(cbNode, cbNodes, node.decorators) ||
+            return visitNodes(cbNode, cbNodes, node.illegalDecorators) ||
                 visitNodes(cbNode, cbNodes, node.modifiers) ||
                 visitNode(cbNode, node.name) ||
                 visitNodes(cbNode, cbNodes, node.members);
@@ -522,19 +522,19 @@ namespace ts {
                 visitNode(cbNode, node.initializer);
         },
         [SyntaxKind.ModuleDeclaration]: function forEachChildInModuleDeclaration<T>(node: ModuleDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-            return visitNodes(cbNode, cbNodes, node.decorators) ||
+            return visitNodes(cbNode, cbNodes, node.illegalDecorators) ||
                 visitNodes(cbNode, cbNodes, node.modifiers) ||
                 visitNode(cbNode, node.name) ||
                 visitNode(cbNode, node.body);
         },
         [SyntaxKind.ImportEqualsDeclaration]: function forEachChildInImportEqualsDeclaration<T>(node: ImportEqualsDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-            return visitNodes(cbNode, cbNodes, node.decorators) ||
+            return visitNodes(cbNode, cbNodes, node.illegalDecorators) ||
                 visitNodes(cbNode, cbNodes, node.modifiers) ||
                 visitNode(cbNode, node.name) ||
                 visitNode(cbNode, node.moduleReference);
         },
         [SyntaxKind.ImportDeclaration]: function forEachChildInImportDeclaration<T>(node: ImportDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-            return visitNodes(cbNode, cbNodes, node.decorators) ||
+            return visitNodes(cbNode, cbNodes, node.illegalDecorators) ||
                 visitNodes(cbNode, cbNodes, node.modifiers) ||
                 visitNode(cbNode, node.importClause) ||
                 visitNode(cbNode, node.moduleSpecifier) ||
@@ -552,7 +552,7 @@ namespace ts {
                 visitNode(cbNode, node.value);
         },
         [SyntaxKind.NamespaceExportDeclaration]: function forEachChildInNamespaceExportDeclaration<T>(node: NamespaceExportDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-            return visitNodes(cbNode, cbNodes, node.decorators) ||
+            return visitNodes(cbNode, cbNodes, node.illegalDecorators) ||
                 visitNode(cbNode, node.name);
         },
         [SyntaxKind.NamespaceImport]: function forEachChildInNamespaceImport<T>(node: NamespaceImport, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
@@ -564,7 +564,7 @@ namespace ts {
         [SyntaxKind.NamedImports]: forEachChildInNamedImportsOrExports,
         [SyntaxKind.NamedExports]: forEachChildInNamedImportsOrExports,
         [SyntaxKind.ExportDeclaration]: function forEachChildInExportDeclaration<T>(node: ExportDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-            return visitNodes(cbNode, cbNodes, node.decorators) ||
+            return visitNodes(cbNode, cbNodes, node.illegalDecorators) ||
                 visitNodes(cbNode, cbNodes, node.modifiers) ||
                 visitNode(cbNode, node.exportClause) ||
                 visitNode(cbNode, node.moduleSpecifier) ||
@@ -573,7 +573,7 @@ namespace ts {
         [SyntaxKind.ImportSpecifier]: forEachChildInImportOrExportSpecifier,
         [SyntaxKind.ExportSpecifier]: forEachChildInImportOrExportSpecifier,
         [SyntaxKind.ExportAssignment]: function forEachChildInExportAssignment<T>(node: ExportAssignment, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-            return visitNodes(cbNode, cbNodes, node.decorators) ||
+            return visitNodes(cbNode, cbNodes, node.illegalDecorators) ||
                 visitNodes(cbNode, cbNodes, node.modifiers) ||
                 visitNode(cbNode, node.expression);
         },
@@ -607,7 +607,7 @@ namespace ts {
             return visitNode(cbNode, node.expression);
         },
         [SyntaxKind.MissingDeclaration]: function forEachChildInMissingDeclaration<T>(node: MissingDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-            return visitNodes(cbNode, cbNodes, node.decorators) ||
+            return visitNodes(cbNode, cbNodes, node.illegalDecorators) ||
                 visitNodes(cbNode, cbNodes, node.modifiers);
         },
         [SyntaxKind.CommaListExpression]: function forEachChildInCommaListExpression<T>(node: CommaListExpression, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
@@ -3736,7 +3736,7 @@ namespace ts {
             const type = parseTypeAnnotation();
             parseTypeMemberSemicolon();
             const node = factory.createIndexSignature(modifiers, parameters, type);
-            (node as Mutable<IndexSignatureDeclaration>).decorators = decorators;
+            (node as Mutable<IndexSignatureDeclaration>).illegalDecorators = decorators;
             return withJSDoc(finishNode(node, pos), hasJSDoc);
         }
 
@@ -6150,7 +6150,7 @@ namespace ts {
                 node = factory.createPropertyAssignment(name, initializer);
             }
             // Decorators, Modifiers, questionToken, and exclamationToken are not supported by property assignments and are reported in the grammar checker
-            node.decorators = decorators;
+            node.illegalDecorators = decorators;
             node.modifiers = modifiers;
             node.questionToken = questionToken;
             node.exclamationToken = exclamationToken;
@@ -6870,7 +6870,7 @@ namespace ts {
                         // would follow. For recovery and error reporting purposes, return an incomplete declaration.
                         const missing = createMissingNode<MissingDeclaration>(SyntaxKind.MissingDeclaration, /*reportAtCurrentPosition*/ true, Diagnostics.Declaration_expected);
                         setTextRangePos(missing, pos);
-                        missing.decorators = decorators;
+                        missing.illegalDecorators = decorators;
                         missing.modifiers = modifiers;
                         return missing;
                     }
@@ -7034,7 +7034,7 @@ namespace ts {
             parseSemicolon();
             const node = factory.createVariableStatement(modifiers, declarationList);
             // Decorators are not allowed on a variable statement, so we keep track of them to report them in the grammar checker.
-            node.decorators = decorators;
+            node.illegalDecorators = decorators;
             return withJSDoc(finishNode(node, pos), hasJSDoc);
         }
 
@@ -7055,7 +7055,7 @@ namespace ts {
             const body = parseFunctionBlockOrSemicolon(isGenerator | isAsync, Diagnostics.or_expected);
             setAwaitContext(savedAwaitContext);
             const node = factory.createFunctionDeclaration(modifiers, asteriskToken, name, typeParameters, parameters, type, body);
-            (node as Mutable<FunctionDeclaration>).decorators = decorators;
+            (node as Mutable<FunctionDeclaration>).illegalDecorators = decorators;
             return withJSDoc(finishNode(node, pos), hasJSDoc);
         }
 
@@ -7081,7 +7081,7 @@ namespace ts {
                     const node = factory.createConstructorDeclaration(modifiers, parameters, body);
 
                     // Attach invalid nodes if they exist so that we can report them in the grammar checker.
-                    (node as Mutable<ConstructorDeclaration>).decorators = decorators;
+                    (node as Mutable<ConstructorDeclaration>).illegalDecorators = decorators;
                     (node as Mutable<ConstructorDeclaration>).typeParameters = typeParameters;
                     (node as Mutable<ConstructorDeclaration>).type = type;
                     return withJSDoc(finishNode(node, pos), hasJSDoc);
@@ -7248,7 +7248,7 @@ namespace ts {
             parseExpectedToken(SyntaxKind.StaticKeyword);
             const body = parseClassStaticBlockBody();
             const node = withJSDoc(finishNode(factory.createClassStaticBlockDeclaration(body), pos), hasJSDoc);
-            (node as Mutable<ClassStaticBlockDeclaration>).decorators = decorators;
+            (node as Mutable<ClassStaticBlockDeclaration>).illegalDecorators = decorators;
             (node as Mutable<ClassStaticBlockDeclaration>).modifiers = modifiers;
             return node;
         }
@@ -7523,7 +7523,7 @@ namespace ts {
             const heritageClauses = parseHeritageClauses();
             const members = parseObjectTypeMembers();
             const node = factory.createInterfaceDeclaration(modifiers, name, typeParameters, heritageClauses, members);
-            (node as Mutable<InterfaceDeclaration>).decorators = decorators;
+            (node as Mutable<InterfaceDeclaration>).illegalDecorators = decorators;
             return withJSDoc(finishNode(node, pos), hasJSDoc);
         }
 
@@ -7535,7 +7535,7 @@ namespace ts {
             const type = token() === SyntaxKind.IntrinsicKeyword && tryParse(parseKeywordAndNoDot) || parseType();
             parseSemicolon();
             const node = factory.createTypeAliasDeclaration(modifiers, name, typeParameters, type);
-            (node as Mutable<TypeAliasDeclaration>).decorators = decorators;
+            (node as Mutable<TypeAliasDeclaration>).illegalDecorators = decorators;
             return withJSDoc(finishNode(node, pos), hasJSDoc);
         }
 
@@ -7563,7 +7563,7 @@ namespace ts {
                 members = createMissingList<EnumMember>();
             }
             const node = factory.createEnumDeclaration(modifiers, name, members);
-            (node as Mutable<EnumDeclaration>).decorators = decorators;
+            (node as Mutable<EnumDeclaration>).illegalDecorators = decorators;
             return withJSDoc(finishNode(node, pos), hasJSDoc);
         }
 
@@ -7589,7 +7589,7 @@ namespace ts {
                 ? parseModuleOrNamespaceDeclaration(getNodePos(), /*hasJSDoc*/ false, /*decorators*/ undefined, /*modifiers*/ undefined, NodeFlags.NestedNamespace | namespaceFlag) as NamespaceDeclaration
                 : parseModuleBlock();
             const node = factory.createModuleDeclaration(modifiers, name, body, flags);
-            (node as Mutable<ModuleDeclaration>).decorators = decorators;
+            (node as Mutable<ModuleDeclaration>).illegalDecorators = decorators;
             return withJSDoc(finishNode(node, pos), hasJSDoc);
         }
 
@@ -7613,7 +7613,7 @@ namespace ts {
                 parseSemicolon();
             }
             const node = factory.createModuleDeclaration(modifiers, name, body, flags);
-            (node as Mutable<ModuleDeclaration>).decorators = decorators;
+            (node as Mutable<ModuleDeclaration>).illegalDecorators = decorators;
             return withJSDoc(finishNode(node, pos), hasJSDoc);
         }
 
@@ -7659,7 +7659,7 @@ namespace ts {
             parseSemicolon();
             const node = factory.createNamespaceExportDeclaration(name);
             // NamespaceExportDeclaration nodes cannot have decorators or modifiers, so we attach them here so we can report them in the grammar checker
-            (node as Mutable<NamespaceExportDeclaration>).decorators = decorators;
+            (node as Mutable<NamespaceExportDeclaration>).illegalDecorators = decorators;
             (node as Mutable<NamespaceExportDeclaration>).modifiers = modifiers;
             return withJSDoc(finishNode(node, pos), hasJSDoc);
         }
@@ -7708,7 +7708,7 @@ namespace ts {
 
             parseSemicolon();
             const node = factory.createImportDeclaration(modifiers, importClause, moduleSpecifier, assertClause);
-            (node as Mutable<ImportDeclaration>).decorators = decorators;
+            (node as Mutable<ImportDeclaration>).illegalDecorators = decorators;
             return withJSDoc(finishNode(node, pos), hasJSDoc);
         }
 
@@ -7761,7 +7761,7 @@ namespace ts {
             const moduleReference = parseModuleReference();
             parseSemicolon();
             const node = factory.createImportEqualsDeclaration(modifiers, isTypeOnly, identifier, moduleReference);
-            (node as Mutable<ImportEqualsDeclaration>).decorators = decorators;
+            (node as Mutable<ImportEqualsDeclaration>).illegalDecorators = decorators;
             const finished = withJSDoc(finishNode(node, pos), hasJSDoc);
             return finished;
         }
@@ -7970,7 +7970,7 @@ namespace ts {
             parseSemicolon();
             setAwaitContext(savedAwaitContext);
             const node = factory.createExportDeclaration(modifiers, isTypeOnly, exportClause, moduleSpecifier, assertClause);
-            (node as Mutable<ExportDeclaration>).decorators = decorators;
+            (node as Mutable<ExportDeclaration>).illegalDecorators = decorators;
             return withJSDoc(finishNode(node, pos), hasJSDoc);
         }
 
@@ -7988,7 +7988,7 @@ namespace ts {
             parseSemicolon();
             setAwaitContext(savedAwaitContext);
             const node = factory.createExportAssignment(modifiers, isExportEquals, expression);
-            (node as Mutable<ExportAssignment>).decorators = decorators;
+            (node as Mutable<ExportAssignment>).illegalDecorators = decorators;
             return withJSDoc(finishNode(node, pos), hasJSDoc);
         }
 
