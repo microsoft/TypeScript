@@ -56,10 +56,10 @@ function foo() {
 
 
 //// [circularIndexedAccessErrors.d.ts]
-declare type T1 = {
+type T1 = {
     x: T1["x"];
 };
-declare type T2<K extends "x" | "y"> = {
+type T2<K extends "x" | "y"> = {
     x: T2<K>[K];
     y: number;
 };

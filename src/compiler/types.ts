@@ -885,6 +885,144 @@ namespace ts {
         /* @internal */ jsDocCache?: readonly JSDocTag[];     // Cache for getJSDocTags
     }
 
+    /* @internal */
+    export type HasChildren =
+        | Identifier
+        | QualifiedName
+        | ComputedPropertyName
+        | TypeParameterDeclaration
+        | ParameterDeclaration
+        | Decorator
+        | PropertySignature
+        | PropertyDeclaration
+        | MethodSignature
+        | MethodDeclaration
+        | ConstructorDeclaration
+        | GetAccessorDeclaration
+        | SetAccessorDeclaration
+        | ClassStaticBlockDeclaration
+        | CallSignatureDeclaration
+        | ConstructSignatureDeclaration
+        | IndexSignatureDeclaration
+        | TypePredicateNode
+        | TypeReferenceNode
+        | FunctionTypeNode
+        | ConstructorTypeNode
+        | TypeQueryNode
+        | TypeLiteralNode
+        | ArrayTypeNode
+        | TupleTypeNode
+        | OptionalTypeNode
+        | RestTypeNode
+        | UnionTypeNode
+        | IntersectionTypeNode
+        | ConditionalTypeNode
+        | InferTypeNode
+        | ImportTypeNode
+        | ImportTypeAssertionContainer
+        | NamedTupleMember
+        | ParenthesizedTypeNode
+        | TypeOperatorNode
+        | IndexedAccessTypeNode
+        | MappedTypeNode
+        | LiteralTypeNode
+        | TemplateLiteralTypeNode
+        | TemplateLiteralTypeSpan
+        | ObjectBindingPattern
+        | ArrayBindingPattern
+        | BindingElement
+        | ArrayLiteralExpression
+        | ObjectLiteralExpression
+        | PropertyAccessExpression
+        | ElementAccessExpression
+        | CallExpression
+        | NewExpression
+        | TaggedTemplateExpression
+        | TypeAssertion
+        | ParenthesizedExpression
+        | FunctionExpression
+        | ArrowFunction
+        | DeleteExpression
+        | TypeOfExpression
+        | VoidExpression
+        | AwaitExpression
+        | PrefixUnaryExpression
+        | PostfixUnaryExpression
+        | BinaryExpression
+        | ConditionalExpression
+        | TemplateExpression
+        | YieldExpression
+        | SpreadElement
+        | ClassExpression
+        | ExpressionWithTypeArguments
+        | AsExpression
+        | NonNullExpression
+        | MetaProperty
+        | TemplateSpan
+        | Block
+        | VariableStatement
+        | ExpressionStatement
+        | IfStatement
+        | DoStatement
+        | WhileStatement
+        | ForStatement
+        | ForInStatement
+        | ForOfStatement
+        | ContinueStatement
+        | BreakStatement
+        | ReturnStatement
+        | WithStatement
+        | SwitchStatement
+        | LabeledStatement
+        | ThrowStatement
+        | TryStatement
+        | VariableDeclaration
+        | VariableDeclarationList
+        | FunctionDeclaration
+        | ClassDeclaration
+        | InterfaceDeclaration
+        | TypeAliasDeclaration
+        | EnumDeclaration
+        | ModuleDeclaration
+        | ModuleBlock
+        | CaseBlock
+        | NamespaceExportDeclaration
+        | ImportEqualsDeclaration
+        | ImportDeclaration
+        | AssertClause
+        | AssertEntry
+        | ImportClause
+        | NamespaceImport
+        | NamespaceExport
+        | NamedImports
+        | ImportSpecifier
+        | ExportAssignment
+        | ExportDeclaration
+        | NamedExports
+        | ExportSpecifier
+        | ExternalModuleReference
+        | JsxElement
+        | JsxSelfClosingElement
+        | JsxOpeningElement
+        | JsxClosingElement
+        | JsxFragment
+        | JsxAttribute
+        | JsxAttributes
+        | JsxSpreadAttribute
+        | JsxExpression
+        | CaseClause
+        | DefaultClause
+        | HeritageClause
+        | CatchClause
+        | PropertyAssignment
+        | ShorthandPropertyAssignment
+        | SpreadAssignment
+        | EnumMember
+        | SourceFile
+        | PartiallyEmittedExpression
+        | CommaListExpression
+        ;
+
     export type HasJSDoc =
         | ParameterDeclaration
         | CallSignatureDeclaration
@@ -1484,7 +1622,7 @@ namespace ts {
         readonly initializer: Expression;
 
         // The following properties are used only to report grammar errors
-        /* @internal */ readonly decorators?: NodeArray<Decorator> | undefined; // property assignment cannot have decorators
+        /* @internal */ readonly illegalDecorators?: NodeArray<Decorator> | undefined; // property assignment cannot have decorators
         /* @internal */ readonly modifiers?: NodeArray<Modifier> | undefined; // property assignment cannot have modifiers
         /* @internal */ readonly questionToken?: QuestionToken | undefined; // property assignment cannot have a question token
         /* @internal */ readonly exclamationToken?: ExclamationToken | undefined; // property assignment cannot have an exclamation token
@@ -1500,7 +1638,7 @@ namespace ts {
         readonly objectAssignmentInitializer?: Expression;
 
         // The following properties are used only to report grammar errors
-        /* @internal */ readonly decorators?: NodeArray<Decorator> | undefined; // shorthand property assignment cannot have decorators
+        /* @internal */ readonly illegalDecorators?: NodeArray<Decorator> | undefined; // shorthand property assignment cannot have decorators
         /* @internal */ readonly modifiers?: NodeArray<Modifier> | undefined; // shorthand property assignment cannot have modifiers
         /* @internal */ readonly questionToken?: QuestionToken | undefined; // shorthand property assignment cannot have a question token
         /* @internal */ readonly exclamationToken?: ExclamationToken | undefined; // shorthand property assignment cannot have an exclamation token
@@ -1582,7 +1720,7 @@ namespace ts {
         readonly body?: FunctionBody;
 
         // The following properties are used only to report grammar errors
-        /* @internal */ readonly decorators?: NodeArray<Decorator> | undefined; // functions cannot have decorators
+        /* @internal */ readonly illegalDecorators?: NodeArray<Decorator> | undefined; // functions cannot have decorators
     }
 
     export interface MethodSignature extends SignatureDeclarationBase, TypeElement {
@@ -1619,7 +1757,7 @@ namespace ts {
         readonly body?: FunctionBody | undefined;
 
         // The following properties are used only to report grammar errors
-        /* @internal */ readonly decorators?: NodeArray<Decorator> | undefined; // A constructor cannot have decorators
+        /* @internal */ readonly illegalDecorators?: NodeArray<Decorator> | undefined; // A constructor cannot have decorators
         /* @internal */ readonly typeParameters?: NodeArray<TypeParameterDeclaration>; // A constructor cannot have type parameters
         /* @internal */ readonly type?: TypeNode; // A constructor cannot have a return type annotation
     }
@@ -1666,7 +1804,7 @@ namespace ts {
         readonly type: TypeNode;
 
         // The following properties are used only to report grammar errors
-        /* @internal */ readonly decorators?: NodeArray<Decorator> | undefined;
+        /* @internal */ readonly illegalDecorators?: NodeArray<Decorator> | undefined;
     }
 
     export interface ClassStaticBlockDeclaration extends ClassElement, JSDocContainer {
@@ -1678,7 +1816,7 @@ namespace ts {
         /* @internal */ returnFlowNode?: FlowNode;
 
         // The following properties are used only to report grammar errors
-        /* @internal */ readonly decorators?: NodeArray<Decorator> | undefined;
+        /* @internal */ readonly illegalDecorators?: NodeArray<Decorator> | undefined;
         /* @internal */ readonly modifiers?: NodeArray<Modifier> | undefined;
     }
 
@@ -2828,7 +2966,7 @@ namespace ts {
         readonly name?: Identifier;
 
         // The following properties are used only to report grammar errors
-        /*@internal*/ decorators?: NodeArray<Decorator> | undefined;
+        /*@internal*/ illegalDecorators?: NodeArray<Decorator> | undefined;
         /*@internal*/ modifiers?: NodeArray<Modifier> | undefined;
     }
 
@@ -2851,7 +2989,7 @@ namespace ts {
         readonly declarationList: VariableDeclarationList;
 
         // The following properties are used only to report grammar errors
-        /* @internal*/ decorators?: NodeArray<Decorator> | undefined;
+        /* @internal*/ illegalDecorators?: NodeArray<Decorator> | undefined;
     }
 
     export interface ExpressionStatement extends Statement {
@@ -3065,7 +3203,7 @@ namespace ts {
         readonly members: NodeArray<TypeElement>;
 
         // The following properties are used only to report grammar errors
-        /* @internal */ readonly decorators?: NodeArray<Decorator> | undefined;
+        /* @internal */ readonly illegalDecorators?: NodeArray<Decorator> | undefined;
     }
 
     export interface HeritageClause extends Node {
@@ -3083,7 +3221,7 @@ namespace ts {
         readonly type: TypeNode;
 
         // The following properties are used only to report grammar errors
-        /* @internal */ readonly decorators?: NodeArray<Decorator> | undefined;
+        /* @internal */ readonly illegalDecorators?: NodeArray<Decorator> | undefined;
     }
 
     export interface EnumMember extends NamedDeclaration, JSDocContainer {
@@ -3102,7 +3240,7 @@ namespace ts {
         readonly members: NodeArray<EnumMember>;
 
         // The following properties are used only to report grammar errors
-        /* @internal */ readonly decorators?: NodeArray<Decorator> | undefined;
+        /* @internal */ readonly illegalDecorators?: NodeArray<Decorator> | undefined;
     }
 
     export type ModuleName =
@@ -3128,7 +3266,7 @@ namespace ts {
         readonly body?: ModuleBody | JSDocNamespaceDeclaration;
 
         // The following properties are used only to report grammar errors
-        /* @internal */ readonly decorators?: NodeArray<Decorator> | undefined;
+        /* @internal */ readonly illegalDecorators?: NodeArray<Decorator> | undefined;
     }
 
     export type NamespaceBody =
@@ -3179,7 +3317,7 @@ namespace ts {
         readonly moduleReference: ModuleReference;
 
         // The following properties are used only to report grammar errors
-        /* @internal */ readonly decorators?: NodeArray<Decorator> | undefined;
+        /* @internal */ readonly illegalDecorators?: NodeArray<Decorator> | undefined;
     }
 
     export interface ExternalModuleReference extends Node {
@@ -3202,7 +3340,7 @@ namespace ts {
         readonly assertClause?: AssertClause;
 
         // The following properties are used only to report grammar errors
-        /* @internal */ readonly decorators?: NodeArray<Decorator> | undefined;
+        /* @internal */ readonly illegalDecorators?: NodeArray<Decorator> | undefined;
     }
 
     export type NamedImportBindings =
@@ -3262,7 +3400,7 @@ namespace ts {
         readonly name: Identifier;
 
         // The following properties are used only to report grammar errors
-        /* @internal */ readonly decorators?: NodeArray<Decorator> | undefined;
+        /* @internal */ readonly illegalDecorators?: NodeArray<Decorator> | undefined;
         /* @internal */ readonly modifiers?: NodeArray<Modifier> | undefined;
     }
 
@@ -3278,7 +3416,7 @@ namespace ts {
         readonly assertClause?: AssertClause;
 
         // The following properties are used only to report grammar errors
-        /* @internal */ readonly decorators?: NodeArray<Decorator> | undefined;
+        /* @internal */ readonly illegalDecorators?: NodeArray<Decorator> | undefined;
     }
 
     export interface NamedImports extends Node {
@@ -3343,7 +3481,7 @@ namespace ts {
         readonly expression: Expression;
 
         // The following properties are used only to report grammar errors
-        /* @internal */ readonly decorators?: NodeArray<Decorator> | undefined;
+        /* @internal */ readonly illegalDecorators?: NodeArray<Decorator> | undefined;
     }
 
     export interface FileReference extends TextRange {
@@ -7347,7 +7485,7 @@ namespace ts {
         parenthesizeBranchOfConditionalExpression(branch: Expression): Expression;
         parenthesizeExpressionOfExportDefault(expression: Expression): Expression;
         parenthesizeExpressionOfNew(expression: Expression): LeftHandSideExpression;
-        parenthesizeLeftSideOfAccess(expression: Expression): LeftHandSideExpression;
+        parenthesizeLeftSideOfAccess(expression: Expression, optionalChain?: boolean): LeftHandSideExpression;
         parenthesizeOperandOfPostfixUnary(operand: Expression): LeftHandSideExpression;
         parenthesizeOperandOfPrefixUnary(operand: Expression): UnaryExpression;
         parenthesizeExpressionsOfCommaDelimitedList(elements: readonly Expression[]): NodeArray<Expression>;

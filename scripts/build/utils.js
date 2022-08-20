@@ -1,4 +1,7 @@
 // @ts-check
+
+/* eslint-disable no-restricted-globals */
+// eslint-disable-next-line @typescript-eslint/triple-slash-reference
 /// <reference path="../types/ambient.d.ts" />
 
 const fs = require("fs");
@@ -128,6 +131,7 @@ function streamFromBuffer(buffer) {
     return new Readable({
         read() {
             this.push(buffer);
+            // eslint-disable-next-line no-null/no-null
             this.push(null);
         }
     });
@@ -249,7 +253,7 @@ function flatten(projectSpec, flattenedProjectSpec, options = {}) {
     const files = [];
     const resolvedOutputSpec = path.resolve(cwd, flattenedProjectSpec);
     const resolvedOutputDirectory = path.dirname(resolvedOutputSpec);
-    const resolvedProjectSpec = resolveProjectSpec(projectSpec, cwd, undefined);
+    const resolvedProjectSpec = resolveProjectSpec(projectSpec, cwd, /*referrer*/ undefined);
     const project = readJson(resolvedProjectSpec);
     const skipProjects = /**@type {Set<string>}*/(new Set());
     const skipFiles = new Set(options && options.exclude && options.exclude.map(file => normalizeSlashes(path.resolve(cwd, file))));
@@ -310,7 +314,7 @@ function normalizeSlashes(file) {
  * @returns {string}
  */
 function resolveProjectSpec(projectSpec, cwd, referrer) {
-    let projectPath = normalizeSlashes(path.resolve(cwd, referrer ? path.dirname(referrer) : "", projectSpec));
+    const projectPath = normalizeSlashes(path.resolve(cwd, referrer ? path.dirname(referrer) : "", projectSpec));
     const stats = fs.statSync(projectPath);
     if (stats.isFile()) return normalizeSlashes(projectPath);
     return normalizeSlashes(path.resolve(cwd, projectPath, "tsconfig.json"));
@@ -321,7 +325,10 @@ function resolveProjectSpec(projectSpec, cwd, referrer) {
  * @param {{ cwd?: string }} [opts]
  */
 function rm(dest, opts) {
-    if (dest && typeof dest === "object") opts = dest, dest = undefined;
+    if (dest && typeof dest === "object") {
+        opts = dest;
+        dest = undefined;
+    }
     let failed = false;
 
     const cwd = path.resolve(opts && opts.cwd || process.cwd());
@@ -369,6 +376,7 @@ function rm(dest, opts) {
             pending.push(entry);
         },
         final(cb) {
+            // eslint-disable-next-line no-null/no-null
             const endThenCb = () => (duplex.push(null), cb()); // signal end of read queue
             processDeleted();
             if (pending.length) {

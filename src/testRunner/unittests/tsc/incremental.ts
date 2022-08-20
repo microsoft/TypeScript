@@ -73,6 +73,21 @@ namespace ts {
             edits: noChangeOnlyRuns
         });
 
+        verifyTscWithEdits({
+            scenario: "incremental",
+            subScenario: "tsbuildinfo has error",
+            fs: () => loadProjectFromFiles({
+                "/src/project/main.ts": "export const x = 10;",
+                "/src/project/tsconfig.json": "{}",
+                "/src/project/tsconfig.tsbuildinfo": "Some random string",
+            }),
+            commandLineArgs: ["--p", "src/project", "-i"],
+            edits: [{
+                subScenario: "tsbuildinfo written has error",
+                modifyFs: fs => prependText(fs, "/src/project/tsconfig.tsbuildinfo", "Some random string"),
+            }]
+        });
+
         describe("with noEmitOnError", () => {
             let projFs: vfs.FileSystem;
             before(() => {

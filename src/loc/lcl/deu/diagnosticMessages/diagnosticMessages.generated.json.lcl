@@ -6531,6 +6531,42 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";File_is_CommonJS_module_because_0_does_not_have_field_type_1460" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[File is CommonJS module because '{0}' does not have field "type"]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Die Datei ist ein CommonJS-Modul, da '{0}' nicht das Feld „Typ“ aufweist]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";File_is_CommonJS_module_because_0_has_field_type_whose_value_is_not_module_1459" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[File is CommonJS module because '{0}' has field "type" whose value is not "module"]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Die Datei ist ein CommonJS-Modul, da '{0}' das Feld „Typ“ aufweist, dessen Wert nicht „Modul“ ist]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";File_is_CommonJS_module_because_package_json_was_not_found_1461" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[File is CommonJS module because 'package.json' was not found]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Die Datei ist ein CommonJS-Modul, da „package.json“ nicht gefunden wurde]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";File_is_ECMAScript_module_because_0_has_field_type_with_value_module_1458" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[File is ECMAScript module because '{0}' has field "type" with value "module"]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Die Datei ist ein ECMAScript-Modul, da '{0}' das Feld „Typ“ mit dem Wert „Modul“ aufweist.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";File_is_a_CommonJS_module_it_may_be_converted_to_an_ES_module_80001" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[File is a CommonJS module; it may be converted to an ES module.]]></Val>
@@ -8522,10 +8558,13 @@
       </Item>
       <Item ItemId=";Module_0_cannot_be_imported_using_this_construct_The_specifier_only_resolves_to_an_ES_module_which_c_1471" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Module '{0}' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.]]></Val>
+          <Val><![CDATA[Module '{0}' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Das Modul "{0}" kann nicht mithilfe dieses Konstrukts importiert werden. Der Spezifizierer wird nur in ein ES-Modul aufgelöst, das nicht synchron importiert werden kann. Verwenden Sie stattdessen den dynamischen Import.]]></Val>
+            <Val><![CDATA[Das Modul "{0}" kann nicht mit diesem Konstrukt importiert werden. Der Spezifizierer wird nur in ein ES-Modul aufgelöst, das nicht mit "require" importiert werden kann. Verwenden Sie stattdessen einen ECMAScript-Import.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Module '{0}' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -10190,6 +10229,15 @@
           <Val><![CDATA[Project '{0}' is out of date because output of its dependency '{1}' has changed]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Das Projekt "{0}" ist veraltet, weil sich die zugehörige Abhängigkeit "{1}" geändert hat.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Project_0_is_out_of_date_because_there_was_error_reading_file_1_6401" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Project '{0}' is out of date because there was error reading file '{1}']]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Das Projekt "{0}" ist veraltet, weil beim Lesen der Datei "{1}" ein Fehler aufgetreten ist.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12798,6 +12846,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";The_current_file_is_a_CommonJS_module_whose_imports_will_produce_require_calls_however_the_reference_1479" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("{0}")' call instead.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Die aktuelle Datei ist ein CommonJS-Modul, dessen Importe "require"-Aufrufe generieren. Die Datei, auf die verwiesen wird, ist jedoch ein ECMAScript-Modul und kann nicht mit "require" importiert werden. Erwägen Sie stattdessen, einen dynamischen 'import("{0}")'-Aufruf zu schreiben.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";The_current_host_does_not_support_the_0_option_5001" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The current host does not support the '{0}' option.]]></Val>
@@ -13770,11 +13827,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";This_module_is_declared_with_using_export_and_can_only_be_used_with_a_default_import_when_using_the__2594" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";This_module_is_declared_with_export_and_can_only_be_used_with_a_default_import_when_using_the_0_flag_2594" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[This module is declared with using 'export =', and can only be used with a default import when using the '{0}' flag.]]></Val>
+          <Val><![CDATA[This module is declared with 'export =', and can only be used with a default import when using the '{0}' flag.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Dieses Modul wird mit "export =" deklariert und kann nur bei Verwendung des Flags "{0}" mit einem Standardimport verwendet werden.]]></Val>
+            <Val><![CDATA[Dieses Modul wird mit „export =“ deklariert und kann nur bei Verwendung des Kennzeichnens „{0}“ mit einem Standardimport verwendet werden.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13883,6 +13940,42 @@
           <Val><![CDATA[This use of 'import' is invalid. 'import()' calls can be written, but they must have parentheses and cannot have type arguments.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Diese Verwendung von „import“ ist ungültig. „import()“-Aufrufe können geschrieben werden, müssen jedoch Klammern aufweisen und dürfen keine Typargumente aufweisen.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";To_convert_this_file_to_an_ECMAScript_module_add_the_field_type_Colon_module_to_0_1482" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[To convert this file to an ECMAScript module, add the field `"type": "module"` to '{0}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Um diese Datei in ein ECMAScript-Modul zu konvertieren, fügen Sie das Feld "type": "module" zu "{0}" hinzu.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";To_convert_this_file_to_an_ECMAScript_module_change_its_file_extension_to_0_or_add_the_field_type_Co_1481" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[To convert this file to an ECMAScript module, change its file extension to '{0}', or add the field `"type": "module"` to '{1}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Um diese Datei in ein ECMAScript-Modul zu konvertieren, ändern Sie die Dateierweiterung in "{0}", oder fügen Sie das Feld ''type': 'module'' zu "{1}" hinzu.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";To_convert_this_file_to_an_ECMAScript_module_change_its_file_extension_to_0_or_create_a_local_packag_1480" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[To convert this file to an ECMAScript module, change its file extension to '{0}' or create a local package.json file with `{ "type": "module" }`.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Um diese Datei in ein ECMAScript-Modul zu konvertieren, ändern Sie ihre Dateierweiterung in '{0}', oder erstellen Sie eine lokale package.json-Datei mit `{ "type": "module" }`.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";To_convert_this_file_to_an_ECMAScript_module_create_a_local_package_json_file_with_type_Colon_module_1483" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[To convert this file to an ECMAScript module, create a local package.json file with `{ "type": "module" }`.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Um diese Datei in ein ECMAScript-Modul zu konvertieren, erstellen Sie eine lokale package.json-Datei mit `{ "type": "module" }`.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

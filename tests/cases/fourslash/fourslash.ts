@@ -378,8 +378,10 @@ declare namespace FourSlashInterface {
         rangesAreDocumentHighlights(ranges?: Range[], options?: VerifyDocumentHighlightsOptions): void;
         rangesWithSameTextAreDocumentHighlights(): void;
         documentHighlightsOf(startRange: Range, ranges: Range[], options?: VerifyDocumentHighlightsOptions): void;
-        /** Prefer semanticClassificationsAre for more descriptive tests */
-        encodedSemanticClassificationsLength(format: "original" | "2020", length: number)
+        /** Prefer {@link syntacticClassificationsAre} for more descriptive tests */
+        encodedSyntacticClassificationsLength(expected: number): void;
+        /** Prefer {@link semanticClassificationsAre} for more descriptive tests */
+        encodedSemanticClassificationsLength(format: "original" | "2020", length: number): void;
         /**
          * This method *requires* a contiguous, complete, and ordered stream of classifications for a file.
          */

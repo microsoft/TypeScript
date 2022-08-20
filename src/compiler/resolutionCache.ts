@@ -360,8 +360,6 @@ namespace ts {
                 if (watcher.files === 0 && watcher.resolutions === 0) {
                     fileWatchesOfAffectingLocations.delete(path);
                     watcher.watcher.close();
-                    // Ensure when watching symlinked package.json, we can close the actual file watcher only once
-                    watcher.watcher = noopFileWatcher;
                 }
             });
 
@@ -771,17 +769,25 @@ namespace ts {
             }
             const paths = new Set<string>();
             paths.add(locationToWatch);
+            let actualWatcher = canWatchDirectoryOrFile(resolutionHost.toPath(locationToWatch)) ?
+                resolutionHost.watchAffectingFileLocation(locationToWatch, (fileName, eventKind) => {
+                    cachedDirectoryStructureHost?.addOrDeleteFile(fileName, resolutionHost.toPath(locationToWatch), eventKind);
+                    const packageJsonMap = moduleResolutionCache.getPackageJsonInfoCache().getInternalMap();
+                    paths.forEach(path => {
+                        if (watcher.resolutions) (affectingPathChecks ??= new Set()).add(path);
+                        if (watcher.files) (affectingPathChecksForFile ??= new Set()).add(path);
+                        packageJsonMap?.delete(resolutionHost.toPath(path));
+                    });
+                    resolutionHost.scheduleInvalidateResolutionsOfFailedLookupLocations();
+                }) : noopFileWatcher;
             const watcher: FileWatcherOfAffectingLocation = {
-                watcher: canWatchDirectoryOrFile(resolutionHost.toPath(locationToWatch)) ?
-                    resolutionHost.watchAffectingFileLocation(locationToWatch, (fileName, eventKind) => {
-                        cachedDirectoryStructureHost?.addOrDeleteFile(fileName, resolutionHost.toPath(locationToWatch), eventKind);
-                        paths.forEach(path => {
-                            if (watcher.resolutions) (affectingPathChecks ??= new Set()).add(path);
-                            if (watcher.files) (affectingPathChecksForFile ??= new Set()).add(path);
-                            moduleResolutionCache.getPackageJsonInfoCache().getInternalMap()?.delete(resolutionHost.toPath(path));
-                        });
-                        resolutionHost.scheduleInvalidateResolutionsOfFailedLookupLocations();
-                    }) : noopFileWatcher,
+                watcher: actualWatcher !== noopFileWatcher ? {
+                    close: () => {
+                        actualWatcher.close();
+                        // Ensure when watching symlinked package.json, we can close the actual file watcher only once
+                        actualWatcher = noopFileWatcher;
+                    }
+                } : actualWatcher,
                 resolutions: forResolution ? 1 : 0,
                 files: forResolution ? 0 : 1,
                 paths,
