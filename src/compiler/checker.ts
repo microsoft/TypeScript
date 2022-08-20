@@ -20310,7 +20310,8 @@ namespace ts {
                     shouldSkipElaboration = true; // Retain top-level error for interface implementing issues, otherwise omit it
                 }
                 if (props.length === 1) {
-                    const propName = symbolToString(unmatchedProperty);
+                    const nameType = getSymbolLinks(unmatchedProperty).nameType;
+                    const propName = nameType && nameType.flags & TypeFlags.EnumLiteral ? `[${symbolToString(nameType.symbol, nameType.symbol.valueDeclaration)}]` : symbolToString(unmatchedProperty);
                     reportError(Diagnostics.Property_0_is_missing_in_type_1_but_required_in_type_2, propName, ...getTypeNamesForErrorDisplay(source, target));
                     if (length(unmatchedProperty.declarations)) {
                         associateRelatedInfo(createDiagnosticForNode(unmatchedProperty.declarations![0], Diagnostics._0_is_declared_here, propName));
