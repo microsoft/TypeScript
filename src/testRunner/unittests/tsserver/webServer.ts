@@ -1,4 +1,4 @@
-/* eslint-disable boolean-trivia */
+/* eslint-disable local-rules/boolean-trivia */
 namespace ts.projectSystem {
     describe("unittests:: tsserver:: webServer", () => {
         class TestWorkerSession extends server.WorkerSession {

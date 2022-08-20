@@ -11,7 +11,7 @@
         "es6": true
     },
     "plugins": [
-        "@typescript-eslint", "jsdoc", "no-null", "import"
+        "@typescript-eslint", "jsdoc", "no-null", "import", "eslint-plugin-local-rules"
     ],
     "overrides": [
         // By default, the ESLint CLI only looks at .js files. But, it will also look at
@@ -81,20 +81,20 @@
         "@typescript-eslint/unified-signatures": "error",
 
         // scripts/eslint/rules
-        "object-literal-surrounding-space": "error",
-        "no-type-assertion-whitespace": "error",
-        "type-operator-spacing": "error",
-        "only-arrow-functions": ["error", {
+        "local-rules/object-literal-surrounding-space": "error",
+        "local-rules/no-type-assertion-whitespace": "error",
+        "local-rules/type-operator-spacing": "error",
+        "local-rules/only-arrow-functions": ["error", {
             "allowNamedFunctions": true ,
             "allowDeclarations": true
         }],
-        "no-double-space": "error",
-        "boolean-trivia": "error",
-        "no-in-operator": "error",
-        "simple-indent": "error",
-        "debug-assert": "error",
-        "no-keywords": "error",
-        "one-namespace-per-file": "error",
+        "local-rules/no-double-space": "error",
+        "local-rules/boolean-trivia": "error",
+        "local-rules/no-in-operator": "error",
+        "local-rules/simple-indent": "error",
+        "local-rules/debug-assert": "error",
+        "local-rules/no-keywords": "error",
+        "local-rules/one-namespace-per-file": "error",
 
         // eslint-plugin-import
         "import/no-extraneous-dependencies": ["error", { "optionalDependencies": false }],
