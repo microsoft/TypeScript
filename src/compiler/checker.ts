@@ -43956,7 +43956,7 @@ namespace ts {
         }
 
         function checkGrammarDecorators(node: Node): boolean {
-            if (canHaveIllegalDecorators(node) && some(node.decorators)) {
+            if (canHaveIllegalDecorators(node) && some(node.illegalDecorators)) {
                 return grammarErrorOnFirstToken(node, Diagnostics.Decorators_are_not_valid_here);
             }
             if (!canHaveDecorators(node) || !hasDecorators(node)) {
