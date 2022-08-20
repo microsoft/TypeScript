@@ -1,7 +1,7 @@
-import { TSESTree } from "@typescript-eslint/utils";
-import { createRule } from "./utils";
+const { TSESTree } = require("@typescript-eslint/utils");
+const { createRule } = require("./utils");
 
-export = createRule({
+module.exports = createRule({
     name: "simple-indent",
     meta: {
         docs: {
@@ -22,7 +22,8 @@ export = createRule({
         const sourceCode = context.getSourceCode();
         const linebreaks = sourceCode.getText().match(/\r\n|[\r\n\u2028\u2029]/gu);
 
-        const checkIndent = (node: TSESTree.Program) => {
+        /** @type {(node: TSESTree.Program) => void} */
+        const checkIndent = (node) => {
             const lines = sourceCode.getLines();
             const linesLen = lines.length;
 
