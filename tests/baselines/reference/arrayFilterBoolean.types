@@ -6,11 +6,27 @@ const mixed = [undefined, "string", null]
 >"string" : "string"
 >null : null
 
-const result = mixed.filter(Boolean)
->result : (string | null | undefined)[]
->mixed.filter(Boolean) : (string | null | undefined)[]
->mixed.filter : { <S extends string | null | undefined>(predicate: (value: string | null | undefined, index: number, array: (string | null | undefined)[]) => value is S, thisArg?: any): S[]; (predicate: (value: string | null | undefined, index: number, array: (string | null | undefined)[]) => unknown, thisArg?: any): (string | null | undefined)[]; }
+const mixedReadonly: Readonly<typeof mixed> = [undefined, "string", null]
+>mixedReadonly : readonly (string | null | undefined)[]
 >mixed : (string | null | undefined)[]
->filter : { <S extends string | null | undefined>(predicate: (value: string | null | undefined, index: number, array: (string | null | undefined)[]) => value is S, thisArg?: any): S[]; (predicate: (value: string | null | undefined, index: number, array: (string | null | undefined)[]) => unknown, thisArg?: any): (string | null | undefined)[]; }
+>[undefined, "string", null] : (string | null | undefined)[]
+>undefined : undefined
+>"string" : "string"
+>null : null
+
+const shouldBeJustStringForMutableArray = mixed.filter(Boolean)
+>shouldBeJustStringForMutableArray : (string | null | undefined)[]
+>mixed.filter(Boolean) : (string | null | undefined)[]
+>mixed.filter : { <S extends string | null | undefined>(predicate: (value: string | null | undefined, index: number, array: (string | null | undefined)[]) => value is S, thisArg?: any): S[]; (predicate: (value: string | null | undefined, index: number, array: (string | null | undefined)[]) => unknown, thisArg?: any): (string | null | undefined)[]; <S extends string | null | undefined>(predicate: BooleanConstructor, thisArg?: any): NonNullable<S>[]; }
+>mixed : (string | null | undefined)[]
+>filter : { <S extends string | null | undefined>(predicate: (value: string | null | undefined, index: number, array: (string | null | undefined)[]) => value is S, thisArg?: any): S[]; (predicate: (value: string | null | undefined, index: number, array: (string | null | undefined)[]) => unknown, thisArg?: any): (string | null | undefined)[]; <S extends string | null | undefined>(predicate: BooleanConstructor, thisArg?: any): NonNullable<S>[]; }
+>Boolean : BooleanConstructor
+
+const shouldBeJustStringForReadonlyArray = mixedReadonly.filter(Boolean)
+>shouldBeJustStringForReadonlyArray : string[]
+>mixedReadonly.filter(Boolean) : string[]
+>mixedReadonly.filter : { <S extends string | null | undefined>(predicate: (value: string | null | undefined, index: number, array: readonly (string | null | undefined)[]) => value is S, thisArg?: any): S[]; <S extends string | null | undefined>(predicate: BooleanConstructor, thisArg?: any): NonNullable<S>[]; (predicate: (value: string | null | undefined, index: number, array: readonly (string | null | undefined)[]) => unknown, thisArg?: any): (string | null | undefined)[]; }
+>mixedReadonly : readonly (string | null | undefined)[]
+>filter : { <S extends string | null | undefined>(predicate: (value: string | null | undefined, index: number, array: readonly (string | null | undefined)[]) => value is S, thisArg?: any): S[]; <S extends string | null | undefined>(predicate: BooleanConstructor, thisArg?: any): NonNullable<S>[]; (predicate: (value: string | null | undefined, index: number, array: readonly (string | null | undefined)[]) => unknown, thisArg?: any): (string | null | undefined)[]; }
 >Boolean : BooleanConstructor
 

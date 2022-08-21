@@ -1,3 +1,7 @@
 // @strict: true
 const mixed = [undefined, "string", null]
-const result = mixed.filter(Boolean)
+const mixedReadonly: Readonly<typeof mixed> = [undefined, "string", null]
+
+const shouldBeJustStringForMutableArray = mixed.filter(Boolean)
+
+const shouldBeJustStringForReadonlyArray = mixedReadonly.filter(Boolean)

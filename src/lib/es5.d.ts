@@ -1230,16 +1230,17 @@ interface ReadonlyArray<T> {
      */
     filter<S extends T>(predicate: (value: T, index: number, array: readonly T[]) => value is S, thisArg?: any): S[];
     /**
+     * Filters out nullish values from the array. Used when `Boolean` is passed as the argument to filter.
+     * @param predicate the `Boolean` constructor, which validates the truthiness of the value being mapped over.
+     * @param thisArg An object to which the this keyword can refer in the predicate function. If thisArg is omitted, undefined is used as the this value.
+     */
+    filter<S extends T>(predicate: BooleanConstructor, thisArg?: any): NonNullable<S>[];
+    /**
      * Returns the elements of an array that meet the condition specified in a callback function.
      * @param predicate A function that accepts up to three arguments. The filter method calls the predicate function one time for each element in the array.
      * @param thisArg An object to which the this keyword can refer in the predicate function. If thisArg is omitted, undefined is used as the this value.
      */
     filter(predicate: (value: T, index: number, array: readonly T[]) => unknown, thisArg?: any): T[];
-    /**
-     * Filters out nullish values from the array.
-     * @param predicate When `Boolean` is passed as the argument to .
-     */
-    filter<T>(predicate: BooleanConstructor): NonNullable<T>[];
     /**
      * Calls the specified callback function for all the elements in an array. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
      * @param callbackfn A function that accepts up to four arguments. The reduce method calls the callbackfn function one time for each element in the array.
@@ -1431,6 +1432,12 @@ interface Array<T> {
      * @param thisArg An object to which the this keyword can refer in the predicate function. If thisArg is omitted, undefined is used as the this value.
      */
     filter(predicate: (value: T, index: number, array: T[]) => unknown, thisArg?: any): T[];
+    /**
+     * Filters out nullish values from the array. Used when `Boolean` is passed as the argument to filter.
+     * @param predicate the `Boolean` constructor, which validates the truthiness of the value being mapped over.
+     * @param thisArg An object to which the this keyword can refer in the predicate function. If thisArg is omitted, undefined is used as the this value.
+     */
+    filter<S extends T>(predicate: BooleanConstructor, thisArg?: any): NonNullable<S>[];
     /**
      * Calls the specified callback function for all the elements in an array. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
      * @param callbackfn A function that accepts up to four arguments. The reduce method calls the callbackfn function one time for each element in the array.

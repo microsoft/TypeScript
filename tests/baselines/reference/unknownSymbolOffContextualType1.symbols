@@ -37,9 +37,9 @@ function getMaxWidth(elementNames: string[]) {
     });
     var enabled = elements.filter(function (e) {
 >enabled : Symbol(enabled, Decl(unknownSymbolOffContextualType1.ts, 11, 7))
->elements.filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>elements.filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >elements : Symbol(elements, Decl(unknownSymbolOffContextualType1.ts, 8, 7))
->filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >e : Symbol(e, Decl(unknownSymbolOffContextualType1.ts, 11, 44))
 
         return !e.isDisabled;

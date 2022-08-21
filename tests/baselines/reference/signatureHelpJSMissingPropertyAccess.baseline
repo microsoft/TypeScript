@@ -330,6 +330,209 @@
               "kind": "methodName"
             },
             {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "S",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "T",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "NonNullable",
+              "kind": "aliasName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "S",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
+              "text": "[",
+              "kind": "punctuation"
+            },
+            {
+              "text": "]",
+              "kind": "punctuation"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "predicate",
+              "documentation": [
+                {
+                  "text": "the `Boolean` constructor, which validates the truthiness of the value being mapped over.",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "predicate",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "BooleanConstructor",
+                  "kind": "interfaceName"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "thisArg",
+              "documentation": [
+                {
+                  "text": "An object to which the this keyword can refer in the predicate function. If thisArg is omitted, undefined is used as the this value.",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "thisArg",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": "?",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "any",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": true,
+              "isRest": false
+            }
+          ],
+          "documentation": [
+            {
+              "text": "Filters out nullish values from the array. Used when `Boolean` is passed as the argument to filter.",
+              "kind": "text"
+            }
+          ],
+          "tags": [
+            {
+              "name": "param",
+              "text": [
+                {
+                  "text": "predicate",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "the `Boolean` constructor, which validates the truthiness of the value being mapped over.",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
+              "name": "param",
+              "text": [
+                {
+                  "text": "thisArg",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "An object to which the this keyword can refer in the predicate function. If thisArg is omitted, undefined is used as the this value.",
+                  "kind": "text"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "ReadonlyArray",
+              "kind": "interfaceName"
+            },
+            {
+              "text": ".",
+              "kind": "punctuation"
+            },
+            {
+              "text": "filter",
+              "kind": "methodName"
+            },
+            {
               "text": "(",
               "kind": "punctuation"
             }
@@ -571,143 +774,6 @@
                 },
                 {
                   "text": "An object to which the this keyword can refer in the predicate function. If thisArg is omitted, undefined is used as the this value.",
-                  "kind": "text"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "isVariadic": false,
-          "prefixDisplayParts": [
-            {
-              "text": "ReadonlyArray",
-              "kind": "interfaceName"
-            },
-            {
-              "text": ".",
-              "kind": "punctuation"
-            },
-            {
-              "text": "filter",
-              "kind": "methodName"
-            },
-            {
-              "text": "<",
-              "kind": "punctuation"
-            },
-            {
-              "text": "T",
-              "kind": "typeParameterName"
-            },
-            {
-              "text": ">",
-              "kind": "punctuation"
-            },
-            {
-              "text": "(",
-              "kind": "punctuation"
-            }
-          ],
-          "suffixDisplayParts": [
-            {
-              "text": ")",
-              "kind": "punctuation"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "NonNullable",
-              "kind": "aliasName"
-            },
-            {
-              "text": "<",
-              "kind": "punctuation"
-            },
-            {
-              "text": "T",
-              "kind": "typeParameterName"
-            },
-            {
-              "text": ">",
-              "kind": "punctuation"
-            },
-            {
-              "text": "[",
-              "kind": "punctuation"
-            },
-            {
-              "text": "]",
-              "kind": "punctuation"
-            }
-          ],
-          "separatorDisplayParts": [
-            {
-              "text": ",",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            }
-          ],
-          "parameters": [
-            {
-              "name": "predicate",
-              "documentation": [
-                {
-                  "text": "When `Boolean` is passed as the argument to .",
-                  "kind": "text"
-                }
-              ],
-              "displayParts": [
-                {
-                  "text": "predicate",
-                  "kind": "parameterName"
-                },
-                {
-                  "text": ":",
-                  "kind": "punctuation"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "BooleanConstructor",
-                  "kind": "interfaceName"
-                }
-              ],
-              "isOptional": false,
-              "isRest": false
-            }
-          ],
-          "documentation": [
-            {
-              "text": "Filters out nullish values from the array.",
-              "kind": "text"
-            }
-          ],
-          "tags": [
-            {
-              "name": "param",
-              "text": [
-                {
-                  "text": "predicate",
-                  "kind": "parameterName"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "When `Boolean` is passed as the argument to .",
                   "kind": "text"
                 }
               ]

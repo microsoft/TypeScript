@@ -73,9 +73,9 @@ const values2: Array<"1" | "2" | null> = ["1", "2", null];
 
 const filteredValues2 = values2.filter(isNotNull);
 >filteredValues2 : Symbol(filteredValues2, Decl(typePredicateFreshLiteralWidening.ts, 22, 5))
->values2.filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>values2.filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >values2 : Symbol(values2, Decl(typePredicateFreshLiteralWidening.ts, 21, 5))
->filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >isNotNull : Symbol(isNotNull, Decl(typePredicateFreshLiteralWidening.ts, 13, 5))
 
 const values1 = [item1, item2, item3].map(item => item.value);
@@ -92,8 +92,8 @@ const values1 = [item1, item2, item3].map(item => item.value);
 
 const filteredValues1 = values1.filter(isNotNull);
 >filteredValues1 : Symbol(filteredValues1, Decl(typePredicateFreshLiteralWidening.ts, 25, 5))
->values1.filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>values1.filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >values1 : Symbol(values1, Decl(typePredicateFreshLiteralWidening.ts, 24, 5))
->filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >isNotNull : Symbol(isNotNull, Decl(typePredicateFreshLiteralWidening.ts, 13, 5))
 

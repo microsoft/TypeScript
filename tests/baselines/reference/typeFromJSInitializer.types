@@ -258,8 +258,8 @@ const e = [1, undefined];
 const g = e.filter(isUndef);
 >g : undefined[]
 >e.filter(isUndef) : undefined[]
->e.filter : { <S extends number | undefined>(predicate: (value: number | undefined, index: number, array: (number | undefined)[]) => value is S, thisArg?: any): S[]; (predicate: (value: number | undefined, index: number, array: (number | undefined)[]) => unknown, thisArg?: any): (number | undefined)[]; }
+>e.filter : { <S extends number | undefined>(predicate: (value: number | undefined, index: number, array: (number | undefined)[]) => value is S, thisArg?: any): S[]; (predicate: (value: number | undefined, index: number, array: (number | undefined)[]) => unknown, thisArg?: any): (number | undefined)[]; <S extends number | undefined>(predicate: BooleanConstructor, thisArg?: any): NonNullable<S>[]; }
 >e : (number | undefined)[]
->filter : { <S extends number | undefined>(predicate: (value: number | undefined, index: number, array: (number | undefined)[]) => value is S, thisArg?: any): S[]; (predicate: (value: number | undefined, index: number, array: (number | undefined)[]) => unknown, thisArg?: any): (number | undefined)[]; }
+>filter : { <S extends number | undefined>(predicate: (value: number | undefined, index: number, array: (number | undefined)[]) => value is S, thisArg?: any): S[]; (predicate: (value: number | undefined, index: number, array: (number | undefined)[]) => unknown, thisArg?: any): (number | undefined)[]; <S extends number | undefined>(predicate: BooleanConstructor, thisArg?: any): NonNullable<S>[]; }
 >isUndef : (v: unknown) => v is undefined
 
