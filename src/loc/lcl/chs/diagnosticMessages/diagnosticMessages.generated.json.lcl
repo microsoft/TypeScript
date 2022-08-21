@@ -1102,7 +1102,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add all missing function declarations]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[添加缺少的所有函数声明]]></Val>
+            <Val><![CDATA[添加所有缺少的函数声明]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1156,7 +1156,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add all missing super calls]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[添加所有缺失的超级调用]]></Val>
+            <Val><![CDATA[添加所有缺失的 super() 调用]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1489,7 +1489,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add 'undefined' type to property '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[向属性“{0}”添加“未定义”类型]]></Val>
+            <Val><![CDATA[向属性“{0}”添加 "undefined" 类型]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1516,7 +1516,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add 'void' to Promise resolved without a value]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[将 "void" 添加到已解析但没有值的承诺]]></Val>
+            <Val><![CDATA[将 "void" 添加到已解析但没有值的 Promise]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1525,7 +1525,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add 'void' to all Promises resolved without a value]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[将 "void" 添加到所有已解析但没有值的承诺]]></Val>
+            <Val><![CDATA[将 "void" 添加到所有已解析但没有值的 Promise]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1579,7 +1579,7 @@
         <Str Cat="Text">
           <Val><![CDATA[All destructured elements are unused.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[未取消使用任何解构元素。]]></Val>
+            <Val><![CDATA[所有解构出的成员都未使用。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1588,7 +1588,7 @@
         <Str Cat="Text">
           <Val><![CDATA[All imports in import declaration are unused.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[未使用导入声明中的所有导入。]]></Val>
+            <Val><![CDATA[导入声明中的所有导入都未使用。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1954,7 +1954,7 @@
         <Str Cat="Text">
           <Val><![CDATA[An identifier or keyword cannot immediately follow a numeric literal.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[标识符或关键字不能紧跟在数字文本之后。]]></Val>
+            <Val><![CDATA[标识符或关键字不能紧跟在数字字面量之后。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2425,7 +2425,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Await expression cannot be used inside a class static block.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[无法在类静态块内使用 Await 表达式。]]></Val>
+            <Val><![CDATA[无法在类静态块内使用 await 表达式。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2443,7 +2443,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Backwards Compatibility]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[后向兼容性]]></Val>
+            <Val><![CDATA[向后兼容性]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2488,7 +2488,7 @@
         <Str Cat="Text">
           <Val><![CDATA[BigInt literals are not available when targeting lower than ES2020.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[目标低于 ES2020 时，bigInt 文本不可用。]]></Val>
+            <Val><![CDATA[目标低于 ES2020 时，BigInt 字面量不可用。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2755,7 +2755,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Cannot assign to '{0}' because it is a read-only property.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[无法分配到 "{0}" ，因为它是只读属性。]]></Val>
+            <Val><![CDATA[无法为“{0}”赋值，因为它是只读属性。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2782,7 +2782,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Cannot assign to '{0}' because it is not a variable.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[无法分配到“{0}”，因为它不是变量。]]></Val>
+            <Val><![CDATA[无法为“{0}”赋值，因为它不是变量。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2791,7 +2791,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Cannot assign to private method '{0}'. Private methods are not writable.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[无法分配给专用方法 "{0}"。专用方法不可写。]]></Val>
+            <Val><![CDATA[无法赋值给私有方法“{0}”。私有方法不可写。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2863,7 +2863,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Cannot extend an interface '{0}'. Did you mean 'implements'?]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[无法扩展接口‘{0}’。您的意思是‘实施’吗？]]></Val>
+            <Val><![CDATA[无法扩展接口“{0}”。您是否想使用 "implements"?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3070,7 +3070,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Cannot find name '{0}'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[找不到名称 "{0}"。是否需要为节点安装类型定义? 请尝试使用 `npm i --save-dev @types/node`。]]></Val>
+            <Val><![CDATA[找不到名称“{0}”。是否需要安装 Node.js 的类型定义? 请尝试运行 `npm i --save-dev @types/node`。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3079,7 +3079,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Cannot find name '{0}'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[找不到名称“{0}”。是否需要为节点安装类型定义? 请尝试使用 `npm i --save-dev @types/node`，然后将 “node” 添加到类型字段。]]></Val>
+            <Val><![CDATA[找不到名称“{0}”。是否需要安装 Node.js 的类型定义? 请尝试运行 `npm i --save-dev @types/node`，然后将 "node" 添加到 tsconfig 的 types 字段。]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Cannot find name '{0}'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add `node` to the types field in your tsconfig.]]></Val>
@@ -3406,7 +3406,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Change all jsdoc-style types to TypeScript]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[将所有 jsdoc 样式类型都更改为 TypeScript]]></Val>
+            <Val><![CDATA[将所有 JSDoc 样式类型都更改为 TypeScript]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3415,7 +3415,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Change all jsdoc-style types to TypeScript (and add '| undefined' to nullable types)]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[将所有 jsdoc 样式类型都更改为 TypeScript (并将 "| undefined" 添加到可以为 null 的类型)]]></Val>
+            <Val><![CDATA[将所有 JSDoc 样式类型都更改为 TypeScript (并将 "| undefined" 添加到可以为 null 的类型)]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4066,7 +4066,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Convert all to bigint numeric literals]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[全部转换为 bigint 数字文本]]></Val>
+            <Val><![CDATA[全部转换为 BigInt 数字字面量]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4228,7 +4228,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Convert to a bigint numeric literal]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[转换为 bigint 数字文本]]></Val>
+            <Val><![CDATA[转换为 BigInt 数字字面量]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6787,7 +6787,7 @@
         <Str Cat="Text">
           <Val><![CDATA['For await' loops cannot be used inside a class static block.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[无法在类静态块内使用 “For await 循环。]]></Val>
+            <Val><![CDATA[无法在类静态块内使用 for...await 循环。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9103,7 +9103,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Object literal may only specify known properties, and '{0}' does not exist in type '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[对象文字可以只指定已知属性，并且“{0}”不在类型“{1}”中。]]></Val>
+            <Val><![CDATA[对象字面量只能指定已知属性，并且“{0}”不在类型“{1}”中。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9112,7 +9112,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Object literal may only specify known properties, but '{0}' does not exist in type '{1}'. Did you mean to write '{2}'?]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[对象文字只能指定已知的属性，但“{0}”中不存在类型“{1}”。是否要写入 {2}?]]></Val>
+            <Val><![CDATA[对象字面量只能指定已知的属性，但“{0}”中不存在类型“{1}”。是否要写入 {2}?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9121,7 +9121,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Object literal's property '{0}' implicitly has an '{1}' type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[对象文字的属性“{0}”隐式含有“{1}”类型。]]></Val>
+            <Val><![CDATA[对象字面量的属性“{0}”隐式含有“{1}”类型。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10690,7 +10690,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Property value can only be string literal, numeric literal, 'true', 'false', 'null', object literal or array literal.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[属性值只能是字符串文本、数字文本、"true"、"false"、"null"、对象文字或数组文本。]]></Val>
+            <Val><![CDATA[属性值只能是字符串、数字、"true"、"false"、"null"、对象或数组等类型的字面量。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12535,7 +12535,7 @@
         <Str Cat="Text">
           <Val><![CDATA[String literal expected.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[应为字符串文本。]]></Val>
+            <Val><![CDATA[应为字符串字面量。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12544,7 +12544,7 @@
         <Str Cat="Text">
           <Val><![CDATA[String literal with double quotes expected.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[应为带双引号的字符串文字。]]></Val>
+            <Val><![CDATA[应为带双引号的字符串字面量。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12637,7 +12637,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Suppress excess property checks for object literals.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[取消对象文字的多余属性检查。]]></Val>
+            <Val><![CDATA[取消对对象字面量的多余属性检查。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15109,7 +15109,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Unterminated regular expression literal.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[未终止的正则表达式文本。]]></Val>
+            <Val><![CDATA[未终止的正则表达式字面量。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15118,7 +15118,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Unterminated string literal.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[未终止的字符串文本。]]></Val>
+            <Val><![CDATA[未终止的字符串字面量。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15127,7 +15127,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Unterminated template literal.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[未终止的模板文本。]]></Val>
+            <Val><![CDATA[未终止的模板字面量。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15472,7 +15472,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Wrap all object literal with parentheses]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[用括号将所有对象文字括起来]]></Val>
+            <Val><![CDATA[用括号括起所有对象字面量]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15508,7 +15508,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Wrap the following body with parentheses which should be an object literal]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[用括号将以下应为对象文字的正文括起来]]></Val>
+            <Val><![CDATA[用括号括起以下应为对象字面量的内容]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -16390,7 +16390,7 @@
         <Str Cat="Text">
           <Val><![CDATA[const enum member initializers can only contain literal values and other computed enum values.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[常量枚举成员初始值设定项只能包含文字值和其他计算的枚举值。]]></Val>
+            <Val><![CDATA[常量枚举成员初始值设定项只能包含字面量值和其他计算的枚举值。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -16825,7 +16825,7 @@
         <Str Cat="Text">
           <Val><![CDATA['readonly' type modifier is only permitted on array and tuple literal types.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[仅允许对数组和元组文本类型使用 "readonly" 类型修饰符。]]></Val>
+            <Val><![CDATA[仅允许对数组和元组字面量类型使用 "readonly" 类型修饰符。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -16834,7 +16834,7 @@
         <Str Cat="Text">
           <Val><![CDATA['require' call may be converted to an import.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[可将“要求”调用转换为导入。]]></Val>
+            <Val><![CDATA[可将 "require" 调用转换为 import 语句。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -16909,7 +16909,7 @@
         <Str Cat="Text">
           <Val><![CDATA['super' can only be referenced in members of derived classes or object literal expressions.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[仅可在派生类或对象文字表达式的成员中引用 "super"。]]></Val>
+            <Val><![CDATA[仅可在派生类或对象字面量表达式的成员中引用 "super"。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -16936,7 +16936,7 @@
         <Str Cat="Text">
           <Val><![CDATA['super' is only allowed in members of object literal expressions when option 'target' is 'ES2015' or higher.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA["target" 选项为 "ES2015" 或更高版本时，仅对象文字表达式的成员中允许 "super"。]]></Val>
+            <Val><![CDATA["target" 选项为 "ES2015" 或更高版本时，仅对象字面量表达式的成员中允许 "super"。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
