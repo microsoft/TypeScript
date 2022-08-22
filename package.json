@@ -118,5 +118,8 @@
     "volta": {
         "node": "14.20.0",
         "npm": "8.15.0"
+    },
+    "dependencies": {
+        "@vscode/sync-api-client": "^0.1.0"
     }
 }

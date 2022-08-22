@@ -3,7 +3,7 @@
 /// <reference lib="webworker" />
 
 namespace ts.server {
-    // declare const lol: import("vscode-sync-api-client").ApiClient
+    declare const apiClient: typeof import("@vscode/sync-api-client").ApiClient
     const nullLogger: Logger = {
         close: noop,
         hasLevel: returnFalse,
@@ -89,8 +89,7 @@ namespace ts.server {
         let sys: ServerHost;
         // TODO: Actually copy this from the old PR
         if (args.includes("--vfs")) {
-            sys = {} as any
-            // TODO: maybe createWebSystem could still work
+            sys = server.createSuperWebSystem(apiClient, args, () => findArgument("--executingFilePath") || location + "")
         }
         else {
             const webHost: WebHost = {

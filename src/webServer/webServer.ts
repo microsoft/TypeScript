@@ -125,6 +125,91 @@ namespace ts.server {
         }
     }
 
+    export function createSuperWebSystem(client: import("@vscode/sync-api-client").ApiClient, args: string[], getExecutingFilePath: () => string): ServerHost {
+        const returnEmptyString = () => "";
+        const dynamicImport = async (id: string): Promise<any> => {
+            // Use syntactic dynamic import first, if available
+            if (server.dynamicImport) {
+                return server.dynamicImport(id);
+            }
+
+            throw new Error("Dynamic import not implemented");
+        };
+
+        return {
+            args,
+            newLine: "\r\n", // This can be configured by clients
+            useCaseSensitiveFileNames: false, // Use false as the default on web since that is the safest option
+            // TODO: Type not right, needs some adaptation
+            readFile: client.vscode.workspace.fileSystem.read,
+            write: client.vscode.terminal.write,
+            watchFile: returnNoopFileWatcher,
+            watchDirectory: returnNoopFileWatcher,
+
+            getExecutingFilePath: () => directorySeparator,
+            // TODO: I'm pretty sure this needs to be better
+            getCurrentDirectory: returnEmptyString, // For inferred project root if projectRoot path is not set, normalizing the paths
+
+            /* eslint-disable no-restricted-globals */
+            setTimeout: (cb, ms, ...args) => setTimeout(cb, ms, ...args),
+            clearTimeout: handle => clearTimeout(handle),
+            setImmediate: x => setTimeout(x, 0),
+            clearImmediate: handle => clearTimeout(handle),
+            /* eslint-enable no-restricted-globals */
+
+            importServicePlugin: async (initialDir: string, moduleName: string): Promise<ModuleImportResult> => {
+                const packageRoot = combinePaths(initialDir, moduleName);
+
+                let packageJson: any | undefined;
+                try {
+                    const packageJsonResponse = await fetch(combinePaths(packageRoot, "package.json"));
+                    packageJson = await packageJsonResponse.json();
+                }
+                catch (e) {
+                    return { module: undefined, error: new Error("Could not load plugin. Could not load 'package.json'.") };
+                }
+
+                const browser = packageJson.browser;
+                if (!browser) {
+                    return { module: undefined, error: new Error("Could not load plugin. No 'browser' field found in package.json.") };
+                }
+
+                const scriptPath = combinePaths(packageRoot, browser);
+                try {
+                    const { default: module } = await dynamicImport(scriptPath);
+                    return { module, error: undefined };
+                }
+                catch (e) {
+                    return { module: undefined, error: e };
+                }
+            },
+            exit: notImplemented,
+
+            // Debugging related
+            getEnvironmentVariable: returnEmptyString, // TODO:: Used to enable debugging info
+            // tryEnableSourceMapsForHost?(): void;
+            // debugMode?: boolean;
+
+            // For semantic server mode
+            // TODO: Type not right
+            fileExists: client.vscode.workspace.fileSystem.stat,
+            directoryExists: returnFalse, // Module resolution
+            readDirectory: notImplemented, // Configured project, typing installer
+            getDirectories: () => [], // For automatic type reference directives
+            createDirectory: notImplemented, // compile On save
+            writeFile: notImplemented, // compile on save
+            resolvePath: identity, // Plugins
+            // realpath? // Module resolution, symlinks
+            // getModifiedTime // File watching
+            // createSHA256Hash // telemetry of the project
+
+            // Logging related
+            // /*@internal*/ bufferFrom?(input: string, encoding?: string): Buffer;
+            // gc?(): void;
+            // getMemoryUsage?(): number;
+        }
+    }
+
     export function createWebSystem(host: WebHost, args: string[], getExecutingFilePath: () => string): ServerHost {
         const returnEmptyString = () => "";
         const getExecutingDirectoryPath = memoize(() => memoize(() => ensureTrailingDirectorySeparator(getDirectoryPath(getExecutingFilePath()))));
