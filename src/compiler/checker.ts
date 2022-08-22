@@ -43070,10 +43070,10 @@ namespace ts {
             }
             const node = getParseTreeNode(nodeIn, isIdentifier);
             if (node) {
-                const symbol = getReferencedValueSymbol(node);
+                const symbol = getReferencedValueSymbol(node); // >> Change it here
                 // We should only get the declaration of an alias if there isn't a local value
                 // declaration for the symbol
-                if (isNonLocalAlias(symbol, /*excludes*/ SymbolFlags.Value) && !getTypeOnlyAliasDeclaration(symbol)) {
+                if (isNonLocalAlias(symbol, /*excludes*/ SymbolFlags.Value) && !getTypeOnlyAliasDeclaration(symbol)) { // >> Probably use the default excludes now
                     return getDeclarationOfAliasSymbol(symbol);
                 }
             }
@@ -43456,10 +43456,10 @@ namespace ts {
         }
 
         function getReferencedValueSymbol(reference: Identifier, startInDeclarationContainer?: boolean): Symbol | undefined {
-            const resolvedSymbol = getNodeLinks(reference).resolvedSymbol;
-            if (resolvedSymbol) {
-                return resolvedSymbol;
-            }
+            // const resolvedSymbol = getNodeLinks(reference).resolvedSymbol;
+            // if (resolvedSymbol) {
+            //     return resolvedSymbol;
+            // }
 
             let location: Node = reference;
             if (startInDeclarationContainer) {
@@ -43473,6 +43473,38 @@ namespace ts {
 
             return resolveName(location, reference.escapedText, SymbolFlags.Value | SymbolFlags.ExportValue | SymbolFlags.Alias, /*nodeNotFoundMessage*/ undefined, /*nameArg*/ undefined, /*isUse*/ true);
         }
+
+        // function getReferencedAnySymbolOld(reference: Identifier, startInDeclarationContainer?: boolean): Symbol | undefined {
+        //     // >> Can't use cached resolved symbol because it might be `unknown` symbol
+        //     // const resolvedSymbol = getNodeLinks(reference).resolvedSymbol;
+        //     // if (resolvedSymbol) {
+        //     //     return resolvedSymbol;
+        //     // }
+
+        //     let location: Node = reference;
+        //     if (startInDeclarationContainer) {
+        //         // When resolving the name of a declaration as a value, we need to start resolution
+        //         // at a point outside of the declaration.
+        //         const parent = reference.parent;
+        //         if (isDeclaration(parent) && reference === parent.name) {
+        //             location = getDeclarationContainer(parent);
+        //         }
+        //     }
+
+        //     // return resolveName(location, reference.escapedText, SymbolFlags.Value | SymbolFlags.ExportValue | SymbolFlags.Alias, /*nodeNotFoundMessage*/ undefined, /*nameArg*/ undefined, /*isUse*/ true);
+        //     return resolveNameHelper(
+        //         location,
+        //         reference.escapedText,
+        //         SymbolFlags.Value | SymbolFlags.ExportValue | SymbolFlags.Alias,
+        //         /*nameNotFoundMessage*/ undefined,
+        //         /*nameArg*/ undefined,
+        //         /*isUse*/ true,
+        //         /*excludeGlobals*/ false,
+        //         /*getSpellingSuggestions*/ true,
+        //         (symbol, name, _meaning) => getSymbol(symbol, name, SymbolFlags.All),
+        //         // /*reportErrors*/ false,
+        //     );
+        // }
 
         function getReferencedValueDeclaration(referenceIn: Identifier): Declaration | undefined {
             if (!isGeneratedIdentifier(referenceIn)) {
