@@ -37,5 +37,5 @@ Dockerfile
 .eslintrc.json
 .yarnrc
 tmp
-eslint-local-rules.js
+.eslintplugin.js
 .eslintcache

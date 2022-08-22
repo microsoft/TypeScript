@@ -69,7 +69,7 @@ namespace ts {
             return sourceIndex;
         }
 
-        /* eslint-disable local-rules/boolean-trivia, no-null/no-null */
+        /* eslint-disable local/boolean-trivia, no-null/no-null */
         function setSourceContent(sourceIndex: number, content: string | null) {
             enter();
             if (content !== null) {
@@ -81,7 +81,7 @@ namespace ts {
             }
             exit();
         }
-        /* eslint-enable local-rules/boolean-trivia, no-null/no-null */
+        /* eslint-enable local/boolean-trivia, no-null/no-null */
 
         function addName(name: string) {
             enter();
