@@ -1,7 +1,7 @@
-import { TSESTree } from "@typescript-eslint/utils";
-import { createRule } from "./utils";
+const { TSESTree } = require("@typescript-eslint/utils");
+const { createRule } = require("./utils");
 
-export = createRule({
+module.exports = createRule({
     name: "no-type-assertion-whitespace",
     meta: {
         docs: {
@@ -18,7 +18,8 @@ export = createRule({
 
     create(context) {
         const sourceCode = context.getSourceCode();
-        const checkTypeAssertionWhitespace = (node: TSESTree.TSTypeAssertion) => {
+        /** @type {(node: TSESTree.TSTypeAssertion) => void} */
+        const checkTypeAssertionWhitespace = (node) => {
             const leftToken = sourceCode.getLastToken(node.typeAnnotation);
             const rightToken = sourceCode.getFirstToken(node.expression);
 

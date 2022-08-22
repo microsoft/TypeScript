@@ -62,6 +62,7 @@
         "eslint-formatter-autolinkable-stylish": "^1.2.0",
         "eslint-plugin-import": "^2.26.0",
         "eslint-plugin-jsdoc": "^39.3.6",
+        "eslint-plugin-local": "^1.0.0",
         "eslint-plugin-no-null": "^1.0.2",
         "fancy-log": "latest",
         "fs-extra": "^9.1.0",
@@ -90,7 +91,6 @@
         "es5-ext": "0.10.53"
     },
     "scripts": {
-        "prepare": "gulp build-eslint-rules",
         "pretest": "gulp tests",
         "test": "gulp runtests-parallel --light=false",
         "test:eslint-rules": "gulp run-eslint-rules-tests",

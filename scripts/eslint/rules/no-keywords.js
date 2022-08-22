@@ -1,7 +1,7 @@
-import { TSESTree, AST_NODE_TYPES } from "@typescript-eslint/utils";
-import { createRule } from "./utils";
+const { TSESTree, AST_NODE_TYPES } = require("@typescript-eslint/utils");
+const { createRule } = require("./utils");
 
-export = createRule({
+module.exports = createRule({
     name: "no-keywords",
     meta: {
         docs: {
@@ -35,13 +35,16 @@ export = createRule({
             "any",
         ];
 
-        const isKeyword = (name: string) => keywords.includes(name);
+        /** @type {(name: string) => boolean} */
+        const isKeyword = (name) => keywords.includes(name);
 
-        const report = (node: TSESTree.Identifier) => {
+        /** @type {(node: TSESTree.Identifier) => void} */
+        const report = (node) => {
             context.report({ messageId: "noKeywordsError", data: { name: node.name }, node });
         };
 
-        const checkProperties = (node: TSESTree.ObjectPattern): void => {
+        /** @type {(node: TSESTree.ObjectPattern) => void} */
+        const checkProperties = (node) => {
             node.properties.forEach(property => {
                 if (
                     property &&
@@ -54,7 +57,8 @@ export = createRule({
             });
         };
 
-        const checkElements = (node: TSESTree.ArrayPattern): void => {
+        /** @type {(node: TSESTree.ArrayPattern) => void} */
+        const checkElements = (node) => {
             node.elements.forEach(element => {
                 if (
                     element &&
@@ -66,14 +70,8 @@ export = createRule({
             });
         };
 
-        const checkParams = (
-            node:
-                | TSESTree.ArrowFunctionExpression
-                | TSESTree.FunctionDeclaration
-                | TSESTree.FunctionExpression
-                | TSESTree.TSMethodSignature
-                | TSESTree.TSFunctionType
-        ): void => {
+        /** @type {(node: TSESTree.ArrowFunctionExpression | TSESTree.FunctionDeclaration | TSESTree.FunctionExpression | TSESTree.TSMethodSignature | TSESTree.TSFunctionType) => void} */
+        const checkParams = (node) => {
             if (!node || !node.params || !node.params.length) {
                 return;
             }

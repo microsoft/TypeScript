@@ -42,7 +42,7 @@ function prepend(data) {
                         sourcesContent: input.sourcesContent
                     };
                 }
-                // eslint-disable-next-line boolean-trivia, no-null/no-null
+                // eslint-disable-next-line local/boolean-trivia, no-null/no-null
                 return cb(null, output);
             }
             catch (e) {

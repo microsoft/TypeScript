@@ -1,12 +1,6 @@
 // Rename this file 'settings.json' or merge its
 // contents into your existing settings.
 {
-    "eslint.validate": [
-        "typescript"
-    ],
-    "eslint.options": {
-        "rulePaths": ["./scripts/eslint/built/rules/"],
-    },
     // To use the last-known-good (LKG) compiler version:
     // "typescript.tsdk": "lib"
 

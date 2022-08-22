@@ -439,7 +439,7 @@ namespace ts {
         let flowNodeProto: FlowNodeBase | undefined;
 
         function attachFlowNodeDebugInfoWorker(flowNode: FlowNodeBase) {
-            if (!("__debugFlowFlags" in flowNode)) { // eslint-disable-line no-in-operator
+            if (!("__debugFlowFlags" in flowNode)) { // eslint-disable-line local/no-in-operator
                 Object.defineProperties(flowNode, {
                     // for use with vscode-js-debug's new customDescriptionGenerator in launch.json
                     __tsDebuggerDisplay: {
@@ -488,7 +488,7 @@ namespace ts {
         let nodeArrayProto: NodeArray<Node> | undefined;
 
         function attachNodeArrayDebugInfoWorker(array: NodeArray<Node>) {
-            if (!("__tsDebuggerDisplay" in array)) { // eslint-disable-line no-in-operator
+            if (!("__tsDebuggerDisplay" in array)) { // eslint-disable-line local/no-in-operator
                 Object.defineProperties(array, {
                     __tsDebuggerDisplay: {
                         value(this: NodeArray<Node>, defaultValue: string) {

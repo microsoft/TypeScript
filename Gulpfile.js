@@ -356,7 +356,6 @@ const eslint = (folder) => async () => {
         "--cache",
         "--cache-location", `${folder}/.eslintcache`,
         "--format", formatter,
-        "--rulesdir", "scripts/eslint/built/rules",
     ];
 
     if (cmdLineOptions.fix) {
@@ -369,10 +368,7 @@ const eslint = (folder) => async () => {
     return exec(process.execPath, args);
 };
 
-const lintRoot = eslint(".");
-lintRoot.displayName = "lint";
-
-const lint = series([buildEslintRules, lintRoot]);
+const lint = eslint(".");
 lint.displayName = "lint";
 task("lint", lint);
 task("lint").description = "Runs eslint on the compiler and scripts sources.";
@@ -431,7 +427,7 @@ task("watch-local").flags = {
 const preTest = parallel(buildTsc, buildTests, buildServices, buildLssl);
 preTest.displayName = "preTest";
 
-const postTest = (done) => cmdLineOptions.lint ? lint(done) : done();
+const postTest = (done) => cmdLineOptions.lint ? lint() : done();
 
 const runTests = () => runConsoleTests("built/local/run.js", "mocha-fivemat-progress-reporter", /*runInParallel*/ false, /*watchMode*/ false);
 task("runtests", series(preBuild, preTest, runTests, postTest));

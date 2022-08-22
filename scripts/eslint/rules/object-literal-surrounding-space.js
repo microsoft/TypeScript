@@ -1,7 +1,7 @@
-import { TSESTree } from "@typescript-eslint/utils";
-import { createRule } from "./utils";
+const { TSESTree } = require("@typescript-eslint/utils");
+const { createRule } = require("./utils");
 
-export = createRule({
+module.exports = createRule({
     name: "object-literal-surrounding-space",
     meta: {
         docs: {
@@ -26,11 +26,13 @@ export = createRule({
         const CLOSE_SYMBOL = "}";
         const OPEN_SYMBOL = "{";
 
-        const manySpaces = (text: string, startIndex: number): boolean => (
+        /** @type {(text: string, startIndex: number) => boolean} */
+        const manySpaces = (text, startIndex) => (
             [startIndex, startIndex + 1].every(i => text.charAt(i) === SPACE_SYMBOL)
         );
 
-        const checkObjectLiteralSurroundingSpace = (node: TSESTree.ObjectExpression) => {
+        /** @type {(node: TSESTree.ObjectExpression) => void} */
+        const checkObjectLiteralSurroundingSpace = (node) => {
             const text = sourceCode.getText(node);
             const startLine = node.loc.start.line;
             const endLine = node.loc.end.line;
