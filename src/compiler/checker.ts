@@ -17024,9 +17024,9 @@ namespace ts {
         }
 
         function getRestrictiveTypeParameter(tp: TypeParameter) {
-            return tp.constraint === unknownType ? tp : tp.restrictiveInstantiation || (
+            return tp.constraint === noConstraintType ? tp : tp.restrictiveInstantiation || (
                 tp.restrictiveInstantiation = createTypeParameter(tp.symbol),
-                (tp.restrictiveInstantiation as TypeParameter).constraint = unknownType,
+                (tp.restrictiveInstantiation as TypeParameter).constraint = noConstraintType,
                 tp.restrictiveInstantiation
             );
         }
@@ -17418,10 +17418,9 @@ namespace ts {
                 // A substitution type originates in the true branch of a conditional type and can be resolved
                 // to just the base type in the same cases as the conditional type resolves to its true branch
                 // (because the base type is then known to satisfy the constraint).
-                if (!(newBaseType.flags & TypeFlags.TypeVariable) && (
-                    newConstraint.flags & TypeFlags.AnyOrUnknown ||
+                if (newConstraint.flags & TypeFlags.AnyOrUnknown ||
                     !isGenericType(newBaseType) && !isGenericType(newConstraint) ||
-                    isTypeAssignableTo(getRestrictiveInstantiation(newBaseType), getRestrictiveInstantiation(newConstraint)))) {
+                    isTypeAssignableTo(getRestrictiveInstantiation(newBaseType), getRestrictiveInstantiation(newConstraint))) {
                     return newBaseType;
                 }
                 return getSubstitutionType(newBaseType, newConstraint);
