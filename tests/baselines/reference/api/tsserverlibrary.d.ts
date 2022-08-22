@@ -4834,6 +4834,8 @@ declare namespace ts {
 }
 declare namespace ts {
     function setTextRange<T extends TextRange>(range: T, location: TextRange | undefined): T;
+    function canHaveModifiers(node: Node): node is HasModifiers;
+    function canHaveDecorators(node: Node): node is HasDecorators;
 }
 declare namespace ts {
     /**
