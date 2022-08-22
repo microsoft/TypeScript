@@ -6077,8 +6077,8 @@ namespace ts {
     // types disappear upon instantiation (just like type parameters).
     export interface SubstitutionType extends InstantiableType {
         objectFlags: ObjectFlags;
-        baseType: Type;     // Target type
-        substitute: Type;   // Type to substitute for type parameter
+        baseType: Type;    // Target type
+        constraint: Type;  // Constraint that target type is known to satisfy
     }
 
     /* @internal */

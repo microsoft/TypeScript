@@ -253,7 +253,7 @@ namespace ts { // eslint-disable-line one-namespace-per-file
                     const substitutionType = type as SubstitutionType;
                     substitutionProperties = {
                         substitutionBaseType: substitutionType.baseType?.id,
-                        substituteType: substitutionType.substitute?.id,
+                        constraintType: substitutionType.constraint?.id,
                     };
                 }
 
