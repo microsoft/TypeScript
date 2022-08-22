@@ -46,7 +46,7 @@ let k = 0;
 {"compilerOptions":{"noImplicitAny":true}}
 
 //// [/a/b/project3.tsconfig.json]
-{"extends":["./extendsConfig1.tsconfig.json","./extendsConfig2.tsconfig.json","./extendsConfig3.tsconfig.json"],"compilerOptions":{"composite":false},"files":["/a/b/other.ts"]}
+{"extends":["./extendsCnfig1.tsconfig.json","./extendsConfig2.tsconfig.json","./extendsConfig3.tsconfig.json"],"compilerOptions":{"composite":false},"files":["/a/b/other.ts"]}
 
 
 /a/lib/tsc.js -b -w -v project1.tsconfig.json project2.tsconfig.json project3.tsconfig.json
@@ -69,7 +69,9 @@ Output::
 
 [[90m12:01:03 AM[0m] Project 'project3.tsconfig.json' is up to date because newest input 'other.ts' is older than output 'other.js'
 
-[[90m12:01:04 AM[0m] Found 0 errors. Watching for file changes.
+[91merror[0m[90m TS5083: [0mCannot read file '/a/b/extendsCnfig1.tsconfig.json'.
+
+[[90m12:01:04 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -123,8 +125,8 @@ WatchedFiles::
   {"fileName":"/a/b/other.ts","pollingInterval":250}
 /a/b/project3.tsconfig.json:
   {"fileName":"/a/b/project3.tsconfig.json","pollingInterval":250}
-/a/b/extendsconfig1.tsconfig.json:
-  {"fileName":"/a/b/extendsConfig1.tsconfig.json","pollingInterval":250}
+/a/b/extendscnfig1.tsconfig.json:
+  {"fileName":"/a/b/extendsCnfig1.tsconfig.json","pollingInterval":250}
 /a/b/extendsconfig2.tsconfig.json:
   {"fileName":"/a/b/extendsConfig2.tsconfig.json","pollingInterval":250}
 /a/b/extendsconfig3.tsconfig.json:
@@ -291,8 +293,8 @@ WatchedFiles::
   {"fileName":"/a/b/other.ts","pollingInterval":250}
 /a/b/project3.tsconfig.json:
   {"fileName":"/a/b/project3.tsconfig.json","pollingInterval":250}
-/a/b/extendsconfig1.tsconfig.json:
-  {"fileName":"/a/b/extendsConfig1.tsconfig.json","pollingInterval":250}
+/a/b/extendscnfig1.tsconfig.json:
+  {"fileName":"/a/b/extendsCnfig1.tsconfig.json","pollingInterval":250}
 /a/b/extendsconfig2.tsconfig.json:
   {"fileName":"/a/b/extendsConfig2.tsconfig.json","pollingInterval":250}
 /a/b/extendsconfig3.tsconfig.json:
@@ -369,7 +371,9 @@ Output::
 
 [[90m12:01:25 AM[0m] Building project '/a/b/project2.tsconfig.json'...
 
-[[90m12:01:36 AM[0m] Found 0 errors. Watching for file changes.
+[91merror[0m[90m TS5083: [0mCannot read file '/a/b/extendsCnfig1.tsconfig.json'.
+
+[[90m12:01:36 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -403,8 +407,8 @@ WatchedFiles::
   {"fileName":"/a/b/other.ts","pollingInterval":250}
 /a/b/project3.tsconfig.json:
   {"fileName":"/a/b/project3.tsconfig.json","pollingInterval":250}
-/a/b/extendsconfig1.tsconfig.json:
-  {"fileName":"/a/b/extendsConfig1.tsconfig.json","pollingInterval":250}
+/a/b/extendscnfig1.tsconfig.json:
+  {"fileName":"/a/b/extendsCnfig1.tsconfig.json","pollingInterval":250}
 /a/b/extendsconfig2.tsconfig.json:
   {"fileName":"/a/b/extendsConfig2.tsconfig.json","pollingInterval":250}
 /a/b/extendsconfig3.tsconfig.json:
@@ -475,7 +479,9 @@ Output::
 
 [[90m12:01:42 AM[0m] Building project '/a/b/project2.tsconfig.json'...
 
-[[90m12:01:53 AM[0m] Found 0 errors. Watching for file changes.
+[91merror[0m[90m TS5083: [0mCannot read file '/a/b/extendsCnfig1.tsconfig.json'.
+
+[[90m12:01:53 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -509,8 +515,8 @@ WatchedFiles::
   {"fileName":"/a/b/other.ts","pollingInterval":250}
 /a/b/project3.tsconfig.json:
   {"fileName":"/a/b/project3.tsconfig.json","pollingInterval":250}
-/a/b/extendsconfig1.tsconfig.json:
-  {"fileName":"/a/b/extendsConfig1.tsconfig.json","pollingInterval":250}
+/a/b/extendscnfig1.tsconfig.json:
+  {"fileName":"/a/b/extendsCnfig1.tsconfig.json","pollingInterval":250}
 /a/b/extendsconfig2.tsconfig.json:
   {"fileName":"/a/b/extendsConfig2.tsconfig.json","pollingInterval":250}
 /a/b/extendsconfig3.tsconfig.json:
@@ -580,7 +586,9 @@ Output::
 
 [[90m12:01:59 AM[0m] Building project '/a/b/project2.tsconfig.json'...
 
-[[90m12:02:12 AM[0m] Found 0 errors. Watching for file changes.
+[91merror[0m[90m TS5083: [0mCannot read file '/a/b/extendsCnfig1.tsconfig.json'.
+
+[[90m12:02:12 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -622,8 +630,8 @@ WatchedFiles::
   {"fileName":"/a/b/other.ts","pollingInterval":250}
 /a/b/project3.tsconfig.json:
   {"fileName":"/a/b/project3.tsconfig.json","pollingInterval":250}
-/a/b/extendsconfig1.tsconfig.json:
-  {"fileName":"/a/b/extendsConfig1.tsconfig.json","pollingInterval":250}
+/a/b/extendscnfig1.tsconfig.json:
+  {"fileName":"/a/b/extendsCnfig1.tsconfig.json","pollingInterval":250}
 /a/b/extendsconfig2.tsconfig.json:
   {"fileName":"/a/b/extendsConfig2.tsconfig.json","pollingInterval":250}
 /a/b/extendsconfig3.tsconfig.json:
@@ -699,8 +707,8 @@ WatchedFiles::
   {"fileName":"/a/b/other.ts","pollingInterval":250}
 /a/b/project3.tsconfig.json:
   {"fileName":"/a/b/project3.tsconfig.json","pollingInterval":250}
-/a/b/extendsconfig1.tsconfig.json:
-  {"fileName":"/a/b/extendsConfig1.tsconfig.json","pollingInterval":250}
+/a/b/extendscnfig1.tsconfig.json:
+  {"fileName":"/a/b/extendsCnfig1.tsconfig.json","pollingInterval":250}
 /a/b/extendsconfig2.tsconfig.json:
   {"fileName":"/a/b/extendsConfig2.tsconfig.json","pollingInterval":250}
 /a/b/extendsconfig3.tsconfig.json:
@@ -778,7 +786,9 @@ Output::
 
 [[90m12:02:34 AM[0m] Building project '/a/b/project2.tsconfig.json'...
 
-[[90m12:02:48 AM[0m] Found 0 errors. Watching for file changes.
+[91merror[0m[90m TS5083: [0mCannot read file '/a/b/extendsCnfig1.tsconfig.json'.
+
+[[90m12:02:48 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -816,8 +826,8 @@ WatchedFiles::
   {"fileName":"/a/b/other.ts","pollingInterval":250}
 /a/b/project3.tsconfig.json:
   {"fileName":"/a/b/project3.tsconfig.json","pollingInterval":250}
-/a/b/extendsconfig1.tsconfig.json:
-  {"fileName":"/a/b/extendsConfig1.tsconfig.json","pollingInterval":250}
+/a/b/extendscnfig1.tsconfig.json:
+  {"fileName":"/a/b/extendsCnfig1.tsconfig.json","pollingInterval":250}
 /a/b/extendsconfig2.tsconfig.json:
   {"fileName":"/a/b/extendsConfig2.tsconfig.json","pollingInterval":250}
 /a/b/extendsconfig3.tsconfig.json:
@@ -859,24 +869,22 @@ Output::
 
 [[90m12:02:54 AM[0m] Building project '/a/b/project3.tsconfig.json'...
 
-[[90m12:02:59 AM[0m] Found 0 errors. Watching for file changes.
+[91merror[0m[90m TS5083: [0mCannot read file '/a/b/extendsCnfig1.tsconfig.json'.
+
+[[90m12:02:55 AM[0m] Found 1 error. Watching for file changes.
 
 
 
 Program root files: ["/a/b/other.ts"]
-Program options: {"composite":false,"strictNullChecks":true,"noImplicitAny":true,"watch":true,"configFilePath":"/a/b/project3.tsconfig.json"}
+Program options: {"strictNullChecks":true,"noImplicitAny":true,"composite":false,"watch":true,"configFilePath":"/a/b/project3.tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /a/b/other.ts
 
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/a/b/other.ts
+No cached semantic diagnostics in the builder::
 
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/a/b/other.ts (used version)
+No shapes updated in the builder::
 
 WatchedFiles::
 /a/b/project1.tsconfig.json:
@@ -893,8 +901,8 @@ WatchedFiles::
   {"fileName":"/a/b/other.ts","pollingInterval":250}
 /a/b/project3.tsconfig.json:
   {"fileName":"/a/b/project3.tsconfig.json","pollingInterval":250}
-/a/b/extendsconfig1.tsconfig.json:
-  {"fileName":"/a/b/extendsConfig1.tsconfig.json","pollingInterval":250}
+/a/b/extendscnfig1.tsconfig.json:
+  {"fileName":"/a/b/extendsCnfig1.tsconfig.json","pollingInterval":250}
 /a/b/extendsconfig2.tsconfig.json:
   {"fileName":"/a/b/extendsConfig2.tsconfig.json","pollingInterval":250}
 /a/b/extendsconfig3.tsconfig.json:
@@ -910,7 +918,6 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
-//// [/a/b/other.js] file written with same contents
 
 Change:: Modify project 3
 
@@ -921,13 +928,13 @@ Input::
 
 Output::
 >> Screen clear
-[[90m12:03:03 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:02:59 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:03:04 AM[0m] Project 'project3.tsconfig.json' is out of date because output file 'project3.tsconfig.tsbuildinfo' does not exist
+[[90m12:03:00 AM[0m] Project 'project3.tsconfig.json' is out of date because output file 'project3.tsconfig.tsbuildinfo' does not exist
 
-[[90m12:03:05 AM[0m] Building project '/a/b/project3.tsconfig.json'...
+[[90m12:03:01 AM[0m] Building project '/a/b/project3.tsconfig.json'...
 
-[[90m12:03:34 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:03:30 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -949,6 +956,7 @@ Semantic diagnostics in builder refreshed for::
 /a/b/other2.ts
 
 Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
 /a/b/commonfile1.ts (computed .d.ts)
 /a/b/commonfile2.ts (computed .d.ts)
 /a/b/other.ts (computed .d.ts)
@@ -969,12 +977,12 @@ WatchedFiles::
   {"fileName":"/a/b/other.ts","pollingInterval":250}
 /a/b/project3.tsconfig.json:
   {"fileName":"/a/b/project3.tsconfig.json","pollingInterval":250}
-/a/b/extendsconfig1.tsconfig.json:
-  {"fileName":"/a/b/extendsConfig1.tsconfig.json","pollingInterval":250}
 /a/b/extendsconfig2.tsconfig.json:
   {"fileName":"/a/b/extendsConfig2.tsconfig.json","pollingInterval":250}
 /a/b/other2.ts:
   {"fileName":"/a/b/other2.ts","pollingInterval":250}
+/a/b/extendsconfig1.tsconfig.json:
+  {"fileName":"/a/b/extendsConfig1.tsconfig.json","pollingInterval":250}
 
 FsWatches::
 
