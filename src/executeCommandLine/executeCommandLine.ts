@@ -300,6 +300,14 @@ namespace ts {
                         // TODO: check infinite loop
                         possibleValues = getPossibleValues(option.element);
                         break;
+                    case "listOrElement":
+                        if (option.element.type === "string"){
+                            possibleValues = option.type;
+                        }
+                        else {
+                            possibleValues = getPossibleValues(option.element);
+                        }
+                        break;
                     case "object":
                         possibleValues = "";
                         break;

@@ -1731,6 +1731,19 @@ namespace ts {
                             i++;
                         }
                         break;
+                    case "listOrElement": 
+                        if(opt.element.type === "string"){
+                            options[opt.name] = validateJsonOptionValue(opt, args[i] || "", errors);
+                            i++;
+                        }
+                        else{
+                            const result = parseListTypeOption(opt, args[i], errors);
+                            options[opt.name] = result || [];
+                            if (result) {
+                                i++;
+                            }
+                        }
+                        break;
                     // If not a primitive, the possible types are specified in what is effectively a map of options.
                     default:
                         options[opt.name] = parseCustomTypeOption(opt as CommandLineOptionOfCustomType, args[i], errors);
@@ -1971,6 +1984,15 @@ namespace ts {
         return commandLineTypeAcquisitionMapCache || (commandLineTypeAcquisitionMapCache = commandLineOptionsToMap(typeAcquisitionDeclarations));
     }
 
+    const extendsOptionDeclaration: CommandLineOptionOfListType = {
+        name: "extends",
+        type: "listOrElement",
+        element: {
+            name: "extends",
+            type: "string"
+        },
+        category: Diagnostics.File_Management,
+    };
     let _tsconfigRootOptions: TsConfigOnlyOption;
     function getTsconfigRootOptionsMap() {
         if (_tsconfigRootOptions === undefined) {
@@ -2002,11 +2024,7 @@ namespace ts {
                         elementOptions: getCommandLineTypeAcquisitionMap(),
                         extraKeyDiagnostics: typeAcquisitionDidYouMeanDiagnostics
                     },
-                    {
-                        name: "extends",
-                        type: "string",
-                        category: Diagnostics.File_Management,
-                    },
+                    extendsOptionDeclaration,
                     {
                         name: "references",
                         type: "list",
@@ -2219,11 +2237,11 @@ namespace ts {
             let invalidReported: boolean | undefined;
             switch (valueExpression.kind) {
                 case SyntaxKind.TrueKeyword:
-                    reportInvalidOptionValue(option && option.type !== "boolean");
+                    reportInvalidOptionValue(option && option.type !== "boolean" && (option.type !== "listOrElement" || option.element.type !== "boolean"));
                     return validateValue(/*value*/ true);
 
                 case SyntaxKind.FalseKeyword:
-                    reportInvalidOptionValue(option && option.type !== "boolean");
+                    reportInvalidOptionValue(option && option.type !== "boolean"&& (option.type !== "listOrElement" || option.element.type !== "boolean"));
                     return validateValue(/*value*/ false);
 
                 case SyntaxKind.NullKeyword:
@@ -2234,7 +2252,7 @@ namespace ts {
                     if (!isDoubleQuotedString(valueExpression)) {
                         errors.push(createDiagnosticForNodeInSourceFile(sourceFile, valueExpression, Diagnostics.String_literal_with_double_quotes_expected));
                     }
-                    reportInvalidOptionValue(option && (isString(option.type) && option.type !== "string"));
+                    reportInvalidOptionValue(option && (isString(option.type) && option.type !== "string")&& (option.type !== "listOrElement" || option.element.type !== "string"));
                     const text = (valueExpression as StringLiteral).text;
                     if (option && !isString(option.type)) {
                         const customOption = option as CommandLineOptionOfCustomType;
@@ -2252,18 +2270,18 @@ namespace ts {
                     return validateValue(text);
 
                 case SyntaxKind.NumericLiteral:
-                    reportInvalidOptionValue(option && option.type !== "number");
+                    reportInvalidOptionValue(option && option.type !== "number" && (option.type !== "listOrElement" || option.element.type !== "number"));
                     return validateValue(Number((valueExpression as NumericLiteral).text));
 
                 case SyntaxKind.PrefixUnaryExpression:
                     if ((valueExpression as PrefixUnaryExpression).operator !== SyntaxKind.MinusToken || (valueExpression as PrefixUnaryExpression).operand.kind !== SyntaxKind.NumericLiteral) {
                         break; // not valid JSON syntax
                     }
-                    reportInvalidOptionValue(option && option.type !== "number");
+                    reportInvalidOptionValue(option && option.type !== "number" && (option.type !== "listOrElement" || option.element.type !== "number"));
                     return validateValue(-Number(((valueExpression as PrefixUnaryExpression).operand as NumericLiteral).text));
 
                 case SyntaxKind.ObjectLiteralExpression:
-                    reportInvalidOptionValue(option && option.type !== "object");
+                    reportInvalidOptionValue(option && option.type !== "object" && (option.type !== "listOrElement" || option.element.type !== "object"));
                     const objectLiteralExpression = valueExpression as ObjectLiteralExpression;
 
                     // Currently having element option declaration in the tsconfig with type "object"
@@ -2284,7 +2302,7 @@ namespace ts {
                     }
 
                 case SyntaxKind.ArrayLiteralExpression:
-                    reportInvalidOptionValue(option && option.type !== "list");
+                    reportInvalidOptionValue(option && option.type !== "list" && option.type !== "listOrElement");
                     return validateValue(convertArrayLiteralExpressionToJson(
                         (valueExpression as ArrayLiteralExpression).elements,
                         option && (option as CommandLineOptionOfListType).element));
@@ -2324,8 +2342,10 @@ namespace ts {
         }
     }
 
-    function getCompilerOptionValueTypeString(option: CommandLineOption) {
-        return option.type === "list" ?
+    function getCompilerOptionValueTypeString(option: CommandLineOption): string {
+        return (option.type === "listOrElement") ?
+            `${getCompilerOptionValueTypeString(option.element)} or Array`:
+            option.type === "list" ?
             "Array" :
             isString(option.type) ? option.type : "string";
     }
@@ -2335,6 +2355,9 @@ namespace ts {
             if (isNullOrUndefined(value)) return true; // All options are undefinable/nullable
             if (option.type === "list") {
                 return isArray(value);
+            }
+            if (option.type === "listOrElement") {
+                return isArray(value) || isCompilerOptionsValue(option.element, value);
             }
             const expectedType = isString(option.type) ? option.type : "string";
             return typeof value === expectedType;
@@ -2444,6 +2467,9 @@ namespace ts {
         }
         else if (optionDefinition.type === "list") {
             return getCustomTypeMapOfCommandLineOption(optionDefinition.element);
+        }
+        else if(optionDefinition.type === "listOrElement"){
+            return (optionDefinition.element.type === "string") ? undefined : getCustomTypeMapOfCommandLineOption(optionDefinition.element);
         }
         else {
             return optionDefinition.type;
@@ -2667,6 +2693,17 @@ namespace ts {
                 const values = value as readonly (string | number)[];
                 if (option.element.isFilePath && values.length) {
                     return values.map(toAbsolutePath);
+                }
+            }
+            else if(option.type === "listOrElement"){
+                if(option.element.type === "string"){
+                    return toAbsolutePath(value as string);
+                }
+                else{
+                    const values = value as readonly (string | number)[];
+                    if (option.element.isFilePath && values.length) {
+                        return values.map(toAbsolutePath);
+                    }
                 }
             }
             else if (option.isFilePath) {
@@ -2943,17 +2980,19 @@ namespace ts {
         /**
          * Note that the case of the config path has not yet been normalized, as no files have been imported into the project yet
          */
-        extendedConfigPath?: string;
+        extendedConfigPath?: string | string[];
     }
 
     function isSuccessfulParsedTsconfig(value: ParsedTsconfig) {
         return !!value.options;
     }
 
+    interface ExtendsResult { options: CompilerOptions, watchOptions?: WatchOptions, include?: string[], exclude?: string[], files?: string[], compileOnSave?: boolean, extendedSourceFiles?: Set<string>}
     /**
      * This *just* extracts options/include/exclude/files out of a config file.
      * It does *not* resolve the included files.
      */
+
     function parseConfig(
         json: any,
         sourceFile: TsConfigSourceFile | undefined,
@@ -2986,34 +3025,52 @@ namespace ts {
         if (ownConfig.extendedConfigPath) {
             // copy the resolution stack so it is never reused between branches in potential diamond-problem scenarios.
             resolutionStack = resolutionStack.concat([resolvedPath]);
-            const extendedConfig = getExtendedConfig(sourceFile, ownConfig.extendedConfigPath, host, resolutionStack, errors, extendedConfigCache);
+            const result: ExtendsResult = {options: {}};
+            if(isString(ownConfig.extendedConfigPath)){
+                applyExtendedConfig(result, ownConfig.extendedConfigPath);
+            }
+            else{
+                ownConfig.extendedConfigPath.forEach(extendedConfigPath => applyExtendedConfig(result, extendedConfigPath));
+            }
+            if(!ownConfig.raw.include && result.include) ownConfig.raw.include = result.include;
+            if(!ownConfig.raw.exclude && result.exclude) ownConfig.raw.exclude = result.exclude;
+            if(!ownConfig.raw.files && result.files) ownConfig.raw.files = result.files;
+            if (ownConfig.raw.compileOnSave !== undefined && result.compileOnSave) ownConfig.raw.compileOnSave = result.compileOnSave;
+            if (sourceFile && result.extendedSourceFiles) sourceFile.extendedSourceFiles = arrayFrom(result.extendedSourceFiles.keys());
+
+            ownConfig.options = assign(result.options, ownConfig.options);
+            ownConfig.watchOptions = ownConfig.watchOptions && result.watchOptions?
+            assign(result.watchOptions, ownConfig.watchOptions) :
+            ownConfig.watchOptions || result.watchOptions;
+        }
+        return ownConfig;
+
+        function applyExtendedConfig(result: ExtendsResult, extendedConfigPath: string){
+            const extendedConfig = getExtendedConfig(sourceFile, extendedConfigPath, host, resolutionStack, errors, extendedConfigCache, result);
             if (extendedConfig && isSuccessfulParsedTsconfig(extendedConfig)) {
-                const baseRaw = extendedConfig.raw;
-                const raw = ownConfig.raw;
+                const extendsRaw = extendedConfig.raw;
                 let relativeDifference: string | undefined ;
-                const setPropertyInRawIfNotUndefined = (propertyName: string) => {
-                    if (!raw[propertyName] && baseRaw[propertyName]) {
-                        raw[propertyName] = map(baseRaw[propertyName], (path: string) => isRootedDiskPath(path) ? path : combinePaths(
-                            relativeDifference ||= convertToRelativePath(getDirectoryPath(ownConfig.extendedConfigPath!), basePath, createGetCanonicalFileName(host.useCaseSensitiveFileNames)),
+                const setPropertyInResultIfNotUndefined = (propertyName: "include" | "exclude" | "files") => {
+                    if (extendsRaw[propertyName]) {
+                        result[propertyName] = map(extendsRaw[propertyName], (path: string) => isRootedDiskPath(path) ? path : combinePaths(
+                            relativeDifference ||= convertToRelativePath(getDirectoryPath(extendedConfigPath), basePath, createGetCanonicalFileName(host.useCaseSensitiveFileNames)),
                             path
                         ));
                     }
                 };
-                setPropertyInRawIfNotUndefined("include");
-                setPropertyInRawIfNotUndefined("exclude");
-                setPropertyInRawIfNotUndefined("files");
-                if (raw.compileOnSave === undefined) {
-                    raw.compileOnSave = baseRaw.compileOnSave;
+                setPropertyInResultIfNotUndefined("include");
+                setPropertyInResultIfNotUndefined("exclude");
+                setPropertyInResultIfNotUndefined("files");
+                if (extendsRaw.compileOnSave !== undefined) {
+                    result.compileOnSave = extendsRaw.compileOnSave;
                 }
-                ownConfig.options = assign({}, extendedConfig.options, ownConfig.options);
-                ownConfig.watchOptions = ownConfig.watchOptions && extendedConfig.watchOptions ?
-                    assign({}, extendedConfig.watchOptions, ownConfig.watchOptions) :
-                    ownConfig.watchOptions || extendedConfig.watchOptions;
+                assign(result.options, extendedConfig.options);
+                result.watchOptions = result.watchOptions && extendedConfig.watchOptions ?
+                    assign({}, result.watchOptions, extendedConfig.watchOptions) :
+                    result.watchOptions || extendedConfig.watchOptions;
                 // TODO extend type typeAcquisition
             }
         }
-
-        return ownConfig;
     }
 
     function parseOwnConfigOfJson(
@@ -3033,15 +3090,27 @@ namespace ts {
         const typeAcquisition = convertTypeAcquisitionFromJsonWorker(json.typeAcquisition || json.typingOptions, basePath, errors, configFileName);
         const watchOptions = convertWatchOptionsFromJsonWorker(json.watchOptions, basePath, errors);
         json.compileOnSave = convertCompileOnSaveOptionFromJson(json, basePath, errors);
-        let extendedConfigPath: string | undefined;
+        let extendedConfigPath:  string[] | undefined;
 
         if (json.extends) {
-            if (!isString(json.extends)) {
-                errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, "extends", "string"));
+            if (!isCompilerOptionsValue(extendsOptionDeclaration, json.extends)) {
+                errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, "extends", getCompilerOptionValueTypeString(extendsOptionDeclaration)));
             }
             else {
                 const newBase = configFileName ? directoryOfCombinedPath(configFileName, basePath) : basePath;
-                extendedConfigPath = getExtendsConfigPath(json.extends, host, newBase, errors, createCompilerDiagnostic);
+                if (isString(json.extends)) {
+                    extendedConfigPath = append (extendedConfigPath, getExtendsConfigPath(json.extends, host, newBase, errors, createCompilerDiagnostic));
+                }
+                else {
+                    for (const fileName of json.extends as unknown[]) {
+                        if (isString(fileName)) {
+                            extendedConfigPath = append (extendedConfigPath, getExtendsConfigPath(fileName, host, newBase, errors, createCompilerDiagnostic));
+                        }
+                        else {
+                            errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, "extends", getCompilerOptionValueTypeString(extendsOptionDeclaration.element)));
+                        }
+                    }
+                }
             }
         }
         return { raw: json, options, watchOptions, typeAcquisition, extendedConfigPath };
@@ -3057,7 +3126,7 @@ namespace ts {
         const options = getDefaultCompilerOptions(configFileName);
         let typeAcquisition: TypeAcquisition | undefined, typingOptionstypeAcquisition: TypeAcquisition | undefined;
         let watchOptions: WatchOptions | undefined;
-        let extendedConfigPath: string | undefined;
+        let extendedConfigPath: string[] | undefined;
         let rootCompilerOptions: PropertyName[] | undefined;
 
         const optionsIterator: JsonConversionNotifier = {
@@ -3083,19 +3152,35 @@ namespace ts {
                 currentOption[option.name] = normalizeOptionValue(option, basePath, value);
             },
             onSetValidOptionKeyValueInRoot(key: string, _keyNode: PropertyName, value: CompilerOptionsValue, valueNode: Expression) {
-                switch (key) {
-                    case "extends":
-                        const newBase = configFileName ? directoryOfCombinedPath(configFileName, basePath) : basePath;
-                        extendedConfigPath = getExtendsConfigPath(
-                            value as string,
-                            host,
-                            newBase,
-                            errors,
-                            (message, arg0) =>
-                                createDiagnosticForNodeInSourceFile(sourceFile, valueNode, message, arg0)
-                        );
-                        return;
-                }
+                    switch (key) {
+                        case "extends":
+                            const newBase = configFileName ? directoryOfCombinedPath(configFileName, basePath) : basePath;
+                            if (isString(value)) {
+                                extendedConfigPath = append (extendedConfigPath, getExtendsConfigPath(
+                                    value,
+                                    host,
+                                    newBase,
+                                    errors,
+                                    (message, arg0) =>
+                                        createDiagnosticForNodeInSourceFile(sourceFile, valueNode, message, arg0)
+                                ));
+                            }
+                            else {
+                                for (const fileName of value as unknown[]) {
+                                    if (isString(fileName)) {
+                                        extendedConfigPath = append(extendedConfigPath, getExtendsConfigPath(
+                                            fileName,
+                                            host,
+                                            newBase,
+                                            errors,
+                                            (message, arg0) =>
+                                                createDiagnosticForNodeInSourceFile(sourceFile, (valueNode as ArrayLiteralExpression).elements[0], message, arg0)
+                                        ));
+                                    }
+                                };
+                            };
+                            return;
+                    }
             },
             onSetUnknownOptionKeyValueInRoot(key: string, keyNode: PropertyName, _value: CompilerOptionsValue, _valueNode: Expression) {
                 if (key === "excludes") {
@@ -3168,7 +3253,8 @@ namespace ts {
         host: ParseConfigHost,
         resolutionStack: string[],
         errors: Push<Diagnostic>,
-        extendedConfigCache?: ESMap<string, ExtendedConfigCacheEntry>
+        extendedConfigCache: ESMap<string, ExtendedConfigCacheEntry> | undefined,
+        result: ExtendsResult
     ): ParsedTsconfig | undefined {
         const path = host.useCaseSensitiveFileNames ? extendedConfigPath : toFileNameLowerCase(extendedConfigPath);
         let value: ExtendedConfigCacheEntry | undefined;
@@ -3188,9 +3274,11 @@ namespace ts {
             }
         }
         if (sourceFile) {
-            sourceFile.extendedSourceFiles = [extendedResult.fileName];
-            if (extendedResult.extendedSourceFiles) {
-                sourceFile.extendedSourceFiles.push(...extendedResult.extendedSourceFiles);
+            (result.extendedSourceFiles ??= new Set()).add(extendedResult.fileName);
+            if (isArray(extendedResult.extendedSourceFiles)) {
+                for (const extenedSourceFile of extendedResult.extendedSourceFiles) {
+                    result.extendedSourceFiles.add(extenedSourceFile);
+                }
             }
         }
         if (extendedResult.parseDiagnostics.length) {
@@ -3286,6 +3374,11 @@ namespace ts {
             if (optType === "list" && isArray(value)) {
                 return convertJsonOptionOfListType(opt , value, basePath, errors);
             }
+            else if (optType === "listOrElement") {
+                return isArray(value) ?
+                    convertJsonOptionOfListType(opt, value, basePath, errors) :
+                    convertJsonOption(opt.element, value, basePath, errors);
+            }
             else if (!isString(optType)) {
                 return convertJsonOptionOfCustomType(opt as CommandLineOptionOfCustomType, value as string, errors);
             }
@@ -3305,6 +3398,18 @@ namespace ts {
                 return filter(map(value, v => normalizeOptionValue(listOption.element, basePath, v)), v => listOption.listPreserveFalsyValues ? true : !!v) as CompilerOptionsValue;
             }
             return value;
+        }
+        if(option.type === "listOrElement"){
+            if (option.element.type === "string"){
+                return normalizeNonListOptionValue(option, basePath, value);
+            }
+            else{
+                const listOption = option;
+                if (listOption.element.isFilePath || !isString(listOption.element.type)) {
+                    return filter(map(value, v => normalizeOptionValue(listOption.element, basePath, v)), v => listOption.listPreserveFalsyValues ? true : !!v) as CompilerOptionsValue;
+                }
+                return value;
+            }
         }
         else if (!isString(option.type)) {
             return option.type.get(isString(value) ? value.toLowerCase() : value);
@@ -3728,6 +3833,12 @@ namespace ts {
             case "list":
                 const elementType = option.element;
                 return isArray(value) ? value.map(v => getOptionValueWithEmptyStrings(v, elementType)) : "";
+            case "listOrElement":
+                if(option.element.type === "string"){
+                    return "";
+                }
+                const typeOfElement = option.element;
+                return isArray(value) ? value.map(v => getOptionValueWithEmptyStrings(v, typeOfElement)) : "";
             default:
                 return forEachEntry(option.type, (optionEnumValue, optionStringValue) => {
                     if (optionEnumValue === value) {
@@ -3748,6 +3859,12 @@ namespace ts {
                 const defaultValue = option.defaultValueDescription;
                 return option.isFilePath ? `./${defaultValue && typeof defaultValue === "string" ? defaultValue : ""}` : "";
             case "list":
+                return [];
+            case "listOrElement":
+                if (option.element.type === "string"){
+                    const defaultValue = option.defaultValueDescription;
+                    return option.isFilePath ? `./${defaultValue && typeof defaultValue === "string" ? defaultValue : ""}` : "";
+                }
                 return [];
             case "object":
                 return {};

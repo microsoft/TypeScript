@@ -566,7 +566,7 @@ export function someFn() { }`),
         verifyTscWatch({
             scenario: "programUpdates",
             subScenario: "works with extended source files",
-            commandLineArgs: ["-b", "-w", "-v", "project1.tsconfig.json", "project2.tsconfig.json"],
+            commandLineArgs: ["-b", "-w", "-v", "project1.tsconfig.json", "project2.tsconfig.json", "project3.tsconfig.json"],
             sys: () => {
                 const alphaExtendedConfigFile: File = {
                     path: "/a/b/alpha.tsconfig.json",
@@ -602,10 +602,49 @@ export function someFn() { }`),
                         files: [otherFile.path]
                     })
                 };
+                const otherFile2: File = {
+                    path: "/a/b/other2.ts",
+                    content: "let k = 0;",
+                };
+                const extendsConfigFile1: File = {
+                    path: "/a/b/extendsConfig1.tsconfig.json",
+                    content: JSON.stringify({
+                        compilerOptions: {
+                            composite: true,
+                        }
+                    })
+                };
+                const extendsConfigFile2: File = {
+                    path: "/a/b/extendsConfig2.tsconfig.json",
+                    content: JSON.stringify({
+                        compilerOptions: {
+                            strictNullChecks: false,
+                        }
+                    })
+                };
+                const extendsConfigFile3: File = {
+                    path: "/a/b/extendsConfig3.tsconfig.json",
+                    content: JSON.stringify({
+                        compilerOptions: {
+                            noImplicitAny: true,
+                        }
+                    })
+                };
+                const project3Config: File = {
+                    path: "/a/b/project3.tsconfig.json",
+                    content: JSON.stringify({
+                        extends: ["./extendsCnfig1.tsconfig.json", "./extendsConfig2.tsconfig.json", "./extendsConfig3.tsconfig.json"],
+                        compilerOptions: {
+                            composite: false,
+                        },
+                        files: [otherFile.path]
+                    })
+                };
                 return createWatchedSystem([
                     libFile,
                     alphaExtendedConfigFile, project1Config, commonFile1, commonFile2,
-                    bravoExtendedConfigFile, project2Config, otherFile
+                    bravoExtendedConfigFile, project2Config, otherFile, otherFile2,
+                    extendsConfigFile1, extendsConfigFile2, extendsConfigFile3, project3Config
                 ], { currentDirectory: "/a/b" });
             },
             changes: [
@@ -645,6 +684,20 @@ export function someFn() { }`),
                     caption: "Build project 2",
                     change: noop,
                     timeouts: checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout // Build project2
+                },
+                {
+                    caption: "Modify extendsConfigFile2",
+                    change: sys => sys.writeFile("/a/b/extendsConfig2.tsconfig.json", JSON.stringify({
+                        compilerOptions: { strictNullChecks: true }
+                    })),
+                    timeouts: checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout // Build project1
+                },
+                {
+                    caption: "Modify project 3",
+                    change: sys => sys.writeFile("/a/b/project3.tsconfig.json", JSON.stringify({
+                        extends: ["./extendsConfig1.tsconfig.json", "./extendsConfig2.tsconfig.json"],
+                    })),
+                    timeouts: checkSingleTimeoutQueueLengthAndRun // Build project1
                 },
             ]
         });
