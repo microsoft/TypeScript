@@ -1530,9 +1530,9 @@ namespace ts {
                         return symbol;
                     }
                     if (symbol.flags & SymbolFlags.Alias) {
-                        const target = resolveAlias(symbol);
+                        const targetFlags = getAllSymbolFlags(symbol);
                         // Unknown symbol means an error occurred in alias resolution, treat it as positive answer to avoid cascading errors
-                        if (target === unknownSymbol || target.flags & meaning) {
+                        if (targetFlags === undefined || targetFlags & meaning) {
                             return symbol;
                         }
                     }
@@ -2214,8 +2214,8 @@ namespace ts {
                             !checkAndReportErrorForExtendingInterface(errorLocation) &&
                             !checkAndReportErrorForUsingTypeAsNamespace(errorLocation, name, meaning) &&
                             !checkAndReportErrorForExportingPrimitiveType(errorLocation, name) &&
+                            !checkAndReportErrorForUsingNamespaceAsTypeOrValue(errorLocation, name, meaning) &&
                             !checkAndReportErrorForUsingTypeAsValue(errorLocation, name, meaning) &&
-                            !checkAndReportErrorForUsingNamespaceModuleAsValue(errorLocation, name, meaning) &&
                             !checkAndReportErrorForUsingValueAsType(errorLocation, name, meaning)) {
                             let suggestion: Symbol | undefined;
                             let suggestedLib: string | undefined;
@@ -2503,7 +2503,7 @@ namespace ts {
         }
 
         function checkAndReportErrorForUsingTypeAsValue(errorLocation: Node, name: __String, meaning: SymbolFlags): boolean {
-            if (meaning & (SymbolFlags.Value & ~SymbolFlags.NamespaceModule)) {
+            if (meaning & SymbolFlags.Value) {
                 if (isPrimitiveTypeName(name)) {
                     if (isExtendedByInterface(errorLocation)) {
                         error(errorLocation, Diagnostics.An_interface_cannot_extend_a_primitive_type_like_0_an_interface_can_only_extend_named_types_and_classes, unescapeLeadingUnderscores(name));
@@ -2514,7 +2514,8 @@ namespace ts {
                     return true;
                 }
                 const symbol = resolveSymbol(resolveName(errorLocation, name, SymbolFlags.Type & ~SymbolFlags.Value, /*nameNotFoundMessage*/undefined, /*nameArg*/ undefined, /*isUse*/ false));
-                if (symbol && !(symbol.flags & SymbolFlags.NamespaceModule)) {
+                const allFlags = symbol && getAllSymbolFlags(symbol);
+                if (symbol && allFlags !== undefined && !(allFlags & SymbolFlags.Value)) {
                     const rawName = unescapeLeadingUnderscores(name);
                     if (isES2015OrLaterConstructorName(name)) {
                         error(errorLocation, Diagnostics._0_only_refers_to_a_type_but_is_being_used_as_a_value_here_Do_you_need_to_change_your_target_library_Try_changing_the_lib_compiler_option_to_es2015_or_later, rawName);
@@ -2565,9 +2566,9 @@ namespace ts {
             return false;
         }
 
-        function checkAndReportErrorForUsingNamespaceModuleAsValue(errorLocation: Node, name: __String, meaning: SymbolFlags): boolean {
-            if (meaning & (SymbolFlags.Value & ~SymbolFlags.NamespaceModule & ~SymbolFlags.Type)) {
-                const symbol = resolveSymbol(resolveName(errorLocation, name, SymbolFlags.NamespaceModule & ~SymbolFlags.Value, /*nameNotFoundMessage*/undefined, /*nameArg*/ undefined, /*isUse*/ false));
+        function checkAndReportErrorForUsingNamespaceAsTypeOrValue(errorLocation: Node, name: __String, meaning: SymbolFlags): boolean {
+            if (meaning & (SymbolFlags.Value & ~SymbolFlags.Type)) {
+                const symbol = resolveSymbol(resolveName(errorLocation, name, SymbolFlags.NamespaceModule, /*nameNotFoundMessage*/undefined, /*nameArg*/ undefined, /*isUse*/ false));
                 if (symbol) {
                     error(
                         errorLocation,
@@ -2576,8 +2577,8 @@ namespace ts {
                     return true;
                 }
             }
-            else if (meaning & (SymbolFlags.Type & ~SymbolFlags.NamespaceModule & ~SymbolFlags.Value)) {
-                const symbol = resolveSymbol(resolveName(errorLocation, name, (SymbolFlags.ValueModule | SymbolFlags.NamespaceModule) & ~SymbolFlags.Type, /*nameNotFoundMessage*/undefined, /*nameArg*/ undefined, /*isUse*/ false));
+            else if (meaning & (SymbolFlags.Type & ~SymbolFlags.Value)) {
+                const symbol = resolveSymbol(resolveName(errorLocation, name, SymbolFlags.Module, /*nameNotFoundMessage*/undefined, /*nameArg*/ undefined, /*isUse*/ false));
                 if (symbol) {
                     error(errorLocation, Diagnostics.Cannot_use_namespace_0_as_a_type, unescapeLeadingUnderscores(name));
                     return true;
@@ -3223,6 +3224,38 @@ namespace ts {
             }
 
             return undefined;
+        }
+
+        /**
+         * Gets combined flags of a `symbol` and all alias targets it resolves to. `resolveAlias`
+         * is typically recursive over chains of aliases, but stops mid-chain if an alias is merged
+         * with another exported symbol, e.g.
+         * ```ts
+         * // a.ts
+         * export const a = 0;
+         * // b.ts
+         * export { a } from "./a";
+         * export type a = number;
+         * // c.ts
+         * import { a } from "./b";
+         * ```
+         * Calling `resolveAlias` on the `a` in c.ts would stop at the merged symbol exported
+         * from b.ts, even though there is still more alias to resolve. Consequently, if we were
+         * trying to determine if the `a` in c.ts has a value meaning, looking at the flags on
+         * the local symbol and on the symbol returned by `resolveAlias` is not enough.
+         * @returns undefined if `symbol` is an alias that ultimately resolves to `unknown`;
+         * combined flags of all alias targets otherwise.
+         */
+        function getAllSymbolFlags(symbol: Symbol): SymbolFlags | undefined {
+            let flags = symbol.flags;
+            while (symbol.flags & SymbolFlags.Alias) {
+                symbol = resolveAlias(symbol);
+                if (symbol === unknownSymbol) {
+                    return undefined;
+                }
+                flags |= symbol.flags;
+            }
+            return flags;
         }
 
         /**
