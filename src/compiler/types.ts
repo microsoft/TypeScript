@@ -885,9 +885,59 @@ namespace ts {
         /* @internal */ jsDocCache?: readonly JSDocTag[];     // Cache for getJSDocTags
     }
 
+    // Ideally, `ForEachChildNodes` and `VisitEachChildNodes` would not differ.
+    // However, `forEachChild` currently processes JSDoc comment syntax and missing declarations more thoroughly.
+    // On the other hand, `visitEachChild` actually processes `Identifier`s (which really *shouldn't* have children,
+    // but are constructed as if they could for faked-up `QualifiedName`s in the language service.)
+
+    /* @internal */
+    export type ForEachChildNodes =
+        | HasChildren
+        | MissingDeclaration
+        | JSDocTypeExpression
+        | JSDocNonNullableType
+        | JSDocNullableType
+        | JSDocOptionalType
+        | JSDocVariadicType
+        | JSDocFunctionType
+        | JSDoc
+        | JSDocSeeTag
+        | JSDocNameReference
+        | JSDocMemberName
+        | JSDocParameterTag
+        | JSDocPropertyTag
+        | JSDocAuthorTag
+        | JSDocImplementsTag
+        | JSDocAugmentsTag
+        | JSDocTemplateTag
+        | JSDocTypedefTag
+        | JSDocCallbackTag
+        | JSDocReturnTag
+        | JSDocTypeTag
+        | JSDocThisTag
+        | JSDocEnumTag
+        | JSDocSignature
+        | JSDocLink
+        | JSDocLinkCode
+        | JSDocLinkPlain
+        | JSDocTypeLiteral
+        | JSDocUnknownTag
+        | JSDocClassTag
+        | JSDocPublicTag
+        | JSDocPrivateTag
+        | JSDocProtectedTag
+        | JSDocReadonlyTag
+        | JSDocDeprecatedTag
+        ;
+
+    /* @internal */
+    export type VisitEachChildNodes =
+        | HasChildren
+        | Identifier
+        ;
+
     /* @internal */
     export type HasChildren =
-        | Identifier
         | QualifiedName
         | ComputedPropertyName
         | TypeParameterDeclaration

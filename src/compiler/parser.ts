@@ -96,7 +96,8 @@ namespace ts {
     }
 
     type ForEachChildFunction<TNode> = <T>(node: TNode, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined) => T | undefined;
-    const forEachChildTable = {
+    type ForEachChildTable = { [TNode in ForEachChildNodes as TNode["kind"]]: ForEachChildFunction<TNode> };
+    const forEachChildTable: ForEachChildTable = {
         [SyntaxKind.QualifiedName]: function forEachChildInQualifiedName<T>(node: QualifiedName, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
             return visitNode(cbNode, node.left) ||
                 visitNode(cbNode, node.right);

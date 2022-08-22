@@ -403,7 +403,7 @@ namespace ts {
     //  }
     //
     // This is then used as the expected type for `visitEachChildTable`.
-    type VisitEachChildTable = { [TNode in HasChildren as TNode["kind"]]: VisitEachChildFunction<TNode> };
+    type VisitEachChildTable = { [TNode in VisitEachChildNodes as TNode["kind"]]: VisitEachChildFunction<TNode> };
 
     // NOTE: Before you can add a new method to `visitEachChildTable`, you must first ensure the `Node` subtype you
     //       wish to add is defined in the `HasChildren` union in types.ts.
