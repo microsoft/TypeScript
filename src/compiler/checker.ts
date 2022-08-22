@@ -43035,7 +43035,7 @@ namespace ts {
                 // declaration, we need to start resolution at the declaration's container.
                 // Otherwise, we could incorrectly resolve the export container as the
                 // declaration if it contains an exported member with the same name.
-                let symbol = getReferencedValueSymbol(node, /*startInDeclarationContainer*/ isNameOfModuleOrEnumDeclaration(node));
+                let symbol = getReferencedValueSymbol(node, /*startInDeclarationContainer*/ isNameOfModuleOrEnumDeclaration(node), /*useCache*/ false); // >> change here
                 if (symbol) {
                     if (symbol.flags & SymbolFlags.ExportValue) {
                         // If we reference an exported entity within the same module declaration, then whether
@@ -43070,7 +43070,7 @@ namespace ts {
             }
             const node = getParseTreeNode(nodeIn, isIdentifier);
             if (node) {
-                const symbol = getReferencedValueSymbol(node); // >> Change it here
+                const symbol = getReferencedValueSymbol(node, /*startInDeclarationContainer*/ undefined, /*useCache*/ false); // >> Change it here
                 // We should only get the declaration of an alias if there isn't a local value
                 // declaration for the symbol
                 if (isNonLocalAlias(symbol, /*excludes*/ SymbolFlags.Value) && !getTypeOnlyAliasDeclaration(symbol)) { // >> Probably use the default excludes now
@@ -43455,11 +43455,13 @@ namespace ts {
             return globals.has(escapeLeadingUnderscores(name));
         }
 
-        function getReferencedValueSymbol(reference: Identifier, startInDeclarationContainer?: boolean): Symbol | undefined {
-            // const resolvedSymbol = getNodeLinks(reference).resolvedSymbol;
-            // if (resolvedSymbol) {
-            //     return resolvedSymbol;
-            // }
+        function getReferencedValueSymbol(reference: Identifier, startInDeclarationContainer?: boolean, useCache = true): Symbol | undefined { // TODO: if we change this to return any kind of symbol, then rename it
+            if (useCache) {
+                const resolvedSymbol = getNodeLinks(reference).resolvedSymbol;
+                if (resolvedSymbol) {
+                    return resolvedSymbol;
+                }
+            }
 
             let location: Node = reference;
             if (startInDeclarationContainer) {
