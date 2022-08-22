@@ -12,6 +12,7 @@ declare namespace Intl {
         timeZoneName: any
         weekday: any
         year: any
+        unknown: any
     }
 
     type DateTimeFormatPartTypes = keyof DateTimeFormatPartTypesRegistry;
