@@ -1,4 +1,4 @@
-namespace Playback { // eslint-disable-line one-namespace-per-file
+namespace Playback { // eslint-disable-line local/one-namespace-per-file
     interface FileInformation {
         contents?: string;
         contentsPath?: string;
@@ -361,7 +361,7 @@ namespace Playback { // eslint-disable-line one-namespace-per-file
 
     function recordReplay<T extends ts.AnyFunction>(original: T, underlying: any) {
         function createWrapper(record: T, replay: T): T {
-            // eslint-disable-next-line only-arrow-functions
+            // eslint-disable-next-line local/only-arrow-functions
             return (function () {
                 if (replayLog !== undefined) {
                     return replay.apply(undefined, arguments);
@@ -447,5 +447,5 @@ namespace Playback { // eslint-disable-line one-namespace-per-file
 }
 
 // empty modules for the module migration script
-namespace ts.server { } // eslint-disable-line one-namespace-per-file
-namespace Harness { } // eslint-disable-line one-namespace-per-file
+namespace ts.server { } // eslint-disable-line local/one-namespace-per-file
+namespace Harness { } // eslint-disable-line local/one-namespace-per-file

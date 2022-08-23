@@ -1,7 +1,7 @@
-import { TSESTree, AST_TOKEN_TYPES } from "@typescript-eslint/utils";
-import { createRule } from "./utils";
+const { TSESTree, AST_TOKEN_TYPES } = require("@typescript-eslint/utils");
+const { createRule } = require("./utils");
 
-export = createRule({
+module.exports = createRule({
     name: "type-operator-spacing",
     meta: {
         docs: {
@@ -21,7 +21,8 @@ export = createRule({
         const tokens = ["|", "&"];
         const text = sourceCode.getText();
 
-        const checkTypeOperatorSpacing = (node: TSESTree.TSIntersectionType | TSESTree.TSUnionType) => {
+        /** @type {(node: TSESTree.TSIntersectionType | TSESTree.TSUnionType) => void} */
+        const checkTypeOperatorSpacing = (node) => {
             node.types.forEach(node => {
                 const token = sourceCode.getTokenBefore(node);
 

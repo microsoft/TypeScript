@@ -1,7 +1,7 @@
-import { AST_NODE_TYPES, TSESTree } from "@typescript-eslint/utils";
-import { createRule } from "./utils";
+const { AST_NODE_TYPES, TSESTree } = require("@typescript-eslint/utils");
+const { createRule } = require("./utils");
 
-export = createRule({
+module.exports = createRule({
     name: "boolean-trivia",
     meta: {
         docs: {
@@ -21,8 +21,10 @@ export = createRule({
         const sourceCode = context.getSourceCode();
         const sourceCodeText = sourceCode.getText();
 
-        const isSetOrAssert = (name: string): boolean => name.startsWith("set") || name.startsWith("assert");
-        const isTrivia = (node: TSESTree.Node): boolean => {
+        /** @type {(name: string) => boolean} */
+        const isSetOrAssert = (name) => name.startsWith("set") || name.startsWith("assert");
+        /** @type {(node: TSESTree.Node) => boolean} */
+        const isTrivia = (node) => {
             if (node.type === AST_NODE_TYPES.Identifier) {
                 return node.name === "undefined";
             }
@@ -35,7 +37,8 @@ export = createRule({
             return false;
         };
 
-        const shouldIgnoreCalledExpression = (node: TSESTree.CallExpression): boolean => {
+        /** @type {(node: TSESTree.CallExpression) => boolean} */
+        const shouldIgnoreCalledExpression = (node) => {
             if (node.callee && node.callee.type === AST_NODE_TYPES.MemberExpression) {
                 const methodName = node.callee.property.type === AST_NODE_TYPES.Identifier
                     ? node.callee.property.name
@@ -68,7 +71,8 @@ export = createRule({
             return false;
         };
 
-        const checkArg = (node: TSESTree.Node): void => {
+        /** @type {(node: TSESTree.Node) => void} */
+        const checkArg = (node) => {
             if (!isTrivia(node)) {
                 return;
             }
@@ -88,7 +92,8 @@ export = createRule({
             }
         };
 
-        const checkBooleanTrivia = (node: TSESTree.CallExpression) => {
+        /** @type {(node: TSESTree.CallExpression) => void} */
+        const checkBooleanTrivia = (node) => {
             if (shouldIgnoreCalledExpression(node)) {
                 return;
             }

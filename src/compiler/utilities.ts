@@ -3947,7 +3947,7 @@ namespace ts {
                 diagnostics = nonFileDiagnostics;
             }
 
-            insertSorted(diagnostics, diagnostic, compareDiagnostics);
+            insertSorted(diagnostics, diagnostic, compareDiagnosticsSkipRelatedInformation);
         }
 
         function getGlobalDiagnostics(): Diagnostic[] {
@@ -7546,7 +7546,7 @@ namespace ts {
             case SyntaxKind.Decorator: {
                 const { parent } = node as Decorator;
                 return canHaveDecorators(parent) ? parent.modifiers :
-                    canHaveIllegalDecorators(parent) ? parent.decorators :
+                    canHaveIllegalDecorators(parent) ? parent.illegalDecorators :
                     undefined;
             }
             case SyntaxKind.HeritageClause:
