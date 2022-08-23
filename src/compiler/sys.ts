@@ -1079,11 +1079,11 @@ namespace ts {
                 useCaseSensitiveFileNames,
                 fileOrDirectory,
                 callback,
-                cb => fsWatchHandlingPresence(fileOrDirectory, entryKind, cb, recursive, fallbackPollingInterval, fallbackOptions),
+                cb => fsWatchHandlingExistenceOnHost(fileOrDirectory, entryKind, cb, recursive, fallbackPollingInterval, fallbackOptions),
             );
         }
 
-        function fsWatchHandlingPresence(
+        function fsWatchHandlingExistenceOnHost(
             fileOrDirectory: string,
             entryKind: FileSystemEntryKind,
             callback: FsWatchCallback,
