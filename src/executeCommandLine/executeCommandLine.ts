@@ -1038,14 +1038,18 @@ namespace ts {
             return name.replace("SolutionBuilder::", "");
         }
 
-        function reportBuildInfoReadOrWriteStatistic(s: CountAndSize, type: "read" | "write") {
-            if (s.count) {
+        function reportBuildInfoReadOrWriteStatistic(s: CountAndSize | undefined, type: "read" | "write") {
+            if (s?.count) {
                 const countStatisticName = `BuildInfo ${type}`;
                 if (s.count !== 1) statistics.push({ name: countStatisticName, value: s.count, type: StatisticType.count });
-                statistics.push({ name: `BuildInfo ${type} size`, value: s.size, type: StatisticType.size });
+                if (s.size) statistics.push({ name: `BuildInfo ${type} size`, value: s.size, type: StatisticType.size });
+                if (s.textTime) statistics.push({ name: `BuildInfo ${type} time`, value: s.textTime, type: StatisticType.time });
+                if (s.parseTime) statistics.push({ name: `BuildInfo ${type} parsing time`, value: s.parseTime, type: StatisticType.time });
                 if (solutionPerformance!.hasStatistics(countStatisticName)) {
                     solutionPerformance!.addAggregateStatistic({ name: countStatisticName, value: s.count, type: StatisticType.count });
-                    solutionPerformance!.addAggregateStatistic({ name: `BuildInfo ${type} size`, value: s.size, type: StatisticType.size });
+                    if (s.size) solutionPerformance!.addAggregateStatistic({ name: `BuildInfo ${type} size`, value: s.size, type: StatisticType.size });
+                    if (s.textTime) solutionPerformance!.addAggregateStatistic({ name: `BuildInfo ${type} time`, value: s.textTime, type: StatisticType.time });
+                    if (s.parseTime) solutionPerformance!.addAggregateStatistic({ name: `BuildInfo ${type} parsing time`, value: s.parseTime, type: StatisticType.time });
                 }
             }
         }
@@ -1080,14 +1084,19 @@ namespace ts {
     interface CountAndSize {
         count: number;
         size: number;
+        textTime: number;
+        parseTime: number;
     }
     interface LastRead {
         size: number;
-        compilerOptions: CompilerOptions;
+        compilerOptions: CompilerOptions | undefined;
+        start: number;
+        textTime: number;
+        end: number;
     }
     export interface BuildInfoCallbacks {
-        getRead(): CountAndSize;
-        getWrite(): CountAndSize;
+        getRead(): CountAndSize | undefined;
+        getWrite(): CountAndSize | undefined;
         getLastRead(): LastRead | undefined;
         onTransferLastRead(): void;
         clearLastRead(): void;
@@ -1098,16 +1107,16 @@ namespace ts {
         buildInfoCallbacks?: BuildInfoCallbacks;
     }
 
-    const zeroCount: CountAndSize = { count: 0, size: 0 };
-
     function createNoOpBuildInfoCallbacks(host: CompilerHost) {
         const oldCallbacks = host.buildInfoCallbacks;
         oldCallbacks?.clearLastRead();
         return host.buildInfoCallbacks = {
-            onRead: noop,
+            onReadStart: noop,
+            onReadText: noop,
+            onReadEnd: noop,
             onWrite: noop,
-            getRead: () => zeroCount,
-            getWrite: () => zeroCount,
+            getRead: returnUndefined,
+            getWrite: returnUndefined,
             getLastRead:returnUndefined,
             onTransferLastRead: noop,
             clearLastRead: noop,
@@ -1132,7 +1141,7 @@ namespace ts {
             // This is needed to ensure that we report buildinfo read of program since its done before program is created
             const oldLastRead = oldCallbacks.getLastRead();
             if (oldLastRead && oldLastRead.compilerOptions === options) {
-                onReadOrWrite(read, oldLastRead.size);
+                recordRead(oldLastRead);
                 oldCallbacks.onTransferLastRead();
             }
             else {
@@ -1140,7 +1149,9 @@ namespace ts {
             }
         }
         return host.buildInfoCallbacks = {
-            onRead,
+            onReadStart,
+            onReadText,
+            onReadEnd,
             onWrite,
             getRead: () => read,
             getWrite: () => write,
@@ -1155,19 +1166,17 @@ namespace ts {
 
         function clear() {
             Debug.assert(!oldCallbacks);
-            clearReadOrWrite(read);
-            clearReadOrWrite(write);
+            read.count = read.size = read.textTime = read.parseTime = 0;
+            write.count = write.size = 0;
             lastRead = undefined;
             lastWrite = undefined;
         }
 
-        function clearReadOrWrite(countAndSize: CountAndSize) {
-            countAndSize.count = 0;
-            countAndSize.size = 0;
-        }
-
         function onTransferLastRead() {
-            revertReadOrWrite(read, lastRead!.size);
+            read.count--;
+            read.size -= lastRead!.size;
+            read.textTime -= lastReadTextTime(lastRead!);
+            read.parseTime -= lastReadParseTime(lastRead!);
             lastRead = undefined;
         }
 
@@ -1183,10 +1192,33 @@ namespace ts {
             countAndSize.size -= size;
         }
 
-        function onRead(size: number, compilerOptions: CompilerOptions | undefined) {
-            onReadOrWrite(read, size);
-            if (compilerOptions) lastRead = { size, compilerOptions };
-            else lastRead = undefined;
+        function onReadStart(compilerOptions: CompilerOptions | undefined) {
+            lastRead = { start: timestamp(), compilerOptions, textTime: 0, end: 0, size: 0 };
+        }
+
+        function onReadText(content: string | undefined) {
+            lastRead!.textTime = timestamp();
+            lastRead!.size = content?.length ?? 0;
+        }
+
+        function onReadEnd() {
+            lastRead!.end = timestamp();
+            recordRead(lastRead!);
+            if (!lastRead!.compilerOptions) lastRead = undefined;
+        }
+
+        function recordRead(lastRead: LastRead) {
+            onReadOrWrite(read, lastRead.size);
+            read.textTime += lastReadTextTime(lastRead);
+            read.parseTime += lastReadParseTime(lastRead);
+        }
+
+        function lastReadTextTime(lastRead: LastRead) {
+            return lastRead.textTime - lastRead.start;
+        }
+
+        function lastReadParseTime(lastRead: LastRead) {
+            return lastRead.end - lastRead.textTime;
         }
 
         function onWrite(size: number) {
@@ -1201,7 +1233,7 @@ namespace ts {
     }
 
     function initializedCountAndSize(): CountAndSize {
-        return { count: 0, size: 0 };
+        return { count: 0, size: 0, textTime: 0, parseTime: 0 };
     }
 
     function isSolutionMarkOrMeasure(name: string) {
@@ -1319,15 +1351,17 @@ namespace ts {
             reportStatisticalValue({ name, value: time, type: StatisticType.time }, aggregate);
         }
 
-        function reportBuildInfoReadOrWriteStatistic(s: CountAndSize, type: "read" | "write") {
-            if (s.count) {
+        function reportBuildInfoReadOrWriteStatistic(s: CountAndSize | undefined, type: "read" | "write") {
+            if (s?.count) {
                 if (s.count === 1) {
                     solutionPerformance?.addAggregateStatistic({ name: `BuildInfo ${type}`, value: s.count, type: StatisticType.count });
                 }
                 else {
                     reportCountStatistic(`BuildInfo ${type}`, s.count);
                 }
-                reportStatisticalValue({ name: `BuildInfo ${type} size`, value: s.size, type: StatisticType.size }, /*aggregate*/ true);
+                if (s.size) reportStatisticalValue({ name: `BuildInfo ${type} size`, value: s.size, type: StatisticType.size }, /*aggregate*/ true);
+                if (s.textTime) reportTimeStatistic(`BuildInfo ${type} time`, s.textTime, /*aggregate*/ true);
+                if (s.parseTime) reportTimeStatistic(`BuildInfo ${type} parsing time`, s.parseTime, /*aggregate*/ true);
             }
         }
     }

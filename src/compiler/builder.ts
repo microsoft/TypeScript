@@ -813,17 +813,24 @@ namespace ts {
         return !!outFile(info.options || {});
     }
 
+    function getProgramBuildInfo(state: BuilderProgramState, getCanonicalFileName: GetCanonicalFileName) {
+        if (outFile(state.compilerOptions) && !state.compilerOptions.composite) return;
+        performance.mark("beforeGetProgramBuildInfo");
+        const result = getProgramBuildInfoWorker(state, getCanonicalFileName);
+        performance.mark("afterGetProgramBuildInfo");
+        performance.measure("BuildInfo generation", "beforeGetProgramBuildInfo", "afterGetProgramBuildInfo");
+        return result;
+    }
+
     /**
      * Gets the program information to be emitted in buildInfo so that we can use it to create new program
      */
-    function getProgramBuildInfo(state: BuilderProgramState, getCanonicalFileName: GetCanonicalFileName): ProgramBuildInfo | undefined {
-        const outFilePath = outFile(state.compilerOptions);
-        if (outFilePath && !state.compilerOptions.composite) return;
+    function getProgramBuildInfoWorker(state: BuilderProgramState, getCanonicalFileName: GetCanonicalFileName): ProgramBuildInfo | undefined {
         const currentDirectory = Debug.checkDefined(state.program).getCurrentDirectory();
         const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(getTsBuildInfoEmitOutputFilePath(state.compilerOptions)!, currentDirectory));
         // Convert the file name to Path here if we set the fileName instead to optimize multiple d.ts file emits and having to compute Canonical path
         const latestChangedDtsFile = state.latestChangedDtsFile ? relativeToBuildInfoEnsuringAbsolutePath(state.latestChangedDtsFile) : undefined;
-        if (outFilePath) {
+        if (outFile(state.compilerOptions)) {
             const fileNames: string[] = [];
             const fileInfos: string[] = [];
             state.program!.getRootFileNames().forEach(f => {

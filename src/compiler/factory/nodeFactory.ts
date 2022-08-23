@@ -6750,9 +6750,11 @@ namespace ts {
                         buildInfo = host.getBuildInfo(declarationMapTextOrBuildInfoPath, options) ?? false;
                     }
                     else {
+                        host?.buildInfoCallbacks?.onReadStart(options);
                         const result = textGetter(declarationMapTextOrBuildInfoPath);
-                        if (result) host?.buildInfoCallbacks?.onRead(result.length, options);
+                        host?.buildInfoCallbacks?.onReadText(result);
                         buildInfo = result !== undefined ? getBuildInfo(declarationMapTextOrBuildInfoPath, result) ?? false : false;
+                        host?.buildInfoCallbacks?.onReadEnd();
                     }
                 }
                 return buildInfo || undefined;

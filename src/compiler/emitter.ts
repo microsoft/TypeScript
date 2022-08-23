@@ -365,7 +365,10 @@ namespace ts {
             }
             const version = ts.version; // Extracted into a const so the form is stable between namespace and module
             const buildInfo: BuildInfo = { bundle, program, version };
+            performance.mark("beforeBuildInfoStringify");
             const buildInfoText = getBuildInfoText(buildInfo);
+            performance.mark("afterBuildInfoStringify");
+            performance.measure("BuildInfo stringify", "beforeBuildInfoStringify", "afterBuildInfoStringify");
             host.buildInfoCallbacks?.onWrite(buildInfoText.length);
             // Pass buildinfo as additional data to avoid having to reparse
             writeFile(host, emitterDiagnostics, buildInfoPath, buildInfoText, /*writeByteOrderMark*/ false, /*sourceFiles*/ undefined, { buildInfo });

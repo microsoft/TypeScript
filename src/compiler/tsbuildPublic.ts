@@ -1504,9 +1504,12 @@ namespace ts {
         if (existing !== undefined && existing.path === path) {
             return existing.buildInfo || undefined;
         }
+        const host = (modifiedTime ? state.host : state.compilerHost);
+        host.buildInfoCallbacks?.onReadStart(options);
         const value = state.readFileWithCache(buildInfoPath);
-        if (value) (modifiedTime ? state.host : state.compilerHost).buildInfoCallbacks?.onRead(value.length, options);
+        host.buildInfoCallbacks?.onReadText(value);
         const buildInfo = value ? ts.getBuildInfo(buildInfoPath, value) : undefined;
+        host.buildInfoCallbacks?.onReadEnd();
         state.buildInfoCache.set(resolvedConfigPath, { path, buildInfo: buildInfo || false, modifiedTime: modifiedTime || missingFileModifiedTime });
         return buildInfo;
     }
