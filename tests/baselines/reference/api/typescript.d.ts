@@ -2338,6 +2338,8 @@ declare namespace ts {
         /** Note that the resulting nodes cannot be checked. */
         symbolToExpression(symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined): Expression | undefined;
         /** Note that the resulting nodes cannot be checked. */
+        symbolToNode(symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined): Node | undefined;
+        /** Note that the resulting nodes cannot be checked. */
         symbolToTypeParameterDeclarations(symbol: Symbol, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined): NodeArray<TypeParameterDeclaration> | undefined;
         /** Note that the resulting nodes cannot be checked. */
         symbolToParameterDeclaration(symbol: Symbol, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined): ParameterDeclaration | undefined;
@@ -2436,7 +2438,7 @@ declare namespace ts {
         AllowEmptyTuple = 524288,
         AllowUniqueESSymbolType = 1048576,
         AllowEmptyIndexInfoType = 2097152,
-        AllowComputedPropertyEnums = 1073741824,
+        WriteComputedProps = 1073741824,
         AllowNodeModulesRelativePaths = 67108864,
         IgnoreErrors = 70221824,
         InObjectTypeLiteral = 4194304,
@@ -2466,7 +2468,7 @@ declare namespace ts {
         InElementType = 2097152,
         InFirstTypeArgument = 4194304,
         InTypeAlias = 8388608,
-        AllowComputedPropertyEnums = 1073741824,
+        WriteComputedProps = 1073741824,
         /** @deprecated */ WriteOwnNameForAnyLike = 0,
         NodeBuilderFlagsMask = 1922071915
     }
@@ -2476,7 +2478,7 @@ declare namespace ts {
         UseOnlyExternalAliasing = 2,
         AllowAnyNodeKind = 4,
         UseAliasDefinedOutsideCurrentScope = 8,
-        AllowComputedPropertyEnums = 16,
+        WriteComputedProps = 16,
     }
     export enum TypePredicateKind {
         This = 0,

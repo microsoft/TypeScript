@@ -464,6 +464,7 @@ namespace ts {
             signatureToSignatureDeclaration: nodeBuilder.signatureToSignatureDeclaration,
             symbolToEntityName: nodeBuilder.symbolToEntityName,
             symbolToExpression: nodeBuilder.symbolToExpression,
+            symbolToNode: nodeBuilder.symbolToNode,
             symbolToTypeParameterDeclarations: nodeBuilder.symbolToTypeParameterDeclarations,
             symbolToParameterDeclaration: nodeBuilder.symbolToParameterDeclaration,
             typeParameterToDeclaration: nodeBuilder.typeParameterToDeclaration,
@@ -4822,8 +4823,8 @@ namespace ts {
             if (flags & SymbolFormatFlags.DoNotIncludeSymbolChain) {
                 nodeFlags |= NodeBuilderFlags.DoNotIncludeSymbolChain;
             }
-            if (flags & SymbolFormatFlags.AllowComputedPropertyEnums) {
-                nodeFlags |= NodeBuilderFlags.AllowComputedPropertyEnums;
+            if (flags & SymbolFormatFlags.WriteComputedProps) {
+                nodeFlags |= NodeBuilderFlags.WriteComputedProps;
             }
             const builder = flags & SymbolFormatFlags.AllowAnyNodeKind ? nodeBuilder.symbolToNode : nodeBuilder.symbolToEntityName;
             return writer ? symbolToStringWorker(writer).getText() : usingSingleLineStringWriter(symbolToStringWorker);
@@ -4927,11 +4928,15 @@ namespace ts {
             };
 
             function symbolToNode(symbol: Symbol, context: NodeBuilderContext, meaning: SymbolFlags) {
-                if (context.flags & NodeBuilderFlags.AllowComputedPropertyEnums) {
+                if (context.flags & NodeBuilderFlags.WriteComputedProps) {
+                    if (symbol.valueDeclaration) {
+                        const name = getNameOfDeclaration(symbol.valueDeclaration);
+                        if (name && isComputedPropertyName(name)) return name;
+                    }
                     const nameType = getSymbolLinks(symbol).nameType;
-                    if (nameType && nameType.flags & TypeFlags.EnumLiteral) {
-                        context.enclosingDeclaration = nameType.symbol.valueDeclaration;
-                        return factory.createComputedPropertyName(symbolToExpression(nameType.symbol, context, meaning));
+                    if (nameType && nameType.flags & (TypeFlags.EnumLiteral | TypeFlags.UniqueESSymbol)) {
+                       context.enclosingDeclaration = nameType.symbol.valueDeclaration;
+                       return factory.createComputedPropertyName(symbolToExpression(nameType.symbol, context, meaning));
                     }
                 }
                 return symbolToExpression(symbol, context, meaning);
@@ -20326,7 +20331,7 @@ namespace ts {
                     shouldSkipElaboration = true; // Retain top-level error for interface implementing issues, otherwise omit it
                 }
                 if (props.length === 1) {
-                    const propName = symbolToString(unmatchedProperty, /*enclosingDeclaration*/ undefined, SymbolFlags.None, SymbolFormatFlags.AllowAnyNodeKind | SymbolFormatFlags.AllowComputedPropertyEnums);
+                    const propName = symbolToString(unmatchedProperty, /*enclosingDeclaration*/ undefined, SymbolFlags.None, SymbolFormatFlags.AllowAnyNodeKind | SymbolFormatFlags.WriteComputedProps);
                     reportError(Diagnostics.Property_0_is_missing_in_type_1_but_required_in_type_2, propName, ...getTypeNamesForErrorDisplay(source, target));
                     if (length(unmatchedProperty.declarations)) {
                         associateRelatedInfo(createDiagnosticForNode(unmatchedProperty.declarations![0], Diagnostics._0_is_declared_here, propName));

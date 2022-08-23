@@ -642,12 +642,9 @@ namespace ts.codefix {
     }
 
     function createPropertyNameFromSymbol(symbol: Symbol, target: ScriptTarget, quotePreference: QuotePreference, checker: TypeChecker) {
-        if (isTransientSymbol(symbol) && symbol.nameType && symbol.nameType.flags & (TypeFlags.UniqueESSymbol | TypeFlags.EnumLiteral)) {
-            const nameTypeSymbol = symbol.nameType.symbol;
-            const expression = checker.symbolToExpression(nameTypeSymbol, SymbolFlags.Value, nameTypeSymbol.valueDeclaration, NodeBuilderFlags.AllowUniqueESSymbolType);
-            if (expression) {
-                return factory.createComputedPropertyName(expression);
-            }
+        if (isTransientSymbol(symbol)) {
+            const prop = checker.symbolToNode(symbol, SymbolFlags.Value, /*enclosingDeclaration*/ undefined, NodeBuilderFlags.WriteComputedProps);
+            if (prop && isComputedPropertyName(prop)) return prop;
         }
         return createPropertyNameNodeForIdentifierOrLiteral(symbol.name, target, quotePreference === QuotePreference.Single);
     }
