@@ -202,6 +202,7 @@ namespace ts {
                             module: null, // eslint-disable-line no-null/no-null
                             noImplicitAny: false
                         },
+                        extends: "./extendsArrayFirst",
                         include: ["../supplemental.*"]
                     }),
                     "dev/configs/extendsArrayFourth.json": JSON.stringify({
@@ -217,7 +218,7 @@ namespace ts {
                         files: [],
                     }),
                     "dev/extendsArrayFails.json": JSON.stringify({
-                        extends: [""],
+                        extends: ["./missingFile"],
                         compilerOptions: {
                             types: []
                         }
@@ -414,7 +415,7 @@ namespace ts {
 
                 testFailure("can report missing configurations", "extendsArrayFails.json", [{
                     code: 6053,
-                    messageText: `File '' not found.`
+                    messageText: `File './missingFile' not found.`
                 }]);
 
                 testFailure("can error when 'extends' is not a string or Array2", "extendsArrayFails2.json", [{

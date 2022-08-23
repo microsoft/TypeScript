@@ -1731,7 +1731,7 @@ namespace ts {
                             i++;
                         }
                         break;
-                    case "listOrElement": 
+                    case "listOrElement":
                         if(opt.element.type === "string"){
                             options[opt.name] = validateJsonOptionValue(opt, args[i] || "", errors);
                             i++;
@@ -2465,11 +2465,8 @@ namespace ts {
             // this is of a type CommandLineOptionOfPrimitiveType
             return undefined;
         }
-        else if (optionDefinition.type === "list") {
+        else if (optionDefinition.type === "list" || optionDefinition.type === "listOrElement") {
             return getCustomTypeMapOfCommandLineOption(optionDefinition.element);
-        }
-        else if(optionDefinition.type === "listOrElement"){
-            return (optionDefinition.element.type === "string") ? undefined : getCustomTypeMapOfCommandLineOption(optionDefinition.element);
         }
         else {
             return optionDefinition.type;
@@ -2987,12 +2984,19 @@ namespace ts {
         return !!value.options;
     }
 
-    interface ExtendsResult { options: CompilerOptions, watchOptions?: WatchOptions, include?: string[], exclude?: string[], files?: string[], compileOnSave?: boolean, extendedSourceFiles?: Set<string>}
+    interface ExtendsResult {
+        options: CompilerOptions,
+        watchOptions?: WatchOptions,
+        include?: string[],
+        exclude?: string[],
+        files?: string[],
+        compileOnSave?: boolean,
+        extendedSourceFiles?: Set<string>
+    }
     /**
      * This *just* extracts options/include/exclude/files out of a config file.
      * It does *not* resolve the included files.
      */
-
     function parseConfig(
         json: any,
         sourceFile: TsConfigSourceFile | undefined,
@@ -3025,7 +3029,7 @@ namespace ts {
         if (ownConfig.extendedConfigPath) {
             // copy the resolution stack so it is never reused between branches in potential diamond-problem scenarios.
             resolutionStack = resolutionStack.concat([resolvedPath]);
-            const result: ExtendsResult = {options: {}};
+            const result: ExtendsResult = { options:{} };
             if(isString(ownConfig.extendedConfigPath)){
                 applyExtendedConfig(result, ownConfig.extendedConfigPath);
             }
@@ -3035,7 +3039,7 @@ namespace ts {
             if(!ownConfig.raw.include && result.include) ownConfig.raw.include = result.include;
             if(!ownConfig.raw.exclude && result.exclude) ownConfig.raw.exclude = result.exclude;
             if(!ownConfig.raw.files && result.files) ownConfig.raw.files = result.files;
-            if (ownConfig.raw.compileOnSave !== undefined && result.compileOnSave) ownConfig.raw.compileOnSave = result.compileOnSave;
+            if (ownConfig.raw.compileOnSave === undefined && result.compileOnSave) ownConfig.raw.compileOnSave = result.compileOnSave;
             if (sourceFile && result.extendedSourceFiles) sourceFile.extendedSourceFiles = arrayFrom(result.extendedSourceFiles.keys());
 
             ownConfig.options = assign(result.options, ownConfig.options);
@@ -3090,7 +3094,7 @@ namespace ts {
         const typeAcquisition = convertTypeAcquisitionFromJsonWorker(json.typeAcquisition || json.typingOptions, basePath, errors, configFileName);
         const watchOptions = convertWatchOptionsFromJsonWorker(json.watchOptions, basePath, errors);
         json.compileOnSave = convertCompileOnSaveOptionFromJson(json, basePath, errors);
-        let extendedConfigPath:  string[] | undefined;
+        let extendedConfigPath: string[] | undefined;
 
         if (json.extends) {
             if (!isCompilerOptionsValue(extendsOptionDeclaration, json.extends)) {
@@ -3275,7 +3279,7 @@ namespace ts {
         }
         if (sourceFile) {
             (result.extendedSourceFiles ??= new Set()).add(extendedResult.fileName);
-            if (isArray(extendedResult.extendedSourceFiles)) {
+            if (extendedResult.extendedSourceFiles) {
                 for (const extenedSourceFile of extendedResult.extendedSourceFiles) {
                     result.extendedSourceFiles.add(extenedSourceFile);
                 }
@@ -3392,24 +3396,13 @@ namespace ts {
 
     function normalizeOptionValue(option: CommandLineOption, basePath: string, value: any): CompilerOptionsValue {
         if (isNullOrUndefined(value)) return undefined;
-        if (option.type === "list") {
+        if (option.type === "listOrElement" && !isArray(value)) return normalizeOptionValue(option.element, basePath, value);
+        else if (option.type === "list" || option.type === "listOrElement") {
             const listOption = option;
             if (listOption.element.isFilePath || !isString(listOption.element.type)) {
                 return filter(map(value, v => normalizeOptionValue(listOption.element, basePath, v)), v => listOption.listPreserveFalsyValues ? true : !!v) as CompilerOptionsValue;
             }
             return value;
-        }
-        if(option.type === "listOrElement"){
-            if (option.element.type === "string"){
-                return normalizeNonListOptionValue(option, basePath, value);
-            }
-            else{
-                const listOption = option;
-                if (listOption.element.isFilePath || !isString(listOption.element.type)) {
-                    return filter(map(value, v => normalizeOptionValue(listOption.element, basePath, v)), v => listOption.listPreserveFalsyValues ? true : !!v) as CompilerOptionsValue;
-                }
-                return value;
-            }
         }
         else if (!isString(option.type)) {
             return option.type.get(isString(value) ? value.toLowerCase() : value);
@@ -3830,15 +3823,12 @@ namespace ts {
                 return typeof value === "number" ? value : "";
             case "boolean":
                 return typeof value === "boolean" ? value : "";
+            case "listOrElement":
+                if (!isArray(value)) return getOptionValueWithEmptyStrings(value, option.element);
+                // fall through to list
             case "list":
                 const elementType = option.element;
                 return isArray(value) ? value.map(v => getOptionValueWithEmptyStrings(v, elementType)) : "";
-            case "listOrElement":
-                if(option.element.type === "string"){
-                    return "";
-                }
-                const typeOfElement = option.element;
-                return isArray(value) ? value.map(v => getOptionValueWithEmptyStrings(v, typeOfElement)) : "";
             default:
                 return forEachEntry(option.type, (optionEnumValue, optionStringValue) => {
                     if (optionEnumValue === value) {
@@ -3849,7 +3839,7 @@ namespace ts {
     }
 
 
-    function getDefaultValueForOption(option: CommandLineOption) {
+    function getDefaultValueForOption(option: CommandLineOption): {} {
         switch (option.type) {
             case "number":
                 return 1;
@@ -3861,11 +3851,7 @@ namespace ts {
             case "list":
                 return [];
             case "listOrElement":
-                if (option.element.type === "string"){
-                    const defaultValue = option.defaultValueDescription;
-                    return option.isFilePath ? `./${defaultValue && typeof defaultValue === "string" ? defaultValue : ""}` : "";
-                }
-                return [];
+                return getDefaultValueForOption(option.element);
             case "object":
                 return {};
             default:

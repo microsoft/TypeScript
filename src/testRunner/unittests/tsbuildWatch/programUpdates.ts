@@ -633,7 +633,7 @@ export function someFn() { }`),
                 const project3Config: File = {
                     path: "/a/b/project3.tsconfig.json",
                     content: JSON.stringify({
-                        extends: ["./extendsCnfig1.tsconfig.json", "./extendsConfig2.tsconfig.json", "./extendsConfig3.tsconfig.json"],
+                        extends: ["./extendsConfig1.tsconfig.json", "./extendsConfig2.tsconfig.json", "./extendsConfig3.tsconfig.json"],
                         compilerOptions: {
                             composite: false,
                         },
