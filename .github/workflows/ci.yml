@@ -11,7 +11,7 @@ on:
       - release-*
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
 
     strategy:
@@ -24,8 +24,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-      with:
-        fetch-depth: 5
     - name: Use node version ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
@@ -33,18 +31,39 @@ jobs:
         check-latest: true
     - run:  npm ci
 
-    # Re: https://github.com/actions/setup-node/pull/125
-    - name: Register Problem Matcher for TSC
-      run: echo "##[add-matcher].github/tsc.json"
-
     - name: Tests
       run:  npm test -- --no-lint
+
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+      with:
+        node-version: "*"
+        check-latest: true
+    - run:  npm ci
 
     - name: Linter
       run:  npm run lint:ci
 
+  browser-integration:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+      with:
+        node-version: "*"
+        check-latest: true
+    - run:  npm ci
+
     - name: Adding playwright
       run: npm install --no-save --no-package-lock playwright
+
+    - name: Build local
+      run: gulp local
 
     - name: Validate the browser can import TypeScript
       run: gulp test-browser-integration

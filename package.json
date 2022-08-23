@@ -28,6 +28,16 @@
     "engines": {
         "node": ">=4.2.0"
     },
+    "files": [
+        "./bin",
+        "./lib",
+        "!./lib/enu",
+        "./loc",
+        "./LICENSE.txt",
+        "./README.md",
+        "./SECURITY.md",
+        "./ThirdPartyNoticeText.txt"
+    ],
     "devDependencies": {
         "@octokit/rest": "latest",
         "@types/async": "latest",
