@@ -65,7 +65,7 @@ In general, things we find useful when reviewing suggestions are:
 5. Change to the TypeScript folder you made: `cd TypeScript`
 6. Install dependencies: `npm ci`
 7. Make sure everything builds and tests pass: `gulp runtests-parallel`
-8. Open the Typescript folder in your editor.
+8. Open the TypeScript folder in your editor.
 9. Follow the directions below to add and debug a test.
 
 ## Tips
