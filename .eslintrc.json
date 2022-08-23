@@ -2,7 +2,6 @@
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
         "warnOnUnsupportedTypeScriptVersion": false,
-        "ecmaVersion": 6,
         "sourceType": "module"
     },
     "env": {
@@ -25,6 +24,17 @@
         { "files": ["*.ts"] }
     ],
     "rules": {
+        // TODO(jakebailey): organize
+        "no-useless-escape": "error",
+        "no-prototype-builtins": "error",
+        "no-self-assign": "error",
+        "no-dupe-else-if": "error",
+        "@typescript-eslint/no-extra-semi": "error",
+        "@typescript-eslint/prefer-as-const": "error",
+        "@typescript-eslint/no-extra-non-null-assertion": "off", // TODO(jakebailey): reenable
+        "@typescript-eslint/no-non-null-asserted-optional-chain": "off", // TODO(jakebailey): reenable
+        "@typescript-eslint/no-array-constructor": "error",
+
         "@typescript-eslint/adjacent-overload-signatures": "error",
         "@typescript-eslint/array-type": "error",
 

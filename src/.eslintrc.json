@@ -6,7 +6,8 @@
     },
     "rules": {
         "@typescript-eslint/no-unnecessary-qualifier": "error",
-        "@typescript-eslint/no-unnecessary-type-assertion": "error"
+        "@typescript-eslint/no-unnecessary-type-assertion": "error",
+        "@typescript-eslint/restrict-plus-operands": "error"
     },
     "overrides": [
         {
