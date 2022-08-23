@@ -2476,7 +2476,7 @@ declare namespace ts {
         UseOnlyExternalAliasing = 2,
         AllowAnyNodeKind = 4,
         UseAliasDefinedOutsideCurrentScope = 8,
-        AllowComputedPropertyEnums = 9,
+        AllowComputedPropertyEnums = 16,
     }
     export enum TypePredicateKind {
         This = 0,
