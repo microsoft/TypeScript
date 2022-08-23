@@ -42558,12 +42558,30 @@ namespace ts {
                         if (!links.resolvedSymbol) {
                             const expressionType = checkExpressionCached(name.expression);
                             const infos = getApplicableIndexInfos(expressionType, getLiteralTypeFromPropertyName(name.name));
-                            if (length(infos) && infos[0].declaration && infos[0].declaration?.symbol.flags & SymbolFlags.Signature && infos[0].declaration?.jsDoc) {
-                                const copy = createSymbol(SymbolFlags.Signature, InternalSymbolName.Index);
-                                copy.declarations = mapDefined(infos, i => i.declaration);
-                                copy.parent = expressionType.aliasSymbol ? expressionType.aliasSymbol : expressionType.symbol ? expressionType.symbol : getSymbolAtLocation(copy.declarations[0].parent);
-                                links.resolvedSymbol = copy;
-                                return copy;
+                            if (infos.length && (expressionType as any).members && (expressionType as any).members.get(InternalSymbolName.Index)) {
+                                const resolved = resolveStructuredTypeMembers(expressionType as ObjectType);
+                                const symbol = resolved.members.get(InternalSymbolName.Index);
+                                if (infos === getIndexInfosOfType(expressionType)) {
+                                    links.resolvedSymbol = symbol;
+                                }
+                                else if (symbol) {
+                                    const symbolLinks = getSymbolLinks(symbol);
+                                    const declarationList = mapDefined(infos, i => i.declaration);
+                                    const nodeListId = map(declarationList, getNodeId).join(",");
+                                    if (!symbolLinks.filteredIndexSymbolCache) {
+                                        symbolLinks.filteredIndexSymbolCache = new Map();
+                                    }
+                                    if (symbolLinks.filteredIndexSymbolCache.has(nodeListId)) {
+                                        links.resolvedSymbol = symbolLinks.filteredIndexSymbolCache.get(nodeListId)!;
+                                    }
+                                    else {
+                                        const copy = createSymbol(SymbolFlags.Signature, InternalSymbolName.Index);
+                                        copy.declarations = mapDefined(infos, i => i.declaration);
+                                        copy.parent = expressionType.aliasSymbol ? expressionType.aliasSymbol : expressionType.symbol ? expressionType.symbol : getSymbolAtLocation(copy.declarations[0].parent);
+                                        symbolLinks.filteredIndexSymbolCache.set(nodeListId, copy);
+                                        links.resolvedSymbol = symbolLinks.filteredIndexSymbolCache.get(nodeListId)!;
+                                    }
+                                }
                             }
                         }
                     }

@@ -5318,6 +5318,7 @@ namespace ts {
         isConstructorDeclaredProperty?: boolean;    // Property declared through 'this.x = ...' assignment in constructor
         tupleLabelDeclaration?: NamedTupleMember | ParameterDeclaration; // Declaration associated with the tuple's label
         accessibleChainCache?: ESMap<string, Symbol[] | undefined>;
+        filteredIndexSymbolCache?: ESMap<string, Symbol> //Symbol with applicable declarations
     }
 
     /* @internal */

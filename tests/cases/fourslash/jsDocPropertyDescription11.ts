@@ -3,10 +3,11 @@
 //// type AliasExample = {
 ////     /** Something generic */
 ////     [p: string]: string;
-////     [key: `any${string}`]: string; //TODOFIX add JSDoc here
+////     /** Something else */
+////     [key: `any${string}`]: string;
 //// }
 //// function aliasExample(e: AliasExample) {
 ////     console.log(e./*alias*/anything);
 //// }
 
-verify.quickInfoAt("alias", "(index) AliasExample[string | `any${string}`]: string", "Something generic");
+verify.quickInfoAt("alias", "(index) AliasExample[string | `any${string}`]: string", "Something generic\nSomething else");

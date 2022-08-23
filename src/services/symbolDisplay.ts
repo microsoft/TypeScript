@@ -499,67 +499,58 @@ namespace ts.SymbolDisplay {
         }
         if (!hasAddedSymbolInfo) {
             if (symbolKind !== ScriptElementKind.unknown) {
-                let indexInfos;
-                if(symbolKind === ScriptElementKind.indexSignatureElement) indexInfos = typeChecker.getIndexInfosOfIndexSymbol(symbol);
-                    if (type) {
-                        if (isThisExpression) {
-                            prefixNextMeaning();
-                            displayParts.push(keywordPart(SyntaxKind.ThisKeyword));
+                if (type) {
+                    if (isThisExpression) {
+                        prefixNextMeaning();
+                        displayParts.push(keywordPart(SyntaxKind.ThisKeyword));
+                    }
+                    else {
+                        addPrefixForAnyFunctionOrVar(symbol, symbolKind);
+                    }
+                    // For properties, variables and local vars: show the type
+                    if (symbolKind === ScriptElementKind.memberVariableElement ||
+                        symbolKind === ScriptElementKind.memberGetAccessorElement ||
+                        symbolKind === ScriptElementKind.memberSetAccessorElement ||
+                        symbolKind === ScriptElementKind.jsxAttribute ||
+                        symbolFlags & SymbolFlags.Variable ||
+                        symbolKind === ScriptElementKind.localVariableElement ||
+                        symbolKind === ScriptElementKind.indexSignatureElement ||
+                        isThisExpression) {
+                        displayParts.push(punctuationPart(SyntaxKind.ColonToken));
+                        displayParts.push(spacePart());
+                        // If the type is type parameter, format it specially
+                        if (type.symbol && type.symbol.flags & SymbolFlags.TypeParameter && symbolKind !== ScriptElementKind.indexSignatureElement) {
+                            const typeParameterParts = mapToDisplayParts(writer => {
+                                const param = typeChecker.typeParameterToDeclaration(type as TypeParameter, enclosingDeclaration, symbolDisplayNodeBuilderFlags)!;
+                                getPrinter().writeNode(EmitHint.Unspecified, param, getSourceFileOfNode(getParseTreeNode(enclosingDeclaration)), writer);
+                            });
+                            addRange(displayParts, typeParameterParts);
                         }
                         else {
-                            addPrefixForAnyFunctionOrVar(symbol, symbolKind, indexInfos);
+                            addRange(displayParts, typeToDisplayParts(typeChecker, type, enclosingDeclaration));
                         }
-                        // For properties, variables and local vars: show the type
-                        if (symbolKind === ScriptElementKind.memberVariableElement ||
-                            symbolKind === ScriptElementKind.memberGetAccessorElement ||
-                            symbolKind === ScriptElementKind.memberSetAccessorElement ||
-                            symbolKind === ScriptElementKind.jsxAttribute ||
-                            symbolFlags & SymbolFlags.Variable ||
-                            symbolKind === ScriptElementKind.localVariableElement ||
-                            symbolKind === ScriptElementKind.indexSignatureElement ||
-                            isThisExpression) {
-                            displayParts.push(punctuationPart(SyntaxKind.ColonToken));
+                        if ((symbol as TransientSymbol).target && ((symbol as TransientSymbol).target as TransientSymbol).tupleLabelDeclaration) {
+                            const labelDecl = ((symbol as TransientSymbol).target as TransientSymbol).tupleLabelDeclaration!;
+                            Debug.assertNode(labelDecl.name, isIdentifier);
                             displayParts.push(spacePart());
-                            // If the type is type parameter, format it specially
-                            if (type.symbol && type.symbol.flags & SymbolFlags.TypeParameter && symbolKind !== ScriptElementKind.indexSignatureElement) {
-                                const typeParameterParts = mapToDisplayParts(writer => {
-                                    const param = typeChecker.typeParameterToDeclaration(type as TypeParameter, enclosingDeclaration, symbolDisplayNodeBuilderFlags)!;
-                                    getPrinter().writeNode(EmitHint.Unspecified, param, getSourceFileOfNode(getParseTreeNode(enclosingDeclaration)), writer);
-                                });
-                                addRange(displayParts, typeParameterParts);
-                            }
-                            //If the type is index signature, format it specially as well
-                            else if(symbolKind === ScriptElementKind.indexSignatureElement){
-                                if(indexInfos){
-                                    const indexTypeParts = typeToDisplayParts(typeChecker, indexInfos[0].type);
-                                    addRange(displayParts, indexTypeParts);
-                                }
-                            }
-                            else {
-                                addRange(displayParts, typeToDisplayParts(typeChecker, type, enclosingDeclaration));
-                            }
-                            if ((symbol as TransientSymbol).target && ((symbol as TransientSymbol).target as TransientSymbol).tupleLabelDeclaration) {
-                                const labelDecl = ((symbol as TransientSymbol).target as TransientSymbol).tupleLabelDeclaration!;
-                                Debug.assertNode(labelDecl.name, isIdentifier);
-                                displayParts.push(spacePart());
-                                displayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
-                                displayParts.push(textPart(idText(labelDecl.name)));
-                                displayParts.push(punctuationPart(SyntaxKind.CloseParenToken));
-                            }
-                        }
-                        else if (symbolFlags & SymbolFlags.Function ||
-                            symbolFlags & SymbolFlags.Method ||
-                            symbolFlags & SymbolFlags.Constructor ||
-                            symbolFlags & SymbolFlags.Signature ||
-                            symbolFlags & SymbolFlags.Accessor ||
-                            symbolKind === ScriptElementKind.memberFunctionElement) {
-                            const allSignatures = type.getNonNullableType().getCallSignatures();
-                            if (allSignatures.length) {
-                                addSignatureDisplayParts(allSignatures[0], allSignatures);
-                                hasMultipleSignatures = allSignatures.length > 1;
-                            }
+                            displayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
+                            displayParts.push(textPart(idText(labelDecl.name)));
+                            displayParts.push(punctuationPart(SyntaxKind.CloseParenToken));
                         }
                     }
+                    else if (symbolFlags & SymbolFlags.Function ||
+                        symbolFlags & SymbolFlags.Method ||
+                        symbolFlags & SymbolFlags.Constructor ||
+                        symbolFlags & SymbolFlags.Signature ||
+                        symbolFlags & SymbolFlags.Accessor ||
+                        symbolKind === ScriptElementKind.memberFunctionElement) {
+                        const allSignatures = type.getNonNullableType().getCallSignatures();
+                        if (allSignatures.length) {
+                            addSignatureDisplayParts(allSignatures[0], allSignatures);
+                            hasMultipleSignatures = allSignatures.length > 1;
+                        }
+                    }
+                }
             }
             else {
                 symbolKind = getSymbolKind(typeChecker, symbol, location);
@@ -648,34 +639,37 @@ namespace ts.SymbolDisplay {
             displayParts.push(spacePart());
         }
 
-        function addFullSymbolName(symbolToDisplay: Symbol, enclosingDeclaration?: Node, indexInfos?: IndexInfo[]) {
+        function addFullSymbolName(symbolToDisplay: Symbol, enclosingDeclaration?: Node) {
+            let indexInfos;
+
             if (alias && symbolToDisplay === symbol) {
                 symbolToDisplay = alias;
             }
-            const fullSymbolDisplayParts = symbolToDisplayParts(typeChecker, symbolToDisplay, enclosingDeclaration || sourceFile, /*meaning*/ undefined,
-                SymbolFormatFlags.WriteTypeParametersOrArguments | SymbolFormatFlags.UseOnlyExternalAliasing | SymbolFormatFlags.AllowAnyNodeKind);
-            if (symbolToDisplay.flags & SymbolFlags.Signature) {
-                if (indexInfos) {
-                    let index = 1;
-                    fullSymbolDisplayParts[index++] = punctuationPart(SyntaxKind.OpenBracketToken);
-                    if (length(indexInfos)) {
-                        //Needed to handle more than one type of index
-                        for (let info = 0; info < indexInfos.length; info++) {
-                            const indexTypeDisplayParts = typeToDisplayParts(typeChecker, indexInfos[info].keyType);
-                            //Needed to handle template literals
-                            for (const part of indexTypeDisplayParts) fullSymbolDisplayParts[index++] = part;
-                            if (info !== indexInfos.length - 1) {
-                                fullSymbolDisplayParts[index++] = spacePart();
-                                fullSymbolDisplayParts[index++] = punctuationPart(SyntaxKind.BarToken);
-                                fullSymbolDisplayParts[index++] = spacePart();
-                            }
-                        }
-                        fullSymbolDisplayParts[index] = punctuationPart(SyntaxKind.CloseBracketToken);
+            if (symbolKind === ScriptElementKind.indexSignatureElement) {
+                indexInfos = typeChecker.getIndexInfosOfIndexSymbol(symbolToDisplay);
+            }
+
+            let fullSymbolDisplayParts: SymbolDisplayPart[] = [];
+            if (symbolToDisplay.flags & SymbolFlags.Signature && indexInfos) {
+                if (symbolToDisplay.parent) {
+                    fullSymbolDisplayParts = symbolToDisplayParts(typeChecker, symbolToDisplay.parent);
+                }
+                fullSymbolDisplayParts.push(punctuationPart(SyntaxKind.OpenBracketToken));
+                //Needed to handle more than one type of index
+                indexInfos.forEach((info, i) => {
+                    //Needed to handle template literals
+                    fullSymbolDisplayParts.push(...typeToDisplayParts(typeChecker, info.keyType));
+                    if (i !== indexInfos.length - 1) {
+                        fullSymbolDisplayParts.push(spacePart());
+                        fullSymbolDisplayParts.push(punctuationPart(SyntaxKind.BarToken));
+                        fullSymbolDisplayParts.push(spacePart());
                     }
-                }
-                else {
-                    fullSymbolDisplayParts[2] = textOrKeywordPart("Any"); //This is the fallback in case else fails
-                }
+                });
+                fullSymbolDisplayParts.push(punctuationPart(SyntaxKind.CloseBracketToken));
+            }
+            else {
+                fullSymbolDisplayParts = symbolToDisplayParts(typeChecker, symbolToDisplay, enclosingDeclaration || sourceFile, /*meaning*/ undefined,
+                    SymbolFormatFlags.WriteTypeParametersOrArguments | SymbolFormatFlags.UseOnlyExternalAliasing | SymbolFormatFlags.AllowAnyNodeKind);
             }
             addRange(displayParts, fullSymbolDisplayParts);
             if (symbol.flags & SymbolFlags.Optional) {
@@ -683,14 +677,13 @@ namespace ts.SymbolDisplay {
             }
         }
 
-        function addPrefixForAnyFunctionOrVar(symbol: Symbol, symbolKind: string, indexInfos?: IndexInfo[]) {
+        function addPrefixForAnyFunctionOrVar(symbol: Symbol, symbolKind: string) {
             prefixNextMeaning();
             if (symbolKind) {
                 pushSymbolKind(symbolKind);
                 if (symbol && !some(symbol.declarations, d => isArrowFunction(d) || (isFunctionExpression(d) || isClassExpression(d)) && !d.name)) {
                     displayParts.push(spacePart());
-                    const enclosingDeclaration = undefined;
-                    addFullSymbolName(symbol, enclosingDeclaration, indexInfos);
+                    addFullSymbolName(symbol);
                 }
             }
         }
