@@ -82,8 +82,8 @@
         "@typescript-eslint/type-annotation-spacing": "error",
         "@typescript-eslint/unified-signatures": "error",
 
-        "@typescript-eslint/no-extra-non-null-assertion": "off", // TODO(jakebailey): reenable
-        "@typescript-eslint/no-non-null-asserted-optional-chain": "off", // TODO(jakebailey): reenable
+        "@typescript-eslint/no-extra-non-null-assertion": "error",
+        "@typescript-eslint/no-non-null-asserted-optional-chain": "error",
 
         // scripts/eslint/rules
         "local/object-literal-surrounding-space": "error",
