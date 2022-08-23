@@ -7195,7 +7195,9 @@ namespace ts {
 
     /*@internal*/
     export interface BuildInfoCallbacks {
-        onRead(size: number, compilerOptions: CompilerOptions | undefined): void;
+        onReadStart(compilerOptions: CompilerOptions | undefined): void;
+        onReadText(text: string | undefined): void;
+        onReadEnd(): void;
         onWrite(size: number): void;
         revertLastWrite(): void;
         clearLastWrite(): void;

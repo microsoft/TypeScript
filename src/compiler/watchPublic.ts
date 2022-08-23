@@ -18,10 +18,11 @@ namespace ts {
             buildInfo = host.getBuildInfo(buildInfoPath, compilerOptions);
         }
         else {
+            host.buildInfoCallbacks?.onReadStart(compilerOptions);
             const content = host.readFile(buildInfoPath);
-            if (!content) return undefined;
-            host.buildInfoCallbacks?.onRead(content.length, compilerOptions);
-            buildInfo = getBuildInfo(buildInfoPath, content);
+            host.buildInfoCallbacks?.onReadText(content);
+            buildInfo = content ? getBuildInfo(buildInfoPath, content) : undefined;
+            host.buildInfoCallbacks?.onReadEnd();
         }
         if (!buildInfo || buildInfo.version !== version || !buildInfo.program) return undefined;
         return { buildInfo, buildInfoPath };
