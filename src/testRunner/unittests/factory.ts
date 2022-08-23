@@ -81,5 +81,40 @@ namespace ts {
                 checkRhs(SyntaxKind.QuestionQuestionEqualsToken, /*expectParens*/ false);
             });
         });
+
+        describe("deprecations", () => {
+            beforeEach(() => {
+                Debug.enableDeprecationWarnings = false;
+            });
+
+            afterEach(() => {
+                Debug.enableDeprecationWarnings = true;
+            });
+
+            // https://github.com/microsoft/TypeScript/issues/50259
+            it("deprecated createConstructorDeclaration overload does not throw", () => {
+                const body = factory.createBlock([]);
+                assert.doesNotThrow(() => factory.createConstructorDeclaration(
+                    /*decorators*/ undefined,
+                    /*modifiers*/ undefined,
+                    /*parameters*/ [],
+                    body,
+                ));
+            });
+
+            // https://github.com/microsoft/TypeScript/issues/50259
+            it("deprecated updateConstructorDeclaration overload does not throw", () => {
+                const body = factory.createBlock([]);
+                const ctor = factory.createConstructorDeclaration(/*modifiers*/ undefined, [], body);
+                assert.doesNotThrow(() => factory.updateConstructorDeclaration(
+                    ctor,
+                    ctor.decorators,
+                    ctor.modifiers,
+                    ctor.parameters,
+                    ctor.body,
+                ));
+            });
+        });
+
     });
 }

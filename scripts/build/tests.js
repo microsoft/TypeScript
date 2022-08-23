@@ -1,5 +1,4 @@
 // @ts-check
-const gulp = require("gulp");
 const del = require("del");
 const fs = require("fs");
 const os = require("os");
@@ -28,7 +27,7 @@ exports.localTest262Baseline = "internal/baselines/test262/local";
 async function runConsoleTests(runJs, defaultReporter, runInParallel, watchMode, cancelToken = CancellationToken.none) {
     return;
     let testTimeout = cmdLineOptions.timeout;
-    let tests = cmdLineOptions.tests;
+    const tests = cmdLineOptions.tests;
     const inspect = cmdLineOptions.break || cmdLineOptions.inspect;
     const runners = cmdLineOptions.runners;
     const light = cmdLineOptions.light;
@@ -73,7 +72,7 @@ async function runConsoleTests(runJs, defaultReporter, runInParallel, watchMode,
     const reporter = cmdLineOptions.reporter || defaultReporter;
 
     /** @type {string[]} */
-    let args = [];
+    const args = [];
 
     // timeout normally isn't necessary but Travis-CI has been timing out on compiler baselines occasionally
     // default timeout is 2sec which really should be enough, but maybe we just need a small amount longer
@@ -102,7 +101,7 @@ async function runConsoleTests(runJs, defaultReporter, runInParallel, watchMode,
             args.push("--no-colors");
         }
         if (inspect !== undefined) {
-            args.unshift((inspect == "" || inspect === true) ? "--inspect-brk" : "--inspect-brk="+inspect);
+            args.unshift((inspect === "" || inspect === true) ? "--inspect-brk" : "--inspect-brk="+inspect);
             args.push("-t", "0");
         }
         else {
@@ -161,7 +160,7 @@ async function runConsoleTests(runJs, defaultReporter, runInParallel, watchMode,
 exports.runConsoleTests = runConsoleTests;
 
 async function cleanTestDirs() {
-    await del([exports.localBaseline, exports.localRwcBaseline])
+    await del([exports.localBaseline, exports.localRwcBaseline]);
     mkdirP.sync(exports.localRwcBaseline);
     mkdirP.sync(exports.localBaseline);
 }
@@ -215,5 +214,5 @@ function deleteTemporaryProjectOutput() {
 }
 
 function regExpEscape(text) {
-    return text.replace(/[.*+?^${}()|\[\]\\]/g, '\\$&');
+    return text.replace(/[.*+?^${}()|\[\]\\]/g, "\\$&");
 }

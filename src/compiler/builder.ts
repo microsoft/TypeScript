@@ -864,15 +864,25 @@ namespace ts {
         return !!outFile(info.options || {});
     }
 
-    /**
-     * Gets the program information to be emitted in buildInfo so that we can use it to create new program
-     */
     function getProgramBuildInfo(
         state: BuilderProgramState,
         host: HostForComputeHash,
+    ) {
+        if (outFile(state.compilerOptions) && !state.compilerOptions.composite && !state.compilerOptions.cacheResolutions) return;
+        performance.mark("beforeGetProgramBuildInfo");
+        const result = getProgramBuildInfoWorker(state, host);
+        performance.mark("afterGetProgramBuildInfo");
+        performance.measure("BuildInfo generation", "beforeGetProgramBuildInfo", "afterGetProgramBuildInfo");
+        return result;
+    }
+
+    /**
+     * Gets the program information to be emitted in buildInfo so that we can use it to create new program
+     */
+    function getProgramBuildInfoWorker(
+        state: BuilderProgramState,
+        host: HostForComputeHash,
     ): ProgramBuildInfo | undefined {
-        const outFilePath = outFile(state.compilerOptions);
-        if (outFilePath && !state.compilerOptions.composite && !state.compilerOptions.cacheResolutions) return;
         const currentDirectory = Debug.checkDefined(state.program).getCurrentDirectory();
         const getCanonicalFileName = createGetCanonicalFileName(state.program!.useCaseSensitiveFileNames());
         const buildInfoPath = getNormalizedAbsolutePath(getTsBuildInfoEmitOutputFilePath(state.compilerOptions)!, currentDirectory);
@@ -888,7 +898,7 @@ namespace ts {
         let resolutionEntries: ProgramBuildInfoResolutionEntry[] | undefined;
         let resolutionEntryToResolutionEntryId: Map<ProgramBuildInfoResolutionEntryId> | undefined;
         let affectedFilesHash: ESMap<ProgramBuildInfoAbsoluteFileId, string | undefined> | undefined;
-        if (outFilePath) {
+        if (outFile(state.compilerOptions)) {
             let fileInfos: string[] | undefined;
             if (state.compilerOptions.composite) {
                 state.program!.getRootFileNames().forEach(f => {

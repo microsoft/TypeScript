@@ -10229,6 +10229,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Project_0_is_out_of_date_because_there_was_error_reading_file_1_6401" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Project '{0}' is out of date because there was error reading file '{1}']]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[O projeto '{0}' está desatualizado porque ocorreu um erro ao ler o arquivo '{1}']]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Project_0_is_up_to_date_6361" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Project '{0}' is up to date]]></Val>
@@ -13814,11 +13823,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";This_module_is_declared_with_using_export_and_can_only_be_used_with_a_default_import_when_using_the__2594" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";This_module_is_declared_with_export_and_can_only_be_used_with_a_default_import_when_using_the_0_flag_2594" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[This module is declared with using 'export =', and can only be used with a default import when using the '{0}' flag.]]></Val>
+          <Val><![CDATA[This module is declared with 'export =', and can only be used with a default import when using the '{0}' flag.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Esse módulo é declarado com o uso de 'export =' e só pode ser usado com uma importação padrão ao usar o sinalizador '{0}'.]]></Val>
+            <Val><![CDATA[Este módulo é declarado com 'export =', e só pode ser usado com uma importação padrão ao usar o sinalizador '{0}'.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

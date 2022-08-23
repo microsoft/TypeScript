@@ -1,7 +1,7 @@
-import { TSESTree, AST_NODE_TYPES } from "@typescript-eslint/utils";
-import { createRule } from "./utils";
+const { TSESTree, AST_NODE_TYPES } = require("@typescript-eslint/utils");
+const { createRule } = require("./utils");
 
-export = createRule({
+module.exports = createRule({
     name: "no-double-space",
     meta: {
         docs: {
@@ -20,7 +20,8 @@ export = createRule({
         const sourceCode = context.getSourceCode();
         const lines = sourceCode.getLines();
 
-        const isStringLiteral = (node: TSESTree.Node | null): boolean => {
+        /** @type {(node: TSESTree.Node | null) => boolean} */
+        const isStringLiteral = (node) => {
             return !!(node && (
                 (node.type === AST_NODE_TYPES.TemplateElement) ||
                 (node.type === AST_NODE_TYPES.TemplateLiteral && node.quasis) ||
@@ -28,11 +29,13 @@ export = createRule({
             ));
         };
 
-        const isRegexLiteral = (node: TSESTree.Node | null): boolean => {
+        /** @type {(node: TSESTree.Node | null) => boolean} */
+        const isRegexLiteral = (node) => {
             return !!(node && node.type === AST_NODE_TYPES.Literal && Object.prototype.hasOwnProperty.call(node, "regex"));
         };
 
-        const checkDoubleSpace = (node: TSESTree.Node) => {
+        /** @type {(node: TSESTree.Node) => void} */
+        const checkDoubleSpace = (node) => {
             lines.forEach((line, index) => {
                 const firstNonSpace = /\S/.exec(line);
                 if (!firstNonSpace || line.includes("@param")) {
