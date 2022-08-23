@@ -1,13 +1,7 @@
-import { AST_NODE_TYPES, TSESTree } from "@typescript-eslint/utils";
-import { createRule } from "./utils";
+const { AST_NODE_TYPES, TSESTree } = require("@typescript-eslint/utils");
+const { createRule } = require("./utils");
 
-type MessageId = "onlyArrowFunctionsError";
-type Options = [{
-    allowNamedFunctions?: boolean;
-    allowDeclarations?: boolean;
-}];
-
-export = createRule<Options, MessageId>({
+module.exports = createRule({
     name: "only-arrow-functions",
     meta: {
         docs: {
@@ -27,6 +21,7 @@ export = createRule<Options, MessageId>({
         }],
         type: "suggestion",
     },
+    /** @type {[{ allowNamedFunctions?: boolean; allowDeclarations?: boolean }]} */
     defaultOptions: [{
         allowNamedFunctions: false,
         allowDeclarations: false,
@@ -34,11 +29,11 @@ export = createRule<Options, MessageId>({
 
     create(context, [{ allowNamedFunctions, allowDeclarations }]) {
 
-        const isThisParameter = (node: TSESTree.FunctionDeclaration | TSESTree.FunctionExpression) => (
-            node.params.length && !!node.params.find(param => param.type === AST_NODE_TYPES.Identifier && param.name === "this")
-        );
+        /** @type {(node: TSESTree.FunctionDeclaration | TSESTree.FunctionExpression) => boolean} */
+        const isThisParameter = (node) => !!node.params.length && !!node.params.find(param => param.type === AST_NODE_TYPES.Identifier && param.name === "this");
 
-        const isMethodType = (node: TSESTree.Node) => {
+        /** @type {(node: TSESTree.Node) => boolean} */
+        const isMethodType = (node) => {
             const types = [
                 AST_NODE_TYPES.MethodDefinition,
                 AST_NODE_TYPES.Property,
@@ -52,7 +47,8 @@ export = createRule<Options, MessageId>({
             return node.type === AST_NODE_TYPES.FunctionExpression && types.includes(parent.type);
         };
 
-        const stack: boolean[] = [];
+        /** @type {boolean[]} */
+        const stack = [];
         const enterFunction = () => {
             stack.push(false);
         };
@@ -63,7 +59,8 @@ export = createRule<Options, MessageId>({
             }
         };
 
-        const exitFunction = (node: TSESTree.FunctionDeclaration | TSESTree.FunctionExpression) => {
+        /** @type {(node: TSESTree.FunctionDeclaration | TSESTree.FunctionExpression) => void} */
+        const exitFunction = (node) => {
             const methodUsesThis = stack.pop();
 
             if (node.type === AST_NODE_TYPES.FunctionDeclaration && allowDeclarations) {

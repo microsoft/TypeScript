@@ -1,13 +1,13 @@
 /* Tracing events for the compiler. */
 
 /*@internal*/
-namespace ts { // eslint-disable-line one-namespace-per-file
+namespace ts { // eslint-disable-line local/one-namespace-per-file
     // should be used as tracing?.___
     export let tracing: typeof tracingEnabled | undefined;
     // enable the above using startTracing()
 
     // `tracingEnabled` should never be used directly, only through the above
-    namespace tracingEnabled { // eslint-disable-line one-namespace-per-file
+    namespace tracingEnabled { // eslint-disable-line local/one-namespace-per-file
         type Mode = "project" | "build" | "server";
 
         let fs: typeof import("fs");

@@ -1,7 +1,7 @@
-import { AST_NODE_TYPES, TSESTree } from "@typescript-eslint/utils";
-import { createRule } from "./utils";
+const { AST_NODE_TYPES, TSESTree } = require("@typescript-eslint/utils");
+const { createRule } = require("./utils");
 
-export = createRule({
+module.exports = createRule({
     name: "debug-assert",
     meta: {
         docs: {
@@ -18,19 +18,23 @@ export = createRule({
     defaultOptions: [],
 
     create(context) {
-        const isArrowFunction = (node: TSESTree.Node) => node.type === AST_NODE_TYPES.ArrowFunctionExpression;
-        const isStringLiteral = (node: TSESTree.Node): boolean => (
+        /** @type {(node: TSESTree.Node) => boolean} */
+        const isArrowFunction = (node) => node.type === AST_NODE_TYPES.ArrowFunctionExpression;
+        /** @type {(node: TSESTree.Node) => boolean} */
+        const isStringLiteral = (node) => (
             (node.type === AST_NODE_TYPES.Literal && typeof node.value === "string") || node.type === AST_NODE_TYPES.TemplateLiteral
         );
 
-        const isDebugAssert = (node: TSESTree.MemberExpression): boolean => (
+        /** @type {(node: TSESTree.MemberExpression) => boolean} */
+        const isDebugAssert = (node) => (
             node.object.type === AST_NODE_TYPES.Identifier
                 && node.object.name === "Debug"
                 && node.property.type === AST_NODE_TYPES.Identifier
                 && node.property.name === "assert"
         );
 
-        const checkDebugAssert = (node: TSESTree.CallExpression) => {
+        /** @type {(node: TSESTree.CallExpression) => void} */
+        const checkDebugAssert = (node) => {
             const args = node.arguments;
             const argsLen = args.length;
             if (!(node.callee.type === AST_NODE_TYPES.MemberExpression && isDebugAssert(node.callee)) || argsLen < 2) {

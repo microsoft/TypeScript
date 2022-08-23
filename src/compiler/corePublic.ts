@@ -127,7 +127,7 @@ namespace ts {
         export function tryGetNativeMap(): MapConstructor {
             // Internet Explorer's Map doesn't support iteration, so don't use it.
             const gMap = globals?.Map;
-            // eslint-disable-next-line no-in-operator
+            // eslint-disable-next-line local/no-in-operator
             const constructor = typeof gMap !== "undefined" && "entries" in gMap.prototype && new gMap([[0, 0]]).size === 1 ? gMap : undefined;
             if (!constructor) {
                 throw new Error("No compatible Map implementation found.");
@@ -141,7 +141,7 @@ namespace ts {
         export function tryGetNativeSet(): SetConstructor {
             // Internet Explorer's Set doesn't support iteration, so don't use it.
             const gSet = globals?.Set;
-            // eslint-disable-next-line no-in-operator
+            // eslint-disable-next-line local/no-in-operator
             const constructor = typeof gSet !== "undefined" && "entries" in gSet.prototype && new gSet([0]).size === 1 ? gSet : undefined;
             if (!constructor) {
                 throw new Error("No compatible Set implementation found.");

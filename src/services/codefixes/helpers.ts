@@ -60,21 +60,34 @@ namespace ts.codefix {
         isAmbient = false,
     ): void {
         const declarations = symbol.getDeclarations();
-        if (!(declarations && declarations.length)) {
-            return undefined;
-        }
+        const declaration = declarations?.[0];
         const checker = context.program.getTypeChecker();
         const scriptTarget = getEmitScriptTarget(context.program.getCompilerOptions());
-        const declaration = declarations[0];
+
+        /**
+         * (#49811)
+         * Note that there are cases in which the symbol declaration is not present. For example, in the code below both
+         * `MappedIndirect.ax` and `MappedIndirect.ay` have no declaration node attached (due to their mapped-type
+         * parent):
+         *
+         * >>> ```ts
+         * >>> type Base = { ax: number; ay: string };
+         * >>> type BaseKeys = keyof Base;
+         * >>> type MappedIndirect = { [K in BaseKeys]: boolean };
+         * >>> ```
+         *
+         * In such cases, we assume the declaration to be a `PropertySignature`.
+         */
+        const kind = declaration?.kind ?? SyntaxKind.PropertySignature;
         const name = getSynthesizedDeepClone(getNameOfDeclaration(declaration), /*includeTrivia*/ false) as PropertyName;
-        const visibilityModifier = createVisibilityModifier(getEffectiveModifierFlags(declaration));
+        const visibilityModifier = createVisibilityModifier(declaration ? getEffectiveModifierFlags(declaration) : ModifierFlags.None);
         const modifiers = visibilityModifier ? factory.createNodeArray([visibilityModifier]) : undefined;
         const type = checker.getWidenedType(checker.getTypeOfSymbolAtLocation(symbol, enclosingDeclaration));
         const optional = !!(symbol.flags & SymbolFlags.Optional);
         const ambient = !!(enclosingDeclaration.flags & NodeFlags.Ambient) || isAmbient;
         const quotePreference = getQuotePreference(sourceFile, preferences);
 
-        switch (declaration.kind) {
+        switch (kind) {
             case SyntaxKind.PropertySignature:
             case SyntaxKind.PropertyDeclaration:
                 const flags = quotePreference === QuotePreference.Single ? NodeBuilderFlags.UseSingleQuotesForStringLiteralType : undefined;
@@ -88,13 +101,14 @@ namespace ts.codefix {
                 }
                 addClassElement(factory.createPropertyDeclaration(
                     modifiers,
-                    name,
+                    declaration ? name : symbol.getName(),
                     optional && (preserveOptional & PreserveOptionalFlags.Property) ? factory.createToken(SyntaxKind.QuestionToken) : undefined,
                     typeNode,
                     /*initializer*/ undefined));
                 break;
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor: {
+                Debug.assertIsDefined(declarations);
                 let typeNode = checker.typeToTypeNode(type, enclosingDeclaration, /*flags*/ undefined, getNoopSymbolTrackerWithResolver(context));
                 const allAccessors = getAllAccessorDeclarations(declarations, declaration as AccessorDeclaration);
                 const orderedAccessors = allAccessors.secondAccessor
@@ -138,6 +152,7 @@ namespace ts.codefix {
                 // If there is more than one overload but no implementation signature
                 // (eg: an abstract method or interface declaration), there is a 1-1
                 // correspondence of declarations and signatures.
+                Debug.assertIsDefined(declarations);
                 const signatures = type.isUnion() ? flatMap(type.types, t => t.getCallSignatures()) : type.getCallSignatures();
                 if (!some(signatures)) {
                     break;

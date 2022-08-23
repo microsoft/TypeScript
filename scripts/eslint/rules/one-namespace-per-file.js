@@ -1,7 +1,7 @@
-import { AST_NODE_TYPES, TSESTree } from "@typescript-eslint/utils";
-import { createRule } from "./utils";
+const { AST_NODE_TYPES, TSESTree } = require("@typescript-eslint/utils");
+const { createRule } = require("./utils");
 
-export = createRule({
+module.exports = createRule({
     name: "one-namespace-per-file",
     meta: {
         docs: {
@@ -17,9 +17,11 @@ export = createRule({
     defaultOptions: [],
 
     create(context) {
-        const isNamespaceDeclaration = (node: TSESTree.Node): node is TSESTree.TSModuleDeclaration => node.type === AST_NODE_TYPES.TSModuleDeclaration;
+        /** @type {(node: TSESTree.Node) => node is TSESTree.TSModuleDeclaration} */
+        const isNamespaceDeclaration = (node) => node.type === AST_NODE_TYPES.TSModuleDeclaration;
 
-        const checkSourceFile = (node: TSESTree.Program) => {
+        /** @type {(node: TSESTree.Program) => void} */
+        const checkSourceFile = (node) => {
             if (context.getFilename().endsWith(".d.ts")) {
                 return;
             }
