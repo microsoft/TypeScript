@@ -448,6 +448,8 @@ namespace ts {
         return {
             close: () => {
                 const watcher = cache.get(path);
+                // Watcher is not expected to be undefined, but if it is normally its because
+                // exception was thrown somewhere else and watch state is not what it should be
                 if (!watcher) return;
                 if (!orderedRemoveItem(watcher.callbacks, callback) || watcher.callbacks.length) return;
                 cache.delete(path);
