@@ -877,17 +877,6 @@ namespace ts {
             || kind === SyntaxKind.SetAccessor;
     }
 
-    export function canHaveDecorators(node: Node): node is HasDecorators {
-        const kind = node.kind;
-        return kind === SyntaxKind.Parameter
-            || kind === SyntaxKind.PropertyDeclaration
-            || kind === SyntaxKind.MethodDeclaration
-            || kind === SyntaxKind.GetAccessor
-            || kind === SyntaxKind.SetAccessor
-            || kind === SyntaxKind.ClassExpression
-            || kind === SyntaxKind.ClassDeclaration;
-    }
-
     export function canHaveIllegalDecorators(node: Node): node is HasIllegalDecorators {
         const kind = node.kind;
         return kind === SyntaxKind.PropertyAssignment
@@ -907,35 +896,6 @@ namespace ts {
             || kind === SyntaxKind.NamespaceExportDeclaration
             || kind === SyntaxKind.ExportDeclaration
             || kind === SyntaxKind.ExportAssignment;
-    }
-
-    export function canHaveModifiers(node: Node): node is HasModifiers {
-        const kind = node.kind;
-        return kind === SyntaxKind.TypeParameter
-            || kind === SyntaxKind.Parameter
-            || kind === SyntaxKind.PropertySignature
-            || kind === SyntaxKind.PropertyDeclaration
-            || kind === SyntaxKind.MethodSignature
-            || kind === SyntaxKind.MethodDeclaration
-            || kind === SyntaxKind.Constructor
-            || kind === SyntaxKind.GetAccessor
-            || kind === SyntaxKind.SetAccessor
-            || kind === SyntaxKind.IndexSignature
-            || kind === SyntaxKind.ConstructorType
-            || kind === SyntaxKind.FunctionExpression
-            || kind === SyntaxKind.ArrowFunction
-            || kind === SyntaxKind.ClassExpression
-            || kind === SyntaxKind.VariableStatement
-            || kind === SyntaxKind.FunctionDeclaration
-            || kind === SyntaxKind.ClassDeclaration
-            || kind === SyntaxKind.InterfaceDeclaration
-            || kind === SyntaxKind.TypeAliasDeclaration
-            || kind === SyntaxKind.EnumDeclaration
-            || kind === SyntaxKind.ModuleDeclaration
-            || kind === SyntaxKind.ImportEqualsDeclaration
-            || kind === SyntaxKind.ImportDeclaration
-            || kind === SyntaxKind.ExportAssignment
-            || kind === SyntaxKind.ExportDeclaration;
     }
 
     export function canHaveIllegalModifiers(node: Node): node is HasIllegalModifiers {
