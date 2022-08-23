@@ -503,7 +503,7 @@ namespace ts {
         /* @internal */ imports: SourceFile["imports"];
         /* @internal */ moduleAugmentations: SourceFile["moduleAugmentations"];
         impliedNodeFormat?: SourceFile["impliedNodeFormat"];
-    };
+    }
 
     /**
      * Calculates the resulting resolution mode for some reference in some file - this is generally the explicitly

@@ -1496,7 +1496,7 @@ namespace Harness {
 
     export function getConfigNameFromFileName(filename: string): "tsconfig.json" | "jsconfig.json" | undefined {
         const flc = ts.getBaseFileName(filename).toLowerCase();
-        return ts.find(["tsconfig.json" as "tsconfig.json", "jsconfig.json" as "jsconfig.json"], x => x === flc);
+        return ts.find(["tsconfig.json" as const, "jsconfig.json" as const], x => x === flc);
     }
 
     if (Error) (Error as any).stackTraceLimit = 100;

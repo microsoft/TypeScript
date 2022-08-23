@@ -563,7 +563,7 @@ namespace ts {
 
     interface ScriptTargetFeatures {
         [key: string]: { [key: string]: string[] | undefined };
-    };
+    }
 
     export function getScriptTargetFeatures(): ScriptTargetFeatures {
         return {

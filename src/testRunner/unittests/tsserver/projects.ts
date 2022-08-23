@@ -567,7 +567,7 @@ namespace ts.projectSystem {
                 path: "/a/b/file1.js",
                 content: "var x = 10;",
                 fileName: "/a/b/file1.js",
-                scriptKind: "JS" as "JS"
+                scriptKind: "JS" as const
             };
 
             const host = createServerHost([]);

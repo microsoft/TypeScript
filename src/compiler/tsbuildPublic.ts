@@ -487,7 +487,7 @@ namespace ts {
         // TODO(rbuckton): Should be a `Set`, but that requires changing the code below that uses `mutateMapSkippingNewValues`
         const currentProjects = new Map(
             getBuildOrderFromAnyBuildOrder(buildOrder).map(
-                resolved => [toResolvedConfigFilePath(state, resolved), true as true])
+                resolved => [toResolvedConfigFilePath(state, resolved), true as const])
         );
 
         const noopOnDelete = { onDeleteValue: noop };

@@ -738,7 +738,7 @@ namespace ts.projectSystem {
         checkAllErrors(request);
     }
 
-    interface SkipErrors { semantic?: true; suggestion?: true };
+    interface SkipErrors { semantic?: true; suggestion?: true }
     export interface CheckAllErrors extends VerifyGetErrRequestBase {
         files: readonly any[];
         skip?: readonly (SkipErrors | undefined)[];

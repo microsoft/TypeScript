@@ -297,7 +297,7 @@ namespace ts.server {
     interface ProjectNavigateToItems {
         project: Project;
         navigateToItems: readonly NavigateToItem[];
-    };
+    }
 
     function createDocumentSpanSet(): Set<DocumentSpan> {
         return createSet(({textSpan}) => textSpan.start + 100003 * textSpan.length, documentSpansEqual);
