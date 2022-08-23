@@ -2436,6 +2436,7 @@ declare namespace ts {
         AllowEmptyTuple = 524288,
         AllowUniqueESSymbolType = 1048576,
         AllowEmptyIndexInfoType = 2097152,
+        AllowComputedPropertyEnums = 1073741824,
         AllowNodeModulesRelativePaths = 67108864,
         IgnoreErrors = 70221824,
         InObjectTypeLiteral = 4194304,
@@ -2465,8 +2466,9 @@ declare namespace ts {
         InElementType = 2097152,
         InFirstTypeArgument = 4194304,
         InTypeAlias = 8388608,
+        AllowComputedPropertyEnums = 1073741824,
         /** @deprecated */ WriteOwnNameForAnyLike = 0,
-        NodeBuilderFlagsMask = 848330091
+        NodeBuilderFlagsMask = 1922071915
     }
     export enum SymbolFormatFlags {
         None = 0,
@@ -2474,6 +2476,7 @@ declare namespace ts {
         UseOnlyExternalAliasing = 2,
         AllowAnyNodeKind = 4,
         UseAliasDefinedOutsideCurrentScope = 8,
+        AllowComputedPropertyEnums = 9,
     }
     export enum TypePredicateKind {
         This = 0,

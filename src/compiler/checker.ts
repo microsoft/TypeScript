@@ -4822,7 +4822,10 @@ namespace ts {
             if (flags & SymbolFormatFlags.DoNotIncludeSymbolChain) {
                 nodeFlags |= NodeBuilderFlags.DoNotIncludeSymbolChain;
             }
-            const builder = flags & SymbolFormatFlags.AllowAnyNodeKind ? nodeBuilder.symbolToExpression : nodeBuilder.symbolToEntityName;
+            if (flags & SymbolFormatFlags.AllowComputedPropertyEnums) {
+                nodeFlags |= NodeBuilderFlags.AllowComputedPropertyEnums;
+            }
+            const builder = flags & SymbolFormatFlags.AllowAnyNodeKind ? nodeBuilder.symbolToNode : nodeBuilder.symbolToEntityName;
             return writer ? symbolToStringWorker(writer).getText() : usingSingleLineStringWriter(symbolToStringWorker);
 
             function symbolToStringWorker(writer: EmitTextWriter) {
@@ -4919,7 +4922,20 @@ namespace ts {
                     withContext(enclosingDeclaration, flags, tracker, context => typeParameterToDeclaration(parameter, context)),
                 symbolTableToDeclarationStatements: (symbolTable: SymbolTable, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker, bundled?: boolean) =>
                     withContext(enclosingDeclaration, flags, tracker, context => symbolTableToDeclarationStatements(symbolTable, context, bundled)),
+                symbolToNode: (symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) =>
+                    withContext(enclosingDeclaration, flags, tracker, context => symbolToNode(symbol, context, meaning)),
             };
+
+            function symbolToNode(symbol: Symbol, context: NodeBuilderContext, meaning: SymbolFlags) {
+                if (context.flags & NodeBuilderFlags.AllowComputedPropertyEnums) {
+                    const nameType = getSymbolLinks(symbol).nameType;
+                    if (nameType && nameType.flags & TypeFlags.EnumLiteral) {
+                        context.enclosingDeclaration = nameType.symbol.valueDeclaration;
+                        return factory.createComputedPropertyName(symbolToExpression(nameType.symbol, context, meaning));
+                    }
+                }
+                return symbolToExpression(symbol, context, meaning);
+            }
 
             function withContext<T>(enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined, tracker: SymbolTracker | undefined, cb: (context: NodeBuilderContext) => T): T | undefined {
                 Debug.assert(enclosingDeclaration === undefined || (enclosingDeclaration.flags & NodeFlags.Synthesized) === 0);
@@ -20310,8 +20326,7 @@ namespace ts {
                     shouldSkipElaboration = true; // Retain top-level error for interface implementing issues, otherwise omit it
                 }
                 if (props.length === 1) {
-                    const nameType = getSymbolLinks(unmatchedProperty).nameType;
-                    const propName = nameType && nameType.flags & TypeFlags.EnumLiteral ? `[${symbolToString(nameType.symbol, nameType.symbol.valueDeclaration)}]` : symbolToString(unmatchedProperty);
+                    const propName = symbolToString(unmatchedProperty, /*enclosingDeclaration*/ undefined, SymbolFlags.None, SymbolFormatFlags.AllowAnyNodeKind | SymbolFormatFlags.AllowComputedPropertyEnums);
                     reportError(Diagnostics.Property_0_is_missing_in_type_1_but_required_in_type_2, propName, ...getTypeNamesForErrorDisplay(source, target));
                     if (length(unmatchedProperty.declarations)) {
                         associateRelatedInfo(createDiagnosticForNode(unmatchedProperty.declarations![0], Diagnostics._0_is_declared_here, propName));

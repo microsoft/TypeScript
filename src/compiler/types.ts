@@ -4822,6 +4822,7 @@ namespace ts {
         AllowEmptyTuple                         = 1 << 19,
         AllowUniqueESSymbolType                 = 1 << 20,
         AllowEmptyIndexInfoType                 = 1 << 21,
+        AllowComputedPropertyEnums              = 1 << 30,
 
         // Errors (cont.)
         AllowNodeModulesRelativePaths           = 1 << 26,
@@ -4871,12 +4872,14 @@ namespace ts {
         InFirstTypeArgument                     = 1 << 22, // Writing first type argument of the instantiated type
         InTypeAlias                             = 1 << 23, // Writing type in type alias declaration
 
+        AllowComputedPropertyEnums              = 1 << 30,
+
         /** @deprecated */ WriteOwnNameForAnyLike  = 0,  // Does nothing
 
         NodeBuilderFlagsMask = NoTruncation | WriteArrayAsGenericType | UseStructuralFallback | WriteTypeArgumentsOfSignature |
             UseFullyQualifiedType | SuppressAnyReturnType | MultilineObjectLiterals | WriteClassExpressionAsTypeLiteral |
             UseTypeOfFunction | OmitParameterModifiers | UseAliasDefinedOutsideCurrentScope | AllowUniqueESSymbolType | InTypeAlias |
-            UseSingleQuotesForStringLiteralType | NoTypeReduction | OmitThisParameter
+            UseSingleQuotesForStringLiteralType | NoTypeReduction | OmitThisParameter | AllowComputedPropertyEnums
     }
 
     export const enum SymbolFormatFlags {
@@ -4898,6 +4901,9 @@ namespace ts {
 
         // Prefer aliases which are not directly visible
         UseAliasDefinedOutsideCurrentScope = 0x00000008,
+
+        // { [E.A]: 1 }
+        AllowComputedPropertyEnums = 0x00000009,
 
         // Skip building an accessible symbol chain
         /* @internal */ DoNotIncludeSymbolChain = 0x00000010,
