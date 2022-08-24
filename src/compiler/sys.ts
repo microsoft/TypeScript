@@ -1088,14 +1088,16 @@ namespace ts {
                 lastDirectoryPart = lastDirectoryPartWithDirectorySeparator.slice(directorySeparator.length);
             }
             /** Watcher for the file system entry depending on whether it is missing or present */
-            let watcher = !fileSystemEntryExists(fileOrDirectory, entryKind) ?
+            let watcher: FileWatcher | undefined = !fileSystemEntryExists(fileOrDirectory, entryKind) ?
                 watchMissingFileSystemEntry() :
                 watchPresentFileSystemEntry();
             return {
                 close: () => {
                     // Close the watcher (either existing file system entry watcher or missing file system entry watcher)
-                    watcher.close();
-                    watcher = undefined!;
+                    if (watcher) {
+                        watcher.close();
+                        watcher = undefined;
+                    }
                 }
             };
 
@@ -1438,7 +1440,7 @@ namespace ts {
 
             const platform: string = _os.platform();
             const useCaseSensitiveFileNames = isFileSystemCaseSensitive();
-            const realpathSync = _fs.realpathSync.native ?? _fs.realpathSync;
+            const fsRealpath = !!_fs.realpathSync.native ? process.platform === "win32" ? fsRealPathHandlingLongPath : _fs.realpathSync.native : _fs.realpathSync;
 
             const fsSupportsRecursiveFsWatch = isNode4OrLater && (process.platform === "win32" || process.platform === "darwin");
             const getCurrentDirectory = memoize(() => process.cwd());
@@ -1887,9 +1889,13 @@ namespace ts {
                 return getAccessibleFileSystemEntries(path).directories.slice();
             }
 
+            function fsRealPathHandlingLongPath(path: string): string {
+                return path.length < 260 ? _fs.realpathSync.native(path) : _fs.realpathSync(path);
+            }
+
             function realpath(path: string): string {
                 try {
-                    return realpathSync(path);
+                    return fsRealpath(path);
                 }
                 catch {
                     return path;

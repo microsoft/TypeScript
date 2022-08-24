@@ -213,9 +213,9 @@ Object.values(0);
 
 Object.freeze(undefined);
 >Object.freeze(undefined) : undefined
->Object.freeze : { <T extends readonly any[]>(a: T): Readonly<T>; <T extends Function>(f: T): T; <T extends { [idx: string]: object | U | null | undefined; }, U extends string | number | bigint | boolean | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
+>Object.freeze : { <T extends Function>(f: T): T; <T extends { [idx: string]: object | U | null | undefined; }, U extends string | number | bigint | boolean | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
 >Object : ObjectConstructor
->freeze : { <T extends readonly any[]>(a: T): Readonly<T>; <T extends Function>(f: T): T; <T extends { [idx: string]: object | U | null | undefined; }, U extends string | number | bigint | boolean | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
+>freeze : { <T extends Function>(f: T): T; <T extends { [idx: string]: object | U | null | undefined; }, U extends string | number | bigint | boolean | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
 >undefined : undefined
 
 Object.isExtensible(undefined);
@@ -255,9 +255,9 @@ Object.seal(undefined);
 
 Object.freeze(0);
 >Object.freeze(0) : number
->Object.freeze : { <T extends readonly any[]>(a: T): Readonly<T>; <T extends Function>(f: T): T; <T extends { [idx: string]: object | U | null | undefined; }, U extends string | number | bigint | boolean | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
+>Object.freeze : { <T extends Function>(f: T): T; <T extends { [idx: string]: object | U | null | undefined; }, U extends string | number | bigint | boolean | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
 >Object : ObjectConstructor
->freeze : { <T extends readonly any[]>(a: T): Readonly<T>; <T extends Function>(f: T): T; <T extends { [idx: string]: object | U | null | undefined; }, U extends string | number | bigint | boolean | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
+>freeze : { <T extends Function>(f: T): T; <T extends { [idx: string]: object | U | null | undefined; }, U extends string | number | bigint | boolean | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
 >0 : 0
 
 Object.isExtensible(0);

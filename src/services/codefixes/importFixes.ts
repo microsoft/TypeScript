@@ -18,11 +18,10 @@ namespace ts.codefix {
         errorCodes,
         getCodeActions(context) {
             const { errorCode, preferences, sourceFile, span, program } = context;
-            const info = getFixesInfo(context, errorCode, span.start, /*useAutoImportProvider*/ true);
+            const info = getFixInfos(context, errorCode, span.start, /*useAutoImportProvider*/ true);
             if (!info) return undefined;
-            const { fixes, symbolName, errorIdentifierText } = info;
             const quotePreference = getQuotePreference(sourceFile, preferences);
-            return fixes.map(fix => codeActionForFix(
+            return info.map(({ fix, symbolName, errorIdentifierText }) => codeActionForFix(
                 context,
                 sourceFile,
                 symbolName,
@@ -74,9 +73,9 @@ namespace ts.codefix {
         return { addImportFromDiagnostic, addImportFromExportedSymbol, writeFixes, hasFixes };
 
         function addImportFromDiagnostic(diagnostic: DiagnosticWithLocation, context: CodeFixContextBase) {
-            const info = getFixesInfo(context, diagnostic.code, diagnostic.start, useAutoImportProvider);
-            if (!info || !info.fixes.length) return;
-            addImport(info);
+            const info = getFixInfos(context, diagnostic.code, diagnostic.start, useAutoImportProvider);
+            if (!info || !info.length) return;
+            addImport(first(info));
         }
 
         function addImportFromExportedSymbol(exportedSymbol: Symbol, isValidTypeOnlyUseSite?: boolean) {
@@ -88,13 +87,12 @@ namespace ts.codefix {
             const useRequire = shouldUseRequire(sourceFile, program);
             const fix = getImportFixForSymbol(sourceFile, exportInfo, moduleSymbol, program, /*useNamespaceInfo*/ undefined, !!isValidTypeOnlyUseSite, useRequire, host, preferences);
             if (fix) {
-                addImport({ fixes: [fix], symbolName, errorIdentifierText: undefined });
+                addImport({ fix, symbolName, errorIdentifierText: undefined });
             }
         }
 
-        function addImport(info: FixesInfo) {
-            const { fixes, symbolName } = info;
-            const fix = first(fixes);
+        function addImport(info: FixInfo) {
+            const { fix, symbolName } = info;
             switch (fix.kind) {
                 case ImportFixKind.UseNamespace:
                     addToNamespace.push(fix);
@@ -369,7 +367,7 @@ namespace ts.codefix {
 
     export function getPromoteTypeOnlyCompletionAction(sourceFile: SourceFile, symbolToken: Identifier, program: Program, host: LanguageServiceHost, formatContext: formatting.FormatContext, preferences: UserPreferences) {
         const compilerOptions = program.getCompilerOptions();
-        const symbolName = getSymbolName(sourceFile, program.getTypeChecker(), symbolToken, compilerOptions);
+        const symbolName = single(getSymbolNamesToImport(sourceFile, program.getTypeChecker(), symbolToken, compilerOptions));
         const fix = getTypeOnlyPromotionFix(sourceFile, symbolToken, symbolName, program);
         const includeSymbolNameInDescription = symbolName !== symbolToken.text;
         return fix && codeFixActionToCodeAction(codeActionForFix({ host, formatContext, preferences }, sourceFile, symbolName, fix, includeSymbolNameInDescription, QuotePreference.Double, compilerOptions));
@@ -741,8 +739,13 @@ namespace ts.codefix {
         }
     }
 
-    interface FixesInfo { readonly fixes: readonly ImportFix[], readonly symbolName: string, readonly errorIdentifierText: string | undefined }
-    function getFixesInfo(context: CodeFixContextBase, errorCode: number, pos: number, useAutoImportProvider: boolean): FixesInfo | undefined {
+    interface FixInfo {
+        readonly fix: ImportFix;
+        readonly symbolName: string;
+        readonly errorIdentifierText: string | undefined;
+        readonly isJsxNamespaceFix?: boolean;
+    }
+    function getFixInfos(context: CodeFixContextBase, errorCode: number, pos: number, useAutoImportProvider: boolean): readonly FixInfo[] | undefined {
         const symbolToken = getTokenAtPosition(context.sourceFile, pos);
         let info;
         if (errorCode === Diagnostics._0_refers_to_a_UMD_global_but_the_current_file_is_a_module_Consider_adding_an_import_instead.code) {
@@ -752,21 +755,24 @@ namespace ts.codefix {
             return undefined;
         }
         else if (errorCode === Diagnostics._0_cannot_be_used_as_a_value_because_it_was_imported_using_import_type.code) {
-            const symbolName = getSymbolName(context.sourceFile, context.program.getTypeChecker(), symbolToken, context.program.getCompilerOptions());
+            const symbolName = single(getSymbolNamesToImport(context.sourceFile, context.program.getTypeChecker(), symbolToken, context.program.getCompilerOptions()));
             const fix = getTypeOnlyPromotionFix(context.sourceFile, symbolToken, symbolName, context.program);
-            return fix && { fixes: [fix], symbolName, errorIdentifierText: symbolToken.text };
+            return fix && [{ fix, symbolName, errorIdentifierText: symbolToken.text }];
         }
         else {
             info = getFixesInfoForNonUMDImport(context, symbolToken, useAutoImportProvider);
         }
 
         const packageJsonImportFilter = createPackageJsonImportFilter(context.sourceFile, context.preferences, context.host);
-        return info && { ...info, fixes: sortFixes(info.fixes, context.sourceFile, context.program, packageJsonImportFilter, context.host) };
+        return info && sortFixInfo(info, context.sourceFile, context.program, packageJsonImportFilter, context.host);
     }
 
-    function sortFixes(fixes: readonly ImportFixWithModuleSpecifier[], sourceFile: SourceFile, program: Program, packageJsonImportFilter: PackageJsonImportFilter, host: LanguageServiceHost): readonly ImportFixWithModuleSpecifier[] {
+    function sortFixInfo(fixes: readonly (FixInfo & { fix: ImportFixWithModuleSpecifier })[], sourceFile: SourceFile, program: Program, packageJsonImportFilter: PackageJsonImportFilter, host: LanguageServiceHost): readonly (FixInfo & { fix: ImportFixWithModuleSpecifier })[] {
         const _toPath = (fileName: string) => toPath(fileName, host.getCurrentDirectory(), hostGetCanonicalFileName(host));
-        return sort(fixes, (a, b) => compareValues(a.kind, b.kind) || compareModuleSpecifiers(a, b, sourceFile, program, packageJsonImportFilter.allowsImportingSpecifier, _toPath));
+        return sort(fixes, (a, b) =>
+            compareBooleans(!!a.isJsxNamespaceFix, !!b.isJsxNamespaceFix) ||
+            compareValues(a.fix.kind, b.fix.kind) ||
+            compareModuleSpecifiers(a.fix, b.fix, sourceFile, program, packageJsonImportFilter.allowsImportingSpecifier, _toPath));
     }
 
     function getBestFix(fixes: readonly ImportFixWithModuleSpecifier[], sourceFile: SourceFile, program: Program, packageJsonImportFilter: PackageJsonImportFilter, host: LanguageServiceHost): ImportFixWithModuleSpecifier | undefined {
@@ -836,7 +842,7 @@ namespace ts.codefix {
         return Comparison.EqualTo;
     }
 
-    function getFixesInfoForUMDImport({ sourceFile, program, host, preferences }: CodeFixContextBase, token: Node): FixesInfo & { fixes: readonly ImportFixWithModuleSpecifier[] } | undefined {
+    function getFixesInfoForUMDImport({ sourceFile, program, host, preferences }: CodeFixContextBase, token: Node): (FixInfo & { fix: ImportFixWithModuleSpecifier })[] | undefined {
         const checker = program.getTypeChecker();
         const umdSymbol = getUmdSymbol(token, checker);
         if (!umdSymbol) return undefined;
@@ -846,7 +852,7 @@ namespace ts.codefix {
         const useRequire = shouldUseRequire(sourceFile, program);
         const position = isIdentifier(token) ? token.getStart(sourceFile) : undefined;
         const fixes = getImportFixes(exportInfo, position ? { position, symbolName } : undefined, /*isValidTypeOnlyUseSite*/ false, useRequire, program, sourceFile, host, preferences).fixes;
-        return { fixes, symbolName, errorIdentifierText: tryCast(token, isIdentifier)?.text };
+        return fixes.map(fix => ({ fix, symbolName, errorIdentifierText: tryCast(token, isIdentifier)?.text }));
     }
     function getUmdSymbol(token: Node, checker: TypeChecker): Symbol | undefined {
         // try the identifier to see if it is the umd symbol
@@ -906,20 +912,21 @@ namespace ts.codefix {
         }
     }
 
-    function getFixesInfoForNonUMDImport({ sourceFile, program, cancellationToken, host, preferences }: CodeFixContextBase, symbolToken: Identifier, useAutoImportProvider: boolean): FixesInfo & { fixes: readonly ImportFixWithModuleSpecifier[] } | undefined {
+    function getFixesInfoForNonUMDImport({ sourceFile, program, cancellationToken, host, preferences }: CodeFixContextBase, symbolToken: Identifier, useAutoImportProvider: boolean): readonly (FixInfo & { fix: ImportFixWithModuleSpecifier })[] | undefined {
         const checker = program.getTypeChecker();
         const compilerOptions = program.getCompilerOptions();
-        const symbolName = getSymbolName(sourceFile, checker, symbolToken, compilerOptions);
-        // "default" is a keyword and not a legal identifier for the import, but appears as an identifier.
-        if (symbolName === InternalSymbolName.Default) {
-            return undefined;
-        }
-        const isValidTypeOnlyUseSite = isValidTypeOnlyAliasUseSite(symbolToken);
-        const useRequire = shouldUseRequire(sourceFile, program);
-        const exportInfo = getExportInfos(symbolName, isJSXTagName(symbolToken), getMeaningFromLocation(symbolToken), cancellationToken, sourceFile, program, useAutoImportProvider, host, preferences);
-        const fixes = arrayFrom(flatMapIterator(exportInfo.entries(), ([_, exportInfos]) =>
-            getImportFixes(exportInfos, { symbolName, position: symbolToken.getStart(sourceFile) }, isValidTypeOnlyUseSite, useRequire, program, sourceFile, host, preferences).fixes));
-        return { fixes, symbolName, errorIdentifierText: symbolToken.text };
+        return flatMap(getSymbolNamesToImport(sourceFile, checker, symbolToken, compilerOptions), symbolName => {
+            // "default" is a keyword and not a legal identifier for the import, but appears as an identifier.
+            if (symbolName === InternalSymbolName.Default) {
+                return undefined;
+            }
+            const isValidTypeOnlyUseSite = isValidTypeOnlyAliasUseSite(symbolToken);
+            const useRequire = shouldUseRequire(sourceFile, program);
+            const exportInfo = getExportInfos(symbolName, isJSXTagName(symbolToken), getMeaningFromLocation(symbolToken), cancellationToken, sourceFile, program, useAutoImportProvider, host, preferences);
+            const fixes = arrayFrom(flatMapIterator(exportInfo.entries(), ([_, exportInfos]) =>
+                getImportFixes(exportInfos, { symbolName, position: symbolToken.getStart(sourceFile) }, isValidTypeOnlyUseSite, useRequire, program, sourceFile, host, preferences).fixes));
+            return fixes.map(fix => ({ fix, symbolName, errorIdentifierText: symbolToken.text, isJsxNamespaceFix: symbolName !== symbolToken.text }));
+        });
     }
 
     function getTypeOnlyPromotionFix(sourceFile: SourceFile, symbolToken: Identifier, symbolName: string, program: Program): FixPromoteTypeOnlyImport | undefined {
@@ -933,15 +940,16 @@ namespace ts.codefix {
         return { kind: ImportFixKind.PromoteTypeOnly, typeOnlyAliasDeclaration };
     }
 
-    function getSymbolName(sourceFile: SourceFile, checker: TypeChecker, symbolToken: Identifier, compilerOptions: CompilerOptions): string {
+    function getSymbolNamesToImport(sourceFile: SourceFile, checker: TypeChecker, symbolToken: Identifier, compilerOptions: CompilerOptions): string[] {
         const parent = symbolToken.parent;
         if ((isJsxOpeningLikeElement(parent) || isJsxClosingElement(parent)) && parent.tagName === symbolToken && jsxModeNeedsExplicitImport(compilerOptions.jsx)) {
             const jsxNamespace = checker.getJsxNamespace(sourceFile);
             if (needsJsxNamespaceFix(jsxNamespace, symbolToken, checker)) {
-                return jsxNamespace;
+                const needsComponentNameFix = !isIntrinsicJsxName(symbolToken.text) && !checker.resolveName(symbolToken.text, symbolToken, SymbolFlags.Value, /*excludeGlobals*/ false);
+                return needsComponentNameFix ? [symbolToken.text, jsxNamespace] : [jsxNamespace];
             }
         }
-        return symbolToken.text;
+        return [symbolToken.text];
     }
 
     function needsJsxNamespaceFix(jsxNamespace: string, symbolToken: Identifier, checker: TypeChecker) {

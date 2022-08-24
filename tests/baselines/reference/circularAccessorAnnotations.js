@@ -41,13 +41,13 @@ declare const c3: {
     get foo(): string;
     set foo(value: typeof c3.foo);
 };
-declare type T1 = {
+type T1 = {
     get foo(): T1["foo"];
 };
-declare type T2 = {
+type T2 = {
     set foo(value: T2["foo"]);
 };
-declare type T3 = {
+type T3 = {
     get foo(): string;
     set foo(value: T3["foo"]);
 };

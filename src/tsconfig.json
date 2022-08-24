@@ -2,7 +2,6 @@
     "files": [],
     "include": [],
     "references": [
-        { "path": "./shims" },
         { "path": "./tsc" },
         { "path": "./tsserver" },
         { "path": "./typingsInstaller" },

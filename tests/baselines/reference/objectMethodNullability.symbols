@@ -158,9 +158,9 @@ Object.values(0);
 >values : Symbol(ObjectConstructor.values, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
 
 Object.freeze(undefined);
->Object.freeze : Symbol(ObjectConstructor.freeze, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object.freeze : Symbol(ObjectConstructor.freeze, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->freeze : Symbol(ObjectConstructor.freeze, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>freeze : Symbol(ObjectConstructor.freeze, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >undefined : Symbol(undefined)
 
 Object.isExtensible(undefined);
@@ -194,9 +194,9 @@ Object.seal(undefined);
 >undefined : Symbol(undefined)
 
 Object.freeze(0);
->Object.freeze : Symbol(ObjectConstructor.freeze, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object.freeze : Symbol(ObjectConstructor.freeze, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->freeze : Symbol(ObjectConstructor.freeze, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>freeze : Symbol(ObjectConstructor.freeze, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 Object.isExtensible(0);
 >Object.isExtensible : Symbol(ObjectConstructor.isExtensible, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))

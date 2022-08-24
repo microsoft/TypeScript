@@ -12,10 +12,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-node@v3
-    - name: Remove existing TypeScript
-      run: |
-        npm uninstall typescript --no-save
-        npm uninstall tslint --no-save
     - name: npm install and test
       run: |
         npm ci

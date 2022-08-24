@@ -2,16 +2,16 @@
 namespace ts.server {
     export interface PackageJsonCache {
         addOrUpdate(fileName: Path): void;
-        forEach(action: (info: PackageJsonInfo, fileName: Path) => void): void;
+        forEach(action: (info: ProjectPackageJsonInfo, fileName: Path) => void): void;
         delete(fileName: Path): void;
-        get(fileName: Path): PackageJsonInfo | false | undefined;
-        getInDirectory(directory: Path): PackageJsonInfo | undefined;
+        get(fileName: Path): ProjectPackageJsonInfo | false | undefined;
+        getInDirectory(directory: Path): ProjectPackageJsonInfo | undefined;
         directoryHasPackageJson(directory: Path): Ternary;
         searchDirectoryAndAncestors(directory: Path): void;
     }
 
     export function createPackageJsonCache(host: ProjectService): PackageJsonCache {
-        const packageJsons = new Map<string, PackageJsonInfo>();
+        const packageJsons = new Map<string, ProjectPackageJsonInfo>();
         const directoriesWithoutPackageJson = new Map<string, true>();
         return {
             addOrUpdate,
