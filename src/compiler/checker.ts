@@ -42558,7 +42558,7 @@ namespace ts {
                         if (!links.resolvedSymbol) {
                             const expressionType = checkExpressionCached(name.expression);
                             const infos = getApplicableIndexInfos(expressionType, getLiteralTypeFromPropertyName(name.name));
-                            if (infos.length && (expressionType as any).members && (expressionType as any).members.get(InternalSymbolName.Index)) {
+                            if (infos.length && (expressionType as ObjectType).members) {
                                 const resolved = resolveStructuredTypeMembers(expressionType as ObjectType);
                                 const symbol = resolved.members.get(InternalSymbolName.Index);
                                 if (infos === getIndexInfosOfType(expressionType)) {
