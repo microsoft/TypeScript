@@ -142,6 +142,7 @@ namespace ts {
         const compilerOptions = context.getCompilerOptions();
         const languageVersion = getEmitScriptTarget(compilerOptions);
         const useDefineForClassFields = getUseDefineForClassFields(compilerOptions);
+        const legacyDecorators = !!compilerOptions.experimentalDecorators;
 
         // Always transform field initializers using Set semantics when `useDefineForClassFields: false`.
         const shouldTransformInitializersUsingSet = !useDefineForClassFields;
@@ -1111,7 +1112,7 @@ namespace ts {
         function getClassFacts(node: ClassLikeDeclaration) {
             let facts = ClassFacts.None;
             const original = getOriginalNode(node);
-            if (isClassDeclaration(original) && classOrConstructorParameterIsDecorated(original)) {
+            if (isClassDeclaration(original) && classOrConstructorParameterIsDecorated(legacyDecorators, original)) {
                 facts |= ClassFacts.ClassWasDecorated;
             }
             for (const member of node.members) {

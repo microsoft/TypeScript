@@ -43,6 +43,7 @@ namespace ts {
         const compilerOptions = context.getCompilerOptions();
         const languageVersion = getEmitScriptTarget(compilerOptions);
         const moduleKind = getEmitModuleKind(compilerOptions);
+        const legacyDecorators = !!compilerOptions.experimentalDecorators;
         const typeSerializer = compilerOptions.emitDecoratorMetadata ? createRuntimeTypeSerializer(context) : undefined;
 
         // Save the previous transformation hooks.
@@ -598,8 +599,8 @@ namespace ts {
             if (some(staticProperties)) facts |= ClassFacts.HasStaticInitializedProperties;
             const extendsClauseElement = getEffectiveBaseTypeNode(node);
             if (extendsClauseElement && skipOuterExpressions(extendsClauseElement.expression).kind !== SyntaxKind.NullKeyword) facts |= ClassFacts.IsDerivedClass;
-            if (classOrConstructorParameterIsDecorated(node)) facts |= ClassFacts.HasConstructorDecorators;
-            if (childIsDecorated(node)) facts |= ClassFacts.HasMemberDecorators;
+            if (classOrConstructorParameterIsDecorated(legacyDecorators, node)) facts |= ClassFacts.HasConstructorDecorators;
+            if (childIsDecorated(legacyDecorators, node)) facts |= ClassFacts.HasMemberDecorators;
             if (isExportOfNamespace(node)) facts |= ClassFacts.IsExportOfNamespace;
             else if (isDefaultExternalModuleExport(node)) facts |= ClassFacts.IsDefaultExternalExport;
             else if (isNamedExternalModuleExport(node)) facts |= ClassFacts.IsNamedExternalExport;

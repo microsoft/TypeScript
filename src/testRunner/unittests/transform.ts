@@ -367,6 +367,7 @@ namespace ts {
                 compilerOptions: {
                     target: ScriptTarget.ES5,
                     newLine: NewLineKind.CarriageReturnLineFeed,
+                    experimentalDecorators: true,
                 }
             }).outputText;
 

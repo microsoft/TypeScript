@@ -357,6 +357,7 @@ namespace ts {
         const compilerOptions = host.getCompilerOptions();
         const languageVersion = getEmitScriptTarget(compilerOptions);
         const moduleKind = getEmitModuleKind(compilerOptions);
+        const legacyDecorators = !!compilerOptions.experimentalDecorators;
         const useDefineForClassFields = getUseDefineForClassFields(compilerOptions);
         const allowSyntheticDefaultImports = getAllowSyntheticDefaultImports(compilerOptions);
         const strictNullChecks = getStrictOptionValue(compilerOptions, "strictNullChecks");
@@ -26026,7 +26027,7 @@ namespace ts {
                 // must instead be rewritten to point to a temporary variable to avoid issues with the double-bind
                 // behavior of class names in ES6.
                 if (declaration.kind === SyntaxKind.ClassDeclaration
-                    && nodeIsDecorated(declaration as ClassDeclaration)) {
+                    && nodeIsDecorated(legacyDecorators, declaration as ClassDeclaration)) {
                     let container = getContainingClass(node);
                     while (container !== undefined) {
                         if (container === declaration && container.name !== node) {
@@ -37335,7 +37336,7 @@ namespace ts {
         function checkDecorators(node: Node): void {
             // skip this check for nodes that cannot have decorators. These should have already had an error reported by
             // checkGrammarDecorators.
-            if (!canHaveDecorators(node) || !hasDecorators(node) || !node.modifiers || !nodeCanBeDecorated(node, node.parent, node.parent.parent)) {
+            if (!canHaveDecorators(node) || !hasDecorators(node) || !node.modifiers || !nodeCanBeDecorated(legacyDecorators, node, node.parent, node.parent.parent)) {
                 return;
             }
 
@@ -44146,7 +44147,7 @@ namespace ts {
             if (!canHaveDecorators(node) || !hasDecorators(node)) {
                 return false;
             }
-            if (!nodeCanBeDecorated(node, node.parent, node.parent.parent)) {
+            if (!nodeCanBeDecorated(legacyDecorators, node, node.parent, node.parent.parent)) {
                 if (node.kind === SyntaxKind.MethodDeclaration && !nodeIsPresent(node.body)) {
                     return grammarErrorOnFirstToken(node, Diagnostics.A_decorator_can_only_decorate_a_method_implementation_not_an_overload);
                 }
@@ -44154,7 +44155,7 @@ namespace ts {
                     return grammarErrorOnFirstToken(node, Diagnostics.Decorators_are_not_valid_here);
                 }
             }
-            else if (node.kind === SyntaxKind.GetAccessor || node.kind === SyntaxKind.SetAccessor) {
+            else if (legacyDecorators && (node.kind === SyntaxKind.GetAccessor || node.kind === SyntaxKind.SetAccessor)) {
                 const accessors = getAllAccessorDeclarations((node.parent as ClassDeclaration).members, node as AccessorDeclaration);
                 if (hasDecorators(accessors.firstAccessor) && node === accessors.secondAccessor) {
                     return grammarErrorOnFirstToken(node, Diagnostics.Decorators_cannot_be_applied_to_multiple_get_Slashset_accessors_of_the_same_name);
@@ -44518,6 +44519,7 @@ namespace ts {
                         case SyntaxKind.ConstructorType:
                             return nodeHasAnyModifiersExcept(node, SyntaxKind.AbstractKeyword);
                         case SyntaxKind.ClassExpression:
+                            return some(node.modifiers, isModifier);
                         case SyntaxKind.InterfaceDeclaration:
                         case SyntaxKind.VariableStatement:
                         case SyntaxKind.TypeAliasDeclaration:

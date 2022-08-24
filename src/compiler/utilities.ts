@@ -1901,76 +1901,91 @@ namespace ts {
         }
     }
 
-    export function nodeCanBeDecorated(node: ClassDeclaration): true;
-    export function nodeCanBeDecorated(node: ClassElement, parent: Node): boolean;
-    export function nodeCanBeDecorated(node: Node, parent: Node, grandparent: Node): boolean;
-    export function nodeCanBeDecorated(node: Node, parent?: Node, grandparent?: Node): boolean {
+    export function nodeCanBeDecorated(useLegacyDecorators: boolean, node: ClassDeclaration): true;
+    export function nodeCanBeDecorated(useLegacyDecorators: boolean, node: ClassExpression): boolean;
+    export function nodeCanBeDecorated(useLegacyDecorators: boolean, node: ClassElement, parent: Node): boolean;
+    export function nodeCanBeDecorated(useLegacyDecorators: boolean, node: Node, parent: Node, grandparent: Node): boolean;
+    export function nodeCanBeDecorated(useLegacyDecorators: boolean, node: Node, parent?: Node, grandparent?: Node): boolean {
         // private names cannot be used with decorators yet
-        if (isNamedDeclaration(node) && isPrivateIdentifier(node.name)) {
+        if (useLegacyDecorators && isNamedDeclaration(node) && isPrivateIdentifier(node.name)) {
             return false;
         }
+
         switch (node.kind) {
             case SyntaxKind.ClassDeclaration:
-                // classes are valid targets
+                // class declarations are valid targets
                 return true;
+
+            case SyntaxKind.ClassExpression:
+                // class expressions are valid targets for native decorators
+                return !useLegacyDecorators;
 
             case SyntaxKind.PropertyDeclaration:
                 // property declarations are valid if their parent is a class declaration.
-                return parent!.kind === SyntaxKind.ClassDeclaration;
+                return parent !== undefined
+                    && (useLegacyDecorators ? isClassDeclaration(parent) : isClassLike(parent));
 
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
             case SyntaxKind.MethodDeclaration:
                 // if this method has a body and its parent is a class declaration, this is a valid target.
                 return (node as FunctionLikeDeclaration).body !== undefined
-                    && parent!.kind === SyntaxKind.ClassDeclaration;
+                    && parent !== undefined
+                    && (useLegacyDecorators ? isClassDeclaration(parent) : isClassLike(parent));
 
             case SyntaxKind.Parameter:
-                // if the parameter's parent has a body and its grandparent is a class declaration, this is a valid target;
+                // TODO(rbuckton): Is there a way to support parameter decorators or should we wait until it is standardized?
+                if (!useLegacyDecorators) return false;
+                // if the parameter's parent has a body and its grandparent is a class declaration, this is a valid target.
                 return (parent as FunctionLikeDeclaration).body !== undefined
-                    && (parent!.kind === SyntaxKind.Constructor
-                        || parent!.kind === SyntaxKind.MethodDeclaration
-                        || parent!.kind === SyntaxKind.SetAccessor)
-                    && grandparent!.kind === SyntaxKind.ClassDeclaration;
+                    && parent !== undefined
+                    && (parent.kind === SyntaxKind.Constructor
+                        || parent.kind === SyntaxKind.MethodDeclaration
+                        || parent.kind === SyntaxKind.SetAccessor)
+                    && grandparent !== undefined
+                    && grandparent.kind === SyntaxKind.ClassDeclaration;
         }
 
         return false;
     }
 
-    export function nodeIsDecorated(node: ClassDeclaration): boolean;
-    export function nodeIsDecorated(node: ClassElement, parent: Node): boolean;
-    export function nodeIsDecorated(node: Node, parent: Node, grandparent: Node): boolean;
-    export function nodeIsDecorated(node: Node, parent?: Node, grandparent?: Node): boolean {
+    export function nodeIsDecorated(useLegacyDecorators: boolean, node: ClassDeclaration | ClassExpression): boolean;
+    export function nodeIsDecorated(useLegacyDecorators: boolean, node: ClassElement, parent: Node): boolean;
+    export function nodeIsDecorated(useLegacyDecorators: boolean, node: Node, parent: Node, grandparent: Node): boolean;
+    export function nodeIsDecorated(useLegacyDecorators: boolean, node: Node, parent?: Node, grandparent?: Node): boolean {
         return hasDecorators(node)
-            && nodeCanBeDecorated(node, parent!, grandparent!); // TODO: GH#18217
+            && nodeCanBeDecorated(useLegacyDecorators, node, parent!, grandparent!);
     }
 
-    export function nodeOrChildIsDecorated(node: ClassDeclaration): boolean;
-    export function nodeOrChildIsDecorated(node: ClassElement, parent: Node): boolean;
-    export function nodeOrChildIsDecorated(node: Node, parent: Node, grandparent: Node): boolean;
-    export function nodeOrChildIsDecorated(node: Node, parent?: Node, grandparent?: Node): boolean {
-        return nodeIsDecorated(node, parent!, grandparent!) || childIsDecorated(node, parent!); // TODO: GH#18217
+    export function nodeOrChildIsDecorated(useLegacyDecorators: boolean, node: ClassDeclaration | ClassExpression): boolean;
+    export function nodeOrChildIsDecorated(useLegacyDecorators: boolean, node: ClassElement, parent: Node): boolean;
+    export function nodeOrChildIsDecorated(useLegacyDecorators: boolean, node: Node, parent: Node, grandparent: Node): boolean;
+    export function nodeOrChildIsDecorated(useLegacyDecorators: boolean, node: Node, parent?: Node, grandparent?: Node): boolean {
+        return nodeIsDecorated(useLegacyDecorators, node, parent!, grandparent!)
+            || childIsDecorated(useLegacyDecorators, node, parent!);
     }
 
-    export function childIsDecorated(node: ClassDeclaration): boolean;
-    export function childIsDecorated(node: Node, parent: Node): boolean;
-    export function childIsDecorated(node: Node, parent?: Node): boolean {
+    export function childIsDecorated(useLegacyDecorators: boolean, node: ClassDeclaration | ClassExpression): boolean;
+    export function childIsDecorated(useLegacyDecorators: boolean, node: Node, parent: Node): boolean;
+    export function childIsDecorated(useLegacyDecorators: boolean, node: Node, parent?: Node): boolean {
         switch (node.kind) {
             case SyntaxKind.ClassDeclaration:
-                return some((node as ClassDeclaration).members, m => nodeOrChildIsDecorated(m, node, parent!)); // TODO: GH#18217
+                return some((node as ClassDeclaration).members, m => nodeOrChildIsDecorated(useLegacyDecorators, m, node, parent!));
+            case SyntaxKind.ClassExpression:
+                return !useLegacyDecorators && some((node as ClassExpression).members, m => nodeOrChildIsDecorated(useLegacyDecorators, m, node, parent!));
             case SyntaxKind.MethodDeclaration:
             case SyntaxKind.SetAccessor:
             case SyntaxKind.Constructor:
-                return some((node as FunctionLikeDeclaration).parameters, p => nodeIsDecorated(p, node, parent!)); // TODO: GH#18217
+                return some((node as FunctionLikeDeclaration).parameters, p => nodeIsDecorated(useLegacyDecorators, p, node, parent!));
             default:
                 return false;
         }
     }
 
-    export function classOrConstructorParameterIsDecorated(node: ClassDeclaration): boolean {
-        if (nodeIsDecorated(node)) return true;
+    export function classOrConstructorParameterIsDecorated(useLegacyDecorators: boolean, node: ClassDeclaration | ClassExpression): boolean {
+        if (nodeIsDecorated(useLegacyDecorators, node)) return true;
         const constructor = getFirstConstructorWithBody(node);
-        return !!constructor && childIsDecorated(constructor, node);
+        return !!constructor && childIsDecorated(useLegacyDecorators, constructor, node);
     }
 
     export function isJSXTagName(node: Node) {

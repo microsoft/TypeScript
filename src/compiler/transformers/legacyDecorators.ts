@@ -66,7 +66,9 @@ namespace ts {
         }
 
         function visitClassDeclaration(node: ClassDeclaration): VisitResult<Statement> {
-            if (!(classOrConstructorParameterIsDecorated(node) || childIsDecorated(node))) return visitEachChild(node, visitor, context);
+            if (!(classOrConstructorParameterIsDecorated(/*legacyDecorators*/ true, node) || childIsDecorated(/*legacyDecorators*/ true, node))) {
+                return visitEachChild(node, visitor, context);
+            }
 
             const statements = hasDecorators(node) ?
                 transformClassDeclarationWithClassDecorators(node, node.name) :
@@ -423,7 +425,7 @@ namespace ts {
          * @param member The class member.
          */
         function isDecoratedClassElement(member: ClassElement, isStaticElement: boolean, parent: ClassLikeDeclaration) {
-            return nodeOrChildIsDecorated(member, parent)
+            return nodeOrChildIsDecorated(/*legacyDecorators*/ true, member, parent)
                 && isStaticElement === isStatic(member);
         }
 
