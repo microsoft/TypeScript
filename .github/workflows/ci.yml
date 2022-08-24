@@ -39,6 +39,7 @@ jobs:
       if: ${{ matrix.node-version == 'vscode' }}
       run: |
         node ./scripts/electron-node/download.js
+        ./scripts/electron-node/.bin/node -e "console.log(process.versions)"
         echo "$PWD/scripts/electron-node/.bin" >> $GITHUB_PATH
 
     - name: Tests
