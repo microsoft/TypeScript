@@ -21,14 +21,24 @@ jobs:
           - "*"
           - lts/*
           - lts/-1
+          - vscode
 
     steps:
     - uses: actions/checkout@v3
+
     - name: Use node version ${{ matrix.node-version }}
+      if: ${{ matrix.node-version != "vscode" }}
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
         check-latest: true
+
+    - name: Use vscode as node
+      if: ${{ matrix.node-version == "vscode" }}
+      run: |
+        node ./scripts/electron-node/download.js
+        echo "$PWD/scripts/electron-node/.bin" >> $GITHUB_PATH
+
     - run:  npm ci
 
     - name: Tests

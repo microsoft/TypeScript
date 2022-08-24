@@ -49,7 +49,7 @@ async function exec(cmd, args, options = {}) {
                     resolve({ exitCode });
                 }
                 else {
-                    reject(new Error(`Process exited with code: ${exitCode}`));
+                    reject(new Error(`${JSON.stringify({ cmd, args, options })}\nProcess exited with code: ${exitCode}`));
                 }
             });
             proc.on("error", error => {
@@ -65,6 +65,11 @@ async function exec(cmd, args, options = {}) {
     }));
 }
 exports.exec = exec;
+
+async function execNode(args, options = {}) {
+    return exec(process.execPath, [...process.execArgv, ...args], options);
+}
+exports.execNode = execNode;
 
 /**
  * @param {ts.Diagnostic[]} diagnostics

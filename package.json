@@ -63,6 +63,7 @@
         "@typescript-eslint/eslint-plugin": "^5.33.1",
         "@typescript-eslint/parser": "^5.33.1",
         "@typescript-eslint/utils": "^5.33.1",
+        "@vscode/test-electron": "^2.1.5",
         "async": "latest",
         "azure-devops-node-api": "^11.2.0",
         "chai": "latest",

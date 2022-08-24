@@ -37,7 +37,7 @@ class ProjectQueue {
 
 const execTsc = (/** @type {boolean} */ lkg, /** @type {string[]} */ ...args) =>
     exec(process.execPath,
-         [resolve(findUpRoot(), lkg ? "./lib/tsc" : "./built/local/tsc"),
+         [...process.execArgv, resolve(findUpRoot(), lkg ? "./lib/tsc" : "./built/local/tsc"),
           "-b", ...args],
          { hidePrompt: true });
 

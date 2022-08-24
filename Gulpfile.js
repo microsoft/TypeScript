@@ -11,7 +11,7 @@ const merge2 = require("merge2");
 const { src, dest, task, parallel, series, watch } = require("gulp");
 const { append, transform } = require("gulp-insert");
 const { prependFile } = require("./scripts/build/prepend");
-const { exec, readJson, needsUpdate, getDiffTool, getDirSize, rm } = require("./scripts/build/utils");
+const { exec, readJson, needsUpdate, getDiffTool, getDirSize, rm, execNode } = require("./scripts/build/utils");
 const { runConsoleTests, refBaseline, localBaseline, refRwcBaseline, localRwcBaseline } = require("./scripts/build/tests");
 const { buildProject, cleanProject, watchProject } = require("./scripts/build/projects");
 const cmdLineOptions = require("./scripts/build/options");
@@ -56,7 +56,7 @@ const diagnosticMessagesJson = "src/compiler/diagnosticMessages.json";
 const diagnosticMessagesGeneratedJson = "src/compiler/diagnosticMessages.generated.json";
 const generateDiagnostics = async () => {
     if (needsUpdate(diagnosticMessagesJson, [diagnosticMessagesGeneratedJson, diagnosticInformationMapTs])) {
-        await exec(process.execPath, ["scripts/processDiagnosticMessages.js", diagnosticMessagesJson]);
+        await execNode(["scripts/processDiagnosticMessages.js", diagnosticMessagesJson]);
     }
 };
 task("generate-diagnostics", series(buildScripts, generateDiagnostics));
@@ -88,7 +88,7 @@ const localizationTargets = ["cs", "de", "es", "fr", "it", "ja", "ko", "pl", "pt
 
 const localize = async () => {
     if (needsUpdate(diagnosticMessagesGeneratedJson, generatedLCGFile)) {
-        return exec(process.execPath, ["scripts/generateLocalizedDiagnosticMessages.js", "src/loc/lcl", "built/local", diagnosticMessagesGeneratedJson], { ignoreExitCode: true });
+        return execNode(["scripts/generateLocalizedDiagnosticMessages.js", "src/loc/lcl", "built/local", diagnosticMessagesGeneratedJson], { ignoreExitCode: true });
     }
 };
 
@@ -365,7 +365,7 @@ const eslint = (folder) => async () => {
     args.push(folder);
 
     log(`Linting: ${args.join(" ")}`);
-    return exec(process.execPath, args);
+    return execNode(args);
 };
 
 const lint = eslint(".");
@@ -466,7 +466,7 @@ task("runtests-parallel").flags = {
 };
 
 
-task("test-browser-integration", () => exec(process.execPath, ["scripts/browserIntegrationTest.js"]));
+task("test-browser-integration", () => execNode(["scripts/browserIntegrationTest.js"]));
 task("test-browser-integration").description = "Runs scripts/browserIntegrationTest.ts which tests that typescript.js loads in a browser";
 
 
@@ -501,7 +501,7 @@ const buildInstrumenter = () => buildProject("src/instrumenter");
 const cleanInstrumenter = () => cleanProject("src/instrumenter");
 cleanTasks.push(cleanInstrumenter);
 
-const tscInstrumented = () => exec(process.execPath, ["built/local/instrumenter.js", "record", cmdLineOptions.tests || "iocapture", "built/local/tsc.js"]);
+const tscInstrumented = () => execNode(["built/local/instrumenter.js", "record", cmdLineOptions.tests || "iocapture", "built/local/tsc.js"]);
 task("tsc-instrumented", series(lkgPreBuild, parallel(localize, buildTsc, buildServer, buildServices, buildLssl, buildLoggedIO, buildInstrumenter), tscInstrumented));
 task("tsc-instrumented").description = "Builds an instrumented tsc.js";
 task("tsc-instrumented").flags = {
@@ -520,7 +520,7 @@ const cleanImportDefinitelyTypedTests = () => cleanProject("scripts/importDefini
 cleanTasks.push(cleanImportDefinitelyTypedTests);
 
 // TODO(rbuckton): Should the path to DefinitelyTyped be configurable via an environment variable?
-const importDefinitelyTypedTests = () => exec(process.execPath, ["scripts/importDefinitelyTypedTests/importDefinitelyTypedTests.js", "./", "../DefinitelyTyped"]);
+const importDefinitelyTypedTests = () => execNode(["scripts/importDefinitelyTypedTests/importDefinitelyTypedTests.js", "./", "../DefinitelyTyped"]);
 task("importDefinitelyTypedTests", series(buildImportDefinitelyTypedTests, importDefinitelyTypedTests));
 task("importDefinitelyTypedTests").description = "Runs the importDefinitelyTypedTests script to copy DT's tests to the TS-internal RWC tests";
 
@@ -551,7 +551,7 @@ const produceLKG = async () => {
         throw new Error("Cannot replace the LKG unless all built targets are present in directory 'built/local/'. The following files are missing:\n" + missingFiles.join("\n"));
     }
     const sizeBefore = getDirSize("lib");
-    await exec(process.execPath, ["scripts/produceLKG.js"]);
+    await execNode(["scripts/produceLKG.js"]);
     const sizeAfter = getDirSize("lib");
     if (sizeAfter > (sizeBefore * 1.10)) {
         throw new Error("The lib folder increased by 10% or more. This likely indicates a bug.");
@@ -572,19 +572,19 @@ task("generate-spec").description = "Generates a Markdown version of the Languag
 task("clean", series(parallel(cleanTasks), cleanBuilt));
 task("clean").description = "Cleans build outputs";
 
-const configureNightly = () => exec(process.execPath, ["scripts/configurePrerelease.js", "dev", "package.json", "src/compiler/corePublic.ts"]);
+const configureNightly = () => execNode(["scripts/configurePrerelease.js", "dev", "package.json", "src/compiler/corePublic.ts"]);
 task("configure-nightly", series(buildScripts, configureNightly));
 task("configure-nightly").description = "Runs scripts/configurePrerelease.ts to prepare a build for nightly publishing";
 
-const configureInsiders = () => exec(process.execPath, ["scripts/configurePrerelease.js", "insiders", "package.json", "src/compiler/corePublic.ts"]);
+const configureInsiders = () => execNode(["scripts/configurePrerelease.js", "insiders", "package.json", "src/compiler/corePublic.ts"]);
 task("configure-insiders", series(buildScripts, configureInsiders));
 task("configure-insiders").description = "Runs scripts/configurePrerelease.ts to prepare a build for insiders publishing";
 
-const configureExperimental = () => exec(process.execPath, ["scripts/configurePrerelease.js", "experimental", "package.json", "src/compiler/corePublic.ts"]);
+const configureExperimental = () => execNode(["scripts/configurePrerelease.js", "experimental", "package.json", "src/compiler/corePublic.ts"]);
 task("configure-experimental", series(buildScripts, configureExperimental));
 task("configure-experimental").description = "Runs scripts/configurePrerelease.ts to prepare a build for experimental publishing";
 
-const createLanguageServicesBuild = () => exec(process.execPath, ["scripts/createLanguageServicesBuild.js"]);
+const createLanguageServicesBuild = () => execNode(["scripts/createLanguageServicesBuild.js"]);
 task("create-language-services-build", series(buildScripts, createLanguageServicesBuild));
 task("create-language-services-build").description = "Runs scripts/createLanguageServicesBuild.ts to prepare a build which only has the require('typescript') JS.";
 

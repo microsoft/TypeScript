@@ -7,3 +7,4 @@
 /scripts/eslint/built/**
 /internal/**
 /coverage/**
+/scripts/electron-node/.*

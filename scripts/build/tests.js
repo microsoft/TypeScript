@@ -7,7 +7,7 @@ const mkdirP = require("mkdirp");
 const log = require("fancy-log");
 const cmdLineOptions = require("./options");
 const { CancellationToken } = require("prex");
-const { exec } = require("./utils");
+const { exec, execNode } = require("./utils");
 const { findUpFile } = require("./findUpDir");
 
 const mochaJs = require.resolve("mocha/bin/_mocha");
@@ -121,7 +121,7 @@ async function runConsoleTests(runJs, defaultReporter, runInParallel, watchMode,
 
     try {
         setNodeEnvToDevelopment();
-        const { exitCode } = await exec(process.execPath, args, {
+        const { exitCode } = await execNode(args, {
             cancelToken,
         });
         if (exitCode !== 0) {
