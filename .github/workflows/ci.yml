@@ -33,13 +33,13 @@ jobs:
         node-version: ${{ matrix.node-version }}
         check-latest: true
 
+    - run:  npm ci
+
     - name: Use VS Code as node
       if: ${{ matrix.node-version == 'vscode' }}
       run: |
         node ./scripts/electron-node/download.js
         echo "$PWD/scripts/electron-node/.bin" >> $GITHUB_PATH
-
-    - run:  npm ci
 
     - name: Tests
       run:  npm test -- --no-lint
