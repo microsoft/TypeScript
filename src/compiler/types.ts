@@ -4595,6 +4595,8 @@ namespace ts {
         /** Note that the resulting nodes cannot be checked. */
         symbolToExpression(symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined): Expression | undefined;
         /** Note that the resulting nodes cannot be checked. */
+        /* @internal */ symbolToNode(symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined): Node | undefined;
+        /** Note that the resulting nodes cannot be checked. */
         symbolToTypeParameterDeclarations(symbol: Symbol, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined): NodeArray<TypeParameterDeclaration> | undefined;
         /** Note that the resulting nodes cannot be checked. */
         symbolToParameterDeclaration(symbol: Symbol, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined): ParameterDeclaration | undefined;
@@ -4872,6 +4874,7 @@ namespace ts {
         AllowEmptyTuple                         = 1 << 19,
         AllowUniqueESSymbolType                 = 1 << 20,
         AllowEmptyIndexInfoType                 = 1 << 21,
+        /* @internal */ WriteComputedProps      = 1 << 30, // { [E.A]: 1 }
 
         // Errors (cont.)
         AllowNodeModulesRelativePaths           = 1 << 26,
@@ -4930,27 +4933,30 @@ namespace ts {
     }
 
     export const enum SymbolFormatFlags {
-        None = 0x00000000,
+        None                                    = 0,
 
         // Write symbols's type argument if it is instantiated symbol
         // eg. class C<T> { p: T }   <-- Show p as C<T>.p here
         //     var a: C<number>;
         //     var p = a.p; <--- Here p is property of C<number> so show it as C<number>.p instead of just C.p
-        WriteTypeParametersOrArguments = 0x00000001,
+        WriteTypeParametersOrArguments          = 1 << 0,
 
         // Use only external alias information to get the symbol name in the given context
         // eg.  module m { export class c { } } import x = m.c;
         // When this flag is specified m.c will be used to refer to the class instead of alias symbol x
-        UseOnlyExternalAliasing = 0x00000002,
+        UseOnlyExternalAliasing                 = 1 << 1,
 
         // Build symbol name using any nodes needed, instead of just components of an entity name
-        AllowAnyNodeKind = 0x00000004,
+        AllowAnyNodeKind                        = 1 << 2,
 
         // Prefer aliases which are not directly visible
-        UseAliasDefinedOutsideCurrentScope = 0x00000008,
+        UseAliasDefinedOutsideCurrentScope      = 1 << 3,
+
+        // { [E.A]: 1 }
+        /* @internal */ WriteComputedProps      = 1 << 4,
 
         // Skip building an accessible symbol chain
-        /* @internal */ DoNotIncludeSymbolChain = 0x00000010,
+        /* @internal */ DoNotIncludeSymbolChain = 1 << 5,
     }
 
     /* @internal */
