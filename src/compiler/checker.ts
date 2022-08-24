@@ -18901,7 +18901,7 @@ namespace ts {
                         }
                     }
 
-                    const isPerformingCommonPropertyChecks = (relation !== comparableRelation || relation === comparableRelation && isLiteralType(source)) &&
+                    const isPerformingCommonPropertyChecks = (relation !== comparableRelation || !(source.flags & TypeFlags.Union) && isLiteralType(source)) &&
                         !(intersectionState & IntersectionState.Target) &&
                         source.flags & (TypeFlags.Primitive | TypeFlags.Object | TypeFlags.Intersection) && source !== globalObjectType &&
                         target.flags & (TypeFlags.Object | TypeFlags.Intersection) && isWeakType(target) &&
