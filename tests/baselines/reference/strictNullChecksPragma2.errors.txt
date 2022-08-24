@@ -1,0 +1,195 @@
+tests/cases/conformance/pragma/strictNullChecks/file1.ts(8,14): error TS2322: Type 'undefined' is not assignable to type 'string'.
+tests/cases/conformance/pragma/strictNullChecks/file1.ts(10,1): error TS2322: Type 'B' is not assignable to type 'A'.
+tests/cases/conformance/pragma/strictNullChecks/file1.ts(15,20): error TS2322: Type 'undefined' is not assignable to type 'string'.
+tests/cases/conformance/pragma/strictNullChecks/file1.ts(24,1): error TS2322: Type 'import("tests/cases/conformance/pragma/strictNullChecks/file1").B' is not assignable to type 'import("tests/cases/conformance/pragma/strictNullChecks/file2").B'.
+tests/cases/conformance/pragma/strictNullChecks/file1.ts(30,1): error TS2322: Type 'B' is not assignable to type 'A'.
+tests/cases/conformance/pragma/strictNullChecks/file2.ts(18,1): error TS2322: Type 'B' is not assignable to type 'A'.
+  Types of property 'member' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+tests/cases/conformance/pragma/strictNullChecks/file2.ts(24,1): error TS2322: Type 'import("tests/cases/conformance/pragma/strictNullChecks/file1").B' is not assignable to type 'import("tests/cases/conformance/pragma/strictNullChecks/file2").B'.
+  Types of property 'member' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+tests/cases/conformance/pragma/strictNullChecks/file2.ts(27,1): error TS2322: Type 'B' is not assignable to type 'A'.
+  Types of property 'member' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+tests/cases/conformance/pragma/strictNullChecks/file3.ts(4,14): error TS2322: Type 'undefined' is not assignable to type 'string'.
+tests/cases/conformance/pragma/strictNullChecks/file3.ts(6,16): error TS2322: Type 'undefined' is not assignable to type 'string'.
+tests/cases/conformance/pragma/strictNullChecks/file3.ts(7,16): error TS2322: Type 'undefined' is not assignable to type 'string'.
+tests/cases/conformance/pragma/strictNullChecks/file3.ts(9,1): error TS2322: Type 'B' is not assignable to type 'A'.
+tests/cases/conformance/pragma/strictNullChecks/file3.ts(19,1): error TS2322: Type 'import("tests/cases/conformance/pragma/strictNullChecks/file1").B' is not assignable to type 'import("tests/cases/conformance/pragma/strictNullChecks/file2").B'.
+tests/cases/conformance/pragma/strictNullChecks/file3.ts(25,1): error TS2322: Type 'B' is not assignable to type 'A'.
+tests/cases/conformance/pragma/strictNullChecks/file4.ts(10,1): error TS2322: Type 'B' is not assignable to type 'A'.
+tests/cases/conformance/pragma/strictNullChecks/file4.ts(20,1): error TS2322: Type 'import("tests/cases/conformance/pragma/strictNullChecks/file1").B' is not assignable to type 'import("tests/cases/conformance/pragma/strictNullChecks/file2").B'.
+tests/cases/conformance/pragma/strictNullChecks/file4.ts(26,1): error TS2322: Type 'B' is not assignable to type 'A'.
+
+
+==== tests/cases/conformance/pragma/strictNullChecks/file1.ts (5 errors) ====
+    export interface A {
+        member: string;
+    }
+    export interface B {
+        member: string | undefined;
+    }
+    
+    let a: A = { member: undefined };
+                 ~~~~~~
+!!! error TS2322: Type 'undefined' is not assignable to type 'string'.
+!!! related TS6500 tests/cases/conformance/pragma/strictNullChecks/file1.ts:2:5: The expected type comes from property 'member' which is declared here on type 'A'
+    declare var b: B;
+    a = b;
+    ~
+!!! error TS2322: Type 'B' is not assignable to type 'A'.
+    b = a;
+    
+    import {A as OtherA, B as OtherB} from "./file2";
+    
+    let a2: OtherA = { member: undefined };
+                       ~~~~~~
+!!! error TS2322: Type 'undefined' is not assignable to type 'string'.
+!!! related TS6500 /.src/tests/cases/conformance/pragma/strictNullChecks/file2.ts:3:5: The expected type comes from property 'member' which is declared here on type 'A'
+    declare var b2: OtherB;
+    a2 = b2;
+    b2 = a2;
+    
+    a = a2;
+    a2 = a;
+    
+    b = b2;
+    b2 = b;
+    ~~
+!!! error TS2322: Type 'import("tests/cases/conformance/pragma/strictNullChecks/file1").B' is not assignable to type 'import("tests/cases/conformance/pragma/strictNullChecks/file2").B'.
+    
+    a = b2;
+    b2 = a;
+    
+    b = a2;
+    a2 = b;
+    ~~
+!!! error TS2322: Type 'B' is not assignable to type 'A'.
+    
+==== tests/cases/conformance/pragma/strictNullChecks/file2.ts (3 errors) ====
+    // @ts-strictNullChecks false
+    export interface A {
+        member: string;
+    }
+    export interface B {
+        member: string | undefined;
+    }
+    
+    let a: A = { member: undefined };
+    declare var b: B;
+    a = b;
+    b = a;
+    
+    import {A as OtherA, B as OtherB} from "./file1";
+    
+    let a2: OtherA = { member: undefined };
+    declare var b2: OtherB;
+    a2 = b2;
+    ~~
+!!! error TS2322: Type 'B' is not assignable to type 'A'.
+!!! error TS2322:   Types of property 'member' are incompatible.
+!!! error TS2322:     Type 'string | undefined' is not assignable to type 'string'.
+!!! error TS2322:       Type 'undefined' is not assignable to type 'string'.
+    b2 = a2;
+    
+    a = a2;
+    a2 = a;
+    
+    b = b2;
+    ~
+!!! error TS2322: Type 'import("tests/cases/conformance/pragma/strictNullChecks/file1").B' is not assignable to type 'import("tests/cases/conformance/pragma/strictNullChecks/file2").B'.
+!!! error TS2322:   Types of property 'member' are incompatible.
+!!! error TS2322:     Type 'string | undefined' is not assignable to type 'string'.
+!!! error TS2322:       Type 'undefined' is not assignable to type 'string'.
+    b2 = b;
+    
+    a = b2;
+    ~
+!!! error TS2322: Type 'B' is not assignable to type 'A'.
+!!! error TS2322:   Types of property 'member' are incompatible.
+!!! error TS2322:     Type 'string | undefined' is not assignable to type 'string'.
+!!! error TS2322:       Type 'undefined' is not assignable to type 'string'.
+    b2 = a;
+    
+    b = a2;
+    a2 = b;
+    
+==== tests/cases/conformance/pragma/strictNullChecks/file3.ts (6 errors) ====
+    import {A, B} from "./file1";
+    import {A as A2, B as B2} from "./file2";
+    
+    let a: A = { member: undefined };
+                 ~~~~~~
+!!! error TS2322: Type 'undefined' is not assignable to type 'string'.
+!!! related TS6500 tests/cases/conformance/pragma/strictNullChecks/file1.ts:2:5: The expected type comes from property 'member' which is declared here on type 'A'
+    let b: B = { member: undefined };
+    let a2: A2 = { member: undefined };
+                   ~~~~~~
+!!! error TS2322: Type 'undefined' is not assignable to type 'string'.
+!!! related TS6500 /.src/tests/cases/conformance/pragma/strictNullChecks/file2.ts:3:5: The expected type comes from property 'member' which is declared here on type 'A'
+    let b2: B2 = { member: undefined };
+                   ~~~~~~
+!!! error TS2322: Type 'undefined' is not assignable to type 'string'.
+!!! related TS6500 /.src/tests/cases/conformance/pragma/strictNullChecks/file2.ts:6:5: The expected type comes from property 'member' which is declared here on type 'B'
+    
+    a = b;
+    ~
+!!! error TS2322: Type 'B' is not assignable to type 'A'.
+    b = a;
+    
+    a2 = b2;
+    b2 = a2;
+    
+    a = a2;
+    a2 = a;
+    
+    b = b2;
+    b2 = b;
+    ~~
+!!! error TS2322: Type 'import("tests/cases/conformance/pragma/strictNullChecks/file1").B' is not assignable to type 'import("tests/cases/conformance/pragma/strictNullChecks/file2").B'.
+    
+    a = b2;
+    b2 = a;
+    
+    b = a2;
+    a2 = b;
+    ~~
+!!! error TS2322: Type 'B' is not assignable to type 'A'.
+    
+==== tests/cases/conformance/pragma/strictNullChecks/file4.ts (3 errors) ====
+    // @ts-strictNullChecks false
+    import {A, B} from "./file1";
+    import {A as A2, B as B2} from "./file2";
+    
+    let a: A = { member: undefined };
+    let b: B = { member: undefined };
+    let a2: A2 = { member: undefined };
+    let b2: B2 = { member: undefined };
+    
+    a = b;
+    ~
+!!! error TS2322: Type 'B' is not assignable to type 'A'.
+    b = a;
+    
+    a2 = b2;
+    b2 = a2;
+    
+    a = a2;
+    a2 = a;
+    
+    b = b2;
+    b2 = b;
+    ~~
+!!! error TS2322: Type 'import("tests/cases/conformance/pragma/strictNullChecks/file1").B' is not assignable to type 'import("tests/cases/conformance/pragma/strictNullChecks/file2").B'.
+    
+    a = b2;
+    b2 = a;
+    
+    b = a2;
+    a2 = b;
+    ~~
+!!! error TS2322: Type 'B' is not assignable to type 'A'.
