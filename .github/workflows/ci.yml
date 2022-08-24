@@ -33,7 +33,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
         check-latest: true
 
-    - name: Use vscode as node
+    - name: Use VS Code as node
       if: ${{ matrix.node-version == "vscode" }}
       run: |
         node ./scripts/electron-node/download.js
