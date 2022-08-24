@@ -49,7 +49,7 @@ async function exec(cmd, args, options = {}) {
                     resolve({ exitCode });
                 }
                 else {
-                    reject(new Error(`${JSON.stringify({ cmd, args, options })}\nProcess exited with code: ${exitCode}`));
+                    reject(new Error(`Process exited with code: ${exitCode}`));
                 }
             });
             proc.on("error", error => {
