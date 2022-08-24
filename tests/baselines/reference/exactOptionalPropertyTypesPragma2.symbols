@@ -1,0 +1,283 @@
+=== tests/cases/conformance/pragma/exactOptionalPropertyTypes/file1.ts ===
+// @ts-exactOptionalPropertyTypes
+export interface A {
+>A : Symbol(A, Decl(file1.ts, 0, 0))
+
+    member: string | undefined;
+>member : Symbol(A.member, Decl(file1.ts, 1, 20))
+}
+declare var a: A;
+>a : Symbol(a, Decl(file1.ts, 4, 11))
+>A : Symbol(A, Decl(file1.ts, 0, 0))
+
+delete a.member;
+>a.member : Symbol(A.member, Decl(file1.ts, 1, 20))
+>a : Symbol(a, Decl(file1.ts, 4, 11))
+>member : Symbol(A.member, Decl(file1.ts, 1, 20))
+
+export interface B {
+>B : Symbol(B, Decl(file1.ts, 5, 16))
+
+    member?: string;
+>member : Symbol(B.member, Decl(file1.ts, 7, 20))
+}
+declare var b: B;
+>b : Symbol(b, Decl(file1.ts, 10, 11))
+>B : Symbol(B, Decl(file1.ts, 5, 16))
+
+a = b;
+>a : Symbol(a, Decl(file1.ts, 4, 11))
+>b : Symbol(b, Decl(file1.ts, 10, 11))
+
+b = a;
+>b : Symbol(b, Decl(file1.ts, 10, 11))
+>a : Symbol(a, Decl(file1.ts, 4, 11))
+
+=== tests/cases/conformance/pragma/exactOptionalPropertyTypes/file2.ts ===
+// @ts-exactOptionalPropertyTypes true
+export interface A {
+>A : Symbol(A, Decl(file2.ts, 0, 0))
+
+    member: string | undefined;
+>member : Symbol(A.member, Decl(file2.ts, 1, 20))
+}
+declare var a: A;
+>a : Symbol(a, Decl(file2.ts, 4, 11))
+>A : Symbol(A, Decl(file2.ts, 0, 0))
+
+delete a.member;
+>a.member : Symbol(A.member, Decl(file2.ts, 1, 20))
+>a : Symbol(a, Decl(file2.ts, 4, 11))
+>member : Symbol(A.member, Decl(file2.ts, 1, 20))
+
+export interface B {
+>B : Symbol(B, Decl(file2.ts, 5, 16))
+
+    member?: string;
+>member : Symbol(B.member, Decl(file2.ts, 7, 20))
+}
+declare var b: B;
+>b : Symbol(b, Decl(file2.ts, 10, 11))
+>B : Symbol(B, Decl(file2.ts, 5, 16))
+
+a = b;
+>a : Symbol(a, Decl(file2.ts, 4, 11))
+>b : Symbol(b, Decl(file2.ts, 10, 11))
+
+b = a;
+>b : Symbol(b, Decl(file2.ts, 10, 11))
+>a : Symbol(a, Decl(file2.ts, 4, 11))
+
+=== tests/cases/conformance/pragma/exactOptionalPropertyTypes/file3.ts ===
+// @ts-exactOptionalPropertyTypes false
+export interface A {
+>A : Symbol(A, Decl(file3.ts, 0, 0))
+
+    member: string | undefined;
+>member : Symbol(A.member, Decl(file3.ts, 1, 20))
+}
+declare var a: A;
+>a : Symbol(a, Decl(file3.ts, 4, 11))
+>A : Symbol(A, Decl(file3.ts, 0, 0))
+
+delete a.member;
+>a.member : Symbol(A.member, Decl(file3.ts, 1, 20))
+>a : Symbol(a, Decl(file3.ts, 4, 11))
+>member : Symbol(A.member, Decl(file3.ts, 1, 20))
+
+export interface B {
+>B : Symbol(B, Decl(file3.ts, 5, 16))
+
+    member?: string;
+>member : Symbol(B.member, Decl(file3.ts, 7, 20))
+}
+declare var b: B;
+>b : Symbol(b, Decl(file3.ts, 10, 11))
+>B : Symbol(B, Decl(file3.ts, 5, 16))
+
+a = b;
+>a : Symbol(a, Decl(file3.ts, 4, 11))
+>b : Symbol(b, Decl(file3.ts, 10, 11))
+
+b = a;
+>b : Symbol(b, Decl(file3.ts, 10, 11))
+>a : Symbol(a, Decl(file3.ts, 4, 11))
+
+=== tests/cases/conformance/pragma/exactOptionalPropertyTypes/file4.ts ===
+export interface A {
+>A : Symbol(A, Decl(file4.ts, 0, 0))
+
+    member: string | undefined;
+>member : Symbol(A.member, Decl(file4.ts, 0, 20))
+}
+declare var a: A;
+>a : Symbol(a, Decl(file4.ts, 3, 11))
+>A : Symbol(A, Decl(file4.ts, 0, 0))
+
+delete a.member;
+>a.member : Symbol(A.member, Decl(file4.ts, 0, 20))
+>a : Symbol(a, Decl(file4.ts, 3, 11))
+>member : Symbol(A.member, Decl(file4.ts, 0, 20))
+
+export interface B {
+>B : Symbol(B, Decl(file4.ts, 4, 16))
+
+    member?: string;
+>member : Symbol(B.member, Decl(file4.ts, 6, 20))
+}
+declare var b: B;
+>b : Symbol(b, Decl(file4.ts, 9, 11))
+>B : Symbol(B, Decl(file4.ts, 4, 16))
+
+a = b;
+>a : Symbol(a, Decl(file4.ts, 3, 11))
+>b : Symbol(b, Decl(file4.ts, 9, 11))
+
+b = a;
+>b : Symbol(b, Decl(file4.ts, 9, 11))
+>a : Symbol(a, Decl(file4.ts, 3, 11))
+
+=== tests/cases/conformance/pragma/exactOptionalPropertyTypes/file5.ts ===
+// @ts-exactOptionalPropertyTypes true
+import {A as A1, B as B1} from "./file2";
+>A : Symbol(A1, Decl(file2.ts, 0, 0))
+>A1 : Symbol(A1, Decl(file5.ts, 1, 8))
+>B : Symbol(B1, Decl(file2.ts, 5, 16))
+>B1 : Symbol(B1, Decl(file5.ts, 1, 16))
+
+import {A as A2, B as B2} from "./file3";
+>A : Symbol(A2, Decl(file3.ts, 0, 0))
+>A2 : Symbol(A2, Decl(file5.ts, 2, 8))
+>B : Symbol(B2, Decl(file3.ts, 5, 16))
+>B2 : Symbol(B2, Decl(file5.ts, 2, 16))
+
+declare var a1: A1, b1: B2, a2: A2, b2: B2;
+>a1 : Symbol(a1, Decl(file5.ts, 4, 11))
+>A1 : Symbol(A1, Decl(file5.ts, 1, 8))
+>b1 : Symbol(b1, Decl(file5.ts, 4, 19))
+>B2 : Symbol(B2, Decl(file5.ts, 2, 16))
+>a2 : Symbol(a2, Decl(file5.ts, 4, 27))
+>A2 : Symbol(A2, Decl(file5.ts, 2, 8))
+>b2 : Symbol(b2, Decl(file5.ts, 4, 35))
+>B2 : Symbol(B2, Decl(file5.ts, 2, 16))
+
+a1 = b1;
+>a1 : Symbol(a1, Decl(file5.ts, 4, 11))
+>b1 : Symbol(b1, Decl(file5.ts, 4, 19))
+
+b1 = a1;
+>b1 : Symbol(b1, Decl(file5.ts, 4, 19))
+>a1 : Symbol(a1, Decl(file5.ts, 4, 11))
+
+a2 = b2;
+>a2 : Symbol(a2, Decl(file5.ts, 4, 27))
+>b2 : Symbol(b2, Decl(file5.ts, 4, 35))
+
+b2 = a2;
+>b2 : Symbol(b2, Decl(file5.ts, 4, 35))
+>a2 : Symbol(a2, Decl(file5.ts, 4, 27))
+
+a1 = a2;
+>a1 : Symbol(a1, Decl(file5.ts, 4, 11))
+>a2 : Symbol(a2, Decl(file5.ts, 4, 27))
+
+a2 = a1;
+>a2 : Symbol(a2, Decl(file5.ts, 4, 27))
+>a1 : Symbol(a1, Decl(file5.ts, 4, 11))
+
+b1 = b2;
+>b1 : Symbol(b1, Decl(file5.ts, 4, 19))
+>b2 : Symbol(b2, Decl(file5.ts, 4, 35))
+
+b2 = b1;
+>b2 : Symbol(b2, Decl(file5.ts, 4, 35))
+>b1 : Symbol(b1, Decl(file5.ts, 4, 19))
+
+a1 = b2;
+>a1 : Symbol(a1, Decl(file5.ts, 4, 11))
+>b2 : Symbol(b2, Decl(file5.ts, 4, 35))
+
+b2 = a1;
+>b2 : Symbol(b2, Decl(file5.ts, 4, 35))
+>a1 : Symbol(a1, Decl(file5.ts, 4, 11))
+
+b1 = a2;
+>b1 : Symbol(b1, Decl(file5.ts, 4, 19))
+>a2 : Symbol(a2, Decl(file5.ts, 4, 27))
+
+a2 = b1;
+>a2 : Symbol(a2, Decl(file5.ts, 4, 27))
+>b1 : Symbol(b1, Decl(file5.ts, 4, 19))
+
+=== tests/cases/conformance/pragma/exactOptionalPropertyTypes/file6.ts ===
+// @ts-exactOptionalPropertyTypes false
+import {A as A1, B as B1} from "./file2";
+>A : Symbol(A1, Decl(file2.ts, 0, 0))
+>A1 : Symbol(A1, Decl(file6.ts, 1, 8))
+>B : Symbol(B1, Decl(file2.ts, 5, 16))
+>B1 : Symbol(B1, Decl(file6.ts, 1, 16))
+
+import {A as A2, B as B2} from "./file3";
+>A : Symbol(A2, Decl(file3.ts, 0, 0))
+>A2 : Symbol(A2, Decl(file6.ts, 2, 8))
+>B : Symbol(B2, Decl(file3.ts, 5, 16))
+>B2 : Symbol(B2, Decl(file6.ts, 2, 16))
+
+declare var a1: A1, b1: B2, a2: A2, b2: B2;
+>a1 : Symbol(a1, Decl(file6.ts, 4, 11))
+>A1 : Symbol(A1, Decl(file6.ts, 1, 8))
+>b1 : Symbol(b1, Decl(file6.ts, 4, 19))
+>B2 : Symbol(B2, Decl(file6.ts, 2, 16))
+>a2 : Symbol(a2, Decl(file6.ts, 4, 27))
+>A2 : Symbol(A2, Decl(file6.ts, 2, 8))
+>b2 : Symbol(b2, Decl(file6.ts, 4, 35))
+>B2 : Symbol(B2, Decl(file6.ts, 2, 16))
+
+a1 = b1;
+>a1 : Symbol(a1, Decl(file6.ts, 4, 11))
+>b1 : Symbol(b1, Decl(file6.ts, 4, 19))
+
+b1 = a1;
+>b1 : Symbol(b1, Decl(file6.ts, 4, 19))
+>a1 : Symbol(a1, Decl(file6.ts, 4, 11))
+
+a2 = b2;
+>a2 : Symbol(a2, Decl(file6.ts, 4, 27))
+>b2 : Symbol(b2, Decl(file6.ts, 4, 35))
+
+b2 = a2;
+>b2 : Symbol(b2, Decl(file6.ts, 4, 35))
+>a2 : Symbol(a2, Decl(file6.ts, 4, 27))
+
+a1 = a2;
+>a1 : Symbol(a1, Decl(file6.ts, 4, 11))
+>a2 : Symbol(a2, Decl(file6.ts, 4, 27))
+
+a2 = a1;
+>a2 : Symbol(a2, Decl(file6.ts, 4, 27))
+>a1 : Symbol(a1, Decl(file6.ts, 4, 11))
+
+b1 = b2;
+>b1 : Symbol(b1, Decl(file6.ts, 4, 19))
+>b2 : Symbol(b2, Decl(file6.ts, 4, 35))
+
+b2 = b1;
+>b2 : Symbol(b2, Decl(file6.ts, 4, 35))
+>b1 : Symbol(b1, Decl(file6.ts, 4, 19))
+
+a1 = b2;
+>a1 : Symbol(a1, Decl(file6.ts, 4, 11))
+>b2 : Symbol(b2, Decl(file6.ts, 4, 35))
+
+b2 = a1;
+>b2 : Symbol(b2, Decl(file6.ts, 4, 35))
+>a1 : Symbol(a1, Decl(file6.ts, 4, 11))
+
+b1 = a2;
+>b1 : Symbol(b1, Decl(file6.ts, 4, 19))
+>a2 : Symbol(a2, Decl(file6.ts, 4, 27))
+
+a2 = b1;
+>a2 : Symbol(a2, Decl(file6.ts, 4, 27))
+>b1 : Symbol(b1, Decl(file6.ts, 4, 19))
+

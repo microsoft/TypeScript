@@ -1,0 +1,90 @@
+=== tests/cases/conformance/pragma/noImplicitOverride/file1.ts ===
+// @ts-noImplicitOverride
+export class A {
+>A : Symbol(A, Decl(file1.ts, 0, 0))
+
+    method() {}
+>method : Symbol(A.method, Decl(file1.ts, 1, 16))
+}
+export class B extends A {
+>B : Symbol(B, Decl(file1.ts, 3, 1))
+>A : Symbol(A, Decl(file1.ts, 0, 0))
+
+    method() {}
+>method : Symbol(B.method, Decl(file1.ts, 4, 26))
+}
+export class C extends A {
+>C : Symbol(C, Decl(file1.ts, 6, 1))
+>A : Symbol(A, Decl(file1.ts, 0, 0))
+
+    override method() {}
+>method : Symbol(C.method, Decl(file1.ts, 7, 26))
+}
+
+=== tests/cases/conformance/pragma/noImplicitOverride/file2.ts ===
+// @ts-noImplicitOverride true
+export class A {
+>A : Symbol(A, Decl(file2.ts, 0, 0))
+
+    method() {}
+>method : Symbol(A.method, Decl(file2.ts, 1, 16))
+}
+export class B extends A {
+>B : Symbol(B, Decl(file2.ts, 3, 1))
+>A : Symbol(A, Decl(file2.ts, 0, 0))
+
+    method() {}
+>method : Symbol(B.method, Decl(file2.ts, 4, 26))
+}
+export class C extends A {
+>C : Symbol(C, Decl(file2.ts, 6, 1))
+>A : Symbol(A, Decl(file2.ts, 0, 0))
+
+    override method() {}
+>method : Symbol(C.method, Decl(file2.ts, 7, 26))
+}
+
+=== tests/cases/conformance/pragma/noImplicitOverride/file3.ts ===
+// @ts-noImplicitOverride false
+export class A {
+>A : Symbol(A, Decl(file3.ts, 0, 0))
+
+    method() {}
+>method : Symbol(A.method, Decl(file3.ts, 1, 16))
+}
+export class B extends A {
+>B : Symbol(B, Decl(file3.ts, 3, 1))
+>A : Symbol(A, Decl(file3.ts, 0, 0))
+
+    method() {}
+>method : Symbol(B.method, Decl(file3.ts, 4, 26))
+}
+export class C extends A {
+>C : Symbol(C, Decl(file3.ts, 6, 1))
+>A : Symbol(A, Decl(file3.ts, 0, 0))
+
+    override method() {}
+>method : Symbol(C.method, Decl(file3.ts, 7, 26))
+}
+
+=== tests/cases/conformance/pragma/noImplicitOverride/file4.ts ===
+export class A {
+>A : Symbol(A, Decl(file4.ts, 0, 0))
+
+    method() {}
+>method : Symbol(A.method, Decl(file4.ts, 0, 16))
+}
+export class B extends A {
+>B : Symbol(B, Decl(file4.ts, 2, 1))
+>A : Symbol(A, Decl(file4.ts, 0, 0))
+
+    method() {}
+>method : Symbol(B.method, Decl(file4.ts, 3, 26))
+}
+export class C extends A {
+>C : Symbol(C, Decl(file4.ts, 5, 1))
+>A : Symbol(A, Decl(file4.ts, 0, 0))
+
+    override method() {}
+>method : Symbol(C.method, Decl(file4.ts, 6, 26))
+}

@@ -12742,7 +12742,7 @@ namespace ts {
                     return symbol;
                 }
                 if (skipObjectFunctionPropertyAugment) return undefined;
-                const file = symbol?.valueDeclaration && getSourceFileOfNode(symbol.valueDeclaration);
+                const file = resolved.symbol?.declarations?.[0] && getSourceFileOfNode(resolved.symbol.declarations[0]);
                 const functionType = resolved === anyFunctionType ? globalFunctionType :
                     resolved.callSignatures.length ? globalCallableFunctionType(file) :
                     resolved.constructSignatures.length ? globalNewableFunctionType(file) :
@@ -19123,8 +19123,8 @@ namespace ts {
             }
 
             function hasExcessProperties(source: FreshObjectLiteralType, target: Type, reportErrors: boolean): boolean {
-                const sourceNoImplicitAny = noImplicitAny(source.symbol?.valueDeclaration);
-                const targetNoImplicitAny = noImplicitAny(target.symbol?.valueDeclaration);
+                const sourceNoImplicitAny = noImplicitAny(source.symbol?.declarations?.[0]);
+                const targetNoImplicitAny = noImplicitAny(target.symbol?.declarations?.[0]);
                 if (!isExcessPropertyCheckTarget(target) || !(sourceNoImplicitAny || targetNoImplicitAny) && getObjectFlags(target) & ObjectFlags.JSLiteral) {
                     return false; // Disable excess property checks on JS literals to simulate having an implicit "index signature" - but only outside of noImplicitAny
                 }
@@ -43113,7 +43113,7 @@ namespace ts {
         function getAugmentedPropertiesOfType(type: Type): Symbol[] {
             type = getApparentType(type);
             const propsByName = createSymbolTable(getPropertiesOfType(type));
-            const file = type.symbol?.valueDeclaration && getSourceFileOfNode(type.symbol.valueDeclaration);
+            const file = type.symbol?.declarations?.[0] && getSourceFileOfNode(type.symbol.declarations[0]);
             const functionType = getSignaturesOfType(type, SignatureKind.Call).length ? globalCallableFunctionType(file) :
                 getSignaturesOfType(type, SignatureKind.Construct).length ? globalNewableFunctionType(file) :
                 undefined;

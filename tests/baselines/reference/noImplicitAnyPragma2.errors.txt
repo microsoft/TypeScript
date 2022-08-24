@@ -1,0 +1,304 @@
+tests/cases/conformance/pragma/noImplicitAny/file1.ts(2,21): error TS2792: Cannot find module 'missing'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+tests/cases/conformance/pragma/noImplicitAny/file1.ts(4,11): error TS7006: Parameter 'p' implicitly has an 'any' type.
+tests/cases/conformance/pragma/noImplicitAny/file1.ts(12,5): error TS7008: Member 'prop2' implicitly has an 'any' type.
+tests/cases/conformance/pragma/noImplicitAny/file1.ts(14,9): error TS2322: Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/pragma/noImplicitAny/file1.ts(18,12): error TS7008: Member 'stat2' implicitly has an 'any' type.
+tests/cases/conformance/pragma/noImplicitAny/file1.ts(20,9): error TS2322: Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/pragma/noImplicitAny/file1.ts(25,9): error TS7023: 'access' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+tests/cases/conformance/pragma/noImplicitAny/file1.ts(28,17): error TS7023: 'f1' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+tests/cases/conformance/pragma/noImplicitAny/file1.ts(32,13): error TS2339: Property 'none' does not exist on type '{}'.
+tests/cases/conformance/pragma/noImplicitAny/file1.ts(37,11): error TS7053: Element implicitly has an 'any' type because expression of type '"none"' can't be used to index type 'B'.
+  Property 'none' does not exist on type 'B'.
+tests/cases/conformance/pragma/noImplicitAny/file1.ts(39,26): error TS2322: Type '{ prop: string; excess: string; }' is not assignable to type 'B'.
+  Object literal may only specify known properties, and 'excess' does not exist in type 'B'.
+tests/cases/conformance/pragma/noImplicitAny/file1.ts(42,11): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+tests/cases/conformance/pragma/noImplicitAny/file2.ts(2,21): error TS2792: Cannot find module 'missing'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+tests/cases/conformance/pragma/noImplicitAny/file2.ts(4,11): error TS7006: Parameter 'p' implicitly has an 'any' type.
+tests/cases/conformance/pragma/noImplicitAny/file2.ts(12,5): error TS7008: Member 'prop2' implicitly has an 'any' type.
+tests/cases/conformance/pragma/noImplicitAny/file2.ts(14,9): error TS2322: Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/pragma/noImplicitAny/file2.ts(18,12): error TS7008: Member 'stat2' implicitly has an 'any' type.
+tests/cases/conformance/pragma/noImplicitAny/file2.ts(20,9): error TS2322: Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/pragma/noImplicitAny/file2.ts(25,9): error TS7023: 'access' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+tests/cases/conformance/pragma/noImplicitAny/file2.ts(28,17): error TS7023: 'f1' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+tests/cases/conformance/pragma/noImplicitAny/file2.ts(32,13): error TS2339: Property 'none' does not exist on type '{}'.
+tests/cases/conformance/pragma/noImplicitAny/file2.ts(37,11): error TS7053: Element implicitly has an 'any' type because expression of type '"none"' can't be used to index type 'B'.
+  Property 'none' does not exist on type 'B'.
+tests/cases/conformance/pragma/noImplicitAny/file2.ts(39,26): error TS2322: Type '{ prop: string; excess: string; }' is not assignable to type 'B'.
+  Object literal may only specify known properties, and 'excess' does not exist in type 'B'.
+tests/cases/conformance/pragma/noImplicitAny/file2.ts(42,11): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+tests/cases/conformance/pragma/noImplicitAny/file3.ts(2,21): error TS2792: Cannot find module 'missing'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+tests/cases/conformance/pragma/noImplicitAny/file3.ts(39,26): error TS2322: Type '{ prop: string; excess: string; }' is not assignable to type 'B'.
+  Object literal may only specify known properties, and 'excess' does not exist in type 'B'.
+tests/cases/conformance/pragma/noImplicitAny/file3.ts(42,11): error TS2350: Only a void function can be called with the 'new' keyword.
+tests/cases/conformance/pragma/noImplicitAny/file4.ts(1,21): error TS2792: Cannot find module 'missing'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+tests/cases/conformance/pragma/noImplicitAny/file4.ts(3,11): error TS7006: Parameter 'p' implicitly has an 'any' type.
+tests/cases/conformance/pragma/noImplicitAny/file4.ts(11,5): error TS7008: Member 'prop2' implicitly has an 'any' type.
+tests/cases/conformance/pragma/noImplicitAny/file4.ts(13,9): error TS2322: Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/pragma/noImplicitAny/file4.ts(17,12): error TS7008: Member 'stat2' implicitly has an 'any' type.
+tests/cases/conformance/pragma/noImplicitAny/file4.ts(19,9): error TS2322: Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/pragma/noImplicitAny/file4.ts(24,9): error TS7023: 'access' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+tests/cases/conformance/pragma/noImplicitAny/file4.ts(27,17): error TS7023: 'f1' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+tests/cases/conformance/pragma/noImplicitAny/file4.ts(31,13): error TS2339: Property 'none' does not exist on type '{}'.
+tests/cases/conformance/pragma/noImplicitAny/file4.ts(36,11): error TS7053: Element implicitly has an 'any' type because expression of type '"none"' can't be used to index type 'B'.
+  Property 'none' does not exist on type 'B'.
+tests/cases/conformance/pragma/noImplicitAny/file4.ts(38,26): error TS2322: Type '{ prop: string; excess: string; }' is not assignable to type 'B'.
+  Object literal may only specify known properties, and 'excess' does not exist in type 'B'.
+tests/cases/conformance/pragma/noImplicitAny/file4.ts(41,11): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+
+
+==== tests/cases/conformance/pragma/noImplicitAny/file1.ts (12 errors) ====
+    // @ts-noImplicitAny
+    import * as ns from "missing";
+                        ~~~~~~~~~
+!!! error TS2792: Cannot find module 'missing'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+    
+    const a = p => p + 1;
+              ~
+!!! error TS7006: Parameter 'p' implicitly has an 'any' type.
+    
+    let x;
+    x = "a";
+    x = 42;
+    
+    export class A {
+        prop;
+        prop2;
+        ~~~~~
+!!! error TS7008: Member 'prop2' implicitly has an 'any' type.
+        constructor() {
+            this.prop = "a";
+            ~~~~~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+            this.prop = 42;
+        }
+        static stat;
+        static stat2;
+               ~~~~~
+!!! error TS7008: Member 'stat2' implicitly has an 'any' type.
+        static {
+            this.stat = "a";
+            ~~~~~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+            this.stat = 42;
+        }
+    
+        set access(param) {}
+        get access() { return this.access; }
+            ~~~~~~
+!!! error TS7023: 'access' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+    }
+    
+    export function f1() {
+                    ~~
+!!! error TS7023: 'f1' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+        return f1();
+    }
+    
+    const res = {}["none"];
+                ~~~~~~~~~~
+!!! error TS2339: Property 'none' does not exist on type '{}'.
+    
+    interface B { prop: string }
+    declare var b: B;
+    
+    const c = b["none"];
+              ~~~~~~~~~
+!!! error TS7053: Element implicitly has an 'any' type because expression of type '"none"' can't be used to index type 'B'.
+!!! error TS7053:   Property 'none' does not exist on type 'B'.
+    
+    const d: B = { prop: "", excess: "yes" };
+                             ~~~~~~~~~~~~~
+!!! error TS2322: Type '{ prop: string; excess: string; }' is not assignable to type 'B'.
+!!! error TS2322:   Object literal may only specify known properties, and 'excess' does not exist in type 'B'.
+    
+    function f2(): string { return ""; }
+    const e = new f2();
+              ~~~~~~~~
+!!! error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+==== tests/cases/conformance/pragma/noImplicitAny/file2.ts (12 errors) ====
+    // @ts-noImplicitAny true
+    import * as ns from "missing";
+                        ~~~~~~~~~
+!!! error TS2792: Cannot find module 'missing'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+    
+    const a = p => p + 1;
+              ~
+!!! error TS7006: Parameter 'p' implicitly has an 'any' type.
+    
+    let x;
+    x = "a";
+    x = 42;
+    
+    export class A {
+        prop;
+        prop2;
+        ~~~~~
+!!! error TS7008: Member 'prop2' implicitly has an 'any' type.
+        constructor() {
+            this.prop = "a";
+            ~~~~~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+            this.prop = 42;
+        }
+        static stat;
+        static stat2;
+               ~~~~~
+!!! error TS7008: Member 'stat2' implicitly has an 'any' type.
+        static {
+            this.stat = "a";
+            ~~~~~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+            this.stat = 42;
+        }
+    
+        set access(param) {}
+        get access() { return this.access; }
+            ~~~~~~
+!!! error TS7023: 'access' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+    }
+    
+    export function f1() {
+                    ~~
+!!! error TS7023: 'f1' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+        return f1();
+    }
+    
+    const res = {}["none"];
+                ~~~~~~~~~~
+!!! error TS2339: Property 'none' does not exist on type '{}'.
+    
+    interface B { prop: string }
+    declare var b: B;
+    
+    const c = b["none"];
+              ~~~~~~~~~
+!!! error TS7053: Element implicitly has an 'any' type because expression of type '"none"' can't be used to index type 'B'.
+!!! error TS7053:   Property 'none' does not exist on type 'B'.
+    
+    const d: B = { prop: "", excess: "yes" };
+                             ~~~~~~~~~~~~~
+!!! error TS2322: Type '{ prop: string; excess: string; }' is not assignable to type 'B'.
+!!! error TS2322:   Object literal may only specify known properties, and 'excess' does not exist in type 'B'.
+    
+    function f2(): string { return ""; }
+    const e = new f2();
+              ~~~~~~~~
+!!! error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
+==== tests/cases/conformance/pragma/noImplicitAny/file3.ts (3 errors) ====
+    // @ts-noImplicitAny false
+    import * as ns from "missing";
+                        ~~~~~~~~~
+!!! error TS2792: Cannot find module 'missing'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+    
+    const a = p => p + 1;
+    
+    let x;
+    x = "a";
+    x = 42;
+    
+    export class A {
+        prop;
+        prop2;
+        constructor() {
+            this.prop = "a";
+            this.prop = 42;
+        }
+        static stat;
+        static stat2;
+        static {
+            this.stat = "a";
+            this.stat = 42;
+        }
+    
+        set access(param) {}
+        get access() { return this.access; }
+    }
+    
+    export function f1() {
+        return f1();
+    }
+    
+    const res = {}["none"];
+    
+    interface B { prop: string }
+    declare var b: B;
+    
+    const c = b["none"];
+    
+    const d: B = { prop: "", excess: "yes" };
+                             ~~~~~~~~~~~~~
+!!! error TS2322: Type '{ prop: string; excess: string; }' is not assignable to type 'B'.
+!!! error TS2322:   Object literal may only specify known properties, and 'excess' does not exist in type 'B'.
+    
+    function f2(): string { return ""; }
+    const e = new f2();
+              ~~~~~~~~
+!!! error TS2350: Only a void function can be called with the 'new' keyword.
+==== tests/cases/conformance/pragma/noImplicitAny/file4.ts (12 errors) ====
+    import * as ns from "missing";
+                        ~~~~~~~~~
+!!! error TS2792: Cannot find module 'missing'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+    
+    const a = p => p + 1;
+              ~
+!!! error TS7006: Parameter 'p' implicitly has an 'any' type.
+    
+    let x;
+    x = "a";
+    x = 42;
+    
+    export class A {
+        prop;
+        prop2;
+        ~~~~~
+!!! error TS7008: Member 'prop2' implicitly has an 'any' type.
+        constructor() {
+            this.prop = "a";
+            ~~~~~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+            this.prop = 42;
+        }
+        static stat;
+        static stat2;
+               ~~~~~
+!!! error TS7008: Member 'stat2' implicitly has an 'any' type.
+        static {
+            this.stat = "a";
+            ~~~~~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+            this.stat = 42;
+        }
+    
+        set access(param) {}
+        get access() { return this.access; }
+            ~~~~~~
+!!! error TS7023: 'access' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+    }
+    
+    export function f1() {
+                    ~~
+!!! error TS7023: 'f1' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+        return f1();
+    }
+    
+    const res = {}["none"];
+                ~~~~~~~~~~
+!!! error TS2339: Property 'none' does not exist on type '{}'.
+    
+    interface B { prop: string }
+    declare var b: B;
+    
+    const c = b["none"];
+              ~~~~~~~~~
+!!! error TS7053: Element implicitly has an 'any' type because expression of type '"none"' can't be used to index type 'B'.
+!!! error TS7053:   Property 'none' does not exist on type 'B'.
+    
+    const d: B = { prop: "", excess: "yes" };
+                             ~~~~~~~~~~~~~
+!!! error TS2322: Type '{ prop: string; excess: string; }' is not assignable to type 'B'.
+!!! error TS2322:   Object literal may only specify known properties, and 'excess' does not exist in type 'B'.
+    
+    function f2(): string { return ""; }
+    const e = new f2();
+              ~~~~~~~~
+!!! error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.

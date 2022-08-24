@@ -1,0 +1,35 @@
+=== tests/cases/conformance/pragma/noImplicitThis/file1.ts ===
+// @ts-noImplicitThis
+const a = () => this.Math;
+>a : () => Math
+>() => this.Math : () => Math
+>this.Math : Math
+>this : typeof globalThis
+>Math : Math
+
+=== tests/cases/conformance/pragma/noImplicitThis/file2.ts ===
+// @ts-noImplicitThis true
+const b = () => this.Math;
+>b : () => Math
+>() => this.Math : () => Math
+>this.Math : Math
+>this : typeof globalThis
+>Math : Math
+
+=== tests/cases/conformance/pragma/noImplicitThis/file3.ts ===
+// @ts-noImplicitThis false
+const c = () => this.Math;
+>c : () => Math
+>() => this.Math : () => Math
+>this.Math : Math
+>this : typeof globalThis
+>Math : Math
+
+=== tests/cases/conformance/pragma/noImplicitThis/file4.ts ===
+const d = () => this.Math;
+>d : () => Math
+>() => this.Math : () => Math
+>this.Math : Math
+>this : typeof globalThis
+>Math : Math
+

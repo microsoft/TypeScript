@@ -1,0 +1,90 @@
+=== tests/cases/conformance/pragma/noImplicitOverride/file1.ts ===
+// @ts-noImplicitOverride
+export class A {
+>A : A
+
+    method() {}
+>method : () => void
+}
+export class B extends A {
+>B : B
+>A : A
+
+    method() {}
+>method : () => void
+}
+export class C extends A {
+>C : C
+>A : A
+
+    override method() {}
+>method : () => void
+}
+
+=== tests/cases/conformance/pragma/noImplicitOverride/file2.ts ===
+// @ts-noImplicitOverride true
+export class A {
+>A : A
+
+    method() {}
+>method : () => void
+}
+export class B extends A {
+>B : B
+>A : A
+
+    method() {}
+>method : () => void
+}
+export class C extends A {
+>C : C
+>A : A
+
+    override method() {}
+>method : () => void
+}
+
+=== tests/cases/conformance/pragma/noImplicitOverride/file3.ts ===
+// @ts-noImplicitOverride false
+export class A {
+>A : A
+
+    method() {}
+>method : () => void
+}
+export class B extends A {
+>B : B
+>A : A
+
+    method() {}
+>method : () => void
+}
+export class C extends A {
+>C : C
+>A : A
+
+    override method() {}
+>method : () => void
+}
+
+=== tests/cases/conformance/pragma/noImplicitOverride/file4.ts ===
+export class A {
+>A : A
+
+    method() {}
+>method : () => void
+}
+export class B extends A {
+>B : B
+>A : A
+
+    method() {}
+>method : () => void
+}
+export class C extends A {
+>C : C
+>A : A
+
+    override method() {}
+>method : () => void
+}

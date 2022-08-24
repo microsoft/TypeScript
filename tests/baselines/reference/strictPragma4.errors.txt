@@ -1,0 +1,36 @@
+tests/cases/conformance/pragma/strict/file2.ts(11,1): error TS2322: Type '(arg: string) => number' is not assignable to type '(arg: unknown) => number'.
+  Types of parameters 'arg' and 'arg' are incompatible.
+    Type 'unknown' is not assignable to type 'string'.
+tests/cases/conformance/pragma/strict/file2.ts(14,5): error TS2564: Property 'prop' has no initializer and is not definitely assigned in the constructor.
+tests/cases/conformance/pragma/strict/file2.ts(19,1): error TS2532: Object is possibly 'undefined'.
+
+
+==== tests/cases/conformance/pragma/strict/file2.ts (3 errors) ====
+    // @ts-strict
+    // @ts-strictBindCallApply false
+    export function f1(x: string) {}
+    f1.call(undefined, 42); // wrong
+    f1.call(undefined, "ok"); // right
+    
+    export let a = (arg: string) => 0;
+    export let b = (arg: unknown) => 0;
+    
+    a = b;
+    b = a;
+    ~
+!!! error TS2322: Type '(arg: string) => number' is not assignable to type '(arg: unknown) => number'.
+!!! error TS2322:   Types of parameters 'arg' and 'arg' are incompatible.
+!!! error TS2322:     Type 'unknown' is not assignable to type 'string'.
+    
+    export class A {
+        prop: string;
+        ~~~~
+!!! error TS2564: Property 'prop' has no initializer and is not definitely assigned in the constructor.
+        constructor() {}
+    }
+    
+    declare var c: { member?: string };
+    c.member.charAt(0);
+    ~~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+    

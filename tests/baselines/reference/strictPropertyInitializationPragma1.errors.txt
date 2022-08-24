@@ -1,0 +1,35 @@
+tests/cases/conformance/pragma/strictPropertyInitialization/file1.ts(3,5): error TS2564: Property 'prop' has no initializer and is not definitely assigned in the constructor.
+tests/cases/conformance/pragma/strictPropertyInitialization/file2.ts(3,5): error TS2564: Property 'prop' has no initializer and is not definitely assigned in the constructor.
+
+
+==== tests/cases/conformance/pragma/strictPropertyInitialization/file1.ts (1 errors) ====
+    // @ts-strictPropertyInitialization
+    export class A {
+        prop: string;
+        ~~~~
+!!! error TS2564: Property 'prop' has no initializer and is not definitely assigned in the constructor.
+        constructor() {}
+    }
+    
+==== tests/cases/conformance/pragma/strictPropertyInitialization/file2.ts (1 errors) ====
+    // @ts-strictPropertyInitialization true
+    export class A {
+        prop: string;
+        ~~~~
+!!! error TS2564: Property 'prop' has no initializer and is not definitely assigned in the constructor.
+        constructor() {}
+    }
+    
+==== tests/cases/conformance/pragma/strictPropertyInitialization/file3.ts (0 errors) ====
+    // @ts-strictPropertyInitialization false
+    export class A {
+        prop: string;
+        constructor() {}
+    }
+    
+==== tests/cases/conformance/pragma/strictPropertyInitialization/file4.ts (0 errors) ====
+    export class A {
+        prop: string;
+        constructor() {}
+    }
+    

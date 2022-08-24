@@ -1,0 +1,57 @@
+tests/cases/conformance/pragma/strictFunctionTypes/file3.ts(10,1): error TS2322: Type '(a: number) => number' is not assignable to type '(a: unknown) => number'.
+  Types of parameters 'a' and 'a' are incompatible.
+    Type 'unknown' is not assignable to type 'number'.
+tests/cases/conformance/pragma/strictFunctionTypes/file3.ts(16,1): error TS2322: Type '(a: number) => number' is not assignable to type '(a: unknown) => number'.
+  Types of parameters 'a' and 'a' are incompatible.
+    Type 'unknown' is not assignable to type 'number'.
+tests/cases/conformance/pragma/strictFunctionTypes/file3.ts(22,1): error TS2322: Type '(a: number) => number' is not assignable to type '(a: unknown) => number'.
+  Types of parameters 'a' and 'a' are incompatible.
+    Type 'unknown' is not assignable to type 'number'.
+
+
+==== tests/cases/conformance/pragma/strictFunctionTypes/file1.ts (0 errors) ====
+    // @ts-strictFunctionTypes
+    export const a = (a: number) => 0;
+    export const b = (a: unknown) => 0;
+    
+==== tests/cases/conformance/pragma/strictFunctionTypes/file2.ts (0 errors) ====
+    // @ts-strictFunctionTypes false
+    export const a = (a: number) => 0;
+    export const b = (a: unknown) => 0;
+    
+==== tests/cases/conformance/pragma/strictFunctionTypes/file3.ts (3 errors) ====
+    import {a as a1, b as b1} from "./file1";
+    import {a as a2, b as b2} from "./file2";
+    
+    declare var numberArgStrict: typeof a1;
+    declare var numberArgLoose: typeof a2;
+    declare var unknownArgStrict: typeof b1;
+    declare var unknownArgLoose: typeof b2;
+    
+    numberArgStrict = unknownArgStrict;
+    unknownArgStrict = numberArgStrict;
+    ~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '(a: number) => number' is not assignable to type '(a: unknown) => number'.
+!!! error TS2322:   Types of parameters 'a' and 'a' are incompatible.
+!!! error TS2322:     Type 'unknown' is not assignable to type 'number'.
+    
+    numberArgStrict = numberArgLoose;
+    numberArgLoose = numberArgStrict;
+    
+    numberArgStrict = unknownArgLoose;
+    unknownArgLoose = numberArgStrict;
+    ~~~~~~~~~~~~~~~
+!!! error TS2322: Type '(a: number) => number' is not assignable to type '(a: unknown) => number'.
+!!! error TS2322:   Types of parameters 'a' and 'a' are incompatible.
+!!! error TS2322:     Type 'unknown' is not assignable to type 'number'.
+    
+    numberArgLoose = unknownArgLoose;
+    unknownArgLoose = numberArgLoose;
+    
+    numberArgLoose = unknownArgStrict;
+    unknownArgStrict = numberArgLoose;
+    ~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '(a: number) => number' is not assignable to type '(a: unknown) => number'.
+!!! error TS2322:   Types of parameters 'a' and 'a' are incompatible.
+!!! error TS2322:     Type 'unknown' is not assignable to type 'number'.
+    

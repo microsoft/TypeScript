@@ -1,0 +1,67 @@
+=== tests/cases/conformance/pragma/strict/file1.ts ===
+// @ts-strict
+// @ts-strictFunctionTypes false
+export function f1(x: string) {}
+>f1 : (x: string) => void
+>x : string
+
+f1.call(undefined, 42); // wrong
+>f1.call(undefined, 42) : void
+>f1.call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>f1 : (x: string) => void
+>call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>undefined : undefined
+>42 : 42
+
+f1.call(undefined, "ok"); // right
+>f1.call(undefined, "ok") : void
+>f1.call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>f1 : (x: string) => void
+>call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>undefined : undefined
+>"ok" : "ok"
+
+export let a = (arg: string) => 0;
+>a : (arg: string) => number
+>(arg: string) => 0 : (arg: string) => number
+>arg : string
+>0 : 0
+
+export let b = (arg: unknown) => 0;
+>b : (arg: unknown) => number
+>(arg: unknown) => 0 : (arg: unknown) => number
+>arg : unknown
+>0 : 0
+
+a = b;
+>a = b : (arg: unknown) => number
+>a : (arg: string) => number
+>b : (arg: unknown) => number
+
+b = a;
+>b = a : (arg: string) => number
+>b : (arg: unknown) => number
+>a : (arg: string) => number
+
+export class A {
+>A : A
+
+    prop: string;
+>prop : string
+
+    constructor() {}
+}
+
+declare var c: { member?: string };
+>c : { member?: string | undefined; }
+>member : string | undefined
+
+c.member.charAt(0);
+>c.member.charAt(0) : string
+>c.member.charAt : (pos: number) => string
+>c.member : string | undefined
+>c : { member?: string | undefined; }
+>member : string | undefined
+>charAt : (pos: number) => string
+>0 : 0
+

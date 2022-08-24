@@ -1,0 +1,71 @@
+=== tests/cases/conformance/pragma/strictBindCallApply/file1.ts ===
+// @ts-strictBindCallApply
+export function f1(x: string) {}
+>f1 : Symbol(f1, Decl(file1.ts, 0, 0))
+>x : Symbol(x, Decl(file1.ts, 1, 19))
+
+f1.call(undefined, 42); // wrong
+>f1.call : Symbol(CallableFunction.call, Decl(lib.es5.d.ts, --, --))
+>f1 : Symbol(f1, Decl(file1.ts, 0, 0))
+>call : Symbol(CallableFunction.call, Decl(lib.es5.d.ts, --, --))
+>undefined : Symbol(undefined)
+
+f1.call(undefined, "ok"); // right
+>f1.call : Symbol(CallableFunction.call, Decl(lib.es5.d.ts, --, --))
+>f1 : Symbol(f1, Decl(file1.ts, 0, 0))
+>call : Symbol(CallableFunction.call, Decl(lib.es5.d.ts, --, --))
+>undefined : Symbol(undefined)
+
+=== tests/cases/conformance/pragma/strictBindCallApply/file2.ts ===
+// @ts-strictBindCallApply true
+export function f1(x: string) {}
+>f1 : Symbol(f1, Decl(file2.ts, 0, 0))
+>x : Symbol(x, Decl(file2.ts, 1, 19))
+
+f1.call(undefined, 42); // wrong
+>f1.call : Symbol(CallableFunction.call, Decl(lib.es5.d.ts, --, --))
+>f1 : Symbol(f1, Decl(file2.ts, 0, 0))
+>call : Symbol(CallableFunction.call, Decl(lib.es5.d.ts, --, --))
+>undefined : Symbol(undefined)
+
+f1.call(undefined, "ok"); // right
+>f1.call : Symbol(CallableFunction.call, Decl(lib.es5.d.ts, --, --))
+>f1 : Symbol(f1, Decl(file2.ts, 0, 0))
+>call : Symbol(CallableFunction.call, Decl(lib.es5.d.ts, --, --))
+>undefined : Symbol(undefined)
+
+=== tests/cases/conformance/pragma/strictBindCallApply/file3.ts ===
+// @ts-strictBindCallApply false
+export function f1(x: string) {}
+>f1 : Symbol(f1, Decl(file3.ts, 0, 0))
+>x : Symbol(x, Decl(file3.ts, 1, 19))
+
+f1.call(undefined, 42); // wrong
+>f1.call : Symbol(Function.call, Decl(lib.es5.d.ts, --, --))
+>f1 : Symbol(f1, Decl(file3.ts, 0, 0))
+>call : Symbol(Function.call, Decl(lib.es5.d.ts, --, --))
+>undefined : Symbol(undefined)
+
+f1.call(undefined, "ok"); // right
+>f1.call : Symbol(Function.call, Decl(lib.es5.d.ts, --, --))
+>f1 : Symbol(f1, Decl(file3.ts, 0, 0))
+>call : Symbol(Function.call, Decl(lib.es5.d.ts, --, --))
+>undefined : Symbol(undefined)
+
+=== tests/cases/conformance/pragma/strictBindCallApply/file4.ts ===
+export function f1(x: string) {}
+>f1 : Symbol(f1, Decl(file4.ts, 0, 0))
+>x : Symbol(x, Decl(file4.ts, 0, 19))
+
+f1.call(undefined, 42); // wrong
+>f1.call : Symbol(CallableFunction.call, Decl(lib.es5.d.ts, --, --))
+>f1 : Symbol(f1, Decl(file4.ts, 0, 0))
+>call : Symbol(CallableFunction.call, Decl(lib.es5.d.ts, --, --))
+>undefined : Symbol(undefined)
+
+f1.call(undefined, "ok"); // right
+>f1.call : Symbol(CallableFunction.call, Decl(lib.es5.d.ts, --, --))
+>f1 : Symbol(f1, Decl(file4.ts, 0, 0))
+>call : Symbol(CallableFunction.call, Decl(lib.es5.d.ts, --, --))
+>undefined : Symbol(undefined)
+

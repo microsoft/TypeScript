@@ -1,0 +1,48 @@
+tests/cases/conformance/pragma/noUncheckedIndexedAccess/file1.ts(6,14): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+tests/cases/conformance/pragma/noUncheckedIndexedAccess/file2.ts(6,14): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+tests/cases/conformance/pragma/noUncheckedIndexedAccess/file4.ts(5,14): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+
+
+==== tests/cases/conformance/pragma/noUncheckedIndexedAccess/file1.ts (1 errors) ====
+    // @ts-noUncheckedIndexedAccess
+    interface A {
+        [index: string]: string;
+    }
+    declare var a: A;
+    export const x: string = a.something;
+                 ~
+!!! error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'string'.
+    
+==== tests/cases/conformance/pragma/noUncheckedIndexedAccess/file2.ts (1 errors) ====
+    // @ts-noUncheckedIndexedAccess true
+    interface A {
+        [index: string]: string;
+    }
+    declare var a: A;
+    export const x: string = a.something;
+                 ~
+!!! error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'string'.
+    
+==== tests/cases/conformance/pragma/noUncheckedIndexedAccess/file3.ts (0 errors) ====
+    // @ts-noUncheckedIndexedAccess false
+    interface A {
+        [index: string]: string;
+    }
+    declare var a: A;
+    export const x: string = a.something;
+    
+==== tests/cases/conformance/pragma/noUncheckedIndexedAccess/file4.ts (1 errors) ====
+    interface A {
+        [index: string]: string;
+    }
+    declare var a: A;
+    export const x: string = a.something;
+                 ~
+!!! error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'string'.
+    

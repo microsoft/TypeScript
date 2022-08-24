@@ -1,0 +1,43 @@
+tests/cases/conformance/pragma/useUnknownInCatchVariables/file1.ts(6,11): error TS2339: Property 'a' does not exist on type 'unknown'.
+tests/cases/conformance/pragma/useUnknownInCatchVariables/file2.ts(6,11): error TS2339: Property 'a' does not exist on type 'unknown'.
+
+
+==== tests/cases/conformance/pragma/useUnknownInCatchVariables/file1.ts (1 errors) ====
+    // @ts-useUnknownInCatchVariables
+    try {
+    
+    }
+    catch (thing) {
+        thing.a;
+              ~
+!!! error TS2339: Property 'a' does not exist on type 'unknown'.
+    }
+    
+==== tests/cases/conformance/pragma/useUnknownInCatchVariables/file2.ts (1 errors) ====
+    // @ts-useUnknownInCatchVariables true
+    try {
+    
+    }
+    catch (thing) {
+        thing.a;
+              ~
+!!! error TS2339: Property 'a' does not exist on type 'unknown'.
+    }
+    
+==== tests/cases/conformance/pragma/useUnknownInCatchVariables/file3.ts (0 errors) ====
+    // @ts-useUnknownInCatchVariables false
+    try {
+    
+    }
+    catch (thing) {
+        thing.a;
+    }
+    
+==== tests/cases/conformance/pragma/useUnknownInCatchVariables/file4.ts (0 errors) ====
+    try {
+    
+    }
+    catch (thing) {
+        thing.a;
+    }
+    

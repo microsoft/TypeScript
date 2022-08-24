@@ -1,0 +1,32 @@
+tests/cases/conformance/pragma/strict/file1.ts(4,20): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+tests/cases/conformance/pragma/strict/file1.ts(14,5): error TS2564: Property 'prop' has no initializer and is not definitely assigned in the constructor.
+tests/cases/conformance/pragma/strict/file1.ts(19,1): error TS2532: Object is possibly 'undefined'.
+
+
+==== tests/cases/conformance/pragma/strict/file1.ts (3 errors) ====
+    // @ts-strict
+    // @ts-strictFunctionTypes false
+    export function f1(x: string) {}
+    f1.call(undefined, 42); // wrong
+                       ~~
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+    f1.call(undefined, "ok"); // right
+    
+    export let a = (arg: string) => 0;
+    export let b = (arg: unknown) => 0;
+    
+    a = b;
+    b = a;
+    
+    export class A {
+        prop: string;
+        ~~~~
+!!! error TS2564: Property 'prop' has no initializer and is not definitely assigned in the constructor.
+        constructor() {}
+    }
+    
+    declare var c: { member?: string };
+    c.member.charAt(0);
+    ~~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+    

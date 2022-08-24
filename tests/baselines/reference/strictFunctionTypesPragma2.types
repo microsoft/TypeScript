@@ -1,0 +1,95 @@
+=== tests/cases/conformance/pragma/strictFunctionTypes/file1.ts ===
+// @ts-strictFunctionTypes
+export let a = (arg: string) => 0;
+>a : (arg: string) => number
+>(arg: string) => 0 : (arg: string) => number
+>arg : string
+>0 : 0
+
+export let b = (arg: unknown) => 0;
+>b : (arg: unknown) => number
+>(arg: unknown) => 0 : (arg: unknown) => number
+>arg : unknown
+>0 : 0
+
+a = b;
+>a = b : (arg: unknown) => number
+>a : (arg: string) => number
+>b : (arg: unknown) => number
+
+b = a;
+>b = a : (arg: string) => number
+>b : (arg: unknown) => number
+>a : (arg: string) => number
+
+=== tests/cases/conformance/pragma/strictFunctionTypes/file2.ts ===
+// @ts-strictFunctionTypes true
+export let a = (arg: string) => 0;
+>a : (arg: string) => number
+>(arg: string) => 0 : (arg: string) => number
+>arg : string
+>0 : 0
+
+export let b = (arg: unknown) => 0;
+>b : (arg: unknown) => number
+>(arg: unknown) => 0 : (arg: unknown) => number
+>arg : unknown
+>0 : 0
+
+a = b;
+>a = b : (arg: unknown) => number
+>a : (arg: string) => number
+>b : (arg: unknown) => number
+
+b = a;
+>b = a : (arg: string) => number
+>b : (arg: unknown) => number
+>a : (arg: string) => number
+
+=== tests/cases/conformance/pragma/strictFunctionTypes/file3.ts ===
+// @ts-strictFunctionTypes false
+export let a = (arg: string) => 0;
+>a : (arg: string) => number
+>(arg: string) => 0 : (arg: string) => number
+>arg : string
+>0 : 0
+
+export let b = (arg: unknown) => 0;
+>b : (arg: unknown) => number
+>(arg: unknown) => 0 : (arg: unknown) => number
+>arg : unknown
+>0 : 0
+
+a = b;
+>a = b : (arg: unknown) => number
+>a : (arg: string) => number
+>b : (arg: unknown) => number
+
+b = a;
+>b = a : (arg: string) => number
+>b : (arg: unknown) => number
+>a : (arg: string) => number
+
+=== tests/cases/conformance/pragma/strictFunctionTypes/file4.ts ===
+export let a = (arg: string) => 0;
+>a : (arg: string) => number
+>(arg: string) => 0 : (arg: string) => number
+>arg : string
+>0 : 0
+
+export let b = (arg: unknown) => 0;
+>b : (arg: unknown) => number
+>(arg: unknown) => 0 : (arg: unknown) => number
+>arg : unknown
+>0 : 0
+
+a = b;
+>a = b : (arg: unknown) => number
+>a : (arg: string) => number
+>b : (arg: unknown) => number
+
+b = a;
+>b = a : (arg: string) => number
+>b : (arg: unknown) => number
+>a : (arg: string) => number
+

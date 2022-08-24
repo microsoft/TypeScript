@@ -1,0 +1,503 @@
+=== tests/cases/conformance/pragma/noImplicitAny/file1.ts ===
+// @ts-noImplicitAny
+import * as ns from "missing";
+>ns : any
+
+const a = p => p + 1;
+>a : (p: any) => any
+>p => p + 1 : (p: any) => any
+>p : any
+>p + 1 : any
+>p : any
+>1 : 1
+
+let x;
+>x : any
+
+x = "a";
+>x = "a" : "a"
+>x : any
+>"a" : "a"
+
+x = 42;
+>x = 42 : 42
+>x : any
+>42 : 42
+
+export class A {
+>A : A
+
+    prop;
+>prop : number
+
+    prop2;
+>prop2 : any
+
+    constructor() {
+        this.prop = "a";
+>this.prop = "a" : "a"
+>this.prop : number
+>this : this
+>prop : number
+>"a" : "a"
+
+        this.prop = 42;
+>this.prop = 42 : 42
+>this.prop : number
+>this : this
+>prop : number
+>42 : 42
+    }
+    static stat;
+>stat : number
+
+    static stat2;
+>stat2 : any
+
+    static {
+        this.stat = "a";
+>this.stat = "a" : "a"
+>this.stat : number
+>this : typeof A
+>stat : number
+>"a" : "a"
+
+        this.stat = 42;
+>this.stat = 42 : 42
+>this.stat : number
+>this : typeof A
+>stat : number
+>42 : 42
+    }
+
+    set access(param) {}
+>access : any
+>param : any
+
+    get access() { return this.access; }
+>access : any
+>this.access : any
+>this : this
+>access : any
+}
+
+export function f1() {
+>f1 : () => any
+
+    return f1();
+>f1() : any
+>f1 : () => any
+}
+
+const res = {}["none"];
+>res : undefined
+>{}["none"] : undefined
+>{} : {}
+>"none" : "none"
+
+interface B { prop: string }
+>prop : string
+
+declare var b: B;
+>b : B
+
+const c = b["none"];
+>c : any
+>b["none"] : any
+>b : B
+>"none" : "none"
+
+const d: B = { prop: "", excess: "yes" };
+>d : B
+>{ prop: "", excess: "yes" } : { prop: string; excess: string; }
+>prop : string
+>"" : ""
+>excess : string
+>"yes" : "yes"
+
+function f2(): string { return ""; }
+>f2 : () => string
+>"" : ""
+
+const e = new f2();
+>e : any
+>new f2() : any
+>f2 : () => string
+
+=== tests/cases/conformance/pragma/noImplicitAny/file2.ts ===
+// @ts-noImplicitAny true
+import * as ns from "missing";
+>ns : any
+
+const a = p => p + 1;
+>a : (p: any) => any
+>p => p + 1 : (p: any) => any
+>p : any
+>p + 1 : any
+>p : any
+>1 : 1
+
+let x;
+>x : any
+
+x = "a";
+>x = "a" : "a"
+>x : any
+>"a" : "a"
+
+x = 42;
+>x = 42 : 42
+>x : any
+>42 : 42
+
+export class A {
+>A : A
+
+    prop;
+>prop : number
+
+    prop2;
+>prop2 : any
+
+    constructor() {
+        this.prop = "a";
+>this.prop = "a" : "a"
+>this.prop : number
+>this : this
+>prop : number
+>"a" : "a"
+
+        this.prop = 42;
+>this.prop = 42 : 42
+>this.prop : number
+>this : this
+>prop : number
+>42 : 42
+    }
+    static stat;
+>stat : number
+
+    static stat2;
+>stat2 : any
+
+    static {
+        this.stat = "a";
+>this.stat = "a" : "a"
+>this.stat : number
+>this : typeof A
+>stat : number
+>"a" : "a"
+
+        this.stat = 42;
+>this.stat = 42 : 42
+>this.stat : number
+>this : typeof A
+>stat : number
+>42 : 42
+    }
+
+    set access(param) {}
+>access : any
+>param : any
+
+    get access() { return this.access; }
+>access : any
+>this.access : any
+>this : this
+>access : any
+}
+
+export function f1() {
+>f1 : () => any
+
+    return f1();
+>f1() : any
+>f1 : () => any
+}
+
+const res = {}["none"];
+>res : undefined
+>{}["none"] : undefined
+>{} : {}
+>"none" : "none"
+
+interface B { prop: string }
+>prop : string
+
+declare var b: B;
+>b : B
+
+const c = b["none"];
+>c : any
+>b["none"] : any
+>b : B
+>"none" : "none"
+
+const d: B = { prop: "", excess: "yes" };
+>d : B
+>{ prop: "", excess: "yes" } : { prop: string; excess: string; }
+>prop : string
+>"" : ""
+>excess : string
+>"yes" : "yes"
+
+function f2(): string { return ""; }
+>f2 : () => string
+>"" : ""
+
+const e = new f2();
+>e : any
+>new f2() : any
+>f2 : () => string
+
+=== tests/cases/conformance/pragma/noImplicitAny/file3.ts ===
+// @ts-noImplicitAny false
+import * as ns from "missing";
+>ns : any
+
+const a = p => p + 1;
+>a : (p: any) => any
+>p => p + 1 : (p: any) => any
+>p : any
+>p + 1 : any
+>p : any
+>1 : 1
+
+let x;
+>x : any
+
+x = "a";
+>x = "a" : "a"
+>x : any
+>"a" : "a"
+
+x = 42;
+>x = 42 : 42
+>x : any
+>42 : 42
+
+export class A {
+>A : A
+
+    prop;
+>prop : any
+
+    prop2;
+>prop2 : any
+
+    constructor() {
+        this.prop = "a";
+>this.prop = "a" : "a"
+>this.prop : any
+>this : this
+>prop : any
+>"a" : "a"
+
+        this.prop = 42;
+>this.prop = 42 : 42
+>this.prop : any
+>this : this
+>prop : any
+>42 : 42
+    }
+    static stat;
+>stat : any
+
+    static stat2;
+>stat2 : any
+
+    static {
+        this.stat = "a";
+>this.stat = "a" : "a"
+>this.stat : any
+>this : typeof A
+>stat : any
+>"a" : "a"
+
+        this.stat = 42;
+>this.stat = 42 : 42
+>this.stat : any
+>this : typeof A
+>stat : any
+>42 : 42
+    }
+
+    set access(param) {}
+>access : any
+>param : any
+
+    get access() { return this.access; }
+>access : any
+>this.access : any
+>this : this
+>access : any
+}
+
+export function f1() {
+>f1 : () => any
+
+    return f1();
+>f1() : any
+>f1 : () => any
+}
+
+const res = {}["none"];
+>res : any
+>{}["none"] : any
+>{} : {}
+>"none" : "none"
+
+interface B { prop: string }
+>prop : string
+
+declare var b: B;
+>b : B
+
+const c = b["none"];
+>c : any
+>b["none"] : any
+>b : B
+>"none" : "none"
+
+const d: B = { prop: "", excess: "yes" };
+>d : B
+>{ prop: "", excess: "yes" } : { prop: string; excess: string; }
+>prop : string
+>"" : ""
+>excess : string
+>"yes" : "yes"
+
+function f2(): string { return ""; }
+>f2 : () => string
+>"" : ""
+
+const e = new f2();
+>e : any
+>new f2() : any
+>f2 : () => string
+
+=== tests/cases/conformance/pragma/noImplicitAny/file4.ts ===
+import * as ns from "missing";
+>ns : any
+
+const a = p => p + 1;
+>a : (p: any) => any
+>p => p + 1 : (p: any) => any
+>p : any
+>p + 1 : any
+>p : any
+>1 : 1
+
+let x;
+>x : any
+
+x = "a";
+>x = "a" : "a"
+>x : any
+>"a" : "a"
+
+x = 42;
+>x = 42 : 42
+>x : any
+>42 : 42
+
+export class A {
+>A : A
+
+    prop;
+>prop : number
+
+    prop2;
+>prop2 : any
+
+    constructor() {
+        this.prop = "a";
+>this.prop = "a" : "a"
+>this.prop : number
+>this : this
+>prop : number
+>"a" : "a"
+
+        this.prop = 42;
+>this.prop = 42 : 42
+>this.prop : number
+>this : this
+>prop : number
+>42 : 42
+    }
+    static stat;
+>stat : number
+
+    static stat2;
+>stat2 : any
+
+    static {
+        this.stat = "a";
+>this.stat = "a" : "a"
+>this.stat : number
+>this : typeof A
+>stat : number
+>"a" : "a"
+
+        this.stat = 42;
+>this.stat = 42 : 42
+>this.stat : number
+>this : typeof A
+>stat : number
+>42 : 42
+    }
+
+    set access(param) {}
+>access : any
+>param : any
+
+    get access() { return this.access; }
+>access : any
+>this.access : any
+>this : this
+>access : any
+}
+
+export function f1() {
+>f1 : () => any
+
+    return f1();
+>f1() : any
+>f1 : () => any
+}
+
+const res = {}["none"];
+>res : undefined
+>{}["none"] : undefined
+>{} : {}
+>"none" : "none"
+
+interface B { prop: string }
+>prop : string
+
+declare var b: B;
+>b : B
+
+const c = b["none"];
+>c : any
+>b["none"] : any
+>b : B
+>"none" : "none"
+
+const d: B = { prop: "", excess: "yes" };
+>d : B
+>{ prop: "", excess: "yes" } : { prop: string; excess: string; }
+>prop : string
+>"" : ""
+>excess : string
+>"yes" : "yes"
+
+function f2(): string { return ""; }
+>f2 : () => string
+>"" : ""
+
+const e = new f2();
+>e : any
+>new f2() : any
+>f2 : () => string
+

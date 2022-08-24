@@ -1,0 +1,19 @@
+=== tests/cases/conformance/pragma/alwaysStrict/file1.ts ===
+// @ts-alwaysStrict
+let private = {};
+>private : Symbol(private, Decl(file1.ts, 1, 3))
+
+=== tests/cases/conformance/pragma/alwaysStrict/file2.ts ===
+// @ts-alwaysStrict true
+let protected = {};
+>protected : Symbol(protected, Decl(file2.ts, 1, 3))
+
+=== tests/cases/conformance/pragma/alwaysStrict/file3.ts ===
+// @ts-alwaysStrict false
+let public = {};
+>public : Symbol(public, Decl(file3.ts, 1, 3))
+
+=== tests/cases/conformance/pragma/alwaysStrict/file4.ts ===
+let static = {};
+>static : Symbol(static, Decl(file4.ts, 0, 3))
+

@@ -1,0 +1,23 @@
+tests/cases/conformance/pragma/alwaysStrict/file1.ts(2,5): error TS1212: Identifier expected. 'private' is a reserved word in strict mode.
+tests/cases/conformance/pragma/alwaysStrict/file2.ts(2,5): error TS1212: Identifier expected. 'protected' is a reserved word in strict mode.
+tests/cases/conformance/pragma/alwaysStrict/file4.ts(1,5): error TS1212: Identifier expected. 'static' is a reserved word in strict mode.
+
+
+==== tests/cases/conformance/pragma/alwaysStrict/file1.ts (1 errors) ====
+    // @ts-alwaysStrict
+    let private = {};
+        ~~~~~~~
+!!! error TS1212: Identifier expected. 'private' is a reserved word in strict mode.
+==== tests/cases/conformance/pragma/alwaysStrict/file2.ts (1 errors) ====
+    // @ts-alwaysStrict true
+    let protected = {};
+        ~~~~~~~~~
+!!! error TS1212: Identifier expected. 'protected' is a reserved word in strict mode.
+==== tests/cases/conformance/pragma/alwaysStrict/file3.ts (0 errors) ====
+    // @ts-alwaysStrict false
+    let public = {};
+==== tests/cases/conformance/pragma/alwaysStrict/file4.ts (1 errors) ====
+    let static = {};
+        ~~~~~~
+!!! error TS1212: Identifier expected. 'static' is a reserved word in strict mode.
+    

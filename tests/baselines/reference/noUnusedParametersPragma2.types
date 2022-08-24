@@ -1,0 +1,23 @@
+=== tests/cases/conformance/pragma/noUnusedParameters/file1.ts ===
+// @ts-noUnusedParameters
+export function f1(x: number) {}
+>f1 : (x: number) => void
+>x : number
+
+=== tests/cases/conformance/pragma/noUnusedParameters/file2.ts ===
+// @ts-noUnusedParameters true
+export function f1(x: number) {}
+>f1 : (x: number) => void
+>x : number
+
+=== tests/cases/conformance/pragma/noUnusedParameters/file3.ts ===
+// @ts-noUnusedParameters false
+export function f1(x: number) {}
+>f1 : (x: number) => void
+>x : number
+
+=== tests/cases/conformance/pragma/noUnusedParameters/file4.ts ===
+export function f1(x: number) {}
+>f1 : (x: number) => void
+>x : number
+

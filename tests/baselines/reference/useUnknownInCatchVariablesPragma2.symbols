@@ -1,0 +1,47 @@
+=== tests/cases/conformance/pragma/useUnknownInCatchVariables/file1.ts ===
+// @ts-useUnknownInCatchVariables
+try {
+
+}
+catch (thing) {
+>thing : Symbol(thing, Decl(file1.ts, 4, 7))
+
+    thing.a;
+>thing : Symbol(thing, Decl(file1.ts, 4, 7))
+}
+
+=== tests/cases/conformance/pragma/useUnknownInCatchVariables/file2.ts ===
+// @ts-useUnknownInCatchVariables true
+try {
+
+}
+catch (thing) {
+>thing : Symbol(thing, Decl(file2.ts, 4, 7))
+
+    thing.a;
+>thing : Symbol(thing, Decl(file2.ts, 4, 7))
+}
+
+=== tests/cases/conformance/pragma/useUnknownInCatchVariables/file3.ts ===
+// @ts-useUnknownInCatchVariables false
+try {
+
+}
+catch (thing) {
+>thing : Symbol(thing, Decl(file3.ts, 4, 7))
+
+    thing.a;
+>thing : Symbol(thing, Decl(file3.ts, 4, 7))
+}
+
+=== tests/cases/conformance/pragma/useUnknownInCatchVariables/file4.ts ===
+try {
+
+}
+catch (thing) {
+>thing : Symbol(thing, Decl(file4.ts, 3, 7))
+
+    thing.a;
+>thing : Symbol(thing, Decl(file4.ts, 3, 7))
+}
+

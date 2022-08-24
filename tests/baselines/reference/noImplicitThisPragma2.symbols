@@ -1,0 +1,31 @@
+=== tests/cases/conformance/pragma/noImplicitThis/file1.ts ===
+// @ts-noImplicitThis
+const a = () => this.Math;
+>a : Symbol(a, Decl(file1.ts, 1, 5))
+>this.Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>this : Symbol(globalThis)
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+=== tests/cases/conformance/pragma/noImplicitThis/file2.ts ===
+// @ts-noImplicitThis true
+const b = () => this.Math;
+>b : Symbol(b, Decl(file2.ts, 1, 5))
+>this.Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>this : Symbol(globalThis)
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+=== tests/cases/conformance/pragma/noImplicitThis/file3.ts ===
+// @ts-noImplicitThis false
+const c = () => this.Math;
+>c : Symbol(c, Decl(file3.ts, 1, 5))
+>this.Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>this : Symbol(globalThis)
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+=== tests/cases/conformance/pragma/noImplicitThis/file4.ts ===
+const d = () => this.Math;
+>d : Symbol(d, Decl(file4.ts, 0, 5))
+>this.Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>this : Symbol(globalThis)
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+

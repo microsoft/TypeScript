@@ -1,0 +1,23 @@
+=== tests/cases/conformance/pragma/noUnusedLocals/file1.ts ===
+// @ts-noUnusedLocals
+export {};
+let x;
+>x : Symbol(x, Decl(file1.ts, 2, 3))
+
+=== tests/cases/conformance/pragma/noUnusedLocals/file2.ts ===
+// @ts-noUnusedLocals true
+export {};
+let x;
+>x : Symbol(x, Decl(file2.ts, 2, 3))
+
+=== tests/cases/conformance/pragma/noUnusedLocals/file3.ts ===
+// @ts-noUnusedLocals false
+export {};
+let x;
+>x : Symbol(x, Decl(file3.ts, 2, 3))
+
+=== tests/cases/conformance/pragma/noUnusedLocals/file4.ts ===
+export {};
+let x;
+>x : Symbol(x, Decl(file4.ts, 1, 3))
+

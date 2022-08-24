@@ -1,0 +1,30 @@
+tests/cases/conformance/pragma/noUnusedLocals/file1.ts(3,5): error TS6133: 'x' is declared but its value is never read.
+tests/cases/conformance/pragma/noUnusedLocals/file2.ts(3,5): error TS6133: 'x' is declared but its value is never read.
+tests/cases/conformance/pragma/noUnusedLocals/file4.ts(2,5): error TS6133: 'x' is declared but its value is never read.
+
+
+==== tests/cases/conformance/pragma/noUnusedLocals/file1.ts (1 errors) ====
+    // @ts-noUnusedLocals
+    export {};
+    let x;
+        ~
+!!! error TS6133: 'x' is declared but its value is never read.
+    
+==== tests/cases/conformance/pragma/noUnusedLocals/file2.ts (1 errors) ====
+    // @ts-noUnusedLocals true
+    export {};
+    let x;
+        ~
+!!! error TS6133: 'x' is declared but its value is never read.
+    
+==== tests/cases/conformance/pragma/noUnusedLocals/file3.ts (0 errors) ====
+    // @ts-noUnusedLocals false
+    export {};
+    let x;
+    
+==== tests/cases/conformance/pragma/noUnusedLocals/file4.ts (1 errors) ====
+    export {};
+    let x;
+        ~
+!!! error TS6133: 'x' is declared but its value is never read.
+    

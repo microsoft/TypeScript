@@ -1351,7 +1351,7 @@ namespace ts {
                 const clause = clauses[i];
                 bind(clause);
                 fallthroughFlow = currentFlow;
-                if (!(currentFlow.flags & FlowFlags.Unreachable) && i !== clauses.length - 1 && options.noFallthroughCasesInSwitch) {
+                if (!(currentFlow.flags & FlowFlags.Unreachable) && i !== clauses.length - 1 && getFileLocalCompilerOption(file, options, "noFallthroughCasesInSwitch")) {
                     clause.fallthroughFlowNode = currentFlow;
                 }
             }

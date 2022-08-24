@@ -1,0 +1,47 @@
+tests/cases/conformance/pragma/strictFunctionTypes/file1.ts(6,1): error TS2322: Type '(arg: string) => number' is not assignable to type '(arg: unknown) => number'.
+  Types of parameters 'arg' and 'arg' are incompatible.
+    Type 'unknown' is not assignable to type 'string'.
+tests/cases/conformance/pragma/strictFunctionTypes/file2.ts(6,1): error TS2322: Type '(arg: string) => number' is not assignable to type '(arg: unknown) => number'.
+  Types of parameters 'arg' and 'arg' are incompatible.
+    Type 'unknown' is not assignable to type 'string'.
+
+
+==== tests/cases/conformance/pragma/strictFunctionTypes/file1.ts (1 errors) ====
+    // @ts-strictFunctionTypes
+    export let a = (arg: string) => 0;
+    export let b = (arg: unknown) => 0;
+    
+    a = b;
+    b = a;
+    ~
+!!! error TS2322: Type '(arg: string) => number' is not assignable to type '(arg: unknown) => number'.
+!!! error TS2322:   Types of parameters 'arg' and 'arg' are incompatible.
+!!! error TS2322:     Type 'unknown' is not assignable to type 'string'.
+    
+==== tests/cases/conformance/pragma/strictFunctionTypes/file2.ts (1 errors) ====
+    // @ts-strictFunctionTypes true
+    export let a = (arg: string) => 0;
+    export let b = (arg: unknown) => 0;
+    
+    a = b;
+    b = a;
+    ~
+!!! error TS2322: Type '(arg: string) => number' is not assignable to type '(arg: unknown) => number'.
+!!! error TS2322:   Types of parameters 'arg' and 'arg' are incompatible.
+!!! error TS2322:     Type 'unknown' is not assignable to type 'string'.
+    
+==== tests/cases/conformance/pragma/strictFunctionTypes/file3.ts (0 errors) ====
+    // @ts-strictFunctionTypes false
+    export let a = (arg: string) => 0;
+    export let b = (arg: unknown) => 0;
+    
+    a = b;
+    b = a;
+    
+==== tests/cases/conformance/pragma/strictFunctionTypes/file4.ts (0 errors) ====
+    export let a = (arg: string) => 0;
+    export let b = (arg: unknown) => 0;
+    
+    a = b;
+    b = a;
+    

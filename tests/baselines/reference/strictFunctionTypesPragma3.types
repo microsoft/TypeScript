@@ -1,0 +1,107 @@
+=== tests/cases/conformance/pragma/strictFunctionTypes/file1.ts ===
+// @ts-strictFunctionTypes
+export const a = (a: number) => 0;
+>a : (a: number) => number
+>(a: number) => 0 : (a: number) => number
+>a : number
+>0 : 0
+
+export const b = (a: unknown) => 0;
+>b : (a: unknown) => number
+>(a: unknown) => 0 : (a: unknown) => number
+>a : unknown
+>0 : 0
+
+=== tests/cases/conformance/pragma/strictFunctionTypes/file2.ts ===
+// @ts-strictFunctionTypes false
+export const a = (a: number) => 0;
+>a : (a: number) => number
+>(a: number) => 0 : (a: number) => number
+>a : number
+>0 : 0
+
+export const b = (a: unknown) => 0;
+>b : (a: unknown) => number
+>(a: unknown) => 0 : (a: unknown) => number
+>a : unknown
+>0 : 0
+
+=== tests/cases/conformance/pragma/strictFunctionTypes/file3.ts ===
+import {a as a1, b as b1} from "./file1";
+>a : (a: number) => number
+>a1 : (a: number) => number
+>b : (a: unknown) => number
+>b1 : (a: unknown) => number
+
+import {a as a2, b as b2} from "./file2";
+>a : (a: number) => number
+>a2 : (a: number) => number
+>b : (a: unknown) => number
+>b2 : (a: unknown) => number
+
+declare var numberArgStrict: typeof a1;
+>numberArgStrict : (a: number) => number
+>a1 : (a: number) => number
+
+declare var numberArgLoose: typeof a2;
+>numberArgLoose : (a: number) => number
+>a2 : (a: number) => number
+
+declare var unknownArgStrict: typeof b1;
+>unknownArgStrict : (a: unknown) => number
+>b1 : (a: unknown) => number
+
+declare var unknownArgLoose: typeof b2;
+>unknownArgLoose : (a: unknown) => number
+>b2 : (a: unknown) => number
+
+numberArgStrict = unknownArgStrict;
+>numberArgStrict = unknownArgStrict : (a: unknown) => number
+>numberArgStrict : (a: number) => number
+>unknownArgStrict : (a: unknown) => number
+
+unknownArgStrict = numberArgStrict;
+>unknownArgStrict = numberArgStrict : (a: number) => number
+>unknownArgStrict : (a: unknown) => number
+>numberArgStrict : (a: number) => number
+
+numberArgStrict = numberArgLoose;
+>numberArgStrict = numberArgLoose : (a: number) => number
+>numberArgStrict : (a: number) => number
+>numberArgLoose : (a: number) => number
+
+numberArgLoose = numberArgStrict;
+>numberArgLoose = numberArgStrict : (a: number) => number
+>numberArgLoose : (a: number) => number
+>numberArgStrict : (a: number) => number
+
+numberArgStrict = unknownArgLoose;
+>numberArgStrict = unknownArgLoose : (a: unknown) => number
+>numberArgStrict : (a: number) => number
+>unknownArgLoose : (a: unknown) => number
+
+unknownArgLoose = numberArgStrict;
+>unknownArgLoose = numberArgStrict : (a: number) => number
+>unknownArgLoose : (a: unknown) => number
+>numberArgStrict : (a: number) => number
+
+numberArgLoose = unknownArgLoose;
+>numberArgLoose = unknownArgLoose : (a: unknown) => number
+>numberArgLoose : (a: number) => number
+>unknownArgLoose : (a: unknown) => number
+
+unknownArgLoose = numberArgLoose;
+>unknownArgLoose = numberArgLoose : (a: number) => number
+>unknownArgLoose : (a: unknown) => number
+>numberArgLoose : (a: number) => number
+
+numberArgLoose = unknownArgStrict;
+>numberArgLoose = unknownArgStrict : (a: unknown) => number
+>numberArgLoose : (a: number) => number
+>unknownArgStrict : (a: unknown) => number
+
+unknownArgStrict = numberArgLoose;
+>unknownArgStrict = numberArgLoose : (a: number) => number
+>unknownArgStrict : (a: unknown) => number
+>numberArgLoose : (a: number) => number
+

@@ -1,0 +1,31 @@
+tests/cases/conformance/pragma/strictBindCallApply/file1.ts(3,20): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+tests/cases/conformance/pragma/strictBindCallApply/file2.ts(3,20): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+
+
+==== tests/cases/conformance/pragma/strictBindCallApply/file1.ts (1 errors) ====
+    // @ts-strictBindCallApply
+    export function f1(x: string) {}
+    f1.call(undefined, 42); // wrong
+                       ~~
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+    f1.call(undefined, "ok"); // right
+    
+==== tests/cases/conformance/pragma/strictBindCallApply/file2.ts (1 errors) ====
+    // @ts-strictBindCallApply true
+    export function f1(x: string) {}
+    f1.call(undefined, 42); // wrong
+                       ~~
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+    f1.call(undefined, "ok"); // right
+    
+==== tests/cases/conformance/pragma/strictBindCallApply/file3.ts (0 errors) ====
+    // @ts-strictBindCallApply false
+    export function f1(x: string) {}
+    f1.call(undefined, 42); // wrong
+    f1.call(undefined, "ok"); // right
+    
+==== tests/cases/conformance/pragma/strictBindCallApply/file4.ts (0 errors) ====
+    export function f1(x: string) {}
+    f1.call(undefined, 42); // wrong
+    f1.call(undefined, "ok"); // right
+    

@@ -1,0 +1,107 @@
+=== tests/cases/conformance/pragma/noFallthroughCasesInSwitch/file1.ts ===
+// @ts-noFallthroughCasesInSwitch
+export function f1(thing: "a" | "b") {
+>f1 : (thing: "a" | "b") => "a" | "b"
+>thing : "a" | "b"
+
+    switch (thing) {
+>thing : "a" | "b"
+
+        case "a":
+>"a" : "a"
+
+            thing;
+>thing : "a"
+
+        case "b":
+>"b" : "b"
+
+            thing;
+>thing : "a" | "b"
+
+            break;
+    }
+    return thing;
+>thing : "a" | "b"
+}
+
+=== tests/cases/conformance/pragma/noFallthroughCasesInSwitch/file2.ts ===
+// @ts-noFallthroughCasesInSwitch true
+export function f1(thing: "a" | "b") {
+>f1 : (thing: "a" | "b") => "a" | "b"
+>thing : "a" | "b"
+
+    switch (thing) {
+>thing : "a" | "b"
+
+        case "a":
+>"a" : "a"
+
+            thing;
+>thing : "a"
+
+        case "b":
+>"b" : "b"
+
+            thing;
+>thing : "a" | "b"
+
+            break;
+    }
+    return thing;
+>thing : "a" | "b"
+}
+
+=== tests/cases/conformance/pragma/noFallthroughCasesInSwitch/file3.ts ===
+// @ts-noFallthroughCasesInSwitch false
+export function f1(thing: "a" | "b") {
+>f1 : (thing: "a" | "b") => "a" | "b"
+>thing : "a" | "b"
+
+    switch (thing) {
+>thing : "a" | "b"
+
+        case "a":
+>"a" : "a"
+
+            thing;
+>thing : "a"
+
+        case "b":
+>"b" : "b"
+
+            thing;
+>thing : "a" | "b"
+
+            break;
+    }
+    return thing;
+>thing : "a" | "b"
+}
+
+=== tests/cases/conformance/pragma/noFallthroughCasesInSwitch/file4.ts ===
+export function f1(thing: "a" | "b") {
+>f1 : (thing: "a" | "b") => "a" | "b"
+>thing : "a" | "b"
+
+    switch (thing) {
+>thing : "a" | "b"
+
+        case "a":
+>"a" : "a"
+
+            thing;
+>thing : "a"
+
+        case "b":
+>"b" : "b"
+
+            thing;
+>thing : "a" | "b"
+
+            break;
+    }
+    return thing;
+>thing : "a" | "b"
+}
+

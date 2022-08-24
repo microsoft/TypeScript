@@ -1,0 +1,38 @@
+tests/cases/conformance/pragma/noImplicitReturns/file1.ts(2,23): error TS7030: Not all code paths return a value.
+tests/cases/conformance/pragma/noImplicitReturns/file2.ts(2,23): error TS7030: Not all code paths return a value.
+
+
+==== tests/cases/conformance/pragma/noImplicitReturns/file1.ts (1 errors) ====
+    // @ts-noImplicitReturns
+    export function f1(): string | undefined {
+                          ~~~~~~~~~~~~~~~~~~
+!!! error TS7030: Not all code paths return a value.
+        if (!!f1) {
+            return "";
+        }
+    }
+    
+==== tests/cases/conformance/pragma/noImplicitReturns/file2.ts (1 errors) ====
+    // @ts-noImplicitReturns true
+    export function f1(): string | undefined {
+                          ~~~~~~~~~~~~~~~~~~
+!!! error TS7030: Not all code paths return a value.
+        if (!!f1) {
+            return "";
+        }
+    }
+    
+==== tests/cases/conformance/pragma/noImplicitReturns/file3.ts (0 errors) ====
+    // @ts-noImplicitReturns false
+    export function f1(): string | undefined {
+        if (!!f1) {
+            return "";
+        }
+    }
+    
+==== tests/cases/conformance/pragma/noImplicitReturns/file4.ts (0 errors) ====
+    export function f1(): string | undefined {
+        if (!!f1) {
+            return "";
+        }
+    }

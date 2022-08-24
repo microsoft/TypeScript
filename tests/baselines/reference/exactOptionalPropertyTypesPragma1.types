@@ -1,0 +1,287 @@
+=== tests/cases/conformance/pragma/exactOptionalPropertyTypes/file1.ts ===
+// @ts-exactOptionalPropertyTypes
+export interface A {
+    member: string | undefined;
+>member : string | undefined
+}
+declare var a: A;
+>a : A
+
+delete a.member;
+>delete a.member : boolean
+>a.member : string | undefined
+>a : A
+>member : string | undefined
+
+export interface B {
+    member?: string;
+>member : string | undefined
+}
+declare var b: B;
+>b : B
+
+a = b;
+>a = b : B
+>a : A
+>b : B
+
+b = a;
+>b = a : A
+>b : B
+>a : A
+
+=== tests/cases/conformance/pragma/exactOptionalPropertyTypes/file2.ts ===
+// @ts-exactOptionalPropertyTypes true
+export interface A {
+    member: string | undefined;
+>member : string | undefined
+}
+declare var a: A;
+>a : A
+
+delete a.member;
+>delete a.member : boolean
+>a.member : string | undefined
+>a : A
+>member : string | undefined
+
+export interface B {
+    member?: string;
+>member : string | undefined
+}
+declare var b: B;
+>b : B
+
+a = b;
+>a = b : B
+>a : A
+>b : B
+
+b = a;
+>b = a : A
+>b : B
+>a : A
+
+=== tests/cases/conformance/pragma/exactOptionalPropertyTypes/file3.ts ===
+// @ts-exactOptionalPropertyTypes false
+export interface A {
+    member: string | undefined;
+>member : string | undefined
+}
+declare var a: A;
+>a : A
+
+delete a.member;
+>delete a.member : boolean
+>a.member : string | undefined
+>a : A
+>member : string | undefined
+
+export interface B {
+    member?: string;
+>member : string | undefined
+}
+declare var b: B;
+>b : B
+
+a = b;
+>a = b : B
+>a : A
+>b : B
+
+b = a;
+>b = a : A
+>b : B
+>a : A
+
+=== tests/cases/conformance/pragma/exactOptionalPropertyTypes/file4.ts ===
+export interface A {
+    member: string | undefined;
+>member : string | undefined
+}
+declare var a: A;
+>a : A
+
+delete a.member;
+>delete a.member : boolean
+>a.member : string | undefined
+>a : A
+>member : string | undefined
+
+export interface B {
+    member?: string;
+>member : string | undefined
+}
+declare var b: B;
+>b : B
+
+a = b;
+>a = b : B
+>a : A
+>b : B
+
+b = a;
+>b = a : A
+>b : B
+>a : A
+
+=== tests/cases/conformance/pragma/exactOptionalPropertyTypes/file5.ts ===
+// @ts-exactOptionalPropertyTypes true
+import {A as A1, B as B1} from "./file2";
+>A : any
+>A1 : any
+>B : any
+>B1 : any
+
+import {A as A2, B as B2} from "./file3";
+>A : any
+>A2 : any
+>B : any
+>B2 : any
+
+declare var a1: A1, b1: B2, a2: A2, b2: B2;
+>a1 : A1
+>b1 : B2
+>a2 : A2
+>b2 : B2
+
+a1 = b1;
+>a1 = b1 : B2
+>a1 : A1
+>b1 : B2
+
+b1 = a1;
+>b1 = a1 : A1
+>b1 : B2
+>a1 : A1
+
+a2 = b2;
+>a2 = b2 : B2
+>a2 : A2
+>b2 : B2
+
+b2 = a2;
+>b2 = a2 : A2
+>b2 : B2
+>a2 : A2
+
+a1 = a2;
+>a1 = a2 : A2
+>a1 : A1
+>a2 : A2
+
+a2 = a1;
+>a2 = a1 : A1
+>a2 : A2
+>a1 : A1
+
+b1 = b2;
+>b1 = b2 : B2
+>b1 : B2
+>b2 : B2
+
+b2 = b1;
+>b2 = b1 : B2
+>b2 : B2
+>b1 : B2
+
+a1 = b2;
+>a1 = b2 : B2
+>a1 : A1
+>b2 : B2
+
+b2 = a1;
+>b2 = a1 : A1
+>b2 : B2
+>a1 : A1
+
+b1 = a2;
+>b1 = a2 : A2
+>b1 : B2
+>a2 : A2
+
+a2 = b1;
+>a2 = b1 : B2
+>a2 : A2
+>b1 : B2
+
+=== tests/cases/conformance/pragma/exactOptionalPropertyTypes/file6.ts ===
+// @ts-exactOptionalPropertyTypes false
+import {A as A1, B as B1} from "./file2";
+>A : any
+>A1 : any
+>B : any
+>B1 : any
+
+import {A as A2, B as B2} from "./file3";
+>A : any
+>A2 : any
+>B : any
+>B2 : any
+
+declare var a1: A1, b1: B2, a2: A2, b2: B2;
+>a1 : A1
+>b1 : B2
+>a2 : A2
+>b2 : B2
+
+a1 = b1;
+>a1 = b1 : B2
+>a1 : A1
+>b1 : B2
+
+b1 = a1;
+>b1 = a1 : A1
+>b1 : B2
+>a1 : A1
+
+a2 = b2;
+>a2 = b2 : B2
+>a2 : A2
+>b2 : B2
+
+b2 = a2;
+>b2 = a2 : A2
+>b2 : B2
+>a2 : A2
+
+a1 = a2;
+>a1 = a2 : A2
+>a1 : A1
+>a2 : A2
+
+a2 = a1;
+>a2 = a1 : A1
+>a2 : A2
+>a1 : A1
+
+b1 = b2;
+>b1 = b2 : B2
+>b1 : B2
+>b2 : B2
+
+b2 = b1;
+>b2 = b1 : B2
+>b2 : B2
+>b1 : B2
+
+a1 = b2;
+>a1 = b2 : B2
+>a1 : A1
+>b2 : B2
+
+b2 = a1;
+>b2 = a1 : A1
+>b2 : B2
+>a1 : A1
+
+b1 = a2;
+>b1 = a2 : A2
+>b1 : B2
+>a2 : A2
+
+a2 = b1;
+>a2 = b1 : B2
+>a2 : A2
+>b1 : B2
+

@@ -1,0 +1,89 @@
+=== tests/cases/conformance/pragma/strictFunctionTypes/file1.ts ===
+// @ts-strictFunctionTypes
+export const a = (a: number) => 0;
+>a : Symbol(a, Decl(file1.ts, 1, 12))
+>a : Symbol(a, Decl(file1.ts, 1, 18))
+
+export const b = (a: unknown) => 0;
+>b : Symbol(b, Decl(file1.ts, 2, 12))
+>a : Symbol(a, Decl(file1.ts, 2, 18))
+
+=== tests/cases/conformance/pragma/strictFunctionTypes/file2.ts ===
+// @ts-strictFunctionTypes false
+export const a = (a: number) => 0;
+>a : Symbol(a, Decl(file2.ts, 1, 12))
+>a : Symbol(a, Decl(file2.ts, 1, 18))
+
+export const b = (a: unknown) => 0;
+>b : Symbol(b, Decl(file2.ts, 2, 12))
+>a : Symbol(a, Decl(file2.ts, 2, 18))
+
+=== tests/cases/conformance/pragma/strictFunctionTypes/file3.ts ===
+import {a as a1, b as b1} from "./file1";
+>a : Symbol(a1, Decl(file1.ts, 1, 12))
+>a1 : Symbol(a1, Decl(file3.ts, 0, 8))
+>b : Symbol(b1, Decl(file1.ts, 2, 12))
+>b1 : Symbol(b1, Decl(file3.ts, 0, 16))
+
+import {a as a2, b as b2} from "./file2";
+>a : Symbol(a2, Decl(file2.ts, 1, 12))
+>a2 : Symbol(a2, Decl(file3.ts, 1, 8))
+>b : Symbol(b2, Decl(file2.ts, 2, 12))
+>b2 : Symbol(b2, Decl(file3.ts, 1, 16))
+
+declare var numberArgStrict: typeof a1;
+>numberArgStrict : Symbol(numberArgStrict, Decl(file3.ts, 3, 11))
+>a1 : Symbol(a1, Decl(file3.ts, 0, 8))
+
+declare var numberArgLoose: typeof a2;
+>numberArgLoose : Symbol(numberArgLoose, Decl(file3.ts, 4, 11))
+>a2 : Symbol(a2, Decl(file3.ts, 1, 8))
+
+declare var unknownArgStrict: typeof b1;
+>unknownArgStrict : Symbol(unknownArgStrict, Decl(file3.ts, 5, 11))
+>b1 : Symbol(b1, Decl(file3.ts, 0, 16))
+
+declare var unknownArgLoose: typeof b2;
+>unknownArgLoose : Symbol(unknownArgLoose, Decl(file3.ts, 6, 11))
+>b2 : Symbol(b2, Decl(file3.ts, 1, 16))
+
+numberArgStrict = unknownArgStrict;
+>numberArgStrict : Symbol(numberArgStrict, Decl(file3.ts, 3, 11))
+>unknownArgStrict : Symbol(unknownArgStrict, Decl(file3.ts, 5, 11))
+
+unknownArgStrict = numberArgStrict;
+>unknownArgStrict : Symbol(unknownArgStrict, Decl(file3.ts, 5, 11))
+>numberArgStrict : Symbol(numberArgStrict, Decl(file3.ts, 3, 11))
+
+numberArgStrict = numberArgLoose;
+>numberArgStrict : Symbol(numberArgStrict, Decl(file3.ts, 3, 11))
+>numberArgLoose : Symbol(numberArgLoose, Decl(file3.ts, 4, 11))
+
+numberArgLoose = numberArgStrict;
+>numberArgLoose : Symbol(numberArgLoose, Decl(file3.ts, 4, 11))
+>numberArgStrict : Symbol(numberArgStrict, Decl(file3.ts, 3, 11))
+
+numberArgStrict = unknownArgLoose;
+>numberArgStrict : Symbol(numberArgStrict, Decl(file3.ts, 3, 11))
+>unknownArgLoose : Symbol(unknownArgLoose, Decl(file3.ts, 6, 11))
+
+unknownArgLoose = numberArgStrict;
+>unknownArgLoose : Symbol(unknownArgLoose, Decl(file3.ts, 6, 11))
+>numberArgStrict : Symbol(numberArgStrict, Decl(file3.ts, 3, 11))
+
+numberArgLoose = unknownArgLoose;
+>numberArgLoose : Symbol(numberArgLoose, Decl(file3.ts, 4, 11))
+>unknownArgLoose : Symbol(unknownArgLoose, Decl(file3.ts, 6, 11))
+
+unknownArgLoose = numberArgLoose;
+>unknownArgLoose : Symbol(unknownArgLoose, Decl(file3.ts, 6, 11))
+>numberArgLoose : Symbol(numberArgLoose, Decl(file3.ts, 4, 11))
+
+numberArgLoose = unknownArgStrict;
+>numberArgLoose : Symbol(numberArgLoose, Decl(file3.ts, 4, 11))
+>unknownArgStrict : Symbol(unknownArgStrict, Decl(file3.ts, 5, 11))
+
+unknownArgStrict = numberArgLoose;
+>unknownArgStrict : Symbol(unknownArgStrict, Decl(file3.ts, 5, 11))
+>numberArgLoose : Symbol(numberArgLoose, Decl(file3.ts, 4, 11))
+

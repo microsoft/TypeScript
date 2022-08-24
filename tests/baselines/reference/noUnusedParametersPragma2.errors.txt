@@ -1,0 +1,26 @@
+tests/cases/conformance/pragma/noUnusedParameters/file1.ts(2,20): error TS6133: 'x' is declared but its value is never read.
+tests/cases/conformance/pragma/noUnusedParameters/file2.ts(2,20): error TS6133: 'x' is declared but its value is never read.
+tests/cases/conformance/pragma/noUnusedParameters/file4.ts(1,20): error TS6133: 'x' is declared but its value is never read.
+
+
+==== tests/cases/conformance/pragma/noUnusedParameters/file1.ts (1 errors) ====
+    // @ts-noUnusedParameters
+    export function f1(x: number) {}
+                       ~
+!!! error TS6133: 'x' is declared but its value is never read.
+    
+==== tests/cases/conformance/pragma/noUnusedParameters/file2.ts (1 errors) ====
+    // @ts-noUnusedParameters true
+    export function f1(x: number) {}
+                       ~
+!!! error TS6133: 'x' is declared but its value is never read.
+    
+==== tests/cases/conformance/pragma/noUnusedParameters/file3.ts (0 errors) ====
+    // @ts-noUnusedParameters false
+    export function f1(x: number) {}
+    
+==== tests/cases/conformance/pragma/noUnusedParameters/file4.ts (1 errors) ====
+    export function f1(x: number) {}
+                       ~
+!!! error TS6133: 'x' is declared but its value is never read.
+    
