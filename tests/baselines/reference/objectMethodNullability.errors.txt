@@ -1,0 +1,135 @@
+tests/cases/compiler/objectMethodNullability.ts(3,15): error TS2769: No overload matches this call.
+  Overload 1 of 5, '(target: {}): {}', gave the following error.
+    Argument of type 'undefined' is not assignable to parameter of type '{}'.
+  Overload 2 of 5, '(target: {}, ...sources: any[]): any', gave the following error.
+    Argument of type 'undefined' is not assignable to parameter of type '{}'.
+tests/cases/compiler/objectMethodNullability.ts(4,15): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'object | null'.
+tests/cases/compiler/objectMethodNullability.ts(5,25): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'object'.
+tests/cases/compiler/objectMethodNullability.ts(6,23): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'object'.
+tests/cases/compiler/objectMethodNullability.ts(7,16): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(o: { [s: string]: unknown; } | ArrayLike<unknown>): [string, unknown][]', gave the following error.
+    Argument of type 'undefined' is not assignable to parameter of type '{ [s: string]: unknown; } | ArrayLike<unknown>'.
+  Overload 2 of 2, '(o: {}): [string, any][]', gave the following error.
+    Argument of type 'undefined' is not assignable to parameter of type '{}'.
+tests/cases/compiler/objectMethodNullability.ts(8,33): error TS2345: Argument of type 'undefined' is not assignable to parameter of type '{}'.
+tests/cases/compiler/objectMethodNullability.ts(9,34): error TS2345: Argument of type 'undefined' is not assignable to parameter of type '{}'.
+tests/cases/compiler/objectMethodNullability.ts(10,28): error TS2345: Argument of type 'undefined' is not assignable to parameter of type '{}'.
+tests/cases/compiler/objectMethodNullability.ts(11,30): error TS2345: Argument of type 'undefined' is not assignable to parameter of type '{}'.
+tests/cases/compiler/objectMethodNullability.ts(12,23): error TS2345: Argument of type 'undefined' is not assignable to parameter of type '{}'.
+tests/cases/compiler/objectMethodNullability.ts(13,15): error TS2345: Argument of type 'undefined' is not assignable to parameter of type '{}'.
+tests/cases/compiler/objectMethodNullability.ts(14,13): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(o: {}): string[]', gave the following error.
+    Argument of type 'undefined' is not assignable to parameter of type '{}'.
+  Overload 2 of 2, '(o: object): string[]', gave the following error.
+    Argument of type 'undefined' is not assignable to parameter of type 'object'.
+tests/cases/compiler/objectMethodNullability.ts(15,23): error TS2345: Argument of type 'undefined' is not assignable to parameter of type '{}'.
+tests/cases/compiler/objectMethodNullability.ts(16,15): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(o: ArrayLike<unknown> | { [s: string]: unknown; }): unknown[]', gave the following error.
+    Argument of type 'undefined' is not assignable to parameter of type 'ArrayLike<unknown> | { [s: string]: unknown; }'.
+  Overload 2 of 2, '(o: {}): any[]', gave the following error.
+    Argument of type 'undefined' is not assignable to parameter of type '{}'.
+tests/cases/compiler/objectMethodNullability.ts(18,15): error TS2345: Argument of type 'number' is not assignable to parameter of type 'object'.
+tests/cases/compiler/objectMethodNullability.ts(19,25): error TS2345: Argument of type 'number' is not assignable to parameter of type 'object'.
+tests/cases/compiler/objectMethodNullability.ts(20,23): error TS2345: Argument of type 'number' is not assignable to parameter of type 'object'.
+
+
+==== tests/cases/compiler/objectMethodNullability.ts (17 errors) ====
+    // All of the following should produce an error:
+    
+    Object.assign(undefined);
+                  ~~~~~~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   Overload 1 of 5, '(target: {}): {}', gave the following error.
+!!! error TS2769:     Argument of type 'undefined' is not assignable to parameter of type '{}'.
+!!! error TS2769:   Overload 2 of 5, '(target: {}, ...sources: any[]): any', gave the following error.
+!!! error TS2769:     Argument of type 'undefined' is not assignable to parameter of type '{}'.
+    Object.create(undefined);
+                  ~~~~~~~~~
+!!! error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'object | null'.
+    Object.defineProperties(undefined, {});
+                            ~~~~~~~~~
+!!! error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'object'.
+    Object.defineProperty(undefined, "foo", {});
+                          ~~~~~~~~~
+!!! error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'object'.
+    Object.entries(undefined);
+                   ~~~~~~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   Overload 1 of 2, '(o: { [s: string]: unknown; } | ArrayLike<unknown>): [string, unknown][]', gave the following error.
+!!! error TS2769:     Argument of type 'undefined' is not assignable to parameter of type '{ [s: string]: unknown; } | ArrayLike<unknown>'.
+!!! error TS2769:   Overload 2 of 2, '(o: {}): [string, any][]', gave the following error.
+!!! error TS2769:     Argument of type 'undefined' is not assignable to parameter of type '{}'.
+    Object.getOwnPropertyDescriptor(undefined, "foo");
+                                    ~~~~~~~~~
+!!! error TS2345: Argument of type 'undefined' is not assignable to parameter of type '{}'.
+    Object.getOwnPropertyDescriptors(undefined);
+                                     ~~~~~~~~~
+!!! error TS2345: Argument of type 'undefined' is not assignable to parameter of type '{}'.
+    Object.getOwnPropertyNames(undefined);
+                               ~~~~~~~~~
+!!! error TS2345: Argument of type 'undefined' is not assignable to parameter of type '{}'.
+    Object.getOwnPropertySymbols(undefined);
+                                 ~~~~~~~~~
+!!! error TS2345: Argument of type 'undefined' is not assignable to parameter of type '{}'.
+    Object.getPrototypeOf(undefined);
+                          ~~~~~~~~~
+!!! error TS2345: Argument of type 'undefined' is not assignable to parameter of type '{}'.
+    Object.hasOwn(undefined, "foo");
+                  ~~~~~~~~~
+!!! error TS2345: Argument of type 'undefined' is not assignable to parameter of type '{}'.
+    Object.keys(undefined);
+                ~~~~~~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   Overload 1 of 2, '(o: {}): string[]', gave the following error.
+!!! error TS2769:     Argument of type 'undefined' is not assignable to parameter of type '{}'.
+!!! error TS2769:   Overload 2 of 2, '(o: object): string[]', gave the following error.
+!!! error TS2769:     Argument of type 'undefined' is not assignable to parameter of type 'object'.
+    Object.setPrototypeOf(undefined, {});
+                          ~~~~~~~~~
+!!! error TS2345: Argument of type 'undefined' is not assignable to parameter of type '{}'.
+    Object.values(undefined);
+                  ~~~~~~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   Overload 1 of 2, '(o: ArrayLike<unknown> | { [s: string]: unknown; }): unknown[]', gave the following error.
+!!! error TS2769:     Argument of type 'undefined' is not assignable to parameter of type 'ArrayLike<unknown> | { [s: string]: unknown; }'.
+!!! error TS2769:   Overload 2 of 2, '(o: {}): any[]', gave the following error.
+!!! error TS2769:     Argument of type 'undefined' is not assignable to parameter of type '{}'.
+    
+    Object.create(0);
+                  ~
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'object'.
+    Object.defineProperties(0, {});
+                            ~
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'object'.
+    Object.defineProperty(0, "foo", {});
+                          ~
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'object'.
+    
+    // While the following should not:
+    
+    Object.assign(0);
+    Object.entries(0);
+    Object.getOwnPropertyDescriptor(0, "foo");
+    Object.getOwnPropertyDescriptors(0);
+    Object.getOwnPropertyNames(0);
+    Object.getOwnPropertySymbols(0);
+    Object.getPrototypeOf(0);
+    Object.hasOwn(0, "foo");
+    Object.keys(0);
+    Object.setPrototypeOf(0, {});
+    Object.values(0);
+    
+    Object.freeze(undefined);
+    Object.isExtensible(undefined);
+    Object.isFrozen(undefined);
+    Object.isSealed(undefined);
+    Object.preventExtensions(undefined);
+    Object.seal(undefined);
+    
+    Object.freeze(0);
+    Object.isExtensible(0);
+    Object.isFrozen(0);
+    Object.isSealed(0);
+    Object.preventExtensions(0);
+    Object.seal(0);
+    

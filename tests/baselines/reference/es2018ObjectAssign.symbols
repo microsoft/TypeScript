@@ -1,9 +1,9 @@
 === tests/cases/compiler/es2018ObjectAssign.ts ===
 const test = Object.assign({}, { test: true });
 >test : Symbol(test, Decl(es2018ObjectAssign.ts, 0, 5))
->Object.assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Object.assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >test : Symbol(test, Decl(es2018ObjectAssign.ts, 0, 32))
 
 declare const p: Promise<number>;

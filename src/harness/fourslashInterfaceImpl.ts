@@ -1172,6 +1172,7 @@ namespace FourSlashInterface {
             typeEntry("Partial"),
             typeEntry("Required"),
             typeEntry("Readonly"),
+            typeEntry("Writable"),
             typeEntry("Pick"),
             typeEntry("Record"),
             typeEntry("Exclude"),
