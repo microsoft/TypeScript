@@ -211,7 +211,7 @@ namespace ts.server {
         dirty = false;
 
         /*@internal*/
-        typingFiles: SortedReadonlyArray<string> = emptyArray;
+        typingFiles: SortedReadonlyArray<string> = createSortedArray();
 
         /*@internal*/
         originalConfiguredProjects: Set<NormalizedPath> | undefined;
@@ -422,7 +422,7 @@ namespace ts.server {
 
         getScriptFileNames() {
             if (!this.rootFiles) {
-                return ts.emptyArray;
+                return [];
             }
 
             let result: string[] | undefined;
@@ -433,7 +433,7 @@ namespace ts.server {
                 }
             });
 
-            return addRange(result, this.typingFiles) || ts.emptyArray;
+            return addRange(result, this.typingFiles) || [];
         }
 
         private getOrCreateScriptInfoAndAttachToProject(fileName: string) {
@@ -649,14 +649,14 @@ namespace ts.server {
          * Get the errors that dont have any file name associated
          */
         getGlobalProjectErrors(): readonly Diagnostic[] {
-            return filter(this.projectErrors, diagnostic => !diagnostic.file) || emptyArray;
+            return filter(this.projectErrors, diagnostic => !diagnostic.file) || [];
         }
 
         /**
          * Get all the project errors
          */
         getAllProjectErrors(): readonly Diagnostic[] {
-            return this.projectErrors || emptyArray;
+            return this.projectErrors || [];
         }
 
         setProjectErrors(projectErrors: Diagnostic[] | undefined) {
@@ -721,7 +721,7 @@ namespace ts.server {
          */
         emitFile(scriptInfo: ScriptInfo, writeFile: (path: string, data: string, writeByteOrderMark?: boolean) => void): EmitResult {
             if (!this.languageServiceEnabled || !this.shouldEmitFile(scriptInfo)) {
-                return { emitSkipped: true, diagnostics: emptyArray };
+                return { emitSkipped: true, diagnostics: [] };
             }
             const { emitSkipped, diagnostics, outputFiles } = this.getLanguageService().getEmitOutput(scriptInfo.fileName);
             if (!emitSkipped) {
@@ -915,7 +915,7 @@ namespace ts.server {
         }
 
         getExcludedFiles(): readonly NormalizedPath[] {
-            return emptyArray;
+            return [];
         }
 
         getFileNames(excludeFilesFromExternalLibraries?: boolean, excludeConfigFiles?: boolean) {
@@ -1104,7 +1104,7 @@ namespace ts.server {
             this.hasAddedorRemovedFiles = false;
             this.hasAddedOrRemovedSymlinks = false;
 
-            const changedFiles: readonly Path[] = this.resolutionCache.finishRecordingFilesWithChangedResolutions() || emptyArray;
+            const changedFiles: readonly Path[] = this.resolutionCache.finishRecordingFilesWithChangedResolutions() || [];
 
             for (const file of changedFiles) {
                 // delete cached information for changed files
@@ -1283,7 +1283,7 @@ namespace ts.server {
                 this.moduleSpecifierCache.clear();
             }
 
-            const oldExternalFiles = this.externalFiles || emptyArray as SortedReadonlyArray<string>;
+            const oldExternalFiles = this.externalFiles || createSortedArray();
             this.externalFiles = this.getExternalFiles();
             enumerateInsertsAndDeletes<string, string>(this.externalFiles, oldExternalFiles, getStringComparer(!this.useCaseSensitiveFileNames()),
                 // Ensure a ScriptInfo is created for new external files. This is performed indirectly
@@ -1752,7 +1752,7 @@ namespace ts.server {
 
         /*@internal*/
         getPackageJsonsVisibleToFile(fileName: string, rootDir?: string): readonly ProjectPackageJsonInfo[] {
-            if (this.projectService.serverMode !== LanguageServiceMode.Semantic) return emptyArray;
+            if (this.projectService.serverMode !== LanguageServiceMode.Semantic) return [];
             return this.projectService.getPackageJsonsVisibleToFile(fileName, rootDir);
         }
 
@@ -1909,8 +1909,8 @@ namespace ts.server {
                 diagnostics: false,
                 skipLibCheck: true,
                 sourceMap: false,
-                types: ts.emptyArray,
-                lib: ts.emptyArray,
+                types: [],
+                lib: [],
                 noLib: true,
             };
         }
@@ -1927,7 +1927,7 @@ namespace ts.server {
     }
     function extractUnresolvedImportsFromSourceFile(file: SourceFile, ambientModules: readonly string[], cachedUnresolvedImportsPerFile: ESMap<Path, readonly string[]>): readonly string[] {
         return getOrUpdate(cachedUnresolvedImportsPerFile, file.path, () => {
-            if (!file.resolvedModules) return emptyArray;
+            if (!file.resolvedModules) return [];
             let unresolvedImports: string[] | undefined;
             file.resolvedModules.forEach((resolvedModule, name) => {
                 // pick unresolved non-relative names
@@ -1937,7 +1937,7 @@ namespace ts.server {
                     unresolvedImports = append(unresolvedImports, parsePackageName(name).packageName);
                 }
             });
-            return unresolvedImports || emptyArray;
+            return unresolvedImports || [];
         });
     }
 
@@ -2048,8 +2048,8 @@ namespace ts.server {
         getTypeAcquisition(): TypeAcquisition {
             return this.typeAcquisition || {
                 enable: allRootFilesAreJsOrDts(this),
-                include: ts.emptyArray,
-                exclude: ts.emptyArray
+                include: [],
+                exclude: []
             };
         }
     }
@@ -2087,12 +2087,12 @@ namespace ts.server {
         /*@internal*/
         static getRootFileNames(dependencySelection: PackageJsonAutoImportPreference, hostProject: Project, moduleResolutionHost: ModuleResolutionHost, compilerOptions: CompilerOptions): string[] {
             if (!dependencySelection) {
-                return ts.emptyArray;
+                return [];
             }
 
             const program = hostProject.getCurrentProgram();
             if (!program) {
-                return ts.emptyArray;
+                return [];
             }
 
             const start = timestamp();
@@ -2112,7 +2112,7 @@ namespace ts.server {
                     // Avoid creating a large project that would significantly slow down time to editor interactivity
                     if (dependencySelection === PackageJsonAutoImportPreference.Auto && dependenciesAdded > this.maxDependencies) {
                         hostProject.log(`AutoImportProviderProject: attempted to add more than ${this.maxDependencies} dependencies. Aborting.`);
-                        return ts.emptyArray;
+                        return [];
                     }
 
                     // 1. Try to load from the implementation package. For many dependencies, the
@@ -2169,7 +2169,7 @@ namespace ts.server {
             if (rootNames?.length) {
                 hostProject.log(`AutoImportProviderProject: found ${rootNames.length} root files in ${dependenciesAdded} dependencies in ${timestamp() - start} ms`);
             }
-            return rootNames || ts.emptyArray;
+            return rootNames || [];
 
             function addDependency(dependency: string) {
                 if (!startsWith(dependency, "@types/")) {
@@ -2209,8 +2209,8 @@ namespace ts.server {
             diagnostics: false,
             skipLibCheck: true,
             sourceMap: false,
-            types: ts.emptyArray,
-            lib: ts.emptyArray,
+            types: [],
+            lib: [],
             noLib: true,
         };
 
@@ -2304,7 +2304,7 @@ namespace ts.server {
         }
 
         getScriptFileNames() {
-            return this.rootFileNames || ts.emptyArray;
+            return this.rootFileNames || [];
         }
 
         getLanguageService(): never {
@@ -2552,14 +2552,14 @@ namespace ts.server {
          * Get the errors that dont have any file name associated
          */
         getGlobalProjectErrors(): readonly Diagnostic[] {
-            return filter(this.projectErrors, diagnostic => !diagnostic.file) || emptyArray;
+            return filter(this.projectErrors, diagnostic => !diagnostic.file) || [];
         }
 
         /**
          * Get all the project errors
          */
         getAllProjectErrors(): readonly Diagnostic[] {
-            return this.projectErrors || emptyArray;
+            return this.projectErrors || [];
         }
 
         setProjectErrors(projectErrors: Diagnostic[]) {

@@ -117,7 +117,7 @@ export const Fragment: unique symbol;
                     })
                 }
             ], { currentDirectory: projectRoot }),
-            changes: emptyArray,
+            changes: [],
         });
 
         function verifyWindowsStyleRoot(subScenario: string, windowsStyleRoot: string, projectRootRelative: string) {

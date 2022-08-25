@@ -1537,7 +1537,7 @@ namespace ts.projectSystem {
 
             const host = createServerHost([app, jquery, chroma]);
             const logger = trackingLogger();
-            const result = JsTyping.discoverTypings(host, logger.log, [app.path, jquery.path, chroma.path], getDirectoryPath(app.path as Path), safeList, emptyMap, { enable: true }, emptyArray, emptyMap, emptyOptions);
+            const result = JsTyping.discoverTypings(host, logger.log, [app.path, jquery.path, chroma.path], getDirectoryPath(app.path as Path), safeList, emptyMap, { enable: true }, [], emptyMap, emptyOptions);
             const finish = logger.finish();
             assert.deepEqual(finish, [
                 'Inferred typings from file names: ["jquery","chroma-js"]',

@@ -331,7 +331,7 @@ namespace ts {
             if (newProgram !== oldProgram) {
                 newProgram?.getSourceFiles().forEach(newFile => {
                     const expected = isExternalOrCommonJsModule(newFile) ? newFile.packageJsonLocations?.length ?? 0 : 0;
-                    const existing = impliedFormatPackageJsons.get(newFile.path) ?? emptyArray;
+                    const existing = impliedFormatPackageJsons.get(newFile.path) ?? [];
                     for (let i = existing.length; i < expected; i++) {
                         createFileWatcherOfAffectingLocation(newFile.packageJsonLocations![i], /*forResolution*/ false);
                     }

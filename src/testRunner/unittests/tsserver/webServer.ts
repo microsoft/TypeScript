@@ -20,7 +20,7 @@ namespace ts.projectSystem {
                     },
                     logger,
                     server.nullCancellationToken,
-                    () => emptyArray
+                    () => []
                 );
             }
 
@@ -37,7 +37,7 @@ namespace ts.projectSystem {
                 fileExists: s => host.fileExists(s),
                 writeMessage: s => messages.push(s),
             };
-            const webSys = server.createWebSystem(webHost, emptyArray, () => host.getExecutingFilePath());
+            const webSys = server.createWebSystem(webHost, [], () => host.getExecutingFilePath());
             webSys.importServicePlugin = importServicePlugin;
             const logger = logLevel !== undefined ? new server.MainProcessLogger(logLevel, webHost) : nullLogger();
             const session = new TestWorkerSession(webSys, webHost, { serverMode: LanguageServiceMode.PartialSemantic, ...options }, logger);

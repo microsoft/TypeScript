@@ -61,7 +61,7 @@ export function f22() { } // trailing`,
             sys.exit(exitStatus);
             sys.write(`exitCode:: ExitStatus.${ExitStatus[sys.exitCode as ExitStatus]}\n`);
             const baseline: string[] = [];
-            tscWatch.baselinePrograms(baseline, getPrograms, emptyArray, /*baselineDependencies*/ false);
+            tscWatch.baselinePrograms(baseline, getPrograms, [], /*baselineDependencies*/ false);
             sys.write(baseline.join("\n"));
             fs.makeReadonly();
             sys.baseLine = () => {

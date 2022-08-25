@@ -126,7 +126,7 @@ namespace ts.codefix {
                         addClassElement(factory.createGetAccessorDeclaration(
                             modifiers,
                             name,
-                            emptyArray,
+                            [],
                             typeNode,
                             ambient ? undefined : body || createStubbedMethodBody(quotePreference)));
                     }

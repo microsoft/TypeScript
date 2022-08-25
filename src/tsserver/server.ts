@@ -5,7 +5,7 @@ namespace ts.server {
     function findArgumentStringArray(argName: string): readonly string[] {
         const arg = findArgument(argName);
         if (arg === undefined) {
-            return emptyArray;
+            return [];
         }
         return arg.split(",").filter(name => name !== "");
     }

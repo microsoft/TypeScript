@@ -69,7 +69,7 @@ ${appendJs}`
                     writeByteOrderMark: false
                 })),
                 emitSkipped: false,
-                diagnostics: emptyArray
+                diagnostics: []
             };
         }
 
@@ -77,7 +77,7 @@ ${appendJs}`
             return {
                 emitSkipped: true,
                 outputFiles: [],
-                diagnostics: emptyArray
+                diagnostics: []
             };
         }
 
@@ -654,7 +654,7 @@ ${appendDts}`
                         arguments: { file: dependencyTs.path }
                     }).response as protocol.CompileOnSaveAffectedFileListSingleProject[];
                     assert.deepEqual(actualAffectedFiles, [
-                        expectedAffectedFiles(usageConfig, emptyArray)
+                        expectedAffectedFiles(usageConfig, [])
                     ], "Affected files");
 
                     // Verify CompileOnSaveEmit
@@ -692,7 +692,7 @@ ${appendDts}`
                         arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
                     }).response as protocol.CompileOnSaveAffectedFileListSingleProject[];
                     assert.deepEqual(actualAffectedFiles, [
-                        expectedAffectedFiles(usageConfig, emptyArray)
+                        expectedAffectedFiles(usageConfig, [])
                     ], "Affected files");
 
                     // Verify CompileOnSaveEmit
@@ -741,7 +741,7 @@ ${appendDts}`
                         arguments: { file: dependencyTs.path }
                     }).response as protocol.CompileOnSaveAffectedFileListSingleProject[];
                     assert.deepEqual(actualAffectedFiles, [
-                        expectedAffectedFiles(usageConfig, emptyArray)
+                        expectedAffectedFiles(usageConfig, [])
                     ], "Affected files");
 
                     // Verify CompileOnSaveEmit
@@ -790,7 +790,7 @@ ${appendDts}`
                         arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
                     }).response as protocol.CompileOnSaveAffectedFileListSingleProject[];
                     assert.deepEqual(actualAffectedFiles, [
-                        expectedAffectedFiles(usageConfig, emptyArray)
+                        expectedAffectedFiles(usageConfig, [])
                     ], "Affected files");
 
                     // Verify CompileOnSaveEmit
@@ -915,7 +915,7 @@ ${appendDts}`
                         arguments: { file: dependencyTs.path }
                     }).response as protocol.CompileOnSaveAffectedFileListSingleProject[];
                     assert.deepEqual(actualAffectedFiles, [
-                        expectedAffectedFiles(usageConfig, emptyArray)
+                        expectedAffectedFiles(usageConfig, [])
                     ], "Affected files");
 
                     // Verify CompileOnSaveEmit
@@ -964,7 +964,7 @@ ${appendDts}`
                         arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
                     }).response as protocol.CompileOnSaveAffectedFileListSingleProject[];
                     assert.deepEqual(actualAffectedFiles, [
-                        expectedAffectedFiles(usageConfig, emptyArray)
+                        expectedAffectedFiles(usageConfig, [])
                     ], "Affected files");
 
                     // Verify CompileOnSaveEmit
@@ -1556,7 +1556,7 @@ ${appendDts}`
                         arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
                     }).response as protocol.CompileOnSaveAffectedFileListSingleProject[];
                     assert.deepEqual(actualAffectedFiles, [
-                        expectedAffectedFiles(usageConfig, emptyArray)
+                        expectedAffectedFiles(usageConfig, [])
                     ], "Affected files");
 
                     // Verify CompileOnSaveEmit
@@ -1605,7 +1605,7 @@ ${appendDts}`
                         arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
                     }).response as protocol.CompileOnSaveAffectedFileListSingleProject[];
                     assert.deepEqual(actualAffectedFiles, [
-                        expectedAffectedFiles(usageConfig, emptyArray)
+                        expectedAffectedFiles(usageConfig, [])
                     ], "Affected files");
 
                     // Verify CompileOnSaveEmit
@@ -1703,7 +1703,7 @@ ${appendDts}`
                         arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
                     }).response as protocol.CompileOnSaveAffectedFileListSingleProject[];
                     assert.deepEqual(actualAffectedFiles, [
-                        expectedAffectedFiles(usageConfig, emptyArray)
+                        expectedAffectedFiles(usageConfig, [])
                     ], "Affected files");
 
                     // Verify CompileOnSaveEmit
@@ -1828,7 +1828,7 @@ ${appendDts}`
                         arguments: { file: dependencyTs.path }
                     }).response as protocol.CompileOnSaveAffectedFileListSingleProject[];
                     assert.deepEqual(actualAffectedFiles, [
-                        expectedAffectedFiles(usageConfig, emptyArray),
+                        expectedAffectedFiles(usageConfig, []),
                         expectedAffectedFiles(dependencyConfig, [dependencyTs])
                     ], "Affected files");
 
@@ -1937,7 +1937,7 @@ ${appendDts}`
                         arguments: { file: dependencyTs.path }
                     }).response as protocol.CompileOnSaveAffectedFileListSingleProject[];
                     assert.deepEqual(actualAffectedFiles, [
-                        expectedAffectedFiles(usageConfig, emptyArray),
+                        expectedAffectedFiles(usageConfig, []),
                         expectedAffectedFiles(dependencyConfig, [dependencyTs])
                     ], "Affected files");
 
@@ -2155,7 +2155,7 @@ ${appendDts}`
                         arguments: { file: dependencyTs.path }
                     }).response as protocol.CompileOnSaveAffectedFileListSingleProject[];
                     assert.deepEqual(actualAffectedFiles, [
-                        expectedAffectedFiles(usageConfig, emptyArray),
+                        expectedAffectedFiles(usageConfig, []),
                         expectedAffectedFiles(dependencyConfig, [dependencyTs])
                     ], "Affected files");
 

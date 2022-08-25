@@ -26,7 +26,7 @@ namespace ts.refactor {
         ],
         getAvailableActions: function getRefactorActionsToExtractType(context): readonly ApplicableRefactorInfo[] {
             const info = getRangeToExtract(context, context.triggerReason === "invoked");
-            if (!info) return emptyArray;
+            if (!info) return [];
 
             if (!isRefactorErrorInfo(info)) {
                 return [{
@@ -49,7 +49,7 @@ namespace ts.refactor {
                 }];
             }
 
-            return emptyArray;
+            return [];
         },
         getEditsForAction: function getRefactorEditsToExtractType(context, actionName): RefactorEditInfo {
             const { file, } = context;
@@ -146,7 +146,7 @@ namespace ts.refactor {
                 if (isIdentifier(node.typeName)) {
                     const typeName = node.typeName;
                     const symbol = checker.resolveName(typeName.text, typeName, SymbolFlags.TypeParameter, /* excludeGlobals */ true);
-                    for (const decl of symbol?.declarations || emptyArray) {
+                    for (const decl of symbol?.declarations || []) {
                         if (isTypeParameterDeclaration(decl) && decl.getSourceFile() === file) {
                             // skip extraction if the type node is in the range of the type parameter declaration.
                             // function foo<T extends { a?: /**/T }>(): void;

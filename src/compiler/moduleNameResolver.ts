@@ -1799,7 +1799,7 @@ namespace ts {
             affectingLocations: noopPush,
             packageJsonInfoCache,
             features: NodeResolutionFeatures.None,
-            conditions: emptyArray,
+            conditions: [],
             requestContainingDirectory: undefined,
             reportDiagnostic: noop
         };

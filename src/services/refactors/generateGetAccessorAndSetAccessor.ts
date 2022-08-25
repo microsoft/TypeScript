@@ -25,9 +25,9 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
             return { renameFilename, renameLocation, edits };
         },
         getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
-            if (!context.endPosition) return emptyArray;
+            if (!context.endPosition) return [];
             const info = codefix.getAccessorConvertiblePropertyAtPosition(context.file, context.program, context.startPosition, context.endPosition, context.triggerReason === "invoked");
-            if (!info) return emptyArray;
+            if (!info) return [];
 
             if (!isRefactorErrorInfo(info)) {
                 return [{
@@ -45,7 +45,7 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
                 }];
             }
 
-            return emptyArray;
+            return [];
         }
     });
 }

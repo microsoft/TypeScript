@@ -25,7 +25,7 @@ namespace ts.refactor.inferFunctionReturnType {
 
     function getRefactorActionsToInferReturnType(context: RefactorContext): readonly ApplicableRefactorInfo[] {
         const info = getInfo(context);
-        if (!info) return emptyArray;
+        if (!info) return [];
         if (!isRefactorErrorInfo(info)) {
             return [{
                 name: refactorName,
@@ -40,7 +40,7 @@ namespace ts.refactor.inferFunctionReturnType {
                 actions: [{ ...inferReturnTypeAction, notApplicableReason: info.error }]
             }];
         }
-        return emptyArray;
+        return [];
     }
 
     type ConvertibleDeclaration =

@@ -210,7 +210,7 @@ function fooB() { }`
             const project = service.inferredProjects[0];
             assert.isFalse(project.autoImportProviderHost);
             assert.isUndefined(project.getPackageJsonAutoImportProvider());
-            assert.deepEqual(project.getPackageJsonsForAutoImport(), emptyArray);
+            assert.deepEqual(project.getPackageJsonsForAutoImport(), []);
         });
 
         it("should support go-to-definition on module specifiers", () => {

@@ -50,8 +50,8 @@ namespace ts.tscWatch {
                     reportDiagnostic
                 )!;
                 const host = createIncrementalCompilerHost(parsedConfig.options, sys);
-                let programs: CommandLineProgram[] = emptyArray;
-                let oldPrograms: CommandLineProgram[] = emptyArray;
+                let programs: CommandLineProgram[] = [];
+                let oldPrograms: CommandLineProgram[] = [];
                 let builderProgram: EmitAndSemanticDiagnosticsBuilderProgram = undefined!;
                 let oldSnap = originalSnap;
                 let cancel = false;

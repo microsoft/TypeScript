@@ -199,7 +199,7 @@ namespace ts {
                 factory.createModuleDeclaration(
                     /*modifiers*/ [factory.createToken(SyntaxKind.DeclareKeyword)],
                     factory.createIdentifier("global"),
-                    factory.createModuleBlock(emptyArray),
+                    factory.createModuleBlock([]),
                     NodeFlags.GlobalAugmentation),
                 createSourceFile("source.ts", "", ScriptTarget.ES2015)
             ));
@@ -209,7 +209,7 @@ namespace ts {
                 factory.createModuleDeclaration(
                     /*modifiers*/ undefined,
                     factory.createIdentifier("global"),
-                    factory.createModuleBlock(emptyArray),
+                    factory.createModuleBlock([]),
                     NodeFlags.GlobalAugmentation),
                 createSourceFile("source.ts", "", ScriptTarget.ES2015)
             ));

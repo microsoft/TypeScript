@@ -144,18 +144,18 @@ function fooB() { }`
             openFilesForSession([file1], session);
             checkNumberOfProjects(service, { inferredProjects: 1 });
             const project = service.inferredProjects[0];
-            checkProjectActualFiles(project, emptyArray);
+            checkProjectActualFiles(project, []);
 
             openFilesForSession([file2], session);
             checkNumberOfProjects(service, { inferredProjects: 1 });
             assert.isFalse(project.dirty);
             project.updateGraph();
-            checkProjectActualFiles(project, emptyArray);
+            checkProjectActualFiles(project, []);
 
             closeFilesForSession([file2], session);
             checkNumberOfProjects(service, { inferredProjects: 1 });
             assert.isTrue(project.dirty);
-            checkProjectActualFiles(project, emptyArray);
+            checkProjectActualFiles(project, []);
         });
     });
 }

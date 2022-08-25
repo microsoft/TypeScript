@@ -25,14 +25,14 @@ namespace ts.codefix {
     function getPropertiesToAdd(file: SourceFile, span: TextSpan, checker: TypeChecker): Symbol[] {
         const sourceTarget = getSourceTarget(getFixableErrorSpanExpression(file, span), checker);
         if (!sourceTarget) {
-            return emptyArray;
+            return [];
         }
         const { source: sourceNode, target: targetNode } = sourceTarget;
         const target = shouldUseParentTypeOfProperty(sourceNode, targetNode, checker)
             ? checker.getTypeAtLocation(targetNode.expression)
             : checker.getTypeAtLocation(targetNode);
         if (target.symbol?.declarations?.some(d => getSourceFileOfNode(d).fileName.match(/\.d\.ts$/))) {
-            return emptyArray;
+            return [];
         }
         return checker.getExactOptionalProperties(target);
     }

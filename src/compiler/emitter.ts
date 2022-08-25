@@ -153,7 +153,7 @@ namespace ts {
             }
         }
         function getOutputs(): readonly string[] {
-            return outputs || emptyArray;
+            return outputs || [];
         }
     }
 

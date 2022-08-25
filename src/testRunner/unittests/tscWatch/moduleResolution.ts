@@ -112,7 +112,7 @@ namespace ts.tscWatch {
                 libFile
             ], { currentDirectory: projectRoot }),
             commandLineArgs: ["-w", "--traceResolution"],
-            changes: emptyArray
+            changes: []
         });
 
         describe("package json file is edited", () => {

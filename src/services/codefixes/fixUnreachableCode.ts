@@ -37,7 +37,7 @@ namespace ts.codefix {
                             break;
                         }
                         else {
-                            changes.replaceNode(sourceFile, statement, factory.createBlock(emptyArray));
+                            changes.replaceNode(sourceFile, statement, factory.createBlock([]));
                         }
                         return;
                     }

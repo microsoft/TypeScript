@@ -274,7 +274,7 @@ namespace ts.JsDoc {
             kind: ScriptElementKind.unknown, // TODO: should have its own kind?
             kindModifiers: "",
             displayParts: [textPart(name)],
-            documentation: emptyArray,
+            documentation: [],
             tags: undefined,
             codeActions: undefined,
         };
@@ -282,7 +282,7 @@ namespace ts.JsDoc {
 
     export function getJSDocParameterNameCompletions(tag: JSDocParameterTag): CompletionEntry[] {
         if (!isIdentifier(tag.name)) {
-            return emptyArray;
+            return [];
         }
         const nameThusFar = tag.name.text;
         const jsdoc = tag.parent;
@@ -308,7 +308,7 @@ namespace ts.JsDoc {
             kind: ScriptElementKind.parameterElement,
             kindModifiers: "",
             displayParts: [textPart(name)],
-            documentation: emptyArray,
+            documentation: [],
             tags: undefined,
             codeActions: undefined,
         };

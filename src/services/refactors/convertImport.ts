@@ -24,7 +24,7 @@ namespace ts.refactor {
         kinds: getOwnValues(actions).map(a => a.kind),
         getAvailableActions: function getRefactorActionsToConvertBetweenNamedAndNamespacedImports(context): readonly ApplicableRefactorInfo[] {
             const info = getImportConversionInfo(context, context.triggerReason === "invoked");
-            if (!info) return emptyArray;
+            if (!info) return [];
 
             if (!isRefactorErrorInfo(info)) {
                 const action = actions[info.convertTo];
@@ -39,7 +39,7 @@ namespace ts.refactor {
                 }));
             }
 
-            return emptyArray;
+            return [];
         },
         getEditsForAction: function getRefactorEditsToConvertBetweenNamedAndNamespacedImports(context, actionName): RefactorEditInfo {
             Debug.assert(some(getOwnValues(actions), action => action.name === actionName), "Unexpected action name");

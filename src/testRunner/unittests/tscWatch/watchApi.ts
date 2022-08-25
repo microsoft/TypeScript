@@ -46,7 +46,7 @@ namespace ts.tscWatch {
                 baseline,
                 oldSnap,
                 getPrograms,
-                changes: emptyArray,
+                changes: [],
                 watchOrSolution: watch
             });
         });
@@ -90,7 +90,7 @@ namespace ts.tscWatch {
                 baseline,
                 oldSnap,
                 getPrograms,
-                changes: emptyArray,
+                changes: [],
                 watchOrSolution: watch
             });
         });
@@ -222,7 +222,7 @@ namespace ts.tscWatch {
             watchBaseline({
                 baseline,
                 getPrograms,
-                oldPrograms: emptyArray,
+                oldPrograms: [],
                 sys,
                 oldSnap,
             });
@@ -412,7 +412,7 @@ namespace ts.tscWatch {
             watchBaseline({
                 baseline,
                 getPrograms,
-                oldPrograms: emptyArray,
+                oldPrograms: [],
                 sys,
                 oldSnap,
             });

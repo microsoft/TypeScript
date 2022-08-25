@@ -220,12 +220,12 @@ namespace ts {
             const keyAttr = find(node.attributes.properties, p => !!p.name && isIdentifier(p.name) && p.name.escapedText === "key") as JsxAttribute | undefined;
             const attrs = keyAttr ? filter(node.attributes.properties, p => p !== keyAttr) : node.attributes.properties;
             const objectProperties = length(attrs) ? transformJsxAttributesToObjectProps(attrs, childrenProp) :
-                factory.createObjectLiteralExpression(childrenProp ? [childrenProp] : emptyArray); // When there are no attributes, React wants {}
+                factory.createObjectLiteralExpression(childrenProp ? [childrenProp] : []); // When there are no attributes, React wants {}
             return visitJsxOpeningLikeElementOrFragmentJSX(
                 tagName,
                 objectProperties,
                 keyAttr,
-                children || emptyArray,
+                children || [],
                 isChild,
                 location
             );

@@ -44,7 +44,7 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
         const { file, startPosition, program, kind } = context;
         const info = getFunctionInfo(file, startPosition, program);
 
-        if (!info) return emptyArray;
+        if (!info) return [];
         const { selectedVariableDeclaration, func } = info;
         const possibleActions: RefactorActionInfo[] = [];
         const errors: RefactorActionInfo[] = [];

@@ -673,7 +673,7 @@ namespace ts {
             }
         }
         // return empty array for: out-of-order binding patterns and JSDoc function syntax, which has un-named parameters
-        return emptyArray;
+        return [];
     }
 
     /**
@@ -941,7 +941,7 @@ namespace ts {
      */
     export function getEffectiveTypeParameterDeclarations(node: DeclarationWithTypeParameters): readonly TypeParameterDeclaration[] {
         if (isJSDocSignature(node)) {
-            return emptyArray;
+            return [];
         }
         if (isJSDocTypeAlias(node)) {
             Debug.assert(node.parent.kind === SyntaxKind.JSDoc);
@@ -963,7 +963,7 @@ namespace ts {
                 return typeTag.typeParameters;
             }
         }
-        return emptyArray;
+        return [];
     }
 
     export function getEffectiveConstraintOfTypeParameter(node: TypeParameterDeclaration): TypeNode | undefined {

@@ -89,7 +89,7 @@ namespace ts.codefix {
             const { errorCode, span } = context;
 
             const info = errorCodeFixIdMap[errorCode];
-            if (!info) return emptyArray;
+            if (!info) return [];
 
             const { descriptions, fixId, fixAllDescriptions } = info;
             const changes = textChanges.ChangeTracker.with(context, changes => dispatchChanges(changes, context, errorCode, span.start));
@@ -139,7 +139,7 @@ namespace ts.codefix {
             changeTracker.addJSDocTags(sourceFile, classElement, [factory.createJSDocOverrideTag(factory.createIdentifier("override"))]);
             return;
         }
-        const modifiers = classElement.modifiers || emptyArray;
+        const modifiers = classElement.modifiers || [];
         const staticModifier = find(modifiers, isStaticModifier);
         const abstractModifier = find(modifiers, isAbstractModifier);
         const accessibilityModifier = find(modifiers, m => isAccessibilityModifier(m.kind));

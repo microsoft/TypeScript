@@ -670,7 +670,7 @@ namespace ts {
                 }
                 newParams = append(newParams, newValueParameter);
             }
-            return factory.createNodeArray(newParams || emptyArray);
+            return factory.createNodeArray(newParams || []);
         }
 
         function ensureTypeParams(node: Node, params: NodeArray<TypeParameterDeclaration> | undefined) {

@@ -1069,7 +1069,7 @@ export function bar() {}`
                 verifySolutionScenario({
                     scenario: "project is directly referenced by solution",
                     configRefs: ["./tsconfig-src.json"],
-                    additionalFiles: emptyArray,
+                    additionalFiles: [],
                 });
             });
 
@@ -1088,7 +1088,7 @@ export function bar() {}`
                     scenario: "disables looking into the child project if disableReferencedProjectLoad is set",
                     solutionOptions: { disableReferencedProjectLoad: true },
                     configRefs: ["./tsconfig-src.json"],
-                    additionalFiles: emptyArray,
+                    additionalFiles: [],
                 });
             });
 

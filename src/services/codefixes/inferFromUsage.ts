@@ -577,7 +577,7 @@ namespace ts.codefix {
                 calculateUsageOfNode(reference, usage);
             }
 
-            return combineTypes(usage.candidateThisTypes || emptyArray);
+            return combineTypes(usage.candidateThisTypes || []);
         }
 
         function inferTypesFromReferencesSingle(references: readonly Identifier[]): Type[] {
@@ -1100,7 +1100,7 @@ namespace ts.codefix {
         }
 
         function getFunctionFromCalls(calls: CallUsage[]) {
-            return checker.createAnonymousType(/*symbol*/ undefined, createSymbolTable(), [getSignatureFromCalls(calls)], emptyArray, emptyArray);
+            return checker.createAnonymousType(/*symbol*/ undefined, createSymbolTable(), [getSignatureFromCalls(calls)], [], []);
         }
 
         function getSignatureFromCalls(calls: CallUsage[]): Signature {

@@ -16,7 +16,7 @@ namespace ts.refactor.convertToOptionalChainExpression {
 
     function getRefactorActionsToConvertToOptionalChain(context: RefactorContext): readonly ApplicableRefactorInfo[] {
         const info = getInfo(context, context.triggerReason === "invoked");
-        if (!info) return emptyArray;
+        if (!info) return [];
 
         if (!isRefactorErrorInfo(info)) {
             return [{
@@ -33,7 +33,7 @@ namespace ts.refactor.convertToOptionalChainExpression {
                 actions: [{ ...toOptionalChainAction, notApplicableReason: info.error }],
             }];
         }
-        return emptyArray;
+        return [];
     }
 
     function getRefactorEditsToConvertToOptionalChain(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
