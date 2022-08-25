@@ -1,0 +1,38 @@
+=== tests/cases/conformance/decorators/class/method/decoratorOnClassMethod19.ts ===
+// https://github.com/microsoft/TypeScript/issues/48515
+declare var decorator: any;
+>decorator : Symbol(decorator, Decl(decoratorOnClassMethod19.ts, 1, 11))
+
+class C1 {
+>C1 : Symbol(C1, Decl(decoratorOnClassMethod19.ts, 1, 27))
+
+    #x
+>#x : Symbol(C1.#x, Decl(decoratorOnClassMethod19.ts, 3, 10))
+
+    @decorator((x: C1) => x.#x)
+>decorator : Symbol(decorator, Decl(decoratorOnClassMethod19.ts, 1, 11))
+>x : Symbol(x, Decl(decoratorOnClassMethod19.ts, 6, 16))
+>C1 : Symbol(C1, Decl(decoratorOnClassMethod19.ts, 1, 27))
+>x.#x : Symbol(C1.#x, Decl(decoratorOnClassMethod19.ts, 3, 10))
+>x : Symbol(x, Decl(decoratorOnClassMethod19.ts, 6, 16))
+
+    y() {}
+>y : Symbol(C1.y, Decl(decoratorOnClassMethod19.ts, 4, 6))
+}
+
+class C2 {
+>C2 : Symbol(C2, Decl(decoratorOnClassMethod19.ts, 8, 1))
+
+    #x
+>#x : Symbol(C2.#x, Decl(decoratorOnClassMethod19.ts, 10, 10))
+
+    y(@decorator((x: C2) => x.#x) p) {}
+>y : Symbol(C2.y, Decl(decoratorOnClassMethod19.ts, 11, 6))
+>decorator : Symbol(decorator, Decl(decoratorOnClassMethod19.ts, 1, 11))
+>x : Symbol(x, Decl(decoratorOnClassMethod19.ts, 13, 18))
+>C2 : Symbol(C2, Decl(decoratorOnClassMethod19.ts, 8, 1))
+>x.#x : Symbol(C2.#x, Decl(decoratorOnClassMethod19.ts, 10, 10))
+>x : Symbol(x, Decl(decoratorOnClassMethod19.ts, 13, 18))
+>p : Symbol(p, Decl(decoratorOnClassMethod19.ts, 13, 6))
+}
+

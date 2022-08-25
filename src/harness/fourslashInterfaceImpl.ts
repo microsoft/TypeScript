@@ -541,6 +541,10 @@ namespace FourSlashInterface {
             this.state.verifySyntacticClassifications(classifications);
         }
 
+        public encodedSyntacticClassificationsLength(length: number) {
+            this.state.verifyEncodedSyntacticClassificationsLength(length);
+        }
+
         public encodedSemanticClassificationsLength(format: ts.SemanticClassificationFormat, length: number) {
             this.state.verifyEncodedSemanticClassificationsLength(format, length);
         }

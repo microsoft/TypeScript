@@ -1,0 +1,17 @@
+=== tests/cases/compiler/contextualTypeOnYield2.ts ===
+type OrGen = () => (number | Generator<string, (arg: number) => void, undefined>);
+>OrGen : Symbol(OrGen, Decl(contextualTypeOnYield2.ts, 0, 0))
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
+>arg : Symbol(arg, Decl(contextualTypeOnYield2.ts, 0, 48))
+
+const g: OrGen = function* () {
+>g : Symbol(g, Decl(contextualTypeOnYield2.ts, 1, 5))
+>OrGen : Symbol(OrGen, Decl(contextualTypeOnYield2.ts, 0, 0))
+
+    return (num) => console.log(num);
+>num : Symbol(num, Decl(contextualTypeOnYield2.ts, 2, 12))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>num : Symbol(num, Decl(contextualTypeOnYield2.ts, 2, 12))
+}

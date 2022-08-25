@@ -46,9 +46,9 @@ t1 = [f1, f2];
 >f2 : (x: number) => number
 
 t2 = [E1.one, E2.two];
->t2 = [E1.one, E2.two] : [E1.one, E2.two]
+>t2 = [E1.one, E2.two] : [E1, E2]
 >t2 : [E1, E2]
->[E1.one, E2.two] : [E1.one, E2.two]
+>[E1.one, E2.two] : [E1, E2]
 >E1.one : E1
 >E1 : typeof E1
 >one : E1
@@ -64,9 +64,9 @@ t3 = [5, undefined];
 >undefined : undefined
 
 t4 = [E1.one, E2.two, 20];
->t4 = [E1.one, E2.two, 20] : [E1.one, E2.two, number]
+>t4 = [E1.one, E2.two, 20] : [E1, E2, number]
 >t4 : [E1, E2, number]
->[E1.one, E2.two, 20] : [E1.one, E2.two, number]
+>[E1.one, E2.two, 20] : [E1, E2, number]
 >E1.one : E1
 >E1 : typeof E1
 >one : E1

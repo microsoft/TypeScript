@@ -178,3 +178,13 @@ tests/cases/compiler/awaitedType.ts(22,12): error TS2589: Type instantiation is 
         const x = await f17(async () => 123 as const);
         return { x };
     }
+    
+    // https://github.com/microsoft/TypeScript/issues/47144
+    type GenericStructure<
+      AcceptableKeyType extends string = string
+    > = Record<AcceptableKeyType, number>;
+    
+    async function brokenExample<AcceptableKeyType extends string = string>(structurePromise: Promise<GenericStructure<AcceptableKeyType>>, key: AcceptableKeyType): Promise<void> {
+      const structure = await structurePromise;
+      structure[key] = 1;
+    }

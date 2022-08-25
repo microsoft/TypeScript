@@ -523,4 +523,4 @@ export interface ComponentConstructor<T extends object> {
         pause(): void;
     };
 }
-export declare type ComponentDefinition<T extends object = object> = T & Partial<Component> & ThisType<T & Component>;
+export type ComponentDefinition<T extends object = object> = T & Partial<Component> & ThisType<T & Component>;
