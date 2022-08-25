@@ -3366,7 +3366,7 @@
           ],
           "documentation": [
             {
-              "text": "Allows manipulation and formatting of text strings and determination and location of substrings within strings.",
+              "text": "Allows manipulation and formatting of text strings and determination of location of substrings within strings.",
               "kind": "text"
             }
           ]
@@ -7083,7 +7083,7 @@
           ],
           "documentation": [
             {
-              "text": "Allows manipulation and formatting of text strings and determination and location of substrings within strings.",
+              "text": "Allows manipulation and formatting of text strings and determination of location of substrings within strings.",
               "kind": "text"
             }
           ]
@@ -11178,7 +11178,7 @@
           ],
           "documentation": [
             {
-              "text": "Allows manipulation and formatting of text strings and determination and location of substrings within strings.",
+              "text": "Allows manipulation and formatting of text strings and determination of location of substrings within strings.",
               "kind": "text"
             }
           ]

@@ -384,7 +384,7 @@ interface String {
     charAt(pos: number): string;
 
     /**
-     * Returns the Unicode value of the character at the specified location.
+     * Returns a non-negative integer less than 65536 (0x10000) that is the code unit value of the character at the specified index.
      * @param index The zero-based index of the desired character. If there is no character at the specified index, NaN is returned.
      */
     charCodeAt(index: number): number;
@@ -410,42 +410,47 @@ interface String {
     lastIndexOf(searchString: string, position?: number): number;
 
     /**
-     * Determines whether two strings are equivalent in the current locale.
-     * @param that String to compare to target string
+     * Determines whether the reference string comes before, after or is equivalent to the specified string in the current locale.
+     * Returns a negative integer if it comes before, a positive number if it comes after, and 0 if they are equivalent.
+     * @param that The string to compare to.
      */
     localeCompare(that: string): number;
 
     /**
      * Matches a string with a regular expression, and returns an array containing the results of that search.
-     * @param regexp A variable name or string literal containing the regular expression pattern and flags.
+     * @param regexp The regular expression for matching. If the provided value is not a RegExp, it is implicitly
+     * converted to a RegExp by using `new RegExp(regexp)`.
      */
     match(regexp: string | RegExp): RegExpMatchArray | null;
 
     /**
-     * Replaces text in a string, using a regular expression or search string.
-     * @param searchValue A string to search for.
-     * @param replaceValue A string containing the text to replace for every successful match of searchValue in this string.
+     * Replaces one or more occurrences of substrings that match a search string or a regular expression.
+     * Only the first occurrence will be replaced unless a RegExp with a `g` (global) flag is used.
+     * @param searchValue A string or RegExp search value.
+     * @param replaceValue The replacement text.
      */
     replace(searchValue: string | RegExp, replaceValue: string): string;
 
     /**
-     * Replaces text in a string, using a regular expression or search string.
-     * @param searchValue A string to search for.
+     * Replaces one or more occurrences of substrings that match a search string or a regular expression.
+     * Only the first occurrence will be replaced unless a RegExp with a `g` (global) flag is used.
+     * @param searchValue A string or RegExp search value.
      * @param replacer A function that returns the replacement text.
      */
     replace(searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string;
 
     /**
      * Finds the first substring match in a regular expression search.
-     * @param regexp The regular expression pattern and applicable flags.
+     * @param regexp The regular expression for matching. If the provided value is not a RegExp, it is implicitly
+     * converted to a RegExp by using `new RegExp(regexp)`.
      */
     search(regexp: string | RegExp): number;
 
     /**
      * Returns a section of a string.
-     * @param start The index to the beginning of the specified portion of stringObj.
-     * @param end The index to the end of the specified portion of stringObj. The substring includes the characters up to, but not including, the character indicated by end.
-     * If this value is not specified, the substring continues to the end of stringObj.
+     * @param start The index to the beginning of the specified portion of the string.
+     * @param end The index to the end of the specified portion of the string. The substring includes the characters up to, but not including, the character indicated by end.
+     * If this value is not specified, the substring continues to the end of the string.
      */
     slice(start?: number, end?: number): string;
 
@@ -457,9 +462,9 @@ interface String {
     split(separator: string | RegExp, limit?: number): string[];
 
     /**
-     * Returns the substring at the specified location within a String object.
-     * @param start The zero-based index number indicating the beginning of the substring.
-     * @param end Zero-based index number indicating the end of the substring. The substring includes the characters up to, but not including, the character indicated by end.
+     * Returns the substring beginning at the specified index within a String object.
+     * @param start The zero-based index indicating the beginning of the substring.
+     * @param end The zero-based index indicating the end of the substring. The substring includes the characters up to, but not including, the character indicated by end.
      * If end is omitted, the characters from start through the end of the original string are returned.
      */
     substring(start: number, end?: number): string;
@@ -484,9 +489,9 @@ interface String {
 
     // IE extensions
     /**
-     * Gets a substring beginning at the specified location and having the specified length.
+     * Gets a substring beginning at the specified index and having the specified length.
      * @deprecated A legacy feature for browser compatibility
-     * @param from The starting position of the desired substring. The index of the first character in the string is zero.
+     * @param from The starting index of the desired substring. The index of the first character in the string is zero.
      * @param length The number of characters to include in the returned substring.
      */
     substr(from: number, length?: number): string;
@@ -505,7 +510,7 @@ interface StringConstructor {
 }
 
 /**
- * Allows manipulation and formatting of text strings and determination and location of substrings within strings.
+ * Allows manipulation and formatting of text strings and determination of location of substrings within strings.
  */
 declare var String: StringConstructor;
 
@@ -570,13 +575,13 @@ interface NumberConstructor {
 
     /**
      * A value that is less than the largest negative number that can be represented in JavaScript.
-     * JavaScript displays NEGATIVE_INFINITY values as -infinity.
+     * JavaScript displays NEGATIVE_INFINITY values as -Infinity.
      */
     readonly NEGATIVE_INFINITY: number;
 
     /**
      * A value greater than the largest number that can be represented in JavaScript.
-     * JavaScript displays POSITIVE_INFINITY values as infinity.
+     * JavaScript displays POSITIVE_INFINITY values as Infinity.
      */
     readonly POSITIVE_INFINITY: number;
 }
@@ -971,7 +976,7 @@ interface RegExp {
 
     // Non-standard extensions
     /** @deprecated A legacy feature for browser compatibility */
-    compile(pattern: string, flags?: string): this;
+    compile(pattern: string, flags?: string): RegExp;
 }
 
 interface RegExpConstructor {
