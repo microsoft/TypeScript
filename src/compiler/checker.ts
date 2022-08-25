@@ -1850,7 +1850,8 @@ namespace ts {
             isUse: boolean,
             excludeGlobals: boolean,
             getSpellingSuggestions: boolean,
-            lookup: typeof getSymbol): Symbol | undefined {
+            lookup: typeof getSymbol,
+            reportErrors = true): Symbol | undefined {
             const originalLocation = location; // needed for did-you-mean error reporting, which gathers candidates starting from the original location
             let result: Symbol | undefined;
             let lastLocation: Node | undefined;
@@ -2011,7 +2012,9 @@ namespace ts {
                                 // TypeScript 1.0 spec (April 2014): 3.4.1
                                 // The scope of a type parameter extends over the entire declaration with which the type
                                 // parameter list is associated, with the exception of static member declarations in classes.
-                                error(errorLocation, Diagnostics.Static_members_cannot_reference_class_type_parameters);
+                                if (reportErrors) {
+                                    error(errorLocation, Diagnostics.Static_members_cannot_reference_class_type_parameters);
+                                }
                                 return undefined;
                             }
                             break loop;
@@ -2029,7 +2032,7 @@ namespace ts {
                         if (lastLocation === (location as ExpressionWithTypeArguments).expression && (location.parent as HeritageClause).token === SyntaxKind.ExtendsKeyword) {
                             const container = location.parent.parent;
                             if (isClassLike(container) && (result = lookup(getSymbolOfNode(container).members!, name, meaning & SymbolFlags.Type))) {
-                                if (nameNotFoundMessage) {
+                                if (reportErrors && nameNotFoundMessage) {
                                     error(errorLocation, Diagnostics.Base_class_expressions_cannot_reference_class_type_parameters);
                                 }
                                 return undefined;
@@ -2049,7 +2052,9 @@ namespace ts {
                         if (isClassLike(grandparent) || grandparent.kind === SyntaxKind.InterfaceDeclaration) {
                             // A reference to this grandparent's type parameters would be an error
                             if (result = lookup(getSymbolOfNode(grandparent as ClassLikeDeclaration | InterfaceDeclaration).members!, name, meaning & SymbolFlags.Type)) {
-                                error(errorLocation, Diagnostics.A_computed_property_name_cannot_reference_a_type_parameter_from_its_containing_type);
+                                if (reportErrors) {
+                                    error(errorLocation, Diagnostics.A_computed_property_name_cannot_reference_a_type_parameter_from_its_containing_type);
+                                }
                                 return undefined;
                             }
                         }
@@ -2206,7 +2211,7 @@ namespace ts {
             }
 
             if (!result) {
-                if (nameNotFoundMessage) {
+                if (reportErrors && nameNotFoundMessage) {
                     addLazyDiagnostic(() => {
                         if (!errorLocation ||
                             !checkAndReportErrorForMissingPrefix(errorLocation, name, nameArg!) && // TODO: GH#18217
@@ -2259,7 +2264,7 @@ namespace ts {
                 }
                 return undefined;
             }
-            else if (checkAndReportErrorForInvalidInitializer()) {
+            else if (reportErrors && checkAndReportErrorForInvalidInitializer()) {
                 return undefined;
             }
 
