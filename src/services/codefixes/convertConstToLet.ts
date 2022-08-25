@@ -11,7 +11,7 @@ namespace ts.codefix {
             if (range === undefined) return;
 
             const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, range));
-            return [createCodeFixAction(fixId, changes, Diagnostics.Convert_const_to_let, fixId, Diagnostics.Convert_const_to_let)];
+            return [createCodeFixActionWithoutFixAll(fixId, changes, Diagnostics.Convert_const_to_let)];
         },
         fixIds: [fixId]
     });
