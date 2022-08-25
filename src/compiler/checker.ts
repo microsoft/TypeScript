@@ -2308,7 +2308,7 @@ namespace ts {
                         }
                     }
                     if (result && errorLocation && meaning & SymbolFlags.Value && result.flags & SymbolFlags.Alias && !(result.flags & SymbolFlags.Value) && !isValidTypeOnlyAliasUseSite(errorLocation)) {
-                        const typeOnlyDeclaration = getTypeOnlyAliasDeclaration(result);
+                        const typeOnlyDeclaration = getTypeOnlyAliasDeclaration(result, SymbolFlags.Value);
                         if (typeOnlyDeclaration) {
                             const message = typeOnlyDeclaration.kind === SyntaxKind.ExportSpecifier
                                 ? Diagnostics._0_cannot_be_used_as_a_value_because_it_was_exported_using_export_type
@@ -3310,12 +3310,18 @@ namespace ts {
         }
 
         /** Indicates that a symbol directly or indirectly resolves to a type-only import or export. */
-        function getTypeOnlyAliasDeclaration(symbol: Symbol): TypeOnlyAliasDeclaration | undefined {
+        function getTypeOnlyAliasDeclaration(symbol: Symbol, include?: SymbolFlags): TypeOnlyAliasDeclaration | undefined {
             if (!(symbol.flags & SymbolFlags.Alias)) {
                 return undefined;
             }
             const links = getSymbolLinks(symbol);
-            return links.typeOnlyDeclaration || undefined;
+            if (include === undefined) {
+                return links.typeOnlyDeclaration || undefined;
+            }
+            if (links.typeOnlyDeclaration) {
+                return (getAllSymbolFlags(resolveAlias(links.typeOnlyDeclaration.symbol)) ?? -1) & include ? links.typeOnlyDeclaration : undefined;
+            }
+            return undefined;
         }
 
         function markExportAsReferenced(node: ImportEqualsDeclaration | ExportSpecifier) {
@@ -3323,7 +3329,7 @@ namespace ts {
             const target = resolveAlias(symbol);
             if (target) {
                 const markAlias = target === unknownSymbol ||
-                    ((target.flags & SymbolFlags.Value) && !isConstEnumOrConstEnumOnlyModule(target) && !getTypeOnlyAliasDeclaration(symbol));
+                    (((getAllSymbolFlags(target) ?? -1) & SymbolFlags.Value) && !isConstEnumOrConstEnumOnlyModule(target) && !getTypeOnlyAliasDeclaration(symbol, SymbolFlags.Value));
 
                 if (markAlias) {
                     markAliasSymbolAsReferenced(symbol);
@@ -25842,9 +25848,9 @@ namespace ts {
         }
 
         function markAliasReferenced(symbol: Symbol, location: Node) {
-            if (isNonLocalAlias(symbol, /*excludes*/ SymbolFlags.Value) && !isInTypeQuery(location) && !getTypeOnlyAliasDeclaration(symbol)) {
+            if (isNonLocalAlias(symbol, /*excludes*/ SymbolFlags.Value) && !isInTypeQuery(location) && !getTypeOnlyAliasDeclaration(symbol, SymbolFlags.Value)) {
                 const target = resolveAlias(symbol);
-                if (target.flags & SymbolFlags.Value) {
+                if ((getAllSymbolFlags(target) ?? -1) & SymbolFlags.Value) {
                     // An alias resolving to a const enum cannot be elided if (1) 'isolatedModules' is enabled
                     // (because the const enum value will not be inlined), or if (2) the alias is an export
                     // of a const enum declaration that will be preserved.
@@ -43147,7 +43153,7 @@ namespace ts {
                 const symbol = getReferencedValueSymbol(node);
                 // We should only get the declaration of an alias if there isn't a local value
                 // declaration for the symbol
-                if (isNonLocalAlias(symbol, /*excludes*/ SymbolFlags.Value) && !getTypeOnlyAliasDeclaration(symbol)) {
+                if (isNonLocalAlias(symbol, /*excludes*/ SymbolFlags.Value) && !getTypeOnlyAliasDeclaration(symbol, SymbolFlags.Value)) {
                     return getDeclarationOfAliasSymbol(symbol);
                 }
             }
@@ -43244,7 +43250,7 @@ namespace ts {
                 case SyntaxKind.ImportSpecifier:
                 case SyntaxKind.ExportSpecifier:
                     const symbol = getSymbolOfNode(node);
-                    return !!symbol && isAliasResolvedToValue(symbol) && !getTypeOnlyAliasDeclaration(symbol);
+                    return !!symbol && isAliasResolvedToValue(symbol) && !getTypeOnlyAliasDeclaration(symbol, SymbolFlags.Value);
                 case SyntaxKind.ExportDeclaration:
                     const exportClause = (node as ExportDeclaration).exportClause;
                     return !!exportClause && (
@@ -43280,7 +43286,7 @@ namespace ts {
             }
             // const enums and modules that contain only const enums are not considered values from the emit perspective
             // unless 'preserveConstEnums' option is set to true
-            return !!(target.flags & SymbolFlags.Value) &&
+            return !!((getAllSymbolFlags(target) ?? -1) & SymbolFlags.Value) &&
                 (shouldPreserveConstEnums(compilerOptions) || !isConstEnumOrConstEnumOnlyModule(target));
         }
 
@@ -43297,7 +43303,7 @@ namespace ts {
                 }
                 const target = getSymbolLinks(symbol!).aliasTarget; // TODO: GH#18217
                 if (target && getEffectiveModifierFlags(node) & ModifierFlags.Export &&
-                    target.flags & SymbolFlags.Value &&
+                    (getAllSymbolFlags(target) ?? -1) & SymbolFlags.Value &&
                     (shouldPreserveConstEnums(compilerOptions) || !isConstEnumOrConstEnumOnlyModule(target))) {
                     // An `export import ... =` of a value symbol is always considered referenced
                     return true;
