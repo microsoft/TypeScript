@@ -7,9 +7,9 @@ const a: "baz" = "foo" satisfies "foo" | "bar";
 const b: { xyz: "baz" } = { xyz: "foo" } satisfies { xyz: "foo" | "bar" };
 >b : { xyz: "baz"; }
 >xyz : "baz"
->{ xyz: "foo" } satisfies { xyz: "foo" | "bar" } : { xyz: string; }
->{ xyz: "foo" } : { xyz: string; }
->xyz : string
+>{ xyz: "foo" } satisfies { xyz: "foo" | "bar" } : { xyz: "foo"; }
+>{ xyz: "foo" } : { xyz: "foo"; }
+>xyz : "foo"
 >"foo" : "foo"
 >xyz : "foo" | "bar"
 

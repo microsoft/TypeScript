@@ -394,7 +394,7 @@ namespace ts {
             return visitNode(cbNode, node.expression);
         },
         [SyntaxKind.SatisfiesExpression]: function forEachChildInSatisfiesExpression<T>(node: SatisfiesExpression, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-            return visitNode(cbNode, node.expression) || visitNode(cbNode, node.type)
+            return visitNode(cbNode, node.expression) || visitNode(cbNode, node.type);
         },
         [SyntaxKind.MetaProperty]: function forEachChildInMetaProperty<T>(node: MetaProperty, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
             return visitNode(cbNode, node.name);

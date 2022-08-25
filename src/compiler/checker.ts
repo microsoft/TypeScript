@@ -27506,9 +27506,7 @@ namespace ts {
                 case SyntaxKind.NonNullExpression:
                     return getContextualType(parent as NonNullExpression, contextFlags);
                 case SyntaxKind.SatisfiesExpression:
-                    const assertedType = getTypeFromTypeNode((parent as SatisfiesExpression).type);
-                    const outerType = getContextualType(parent as SatisfiesExpression, contextFlags);
-                    return outerType === undefined ? assertedType : getIntersectionType([assertedType, outerType]);
+                    return getTypeFromTypeNode((parent as SatisfiesExpression).type);
                 case SyntaxKind.ExportAssignment:
                     return tryGetTypeFromEffectiveTypeNode(parent as ExportAssignment);
                 case SyntaxKind.JsxExpression:
