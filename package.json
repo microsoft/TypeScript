@@ -32,7 +32,6 @@
         "./bin",
         "./lib",
         "!./lib/enu",
-        "./AUTHORS.md",
         "./LICENSE.txt",
         "./README.md",
         "./SECURITY.md",
