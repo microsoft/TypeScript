@@ -610,7 +610,7 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         this.removeFileOrFolder(currentEntry);
     }
 
-    private hasWatchChanges?: boolean;
+    hasWatchChanges?: boolean;
     private createWatcher<T>(map: MultiMap<Path, T>, path: Path, callback: T): FileWatcher {
         this.hasWatchChanges = true;
         map.add(path, callback);
@@ -1102,7 +1102,7 @@ function diffFsEntry(baseline: string[], oldFsEntry: FSEntry | undefined, newFsE
     }
 }
 
-function serializeMultiMap<T>(baseline: string[], caption: string, multiMap: MultiMap<string, T>, serialized: Map<string, T[]> | undefined) {
+export function serializeMultiMap<T>(baseline: string[], caption: string, multiMap: MultiMap<string, T>, serialized: Map<string, T[]> | undefined) {
     let hasChange = diffMap(baseline, caption, multiMap, serialized, /*deleted*/ false);
     hasChange = diffMap(baseline, caption, serialized, multiMap, /*deleted*/ true) || hasChange;
     if (hasChange) {

@@ -2,6 +2,7 @@ import * as ts from "../../_namespaces/ts";
 import {
     commonFile1,
     commonFile2,
+    createWatchFactorySystem,
 } from "../tscWatch/helpers";
 import {
     createServerHost,
@@ -20,6 +21,7 @@ import {
     protocolFileLocationFromSubstring,
     setCompilerOptionsForInferredProjectsRequestForSession,
     TestSession,
+    TestSessionOptions,
     toExternalFiles,
 } from "./helpers";
 
@@ -494,4 +496,68 @@ describe("unittests:: tsserver:: watchEnvironment:: watchFile is single watcher 
         openFilesForSession([index], session);
         baselineTsserverLogs("watchEnvironment", "when watchFile is single watcher per file", session);
     });
+});
+
+describe("unittests:: tsserver:: watchEnvironment:: watchFactory", () => {
+    it("plugin overriding watch", () => {
+        const { host, session, plugin, aTs, bTs, } = createHostForPlugins({ globalPlugins: ["myplugin"] });
+        const existingWatchFile = host.watchFile;
+        const existingWatchDirectory = host.watchDirectory;
+        host.require = (initialPath, moduleName) => {
+            session.logger.log(`CustomRequire:: Resolving ${moduleName} from ${initialPath}`);
+            return {
+                module: (): ts.server.PluginModule => ({
+                    create: info => {
+                        info.serverHost.watchFile = plugin.watchFile;
+                        info.serverHost.watchDirectory = plugin.watchDirectory;
+                        return info.languageService;
+                    }
+                }),
+                error: undefined
+            };
+        };
+        openFilesForSession([aTs], session);
+        session.logger.log(`Host watchFile expected to be patched. Actual: ${host.watchFile !== existingWatchFile}`);
+        session.logger.log(`Host watchDirectory expected to be patched. Actual: ${host.watchDirectory !== existingWatchDirectory}`);
+
+        // Change b.ts
+        session.logger.log("Change file");
+        host.writeFile(bTs.path, aTs.content);
+        // Since we have overriden watch, this shouldnt do anything
+        host.runQueuedTimeoutCallbacks();
+
+        // Actually invoke watches
+        session.logger.log("Invoke plugin watches");
+        plugin.watchedFiles.get(bTs.path)!.forEach(({ callback }) => callback(bTs.path, ts.FileWatcherEventKind.Changed));
+        // Host should have updates queued
+        host.runQueuedTimeoutCallbacks();
+
+        baselineTsserverLogs("watchEnvironment", "plugin overriding watch", session);
+    });
+
+    function createHostForPlugins(opts?: Partial<TestSessionOptions>, watchOptions?: ts.WatchOptions) {
+        const configFile: File = {
+            path: `/user/username/projects/myproject/tsconfig.json`,
+            content: JSON.stringify({ watchOptions })
+        };
+        const aTs: File = {
+            path: `/user/username/projects/myproject/a.ts`,
+            content: `export class a { prop = "hello"; foo() { return this.prop; } }`
+        };
+        const bTs: File = {
+            path: `/user/username/projects/myproject/b.ts`,
+            content: `export class b { prop = "hello"; foo() { return this.prop; } }`
+        };
+        const host = createServerHost([aTs, bTs, configFile, libFile]);
+        const session = createSession(host, {
+            ...opts,
+            logger: createLoggerWithInMemoryLogs(host),
+            pluginProbeLocations: ["/a/pluginprobe1", "/a/pluginprobe2"],
+        });
+        return { host, session, aTs, bTs, plugin: createFactoryFunctions(session) };
+    }
+
+    function createFactoryFunctions(session: TestSession, pluginName?: string) {
+        return createWatchFactorySystem(session.testhost, s => session.logger.log(s), pluginName).factoryData;
+    }
 });
