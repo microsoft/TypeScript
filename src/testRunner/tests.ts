@@ -198,6 +198,7 @@ import "./unittests/tsserver/typeReferenceDirectives";
 import "./unittests/tsserver/typingsInstaller";
 import "./unittests/tsserver/versionCache";
 import "./unittests/tsserver/watchEnvironment";
+import "./unittests/tsserver/watchFactory";
 import "./unittests/debugDeprecation";
 import "./unittests/tsserver/inconsistentErrorInEditor";
 import "./unittests/tsserver/getMoveToRefactoringFileSuggestions";
