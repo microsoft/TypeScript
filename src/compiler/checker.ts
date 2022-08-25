@@ -13883,7 +13883,6 @@ namespace ts {
 
         function getSubstitutionType(baseType: Type, constraint: Type) {
             if (constraint.flags & TypeFlags.AnyOrUnknown || constraint === baseType ||
-                baseType.flags & TypeFlags.Substitution && (baseType as SubstitutionType).constraint === constraint ||
                 !isGenericType(baseType) && !isGenericType(constraint)) {
                 return baseType;
             }
@@ -16079,11 +16078,7 @@ namespace ts {
                 const objectType = getTypeFromTypeNode(node.objectType);
                 const indexType = getTypeFromTypeNode(node.indexType);
                 const potentialAlias = getAliasSymbolForTypeNode(node);
-                const resolved = getIndexedAccessType(objectType, indexType, AccessFlags.None, node, potentialAlias, getTypeArgumentsForAliasSymbol(potentialAlias));
-                links.resolvedType = resolved.flags & TypeFlags.IndexedAccess &&
-                    (resolved as IndexedAccessType).objectType === objectType &&
-                    (resolved as IndexedAccessType).indexType === indexType ?
-                    getConditionalFlowTypeOfType(resolved, node) : resolved;
+                links.resolvedType = getIndexedAccessType(objectType, indexType, AccessFlags.None, node, potentialAlias, getTypeArgumentsForAliasSymbol(potentialAlias));
             }
             return links.resolvedType;
         }
@@ -17024,7 +17019,7 @@ namespace ts {
         }
 
         function getRestrictiveTypeParameter(tp: TypeParameter) {
-            return tp.constraint === noConstraintType ? tp : tp.restrictiveInstantiation || (
+            return !tp.constraint && !getConstraintDeclaration(tp) || tp.constraint === noConstraintType ? tp : tp.restrictiveInstantiation || (
                 tp.restrictiveInstantiation = createTypeParameter(tp.symbol),
                 (tp.restrictiveInstantiation as TypeParameter).constraint = noConstraintType,
                 tp.restrictiveInstantiation
@@ -17418,12 +17413,13 @@ namespace ts {
                 // A substitution type originates in the true branch of a conditional type and can be resolved
                 // to just the base type in the same cases as the conditional type resolves to its true branch
                 // (because the base type is then known to satisfy the constraint).
-                if (newConstraint.flags & TypeFlags.AnyOrUnknown ||
-                    !isGenericType(newBaseType) && !isGenericType(newConstraint) ||
-                    isTypeAssignableTo(getRestrictiveInstantiation(newBaseType), getRestrictiveInstantiation(newConstraint))) {
+                if (newBaseType.flags & TypeFlags.TypeVariable && isGenericType(newConstraint)) {
+                    return getSubstitutionType(newBaseType, newConstraint);
+                }
+                if (newConstraint.flags & TypeFlags.AnyOrUnknown || isTypeAssignableTo(getRestrictiveInstantiation(newBaseType), getRestrictiveInstantiation(newConstraint))) {
                     return newBaseType;
                 }
-                return getSubstitutionType(newBaseType, newConstraint);
+                return newBaseType.flags & TypeFlags.TypeVariable ? getSubstitutionType(newBaseType, newConstraint) : getIntersectionType([newConstraint, newBaseType]);
             }
             return type;
         }
