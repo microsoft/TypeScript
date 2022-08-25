@@ -439,6 +439,7 @@ namespace ts {
             getTypeOfPropertyOfType: (type, name) => getTypeOfPropertyOfType(type, escapeLeadingUnderscores(name)),
             getIndexInfoOfType: (type, kind) => getIndexInfoOfType(type, kind === IndexKind.String ? stringType : numberType),
             getIndexInfosOfType,
+            getIndexInfosOfIndexSymbol,
             getSignaturesOfType,
             getIndexTypeOfType: (type, kind) => getIndexTypeOfType(type, kind === IndexKind.String ? stringType : numberType),
             getIndexType: type => getIndexType(type),
@@ -42615,6 +42616,35 @@ namespace ts {
 
                     if (name.kind === SyntaxKind.PropertyAccessExpression) {
                         checkPropertyAccessExpression(name, CheckMode.Normal);
+                        if (!links.resolvedSymbol) {
+                            const expressionType = checkExpressionCached(name.expression);
+                            const infos = getApplicableIndexInfos(expressionType, getLiteralTypeFromPropertyName(name.name));
+                            if (infos.length && (expressionType as ObjectType).members) {
+                                const resolved = resolveStructuredTypeMembers(expressionType as ObjectType);
+                                const symbol = resolved.members.get(InternalSymbolName.Index);
+                                if (infos === getIndexInfosOfType(expressionType)) {
+                                    links.resolvedSymbol = symbol;
+                                }
+                                else if (symbol) {
+                                    const symbolLinks = getSymbolLinks(symbol);
+                                    const declarationList = mapDefined(infos, i => i.declaration);
+                                    const nodeListId = map(declarationList, getNodeId).join(",");
+                                    if (!symbolLinks.filteredIndexSymbolCache) {
+                                        symbolLinks.filteredIndexSymbolCache = new Map();
+                                    }
+                                    if (symbolLinks.filteredIndexSymbolCache.has(nodeListId)) {
+                                        links.resolvedSymbol = symbolLinks.filteredIndexSymbolCache.get(nodeListId)!;
+                                    }
+                                    else {
+                                        const copy = createSymbol(SymbolFlags.Signature, InternalSymbolName.Index);
+                                        copy.declarations = mapDefined(infos, i => i.declaration);
+                                        copy.parent = expressionType.aliasSymbol ? expressionType.aliasSymbol : expressionType.symbol ? expressionType.symbol : getSymbolAtLocation(copy.declarations[0].parent);
+                                        symbolLinks.filteredIndexSymbolCache.set(nodeListId, copy);
+                                        links.resolvedSymbol = symbolLinks.filteredIndexSymbolCache.get(nodeListId)!;
+                                    }
+                                }
+                            }
+                        }
                     }
                     else {
                         checkQualifiedName(name, CheckMode.Normal);
