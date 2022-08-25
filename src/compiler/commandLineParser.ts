@@ -93,7 +93,10 @@ namespace ts {
         ["esnext.bigint", "lib.es2020.bigint.d.ts"],
         ["esnext.string", "lib.es2022.string.d.ts"],
         ["esnext.promise", "lib.es2021.promise.d.ts"],
-        ["esnext.weakref", "lib.es2021.weakref.d.ts"]
+        ["esnext.weakref", "lib.es2021.weakref.d.ts"],
+        ["decorators", "lib.decorators.d.ts"],
+        ["decorators.legacy", "lib.decorators.legacy.d.ts"],
+        ["decorators.parameters", "lib.decorators.parameters.d.ts"],
     ];
 
     /**
