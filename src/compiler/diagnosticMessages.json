@@ -7064,6 +7064,10 @@
         "category": "Message",
         "code": 95101
     },
+    "Convert all 'const' to 'let'": {
+        "category": "Message",
+        "code": 95102
+    },
     "Convert function expression '{0}' to arrow function": {
         "category": "Message",
         "code": 95105
