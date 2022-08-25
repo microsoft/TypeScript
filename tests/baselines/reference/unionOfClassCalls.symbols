@@ -67,9 +67,9 @@ arr.map((a: number | string, index: number) => {
 
 // This case still doesn't work because `reduce` has multiple overloads :(
 arr.reduce((acc: Array<string>, a: number | string, index: number) => { 
->arr.reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --) ... and 1 more)
+>arr.reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >arr : Symbol(arr, Decl(unionOfClassCalls.ts, 18, 5))
->reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --) ... and 1 more)
+>reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >acc : Symbol(acc, Decl(unionOfClassCalls.ts, 27, 12))
 >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >a : Symbol(a, Decl(unionOfClassCalls.ts, 27, 31))
@@ -103,9 +103,9 @@ arr1.map((a: number, index: number) => {
 })
 
 arr1.reduce((acc: number[], a: number, index: number) => { 
->arr1.reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>arr1.reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >arr1 : Symbol(arr1, Decl(unionOfClassCalls.ts, 19, 5))
->reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >acc : Symbol(acc, Decl(unionOfClassCalls.ts, 39, 13))
 >a : Symbol(a, Decl(unionOfClassCalls.ts, 39, 27))
 >index : Symbol(index, Decl(unionOfClassCalls.ts, 39, 38))
@@ -139,9 +139,9 @@ arr2.map((a:  string, index: number) => {
 })
 
 arr2.reduce((acc: string[], a: string, index: number) => { 
->arr2.reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>arr2.reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >arr2 : Symbol(arr2, Decl(unionOfClassCalls.ts, 20, 5))
->reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >acc : Symbol(acc, Decl(unionOfClassCalls.ts, 50, 13))
 >a : Symbol(a, Decl(unionOfClassCalls.ts, 50, 27))
 >index : Symbol(index, Decl(unionOfClassCalls.ts, 50, 38))

@@ -8,8 +8,18 @@ interface Array<T> {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    find<S extends T>(predicate: (this: void, value: T, index: number, obj: T[]) => value is S, thisArg?: any): S | undefined;
-    find(predicate: (value: T, index: number, obj: T[]) => unknown, thisArg?: any): T | undefined;
+    find<S extends T>(predicate: (value: T, index: number, array: T[]) => value is S, thisArg?: any): S | undefined;
+
+    /**
+     * Returns the value of the first element in the array where predicate is true, and undefined
+     * otherwise.
+     * @param predicate find calls predicate once for each element of the array, in ascending
+     * order, until it finds one where predicate returns true. If such an element is found, find
+     * immediately returns that element value. Otherwise, find returns undefined.
+     * @param thisArg If provided, it will be used as the this value for each invocation of
+     * predicate. If it is not provided, undefined is used instead.
+     */
+    find(predicate: (value: T, index: number, array: T[]) => unknown, thisArg?: any): T | undefined;
 
     /**
      * Returns the index of the first element in the array where predicate is true, and -1
@@ -20,50 +30,50 @@ interface Array<T> {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    findIndex(predicate: (value: T, index: number, obj: T[]) => unknown, thisArg?: any): number;
+    findIndex(predicate: (value: T, index: number, array: T[]) => unknown, thisArg?: any): number;
 
     /**
      * Changes all array elements from `start` to `end` index to a static `value` and returns the modified array
      * @param value value to fill array section with
      * @param start index to start filling the array at. If start is negative, it is treated as
-     * length+start where length is the length of the array.
+     * length + start where length is the length of the array.
      * @param end index to stop filling the array at. If end is negative, it is treated as
-     * length+end.
+     * length + end.
      */
-    fill(value: T, start?: number, end?: number): this;
+    fill(value: T, start?: number, end?: number): T[];
 
     /**
      * Returns the this object after copying a section of the array identified by start and end
      * to the same array starting at position target
-     * @param target If target is negative, it is treated as length+target where length is the
+     * @param target If target is negative, it is treated as length + target where length is the
      * length of the array.
-     * @param start If start is negative, it is treated as length+start. If end is negative, it
-     * is treated as length+end.
+     * @param start If start is negative, it is treated as length + start. If end is negative, it
+     * is treated as length + end.
      * @param end If not specified, length of the this object is used as its default value.
      */
-    copyWithin(target: number, start: number, end?: number): this;
+    copyWithin(target: number, start: number, end?: number): T[];
 }
 
 interface ArrayConstructor {
     /**
-     * Creates an array from an array-like object.
-     * @param arrayLike An array-like object to convert to an array.
+     * Creates an array from an array-like or iterable object.
+     * @param source An array-like or iterable object to convert to an array.
      */
-    from<T>(arrayLike: ArrayLike<T>): T[];
+    from<T>(source: ArrayLike<T>): T[];
 
     /**
-     * Creates an array from an iterable object.
-     * @param arrayLike An array-like object to convert to an array.
+     * Creates an array from an array-like or iterable object.
+     * @param source An array-like or iterable object to convert to an array.
      * @param mapfn A mapping function to call on every element of the array.
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
-    from<T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[];
+    from<T, U>(source: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[];
 
     /**
      * Returns a new array from a set of elements.
      * @param items A set of elements to include in the new array object.
      */
-    of<T>(...items: T[]): T[];
+    of<T extends any[]>(...items: T): T;
 }
 
 interface DateConstructor {
@@ -329,8 +339,18 @@ interface ReadonlyArray<T> {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    find<S extends T>(predicate: (this: void, value: T, index: number, obj: readonly T[]) => value is S, thisArg?: any): S | undefined;
-    find(predicate: (value: T, index: number, obj: readonly T[]) => unknown, thisArg?: any): T | undefined;
+    find<S extends T>(predicate: (value: T, index: number, array: readonly T[]) => value is S, thisArg?: any): S | undefined;
+
+    /**
+     * Returns the value of the first element in the array where predicate is true, and undefined
+     * otherwise.
+     * @param predicate find calls predicate once for each element of the array, in ascending
+     * order, until it finds one where predicate returns true. If such an element is found, find
+     * immediately returns that element value. Otherwise, find returns undefined.
+     * @param thisArg If provided, it will be used as the this value for each invocation of
+     * predicate. If it is not provided, undefined is used instead.
+     */
+    find(predicate: (value: T, index: number, array: readonly T[]) => unknown, thisArg?: any): T | undefined;
 
     /**
      * Returns the index of the first element in the array where predicate is true, and -1
@@ -341,7 +361,7 @@ interface ReadonlyArray<T> {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    findIndex(predicate: (value: T, index: number, obj: readonly T[]) => unknown, thisArg?: any): number;
+    findIndex(predicate: (value: T, index: number, array: readonly T[]) => unknown, thisArg?: any): number;
 }
 
 interface RegExp {

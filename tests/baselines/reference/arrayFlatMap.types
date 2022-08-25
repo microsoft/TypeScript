@@ -9,17 +9,17 @@ const readonlyArray: ReadonlyArray<number> = [];
 
 array.flatMap((): ReadonlyArray<number> => []); // ok
 >array.flatMap((): ReadonlyArray<number> => []) : number[]
->array.flatMap : <U, This = undefined>(callback: (this: This, value: number, index: number, array: number[]) => U | readonly U[], thisArg?: This) => U[]
+>array.flatMap : <U>(callback: (value: number, index: number, array: number[]) => U | readonly U[], thisArg?: any) => U[]
 >array : number[]
->flatMap : <U, This = undefined>(callback: (this: This, value: number, index: number, array: number[]) => U | readonly U[], thisArg?: This) => U[]
+>flatMap : <U>(callback: (value: number, index: number, array: number[]) => U | readonly U[], thisArg?: any) => U[]
 >(): ReadonlyArray<number> => [] : () => ReadonlyArray<number>
 >[] : undefined[]
 
 readonlyArray.flatMap((): ReadonlyArray<number> => []); // ok
 >readonlyArray.flatMap((): ReadonlyArray<number> => []) : number[]
->readonlyArray.flatMap : <U, This = undefined>(callback: (this: This, value: number, index: number, array: number[]) => U | readonly U[], thisArg?: This) => U[]
+>readonlyArray.flatMap : <U>(callback: (value: number, index: number, array: number[]) => U | readonly U[], thisArg?: any) => U[]
 >readonlyArray : readonly number[]
->flatMap : <U, This = undefined>(callback: (this: This, value: number, index: number, array: number[]) => U | readonly U[], thisArg?: This) => U[]
+>flatMap : <U>(callback: (value: number, index: number, array: number[]) => U | readonly U[], thisArg?: any) => U[]
 >(): ReadonlyArray<number> => [] : () => ReadonlyArray<number>
 >[] : undefined[]
 

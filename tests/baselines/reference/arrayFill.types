@@ -1,0 +1,142 @@
+=== tests/cases/compiler/arrayFill.ts ===
+var strTuple: ["foo", "bar", "baz"];
+>strTuple : ["foo", "bar", "baz"]
+
+strTuple.fill("foo"); // Type should be ("foo" | "bar" | "baz")[] instead of ["foo", "bar", "baz"]
+>strTuple.fill("foo") : ("foo" | "bar" | "baz")[]
+>strTuple.fill : (value: "foo" | "bar" | "baz", start?: number, end?: number) => ("foo" | "bar" | "baz")[]
+>strTuple : ["foo", "bar", "baz"]
+>fill : (value: "foo" | "bar" | "baz", start?: number, end?: number) => ("foo" | "bar" | "baz")[]
+>"foo" : "foo"
+
+var numTuple: [11, 2, 22, 1];
+>numTuple : [11, 2, 22, 1]
+
+numTuple.fill(11); // Type should be (11 | 2 | 22 | 1)[] instead of [11, 2, 22, 1]
+>numTuple.fill(11) : (11 | 2 | 22 | 1)[]
+>numTuple.fill : (value: 11 | 2 | 22 | 1, start?: number, end?: number) => (11 | 2 | 22 | 1)[]
+>numTuple : [11, 2, 22, 1]
+>fill : (value: 11 | 2 | 22 | 1, start?: number, end?: number) => (11 | 2 | 22 | 1)[]
+>11 : 11
+
+interface Int8ArrayExtension extends Int8Array {}
+var int8Array: Int8ArrayExtension;
+>int8Array : Int8ArrayExtension
+
+int8Array.fill(0); // Int8Array
+>int8Array.fill(0) : Int8Array
+>int8Array.fill : (value: number, start?: number, end?: number) => Int8Array
+>int8Array : Int8ArrayExtension
+>fill : (value: number, start?: number, end?: number) => Int8Array
+>0 : 0
+
+interface Uint8ArrayExtension extends Uint8Array {}
+var uint8Array: Uint8ArrayExtension;
+>uint8Array : Uint8ArrayExtension
+
+uint8Array.fill(0); // Uint8Array
+>uint8Array.fill(0) : Uint8Array
+>uint8Array.fill : (value: number, start?: number, end?: number) => Uint8Array
+>uint8Array : Uint8ArrayExtension
+>fill : (value: number, start?: number, end?: number) => Uint8Array
+>0 : 0
+
+interface Uint8ClampedArrayExtension extends Uint8ClampedArray {}
+var uint8ClampedArray: Uint8ClampedArrayExtension;
+>uint8ClampedArray : Uint8ClampedArrayExtension
+
+uint8ClampedArray.fill(0); // Uint8ClampedArray
+>uint8ClampedArray.fill(0) : Uint8ClampedArray
+>uint8ClampedArray.fill : (value: number, start?: number, end?: number) => Uint8ClampedArray
+>uint8ClampedArray : Uint8ClampedArrayExtension
+>fill : (value: number, start?: number, end?: number) => Uint8ClampedArray
+>0 : 0
+
+interface Int16ArrayExtension extends Int16Array {}
+var int16Array: Int16ArrayExtension;
+>int16Array : Int16ArrayExtension
+
+int16Array.fill(0); // Int16Array
+>int16Array.fill(0) : Int16Array
+>int16Array.fill : (value: number, start?: number, end?: number) => Int16Array
+>int16Array : Int16ArrayExtension
+>fill : (value: number, start?: number, end?: number) => Int16Array
+>0 : 0
+
+interface Uint16ArrayExtension extends Uint16Array {}
+var uint16Array: Uint16ArrayExtension;
+>uint16Array : Uint16ArrayExtension
+
+uint16Array.fill(0); // Uint16Array
+>uint16Array.fill(0) : Uint16Array
+>uint16Array.fill : (value: number, start?: number, end?: number) => Uint16Array
+>uint16Array : Uint16ArrayExtension
+>fill : (value: number, start?: number, end?: number) => Uint16Array
+>0 : 0
+
+interface Int32ArrayExtension extends Int32Array {}
+var int32Array: Int32ArrayExtension;
+>int32Array : Int32ArrayExtension
+
+int32Array.fill(0); // Int32Array
+>int32Array.fill(0) : Int32Array
+>int32Array.fill : (value: number, start?: number, end?: number) => Int32Array
+>int32Array : Int32ArrayExtension
+>fill : (value: number, start?: number, end?: number) => Int32Array
+>0 : 0
+
+interface Uint32ArrayExtension extends Uint32Array {}
+var uint32Array: Uint32ArrayExtension;
+>uint32Array : Uint32ArrayExtension
+
+uint32Array.fill(0); // Uint32Array
+>uint32Array.fill(0) : Uint32Array
+>uint32Array.fill : (value: number, start?: number, end?: number) => Uint32Array
+>uint32Array : Uint32ArrayExtension
+>fill : (value: number, start?: number, end?: number) => Uint32Array
+>0 : 0
+
+interface Float32ArrayExtension extends Float32Array {}
+var float32Array: Float32ArrayExtension;
+>float32Array : Float32ArrayExtension
+
+float32Array.fill(0); // Float32Array
+>float32Array.fill(0) : Float32Array
+>float32Array.fill : (value: number, start?: number, end?: number) => Float32Array
+>float32Array : Float32ArrayExtension
+>fill : (value: number, start?: number, end?: number) => Float32Array
+>0 : 0
+
+interface Float64ArrayExtension extends Float64Array {}
+var float64Array: Float64ArrayExtension;
+>float64Array : Float64ArrayExtension
+
+float64Array.fill(0); // Float64Array
+>float64Array.fill(0) : Float64Array
+>float64Array.fill : (value: number, start?: number, end?: number) => Float64Array
+>float64Array : Float64ArrayExtension
+>fill : (value: number, start?: number, end?: number) => Float64Array
+>0 : 0
+
+interface BigInt64ArrayExtension extends BigInt64Array {}
+var bigInt64Array: BigInt64ArrayExtension;
+>bigInt64Array : BigInt64ArrayExtension
+
+bigInt64Array.fill(0n); // BigInt64Array
+>bigInt64Array.fill(0n) : BigInt64Array
+>bigInt64Array.fill : (value: bigint, start?: number, end?: number) => BigInt64Array
+>bigInt64Array : BigInt64ArrayExtension
+>fill : (value: bigint, start?: number, end?: number) => BigInt64Array
+>0n : 0n
+
+interface BigUint64ArrayExtension extends BigUint64Array {}
+var bigUint64Array: BigUint64ArrayExtension;
+>bigUint64Array : BigUint64ArrayExtension
+
+bigUint64Array.fill(0n); // BigUint64Array
+>bigUint64Array.fill(0n) : BigUint64Array
+>bigUint64Array.fill : (value: bigint, start?: number, end?: number) => BigUint64Array
+>bigUint64Array : BigUint64ArrayExtension
+>fill : (value: bigint, start?: number, end?: number) => BigUint64Array
+>0n : 0n
+

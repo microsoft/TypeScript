@@ -8,6 +8,9 @@ declare class MyArray<T> implements Array<T> {
     toLocaleString(): string;
 >toLocaleString : () => string
 
+    valueOf(): T[];
+>valueOf : () => T[]
+
     concat<U extends T[]>(...items: U[]): T[];
 >concat : { <U extends T[]>(...items: U[]): T[]; (...items: T[]): T[]; }
 >items : U[]
@@ -38,8 +41,8 @@ declare class MyArray<T> implements Array<T> {
 >start : number
 >end : number
 
-    sort(compareFn?: (a: T, b: T) => number): this;
->sort : (compareFn?: (a: T, b: T) => number) => this
+    sort(compareFn?: (a: T, b: T) => number): T[];
+>sort : (compareFn?: (a: T, b: T) => number) => T[]
 >compareFn : (a: T, b: T) => number
 >a : T
 >b : T
@@ -143,6 +146,77 @@ declare class MyArray<T> implements Array<T> {
 >currentIndex : number
 >array : T[]
 >initialValue : U
+
+    find(predicate: (value: T, index: number, array: T[]) => boolean, thisArg?: any): T | undefined;
+>find : (predicate: (value: T, index: number, array: T[]) => boolean, thisArg?: any) => T | undefined
+>predicate : (value: T, index: number, array: T[]) => boolean
+>value : T
+>index : number
+>array : T[]
+>thisArg : any
+
+    findIndex(predicate: (value: T, index: number, array: T[]) => boolean, thisArg?: any): number;
+>findIndex : (predicate: (value: T, index: number, array: T[]) => boolean, thisArg?: any) => number
+>predicate : (value: T, index: number, array: T[]) => boolean
+>value : T
+>index : number
+>array : T[]
+>thisArg : any
+
+    fill(value: T, start?: number, end?: number): T[];
+>fill : (value: T, start?: number, end?: number) => T[]
+>value : T
+>start : number
+>end : number
+
+    copyWithin(target: number, start: number, end?: number): T[];
+>copyWithin : (target: number, start: number, end?: number) => T[]
+>target : number
+>start : number
+>end : number
+
+    [Symbol.iterator](): IterableIterator<T>;
+>[Symbol.iterator] : () => IterableIterator<T>
+>Symbol.iterator : unique symbol
+>Symbol : SymbolConstructor
+>iterator : unique symbol
+
+    entries(): IterableIterator<[number, T]>;
+>entries : () => IterableIterator<[number, T]>
+
+    keys(): IterableIterator<number>;
+>keys : () => IterableIterator<number>
+
+    values(): IterableIterator<T>;
+>values : () => IterableIterator<T>
+
+    [Symbol.unscopables]: any;
+>[Symbol.unscopables] : any
+>Symbol.unscopables : unique symbol
+>Symbol : SymbolConstructor
+>unscopables : unique symbol
+
+    includes(searchElement: T, fromIndex?: number): boolean;
+>includes : (searchElement: T, fromIndex?: number) => boolean
+>searchElement : T
+>fromIndex : number
+
+    flatMap<U>(callback: (value: T, index: number, array: T[]) => U | U[], thisArg?: any): U[]
+>flatMap : <U>(callback: (value: T, index: number, array: T[]) => U | U[], thisArg?: any) => U[]
+>callback : (value: T, index: number, array: T[]) => U | U[]
+>value : T
+>index : number
+>array : T[]
+>thisArg : any
+
+    flat<A, D extends number = 1>(this: A, depth?: D): FlatArray<A, D>[]
+>flat : <A, D extends number = 1>(this: A, depth?: D) => FlatArray<A, D>[]
+>this : A
+>depth : D
+
+    at(index: number): T | undefined;
+>at : (index: number) => T | undefined
+>index : number
 
     length: number;
 >length : number

@@ -4,7 +4,7 @@ interface Array<T> {
 >T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(duplicateOverloadInTypeAugmentation1.ts, 0, 16))
 
     reduce(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T,
->reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(duplicateOverloadInTypeAugmentation1.ts, 0, 20), Decl(duplicateOverloadInTypeAugmentation1.ts, 2, 29))
+>reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(duplicateOverloadInTypeAugmentation1.ts, 0, 20), Decl(duplicateOverloadInTypeAugmentation1.ts, 2, 29))
 >callbackfn : Symbol(callbackfn, Decl(duplicateOverloadInTypeAugmentation1.ts, 1, 11))
 >previousValue : Symbol(previousValue, Decl(duplicateOverloadInTypeAugmentation1.ts, 1, 24))
 >T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(duplicateOverloadInTypeAugmentation1.ts, 0, 16))
@@ -21,7 +21,7 @@ interface Array<T> {
 >T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(duplicateOverloadInTypeAugmentation1.ts, 0, 16))
 
     reduce<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U,
->reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(duplicateOverloadInTypeAugmentation1.ts, 0, 20), Decl(duplicateOverloadInTypeAugmentation1.ts, 2, 29))
+>reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(duplicateOverloadInTypeAugmentation1.ts, 0, 20), Decl(duplicateOverloadInTypeAugmentation1.ts, 2, 29))
 >U : Symbol(U, Decl(duplicateOverloadInTypeAugmentation1.ts, 3, 11))
 >callbackfn : Symbol(callbackfn, Decl(duplicateOverloadInTypeAugmentation1.ts, 3, 14))
 >previousValue : Symbol(previousValue, Decl(duplicateOverloadInTypeAugmentation1.ts, 3, 27))
@@ -44,9 +44,9 @@ var a: Array<string>;
 
 var r5 = a.reduce((x, y) => x + y);
 >r5 : Symbol(r5, Decl(duplicateOverloadInTypeAugmentation1.ts, 7, 3))
->a.reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(duplicateOverloadInTypeAugmentation1.ts, 0, 20), Decl(duplicateOverloadInTypeAugmentation1.ts, 2, 29))
+>a.reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(duplicateOverloadInTypeAugmentation1.ts, 0, 20), Decl(duplicateOverloadInTypeAugmentation1.ts, 2, 29))
 >a : Symbol(a, Decl(duplicateOverloadInTypeAugmentation1.ts, 6, 3))
->reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(duplicateOverloadInTypeAugmentation1.ts, 0, 20), Decl(duplicateOverloadInTypeAugmentation1.ts, 2, 29))
+>reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(duplicateOverloadInTypeAugmentation1.ts, 0, 20), Decl(duplicateOverloadInTypeAugmentation1.ts, 2, 29))
 >x : Symbol(x, Decl(duplicateOverloadInTypeAugmentation1.ts, 7, 19))
 >y : Symbol(y, Decl(duplicateOverloadInTypeAugmentation1.ts, 7, 21))
 >x : Symbol(x, Decl(duplicateOverloadInTypeAugmentation1.ts, 7, 19))
