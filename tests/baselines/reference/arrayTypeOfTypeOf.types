@@ -14,11 +14,11 @@ var xs2: typeof Array;
 >Array : ArrayConstructor
 
 var xs3: typeof Array<number>;
->xs3 : { (arrayLength: number): number[]; (...items: number[]): number[]; new (arrayLength: number): number[]; new (...items: number[]): number[]; isArray(arg: any): arg is any[]; readonly prototype: any[]; }
+>xs3 : { (arrayLength: number): number[]; (...items: number[]): number[]; new (arrayLength: number): number[]; new (...items: number[]): number[]; isArray<T>(arg: T): arg is T extends any ? Extract<true extends false & T ? any[] : T extends readonly any[] ? T : T extends string ? never : T extends ArrayLike<infer U> ? U[] : unknown[], T> : never; readonly prototype: any[]; }
 >Array : ArrayConstructor
 
 var xs4: typeof Array<typeof x>;
->xs4 : { (arrayLength: number): number[]; (...items: number[]): number[]; new (arrayLength: number): number[]; new (...items: number[]): number[]; isArray(arg: any): arg is any[]; readonly prototype: any[]; }
+>xs4 : { (arrayLength: number): number[]; (...items: number[]): number[]; new (arrayLength: number): number[]; new (...items: number[]): number[]; isArray<T>(arg: T): arg is T extends any ? Extract<true extends false & T ? any[] : T extends readonly any[] ? T : T extends string ? never : T extends ArrayLike<infer U> ? U[] : unknown[], T> : never; readonly prototype: any[]; }
 >Array : ArrayConstructor
 >x : number
 

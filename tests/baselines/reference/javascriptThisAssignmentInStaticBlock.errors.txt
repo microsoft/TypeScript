@@ -1,6 +1,6 @@
-/src/a.js(10,7): error TS2417: Class static side 'typeof ElementsArray' incorrectly extends base class static side '{ isArray(arg: any): arg is any[]; readonly prototype: any[]; }'.
+/src/a.js(10,7): error TS2417: Class static side 'typeof ElementsArray' incorrectly extends base class static side '{ isArray<T>(arg: T): arg is T extends any ? Extract<true extends false & T ? any[] : T extends readonly any[] ? T : T extends string ? never : T extends ArrayLike<infer U> ? U[] : unknown[], T> : never; readonly prototype: any[]; }'.
   Types of property 'isArray' are incompatible.
-    Type '(arg: any) => boolean' is not assignable to type '(arg: any) => arg is any[]'.
+    Type '(arg: any) => boolean' is not assignable to type '<T>(arg: T) => arg is T extends any ? Extract<true extends false & T ? any[] : T extends readonly any[] ? T : T extends string ? never : T extends ArrayLike<infer U> ? U[] : unknown[], T> : never'.
       Signature '(arg: any): boolean' must be a type predicate.
 
 
@@ -16,9 +16,9 @@
     // GH#46468
     class ElementsArray extends Array {
           ~~~~~~~~~~~~~
-!!! error TS2417: Class static side 'typeof ElementsArray' incorrectly extends base class static side '{ isArray(arg: any): arg is any[]; readonly prototype: any[]; }'.
+!!! error TS2417: Class static side 'typeof ElementsArray' incorrectly extends base class static side '{ isArray<T>(arg: T): arg is T extends any ? Extract<true extends false & T ? any[] : T extends readonly any[] ? T : T extends string ? never : T extends ArrayLike<infer U> ? U[] : unknown[], T> : never; readonly prototype: any[]; }'.
 !!! error TS2417:   Types of property 'isArray' are incompatible.
-!!! error TS2417:     Type '(arg: any) => boolean' is not assignable to type '(arg: any) => arg is any[]'.
+!!! error TS2417:     Type '(arg: any) => boolean' is not assignable to type '<T>(arg: T) => arg is T extends any ? Extract<true extends false & T ? any[] : T extends readonly any[] ? T : T extends string ? never : T extends ArrayLike<infer U> ? U[] : unknown[], T> : never'.
 !!! error TS2417:       Signature '(arg: any): boolean' must be a type predicate.
         static {
             const superisArray = super.isArray;

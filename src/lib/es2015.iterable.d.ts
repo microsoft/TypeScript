@@ -56,6 +56,15 @@ interface Array<T> {
 }
 
 interface ArrayConstructor {
+    isArray<T>(arg: T): arg is
+        T extends any ? Extract<
+            true extends false & T ? any[] :
+            T extends readonly any[] ? T :
+            T extends string ? never :
+            T extends ArrayLike<infer U> | Iterable<infer U> ? U[] :
+            unknown[], T
+        > : never;
+
     /**
      * Creates an array from an iterable object.
      * @param iterable An iterable object to convert to an array.

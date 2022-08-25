@@ -91,9 +91,9 @@ function testFunc() {
           const reversedVal1 = val1.slice().reverse();
 >reversedVal1 : Symbol(reversedVal1, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 29, 15))
 >val1.slice().reverse : Symbol(Array.reverse, Decl(lib.es5.d.ts, --, --))
->val1.slice : Symbol(Array.slice, Decl(lib.es5.d.ts, --, --))
+>val1.slice : Symbol(ReadonlyArray.slice, Decl(lib.es5.d.ts, --, --))
 >val1 : Symbol(val1, Decl(narrowingAssignmentReadonlyRespectsAssertion.ts, 26, 26))
->slice : Symbol(Array.slice, Decl(lib.es5.d.ts, --, --))
+>slice : Symbol(ReadonlyArray.slice, Decl(lib.es5.d.ts, --, --))
 >reverse : Symbol(Array.reverse, Decl(lib.es5.d.ts, --, --))
 
           console.log(reversedVal1);

@@ -100,28 +100,28 @@ function testFunc() {
 
       if (Array.isArray(val1)) {
 >Array.isArray(val1) : boolean
->Array.isArray : (arg: any) => arg is any[]
+>Array.isArray : <T>(arg: T) => arg is T extends any ? Extract<true extends false & T ? any[] : T extends readonly any[] ? T : T extends string ? never : T extends ArrayLike<infer U> ? U[] : unknown[], T> : never
 >Array : ArrayConstructor
->isArray : (arg: any) => arg is any[]
+>isArray : <T>(arg: T) => arg is T extends any ? Extract<true extends false & T ? any[] : T extends readonly any[] ? T : T extends string ? never : T extends ArrayLike<infer U> ? U[] : unknown[], T> : never
 >val1 : string | number | readonly (string | number)[]
 
           // This should retain val1 as being an array
           const reversedVal1 = val1.slice().reverse();
->reversedVal1 : any[]
->val1.slice().reverse() : any[]
->val1.slice().reverse : () => any[]
->val1.slice() : any[]
->val1.slice : (start?: number, end?: number) => any[]
->val1 : any[]
->slice : (start?: number, end?: number) => any[]
->reverse : () => any[]
+>reversedVal1 : (string | number)[]
+>val1.slice().reverse() : (string | number)[]
+>val1.slice().reverse : () => (string | number)[]
+>val1.slice() : (string | number)[]
+>val1.slice : (start?: number, end?: number) => (string | number)[]
+>val1 : readonly (string | number)[]
+>slice : (start?: number, end?: number) => (string | number)[]
+>reverse : () => (string | number)[]
 
           console.log(reversedVal1);
 >console.log(reversedVal1) : void
 >console.log : (...data: any[]) => void
 >console : Console
 >log : (...data: any[]) => void
->reversedVal1 : any[]
+>reversedVal1 : (string | number)[]
 
       } else {
           console.log(val1);
@@ -129,7 +129,7 @@ function testFunc() {
 >console.log : (...data: any[]) => void
 >console : Console
 >log : (...data: any[]) => void
->val1 : string | number | readonly (string | number)[]
+>val1 : string | number
       }
       console.log(val2);
 >console.log(val2) : void

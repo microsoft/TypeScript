@@ -61,13 +61,13 @@ function f2() {
 >Array : ArrayConstructor
 
     const A1 = Array<string>;  // new (...) => string[]
->A1 : { (arrayLength: number): string[]; (...items: string[]): string[]; new (arrayLength: number): string[]; new (...items: string[]): string[]; isArray(arg: any): arg is any[]; readonly prototype: any[]; }
->Array<string> : { (arrayLength: number): string[]; (...items: string[]): string[]; new (arrayLength: number): string[]; new (...items: string[]): string[]; isArray(arg: any): arg is any[]; readonly prototype: any[]; }
+>A1 : { (arrayLength: number): string[]; (...items: string[]): string[]; new (arrayLength: number): string[]; new (...items: string[]): string[]; isArray<T>(arg: T): arg is T extends any ? Extract<true extends false & T ? any[] : T extends readonly any[] ? T : T extends string ? never : T extends ArrayLike<infer U> ? U[] : unknown[], T> : never; readonly prototype: any[]; }
+>Array<string> : { (arrayLength: number): string[]; (...items: string[]): string[]; new (arrayLength: number): string[]; new (...items: string[]): string[]; isArray<T>(arg: T): arg is T extends any ? Extract<true extends false & T ? any[] : T extends readonly any[] ? T : T extends string ? never : T extends ArrayLike<infer U> ? U[] : unknown[], T> : never; readonly prototype: any[]; }
 >Array : ArrayConstructor
 
     const A2 = Array<string, number>;  // Error
->A2 : { isArray(arg: any): arg is any[]; readonly prototype: any[]; }
->Array<string, number> : { isArray(arg: any): arg is any[]; readonly prototype: any[]; }
+>A2 : { isArray<T>(arg: T): arg is T extends any ? Extract<true extends false & T ? any[] : T extends readonly any[] ? T : T extends string ? never : T extends ArrayLike<infer U> ? U[] : unknown[], T> : never; readonly prototype: any[]; }
+>Array<string, number> : { isArray<T>(arg: T): arg is T extends any ? Extract<true extends false & T ? any[] : T extends readonly any[] ? T : T extends string ? never : T extends ArrayLike<infer U> ? U[] : unknown[], T> : never; readonly prototype: any[]; }
 >Array : ArrayConstructor
 }
 
@@ -76,11 +76,11 @@ type T20 = typeof Array<>;  // Error
 >Array : ArrayConstructor
 
 type T21 = typeof Array<string>;  // new (...) => string[]
->T21 : { (arrayLength: number): string[]; (...items: string[]): string[]; new (arrayLength: number): string[]; new (...items: string[]): string[]; isArray(arg: any): arg is any[]; readonly prototype: any[]; }
+>T21 : { (arrayLength: number): string[]; (...items: string[]): string[]; new (arrayLength: number): string[]; new (...items: string[]): string[]; isArray<T>(arg: T): arg is T extends any ? Extract<true extends false & T ? any[] : T extends readonly any[] ? T : T extends string ? never : T extends ArrayLike<infer U> ? U[] : unknown[], T> : never; readonly prototype: any[]; }
 >Array : ArrayConstructor
 
 type T22 = typeof Array<string, number>;  // Error
->T22 : { isArray(arg: any): arg is any[]; readonly prototype: any[]; }
+>T22 : { isArray<T>(arg: T): arg is T extends any ? Extract<true extends false & T ? any[] : T extends readonly any[] ? T : T extends string ? never : T extends ArrayLike<infer U> ? U[] : unknown[], T> : never; readonly prototype: any[]; }
 >Array : ArrayConstructor
 
 declare class C<T> {
