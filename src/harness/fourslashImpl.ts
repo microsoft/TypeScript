@@ -531,7 +531,7 @@ namespace FourSlash {
 
         public verifyOrganizeImports(newContent: string) {
             const changes = this.languageService.organizeImports({ fileName: this.activeFile.fileName, type: "file" }, this.formatCodeSettings, ts.emptyOptions);
-            this.applyChanges(changes);
+            this.assertAndApplyChanges(changes, "organizeImports");
             this.verifyFileContent(this.activeFile.fileName, newContent);
         }
 
@@ -2266,6 +2266,13 @@ namespace FourSlash {
             Utils.assertStructuralEquals(incrementalSourceFile, referenceSourceFile);
         }
 
+        private assertAndApplyEdits(fileName: string, edits: readonly ts.TextChange[], operationName: string) {
+            if (edits.length === 0) {
+                this.raiseError(`Received an empty set of changes in file '${fileName}' for operation '${operationName}'.`)
+            }
+            this.applyEdits(fileName, edits);
+        }
+
         /**
          * @returns The number of characters added to the file as a result of the edits.
          * May be negative.
@@ -2868,7 +2875,8 @@ namespace FourSlash {
                 }
             }
 
-            this.applyChanges(fixes[index].changes);
+            const fix = fixes[index];
+            this.assertAndApplyChanges(fix.changes, fix.description);
         }
 
         public applyCodeActionFromCompletion(markerName: string, options: FourSlashInterface.VerifyCompletionActionOptions) {
@@ -2892,7 +2900,7 @@ namespace FourSlash {
             if (codeAction.description !== options.description) {
                 this.raiseError(`Expected description to be:\n${options.description}\ngot:\n${codeActions[0].description}`);
             }
-            this.applyChanges(codeAction.changes);
+            this.assertAndApplyChanges(codeAction.changes, codeAction.description);
 
             this.verifyNewContentAfterChange(options, ts.flatMap(codeActions, a => a.changes.map(c => c.fileName)));
         }
@@ -2984,6 +2992,7 @@ namespace FourSlash {
                 assert(changes.length === 1, "Affected 0 or more than 1 file, must use 'newFileContent' instead of 'newRangeContent'");
                 const change = ts.first(changes);
                 assert(change.fileName = this.activeFile.fileName);
+                assert(change.textChanges.length > 0, `Returned an empty set of edits in file ${change.fileName}`);
                 const newText = ts.textChanges.applyChanges(this.getFileContent(this.activeFile.fileName), change.textChanges);
                 const newRange = updateTextRangeForTextChanges(this.getOnlyRange(), change.textChanges);
                 const actualText = newText.slice(newRange.pos, newRange.end);
@@ -3055,9 +3064,12 @@ namespace FourSlash {
             });
         }
 
-        private applyChanges(changes: readonly ts.FileTextChanges[]): void {
-            for (const change of changes) {
-                this.applyEdits(change.fileName, change.textChanges);
+        private assertAndApplyChanges(changes: readonly ts.FileTextChanges[], operationName: string): void {
+            if (changes.length === 0) {
+                this.raiseError(`Received no edits for refactoring '${operationName}'.`)
+            }
+            for (const { fileName, textChanges } of changes) {
+                this.assertAndApplyEdits(fileName, textChanges, operationName);
             }
         }
 
@@ -3542,9 +3554,8 @@ namespace FourSlash {
             }
 
             const editInfo = this.languageService.getEditsForRefactor(this.activeFile.fileName, this.formatCodeSettings, range, refactorName, actionName, ts.emptyOptions)!;
-            for (const edit of editInfo.edits) {
-                this.applyEdits(edit.fileName, edit.textChanges);
-            }
+            
+            this.assertAndApplyChanges(editInfo.edits, refactorName);
 
             let renameFilename: string | undefined;
             let renamePosition: number | undefined;
@@ -3658,9 +3669,7 @@ namespace FourSlash {
 
             const editInfo = this.languageService.getEditsForRefactor(marker.fileName, formattingOptions, marker.position, refactorNameToApply, actionName, ts.emptyOptions)!;
 
-            for (const edit of editInfo.edits) {
-                this.applyEdits(edit.fileName, edit.textChanges);
-            }
+            this.assertAndApplyChanges(editInfo.edits, refactorNameToApply);
             const actualContent = this.getFileContent(marker.fileName);
 
             if (actualContent !== expectedContent) {
