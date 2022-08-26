@@ -6799,6 +6799,7 @@ namespace ts {
             constantValue,
             helpers,
             startsOnNewLine,
+            snippetElement,
         } = sourceEmitNode;
         if (!destEmitNode) destEmitNode = {} as EmitNode;
         // We are using `.slice()` here in case `destEmitNode.leadingComments` is pushed to later.
@@ -6815,6 +6816,7 @@ namespace ts {
             }
         }
         if (startsOnNewLine !== undefined) destEmitNode.startsOnNewLine = startsOnNewLine;
+        if (snippetElement !== undefined) destEmitNode.snippetElement = snippetElement;
         return destEmitNode;
     }
 
