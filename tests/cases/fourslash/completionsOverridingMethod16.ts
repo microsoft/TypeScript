@@ -2,8 +2,8 @@
 
 // @newline: LF
 ////declare class B {
-////    get foo(): any;
 ////    set foo(value: any);
+////    get foo(): any;
 ////}
 ////class A extends B {
 ////    /**/
