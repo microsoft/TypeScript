@@ -4,7 +4,6 @@
         "outFile": "../../built/local/services.js"
     },
     "references": [
-        { "path": "../shims" },
         { "path": "../compiler" },
         { "path": "../jsTyping" }
     ],
@@ -68,6 +67,7 @@
         "codefixes/convertLiteralTypeToMappedType.ts",
         "codefixes/fixClassIncorrectlyImplementsInterface.ts",
         "codefixes/importFixes.ts",
+        "codefixes/fixAddMissingConstraint.ts",
         "codefixes/fixOverrideModifier.ts",
         "codefixes/fixNoPropertyAccessFromIndexSignature.ts",
         "codefixes/fixImplicitThis.ts",

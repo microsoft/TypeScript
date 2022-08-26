@@ -40,7 +40,10 @@ namespace ts.tscWatch {
                         {
                             caption: "modify typing file",
                             change: sys => sys.writeFile(typing.path, `${typing.content}export const typing1 = 10;`),
-                            timeouts: sys => pkgs(() => sys.checkTimeoutQueueLengthAndRun(1))
+                            timeouts: sys => {
+                                sys.checkTimeoutQueueLengthAndRun(1);
+                                checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout(sys);
+                            }
                         },
                         {
                             // Make change
@@ -54,7 +57,10 @@ namespace ts.tscWatch {
                         {
                             caption: "modify typing file",
                             change: sys => sys.writeFile(typing.path, typing.content),
-                            timeouts: sys => pkgs(() => sys.checkTimeoutQueueLengthAndRun(1))
+                            timeouts: sys => {
+                                sys.checkTimeoutQueueLengthAndRun(1);
+                                checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout(sys);
+                            }
                         },
                         {
                             // Make change to remove all watches
@@ -68,7 +74,7 @@ namespace ts.tscWatch {
                         {
                             caption: "modify typing file",
                             change: sys => sys.writeFile(typing.path, `${typing.content}export const typing1 = 10;`),
-                            timeouts: sys => pkgs(() => sys.checkTimeoutQueueLengthAndRun(1))
+                            timeouts: sys => sys.checkTimeoutQueueLength(0),
                         },
                     ],
                     watchOrSolution: solutionBuilder

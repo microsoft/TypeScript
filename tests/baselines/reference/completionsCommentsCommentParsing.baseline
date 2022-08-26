@@ -4883,6 +4883,18 @@
           ]
         },
         {
+          "name": "satisfies",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "satisfies",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
           "name": "String",
           "kind": "var",
           "kindModifiers": "declare",
@@ -5053,6 +5065,18 @@
           "displayParts": [
             {
               "text": "try",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "type",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "type",
               "kind": "keyword"
             }
           ]
@@ -11051,6 +11075,18 @@
           ]
         },
         {
+          "name": "satisfies",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "satisfies",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
           "name": "String",
           "kind": "var",
           "kindModifiers": "declare",
@@ -11345,6 +11381,18 @@
           "displayParts": [
             {
               "text": "try",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "type",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "type",
               "kind": "keyword"
             }
           ]
@@ -16951,6 +16999,18 @@
           ]
         },
         {
+          "name": "satisfies",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "satisfies",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
           "name": "String",
           "kind": "var",
           "kindModifiers": "declare",
@@ -17121,6 +17181,18 @@
           "displayParts": [
             {
               "text": "try",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "type",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "type",
               "kind": "keyword"
             }
           ]
@@ -22587,6 +22659,18 @@
           "displayParts": [
             {
               "text": "return",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "satisfies",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "satisfies",
               "kind": "keyword"
             }
           ]
@@ -28395,6 +28479,18 @@
           ]
         },
         {
+          "name": "satisfies",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "satisfies",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
           "name": "String",
           "kind": "var",
           "kindModifiers": "declare",
@@ -28565,6 +28661,18 @@
           "displayParts": [
             {
               "text": "try",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "type",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "type",
               "kind": "keyword"
             }
           ]
@@ -34563,6 +34671,18 @@
           ]
         },
         {
+          "name": "satisfies",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "satisfies",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
           "name": "String",
           "kind": "var",
           "kindModifiers": "declare",
@@ -34857,6 +34977,18 @@
           "displayParts": [
             {
               "text": "try",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "type",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "type",
               "kind": "keyword"
             }
           ]
@@ -40475,6 +40607,18 @@
           "displayParts": [
             {
               "text": "return",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "satisfies",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "satisfies",
               "kind": "keyword"
             }
           ]

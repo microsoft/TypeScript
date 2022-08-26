@@ -449,6 +449,7 @@ namespace ts.formatting {
             case SyntaxKind.TypePredicate:
             case SyntaxKind.UnionType:
             case SyntaxKind.IntersectionType:
+            case SyntaxKind.SatisfiesExpression:
                 return true;
 
             // equals in binding elements: function foo([[x, y] = [1, 2]])
@@ -724,7 +725,7 @@ namespace ts.formatting {
 
     function isEndOfDecoratorContextOnSameLine(context: FormattingContext): boolean {
         return context.TokensAreOnSameLine() &&
-            !!context.contextNode.decorators &&
+            hasDecorators(context.contextNode) &&
             nodeIsInDecoratorContext(context.currentTokenParent) &&
             !nodeIsInDecoratorContext(context.nextTokenParent);
     }

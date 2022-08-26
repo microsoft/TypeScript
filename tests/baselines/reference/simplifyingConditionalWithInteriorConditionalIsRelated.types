@@ -15,7 +15,7 @@ function JustConditional<T>(): ConditionalType<T> {
 >JustConditional : <T>() => ConditionalType<T>
 
     return ConditionalOrUndefined<T>()!; // shouldn't error
->ConditionalOrUndefined<T>()! : NonNullable<ConditionalType<T>>
+>ConditionalOrUndefined<T>()! : ConditionalType<T>
 >ConditionalOrUndefined<T>() : ConditionalType<T> | undefined
 >ConditionalOrUndefined : <T>() => ConditionalType<T> | undefined
 }

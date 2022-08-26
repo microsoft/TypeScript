@@ -1,6 +1,6 @@
-const fs = require("fs");
-const async = require("async");
-const glob = require("glob");
+import * as fs from "fs";
+import * as async from "async";
+import * as glob from "glob";
 
 fs.readFile("src/compiler/diagnosticMessages.json", "utf-8", (err, data) => {
     if (err) {
@@ -25,7 +25,7 @@ fs.readFile("src/compiler/diagnosticMessages.json", "utf-8", (err, data) => {
             fs.readFile(baseDir + f, "utf-8", (err, baseline) => {
                 if (err) throw err;
 
-                let g: string[];
+                let g: RegExpExecArray | null;
                 while (g = errRegex.exec(baseline)) {
                     const errCode = +g[1];
                     const msg = keys.filter(k => messages[k].code === errCode)[0];
@@ -53,7 +53,7 @@ fs.readFile("src/compiler/diagnosticMessages.json", "utf-8", (err, data) => {
 fs.readFile("src/compiler/diagnosticInformationMap.generated.ts", "utf-8", (err, data) => {
     const errorRegexp = /\s(\w+): \{ code/g;
     const errorNames: string[] = [];
-    let errMatch: string[];
+    let errMatch: RegExpExecArray | null;
     while (errMatch = errorRegexp.exec(data)) {
         errorNames.push(errMatch[1]);
     }

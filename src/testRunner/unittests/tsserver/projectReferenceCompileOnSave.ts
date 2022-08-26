@@ -139,7 +139,7 @@ ${appendDts}`
                     }
 
                     // Verify EmitOutput
-                    const { exportedModulesFromDeclarationEmit: _1, ...actualEmitOutput } = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: usageTs.path }
                     }).response as EmitOutput;
@@ -175,7 +175,7 @@ ${appendDts}`
                     }
 
                     // Verify EmitOutput
-                    const { exportedModulesFromDeclarationEmit: _1, ...actualEmitOutput } = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: usageTs.path, projectFileName: usageConfig.path }
                     }).response as EmitOutput;
@@ -218,7 +218,7 @@ ${appendDts}`
                     }
 
                     // Verify EmitOutput
-                    const { exportedModulesFromDeclarationEmit: _1, ...actualEmitOutput } = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: usageTs.path }
                     }).response as EmitOutput;
@@ -261,7 +261,7 @@ ${appendDts}`
                     }
 
                     // Verify EmitOutput
-                    const { exportedModulesFromDeclarationEmit: _1, ...actualEmitOutput } = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: usageTs.path, projectFileName: usageConfig.path }
                     }).response as EmitOutput;
@@ -315,7 +315,7 @@ ${appendDts}`
                     }
 
                     // Verify EmitOutput
-                    const { exportedModulesFromDeclarationEmit: _1, ...actualEmitOutput } = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: usageTs.path }
                     }).response as EmitOutput;
@@ -369,7 +369,7 @@ ${appendDts}`
                     }
 
                     // Verify EmitOutput
-                    const { exportedModulesFromDeclarationEmit: _1, ...actualEmitOutput } = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: usageTs.path, projectFileName: usageConfig.path }
                     }).response as EmitOutput;
@@ -412,7 +412,7 @@ ${appendDts}`
                     }
 
                     // Verify EmitOutput
-                    const { exportedModulesFromDeclarationEmit: _1, ...actualEmitOutput } = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: usageTs.path }
                     }).response as EmitOutput;
@@ -455,7 +455,7 @@ ${appendDts}`
                     }
 
                     // Verify EmitOutput
-                    const { exportedModulesFromDeclarationEmit: _1, ...actualEmitOutput } = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: usageTs.path, projectFileName: usageConfig.path }
                     }).response as EmitOutput;
@@ -509,7 +509,7 @@ ${appendDts}`
                     }
 
                     // Verify EmitOutput
-                    const { exportedModulesFromDeclarationEmit: _1, ...actualEmitOutput } = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: usageTs.path }
                     }).response as EmitOutput;
@@ -563,7 +563,7 @@ ${appendDts}`
                     }
 
                     // Verify EmitOutput
-                    const { exportedModulesFromDeclarationEmit: _1, ...actualEmitOutput } = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: usageTs.path, projectFileName: usageConfig.path }
                     }).response as EmitOutput;
@@ -597,7 +597,7 @@ ${appendDts}`
                     assert.equal(host.writtenFiles.size, 0);
 
                     // Verify EmitOutput
-                    const { exportedModulesFromDeclarationEmit: _1, ...actualEmitOutput } = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: dependencyTs.path }
                     }).response as EmitOutput;
@@ -628,7 +628,7 @@ ${appendDts}`
                     assert.equal(host.writtenFiles.size, 0);
 
                     // Verify EmitOutput
-                    const { exportedModulesFromDeclarationEmit: _1, ...actualEmitOutput } = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
                     }).response as EmitOutput;
@@ -666,7 +666,7 @@ ${appendDts}`
                     assert.equal(host.writtenFiles.size, 0);
 
                     // Verify EmitOutput
-                    const { exportedModulesFromDeclarationEmit: _1, ...actualEmitOutput } = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: dependencyTs.path }
                     }).response as EmitOutput;
@@ -704,7 +704,7 @@ ${appendDts}`
                     assert.equal(host.writtenFiles.size, 0);
 
                     // Verify EmitOutput
-                    const { exportedModulesFromDeclarationEmit: _1, ...actualEmitOutput } = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
                     }).response as EmitOutput;
@@ -753,7 +753,7 @@ ${appendDts}`
                     assert.equal(host.writtenFiles.size, 0);
 
                     // Verify EmitOutput
-                    const { exportedModulesFromDeclarationEmit: _1, ...actualEmitOutput } = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: dependencyTs.path }
                     }).response as EmitOutput;
@@ -802,7 +802,7 @@ ${appendDts}`
                     assert.equal(host.writtenFiles.size, 0);
 
                     // Verify EmitOutput
-                    const { exportedModulesFromDeclarationEmit: _1, ...actualEmitOutput } = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
                     }).response as EmitOutput;
@@ -840,7 +840,7 @@ ${appendDts}`
                     assert.equal(host.writtenFiles.size, 0);
 
                     // Verify EmitOutput
-                    const { exportedModulesFromDeclarationEmit: _1, ...actualEmitOutput } = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: dependencyTs.path }
                     }).response as EmitOutput;
@@ -878,7 +878,7 @@ ${appendDts}`
                     assert.equal(host.writtenFiles.size, 0);
 
                     // Verify EmitOutput
-                    const { exportedModulesFromDeclarationEmit: _1, ...actualEmitOutput } = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
                     }).response as EmitOutput;
@@ -927,7 +927,7 @@ ${appendDts}`
                     assert.equal(host.writtenFiles.size, 0);
 
                     // Verify EmitOutput
-                    const { exportedModulesFromDeclarationEmit: _1, ...actualEmitOutput } = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: dependencyTs.path }
                     }).response as EmitOutput;
@@ -976,7 +976,7 @@ ${appendDts}`
                     assert.equal(host.writtenFiles.size, 0);
 
                     // Verify EmitOutput
-                    const { exportedModulesFromDeclarationEmit: _1, ...actualEmitOutput } = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
                     }).response as EmitOutput;
@@ -1017,7 +1017,7 @@ ${appendDts}`
                     }
 
                     // Verify EmitOutput
-                    const { exportedModulesFromDeclarationEmit: _1, ...actualEmitOutput } = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: usageTs.path }
                     }).response as EmitOutput;
@@ -1053,7 +1053,7 @@ ${appendDts}`
                     }
 
                     // Verify EmitOutput
-                    const { exportedModulesFromDeclarationEmit: _1, ...actualEmitOutput } = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: usageTs.path, projectFileName: usageConfig.path }
                     }).response as EmitOutput;
@@ -1107,7 +1107,7 @@ ${appendDts}`
                     }
 
                     // Verify EmitOutput
-                    const { exportedModulesFromDeclarationEmit: _1, ...actualEmitOutput } = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: usageTs.path }
                     }).response as EmitOutput;
@@ -1161,7 +1161,7 @@ ${appendDts}`
                     }
 
                     // Verify EmitOutput
-                    const { exportedModulesFromDeclarationEmit: _1, ...actualEmitOutput } = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: usageTs.path, projectFileName: usageConfig.path }
                     }).response as EmitOutput;
@@ -1215,7 +1215,7 @@ ${appendDts}`
                     }
 
                     // Verify EmitOutput
-                    const { exportedModulesFromDeclarationEmit: _1, ...actualEmitOutput } = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: usageTs.path }
                     }).response as EmitOutput;
@@ -1269,7 +1269,7 @@ ${appendDts}`
                     }
 
                     // Verify EmitOutput
-                    const { exportedModulesFromDeclarationEmit: _1, ...actualEmitOutput } = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: usageTs.path, projectFileName: usageConfig.path }
                     }).response as EmitOutput;
@@ -1323,7 +1323,7 @@ ${appendDts}`
                     }
 
                     // Verify EmitOutput
-                    const { exportedModulesFromDeclarationEmit: _1, ...actualEmitOutput } = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: usageTs.path }
                     }).response as EmitOutput;
@@ -1377,7 +1377,7 @@ ${appendDts}`
                     }
 
                     // Verify EmitOutput
-                    const { exportedModulesFromDeclarationEmit: _1, ...actualEmitOutput } = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: usageTs.path, projectFileName: usageConfig.path }
                     }).response as EmitOutput;
@@ -1431,7 +1431,7 @@ ${appendDts}`
                     }
 
                     // Verify EmitOutput
-                    const { exportedModulesFromDeclarationEmit: _1, ...actualEmitOutput } = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: usageTs.path }
                     }).response as EmitOutput;
@@ -1485,7 +1485,7 @@ ${appendDts}`
                     }
 
                     // Verify EmitOutput
-                    const { exportedModulesFromDeclarationEmit: _1, ...actualEmitOutput } = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: usageTs.path, projectFileName: usageConfig.path }
                     }).response as EmitOutput;
@@ -1519,7 +1519,7 @@ ${appendDts}`
                     assert.equal(host.writtenFiles.size, 0);
 
                     // Verify EmitOutput
-                    const { exportedModulesFromDeclarationEmit: _1, ...actualEmitOutput } = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
                     }).response as EmitOutput;
@@ -1568,7 +1568,7 @@ ${appendDts}`
                     assert.equal(host.writtenFiles.size, 0);
 
                     // Verify EmitOutput
-                    const { exportedModulesFromDeclarationEmit: _1, ...actualEmitOutput } = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
                     }).response as EmitOutput;
@@ -1617,7 +1617,7 @@ ${appendDts}`
                     assert.equal(host.writtenFiles.size, 0);
 
                     // Verify EmitOutput
-                    const { exportedModulesFromDeclarationEmit: _1, ...actualEmitOutput } = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
                     }).response as EmitOutput;
@@ -1666,7 +1666,7 @@ ${appendDts}`
                     assert.equal(host.writtenFiles.size, 0);
 
                     // Verify EmitOutput
-                    const { exportedModulesFromDeclarationEmit: _1, ...actualEmitOutput } = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
                     }).response as EmitOutput;
@@ -1715,7 +1715,7 @@ ${appendDts}`
                     assert.equal(host.writtenFiles.size, 0);
 
                     // Verify EmitOutput
-                    const { exportedModulesFromDeclarationEmit: _1, ...actualEmitOutput } = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
                     }).response as EmitOutput;
@@ -1755,7 +1755,7 @@ ${appendDts}`
                     }
 
                     // Verify EmitOutput
-                    const { exportedModulesFromDeclarationEmit: _1, ...actualEmitOutput } = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: dependencyTs.path }
                     }).response as EmitOutput;
@@ -1791,7 +1791,7 @@ ${appendDts}`
                     }
 
                     // Verify EmitOutput
-                    const { exportedModulesFromDeclarationEmit: _1, ...actualEmitOutput } = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: dependencyTs.path, projectFileName: dependencyConfig.path }
                     }).response as EmitOutput;
@@ -1846,7 +1846,7 @@ ${appendDts}`
                     }
 
                     // Verify EmitOutput
-                    const { exportedModulesFromDeclarationEmit: _1, ...actualEmitOutput } = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: dependencyTs.path }
                     }).response as EmitOutput;
@@ -1900,7 +1900,7 @@ ${appendDts}`
                     }
 
                     // Verify EmitOutput
-                    const { exportedModulesFromDeclarationEmit: _1, ...actualEmitOutput } = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: dependencyTs.path, projectFileName: dependencyConfig.path }
                     }).response as EmitOutput;
@@ -1955,7 +1955,7 @@ ${appendDts}`
                     }
 
                     // Verify EmitOutput
-                    const { exportedModulesFromDeclarationEmit: _1, ...actualEmitOutput } = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: dependencyTs.path }
                     }).response as EmitOutput;
@@ -2009,7 +2009,7 @@ ${appendDts}`
                     }
 
                     // Verify EmitOutput
-                    const { exportedModulesFromDeclarationEmit: _1, ...actualEmitOutput } = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: dependencyTs.path, projectFileName: dependencyConfig.path }
                     }).response as EmitOutput;
@@ -2064,7 +2064,7 @@ ${appendDts}`
                     }
 
                     // Verify EmitOutput
-                    const { exportedModulesFromDeclarationEmit: _1, ...actualEmitOutput } = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: dependencyTs.path }
                     }).response as EmitOutput;
@@ -2118,7 +2118,7 @@ ${appendDts}`
                     }
 
                     // Verify EmitOutput
-                    const { exportedModulesFromDeclarationEmit: _1, ...actualEmitOutput } = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: dependencyTs.path, projectFileName: dependencyConfig.path }
                     }).response as EmitOutput;
@@ -2173,7 +2173,7 @@ ${appendDts}`
                     }
 
                     // Verify EmitOutput
-                    const { exportedModulesFromDeclarationEmit: _1, ...actualEmitOutput } = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: dependencyTs.path }
                     }).response as EmitOutput;
@@ -2227,7 +2227,7 @@ ${appendDts}`
                     }
 
                     // Verify EmitOutput
-                    const { exportedModulesFromDeclarationEmit: _1, ...actualEmitOutput } = session.executeCommandSeq<protocol.EmitOutputRequest>({
+                    const actualEmitOutput = session.executeCommandSeq<protocol.EmitOutputRequest>({
                         command: protocol.CommandTypes.EmitOutput,
                         arguments: { file: dependencyTs.path, projectFileName: dependencyConfig.path }
                     }).response as EmitOutput;

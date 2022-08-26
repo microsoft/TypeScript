@@ -541,6 +541,10 @@ namespace FourSlashInterface {
             this.state.verifySyntacticClassifications(classifications);
         }
 
+        public encodedSyntacticClassificationsLength(length: number) {
+            this.state.verifyEncodedSyntacticClassificationsLength(length);
+        }
+
         public encodedSemanticClassificationsLength(format: ts.SemanticClassificationFormat, length: number) {
             this.state.verifyEncodedSemanticClassificationsLength(format, length);
         }
@@ -556,12 +560,19 @@ namespace FourSlashInterface {
             this.state.replaceWithSemanticClassifications(format);
         }
 
-        public renameInfoSucceeded(displayName?: string, fullDisplayName?: string, kind?: string, kindModifiers?: string, fileToRename?: string, expectedRange?: FourSlash.Range, options?: ts.RenameInfoOptions) {
-            this.state.verifyRenameInfoSucceeded(displayName, fullDisplayName, kind, kindModifiers, fileToRename, expectedRange, options);
+        public renameInfoSucceeded(
+            displayName?: string,
+            fullDisplayName?: string,
+            kind?: string,
+            kindModifiers?: string,
+            fileToRename?: string,
+            expectedRange?: FourSlash.Range,
+            preferences?: ts.UserPreferences) {
+            this.state.verifyRenameInfoSucceeded(displayName, fullDisplayName, kind, kindModifiers, fileToRename, expectedRange, preferences);
         }
 
-        public renameInfoFailed(message?: string, allowRenameOfImportPath?: boolean) {
-            this.state.verifyRenameInfoFailed(message, allowRenameOfImportPath);
+        public renameInfoFailed(message?: string, preferences?: ts.UserPreferences) {
+            this.state.verifyRenameInfoFailed(message, preferences);
         }
 
         public renameLocations(startRanges: ArrayOrSingle<FourSlash.Range>, options: RenameLocationsOptions) {
@@ -1377,6 +1388,7 @@ namespace FourSlashInterface {
             "package",
             "readonly",
             "return",
+            "satisfies",
             "string",
             "super",
             "switch",
@@ -1492,12 +1504,14 @@ namespace FourSlashInterface {
             "null",
             "package",
             "return",
+            "satisfies",
             "super",
             "switch",
             "this",
             "throw",
             "true",
             "try",
+            "type",
             "typeof",
             "var",
             "void",
@@ -1589,6 +1603,7 @@ namespace FourSlashInterface {
             "package",
             "readonly",
             "return",
+            "satisfies",
             "string",
             "super",
             "switch",
@@ -1643,12 +1658,14 @@ namespace FourSlashInterface {
             "null",
             "package",
             "return",
+            "satisfies",
             "super",
             "switch",
             "this",
             "throw",
             "true",
             "try",
+            "type",
             "typeof",
             "var",
             "void",

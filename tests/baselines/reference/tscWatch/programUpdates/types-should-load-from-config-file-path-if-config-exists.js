@@ -58,18 +58,14 @@ WatchedFiles::
   {"fileName":"/a/b/node_modules/@types/node/index.d.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/a/b/node_modules/node/package.json:
-  {"fileName":"/a/b/node_modules/node/package.json","pollingInterval":250}
-/a/b/node_modules/@types/node/package.json:
-  {"fileName":"/a/b/node_modules/@types/node/package.json","pollingInterval":250}
 
 FsWatches::
 
 FsWatchesRecursive::
 /a/b/node_modules:
-  {"directoryName":"/a/b/node_modules","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a/b/node_modules"}
 /a/b:
-  {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/a/b"}
 
 exitCode:: ExitStatus.undefined
 

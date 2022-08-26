@@ -1,10 +1,4 @@
 namespace ts.projectSystem {
-    function createHostModuleResolutionTrace(host: TestServerHost & ModuleResolutionHost) {
-        const resolutionTrace: string[] = [];
-        host.trace = resolutionTrace.push.bind(resolutionTrace);
-        return resolutionTrace;
-    }
-
     describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem extra resolution pass in server host", () => {
         it("can load typings that are proper modules", () => {
             const file1 = {
@@ -16,33 +10,14 @@ namespace ts.projectSystem {
                 content: "export let x = 1"
             };
             const host: TestServerHost & ModuleResolutionHost = createServerHost([file1, lib]);
-            const resolutionTrace = createHostModuleResolutionTrace(host);
-            const projectService = createProjectService(host, { typingsInstaller: new TestTypingsInstaller("/a/cache", /*throttleLimit*/5, host) });
+            const projectService = createProjectService(host, {
+                typingsInstaller: new TestTypingsInstaller("/a/cache", /*throttleLimit*/5, host),
+                logger: createLoggerWithInMemoryLogs()
+            });
 
             projectService.setCompilerOptionsForInferredProjects({ traceResolution: true, allowJs: true });
             projectService.openClientFile(file1.path);
-            projectService.checkNumberOfProjects({ inferredProjects: 1 });
-            const proj = projectService.inferredProjects[0];
-
-            assert.deepEqual(resolutionTrace, [
-                "======== Resolving module 'lib' from '/a/b/app.js'. ========",
-                "Module resolution kind is not specified, using 'NodeJs'.",
-                "Loading module 'lib' from 'node_modules' folder, target file type 'TypeScript'.",
-                "Directory '/a/b/node_modules' does not exist, skipping all lookups in it.",
-                "Directory '/a/node_modules' does not exist, skipping all lookups in it.",
-                "Directory '/node_modules' does not exist, skipping all lookups in it.",
-                "Loading module 'lib' from 'node_modules' folder, target file type 'JavaScript'.",
-                "Directory '/a/b/node_modules' does not exist, skipping all lookups in it.",
-                "Directory '/a/node_modules' does not exist, skipping all lookups in it.",
-                "Directory '/node_modules' does not exist, skipping all lookups in it.",
-                "======== Module name 'lib' was not resolved. ========",
-                `Auto discovery for typings is enabled in project '${proj.getProjectName()}'. Running extra resolution pass for module 'lib' using cache location '/a/cache'.`,
-                "File '/a/cache/node_modules/lib.d.ts' does not exist.",
-                "File '/a/cache/node_modules/@types/lib/package.json' does not exist.",
-                "File '/a/cache/node_modules/@types/lib.d.ts' does not exist.",
-                "File '/a/cache/node_modules/@types/lib/index.d.ts' exist - use it as a name resolution result.",
-            ]);
-            checkProjectActualFiles(proj, [file1.path, lib.path]);
+            baselineTsserverLogs("resolutionCache", "can load typings that are proper modules", projectService);
         });
     });
 
@@ -378,117 +353,6 @@ namespace ts.projectSystem {
             return { module1, module2 };
         }
 
-        function verifyTrace(resolutionTrace: string[], expected: string[]) {
-            assert.deepEqual(resolutionTrace, expected);
-            resolutionTrace.length = 0;
-        }
-
-        function getExpectedFileDoesNotExistResolutionTrace(host: TestServerHost, expectedTrace: string[], foundModule: boolean, module: File, directory: string, file: string, ignoreIfParentMissing?: boolean) {
-            if (!foundModule) {
-                const path = combinePaths(directory, file);
-                if (!ignoreIfParentMissing || host.directoryExists(getDirectoryPath(path))) {
-                    if (module.path === path) {
-                        foundModule = true;
-                    }
-                    else {
-                        expectedTrace.push(`File '${path}' does not exist.`);
-                    }
-                }
-            }
-            return foundModule;
-        }
-
-        function getExpectedMissedLocationResolutionTrace(host: TestServerHost, expectedTrace: string[], dirPath: string, module: File, moduleName: string, useNodeModules: boolean, cacheLocation?: string) {
-            let foundModule = false;
-            forEachAncestorDirectory(dirPath, dirPath => {
-                if (dirPath === cacheLocation) {
-                    return foundModule;
-                }
-
-                const directory = useNodeModules ? combinePaths(dirPath, nodeModules) : dirPath;
-                if (useNodeModules && !foundModule && !host.directoryExists(directory)) {
-                    expectedTrace.push(`Directory '${directory}' does not exist, skipping all lookups in it.`);
-                    return undefined;
-                }
-                foundModule = getExpectedFileDoesNotExistResolutionTrace(host, expectedTrace, foundModule, module, directory, `${moduleName}/package.json`, /*ignoreIfParentMissing*/ true);
-                foundModule = getExpectedFileDoesNotExistResolutionTrace(host, expectedTrace, foundModule, module, directory, `${moduleName}.ts`);
-                foundModule = getExpectedFileDoesNotExistResolutionTrace(host, expectedTrace, foundModule, module, directory, `${moduleName}.tsx`);
-                foundModule = getExpectedFileDoesNotExistResolutionTrace(host, expectedTrace, foundModule, module, directory, `${moduleName}.d.ts`);
-                foundModule = getExpectedFileDoesNotExistResolutionTrace(host, expectedTrace, foundModule, module, directory, `${moduleName}/index.ts`, /*ignoreIfParentMissing*/ true);
-                if (useNodeModules && !foundModule) {
-                    expectedTrace.push(`Directory '${directory}/@types' does not exist, skipping all lookups in it.`);
-                }
-                return foundModule ? true : undefined;
-            });
-        }
-
-        function getExpectedResolutionTraceHeader(expectedTrace: string[], file: File, moduleName: string) {
-            expectedTrace.push(
-                `======== Resolving module '${moduleName}' from '${file.path}'. ========`,
-                `Module resolution kind is not specified, using 'NodeJs'.`
-            );
-        }
-
-        function getExpectedResolutionTraceFooter(expectedTrace: string[], module: File, moduleName: string, addRealPathTrace: boolean, ignoreModuleFileFound?: boolean) {
-            if (!ignoreModuleFileFound) {
-                expectedTrace.push(`File '${module.path}' exist - use it as a name resolution result.`);
-            }
-            if (addRealPathTrace) {
-                expectedTrace.push(`Resolving real path for '${module.path}', result '${module.path}'.`);
-            }
-            expectedTrace.push(`======== Module name '${moduleName}' was successfully resolved to '${module.path}'. ========`);
-        }
-
-        function getExpectedModuleResolutionFromCacheTrace(containingFile: File, module: File, moduleName: string, cacheLocation: string): string {
-            return `Reusing resolution of module '${moduleName}' from '${containingFile.path}' found in cache from location '${cacheLocation}', it was successfully resolved to '${module.path}'.`;
-        }
-
-        function getExpectedRelativeModuleResolutionTrace(host: TestServerHost, file: File, module: File, moduleName: string, expectedTrace: string[] = []) {
-            getExpectedResolutionTraceHeader(expectedTrace, file, moduleName);
-            expectedTrace.push(`Loading module as file / folder, candidate module location '${removeFileExtension(module.path)}', target file type 'TypeScript'.`);
-            getExpectedMissedLocationResolutionTrace(host, expectedTrace, getDirectoryPath(normalizePath(combinePaths(getDirectoryPath(file.path), moduleName))), module, moduleName.substring(moduleName.lastIndexOf("/") + 1), /*useNodeModules*/ false);
-            getExpectedResolutionTraceFooter(expectedTrace, module, moduleName, /*addRealPathTrace*/ false);
-            return expectedTrace;
-        }
-
-        function getExpectedNonRelativeModuleResolutionTrace(host: TestServerHost, file: File, module: File, moduleName: string, expectedTrace: string[] = []) {
-            getExpectedResolutionTraceHeader(expectedTrace, file, moduleName);
-            expectedTrace.push(`Loading module '${moduleName}' from 'node_modules' folder, target file type 'TypeScript'.`);
-            getExpectedMissedLocationResolutionTrace(host, expectedTrace, getDirectoryPath(file.path), module, moduleName, /*useNodeModules*/ true);
-            getExpectedResolutionTraceFooter(expectedTrace, module, moduleName, /*addRealPathTrace*/ true);
-            return expectedTrace;
-        }
-
-        function getExpectedNonRelativeModuleResolutionFromCacheTrace(host: TestServerHost, file: File, module: File, moduleName: string, cacheLocation: string, expectedTrace: string[] = []) {
-            getExpectedResolutionTraceHeader(expectedTrace, file, moduleName);
-            expectedTrace.push(`Loading module '${moduleName}' from 'node_modules' folder, target file type 'TypeScript'.`);
-            getExpectedMissedLocationResolutionTrace(host, expectedTrace, getDirectoryPath(file.path), module, moduleName, /*useNodeModules*/ true, cacheLocation);
-            expectedTrace.push(`Resolution for module '${moduleName}' was found in cache from location '${cacheLocation}'.`);
-            getExpectedResolutionTraceFooter(expectedTrace, module, moduleName, /*addRealPathTrace*/ false, /*ignoreModuleFileFound*/ true);
-            return expectedTrace;
-        }
-
-        function getExpectedReusingResolutionFromOldProgram(file: File, moduleFile: File, moduleName: string) {
-            return `Reusing resolution of module '${moduleName}' from '${file.path}' of old program, it was successfully resolved to '${moduleFile.path}'.`;
-        }
-
-        function verifyWatchesWithConfigFile(host: TestServerHost, files: File[], openFile: File, extraExpectedDirectories?: readonly string[]) {
-            const expectedRecursiveDirectories = new Set([tscWatch.projectRoot, `${tscWatch.projectRoot}/${nodeModulesAtTypes}`, ...(extraExpectedDirectories || emptyArray)]);
-            checkWatchedFiles(host, mapDefined(files, f => {
-                if (f === openFile) {
-                    return undefined;
-                }
-                const indexOfNodeModules = f.path.indexOf("/node_modules/");
-                if (indexOfNodeModules === -1) {
-                    return f.path;
-                }
-                expectedRecursiveDirectories.add(f.path.substr(0, indexOfNodeModules + "/node_modules".length));
-                return undefined;
-            }));
-            checkWatchedDirectories(host, [], /*recursive*/ false);
-            checkWatchedDirectories(host, arrayFrom(expectedRecursiveDirectories.values()), /*recursive*/ true);
-        }
-
         describe("from files in same folder", () => {
             function getFiles(fileContent: string) {
                 const file1: File = {
@@ -503,64 +367,34 @@ namespace ts.projectSystem {
             }
 
             it("relative module name", () => {
-                const module1Name = "./module1";
-                const module2Name = "../module2";
-                const fileContent = `import { module1 } from "${module1Name}";import { module2 } from "${module2Name}";`;
+                const fileContent = `import { module1 } from "./module1";import { module2 } from "../module2";`;
                 const { file1, file2 } = getFiles(fileContent);
                 const { module1, module2 } = getModules(`${tscWatch.projectRoot}/src/module1.ts`, `${tscWatch.projectRoot}/module2.ts`);
                 const files = [module1, module2, file1, file2, configFile, libFile];
                 const host = createServerHost(files);
-                const resolutionTrace = createHostModuleResolutionTrace(host);
-                const service = createProjectService(host);
+                const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs() });
                 service.openClientFile(file1.path);
-                const expectedTrace = getExpectedRelativeModuleResolutionTrace(host, file1, module1, module1Name);
-                getExpectedRelativeModuleResolutionTrace(host, file1, module2, module2Name, expectedTrace);
-                expectedTrace.push(getExpectedModuleResolutionFromCacheTrace(file2, module1, module1Name, `${tscWatch.projectRoot}/src`));
-                expectedTrace.push(getExpectedModuleResolutionFromCacheTrace(file2, module2, module2Name, `${tscWatch.projectRoot}/src`));
-                verifyTrace(resolutionTrace, expectedTrace);
-                verifyWatchesWithConfigFile(host, files, file1);
 
                 host.writeFile(file1.path, file1.content + fileContent);
                 host.writeFile(file2.path, file2.content + fileContent);
                 host.runQueuedTimeoutCallbacks();
-                verifyTrace(resolutionTrace, [
-                    getExpectedReusingResolutionFromOldProgram(file1, module1, module1Name),
-                    getExpectedReusingResolutionFromOldProgram(file1, module2, module2Name),
-                    getExpectedReusingResolutionFromOldProgram(file2, module1, module1Name),
-                    getExpectedReusingResolutionFromOldProgram(file2, module2, module2Name),
-                ]);
-                verifyWatchesWithConfigFile(host, files, file1);
+
+                baselineTsserverLogs("resolutionCache", "relative module name from files in same folder", service);
             });
 
             it("non relative module name", () => {
-                const expectedNonRelativeDirectories = [`${tscWatch.projectRoot}/node_modules`, `${tscWatch.projectRoot}/src`];
-                const module1Name = "module1";
-                const module2Name = "module2";
-                const fileContent = `import { module1 } from "${module1Name}";import { module2 } from "${module2Name}";`;
+                const fileContent = `import { module1 } from "module1";import { module2 } from "module2";`;
                 const { file1, file2 } = getFiles(fileContent);
                 const { module1, module2 } = getModules(`${tscWatch.projectRoot}/src/node_modules/module1/index.ts`, `${tscWatch.projectRoot}/node_modules/module2/index.ts`);
                 const files = [module1, module2, file1, file2, configFile, libFile];
                 const host = createServerHost(files);
-                const resolutionTrace = createHostModuleResolutionTrace(host);
-                const service = createProjectService(host);
+                const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs() });
                 service.openClientFile(file1.path);
-                const expectedTrace = getExpectedNonRelativeModuleResolutionTrace(host, file1, module1, module1Name);
-                getExpectedNonRelativeModuleResolutionTrace(host, file1, module2, module2Name, expectedTrace);
-                expectedTrace.push(getExpectedModuleResolutionFromCacheTrace(file2, module1, module1Name, `${tscWatch.projectRoot}/src`));
-                expectedTrace.push(getExpectedModuleResolutionFromCacheTrace(file2, module2, module2Name, `${tscWatch.projectRoot}/src`));
-                verifyTrace(resolutionTrace, expectedTrace);
-                verifyWatchesWithConfigFile(host, files, file1, expectedNonRelativeDirectories);
 
                 host.writeFile(file1.path, file1.content + fileContent);
                 host.writeFile(file2.path, file2.content + fileContent);
                 host.runQueuedTimeoutCallbacks();
-                verifyTrace(resolutionTrace, [
-                    getExpectedReusingResolutionFromOldProgram(file1, module1, module1Name),
-                    getExpectedReusingResolutionFromOldProgram(file1, module2, module2Name),
-                    getExpectedReusingResolutionFromOldProgram(file2, module1, module1Name),
-                    getExpectedReusingResolutionFromOldProgram(file2, module2, module2Name),
-                ]);
-                verifyWatchesWithConfigFile(host, files, file1, expectedNonRelativeDirectories);
+                baselineTsserverLogs("resolutionCache", "non relative module name from files in same folder", service);
             });
         });
 
@@ -586,93 +420,40 @@ namespace ts.projectSystem {
             }
 
             it("relative module name", () => {
-                const module1Name = "./module1";
-                const module2Name = "../module2";
-                const module3Name = "../module1";
-                const module4Name = "../../module2";
-                const module5Name = "../../src/module1";
-                const module6Name = "../src/module1";
-                const fileContent1 = `import { module1 } from "${module1Name}";import { module2 } from "${module2Name}";`;
-                const fileContent2 = `import { module1 } from "${module3Name}";import { module2 } from "${module4Name}";`;
-                const fileContent3 = `import { module1 } from "${module5Name}";import { module2 } from "${module4Name}";`;
-                const fileContent4 = `import { module1 } from "${module6Name}";import { module2 } from "${module2Name}";`;
+                const fileContent1 = `import { module1 } from "./module1";import { module2 } from "../module2";`;
+                const fileContent2 = `import { module1 } from "../module1";import { module2 } from "../../module2";`;
+                const fileContent3 = `import { module1 } from "../../src/module1";import { module2 } from "../../module2";`;
+                const fileContent4 = `import { module1 } from "../src/module1}";import { module2 } from "../module2";`;
                 const { file1, file2, file3, file4 } = getFiles(fileContent1, fileContent2, fileContent3, fileContent4);
                 const { module1, module2 } = getModules(`${tscWatch.projectRoot}/product/src/module1.ts`, `${tscWatch.projectRoot}/product/module2.ts`);
                 const files = [module1, module2, file1, file2, file3, file4, configFile, libFile];
                 const host = createServerHost(files);
-                const resolutionTrace = createHostModuleResolutionTrace(host);
-                const service = createProjectService(host);
+                const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs() });
                 service.openClientFile(file1.path);
-                const expectedTrace = getExpectedRelativeModuleResolutionTrace(host, file1, module1, module1Name);
-                getExpectedRelativeModuleResolutionTrace(host, file1, module2, module2Name, expectedTrace);
-                getExpectedRelativeModuleResolutionTrace(host, file2, module1, module3Name, expectedTrace);
-                getExpectedRelativeModuleResolutionTrace(host, file2, module2, module4Name, expectedTrace);
-                getExpectedRelativeModuleResolutionTrace(host, file4, module1, module6Name, expectedTrace);
-                getExpectedRelativeModuleResolutionTrace(host, file4, module2, module2Name, expectedTrace);
-                getExpectedRelativeModuleResolutionTrace(host, file3, module1, module5Name, expectedTrace);
-                getExpectedRelativeModuleResolutionTrace(host, file3, module2, module4Name, expectedTrace);
-                verifyTrace(resolutionTrace, expectedTrace);
-                verifyWatchesWithConfigFile(host, files, file1);
 
                 host.writeFile(file1.path, file1.content + fileContent1);
                 host.writeFile(file2.path, file2.content + fileContent2);
                 host.writeFile(file3.path, file3.content + fileContent3);
                 host.writeFile(file4.path, file4.content + fileContent4);
                 host.runQueuedTimeoutCallbacks();
-
-                verifyTrace(resolutionTrace, [
-                    getExpectedReusingResolutionFromOldProgram(file1, module1, module1Name),
-                    getExpectedReusingResolutionFromOldProgram(file1, module2, module2Name),
-                    getExpectedReusingResolutionFromOldProgram(file2, module1, module3Name),
-                    getExpectedReusingResolutionFromOldProgram(file2, module2, module4Name),
-                    getExpectedReusingResolutionFromOldProgram(file4, module1, module6Name),
-                    getExpectedReusingResolutionFromOldProgram(file4, module2, module2Name),
-                    getExpectedReusingResolutionFromOldProgram(file3, module1, module5Name),
-                    getExpectedReusingResolutionFromOldProgram(file3, module2, module4Name),
-                ]);
-                verifyWatchesWithConfigFile(host, files, file1);
+                baselineTsserverLogs("resolutionCache", "relative module name from files in different folders", service);
             });
 
             it("non relative module name", () => {
-                const expectedNonRelativeDirectories = [`${tscWatch.projectRoot}/node_modules`, `${tscWatch.projectRoot}/product`];
-                const module1Name = "module1";
-                const module2Name = "module2";
-                const fileContent = `import { module1 } from "${module1Name}";import { module2 } from "${module2Name}";`;
+                const fileContent = `import { module1 } from "module1";import { module2 } from "module2";`;
                 const { file1, file2, file3, file4 } = getFiles(fileContent);
                 const { module1, module2 } = getModules(`${tscWatch.projectRoot}/product/node_modules/module1/index.ts`, `${tscWatch.projectRoot}/node_modules/module2/index.ts`);
                 const files = [module1, module2, file1, file2, file3, file4, configFile, libFile];
                 const host = createServerHost(files);
-                const resolutionTrace = createHostModuleResolutionTrace(host);
-                const service = createProjectService(host);
+                const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs() });
                 service.openClientFile(file1.path);
-                const expectedTrace = getExpectedNonRelativeModuleResolutionTrace(host, file1, module1, module1Name);
-                getExpectedNonRelativeModuleResolutionTrace(host, file1, module2, module2Name, expectedTrace);
-                getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file2, module1, module1Name, getDirectoryPath(file1.path), expectedTrace);
-                getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file2, module2, module2Name, getDirectoryPath(file1.path), expectedTrace);
-                getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file4, module1, module1Name, `${tscWatch.projectRoot}/product`, expectedTrace);
-                getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file4, module2, module2Name, `${tscWatch.projectRoot}/product`, expectedTrace);
-                getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file3, module1, module1Name, getDirectoryPath(file4.path), expectedTrace);
-                getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file3, module2, module2Name, getDirectoryPath(file4.path), expectedTrace);
-                verifyTrace(resolutionTrace, expectedTrace);
-                verifyWatchesWithConfigFile(host, files, file1, expectedNonRelativeDirectories);
 
                 host.writeFile(file1.path, file1.content + fileContent);
                 host.writeFile(file2.path, file2.content + fileContent);
                 host.writeFile(file3.path, file3.content + fileContent);
                 host.writeFile(file4.path, file4.content + fileContent);
                 host.runQueuedTimeoutCallbacks();
-
-                verifyTrace(resolutionTrace, [
-                    getExpectedReusingResolutionFromOldProgram(file1, module1, module1Name),
-                    getExpectedReusingResolutionFromOldProgram(file1, module2, module2Name),
-                    getExpectedReusingResolutionFromOldProgram(file2, module1, module1Name),
-                    getExpectedReusingResolutionFromOldProgram(file2, module2, module2Name),
-                    getExpectedReusingResolutionFromOldProgram(file4, module1, module1Name),
-                    getExpectedReusingResolutionFromOldProgram(file4, module2, module2Name),
-                    getExpectedReusingResolutionFromOldProgram(file3, module1, module1Name),
-                    getExpectedReusingResolutionFromOldProgram(file3, module2, module2Name),
-                ]);
-                verifyWatchesWithConfigFile(host, files, file1, expectedNonRelativeDirectories);
+                baselineTsserverLogs("resolutionCache", "non relative module name from files in different folders", service);
             });
 
             it("non relative module name from inferred project", () => {
@@ -686,135 +467,72 @@ namespace ts.projectSystem {
                 const { module1, module2 } = getModules(`${tscWatch.projectRoot}/product/node_modules/module1/index.ts`, `${tscWatch.projectRoot}/node_modules/module2/index.ts`);
                 const files = [module1, module2, file1, file2, file3, file4, libFile];
                 const host = createServerHost(files);
-                const resolutionTrace = createHostModuleResolutionTrace(host);
-                const service = createProjectService(host);
+                const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs() });
                 service.setCompilerOptionsForInferredProjects({ traceResolution: true });
                 service.openClientFile(file1.path);
-                const expectedTrace = getExpectedRelativeModuleResolutionTrace(host, file1, file2, file2Name);
-                getExpectedRelativeModuleResolutionTrace(host, file1, file4, file4Name, expectedTrace);
-                getExpectedRelativeModuleResolutionTrace(host, file1, file3, file3Name, expectedTrace);
-                getExpectedNonRelativeModuleResolutionTrace(host, file1, module1, module1Name, expectedTrace);
-                getExpectedNonRelativeModuleResolutionTrace(host, file1, module2, module2Name, expectedTrace);
-                getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file2, module1, module1Name, getDirectoryPath(file1.path), expectedTrace);
-                getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file2, module2, module2Name, getDirectoryPath(file1.path), expectedTrace);
-                getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file4, module1, module1Name, `${tscWatch.projectRoot}/product`, expectedTrace);
-                getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file4, module2, module2Name, `${tscWatch.projectRoot}/product`, expectedTrace);
-                getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file3, module1, module1Name, getDirectoryPath(file4.path), expectedTrace);
-                getExpectedNonRelativeModuleResolutionFromCacheTrace(host, file3, module2, module2Name, getDirectoryPath(file4.path), expectedTrace);
-                verifyTrace(resolutionTrace, expectedTrace);
-
-                const currentDirectory = getDirectoryPath(file1.path);
-                const watchedFiles = mapDefined(files, f => f === file1 || f.path.indexOf("/node_modules/") !== -1 ? undefined : f.path)
-                    .concat(getConfigFilesToWatch(`${tscWatch.projectRoot}/product/src`));
-                const watchedRecursiveDirectories = getTypeRootsFromLocation(currentDirectory).concat([
-                    `${currentDirectory}/node_modules`, `${currentDirectory}/feature`, `${tscWatch.projectRoot}/product/${nodeModules}`,
-                    `${tscWatch.projectRoot}/${nodeModules}`, `${tscWatch.projectRoot}/product/test/${nodeModules}`,
-                    `${tscWatch.projectRoot}/product/test/src/${nodeModules}`
-                ]);
-                checkWatches();
-
                 host.writeFile(file1.path, file1.content + importModuleContent);
                 host.writeFile(file2.path, file2.content + importModuleContent);
                 host.writeFile(file3.path, file3.content + importModuleContent);
                 host.writeFile(file4.path, file4.content + importModuleContent);
                 host.runQueuedTimeoutCallbacks();
-
-                verifyTrace(resolutionTrace, [
-                    getExpectedReusingResolutionFromOldProgram(file1, file2, file2Name),
-                    getExpectedReusingResolutionFromOldProgram(file1, file4, file4Name),
-                    getExpectedReusingResolutionFromOldProgram(file1, file3, file3Name),
-                    getExpectedReusingResolutionFromOldProgram(file1, module1, module1Name),
-                    getExpectedReusingResolutionFromOldProgram(file1, module2, module2Name),
-                    getExpectedReusingResolutionFromOldProgram(file2, module1, module1Name),
-                    getExpectedReusingResolutionFromOldProgram(file2, module2, module2Name),
-                    getExpectedReusingResolutionFromOldProgram(file4, module1, module1Name),
-                    getExpectedReusingResolutionFromOldProgram(file4, module2, module2Name),
-                    getExpectedReusingResolutionFromOldProgram(file3, module1, module1Name),
-                    getExpectedReusingResolutionFromOldProgram(file3, module2, module2Name),
-                ]);
-                checkWatches();
-
-                function checkWatches() {
-                    checkWatchedFiles(host, watchedFiles);
-                    checkWatchedDirectories(host, [], /*recursive*/ false);
-                    checkWatchedDirectories(host, watchedRecursiveDirectories, /*recursive*/ true);
-                }
+                baselineTsserverLogs("resolutionCache", "non relative module name from inferred project", service);
             });
         });
 
         describe("when watching directories for failed lookup locations in amd resolution", () => {
-            const nodeFile: File = {
-                path: `${tscWatch.projectRoot}/src/typings/node.d.ts`,
-                content: `
+            function verifyModuleResolution(scenario: string, useNodeFile: boolean) {
+                it(scenario, () => {
+                    const nodeFile: File = {
+                        path: `${tscWatch.projectRoot}/src/typings/node.d.ts`,
+                        content: `
 declare module "fs" {
     export interface something {
     }
 }`
-            };
-            const electronFile: File = {
-                path: `${tscWatch.projectRoot}/src/typings/electron.d.ts`,
-                content: `
+                    };
+                    const electronFile: File = {
+                        path: `${tscWatch.projectRoot}/src/typings/electron.d.ts`,
+                        content: `
 declare module 'original-fs' {
     import * as fs from 'fs';
     export = fs;
 }`
-            };
-            const srcFile: File = {
-                path: `${tscWatch.projectRoot}/src/somefolder/srcfile.ts`,
-                content: `
+                    };
+                    const srcFile: File = {
+                        path: `${tscWatch.projectRoot}/src/somefolder/srcfile.ts`,
+                        content: `
 import { x } from "somefolder/module1";
 import { x } from "somefolder/module2";
 const y = x;`
-            };
-            const moduleFile: File = {
-                path: `${tscWatch.projectRoot}/src/somefolder/module1.ts`,
-                content: `
+                    };
+                    const moduleFile: File = {
+                        path: `${tscWatch.projectRoot}/src/somefolder/module1.ts`,
+                        content: `
 export const x = 10;`
-            };
-            const configFile: File = {
-                path: `${tscWatch.projectRoot}/src/tsconfig.json`,
-                content: JSON.stringify({
-                    compilerOptions: {
-                        module: "amd",
-                        moduleResolution: "classic",
-                        target: "es5",
-                        outDir: "../out",
-                        baseUrl: "./",
-                        typeRoots: ["typings"]
-                    }
-                })
-            };
+                    };
+                    const configFile: File = {
+                        path: `${tscWatch.projectRoot}/src/tsconfig.json`,
+                        content: JSON.stringify({
+                            compilerOptions: {
+                                module: "amd",
+                                moduleResolution: "classic",
+                                target: "es5",
+                                outDir: "../out",
+                                baseUrl: "./",
+                                typeRoots: ["typings"]
+                            }
+                        })
+                    };
 
-            function verifyModuleResolution(useNodeFile: boolean) {
-                const files = [...(useNodeFile ? [nodeFile] : []), electronFile, srcFile, moduleFile, configFile, libFile];
-                const host = createServerHost(files);
-                const service = createProjectService(host);
-                service.openClientFile(srcFile.path, srcFile.content, ScriptKind.TS, tscWatch.projectRoot);
-                checkProjectActualFiles(service.configuredProjects.get(configFile.path)!, files.map(f => f.path));
-                checkWatchedFilesDetailed(host, mapDefined(files, f => f === srcFile ? undefined : f.path), 1);
-                if (useNodeFile) {
-                    checkWatchedDirectories(host, emptyArray,  /*recursive*/ false); // since fs resolves to ambient module, shouldnt watch failed lookup
-                }
-                else {
-                    checkWatchedDirectoriesDetailed(host, [`${tscWatch.projectRoot}`, `${tscWatch.projectRoot}/src`], 1,  /*recursive*/ false); // failed lookup for fs
-                }
-                const expectedWatchedDirectories = new Map<string, number>();
-                expectedWatchedDirectories.set(`${tscWatch.projectRoot}/src`, 1); // Wild card
-                expectedWatchedDirectories.set(`${tscWatch.projectRoot}/src/somefolder`, 1); // failedLookup for somefolder/module2
-                expectedWatchedDirectories.set(`${tscWatch.projectRoot}/src/node_modules`, 1); // failed lookup for somefolder/module2
-                expectedWatchedDirectories.set(`${tscWatch.projectRoot}/somefolder`, 1); // failed lookup for somefolder/module2
-                expectedWatchedDirectories.set(`${tscWatch.projectRoot}/node_modules`, 1); // failed lookup for with node_modules/@types/fs
-                expectedWatchedDirectories.set(`${tscWatch.projectRoot}/src/typings`, useNodeFile ? 1 : 2); // typeroot directory + failed lookup if not using node file
-                checkWatchedDirectoriesDetailed(host, expectedWatchedDirectories, /*recursive*/ true);
+                    const files = [...(useNodeFile ? [nodeFile] : []), electronFile, srcFile, moduleFile, configFile, libFile];
+                    const host = createServerHost(files);
+                    const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs() });
+                    service.openClientFile(srcFile.path, srcFile.content, ScriptKind.TS, tscWatch.projectRoot);
+                    baselineTsserverLogs("resolutionCache", scenario, service);
+                });
             }
-
-            it("when resolves to ambient module", () => {
-                verifyModuleResolution(/*useNodeFile*/ true);
-            });
-
-            it("when resolution fails", () => {
-                verifyModuleResolution(/*useNodeFile*/ false);
-            });
+            verifyModuleResolution("when resolves to ambient module", /*useNodeFile*/ true);
+            verifyModuleResolution("when resolution fails", /*useNodeFile*/ false);
         });
 
         describe("ignores files/folder changes in node_modules that start with '.'", () => {
@@ -864,10 +582,7 @@ export const x = 10;`
 
         describe("avoid unnecessary invalidation", () => {
             it("unnecessary lookup invalidation on save", () => {
-                const expectedNonRelativeDirectories = [`${tscWatch.projectRoot}/node_modules`, `${tscWatch.projectRoot}/src`];
-                const module1Name = "module1";
-                const module2Name = "module2";
-                const fileContent = `import { module1 } from "${module1Name}";import { module2 } from "${module2Name}";`;
+                const fileContent = `import { module1 } from "module1";import { module2 } from "module2";`;
                 const file1: File = {
                     path: `${tscWatch.projectRoot}/src/file1.ts`,
                     content: fileContent
@@ -875,17 +590,13 @@ export const x = 10;`
                 const { module1, module2 } = getModules(`${tscWatch.projectRoot}/src/node_modules/module1/index.ts`, `${tscWatch.projectRoot}/node_modules/module2/index.ts`);
                 const files = [module1, module2, file1, configFile, libFile];
                 const host = createServerHost(files);
-                const resolutionTrace = createHostModuleResolutionTrace(host);
-                const service = createProjectService(host);
+                const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs() });
                 service.openClientFile(file1.path);
-                const expectedTrace = getExpectedNonRelativeModuleResolutionTrace(host, file1, module1, module1Name);
-                getExpectedNonRelativeModuleResolutionTrace(host, file1, module2, module2Name, expectedTrace);
-                verifyTrace(resolutionTrace, expectedTrace);
-                verifyWatchesWithConfigFile(host, files, file1, expectedNonRelativeDirectories);
 
                 // invoke callback to simulate saving
                 host.modifyFile(file1.path, file1.content, { invokeFileDeleteCreateAsPartInsteadOfChange: true });
                 host.checkTimeoutQueueLengthAndRun(0);
+                baselineTsserverLogs("resolutionCache", "avoid unnecessary lookup invalidation on save", service);
             });
         });
     });

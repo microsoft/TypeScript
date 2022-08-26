@@ -400,7 +400,7 @@ namespace ts.projectSystem {
 
             const response = executeSessionRequest<protocol.ReferencesRequest, protocol.ReferencesResponse>(session, protocol.CommandTypes.References, protocolFileLocationFromSubstring(userTs, "fnA()"));
             assert.deepEqual<protocol.ReferencesResponseBody | undefined>(response, {
-                refs: [...referencesUserTs(userTs, /*isDefinition*/ undefined), referenceATs(aTs, /*isDefinition*/ true)], // Presently inconsistent across projects
+                refs: [...referencesUserTs(userTs, /*isDefinition*/ undefined), referenceATs(aTs, /*isDefinition*/ undefined)],
                 symbolName: "fnA",
                 symbolStartOffset: protocolLocationFromSubstring(userTs.content, "fnA()").offset,
                 symbolDisplayString: "function fnA(): void",
@@ -455,7 +455,7 @@ namespace ts.projectSystem {
                     },
                     references: [
                         makeReferencedSymbolEntry({ file: userTs, text: "fnA" }),
-                        makeReferencedSymbolEntry({ file: aTs, text: "fnA", isDefinition: true, isWriteAccess: true, contextText: "export function fnA() {}" }),
+                        makeReferencedSymbolEntry({ file: aTs, text: "fnA", isWriteAccess: true, contextText: "export function fnA() {}" }),
                     ],
                 },
             ]);

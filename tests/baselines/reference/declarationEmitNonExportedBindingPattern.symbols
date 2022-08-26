@@ -1,0 +1,45 @@
+=== tests/cases/compiler/test.ts ===
+function getFoo() {
+>getFoo : Symbol(getFoo, Decl(test.ts, 0, 0))
+
+  return { foo: { test: 42 } }
+>foo : Symbol(foo, Decl(test.ts, 1, 10))
+>test : Symbol(test, Decl(test.ts, 1, 17))
+}
+
+const { foo } = getFoo()
+>foo : Symbol(foo, Decl(test.ts, 4, 7))
+>getFoo : Symbol(getFoo, Decl(test.ts, 0, 0))
+
+export type AliasType = typeof foo
+>AliasType : Symbol(AliasType, Decl(test.ts, 4, 24))
+>foo : Symbol(foo, Decl(test.ts, 4, 7))
+
+const { foo: renamed } = getFoo()
+>foo : Symbol(foo, Decl(test.ts, 1, 10))
+>renamed : Symbol(renamed, Decl(test.ts, 8, 7))
+>getFoo : Symbol(getFoo, Decl(test.ts, 0, 0))
+
+export type AliasType2 = typeof renamed
+>AliasType2 : Symbol(AliasType2, Decl(test.ts, 8, 33))
+>renamed : Symbol(renamed, Decl(test.ts, 8, 7))
+
+function getNested() {
+>getNested : Symbol(getNested, Decl(test.ts, 10, 39))
+
+  return { a: { b: { c: 'd' } } }
+>a : Symbol(a, Decl(test.ts, 13, 10))
+>b : Symbol(b, Decl(test.ts, 13, 15))
+>c : Symbol(c, Decl(test.ts, 13, 20))
+}
+
+const { a: { b: { c } } } = getNested()
+>a : Symbol(a, Decl(test.ts, 13, 10))
+>b : Symbol(b, Decl(test.ts, 13, 15))
+>c : Symbol(c, Decl(test.ts, 16, 17))
+>getNested : Symbol(getNested, Decl(test.ts, 10, 39))
+
+export type AliasType3 = typeof c
+>AliasType3 : Symbol(AliasType3, Decl(test.ts, 16, 39))
+>c : Symbol(c, Decl(test.ts, 16, 17))
+

@@ -3,12 +3,11 @@ tests/cases/compiler/inDoesNotOperateOnPrimitiveTypes.ts(23,12): error TS2361: T
 tests/cases/compiler/inDoesNotOperateOnPrimitiveTypes.ts(27,12): error TS2361: The right-hand side of an 'in' expression must not be a primitive.
 tests/cases/compiler/inDoesNotOperateOnPrimitiveTypes.ts(34,12): error TS2361: The right-hand side of an 'in' expression must not be a primitive.
 tests/cases/compiler/inDoesNotOperateOnPrimitiveTypes.ts(53,14): error TS2361: The right-hand side of an 'in' expression must not be a primitive.
-tests/cases/compiler/inDoesNotOperateOnPrimitiveTypes.ts(55,18): error TS2361: The right-hand side of an 'in' expression must not be a primitive.
 tests/cases/compiler/inDoesNotOperateOnPrimitiveTypes.ts(60,12): error TS2361: The right-hand side of an 'in' expression must not be a primitive.
 tests/cases/compiler/inDoesNotOperateOnPrimitiveTypes.ts(64,12): error TS2361: The right-hand side of an 'in' expression must not be a primitive.
 
 
-==== tests/cases/compiler/inDoesNotOperateOnPrimitiveTypes.ts (8 errors) ====
+==== tests/cases/compiler/inDoesNotOperateOnPrimitiveTypes.ts (7 errors) ====
     const validHasKey = <T extends object>(
       thing: T,
       key: string,
@@ -74,8 +73,6 @@ tests/cases/compiler/inDoesNotOperateOnPrimitiveTypes.ts(64,12): error TS2361: T
 !!! error TS2361: The right-hand side of an 'in' expression must not be a primitive.
         if (typeof p === "object") {
             "key" in p;
-                     ~
-!!! error TS2361: The right-hand side of an 'in' expression must not be a primitive.
         }
     }
     

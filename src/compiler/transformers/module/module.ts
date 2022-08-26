@@ -193,8 +193,8 @@ namespace ts {
                                             /*name*/ undefined,
                                             /*typeParameters*/ undefined,
                                             [
-                                                factory.createParameterDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "require"),
-                                                factory.createParameterDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "exports"),
+                                                factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "require"),
+                                                factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "exports"),
                                                 ...importAliasNames
                                             ],
                                             /*type*/ undefined,
@@ -225,7 +225,7 @@ namespace ts {
                 /*asteriskToken*/ undefined,
                 /*name*/ undefined,
                 /*typeParameters*/ undefined,
-                [factory.createParameterDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "factory")],
+                [factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "factory")],
                 /*type*/ undefined,
                 setTextRange(
                     factory.createBlock(
@@ -333,8 +333,8 @@ namespace ts {
                                         /*name*/ undefined,
                                         /*typeParameters*/ undefined,
                                         [
-                                            factory.createParameterDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "require"),
-                                            factory.createParameterDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "exports"),
+                                            factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "require"),
+                                            factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "exports"),
                                             ...importAliasNames
                                         ],
                                         /*type*/ undefined,
@@ -374,7 +374,7 @@ namespace ts {
             for (const amdDependency of node.amdDependencies) {
                 if (amdDependency.name) {
                     aliasedModuleNames.push(factory.createStringLiteral(amdDependency.path));
-                    importAliasNames.push(factory.createParameterDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, amdDependency.name));
+                    importAliasNames.push(factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, amdDependency.name));
                 }
                 else {
                     unaliasedModuleNames.push(factory.createStringLiteral(amdDependency.path));
@@ -396,7 +396,7 @@ namespace ts {
                         // This is so that when printer will not substitute the identifier
                         setEmitFlags(importAliasName, EmitFlags.NoSubstitution);
                         aliasedModuleNames.push(externalModuleName);
-                        importAliasNames.push(factory.createParameterDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, importAliasName));
+                        importAliasNames.push(factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, importAliasName));
                     }
                     else {
                         unaliasedModuleNames.push(externalModuleName);
@@ -772,8 +772,8 @@ namespace ts {
             const resolve = factory.createUniqueName("resolve");
             const reject = factory.createUniqueName("reject");
             const parameters = [
-                factory.createParameterDeclaration(/*decorator*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, /*name*/ resolve),
-                factory.createParameterDeclaration(/*decorator*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, /*name*/ reject)
+                factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, /*name*/ resolve),
+                factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, /*name*/ reject)
             ];
             const body = factory.createBlock([
                 factory.createExpressionStatement(
@@ -1228,7 +1228,6 @@ namespace ts {
                     setOriginalNode(
                         setTextRange(
                             factory.createFunctionDeclaration(
-                                /*decorators*/ undefined,
                                 visitNodes(node.modifiers, modifierVisitor, isModifier),
                                 node.asteriskToken,
                                 factory.getDeclarationName(node, /*allowComments*/ true, /*allowSourceMaps*/ true),
@@ -1271,8 +1270,7 @@ namespace ts {
                     setOriginalNode(
                         setTextRange(
                             factory.createClassDeclaration(
-                                /*decorators*/ undefined,
-                                visitNodes(node.modifiers, modifierVisitor, isModifier),
+                                visitNodes(node.modifiers, modifierVisitor, isModifierLike),
                                 factory.getDeclarationName(node, /*allowComments*/ true, /*allowSourceMaps*/ true),
                                 /*typeParameters*/ undefined,
                                 visitNodes(node.heritageClauses, visitor),

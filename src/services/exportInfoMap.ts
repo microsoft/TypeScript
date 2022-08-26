@@ -49,7 +49,7 @@ namespace ts {
         clear(): void;
         add(importingFile: Path, symbol: Symbol, key: __String, moduleSymbol: Symbol, moduleFile: SourceFile | undefined, exportKind: ExportKind, isFromPackageJson: boolean, checker: TypeChecker): void;
         get(importingFile: Path, key: string): readonly SymbolExportInfo[] | undefined;
-        search(importingFile: Path, preferCapitalized: boolean, matches: (name: string, targetFlags: SymbolFlags) => boolean, action: (info: readonly SymbolExportInfo[], symbolName: string, isFromAmbientModule: boolean, key: string) => void): void;
+        search<T>(importingFile: Path, preferCapitalized: boolean, matches: (name: string, targetFlags: SymbolFlags) => boolean, action: (info: readonly SymbolExportInfo[], symbolName: string, isFromAmbientModule: boolean, key: string) => T | undefined): T | undefined;
         releaseSymbols(): void;
         isEmpty(): boolean;
         /** @returns Whether the change resulted in the cache being cleared */
@@ -160,14 +160,15 @@ namespace ts {
             },
             search: (importingFile, preferCapitalized, matches, action) => {
                 if (importingFile !== usableByFileName) return;
-                exportInfo.forEach((info, key) => {
+                return forEachEntry(exportInfo, (info, key) => {
                     const { symbolName, ambientModuleName } = parseKey(key);
                     const name = preferCapitalized && info[0].capitalizedSymbolName || symbolName;
                     if (matches(name, info[0].targetFlags)) {
                         const rehydrated = info.map(rehydrateCachedInfo);
                         const filtered = rehydrated.filter((r, i) => isNotShadowedByDeeperNodeModulesPackage(r, info[i].packageName));
                         if (filtered.length) {
-                            action(filtered, name, !!ambientModuleName, key);
+                            const res = action(filtered, name, !!ambientModuleName, key);
+                            if (res !== undefined) return res;
                         }
                     }
                 });
@@ -336,32 +337,42 @@ namespace ts {
     export function forEachExternalModuleToImportFrom(
         program: Program,
         host: LanguageServiceHost,
+        preferences: UserPreferences,
         useAutoImportProvider: boolean,
         cb: (module: Symbol, moduleFile: SourceFile | undefined, program: Program, isFromPackageJson: boolean) => void,
     ) {
-        forEachExternalModule(program.getTypeChecker(), program.getSourceFiles(), (module, file) => cb(module, file, program, /*isFromPackageJson*/ false));
+        const useCaseSensitiveFileNames = hostUsesCaseSensitiveFileNames(host);
+        const excludePatterns = preferences.autoImportFileExcludePatterns && mapDefined(preferences.autoImportFileExcludePatterns, spec => {
+            // The client is expected to send rooted path specs since we don't know
+            // what directory a relative path is relative to.
+            const pattern = getPatternFromSpec(spec, "", "exclude");
+            return pattern ? getRegexFromPattern(pattern, useCaseSensitiveFileNames) : undefined;
+        });
+
+        forEachExternalModule(program.getTypeChecker(), program.getSourceFiles(), excludePatterns, (module, file) => cb(module, file, program, /*isFromPackageJson*/ false));
         const autoImportProvider = useAutoImportProvider && host.getPackageJsonAutoImportProvider?.();
         if (autoImportProvider) {
             const start = timestamp();
-            forEachExternalModule(autoImportProvider.getTypeChecker(), autoImportProvider.getSourceFiles(), (module, file) => cb(module, file, autoImportProvider, /*isFromPackageJson*/ true));
+            forEachExternalModule(autoImportProvider.getTypeChecker(), autoImportProvider.getSourceFiles(), excludePatterns, (module, file) => cb(module, file, autoImportProvider, /*isFromPackageJson*/ true));
             host.log?.(`forEachExternalModuleToImportFrom autoImportProvider: ${timestamp() - start}`);
         }
     }
 
-    function forEachExternalModule(checker: TypeChecker, allSourceFiles: readonly SourceFile[], cb: (module: Symbol, sourceFile: SourceFile | undefined) => void) {
+    function forEachExternalModule(checker: TypeChecker, allSourceFiles: readonly SourceFile[], excludePatterns: readonly RegExp[] | undefined, cb: (module: Symbol, sourceFile: SourceFile | undefined) => void) {
+        const isExcluded = (fileName: string) => excludePatterns?.some(p => p.test(fileName));
         for (const ambient of checker.getAmbientModules()) {
-            if (!stringContains(ambient.name, "*")) {
+            if (!stringContains(ambient.name, "*") && !(excludePatterns && ambient.declarations?.every(d => isExcluded(d.getSourceFile().fileName)))) {
                 cb(ambient, /*sourceFile*/ undefined);
             }
         }
         for (const sourceFile of allSourceFiles) {
-            if (isExternalOrCommonJsModule(sourceFile)) {
+            if (isExternalOrCommonJsModule(sourceFile) && !isExcluded(sourceFile.fileName)) {
                 cb(checker.getMergedSymbol(sourceFile.symbol), sourceFile);
             }
         }
     }
 
-    export function getExportInfoMap(importingFile: SourceFile, host: LanguageServiceHost, program: Program, cancellationToken: CancellationToken | undefined): ExportInfoMap {
+    export function getExportInfoMap(importingFile: SourceFile, host: LanguageServiceHost, program: Program, preferences: UserPreferences, cancellationToken: CancellationToken | undefined): ExportInfoMap {
         const start = timestamp();
         // Pulling the AutoImportProvider project will trigger its updateGraph if pending,
         // which will invalidate the export map cache if things change, so pull it before
@@ -382,7 +393,7 @@ namespace ts {
         const compilerOptions = program.getCompilerOptions();
         let moduleCount = 0;
         try {
-            forEachExternalModuleToImportFrom(program, host, /*useAutoImportProvider*/ true, (moduleSymbol, moduleFile, program, isFromPackageJson) => {
+            forEachExternalModuleToImportFrom(program, host, preferences, /*useAutoImportProvider*/ true, (moduleSymbol, moduleFile, program, isFromPackageJson) => {
                 if (++moduleCount % 100 === 0) cancellationToken?.throwIfCancellationRequested();
                 const seenExports = new Map<__String, true>();
                 const checker = program.getTypeChecker();

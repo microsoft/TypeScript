@@ -7,7 +7,6 @@ namespace ts {
             it("parenthesizes default export if necessary", () => {
                 function checkExpression(expression: Expression) {
                     const node = factory.createExportAssignment(
-                        /*decorators*/ undefined,
                         /*modifiers*/ undefined,
                         /*isExportEquals*/ false,
                         expression,
@@ -15,8 +14,8 @@ namespace ts {
                     assertSyntaxKind(node.expression, SyntaxKind.ParenthesizedExpression);
                 }
 
-                const clazz = factory.createClassExpression(/*decorators*/ undefined, /*modifiers*/ undefined, "C", /*typeParameters*/ undefined, /*heritageClauses*/ undefined, [
-                    factory.createPropertyDeclaration(/*decorators*/ undefined, [factory.createToken(SyntaxKind.StaticKeyword)], "prop", /*questionOrExclamationToken*/ undefined, /*type*/ undefined, factory.createStringLiteral("1")),
+                const clazz = factory.createClassExpression(/*modifiers*/ undefined, "C", /*typeParameters*/ undefined, /*heritageClauses*/ undefined, [
+                    factory.createPropertyDeclaration([factory.createToken(SyntaxKind.StaticKeyword)], "prop", /*questionOrExclamationToken*/ undefined, /*type*/ undefined, factory.createStringLiteral("1")),
                 ]);
                 checkExpression(clazz);
                 checkExpression(factory.createPropertyAccessExpression(clazz, "prop"));
@@ -82,5 +81,40 @@ namespace ts {
                 checkRhs(SyntaxKind.QuestionQuestionEqualsToken, /*expectParens*/ false);
             });
         });
+
+        describe("deprecations", () => {
+            beforeEach(() => {
+                Debug.enableDeprecationWarnings = false;
+            });
+
+            afterEach(() => {
+                Debug.enableDeprecationWarnings = true;
+            });
+
+            // https://github.com/microsoft/TypeScript/issues/50259
+            it("deprecated createConstructorDeclaration overload does not throw", () => {
+                const body = factory.createBlock([]);
+                assert.doesNotThrow(() => factory.createConstructorDeclaration(
+                    /*decorators*/ undefined,
+                    /*modifiers*/ undefined,
+                    /*parameters*/ [],
+                    body,
+                ));
+            });
+
+            // https://github.com/microsoft/TypeScript/issues/50259
+            it("deprecated updateConstructorDeclaration overload does not throw", () => {
+                const body = factory.createBlock([]);
+                const ctor = factory.createConstructorDeclaration(/*modifiers*/ undefined, [], body);
+                assert.doesNotThrow(() => factory.updateConstructorDeclaration(
+                    ctor,
+                    ctor.decorators,
+                    ctor.modifiers,
+                    ctor.parameters,
+                    ctor.body,
+                ));
+            });
+        });
+
     });
 }

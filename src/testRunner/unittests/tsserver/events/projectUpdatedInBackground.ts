@@ -28,7 +28,7 @@ namespace ts.projectSystem {
             verifyInitialOpen(file: File): void;
         }
 
-        function verifyProjectsUpdatedInBackgroundEvent(createSession: (host: TestServerHost) => ProjectsUpdatedInBackgroundEventVerifier) {
+        function verifyProjectsUpdatedInBackgroundEvent(scenario: string, createSession: (host: TestServerHost, logger?: Logger) => ProjectsUpdatedInBackgroundEventVerifier) {
             it("when adding new file", () => {
                 const commonFile1: File = {
                     path: "/a/b/file1.ts",
@@ -415,96 +415,70 @@ namespace ts.projectSystem {
             });
 
             describe("resolution when resolution cache size", () => {
-                function verifyWithMaxCacheLimit(useSlashRootAsSomeNotRootFolderInUserDirectory: boolean) {
-                    const rootFolder = useSlashRootAsSomeNotRootFolderInUserDirectory ? "/user/username/rootfolder/otherfolder/" : "/";
-                    const file1: File = {
-                        path: rootFolder + "a/b/project/file1.ts",
-                        content: 'import a from "file2"'
-                    };
-                    const file2: File = {
-                        path: rootFolder + "a/b/node_modules/file2.d.ts",
-                        content: "export class a { }"
-                    };
-                    const file3: File = {
-                        path: rootFolder + "a/b/project/file3.ts",
-                        content: "export class c { }"
-                    };
-                    const configFile: File = {
-                        path: rootFolder + "a/b/project/tsconfig.json",
-                        content: JSON.stringify({ compilerOptions: { typeRoots: [] } })
-                    };
+                function verifyWithMaxCacheLimit(subScenario: string, useSlashRootAsSomeNotRootFolderInUserDirectory: boolean) {
+                    it(subScenario, () => {
+                        const rootFolder = useSlashRootAsSomeNotRootFolderInUserDirectory ? "/user/username/rootfolder/otherfolder/" : "/";
+                        const file1: File = {
+                            path: rootFolder + "a/b/project/file1.ts",
+                            content: 'import a from "file2"'
+                        };
+                        const file2: File = {
+                            path: rootFolder + "a/b/node_modules/file2.d.ts",
+                            content: "export class a { }"
+                        };
+                        const file3: File = {
+                            path: rootFolder + "a/b/project/file3.ts",
+                            content: "export class c { }"
+                        };
+                        const configFile: File = {
+                            path: rootFolder + "a/b/project/tsconfig.json",
+                            content: JSON.stringify({ compilerOptions: { typeRoots: [] } })
+                        };
 
-                    const projectFiles = [file1, file3, libFile, configFile];
-                    const openFiles = [file1.path];
-                    const watchedRecursiveDirectories = useSlashRootAsSomeNotRootFolderInUserDirectory ?
-                        // Folders of node_modules lookup not in changedRoot
-                        ["a/b/project", "a/b/project/node_modules", "a/b/node_modules", "a/node_modules", "node_modules"].map(v => rootFolder + v) :
-                        // Folder of tsconfig
-                        ["/a/b/project", "/a/b/project/node_modules"];
-                    const host = createServerHost(projectFiles);
-                    const { session, verifyInitialOpen, verifyProjectsUpdatedInBackgroundEventHandler } = createSession(host);
-                    const projectService = session.getProjectService();
-                    verifyInitialOpen(file1);
-                    checkNumberOfProjects(projectService, { configuredProjects: 1 });
-                    const project = projectService.configuredProjects.get(configFile.path)!;
-                    verifyProject();
+                        const openFiles = [file1.path];
+                        const host = createServerHost([file1, file3, libFile, configFile]);
+                        const { session, verifyInitialOpen, verifyProjectsUpdatedInBackgroundEventHandler } = createSession(host, createLoggerWithInMemoryLogs());
+                        verifyInitialOpen(file1);
 
-                    file3.content += "export class d {}";
-                    host.writeFile(file3.path, file3.content);
-                    host.checkTimeoutQueueLengthAndRun(2);
+                        file3.content += "export class d {}";
+                        host.writeFile(file3.path, file3.content);
+                        host.checkTimeoutQueueLengthAndRun(2);
 
-                    // Since this is first event
-                    verifyProject();
-                    verifyProjectsUpdatedInBackgroundEventHandler([{
-                        eventName: server.ProjectsUpdatedInBackgroundEvent,
-                        data: {
-                            openFiles
-                        }
-                    }]);
+                        // Since this is first event
+                        verifyProjectsUpdatedInBackgroundEventHandler([{
+                            eventName: server.ProjectsUpdatedInBackgroundEvent,
+                            data: {
+                                openFiles
+                            }
+                        }]);
 
-                    projectFiles.push(file2);
-                    host.writeFile(file2.path, file2.content);
-                    host.runQueuedTimeoutCallbacks(); // For invalidation
-                    host.runQueuedTimeoutCallbacks(); // For actual update
-                    if (useSlashRootAsSomeNotRootFolderInUserDirectory) {
-                        watchedRecursiveDirectories.length = 3;
-                    }
-                    else {
-                        // file2 addition wont be detected
-                        projectFiles.pop();
-                        assert.isTrue(host.fileExists(file2.path));
-                    }
-                    verifyProject();
+                        host.writeFile(file2.path, file2.content);
+                        host.runQueuedTimeoutCallbacks(); // For invalidation
+                        host.runQueuedTimeoutCallbacks(); // For actual update
 
-                    verifyProjectsUpdatedInBackgroundEventHandler(useSlashRootAsSomeNotRootFolderInUserDirectory ? [{
-                        eventName: server.ProjectsUpdatedInBackgroundEvent,
-                        data: {
-                            openFiles
-                        }
-                    }] : []);
-
-                    function verifyProject() {
-                        checkProjectActualFiles(project, map(projectFiles, file => file.path));
-                        checkWatchedDirectories(host, [], /*recursive*/ false);
-                        checkWatchedDirectories(host, watchedRecursiveDirectories, /*recursive*/ true);
-                    }
+                        verifyProjectsUpdatedInBackgroundEventHandler(useSlashRootAsSomeNotRootFolderInUserDirectory ? [{
+                            eventName: server.ProjectsUpdatedInBackgroundEvent,
+                            data: {
+                                openFiles
+                            }
+                        }] : []);
+                        baselineTsserverLogs("projectUpdatedInBackground", `${scenario} and ${subScenario}`, session);
+                    });
                 }
-
-                it("project is not at root level", () => {
-                    verifyWithMaxCacheLimit(/*useSlashRootAsSomeNotRootFolderInUserDirectory*/ true);
-                });
-
-                it("project is at root level", () => {
-                    verifyWithMaxCacheLimit(/*useSlashRootAsSomeNotRootFolderInUserDirectory*/ false);
-                });
+                verifyWithMaxCacheLimit("project is not at root level", /*useSlashRootAsSomeNotRootFolderInUserDirectory*/ true);
+                verifyWithMaxCacheLimit("project is at root level", /*useSlashRootAsSomeNotRootFolderInUserDirectory*/ false);
             });
         }
 
         describe("when event handler is set in the session", () => {
-            verifyProjectsUpdatedInBackgroundEvent(createSessionWithProjectChangedEventHandler);
+            verifyProjectsUpdatedInBackgroundEvent("when event handler is set in the session", createSessionWithProjectChangedEventHandler);
 
-            function createSessionWithProjectChangedEventHandler(host: TestServerHost): ProjectsUpdatedInBackgroundEventVerifier {
-                const { session, events: projectChangedEvents } = createSessionWithEventTracking<server.ProjectsUpdatedInBackgroundEvent>(host, server.ProjectsUpdatedInBackgroundEvent);
+            function createSessionWithProjectChangedEventHandler(host: TestServerHost, logger: Logger | undefined): ProjectsUpdatedInBackgroundEventVerifier {
+                const { session, events: projectChangedEvents } = createSessionWithEventTracking<server.ProjectsUpdatedInBackgroundEvent>(
+                    host,
+                    server.ProjectsUpdatedInBackgroundEvent,
+                    logger && { logger }
+                );
                 return {
                     session,
                     verifyProjectsUpdatedInBackgroundEventHandler,
@@ -535,16 +509,20 @@ namespace ts.projectSystem {
 
         describe("when event handler is not set but session is created with canUseEvents = true", () => {
             describe("without noGetErrOnBackgroundUpdate, diagnostics for open files are queued", () => {
-                verifyProjectsUpdatedInBackgroundEvent(createSessionThatUsesEvents);
+                verifyProjectsUpdatedInBackgroundEvent("without noGetErrOnBackgroundUpdate", createSessionThatUsesEvents);
             });
 
             describe("with noGetErrOnBackgroundUpdate, diagnostics for open file are not queued", () => {
-                verifyProjectsUpdatedInBackgroundEvent(host => createSessionThatUsesEvents(host, /*noGetErrOnBackgroundUpdate*/ true));
+                verifyProjectsUpdatedInBackgroundEvent("with noGetErrOnBackgroundUpdate", (host, logger) => createSessionThatUsesEvents(host, logger, /*noGetErrOnBackgroundUpdate*/ true));
             });
 
 
-            function createSessionThatUsesEvents(host: TestServerHost, noGetErrOnBackgroundUpdate?: boolean): ProjectsUpdatedInBackgroundEventVerifier {
-                const { session, getEvents, clearEvents } = createSessionWithDefaultEventHandler<protocol.ProjectsUpdatedInBackgroundEvent>(host, server.ProjectsUpdatedInBackgroundEvent, { noGetErrOnBackgroundUpdate });
+            function createSessionThatUsesEvents(host: TestServerHost, logger: Logger | undefined, noGetErrOnBackgroundUpdate?: boolean): ProjectsUpdatedInBackgroundEventVerifier {
+                const { session, getEvents, clearEvents } = createSessionWithDefaultEventHandler<protocol.ProjectsUpdatedInBackgroundEvent>(
+                    host,
+                    server.ProjectsUpdatedInBackgroundEvent,
+                    { noGetErrOnBackgroundUpdate, logger: logger || createHasErrorMessageLogger() }
+                );
 
                 return {
                     session,

@@ -10,7 +10,7 @@ function f1<T extends string | undefined>(x: T, y: { a: T }, z: [T]): string {
 >x : T
 
         x;
->x : T
+>x : NonNullable<T>
 
         x.length;
 >x.length : number
@@ -67,7 +67,7 @@ function f2<T>(x: Extract<T, string | undefined> | null): string {
 >x : Extract<T, string | undefined> | null
 
         x;
->x : Extract<T, string | undefined>
+>x : NonNullable<Extract<T, string | undefined>>
 
         x.length;
 >x.length : number
@@ -404,11 +404,11 @@ function fx1<T, K extends keyof T>(obj: T, key: K) {
 >key : K
 
     const x2 = obj && obj[key];
->x2 : T[K]
->obj && obj[key] : T[K]
+>x2 : NonNullable<T>[K]
+>obj && obj[key] : NonNullable<T>[K]
 >obj : T
->obj[key] : T[K]
->obj : T
+>obj[key] : NonNullable<T>[K]
+>obj : NonNullable<T>
 >key : K
 }
 
@@ -438,8 +438,8 @@ function fx3<T extends Record<keyof T, string> | undefined, K extends keyof T>(o
 >key : K
 
     const x1 = obj[key];  // Error
->x1 : NonNullable<Record<keyof T, string>>[K]
->obj[key] : NonNullable<Record<keyof T, string>>[K]
+>x1 : Record<keyof T, string>[K]
+>obj[key] : Record<keyof T, string>[K]
 >obj : Record<keyof T, string> | undefined
 >key : K
 
@@ -469,14 +469,14 @@ class TableBaseEnum<
 >null : null
 
         iSpec[null! as keyof InternalSpec];  // Error, object possibly undefined
->iSpec[null! as keyof InternalSpec] : NonNullable<Record<keyof PublicSpec, any>>[keyof InternalSpec]
+>iSpec[null! as keyof InternalSpec] : Record<keyof PublicSpec, any>[keyof InternalSpec]
 >iSpec : Record<keyof PublicSpec, any> | undefined
 >null! as keyof InternalSpec : keyof InternalSpec
 >null! : never
 >null : null
 
         iSpec[null! as keyof PublicSpec];    // Error, object possibly undefined
->iSpec[null! as keyof PublicSpec] : NonNullable<Record<keyof PublicSpec, any>>[keyof PublicSpec]
+>iSpec[null! as keyof PublicSpec] : Record<keyof PublicSpec, any>[keyof PublicSpec]
 >iSpec : Record<keyof PublicSpec, any> | undefined
 >null! as keyof PublicSpec : keyof PublicSpec
 >null! : never

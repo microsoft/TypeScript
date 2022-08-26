@@ -1768,9 +1768,9 @@ function f30(o: Thing | undefined) {
 >foo : string | number | undefined
 
         o.foo;
->o.foo : string | number
+>o.foo : NonNullable<string | number | undefined>
 >o : Thing
->foo : string | number
+>foo : NonNullable<string | number | undefined>
     }
 }
 
