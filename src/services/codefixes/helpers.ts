@@ -81,7 +81,6 @@ namespace ts.codefix {
         const kind = declaration?.kind ?? SyntaxKind.PropertySignature;
         const declarationName = getNameOfDeclaration(declaration) as PropertyName;
         const visibilityModifier = createVisibilityModifier(declaration ? getEffectiveModifierFlags(declaration) : ModifierFlags.None);
-        // const modifiers = visibilityModifier ? factory.createNodeArray([visibilityModifier]) : undefined;
         const type = checker.getWidenedType(checker.getTypeOfSymbolAtLocation(symbol, enclosingDeclaration));
         const optional = !!(symbol.flags & SymbolFlags.Optional);
         const ambient = !!(enclosingDeclaration.flags & NodeFlags.Ambient) || isAmbient;
