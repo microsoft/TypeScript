@@ -3248,12 +3248,25 @@ namespace ts {
          */
         function getAllSymbolFlags(symbol: Symbol): SymbolFlags | undefined {
             let flags = symbol.flags;
+            let seenSymbols;
             while (symbol.flags & SymbolFlags.Alias) {
-                symbol = resolveAlias(symbol);
-                if (symbol === unknownSymbol) {
+                const target = resolveAlias(symbol);
+                if (target === unknownSymbol) {
                     return undefined;
                 }
-                flags |= symbol.flags;
+
+                // Optimization - avoid creating `seenSymbols` Set in most cases
+                if (target === symbol) {
+                    break;
+                }
+                else if (target.flags & SymbolFlags.Alias && !seenSymbols) {
+                    seenSymbols = new Set([symbol, target]);
+                }
+                else if (seenSymbols?.has(target)) {
+                    break;
+                }
+                flags |= target.flags;
+                symbol = target;
             }
             return flags;
         }
@@ -3350,8 +3363,8 @@ namespace ts {
                 // This way a chain of imports can be elided if ultimately the final input is only used in a type
                 // position.
                 if (isInternalModuleImportEqualsDeclaration(node)) {
-                    const target = resolveSymbol(symbol);
-                    if (target === unknownSymbol || target.flags & SymbolFlags.Value) {
+                    const targetFlags = getAllSymbolFlags(resolveSymbol(symbol));
+                    if (targetFlags === undefined || targetFlags & SymbolFlags.Value) {
                         // import foo = <symbol>
                         checkExpressionCached(node.moduleReference as Expression);
                     }
@@ -4277,7 +4290,7 @@ namespace ts {
         function symbolIsValue(symbol: Symbol, includeTypeOnlyMembers?: boolean): boolean {
             return !!(
                 symbol.flags & SymbolFlags.Value ||
-                symbol.flags & SymbolFlags.Alias && resolveAlias(symbol).flags & SymbolFlags.Value && (includeTypeOnlyMembers || !getTypeOnlyAliasDeclaration(symbol)));
+                symbol.flags & SymbolFlags.Alias && (getAllSymbolFlags(symbol) ?? -1) & SymbolFlags.Value && (includeTypeOnlyMembers || !getTypeOnlyAliasDeclaration(symbol)));
         }
 
         function findConstructorDeclaration(node: ClassLikeDeclaration): ConstructorDeclaration | undefined {
@@ -4572,7 +4585,7 @@ namespace ts {
 
                 // Qualify if the symbol from symbol table has same meaning as expected
                 symbolFromSymbolTable = (symbolFromSymbolTable.flags & SymbolFlags.Alias && !getDeclarationOfKind(symbolFromSymbolTable, SyntaxKind.ExportSpecifier)) ? resolveAlias(symbolFromSymbolTable) : symbolFromSymbolTable;
-                if (symbolFromSymbolTable.flags & meaning) {
+                if ((getAllSymbolFlags(symbolFromSymbolTable) ?? unknownSymbol.flags) & meaning) {
                     qualify = true;
                     return true;
                 }
@@ -7535,7 +7548,7 @@ namespace ts {
                 }
 
                 function isTypeOnlyNamespace(symbol: Symbol) {
-                    return every(getNamespaceMembersForSerialization(symbol), m => !(resolveSymbol(m).flags & SymbolFlags.Value));
+                    return every(getNamespaceMembersForSerialization(symbol), m => !((getAllSymbolFlags(resolveSymbol(m)) ?? unknownSymbol.flags) & SymbolFlags.Value));
                 }
 
                 function serializeModule(symbol: Symbol, symbolName: string, modifierFlags: ModifierFlags) {
@@ -10013,7 +10026,7 @@ namespace ts {
                 links.type = exportSymbol?.declarations && isDuplicatedCommonJSExport(exportSymbol.declarations) && symbol.declarations!.length ? getFlowTypeFromCommonJSExport(exportSymbol)
                     : isDuplicatedCommonJSExport(symbol.declarations) ? autoType
                     : declaredType ? declaredType
-                    : targetSymbol.flags & SymbolFlags.Value ? getTypeOfSymbol(targetSymbol)
+                    : (getAllSymbolFlags(targetSymbol) ?? -1) & SymbolFlags.Value ? getTypeOfSymbol(targetSymbol)
                     : errorType;
             }
             return links.type;
@@ -32350,7 +32363,7 @@ namespace ts {
                     if (symbol && symbol.flags & SymbolFlags.Alias) {
                         symbol = resolveAlias(symbol);
                     }
-                    return !!(symbol && (symbol.flags & SymbolFlags.Enum) && getEnumKind(symbol) === EnumKind.Literal);
+                    return !!(symbol && ((getAllSymbolFlags(symbol) ?? unknownSymbol.flags) & SymbolFlags.Enum) && getEnumKind(symbol) === EnumKind.Literal);
             }
             return false;
         }
@@ -41460,14 +41473,15 @@ namespace ts {
                 if (node.moduleReference.kind !== SyntaxKind.ExternalModuleReference) {
                     const target = resolveAlias(getSymbolOfNode(node));
                     if (target !== unknownSymbol) {
-                        if (target.flags & SymbolFlags.Value) {
+                        const targetFlags = getAllSymbolFlags(target) ?? unknownSymbol.flags;
+                        if (targetFlags & SymbolFlags.Value) {
                             // Target is a value symbol, check that it is not hidden by a local declaration with the same name
                             const moduleName = getFirstIdentifier(node.moduleReference);
                             if (!(resolveEntityName(moduleName, SymbolFlags.Value | SymbolFlags.Namespace)!.flags & SymbolFlags.Namespace)) {
                                 error(moduleName, Diagnostics.Module_0_is_hidden_by_a_local_declaration_with_the_same_name, declarationNameToString(moduleName));
                             }
                         }
-                        if (target.flags & SymbolFlags.Type) {
+                        if (targetFlags & SymbolFlags.Type) {
                             checkTypeNameIsReserved(node.name, Diagnostics.Import_name_cannot_be_0);
                         }
                     }
@@ -41618,7 +41632,7 @@ namespace ts {
                         markExportAsReferenced(node);
                     }
                     const target = symbol && (symbol.flags & SymbolFlags.Alias ? resolveAlias(symbol) : symbol);
-                    if (!target || target === unknownSymbol || target.flags & SymbolFlags.Value) {
+                    if (!target || (getAllSymbolFlags(target) ?? -1) & SymbolFlags.Value) {
                         checkExpressionCached(node.propertyName || node.name);
                     }
                 }
@@ -41670,7 +41684,7 @@ namespace ts {
                     markAliasReferenced(sym, id);
                     // If not a value, we're interpreting the identifier as a type export, along the lines of (`export { Id as default }`)
                     const target = sym.flags & SymbolFlags.Alias ? resolveAlias(sym) : sym;
-                    if (target === unknownSymbol || target.flags & SymbolFlags.Value) {
+                    if ((getAllSymbolFlags(target) ?? -1) & SymbolFlags.Value) {
                         // However if it is a value, we need to check it's being used correctly
                         checkExpressionCached(node.expression);
                     }
@@ -43099,7 +43113,7 @@ namespace ts {
 
             function isValue(s: Symbol): boolean {
                 s = resolveSymbol(s);
-                return s && !!(s.flags & SymbolFlags.Value);
+                return s && !!((getAllSymbolFlags(s) ?? unknownSymbol.flags) & SymbolFlags.Value);
             }
         }
 

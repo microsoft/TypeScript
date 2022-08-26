@@ -32,7 +32,7 @@ declare global {
 
 export {
     Model
->Model : typeof Model
+>Model : typeof global.Model
 
 };
 export as namespace Backbone;

@@ -18,16 +18,16 @@ export type { A };
 
 === tests/cases/conformance/externalModules/c.ts ===
 import { A } from "./b";
->A : any
+>A : {}
 
 namespace A {}
 export { A };
->A : any
+>A : {}
 
 === tests/cases/conformance/externalModules/d.ts ===
 import { A } from "./c";
->A : any
+>A : {}
 
 A;
->A : any
+>A : {}
 

@@ -24,5 +24,7 @@ import { Drink } from "./drink";
 const x: Drink = Drink.TEA;
 >x : Symbol(x, Decl(index.ts, 2, 5))
 >Drink : Symbol(Drink, Decl(index.ts, 0, 8))
+>Drink.TEA : Symbol(TEA, Decl(constants.ts, 3, 12))
 >Drink : Symbol(Drink, Decl(index.ts, 0, 8))
+>TEA : Symbol(TEA, Decl(constants.ts, 3, 12))
 

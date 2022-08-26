@@ -20,12 +20,12 @@ export * as Drink from "./constants";
 
 === tests/cases/conformance/externalModules/index.ts ===
 import { Drink } from "./drink";
->Drink : any
+>Drink : typeof import("tests/cases/conformance/externalModules/constants")
 
 // 'Drink' only refers to a type, but is being used as a value here
 const x: Drink = Drink.TEA;
 >x : Drink
->Drink.TEA : error
->Drink : any
->TEA : any
+>Drink.TEA : 1
+>Drink : typeof import("tests/cases/conformance/externalModules/constants")
+>TEA : 1
 

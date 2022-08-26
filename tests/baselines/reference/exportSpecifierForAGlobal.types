@@ -4,15 +4,15 @@ declare class X { }
 
 === tests/cases/compiler/b.ts ===
 export {X};
->X : typeof X
+>X : typeof globalThis.X
 
 export function f() {
->f : () => X
+>f : () => globalThis.X
 
     var x: X;
->x : X
+>x : globalThis.X
 
     return x;
->x : X
+>x : globalThis.X
 } 
 

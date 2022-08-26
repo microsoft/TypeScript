@@ -15,20 +15,20 @@ declare class Cls2 {
 
 === tests/cases/compiler/file2.ts ===
 export {Cls1, Cls1 as CCls1};
->Cls1 : typeof Cls1
->Cls1 : typeof Cls1
->CCls1 : typeof Cls1
+>Cls1 : typeof globalThis.Cls1
+>Cls1 : typeof globalThis.Cls1
+>CCls1 : typeof globalThis.Cls1
 
 export {Cls2, Cls2 as CCls2};
->Cls2 : typeof Cls2
->Cls2 : typeof Cls2
->CCls2 : typeof Cls2
+>Cls2 : typeof globalThis.Cls2
+>Cls2 : typeof globalThis.Cls2
+>CCls2 : typeof globalThis.Cls2
 
 export {Cls1 as CCCls1};
->Cls1 : typeof Cls1
->CCCls1 : typeof Cls1
+>Cls1 : typeof globalThis.Cls1
+>CCCls1 : typeof globalThis.Cls1
 
 export {Cls2 as CCCls2};
->Cls2 : typeof Cls2
->CCCls2 : typeof Cls2
+>Cls2 : typeof globalThis.Cls2
+>CCCls2 : typeof globalThis.Cls2
 
