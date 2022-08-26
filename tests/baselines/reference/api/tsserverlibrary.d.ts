@@ -2840,7 +2840,7 @@ declare namespace ts {
     export interface SubstitutionType extends InstantiableType {
         objectFlags: ObjectFlags;
         baseType: Type;
-        substitute: Type;
+        constraint: Type;
     }
     export enum SignatureKind {
         Call = 0,
