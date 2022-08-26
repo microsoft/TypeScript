@@ -35,7 +35,8 @@
         "./LICENSE.txt",
         "./README.md",
         "./SECURITY.md",
-        "./ThirdPartyNoticeText.txt"
+        "./ThirdPartyNoticeText.txt",
+        "!**/.gitattributes"
     ],
     "devDependencies": {
         "@octokit/rest": "latest",
