@@ -160,7 +160,7 @@
           "kind": "property",
           "kindModifiers": "declare",
           "sortText": "17",
-          "insertText": "get mask(): any {\r\n    throw new Error(\"Method not implemented.\");\r\n}\r\nset mask(value: any) {\r\n    throw new Error(\"Method not implemented.\");\r\n}",
+          "insertText": "get mask(): any {\r\n}\r\nset mask(value: any) {\r\n}",
           "displayParts": [
             {
               "text": "(",
@@ -369,7 +369,7 @@
           "kind": "property",
           "kindModifiers": "declare",
           "sortText": "17",
-          "insertText": "set mask(value: any) {\r\n    throw new Error(\"Method not implemented.\");\r\n}\r\nget mask(): any {\r\n    throw new Error(\"Method not implemented.\");\r\n}",
+          "insertText": "set mask(value: any) {\r\n}\r\nget mask(): any {\r\n}",
           "displayParts": [
             {
               "text": "(",
