@@ -2973,7 +2973,7 @@ namespace ts {
         function parseDelimitedList<T extends Node | undefined>(kind: ParsingContext, parseElement: () => T, considerSemicolonAsDelimiter?: boolean): NodeArray<NonNullable<T>> | undefined {
             const saveParsingContext = parsingContext;
             parsingContext |= 1 << kind;
-            const list = [];
+            const list: NonNullable<T>[] = [];
             const listPos = getNodePos();
 
             let commaStart = -1; // Meaning the previous token was not a comma
@@ -2985,7 +2985,7 @@ namespace ts {
                         parsingContext = saveParsingContext;
                         return undefined;
                     }
-                    list.push(result as NonNullable<T>);
+                    list.push(result);
                     commaStart = scanner.getTokenPos();
 
                     if (parseOptional(SyntaxKind.CommaToken)) {
