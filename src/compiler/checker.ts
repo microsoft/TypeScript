@@ -34199,26 +34199,19 @@ namespace ts {
             }
 
             function tryGiveBetterPrimaryError(errNode: Node, maybeMissingAwait: boolean, leftStr: string, rightStr: string) {
-                let typeName: string | undefined;
                 switch (operatorToken.kind) {
                     case SyntaxKind.EqualsEqualsEqualsToken:
                     case SyntaxKind.EqualsEqualsToken:
-                        typeName = "false";
-                        break;
                     case SyntaxKind.ExclamationEqualsEqualsToken:
                     case SyntaxKind.ExclamationEqualsToken:
-                        typeName = "true";
+                        return errorAndMaybeSuggestAwait(
+                            errNode,
+                            maybeMissingAwait,
+                            Diagnostics.This_comparison_appears_to_be_unintentional_because_the_types_0_and_1_have_no_overlap,
+                            leftStr, rightStr);
+                    default:
+                        return undefined;
                 }
-
-                if (typeName) {
-                    return errorAndMaybeSuggestAwait(
-                        errNode,
-                        maybeMissingAwait,
-                        Diagnostics.This_condition_will_always_return_0_since_the_types_1_and_2_have_no_overlap,
-                        typeName, leftStr, rightStr);
-                }
-
-                return undefined;
             }
         }
 
