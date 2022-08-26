@@ -91,7 +91,7 @@
         "node-fetch": "^2.6.7",
         "prex": "^0.4.7",
         "source-map-support": "latest",
-        "typescript": "^4.7.4",
+        "typescript": "^4.8.2",
         "vinyl": "latest",
         "which": "^2.0.2",
         "xml2js": "^0.4.23"
