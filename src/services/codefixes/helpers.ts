@@ -124,11 +124,11 @@ namespace ts.codefix {
                 for (const accessor of orderedAccessors) {
                     if (isGetAccessorDeclaration(accessor)) {
                         addClassElement(factory.createGetAccessorDeclaration(
-                            modifiers,
-                            name,
+                            getSynthesizedDeepClones(modifiers),
+                            getSynthesizedDeepClone(name),
                             emptyArray,
-                            typeNode,
-                            ambient ? undefined : body || createStubbedMethodBody(quotePreference)));
+                            getSynthesizedDeepClone(typeNode),
+                            ambient ? undefined : getSynthesizedDeepClone(body) || createStubbedMethodBody(quotePreference)));
                     }
                     else {
                         Debug.assertNode(accessor, isSetAccessorDeclaration, "The counterpart to a getter should be a setter");
