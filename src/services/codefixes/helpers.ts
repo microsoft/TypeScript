@@ -128,7 +128,7 @@ namespace ts.codefix {
                             getSynthesizedDeepClone(name),
                             emptyArray,
                             getSynthesizedDeepClone(typeNode),
-                            ambient ? undefined : createStubbedMethodBody(quotePreference)));
+                            ambient ? undefined : getSynthesizedDeepClone(body) || createStubbedMethodBody(quotePreference)));
                     }
                     else {
                         Debug.assertNode(accessor, isSetAccessorDeclaration, "The counterpart to a getter should be a setter");
@@ -138,7 +138,7 @@ namespace ts.codefix {
                             getSynthesizedDeepClones(modifiers),
                             getSynthesizedDeepClone(name),
                             createDummyParameters(1, [parameterName], [getSynthesizedDeepClone(typeNode)], 1, /*inJs*/ false),
-                            ambient ? undefined : createStubbedMethodBody(quotePreference)));
+                            ambient ? undefined : getSynthesizedDeepClone(body) || createStubbedMethodBody(quotePreference)));
                     }
                 }
                 break;
