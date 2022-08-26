@@ -1100,7 +1100,7 @@
         "category": "Error",
         "code": 1359
     },
-    "Class constructor may not be a generator.": {
+    "Type '{0}' does not satisfy the expected type '{1}'.": {
         "category": "Error",
         "code": 1360
     },
@@ -1131,6 +1131,10 @@
     "Split all invalid type-only imports": {
         "category": "Message",
         "code": 1367
+    },
+    "Class constructor may not be a generator.": {
+        "category": "Error",
+        "code": 1368
     },
     "Did you mean '{0}'?": {
         "category": "Message",
@@ -6375,6 +6379,10 @@
     "You cannot rename elements that are defined in another 'node_modules' folder.": {
         "category": "Error",
         "code": 8036
+    },
+    "Type satisfaction expressions can only be used in TypeScript files.": {
+        "category": "Error",
+        "code": 8037
     },
 
     "Declaration emit for this file requires using private name '{0}'. An explicit type annotation may unblock declaration emit.": {
