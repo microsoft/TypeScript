@@ -1837,8 +1837,9 @@ namespace ts {
             nameArg: __String | Identifier | undefined,
             isUse: boolean,
             excludeGlobals = false,
-            getSpellingSuggstions = true): Symbol | undefined {
-            return resolveNameHelper(location, name, meaning, nameNotFoundMessage, nameArg, isUse, excludeGlobals, getSpellingSuggstions, getSymbol);
+            getSpellingSuggestions = true,
+            reportErrors = true): Symbol | undefined {
+            return resolveNameHelper(location, name, meaning, nameNotFoundMessage, nameArg, isUse, excludeGlobals, getSpellingSuggestions, getSymbol, reportErrors);
         }
 
         function resolveNameHelper(
@@ -2269,7 +2270,7 @@ namespace ts {
             }
 
             // Perform extra checks only if error reporting was requested
-            if (nameNotFoundMessage) {
+            if (reportErrors && nameNotFoundMessage) {
                 addLazyDiagnostic(() => {
                     // Only check for block-scoped variable if we have an error location and are looking for the
                     // name with variable meaning
@@ -43507,7 +43508,10 @@ namespace ts {
                 SymbolFlags.Value | SymbolFlags.ExportValue | SymbolFlags.Alias,
                 /*nodeNotFoundMessage*/ undefined,
                 /*nameArg*/ undefined,
-                /*isUse*/ true);
+                /*isUse*/ true,
+                /*excludeGlobals*/ undefined,
+                /*getSpellingSuggestions*/ undefined,
+                /*reportErrors*/ false);
         }
 
         function getReferencedValueDeclaration(referenceIn: Identifier): Declaration | undefined {
