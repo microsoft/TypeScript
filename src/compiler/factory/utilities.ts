@@ -437,6 +437,7 @@ namespace ts {
                 return (kinds & OuterExpressionKinds.Parentheses) !== 0;
             case SyntaxKind.TypeAssertionExpression:
             case SyntaxKind.AsExpression:
+            case SyntaxKind.SatisfiesExpression:
                 return (kinds & OuterExpressionKinds.TypeAssertions) !== 0;
             case SyntaxKind.NonNullExpression:
                 return (kinds & OuterExpressionKinds.NonNullAssertions) !== 0;
