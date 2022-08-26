@@ -7178,7 +7178,8 @@ namespace ts {
         if (!diagnostic.relatedInformation) {
             diagnostic.relatedInformation = [];
         }
-        Debug.assert(diagnostic.relatedInformation !== [], "Diagnostic had empty array singleton for related info, but is still being constructed!");
+        // TODO(jakebailey): what to do?
+        // Debug.assert(diagnostic.relatedInformation !== [], "Diagnostic had empty array singleton for related info, but is still being constructed!");
         diagnostic.relatedInformation.push(...relatedInformation);
         return diagnostic;
     }
