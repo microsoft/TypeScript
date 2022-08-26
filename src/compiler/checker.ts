@@ -43075,10 +43075,10 @@ namespace ts {
             }
             const node = getParseTreeNode(nodeIn, isIdentifier);
             if (node) {
-                const symbol = getReferencedSymbol(node, /*startInDeclarationContainer*/ undefined); // >> Change it here
+                const symbol = getReferencedSymbol(node, /*startInDeclarationContainer*/ undefined);
                 // We should only get the declaration of an alias if there isn't a local value
-                // declaration for the symbol // >> UPDATE THIS
-                if (isNonLocalAlias(symbol, /*excludes*/ SymbolFlags.Value) && !getTypeOnlyAliasDeclaration(symbol)) { // >> Probably use the default excludes now
+                // declaration for the symbol
+                if (isNonLocalAlias(symbol, /*excludes*/ SymbolFlags.Value) && !getTypeOnlyAliasDeclaration(symbol)) {
                     return getDeclarationOfAliasSymbol(symbol);
                 }
             }
@@ -43497,10 +43497,14 @@ namespace ts {
                 }
             }
 
+            // >> TODO: this comment is only valid for the use of 'getReferencedSymbol' in 'getReferencedImportDeclaration'.
+            // We get the symbol that has a value meaning, or is an alias.
+            // We'll only ever want a symbol that doesn't have a value meaning if it is also an import,
+            // and therefore if it has an alias meaning (because those type-resolving imports are not always elided e.g. in JS).
             return resolveName(
                 location,
                 reference.escapedText,
-                SymbolFlags.Value | SymbolFlags.ExportValue | SymbolFlags.Alias, // >> update symbol flags?
+                SymbolFlags.Value | SymbolFlags.ExportValue | SymbolFlags.Alias,
                 /*nodeNotFoundMessage*/ undefined,
                 /*nameArg*/ undefined,
                 /*isUse*/ true);

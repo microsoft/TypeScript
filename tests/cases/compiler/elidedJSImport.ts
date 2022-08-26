@@ -1,6 +1,6 @@
 // @allowJs: true
 // @checkJs: false
-// @module: ES2020
+// @module: ES2020, commonjs
 // @moduleResolution: node
 // @outDir: out
 
