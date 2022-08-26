@@ -1463,6 +1463,7 @@ namespace ts {
 
         function finishUpdateMethodDeclaration(updated: Mutable<MethodDeclaration>, original: MethodDeclaration) {
             if (updated !== original) {
+                // copy children used only for error reporting
                 updated.exclamationToken = original.exclamationToken;
             }
             return update(updated, original);
@@ -1482,8 +1483,7 @@ namespace ts {
             node.transformFlags = propagateChildFlags(body) | TransformFlags.ContainsClassFields;
 
             // The following properties are used only to report grammar errors
-            node.illegalDecorators = undefined;
-            node.modifiers = undefined;
+            node.decoratorsAndModifiers = undefined;
             return node;
         }
 
@@ -1499,8 +1499,8 @@ namespace ts {
 
         function finishUpdateClassStaticBlockDeclaration(updated: Mutable<ClassStaticBlockDeclaration>, original: ClassStaticBlockDeclaration) {
             if (updated !== original) {
-                updated.illegalDecorators = original.illegalDecorators;
-                updated.modifiers = original.modifiers;
+                // copy children used only for error reporting
+                updated.decoratorsAndModifiers = original.decoratorsAndModifiers;
             }
             return update(updated, original);
         }
@@ -1523,7 +1523,7 @@ namespace ts {
             node.transformFlags |= TransformFlags.ContainsES2015;
 
             // The following properties are used only to report grammar errors
-            node.illegalDecorators = undefined;
+            node.decoratorsAndModifiers = undefined;
             node.typeParameters = undefined;
             node.type = undefined;
             return node;
@@ -1545,7 +1545,10 @@ namespace ts {
 
         function finishUpdateConstructorDeclaration(updated: Mutable<ConstructorDeclaration>, original: ConstructorDeclaration) {
             if (updated !== original) {
-                updated.illegalDecorators = original.illegalDecorators;
+                // copy children used only for error reporting
+                if (updated.modifiers === original.modifiers) {
+                    updated.decoratorsAndModifiers = original.decoratorsAndModifiers;
+                }
                 updated.typeParameters = original.typeParameters;
                 updated.type = original.type;
             }
@@ -1595,6 +1598,7 @@ namespace ts {
 
         function finishUpdateGetAccessorDeclaration(updated: Mutable<GetAccessorDeclaration>, original: GetAccessorDeclaration) {
             if (updated !== original) {
+                // copy children used only for error reporting
                 updated.typeParameters = original.typeParameters;
             }
             return finishUpdateBaseSignatureDeclaration(updated, original);
@@ -1641,6 +1645,7 @@ namespace ts {
 
         function finishUpdateSetAccessorDeclaration(updated: Mutable<SetAccessorDeclaration>, original: SetAccessorDeclaration) {
             if (updated !== original) {
+                // copy children used only for error reporting
                 updated.typeParameters = original.typeParameters;
                 updated.type = original.type;
             }
@@ -1822,7 +1827,7 @@ namespace ts {
             node.transformFlags = TransformFlags.ContainsTypeScript;
 
             // The following properties are used only to report grammar errors
-            node.modifiers = undefined;
+            node.decoratorsAndModifiers = undefined;
             return node;
         }
 
@@ -1842,7 +1847,8 @@ namespace ts {
 
         function finishUpdateFunctionTypeNode(updated: Mutable<FunctionTypeNode>, original: FunctionTypeNode) {
             if (updated !== original) {
-                updated.modifiers = original.modifiers;
+                // copy children used only for error reporting
+                updated.decoratorsAndModifiers = original.decoratorsAndModifiers;
             }
             return finishUpdateBaseSignatureDeclaration(updated, original);
         }
@@ -3724,7 +3730,7 @@ namespace ts {
             }
 
             // The following properties are used only to report grammar errors
-            node.illegalDecorators = undefined;
+            node.decoratorsAndModifiers = undefined;
             return node;
         }
 
@@ -3753,7 +3759,9 @@ namespace ts {
         function finishUpdateFunctionDeclaration(updated: Mutable<FunctionDeclaration>, original: FunctionDeclaration) {
             if (updated !== original) {
                 // copy children used only for error reporting
-                updated.illegalDecorators = original.illegalDecorators;
+                if (updated.modifiers === original.modifiers) {
+                    updated.decoratorsAndModifiers = original.decoratorsAndModifiers;
+                }
             }
             return finishUpdateBaseSignatureDeclaration(updated, original);
         }
@@ -3823,7 +3831,7 @@ namespace ts {
             node.transformFlags = TransformFlags.ContainsTypeScript;
 
             // The following properties are used only to report grammar errors
-            node.illegalDecorators = undefined;
+            node.decoratorsAndModifiers = undefined;
             return node;
         }
 
@@ -3847,7 +3855,10 @@ namespace ts {
 
         function finishUpdateInterfaceDeclaration(updated: Mutable<InterfaceDeclaration>, original: InterfaceDeclaration) {
             if (updated !== original) {
-                updated.illegalDecorators = original.illegalDecorators;
+                // copy children used only for error reporting
+                if (updated.modifiers === original.modifiers) {
+                    updated.decoratorsAndModifiers = original.decoratorsAndModifiers;
+                }
             }
             return update(updated, original);
         }
@@ -3869,7 +3880,7 @@ namespace ts {
             node.transformFlags = TransformFlags.ContainsTypeScript;
 
             // The following properties are used only to report grammar errors
-            node.illegalDecorators = undefined;
+            node.decoratorsAndModifiers = undefined;
             return node;
         }
 
@@ -3891,7 +3902,10 @@ namespace ts {
 
         function finishUpdateTypeAliasDeclaration(updated: Mutable<TypeAliasDeclaration>, original: TypeAliasDeclaration) {
             if (updated !== original) {
-                updated.illegalDecorators = original.illegalDecorators;
+                // copy children used only for error reporting
+                if (updated.modifiers === original.modifiers) {
+                    updated.decoratorsAndModifiers = original.decoratorsAndModifiers;
+                }
             }
             return update(updated, original);
         }
@@ -3914,7 +3928,7 @@ namespace ts {
             node.transformFlags &= ~TransformFlags.ContainsPossibleTopLevelAwait; // Enum declarations cannot contain `await`
 
             // The following properties are used only to report grammar errors
-            node.illegalDecorators = undefined;
+            node.decoratorsAndModifiers = undefined;
             return node;
         }
 
@@ -3933,7 +3947,10 @@ namespace ts {
 
         function finishUpdateEnumDeclaration(updated: Mutable<EnumDeclaration>, original: EnumDeclaration) {
             if (updated !== original) {
-                updated.illegalDecorators = original.illegalDecorators;
+                // copy children used only for error reporting
+                if (updated.modifiers === original.modifiers) {
+                    updated.decoratorsAndModifiers = original.decoratorsAndModifiers;
+                }
             }
             return update(updated, original);
         }
@@ -3963,7 +3980,7 @@ namespace ts {
             node.transformFlags &= ~TransformFlags.ContainsPossibleTopLevelAwait; // Module declarations cannot contain `await`.
 
             // The following properties are used only to report grammar errors
-            node.illegalDecorators = undefined;
+            node.decoratorsAndModifiers = undefined;
             return node;
         }
 
@@ -3983,7 +4000,10 @@ namespace ts {
 
         function finishUpdateModuleDeclaration(updated: Mutable<ModuleDeclaration>, original: ModuleDeclaration) {
             if (updated !== original) {
-                updated.illegalDecorators = original.illegalDecorators;
+                // copy children used only for error reporting
+                if (updated.modifiers === original.modifiers) {
+                    updated.decoratorsAndModifiers = original.decoratorsAndModifiers;
+                }
             }
             return update(updated, original);
         }
@@ -4028,8 +4048,7 @@ namespace ts {
             node.transformFlags = TransformFlags.ContainsTypeScript;
 
             // The following properties are used only to report grammar errors
-            node.illegalDecorators = undefined;
-            node.modifiers = undefined;
+            node.decoratorsAndModifiers = undefined;
             return node;
         }
 
@@ -4042,8 +4061,8 @@ namespace ts {
 
         function finishUpdateNamespaceExportDeclaration(updated: Mutable<NamespaceExportDeclaration>, original: NamespaceExportDeclaration) {
             if (updated !== original) {
-                updated.illegalDecorators = original.illegalDecorators;
-                updated.modifiers = original.modifiers;
+                // copy children used only for error reporting
+                updated.decoratorsAndModifiers = original.decoratorsAndModifiers;
             }
             return update(updated, original);
         }
@@ -4067,7 +4086,7 @@ namespace ts {
             node.transformFlags &= ~TransformFlags.ContainsPossibleTopLevelAwait; // Import= declaration is always parsed in an Await context
 
             // The following properties are used only to report grammar errors
-            node.illegalDecorators = undefined;
+            node.decoratorsAndModifiers = undefined;
             return node;
         }
 
@@ -4089,7 +4108,10 @@ namespace ts {
 
         function finishUpdateImportEqualsDeclaration(updated: Mutable<ImportEqualsDeclaration>, original: ImportEqualsDeclaration) {
             if (updated !== original) {
-                updated.illegalDecorators = original.illegalDecorators;
+                // copy children used only for error reporting
+                if (updated.modifiers === original.modifiers) {
+                    updated.decoratorsAndModifiers = original.decoratorsAndModifiers;
+                }
             }
             return update(updated, original);
         }
@@ -4112,7 +4134,7 @@ namespace ts {
             node.transformFlags &= ~TransformFlags.ContainsPossibleTopLevelAwait; // always parsed in an Await context
 
             // The following properties are used only to report grammar errors
-            node.illegalDecorators = undefined;
+            node.decoratorsAndModifiers = undefined;
             return node;
         }
 
@@ -4134,7 +4156,10 @@ namespace ts {
 
         function finishUpdateImportDeclaration(updated: Mutable<ImportDeclaration>, original: ImportDeclaration) {
             if (updated !== original) {
-                updated.illegalDecorators = original.illegalDecorators;
+                // copy children used only for error reporting
+                if (updated.modifiers === original.modifiers) {
+                    updated.decoratorsAndModifiers = original.decoratorsAndModifiers;
+                }
             }
             return update(updated, original);
         }
@@ -4302,7 +4327,7 @@ namespace ts {
             node.transformFlags &= ~TransformFlags.ContainsPossibleTopLevelAwait; // always parsed in an Await context
 
             // The following properties are used only to report grammar errors
-            node.illegalDecorators = undefined;
+            node.decoratorsAndModifiers = undefined;
             return node;
         }
 
@@ -4320,7 +4345,10 @@ namespace ts {
 
         function finishUpdateExportAssignment(updated: Mutable<ExportAssignment>, original: ExportAssignment) {
             if (updated !== original) {
-                updated.illegalDecorators = original.illegalDecorators;
+                // copy children used only for error reporting
+                if (updated.modifiers === original.modifiers) {
+                    updated.decoratorsAndModifiers = original.decoratorsAndModifiers;
+                }
             }
             return update(updated, original);
         }
@@ -4346,7 +4374,7 @@ namespace ts {
             node.transformFlags &= ~TransformFlags.ContainsPossibleTopLevelAwait; // always parsed in an Await context
 
             // The following properties are used only to report grammar errors
-            node.illegalDecorators = undefined;
+            node.decoratorsAndModifiers = undefined;
             return node;
         }
 
@@ -4370,7 +4398,10 @@ namespace ts {
 
         function finishUpdateExportDeclaration(updated: Mutable<ExportDeclaration>, original: ExportDeclaration) {
             if (updated !== original) {
-                updated.illegalDecorators = original.illegalDecorators;
+                // copy children used only for error reporting
+                if (updated.modifiers === original.modifiers) {
+                    updated.decoratorsAndModifiers = original.decoratorsAndModifiers;
+                }
             }
             return update(updated, original);
         }
@@ -5229,8 +5260,7 @@ namespace ts {
                 propagateChildFlags(node.initializer);
 
             // The following properties are used only to report grammar errors
-            node.illegalDecorators = undefined;
-            node.modifiers = undefined;
+            node.decoratorsAndModifiers = undefined;
             node.questionToken = undefined;
             node.exclamationToken = undefined;
             return node;
@@ -5247,8 +5277,8 @@ namespace ts {
         function finishUpdatePropertyAssignment(updated: Mutable<PropertyAssignment>, original: PropertyAssignment) {
             // copy children used only for error reporting
             if (updated !== original) {
-                updated.illegalDecorators = original.illegalDecorators;
-                updated.modifiers = original.modifiers;
+                // copy children used only for error reporting
+                updated.decoratorsAndModifiers = original.decoratorsAndModifiers;
                 updated.questionToken = original.questionToken;
                 updated.exclamationToken = original.exclamationToken;
             }
@@ -5269,8 +5299,7 @@ namespace ts {
 
             // The following properties are used only to report grammar errors
             node.equalsToken = undefined;
-            node.illegalDecorators = undefined;
-            node.modifiers = undefined;
+            node.decoratorsAndModifiers = undefined;
             node.questionToken = undefined;
             node.exclamationToken = undefined;
             return node;
@@ -5287,11 +5316,10 @@ namespace ts {
         function finishUpdateShorthandPropertyAssignment(updated: Mutable<ShorthandPropertyAssignment>, original: ShorthandPropertyAssignment) {
             if (updated !== original) {
                 // copy children used only for error reporting
-                updated.equalsToken = original.equalsToken;
-                updated.illegalDecorators = original.illegalDecorators;
-                updated.modifiers = original.modifiers;
+                updated.decoratorsAndModifiers = original.decoratorsAndModifiers;
                 updated.questionToken = original.questionToken;
                 updated.exclamationToken = original.exclamationToken;
+                updated.equalsToken = original.equalsToken;
             }
             return update(updated, original);
         }

@@ -35389,7 +35389,7 @@ namespace ts {
             // It is a SyntaxError if the Identifier "eval" or the Identifier "arguments" occurs as the
             // Identifier in a PropertySetParameterList of a PropertyAssignment that is contained in strict code
             // or if its FunctionBody is strict code(11.1.5).
-            checkGrammarDecoratorsAndModifiers(node);
+            checkGrammarModifiers(node);
 
             checkVariableLikeDeclaration(node);
             const func = getContainingFunction(node)!;
@@ -35790,7 +35790,7 @@ namespace ts {
 
         function checkPropertyDeclaration(node: PropertyDeclaration | PropertySignature) {
             // Grammar checking
-            if (!checkGrammarDecoratorsAndModifiers(node) && !checkGrammarProperty(node)) checkGrammarComputedPropertyName(node.name);
+            if (!checkGrammarModifiers(node) && !checkGrammarProperty(node)) checkGrammarComputedPropertyName(node.name);
             checkVariableLikeDeclaration(node);
 
             setNodeLinksForPrivateIdentifierScope(node);
@@ -35852,7 +35852,7 @@ namespace ts {
         }
 
         function checkClassStaticBlockDeclaration(node: ClassStaticBlockDeclaration) {
-            checkGrammarDecoratorsAndModifiers(node);
+            checkGrammarModifiers(node);
 
             forEachChild(node, checkSourceElement);
         }
@@ -38420,7 +38420,7 @@ namespace ts {
 
         function checkVariableStatement(node: VariableStatement) {
             // Grammar checking
-            if (!checkGrammarDecoratorsAndModifiers(node) && !checkGrammarVariableDeclarationList(node.declarationList)) checkGrammarForDisallowedLetOrConstStatement(node);
+            if (!checkGrammarModifiers(node) && !checkGrammarVariableDeclarationList(node.declarationList)) checkGrammarForDisallowedLetOrConstStatement(node);
             forEach(node.declarationList.declarations, checkSourceElement);
         }
 
@@ -40721,7 +40721,7 @@ namespace ts {
 
         function checkInterfaceDeclaration(node: InterfaceDeclaration) {
             // Grammar checking
-            if (!checkGrammarDecoratorsAndModifiers(node)) checkGrammarInterfaceDeclaration(node);
+            if (!checkGrammarModifiers(node)) checkGrammarInterfaceDeclaration(node);
 
             checkTypeParameters(node.typeParameters);
             addLazyDiagnostic(() => {
@@ -40763,7 +40763,7 @@ namespace ts {
 
         function checkTypeAliasDeclaration(node: TypeAliasDeclaration) {
             // Grammar checking
-            checkGrammarDecoratorsAndModifiers(node);
+            checkGrammarModifiers(node);
             checkTypeNameIsReserved(node.name, Diagnostics.Type_alias_name_cannot_be_0);
             checkExportsOnMergedDeclarations(node);
             checkTypeParameters(node.typeParameters);
@@ -40960,7 +40960,7 @@ namespace ts {
 
         function checkEnumDeclarationWorker(node: EnumDeclaration) {
             // Grammar checking
-            checkGrammarDecoratorsAndModifiers(node);
+            checkGrammarModifiers(node);
 
             checkCollisionsForDeclarationName(node, node.name);
             checkExportsOnMergedDeclarations(node);
@@ -41073,7 +41073,7 @@ namespace ts {
                     return;
                 }
 
-                if (!checkGrammarDecoratorsAndModifiers(node)) {
+                if (!checkGrammarModifiers(node)) {
                     if (!inAmbientContext && node.name.kind === SyntaxKind.StringLiteral) {
                         grammarErrorOnNode(node.name, Diagnostics.Only_ambient_modules_can_use_quoted_names);
                     }
@@ -41458,7 +41458,7 @@ namespace ts {
                 // If we hit an import declaration in an illegal context, just bail out to avoid cascading errors.
                 return;
             }
-            if (!checkGrammarDecoratorsAndModifiers(node) && hasEffectiveModifiers(node)) {
+            if (!checkGrammarModifiers(node) && hasEffectiveModifiers(node)) {
                 grammarErrorOnFirstToken(node, Diagnostics.An_import_declaration_cannot_have_modifiers);
             }
             if (checkExternalImportOrExportDeclaration(node)) {
@@ -41493,7 +41493,7 @@ namespace ts {
                 return;
             }
 
-            checkGrammarDecoratorsAndModifiers(node);
+            checkGrammarModifiers(node);
             if (isInternalModuleImportEqualsDeclaration(node) || checkExternalImportOrExportDeclaration(node)) {
                 checkImportBinding(node);
                 if (hasSyntacticModifier(node, ModifierFlags.Export)) {
@@ -41532,7 +41532,7 @@ namespace ts {
                 return;
             }
 
-            if (!checkGrammarDecoratorsAndModifiers(node) && hasSyntacticModifiers(node)) {
+            if (!checkGrammarModifiers(node) && hasSyntacticModifiers(node)) {
                 grammarErrorOnFirstToken(node, Diagnostics.An_export_declaration_cannot_have_modifiers);
             }
 
@@ -41696,7 +41696,7 @@ namespace ts {
                 return;
             }
             // Grammar checking
-            if (!checkGrammarDecoratorsAndModifiers(node) && hasEffectiveModifiers(node)) {
+            if (!checkGrammarModifiers(node) && hasEffectiveModifiers(node)) {
                 grammarErrorOnFirstToken(node, Diagnostics.An_export_assignment_cannot_have_modifiers);
             }
 
@@ -44136,309 +44136,315 @@ namespace ts {
         }
 
         // GRAMMAR CHECKING
-        function checkGrammarDecoratorsAndModifiers(node: HasModifiers | HasDecorators | HasIllegalModifiers | HasIllegalDecorators): boolean {
-            return checkGrammarDecorators(node) || checkGrammarModifiers(node);
-        }
 
-        function checkGrammarDecorators(node: Node): boolean {
-            if (canHaveIllegalDecorators(node) && some(node.illegalDecorators)) {
-                return grammarErrorOnFirstToken(node, Diagnostics.Decorators_are_not_valid_here);
-            }
-            if (!canHaveDecorators(node) || !hasDecorators(node)) {
-                return false;
-            }
-            if (!nodeCanBeDecorated(legacyDecorators, node, node.parent, node.parent.parent)) {
-                if (node.kind === SyntaxKind.MethodDeclaration && !nodeIsPresent(node.body)) {
-                    return grammarErrorOnFirstToken(node, Diagnostics.A_decorator_can_only_decorate_a_method_implementation_not_an_overload);
-                }
-                else {
-                    return grammarErrorOnFirstToken(node, Diagnostics.Decorators_are_not_valid_here);
-                }
-            }
-            else if (legacyDecorators && (node.kind === SyntaxKind.GetAccessor || node.kind === SyntaxKind.SetAccessor)) {
-                const accessors = getAllAccessorDeclarations((node.parent as ClassDeclaration).members, node as AccessorDeclaration);
-                if (hasDecorators(accessors.firstAccessor) && node === accessors.secondAccessor) {
-                    return grammarErrorOnFirstToken(node, Diagnostics.Decorators_cannot_be_applied_to_multiple_get_Slashset_accessors_of_the_same_name);
-                }
-            }
-            return false;
-        }
-
-        function checkGrammarModifiers(node: HasModifiers | HasIllegalModifiers): boolean {
-            const quickResult = reportObviousModifierErrors(node);
+        function checkGrammarModifiers(node: HasModifiers | HasDecorators | HasIllegalModifiers | HasIllegalDecorators): boolean {
+            const quickResult = reportObviousDecoratorErrors(node) || reportObviousModifierErrors(node);
             if (quickResult !== undefined) {
                 return quickResult;
             }
 
-            let lastStatic: Node | undefined, lastDeclare: Node | undefined, lastAsync: Node | undefined, lastOverride: Node | undefined;
+            if (isParameter(node) && parameterIsThisKeyword(node)) {
+                return grammarErrorOnFirstToken(node, Diagnostics.Decorators_and_modifiers_may_not_be_applied_to_this_parameters);
+            }
+
+            let lastStatic: Node | undefined, lastDeclare: Node | undefined, lastAsync: Node | undefined, lastOverride: Node | undefined, firstDecorator: Decorator | undefined;
             let flags = ModifierFlags.None;
-            for (const modifier of node.modifiers!) {
-                if (isDecorator(modifier)) continue;
-                if (modifier.kind !== SyntaxKind.ReadonlyKeyword) {
-                    if (node.kind === SyntaxKind.PropertySignature || node.kind === SyntaxKind.MethodSignature) {
-                        return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_type_member, tokenToString(modifier.kind));
+            let sawExportBeforeDecorators = false;
+            for (const modifier of (node as HasModifiers).modifiers!) {
+                if (isDecorator(modifier)) {
+                    if (!nodeCanBeDecorated(legacyDecorators, node, node.parent, node.parent.parent)) {
+                        if (node.kind === SyntaxKind.MethodDeclaration && !nodeIsPresent(node.body)) {
+                            return grammarErrorOnFirstToken(node, Diagnostics.A_decorator_can_only_decorate_a_method_implementation_not_an_overload);
+                        }
+                        else {
+                            return grammarErrorOnFirstToken(node, Diagnostics.Decorators_are_not_valid_here);
+                        }
                     }
-                    if (node.kind === SyntaxKind.IndexSignature && (modifier.kind !== SyntaxKind.StaticKeyword || !isClassLike(node.parent))) {
-                        return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_an_index_signature, tokenToString(modifier.kind));
+                    else if (legacyDecorators && (node.kind === SyntaxKind.GetAccessor || node.kind === SyntaxKind.SetAccessor)) {
+                        const accessors = getAllAccessorDeclarations((node.parent as ClassDeclaration).members, node as AccessorDeclaration);
+                        if (hasDecorators(accessors.firstAccessor) && node === accessors.secondAccessor) {
+                            return grammarErrorOnFirstToken(node, Diagnostics.Decorators_cannot_be_applied_to_multiple_get_Slashset_accessors_of_the_same_name);
+                        }
                     }
+                    if (flags & ~(ModifierFlags.ExportDefault | ModifierFlags.Decorator)) {
+                        return grammarErrorOnNode(modifier, Diagnostics.Decorators_are_not_valid_here);
+                    }
+                    flags |= ModifierFlags.Decorator;
+                    if (flags & ModifierFlags.Export) {
+                        sawExportBeforeDecorators = true;
+                    }
+                    firstDecorator ??= modifier;
                 }
-                if (modifier.kind !== SyntaxKind.InKeyword && modifier.kind !== SyntaxKind.OutKeyword) {
-                    if (node.kind === SyntaxKind.TypeParameter) {
-                        return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_type_parameter, tokenToString(modifier.kind));
+                else {
+                    if (modifier.kind !== SyntaxKind.ReadonlyKeyword) {
+                        if (node.kind === SyntaxKind.PropertySignature || node.kind === SyntaxKind.MethodSignature) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_type_member, tokenToString(modifier.kind));
+                        }
+                        if (node.kind === SyntaxKind.IndexSignature && (modifier.kind !== SyntaxKind.StaticKeyword || !isClassLike(node.parent))) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_an_index_signature, tokenToString(modifier.kind));
+                        }
                     }
-                }
-                switch (modifier.kind) {
-                    case SyntaxKind.ConstKeyword:
-                        if (node.kind !== SyntaxKind.EnumDeclaration) {
-                            return grammarErrorOnNode(node, Diagnostics.A_class_member_cannot_have_the_0_keyword, tokenToString(SyntaxKind.ConstKeyword));
+                    if (modifier.kind !== SyntaxKind.InKeyword && modifier.kind !== SyntaxKind.OutKeyword) {
+                        if (node.kind === SyntaxKind.TypeParameter) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_type_parameter, tokenToString(modifier.kind));
                         }
-                        break;
-                    case SyntaxKind.OverrideKeyword:
-                        // If node.kind === SyntaxKind.Parameter, checkParameter reports an error if it's not a parameter property.
-                        if (flags & ModifierFlags.Override) {
-                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_already_seen, "override");
-                        }
-                        else if (flags & ModifierFlags.Ambient) {
-                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "override", "declare");
-                        }
-                        else if (flags & ModifierFlags.Readonly) {
-                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "override", "readonly");
-                        }
-                        else if (flags & ModifierFlags.Accessor) {
-                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "override", "accessor");
-                        }
-                        else if (flags & ModifierFlags.Async) {
-                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "override", "async");
-                        }
-                        flags |= ModifierFlags.Override;
-                        lastOverride = modifier;
-                        break;
-
-                    case SyntaxKind.PublicKeyword:
-                    case SyntaxKind.ProtectedKeyword:
-                    case SyntaxKind.PrivateKeyword:
-                        const text = visibilityToString(modifierToFlag(modifier.kind));
-
-                        if (flags & ModifierFlags.AccessibilityModifier) {
-                            return grammarErrorOnNode(modifier, Diagnostics.Accessibility_modifier_already_seen);
-                        }
-                        else if (flags & ModifierFlags.Override) {
-                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, text, "override");
-                        }
-                        else if (flags & ModifierFlags.Static) {
-                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, text, "static");
-                        }
-                        else if (flags & ModifierFlags.Accessor) {
-                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, text, "accessor");
-                        }
-                        else if (flags & ModifierFlags.Readonly) {
-                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, text, "readonly");
-                        }
-                        else if (flags & ModifierFlags.Async) {
-                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, text, "async");
-                        }
-                        else if (node.parent.kind === SyntaxKind.ModuleBlock || node.parent.kind === SyntaxKind.SourceFile) {
-                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_module_or_namespace_element, text);
-                        }
-                        else if (flags & ModifierFlags.Abstract) {
-                            if (modifier.kind === SyntaxKind.PrivateKeyword) {
-                                return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, text, "abstract");
+                    }
+                    switch (modifier.kind) {
+                        case SyntaxKind.ConstKeyword:
+                            if (node.kind !== SyntaxKind.EnumDeclaration) {
+                                return grammarErrorOnNode(node, Diagnostics.A_class_member_cannot_have_the_0_keyword, tokenToString(SyntaxKind.ConstKeyword));
                             }
-                            else {
-                                return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, text, "abstract");
-                            }
-                        }
-                        else if (isPrivateIdentifierClassElementDeclaration(node)) {
-                            return grammarErrorOnNode(modifier, Diagnostics.An_accessibility_modifier_cannot_be_used_with_a_private_identifier);
-                        }
-                        flags |= modifierToFlag(modifier.kind);
-                        break;
-
-                    case SyntaxKind.StaticKeyword:
-                        if (flags & ModifierFlags.Static) {
-                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_already_seen, "static");
-                        }
-                        else if (flags & ModifierFlags.Readonly) {
-                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "static", "readonly");
-                        }
-                        else if (flags & ModifierFlags.Async) {
-                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "static", "async");
-                        }
-                        else if (flags & ModifierFlags.Accessor) {
-                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "static", "accessor");
-                        }
-                        else if (node.parent.kind === SyntaxKind.ModuleBlock || node.parent.kind === SyntaxKind.SourceFile) {
-                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_module_or_namespace_element, "static");
-                        }
-                        else if (node.kind === SyntaxKind.Parameter) {
-                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_parameter, "static");
-                        }
-                        else if (flags & ModifierFlags.Abstract) {
-                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "static", "abstract");
-                        }
-                        else if (flags & ModifierFlags.Override) {
-                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "static", "override");
-                        }
-                        flags |= ModifierFlags.Static;
-                        lastStatic = modifier;
-                        break;
-
-                    case SyntaxKind.AccessorKeyword:
-                        if (flags & ModifierFlags.Accessor) {
-                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_already_seen, "accessor");
-                        }
-                        else if (flags & ModifierFlags.Readonly) {
-                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "accessor", "readonly");
-                        }
-                        else if (flags & ModifierFlags.Ambient) {
-                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "accessor", "declare");
-                        }
-                        else if (node.kind !== SyntaxKind.PropertyDeclaration) {
-                            return grammarErrorOnNode(modifier, Diagnostics.accessor_modifier_can_only_appear_on_a_property_declaration);
-                        }
-
-                        flags |= ModifierFlags.Accessor;
-                        break;
-
-                    case SyntaxKind.ReadonlyKeyword:
-                        if (flags & ModifierFlags.Readonly) {
-                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_already_seen, "readonly");
-                        }
-                        else if (node.kind !== SyntaxKind.PropertyDeclaration && node.kind !== SyntaxKind.PropertySignature && node.kind !== SyntaxKind.IndexSignature && node.kind !== SyntaxKind.Parameter) {
+                            break;
+                        case SyntaxKind.OverrideKeyword:
                             // If node.kind === SyntaxKind.Parameter, checkParameter reports an error if it's not a parameter property.
-                            return grammarErrorOnNode(modifier, Diagnostics.readonly_modifier_can_only_appear_on_a_property_declaration_or_index_signature);
-                        }
-                        flags |= ModifierFlags.Readonly;
-                        break;
-
-                    case SyntaxKind.ExportKeyword:
-                        if (flags & ModifierFlags.Export) {
-                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_already_seen, "export");
-                        }
-                        else if (flags & ModifierFlags.Ambient) {
-                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "export", "declare");
-                        }
-                        else if (flags & ModifierFlags.Abstract) {
-                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "export", "abstract");
-                        }
-                        else if (flags & ModifierFlags.Async) {
-                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "export", "async");
-                        }
-                        else if (isClassLike(node.parent)) {
-                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_class_elements_of_this_kind, "export");
-                        }
-                        else if (node.kind === SyntaxKind.Parameter) {
-                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_parameter, "export");
-                        }
-                        flags |= ModifierFlags.Export;
-                        break;
-                    case SyntaxKind.DefaultKeyword:
-                        const container = node.parent.kind === SyntaxKind.SourceFile ? node.parent : node.parent.parent;
-                        if (container.kind === SyntaxKind.ModuleDeclaration && !isAmbientModule(container)) {
-                            return grammarErrorOnNode(modifier, Diagnostics.A_default_export_can_only_be_used_in_an_ECMAScript_style_module);
-                        }
-                        else if (!(flags & ModifierFlags.Export)) {
-                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "export", "default");
-                        }
-
-                        flags |= ModifierFlags.Default;
-                        break;
-                    case SyntaxKind.DeclareKeyword:
-                        if (flags & ModifierFlags.Ambient) {
-                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_already_seen, "declare");
-                        }
-                        else if (flags & ModifierFlags.Async) {
-                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_in_an_ambient_context, "async");
-                        }
-                        else if (flags & ModifierFlags.Override) {
-                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_in_an_ambient_context, "override");
-                        }
-                        else if (isClassLike(node.parent) && !isPropertyDeclaration(node)) {
-                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_class_elements_of_this_kind, "declare");
-                        }
-                        else if (node.kind === SyntaxKind.Parameter) {
-                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_parameter, "declare");
-                        }
-                        else if ((node.parent.flags & NodeFlags.Ambient) && node.parent.kind === SyntaxKind.ModuleBlock) {
-                            return grammarErrorOnNode(modifier, Diagnostics.A_declare_modifier_cannot_be_used_in_an_already_ambient_context);
-                        }
-                        else if (isPrivateIdentifierClassElementDeclaration(node)) {
-                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_a_private_identifier, "declare");
-                        }
-                        flags |= ModifierFlags.Ambient;
-                        lastDeclare = modifier;
-                        break;
-
-                    case SyntaxKind.AbstractKeyword:
-                        if (flags & ModifierFlags.Abstract) {
-                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_already_seen, "abstract");
-                        }
-                        if (node.kind !== SyntaxKind.ClassDeclaration &&
-                            node.kind !== SyntaxKind.ConstructorType) {
-                            if (node.kind !== SyntaxKind.MethodDeclaration &&
-                                node.kind !== SyntaxKind.PropertyDeclaration &&
-                                node.kind !== SyntaxKind.GetAccessor &&
-                                node.kind !== SyntaxKind.SetAccessor) {
-                                return grammarErrorOnNode(modifier, Diagnostics.abstract_modifier_can_only_appear_on_a_class_method_or_property_declaration);
+                            if (flags & ModifierFlags.Override) {
+                                return grammarErrorOnNode(modifier, Diagnostics._0_modifier_already_seen, "override");
                             }
-                            if (!(node.parent.kind === SyntaxKind.ClassDeclaration && hasSyntacticModifier(node.parent, ModifierFlags.Abstract))) {
-                                return grammarErrorOnNode(modifier, Diagnostics.Abstract_methods_can_only_appear_within_an_abstract_class);
+                            else if (flags & ModifierFlags.Ambient) {
+                                return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "override", "declare");
                             }
+                            else if (flags & ModifierFlags.Readonly) {
+                                return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "override", "readonly");
+                            }
+                            else if (flags & ModifierFlags.Accessor) {
+                                return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "override", "accessor");
+                            }
+                            else if (flags & ModifierFlags.Async) {
+                                return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "override", "async");
+                            }
+                            flags |= ModifierFlags.Override;
+                            lastOverride = modifier;
+                            break;
+
+                        case SyntaxKind.PublicKeyword:
+                        case SyntaxKind.ProtectedKeyword:
+                        case SyntaxKind.PrivateKeyword:
+                            const text = visibilityToString(modifierToFlag(modifier.kind));
+
+                            if (flags & ModifierFlags.AccessibilityModifier) {
+                                return grammarErrorOnNode(modifier, Diagnostics.Accessibility_modifier_already_seen);
+                            }
+                            else if (flags & ModifierFlags.Override) {
+                                return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, text, "override");
+                            }
+                            else if (flags & ModifierFlags.Static) {
+                                return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, text, "static");
+                            }
+                            else if (flags & ModifierFlags.Accessor) {
+                                return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, text, "accessor");
+                            }
+                            else if (flags & ModifierFlags.Readonly) {
+                                return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, text, "readonly");
+                            }
+                            else if (flags & ModifierFlags.Async) {
+                                return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, text, "async");
+                            }
+                            else if (node.parent.kind === SyntaxKind.ModuleBlock || node.parent.kind === SyntaxKind.SourceFile) {
+                                return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_module_or_namespace_element, text);
+                            }
+                            else if (flags & ModifierFlags.Abstract) {
+                                if (modifier.kind === SyntaxKind.PrivateKeyword) {
+                                    return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, text, "abstract");
+                                }
+                                else {
+                                    return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, text, "abstract");
+                                }
+                            }
+                            else if (isPrivateIdentifierClassElementDeclaration(node)) {
+                                return grammarErrorOnNode(modifier, Diagnostics.An_accessibility_modifier_cannot_be_used_with_a_private_identifier);
+                            }
+                            flags |= modifierToFlag(modifier.kind);
+                            break;
+
+                        case SyntaxKind.StaticKeyword:
                             if (flags & ModifierFlags.Static) {
+                                return grammarErrorOnNode(modifier, Diagnostics._0_modifier_already_seen, "static");
+                            }
+                            else if (flags & ModifierFlags.Readonly) {
+                                return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "static", "readonly");
+                            }
+                            else if (flags & ModifierFlags.Async) {
+                                return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "static", "async");
+                            }
+                            else if (flags & ModifierFlags.Accessor) {
+                                return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "static", "accessor");
+                            }
+                            else if (node.parent.kind === SyntaxKind.ModuleBlock || node.parent.kind === SyntaxKind.SourceFile) {
+                                return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_module_or_namespace_element, "static");
+                            }
+                            else if (node.kind === SyntaxKind.Parameter) {
+                                return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_parameter, "static");
+                            }
+                            else if (flags & ModifierFlags.Abstract) {
                                 return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "static", "abstract");
                             }
-                            if (flags & ModifierFlags.Private) {
-                                return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "private", "abstract");
+                            else if (flags & ModifierFlags.Override) {
+                                return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "static", "override");
                             }
-                            if (flags & ModifierFlags.Async && lastAsync) {
-                                return grammarErrorOnNode(lastAsync, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "async", "abstract");
-                            }
-                            if (flags & ModifierFlags.Override) {
-                                return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "abstract", "override");
-                            }
+                            flags |= ModifierFlags.Static;
+                            lastStatic = modifier;
+                            break;
+
+                        case SyntaxKind.AccessorKeyword:
                             if (flags & ModifierFlags.Accessor) {
-                                return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "abstract", "accessor");
+                                return grammarErrorOnNode(modifier, Diagnostics._0_modifier_already_seen, "accessor");
                             }
-                        }
-                        if (isNamedDeclaration(node) && node.name.kind === SyntaxKind.PrivateIdentifier) {
-                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_a_private_identifier, "abstract");
-                        }
+                            else if (flags & ModifierFlags.Readonly) {
+                                return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "accessor", "readonly");
+                            }
+                            else if (flags & ModifierFlags.Ambient) {
+                                return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "accessor", "declare");
+                            }
+                            else if (node.kind !== SyntaxKind.PropertyDeclaration) {
+                                return grammarErrorOnNode(modifier, Diagnostics.accessor_modifier_can_only_appear_on_a_property_declaration);
+                            }
 
-                        flags |= ModifierFlags.Abstract;
-                        break;
+                            flags |= ModifierFlags.Accessor;
+                            break;
 
-                    case SyntaxKind.AsyncKeyword:
-                        if (flags & ModifierFlags.Async) {
-                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_already_seen, "async");
-                        }
-                        else if (flags & ModifierFlags.Ambient || node.parent.flags & NodeFlags.Ambient) {
-                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_in_an_ambient_context, "async");
-                        }
-                        else if (node.kind === SyntaxKind.Parameter) {
-                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_parameter, "async");
-                        }
-                        if (flags & ModifierFlags.Abstract) {
-                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "async", "abstract");
-                        }
-                        flags |= ModifierFlags.Async;
-                        lastAsync = modifier;
-                        break;
+                        case SyntaxKind.ReadonlyKeyword:
+                            if (flags & ModifierFlags.Readonly) {
+                                return grammarErrorOnNode(modifier, Diagnostics._0_modifier_already_seen, "readonly");
+                            }
+                            else if (node.kind !== SyntaxKind.PropertyDeclaration && node.kind !== SyntaxKind.PropertySignature && node.kind !== SyntaxKind.IndexSignature && node.kind !== SyntaxKind.Parameter) {
+                                // If node.kind === SyntaxKind.Parameter, checkParameter reports an error if it's not a parameter property.
+                                return grammarErrorOnNode(modifier, Diagnostics.readonly_modifier_can_only_appear_on_a_property_declaration_or_index_signature);
+                            }
+                            flags |= ModifierFlags.Readonly;
+                            break;
 
-                    case SyntaxKind.InKeyword:
-                    case SyntaxKind.OutKeyword:
-                        const inOutFlag = modifier.kind === SyntaxKind.InKeyword ? ModifierFlags.In : ModifierFlags.Out;
-                        const inOutText = modifier.kind === SyntaxKind.InKeyword ? "in" : "out";
-                        if (node.kind !== SyntaxKind.TypeParameter || !(isInterfaceDeclaration(node.parent) || isClassLike(node.parent) || isTypeAliasDeclaration(node.parent))) {
-                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_can_only_appear_on_a_type_parameter_of_a_class_interface_or_type_alias, inOutText);
-                        }
-                        if (flags & inOutFlag) {
-                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_already_seen, inOutText);
-                        }
-                        if (inOutFlag & ModifierFlags.In && flags & ModifierFlags.Out) {
-                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "in", "out");
-                        }
-                        flags |= inOutFlag;
-                        break;
+                        case SyntaxKind.ExportKeyword:
+                            if (flags & ModifierFlags.Export) {
+                                return grammarErrorOnNode(modifier, Diagnostics._0_modifier_already_seen, "export");
+                            }
+                            else if (flags & ModifierFlags.Ambient) {
+                                return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "export", "declare");
+                            }
+                            else if (flags & ModifierFlags.Abstract) {
+                                return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "export", "abstract");
+                            }
+                            else if (flags & ModifierFlags.Async) {
+                                return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "export", "async");
+                            }
+                            else if (isClassLike(node.parent)) {
+                                return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_class_elements_of_this_kind, "export");
+                            }
+                            else if (node.kind === SyntaxKind.Parameter) {
+                                return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_parameter, "export");
+                            }
+                            flags |= ModifierFlags.Export;
+                            break;
+                        case SyntaxKind.DefaultKeyword:
+                            const container = node.parent.kind === SyntaxKind.SourceFile ? node.parent : node.parent.parent;
+                            if (container.kind === SyntaxKind.ModuleDeclaration && !isAmbientModule(container)) {
+                                return grammarErrorOnNode(modifier, Diagnostics.A_default_export_can_only_be_used_in_an_ECMAScript_style_module);
+                            }
+                            else if (!(flags & ModifierFlags.Export)) {
+                                return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "export", "default");
+                            }
+                            else if (sawExportBeforeDecorators) {
+                                return grammarErrorOnNode(firstDecorator!, Diagnostics.Decorators_are_not_valid_here);
+                            }
+
+                            flags |= ModifierFlags.Default;
+                            break;
+                        case SyntaxKind.DeclareKeyword:
+                            if (flags & ModifierFlags.Ambient) {
+                                return grammarErrorOnNode(modifier, Diagnostics._0_modifier_already_seen, "declare");
+                            }
+                            else if (flags & ModifierFlags.Async) {
+                                return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_in_an_ambient_context, "async");
+                            }
+                            else if (flags & ModifierFlags.Override) {
+                                return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_in_an_ambient_context, "override");
+                            }
+                            else if (isClassLike(node.parent) && !isPropertyDeclaration(node)) {
+                                return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_class_elements_of_this_kind, "declare");
+                            }
+                            else if (node.kind === SyntaxKind.Parameter) {
+                                return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_parameter, "declare");
+                            }
+                            else if ((node.parent.flags & NodeFlags.Ambient) && node.parent.kind === SyntaxKind.ModuleBlock) {
+                                return grammarErrorOnNode(modifier, Diagnostics.A_declare_modifier_cannot_be_used_in_an_already_ambient_context);
+                            }
+                            else if (isPrivateIdentifierClassElementDeclaration(node)) {
+                                return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_a_private_identifier, "declare");
+                            }
+                            flags |= ModifierFlags.Ambient;
+                            lastDeclare = modifier;
+                            break;
+
+                        case SyntaxKind.AbstractKeyword:
+                            if (flags & ModifierFlags.Abstract) {
+                                return grammarErrorOnNode(modifier, Diagnostics._0_modifier_already_seen, "abstract");
+                            }
+                            if (node.kind !== SyntaxKind.ClassDeclaration &&
+                                node.kind !== SyntaxKind.ConstructorType) {
+                                if (node.kind !== SyntaxKind.MethodDeclaration &&
+                                    node.kind !== SyntaxKind.PropertyDeclaration &&
+                                    node.kind !== SyntaxKind.GetAccessor &&
+                                    node.kind !== SyntaxKind.SetAccessor) {
+                                    return grammarErrorOnNode(modifier, Diagnostics.abstract_modifier_can_only_appear_on_a_class_method_or_property_declaration);
+                                }
+                                if (!(node.parent.kind === SyntaxKind.ClassDeclaration && hasSyntacticModifier(node.parent, ModifierFlags.Abstract))) {
+                                    return grammarErrorOnNode(modifier, Diagnostics.Abstract_methods_can_only_appear_within_an_abstract_class);
+                                }
+                                if (flags & ModifierFlags.Static) {
+                                    return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "static", "abstract");
+                                }
+                                if (flags & ModifierFlags.Private) {
+                                    return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "private", "abstract");
+                                }
+                                if (flags & ModifierFlags.Async && lastAsync) {
+                                    return grammarErrorOnNode(lastAsync, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "async", "abstract");
+                                }
+                                if (flags & ModifierFlags.Override) {
+                                    return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "abstract", "override");
+                                }
+                                if (flags & ModifierFlags.Accessor) {
+                                    return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "abstract", "accessor");
+                                }
+                            }
+                            if (isNamedDeclaration(node) && node.name.kind === SyntaxKind.PrivateIdentifier) {
+                                return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_a_private_identifier, "abstract");
+                            }
+
+                            flags |= ModifierFlags.Abstract;
+                            break;
+
+                        case SyntaxKind.AsyncKeyword:
+                            if (flags & ModifierFlags.Async) {
+                                return grammarErrorOnNode(modifier, Diagnostics._0_modifier_already_seen, "async");
+                            }
+                            else if (flags & ModifierFlags.Ambient || node.parent.flags & NodeFlags.Ambient) {
+                                return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_in_an_ambient_context, "async");
+                            }
+                            else if (node.kind === SyntaxKind.Parameter) {
+                                return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_parameter, "async");
+                            }
+                            if (flags & ModifierFlags.Abstract) {
+                                return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "async", "abstract");
+                            }
+                            flags |= ModifierFlags.Async;
+                            lastAsync = modifier;
+                            break;
+
+                        case SyntaxKind.InKeyword:
+                        case SyntaxKind.OutKeyword:
+                            const inOutFlag = modifier.kind === SyntaxKind.InKeyword ? ModifierFlags.In : ModifierFlags.Out;
+                            const inOutText = modifier.kind === SyntaxKind.InKeyword ? "in" : "out";
+                            if (node.kind !== SyntaxKind.TypeParameter || !(isInterfaceDeclaration(node.parent) || isClassLike(node.parent) || isTypeAliasDeclaration(node.parent))) {
+                                return grammarErrorOnNode(modifier, Diagnostics._0_modifier_can_only_appear_on_a_type_parameter_of_a_class_interface_or_type_alias, inOutText);
+                            }
+                            if (flags & inOutFlag) {
+                                return grammarErrorOnNode(modifier, Diagnostics._0_modifier_already_seen, inOutText);
+                            }
+                            if (inOutFlag & ModifierFlags.In && flags & ModifierFlags.Out) {
+                                return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "in", "out");
+                            }
+                            flags |= inOutFlag;
+                            break;
+                    }
                 }
             }
 
@@ -44474,14 +44480,12 @@ namespace ts {
          * undefined: Need to do full checking on the modifiers.
          */
         function reportObviousModifierErrors(node: HasModifiers | HasIllegalModifiers): boolean | undefined {
-            return !node.modifiers
-                ? false
-                : shouldReportBadModifier(node)
-                    ? grammarErrorOnFirstToken(node, Diagnostics.Modifiers_cannot_appear_here)
-                    : undefined;
+            if (canHaveModifiers(node) ? node.modifiers === undefined : node.decoratorsAndModifiers === undefined) return false;
+            const modifier = shouldReportBadModifier(node);
+            return modifier && grammarErrorOnFirstToken(modifier, Diagnostics.Modifiers_cannot_appear_here);
         }
 
-        function shouldReportBadModifier(node: HasModifiers | HasIllegalModifiers): boolean {
+        function shouldReportBadModifier(node: HasModifiers | HasIllegalModifiers): Modifier | undefined {
             switch (node.kind) {
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
@@ -44500,44 +44504,49 @@ namespace ts {
                 case SyntaxKind.ArrowFunction:
                 case SyntaxKind.Parameter:
                 case SyntaxKind.TypeParameter:
-                    return false;
+                    return undefined;
                 case SyntaxKind.ClassStaticBlockDeclaration:
                 case SyntaxKind.PropertyAssignment:
                 case SyntaxKind.ShorthandPropertyAssignment:
                 case SyntaxKind.NamespaceExportDeclaration:
                 case SyntaxKind.FunctionType:
                 case SyntaxKind.MissingDeclaration:
-                    return true;
+                    return find(node.decoratorsAndModifiers, isModifier);
                 default:
                     if (node.parent.kind === SyntaxKind.ModuleBlock || node.parent.kind === SyntaxKind.SourceFile) {
-                        return false;
+                        return undefined;
                     }
                     switch (node.kind) {
                         case SyntaxKind.FunctionDeclaration:
-                            return nodeHasAnyModifiersExcept(node, SyntaxKind.AsyncKeyword);
+                            return findFirstModifierExcept(node, SyntaxKind.AsyncKeyword);
                         case SyntaxKind.ClassDeclaration:
                         case SyntaxKind.ConstructorType:
-                            return nodeHasAnyModifiersExcept(node, SyntaxKind.AbstractKeyword);
+                            return findFirstModifierExcept(node, SyntaxKind.AbstractKeyword);
                         case SyntaxKind.ClassExpression:
-                            return some(node.modifiers, isModifier);
                         case SyntaxKind.InterfaceDeclaration:
                         case SyntaxKind.VariableStatement:
                         case SyntaxKind.TypeAliasDeclaration:
-                            return true;
+                            return find(node.modifiers, isModifier);
                         case SyntaxKind.EnumDeclaration:
-                            return nodeHasAnyModifiersExcept(node, SyntaxKind.ConstKeyword);
+                            return findFirstModifierExcept(node, SyntaxKind.ConstKeyword);
                         default:
                             Debug.assertNever(node);
                     }
             }
         }
 
-        function nodeHasAnyModifiersExcept(node: HasModifiers, allowedModifier: SyntaxKind): boolean {
-            for (const modifier of node.modifiers!) {
-                if (isDecorator(modifier)) continue;
-                return modifier.kind !== allowedModifier;
-            }
-            return false;
+        function findFirstModifierExcept(node: HasModifiers, allowedModifier: SyntaxKind): Modifier | undefined {
+            const modifier = find(node.modifiers, isModifier);
+            return modifier && modifier.kind !== allowedModifier ? modifier : undefined;
+        }
+
+        function reportObviousDecoratorErrors(node: HasModifiers | HasDecorators | HasIllegalModifiers | HasIllegalDecorators) {
+            const decorator = shouldReportBadDecorator(node);
+            return decorator && grammarErrorOnFirstToken(decorator, Diagnostics.Decorators_are_not_valid_here);
+        }
+
+        function shouldReportBadDecorator(node: HasModifiers | HasDecorators | HasIllegalModifiers | HasIllegalDecorators): Decorator | undefined {
+            if (canHaveIllegalDecorators(node)) return find(node.decoratorsAndModifiers, isDecorator);
         }
 
         function checkGrammarAsyncModifier(node: Node, asyncModifier: Node): boolean {
@@ -44633,7 +44642,7 @@ namespace ts {
         function checkGrammarFunctionLikeDeclaration(node: FunctionLikeDeclaration | MethodSignature): boolean {
             // Prevent cascading error by short-circuit
             const file = getSourceFileOfNode(node);
-            return checkGrammarDecoratorsAndModifiers(node) ||
+            return checkGrammarModifiers(node) ||
                 checkGrammarTypeParameterList(node.typeParameters, file) ||
                 checkGrammarParameterList(node.parameters) ||
                 checkGrammarArrowFunction(node, file) ||
@@ -44704,7 +44713,7 @@ namespace ts {
 
         function checkGrammarIndexSignature(node: IndexSignatureDeclaration) {
             // Prevent cascading error by short-circuit
-            return checkGrammarDecoratorsAndModifiers(node) || checkGrammarIndexSignatureParameters(node);
+            return checkGrammarModifiers(node) || checkGrammarIndexSignatureParameters(node);
         }
 
         function checkGrammarForAtLeastOneTypeArgument(node: Node, typeArguments: NodeArray<TypeNode> | undefined): boolean {
@@ -44752,7 +44761,7 @@ namespace ts {
             let seenExtendsClause = false;
             let seenImplementsClause = false;
 
-            if (!checkGrammarDecoratorsAndModifiers(node) && node.heritageClauses) {
+            if (!checkGrammarModifiers(node) && node.heritageClauses) {
                 for (const heritageClause of node.heritageClauses) {
                     if (heritageClause.token === SyntaxKind.ExtendsKeyword) {
                         if (seenExtendsClause) {
@@ -44882,9 +44891,11 @@ namespace ts {
                         }
                     }
                 }
-                else if (canHaveIllegalModifiers(prop) && prop.modifiers) {
-                    for (const mod of prop.modifiers) {
-                        grammarErrorOnNode(mod, Diagnostics._0_modifier_cannot_be_used_here, getTextOfNode(mod));
+                else if (canHaveIllegalModifiers(prop) && prop.decoratorsAndModifiers) {
+                    for (const mod of prop.decoratorsAndModifiers) {
+                        if (isModifier(mod)) {
+                            grammarErrorOnNode(mod, Diagnostics._0_modifier_cannot_be_used_here, getTextOfNode(mod));
+                        }
                     }
                 }
 

@@ -7568,7 +7568,6 @@ namespace ts {
             case SyntaxKind.Decorator: {
                 const { parent } = node as Decorator;
                 return canHaveDecorators(parent) ? parent.modifiers :
-                    canHaveIllegalDecorators(parent) ? parent.illegalDecorators :
                     undefined;
             }
             case SyntaxKind.HeritageClause:
