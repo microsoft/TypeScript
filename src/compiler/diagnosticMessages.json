@@ -1864,7 +1864,7 @@
         "category": "Error",
         "code": 2366
     },
-    "This condition will always return '{0}' since the types '{1}' and '{2}' have no overlap.": {
+    "This comparison appears to be unintentional because the types '{0}' and '{1}' have no overlap.": {
         "category": "Error",
         "code": 2367
     },
