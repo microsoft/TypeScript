@@ -932,6 +932,7 @@ namespace ts {
         | JSDocProtectedTag
         | JSDocReadonlyTag
         | JSDocDeprecatedTag
+        | JSDocThrowsTag
         ;
 
     /* @internal */

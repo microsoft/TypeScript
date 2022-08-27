@@ -712,10 +712,11 @@ namespace ts {
                 visitNode(cbNode, node.typeExpression) ||
                 (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment));
         },
-        [SyntaxKind.JSDocReturnTag]: forEachChildInJSDocReturnTag,
-        [SyntaxKind.JSDocTypeTag]: forEachChildInJSDocReturnTag,
-        [SyntaxKind.JSDocThisTag]: forEachChildInJSDocReturnTag,
-        [SyntaxKind.JSDocEnumTag]: forEachChildInJSDocReturnTag,
+        [SyntaxKind.JSDocReturnTag]: forEachChildInJSDocTypeLikeTag,
+        [SyntaxKind.JSDocTypeTag]: forEachChildInJSDocTypeLikeTag,
+        [SyntaxKind.JSDocThisTag]: forEachChildInJSDocTypeLikeTag,
+        [SyntaxKind.JSDocEnumTag]: forEachChildInJSDocTypeLikeTag,
+        [SyntaxKind.JSDocThrowsTag]: forEachChildInJSDocTypeLikeTag,
         [SyntaxKind.JSDocSignature]: function forEachChildInJSDocSignature<T>(node: JSDocSignature, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
             return forEach(node.typeParameters, cbNode) ||
                 forEach(node.parameters, cbNode) ||
@@ -808,7 +809,7 @@ namespace ts {
             (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment));
     }
 
-    function forEachChildInJSDocReturnTag<T>(node: JSDocReturnTag | JSDocTypeTag | JSDocThisTag | JSDocEnumTag, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+    function forEachChildInJSDocTypeLikeTag<T>(node: JSDocReturnTag | JSDocTypeTag | JSDocThisTag | JSDocEnumTag | JSDocThrowsTag, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.tagName) ||
             visitNode(cbNode, node.typeExpression) ||
             (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment));
