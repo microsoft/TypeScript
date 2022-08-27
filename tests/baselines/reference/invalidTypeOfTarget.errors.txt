@@ -36,7 +36,7 @@ tests/cases/conformance/types/specifyingTypes/typeQueries/invalidTypeOfTarget.ts
     var x7: typeof function f() { };
                    ~~~~~~~~
 !!! error TS2552: Cannot find name 'function'. Did you mean 'Function'?
-!!! related TS2728 /.ts/lib.es5.d.ts:324:13: 'Function' is declared here.
+!!! related TS2728 /.ts/lib.es5.d.ts:318:13: 'Function' is declared here.
                             ~
 !!! error TS1005: ',' expected.
                              ~

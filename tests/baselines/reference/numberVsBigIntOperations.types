@@ -727,3 +727,20 @@ if (bigZeroOrOne) isOne(bigZeroOrOne);
 >isOne : (x: 1n | 1) => 1n | 1
 >bigZeroOrOne : 1
 
+type NumberOrBigint = number | bigint;
+>NumberOrBigint : number | bigint
+
+function getKey<S extends NumberOrBigint>(key: S) {
+>getKey : <S extends NumberOrBigint>(key: S) => void
+>key : S
+
+    +key;   // should error
+>+key : number
+>key : S
+
+    0 + key;    // should error
+>0 + key : any
+>0 : 0
+>key : S
+}
+

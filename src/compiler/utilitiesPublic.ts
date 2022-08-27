@@ -932,6 +932,12 @@ namespace ts {
     /**
      * Gets the effective type parameters. If the node was parsed in a
      * JavaScript file, gets the type parameters from the `@template` tag from JSDoc.
+     *
+     * This does *not* return type parameters from a jsdoc reference to a generic type, eg
+     *
+     * type Id = <T>(x: T) => T
+     * /** @type {Id} /
+     * function id(x) { return x }
      */
     export function getEffectiveTypeParameterDeclarations(node: DeclarationWithTypeParameters): readonly TypeParameterDeclaration[] {
         if (isJSDocSignature(node)) {
@@ -1636,6 +1642,7 @@ namespace ts {
             case SyntaxKind.OmittedExpression:
             case SyntaxKind.CommaListExpression:
             case SyntaxKind.PartiallyEmittedExpression:
+            case SyntaxKind.SatisfiesExpression:
                 return true;
             default:
                 return isUnaryExpressionKind(kind);

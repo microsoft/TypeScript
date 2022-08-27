@@ -900,6 +900,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";A_tuple_type_cannot_be_indexed_with_a_negative_value_2514" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[A tuple type cannot be indexed with a negative value.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[タプル型に負の値のインデックスを指定することはできません。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";A_type_assertion_expression_is_not_allowed_in_the_left_hand_side_of_an_exponentiation_expression_Con_17007" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[A type assertion expression is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses.]]></Val>
@@ -2108,6 +2117,15 @@
           <Val><![CDATA[An index signature parameter type must be 'string', 'number', 'symbol', or a template literal type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[インデックス シグネチャ パラメーター型は、'string'、'number'、'symbol'、またはテンプレート リテラルの型である必要があります。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";An_instantiation_expression_cannot_be_followed_by_a_property_access_1477" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[An instantiation expression cannot be followed by a property access.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[インスタンス化式の後にプロパティ アクセスを続けることはできません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3986,6 +4004,15 @@
           <Val><![CDATA[Convert '{0}' to mapped object type]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA['{0}' をマップされたオブジェクト型に変換する]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Convert_all_const_to_let_95102" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Convert all 'const' to 'let']]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[すべての 'const' を 'let' に変換する]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6516,6 +6543,42 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";File_is_CommonJS_module_because_0_does_not_have_field_type_1460" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[File is CommonJS module because '{0}' does not have field "type"]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}' にはフィールド "type" がないため、ファイルは CommonJS モジュールです]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";File_is_CommonJS_module_because_0_has_field_type_whose_value_is_not_module_1459" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[File is CommonJS module because '{0}' has field "type" whose value is not "module"]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}' にフィールド "type" があり、値が "module" ではないため、ファイルは CommonJS モジュールです。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";File_is_CommonJS_module_because_package_json_was_not_found_1461" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[File is CommonJS module because 'package.json' was not found]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA["package.json" が見つからなかったため、ファイルは CommonJS モジュールです]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";File_is_ECMAScript_module_because_0_has_field_type_with_value_module_1458" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[File is ECMAScript module because '{0}' has field "type" with value "module"]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}' には値 "module" のフィールド "type" があるため、ファイルは ECMAScript モジュールです。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";File_is_a_CommonJS_module_it_may_be_converted_to_an_ES_module_80001" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[File is a CommonJS module; it may be converted to an ES module.]]></Val>
@@ -7190,6 +7253,15 @@
           <Val><![CDATA[Identifier expected. '__esModule' is reserved as an exported marker when transforming ECMAScript modules.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[識別子が必要です。'__esModule' は、ECMAScript モジュールを変換するときのエクスポート済みマーカーとして予約されています。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Identifier_or_string_literal_expected_1478" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Identifier or string literal expected.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[識別子または文字列リテラルが必要です。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8498,10 +8570,13 @@
       </Item>
       <Item ItemId=";Module_0_cannot_be_imported_using_this_construct_The_specifier_only_resolves_to_an_ES_module_which_c_1471" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Module '{0}' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.]]></Val>
+          <Val><![CDATA[Module '{0}' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[モジュール '{0}' はこのコンストラクトではインポートできません。指定子は ES モジュールに対してのみ解決されるため、同期的にインポートすることはできません。代わりに動的インポートを使用します。]]></Val>
+            <Val><![CDATA[モジュール '{0}' はこのコンストラクトではインポートできません。指定子は ES モジュールに解決されるだけであるため、'require' でインポートすることはできません。代わりに ECMAScript インポートを使用してください。]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Module '{0}' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -10169,6 +10244,15 @@
           <Val><![CDATA[Project '{0}' is out of date because output of its dependency '{1}' has changed]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[依存関係 '{1}' の出力が変更されているため、プロジェクト '{0}' は最新の状態ではありません]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Project_0_is_out_of_date_because_there_was_error_reading_file_1_6401" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Project '{0}' is out of date because there was error reading file '{1}']]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[ファイル '{1}' の読み取り中にエラーが発生したため、プロジェクト '{0}' は最新ではありません]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12777,6 +12861,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";The_current_file_is_a_CommonJS_module_whose_imports_will_produce_require_calls_however_the_reference_1479" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("{0}")' call instead.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[現在のファイルは CommonJS モジュールであり、このインポートでは 'require' 呼び出しが生成されますが、参照ファイルは ECMAScript モジュールであるため、'require' ではインポートできません。代わりに動的な 'import("{0}")' 呼び出しを記述することを検討してください。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";The_current_host_does_not_support_the_0_option_5001" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The current host does not support the '{0}' option.]]></Val>
@@ -13749,11 +13842,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";This_module_is_declared_with_using_export_and_can_only_be_used_with_a_default_import_when_using_the__2594" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";This_module_is_declared_with_export_and_can_only_be_used_with_a_default_import_when_using_the_0_flag_2594" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[This module is declared with using 'export =', and can only be used with a default import when using the '{0}' flag.]]></Val>
+          <Val><![CDATA[This module is declared with 'export =', and can only be used with a default import when using the '{0}' flag.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[このモジュールは 'export =' を使用して宣言されていて、'{0}' フラグを使用する場合は既定のインポートでのみ使用できます。]]></Val>
+            <Val><![CDATA[このモジュールは、'export =' を使用して宣言されており、'{0}' フラグを使用する場合は既定のインポートでのみ使用できます。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13862,6 +13955,42 @@
           <Val><![CDATA[This use of 'import' is invalid. 'import()' calls can be written, but they must have parentheses and cannot have type arguments.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[この 'import' の使用は無効です。'import()' 呼び出しは書き込むことができますが、かっこが必要であり、型引数を指定することはできません。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";To_convert_this_file_to_an_ECMAScript_module_add_the_field_type_Colon_module_to_0_1482" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[To convert this file to an ECMAScript module, add the field `"type": "module"` to '{0}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[このファイルを ECMAScript モジュールに変換するには、フィールド '"type": "module"' を '{0}' に追加します。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";To_convert_this_file_to_an_ECMAScript_module_change_its_file_extension_to_0_or_add_the_field_type_Co_1481" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[To convert this file to an ECMAScript module, change its file extension to '{0}', or add the field `"type": "module"` to '{1}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[このファイルを ECMAScript モジュールに変換するには、ファイル拡張子を '{0}' に変更するか、フィールド '"type": "module"' を '{1}' に追加します。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";To_convert_this_file_to_an_ECMAScript_module_change_its_file_extension_to_0_or_create_a_local_packag_1480" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[To convert this file to an ECMAScript module, change its file extension to '{0}' or create a local package.json file with `{ "type": "module" }`.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[このファイルを ECMAScript モジュールに変換するには、ファイル拡張子を '{0}' に変更するか、'{ "type": "module" }' を含むローカルの package.json ファイルを作成します。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";To_convert_this_file_to_an_ECMAScript_module_create_a_local_package_json_file_with_type_Colon_module_1483" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[To convert this file to an ECMAScript module, create a local package.json file with `{ "type": "module" }`.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[このファイルを ECMAScript モジュールに変換するには、'{ "type": "module" }' を含むローカルの package.json ファイルを作成します。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14447,6 +14576,15 @@
           <Val><![CDATA[Type of computed property's value is '{0}', which is not assignable to type '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[計算されたプロパティの値の型は '{0}' です。これは、型 '{1}' に代入することはできません。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Type_of_instance_member_variable_0_cannot_reference_identifier_1_declared_in_the_constructor_2844" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Type of instance member variable '{0}' cannot reference identifier '{1}' declared in the constructor.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[インスタンス メンバー変数 '{0}' の型は、コンストラクターで宣言された識別子 '{1}' を参照できません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

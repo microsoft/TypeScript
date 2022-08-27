@@ -181,6 +181,7 @@ namespace ts {
         RequireKeyword,
         NumberKeyword,
         ObjectKeyword,
+        SatisfiesKeyword,
         SetKeyword,
         StringKeyword,
         SymbolKeyword,
@@ -274,6 +275,7 @@ namespace ts {
         NonNullExpression,
         MetaProperty,
         SyntheticExpression,
+        SatisfiesExpression,
 
         // Misc
         TemplateSpan,
@@ -608,6 +610,7 @@ namespace ts {
         | SyntaxKind.OverrideKeyword
         | SyntaxKind.RequireKeyword
         | SyntaxKind.ReturnKeyword
+        | SyntaxKind.SatisfiesKeyword
         | SyntaxKind.SetKeyword
         | SyntaxKind.StaticKeyword
         | SyntaxKind.StringKeyword
@@ -885,6 +888,195 @@ namespace ts {
         /* @internal */ jsDoc?: JSDoc[];                      // JSDoc that directly precedes this node
         /* @internal */ jsDocCache?: readonly JSDocTag[];     // Cache for getJSDocTags
     }
+
+    // Ideally, `ForEachChildNodes` and `VisitEachChildNodes` would not differ.
+    // However, `forEachChild` currently processes JSDoc comment syntax and missing declarations more thoroughly.
+    // On the other hand, `visitEachChild` actually processes `Identifier`s (which really *shouldn't* have children,
+    // but are constructed as if they could for faked-up `QualifiedName`s in the language service.)
+
+    /* @internal */
+    export type ForEachChildNodes =
+        | HasChildren
+        | MissingDeclaration
+        | JSDocTypeExpression
+        | JSDocNonNullableType
+        | JSDocNullableType
+        | JSDocOptionalType
+        | JSDocVariadicType
+        | JSDocFunctionType
+        | JSDoc
+        | JSDocSeeTag
+        | JSDocNameReference
+        | JSDocMemberName
+        | JSDocParameterTag
+        | JSDocPropertyTag
+        | JSDocAuthorTag
+        | JSDocImplementsTag
+        | JSDocAugmentsTag
+        | JSDocTemplateTag
+        | JSDocTypedefTag
+        | JSDocCallbackTag
+        | JSDocReturnTag
+        | JSDocTypeTag
+        | JSDocThisTag
+        | JSDocEnumTag
+        | JSDocSignature
+        | JSDocLink
+        | JSDocLinkCode
+        | JSDocLinkPlain
+        | JSDocTypeLiteral
+        | JSDocUnknownTag
+        | JSDocClassTag
+        | JSDocPublicTag
+        | JSDocPrivateTag
+        | JSDocProtectedTag
+        | JSDocReadonlyTag
+        | JSDocDeprecatedTag
+        ;
+
+    /* @internal */
+    export type VisitEachChildNodes =
+        | HasChildren
+        | Identifier
+        ;
+
+    /* @internal */
+    export type HasChildren =
+        | QualifiedName
+        | ComputedPropertyName
+        | TypeParameterDeclaration
+        | ParameterDeclaration
+        | Decorator
+        | PropertySignature
+        | PropertyDeclaration
+        | MethodSignature
+        | MethodDeclaration
+        | ConstructorDeclaration
+        | GetAccessorDeclaration
+        | SetAccessorDeclaration
+        | ClassStaticBlockDeclaration
+        | CallSignatureDeclaration
+        | ConstructSignatureDeclaration
+        | IndexSignatureDeclaration
+        | TypePredicateNode
+        | TypeReferenceNode
+        | FunctionTypeNode
+        | ConstructorTypeNode
+        | TypeQueryNode
+        | TypeLiteralNode
+        | ArrayTypeNode
+        | TupleTypeNode
+        | OptionalTypeNode
+        | RestTypeNode
+        | UnionTypeNode
+        | IntersectionTypeNode
+        | ConditionalTypeNode
+        | InferTypeNode
+        | ImportTypeNode
+        | ImportTypeAssertionContainer
+        | NamedTupleMember
+        | ParenthesizedTypeNode
+        | TypeOperatorNode
+        | IndexedAccessTypeNode
+        | MappedTypeNode
+        | LiteralTypeNode
+        | TemplateLiteralTypeNode
+        | TemplateLiteralTypeSpan
+        | ObjectBindingPattern
+        | ArrayBindingPattern
+        | BindingElement
+        | ArrayLiteralExpression
+        | ObjectLiteralExpression
+        | PropertyAccessExpression
+        | ElementAccessExpression
+        | CallExpression
+        | NewExpression
+        | TaggedTemplateExpression
+        | TypeAssertion
+        | ParenthesizedExpression
+        | FunctionExpression
+        | ArrowFunction
+        | DeleteExpression
+        | TypeOfExpression
+        | VoidExpression
+        | AwaitExpression
+        | PrefixUnaryExpression
+        | PostfixUnaryExpression
+        | BinaryExpression
+        | ConditionalExpression
+        | TemplateExpression
+        | YieldExpression
+        | SpreadElement
+        | ClassExpression
+        | ExpressionWithTypeArguments
+        | AsExpression
+        | NonNullExpression
+        | SatisfiesExpression
+        | MetaProperty
+        | TemplateSpan
+        | Block
+        | VariableStatement
+        | ExpressionStatement
+        | IfStatement
+        | DoStatement
+        | WhileStatement
+        | ForStatement
+        | ForInStatement
+        | ForOfStatement
+        | ContinueStatement
+        | BreakStatement
+        | ReturnStatement
+        | WithStatement
+        | SwitchStatement
+        | LabeledStatement
+        | ThrowStatement
+        | TryStatement
+        | VariableDeclaration
+        | VariableDeclarationList
+        | FunctionDeclaration
+        | ClassDeclaration
+        | InterfaceDeclaration
+        | TypeAliasDeclaration
+        | EnumDeclaration
+        | ModuleDeclaration
+        | ModuleBlock
+        | CaseBlock
+        | NamespaceExportDeclaration
+        | ImportEqualsDeclaration
+        | ImportDeclaration
+        | AssertClause
+        | AssertEntry
+        | ImportClause
+        | NamespaceImport
+        | NamespaceExport
+        | NamedImports
+        | ImportSpecifier
+        | ExportAssignment
+        | ExportDeclaration
+        | NamedExports
+        | ExportSpecifier
+        | ExternalModuleReference
+        | JsxElement
+        | JsxSelfClosingElement
+        | JsxOpeningElement
+        | JsxClosingElement
+        | JsxFragment
+        | JsxAttribute
+        | JsxAttributes
+        | JsxSpreadAttribute
+        | JsxExpression
+        | CaseClause
+        | DefaultClause
+        | HeritageClause
+        | CatchClause
+        | PropertyAssignment
+        | ShorthandPropertyAssignment
+        | SpreadAssignment
+        | EnumMember
+        | SourceFile
+        | PartiallyEmittedExpression
+        | CommaListExpression
+        ;
 
     export type HasJSDoc =
         | ParameterDeclaration
@@ -1485,7 +1677,7 @@ namespace ts {
         readonly initializer: Expression;
 
         // The following properties are used only to report grammar errors
-        /* @internal */ readonly decorators?: NodeArray<Decorator> | undefined; // property assignment cannot have decorators
+        /* @internal */ readonly illegalDecorators?: NodeArray<Decorator> | undefined; // property assignment cannot have decorators
         /* @internal */ readonly modifiers?: NodeArray<Modifier> | undefined; // property assignment cannot have modifiers
         /* @internal */ readonly questionToken?: QuestionToken | undefined; // property assignment cannot have a question token
         /* @internal */ readonly exclamationToken?: ExclamationToken | undefined; // property assignment cannot have an exclamation token
@@ -1501,7 +1693,7 @@ namespace ts {
         readonly objectAssignmentInitializer?: Expression;
 
         // The following properties are used only to report grammar errors
-        /* @internal */ readonly decorators?: NodeArray<Decorator> | undefined; // shorthand property assignment cannot have decorators
+        /* @internal */ readonly illegalDecorators?: NodeArray<Decorator> | undefined; // shorthand property assignment cannot have decorators
         /* @internal */ readonly modifiers?: NodeArray<Modifier> | undefined; // shorthand property assignment cannot have modifiers
         /* @internal */ readonly questionToken?: QuestionToken | undefined; // shorthand property assignment cannot have a question token
         /* @internal */ readonly exclamationToken?: ExclamationToken | undefined; // shorthand property assignment cannot have an exclamation token
@@ -1583,7 +1775,7 @@ namespace ts {
         readonly body?: FunctionBody;
 
         // The following properties are used only to report grammar errors
-        /* @internal */ readonly decorators?: NodeArray<Decorator> | undefined; // functions cannot have decorators
+        /* @internal */ readonly illegalDecorators?: NodeArray<Decorator> | undefined; // functions cannot have decorators
     }
 
     export interface MethodSignature extends SignatureDeclarationBase, TypeElement {
@@ -1620,7 +1812,7 @@ namespace ts {
         readonly body?: FunctionBody | undefined;
 
         // The following properties are used only to report grammar errors
-        /* @internal */ readonly decorators?: NodeArray<Decorator> | undefined; // A constructor cannot have decorators
+        /* @internal */ readonly illegalDecorators?: NodeArray<Decorator> | undefined; // A constructor cannot have decorators
         /* @internal */ readonly typeParameters?: NodeArray<TypeParameterDeclaration>; // A constructor cannot have type parameters
         /* @internal */ readonly type?: TypeNode; // A constructor cannot have a return type annotation
     }
@@ -1667,7 +1859,7 @@ namespace ts {
         readonly type: TypeNode;
 
         // The following properties are used only to report grammar errors
-        /* @internal */ readonly decorators?: NodeArray<Decorator> | undefined;
+        /* @internal */ readonly illegalDecorators?: NodeArray<Decorator> | undefined;
     }
 
     export interface ClassStaticBlockDeclaration extends ClassElement, JSDocContainer {
@@ -1679,7 +1871,7 @@ namespace ts {
         /* @internal */ returnFlowNode?: FlowNode;
 
         // The following properties are used only to report grammar errors
-        /* @internal */ readonly decorators?: NodeArray<Decorator> | undefined;
+        /* @internal */ readonly illegalDecorators?: NodeArray<Decorator> | undefined;
         /* @internal */ readonly modifiers?: NodeArray<Modifier> | undefined;
     }
 
@@ -2628,6 +2820,12 @@ namespace ts {
         readonly expression: UnaryExpression;
     }
 
+    export interface SatisfiesExpression extends Expression {
+        readonly kind: SyntaxKind.SatisfiesExpression;
+        readonly expression: Expression;
+        readonly type: TypeNode;
+    }
+
     export type AssertionExpression =
         | TypeAssertion
         | AsExpression
@@ -2829,7 +3027,7 @@ namespace ts {
         readonly name?: Identifier;
 
         // The following properties are used only to report grammar errors
-        /*@internal*/ decorators?: NodeArray<Decorator> | undefined;
+        /*@internal*/ illegalDecorators?: NodeArray<Decorator> | undefined;
         /*@internal*/ modifiers?: NodeArray<Modifier> | undefined;
     }
 
@@ -2852,7 +3050,7 @@ namespace ts {
         readonly declarationList: VariableDeclarationList;
 
         // The following properties are used only to report grammar errors
-        /* @internal*/ decorators?: NodeArray<Decorator> | undefined;
+        /* @internal*/ illegalDecorators?: NodeArray<Decorator> | undefined;
     }
 
     export interface ExpressionStatement extends Statement {
@@ -3066,7 +3264,7 @@ namespace ts {
         readonly members: NodeArray<TypeElement>;
 
         // The following properties are used only to report grammar errors
-        /* @internal */ readonly decorators?: NodeArray<Decorator> | undefined;
+        /* @internal */ readonly illegalDecorators?: NodeArray<Decorator> | undefined;
     }
 
     export interface HeritageClause extends Node {
@@ -3084,7 +3282,7 @@ namespace ts {
         readonly type: TypeNode;
 
         // The following properties are used only to report grammar errors
-        /* @internal */ readonly decorators?: NodeArray<Decorator> | undefined;
+        /* @internal */ readonly illegalDecorators?: NodeArray<Decorator> | undefined;
     }
 
     export interface EnumMember extends NamedDeclaration, JSDocContainer {
@@ -3103,7 +3301,7 @@ namespace ts {
         readonly members: NodeArray<EnumMember>;
 
         // The following properties are used only to report grammar errors
-        /* @internal */ readonly decorators?: NodeArray<Decorator> | undefined;
+        /* @internal */ readonly illegalDecorators?: NodeArray<Decorator> | undefined;
     }
 
     export type ModuleName =
@@ -3129,7 +3327,7 @@ namespace ts {
         readonly body?: ModuleBody | JSDocNamespaceDeclaration;
 
         // The following properties are used only to report grammar errors
-        /* @internal */ readonly decorators?: NodeArray<Decorator> | undefined;
+        /* @internal */ readonly illegalDecorators?: NodeArray<Decorator> | undefined;
     }
 
     export type NamespaceBody =
@@ -3180,7 +3378,7 @@ namespace ts {
         readonly moduleReference: ModuleReference;
 
         // The following properties are used only to report grammar errors
-        /* @internal */ readonly decorators?: NodeArray<Decorator> | undefined;
+        /* @internal */ readonly illegalDecorators?: NodeArray<Decorator> | undefined;
     }
 
     export interface ExternalModuleReference extends Node {
@@ -3203,7 +3401,7 @@ namespace ts {
         readonly assertClause?: AssertClause;
 
         // The following properties are used only to report grammar errors
-        /* @internal */ readonly decorators?: NodeArray<Decorator> | undefined;
+        /* @internal */ readonly illegalDecorators?: NodeArray<Decorator> | undefined;
     }
 
     export type NamedImportBindings =
@@ -3263,7 +3461,7 @@ namespace ts {
         readonly name: Identifier;
 
         // The following properties are used only to report grammar errors
-        /* @internal */ readonly decorators?: NodeArray<Decorator> | undefined;
+        /* @internal */ readonly illegalDecorators?: NodeArray<Decorator> | undefined;
         /* @internal */ readonly modifiers?: NodeArray<Modifier> | undefined;
     }
 
@@ -3279,7 +3477,7 @@ namespace ts {
         readonly assertClause?: AssertClause;
 
         // The following properties are used only to report grammar errors
-        /* @internal */ readonly decorators?: NodeArray<Decorator> | undefined;
+        /* @internal */ readonly illegalDecorators?: NodeArray<Decorator> | undefined;
     }
 
     export interface NamedImports extends Node {
@@ -3344,7 +3542,7 @@ namespace ts {
         readonly expression: Expression;
 
         // The following properties are used only to report grammar errors
-        /* @internal */ readonly decorators?: NodeArray<Decorator> | undefined;
+        /* @internal */ readonly illegalDecorators?: NodeArray<Decorator> | undefined;
     }
 
     export interface FileReference extends TextRange {
@@ -3805,6 +4003,8 @@ namespace ts {
          * CommonJS-output-format by the node module transformer and type checker, regardless of extension or context.
          */
         impliedNodeFormat?: ModuleKind.ESNext | ModuleKind.CommonJS;
+        /*@internal*/ packageJsonLocations?: readonly string[];
+        /*@internal*/ packageJsonScope?: PackageJsonInfo;
 
         /* @internal */ scriptKind: ScriptKind;
 
@@ -4373,6 +4573,7 @@ namespace ts {
         /* @internal */ getTypeOfPropertyOfType(type: Type, propertyName: string): Type | undefined;
         getIndexInfoOfType(type: Type, kind: IndexKind): IndexInfo | undefined;
         getIndexInfosOfType(type: Type): readonly IndexInfo[];
+        getIndexInfosOfIndexSymbol: (indexSymbol: Symbol) => IndexInfo[];
         getSignaturesOfType(type: Type, kind: SignatureKind): readonly Signature[];
         getIndexTypeOfType(type: Type, kind: IndexKind): Type | undefined;
         /* @internal */ getIndexType(type: Type): Type;
@@ -4410,6 +4611,8 @@ namespace ts {
         symbolToEntityName(symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined): EntityName | undefined;
         /** Note that the resulting nodes cannot be checked. */
         symbolToExpression(symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined): Expression | undefined;
+        /** Note that the resulting nodes cannot be checked. */
+        /* @internal */ symbolToNode(symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined): Node | undefined;
         /** Note that the resulting nodes cannot be checked. */
         symbolToTypeParameterDeclarations(symbol: Symbol, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined): NodeArray<TypeParameterDeclaration> | undefined;
         /** Note that the resulting nodes cannot be checked. */
@@ -4688,6 +4891,7 @@ namespace ts {
         AllowEmptyTuple                         = 1 << 19,
         AllowUniqueESSymbolType                 = 1 << 20,
         AllowEmptyIndexInfoType                 = 1 << 21,
+        /* @internal */ WriteComputedProps      = 1 << 30, // { [E.A]: 1 }
 
         // Errors (cont.)
         AllowNodeModulesRelativePaths           = 1 << 26,
@@ -4746,27 +4950,30 @@ namespace ts {
     }
 
     export const enum SymbolFormatFlags {
-        None = 0x00000000,
+        None                                    = 0,
 
         // Write symbols's type argument if it is instantiated symbol
         // eg. class C<T> { p: T }   <-- Show p as C<T>.p here
         //     var a: C<number>;
         //     var p = a.p; <--- Here p is property of C<number> so show it as C<number>.p instead of just C.p
-        WriteTypeParametersOrArguments = 0x00000001,
+        WriteTypeParametersOrArguments          = 1 << 0,
 
         // Use only external alias information to get the symbol name in the given context
         // eg.  module m { export class c { } } import x = m.c;
         // When this flag is specified m.c will be used to refer to the class instead of alias symbol x
-        UseOnlyExternalAliasing = 0x00000002,
+        UseOnlyExternalAliasing                 = 1 << 1,
 
         // Build symbol name using any nodes needed, instead of just components of an entity name
-        AllowAnyNodeKind = 0x00000004,
+        AllowAnyNodeKind                        = 1 << 2,
 
         // Prefer aliases which are not directly visible
-        UseAliasDefinedOutsideCurrentScope = 0x00000008,
+        UseAliasDefinedOutsideCurrentScope      = 1 << 3,
+
+        // { [E.A]: 1 }
+        /* @internal */ WriteComputedProps      = 1 << 4,
 
         // Skip building an accessible symbol chain
-        /* @internal */ DoNotIncludeSymbolChain = 0x00000010,
+        /* @internal */ DoNotIncludeSymbolChain = 1 << 5,
     }
 
     /* @internal */
@@ -5183,6 +5390,7 @@ namespace ts {
         isConstructorDeclaredProperty?: boolean;    // Property declared through 'this.x = ...' assignment in constructor
         tupleLabelDeclaration?: NamedTupleMember | ParameterDeclaration; // Declaration associated with the tuple's label
         accessibleChainCache?: ESMap<string, Symbol[] | undefined>;
+        filteredIndexSymbolCache?: ESMap<string, Symbol> //Symbol with applicable declarations
     }
 
     /* @internal */
@@ -5943,8 +6151,8 @@ namespace ts {
     // types disappear upon instantiation (just like type parameters).
     export interface SubstitutionType extends InstantiableType {
         objectFlags: ObjectFlags;
-        baseType: Type;     // Target type
-        substitute: Type;   // Type to substitute for type parameter
+        baseType: Type;    // Target type
+        constraint: Type;  // Constraint that target type is known to satisfy
     }
 
     /* @internal */
@@ -7047,10 +7255,9 @@ namespace ts {
         ContainsPossibleTopLevelAwait = 1 << 26,
         ContainsLexicalSuper = 1 << 27,
         ContainsUpdateExpressionForIdentifier = 1 << 28,
-        // Please leave this as 1 << 29.
-        // It is the maximum bit we can set before we outgrow the size of a v8 small integer (SMI) on an x86 system.
-        // It is a good reminder of how much room we have left
-        HasComputedFlags = 1 << 29, // Transform flags have been computed.
+        ContainsPrivateIdentifierInExpression = 1 << 29,
+
+        HasComputedFlags = 1 << 31, // Transform flags have been computed.
 
         // Assertions
         // - Bitmasks that are used to assert facts about the syntax of a node and its subtree.
@@ -7329,6 +7536,7 @@ namespace ts {
     export type OuterExpression =
         | ParenthesizedExpression
         | TypeAssertion
+        | SatisfiesExpression
         | AsExpression
         | NonNullExpression
         | PartiallyEmittedExpression;
@@ -7352,7 +7560,7 @@ namespace ts {
         parenthesizeBranchOfConditionalExpression(branch: Expression): Expression;
         parenthesizeExpressionOfExportDefault(expression: Expression): Expression;
         parenthesizeExpressionOfNew(expression: Expression): LeftHandSideExpression;
-        parenthesizeLeftSideOfAccess(expression: Expression): LeftHandSideExpression;
+        parenthesizeLeftSideOfAccess(expression: Expression, optionalChain?: boolean): LeftHandSideExpression;
         parenthesizeOperandOfPostfixUnary(operand: Expression): LeftHandSideExpression;
         parenthesizeOperandOfPrefixUnary(operand: Expression): UnaryExpression;
         parenthesizeExpressionsOfCommaDelimitedList(elements: readonly Expression[]): NodeArray<Expression>;
@@ -7665,6 +7873,8 @@ namespace ts {
         updateNonNullChain(node: NonNullChain, expression: Expression): NonNullChain;
         createMetaProperty(keywordToken: MetaProperty["keywordToken"], name: Identifier): MetaProperty;
         updateMetaProperty(node: MetaProperty, name: Identifier): MetaProperty;
+        createSatisfiesExpression(expression: Expression, type: TypeNode): SatisfiesExpression;
+        updateSatisfiesExpression(node: SatisfiesExpression, expression: Expression, type: TypeNode): SatisfiesExpression;
 
         //
         // Misc
