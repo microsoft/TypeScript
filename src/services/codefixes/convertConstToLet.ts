@@ -7,28 +7,51 @@ namespace ts.codefix {
         errorCodes,
         getCodeActions: function getCodeActionsToConvertConstToLet(context) {
             const { sourceFile, span, program } = context;
-            const range = getConstTokenRange(sourceFile, span.start, program);
-            if (range === undefined) return;
+            const info = getInfo(sourceFile, span.start, program);
+            if (info === undefined) return;
 
-            const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, range));
-            return [createCodeFixAction(fixId, changes, Diagnostics.Convert_const_to_let, fixId, Diagnostics.Convert_const_to_let)];
+            const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, info.token));
+            return [createCodeFixActionMaybeFixAll(fixId, changes, Diagnostics.Convert_const_to_let, fixId, Diagnostics.Convert_all_const_to_let)];
+        },
+        getAllCodeActions: context => {
+            const { program } = context;
+            const seen = new Map<number, true>();
+
+            return createCombinedCodeActions(textChanges.ChangeTracker.with(context, changes => {
+                eachDiagnostic(context, errorCodes, diag => {
+                    const info = getInfo(diag.file, diag.start, program);
+                    if (info) {
+                        if (addToSeen(seen, getSymbolId(info.symbol))) {
+                            return doChange(changes, diag.file, info.token);
+                        }
+                    }
+                    return undefined;
+                });
+            }));
         },
         fixIds: [fixId]
     });
 
-    function getConstTokenRange(sourceFile: SourceFile, pos: number, program: Program) {
+    interface Info {
+        symbol: Symbol;
+        token: Token<SyntaxKind.ConstKeyword>;
+    }
+
+    function getInfo(sourceFile: SourceFile, pos: number, program: Program): Info | undefined {
         const checker = program.getTypeChecker();
         const symbol = checker.getSymbolAtLocation(getTokenAtPosition(sourceFile, pos));
+        if (symbol === undefined) return;
+
         const declaration = tryCast(symbol?.valueDeclaration?.parent, isVariableDeclarationList);
         if (declaration === undefined) return;
 
-        const constToken = findChildOfKind(declaration, SyntaxKind.ConstKeyword, sourceFile);
+        const constToken = findChildOfKind<Token<SyntaxKind.ConstKeyword>>(declaration, SyntaxKind.ConstKeyword, sourceFile);
         if (constToken === undefined) return;
 
-        return createRange(constToken.pos, constToken.end);
+        return { symbol, token: constToken };
     }
 
-    function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, range: TextRange) {
-        changes.replaceRangeWithText(sourceFile, range, "let");
+    function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, token: Token<SyntaxKind.ConstKeyword>) {
+        changes.replaceNode(sourceFile, token, factory.createToken(SyntaxKind.LetKeyword));
     }
 }

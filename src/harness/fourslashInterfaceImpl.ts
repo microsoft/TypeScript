@@ -541,6 +541,10 @@ namespace FourSlashInterface {
             this.state.verifySyntacticClassifications(classifications);
         }
 
+        public encodedSyntacticClassificationsLength(length: number) {
+            this.state.verifyEncodedSyntacticClassificationsLength(length);
+        }
+
         public encodedSemanticClassificationsLength(format: ts.SemanticClassificationFormat, length: number) {
             this.state.verifyEncodedSemanticClassificationsLength(format, length);
         }
@@ -1384,6 +1388,7 @@ namespace FourSlashInterface {
             "package",
             "readonly",
             "return",
+            "satisfies",
             "string",
             "super",
             "switch",
@@ -1499,6 +1504,7 @@ namespace FourSlashInterface {
             "null",
             "package",
             "return",
+            "satisfies",
             "super",
             "switch",
             "this",
@@ -1597,6 +1603,7 @@ namespace FourSlashInterface {
             "package",
             "readonly",
             "return",
+            "satisfies",
             "string",
             "super",
             "switch",
@@ -1651,6 +1658,7 @@ namespace FourSlashInterface {
             "null",
             "package",
             "return",
+            "satisfies",
             "super",
             "switch",
             "this",

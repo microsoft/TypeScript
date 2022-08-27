@@ -965,7 +965,7 @@ namespace ts {
         if (typeof value === "number") {
             return factory.createNumericLiteral(value);
         }
-        // eslint-disable-next-line no-in-operator
+        // eslint-disable-next-line local/no-in-operator
         if (typeof value === "object" && "base10Value" in value) { // PseudoBigInt
             return factory.createBigIntLiteral(value);
         }
