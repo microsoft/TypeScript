@@ -3564,7 +3564,7 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Class_constructor_may_not_be_a_generator_1360" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Class_constructor_may_not_be_a_generator_1368" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Class constructor may not be a generator.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
@@ -13644,20 +13644,17 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";This_comparison_appears_to_be_unintentional_because_the_types_0_and_1_have_no_overlap_2367" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This comparison appears to be unintentional because the types '{0}' and '{1}' have no overlap.]]></Val>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";This_condition_will_always_return_0_since_JavaScript_compares_objects_by_reference_not_value_2839" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[This condition will always return '{0}' since JavaScript compares objects by reference, not value.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[此条件将始终返回“{0}”，因为 JavaScript 按引用而不是值比较对象。]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";This_condition_will_always_return_0_since_the_types_1_and_2_have_no_overlap_2367" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[This condition will always return '{0}' since the types '{1}' and '{2}' have no overlap.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[此条件将始终返回 "{0}"，因为类型 "{1}" 和 "{2}" 没有重叠。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14130,6 +14127,12 @@
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[类型“{0}”不满足约束“{1}”。]]></Val>
           </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Type_0_does_not_satisfy_the_expected_type_1_1360" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Type '{0}' does not satisfy the expected type '{1}'.]]></Val>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -14832,6 +14835,12 @@
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[======== 类型引用指令 "{0}" 已成功解析为 "{1}" ，包 ID 为 "{2}"，主要: {3}。========]]></Val>
           </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Type_satisfaction_expressions_can_only_be_used_in_TypeScript_files_8037" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Type satisfaction expressions can only be used in TypeScript files.]]></Val>
         </Str>
         <Disp Icon="Str" />
       </Item>
