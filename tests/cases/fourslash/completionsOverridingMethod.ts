@@ -123,7 +123,7 @@ verify.completions({
     includes: [
         {
             name: "foo",
-            sortText: completion.SortText.LocationPriority,
+            sortText: completion.SortText.ClassMemberSnippets,
             insertText: "foo(param1: string, param2: boolean): Promise<void> {\n}",
         }
     ],
@@ -140,7 +140,7 @@ verify.completions({
     includes: [
         {
             name: "foo",
-            sortText: completion.SortText.LocationPriority,
+            sortText: completion.SortText.ClassMemberSnippets,
             insertText: "foo(a: string, b: string): string {\n}",
         }
     ],
@@ -157,7 +157,7 @@ verify.completions({
     includes: [
         {
             name: "foo",
-            sortText: completion.SortText.LocationPriority,
+            sortText: completion.SortText.ClassMemberSnippets,
             insertText: "foo(a: string): string {\n}",
         }
     ],
@@ -174,7 +174,7 @@ verify.completions({
     includes: [
         {
             name: "foo",
-            sortText: completion.SortText.LocationPriority,
+            sortText: completion.SortText.ClassMemberSnippets,
             insertText: "foo(a: string): string {\n}",
         }
     ],
@@ -191,7 +191,7 @@ verify.completions({
     includes: [
         {
             name: "foo",
-            sortText: completion.SortText.LocationPriority,
+            sortText: completion.SortText.ClassMemberSnippets,
             insertText: "foo(a: string): string {\n}",
         }
     ],
@@ -208,7 +208,7 @@ verify.completions({
     includes: [
         {
             name: "foo",
-            sortText: completion.SortText.LocationPriority,
+            sortText: completion.SortText.ClassMemberSnippets,
             insertText: "foo(a: string): string {\n}",
         }
     ],
@@ -225,7 +225,7 @@ verify.completions({
     includes: [
         {
             name: "foo",
-            sortText: completion.SortText.LocationPriority,
+            sortText: completion.SortText.ClassMemberSnippets,
             insertText:
 `foo(a: string): string;
 foo(a: undefined, b: number): string;
@@ -256,7 +256,7 @@ verify.completions({
     includes: [
         {
             name: "met",
-            sortText: completion.SortText.LocationPriority,
+            sortText: completion.SortText.ClassMemberSnippets,
             replacementSpan: test.ranges()[0],
             insertText: "static met(n: number): number {\n}",
         }
@@ -274,12 +274,12 @@ verify.completions({
     includes: [
         {
             name: "met",
-            sortText: completion.SortText.LocationPriority,
+            sortText: completion.SortText.ClassMemberSnippets,
             insertText: "met<T>(t: T): T {\n}",
         },
         {
             name: "metcons",
-            sortText: completion.SortText.LocationPriority,
+            sortText: completion.SortText.ClassMemberSnippets,
             insertText: "metcons<T extends string | number>(t: T): T {\n}",
         }
     ],

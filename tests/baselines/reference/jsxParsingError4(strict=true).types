@@ -10,22 +10,22 @@ declare namespace JSX {
 }
 
 const a = (
->a : any
->(  <public-foo></public-foo>) : any
+>a : error
+>(  <public-foo></public-foo>) : error
 
   <public-foo></public-foo>
-><public-foo></public-foo> : any
+><public-foo></public-foo> : error
 >public-foo : any
 >public-foo : any
 
 );
 
 const b = (
->b : any
->(  <public></public>) : any
+>b : error
+>(  <public></public>) : error
 
   <public></public>
-><public></public> : any
+><public></public> : error
 >public : any
 >public : any
 

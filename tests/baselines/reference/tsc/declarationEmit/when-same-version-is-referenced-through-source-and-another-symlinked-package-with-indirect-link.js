@@ -155,7 +155,7 @@ plugin-one/node_modules/typescript-fsa/index.d.ts
   Imported via "typescript-fsa" from file 'plugin-one/index.ts' with packageId 'typescript-fsa/index.d.ts@3.0.0-beta-2'
   File redirects to file 'plugin-two/node_modules/typescript-fsa/index.d.ts'
 plugin-one/index.ts
-  Matched by include pattern '**/*' in 'plugin-one/tsconfig.json'
+  Matched by default include pattern '**/*'
 
 
 Program root files: ["/user/username/projects/myproject/plugin-one/index.ts"]

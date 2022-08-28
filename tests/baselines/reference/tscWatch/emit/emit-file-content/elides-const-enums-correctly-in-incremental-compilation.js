@@ -81,7 +81,7 @@ exports.__esModule = true;
 //// [/user/someone/projects/myproject/file3.js]
 "use strict";
 exports.__esModule = true;
-var v = 1 /* V */;
+var v = 1 /* E2.V */;
 
 
 
@@ -134,7 +134,7 @@ exitCode:: ExitStatus.undefined
 //// [/user/someone/projects/myproject/file3.js]
 "use strict";
 exports.__esModule = true;
-var v = 1 /* V */;
+var v = 1 /* E2.V */;
 function foo2() { return 2; }
 
 

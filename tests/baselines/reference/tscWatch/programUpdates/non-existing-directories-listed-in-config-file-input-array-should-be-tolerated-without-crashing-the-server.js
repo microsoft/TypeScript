@@ -45,18 +45,18 @@ No shapes updated in the builder::
 WatchedFiles::
 /a/b/tsconfig.json:
   {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
+/a/b/node_modules/@types:
+  {"fileName":"/a/b/node_modules/@types","pollingInterval":500}
+/a/b/app:
+  {"fileName":"/a/b/app","pollingInterval":500}
+/a/b/test:
+  {"fileName":"/a/b/test","pollingInterval":500}
+/a/b/something:
+  {"fileName":"/a/b/something","pollingInterval":500}
 
 FsWatches::
-/a/b/app:
-  {"directoryName":"/a/b/app","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 FsWatchesRecursive::
-/a/b/node_modules/@types:
-  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/a/b/test:
-  {"directoryName":"/a/b/test","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/a/b/something:
-  {"directoryName":"/a/b/something","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 

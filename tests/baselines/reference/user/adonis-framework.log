@@ -35,18 +35,18 @@ node_modules/adonis-framework/src/Config/index.js(39,15): error TS2304: Cannot f
 node_modules/adonis-framework/src/Config/index.js(58,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Encryption/index.js(53,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Encryption/index.js(71,34): error TS2769: No overload matches this call.
-  Overload 1 of 4, '(data: ArrayBufferView, input_encoding: undefined, output_encoding: Encoding): string', gave the following error.
+  Overload 1 of 4, '(data: ArrayBufferView, inputEncoding: undefined, outputEncoding: Encoding): string', gave the following error.
     Argument of type 'string' is not assignable to parameter of type 'undefined'.
-  Overload 2 of 4, '(data: string, input_encoding: Encoding | undefined, output_encoding: Encoding): string', gave the following error.
+  Overload 2 of 4, '(data: string, inputEncoding: Encoding | undefined, outputEncoding: Encoding): string', gave the following error.
     Argument of type 'string' is not assignable to parameter of type 'Encoding | undefined'.
 node_modules/adonis-framework/src/Encryption/index.js(77,27): error TS2322: Type 'string' is not assignable to type 'Buffer'.
 node_modules/adonis-framework/src/Encryption/index.js(77,50): error TS2345: Argument of type 'Buffer' is not assignable to parameter of type 'string'.
 node_modules/adonis-framework/src/Encryption/index.js(85,23): error TS8024: JSDoc '@param' tag has name 'value', but there is no parameter with that name.
 node_modules/adonis-framework/src/Encryption/index.js(87,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Encryption/index.js(101,21): error TS2769: No overload matches this call.
-  Overload 1 of 4, '(data: ArrayBufferView, input_encoding: undefined, output_encoding: Encoding): string', gave the following error.
+  Overload 1 of 4, '(data: ArrayBufferView, inputEncoding: undefined, outputEncoding: Encoding): string', gave the following error.
     Argument of type '"base64"' is not assignable to parameter of type 'undefined'.
-  Overload 2 of 4, '(data: string, input_encoding: Encoding | undefined, output_encoding: Encoding): string', gave the following error.
+  Overload 2 of 4, '(data: string, inputEncoding: Encoding | undefined, outputEncoding: Encoding): string', gave the following error.
     Argument of type 'string' is not assignable to parameter of type 'Encoding'.
 node_modules/adonis-framework/src/Encryption/index.js(102,5): error TS2322: Type 'string' is not assignable to type 'Buffer & string'.
   Type 'string' is not assignable to type 'Buffer'.
@@ -63,11 +63,11 @@ node_modules/adonis-framework/src/Env/index.js(54,15): error TS2304: Cannot find
 node_modules/adonis-framework/src/Env/index.js(56,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Env/index.js(80,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Event/index.js(13,21): error TS2307: Cannot find module 'adonis-fold' or its corresponding type declarations.
-node_modules/adonis-framework/src/Event/index.js(128,12): error TS2740: Type '() => {}[]' is missing the following properties from type 'any[]': pop, push, concat, join, and 27 more.
+node_modules/adonis-framework/src/Event/index.js(128,12): error TS2322: Type '() => {}[]' is not assignable to type 'any[]'.
 node_modules/adonis-framework/src/Event/index.js(153,25): error TS2339: Property 'wildcard' does not exist on type 'EventEmitter2'.
 node_modules/adonis-framework/src/Event/index.js(188,17): error TS2304: Cannot find name 'Spread'.
-node_modules/adonis-framework/src/Event/index.js(201,27): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'any[]'.
-  Type 'IArguments' is missing the following properties from type 'any[]': pop, push, concat, join, and 26 more.
+node_modules/adonis-framework/src/Event/index.js(201,27): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'Spread[]'.
+  Type 'IArguments' is missing the following properties from type 'Spread[]': pop, push, concat, join, and 27 more.
 node_modules/adonis-framework/src/Event/index.js(207,24): error TS2304: Cannot find name 'Sring'.
 node_modules/adonis-framework/src/Event/index.js(256,52): error TS2345: Argument of type 'Function' is not assignable to parameter of type 'Listener'.
   Type 'Function' provides no match for the signature '(...values: any[]): void'.
@@ -91,6 +91,7 @@ node_modules/adonis-framework/src/Exceptions/index.js(164,14): error TS1056: Acc
 node_modules/adonis-framework/src/Exceptions/index.js(178,21): error TS2554: Expected 0 arguments, but got 3.
 node_modules/adonis-framework/src/Exceptions/index.js(191,21): error TS2554: Expected 0 arguments, but got 3.
 node_modules/adonis-framework/src/Exceptions/index.js(205,21): error TS2554: Expected 0 arguments, but got 3.
+node_modules/adonis-framework/src/File/index.js(139,22): error TS2345: Argument of type 'unknown' is not assignable to parameter of type 'string'.
 node_modules/adonis-framework/src/File/index.js(175,5): error TS2322: Type 'Promise<any>' is not assignable to type 'boolean'.
 node_modules/adonis-framework/src/File/index.js(273,5): error TS2322: Type 'string | boolean' is not assignable to type 'boolean'.
   Type 'string' is not assignable to type 'boolean'.
@@ -141,7 +142,7 @@ node_modules/adonis-framework/src/Response/index.js(299,15): error TS2304: Canno
 node_modules/adonis-framework/src/Response/index.js(323,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Route/ResourceCollection.js(39,11): error TS1359: Identifier expected. 'this' is a reserved word that cannot be used here.
 node_modules/adonis-framework/src/Route/ResourceCollection.js(43,40): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'any[]'.
-  Type 'IArguments' is missing the following properties from type 'any[]': pop, push, concat, join, and 26 more.
+  Type 'IArguments' is missing the following properties from type 'any[]': pop, push, concat, join, and 27 more.
 node_modules/adonis-framework/src/Route/ResourceCollection.js(56,31): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'any[]'.
 node_modules/adonis-framework/src/Route/ResourceMember.js(39,11): error TS1359: Identifier expected. 'this' is a reserved word that cannot be used here.
 node_modules/adonis-framework/src/Route/ResourceMember.js(43,40): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'any[]'.
@@ -166,7 +167,7 @@ node_modules/adonis-framework/src/Route/index.js(343,33): error TS2345: Argument
 node_modules/adonis-framework/src/Route/index.js(354,20): error TS2694: Namespace 'Route' has no exported member 'Group'.
 node_modules/adonis-framework/src/Route/index.js(368,3): error TS2322: Type 'null' is not assignable to type 'string'.
 node_modules/adonis-framework/src/Route/index.js(396,63): error TS2554: Expected 2 arguments, but got 3.
-node_modules/adonis-framework/src/Route/index.js(407,20): error TS2694: Namespace 'Route' has no exported member 'resources'.
+node_modules/adonis-framework/src/Route/index.js(407,14): error TS2749: 'Route.resources' refers to a value, but is being used as a type here. Did you mean 'typeof Route.resources'?
 node_modules/adonis-framework/src/Route/index.js(501,42): error TS2345: Argument of type 'boolean | undefined' is not assignable to parameter of type 'boolean'.
   Type 'undefined' is not assignable to type 'boolean'.
 node_modules/adonis-framework/src/Route/resource.js(92,25): error TS2345: Argument of type 'string[]' is not assignable to parameter of type 'string'.
@@ -183,7 +184,7 @@ node_modules/adonis-framework/src/Route/resource.js(209,45): error TS2345: Argum
 node_modules/adonis-framework/src/Route/resource.js(233,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Route/resource.js(261,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Route/resource.js(286,11): error TS1359: Identifier expected. 'this' is a reserved word that cannot be used here.
-node_modules/adonis-framework/src/Route/resource.js(290,40): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '[any, ...any[]]'.
+node_modules/adonis-framework/src/Route/resource.js(290,40): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '[Mixed, ...any[]]'.
 node_modules/adonis-framework/src/Route/resource.js(296,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Route/resource.js(314,62): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'any[]'.
 node_modules/adonis-framework/src/Server/helpers.js(17,29): error TS8024: JSDoc '@param' tag has name 'appNamespace', but there is no parameter with that name.

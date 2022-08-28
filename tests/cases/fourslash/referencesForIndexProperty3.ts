@@ -3,13 +3,13 @@
 // References to a property of the apparent type using string indexer
 
 ////interface Object {
-////    [|[|{| "isDefinition": true, "contextRangeIndex": 0 |}toMyString|]();|]
+////    /*1*/toMyString();
 ////}
 ////
 ////var y: Object;
-////y.[|toMyString|]();
+////y./*2*/toMyString();
 ////
 ////var x = {};
-////x["[|toMyString|]"]();
+////x["/*3*/toMyString"]();
 
-verify.singleReferenceGroup("(method) Object.toMyString(): any", "toMyString");
+verify.baselineFindAllReferences('1', '2', '3');

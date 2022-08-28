@@ -31,7 +31,7 @@ Project '/a/b/tsconfig.json' (Configured)
 	../lib/lib.d.ts
 	  Default library for target 'es3'
 	app.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 
 -----------------------------------------------
 event:

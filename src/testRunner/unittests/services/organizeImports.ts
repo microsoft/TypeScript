@@ -679,23 +679,6 @@ import "lib1";
                 { path: "/lib1.ts", content: "" },
                 { path: "/lib2.ts", content: "" });
 
-                testOrganizeImports("SortComments",
-                /*skipDestructiveCodeActions*/ false,
-                {
-                    path: "/test.ts",
-                    content: `
-// Header
-import "lib3";
-// Comment2
-import "lib2";
-// Comment1
-import "lib1";
-`,
-                },
-                { path: "/lib1.ts", content: "" },
-                { path: "/lib2.ts", content: "" },
-                { path: "/lib3.ts", content: "" });
-
             testOrganizeImports("AmbientModule",
                 /*skipDestructiveCodeActions*/ false,
                 {

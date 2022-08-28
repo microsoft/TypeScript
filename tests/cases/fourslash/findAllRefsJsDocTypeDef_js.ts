@@ -5,16 +5,16 @@
 // @allowJs: true
 
 // @Filename: /a.js
-/////** [|@typedef {number} [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}T|]|] */
+/////** /*1*/@typedef {number} /*2*/T */
 ////
 /////**
-//// * @return {[|T|]}
+//// * @return {/*3*/T}
 //// */
 ////function f(obj) { return 0; }
 ////
 /////**
-//// * @return {[|T|]}
+//// * @return {/*4*/T}
 //// */
 ////function f2(obj) { return 0; }
 
-verify.singleReferenceGroup("type T = number", "T");
+verify.baselineFindAllReferences('1', '2', '3', '4');

@@ -132,11 +132,11 @@ enum E13 {
 
     postColonValueComma: 2,
 >postColonValueComma : E13.postColonValueComma
->2 : typeof E13["2"]
+>2 : (typeof E13)["2"]
 
     postColonValueSemicolon: 3;
 >postColonValueSemicolon : E13.postColonValueSemicolon
->3 : typeof E13["3"]
+>3 : (typeof E13)["3"]
 
 };
 
@@ -146,7 +146,7 @@ enum E14 { a, b: any "hello" += 1, c, d}
 >b : E14.b
 >any : E14.any
 >"hello" : E14.hello
->1 : typeof E14["1"]
+>1 : (typeof E14)["1"]
 >c : E14.c
 >d : E14.d
 

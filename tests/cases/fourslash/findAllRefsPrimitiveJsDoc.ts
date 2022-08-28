@@ -3,9 +3,9 @@
 /// <reference path='fourslash.ts'/>
 
 /////**
-//// * @param {[|number|]} n
-//// * @returns {[|number|]}
+//// * @param {/*1*/number} n
+//// * @returns {/*2*/number}
 //// */
-////function f(n: [|number|]): [|number|] {}
+////function f(n: /*3*/number): /*4*/number {}
 
-verify.singleReferenceGroup("number");
+verify.baselineFindAllReferences('1', '2', '3', '4');

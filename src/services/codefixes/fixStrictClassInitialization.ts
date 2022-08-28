@@ -67,9 +67,9 @@ namespace ts.codefix {
     }
 
     function addDefiniteAssignmentAssertion(changeTracker: textChanges.ChangeTracker, propertyDeclarationSourceFile: SourceFile, propertyDeclaration: PropertyDeclaration): void {
+        suppressLeadingAndTrailingTrivia(propertyDeclaration);
         const property = factory.updatePropertyDeclaration(
             propertyDeclaration,
-            propertyDeclaration.decorators,
             propertyDeclaration.modifiers,
             propertyDeclaration.name,
             factory.createToken(SyntaxKind.ExclamationToken),
@@ -108,9 +108,9 @@ namespace ts.codefix {
     }
 
     function addInitializer(changeTracker: textChanges.ChangeTracker, propertyDeclarationSourceFile: SourceFile, propertyDeclaration: PropertyDeclaration, initializer: Expression): void {
+        suppressLeadingAndTrailingTrivia(propertyDeclaration);
         const property = factory.updatePropertyDeclaration(
             propertyDeclaration,
-            propertyDeclaration.decorators,
             propertyDeclaration.modifiers,
             propertyDeclaration.name,
             propertyDeclaration.questionToken,

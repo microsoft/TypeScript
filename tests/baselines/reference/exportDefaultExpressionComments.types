@@ -1,0 +1,7 @@
+=== tests/cases/conformance/declarationEmit/exportDefaultExpressionComments.ts ===
+/**
+ * JSDoc Comments
+ */
+export default null
+>null : null
+

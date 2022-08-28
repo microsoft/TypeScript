@@ -35,8 +35,9 @@ namespace ts.BreakpointResolver {
         return spanInNode(tokenAtLocation);
 
         function textSpan(startNode: Node, endNode?: Node) {
-            const start = startNode.decorators ?
-                skipTrivia(sourceFile.text, startNode.decorators.end) :
+            const lastDecorator = canHaveDecorators(startNode) ? findLast(startNode.modifiers, isDecorator) : undefined;
+            const start = lastDecorator ?
+                skipTrivia(sourceFile.text, lastDecorator.end) :
                 startNode.getStart(sourceFile);
             return createTextSpanFromBounds(start, (endNode || startNode).getEnd());
         }
@@ -52,8 +53,18 @@ namespace ts.BreakpointResolver {
             return spanInNode(otherwiseOnNode);
         }
 
-        function spanInNodeArray<T extends Node>(nodeArray: NodeArray<T>) {
-            return createTextSpanFromBounds(skipTrivia(sourceFile.text, nodeArray.pos), nodeArray.end);
+        function spanInNodeArray<T extends Node>(nodeArray: NodeArray<T> | undefined, node: T, match: (value: Node) => boolean) {
+            if (nodeArray) {
+                const index = nodeArray.indexOf(node);
+                if (index >= 0) {
+                    let start = index;
+                    let end = index + 1;
+                    while (start > 0 && match(nodeArray[start - 1])) start--;
+                    while (end < nodeArray.length && match(nodeArray[end])) end++;
+                    return createTextSpanFromBounds(skipTrivia(sourceFile.text, nodeArray[start].pos), nodeArray[end - 1].end);
+                }
+            }
+            return textSpan(node);
         }
 
         function spanInPreviousNode(node: Node): TextSpan | undefined {
@@ -197,7 +208,7 @@ namespace ts.BreakpointResolver {
                         return spanInNode((node as WithStatement).statement);
 
                     case SyntaxKind.Decorator:
-                        return spanInNodeArray(parent.decorators!);
+                        return spanInNodeArray((parent as HasDecorators).modifiers, node, isDecorator);
 
                     case SyntaxKind.ObjectBindingPattern:
                     case SyntaxKind.ArrayBindingPattern:
@@ -391,7 +402,7 @@ namespace ts.BreakpointResolver {
 
                 // Breakpoint is possible in variableDeclaration only if there is initialization
                 // or its declaration from 'for of'
-                if (variableDeclaration.initializer ||
+                if ((hasOnlyExpressionInitializer(variableDeclaration) && variableDeclaration.initializer) ||
                     hasSyntacticModifier(variableDeclaration, ModifierFlags.Export) ||
                     parent.parent.kind === SyntaxKind.ForOfStatement) {
                     return textSpanFromVariableDeclaration(variableDeclaration);

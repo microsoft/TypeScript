@@ -19,7 +19,7 @@ const s2 = "x";
 
 // or in a type definition
 type Foo3 = { [s3]: number; }
->Foo3 : Foo3
+>Foo3 : { x: number; }
 >[s3] : number
 >s3 : "x"
 

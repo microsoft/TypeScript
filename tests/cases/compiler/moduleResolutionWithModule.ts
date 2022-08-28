@@ -1,5 +1,5 @@
-// @moduleResolution: node,node12,nodenext
-// @module: commonjs,node12,nodenext
+// @moduleResolution: node16,nodenext
+// @module: commonjs,node16,nodenext
 // @filename: node_modules/pkg/package.json
 {
     "name": "pkg",

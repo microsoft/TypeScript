@@ -16,7 +16,7 @@ verify.completions({
         hasAction: true,
         kind: "const",
         kindModifiers: "export,deprecated",
-        sortText: completion.SortText.DeprecatedAutoImportSuggestions
+        sortText: completion.SortText.Deprecated(completion.SortText.AutoImportSuggestions),
     }],
     preferences: {
         includeCompletionsForModuleExports: true,

@@ -15,7 +15,7 @@ export default function foo(value: string | number): string | number {
 >1 : 1
 }
 type Foo = {}
->Foo : Foo
+>Foo : {}
 
 export default Foo
 >Foo : Foo

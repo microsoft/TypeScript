@@ -1,0 +1,69 @@
+=== tests/cases/conformance/controlFlow/controlFlowParameter.ts ===
+function f1(
+>f1 : Symbol(f1, Decl(controlFlowParameter.ts, 0, 0))
+
+  required: unknown = (() => {
+>required : Symbol(required, Decl(controlFlowParameter.ts, 0, 12))
+
+    throw new Error("bad");
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+  })()
+) {
+  console.log("ok"); // should not trigger 'Unreachable code detected.'
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+}
+
+function f2(
+>f2 : Symbol(f2, Decl(controlFlowParameter.ts, 6, 1))
+
+  a: number | string | undefined,
+>a : Symbol(a, Decl(controlFlowParameter.ts, 8, 12))
+
+  required: unknown = (() => {
+>required : Symbol(required, Decl(controlFlowParameter.ts, 9, 33))
+
+    a = 1;
+>a : Symbol(a, Decl(controlFlowParameter.ts, 8, 12))
+
+  })()
+) {
+  a; // should be number | string | undefined
+>a : Symbol(a, Decl(controlFlowParameter.ts, 8, 12))
+}
+
+function f3(
+>f3 : Symbol(f3, Decl(controlFlowParameter.ts, 15, 1))
+
+  a: number | string | undefined = 1,
+>a : Symbol(a, Decl(controlFlowParameter.ts, 17, 12))
+
+  required: unknown = (() => {
+>required : Symbol(required, Decl(controlFlowParameter.ts, 18, 37))
+
+    a = "";
+>a : Symbol(a, Decl(controlFlowParameter.ts, 17, 12))
+
+  })()
+) {
+  a; // should be number | string
+>a : Symbol(a, Decl(controlFlowParameter.ts, 17, 12))
+}
+
+function f4(
+>f4 : Symbol(f4, Decl(controlFlowParameter.ts, 24, 1))
+
+  a: number | string | undefined = 1,
+>a : Symbol(a, Decl(controlFlowParameter.ts, 26, 12))
+
+  { [(a = "")]: b } = {} as any
+>a : Symbol(a, Decl(controlFlowParameter.ts, 26, 12))
+>b : Symbol(b, Decl(controlFlowParameter.ts, 28, 3))
+
+) {
+  a; // should be string
+>a : Symbol(a, Decl(controlFlowParameter.ts, 26, 12))
+}
+

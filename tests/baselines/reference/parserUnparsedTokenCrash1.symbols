@@ -1,0 +1,4 @@
+=== tests/cases/compiler/a.js ===
+( y = 1 ; 2 )
+No type information for this code.
+No type information for this code.

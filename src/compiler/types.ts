@@ -176,10 +176,12 @@ namespace ts {
         ModuleKeyword,
         NamespaceKeyword,
         NeverKeyword,
+        OutKeyword,
         ReadonlyKeyword,
         RequireKeyword,
         NumberKeyword,
         ObjectKeyword,
+        SatisfiesKeyword,
         SetKeyword,
         StringKeyword,
         SymbolKeyword,
@@ -273,6 +275,7 @@ namespace ts {
         NonNullExpression,
         MetaProperty,
         SyntheticExpression,
+        SatisfiesExpression,
 
         // Misc
         TemplateSpan,
@@ -378,7 +381,9 @@ namespace ts {
         JSDocFunctionType,
         JSDocVariadicType,
         JSDocNamepathType, // https://jsdoc.app/about-namepaths.html
-        JSDocComment,
+        JSDoc,
+        /** @deprecated Use SyntaxKind.JSDoc */
+        JSDocComment = JSDoc,
         JSDocText,
         JSDocTypeLiteral,
         JSDocSignature,
@@ -600,9 +605,11 @@ namespace ts {
         | SyntaxKind.ProtectedKeyword
         | SyntaxKind.PublicKeyword
         | SyntaxKind.ReadonlyKeyword
+        | SyntaxKind.OutKeyword
         | SyntaxKind.OverrideKeyword
         | SyntaxKind.RequireKeyword
         | SyntaxKind.ReturnKeyword
+        | SyntaxKind.SatisfiesKeyword
         | SyntaxKind.SetKeyword
         | SyntaxKind.StaticKeyword
         | SyntaxKind.StringKeyword
@@ -632,10 +639,12 @@ namespace ts {
         | SyntaxKind.DeclareKeyword
         | SyntaxKind.DefaultKeyword
         | SyntaxKind.ExportKeyword
+        | SyntaxKind.InKeyword
         | SyntaxKind.PrivateKeyword
         | SyntaxKind.ProtectedKeyword
         | SyntaxKind.PublicKeyword
         | SyntaxKind.ReadonlyKeyword
+        | SyntaxKind.OutKeyword
         | SyntaxKind.OverrideKeyword
         | SyntaxKind.StaticKeyword
         ;
@@ -757,10 +766,11 @@ namespace ts {
         YieldContext       = 1 << 13, // If node was parsed in the 'yield' context created when parsing a generator
         DecoratorContext   = 1 << 14, // If node was parsed as part of a decorator
         AwaitContext       = 1 << 15, // If node was parsed in the 'await' context created when parsing an async function
-        ThisNodeHasError   = 1 << 16, // If the parser encountered an error when parsing the code that created this node
-        JavaScriptFile     = 1 << 17, // If node was parsed in a JavaScript
-        ThisNodeOrAnySubNodesHasError = 1 << 18, // If this node or any of its children had an error
-        HasAggregatedChildData = 1 << 19, // If we've computed data from children and cached it in this node
+        DisallowConditionalTypesContext = 1 << 16, // If node was parsed in a context where conditional types are not allowed
+        ThisNodeHasError   = 1 << 17, // If the parser encountered an error when parsing the code that created this node
+        JavaScriptFile     = 1 << 18, // If node was parsed in a JavaScript
+        ThisNodeOrAnySubNodesHasError = 1 << 19, // If this node or any of its children had an error
+        HasAggregatedChildData = 1 << 20, // If we've computed data from children and cached it in this node
 
         // These flags will be set when the parser encounters a dynamic import expression or 'import.meta' to avoid
         // walking the tree if the flags are not set. However, these flags are just a approximation
@@ -771,15 +781,15 @@ namespace ts {
         // removal, it is likely that users will add the import anyway.
         // The advantage of this approach is its simplicity. For the case of batch compilation,
         // we guarantee that users won't have to pay the price of walking the tree if a dynamic import isn't used.
-        /* @internal */ PossiblyContainsDynamicImport = 1 << 20,
-        /* @internal */ PossiblyContainsImportMeta    = 1 << 21,
+        /* @internal */ PossiblyContainsDynamicImport = 1 << 21,
+        /* @internal */ PossiblyContainsImportMeta    = 1 << 22,
 
-        JSDoc                                         = 1 << 22, // If node was parsed inside jsdoc
-        /* @internal */ Ambient                       = 1 << 23, // If node was inside an ambient context -- a declaration file, or inside something with the `declare` modifier.
-        /* @internal */ InWithStatement               = 1 << 24, // If any ancestor of node was the `statement` of a WithStatement (not the `expression`)
-        JsonFile                                      = 1 << 25, // If node was parsed in a Json
-        /* @internal */ TypeCached                    = 1 << 26, // If a type was cached for node at any point
-        /* @internal */ Deprecated                    = 1 << 27, // If has '@deprecated' JSDoc tag
+        JSDoc                                         = 1 << 23, // If node was parsed inside jsdoc
+        /* @internal */ Ambient                       = 1 << 24, // If node was inside an ambient context -- a declaration file, or inside something with the `declare` modifier.
+        /* @internal */ InWithStatement               = 1 << 25, // If any ancestor of node was the `statement` of a WithStatement (not the `expression`)
+        JsonFile                                      = 1 << 26, // If node was parsed in a Json
+        /* @internal */ TypeCached                    = 1 << 27, // If a type was cached for node at any point
+        /* @internal */ Deprecated                    = 1 << 28, // If has '@deprecated' JSDoc tag
 
         BlockScoped = Let | Const,
 
@@ -787,7 +797,7 @@ namespace ts {
         ReachabilityAndEmitFlags = ReachabilityCheckFlags | HasAsyncFunctions,
 
         // Parsing context flags
-        ContextFlags = DisallowInContext | YieldContext | DecoratorContext | AwaitContext | JavaScriptFile | InWithStatement | Ambient,
+        ContextFlags = DisallowInContext | DisallowConditionalTypesContext | YieldContext | DecoratorContext | AwaitContext | JavaScriptFile | InWithStatement | Ambient,
 
         // Exclude these flags when parsing a Type
         TypeExcludesFlags = YieldContext | AwaitContext,
@@ -815,6 +825,9 @@ namespace ts {
 
         Deprecated =         1 << 13, // Deprecated tag.
         Override =           1 << 14, // Override method.
+        In =                 1 << 15, // Contravariance modifier
+        Out =                1 << 16, // Covariance modifier
+        Decorator =          1 << 17, // Contains a decorator.
         HasComputedFlags =   1 << 29, // Modifier flags have been computed
 
         AccessibilityModifier = Public | Private | Protected,
@@ -822,9 +835,10 @@ namespace ts {
         ParameterPropertyModifier = AccessibilityModifier | Readonly | Override,
         NonPublicAccessibilityModifier = Private | Protected,
 
-        TypeScriptModifier = Ambient | Public | Private | Protected | Readonly | Abstract | Const | Override,
+        TypeScriptModifier = Ambient | Public | Private | Protected | Readonly | Abstract | Const | Override | In | Out,
         ExportDefault = Export | Default,
-        All = Export | Ambient | Public | Private | Protected | Static | Readonly | Abstract | Async | Default | Const | Deprecated | Override
+        All = Export | Ambient | Public | Private | Protected | Static | Readonly | Abstract | Async | Default | Const | Deprecated | Override | In | Out | Decorator,
+        Modifier = All & ~Decorator
     }
 
     export const enum JsxFlags {
@@ -856,8 +870,6 @@ namespace ts {
         readonly flags: NodeFlags;
         /* @internal */ modifierFlagsCache: ModifierFlags;
         /* @internal */ readonly transformFlags: TransformFlags; // Flags for transforms
-        readonly decorators?: NodeArray<Decorator>;           // Array of decorators (in document order)
-        readonly modifiers?: ModifiersArray;                  // Array of modifiers
         /* @internal */ id?: NodeId;                          // Unique id (used to look up NodeLinks)
         readonly parent: Node;                                // Parent node (initialized by binding)
         /* @internal */ original?: Node;                      // The original node if this is an updated node.
@@ -875,6 +887,195 @@ namespace ts {
         /* @internal */ jsDoc?: JSDoc[];                      // JSDoc that directly precedes this node
         /* @internal */ jsDocCache?: readonly JSDocTag[];     // Cache for getJSDocTags
     }
+
+    // Ideally, `ForEachChildNodes` and `VisitEachChildNodes` would not differ.
+    // However, `forEachChild` currently processes JSDoc comment syntax and missing declarations more thoroughly.
+    // On the other hand, `visitEachChild` actually processes `Identifier`s (which really *shouldn't* have children,
+    // but are constructed as if they could for faked-up `QualifiedName`s in the language service.)
+
+    /* @internal */
+    export type ForEachChildNodes =
+        | HasChildren
+        | MissingDeclaration
+        | JSDocTypeExpression
+        | JSDocNonNullableType
+        | JSDocNullableType
+        | JSDocOptionalType
+        | JSDocVariadicType
+        | JSDocFunctionType
+        | JSDoc
+        | JSDocSeeTag
+        | JSDocNameReference
+        | JSDocMemberName
+        | JSDocParameterTag
+        | JSDocPropertyTag
+        | JSDocAuthorTag
+        | JSDocImplementsTag
+        | JSDocAugmentsTag
+        | JSDocTemplateTag
+        | JSDocTypedefTag
+        | JSDocCallbackTag
+        | JSDocReturnTag
+        | JSDocTypeTag
+        | JSDocThisTag
+        | JSDocEnumTag
+        | JSDocSignature
+        | JSDocLink
+        | JSDocLinkCode
+        | JSDocLinkPlain
+        | JSDocTypeLiteral
+        | JSDocUnknownTag
+        | JSDocClassTag
+        | JSDocPublicTag
+        | JSDocPrivateTag
+        | JSDocProtectedTag
+        | JSDocReadonlyTag
+        | JSDocDeprecatedTag
+        ;
+
+    /* @internal */
+    export type VisitEachChildNodes =
+        | HasChildren
+        | Identifier
+        ;
+
+    /* @internal */
+    export type HasChildren =
+        | QualifiedName
+        | ComputedPropertyName
+        | TypeParameterDeclaration
+        | ParameterDeclaration
+        | Decorator
+        | PropertySignature
+        | PropertyDeclaration
+        | MethodSignature
+        | MethodDeclaration
+        | ConstructorDeclaration
+        | GetAccessorDeclaration
+        | SetAccessorDeclaration
+        | ClassStaticBlockDeclaration
+        | CallSignatureDeclaration
+        | ConstructSignatureDeclaration
+        | IndexSignatureDeclaration
+        | TypePredicateNode
+        | TypeReferenceNode
+        | FunctionTypeNode
+        | ConstructorTypeNode
+        | TypeQueryNode
+        | TypeLiteralNode
+        | ArrayTypeNode
+        | TupleTypeNode
+        | OptionalTypeNode
+        | RestTypeNode
+        | UnionTypeNode
+        | IntersectionTypeNode
+        | ConditionalTypeNode
+        | InferTypeNode
+        | ImportTypeNode
+        | ImportTypeAssertionContainer
+        | NamedTupleMember
+        | ParenthesizedTypeNode
+        | TypeOperatorNode
+        | IndexedAccessTypeNode
+        | MappedTypeNode
+        | LiteralTypeNode
+        | TemplateLiteralTypeNode
+        | TemplateLiteralTypeSpan
+        | ObjectBindingPattern
+        | ArrayBindingPattern
+        | BindingElement
+        | ArrayLiteralExpression
+        | ObjectLiteralExpression
+        | PropertyAccessExpression
+        | ElementAccessExpression
+        | CallExpression
+        | NewExpression
+        | TaggedTemplateExpression
+        | TypeAssertion
+        | ParenthesizedExpression
+        | FunctionExpression
+        | ArrowFunction
+        | DeleteExpression
+        | TypeOfExpression
+        | VoidExpression
+        | AwaitExpression
+        | PrefixUnaryExpression
+        | PostfixUnaryExpression
+        | BinaryExpression
+        | ConditionalExpression
+        | TemplateExpression
+        | YieldExpression
+        | SpreadElement
+        | ClassExpression
+        | ExpressionWithTypeArguments
+        | AsExpression
+        | NonNullExpression
+        | SatisfiesExpression
+        | MetaProperty
+        | TemplateSpan
+        | Block
+        | VariableStatement
+        | ExpressionStatement
+        | IfStatement
+        | DoStatement
+        | WhileStatement
+        | ForStatement
+        | ForInStatement
+        | ForOfStatement
+        | ContinueStatement
+        | BreakStatement
+        | ReturnStatement
+        | WithStatement
+        | SwitchStatement
+        | LabeledStatement
+        | ThrowStatement
+        | TryStatement
+        | VariableDeclaration
+        | VariableDeclarationList
+        | FunctionDeclaration
+        | ClassDeclaration
+        | InterfaceDeclaration
+        | TypeAliasDeclaration
+        | EnumDeclaration
+        | ModuleDeclaration
+        | ModuleBlock
+        | CaseBlock
+        | NamespaceExportDeclaration
+        | ImportEqualsDeclaration
+        | ImportDeclaration
+        | AssertClause
+        | AssertEntry
+        | ImportClause
+        | NamespaceImport
+        | NamespaceExport
+        | NamedImports
+        | ImportSpecifier
+        | ExportAssignment
+        | ExportDeclaration
+        | NamedExports
+        | ExportSpecifier
+        | ExternalModuleReference
+        | JsxElement
+        | JsxSelfClosingElement
+        | JsxOpeningElement
+        | JsxClosingElement
+        | JsxFragment
+        | JsxAttribute
+        | JsxAttributes
+        | JsxSpreadAttribute
+        | JsxExpression
+        | CaseClause
+        | DefaultClause
+        | HeritageClause
+        | CatchClause
+        | PropertyAssignment
+        | ShorthandPropertyAssignment
+        | SpreadAssignment
+        | EnumMember
+        | SourceFile
+        | PartiallyEmittedExpression
+        | CommaListExpression
+        ;
 
     export type HasJSDoc =
         | ParameterDeclaration
@@ -954,6 +1155,23 @@ namespace ts {
         | JSDocVariadicType
         ;
 
+    // NOTE: Changing the following list requires changes to:
+    // - `canHaveIllegalType` in factory/utilities.ts
+    /* @internal */
+    export type HasIllegalType =
+        | ConstructorDeclaration
+        | SetAccessorDeclaration
+        ;
+
+    // NOTE: Changing the following list requires changes to:
+    // - `canHaveIllegalTypeParameters` in factory/utilities.ts
+    /* @internal */
+    export type HasIllegalTypeParameters =
+        | ConstructorDeclaration
+        | SetAccessorDeclaration
+        | GetAccessorDeclaration
+        ;
+
     export type HasTypeArguments =
         | CallExpression
         | NewExpression
@@ -973,16 +1191,59 @@ namespace ts {
         | VariableDeclaration
         | ParameterDeclaration
         | BindingElement
-        | PropertySignature
         | PropertyDeclaration
         | PropertyAssignment
         | EnumMember
         ;
 
-    // NOTE: Changing this list requires changes to `canHaveModifiers` in factory/utilities.ts and `updateModifiers` in factory/nodeFactory.ts
     /* @internal */
-    export type HasModifiers =
+    export type HasIllegalExpressionInitializer =
+        | PropertySignature
+        ;
+
+    // NOTE: Changing the following list requires changes to:
+    // - `canHaveDecorators` in factory/utilities.ts
+    // - `updateModifiers` in factory/nodeFactory.ts
+    export type HasDecorators =
         | ParameterDeclaration
+        | PropertyDeclaration
+        | MethodDeclaration
+        | GetAccessorDeclaration
+        | SetAccessorDeclaration
+        | ClassExpression
+        | ClassDeclaration
+        ;
+
+    // NOTE: Changing the following list requires changes to:
+    // - `canHaveIllegalDecorators` in factory/utilities.ts
+    /* @internal */
+    export type HasIllegalDecorators =
+        | PropertyAssignment
+        | ShorthandPropertyAssignment
+        | FunctionDeclaration
+        | ConstructorDeclaration
+        | IndexSignatureDeclaration
+        | ClassStaticBlockDeclaration
+        | MissingDeclaration
+        | VariableStatement
+        | InterfaceDeclaration
+        | TypeAliasDeclaration
+        | EnumDeclaration
+        | ModuleDeclaration
+        | ImportEqualsDeclaration
+        | ImportDeclaration
+        | NamespaceExportDeclaration
+        | ExportDeclaration
+        | ExportAssignment
+        ;
+
+    // NOTE: Changing the following list requires changes to:
+    // - `canHaveModifiers` in factory/utilities.ts
+    // - `updateModifiers` in factory/nodeFactory.ts
+    export type HasModifiers =
+        | TypeParameterDeclaration
+        | ParameterDeclaration
+        | ConstructorTypeNode
         | PropertySignature
         | PropertyDeclaration
         | MethodSignature
@@ -1005,6 +1266,18 @@ namespace ts {
         | ImportDeclaration
         | ExportAssignment
         | ExportDeclaration
+        ;
+
+    // NOTE: Changing the following list requires changes to:
+    // - `canHaveIllegalModifiers` in factory/utilities.ts
+    /* @internal */
+    export type HasIllegalModifiers =
+        | ClassStaticBlockDeclaration
+        | PropertyAssignment
+        | ShorthandPropertyAssignment
+        | MissingDeclaration
+        | FunctionTypeNode
+        | NamespaceExportDeclaration
         ;
 
     /* @internal */
@@ -1064,10 +1337,12 @@ namespace ts {
     export type DeclareKeyword = ModifierToken<SyntaxKind.DeclareKeyword>;
     export type DefaultKeyword = ModifierToken<SyntaxKind.DefaultKeyword>;
     export type ExportKeyword = ModifierToken<SyntaxKind.ExportKeyword>;
+    export type InKeyword = ModifierToken<SyntaxKind.InKeyword>;
     export type PrivateKeyword = ModifierToken<SyntaxKind.PrivateKeyword>;
     export type ProtectedKeyword = ModifierToken<SyntaxKind.ProtectedKeyword>;
     export type PublicKeyword = ModifierToken<SyntaxKind.PublicKeyword>;
     export type ReadonlyKeyword = ModifierToken<SyntaxKind.ReadonlyKeyword>;
+    export type OutKeyword = ModifierToken<SyntaxKind.OutKeyword>;
     export type OverrideKeyword = ModifierToken<SyntaxKind.OverrideKeyword>;
     export type StaticKeyword = ModifierToken<SyntaxKind.StaticKeyword>;
 
@@ -1081,13 +1356,17 @@ namespace ts {
         | DeclareKeyword
         | DefaultKeyword
         | ExportKeyword
+        | InKeyword
         | PrivateKeyword
         | ProtectedKeyword
         | PublicKeyword
+        | OutKeyword
         | OverrideKeyword
         | ReadonlyKeyword
         | StaticKeyword
         ;
+
+    export type ModifierLike = Modifier | Decorator;
 
     export type AccessibilityModifier =
         | PublicKeyword
@@ -1241,6 +1520,7 @@ namespace ts {
     export interface TypeParameterDeclaration extends NamedDeclaration {
         readonly kind: SyntaxKind.TypeParameter;
         readonly parent: DeclarationWithTypeParameterChildren | InferTypeNode;
+        readonly modifiers?: NodeArray<Modifier>;
         readonly name: Identifier;
         /** Note: Consider calling `getEffectiveConstraintOfTypeParameter` */
         readonly constraint?: TypeNode;
@@ -1253,9 +1533,9 @@ namespace ts {
     export interface SignatureDeclarationBase extends NamedDeclaration, JSDocContainer {
         readonly kind: SignatureDeclaration["kind"];
         readonly name?: PropertyName;
-        readonly typeParameters?: NodeArray<TypeParameterDeclaration>;
+        readonly typeParameters?: NodeArray<TypeParameterDeclaration> | undefined;
         readonly parameters: NodeArray<ParameterDeclaration>;
-        readonly type?: TypeNode;
+        readonly type?: TypeNode | undefined;
         /* @internal */ typeArguments?: NodeArray<TypeNode>; // Used for quick info, replaces typeParameters for instantiated signatures
     }
 
@@ -1305,6 +1585,7 @@ namespace ts {
     export interface ParameterDeclaration extends NamedDeclaration, JSDocContainer {
         readonly kind: SyntaxKind.Parameter;
         readonly parent: SignatureDeclaration;
+        readonly modifiers?: NodeArray<ModifierLike>;
         readonly dotDotDotToken?: DotDotDotToken;    // Present on rest parameter
         readonly name: BindingName;                  // Declared parameter name.
         readonly questionToken?: QuestionToken;      // Present on optional parameter
@@ -1326,15 +1607,19 @@ namespace ts {
 
     export interface PropertySignature extends TypeElement, JSDocContainer {
         readonly kind: SyntaxKind.PropertySignature;
+        readonly modifiers?: NodeArray<Modifier>;
         readonly name: PropertyName;                 // Declared property name
         readonly questionToken?: QuestionToken;      // Present on optional property
         readonly type?: TypeNode;                    // Optional type annotation
-        initializer?: Expression;                    // Present for use with reporting a grammar error
+
+        // The following properties are used only to report grammar errors
+        /* @internal */ readonly initializer?: Expression | undefined; // A property signature cannot have an initializer
     }
 
     export interface PropertyDeclaration extends ClassElement, JSDocContainer {
         readonly kind: SyntaxKind.PropertyDeclaration;
         readonly parent: ClassLikeDeclaration;
+        readonly modifiers?: NodeArray<ModifierLike>;
         readonly name: PropertyName;
         readonly questionToken?: QuestionToken;      // Present for use with reporting a grammar error
         readonly exclamationToken?: ExclamationToken;
@@ -1388,21 +1673,29 @@ namespace ts {
         readonly kind: SyntaxKind.PropertyAssignment;
         readonly parent: ObjectLiteralExpression;
         readonly name: PropertyName;
-        readonly questionToken?: QuestionToken; // Present for use with reporting a grammar error
-        readonly exclamationToken?: ExclamationToken; // Present for use with reporting a grammar error
         readonly initializer: Expression;
+
+        // The following properties are used only to report grammar errors
+        /* @internal */ readonly illegalDecorators?: NodeArray<Decorator> | undefined; // property assignment cannot have decorators
+        /* @internal */ readonly modifiers?: NodeArray<Modifier> | undefined; // property assignment cannot have modifiers
+        /* @internal */ readonly questionToken?: QuestionToken | undefined; // property assignment cannot have a question token
+        /* @internal */ readonly exclamationToken?: ExclamationToken | undefined; // property assignment cannot have an exclamation token
     }
 
     export interface ShorthandPropertyAssignment extends ObjectLiteralElement, JSDocContainer {
         readonly kind: SyntaxKind.ShorthandPropertyAssignment;
         readonly parent: ObjectLiteralExpression;
         readonly name: Identifier;
-        readonly questionToken?: QuestionToken;
-        readonly exclamationToken?: ExclamationToken;
         // used when ObjectLiteralExpression is used in ObjectAssignmentPattern
         // it is a grammar error to appear in actual object initializer:
         readonly equalsToken?: EqualsToken;
         readonly objectAssignmentInitializer?: Expression;
+
+        // The following properties are used only to report grammar errors
+        /* @internal */ readonly illegalDecorators?: NodeArray<Decorator> | undefined; // shorthand property assignment cannot have decorators
+        /* @internal */ readonly modifiers?: NodeArray<Modifier> | undefined; // shorthand property assignment cannot have modifiers
+        /* @internal */ readonly questionToken?: QuestionToken | undefined; // shorthand property assignment cannot have a question token
+        /* @internal */ readonly exclamationToken?: ExclamationToken | undefined; // shorthand property assignment cannot have an exclamation token
     }
 
     export interface SpreadAssignment extends ObjectLiteralElement, JSDocContainer {
@@ -1455,10 +1748,10 @@ namespace ts {
     export interface FunctionLikeDeclarationBase extends SignatureDeclarationBase {
         _functionLikeDeclarationBrand: any;
 
-        readonly asteriskToken?: AsteriskToken;
-        readonly questionToken?: QuestionToken;
-        readonly exclamationToken?: ExclamationToken;
-        readonly body?: Block | Expression;
+        readonly asteriskToken?: AsteriskToken | undefined;
+        readonly questionToken?: QuestionToken | undefined;
+        readonly exclamationToken?: ExclamationToken | undefined;
+        readonly body?: Block | Expression | undefined;
         /* @internal */ endFlowNode?: FlowNode;
         /* @internal */ returnFlowNode?: FlowNode;
     }
@@ -1476,13 +1769,18 @@ namespace ts {
 
     export interface FunctionDeclaration extends FunctionLikeDeclarationBase, DeclarationStatement {
         readonly kind: SyntaxKind.FunctionDeclaration;
+        readonly modifiers?: NodeArray<Modifier>;
         readonly name?: Identifier;
         readonly body?: FunctionBody;
+
+        // The following properties are used only to report grammar errors
+        /* @internal */ readonly illegalDecorators?: NodeArray<Decorator> | undefined; // functions cannot have decorators
     }
 
     export interface MethodSignature extends SignatureDeclarationBase, TypeElement {
         readonly kind: SyntaxKind.MethodSignature;
         readonly parent: ObjectTypeDeclaration;
+        readonly modifiers?: NodeArray<Modifier>;
         readonly name: PropertyName;
     }
 
@@ -1498,17 +1796,24 @@ namespace ts {
     export interface MethodDeclaration extends FunctionLikeDeclarationBase, ClassElement, ObjectLiteralElement, JSDocContainer {
         readonly kind: SyntaxKind.MethodDeclaration;
         readonly parent: ClassLikeDeclaration | ObjectLiteralExpression;
+        readonly modifiers?: NodeArray<ModifierLike> | undefined;
         readonly name: PropertyName;
-        readonly body?: FunctionBody;
-        /* @internal*/ exclamationToken?: ExclamationToken; // Present for use with reporting a grammar error
+        readonly body?: FunctionBody | undefined;
+
+        // The following properties are used only to report grammar errors
+        /* @internal */ readonly exclamationToken?: ExclamationToken | undefined; // A method cannot have an exclamation token
     }
 
     export interface ConstructorDeclaration extends FunctionLikeDeclarationBase, ClassElement, JSDocContainer {
         readonly kind: SyntaxKind.Constructor;
         readonly parent: ClassLikeDeclaration;
-        readonly body?: FunctionBody;
-        /* @internal */ typeParameters?: NodeArray<TypeParameterDeclaration>; // Present for use with reporting a grammar error
-        /* @internal */ type?: TypeNode; // Present for use with reporting a grammar error
+        readonly modifiers?: NodeArray<Modifier> | undefined;
+        readonly body?: FunctionBody | undefined;
+
+        // The following properties are used only to report grammar errors
+        /* @internal */ readonly illegalDecorators?: NodeArray<Decorator> | undefined; // A constructor cannot have decorators
+        /* @internal */ readonly typeParameters?: NodeArray<TypeParameterDeclaration>; // A constructor cannot have type parameters
+        /* @internal */ readonly type?: TypeNode; // A constructor cannot have a return type annotation
     }
 
     /** For when we encounter a semicolon in a class declaration. ES6 allows these as class elements. */
@@ -1522,9 +1827,12 @@ namespace ts {
     export interface GetAccessorDeclaration extends FunctionLikeDeclarationBase, ClassElement, TypeElement, ObjectLiteralElement, JSDocContainer {
         readonly kind: SyntaxKind.GetAccessor;
         readonly parent: ClassLikeDeclaration | ObjectLiteralExpression | TypeLiteralNode | InterfaceDeclaration;
+        readonly modifiers?: NodeArray<ModifierLike>;
         readonly name: PropertyName;
         readonly body?: FunctionBody;
-        /* @internal */ typeParameters?: NodeArray<TypeParameterDeclaration>; // Present for use with reporting a grammar error
+
+        // The following properties are used only to report grammar errors
+        /* @internal */ readonly typeParameters?: NodeArray<TypeParameterDeclaration> | undefined; // A get accessor cannot have type parameters
     }
 
     // See the comment on MethodDeclaration for the intuition behind SetAccessorDeclaration being a
@@ -1532,10 +1840,13 @@ namespace ts {
     export interface SetAccessorDeclaration extends FunctionLikeDeclarationBase, ClassElement, TypeElement, ObjectLiteralElement, JSDocContainer {
         readonly kind: SyntaxKind.SetAccessor;
         readonly parent: ClassLikeDeclaration | ObjectLiteralExpression | TypeLiteralNode | InterfaceDeclaration;
+        readonly modifiers?: NodeArray<ModifierLike>;
         readonly name: PropertyName;
         readonly body?: FunctionBody;
-        /* @internal */ typeParameters?: NodeArray<TypeParameterDeclaration>; // Present for use with reporting a grammar error
-        /* @internal */ type?: TypeNode; // Present for use with reporting a grammar error
+
+        // The following properties are used only to report grammar errors
+        /* @internal */ readonly typeParameters?: NodeArray<TypeParameterDeclaration> | undefined; // A set accessor cannot have type parameters
+        /* @internal */ readonly type?: TypeNode | undefined; // A set accessor cannot have a return type
     }
 
     export type AccessorDeclaration = GetAccessorDeclaration | SetAccessorDeclaration;
@@ -1543,17 +1854,24 @@ namespace ts {
     export interface IndexSignatureDeclaration extends SignatureDeclarationBase, ClassElement, TypeElement {
         readonly kind: SyntaxKind.IndexSignature;
         readonly parent: ObjectTypeDeclaration;
+        readonly modifiers?: NodeArray<Modifier>;
         readonly type: TypeNode;
+
+        // The following properties are used only to report grammar errors
+        /* @internal */ readonly illegalDecorators?: NodeArray<Decorator> | undefined;
     }
 
     export interface ClassStaticBlockDeclaration extends ClassElement, JSDocContainer {
         readonly kind: SyntaxKind.ClassStaticBlockDeclaration;
         readonly parent: ClassDeclaration | ClassExpression;
         readonly body: Block;
-        /* @internal */ readonly decorators?: NodeArray<Decorator>; // Present for use with reporting a grammar error
-        /* @internal */ readonly modifier?: ModifiersArray; // Present for use with reporting a grammar error
+
         /* @internal */ endFlowNode?: FlowNode;
         /* @internal */ returnFlowNode?: FlowNode;
+
+        // The following properties are used only to report grammar errors
+        /* @internal */ readonly illegalDecorators?: NodeArray<Decorator> | undefined;
+        /* @internal */ readonly modifiers?: NodeArray<Modifier> | undefined;
     }
 
     export interface TypeNode extends Node {
@@ -1600,10 +1918,14 @@ namespace ts {
 
     export interface FunctionTypeNode extends FunctionOrConstructorTypeNodeBase {
         readonly kind: SyntaxKind.FunctionType;
+
+        // The following properties are used only to report grammar errors
+        /* @internal */ readonly modifiers?: NodeArray<Modifier> | undefined;
     }
 
     export interface ConstructorTypeNode extends FunctionOrConstructorTypeNodeBase {
         readonly kind: SyntaxKind.ConstructorType;
+        readonly modifiers?: NodeArray<Modifier>;
     }
 
     export interface NodeWithTypeArguments extends TypeNode {
@@ -2124,12 +2446,14 @@ namespace ts {
 
     export interface FunctionExpression extends PrimaryExpression, FunctionLikeDeclarationBase, JSDocContainer {
         readonly kind: SyntaxKind.FunctionExpression;
+        readonly modifiers?: NodeArray<Modifier>;
         readonly name?: Identifier;
         readonly body: FunctionBody;  // Required, whereas the member inherited from FunctionDeclaration is optional
     }
 
     export interface ArrowFunction extends Expression, FunctionLikeDeclarationBase, JSDocContainer {
         readonly kind: SyntaxKind.ArrowFunction;
+        readonly modifiers?: NodeArray<Modifier>;
         readonly equalsGreaterThanToken: EqualsGreaterThanToken;
         readonly body: ConciseBody;
         readonly name: never;
@@ -2495,6 +2819,12 @@ namespace ts {
         readonly expression: UnaryExpression;
     }
 
+    export interface SatisfiesExpression extends Expression {
+        readonly kind: SyntaxKind.SatisfiesExpression;
+        readonly expression: Expression;
+        readonly type: TypeNode;
+    }
+
     export type AssertionExpression =
         | TypeAssertion
         | AsExpression
@@ -2599,8 +2929,15 @@ namespace ts {
         readonly parent: JsxAttributes;
         readonly name: Identifier;
         /// JSX attribute initializers are optional; <X y /> is sugar for <X y={true} />
-        readonly initializer?: StringLiteral | JsxExpression;
+        readonly initializer?: JsxAttributeValue;
     }
+
+    export type JsxAttributeValue =
+        | StringLiteral
+        | JsxExpression
+        | JsxElement
+        | JsxSelfClosingElement
+        | JsxFragment;
 
     export interface JsxSpreadAttribute extends ObjectLiteralElement {
         readonly kind: SyntaxKind.JsxSpreadAttribute;
@@ -2685,10 +3022,12 @@ namespace ts {
     }
 
     export interface MissingDeclaration extends DeclarationStatement {
-        /*@internal*/ decorators?: NodeArray<Decorator>; // Present for use with reporting a grammar error
-        /*@internal*/ modifiers?: ModifiersArray; // Present for use with reporting a grammar error
         readonly kind: SyntaxKind.MissingDeclaration;
         readonly name?: Identifier;
+
+        // The following properties are used only to report grammar errors
+        /*@internal*/ illegalDecorators?: NodeArray<Decorator> | undefined;
+        /*@internal*/ modifiers?: NodeArray<Modifier> | undefined;
     }
 
     export type BlockLike =
@@ -2705,9 +3044,12 @@ namespace ts {
     }
 
     export interface VariableStatement extends Statement {
-        /* @internal*/ decorators?: NodeArray<Decorator>; // Present for use with reporting a grammar error
         readonly kind: SyntaxKind.VariableStatement;
+        readonly modifiers?: NodeArray<Modifier>;
         readonly declarationList: VariableDeclarationList;
+
+        // The following properties are used only to report grammar errors
+        /* @internal*/ illegalDecorators?: NodeArray<Decorator> | undefined;
     }
 
     export interface ExpressionStatement extends Statement {
@@ -2886,12 +3228,14 @@ namespace ts {
 
     export interface ClassDeclaration extends ClassLikeDeclarationBase, DeclarationStatement {
         readonly kind: SyntaxKind.ClassDeclaration;
+        readonly modifiers?: NodeArray<ModifierLike>;
         /** May be undefined in `export default class { ... }`. */
         readonly name?: Identifier;
     }
 
     export interface ClassExpression extends ClassLikeDeclarationBase, PrimaryExpression {
         readonly kind: SyntaxKind.ClassExpression;
+        readonly modifiers?: NodeArray<ModifierLike>;
     }
 
     export type ClassLikeDeclaration =
@@ -2907,15 +3251,19 @@ namespace ts {
     export interface TypeElement extends NamedDeclaration {
         _typeElementBrand: any;
         readonly name?: PropertyName;
-        readonly questionToken?: QuestionToken;
+        readonly questionToken?: QuestionToken | undefined;
     }
 
     export interface InterfaceDeclaration extends DeclarationStatement, JSDocContainer {
         readonly kind: SyntaxKind.InterfaceDeclaration;
+        readonly modifiers?: NodeArray<Modifier>;
         readonly name: Identifier;
         readonly typeParameters?: NodeArray<TypeParameterDeclaration>;
         readonly heritageClauses?: NodeArray<HeritageClause>;
         readonly members: NodeArray<TypeElement>;
+
+        // The following properties are used only to report grammar errors
+        /* @internal */ readonly illegalDecorators?: NodeArray<Decorator> | undefined;
     }
 
     export interface HeritageClause extends Node {
@@ -2927,9 +3275,13 @@ namespace ts {
 
     export interface TypeAliasDeclaration extends DeclarationStatement, JSDocContainer {
         readonly kind: SyntaxKind.TypeAliasDeclaration;
+        readonly modifiers?: NodeArray<Modifier>;
         readonly name: Identifier;
         readonly typeParameters?: NodeArray<TypeParameterDeclaration>;
         readonly type: TypeNode;
+
+        // The following properties are used only to report grammar errors
+        /* @internal */ readonly illegalDecorators?: NodeArray<Decorator> | undefined;
     }
 
     export interface EnumMember extends NamedDeclaration, JSDocContainer {
@@ -2943,8 +3295,12 @@ namespace ts {
 
     export interface EnumDeclaration extends DeclarationStatement, JSDocContainer {
         readonly kind: SyntaxKind.EnumDeclaration;
+        readonly modifiers?: NodeArray<Modifier>;
         readonly name: Identifier;
         readonly members: NodeArray<EnumMember>;
+
+        // The following properties are used only to report grammar errors
+        /* @internal */ readonly illegalDecorators?: NodeArray<Decorator> | undefined;
     }
 
     export type ModuleName =
@@ -2965,8 +3321,12 @@ namespace ts {
     export interface ModuleDeclaration extends DeclarationStatement, JSDocContainer {
         readonly kind: SyntaxKind.ModuleDeclaration;
         readonly parent: ModuleBody | SourceFile;
+        readonly modifiers?: NodeArray<Modifier>;
         readonly name: ModuleName;
         readonly body?: ModuleBody | JSDocNamespaceDeclaration;
+
+        // The following properties are used only to report grammar errors
+        /* @internal */ readonly illegalDecorators?: NodeArray<Decorator> | undefined;
     }
 
     export type NamespaceBody =
@@ -3008,12 +3368,16 @@ namespace ts {
     export interface ImportEqualsDeclaration extends DeclarationStatement, JSDocContainer {
         readonly kind: SyntaxKind.ImportEqualsDeclaration;
         readonly parent: SourceFile | ModuleBlock;
+        readonly modifiers?: NodeArray<Modifier>;
         readonly name: Identifier;
         readonly isTypeOnly: boolean;
 
         // 'EntityName' for an internal module reference, 'ExternalModuleReference' for an external
         // module reference.
         readonly moduleReference: ModuleReference;
+
+        // The following properties are used only to report grammar errors
+        /* @internal */ readonly illegalDecorators?: NodeArray<Decorator> | undefined;
     }
 
     export interface ExternalModuleReference extends Node {
@@ -3029,10 +3393,14 @@ namespace ts {
     export interface ImportDeclaration extends Statement {
         readonly kind: SyntaxKind.ImportDeclaration;
         readonly parent: SourceFile | ModuleBlock;
+        readonly modifiers?: NodeArray<Modifier>;
         readonly importClause?: ImportClause;
         /** If this is not a StringLiteral it will be a grammar error. */
         readonly moduleSpecifier: Expression;
         readonly assertClause?: AssertClause;
+
+        // The following properties are used only to report grammar errors
+        /* @internal */ readonly illegalDecorators?: NodeArray<Decorator> | undefined;
     }
 
     export type NamedImportBindings =
@@ -3090,19 +3458,25 @@ namespace ts {
     export interface NamespaceExportDeclaration extends DeclarationStatement, JSDocContainer {
         readonly kind: SyntaxKind.NamespaceExportDeclaration;
         readonly name: Identifier;
-        /* @internal */ decorators?: NodeArray<Decorator>; // Present for use with reporting a grammar error
-        /* @internal */ modifiers?: ModifiersArray; // Present for use with reporting a grammar error
+
+        // The following properties are used only to report grammar errors
+        /* @internal */ readonly illegalDecorators?: NodeArray<Decorator> | undefined;
+        /* @internal */ readonly modifiers?: NodeArray<Modifier> | undefined;
     }
 
     export interface ExportDeclaration extends DeclarationStatement, JSDocContainer {
         readonly kind: SyntaxKind.ExportDeclaration;
         readonly parent: SourceFile | ModuleBlock;
+        readonly modifiers?: NodeArray<Modifier>;
         readonly isTypeOnly: boolean;
         /** Will not be assigned in the case of `export * from "foo";` */
         readonly exportClause?: NamedExportBindings;
         /** If this is not a StringLiteral it will be a grammar error. */
         readonly moduleSpecifier?: Expression;
         readonly assertClause?: AssertClause;
+
+        // The following properties are used only to report grammar errors
+        /* @internal */ readonly illegalDecorators?: NodeArray<Decorator> | undefined;
     }
 
     export interface NamedImports extends Node {
@@ -3162,8 +3536,12 @@ namespace ts {
     export interface ExportAssignment extends DeclarationStatement, JSDocContainer {
         readonly kind: SyntaxKind.ExportAssignment;
         readonly parent: SourceFile;
+        readonly modifiers?: NodeArray<Modifier>;
         readonly isExportEquals?: boolean;
         readonly expression: Expression;
+
+        // The following properties are used only to report grammar errors
+        /* @internal */ readonly illegalDecorators?: NodeArray<Decorator> | undefined;
     }
 
     export interface FileReference extends TextRange {
@@ -3222,11 +3600,13 @@ namespace ts {
     export interface JSDocNonNullableType extends JSDocType {
         readonly kind: SyntaxKind.JSDocNonNullableType;
         readonly type: TypeNode;
+        readonly postfix: boolean;
     }
 
     export interface JSDocNullableType extends JSDocType {
         readonly kind: SyntaxKind.JSDocNullableType;
         readonly type: TypeNode;
+        readonly postfix: boolean;
     }
 
     export interface JSDocOptionalType extends JSDocType {
@@ -3256,7 +3636,7 @@ namespace ts {
         ;
 
     export interface JSDoc extends Node {
-        readonly kind: SyntaxKind.JSDocComment;
+        readonly kind: SyntaxKind.JSDoc;
         readonly parent: HasJSDoc;
         readonly tags?: NodeArray<JSDocTag>;
         readonly comment?: string | NodeArray<JSDocComment>;
@@ -3446,7 +3826,6 @@ namespace ts {
         | FlowStart
         | FlowLabel
         | FlowAssignment
-        | FlowCall
         | FlowCondition
         | FlowSwitchClause
         | FlowArrayMutation
@@ -3601,7 +3980,7 @@ namespace ts {
         languageVersion: ScriptTarget;
 
         /**
-         * When `module` is `Node12` or `NodeNext`, this field controls whether the
+         * When `module` is `Node16` or `NodeNext`, this field controls whether the
          * source file in question is an ESNext-output-format file, or a CommonJS-output-format
          * module. This is derived by the module resolver as it looks up the file, since
          * it is derived from either the file extension of the module, or the containing
@@ -3610,8 +3989,16 @@ namespace ts {
          * It is _public_ so that (pre)transformers can set this field,
          * since it switches the builtin `node` module transform. Generally speaking, if unset,
          * the field is treated as though it is `ModuleKind.CommonJS`.
+         *
+         * Note that this field is only set by the module resolution process when
+         * `moduleResolution` is `Node16` or `NodeNext`, which is implied by the `module` setting
+         * of `Node16` or `NodeNext`, respectively, but may be overriden (eg, by a `moduleResolution`
+         * of `node`). If so, this field will be unset and source files will be considered to be
+         * CommonJS-output-format by the node module transformer and type checker, regardless of extension or context.
          */
         impliedNodeFormat?: ModuleKind.ESNext | ModuleKind.CommonJS;
+        /*@internal*/ packageJsonLocations?: readonly string[];
+        /*@internal*/ packageJsonScope?: PackageJsonInfo;
 
         /* @internal */ scriptKind: ScriptKind;
 
@@ -3620,7 +4007,13 @@ namespace ts {
          * This is intended to be the first top-level import/export,
          * but could be arbitrarily nested (e.g. `import.meta`).
          */
-        /* @internal */ externalModuleIndicator?: Node;
+        /* @internal */ externalModuleIndicator?: Node | true;
+        /**
+         * The callback used to set the external module indicator - this is saved to
+         * be later reused during incremental reparsing, which otherwise lacks the information
+         * to set this field
+         */
+        /* @internal */ setExternalModuleIndicator?: (file: SourceFile) => void;
         // The first node that causes this file to be a CommonJS module
         /* @internal */ commonJsModuleIndicator?: Node;
         // JS identifier-declarations that are intended to merge with globals
@@ -3836,12 +4229,18 @@ namespace ts {
      */
     export type ResolvedConfigFileName = string & { _isResolvedConfigFileName: never };
 
+    export interface WriteFileCallbackData {
+        /*@internal*/ sourceMapUrlPos?: number;
+        /*@internal*/ buildInfo?: BuildInfo;
+        /*@internal*/ diagnostics?: readonly DiagnosticWithLocation[];
+    }
     export type WriteFileCallback = (
         fileName: string,
-        data: string,
+        text: string,
         writeByteOrderMark: boolean,
         onError?: (message: string) => void,
         sourceFiles?: readonly SourceFile[],
+        data?: WriteFileCallbackData,
     ) => void;
 
     export class OperationCanceledException { }
@@ -3998,11 +4397,6 @@ namespace ts {
 
         /* @internal */ getCommonSourceDirectory(): string;
 
-        // For testing purposes only.  Should not be used by any other consumers (including the
-        // language service).
-        /* @internal */ getDiagnosticsProducingTypeChecker(): TypeChecker;
-        /* @internal */ dropDiagnosticsProducingTypeChecker(): void;
-
         /* @internal */ getCachedSemanticDiagnostics(sourceFile?: SourceFile): readonly Diagnostic[] | undefined;
 
         /* @internal */ getClassifiableNames(): Set<__String>;
@@ -4052,6 +4446,8 @@ namespace ts {
          * This implementation handles file exists to be true if file is source of project reference redirect when program is created using useSourceOfProjectReferenceRedirect
          */
         /*@internal*/ fileExists(fileName: string): boolean;
+        /** Call compilerHost.writeFile on host program was created with */
+        /*@internal*/ writeFile: WriteFileCallback;
     }
 
     /*@internal*/
@@ -4146,7 +4542,6 @@ namespace ts {
         diagnostics: readonly Diagnostic[];
         emittedFiles?: string[]; // Array of files the compiler wrote to disk
         /* @internal */ sourceMaps?: SourceMapEmitResult[];  // Array of sourceMapData if compiler emitted sourcemaps
-        /* @internal */ exportedModulesFromDeclarationEmit?: ExportedModulesFromDeclarationEmit;
     }
 
     /* @internal */
@@ -4172,6 +4567,7 @@ namespace ts {
         /* @internal */ getTypeOfPropertyOfType(type: Type, propertyName: string): Type | undefined;
         getIndexInfoOfType(type: Type, kind: IndexKind): IndexInfo | undefined;
         getIndexInfosOfType(type: Type): readonly IndexInfo[];
+        getIndexInfosOfIndexSymbol: (indexSymbol: Symbol) => IndexInfo[];
         getSignaturesOfType(type: Type, kind: SignatureKind): readonly Signature[];
         getIndexTypeOfType(type: Type, kind: IndexKind): Type | undefined;
         /* @internal */ getIndexType(type: Type): Type;
@@ -4209,6 +4605,8 @@ namespace ts {
         symbolToEntityName(symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined): EntityName | undefined;
         /** Note that the resulting nodes cannot be checked. */
         symbolToExpression(symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined): Expression | undefined;
+        /** Note that the resulting nodes cannot be checked. */
+        /* @internal */ symbolToNode(symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined): Node | undefined;
         /** Note that the resulting nodes cannot be checked. */
         symbolToTypeParameterDeclarations(symbol: Symbol, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined): NodeArray<TypeParameterDeclaration> | undefined;
         /** Note that the resulting nodes cannot be checked. */
@@ -4271,6 +4669,7 @@ namespace ts {
          */
         getResolvedSignature(node: CallLikeExpression, candidatesOutArray?: Signature[], argumentCount?: number): Signature | undefined;
         /* @internal */ getResolvedSignatureForSignatureHelp(node: CallLikeExpression, candidatesOutArray?: Signature[], argumentCount?: number): Signature | undefined;
+        /* @internal */ getResolvedSignatureForStringLiteralCompletions(call: CallLikeExpression, editingArgument: Node, candidatesOutArray: Signature[]): Signature | undefined;
         /* @internal */ getExpandedParameters(sig: Signature): readonly (readonly Symbol[])[];
         /* @internal */ hasEffectiveRestParameter(sig: Signature): boolean;
         /* @internal */ containsArgumentsReference(declaration: SignatureDeclaration): boolean;
@@ -4407,7 +4806,7 @@ namespace ts {
          */
         /* @internal */ resolveExternalModuleSymbol(symbol: Symbol): Symbol;
         /** @param node A location where we might consider accessing `this`. Not necessarily a ThisExpression. */
-        /* @internal */ tryGetThisTypeAt(node: Node, includeGlobalThis?: boolean): Type | undefined;
+        /* @internal */ tryGetThisTypeAt(node: Node, includeGlobalThis?: boolean, container?: Node): Type | undefined;
         /* @internal */ getTypeArgumentConstraint(node: TypeNode): Type | undefined;
 
         /**
@@ -4474,11 +4873,11 @@ namespace ts {
         UseAliasDefinedOutsideCurrentScope      = 1 << 14,  // Allow non-visible aliases
         UseSingleQuotesForStringLiteralType     = 1 << 28,  // Use single quotes for string literal type
         NoTypeReduction                         = 1 << 29,  // Don't call getReducedType
-        NoUndefinedOptionalParameterType        = 1 << 30,  // Do not add undefined to optional parameter type
+        OmitThisParameter                       = 1 << 25,
 
         // Error handling
         AllowThisInObjectLiteral                = 1 << 15,
-        AllowQualifiedNameInPlaceOfIdentifier    = 1 << 16,
+        AllowQualifiedNameInPlaceOfIdentifier   = 1 << 16,
         /** @deprecated AllowQualifedNameInPlaceOfIdentifier. Use AllowQualifiedNameInPlaceOfIdentifier instead. */
         AllowQualifedNameInPlaceOfIdentifier    = AllowQualifiedNameInPlaceOfIdentifier,
         AllowAnonymousIdentifier                = 1 << 17,
@@ -4486,6 +4885,7 @@ namespace ts {
         AllowEmptyTuple                         = 1 << 19,
         AllowUniqueESSymbolType                 = 1 << 20,
         AllowEmptyIndexInfoType                 = 1 << 21,
+        /* @internal */ WriteComputedProps      = 1 << 30, // { [E.A]: 1 }
 
         // Errors (cont.)
         AllowNodeModulesRelativePaths           = 1 << 26,
@@ -4520,6 +4920,7 @@ namespace ts {
         UseAliasDefinedOutsideCurrentScope      = 1 << 14, // For a `type T = ... ` defined in a different file, write `T` instead of its value, even though `T` can't be accessed in the current scope.
         UseSingleQuotesForStringLiteralType     = 1 << 28, // Use single quotes for string literal type
         NoTypeReduction                         = 1 << 29, // Don't call getReducedType
+        OmitThisParameter                       = 1 << 25,
 
         // Error Handling
         AllowUniqueESSymbolType                 = 1 << 20, // This is bit 20 to align with the same bit in `NodeBuilderFlags`
@@ -4539,31 +4940,34 @@ namespace ts {
         NodeBuilderFlagsMask = NoTruncation | WriteArrayAsGenericType | UseStructuralFallback | WriteTypeArgumentsOfSignature |
             UseFullyQualifiedType | SuppressAnyReturnType | MultilineObjectLiterals | WriteClassExpressionAsTypeLiteral |
             UseTypeOfFunction | OmitParameterModifiers | UseAliasDefinedOutsideCurrentScope | AllowUniqueESSymbolType | InTypeAlias |
-            UseSingleQuotesForStringLiteralType | NoTypeReduction,
+            UseSingleQuotesForStringLiteralType | NoTypeReduction | OmitThisParameter
     }
 
     export const enum SymbolFormatFlags {
-        None = 0x00000000,
+        None                                    = 0,
 
         // Write symbols's type argument if it is instantiated symbol
         // eg. class C<T> { p: T }   <-- Show p as C<T>.p here
         //     var a: C<number>;
         //     var p = a.p; <--- Here p is property of C<number> so show it as C<number>.p instead of just C.p
-        WriteTypeParametersOrArguments = 0x00000001,
+        WriteTypeParametersOrArguments          = 1 << 0,
 
         // Use only external alias information to get the symbol name in the given context
         // eg.  module m { export class c { } } import x = m.c;
         // When this flag is specified m.c will be used to refer to the class instead of alias symbol x
-        UseOnlyExternalAliasing = 0x00000002,
+        UseOnlyExternalAliasing                 = 1 << 1,
 
         // Build symbol name using any nodes needed, instead of just components of an entity name
-        AllowAnyNodeKind = 0x00000004,
+        AllowAnyNodeKind                        = 1 << 2,
 
         // Prefer aliases which are not directly visible
-        UseAliasDefinedOutsideCurrentScope = 0x00000008,
+        UseAliasDefinedOutsideCurrentScope      = 1 << 3,
+
+        // { [E.A]: 1 }
+        /* @internal */ WriteComputedProps      = 1 << 4,
 
         // Skip building an accessible symbol chain
-        /* @internal */ DoNotIncludeSymbolChain = 0x00000010,
+        /* @internal */ DoNotIncludeSymbolChain = 1 << 5,
     }
 
     /* @internal */
@@ -4653,8 +5057,10 @@ namespace ts {
     export type AnyImportOrRequire = AnyImportSyntax | VariableDeclarationInitializedTo<RequireOrImportCall>;
 
     /* @internal */
-    export type AnyImportOrRequireStatement = AnyImportSyntax | RequireVariableStatement;
+    export type AnyImportOrBareOrAccessedRequire = AnyImportSyntax | VariableDeclarationInitializedTo<RequireOrImportCall | AccessExpression>;
 
+    /* @internal */
+    export type AnyImportOrRequireStatement = AnyImportSyntax | RequireVariableStatement;
 
     /* @internal */
     export type AnyImportOrReExport = AnyImportSyntax | ExportDeclaration;
@@ -4719,6 +5125,14 @@ namespace ts {
         secondAccessor: AccessorDeclaration | undefined;
         getAccessor: GetAccessorDeclaration | undefined;
         setAccessor: SetAccessorDeclaration | undefined;
+    }
+
+    /* @internal */
+    export interface AllDecorators {
+        decorators: readonly Decorator[] | undefined;
+        parameters?: readonly (readonly Decorator[] | undefined)[];
+        getDecorators?: readonly Decorator[] | undefined;
+        setDecorators?: readonly Decorator[] | undefined;
     }
 
     /** Indicates how to serialize the name for a TypeReferenceNode when emitting decorator metadata */
@@ -4927,7 +5341,8 @@ namespace ts {
     /* @internal */
     export interface SymbolLinks {
         immediateTarget?: Symbol;                   // Immediate target of an alias. May be another alias. Do not access directly, use `checker.getImmediateAliasedSymbol` instead.
-        target?: Symbol;                            // Resolved (non-alias) target of an alias
+        aliasTarget?: Symbol,                       // Resolved (non-alias) target of an alias
+        target?: Symbol;                            // Original version of an instantiated symbol
         type?: Type;                                // Type of value symbol
         writeType?: Type;                           // Type of value symbol in write contexts
         nameType?: Type;                            // Type associated with a late-bound symbol
@@ -4969,6 +5384,7 @@ namespace ts {
         isConstructorDeclaredProperty?: boolean;    // Property declared through 'this.x = ...' assignment in constructor
         tupleLabelDeclaration?: NamedTupleMember | ParameterDeclaration; // Declaration associated with the tuple's label
         accessibleChainCache?: ESMap<string, Symbol[] | undefined>;
+        filteredIndexSymbolCache?: ESMap<string, Symbol> //Symbol with applicable declarations
     }
 
     /* @internal */
@@ -5236,11 +5652,12 @@ namespace ts {
         pattern?: DestructuringPattern;  // Destructuring pattern represented by type (if any)
         aliasSymbol?: Symbol;            // Alias associated with type
         aliasTypeArguments?: readonly Type[]; // Alias type arguments (if any)
-        /* @internal */ aliasTypeArgumentsContainsMarker?: boolean; // Alias type arguments (if any)
         /* @internal */
         permissiveInstantiation?: Type;  // Instantiation with type parameters mapped to wildcard type
         /* @internal */
         restrictiveInstantiation?: Type; // Instantiation with type parameters mapped to unconstrained form
+        /* @internal */
+        uniqueLiteralFilledInstantiation?: Type;  // Instantiation with type parameters mapped to never type
         /* @internal */
         immediateBaseConstraint?: Type;  // Immediate base constraint cache
         /* @internal */
@@ -5315,22 +5732,21 @@ namespace ts {
         ObjectLiteralPatternWithComputedProperties = 1 << 9,  // Object literal pattern with computed properties
         ReverseMapped    = 1 << 10, // Object contains a property from a reverse-mapped type
         JsxAttributes    = 1 << 11, // Jsx attributes type
-        MarkerType       = 1 << 12, // Marker type used for variance probing
-        JSLiteral        = 1 << 13, // Object type declared in JS - disables errors on read/write of nonexisting members
-        FreshLiteral     = 1 << 14, // Fresh object literal
-        ArrayLiteral     = 1 << 15, // Originates in an array literal
+        JSLiteral        = 1 << 12, // Object type declared in JS - disables errors on read/write of nonexisting members
+        FreshLiteral     = 1 << 13, // Fresh object literal
+        ArrayLiteral     = 1 << 14, // Originates in an array literal
         /* @internal */
-        PrimitiveUnion   = 1 << 16, // Union of only primitive types
+        PrimitiveUnion   = 1 << 15, // Union of only primitive types
         /* @internal */
-        ContainsWideningType = 1 << 17, // Type is or contains undefined or null widening type
+        ContainsWideningType = 1 << 16, // Type is or contains undefined or null widening type
         /* @internal */
-        ContainsObjectOrArrayLiteral = 1 << 18, // Type is or contains object literal type
+        ContainsObjectOrArrayLiteral = 1 << 17, // Type is or contains object literal type
         /* @internal */
-        NonInferrableType = 1 << 19, // Type is or contains anyFunctionType or silentNeverType
+        NonInferrableType = 1 << 18, // Type is or contains anyFunctionType or silentNeverType
         /* @internal */
-        CouldContainTypeVariablesComputed = 1 << 20, // CouldContainTypeVariables flag has been computed
+        CouldContainTypeVariablesComputed = 1 << 19, // CouldContainTypeVariables flag has been computed
         /* @internal */
-        CouldContainTypeVariables = 1 << 21, // Type could contain a type variable
+        CouldContainTypeVariables = 1 << 20, // Type could contain a type variable
 
         ClassOrInterface = Class | Interface,
         /* @internal */
@@ -5342,36 +5758,41 @@ namespace ts {
         ObjectTypeKindMask = ClassOrInterface | Reference | Tuple | Anonymous | Mapped | ReverseMapped | EvolvingArray,
 
         // Flags that require TypeFlags.Object
-        ContainsSpread   = 1 << 22,  // Object literal contains spread operation
-        ObjectRestType   = 1 << 23,  // Originates in object rest declaration
-        InstantiationExpressionType = 1 << 24,  // Originates in instantiation expression
+        ContainsSpread   = 1 << 21,  // Object literal contains spread operation
+        ObjectRestType   = 1 << 22,  // Originates in object rest declaration
+        InstantiationExpressionType = 1 << 23,  // Originates in instantiation expression
         /* @internal */
-        IsClassInstanceClone = 1 << 25, // Type is a clone of a class instance type
+        IsClassInstanceClone = 1 << 24, // Type is a clone of a class instance type
         // Flags that require TypeFlags.Object and ObjectFlags.Reference
         /* @internal */
-        IdenticalBaseTypeCalculated = 1 << 26, // has had `getSingleBaseForNonAugmentingSubtype` invoked on it already
+        IdenticalBaseTypeCalculated = 1 << 25, // has had `getSingleBaseForNonAugmentingSubtype` invoked on it already
         /* @internal */
-        IdenticalBaseTypeExists = 1 << 27, // has a defined cachedEquivalentBaseType member
+        IdenticalBaseTypeExists = 1 << 26, // has a defined cachedEquivalentBaseType member
 
         // Flags that require TypeFlags.UnionOrIntersection or TypeFlags.Substitution
         /* @internal */
-        IsGenericTypeComputed = 1 << 22, // IsGenericObjectType flag has been computed
+        IsGenericTypeComputed = 1 << 21, // IsGenericObjectType flag has been computed
         /* @internal */
-        IsGenericObjectType = 1 << 23, // Union or intersection contains generic object type
+        IsGenericObjectType = 1 << 22, // Union or intersection contains generic object type
         /* @internal */
-        IsGenericIndexType = 1 << 24, // Union or intersection contains generic index type
+        IsGenericIndexType = 1 << 23, // Union or intersection contains generic index type
         /* @internal */
         IsGenericType = IsGenericObjectType | IsGenericIndexType,
 
         // Flags that require TypeFlags.Union
         /* @internal */
-        ContainsIntersections = 1 << 25, // Union contains intersections
+        ContainsIntersections = 1 << 24, // Union contains intersections
+        /* @internal */
+        IsUnknownLikeUnionComputed = 1 << 25, // IsUnknownLikeUnion flag has been computed
+        /* @internal */
+        IsUnknownLikeUnion = 1 << 26, // Union of null, undefined, and empty object type
+        /* @internal */
 
         // Flags that require TypeFlags.Intersection
         /* @internal */
-        IsNeverIntersectionComputed = 1 << 25, // IsNeverLike flag has been computed
+        IsNeverIntersectionComputed = 1 << 24, // IsNeverLike flag has been computed
         /* @internal */
-        IsNeverIntersection = 1 << 26, // Intersection reduces to never
+        IsNeverIntersection = 1 << 25, // Intersection reduces to never
     }
 
     /* @internal */
@@ -5724,8 +6145,8 @@ namespace ts {
     // types disappear upon instantiation (just like type parameters).
     export interface SubstitutionType extends InstantiableType {
         objectFlags: ObjectFlags;
-        baseType: Type;     // Target type
-        substitute: Type;   // Type to substitute for type parameter
+        baseType: Type;    // Target type
+        constraint: Type;  // Constraint that target type is known to satisfy
     }
 
     /* @internal */
@@ -5820,6 +6241,7 @@ namespace ts {
     export const enum TypeMapKind {
         Simple,
         Array,
+        Deferred,
         Function,
         Composite,
         Merged,
@@ -5829,7 +6251,8 @@ namespace ts {
     export type TypeMapper =
         | { kind: TypeMapKind.Simple, source: Type, target: Type }
         | { kind: TypeMapKind.Array, sources: readonly Type[], targets: readonly Type[] | undefined }
-        | { kind: TypeMapKind.Function, func: (t: Type) => Type }
+        | { kind: TypeMapKind.Deferred, sources: readonly Type[], targets: (() => Type)[] }
+        | { kind: TypeMapKind.Function, func: (t: Type) => Type, debugInfo?: () => string }
         | { kind: TypeMapKind.Composite | TypeMapKind.Merged, mapper1: TypeMapper, mapper2: TypeMapper };
 
     export const enum InferencePriority {
@@ -5843,10 +6266,10 @@ namespace ts {
         ReturnType                   = 1 << 7,  // Inference made from return type of generic function
         LiteralKeyof                 = 1 << 8,  // Inference made from a string literal to a keyof T
         NoConstraints                = 1 << 9,  // Don't infer from constraints of instantiable types
-        AlwaysStrict                 = 1 << 10,  // Always use strict rules for contravariant inferences
+        AlwaysStrict                 = 1 << 10, // Always use strict rules for contravariant inferences
         MaxValue                     = 1 << 11, // Seed for inference priority tracking
 
-        PriorityImpliesCombination = ReturnType | MappedTypeConstraint | LiteralKeyof,  // These priorities imply that the resulting type should be a combination of all candidates
+        PriorityImpliesCombination = ReturnType | MappedTypeConstraint | LiteralKeyof, // These priorities imply that the resulting type should be a combination of all candidates
         Circularity = -1,  // Inference circularity (value less than all other priorities)
     }
 
@@ -5899,6 +6322,13 @@ namespace ts {
         nonFixingMapper: TypeMapper;                  // Mapper that doesn't fix inferences
         returnMapper?: TypeMapper;                    // Type mapper for inferences from return types (if any)
         inferredTypeParameters?: readonly TypeParameter[]; // Inferred type parameters for function result
+        intraExpressionInferenceSites?: IntraExpressionInferenceSite[];
+    }
+
+    /* @internal */
+    export interface IntraExpressionInferenceSite {
+        node: Expression | MethodDeclaration;
+        type: Type;
     }
 
     /* @internal */
@@ -6018,11 +6448,27 @@ namespace ts {
         Classic  = 1,
         NodeJs   = 2,
         // Starting with node12, node's module resolver has significant departures from traditional cjs resolution
-        // to better support ecmascript modules and their use within node - more features are still being added, so
-        // we can expect it to change over time, and as such, offer both a `NodeNext` moving resolution target, and a `Node12`
-        // version-anchored resolution target
-        Node12   = 3,
-        NodeNext = 99, // Not simply `Node12` so that compiled code linked against TS can use the `Next` value reliably (same as with `ModuleKind`)
+        // to better support ecmascript modules and their use within node - however more features are still being added.
+        // TypeScript's Node ESM support was introduced after Node 12 went end-of-life, and Node 14 is the earliest stable
+        // version that supports both pattern trailers - *but*, Node 16 is the first version that also supports ECMASCript 2022.
+        // In turn, we offer both a `NodeNext` moving resolution target, and a `Node16` version-anchored resolution target
+        Node16   = 3,
+        NodeNext = 99, // Not simply `Node16` so that compiled code linked against TS can use the `Next` value reliably (same as with `ModuleKind`)
+    }
+
+    export enum ModuleDetectionKind {
+        /**
+         * Files with imports, exports and/or import.meta are considered modules
+         */
+        Legacy = 1,
+        /**
+         * Legacy, but also files with jsx under react-jsx or react-jsxdev and esm mode files under moduleResolution: node16+
+         */
+        Auto = 2,
+        /**
+         * Consider all non-declaration files modules, regardless of present syntax
+         */
+        Force = 3,
     }
 
     export interface PluginImport {
@@ -6120,6 +6566,8 @@ namespace ts {
         maxNodeModuleJsDepth?: number;
         module?: ModuleKind;
         moduleResolution?: ModuleResolutionKind;
+        moduleSuffixes?: string[];
+        moduleDetection?: ModuleDetectionKind;
         newLine?: NewLineKind;
         noEmit?: boolean;
         /*@internal*/noEmitForJsFiles?: boolean;
@@ -6138,6 +6586,8 @@ namespace ts {
         assumeChangesOnlyAffectDirectDependencies?: boolean;
         noLib?: boolean;
         noResolve?: boolean;
+        /*@internal*/
+        noDtsResolution?: boolean;
         noUncheckedIndexedAccess?: boolean;
         out?: string;
         outDir?: string;
@@ -6231,8 +6681,8 @@ namespace ts {
         ES2022 = 7,
         ESNext = 99,
 
-        // Node12+ is an amalgam of commonjs (albeit updated) and es2020+, and represents a distinct module system from es2020/esnext
-        Node12 = 100,
+        // Node16+ is an amalgam of commonjs (albeit updated) and es2022+, and represents a distinct module system from es2020/esnext
+        Node16 = 100,
         NodeNext = 199,
     }
 
@@ -6334,6 +6784,7 @@ namespace ts {
         validatedIncludeSpecs: readonly string[] | undefined;
         validatedExcludeSpecs: readonly string[] | undefined;
         pathPatterns: readonly (string | Pattern)[] | undefined;
+        isDefaultIncludeSpec: boolean;
     }
 
     /* @internal */
@@ -6370,6 +6821,9 @@ namespace ts {
         affectsSemanticDiagnostics?: true;                      // true if option affects semantic diagnostics
         affectsEmit?: true;                                     // true if the options affects emit
         affectsProgramStructure?: true;                         // true if program should be reconstructed from root files if option changes and does not affect module resolution as affectsModuleResolution indirectly means program needs to reconstructed
+        affectsDeclarationPath?: true;                          // true if the options affects declaration file path computed
+        affectsMultiFileEmitBuildInfo?: true;                   // true if this options should be emitted in buildInfo without --out
+        affectsBundleEmitBuildInfo?: true;                      // true if this options should be emitted in buildInfo with --out
         transpileOptionValue?: boolean | undefined;             // If set this means that the option should be set to this value when transpiling
         extraValidation?: (value: CompilerOptionsValue) => [DiagnosticMessage, ...string[]] | undefined; // Additional validation to be performed for the value to be valid
     }
@@ -6423,6 +6877,7 @@ namespace ts {
     export interface CommandLineOptionOfListType extends CommandLineOptionBase {
         type: "list";
         element: CommandLineOptionOfCustomType | CommandLineOptionOfStringType | CommandLineOptionOfNumberType | CommandLineOptionOfBooleanType | TsConfigOnlyOption;
+        listPreserveFalsyValues?: boolean;
     }
 
     /* @internal */
@@ -6581,7 +7036,15 @@ namespace ts {
         realpath?(path: string): string;
         getCurrentDirectory?(): string;
         getDirectories?(path: string): string[];
-        useCaseSensitiveFileNames?: boolean | (() => boolean);
+        useCaseSensitiveFileNames?: boolean | (() => boolean) | undefined;
+    }
+
+    /**
+     * Used by services to specify the minimum host area required to set up source files under any compilation settings
+     */
+    export interface MinimalResolutionCacheHost extends ModuleResolutionHost {
+        getCompilationSettings(): CompilerOptions;
+        getCompilerHost?(): CompilerHost | undefined;
     }
 
     /**
@@ -6657,6 +7120,10 @@ namespace ts {
         readonly resolvedModule: ResolvedModuleFull | undefined;
         /* @internal */
         readonly failedLookupLocations: string[];
+        /* @internal */
+        readonly affectingLocations: string[];
+        /* @internal */
+        readonly resolutionDiagnostics: Diagnostic[]
     }
 
     export interface ResolvedTypeReferenceDirective {
@@ -6678,6 +7145,8 @@ namespace ts {
     export interface ResolvedTypeReferenceDirectiveWithFailedLookupLocations {
         readonly resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective | undefined;
         readonly failedLookupLocations: string[];
+        /*@internal*/ readonly affectingLocations: string[];
+        /* @internal */ resolutionDiagnostics: Diagnostic[];
     }
 
     /* @internal */
@@ -6686,8 +7155,8 @@ namespace ts {
     export type HasChangedAutomaticTypeDirectiveNames = () => boolean;
 
     export interface CompilerHost extends ModuleResolutionHost {
-        getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined;
-        getSourceFileByPath?(fileName: string, path: Path, languageVersion: ScriptTarget, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined;
+        getSourceFile(fileName: string, languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined;
+        getSourceFileByPath?(fileName: string, path: Path, languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined;
         getCancellationToken?(): CancellationToken;
         getDefaultLibFileName(options: CompilerOptions): string;
         getDefaultLibLocation?(): string;
@@ -6729,6 +7198,7 @@ namespace ts {
 
         // For testing:
         /*@internal*/ disableUseFileVersionAsSignature?: boolean;
+        /*@internal*/ storeFilesChangingSignatureDuringEmit?: boolean;
     }
 
     /** true if --out otherwise source file name */
@@ -6763,25 +7233,25 @@ namespace ts {
 
         // Markers
         // - Flags used to indicate that a subtree contains a specific transformation.
-        ContainsTypeScriptClassSyntax = 1 << 12, // Decorators, Property Initializers, Parameter Property Initializers
-        ContainsLexicalThis = 1 << 13,
-        ContainsRestOrSpread = 1 << 14,
-        ContainsObjectRestOrSpread = 1 << 15,
-        ContainsComputedPropertyName = 1 << 16,
-        ContainsBlockScopedBinding = 1 << 17,
-        ContainsBindingPattern = 1 << 18,
-        ContainsYield = 1 << 19,
-        ContainsAwait = 1 << 20,
-        ContainsHoistedDeclarationOrCompletion = 1 << 21,
-        ContainsDynamicImport = 1 << 22,
-        ContainsClassFields = 1 << 23,
-        ContainsPossibleTopLevelAwait = 1 << 24,
-        ContainsLexicalSuper = 1 << 25,
-        ContainsUpdateExpressionForIdentifier = 1 << 26,
-        // Please leave this as 1 << 29.
-        // It is the maximum bit we can set before we outgrow the size of a v8 small integer (SMI) on an x86 system.
-        // It is a good reminder of how much room we have left
-        HasComputedFlags = 1 << 29, // Transform flags have been computed.
+        ContainsTypeScriptClassSyntax = 1 << 13, // Property Initializers, Parameter Property Initializers
+        ContainsLexicalThis = 1 << 14,
+        ContainsRestOrSpread = 1 << 15,
+        ContainsObjectRestOrSpread = 1 << 16,
+        ContainsComputedPropertyName = 1 << 17,
+        ContainsBlockScopedBinding = 1 << 18,
+        ContainsBindingPattern = 1 << 19,
+        ContainsYield = 1 << 20,
+        ContainsAwait = 1 << 21,
+        ContainsHoistedDeclarationOrCompletion = 1 << 22,
+        ContainsDynamicImport = 1 << 23,
+        ContainsClassFields = 1 << 24,
+        ContainsDecorators = 1 << 25,
+        ContainsPossibleTopLevelAwait = 1 << 26,
+        ContainsLexicalSuper = 1 << 27,
+        ContainsUpdateExpressionForIdentifier = 1 << 28,
+        ContainsPrivateIdentifierInExpression = 1 << 29,
+
+        HasComputedFlags = 1 << 31, // Transform flags have been computed.
 
         // Assertions
         // - Bitmasks that are used to assert facts about the syntax of a node and its subtree.
@@ -7031,6 +7501,7 @@ namespace ts {
         getProgramBuildInfo(): ProgramBuildInfo | undefined;
         getSourceFileFromReference: Program["getSourceFileFromReference"];
         readonly redirectTargetsMap: RedirectTargetsMap;
+        createHash?(data: string): string;
     }
 
     /* @internal */
@@ -7059,6 +7530,7 @@ namespace ts {
     export type OuterExpression =
         | ParenthesizedExpression
         | TypeAssertion
+        | SatisfiesExpression
         | AsExpression
         | NonNullExpression
         | PartiallyEmittedExpression;
@@ -7082,7 +7554,7 @@ namespace ts {
         parenthesizeBranchOfConditionalExpression(branch: Expression): Expression;
         parenthesizeExpressionOfExportDefault(expression: Expression): Expression;
         parenthesizeExpressionOfNew(expression: Expression): LeftHandSideExpression;
-        parenthesizeLeftSideOfAccess(expression: Expression): LeftHandSideExpression;
+        parenthesizeLeftSideOfAccess(expression: Expression, optionalChain?: boolean): LeftHandSideExpression;
         parenthesizeOperandOfPostfixUnary(operand: Expression): LeftHandSideExpression;
         parenthesizeOperandOfPrefixUnary(operand: Expression): UnaryExpression;
         parenthesizeExpressionsOfCommaDelimitedList(elements: readonly Expression[]): NodeArray<Expression>;
@@ -7090,10 +7562,19 @@ namespace ts {
         parenthesizeExpressionOfExpressionStatement(expression: Expression): Expression;
         parenthesizeConciseBodyOfArrowFunction(body: Expression): Expression;
         parenthesizeConciseBodyOfArrowFunction(body: ConciseBody): ConciseBody;
-        parenthesizeMemberOfConditionalType(member: TypeNode): TypeNode;
-        parenthesizeMemberOfElementType(member: TypeNode): TypeNode;
-        parenthesizeElementTypeOfArrayType(member: TypeNode): TypeNode;
-        parenthesizeConstituentTypesOfUnionOrIntersectionType(members: readonly TypeNode[]): NodeArray<TypeNode>;
+        parenthesizeCheckTypeOfConditionalType(type: TypeNode): TypeNode;
+        parenthesizeExtendsTypeOfConditionalType(type: TypeNode): TypeNode;
+        parenthesizeOperandOfTypeOperator(type: TypeNode): TypeNode;
+        parenthesizeOperandOfReadonlyTypeOperator(type: TypeNode): TypeNode;
+        parenthesizeNonArrayTypeOfPostfixType(type: TypeNode): TypeNode;
+        parenthesizeElementTypesOfTupleType(types: readonly (TypeNode | NamedTupleMember)[]): NodeArray<TypeNode>;
+        parenthesizeElementTypeOfTupleType(type: TypeNode | NamedTupleMember): TypeNode | NamedTupleMember;
+        parenthesizeTypeOfOptionalType(type: TypeNode): TypeNode;
+        parenthesizeConstituentTypeOfUnionType(type: TypeNode): TypeNode;
+        parenthesizeConstituentTypesOfUnionType(constituents: readonly TypeNode[]): NodeArray<TypeNode>;
+        parenthesizeConstituentTypeOfIntersectionType(type: TypeNode): TypeNode;
+        parenthesizeConstituentTypesOfIntersectionType(constituents: readonly TypeNode[]): NodeArray<TypeNode>;
+        parenthesizeLeadingTypeArgument(typeNode: TypeNode): TypeNode;
         parenthesizeTypeArguments(typeParameters: readonly TypeNode[] | undefined): NodeArray<TypeNode> | undefined;
     }
 
@@ -7112,6 +7593,8 @@ namespace ts {
     export interface NodeFactory {
         /* @internal */ readonly parenthesizer: ParenthesizerRules;
         /* @internal */ readonly converters: NodeConverters;
+        /* @internal */ readonly baseFactory: BaseNodeFactory;
+        /* @internal */ readonly flags: NodeFactoryFlags;
         createNodeArray<T extends Node>(elements?: readonly T[], hasTrailingComma?: boolean): NodeArray<T>;
 
         //
@@ -7206,10 +7689,10 @@ namespace ts {
         // Signature elements
         //
 
-        createTypeParameterDeclaration(name: string | Identifier, constraint?: TypeNode, defaultType?: TypeNode): TypeParameterDeclaration;
-        updateTypeParameterDeclaration(node: TypeParameterDeclaration, name: Identifier, constraint: TypeNode | undefined, defaultType: TypeNode | undefined): TypeParameterDeclaration;
-        createParameterDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, dotDotDotToken: DotDotDotToken | undefined, name: string | BindingName, questionToken?: QuestionToken, type?: TypeNode, initializer?: Expression): ParameterDeclaration;
-        updateParameterDeclaration(node: ParameterDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, dotDotDotToken: DotDotDotToken | undefined, name: string | BindingName, questionToken: QuestionToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined): ParameterDeclaration;
+        createTypeParameterDeclaration(modifiers: readonly Modifier[] | undefined, name: string | Identifier, constraint?: TypeNode, defaultType?: TypeNode): TypeParameterDeclaration;
+        updateTypeParameterDeclaration(node: TypeParameterDeclaration, modifiers: readonly Modifier[] | undefined, name: Identifier, constraint: TypeNode | undefined, defaultType: TypeNode | undefined): TypeParameterDeclaration;
+        createParameterDeclaration(modifiers: readonly ModifierLike[] | undefined, dotDotDotToken: DotDotDotToken | undefined, name: string | BindingName, questionToken?: QuestionToken, type?: TypeNode, initializer?: Expression): ParameterDeclaration;
+        updateParameterDeclaration(node: ParameterDeclaration, modifiers: readonly ModifierLike[] | undefined, dotDotDotToken: DotDotDotToken | undefined, name: string | BindingName, questionToken: QuestionToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined): ParameterDeclaration;
         createDecorator(expression: Expression): Decorator;
         updateDecorator(node: Decorator, expression: Expression): Decorator;
 
@@ -7219,29 +7702,29 @@ namespace ts {
 
         createPropertySignature(modifiers: readonly Modifier[] | undefined, name: PropertyName | string, questionToken: QuestionToken | undefined, type: TypeNode | undefined): PropertySignature;
         updatePropertySignature(node: PropertySignature, modifiers: readonly Modifier[] | undefined, name: PropertyName, questionToken: QuestionToken | undefined, type: TypeNode | undefined): PropertySignature;
-        createPropertyDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: string | PropertyName, questionOrExclamationToken: QuestionToken | ExclamationToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined): PropertyDeclaration;
-        updatePropertyDeclaration(node: PropertyDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: string | PropertyName, questionOrExclamationToken: QuestionToken | ExclamationToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined): PropertyDeclaration;
+        createPropertyDeclaration(modifiers: readonly ModifierLike[] | undefined, name: string | PropertyName, questionOrExclamationToken: QuestionToken | ExclamationToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined): PropertyDeclaration;
+        updatePropertyDeclaration(node: PropertyDeclaration, modifiers: readonly ModifierLike[] | undefined, name: string | PropertyName, questionOrExclamationToken: QuestionToken | ExclamationToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined): PropertyDeclaration;
         createMethodSignature(modifiers: readonly Modifier[] | undefined, name: string | PropertyName, questionToken: QuestionToken | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined): MethodSignature;
         updateMethodSignature(node: MethodSignature, modifiers: readonly Modifier[] | undefined, name: PropertyName, questionToken: QuestionToken | undefined, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode | undefined): MethodSignature;
-        createMethodDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, asteriskToken: AsteriskToken | undefined, name: string | PropertyName, questionToken: QuestionToken | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined): MethodDeclaration;
-        updateMethodDeclaration(node: MethodDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, asteriskToken: AsteriskToken | undefined, name: PropertyName, questionToken: QuestionToken | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined): MethodDeclaration;
-        createConstructorDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], body: Block | undefined): ConstructorDeclaration;
-        updateConstructorDeclaration(node: ConstructorDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], body: Block | undefined): ConstructorDeclaration;
-        createGetAccessorDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: string | PropertyName, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined): GetAccessorDeclaration;
-        updateGetAccessorDeclaration(node: GetAccessorDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: PropertyName, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined): GetAccessorDeclaration;
-        createSetAccessorDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: string | PropertyName, parameters: readonly ParameterDeclaration[], body: Block | undefined): SetAccessorDeclaration;
-        updateSetAccessorDeclaration(node: SetAccessorDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: PropertyName, parameters: readonly ParameterDeclaration[], body: Block | undefined): SetAccessorDeclaration;
+        createMethodDeclaration(modifiers: readonly ModifierLike[] | undefined, asteriskToken: AsteriskToken | undefined, name: string | PropertyName, questionToken: QuestionToken | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined): MethodDeclaration;
+        updateMethodDeclaration(node: MethodDeclaration, modifiers: readonly ModifierLike[] | undefined, asteriskToken: AsteriskToken | undefined, name: PropertyName, questionToken: QuestionToken | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined): MethodDeclaration;
+        createConstructorDeclaration(modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], body: Block | undefined): ConstructorDeclaration;
+        updateConstructorDeclaration(node: ConstructorDeclaration, modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], body: Block | undefined): ConstructorDeclaration;
+        createGetAccessorDeclaration(modifiers: readonly ModifierLike[] | undefined, name: string | PropertyName, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined): GetAccessorDeclaration;
+        updateGetAccessorDeclaration(node: GetAccessorDeclaration, modifiers: readonly ModifierLike[] | undefined, name: PropertyName, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined): GetAccessorDeclaration;
+        createSetAccessorDeclaration(modifiers: readonly ModifierLike[] | undefined, name: string | PropertyName, parameters: readonly ParameterDeclaration[], body: Block | undefined): SetAccessorDeclaration;
+        updateSetAccessorDeclaration(node: SetAccessorDeclaration, modifiers: readonly ModifierLike[] | undefined, name: PropertyName, parameters: readonly ParameterDeclaration[], body: Block | undefined): SetAccessorDeclaration;
         createCallSignature(typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined): CallSignatureDeclaration;
         updateCallSignature(node: CallSignatureDeclaration, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode | undefined): CallSignatureDeclaration;
         createConstructSignature(typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined): ConstructSignatureDeclaration;
         updateConstructSignature(node: ConstructSignatureDeclaration, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode | undefined): ConstructSignatureDeclaration;
-        createIndexSignature(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): IndexSignatureDeclaration;
-        /* @internal */ createIndexSignature(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined): IndexSignatureDeclaration; // eslint-disable-line @typescript-eslint/unified-signatures
-        updateIndexSignature(node: IndexSignatureDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): IndexSignatureDeclaration;
+        createIndexSignature(modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): IndexSignatureDeclaration;
+        /* @internal */ createIndexSignature(modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined): IndexSignatureDeclaration; // eslint-disable-line @typescript-eslint/unified-signatures
+        updateIndexSignature(node: IndexSignatureDeclaration, modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): IndexSignatureDeclaration;
         createTemplateLiteralTypeSpan(type: TypeNode, literal: TemplateMiddle | TemplateTail): TemplateLiteralTypeSpan;
         updateTemplateLiteralTypeSpan(node: TemplateLiteralTypeSpan, type: TypeNode, literal: TemplateMiddle | TemplateTail): TemplateLiteralTypeSpan;
-        createClassStaticBlockDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, body: Block): ClassStaticBlockDeclaration;
-        updateClassStaticBlockDeclaration(node: ClassStaticBlockDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, body: Block): ClassStaticBlockDeclaration;
+        createClassStaticBlockDeclaration(body: Block): ClassStaticBlockDeclaration;
+        updateClassStaticBlockDeclaration(node: ClassStaticBlockDeclaration, body: Block): ClassStaticBlockDeclaration;
 
         //
         // Types
@@ -7255,11 +7738,7 @@ namespace ts {
         createFunctionTypeNode(typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): FunctionTypeNode;
         updateFunctionTypeNode(node: FunctionTypeNode, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode): FunctionTypeNode;
         createConstructorTypeNode(modifiers: readonly Modifier[] | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): ConstructorTypeNode;
-        /** @deprecated */
-        createConstructorTypeNode(typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): ConstructorTypeNode;
         updateConstructorTypeNode(node: ConstructorTypeNode, modifiers: readonly Modifier[] | undefined, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode): ConstructorTypeNode;
-        /** @deprecated */
-        updateConstructorTypeNode(node: ConstructorTypeNode, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode): ConstructorTypeNode;
         createTypeQueryNode(exprName: EntityName, typeArguments?: readonly TypeNode[]): TypeQueryNode;
         updateTypeQueryNode(node: TypeQueryNode, exprName: EntityName, typeArguments?: readonly TypeNode[]): TypeQueryNode;
         createTypeLiteralNode(members: readonly TypeElement[] | undefined): TypeLiteralNode;
@@ -7282,11 +7761,7 @@ namespace ts {
         updateConditionalTypeNode(node: ConditionalTypeNode, checkType: TypeNode, extendsType: TypeNode, trueType: TypeNode, falseType: TypeNode): ConditionalTypeNode;
         createInferTypeNode(typeParameter: TypeParameterDeclaration): InferTypeNode;
         updateInferTypeNode(node: InferTypeNode, typeParameter: TypeParameterDeclaration): InferTypeNode;
-        /*@deprecated*/
-        createImportTypeNode(argument: TypeNode, qualifier?: EntityName, typeArguments?: readonly TypeNode[], isTypeOf?: boolean): ImportTypeNode;
         createImportTypeNode(argument: TypeNode, assertions?: ImportTypeAssertionContainer, qualifier?: EntityName, typeArguments?: readonly TypeNode[], isTypeOf?: boolean): ImportTypeNode;
-        /*@deprecated*/
-        updateImportTypeNode(node: ImportTypeNode, argument: TypeNode, qualifier: EntityName | undefined, typeArguments: readonly TypeNode[] | undefined, isTypeOf?: boolean): ImportTypeNode;
         updateImportTypeNode(node: ImportTypeNode, argument: TypeNode, assertions: ImportTypeAssertionContainer | undefined, qualifier: EntityName | undefined, typeArguments: readonly TypeNode[] | undefined, isTypeOf?: boolean): ImportTypeNode;
         createParenthesizedType(type: TypeNode): ParenthesizedTypeNode;
         updateParenthesizedType(node: ParenthesizedTypeNode, type: TypeNode): ParenthesizedTypeNode;
@@ -7379,8 +7854,8 @@ namespace ts {
         updateYieldExpression(node: YieldExpression, asteriskToken: AsteriskToken | undefined, expression: Expression | undefined): YieldExpression;
         createSpreadElement(expression: Expression): SpreadElement;
         updateSpreadElement(node: SpreadElement, expression: Expression): SpreadElement;
-        createClassExpression(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: string | Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly ClassElement[]): ClassExpression;
-        updateClassExpression(node: ClassExpression, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly ClassElement[]): ClassExpression;
+        createClassExpression(modifiers: readonly ModifierLike[] | undefined, name: string | Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly ClassElement[]): ClassExpression;
+        updateClassExpression(node: ClassExpression, modifiers: readonly ModifierLike[] | undefined, name: Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly ClassElement[]): ClassExpression;
         createOmittedExpression(): OmittedExpression;
         createExpressionWithTypeArguments(expression: Expression, typeArguments: readonly TypeNode[] | undefined): ExpressionWithTypeArguments;
         updateExpressionWithTypeArguments(node: ExpressionWithTypeArguments, expression: Expression, typeArguments: readonly TypeNode[] | undefined): ExpressionWithTypeArguments;
@@ -7392,6 +7867,8 @@ namespace ts {
         updateNonNullChain(node: NonNullChain, expression: Expression): NonNullChain;
         createMetaProperty(keywordToken: MetaProperty["keywordToken"], name: Identifier): MetaProperty;
         updateMetaProperty(node: MetaProperty, name: Identifier): MetaProperty;
+        createSatisfiesExpression(expression: Expression, type: TypeNode): SatisfiesExpression;
+        updateSatisfiesExpression(node: SatisfiesExpression, expression: Expression, type: TypeNode): SatisfiesExpression;
 
         //
         // Misc
@@ -7445,28 +7922,28 @@ namespace ts {
         updateVariableDeclaration(node: VariableDeclaration, name: BindingName, exclamationToken: ExclamationToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined): VariableDeclaration;
         createVariableDeclarationList(declarations: readonly VariableDeclaration[], flags?: NodeFlags): VariableDeclarationList;
         updateVariableDeclarationList(node: VariableDeclarationList, declarations: readonly VariableDeclaration[]): VariableDeclarationList;
-        createFunctionDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, asteriskToken: AsteriskToken | undefined, name: string | Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined): FunctionDeclaration;
-        updateFunctionDeclaration(node: FunctionDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, asteriskToken: AsteriskToken | undefined, name: Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined): FunctionDeclaration;
-        createClassDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: string | Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly ClassElement[]): ClassDeclaration;
-        updateClassDeclaration(node: ClassDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly ClassElement[]): ClassDeclaration;
-        createInterfaceDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: string | Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly TypeElement[]): InterfaceDeclaration;
-        updateInterfaceDeclaration(node: InterfaceDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly TypeElement[]): InterfaceDeclaration;
-        createTypeAliasDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: string | Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, type: TypeNode): TypeAliasDeclaration;
-        updateTypeAliasDeclaration(node: TypeAliasDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, type: TypeNode): TypeAliasDeclaration;
-        createEnumDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: string | Identifier, members: readonly EnumMember[]): EnumDeclaration;
-        updateEnumDeclaration(node: EnumDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: Identifier, members: readonly EnumMember[]): EnumDeclaration;
-        createModuleDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: ModuleName, body: ModuleBody | undefined, flags?: NodeFlags): ModuleDeclaration;
-        updateModuleDeclaration(node: ModuleDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: ModuleName, body: ModuleBody | undefined): ModuleDeclaration;
+        createFunctionDeclaration(modifiers: readonly ModifierLike[] | undefined, asteriskToken: AsteriskToken | undefined, name: string | Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined): FunctionDeclaration;
+        updateFunctionDeclaration(node: FunctionDeclaration, modifiers: readonly ModifierLike[] | undefined, asteriskToken: AsteriskToken | undefined, name: Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined): FunctionDeclaration;
+        createClassDeclaration(modifiers: readonly ModifierLike[] | undefined, name: string | Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly ClassElement[]): ClassDeclaration;
+        updateClassDeclaration(node: ClassDeclaration, modifiers: readonly ModifierLike[] | undefined, name: Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly ClassElement[]): ClassDeclaration;
+        createInterfaceDeclaration(modifiers: readonly Modifier[] | undefined, name: string | Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly TypeElement[]): InterfaceDeclaration;
+        updateInterfaceDeclaration(node: InterfaceDeclaration, modifiers: readonly Modifier[] | undefined, name: Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly TypeElement[]): InterfaceDeclaration;
+        createTypeAliasDeclaration(modifiers: readonly Modifier[] | undefined, name: string | Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, type: TypeNode): TypeAliasDeclaration;
+        updateTypeAliasDeclaration(node: TypeAliasDeclaration, modifiers: readonly Modifier[] | undefined, name: Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, type: TypeNode): TypeAliasDeclaration;
+        createEnumDeclaration(modifiers: readonly Modifier[] | undefined, name: string | Identifier, members: readonly EnumMember[]): EnumDeclaration;
+        updateEnumDeclaration(node: EnumDeclaration, modifiers: readonly Modifier[] | undefined, name: Identifier, members: readonly EnumMember[]): EnumDeclaration;
+        createModuleDeclaration(modifiers: readonly Modifier[] | undefined, name: ModuleName, body: ModuleBody | undefined, flags?: NodeFlags): ModuleDeclaration;
+        updateModuleDeclaration(node: ModuleDeclaration, modifiers: readonly Modifier[] | undefined, name: ModuleName, body: ModuleBody | undefined): ModuleDeclaration;
         createModuleBlock(statements: readonly Statement[]): ModuleBlock;
         updateModuleBlock(node: ModuleBlock, statements: readonly Statement[]): ModuleBlock;
         createCaseBlock(clauses: readonly CaseOrDefaultClause[]): CaseBlock;
         updateCaseBlock(node: CaseBlock, clauses: readonly CaseOrDefaultClause[]): CaseBlock;
         createNamespaceExportDeclaration(name: string | Identifier): NamespaceExportDeclaration;
         updateNamespaceExportDeclaration(node: NamespaceExportDeclaration, name: Identifier): NamespaceExportDeclaration;
-        createImportEqualsDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, isTypeOnly: boolean, name: string | Identifier, moduleReference: ModuleReference): ImportEqualsDeclaration;
-        updateImportEqualsDeclaration(node: ImportEqualsDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, isTypeOnly: boolean, name: Identifier, moduleReference: ModuleReference): ImportEqualsDeclaration;
-        createImportDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause?: AssertClause): ImportDeclaration;
-        updateImportDeclaration(node: ImportDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration;
+        createImportEqualsDeclaration(modifiers: readonly Modifier[] | undefined, isTypeOnly: boolean, name: string | Identifier, moduleReference: ModuleReference): ImportEqualsDeclaration;
+        updateImportEqualsDeclaration(node: ImportEqualsDeclaration, modifiers: readonly Modifier[] | undefined, isTypeOnly: boolean, name: Identifier, moduleReference: ModuleReference): ImportEqualsDeclaration;
+        createImportDeclaration(modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause?: AssertClause): ImportDeclaration;
+        updateImportDeclaration(node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration;
         createImportClause(isTypeOnly: boolean, name: Identifier | undefined, namedBindings: NamedImportBindings | undefined): ImportClause;
         updateImportClause(node: ImportClause, isTypeOnly: boolean, name: Identifier | undefined, namedBindings: NamedImportBindings | undefined): ImportClause;
         createAssertClause(elements: NodeArray<AssertEntry>, multiLine?: boolean): AssertClause;
@@ -7483,10 +7960,10 @@ namespace ts {
         updateNamedImports(node: NamedImports, elements: readonly ImportSpecifier[]): NamedImports;
         createImportSpecifier(isTypeOnly: boolean, propertyName: Identifier | undefined, name: Identifier): ImportSpecifier;
         updateImportSpecifier(node: ImportSpecifier, isTypeOnly: boolean, propertyName: Identifier | undefined, name: Identifier): ImportSpecifier;
-        createExportAssignment(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, isExportEquals: boolean | undefined, expression: Expression): ExportAssignment;
-        updateExportAssignment(node: ExportAssignment, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, expression: Expression): ExportAssignment;
-        createExportDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, isTypeOnly: boolean, exportClause: NamedExportBindings | undefined, moduleSpecifier?: Expression, assertClause?: AssertClause): ExportDeclaration;
-        updateExportDeclaration(node: ExportDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, isTypeOnly: boolean, exportClause: NamedExportBindings | undefined, moduleSpecifier: Expression | undefined, assertClause: AssertClause | undefined): ExportDeclaration;
+        createExportAssignment(modifiers: readonly Modifier[] | undefined, isExportEquals: boolean | undefined, expression: Expression): ExportAssignment;
+        updateExportAssignment(node: ExportAssignment, modifiers: readonly Modifier[] | undefined, expression: Expression): ExportAssignment;
+        createExportDeclaration(modifiers: readonly Modifier[] | undefined, isTypeOnly: boolean, exportClause: NamedExportBindings | undefined, moduleSpecifier?: Expression, assertClause?: AssertClause): ExportDeclaration;
+        updateExportDeclaration(node: ExportDeclaration, modifiers: readonly Modifier[] | undefined, isTypeOnly: boolean, exportClause: NamedExportBindings | undefined, moduleSpecifier: Expression | undefined, assertClause: AssertClause | undefined): ExportDeclaration;
         createNamedExports(elements: readonly ExportSpecifier[]): NamedExports;
         updateNamedExports(node: NamedExports, elements: readonly ExportSpecifier[]): NamedExports;
         createExportSpecifier(isTypeOnly: boolean, propertyName: string | Identifier | undefined, name: string | Identifier): ExportSpecifier;
@@ -7506,9 +7983,9 @@ namespace ts {
 
         createJSDocAllType(): JSDocAllType;
         createJSDocUnknownType(): JSDocUnknownType;
-        createJSDocNonNullableType(type: TypeNode): JSDocNonNullableType;
+        createJSDocNonNullableType(type: TypeNode, postfix?: boolean): JSDocNonNullableType;
         updateJSDocNonNullableType(node: JSDocNonNullableType, type: TypeNode): JSDocNonNullableType;
-        createJSDocNullableType(type: TypeNode): JSDocNullableType;
+        createJSDocNullableType(type: TypeNode, postfix?: boolean): JSDocNullableType;
         updateJSDocNullableType(node: JSDocNullableType, type: TypeNode): JSDocNullableType;
         createJSDocOptionalType(type: TypeNode): JSDocOptionalType;
         updateJSDocOptionalType(node: JSDocOptionalType, type: TypeNode): JSDocOptionalType;
@@ -7599,8 +8076,8 @@ namespace ts {
         createJsxOpeningFragment(): JsxOpeningFragment;
         createJsxJsxClosingFragment(): JsxClosingFragment;
         updateJsxFragment(node: JsxFragment, openingFragment: JsxOpeningFragment, children: readonly JsxChild[], closingFragment: JsxClosingFragment): JsxFragment;
-        createJsxAttribute(name: Identifier, initializer: StringLiteral | JsxExpression | undefined): JsxAttribute;
-        updateJsxAttribute(node: JsxAttribute, name: Identifier, initializer: StringLiteral | JsxExpression | undefined): JsxAttribute;
+        createJsxAttribute(name: Identifier, initializer: JsxAttributeValue | undefined): JsxAttribute;
+        updateJsxAttribute(node: JsxAttribute, name: Identifier, initializer: JsxAttributeValue | undefined): JsxAttribute;
         createJsxAttributes(properties: readonly JsxAttributeLike[]): JsxAttributes;
         updateJsxAttributes(node: JsxAttributes, properties: readonly JsxAttributeLike[]): JsxAttributes;
         createJsxSpreadAttribute(expression: Expression): JsxSpreadAttribute;
@@ -8163,6 +8640,8 @@ namespace ts {
     /*@internal*/
     export interface BundleFileInfo {
         sections: BundleFileSection[];
+        hash?: string;
+        mapHash?: string;
         sources?: SourceFileInfo;
     }
 
@@ -8395,7 +8874,7 @@ namespace ts {
     export interface ResolvedModuleSpecifierInfo {
         modulePaths: readonly ModulePath[] | undefined;
         moduleSpecifiers: readonly string[] | undefined;
-        isAutoImportable: boolean | undefined;
+        isBlockedByPackageJsonDependencies: boolean | undefined;
     }
 
     /* @internal */
@@ -8407,7 +8886,7 @@ namespace ts {
     export interface ModuleSpecifierCache {
         get(fromFileName: Path, toFileName: Path, preferences: UserPreferences, options: ModuleSpecifierOptions): Readonly<ResolvedModuleSpecifierInfo> | undefined;
         set(fromFileName: Path, toFileName: Path, preferences: UserPreferences, options: ModuleSpecifierOptions, modulePaths: readonly ModulePath[], moduleSpecifiers: readonly string[]): void;
-        setIsAutoImportable(fromFileName: Path, toFileName: Path, preferences: UserPreferences, options: ModuleSpecifierOptions, isAutoImportable: boolean): void;
+        setBlockedByPackageJsonDependencies(fromFileName: Path, toFileName: Path, preferences: UserPreferences, options: ModuleSpecifierOptions, isBlockedByPackageJsonDependencies: boolean): void;
         setModulePaths(fromFileName: Path, toFileName: Path, preferences: UserPreferences, options: ModuleSpecifierOptions, modulePaths: readonly ModulePath[]): void;
         clear(): void;
         count(): number;
@@ -8431,6 +8910,7 @@ namespace ts {
         trackExternalModuleSymbolOfImportTypeNode?(symbol: Symbol): void;
         reportNonlocalAugmentation?(containingFile: SourceFile, parentSymbol: Symbol, augmentingSymbol: Symbol): void;
         reportNonSerializableProperty?(propertyName: string): void;
+        reportImportTypeNodeResolutionModeOverride?(): void;
     }
 
     export interface TextSpan {
@@ -8505,13 +8985,12 @@ namespace ts {
         PreferNewLine = 1 << 16,        // Prefer adding a LineTerminator between synthesized nodes.
         NoTrailingNewLine = 1 << 17,    // Do not emit a trailing NewLine for a MultiLine list.
         NoInterveningComments = 1 << 18, // Do not emit comments between each node
-
         NoSpaceIfEmpty = 1 << 19,       // If the literal is empty, do not add spaces between braces.
         SingleElement = 1 << 20,
         SpaceAfterList = 1 << 21,       // Add space after list
 
         // Precomputed Formats
-        Modifiers = SingleLine | SpaceBetweenSiblings | NoInterveningComments,
+        Modifiers = SingleLine | SpaceBetweenSiblings | NoInterveningComments | SpaceAfterList,
         HeritageClauses = SingleLine | SpaceBetweenSiblings,
         SingleLineTypeLiteralMembers = SingleLine | SpaceBetweenBraces | SpaceBetweenSiblings,
         MultiLineTypeLiteralMembers = MultiLine | Indented | OptionalIfEmpty,
@@ -8710,6 +9189,8 @@ namespace ts {
         readonly includeAutomaticOptionalChainCompletions?: boolean;
         readonly includeCompletionsWithInsertText?: boolean;
         readonly includeCompletionsWithClassMemberSnippets?: boolean;
+        readonly includeCompletionsWithObjectLiteralMethodSnippets?: boolean;
+        readonly useLabelDetailsInCompletionEntries?: boolean;
         readonly allowIncompleteCompletions?: boolean;
         readonly importModuleSpecifierPreference?: "shortest" | "project-relative" | "relative" | "non-relative";
         /** Determines whether we import `foo/index.ts` as "foo", "foo/index", or "foo/index.js" */
@@ -8723,14 +9204,24 @@ namespace ts {
         readonly includeInlayParameterNameHintsWhenArgumentMatchesName?: boolean;
         readonly includeInlayFunctionParameterTypeHints?: boolean,
         readonly includeInlayVariableTypeHints?: boolean;
+        readonly includeInlayVariableTypeHintsWhenTypeMatchesName?: boolean;
         readonly includeInlayPropertyDeclarationTypeHints?: boolean;
         readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
         readonly includeInlayEnumMemberValueHints?: boolean;
+        readonly allowRenameOfImportPath?: boolean;
+        readonly autoImportFileExcludePatterns?: string[];
     }
 
     /** Represents a bigint literal value without requiring bigint support */
     export interface PseudoBigInt {
         negative: boolean;
         base10Value: string;
+    }
+
+    /* @internal */
+    export interface Queue<T> {
+        enqueue(...items: T[]): void;
+        dequeue(): T;
+        isEmpty(): boolean;
     }
 }

@@ -19,6 +19,7 @@ tests/cases/compiler/jsxNamespacePrefixInNameReact.tsx(23,21): error TS1003: Ide
 tests/cases/compiler/jsxNamespacePrefixInNameReact.tsx(24,26): error TS1003: Identifier expected.
 tests/cases/compiler/jsxNamespacePrefixInNameReact.tsx(24,27): error TS1003: Identifier expected.
 tests/cases/compiler/jsxNamespacePrefixInNameReact.tsx(24,29): error TS1005: '...' expected.
+tests/cases/compiler/jsxNamespacePrefixInNameReact.tsx(24,29): error TS2698: Spread types may only be created from object types.
 tests/cases/compiler/jsxNamespacePrefixInNameReact.tsx(26,21): error TS1109: Expression expected.
 tests/cases/compiler/jsxNamespacePrefixInNameReact.tsx(26,22): error TS1109: Expression expected.
 tests/cases/compiler/jsxNamespacePrefixInNameReact.tsx(26,25): error TS1005: ',' expected.
@@ -29,7 +30,7 @@ tests/cases/compiler/jsxNamespacePrefixInNameReact.tsx(26,42): error TS1109: Exp
 tests/cases/compiler/jsxNamespacePrefixInNameReact.tsx(27,24): error TS1003: Identifier expected.
 
 
-==== tests/cases/compiler/jsxNamespacePrefixInNameReact.tsx (29 errors) ====
+==== tests/cases/compiler/jsxNamespacePrefixInNameReact.tsx (30 errors) ====
     declare var React: any;
     
     var justElement1 = <a:element />;
@@ -96,6 +97,8 @@ tests/cases/compiler/jsxNamespacePrefixInNameReact.tsx(27,24): error TS1003: Ide
 !!! error TS1003: Identifier expected.
                                 ~~~~~~~
 !!! error TS1005: '...' expected.
+                                ~~~~~~~
+!!! error TS2698: Spread types may only be created from object types.
     
     var beginOfIdent1 = <:a attr={"value"} />;
                         ~

@@ -60,10 +60,10 @@ interface IRouterMatcher<T> {
 }
 
 type PathParams = string | RegExp | (string | RegExp)[];
->PathParams : PathParams
+>PathParams : string | RegExp | (string | RegExp)[]
 
 type RequestHandlerParams = RequestHandler | ErrorRequestHandler | (RequestHandler | ErrorRequestHandler)[];
->RequestHandlerParams : RequestHandlerParams
+>RequestHandlerParams : RequestHandler | ErrorRequestHandler | (RequestHandler | ErrorRequestHandler)[]
 
 interface RequestHandler {
     (req: Request, res: Response, next: NextFunction): any;

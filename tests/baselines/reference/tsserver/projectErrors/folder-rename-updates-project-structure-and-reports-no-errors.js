@@ -32,9 +32,9 @@ Project '/a/b/projects/myproject/tsconfig.json' (Configured)
 
 
 	bar/app.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 	foo/foo.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 
 -----------------------------------------------
 event:
@@ -93,9 +93,9 @@ Project '/a/b/projects/myproject/tsconfig.json' (Configured)
 
 
 	bar/app.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 	foo2/foo.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 
 -----------------------------------------------
 Running: *ensureProjectForOpenFiles*

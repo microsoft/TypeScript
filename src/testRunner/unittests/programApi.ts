@@ -179,13 +179,13 @@ namespace ts {
         });
     });
 
-    describe("unittests:: programApi:: Program.getDiagnosticsProducingTypeChecker / Program.getSemanticDiagnostics", () => {
+    describe("unittests:: programApi:: Program.getTypeChecker / Program.getSemanticDiagnostics", () => {
         it("does not produce errors on `as const` it would not normally produce on the command line", () => {
             const main = new documents.TextDocument("/main.ts", "0 as const");
 
             const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ false, { documents: [main], cwd: "/" });
             const program = createProgram(["/main.ts"], {}, new fakes.CompilerHost(fs, { newLine: NewLineKind.LineFeed }));
-            const typeChecker = program.getDiagnosticsProducingTypeChecker();
+            const typeChecker = program.getTypeChecker();
             const sourceFile = program.getSourceFile("main.ts")!;
             typeChecker.getTypeAtLocation(((sourceFile.statements[0] as ExpressionStatement).expression as AsExpression).type);
             const diag = program.getSemanticDiagnostics();
@@ -199,7 +199,7 @@ namespace ts {
             const program = createProgram(["/main.ts"], {}, new fakes.CompilerHost(fs, { newLine: NewLineKind.LineFeed }));
 
             const sourceFile = program.getSourceFile("main.ts")!;
-            const typeChecker = program.getDiagnosticsProducingTypeChecker();
+            const typeChecker = program.getTypeChecker();
             typeChecker.getSymbolAtLocation((sourceFile.statements[0] as ImportDeclaration).moduleSpecifier);
             assert.isEmpty(program.getSemanticDiagnostics());
         });

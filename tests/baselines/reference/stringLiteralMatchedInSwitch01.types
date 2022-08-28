@@ -1,9 +1,9 @@
 === tests/cases/conformance/types/stringLiteral/stringLiteralMatchedInSwitch01.ts ===
 type S = "a" | "b";
->S : S
+>S : "a" | "b"
 
 type T = S[] | S;
->T : T
+>T : S | S[]
 
 var foo: T;
 >foo : T

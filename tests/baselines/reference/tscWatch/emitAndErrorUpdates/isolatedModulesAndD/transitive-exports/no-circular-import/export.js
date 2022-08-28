@@ -33,7 +33,7 @@ export class Data {
 }
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"files":["app.ts"],"compilerOptions":{"baseUrl":".","isolatedModules":true,"declaration":true}}
+{"files":["app.ts"],"compilerOptions":{"baseUrl":"."}}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -49,7 +49,7 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-/a/lib/tsc.js --w
+/a/lib/tsc.js --w --isolatedModules --d
 Output::
 >> Screen clear
 [[90m12:00:37 AM[0m] Starting compilation in watch mode...
@@ -59,7 +59,7 @@ Output::
 
 
 Program root files: ["/user/username/projects/myproject/app.ts"]
-Program options: {"baseUrl":"/user/username/projects/myproject","isolatedModules":true,"declaration":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"baseUrl":"/user/username/projects/myproject","watch":true,"isolatedModules":true,"declaration":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -81,12 +81,12 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
-/user/username/projects/myproject/lib1/tools/tools.interface.ts (used version)
-/user/username/projects/myproject/lib1/tools/public.ts (used version)
-/user/username/projects/myproject/lib1/public.ts (used version)
-/user/username/projects/myproject/lib2/data.ts (used version)
-/user/username/projects/myproject/lib2/public.ts (used version)
-/user/username/projects/myproject/app.ts (used version)
+/user/username/projects/myproject/lib1/tools/tools.interface.ts (computed .d.ts during emit)
+/user/username/projects/myproject/lib1/tools/public.ts (computed .d.ts during emit)
+/user/username/projects/myproject/lib1/public.ts (computed .d.ts during emit)
+/user/username/projects/myproject/lib2/data.ts (computed .d.ts during emit)
+/user/username/projects/myproject/lib2/public.ts (computed .d.ts during emit)
+/user/username/projects/myproject/app.ts (computed .d.ts during emit)
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
@@ -105,12 +105,12 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/lib1/tools/tools.interface.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/user/username/projects/myproject/node_modules/@types:
+  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
 
 FsWatches::
 
 FsWatchesRecursive::
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 
@@ -267,7 +267,7 @@ Output::
 
 
 Program root files: ["/user/username/projects/myproject/app.ts"]
-Program options: {"baseUrl":"/user/username/projects/myproject","isolatedModules":true,"declaration":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"baseUrl":"/user/username/projects/myproject","watch":true,"isolatedModules":true,"declaration":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -288,11 +288,11 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/lib1/tools/tools.interface.ts (computed .d.ts)
-/user/username/projects/myproject/lib1/tools/public.ts (used version)
-/user/username/projects/myproject/lib1/public.ts (used version)
-/user/username/projects/myproject/lib2/data.ts (used version)
-/user/username/projects/myproject/lib2/public.ts (used version)
-/user/username/projects/myproject/app.ts (used version)
+/user/username/projects/myproject/lib1/tools/public.ts (computed .d.ts during emit)
+/user/username/projects/myproject/lib1/public.ts (computed .d.ts during emit)
+/user/username/projects/myproject/lib2/data.ts (computed .d.ts during emit)
+/user/username/projects/myproject/lib2/public.ts (computed .d.ts during emit)
+/user/username/projects/myproject/app.ts (computed .d.ts during emit)
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
@@ -311,12 +311,12 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/lib1/tools/tools.interface.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/user/username/projects/myproject/node_modules/@types:
+  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
 
 FsWatches::
 
 FsWatchesRecursive::
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 
@@ -351,7 +351,7 @@ Output::
 
 
 Program root files: ["/user/username/projects/myproject/app.ts"]
-Program options: {"baseUrl":"/user/username/projects/myproject","isolatedModules":true,"declaration":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"baseUrl":"/user/username/projects/myproject","watch":true,"isolatedModules":true,"declaration":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -372,11 +372,11 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/lib1/tools/tools.interface.ts (computed .d.ts)
-/user/username/projects/myproject/lib1/tools/public.ts (used version)
-/user/username/projects/myproject/lib1/public.ts (used version)
-/user/username/projects/myproject/lib2/data.ts (used version)
-/user/username/projects/myproject/lib2/public.ts (used version)
-/user/username/projects/myproject/app.ts (used version)
+/user/username/projects/myproject/lib1/tools/public.ts (computed .d.ts during emit)
+/user/username/projects/myproject/lib1/public.ts (computed .d.ts during emit)
+/user/username/projects/myproject/lib2/data.ts (computed .d.ts during emit)
+/user/username/projects/myproject/lib2/public.ts (computed .d.ts during emit)
+/user/username/projects/myproject/app.ts (computed .d.ts during emit)
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
@@ -395,12 +395,12 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/lib1/tools/tools.interface.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/user/username/projects/myproject/node_modules/@types:
+  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
 
 FsWatches::
 
 FsWatchesRecursive::
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 
@@ -441,7 +441,7 @@ Output::
 
 
 Program root files: ["/user/username/projects/myproject/app.ts"]
-Program options: {"baseUrl":"/user/username/projects/myproject","isolatedModules":true,"declaration":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"baseUrl":"/user/username/projects/myproject","watch":true,"isolatedModules":true,"declaration":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -462,11 +462,11 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/lib1/tools/tools.interface.ts (computed .d.ts)
-/user/username/projects/myproject/lib1/tools/public.ts (used version)
-/user/username/projects/myproject/lib1/public.ts (used version)
-/user/username/projects/myproject/lib2/data.ts (used version)
-/user/username/projects/myproject/lib2/public.ts (used version)
-/user/username/projects/myproject/app.ts (used version)
+/user/username/projects/myproject/lib1/tools/public.ts (computed .d.ts during emit)
+/user/username/projects/myproject/lib1/public.ts (computed .d.ts during emit)
+/user/username/projects/myproject/lib2/data.ts (computed .d.ts during emit)
+/user/username/projects/myproject/lib2/public.ts (computed .d.ts during emit)
+/user/username/projects/myproject/app.ts (computed .d.ts during emit)
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
@@ -485,12 +485,12 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/lib1/tools/tools.interface.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/user/username/projects/myproject/node_modules/@types:
+  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
 
 FsWatches::
 
 FsWatchesRecursive::
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 

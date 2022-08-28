@@ -34,9 +34,9 @@ Project '/users/username/projects/project/tsconfig.json' (Configured)
 	../../../../a/lib/lib.d.ts
 	  Default library for target 'es3'
 	b.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 	sub/a.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 
 -----------------------------------------------
 event:
@@ -103,9 +103,9 @@ Project '/users/username/projects/project/tsconfig.json' (Configured)
 	../../../../a/lib/lib.d.ts
 	  Default library for target 'es3'
 	b.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 	a.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 
 -----------------------------------------------
 Project '/users/username/projects/project/tsconfig.json' (Configured)
@@ -169,11 +169,11 @@ Project '/users/username/projects/project/tsconfig.json' (Configured)
 	../../../../a/lib/lib.d.ts
 	  Default library for target 'es3'
 	b.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 
 -----------------------------------------------
 event:
-    {"seq":0,"type":"event","event":"configFileDiag","body":{"triggerFile":"/users/username/projects/project/sub/a.ts","configFile":"/users/username/projects/project/tsconfig.json","diagnostics":[{"text":"File '/users/username/projects/project/a.ts' not found.\n  The file is in the program because:\n    Matched by include pattern '**/*' in '/users/username/projects/project/tsconfig.json'","code":6053,"category":"error"}]}}
+    {"seq":0,"type":"event","event":"configFileDiag","body":{"triggerFile":"/users/username/projects/project/sub/a.ts","configFile":"/users/username/projects/project/tsconfig.json","diagnostics":[{"text":"File '/users/username/projects/project/a.ts' not found.\n  The file is in the program because:\n    Matched by default include pattern '**/*'","code":6053,"category":"error"}]}}
 Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
 FileWatcher:: Added:: WatchInfo: /users/username/projects/project/sub/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 FileWatcher:: Added:: WatchInfo: /users/username/projects/project/sub/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
@@ -275,9 +275,9 @@ Project '/users/username/projects/project/tsconfig.json' (Configured)
 	../../../../a/lib/lib.d.ts
 	  Default library for target 'es3'
 	b.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 	sub/a.ts
-	  Matched by include pattern '**/*' in 'tsconfig.json'
+	  Matched by default include pattern '**/*'
 
 -----------------------------------------------
 event:

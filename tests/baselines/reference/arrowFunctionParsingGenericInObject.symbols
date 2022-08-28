@@ -1,0 +1,133 @@
+=== tests/cases/compiler/arrowFunctionParsingGenericInObject.ts ===
+const fn1 = () => ({
+>fn1 : Symbol(fn1, Decl(arrowFunctionParsingGenericInObject.ts, 0, 5))
+
+    test: <T = undefined>(value: T): T => value,
+>test : Symbol(test, Decl(arrowFunctionParsingGenericInObject.ts, 0, 20))
+>T : Symbol(T, Decl(arrowFunctionParsingGenericInObject.ts, 1, 11))
+>value : Symbol(value, Decl(arrowFunctionParsingGenericInObject.ts, 1, 26))
+>T : Symbol(T, Decl(arrowFunctionParsingGenericInObject.ts, 1, 11))
+>T : Symbol(T, Decl(arrowFunctionParsingGenericInObject.ts, 1, 11))
+>value : Symbol(value, Decl(arrowFunctionParsingGenericInObject.ts, 1, 26))
+
+    extraValue: () => {},
+>extraValue : Symbol(extraValue, Decl(arrowFunctionParsingGenericInObject.ts, 1, 48))
+
+})
+
+const fn1async = () => ({
+>fn1async : Symbol(fn1async, Decl(arrowFunctionParsingGenericInObject.ts, 5, 5))
+
+    test: async <T = undefined>(value: T): Promise<T> => value,
+>test : Symbol(test, Decl(arrowFunctionParsingGenericInObject.ts, 5, 25))
+>T : Symbol(T, Decl(arrowFunctionParsingGenericInObject.ts, 6, 17))
+>value : Symbol(value, Decl(arrowFunctionParsingGenericInObject.ts, 6, 32))
+>T : Symbol(T, Decl(arrowFunctionParsingGenericInObject.ts, 6, 17))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>T : Symbol(T, Decl(arrowFunctionParsingGenericInObject.ts, 6, 17))
+>value : Symbol(value, Decl(arrowFunctionParsingGenericInObject.ts, 6, 32))
+
+    extraValue: () => {},
+>extraValue : Symbol(extraValue, Decl(arrowFunctionParsingGenericInObject.ts, 6, 63))
+
+})
+
+const fn2 = () => ({
+>fn2 : Symbol(fn2, Decl(arrowFunctionParsingGenericInObject.ts, 10, 5))
+
+    test: <T>(value: T): T => value,
+>test : Symbol(test, Decl(arrowFunctionParsingGenericInObject.ts, 10, 20))
+>T : Symbol(T, Decl(arrowFunctionParsingGenericInObject.ts, 11, 11))
+>value : Symbol(value, Decl(arrowFunctionParsingGenericInObject.ts, 11, 14))
+>T : Symbol(T, Decl(arrowFunctionParsingGenericInObject.ts, 11, 11))
+>T : Symbol(T, Decl(arrowFunctionParsingGenericInObject.ts, 11, 11))
+>value : Symbol(value, Decl(arrowFunctionParsingGenericInObject.ts, 11, 14))
+
+    extraValue: () => {},
+>extraValue : Symbol(extraValue, Decl(arrowFunctionParsingGenericInObject.ts, 11, 36))
+
+})
+
+const fn2async = () => ({
+>fn2async : Symbol(fn2async, Decl(arrowFunctionParsingGenericInObject.ts, 15, 5))
+
+    test: async <T>(value: T): Promise<T> => value,
+>test : Symbol(test, Decl(arrowFunctionParsingGenericInObject.ts, 15, 25))
+>T : Symbol(T, Decl(arrowFunctionParsingGenericInObject.ts, 16, 17))
+>value : Symbol(value, Decl(arrowFunctionParsingGenericInObject.ts, 16, 20))
+>T : Symbol(T, Decl(arrowFunctionParsingGenericInObject.ts, 16, 17))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>T : Symbol(T, Decl(arrowFunctionParsingGenericInObject.ts, 16, 17))
+>value : Symbol(value, Decl(arrowFunctionParsingGenericInObject.ts, 16, 20))
+
+    extraValue: () => {},
+>extraValue : Symbol(extraValue, Decl(arrowFunctionParsingGenericInObject.ts, 16, 51))
+
+})
+
+const fn3 = () => ({
+>fn3 : Symbol(fn3, Decl(arrowFunctionParsingGenericInObject.ts, 20, 5))
+
+    extraValue: () => {},
+>extraValue : Symbol(extraValue, Decl(arrowFunctionParsingGenericInObject.ts, 20, 20))
+
+    test: <T = undefined>(value: T): T => value,
+>test : Symbol(test, Decl(arrowFunctionParsingGenericInObject.ts, 21, 25))
+>T : Symbol(T, Decl(arrowFunctionParsingGenericInObject.ts, 22, 11))
+>value : Symbol(value, Decl(arrowFunctionParsingGenericInObject.ts, 22, 26))
+>T : Symbol(T, Decl(arrowFunctionParsingGenericInObject.ts, 22, 11))
+>T : Symbol(T, Decl(arrowFunctionParsingGenericInObject.ts, 22, 11))
+>value : Symbol(value, Decl(arrowFunctionParsingGenericInObject.ts, 22, 26))
+
+})
+
+const fn3async = () => ({
+>fn3async : Symbol(fn3async, Decl(arrowFunctionParsingGenericInObject.ts, 25, 5))
+
+    extraValue: () => {},
+>extraValue : Symbol(extraValue, Decl(arrowFunctionParsingGenericInObject.ts, 25, 25))
+
+    test: async <T = undefined>(value: T): Promise<T> => value,
+>test : Symbol(test, Decl(arrowFunctionParsingGenericInObject.ts, 26, 25))
+>T : Symbol(T, Decl(arrowFunctionParsingGenericInObject.ts, 27, 17))
+>value : Symbol(value, Decl(arrowFunctionParsingGenericInObject.ts, 27, 32))
+>T : Symbol(T, Decl(arrowFunctionParsingGenericInObject.ts, 27, 17))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>T : Symbol(T, Decl(arrowFunctionParsingGenericInObject.ts, 27, 17))
+>value : Symbol(value, Decl(arrowFunctionParsingGenericInObject.ts, 27, 32))
+
+})
+
+const fn4 = () => ({
+>fn4 : Symbol(fn4, Decl(arrowFunctionParsingGenericInObject.ts, 30, 5))
+
+    extraValue: '',
+>extraValue : Symbol(extraValue, Decl(arrowFunctionParsingGenericInObject.ts, 30, 20))
+
+    test: <T = undefined>(value: T): T => value,
+>test : Symbol(test, Decl(arrowFunctionParsingGenericInObject.ts, 31, 19))
+>T : Symbol(T, Decl(arrowFunctionParsingGenericInObject.ts, 32, 11))
+>value : Symbol(value, Decl(arrowFunctionParsingGenericInObject.ts, 32, 26))
+>T : Symbol(T, Decl(arrowFunctionParsingGenericInObject.ts, 32, 11))
+>T : Symbol(T, Decl(arrowFunctionParsingGenericInObject.ts, 32, 11))
+>value : Symbol(value, Decl(arrowFunctionParsingGenericInObject.ts, 32, 26))
+
+})
+
+const fn4async = () => ({
+>fn4async : Symbol(fn4async, Decl(arrowFunctionParsingGenericInObject.ts, 35, 5))
+
+    extraValue: '',
+>extraValue : Symbol(extraValue, Decl(arrowFunctionParsingGenericInObject.ts, 35, 25))
+
+    test: async <T = undefined>(value: T): Promise<T> => value,
+>test : Symbol(test, Decl(arrowFunctionParsingGenericInObject.ts, 36, 19))
+>T : Symbol(T, Decl(arrowFunctionParsingGenericInObject.ts, 37, 17))
+>value : Symbol(value, Decl(arrowFunctionParsingGenericInObject.ts, 37, 32))
+>T : Symbol(T, Decl(arrowFunctionParsingGenericInObject.ts, 37, 17))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>T : Symbol(T, Decl(arrowFunctionParsingGenericInObject.ts, 37, 17))
+>value : Symbol(value, Decl(arrowFunctionParsingGenericInObject.ts, 37, 32))
+
+})
+

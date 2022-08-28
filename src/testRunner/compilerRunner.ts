@@ -118,6 +118,7 @@ namespace Harness {
         private static varyBy: readonly string[] = [
             "module",
             "moduleResolution",
+            "moduleDetection",
             "target",
             "jsx",
             "removeComments",
@@ -140,7 +141,10 @@ namespace Harness {
             "preserveConstEnums",
             "skipLibCheck",
             "exactOptionalPropertyTypes",
-            "useUnknownInCatchVariables"
+            "useDefineForClassFields",
+            "useUnknownInCatchVariables",
+            "noUncheckedIndexedAccess",
+            "noPropertyAccessFromIndexSignature",
         ];
         private fileName: string;
         private justName: string;

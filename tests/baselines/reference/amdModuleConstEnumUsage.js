@@ -34,7 +34,7 @@ define(["require", "exports"], function (require, exports) {
         function User() {
         }
         User.prototype.method = function (input) {
-            if (0 /* A */ === input) { }
+            if (0 /* CharCode.A */ === input) { }
         };
         return User;
     }());

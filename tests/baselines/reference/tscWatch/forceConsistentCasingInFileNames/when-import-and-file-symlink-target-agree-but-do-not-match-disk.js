@@ -38,7 +38,7 @@ Output::
 
 [96mb.ts[0m:[93m2[0m:[93m19[0m - [91merror[0m[90m TS1149: [0mFile name '/user/username/projects/myproject/Xy.ts' differs from already included file name '/user/username/projects/myproject/XY.ts' only in casing.
   The file is in the program because:
-    Matched by include pattern '**/*' in 'tsconfig.json'
+    Matched by default include pattern '**/*'
     Imported via "./Xy" from file '/user/username/projects/myproject/b.ts'
 
 [7m2[0m import { a } from "./Xy";
@@ -47,13 +47,13 @@ Output::
 ../../../../a/lib/lib.d.ts
   Default library for target 'es3'
 XY.ts
-  Matched by include pattern '**/*' in 'tsconfig.json'
+  Matched by default include pattern '**/*'
   Imported via "./Xy" from file 'b.ts'
 link.ts
   Imported via "./link" from file 'b.ts'
-  Matched by include pattern '**/*' in 'tsconfig.json'
+  Matched by default include pattern '**/*'
 b.ts
-  Matched by include pattern '**/*' in 'tsconfig.json'
+  Matched by default include pattern '**/*'
 [[90m12:00:32 AM[0m] Found 1 error. Watching for file changes.
 
 
@@ -90,14 +90,14 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/link.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/user/username/projects/myproject/node_modules/@types:
+  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
 
 FsWatches::
 
 FsWatchesRecursive::
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject"}
 
 exitCode:: ExitStatus.undefined
 
@@ -144,7 +144,7 @@ Output::
 
 [96mb.ts[0m:[93m2[0m:[93m19[0m - [91merror[0m[90m TS1149: [0mFile name '/user/username/projects/myproject/Xy.ts' differs from already included file name '/user/username/projects/myproject/XY.ts' only in casing.
   The file is in the program because:
-    Matched by include pattern '**/*' in 'tsconfig.json'
+    Matched by default include pattern '**/*'
     Imported via "./Xy" from file '/user/username/projects/myproject/b.ts'
 
 [7m2[0m import { a } from "./Xy";
@@ -153,13 +153,13 @@ Output::
 ../../../../a/lib/lib.d.ts
   Default library for target 'es3'
 XY.ts
-  Matched by include pattern '**/*' in 'tsconfig.json'
+  Matched by default include pattern '**/*'
   Imported via "./Xy" from file 'b.ts'
 link.ts
   Imported via "./link" from file 'b.ts'
-  Matched by include pattern '**/*' in 'tsconfig.json'
+  Matched by default include pattern '**/*'
 b.ts
-  Matched by include pattern '**/*' in 'tsconfig.json'
+  Matched by default include pattern '**/*'
 [[90m12:00:42 AM[0m] Found 1 error. Watching for file changes.
 
 
@@ -192,14 +192,14 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/link.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/user/username/projects/myproject/node_modules/@types:
+  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
 
 FsWatches::
 
 FsWatchesRecursive::
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"/user/username/projects/myproject"}
 
 exitCode:: ExitStatus.undefined
 

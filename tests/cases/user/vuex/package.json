@@ -6,7 +6,8 @@
   "author": "",
   "license": "Apache-2.0",
   "dependencies": {
-    "vue": "^2.5.2",
+    "@babel/types": "latest",
+    "vue": "latest",
     "vuex": "latest"
   }
 }

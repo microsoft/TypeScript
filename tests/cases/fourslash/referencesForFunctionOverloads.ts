@@ -2,9 +2,9 @@
 
 // Function overloads should be highlighted together.
 
-////[|function [|{| "isDefinition": true, "contextRangeIndex": 0 |}foo|](x: string);|]
-////[|function [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}foo|](x: string, y: number) {
-////    [|foo|]('', 43);
-////}|]
+/////*1*/function /*2*/foo(x: string);
+/////*3*/function /*4*/foo(x: string, y: number) {
+////    /*5*/foo('', 43);
+////}
 
-verify.singleReferenceGroup("function foo(x: string): any", "foo");
+verify.baselineFindAllReferences('1', '2', '3', '4', '5');

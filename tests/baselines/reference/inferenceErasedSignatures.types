@@ -15,7 +15,7 @@ abstract class SomeAbstractClass<C, M, R> extends SomeBaseClass {
 >SomeBaseClass : SomeBaseClass
 
     foo!: (r?: R) => void;
->foo : (r?: R | undefined) => void
+>foo : (r?: R) => void
 >r : R | undefined
 
     bar!: (r?: any) => void;
@@ -72,7 +72,7 @@ interface BaseType<T1, T2>  {
 >c : T1
 
     useT2(r?: T2): void;
->useT2 : (r?: T2 | undefined) => void
+>useT2 : (r?: T2) => void
 >r : T2 | undefined
 
     unrelatedButSomehowRelevant(r?: any): void;
@@ -99,7 +99,7 @@ interface StructuralVersion  {
 >c : number
 
     useT2(r?: boolean): void;
->useT2 : (r?: boolean | undefined) => void
+>useT2 : (r?: boolean) => void
 >r : boolean | undefined
 
     unrelatedButSomehowRelevant(r?: any): void;

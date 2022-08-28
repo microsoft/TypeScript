@@ -383,7 +383,7 @@ function narrowsToNever(x: { l: number } | { r: number }) {
 }
 
 type AOrB = { aProp: number } | { bProp: number };
->AOrB : AOrB
+>AOrB : { aProp: number; } | { bProp: number; }
 >aProp : number
 >bProp : number
 

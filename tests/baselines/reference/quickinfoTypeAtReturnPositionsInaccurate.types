@@ -102,7 +102,7 @@ class SimpleStore<Entries extends { [index: string]: NumClass<number> | StrClass
 }
 
 type Slice = {
->Slice : Slice
+>Slice : { [index: string]: NumClass<number> | StrClass<string>; }
 
     [index: string]: NumClass<number> | StrClass<string>
 >index : string

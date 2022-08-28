@@ -1,0 +1,23 @@
+=== tests/cases/compiler/typeGuardNarrowsIndexedAccessOfKnownProperty2.ts ===
+const foo: { key?: number } = {};
+>foo : Symbol(foo, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty2.ts, 0, 5))
+>key : Symbol(key, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty2.ts, 0, 12))
+
+const key = 'key' as const;
+>key : Symbol(key, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty2.ts, 1, 5))
+>const : Symbol(const)
+
+if (foo[key]) {
+>foo : Symbol(foo, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty2.ts, 0, 5))
+>key : Symbol(key, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty2.ts, 1, 5))
+
+    foo[key]; // number
+>foo : Symbol(foo, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty2.ts, 0, 5))
+>key : Symbol(key, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty2.ts, 1, 5))
+
+    foo.key;  // number
+>foo.key : Symbol(key, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty2.ts, 0, 12))
+>foo : Symbol(foo, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty2.ts, 0, 5))
+>key : Symbol(key, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty2.ts, 0, 12))
+}
+

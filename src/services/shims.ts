@@ -19,7 +19,7 @@ let debugObjectHost: { CollectGarbage(): void } = (function (this: any) { // esl
 })();
 
 // We need to use 'null' to interface with the managed side.
-/* eslint-disable no-in-operator */
+/* eslint-disable local/no-in-operator */
 
 /* @internal */
 namespace ts {
@@ -165,7 +165,7 @@ namespace ts {
          * Returns a JSON-encoded value of the type:
          * { canRename: boolean, localizedErrorMessage: string, displayName: string, fullDisplayName: string, kind: string, kindModifiers: string, triggerSpan: { start; length } }
          */
-        getRenameInfo(fileName: string, position: number, options?: RenameInfoOptions): string;
+        getRenameInfo(fileName: string, position: number, preferences: UserPreferences): string;
         getSmartSelectionRange(fileName: string, position: number): string;
 
         /**
@@ -225,7 +225,7 @@ namespace ts {
 
         /**
          * Returns a JSON-encoded value of the type:
-         * { fileName: string; highlights: { start: number; length: number, isDefinition: boolean }[] }[]
+         * { fileName: string; highlights: { start: number; length: number }[] }[]
          *
          * @param fileToSearch A JSON encoded string[] containing the file names that should be
          *  considered when searching.
@@ -554,7 +554,7 @@ namespace ts {
         }
     }
 
-    function simpleForwardCall(logger: Logger, actionDescription: string, action: () => {}, logPerformance: boolean): {} {
+    function simpleForwardCall(logger: Logger, actionDescription: string, action: () => unknown, logPerformance: boolean): unknown {
         let start: number | undefined;
         if (logPerformance) {
             logger.log(actionDescription);
@@ -855,10 +855,10 @@ namespace ts {
             );
         }
 
-        public getRenameInfo(fileName: string, position: number, options?: RenameInfoOptions): string {
+        public getRenameInfo(fileName: string, position: number, preferences: UserPreferences): string {
             return this.forwardJSONCall(
                 `getRenameInfo('${fileName}', ${position})`,
-                () => this.languageService.getRenameInfo(fileName, position, options)
+                () => this.languageService.getRenameInfo(fileName, position, preferences)
             );
         }
 
@@ -1180,7 +1180,8 @@ namespace ts {
 
                 return {
                     resolvedFileName,
-                    failedLookupLocations: result.failedLookupLocations
+                    failedLookupLocations: result.failedLookupLocations,
+                    affectingLocations: result.affectingLocations,
                 };
             });
         }
@@ -1280,7 +1281,8 @@ namespace ts {
                     info.packageNameToTypingLocation,
                     info.typeAcquisition,
                     info.unresolvedImports,
-                    info.typesRegistry);
+                    info.typesRegistry,
+                    emptyOptions);
             });
         }
     }
@@ -1355,4 +1357,4 @@ namespace ts {
     }
 }
 
-/* eslint-enable no-in-operator */
+/* eslint-enable local/no-in-operator */

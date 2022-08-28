@@ -38,11 +38,11 @@ Output::
 a/lib/lib.d.ts
   Default library for target 'es3'
 project/a.ts
-  Matched by include pattern '**/*' in 'project/tsconfig.json'
+  Matched by default include pattern '**/*'
   Imported via "C://project/a" from file 'project/b.ts'
   Imported via "c://project/a" from file 'project/b.ts'
 project/b.ts
-  Matched by include pattern '**/*' in 'project/tsconfig.json'
+  Matched by default include pattern '**/*'
 [[90m12:00:22 AM[0m] Found 0 errors. Watching for file changes.
 
 
@@ -74,14 +74,14 @@ c:/project/b.ts:
   {"fileName":"c:/project/b.ts","pollingInterval":250}
 c:/a/lib/lib.d.ts:
   {"fileName":"c:/a/lib/lib.d.ts","pollingInterval":250}
+c:/project/node_modules/@types:
+  {"fileName":"c:/project/node_modules/@types","pollingInterval":500}
 
 FsWatches::
 
 FsWatchesRecursive::
-c:/project/node_modules/@types:
-  {"directoryName":"c:/project/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 c:/project:
-  {"directoryName":"c:/project","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"c:/project"}
 
 exitCode:: ExitStatus.undefined
 
@@ -121,11 +121,11 @@ Output::
 a/lib/lib.d.ts
   Default library for target 'es3'
 project/a.ts
-  Matched by include pattern '**/*' in 'project/tsconfig.json'
+  Matched by default include pattern '**/*'
   Imported via "C://project/a" from file 'project/b.ts'
   Imported via "c://project/a" from file 'project/b.ts'
 project/b.ts
-  Matched by include pattern '**/*' in 'project/tsconfig.json'
+  Matched by default include pattern '**/*'
 [[90m12:00:32 AM[0m] Found 0 errors. Watching for file changes.
 
 
@@ -155,14 +155,14 @@ c:/project/b.ts:
   {"fileName":"c:/project/b.ts","pollingInterval":250}
 c:/a/lib/lib.d.ts:
   {"fileName":"c:/a/lib/lib.d.ts","pollingInterval":250}
+c:/project/node_modules/@types:
+  {"fileName":"c:/project/node_modules/@types","pollingInterval":500}
 
 FsWatches::
 
 FsWatchesRecursive::
-c:/project/node_modules/@types:
-  {"directoryName":"c:/project/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 c:/project:
-  {"directoryName":"c:/project","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {"directoryName":"c:/project"}
 
 exitCode:: ExitStatus.undefined
 

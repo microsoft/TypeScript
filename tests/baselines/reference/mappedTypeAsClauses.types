@@ -5,7 +5,7 @@ type Getters<T> = { [P in keyof T & string as `get${Capitalize<P>}`]: () => T[P]
 >Getters : Getters<T>
 
 type TG1 = Getters<{ foo: string, bar: number, baz: { z: boolean } }>;
->TG1 : TG1
+>TG1 : { getFoo: () => string; getBar: () => number; getBaz: () => { z: boolean; }; }
 >foo : string
 >bar : number
 >baz : { z: boolean; }
@@ -22,7 +22,7 @@ type TypeFromDefs<T extends PropDef<keyof any, any>> = { [P in T as P['name']]: 
 >TypeFromDefs : TypeFromDefs<T>
 
 type TP1 = TypeFromDefs<{ name: 'a', type: string } | { name: 'b', type: number } | { name: 'a', type: boolean }>;
->TP1 : TP1
+>TP1 : { a: string | boolean; b: number; }
 >name : "a"
 >type : string
 >name : "b"
@@ -33,10 +33,10 @@ type TP1 = TypeFromDefs<{ name: 'a', type: string } | { name: 'b', type: number 
 // No array or tuple type mapping when 'as N' clause present
 
 type TA1 = Getters<string[]>;
->TA1 : TA1
+>TA1 : { getConcat: () => { (...items: ConcatArray<string>[]): string[]; (...items: (string | ConcatArray<string>)[]): string[]; }; getIndexOf: () => (searchElement: string, fromIndex?: number | undefined) => number; getLastIndexOf: () => (searchElement: string, fromIndex?: number | undefined) => number; getSlice: () => (start?: number | undefined, end?: number | undefined) => string[]; getLength: () => number; getToString: () => () => string; getToLocaleString: () => () => string; getPop: () => () => string | undefined; getPush: () => (...items: string[]) => number; getJoin: () => (separator?: string | undefined) => string; getReverse: () => () => string[]; getShift: () => () => string | undefined; getSort: () => (compareFn?: ((a: string, b: string) => number) | undefined) => string[]; getSplice: () => { (start: number, deleteCount?: number | undefined): string[]; (start: number, deleteCount: number, ...items: string[]): string[]; }; getUnshift: () => (...items: string[]) => number; getEvery: () => { <S extends string>(predicate: (value: string, index: number, array: string[]) => value is S, thisArg?: any): this is S[]; (predicate: (value: string, index: number, array: string[]) => unknown, thisArg?: any): boolean; }; getSome: () => (predicate: (value: string, index: number, array: string[]) => unknown, thisArg?: any) => boolean; getForEach: () => (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void; getMap: () => <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]; getFilter: () => { <S extends string>(predicate: (value: string, index: number, array: string[]) => value is S, thisArg?: any): S[]; (predicate: (value: string, index: number, array: string[]) => unknown, thisArg?: any): string[]; }; getReduce: () => { (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string): string; (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string, initialValue: string): string; <U>(callbackfn: (previousValue: U, currentValue: string, currentIndex: number, array: string[]) => U, initialValue: U): U; }; getReduceRight: () => { (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string): string; (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string, initialValue: string): string; <U>(callbackfn: (previousValue: U, currentValue: string, currentIndex: number, array: string[]) => U, initialValue: U): U; }; }
 
 type TA2 = Getters<[number, boolean]>;
->TA2 : TA2
+>TA2 : { getConcat: () => { (...items: ConcatArray<number | boolean>[]): (number | boolean)[]; (...items: (number | boolean | ConcatArray<number | boolean>)[]): (number | boolean)[]; }; getIndexOf: () => (searchElement: number | boolean, fromIndex?: number | undefined) => number; getLastIndexOf: () => (searchElement: number | boolean, fromIndex?: number | undefined) => number; getSlice: () => (start?: number | undefined, end?: number | undefined) => (number | boolean)[]; getLength: () => 2; getToString: () => () => string; getToLocaleString: () => () => string; getPop: () => () => number | boolean | undefined; getPush: () => (...items: (number | boolean)[]) => number; getJoin: () => (separator?: string | undefined) => string; getReverse: () => () => (number | boolean)[]; getShift: () => () => number | boolean | undefined; getSort: () => (compareFn?: ((a: number | boolean, b: number | boolean) => number) | undefined) => [number, boolean]; getSplice: () => { (start: number, deleteCount?: number | undefined): (number | boolean)[]; (start: number, deleteCount: number, ...items: (number | boolean)[]): (number | boolean)[]; }; getUnshift: () => (...items: (number | boolean)[]) => number; getEvery: () => { <S extends number | boolean>(predicate: (value: number | boolean, index: number, array: (number | boolean)[]) => value is S, thisArg?: any): this is S[]; (predicate: (value: number | boolean, index: number, array: (number | boolean)[]) => unknown, thisArg?: any): boolean; }; getSome: () => (predicate: (value: number | boolean, index: number, array: (number | boolean)[]) => unknown, thisArg?: any) => boolean; getForEach: () => (callbackfn: (value: number | boolean, index: number, array: (number | boolean)[]) => void, thisArg?: any) => void; getMap: () => <U>(callbackfn: (value: number | boolean, index: number, array: (number | boolean)[]) => U, thisArg?: any) => U[]; getFilter: () => { <S extends number | boolean>(predicate: (value: number | boolean, index: number, array: (number | boolean)[]) => value is S, thisArg?: any): S[]; (predicate: (value: number | boolean, index: number, array: (number | boolean)[]) => unknown, thisArg?: any): (number | boolean)[]; }; getReduce: () => { (callbackfn: (previousValue: number | boolean, currentValue: number | boolean, currentIndex: number, array: (number | boolean)[]) => number | boolean): number | boolean; (callbackfn: (previousValue: number | boolean, currentValue: number | boolean, currentIndex: number, array: (number | boolean)[]) => number | boolean, initialValue: number | boolean): number | boolean; <U>(callbackfn: (previousValue: U, currentValue: number | boolean, currentIndex: number, array: (number | boolean)[]) => U, initialValue: U): U; }; getReduceRight: () => { (callbackfn: (previousValue: number | boolean, currentValue: number | boolean, currentIndex: number, array: (number | boolean)[]) => number | boolean): number | boolean; (callbackfn: (previousValue: number | boolean, currentValue: number | boolean, currentIndex: number, array: (number | boolean)[]) => number | boolean, initialValue: number | boolean): number | boolean; <U>(callbackfn: (previousValue: U, currentValue: number | boolean, currentIndex: number, array: (number | boolean)[]) => U, initialValue: U): U; }; get0: () => number; get1: () => boolean; }
 
 // Filtering using 'as N' clause
 
@@ -56,7 +56,7 @@ type DoubleProp<T> = { [P in keyof T & string as `${P}1` | `${P}2`]: T[P] }
 >DoubleProp : DoubleProp<T>
 
 type TD1 = DoubleProp<{ a: string, b: number }>;  // { a1: string, a2: string, b1: number, b2: number }
->TD1 : TD1
+>TD1 : { a1: string; a2: string; b1: number; b2: number; }
 >a : string
 >b : number
 
@@ -91,7 +91,7 @@ type LazyPerson = Lazyify<Person>;
 // Repro from #40833
 
 type Example = {foo: string, bar: number};
->Example : Example
+>Example : { foo: string; bar: number; }
 >foo : string
 >bar : number
 
@@ -153,7 +153,7 @@ interface Wheel {
 }
 
 type Primitive = string | number | boolean;
->Primitive : Primitive
+>Primitive : string | number | boolean
 
 type OnlyPrimitives<T> = { [K in keyof T as T[K] extends Primitive ? K : never]: T[K] };
 >OnlyPrimitives : OnlyPrimitives<T>
@@ -192,7 +192,7 @@ type GetObjWithIf<S, V> = { [TP in keyof S as If<Equal<S[TP], V>, TP, never>]: a
 >GetObjWithIf : GetObjWithIf<S, V>
 
 type Task = {
->Task : Task
+>Task : { isDone: boolean; }
 
   isDone: boolean;
 >isDone : boolean
@@ -200,7 +200,7 @@ type Task = {
 };
 
 type Schema = {
->Schema : Schema
+>Schema : { root: {    title: string;    task: Task;}; Task: Task; }
 
   root: {
 >root : { title: string; task: Task; }
@@ -252,7 +252,7 @@ f("a");  // Error, should allow only "b"
 >"a" : "a"
 
 type NameMap = { 'a': 'x', 'b': 'y', 'c': 'z' };
->NameMap : NameMap
+>NameMap : { a: 'x'; b: 'y'; c: 'z'; }
 >'a' : "x"
 >'b' : "y"
 >'c' : "z"

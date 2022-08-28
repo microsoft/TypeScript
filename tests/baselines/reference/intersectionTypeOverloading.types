@@ -3,11 +3,11 @@
 // overload resolution
 
 type F = (s: string) => string;
->F : F
+>F : (s: string) => string
 >s : string
 
 type G = (x: any) => any;
->G : G
+>G : (x: any) => any
 >x : any
 
 var fg: F & G;

@@ -158,7 +158,7 @@ namespace ts.FindAllReferences {
         function isExported(node: Node, stopAtAmbientModule = false) {
             return findAncestor(node, node => {
                 if (stopAtAmbientModule && isAmbientModuleDeclaration(node)) return "quit";
-                return some(node.modifiers, mod => mod.kind === SyntaxKind.ExportKeyword);
+                return canHaveModifiers(node) && some(node.modifiers, isExportModifier);
             });
         }
 
@@ -555,6 +555,7 @@ namespace ts.FindAllReferences {
             // Similarly, skip past the symbol for 'export ='
             if (importedSymbol.escapedName === "export=") {
                 importedSymbol = getExportEqualsLocalSymbol(importedSymbol, checker);
+                if (importedSymbol === undefined) return undefined;
             }
 
             // If the import has a different name than the export, do not continue searching.
@@ -577,22 +578,22 @@ namespace ts.FindAllReferences {
         }
     }
 
-    function getExportEqualsLocalSymbol(importedSymbol: Symbol, checker: TypeChecker): Symbol {
+    function getExportEqualsLocalSymbol(importedSymbol: Symbol, checker: TypeChecker): Symbol | undefined {
         if (importedSymbol.flags & SymbolFlags.Alias) {
-            return Debug.checkDefined(checker.getImmediateAliasedSymbol(importedSymbol));
+            return checker.getImmediateAliasedSymbol(importedSymbol);
         }
 
         const decl = Debug.checkDefined(importedSymbol.valueDeclaration);
         if (isExportAssignment(decl)) { // `export = class {}`
-            return Debug.checkDefined(decl.expression.symbol);
+            return decl.expression.symbol;
         }
         else if (isBinaryExpression(decl)) { // `module.exports = class {}`
-            return Debug.checkDefined(decl.right.symbol);
+            return decl.right.symbol;
         }
         else if (isSourceFile(decl)) { // json module
-            return Debug.checkDefined(decl.symbol);
+            return decl.symbol;
         }
-        return Debug.fail();
+        return undefined;
     }
 
     // If a reference is a class expression, the exported node would be its parent.
@@ -621,7 +622,7 @@ namespace ts.FindAllReferences {
                 Debug.assert((parent as ImportClause | NamespaceImport).name === node);
                 return true;
             case SyntaxKind.BindingElement:
-                return isInJSFile(node) && isVariableDeclarationInitializedToBareOrAccessedRequire(parent);
+                return isInJSFile(node) && isVariableDeclarationInitializedToBareOrAccessedRequire(parent.parent.parent);
             default:
                 return false;
         }

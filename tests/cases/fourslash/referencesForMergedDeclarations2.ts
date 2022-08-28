@@ -6,13 +6,9 @@
 ////
 ////function ATest() { }
 ////
-////[|import [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}alias|] = ATest;|] // definition
+/////*1*/import /*2*/alias = ATest; // definition
 ////
-////var a: [|alias|].Bar; // namespace
-////[|alias|].call(this); // value
+////var a: /*3*/alias.Bar; // namespace
+/////*4*/alias.call(this); // value
 
-verify.singleReferenceGroup([
-    "(alias) function alias(): void",
-    "(alias) namespace alias",
-    "import alias = ATest"
-].join("\n"), "alias");
+verify.baselineFindAllReferences('1', '2', '3', '4');

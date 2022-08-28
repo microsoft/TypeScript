@@ -1,6 +1,6 @@
 === tests/cases/compiler/discriminateObjectTypesOnly.ts ===
 type Thing = number | object;
->Thing : Thing
+>Thing : number | object
 
 const k: Thing = { toFixed: null }; // OK, satisfies object
 >k : Thing
@@ -9,7 +9,7 @@ const k: Thing = { toFixed: null }; // OK, satisfies object
 >null : null
 
 type Thing2 = number | { toFixed: null } | object;
->Thing2 : Thing2
+>Thing2 : number | object | { toFixed: null; }
 >toFixed : null
 >null : null
 
@@ -26,7 +26,7 @@ const h: Thing2 = { toString: null }; // OK, satisfies object
 >null : null
 
 type Thing3 = number | { toFixed: null, toString: undefined } | object;
->Thing3 : Thing3
+>Thing3 : number | object | { toFixed: null; toString: undefined; }
 >toFixed : null
 >null : null
 >toString : undefined

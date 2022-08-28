@@ -159,7 +159,7 @@ function writeProtocolFile(outputFile: string, protocolTs: string, typeScriptSer
             if (fileName === protocolFileName) {
                 return ts.createSourceFile(fileName, protocolDts, options.target);
             }
-            return originalGetSourceFile.apply(host, [fileName]);
+            return originalGetSourceFile.apply(host, [fileName, ts.ScriptTarget.Latest]);
         };
         const rootFiles = includeTypeScriptServices ? [protocolFileName, typeScriptServicesDts] : [protocolFileName];
         return ts.createProgram(rootFiles, options, host);

@@ -1,66 +1,66 @@
 /// <reference path='fourslash.ts'/>
 
 // @Filename: localGetReferences_1.ts
-////// Comment Refence Test: g/*1*/lobalVar
+////// Comment Refence Test: g/*43*/lobalVar
 ////// References to a variable declared in global.
-////[|var [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}globalVar|]: number = 2;|]
+/////*1*/var /*2*/globalVar: number = 2;
 ////
 ////class fooCls {
 ////    // References to static variable declared in a class.
-////    [|static [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}clsSVar|] = 1;|]
+////    /*3*/static /*4*/clsSVar = 1;
 ////    // References to a variable declared in a class.
-////    [|[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 4 |}clsVar|] = 1;|]
+////    /*5*/clsVar = 1;
 ////
-////    constructor ([|public [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 6 |}clsParam|]: number|]) {
+////    constructor (/*6*/public /*7*/clsParam: number) {
 ////        //Increments
-////        [|{| "isWriteAccess": true |}globalVar|]++;
-////        this.[|{| "isWriteAccess": true |}clsVar|]++;
-////        fooCls.[|{| "isWriteAccess": true |}clsSVar|]++;
+////        /*8*/globalVar++;
+////        this./*9*/clsVar++;
+////        fooCls./*10*/clsSVar++;
 ////        // References to a class parameter.
-////        this.[|{| "isWriteAccess": true |}clsParam|]++;
+////        this./*11*/clsParam++;
 ////        modTest.modVar++;
 ////    }
 ////}
 ////
 ////// References to a function parameter.
-////[|function [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 12 |}foo|]([|[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 14 |}x|]: number|]) {
+/////*12*/function /*13*/foo(/*14*/x: number) {
 ////    // References to a variable declared in a function.
-////    [|var [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 16 |}fnVar|] = 1;|]
+////    /*15*/var /*16*/fnVar = 1;
 ////
 ////    //Increments
-////    fooCls.[|{| "isWriteAccess": true |}clsSVar|]++;
-////    [|{| "isWriteAccess": true |}globalVar|]++;
+////    fooCls./*17*/clsSVar++;
+////    /*18*/globalVar++;
 ////    modTest.modVar++;
-////    [|{| "isWriteAccess": true |}fnVar|]++;
+////    /*19*/fnVar++;
 ////
 ////    //Return
-////    return [|{| "isWriteAccess": true |}x|]++;
-////}|]
+////    return /*20*/x++;
+////}
 ////
 ////module modTest {
 ////    //Declare
 ////    export var modVar:number;
 ////
 ////    //Increments
-////    [|{| "isWriteAccess": true |}globalVar|]++;
-////    fooCls.[|{| "isWriteAccess": true |}clsSVar|]++;
+////    /*21*/globalVar++;
+////    fooCls./*22*/clsSVar++;
 ////    modVar++;
 ////
 ////    class testCls {
-////        static boo = [|foo|];
+////        static boo = /*23*/foo;
 ////    }
 ////
 ////    function testFn(){
-////        static boo = [|foo|];
+////        static boo = /*24*/foo;
 ////
 ////        //Increments
-////        [|{| "isWriteAccess": true |}globalVar|]++;
-////        fooCls.[|{| "isWriteAccess": true |}clsSVar|]++;
+////        /*25*/globalVar++;
+////        fooCls./*26*/clsSVar++;
 ////        modVar++;
 ////    }
 ////
 ////    module testMod {
-////        var boo = [|foo|];
+////        var boo = /*27*/foo;
 ////    }
 ////}
 ////
@@ -69,26 +69,26 @@
 ////
 //////Arguments
 ////// References to a class argument.
-////clsTest = new fooCls([|globalVar|]);
+////clsTest = new fooCls(/*28*/globalVar);
 ////// References to a function argument.
-////[|foo|]([|globalVar|]);
+/////*29*/foo(/*30*/globalVar);
 ////
 //////Increments
-////fooCls.[|{| "isWriteAccess": true |}clsSVar|]++;
+////fooCls./*31*/clsSVar++;
 ////modTest.modVar++;
-////[|{| "isWriteAccess": true |}globalVar|] = [|globalVar|] + [|globalVar|];
+/////*32*/globalVar = /*33*/globalVar + /*34*/globalVar;
 ////
 //////ETC - Other cases
-////[|{| "isWriteAccess": true |}globalVar|] = 3;
+/////*35*/globalVar = 3;
 ////// References to illegal assignment.
-////[|{| "isWriteAccess": true |}foo|] = [|foo|] + 1;
-/////*3*/err = err++;
-/////*4*/
+/////*36*/foo = /*37*/foo + 1;
+/////*44*/err = err++;
+/////*45*/
 //////Shadowed fn Parameter
-////function shdw([|[|{| "isWriteAccess": true, "isDefinition": true, "shadow": true, "contextRangeIndex": 39 |}globalVar|]: number|]) {
+////function shdw(/*38*/globalVar: number) {
 ////    //Increments
-////    [|{| "isWriteAccess": true, "shadow": true |}globalVar|]++;
-////    return [|{| "shadow": true |}globalVar|];
+////    /*39*/globalVar++;
+////    return /*40*/globalVar;
 ////}
 ////
 //////Remotes
@@ -117,12 +117,12 @@
 ////array.forEach(
 ////
 ////
-////function([|{| "isWriteAccess": true, "isDefinition": true |}str|]) {
+////function(/*41*/str) {
 ////
 ////
 ////
 ////   // Reference misses function parameter.
-////   return [|str|] + " ";
+////   return /*42*/str + " ";
 ////
 ////});
 
@@ -185,55 +185,9 @@
 ////	}
 ////}
 
-// References to comment / unresolved symbol / no context
-verify.baselineFindAllReferences('1', '3', '4')
-
-test.rangesByText().forEach((ranges, text) => {
-    switch (text) {
-        case "var globalVar: number = 2;":
-        case "static clsSVar = 1;":
-        case "clsVar = 1;":
-        case "public clsParam: number":
-        case `function foo(x: number) {
-    // References to a variable declared in a function.
-    var fnVar = 1;
-
-    //Increments
-    fooCls.clsSVar++;
-    globalVar++;
-    modTest.modVar++;
-    fnVar++;
-
-    //Return
-    return x++;
-}`:
-        case "x: number":
-        case "var fnVar = 1;":
-        case "globalVar: number":
-            return;
-    }
-
-    if (text === "globalVar") {
-        verify.singleReferenceGroup("(parameter) globalVar: number", ranges.filter(isShadow));
-        verify.singleReferenceGroup("var globalVar: number", ranges.filter(r => !isShadow(r)));
-        return;
-    }
-
-    const definition = (() => {
-        switch (text) {
-            case "fnVar": return "(local var) fnVar: number";
-            case "clsSVar": return "(property) fooCls.clsSVar: number";
-            case "clsVar": return "(property) fooCls.clsVar: number";
-            case "clsParam": return "(property) fooCls.clsParam: number";
-            case "foo": return "function foo(x: number): number";
-            case "x": return "(parameter) x: number";
-            case "str": return "(parameter) str: string";
-            default: throw new Error(text);
-        }
-    })();
-    verify.singleReferenceGroup(definition, ranges);
-});
-
-function isShadow(r) {
-    return r.marker && r.marker.data && r.marker.data.shadow;
-}
+verify.baselineFindAllReferences(
+    '1', '2', '3', '4', '5', '6', '7', '8', '9', '10',
+    '11', '12', '13', '14', '15', '16', '17', '18', '19', '20',
+    '21', '22', '23', '24', '25', '26', '27', '28', '29', '30',
+    '31', '32', '33', '34', '35', '36', '37', '38', '39', '40',
+    '41', '42', '43', '44', '45');

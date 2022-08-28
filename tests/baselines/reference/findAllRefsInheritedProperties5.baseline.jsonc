@@ -364,8 +364,7 @@
           "start": 85,
           "length": 14
         },
-        "isWriteAccess": false,
-        "isDefinition": true
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -373,8 +372,7 @@
           "length": 5
         },
         "fileName": "/tests/cases/fourslash/findAllRefsInheritedProperties5.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }

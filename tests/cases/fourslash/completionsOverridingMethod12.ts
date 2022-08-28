@@ -28,7 +28,7 @@ verify.completions({
     includes: [
         {
             name: "P",
-            sortText: completion.SortText.LocationPriority,
+            sortText: completion.SortText.ClassMemberSnippets,
             replacementSpan: test.ranges()[0],
             insertText: "public abstract get P(): string;",
         },
@@ -46,7 +46,7 @@ verify.completions({
     includes: [
         {
             name: "P",
-            sortText: completion.SortText.LocationPriority,
+            sortText: completion.SortText.ClassMemberSnippets,
             replacementSpan: test.ranges()[1],
             insertText: "public abstract override get P(): string;",
         },

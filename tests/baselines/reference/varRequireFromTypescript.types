@@ -43,7 +43,7 @@ function f(greatest, wrap) {
 
 === tests/cases/conformance/salsa/ex.d.ts ===
 export type Greatest = { day: 1 }
->Greatest : Greatest
+>Greatest : { day: 1; }
 >day : 1
 
 export class Crunch {

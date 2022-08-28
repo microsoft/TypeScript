@@ -1,9 +1,9 @@
 === tests/cases/conformance/types/tuple/named/namedTupleMembers.ts ===
 export type Segment = [length: number, count: number];
->Segment : Segment
+>Segment : [length: number, count: number]
 
 export type SegmentAnnotated = [
->SegmentAnnotated : SegmentAnnotated
+>SegmentAnnotated : [length: number, count: number]
 
     /** 
      * Size of message buffer segment handles
@@ -88,7 +88,7 @@ d = c;
 >c : [number, number]
 
 export type WithOptAndRest = [first: number, second?: number, ...rest: string[]];
->WithOptAndRest : WithOptAndRest
+>WithOptAndRest : [first: number, second?: number, ...rest: string[]]
 
 export type Func<T extends any[]> = (...x: T) => void;
 >Func : Func<T>
@@ -112,7 +112,7 @@ export function useState<T>(initial: T): [value: T, setter: (T) => void] {
 
 
 export type Iter = Func<[step: number, iterations: number]>;
->Iter : Iter
+>Iter : (step: number, iterations: number) => void
 
 export function readSegment([length, count]: [number, number]) {}
 >readSegment : ([length, count]: [number, number]) => void
@@ -128,10 +128,10 @@ export const val = null as any as Parameters<typeof readSegment>[0];
 >readSegment : ([length, count]: [number, number]) => void
 
 export type RecursiveTupleA = [initial: string, next: RecursiveTupleA];
->RecursiveTupleA : RecursiveTupleA
+>RecursiveTupleA : [initial: string, next: RecursiveTupleA]
 
 export type RecursiveTupleB = [first: string, ptr: RecursiveTupleB];
->RecursiveTupleB : RecursiveTupleB
+>RecursiveTupleB : [first: string, ptr: RecursiveTupleB]
 
 declare var q: RecursiveTupleA;
 >q : RecursiveTupleA
@@ -150,10 +150,10 @@ r = q;
 >q : RecursiveTupleA
 
 export type RecusiveRest = [first: string, ...rest: RecusiveRest[]];
->RecusiveRest : RecusiveRest
+>RecusiveRest : [first: string, ...rest: RecusiveRest[]]
 
 export type RecusiveRest2 = [string, ...RecusiveRest2[]];
->RecusiveRest2 : RecusiveRest2
+>RecusiveRest2 : [string, ...RecusiveRest2[]]
 
 declare var x: RecusiveRest;
 >x : RecusiveRest

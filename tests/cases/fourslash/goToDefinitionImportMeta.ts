@@ -11,3 +11,5 @@
 ////}
 
 verify.goToDefinition("reference", []);
+
+verify.noErrors();

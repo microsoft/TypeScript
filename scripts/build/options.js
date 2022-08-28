@@ -7,6 +7,7 @@ module.exports = minimist(process.argv.slice(2), {
     boolean: ["dirty", "light", "colors", "lint", "lkg", "soft", "fix", "failed", "keepFailed", "force", "built"],
     string: ["browser", "tests", "break", "host", "reporter", "stackTraceLimit", "timeout", "shards", "shardId"],
     alias: {
+        /* eslint-disable quote-props */
         "b": "browser",
         "i": ["inspect", "inspect-brk", "break", "debug", "debug-brk"],
         "t": ["tests", "test"],
@@ -16,6 +17,7 @@ module.exports = minimist(process.argv.slice(2), {
         "skippercent": "skipPercent",
         "w": "workers",
         "f": "fix"
+        /* eslint-enable quote-props */
     },
     default: {
         soft: false,
@@ -31,7 +33,7 @@ module.exports = minimist(process.argv.slice(2), {
         reporter: process.env.reporter || process.env.r,
         lint: process.env.lint || true,
         fix: process.env.fix || process.env.f,
-        workers: process.env.workerCount || os.cpus().length,
+        workers: process.env.workerCount || ((os.cpus().length - (process.env.CI ? 0 : 1)) || 1),
         failed: false,
         keepFailed: false,
         lkg: true,

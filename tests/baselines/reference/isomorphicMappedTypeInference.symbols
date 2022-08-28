@@ -75,10 +75,10 @@ function boxify<T>(obj: T): Boxified<T> {
 >result : Symbol(result, Decl(isomorphicMappedTypeInference.ts, 17, 7))
 }
 
-function unboxify<T>(obj: Boxified<T>): T {
+function unboxify<T extends object>(obj: Boxified<T>): T {
 >unboxify : Symbol(unboxify, Decl(isomorphicMappedTypeInference.ts, 22, 1))
 >T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 24, 18))
->obj : Symbol(obj, Decl(isomorphicMappedTypeInference.ts, 24, 21))
+>obj : Symbol(obj, Decl(isomorphicMappedTypeInference.ts, 24, 36))
 >Boxified : Symbol(Boxified, Decl(isomorphicMappedTypeInference.ts, 2, 1))
 >T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 24, 18))
 >T : Symbol(T, Decl(isomorphicMappedTypeInference.ts, 24, 18))
@@ -89,13 +89,13 @@ function unboxify<T>(obj: Boxified<T>): T {
 
     for (let k in obj) {
 >k : Symbol(k, Decl(isomorphicMappedTypeInference.ts, 26, 12))
->obj : Symbol(obj, Decl(isomorphicMappedTypeInference.ts, 24, 21))
+>obj : Symbol(obj, Decl(isomorphicMappedTypeInference.ts, 24, 36))
 
         result[k] = unbox(obj[k]);
 >result : Symbol(result, Decl(isomorphicMappedTypeInference.ts, 25, 7))
 >k : Symbol(k, Decl(isomorphicMappedTypeInference.ts, 26, 12))
 >unbox : Symbol(unbox, Decl(isomorphicMappedTypeInference.ts, 10, 1))
->obj : Symbol(obj, Decl(isomorphicMappedTypeInference.ts, 24, 21))
+>obj : Symbol(obj, Decl(isomorphicMappedTypeInference.ts, 24, 36))
 >k : Symbol(k, Decl(isomorphicMappedTypeInference.ts, 26, 12))
     }
     return result;

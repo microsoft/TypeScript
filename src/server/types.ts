@@ -5,7 +5,11 @@ declare namespace ts.server {
         data: any;
     }
 
-    export type RequireResult = { module: {}, error: undefined } | { module: undefined, error: { stack?: string, message?: string } };
+    export type ModuleImportResult = { module: {}, error: undefined } | { module: undefined, error: { stack?: string, message?: string } };
+
+    /** @deprecated Use {@link ModuleImportResult} instead. */
+    export type RequireResult = ModuleImportResult;
+
     export interface ServerHost extends System {
         watchFile(path: string, callback: FileWatcherCallback, pollingInterval?: number, options?: WatchOptions): FileWatcher;
         watchDirectory(path: string, callback: DirectoryWatcherCallback, recursive?: boolean, options?: WatchOptions): FileWatcher;
@@ -15,6 +19,7 @@ declare namespace ts.server {
         clearImmediate(timeoutId: any): void;
         gc?(): void;
         trace?(s: string): void;
-        require?(initialPath: string, moduleName: string): RequireResult;
+        require?(initialPath: string, moduleName: string): ModuleImportResult;
+        importServicePlugin?(root: string, moduleName: string): Promise<ModuleImportResult>;
     }
 }

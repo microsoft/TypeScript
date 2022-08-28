@@ -10,28 +10,17 @@ namespace ts.projectSystem {
             const testsConfig = TestFSWithWatch.getTsBuildProjectFile("sample1", "tests/tsconfig.json");
             const testsIndex = TestFSWithWatch.getTsBuildProjectFile("sample1", "tests/index.ts");
             const host = createServerHost([libFile, coreConfig, coreIndex, coreAnotherModule, coreSomeDecl, logicConfig, logicIndex, testsConfig, testsIndex]);
-            const service = createProjectService(host);
+            const logger = createLoggerWithInMemoryLogs();
+            const service = createProjectService(host, { logger });
             service.openClientFile(testsIndex.path);
-
-            checkWatchedFilesDetailed(host, [coreConfig, coreIndex, coreAnotherModule, logicConfig, logicIndex, testsConfig, libFile].map(f => f.path.toLowerCase()), 1);
-            checkWatchedDirectoriesDetailed(host, emptyArray, 1, /*recursive*/ false);
-            checkWatchedDirectoriesDetailed(host, [
-                TestFSWithWatch.getTsBuildProjectFilePath("sample1", "core"),
-                TestFSWithWatch.getTsBuildProjectFilePath("sample1", "logic"),
-                ...getTypeRootsFromLocation(TestFSWithWatch.getTsBuildProjectFilePath("sample1", "tests"))
-            ], 1, /*recursive*/ true);
 
             // local edit in ts file
             host.appendFile(logicIndex.path, `function foo() {}`);
             host.checkTimeoutQueueLengthAndRun(2);
-            checkNumberOfProjects(service, { configuredProjects: 1 });
-            checkProjectActualFiles(service.configuredProjects.get(testsConfig.path)!, [libFile.path, coreIndex.path, coreAnotherModule.path, logicIndex.path, testsIndex.path, testsConfig.path]);
 
             // non local edit in ts file
             host.appendFile(logicIndex.path, `export function gfoo() {}`);
             host.checkTimeoutQueueLengthAndRun(2);
-            checkNumberOfProjects(service, { configuredProjects: 1 });
-            checkProjectActualFiles(service.configuredProjects.get(testsConfig.path)!, [libFile.path, coreIndex.path, coreAnotherModule.path, logicIndex.path, testsIndex.path, testsConfig.path]);
 
             // change in project reference config file
             host.writeFile(logicConfig.path, JSON.stringify({
@@ -39,8 +28,7 @@ namespace ts.projectSystem {
                 references: [{ path: "../core" }]
             }));
             host.checkTimeoutQueueLengthAndRun(2);
-            checkNumberOfProjects(service, { configuredProjects: 1 });
-            checkProjectActualFiles(service.configuredProjects.get(testsConfig.path)!, [libFile.path, coreIndex.path, coreAnotherModule.path, logicIndex.path, testsIndex.path, testsConfig.path]);
+            baselineTsserverLogs("projectsWithReferences", "sample project", service);
         });
 
         describe("on transitive references in different folders", () => {
@@ -90,47 +78,23 @@ X;`,
 export class A {}`
                 };
                 const host = createServerHost([libFile, aConfig, bConfig, cConfig, aTs, bTs, cTs, refsTs]);
-                const service = createProjectService(host);
+                const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs() });
                 service.openClientFile(cTs.path);
                 return { host, service, aConfig, bConfig, cConfig, aTs, bTs, cTs, refsTs };
             }
 
             it("non local edit", () => {
-                const { host, service, aConfig, bConfig, cConfig, aTs, bTs, cTs, refsTs } = createService();
+                const { host, service, bTs } = createService();
                 checkNumberOfProjects(service, { configuredProjects: 1 });
-                checkProjectActualFiles(service.configuredProjects.get(cConfig.path)!, [libFile.path, cTs.path, cConfig.path, bTs.path, aTs.path, refsTs.path]);
-                checkWatchedFilesDetailed(host, [libFile.path, aTs.path, bTs.path, refsTs.path, aConfig.path, bConfig.path, cConfig.path], 1);
-                checkWatchedDirectoriesDetailed(host, [
-                    tscWatch.projectRoot // watches for directories created for resolution of b
-                ], 1, /*recursive*/ false);
-                checkWatchedDirectoriesDetailed(host, [
-                    `${tscWatch.projectRoot}/a`, // Failed to package json
-                    `${tscWatch.projectRoot}/b`, // Failed to package json
-                    `${tscWatch.projectRoot}/refs`, // Failed lookup since refs/a.ts does not exist
-                    ...getTypeRootsFromLocation(`${tscWatch.projectRoot}/c`)
-                ], 1, /*recursive*/ true);
-                checkOrphanScriptInfos(service, emptyArray);
 
                 // non local edit
                 host.appendFile(bTs.path, `export function gFoo() { }`);
                 host.checkTimeoutQueueLengthAndRun(2);
-                checkNumberOfProjects(service, { configuredProjects: 1 });
-                checkProjectActualFiles(service.configuredProjects.get(cConfig.path)!, [libFile.path, cTs.path, cConfig.path, bTs.path, aTs.path, refsTs.path]);
-                checkWatchedFilesDetailed(host, [libFile.path, aTs.path, bTs.path, refsTs.path, aConfig.path, bConfig.path, cConfig.path], 1);
-                checkWatchedDirectoriesDetailed(host, [
-                    tscWatch.projectRoot // watches for directories created for resolution of b
-                ], 1, /*recursive*/ false);
-                checkWatchedDirectoriesDetailed(host, [
-                    `${tscWatch.projectRoot}/a`, // Failed to package json
-                    `${tscWatch.projectRoot}/b`, // Failed to package json
-                    `${tscWatch.projectRoot}/refs`, // Failed lookup since refs/a.ts does not exist
-                    ...getTypeRootsFromLocation(`${tscWatch.projectRoot}/c`)
-                ], 1, /*recursive*/ true);
-                checkOrphanScriptInfos(service, emptyArray);
+                baselineTsserverLogs("projectsWithReferences", "transitive references with non local edit", service);
             });
 
             it("edit on config file", () => {
-                const { host, service, aConfig, bConfig, cConfig, aTs, bTs, cTs, refsTs } = createService();
+                const { host, service, cConfig, refsTs } = createService();
                 const nRefsTs: File = {
                     path: `${tscWatch.projectRoot}/nrefs/a.d.ts`,
                     content: refsTs.content
@@ -140,41 +104,15 @@ export class A {}`
                 cTsConfigJson.compilerOptions.paths = { "@ref/*": ["../nrefs/*"] };
                 host.writeFile(cConfig.path, JSON.stringify(cTsConfigJson));
                 host.checkTimeoutQueueLengthAndRun(2);
-                checkNumberOfProjects(service, { configuredProjects: 1 });
-                checkProjectActualFiles(service.configuredProjects.get(cConfig.path)!, [libFile.path, cTs.path, cConfig.path, bTs.path, aTs.path, nRefsTs.path]);
-                checkWatchedFilesDetailed(host, [libFile.path, aTs.path, bTs.path, refsTs.path, aConfig.path, bConfig.path, cConfig.path, nRefsTs.path], 1);
-                checkWatchedDirectoriesDetailed(host, [
-                    tscWatch.projectRoot // watches for directories created for resolution of b
-                ], 1, /*recursive*/ false);
-                checkWatchedDirectoriesDetailed(host, [
-                    `${tscWatch.projectRoot}/a`, // Failed to package json
-                    `${tscWatch.projectRoot}/b`, // Failed to package json
-                    `${tscWatch.projectRoot}/nrefs`, // Failed lookup since nrefs/a.ts does not exist
-                    ...getTypeRootsFromLocation(`${tscWatch.projectRoot}/c`)
-                ], 1, /*recursive*/ true);
-                // Script infos arent deleted till next file open
-                checkOrphanScriptInfos(service, [refsTs.path]);
 
                 // revert the edit on config file
                 host.writeFile(cConfig.path, cConfig.content);
                 host.checkTimeoutQueueLengthAndRun(2);
-                checkProjectActualFiles(service.configuredProjects.get(cConfig.path)!, [libFile.path, cTs.path, cConfig.path, bTs.path, aTs.path, refsTs.path]);
-                checkWatchedFilesDetailed(host, [libFile.path, aTs.path, bTs.path, refsTs.path, aConfig.path, bConfig.path, cConfig.path, nRefsTs.path], 1);
-                checkWatchedDirectoriesDetailed(host, [
-                    tscWatch.projectRoot // watches for directories created for resolution of b
-                ], 1, /*recursive*/ false);
-                checkWatchedDirectoriesDetailed(host, [
-                    `${tscWatch.projectRoot}/a`, // Failed to package json
-                    `${tscWatch.projectRoot}/b`, // Failed to package json
-                    `${tscWatch.projectRoot}/refs`, // Failed lookup since refs/a.ts does not exist
-                    ...getTypeRootsFromLocation(`${tscWatch.projectRoot}/c`)
-                ], 1, /*recursive*/ true);
-                // Script infos arent deleted till next file open
-                checkOrphanScriptInfos(service, [nRefsTs.path]);
+                baselineTsserverLogs("projectsWithReferences", "transitive references with edit on config file", service);
             });
 
             it("edit in referenced config file", () => {
-                const { host, service, aConfig, bConfig, cConfig, aTs, bTs, cTs, refsTs } = createService();
+                const { host, service, bConfig, refsTs } = createService();
                 const nRefsTs: File = {
                     path: `${tscWatch.projectRoot}/nrefs/a.d.ts`,
                     content: refsTs.content
@@ -184,107 +122,33 @@ export class A {}`
                 bTsConfigJson.compilerOptions.paths = { "@ref/*": ["../nrefs/*"] };
                 host.writeFile(bConfig.path, JSON.stringify(bTsConfigJson));
                 host.checkTimeoutQueueLengthAndRun(2);
-                checkNumberOfProjects(service, { configuredProjects: 1 });
-                checkProjectActualFiles(service.configuredProjects.get(cConfig.path)!, [libFile.path, cTs.path, cConfig.path, bTs.path, refsTs.path, nRefsTs.path]);
-                checkWatchedFilesDetailed(host, [libFile.path, aTs.path, bTs.path, refsTs.path, aConfig.path, bConfig.path, cConfig.path, nRefsTs.path], 1);
-                checkWatchedDirectoriesDetailed(host, [
-                    tscWatch.projectRoot // watches for directories created for resolution of b
-                ], 1, /*recursive*/ false);
-                checkWatchedDirectoriesDetailed(host, [
-                    `${tscWatch.projectRoot}/b`, // Failed to package json
-                    `${tscWatch.projectRoot}/refs`, // Failed lookup since refs/a.ts does not exist
-                    `${tscWatch.projectRoot}/nrefs`, // Failed lookup since nrefs/a.ts does not exist
-                    ...getTypeRootsFromLocation(`${tscWatch.projectRoot}/c`)
-                ], 1, /*recursive*/ true);
-                // Script infos arent deleted till next file open
-                checkOrphanScriptInfos(service, [aTs.path]);
 
                 // revert the edit on config file
                 host.writeFile(bConfig.path, bConfig.content);
                 host.checkTimeoutQueueLengthAndRun(2);
-                checkProjectActualFiles(service.configuredProjects.get(cConfig.path)!, [libFile.path, cTs.path, cConfig.path, bTs.path, aTs.path, refsTs.path]);
-                checkWatchedFilesDetailed(host, [libFile.path, aTs.path, bTs.path, refsTs.path, aConfig.path, bConfig.path, cConfig.path, nRefsTs.path], 1);
-                checkWatchedDirectoriesDetailed(host, [
-                    tscWatch.projectRoot // watches for directories created for resolution of b
-                ], 1, /*recursive*/ false);
-                checkWatchedDirectoriesDetailed(host, [
-                    `${tscWatch.projectRoot}/a`, // Failed to package json
-                    `${tscWatch.projectRoot}/b`, // Failed to package json
-                    `${tscWatch.projectRoot}/refs`, // Failed lookup since refs/a.ts does not exist
-                    ...getTypeRootsFromLocation(`${tscWatch.projectRoot}/c`)
-                ], 1, /*recursive*/ true);
-                // Script infos arent deleted till next file open
-                checkOrphanScriptInfos(service, [nRefsTs.path]);
+                baselineTsserverLogs("projectsWithReferences", "transitive references with edit in referenced config file", service);
             });
 
             it("deleting referenced config file", () => {
-                const { host, service, aConfig, bConfig, cConfig, aTs, bTs, cTs, refsTs } = createService();
+                const { host, service, bConfig } = createService();
                 host.deleteFile(bConfig.path);
                 host.checkTimeoutQueueLengthAndRun(3); // Schedules failed lookup invalidation
-                checkNumberOfProjects(service, { configuredProjects: 1 });
-                checkProjectActualFiles(service.configuredProjects.get(cConfig.path)!, [libFile.path, cTs.path, cConfig.path, bTs.path, refsTs.path]);
-                checkWatchedFilesDetailed(host, [libFile.path, aTs.path, bTs.path, refsTs.path, bConfig.path, cConfig.path], 1);
-                checkWatchedDirectoriesDetailed(host, [
-                    tscWatch.projectRoot // watches for directories created for resolution of b
-                ], 1, /*recursive*/ false);
-                checkWatchedDirectoriesDetailed(host, [
-                    `${tscWatch.projectRoot}/b`, // Failed to package json
-                    `${tscWatch.projectRoot}/refs`, // Failed lookup since refs/a.ts does not exist
-                    ...getTypeRootsFromLocation(`${tscWatch.projectRoot}/c`)
-                ], 1, /*recursive*/ true);
-                // Script infos arent deleted till next file open
-                checkOrphanScriptInfos(service, [aTs.path]);
 
                 // revert
                 host.writeFile(bConfig.path, bConfig.content);
                 host.checkTimeoutQueueLengthAndRun(3); // Schedules failed lookup invalidation
-                checkProjectActualFiles(service.configuredProjects.get(cConfig.path)!, [libFile.path, cTs.path, cConfig.path, bTs.path, aTs.path, refsTs.path]);
-                checkWatchedFilesDetailed(host, [libFile.path, aTs.path, bTs.path, refsTs.path, aConfig.path, bConfig.path, cConfig.path], 1);
-                checkWatchedDirectoriesDetailed(host, [
-                    tscWatch.projectRoot // watches for directories created for resolution of b
-                ], 1, /*recursive*/ false);
-                checkWatchedDirectoriesDetailed(host, [
-                    `${tscWatch.projectRoot}/a`, // Failed to package json
-                    `${tscWatch.projectRoot}/b`, // Failed to package json
-                    `${tscWatch.projectRoot}/refs`, // Failed lookup since refs/a.ts does not exist
-                    ...getTypeRootsFromLocation(`${tscWatch.projectRoot}/c`)
-                ], 1, /*recursive*/ true);
-                checkOrphanScriptInfos(service, emptyArray);
+                baselineTsserverLogs("projectsWithReferences", "transitive references with deleting referenced config file", service);
             });
 
             it("deleting transitively referenced config file", () => {
-                const { host, service, aConfig, bConfig, cConfig, aTs, bTs, cTs, refsTs } = createService();
+                const { host, service, aConfig } = createService();
                 host.deleteFile(aConfig.path);
                 host.checkTimeoutQueueLengthAndRun(3); // Schedules failed lookup invalidation
-                checkNumberOfProjects(service, { configuredProjects: 1 });
-                checkProjectActualFiles(service.configuredProjects.get(cConfig.path)!, [libFile.path, cTs.path, cConfig.path, bTs.path, aTs.path, refsTs.path]);
-                checkWatchedFilesDetailed(host, [libFile.path, aTs.path, bTs.path, refsTs.path, aConfig.path, bConfig.path, cConfig.path], 1);
-                checkWatchedDirectoriesDetailed(host, [
-                    tscWatch.projectRoot // watches for directories created for resolution of b
-                ], 1, /*recursive*/ false);
-                checkWatchedDirectoriesDetailed(host, [
-                    `${tscWatch.projectRoot}/a`, // Failed to package json
-                    `${tscWatch.projectRoot}/b`, // Failed to package json
-                    `${tscWatch.projectRoot}/refs`, // Failed lookup since refs/a.ts does not exist
-                    ...getTypeRootsFromLocation(`${tscWatch.projectRoot}/c`)
-                ], 1, /*recursive*/ true);
-                checkOrphanScriptInfos(service, emptyArray);
 
                 // revert
                 host.writeFile(aConfig.path, aConfig.content);
                 host.checkTimeoutQueueLengthAndRun(3); // Schedules failed lookup invalidation
-                checkProjectActualFiles(service.configuredProjects.get(cConfig.path)!, [libFile.path, cTs.path, cConfig.path, bTs.path, aTs.path, refsTs.path]);
-                checkWatchedFilesDetailed(host, [libFile.path, aTs.path, bTs.path, refsTs.path, aConfig.path, bConfig.path, cConfig.path], 1);
-                checkWatchedDirectoriesDetailed(host, [
-                    tscWatch.projectRoot // watches for directories created for resolution of b
-                ], 1, /*recursive*/ false);
-                checkWatchedDirectoriesDetailed(host, [
-                    `${tscWatch.projectRoot}/a`, // Failed to package json
-                    `${tscWatch.projectRoot}/b`, // Failed to package json
-                    `${tscWatch.projectRoot}/refs`, // Failed lookup since refs/a.ts does not exist
-                    ...getTypeRootsFromLocation(`${tscWatch.projectRoot}/c`)
-                ], 1, /*recursive*/ true);
-                checkOrphanScriptInfos(service, emptyArray);
+                baselineTsserverLogs("projectsWithReferences", "transitive references with deleting transitively referenced config file", service);
             });
         });
 
@@ -330,44 +194,22 @@ X;`,
 export class A {}`
                 };
                 const host = createServerHost([libFile, aConfig, bConfig, cConfig, aTs, bTs, cTs, refsTs]);
-                const service = createProjectService(host);
+                const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs() });
                 service.openClientFile(cTs.path);
                 return { host, service, aConfig, bConfig, cConfig, aTs, bTs, cTs, refsTs };
             }
 
             it("non local edit", () => {
-                const { host, service, aConfig, bConfig, cConfig, aTs, bTs, cTs, refsTs } = createService();
-                checkNumberOfProjects(service, { configuredProjects: 1 });
-                checkProjectActualFiles(service.configuredProjects.get(cConfig.path)!, [libFile.path, cTs.path, cConfig.path, bTs.path, aTs.path, refsTs.path]);
-                checkWatchedFilesDetailed(host, [libFile.path, aTs.path, bTs.path, refsTs.path, aConfig.path, bConfig.path, cConfig.path], 1);
-                checkWatchedDirectoriesDetailed(host, [
-                    tscWatch.projectRoot // watches for directories created for resolution of b
-                ], 1, /*recursive*/ false);
-                const expectedWatchedDirectoriesDetailed = arrayToMap([
-                    `${tscWatch.projectRoot}/c`, // Wild card directory
-                    `${tscWatch.projectRoot}/refs`, // Failed lookup since refs/a.ts does not exist
-                    ...getTypeRootsFromLocation(`${tscWatch.projectRoot}/c`)
-                ], identity, () => 1);
-                expectedWatchedDirectoriesDetailed.set(`${tscWatch.projectRoot}/a`, 2); // Failed to package json and wild card directory
-                expectedWatchedDirectoriesDetailed.set(`${tscWatch.projectRoot}/b`, 2); // Failed to package json and wild card directory
-                checkWatchedDirectoriesDetailed(host, expectedWatchedDirectoriesDetailed, /*recursive*/ true);
-                checkOrphanScriptInfos(service, emptyArray);
+                const { host, service, bTs } = createService();
 
                 // non local edit
                 host.appendFile(bTs.path, `export function gFoo() { }`);
                 host.checkTimeoutQueueLengthAndRun(2);
-                checkNumberOfProjects(service, { configuredProjects: 1 });
-                checkProjectActualFiles(service.configuredProjects.get(cConfig.path)!, [libFile.path, cTs.path, cConfig.path, bTs.path, aTs.path, refsTs.path]);
-                checkWatchedFilesDetailed(host, [libFile.path, aTs.path, bTs.path, refsTs.path, aConfig.path, bConfig.path, cConfig.path], 1);
-                checkWatchedDirectoriesDetailed(host, [
-                    tscWatch.projectRoot // watches for directories created for resolution of b
-                ], 1, /*recursive*/ false);
-                checkWatchedDirectoriesDetailed(host, expectedWatchedDirectoriesDetailed, /*recursive*/ true);
-                checkOrphanScriptInfos(service, emptyArray);
+                baselineTsserverLogs("projectsWithReferences", "trasitive references without files with non local edit", service);
             });
 
             it("edit on config file", () => {
-                const { host, service, aConfig, bConfig, cConfig, aTs, bTs, cTs, refsTs } = createService();
+                const { host, service, cConfig, refsTs } = createService();
                 const nRefsTs: File = {
                     path: `${tscWatch.projectRoot}/nrefs/a.d.ts`,
                     content: refsTs.content
@@ -377,40 +219,15 @@ export class A {}`
                 cTsConfigJson.compilerOptions.paths = { "@ref/*": ["../nrefs/*"] };
                 host.writeFile(cConfig.path, JSON.stringify(cTsConfigJson));
                 host.checkTimeoutQueueLengthAndRun(2);
-                checkNumberOfProjects(service, { configuredProjects: 1 });
-                checkProjectActualFiles(service.configuredProjects.get(cConfig.path)!, [libFile.path, cTs.path, cConfig.path, bTs.path, aTs.path, nRefsTs.path]);
-                checkWatchedFilesDetailed(host, [libFile.path, aTs.path, bTs.path, refsTs.path, aConfig.path, bConfig.path, cConfig.path, nRefsTs.path], 1);
-                checkWatchedDirectoriesDetailed(host, [
-                    tscWatch.projectRoot // watches for directories created for resolution of b
-                ], 1, /*recursive*/ false);
-                const expectedWatchedDirectoriesDetailed = arrayToMap([
-                    `${tscWatch.projectRoot}/c`, // Wild card directory
-                    `${tscWatch.projectRoot}/nrefs`, // Failed lookup since nrefs/a.ts does not exist
-                    ...getTypeRootsFromLocation(`${tscWatch.projectRoot}/c`)
-                ], identity, () => 1);
-                expectedWatchedDirectoriesDetailed.set(`${tscWatch.projectRoot}/a`, 2); // Failed to package json and wild card directory
-                expectedWatchedDirectoriesDetailed.set(`${tscWatch.projectRoot}/b`, 2); // Failed to package json and wild card directory
-                checkWatchedDirectoriesDetailed(host, expectedWatchedDirectoriesDetailed, /*recursive*/ true);
-                // Script infos arent deleted till next file open
-                checkOrphanScriptInfos(service, [refsTs.path]);
 
                 // revert the edit on config file
                 host.writeFile(cConfig.path, cConfig.content);
                 host.checkTimeoutQueueLengthAndRun(2);
-                checkProjectActualFiles(service.configuredProjects.get(cConfig.path)!, [libFile.path, cTs.path, cConfig.path, bTs.path, aTs.path, refsTs.path]);
-                checkWatchedFilesDetailed(host, [libFile.path, aTs.path, bTs.path, refsTs.path, aConfig.path, bConfig.path, cConfig.path, nRefsTs.path], 1);
-                checkWatchedDirectoriesDetailed(host, [
-                    tscWatch.projectRoot // watches for directories created for resolution of b
-                ], 1, /*recursive*/ false);
-                expectedWatchedDirectoriesDetailed.delete(`${tscWatch.projectRoot}/nrefs`);
-                expectedWatchedDirectoriesDetailed.set(`${tscWatch.projectRoot}/refs`, 1);  // Failed lookup since refs/a.ts does not exist
-                checkWatchedDirectoriesDetailed(host, expectedWatchedDirectoriesDetailed, /*recursive*/ true);
-                // Script infos arent deleted till next file open
-                checkOrphanScriptInfos(service, [nRefsTs.path]);
+                baselineTsserverLogs("projectsWithReferences", "trasitive references without files with edit on config file", service);
             });
 
             it("edit in referenced config file", () => {
-                const { host, service, aConfig, bConfig, cConfig, aTs, bTs, cTs, refsTs } = createService();
+                const { host, service, bConfig, refsTs } = createService();
                 const nRefsTs: File = {
                     path: `${tscWatch.projectRoot}/nrefs/a.d.ts`,
                     content: refsTs.content
@@ -420,108 +237,33 @@ export class A {}`
                 bTsConfigJson.compilerOptions.paths = { "@ref/*": ["../nrefs/*"] };
                 host.writeFile(bConfig.path, JSON.stringify(bTsConfigJson));
                 host.checkTimeoutQueueLengthAndRun(2);
-                checkNumberOfProjects(service, { configuredProjects: 1 });
-                checkProjectActualFiles(service.configuredProjects.get(cConfig.path)!, [libFile.path, cTs.path, cConfig.path, bTs.path, refsTs.path, nRefsTs.path]);
-                checkWatchedFilesDetailed(host, [libFile.path, aTs.path, bTs.path, refsTs.path, aConfig.path, bConfig.path, cConfig.path, nRefsTs.path], 1);
-                checkWatchedDirectoriesDetailed(host, [
-                    tscWatch.projectRoot // watches for directories created for resolution of b
-                ], 1, /*recursive*/ false);
-                const expectedWatchedDirectoriesDetailed = arrayToMap([
-                    `${tscWatch.projectRoot}/a`, // Wild card directory
-                    `${tscWatch.projectRoot}/c`, // Wild card directory
-                    `${tscWatch.projectRoot}/refs`, // Failed lookup since refs/a.ts does not exist
-                    `${tscWatch.projectRoot}/nrefs`, // Failed lookup since nrefs/a.ts does not exist
-                    ...getTypeRootsFromLocation(`${tscWatch.projectRoot}/c`)
-                ], identity, () => 1);
-                expectedWatchedDirectoriesDetailed.set(`${tscWatch.projectRoot}/b`, 2); // Failed to package json and wild card directory
-                checkWatchedDirectoriesDetailed(host, expectedWatchedDirectoriesDetailed, /*recursive*/ true);
-                // Script infos arent deleted till next file open
-                checkOrphanScriptInfos(service, [aTs.path]);
 
                 // revert the edit on config file
                 host.writeFile(bConfig.path, bConfig.content);
                 host.checkTimeoutQueueLengthAndRun(2);
-                checkProjectActualFiles(service.configuredProjects.get(cConfig.path)!, [libFile.path, cTs.path, cConfig.path, bTs.path, aTs.path, refsTs.path]);
-                checkWatchedFilesDetailed(host, [libFile.path, aTs.path, bTs.path, refsTs.path, aConfig.path, bConfig.path, cConfig.path, nRefsTs.path], 1);
-                checkWatchedDirectoriesDetailed(host, [
-                    tscWatch.projectRoot // watches for directories created for resolution of b
-                ], 1, /*recursive*/ false);
-                expectedWatchedDirectoriesDetailed.delete(`${tscWatch.projectRoot}/nrefs`);
-                expectedWatchedDirectoriesDetailed.set(`${tscWatch.projectRoot}/a`, 2); // Failed to package json and wild card directory
-                checkWatchedDirectoriesDetailed(host, expectedWatchedDirectoriesDetailed, /*recursive*/ true);
-                // Script infos arent deleted till next file open
-                checkOrphanScriptInfos(service, [nRefsTs.path]);
+                baselineTsserverLogs("projectsWithReferences", "trasitive references without files with edit in referenced config file", service);
             });
 
             it("deleting referenced config file", () => {
-                const { host, service, aConfig, bConfig, cConfig, aTs, bTs, cTs, refsTs } = createService();
+                const { host, service, bConfig } = createService();
                 host.deleteFile(bConfig.path);
                 host.checkTimeoutQueueLengthAndRun(3); // Schedules failed lookup invalidation
-                checkNumberOfProjects(service, { configuredProjects: 1 });
-                checkProjectActualFiles(service.configuredProjects.get(cConfig.path)!, [libFile.path, cTs.path, cConfig.path, bTs.path, refsTs.path]);
-                checkWatchedFilesDetailed(host, [libFile.path, aTs.path, bTs.path, refsTs.path, bConfig.path, cConfig.path], 1);
-                checkWatchedDirectoriesDetailed(host, [
-                    tscWatch.projectRoot // watches for directories created for resolution of b
-                ], 1, /*recursive*/ false);
-                checkWatchedDirectoriesDetailed(host, [
-                    `${tscWatch.projectRoot}/c`, // Wild card directory
-                    `${tscWatch.projectRoot}/b`, // Failed to package json
-                    `${tscWatch.projectRoot}/refs`, // Failed lookup since refs/a.ts does not exist
-                    ...getTypeRootsFromLocation(`${tscWatch.projectRoot}/c`)
-                ], 1, /*recursive*/ true);
-                // Script infos arent deleted till next file open
-                checkOrphanScriptInfos(service, [aTs.path]);
 
                 // revert
                 host.writeFile(bConfig.path, bConfig.content);
                 host.checkTimeoutQueueLengthAndRun(3); // Schedules failed lookup invalidation
-                checkProjectActualFiles(service.configuredProjects.get(cConfig.path)!, [libFile.path, cTs.path, cConfig.path, bTs.path, aTs.path, refsTs.path]);
-                checkWatchedFilesDetailed(host, [libFile.path, aTs.path, bTs.path, refsTs.path, aConfig.path, bConfig.path, cConfig.path], 1);
-                checkWatchedDirectoriesDetailed(host, [
-                    tscWatch.projectRoot // watches for directories created for resolution of b
-                ], 1, /*recursive*/ false);
-                const expectedWatchedDirectoriesDetailed = arrayToMap([
-                    `${tscWatch.projectRoot}/c`, // Wild card directory
-                    `${tscWatch.projectRoot}/refs`, // Failed lookup since refs/a.ts does not exist
-                    ...getTypeRootsFromLocation(`${tscWatch.projectRoot}/c`)
-                ], identity, () => 1);
-                expectedWatchedDirectoriesDetailed.set(`${tscWatch.projectRoot}/a`, 2); // Failed to package json and wild card directory
-                expectedWatchedDirectoriesDetailed.set(`${tscWatch.projectRoot}/b`, 2); // Failed to package json and wild card directory
-                checkWatchedDirectoriesDetailed(host, expectedWatchedDirectoriesDetailed, /*recursive*/ true);
-                checkOrphanScriptInfos(service, emptyArray);
+                baselineTsserverLogs("projectsWithReferences", "trasitive references without files with deleting referenced config file", service);
             });
 
             it("deleting transitively referenced config file", () => {
-                const { host, service, aConfig, bConfig, cConfig, aTs, bTs, cTs, refsTs } = createService();
+                const { host, service, aConfig } = createService();
                 host.deleteFile(aConfig.path);
                 host.checkTimeoutQueueLengthAndRun(3); // Schedules failed lookup invalidation
-                checkNumberOfProjects(service, { configuredProjects: 1 });
-                checkProjectActualFiles(service.configuredProjects.get(cConfig.path)!, [libFile.path, cTs.path, cConfig.path, bTs.path, aTs.path, refsTs.path]);
-                checkWatchedFilesDetailed(host, [libFile.path, aTs.path, bTs.path, refsTs.path, aConfig.path, bConfig.path, cConfig.path], 1);
-                checkWatchedDirectoriesDetailed(host, [
-                    tscWatch.projectRoot // watches for directories created for resolution of b
-                ], 1, /*recursive*/ false);
-                const expectedWatchedDirectoriesDetailed = arrayToMap([
-                    `${tscWatch.projectRoot}/c`, // Wild card directory
-                    `${tscWatch.projectRoot}/a`, // Failed to package json
-                    `${tscWatch.projectRoot}/refs`, // Failed lookup since refs/a.ts does not exist
-                    ...getTypeRootsFromLocation(`${tscWatch.projectRoot}/c`)
-                ], identity, () => 1);
-                expectedWatchedDirectoriesDetailed.set(`${tscWatch.projectRoot}/b`, 2); // Failed to package json and wild card directory
-                checkWatchedDirectoriesDetailed(host, expectedWatchedDirectoriesDetailed, /*recursive*/ true);
-                checkOrphanScriptInfos(service, emptyArray);
 
                 // revert
                 host.writeFile(aConfig.path, aConfig.content);
                 host.checkTimeoutQueueLengthAndRun(3); // Schedules failed lookup invalidation
-                checkProjectActualFiles(service.configuredProjects.get(cConfig.path)!, [libFile.path, cTs.path, cConfig.path, bTs.path, aTs.path, refsTs.path]);
-                checkWatchedFilesDetailed(host, [libFile.path, aTs.path, bTs.path, refsTs.path, aConfig.path, bConfig.path, cConfig.path], 1);
-                checkWatchedDirectoriesDetailed(host, [
-                    tscWatch.projectRoot // watches for directories created for resolution of b
-                ], 1, /*recursive*/ false);
-                expectedWatchedDirectoriesDetailed.set(`${tscWatch.projectRoot}/a`, 2); // Failed to package json and wild card directory
-                checkWatchedDirectoriesDetailed(host, expectedWatchedDirectoriesDetailed, /*recursive*/ true);
-                checkOrphanScriptInfos(service, emptyArray);
+                baselineTsserverLogs("projectsWithReferences", "trasitive references without files with deleting transitively referenced config file", service);
             });
         });
     });

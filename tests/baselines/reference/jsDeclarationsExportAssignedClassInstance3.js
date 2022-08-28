@@ -22,4 +22,4 @@ module.exports.additional = 20;
 
 //// [index.d.ts]
 export const member: number;
-export const additional: number;
+export const additional: 20;

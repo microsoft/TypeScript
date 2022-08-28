@@ -75,8 +75,8 @@ const aa6 = a6 ?? 'whatever'
 >'whatever' : "whatever"
 
 const aa7 = a7 ?? 'whatever'
->aa7 : unknown
->a7 ?? 'whatever' : unknown
+>aa7 : {}
+>a7 ?? 'whatever' : {}
 >a7 : unknown
 >'whatever' : "whatever"
 

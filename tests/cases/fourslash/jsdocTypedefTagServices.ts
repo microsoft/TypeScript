@@ -5,7 +5,7 @@
 
 /////**
 //// * Doc comment
-//// * [|@typedef /*def*/[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}Product|]
+//// * [|@typedef /*def*/[|{| "contextRangeIndex": 0 |}Product|]
 //// * @property {string} title
 //// |]*/
 
@@ -25,5 +25,5 @@ verify.goToDefinition("use", "def");
 
 verify.rangesAreOccurrences(/*isWriteAccesss*/ undefined, ranges);
 verify.rangesAreDocumentHighlights(ranges);
-verify.singleReferenceGroup(desc, ranges);
+verify.baselineFindAllReferences("use", "def");
 verify.rangesAreRenameLocations(ranges);

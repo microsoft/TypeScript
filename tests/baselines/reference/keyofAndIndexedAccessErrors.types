@@ -421,7 +421,7 @@ type UndefinedKeys<T extends Record<string, any>> = {
 };
 
 type MyType = {a: string, b: string | undefined}
->MyType : MyType
+>MyType : { a: string; b: string | undefined; }
 >a : string
 >b : string
 

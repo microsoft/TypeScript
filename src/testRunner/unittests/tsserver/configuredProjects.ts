@@ -25,21 +25,13 @@ namespace ts.projectSystem {
             };
 
             const host = createServerHost([configFile, libFile, file1, file2, file3]);
-            const projectService = createProjectService(host);
+            const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs() });
             const { configFileName, configFileErrors } = projectService.openClientFile(file1.path);
 
             assert(configFileName, "should find config file");
             assert.isTrue(!configFileErrors || configFileErrors.length === 0, `expect no errors in config file, got ${JSON.stringify(configFileErrors)}`);
-            checkNumberOfInferredProjects(projectService, 0);
-            checkNumberOfConfiguredProjects(projectService, 1);
 
-            const project = configuredProjectAt(projectService, 0);
-            checkProjectActualFiles(project, [file1.path, libFile.path, file2.path, configFile.path]);
-            checkProjectRootFiles(project, [file1.path, file2.path]);
-            // watching all files except one that was open
-            checkWatchedFiles(host, [configFile.path, file2.path, libFile.path]);
-            const configFileDirectory = getDirectoryPath(configFile.path);
-            checkWatchedDirectories(host, [configFileDirectory, combinePaths(configFileDirectory, nodeModulesAtTypes)], /*recursive*/ true);
+            baselineTsserverLogs("configuredProjects", "create configured project without file list", projectService);
         });
 
         it("create configured project with the file list", () => {
@@ -65,20 +57,13 @@ namespace ts.projectSystem {
             };
 
             const host = createServerHost([configFile, libFile, file1, file2, file3]);
-            const projectService = createProjectService(host);
+            const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs() });
             const { configFileName, configFileErrors } = projectService.openClientFile(file1.path);
 
             assert(configFileName, "should find config file");
             assert.isTrue(!configFileErrors || configFileErrors.length === 0, `expect no errors in config file, got ${JSON.stringify(configFileErrors)}`);
-            checkNumberOfInferredProjects(projectService, 0);
-            checkNumberOfConfiguredProjects(projectService, 1);
 
-            const project = configuredProjectAt(projectService, 0);
-            checkProjectActualFiles(project, [file1.path, libFile.path, file2.path, configFile.path]);
-            checkProjectRootFiles(project, [file1.path, file2.path]);
-            // watching all files except one that was open
-            checkWatchedFiles(host, [configFile.path, file2.path, libFile.path]);
-            checkWatchedDirectories(host, [getDirectoryPath(configFile.path)], /*recursive*/ false);
+            baselineTsserverLogs("configuredProjects", "create configured project with the file list", projectService);
         });
 
         it("add and then remove a config file in a folder with loose files", () => {
@@ -99,41 +84,19 @@ namespace ts.projectSystem {
 
             const host = createServerHost([libFile, commonFile1, commonFile2]);
 
-            const projectService = createProjectService(host);
+            const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs() });
             projectService.openClientFile(commonFile1.path);
             projectService.openClientFile(commonFile2.path);
-
-            projectService.checkNumberOfProjects({ inferredProjects: 2 });
-            checkProjectActualFiles(projectService.inferredProjects[0], [commonFile1.path, libFile.path]);
-            checkProjectActualFiles(projectService.inferredProjects[1], [commonFile2.path, libFile.path]);
-
-            const watchedFiles = getConfigFilesToWatch(tscWatch.projectRoot).concat(libFile.path);
-            checkWatchedFiles(host, watchedFiles);
 
             // Add a tsconfig file
             host.writeFile(configFile.path, configFile.content);
             host.checkTimeoutQueueLengthAndRun(2); // load configured project from disk + ensureProjectsForOpenFiles
 
-            projectService.checkNumberOfProjects({ inferredProjects: 2, configuredProjects: 1 });
-            assert.isTrue(projectService.inferredProjects[0].isOrphan());
-            checkProjectActualFiles(projectService.inferredProjects[1], [commonFile2.path, libFile.path]);
-            checkProjectActualFiles(projectService.configuredProjects.get(configFile.path)!, [libFile.path, commonFile1.path, configFile.path]);
-
-            checkWatchedFiles(host, watchedFiles);
-
             // remove the tsconfig file
             host.deleteFile(configFile.path);
-
-            projectService.checkNumberOfProjects({ inferredProjects: 2 });
-            assert.isTrue(projectService.inferredProjects[0].isOrphan());
-            checkProjectActualFiles(projectService.inferredProjects[1], [commonFile2.path, libFile.path]);
-
             host.checkTimeoutQueueLengthAndRun(1); // Refresh inferred projects
 
-            projectService.checkNumberOfProjects({ inferredProjects: 2 });
-            checkProjectActualFiles(projectService.inferredProjects[0], [commonFile1.path, libFile.path]);
-            checkProjectActualFiles(projectService.inferredProjects[1], [commonFile2.path, libFile.path]);
-            checkWatchedFiles(host, watchedFiles);
+            baselineTsserverLogs("configuredProjects", "add and then remove a config file in a folder with loose files", projectService);
         });
 
         it("add new files to a configured project without file list", () => {
@@ -142,20 +105,13 @@ namespace ts.projectSystem {
                 content: `{}`
             };
             const host = createServerHost([commonFile1, libFile, configFile]);
-            const projectService = createProjectService(host);
+            const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs() });
             projectService.openClientFile(commonFile1.path);
-            const configFileDir = getDirectoryPath(configFile.path);
-            checkWatchedDirectories(host, [configFileDir, combinePaths(configFileDir, nodeModulesAtTypes)], /*recursive*/ true);
-            checkNumberOfConfiguredProjects(projectService, 1);
-
-            const project = configuredProjectAt(projectService, 0);
-            checkProjectRootFiles(project, [commonFile1.path]);
 
             // add a new ts file
             host.writeFile(commonFile2.path, commonFile2.content);
             host.checkTimeoutQueueLengthAndRun(2);
-            // project service waits for 250ms to update the project structure, therefore the assertion needs to wait longer.
-            checkProjectRootFiles(project, [commonFile1.path, commonFile2.path]);
+            baselineTsserverLogs("configuredProjects", "add new files to a configured project without file list", projectService);
         });
 
         it("should ignore non-existing files specified in the config file", () => {
@@ -581,56 +537,37 @@ namespace ts.projectSystem {
 
             const files = [file1, file2, file3, file4];
             const host = createServerHost(files.concat(configFile));
-            const projectService = createProjectService(host);
+            const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs() });
 
             projectService.openClientFile(file1.path);
             projectService.openClientFile(file2.path);
             projectService.openClientFile(file3.path);
             projectService.openClientFile(file4.path);
 
-            const infos = files.map(file => projectService.getScriptInfoForPath(file.path as Path)!);
-            checkOpenFiles(projectService, files);
-            checkNumberOfProjects(projectService, { configuredProjects: 1, inferredProjects: 2 });
             const configProject1 = projectService.configuredProjects.get(configFile.path)!;
             assert.isTrue(configProject1.hasOpenRef()); // file1 and file3
-            checkProjectActualFiles(configProject1, [file1.path, file3.path, configFile.path]);
-            const inferredProject1 = projectService.inferredProjects[0];
-            checkProjectActualFiles(inferredProject1, [file2.path]);
-            const inferredProject2 = projectService.inferredProjects[1];
-            checkProjectActualFiles(inferredProject2, [file4.path]);
 
             host.writeFile(configFile.path, "{}");
             host.runQueuedTimeoutCallbacks();
 
-            verifyScriptInfos();
-            checkOpenFiles(projectService, files);
-            verifyConfiguredProjectStateAfterUpdate(/*hasOpenRef*/ true, 2); // file1, file2, file3
+            assert.isTrue(configProject1.hasOpenRef()); // file1, file2, file3
             assert.isTrue(projectService.inferredProjects[0].isOrphan());
-            const inferredProject3 = projectService.inferredProjects[1];
-            checkProjectActualFiles(inferredProject3, [file4.path]);
-            assert.strictEqual(inferredProject3, inferredProject2);
 
             projectService.closeClientFile(file1.path);
             projectService.closeClientFile(file2.path);
             projectService.closeClientFile(file4.path);
 
-            verifyScriptInfos();
-            checkOpenFiles(projectService, [file3]);
-            verifyConfiguredProjectStateAfterUpdate(/*hasOpenRef*/ true, 2); // file3
+            assert.isTrue(configProject1.hasOpenRef()); // file3
             assert.isTrue(projectService.inferredProjects[0].isOrphan());
             assert.isTrue(projectService.inferredProjects[1].isOrphan());
 
             projectService.openClientFile(file4.path);
-            verifyScriptInfos();
-            checkOpenFiles(projectService, [file3, file4]);
-            verifyConfiguredProjectStateAfterUpdate(/*hasOpenRef*/ true, 1); // file3
+            assert.isTrue(configProject1.hasOpenRef()); // file3
             const inferredProject4 = projectService.inferredProjects[0];
             checkProjectActualFiles(inferredProject4, [file4.path]);
 
             projectService.closeClientFile(file3.path);
-            verifyScriptInfos();
-            checkOpenFiles(projectService, [file4]);
-            verifyConfiguredProjectStateAfterUpdate(/*hasOpenRef*/ false, 1); // No open files
+            assert.isFalse(configProject1.hasOpenRef()); // No open files
             const inferredProject5 = projectService.inferredProjects[0];
             checkProjectActualFiles(inferredProject4, [file4.path]);
             assert.strictEqual(inferredProject5, inferredProject4);
@@ -641,31 +578,8 @@ namespace ts.projectSystem {
             };
             host.writeFile(file5.path, file5.content);
             projectService.openClientFile(file5.path);
-            verifyScriptInfosAreUndefined([file1, file2, file3]);
-            assert.strictEqual(projectService.getScriptInfoForPath(file4.path as Path), find(infos, info => info.path === file4.path));
-            assert.isDefined(projectService.getScriptInfoForPath(file5.path as Path));
-            checkOpenFiles(projectService, [file4, file5]);
-            checkNumberOfProjects(projectService, { inferredProjects: 2 });
-            checkProjectActualFiles(projectService.inferredProjects[0], [file4.path]);
-            checkProjectActualFiles(projectService.inferredProjects[1], [file5.path]);
 
-            function verifyScriptInfos() {
-                infos.forEach(info => assert.strictEqual(projectService.getScriptInfoForPath(info.path), info));
-            }
-
-            function verifyScriptInfosAreUndefined(files: File[]) {
-                for (const file of files) {
-                    assert.isUndefined(projectService.getScriptInfoForPath(file.path as Path));
-                }
-            }
-
-            function verifyConfiguredProjectStateAfterUpdate(hasOpenRef: boolean, inferredProjects: number) {
-                checkNumberOfProjects(projectService, { configuredProjects: 1, inferredProjects });
-                const configProject2 = projectService.configuredProjects.get(configFile.path)!;
-                assert.strictEqual(configProject2, configProject1);
-                checkProjectActualFiles(configProject2, [file1.path, file2.path, file3.path, configFile.path]);
-                assert.equal(configProject2.hasOpenRef(), hasOpenRef);
-            }
+            baselineTsserverLogs("configuredProjects", "Open ref of configured project when open file gets added to the project as part of configured file update", projectService);
         });
 
         it("Open ref of configured project when open file gets added to the project as part of configured file update buts its open file references are all closed when the update happens", () => {
@@ -1103,35 +1017,22 @@ foo();`
                 };
 
                 const host = createServerHost([alphaExtendedConfig, aConfig, aFile, bravoExtendedConfig, bConfig, bFile, ...(additionalFiles || emptyArray)]);
-                const projectService = createProjectService(host);
+                const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs() });
                 return { host, projectService, aFile, bFile, aConfig, bConfig, alphaExtendedConfig, bravoExtendedConfig };
             }
 
             it("should watch the extended configs of multiple projects", () => {
-                const { host, projectService, aFile, bFile, aConfig, bConfig, alphaExtendedConfig, bravoExtendedConfig } = getService();
+                const { host, projectService, aFile, bFile, bConfig, alphaExtendedConfig, bravoExtendedConfig } = getService();
 
                 projectService.openClientFile(aFile.path);
                 projectService.openClientFile(bFile.path);
-                checkNumberOfConfiguredProjects(projectService, 2);
-                const aProject = projectService.configuredProjects.get(aConfig.path)!;
-                const bProject = projectService.configuredProjects.get(bConfig.path)!;
-                checkProjectActualFiles(aProject, [aFile.path, aConfig.path, alphaExtendedConfig.path]);
-                checkProjectActualFiles(bProject, [bFile.path, bConfig.path, bravoExtendedConfig.path, alphaExtendedConfig.path]);
-                assert.isUndefined(aProject.getCompilerOptions().strict);
-                assert.isUndefined(bProject.getCompilerOptions().strict);
-                checkWatchedFiles(host, [aConfig.path, bConfig.path, libFile.path, bravoExtendedConfig.path, alphaExtendedConfig.path]);
 
                 host.writeFile(alphaExtendedConfig.path, JSON.stringify({
                     compilerOptions: {
                         strict: true
                     }
                 }));
-                assert.isTrue(projectService.hasPendingProjectUpdate(aProject));
-                assert.isTrue(projectService.hasPendingProjectUpdate(bProject));
                 host.checkTimeoutQueueLengthAndRun(3);
-                assert.isTrue(aProject.getCompilerOptions().strict);
-                assert.isTrue(bProject.getCompilerOptions().strict);
-                checkWatchedFiles(host, [aConfig.path, bConfig.path, libFile.path, bravoExtendedConfig.path, alphaExtendedConfig.path]);
 
                 host.writeFile(bravoExtendedConfig.path, JSON.stringify({
                     extends: "./alpha.tsconfig.json",
@@ -1139,30 +1040,16 @@ foo();`
                         strict: false
                     }
                 }));
-                assert.isFalse(projectService.hasPendingProjectUpdate(aProject));
-                assert.isTrue(projectService.hasPendingProjectUpdate(bProject));
                 host.checkTimeoutQueueLengthAndRun(2);
-                assert.isTrue(aProject.getCompilerOptions().strict);
-                assert.isFalse(bProject.getCompilerOptions().strict);
-                checkWatchedFiles(host, [aConfig.path, bConfig.path, libFile.path, bravoExtendedConfig.path, alphaExtendedConfig.path]);
 
                 host.writeFile(bConfig.path, JSON.stringify({
                     extends: "../extended/alpha.tsconfig.json",
                 }));
-                assert.isFalse(projectService.hasPendingProjectUpdate(aProject));
-                assert.isTrue(projectService.hasPendingProjectUpdate(bProject));
                 host.checkTimeoutQueueLengthAndRun(2);
-                assert.isTrue(aProject.getCompilerOptions().strict);
-                assert.isTrue(bProject.getCompilerOptions().strict);
-                checkWatchedFiles(host, [aConfig.path, bConfig.path, libFile.path, alphaExtendedConfig.path]);
 
                 host.writeFile(alphaExtendedConfig.path, "{}");
-                assert.isTrue(projectService.hasPendingProjectUpdate(aProject));
-                assert.isTrue(projectService.hasPendingProjectUpdate(bProject));
                 host.checkTimeoutQueueLengthAndRun(3);
-                assert.isUndefined(aProject.getCompilerOptions().strict);
-                assert.isUndefined(bProject.getCompilerOptions().strict);
-                checkWatchedFiles(host, [aConfig.path, bConfig.path, libFile.path, alphaExtendedConfig.path]);
+                baselineTsserverLogs("configuredProjects", "should watch the extended configs of multiple projects", projectService);
             });
 
             it("should stop watching the extended configs of closed projects", () => {
@@ -1174,27 +1061,21 @@ foo();`
                     path: `${tscWatch.projectRoot}/dummy/tsconfig.json`,
                     content: "{}"
                 };
-                const { host, projectService, aFile, bFile, aConfig, bConfig, alphaExtendedConfig, bravoExtendedConfig } = getService([dummy, dummyConfig]);
+                const { projectService, aFile, bFile } = getService([dummy, dummyConfig]);
 
                 projectService.openClientFile(aFile.path);
                 projectService.openClientFile(bFile.path);
                 projectService.openClientFile(dummy.path);
-                checkNumberOfConfiguredProjects(projectService, 3);
-                checkWatchedFiles(host, [aConfig.path, bConfig.path, libFile.path, bravoExtendedConfig.path, alphaExtendedConfig.path, dummyConfig.path]);
 
                 projectService.closeClientFile(bFile.path);
                 projectService.closeClientFile(dummy.path);
                 projectService.openClientFile(dummy.path);
 
-                checkNumberOfConfiguredProjects(projectService, 2);
-                checkWatchedFiles(host, [aConfig.path, libFile.path, alphaExtendedConfig.path, dummyConfig.path]);
 
                 projectService.closeClientFile(aFile.path);
                 projectService.closeClientFile(dummy.path);
                 projectService.openClientFile(dummy.path);
-
-                checkNumberOfConfiguredProjects(projectService, 1);
-                checkWatchedFiles(host, [libFile.path, dummyConfig.path]);
+                baselineTsserverLogs("configuredProjects", "should stop watching the extended configs of closed projects", projectService);
             });
         });
     });
@@ -1297,35 +1178,16 @@ foo();`
             };
             const files = [file1, file2a, configFile, libFile];
             const host = createServerHost(files);
-            const projectService = createProjectService(host);
+            const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs() });
             projectService.openClientFile(file1.path);
-            checkNumberOfProjects(projectService, { configuredProjects: 1 });
-            const project = projectService.configuredProjects.get(configFile.path)!;
-            assert.isDefined(project);
-            checkProjectActualFiles(project, map(files, file => file.path));
-            checkWatchedFiles(host, mapDefined(files, file => file === file1 ? undefined : file.path));
-            checkWatchedDirectoriesDetailed(host, ["/a/b"], 1, /*recursive*/ false);
-            checkWatchedDirectoriesDetailed(host, ["/a/b/node_modules/@types"], 1, /*recursive*/ true);
 
-            files.push(file2);
             host.writeFile(file2.path, file2.content);
             host.runQueuedTimeoutCallbacks(); // Scheduled invalidation of resolutions
             host.runQueuedTimeoutCallbacks(); // Actual update
-            checkNumberOfProjects(projectService, { configuredProjects: 1 });
-            assert.strictEqual(projectService.configuredProjects.get(configFile.path), project);
-            checkProjectActualFiles(project, mapDefined(files, file => file === file2a ? undefined : file.path));
-            checkWatchedFiles(host, mapDefined(files, file => file === file1 ? undefined : file.path));
-            checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
-            checkWatchedDirectoriesDetailed(host, ["/a/b/node_modules/@types"], 1, /*recursive*/ true);
 
             // On next file open the files file2a should be closed and not watched any more
             projectService.openClientFile(file2.path);
-            checkNumberOfProjects(projectService, { configuredProjects: 1 });
-            assert.strictEqual(projectService.configuredProjects.get(configFile.path), project);
-            checkProjectActualFiles(project, mapDefined(files, file => file === file2a ? undefined : file.path));
-            checkWatchedFiles(host, [libFile.path, configFile.path]);
-            checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
-            checkWatchedDirectoriesDetailed(host, ["/a/b/node_modules/@types"], 1, /*recursive*/ true);
+            baselineTsserverLogs("configuredProjects", "changed module resolution reflected when specifying files list", projectService);
         });
 
         it("Failed lookup locations uses parent most node_modules directory", () => {
@@ -1355,17 +1217,9 @@ foo();`
             nonLibFiles.forEach(f => f.path = root + f.path);
             const files = nonLibFiles.concat(libFile);
             const host = createServerHost(files);
-            const projectService = createProjectService(host);
+            const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs() });
             projectService.openClientFile(file1.path);
-            checkNumberOfProjects(projectService, { configuredProjects: 1 });
-            const project = projectService.configuredProjects.get(configFile.path)!;
-            assert.isDefined(project);
-            checkProjectActualFiles(project, [file1.path, libFile.path, module1.path, module2.path, configFile.path]);
-            checkWatchedFiles(host, [libFile.path, configFile.path]);
-            checkWatchedDirectories(host, [], /*recursive*/ false);
-            const watchedRecursiveDirectories = getTypeRootsFromLocation(root + "/a/b/src");
-            watchedRecursiveDirectories.push(`${root}/a/b/src/node_modules`, `${root}/a/b/node_modules`);
-            checkWatchedDirectories(host, watchedRecursiveDirectories, /*recursive*/ true);
+            baselineTsserverLogs("configuredProjects", "failed lookup locations uses parent most node_modules directory", projectService);
         });
     });
 

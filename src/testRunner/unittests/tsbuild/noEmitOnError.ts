@@ -8,41 +8,80 @@ namespace ts {
             projFs = undefined!;
         });
 
-        function verifyNoEmitOnError(subScenario: string, fixModifyFs: TscIncremental["modifyFs"], modifyFs?: TscIncremental["modifyFs"]) {
-            verifyTscSerializedIncrementalEdits({
-                scenario: "noEmitOnError",
-                subScenario,
-                fs: () => projFs,
-                modifyFs,
-                commandLineArgs: ["--b", "/src/tsconfig.json"],
-                incrementalScenarios: [
-                    noChangeRun,
-                    {
-                        subScenario: "Fix error",
-                        buildKind: BuildKind.IncrementalDtsChange,
-                        modifyFs: fixModifyFs,
-                    },
-                    noChangeRun,
-                ],
-                baselinePrograms: true,
-                baselineIncremental: true
-            });
-        }
-
-        verifyNoEmitOnError(
-            "syntax errors",
-            fs => fs.writeFileSync("/src/src/main.ts", `import { A } from "../shared/types/db";
+        verifyTscWithEdits({
+            scenario: "noEmitOnError",
+            subScenario: "syntax errors",
+            fs: () => projFs,
+            commandLineArgs: ["--b", "/src/tsconfig.json"],
+            edits: [
+                noChangeRun,
+                {
+                    subScenario: "Fix error",
+                    modifyFs: fs => fs.writeFileSync("/src/src/main.ts", `import { A } from "../shared/types/db";
 const a = {
     lastName: 'sdsd'
-};`, "utf-8")
-        );
+};`, "utf-8"),
+                },
+                noChangeRun,
+            ],
+            baselinePrograms: true,
+        });
 
-        verifyNoEmitOnError(
-            "semantic errors",
-            fs => fs.writeFileSync("/src/src/main.ts", `import { A } from "../shared/types/db";
+        verifyTscWithEdits({
+            scenario: "noEmitOnError",
+            subScenario: "syntax errors with incremental",
+            fs: () => projFs,
+            commandLineArgs: ["--b", "/src/tsconfig.json", "--incremental"],
+            edits: [
+                noChangeRun,
+                {
+                    subScenario: "Fix error",
+                    modifyFs: fs => fs.writeFileSync("/src/src/main.ts", `import { A } from "../shared/types/db";
+const a = {
+    lastName: 'sdsd'
+};`, "utf-8"),
+                },
+                noChangeRun,
+            ],
+            baselinePrograms: true,
+        });
+
+        verifyTscWithEdits({
+            scenario: "noEmitOnError",
+            subScenario: "semantic errors",
+            fs: () => projFs,
+            modifyFs: fs => fs.writeFileSync("/src/src/main.ts", `import { A } from "../shared/types/db";
+const a: string = 10;`, "utf-8"),
+            commandLineArgs: ["--b", "/src/tsconfig.json"],
+            edits: [
+                noChangeRun,
+                {
+                    subScenario: "Fix error",
+                    modifyFs: fs => fs.writeFileSync("/src/src/main.ts", `import { A } from "../shared/types/db";
 const a: string = "hello";`, "utf-8"),
-            fs => fs.writeFileSync("/src/src/main.ts", `import { A } from "../shared/types/db";
-const a: string = 10;`, "utf-8")
-        );
+                },
+                noChangeRun,
+            ],
+            baselinePrograms: true,
+        });
+
+        verifyTscWithEdits({
+            scenario: "noEmitOnError",
+            subScenario: "semantic errors with incremental",
+            fs: () => projFs,
+            modifyFs: fs => fs.writeFileSync("/src/src/main.ts", `import { A } from "../shared/types/db";
+const a: string = 10;`, "utf-8"),
+            commandLineArgs: ["--b", "/src/tsconfig.json", "--incremental"],
+            edits: [
+                noChangeWithExportsDiscrepancyRun,
+                {
+                    subScenario: "Fix error",
+                    modifyFs: fs => fs.writeFileSync("/src/src/main.ts", `import { A } from "../shared/types/db";
+const a: string = "hello";`, "utf-8"),
+                },
+                noChangeRun,
+            ],
+            baselinePrograms: true,
+        });
     });
 }

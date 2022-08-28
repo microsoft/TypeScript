@@ -136,14 +136,14 @@ Resolving real path for '/user/username/projects/myProject/plugin-two/node_modul
 plugin-one/node_modules/typescript-fsa/index.d.ts
   Imported via "typescript-fsa" from file 'plugin-one/action.ts' with packageId 'typescript-fsa/index.d.ts@3.0.0-beta-2'
 plugin-one/action.ts
-  Matched by include pattern '**/*' in 'plugin-one/tsconfig.json'
+  Matched by default include pattern '**/*'
 plugin-two/node_modules/typescript-fsa/index.d.ts
   Imported via "typescript-fsa" from file 'plugin-two/index.d.ts' with packageId 'typescript-fsa/index.d.ts@3.0.0-beta-2'
   File redirects to file 'plugin-one/node_modules/typescript-fsa/index.d.ts'
 plugin-two/index.d.ts
   Imported via "plugin-two" from file 'plugin-one/index.ts'
 plugin-one/index.ts
-  Matched by include pattern '**/*' in 'plugin-one/tsconfig.json'
+  Matched by default include pattern '**/*'
 
 
 Program root files: ["/user/username/projects/myproject/plugin-one/action.ts","/user/username/projects/myproject/plugin-one/index.ts"]

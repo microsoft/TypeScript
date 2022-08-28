@@ -12,7 +12,7 @@ namespace ts.formatting {
         readEOFTokenRange(): TextRangeWithKind;
         getCurrentLeadingTrivia(): TextRangeWithKind[] | undefined;
         lastTrailingTriviaWasNewLine(): boolean;
-        skipToEndOf(node: Node): void;
+        skipToEndOf(node: Node | NodeArray<Node>): void;
         skipToStartOf(node: Node): void;
     }
 
@@ -286,7 +286,7 @@ namespace ts.formatting {
             return tokenInfo;
         }
 
-        function skipToEndOf(node: Node): void {
+        function skipToEndOf(node: Node | NodeArray<Node>): void {
             scanner.setTextPos(node.end);
             savedPos = scanner.getStartPos();
             lastScanAction = undefined;

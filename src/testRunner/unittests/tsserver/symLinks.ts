@@ -131,6 +131,16 @@ new C();`
                         host.runQueuedTimeoutCallbacks(); // Actual update
 
                         verifyGetErrRequest({ session, host, files: [recognizersDateTimeSrcFile] });
+
+                        // Change config file's module resolution affecting option
+                        const config = JSON.parse(host.readFile(recognizerDateTimeTsconfigPath)!);
+                        host.writeFile(recognizerDateTimeTsconfigPath, JSON.stringify({
+                            ...config,
+                            compilerOptions: { ...config.compilerOptions, resolveJsonModule: true }
+                        }));
+                        host.runQueuedTimeoutCallbacks(); // Scheduled invalidation of resolutions
+                        host.runQueuedTimeoutCallbacks(); // Actual update
+
                         baselineTsserverLogs("symLinks", `module resolution${withPathMapping ? " with path mapping" : ""} when project compiles from sources`, session);
                     });
 

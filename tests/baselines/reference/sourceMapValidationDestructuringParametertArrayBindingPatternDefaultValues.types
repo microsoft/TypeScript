@@ -7,7 +7,7 @@ declare var console: {
 >msg : any
 }
 type Robot = [number, string, string];
->Robot : Robot
+>Robot : [number, string, string]
 
 var robotA: Robot = [1, "mower", "mowing"];
 >robotA : Robot

@@ -14,19 +14,9 @@ namespace ts.projectSystem {
                 content: `export let x: number`
             };
             const host = createServerHost([appFile, moduleFile, libFile]);
-            const projectService = createProjectService(host);
-            const { configFileName } = projectService.openClientFile(appFile.path);
-
-            assert(!configFileName, `should not find config, got: '${configFileName}`);
-            checkNumberOfConfiguredProjects(projectService, 0);
-            checkNumberOfInferredProjects(projectService, 1);
-
-            const project = projectService.inferredProjects[0];
-
-            checkArray("inferred project", project.getFileNames(), [appFile.path, libFile.path, moduleFile.path]);
-            checkWatchedFiles(host, getConfigFilesToWatch(tscWatch.projectRoot).concat(libFile.path, moduleFile.path));
-            checkWatchedDirectories(host, [tscWatch.projectRoot], /*recursive*/ false);
-            checkWatchedDirectories(host, [combinePaths(tscWatch.projectRoot, nodeModulesAtTypes)], /*recursive*/ true);
+            const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs() });
+            projectService.openClientFile(appFile.path);
+            baselineTsserverLogs("inferredProjects", "create inferred project", projectService);
         });
 
         it("should use only one inferred project if 'useOneInferredProject' is set", () => {

@@ -228,8 +228,8 @@ class C {
         return null;
     }
     // modifier mistakes
-    static constructor() { }
-    async constructor() { }
+    constructor() { }
+    constructor() { }
     x = 1;
     y() {
         return 12;
