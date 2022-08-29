@@ -146,23 +146,7 @@ namespace ts {
                     break;
                 }
                 case "listOrElement": {
-                    if (option.isTSConfigOnly) {
-                        args = ["-p", "tsconfig.json"];
-                        if(option.element.type === "string"){
-                            optionValue = { [option.name]: "someString" };
-                        }
-                        else{
-                            optionValue = { [option.name]: [] };
-                        }
-                    }
-                    else {
-                        if(option.element.type === "string"){
-                            args = [`--${option.name}`, "someString"];
-                        }
-                        else{
-                            args = [`--${option.name}`];
-                        }
-                    }
+                    Debug.fail();
                     break;
                 }
                 case "string": {

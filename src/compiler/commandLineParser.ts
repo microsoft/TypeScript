@@ -1732,17 +1732,7 @@ namespace ts {
                         }
                         break;
                     case "listOrElement":
-                        if(opt.element.type === "string"){
-                            options[opt.name] = validateJsonOptionValue(opt, args[i] || "", errors);
-                            i++;
-                        }
-                        else{
-                            const result = parseListTypeOption(opt, args[i], errors);
-                            options[opt.name] = result || [];
-                            if (result) {
-                                i++;
-                            }
-                        }
+                        Debug.fail();
                         break;
                     // If not a primitive, the possible types are specified in what is effectively a map of options.
                     default:
@@ -2252,8 +2242,11 @@ namespace ts {
                     if (!isDoubleQuotedString(valueExpression)) {
                         errors.push(createDiagnosticForNodeInSourceFile(sourceFile, valueExpression, Diagnostics.String_literal_with_double_quotes_expected));
                     }
-                    reportInvalidOptionValue(option && (isString(option.type) && option.type !== "string")&& (option.type !== "listOrElement" || option.element.type !== "string"));
+                    reportInvalidOptionValue(option && (isString(option.type) && option.type !== "string") && (option.type !== "listOrElement" || (isString(option.element.type) && option.element.type !== "string")));
                     const text = (valueExpression as StringLiteral).text;
+                    if (option) {
+                        Debug.assert(option.type !== "listOrElement" || option.element.type === "string", "Only string or array of string is handled for now");
+                    }
                     if (option && !isString(option.type)) {
                         const customOption = option as CommandLineOptionOfCustomType;
                         // Validate custom option type
@@ -2512,6 +2505,7 @@ namespace ts {
                 const value = options[name] as CompilerOptionsValue;
                 const optionDefinition = optionsNameMap.get(name.toLowerCase());
                 if (optionDefinition) {
+                    Debug.assert(optionDefinition.type !== "listOrElement");
                     const customTypeMap = getCustomTypeMapOfCommandLineOption(optionDefinition);
                     if (!customTypeMap) {
                         // There is no map associated with this compiler option then use the value as-is
@@ -2696,7 +2690,7 @@ namespace ts {
                 if(option.element.type === "string"){
                     return toAbsolutePath(value as string);
                 }
-                else{
+                else {
                     const values = value as readonly (string | number)[];
                     if (option.element.isFilePath && values.length) {
                         return values.map(toAbsolutePath);
@@ -2985,12 +2979,12 @@ namespace ts {
     }
 
     interface ExtendsResult {
-        options: CompilerOptions,
-        watchOptions?: WatchOptions,
-        include?: string[],
-        exclude?: string[],
-        files?: string[],
-        compileOnSave?: boolean,
+        options: CompilerOptions;
+        watchOptions?: WatchOptions;
+        include?: string[];
+        exclude?: string[];
+        files?: string[];
+        compileOnSave?: boolean;
         extendedSourceFiles?: Set<string>
     }
     /**
@@ -3030,22 +3024,22 @@ namespace ts {
             // copy the resolution stack so it is never reused between branches in potential diamond-problem scenarios.
             resolutionStack = resolutionStack.concat([resolvedPath]);
             const result: ExtendsResult = { options:{} };
-            if(isString(ownConfig.extendedConfigPath)){
+            if (isString(ownConfig.extendedConfigPath)) {
                 applyExtendedConfig(result, ownConfig.extendedConfigPath);
             }
-            else{
+            else {
                 ownConfig.extendedConfigPath.forEach(extendedConfigPath => applyExtendedConfig(result, extendedConfigPath));
             }
-            if(!ownConfig.raw.include && result.include) ownConfig.raw.include = result.include;
-            if(!ownConfig.raw.exclude && result.exclude) ownConfig.raw.exclude = result.exclude;
-            if(!ownConfig.raw.files && result.files) ownConfig.raw.files = result.files;
+            if (!ownConfig.raw.include && result.include) ownConfig.raw.include = result.include;
+            if (!ownConfig.raw.exclude && result.exclude) ownConfig.raw.exclude = result.exclude;
+            if (!ownConfig.raw.files && result.files) ownConfig.raw.files = result.files;
             if (ownConfig.raw.compileOnSave === undefined && result.compileOnSave) ownConfig.raw.compileOnSave = result.compileOnSave;
             if (sourceFile && result.extendedSourceFiles) sourceFile.extendedSourceFiles = arrayFrom(result.extendedSourceFiles.keys());
 
             ownConfig.options = assign(result.options, ownConfig.options);
-            ownConfig.watchOptions = ownConfig.watchOptions && result.watchOptions?
-            assign(result.watchOptions, ownConfig.watchOptions) :
-            ownConfig.watchOptions || result.watchOptions;
+            ownConfig.watchOptions = ownConfig.watchOptions && result.watchOptions ?
+                assign(result.watchOptions, ownConfig.watchOptions) :
+                ownConfig.watchOptions || result.watchOptions;
         }
         return ownConfig;
 
@@ -3130,7 +3124,7 @@ namespace ts {
         const options = getDefaultCompilerOptions(configFileName);
         let typeAcquisition: TypeAcquisition | undefined, typingOptionstypeAcquisition: TypeAcquisition | undefined;
         let watchOptions: WatchOptions | undefined;
-        let extendedConfigPath: string[] | undefined;
+        let extendedConfigPath: string | string[] | undefined;
         let rootCompilerOptions: PropertyName[] | undefined;
 
         const optionsIterator: JsonConversionNotifier = {
@@ -3160,16 +3154,17 @@ namespace ts {
                         case "extends":
                             const newBase = configFileName ? directoryOfCombinedPath(configFileName, basePath) : basePath;
                             if (isString(value)) {
-                                extendedConfigPath = append (extendedConfigPath, getExtendsConfigPath(
+                                extendedConfigPath = getExtendsConfigPath(
                                     value,
                                     host,
                                     newBase,
                                     errors,
                                     (message, arg0) =>
                                         createDiagnosticForNodeInSourceFile(sourceFile, valueNode, message, arg0)
-                                ));
+                                );
                             }
                             else {
+                                extendedConfigPath = [];
                                 for (const fileName of value as unknown[]) {
                                     if (isString(fileName)) {
                                         extendedConfigPath = append(extendedConfigPath, getExtendsConfigPath(

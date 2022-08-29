@@ -73,6 +73,7 @@ namespace ts {
                 case "compilerOptions":
                     forEachProperty(property.initializer, (property, propertyName) => {
                         const option = getOptionFromName(propertyName);
+                        Debug.assert(option?.type !== "listOrElement");
                         if (option && (option.isFilePath || option.type === "list" && option.element.isFilePath)) {
                             updatePaths(property);
                         }

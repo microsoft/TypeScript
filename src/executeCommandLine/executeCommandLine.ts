@@ -163,7 +163,8 @@ namespace ts {
         const defaultValueDescription =
             typeof option.defaultValueDescription === "object"
                 ? getDiagnosticText(option.defaultValueDescription)
-                : formatDefaultValue(
+                : Debug.assert(option.type !== "listOrElement");
+                    formatDefaultValue(
                       option.defaultValueDescription,
                       option.type === "list" ? option.element.type : option.type
                   );
@@ -276,6 +277,7 @@ namespace ts {
             };
 
             function getValueType(option: CommandLineOption) {
+                Debug.assert(option.type !== "listOrElement");
                 switch (option.type) {
                     case "string":
                     case "number":
@@ -297,16 +299,8 @@ namespace ts {
                         possibleValues = option.type;
                         break;
                     case "list":
-                        // TODO: check infinite loop
-                        possibleValues = getPossibleValues(option.element);
-                        break;
                     case "listOrElement":
-                        if (option.element.type === "string"){
-                            possibleValues = option.type;
-                        }
-                        else {
-                            possibleValues = getPossibleValues(option.element);
-                        }
+                        possibleValues = getPossibleValues(option.element);
                         break;
                     case "object":
                         possibleValues = "";
