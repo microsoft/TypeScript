@@ -69,4 +69,4 @@ var E = (_b = /** @class */ (function () {
 
 
 //// [mappedTypeProperties.d.ts]
-export declare type PlaceType = 'openSky' | 'roofed' | 'garage';
+export type PlaceType = 'openSky' | 'roofed' | 'garage';

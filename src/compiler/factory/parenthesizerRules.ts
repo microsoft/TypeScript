@@ -319,7 +319,7 @@ namespace ts {
          * Wraps an expression in parentheses if it is needed in order to use the expression for
          * property or element access.
          */
-        function parenthesizeLeftSideOfAccess(expression: Expression): LeftHandSideExpression {
+        function parenthesizeLeftSideOfAccess(expression: Expression, optionalChain?: boolean): LeftHandSideExpression {
             // isLeftHandSideExpression is almost the correct criterion for when it is not necessary
             // to parenthesize the expression before a dot. The known exception is:
             //
@@ -328,7 +328,8 @@ namespace ts {
             //
             const emittedExpression = skipPartiallyEmittedExpressions(expression);
             if (isLeftHandSideExpression(emittedExpression)
-                && (emittedExpression.kind !== SyntaxKind.NewExpression || (emittedExpression as NewExpression).arguments)) {
+                && (emittedExpression.kind !== SyntaxKind.NewExpression || (emittedExpression as NewExpression).arguments)
+                && (optionalChain || !isOptionalChain(emittedExpression))) {
                 // TODO(rbuckton): Verify whether this assertion holds.
                 return expression as LeftHandSideExpression;
             }

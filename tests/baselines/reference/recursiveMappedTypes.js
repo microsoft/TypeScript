@@ -104,13 +104,13 @@ x.type;
 
 
 //// [recursiveMappedTypes.d.ts]
-export declare type Circular<T> = {
+export type Circular<T> = {
     [P in keyof T]: Circular<T>;
 };
-declare type NonOptionalKeys<T> = {
+type NonOptionalKeys<T> = {
     [P in keyof T]: undefined extends T[P] ? never : P;
 }[keyof T];
-declare type Child<T> = {
+type Child<T> = {
     [P in NonOptionalKeys<T>]: T[P];
 };
 export interface ListWidget {
@@ -120,10 +120,10 @@ export interface ListWidget {
     "collapsable"?: boolean;
     "each": Child<ListWidget>;
 }
-export declare type TV<T, K extends keyof T> = T[K] extends Record<infer E, any> ? E : never;
-export declare type ObjectOrArray<T, K extends keyof any = keyof any> = T[] | Record<K, T | Record<K, T> | T[]>;
-export declare type ThemeValue<K extends keyof ThemeType, ThemeType, TVal = any> = ThemeType[K] extends TVal[] ? number : ThemeType[K] extends Record<infer E, TVal> ? E : ThemeType[K] extends ObjectOrArray<infer F> ? F : never;
-export declare type Foo<T> = T extends {
+export type TV<T, K extends keyof T> = T[K] extends Record<infer E, any> ? E : never;
+export type ObjectOrArray<T, K extends keyof any = keyof any> = T[] | Record<K, T | Record<K, T> | T[]>;
+export type ThemeValue<K extends keyof ThemeType, ThemeType, TVal = any> = ThemeType[K] extends TVal[] ? number : ThemeType[K] extends Record<infer E, TVal> ? E : ThemeType[K] extends ObjectOrArray<infer F> ? F : never;
+export type Foo<T> = T extends {
     [P in infer E]: any;
 } ? E : never;
 export {};

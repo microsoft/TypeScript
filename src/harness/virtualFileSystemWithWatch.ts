@@ -116,7 +116,14 @@ interface Array<T> { length: number; [n: number]: T; }`
 
     function createWatcher<T>(map: MultiMap<Path, T>, path: Path, callback: T): FileWatcher {
         map.add(path, callback);
-        return { close: () => map.remove(path, callback) };
+        let closed = false;
+        return {
+            close: () => {
+                Debug.assert(!closed);
+                map.remove(path, callback);
+                closed = true;
+            }
+        };
     }
 
     export function getDiffInKeys<T>(map: ESMap<string, T>, expectedKeys: readonly string[]) {
