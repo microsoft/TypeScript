@@ -13758,7 +13758,6 @@ interface Storage {
      * Dispatches a storage event on Window objects holding an equivalent Storage object.
      */
     setItem(key: string, value: string): void;
-    [name: string]: any;
 }
 
 declare var Storage: {
