@@ -5012,6 +5012,7 @@ declare var ErrorEvent: {
 interface Event {
     /** Returns true or false depending on how event was initialized. True if event goes through its target's ancestors in reverse tree order, and false otherwise. */
     readonly bubbles: boolean;
+    /** @deprecated */
     cancelBubble: boolean;
     /** Returns true or false depending on how event was initialized. Its return value does not always carry meaning, but true can indicate that part of the operation during which event was dispatched, can be canceled by invoking the preventDefault() method. */
     readonly cancelable: boolean;
