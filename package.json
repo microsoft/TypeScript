@@ -101,7 +101,6 @@
         "es5-ext": "0.10.53"
     },
     "scripts": {
-        "pretest": "gulp tests",
         "test": "gulp runtests-parallel --light=false",
         "test:eslint-rules": "gulp run-eslint-rules-tests",
         "build": "npm run build:compiler && npm run build:tests",
