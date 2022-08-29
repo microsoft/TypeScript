@@ -13647,6 +13647,9 @@
       <Item ItemId=";This_comparison_appears_to_be_unintentional_because_the_types_0_and_1_have_no_overlap_2367" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[This comparison appears to be unintentional because the types '{0}' and '{1}' have no overlap.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[此比較似乎是無意的，因為類型 '{0}' 和 '{1}' 沒有重疊。]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -14133,6 +14136,9 @@
       <Item ItemId=";Type_0_does_not_satisfy_the_expected_type_1_1360" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Type '{0}' does not satisfy the expected type '{1}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[類型 '{0}' 不符合預期類型 '{1}'。]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -14841,6 +14847,9 @@
       <Item ItemId=";Type_satisfaction_expressions_can_only_be_used_in_TypeScript_files_8037" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Type satisfaction expressions can only be used in TypeScript files.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[類型滿足運算式只可用於 TypeScript 檔案。]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
