@@ -262,5 +262,49 @@ a;b;
         verifyDirSymlink("when import matches disk but directory symlink target does not", `${projectRoot}/XY`, `${projectRoot}/XY`, `./Xy`);
         verifyDirSymlink("when import and directory symlink target agree but do not match disk", `${projectRoot}/XY`, `${projectRoot}/Xy`, `./Xy`);
         verifyDirSymlink("when import, directory symlink target, and disk are all different", `${projectRoot}/XY`, `${projectRoot}/Xy`, `./yX`);
+
+        verifyTscWatch({
+            scenario: "forceConsistentCasingInFileNames",
+            subScenario: "with nodeNext resolution",
+            commandLineArgs: ["--w", "--explainFiles"],
+            sys: () => createWatchedSystem({
+                "/Users/name/projects/web/src/bin.ts": `import { foo } from "yargs";`,
+                "/Users/name/projects/web/node_modules/@types/yargs/index.d.ts": "export function foo(): void;",
+                "/Users/name/projects/web/node_modules/@types/yargs/index.d.mts": "export function foo(): void;",
+                "/Users/name/projects/web/node_modules/@types/yargs/package.json": JSON.stringify({
+                    name: "yargs",
+                    version: "17.0.12",
+                    exports: {
+                        ".": {
+                            types: {
+                                import: "./index.d.mts",
+                                default: "./index.d.ts"
+                            }
+                        },
+                        // "./helpers": {
+                        //     types: {
+                        //         "import": "./helpers.d.mts",
+                        //         "default": "./helpers.d.ts"
+                        //     }
+                        // },
+                        // "./yargs": {
+                        //     "types": {
+                        //         "default": "./yargs.d.ts"
+                        //     }
+                        // },
+                        // "./package.json": "./package.json"
+                    }
+                }),
+                "/Users/name/projects/web/tsconfig.json": JSON.stringify({
+                    compilerOptions: {
+                        moduleResolution: "nodenext",
+                        forceConsistentCasingInFileNames: true,
+                        traceResolution: true,
+                    }
+                }),
+                [libFile.path]: libFile.content,
+            }, { currentDirectory: "/Users/name/projects/web" }),
+            changes: emptyArray,
+        });
     });
 }
