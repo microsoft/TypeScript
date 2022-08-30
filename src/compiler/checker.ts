@@ -6101,7 +6101,7 @@ namespace ts {
                         }
                         let visited = visitEachChild(node, elideInitializerAndPropertyRenamingAndSetEmitFlags, nullTransformationContext, /*nodesVisitor*/ undefined, elideInitializerAndPropertyRenamingAndSetEmitFlags)!;
                         if (isBindingElement(visited)) {
-                            if (visited.propertyName && isIdentifier(visited.propertyName) && isIdentifier(visited.name)) {
+                            if (visited.propertyName && isIdentifier(visited.propertyName) && isIdentifier(visited.name) && !isStringAKeyword(idText(visited.propertyName))) {
                                 visited = factory.updateBindingElement(
                                     visited,
                                     visited.dotDotDotToken,
