@@ -1,0 +1,24 @@
+=== tests/cases/compiler/mappedTypeOverNullableConstraintWithIndexSignatureWithNonNullable.ts ===
+interface StateSchema {
+  states?: {
+>states : { [key: string]: StateSchema; } | undefined
+
+    [key: string]: StateSchema;
+>key : string
+
+  };
+}
+
+declare class StateNode<TStateSchema extends StateSchema> {
+>StateNode : StateNode<TStateSchema>
+
+  schema: TStateSchema;
+>schema : TStateSchema
+}
+
+type StateNodesConfig<TStateSchema extends StateSchema> = {
+>StateNodesConfig : StateNodesConfig<TStateSchema>
+
+  [K in keyof TStateSchema["states"]]: StateNode<NonNullable<TStateSchema["states"]>[K]>;
+};
+

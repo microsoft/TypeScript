@@ -15903,6 +15903,9 @@ namespace ts {
         }
 
         function distributeIndexOverObjectType(objectType: Type, indexType: Type, writing: boolean) {
+            if (shouldDeferIndexType(objectType)) {
+                return;
+            }
             // (T | U)[K] -> T[K] | U[K] (reading)
             // (T | U)[K] -> T[K] & U[K] (writing)
             // (T & U)[K] -> T[K] & U[K]
