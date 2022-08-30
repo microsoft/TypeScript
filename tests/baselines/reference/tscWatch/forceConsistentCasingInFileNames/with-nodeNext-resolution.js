@@ -54,9 +54,9 @@ File '/Users/name/projects/web/node_modules/yargs.tsx' does not exist.
 File '/Users/name/projects/web/node_modules/yargs.d.ts' does not exist.
 Found 'package.json' at '/Users/name/projects/web/node_modules/@types/yargs/package.json'.
 'package.json' does not have a 'typesVersions' field.
-File '/users/name/projects/web/node_modules/@types/yargs/index.d.ts' exist - use it as a name resolution result.
-Resolving real path for '/users/name/projects/web/node_modules/@types/yargs/index.d.ts', result '/Users/name/projects/web/node_modules/@types/yargs/index.d.ts'.
-======== Module name 'yargs' was successfully resolved to '/users/name/projects/web/node_modules/@types/yargs/index.d.ts' with Package ID 'yargs/index.d.ts@17.0.12'. ========
+File '/Users/name/projects/web/node_modules/@types/yargs/index.d.ts' exist - use it as a name resolution result.
+Resolving real path for '/Users/name/projects/web/node_modules/@types/yargs/index.d.ts', result '/Users/name/projects/web/node_modules/@types/yargs/index.d.ts'.
+======== Module name 'yargs' was successfully resolved to '/Users/name/projects/web/node_modules/@types/yargs/index.d.ts' with Package ID 'yargs/index.d.ts@17.0.12'. ========
 File '/users/name/projects/web/node_modules/@types/yargs/package.json' exists according to earlier cached lookups.
 ======== Resolving type reference directive 'yargs', containing file '/Users/name/projects/web/__inferred type names__.ts', root directory '/Users/name/projects/web/node_modules/@types'. ========
 Resolving with primary search path '/Users/name/projects/web/node_modules/@types'.
@@ -69,15 +69,6 @@ Resolving real path for '/Users/name/projects/web/node_modules/@types/yargs/inde
 File '/a/lib/package.json' does not exist.
 File '/a/package.json' does not exist.
 File '/package.json' does not exist according to earlier cached lookups.
-[96msrc/bin.ts[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS1261: [0mAlready included file name '/users/name/projects/web/node_modules/@types/yargs/index.d.ts' differs from file name '/Users/name/projects/web/node_modules/@types/yargs/index.d.ts' only in casing.
-  The file is in the program because:
-    Imported via "yargs" from file '/Users/name/projects/web/src/bin.ts' with packageId 'yargs/index.d.ts@17.0.12'
-    Entry point for implicit type library 'yargs' with packageId 'yargs/index.d.ts@17.0.12'
-  File is CommonJS module because '/users/name/projects/web/node_modules/@types/yargs/package.json' does not have field "type"
-
-[7m1[0m import { foo } from "yargs";
-[7m [0m [91m                    ~~~~~~~[0m
-
 ../../../../a/lib/lib.d.ts
   Default library for target 'es3'
 node_modules/@types/yargs/index.d.ts
@@ -87,7 +78,7 @@ node_modules/@types/yargs/index.d.ts
 src/bin.ts
   Matched by default include pattern '**/*'
   File is CommonJS module because 'package.json' was not found
-[[90m12:00:38 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:00:38 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -96,12 +87,12 @@ Program options: {"moduleResolution":99,"forceConsistentCasingInFileNames":true,
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
-/users/name/projects/web/node_modules/@types/yargs/index.d.ts
+/Users/name/projects/web/node_modules/@types/yargs/index.d.ts
 /Users/name/projects/web/src/bin.ts
 
 Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
-/users/name/projects/web/node_modules/@types/yargs/index.d.ts
+/Users/name/projects/web/node_modules/@types/yargs/index.d.ts
 /Users/name/projects/web/src/bin.ts
 
 Shape signatures in builder refreshed for::
@@ -115,7 +106,7 @@ WatchedFiles::
 /users/name/projects/web/src/bin.ts:
   {"fileName":"/Users/name/projects/web/src/bin.ts","pollingInterval":250}
 /users/name/projects/web/node_modules/@types/yargs/index.d.ts:
-  {"fileName":"/users/name/projects/web/node_modules/@types/yargs/index.d.ts","pollingInterval":250}
+  {"fileName":"/Users/name/projects/web/node_modules/@types/yargs/index.d.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 /users/name/projects/web/node_modules/@types/yargs/package.json:

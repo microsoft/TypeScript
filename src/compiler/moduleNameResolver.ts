@@ -2227,7 +2227,7 @@ namespace ts {
             function toAbsolutePath(path: string | undefined): string | undefined;
             function toAbsolutePath(path: string | undefined): string | undefined {
                 if (path === undefined) return path;
-                return hostGetCanonicalFileName({ useCaseSensitiveFileNames })(getNormalizedAbsolutePath(path, state.host.getCurrentDirectory?.()));
+                return getNormalizedAbsolutePath(path, state.host.getCurrentDirectory?.());
             }
 
             function combineDirectoryPath(root: string, dir: string) {
