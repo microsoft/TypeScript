@@ -1163,7 +1163,7 @@ namespace ts {
 
                         preserveJsDoc(statement, input);
                         removeAllComments(input);
-                        return [statement, factory.updateExportAssignment(input, input.modifiers, newId)];
+                        return [statement, factory.updateExportAssignment(input, input.modifiers, /*type*/ undefined, newId)];
                     }
                 }
             }
@@ -1314,6 +1314,7 @@ namespace ts {
                         const exportDefaultDeclaration = factory.createExportAssignment(
                             /*modifiers*/ undefined,
                             /*isExportEquals*/ false,
+                            /*type*/ undefined,
                             namespaceDecl.name
                         );
 

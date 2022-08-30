@@ -1,0 +1,43 @@
+=== /a.ts ===
+export default: number = 1;
+No type information for this code.
+No type information for this code.=== /b.ts ===
+export default: number = "";
+No type information for this code.
+No type information for this code.=== /c.ts ===
+export default: number = {};
+>{} : {}
+
+=== /d.ts ===
+interface I {
+    a: number;
+>a : number
+
+    b: string;
+>b : string
+}
+export default: I = {};
+>{} : {}
+
+=== /e.ts ===
+export default: number[] = [];
+>[] : undefined[]
+
+=== /f.ts ===
+export default: number[] = [""];
+>[""] : string[]
+>"" : ""
+
+=== /g.ts ===
+const a = [""];
+>a : string[]
+>[""] : string[]
+>"" : ""
+
+export default: number[] = a;
+>a : string[]
+
+=== /h.ts ===
+export default: number[];
+> : any
+

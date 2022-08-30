@@ -1,0 +1,19 @@
+/a.ts(6,23): error TS2322: Type '{ c: boolean; }' is not assignable to type 'I'.
+  Object literal may only specify known properties, and 'c' does not exist in type 'I'.
+
+
+==== /a.ts (1 errors) ====
+    interface I {
+        a: boolean;
+        b: boolean;
+    }
+    
+    export default: I = { c: false };
+                          ~~~~~~~~
+!!! error TS2322: Type '{ c: boolean; }' is not assignable to type 'I'.
+!!! error TS2322:   Object literal may only specify known properties, and 'c' does not exist in type 'I'.
+    
+==== /b.ts (0 errors) ====
+    import a from "./a";
+    a;
+    

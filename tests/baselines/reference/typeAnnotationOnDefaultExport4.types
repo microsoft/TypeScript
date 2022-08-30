@@ -1,0 +1,23 @@
+=== /a.ts ===
+interface I {
+    a: number;
+>a : number
+
+    b: number;
+>b : number
+}
+
+export default: I = { a: 1, b: 1 };
+>{ a: 1, b: 1 } : { a: number; b: number; }
+>a : number
+>1 : 1
+>b : number
+>1 : 1
+
+=== /b.ts ===
+import a from "./a";
+>a : I
+
+a;
+>a : I
+

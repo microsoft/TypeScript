@@ -579,6 +579,7 @@ namespace ts {
         [SyntaxKind.ExportAssignment]: function forEachChildInExportAssignment<T>(node: ExportAssignment, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
             return visitNodes(cbNode, cbNodes, node.illegalDecorators) ||
                 visitNodes(cbNode, cbNodes, node.modifiers) ||
+                visitNode(cbNode, node.type) ||
                 visitNode(cbNode, node.expression);
         },
         [SyntaxKind.TemplateExpression]: function forEachChildInTemplateExpression<T>(node: TemplateExpression, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
@@ -7987,16 +7988,21 @@ namespace ts {
             const savedAwaitContext = inAwaitContext();
             setAwaitContext(/*value*/ true);
             let isExportEquals: boolean | undefined;
+            let type: TypeNode | undefined;
             if (parseOptional(SyntaxKind.EqualsToken)) {
                 isExportEquals = true;
             }
             else {
                 parseExpected(SyntaxKind.DefaultKeyword);
+                type = parseTypeAnnotation();
+                if (type) {
+                    parseExpected(SyntaxKind.EqualsToken);
+                }
             }
             const expression = parseAssignmentExpressionOrHigher(/*allowReturnTypeInArrowFunction*/ true);
             parseSemicolon();
             setAwaitContext(savedAwaitContext);
-            const node = factory.createExportAssignment(modifiers, isExportEquals, expression);
+            const node = factory.createExportAssignment(modifiers, isExportEquals, type, expression);
             (node as Mutable<ExportAssignment>).illegalDecorators = decorators;
             return withJSDoc(finishNode(node, pos), hasJSDoc);
         }

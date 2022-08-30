@@ -7408,7 +7408,7 @@ namespace ts {
                         }
                     }
                     if (needsPostExportDefault) {
-                        addResult(factory.createExportAssignment(/*modifiers*/ undefined, /*isExportAssignment*/ false, factory.createIdentifier(getInternalSymbolName(symbol, symbolName))), ModifierFlags.None);
+                        addResult(factory.createExportAssignment(/*modifiers*/ undefined, /*isExportAssignment*/ false, /*type*/ undefined, factory.createIdentifier(getInternalSymbolName(symbol, symbolName))), ModifierFlags.None);
                     }
                     else if (needsExportDeclaration) {
                         addResult(factory.createExportDeclaration(
@@ -8022,6 +8022,7 @@ namespace ts {
                             results.push(factory.createExportAssignment(
                                 /*modifiers*/ undefined,
                                 isExportEquals,
+                                /*type*/ undefined,
                                 symbolToExpression(target, context, SymbolFlags.All)
                             ));
                         }
@@ -8073,6 +8074,7 @@ namespace ts {
                             results.push(factory.createExportAssignment(
                                 /*modifiers*/ undefined,
                                 isExportEquals,
+                                /*type*/ undefined,
                                 factory.createIdentifier(varName)
                             ));
                             return true;

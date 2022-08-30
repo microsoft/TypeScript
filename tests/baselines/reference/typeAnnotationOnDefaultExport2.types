@@ -1,0 +1,21 @@
+=== /a.ts ===
+interface I {
+    a: boolean;
+>a : boolean
+
+    b: boolean;
+>b : boolean
+}
+
+export default: I = { c: false };
+>{ c: false } : { c: boolean; }
+>c : boolean
+>false : false
+
+=== /b.ts ===
+import a from "./a";
+>a : I
+
+a;
+>a : I
+

@@ -9,6 +9,7 @@ namespace ts {
                     const node = factory.createExportAssignment(
                         /*modifiers*/ undefined,
                         /*isExportEquals*/ false,
+                        /*type*/ undefined,
                         expression,
                     );
                     assertSyntaxKind(node.expression, SyntaxKind.ParenthesizedExpression);

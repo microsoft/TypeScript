@@ -3474,6 +3474,11 @@ namespace ts {
             }
             else {
                 emitTokenWithComment(SyntaxKind.DefaultKeyword, nextPos, writeKeyword, node);
+                if (node.type) {
+                    emitTypeAnnotation(node.type);
+                    writeSpace();
+                    emitTokenWithComment(SyntaxKind.EqualsToken, node.type.end, writeOperator, node);
+                }
             }
             writeSpace();
             emitExpression(node.expression, node.isExportEquals ?

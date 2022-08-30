@@ -199,11 +199,11 @@ namespace ts {
         /**
          * @deprecated Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.
          */
-        createExportAssignment(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, isExportEquals: boolean | undefined, expression: Expression): ExportAssignment;
+        createExportAssignment(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, isExportEquals: boolean | undefined, type: TypeNode | undefined, expression: Expression): ExportAssignment;
         /**
          * @deprecated Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.
          */
-        updateExportAssignment(node: ExportAssignment, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, expression: Expression): ExportAssignment;
+        updateExportAssignment(node: ExportAssignment, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, type: TypeNode | undefined, expression: Expression): ExportAssignment;
         /**
          * @deprecated Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.
          */
@@ -1278,25 +1278,27 @@ namespace ts {
 
         factory.createExportAssignment = buildOverload("createExportAssignment")
             .overload({
-                0(modifiers: readonly Modifier[] | undefined, isExportEquals: boolean | undefined, expression: Expression): ExportAssignment {
-                    return createExportAssignment(modifiers, isExportEquals, expression);
+                0(modifiers: readonly Modifier[] | undefined, isExportEquals: boolean | undefined, type: TypeNode | undefined, expression: Expression): ExportAssignment {
+                    return createExportAssignment(modifiers, isExportEquals, type, expression);
                 },
 
-                1(_decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, isExportEquals: boolean | undefined, expression: Expression): ExportAssignment {
-                    return createExportAssignment(modifiers, isExportEquals, expression);
+                1(_decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, isExportEquals: boolean | undefined, type: TypeNode | undefined, expression: Expression): ExportAssignment {
+                    return createExportAssignment(modifiers, isExportEquals, type, expression);
                 },
             })
             .bind({
-                0: ([modifiers, isExportEquals, expression, other]) =>
+                0: ([modifiers, isExportEquals, type, expression, other]) =>
                     (other === undefined) &&
                     (modifiers === undefined || every(modifiers, isModifier)) &&
                     (isExportEquals === undefined || typeof isExportEquals === "boolean") &&
+                    (type === undefined || typeof type !== "boolean" && isTypeNode(type)) &&
                     (typeof expression === "object"),
 
-                1: ([decorators, modifiers, isExportEquals, expression]) =>
+                1: ([decorators, modifiers, isExportEquals, type, expression]) =>
                     (decorators === undefined || every(decorators, isDecorator)) &&
                     (modifiers === undefined || isArray(modifiers)) &&
                     (isExportEquals === undefined || typeof isExportEquals === "boolean") &&
+                    (type === undefined || isTypeNode(type)) &&
                     (expression !== undefined && isExpression(expression)),
             })
             .deprecate({
@@ -1306,23 +1308,25 @@ namespace ts {
 
         factory.updateExportAssignment = buildOverload("updateExportAssignment")
             .overload({
-                0(node: ExportAssignment, modifiers: readonly Modifier[] | undefined, expression: Expression): ExportAssignment {
-                    return updateExportAssignment(node, modifiers, expression);
+                0(node: ExportAssignment, modifiers: readonly Modifier[] | undefined, type: TypeNode | undefined, expression: Expression): ExportAssignment {
+                    return updateExportAssignment(node, modifiers, type, expression);
                 },
 
-                1(node: ExportAssignment, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, expression: Expression): ExportAssignment {
-                    return updateExportAssignment(node, modifiers, expression);
+                1(node: ExportAssignment, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, type: TypeNode | undefined, expression: Expression): ExportAssignment {
+                    return updateExportAssignment(node, modifiers, type, expression);
                 },
             })
             .bind({
-                0: ([, modifiers, expression, other]) =>
+                0: ([, modifiers, type, expression, other]) =>
                     (other === undefined) &&
-                    (modifiers === undefined || every(modifiers, isModifier)) &&
+                    (modifiers === undefined || isArray(modifiers) && every(modifiers, isModifier)) &&
+                    (type === undefined || !isArray(type) && isTypeNode(type)) &&
                     (expression !== undefined && !isArray(expression)),
 
-                1: ([, decorators, modifiers, expression]) =>
+                1: ([, decorators, modifiers, type, expression]) =>
                     (decorators === undefined || every(decorators, isDecorator)) &&
                     (modifiers === undefined || isArray(modifiers)) &&
+                    (type === undefined || isTypeNode(type)) &&
                     (expression !== undefined && isExpression(expression)),
             })
             .deprecate({

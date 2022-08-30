@@ -4245,16 +4245,19 @@ namespace ts {
         function createExportAssignment(
             modifiers: readonly Modifier[] | undefined,
             isExportEquals: boolean | undefined,
-            expression: Expression
+            type: TypeNode | undefined,
+            expression: Expression,
         ) {
             const node = createBaseDeclaration<ExportAssignment>(SyntaxKind.ExportAssignment);
             node.modifiers = asNodeArray(modifiers);
+            node.type = type;
             node.isExportEquals = isExportEquals;
             node.expression = isExportEquals
                 ? parenthesizerRules().parenthesizeRightSideOfBinary(SyntaxKind.EqualsToken, /*leftSide*/ undefined, expression)
                 : parenthesizerRules().parenthesizeExpressionOfExportDefault(expression);
-            node.transformFlags |= propagateChildrenFlags(node.modifiers) | propagateChildFlags(node.expression);
+            node.transformFlags |= propagateChildrenFlags(node.modifiers) | propagateChildFlags(node.expression) | propagateChildFlags(type);
             node.transformFlags &= ~TransformFlags.ContainsPossibleTopLevelAwait; // always parsed in an Await context
+            if (type) node.transformFlags |= TransformFlags.ContainsTypeScript;
 
             // The following properties are used only to report grammar errors
             node.illegalDecorators = undefined;
@@ -4265,11 +4268,13 @@ namespace ts {
         function updateExportAssignment(
             node: ExportAssignment,
             modifiers: readonly Modifier[] | undefined,
-            expression: Expression
+            type: TypeNode | undefined,
+            expression: Expression,
         ) {
             return node.modifiers !== modifiers
                 || node.expression !== expression
-                ? finishUpdateExportAssignment(createExportAssignment(modifiers, node.isExportEquals, expression), node)
+                || node.type !== type
+                ? finishUpdateExportAssignment(createExportAssignment(modifiers, node.isExportEquals, type, expression), node)
                 : node;
         }
 
@@ -5648,6 +5653,7 @@ namespace ts {
             return createExportAssignment(
                 /*modifiers*/ undefined,
                 /*isExportEquals*/ false,
+                /*type*/ undefined,
                 expression);
         }
 
@@ -6272,7 +6278,7 @@ namespace ts {
                 isModuleDeclaration(node) ? updateModuleDeclaration(node, modifierArray, node.name, node.body) :
                 isImportEqualsDeclaration(node) ? updateImportEqualsDeclaration(node, modifierArray, node.isTypeOnly, node.name, node.moduleReference) :
                 isImportDeclaration(node) ? updateImportDeclaration(node, modifierArray, node.importClause, node.moduleSpecifier, node.assertClause) :
-                isExportAssignment(node) ? updateExportAssignment(node, modifierArray, node.expression) :
+                isExportAssignment(node) ? updateExportAssignment(node, modifierArray, node.type, node.expression) :
                 isExportDeclaration(node) ? updateExportDeclaration(node, modifierArray, node.isTypeOnly, node.exportClause, node.moduleSpecifier, node.assertClause) :
                 Debug.assertNever(node);
         }

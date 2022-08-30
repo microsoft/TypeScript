@@ -3538,6 +3538,7 @@ namespace ts {
         readonly parent: SourceFile;
         readonly modifiers?: NodeArray<Modifier>;
         readonly isExportEquals?: boolean;
+        readonly type?: TypeNode;
         readonly expression: Expression;
 
         // The following properties are used only to report grammar errors
@@ -7960,8 +7961,8 @@ namespace ts {
         updateNamedImports(node: NamedImports, elements: readonly ImportSpecifier[]): NamedImports;
         createImportSpecifier(isTypeOnly: boolean, propertyName: Identifier | undefined, name: Identifier): ImportSpecifier;
         updateImportSpecifier(node: ImportSpecifier, isTypeOnly: boolean, propertyName: Identifier | undefined, name: Identifier): ImportSpecifier;
-        createExportAssignment(modifiers: readonly Modifier[] | undefined, isExportEquals: boolean | undefined, expression: Expression): ExportAssignment;
-        updateExportAssignment(node: ExportAssignment, modifiers: readonly Modifier[] | undefined, expression: Expression): ExportAssignment;
+        createExportAssignment(modifiers: readonly Modifier[] | undefined, isExportEquals: boolean | undefined, type: TypeNode | undefined, expression: Expression): ExportAssignment;
+        updateExportAssignment(node: ExportAssignment, modifiers: readonly Modifier[] | undefined, type: TypeNode | undefined, expression: Expression): ExportAssignment;
         createExportDeclaration(modifiers: readonly Modifier[] | undefined, isTypeOnly: boolean, exportClause: NamedExportBindings | undefined, moduleSpecifier?: Expression, assertClause?: AssertClause): ExportDeclaration;
         updateExportDeclaration(node: ExportDeclaration, modifiers: readonly Modifier[] | undefined, isTypeOnly: boolean, exportClause: NamedExportBindings | undefined, moduleSpecifier: Expression | undefined, assertClause: AssertClause | undefined): ExportDeclaration;
         createNamedExports(elements: readonly ExportSpecifier[]): NamedExports;

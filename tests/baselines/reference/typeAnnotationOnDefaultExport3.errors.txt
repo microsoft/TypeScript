@@ -1,0 +1,17 @@
+/a.ts(6,21): error TS2739: Type '{ c: number; }' is missing the following properties from type 'I': a, b
+
+
+==== /a.ts (1 errors) ====
+    interface I {
+        a: boolean;
+        b: boolean;
+    }
+    const a = { c: 1 };
+    export default: I = a;
+                        ~
+!!! error TS2739: Type '{ c: number; }' is missing the following properties from type 'I': a, b
+    
+==== /b.ts (0 errors) ====
+    import a from "./a";
+    a;
+    

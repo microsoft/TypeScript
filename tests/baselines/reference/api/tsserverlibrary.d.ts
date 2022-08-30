@@ -1791,6 +1791,7 @@ declare namespace ts {
         readonly parent: SourceFile;
         readonly modifiers?: NodeArray<Modifier>;
         readonly isExportEquals?: boolean;
+        readonly type?: TypeNode;
         readonly expression: Expression;
     }
     export interface FileReference extends TextRange {
@@ -3678,8 +3679,8 @@ declare namespace ts {
         updateNamedImports(node: NamedImports, elements: readonly ImportSpecifier[]): NamedImports;
         createImportSpecifier(isTypeOnly: boolean, propertyName: Identifier | undefined, name: Identifier): ImportSpecifier;
         updateImportSpecifier(node: ImportSpecifier, isTypeOnly: boolean, propertyName: Identifier | undefined, name: Identifier): ImportSpecifier;
-        createExportAssignment(modifiers: readonly Modifier[] | undefined, isExportEquals: boolean | undefined, expression: Expression): ExportAssignment;
-        updateExportAssignment(node: ExportAssignment, modifiers: readonly Modifier[] | undefined, expression: Expression): ExportAssignment;
+        createExportAssignment(modifiers: readonly Modifier[] | undefined, isExportEquals: boolean | undefined, type: TypeNode | undefined, expression: Expression): ExportAssignment;
+        updateExportAssignment(node: ExportAssignment, modifiers: readonly Modifier[] | undefined, type: TypeNode | undefined, expression: Expression): ExportAssignment;
         createExportDeclaration(modifiers: readonly Modifier[] | undefined, isTypeOnly: boolean, exportClause: NamedExportBindings | undefined, moduleSpecifier?: Expression, assertClause?: AssertClause): ExportDeclaration;
         updateExportDeclaration(node: ExportDeclaration, modifiers: readonly Modifier[] | undefined, isTypeOnly: boolean, exportClause: NamedExportBindings | undefined, moduleSpecifier: Expression | undefined, assertClause: AssertClause | undefined): ExportDeclaration;
         createNamedExports(elements: readonly ExportSpecifier[]): NamedExports;
@@ -11432,13 +11433,13 @@ declare namespace ts {
     const updateImportSpecifier: (node: ImportSpecifier, isTypeOnly: boolean, propertyName: Identifier | undefined, name: Identifier) => ImportSpecifier;
     /** @deprecated Use `factory.createExportAssignment` or the factory supplied by your transformation context instead. */
     const createExportAssignment: {
-        (modifiers: readonly Modifier[] | undefined, isExportEquals: boolean | undefined, expression: Expression): ExportAssignment;
-        (decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, isExportEquals: boolean | undefined, expression: Expression): ExportAssignment;
+        (modifiers: readonly Modifier[] | undefined, isExportEquals: boolean | undefined, type: TypeNode | undefined, expression: Expression): ExportAssignment;
+        (decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, isExportEquals: boolean | undefined, type: TypeNode | undefined, expression: Expression): ExportAssignment;
     };
     /** @deprecated Use `factory.updateExportAssignment` or the factory supplied by your transformation context instead. */
     const updateExportAssignment: {
-        (node: ExportAssignment, modifiers: readonly Modifier[] | undefined, expression: Expression): ExportAssignment;
-        (node: ExportAssignment, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, expression: Expression): ExportAssignment;
+        (node: ExportAssignment, modifiers: readonly Modifier[] | undefined, type: TypeNode | undefined, expression: Expression): ExportAssignment;
+        (node: ExportAssignment, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, type: TypeNode | undefined, expression: Expression): ExportAssignment;
     };
     /** @deprecated Use `factory.createNamedExports` or the factory supplied by your transformation context instead. */
     const createNamedExports: (elements: readonly ExportSpecifier[]) => NamedExports;
@@ -11978,11 +11979,11 @@ declare namespace ts {
         /**
          * @deprecated Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.
          */
-        createExportAssignment(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, isExportEquals: boolean | undefined, expression: Expression): ExportAssignment;
+        createExportAssignment(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, isExportEquals: boolean | undefined, type: TypeNode | undefined, expression: Expression): ExportAssignment;
         /**
          * @deprecated Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.
          */
-        updateExportAssignment(node: ExportAssignment, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, expression: Expression): ExportAssignment;
+        updateExportAssignment(node: ExportAssignment, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, type: TypeNode | undefined, expression: Expression): ExportAssignment;
         /**
          * @deprecated Decorators are no longer supported for this function. Callers should use an overload that does not accept a `decorators` parameter.
          */

@@ -1,0 +1,24 @@
+=== /a.ts ===
+interface I {
+    a: boolean;
+>a : boolean
+
+    b: boolean;
+>b : boolean
+}
+const a = { c: 1 };
+>a : { c: number; }
+>{ c: 1 } : { c: number; }
+>c : number
+>1 : 1
+
+export default: I = a;
+>a : { c: number; }
+
+=== /b.ts ===
+import a from "./a";
+>a : I
+
+a;
+>a : I
+

@@ -1157,6 +1157,7 @@ namespace ts {
         [SyntaxKind.ExportAssignment]: function visitEachChildOfExportAssignment(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
             return context.factory.updateExportAssignment(node,
                 nodesVisitor(node.modifiers, visitor, isModifier),
+                nodeVisitor(node.type, visitor, isTypeNode),
                 nodeVisitor(node.expression, visitor, isExpression));
         },
 
