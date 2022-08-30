@@ -30,7 +30,7 @@
       "kind": "property",
       "name": "(property) Foo.bar: boolean",
       "textSpan": {
-        "start": 86,
+        "start": 45,
         "length": 3
       },
       "displayParts": [
@@ -76,8 +76,8 @@
         }
       ],
       "contextSpan": {
-        "start": 82,
-        "length": 28
+        "start": 40,
+        "length": 17
       }
     },
     "references": [
@@ -87,6 +87,10 @@
           "length": 3
         },
         "fileName": "/my-test-file.js",
+        "contextSpan": {
+          "start": 40,
+          "length": 17
+        },
         "isWriteAccess": true
       },
       {
@@ -95,6 +99,10 @@
           "length": 3
         },
         "fileName": "/my-test-file.js",
+        "contextSpan": {
+          "start": 60,
+          "length": 16
+        },
         "isWriteAccess": true
       },
       {

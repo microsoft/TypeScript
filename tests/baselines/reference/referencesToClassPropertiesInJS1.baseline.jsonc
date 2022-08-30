@@ -30,7 +30,7 @@
       "kind": "property",
       "name": "(property) Foo.bar: boolean",
       "textSpan": {
-        "start": 86,
+        "start": 45,
         "length": 3
       },
       "displayParts": [
@@ -76,8 +76,8 @@
         }
       ],
       "contextSpan": {
-        "start": 82,
-        "length": 28
+        "start": 40,
+        "length": 17
       }
     },
     "references": [
@@ -87,7 +87,12 @@
           "length": 3
         },
         "fileName": "/my-test-file.js",
-        "isWriteAccess": true
+        "contextSpan": {
+          "start": 40,
+          "length": 17
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
       },
       {
         "textSpan": {
@@ -95,7 +100,12 @@
           "length": 3
         },
         "fileName": "/my-test-file.js",
-        "isWriteAccess": true
+        "contextSpan": {
+          "start": 60,
+          "length": 16
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
       },
       {
         "textSpan": {
@@ -107,7 +117,8 @@
           "start": 82,
           "length": 28
         },
-        "isWriteAccess": true
+        "isWriteAccess": true,
+        "isDefinition": true
       },
       {
         "textSpan": {
@@ -119,7 +130,8 @@
           "start": 113,
           "length": 48
         },
-        "isWriteAccess": true
+        "isWriteAccess": true,
+        "isDefinition": true
       },
       {
         "textSpan": {
@@ -131,7 +143,8 @@
           "start": 237,
           "length": 16
         },
-        "isWriteAccess": true
+        "isWriteAccess": true,
+        "isDefinition": false
       }
     ]
   }
