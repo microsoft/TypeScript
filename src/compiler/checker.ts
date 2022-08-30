@@ -18425,7 +18425,7 @@ namespace ts {
             if (reduced !== type) {
                 return reduced;
             }
-            if (type.flags & TypeFlags.Intersection) {
+            if (type.flags & TypeFlags.Intersection && some((type as IntersectionType).types, isEmptyAnonymousObjectType)) {
                 const normalizedTypes = sameMap(type.types, t => getNormalizedType(t, writing));
                 if (normalizedTypes !== type.types) {
                     return getIntersectionType(normalizedTypes);
