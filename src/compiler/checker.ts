@@ -9134,6 +9134,26 @@ namespace ts {
                 if (type) {
                     return addOptionality(type, /*isProperty*/ false, isOptional);
                 }
+                if (isMethodDeclaration(func) && isClassLike(func.parent)
+                    && (noImplicitAny || isInJSFile(func.parent))) { // TODO: Might want to fiddle with restrictions here
+                    const k = func.parent;
+                    const basetypes = getBaseTypes(getTypeOfSymbol(getSymbolOfNode(k)) as InterfaceType); // TODO: Assumption of prototype
+                    if (basetypes.length === 1 && isIdentifier(func.name)) { // TODO: Limitations of prototype
+                        const methodType = getTypeOfPropertyOfType(basetypes[0], func.name.escapedText)
+                        if (methodType) {
+                            const sig = getSingleCallSignature(methodType)
+                            if (sig) {
+                                const i = func.parameters.indexOf(declaration)
+                                if (i > -1) {
+                                    const t = tryGetTypeAtPosition(sig, i)
+                                    if (t) { // wtb nullable monad
+                                        return addOptionality(t, /*isProperty*/ false, isOptional);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
 
             // Use the type of the initializer expression if one is present and the declaration is
