@@ -32349,7 +32349,7 @@ namespace ts {
         }
 
         function checkAssertionWorker(errNode: Node, type: TypeNode, expression: UnaryExpression | Expression, checkMode?: CheckMode) {
-            let exprType = checkExpression(expression, checkMode);
+            let exprType = checkExpression(expression, checkMode, CheckExpressionIntent.NoLiteralFreshening);
             if (isConstTypeReference(type)) {
                 if (!isValidConstAssertionArgument(expression)) {
                     error(expression, Diagnostics.A_const_assertions_can_only_be_applied_to_references_to_enum_members_or_string_number_boolean_array_or_object_literals);
@@ -34203,10 +34203,10 @@ namespace ts {
                 leftType = checkTruthinessExpression(left, checkMode);
             }
             else {
-                leftType = checkExpression(left, checkMode);
+                leftType = checkExpression(left, checkMode, CheckExpressionIntent.NoLiteralFreshening);
             }
 
-            const rightType = checkExpression(right, checkMode);
+            const rightType = checkExpression(right, checkMode, CheckExpressionIntent.NoLiteralFreshening);
             return checkBinaryLikeExpressionWorker(left, operatorToken, right, leftType, rightType, errorNode);
         }
 
@@ -39623,7 +39623,7 @@ namespace ts {
             let firstDefaultClause: CaseOrDefaultClause;
             let hasDuplicateDefaultClause = false;
 
-            const expressionType = checkExpression(node.expression);
+            const expressionType = checkExpression(node.expression, /*checkMode*/ undefined, CheckExpressionIntent.NoLiteralFreshening);
             const expressionIsLiteral = isLiteralType(expressionType);
             forEach(node.caseBlock.clauses, clause => {
                 // Grammar check for duplicate default clauses, skip if we already report duplicate default clause
@@ -39650,7 +39650,7 @@ namespace ts {
                         // TypeScript 1.0 spec (April 2014): 5.9
                         // In a 'switch' statement, each 'case' expression must be of a type that is comparable
                         // to or from the type of the 'switch' expression.
-                        let caseType = checkExpression(clause.expression);
+                        let caseType = checkExpression(clause.expression, /*checkMode*/ undefined, CheckExpressionIntent.NoLiteralFreshening);
                         const caseIsLiteral = isLiteralType(caseType);
                         let comparedExpressionType = expressionType;
                         if (!caseIsLiteral || !expressionIsLiteral) {
