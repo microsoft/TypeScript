@@ -9754,7 +9754,7 @@ namespace ts {
                 }
                 const type = getTypeOfNode(typeNode);
                 // an errorType will make `checkTryStatement` issue an error
-                return isTypeAny(type) || type === unknownType ? type : errorType;
+                return isTypeAny(type) || !!(type.flags & TypeFlags.Unknown) ? type : errorType;
             }
             // Handle export default expressions
             if (isSourceFile(declaration) && isJsonSourceFile(declaration)) {
@@ -12992,8 +12992,8 @@ namespace ts {
                 for (let i = numTypeArguments; i < numTypeParameters; i++) {
                     result[i] = errorType;
                 }
-                const baseDefaultType = getDefaultTypeArgumentType(isJavaScriptImplicitAny);
                 for (let i = numTypeArguments; i < numTypeParameters; i++) {
+                    const baseDefaultType = getDefaultTypeArgumentType(isJavaScriptImplicitAny, typeParameters![i]);
                     let defaultType = getDefaultFromTypeParameter(typeParameters![i]);
                     if (isJavaScriptImplicitAny && defaultType && (isTypeIdenticalTo(defaultType, unknownType) || isTypeIdenticalTo(defaultType, emptyObjectType))) {
                         defaultType = anyType;
@@ -16888,7 +16888,7 @@ namespace ts {
                 case SyntaxKind.JSDocUnknownType:
                     return anyType;
                 case SyntaxKind.UnknownKeyword:
-                    return unknownType;
+                    return strictNullChecks(node) ? unknownType : nonNullUnknownType;
                 case SyntaxKind.StringKeyword:
                     return stringType;
                 case SyntaxKind.NumberKeyword:
@@ -23418,7 +23418,7 @@ namespace ts {
                     inferredType = getTypeFromInference(inference);
                 }
 
-                inference.inferredType = inferredType || getDefaultTypeArgumentType(!!(context.flags & InferenceFlags.AnyDefault));
+                inference.inferredType = inferredType || getDefaultTypeArgumentType(!!(context.flags & InferenceFlags.AnyDefault), inference.typeParameter);
 
                 const constraint = getConstraintOfTypeParameter(inference.typeParameter);
                 if (constraint) {
@@ -23432,8 +23432,8 @@ namespace ts {
             return inference.inferredType;
         }
 
-        function getDefaultTypeArgumentType(isInJavaScriptFile: boolean): Type {
-            return isInJavaScriptFile ? anyType : unknownType;
+        function getDefaultTypeArgumentType(isInJavaScriptFile: boolean, param: TypeParameter): Type {
+            return isInJavaScriptFile ? anyType : strictNullChecks(param.symbol?.declarations?.[0]) ? unknownType : nonNullUnknownType;
         }
 
         function getInferredTypes(context: InferenceContext): Type[] {
@@ -24677,8 +24677,7 @@ namespace ts {
             if (resultType === unreachableNeverType || reference.parent && reference.parent.kind === SyntaxKind.NonNullExpression && !(resultType.flags & TypeFlags.Never) && getTypeWithFacts(resultType, TypeFacts.NEUndefinedOrNull, reference).flags & TypeFlags.Never) {
                 return declaredType;
             }
-            // The non-null unknown type should never escape control flow analysis.
-            return resultType === nonNullUnknownType ? unknownType : resultType;
+            return resultType;
 
             function getOrSetCacheKey() {
                 if (isKeySet) {
@@ -31437,7 +31436,7 @@ namespace ts {
                 typeArguments.pop();
             }
             while (typeArguments.length < typeParameters.length) {
-                typeArguments.push(getDefaultFromTypeParameter(typeParameters[typeArguments.length]) || getConstraintOfTypeParameter(typeParameters[typeArguments.length]) || getDefaultTypeArgumentType(isJs));
+                typeArguments.push(getDefaultFromTypeParameter(typeParameters[typeArguments.length]) || getConstraintOfTypeParameter(typeParameters[typeArguments.length]) || getDefaultTypeArgumentType(isJs, typeParameters[typeArguments.length]));
             }
             return typeArguments;
         }
@@ -32945,7 +32944,7 @@ namespace ts {
                 links.type = type || (declaration ? getWidenedTypeForVariableLikeDeclaration(declaration, /*reportErrors*/ true) : getTypeOfSymbol(parameter));
                 if (declaration && declaration.name.kind !== SyntaxKind.Identifier) {
                     // if inference didn't come up with anything but unknown, fall back to the binding pattern if present.
-                    if (links.type === unknownType) {
+                    if (!!(links.type?.flags & TypeFlags.Unknown)) {
                         links.type = getTypeFromBindingPattern(declaration.name);
                     }
                     assignBindingElementTypes(declaration.name, links.type);
@@ -33000,7 +32999,7 @@ namespace ts {
 
         function createPromiseReturnType(func: FunctionLikeDeclaration | ImportCall, promisedType: Type) {
             const promiseType = createPromiseType(promisedType);
-            if (promiseType === unknownType) {
+            if (!!(promiseType.flags & TypeFlags.Unknown)) {
                 error(func, isImportCall(func) ?
                     Diagnostics.A_dynamic_import_call_returns_a_Promise_Make_sure_you_have_a_declaration_for_Promise_or_include_ES2015_in_your_lib_option :
                     Diagnostics.An_async_function_or_method_must_return_a_Promise_Make_sure_you_have_a_declaration_for_Promise_or_include_ES2015_in_your_lib_option);

@@ -1,0 +1,29 @@
+=== tests/cases/compiler/nonStrictUnknownLooksLikeEmptyObject.ts ===
+declare var a: { x?: number, y?: number };
+>a : { x?: number; y?: number; }
+>x : number
+>y : number
+
+declare var b: unknown; // direct unknown
+>b : unknown
+
+a = b;
+>a = b : unknown
+>a : { x?: number; y?: number; }
+>b : unknown
+
+// unknown via failed inference
+declare function f1<T>(x?: T): T;
+>f1 : <T>(x?: T) => T
+>x : T
+
+const res = f1();
+>res : unknown
+>f1() : unknown
+>f1 : <T>(x?: T) => T
+
+a = res;
+>a = res : unknown
+>a : { x?: number; y?: number; }
+>res : unknown
+

@@ -1,0 +1,29 @@
+=== tests/cases/compiler/nonStrictUnknownLooksLikeEmptyObject.ts ===
+declare var a: { x?: number, y?: number };
+>a : Symbol(a, Decl(nonStrictUnknownLooksLikeEmptyObject.ts, 0, 11))
+>x : Symbol(x, Decl(nonStrictUnknownLooksLikeEmptyObject.ts, 0, 16))
+>y : Symbol(y, Decl(nonStrictUnknownLooksLikeEmptyObject.ts, 0, 28))
+
+declare var b: unknown; // direct unknown
+>b : Symbol(b, Decl(nonStrictUnknownLooksLikeEmptyObject.ts, 1, 11))
+
+a = b;
+>a : Symbol(a, Decl(nonStrictUnknownLooksLikeEmptyObject.ts, 0, 11))
+>b : Symbol(b, Decl(nonStrictUnknownLooksLikeEmptyObject.ts, 1, 11))
+
+// unknown via failed inference
+declare function f1<T>(x?: T): T;
+>f1 : Symbol(f1, Decl(nonStrictUnknownLooksLikeEmptyObject.ts, 3, 6))
+>T : Symbol(T, Decl(nonStrictUnknownLooksLikeEmptyObject.ts, 6, 20))
+>x : Symbol(x, Decl(nonStrictUnknownLooksLikeEmptyObject.ts, 6, 23))
+>T : Symbol(T, Decl(nonStrictUnknownLooksLikeEmptyObject.ts, 6, 20))
+>T : Symbol(T, Decl(nonStrictUnknownLooksLikeEmptyObject.ts, 6, 20))
+
+const res = f1();
+>res : Symbol(res, Decl(nonStrictUnknownLooksLikeEmptyObject.ts, 7, 5))
+>f1 : Symbol(f1, Decl(nonStrictUnknownLooksLikeEmptyObject.ts, 3, 6))
+
+a = res;
+>a : Symbol(a, Decl(nonStrictUnknownLooksLikeEmptyObject.ts, 0, 11))
+>res : Symbol(res, Decl(nonStrictUnknownLooksLikeEmptyObject.ts, 7, 5))
+
