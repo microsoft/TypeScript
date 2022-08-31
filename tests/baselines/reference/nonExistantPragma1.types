@@ -1,0 +1,6 @@
+=== tests/cases/conformance/pragma/nonExistantPragma1.ts ===
+// @ts-thisOptionDoesNotExist
+// unknown option is ignored
+export class A {}
+>A : A
+
