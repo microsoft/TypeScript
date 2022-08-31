@@ -25,6 +25,16 @@ try {
 >f3() : { c: string; }
 >f3 : () => { c: string; }
 
+    var [d = 1] = [];
+>d : number
+>1 : 1
+>[] : []
+
+    var { e = 1 } = { };
+>e : number
+>1 : 1
+>{ } : { e?: number | undefined; }
+
 } catch {
     console.error("error");
 >console.error("error") : void
@@ -42,4 +52,10 @@ b;
 
 c;
 >c : string
+
+d;
+>d : number
+
+e;
+>e : number
 

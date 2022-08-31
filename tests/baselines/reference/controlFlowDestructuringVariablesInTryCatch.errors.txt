@@ -1,9 +1,11 @@
-tests/cases/compiler/controlFlowDestructuringVariablesInTryCatch.ts(13,1): error TS2454: Variable 'a' is used before being assigned.
-tests/cases/compiler/controlFlowDestructuringVariablesInTryCatch.ts(14,1): error TS2454: Variable 'b' is used before being assigned.
-tests/cases/compiler/controlFlowDestructuringVariablesInTryCatch.ts(15,1): error TS2454: Variable 'c' is used before being assigned.
+tests/cases/compiler/controlFlowDestructuringVariablesInTryCatch.ts(16,1): error TS2454: Variable 'a' is used before being assigned.
+tests/cases/compiler/controlFlowDestructuringVariablesInTryCatch.ts(17,1): error TS2454: Variable 'b' is used before being assigned.
+tests/cases/compiler/controlFlowDestructuringVariablesInTryCatch.ts(18,1): error TS2454: Variable 'c' is used before being assigned.
+tests/cases/compiler/controlFlowDestructuringVariablesInTryCatch.ts(19,1): error TS2454: Variable 'd' is used before being assigned.
+tests/cases/compiler/controlFlowDestructuringVariablesInTryCatch.ts(20,1): error TS2454: Variable 'e' is used before being assigned.
 
 
-==== tests/cases/compiler/controlFlowDestructuringVariablesInTryCatch.ts (3 errors) ====
+==== tests/cases/compiler/controlFlowDestructuringVariablesInTryCatch.ts (5 errors) ====
     declare function f1(): string;
     declare function f2(): [b: string];
     declare function f3(): { c: string };
@@ -12,6 +14,9 @@ tests/cases/compiler/controlFlowDestructuringVariablesInTryCatch.ts(15,1): error
         var a = f1();
         var [b] = f2();
         var { c } = f3();
+    
+        var [d = 1] = [];
+        var { e = 1 } = { };
     } catch {
         console.error("error");
     }
@@ -25,4 +30,10 @@ tests/cases/compiler/controlFlowDestructuringVariablesInTryCatch.ts(15,1): error
     c;
     ~
 !!! error TS2454: Variable 'c' is used before being assigned.
+    d;
+    ~
+!!! error TS2454: Variable 'd' is used before being assigned.
+    e;
+    ~
+!!! error TS2454: Variable 'e' is used before being assigned.
     

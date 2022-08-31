@@ -26117,7 +26117,7 @@ namespace ts {
                     return convertAutoToAny(flowType);
                 }
             }
-            else if (!assumeInitialized && !containsUndefinedType(type) && containsUndefinedType(flowType)) {
+            else if (!assumeInitialized && !containsUndefinedType(type) && containsUndefinedType(flowType) && !(isBindingElement(declaration) && findAncestor(node, isBindingElement))) {
                 error(node, Diagnostics.Variable_0_is_used_before_being_assigned, symbolToString(symbol));
                 // Return the declared type to reduce follow-on errors
                 return type;

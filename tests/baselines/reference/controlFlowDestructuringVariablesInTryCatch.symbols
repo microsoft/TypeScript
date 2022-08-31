@@ -22,6 +22,12 @@ try {
 >c : Symbol(c, Decl(controlFlowDestructuringVariablesInTryCatch.ts, 7, 9))
 >f3 : Symbol(f3, Decl(controlFlowDestructuringVariablesInTryCatch.ts, 1, 35))
 
+    var [d = 1] = [];
+>d : Symbol(d, Decl(controlFlowDestructuringVariablesInTryCatch.ts, 9, 9))
+
+    var { e = 1 } = { };
+>e : Symbol(e, Decl(controlFlowDestructuringVariablesInTryCatch.ts, 10, 9))
+
 } catch {
     console.error("error");
 >console.error : Symbol(Console.error, Decl(lib.dom.d.ts, --, --))
@@ -37,4 +43,10 @@ b;
 
 c;
 >c : Symbol(c, Decl(controlFlowDestructuringVariablesInTryCatch.ts, 7, 9))
+
+d;
+>d : Symbol(d, Decl(controlFlowDestructuringVariablesInTryCatch.ts, 9, 9))
+
+e;
+>e : Symbol(e, Decl(controlFlowDestructuringVariablesInTryCatch.ts, 10, 9))
 

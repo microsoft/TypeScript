@@ -8,6 +8,9 @@ try {
     var a = f1();
     var [b] = f2();
     var { c } = f3();
+
+    var [d = 1] = [];
+    var { e = 1 } = { };
 } catch {
     console.error("error");
 }
@@ -15,3 +18,5 @@ try {
 a;
 b;
 c;
+d;
+e;
