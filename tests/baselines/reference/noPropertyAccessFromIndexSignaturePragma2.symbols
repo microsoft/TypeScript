@@ -12,7 +12,9 @@ declare var a: A;
 
 export const b = a.something;
 >b : Symbol(b, Decl(file1.ts, 5, 12))
+>a.something : Symbol(A.__index, Decl(file1.ts, 1, 13))
 >a : Symbol(a, Decl(file1.ts, 4, 11))
+>something : Symbol(A.__index, Decl(file1.ts, 1, 13))
 
 === tests/cases/conformance/pragma/noPropertyAccessFromIndexSignature/file2.ts ===
 // @ts-noPropertyAccessFromIndexSignature true
@@ -28,7 +30,9 @@ declare var a: A;
 
 export const b = a.something;
 >b : Symbol(b, Decl(file2.ts, 5, 12))
+>a.something : Symbol(A.__index, Decl(file2.ts, 1, 13))
 >a : Symbol(a, Decl(file2.ts, 4, 11))
+>something : Symbol(A.__index, Decl(file2.ts, 1, 13))
 
 === tests/cases/conformance/pragma/noPropertyAccessFromIndexSignature/file3.ts ===
 // @ts-noPropertyAccessFromIndexSignature false
@@ -44,7 +48,9 @@ declare var a: A;
 
 export const b = a.something;
 >b : Symbol(b, Decl(file3.ts, 5, 12))
+>a.something : Symbol(A.__index, Decl(file3.ts, 1, 13))
 >a : Symbol(a, Decl(file3.ts, 4, 11))
+>something : Symbol(A.__index, Decl(file3.ts, 1, 13))
 
 === tests/cases/conformance/pragma/noPropertyAccessFromIndexSignature/file4.ts ===
 interface A {
@@ -59,5 +65,7 @@ declare var a: A;
 
 export const b = a.something;
 >b : Symbol(b, Decl(file4.ts, 4, 12))
+>a.something : Symbol(A.__index, Decl(file4.ts, 0, 13))
 >a : Symbol(a, Decl(file4.ts, 3, 11))
+>something : Symbol(A.__index, Decl(file4.ts, 0, 13))
 

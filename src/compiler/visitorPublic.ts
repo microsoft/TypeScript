@@ -888,13 +888,19 @@ namespace ts {
                 nodeVisitor(node.type, visitor, isTypeNode));
         },
 
+        [SyntaxKind.SatisfiesExpression]: function visitEachChildOfSatisfiesExpression(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateSatisfiesExpression(node,
+                nodeVisitor(node.expression, visitor, isExpression),
+                nodeVisitor(node.type, visitor, isTypeNode));
+        },
+
         [SyntaxKind.NonNullExpression]: function visitEachChildOfNonNullExpression(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
             return isOptionalChain(node) ?
                 context.factory.updateNonNullChain(node,
                     nodeVisitor(node.expression, visitor, isExpression)) :
                 context.factory.updateNonNullExpression(node,
                     nodeVisitor(node.expression, visitor, isExpression));
-            },
+        },
 
         [SyntaxKind.MetaProperty]: function visitEachChildOfMetaProperty(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
             return context.factory.updateMetaProperty(node,

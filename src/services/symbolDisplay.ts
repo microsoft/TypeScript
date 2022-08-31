@@ -64,6 +64,7 @@ namespace ts.SymbolDisplay {
         if (flags & SymbolFlags.SetAccessor) return ScriptElementKind.memberSetAccessorElement;
         if (flags & SymbolFlags.Method) return ScriptElementKind.memberFunctionElement;
         if (flags & SymbolFlags.Constructor) return ScriptElementKind.constructorImplementationElement;
+        if (flags & SymbolFlags.Signature) return ScriptElementKind.indexSignatureElement;
 
         if (flags & SymbolFlags.Property) {
             if (flags & SymbolFlags.Transient && (symbol as TransientSymbol).checkFlags & CheckFlags.Synthetic) {
@@ -506,7 +507,6 @@ namespace ts.SymbolDisplay {
                     else {
                         addPrefixForAnyFunctionOrVar(symbol, symbolKind);
                     }
-
                     // For properties, variables and local vars: show the type
                     if (symbolKind === ScriptElementKind.memberVariableElement ||
                         symbolKind === ScriptElementKind.memberGetAccessorElement ||
@@ -514,11 +514,12 @@ namespace ts.SymbolDisplay {
                         symbolKind === ScriptElementKind.jsxAttribute ||
                         symbolFlags & SymbolFlags.Variable ||
                         symbolKind === ScriptElementKind.localVariableElement ||
+                        symbolKind === ScriptElementKind.indexSignatureElement ||
                         isThisExpression) {
                         displayParts.push(punctuationPart(SyntaxKind.ColonToken));
                         displayParts.push(spacePart());
                         // If the type is type parameter, format it specially
-                        if (type.symbol && type.symbol.flags & SymbolFlags.TypeParameter) {
+                        if (type.symbol && type.symbol.flags & SymbolFlags.TypeParameter && symbolKind !== ScriptElementKind.indexSignatureElement) {
                             const typeParameterParts = mapToDisplayParts(writer => {
                                 const param = typeChecker.typeParameterToDeclaration(type as TypeParameter, enclosingDeclaration, symbolDisplayNodeBuilderFlags)!;
                                 getPrinter().writeNode(EmitHint.Unspecified, param, getSourceFileOfNode(getParseTreeNode(enclosingDeclaration)), writer);
@@ -639,13 +640,38 @@ namespace ts.SymbolDisplay {
         }
 
         function addFullSymbolName(symbolToDisplay: Symbol, enclosingDeclaration?: Node) {
+            let indexInfos;
+
             if (alias && symbolToDisplay === symbol) {
                 symbolToDisplay = alias;
             }
-            const fullSymbolDisplayParts = symbolToDisplayParts(typeChecker, symbolToDisplay, enclosingDeclaration || sourceFile, /*meaning*/ undefined,
-                SymbolFormatFlags.WriteTypeParametersOrArguments | SymbolFormatFlags.UseOnlyExternalAliasing | SymbolFormatFlags.AllowAnyNodeKind);
-            addRange(displayParts, fullSymbolDisplayParts);
+            if (symbolKind === ScriptElementKind.indexSignatureElement) {
+                indexInfos = typeChecker.getIndexInfosOfIndexSymbol(symbolToDisplay);
+            }
 
+            let fullSymbolDisplayParts: SymbolDisplayPart[] = [];
+            if (symbolToDisplay.flags & SymbolFlags.Signature && indexInfos) {
+                if (symbolToDisplay.parent) {
+                    fullSymbolDisplayParts = symbolToDisplayParts(typeChecker, symbolToDisplay.parent);
+                }
+                fullSymbolDisplayParts.push(punctuationPart(SyntaxKind.OpenBracketToken));
+                //Needed to handle more than one type of index
+                indexInfos.forEach((info, i) => {
+                    //Needed to handle template literals
+                    fullSymbolDisplayParts.push(...typeToDisplayParts(typeChecker, info.keyType));
+                    if (i !== indexInfos.length - 1) {
+                        fullSymbolDisplayParts.push(spacePart());
+                        fullSymbolDisplayParts.push(punctuationPart(SyntaxKind.BarToken));
+                        fullSymbolDisplayParts.push(spacePart());
+                    }
+                });
+                fullSymbolDisplayParts.push(punctuationPart(SyntaxKind.CloseBracketToken));
+            }
+            else {
+                fullSymbolDisplayParts = symbolToDisplayParts(typeChecker, symbolToDisplay, enclosingDeclaration || sourceFile, /*meaning*/ undefined,
+                    SymbolFormatFlags.WriteTypeParametersOrArguments | SymbolFormatFlags.UseOnlyExternalAliasing | SymbolFormatFlags.AllowAnyNodeKind);
+            }
+            addRange(displayParts, fullSymbolDisplayParts);
             if (symbol.flags & SymbolFlags.Optional) {
                 displayParts.push(punctuationPart(SyntaxKind.QuestionToken));
             }

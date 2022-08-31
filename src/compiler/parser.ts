@@ -393,6 +393,9 @@ namespace ts {
         [SyntaxKind.NonNullExpression]: function forEachChildInNonNullExpression<T>(node: NonNullExpression, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
             return visitNode(cbNode, node.expression);
         },
+        [SyntaxKind.SatisfiesExpression]: function forEachChildInSatisfiesExpression<T>(node: SatisfiesExpression, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+            return visitNode(cbNode, node.expression) || visitNode(cbNode, node.type);
+        },
         [SyntaxKind.MetaProperty]: function forEachChildInMetaProperty<T>(node: MetaProperty, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
             return visitNode(cbNode, node.name);
         },
@@ -841,7 +844,6 @@ namespace ts {
         if (node === undefined || node.kind <= SyntaxKind.LastToken) {
             return;
         }
-
         const fn = (forEachChildTable as Record<SyntaxKind, ForEachChildFunction<any>>)[node.kind];
         return fn === undefined ? undefined : fn(node, cbNode, cbNodes);
     }
@@ -2971,7 +2973,7 @@ namespace ts {
         function parseDelimitedList<T extends Node | undefined>(kind: ParsingContext, parseElement: () => T, considerSemicolonAsDelimiter?: boolean): NodeArray<NonNullable<T>> | undefined {
             const saveParsingContext = parsingContext;
             parsingContext |= 1 << kind;
-            const list = [];
+            const list: NonNullable<T>[] = [];
             const listPos = getNodePos();
 
             let commaStart = -1; // Meaning the previous token was not a comma
@@ -2983,7 +2985,7 @@ namespace ts {
                         parsingContext = saveParsingContext;
                         return undefined;
                     }
-                    list.push(result as NonNullable<T>);
+                    list.push(result);
                     commaStart = scanner.getTokenPos();
 
                     if (parseOptional(SyntaxKind.CommaToken)) {
@@ -5109,7 +5111,7 @@ namespace ts {
                     break;
                 }
 
-                if (token() === SyntaxKind.AsKeyword) {
+                if (token() === SyntaxKind.AsKeyword || token() === SyntaxKind.SatisfiesKeyword) {
                     // Make sure we *do* perform ASI for constructs like this:
                     //    var x = foo
                     //    as (Bar)
@@ -5119,8 +5121,10 @@ namespace ts {
                         break;
                     }
                     else {
+                        const keywordKind = token();
                         nextToken();
-                        leftOperand = makeAsExpression(leftOperand, parseType());
+                        leftOperand = keywordKind === SyntaxKind.SatisfiesKeyword ? makeSatisfiesExpression(leftOperand, parseType()) :
+                            makeAsExpression(leftOperand, parseType());
                     }
                 }
                 else {
@@ -5137,6 +5141,10 @@ namespace ts {
             }
 
             return getBinaryOperatorPrecedence(token()) > 0;
+        }
+
+        function makeSatisfiesExpression(left: Expression, right: TypeNode): SatisfiesExpression {
+            return finishNode(factory.createSatisfiesExpression(left, right), left.pos);
         }
 
         function makeBinaryExpression(left: Expression, operatorToken: BinaryOperatorToken, right: Expression, pos: number): BinaryExpression {

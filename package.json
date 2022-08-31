@@ -32,12 +32,11 @@
         "./bin",
         "./lib",
         "!./lib/enu",
-        "./loc",
-        "./AUTHORS.md",
         "./LICENSE.txt",
         "./README.md",
         "./SECURITY.md",
-        "./ThirdPartyNoticeText.txt"
+        "./ThirdPartyNoticeText.txt",
+        "!**/.gitattributes"
     ],
     "devDependencies": {
         "@octokit/rest": "latest",
@@ -93,7 +92,7 @@
         "node-fetch": "^2.6.7",
         "prex": "^0.4.7",
         "source-map-support": "latest",
-        "typescript": "^4.7.4",
+        "typescript": "^4.8.2",
         "vinyl": "latest",
         "which": "^2.0.2",
         "xml2js": "^0.4.23"
@@ -102,7 +101,6 @@
         "es5-ext": "0.10.53"
     },
     "scripts": {
-        "pretest": "gulp tests",
         "test": "gulp runtests-parallel --light=false",
         "test:eslint-rules": "gulp run-eslint-rules-tests",
         "build": "npm run build:compiler && npm run build:tests",
