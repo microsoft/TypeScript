@@ -1101,14 +1101,22 @@ namespace ts {
         } : diagnostic.messageText;
     }
 
+    
+    export function createDiagnosticForRange(sourceFile: SourceFile, range: TextRange, message: DiagnosticMessage, ...args: (string | number | undefined)[]): DiagnosticWithLocation;
     export function createDiagnosticForRange(sourceFile: SourceFile, range: TextRange, message: DiagnosticMessage): DiagnosticWithLocation {
+        let text = getLocaleSpecificMessage(message);
+
+        if (arguments.length > 3) {
+            text = formatStringFromArgs(text, arguments, 3);
+        }
+
         return {
             file: sourceFile,
             start: range.pos,
             length: range.end - range.pos,
             code: message.code,
             category: message.category,
-            messageText: message.message,
+            messageText: text,
         };
     }
 

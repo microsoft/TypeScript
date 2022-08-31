@@ -1,0 +1,13 @@
+tests/cases/conformance/pragma/duplicateLocalPragmas1.ts(1,1): error TS1280: Duplicate local compiler option 'strict'.
+tests/cases/conformance/pragma/duplicateLocalPragmas1.ts(2,1): error TS1280: Duplicate local compiler option 'strict'.
+
+
+==== tests/cases/conformance/pragma/duplicateLocalPragmas1.ts (2 errors) ====
+    // @ts-strict
+    ~~~~~~~~~~~~~
+!!! error TS1280: Duplicate local compiler option 'strict'.
+    // @ts-strict
+    ~~~~~~~~~~~~~
+!!! error TS1280: Duplicate local compiler option 'strict'.
+    export class A {}
+    

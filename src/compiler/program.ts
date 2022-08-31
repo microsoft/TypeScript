@@ -3662,6 +3662,18 @@ namespace ts {
                 });
             }
 
+            for (const file of files) {
+                const entries = file.pragmas.entries();
+                for (let result = entries.next(); !result.done; result = entries.next()) {
+                    const [key, value] = result.value;
+                    if (startsWith(key, "ts-") && key !== "ts-check" && key !== "ts-nocheck" && isArray(value)) {
+                        for (const elem of value) {
+                            programDiagnostics.add(createDiagnosticForRange(file, elem.range, Diagnostics.Duplicate_local_compiler_option_0, key.slice(3)));
+                        }
+                    }
+                }
+            }
+
             // Verify that all the emit files are unique and don't overwrite input files
             function verifyEmitFilePath(emitFileName: string | undefined, emitFilesSeen: Set<string>) {
                 if (emitFileName) {
