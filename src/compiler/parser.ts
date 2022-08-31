@@ -9854,9 +9854,20 @@ namespace ts {
                     const opt = find(optionsAllowedAsPragmaOption, o => o.name.toLowerCase() === optName)!;
                     const entry = (isArray(entryOrList) ? last(entryOrList) : entryOrList);
                     const unparsedValue = (entry.arguments as PragmaArgumentType<`ts-${Lowercase<FileLocalOptionName>}`>).value;
-                    const optContainer: OptionsBase = {};
+                    let parsedValue: OptionsBase[string];
                     const errors: Diagnostic[] = [];
-                    const parsedValue = unparsedValue === undefined ? true : (parseOptionValue([unparsedValue], 0, /*diagnostics*/ undefined, opt, optContainer, errors), optContainer[opt.name]);
+                    if (!unparsedValue || !trimString(unparsedValue)) {
+                        parsedValue = true;
+                    }
+                    else {
+                        const optContainer: OptionsBase = {};
+                        const newIdx = parseOptionValue([unparsedValue], 0, /*diagnostics*/ undefined, opt, optContainer, errors);
+                        parsedValue = optContainer[opt.name];
+                        if (newIdx === 0) {
+                            // argument was not consumed, issue an error
+                            errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, optName, opt.type));
+                        }
+                    }
                     if (unparsedValue === undefined && opt.type !== "boolean") {
                         errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_expects_an_argument, optName));
                     }

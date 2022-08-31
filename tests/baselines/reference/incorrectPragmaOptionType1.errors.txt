@@ -1,0 +1,9 @@
+tests/cases/conformance/pragma/incorrectPragmaOptionType1.ts(1,1): error TS5024: Compiler option 'strict' requires a value of type boolean.
+
+
+==== tests/cases/conformance/pragma/incorrectPragmaOptionType1.ts (1 errors) ====
+    // @ts-strict 42
+    ~~~~~~~~~~~~~~~~
+!!! error TS5024: Compiler option 'strict' requires a value of type boolean.
+    export class A {}
+    

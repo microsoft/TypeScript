@@ -1,0 +1,5 @@
+=== tests/cases/conformance/pragma/incorrectPragmaOptionType1.ts ===
+// @ts-strict 42
+export class A {}
+>A : A
+
