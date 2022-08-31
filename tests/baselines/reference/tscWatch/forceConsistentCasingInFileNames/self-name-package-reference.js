@@ -35,28 +35,19 @@ Found 'package.json' at '/users/name/projects/web/package.json'.
 ======== Resolving module '@this/package' from '/Users/name/projects/web/index.ts'. ========
 Module resolution kind is not specified, using 'NodeNext'.
 File '/users/name/projects/web/package.json' exists according to earlier cached lookups.
-File '/users/name/projects/web/index.ts' exist - use it as a name resolution result.
-Resolving real path for '/users/name/projects/web/index.ts', result '/Users/name/projects/web/index.ts'.
-======== Module name '@this/package' was successfully resolved to '/users/name/projects/web/index.ts'. ========
+File '/Users/name/projects/web/index.ts' exist - use it as a name resolution result.
+Resolving real path for '/Users/name/projects/web/index.ts', result '/Users/name/projects/web/index.ts'.
+======== Module name '@this/package' was successfully resolved to '/Users/name/projects/web/index.ts'. ========
 File '/a/lib/package.json' does not exist.
 File '/a/package.json' does not exist.
 File '/package.json' does not exist.
-[96mindex.ts[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS1149: [0mFile name '/users/name/projects/web/index.ts' differs from already included file name '/Users/name/projects/web/index.ts' only in casing.
-  The file is in the program because:
-    Matched by default include pattern '**/*'
-    Imported via "@this/package" from file '/Users/name/projects/web/index.ts'
-  File is ECMAScript module because '/users/name/projects/web/package.json' has field "type" with value "module"
-
-[7m1[0m import * as me from "@this/package";
-[7m [0m [91m                    ~~~~~~~~~~~~~~~[0m
-
 ../../../../a/lib/lib.esnext.full.d.ts
   Default library for target 'esnext'
 index.ts
   Matched by default include pattern '**/*'
   Imported via "@this/package" from file 'index.ts'
   File is ECMAScript module because 'package.json' has field "type" with value "module"
-[[90m12:00:36 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:00:36 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
