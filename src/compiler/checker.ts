@@ -15589,12 +15589,13 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                         return accessFlags & AccessFlags.IncludeUndefined ? getUnionType([indexInfo.type, undefinedType]) : indexInfo.type;
                     }
                     errorIfWritingToReadonlyIndex(indexInfo);
-                    if (accessFlags & AccessFlags.IncludeUndefined && objectType.symbol && objectType.symbol.flags & (SymbolFlags.RegularEnum | SymbolFlags.ConstEnum)) {
-                        if (indexType.symbol && indexType.flags & TypeFlags.EnumLiteral && getParentOfSymbol(indexType.symbol) === objectType.symbol) {
+                    if (accessFlags & AccessFlags.IncludeUndefined) {
+                        if (objectType.symbol && objectType.symbol.flags & (SymbolFlags.RegularEnum | SymbolFlags.ConstEnum) && (indexType.symbol && indexType.flags & TypeFlags.EnumLiteral && getParentOfSymbol(indexType.symbol) === objectType.symbol)) {
                             return indexInfo.type;
                         }
+                        return getUnionType([indexInfo.type, undefinedType]);
                     }
-                    return accessFlags & AccessFlags.IncludeUndefined ? getUnionType([indexInfo.type, undefinedType]) : indexInfo.type;
+                    return indexInfo.type;
                 }
                 if (indexType.flags & TypeFlags.Never) {
                     return neverType;
