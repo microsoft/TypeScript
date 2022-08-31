@@ -25500,7 +25500,7 @@ namespace ts {
                     case "symbol": return narrowTypeByTypeFacts(type, esSymbolType, TypeFacts.TypeofEQSymbol);
                     case "object": return type.flags & TypeFlags.Any ? type : getUnionType([narrowTypeByTypeFacts(type, nonPrimitiveType, TypeFacts.TypeofEQObject), narrowTypeByTypeFacts(type, nullType, TypeFacts.EQNull)]);
                     case "function": return type.flags & TypeFlags.Any ? type : narrowTypeByTypeFacts(type, globalFunctionType, TypeFacts.TypeofEQFunction);
-                    case "undefined": return narrowTypeByTypeFacts(type, undefinedType, TypeFacts.EQUndefined);
+                    case "undefined": return narrowTypeByTypeFacts(type, strictNullChecks(reference) ? undefinedType : undefinedPermissiveType, TypeFacts.EQUndefined);
                 }
                 return narrowTypeByTypeFacts(type, nonPrimitiveType, TypeFacts.TypeofEQHostObject);
             }

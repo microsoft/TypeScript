@@ -1,0 +1,43 @@
+=== tests/cases/compiler/nonStrictNullChecksUndefinedNarrowingAssignableToNumber.ts ===
+export function hash(obj: any, hashVal = 0): number {
+>hash : (obj: any, hashVal?: number) => number
+>obj : any
+>hashVal : number
+>0 : 0
+
+	switch (typeof obj) {
+>typeof obj : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>obj : any
+
+		case 'number':
+>'number' : "number"
+
+			return numberHash(obj, hashVal);
+>numberHash(obj, hashVal) : number
+>numberHash : (val: number, initialHashVal: number) => number
+>obj : number
+>hashVal : number
+
+		case 'undefined':
+>'undefined' : "undefined"
+
+			return numberHash(obj, 937);
+>numberHash(obj, 937) : number
+>numberHash : (val: number, initialHashVal: number) => number
+>obj : undefined
+>937 : 937
+
+		default:
+			return numberHash(obj, 617);
+>numberHash(obj, 617) : number
+>numberHash : (val: number, initialHashVal: number) => number
+>obj : any
+>617 : 617
+	}
+}
+
+declare function numberHash(val: number, initialHashVal: number): number;
+>numberHash : (val: number, initialHashVal: number) => number
+>val : number
+>initialHashVal : number
+
