@@ -1,0 +1,144 @@
+=== tests/cases/compiler/nonStrictNullChecksMissingPropertyAssignableToAnything.ts ===
+export interface IJSONSchema {
+    id?: string;
+>id : string
+
+    type?: string | string[];
+>type : string | string[]
+
+    anyOf?: IJSONSchema[];
+>anyOf : IJSONSchema[]
+
+	enum?: any[];
+>enum : any[]
+
+	items?: IJSONSchema | IJSONSchema[];
+>items : IJSONSchema | IJSONSchema[]
+
+    properties?: IJSONSchemaMap;
+>properties : IJSONSchemaMap
+}
+
+export interface IJSONSchemaMap {
+    [name: string]: IJSONSchema;
+>name : string
+}
+
+export const tokenColorsSchema = {
+>tokenColorsSchema : { type: string; items: { type: string; properties: { scope: { anyOf: ({ enum: string[]; type?: undefined; items?: undefined; } | { type: string; enum?: undefined; items?: undefined; } | { type: string; items: { enum: string[]; type?: undefined; }; enum?: undefined; } | { type: string; items: { type: string; enum?: undefined; }; enum?: undefined; })[]; }; }; }; }
+>{    type: 'array',    items: {        type: 'object',        properties: {            scope: {                anyOf: [                    {                        enum: ["a", "b"]                    },                    {                        type: 'string'                    },                    {                        type: 'array',                        items: {                            enum: ["a", "b"]                        }                    },                    {                        type: 'array',                        items: {                            type: 'string'                        }                    }                ]            },        }    }} : { type: string; items: { type: string; properties: { scope: { anyOf: ({ enum: string[]; } | { type: string; } | { type: string; items: { enum: string[]; }; } | { type: string; items: { type: string; }; })[]; }; }; }; }
+
+    type: 'array',
+>type : string
+>'array' : "array"
+
+    items: {
+>items : { type: string; properties: { scope: { anyOf: ({ enum: string[]; } | { type: string; } | { type: string; items: { enum: string[]; }; } | { type: string; items: { type: string; }; })[]; }; }; }
+>{        type: 'object',        properties: {            scope: {                anyOf: [                    {                        enum: ["a", "b"]                    },                    {                        type: 'string'                    },                    {                        type: 'array',                        items: {                            enum: ["a", "b"]                        }                    },                    {                        type: 'array',                        items: {                            type: 'string'                        }                    }                ]            },        }    } : { type: string; properties: { scope: { anyOf: ({ enum: string[]; } | { type: string; } | { type: string; items: { enum: string[]; }; } | { type: string; items: { type: string; }; })[]; }; }; }
+
+        type: 'object',
+>type : string
+>'object' : "object"
+
+        properties: {
+>properties : { scope: { anyOf: ({ enum: string[]; } | { type: string; } | { type: string; items: { enum: string[]; }; } | { type: string; items: { type: string; }; })[]; }; }
+>{            scope: {                anyOf: [                    {                        enum: ["a", "b"]                    },                    {                        type: 'string'                    },                    {                        type: 'array',                        items: {                            enum: ["a", "b"]                        }                    },                    {                        type: 'array',                        items: {                            type: 'string'                        }                    }                ]            },        } : { scope: { anyOf: ({ enum: string[]; } | { type: string; } | { type: string; items: { enum: string[]; }; } | { type: string; items: { type: string; }; })[]; }; }
+
+            scope: {
+>scope : { anyOf: ({ enum: string[]; } | { type: string; } | { type: string; items: { enum: string[]; }; } | { type: string; items: { type: string; }; })[]; }
+>{                anyOf: [                    {                        enum: ["a", "b"]                    },                    {                        type: 'string'                    },                    {                        type: 'array',                        items: {                            enum: ["a", "b"]                        }                    },                    {                        type: 'array',                        items: {                            type: 'string'                        }                    }                ]            } : { anyOf: ({ enum: string[]; } | { type: string; } | { type: string; items: { enum: string[]; }; } | { type: string; items: { type: string; }; })[]; }
+
+                anyOf: [
+>anyOf : ({ enum: string[]; } | { type: string; } | { type: string; items: { enum: string[]; }; } | { type: string; items: { type: string; }; })[]
+>[                    {                        enum: ["a", "b"]                    },                    {                        type: 'string'                    },                    {                        type: 'array',                        items: {                            enum: ["a", "b"]                        }                    },                    {                        type: 'array',                        items: {                            type: 'string'                        }                    }                ] : ({ enum: string[]; } | { type: string; } | { type: string; items: { enum: string[]; }; } | { type: string; items: { type: string; }; })[]
+                    {
+>{                        enum: ["a", "b"]                    } : { enum: string[]; }
+
+                        enum: ["a", "b"]
+>enum : string[]
+>["a", "b"] : string[]
+>"a" : "a"
+>"b" : "b"
+
+                    },
+                    {
+>{                        type: 'string'                    } : { type: string; }
+
+                        type: 'string'
+>type : string
+>'string' : "string"
+
+                    },
+                    {
+>{                        type: 'array',                        items: {                            enum: ["a", "b"]                        }                    } : { type: string; items: { enum: string[]; }; }
+
+                        type: 'array',
+>type : string
+>'array' : "array"
+
+                        items: {
+>items : { enum: string[]; }
+>{                            enum: ["a", "b"]                        } : { enum: string[]; }
+
+                            enum: ["a", "b"]
+>enum : string[]
+>["a", "b"] : string[]
+>"a" : "a"
+>"b" : "b"
+                        }
+                    },
+                    {
+>{                        type: 'array',                        items: {                            type: 'string'                        }                    } : { type: string; items: { type: string; }; }
+
+                        type: 'array',
+>type : string
+>'array' : "array"
+
+                        items: {
+>items : { type: string; }
+>{                            type: 'string'                        } : { type: string; }
+
+                            type: 'string'
+>type : string
+>'string' : "string"
+                        }
+                    }
+                ]
+            },
+        }
+    }
+};
+
+const schema: IJSONSchema = {
+>schema : IJSONSchema
+>{    type: 'object',    properties: {        tokenColors: {            anyOf: [{                type: 'string'            },                tokenColorsSchema            ]        }    }} : { type: string; properties: { tokenColors: { anyOf: ({ type: string; items: { type: string; properties: { scope: { anyOf: ({ enum: string[]; type?: undefined; items?: undefined; } | { type: string; enum?: undefined; items?: undefined; } | { type: string; items: { enum: string[]; type?: undefined; }; enum?: undefined; } | { type: string; items: { type: string; enum?: undefined; }; enum?: undefined; })[]; }; }; }; } | { type: string; })[]; }; }; }
+
+    type: 'object',
+>type : string
+>'object' : "object"
+
+    properties: {
+>properties : { tokenColors: { anyOf: ({ type: string; items: { type: string; properties: { scope: { anyOf: ({ enum: string[]; type?: undefined; items?: undefined; } | { type: string; enum?: undefined; items?: undefined; } | { type: string; items: { enum: string[]; type?: undefined; }; enum?: undefined; } | { type: string; items: { type: string; enum?: undefined; }; enum?: undefined; })[]; }; }; }; } | { type: string; })[]; }; }
+>{        tokenColors: {            anyOf: [{                type: 'string'            },                tokenColorsSchema            ]        }    } : { tokenColors: { anyOf: ({ type: string; items: { type: string; properties: { scope: { anyOf: ({ enum: string[]; type?: undefined; items?: undefined; } | { type: string; enum?: undefined; items?: undefined; } | { type: string; items: { enum: string[]; type?: undefined; }; enum?: undefined; } | { type: string; items: { type: string; enum?: undefined; }; enum?: undefined; })[]; }; }; }; } | { type: string; })[]; }; }
+
+        tokenColors: {
+>tokenColors : { anyOf: ({ type: string; items: { type: string; properties: { scope: { anyOf: ({ enum: string[]; type?: undefined; items?: undefined; } | { type: string; enum?: undefined; items?: undefined; } | { type: string; items: { enum: string[]; type?: undefined; }; enum?: undefined; } | { type: string; items: { type: string; enum?: undefined; }; enum?: undefined; })[]; }; }; }; } | { type: string; })[]; }
+>{            anyOf: [{                type: 'string'            },                tokenColorsSchema            ]        } : { anyOf: ({ type: string; items: { type: string; properties: { scope: { anyOf: ({ enum: string[]; type?: undefined; items?: undefined; } | { type: string; enum?: undefined; items?: undefined; } | { type: string; items: { enum: string[]; type?: undefined; }; enum?: undefined; } | { type: string; items: { type: string; enum?: undefined; }; enum?: undefined; })[]; }; }; }; } | { type: string; })[]; }
+
+            anyOf: [{
+>anyOf : ({ type: string; items: { type: string; properties: { scope: { anyOf: ({ enum: string[]; type?: undefined; items?: undefined; } | { type: string; enum?: undefined; items?: undefined; } | { type: string; items: { enum: string[]; type?: undefined; }; enum?: undefined; } | { type: string; items: { type: string; enum?: undefined; }; enum?: undefined; })[]; }; }; }; } | { type: string; })[]
+>[{                type: 'string'            },                tokenColorsSchema            ] : ({ type: string; items: { type: string; properties: { scope: { anyOf: ({ enum: string[]; type?: undefined; items?: undefined; } | { type: string; enum?: undefined; items?: undefined; } | { type: string; items: { enum: string[]; type?: undefined; }; enum?: undefined; } | { type: string; items: { type: string; enum?: undefined; }; enum?: undefined; })[]; }; }; }; } | { type: string; })[]
+>{                type: 'string'            } : { type: string; }
+
+                type: 'string'
+>type : string
+>'string' : "string"
+
+            },
+                tokenColorsSchema
+>tokenColorsSchema : { type: string; items: { type: string; properties: { scope: { anyOf: ({ enum: string[]; type?: undefined; items?: undefined; } | { type: string; enum?: undefined; items?: undefined; } | { type: string; items: { enum: string[]; type?: undefined; }; enum?: undefined; } | { type: string; items: { type: string; enum?: undefined; }; enum?: undefined; })[]; }; }; }; }
+
+            ]
+        }
+    }
+};

@@ -778,7 +778,7 @@ namespace ts {
         const subtypeReductionCache = new Map<string, Type[]>();
         const cachedTypes = new Map<string, Type>();
         const evolvingArrayTypes: EvolvingArrayType[] = [];
-        const undefinedProperties: SymbolTable = new Map();
+        const undefinedProperties = new Map<string, Symbol>();
         const markerTypes = new Set<number>();
 
         const unknownSymbol = createSymbol(SymbolFlags.Property, "unknown" as __String);
@@ -21875,14 +21875,19 @@ namespace ts {
             return widened === original ? prop : createSymbolWithType(prop, widened);
         }
 
+        function getUndefinedPropertyNameHash(prop: Symbol): string {
+            return `${prop.escapedName}|${strictNullChecks(prop.valueDeclaration)}|${!!exactOptionalPropertyTypes(prop.valueDeclaration)}`;
+        }
+
         function getUndefinedProperty(prop: Symbol) {
-            const cached = undefinedProperties.get(prop.escapedName);
+            const id = getUndefinedPropertyNameHash(prop);
+            const cached = undefinedProperties.get(id);
             if (cached) {
                 return cached;
             }
-            const result = createSymbolWithType(prop, getMissingOrUndefinedType(prop.valueDeclaration));
+            const result = createSymbolWithType(prop, !strictNullChecks(prop.valueDeclaration) ? undefinedWideningType : getMissingOrUndefinedType(prop.valueDeclaration));
             result.flags |= SymbolFlags.Optional;
-            undefinedProperties.set(prop.escapedName, result);
+            undefinedProperties.set(id, result);
             return result;
         }
 

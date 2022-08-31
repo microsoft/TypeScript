@@ -1,0 +1,120 @@
+=== tests/cases/compiler/nonStrictNullChecksMissingPropertyAssignableToAnything.ts ===
+export interface IJSONSchema {
+>IJSONSchema : Symbol(IJSONSchema, Decl(nonStrictNullChecksMissingPropertyAssignableToAnything.ts, 0, 0))
+
+    id?: string;
+>id : Symbol(IJSONSchema.id, Decl(nonStrictNullChecksMissingPropertyAssignableToAnything.ts, 0, 30))
+
+    type?: string | string[];
+>type : Symbol(IJSONSchema.type, Decl(nonStrictNullChecksMissingPropertyAssignableToAnything.ts, 1, 16))
+
+    anyOf?: IJSONSchema[];
+>anyOf : Symbol(IJSONSchema.anyOf, Decl(nonStrictNullChecksMissingPropertyAssignableToAnything.ts, 2, 29))
+>IJSONSchema : Symbol(IJSONSchema, Decl(nonStrictNullChecksMissingPropertyAssignableToAnything.ts, 0, 0))
+
+	enum?: any[];
+>enum : Symbol(IJSONSchema.enum, Decl(nonStrictNullChecksMissingPropertyAssignableToAnything.ts, 3, 26))
+
+	items?: IJSONSchema | IJSONSchema[];
+>items : Symbol(IJSONSchema.items, Decl(nonStrictNullChecksMissingPropertyAssignableToAnything.ts, 4, 14))
+>IJSONSchema : Symbol(IJSONSchema, Decl(nonStrictNullChecksMissingPropertyAssignableToAnything.ts, 0, 0))
+>IJSONSchema : Symbol(IJSONSchema, Decl(nonStrictNullChecksMissingPropertyAssignableToAnything.ts, 0, 0))
+
+    properties?: IJSONSchemaMap;
+>properties : Symbol(IJSONSchema.properties, Decl(nonStrictNullChecksMissingPropertyAssignableToAnything.ts, 5, 37))
+>IJSONSchemaMap : Symbol(IJSONSchemaMap, Decl(nonStrictNullChecksMissingPropertyAssignableToAnything.ts, 7, 1))
+}
+
+export interface IJSONSchemaMap {
+>IJSONSchemaMap : Symbol(IJSONSchemaMap, Decl(nonStrictNullChecksMissingPropertyAssignableToAnything.ts, 7, 1))
+
+    [name: string]: IJSONSchema;
+>name : Symbol(name, Decl(nonStrictNullChecksMissingPropertyAssignableToAnything.ts, 10, 5))
+>IJSONSchema : Symbol(IJSONSchema, Decl(nonStrictNullChecksMissingPropertyAssignableToAnything.ts, 0, 0))
+}
+
+export const tokenColorsSchema = {
+>tokenColorsSchema : Symbol(tokenColorsSchema, Decl(nonStrictNullChecksMissingPropertyAssignableToAnything.ts, 13, 12))
+
+    type: 'array',
+>type : Symbol(type, Decl(nonStrictNullChecksMissingPropertyAssignableToAnything.ts, 13, 34))
+
+    items: {
+>items : Symbol(items, Decl(nonStrictNullChecksMissingPropertyAssignableToAnything.ts, 14, 18))
+
+        type: 'object',
+>type : Symbol(type, Decl(nonStrictNullChecksMissingPropertyAssignableToAnything.ts, 15, 12))
+
+        properties: {
+>properties : Symbol(properties, Decl(nonStrictNullChecksMissingPropertyAssignableToAnything.ts, 16, 23))
+
+            scope: {
+>scope : Symbol(scope, Decl(nonStrictNullChecksMissingPropertyAssignableToAnything.ts, 17, 21))
+
+                anyOf: [
+>anyOf : Symbol(anyOf, Decl(nonStrictNullChecksMissingPropertyAssignableToAnything.ts, 18, 20))
+                    {
+                        enum: ["a", "b"]
+>enum : Symbol(enum, Decl(nonStrictNullChecksMissingPropertyAssignableToAnything.ts, 20, 21))
+
+                    },
+                    {
+                        type: 'string'
+>type : Symbol(type, Decl(nonStrictNullChecksMissingPropertyAssignableToAnything.ts, 23, 21))
+
+                    },
+                    {
+                        type: 'array',
+>type : Symbol(type, Decl(nonStrictNullChecksMissingPropertyAssignableToAnything.ts, 26, 21))
+
+                        items: {
+>items : Symbol(items, Decl(nonStrictNullChecksMissingPropertyAssignableToAnything.ts, 27, 38))
+
+                            enum: ["a", "b"]
+>enum : Symbol(enum, Decl(nonStrictNullChecksMissingPropertyAssignableToAnything.ts, 28, 32))
+                        }
+                    },
+                    {
+                        type: 'array',
+>type : Symbol(type, Decl(nonStrictNullChecksMissingPropertyAssignableToAnything.ts, 32, 21))
+
+                        items: {
+>items : Symbol(items, Decl(nonStrictNullChecksMissingPropertyAssignableToAnything.ts, 33, 38))
+
+                            type: 'string'
+>type : Symbol(type, Decl(nonStrictNullChecksMissingPropertyAssignableToAnything.ts, 34, 32))
+                        }
+                    }
+                ]
+            },
+        }
+    }
+};
+
+const schema: IJSONSchema = {
+>schema : Symbol(schema, Decl(nonStrictNullChecksMissingPropertyAssignableToAnything.ts, 44, 5))
+>IJSONSchema : Symbol(IJSONSchema, Decl(nonStrictNullChecksMissingPropertyAssignableToAnything.ts, 0, 0))
+
+    type: 'object',
+>type : Symbol(type, Decl(nonStrictNullChecksMissingPropertyAssignableToAnything.ts, 44, 29))
+
+    properties: {
+>properties : Symbol(properties, Decl(nonStrictNullChecksMissingPropertyAssignableToAnything.ts, 45, 19))
+
+        tokenColors: {
+>tokenColors : Symbol(tokenColors, Decl(nonStrictNullChecksMissingPropertyAssignableToAnything.ts, 46, 17))
+
+            anyOf: [{
+>anyOf : Symbol(anyOf, Decl(nonStrictNullChecksMissingPropertyAssignableToAnything.ts, 47, 22))
+
+                type: 'string'
+>type : Symbol(type, Decl(nonStrictNullChecksMissingPropertyAssignableToAnything.ts, 48, 21))
+
+            },
+                tokenColorsSchema
+>tokenColorsSchema : Symbol(tokenColorsSchema, Decl(nonStrictNullChecksMissingPropertyAssignableToAnything.ts, 13, 12))
+
+            ]
+        }
+    }
+};
