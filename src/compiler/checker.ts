@@ -15903,13 +15903,10 @@ namespace ts {
         }
 
         function distributeIndexOverObjectType(objectType: Type, indexType: Type, writing: boolean) {
-            if (shouldDeferIndexType(objectType)) {
-                return;
-            }
             // (T | U)[K] -> T[K] | U[K] (reading)
             // (T | U)[K] -> T[K] & U[K] (writing)
             // (T & U)[K] -> T[K] & U[K]
-            if (objectType.flags & TypeFlags.UnionOrIntersection) {
+            if (objectType.flags & TypeFlags.Union || objectType.flags & TypeFlags.Intersection && !shouldDeferIndexType(objectType)) {
                 const types = map((objectType as UnionOrIntersectionType).types, t => getSimplifiedType(getIndexedAccessType(t, indexType), writing));
                 return objectType.flags & TypeFlags.Intersection || writing ? getIntersectionType(types) : getUnionType(types);
             }
