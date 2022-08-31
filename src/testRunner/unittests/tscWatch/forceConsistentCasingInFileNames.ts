@@ -294,5 +294,37 @@ a;b;
             }, { currentDirectory: "/Users/name/projects/web" }),
             changes: emptyArray,
         });
+
+        verifyTscWatch({
+            scenario: "forceConsistentCasingInFileNames",
+            subScenario: "self name package reference",
+            commandLineArgs: ["-w", "--explainFiles"],
+            sys: () => createWatchedSystem({
+                "/Users/name/projects/web/package.json": JSON.stringify({
+                    name: "@this/package",
+                    type: "module",
+                    exports: {
+                        ".": "./dist/index.js"
+                    }
+                }),
+                "/Users/name/projects/web/index.ts": Utils.dedent`
+                    import * as me from "@this/package";
+                    me.thing();
+                    export function thing(): void {}
+                `,
+                "/Users/name/projects/web/tsconfig.json": JSON.stringify({
+                    compilerOptions: {
+                        module: "nodenext",
+                        outDir: "./dist",
+                        declarationDir: "./types",
+                        composite: true,
+                        forceConsistentCasingInFileNames: true,
+                        traceResolution: true,
+                    }
+                }),
+                "/a/lib/lib.esnext.full.d.ts": libFile.content,
+            }, { currentDirectory: "/Users/name/projects/web" }),
+            changes: emptyArray,
+        });
     });
 }
