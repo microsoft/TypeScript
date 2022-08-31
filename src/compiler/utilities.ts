@@ -1988,6 +1988,34 @@ namespace ts {
         return !!constructor && childIsDecorated(useLegacyDecorators, constructor, node);
     }
 
+    export function classElementOrClassElementParameterIsDecorated(useLegacyDecorators: boolean, node: ClassElement, parent: ClassDeclaration | ClassExpression): boolean {
+        let parameters: NodeArray<ParameterDeclaration> | undefined;
+        if (isAccessor(node)) {
+            const { firstAccessor, secondAccessor, setAccessor } = getAllAccessorDeclarations(parent.members, node);
+            const firstAccessorWithDecorators =
+                hasDecorators(firstAccessor) ? firstAccessor :
+                secondAccessor && hasDecorators(secondAccessor) ? secondAccessor :
+                undefined;
+            if (!firstAccessorWithDecorators || node !== firstAccessorWithDecorators) {
+                return false;
+            }
+            parameters = setAccessor?.parameters;
+        }
+        else if (isMethodDeclaration(node)) {
+            parameters = node.parameters;
+        }
+        if (nodeIsDecorated(useLegacyDecorators, node, parent)) {
+            return true;
+        }
+        if (parameters) {
+            for (const parameter of parameters) {
+                if (parameterIsThisKeyword(parameter)) continue;
+                if (nodeIsDecorated(useLegacyDecorators, parameter, node, parent)) return true;
+            }
+        }
+        return false;
+    }
+
     export function isJSXTagName(node: Node) {
         const { parent } = node;
         if (parent.kind === SyntaxKind.JsxOpeningElement ||

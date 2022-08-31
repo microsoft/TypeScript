@@ -3365,7 +3365,6 @@ namespace ts {
                 factory.createParameterDeclaration(
                     /*modifiers*/ undefined,
                     /*dotDotDotToken*/ undefined,
-                    // TODO(rbuckton): JSDoc parameters don't have names (except `this`/`new`), should we manufacture an empty identifier?
                     name!,
                     /*questionToken*/ undefined,
                     parseJSDocType(),

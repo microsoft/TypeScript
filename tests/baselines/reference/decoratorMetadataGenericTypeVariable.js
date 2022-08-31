@@ -18,7 +18,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 exports.__esModule = true;
 exports.C = void 0;
-var C = /** @class */ (function () {
+var C = exports.C = /** @class */ (function () {
     function C() {
     }
     __decorate([
@@ -27,4 +27,3 @@ var C = /** @class */ (function () {
     ], C.prototype, "member");
     return C;
 }());
-exports.C = C;

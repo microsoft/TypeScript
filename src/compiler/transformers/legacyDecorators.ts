@@ -70,7 +70,7 @@ namespace ts {
                 return visitEachChild(node, visitor, context);
             }
 
-            const statements = hasDecorators(node) ?
+            const statements = classOrConstructorParameterIsDecorated(/*useLegacyDecorators*/ true, node) ?
                 transformClassDeclarationWithClassDecorators(node, node.name) :
                 transformClassDeclarationWithoutClassDecorators(node, node.name);
 
@@ -390,6 +390,10 @@ namespace ts {
             return updated;
         }
 
+        function isSyntheticMetadataDecorator(node: Decorator) {
+            return isCallToHelper(node.expression, "___metadata" as __String);
+        }
+
         /**
          * Transforms all of the decorators for a declaration into an array of expressions.
          *
@@ -400,9 +404,12 @@ namespace ts {
                 return undefined;
             }
 
+            // ensure that metadata decorators are last
+            const { false: decorators, true: metadata } = groupBy(allDecorators.decorators, isSyntheticMetadataDecorator);
             const decoratorExpressions: Expression[] = [];
-            addRange(decoratorExpressions, map(allDecorators.decorators, transformDecorator));
+            addRange(decoratorExpressions, map(decorators, transformDecorator));
             addRange(decoratorExpressions, flatMap(allDecorators.parameters, transformDecoratorsOfParameter));
+            addRange(decoratorExpressions, map(metadata, transformDecorator));
             return decoratorExpressions;
         }
 

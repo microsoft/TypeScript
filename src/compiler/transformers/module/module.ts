@@ -1315,11 +1315,30 @@ namespace ts {
                 // If we're exporting these variables, then these just become assignments to 'exports.x'.
                 for (const variable of node.declarationList.declarations) {
                     if (isIdentifier(variable.name) && isLocalName(variable.name)) {
+                        // A "local name" generally means a variable declaration that *shouldn't* be
+                        // converted to `exports.x = ...`, even if the declaration is exported. This
+                        // usually indicates a class or function declaration that was converted into
+                        // a variable declaration, as most references to the declaration will remain
+                        // untransformed (i.e., `new C` rather than `new exports.C`). In these cases,
+                        // an `export { x }` declaration will follow.
                         if (!modifiers) {
                             modifiers = visitNodes(node.modifiers, modifierVisitor, isModifier);
                         }
 
-                        variables = append(variables, variable);
+                        if (variable.initializer) {
+                            const updatedVariable = factory.updateVariableDeclaration(
+                                variable,
+                                variable.name,
+                                /*exclamationToken*/ undefined,
+                                /*type*/ undefined,
+                                createExportExpression(
+                                    variable.name,
+                                    visitNode(variable.initializer, visitor, isExpression)));
+                            variables = append(variables, updatedVariable);
+                        }
+                        else {
+                            variables = append(variables, variable);
+                        }
                     }
                     else if (variable.initializer) {
                         if (!isBindingPattern(variable.name) && (isArrowFunction(variable.initializer) || isFunctionExpression(variable.initializer) || isClassExpression(variable.initializer))) {

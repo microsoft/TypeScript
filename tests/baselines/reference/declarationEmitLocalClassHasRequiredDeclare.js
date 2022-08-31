@@ -24,13 +24,12 @@ var X = /** @class */ (function () {
     }
     return X;
 }());
-var A = /** @class */ (function () {
+var A = exports.A = /** @class */ (function () {
     function A() {
     }
     A.X = X;
     return A;
 }());
-exports.A = A;
 var Y = /** @class */ (function () {
     function Y() {
     }

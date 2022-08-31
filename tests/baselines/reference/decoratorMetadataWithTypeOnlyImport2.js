@@ -41,7 +41,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 exports.__esModule = true;
 exports.Main = void 0;
-var Main = /** @class */ (function () {
+var Main = exports.Main = /** @class */ (function () {
     function Main() {
     }
     __decorate([
@@ -50,4 +50,3 @@ var Main = /** @class */ (function () {
     ], Main.prototype, "field");
     return Main;
 }());
-exports.Main = Main;

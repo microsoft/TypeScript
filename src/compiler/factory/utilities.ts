@@ -1233,6 +1233,20 @@ namespace ts {
         }
     }
 
+    function isExportOrDefaultKeywordKind(kind: SyntaxKind): kind is SyntaxKind.ExportKeyword | SyntaxKind.DefaultKeyword {
+        return kind === SyntaxKind.ExportKeyword || kind === SyntaxKind.DefaultKeyword;
+    }
+
+    export function isExportOrDefaultModifier(node: Node): node is ExportKeyword | DefaultKeyword {
+        const kind = node.kind;
+        return isExportOrDefaultKeywordKind(kind);
+    }
+
+    export function isNonExportDefaultModifier(node: Node): node is Exclude<Modifier, ExportKeyword | DefaultKeyword> {
+        const kind = node.kind;
+        return isModifierKind(kind) && !isExportOrDefaultKeywordKind(kind);
+    }
+
     /**
      * If `nodes` is not undefined, creates an empty `NodeArray` that preserves the `pos` and `end` of `nodes`.
      * @internal

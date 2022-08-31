@@ -15,16 +15,14 @@ namespace ts {
     const enum ClassFacts {
         None = 0,
         HasStaticInitializedProperties = 1 << 0,
-        HasConstructorDecorators = 1 << 1,
+        HasClassOrConstructorParameterDecorators = 1 << 1,
         HasMemberDecorators = 1 << 2,
         IsExportOfNamespace = 1 << 3,
         IsNamedExternalExport = 1 << 4,
         IsDefaultExternalExport = 1 << 5,
         IsDerivedClass = 1 << 6,
-        UseImmediatelyInvokedFunctionExpression = 1 << 7,
 
-        HasAnyDecorators = HasConstructorDecorators | HasMemberDecorators,
-        NeedsName = HasStaticInitializedProperties | HasMemberDecorators,
+        HasAnyDecorators = HasClassOrConstructorParameterDecorators | HasMemberDecorators,
         MayNeedImmediatelyInvokedFunctionExpression = HasAnyDecorators | HasStaticInitializedProperties,
         IsExported = IsExportOfNamespace | IsDefaultExternalExport | IsNamedExternalExport,
     }
@@ -363,6 +361,14 @@ namespace ts {
             }
         }
 
+        function decoratorElidingVisitor(node: Node): VisitResult<Node> {
+            return isDecorator(node) ? undefined : visitor(node);
+        }
+
+        function modifierElidingVisitor(node: Node): VisitResult<Node> {
+            return isModifier(node) ? undefined : visitor(node);
+        }
+
         function modifierVisitor(node: Node): VisitResult<Node> {
             if (isDecorator(node)) return undefined;
             if (modifierToFlag(node.kind) & ModifierFlags.TypeScriptModifier) {
@@ -594,17 +600,16 @@ namespace ts {
             );
         }
 
-        function getClassFacts(node: ClassDeclaration, staticProperties: readonly PropertyDeclaration[]) {
+        function getClassFacts(node: ClassDeclaration) {
             let facts = ClassFacts.None;
-            if (some(staticProperties)) facts |= ClassFacts.HasStaticInitializedProperties;
+            if (some(getProperties(node, /*requireInitialized*/ true, /*isStatic*/ true))) facts |= ClassFacts.HasStaticInitializedProperties;
             const extendsClauseElement = getEffectiveBaseTypeNode(node);
             if (extendsClauseElement && skipOuterExpressions(extendsClauseElement.expression).kind !== SyntaxKind.NullKeyword) facts |= ClassFacts.IsDerivedClass;
-            if (classOrConstructorParameterIsDecorated(legacyDecorators, node)) facts |= ClassFacts.HasConstructorDecorators;
+            if (classOrConstructorParameterIsDecorated(legacyDecorators, node)) facts |= ClassFacts.HasClassOrConstructorParameterDecorators;
             if (childIsDecorated(legacyDecorators, node)) facts |= ClassFacts.HasMemberDecorators;
             if (isExportOfNamespace(node)) facts |= ClassFacts.IsExportOfNamespace;
             else if (isDefaultExternalModuleExport(node)) facts |= ClassFacts.IsDefaultExternalExport;
             else if (isNamedExternalModuleExport(node)) facts |= ClassFacts.IsNamedExternalExport;
-            if (languageVersion <= ScriptTarget.ES5 && (facts & ClassFacts.MayNeedImmediatelyInvokedFunctionExpression)) facts |= ClassFacts.UseImmediatelyInvokedFunctionExpression;
             return facts;
         }
 
@@ -620,7 +625,13 @@ namespace ts {
         }
 
         function visitClassDeclaration(node: ClassDeclaration): VisitResult<Statement> {
-            if (!isClassLikeDeclarationWithTypeScriptSyntax(node) && !(currentNamespace && hasSyntacticModifier(node, ModifierFlags.Export))) {
+            const facts = getClassFacts(node);
+            const promoteToIIFE = languageVersion <= ScriptTarget.ES5 &&
+                !!(facts & ClassFacts.MayNeedImmediatelyInvokedFunctionExpression);
+
+            if (!isClassLikeDeclarationWithTypeScriptSyntax(node) &&
+                !classOrConstructorParameterIsDecorated(legacyDecorators, node) &&
+                !isExportOfNamespace(node)) {
                 return factory.updateClassDeclaration(
                     node,
                     visitNodes(node.modifiers, modifierVisitor, isModifier),
@@ -631,28 +642,41 @@ namespace ts {
                 );
             }
 
-            const staticProperties = getProperties(node, /*requireInitializer*/ true, /*isStatic*/ true);
-            const facts = getClassFacts(node, staticProperties);
-
-            if (facts & ClassFacts.UseImmediatelyInvokedFunctionExpression) {
+            if (promoteToIIFE) {
                 context.startLexicalEnvironment();
             }
 
-            const name = node.name || (facts & ClassFacts.NeedsName ? factory.getGeneratedNameForNode(node) : undefined);
-            const allDecorators = getAllDecoratorsOfClass(node);
-            const decorators = transformAllDecoratorsOfDeclaration(node, node, allDecorators);
+            const moveModifiers =
+                promoteToIIFE ||
+                facts & ClassFacts.IsExportOfNamespace ||
+                facts & ClassFacts.HasClassOrConstructorParameterDecorators ||
+                facts & ClassFacts.HasStaticInitializedProperties;
 
-            // we do not emit modifiers on the declaration if we are emitting an IIFE
-            const modifiers = !(facts & ClassFacts.UseImmediatelyInvokedFunctionExpression)
-                ? visitNodes(node.modifiers, modifierVisitor, isModifier)
-                : elideNodes(factory, node.modifiers); // preserve positions, if available
+            // elide modifiers on the declaration if we are emitting an IIFE or the class is
+            // a namespace export
+            let modifiers = moveModifiers ?
+                visitNodes(node.modifiers, modifierElidingVisitor, isModifierLike) :
+                visitNodes(node.modifiers, visitor, isModifierLike);
+
+            // inject metadata only if the class is decorated
+            if (facts & ClassFacts.HasClassOrConstructorParameterDecorators) {
+                modifiers = injectClassTypeMetadata(modifiers, node);
+            }
+
+            const needsName =
+                facts & ClassFacts.HasMemberDecorators ||
+                facts & ClassFacts.HasStaticInitializedProperties;
+
+            const name = needsName ?
+                node.name ?? factory.getGeneratedNameForNode(node) :
+                node.name;
 
             //  ${modifiers} class ${name} ${heritageClauses} {
             //      ${members}
             //  }
-            const classStatement = factory.updateClassDeclaration(
+            const classDeclaration = factory.updateClassDeclaration(
                 node,
-                concatenate<ModifierLike>(decorators, modifiers),
+                modifiers,
                 name,
                 /*typeParameters*/ undefined,
                 visitNodes(node.heritageClauses, visitor, isHeritageClause),
@@ -666,11 +690,10 @@ namespace ts {
                 emitFlags |= EmitFlags.NoTrailingSourceMap;
             }
 
-            setEmitFlags(classStatement, emitFlags);
+            setEmitFlags(classDeclaration, emitFlags);
 
-            let statements: Statement[] = [classStatement];
-
-            if (facts & ClassFacts.UseImmediatelyInvokedFunctionExpression) {
+            let statement: VariableStatement | ClassDeclaration;
+            if (promoteToIIFE) {
                 // When we emit a TypeScript class down to ES5, we must wrap it in an IIFE so that the
                 // 'es2015' transformer can properly nest static initializers and decorators. The result
                 // looks something like:
@@ -682,6 +705,7 @@ namespace ts {
                 //      return C;
                 //  }();
                 //
+                const statements: Statement[] = [classDeclaration];
                 const closingBraceLocation = createTokenRange(skipTrivia(currentSourceFile.text, node.members.end), SyntaxKind.CloseBraceToken);
                 const localName = factory.getInternalName(node);
 
@@ -691,18 +715,24 @@ namespace ts {
                 setTextRangeEnd(outer, closingBraceLocation.end);
                 setEmitFlags(outer, EmitFlags.NoComments);
 
-                const statement = factory.createReturnStatement(outer);
-                setTextRangePos(statement, closingBraceLocation.pos);
-                setEmitFlags(statement, EmitFlags.NoComments | EmitFlags.NoTokenSourceMaps);
-                statements.push(statement);
+                const returnStatement = factory.createReturnStatement(outer);
+                setTextRangePos(returnStatement, closingBraceLocation.pos);
+                setEmitFlags(returnStatement, EmitFlags.NoComments | EmitFlags.NoTokenSourceMaps);
+                statements.push(returnStatement);
 
                 insertStatementsAfterStandardPrologue(statements, context.endLexicalEnvironment());
 
                 const iife = factory.createImmediatelyInvokedArrowFunction(statements);
                 setEmitFlags(iife, EmitFlags.TypeScriptClassWrapper);
 
+                //  export let C = (() => { ... })();
+                const modifiers = facts & ClassFacts.IsNamedExternalExport ?
+                    factory.createModifiersFromModifierFlags(ModifierFlags.Export) :
+                    undefined;
+
+                //  let C = (() => { ... })();
                 const varStatement = factory.createVariableStatement(
-                    /*modifiers*/ undefined,
+                    modifiers,
                     factory.createVariableDeclarationList([
                         factory.createVariableDeclaration(
                             factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ false),
@@ -710,52 +740,62 @@ namespace ts {
                             /*type*/ undefined,
                             iife
                         )
-                    ])
+                    ], NodeFlags.Let)
                 );
 
                 setOriginalNode(varStatement, node);
                 setCommentRange(varStatement, node);
                 setSourceMapRange(varStatement, moveRangePastDecorators(node));
                 startOnNewLine(varStatement);
-                statements = [varStatement];
+                statement = varStatement;
+            }
+            else {
+                statement = classDeclaration;
             }
 
-            // If the class is exported as part of a TypeScript namespace, emit the namespace export.
-            // Otherwise, if the class was exported at the top level and was decorated, emit an export
-            // declaration or export default for the class.
-            if (facts & ClassFacts.IsExportOfNamespace) {
-                addExportMemberAssignment(statements, node);
-            }
-            else if (facts & ClassFacts.UseImmediatelyInvokedFunctionExpression || facts & ClassFacts.HasConstructorDecorators) {
+            if (moveModifiers) {
+                if (facts & ClassFacts.IsExportOfNamespace) {
+                    return demarcateMultiStatementExport(
+                        statement,
+                        createExportMemberAssignmentStatement(node));
+                }
                 if (facts & ClassFacts.IsDefaultExternalExport) {
-                    statements.push(factory.createExportDefault(factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true)));
+                    return demarcateMultiStatementExport(
+                        statement,
+                        factory.createExportDefault(factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true)));
                 }
-                else if (facts & ClassFacts.IsNamedExternalExport) {
-                    statements.push(factory.createExternalModuleExport(factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true)));
+                if (facts & ClassFacts.IsNamedExternalExport && !promoteToIIFE) {
+                    return demarcateMultiStatementExport(
+                        statement,
+                        factory.createExternalModuleExport(factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true)));
                 }
             }
 
-            if (statements.length > 1) {
-                // Add a DeclarationMarker as a marker for the end of the declaration
-                statements.push(factory.createEndOfDeclarationMarker(node));
-                setEmitFlags(classStatement, getEmitFlags(classStatement) | EmitFlags.HasEndOfDeclarationMarker);
-            }
+            return statement;
+        }
 
-            return singleOrMany(statements);
+        function demarcateMultiStatementExport(declarationStatement: Statement, exportStatement: Statement) {
+            addEmitFlags(declarationStatement, EmitFlags.HasEndOfDeclarationMarker);
+            return [
+                declarationStatement,
+                exportStatement,
+                factory.createEndOfDeclarationMarker(declarationStatement)
+            ];
         }
 
         function visitClassExpression(node: ClassExpression): Expression {
-            const allDecorators = getAllDecoratorsOfClass(node);
-            const decorators = transformAllDecoratorsOfDeclaration(node, node, allDecorators);
+            let modifiers = visitNodes(node.modifiers, modifierElidingVisitor, isModifierLike);
+            if (classOrConstructorParameterIsDecorated(legacyDecorators, node)) {
+                modifiers = injectClassTypeMetadata(modifiers, node);
+            }
+
             return factory.updateClassExpression(
                 node,
-                decorators,
+                modifiers,
                 node.name,
                 /*typeParameters*/ undefined,
                 visitNodes(node.heritageClauses, visitor, isHeritageClause),
-                isClassLikeDeclarationWithTypeScriptSyntax(node) ?
-                    transformClassMembers(node) :
-                    visitNodes(node.members, getClassElementVisitor(node), isClassElement)
+                transformClassMembers(node)
             );
         }
 
@@ -765,72 +805,60 @@ namespace ts {
          * @param node The current class.
          */
         function transformClassMembers(node: ClassDeclaration | ClassExpression) {
-            const members: ClassElement[] = [];
+            const members = visitNodes(node.members, getClassElementVisitor(node), isClassElement);
+
+            let newMembers: ClassElement[] | undefined;
             const constructor = getFirstConstructorWithBody(node);
             const parametersWithPropertyAssignments = constructor &&
-                filter(constructor.parameters, p => isParameterPropertyDeclaration(p, constructor));
+                filter(constructor.parameters, (p): p is ParameterPropertyDeclaration => isParameterPropertyDeclaration(p, constructor));
 
             if (parametersWithPropertyAssignments) {
                 for (const parameter of parametersWithPropertyAssignments) {
-                    if (isIdentifier(parameter.name)) {
-                        members.push(setOriginalNode(factory.createPropertyDeclaration(
-                            /*modifiers*/ undefined,
-                            parameter.name,
-                            /*questionOrExclamationToken*/ undefined,
-                            /*type*/ undefined,
-                            /*initializer*/ undefined), parameter));
-                    }
+                    const parameterProperty = factory.createPropertyDeclaration(
+                        /*modifiers*/ undefined,
+                        parameter.name,
+                        /*questionOrExclamationToken*/ undefined,
+                        /*type*/ undefined,
+                        /*initializer*/ undefined);
+                    setOriginalNode(parameterProperty, parameter);
+                    newMembers = append(newMembers, parameterProperty);
                 }
             }
 
-            addRange(members, visitNodes(node.members, getClassElementVisitor(node), isClassElement));
-            return setTextRange(factory.createNodeArray(members), /*location*/ node.members);
-        }
-
-        /**
-         * Transforms all of the decorators for a declaration into an array of expressions.
-         *
-         * @param node The declaration node.
-         * @param allDecorators An object containing all of the decorators for the declaration.
-         */
-        function transformAllDecoratorsOfDeclaration(node: Declaration, container: ClassLikeDeclaration, allDecorators: AllDecorators | undefined) {
-            if (!allDecorators) {
-                return undefined;
+            if (newMembers) {
+                newMembers = addRange(newMembers, members);
+                return setTextRange(factory.createNodeArray(newMembers), /*location*/ node.members);
             }
 
-            const decorators = visitArray(allDecorators.decorators, visitor, isDecorator);
-            const parameterDecorators = flatMap(allDecorators.parameters, transformDecoratorsOfParameter);
-            const metadataDecorators = some(decorators) || some(parameterDecorators) ? getTypeMetadata(node, container) : undefined;
-            const result = factory.createNodeArray(concatenate(concatenate(decorators, parameterDecorators), metadataDecorators));
-            const pos = firstOrUndefined(allDecorators.decorators)?.pos ?? -1;
-            const end = lastOrUndefined(allDecorators.decorators)?.end ?? -1;
-            setTextRangePosEnd(result, pos, end);
-            return result;
+            return members;
         }
 
-        /**
-         * Transforms the decorators of a parameter into decorators of the class/method.
-         *
-         * @param parameterDecorators The decorators for the parameter at the provided offset.
-         * @param parameterOffset The offset of the parameter.
-         */
-        function transformDecoratorsOfParameter(parameterDecorators: Decorator[], parameterOffset: number) {
-            if (parameterDecorators) {
-                const decorators: Decorator[] = [];
-                for (const parameterDecorator of parameterDecorators) {
-                    const expression = visitNode(parameterDecorator.expression, visitor, isExpression);
-                    const helper = emitHelpers().createParamHelper(expression, parameterOffset);
-                    setTextRange(helper, parameterDecorator.expression);
-                    setEmitFlags(helper, EmitFlags.NoComments);
+        function injectClassTypeMetadata(modifiers: NodeArray<ModifierLike> | undefined, node: ClassLikeDeclaration) {
+            const metadata = getTypeMetadata(node, node);
+            if (some(metadata)) {
+                const modifiersArray: ModifierLike[] = [];
+                addRange(modifiersArray, takeWhile(modifiers, isExportOrDefaultModifier));
+                addRange(modifiersArray, filter(modifiers, isDecorator));
+                addRange(modifiersArray, metadata);
+                addRange(modifiersArray, filter(skipWhile(modifiers, isExportOrDefaultModifier), isModifier));
+                modifiers = setTextRange(factory.createNodeArray(modifiersArray), modifiers);
+            }
 
-                    const decorator = factory.createDecorator(helper);
-                    setSourceMapRange(decorator, parameterDecorator.expression);
-                    setCommentRange(decorator, parameterDecorator.expression);
-                    setEmitFlags(decorator, EmitFlags.NoComments);
-                    decorators.push(decorator);
+            return modifiers;
+        }
+
+        function injectClassElementTypeMetadata(modifiers: NodeArray<ModifierLike> | undefined, node: ClassElement, container: ClassLikeDeclaration | ObjectLiteralExpression) {
+            if (isClassLike(container) && classElementOrClassElementParameterIsDecorated(legacyDecorators, node, container)) {
+                const metadata = getTypeMetadata(node, container);
+                if (some(metadata)) {
+                    const modifiersArray: ModifierLike[] = [];
+                    addRange(modifiersArray, filter(modifiers, isDecorator));
+                    addRange(modifiersArray, metadata);
+                    addRange(modifiersArray, filter(modifiers, isModifier));
+                    modifiers = setTextRange(factory.createNodeArray(modifiersArray), modifiers);
                 }
-                return decorators;
             }
+            return modifiers;
         }
 
         /**
@@ -1029,14 +1057,18 @@ namespace ts {
                 return undefined;
             }
 
-            const allDecorators = getAllDecoratorsOfClassElement(node, parent);
-            const decorators = transformAllDecoratorsOfDeclaration(node, parent, allDecorators);
+            let modifiers = isClassLike(parent) ? !isAmbient ?
+                visitNodes(node.modifiers, visitor, isModifierLike) :
+                visitNodes(node.modifiers, modifierElidingVisitor, isModifierLike) :
+                visitNodes(node.modifiers, decoratorElidingVisitor, isModifierLike);
+
+            modifiers = injectClassElementTypeMetadata(modifiers, node, parent);
 
             // Preserve a `declare x` property with decorators to be handled by the decorators transform
             if (isAmbient) {
                 return factory.updatePropertyDeclaration(
                     node,
-                    concatenate<ModifierLike>(decorators, factory.createModifiersFromModifierFlags(ModifierFlags.Ambient)),
+                    concatenate<ModifierLike>(modifiers, factory.createModifiersFromModifierFlags(ModifierFlags.Ambient)),
                     visitNode(node.name, visitor, isPropertyName),
                     /*questionOrExclamationToken*/ undefined,
                     /*type*/ undefined,
@@ -1046,7 +1078,7 @@ namespace ts {
 
             return factory.updatePropertyDeclaration(
                 node,
-                concatenate(decorators, visitNodes(node.modifiers, modifierVisitor, isModifierLike)),
+                modifiers,
                 visitPropertyNameOfClassElement(node),
                 /*questionOrExclamationToken*/ undefined,
                 /*type*/ undefined,
@@ -1180,11 +1212,15 @@ namespace ts {
                 return undefined;
             }
 
-            const allDecorators = isClassLike(parent) ? getAllDecoratorsOfClassElement(node, parent) : undefined;
-            const decorators = isClassLike(parent) ? transformAllDecoratorsOfDeclaration(node, parent, allDecorators) : undefined;
+            let modifiers = isClassLike(parent) ?
+                visitNodes(node.modifiers, visitor, isModifierLike) :
+                visitNodes(node.modifiers, decoratorElidingVisitor, isModifierLike);
+
+            modifiers = injectClassElementTypeMetadata(modifiers, node, parent);
+
             return factory.updateMethodDeclaration(
                 node,
-                concatenate(decorators, visitNodes(node.modifiers, modifierVisitor, isModifierLike)),
+                modifiers,
                 node.asteriskToken,
                 visitPropertyNameOfClassElement(node),
                 /*questionToken*/ undefined,
@@ -1214,13 +1250,15 @@ namespace ts {
                 return undefined;
             }
 
-            const decorators = isClassLike(parent) ?
-                transformAllDecoratorsOfDeclaration(node, parent, getAllDecoratorsOfClassElement(node, parent)) :
-                undefined;
+            let modifiers = isClassLike(parent) ?
+                visitNodes(node.modifiers, visitor, isModifierLike) :
+                visitNodes(node.modifiers, decoratorElidingVisitor, isModifierLike);
+
+            modifiers = injectClassElementTypeMetadata(modifiers, node, parent);
 
             return factory.updateGetAccessorDeclaration(
                 node,
-                concatenate(decorators, visitNodes(node.modifiers, modifierVisitor, isModifierLike)),
+                modifiers,
                 visitPropertyNameOfClassElement(node),
                 visitParameterList(node.parameters, visitor, context),
                 /*type*/ undefined,
@@ -1237,13 +1275,15 @@ namespace ts {
                 return undefined;
             }
 
-            const decorators = isClassLike(parent) ?
-                transformAllDecoratorsOfDeclaration(node, parent, getAllDecoratorsOfClassElement(node, parent)) :
-                undefined;
+            let modifiers = isClassLike(parent) ?
+                visitNodes(node.modifiers, visitor, isModifierLike) :
+                visitNodes(node.modifiers, decoratorElidingVisitor, isModifierLike);
+
+            modifiers = injectClassElementTypeMetadata(modifiers, node, parent);
 
             return factory.updateSetAccessorDeclaration(
                 node,
-                concatenate(decorators, visitNodes(node.modifiers, modifierVisitor, isModifierLike)),
+                modifiers,
                 visitPropertyNameOfClassElement(node),
                 visitParameterList(node.parameters, visitor, context),
                 visitFunctionBody(node.body, visitor, context) || factory.createBlock([])
@@ -1309,7 +1349,7 @@ namespace ts {
 
             const updated = factory.updateParameterDeclaration(
                 node,
-                elideNodes(factory, node.modifiers), // preserve positions, if available
+                visitNodes(node.modifiers, node => isDecorator(node) ? visitor(node) : undefined, isModifierLike),
                 node.dotDotDotToken,
                 visitNode(node.name, visitor, isBindingName),
                 /*questionToken*/ undefined,
@@ -2243,7 +2283,7 @@ namespace ts {
                 && hasSyntacticModifier(node, ModifierFlags.Default);
         }
 
-        function addExportMemberAssignment(statements: Statement[], node: ClassDeclaration | FunctionDeclaration) {
+        function createExportMemberAssignmentStatement(node: ClassDeclaration | FunctionDeclaration) {
             const expression = factory.createAssignment(
                 factory.getExternalModuleOrNamespaceExportName(currentNamespaceContainerName, node, /*allowComments*/ false, /*allowSourceMaps*/ true),
                 factory.getLocalName(node)
@@ -2252,7 +2292,11 @@ namespace ts {
 
             const statement = factory.createExpressionStatement(expression);
             setSourceMapRange(statement, createRange(-1, node.end));
-            statements.push(statement);
+            return statement;
+        }
+
+        function addExportMemberAssignment(statements: Statement[], node: ClassDeclaration | FunctionDeclaration) {
+            statements.push(createExportMemberAssignmentStatement(node));
         }
 
         function createNamespaceExport(exportName: Identifier, exportValue: Expression, location?: TextRange) {

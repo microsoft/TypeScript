@@ -1400,6 +1400,20 @@ namespace ts {
         return arrayFrom(arrayToMultiMap(values, getGroupId).values(), resultSelector);
     }
 
+    export function groupBy<T, U extends T>(values: readonly T[] | undefined, keySelector: (value: T) => value is U): { true?: U[], false?: Exclude<T, U>[] };
+    export function groupBy<T, K extends string | number | boolean | null | undefined>(values: readonly T[] | undefined, keySelector: (value: T) => K): { [P in K as `${P}`]?: T[]; };
+    export function groupBy<T, K extends string | number | boolean | null | undefined>(values: readonly T[] | undefined, keySelector: (value: T) => K): { [P in K as `${P}`]?: T[]; } {
+        const result: Record<string, T[]> = {};
+        if (values) {
+            for (const value of values) {
+                const key = `${keySelector(value)}`;
+                const array = result[key] ??= [];
+                array.push(value);
+            }
+        }
+        return result as { [P in K as `${P}`]?: T[]; };
+    }
+
     export function clone<T>(object: T): T {
         const result: any = {};
         for (const id in object) {
@@ -2489,13 +2503,29 @@ namespace ts {
     }
 
     export function takeWhile<T, U extends T>(array: readonly T[], predicate: (element: T) => element is U): U[];
-    export function takeWhile<T>(array: readonly T[], predicate: (element: T) => boolean): T[] {
-        const len = array.length;
-        let index = 0;
-        while (index < len && predicate(array[index])) {
-            index++;
+    export function takeWhile<T, U extends T>(array: readonly T[] | undefined, predicate: (element: T) => element is U): U[] | undefined;
+    export function takeWhile<T, U extends T>(array: readonly T[] | undefined, predicate: (element: T) => element is U): U[] | undefined {
+        if (array) {
+            const len = array.length;
+            let index = 0;
+            while (index < len && predicate(array[index])) {
+                index++;
+            }
+            return array.slice(0, index) as U[];
         }
-        return array.slice(0, index);
+    }
+
+    export function skipWhile<T, U extends T>(array: readonly T[], predicate: (element: T) => element is U): Exclude<T, U>[];
+    export function skipWhile<T, U extends T>(array: readonly T[] | undefined, predicate: (element: T) => element is U): Exclude<T, U>[] | undefined;
+    export function skipWhile<T, U extends T>(array: readonly T[] | undefined, predicate: (element: T) => element is U): Exclude<T, U>[] | undefined {
+        if (array) {
+            const len = array.length;
+            let index = 0;
+            while (index < len && predicate(array[index])) {
+                index++;
+            }
+            return array.slice(index) as Exclude<T, U>[];
+        }
     }
 
     /**
