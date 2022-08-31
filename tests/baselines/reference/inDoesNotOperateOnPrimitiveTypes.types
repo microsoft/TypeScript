@@ -79,7 +79,7 @@ function union2<T extends object, U extends string | number>(thing: T | U) {
     "key" in thing; // Ok
 >"key" in thing : boolean
 >"key" : "key"
->thing : T | (T & null) | (U & null)
+>thing : T
   }
 }
 
@@ -146,7 +146,7 @@ function union5<T extends object | string, U extends object | number>(p: T | U) 
         "key" in p;
 >"key" in p : boolean
 >"key" : "key"
->p : (T & object) | (U & object) | (T & null) | (U & null)
+>p : (T & object) | (U & object)
     }
 }
 

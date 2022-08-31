@@ -1,0 +1,55 @@
+=== tests/cases/compiler/nonStrictNullChecksNoNullIntroducedByControlFlow.ts ===
+export function clone<T>(obj: T): T {
+>clone : Symbol(clone, Decl(nonStrictNullChecksNoNullIntroducedByControlFlow.ts, 0, 0))
+>T : Symbol(T, Decl(nonStrictNullChecksNoNullIntroducedByControlFlow.ts, 0, 22))
+>obj : Symbol(obj, Decl(nonStrictNullChecksNoNullIntroducedByControlFlow.ts, 0, 25))
+>T : Symbol(T, Decl(nonStrictNullChecksNoNullIntroducedByControlFlow.ts, 0, 22))
+>T : Symbol(T, Decl(nonStrictNullChecksNoNullIntroducedByControlFlow.ts, 0, 22))
+
+	if (!obj || typeof obj !== 'object') {
+>obj : Symbol(obj, Decl(nonStrictNullChecksNoNullIntroducedByControlFlow.ts, 0, 25))
+>obj : Symbol(obj, Decl(nonStrictNullChecksNoNullIntroducedByControlFlow.ts, 0, 25))
+
+		return obj;
+>obj : Symbol(obj, Decl(nonStrictNullChecksNoNullIntroducedByControlFlow.ts, 0, 25))
+	}
+	var result = (Array.isArray(obj)) ? <any>[] : <any>{};
+>result : Symbol(result, Decl(nonStrictNullChecksNoNullIntroducedByControlFlow.ts, 4, 4))
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>obj : Symbol(obj, Decl(nonStrictNullChecksNoNullIntroducedByControlFlow.ts, 0, 25))
+
+	Object.keys(obj).forEach((key) => {
+>Object.keys(obj).forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>Object.keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --))
+>obj : Symbol(obj, Decl(nonStrictNullChecksNoNullIntroducedByControlFlow.ts, 0, 25))
+>forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>key : Symbol(key, Decl(nonStrictNullChecksNoNullIntroducedByControlFlow.ts, 5, 27))
+
+		if (obj[key] && typeof obj[key] === 'object') {
+>obj : Symbol(obj, Decl(nonStrictNullChecksNoNullIntroducedByControlFlow.ts, 0, 25))
+>key : Symbol(key, Decl(nonStrictNullChecksNoNullIntroducedByControlFlow.ts, 5, 27))
+>obj : Symbol(obj, Decl(nonStrictNullChecksNoNullIntroducedByControlFlow.ts, 0, 25))
+>key : Symbol(key, Decl(nonStrictNullChecksNoNullIntroducedByControlFlow.ts, 5, 27))
+
+			result[key] = clone(obj[key]);
+>result : Symbol(result, Decl(nonStrictNullChecksNoNullIntroducedByControlFlow.ts, 4, 4))
+>key : Symbol(key, Decl(nonStrictNullChecksNoNullIntroducedByControlFlow.ts, 5, 27))
+>clone : Symbol(clone, Decl(nonStrictNullChecksNoNullIntroducedByControlFlow.ts, 0, 0))
+>obj : Symbol(obj, Decl(nonStrictNullChecksNoNullIntroducedByControlFlow.ts, 0, 25))
+>key : Symbol(key, Decl(nonStrictNullChecksNoNullIntroducedByControlFlow.ts, 5, 27))
+
+		} else {
+			result[key] = obj[key];
+>result : Symbol(result, Decl(nonStrictNullChecksNoNullIntroducedByControlFlow.ts, 4, 4))
+>key : Symbol(key, Decl(nonStrictNullChecksNoNullIntroducedByControlFlow.ts, 5, 27))
+>obj : Symbol(obj, Decl(nonStrictNullChecksNoNullIntroducedByControlFlow.ts, 0, 25))
+>key : Symbol(key, Decl(nonStrictNullChecksNoNullIntroducedByControlFlow.ts, 5, 27))
+		}
+	});
+	return result;
+>result : Symbol(result, Decl(nonStrictNullChecksNoNullIntroducedByControlFlow.ts, 4, 4))
+}
