@@ -281,18 +281,6 @@ a;b;
                                 default: "./index.d.ts"
                             }
                         },
-                        // "./helpers": {
-                        //     types: {
-                        //         "import": "./helpers.d.mts",
-                        //         "default": "./helpers.d.ts"
-                        //     }
-                        // },
-                        // "./yargs": {
-                        //     "types": {
-                        //         "default": "./yargs.d.ts"
-                        //     }
-                        // },
-                        // "./package.json": "./package.json"
                     }
                 }),
                 "/Users/name/projects/web/tsconfig.json": JSON.stringify({
