@@ -29,7 +29,7 @@ namespace ts.projectSystem {
             }
         }
 
-        function setup(logLevel: server.LogLevel | undefined, options?: Partial<server.StartSessionOptions>, importServicePlugin?: server.ServerHost["importServicePlugin"]) {
+        function setup(logLevel: server.LogLevel | undefined, options?: Partial<server.StartSessionOptions>, importPlugin?: server.ServerHost["importPlugin"]) {
             const host = createServerHost([libFile], { windowsStyleRoot: "c:/" });
             const messages: any[] = [];
             const webHost: server.WebHost = {
@@ -38,7 +38,7 @@ namespace ts.projectSystem {
                 writeMessage: s => messages.push(s),
             };
             const webSys = server.createWebSystem(webHost, emptyArray, () => host.getExecutingFilePath());
-            webSys.importServicePlugin = importServicePlugin;
+            webSys.importPlugin = importPlugin;
             const logger = logLevel !== undefined ? new server.MainProcessLogger(logLevel, webHost) : nullLogger();
             const session = new TestWorkerSession(webSys, webHost, { serverMode: LanguageServiceMode.PartialSemantic, ...options }, logger);
             return { getMessages: () => messages, clearMessages: () => messages.length = 0, session };
@@ -161,7 +161,7 @@ namespace ts.projectSystem {
             it("plugins are not loaded immediately", async () => {
                 let pluginModuleInstantiated = false;
                 let pluginInvoked = false;
-                const importServicePlugin = async (_root: string, _moduleName: string): Promise<server.ModuleImportResult> => {
+                const importPlugin = async (_root: string, _moduleName: string): Promise<server.ModuleImportResult> => {
                     await Promise.resolve(); // simulate at least a single turn delay
                     pluginModuleInstantiated = true;
                     return {
@@ -173,7 +173,7 @@ namespace ts.projectSystem {
                     };
                 };
 
-                const { session } = setup(/*logLevel*/ undefined, { globalPlugins: ["plugin-a"] }, importServicePlugin);
+                const { session } = setup(/*logLevel*/ undefined, { globalPlugins: ["plugin-a"] }, importPlugin);
                 const projectService = session.getProjectService();
 
                 session.executeCommand({ seq: 1, type: "request", command: protocol.CommandTypes.Open, arguments: { file: "^memfs:/foo.ts", content: "" } });
@@ -201,7 +201,7 @@ namespace ts.projectSystem {
                 const pluginADeferred = Utils.defer();
                 const pluginBDeferred = Utils.defer();
                 const log: string[] = [];
-                const importServicePlugin = async (_root: string, moduleName: string): Promise<server.ModuleImportResult> => {
+                const importPlugin = async (_root: string, moduleName: string): Promise<server.ModuleImportResult> => {
                     log.push(`request import ${moduleName}`);
                     const promise = moduleName === "plugin-a" ? pluginADeferred.promise : pluginBDeferred.promise;
                     await promise;
@@ -215,7 +215,7 @@ namespace ts.projectSystem {
                     };
                 };
 
-                const { session } = setup(/*logLevel*/ undefined, { globalPlugins: ["plugin-a", "plugin-b"] }, importServicePlugin);
+                const { session } = setup(/*logLevel*/ undefined, { globalPlugins: ["plugin-a", "plugin-b"] }, importPlugin);
                 const projectService = session.getProjectService();
 
                 session.executeCommand({ seq: 1, type: "request", command: protocol.CommandTypes.Open, arguments: { file: "^memfs:/foo.ts", content: "" } });
@@ -241,7 +241,7 @@ namespace ts.projectSystem {
             });
 
             it("sends projectsUpdatedInBackground event", async () => {
-                const importServicePlugin = async (_root: string, _moduleName: string): Promise<server.ModuleImportResult> => {
+                const importPlugin = async (_root: string, _moduleName: string): Promise<server.ModuleImportResult> => {
                     await Promise.resolve(); // simulate at least a single turn delay
                     return {
                         module: (() => ({ create: info => info.languageService })) as server.PluginModuleFactory,
@@ -249,7 +249,7 @@ namespace ts.projectSystem {
                     };
                 };
 
-                const { session, getMessages } = setup(/*logLevel*/ undefined, { globalPlugins: ["plugin-a"] }, importServicePlugin);
+                const { session, getMessages } = setup(/*logLevel*/ undefined, { globalPlugins: ["plugin-a"] }, importPlugin);
                 const projectService = session.getProjectService();
 
                 session.executeCommand({ seq: 1, type: "request", command: protocol.CommandTypes.Open, arguments: { file: "^memfs:/foo.ts", content: "" } });
@@ -270,7 +270,7 @@ namespace ts.projectSystem {
                 const pluginAShouldLoad = Utils.defer();
                 const pluginAExternalFilesRequested = Utils.defer();
 
-                const importServicePlugin = async (_root: string, _moduleName: string): Promise<server.ModuleImportResult> => {
+                const importPlugin = async (_root: string, _moduleName: string): Promise<server.ModuleImportResult> => {
                     // wait until the initial external files are requested from the project service.
                     await pluginAShouldLoad.promise;
 
@@ -287,7 +287,7 @@ namespace ts.projectSystem {
                     };
                 };
 
-                const { session } = setup(/*logLevel*/ undefined, { globalPlugins: ["plugin-a"] }, importServicePlugin);
+                const { session } = setup(/*logLevel*/ undefined, { globalPlugins: ["plugin-a"] }, importPlugin);
                 const projectService = session.getProjectService();
 
                 session.executeCommand({ seq: 1, type: "request", command: protocol.CommandTypes.Open, arguments: { file: "^memfs:/foo.ts", content: "" } });
@@ -316,7 +316,7 @@ namespace ts.projectSystem {
             it("project is closed before plugins are loaded", async () => {
                 const pluginALoaded = Utils.defer();
                 const projectClosed = Utils.defer();
-                const importServicePlugin = async (_root: string, _moduleName: string): Promise<server.ModuleImportResult> => {
+                const importPlugin = async (_root: string, _moduleName: string): Promise<server.ModuleImportResult> => {
                     // mark that the plugin has started loading
                     pluginALoaded.resolve();
 
@@ -328,7 +328,7 @@ namespace ts.projectSystem {
                     };
                 };
 
-                const { session, getMessages } = setup(/*logLevel*/ undefined, { globalPlugins: ["plugin-a"] }, importServicePlugin);
+                const { session, getMessages } = setup(/*logLevel*/ undefined, { globalPlugins: ["plugin-a"] }, importPlugin);
                 const projectService = session.getProjectService();
 
                 session.executeCommand({ seq: 1, type: "request", command: protocol.CommandTypes.Open, arguments: { file: "^memfs:/foo.ts", content: "" } });

@@ -256,12 +256,12 @@ namespace ts.server {
 
         /*@internal*/
         public static async importServicePluginAsync(moduleName: string, initialDir: string, host: ServerHost, log: (message: string) => void, logErrors?: (message: string) => void): Promise<{} | undefined> {
-            Debug.assertIsDefined(host.importServicePlugin);
+            Debug.assertIsDefined(host.importPlugin);
             const resolvedPath = combinePaths(initialDir, "node_modules");
             log(`Dynamically importing ${moduleName} from ${initialDir} (resolved to ${resolvedPath})`);
             let result: ModuleImportResult;
             try {
-                result = await host.importServicePlugin(resolvedPath, moduleName);
+                result = await host.importPlugin(resolvedPath, moduleName);
             }
             catch (e) {
                 result = { module: undefined, error: e };
@@ -1607,7 +1607,7 @@ namespace ts.server {
         protected enableGlobalPlugins(options: CompilerOptions, pluginConfigOverrides: Map<any> | undefined): void {
             const host = this.projectService.host;
 
-            if (!host.require && !host.importServicePlugin) {
+            if (!host.require && !host.importPlugin) {
                 this.projectService.logger.info("Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded");
                 return;
             }
@@ -1658,7 +1658,7 @@ namespace ts.server {
          */
         /*@internal*/
         async beginEnablePluginAsync(pluginConfigEntry: PluginImport, searchPaths: string[], pluginConfigOverrides: Map<any> | undefined): Promise<BeginEnablePluginResult> {
-            Debug.assertIsDefined(this.projectService.host.importServicePlugin);
+            Debug.assertIsDefined(this.projectService.host.importPlugin);
 
             let errorLogs: string[] | undefined;
             const log = (message: string) => this.projectService.logger.info(message);
@@ -2522,8 +2522,7 @@ namespace ts.server {
         /*@internal*/
         enablePluginsWithOptions(options: CompilerOptions, pluginConfigOverrides: ESMap<string, any> | undefined): void {
             const host = this.projectService.host;
-
-            if (!host.require && !host.importServicePlugin) {
+            if (!host.require && !host.importPlugin) {
                 this.projectService.logger.info("Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded");
                 return;
             }
