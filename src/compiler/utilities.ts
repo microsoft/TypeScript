@@ -1101,7 +1101,6 @@ namespace ts {
         } : diagnostic.messageText;
     }
 
-    
     export function createDiagnosticForRange(sourceFile: SourceFile, range: TextRange, message: DiagnosticMessage, ...args: (string | number | undefined)[]): DiagnosticWithLocation;
     export function createDiagnosticForRange(sourceFile: SourceFile, range: TextRange, message: DiagnosticMessage): DiagnosticWithLocation {
         let text = getLocaleSpecificMessage(message);
