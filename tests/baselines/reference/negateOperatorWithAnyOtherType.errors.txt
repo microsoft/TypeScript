@@ -1,5 +1,5 @@
-tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorWithAnyOtherType.ts(34,24): error TS18047: 'undefined' is possibly 'undefined'.
-tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorWithAnyOtherType.ts(35,23): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorWithAnyOtherType.ts(34,24): error TS18049: The value 'undefined' cannot be used here.
+tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorWithAnyOtherType.ts(35,23): error TS18049: The value 'null' cannot be used here.
 tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperatorWithAnyOtherType.ts(51,1): error TS2695: Left side of comma operator is unused and has no side effects.
 
 
@@ -39,10 +39,10 @@ tests/cases/conformance/expressions/unaryOperators/negateOperator/negateOperator
     // any type literal
     var ResultIsNumber7 = -undefined;
                            ~~~~~~~~~
-!!! error TS18047: 'undefined' is possibly 'undefined'.
+!!! error TS18049: The value 'undefined' cannot be used here.
     var ResultIsNumber = -null;
                           ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18049: The value 'null' cannot be used here.
     
     // any type expressions
     var ResultIsNumber8 = -ANY2[0];
