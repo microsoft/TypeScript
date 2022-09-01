@@ -1,4 +1,4 @@
-// @strict: true
+// @strictNullChecks: true,false
 
 type S = 
 | { type: 'string', value: string } 
@@ -9,5 +9,8 @@ type S =
 declare var s: S
 
 if (s.value !== undefined) {
+  s;
+}
+else {
   s;
 }

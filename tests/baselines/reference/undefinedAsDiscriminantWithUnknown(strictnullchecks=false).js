@@ -1,4 +1,4 @@
-//// [50527.ts]
+//// [undefinedAsDiscriminantWithUnknown.ts]
 type S = 
 | { type: 'string', value: string } 
 | { type: 'number', value: number } 
@@ -10,10 +10,14 @@ declare var s: S
 if (s.value !== undefined) {
   s;
 }
+else {
+  s;
+}
 
-
-//// [50527.js]
-"use strict";
+//// [undefinedAsDiscriminantWithUnknown.js]
 if (s.value !== undefined) {
+    s;
+}
+else {
     s;
 }
