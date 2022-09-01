@@ -8,7 +8,6 @@ class C1 {
 
 declare var f: any;
 class C2 {
-    // @ts-ignore
     accessor [f()] = 1;
 }
 
@@ -44,10 +43,8 @@ _C1__c_accessor_storage = { value: void 0 };
 _C1__d_accessor_storage = { value: 2 };
 class C2 {
     constructor() {
-        // @ts-ignore
         _C2__e_accessor_storage.set(this, 1);
     }
-    // @ts-ignore
     get [(_C2__e_accessor_storage = new WeakMap(), _b = f(), _b)]() { return __classPrivateFieldGet(this, _C2__e_accessor_storage, "f"); }
     set [_b](value) { __classPrivateFieldSet(this, _C2__e_accessor_storage, value, "f"); }
 }

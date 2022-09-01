@@ -27,7 +27,6 @@ declare var f: any;
 class C2 {
 >C2 : C2
 
-    // @ts-ignore
     accessor [f()] = 1;
 >[f()] : number
 >f() : any

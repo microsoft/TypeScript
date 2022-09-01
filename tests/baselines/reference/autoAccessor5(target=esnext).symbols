@@ -25,7 +25,6 @@ declare var f: any;
 class C2 {
 >C2 : Symbol(C2, Decl(autoAccessor5.ts, 7, 19))
 
-    // @ts-ignore
     accessor [f()] = 1;
 >[f()] : Symbol(C2[f()], Decl(autoAccessor5.ts, 8, 10))
 >f : Symbol(f, Decl(autoAccessor5.ts, 7, 11))

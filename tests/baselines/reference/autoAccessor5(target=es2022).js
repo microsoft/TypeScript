@@ -8,7 +8,6 @@ class C1 {
 
 declare var f: any;
 class C2 {
-    // @ts-ignore
     accessor [f()] = 1;
 }
 
@@ -30,7 +29,6 @@ class C1 {
 }
 class C2 {
     #_e_accessor_storage = 1;
-    // @ts-ignore
     get [(_a = f(), _a)]() { return this.#_e_accessor_storage; }
     set [_a](value) { this.#_e_accessor_storage = value; }
 }

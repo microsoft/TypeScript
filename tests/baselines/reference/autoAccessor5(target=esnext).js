@@ -8,7 +8,6 @@ class C1 {
 
 declare var f: any;
 class C2 {
-    // @ts-ignore
     accessor [f()] = 1;
 }
 
@@ -20,6 +19,5 @@ class C1 {
     static accessor ["z"] = 2;
 }
 class C2 {
-    // @ts-ignore
     accessor [f()] = 1;
 }

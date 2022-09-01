@@ -1040,7 +1040,7 @@ namespace ts {
                     transformFlags = TransformFlags.ContainsES2015;
                     break;
                 case SyntaxKind.AccessorKeyword:
-                    transformFlags = TransformFlags.ContainsDecorators;
+                    transformFlags = TransformFlags.ContainsClassFields;
                     break;
                 case SyntaxKind.ThisKeyword:
                     // 'this' indicates a lexical 'this'

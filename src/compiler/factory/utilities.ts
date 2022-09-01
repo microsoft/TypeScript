@@ -1323,7 +1323,7 @@ namespace ts {
 
 
     /**
-     * Creates a private backing field for an `accesor` {@link PropertyDeclaration}.
+     * Creates a private backing field for an `accessor` {@link PropertyDeclaration}.
      */
     export function createAccessorPropertyBackingField(factory: NodeFactory, node: PropertyDeclaration, modifiers: ModifiersArray | undefined, initializer: Expression | undefined) {
         return factory.updatePropertyDeclaration(

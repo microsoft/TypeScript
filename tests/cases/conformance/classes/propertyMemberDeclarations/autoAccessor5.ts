@@ -1,5 +1,4 @@
 // @target: esnext, es2022, es2015, es5
-// @noEmitOnError: true
 
 class C1 {
     accessor ["w"]: any;
@@ -10,6 +9,5 @@ class C1 {
 
 declare var f: any;
 class C2 {
-    // @ts-ignore
     accessor [f()] = 1;
 }
