@@ -2227,7 +2227,7 @@ namespace ts {
             function toAbsolutePath(path: string | undefined): string | undefined;
             function toAbsolutePath(path: string | undefined): string | undefined {
                 if (path === undefined) return path;
-                return hostGetCanonicalFileName({ useCaseSensitiveFileNames })(getNormalizedAbsolutePath(path, state.host.getCurrentDirectory?.()));
+                return getNormalizedAbsolutePath(path, state.host.getCurrentDirectory?.());
             }
 
             function combineDirectoryPath(root: string, dir: string) {
@@ -2249,7 +2249,7 @@ namespace ts {
                 if ((extensions === Extensions.TypeScript || extensions === Extensions.JavaScript || extensions === Extensions.Json)
                     && (state.compilerOptions.declarationDir || state.compilerOptions.outDir)
                     && finalPath.indexOf("/node_modules/") === -1
-                    && (state.compilerOptions.configFile ? startsWith(toAbsolutePath(state.compilerOptions.configFile.fileName), scope.packageDirectory) : true)
+                    && (state.compilerOptions.configFile ? containsPath(scope.packageDirectory, toAbsolutePath(state.compilerOptions.configFile.fileName), !useCaseSensitiveFileNames()) : true)
                 ) {
                     // So that all means we'll only try these guesses for files outside `node_modules` in a directory where the `package.json` and `tsconfig.json` are siblings.
                     // Even with all that, we still don't know if the root of the output file structure will be (relative to the package file)
@@ -2310,7 +2310,7 @@ namespace ts {
                     for (const commonSourceDirGuess of commonSourceDirGuesses) {
                         const candidateDirectories = getOutputDirectoriesForBaseDirectory(commonSourceDirGuess);
                         for (const candidateDir of candidateDirectories) {
-                            if (startsWith(finalPath, candidateDir)) {
+                            if (containsPath(candidateDir, finalPath, !useCaseSensitiveFileNames())) {
                                 // The matched export is looking up something in either the out declaration or js dir, now map the written path back into the source dir and source extension
                                 const pathFragment = finalPath.slice(candidateDir.length + 1); // +1 to also remove directory seperator
                                 const possibleInputBase = combinePaths(commonSourceDirGuess, pathFragment);
