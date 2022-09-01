@@ -32,7 +32,7 @@ jobs:
     - run:  npm ci
 
     - name: Tests
-      run:  npm test -- --no-lint
+      run:  npm test
 
   lint:
     runs-on: ubuntu-latest
