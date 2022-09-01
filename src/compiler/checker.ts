@@ -28964,7 +28964,8 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                     Diagnostics._0_is_possibly_null,
                     nodeText
                 );
-            } else {
+            }
+            else {
                 error(node, facts & TypeFacts.IsUndefined ? facts & TypeFacts.IsNull ?
                     Diagnostics.Object_is_possibly_null_or_undefined :
                     Diagnostics.Object_is_possibly_undefined :
