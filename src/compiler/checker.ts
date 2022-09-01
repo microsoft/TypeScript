@@ -9552,7 +9552,7 @@ namespace ts {
                 // contextual type or, if the element itself is a binding pattern, with the type implied by that binding
                 // pattern.
                 const contextualType = isBindingPattern(element.name) ? getTypeFromBindingPattern(element.name, /*includePatternInType*/ true, /*reportErrors*/ false) : unknownType;
-                return addOptionality(widenTypeInferredFromInitializer(element, checkDeclarationInitializer(element, CheckMode.Normal, contextualType)));
+                return addOptionality(widenTypeInferredFromInitializer(element, checkDeclarationInitializer(element, reportErrors ? CheckMode.Normal : CheckMode.SkipContextSensitive, contextualType)));
             }
             if (isBindingPattern(element.name)) {
                 return getTypeFromBindingPattern(element.name, includePatternInType, reportErrors);
@@ -9692,21 +9692,22 @@ namespace ts {
             }
         }
 
-        function getTypeOfVariableOrParameterOrProperty(symbol: Symbol): Type {
+        function getTypeOfVariableOrParameterOrProperty(symbol: Symbol, checkMode?: CheckMode): Type {
             const links = getSymbolLinks(symbol);
-            if (!links.type) {
-                const type = getTypeOfVariableOrParameterOrPropertyWorker(symbol);
+            let result = links.type;
+            if (!result) {
+                result = getTypeOfVariableOrParameterOrPropertyWorker(symbol, checkMode);
                 // For a contextually typed parameter it is possible that a type has already
                 // been assigned (in assignTypeToParameterAndFixTypeParameters), and we want
                 // to preserve this type.
-                if (!links.type) {
-                    links.type = type;
+                if (!links.type && !(checkMode && checkMode & ~CheckMode.Normal)) {
+                    links.type = result;
                 }
             }
-            return links.type;
+            return result;
         }
 
-        function getTypeOfVariableOrParameterOrPropertyWorker(symbol: Symbol): Type {
+        function getTypeOfVariableOrParameterOrPropertyWorker(symbol: Symbol, checkMode?: CheckMode): Type {
             // Handle prototype property
             if (symbol.flags & SymbolFlags.Prototype) {
                 return getTypeOfPrototypeProperty(symbol);
@@ -9758,6 +9759,10 @@ namespace ts {
                 // Symbol is property of some kind that is merged with something - should use `getTypeOfFuncClassEnumModule` and not `getTypeOfVariableOrParameterOrProperty`
                 if (symbol.flags & SymbolFlags.ValueModule && !(symbol.flags & SymbolFlags.Assignment)) {
                     return getTypeOfFuncClassEnumModule(symbol);
+                }
+
+                if (checkMode && checkMode !== CheckMode.Normal) {
+                    return anyType;
                 }
                 return reportCircularityError(symbol);
             }
@@ -9825,6 +9830,10 @@ namespace ts {
                 // Symbol is property of some kind that is merged with something - should use `getTypeOfFuncClassEnumModule` and not `getTypeOfVariableOrParameterOrProperty`
                 if (symbol.flags & SymbolFlags.ValueModule && !(symbol.flags & SymbolFlags.Assignment)) {
                     return getTypeOfFuncClassEnumModule(symbol);
+                }
+
+                if (checkMode && checkMode !== CheckMode.Normal) {
+                    return anyType;
                 }
                 return reportCircularityError(symbol);
             }
@@ -10073,7 +10082,7 @@ namespace ts {
             return getTypeOfSymbol(symbol);
         }
 
-        function getTypeOfSymbol(symbol: Symbol): Type {
+        function getTypeOfSymbol(symbol: Symbol, checkMode?: CheckMode): Type {
             const checkFlags = getCheckFlags(symbol);
             if (checkFlags & CheckFlags.DeferredType) {
                 return getTypeOfSymbolWithDeferredType(symbol);
@@ -10088,7 +10097,7 @@ namespace ts {
                 return getTypeOfReverseMappedSymbol(symbol as ReverseMappedSymbol);
             }
             if (symbol.flags & (SymbolFlags.Variable | SymbolFlags.Property)) {
-                return getTypeOfVariableOrParameterOrProperty(symbol);
+                return getTypeOfVariableOrParameterOrProperty(symbol, checkMode);
             }
             if (symbol.flags & (SymbolFlags.Function | SymbolFlags.Method | SymbolFlags.Class | SymbolFlags.Enum | SymbolFlags.ValueModule)) {
                 return getTypeOfFuncClassEnumModule(symbol);
@@ -25858,7 +25867,7 @@ namespace ts {
             }
         }
 
-        function getNarrowedTypeOfSymbol(symbol: Symbol, location: Identifier) {
+        function getNarrowedTypeOfSymbol(symbol: Symbol, location: Identifier, checkMode?: CheckMode) {
             const declaration = symbol.valueDeclaration;
             if (declaration) {
                 // If we have a non-rest binding element with no initializer declared as a const variable or a const-like
@@ -25938,7 +25947,7 @@ namespace ts {
                     }
                 }
             }
-            return getTypeOfSymbol(symbol);
+            return getTypeOfSymbol(symbol, checkMode);
         }
 
         function checkIdentifier(node: Identifier, checkMode: CheckMode | undefined): Type {
@@ -26026,7 +26035,7 @@ namespace ts {
 
             checkNestedBlockScopedBinding(node, symbol);
 
-            let type = getNarrowedTypeOfSymbol(localOrExportSymbol, node);
+            let type = getNarrowedTypeOfSymbol(localOrExportSymbol, node, checkMode);
             const assignmentKind = getAssignmentTargetKind(node);
 
             if (assignmentKind) {
