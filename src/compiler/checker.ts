@@ -9700,7 +9700,7 @@ namespace ts {
                 // For a contextually typed parameter it is possible that a type has already
                 // been assigned (in assignTypeToParameterAndFixTypeParameters), and we want
                 // to preserve this type.
-                if (!links.type && !(checkMode && checkMode & ~CheckMode.Normal)) {
+                if (!links.type && !(checkMode && checkMode !== CheckMode.Normal)) {
                     links.type = result;
                 }
             }
