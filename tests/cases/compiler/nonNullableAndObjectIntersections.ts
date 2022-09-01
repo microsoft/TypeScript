@@ -1,4 +1,4 @@
-// @strict: false
+// @strict: true, false
 
 // These should all resolve to never
 
@@ -14,5 +14,5 @@ type T6 = null & { a: string } & {};
 type NonNullableNew<T> = T & {};
 type NonNullableOld<T> = T extends null | undefined ? never : T;
 
-type IsNullWithoutStrictNullChecks = NonNullableNew<null>;
-type IsAlwaysNever = NonNullableOld<null>;
+type TestNew = NonNullableNew<null>;
+type TestOld = NonNullableOld<null>;
