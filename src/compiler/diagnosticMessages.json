@@ -7437,5 +7437,9 @@
     "'{0}' is possibly 'null' or 'undefined'.": {
         "category": "Error",
         "code": 18048
+    },
+    "The value '{0}' cannot be used here.": {
+        "category": "Error",
+        "code": 18049
     }
 }

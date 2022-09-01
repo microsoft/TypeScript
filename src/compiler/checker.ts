@@ -28948,23 +28948,29 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
         }
 
         function reportObjectPossiblyNullOrUndefinedError(node: Node, facts: TypeFacts) {
-            if (isEntityNameExpression(node)) {
-                const nodeText = entityNameToString(node);
-                if (nodeText.length < 100) {
-                    error(node, facts & TypeFacts.IsUndefined ? facts & TypeFacts.IsNull ?
-                        Diagnostics._0_is_possibly_null_or_undefined :
-                        Diagnostics._0_is_possibly_undefined :
-                        Diagnostics._0_is_possibly_null,
-                        nodeText
-                    );
+            const nodeText = isEntityNameExpression(node) ? entityNameToString(node) : undefined;
+            if (node.kind === SyntaxKind.NullKeyword) {
+                error(node, Diagnostics.The_value_0_cannot_be_used_here, "null");
+                return;
+            }
+            if (nodeText !== undefined && nodeText.length < 100) {
+                if (isIdentifier(node) && nodeText === "undefined") {
+                    error(node, Diagnostics.The_value_0_cannot_be_used_here, "undefined");
                     return;
                 }
+                error(node, facts & TypeFacts.IsUndefined ? facts & TypeFacts.IsNull ?
+                    Diagnostics._0_is_possibly_null_or_undefined :
+                    Diagnostics._0_is_possibly_undefined :
+                    Diagnostics._0_is_possibly_null,
+                    nodeText
+                );
+            } else {
+                error(node, facts & TypeFacts.IsUndefined ? facts & TypeFacts.IsNull ?
+                    Diagnostics.Object_is_possibly_null_or_undefined :
+                    Diagnostics.Object_is_possibly_undefined :
+                    Diagnostics.Object_is_possibly_null
+                );
             }
-            error(node, facts & TypeFacts.IsUndefined ? facts & TypeFacts.IsNull ?
-                Diagnostics.Object_is_possibly_null_or_undefined :
-                Diagnostics.Object_is_possibly_undefined :
-                Diagnostics.Object_is_possibly_null
-            );
         }
 
         function reportCannotInvokePossiblyNullOrUndefinedError(node: Node, facts: TypeFacts) {
@@ -29009,6 +29015,10 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
             if (nonNullType.flags & TypeFlags.Void) {
                 if (isEntityNameExpression(node)) {
                     const nodeText = entityNameToString(node);
+                    if (isIdentifier(node) && nodeText === "undefined") {
+                        error(node, Diagnostics.The_value_0_cannot_be_used_here, nodeText);
+                        return nonNullType;
+                    }
                     if (nodeText.length < 100) {
                         error(node, Diagnostics._0_is_possibly_undefined, nodeText);
                         return nonNullType;
