@@ -15166,7 +15166,7 @@ namespace ts {
                 return includes & TypeFlags.IncludesWildcard ? wildcardType : anyType;
             }
             if (!strictNullChecks && includes & TypeFlags.Nullable) {
-                return includes & TypeFlags.Undefined ? undefinedType : nullType;
+                return includes & TypeFlags.IncludesEmptyObject ? neverType : includes & TypeFlags.Undefined ? undefinedType : nullType;
             }
             if (includes & TypeFlags.String && includes & (TypeFlags.StringLiteral | TypeFlags.TemplateLiteral | TypeFlags.StringMapping) ||
                 includes & TypeFlags.Number && includes & TypeFlags.NumberLiteral ||
