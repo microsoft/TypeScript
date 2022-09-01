@@ -2677,7 +2677,7 @@
         "category": "Error",
         "code": 2593
     },
-    "This module is declared with using 'export =', and can only be used with a default import when using the '{0}' flag.": {
+    "This module is declared with 'export =', and can only be used with a default import when using the '{0}' flag.": {
         "category": "Error",
         "code": 2594
     },
