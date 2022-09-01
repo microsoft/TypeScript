@@ -25756,8 +25756,10 @@ namespace ts {
                 !!(type.flags & TypeFlags.Instantiable && getBaseConstraintOrType(type).flags & (TypeFlags.Nullable | TypeFlags.Union));
         }
 
-        function isGenericTypeWithoutNullableConstraint(type: Type) {
-            return !!(type.flags & TypeFlags.Instantiable && !maybeTypeOfKind(getBaseConstraintOrType(type), TypeFlags.Nullable));
+        function isGenericTypeWithoutNullableConstraint(type: Type): boolean {
+            return type.flags & TypeFlags.Intersection ?
+                some((type as IntersectionType).types, isGenericTypeWithoutNullableConstraint) :
+                !!(type.flags & TypeFlags.Instantiable && !maybeTypeOfKind(getBaseConstraintOrType(type), TypeFlags.Nullable));
         }
 
         function hasContextualTypeWithNoGenericTypes(node: Node, checkMode: CheckMode | undefined) {
