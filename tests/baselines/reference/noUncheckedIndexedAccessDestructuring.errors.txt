@@ -5,13 +5,14 @@ tests/cases/conformance/pedantic/noUncheckedIndexedAccessDestructuring.ts(23,1):
 tests/cases/conformance/pedantic/noUncheckedIndexedAccessDestructuring.ts(26,1): error TS18047: 't2.z' is possibly 'undefined'.
 tests/cases/conformance/pedantic/noUncheckedIndexedAccessDestructuring.ts(34,5): error TS18047: 'z' is possibly 'undefined'.
 tests/cases/conformance/pedantic/noUncheckedIndexedAccessDestructuring.ts(41,5): error TS18047: 'q.z' is possibly 'undefined'.
-tests/cases/conformance/pedantic/noUncheckedIndexedAccessDestructuring.ts(50,2): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+tests/cases/conformance/pedantic/noUncheckedIndexedAccessDestructuring.ts(52,5): error TS18047: 'q.z' is possibly 'undefined'.
+tests/cases/conformance/pedantic/noUncheckedIndexedAccessDestructuring.ts(62,2): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
   Type 'undefined' is not assignable to type 'string'.
-tests/cases/conformance/pedantic/noUncheckedIndexedAccessDestructuring.ts(59,8): error TS2322: Type 'number | undefined' is not assignable to type 'number'.
+tests/cases/conformance/pedantic/noUncheckedIndexedAccessDestructuring.ts(71,8): error TS2322: Type 'number | undefined' is not assignable to type 'number'.
   Type 'undefined' is not assignable to type 'number'.
 
 
-==== tests/cases/conformance/pedantic/noUncheckedIndexedAccessDestructuring.ts (9 errors) ====
+==== tests/cases/conformance/pedantic/noUncheckedIndexedAccessDestructuring.ts (10 errors) ====
     declare const strArray: string[];
     declare const strStrTuple: [string, string];
     
@@ -66,6 +67,21 @@ tests/cases/conformance/pedantic/noUncheckedIndexedAccessDestructuring.ts(59,8):
         q.y.toFixed(); // Should OK
         q.z.toFixed(); // Should error
         ~~~
+!!! error TS18047: 'q.z' is possibly 'undefined'.
+    }
+    
+    {
+        const { x, ...q } = numMapPoint;
+        x.
+        toFixed(); // Should OK
+    
+        q.
+        y.toFixed(); // Should OK
+    
+        q.
+        ~~
+        z.toFixed(); // Should error
+    ~~~~~
 !!! error TS18047: 'q.z' is possibly 'undefined'.
     }
     
