@@ -25150,7 +25150,7 @@ namespace ts {
 
             function narrowByInKeyword(type: Type, name: __String, assumeTrue: boolean) {
                 if (type.flags & TypeFlags.Union
-                    || type.flags & TypeFlags.Object && declaredType !== type
+                    || type.flags & TypeFlags.Object && declaredType !== type && !(declaredType === unknownType && isEmptyAnonymousObjectType(type))
                     || isThisTypeParameter(type)
                     || type.flags & TypeFlags.Intersection && every((type as IntersectionType).types, t => t.symbol !== globalThisSymbol)) {
                     return filterType(type, t => isTypePresencePossible(t, name, assumeTrue));
