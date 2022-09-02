@@ -7,7 +7,6 @@ import * as glob from "glob";
 const root = path.join(__dirname, "..");
 const source = path.join(root, "built/local");
 const dest = path.join(root, "lib");
-const copyright = fs.readFileSync(path.join(__dirname, "../CopyrightNotice.txt"), "utf-8");
 
 async function produceLKG() {
     console.log(`Building LKG from ${source} to ${dest}`);
@@ -74,17 +73,12 @@ async function copyScriptOutputs() {
 }
 
 async function copyDeclarationOutputs() {
-    await copyWithCopyright("tsserverlibrary.d.ts");
-    await copyWithCopyright("typescript.d.ts");
+    await copyFromBuiltLocal("tsserverlibrary.d.ts");
+    await copyFromBuiltLocal("typescript.d.ts");
 }
 
 async function writeGitAttributes() {
     await fs.writeFile(path.join(dest, ".gitattributes"), `* text eol=lf`, "utf-8");
-}
-
-async function copyWithCopyright(fileName: string, destName = fileName) {
-    const content = await fs.readFile(path.join(source, fileName), "utf-8");
-    await fs.writeFile(path.join(dest, destName), copyright + "\n" + content);
 }
 
 async function copyFromBuiltLocal(fileName: string) {
