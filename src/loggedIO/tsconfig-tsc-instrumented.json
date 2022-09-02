@@ -1,7 +1,8 @@
 {
+    // TODO: ???
     "extends": "../tsconfig-base",
     "compilerOptions": {
-        "outDir": "../../built/local",
+        "outDir": "../../built/local/loggedIO",
         "types": [
             "node", "mocha", "chai"
         ],

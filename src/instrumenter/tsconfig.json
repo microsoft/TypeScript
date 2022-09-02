@@ -7,8 +7,7 @@
             "dom",
             "scripthost"
         ],
-        "outDir": "../../built/local",
-        "sourceMap": true
+        "outDir": "../../built/local/instrumenter"
     },
     "files": [
         "instrumenter.ts"
