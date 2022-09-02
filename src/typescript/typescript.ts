@@ -1,7 +1,4 @@
-import * as ts from "./_namespaces/ts";
 import { Debug, LogLevel } from "./_namespaces/ts";
-
-// TODO(jakebailey): replace const enum with enum in d.ts
 
 // enable deprecation logging
 declare const console: any;
@@ -18,4 +15,4 @@ if (typeof console !== "undefined") {
     };
 }
 
-export = ts;
+export * from "./_namespaces/ts";

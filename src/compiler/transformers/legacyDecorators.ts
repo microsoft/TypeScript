@@ -1,5 +1,5 @@
 import {
-    addEmitHelpers, addRange, AllDecorators, append, canHaveDecorators, chainBundle, childIsDecorated, ClassDeclaration,
+    addEmitHelpers, addRange, AllDecorators, append, Bundle, canHaveDecorators, chainBundle, childIsDecorated, ClassDeclaration,
     ClassElement, ClassExpression, ClassLikeDeclaration, classOrConstructorParameterIsDecorated, ConstructorDeclaration,
     Decorator, elideNodes, EmitFlags, EmitHint, EnumMember, Expression, filter, flatMap, GetAccessorDeclaration,
     getAllDecoratorsOfClass, getAllDecoratorsOfClassElement, getEmitFlags, getEmitScriptTarget, getOriginalNodeId,
@@ -14,7 +14,7 @@ import {
 } from "../_namespaces/ts";
 
 /** @internal */
-export function transformLegacyDecorators(context: TransformationContext) {
+export function transformLegacyDecorators(context: TransformationContext): (x: SourceFile | Bundle) => SourceFile | Bundle {
     const {
         factory,
         getEmitHelperFactory: emitHelpers,

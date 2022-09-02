@@ -51,7 +51,8 @@ export interface ResolutionCache {
     clear(): void;
 }
 
-interface ResolutionWithFailedLookupLocations {
+/** @internal */
+export interface ResolutionWithFailedLookupLocations {
     readonly failedLookupLocations: string[];
     readonly affectingLocations: string[];
     isInvalidated?: boolean;
@@ -65,7 +66,8 @@ interface ResolutionWithResolvedFileName {
     packagetId?: PackageId;
 }
 
-interface CachedResolvedModuleWithFailedLookupLocations extends ResolvedModuleWithFailedLookupLocations, ResolutionWithFailedLookupLocations {
+/** @internal */
+export interface CachedResolvedModuleWithFailedLookupLocations extends ResolvedModuleWithFailedLookupLocations, ResolutionWithFailedLookupLocations {
 }
 
 interface CachedResolvedTypeReferenceDirectiveWithFailedLookupLocations extends ResolvedTypeReferenceDirectiveWithFailedLookupLocations, ResolutionWithFailedLookupLocations {

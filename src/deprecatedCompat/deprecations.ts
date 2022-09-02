@@ -1,4 +1,4 @@
-import { Debug, DeprecationOptions, hasProperty } from "./_namespaces/ts";
+import { Debug, DeprecationOptions, hasProperty, UnionToIntersection } from "./_namespaces/ts";
 
 // The following are deprecations for the public API. Deprecated exports are removed from the compiler itself
 // and compatible implementations are added here, along with an appropriate deprecation warning using
@@ -12,31 +12,54 @@ import { Debug, DeprecationOptions, hasProperty } from "./_namespaces/ts";
 //
 // Once we have determined enough time has passed after a deprecation has been marked as `"warn"` or `"error"`, it will be removed from the public API.
 
-/** Defines a list of overloads by ordinal */
-type OverloadDefinitions = { readonly [P in number]: (...args: any[]) => any; };
+/**
+ * Defines a list of overloads by ordinal
+ *
+ * @internal
+ */
+export type OverloadDefinitions = { readonly [P in number]: (...args: any[]) => any; };
 
 /** A function that returns the ordinal of the overload that matches the provided arguments */
 type OverloadBinder<T extends OverloadDefinitions> = (args: OverloadParameters<T>) => OverloadKeys<T> | undefined;
 
-/** Extracts the ordinals from an set of overload definitions. */
-type OverloadKeys<T extends OverloadDefinitions> = Extract<keyof T, number>;
+/**
+ * Extracts the ordinals from an set of overload definitions.
+ *
+ * @internal
+ */
+export type OverloadKeys<T extends OverloadDefinitions> = Extract<keyof T, number>;
 
-/** Extracts a union of the potential parameter lists for each overload. */
-type OverloadParameters<T extends OverloadDefinitions> = Parameters<{ [P in OverloadKeys<T>]: T[P]; }[OverloadKeys<T>]>;
+/**
+ * Extracts a union of the potential parameter lists for each overload.
+ *
+ * @internal
+ */
+export type OverloadParameters<T extends OverloadDefinitions> = Parameters<{ [P in OverloadKeys<T>]: T[P]; }[OverloadKeys<T>]>;
 
 // NOTE: the following doesn't work in TS 4.4 (the current LKG in main), so we have to use UnionToIntersection for now
-/** Constructs an intersection of each overload in a set of overload definitions. */
 // type OverloadFunction<T extends OverloadDefinitions, R extends ((...args: any[]) => any)[] = [], O = unknown> =
 //     R["length"] extends keyof T ? OverloadFunction<T, [...R, T[R["length"]]], O & T[R["length"]]> :
 //     unknown extends O ? never : O;
-type UnionToIntersection<T> = (T extends any ? (x: T) => any : never) extends (x: infer R) => any ? R : never;
-type OverloadFunction<T extends OverloadDefinitions> = UnionToIntersection<T[keyof T]>;
+/**
+ * Constructs an intersection of each overload in a set of overload definitions.
+ *
+ * @internal
+ */
+export type OverloadFunction<T extends OverloadDefinitions> = UnionToIntersection<T[keyof T]>;
 
-/** Maps each ordinal in a set of overload definitions to a function that can be used to bind its arguments. */
-type OverloadBinders<T extends OverloadDefinitions> = { [P in OverloadKeys<T>]: (args: OverloadParameters<T>) => boolean | undefined; };
+/**
+ * Maps each ordinal in a set of overload definitions to a function that can be used to bind its arguments.
+ *
+ * @internal
+ */
+export type OverloadBinders<T extends OverloadDefinitions> = { [P in OverloadKeys<T>]: (args: OverloadParameters<T>) => boolean | undefined; };
 
-/** Defines deprecations for specific overloads by ordinal. */
-type OverloadDeprecations<T extends OverloadDefinitions> = { [P in OverloadKeys<T>]?: DeprecationOptions; };
+/**
+ * Defines deprecations for specific overloads by ordinal.
+ *
+ * @internal
+ */
+export type OverloadDeprecations<T extends OverloadDefinitions> = { [P in OverloadKeys<T>]?: DeprecationOptions; };
 
 /** @internal */
 export function createOverload<T extends OverloadDefinitions>(name: string, overloads: T, binder: OverloadBinders<T>, deprecations?: OverloadDeprecations<T>) {
@@ -75,19 +98,23 @@ function createBinder<T extends OverloadDefinitions>(overloads: T, binder: Overl
     };
 }
 
-interface OverloadBuilder {
+/** @internal */
+export interface OverloadBuilder {
     overload<T extends OverloadDefinitions>(overloads: T): BindableOverloadBuilder<T>;
 }
 
-interface BindableOverloadBuilder<T extends OverloadDefinitions> {
+/** @internal */
+export interface BindableOverloadBuilder<T extends OverloadDefinitions> {
     bind(binder: OverloadBinders<T>): BoundOverloadBuilder<T>;
 }
 
-interface FinishableOverloadBuilder<T extends OverloadDefinitions> {
+/** @internal */
+export interface FinishableOverloadBuilder<T extends OverloadDefinitions> {
     finish(): OverloadFunction<T>;
 }
 
-interface BoundOverloadBuilder<T extends OverloadDefinitions> extends FinishableOverloadBuilder<T> {
+/** @internal */
+export interface BoundOverloadBuilder<T extends OverloadDefinitions> extends FinishableOverloadBuilder<T> {
     deprecate(deprecations: OverloadDeprecations<T>): FinishableOverloadBuilder<T>;
 }
 

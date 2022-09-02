@@ -1,5 +1,5 @@
 import {
-    addEmitHelpers, arrayFrom, chainBundle, createExpressionForJsxElement, createExpressionForJsxFragment,
+    addEmitHelpers, arrayFrom, Bundle, chainBundle, createExpressionForJsxElement, createExpressionForJsxFragment,
     createExpressionFromEntityName, createJsxFactoryExpression, Debug, emptyArray, Expression, filter, find, flatten,
     GeneratedIdentifierFlags, getEmitScriptTarget, getEntries, getJSXImplicitImportBase, getJSXRuntimeImport,
     getLineAndCharacterOfPosition, getOriginalNode, getSemanticJsxChildren, Identifier, idText, ImportSpecifier,
@@ -14,7 +14,7 @@ import {
 } from "../_namespaces/ts";
 
 /** @internal */
-export function transformJsx(context: TransformationContext) {
+export function transformJsx(context: TransformationContext): (x: SourceFile | Bundle) => SourceFile | Bundle {
     interface PerFileState {
         importSpecifier?: string;
         filenameDeclaration?: VariableDeclaration & { name: Identifier; };
