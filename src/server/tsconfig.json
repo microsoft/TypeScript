@@ -1,9 +1,7 @@
 {
     "extends": "../tsconfig-base",
     "compilerOptions": {
-        "removeComments": false,
-        "outDir": "../../built/local",
-        "preserveConstEnums": true,
+        "outDir": "../../built/local/server",
         "types": [
             "node"
         ]

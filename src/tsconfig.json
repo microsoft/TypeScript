@@ -4,11 +4,13 @@
     "references": [
         { "path": "./tsc" },
         { "path": "./tsserver" },
+        { "path": "./tsserverlibrary" },
+        { "path": "./typescript" },
         { "path": "./typingsInstaller" },
         { "path": "./watchGuard" },
         { "path": "./debug" },
         { "path": "./cancellationToken" },
         { "path": "./dynamicImportCompat" },
-        { "path": "./testRunner" }
+        { "path": "./testRunner" },
     ]
 }
