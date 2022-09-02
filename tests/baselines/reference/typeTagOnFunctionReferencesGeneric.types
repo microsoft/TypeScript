@@ -5,7 +5,7 @@
 
 /**@type {IFn}*/
 export function inJs(l) {
->inJs : <T>(l: T) => T
+>inJs : <T>(m: T) => T
 >l : T
 
     return l;
@@ -13,7 +13,7 @@ export function inJs(l) {
 }
 inJs(1); // lints error. Why?
 >inJs(1) : 1
->inJs : <T>(l: T) => T
+>inJs : <T>(m: T) => T
 >1 : 1
 
 /**@type {IFn}*/

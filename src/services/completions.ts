@@ -1671,7 +1671,7 @@ namespace ts.Completions {
             }
             case "symbol": {
                 const { symbol, location, contextToken, origin, previousToken } = symbolCompletion;
-                const { codeActions, sourceDisplay } = getCompletionEntryCodeActionsAndSourceDisplay(name, location, contextToken, origin, symbol, program, host, compilerOptions, sourceFile, position, previousToken, formatContext, preferences, data, source);
+                const { codeActions, sourceDisplay } = getCompletionEntryCodeActionsAndSourceDisplay(name, location, contextToken, origin, symbol, program, host, compilerOptions, sourceFile, position, previousToken, formatContext, preferences, data, source, cancellationToken);
                 return createCompletionDetailsForSymbol(symbol, typeChecker, sourceFile, location, cancellationToken, codeActions, sourceDisplay); // TODO: GH#18217
             }
             case "literal": {
@@ -1722,6 +1722,7 @@ namespace ts.Completions {
         preferences: UserPreferences,
         data: CompletionEntryData | undefined,
         source: string | undefined,
+        cancellationToken: CancellationToken,
     ): CodeActionsAndSourceDisplay {
         if (data?.moduleSpecifier) {
             if (previousToken && getImportStatementCompletionInfo(contextToken || previousToken).replacementNode) {
@@ -1786,7 +1787,8 @@ namespace ts.Completions {
             program,
             formatContext,
             previousToken && isIdentifier(previousToken) ? previousToken.getStart(sourceFile) : position,
-            preferences);
+            preferences,
+            cancellationToken);
         Debug.assert(!data?.moduleSpecifier || moduleSpecifier === data.moduleSpecifier);
         return { sourceDisplay: [textPart(moduleSpecifier)], codeActions: [codeAction] };
     }
@@ -2673,6 +2675,9 @@ namespace ts.Completions {
 
                     case SyntaxKind.ExtendsKeyword:
                         return parentKind === SyntaxKind.TypeParameter;
+
+                    case SyntaxKind.SatisfiesKeyword:
+                        return parentKind === SyntaxKind.SatisfiesExpression;
                 }
             }
             return false;
@@ -3960,6 +3965,7 @@ namespace ts.Completions {
         return kind === SyntaxKind.AsyncKeyword
             || kind === SyntaxKind.AwaitKeyword
             || kind === SyntaxKind.AsKeyword
+            || kind === SyntaxKind.SatisfiesKeyword
             || kind === SyntaxKind.TypeKeyword
             || !isContextualKeyword(kind) && !isClassMemberCompletionKeyword(kind);
     }

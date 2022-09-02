@@ -392,10 +392,12 @@ namespace ts {
         if (resolved) {
             const { fileName, packageId } = resolved;
             const resolvedFileName = options.preserveSymlinks ? fileName : realPath(fileName, host, traceEnabled);
+            const pathsAreEqual = arePathsEqual(fileName, resolvedFileName, host);
             resolvedTypeReferenceDirective = {
                 primary,
-                resolvedFileName,
-                originalPath: arePathsEqual(fileName, resolvedFileName, host) ? undefined : fileName,
+                // If the fileName and realpath are differing only in casing prefer fileName so that we can issue correct errors for casing under forceConsistentCasingInFileNames
+                resolvedFileName: pathsAreEqual ? fileName : resolvedFileName,
+                originalPath: pathsAreEqual ? undefined : fileName,
                 packageId,
                 isExternalLibraryImport: pathContainsNodeModules(fileName),
             };
@@ -543,6 +545,7 @@ namespace ts {
     }
 
     export interface TypeReferenceDirectiveResolutionCache extends PerDirectoryResolutionCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>, PackageJsonInfoCache {
+        /*@internal*/ clearAllExceptPackageJsonInfoCache(): void;
     }
 
     export interface ModeAwareCache<T> {
@@ -570,6 +573,7 @@ namespace ts {
 
     export interface ModuleResolutionCache extends PerDirectoryResolutionCache<ResolvedModuleWithFailedLookupLocations>, NonRelativeModuleNameResolutionCache, PackageJsonInfoCache {
         getPackageJsonInfoCache(): PackageJsonInfoCache;
+        /*@internal*/ clearAllExceptPackageJsonInfoCache(): void;
     }
 
     /**
@@ -584,6 +588,7 @@ namespace ts {
         /*@internal*/ getPackageJsonInfo(packageJsonPath: string): PackageJsonInfo | boolean | undefined;
         /*@internal*/ setPackageJsonInfo(packageJsonPath: string, info: PackageJsonInfo | boolean): void;
         /*@internal*/ entries(): [Path, PackageJsonInfo | boolean][];
+        /*@internal*/ getInternalMap(): ESMap<Path, PackageJsonInfo | boolean> | undefined;
         clear(): void;
     }
 
@@ -649,7 +654,7 @@ namespace ts {
 
     function createPackageJsonInfoCache(currentDirectory: string, getCanonicalFileName: (s: string) => string): PackageJsonInfoCache {
         let cache: ESMap<Path, PackageJsonInfo | boolean> | undefined;
-        return { getPackageJsonInfo, setPackageJsonInfo, clear, entries };
+        return { getPackageJsonInfo, setPackageJsonInfo, clear, entries, getInternalMap };
         function getPackageJsonInfo(packageJsonPath: string) {
             return cache?.get(toPath(packageJsonPath, currentDirectory, getCanonicalFileName));
         }
@@ -662,6 +667,9 @@ namespace ts {
         function entries() {
             const iter = cache?.entries();
             return iter ? arrayFrom(iter) : [];
+        }
+        function getInternalMap() {
+            return cache;
         }
     }
 
@@ -797,23 +805,28 @@ namespace ts {
         directoryToModuleNameMap?: CacheWithRedirects<ModeAwareCache<ResolvedModuleWithFailedLookupLocations>>,
         moduleNameToDirectoryMap?: CacheWithRedirects<PerModuleNameCache>,
     ): ModuleResolutionCache {
-        const preDirectoryResolutionCache = createPerDirectoryResolutionCache(currentDirectory, getCanonicalFileName, directoryToModuleNameMap ||= createCacheWithRedirects(options));
+        const perDirectoryResolutionCache = createPerDirectoryResolutionCache(currentDirectory, getCanonicalFileName, directoryToModuleNameMap ||= createCacheWithRedirects(options));
         moduleNameToDirectoryMap ||= createCacheWithRedirects(options);
         const packageJsonInfoCache = createPackageJsonInfoCache(currentDirectory, getCanonicalFileName);
 
         return {
             ...packageJsonInfoCache,
-            ...preDirectoryResolutionCache,
+            ...perDirectoryResolutionCache,
             getOrCreateCacheForModuleName,
             clear,
             update,
             getPackageJsonInfoCache: () => packageJsonInfoCache,
+            clearAllExceptPackageJsonInfoCache,
         };
 
         function clear() {
-            preDirectoryResolutionCache.clear();
-            moduleNameToDirectoryMap!.clear();
+            clearAllExceptPackageJsonInfoCache();
             packageJsonInfoCache.clear();
+        }
+
+        function clearAllExceptPackageJsonInfoCache() {
+            perDirectoryResolutionCache.clear();
+            moduleNameToDirectoryMap!.clear();
         }
 
         function update(options: CompilerOptions) {
@@ -919,18 +932,23 @@ namespace ts {
         packageJsonInfoCache?: PackageJsonInfoCache | undefined,
         directoryToModuleNameMap?: CacheWithRedirects<ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>>,
     ): TypeReferenceDirectiveResolutionCache {
-        const preDirectoryResolutionCache = createPerDirectoryResolutionCache(currentDirectory, getCanonicalFileName, directoryToModuleNameMap ||= createCacheWithRedirects(options));
+        const perDirectoryResolutionCache = createPerDirectoryResolutionCache(currentDirectory, getCanonicalFileName, directoryToModuleNameMap ||= createCacheWithRedirects(options));
         packageJsonInfoCache ||= createPackageJsonInfoCache(currentDirectory, getCanonicalFileName);
 
         return {
             ...packageJsonInfoCache,
-            ...preDirectoryResolutionCache,
+            ...perDirectoryResolutionCache,
             clear,
+            clearAllExceptPackageJsonInfoCache,
         };
 
         function clear() {
-            preDirectoryResolutionCache.clear();
+            clearAllExceptPackageJsonInfoCache();
             packageJsonInfoCache!.clear();
+        }
+
+        function clearAllExceptPackageJsonInfoCache() {
+            perDirectoryResolutionCache.clear();
         }
     }
 
@@ -1390,8 +1408,10 @@ namespace ts {
                 let resolvedValue = resolved.value;
                 if (!compilerOptions.preserveSymlinks && resolvedValue && !resolvedValue.originalPath) {
                     const path = realPath(resolvedValue.path, host, traceEnabled);
-                    const originalPath = arePathsEqual(path, resolvedValue.path, host) ? undefined : resolvedValue.path;
-                    resolvedValue = { ...resolvedValue, path, originalPath };
+                    const pathsAreEqual = arePathsEqual(path, resolvedValue.path, host);
+                    const originalPath = pathsAreEqual ? undefined : resolvedValue.path;
+                    // If the path and realpath are differing only in casing prefer path so that we can issue correct errors for casing under forceConsistentCasingInFileNames
+                    resolvedValue = { ...resolvedValue, path: pathsAreEqual ? resolvedValue.path : path, originalPath };
                 }
                 // For node_modules lookups, get the real path so that multiple accesses to an `npm link`-ed module do not create duplicate files.
                 return { value: resolvedValue && { resolved: resolvedValue, isExternalLibraryImport: true } };
@@ -1786,7 +1806,7 @@ namespace ts {
     }
 
     /*@internal*/
-    interface PackageJsonInfo {
+    export interface PackageJsonInfo {
         packageDirectory: string;
         packageJsonContent: PackageJsonPathFields;
         versionPaths: VersionPaths | undefined;
@@ -2207,7 +2227,7 @@ namespace ts {
             function toAbsolutePath(path: string | undefined): string | undefined;
             function toAbsolutePath(path: string | undefined): string | undefined {
                 if (path === undefined) return path;
-                return hostGetCanonicalFileName({ useCaseSensitiveFileNames })(getNormalizedAbsolutePath(path, state.host.getCurrentDirectory?.()));
+                return getNormalizedAbsolutePath(path, state.host.getCurrentDirectory?.());
             }
 
             function combineDirectoryPath(root: string, dir: string) {
@@ -2229,7 +2249,7 @@ namespace ts {
                 if ((extensions === Extensions.TypeScript || extensions === Extensions.JavaScript || extensions === Extensions.Json)
                     && (state.compilerOptions.declarationDir || state.compilerOptions.outDir)
                     && finalPath.indexOf("/node_modules/") === -1
-                    && (state.compilerOptions.configFile ? startsWith(toAbsolutePath(state.compilerOptions.configFile.fileName), scope.packageDirectory) : true)
+                    && (state.compilerOptions.configFile ? containsPath(scope.packageDirectory, toAbsolutePath(state.compilerOptions.configFile.fileName), !useCaseSensitiveFileNames()) : true)
                 ) {
                     // So that all means we'll only try these guesses for files outside `node_modules` in a directory where the `package.json` and `tsconfig.json` are siblings.
                     // Even with all that, we still don't know if the root of the output file structure will be (relative to the package file)
@@ -2290,7 +2310,7 @@ namespace ts {
                     for (const commonSourceDirGuess of commonSourceDirGuesses) {
                         const candidateDirectories = getOutputDirectoriesForBaseDirectory(commonSourceDirGuess);
                         for (const candidateDir of candidateDirectories) {
-                            if (startsWith(finalPath, candidateDir)) {
+                            if (containsPath(candidateDir, finalPath, !useCaseSensitiveFileNames())) {
                                 // The matched export is looking up something in either the out declaration or js dir, now map the written path back into the source dir and source extension
                                 const pathFragment = finalPath.slice(candidateDir.length + 1); // +1 to also remove directory seperator
                                 const possibleInputBase = combinePaths(commonSourceDirGuess, pathFragment);

@@ -1868,9 +1868,9 @@ namespace ts.server {
 
         private getFileAndLanguageServiceForSyntacticOperation(args: protocol.FileRequestArgs) {
             // Since this is syntactic operation, there should always be project for the file
-            // we wouldnt have to ensure project but rather throw if we dont get project
+            // throw if we dont get project
             const file = toNormalizedPath(args.file);
-            const project = this.getProject(args.projectFileName) || this.projectService.tryGetDefaultProjectForFile(file);
+            const project = this.getProject(args.projectFileName) || this.projectService.ensureDefaultProjectForFile(file);
             if (!project) {
                 return Errors.ThrowNoProject();
             }

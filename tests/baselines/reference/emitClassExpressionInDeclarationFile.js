@@ -117,7 +117,7 @@ export declare class FooItem {
     foo(): void;
     name?: string;
 }
-export declare type Constructor<T> = new (...args: any[]) => T;
+export type Constructor<T> = new (...args: any[]) => T;
 export declare function WithTags<T extends Constructor<FooItem>>(Base: T): {
     new (...args: any[]): {
         tags(): void;

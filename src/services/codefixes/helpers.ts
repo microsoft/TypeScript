@@ -60,21 +60,33 @@ namespace ts.codefix {
         isAmbient = false,
     ): void {
         const declarations = symbol.getDeclarations();
-        if (!(declarations && declarations.length)) {
-            return undefined;
-        }
+        const declaration = declarations?.[0];
         const checker = context.program.getTypeChecker();
         const scriptTarget = getEmitScriptTarget(context.program.getCompilerOptions());
-        const declaration = declarations[0];
-        const name = getSynthesizedDeepClone(getNameOfDeclaration(declaration), /*includeTrivia*/ false) as PropertyName;
-        const visibilityModifier = createVisibilityModifier(getEffectiveModifierFlags(declaration));
-        const modifiers = visibilityModifier ? factory.createNodeArray([visibilityModifier]) : undefined;
+
+        /**
+         * (#49811)
+         * Note that there are cases in which the symbol declaration is not present. For example, in the code below both
+         * `MappedIndirect.ax` and `MappedIndirect.ay` have no declaration node attached (due to their mapped-type
+         * parent):
+         *
+         * >>> ```ts
+         * >>> type Base = { ax: number; ay: string };
+         * >>> type BaseKeys = keyof Base;
+         * >>> type MappedIndirect = { [K in BaseKeys]: boolean };
+         * >>> ```
+         *
+         * In such cases, we assume the declaration to be a `PropertySignature`.
+         */
+        const kind = declaration?.kind ?? SyntaxKind.PropertySignature;
+        const declarationName = getNameOfDeclaration(declaration) as PropertyName;
+        const visibilityModifier = createVisibilityModifier(declaration ? getEffectiveModifierFlags(declaration) : ModifierFlags.None);
         const type = checker.getWidenedType(checker.getTypeOfSymbolAtLocation(symbol, enclosingDeclaration));
         const optional = !!(symbol.flags & SymbolFlags.Optional);
         const ambient = !!(enclosingDeclaration.flags & NodeFlags.Ambient) || isAmbient;
         const quotePreference = getQuotePreference(sourceFile, preferences);
 
-        switch (declaration.kind) {
+        switch (kind) {
             case SyntaxKind.PropertySignature:
             case SyntaxKind.PropertyDeclaration:
                 const flags = quotePreference === QuotePreference.Single ? NodeBuilderFlags.UseSingleQuotesForStringLiteralType : undefined;
@@ -87,14 +99,15 @@ namespace ts.codefix {
                     }
                 }
                 addClassElement(factory.createPropertyDeclaration(
-                    modifiers,
-                    name,
+                    createModifiers(visibilityModifier),
+                    declaration ? createName(declarationName) : symbol.getName(),
                     optional && (preserveOptional & PreserveOptionalFlags.Property) ? factory.createToken(SyntaxKind.QuestionToken) : undefined,
                     typeNode,
                     /*initializer*/ undefined));
                 break;
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor: {
+                Debug.assertIsDefined(declarations);
                 let typeNode = checker.typeToTypeNode(type, enclosingDeclaration, /*flags*/ undefined, getNoopSymbolTrackerWithResolver(context));
                 const allAccessors = getAllAccessorDeclarations(declarations, declaration as AccessorDeclaration);
                 const orderedAccessors = allAccessors.secondAccessor
@@ -110,21 +123,21 @@ namespace ts.codefix {
                 for (const accessor of orderedAccessors) {
                     if (isGetAccessorDeclaration(accessor)) {
                         addClassElement(factory.createGetAccessorDeclaration(
-                            modifiers,
-                            name,
+                            createModifiers(visibilityModifier),
+                            createName(declarationName),
                             emptyArray,
-                            typeNode,
-                            ambient ? undefined : body || createStubbedMethodBody(quotePreference)));
+                            createTypeNode(typeNode),
+                            createBody(body, quotePreference, ambient)));
                     }
                     else {
                         Debug.assertNode(accessor, isSetAccessorDeclaration, "The counterpart to a getter should be a setter");
                         const parameter = getSetAccessorValueParameter(accessor);
                         const parameterName = parameter && isIdentifier(parameter.name) ? idText(parameter.name) : undefined;
                         addClassElement(factory.createSetAccessorDeclaration(
-                            modifiers,
-                            name,
-                            createDummyParameters(1, [parameterName], [typeNode], 1, /*inJs*/ false),
-                            ambient ? undefined : body || createStubbedMethodBody(quotePreference)));
+                            createModifiers(visibilityModifier),
+                            createName(declarationName),
+                            createDummyParameters(1, [parameterName], [createTypeNode(typeNode)], 1, /*inJs*/ false),
+                            createBody(body, quotePreference, ambient)));
                     }
                 }
                 break;
@@ -138,6 +151,7 @@ namespace ts.codefix {
                 // If there is more than one overload but no implementation signature
                 // (eg: an abstract method or interface declaration), there is a 1-1
                 // correspondence of declarations and signatures.
+                Debug.assertIsDefined(declarations);
                 const signatures = type.isUnion() ? flatMap(type.types, t => t.getCallSignatures()) : type.getCallSignatures();
                 if (!some(signatures)) {
                     break;
@@ -146,36 +160,57 @@ namespace ts.codefix {
                 if (declarations.length === 1) {
                     Debug.assert(signatures.length === 1, "One declaration implies one signature");
                     const signature = signatures[0];
-                    outputMethod(quotePreference, signature, modifiers, name, ambient ? undefined : body || createStubbedMethodBody(quotePreference));
+                    outputMethod(quotePreference, signature, createModifiers(visibilityModifier), createName(declarationName), createBody(body, quotePreference, ambient));
                     break;
                 }
 
                 for (const signature of signatures) {
                     // Ensure nodes are fresh so they can have different positions when going through formatting.
-                    outputMethod(quotePreference, signature, getSynthesizedDeepClones(modifiers, /*includeTrivia*/ false), getSynthesizedDeepClone(name, /*includeTrivia*/ false));
+                    outputMethod(quotePreference, signature, createModifiers(visibilityModifier), createName(declarationName));
                 }
 
                 if (!ambient) {
                     if (declarations.length > signatures.length) {
                         const signature = checker.getSignatureFromDeclaration(declarations[declarations.length - 1] as SignatureDeclaration)!;
-                        outputMethod(quotePreference, signature, modifiers, name, body || createStubbedMethodBody(quotePreference));
+                        outputMethod(quotePreference, signature, createModifiers(visibilityModifier), createName(declarationName), createBody(body, quotePreference));
                     }
                     else {
                         Debug.assert(declarations.length === signatures.length, "Declarations and signatures should match count");
-                        addClassElement(createMethodImplementingSignatures(checker, context, enclosingDeclaration, signatures, name, optional && !!(preserveOptional & PreserveOptionalFlags.Method), modifiers, quotePreference, body));
+                        addClassElement(createMethodImplementingSignatures(checker, context, enclosingDeclaration, signatures, createName(declarationName), optional && !!(preserveOptional & PreserveOptionalFlags.Method), createModifiers(visibilityModifier), quotePreference, body));
                     }
                 }
                 break;
         }
 
         function outputMethod(quotePreference: QuotePreference, signature: Signature, modifiers: NodeArray<Modifier> | undefined, name: PropertyName, body?: Block): void {
-            const method = createSignatureDeclarationFromSignature(SyntaxKind.MethodDeclaration, context, quotePreference, signature, body, name, modifiers, optional && !!(preserveOptional & PreserveOptionalFlags.Method), enclosingDeclaration, importAdder);
+            const method = createSignatureDeclarationFromSignature(SyntaxKind.MethodDeclaration, context, quotePreference, signature, body, name, modifiers, optional && !!(preserveOptional & PreserveOptionalFlags.Method), enclosingDeclaration, importAdder) as MethodDeclaration;
             if (method) addClassElement(method);
+        }
+
+        function createName(node: PropertyName) {
+            return getSynthesizedDeepClone(node, /*includeTrivia*/ false);
+        }
+
+        function createModifiers(modifier: Modifier | undefined) {
+            return modifier ? factory.createNodeArray([modifier]) : undefined;
+        }
+
+        function createBody(block: Block | undefined, quotePreference: QuotePreference, ambient?: boolean) {
+            return ambient ? undefined :
+                getSynthesizedDeepClone(block, /*includeTrivia*/ false) || createStubbedMethodBody(quotePreference);
+        }
+
+        function createTypeNode(typeNode: TypeNode | undefined) {
+            return getSynthesizedDeepClone(typeNode, /*includeTrivia*/ false);
         }
     }
 
     export function createSignatureDeclarationFromSignature(
-        kind: SyntaxKind.MethodDeclaration | SyntaxKind.FunctionExpression | SyntaxKind.ArrowFunction,
+        kind:
+            | SyntaxKind.MethodDeclaration
+            | SyntaxKind.FunctionExpression
+            | SyntaxKind.ArrowFunction
+            | SyntaxKind.FunctionDeclaration,
         context: TypeConstructionContext,
         quotePreference: QuotePreference,
         signature: Signature,
@@ -185,7 +220,7 @@ namespace ts.codefix {
         optional: boolean | undefined,
         enclosingDeclaration: Node | undefined,
         importAdder: ImportAdder | undefined
-     ) {
+    ) {
         const program = context.program;
         const checker = program.getTypeChecker();
         const scriptTarget = getEmitScriptTarget(program.getCompilerOptions());
@@ -194,7 +229,7 @@ namespace ts.codefix {
             | NodeBuilderFlags.SuppressAnyReturnType
             | NodeBuilderFlags.AllowEmptyTuple
             | (quotePreference === QuotePreference.Single ? NodeBuilderFlags.UseSingleQuotesForStringLiteralType : NodeBuilderFlags.None);
-        const signatureDeclaration = checker.signatureToSignatureDeclaration(signature, kind, enclosingDeclaration, flags, getNoopSymbolTrackerWithResolver(context)) as ArrowFunction | FunctionExpression | MethodDeclaration;
+        const signatureDeclaration = checker.signatureToSignatureDeclaration(signature, kind, enclosingDeclaration, flags, getNoopSymbolTrackerWithResolver(context)) as ArrowFunction | FunctionExpression | MethodDeclaration | FunctionDeclaration;
         if (!signatureDeclaration) {
             return undefined;
         }
@@ -272,6 +307,9 @@ namespace ts.codefix {
         }
         if (isMethodDeclaration(signatureDeclaration)) {
             return factory.updateMethodDeclaration(signatureDeclaration, modifiers, asteriskToken, name ?? factory.createIdentifier(""), questionToken, typeParameters, parameters, type, body);
+        }
+        if (isFunctionDeclaration(signatureDeclaration)) {
+            return factory.updateFunctionDeclaration(signatureDeclaration, modifiers, signatureDeclaration.asteriskToken, tryCast(name, isIdentifier), typeParameters, parameters, type, body ?? signatureDeclaration.body);
         }
         return undefined;
     }

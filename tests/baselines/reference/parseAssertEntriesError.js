@@ -43,6 +43,6 @@ ImportInterface;
 
 
 //// [index.d.ts]
-export declare type LocalInterface = import("pkg", { assert: {} });
+export type LocalInterface = import("pkg", { assert: {} });
 export declare const a: any;
 export declare const b: any;
