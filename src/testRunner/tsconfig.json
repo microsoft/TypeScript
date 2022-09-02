@@ -1,10 +1,7 @@
 {
-    "extends": "../tsconfig-noncomposite-base",
+    "extends": "../tsconfig-base",
     "compilerOptions": {
-        "outDir": "../../built/local",
-        "composite": false,
-        "declaration": false,
-        "declarationMap": false,
+        "outDir": "../../built/local/testRunner",
         "types": [
             "node", "mocha", "chai"
         ],
