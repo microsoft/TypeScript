@@ -68,11 +68,7 @@
           "kind": "link"
         },
         {
-          "text": "https://vscode.dev/ ",
-          "kind": "linkText"
-        },
-        {
-          "text": "end",
+          "text": "https://vscode.dev/ end",
           "kind": "linkText"
         },
         {

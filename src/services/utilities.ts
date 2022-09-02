@@ -2385,11 +2385,7 @@ namespace ts {
                 if (text) parts.push(linkTextPart(text));
             }
             else {
-                const pos = text.indexOf(String.fromCharCode(CharacterCodes.bar));
-                const namePath = pos >= 0 ? text.slice(0, pos) : text;
-                const namePathText = pos >= 0 ? skipSeparatorFromLinkText(text.slice(pos)) : undefined;
-                parts.push(linkTextPart(name + (suffix || text.indexOf("://") === 0 ? "" : " ") + namePath));
-                if (namePathText) parts.push(linkTextPart(namePathText));
+                parts.push(linkTextPart(name + (suffix ? "" : " ") + text));
             }
         }
         parts.push(linkPart("}"));
@@ -2406,15 +2402,21 @@ namespace ts {
     }
 
     function findLinkNameEnd(text: string) {
+        let pos = text.indexOf("://");
+        if (pos === 0) {
+            while (pos < text.length && text.charCodeAt(pos) !== CharacterCodes.bar) pos++;
+            return pos;
+        }
         if (text.indexOf("()") === 0) return 2;
-        if (text[0] !== "<") return 0;
-        let brackets = 0;
-        let i = 0;
-        while (i < text.length) {
-            if (text[i] === "<") brackets++;
-            if (text[i] === ">") brackets--;
-            i++;
-            if (!brackets) return i;
+        if (text.charAt(0) === "<") {
+            let brackets = 0;
+            let i = 0;
+            while (i < text.length) {
+                if (text[i] === "<") brackets++;
+                if (text[i] === ">") brackets--;
+                i++;
+                if (!brackets) return i;
+            }
         }
         return 0;
     }
