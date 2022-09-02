@@ -1,10 +1,7 @@
 {
-    "extends": "../tsconfig-noncomposite-base",
+    "extends": "../tsconfig-base",
     "compilerOptions": {
-        "outDir": "../../built/local",
-        "composite": false,
-        "declaration": false,
-        "declarationMap": false,
+        "outDir": "../../built/local/testRunner",
         "types": [
             "node", "mocha", "chai"
         ],
@@ -27,16 +24,6 @@
     ],
 
     "files": [
-        "compilerRef.ts",
-        "evaluatorRef.ts",
-        "fakesRef.ts",
-        "vpathRef.ts",
-        "vfsRef.ts",
-        "fourslashRef.ts",
-        "playbackRef.ts",
-        "utilsRef.ts",
-        "documentsRef.ts",
-
         "fourslashRunner.ts",
         "compilerRunner.ts",
         "projectsRunner.ts",
@@ -263,7 +250,6 @@
         "_namespaces/ts.tscWatch.ts",
         "_namespaces/ts.projectSystem.ts",
         "_namespaces/ts.server.ts",
-        "_namespaces/ts.textStorage.ts",
         "_namespaces/tests.ts"
     ]
 }

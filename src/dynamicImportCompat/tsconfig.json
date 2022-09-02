@@ -1,14 +1,11 @@
 {
-    "extends": "../tsconfig-library-base",
+    "extends": "../tsconfig-base",
     "compilerOptions": {
-        "outDir": "../../built/local",
+        "outDir": "../../built/local/dynamicImportCompat",
         "rootDir": ".",
         "target": "esnext",
         "module": "esnext",
-        "lib": ["esnext"],
-        "declaration": false,
-        "sourceMap": true,
-        "tsBuildInfoFile": "../../built/local/dynamicImportCompat.tsbuildinfo"
+        "lib": ["esnext"]
     },
     "files": [
         "dynamicImportCompat.ts",

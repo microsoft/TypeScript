@@ -1,9 +1,7 @@
 {
-    "extends": "../tsconfig-noncomposite-base",
+    "extends": "../tsconfig-base",
     "compilerOptions": {
-        "removeComments": true,
-        "incremental":  false,
-        "outDir": "../../built/local",
+        "outDir": "../../built/local/watchGuard",
         "types": [
             "node"
         ],
