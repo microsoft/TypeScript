@@ -1,6 +1,29 @@
 import { noop } from "./_namespaces/ts";
 
-type PerfLogger = typeof import("@microsoft/typescript-etw");
+/** @internal */
+export interface PerfLogger {
+    logEvent(msg: string): void;
+    logErrEvent(msg: string): void;
+    logPerfEvent(msg: string): void;
+    logInfoEvent(msg: string): void;
+    logStartCommand(command: string, msg: string): void;
+    logStopCommand(command: string, msg: string): void;
+    logStartUpdateProgram(msg: string): void;
+    logStopUpdateProgram(msg: string): void;
+    logStartUpdateGraph(): void;
+    logStopUpdateGraph(): void;
+    logStartResolveModule(name: string): void;
+    logStopResolveModule(success: string): void;
+    logStartParseSourceFile(filename: string): void;
+    logStopParseSourceFile(): void;
+    logStartReadFile(filename: string): void;
+    logStopReadFile(): void;
+    logStartBindFile(filename: string): void;
+    logStopBindFile(): void;
+    logStartScheduledOperation(operationId: string): void;
+    logStopScheduledOperation(): void;
+}
+
 const nullLogger: PerfLogger = {
     logEvent: noop,
     logErrEvent: noop,
@@ -26,7 +49,7 @@ const nullLogger: PerfLogger = {
 
 // Load optional module to enable Event Tracing for Windows
 // See https://github.com/microsoft/typescript-etw for more information
-let etwModule;
+let etwModule: typeof import("@microsoft/typescript-etw") | undefined;
 try {
     const etwModulePath = process.env.TS_ETW_MODULE_PATH ?? "./node_modules/@microsoft/typescript-etw";
 
@@ -43,4 +66,4 @@ catch (e) {
  *
  * @internal
  */
-export const perfLogger: PerfLogger = etwModule && etwModule.logEvent ? etwModule : nullLogger;
+export const perfLogger: PerfLogger = etwModule?.logEvent ? etwModule : nullLogger;

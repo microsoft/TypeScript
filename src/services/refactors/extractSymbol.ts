@@ -255,7 +255,8 @@ export namespace Messages {
     export const cannotExtractFunctionsContainingThisToMethod = createMessage("Cannot extract functions containing this to method");
 }
 
-enum RangeFacts {
+/** @internal */
+export enum RangeFacts {
     None = 0,
     HasReturn = 1 << 0,
     IsGenerator = 1 << 1,
@@ -270,8 +271,10 @@ enum RangeFacts {
 
 /**
  * Represents an expression or a list of statements that should be extracted with some extra information
+ *
+ * @internal
  */
-interface TargetRange {
+export interface TargetRange {
     readonly range: Expression | Statement[];
     readonly facts: RangeFacts;
     /**
@@ -282,8 +285,10 @@ interface TargetRange {
 
 /**
  * Result of 'getRangeToExtract' operation: contains either a range or a list of errors
+ *
+ * @internal
  */
-type RangeToExtract = {
+export type RangeToExtract = {
     readonly targetRange?: never;
     readonly errors: readonly Diagnostic[];
 } | {

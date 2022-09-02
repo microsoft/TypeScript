@@ -1,4 +1,5 @@
 import {
+    CallExpression,
     Debug, Expression, factory, getSourceTextOfNodeFromSourceFile, hasInvalidEscape, Identifier, isExpression,
     isExternalModule, isNoSubstitutionTemplateLiteral, NoSubstitutionTemplateLiteral, setTextRange, SourceFile,
     SyntaxKind, TaggedTemplateExpression, TemplateHead, TemplateLiteralLikeNode, TemplateMiddle, TemplateTail,
@@ -18,7 +19,7 @@ export function processTaggedTemplateExpression(
     visitor: Visitor,
     currentSourceFile: SourceFile,
     recordTaggedTemplateString: (temp: Identifier) => void,
-    level: ProcessLevel) {
+    level: ProcessLevel): CallExpression | TaggedTemplateExpression {
 
     // Visit the tag expression
     const tag = visitNode(node.tag, visitor, isExpression);

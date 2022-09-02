@@ -1,10 +1,11 @@
 import {
+    Bundle,
     CatchClause, chainBundle, isBlock, Node, SourceFile, SyntaxKind, TransformationContext, TransformFlags,
     visitEachChild, visitNode, VisitResult,
 } from "../_namespaces/ts";
 
 /** @internal */
-export function transformES2019(context: TransformationContext) {
+export function transformES2019(context: TransformationContext): (x: SourceFile | Bundle) => SourceFile | Bundle {
     const factory = context.factory;
     return chainBundle(context, transformSourceFile);
 

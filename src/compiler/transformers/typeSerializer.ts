@@ -14,14 +14,17 @@ import {
     VoidExpression,
 } from "../_namespaces/ts";
 
-type SerializedEntityName =
+/** @internal */
+export type SerializedEntityName =
     | Identifier // Globals (i.e., `String`, `Number`, etc.)
  // Globals (i.e., `String`, `Number`, etc.)
     | PropertyAccessEntityNameExpression // `A.B`
  // `A.B`
     ;
 
-type SerializedTypeNode =
+
+/** @internal */
+export type SerializedTypeNode =
     | SerializedEntityName
     | ConditionalExpression // Type Reference or Global fallback
  // Type Reference or Global fallback

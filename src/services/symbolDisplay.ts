@@ -149,7 +149,8 @@ export function getSymbolModifiers(typeChecker: TypeChecker, symbol: Symbol): st
     return modifiers.size > 0 ? arrayFrom(modifiers.values()).join(",") : ScriptElementKindModifier.none;
 }
 
-interface SymbolDisplayPartsDocumentationAndSymbolKind {
+/** @internal */
+export interface SymbolDisplayPartsDocumentationAndSymbolKind {
     displayParts: SymbolDisplayPart[];
     documentation: SymbolDisplayPart[];
     symbolKind: ScriptElementKind;

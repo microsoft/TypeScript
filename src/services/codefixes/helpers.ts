@@ -8,7 +8,7 @@ import {
     IntersectionType, isArrowFunction, isAutoAccessorPropertyDeclaration, isFunctionDeclaration, isFunctionExpression,
     isGetAccessorDeclaration, isIdentifier, isImportTypeNode, isInJSFile, isLiteralImportTypeNode, isMethodDeclaration,
     isObjectLiteralExpression, isPropertyAccessExpression, isPropertyAssignment, isSetAccessorDeclaration,
-    isStringLiteral, isYieldExpression, LanguageServiceHost, length, map, Map, MethodDeclaration, Modifier,
+    isStringLiteral, isYieldExpression, LanguageServiceHost, length, map, Map, MethodDeclaration, MethodSignature, Modifier,
     ModifierFlags, Node, NodeArray, NodeBuilderFlags, NodeFlags, nullTransformationContext, ObjectFlags,
     ObjectLiteralExpression, ObjectType, ParameterDeclaration, Program, PropertyAssignment, PropertyDeclaration,
     PropertyName, QuotePreference, sameMap, ScriptTarget, Set, SetAccessorDeclaration, setTextRange, Signature,
@@ -57,7 +57,8 @@ export interface TypeConstructionContext {
     host: LanguageServiceHost;
 }
 
-type AddNode = PropertyDeclaration | GetAccessorDeclaration | SetAccessorDeclaration | MethodDeclaration | FunctionExpression | ArrowFunction;
+/** @internal */
+export type AddNode = PropertyDeclaration | GetAccessorDeclaration | SetAccessorDeclaration | MethodDeclaration | FunctionExpression | ArrowFunction;
 
 /** @internal */
 export const enum PreserveOptionalFlags {
@@ -353,7 +354,7 @@ export function createSignatureDeclarationFromCallExpression(
     name: Identifier | string,
     modifierFlags: ModifierFlags,
     contextNode: Node
-) {
+): MethodDeclaration | FunctionDeclaration | MethodSignature {
     const quotePreference = getQuotePreference(context.sourceFile, context.preferences);
     const scriptTarget = getEmitScriptTarget(context.program.getCompilerOptions());
     const tracker = getNoopSymbolTrackerWithResolver(context);
@@ -417,7 +418,8 @@ export function createSignatureDeclarationFromCallExpression(
     }
 }
 
-interface ArgumentTypeParameterAndConstraint {
+/** @internal */
+export interface ArgumentTypeParameterAndConstraint {
     argumentType: Type;
     constraint?: TypeNode;
 }
