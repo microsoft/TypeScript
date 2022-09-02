@@ -1,0 +1,16 @@
+{
+    "$schema": "https://raw.githubusercontent.com/microsoft/rushstack/%40microsoft/api-extractor_v7.31.0/apps/api-extractor/src/schemas/api-extractor.schema.json",
+    "extends": "../api-extractor-base.json",
+    "compiler": {
+        "tsconfigFilePath": "./tsconfig.json"
+    },
+
+    "mainEntryPointFilePath": "<projectFolder>/built/local/tsserverlibrary/tsserverlibrary.d.ts",
+
+    "dtsRollup": {
+        "enabled": true,
+        "publicTrimmedFilePath": "<projectFolder>/built/local/tsserverlibrary.d.ts",
+        "untrimmedFilePath": "<projectFolder>/built/local/tsserverlibrary.internal.d.ts"
+    }
+}
+  

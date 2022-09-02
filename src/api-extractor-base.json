@@ -1,0 +1,85 @@
+{
+    "$schema": "https://raw.githubusercontent.com/microsoft/rushstack/%40microsoft/api-extractor_v7.31.0/apps/api-extractor/src/schemas/api-extractor.schema.json",
+    "projectFolder": "..",
+    "mainEntryPointFilePath": "",
+    "bundledPackages": [],
+    "newlineKind": "crlf",
+    "enumMemberOrder": "preserve",
+
+    "compiler": {
+        "tsconfigFilePath": ""
+    },
+    "apiReport": {
+        "enabled": false
+    },
+    "docModel": {
+        "enabled": false
+    },
+    "dtsRollup": {
+        "enabled": true,
+        "untrimmedFilePath": "",
+        "alphaTrimmedFilePath": "",
+        "betaTrimmedFilePath": "",
+        "publicTrimmedFilePath": "",
+        "omitTrimmingComments": true
+    },
+    "tsdocMetadata": {
+        "enabled": false
+    },
+    "messages": {
+        "compilerMessageReporting": {
+            "default": {
+                "logLevel": "warning"
+            }
+            // "TS2551": {
+            //   "logLevel": "warning",
+            //   "addToApiReportFile": true
+            // },
+            //
+            // . . .
+        },
+        "extractorMessageReporting": {
+            "default": {
+                "logLevel": "warning"
+                // "addToApiReportFile": false
+            },
+            "ae-internal-missing-underscore": {
+                "logLevel": "none",
+                "addToApiReportFile": false
+            },
+            // TODO(jakebailey): should we explicitly mark things as public?
+            "ae-missing-release-tag": {
+                "logLevel": "none",
+                "addToApiReportFile": false
+            },
+            // TODO(jakebailey): Fix these?
+            "ae-unresolved-link": {
+                "logLevel": "none",
+                "addToApiReportFile": false
+            },
+            // This incorrectly fires for functions with partially internal overloads.
+            "ae-internal-mixed-release-tag": {
+                "logLevel": "none",
+                "addToApiReportFile": false
+            }
+            // "ae-extra-release-tag": {
+            //   "logLevel": "warning",
+            //   "addToApiReportFile": true
+            // },
+            //
+            // . . .
+        },
+        "tsdocMessageReporting": {
+            "default": {
+                "logLevel": "none",
+                "addToApiReportFile": false
+            }
+            // "tsdoc-link-tag-unescaped-text": {
+            //   "logLevel": "warning",
+            //   "addToApiReportFile": true
+            // },
+            //
+            // . . .
+        }
+    }
+}

@@ -98,6 +98,24 @@ const buildAll = () => buildProject("src");
 
 task("moduleBuild", parallel(generateLibs, series(buildScripts, localize, buildAll)));
 
+const apiExtractor = async () => {
+    async function runApiExtractor(configPath) {
+        await exec(process.execPath, [
+            "node_modules/@microsoft/api-extractor/bin/api-extractor",
+            "run",
+            "--local",
+            "--config",
+            configPath,
+        ]);
+    }
+
+    // TODO(jakebailey): prepend copyright notice, replace const enums with regular enums
+    await runApiExtractor("./src/typescript/api-extractor.json");
+    await runApiExtractor("./src/tsserverlibrary/api-extractor.json");
+};
+
+task("api-extractor", series(task("moduleBuild"), apiExtractor));
+
 const buildDebugTools = () => buildProject("src/debug");
 const cleanDebugTools = () => cleanProject("src/debug");
 cleanTasks.push(cleanDebugTools);

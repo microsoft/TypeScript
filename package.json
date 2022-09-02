@@ -39,6 +39,7 @@
         "!**/.gitattributes"
     ],
     "devDependencies": {
+        "@microsoft/api-extractor": "^7.31.0",
         "@octokit/rest": "latest",
         "@types/async": "latest",
         "@types/chai": "latest",
