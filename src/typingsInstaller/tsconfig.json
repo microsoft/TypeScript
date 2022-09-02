@@ -1,8 +1,7 @@
 {
-    "extends": "../tsconfig-noncomposite-base",
+    "extends": "../tsconfig-base",
     "compilerOptions": {
-        "removeComments": true,
-        "outDir": "../../built/local",
+        "outDir": "../../built/local/typingsInstaller",
         "types": [
             "node"
         ],
