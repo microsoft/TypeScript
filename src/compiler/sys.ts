@@ -1440,7 +1440,7 @@ namespace ts {
 
             const platform: string = _os.platform();
             const useCaseSensitiveFileNames = isFileSystemCaseSensitive();
-            const realpathSync = _fs.realpathSync.native ?? _fs.realpathSync;
+            const fsRealpath = !!_fs.realpathSync.native ? process.platform === "win32" ? fsRealPathHandlingLongPath : _fs.realpathSync.native : _fs.realpathSync;
 
             const fsSupportsRecursiveFsWatch = isNode4OrLater && (process.platform === "win32" || process.platform === "darwin");
             const getCurrentDirectory = memoize(() => process.cwd());
@@ -1889,9 +1889,13 @@ namespace ts {
                 return getAccessibleFileSystemEntries(path).directories.slice();
             }
 
+            function fsRealPathHandlingLongPath(path: string): string {
+                return path.length < 260 ? _fs.realpathSync.native(path) : _fs.realpathSync(path);
+            }
+
             function realpath(path: string): string {
                 try {
-                    return realpathSync(path);
+                    return fsRealpath(path);
                 }
                 catch {
                     return path;

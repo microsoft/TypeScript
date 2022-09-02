@@ -1,0 +1,211 @@
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/completionsOverridingMethod15.ts",
+      "position": 89,
+      "name": ""
+    },
+    "completionList": {
+      "flags": 0,
+      "isGlobalCompletion": false,
+      "isMemberCompletion": true,
+      "isNewIdentifierLocation": true,
+      "entries": [
+        {
+          "name": "abstract",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "abstract",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "async",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "async",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "constructor",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "constructor",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "declare",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "declare",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "get",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "get",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "override",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "override",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "private",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "private",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "protected",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "protected",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "public",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "public",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "readonly",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "readonly",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "set",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "set",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "static",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "static",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "foo",
+          "kind": "property",
+          "kindModifiers": "declare",
+          "sortText": "17",
+          "insertText": "get foo(): any {\n}\nset foo(value: any) {\n}",
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "property",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "B",
+              "kind": "className"
+            },
+            {
+              "text": ".",
+              "kind": "punctuation"
+            },
+            {
+              "text": "foo",
+              "kind": "propertyName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "any",
+              "kind": "keyword"
+            }
+          ],
+          "documentation": []
+        }
+      ]
+    }
+  }
+]

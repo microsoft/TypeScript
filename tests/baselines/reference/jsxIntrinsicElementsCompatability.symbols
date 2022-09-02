@@ -1,0 +1,33 @@
+=== tests/cases/compiler/jsxIntrinsicElementsCompatability.tsx ===
+/// <reference path="react16.d.ts" />
+import * as React from "react";
+>React : Symbol(React, Decl(jsxIntrinsicElementsCompatability.tsx, 1, 6))
+
+function SomeComponent<T extends 'button' | 'a'>(props: { element?: T } & JSX.IntrinsicElements[T]): JSX.Element {
+>SomeComponent : Symbol(SomeComponent, Decl(jsxIntrinsicElementsCompatability.tsx, 1, 31))
+>T : Symbol(T, Decl(jsxIntrinsicElementsCompatability.tsx, 2, 23))
+>props : Symbol(props, Decl(jsxIntrinsicElementsCompatability.tsx, 2, 49))
+>element : Symbol(element, Decl(jsxIntrinsicElementsCompatability.tsx, 2, 57))
+>T : Symbol(T, Decl(jsxIntrinsicElementsCompatability.tsx, 2, 23))
+>JSX : Symbol(JSX, Decl(react16.d.ts, 2493, 12))
+>IntrinsicElements : Symbol(JSX.IntrinsicElements, Decl(react16.d.ts, 2514, 86))
+>T : Symbol(T, Decl(jsxIntrinsicElementsCompatability.tsx, 2, 23))
+>JSX : Symbol(JSX, Decl(react16.d.ts, 2493, 12))
+>Element : Symbol(JSX.Element, Decl(react16.d.ts, 2494, 23))
+
+    // Just so the return value is RectElement, the rendered element doesnt matter
+    return <div />
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+}
+
+function Test<T extends 'button' | 'a'>(el: T) {
+>Test : Symbol(Test, Decl(jsxIntrinsicElementsCompatability.tsx, 5, 1))
+>T : Symbol(T, Decl(jsxIntrinsicElementsCompatability.tsx, 7, 14))
+>el : Symbol(el, Decl(jsxIntrinsicElementsCompatability.tsx, 7, 40))
+>T : Symbol(T, Decl(jsxIntrinsicElementsCompatability.tsx, 7, 14))
+
+    return <SomeComponent element={el} />
+>SomeComponent : Symbol(SomeComponent, Decl(jsxIntrinsicElementsCompatability.tsx, 1, 31))
+>element : Symbol(element, Decl(jsxIntrinsicElementsCompatability.tsx, 8, 25))
+>el : Symbol(el, Decl(jsxIntrinsicElementsCompatability.tsx, 7, 40))
+}

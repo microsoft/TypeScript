@@ -196,12 +196,6 @@ interface ObjectConstructor {
 
     /**
      * Prevents the modification of existing property attributes and values, and prevents the addition of new properties.
-     * @param a Object on which to lock the attributes.
-     */
-    freeze<T>(a: T[]): readonly T[];
-
-    /**
-     * Prevents the modification of existing property attributes and values, and prevents the addition of new properties.
      * @param f Object on which to lock the attributes.
      */
     freeze<T extends Function>(f: T): T;
@@ -931,6 +925,10 @@ interface RegExpMatchArray extends Array<string> {
      * A copy of the search string.
      */
     input?: string;
+    /**
+     * The first match. This will always be present because `null` will be returned if there are no matches.
+     */
+    0: string;
 }
 
 interface RegExpExecArray extends Array<string> {

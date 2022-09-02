@@ -36,7 +36,7 @@ namespace ts {
         }
 
         private assertHasRealPosition(message?: string) {
-            // eslint-disable-next-line debug-assert
+            // eslint-disable-next-line local/debug-assert
             Debug.assert(!positionIsSynthesized(this.pos) && !positionIsSynthesized(this.end), message || "Node must have a real position for this operation");
         }
 
@@ -1363,6 +1363,11 @@ namespace ts {
                 onUnRecoverableConfigFileDiagnostic: noop,
             };
 
+            // The call to isProgramUptoDate below may refer back to documentRegistryBucketKey;
+            // calculate this early so it's not undefined if downleveled to a var (or, if emitted
+            // as a const variable without downleveling, doesn't crash).
+            const documentRegistryBucketKey = documentRegistry.getKeyForCompilationSettings(newSettings);
+
             // If the program is already up-to-date, we can reuse it
             if (isProgramUptoDate(program, rootFileNames, newSettings, (_path, fileName) => host.getScriptVersion(fileName), fileName => compilerHost!.fileExists(fileName), hasInvalidatedResolution, hasChangedAutomaticTypeDirectiveNames, getParsedCommandLine, projectReferences)) {
                 return;
@@ -1374,7 +1379,6 @@ namespace ts {
             // the program points to old source files that have been invalidated because of
             // incremental parsing.
 
-            const documentRegistryBucketKey = documentRegistry.getKeyForCompilationSettings(newSettings);
             const options: CreateProgramOptions = {
                 rootNames: rootFileNames,
                 options: newSettings,
