@@ -7280,6 +7280,7 @@ namespace ts {
                         && symbol.escapedName !== InternalSymbolName.ExportEquals
                         && !(symbol.flags & SymbolFlags.Prototype)
                         && !(symbol.flags & SymbolFlags.Class)
+                        && !(symbol.flags & SymbolFlags.Method)
                         && !isConstMergedWithNSPrintableAsSignatureMerge) {
                         if (propertyAsAlias) {
                             const createdExport = serializeMaybeAliasAssignment(symbol);
