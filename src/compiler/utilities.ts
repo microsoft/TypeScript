@@ -5081,7 +5081,7 @@ namespace ts {
             }
             if (isJSDocAugmentsTag(node.parent)) {
                 const host = getEffectiveJSDocHost(node.parent);
-                if (host && isClassDeclaration(host)) {
+                if (host && isClassLike(host)) {
                     return { class: host, isImplements: false };
                 }
             }
