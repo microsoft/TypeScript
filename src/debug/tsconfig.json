@@ -1,11 +1,9 @@
 {
-    "extends": "../tsconfig-library-base",
+    "extends": "../tsconfig-base",
     "compilerOptions": {
         "target": "es2019",
         "lib": ["es2019"],
-        "outDir": "../../built/local",
-        "declaration": false,
-        "sourceMap": true
+        "outDir": "../../built/local/debug"
     },
     "files": [
         "dbg.ts",
