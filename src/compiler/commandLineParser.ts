@@ -2073,7 +2073,7 @@ function getTsconfigRootOptionsMap() {
 }
 
 /** @internal */
-interface JsonConversionNotifier {
+export interface JsonConversionNotifier {
     /**
      * Notifies parent option object is being set with the optionKey and a valid optionValue
      * Currently it notifies only if there is element with type object (parentOption) and

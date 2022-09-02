@@ -230,7 +230,7 @@ export function createCompilerHostWorker(options: CompilerOptions, setParentNode
 }
 
 /** @internal */
-interface CompilerHostLikeForCache {
+export interface CompilerHostLikeForCache {
     fileExists(fileName: string): boolean;
     readFile(fileName: string, encoding?: string): string | undefined;
     directoryExists?(directory: string): boolean;
@@ -4358,7 +4358,7 @@ export function filterSemanticDiagnostics(diagnostic: readonly Diagnostic[], opt
 }
 
 /** @internal */
-interface CompilerHostLike {
+export interface CompilerHostLike {
     useCaseSensitiveFileNames(): boolean;
     getCurrentDirectory(): string;
     fileExists(fileName: string): boolean;

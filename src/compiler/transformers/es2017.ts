@@ -14,7 +14,7 @@ import {
     setOriginalNode, setSourceMapRange, setTextRange, some, SourceFile, Statement, SyntaxKind, TextRange,
     TransformationContext, TransformFlags, TypeNode, TypeReferenceSerializationKind, unescapeLeadingUnderscores,
     VariableDeclaration, VariableDeclarationList, VariableStatement, visitEachChild, visitFunctionBody,
-    visitIterationBody, visitNode, visitNodes, visitParameterList, VisitResult,
+    visitIterationBody, visitNode, visitNodes, visitParameterList, VisitResult, Bundle,
 } from "../_namespaces/ts";
 
 type SuperContainer = ClassDeclaration | MethodDeclaration | GetAccessorDeclaration | SetAccessorDeclaration | ConstructorDeclaration;
@@ -30,7 +30,7 @@ const enum ContextFlags {
 }
 
 /** @internal */
-export function transformES2017(context: TransformationContext) {
+export function transformES2017(context: TransformationContext): (x: SourceFile | Bundle) => SourceFile | Bundle {
     const {
         factory,
         getEmitHelperFactory: emitHelpers,

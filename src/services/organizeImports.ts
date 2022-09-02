@@ -1,6 +1,7 @@
 import {
     AnyImportOrRequireStatement, arrayIsSorted, binarySearch, compareBooleans, compareStringsCaseInsensitive,
-    compareValues, createScanner, emptyArray, ExportDeclaration, ExportSpecifier, Expression, factory,
+    compareValues, Comparison, createScanner, emptyArray, ExportDeclaration, ExportSpecifier, Expression, factory,
+    FileTextChanges,
     FindAllReferences, flatMap, formatting, getNewLineOrDefaultFromHost, group, Identifier, identity, ImportDeclaration,
     ImportOrExportSpecifier, ImportSpecifier, isAmbientModule, isExportDeclaration, isExternalModuleNameRelative,
     isExternalModuleReference, isImportDeclaration, isNamedExports, isNamedImports, isNamespaceImport, isString,
@@ -25,7 +26,7 @@ export function organizeImports(
     program: Program,
     preferences: UserPreferences,
     mode: OrganizeImportsMode,
-) {
+): FileTextChanges[] {
     const changeTracker = textChanges.ChangeTracker.fromContext({ host, formatContext, preferences });
     const shouldSort = mode === OrganizeImportsMode.SortAndCombine || mode === OrganizeImportsMode.All;
     const shouldCombine = shouldSort; // These are currently inseparable, but I draw a distinction for clarity and in case we add modes in the future.
@@ -481,7 +482,7 @@ function sortSpecifiers<T extends ImportOrExportSpecifier>(specifiers: readonly 
 }
 
 /** @internal */
-export function compareImportOrExportSpecifiers<T extends ImportOrExportSpecifier>(s1: T, s2: T) {
+export function compareImportOrExportSpecifiers<T extends ImportOrExportSpecifier>(s1: T, s2: T): Comparison {
     return compareBooleans(s1.isTypeOnly, s2.isTypeOnly)
         || compareIdentifiers(s1.propertyName || s1.name, s2.propertyName || s2.name)
         || compareIdentifiers(s1.name, s2.name);

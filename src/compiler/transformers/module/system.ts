@@ -1,5 +1,5 @@
 import {
-    addRange, append, BinaryExpression, BindingElement, Block, CaseBlock, CaseClause, CaseOrDefaultClause, CatchClause,
+    addRange, append, BinaryExpression, BindingElement, Block, Bundle, CaseBlock, CaseClause, CaseOrDefaultClause, CatchClause,
     chainBundle, ClassDeclaration, collectExternalModuleInfo, Debug, Declaration, DefaultClause,
     DestructuringAssignment, DoStatement, EmitFlags, EmitHint, EndOfDeclarationMarker, ExportAssignment,
     ExportDeclaration, Expression, ExpressionStatement, ExternalModuleInfo, firstOrUndefined,
@@ -25,7 +25,7 @@ import {
 } from "../../_namespaces/ts";
 
 /** @internal */
-export function transformSystemModule(context: TransformationContext) {
+export function transformSystemModule(context: TransformationContext): (x: SourceFile | Bundle) => SourceFile | Bundle {
     interface DependencyGroup {
         name: StringLiteral;
         externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[];

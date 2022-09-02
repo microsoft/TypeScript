@@ -1,6 +1,6 @@
 import {
     AccessorDeclaration, addEmitHelpers, addSyntheticTrailingComment, ArrayLiteralExpression, Associativity,
-    BinaryExpression, Block, BreakStatement, CallExpression, CaseClause, chainBundle, CommaListExpression,
+    BinaryExpression, Block, BreakStatement, Bundle, CallExpression, CaseClause, chainBundle, CommaListExpression,
     ConditionalExpression, ContinueStatement, createExpressionForObjectLiteralElementLike, Debug, DoStatement,
     ElementAccessExpression, EmitFlags, EmitHint, ESMap, Expression, ExpressionStatement, forEach, ForInStatement,
     ForStatement, FunctionDeclaration, FunctionExpression, getEmitFlags, getEmitScriptTarget,
@@ -247,7 +247,7 @@ function getInstructionName(instruction: Instruction): string {
 }
 
 /** @internal */
-export function transformGenerators(context: TransformationContext) {
+export function transformGenerators(context: TransformationContext): (x: SourceFile | Bundle) => SourceFile | Bundle {
     const {
         factory,
         getEmitHelperFactory: emitHelpers,

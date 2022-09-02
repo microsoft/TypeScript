@@ -6,7 +6,8 @@ import { emptyArray, protocol } from "./_namespaces/ts.server";
 
 const lineCollectionCapacity = 4;
 
-interface LineCollection {
+/** @internal */
+export interface LineCollection {
     charCount(): number;
     lineCount(): number;
     isLeaf(): this is LineLeaf;
@@ -19,7 +20,8 @@ export interface AbsolutePositionAndLineText {
     lineText: string | undefined;
 }
 
-const enum CharRangeSection {
+/** @internal */
+export const enum CharRangeSection {
     PreStart,
     Start,
     Entire,
@@ -28,7 +30,8 @@ const enum CharRangeSection {
     PostEnd
 }
 
-interface LineIndexWalker {
+/** @internal */
+export interface LineIndexWalker {
     goSubtree: boolean;
     done: boolean;
     leaf(relativeStart: number, relativeLength: number, lineCollection: LineLeaf): void;
@@ -568,7 +571,8 @@ export class LineIndex {
     }
 }
 
-class LineNode implements LineCollection {
+/** @internal */
+export class LineNode implements LineCollection {
     totalChars = 0;
     totalLines = 0;
 
@@ -819,7 +823,8 @@ class LineNode implements LineCollection {
     }
 }
 
-class LineLeaf implements LineCollection {
+/** @internal */
+export class LineLeaf implements LineCollection {
     constructor(public text: string) {
     }
 

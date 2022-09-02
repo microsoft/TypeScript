@@ -30,8 +30,12 @@ export function getEditsForFileRename(
     });
 }
 
-/** If 'path' refers to an old directory, returns path in the new directory. */
-type PathUpdater = (path: string) => string | undefined;
+/**
+ * If 'path' refers to an old directory, returns path in the new directory.
+ *
+ * @internal
+ */
+export type PathUpdater = (path: string) => string | undefined;
 // exported for tests
 /** @internal */
 export function getPathUpdater(oldFileOrDirPath: string, newFileOrDirPath: string, getCanonicalFileName: GetCanonicalFileName, sourceMapper: SourceMapper | undefined): PathUpdater {

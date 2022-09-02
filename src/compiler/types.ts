@@ -5093,7 +5093,7 @@ export interface SymbolWalker {
 
 // This was previously deprecated in our public API, but is still used internally
 /** @internal */
-interface SymbolWriter extends SymbolTracker {
+export interface SymbolWriter extends SymbolTracker {
     writeKeyword(text: string): void;
     writeOperator(text: string): void;
     writePunctuation(text: string): void;
@@ -9250,7 +9250,7 @@ export const enum PragmaKindFlags {
 }
 
 /** @internal */
-interface PragmaArgumentSpecification<TName extends string> {
+export interface PragmaArgumentSpecification<TName extends string> {
     name: TName; // Determines the name of the key in the resulting parsed type, type parameter to cause literal type inference
     optional?: boolean;
     captureSpan?: boolean;
@@ -9314,20 +9314,20 @@ export const commentPragmas = {
 } as const;
 
 /** @internal */
-type PragmaArgTypeMaybeCapture<TDesc> = TDesc extends {captureSpan: true} ? {value: string, pos: number, end: number} : string;
+export type PragmaArgTypeMaybeCapture<TDesc> = TDesc extends {captureSpan: true} ? {value: string, pos: number, end: number} : string;
 
 /** @internal */
-type PragmaArgTypeOptional<TDesc, TName extends string> =
+export type PragmaArgTypeOptional<TDesc, TName extends string> =
     TDesc extends {optional: true}
         ? {[K in TName]?: PragmaArgTypeMaybeCapture<TDesc>}
         : {[K in TName]: PragmaArgTypeMaybeCapture<TDesc>};
 
 /** @internal */
-type UnionToIntersection<U> =
+export type UnionToIntersection<U> =
         (U extends any ? (k: U) => void : never) extends ((k: infer I) => void) ? I : never;
 
 /** @internal */
-type ArgumentDefinitionToFieldUnion<T extends readonly PragmaArgumentSpecification<any>[]> = {
+export type ArgumentDefinitionToFieldUnion<T extends readonly PragmaArgumentSpecification<any>[]> = {
     [K in keyof T]: PragmaArgTypeOptional<T[K], T[K] extends {name: infer TName} ? TName extends string ? TName : never : never>
 }[Extract<keyof T, number>]; // The mapped type maps over only the tuple members, but this reindex gets _all_ members - by extracting only `number` keys, we get only the tuple members
 
@@ -9336,13 +9336,13 @@ type ArgumentDefinitionToFieldUnion<T extends readonly PragmaArgumentSpecificati
  *
  * @internal
  */
-type PragmaArgumentType<KPrag extends keyof ConcretePragmaSpecs> =
+export type PragmaArgumentType<KPrag extends keyof ConcretePragmaSpecs> =
     ConcretePragmaSpecs[KPrag] extends { args: readonly PragmaArgumentSpecification<any>[] }
         ? UnionToIntersection<ArgumentDefinitionToFieldUnion<ConcretePragmaSpecs[KPrag]["args"]>>
         : never;
 
 /** @internal */
-type ConcretePragmaSpecs = typeof commentPragmas;
+export type ConcretePragmaSpecs = typeof commentPragmas;
 
 /** @internal */
 export type PragmaPseudoMap = {[K in keyof ConcretePragmaSpecs]: {arguments: PragmaArgumentType<K>, range: CommentRange}};

@@ -128,6 +128,19 @@ task("build-src", series(preSrc, buildSrc));
 const cleanSrc = () => cleanProject("src");
 task("clean-src", cleanSrc);
 
+/**
+ * @param {string} entrypoint
+ * @param {string} output
+ */
+async function runDtsBundler(entrypoint, output) {
+    await exec(process.execPath, [
+        "./scripts/dtsBundler.mjs",
+        "--entrypoint",
+        entrypoint,
+        "--output",
+        output,
+    ]);
+}
 
 /** @type {string | undefined} */
 let copyrightHeader;
@@ -275,6 +288,7 @@ const esbuildServices = esbuildTask("./src/typescript/typescript.ts", "./built/l
 const writeServicesCJSShim = () => writeCJSReexport("./built/local/typescript/typescript.js", "./built/local/typescript.js");
 const buildServicesProject = () => buildProject("src/typescript");
 
+// TODO(jakebailey): rename this; no longer "services".
 const buildServices = () => {
     if (cmdLineOptions.bundle) return esbuildServices.build();
     writeServicesCJSShim();
@@ -304,6 +318,9 @@ task("watch-services").flags = {
     "   --built": "Compile using the built version of the compiler."
 };
 
+const dtsServices = () => runDtsBundler("./built/local/typescript/typescript.d.ts", "./built/local/typescript.d.ts");
+task("dts-services", series(preBuild, buildServicesProject, dtsServices));
+task("dts-services").description = "Builds typescript.d.ts";
 
 const esbuildServer = esbuildTask("./src/tsserver/server.ts", "./built/local/tsserver.js", /* exportIsTsObject */ true);
 const writeServerCJSShim = () => writeCJSReexport("./built/local/tsserver/server.js", "./built/local/tsserver.js");
@@ -355,10 +372,11 @@ task("watch-min").flags = {
 const esbuildLssl = esbuildTask("./src/tsserverlibrary/tsserverlibrary.ts", "./built/local/tsserverlibrary.js", /* exportIsTsObject */ true);
 const writeLsslCJSShim = () => writeCJSReexport("./built/local/tsserverlibrary/tsserverlibrary.js", "./built/local/tsserverlibrary.js");
 
+const buildLsslProject = () => buildProject("src/tsserverlibrary");
 const buildLssl = () => {
     if (cmdLineOptions.bundle) return esbuildLssl.build();
     writeLsslCJSShim();
-    return buildProject("src/tsserverlibrary");
+    return buildLsslProject();
 };
 task("lssl", series(preBuild, buildLssl));
 task("lssl").description = "Builds language service server library";
@@ -381,6 +399,14 @@ task("watch-lssl").description = "Watch for changes and rebuild tsserverlibrary 
 task("watch-lssl").flags = {
     "   --built": "Compile using the built version of the compiler."
 };
+
+const dtsLssl = () => runDtsBundler("./built/local/tsserverlibrary/tsserverlibrary.d.ts", "./built/local/tsserverlibrary.d.ts");
+task("dts-lssl", series(preBuild, buildLsslProject, dtsLssl));
+task("dts-lssl").description = "Builds tsserverlibrary.d.ts";
+
+// TODO(jakebailey): this is probably not efficient, but, gulp.
+const dts = series(preBuild, parallel(buildServicesProject, buildLsslProject), parallel(dtsServices, dtsLssl));
+task("dts", dts);
 
 const testRunner = "./built/local/run.js";
 const esbuildTests = esbuildTask("./src/testRunner/_namespaces/Harness.ts", testRunner);
@@ -492,7 +518,7 @@ const buildOtherOutputs = parallel(buildCancellationToken, buildTypingsInstaller
 task("other-outputs", series(preBuild, buildOtherOutputs));
 task("other-outputs").description = "Builds miscelaneous scripts and documents distributed with the LKG";
 
-task("local", series(preBuild, parallel(localize, buildTsc, buildServer, buildServices, buildLssl, buildOtherOutputs)));
+task("local", series(preBuild, parallel(localize, buildTsc, buildServer, buildServices, buildLssl, buildOtherOutputs, dts)));
 task("local").description = "Builds the full compiler and services";
 task("local").flags = {
     "   --built": "Compile using the built version of the compiler."
@@ -508,7 +534,7 @@ const preTest = parallel(buildTsc, buildTests, buildServices, buildLssl);
 preTest.displayName = "preTest";
 
 const runTests = () => runConsoleTests(testRunner, "mocha-fivemat-progress-reporter", /*runInParallel*/ false, /*watchMode*/ false);
-task("runtests", series(preBuild, preTest, runTests));
+task("runtests", series(preBuild, preTest, dts, runTests));
 task("runtests").description = "Runs the tests using the built run.js file.";
 task("runtests").flags = {
     "-t --tests=<regex>": "Pattern for tests to run.",
@@ -527,7 +553,7 @@ task("runtests").flags = {
 };
 
 const runTestsParallel = () => runConsoleTests(testRunner, "min", /*runInParallel*/ cmdLineOptions.workers > 1, /*watchMode*/ false);
-task("runtests-parallel", series(preBuild, preTest, runTestsParallel));
+task("runtests-parallel", series(preBuild, preTest, dts, runTestsParallel));
 task("runtests-parallel").description = "Runs all the tests in parallel using the built run.js file.";
 task("runtests-parallel").flags = {
     "   --light": "Run tests in light mode (fewer verifications, but tests run faster).",
@@ -613,8 +639,7 @@ const produceLKG = async () => {
     }
 };
 
-// TODO(jakebailey): dependencies on dts
-task("LKG", series(lkgPreBuild, parallel(localize, buildTsc, buildServer, buildServices, buildLssl, buildOtherOutputs), produceLKG));
+task("LKG", series(lkgPreBuild, parallel(localize, buildTsc, buildServer, buildServices, buildLssl, buildOtherOutputs, dts), produceLKG));
 task("LKG").description = "Makes a new LKG out of the built js files";
 task("LKG").flags = {
     "   --built": "Compile using the built version of the compiler.",

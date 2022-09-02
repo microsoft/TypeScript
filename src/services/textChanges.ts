@@ -1213,7 +1213,8 @@ function assignPositionsToNodeArray(nodes: NodeArray<any>, visitor: Visitor, tes
     return nodeArray;
 }
 
-interface TextChangesWriter extends EmitTextWriter, PrintHandlers {}
+/** @internal */
+export interface TextChangesWriter extends EmitTextWriter, PrintHandlers {}
 
 /** @internal */
 export function createWriter(newLine: string): TextChangesWriter {

@@ -1,5 +1,5 @@
 import {
-    AssignmentExpression, BinaryExpression, chainBundle, getNonAssignmentOperatorForCompoundAssignment,
+    AssignmentExpression, BinaryExpression, Bundle, chainBundle, getNonAssignmentOperatorForCompoundAssignment,
     isAccessExpression, isExpression, isLeftHandSideExpression, isLogicalOrCoalescingAssignmentExpression,
     isPropertyAccessExpression, isSimpleCopiableExpression, LogicalOrCoalescingAssignmentOperator, Node,
     skipParentheses, SourceFile, SyntaxKind, Token, TransformationContext, TransformFlags, visitEachChild, visitNode,
@@ -7,7 +7,7 @@ import {
 } from "../_namespaces/ts";
 
 /** @internal */
-export function transformES2021(context: TransformationContext) {
+export function transformES2021(context: TransformationContext): (x: SourceFile | Bundle) => SourceFile | Bundle {
     const {
         hoistVariableDeclaration,
         factory

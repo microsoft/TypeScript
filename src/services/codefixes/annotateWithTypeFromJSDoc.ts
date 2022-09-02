@@ -32,7 +32,8 @@ function getDeclaration(file: SourceFile, pos: number): DeclarationWithType | un
     return tryCast(isParameter(name.parent) ? name.parent.parent : name.parent, parameterShouldGetTypeFromJSDoc);
 }
 
-type DeclarationWithType =
+/** @internal */
+export type DeclarationWithType =
     | FunctionLikeDeclaration
     | VariableDeclaration
     | PropertySignature

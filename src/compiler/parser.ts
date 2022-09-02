@@ -9830,7 +9830,7 @@ export function processCommentPragmas(context: PragmaContext, sourceText: string
 }
 
 /** @internal */
-type PragmaDiagnosticReporter = (pos: number, length: number, message: DiagnosticMessage) => void;
+export type PragmaDiagnosticReporter = (pos: number, length: number, message: DiagnosticMessage) => void;
 
 /** @internal */
 export function processPragmasIntoFields(context: PragmaContext, reportDiagnostic: PragmaDiagnosticReporter): void {

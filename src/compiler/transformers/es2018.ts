@@ -17,7 +17,7 @@ import {
     skipParentheses, some, SourceFile, startOnNewLine, Statement, SyntaxKind, TaggedTemplateExpression, TextRange,
     Token, TransformationContext, TransformFlags, unwrapInnermostStatementOfLabel, VariableDeclaration,
     VariableStatement, visitEachChild, visitIterationBody, visitLexicalEnvironment, visitNode, visitNodes,
-    visitParameterList, VisitResult, VoidExpression, YieldExpression,
+    visitParameterList, VisitResult, VoidExpression, YieldExpression, Bundle,
 } from "../_namespaces/ts";
 
 const enum ESNextSubstitutionFlags {
@@ -58,7 +58,7 @@ const enum HierarchyFacts {
 }
 
 /** @internal */
-export function transformES2018(context: TransformationContext) {
+export function transformES2018(context: TransformationContext): (x: SourceFile | Bundle) => SourceFile | Bundle {
     const {
         factory,
         getEmitHelperFactory: emitHelpers,

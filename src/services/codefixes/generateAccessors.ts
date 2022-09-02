@@ -11,12 +11,17 @@ import {
     SymbolFlags, SyntaxKind, textChanges, TypeChecker, TypeNode,
 } from "../_namespaces/ts";
 
-type AcceptedDeclaration = ParameterPropertyDeclaration | PropertyDeclaration | PropertyAssignment;
-type AcceptedNameType = Identifier | StringLiteral;
-type ContainerDeclaration = ClassLikeDeclaration | ObjectLiteralExpression;
+/** @internal */
+export type AcceptedDeclaration = ParameterPropertyDeclaration | PropertyDeclaration | PropertyAssignment;
+/** @internal */
+export type AcceptedNameType = Identifier | StringLiteral;
+/** @internal */
+export type ContainerDeclaration = ClassLikeDeclaration | ObjectLiteralExpression;
 
-type Info = AccessorInfo | refactor.RefactorErrorInfo;
-interface AccessorInfo {
+/** @internal */
+export type AccessorOrRefactorErrorInfo = AccessorInfo | refactor.RefactorErrorInfo;
+/** @internal */
+export interface AccessorInfo {
     readonly container: ContainerDeclaration;
     readonly isStatic: boolean;
     readonly isReadonly: boolean;
@@ -117,7 +122,7 @@ function prepareModifierFlagsForField(modifierFlags: ModifierFlags): ModifierFla
 }
 
 /** @internal */
-export function getAccessorConvertiblePropertyAtPosition(file: SourceFile, program: Program, start: number, end: number, considerEmptySpans = true): Info | undefined {
+export function getAccessorConvertiblePropertyAtPosition(file: SourceFile, program: Program, start: number, end: number, considerEmptySpans = true): AccessorOrRefactorErrorInfo | undefined {
     const node = getTokenAtPosition(file, start);
     const cursorRequest = start === end && considerEmptySpans;
     const declaration = findAncestor(node.parent, isAcceptedDeclaration);

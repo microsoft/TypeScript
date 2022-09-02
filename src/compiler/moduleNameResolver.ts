@@ -128,7 +128,7 @@ function createResolvedModuleWithFailedLookupLocations(
 }
 
 /** @internal */
-interface ModuleResolutionState {
+export interface ModuleResolutionState {
     host: ModuleResolutionHost;
     compilerOptions: CompilerOptions;
     traceEnabled: boolean;
@@ -146,7 +146,7 @@ interface ModuleResolutionState {
  *
  * @internal
  */
-interface PackageJsonPathFields {
+export interface PackageJsonPathFields {
     typings?: string;
     types?: string;
     typesVersions?: MapLike<MapLike<string[]>>;
@@ -226,7 +226,7 @@ function readPackageJsonTypesVersionsField(jsonContent: PackageJson, state: Modu
 }
 
 /** @internal */
-interface VersionPaths {
+export interface VersionPaths {
     version: string;
     paths: MapLike<string[]>;
 }
@@ -1290,7 +1290,7 @@ export function resolveJSModule(moduleName: string, initialDir: string, host: Mo
 }
 
 /** @internal */
-enum NodeResolutionFeatures {
+export enum NodeResolutionFeatures {
     None = 0,
     // resolving `#local` names in your own package.json
     Imports = 1 << 1,
