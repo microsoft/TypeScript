@@ -17,7 +17,7 @@ import {
     packageIdToString, ParseConfigFileHost, pathIsAbsolute, Program, ProgramHost, ProjectReference,
     ReportEmitErrorSummary, ReportFileInError, sortAndDeduplicateDiagnostics, SourceFile, sys, System,
     targetOptionDeclaration, WatchCompilerHost, WatchCompilerHostOfConfigFile,
-    WatchCompilerHostOfFilesAndCompilerOptions, WatchFactoryHost, WatchHost, WatchLogLevel, WatchOptions,
+    WatchCompilerHostOfFilesAndCompilerOptions, WatchFactory, WatchFactoryHost, WatchHost, WatchLogLevel, WatchOptions,
     WatchStatusReporter, WriteFileCallback, writeFileEnsuringDirectories,
 } from "./_namespaces/ts";
 
@@ -632,7 +632,8 @@ export interface WatchTypeRegistry {
     NodeModulesForModuleSpecifierCache: "node_modules for module specifier cache invalidation",
 }
 
-interface WatchFactory<X, Y = undefined> extends ts.WatchFactory<X, Y> {
+/** @internal */
+export interface WatchFactoryWithLog<X, Y = undefined> extends WatchFactory<X, Y> {
     writeLog: (s: string) => void;
 }
 
@@ -640,7 +641,7 @@ interface WatchFactory<X, Y = undefined> extends ts.WatchFactory<X, Y> {
 export function createWatchFactory<Y = undefined>(host: WatchFactoryHost & { trace?(s: string): void; }, options: { extendedDiagnostics?: boolean; diagnostics?: boolean; }) {
     const watchLogLevel = host.trace ? options.extendedDiagnostics ? WatchLogLevel.Verbose : options.diagnostics ? WatchLogLevel.TriggerOnly : WatchLogLevel.None : WatchLogLevel.None;
     const writeLog: (s: string) => void = watchLogLevel !== WatchLogLevel.None ? (s => host.trace!(s)) : noop;
-    const result = getWatchFactory<WatchType, Y>(host, watchLogLevel, writeLog) as WatchFactory<WatchType, Y>;
+    const result = getWatchFactory<WatchType, Y>(host, watchLogLevel, writeLog) as WatchFactoryWithLog<WatchType, Y>;
     result.writeLog = writeLog;
     return result;
 }

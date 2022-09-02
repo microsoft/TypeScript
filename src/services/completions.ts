@@ -124,7 +124,8 @@ export enum CompletionSource {
     ObjectLiteralMethodSnippet = "ObjectLiteralMethodSnippet/",
 }
 
-const enum SymbolOriginInfoKind {
+/** @internal */
+export const enum SymbolOriginInfoKind {
     ThisType            = 1 << 0,
     SymbolMember        = 1 << 1,
     Export              = 1 << 2,
@@ -138,7 +139,8 @@ const enum SymbolOriginInfoKind {
     SymbolMemberExport   = SymbolMember | Export,
 }
 
-interface SymbolOriginInfo {
+/** @internal */
+export interface SymbolOriginInfo {
     kind: SymbolOriginInfoKind;
     isDefaultExport?: boolean;
     isFromPackageJson?: boolean;
@@ -210,18 +212,25 @@ function originIsObjectLiteralMethod(origin: SymbolOriginInfo | undefined): orig
     return !!(origin && origin.kind & SymbolOriginInfoKind.ObjectLiteralMethod);
 }
 
-interface UniqueNameSet {
+/** @internal */
+export interface UniqueNameSet {
     add(name: string): void;
     has(name: string): boolean;
 }
 
 /**
  * Map from symbol index in `symbols` -> SymbolOriginInfo.
+ *
+ * @internal
  */
-type SymbolOriginInfoMap = Record<number, SymbolOriginInfo>;
+export type SymbolOriginInfoMap = Record<number, SymbolOriginInfo>;
 
-/** Map from symbol id -> SortText. */
-type SymbolSortTextMap = (SortText | undefined)[];
+/**
+ * Map from symbol id -> SortText.
+ *
+ * @internal
+ */
+export type SymbolSortTextMap = (SortText | undefined)[];
 
 const enum KeywordCompletionFilters {
     None,                           // No keywords
@@ -1882,8 +1891,12 @@ export function getCompletionEntrySymbol(
 }
 
 const enum CompletionDataKind { Data, JsDocTagName, JsDocTag, JsDocParameterName, Keywords }
-/** true: after the `=` sign but no identifier has been typed yet. Else is the Identifier after the initializer. */
-type IsJsxInitializer = boolean | Identifier;
+/**
+ * true: after the `=` sign but no identifier has been typed yet. Else is the Identifier after the initializer.
+ *
+ * @internal
+ */
+export type IsJsxInitializer = boolean | Identifier;
 interface CompletionData {
     readonly kind: CompletionDataKind.Data;
     readonly symbols: readonly Symbol[];
@@ -4320,7 +4333,8 @@ function tryGetObjectLiteralContextualType(node: ObjectLiteralExpression, typeCh
     return undefined;
 }
 
-interface ImportStatementCompletionInfo {
+/** @internal */
+export interface ImportStatementCompletionInfo {
     isKeywordOnlyCompletion: boolean;
     keywordCompletion: TokenSyntaxKind | undefined;
     isNewIdentifierLocation: boolean;

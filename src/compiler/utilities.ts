@@ -722,7 +722,8 @@ export function getEmitFlags(node: Node): EmitFlags {
     return emitNode && emitNode.flags || 0;
 }
 
-interface ScriptTargetFeatures {
+/** @internal */
+export interface ScriptTargetFeatures {
     [key: string]: { [key: string]: string[] | undefined };
 }
 
@@ -6744,14 +6745,14 @@ export function formatStringFromArgs(text: string, args: ArrayLike<string | numb
 let localizedDiagnosticMessages: MapLike<string> | undefined;
 
 /** @internal */
-export function setLocalizedDiagnosticMessages(messages: typeof localizedDiagnosticMessages) {
+export function setLocalizedDiagnosticMessages(messages: MapLike<string> | undefined) {
     localizedDiagnosticMessages = messages;
 }
 
 /** @internal */
 // If the localized messages json is unset, and if given function use it to set the json
 
-export function maybeSetLocalizedDiagnosticMessages(getMessages: undefined | (() => typeof localizedDiagnosticMessages)) {
+export function maybeSetLocalizedDiagnosticMessages(getMessages: undefined | (() => MapLike<string> | undefined)) {
     if (!localizedDiagnosticMessages && getMessages) {
         localizedDiagnosticMessages = getMessages();
     }

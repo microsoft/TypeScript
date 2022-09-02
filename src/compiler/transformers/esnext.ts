@@ -1,9 +1,10 @@
 import {
+    Bundle,
     chainBundle, Node, SourceFile, TransformationContext, TransformFlags, visitEachChild, VisitResult,
 } from "../_namespaces/ts";
 
 /** @internal */
-export function transformESNext(context: TransformationContext) {
+export function transformESNext(context: TransformationContext): (x: SourceFile | Bundle) => SourceFile | Bundle {
   return chainBundle(context, transformSourceFile);
 
   function transformSourceFile(node: SourceFile) {

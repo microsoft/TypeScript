@@ -12,7 +12,7 @@ import {
     isPrivateIdentifier, isPropertyDeclaration, isStatic, isStringLiteralLike, isSuperCall, LogicalOperatorOrHigher,
     map, Map, MethodDeclaration, ModifierFlags, NamedImportBindings, NamespaceExport, Node, NodeArray,
     parameterIsThisKeyword, PrivateIdentifierAccessorDeclaration, PrivateIdentifierAutoAccessorPropertyDeclaration,
-    PrivateIdentifierMethodDeclaration, PropertyDeclaration, skipParentheses, some, SourceFile, Statement, SyntaxKind,
+    PrivateIdentifierMethodDeclaration, PropertyDeclaration, skipParentheses, some, SourceFile, Statement, SuperCall, SyntaxKind,
     TransformationContext, VariableDeclaration, VariableStatement,
 } from "../_namespaces/ts";
 
@@ -332,7 +332,7 @@ export function getNonAssignmentOperatorForCompoundAssignment(kind: CompoundAssi
  *
  * @internal
  */
-export function getSuperCallFromStatement(statement: Statement) {
+export function getSuperCallFromStatement(statement: Statement): SuperCall | undefined {
     if (!isExpressionStatement(statement)) {
         return undefined;
     }

@@ -1,5 +1,5 @@
 import {
-    addRange, append, chainBundle, createEmptyExports, createExternalHelpersImportDeclarationIfNeeded, Debug, EmitFlags,
+    addRange, append, Bundle, chainBundle, createEmptyExports, createExternalHelpersImportDeclarationIfNeeded, Debug, EmitFlags,
     EmitHint, ESMap, ExportAssignment, ExportDeclaration, Expression, GeneratedIdentifierFlags, getEmitFlags,
     getEmitModuleKind, getEmitScriptTarget, getExternalModuleNameLiteral, hasSyntacticModifier, Identifier, idText,
     ImportDeclaration, ImportEqualsDeclaration, insertStatementsAfterCustomPrologue,
@@ -10,7 +10,7 @@ import {
 } from "../../_namespaces/ts";
 
 /** @internal */
-export function transformECMAScriptModule(context: TransformationContext) {
+export function transformECMAScriptModule(context: TransformationContext): (x: SourceFile | Bundle) => SourceFile | Bundle {
     const {
         factory,
         getEmitHelperFactory: emitHelpers,

@@ -1,11 +1,11 @@
 import {
-    BinaryExpression, chainBundle, Expression, isElementAccessExpression, isExpression, isPropertyAccessExpression,
+    BinaryExpression, Bundle, chainBundle, Expression, isElementAccessExpression, isExpression, isPropertyAccessExpression,
     Node, setTextRange, SourceFile, SyntaxKind, TransformationContext, TransformFlags, visitEachChild, visitNode,
     VisitResult,
 } from "../_namespaces/ts";
 
 /** @internal */
-export function transformES2016(context: TransformationContext) {
+export function transformES2016(context: TransformationContext): (x: SourceFile | Bundle) => SourceFile | Bundle {
     const {
         factory,
         hoistVariableDeclaration

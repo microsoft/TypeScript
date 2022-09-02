@@ -1260,7 +1260,7 @@ export function patchWriteFileEnsuringDirectory(sys: System) {
 export type BufferEncoding = "ascii" | "utf8" | "utf-8" | "utf16le" | "ucs2" | "ucs-2" | "base64" | "latin1" | "binary" | "hex";
 
 /** @internal */
-interface NodeBuffer extends Uint8Array {
+export interface NodeBuffer extends Uint8Array {
     constructor: any;
     write(str: string, encoding?: BufferEncoding): number;
     write(str: string, offset: number, encoding?: BufferEncoding): number;
@@ -1336,7 +1336,7 @@ interface NodeBuffer extends Uint8Array {
 }
 
 /** @internal */
-interface Buffer extends NodeBuffer { }
+export interface Buffer extends NodeBuffer { }
 
 // TODO: GH#18217 Methods on System are often used as if they are certainly defined
 export interface System {
