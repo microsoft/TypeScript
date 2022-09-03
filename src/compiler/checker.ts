@@ -642,6 +642,11 @@ namespace ts {
             getOptionalType: () => optionalType,
             getPromiseType: () => getGlobalPromiseType(/*reportErrors*/ false),
             getPromiseLikeType: () => getGlobalPromiseLikeType(/*reportErrors*/ false),
+            getAsyncIterableType: () => {
+                const type = getGlobalAsyncIterableType(/*reportErrors*/ false);
+                if (type === emptyGenericType) return undefined;
+                return type;
+            },
             isSymbolAccessible,
             isArrayType,
             isTupleType,
@@ -39214,7 +39219,18 @@ namespace ts {
             const message = allowAsyncIterables
                 ? Diagnostics.Type_0_must_have_a_Symbol_asyncIterator_method_that_returns_an_async_iterator
                 : Diagnostics.Type_0_must_have_a_Symbol_iterator_method_that_returns_an_iterator;
-            return errorAndMaybeSuggestAwait(errorNode, !!getAwaitedTypeOfPromise(type), message, typeToString(type));
+            const suggestAwait =
+                // for (const x of Promise<...>) or [...Promise<...>]
+                !!getAwaitedTypeOfPromise(type)
+                // for (const x of AsyncIterable<...>)
+                || (
+                    !allowAsyncIterables &&
+                    isForOfStatement(errorNode.parent) &&
+                    errorNode.parent.expression === errorNode &&
+                    getGlobalAsyncIterableType(/** reportErrors */ false) !== emptyGenericType &&
+                    isTypeAssignableTo(type, getGlobalAsyncIterableType(/** reportErrors */ false)
+                ));
+            return errorAndMaybeSuggestAwait(errorNode, suggestAwait, message, typeToString(type));
         }
 
         /**
