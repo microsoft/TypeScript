@@ -32,8 +32,6 @@ namespace ts {
 
         initTSConfigCorrectly("Initialized TSConfig with --help", ["--init", "--help"]);
 
-        initTSConfigCorrectly("Initialized TSConfig with -?", ["--init", "--?"]);
-
         initTSConfigCorrectly("Initialized TSConfig with --watch", ["--init", "--watch"]);
     });
 }
