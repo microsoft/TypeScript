@@ -34386,6 +34386,7 @@ namespace ts {
                         const eqType = operator === SyntaxKind.EqualsEqualsToken || operator === SyntaxKind.EqualsEqualsEqualsToken;
                         error(errorNode, Diagnostics.This_condition_will_always_return_0_since_JavaScript_compares_objects_by_reference_not_value, eqType ? "false" : "true");
                     }
+                    checkNaNEquality(errorNode, operator, left, right, leftType, rightType);
                     reportOperatorErrorUnless((left, right) => isTypeEqualityComparableTo(left, right) || isTypeEqualityComparableTo(right, left));
                     return booleanType;
 
@@ -34617,6 +34618,23 @@ namespace ts {
                     default:
                         return undefined;
                 }
+            }
+
+            function checkNaNEquality(errorNode: Node | undefined, operator: SyntaxKind, left: Expression, right: Expression, leftType: Type, rightType: Type) {
+                const isLeftNaN = leftType.flags & TypeFlags.Number && isNaN(skipParentheses(left));
+                const isRightNaN = rightType.flags & TypeFlags.Number && isNaN(skipParentheses(right));
+                if (isLeftNaN || isRightNaN) {
+                    const err = error(errorNode, Diagnostics.This_condition_will_always_return_0,
+                        tokenToString(operator === SyntaxKind.EqualsEqualsEqualsToken || operator === SyntaxKind.EqualsEqualsToken ? SyntaxKind.FalseKeyword : SyntaxKind.TrueKeyword));
+                    if (isLeftNaN && isRightNaN) return;
+                    const location = isLeftNaN ? right : left;
+                    addRelatedInfo(err, createDiagnosticForNode(location, Diagnostics.Did_you_mean_0,
+                        `${operator === SyntaxKind.ExclamationEqualsEqualsToken || operator === SyntaxKind.ExclamationEqualsToken ? tokenToString(SyntaxKind.ExclamationToken) : ""}Number.isNaN(${getTextOfNode(location)})`));
+                }
+            }
+
+            function isNaN(expr: Expression): boolean {
+                return isIdentifier(expr) && expr.escapedText === "NaN";
             }
         }
 

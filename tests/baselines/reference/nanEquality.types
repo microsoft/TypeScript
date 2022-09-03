@@ -1,0 +1,92 @@
+=== tests/cases/compiler/nanEquality.ts ===
+declare const x: number;
+>x : number
+
+if (x === NaN) {}
+>x === NaN : boolean
+>x : number
+>NaN : number
+
+if (NaN === x) {}
+>NaN === x : boolean
+>NaN : number
+>x : number
+
+if (x == NaN) {}
+>x == NaN : boolean
+>x : number
+>NaN : number
+
+if (NaN == x) {}
+>NaN == x : boolean
+>NaN : number
+>x : number
+
+if (x !== NaN) {}
+>x !== NaN : boolean
+>x : number
+>NaN : number
+
+if (NaN !== x) {}
+>NaN !== x : boolean
+>NaN : number
+>x : number
+
+if (x != NaN) {}
+>x != NaN : boolean
+>x : number
+>NaN : number
+
+if (NaN != x) {}
+>NaN != x : boolean
+>NaN : number
+>x : number
+
+if (x === ((NaN))) {}
+>x === ((NaN)) : boolean
+>x : number
+>((NaN)) : number
+>(NaN) : number
+>NaN : number
+
+if (((NaN)) === x) {}
+>((NaN)) === x : boolean
+>((NaN)) : number
+>(NaN) : number
+>NaN : number
+>x : number
+
+if (x !== ((NaN))) {}
+>x !== ((NaN)) : boolean
+>x : number
+>((NaN)) : number
+>(NaN) : number
+>NaN : number
+
+if (((NaN)) !== x) {}
+>((NaN)) !== x : boolean
+>((NaN)) : number
+>(NaN) : number
+>NaN : number
+>x : number
+
+if (NaN === NaN) {}
+>NaN === NaN : boolean
+>NaN : number
+>NaN : number
+
+if (NaN !== NaN) {}
+>NaN !== NaN : boolean
+>NaN : number
+>NaN : number
+
+if (NaN == NaN) {}
+>NaN == NaN : boolean
+>NaN : number
+>NaN : number
+
+if (NaN != NaN) {}
+>NaN != NaN : boolean
+>NaN : number
+>NaN : number
+
