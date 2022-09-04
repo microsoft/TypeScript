@@ -16,14 +16,15 @@ import which from "which";
  * @property {boolean} [ignoreExitCode]
  * @property {boolean} [hidePrompt]
  * @property {boolean} [waitForExit=true]
+ * @property {boolean} [ignoreStdout]
  * @property {import("@esfx/canceltoken").CancelToken} [token]
  */
 export async function exec(cmd, args, options = {}) {
     return /**@type {Promise<{exitCode?: number}>}*/(new Promise((resolve, reject) => {
-        const { ignoreExitCode, waitForExit = true } = options;
+        const { ignoreExitCode, waitForExit = true, ignoreStdout } = options;
 
         if (!options.hidePrompt) console.log(`> ${chalk.green(cmd)} ${args.join(" ")}`);
-        const proc = spawn(which.sync(cmd), args, { stdio: waitForExit ? "inherit" : "ignore" });
+        const proc = spawn(which.sync(cmd), args, { stdio: waitForExit ? ignoreStdout ? ["inherit", "ignore", "inherit"] : "inherit" : "ignore" });
         if (waitForExit) {
             const onCanceled = () => {
                 proc.kill();

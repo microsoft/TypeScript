@@ -509,6 +509,18 @@ export const lint = task({
     },
 });
 
+export const format = task({
+    name: "format",
+    description: "Formats the codebase.",
+    run: () => exec(process.execPath, ["node_modules/dprint/bin.js", "fmt"]),
+});
+
+export const checkFormat = task({
+    name: "check-format",
+    description: "Checks that the codebase is formatted.",
+    run: () => exec(process.execPath, ["node_modules/dprint/bin.js", "check"], { ignoreStdout: true }),
+});
+
 const { main: cancellationToken, watch: watchCancellationToken } = entrypointBuildTask({
     name: "cancellation-token",
     project: "src/cancellationToken",
