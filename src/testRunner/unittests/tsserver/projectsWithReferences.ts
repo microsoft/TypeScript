@@ -34,10 +34,13 @@ describe("unittests:: tsserver:: projects with references: invoking when referen
         host.runQueuedTimeoutCallbacks();
 
         // change in project reference config file
-        host.writeFile(logicConfig.path, JSON.stringify({
-            compilerOptions: { composite: true, declaration: true, declarationDir: "decls" },
-            references: [{ path: "../core" }],
-        }));
+        host.writeFile(
+            logicConfig.path,
+            JSON.stringify({
+                compilerOptions: { composite: true, declaration: true, declarationDir: "decls" },
+                references: [{ path: "../core" }],
+            }),
+        );
         host.runQueuedTimeoutCallbacks();
         baselineTsserverLogs("projectsWithReferences", "sample project", service);
     });

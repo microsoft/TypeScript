@@ -1,7 +1,8 @@
-
 import * as ts from "../../_namespaces/ts";
 import * as Utils from "../../_namespaces/Utils";
-import { compilerOptionsToConfigJson } from "../helpers/contents";
+import {
+    compilerOptionsToConfigJson,
+} from "../helpers/contents";
 import {
     baselineTsserverLogs,
     createLoggerWithInMemoryLogs,
@@ -33,7 +34,7 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem extra r
         const host: TestServerHost & ts.ModuleResolutionHost = createServerHost([file1, lib]);
         const logger = createLoggerWithInMemoryLogs(host);
         const projectService = createProjectService(host, {
-            typingsInstaller: new TestTypingsInstaller("/a/cache", /*throttleLimit*/5, host, logger),
+            typingsInstaller: new TestTypingsInstaller("/a/cache", /*throttleLimit*/ 5, host, logger),
             logger,
         });
 

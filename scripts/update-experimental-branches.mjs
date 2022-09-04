@@ -1,6 +1,10 @@
-import { Octokit } from "@octokit/rest";
+import {
+    Octokit,
+} from "@octokit/rest";
 
-import { runSequence } from "./run-sequence.mjs";
+import {
+    runSequence,
+} from "./run-sequence.mjs";
 
 // The first is used by bot-based kickoffs, the second by automatic triggers
 const triggeredPR = process.env.SOURCE_ISSUE || process.env.SYSTEM_PULLREQUEST_PULLREQUESTNUMBER;
@@ -61,7 +65,6 @@ async function main() {
                 ["git", ["rebase", "main"]],
                 ["git", ["push", "-f", "-u", "fork", `${num}`]], // Keep a rebased copy of this branch in our fork
             ]);
-
         }
         else {
             throw new Error(`Invalid PR number: ${numRaw}`);

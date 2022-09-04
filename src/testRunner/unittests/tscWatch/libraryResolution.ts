@@ -1,4 +1,7 @@
-import { getCommandLineArgsForLibResolution, getSysForLibResolution } from "../helpers/libraryResolution";
+import {
+    getCommandLineArgsForLibResolution,
+    getSysForLibResolution,
+} from "../helpers/libraryResolution";
 import {
     TscWatchCompileChange,
     TscWatchSystem,
@@ -14,27 +17,34 @@ describe("unittests:: tsc-watch:: libraryResolution", () => {
         return withoutConfig ? [] : [
             {
                 caption: "change program options to update module resolution",
-                edit: sys => sys.writeFile("/home/src/projects/project1/tsconfig.json", JSON.stringify({
-                    compilerOptions: {
-                        composite: true,
-                        typeRoots: ["./typeroot1", "./typeroot2"],
-                        lib: ["es5", "dom"],
-                        traceResolution: true,
-                    },
-                })),
+                edit: sys =>
+                    sys.writeFile(
+                        "/home/src/projects/project1/tsconfig.json",
+                        JSON.stringify({
+                            compilerOptions: {
+                                composite: true,
+                                typeRoots: ["./typeroot1", "./typeroot2"],
+                                lib: ["es5", "dom"],
+                                traceResolution: true,
+                            },
+                        }),
+                    ),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
             {
                 caption: "change program options to update module resolution and also update lib file",
                 edit: sys => {
-                    sys.writeFile("/home/src/projects/project1/tsconfig.json", JSON.stringify({
-                        compilerOptions: {
-                            composite: true,
-                            typeRoots: ["./typeroot1"],
-                            lib: ["es5", "dom"],
-                            traceResolution: true,
-                        },
-                    }));
+                    sys.writeFile(
+                        "/home/src/projects/project1/tsconfig.json",
+                        JSON.stringify({
+                            compilerOptions: {
+                                composite: true,
+                                typeRoots: ["./typeroot1"],
+                                lib: ["es5", "dom"],
+                                traceResolution: true,
+                            },
+                        }),
+                    );
                     changeLib(sys);
                 },
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),

@@ -1,4 +1,6 @@
-import { reportDocumentRegistryStats } from "../../../harness/incrementalUtils";
+import {
+    reportDocumentRegistryStats,
+} from "../../../harness/incrementalUtils";
 import * as ts from "../../_namespaces/ts";
 import {
     baselineTsserverLogs,

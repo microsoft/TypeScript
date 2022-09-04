@@ -90,32 +90,34 @@ registerCodeFix({
         if (info.kind === ProblemKind.MissingReturnStatement) {
             return append(
                 [getActionForfixAddReturnStatement(context, info.expression, info.statement)],
-                isArrowFunction(info.declaration) ? getActionForFixRemoveBracesFromArrowFunctionBody(context, info.declaration, info.expression, info.commentSource): undefined);
+                isArrowFunction(info.declaration) ? getActionForFixRemoveBracesFromArrowFunctionBody(context, info.declaration, info.expression, info.commentSource) : undefined,
+            );
         }
         else {
             return [getActionForfixWrapTheBlockWithParen(context, info.declaration, info.expression)];
         }
     },
-    getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
-        const info = getInfo(context.program.getTypeChecker(), diag.file, diag.start, diag.code);
-        if (!info) return undefined;
+    getAllCodeActions: context =>
+        codeFixAll(context, errorCodes, (changes, diag) => {
+            const info = getInfo(context.program.getTypeChecker(), diag.file, diag.start, diag.code);
+            if (!info) return undefined;
 
-        switch (context.fixId) {
-            case fixIdAddReturnStatement:
-                addReturnStatement(changes, diag.file, info.expression, info.statement);
-                break;
-            case fixRemoveBracesFromArrowFunctionBody:
-                if (!isArrowFunction(info.declaration)) return undefined;
-                removeBlockBodyBrace(changes, diag.file, info.declaration, info.expression, info.commentSource, /*withParen*/ false);
-                break;
-            case fixIdWrapTheBlockWithParen:
-                if (!isArrowFunction(info.declaration)) return undefined;
-                wrapBlockWithParen(changes, diag.file, info.declaration, info.expression);
-                break;
-            default:
-                Debug.fail(JSON.stringify(context.fixId));
-        }
-    }),
+            switch (context.fixId) {
+                case fixIdAddReturnStatement:
+                    addReturnStatement(changes, diag.file, info.expression, info.statement);
+                    break;
+                case fixRemoveBracesFromArrowFunctionBody:
+                    if (!isArrowFunction(info.declaration)) return undefined;
+                    removeBlockBodyBrace(changes, diag.file, info.declaration, info.expression, info.commentSource, /*withParen*/ false);
+                    break;
+                case fixIdWrapTheBlockWithParen:
+                    if (!isArrowFunction(info.declaration)) return undefined;
+                    wrapBlockWithParen(changes, diag.file, info.declaration, info.expression);
+                    break;
+                default:
+                    Debug.fail(JSON.stringify(context.fixId));
+            }
+        }),
 });
 
 function createObjectTypeFromLabeledExpression(checker: TypeChecker, label: Identifier, expression: Expression) {
@@ -149,12 +151,12 @@ function getFixInfo(checker: TypeChecker, declaration: FunctionLikeDeclaration, 
                 statement: firstStatement,
                 commentSource: firstStatement.statement.expression,
             } : {
-                    declaration,
-                    kind: ProblemKind.MissingReturnStatement,
-                    expression: node,
-                    statement: firstStatement,
-                    commentSource: firstStatement.statement.expression,
-                };
+                declaration,
+                kind: ProblemKind.MissingReturnStatement,
+                expression: node,
+                statement: firstStatement,
+                commentSource: firstStatement.statement.expression,
+            };
         }
     }
     else if (isBlock(firstStatement) && length(firstStatement.statements) === 1) {
@@ -192,13 +194,15 @@ function checkFixedAssignableTo(checker: TypeChecker, declaration: FunctionLikeD
                 exprType,
                 /*typePredicate*/ undefined,
                 sig.minArgumentCount,
-                sig.flags);
+                sig.flags,
+            );
             exprType = checker.createAnonymousType(
                 /*symbol*/ undefined,
                 createSymbolTable(),
                 [newSig],
                 [],
-                []);
+                [],
+            );
         }
         else {
             exprType = checker.getAnyType();

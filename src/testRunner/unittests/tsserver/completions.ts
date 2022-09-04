@@ -167,9 +167,11 @@ export interface BrowserRouterProps {
         ];
         const files = [
             ...filesInProject,
-            appPackage, libFile,
+            appPackage,
+            libFile,
             localReactPackage,
-            localReactRouterDomPackage, localReactRouterDom,
+            localReactRouterDomPackage,
+            localReactRouterDom,
             localPropTypesPackage,
             globalReactRouterDomPackage,
             globalReactPackage,

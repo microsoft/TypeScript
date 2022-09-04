@@ -143,7 +143,7 @@ describe("unittests:: tsserver:: projects::", () => {
                     {
                         compilerOptions: {},
                         files: ["f1.ts"],
-                    }
+                    },
                 ),
             };
 
@@ -170,7 +170,7 @@ describe("unittests:: tsserver:: projects::", () => {
                     {
                         compilerOptions: {},
                         files: ["f1.ts"],
-                    }
+                    },
                 ),
             };
 
@@ -191,7 +191,7 @@ describe("unittests:: tsserver:: projects::", () => {
                     {
                         compilerOptions: {},
                         files: ["f1.ts"],
-                    }
+                    },
                 ),
             };
 
@@ -363,16 +363,19 @@ describe("unittests:: tsserver:: projects::", () => {
         const projectName = "project";
         const projectService = createProjectService(host, { typingsInstaller, logger: createLoggerWithInMemoryLogs(host) });
         projectService.openExternalProject({ projectFileName: projectName, options: {}, rootFiles: toExternalFiles([file1.path, constructorFile.path, bliss.path]) });
-        assert.equal(request, JSON.stringify({
-            projectName,
-            fileNames: [libFile.path, file1.path, constructorFile.path, bliss.path],
-            compilerOptions: { allowNonTsExtensions: true, noEmitForJsFiles: true },
-            typeAcquisition: { include: ["blissfuljs"], exclude: [], enable: true },
-            unresolvedImports: ["s"],
-            projectRootPath: "/",
-            cachePath,
-            kind: "discover",
-        }));
+        assert.equal(
+            request,
+            JSON.stringify({
+                projectName,
+                fileNames: [libFile.path, file1.path, constructorFile.path, bliss.path],
+                compilerOptions: { allowNonTsExtensions: true, noEmitForJsFiles: true },
+                typeAcquisition: { include: ["blissfuljs"], exclude: [], enable: true },
+                unresolvedImports: ["s"],
+                projectRootPath: "/",
+                cachePath,
+                kind: "discover",
+            }),
+        );
         const response = JSON.parse(request!);
         request = undefined;
         projectService.updateTypingsForProject({
@@ -647,7 +650,8 @@ describe("unittests:: tsserver:: projects::", () => {
         projectService.applyChangesInOpenFiles(
             /*openFiles*/ undefined,
             /*changedFiles*/ undefined,
-            /*closedFiles*/[file2.path]);
+            /*closedFiles*/ [file2.path],
+        );
 
         // HTML file is still included in project
 
@@ -665,7 +669,6 @@ describe("unittests:: tsserver:: projects::", () => {
     });
 
     it("no tsconfig script block diagnostic errors", () => {
-
         //  #1. Ensure no diagnostic errors when allowJs is true
         const file1 = {
             path: "/a/b/f1.ts",
@@ -755,8 +758,9 @@ describe("unittests:: tsserver:: projects::", () => {
 
         projectService.applyChangesInOpenFiles(
             /*openFiles*/ undefined,
-            /*changedFiles*/ts.singleIterator({ fileName: file1.path, changes: ts.singleIterator({ span: ts.createTextSpan(0, file1.path.length), newText: "let y = 1" }) }),
-            /*closedFiles*/ undefined);
+            /*changedFiles*/ ts.singleIterator({ fileName: file1.path, changes: ts.singleIterator({ span: ts.createTextSpan(0, file1.path.length), newText: "let y = 1" }) }),
+            /*closedFiles*/ undefined,
+        );
 
         projectService.ensureInferredProjectsUpToDate_TestOnly();
         baselineTsserverLogs("projects", "project structure update is deferred if files are not added or removed", projectService);
@@ -771,7 +775,6 @@ describe("unittests:: tsserver:: projects::", () => {
         const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
         const projectFileName = "projectFileName";
         projectService.openExternalProject({ projectFileName, options: {}, rootFiles: [{ fileName: file1.path, scriptKind: ts.ScriptKind.JS, hasMixedContent: true }] });
-
 
         const project = projectService.externalProjects[0];
 
@@ -1176,7 +1179,7 @@ describe("unittests:: tsserver:: projects::", () => {
         };
         const fileB: File = {
             path: `${projectRootPath}/B/b.ts`,
-            content: "import { foo } from \"../A/a\"; console.log(foo);",
+            content: 'import { foo } from "../A/a"; console.log(foo);',
         };
         const configB: File = {
             path: `${projectRootPath}/B/tsconfig.json`,
@@ -1218,7 +1221,7 @@ describe("unittests:: tsserver:: projects::", () => {
         };
         const fileB: File = {
             path: `${projectRootPath}/B/b.ts`,
-            content: "import { foo } from \"../B/b2\"; console.log(foo);",
+            content: 'import { foo } from "../B/b2"; console.log(foo);',
         };
         const fileB2: File = {
             path: `${projectRootPath}/B/b2.ts`,
@@ -1246,7 +1249,9 @@ describe("unittests:: tsserver:: projects::", () => {
         });
         const knownProjects = session.getProjectService().synchronizeProjectList([], /*includeProjectReferenceRedirectInfo*/ true);
 
-        host.modifyFile(configA.path, `{
+        host.modifyFile(
+            configA.path,
+            `{
   "compilerOptions": {
     "composite": true,
     "declaration": true
@@ -1255,7 +1260,8 @@ describe("unittests:: tsserver:: projects::", () => {
       "**/*",
       "../B/b2.ts"
   ]
-}`);
+}`,
+        );
 
         session.executeCommandSeq<ts.server.protocol.SynchronizeProjectListRequest>({
             command: ts.server.protocol.CommandTypes.SynchronizeProjectList,
@@ -1452,7 +1458,7 @@ describe("unittests:: tsserver:: projects::", () => {
             innerFile => ({
                 command: ts.server.protocol.CommandTypes.GetOutliningSpans,
                 arguments: { file: innerFile.path },
-            })
+            }),
         );
 
         runOnTs<ts.server.protocol.ReferencesRequest>(
@@ -1460,7 +1466,7 @@ describe("unittests:: tsserver:: projects::", () => {
             innerFile => ({
                 command: ts.server.protocol.CommandTypes.References,
                 arguments: protocolFileLocationFromSubstring(innerFile, "bar"),
-            })
+            }),
         );
 
         it("js file opened is in configured project that will be removed", () => {

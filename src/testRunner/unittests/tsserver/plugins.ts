@@ -134,11 +134,14 @@ describe("unittests:: tsserver:: plugins:: loading", () => {
         openFilesForSession([aTs], session);
         session.logger.log(`ExternalFiles:: ${JSON.stringify(session.getProjectService().configuredProjects.get(tsconfig.path)!.getExternalFiles())}`);
 
-        host.writeFile(tsconfig.path, JSON.stringify({
-            compilerOptions: {
-                plugins: [{ name: "some-other-plugin" }],
-            },
-        }));
+        host.writeFile(
+            tsconfig.path,
+            JSON.stringify({
+                compilerOptions: {
+                    plugins: [{ name: "some-other-plugin" }],
+                },
+            }),
+        );
         host.runQueuedTimeoutCallbacks();
         session.logger.log(`ExternalFiles:: ${JSON.stringify(session.getProjectService().configuredProjects.get(tsconfig.path)!.getExternalFiles())}`);
 
@@ -172,7 +175,7 @@ describe("unittests:: tsserver:: plugins:: overriding getSupportedCodeFixes", ()
                 module: () => ({
                     create(info: ts.server.PluginCreateInfo) {
                         const proxy = Harness.LanguageService.makeDefaultProxy(info);
-                        proxy.getSupportedCodeFixes = (fileName) => {
+                        proxy.getSupportedCodeFixes = fileName => {
                             switch (fileName) {
                                 case "/a.ts":
                                     return ["a"];

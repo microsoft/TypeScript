@@ -1,4 +1,6 @@
-import { libContent } from "../helpers/contents";
+import {
+    libContent,
+} from "../helpers/contents";
 import {
     TscWatchCompileChange,
     verifyTscWatch,
@@ -16,7 +18,7 @@ describe("unittests:: tsc-watch:: Emit times and Error updates in builder after 
         content: `{}`,
     };
     interface VerifyEmitAndErrorUpdates {
-        subScenario: string
+        subScenario: string;
         files: () => File[];
         currentDirectory?: string;
         changes: TscWatchCompileChange[];
@@ -31,10 +33,11 @@ describe("unittests:: tsc-watch:: Emit times and Error updates in builder after 
             scenario: "emitAndErrorUpdates",
             subScenario: `default/${subScenario}`,
             commandLineArgs: ["--w"],
-            sys: () => createWatchedSystem(
-                files(),
-                { currentDirectory: currentDirectory || "/user/username/projects/myproject" }
-            ),
+            sys: () =>
+                createWatchedSystem(
+                    files(),
+                    { currentDirectory: currentDirectory || "/user/username/projects/myproject" },
+                ),
             edits: changes,
             baselineIncremental: true,
         });
@@ -43,10 +46,11 @@ describe("unittests:: tsc-watch:: Emit times and Error updates in builder after 
             scenario: "emitAndErrorUpdates",
             subScenario: `defaultAndD/${subScenario}`,
             commandLineArgs: ["--w", "--d"],
-            sys: () => createWatchedSystem(
-                files(),
-                { currentDirectory: currentDirectory || "/user/username/projects/myproject" }
-            ),
+            sys: () =>
+                createWatchedSystem(
+                    files(),
+                    { currentDirectory: currentDirectory || "/user/username/projects/myproject" },
+                ),
             edits: changes,
             baselineIncremental: true,
         });
@@ -55,10 +59,11 @@ describe("unittests:: tsc-watch:: Emit times and Error updates in builder after 
             scenario: "emitAndErrorUpdates",
             subScenario: `isolatedModules/${subScenario}`,
             commandLineArgs: ["--w", "--isolatedModules"],
-            sys: () => createWatchedSystem(
-                files(),
-                { currentDirectory: currentDirectory || "/user/username/projects/myproject" }
-            ),
+            sys: () =>
+                createWatchedSystem(
+                    files(),
+                    { currentDirectory: currentDirectory || "/user/username/projects/myproject" },
+                ),
             edits: changes,
             baselineIncremental: true,
         });
@@ -67,10 +72,11 @@ describe("unittests:: tsc-watch:: Emit times and Error updates in builder after 
             scenario: "emitAndErrorUpdates",
             subScenario: `isolatedModulesAndD/${subScenario}`,
             commandLineArgs: ["--w", "--isolatedModules", "--d"],
-            sys: () => createWatchedSystem(
-                files(),
-                { currentDirectory: currentDirectory || "/user/username/projects/myproject" }
-            ),
+            sys: () =>
+                createWatchedSystem(
+                    files(),
+                    { currentDirectory: currentDirectory || "/user/username/projects/myproject" },
+                ),
             edits: changes,
             baselineIncremental: true,
         });
@@ -79,10 +85,11 @@ describe("unittests:: tsc-watch:: Emit times and Error updates in builder after 
             scenario: "emitAndErrorUpdates",
             subScenario: `assumeChangesOnlyAffectDirectDependencies/${subScenario}`,
             commandLineArgs: ["--w", "--assumeChangesOnlyAffectDirectDependencies"],
-            sys: () => createWatchedSystem(
-                files(),
-                { currentDirectory: currentDirectory || "/user/username/projects/myproject" }
-            ),
+            sys: () =>
+                createWatchedSystem(
+                    files(),
+                    { currentDirectory: currentDirectory || "/user/username/projects/myproject" },
+                ),
             edits: changes,
             baselineIncremental: true,
         });
@@ -91,10 +98,11 @@ describe("unittests:: tsc-watch:: Emit times and Error updates in builder after 
             scenario: "emitAndErrorUpdates",
             subScenario: `assumeChangesOnlyAffectDirectDependenciesAndD/${subScenario}`,
             commandLineArgs: ["--w", "--assumeChangesOnlyAffectDirectDependencies", "--d"],
-            sys: () => createWatchedSystem(
-                files(),
-                { currentDirectory: currentDirectory || "/user/username/projects/myproject" }
-            ),
+            sys: () =>
+                createWatchedSystem(
+                    files(),
+                    { currentDirectory: currentDirectory || "/user/username/projects/myproject" },
+                ),
             edits: changes,
             baselineIncremental: true,
         });
@@ -151,7 +159,7 @@ export class B
             verifyDeepImportChange(
                 "errors for .ts change",
                 bFile,
-                cFile
+                cFile,
             );
         });
         describe("updates errors when deep import through declaration file changes", () => {
@@ -173,7 +181,7 @@ export class B
             verifyDeepImportChange(
                 "errors for .d.ts change",
                 bFile,
-                cFile
+                cFile,
             );
         });
     });
@@ -314,7 +322,7 @@ export class Data {
         describe("when there are no circular import and exports", () => {
             verifyTransitiveExports(
                 "no circular import/export",
-                [lib2Data]
+                [lib2Data],
             );
         });
         describe("when there are circular import and exports", () => {
@@ -339,7 +347,7 @@ export class Data2 {
             };
             verifyTransitiveExports(
                 "yes circular import/exports",
-                [lib2Data, lib2Data2]
+                [lib2Data, lib2Data2],
             );
         });
     });
@@ -362,19 +370,29 @@ export class Data2 {
         verifyEmitAndErrorUpdates({
             subScenario: "with noEmitOnError",
             currentDirectory: `/user/username/projects/noEmitOnError`,
-            files: () => ["shared/types/db.ts", "src/main.ts", "src/other.ts", "tsconfig.json"]
-                .map(f => getTsBuildProjectFile("noEmitOnError", f)).concat({ path: libFile.path, content: libContent }),
+            files: () =>
+                ["shared/types/db.ts", "src/main.ts", "src/other.ts", "tsconfig.json"]
+                    .map(f => getTsBuildProjectFile("noEmitOnError", f)).concat({ path: libFile.path, content: libContent }),
             changes: [
                 noChange,
-                change("Fix Syntax error", `import { A } from "../shared/types/db";
+                change(
+                    "Fix Syntax error",
+                    `import { A } from "../shared/types/db";
 const a = {
     lastName: 'sdsd'
-};`),
-                change("Semantic Error", `import { A } from "../shared/types/db";
-const a: string = 10;`),
+};`,
+                ),
+                change(
+                    "Semantic Error",
+                    `import { A } from "../shared/types/db";
+const a: string = 10;`,
+                ),
                 noChange,
-                change("Fix Semantic Error", `import { A } from "../shared/types/db";
-const a: string = "hello";`),
+                change(
+                    "Fix Semantic Error",
+                    `import { A } from "../shared/types/db";
+const a: string = "hello";`,
+                ),
                 noChange,
             ],
         });

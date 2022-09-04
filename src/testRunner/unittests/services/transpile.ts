@@ -2,7 +2,6 @@ import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
 
 describe("unittests:: services:: Transpile", () => {
-
     interface TranspileTestSettings {
         options?: ts.TranspileOptions;
         noSetFileName?: boolean;
@@ -10,82 +9,81 @@ describe("unittests:: services:: Transpile", () => {
     }
 
     function transpilesCorrectly(nameIn: string, input: string, testSettings: TranspileTestSettings) {
-        const runOnce = (name: string, testSettings: TranspileTestSettings) => describe(name, () => {
-            let transpileResult: ts.TranspileOutput;
-            let oldTranspileResult: string;
-            let oldTranspileDiagnostics: ts.Diagnostic[];
+        const runOnce = (name: string, testSettings: TranspileTestSettings) =>
+            describe(name, () => {
+                let transpileResult: ts.TranspileOutput;
+                let oldTranspileResult: string;
+                let oldTranspileDiagnostics: ts.Diagnostic[];
 
-            const transpileOptions: ts.TranspileOptions = testSettings.options || {};
-            if (!transpileOptions.compilerOptions) {
-                transpileOptions.compilerOptions = { };
-            }
-            if (transpileOptions.compilerOptions.target === undefined) {
-                transpileOptions.compilerOptions.target = ts.ScriptTarget.ES3;
-            }
-
-            if (transpileOptions.compilerOptions.newLine === undefined) {
-                // use \r\n as default new line
-                transpileOptions.compilerOptions.newLine = ts.NewLineKind.CarriageReturnLineFeed;
-            }
-
-            transpileOptions.compilerOptions.sourceMap = true;
-
-            let unitName = transpileOptions.fileName;
-            if (!unitName) {
-                unitName = transpileOptions.compilerOptions.jsx ? "file.tsx" : "file.ts";
-                if (!testSettings.noSetFileName) {
-                    transpileOptions.fileName = unitName;
+                const transpileOptions: ts.TranspileOptions = testSettings.options || {};
+                if (!transpileOptions.compilerOptions) {
+                    transpileOptions.compilerOptions = {};
                 }
-            }
+                if (transpileOptions.compilerOptions.target === undefined) {
+                    transpileOptions.compilerOptions.target = ts.ScriptTarget.ES3;
+                }
 
-            transpileOptions.reportDiagnostics = true;
+                if (transpileOptions.compilerOptions.newLine === undefined) {
+                    // use \r\n as default new line
+                    transpileOptions.compilerOptions.newLine = ts.NewLineKind.CarriageReturnLineFeed;
+                }
 
-            const justName = "transpile/" + name.replace(/[^a-z0-9\-. ()=]/ig, "") + (transpileOptions.compilerOptions.jsx ? ts.Extension.Tsx : ts.Extension.Ts);
-            const toBeCompiled = [{
-                unitName,
-                content: input,
-            }];
-            const canUseOldTranspile = !transpileOptions.renamedDependencies;
+                transpileOptions.compilerOptions.sourceMap = true;
 
-            before(() => {
-                transpileResult = ts.transpileModule(input, transpileOptions);
+                let unitName = transpileOptions.fileName;
+                if (!unitName) {
+                    unitName = transpileOptions.compilerOptions.jsx ? "file.tsx" : "file.ts";
+                    if (!testSettings.noSetFileName) {
+                        transpileOptions.fileName = unitName;
+                    }
+                }
+
+                transpileOptions.reportDiagnostics = true;
+
+                const justName = "transpile/" + name.replace(/[^a-z0-9\-. ()=]/ig, "") + (transpileOptions.compilerOptions.jsx ? ts.Extension.Tsx : ts.Extension.Ts);
+                const toBeCompiled = [{
+                    unitName,
+                    content: input,
+                }];
+                const canUseOldTranspile = !transpileOptions.renamedDependencies;
+
+                before(() => {
+                    transpileResult = ts.transpileModule(input, transpileOptions);
+
+                    if (canUseOldTranspile) {
+                        oldTranspileDiagnostics = [];
+                        oldTranspileResult = ts.transpile(input, transpileOptions.compilerOptions, transpileOptions.fileName, oldTranspileDiagnostics, transpileOptions.moduleName);
+                    }
+                });
+
+                after(() => {
+                    transpileResult = undefined!;
+                    oldTranspileResult = undefined!;
+                    oldTranspileDiagnostics = undefined!;
+                });
+
+                /* eslint-disable no-null/no-null */
+                it("Correct errors for " + justName, () => {
+                    Harness.Baseline.runBaseline(justName.replace(/\.tsx?$/, ".errors.txt"), transpileResult.diagnostics!.length === 0 ? null : Harness.Compiler.getErrorBaseline(toBeCompiled, transpileResult.diagnostics!));
+                });
 
                 if (canUseOldTranspile) {
-                    oldTranspileDiagnostics = [];
-                    oldTranspileResult = ts.transpile(input, transpileOptions.compilerOptions, transpileOptions.fileName, oldTranspileDiagnostics, transpileOptions.moduleName);
+                    it("Correct errors (old transpile) for " + justName, () => {
+                        Harness.Baseline.runBaseline(justName.replace(/\.tsx?$/, ".oldTranspile.errors.txt"), oldTranspileDiagnostics.length === 0 ? null : Harness.Compiler.getErrorBaseline(toBeCompiled, oldTranspileDiagnostics));
+                    });
+                }
+                /* eslint-enable no-null/no-null */
+
+                it("Correct output for " + justName, () => {
+                    Harness.Baseline.runBaseline(justName.replace(/\.tsx?$/, ts.Extension.Js), transpileResult.outputText);
+                });
+
+                if (canUseOldTranspile) {
+                    it("Correct output (old transpile) for " + justName, () => {
+                        Harness.Baseline.runBaseline(justName.replace(/\.tsx?$/, ".oldTranspile.js"), oldTranspileResult);
+                    });
                 }
             });
-
-            after(() => {
-                transpileResult = undefined!;
-                oldTranspileResult = undefined!;
-                oldTranspileDiagnostics = undefined!;
-            });
-
-            /* eslint-disable no-null/no-null */
-            it("Correct errors for " + justName, () => {
-                Harness.Baseline.runBaseline(justName.replace(/\.tsx?$/, ".errors.txt"),
-                    transpileResult.diagnostics!.length === 0 ? null : Harness.Compiler.getErrorBaseline(toBeCompiled, transpileResult.diagnostics!));
-            });
-
-            if (canUseOldTranspile) {
-                it("Correct errors (old transpile) for " + justName, () => {
-                    Harness.Baseline.runBaseline(justName.replace(/\.tsx?$/, ".oldTranspile.errors.txt"),
-                        oldTranspileDiagnostics.length === 0 ? null : Harness.Compiler.getErrorBaseline(toBeCompiled, oldTranspileDiagnostics));
-                });
-            }
-            /* eslint-enable no-null/no-null */
-
-            it("Correct output for " + justName, () => {
-                Harness.Baseline.runBaseline(justName.replace(/\.tsx?$/, ts.Extension.Js), transpileResult.outputText);
-            });
-
-            if (canUseOldTranspile) {
-                it("Correct output (old transpile) for " + justName, () => {
-                    Harness.Baseline.runBaseline(justName.replace(/\.tsx?$/, ".oldTranspile.js"), oldTranspileResult);
-                });
-            }
-        });
 
         if (testSettings.testVerbatimModuleSyntax !== "only") {
             runOnce(nameIn, testSettings);
@@ -109,11 +107,15 @@ describe("unittests:: services:: Transpile", () => {
         testVerbatimModuleSyntax: true,
     });
 
-    transpilesCorrectly("Generates no diagnostics for missing file references", `/// <reference path="file2.ts" />
-var x = 0;`, {
-        options: { compilerOptions: { module: ts.ModuleKind.CommonJS } },
-        testVerbatimModuleSyntax: true,
-    });
+    transpilesCorrectly(
+        "Generates no diagnostics for missing file references",
+        `/// <reference path="file2.ts" />
+var x = 0;`,
+        {
+            options: { compilerOptions: { module: ts.ModuleKind.CommonJS } },
+            testVerbatimModuleSyntax: true,
+        },
+    );
 
     transpilesCorrectly("Generates no diagnostics for missing module imports", `import {a} from "module2";`, {
         options: { compilerOptions: { module: ts.ModuleKind.CommonJS } },
@@ -148,41 +150,52 @@ var x = 0;`, {
         testVerbatimModuleSyntax: true,
     });
 
-    transpilesCorrectly("Rename dependencies - System",
+    transpilesCorrectly(
+        "Rename dependencies - System",
         `import {foo} from "SomeName";\n` +
-        `declare function use(a: any);\n` +
-        `use(foo);`, {
+            `declare function use(a: any);\n` +
+            `use(foo);`,
+        {
             options: { compilerOptions: { module: ts.ModuleKind.System, newLine: ts.NewLineKind.LineFeed }, renamedDependencies: { SomeName: "SomeOtherName" } },
-        });
+        },
+    );
 
-    transpilesCorrectly("Rename dependencies - AMD",
+    transpilesCorrectly(
+        "Rename dependencies - AMD",
         `import {foo} from "SomeName";\n` +
-        `declare function use(a: any);\n` +
-        `use(foo);`, {
+            `declare function use(a: any);\n` +
+            `use(foo);`,
+        {
             options: { compilerOptions: { module: ts.ModuleKind.AMD, newLine: ts.NewLineKind.LineFeed }, renamedDependencies: { SomeName: "SomeOtherName" } },
-        });
+        },
+    );
 
-    transpilesCorrectly("Rename dependencies - UMD",
+    transpilesCorrectly(
+        "Rename dependencies - UMD",
         `import {foo} from "SomeName";\n` +
-        `declare function use(a: any);\n` +
-        `use(foo);`, {
+            `declare function use(a: any);\n` +
+            `use(foo);`,
+        {
             options: { compilerOptions: { module: ts.ModuleKind.UMD, newLine: ts.NewLineKind.LineFeed }, renamedDependencies: { SomeName: "SomeOtherName" } },
-        });
+        },
+    );
 
-    transpilesCorrectly("Transpile with emit decorators and emit metadata",
+    transpilesCorrectly(
+        "Transpile with emit decorators and emit metadata",
         `import {db} from './db';\n` +
-        `function someDecorator(target) {\n` +
-        `    return target;\n` +
-        `} \n` +
-        `@someDecorator\n` +
-        `class MyClass {\n` +
-        `    db: db;\n` +
-        `    constructor(db: db) {\n` +
-        `        this.db = db;\n` +
-        `        this.db.doSomething(); \n` +
-        `    }\n` +
-        `}\n` +
-        `export {MyClass}; \n`, {
+            `function someDecorator(target) {\n` +
+            `    return target;\n` +
+            `} \n` +
+            `@someDecorator\n` +
+            `class MyClass {\n` +
+            `    db: db;\n` +
+            `    constructor(db: db) {\n` +
+            `        this.db = db;\n` +
+            `        this.db.doSomething(); \n` +
+            `    }\n` +
+            `}\n` +
+            `export {MyClass}; \n`,
+        {
             options: {
                 compilerOptions: {
                     module: ts.ModuleKind.CommonJS,
@@ -194,7 +207,8 @@ var x = 0;`, {
                 },
             },
             testVerbatimModuleSyntax: true,
-        });
+        },
+    );
 
     transpilesCorrectly("Supports backslashes in file name", "var x", {
         options: { fileName: "a\\b.ts" },
@@ -514,13 +528,15 @@ var x = 0;`, {
         testVerbatimModuleSyntax: true,
     });
 
-    transpilesCorrectly("Correctly serialize metadata when transpile with CommonJS option",
+    transpilesCorrectly(
+        "Correctly serialize metadata when transpile with CommonJS option",
         `import * as ng from "angular2/core";` +
-        `declare function foo(...args: any[]);` +
-        `@foo` +
-        `export class MyClass1 {` +
-        `    constructor(private _elementRef: ng.ElementRef){}` +
-        `}`, {
+            `declare function foo(...args: any[]);` +
+            `@foo` +
+            `export class MyClass1 {` +
+            `    constructor(private _elementRef: ng.ElementRef){}` +
+            `}`,
+        {
             options: {
                 compilerOptions: {
                     target: ts.ScriptTarget.ES5,
@@ -531,16 +547,18 @@ var x = 0;`, {
                 },
             },
             testVerbatimModuleSyntax: true,
-        }
+        },
     );
 
-    transpilesCorrectly("Correctly serialize metadata when transpile with System option",
+    transpilesCorrectly(
+        "Correctly serialize metadata when transpile with System option",
         `import * as ng from "angular2/core";` +
-        `declare function foo(...args: any[]);` +
-        `@foo` +
-        `export class MyClass1 {` +
-        `    constructor(private _elementRef: ng.ElementRef){}` +
-        `}`, {
+            `declare function foo(...args: any[]);` +
+            `@foo` +
+            `export class MyClass1 {` +
+            `    constructor(private _elementRef: ng.ElementRef){}` +
+            `}`,
+        {
             options: {
                 compilerOptions: {
                     target: ts.ScriptTarget.ES5,
@@ -551,7 +569,7 @@ var x = 0;`, {
                     isolatedModules: true,
                 },
             },
-        }
+        },
     );
 
     transpilesCorrectly("Supports readonly keyword for arrays", "let x: readonly string[];", {
@@ -569,67 +587,79 @@ var x = 0;`, {
         testVerbatimModuleSyntax: true,
     });
 
-    transpilesCorrectly("Export star as ns conflict does not crash", `
+    transpilesCorrectly(
+        "Export star as ns conflict does not crash",
+        `
 var a;
 export { a as alias };
-export * as alias from './file';`, {
-        noSetFileName: true,
+export * as alias from './file';`,
+        {
+            noSetFileName: true,
+            testVerbatimModuleSyntax: true,
+        },
+    );
+
+    transpilesCorrectly(
+        "Elides import equals referenced only by export type",
+        `import IFoo = Namespace.IFoo;` +
+            `export type { IFoo };`,
+        {
+            options: { compilerOptions: { module: ts.ModuleKind.CommonJS } },
+        },
+    );
+
+    transpilesCorrectly(
+        "Does not elide import equals referenced only by export type",
+        `import IFoo = Namespace.IFoo;` +
+            `export type { IFoo };`,
+        {
+            options: { compilerOptions: { module: ts.ModuleKind.CommonJS } },
+            testVerbatimModuleSyntax: "only",
+        },
+    );
+
+    transpilesCorrectly(
+        "Elides import equals referenced only by type only export specifier",
+        `import IFoo = Namespace.IFoo;` +
+            `export { type IFoo };`,
+        {
+            options: { compilerOptions: { module: ts.ModuleKind.CommonJS } },
+        },
+    );
+
+    transpilesCorrectly(
+        "Does not elide import equals referenced only by type only export specifier",
+        `import IFoo = Namespace.IFoo;` +
+            `export { type IFoo };`,
+        {
+            options: { compilerOptions: { module: ts.ModuleKind.CommonJS } },
+            testVerbatimModuleSyntax: "only",
+        },
+    );
+
+    transpilesCorrectly("Can transpile .ts extensions without error", `import { foo } from "./foo.ts";`, {
+        options: { compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ESNext } },
         testVerbatimModuleSyntax: true,
     });
 
-    transpilesCorrectly("Elides import equals referenced only by export type",
-        `import IFoo = Namespace.IFoo;` +
-        `export type { IFoo };`, {
-            options: { compilerOptions: { module: ts.ModuleKind.CommonJS } },
-        }
-    );
+    transpilesCorrectly("Ignores `allowImportingTsExtensions` without `noEmit` error", `import { foo } from "./foo.ts";`, {
+        options: { compilerOptions: { module: ts.ModuleKind.ESNext, allowImportingTsExtensions: true, target: ts.ScriptTarget.ESNext } },
+        testVerbatimModuleSyntax: true,
+    });
 
-    transpilesCorrectly("Does not elide import equals referenced only by export type",
-        `import IFoo = Namespace.IFoo;` +
-        `export type { IFoo };`, {
-            options: { compilerOptions: { module: ts.ModuleKind.CommonJS } },
-            testVerbatimModuleSyntax: "only",
-        }
-    );
-
-    transpilesCorrectly("Elides import equals referenced only by type only export specifier",
-        `import IFoo = Namespace.IFoo;` +
-        `export { type IFoo };`, {
-            options: { compilerOptions: { module: ts.ModuleKind.CommonJS } },
-        }
-    );
-
-    transpilesCorrectly("Does not elide import equals referenced only by type only export specifier",
-        `import IFoo = Namespace.IFoo;` +
-        `export { type IFoo };`, {
-            options: { compilerOptions: { module: ts.ModuleKind.CommonJS } },
-            testVerbatimModuleSyntax: "only",
-        }
-    );
-
-    transpilesCorrectly("Can transpile .ts extensions without error",
-        `import { foo } from "./foo.ts";`, {
-            options: { compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ESNext } },
-            testVerbatimModuleSyntax: true,
-        }
-    );
-
-    transpilesCorrectly("Ignores `allowImportingTsExtensions` without `noEmit` error",
-        `import { foo } from "./foo.ts";`, {
-            options: { compilerOptions: { module: ts.ModuleKind.ESNext, allowImportingTsExtensions: true, target: ts.ScriptTarget.ESNext } },
-            testVerbatimModuleSyntax: true,
-        }
-    );
-
-    transpilesCorrectly("Preserves exported const merged with type-only import", `
+    transpilesCorrectly(
+        "Preserves exported const merged with type-only import",
+        `
         import fooValue from "./values";
         import type {Foo} from "./types";
 
         const Foo: Foo = fooValue as any as Foo;
 
         export {Foo};
-    `, {
-        options: { compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ESNext } },
-        testVerbatimModuleSyntax: true,
-    });
+    `,
+        {
+            options: { compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ESNext } },
+            testVerbatimModuleSyntax: true,
+        },
+    );
 });

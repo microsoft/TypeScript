@@ -1,6 +1,13 @@
 import * as Utils from "../../_namespaces/Utils";
-import { baselineTsserverLogs, createLoggerWithInMemoryLogs, createProjectService, logDiagnostics } from "../helpers/tsserver";
-import { createServerHost } from "../helpers/virtualFileSystemWithWatch";
+import {
+    baselineTsserverLogs,
+    createLoggerWithInMemoryLogs,
+    createProjectService,
+    logDiagnostics,
+} from "../helpers/tsserver";
+import {
+    createServerHost,
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsserver:: languageService", () => {
     it("should work correctly on case-sensitive file systems", () => {

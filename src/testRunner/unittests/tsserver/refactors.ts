@@ -98,8 +98,10 @@ describe("unittests:: tsserver:: refactors", () => {
     it("handles moving statement to an existing file", () => {
         const aTs: File = { path: "/Foo/a.ts", content: "const x = 0;" };
         const bTs: File = {
-            path: "/Foo/b.ts", content: `import {} from "./bar";
-    const a = 1;`};
+            path: "/Foo/b.ts",
+            content: `import {} from "./bar";
+    const a = 1;`,
+        };
         const tsconfig: File = { path: "/Foo/tsconfig.json", content: `{ "files": ["./a.ts", "./b.ts"] }` };
         const host = createServerHost([aTs, bTs, tsconfig]);
         const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });

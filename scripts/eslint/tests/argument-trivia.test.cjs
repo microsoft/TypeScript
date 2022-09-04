@@ -77,7 +77,7 @@ const fn = (prop: boolean) => {};
 fn(/* boolean arg */false);
             `,
             errors: [{ messageId: "argumentTriviaArgumentSpaceError" }],
-            output:`
+            output: `
 const fn = (prop: boolean) => {};
 fn(/* boolean arg */ false);
             `,

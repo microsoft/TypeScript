@@ -18,10 +18,12 @@ function createExportingModuleFile(path: string, exportPrefix: string, exportCou
 }
 
 function createExportingModuleFiles(pathPrefix: string, fileCount: number, exportCount: number, getExportPrefix: (fileIndex: number) => string): File[] {
-    return ts.arrayOf(fileCount, fileIndex => createExportingModuleFile(
-        `${pathPrefix}_${fileIndex}.ts`,
-        getExportPrefix(fileIndex),
-        exportCount));
+    return ts.arrayOf(fileCount, fileIndex =>
+        createExportingModuleFile(
+            `${pathPrefix}_${fileIndex}.ts`,
+            getExportPrefix(fileIndex),
+            exportCount,
+        ));
 }
 
 function createNodeModulesPackage(packageName: string, fileCount: number, exportCount: number, getExportPrefix: (fileIndex: number) => string): File[] {
@@ -133,7 +135,8 @@ describe("unittests:: tsserver:: completionsIncomplete", () => {
                 assert.lengthOf(completions.entries.filter(entry => (entry.data as any)?.moduleSpecifier?.startsWith("dep-a")), 50);
                 assertCompletionDetailsOk(
                     indexFile.path,
-                    completions.entries.find(entry => (entry.data as any)?.moduleSpecifier?.startsWith("dep-a"))!);
+                    completions.entries.find(entry => (entry.data as any)?.moduleSpecifier?.startsWith("dep-a"))!,
+                );
             });
         baselineTsserverLogs("completionsIncomplete", "works with PackageJsonAutoImportProvider", session);
     });

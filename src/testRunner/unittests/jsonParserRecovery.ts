@@ -11,7 +11,8 @@ describe("unittests:: jsonParserRecovery", () => {
                 Harness.Compiler.getErrorBaseline([{
                     content: text,
                     unitName: name,
-                }], file.parseDiagnostics));
+                }], file.parseDiagnostics),
+            );
 
             // Will throw if parse tree does not cover full input text
             file.getChildren();
@@ -22,7 +23,9 @@ describe("unittests:: jsonParserRecovery", () => {
     parsesToValidSourceFileWithErrors("TypeScript code", "interface Foo {} blah");
     parsesToValidSourceFileWithErrors("Two comma-separated objects", "{}, {}");
     parsesToValidSourceFileWithErrors("Two objects", "{} {}");
-    parsesToValidSourceFileWithErrors("JSX", `
+    parsesToValidSourceFileWithErrors(
+        "JSX",
+        `
         interface Test {}
 
         const Header = () => (
@@ -36,5 +39,6 @@ describe("unittests:: jsonParserRecovery", () => {
               \`}
             </style>
           </div>
-        )`);
+        )`,
+    );
 });

@@ -21,9 +21,7 @@ registerCodeFix({
             return undefined;
         }
 
-        const changes = textChanges.ChangeTracker.with(context, changeTracker =>
-            doChange(changeTracker, configFile)
-        );
+        const changes = textChanges.ChangeTracker.with(context, changeTracker => doChange(changeTracker, configFile));
         return [
             createCodeFixActionWithoutFixAll(fixID, changes, Diagnostics.Enable_the_jsx_flag_in_your_configuration_file),
         ];

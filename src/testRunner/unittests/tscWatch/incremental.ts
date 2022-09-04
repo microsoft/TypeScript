@@ -1,7 +1,11 @@
 import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
-import { CommandLineProgram } from "../helpers/baseline";
-import { libContent } from "../helpers/contents";
+import {
+    CommandLineProgram,
+} from "../helpers/baseline";
+import {
+    libContent,
+} from "../helpers/contents";
 import {
     applyEdit,
     createBaseline,
@@ -43,7 +47,7 @@ describe("unittests:: tsc-watch:: emit file --incremental", () => {
 
     function verifyIncrementalWatchEmitWorker(
         { subScenario, files, optionsToExtend, modifyFs }: VerifyIncrementalWatchEmitInput,
-        incremental: boolean
+        incremental: boolean,
     ) {
         const { sys, baseline, oldSnap, cb, getPrograms } = createBaseline(createWatchedSystem(files(), { currentDirectory: project }));
         if (incremental) sys.exit = exitCode => sys.exitCode = exitCode;
@@ -279,12 +283,16 @@ export { C } from "./c";
             return [libFile, aTs, bTs, cTs, indexTs, config];
         },
         subScenario: "incremental with circular references",
-        modifyFs: host => host.writeFile(`${project}/a.ts`, `import { B } from "./b";
+        modifyFs: host =>
+            host.writeFile(
+                `${project}/a.ts`,
+                `import { B } from "./b";
 export interface A {
     b: B;
     foo: any;
 }
-`),
+`,
+            ),
     });
 
     verifyIncrementalWatchEmit({
@@ -395,12 +403,13 @@ export const Fragment: unique symbol;
     verifyTscWatch({
         scenario: "incremental",
         subScenario: "tsbuildinfo has error",
-        sys: () => createWatchedSystem({
-            "/src/project/main.ts": "export const x = 10;",
-            "/src/project/tsconfig.json": "{}",
-            "/src/project/tsconfig.tsbuildinfo": "Some random string",
-            [libFile.path]: libFile.content,
-        }),
+        sys: () =>
+            createWatchedSystem({
+                "/src/project/main.ts": "export const x = 10;",
+                "/src/project/tsconfig.json": "{}",
+                "/src/project/tsconfig.tsbuildinfo": "Some random string",
+                [libFile.path]: libFile.content,
+            }),
         commandLineArgs: ["--p", "src/project", "-i", "-w"],
     });
 });

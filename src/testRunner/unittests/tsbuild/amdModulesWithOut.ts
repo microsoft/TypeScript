@@ -125,10 +125,18 @@ describe("unittests:: tsbuild:: outFile:: on amd modules with --out", () => {
         describe("stripInternal", () => {
             function stripInternalScenario(fs: vfs.FileSystem) {
                 const internal = "/*@internal*/";
-                replaceText(fs, "/src/app/tsconfig.json", `"composite": true,`, `"composite": true,
-"stripInternal": true,`);
+                replaceText(
+                    fs,
+                    "/src/app/tsconfig.json",
+                    `"composite": true,`,
+                    `"composite": true,
+"stripInternal": true,`,
+                );
                 replaceText(fs, "/src/lib/file0.ts", "const", `${internal} const`);
-                appendText(fs, "/src/lib/file1.ts", `
+                appendText(
+                    fs,
+                    "/src/lib/file1.ts",
+                    `
 export class normalC {
     ${internal} constructor() { }
     ${internal} prop: string;
@@ -153,7 +161,8 @@ ${internal} export namespace internalOther.something { export class someClass {}
 ${internal} export import internalImport = internalNamespace.someClass;
 ${internal} export type internalType = internalC;
 ${internal} export const internalConst = 10;
-${internal} export enum internalEnum { a, b, c }`);
+${internal} export enum internalEnum { a, b, c }`,
+                );
             }
 
             // Verify initial + incremental edits

@@ -132,8 +132,8 @@ function addRule(rules: Rule[], rule: Rule, specificTokens: boolean, constructio
     const position = rule.action & RuleAction.StopAction ?
         specificTokens ? RulesPosition.StopRulesSpecific : RulesPosition.StopRulesAny :
         rule.context !== anyContext ?
-            specificTokens ? RulesPosition.ContextRulesSpecific : RulesPosition.ContextRulesAny :
-            specificTokens ? RulesPosition.NoContextRulesSpecific : RulesPosition.NoContextRulesAny;
+        specificTokens ? RulesPosition.ContextRulesSpecific : RulesPosition.ContextRulesAny :
+        specificTokens ? RulesPosition.NoContextRulesSpecific : RulesPosition.NoContextRulesAny;
 
     const state = constructionState[rulesBucketIndex] || 0;
     rules.splice(getInsertionIndex(state, position), 0, rule);

@@ -63,7 +63,8 @@ describe("unittests:: tsserver:: symLinks", () => {
                 { file: aFc, projectRootPath: folderA },
                 { file: bFc, projectRootPath: folderB },
             ],
-            session);
+            session,
+        );
         session.executeCommandSeq<ts.server.protocol.RenameRequest>({
             command: ts.server.protocol.CommandTypes.Rename,
             arguments: { file: aFc, ...protocolLocationFromSubstring(cFile.content, "C") },
@@ -152,10 +153,13 @@ new C();`,
 
                     // Change config file's module resolution affecting option
                     const config = JSON.parse(host.readFile(recognizerDateTimeTsconfigPath)!);
-                    host.writeFile(recognizerDateTimeTsconfigPath, JSON.stringify({
-                        ...config,
-                        compilerOptions: { ...config.compilerOptions, resolveJsonModule: true },
-                    }));
+                    host.writeFile(
+                        recognizerDateTimeTsconfigPath,
+                        JSON.stringify({
+                            ...config,
+                            compilerOptions: { ...config.compilerOptions, resolveJsonModule: true },
+                        }),
+                    );
                     host.runQueuedTimeoutCallbacks(); // Scheduled invalidation of resolutions
                     host.runQueuedTimeoutCallbacks(); // Actual update
 

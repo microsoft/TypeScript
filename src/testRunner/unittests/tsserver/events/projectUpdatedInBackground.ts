@@ -140,8 +140,14 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
                 if (!firstReloadFileList) host.runQueuedTimeoutCallbacks(); // Invalidated module resolutions to schedule project update
 
                 return {
-                    host, session,
-                    moduleFile1, file1Consumer1, file1Consumer2, moduleFile2, globalFile3, configFile,
+                    host,
+                    session,
+                    moduleFile1,
+                    file1Consumer1,
+                    file1Consumer2,
+                    moduleFile2,
+                    globalFile3,
+                    configFile,
                     updateContentOfOpenFile,
                 };
 
@@ -399,18 +405,20 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
 
     describe("when event handler is not set but session is created with canUseEvents = true", () => {
         describe("without noGetErrOnBackgroundUpdate, diagnostics for open files are queued", () => {
-            verifyProjectsUpdatedInBackgroundEvent("without noGetErrOnBackgroundUpdate", host => createSession(host, {
-                canUseEvents: true,
-                logger: createLoggerWithInMemoryLogs(host),
-            }));
+            verifyProjectsUpdatedInBackgroundEvent("without noGetErrOnBackgroundUpdate", host =>
+                createSession(host, {
+                    canUseEvents: true,
+                    logger: createLoggerWithInMemoryLogs(host),
+                }));
         });
 
         describe("with noGetErrOnBackgroundUpdate, diagnostics for open file are not queued", () => {
-            verifyProjectsUpdatedInBackgroundEvent("with noGetErrOnBackgroundUpdate", host => createSession(host, {
-                canUseEvents: true,
-                logger: createLoggerWithInMemoryLogs(host),
-                noGetErrOnBackgroundUpdate: true,
-            }));
+            verifyProjectsUpdatedInBackgroundEvent("with noGetErrOnBackgroundUpdate", host =>
+                createSession(host, {
+                    canUseEvents: true,
+                    logger: createLoggerWithInMemoryLogs(host),
+                    noGetErrOnBackgroundUpdate: true,
+                }));
         });
     });
 });

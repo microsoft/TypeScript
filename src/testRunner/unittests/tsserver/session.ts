@@ -1,6 +1,10 @@
-import { expect } from "chai";
+import {
+    expect,
+} from "chai";
 
-import { incrementalVerifier } from "../../../harness/incrementalUtils";
+import {
+    incrementalVerifier,
+} from "../../../harness/incrementalUtils";
 import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
 import {
@@ -14,20 +18,34 @@ const mockHost: ts.server.ServerHost = {
     args: [],
     newLine: "\n",
     useCaseSensitiveFileNames: true,
-    write(s): void { lastWrittenToHost = s; },
+    write(s): void {
+        lastWrittenToHost = s;
+    },
     readFile: ts.returnUndefined,
     writeFile: ts.noop,
-    resolvePath(): string { return undefined!; }, // TODO: GH#18217
+    resolvePath(): string {
+        return undefined!;
+    }, // TODO: GH#18217
     fileExists: () => false,
     directoryExists: () => false,
     getDirectories: () => [],
     createDirectory: ts.noop,
-    getExecutingFilePath(): string { return ""; },
-    getCurrentDirectory(): string { return ""; },
-    getEnvironmentVariable(): string { return ""; },
-    readDirectory() { return []; },
+    getExecutingFilePath(): string {
+        return "";
+    },
+    getCurrentDirectory(): string {
+        return "";
+    },
+    getEnvironmentVariable(): string {
+        return "";
+    },
+    readDirectory() {
+        return [];
+    },
     exit: ts.noop,
-    setTimeout() { return 0; },
+    setTimeout() {
+        return 0;
+    },
     clearTimeout: ts.noop,
     setImmediate: () => 0,
     clearImmediate: ts.noop,
@@ -179,7 +197,8 @@ describe("unittests:: tsserver:: Session:: General functionality", () => {
                     newLine: ts.NewLineKind.LineFeed,
                     moduleResolution: ts.ModuleResolutionKind.Node10,
                     allowNonTsExtensions: true, // injected by tsserver
-                } as ts.CompilerOptions);
+                } as ts.CompilerOptions,
+            );
         });
 
         it("Status request gives ts.version", () => {
@@ -352,7 +371,6 @@ describe("unittests:: tsserver:: Session:: General functionality", () => {
 });
 
 describe("unittests:: tsserver:: Session:: exceptions", () => {
-
     // Disable sourcemap support for the duration of the test, as sourcemapping the errors generated during this test is slow and not something we care to test
     let oldPrepare: ts.AnyFunction;
     let oldStackTraceLimit: number;
@@ -371,7 +389,7 @@ describe("unittests:: tsserver:: Session:: exceptions", () => {
     const command = "testhandler";
     class TestSession extends ts.server.Session {
         lastSent: ts.server.protocol.Message | undefined;
-        private exceptionRaisingHandler(_request: ts.server.protocol.Request): { response?: any, responseRequired: boolean } {
+        private exceptionRaisingHandler(_request: ts.server.protocol.Request): { response?: any; responseRequired: boolean; } {
             f1();
             return ts.Debug.fail(); // unreachable, throw to make compiler happy
             function f1() {
@@ -400,7 +418,6 @@ describe("unittests:: tsserver:: Session:: exceptions", () => {
     }
 
     it("raised in a protocol handler generate an event", () => {
-
         const session = new TestSession();
 
         const request = {
@@ -596,7 +613,7 @@ describe("unittests:: tsserver:: Session:: an example of using the Session API t
         }
     }
 
-    it("can be constructed and respond to commands", (done) => {
+    it("can be constructed and respond to commands", done => {
         const cli = new InProcClient();
         const session = new InProcSession(cli);
         const toEcho = {
@@ -611,7 +628,7 @@ describe("unittests:: tsserver:: Session:: an example of using the Session API t
         cli.connect(session);
 
         // Add an event handler
-        cli.on("testevent", (eventinfo) => {
+        cli.on("testevent", eventinfo => {
             expect(eventinfo).to.equal(toEvent);
             responses++;
             expect(responses).to.equal(1);
@@ -621,7 +638,7 @@ describe("unittests:: tsserver:: Session:: an example of using the Session API t
         session.event(toEvent, "testevent");
 
         // Queue an echo command
-        cli.execute("echo", toEcho, (resp) => {
+        cli.execute("echo", toEcho, resp => {
             assert(resp.success, resp.message);
             responses++;
             expect(responses).to.equal(2);
@@ -634,7 +651,7 @@ describe("unittests:: tsserver:: Session:: an example of using the Session API t
             formatOptions: {
                 newLineCharacter: "`n",
             },
-        }, (resp) => {
+        }, resp => {
             assert(resp.success, resp.message);
             responses++;
             expect(responses).to.equal(3);

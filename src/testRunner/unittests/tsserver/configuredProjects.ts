@@ -1,5 +1,7 @@
 import * as ts from "../../_namespaces/ts";
-import { ensureErrorFreeBuild } from "../helpers/solutionBuilder";
+import {
+    ensureErrorFreeBuild,
+} from "../helpers/solutionBuilder";
 import {
     commonFile1,
     commonFile2,
@@ -227,13 +229,15 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
         projectService.openClientFile(nodeModuleFile.path);
         projectService.openClientFile(classicModuleFile.path);
 
-
-        host.writeFile(configFile.path, `{
+        host.writeFile(
+            configFile.path,
+            `{
                 "compilerOptions": {
                     "moduleResolution": "classic"
                 },
                 "files": ["${file1.path}"]
-            }`);
+            }`,
+        );
         host.runQueuedTimeoutCallbacks();
 
         // will not remove project 1
@@ -585,8 +589,7 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
         };
         const host = createServerHost([f1, f2, f3, config]);
         const originalGetFileSize = host.getFileSize;
-        host.getFileSize = (filePath: string) =>
-            filePath === f2.path ? ts.server.maxProgramSizeForNonTsFiles + 1 : originalGetFileSize.call(host, filePath);
+        host.getFileSize = (filePath: string) => filePath === f2.path ? ts.server.maxProgramSizeForNonTsFiles + 1 : originalGetFileSize.call(host, filePath);
 
         const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
         projectService.openClientFile(f1.path);
@@ -631,8 +634,7 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
         };
         const host = createServerHost([f1, f2, config]);
         const originalGetFileSize = host.getFileSize;
-        host.getFileSize = (filePath: string) =>
-            filePath === f2.path ? ts.server.maxProgramSizeForNonTsFiles + 1 : originalGetFileSize.call(host, filePath);
+        host.getFileSize = (filePath: string) => filePath === f2.path ? ts.server.maxProgramSizeForNonTsFiles + 1 : originalGetFileSize.call(host, filePath);
         const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
         openFilesForSession([f1], session);
         session.logger.log(`Language languageServiceEnabled:: ${session.getProjectService().configuredProjects.get(config.path)!.languageServiceEnabled}`);
@@ -741,7 +743,10 @@ declare var console: {
         };
         function verifySessionWorker({ withExclude, openFileBeforeCreating }: VerifySession, errorOnNewFileBeforeOldFile: boolean) {
             const host = createServerHost([
-                foo, bar, libFile, { path: `/user/username/projects/myproject/src/sub` },
+                foo,
+                bar,
+                libFile,
+                { path: `/user/username/projects/myproject/src/sub` },
                 withExclude ?
                     {
                         path: config.path,
@@ -923,24 +928,33 @@ foo();`,
             projectService.openClientFile(aFile.path);
             projectService.openClientFile(bFile.path);
 
-            host.writeFile(alphaExtendedConfig.path, JSON.stringify({
-                compilerOptions: {
-                    strict: true,
-                },
-            }));
+            host.writeFile(
+                alphaExtendedConfig.path,
+                JSON.stringify({
+                    compilerOptions: {
+                        strict: true,
+                    },
+                }),
+            );
             host.runQueuedTimeoutCallbacks();
 
-            host.writeFile(bravoExtendedConfig.path, JSON.stringify({
-                extends: "./alpha.tsconfig.json",
-                compilerOptions: {
-                    strict: false,
-                },
-            }));
+            host.writeFile(
+                bravoExtendedConfig.path,
+                JSON.stringify({
+                    extends: "./alpha.tsconfig.json",
+                    compilerOptions: {
+                        strict: false,
+                    },
+                }),
+            );
             host.runQueuedTimeoutCallbacks();
 
-            host.writeFile(bConfig.path, JSON.stringify({
-                extends: "../extended/alpha.tsconfig.json",
-            }));
+            host.writeFile(
+                bConfig.path,
+                JSON.stringify({
+                    extends: "../extended/alpha.tsconfig.json",
+                }),
+            );
             host.runQueuedTimeoutCallbacks();
 
             host.writeFile(alphaExtendedConfig.path, "{}");
@@ -966,7 +980,6 @@ foo();`,
             projectService.closeClientFile(bFile.path);
             projectService.closeClientFile(dummy.path);
             projectService.openClientFile(dummy.path);
-
 
             projectService.closeClientFile(aFile.path);
             projectService.closeClientFile(dummy.path);

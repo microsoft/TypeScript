@@ -88,15 +88,13 @@ export interface ESDecorateClassElementAccess {
 
 /** @internal */
 export type ESDecorateName =
-    | { computed: true, name: Expression }
-    | { computed: false, name: Identifier | PrivateIdentifier }
-    ;
+    | { computed: true; name: Expression; }
+    | { computed: false; name: Identifier | PrivateIdentifier; };
 
 /** @internal */
 export type ESDecorateContext =
     | ESDecorateClassContext
-    | ESDecorateClassElementContext
-    ;
+    | ESDecorateClassElementContext;
 
 /** @internal */
 export interface EmitHelperFactory {
@@ -220,7 +218,7 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
         return factory.createCallExpression(
             getUnscopedHelperName("__decorate"),
             /*typeArguments*/ undefined,
-            argumentsArray
+            argumentsArray,
         );
     }
 
@@ -232,7 +230,7 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
             [
                 factory.createStringLiteral(metadataKey),
                 metadataValue,
-            ]
+            ],
         );
     }
 
@@ -245,9 +243,9 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
                 [
                     factory.createNumericLiteral(parameterOffset + ""),
                     expression,
-                ]
+                ],
             ),
-            location
+            location,
         );
     }
 
@@ -276,12 +274,12 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
                 [factory.createParameterDeclaration(
                     /*modifiers*/ undefined,
                     /*dotDotDotToken*/ undefined,
-                    factory.createIdentifier("obj")
+                    factory.createIdentifier("obj"),
                 )],
                 /*type*/ undefined,
                 /*equalsGreaterThanToken*/ undefined,
-                accessor
-            )
+                accessor,
+            ),
         );
     }
 
@@ -295,33 +293,34 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
             factory.createArrowFunction(
                 /*modifiers*/ undefined,
                 /*typeParameters*/ undefined,
-                [factory.createParameterDeclaration(
-                    /*modifiers*/ undefined,
-                    /*dotDotDotToken*/ undefined,
-                    factory.createIdentifier("obj")
-                ),
-                factory.createParameterDeclaration(
-                    /*modifiers*/ undefined,
-                    /*dotDotDotToken*/ undefined,
-                    factory.createIdentifier("value")
-                )],
+                [
+                    factory.createParameterDeclaration(
+                        /*modifiers*/ undefined,
+                        /*dotDotDotToken*/ undefined,
+                        factory.createIdentifier("obj"),
+                    ),
+                    factory.createParameterDeclaration(
+                        /*modifiers*/ undefined,
+                        /*dotDotDotToken*/ undefined,
+                        factory.createIdentifier("value"),
+                    ),
+                ],
                 /*type*/ undefined,
                 /*equalsGreaterThanToken*/ undefined,
                 factory.createBlock([
                     factory.createExpressionStatement(
                         factory.createAssignment(
                             accessor,
-                            factory.createIdentifier("value")
-                        )
+                            factory.createIdentifier("value"),
+                        ),
                     ),
-                ])
-            )
+                ]),
+            ),
         );
     }
 
     function createESDecorateClassElementAccessHasMethod(elementName: ESDecorateName) {
-        const propertyName =
-            elementName.computed ? elementName.name :
+        const propertyName = elementName.computed ? elementName.name :
             isIdentifier(elementName.name) ? factory.createStringLiteralFromNode(elementName.name) :
             elementName.name;
 
@@ -333,16 +332,16 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
                 [factory.createParameterDeclaration(
                     /*modifiers*/ undefined,
                     /*dotDotDotToken*/ undefined,
-                    factory.createIdentifier("obj")
+                    factory.createIdentifier("obj"),
                 )],
                 /*type*/ undefined,
                 /*equalsGreaterThanToken*/ undefined,
                 factory.createBinaryExpression(
                     propertyName,
                     SyntaxKind.InKeyword,
-                    factory.createIdentifier("obj")
-                )
-            )
+                    factory.createIdentifier("obj"),
+                ),
+            ),
         );
     }
 
@@ -383,7 +382,8 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
                 createESDecorateContextObject(contextIn),
                 initializers,
                 extraInitializers,
-            ]);
+            ],
+        );
     }
 
     function createRunInitializersHelper(thisArg: Expression, initializers: Expression, value?: Expression) {
@@ -391,22 +391,20 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
         return factory.createCallExpression(
             getUnscopedHelperName("__runInitializers"),
             /*typeArguments*/ undefined,
-            value ? [thisArg, initializers, value] : [thisArg, initializers]
+            value ? [thisArg, initializers, value] : [thisArg, initializers],
         );
     }
     // ES2018 Helpers
 
     function createAssignHelper(attributesSegments: Expression[]) {
         if (getEmitScriptTarget(context.getCompilerOptions()) >= ScriptTarget.ES2015) {
-            return factory.createCallExpression(factory.createPropertyAccessExpression(factory.createIdentifier("Object"), "assign"),
-                              /*typeArguments*/ undefined,
-                              attributesSegments);
+            return factory.createCallExpression(factory.createPropertyAccessExpression(factory.createIdentifier("Object"), "assign"), /*typeArguments*/ undefined, attributesSegments);
         }
         context.requestEmitHelper(assignHelper);
         return factory.createCallExpression(
             getUnscopedHelperName("__assign"),
             /*typeArguments*/ undefined,
-            attributesSegments
+            attributesSegments,
         );
     }
 
@@ -429,7 +427,7 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
                 hasLexicalThis ? factory.createThis() : factory.createVoidZero(),
                 factory.createIdentifier("arguments"),
                 generatorFunc,
-            ]
+            ],
         );
     }
 
@@ -439,7 +437,7 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
         return factory.createCallExpression(
             getUnscopedHelperName("__asyncDelegator"),
             /*typeArguments*/ undefined,
-            [expression]
+            [expression],
         );
     }
 
@@ -448,7 +446,7 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
         return factory.createCallExpression(
             getUnscopedHelperName("__asyncValues"),
             /*typeArguments*/ undefined,
-            [expression]
+            [expression],
         );
     }
 
@@ -475,8 +473,8 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
                             /*questionToken*/ undefined,
                             temp,
                             /*colonToken*/ undefined,
-                            factory.createAdd(temp, factory.createStringLiteral(""))
-                        )
+                            factory.createAdd(temp, factory.createStringLiteral("")),
+                        ),
                     );
                 }
                 else {
@@ -491,8 +489,9 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
                 value,
                 setTextRange(
                     factory.createArrayLiteralExpression(propertyNames),
-                    location
-                )]
+                    location,
+                ),
+            ],
         );
     }
 
@@ -508,7 +507,7 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
             /*typeParameters*/ undefined,
             /*parameters*/ [],
             /*type*/ undefined,
-            body
+            body,
         );
 
         // Mark this node as originally an async function
@@ -522,7 +521,7 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
                 hasLexicalArguments ? factory.createIdentifier("arguments") : factory.createVoidZero(),
                 promiseConstructor ? createExpressionFromEntityName(factory, promiseConstructor) : factory.createVoidZero(),
                 generatorFunc,
-            ]
+            ],
         );
     }
 
@@ -533,7 +532,7 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
         return factory.createCallExpression(
             getUnscopedHelperName("__extends"),
             /*typeArguments*/ undefined,
-            [name, factory.createUniqueName("_super", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel)]
+            [name, factory.createUniqueName("_super", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel)],
         );
     }
 
@@ -542,7 +541,7 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
         return factory.createCallExpression(
             getUnscopedHelperName("__makeTemplateObject"),
             /*typeArguments*/ undefined,
-            [cooked, raw]
+            [cooked, raw],
         );
     }
 
@@ -551,7 +550,7 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
         return factory.createCallExpression(
             getUnscopedHelperName("__spreadArray"),
             /*typeArguments*/ undefined,
-            [to, from, packFrom ? immutableTrue() : immutableFalse()]
+            [to, from, packFrom ? immutableTrue() : immutableFalse()],
         );
     }
 
@@ -560,7 +559,7 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
         return factory.createCallExpression(
             getUnscopedHelperName("__propKey"),
             /*typeArguments*/ undefined,
-            [expr]
+            [expr],
         );
     }
 
@@ -569,7 +568,7 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
         return context.factory.createCallExpression(
             getUnscopedHelperName("__setFunctionName"),
             /*typeArguments*/ undefined,
-            prefix ? [f, name, context.factory.createStringLiteral(prefix)] : [f, name]
+            prefix ? [f, name, context.factory.createStringLiteral(prefix)] : [f, name],
         );
     }
 
@@ -580,7 +579,7 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
         return factory.createCallExpression(
             getUnscopedHelperName("__values"),
             /*typeArguments*/ undefined,
-            [expression]
+            [expression],
         );
     }
 
@@ -591,7 +590,7 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
             /*typeArguments*/ undefined,
             count !== undefined
                 ? [iteratorRecord, factory.createNumericLiteral(count + "")]
-                : [iteratorRecord]
+                : [iteratorRecord],
         );
     }
 
@@ -602,7 +601,8 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
         return factory.createCallExpression(
             getUnscopedHelperName("__generator"),
             /*typeArguments*/ undefined,
-            [factory.createThis(), body]);
+            [factory.createThis(), body],
+        );
     }
 
     // ES Module Helpers
@@ -612,7 +612,8 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
         return factory.createCallExpression(
             getUnscopedHelperName("__createBinding"),
             /*typeArguments*/ undefined,
-            [factory.createIdentifier("exports"), module, inputName, ...(outputName ? [outputName] : [])]);
+            [factory.createIdentifier("exports"), module, inputName, ...(outputName ? [outputName] : [])],
+        );
     }
 
     function createImportStarHelper(expression: Expression) {
@@ -620,7 +621,7 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
         return factory.createCallExpression(
             getUnscopedHelperName("__importStar"),
             /*typeArguments*/ undefined,
-            [expression]
+            [expression],
         );
     }
 
@@ -634,7 +635,7 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
         return factory.createCallExpression(
             getUnscopedHelperName("__importDefault"),
             /*typeArguments*/ undefined,
-            [expression]
+            [expression],
         );
     }
 
@@ -644,7 +645,7 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
         return factory.createCallExpression(
             getUnscopedHelperName("__exportStar"),
             /*typeArguments*/ undefined,
-            [moduleExpression, exportsExpression]
+            [moduleExpression, exportsExpression],
         );
     }
 
@@ -684,7 +685,7 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
         return factory.createCallExpression(
             getUnscopedHelperName("__addDisposableResource"),
             /*typeArguments*/ undefined,
-            [envBinding, value, async ? factory.createTrue() : factory.createFalse()]
+            [envBinding, value, async ? factory.createTrue() : factory.createFalse()],
         );
     }
 

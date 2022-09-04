@@ -1,6 +1,10 @@
-import { Octokit } from "@octokit/rest";
+import {
+    Octokit,
+} from "@octokit/rest";
 
-import { runSequence } from "./run-sequence.mjs";
+import {
+    runSequence,
+} from "./run-sequence.mjs";
 
 const userName = process.env.GH_USERNAME || "typescript-bot";
 const reviewers = process.env.REQUESTING_USER ? [process.env.REQUESTING_USER] : ["weswigham", "sandersn", "RyanCavanaugh"];
@@ -34,8 +38,7 @@ gh.pulls.create({
     title: `🤖 User test baselines have changed` + (process.env.TARGET_BRANCH ? ` for ${process.env.TARGET_BRANCH}` : ""),
     head: `${userName}:${branchName}`,
     base: branchName === masterBranchname ? "main" : masterBranchname,
-    body:
-`${process.env.SOURCE_ISSUE ? `This test run was triggerd by a request on https://github.com/Microsoft/TypeScript/pull/${process.env.SOURCE_ISSUE} `+"\n" : ""}Please review the diff and merge if no changes are unexpected.
+    body: `${process.env.SOURCE_ISSUE ? `This test run was triggerd by a request on https://github.com/Microsoft/TypeScript/pull/${process.env.SOURCE_ISSUE} ` + "\n" : ""}Please review the diff and merge if no changes are unexpected.
 You can view the build log [here](https://typescript.visualstudio.com/TypeScript/_build/index?buildId=${process.env.BUILD_BUILDID}&_a=summary).
 
 cc ${reviewers.map(r => "@" + r).join(" ")}`,

@@ -77,10 +77,12 @@ describe("unittests:: tsserver:: autoImportProvider", () => {
         ]);
 
         openFilesForSession([angularFormsDts], session);
-        assert.isUndefined(projectService
-            .getDefaultProjectForFile(angularFormsDts.path as ts.server.NormalizedPath, /*ensureProject*/ true)!
-            .getLanguageService()
-            .getAutoImportProvider());
+        assert.isUndefined(
+            projectService
+                .getDefaultProjectForFile(angularFormsDts.path as ts.server.NormalizedPath, /*ensureProject*/ true)!
+                .getLanguageService()
+                .getAutoImportProvider(),
+        );
         baselineTsserverLogs("autoImportProvider", "projects already inside node_modules", session);
     });
 
@@ -129,7 +131,8 @@ describe("unittests:: tsserver:: autoImportProvider", () => {
         updateFile(indexTs.path, "console.log(0)");
         assert.strictEqual(
             projectService.configuredProjects.get(tsconfig.path)!.getLanguageService().getAutoImportProvider(),
-            autoImportProvider);
+            autoImportProvider,
+        );
         baselineTsserverLogs("autoImportProvider", "Reuses autoImportProvider when program structure is unchanged", session);
     });
 
@@ -245,10 +248,10 @@ describe("unittests:: tsserver:: autoImportProvider", () => {
     });
 
     it("Does not create an auto import provider if there are too many dependencies", () => {
-        const createPackage = (i: number): File[] => ([
+        const createPackage = (i: number): File[] => [
             { path: `/node_modules/package${i}/package.json`, content: `{ "name": "package${i}" }` },
             { path: `/node_modules/package${i}/index.d.ts`, content: `` },
-        ]);
+        ];
 
         const packages = [];
         for (let i = 0; i < 11; i++) {
@@ -358,7 +361,7 @@ describe("unittests:: tsserver:: autoImportProvider - monorepo", () => {
         for (const option of ts.sourceFileAffectingCompilerOptions) {
             assert(
                 !ts.hasProperty(ts.server.AutoImportProviderProject.compilerOptionsOverrides, option.name),
-                `'${option.name}' may cause AutoImportProviderProject not to share source files with main program`
+                `'${option.name}' may cause AutoImportProviderProject not to share source files with main program`,
             );
         }
     });

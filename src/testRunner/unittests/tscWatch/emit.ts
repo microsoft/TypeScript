@@ -17,12 +17,13 @@ describe("unittests:: tsc-watch:: emit with outFile or out setting", () => {
             scenario,
             subScenario: `emit with outFile or out setting/${subScenario}`,
             commandLineArgs: ["--w", "-p", "/a/tsconfig.json"],
-            sys: () => createWatchedSystem({
-                "/a/a.ts": "let x = 1",
-                "/a/b.ts": "let y = 1",
-                "/a/tsconfig.json": JSON.stringify({ compilerOptions: { out, outFile } }),
-                [libFile.path]: libFile.content,
-            }),
+            sys: () =>
+                createWatchedSystem({
+                    "/a/a.ts": "let x = 1",
+                    "/a/b.ts": "let y = 1",
+                    "/a/tsconfig.json": JSON.stringify({ compilerOptions: { out, outFile } }),
+                    [libFile.path]: libFile.content,
+                }),
             edits: [
                 {
                     caption: "Make change in the file",
@@ -95,7 +96,7 @@ describe("unittests:: tsc-watch:: emit for configured projects", () => {
         getAdditionalFileOrFolder?: () => File[];
         /** initial list of files to emit if not the default list */
         firstReloadFileList?: string[];
-        changes: TscWatchCompileChange[]
+        changes: TscWatchCompileChange[];
     }
     function verifyTscWatchEmit({
         subScenario,
@@ -139,9 +140,10 @@ describe("unittests:: tsc-watch:: emit for configured projects", () => {
                 };
                 const additionalFiles = getAdditionalFileOrFolder?.() || ts.emptyArray;
                 const files = [moduleFile1, file1Consumer1, file1Consumer2, globalFile3, moduleFile2, configFile, libFile, ...additionalFiles];
-                return createWatchedSystem(firstReloadFileList ?
-                    ts.map(firstReloadFileList, fileName => ts.find(files, file => file.path === fileName)!) :
-                    files
+                return createWatchedSystem(
+                    firstReloadFileList ?
+                        ts.map(firstReloadFileList, fileName => ts.find(files, file => file.path === fileName)!) :
+                        files,
                 );
             },
             edits: changes,
@@ -363,16 +365,17 @@ describe("unittests:: tsc-watch:: emit file content", () => {
             scenario,
             subScenario: `emit file content/${subScenario}`,
             commandLineArgs: ["--w", "/a/app.ts"],
-            sys: () => createWatchedSystem(
-                [
-                    {
-                        path: "/a/app.ts",
-                        content: ["var x = 1;", "var y = 2;"].join(newLine),
-                    },
-                    libFile,
-                ],
-                { newLine }
-            ),
+            sys: () =>
+                createWatchedSystem(
+                    [
+                        {
+                            path: "/a/app.ts",
+                            content: ["var x = 1;", "var y = 2;"].join(newLine),
+                        },
+                        libFile,
+                    ],
+                    { newLine },
+                ),
             edits: [
                 {
                     caption: "Append a line",
@@ -517,11 +520,12 @@ describe("unittests:: tsc-watch:: emit with when module emit is specified as nod
         edits: [
             {
                 caption: "Modify typescript file",
-                edit: sys => sys.modifyFile(
-                    "/a/rootFolder/project/Scripts/TypeScript.ts",
-                    "var zz30 = 100;",
-                    { invokeDirectoryWatcherInsteadOfFileChanged: true },
-                ),
+                edit: sys =>
+                    sys.modifyFile(
+                        "/a/rootFolder/project/Scripts/TypeScript.ts",
+                        "var zz30 = 100;",
+                        { invokeDirectoryWatcherInsteadOfFileChanged: true },
+                    ),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],

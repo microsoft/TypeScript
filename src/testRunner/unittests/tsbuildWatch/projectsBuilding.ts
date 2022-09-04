@@ -58,10 +58,11 @@ describe("unittests:: tsbuildWatch:: watchMode:: projectsBuilding", () => {
         scenario: "projectsBuilding",
         subScenario: `when there are 3 projects in a solution`,
         commandLineArgs: ["-b", "-w", "-v"],
-        sys: () => createWatchedSystem(
-            [libFile, ...ts.flatMap(pkgs(pkgFiles, 3), ts.identity), solution(3)],
-            { currentDirectory: "/user/username/projects/myproject" }
-        ),
+        sys: () =>
+            createWatchedSystem(
+                [libFile, ...ts.flatMap(pkgs(pkgFiles, 3), ts.identity), solution(3)],
+                { currentDirectory: "/user/username/projects/myproject" },
+            ),
         edits: [
             {
                 caption: "dts doesn't change",
@@ -82,10 +83,11 @@ describe("unittests:: tsbuildWatch:: watchMode:: projectsBuilding", () => {
         scenario: "projectsBuilding",
         subScenario: `when there are 5 projects in a solution`,
         commandLineArgs: ["-b", "-w", "-v"],
-        sys: () => createWatchedSystem(
-            [libFile, ...ts.flatMap(pkgs(pkgFiles, 5), ts.identity), solution(5)],
-            { currentDirectory: "/user/username/projects/myproject" }
-        ),
+        sys: () =>
+            createWatchedSystem(
+                [libFile, ...ts.flatMap(pkgs(pkgFiles, 5), ts.identity), solution(5)],
+                { currentDirectory: "/user/username/projects/myproject" },
+            ),
         edits: [
             {
                 caption: "dts doesn't change",
@@ -106,10 +108,11 @@ describe("unittests:: tsbuildWatch:: watchMode:: projectsBuilding", () => {
         scenario: "projectsBuilding",
         subScenario: `when there are 8 projects in a solution`,
         commandLineArgs: ["-b", "-w", "-v"],
-        sys: () => createWatchedSystem(
-            [libFile, ...ts.flatMap(pkgs(pkgFiles, 8), ts.identity), solution(8)],
-            { currentDirectory: "/user/username/projects/myproject" }
-        ),
+        sys: () =>
+            createWatchedSystem(
+                [libFile, ...ts.flatMap(pkgs(pkgFiles, 8), ts.identity), solution(8)],
+                { currentDirectory: "/user/username/projects/myproject" },
+            ),
         edits: [
             {
                 caption: "dts doesn't change",
@@ -144,10 +147,11 @@ describe("unittests:: tsbuildWatch:: watchMode:: projectsBuilding", () => {
         scenario: "projectsBuilding",
         subScenario: `when there are 23 projects in a solution`,
         commandLineArgs: ["-b", "-w", "-v"],
-        sys: () => createWatchedSystem(
-            [libFile, ...ts.flatMap(pkgs(pkgFiles, 23), ts.identity), solution(23)],
-            { currentDirectory: "/user/username/projects/myproject" }
-        ),
+        sys: () =>
+            createWatchedSystem(
+                [libFile, ...ts.flatMap(pkgs(pkgFiles, 23), ts.identity), solution(23)],
+                { currentDirectory: "/user/username/projects/myproject" },
+            ),
         edits: [
             {
                 caption: "dts doesn't change",

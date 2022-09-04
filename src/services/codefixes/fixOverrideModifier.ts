@@ -153,7 +153,8 @@ function dispatchChanges(
     changeTracker: textChanges.ChangeTracker,
     context: CodeFixContext | CodeFixAllContext,
     errorCode: number,
-    pos: number) {
+    pos: number,
+) {
     switch (errorCode) {
         case Diagnostics.This_member_must_have_an_override_modifier_because_it_overrides_a_member_in_the_base_class_0.code:
         case Diagnostics.This_member_must_have_a_JSDoc_comment_with_an_override_tag_because_it_overrides_a_member_in_the_base_class_0.code:
@@ -227,4 +228,3 @@ function findContainerClassElementLike(sourceFile: SourceFile, pos: number) {
     Debug.assert(classElement && isClassElementLikeHasJSDoc(classElement));
     return classElement;
 }
-

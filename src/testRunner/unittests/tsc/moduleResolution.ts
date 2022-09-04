@@ -1,6 +1,15 @@
-import { getFsConentsForNode10ResultAtTypesPackageJson, getFsContentsForNode10Result, getFsContentsForNode10ResultDts, getFsContentsForNode10ResultPackageJson } from "../helpers/node10Result";
-import { verifyTsc } from "../helpers/tsc";
-import { loadProjectFromFiles } from "../helpers/vfs";
+import {
+    getFsConentsForNode10ResultAtTypesPackageJson,
+    getFsContentsForNode10Result,
+    getFsContentsForNode10ResultDts,
+    getFsContentsForNode10ResultPackageJson,
+} from "../helpers/node10Result";
+import {
+    verifyTsc,
+} from "../helpers/tsc";
+import {
+    loadProjectFromFiles,
+} from "../helpers/vfs";
 
 describe("unittests:: tsc:: moduleResolution::", () => {
     verifyTsc({

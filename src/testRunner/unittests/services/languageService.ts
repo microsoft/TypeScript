@@ -1,4 +1,6 @@
-import { expect } from "chai";
+import {
+    expect,
+} from "chai";
 
 import * as ts from "../../_namespaces/ts";
 import {
@@ -8,7 +10,7 @@ import {
 } from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: services:: languageService", () => {
-    const files: {[index: string]: string} = {
+    const files: { [index: string]: string; } = {
         "foo.ts": `import Vue from "./vue";
 import Component from "./vue-class-component";
 import { vueTemplateHtml } from "./variables";
@@ -62,20 +64,20 @@ export function Component(x: Config): any;`,
         assert.deepEqual(
             languageService.getEmitOutput(
                 "foo.ts",
-                /*emitOnlyDtsFiles*/ true
+                /*emitOnlyDtsFiles*/ true,
             ),
             {
                 emitSkipped: true,
                 diagnostics: ts.emptyArray,
                 outputFiles: ts.emptyArray,
-            }
+            },
         );
 
         assert.deepEqual(
             languageService.getEmitOutput(
                 "foo.ts",
                 /*emitOnlyDtsFiles*/ true,
-                /*forceDtsEmit*/ true
+                /*forceDtsEmit*/ true,
             ),
             {
                 emitSkipped: false,
@@ -85,14 +87,14 @@ export function Component(x: Config): any;`,
                     text: "export {};\n",
                     writeByteOrderMark: false,
                 }],
-            }
+            },
         );
     });
 
     describe("detects program upto date correctly", () => {
         function verifyProgramUptoDate(useProjectVersion: boolean) {
             let projectVersion = "1";
-            const files = new Map<string, { version: string, text: string; }>();
+            const files = new Map<string, { version: string; text: string; }>();
             files.set("/project/root.ts", { version: "1", text: `import { foo } from "./other"` });
             files.set("/project/other.ts", { version: "1", text: `export function foo() { }` });
             files.set("/lib/lib.d.ts", { version: "1", text: libFile.content });
@@ -134,7 +136,7 @@ export function Component(x: Config): any;`,
             function verifyProgramFiles(program: ts.Program) {
                 assert.deepEqual(
                     program.getSourceFiles().map(f => f.fileName),
-                    ["/lib/lib.d.ts", "/project/other.ts", "/project/root.ts"]
+                    ["/lib/lib.d.ts", "/project/other.ts", "/project/root.ts"],
                 );
             }
         }
@@ -218,7 +220,7 @@ export function Component(x: Config): any;`,
             const { ls, system, class1, class2 } = setup(ts.returnTrue);
             assert.deepEqual(
                 ls.getProgram()!.getSourceFiles().map(f => f.fileName),
-                [libFile.path, class1.path, class2.path]
+                [libFile.path, class1.path, class2.path],
             );
             // Add new file to referenced project
             const class3 = `/user/username/projects/myproject/projects/project1/class3.ts`;
@@ -226,7 +228,7 @@ export function Component(x: Config): any;`,
             const program = ls.getProgram()!;
             assert.deepEqual(
                 program.getSourceFiles().map(f => f.fileName),
-                [libFile.path, class1.path, class3, class2.path]
+                [libFile.path, class1.path, class3, class2.path],
             );
             // Add excluded file to referenced project
             system.ensureFileOrFolder({ path: `/user/username/projects/myproject/projects/project1/temp/file.d.ts`, content: `declare class file {}` });
@@ -241,7 +243,7 @@ export function Component(x: Config): any;`,
             const program1 = ls.getProgram()!;
             assert.deepEqual(
                 program1.getSourceFiles().map(f => f.fileName),
-                [libFile.path, class1Dts.path, class2.path]
+                [libFile.path, class1Dts.path, class2.path],
             );
             // Add new file to referenced project
             const class3 = `/user/username/projects/myproject/projects/project1/class3.ts`;
@@ -249,7 +251,7 @@ export function Component(x: Config): any;`,
             assert.notStrictEqual(ls.getProgram(), program1);
             assert.deepEqual(
                 ls.getProgram()!.getSourceFiles().map(f => f.fileName),
-                [libFile.path, class1Dts.path, class2.path]
+                [libFile.path, class1Dts.path, class2.path],
             );
             // Add class3 output
             const class3Dts = `/user/username/projects/myproject/projects/project1/class3.d.ts`;
@@ -257,7 +259,7 @@ export function Component(x: Config): any;`,
             const program2 = ls.getProgram()!;
             assert.deepEqual(
                 program2.getSourceFiles().map(f => f.fileName),
-                [libFile.path, class1Dts.path, class3Dts, class2.path]
+                [libFile.path, class1Dts.path, class3Dts, class2.path],
             );
             // Add excluded file to referenced project
             system.ensureFileOrFolder({ path: `/user/username/projects/myproject/projects/project1/temp/file.d.ts`, content: `declare class file {}` });
@@ -266,13 +268,13 @@ export function Component(x: Config): any;`,
             system.deleteFile(class3Dts);
             assert.deepEqual(
                 ls.getProgram()!.getSourceFiles().map(f => f.fileName),
-                [libFile.path, class1Dts.path, class2.path]
+                [libFile.path, class1Dts.path, class2.path],
             );
             // Write output again
             system.writeFile(class3Dts, `declare class class3 {}`);
             assert.deepEqual(
                 ls.getProgram()!.getSourceFiles().map(f => f.fileName),
-                [libFile.path, class1Dts.path, class3Dts, class2.path]
+                [libFile.path, class1Dts.path, class3Dts, class2.path],
             );
         });
     });

@@ -31,7 +31,7 @@ module.exports = createRule({
         );
 
         /** @type {(node: TSESTree.ObjectExpression) => void} */
-        const checkObjectLiteralSurroundingSpace = (node) => {
+        const checkObjectLiteralSurroundingSpace = node => {
             const text = sourceCode.getText(node);
             const startLine = node.loc.start.line;
             const endLine = node.loc.end.line;

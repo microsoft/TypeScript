@@ -68,14 +68,14 @@ function fixSingleExportDeclaration(changes: textChanges.ChangeTracker, exportSp
             /*isTypeOnly*/ false,
             factory.updateNamedExports(exportClause, filter(exportClause.elements, e => !contains(typeExportSpecifiers, e))),
             exportDeclaration.moduleSpecifier,
-            /*assertClause*/ undefined
+            /*assertClause*/ undefined,
         );
         const typeExportDeclaration = factory.createExportDeclaration(
             /*modifiers*/ undefined,
             /*isTypeOnly*/ true,
             factory.createNamedExports(typeExportSpecifiers),
             exportDeclaration.moduleSpecifier,
-            /*assertClause*/ undefined
+            /*assertClause*/ undefined,
         );
 
         changes.replaceNode(context.sourceFile, exportDeclaration, valueExportDeclaration, {
@@ -94,7 +94,8 @@ function getTypeExportSpecifiers(originExportSpecifier: ExportSpecifier, context
 
     const diagnostics = getDiagnosticsWithinSpan(
         createTextSpanFromNode(exportClause),
-        context.program.getSemanticDiagnostics(context.sourceFile, context.cancellationToken));
+        context.program.getSemanticDiagnostics(context.sourceFile, context.cancellationToken),
+    );
 
     return filter(exportClause.elements, element => {
         return element === originExportSpecifier || findDiagnosticForNode(element, diagnostics)?.code === errorCodes[0];

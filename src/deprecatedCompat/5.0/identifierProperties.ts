@@ -5,7 +5,9 @@ import {
     identifierToKeywordKind,
     NodeFlags,
 } from "../_namespaces/ts";
-import { deprecate } from "../deprecate";
+import {
+    deprecate,
+} from "../deprecate";
 
 declare module "../../compiler/types" {
     export interface Identifier {

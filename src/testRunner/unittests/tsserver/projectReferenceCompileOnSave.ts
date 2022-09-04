@@ -1,5 +1,7 @@
 import * as ts from "../../_namespaces/ts";
-import { ensureErrorFreeBuild } from "../helpers/solutionBuilder";
+import {
+    ensureErrorFreeBuild,
+} from "../helpers/solutionBuilder";
 import {
     baselineTsserverLogs,
     createLoggerWithInMemoryLogs,

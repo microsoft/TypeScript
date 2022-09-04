@@ -1,6 +1,8 @@
 import * as ts from "../../_namespaces/ts";
 import * as Utils from "../../_namespaces/Utils";
-import { libContent } from "../helpers/contents";
+import {
+    libContent,
+} from "../helpers/contents";
 import {
     createBaseline,
     createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline,
@@ -51,8 +53,11 @@ describe("unittests:: tsc-watch:: resolutionCache:: tsc-watch module resolution 
                     edit: sys => {
                         // patch fileExists to make sure that disk is not touched
                         host.fileExists = ts.notImplemented;
-                        sys.writeFile(root.path, `import {x} from "f1"
-                            var x: string = 1;`);
+                        sys.writeFile(
+                            root.path,
+                            `import {x} from "f1"
+                            var x: string = 1;`,
+                        );
                     },
                     timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                 },
@@ -144,7 +149,7 @@ describe("unittests:: tsc-watch:: resolutionCache:: tsc-watch module resolution 
                 caption: "write imported file",
                 edit: sys => {
                     fileExistsCalledForBar = false;
-                    sys.writeFile(root.path,`import {y} from "bar"`);
+                    sys.writeFile(root.path, `import {y} from "bar"`);
                     sys.writeFile(imported.path, imported.content);
                 },
                 timeouts: sys => {
@@ -229,10 +234,11 @@ describe("unittests:: tsc-watch:: resolutionCache:: tsc-watch module resolution 
         scenario,
         subScenario: "works when module resolution changes to ambient module",
         commandLineArgs: ["-w", "/users/username/projects/project/foo.ts"],
-        sys: () => createWatchedSystem([{
-            path: "/users/username/projects/project/foo.ts",
-            content: `import * as fs from "fs";`,
-        }, libFile], { currentDirectory: "/users/username/projects/project" }),
+        sys: () =>
+            createWatchedSystem([{
+                path: "/users/username/projects/project/foo.ts",
+                content: `import * as fs from "fs";`,
+            }, libFile], { currentDirectory: "/users/username/projects/project" }),
         edits: [
             {
                 caption: "npm install node types",
@@ -288,13 +294,17 @@ declare module "url" {
         edits: [
             {
                 caption: "Add fs definition",
-                edit: sys => sys.appendFile("/users/username/projects/project/bar.d.ts", `
+                edit: sys =>
+                    sys.appendFile(
+                        "/users/username/projects/project/bar.d.ts",
+                        `
 declare module "fs" {
     export interface Stats {
         isFile(): boolean;
     }
 }
-`),
+`,
+                    ),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],
@@ -389,10 +399,11 @@ declare module "fs" {
                 edits: [
                     {
                         caption: "npm install file and folder that start with '.'",
-                        edit: sys => sys.ensureFileOrFolder({
-                            path: `/user/username/projects/myproject/node_modules/.cache/babel-loader/89c02171edab901b9926470ba6d5677e.ts`,
-                            content: JSON.stringify({ something: 10 }),
-                        }),
+                        edit: sys =>
+                            sys.ensureFileOrFolder({
+                                path: `/user/username/projects/myproject/node_modules/.cache/babel-loader/89c02171edab901b9926470ba6d5677e.ts`,
+                                content: JSON.stringify({ something: 10 }),
+                            }),
                         timeouts: sys => sys.logTimeoutQueueLength(),
                     },
                 ],
@@ -548,10 +559,11 @@ declare namespace NodeJS {
                 },
                 {
                     caption: `npm ci step two: create atTypes but something else in the @types folder`,
-                    edit: sys => sys.ensureFileOrFolder({
-                        path: `/user/username/projects/myproject/node_modules/@types/mocha/index.d.ts`,
-                        content: `export const foo = 10;`,
-                    }),
+                    edit: sys =>
+                        sys.ensureFileOrFolder({
+                            path: `/user/username/projects/myproject/node_modules/@types/mocha/index.d.ts`,
+                            content: `export const foo = 10;`,
+                        }),
                     timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                 },
                 {
@@ -580,28 +592,29 @@ declare namespace NodeJS {
     verifyTscWatch({
         scenario,
         subScenario: "reusing type ref resolution",
-        sys: () => createWatchedSystem({
-            "/users/username/projects/project/tsconfig.json": JSON.stringify({
-                compilerOptions: {
-                    composite: true,
-                    traceResolution: true,
-                    outDir: "outDir",
-                },
-            }),
-            "/users/username/projects/project/fileWithImports.ts": Utils.dedent`
+        sys: () =>
+            createWatchedSystem({
+                "/users/username/projects/project/tsconfig.json": JSON.stringify({
+                    compilerOptions: {
+                        composite: true,
+                        traceResolution: true,
+                        outDir: "outDir",
+                    },
+                }),
+                "/users/username/projects/project/fileWithImports.ts": Utils.dedent`
                 import type { Import0 } from "pkg0";
                 import type { Import1 } from "pkg1";
             `,
-            "/users/username/projects/project/node_modules/pkg0/index.d.ts": `export interface Import0 {}`,
-            "/users/username/projects/project/fileWithTypeRefs.ts": Utils.dedent`
+                "/users/username/projects/project/node_modules/pkg0/index.d.ts": `export interface Import0 {}`,
+                "/users/username/projects/project/fileWithTypeRefs.ts": Utils.dedent`
                 /// <reference types="pkg2"/>
                 /// <reference types="pkg3"/>
                 interface LocalInterface extends Import2, Import3 {}
                 export {}
             `,
-            "/users/username/projects/project/node_modules/pkg2/index.d.ts": `interface Import2 {}`,
-            [libFile.path]: libFile.content,
-        }, { currentDirectory: "/users/username/projects/project" }),
+                "/users/username/projects/project/node_modules/pkg2/index.d.ts": `interface Import2 {}`,
+                [libFile.path]: libFile.content,
+            }, { currentDirectory: "/users/username/projects/project" }),
         commandLineArgs: ["-w", "--explainFiles", "--extendedDiagnostics"],
         edits: [
             {
@@ -627,21 +640,23 @@ declare namespace NodeJS {
         scenario,
         subScenario: "scoped package installation",
         commandLineArgs: ["--w", "-p", `.`, "--traceResolution", "--extendedDiagnostics"],
-        sys: () => createWatchedSystem({
-            "/user/username/projects/myproject/lib/app.ts": Utils.dedent`
+        sys: () =>
+            createWatchedSystem({
+                "/user/username/projects/myproject/lib/app.ts": Utils.dedent`
                 import { myapp } from "@myapp/ts-types";
                 const x: 10 = myapp;
             `,
-            "/user/username/projects/myproject/tsconfig.json": "{}",
-            [libFile.path]: libContent,
-        }, { currentDirectory: "/user/username/projects/myproject" }),
+                "/user/username/projects/myproject/tsconfig.json": "{}",
+                [libFile.path]: libContent,
+            }, { currentDirectory: "/user/username/projects/myproject" }),
         edits: [
             {
                 caption: "npm install unrelated non scoped",
-                edit: sys => sys.ensureFileOrFolder({
-                    path: `/user/username/projects/myproject/node_modules/unrelated/index.d.ts`,
-                    content: `export const unrelated = 10;`,
-                }),
+                edit: sys =>
+                    sys.ensureFileOrFolder({
+                        path: `/user/username/projects/myproject/node_modules/unrelated/index.d.ts`,
+                        content: `export const unrelated = 10;`,
+                    }),
                 timeouts: sys => {
                     sys.runQueuedTimeoutCallbacks();
                     sys.runQueuedTimeoutCallbacks();
@@ -649,10 +664,11 @@ declare namespace NodeJS {
             },
             {
                 caption: "npm install unrelated scoped in myapp",
-                edit: sys => sys.ensureFileOrFolder({
-                    path: `/user/username/projects/myproject/node_modules/@myapp/unrelated/index.d.ts`,
-                    content: `export const myappUnrelated = 10;`,
-                }),
+                edit: sys =>
+                    sys.ensureFileOrFolder({
+                        path: `/user/username/projects/myproject/node_modules/@myapp/unrelated/index.d.ts`,
+                        content: `export const myappUnrelated = 10;`,
+                    }),
                 timeouts: sys => {
                     sys.runQueuedTimeoutCallbacks();
                     sys.runQueuedTimeoutCallbacks();
@@ -660,10 +676,11 @@ declare namespace NodeJS {
             },
             {
                 caption: "npm install unrelated2 scoped in myapp",
-                edit: sys => sys.ensureFileOrFolder({
-                    path: `/user/username/projects/myproject/node_modules/@myapp/unrelated2/index.d.ts`,
-                    content: `export const myappUnrelated2 = 10;`,
-                }),
+                edit: sys =>
+                    sys.ensureFileOrFolder({
+                        path: `/user/username/projects/myproject/node_modules/@myapp/unrelated2/index.d.ts`,
+                        content: `export const myappUnrelated2 = 10;`,
+                    }),
                 timeouts: sys => {
                     sys.runQueuedTimeoutCallbacks();
                     sys.runQueuedTimeoutCallbacks();
@@ -671,10 +688,11 @@ declare namespace NodeJS {
             },
             {
                 caption: "npm install ts-types",
-                edit: sys => sys.ensureFileOrFolder({
-                    path: `/user/username/projects/myproject/node_modules/@myapp/ts-types/index.d.ts`,
-                    content: `export const myapp = 10;`,
-                }),
+                edit: sys =>
+                    sys.ensureFileOrFolder({
+                        path: `/user/username/projects/myproject/node_modules/@myapp/ts-types/index.d.ts`,
+                        content: `export const myapp = 10;`,
+                    }),
                 timeouts: sys => {
                     sys.runQueuedTimeoutCallbacks();
                     sys.runQueuedTimeoutCallbacks();

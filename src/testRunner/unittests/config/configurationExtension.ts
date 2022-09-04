@@ -2,7 +2,10 @@ import * as fakes from "../../_namespaces/fakes";
 import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
 import * as vfs from "../../_namespaces/vfs";
-import { baselineParseConfig, baselineParseConfigHost } from "./helpers";
+import {
+    baselineParseConfig,
+    baselineParseConfigHost,
+} from "./helpers";
 
 function createFileSystem(ignoreCase: boolean, cwd: string, root: string) {
     return new vfs.FileSystem(ignoreCase, {
@@ -301,20 +304,21 @@ describe("unittests:: config:: configurationExtension", () => {
         baselineParseConfig({
             scenario: "configurationExtension",
             subScenario: testName,
-            input: () => nameAndEntry.map(([name, entry]) => ({
-                createHost: baseline => {
-                    baseline.push(name);
-                    return host;
-                },
-                jsonText: host.readFile(entry)!,
-                configFileName: entry,
-                baselineParsed: (baseline, parsed) => {
-                    baseline.push("CompilerOptions::");
-                    baseline.push(JSON.stringify(parsed.options, undefined, " "));
-                    baseline.push("FileNames::");
-                    baseline.push(parsed.fileNames.join());
-                },
-            })),
+            input: () =>
+                nameAndEntry.map(([name, entry]) => ({
+                    createHost: baseline => {
+                        baseline.push(name);
+                        return host;
+                    },
+                    jsonText: host.readFile(entry)!,
+                    configFileName: entry,
+                    baselineParsed: (baseline, parsed) => {
+                        baseline.push("CompilerOptions::");
+                        baseline.push(JSON.stringify(parsed.options, undefined, " "));
+                        baseline.push("FileNames::");
+                        baseline.push(parsed.fileNames.join());
+                    },
+                })),
             skipFs: true,
             header: baseline => baselineParseConfigHost(baseline, host),
         });
@@ -324,7 +328,7 @@ describe("unittests:: config:: configurationExtension", () => {
                 const baseline: string[] = [];
                 baselineParseConfigHost(baseline, host);
                 baseline.push(`configFileName:: ${name}`);
-                const sourceFile = ts.readJsonConfigFile(entry, (path) => host.readFile(path));
+                const sourceFile = ts.readJsonConfigFile(entry, path => host.readFile(path));
                 const dir = ts.combinePaths(basePath, "configs");
                 ts.parseJsonSourceFileConfigFileContent(sourceFile, host, dir, {}, ts.getBaseFileName(entry));
                 baseline.push("ExtendedSourceFiles::", ...sourceFile.extendedSourceFiles!);

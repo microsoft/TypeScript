@@ -112,11 +112,14 @@ describe("unittests:: tsbuildWatch:: watchEnvironment:: tsbuild:: watchMode:: wi
             ];
         }
         function writePkgReferences(system: TestServerHost) {
-            system.writeFile(configPath, JSON.stringify({
-                files: [],
-                include: [],
-                references: pkgs(createPkgReference),
-            }));
+            system.writeFile(
+                configPath,
+                JSON.stringify({
+                    files: [],
+                    include: [],
+                    references: pkgs(createPkgReference),
+                }),
+            );
         }
     });
 });

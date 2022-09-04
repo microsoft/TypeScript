@@ -1,9 +1,10 @@
-import { Octokit } from "@octokit/rest";
+import {
+    Octokit,
+} from "@octokit/rest";
 import assert from "assert";
 import ado from "azure-devops-node-api";
 import fs from "fs";
 import fetch from "node-fetch";
-
 
 async function main() {
     const source = process.env.SOURCE_ISSUE;

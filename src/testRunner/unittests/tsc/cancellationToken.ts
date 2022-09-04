@@ -54,17 +54,17 @@ describe("unittests:: tsc:: builder cancellationToken", () => {
             };
             const { sys, baseline, oldSnap: originalSnap } = createBaseline(createWatchedSystem(
                 [aFile, bFile, cFile, dFile, config, libFile],
-                { currentDirectory: "/user/username/projects/myproject" }
+                { currentDirectory: "/user/username/projects/myproject" },
             ));
             sys.exit = exitCode => sys.exitCode = exitCode;
             const reportDiagnostic = ts.createDiagnosticReporter(sys, /*pretty*/ true);
             const parsedConfig = ts.parseConfigFileWithSystem(
                 "tsconfig.json",
                 {},
-             /*extendedConfigCache*/ undefined,
-              /*watchOptionsToExtend*/ undefined,
+                /*extendedConfigCache*/ undefined,
+                /*watchOptionsToExtend*/ undefined,
                 sys,
-                reportDiagnostic
+                reportDiagnostic,
             )!;
             const host = ts.createIncrementalCompilerHost(parsedConfig.options, sys);
             let programs: CommandLineProgram[] = ts.emptyArray;
@@ -91,7 +91,7 @@ describe("unittests:: tsc:: builder cancellationToken", () => {
                 sys,
                 baseline,
                 sys => sys.appendFile(cFile.path, "export function foo() {}"),
-                "Add change that affects d.ts"
+                "Add change that affects d.ts",
             );
             createIncrementalProgram();
 
@@ -145,8 +145,8 @@ describe("unittests:: tsc:: builder cancellationToken", () => {
                         parsedConfig.options,
                         host,
                         builderProgram,
-                    /*configFileParsingDiagnostics*/ undefined,
-                    /*projectReferences*/ undefined,
+                        /*configFileParsingDiagnostics*/ undefined,
+                        /*projectReferences*/ undefined,
                     );
                 updatePrograms();
             }
@@ -173,9 +173,9 @@ describe("unittests:: tsc:: builder cancellationToken", () => {
                     parsedConfig.fileNames,
                     parsedConfig.options,
                     host,
-                /*oldProgram*/ undefined,
-                /*configFileParsingDiagnostics*/ undefined,
-                /*projectReferences*/ undefined,
+                    /*oldProgram*/ undefined,
+                    /*configFileParsingDiagnostics*/ undefined,
+                    /*projectReferences*/ undefined,
                 );
                 updatePrograms();
                 emitAndBaseline();

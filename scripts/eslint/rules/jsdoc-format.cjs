@@ -46,7 +46,7 @@ module.exports = createRule({
         };
 
         /** @type {(c: TSESTree.Comment) => TSESTree.SourceLocation} */
-        const getJSDocStartLoc = (c) => {
+        const getJSDocStartLoc = c => {
             return {
                 start: c.loc.start,
                 end: {
@@ -57,7 +57,7 @@ module.exports = createRule({
         };
 
         /** @type {(node: TSESTree.Node) => void} */
-        const checkDeclaration = (node) => {
+        const checkDeclaration = node => {
             const blockComments = sourceCode.getCommentsBefore(node).filter(c => c.type === "Block");
             if (blockComments.length === 0) {
                 return;
@@ -132,7 +132,7 @@ module.exports = createRule({
                                     column: actual - 1,
                                 },
                             },
-                            fix: (fixer) => {
+                            fix: fixer => {
                                 if (diff > 0) {
                                     // Too many
                                     const start = sourceCode.getIndexFromLoc({ line, column: expected - 1 });

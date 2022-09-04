@@ -79,7 +79,7 @@ function shouldUseParentTypeOfProperty(sourceNode: Node, targetNode: Node, check
  * Find the source and target of the incorrect assignment.
  * The call is recursive for property assignments.
  */
-function getSourceTarget(errorNode: Node | undefined, checker: TypeChecker): { source: Node, target: Node } | undefined {
+function getSourceTarget(errorNode: Node | undefined, checker: TypeChecker): { source: Node; target: Node; } | undefined {
     if (!errorNode) {
         return undefined;
     }
@@ -98,8 +98,10 @@ function getSourceTarget(errorNode: Node | undefined, checker: TypeChecker): { s
         const name = (n.valueDeclaration as any as SignatureDeclaration).parameters[i].name;
         if (isIdentifier(name)) return { source: errorNode, target: name };
     }
-    else if (isPropertyAssignment(errorNode.parent) && isIdentifier(errorNode.parent.name) ||
-        isShorthandPropertyAssignment(errorNode.parent)) {
+    else if (
+        isPropertyAssignment(errorNode.parent) && isIdentifier(errorNode.parent.name) ||
+        isShorthandPropertyAssignment(errorNode.parent)
+    ) {
         const parentTarget = getSourceTarget(errorNode.parent.parent, checker);
         if (!parentTarget) return undefined;
         const prop = checker.getPropertyOfType(checker.getTypeAtLocation(parentTarget.target), (errorNode.parent.name as Identifier).text);

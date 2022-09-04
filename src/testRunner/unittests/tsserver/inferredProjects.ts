@@ -1,5 +1,7 @@
 import * as ts from "../../_namespaces/ts";
-import { commonFile1 } from "../helpers/tscWatch";
+import {
+    commonFile1,
+} from "../helpers/tscWatch";
 import {
     baselineTsserverLogs,
     closeFilesForSession,
@@ -215,9 +217,7 @@ describe("unittests:: tsserver:: inferredProjects", () => {
             baselineTsserverLogs("inferredProjects", subScenario, session);
 
             function openClientFiles(projectRoots: [string | undefined, string | undefined, string | undefined, string | undefined]) {
-                files.forEach((file, index) =>
-                    openFilesForSession([{ file: file.path, content: file.content, scriptKindName: "JS", projectRootPath: projectRoots[index] }], session)
-                );
+                files.forEach((file, index) => openFilesForSession([{ file: file.path, content: file.content, scriptKindName: "JS", projectRootPath: projectRoots[index] }], session));
             }
 
             function closeClientFiles() {

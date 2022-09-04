@@ -514,7 +514,8 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                         {
                             caption: "delete fooBar",
                             edit: sys => sys.deleteFile(`/user/username/projects/myproject/node_modules/bar/fooBar.d.ts`),
-                            timeouts: sys => sys.logTimeoutQueueLength()                            },
+                            timeouts: sys => sys.logTimeoutQueueLength(),
+                        },
                     ],
                 });
 
@@ -547,27 +548,29 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
         scenario,
         subScenario: `fsWatch/when using file watching thats when rename occurs when file is still on the disk`,
         commandLineArgs: ["-w", "--extendedDiagnostics"],
-        sys: () => createWatchedSystem(
-            {
-                [libFile.path]: libFile.content,
-                [`/user/username/projects/myproject/main.ts`]: `import { foo } from "./foo"; foo();`,
-                [`/user/username/projects/myproject/foo.ts`]: `export declare function foo(): string;`,
-                [`/user/username/projects/myproject/tsconfig.json`]: JSON.stringify({
-                    watchOptions: { watchFile: "useFsEvents" },
-                    files: ["foo.ts", "main.ts"],
-                }),
-            },
-            { currentDirectory: "/user/username/projects/myproject" }
-        ),
+        sys: () =>
+            createWatchedSystem(
+                {
+                    [libFile.path]: libFile.content,
+                    [`/user/username/projects/myproject/main.ts`]: `import { foo } from "./foo"; foo();`,
+                    [`/user/username/projects/myproject/foo.ts`]: `export declare function foo(): string;`,
+                    [`/user/username/projects/myproject/tsconfig.json`]: JSON.stringify({
+                        watchOptions: { watchFile: "useFsEvents" },
+                        files: ["foo.ts", "main.ts"],
+                    }),
+                },
+                { currentDirectory: "/user/username/projects/myproject" },
+            ),
         edits: [
             {
                 caption: "Introduce error such that when callback happens file is already appeared",
                 // vm's wq generates this kind of event
                 // Skip delete event so inode changes but when the create's rename occurs file is on disk
-                edit: sys => sys.modifyFile(`/user/username/projects/myproject/foo.ts`, `export declare function foo2(): string;`, {
-                    invokeFileDeleteCreateAsPartInsteadOfChange: true,
-                    ignoreDelete: true,
-                }),
+                edit: sys =>
+                    sys.modifyFile(`/user/username/projects/myproject/foo.ts`, `export declare function foo2(): string;`, {
+                        invokeFileDeleteCreateAsPartInsteadOfChange: true,
+                        ignoreDelete: true,
+                    }),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
             {
@@ -583,18 +586,19 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
             scenario,
             subScenario: `fsWatch/when using file watching thats on inode`,
             commandLineArgs: ["-w", "--extendedDiagnostics"],
-            sys: () => createWatchedSystem(
-                {
-                    [libFile.path]: libFile.content,
-                    [`/user/username/projects/myproject/main.ts`]: `import { foo } from "./foo"; foo();`,
-                    [`/user/username/projects/myproject/foo.d.ts`]: `export function foo(): string;`,
-                    [`/user/username/projects/myproject/tsconfig.json`]: JSON.stringify({ watchOptions: { watchFile: "useFsEvents" }, files: ["foo.d.ts", "main.ts"] }),
-                },
-                {
-                    currentDirectory: "/user/username/projects/myproject",
-                    inodeWatching: true,
-                }
-            ),
+            sys: () =>
+                createWatchedSystem(
+                    {
+                        [libFile.path]: libFile.content,
+                        [`/user/username/projects/myproject/main.ts`]: `import { foo } from "./foo"; foo();`,
+                        [`/user/username/projects/myproject/foo.d.ts`]: `export function foo(): string;`,
+                        [`/user/username/projects/myproject/tsconfig.json`]: JSON.stringify({ watchOptions: { watchFile: "useFsEvents" }, files: ["foo.d.ts", "main.ts"] }),
+                    },
+                    {
+                        currentDirectory: "/user/username/projects/myproject",
+                        inodeWatching: true,
+                    },
+                ),
             edits: [
                 {
                     caption: "Replace file with rename event that introduces error",
@@ -613,18 +617,19 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
             scenario,
             subScenario: `fsWatch/when using file watching thats on inode when rename event ends with tilde`,
             commandLineArgs: ["-w", "--extendedDiagnostics"],
-            sys: () => createWatchedSystem(
-                {
-                    [libFile.path]: libFile.content,
-                    [`/user/username/projects/myproject/main.ts`]: `import { foo } from "./foo"; foo();`,
-                    [`/user/username/projects/myproject/foo.d.ts`]: `export function foo(): string;`,
-                    [`/user/username/projects/myproject/tsconfig.json`]: JSON.stringify({ watchOptions: { watchFile: "useFsEvents" }, files: ["foo.d.ts", "main.ts"] }),
-                },
-                {
-                    currentDirectory: "/user/username/projects/myproject",
-                    inodeWatching: true,
-                }
-            ),
+            sys: () =>
+                createWatchedSystem(
+                    {
+                        [libFile.path]: libFile.content,
+                        [`/user/username/projects/myproject/main.ts`]: `import { foo } from "./foo"; foo();`,
+                        [`/user/username/projects/myproject/foo.d.ts`]: `export function foo(): string;`,
+                        [`/user/username/projects/myproject/tsconfig.json`]: JSON.stringify({ watchOptions: { watchFile: "useFsEvents" }, files: ["foo.d.ts", "main.ts"] }),
+                    },
+                    {
+                        currentDirectory: "/user/username/projects/myproject",
+                        inodeWatching: true,
+                    },
+                ),
             edits: [
                 {
                     caption: "Replace file with rename event that introduces error",
@@ -643,31 +648,33 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
             scenario,
             subScenario: `fsWatch/when using file watching thats on inode when rename occurs when file is still on the disk`,
             commandLineArgs: ["-w", "--extendedDiagnostics"],
-            sys: () => createWatchedSystem(
-                {
-                    [libFile.path]: libFile.content,
-                    [`/user/username/projects/myproject/main.ts`]: `import { foo } from "./foo"; foo();`,
-                    [`/user/username/projects/myproject/foo.ts`]: `export declare function foo(): string;`,
-                    [`/user/username/projects/myproject/tsconfig.json`]: JSON.stringify({
-                        watchOptions: { watchFile: "useFsEvents" },
-                        files: ["foo.ts", "main.ts"],
-                    }),
-                },
-                {
-                    currentDirectory: "/user/username/projects/myproject",
-                    inodeWatching: true,
-                }
-            ),
+            sys: () =>
+                createWatchedSystem(
+                    {
+                        [libFile.path]: libFile.content,
+                        [`/user/username/projects/myproject/main.ts`]: `import { foo } from "./foo"; foo();`,
+                        [`/user/username/projects/myproject/foo.ts`]: `export declare function foo(): string;`,
+                        [`/user/username/projects/myproject/tsconfig.json`]: JSON.stringify({
+                            watchOptions: { watchFile: "useFsEvents" },
+                            files: ["foo.ts", "main.ts"],
+                        }),
+                    },
+                    {
+                        currentDirectory: "/user/username/projects/myproject",
+                        inodeWatching: true,
+                    },
+                ),
             edits: [
                 {
                     caption: "Introduce error such that when callback happens file is already appeared",
                     // vm's wq generates this kind of event
                     // Skip delete event so inode changes but when the create's rename occurs file is on disk
-                    edit: sys => sys.modifyFile(`/user/username/projects/myproject/foo.ts`, `export declare function foo2(): string;`, {
-                        invokeFileDeleteCreateAsPartInsteadOfChange: true,
-                        ignoreDelete: true,
-                        skipInodeCheckOnCreate: true,
-                    }),
+                    edit: sys =>
+                        sys.modifyFile(`/user/username/projects/myproject/foo.ts`, `export declare function foo2(): string;`, {
+                            invokeFileDeleteCreateAsPartInsteadOfChange: true,
+                            ignoreDelete: true,
+                            skipInodeCheckOnCreate: true,
+                        }),
                     timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                 },
                 {
@@ -683,10 +690,11 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
         scenario,
         subScenario: "fsEvent for change is repeated",
         commandLineArgs: ["-w", "main.ts", "--extendedDiagnostics"],
-        sys: () => createWatchedSystem({
-            "/user/username/projects/project/main.ts": `let a: string = "Hello"`,
-            [libFile.path]: libFile.content,
-        }, { currentDirectory: "/user/username/projects/project" }),
+        sys: () =>
+            createWatchedSystem({
+                "/user/username/projects/project/main.ts": `let a: string = "Hello"`,
+                [libFile.path]: libFile.content,
+            }, { currentDirectory: "/user/username/projects/project" }),
         edits: [
             {
                 caption: "change main.ts",

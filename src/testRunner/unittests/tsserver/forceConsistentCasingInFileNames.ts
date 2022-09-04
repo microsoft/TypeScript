@@ -95,7 +95,7 @@ describe("unittests:: tsserver:: forceConsistentCasingInFileNames", () => {
                         newText: "./logger",
                         ...protocolTextSpanFromSubstring(
                             anotherFile.content,
-                            "./Logger"
+                            "./Logger",
                         ),
                     }],
                 }],
@@ -137,7 +137,7 @@ describe("unittests:: tsserver:: forceConsistentCasingInFileNames", () => {
                         newText: "./logger",
                         ...protocolTextSpanFromSubstring(
                             anotherFile.content,
-                            "./Logger"
+                            "./Logger",
                         ),
                     }],
                 }],

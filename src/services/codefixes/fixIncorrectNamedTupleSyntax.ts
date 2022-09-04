@@ -58,7 +58,7 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, na
         namedTupleMember.dotDotDotToken || (sawRest ? factory.createToken(SyntaxKind.DotDotDotToken) : undefined),
         namedTupleMember.name,
         namedTupleMember.questionToken || (sawOptional ? factory.createToken(SyntaxKind.QuestionToken) : undefined),
-        unwrappedType
+        unwrappedType,
     );
     if (updated === namedTupleMember) {
         return;

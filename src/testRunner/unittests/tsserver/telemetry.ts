@@ -8,7 +8,10 @@ import {
     openFilesForSession,
     toExternalFiles,
 } from "../helpers/tsserver";
-import { createServerHost, File } from "../helpers/virtualFileSystemWithWatch";
+import {
+    createServerHost,
+    File,
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsserver:: project telemetry", () => {
     it("does nothing for inferred project", () => {

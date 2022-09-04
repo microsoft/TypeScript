@@ -5,7 +5,9 @@
  * bundle as namespaces again, even though the project is modules.
  */
 
-import assert, { fail } from "assert";
+import assert, {
+    fail,
+} from "assert";
 import cp from "child_process";
 import fs from "fs";
 import minimist from "minimist";
@@ -49,7 +51,6 @@ function isInternalDeclaration(node) {
 }
 
 /**
- *
  * @param {ts.VariableDeclaration} node
  * @returns {ts.VariableStatement}
  */
@@ -63,7 +64,6 @@ function getParentVariableStatement(node) {
 }
 
 /**
- *
  * @param {ts.Declaration} node
  * @returns {ts.Statement | undefined}
  */
@@ -208,8 +208,8 @@ function nodeToLocation(node) {
 function removeDeclareConstExport(node) {
     switch (node.kind) {
         case ts.SyntaxKind.DeclareKeyword: // No need to emit this in d.ts files.
-        case ts.SyntaxKind.ConstKeyword:   // Remove const from const enums.
-        case ts.SyntaxKind.ExportKeyword:  // No export modifier; we are already in the namespace.
+        case ts.SyntaxKind.ConstKeyword: // Remove const from const enums.
+        case ts.SyntaxKind.ExportKeyword: // No export modifier; we are already in the namespace.
             return undefined;
     }
     return node;
@@ -375,7 +375,7 @@ function emitAsNamespace(name, moduleSymbol) {
 
             const isInternal = isInternalDeclaration(statement);
             if (!isInternal) {
-                const publicStatement = ts.visitEachChild(statement, (node) => {
+                const publicStatement = ts.visitEachChild(statement, node => {
                     // No @internal comments in the public API.
                     if (isInternalDeclaration(node)) {
                         return undefined;

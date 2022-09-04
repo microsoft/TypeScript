@@ -81,12 +81,11 @@ const mytestconfigFileName = "mytest.config";
 const testconfigFileName = "test.config";
 
 const customConfig = tryGetConfig(IO.args());
-const testConfigContent =
-    customConfig && IO.fileExists(customConfig)
-        ? IO.readFile(customConfig)!
-        : IO.fileExists(mytestconfigFileName)
-            ? IO.readFile(mytestconfigFileName)!
-            : IO.fileExists(testconfigFileName) ? IO.readFile(testconfigFileName)! : "";
+const testConfigContent = customConfig && IO.fileExists(customConfig)
+    ? IO.readFile(customConfig)!
+    : IO.fileExists(mytestconfigFileName)
+    ? IO.readFile(mytestconfigFileName)!
+    : IO.fileExists(testconfigFileName) ? IO.readFile(testconfigFileName)! : "";
 
 export let taskConfigsFolder: string;
 export let workerCount: number;

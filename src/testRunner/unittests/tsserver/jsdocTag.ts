@@ -23,8 +23,8 @@ describe("unittests:: tsserver:: jsdocTag:: jsdoc @link ", () => {
 `,
     };
     function assertQuickInfoJSDoc(subScenario: string, file: File, options: {
-        displayPartsForJSDoc: boolean,
-        command: ts.server.protocol.CommandTypes,
+        displayPartsForJSDoc: boolean;
+        command: ts.server.protocol.CommandTypes;
     }) {
         it(subScenario, () => {
             const { command, displayPartsForJSDoc } = options;
@@ -102,8 +102,8 @@ var x = 1
     });
 
     function assertSignatureHelpJSDoc(subScenario: string, options: {
-        displayPartsForJSDoc: boolean,
-        command: ts.server.protocol.CommandTypes,
+        displayPartsForJSDoc: boolean;
+        command: ts.server.protocol.CommandTypes;
     }) {
         it(subScenario, () => {
             const linkInParamTag: File = {
@@ -156,8 +156,8 @@ x(1)`,
     });
 
     function assertCompletionsJSDoc(subScenario: string, options: {
-        displayPartsForJSDoc: boolean,
-        command: ts.server.protocol.CommandTypes,
+        displayPartsForJSDoc: boolean;
+        command: ts.server.protocol.CommandTypes;
     }) {
         it(subScenario, () => {
             const linkInParamJSDoc: File = {

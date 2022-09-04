@@ -1,6 +1,10 @@
 import * as ts from "../../_namespaces/ts";
-import { libContent } from "../helpers/contents";
-import { solutionBuildWithBaseline } from "../helpers/solutionBuilder";
+import {
+    libContent,
+} from "../helpers/contents";
+import {
+    solutionBuildWithBaseline,
+} from "../helpers/solutionBuilder";
 import {
     createBaseline,
     createWatchCompilerHostOfConfigFileForBaseline,
@@ -28,7 +32,7 @@ describe("unittests:: tsc-watch:: watchAPI:: with sourceOfProjectReferenceRedire
             alreadyBuilt ? (sys, originalRead) => {
                 solutionBuildWithBaseline(sys, [config], originalRead);
                 sys.clearOutput();
-            } : undefined
+            } : undefined,
         );
         const host = createWatchCompilerHostOfConfigFileForBaseline({
             configFileName: config,
@@ -140,11 +144,15 @@ describe("unittests:: tsc-watch:: watchAPI:: with sourceOfProjectReferenceRedire
                             types: "lib/index.d.ts",
                         }),
                     },
-                    aTest: file("A", "index.ts", `import { foo } from '${scope}b';
+                    aTest: file(
+                        "A",
+                        "index.ts",
+                        `import { foo } from '${scope}b';
 import { bar } from '${scope}b/lib/bar';
 foo();
 bar();
-`),
+`,
+                    ),
                     bFoo: file("B", "index.ts", `export function foo() { }`),
                     bBar: file("B", "bar.ts", `export function bar() { }`),
                     bSymlink: {
@@ -161,11 +169,15 @@ bar();
                         path: `/user/username/projects/myproject/packages/B/package.json`,
                         content: "{}",
                     },
-                    aTest: file("A", "test.ts", `import { foo } from '${scope}b/lib/foo';
+                    aTest: file(
+                        "A",
+                        "test.ts",
+                        `import { foo } from '${scope}b/lib/foo';
 import { bar } from '${scope}b/lib/bar/foo';
 foo();
 bar();
-`),
+`,
+                    ),
                     bFoo: file("B", "foo.ts", `export function foo() { }`),
                     bBar: file("B", "bar/foo.ts", `export function bar() { }`),
                     bSymlink: {

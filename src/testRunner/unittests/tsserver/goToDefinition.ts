@@ -1,14 +1,22 @@
-import { protocol } from "../../_namespaces/ts.server";
-import { baselineTsserverLogs, createLoggerWithInMemoryLogs, createSession } from "../helpers/tsserver";
-import { createServerHost, File } from "../helpers/virtualFileSystemWithWatch";
+import {
+    protocol,
+} from "../../_namespaces/ts.server";
+import {
+    baselineTsserverLogs,
+    createLoggerWithInMemoryLogs,
+    createSession,
+} from "../helpers/tsserver";
+import {
+    createServerHost,
+    File,
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: services:: goToDefinition", () => {
     it("does not issue errors on jsdoc in TS", () => {
         const files: File[] = [
             {
                 path: "/packages/babel-loader/tsconfig.json",
-                content:
-                `
+                content: `
 {
     "compilerOptions": {
         "target": "ES2018",
@@ -24,8 +32,7 @@ describe("unittests:: services:: goToDefinition", () => {
             },
             {
                 path: "/packages/babel-loader/src/index.ts",
-                content:
-                `
+                content: `
 declare class Stuff {
     /** For more thorough tests, use {@link checkFooIs} */
     checkFooLengthIs(len: number): void;
@@ -65,14 +72,12 @@ declare class Stuff {
             },
         });
         baselineTsserverLogs("goToDefinition", "does not issue errors on jsdoc in TS", session);
-
     });
     it("does not issue errors on jsdoc in TS", () => {
         const files: File[] = [
             {
                 path: "/packages/babel-loader/tsconfig.json",
-                content:
-                `
+                content: `
 {
     "compilerOptions": {
         "target": "ES2018",
@@ -88,8 +93,7 @@ declare class Stuff {
             },
             {
                 path: "/packages/babel-loader/src/index.ts",
-                content:
-                `
+                content: `
 declare class Stuff {
   /**
    * Register a function to be run on mod initialization...
@@ -135,6 +139,5 @@ declare class Stuff {
             },
         });
         baselineTsserverLogs("goToDefinition", "does not issue errors on jsdoc in TS2", session);
-
     });
 });

@@ -176,8 +176,9 @@ describe("unittests:: tsserver:: events:: ProjectLoadingStart and ProjectLoading
     }
 
     verifyProjectLoadingStartAndFinish("when using event handler", host => createSessionWithCustomEventHandler(host));
-    verifyProjectLoadingStartAndFinish("when using default event handler", host => createSession(
-        host,
-        { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) }
-    ));
+    verifyProjectLoadingStartAndFinish("when using default event handler", host =>
+        createSession(
+            host,
+            { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) },
+        ));
 });

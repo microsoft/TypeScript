@@ -59,9 +59,13 @@ describe("unittests:: tsbuild:: inferredTypeFromTransitiveModule::", () => {
         commandLineArgs: ["--b", "/src", "--verbose"],
         modifyFs: fs => {
             changeToIsolatedModules(fs);
-            appendText(fs, "/src/lazyIndex.ts", `
+            appendText(
+                fs,
+                "/src/lazyIndex.ts",
+                `
 import { default as bar } from './bar';
-bar("hello");`);
+bar("hello");`,
+            );
         },
         edits: [
             {

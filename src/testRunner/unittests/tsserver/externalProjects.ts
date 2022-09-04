@@ -211,7 +211,7 @@ describe("unittests:: tsserver:: externalProjects", () => {
                 {
                     compilerOptions: {},
                     files: ["f1.ts"],
-                }
+                },
             ),
         };
         const file2 = {
@@ -224,7 +224,7 @@ describe("unittests:: tsserver:: externalProjects", () => {
                 {
                     compilerOptions: {},
                     files: ["f2.ts"],
-                }
+                },
             ),
         };
         const file3 = {
@@ -281,7 +281,6 @@ describe("unittests:: tsserver:: externalProjects", () => {
             options: {},
             projectFileName: externalProjectName,
         });
-
 
         projectService.closeClientFile(file1.path);
         // configured project is alive since it is opened as part of external project
@@ -376,8 +375,7 @@ describe("unittests:: tsserver:: externalProjects", () => {
         };
         const host = createServerHost([f1, f2]);
         const originalGetFileSize = host.getFileSize;
-        host.getFileSize = (filePath: string) =>
-            filePath === f2.path ? ts.server.maxProgramSizeForNonTsFiles + 1 : originalGetFileSize.call(host, filePath);
+        host.getFileSize = (filePath: string) => filePath === f2.path ? ts.server.maxProgramSizeForNonTsFiles + 1 : originalGetFileSize.call(host, filePath);
 
         const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
         const projectFileName = "/a/proj.csproj";
@@ -611,7 +609,8 @@ describe("unittests:: tsserver:: externalProjects", () => {
                             "es5",
                         ],
                     },
-                }),
+                },
+            ),
         };
         const config2 = {
             path: config1.path,
@@ -627,7 +626,8 @@ describe("unittests:: tsserver:: externalProjects", () => {
                             "es2015.promise",
                         ],
                     },
-                }),
+                },
+            ),
         };
         const host = createServerHost([libES5, libES2015Promise, app, config1], { executingFilePath: "/compiler/tsc.js" });
         const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });

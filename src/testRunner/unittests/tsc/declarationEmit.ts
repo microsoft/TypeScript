@@ -1,6 +1,8 @@
 import * as ts from "../../_namespaces/ts";
 import * as Utils from "../../_namespaces/Utils";
-import { verifyTscWatch } from "../helpers/tscWatch";
+import {
+    verifyTscWatch,
+} from "../helpers/tscWatch";
 import {
     createWatchedSystem,
     FileOrFolderOrSymLink,
@@ -37,10 +39,11 @@ describe("unittests:: tsc:: declarationEmit::", () => {
             verifyTscWatch({
                 scenario: "declarationEmit",
                 subScenario: caseChangeScenario,
-                sys: () => createWatchedSystem(
-                    files.map(f => changeCaseFile(f, changeCaseFileTestPath, str => str.replace("myproject", "myProject"))),
-                    { currentDirectory: "/user/username/projects/myproject" }
-                ),
+                sys: () =>
+                    createWatchedSystem(
+                        files.map(f => changeCaseFile(f, changeCaseFileTestPath, str => str.replace("myproject", "myProject"))),
+                        { currentDirectory: "/user/username/projects/myproject" },
+                    ),
                 commandLineArgs: ["-p", rootProject, "--explainFiles"],
             });
         });

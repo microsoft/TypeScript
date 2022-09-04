@@ -6,7 +6,9 @@ import {
     TestTypingsInstaller,
     toExternalFile,
 } from "../helpers/tsserver";
-import { createServerHost } from "../helpers/virtualFileSystemWithWatch";
+import {
+    createServerHost,
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsserver:: typeAquisition:: autoDiscovery", () => {
     it("does not depend on extension", () => {

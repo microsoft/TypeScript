@@ -1,21 +1,45 @@
 // @ts-check
-import { CancelToken } from "@esfx/canceltoken";
+import {
+    CancelToken,
+} from "@esfx/canceltoken";
 import chalk from "chalk";
 import chokidar from "chokidar";
 import del from "del";
 import esbuild from "esbuild";
-import { EventEmitter } from "events";
+import {
+    EventEmitter,
+} from "events";
 import fs from "fs";
 import _glob from "glob";
-import { task } from "hereby";
+import {
+    task,
+} from "hereby";
 import path from "path";
 import util from "util";
 
-import { localizationDirectories } from "./scripts/build/localization.mjs";
+import {
+    localizationDirectories,
+} from "./scripts/build/localization.mjs";
 import cmdLineOptions from "./scripts/build/options.mjs";
-import { buildProject, cleanProject, watchProject } from "./scripts/build/projects.mjs";
-import { localBaseline, refBaseline, runConsoleTests } from "./scripts/build/tests.mjs";
-import { Debouncer, Deferred, exec, getDiffTool, memoize, needsUpdate, readJson } from "./scripts/build/utils.mjs";
+import {
+    buildProject,
+    cleanProject,
+    watchProject,
+} from "./scripts/build/projects.mjs";
+import {
+    localBaseline,
+    refBaseline,
+    runConsoleTests,
+} from "./scripts/build/tests.mjs";
+import {
+    Debouncer,
+    Deferred,
+    exec,
+    getDiffTool,
+    memoize,
+    needsUpdate,
+    readJson,
+} from "./scripts/build/utils.mjs";
 
 const glob = util.promisify(_glob);
 
@@ -27,7 +51,6 @@ const copyright = memoize(async () => {
     const contents = await fs.promises.readFile(copyrightFilename, "utf-8");
     return contents.replace(/\r\n/g, "\n");
 });
-
 
 export const buildScripts = task({
     name: "scripts",
@@ -48,7 +71,6 @@ const libs = memoize(() => {
     return libs;
 });
 
-
 export const generateLibs = task({
     name: "lib",
     description: "Builds the library targets",
@@ -66,7 +88,6 @@ export const generateLibs = task({
         }
     },
 });
-
 
 const diagnosticInformationMapTs = "src/compiler/diagnosticInformationMap.generated.ts";
 const diagnosticMessagesJson = "src/compiler/diagnosticMessages.json";
@@ -86,7 +107,6 @@ const cleanDiagnostics = task({
     hiddenFromTaskList: true,
     run: () => del([diagnosticInformationMapTs, diagnosticMessagesGeneratedJson]),
 });
-
 
 // Localize diagnostics
 /**
@@ -151,7 +171,6 @@ async function runDtsBundler(entrypoint, output) {
     ]);
 }
 
-
 /**
  * @param {string} entrypoint
  * @param {string} outfile
@@ -203,7 +222,7 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
             options.plugins = [
                 {
                     name: "fix-require",
-                    setup: (build) => {
+                    setup: build => {
                         build.onEnd(async () => {
                             let contents = await fs.promises.readFile(outfile, "utf-8");
                             contents = contents.replace(/\$\$require/g, "  require");
@@ -226,7 +245,7 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
                 const onRebuild = taskOptions.onWatchRebuild;
                 options.plugins = (options.plugins?.slice(0) ?? []).concat([{
                     name: "watch",
-                    setup: (build) => {
+                    setup: build => {
                         let firstBuild = true;
                         build.onEnd(() => {
                             if (firstBuild) {
@@ -337,7 +356,6 @@ function entrypointBuildTask(options) {
     return { build, bundle, shim, main, watch };
 }
 
-
 const { main: tsc, watch: watchTsc } = entrypointBuildTask({
     name: "tsc",
     description: "Builds the command-line compiler",
@@ -349,7 +367,6 @@ const { main: tsc, watch: watchTsc } = entrypointBuildTask({
     mainDeps: [generateLibs],
 });
 export { tsc, watchTsc };
-
 
 const { main: services, build: buildServices, watch: watchServices } = entrypointBuildTask({
     name: "services",
@@ -375,7 +392,6 @@ export const dtsServices = task({
     },
 });
 
-
 const { main: tsserver, watch: watchTsserver } = entrypointBuildTask({
     name: "tsserver",
     description: "Builds the language server",
@@ -387,7 +403,6 @@ const { main: tsserver, watch: watchTsserver } = entrypointBuildTask({
     mainDeps: [generateLibs],
 });
 export { tsserver, watchTsserver };
-
 
 export const min = task({
     name: "min",
@@ -401,8 +416,6 @@ export const watchMin = task({
     hiddenFromTaskList: true,
     dependencies: [watchTsc, watchTsserver],
 });
-
-
 
 // This is technically not enough to make tsserverlibrary loadable in the
 // browser, but it's unlikely that anyone has actually been doing that.
@@ -456,7 +469,6 @@ export const dts = task({
     dependencies: [dtsServices, dtsLssl],
 });
 
-
 const testRunner = "./built/local/run.js";
 const watchTestsEmitter = new EventEmitter();
 const { main: tests, watch: watchTests } = entrypointBuildTask({
@@ -478,7 +490,6 @@ const { main: tests, watch: watchTests } = entrypointBuildTask({
 });
 export { tests, watchTests };
 
-
 export const runEslintRulesTests = task({
     name: "run-eslint-rules-tests",
     description: "Runs the eslint rule tests",
@@ -494,8 +505,10 @@ export const lint = task({
         const args = [
             "node_modules/eslint/bin/eslint",
             "--cache",
-            "--cache-location", `${folder}/.eslintcache`,
-            "--format", formatter,
+            "--cache-location",
+            `${folder}/.eslintcache`,
+            "--format",
+            formatter,
         ];
 
         if (cmdLineOptions.fix) {
@@ -558,7 +571,6 @@ export const generateTypesMap = task({
     },
 });
 
-
 // Drop a copy of diagnosticMessages.generated.json into the built/local folder. This allows
 // it to be synced to the Azure DevOps repo, so that it can get picked up by the build
 // pipeline that generates the localization artifacts that are then fed into the translation process.
@@ -572,7 +584,6 @@ const copyBuiltLocalDiagnosticMessages = task({
         await fs.promises.writeFile(builtLocalDiagnosticMessagesGeneratedJson, contents);
     },
 });
-
 
 export const otherOutputs = task({
     name: "other-outputs",
@@ -638,7 +649,7 @@ export const runTestsAndWatch = task({
         let watching = true;
         let running = true;
         let lastTestChangeTimeMs = Date.now();
-        let testsChangedDeferred = /** @type {Deferred<void>} */(new Deferred());
+        let testsChangedDeferred = /** @type {Deferred<void>} */ (new Deferred());
         let testsChangedCancelSource = CancelToken.source();
 
         const testsChangedDebouncer = new Debouncer(1_000, endRunTests);
@@ -721,7 +732,7 @@ export const runTestsAndWatch = task({
         function endRunTests() {
             lastTestChangeTimeMs = Date.now();
             testsChangedDeferred.resolve();
-            testsChangedDeferred = /** @type {Deferred<void>} */(new Deferred());
+            testsChangedDeferred = /** @type {Deferred<void>} */ (new Deferred());
         }
 
         function endWatchMode() {
@@ -821,7 +832,6 @@ export const updateSublime = task({
         }
     },
 });
-
 
 export const produceLKG = task({
     name: "LKG",

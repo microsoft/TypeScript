@@ -5,7 +5,9 @@ import {
     openExternalProjectForSession,
     toExternalFile,
 } from "../helpers/tsserver";
-import { createServerHost } from "../helpers/virtualFileSystemWithWatch";
+import {
+    createServerHost,
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsserver:: importHelpers", () => {
     it("should not crash in tsserver", () => {

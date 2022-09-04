@@ -1,5 +1,7 @@
 import * as Utils from "../../_namespaces/Utils";
-import { verifyTscWatch } from "../helpers/tscWatch";
+import {
+    verifyTscWatch,
+} from "../helpers/tscWatch";
 import {
     createWatchedSystem,
     File,
@@ -50,13 +52,14 @@ describe("unittests:: tsc-watch:: nodeNextWatch:: emit when module emit is speci
         edits: [
             {
                 caption: "Modify typescript file",
-                edit: sys => sys.modifyFile(
-                    "/project/src/index.ts",
-                    Utils.dedent`
+                edit: sys =>
+                    sys.modifyFile(
+                        "/project/src/index.ts",
+                        Utils.dedent`
                             import * as Thing from "thing";
                             Thing.fn();`,
-                    {},
-                ),
+                        {},
+                    ),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],

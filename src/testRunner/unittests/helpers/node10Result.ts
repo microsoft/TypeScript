@@ -1,35 +1,49 @@
-import { dedent } from "../../_namespaces/Utils";
-import { FsContents } from "./contents";
-import { libFile } from "./virtualFileSystemWithWatch";
+import {
+    dedent,
+} from "../../_namespaces/Utils";
+import {
+    FsContents,
+} from "./contents";
+import {
+    libFile,
+} from "./virtualFileSystemWithWatch";
 
 export function getFsConentsForNode10ResultAtTypesPackageJson(packageName: string, addTypesCondition: boolean) {
-    return JSON.stringify({
-        name: `@types/${packageName}`,
-        version: "1.0.0",
-        types: "index.d.ts",
-        exports: {
-            ".": {
-                ...(addTypesCondition ? { types: "./index.d.ts" } : {}),
-                require: "./index.d.ts",
+    return JSON.stringify(
+        {
+            name: `@types/${packageName}`,
+            version: "1.0.0",
+            types: "index.d.ts",
+            exports: {
+                ".": {
+                    ...(addTypesCondition ? { types: "./index.d.ts" } : {}),
+                    require: "./index.d.ts",
+                },
             },
         },
-    }, undefined, " ");
+        undefined,
+        " ",
+    );
 }
 
 export function getFsContentsForNode10ResultPackageJson(packageName: string, addTypes: boolean, addTypesCondition: boolean) {
-    return JSON.stringify({
-        name: packageName,
-        version: "1.0.0",
-        main: "index.js",
-        ...(addTypes ? { types: "index.d.ts" } : {}),
-        exports: {
-            ".": {
-                ...(addTypesCondition ? { types: "./index.d.ts" } : {}),
-                import: "./index.mjs",
-                require: "./index.js",
+    return JSON.stringify(
+        {
+            name: packageName,
+            version: "1.0.0",
+            main: "index.js",
+            ...(addTypes ? { types: "index.d.ts" } : {}),
+            exports: {
+                ".": {
+                    ...(addTypesCondition ? { types: "./index.d.ts" } : {}),
+                    import: "./index.mjs",
+                    require: "./index.js",
+                },
             },
         },
-    }, undefined, " ");
+        undefined,
+        " ",
+    );
 }
 
 export function getFsContentsForNode10ResultDts(packageName: string) {

@@ -1,6 +1,8 @@
 import * as fakes from "../../_namespaces/fakes";
 import * as vfs from "../../_namespaces/vfs";
-import { baselineParseConfig } from "./helpers";
+import {
+    baselineParseConfig,
+} from "./helpers";
 
 describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
     function baselineCompilerOptions(subScenario: string, json: any, configFileName: string) {
@@ -17,17 +19,20 @@ describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
             scenario: "convertCompilerOptionsFromJson",
             subScenario,
             input: () => [{
-                createHost: () => new fakes.ParseConfigHost(new vfs.FileSystem(
-                    /*ignoreCase*/ false,
-                    {
-                        cwd: "/apath/",
-                        files: {
-                            [`/apath/${configFileName}`]: jsonText,
-                            "/apath/a.ts": "",
-                            "/apath/b.js": "",
-                        },
-                    },
-                )),
+                createHost: () =>
+                    new fakes.ParseConfigHost(
+                        new vfs.FileSystem(
+                            /*ignoreCase*/ false,
+                            {
+                                cwd: "/apath/",
+                                files: {
+                                    [`/apath/${configFileName}`]: jsonText,
+                                    "/apath/a.ts": "",
+                                    "/apath/b.js": "",
+                                },
+                            },
+                        ),
+                    ),
                 jsonText,
                 configFileName,
                 basePath: "/apath",
@@ -222,7 +227,9 @@ describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
 
     baselineCompilerOptions("Convert default jsconfig.json to compiler-options", {}, "jsconfig.json");
 
-    baselineCompilerOptionsJsonText("Convert tsconfig options when there are multiple invalid strings", `{
+    baselineCompilerOptionsJsonText(
+        "Convert tsconfig options when there are multiple invalid strings",
+        `{
   "compilerOptions": {
     "target": "<%- options.useTsWithBabel ? 'esnext' : 'es5' %>",
     "module": "esnext",
@@ -242,41 +249,57 @@ describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
   }
 }
 `,
-        "tsconfig.json");
+        "tsconfig.json",
+    );
 
-    baselineCompilerOptionsJsonText("Convert a tsconfig file with stray trailing characters",
+    baselineCompilerOptionsJsonText(
+        "Convert a tsconfig file with stray trailing characters",
         `{
             "compilerOptions": {
                 "target": "esnext"
             }
-        } blah`, "tsconfig.json");
+        } blah`,
+        "tsconfig.json",
+    );
 
-    baselineCompilerOptionsJsonText("Convert a tsconfig file with stray leading characters",
+    baselineCompilerOptionsJsonText(
+        "Convert a tsconfig file with stray leading characters",
         `blah {
             "compilerOptions": {
                 "target": "esnext"
             }
-        }`, "tsconfig.json");
+        }`,
+        "tsconfig.json",
+    );
 
-    baselineCompilerOptionsJsonText("Convert a tsconfig file as an array",
+    baselineCompilerOptionsJsonText(
+        "Convert a tsconfig file as an array",
         `[{
             "compilerOptions": {
                 "target": "esnext"
             }
-        }]`, "tsconfig.json");
+        }]`,
+        "tsconfig.json",
+    );
 
-    baselineCompilerOptionsJsonText("raises an error if you've set a compiler flag in the root without including compilerOptions",
+    baselineCompilerOptionsJsonText(
+        "raises an error if you've set a compiler flag in the root without including compilerOptions",
         `{
             "module": "esnext",
-        }`, "tsconfig.json");
+        }`,
+        "tsconfig.json",
+    );
 
-    baselineCompilerOptionsJsonText("does not raise an error if you've set a compiler flag in the root when you have included 'compilerOptions'",
+    baselineCompilerOptionsJsonText(
+        "does not raise an error if you've set a compiler flag in the root when you have included 'compilerOptions'",
         `{
             "target": "esnext",
             "compilerOptions": {
                 "module": "esnext"
             }
-        }`, "tsconfig.json");
+        }`,
+        "tsconfig.json",
+    );
 
     baselineCompilerOptionsJsonText("Don't crash when root expression is not object at all", `42`, "tsconfig.json");
 

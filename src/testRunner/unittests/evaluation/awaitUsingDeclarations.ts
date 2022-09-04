@@ -7,7 +7,8 @@ function FakeSuppressedError(error: any, suppressed: any) {
 
 describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
     it("'await using' in Block, normal completion (es2018)", async () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         const disposable = {
@@ -30,7 +31,9 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
             }
             output.push("after block");
         }
-        `, { target: ts.ScriptTarget.ES2018 });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+        );
 
         await main();
 
@@ -45,7 +48,8 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
     });
 
     it("'await using' in Block, 'throw' in body (es2018)", async () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         const disposable = {
@@ -72,7 +76,9 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
             }
             output.push("after try");
         }
-        `, { target: ts.ScriptTarget.ES2018 });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+        );
 
         await main();
 
@@ -87,7 +93,8 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
     });
 
     it("'await using' in Block, 'throw' in dispose (es2018)", async () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         const disposable = {
@@ -114,7 +121,9 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
             }
             output.push("after try");
         }
-        `, { target: ts.ScriptTarget.ES2018 });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+        );
 
         await main();
 
@@ -130,7 +139,8 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
     });
 
     it("'await using' in Block, 'throw' in body and dispose (es2018)", async () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         const disposable = {
@@ -158,7 +168,10 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
             }
             output.push("after try");
         }
-        `, { target: ts.ScriptTarget.ES2018 }, { SuppressedError: FakeSuppressedError });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+            { SuppressedError: FakeSuppressedError },
+        );
 
         await main();
 
@@ -176,7 +189,8 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
     });
 
     it("'await using' in Block, 'throw' in body and dispose, no global SuppressedError (es2018)", async () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         const disposable = {
@@ -204,7 +218,9 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
             }
             output.push("after try");
         }
-        `, { target: ts.ScriptTarget.ES2018 });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+        );
 
         await main();
 
@@ -212,7 +228,8 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
             "before try",
             "enter try",
             "body",
-            "disposed"]);
+            "disposed",
+        ]);
         assert.instanceOf(output[4], Error);
         assert.strictEqual(output[4].name, "SuppressedError");
         assert.strictEqual(output[4].error, "dispose error");
@@ -223,7 +240,8 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
     });
 
     it("'await using' in Block, 'return' in body (es2018)", async () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         const disposable = {
@@ -246,7 +264,9 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
             }
             output.push("after block");
         }
-        `, { target: ts.ScriptTarget.ES2018 });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+        );
 
         await main();
 
@@ -259,7 +279,8 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
     });
 
     it("'await using' in Block, 'break' in body (es2018)", async () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         const disposable = {
@@ -282,7 +303,9 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
             }
             output.push("after block");
         }
-        `, { target: ts.ScriptTarget.ES2018 });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+        );
 
         await main();
 
@@ -296,7 +319,8 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
     });
 
     it("'await using' in Block, 'continue' in body (es2018)", async () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         const disposable = {
@@ -319,7 +343,9 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
             }
             output.push("after block");
         }
-        `, { target: ts.ScriptTarget.ES2018 });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+        );
 
         await main();
 
@@ -336,7 +362,8 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
     });
 
     it("'await using' in head of 'for', normal completion (es2018)", async () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         const disposable = {
@@ -359,7 +386,9 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
             }
             output.push("after loop");
         }
-        `, { target: ts.ScriptTarget.ES2018 });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+        );
 
         await main();
 
@@ -377,7 +406,8 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
     });
 
     it("'await using' in head of 'for', 'throw' in body (es2018)", async () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         const disposable = {
@@ -405,7 +435,9 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
             }
             output.push("after loop");
         }
-        `, { target: ts.ScriptTarget.ES2018 });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+        );
 
         await main();
 
@@ -420,7 +452,8 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
     });
 
     it("'await using' in head of 'for', 'throw' in dispose (es2018)", async () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         const disposable = {
@@ -448,7 +481,9 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
             }
             output.push("after loop");
         }
-        `, { target: ts.ScriptTarget.ES2018 });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+        );
 
         await main();
 
@@ -467,7 +502,8 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
     });
 
     it("'await using' in head of 'for', 'throw' in body and dispose (es2018)", async () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         const disposable = {
@@ -496,7 +532,10 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
             }
             output.push("after loop");
         }
-        `, { target: ts.ScriptTarget.ES2018 }, { SuppressedError: FakeSuppressedError });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+            { SuppressedError: FakeSuppressedError },
+        );
 
         await main();
 
@@ -514,7 +553,8 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
     });
 
     it("'await using' in head of 'for', 'return' in body (es2018)", async () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         const disposable = {
@@ -537,7 +577,9 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
             }
             output.push("after loop");
         }
-        `, { target: ts.ScriptTarget.ES2018 });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+        );
 
         await main();
 
@@ -550,7 +592,8 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
     });
 
     it("'await using' in head of 'for', 'break' in body (es2018)", async () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         const disposable = {
@@ -573,7 +616,9 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
             }
             output.push("after loop");
         }
-        `, { target: ts.ScriptTarget.ES2018 });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+        );
 
         await main();
 
@@ -587,7 +632,8 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
     });
 
     it("'await using' in head of 'for', 'continue' in body (es2018)", async () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         const disposable = {
@@ -610,7 +656,9 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
             }
             output.push("after loop");
         }
-        `, { target: ts.ScriptTarget.ES2018 });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+        );
 
         await main();
 
@@ -626,7 +674,8 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
     });
 
     it("'await using' in head of 'for', multiple iterations (es2018)", async () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         const disposable = {
@@ -649,7 +698,9 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
             }
             output.push("after loop");
         }
-        `, { target: ts.ScriptTarget.ES2018 });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+        );
 
         await main();
 
@@ -667,7 +718,8 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
     });
 
     it("'await using' in head of 'for-of', normal completion (es2018)", async () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         function* g() {
@@ -696,7 +748,9 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
             }
             output.push("after loop");
         }
-        `, { target: ts.ScriptTarget.ES2018 });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+        );
 
         await main();
 
@@ -715,7 +769,8 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
     });
 
     it("'await using' in head of 'for-of', 'throw' in body (es2018)", async () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         function* g() {
@@ -750,7 +805,9 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
             }
             output.push("after loop");
         }
-        `, { target: ts.ScriptTarget.ES2018 });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+        );
 
         await main();
 
@@ -765,7 +822,8 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
     });
 
     it("'await using' in head of 'for-of', 'throw' in dispose (es2018)", async () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         function* g() {
@@ -800,7 +858,9 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
             }
             output.push("after loop");
         }
-        `, { target: ts.ScriptTarget.ES2018 });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+        );
 
         await main();
 
@@ -816,7 +876,8 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
     });
 
     it("'await using' in head of 'for-of', 'throw' in body and dispose (es2018)", async () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         function* g() {
@@ -852,7 +913,10 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
             }
             output.push("after loop");
         }
-        `, { target: ts.ScriptTarget.ES2018 }, { SuppressedError: FakeSuppressedError });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+            { SuppressedError: FakeSuppressedError },
+        );
 
         await main();
 
@@ -870,7 +934,8 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
     });
 
     it("'await using' in head of 'for-of', 'return' in body (es2018)", async () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         function* g() {
@@ -899,7 +964,9 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
             }
             output.push("after loop");
         }
-        `, { target: ts.ScriptTarget.ES2018 });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+        );
 
         await main();
 
@@ -912,7 +979,8 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
     });
 
     it("'await using' in head of 'for-of', 'break' in body (es2018)", async () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         function* g() {
@@ -941,7 +1009,9 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
             }
             output.push("after loop");
         }
-        `, { target: ts.ScriptTarget.ES2018 });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+        );
 
         await main();
 
@@ -955,7 +1025,8 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
     });
 
     it("'await using' in head of 'for-of', 'continue' in body (es2018)", async () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         function* g() {
@@ -984,7 +1055,9 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
             }
             output.push("after loop");
         }
-        `, { target: ts.ScriptTarget.ES2018 });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+        );
 
         await main();
 
@@ -1001,7 +1074,8 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
     });
 
     it("'await using' in head of 'for-await-of', normal completion (es2018)", async () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         function* g() {
@@ -1030,7 +1104,9 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
             }
             output.push("after loop");
         }
-        `, { target: ts.ScriptTarget.ES2018 });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+        );
 
         await main();
 
@@ -1049,7 +1125,8 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
     });
 
     it("'await using' in head of 'for-await-of', 'throw' in body (es2018)", async () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         function* g() {
@@ -1084,7 +1161,9 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
             }
             output.push("after loop");
         }
-        `, { target: ts.ScriptTarget.ES2018 });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+        );
 
         await main();
 
@@ -1099,7 +1178,8 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
     });
 
     it("'await using' in head of 'for-await-of', 'throw' in dispose (es2018)", async () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         function* g() {
@@ -1134,7 +1214,9 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
             }
             output.push("after loop");
         }
-        `, { target: ts.ScriptTarget.ES2018 });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+        );
 
         await main();
 
@@ -1150,7 +1232,8 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
     });
 
     it("'await using' in head of 'for-await-of', 'throw' in body and dispose (es2018)", async () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         function* g() {
@@ -1186,7 +1269,10 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
             }
             output.push("after loop");
         }
-        `, { target: ts.ScriptTarget.ES2018 }, { SuppressedError: FakeSuppressedError });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+            { SuppressedError: FakeSuppressedError },
+        );
 
         await main();
 
@@ -1204,7 +1290,8 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
     });
 
     it("'await using' in head of 'for-await-of', 'return' in body (es2018)", async () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         function* g() {
@@ -1233,7 +1320,9 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
             }
             output.push("after loop");
         }
-        `, { target: ts.ScriptTarget.ES2018 });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+        );
 
         await main();
 
@@ -1246,7 +1335,8 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
     });
 
     it("'await using' in head of 'for-await-of', 'break' in body (es2018)", async () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         function* g() {
@@ -1275,7 +1365,9 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
             }
             output.push("after loop");
         }
-        `, { target: ts.ScriptTarget.ES2018 });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+        );
 
         await main();
 
@@ -1289,7 +1381,8 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
     });
 
     it("'await using' in head of 'for-await-of', 'continue' in body (es2018)", async () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         function* g() {
@@ -1318,7 +1411,9 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
             }
             output.push("after loop");
         }
-        `, { target: ts.ScriptTarget.ES2018 });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+        );
 
         await main();
 
@@ -1335,7 +1430,8 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
     });
 
     it("'await using' at top level of module (System)", async () => {
-        const { output, x, y } = await evaluator.evaluateTypeScript(`
+        const { output, x, y } = await evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
         output.push("before export x");
         export const x = 1;
@@ -1348,7 +1444,9 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
         output.push("after using");
         export const y = 2;
         output.push("after export y");
-        `, { target: ts.ScriptTarget.ES2018, module: ts.ModuleKind.System });
+        `,
+            { target: ts.ScriptTarget.ES2018, module: ts.ModuleKind.System },
+        );
 
         assert.strictEqual(x, 1);
         assert.strictEqual(y, 2);
@@ -1362,7 +1460,8 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
     });
 
     it("'await using' for 'null' value", async () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         function body() {
@@ -1379,7 +1478,9 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
             }
             output.push("after block");
         }
-        `, { target: ts.ScriptTarget.ES2018 });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+        );
 
         await main();
 
@@ -1393,7 +1494,8 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
     });
 
     it("'await using' for 'undefined' value", async () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         function body() {
@@ -1410,7 +1512,9 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
             }
             output.push("after block");
         }
-        `, { target: ts.ScriptTarget.ES2018 });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+        );
 
         await main();
 
@@ -1424,7 +1528,8 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
     });
 
     it("'await using' for sync disposable value", async () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         const disposable = {
@@ -1447,7 +1552,9 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
             }
             output.push("after block");
         }
-        `, { target: ts.ScriptTarget.ES2018 });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+        );
 
         await main();
 
@@ -1462,7 +1569,8 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
     });
 
     it("'await using' for non-disposable value", async () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         function body() {
@@ -1479,7 +1587,9 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
             }
             output.push("after block");
         }
-        `, { target: ts.ScriptTarget.ES2018 });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+        );
 
         try {
             await main();
@@ -1496,7 +1606,8 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
     });
 
     it("'await using' disposes in reverse order", async () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         const disposable_1 = {
@@ -1524,7 +1635,9 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
             }
             output.push("after block");
         }
-        `, { target: ts.ScriptTarget.ES2018 });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+        );
 
         await main();
 
@@ -1540,7 +1653,8 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
     });
 
     it("'await using' + 'using' disposes in reverse order", async () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         const disposable_1 = {
@@ -1570,7 +1684,9 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
             }
             output.push("after block");
         }
-        `, { target: ts.ScriptTarget.ES2018 });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+        );
 
         await main();
 
@@ -1586,7 +1702,8 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
     });
 
     it("'await using' forces await if null and evaluated", async () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         function body() {
@@ -1614,7 +1731,9 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
             await p;
         }
 
-        `, { target: ts.ScriptTarget.ES2018 });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+        );
 
         await main();
 
@@ -1629,7 +1748,8 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
     });
 
     it("'await using' does not force await if null and not evaluated", async () => {
-        const { main, output } = evaluator.evaluateTypeScript(`
+        const { main, output } = evaluator.evaluateTypeScript(
+            `
         export const output: any[] = [];
 
         function body() {
@@ -1658,7 +1778,9 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
             await p;
         }
 
-        `, { target: ts.ScriptTarget.ES2018 });
+        `,
+            { target: ts.ScriptTarget.ES2018 },
+        );
 
         await main();
 

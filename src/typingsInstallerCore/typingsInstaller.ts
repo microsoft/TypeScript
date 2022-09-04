@@ -37,7 +37,7 @@ interface NpmConfig {
 }
 
 interface NpmLock {
-    dependencies: { [packageName: string]: { version: string } };
+    dependencies: { [packageName: string]: { version: string; }; };
 }
 
 export interface Log {
@@ -118,7 +118,8 @@ export abstract class TypingsInstaller {
         private readonly safeListPath: Path,
         private readonly typesMapLocation: Path,
         private readonly throttleLimit: number,
-        protected readonly log = nullLog) {
+        protected readonly log = nullLog,
+    ) {
         const isLoggingEnabled = this.log.isEnabled();
         if (isLoggingEnabled) {
             this.log.writeLine(`Global cache location '${globalCachePath}', safe file path '${safeListPath}', types map path ${typesMapLocation}`);
@@ -150,7 +151,6 @@ export abstract class TypingsInstaller {
         }
     }
 
-
     install(req: DiscoverTypings) {
         if (this.log.isEnabled()) {
             this.log.writeLine(`Got install request ${JSON.stringify(req)}`);
@@ -177,7 +177,8 @@ export abstract class TypingsInstaller {
             req.typeAcquisition,
             req.unresolvedImports,
             this.typesRegistry,
-            req.compilerOptions);
+            req.compilerOptions,
+        );
 
         if (this.log.isEnabled()) {
             this.log.writeLine(`Finished typings discovery: ${JSON.stringify(discoverTypingsResult)}`);

@@ -38,7 +38,10 @@ import {
     TypeChecker,
     VariableDeclaration,
 } from "../_namespaces/ts";
-import { RefactorErrorInfo, registerRefactor } from "../_namespaces/ts.refactor";
+import {
+    RefactorErrorInfo,
+    registerRefactor,
+} from "../_namespaces/ts.refactor";
 
 const refactorName = "Inline variable";
 const refactorDescription = getLocaleSpecificMessage(Diagnostics.Inline_variable);

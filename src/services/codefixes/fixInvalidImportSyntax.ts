@@ -43,12 +43,17 @@ function getCodeFixesForImportDeclaration(context: CodeFixContext, node: ImportD
 
     if (getEmitModuleKind(opts) === ModuleKind.CommonJS) {
         // import Bluebird = require("bluebird");
-        variations.push(createAction(context, sourceFile, node, factory.createImportEqualsDeclaration(
-            /*modifiers*/ undefined,
-            /*isTypeOnly*/ false,
-            namespace.name,
-            factory.createExternalModuleReference(node.moduleSpecifier)
-        )));
+        variations.push(createAction(
+            context,
+            sourceFile,
+            node,
+            factory.createImportEqualsDeclaration(
+                /*modifiers*/ undefined,
+                /*isTypeOnly*/ false,
+                namespace.name,
+                factory.createExternalModuleReference(node.moduleSpecifier),
+            ),
+        ));
     }
 
     return variations;

@@ -273,7 +273,8 @@ export function compileFiles(host: fakes.CompilerHost, rootFiles: string[] | und
     const postErrors = ts.getPreEmitDiagnostics(program);
     const longerErrors = ts.length(preErrors) > postErrors.length ? preErrors : postErrors;
     const shorterErrors = longerErrors === preErrors ? postErrors : preErrors;
-    const errors = preErrors && (preErrors.length !== postErrors.length) ? [...shorterErrors!,
+    const errors = preErrors && (preErrors.length !== postErrors.length) ? [
+        ...shorterErrors!,
         ts.addRelatedInfo(
             ts.createCompilerDiagnostic({
                 category: ts.DiagnosticCategory.Error,
@@ -287,7 +288,7 @@ export function compileFiles(host: fakes.CompilerHost, rootFiles: string[] | und
                 key: "-1",
                 message: `The excess diagnostics are:`,
             }),
-            ...ts.filter(longerErrors!, p => !ts.some(shorterErrors, p2 => ts.compareDiagnostics(p, p2) === ts.Comparison.EqualTo))
+            ...ts.filter(longerErrors!, p => !ts.some(shorterErrors, p2 => ts.compareDiagnostics(p, p2) === ts.Comparison.EqualTo)),
         ),
     ] : postErrors;
     return new CompilationResult(host, compilerOptions, program, emitResult, errors);

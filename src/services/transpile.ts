@@ -89,7 +89,7 @@ export function transpileModule(input: string, transpileOptions: TranspileOption
     const newLine = getNewLineCharacter(options);
     // Create a compilerHost object to allow the compiler to read and write files
     const compilerHost: CompilerHost = {
-        getSourceFile: (fileName) => fileName === normalizePath(inputFileName) ? sourceFile : undefined,
+        getSourceFile: fileName => fileName === normalizePath(inputFileName) ? sourceFile : undefined,
         writeFile: (name, text) => {
             if (fileExtensionIs(name, ".map")) {
                 Debug.assertEqual(sourceMapText, undefined, "Unexpected multiple source map outputs, file:", name);
@@ -120,7 +120,7 @@ export function transpileModule(input: string, transpileOptions: TranspileOption
             languageVersion: getEmitScriptTarget(options),
             impliedNodeFormat: getImpliedNodeFormatForFile(toPath(inputFileName, "", compilerHost.getCanonicalFileName), /*packageJsonInfoCache*/ undefined, compilerHost, options),
             setExternalModuleIndicator: getSetExternalModuleIndicator(options),
-        }
+        },
     );
     if (transpileOptions.moduleName) {
         sourceFile.moduleName = transpileOptions.moduleName;

@@ -3,7 +3,10 @@ import {
     noChangeOnlyRuns,
     verifyTsc,
 } from "../helpers/tsc";
-import { loadProjectFromDisk, replaceText } from "../helpers/vfs";
+import {
+    loadProjectFromDisk,
+    replaceText,
+} from "../helpers/vfs";
 
 describe("unittests:: tsbuild:: with resolveJsonModule option on project resolveJsonModuleAndComposite", () => {
     let projFs: vfs.FileSystem;
@@ -37,9 +40,12 @@ describe("unittests:: tsbuild:: with resolveJsonModule option on project resolve
         modifyFs: fs => {
             fs.rimrafSync("/src/src/hello.json");
             fs.writeFileSync("/src/src/index.json", JSON.stringify({ hello: "world" }));
-            fs.writeFileSync("/src/src/index.ts", `import hello from "./index.json"
+            fs.writeFileSync(
+                "/src/src/index.ts",
+                `import hello from "./index.json"
 
-export default hello.hello`);
+export default hello.hello`,
+            );
         },
     });
 

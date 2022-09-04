@@ -149,9 +149,7 @@ function getFullMatch(candidateContainers: readonly string[], candidate: string,
     }
 
     let bestMatch: PatternMatch | undefined;
-    for (let i = dotSeparatedSegments.length - 2, j = candidateContainers.length - 1;
-        i >= 0;
-        i -= 1, j -= 1) {
+    for (let i = dotSeparatedSegments.length - 2, j = candidateContainers.length - 1; i >= 0; i -= 1, j -= 1) {
         bestMatch = betterMatch(bestMatch, matchSegment(candidateContainers[j], dotSeparatedSegments[i], stringToWordSpans));
     }
     return bestMatch;
@@ -328,8 +326,10 @@ function tryCamelCaseMatch(candidate: string, candidateParts: TextSpan[], chunk:
                 // We've already gotten one pattern part match in this candidate.  We will
                 // only continue trying to consumer pattern parts if the last part and this
                 // part are both upper case.
-                if (!isUpperCaseLetter(chunk.text.charCodeAt(chunkCharacterSpans[currentChunkSpan - 1].start)) ||
-                    !isUpperCaseLetter(chunk.text.charCodeAt(chunkCharacterSpans[currentChunkSpan].start))) {
+                if (
+                    !isUpperCaseLetter(chunk.text.charCodeAt(chunkCharacterSpans[currentChunkSpan - 1].start)) ||
+                    !isUpperCaseLetter(chunk.text.charCodeAt(chunkCharacterSpans[currentChunkSpan].start))
+                ) {
                     break;
                 }
             }
@@ -395,7 +395,6 @@ function isLowerCaseLetter(ch: number) {
     if (ch < CharacterCodes.maxAsciiCharacter || !isUnicodeIdentifierStart(ch, ScriptTarget.Latest)) {
         return false;
     }
-
 
     // TODO: find a way to determine this for any unicode characters in a
     // non-allocating manner.
@@ -498,12 +497,13 @@ function breakIntoSpans(identifier: string, word: boolean): TextSpan[] {
         const hasTransitionFromLowerToUpper = transitionFromLowerToUpper(identifier, word, i);
         const hasTransitionFromUpperToLower = word && transitionFromUpperToLower(identifier, i, wordStart);
 
-        if (charIsPunctuation(identifier.charCodeAt(i - 1)) ||
+        if (
+            charIsPunctuation(identifier.charCodeAt(i - 1)) ||
             charIsPunctuation(identifier.charCodeAt(i)) ||
             lastIsDigit !== currentIsDigit ||
             hasTransitionFromLowerToUpper ||
-            hasTransitionFromUpperToLower) {
-
+            hasTransitionFromUpperToLower
+        ) {
             if (!isAllPunctuation(identifier, wordStart, i)) {
                 result.push(createTextSpan(wordStart, i - wordStart));
             }

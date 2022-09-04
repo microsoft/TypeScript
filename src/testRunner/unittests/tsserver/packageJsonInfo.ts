@@ -50,10 +50,13 @@ describe("unittests:: tsserver:: packageJsonInfo::", () => {
         assert.ok(packageJsonInfo.optionalDependencies);
 
         // Edit package.json
-        host.writeFile(packageJson.path, JSON.stringify({
-            ...packageJsonContent,
-            dependencies: undefined,
-        }));
+        host.writeFile(
+            packageJson.path,
+            JSON.stringify({
+                ...packageJsonContent,
+                dependencies: undefined,
+            }),
+        );
         session.testhost.baselineHost("Edit package.json");
         packageJsonInfo = projectService.packageJsonCache.getInDirectory("/" as ts.Path)!;
         assert.isUndefined(packageJsonInfo.dependencies);
@@ -63,7 +66,7 @@ describe("unittests:: tsserver:: packageJsonInfo::", () => {
 
     it("finds package.json on demand, watches for deletion, and removes them from cache", () => {
         // Initialize project with package.json
-        const { session , projectService, host } = setup();
+        const { session, projectService, host } = setup();
         projectService.getPackageJsonsVisibleToFile("/src/whatever/blah.ts" as ts.Path);
         assert.ok(projectService.packageJsonCache.getInDirectory("/" as ts.Path));
 

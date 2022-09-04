@@ -66,7 +66,7 @@ export namespace Errors {
     }
 }
 
-export type NormalizedPath = string & { __normalizedPathTag: any };
+export type NormalizedPath = string & { __normalizedPathTag: any; };
 
 export function toNormalizedPath(fileName: string): NormalizedPath {
     return normalizePath(fileName) as NormalizedPath;

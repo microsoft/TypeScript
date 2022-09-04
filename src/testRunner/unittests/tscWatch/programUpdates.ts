@@ -1,7 +1,11 @@
 import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
-import { commandLineCallbacks } from "../helpers/baseline";
-import { compilerOptionsToConfigJson } from "../helpers/contents";
+import {
+    commandLineCallbacks,
+} from "../helpers/baseline";
+import {
+    compilerOptionsToConfigJson,
+} from "../helpers/contents";
 import {
     commonFile1,
     commonFile2,
@@ -201,10 +205,14 @@ describe("unittests:: tsc-watch:: program updates", () => {
             },
             {
                 caption: "Change config",
-                edit: sys => sys.writeFile(configFilePath, `{
+                edit: sys =>
+                    sys.writeFile(
+                        configFilePath,
+                        `{
                         "compilerOptions": {},
                         "files": ["${commonFile1.path}"]
-                    }`),
+                    }`,
+                    ),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],
@@ -227,10 +235,14 @@ describe("unittests:: tsc-watch:: program updates", () => {
         edits: [
             {
                 caption: "Modify config without changing content",
-                edit: sys => sys.modifyFile(configFilePath, `{
+                edit: sys =>
+                    sys.modifyFile(
+                        configFilePath,
+                        `{
                         "compilerOptions": {},
                         "files": ["${commonFile1.path}", "${commonFile2.path}"]
-                    }`),
+                    }`,
+                    ),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],
@@ -256,16 +268,24 @@ describe("unittests:: tsc-watch:: program updates", () => {
         edits: [
             {
                 caption: "Disable  allowUnsusedLabels",
-                edit: sys => sys.modifyFile("/tsconfig.json", JSON.stringify({
-                    compilerOptions: { allowUnusedLabels: false },
-                })),
+                edit: sys =>
+                    sys.modifyFile(
+                        "/tsconfig.json",
+                        JSON.stringify({
+                            compilerOptions: { allowUnusedLabels: false },
+                        }),
+                    ),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
             {
                 caption: "Enable  allowUnsusedLabels",
-                edit: sys => sys.modifyFile("/tsconfig.json", JSON.stringify({
-                    compilerOptions: { allowUnusedLabels: true },
-                })),
+                edit: sys =>
+                    sys.modifyFile(
+                        "/tsconfig.json",
+                        JSON.stringify({
+                            compilerOptions: { allowUnusedLabels: true },
+                        }),
+                    ),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],
@@ -296,18 +316,26 @@ describe("unittests:: tsc-watch:: program updates", () => {
         edits: [
             {
                 caption: "Disable  allowArbitraryExtensions",
-                edit: sys => sys.modifyFile("/tsconfig.json", JSON.stringify({
-                    compilerOptions: { allowArbitraryExtensions: false },
-                    files: ["/a.ts"],
-                })),
+                edit: sys =>
+                    sys.modifyFile(
+                        "/tsconfig.json",
+                        JSON.stringify({
+                            compilerOptions: { allowArbitraryExtensions: false },
+                            files: ["/a.ts"],
+                        }),
+                    ),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
             {
                 caption: "Enable  allowArbitraryExtensions",
-                edit: sys => sys.modifyFile("/tsconfig.json", JSON.stringify({
-                    compilerOptions: { allowArbitraryExtensions: true },
-                    files: ["/a.ts"],
-                })),
+                edit: sys =>
+                    sys.modifyFile(
+                        "/tsconfig.json",
+                        JSON.stringify({
+                            compilerOptions: { allowArbitraryExtensions: true },
+                            files: ["/a.ts"],
+                        }),
+                    ),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],
@@ -341,17 +369,24 @@ export class A {
         edits: [
             {
                 caption: "Enable experimentalDecorators",
-                edit: sys => sys.modifyFile("/tsconfig.json", JSON.stringify({
-                    compilerOptions: { target: "es6", importsNotUsedAsValues: "error", experimentalDecorators: true },
-                })),
+                edit: sys =>
+                    sys.modifyFile(
+                        "/tsconfig.json",
+                        JSON.stringify({
+                            compilerOptions: { target: "es6", importsNotUsedAsValues: "error", experimentalDecorators: true },
+                        }),
+                    ),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
-
             },
             {
                 caption: "Enable emitDecoratorMetadata",
-                edit: sys => sys.modifyFile("/tsconfig.json", JSON.stringify({
-                    compilerOptions: { target: "es6", importsNotUsedAsValues: "error", experimentalDecorators: true, emitDecoratorMetadata: true },
-                })),
+                edit: sys =>
+                    sys.modifyFile(
+                        "/tsconfig.json",
+                        JSON.stringify({
+                            compilerOptions: { target: "es6", importsNotUsedAsValues: "error", experimentalDecorators: true, emitDecoratorMetadata: true },
+                        }),
+                    ),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],
@@ -408,12 +443,16 @@ export class A {
         edits: [
             {
                 caption: "Change module resolution to classic",
-                edit: sys => sys.writeFile(configFile.path, `{
+                edit: sys =>
+                    sys.writeFile(
+                        configFile.path,
+                        `{
                         "compilerOptions": {
                             "moduleResolution": "classic"
                         },
                         "files": ["/a/b/file1.ts"]
-                    }`),
+                    }`,
+                    ),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],
@@ -601,11 +640,11 @@ export class A {
             oldSnap,
         });
 
-        const {cb: cb2, getPrograms: getPrograms2 } = commandLineCallbacks(sys);
+        const { cb: cb2, getPrograms: getPrograms2 } = commandLineCallbacks(sys);
         const oldSnap2 = sys.snap();
         baseline.push("createing separate watcher");
         ts.createWatchProgram(createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline({
-            rootFiles:[file1.path],
+            rootFiles: [file1.path],
             system: sys,
             options: { allowNonTsExtensions: true },
             cb: cb2,
@@ -858,27 +897,32 @@ declare const eval: any`,
                                 "es5",
                             ],
                         },
-                    }),
+                    },
+                ),
             };
             return createWatchedSystem([libES5, libES2015Promise, app, config1], { executingFilePath: "/compiler/tsc.js" });
         },
         edits: [
             {
                 caption: "Change the lib in config",
-                edit: sys => sys.writeFile("/src/tsconfig.json", JSON.stringify(
-                    {
-                        compilerOptions: {
-                            module: "commonjs",
-                            target: "es5",
-                            noImplicitAny: true,
-                            sourceMap: false,
-                            lib: [
-                                "es5",
-                                "es2015.promise",
-                            ],
-                        },
-                    })
-                ),
+                edit: sys =>
+                    sys.writeFile(
+                        "/src/tsconfig.json",
+                        JSON.stringify(
+                            {
+                                compilerOptions: {
+                                    module: "commonjs",
+                                    target: "es5",
+                                    noImplicitAny: true,
+                                    sourceMap: false,
+                                    lib: [
+                                        "es5",
+                                        "es2015.promise",
+                                    ],
+                                },
+                            },
+                        ),
+                    ),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],
@@ -1079,19 +1123,27 @@ declare const eval: any`,
         edits: [
             {
                 caption: "change config file to add error",
-                edit: sys => sys.writeFile(configFilePath, `{
+                edit: sys =>
+                    sys.writeFile(
+                        configFilePath,
+                        `{
                         "compilerOptions": {
                             "haha": 123
                         }
-                    }`),
+                    }`,
+                    ),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
             {
                 caption: "change config file to remove error",
-                edit: sys => sys.writeFile(configFilePath, `{
+                edit: sys =>
+                    sys.writeFile(
+                        configFilePath,
+                        `{
                         "compilerOptions": {
                         }
-                    }`),
+                    }`,
+                    ),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],
@@ -1196,13 +1248,17 @@ declare const eval: any`,
         edits: [
             {
                 caption: "Remove the comment from config file",
-                edit: sys => sys.writeFile(configFilePath, `
+                edit: sys =>
+                    sys.writeFile(
+                        configFilePath,
+                        `
 {
     "compilerOptions": {
         "inlineSourceMap": true,
         "mapRoot": "./"
     }
-}`),
+}`,
+                    ),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],
@@ -1245,32 +1301,32 @@ declare const eval: any`,
 
         verifyWithOptions(
             "without outDir or outFile is specified",
-            { module: ts.ModuleKind.AMD }
+            { module: ts.ModuleKind.AMD },
         );
 
         verifyWithOptions(
             "with outFile",
-            { module: ts.ModuleKind.AMD, outFile: "build/outFile.js" }
+            { module: ts.ModuleKind.AMD, outFile: "build/outFile.js" },
         );
 
         verifyWithOptions(
             "when outDir is specified",
-            { module: ts.ModuleKind.AMD, outDir: "build" }
+            { module: ts.ModuleKind.AMD, outDir: "build" },
         );
 
         verifyWithOptions(
             "without outDir or outFile is specified with declaration enabled",
-            { module: ts.ModuleKind.AMD, declaration: true }
+            { module: ts.ModuleKind.AMD, declaration: true },
         );
 
         verifyWithOptions(
             "when outDir and declarationDir is specified",
-            { module: ts.ModuleKind.AMD, outDir: "build", declaration: true, declarationDir: "decls" }
+            { module: ts.ModuleKind.AMD, outDir: "build", declaration: true, declarationDir: "decls" },
         );
 
         verifyWithOptions(
             "declarationDir is specified",
-            { module: ts.ModuleKind.AMD, declaration: true, declarationDir: "decls" }
+            { module: ts.ModuleKind.AMD, declaration: true, declarationDir: "decls" },
         );
     });
 
@@ -1293,14 +1349,17 @@ function two() {
         edits: [
             {
                 caption: "Change file to module",
-                edit: sys => sys.writeFile("/a/b/file.ts", `function one() {}
+                edit: sys =>
+                    sys.writeFile(
+                        "/a/b/file.ts",
+                        `function one() {}
 export function two() {
     return function three() {
         one();
     }
-}`),
+}`,
+                    ),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
-
             },
         ],
     });
@@ -1507,7 +1566,6 @@ export function f(p: C) { return p; }`,
         ],
     });
 
-
     verifyTscWatch({
         scenario,
         subScenario: "updates errors when forceConsistentCasingInFileNames changes",
@@ -1585,9 +1643,13 @@ export function f(p: C) { return p; }`,
             {
                 caption: "Create b.ts with same content",
                 // Create bts with same file contents
-                edit: sys => sys.writeFile(`/user/username/projects/myproject/b.ts`, `declare module 'a' {
+                edit: sys =>
+                    sys.writeFile(
+                        `/user/username/projects/myproject/b.ts`,
+                        `declare module 'a' {
   type foo = number;
-}`),
+}`,
+                    ),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
             {
@@ -1771,9 +1833,13 @@ const b: string = a;`,
         edits: [
             {
                 caption: "Make changes to file a",
-                edit: sys => sys.writeFile(`/user/username/projects/myproject/a.ts`, `
+                edit: sys =>
+                    sys.writeFile(
+                        `/user/username/projects/myproject/a.ts`,
+                        `
 
-import { x } from "../b";`),
+import { x } from "../b";`,
+                    ),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],
@@ -1834,44 +1900,65 @@ import { x } from "../b";`),
                 }),
             };
             return createWatchedSystem([
-                libFile, commonFile1, commonFile2, configFile, firstExtendedConfigFile, secondExtendedConfigFile,
+                libFile,
+                commonFile1,
+                commonFile2,
+                configFile,
+                firstExtendedConfigFile,
+                secondExtendedConfigFile,
             ]);
         },
         edits: [
             {
                 caption: "Change config to extend another config",
-                edit: sys => sys.modifyFile(configFilePath, JSON.stringify({
-                    extends: "./second.tsconfig.json",
-                    compilerOptions: {},
-                    files: [commonFile1.path, commonFile2.path],
-                })),
+                edit: sys =>
+                    sys.modifyFile(
+                        configFilePath,
+                        JSON.stringify({
+                            extends: "./second.tsconfig.json",
+                            compilerOptions: {},
+                            files: [commonFile1.path, commonFile2.path],
+                        }),
+                    ),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
             {
                 caption: "Change first extended config",
-                edit: sys => sys.modifyFile("/a/b/first.tsconfig.json", JSON.stringify({
-                    compilerOptions: {
-                        strict: false,
-                    },
-                })),
+                edit: sys =>
+                    sys.modifyFile(
+                        "/a/b/first.tsconfig.json",
+                        JSON.stringify({
+                            compilerOptions: {
+                                strict: false,
+                            },
+                        }),
+                    ),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
             {
                 caption: "Change second extended config",
-                edit: sys => sys.modifyFile("/a/b/second.tsconfig.json", JSON.stringify({
-                    extends: "./first.tsconfig.json",
-                    compilerOptions: {
-                        strictNullChecks: true,
-                    },
-                })),
+                edit: sys =>
+                    sys.modifyFile(
+                        "/a/b/second.tsconfig.json",
+                        JSON.stringify({
+                            extends: "./first.tsconfig.json",
+                            compilerOptions: {
+                                strictNullChecks: true,
+                            },
+                        }),
+                    ),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
             {
                 caption: "Change config to stop extending another config",
-                edit: sys => sys.modifyFile(configFilePath, JSON.stringify({
-                    compilerOptions: {},
-                    files: [commonFile1.path, commonFile2.path],
-                })),
+                edit: sys =>
+                    sys.modifyFile(
+                        configFilePath,
+                        JSON.stringify({
+                            compilerOptions: {},
+                            files: [commonFile1.path, commonFile2.path],
+                        }),
+                    ),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],
@@ -2037,12 +2124,16 @@ import { x } from "../b";`),
         edits: [
             {
                 caption: "Change allowImportingTsExtensions to true",
-                edit: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, JSON.stringify({
-                    compilerOptions: {
-                        noEmit: true,
-                        allowImportingTsExtensions: true,
-                    },
-                })),
+                edit: sys =>
+                    sys.writeFile(
+                        `/user/username/projects/myproject/tsconfig.json`,
+                        JSON.stringify({
+                            compilerOptions: {
+                                noEmit: true,
+                                allowImportingTsExtensions: true,
+                            },
+                        }),
+                    ),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],

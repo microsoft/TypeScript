@@ -1,9 +1,13 @@
-import { Octokit } from "@octokit/rest";
+import {
+    Octokit,
+} from "@octokit/rest";
 import fs from "fs";
 import path from "path";
 import url from "url";
 
-import { runSequence } from "./run-sequence.mjs";
+import {
+    runSequence,
+} from "./run-sequence.mjs";
 
 const __filename = url.fileURLToPath(new URL(import.meta.url));
 const __dirname = path.dirname(__filename);
@@ -89,8 +93,7 @@ ${logText.trim()}`;
         title: `🤖 Pick PR #${process.env.SOURCE_ISSUE} (${inputPR.title.substring(0, 35)}${inputPR.title.length > 35 ? "..." : ""}) into ${process.env.TARGET_BRANCH}`,
         head: `${userName}:${branchName}`,
         base: process.env.TARGET_BRANCH,
-        body:
-    `This cherry-pick was triggered by a request on https://github.com/Microsoft/TypeScript/pull/${process.env.SOURCE_ISSUE}
+        body: `This cherry-pick was triggered by a request on https://github.com/Microsoft/TypeScript/pull/${process.env.SOURCE_ISSUE}
 Please review the diff and merge if no changes are unexpected.${produceLKG ? ` An LKG update commit is included separately from the base change.` : ""}
 You can view the cherry-pick log [here](https://typescript.visualstudio.com/TypeScript/_build/index?buildId=${process.env.BUILD_BUILDID}&_a=summary).
 

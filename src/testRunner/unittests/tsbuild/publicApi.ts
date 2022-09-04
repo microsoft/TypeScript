@@ -10,7 +10,9 @@ import {
     TscCompileSystem,
     verifyTscBaseline,
 } from "../helpers/tsc";
-import { loadProjectFromFiles } from "../helpers/vfs";
+import {
+    loadProjectFromFiles,
+} from "../helpers/vfs";
 
 describe("unittests:: tsbuild:: Public API with custom transformers when passed to build", () => {
     let sys: TscCompileSystem;
@@ -62,10 +64,10 @@ export function f22() { } // trailing`,
         const { cb, getPrograms } = commandLineCallbacks(sys, /*originalReadCall*/ undefined);
         const buildHost = ts.createSolutionBuilderHost(
             sys,
-                /*createProgram*/ undefined,
+            /*createProgram*/ undefined,
             ts.createDiagnosticReporter(sys, /*pretty*/ true),
             ts.createBuilderStatusReporter(sys, /*pretty*/ true),
-            (errorCount, filesInError) => sys.write(ts.getErrorSummaryText(errorCount, filesInError, sys.newLine, sys))
+            (errorCount, filesInError) => sys.write(ts.getErrorSummaryText(errorCount, filesInError, sys.newLine, sys)),
         );
         buildHost.afterProgramEmitAndDiagnostics = cb;
         buildHost.afterEmitBundle = cb;

@@ -109,11 +109,13 @@ class ProjectParseConfigHost extends fakes.ParseConfigHost {
     public override readDirectory(path: string, extensions: string[], excludes: string[], includes: string[], depth: number): string[] {
         const result = super.readDirectory(path, extensions, excludes, includes, depth);
         const projectRoot = vpath.resolve(vfs.srcFolder, this._testCase.projectRoot);
-        return result.map(item => vpath.relative(
-            projectRoot,
-            vpath.resolve(projectRoot, item),
-            this.vfs.ignoreCase
-        ));
+        return result.map(item =>
+            vpath.relative(
+                projectRoot,
+                vpath.resolve(projectRoot, item),
+                this.vfs.ignoreCase,
+            )
+        );
     }
 }
 
@@ -219,8 +221,9 @@ class ProjectTestCase {
         resolutionInfo.resolvedInputFiles = this.compilerResult.program!.getSourceFiles()
             .map(({ fileName: input }) =>
                 vpath.beneath(vfs.builtFolder, input, this.vfs.ignoreCase) || vpath.beneath(vfs.testLibFolder, input, this.vfs.ignoreCase) ? Utils.removeTestPathPrefixes(input) :
-                vpath.isAbsolute(input) ? vpath.relative(cwd, input, ignoreCase) :
-                input);
+                    vpath.isAbsolute(input) ? vpath.relative(cwd, input, ignoreCase) :
+                    input
+            );
 
         resolutionInfo.emittedFiles = this.compilerResult.outputFiles!
             .map(output => output.meta.get("fileName") || output.file)
@@ -318,11 +321,7 @@ class ProjectTestCase {
         return url;
     }
 
-    private compileProjectFiles(moduleKind: ts.ModuleKind, configFileSourceFiles: readonly ts.SourceFile[],
-        getInputFiles: () => readonly string[],
-        compilerHost: ts.CompilerHost,
-        compilerOptions: ts.CompilerOptions): CompileProjectFilesResult {
-
+    private compileProjectFiles(moduleKind: ts.ModuleKind, configFileSourceFiles: readonly ts.SourceFile[], getInputFiles: () => readonly string[], compilerHost: ts.CompilerHost, compilerOptions: ts.CompilerOptions): CompileProjectFilesResult {
         const program = ts.createProgram(getInputFiles(), compilerOptions, compilerHost);
         const errors = ts.getPreEmitDiagnostics(program);
 

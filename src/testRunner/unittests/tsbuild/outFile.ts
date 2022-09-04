@@ -1,7 +1,9 @@
 import * as fakes from "../../_namespaces/fakes";
 import * as ts from "../../_namespaces/ts";
 import * as vfs from "../../_namespaces/vfs";
-import { createSolutionBuilderHostForBaseline } from "../helpers/solutionBuilder";
+import {
+    createSolutionBuilderHostForBaseline,
+} from "../helpers/solutionBuilder";
 import {
     noChangeOnlyRuns,
     testTscCompileLike,
@@ -18,8 +20,10 @@ import {
     addTestPrologue,
     addTripleSlashRef,
     appendText,
-    changeStubToRest, enableStrict,
-    loadProjectFromDisk, prependText,
+    changeStubToRest,
+    enableStrict,
+    loadProjectFromDisk,
+    prependText,
     removeRest,
     replaceText,
 } from "../helpers/vfs";
@@ -116,8 +120,14 @@ describe("unittests:: tsbuild:: outFile::", () => {
     // Verify baseline with build info
     verifyOutFileScenario({
         subScenario: "when final project specifies tsBuildInfoFile",
-        modifyFs: fs => replaceText(fs, "/src/third/tsconfig.json", `"composite": true,`, `"composite": true,
-        "tsBuildInfoFile": "./thirdjs/output/third.tsbuildinfo",`),
+        modifyFs: fs =>
+            replaceText(
+                fs,
+                "/src/third/tsconfig.json",
+                `"composite": true,`,
+                `"composite": true,
+        "tsBuildInfoFile": "./thirdjs/output/third.tsbuildinfo",`,
+            ),
         ignoreDtsChanged: true,
         ignoreDtsUnchanged: true,
         baselineOnly: true,
@@ -399,8 +409,13 @@ describe("unittests:: tsbuild:: outFile::", () => {
             }
 
             function stripInternalOfThird(fs: vfs.FileSystem) {
-                replaceText(fs, "/src/third/tsconfig.json", `"declaration": true,`, `"declaration": true,
-    "stripInternal": true,`);
+                replaceText(
+                    fs,
+                    "/src/third/tsconfig.json",
+                    `"declaration": true,`,
+                    `"declaration": true,
+    "stripInternal": true,`,
+                );
             }
 
             function stripInternalScenario(fs: vfs.FileSystem, removeCommentsDisabled?: boolean, jsDocStyle?: boolean) {
@@ -410,7 +425,10 @@ describe("unittests:: tsbuild:: outFile::", () => {
                 }
                 stripInternalOfThird(fs);
                 replaceText(fs, "/src/first/first_PART1.ts", "interface", `${internal} interface`);
-                appendText(fs, "/src/second/second_part1.ts", `
+                appendText(
+                    fs,
+                    "/src/second/second_part1.ts",
+                    `
 class normalC {
     ${internal} constructor() { }
     ${internal} prop: string;
@@ -435,7 +453,8 @@ ${internal} namespace internalOther.something { export class someClass {} }
 ${internal} import internalImport = internalNamespace.someClass;
 ${internal} type internalType = internalC;
 ${internal} const internalConst = 10;
-${internal} enum internalEnum { a, b, c }`);
+${internal} enum internalEnum { a, b, c }`,
+                );
             }
 
             // Verify initial + incremental edits
@@ -473,8 +492,13 @@ ${internal} enum internalEnum { a, b, c }`);
 
             describe("with three levels of project dependency", () => {
                 function makeOneTwoThreeDependOrder(fs: vfs.FileSystem) {
-                    replaceText(fs, "/src/second/tsconfig.json", "[", `[
-    { "path": "../first", "prepend": true }`);
+                    replaceText(
+                        fs,
+                        "/src/second/tsconfig.json",
+                        "[",
+                        `[
+    { "path": "../first", "prepend": true }`,
+                    );
                     replaceText(fs, "/src/third/tsconfig.json", `{ "path": "../first", "prepend": true },`, "");
                 }
 
@@ -522,7 +546,10 @@ ${internal} enum internalEnum { a, b, c }`);
                 subScenario: "stripInternal baseline when internal is inside another internal",
                 modifyFs: fs => {
                     stripInternalOfThird(fs);
-                    prependText(fs, "/src/first/first_PART1.ts", `namespace ts {
+                    prependText(
+                        fs,
+                        "/src/first/first_PART1.ts",
+                        `namespace ts {
     /* @internal */
     /**
      * Subset of properties from SourceFile that are used in multiple utility functions
@@ -549,7 +576,8 @@ ${internal} enum internalEnum { a, b, c }`);
     export interface SourceFile {
         someProp: string;
     }
-}`);
+}`,
+                    );
                 },
                 ignoreDtsChanged: true,
                 ignoreDtsUnchanged: true,
@@ -561,7 +589,10 @@ ${internal} enum internalEnum { a, b, c }`);
                 subScenario: "stripInternal when few members of enum are internal",
                 modifyFs: fs => {
                     stripInternalOfThird(fs);
-                    prependText(fs, "/src/first/first_PART1.ts", `enum TokenFlags {
+                    prependText(
+                        fs,
+                        "/src/first/first_PART1.ts",
+                        `enum TokenFlags {
     None = 0,
     /* @internal */
     PrecedingLineBreak = 1 << 0,
@@ -583,7 +614,8 @@ ${internal} enum internalEnum { a, b, c }`);
     /* @internal */
     NumericLiteralFlags = Scientific | Octal | HexSpecifier | BinaryOrOctalSpecifier | ContainsSeparator
 }
-`);
+`,
+                    );
                 },
                 ignoreDtsChanged: true,
                 ignoreDtsUnchanged: true,
@@ -598,30 +630,36 @@ ${internal} enum internalEnum { a, b, c }`);
                 modifyFs: fs => {
                     fs.writeFileSync("/src/first/first_PART1.ts", "/* @internal */ const A = 1;");
                     fs.writeFileSync("/src/third/third_part1.ts", "const B = 2;");
-                    fs.writeFileSync("/src/first/tsconfig.json", JSON.stringify({
-                        compilerOptions: {
-                            composite: true,
-                            declaration: true,
-                            declarationMap: true,
-                            skipDefaultLibCheck: true,
-                            sourceMap: true,
-                            outFile: "./bin/first-output.js",
-                        },
-                        files: ["/src/first/first_PART1.ts"],
-                    }));
-                    fs.writeFileSync("/src/third/tsconfig.json", JSON.stringify({
-                        compilerOptions: {
-                            ignoreDeprecations: "5.0",
-                            composite: true,
-                            declaration: true,
-                            declarationMap: false,
-                            stripInternal: true,
-                            sourceMap: true,
-                            outFile: "./thirdjs/output/third-output.js",
-                        },
-                        references: [{ path: "../first", prepend: true }],
-                        files: ["/src/third/third_part1.ts"],
-                    }));
+                    fs.writeFileSync(
+                        "/src/first/tsconfig.json",
+                        JSON.stringify({
+                            compilerOptions: {
+                                composite: true,
+                                declaration: true,
+                                declarationMap: true,
+                                skipDefaultLibCheck: true,
+                                sourceMap: true,
+                                outFile: "./bin/first-output.js",
+                            },
+                            files: ["/src/first/first_PART1.ts"],
+                        }),
+                    );
+                    fs.writeFileSync(
+                        "/src/third/tsconfig.json",
+                        JSON.stringify({
+                            compilerOptions: {
+                                ignoreDeprecations: "5.0",
+                                composite: true,
+                                declaration: true,
+                                declarationMap: false,
+                                stripInternal: true,
+                                sourceMap: true,
+                                outFile: "./thirdjs/output/third-output.js",
+                            },
+                            references: [{ path: "../first", prepend: true }],
+                            files: ["/src/third/third_part1.ts"],
+                        }),
+                    );
                 },
             });
         });

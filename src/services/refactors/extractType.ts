@@ -150,11 +150,19 @@ registerRefactor(refactorName, {
 });
 
 interface TypeAliasInfo {
-    isJS: boolean; selection: TypeNode; enclosingNode: Node; typeParameters: readonly TypeParameterDeclaration[]; typeElements?: readonly TypeElement[];
+    isJS: boolean;
+    selection: TypeNode;
+    enclosingNode: Node;
+    typeParameters: readonly TypeParameterDeclaration[];
+    typeElements?: readonly TypeElement[];
 }
 
 interface InterfaceInfo {
-    isJS: boolean; selection: TypeNode; enclosingNode: Node; typeParameters: readonly TypeParameterDeclaration[]; typeElements: readonly TypeElement[];
+    isJS: boolean;
+    selection: TypeNode;
+    enclosingNode: Node;
+    typeParameters: readonly TypeParameterDeclaration[];
+    typeElements: readonly TypeElement[];
 }
 
 type ExtractInfo = TypeAliasInfo | InterfaceInfo;
@@ -166,8 +174,9 @@ function getRangeToExtract(context: RefactorContext, considerEmptySpans = true):
     const range = createTextRangeFromSpan(getRefactorContextSpan(context));
     const cursorRequest = range.pos === range.end && considerEmptySpans;
 
-    const selection = findAncestor(current, (node => node.parent && isTypeNode(node) && !rangeContainsSkipTrivia(range, node.parent, file) &&
-        (cursorRequest || nodeOverlapsWithStartEnd(current, file, range.pos, range.end))));
+    const selection = findAncestor(current, node =>
+        node.parent && isTypeNode(node) && !rangeContainsSkipTrivia(range, node.parent, file) &&
+        (cursorRequest || nodeOverlapsWithStartEnd(current, file, range.pos, range.end)));
     if (!selection || !isTypeNode(selection)) return { error: getLocaleSpecificMessage(Diagnostics.Selection_is_not_a_valid_type_node) };
 
     const checker = context.program.getTypeChecker();
@@ -275,7 +284,7 @@ function doTypeAliasChange(changes: textChanges.ChangeTracker, file: SourceFile,
         /*modifiers*/ undefined,
         name,
         typeParameters.map(id => factory.updateTypeParameterDeclaration(id, id.modifiers, id.name, id.constraint, /*defaultType*/ undefined)),
-        selection
+        selection,
     );
     changes.insertNodeBefore(file, enclosingNode, ignoreSourceNewlines(newTypeNode), /*blankLineBetween*/ true);
     changes.replaceNode(file, selection, factory.createTypeReferenceNode(name, typeParameters.map(id => factory.createTypeReferenceNode(id.name, /*typeArguments*/ undefined))), { leadingTriviaOption: textChanges.LeadingTriviaOption.Exclude, trailingTriviaOption: textChanges.TrailingTriviaOption.ExcludeWhitespace });
@@ -289,7 +298,7 @@ function doInterfaceChange(changes: textChanges.ChangeTracker, file: SourceFile,
         name,
         typeParameters,
         /*heritageClauses*/ undefined,
-        typeElements
+        typeElements,
     );
     setTextRange(newTypeNode, typeElements[0]?.parent);
     changes.insertNodeBefore(file, enclosingNode, ignoreSourceNewlines(newTypeNode), /*blankLineBetween*/ true);
@@ -304,7 +313,8 @@ function doTypedefChange(changes: textChanges.ChangeTracker, context: RefactorCo
     const node = factory.createJSDocTypedefTag(
         factory.createIdentifier("typedef"),
         factory.createJSDocTypeExpression(selection),
-        factory.createIdentifier(name));
+        factory.createIdentifier(name),
+    );
 
     const templates: JSDocTemplateTag[] = [];
     forEach(typeParameters, typeParameter => {
@@ -313,7 +323,7 @@ function doTypedefChange(changes: textChanges.ChangeTracker, context: RefactorCo
         const template = factory.createJSDocTemplateTag(
             factory.createIdentifier("template"),
             constraint && cast(constraint, isJSDocTypeExpression),
-            [parameter]
+            [parameter],
         );
         templates.push(template);
     });

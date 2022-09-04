@@ -18,7 +18,7 @@ module.exports = createRule({
     create(context) {
         const sourceCode = context.getSourceCode();
         /** @type {(node: TSESTree.TSTypeAssertion) => void} */
-        const checkTypeAssertionWhitespace = (node) => {
+        const checkTypeAssertionWhitespace = node => {
             const leftToken = sourceCode.getLastToken(node.typeAnnotation);
             const rightToken = sourceCode.getFirstToken(node.expression);
 

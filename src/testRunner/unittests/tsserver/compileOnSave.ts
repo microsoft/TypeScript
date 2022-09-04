@@ -673,7 +673,7 @@ describe("unittests:: tsserver:: compileOnSave:: affected list", () => {
         testDTS(
             "dtsFileChange in module file",
             /*dtsFileContents*/ "export const x: string;",
-            /*tsFileContents*/  "import { x } from './runtime/a;",
+            /*tsFileContents*/ "import { x } from './runtime/a;",
             /*opts*/ {},
         );
 
@@ -735,7 +735,7 @@ describe("unittests:: tsserver:: compileOnSave:: affected list", () => {
 
 describe("unittests:: tsserver:: compileOnSave:: EmitFile test", () => {
     it("should respect line endings", () => {
-        const logger = createLoggerWithInMemoryLogs(/*host*/ undefined!); //special handling
+        const logger = createLoggerWithInMemoryLogs(/*host*/ undefined!); // special handling
         test("\n", logger);
         test("\r\n", logger);
         baselineTsserverLogs("compileOnSave", "line endings", { logger });

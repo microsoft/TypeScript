@@ -33,7 +33,7 @@ for (const symbolName of symbolNames) {
     }
 }
 
-export function evaluateTypeScript(source: string | { files: vfs.FileSet, rootFiles: string[], main: string }, options?: ts.CompilerOptions, globals?: Record<string, any>) {
+export function evaluateTypeScript(source: string | { files: vfs.FileSet; rootFiles: string[]; main: string; }, options?: ts.CompilerOptions, globals?: Record<string, any>) {
     if (typeof source === "string") source = { files: { [sourceFile]: source }, rootFiles: [sourceFile], main: sourceFile };
     const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ false, { files: source.files });
     const compilerOptions: ts.CompilerOptions = {
@@ -45,11 +45,14 @@ export function evaluateTypeScript(source: string | { files: vfs.FileSet, rootFi
     const host = new fakes.CompilerHost(fs, compilerOptions);
     const result = compiler.compileFiles(host, source.rootFiles, compilerOptions);
     if (ts.some(result.diagnostics)) {
-        assert.ok(/*value*/ false, "Syntax error in evaluation source text:\n" + ts.formatDiagnostics(result.diagnostics, {
-            getCanonicalFileName: file => file,
-            getCurrentDirectory: () => "",
-            getNewLine: () => "\n",
-        }));
+        assert.ok(
+            /*value*/ false,
+            "Syntax error in evaluation source text:\n" + ts.formatDiagnostics(result.diagnostics, {
+                getCanonicalFileName: file => file,
+                getCurrentDirectory: () => "",
+                getNewLine: () => "\n",
+            }),
+        );
     }
 
     const output = result.getOutput(source.main, "js")!;
@@ -330,7 +333,9 @@ class SystemLoader extends Loader<SystemModule> {
         }
 
         const context: SystemModuleContext = {
-            import: (_id) => { throw new Error("Dynamic import not implemented."); },
+            import: _id => {
+                throw new Error("Dynamic import not implemented.");
+            },
             meta: {
                 url: ts.isUrl(module.file) ? module.file : `file:///${ts.normalizeSlashes(module.file).replace(/^\//, "").split("/").map(encodeURIComponent).join("/")}`,
             },

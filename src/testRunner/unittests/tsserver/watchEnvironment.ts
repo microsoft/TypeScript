@@ -73,15 +73,15 @@ describe("unittests:: tsserver:: watchEnvironment:: tsserverProjectSystem watchD
 
     verifyCompletionListWithNewFileInSubFolder(
         "uses watchFile when file is added to subfolder",
-        Tsc_WatchDirectory.WatchFile
+        Tsc_WatchDirectory.WatchFile,
     );
     verifyCompletionListWithNewFileInSubFolder(
         "uses non recursive watchDirectory when file is added to subfolder",
-        Tsc_WatchDirectory.NonRecursiveWatchDirectory
+        Tsc_WatchDirectory.NonRecursiveWatchDirectory,
     );
     verifyCompletionListWithNewFileInSubFolder(
         "uses dynamic polling when file is added to subfolder",
-        Tsc_WatchDirectory.DynamicPolling
+        Tsc_WatchDirectory.DynamicPolling,
     );
 });
 
@@ -192,7 +192,7 @@ it("unittests:: tsserver:: watchEnvironment:: tsserverProjectSystem watching fil
         const file: File = { path, content: "const x = 10" };
         const host = createServerHost(
             [libFile, file],
-            { windowsStyleRoot }
+            { windowsStyleRoot },
         );
         logger.host = host;
         logger.info(`For files of style ${path}`);

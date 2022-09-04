@@ -53,11 +53,16 @@ describe("unittests:: Reuse program structure:: General", () => {
     function getFiles(): NamedSourceText[] {
         return [
             {
-                name: "a.ts", text: SourceText.New(`
+                name: "a.ts",
+                text: SourceText.New(
+                    `
 /// <reference path='b.ts'/>
 /// <reference path='non-existing-file.ts'/>
 /// <reference types="typerefs" />
-`, "", `var x = 1`),
+`,
+                    "",
+                    `var x = 1`,
+                ),
             },
             { name: "b.ts", text: SourceText.New(`/// <reference path='c.ts'/>`, "", `var y = 2`) },
             { name: "c.ts", text: SourceText.New("", "", `var z = 1;`) },
@@ -361,18 +366,19 @@ describe("unittests:: Reuse program structure:: General", () => {
             { name: "node_modules/@types/typerefs2/index.d.ts", text: SourceText.New("", "", "declare let z: string;") },
             {
                 name: "f1.ts",
-                text:
-                    SourceText.New(
-                        `/// <reference path="a1.ts"/>${newLine}/// <reference types="typerefs1"/>${newLine}/// <reference no-default-lib="true"/>`,
-                        `import { B } from './b1';${newLine}export let BB = B;`,
-                        "declare module './b1' { interface B { y: string; } }"),
+                text: SourceText.New(
+                    `/// <reference path="a1.ts"/>${newLine}/// <reference types="typerefs1"/>${newLine}/// <reference no-default-lib="true"/>`,
+                    `import { B } from './b1';${newLine}export let BB = B;`,
+                    "declare module './b1' { interface B { y: string; } }",
+                ),
             },
             {
                 name: "f2.ts",
                 text: SourceText.New(
                     `/// <reference path="a2.ts"/>${newLine}/// <reference types="typerefs2"/>`,
                     `import { B } from './b2';${newLine}import { BB } from './f1';`,
-                    "(new BB).x; (new BB).y;"),
+                    "(new BB).x; (new BB).y;",
+                ),
             },
         ];
 
@@ -427,7 +433,7 @@ describe("unittests:: Reuse program structure:: General", () => {
         const root = "/a.ts";
         const compilerOptions = { target, moduleResolution: ts.ModuleResolutionKind.Node10 };
 
-        function createRedirectProgram(useGetSourceFileByPath: boolean, options?: { bText: string, bVersion: string }): ProgramWithSourceTexts {
+        function createRedirectProgram(useGetSourceFileByPath: boolean, options?: { bText: string; bVersion: string; }): ProgramWithSourceTexts {
             const files: NamedSourceText[] = [
                 {
                     name: "/node_modules/a/index.d.ts",
@@ -538,21 +544,23 @@ describe("unittests:: Reuse program structure:: host is optional", () => {
     });
 });
 
-
 describe("unittests:: Reuse program structure:: isProgramUptoDate", () => {
     function getWhetherProgramIsUptoDate(
         program: ts.Program,
         newRootFileNames: string[],
-        newOptions: ts.CompilerOptions
+        newOptions: ts.CompilerOptions,
     ) {
         return ts.isProgramUptoDate(
-            program, newRootFileNames, newOptions,
-            path => program.getSourceFileByPath(path)!.version, /*fileExists*/ ts.returnFalse,
+            program,
+            newRootFileNames,
+            newOptions,
+            path => program.getSourceFileByPath(path)!.version,
+            /*fileExists*/ ts.returnFalse,
             /*hasInvalidatedResolutions*/ ts.returnFalse,
             /*hasInvalidatedLibResolutions*/ ts.returnFalse,
             /*hasChangedAutomaticTypeDirectiveNames*/ undefined,
             /*getParsedCommandLine*/ ts.returnUndefined,
-            /*projectReferences*/ undefined
+            /*projectReferences*/ undefined,
         );
     }
 
@@ -566,7 +574,7 @@ describe("unittests:: Reuse program structure:: isProgramUptoDate", () => {
         function verifyProgramIsUptoDate(
             program: ts.Program,
             newRootFileNames: string[],
-            newOptions: ts.CompilerOptions
+            newOptions: ts.CompilerOptions,
         ) {
             const actual = getWhetherProgramIsUptoDate(program, newRootFileNames, newOptions);
             assert.isTrue(actual);
@@ -733,13 +741,12 @@ describe("unittests:: Reuse program structure:: isProgramUptoDate", () => {
             })).getCurrentProgram().getProgram();
             verifyProgramIsUptoDate(program, duplicate(rootFiles), duplicate(options));
         });
-
     });
     describe("should return false when there is no change in compiler options but", () => {
         function verifyProgramIsNotUptoDate(
             program: ts.Program,
             newRootFileNames: string[],
-            newOptions: ts.CompilerOptions
+            newOptions: ts.CompilerOptions,
         ) {
             const actual = getWhetherProgramIsUptoDate(program, newRootFileNames, newOptions);
             assert.isFalse(actual);

@@ -53,12 +53,28 @@ export const enum TokenEncodingConsts {
 
 /** @internal */
 export const enum TokenType {
-    class, enum, interface, namespace, typeParameter, type, parameter, variable, enumMember, property, function, member,
+    class,
+    enum,
+    interface,
+    namespace,
+    typeParameter,
+    type,
+    parameter,
+    variable,
+    enumMember,
+    property,
+    function,
+    member,
 }
 
 /** @internal */
 export const enum TokenModifier {
-    declaration, static, async, readonly, defaultLibrary, local,
+    declaration,
+    static,
+    async,
+    readonly,
+    defaultLibrary,
+    local,
 }
 
 /**
@@ -109,7 +125,7 @@ function collectTokens(program: Program, sourceFile: SourceFile, span: TextSpan,
     let inJSXElement = false;
 
     function visit(node: Node) {
-        switch(node.kind) {
+        switch (node.kind) {
             case SyntaxKind.ModuleDeclaration:
             case SyntaxKind.ClassDeclaration:
             case SyntaxKind.InterfaceDeclaration:
@@ -141,7 +157,7 @@ function collectTokens(program: Program, sourceFile: SourceFile, span: TextSpan,
                 if (typeIdx !== undefined) {
                     let modifierSet = 0;
                     if (node.parent) {
-                        const parentIsDeclaration = (isBindingElement(node.parent) || tokenFromDeclarationMapping.get(node.parent.kind) === typeIdx);
+                        const parentIsDeclaration = isBindingElement(node.parent) || tokenFromDeclarationMapping.get(node.parent.kind) === typeIdx;
                         if (parentIsDeclaration && (node.parent as NamedDeclaration).name === node) {
                             modifierSet = 1 << TokenModifier.declaration;
                         }
@@ -181,7 +197,6 @@ function collectTokens(program: Program, sourceFile: SourceFile, span: TextSpan,
                     }
 
                     collector(node, typeIdx, modifierSet);
-
                 }
             }
         }
@@ -200,7 +215,7 @@ function classifySymbol(symbol: Symbol, meaning: SemanticMeaning): TokenType | u
     else if (flags & SymbolFlags.Enum) {
         return TokenType.enum;
     }
-     else if (flags & SymbolFlags.TypeAlias) {
+    else if (flags & SymbolFlags.TypeAlias) {
         return TokenType.type;
     }
     else if (flags & SymbolFlags.Interface) {

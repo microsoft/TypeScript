@@ -22,7 +22,7 @@ module.exports = createRule({
         const linebreaks = sourceCode.getText().match(/\r\n|[\r\n\u2028\u2029]/gu);
 
         /** @type {(node: TSESTree.Program) => void} */
-        const checkIndent = (node) => {
+        const checkIndent = node => {
             const lines = sourceCode.getLines();
             const linesLen = lines.length;
 

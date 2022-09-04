@@ -57,14 +57,16 @@ function getReturnType(expr: FunctionDeclaration | MethodDeclaration | FunctionE
     if (expr.type) {
         return expr.type;
     }
-    if (isVariableDeclaration(expr.parent) &&
+    if (
+        isVariableDeclaration(expr.parent) &&
         expr.parent.type &&
-        isFunctionTypeNode(expr.parent.type)) {
+        isFunctionTypeNode(expr.parent.type)
+    ) {
         return expr.parent.type.type;
     }
 }
 
-function getNodes(sourceFile: SourceFile, start: number): { insertBefore: Node, returnType: TypeNode | undefined } | undefined {
+function getNodes(sourceFile: SourceFile, start: number): { insertBefore: Node; returnType: TypeNode | undefined; } | undefined {
     const token = getTokenAtPosition(sourceFile, start);
     const containingFunction = getContainingFunction(token);
     if (!containingFunction) {
@@ -97,8 +99,8 @@ function getNodes(sourceFile: SourceFile, start: number): { insertBefore: Node, 
 function doChange(
     changes: textChanges.ChangeTracker,
     sourceFile: SourceFile,
-    { insertBefore, returnType }: { insertBefore: Node, returnType: TypeNode | undefined }): void {
-
+    { insertBefore, returnType }: { insertBefore: Node; returnType: TypeNode | undefined; },
+): void {
     if (returnType) {
         const entityName = getEntityNameFromTypeNode(returnType);
         if (!entityName || entityName.kind !== SyntaxKind.Identifier || entityName.text !== "Promise") {

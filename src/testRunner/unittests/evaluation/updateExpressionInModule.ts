@@ -36,32 +36,40 @@ describe("unittests:: evaluation:: updateExpressionInModule", () => {
         assert.equal(result.b, 2);
     });
     itIfBigInt("pre-increment in commonjs using BigInt", () => {
-        const result = evaluator.evaluateTypeScript({
-            files: {
-                "/.src/main.ts": `
+        const result = evaluator.evaluateTypeScript(
+            {
+                files: {
+                    "/.src/main.ts": `
                 let a = BigInt(1);
                 export { a };
                 export const b = ++a;
                 `,
+                },
+                rootFiles: ["/.src/main.ts"],
+                main: "/.src/main.ts",
             },
-            rootFiles: ["/.src/main.ts"],
-            main: "/.src/main.ts",
-        }, { module: ts.ModuleKind.CommonJS }, { BigInt });
+            { module: ts.ModuleKind.CommonJS },
+            { BigInt },
+        );
         assert.equal(result.a, BigInt(2));
         assert.equal(result.b, BigInt(2));
     });
     itIfBigInt("pre-increment in System using BigInt", () => {
-        const result = evaluator.evaluateTypeScript({
-            files: {
-                "/.src/main.ts": `
+        const result = evaluator.evaluateTypeScript(
+            {
+                files: {
+                    "/.src/main.ts": `
                 let a = BigInt(1);
                 export { a };
                 export const b = ++a;
                 `,
+                },
+                rootFiles: ["/.src/main.ts"],
+                main: "/.src/main.ts",
             },
-            rootFiles: ["/.src/main.ts"],
-            main: "/.src/main.ts",
-        }, { module: ts.ModuleKind.System }, { BigInt });
+            { module: ts.ModuleKind.System },
+            { BigInt },
+        );
         assert.equal(result.a, BigInt(2));
         assert.equal(result.b, BigInt(2));
     });
@@ -96,32 +104,40 @@ describe("unittests:: evaluation:: updateExpressionInModule", () => {
         assert.equal(result.b, 1);
     });
     itIfBigInt("post-increment in commonjs using BigInt", () => {
-        const result = evaluator.evaluateTypeScript({
-            files: {
-                "/.src/main.ts": `
+        const result = evaluator.evaluateTypeScript(
+            {
+                files: {
+                    "/.src/main.ts": `
                 let a = BigInt(1);
                 export { a };
                 export const b = a++;
                 `,
+                },
+                rootFiles: ["/.src/main.ts"],
+                main: "/.src/main.ts",
             },
-            rootFiles: ["/.src/main.ts"],
-            main: "/.src/main.ts",
-        }, { module: ts.ModuleKind.CommonJS }, { BigInt });
+            { module: ts.ModuleKind.CommonJS },
+            { BigInt },
+        );
         assert.equal(result.a, BigInt(2));
         assert.equal(result.b, BigInt(1));
     });
     itIfBigInt("post-increment in System using BigInt", () => {
-        const result = evaluator.evaluateTypeScript({
-            files: {
-                "/.src/main.ts": `
+        const result = evaluator.evaluateTypeScript(
+            {
+                files: {
+                    "/.src/main.ts": `
                 let a = BigInt(1);
                 export { a };
                 export const b = a++;
                 `,
+                },
+                rootFiles: ["/.src/main.ts"],
+                main: "/.src/main.ts",
             },
-            rootFiles: ["/.src/main.ts"],
-            main: "/.src/main.ts",
-        }, { module: ts.ModuleKind.System }, { BigInt });
+            { module: ts.ModuleKind.System },
+            { BigInt },
+        );
         assert.equal(result.a, BigInt(2));
         assert.equal(result.b, BigInt(1));
     });

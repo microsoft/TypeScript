@@ -1,14 +1,22 @@
-import { protocol } from "../../_namespaces/ts.server";
-import { baselineTsserverLogs, createLoggerWithInMemoryLogs, createSession } from "../helpers/tsserver";
-import { createServerHost, File } from "../helpers/virtualFileSystemWithWatch";
+import {
+    protocol,
+} from "../../_namespaces/ts.server";
+import {
+    baselineTsserverLogs,
+    createLoggerWithInMemoryLogs,
+    createSession,
+} from "../helpers/tsserver";
+import {
+    createServerHost,
+    File,
+} from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: services:: findAllReferences", () => {
     it("does not try to open a file in a project that was updated and no longer has the file", () => {
         const files: File[] = [
             {
                 path: "/packages/babel-loader/tsconfig.json",
-                content:
-`
+                content: `
 {
     "compilerOptions": {
         "target": "ES2018",
@@ -26,15 +34,13 @@ describe("unittests:: services:: findAllReferences", () => {
             },
             {
                 path: "/packages/babel-loader/src/index.ts",
-                content:
-`
+                content: `
 import type { Foo } from "../../core/src/index.js";
 `,
             },
             {
                 path: "/packages/core/tsconfig.json",
-                content:
-`
+                content: `
 {
     "compilerOptions": {
         "target": "ES2018",
@@ -51,8 +57,7 @@ import type { Foo } from "../../core/src/index.js";
             },
             {
                 path: "/packages/core/src/index.ts",
-                content:
-`
+                content: `
 import { Bar } from "./loading-indicator.js";
 export type Foo = {};
 const bar: Bar = {
@@ -62,8 +67,7 @@ const bar: Bar = {
             },
             {
                 path: "/packages/core/src/loading-indicator.ts",
-                content:
-`
+                content: `
 export interface Bar {
     prop: number;
 }
@@ -132,7 +136,7 @@ const bar: Bar = {
             command: protocol.CommandTypes.References,
             arguments: {
                 file: files[3].path, // core/src/index.ts
-                line: 5,             // `prop`
+                line: 5, // `prop`
                 offset: 5,
             },
         });

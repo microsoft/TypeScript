@@ -379,14 +379,14 @@ function lookupInUnicodeMap(code: number, map: readonly number[]): boolean {
     return languageVersion! >= ScriptTarget.ES2015 ?
         lookupInUnicodeMap(code, unicodeESNextIdentifierStart) :
         languageVersion === ScriptTarget.ES5 ? lookupInUnicodeMap(code, unicodeES5IdentifierStart) :
-            lookupInUnicodeMap(code, unicodeES3IdentifierStart);
+        lookupInUnicodeMap(code, unicodeES3IdentifierStart);
 }
 
 function isUnicodeIdentifierPart(code: number, languageVersion: ScriptTarget | undefined) {
     return languageVersion! >= ScriptTarget.ES2015 ?
         lookupInUnicodeMap(code, unicodeESNextIdentifierPart) :
         languageVersion === ScriptTarget.ES5 ? lookupInUnicodeMap(code, unicodeES5IdentifierPart) :
-            lookupInUnicodeMap(code, unicodeES3IdentifierPart);
+        lookupInUnicodeMap(code, unicodeES3IdentifierPart);
 }
 
 function makeReverseMap(source: Map<string, number>): string[] {
@@ -815,7 +815,8 @@ function iterateCommentRanges<T, U>(reduce: boolean, text: string, pos: number, 
             pos = shebang.length;
         }
     }
-    scan: while (pos >= 0 && pos < text.length) {
+    scan:
+    while (pos >= 0 && pos < text.length) {
         const ch = text.charCodeAt(pos);
         switch (ch) {
             case CharacterCodes.carriageReturn:
@@ -977,14 +978,7 @@ export function isIdentifierText(name: string, languageVersion: ScriptTarget | u
 }
 
 // Creates a scanner over a (possibly unspecified) range of a piece of text.
-export function createScanner(languageVersion: ScriptTarget,
-    skipTrivia: boolean,
-    languageVariant = LanguageVariant.Standard,
-    textInitial?: string,
-    onError?: ErrorCallback,
-    start?: number,
-    length?: number): Scanner {
-
+export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean, languageVariant = LanguageVariant.Standard, textInitial?: string, onError?: ErrorCallback, start?: number, length?: number): Scanner {
     // Why var? It avoids TDZ checks in the runtime which can be costly.
     // See: https://github.com/microsoft/TypeScript/issues/52924
     /* eslint-disable no-var */
@@ -992,7 +986,6 @@ export function createScanner(languageVersion: ScriptTarget,
 
     // Current position (end position of text of current token)
     var pos: number;
-
 
     // end of text
     var end: number;
@@ -1318,9 +1311,10 @@ export function createScanner(languageVersion: ScriptTarget,
             if (ch >= CharacterCodes.A && ch <= CharacterCodes.F) {
                 ch += CharacterCodes.a - CharacterCodes.A; // standardize hex literals to lowercase
             }
-            else if (!((ch >= CharacterCodes._0 && ch <= CharacterCodes._9) ||
-                (ch >= CharacterCodes.a && ch <= CharacterCodes.f)
-            )) {
+            else if (
+                !((ch >= CharacterCodes._0 && ch <= CharacterCodes._9) ||
+                    (ch >= CharacterCodes.a && ch <= CharacterCodes.f))
+            ) {
                 break;
             }
             valueChars.push(ch);
@@ -1524,7 +1518,7 @@ export function createScanner(languageVersion: ScriptTarget,
             case CharacterCodes.singleQuote:
                 return "'";
             case CharacterCodes.doubleQuote:
-                return "\"";
+                return '"';
             case CharacterCodes.u:
                 if (pos < end && text.charCodeAt(pos) === CharacterCodes.openBrace) {
                     // '\u{DDDDDDDD}'
@@ -1655,7 +1649,6 @@ export function createScanner(languageVersion: ScriptTarget,
         return -1;
     }
 
-
     function peekExtendedUnicodeEscape(): number {
         if (codePointAt(text, pos + 1) === CharacterCodes.u && codePointAt(text, pos + 2) === CharacterCodes.openBrace) {
             const start = pos;
@@ -1773,8 +1766,8 @@ export function createScanner(languageVersion: ScriptTarget,
             const numericValue = tokenFlags & TokenFlags.BinarySpecifier
                 ? parseInt(tokenValue.slice(2), 2) // skip "0b"
                 : tokenFlags & TokenFlags.OctalSpecifier
-                    ? parseInt(tokenValue.slice(2), 8) // skip "0o"
-                    : +tokenValue;
+                ? parseInt(tokenValue.slice(2), 8) // skip "0o"
+                : +tokenValue;
             tokenValue = "" + numericValue;
             return SyntaxKind.NumericLiteral;
         }
@@ -2098,9 +2091,11 @@ export function createScanner(languageVersion: ScriptTarget,
                     if (text.charCodeAt(pos + 1) === CharacterCodes.equals) {
                         return pos += 2, token = SyntaxKind.LessThanEqualsToken;
                     }
-                    if (languageVariant === LanguageVariant.JSX &&
+                    if (
+                        languageVariant === LanguageVariant.JSX &&
                         text.charCodeAt(pos + 1) === CharacterCodes.slash &&
-                        text.charCodeAt(pos + 2) !== CharacterCodes.asterisk) {
+                        text.charCodeAt(pos + 2) !== CharacterCodes.asterisk
+                    ) {
                         return pos += 2, token = SyntaxKind.LessThanSlashToken;
                     }
                     pos++;
@@ -2592,16 +2587,16 @@ export function createScanner(languageVersion: ScriptTarget,
         if (pos >= end) {
             return token = SyntaxKind.EndOfFileToken;
         }
-        for (let ch = text.charCodeAt(pos);
-             pos < end && (!isLineBreak(ch) && ch !== CharacterCodes.backtick);
-             ch = codePointAt(text, ++pos)) {
+        for (let ch = text.charCodeAt(pos); pos < end && (!isLineBreak(ch) && ch !== CharacterCodes.backtick); ch = codePointAt(text, ++pos)) {
             if (!inBackticks) {
                 if (ch === CharacterCodes.openBrace) {
                     break;
                 }
-                else if (ch === CharacterCodes.at
+                else if (
+                    ch === CharacterCodes.at
                     && pos - 1 >= 0 && isWhiteSpaceSingleLine(text.charCodeAt(pos - 1))
-                    && !(pos + 1 < end && isWhiteSpaceLike(text.charCodeAt(pos + 1)))) {
+                    && !(pos + 1 < end && isWhiteSpaceLike(text.charCodeAt(pos + 1)))
+                ) {
                     // @ doesn't start a new tag inside ``, and elsewhere, only after whitespace and before non-whitespace
                     break;
                 }

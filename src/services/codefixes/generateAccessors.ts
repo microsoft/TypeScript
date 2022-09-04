@@ -218,9 +218,9 @@ function generateGetAccessor(fieldName: AcceptedNameType, accessorName: Accepted
         type,
         factory.createBlock([
             factory.createReturnStatement(
-                createAccessorAccessExpression(fieldName, isStatic, container)
+                createAccessorAccessExpression(fieldName, isStatic, container),
             ),
-        ], /*multiLine*/ true)
+        ], /*multiLine*/ true),
     );
 }
 
@@ -233,16 +233,16 @@ function generateSetAccessor(fieldName: AcceptedNameType, accessorName: Accepted
             /*dotDotDotToken*/ undefined,
             factory.createIdentifier("value"),
             /*questionToken*/ undefined,
-            type
+            type,
         )],
         factory.createBlock([
             factory.createExpressionStatement(
                 factory.createAssignment(
                     createAccessorAccessExpression(fieldName, isStatic, container),
-                    factory.createIdentifier("value")
-                )
+                    factory.createIdentifier("value"),
+                ),
             ),
-        ], /*multiLine*/ true)
+        ], /*multiLine*/ true),
     );
 }
 
@@ -253,7 +253,7 @@ function updatePropertyDeclaration(changeTracker: textChanges.ChangeTracker, fil
         fieldName,
         declaration.questionToken || declaration.exclamationToken,
         type,
-        declaration.initializer
+        declaration.initializer,
     );
     changeTracker.replaceNode(file, declaration, property);
 }
@@ -278,8 +278,7 @@ function updateFieldDeclaration(changeTracker: textChanges.ChangeTracker, file: 
         updatePropertyAssignmentDeclaration(changeTracker, file, declaration, fieldName);
     }
     else {
-        changeTracker.replaceNode(file, declaration,
-            factory.updateParameterDeclaration(declaration, modifiers, declaration.dotDotDotToken, cast(fieldName, isIdentifier), declaration.questionToken, declaration.type, declaration.initializer));
+        changeTracker.replaceNode(file, declaration, factory.updateParameterDeclaration(declaration, modifiers, declaration.dotDotDotToken, cast(fieldName, isIdentifier), declaration.questionToken, declaration.type, declaration.initializer));
     }
 }
 
@@ -292,11 +291,13 @@ function insertAccessor(changeTracker: textChanges.ChangeTracker, file: SourceFi
 function updateReadonlyPropertyInitializerStatementConstructor(changeTracker: textChanges.ChangeTracker, file: SourceFile, constructor: ConstructorDeclaration, fieldName: string, originalName: string) {
     if (!constructor.body) return;
     constructor.body.forEachChild(function recur(node) {
-        if (isElementAccessExpression(node) &&
+        if (
+            isElementAccessExpression(node) &&
             node.expression.kind === SyntaxKind.ThisKeyword &&
             isStringLiteral(node.argumentExpression) &&
             node.argumentExpression.text === originalName &&
-            isWriteAccess(node)) {
+            isWriteAccess(node)
+        ) {
             changeTracker.replaceNode(file, node.argumentExpression, factory.createStringLiteral(fieldName));
         }
         if (isPropertyAccessExpression(node) && node.expression.kind === SyntaxKind.ThisKeyword && node.name.text === originalName && isWriteAccess(node)) {

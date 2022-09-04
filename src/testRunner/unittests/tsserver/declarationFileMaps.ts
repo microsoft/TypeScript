@@ -251,7 +251,9 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
         baselineTsserverLogs("declarationFileMaps", "findAllReferences starting at definition", session);
     });
 
-    interface ReferencesFullRequest extends ts.server.protocol.FileLocationRequest { readonly command: ts.server.protocol.CommandTypes.ReferencesFull; }
+    interface ReferencesFullRequest extends ts.server.protocol.FileLocationRequest {
+        readonly command: ts.server.protocol.CommandTypes.ReferencesFull;
+    }
     it("findAllReferencesFull", () => {
         const session = makeSampleProjects();
 

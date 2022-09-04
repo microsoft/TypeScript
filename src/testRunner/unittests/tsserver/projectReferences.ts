@@ -1,5 +1,7 @@
 import * as ts from "../../_namespaces/ts";
-import { solutionBuildWithBaseline } from "../helpers/solutionBuilder";
+import {
+    solutionBuildWithBaseline,
+} from "../helpers/solutionBuilder";
 import {
     baselineTsserverLogs,
     createHostWithSolutionBuild,
@@ -176,7 +178,7 @@ function foo() {
             };
             const host = createHostWithSolutionBuild(
                 [commonConfig, keyboardTs, keyboardTestTs, srcConfig, terminalTs, libFile],
-                [srcConfig.path]
+                [srcConfig.path],
             );
             const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
             openFilesForSession([keyboardTs, terminalTs], session);
@@ -359,11 +361,15 @@ function foo() {
                         types: "lib/index.d.ts",
                     }),
                 },
-                aTest: file("A", "index.ts", `import { foo } from '${scope}b';
+                aTest: file(
+                    "A",
+                    "index.ts",
+                    `import { foo } from '${scope}b';
 import { bar } from '${scope}b/lib/bar';
 foo();
 bar();
-`),
+`,
+                ),
                 bFoo: file("B", "index.ts", `export function foo() { }`),
                 bBar: file("B", "bar.ts", `export function bar() { }`),
                 bSymlink: {
@@ -377,11 +383,15 @@ bar();
                     path: `/user/username/projects/myproject/packages/B/package.json`,
                     content: "{}",
                 },
-                aTest: file("A", "test.ts", `import { foo } from '${scope}b/lib/foo';
+                aTest: file(
+                    "A",
+                    "test.ts",
+                    `import { foo } from '${scope}b/lib/foo';
 import { bar } from '${scope}b/lib/bar/foo';
 foo();
 bar();
-`),
+`,
+                ),
                 bFoo: file("B", "foo.ts", `export function foo() { }`),
                 bBar: file("B", "bar/foo.ts", `export function bar() { }`),
                 bSymlink: {
@@ -739,21 +749,21 @@ ${usage}`,
             "when using arrow function assignment",
             `export const dog = () => { };`,
             `shared.dog();`,
-            "dog"
+            "dog",
         );
 
         verify(
             "when using arrow function as object literal property types",
             `export const foo = { bar: () => { } };`,
             `shared.foo.bar();`,
-            "bar"
+            "bar",
         );
 
         verify(
             "when using object literal property",
             `export const foo = {  baz: "BAZ" };`,
             `shared.foo.baz;`,
-            "baz"
+            "baz",
         );
 
         verify(
@@ -761,9 +771,8 @@ ${usage}`,
             `export const foo = class { fly() {} };`,
             `const instance = new shared.foo();
 instance.fly();`,
-            "fly"
+            "fly",
         );
-
 
         verify(
             // when using arrow function as object literal property is loaded through indirect assignment with original declaration local to project is treated as local
@@ -771,7 +780,7 @@ instance.fly();`,
             `const local = { bar: () => { } };
 export const foo = local;`,
             `shared.foo.bar();`,
-            "bar"
+            "bar",
         );
     });
 
@@ -920,7 +929,7 @@ export function bar() {}`,
             const tsconfig: File = {
                 path: tsconfigPath,
                 content: JSON.stringify({
-                    ... (solutionOptions ? { compilerOptions: solutionOptions } : {}),
+                    ...(solutionOptions ? { compilerOptions: solutionOptions } : {}),
                     references: configRefs.map(path => ({ path })),
                     files: solutionFiles || [],
                 }),
@@ -930,11 +939,20 @@ export function bar() {}`,
                 content: "let a = 10;",
             };
             const host = createServerHost([
-                tsconfigSrc, tsconfig, main, helper,
-                libFile, dummyFile,
-                mainDts, mainDtsMap, helperDts, helperDtsMap,
-                tsconfigIndirect3, fileResolvingToMainDts,
-                ...additionalFiles]);
+                tsconfigSrc,
+                tsconfig,
+                main,
+                helper,
+                libFile,
+                dummyFile,
+                mainDts,
+                mainDtsMap,
+                helperDts,
+                helperDtsMap,
+                tsconfigIndirect3,
+                fileResolvingToMainDts,
+                ...additionalFiles,
+            ]);
             const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
             const service = session.getProjectService();
             service.openClientFile(main.path);
@@ -1380,7 +1398,7 @@ bar;`,
                     errorCodes: [ts.Diagnostics.Cannot_find_name_0.code],
                 },
             });
-            baselineTsserverLogs("projectReferences", `auto import with referenced project${built ? " when built" : ""}${disableSourceOfProjectReferenceRedirect ? " with disableSourceOfProjectReferenceRedirect": ""}`, session);
+            baselineTsserverLogs("projectReferences", `auto import with referenced project${built ? " when built" : ""}${disableSourceOfProjectReferenceRedirect ? " with disableSourceOfProjectReferenceRedirect" : ""}`, session);
         }
 
         it("when project is built", () => {
@@ -1423,12 +1441,31 @@ bar;`,
         const [noCoreRef2File, noCoreRef2Config] = getPackageAndFile("noCoreRef2");
 
         const host = createServerHost([
-            libFile, mainFile, mainConfig, coreFile, coreConfig, noCoreRef1File, noCoreRef1Config,
-            indirectFile, indirectConfig, coreRef1File, coreRef1Config,
-            indirectDisabledChildLoad1File, indirectDisabledChildLoad1Config, coreRef2File, coreRef2Config,
-            indirectDisabledChildLoad2File, indirectDisabledChildLoad2Config, coreRef3File, coreRef3Config,
-            refToCoreRef3File, refToCoreRef3Config,
-            indirectNoCoreRefFile, indirectNoCoreRefConfig, noCoreRef2File, noCoreRef2Config,
+            libFile,
+            mainFile,
+            mainConfig,
+            coreFile,
+            coreConfig,
+            noCoreRef1File,
+            noCoreRef1Config,
+            indirectFile,
+            indirectConfig,
+            coreRef1File,
+            coreRef1Config,
+            indirectDisabledChildLoad1File,
+            indirectDisabledChildLoad1Config,
+            coreRef2File,
+            coreRef2Config,
+            indirectDisabledChildLoad2File,
+            indirectDisabledChildLoad2Config,
+            coreRef3File,
+            coreRef3Config,
+            refToCoreRef3File,
+            refToCoreRef3Config,
+            indirectNoCoreRefFile,
+            indirectNoCoreRefConfig,
+            noCoreRef2File,
+            noCoreRef2Config,
         ], { useCaseSensitiveFileNames: true });
         const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
         openFilesForSession([mainFile, coreFile], session);
@@ -1491,11 +1528,10 @@ const b: B = new B();`,
             projectAlreadyLoaded: boolean,
             disableReferencedProjectLoad: boolean,
             disableSourceOfProjectReferenceRedirect: boolean,
-            dtsMapPresent: boolean) {
-
+            dtsMapPresent: boolean,
+        ) {
             // Mangled to stay under windows path length limit
-            const subScenario =
-                `when proj ${projectAlreadyLoaded ? "is" : "is not"} loaded` +
+            const subScenario = `when proj ${projectAlreadyLoaded ? "is" : "is not"} loaded` +
                 ` and refd proj loading is ${disableReferencedProjectLoad ? "disabled" : "enabled"}` +
                 ` and proj ref redirects are ${disableSourceOfProjectReferenceRedirect ? "disabled" : "enabled"}` +
                 ` and a decl map is ${dtsMapPresent ? "present" : "missing"}`;

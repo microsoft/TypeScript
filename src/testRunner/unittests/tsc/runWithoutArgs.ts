@@ -1,7 +1,9 @@
 import {
     verifyTsc,
 } from "../helpers/tsc";
-import { loadProjectFromFiles } from "../helpers/vfs";
+import {
+    loadProjectFromFiles,
+} from "../helpers/vfs";
 
 describe("unittests:: tsc:: runWithoutArgs::", () => {
     verifyTsc({
@@ -26,5 +28,4 @@ describe("unittests:: tsc:: runWithoutArgs::", () => {
         commandLineArgs: [],
         environmentVariables: { NO_COLOR: "true" },
     });
-
 });

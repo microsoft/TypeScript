@@ -1,4 +1,6 @@
-import { Octokit } from "@octokit/rest";
+import {
+    Octokit,
+} from "@octokit/rest";
 import minimist from "minimist";
 
 const options = minimist(process.argv.slice(2), {

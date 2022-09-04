@@ -68,9 +68,7 @@ registerRefactor(refactorName, {
             return [{ name: refactorName, description, actions: [moveToNewFileAction] }];
         }
         if (context.preferences.provideRefactorNotApplicableReason) {
-            return [{ name: refactorName, description, actions:
-                [{ ...moveToNewFileAction, notApplicableReason: getLocaleSpecificMessage(Diagnostics.Selection_is_not_a_valid_statement_or_statements) }],
-            }];
+            return [{ name: refactorName, description, actions: [{ ...moveToNewFileAction, notApplicableReason: getLocaleSpecificMessage(Diagnostics.Selection_is_not_a_valid_statement_or_statements) }] }];
         }
         return emptyArray;
     },
@@ -95,7 +93,14 @@ function doChange(oldFile: SourceFile, program: Program, toMove: ToMove, changes
 }
 
 function getNewStatementsAndRemoveFromOldFile(
-    oldFile: SourceFile, usage: UsageInfo, changes: textChanges.ChangeTracker, toMove: ToMove, program: Program, host: LanguageServiceHost, newFilename: string, preferences: UserPreferences,
+    oldFile: SourceFile,
+    usage: UsageInfo,
+    changes: textChanges.ChangeTracker,
+    toMove: ToMove,
+    program: Program,
+    host: LanguageServiceHost,
+    newFilename: string,
+    preferences: UserPreferences,
 ) {
     const checker = program.getTypeChecker();
     const prologueDirectives = takeWhile(oldFile.statements, isPrologueDirective);

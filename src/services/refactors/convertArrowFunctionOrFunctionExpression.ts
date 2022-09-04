@@ -119,7 +119,7 @@ function getRefactorActionsToConvertFunctionExpressions(context: RefactorContext
 
     if (refactorKindBeginsWith(toAnonymousFunctionAction.kind, kind)) {
         const error = !selectedVariableDeclaration && isArrowFunction(func) ?
-            undefined: getLocaleSpecificMessage(Diagnostics.Could_not_convert_to_anonymous_function);
+            undefined : getLocaleSpecificMessage(Diagnostics.Could_not_convert_to_anonymous_function);
         if (error) {
             errors.push({ ...toAnonymousFunctionAction, notApplicableReason: error });
         }
@@ -181,7 +181,6 @@ function getRefactorEditsToConvertFunctionExpressions(context: RefactorContext, 
 function containingThis(node: Node): boolean {
     let containsThis = false;
     node.forEachChild(function checkThis(child) {
-
         if (isThis(child)) {
             containsThis = true;
             return;
@@ -308,7 +307,7 @@ function getEditInfoForConvertToArrowFunction(context: RefactorContext, func: Fu
 }
 
 function canBeConvertedToExpression(body: Block, head: Statement): head is ReturnStatement {
-    return body.statements.length === 1 && ((isReturnStatement(head) && !!head.expression));
+    return body.statements.length === 1 && (isReturnStatement(head) && !!head.expression);
 }
 
 function isFunctionReferencedInFile(sourceFile: SourceFile, typeChecker: TypeChecker, node: FunctionExpression): boolean {
