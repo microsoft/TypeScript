@@ -176,6 +176,7 @@ export interface ReusableBuilderProgramState extends BuilderState {
     bundle?: BundleBuildInfo;
 }
 
+// dprint-ignore
 /** @internal */
 export const enum BuilderFileEmit {
     None                = 0,

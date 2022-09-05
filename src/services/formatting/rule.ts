@@ -18,6 +18,7 @@ export type ContextPredicate = (context: FormattingContext) => boolean;
 /** @internal */
 export const anyContext: readonly ContextPredicate[] = emptyArray;
 
+// dprint-ignore
 /** @internal */
 export const enum RuleAction {
     None                       = 0,

@@ -8581,6 +8581,7 @@ namespace Parser {
         return withJSDoc(finishNode(node, pos), hasJSDoc);
     }
 
+    // dprint-ignore
     const enum ParsingContext {
         SourceElements,            // Elements in source file
         BlockStatements,           // Statements in block

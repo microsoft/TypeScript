@@ -1141,6 +1141,7 @@ const enum WideningKind {
     GeneratorYield,
 }
 
+// dprint-ignore
 /** @internal */
 export const enum TypeFacts {
     None = 0,
@@ -1251,6 +1252,7 @@ const enum TypeSystemPropertyName {
     ParameterInitializerContainsUndefined,
 }
 
+// dprint-ignore
 /** @internal */
 export const enum CheckMode {
     Normal = 0,                                     // Normal type checking

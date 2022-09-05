@@ -218,6 +218,7 @@ import {
 
 type Label = number;
 
+// dprint-ignore
 const enum OpCode {
     Nop,                    // No operation, used to force a new case in the state machine
     Statement,              // A regular javascript statement

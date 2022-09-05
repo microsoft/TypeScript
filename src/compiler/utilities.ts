@@ -4974,6 +4974,7 @@ export function isTrivia(token: SyntaxKind): token is TriviaSyntaxKind {
     return SyntaxKind.FirstTriviaToken <= token && token <= SyntaxKind.LastTriviaToken;
 }
 
+// dprint-ignore
 /** @internal */
 export const enum FunctionFlags {
     Normal = 0,             // Function is a normal function

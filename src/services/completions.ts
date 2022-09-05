@@ -452,6 +452,7 @@ export enum CompletionSource {
     ObjectLiteralMemberWithComma = "ObjectLiteralMemberWithComma/",
 }
 
+// dprint-ignore
 /** @internal */
 export const enum SymbolOriginInfoKind {
     ThisType             = 1 << 0,
@@ -575,6 +576,7 @@ export type SymbolOriginInfoMap = Record<number, SymbolOriginInfo>;
  */
 export type SymbolSortTextMap = (SortText | undefined)[];
 
+// dprint-ignore
 const enum KeywordCompletionFilters {
     None,                           // No keywords
     All,                            // Every possible keyword (TODO: This is never appropriate)
@@ -4118,6 +4120,7 @@ function getCompletionData(
             const containingNodeKind = contextToken.parent.kind;
             const tokenKind = keywordForNode(contextToken);
             // Previous token may have been a keyword that was converted to an identifier.
+            // dprint-ignore
             switch (tokenKind) {
                 case SyntaxKind.CommaToken:
                     return containingNodeKind === SyntaxKind.CallExpression               // func( a, |
@@ -4568,6 +4571,7 @@ function getCompletionData(
     function isSolelyIdentifierDefinitionLocation(contextToken: Node): boolean {
         const parent = contextToken.parent;
         const containingNodeKind = parent.kind;
+        // dprint-ignore
         switch (contextToken.kind) {
             case SyntaxKind.CommaToken:
                 return containingNodeKind === SyntaxKind.VariableDeclaration ||

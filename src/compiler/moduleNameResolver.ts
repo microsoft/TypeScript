@@ -176,6 +176,7 @@ interface PathAndExtension {
     resolvedUsingTsExtension: boolean | undefined;
 }
 
+// dprint-ignore
 /**
  * Kinds of file that we are currently looking for.
  */

@@ -360,6 +360,7 @@ interface ConvertedLoopState {
 type LoopConverter<T extends IterationStatement> = (node: T, outermostLabeledStatement: LabeledStatement | undefined, convertedLoopBodyStatements: Statement[] | undefined, ancestorFacts: HierarchyFacts) => Statement;
 
 // Facts we track as we traverse the tree
+// dprint-ignore
 const enum HierarchyFacts {
     None = 0,
 
@@ -459,6 +460,7 @@ const enum HierarchyFacts {
     FunctionSubtreeExcludes = NewTarget | CapturedLexicalThis,
 }
 
+// dprint-ignore
 const enum SpreadSegmentKind {
     None,           // Not a spread segment
     UnpackedSpread, // A spread segment that must be packed (i.e., converting `[...[1, , 2]]` into `[1, undefined, 2]`)

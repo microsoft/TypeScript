@@ -72,9 +72,7 @@ import {
 /** @internal */
 export type SerializedEntityName =
     | Identifier // Globals (i.e., `String`, `Number`, etc.)
- // Globals (i.e., `String`, `Number`, etc.)
     | PropertyAccessEntityNameExpression // `A.B`
- // `A.B`
     ;
 
 
@@ -82,9 +80,7 @@ export type SerializedEntityName =
 export type SerializedTypeNode =
     | SerializedEntityName
     | ConditionalExpression // Type Reference or Global fallback
- // Type Reference or Global fallback
     | VoidExpression // `void 0` used for null/undefined/never
- // `void 0` used for null/undefined/never
     ;
 
 /** @internal */

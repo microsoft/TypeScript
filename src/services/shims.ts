@@ -90,6 +90,7 @@ let debugObjectHost: { CollectGarbage(): void } = (function (this: any) { // esl
 // We need to use 'null' to interface with the managed side.
 /* eslint-disable local/no-in-operator */
 
+// dprint-ignore
 interface DiscoverTypingsInfo {
     fileNames: string[];                            // The file names that belong to the same project.
     projectRootPath: string;                        // The path to the project root directory

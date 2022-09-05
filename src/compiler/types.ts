@@ -789,6 +789,7 @@ export type JSDocSyntaxKind =
     | KeywordSyntaxKind
     ;
 
+// dprint-ignore
 export const enum NodeFlags {
     None               = 0,
     Let                = 1 << 0,  // Variable declaration
@@ -856,6 +857,7 @@ export const enum NodeFlags {
     /** @internal */ IdentifierIsInJSDocNamespace = HasAsyncFunctions, // Indicates whether the identifier is part of a JSDoc namespace
 }
 
+// dprint-ignore
 export const enum ModifierFlags {
     None =               0,
     Export =             1 << 0,  // Declarations
@@ -900,6 +902,7 @@ export const enum JsxFlags {
     IntrinsicElement = IntrinsicNamedElement | IntrinsicIndexedElement,
 }
 
+// dprint-ignore
 /** @internal */
 export const enum RelationComparisonResult {
     Succeeded           = 1 << 0, // Should be truthy
@@ -1672,6 +1675,7 @@ export type ClassMemberModifier =
 
 export type ModifiersArray = NodeArray<Modifier>;
 
+// dprint-ignore
 export const enum GeneratedIdentifierFlags {
     // Kinds
     None = 0,                           // Not automatically generated.
@@ -1702,6 +1706,7 @@ export interface TransientIdentifier extends Identifier {
     resolvedSymbol: Symbol;
 }
 
+// dprint-ignore
 /** @internal */
 export interface AutoGenerateInfo {
     flags: GeneratedIdentifierFlags;            // Specifies whether to auto-generate the text for an identifier.
@@ -1853,6 +1858,7 @@ export interface ConstructSignatureDeclaration extends SignatureDeclarationBase,
 
 export type BindingName = Identifier | BindingPattern;
 
+// dprint-ignore
 export interface VariableDeclaration extends NamedDeclaration, JSDocContainer {
     readonly kind: SyntaxKind.VariableDeclaration;
     readonly parent: VariableDeclarationList | CatchClause;
@@ -1871,6 +1877,7 @@ export interface VariableDeclarationList extends Node {
     readonly declarations: NodeArray<VariableDeclaration>;
 }
 
+// dprint-ignore
 export interface ParameterDeclaration extends NamedDeclaration, JSDocContainer {
     readonly kind: SyntaxKind.Parameter;
     readonly parent: SignatureDeclaration;
@@ -1882,6 +1889,7 @@ export interface ParameterDeclaration extends NamedDeclaration, JSDocContainer {
     readonly initializer?: Expression;           // Optional initializer
 }
 
+// dprint-ignore
 export interface BindingElement extends NamedDeclaration, FlowContainer {
     readonly kind: SyntaxKind.BindingElement;
     readonly parent: BindingPattern;
@@ -1894,6 +1902,7 @@ export interface BindingElement extends NamedDeclaration, FlowContainer {
 /** @internal */
 export type BindingElementGrandparent = BindingElement["parent"]["parent"];
 
+// dprint-ignore
 export interface PropertySignature extends TypeElement, JSDocContainer {
     readonly kind: SyntaxKind.PropertySignature;
     readonly parent: TypeLiteralNode | InterfaceDeclaration;
@@ -1906,6 +1915,7 @@ export interface PropertySignature extends TypeElement, JSDocContainer {
     /** @internal */ readonly initializer?: Expression | undefined; // A property signature cannot have an initializer
 }
 
+// dprint-ignore
 export interface PropertyDeclaration extends ClassElement, JSDocContainer {
     readonly kind: SyntaxKind.PropertyDeclaration;
     readonly parent: ClassLikeDeclaration;
@@ -2789,6 +2799,7 @@ export interface NoSubstitutionTemplateLiteral extends LiteralExpression, Templa
     templateFlags?: TokenFlags;
 }
 
+// dprint-ignore
 export const enum TokenFlags {
     None = 0,
     /** @internal */
@@ -4113,6 +4124,7 @@ export interface JSDocSatisfiesExpression extends ParenthesizedExpression {
 }
 
 // NOTE: Ensure this is up-to-date with src/debug/debug.ts
+// dprint-ignore
 export const enum FlowFlags {
     Unreachable    = 1 << 0,  // Unreachable code
     Start          = 1 << 1,  // Start of flow graph
@@ -4178,6 +4190,7 @@ export interface FlowCondition extends FlowNodeBase {
     antecedent: FlowNode;
 }
 
+// dprint-ignore
 export interface FlowSwitchClause extends FlowNodeBase {
     switchStatement: SwitchStatement;
     clauseStart: number;   // Start index of case/default clause range
@@ -4203,6 +4216,7 @@ export type FlowType = Type | IncompleteType;
 // Incomplete types occur during control flow analysis of loops. An IncompleteType
 // is distinguished from a regular type by a flags value of zero. Incomplete type
 // objects are internal to the getFlowTypeOfReference function and never escape it.
+// dprint-ignore
 export interface IncompleteType {
     flags: TypeFlags | 0;  // No flags set
     type: Type;            // The type marked incomplete
@@ -5323,6 +5337,7 @@ export const enum UnionReduction {
     Subtype,
 }
 
+// dprint-ignore
 /** @internal */
 export const enum ContextFlags {
     None           = 0,
@@ -5333,6 +5348,7 @@ export const enum ContextFlags {
 }
 
 // NOTE: If modifying this enum, must modify `TypeFormatFlags` too!
+// dprint-ignore
 export const enum NodeBuilderFlags {
     None                                    = 0,
     // Options
@@ -5378,6 +5394,7 @@ export const enum NodeBuilderFlags {
 }
 
 // Ensure the shared flags between this and `NodeBuilderFlags` stay in alignment
+// dprint-ignore
 export const enum TypeFormatFlags {
     None                                    = 0,
     NoTruncation                            = 1 << 0,  // Don't truncate typeToString result
@@ -5419,6 +5436,7 @@ export const enum TypeFormatFlags {
         UseSingleQuotesForStringLiteralType | NoTypeReduction | OmitThisParameter,
 }
 
+// dprint-ignore
 export const enum SymbolFormatFlags {
     None                                    = 0,
 
@@ -5719,6 +5737,7 @@ export interface EmitResolver {
     isImportRequiredByAugmentation(decl: ImportDeclaration): boolean;
 }
 
+// dprint-ignore
 export const enum SymbolFlags {
     None                    = 0,
     FunctionScopedVariable  = 1 << 0,   // Variable (var) or parameter
@@ -5815,6 +5834,7 @@ export const enum SymbolFlags {
 /** @internal */
 export type SymbolId = number;
 
+// dprint-ignore
 export interface Symbol {
     flags: SymbolFlags;                     // Symbol flags
     escapedName: __String;                  // Name of symbol
@@ -5834,6 +5854,7 @@ export interface Symbol {
     /** @internal */ assignmentDeclarationMembers?: Map<number, Declaration>; // detected late-bound assignment declarations associated with the symbol
 }
 
+// dprint-ignore
 /** @internal */
 export interface SymbolLinks {
     _symbolLinksBrand: any;
@@ -5892,6 +5913,7 @@ export const enum EnumKind {
     Literal,                             // Literal enum (each member has a TypeFlags.EnumLiteral type)
 }
 
+// dprint-ignore
 /** @internal */
 export const enum CheckFlags {
     None              = 0,
@@ -6003,6 +6025,7 @@ export interface PatternAmbientModule {
     symbol: Symbol;
 }
 
+// dprint-ignore
 /** @internal */
 export const enum NodeCheckFlags {
     None                                     = 0,
@@ -6031,6 +6054,7 @@ export const enum NodeCheckFlags {
     InCheckIdentifier                        = 1 << 22,
 }
 
+// dprint-ignore
 /** @internal */
 export interface NodeLinks {
     flags: NodeCheckFlags;              // Set of flags specific to Node
@@ -6073,6 +6097,7 @@ export interface SerializedTypeEntry {
     addedLength: number;
 }
 
+// dprint-ignore
 export const enum TypeFlags {
     Any             = 1 << 0,
     Unknown         = 1 << 1,
@@ -6172,6 +6197,7 @@ export type DestructuringPattern = BindingPattern | ObjectLiteralExpression | Ar
 export type TypeId = number;
 
 // Properties common to all types
+// dprint-ignore
 export interface Type {
     flags: TypeFlags;                // Flags
     /** @internal */ id: TypeId;      // Unique ID
@@ -6243,6 +6269,7 @@ export interface EnumType extends FreshableType {
 // Types included in TypeFlags.ObjectFlagsType have an objectFlags property. Some ObjectFlags
 // are specific to certain types and reuse the same bit position. Those ObjectFlags require a check
 // for a certain TypeFlags value to determine their meaning.
+// dprint-ignore
 export const enum ObjectFlags {
     None             = 0,
     Class            = 1 << 0,  // Class
@@ -6324,6 +6351,7 @@ export const enum ObjectFlags {
 export type ObjectFlagsType = NullableType | ObjectType | UnionType | IntersectionType | TemplateLiteralType;
 
 // Object types (TypeFlags.ObjectType)
+// dprint-ignore
 export interface ObjectType extends Type {
     objectFlags: ObjectFlags;
     /** @internal */ members?: SymbolTable;             // Properties by name
@@ -6335,6 +6363,7 @@ export interface ObjectType extends Type {
 }
 
 /** Class and interface types (ObjectFlags.Class and ObjectFlags.Interface). */
+// dprint-ignore
 export interface InterfaceType extends ObjectType {
     typeParameters: TypeParameter[] | undefined;      // Type parameters (undefined if non-generic)
     outerTypeParameters: TypeParameter[] | undefined; // Outer type parameters (undefined if none)
@@ -6351,6 +6380,7 @@ export interface InterfaceType extends ObjectType {
 // Object type or intersection of object types
 export type BaseType = ObjectType | IntersectionType | TypeVariable; // Also `any` and `object`
 
+// dprint-ignore
 export interface InterfaceTypeWithDeclaredMembers extends InterfaceType {
     declaredProperties: Symbol[];                   // Declared members
     declaredCallSignatures: Signature[];            // Declared call signatures
@@ -6390,6 +6420,7 @@ export interface DeferredTypeReference extends TypeReference {
     instantiations?: Map<string, Type>; // Instantiations of generic type alias (undefined if non-generic)
 }
 
+// dprint-ignore
 /** @internal */
 export const enum VarianceFlags {
     Invariant     =      0,  // Neither covariant nor contravariant
@@ -6411,6 +6442,7 @@ export interface GenericType extends InterfaceType, TypeReference {
     variances?: VarianceFlags[];  // Variance of each type parameter
 }
 
+// dprint-ignore
 export const enum ElementFlags {
     Required    = 1 << 0,  // T
     Optional    = 1 << 1,  // T?
@@ -6520,6 +6552,7 @@ export interface ReverseMappedType extends ObjectType {
 
 /** @internal */
 // Resolved object, union, or intersection type
+// dprint-ignore
 export interface ResolvedType extends ObjectType, UnionOrIntersectionType {
     members: SymbolTable;             // Properties by name
     properties: Symbol[];             // Properties
@@ -6578,6 +6611,7 @@ export interface InstantiableType extends Type {
 }
 
 // Type parameters (TypeFlags.TypeParameter)
+// dprint-ignore
 export interface TypeParameter extends InstantiableType {
     /**
      * Retrieve using getConstraintFromTypeParameter
@@ -6708,6 +6742,7 @@ export const enum SignatureKind {
     Construct,
 }
 
+// dprint-ignore
 /** @internal */
 export const enum SignatureFlags {
     None = 0,
@@ -6732,6 +6767,7 @@ export const enum SignatureFlags {
     CallChainFlags = IsInnerCallChain | IsOuterCallChain,
 }
 
+// dprint-ignore
 export interface Signature {
     /** @internal */ flags: SignatureFlags;
     /** @internal */ checker?: TypeChecker;
@@ -6804,6 +6840,7 @@ export type TypeMapper =
     | { kind: TypeMapKind.Function, func: (t: Type) => Type, debugInfo?: () => string }
     | { kind: TypeMapKind.Composite | TypeMapKind.Merged, mapper1: TypeMapper, mapper2: TypeMapper };
 
+// dprint-ignore
 export const enum InferencePriority {
     None                         = 0,
     NakedTypeVariable            = 1 << 0,  // Naked type variable in union or intersection type
@@ -6823,6 +6860,7 @@ export const enum InferencePriority {
     Circularity = -1,  // Inference circularity (value less than all other priorities)
 }
 
+// dprint-ignore
 /** @internal */
 export interface InferenceInfo {
     typeParameter: TypeParameter;            // Type parameter for which inferences are being made
@@ -6835,6 +6873,7 @@ export interface InferenceInfo {
     impliedArity?: number;
 }
 
+// dprint-ignore
 /** @internal */
 export const enum InferenceFlags {
     None            =      0,  // No special inference behaviors
@@ -6863,6 +6902,7 @@ export const enum Ternary {
 /** @internal */
 export type TypeComparer = (s: Type, t: Type, reportErrors?: boolean) => Ternary;
 
+// dprint-ignore
 /** @internal */
 export interface InferenceContext {
     inferences: InferenceInfo[];                  // Inferences made for each type parameter
@@ -6882,6 +6922,7 @@ export interface IntraExpressionInferenceSite {
     type: Type;
 }
 
+// dprint-ignore
 /** @internal */
 export interface WideningContext {
     parent?: WideningContext;       // Parent context
@@ -7389,6 +7430,7 @@ export interface CreateProgramOptions {
     typeScriptVersion?: string;
 }
 
+// dprint-ignore
 /** @internal */
 export interface CommandLineOptionBase {
     name: string;
@@ -7472,6 +7514,7 @@ export interface CommandLineOptionOfListType extends CommandLineOptionBase {
 /** @internal */
 export type CommandLineOption = CommandLineOptionOfCustomType | CommandLineOptionOfStringType | CommandLineOptionOfNumberType | CommandLineOptionOfBooleanType | TsConfigOnlyOption | CommandLineOptionOfListType;
 
+// dprint-ignore
 /** @internal */
 export const enum CharacterCodes {
     nullCharacter = 0,
@@ -7950,6 +7993,7 @@ export interface SourceMapSource {
 
 /** @internal */
 // NOTE: Any new properties should be accounted for in `mergeEmitNode` in factory/nodeFactory.ts
+// dprint-ignore
 export interface EmitNode {
     flags: EmitFlags;                        // Flags that customize emit
     internalFlags: InternalEmitFlags;        // Internal flags that customize emit
@@ -7989,6 +8033,7 @@ export interface Placeholder {
 }
 
 // Reference: https://code.visualstudio.com/docs/editor/userdefinedsnippets#_snippet-syntax
+// dprint-ignore
 /** @internal */
 export const enum SnippetKind {
     TabStop,                                // `$1`, `$2`
@@ -7997,6 +8042,7 @@ export const enum SnippetKind {
     Variable,                               // `$name`, `${name:default}`
 }
 
+// dprint-ignore
 export const enum EmitFlags {
     None = 0,
     SingleLine = 1 << 0,                    // The contents of this node should be emitted on a single line.
@@ -8029,6 +8075,7 @@ export const enum EmitFlags {
     NoAsciiEscaping = 1 << 24,              // When synthesizing nodes that lack an original node or textSourceNode, we want to write the text on the node with ASCII escaping substitutions.
 }
 
+// dprint-ignore
 /** @internal */
 export const enum InternalEmitFlags {
     None = 0,
@@ -8040,6 +8087,7 @@ export const enum InternalEmitFlags {
     TransformPrivateStaticElements = 1 << 5, // Indicates static private elements in a file or class should be transformed regardless of --target (used by esDecorators transform)
 }
 
+// dprint-ignore
 export interface EmitHelperBase {
     readonly name: string;                                          // A unique name for this helper.
     readonly scoped: boolean;                                       // Indicates whether the helper MUST be emitted in the current scope.
@@ -8052,6 +8100,7 @@ export interface ScopedEmitHelper extends EmitHelperBase {
     readonly scoped: true;
 }
 
+// dprint-ignore
 export interface UnscopedEmitHelper extends EmitHelperBase {
     readonly scoped: false;                                         // Indicates whether the helper MUST be emitted in the current scope.
     /** @internal */
@@ -8066,6 +8115,7 @@ export type UniqueNameHandler = (baseName: string, checkFn?: (name: string) => b
 
 export type EmitHelperUniqueNameCallback = (name: string) => string;
 
+// dprint-ignore
 /**
  * Used by the checker, this enum keeps track of external emit helpers that should be type
  * checked.
@@ -8120,6 +8170,7 @@ export const enum ExternalEmitHelpers {
     SpreadIncludes = Read | SpreadArray,
 }
 
+// dprint-ignore
 export const enum EmitHint {
     SourceFile,          // Emitting a SourceFile
     Expression,          // Emitting an Expression
@@ -9720,6 +9771,7 @@ export interface SyntaxList extends Node {
     _children: Node[];
 }
 
+// dprint-ignore
 export const enum ListFormat {
     None = 0,
 
