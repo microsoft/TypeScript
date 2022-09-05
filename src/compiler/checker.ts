@@ -17343,14 +17343,43 @@ namespace ts {
                     // Distributive conditional types are distributed over union types. For example, when the
                     // distributive conditional type T extends U ? X : Y is instantiated with A | B for T, the
                     // result is (A extends U ? X : Y) | (B extends U ? X : Y).
-                    result = distributionType && checkType !== distributionType && distributionType.flags & (TypeFlags.Union | TypeFlags.Never) ?
-                        mapTypeWithAlias(getReducedType(distributionType), t => getConditionalType(root, prependTypeMapping(checkType, t, newMapper)), aliasSymbol, aliasTypeArguments) :
-                        getConditionalType(root, newMapper, aliasSymbol, aliasTypeArguments);
+                    result = distributionType && checkType !== distributionType && distributionType.flags & (TypeFlags.Union | TypeFlags.Never)
+                        ? root.isDistributive && !isDistributionDependent(root) && !containsInferTypeNode(root.node)
+                            ? getConditionalTypeForSimpleDistributionType(getReducedType(distributionType), (t) => getConditionalType(root, prependTypeMapping(checkType, t, newMapper)), aliasSymbol, aliasTypeArguments)
+                            : mapTypeWithAlias(getReducedType(distributionType), (t) => getConditionalType(root, prependTypeMapping(checkType, t, newMapper)), aliasSymbol, aliasTypeArguments)
+                        : getConditionalType(root, newMapper, aliasSymbol, aliasTypeArguments);
                     root.instantiations!.set(id, result);
                 }
                 return result;
             }
             return type;
+        }
+
+        // For types like A extends B ? C : D, if the check-type (A) appears in neither branch and the extends type (B) has no infer positions,
+        // the output type will be combinations of C and D.
+        function getConditionalTypeForSimpleDistributionType(type: Type, mapper: (t: Type) => Type, aliasSymbol: Symbol | undefined, aliasTypeArguments: readonly Type[] | undefined): Type {
+            if (!(type.flags & TypeFlags.Union && aliasSymbol)) {
+                return mapType(type, mapper);
+            }
+            let firstMappedType: Type | undefined;
+            for(const t of (type as UnionType).types) {
+                const mapped = mapper(t);
+                if (mapped.flags & TypeFlags.AnyOrUnknown) {
+                    return mapped;
+                }
+                else if (!firstMappedType) {
+                    firstMappedType = mapped;
+                }
+                else if (firstMappedType !== mapped) {
+                    return getUnionType([firstMappedType, mapped], UnionReduction.Literal, aliasSymbol, aliasTypeArguments);
+                }
+            }
+            Debug.assertIsDefined(firstMappedType);
+            return firstMappedType;
+        }
+
+        function containsInferTypeNode(node: Node) {
+            return isInferTypeNode(node) || forEachChildRecursively(node, isInferTypeNode);
         }
 
         function instantiateType(type: Type, mapper: TypeMapper | undefined): Type;
