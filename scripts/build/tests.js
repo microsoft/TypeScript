@@ -6,7 +6,6 @@ const path = require("path");
 const mkdirP = require("mkdirp");
 const log = require("fancy-log");
 const cmdLineOptions = require("./options");
-const { CancellationToken } = require("prex");
 const { exec } = require("./utils");
 const { findUpFile } = require("./findUpDir");
 
@@ -22,9 +21,8 @@ exports.localTest262Baseline = "internal/baselines/test262/local";
  * @param {string} defaultReporter
  * @param {boolean} runInParallel
  * @param {boolean} watchMode
- * @param {import("prex").CancellationToken} [cancelToken]
  */
-async function runConsoleTests(runJs, defaultReporter, runInParallel, watchMode, cancelToken = CancellationToken.none) {
+async function runConsoleTests(runJs, defaultReporter, runInParallel, watchMode) {
     let testTimeout = cmdLineOptions.timeout;
     const tests = cmdLineOptions.tests;
     const inspect = cmdLineOptions.break || cmdLineOptions.inspect;
@@ -38,7 +36,6 @@ async function runConsoleTests(runJs, defaultReporter, runInParallel, watchMode,
     const shardId = +cmdLineOptions.shardId || undefined;
     if (!cmdLineOptions.dirty) {
         await cleanTestDirs();
-        cancelToken.throwIfCancellationRequested();
     }
 
     if (fs.existsSync(testConfigFile)) {
@@ -121,9 +118,7 @@ async function runConsoleTests(runJs, defaultReporter, runInParallel, watchMode,
 
     try {
         setNodeEnvToDevelopment();
-        const { exitCode } = await exec(process.execPath, args, {
-            cancelToken,
-        });
+        const { exitCode } = await exec(process.execPath, args);
         if (exitCode !== 0) {
             errorStatus = exitCode;
             error = new Error(`Process exited with status code ${errorStatus}.`);
@@ -132,8 +127,8 @@ async function runConsoleTests(runJs, defaultReporter, runInParallel, watchMode,
             // finally, do a sanity check and build the compiler with the built version of itself
             log.info("Starting sanity check build...");
             // Cleanup everything except lint rules (we'll need those later and would rather not waste time rebuilding them)
-            await exec("gulp", ["clean-tsc", "clean-services", "clean-tsserver", "clean-lssl", "clean-tests"], { cancelToken });
-            const { exitCode } = await exec("gulp", ["local", "--lkg=false"], { cancelToken });
+            await exec("gulp", ["clean-tsc", "clean-services", "clean-tsserver", "clean-lssl", "clean-tests"]);
+            const { exitCode } = await exec("gulp", ["local", "--lkg=false"]);
             if (exitCode !== 0) {
                 errorStatus = exitCode;
                 error = new Error(`Sanity check build process exited with status code ${errorStatus}.`);
