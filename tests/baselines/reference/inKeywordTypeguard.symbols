@@ -371,9 +371,7 @@ function negativeIntersectionTest() {
 
     } else {
         window.ontouchstart
->window.ontouchstart : Symbol(ontouchstart, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
 >window : Symbol(window, Decl(lib.dom.d.ts, --, --))
->ontouchstart : Symbol(ontouchstart, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
     }
 }
 

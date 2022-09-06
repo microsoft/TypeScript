@@ -146,13 +146,13 @@ function negativeTestClassesWithMemberMissingInBothClasses(x: AWithMethod | BWit
         x.a();
 >x.a() : any
 >x.a : any
->x : never
+>x : (AWithMethod & Record<"c", unknown>) | (BWithMethod & Record<"c", unknown>)
 >a : any
 
         x.b();
 >x.b() : any
 >x.b : any
->x : never
+>x : (AWithMethod & Record<"c", unknown>) | (BWithMethod & Record<"c", unknown>)
 >b : any
 
     } else {
@@ -332,7 +332,7 @@ if ('extra' in error) {
 >error : Error
 
     error // Still Error
->error : Error
+>error : Error & Record<"extra", unknown>
 
 } else {
     error // Error
@@ -446,9 +446,9 @@ function negativeIntersectionTest() {
 
     } else {
         window.ontouchstart
->window.ontouchstart : ((this: GlobalEventHandlers, ev: TouchEvent) => any) & ((this: Window, ev: TouchEvent) => any)
->window : Window & typeof globalThis
->ontouchstart : ((this: GlobalEventHandlers, ev: TouchEvent) => any) & ((this: Window, ev: TouchEvent) => any)
+>window.ontouchstart : any
+>window : never
+>ontouchstart : any
     }
 }
 
