@@ -33,7 +33,7 @@ namespace ts.projectSystem {
                 const environmentVariables = new Map<string, string>();
                 environmentVariables.set("TSC_WATCHDIRECTORY", tscWatchDirectory);
                 const host = createServerHost(files, { environmentVariables });
-                const logger = createLoggerWithInMemoryLogs();
+                const logger = createLoggerWithInMemoryLogs(host);
                 const projectService = createProjectService(host, { logger });
                 projectService.openClientFile(index.path);
 
@@ -91,7 +91,7 @@ namespace ts.projectSystem {
                 };
                 const files = [configFile, file1, file2, libFile];
                 const host = createServerHost(files, { windowsStyleRoot: "c:/" });
-                const logger = createLoggerWithInMemoryLogs();
+                const logger = createLoggerWithInMemoryLogs(host);
                 const projectService = createProjectService(host, { logger });
                 projectService.openClientFile(file1.path);
                 serializeHostWatchesIntoLogger(host, logger);
@@ -127,7 +127,7 @@ namespace ts.projectSystem {
         const environmentVariables = new Map<string, string>();
         environmentVariables.set("TSC_WATCHDIRECTORY", Tsc_WatchDirectory.NonRecursiveWatchDirectory);
         const host = createServerHost([index, file1, configFile, libFile, nodeModulesExistingUnusedFile], { environmentVariables });
-        const logger = createLoggerWithInMemoryLogs();
+        const logger = createLoggerWithInMemoryLogs(host);
         const projectService = createProjectService(host, { logger });
         projectService.openClientFile(index.path);
 
@@ -173,7 +173,7 @@ namespace ts.projectSystem {
     });
 
     it("unittests:: tsserver:: watchEnvironment:: tsserverProjectSystem watching files with network style paths", () => {
-        const logger = createLoggerWithInMemoryLogs();
+        const logger = createLoggerWithInMemoryLogs(/*host*/ undefined!); // Special handling to ensure same logger is used
         verifyFilePathStyle("c:/myprojects/project/x.js", logger);
         verifyFilePathStyle("//vda1cs4850/myprojects/project/x.js", logger);
         verifyFilePathStyle("//vda1cs4850/c$/myprojects/project/x.js", logger);
@@ -182,12 +182,13 @@ namespace ts.projectSystem {
         baselineTsserverLogs("watchEnvironment", `watching files with network style paths`, { logger });
 
         function verifyFilePathStyle(path: string, logger: Logger) {
-            logger.info(`For files of style ${path}`);
             const windowsStyleRoot = path.substring(0, getRootLength(path));
             const host = createServerHost(
                 [libFile, { path, content: "const x = 10" }],
                 { windowsStyleRoot }
             );
+            logger.host = host;
+            logger.info(`For files of style ${path}`);
             const service = createProjectService(host, { logger });
             service.openClientFile(path);
             checkNumberOfProjects(service, { inferredProjects: 1 });
@@ -203,7 +204,7 @@ namespace ts.projectSystem {
             };
             const files = [libFile, commonFile2, configFile];
             const host = createServerHost(files.concat(commonFile1));
-            const logger = createLoggerWithInMemoryLogs();
+            const logger = createLoggerWithInMemoryLogs(host);
             const session = createSession(host, { logger });
             session.executeCommandSeq<protocol.ConfigureRequest>({
                 command: protocol.CommandTypes.Configure,
@@ -225,7 +226,7 @@ namespace ts.projectSystem {
             };
             const files = [libFile, commonFile2, configFile];
             const host = createServerHost(files.concat(commonFile1), { runWithoutRecursiveWatches: true });
-            const logger = createLoggerWithInMemoryLogs();
+            const logger = createLoggerWithInMemoryLogs(host);
             const session = createSession(host, { logger });
             session.executeCommandSeq<protocol.ConfigureRequest>({
                 command: protocol.CommandTypes.Configure,
@@ -247,7 +248,7 @@ namespace ts.projectSystem {
             };
             const files = [libFile, commonFile2, configFile];
             const host = createServerHost(files.concat(commonFile1), { runWithoutRecursiveWatches: true, runWithFallbackPolling: true });
-            const logger = createLoggerWithInMemoryLogs();
+            const logger = createLoggerWithInMemoryLogs(host);
             const session = createSession(host, { logger });
             session.executeCommandSeq<protocol.ConfigureRequest>({
                 command: protocol.CommandTypes.Configure,
@@ -273,7 +274,7 @@ namespace ts.projectSystem {
             };
             const files = [libFile, commonFile2, configFile];
             const host = createServerHost(files.concat(commonFile1));
-            const logger = createLoggerWithInMemoryLogs();
+            const logger = createLoggerWithInMemoryLogs(host);
             const session = createSession(host, { logger });
             openFilesForSession([{ file: commonFile1, projectRootPath: "/a/b" }], session);
             serializeHostWatchesIntoLogger(host, logger);
@@ -291,7 +292,7 @@ namespace ts.projectSystem {
             };
             const files = [libFile, commonFile2, configFile];
             const host = createServerHost(files.concat(commonFile1), { runWithoutRecursiveWatches: true });
-            const logger = createLoggerWithInMemoryLogs();
+            const logger = createLoggerWithInMemoryLogs(host);
             const session = createSession(host, { logger });
             openFilesForSession([{ file: commonFile1, projectRootPath: "/a/b" }], session);
             serializeHostWatchesIntoLogger(host, logger);
@@ -309,7 +310,7 @@ namespace ts.projectSystem {
             };
             const files = [libFile, commonFile2, configFile];
             const host = createServerHost(files.concat(commonFile1), { runWithoutRecursiveWatches: true, runWithFallbackPolling: true });
-            const logger = createLoggerWithInMemoryLogs();
+            const logger = createLoggerWithInMemoryLogs(host);
             const session = createSession(host, { logger });
             session.executeCommandSeq<protocol.ConfigureRequest>({
                 command: protocol.CommandTypes.Configure,
@@ -356,7 +357,7 @@ namespace ts.projectSystem {
                 const { main, bar, foo } = setupFiles();
                 const files = [libFile, main, bar, foo, configFile];
                 const host = createServerHost(files, { currentDirectory: tscWatch.projectRoot });
-                const logger = createLoggerWithInMemoryLogs();
+                const logger = createLoggerWithInMemoryLogs(host);
                 const service = createProjectService(host, { logger });
                 setupConfigureHost(service, configureHost);
                 service.openClientFile(main.path);
@@ -379,7 +380,7 @@ namespace ts.projectSystem {
                 const { main, bar, foo } = setupFiles();
                 const files = [libFile, main, bar, foo];
                 const host = createServerHost(files, { currentDirectory: tscWatch.projectRoot });
-                const logger = createLoggerWithInMemoryLogs();
+                const logger = createLoggerWithInMemoryLogs(host);
                 const service = createProjectService(host, { logger });
                 setupConfigureHost(service, configureHost);
                 service.openExternalProject({
@@ -433,7 +434,7 @@ namespace ts.projectSystem {
                 const { main, bar, foo } = setupFiles();
                 const files = [libFile, main, bar, foo];
                 const host = createServerHost(files, { currentDirectory: tscWatch.projectRoot });
-                const logger = createLoggerWithInMemoryLogs();
+                const logger = createLoggerWithInMemoryLogs(host);
                 const service = createProjectService(host, { useInferredProjectPerProjectRoot: true, logger });
                 setupConfigureHost(service, configureHost);
                 service.setCompilerOptionsForInferredProjects({ excludeDirectories: ["node_modules"] }, tscWatch.projectRoot);
@@ -485,7 +486,7 @@ namespace ts.projectSystem {
                     content: `import { foo } from "bar"`
                 };
                 const host = createServerHost([file, libFile]);
-                const logger = createLoggerWithInMemoryLogs();
+                const logger = createLoggerWithInMemoryLogs(host);
                 const service = createProjectService(host, { logger });
                 service.openClientFile(file.path, /*fileContent*/ undefined, /*scriptKind*/ undefined, projectRoot);
                 serializeHostWatchesIntoLogger(host, logger);
@@ -514,7 +515,7 @@ namespace ts.projectSystem {
                 content: `import * as tsconfig from "./tsconfig.json";`
             };
             const host = createServerHost([config, index, libFile]);
-            const session = createSession(host, { logger: createLoggerWithInMemoryLogs() });
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
             openFilesForSession([index], session);
             host.serializeWatches().forEach(b => session.logger.info(b));
             baselineTsserverLogs("watchEnvironment", "when watchFile is single watcher per file", session);

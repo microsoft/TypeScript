@@ -53,6 +53,7 @@ namespace ts.projectSystem {
 
     export interface Logger extends server.Logger {
         logs: string[];
+        host?: TestServerHost;
     }
 
     export function nullLogger(): Logger {
@@ -77,20 +78,52 @@ namespace ts.projectSystem {
         };
     }
 
-    export function createLoggerWritingToConsole(): Logger {
-        return {
+    function handleLoggerGroup(logger: Logger, host: TestServerHost | undefined): Logger {
+        let inGroup = false;
+        let firstInGroup = false;
+        let seq = 0;
+        logger.startGroup = () => {
+            inGroup = true;
+            firstInGroup = true;
+        };
+        logger.endGroup = () => inGroup = false;
+        logger.host = host;
+        const originalInfo = logger.info;
+        logger.info = s => msg(s, server.Msg.Info, s => originalInfo.call(logger, s));
+        return logger;
+
+        function msg(s: string, type = server.Msg.Err, write: (s: string) => void) {
+            s = `[${nowString()}] ${s}`;
+            if (!inGroup || firstInGroup) s = padStringRight(type + " " + seq.toString(), "          ") + s;
+            write(s);
+            if (!inGroup) seq++;
+        }
+
+        function padStringRight(str: string, padding: string) {
+            return (str + padding).slice(0, padding.length);
+        }
+
+        function nowString() {
+            // E.g. "12:34:56.789"
+            const d = logger.host!.now();
+            return `${padLeft(d.getHours().toString(), 2, "0")}:${padLeft(d.getMinutes().toString(), 2, "0")}:${padLeft(d.getSeconds().toString(), 2, "0")}.${padLeft(d.getMilliseconds().toString(), 3, "0")}`;
+        }
+    }
+
+    export function createLoggerWritingToConsole(host: TestServerHost): Logger {
+        return handleLoggerGroup({
             ...nullLogger(),
             hasLevel: returnTrue,
             loggingEnabled: returnTrue,
             perftrc: s => console.log(s),
             info: s => console.log(s),
             msg: (s, type) => console.log(`${type}:: ${s}`),
-        };
+        }, host);
     }
 
-    export function createLoggerWithInMemoryLogs(): Logger {
+    export function createLoggerWithInMemoryLogs(host: TestServerHost): Logger {
         const logger = createHasErrorMessageLogger();
-        return {
+        return handleLoggerGroup({
             ...logger,
             hasLevel: returnTrue,
             loggingEnabled: returnTrue,
@@ -111,7 +144,7 @@ namespace ts.projectSystem {
                     .replace(/dependencies in \d+(?:\.\d+)?/g, `dependencies in *`)
                     .replace(/\"exportMapKey\"\:\"[_$a-zA-Z][_$_$a-zA-Z0-9]*\|\d+\|/g, match => match.replace(/\|\d+\|/, `|*|`))
             )
-        };
+        }, host);
     }
 
     export function baselineTsserverLogs(scenario: string, subScenario: string, sessionOrService: { logger: Logger; }) {
@@ -765,7 +798,7 @@ namespace ts.projectSystem {
     function verifyErrorsUsingGeterr({scenario, subScenario, allFiles, openFiles, getErrRequest }: VerifyGetErrScenario) {
         it("verifies the errors in open file", () => {
             const host = createServerHost([...allFiles(), libFile]);
-            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs() });
+            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
             openFilesForSession(openFiles(), session);
 
             verifyGetErrRequest({ session, host, files: getErrRequest() });
@@ -776,7 +809,7 @@ namespace ts.projectSystem {
     function verifyErrorsUsingGeterrForProject({ scenario, subScenario, allFiles, openFiles, getErrForProjectRequest }: VerifyGetErrScenario) {
         it("verifies the errors in projects", () => {
             const host = createServerHost([...allFiles(), libFile]);
-            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs() });
+            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
             openFilesForSession(openFiles(), session);
 
             for (const expected of getErrForProjectRequest()) {
@@ -793,7 +826,7 @@ namespace ts.projectSystem {
     function verifyErrorsUsingSyncMethods({ scenario, subScenario, allFiles, openFiles, syncDiagnostics }: VerifyGetErrScenario) {
         it("verifies the errors using sync commands", () => {
             const host = createServerHost([...allFiles(), libFile]);
-            const session = createSession(host, { logger: createLoggerWithInMemoryLogs() });
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
             openFilesForSession(openFiles(), session);
             for (const { file, project } of syncDiagnostics()) {
                 const reqArgs = { file: filePath(file), projectFileName: project && filePath(project) };

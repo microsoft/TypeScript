@@ -1,10 +1,10 @@
-Provided types map file "/a/lib/typesMap.json" doesn't exist
-request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/a/index.ts"}}
-Search path: /user/username/projects/myproject/a
-For info: /user/username/projects/myproject/a/index.ts :: Config file name: /user/username/projects/myproject/a/tsconfig.json
-Creating configuration project /user/username/projects/myproject/a/tsconfig.json
-FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/a/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/a/tsconfig.json WatchType: Config file
-Config: /user/username/projects/myproject/a/tsconfig.json : {
+Info 0    [16:00:29.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info 1    [16:00:30.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/a/index.ts"}}
+Info 2    [16:00:31.000] Search path: /user/username/projects/myproject/a
+Info 3    [16:00:32.000] For info: /user/username/projects/myproject/a/index.ts :: Config file name: /user/username/projects/myproject/a/tsconfig.json
+Info 4    [16:00:33.000] Creating configuration project /user/username/projects/myproject/a/tsconfig.json
+Info 5    [16:00:34.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/a/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/a/tsconfig.json WatchType: Config file
+Info 6    [16:00:35.000] Config: /user/username/projects/myproject/a/tsconfig.json : {
  "rootNames": [
   "/user/username/projects/myproject/a/index.ts"
  ],
@@ -21,11 +21,11 @@ Config: /user/username/projects/myproject/a/tsconfig.json : {
   }
  ]
 }
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/a 1 undefined Config: /user/username/projects/myproject/a/tsconfig.json WatchType: Wild card directory
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/a 1 undefined Config: /user/username/projects/myproject/a/tsconfig.json WatchType: Wild card directory
-Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
-Starting updateGraphWorker: Project: /user/username/projects/myproject/a/tsconfig.json
-Config: /user/username/projects/myproject/b/tsconfig.json : {
+Info 7    [16:00:36.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/a 1 undefined Config: /user/username/projects/myproject/a/tsconfig.json WatchType: Wild card directory
+Info 8    [16:00:37.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/a 1 undefined Config: /user/username/projects/myproject/a/tsconfig.json WatchType: Wild card directory
+Info 9    [16:00:38.000] Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
+Info 10   [16:00:39.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/a/tsconfig.json
+Info 11   [16:00:40.000] Config: /user/username/projects/myproject/b/tsconfig.json : {
  "rootNames": [
   "/user/username/projects/myproject/b/helper.ts",
   "/user/username/projects/myproject/b/index.ts"
@@ -37,20 +37,20 @@ Config: /user/username/projects/myproject/b/tsconfig.json : {
   "configFilePath": "/user/username/projects/myproject/b/tsconfig.json"
  }
 }
-FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/a/tsconfig.json WatchType: Config file
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b 1 undefined Config: /user/username/projects/myproject/b/tsconfig.json WatchType: Wild card directory
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b 1 undefined Config: /user/username/projects/myproject/b/tsconfig.json WatchType: Wild card directory
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b 1 undefined Project: /user/username/projects/myproject/a/tsconfig.json WatchType: Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b 1 undefined Project: /user/username/projects/myproject/a/tsconfig.json WatchType: Failed Lookup Locations
-FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b/index.ts 500 undefined WatchType: Closed Script info
-FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /user/username/projects/myproject/a/tsconfig.json WatchType: Missing file
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/a/node_modules/@types 1 undefined Project: /user/username/projects/myproject/a/tsconfig.json WatchType: Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/a/node_modules/@types 1 undefined Project: /user/username/projects/myproject/a/tsconfig.json WatchType: Type roots
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/a/tsconfig.json WatchType: Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/a/tsconfig.json WatchType: Type roots
-Finishing updateGraphWorker: Project: /user/username/projects/myproject/a/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Project '/user/username/projects/myproject/a/tsconfig.json' (Configured)
-	Files (2)
+Info 12   [16:00:41.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/a/tsconfig.json WatchType: Config file
+Info 13   [16:00:42.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b 1 undefined Config: /user/username/projects/myproject/b/tsconfig.json WatchType: Wild card directory
+Info 14   [16:00:43.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b 1 undefined Config: /user/username/projects/myproject/b/tsconfig.json WatchType: Wild card directory
+Info 15   [16:00:44.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b 1 undefined Project: /user/username/projects/myproject/a/tsconfig.json WatchType: Failed Lookup Locations
+Info 16   [16:00:45.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b 1 undefined Project: /user/username/projects/myproject/a/tsconfig.json WatchType: Failed Lookup Locations
+Info 17   [16:00:46.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b/index.ts 500 undefined WatchType: Closed Script info
+Info 18   [16:00:47.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /user/username/projects/myproject/a/tsconfig.json WatchType: Missing file
+Info 19   [16:00:48.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/a/node_modules/@types 1 undefined Project: /user/username/projects/myproject/a/tsconfig.json WatchType: Type roots
+Info 20   [16:00:49.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/a/node_modules/@types 1 undefined Project: /user/username/projects/myproject/a/tsconfig.json WatchType: Type roots
+Info 21   [16:00:50.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/a/tsconfig.json WatchType: Type roots
+Info 22   [16:00:51.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/a/tsconfig.json WatchType: Type roots
+Info 23   [16:00:52.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/a/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 24   [16:00:53.000] Project '/user/username/projects/myproject/a/tsconfig.json' (Configured)
+Info 25   [16:00:54.000] 	Files (2)
 	/user/username/projects/myproject/b/index.ts
 	/user/username/projects/myproject/a/index.ts
 
@@ -60,35 +60,35 @@ Project '/user/username/projects/myproject/a/tsconfig.json' (Configured)
 	index.ts
 	  Matched by default include pattern '**/*'
 
------------------------------------------------
-Search path: /user/username/projects/myproject/a
-For info: /user/username/projects/myproject/a/tsconfig.json :: No config files found.
-Project '/user/username/projects/myproject/a/tsconfig.json' (Configured)
-	Files (2)
+Info 26   [16:00:55.000] -----------------------------------------------
+Info 27   [16:00:56.000] Search path: /user/username/projects/myproject/a
+Info 28   [16:00:57.000] For info: /user/username/projects/myproject/a/tsconfig.json :: No config files found.
+Info 29   [16:00:58.000] Project '/user/username/projects/myproject/a/tsconfig.json' (Configured)
+Info 29   [16:00:59.000] 	Files (2)
 
------------------------------------------------
-Open files: 
-	FileName: /user/username/projects/myproject/a/index.ts ProjectRootPath: undefined
-		Projects: /user/username/projects/myproject/a/tsconfig.json
-response:{"responseRequired":false}
-request:{"command":"references","arguments":{"file":"/user/username/projects/myproject/a/index.ts","line":3,"offset":10},"seq":1,"type":"request"}
-Finding references to /user/username/projects/myproject/a/index.ts position 40 in project /user/username/projects/myproject/a/tsconfig.json
-Search path: /user/username/projects/myproject/b
-For info: /user/username/projects/myproject/b/index.ts :: Config file name: /user/username/projects/myproject/b/tsconfig.json
-Creating configuration project /user/username/projects/myproject/b/tsconfig.json
-Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
-FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b/helper.ts 500 undefined WatchType: Closed Script info
-Starting updateGraphWorker: Project: /user/username/projects/myproject/b/tsconfig.json
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b 0 undefined Project: /user/username/projects/myproject/b/tsconfig.json WatchType: Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b 0 undefined Project: /user/username/projects/myproject/b/tsconfig.json WatchType: Failed Lookup Locations
-FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /user/username/projects/myproject/b/tsconfig.json WatchType: Missing file
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b/node_modules/@types 1 undefined Project: /user/username/projects/myproject/b/tsconfig.json WatchType: Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b/node_modules/@types 1 undefined Project: /user/username/projects/myproject/b/tsconfig.json WatchType: Type roots
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/b/tsconfig.json WatchType: Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/b/tsconfig.json WatchType: Type roots
-Finishing updateGraphWorker: Project: /user/username/projects/myproject/b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Project '/user/username/projects/myproject/b/tsconfig.json' (Configured)
-	Files (2)
+Info 29   [16:01:00.000] -----------------------------------------------
+Info 29   [16:01:01.000] Open files: 
+Info 29   [16:01:02.000] 	FileName: /user/username/projects/myproject/a/index.ts ProjectRootPath: undefined
+Info 29   [16:01:03.000] 		Projects: /user/username/projects/myproject/a/tsconfig.json
+Info 29   [16:01:04.000] response:{"responseRequired":false}
+Info 30   [16:01:05.000] request:{"command":"references","arguments":{"file":"/user/username/projects/myproject/a/index.ts","line":3,"offset":10},"seq":1,"type":"request"}
+Info 31   [16:01:06.000] Finding references to /user/username/projects/myproject/a/index.ts position 40 in project /user/username/projects/myproject/a/tsconfig.json
+Info 32   [16:01:07.000] Search path: /user/username/projects/myproject/b
+Info 33   [16:01:08.000] For info: /user/username/projects/myproject/b/index.ts :: Config file name: /user/username/projects/myproject/b/tsconfig.json
+Info 34   [16:01:09.000] Creating configuration project /user/username/projects/myproject/b/tsconfig.json
+Info 35   [16:01:10.000] Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
+Info 36   [16:01:11.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b/helper.ts 500 undefined WatchType: Closed Script info
+Info 37   [16:01:12.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/b/tsconfig.json
+Info 38   [16:01:13.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b 0 undefined Project: /user/username/projects/myproject/b/tsconfig.json WatchType: Failed Lookup Locations
+Info 39   [16:01:14.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b 0 undefined Project: /user/username/projects/myproject/b/tsconfig.json WatchType: Failed Lookup Locations
+Info 40   [16:01:15.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /user/username/projects/myproject/b/tsconfig.json WatchType: Missing file
+Info 41   [16:01:16.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b/node_modules/@types 1 undefined Project: /user/username/projects/myproject/b/tsconfig.json WatchType: Type roots
+Info 42   [16:01:17.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b/node_modules/@types 1 undefined Project: /user/username/projects/myproject/b/tsconfig.json WatchType: Type roots
+Info 43   [16:01:18.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/b/tsconfig.json WatchType: Type roots
+Info 44   [16:01:19.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/b/tsconfig.json WatchType: Type roots
+Info 45   [16:01:20.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 46   [16:01:21.000] Project '/user/username/projects/myproject/b/tsconfig.json' (Configured)
+Info 47   [16:01:22.000] 	Files (2)
 	/user/username/projects/myproject/b/index.ts
 	/user/username/projects/myproject/b/helper.ts
 
@@ -99,8 +99,8 @@ Project '/user/username/projects/myproject/b/tsconfig.json' (Configured)
 	helper.ts
 	  Matched by default include pattern '**/*'
 
------------------------------------------------
-Search path: /user/username/projects/myproject/b
-For info: /user/username/projects/myproject/b/index.ts :: Config file name: /user/username/projects/myproject/b/tsconfig.json
-Finding references to /user/username/projects/myproject/b/index.ts position 13 in project /user/username/projects/myproject/b/tsconfig.json
-response:{"response":{"refs":[{"file":"/user/username/projects/myproject/a/index.ts","start":{"line":1,"offset":10},"end":{"line":1,"offset":11},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":30},"lineText":"import { B } from \"../b/lib\";","isWriteAccess":true},{"file":"/user/username/projects/myproject/a/index.ts","start":{"line":3,"offset":10},"end":{"line":3,"offset":11},"lineText":"const b: B = new B();","isWriteAccess":false},{"file":"/user/username/projects/myproject/a/index.ts","start":{"line":3,"offset":18},"end":{"line":3,"offset":19},"lineText":"const b: B = new B();","isWriteAccess":false},{"file":"/user/username/projects/myproject/b/index.ts","start":{"line":1,"offset":14},"end":{"line":1,"offset":15},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":3,"offset":2},"lineText":"export class B {","isWriteAccess":true},{"file":"/user/username/projects/myproject/b/helper.ts","start":{"line":1,"offset":10},"end":{"line":1,"offset":11},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":23},"lineText":"import { B } from \".\";","isWriteAccess":true},{"file":"/user/username/projects/myproject/b/helper.ts","start":{"line":3,"offset":10},"end":{"line":3,"offset":11},"lineText":"const b: B = new B();","isWriteAccess":false},{"file":"/user/username/projects/myproject/b/helper.ts","start":{"line":3,"offset":18},"end":{"line":3,"offset":19},"lineText":"const b: B = new B();","isWriteAccess":false}],"symbolName":"B","symbolStartOffset":10,"symbolDisplayString":"(alias) class B\nimport B"},"responseRequired":true}
+Info 48   [16:01:23.000] -----------------------------------------------
+Info 49   [16:01:24.000] Search path: /user/username/projects/myproject/b
+Info 50   [16:01:25.000] For info: /user/username/projects/myproject/b/index.ts :: Config file name: /user/username/projects/myproject/b/tsconfig.json
+Info 51   [16:01:26.000] Finding references to /user/username/projects/myproject/b/index.ts position 13 in project /user/username/projects/myproject/b/tsconfig.json
+Info 52   [16:01:27.000] response:{"response":{"refs":[{"file":"/user/username/projects/myproject/a/index.ts","start":{"line":1,"offset":10},"end":{"line":1,"offset":11},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":30},"lineText":"import { B } from \"../b/lib\";","isWriteAccess":true},{"file":"/user/username/projects/myproject/a/index.ts","start":{"line":3,"offset":10},"end":{"line":3,"offset":11},"lineText":"const b: B = new B();","isWriteAccess":false},{"file":"/user/username/projects/myproject/a/index.ts","start":{"line":3,"offset":18},"end":{"line":3,"offset":19},"lineText":"const b: B = new B();","isWriteAccess":false},{"file":"/user/username/projects/myproject/b/index.ts","start":{"line":1,"offset":14},"end":{"line":1,"offset":15},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":3,"offset":2},"lineText":"export class B {","isWriteAccess":true},{"file":"/user/username/projects/myproject/b/helper.ts","start":{"line":1,"offset":10},"end":{"line":1,"offset":11},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":23},"lineText":"import { B } from \".\";","isWriteAccess":true},{"file":"/user/username/projects/myproject/b/helper.ts","start":{"line":3,"offset":10},"end":{"line":3,"offset":11},"lineText":"const b: B = new B();","isWriteAccess":false},{"file":"/user/username/projects/myproject/b/helper.ts","start":{"line":3,"offset":18},"end":{"line":3,"offset":19},"lineText":"const b: B = new B();","isWriteAccess":false}],"symbolName":"B","symbolStartOffset":10,"symbolDisplayString":"(alias) class B\nimport B"},"responseRequired":true}

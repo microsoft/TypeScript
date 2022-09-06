@@ -1,10 +1,10 @@
-Provided types map file "/a/lib/typesMap.json" doesn't exist
-request:{"command":"open","arguments":{"file":"/a/b/project/file1.ts"},"seq":1,"type":"request"}
-Search path: /a/b/project
-For info: /a/b/project/file1.ts :: Config file name: /a/b/project/tsconfig.json
-Creating configuration project /a/b/project/tsconfig.json
-FileWatcher:: Added:: WatchInfo: /a/b/project/tsconfig.json 2000 undefined Project: /a/b/project/tsconfig.json WatchType: Config file
-Config: /a/b/project/tsconfig.json : {
+Info 0    [16:00:19.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info 1    [16:00:20.000] request:{"command":"open","arguments":{"file":"/a/b/project/file1.ts"},"seq":1,"type":"request"}
+Info 2    [16:00:21.000] Search path: /a/b/project
+Info 3    [16:00:22.000] For info: /a/b/project/file1.ts :: Config file name: /a/b/project/tsconfig.json
+Info 4    [16:00:23.000] Creating configuration project /a/b/project/tsconfig.json
+Info 5    [16:00:24.000] FileWatcher:: Added:: WatchInfo: /a/b/project/tsconfig.json 2000 undefined Project: /a/b/project/tsconfig.json WatchType: Config file
+Info 6    [16:00:25.000] Config: /a/b/project/tsconfig.json : {
  "rootNames": [
   "/a/b/project/file1.ts",
   "/a/b/project/file3.ts"
@@ -14,17 +14,17 @@ Config: /a/b/project/tsconfig.json : {
   "configFilePath": "/a/b/project/tsconfig.json"
  }
 }
-DirectoryWatcher:: Added:: WatchInfo: /a/b/project 1 undefined Config: /a/b/project/tsconfig.json WatchType: Wild card directory
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/project 1 undefined Config: /a/b/project/tsconfig.json WatchType: Wild card directory
-Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
-FileWatcher:: Added:: WatchInfo: /a/b/project/file3.ts 500 undefined WatchType: Closed Script info
-Starting updateGraphWorker: Project: /a/b/project/tsconfig.json
-FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-DirectoryWatcher:: Added:: WatchInfo: /a/b/project/node_modules 1 undefined Project: /a/b/project/tsconfig.json WatchType: Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/project/node_modules 1 undefined Project: /a/b/project/tsconfig.json WatchType: Failed Lookup Locations
-Finishing updateGraphWorker: Project: /a/b/project/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Project '/a/b/project/tsconfig.json' (Configured)
-	Files (3)
+Info 7    [16:00:26.000] DirectoryWatcher:: Added:: WatchInfo: /a/b/project 1 undefined Config: /a/b/project/tsconfig.json WatchType: Wild card directory
+Info 8    [16:00:27.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/project 1 undefined Config: /a/b/project/tsconfig.json WatchType: Wild card directory
+Info 9    [16:00:28.000] Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
+Info 10   [16:00:29.000] FileWatcher:: Added:: WatchInfo: /a/b/project/file3.ts 500 undefined WatchType: Closed Script info
+Info 11   [16:00:30.000] Starting updateGraphWorker: Project: /a/b/project/tsconfig.json
+Info 12   [16:00:31.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info 13   [16:00:32.000] DirectoryWatcher:: Added:: WatchInfo: /a/b/project/node_modules 1 undefined Project: /a/b/project/tsconfig.json WatchType: Failed Lookup Locations
+Info 14   [16:00:33.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/project/node_modules 1 undefined Project: /a/b/project/tsconfig.json WatchType: Failed Lookup Locations
+Info 15   [16:00:34.000] Finishing updateGraphWorker: Project: /a/b/project/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 16   [16:00:35.000] Project '/a/b/project/tsconfig.json' (Configured)
+Info 17   [16:00:36.000] 	Files (3)
 	/a/lib/lib.d.ts
 	/a/b/project/file1.ts
 	/a/b/project/file3.ts
@@ -37,37 +37,37 @@ Project '/a/b/project/tsconfig.json' (Configured)
 	file3.ts
 	  Matched by default include pattern '**/*'
 
------------------------------------------------
-Project '/a/b/project/tsconfig.json' (Configured)
-	Files (3)
+Info 18   [16:00:37.000] -----------------------------------------------
+Info 19   [16:00:38.000] Project '/a/b/project/tsconfig.json' (Configured)
+Info 19   [16:00:39.000] 	Files (3)
 
------------------------------------------------
-Open files: 
-	FileName: /a/b/project/file1.ts ProjectRootPath: undefined
-		Projects: /a/b/project/tsconfig.json
-response:{"responseRequired":false}
-FileWatcher:: Triggered with /a/b/project/file3.ts 1:: WatchInfo: /a/b/project/file3.ts 500 undefined WatchType: Closed Script info
-Scheduled: /a/b/project/tsconfig.json
-Scheduled: *ensureProjectForOpenFiles*
-Elapsed:: *ms FileWatcher:: Triggered with /a/b/project/file3.ts 1:: WatchInfo: /a/b/project/file3.ts 500 undefined WatchType: Closed Script info
-Running: /a/b/project/tsconfig.json
-Starting updateGraphWorker: Project: /a/b/project/tsconfig.json
-Finishing updateGraphWorker: Project: /a/b/project/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
-Different program with same set of files
-Running: *ensureProjectForOpenFiles*
-Before ensureProjectForOpenFiles:
-Project '/a/b/project/tsconfig.json' (Configured)
-	Files (3)
+Info 19   [16:00:40.000] -----------------------------------------------
+Info 19   [16:00:41.000] Open files: 
+Info 19   [16:00:42.000] 	FileName: /a/b/project/file1.ts ProjectRootPath: undefined
+Info 19   [16:00:43.000] 		Projects: /a/b/project/tsconfig.json
+Info 19   [16:00:44.000] response:{"responseRequired":false}
+Info 20   [16:00:48.000] FileWatcher:: Triggered with /a/b/project/file3.ts 1:: WatchInfo: /a/b/project/file3.ts 500 undefined WatchType: Closed Script info
+Info 21   [16:00:49.000] Scheduled: /a/b/project/tsconfig.json
+Info 22   [16:00:50.000] Scheduled: *ensureProjectForOpenFiles*
+Info 23   [16:00:51.000] Elapsed:: *ms FileWatcher:: Triggered with /a/b/project/file3.ts 1:: WatchInfo: /a/b/project/file3.ts 500 undefined WatchType: Closed Script info
+Info 24   [16:00:52.000] Running: /a/b/project/tsconfig.json
+Info 25   [16:00:53.000] Starting updateGraphWorker: Project: /a/b/project/tsconfig.json
+Info 26   [16:00:54.000] Finishing updateGraphWorker: Project: /a/b/project/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info 27   [16:00:55.000] Different program with same set of files
+Info 28   [16:00:56.000] Running: *ensureProjectForOpenFiles*
+Info 29   [16:00:57.000] Before ensureProjectForOpenFiles:
+Info 30   [16:00:58.000] Project '/a/b/project/tsconfig.json' (Configured)
+Info 30   [16:00:59.000] 	Files (3)
 
------------------------------------------------
-Open files: 
-	FileName: /a/b/project/file1.ts ProjectRootPath: undefined
-		Projects: /a/b/project/tsconfig.json
-After ensureProjectForOpenFiles:
-Project '/a/b/project/tsconfig.json' (Configured)
-	Files (3)
+Info 30   [16:01:00.000] -----------------------------------------------
+Info 30   [16:01:01.000] Open files: 
+Info 30   [16:01:02.000] 	FileName: /a/b/project/file1.ts ProjectRootPath: undefined
+Info 30   [16:01:03.000] 		Projects: /a/b/project/tsconfig.json
+Info 30   [16:01:04.000] After ensureProjectForOpenFiles:
+Info 31   [16:01:05.000] Project '/a/b/project/tsconfig.json' (Configured)
+Info 31   [16:01:06.000] 	Files (3)
 
------------------------------------------------
-Open files: 
-	FileName: /a/b/project/file1.ts ProjectRootPath: undefined
-		Projects: /a/b/project/tsconfig.json
+Info 31   [16:01:07.000] -----------------------------------------------
+Info 31   [16:01:08.000] Open files: 
+Info 31   [16:01:09.000] 	FileName: /a/b/project/file1.ts ProjectRootPath: undefined
+Info 31   [16:01:10.000] 		Projects: /a/b/project/tsconfig.json

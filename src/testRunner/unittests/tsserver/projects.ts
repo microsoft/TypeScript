@@ -7,7 +7,7 @@ namespace ts.projectSystem {
                     let x = y`
             };
             const host = createServerHost([file1, libFile]);
-            const session = createSession(host, { logger: createLoggerWithInMemoryLogs() });
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
             openFilesForSession([file1], session);
 
             const getErrRequest = makeSessionRequest<server.protocol.SemanticDiagnosticsSyncRequestArgs>(
@@ -861,7 +861,7 @@ namespace ts.projectSystem {
                 content: `<html><script language="javascript">var x = 1;</></html>`
             };
             const host = createServerHost([file1]);
-            const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs() });
+            const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
             const projectFileName = "projectFileName";
             projectService.openExternalProject({ projectFileName, options: {}, rootFiles: [{ fileName: file1.path, scriptKind: ScriptKind.JS, hasMixedContent: true }] });
 
@@ -1005,7 +1005,7 @@ namespace ts.projectSystem {
                 content: JSON.stringify({ compilerOptions: {} })
             };
             const host = createServerHost([f1, libFile, config]);
-            const session = createSession(host, { logger: createLoggerWithInMemoryLogs() });
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
             session.executeCommandSeq({
                 command: server.CommandNames.Open,
                 arguments: {
@@ -1074,7 +1074,7 @@ namespace ts.projectSystem {
 
             const files = [config, file, filesFile1, filesFile2, libFile];
             const host = createServerHost(files);
-            const session = createSession(host, { logger: createLoggerWithInMemoryLogs() });
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
             // Create configured project
             session.executeCommandSeq<protocol.OpenRequest>({
                 command: protocol.CommandTypes.Open,
@@ -1516,7 +1516,7 @@ namespace ts.projectSystem {
             };
             const files = [fileSubA, fileB, config, libFile];
             const host = createServerHost(files);
-            const session = createSession(host, { canUseEvents: true, noGetErrOnBackgroundUpdate: true, logger: createLoggerWithInMemoryLogs() });
+            const session = createSession(host, { canUseEvents: true, noGetErrOnBackgroundUpdate: true, logger: createLoggerWithInMemoryLogs(host) });
             openFile(fileB);
             openFile(fileSubA);
 
@@ -1634,7 +1634,7 @@ namespace ts.projectSystem {
                 content: `export function foobar() { }`
             };
             const host = createServerHost([testsConfig, testsFile, innerFile, innerConfig, innerSrcFile, libFile]);
-            const session = createSession(host, { logger: createLoggerWithInMemoryLogs() });
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
             openFilesForSession([testsFile], session);
             closeFilesForSession([testsFile], session);
             openFilesForSession([innerFile], session);

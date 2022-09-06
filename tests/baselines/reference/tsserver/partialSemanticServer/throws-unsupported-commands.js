@@ -1,10 +1,10 @@
-Provided types map file "/a/lib/typesMap.json" doesn't exist
-request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/a.ts"}}
-Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
-Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Project '/dev/null/inferredProject1*' (Inferred)
-	Files (2)
+Info 0    [16:00:31.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info 1    [16:00:32.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/a.ts"}}
+Info 2    [16:00:33.000] Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
+Info 3    [16:00:34.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
+Info 4    [16:00:35.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 5    [16:00:36.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 6    [16:00:37.000] 	Files (2)
 	/a/lib/lib.d.ts
 	/user/username/projects/myproject/a.ts
 
@@ -14,15 +14,15 @@ Project '/dev/null/inferredProject1*' (Inferred)
 	user/username/projects/myproject/a.ts
 	  Root file specified for compilation
 
------------------------------------------------
-Project '/dev/null/inferredProject1*' (Inferred)
-	Files (2)
+Info 7    [16:00:38.000] -----------------------------------------------
+Info 8    [16:00:39.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 8    [16:00:40.000] 	Files (2)
 
------------------------------------------------
-Open files: 
-	FileName: /user/username/projects/myproject/a.ts ProjectRootPath: undefined
-		Projects: /dev/null/inferredProject1*
-response:{"responseRequired":false}
-request:{"type":"request","seq":1,"command":"semanticDiagnosticsSync","arguments":{"file":"/user/username/projects/myproject/a.ts"}}
-Request: semanticDiagnosticsSync not allowed in LanguageServiceMode.PartialSemantic
-LanguageService Operation: getSemanticDiagnostics not allowed in LanguageServiceMode.PartialSemantic
+Info 8    [16:00:41.000] -----------------------------------------------
+Info 8    [16:00:42.000] Open files: 
+Info 8    [16:00:43.000] 	FileName: /user/username/projects/myproject/a.ts ProjectRootPath: undefined
+Info 8    [16:00:44.000] 		Projects: /dev/null/inferredProject1*
+Info 8    [16:00:45.000] response:{"responseRequired":false}
+Info 9    [16:00:46.000] request:{"type":"request","seq":1,"command":"semanticDiagnosticsSync","arguments":{"file":"/user/username/projects/myproject/a.ts"}}
+Info 10   [16:00:47.000] Request: semanticDiagnosticsSync not allowed in LanguageServiceMode.PartialSemantic
+Info 11   [16:00:48.000] LanguageService Operation: getSemanticDiagnostics not allowed in LanguageServiceMode.PartialSemantic

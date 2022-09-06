@@ -1,9 +1,9 @@
-Provided types map file "/typesMap.json" doesn't exist
-Search path: /user/username/projects/sample1/tests
-For info: /user/username/projects/sample1/tests/index.ts :: Config file name: /user/username/projects/sample1/tests/tsconfig.json
-Creating configuration project /user/username/projects/sample1/tests/tsconfig.json
-FileWatcher:: Added:: WatchInfo: /user/username/projects/sample1/tests/tsconfig.json 2000 undefined Project: /user/username/projects/sample1/tests/tsconfig.json WatchType: Config file
-Config: /user/username/projects/sample1/tests/tsconfig.json : {
+Info 0    [16:00:39.000] Provided types map file "/typesMap.json" doesn't exist
+Info 1    [16:00:40.000] Search path: /user/username/projects/sample1/tests
+Info 2    [16:00:41.000] For info: /user/username/projects/sample1/tests/index.ts :: Config file name: /user/username/projects/sample1/tests/tsconfig.json
+Info 3    [16:00:42.000] Creating configuration project /user/username/projects/sample1/tests/tsconfig.json
+Info 4    [16:00:43.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/sample1/tests/tsconfig.json 2000 undefined Project: /user/username/projects/sample1/tests/tsconfig.json WatchType: Config file
+Info 5    [16:00:44.000] Config: /user/username/projects/sample1/tests/tsconfig.json : {
  "rootNames": [
   "/user/username/projects/sample1/tests/index.ts"
  ],
@@ -25,9 +25,9 @@ Config: /user/username/projects/sample1/tests/tsconfig.json : {
   }
  ]
 }
-Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
-Starting updateGraphWorker: Project: /user/username/projects/sample1/tests/tsconfig.json
-Config: /user/username/projects/sample1/core/tsconfig.json : {
+Info 6    [16:00:45.000] Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
+Info 7    [16:00:46.000] Starting updateGraphWorker: Project: /user/username/projects/sample1/tests/tsconfig.json
+Info 8    [16:00:47.000] Config: /user/username/projects/sample1/core/tsconfig.json : {
  "rootNames": [
   "/user/username/projects/sample1/core/anotherModule.ts",
   "/user/username/projects/sample1/core/index.ts",
@@ -41,10 +41,10 @@ Config: /user/username/projects/sample1/core/tsconfig.json : {
   "configFilePath": "/user/username/projects/sample1/core/tsconfig.json"
  }
 }
-FileWatcher:: Added:: WatchInfo: /user/username/projects/sample1/core/tsconfig.json 2000 undefined Project: /user/username/projects/sample1/tests/tsconfig.json WatchType: Config file
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/sample1/core 1 undefined Config: /user/username/projects/sample1/core/tsconfig.json WatchType: Wild card directory
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/sample1/core 1 undefined Config: /user/username/projects/sample1/core/tsconfig.json WatchType: Wild card directory
-Config: /user/username/projects/sample1/logic/tsconfig.json : {
+Info 9    [16:00:48.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/sample1/core/tsconfig.json 2000 undefined Project: /user/username/projects/sample1/tests/tsconfig.json WatchType: Config file
+Info 10   [16:00:49.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/sample1/core 1 undefined Config: /user/username/projects/sample1/core/tsconfig.json WatchType: Wild card directory
+Info 11   [16:00:50.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/sample1/core 1 undefined Config: /user/username/projects/sample1/core/tsconfig.json WatchType: Wild card directory
+Info 12   [16:00:51.000] Config: /user/username/projects/sample1/logic/tsconfig.json : {
  "rootNames": [
   "/user/username/projects/sample1/logic/index.ts"
  ],
@@ -63,20 +63,20 @@ Config: /user/username/projects/sample1/logic/tsconfig.json : {
   }
  ]
 }
-FileWatcher:: Added:: WatchInfo: /user/username/projects/sample1/logic/tsconfig.json 2000 undefined Project: /user/username/projects/sample1/tests/tsconfig.json WatchType: Config file
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/sample1/logic 1 undefined Config: /user/username/projects/sample1/logic/tsconfig.json WatchType: Wild card directory
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/sample1/logic 1 undefined Config: /user/username/projects/sample1/logic/tsconfig.json WatchType: Wild card directory
-FileWatcher:: Added:: WatchInfo: /user/username/projects/sample1/core/index.ts 500 undefined WatchType: Closed Script info
-FileWatcher:: Added:: WatchInfo: /user/username/projects/sample1/logic/index.ts 500 undefined WatchType: Closed Script info
-FileWatcher:: Added:: WatchInfo: /user/username/projects/sample1/core/anotherModule.ts 500 undefined WatchType: Closed Script info
-FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/sample1/tests/node_modules/@types 1 undefined Project: /user/username/projects/sample1/tests/tsconfig.json WatchType: Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/sample1/tests/node_modules/@types 1 undefined Project: /user/username/projects/sample1/tests/tsconfig.json WatchType: Type roots
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/sample1/node_modules/@types 1 undefined Project: /user/username/projects/sample1/tests/tsconfig.json WatchType: Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/sample1/node_modules/@types 1 undefined Project: /user/username/projects/sample1/tests/tsconfig.json WatchType: Type roots
-Finishing updateGraphWorker: Project: /user/username/projects/sample1/tests/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Project '/user/username/projects/sample1/tests/tsconfig.json' (Configured)
-	Files (5)
+Info 13   [16:00:52.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/sample1/logic/tsconfig.json 2000 undefined Project: /user/username/projects/sample1/tests/tsconfig.json WatchType: Config file
+Info 14   [16:00:53.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/sample1/logic 1 undefined Config: /user/username/projects/sample1/logic/tsconfig.json WatchType: Wild card directory
+Info 15   [16:00:54.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/sample1/logic 1 undefined Config: /user/username/projects/sample1/logic/tsconfig.json WatchType: Wild card directory
+Info 16   [16:00:55.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/sample1/core/index.ts 500 undefined WatchType: Closed Script info
+Info 17   [16:00:56.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/sample1/logic/index.ts 500 undefined WatchType: Closed Script info
+Info 18   [16:00:57.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/sample1/core/anotherModule.ts 500 undefined WatchType: Closed Script info
+Info 19   [16:00:58.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info 20   [16:00:59.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/sample1/tests/node_modules/@types 1 undefined Project: /user/username/projects/sample1/tests/tsconfig.json WatchType: Type roots
+Info 21   [16:01:00.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/sample1/tests/node_modules/@types 1 undefined Project: /user/username/projects/sample1/tests/tsconfig.json WatchType: Type roots
+Info 22   [16:01:01.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/sample1/node_modules/@types 1 undefined Project: /user/username/projects/sample1/tests/tsconfig.json WatchType: Type roots
+Info 23   [16:01:02.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/sample1/node_modules/@types 1 undefined Project: /user/username/projects/sample1/tests/tsconfig.json WatchType: Type roots
+Info 24   [16:01:03.000] Finishing updateGraphWorker: Project: /user/username/projects/sample1/tests/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 25   [16:01:04.000] Project '/user/username/projects/sample1/tests/tsconfig.json' (Configured)
+Info 26   [16:01:05.000] 	Files (5)
 	/a/lib/lib.d.ts
 	/user/username/projects/sample1/core/index.ts
 	/user/username/projects/sample1/core/anotherModule.ts
@@ -97,73 +97,73 @@ Project '/user/username/projects/sample1/tests/tsconfig.json' (Configured)
 	index.ts
 	  Part of 'files' list in tsconfig.json
 
------------------------------------------------
-Search path: /user/username/projects/sample1/tests
-For info: /user/username/projects/sample1/tests/tsconfig.json :: No config files found.
-Project '/user/username/projects/sample1/tests/tsconfig.json' (Configured)
-	Files (5)
+Info 27   [16:01:06.000] -----------------------------------------------
+Info 28   [16:01:07.000] Search path: /user/username/projects/sample1/tests
+Info 29   [16:01:08.000] For info: /user/username/projects/sample1/tests/tsconfig.json :: No config files found.
+Info 30   [16:01:09.000] Project '/user/username/projects/sample1/tests/tsconfig.json' (Configured)
+Info 30   [16:01:10.000] 	Files (5)
 
------------------------------------------------
-Open files: 
-	FileName: /user/username/projects/sample1/tests/index.ts ProjectRootPath: undefined
-		Projects: /user/username/projects/sample1/tests/tsconfig.json
-FileWatcher:: Triggered with /user/username/projects/sample1/logic/index.ts 1:: WatchInfo: /user/username/projects/sample1/logic/index.ts 500 undefined WatchType: Closed Script info
-Scheduled: /user/username/projects/sample1/tests/tsconfig.json
-Scheduled: *ensureProjectForOpenFiles*
-Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/sample1/logic/index.ts 1:: WatchInfo: /user/username/projects/sample1/logic/index.ts 500 undefined WatchType: Closed Script info
-Running: /user/username/projects/sample1/tests/tsconfig.json
-Starting updateGraphWorker: Project: /user/username/projects/sample1/tests/tsconfig.json
-Finishing updateGraphWorker: Project: /user/username/projects/sample1/tests/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
-Different program with same set of files
-Running: *ensureProjectForOpenFiles*
-Before ensureProjectForOpenFiles:
-Project '/user/username/projects/sample1/tests/tsconfig.json' (Configured)
-	Files (5)
+Info 30   [16:01:11.000] -----------------------------------------------
+Info 30   [16:01:12.000] Open files: 
+Info 30   [16:01:13.000] 	FileName: /user/username/projects/sample1/tests/index.ts ProjectRootPath: undefined
+Info 30   [16:01:14.000] 		Projects: /user/username/projects/sample1/tests/tsconfig.json
+Info 30   [16:01:17.000] FileWatcher:: Triggered with /user/username/projects/sample1/logic/index.ts 1:: WatchInfo: /user/username/projects/sample1/logic/index.ts 500 undefined WatchType: Closed Script info
+Info 31   [16:01:18.000] Scheduled: /user/username/projects/sample1/tests/tsconfig.json
+Info 32   [16:01:19.000] Scheduled: *ensureProjectForOpenFiles*
+Info 33   [16:01:20.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/sample1/logic/index.ts 1:: WatchInfo: /user/username/projects/sample1/logic/index.ts 500 undefined WatchType: Closed Script info
+Info 34   [16:01:21.000] Running: /user/username/projects/sample1/tests/tsconfig.json
+Info 35   [16:01:22.000] Starting updateGraphWorker: Project: /user/username/projects/sample1/tests/tsconfig.json
+Info 36   [16:01:23.000] Finishing updateGraphWorker: Project: /user/username/projects/sample1/tests/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info 37   [16:01:24.000] Different program with same set of files
+Info 38   [16:01:25.000] Running: *ensureProjectForOpenFiles*
+Info 39   [16:01:26.000] Before ensureProjectForOpenFiles:
+Info 40   [16:01:27.000] Project '/user/username/projects/sample1/tests/tsconfig.json' (Configured)
+Info 40   [16:01:28.000] 	Files (5)
 
------------------------------------------------
-Open files: 
-	FileName: /user/username/projects/sample1/tests/index.ts ProjectRootPath: undefined
-		Projects: /user/username/projects/sample1/tests/tsconfig.json
-After ensureProjectForOpenFiles:
-Project '/user/username/projects/sample1/tests/tsconfig.json' (Configured)
-	Files (5)
+Info 40   [16:01:29.000] -----------------------------------------------
+Info 40   [16:01:30.000] Open files: 
+Info 40   [16:01:31.000] 	FileName: /user/username/projects/sample1/tests/index.ts ProjectRootPath: undefined
+Info 40   [16:01:32.000] 		Projects: /user/username/projects/sample1/tests/tsconfig.json
+Info 40   [16:01:33.000] After ensureProjectForOpenFiles:
+Info 41   [16:01:34.000] Project '/user/username/projects/sample1/tests/tsconfig.json' (Configured)
+Info 41   [16:01:35.000] 	Files (5)
 
------------------------------------------------
-Open files: 
-	FileName: /user/username/projects/sample1/tests/index.ts ProjectRootPath: undefined
-		Projects: /user/username/projects/sample1/tests/tsconfig.json
-FileWatcher:: Triggered with /user/username/projects/sample1/logic/index.ts 1:: WatchInfo: /user/username/projects/sample1/logic/index.ts 500 undefined WatchType: Closed Script info
-Scheduled: /user/username/projects/sample1/tests/tsconfig.json
-Scheduled: *ensureProjectForOpenFiles*
-Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/sample1/logic/index.ts 1:: WatchInfo: /user/username/projects/sample1/logic/index.ts 500 undefined WatchType: Closed Script info
-Running: /user/username/projects/sample1/tests/tsconfig.json
-Starting updateGraphWorker: Project: /user/username/projects/sample1/tests/tsconfig.json
-Finishing updateGraphWorker: Project: /user/username/projects/sample1/tests/tsconfig.json Version: 3 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
-Different program with same set of files
-Running: *ensureProjectForOpenFiles*
-Before ensureProjectForOpenFiles:
-Project '/user/username/projects/sample1/tests/tsconfig.json' (Configured)
-	Files (5)
+Info 41   [16:01:36.000] -----------------------------------------------
+Info 41   [16:01:37.000] Open files: 
+Info 41   [16:01:38.000] 	FileName: /user/username/projects/sample1/tests/index.ts ProjectRootPath: undefined
+Info 41   [16:01:39.000] 		Projects: /user/username/projects/sample1/tests/tsconfig.json
+Info 41   [16:01:42.000] FileWatcher:: Triggered with /user/username/projects/sample1/logic/index.ts 1:: WatchInfo: /user/username/projects/sample1/logic/index.ts 500 undefined WatchType: Closed Script info
+Info 42   [16:01:43.000] Scheduled: /user/username/projects/sample1/tests/tsconfig.json
+Info 43   [16:01:44.000] Scheduled: *ensureProjectForOpenFiles*
+Info 44   [16:01:45.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/sample1/logic/index.ts 1:: WatchInfo: /user/username/projects/sample1/logic/index.ts 500 undefined WatchType: Closed Script info
+Info 45   [16:01:46.000] Running: /user/username/projects/sample1/tests/tsconfig.json
+Info 46   [16:01:47.000] Starting updateGraphWorker: Project: /user/username/projects/sample1/tests/tsconfig.json
+Info 47   [16:01:48.000] Finishing updateGraphWorker: Project: /user/username/projects/sample1/tests/tsconfig.json Version: 3 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info 48   [16:01:49.000] Different program with same set of files
+Info 49   [16:01:50.000] Running: *ensureProjectForOpenFiles*
+Info 50   [16:01:51.000] Before ensureProjectForOpenFiles:
+Info 51   [16:01:52.000] Project '/user/username/projects/sample1/tests/tsconfig.json' (Configured)
+Info 51   [16:01:53.000] 	Files (5)
 
------------------------------------------------
-Open files: 
-	FileName: /user/username/projects/sample1/tests/index.ts ProjectRootPath: undefined
-		Projects: /user/username/projects/sample1/tests/tsconfig.json
-After ensureProjectForOpenFiles:
-Project '/user/username/projects/sample1/tests/tsconfig.json' (Configured)
-	Files (5)
+Info 51   [16:01:54.000] -----------------------------------------------
+Info 51   [16:01:55.000] Open files: 
+Info 51   [16:01:56.000] 	FileName: /user/username/projects/sample1/tests/index.ts ProjectRootPath: undefined
+Info 51   [16:01:57.000] 		Projects: /user/username/projects/sample1/tests/tsconfig.json
+Info 51   [16:01:58.000] After ensureProjectForOpenFiles:
+Info 52   [16:01:59.000] Project '/user/username/projects/sample1/tests/tsconfig.json' (Configured)
+Info 52   [16:02:00.000] 	Files (5)
 
------------------------------------------------
-Open files: 
-	FileName: /user/username/projects/sample1/tests/index.ts ProjectRootPath: undefined
-		Projects: /user/username/projects/sample1/tests/tsconfig.json
-FileWatcher:: Triggered with /user/username/projects/sample1/logic/tsconfig.json 1:: WatchInfo: /user/username/projects/sample1/logic/tsconfig.json 2000 undefined Project: /user/username/projects/sample1/tests/tsconfig.json WatchType: Config file
-Scheduled: /user/username/projects/sample1/tests/tsconfig.json
-Scheduled: *ensureProjectForOpenFiles*
-Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/sample1/logic/tsconfig.json 1:: WatchInfo: /user/username/projects/sample1/logic/tsconfig.json 2000 undefined Project: /user/username/projects/sample1/tests/tsconfig.json WatchType: Config file
-Running: /user/username/projects/sample1/tests/tsconfig.json
-Starting updateGraphWorker: Project: /user/username/projects/sample1/tests/tsconfig.json
-Config: /user/username/projects/sample1/logic/tsconfig.json : {
+Info 52   [16:02:01.000] -----------------------------------------------
+Info 52   [16:02:02.000] Open files: 
+Info 52   [16:02:03.000] 	FileName: /user/username/projects/sample1/tests/index.ts ProjectRootPath: undefined
+Info 52   [16:02:04.000] 		Projects: /user/username/projects/sample1/tests/tsconfig.json
+Info 52   [16:02:08.000] FileWatcher:: Triggered with /user/username/projects/sample1/logic/tsconfig.json 1:: WatchInfo: /user/username/projects/sample1/logic/tsconfig.json 2000 undefined Project: /user/username/projects/sample1/tests/tsconfig.json WatchType: Config file
+Info 53   [16:02:09.000] Scheduled: /user/username/projects/sample1/tests/tsconfig.json
+Info 54   [16:02:10.000] Scheduled: *ensureProjectForOpenFiles*
+Info 55   [16:02:11.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/sample1/logic/tsconfig.json 1:: WatchInfo: /user/username/projects/sample1/logic/tsconfig.json 2000 undefined Project: /user/username/projects/sample1/tests/tsconfig.json WatchType: Config file
+Info 56   [16:02:12.000] Running: /user/username/projects/sample1/tests/tsconfig.json
+Info 57   [16:02:13.000] Starting updateGraphWorker: Project: /user/username/projects/sample1/tests/tsconfig.json
+Info 58   [16:02:14.000] Config: /user/username/projects/sample1/logic/tsconfig.json : {
  "rootNames": [
   "/user/username/projects/sample1/logic/index.ts"
  ],
@@ -180,22 +180,22 @@ Config: /user/username/projects/sample1/logic/tsconfig.json : {
   }
  ]
 }
-Finishing updateGraphWorker: Project: /user/username/projects/sample1/tests/tsconfig.json Version: 4 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Different program with same set of files
-Running: *ensureProjectForOpenFiles*
-Before ensureProjectForOpenFiles:
-Project '/user/username/projects/sample1/tests/tsconfig.json' (Configured)
-	Files (5)
+Info 59   [16:02:15.000] Finishing updateGraphWorker: Project: /user/username/projects/sample1/tests/tsconfig.json Version: 4 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 60   [16:02:16.000] Different program with same set of files
+Info 61   [16:02:17.000] Running: *ensureProjectForOpenFiles*
+Info 62   [16:02:18.000] Before ensureProjectForOpenFiles:
+Info 63   [16:02:19.000] Project '/user/username/projects/sample1/tests/tsconfig.json' (Configured)
+Info 63   [16:02:20.000] 	Files (5)
 
------------------------------------------------
-Open files: 
-	FileName: /user/username/projects/sample1/tests/index.ts ProjectRootPath: undefined
-		Projects: /user/username/projects/sample1/tests/tsconfig.json
-After ensureProjectForOpenFiles:
-Project '/user/username/projects/sample1/tests/tsconfig.json' (Configured)
-	Files (5)
+Info 63   [16:02:21.000] -----------------------------------------------
+Info 63   [16:02:22.000] Open files: 
+Info 63   [16:02:23.000] 	FileName: /user/username/projects/sample1/tests/index.ts ProjectRootPath: undefined
+Info 63   [16:02:24.000] 		Projects: /user/username/projects/sample1/tests/tsconfig.json
+Info 63   [16:02:25.000] After ensureProjectForOpenFiles:
+Info 64   [16:02:26.000] Project '/user/username/projects/sample1/tests/tsconfig.json' (Configured)
+Info 64   [16:02:27.000] 	Files (5)
 
------------------------------------------------
-Open files: 
-	FileName: /user/username/projects/sample1/tests/index.ts ProjectRootPath: undefined
-		Projects: /user/username/projects/sample1/tests/tsconfig.json
+Info 64   [16:02:28.000] -----------------------------------------------
+Info 64   [16:02:29.000] Open files: 
+Info 64   [16:02:30.000] 	FileName: /user/username/projects/sample1/tests/index.ts ProjectRootPath: undefined
+Info 64   [16:02:31.000] 		Projects: /user/username/projects/sample1/tests/tsconfig.json

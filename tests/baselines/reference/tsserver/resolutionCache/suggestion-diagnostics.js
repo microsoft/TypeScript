@@ -1,35 +1,35 @@
-Provided types map file "/a/lib/typesMap.json" doesn't exist
-request:{"command":"open","arguments":{"file":"/a.js","fileContent":"function f(p) {}"},"seq":1,"type":"request"}
-Search path: /
-For info: /a.js :: No config files found.
-Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
-Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
-Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Project '/dev/null/inferredProject1*' (Inferred)
-	Files (1)
+Info 0    [16:00:05.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info 1    [16:00:06.000] request:{"command":"open","arguments":{"file":"/a.js","fileContent":"function f(p) {}"},"seq":1,"type":"request"}
+Info 2    [16:00:07.000] Search path: /
+Info 3    [16:00:08.000] For info: /a.js :: No config files found.
+Info 4    [16:00:09.000] Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
+Info 5    [16:00:10.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
+Info 6    [16:00:11.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
+Info 7    [16:00:12.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 8    [16:00:13.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 9    [16:00:14.000] 	Files (1)
 	/a.js
 
 
 	a.js
 	  Root file specified for compilation
 
------------------------------------------------
-Project '/dev/null/inferredProject1*' (Inferred)
-	Files (1)
+Info 10   [16:00:15.000] -----------------------------------------------
+Info 11   [16:00:16.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 11   [16:00:17.000] 	Files (1)
 
------------------------------------------------
-Open files: 
-	FileName: /a.js ProjectRootPath: undefined
-		Projects: /dev/null/inferredProject1*
-response:{"responseRequired":false}
-request:{"command":"geterr","arguments":{"delay":0,"files":["/a.js"]},"seq":2,"type":"request"}
-response:{"responseRequired":false}
-event:
+Info 11   [16:00:18.000] -----------------------------------------------
+Info 11   [16:00:19.000] Open files: 
+Info 11   [16:00:20.000] 	FileName: /a.js ProjectRootPath: undefined
+Info 11   [16:00:21.000] 		Projects: /dev/null/inferredProject1*
+Info 11   [16:00:22.000] response:{"responseRequired":false}
+Info 12   [16:00:23.000] request:{"command":"geterr","arguments":{"delay":0,"files":["/a.js"]},"seq":2,"type":"request"}
+Info 13   [16:00:24.000] response:{"responseRequired":false}
+Info 14   [16:00:25.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/a.js","diagnostics":[]}}
-event:
+Info 15   [16:00:26.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/a.js","diagnostics":[]}}
-event:
+Info 16   [16:00:27.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/a.js","diagnostics":[{"start":{"line":1,"offset":12},"end":{"line":1,"offset":13},"text":"'p' is declared but its value is never read.","code":6133,"category":"suggestion","reportsUnnecessary":true}]}}
-event:
+Info 17   [16:00:28.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":2}}

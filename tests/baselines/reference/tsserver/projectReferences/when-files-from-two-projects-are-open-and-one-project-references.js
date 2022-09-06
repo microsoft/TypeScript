@@ -1,10 +1,10 @@
-Provided types map file "/a/lib/typesMap.json" doesn't exist
-request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/main/src/file1.ts"}}
-Search path: /user/username/projects/myproject/main/src
-For info: /user/username/projects/myproject/main/src/file1.ts :: Config file name: /user/username/projects/myproject/main/tsconfig.json
-Creating configuration project /user/username/projects/myproject/main/tsconfig.json
-FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/main/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Config file
-Config: /user/username/projects/myproject/main/tsconfig.json : {
+Info 0    [16:01:53.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info 1    [16:01:54.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/main/src/file1.ts"}}
+Info 2    [16:01:55.000] Search path: /user/username/projects/myproject/main/src
+Info 3    [16:01:56.000] For info: /user/username/projects/myproject/main/src/file1.ts :: Config file name: /user/username/projects/myproject/main/tsconfig.json
+Info 4    [16:01:57.000] Creating configuration project /user/username/projects/myproject/main/tsconfig.json
+Info 5    [16:01:58.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/main/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Config file
+Info 6    [16:01:59.000] Config: /user/username/projects/myproject/main/tsconfig.json : {
  "rootNames": [
   "/user/username/projects/myproject/main/src/file1.ts"
  ],
@@ -43,11 +43,11 @@ Config: /user/username/projects/myproject/main/tsconfig.json : {
   }
  ]
 }
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/main 1 undefined Config: /user/username/projects/myproject/main/tsconfig.json WatchType: Wild card directory
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/main 1 undefined Config: /user/username/projects/myproject/main/tsconfig.json WatchType: Wild card directory
-Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
-Starting updateGraphWorker: Project: /user/username/projects/myproject/main/tsconfig.json
-Config: /user/username/projects/myproject/core/tsconfig.json : {
+Info 7    [16:02:00.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/main 1 undefined Config: /user/username/projects/myproject/main/tsconfig.json WatchType: Wild card directory
+Info 8    [16:02:01.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/main 1 undefined Config: /user/username/projects/myproject/main/tsconfig.json WatchType: Wild card directory
+Info 9    [16:02:02.000] Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
+Info 10   [16:02:03.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/main/tsconfig.json
+Info 11   [16:02:04.000] Config: /user/username/projects/myproject/core/tsconfig.json : {
  "rootNames": [
   "/user/username/projects/myproject/core/src/file1.ts"
  ],
@@ -56,10 +56,10 @@ Config: /user/username/projects/myproject/core/tsconfig.json : {
   "configFilePath": "/user/username/projects/myproject/core/tsconfig.json"
  }
 }
-FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/core/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Config file
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/core 1 undefined Config: /user/username/projects/myproject/core/tsconfig.json WatchType: Wild card directory
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/core 1 undefined Config: /user/username/projects/myproject/core/tsconfig.json WatchType: Wild card directory
-Config: /user/username/projects/myproject/indirect/tsconfig.json : {
+Info 12   [16:02:05.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/core/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Config file
+Info 13   [16:02:06.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/core 1 undefined Config: /user/username/projects/myproject/core/tsconfig.json WatchType: Wild card directory
+Info 14   [16:02:07.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/core 1 undefined Config: /user/username/projects/myproject/core/tsconfig.json WatchType: Wild card directory
+Info 15   [16:02:08.000] Config: /user/username/projects/myproject/indirect/tsconfig.json : {
  "rootNames": [
   "/user/username/projects/myproject/indirect/src/file1.ts"
  ],
@@ -74,10 +74,10 @@ Config: /user/username/projects/myproject/indirect/tsconfig.json : {
   }
  ]
 }
-FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/indirect/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Config file
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/indirect 1 undefined Config: /user/username/projects/myproject/indirect/tsconfig.json WatchType: Wild card directory
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/indirect 1 undefined Config: /user/username/projects/myproject/indirect/tsconfig.json WatchType: Wild card directory
-Config: /user/username/projects/myproject/coreRef1/tsconfig.json : {
+Info 16   [16:02:09.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/indirect/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Config file
+Info 17   [16:02:10.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/indirect 1 undefined Config: /user/username/projects/myproject/indirect/tsconfig.json WatchType: Wild card directory
+Info 18   [16:02:11.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/indirect 1 undefined Config: /user/username/projects/myproject/indirect/tsconfig.json WatchType: Wild card directory
+Info 19   [16:02:12.000] Config: /user/username/projects/myproject/coreRef1/tsconfig.json : {
  "rootNames": [
   "/user/username/projects/myproject/coreRef1/src/file1.ts"
  ],
@@ -92,10 +92,10 @@ Config: /user/username/projects/myproject/coreRef1/tsconfig.json : {
   }
  ]
 }
-FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/coreRef1/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Config file
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/coreRef1 1 undefined Config: /user/username/projects/myproject/coreRef1/tsconfig.json WatchType: Wild card directory
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/coreRef1 1 undefined Config: /user/username/projects/myproject/coreRef1/tsconfig.json WatchType: Wild card directory
-Config: /user/username/projects/myproject/noCoreRef1/tsconfig.json : {
+Info 20   [16:02:13.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/coreRef1/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Config file
+Info 21   [16:02:14.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/coreRef1 1 undefined Config: /user/username/projects/myproject/coreRef1/tsconfig.json WatchType: Wild card directory
+Info 22   [16:02:15.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/coreRef1 1 undefined Config: /user/username/projects/myproject/coreRef1/tsconfig.json WatchType: Wild card directory
+Info 23   [16:02:16.000] Config: /user/username/projects/myproject/noCoreRef1/tsconfig.json : {
  "rootNames": [
   "/user/username/projects/myproject/noCoreRef1/src/file1.ts"
  ],
@@ -104,10 +104,10 @@ Config: /user/username/projects/myproject/noCoreRef1/tsconfig.json : {
   "configFilePath": "/user/username/projects/myproject/noCoreRef1/tsconfig.json"
  }
 }
-FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/noCoreRef1/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Config file
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/noCoreRef1 1 undefined Config: /user/username/projects/myproject/noCoreRef1/tsconfig.json WatchType: Wild card directory
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/noCoreRef1 1 undefined Config: /user/username/projects/myproject/noCoreRef1/tsconfig.json WatchType: Wild card directory
-Config: /user/username/projects/myproject/indirectDisabledChildLoad1/tsconfig.json : {
+Info 24   [16:02:17.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/noCoreRef1/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Config file
+Info 25   [16:02:18.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/noCoreRef1 1 undefined Config: /user/username/projects/myproject/noCoreRef1/tsconfig.json WatchType: Wild card directory
+Info 26   [16:02:19.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/noCoreRef1 1 undefined Config: /user/username/projects/myproject/noCoreRef1/tsconfig.json WatchType: Wild card directory
+Info 27   [16:02:20.000] Config: /user/username/projects/myproject/indirectDisabledChildLoad1/tsconfig.json : {
  "rootNames": [
   "/user/username/projects/myproject/indirectDisabledChildLoad1/src/file1.ts"
  ],
@@ -123,10 +123,10 @@ Config: /user/username/projects/myproject/indirectDisabledChildLoad1/tsconfig.js
   }
  ]
 }
-FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/indirectDisabledChildLoad1/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Config file
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/indirectDisabledChildLoad1 1 undefined Config: /user/username/projects/myproject/indirectDisabledChildLoad1/tsconfig.json WatchType: Wild card directory
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/indirectDisabledChildLoad1 1 undefined Config: /user/username/projects/myproject/indirectDisabledChildLoad1/tsconfig.json WatchType: Wild card directory
-Config: /user/username/projects/myproject/coreRef2/tsconfig.json : {
+Info 28   [16:02:21.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/indirectDisabledChildLoad1/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Config file
+Info 29   [16:02:22.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/indirectDisabledChildLoad1 1 undefined Config: /user/username/projects/myproject/indirectDisabledChildLoad1/tsconfig.json WatchType: Wild card directory
+Info 30   [16:02:23.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/indirectDisabledChildLoad1 1 undefined Config: /user/username/projects/myproject/indirectDisabledChildLoad1/tsconfig.json WatchType: Wild card directory
+Info 31   [16:02:24.000] Config: /user/username/projects/myproject/coreRef2/tsconfig.json : {
  "rootNames": [
   "/user/username/projects/myproject/coreRef2/src/file1.ts"
  ],
@@ -141,10 +141,10 @@ Config: /user/username/projects/myproject/coreRef2/tsconfig.json : {
   }
  ]
 }
-FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/coreRef2/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Config file
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/coreRef2 1 undefined Config: /user/username/projects/myproject/coreRef2/tsconfig.json WatchType: Wild card directory
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/coreRef2 1 undefined Config: /user/username/projects/myproject/coreRef2/tsconfig.json WatchType: Wild card directory
-Config: /user/username/projects/myproject/indirectDisabledChildLoad2/tsconfig.json : {
+Info 32   [16:02:25.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/coreRef2/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Config file
+Info 33   [16:02:26.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/coreRef2 1 undefined Config: /user/username/projects/myproject/coreRef2/tsconfig.json WatchType: Wild card directory
+Info 34   [16:02:27.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/coreRef2 1 undefined Config: /user/username/projects/myproject/coreRef2/tsconfig.json WatchType: Wild card directory
+Info 35   [16:02:28.000] Config: /user/username/projects/myproject/indirectDisabledChildLoad2/tsconfig.json : {
  "rootNames": [
   "/user/username/projects/myproject/indirectDisabledChildLoad2/src/file1.ts"
  ],
@@ -160,10 +160,10 @@ Config: /user/username/projects/myproject/indirectDisabledChildLoad2/tsconfig.js
   }
  ]
 }
-FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/indirectDisabledChildLoad2/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Config file
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/indirectDisabledChildLoad2 1 undefined Config: /user/username/projects/myproject/indirectDisabledChildLoad2/tsconfig.json WatchType: Wild card directory
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/indirectDisabledChildLoad2 1 undefined Config: /user/username/projects/myproject/indirectDisabledChildLoad2/tsconfig.json WatchType: Wild card directory
-Config: /user/username/projects/myproject/coreRef3/tsconfig.json : {
+Info 36   [16:02:29.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/indirectDisabledChildLoad2/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Config file
+Info 37   [16:02:30.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/indirectDisabledChildLoad2 1 undefined Config: /user/username/projects/myproject/indirectDisabledChildLoad2/tsconfig.json WatchType: Wild card directory
+Info 38   [16:02:31.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/indirectDisabledChildLoad2 1 undefined Config: /user/username/projects/myproject/indirectDisabledChildLoad2/tsconfig.json WatchType: Wild card directory
+Info 39   [16:02:32.000] Config: /user/username/projects/myproject/coreRef3/tsconfig.json : {
  "rootNames": [
   "/user/username/projects/myproject/coreRef3/src/file1.ts"
  ],
@@ -178,10 +178,10 @@ Config: /user/username/projects/myproject/coreRef3/tsconfig.json : {
   }
  ]
 }
-FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/coreRef3/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Config file
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/coreRef3 1 undefined Config: /user/username/projects/myproject/coreRef3/tsconfig.json WatchType: Wild card directory
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/coreRef3 1 undefined Config: /user/username/projects/myproject/coreRef3/tsconfig.json WatchType: Wild card directory
-Config: /user/username/projects/myproject/refToCoreRef3/tsconfig.json : {
+Info 40   [16:02:33.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/coreRef3/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Config file
+Info 41   [16:02:34.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/coreRef3 1 undefined Config: /user/username/projects/myproject/coreRef3/tsconfig.json WatchType: Wild card directory
+Info 42   [16:02:35.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/coreRef3 1 undefined Config: /user/username/projects/myproject/coreRef3/tsconfig.json WatchType: Wild card directory
+Info 43   [16:02:36.000] Config: /user/username/projects/myproject/refToCoreRef3/tsconfig.json : {
  "rootNames": [
   "/user/username/projects/myproject/refToCoreRef3/src/file1.ts"
  ],
@@ -196,10 +196,10 @@ Config: /user/username/projects/myproject/refToCoreRef3/tsconfig.json : {
   }
  ]
 }
-FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/refToCoreRef3/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Config file
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/refToCoreRef3 1 undefined Config: /user/username/projects/myproject/refToCoreRef3/tsconfig.json WatchType: Wild card directory
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/refToCoreRef3 1 undefined Config: /user/username/projects/myproject/refToCoreRef3/tsconfig.json WatchType: Wild card directory
-Config: /user/username/projects/myproject/indirectNoCoreRef/tsconfig.json : {
+Info 44   [16:02:37.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/refToCoreRef3/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Config file
+Info 45   [16:02:38.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/refToCoreRef3 1 undefined Config: /user/username/projects/myproject/refToCoreRef3/tsconfig.json WatchType: Wild card directory
+Info 46   [16:02:39.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/refToCoreRef3 1 undefined Config: /user/username/projects/myproject/refToCoreRef3/tsconfig.json WatchType: Wild card directory
+Info 47   [16:02:40.000] Config: /user/username/projects/myproject/indirectNoCoreRef/tsconfig.json : {
  "rootNames": [
   "/user/username/projects/myproject/indirectNoCoreRef/src/file1.ts"
  ],
@@ -214,10 +214,10 @@ Config: /user/username/projects/myproject/indirectNoCoreRef/tsconfig.json : {
   }
  ]
 }
-FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/indirectNoCoreRef/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Config file
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/indirectNoCoreRef 1 undefined Config: /user/username/projects/myproject/indirectNoCoreRef/tsconfig.json WatchType: Wild card directory
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/indirectNoCoreRef 1 undefined Config: /user/username/projects/myproject/indirectNoCoreRef/tsconfig.json WatchType: Wild card directory
-Config: /user/username/projects/myproject/noCoreRef2/tsconfig.json : {
+Info 48   [16:02:41.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/indirectNoCoreRef/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Config file
+Info 49   [16:02:42.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/indirectNoCoreRef 1 undefined Config: /user/username/projects/myproject/indirectNoCoreRef/tsconfig.json WatchType: Wild card directory
+Info 50   [16:02:43.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/indirectNoCoreRef 1 undefined Config: /user/username/projects/myproject/indirectNoCoreRef/tsconfig.json WatchType: Wild card directory
+Info 51   [16:02:44.000] Config: /user/username/projects/myproject/noCoreRef2/tsconfig.json : {
  "rootNames": [
   "/user/username/projects/myproject/noCoreRef2/src/file1.ts"
  ],
@@ -226,17 +226,17 @@ Config: /user/username/projects/myproject/noCoreRef2/tsconfig.json : {
   "configFilePath": "/user/username/projects/myproject/noCoreRef2/tsconfig.json"
  }
 }
-FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/noCoreRef2/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Config file
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/noCoreRef2 1 undefined Config: /user/username/projects/myproject/noCoreRef2/tsconfig.json WatchType: Wild card directory
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/noCoreRef2 1 undefined Config: /user/username/projects/myproject/noCoreRef2/tsconfig.json WatchType: Wild card directory
-FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/main/node_modules/@types 1 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/main/node_modules/@types 1 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Type roots
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Type roots
-Finishing updateGraphWorker: Project: /user/username/projects/myproject/main/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Project '/user/username/projects/myproject/main/tsconfig.json' (Configured)
-	Files (2)
+Info 52   [16:02:45.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/noCoreRef2/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Config file
+Info 53   [16:02:46.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/noCoreRef2 1 undefined Config: /user/username/projects/myproject/noCoreRef2/tsconfig.json WatchType: Wild card directory
+Info 54   [16:02:47.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/noCoreRef2 1 undefined Config: /user/username/projects/myproject/noCoreRef2/tsconfig.json WatchType: Wild card directory
+Info 55   [16:02:48.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info 56   [16:02:49.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/main/node_modules/@types 1 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Type roots
+Info 57   [16:02:50.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/main/node_modules/@types 1 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Type roots
+Info 58   [16:02:51.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Type roots
+Info 59   [16:02:52.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Type roots
+Info 60   [16:02:53.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/main/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 61   [16:02:54.000] Project '/user/username/projects/myproject/main/tsconfig.json' (Configured)
+Info 62   [16:02:55.000] 	Files (2)
 	/a/lib/lib.d.ts
 	/user/username/projects/myproject/main/src/file1.ts
 
@@ -246,30 +246,30 @@ Project '/user/username/projects/myproject/main/tsconfig.json' (Configured)
 	src/file1.ts
 	  Matched by default include pattern '**/*'
 
------------------------------------------------
-Search path: /user/username/projects/myproject/main
-For info: /user/username/projects/myproject/main/tsconfig.json :: No config files found.
-Project '/user/username/projects/myproject/main/tsconfig.json' (Configured)
-	Files (2)
+Info 63   [16:02:56.000] -----------------------------------------------
+Info 64   [16:02:57.000] Search path: /user/username/projects/myproject/main
+Info 65   [16:02:58.000] For info: /user/username/projects/myproject/main/tsconfig.json :: No config files found.
+Info 66   [16:02:59.000] Project '/user/username/projects/myproject/main/tsconfig.json' (Configured)
+Info 66   [16:03:00.000] 	Files (2)
 
------------------------------------------------
-Open files: 
-	FileName: /user/username/projects/myproject/main/src/file1.ts ProjectRootPath: undefined
-		Projects: /user/username/projects/myproject/main/tsconfig.json
-response:{"responseRequired":false}
-request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/core/src/file1.ts"}}
-Search path: /user/username/projects/myproject/core/src
-For info: /user/username/projects/myproject/core/src/file1.ts :: Config file name: /user/username/projects/myproject/core/tsconfig.json
-Creating configuration project /user/username/projects/myproject/core/tsconfig.json
-Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
-Starting updateGraphWorker: Project: /user/username/projects/myproject/core/tsconfig.json
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/core/node_modules/@types 1 undefined Project: /user/username/projects/myproject/core/tsconfig.json WatchType: Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/core/node_modules/@types 1 undefined Project: /user/username/projects/myproject/core/tsconfig.json WatchType: Type roots
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/core/tsconfig.json WatchType: Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/core/tsconfig.json WatchType: Type roots
-Finishing updateGraphWorker: Project: /user/username/projects/myproject/core/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Project '/user/username/projects/myproject/core/tsconfig.json' (Configured)
-	Files (2)
+Info 66   [16:03:01.000] -----------------------------------------------
+Info 66   [16:03:02.000] Open files: 
+Info 66   [16:03:03.000] 	FileName: /user/username/projects/myproject/main/src/file1.ts ProjectRootPath: undefined
+Info 66   [16:03:04.000] 		Projects: /user/username/projects/myproject/main/tsconfig.json
+Info 66   [16:03:05.000] response:{"responseRequired":false}
+Info 67   [16:03:06.000] request:{"seq":0,"type":"request","command":"open","arguments":{"file":"/user/username/projects/myproject/core/src/file1.ts"}}
+Info 68   [16:03:07.000] Search path: /user/username/projects/myproject/core/src
+Info 69   [16:03:08.000] For info: /user/username/projects/myproject/core/src/file1.ts :: Config file name: /user/username/projects/myproject/core/tsconfig.json
+Info 70   [16:03:09.000] Creating configuration project /user/username/projects/myproject/core/tsconfig.json
+Info 71   [16:03:10.000] Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
+Info 72   [16:03:11.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/core/tsconfig.json
+Info 73   [16:03:12.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/core/node_modules/@types 1 undefined Project: /user/username/projects/myproject/core/tsconfig.json WatchType: Type roots
+Info 74   [16:03:13.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/core/node_modules/@types 1 undefined Project: /user/username/projects/myproject/core/tsconfig.json WatchType: Type roots
+Info 75   [16:03:14.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/core/tsconfig.json WatchType: Type roots
+Info 76   [16:03:15.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/core/tsconfig.json WatchType: Type roots
+Info 77   [16:03:16.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/core/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 78   [16:03:17.000] Project '/user/username/projects/myproject/core/tsconfig.json' (Configured)
+Info 79   [16:03:18.000] 	Files (2)
 	/a/lib/lib.d.ts
 	/user/username/projects/myproject/core/src/file1.ts
 
@@ -279,36 +279,36 @@ Project '/user/username/projects/myproject/core/tsconfig.json' (Configured)
 	src/file1.ts
 	  Matched by default include pattern '**/*'
 
------------------------------------------------
-Search path: /user/username/projects/myproject/core
-For info: /user/username/projects/myproject/core/tsconfig.json :: No config files found.
-Project '/user/username/projects/myproject/main/tsconfig.json' (Configured)
-	Files (2)
+Info 80   [16:03:19.000] -----------------------------------------------
+Info 81   [16:03:20.000] Search path: /user/username/projects/myproject/core
+Info 82   [16:03:21.000] For info: /user/username/projects/myproject/core/tsconfig.json :: No config files found.
+Info 83   [16:03:22.000] Project '/user/username/projects/myproject/main/tsconfig.json' (Configured)
+Info 83   [16:03:23.000] 	Files (2)
 
------------------------------------------------
-Project '/user/username/projects/myproject/core/tsconfig.json' (Configured)
-	Files (2)
+Info 83   [16:03:24.000] -----------------------------------------------
+Info 83   [16:03:25.000] Project '/user/username/projects/myproject/core/tsconfig.json' (Configured)
+Info 83   [16:03:26.000] 	Files (2)
 
------------------------------------------------
-Open files: 
-	FileName: /user/username/projects/myproject/main/src/file1.ts ProjectRootPath: undefined
-		Projects: /user/username/projects/myproject/main/tsconfig.json
-	FileName: /user/username/projects/myproject/core/src/file1.ts ProjectRootPath: undefined
-		Projects: /user/username/projects/myproject/core/tsconfig.json
-response:{"responseRequired":false}
-request:{"command":"references","arguments":{"file":"/user/username/projects/myproject/core/src/file1.ts","line":1,"offset":14},"seq":1,"type":"request"}
-Finding references to /user/username/projects/myproject/core/src/file1.ts position 13 in project /user/username/projects/myproject/core/tsconfig.json
-Creating configuration project /user/username/projects/myproject/indirect/tsconfig.json
-Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
-FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/indirect/src/file1.ts 500 undefined WatchType: Closed Script info
-Starting updateGraphWorker: Project: /user/username/projects/myproject/indirect/tsconfig.json
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/indirect/node_modules/@types 1 undefined Project: /user/username/projects/myproject/indirect/tsconfig.json WatchType: Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/indirect/node_modules/@types 1 undefined Project: /user/username/projects/myproject/indirect/tsconfig.json WatchType: Type roots
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/indirect/tsconfig.json WatchType: Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/indirect/tsconfig.json WatchType: Type roots
-Finishing updateGraphWorker: Project: /user/username/projects/myproject/indirect/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Project '/user/username/projects/myproject/indirect/tsconfig.json' (Configured)
-	Files (2)
+Info 83   [16:03:27.000] -----------------------------------------------
+Info 83   [16:03:28.000] Open files: 
+Info 83   [16:03:29.000] 	FileName: /user/username/projects/myproject/main/src/file1.ts ProjectRootPath: undefined
+Info 83   [16:03:30.000] 		Projects: /user/username/projects/myproject/main/tsconfig.json
+Info 83   [16:03:31.000] 	FileName: /user/username/projects/myproject/core/src/file1.ts ProjectRootPath: undefined
+Info 83   [16:03:32.000] 		Projects: /user/username/projects/myproject/core/tsconfig.json
+Info 83   [16:03:33.000] response:{"responseRequired":false}
+Info 84   [16:03:34.000] request:{"command":"references","arguments":{"file":"/user/username/projects/myproject/core/src/file1.ts","line":1,"offset":14},"seq":1,"type":"request"}
+Info 85   [16:03:35.000] Finding references to /user/username/projects/myproject/core/src/file1.ts position 13 in project /user/username/projects/myproject/core/tsconfig.json
+Info 86   [16:03:36.000] Creating configuration project /user/username/projects/myproject/indirect/tsconfig.json
+Info 87   [16:03:37.000] Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
+Info 88   [16:03:38.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/indirect/src/file1.ts 500 undefined WatchType: Closed Script info
+Info 89   [16:03:39.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/indirect/tsconfig.json
+Info 90   [16:03:40.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/indirect/node_modules/@types 1 undefined Project: /user/username/projects/myproject/indirect/tsconfig.json WatchType: Type roots
+Info 91   [16:03:41.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/indirect/node_modules/@types 1 undefined Project: /user/username/projects/myproject/indirect/tsconfig.json WatchType: Type roots
+Info 92   [16:03:42.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/indirect/tsconfig.json WatchType: Type roots
+Info 93   [16:03:43.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/indirect/tsconfig.json WatchType: Type roots
+Info 94   [16:03:44.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/indirect/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 95   [16:03:45.000] Project '/user/username/projects/myproject/indirect/tsconfig.json' (Configured)
+Info 96   [16:03:46.000] 	Files (2)
 	/a/lib/lib.d.ts
 	/user/username/projects/myproject/indirect/src/file1.ts
 
@@ -318,18 +318,18 @@ Project '/user/username/projects/myproject/indirect/tsconfig.json' (Configured)
 	src/file1.ts
 	  Matched by default include pattern '**/*'
 
------------------------------------------------
-Creating configuration project /user/username/projects/myproject/coreRef1/tsconfig.json
-Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
-FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/coreRef1/src/file1.ts 500 undefined WatchType: Closed Script info
-Starting updateGraphWorker: Project: /user/username/projects/myproject/coreRef1/tsconfig.json
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/coreRef1/node_modules/@types 1 undefined Project: /user/username/projects/myproject/coreRef1/tsconfig.json WatchType: Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/coreRef1/node_modules/@types 1 undefined Project: /user/username/projects/myproject/coreRef1/tsconfig.json WatchType: Type roots
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/coreRef1/tsconfig.json WatchType: Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/coreRef1/tsconfig.json WatchType: Type roots
-Finishing updateGraphWorker: Project: /user/username/projects/myproject/coreRef1/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Project '/user/username/projects/myproject/coreRef1/tsconfig.json' (Configured)
-	Files (2)
+Info 97   [16:03:47.000] -----------------------------------------------
+Info 98   [16:03:48.000] Creating configuration project /user/username/projects/myproject/coreRef1/tsconfig.json
+Info 99   [16:03:49.000] Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
+Info 100  [16:03:50.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/coreRef1/src/file1.ts 500 undefined WatchType: Closed Script info
+Info 101  [16:03:51.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/coreRef1/tsconfig.json
+Info 102  [16:03:52.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/coreRef1/node_modules/@types 1 undefined Project: /user/username/projects/myproject/coreRef1/tsconfig.json WatchType: Type roots
+Info 103  [16:03:53.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/coreRef1/node_modules/@types 1 undefined Project: /user/username/projects/myproject/coreRef1/tsconfig.json WatchType: Type roots
+Info 104  [16:03:54.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/coreRef1/tsconfig.json WatchType: Type roots
+Info 105  [16:03:55.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/coreRef1/tsconfig.json WatchType: Type roots
+Info 106  [16:03:56.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/coreRef1/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 107  [16:03:57.000] Project '/user/username/projects/myproject/coreRef1/tsconfig.json' (Configured)
+Info 108  [16:03:58.000] 	Files (2)
 	/a/lib/lib.d.ts
 	/user/username/projects/myproject/coreRef1/src/file1.ts
 
@@ -339,18 +339,18 @@ Project '/user/username/projects/myproject/coreRef1/tsconfig.json' (Configured)
 	src/file1.ts
 	  Matched by default include pattern '**/*'
 
------------------------------------------------
-Creating configuration project /user/username/projects/myproject/indirectDisabledChildLoad1/tsconfig.json
-Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
-FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/indirectDisabledChildLoad1/src/file1.ts 500 undefined WatchType: Closed Script info
-Starting updateGraphWorker: Project: /user/username/projects/myproject/indirectDisabledChildLoad1/tsconfig.json
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/indirectDisabledChildLoad1/node_modules/@types 1 undefined Project: /user/username/projects/myproject/indirectDisabledChildLoad1/tsconfig.json WatchType: Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/indirectDisabledChildLoad1/node_modules/@types 1 undefined Project: /user/username/projects/myproject/indirectDisabledChildLoad1/tsconfig.json WatchType: Type roots
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/indirectDisabledChildLoad1/tsconfig.json WatchType: Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/indirectDisabledChildLoad1/tsconfig.json WatchType: Type roots
-Finishing updateGraphWorker: Project: /user/username/projects/myproject/indirectDisabledChildLoad1/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Project '/user/username/projects/myproject/indirectDisabledChildLoad1/tsconfig.json' (Configured)
-	Files (2)
+Info 109  [16:03:59.000] -----------------------------------------------
+Info 110  [16:04:00.000] Creating configuration project /user/username/projects/myproject/indirectDisabledChildLoad1/tsconfig.json
+Info 111  [16:04:01.000] Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
+Info 112  [16:04:02.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/indirectDisabledChildLoad1/src/file1.ts 500 undefined WatchType: Closed Script info
+Info 113  [16:04:03.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/indirectDisabledChildLoad1/tsconfig.json
+Info 114  [16:04:04.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/indirectDisabledChildLoad1/node_modules/@types 1 undefined Project: /user/username/projects/myproject/indirectDisabledChildLoad1/tsconfig.json WatchType: Type roots
+Info 115  [16:04:05.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/indirectDisabledChildLoad1/node_modules/@types 1 undefined Project: /user/username/projects/myproject/indirectDisabledChildLoad1/tsconfig.json WatchType: Type roots
+Info 116  [16:04:06.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/indirectDisabledChildLoad1/tsconfig.json WatchType: Type roots
+Info 117  [16:04:07.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/indirectDisabledChildLoad1/tsconfig.json WatchType: Type roots
+Info 118  [16:04:08.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/indirectDisabledChildLoad1/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 119  [16:04:09.000] Project '/user/username/projects/myproject/indirectDisabledChildLoad1/tsconfig.json' (Configured)
+Info 120  [16:04:10.000] 	Files (2)
 	/a/lib/lib.d.ts
 	/user/username/projects/myproject/indirectDisabledChildLoad1/src/file1.ts
 
@@ -360,18 +360,18 @@ Project '/user/username/projects/myproject/indirectDisabledChildLoad1/tsconfig.j
 	src/file1.ts
 	  Matched by default include pattern '**/*'
 
------------------------------------------------
-Creating configuration project /user/username/projects/myproject/indirectDisabledChildLoad2/tsconfig.json
-Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
-FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/indirectDisabledChildLoad2/src/file1.ts 500 undefined WatchType: Closed Script info
-Starting updateGraphWorker: Project: /user/username/projects/myproject/indirectDisabledChildLoad2/tsconfig.json
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/indirectDisabledChildLoad2/node_modules/@types 1 undefined Project: /user/username/projects/myproject/indirectDisabledChildLoad2/tsconfig.json WatchType: Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/indirectDisabledChildLoad2/node_modules/@types 1 undefined Project: /user/username/projects/myproject/indirectDisabledChildLoad2/tsconfig.json WatchType: Type roots
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/indirectDisabledChildLoad2/tsconfig.json WatchType: Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/indirectDisabledChildLoad2/tsconfig.json WatchType: Type roots
-Finishing updateGraphWorker: Project: /user/username/projects/myproject/indirectDisabledChildLoad2/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Project '/user/username/projects/myproject/indirectDisabledChildLoad2/tsconfig.json' (Configured)
-	Files (2)
+Info 121  [16:04:11.000] -----------------------------------------------
+Info 122  [16:04:12.000] Creating configuration project /user/username/projects/myproject/indirectDisabledChildLoad2/tsconfig.json
+Info 123  [16:04:13.000] Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
+Info 124  [16:04:14.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/indirectDisabledChildLoad2/src/file1.ts 500 undefined WatchType: Closed Script info
+Info 125  [16:04:15.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/indirectDisabledChildLoad2/tsconfig.json
+Info 126  [16:04:16.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/indirectDisabledChildLoad2/node_modules/@types 1 undefined Project: /user/username/projects/myproject/indirectDisabledChildLoad2/tsconfig.json WatchType: Type roots
+Info 127  [16:04:17.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/indirectDisabledChildLoad2/node_modules/@types 1 undefined Project: /user/username/projects/myproject/indirectDisabledChildLoad2/tsconfig.json WatchType: Type roots
+Info 128  [16:04:18.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/indirectDisabledChildLoad2/tsconfig.json WatchType: Type roots
+Info 129  [16:04:19.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/indirectDisabledChildLoad2/tsconfig.json WatchType: Type roots
+Info 130  [16:04:20.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/indirectDisabledChildLoad2/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 131  [16:04:21.000] Project '/user/username/projects/myproject/indirectDisabledChildLoad2/tsconfig.json' (Configured)
+Info 132  [16:04:22.000] 	Files (2)
 	/a/lib/lib.d.ts
 	/user/username/projects/myproject/indirectDisabledChildLoad2/src/file1.ts
 
@@ -381,18 +381,18 @@ Project '/user/username/projects/myproject/indirectDisabledChildLoad2/tsconfig.j
 	src/file1.ts
 	  Matched by default include pattern '**/*'
 
------------------------------------------------
-Creating configuration project /user/username/projects/myproject/refToCoreRef3/tsconfig.json
-Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
-FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/refToCoreRef3/src/file1.ts 500 undefined WatchType: Closed Script info
-Starting updateGraphWorker: Project: /user/username/projects/myproject/refToCoreRef3/tsconfig.json
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/refToCoreRef3/node_modules/@types 1 undefined Project: /user/username/projects/myproject/refToCoreRef3/tsconfig.json WatchType: Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/refToCoreRef3/node_modules/@types 1 undefined Project: /user/username/projects/myproject/refToCoreRef3/tsconfig.json WatchType: Type roots
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/refToCoreRef3/tsconfig.json WatchType: Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/refToCoreRef3/tsconfig.json WatchType: Type roots
-Finishing updateGraphWorker: Project: /user/username/projects/myproject/refToCoreRef3/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Project '/user/username/projects/myproject/refToCoreRef3/tsconfig.json' (Configured)
-	Files (2)
+Info 133  [16:04:23.000] -----------------------------------------------
+Info 134  [16:04:24.000] Creating configuration project /user/username/projects/myproject/refToCoreRef3/tsconfig.json
+Info 135  [16:04:25.000] Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
+Info 136  [16:04:26.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/refToCoreRef3/src/file1.ts 500 undefined WatchType: Closed Script info
+Info 137  [16:04:27.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/refToCoreRef3/tsconfig.json
+Info 138  [16:04:28.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/refToCoreRef3/node_modules/@types 1 undefined Project: /user/username/projects/myproject/refToCoreRef3/tsconfig.json WatchType: Type roots
+Info 139  [16:04:29.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/refToCoreRef3/node_modules/@types 1 undefined Project: /user/username/projects/myproject/refToCoreRef3/tsconfig.json WatchType: Type roots
+Info 140  [16:04:30.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/refToCoreRef3/tsconfig.json WatchType: Type roots
+Info 141  [16:04:31.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/refToCoreRef3/tsconfig.json WatchType: Type roots
+Info 142  [16:04:32.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/refToCoreRef3/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 143  [16:04:33.000] Project '/user/username/projects/myproject/refToCoreRef3/tsconfig.json' (Configured)
+Info 144  [16:04:34.000] 	Files (2)
 	/a/lib/lib.d.ts
 	/user/username/projects/myproject/refToCoreRef3/src/file1.ts
 
@@ -402,18 +402,18 @@ Project '/user/username/projects/myproject/refToCoreRef3/tsconfig.json' (Configu
 	src/file1.ts
 	  Matched by default include pattern '**/*'
 
------------------------------------------------
-Creating configuration project /user/username/projects/myproject/coreRef3/tsconfig.json
-Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
-FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/coreRef3/src/file1.ts 500 undefined WatchType: Closed Script info
-Starting updateGraphWorker: Project: /user/username/projects/myproject/coreRef3/tsconfig.json
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/coreRef3/node_modules/@types 1 undefined Project: /user/username/projects/myproject/coreRef3/tsconfig.json WatchType: Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/coreRef3/node_modules/@types 1 undefined Project: /user/username/projects/myproject/coreRef3/tsconfig.json WatchType: Type roots
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/coreRef3/tsconfig.json WatchType: Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/coreRef3/tsconfig.json WatchType: Type roots
-Finishing updateGraphWorker: Project: /user/username/projects/myproject/coreRef3/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Project '/user/username/projects/myproject/coreRef3/tsconfig.json' (Configured)
-	Files (2)
+Info 145  [16:04:35.000] -----------------------------------------------
+Info 146  [16:04:36.000] Creating configuration project /user/username/projects/myproject/coreRef3/tsconfig.json
+Info 147  [16:04:37.000] Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
+Info 148  [16:04:38.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/coreRef3/src/file1.ts 500 undefined WatchType: Closed Script info
+Info 149  [16:04:39.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/coreRef3/tsconfig.json
+Info 150  [16:04:40.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/coreRef3/node_modules/@types 1 undefined Project: /user/username/projects/myproject/coreRef3/tsconfig.json WatchType: Type roots
+Info 151  [16:04:41.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/coreRef3/node_modules/@types 1 undefined Project: /user/username/projects/myproject/coreRef3/tsconfig.json WatchType: Type roots
+Info 152  [16:04:42.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/coreRef3/tsconfig.json WatchType: Type roots
+Info 153  [16:04:43.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/coreRef3/tsconfig.json WatchType: Type roots
+Info 154  [16:04:44.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/coreRef3/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 155  [16:04:45.000] Project '/user/username/projects/myproject/coreRef3/tsconfig.json' (Configured)
+Info 156  [16:04:46.000] 	Files (2)
 	/a/lib/lib.d.ts
 	/user/username/projects/myproject/coreRef3/src/file1.ts
 
@@ -423,6 +423,6 @@ Project '/user/username/projects/myproject/coreRef3/tsconfig.json' (Configured)
 	src/file1.ts
 	  Matched by default include pattern '**/*'
 
------------------------------------------------
-FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/core/src/file1.d.ts 2000 undefined Project: /user/username/projects/myproject/core/tsconfig.json WatchType: Missing generated file
-response:{"response":{"refs":[{"file":"/user/username/projects/myproject/core/src/file1.ts","start":{"line":1,"offset":14},"end":{"line":1,"offset":23},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":29},"lineText":"export const coreConst = 10;","isWriteAccess":true,"isDefinition":true}],"symbolName":"coreConst","symbolStartOffset":14,"symbolDisplayString":"const coreConst: 10"},"responseRequired":true}
+Info 157  [16:04:47.000] -----------------------------------------------
+Info 158  [16:04:48.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/core/src/file1.d.ts 2000 undefined Project: /user/username/projects/myproject/core/tsconfig.json WatchType: Missing generated file
+Info 159  [16:04:49.000] response:{"response":{"refs":[{"file":"/user/username/projects/myproject/core/src/file1.ts","start":{"line":1,"offset":14},"end":{"line":1,"offset":23},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":29},"lineText":"export const coreConst = 10;","isWriteAccess":true,"isDefinition":true}],"symbolName":"coreConst","symbolStartOffset":14,"symbolDisplayString":"const coreConst: 10"},"responseRequired":true}
