@@ -22,7 +22,7 @@
         //
         // ESLint in VS Code will lint any opened file (so long as it's not eslintignore'd), so
         // that will work regardless of the below.
-        { "files": ["*.ts"] }
+        { "files": ["*.ts", "*.mts", "*.cts", "*.mjs", "*.cjs"] }
     ],
     "rules": {
         "@typescript-eslint/adjacent-overload-signatures": "error",
