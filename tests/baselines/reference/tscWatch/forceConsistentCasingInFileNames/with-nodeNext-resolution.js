@@ -100,37 +100,37 @@ Shape signatures in builder refreshed for::
 /users/name/projects/web/node_modules/@types/yargs/index.d.ts (used version)
 /users/name/projects/web/src/bin.ts (used version)
 
-WatchedFiles::
-/users/name/projects/web/tsconfig.json:
-  {"fileName":"/Users/name/projects/web/tsconfig.json","pollingInterval":250}
-/users/name/projects/web/src/bin.ts:
-  {"fileName":"/Users/name/projects/web/src/bin.ts","pollingInterval":250}
-/users/name/projects/web/node_modules/@types/yargs/index.d.ts:
-  {"fileName":"/Users/name/projects/web/node_modules/@types/yargs/index.d.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/users/name/projects/web/node_modules/@types/yargs/package.json:
-  {"fileName":"/Users/name/projects/web/node_modules/@types/yargs/package.json","pollingInterval":250}
+PolledWatches::
 /users/name/projects/web/src/package.json:
-  {"fileName":"/Users/name/projects/web/src/package.json","pollingInterval":250}
+  {"pollingInterval":2000}
 /users/name/projects/web/package.json:
-  {"fileName":"/Users/name/projects/web/package.json","pollingInterval":250}
+  {"pollingInterval":2000}
 /users/name/projects/package.json:
-  {"fileName":"/Users/name/projects/package.json","pollingInterval":250}
+  {"pollingInterval":2000}
 
 FsWatches::
+/users/name/projects/web/tsconfig.json:
+  {}
+/users/name/projects/web/src/bin.ts:
+  {}
+/users/name/projects/web/node_modules/@types/yargs/index.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 /users/name/projects/web:
-  {"directoryName":"/Users/name/projects/web"}
+  {}
+/users/name/projects/web/node_modules/@types/yargs/package.json:
+  {}
 
 FsWatchesRecursive::
 /users/name/projects/web/src:
-  {"directoryName":"/users/name/projects/web/src"}
+  {}
 /users/name/projects/web/node_modules:
-  {"directoryName":"/Users/name/projects/web/node_modules"}
+  {}
 /users/name/projects/web/node_modules/@types:
-  {"directoryName":"/Users/name/projects/web/node_modules/@types"}
+  {}
 /users/name/projects/web:
-  {"directoryName":"/users/name/projects/web"}
+  {}
 
 exitCode:: ExitStatus.undefined
 

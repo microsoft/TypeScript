@@ -102,6 +102,10 @@ FileWatcher:: Triggered with /user/username/projects/myproject/decls/FnS.d.ts 0:
 Scheduled: /user/username/projects/myproject/dependency/tsconfig.json
 Scheduled: *ensureProjectForOpenFiles*
 Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/decls/FnS.d.ts 0:: WatchInfo: /user/username/projects/myproject/decls/FnS.d.ts 2000 undefined Project: /user/username/projects/myproject/dependency/tsconfig.json WatchType: Missing generated file
+FileWatcher:: Triggered with /user/username/projects/myproject/decls/FnS.d.ts 0:: WatchInfo: /user/username/projects/myproject/decls/FnS.d.ts 2000 undefined Project: /user/username/projects/myproject/dependency/tsconfig.json WatchType: Missing generated file
+Scheduled: /user/username/projects/myproject/dependency/tsconfig.json, Cancelled earlier one
+Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
+Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/decls/FnS.d.ts 0:: WatchInfo: /user/username/projects/myproject/decls/FnS.d.ts 2000 undefined Project: /user/username/projects/myproject/dependency/tsconfig.json WatchType: Missing generated file
 request:{"command":"rename","arguments":{"file":"/user/username/projects/myproject/dependency/FnS.ts","line":1,"offset":17},"seq":2,"type":"request"}
 Starting updateGraphWorker: Project: /user/username/projects/myproject/dependency/tsconfig.json
 Finishing updateGraphWorker: Project: /user/username/projects/myproject/dependency/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Not Elapsed:: *ms

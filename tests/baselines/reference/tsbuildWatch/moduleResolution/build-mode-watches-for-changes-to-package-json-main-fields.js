@@ -148,29 +148,29 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/packages/pkg2/build/index.d.ts (used version)
 /user/username/projects/myproject/packages/pkg1/index.ts (used version)
 
-WatchedFiles::
-/user/username/projects/myproject/packages/pkg2/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/packages/pkg2/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/packages/pkg2/const.ts:
-  {"fileName":"/user/username/projects/myproject/packages/pkg2/const.ts","pollingInterval":250}
-/user/username/projects/myproject/packages/pkg2/index.ts:
-  {"fileName":"/user/username/projects/myproject/packages/pkg2/index.ts","pollingInterval":250}
-/user/username/projects/myproject/packages/pkg2/other.ts:
-  {"fileName":"/user/username/projects/myproject/packages/pkg2/other.ts","pollingInterval":250}
-/user/username/projects/myproject/packages/pkg1/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/packages/pkg1/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/packages/pkg1/index.ts:
-  {"fileName":"/user/username/projects/myproject/packages/pkg1/index.ts","pollingInterval":250}
-/user/username/projects/myproject/packages/pkg2/package.json:
-  {"fileName":"/user/username/projects/myproject/packages/pkg2/package.json","pollingInterval":250}
+PolledWatches::
 
 FsWatches::
+/user/username/projects/myproject/packages/pkg2/tsconfig.json:
+  {}
+/user/username/projects/myproject/packages/pkg2/const.ts:
+  {}
+/user/username/projects/myproject/packages/pkg2/index.ts:
+  {}
+/user/username/projects/myproject/packages/pkg2/other.ts:
+  {}
+/user/username/projects/myproject/packages/pkg1/tsconfig.json:
+  {}
+/user/username/projects/myproject/packages/pkg1/index.ts:
+  {}
+/user/username/projects/myproject/packages/pkg2/package.json:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject/packages/pkg2:
-  {"directoryName":"/user/username/projects/myproject/packages/pkg2"}
+  {}
 /user/username/projects/myproject/packages/pkg1:
-  {"directoryName":"/user/username/projects/myproject/packages/pkg1"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -336,29 +336,29 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/packages/pkg2/build/other.d.ts (used version)
 /user/username/projects/myproject/packages/pkg1/index.ts (computed .d.ts)
 
-WatchedFiles::
-/user/username/projects/myproject/packages/pkg2/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/packages/pkg2/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/packages/pkg2/const.ts:
-  {"fileName":"/user/username/projects/myproject/packages/pkg2/const.ts","pollingInterval":250}
-/user/username/projects/myproject/packages/pkg2/index.ts:
-  {"fileName":"/user/username/projects/myproject/packages/pkg2/index.ts","pollingInterval":250}
-/user/username/projects/myproject/packages/pkg2/other.ts:
-  {"fileName":"/user/username/projects/myproject/packages/pkg2/other.ts","pollingInterval":250}
-/user/username/projects/myproject/packages/pkg1/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/packages/pkg1/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/packages/pkg1/index.ts:
-  {"fileName":"/user/username/projects/myproject/packages/pkg1/index.ts","pollingInterval":250}
-/user/username/projects/myproject/packages/pkg2/package.json:
-  {"fileName":"/user/username/projects/myproject/packages/pkg2/package.json","pollingInterval":250}
+PolledWatches::
 
 FsWatches::
+/user/username/projects/myproject/packages/pkg2/tsconfig.json:
+  {}
+/user/username/projects/myproject/packages/pkg2/const.ts:
+  {}
+/user/username/projects/myproject/packages/pkg2/index.ts:
+  {}
+/user/username/projects/myproject/packages/pkg2/other.ts:
+  {}
+/user/username/projects/myproject/packages/pkg1/tsconfig.json:
+  {}
+/user/username/projects/myproject/packages/pkg1/index.ts:
+  {}
+/user/username/projects/myproject/packages/pkg2/package.json:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject/packages/pkg2:
-  {"directoryName":"/user/username/projects/myproject/packages/pkg2"}
+  {}
 /user/username/projects/myproject/packages/pkg1:
-  {"directoryName":"/user/username/projects/myproject/packages/pkg1"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -438,29 +438,29 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/packages/pkg2/build/index.d.ts (used version)
 /user/username/projects/myproject/packages/pkg1/index.ts (computed .d.ts)
 
-WatchedFiles::
-/user/username/projects/myproject/packages/pkg2/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/packages/pkg2/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/packages/pkg2/const.ts:
-  {"fileName":"/user/username/projects/myproject/packages/pkg2/const.ts","pollingInterval":250}
-/user/username/projects/myproject/packages/pkg2/index.ts:
-  {"fileName":"/user/username/projects/myproject/packages/pkg2/index.ts","pollingInterval":250}
-/user/username/projects/myproject/packages/pkg2/other.ts:
-  {"fileName":"/user/username/projects/myproject/packages/pkg2/other.ts","pollingInterval":250}
-/user/username/projects/myproject/packages/pkg1/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/packages/pkg1/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/packages/pkg1/index.ts:
-  {"fileName":"/user/username/projects/myproject/packages/pkg1/index.ts","pollingInterval":250}
-/user/username/projects/myproject/packages/pkg2/package.json:
-  {"fileName":"/user/username/projects/myproject/packages/pkg2/package.json","pollingInterval":250}
+PolledWatches::
 
 FsWatches::
+/user/username/projects/myproject/packages/pkg2/tsconfig.json:
+  {}
+/user/username/projects/myproject/packages/pkg2/const.ts:
+  {}
+/user/username/projects/myproject/packages/pkg2/index.ts:
+  {}
+/user/username/projects/myproject/packages/pkg2/other.ts:
+  {}
+/user/username/projects/myproject/packages/pkg1/tsconfig.json:
+  {}
+/user/username/projects/myproject/packages/pkg1/index.ts:
+  {}
+/user/username/projects/myproject/packages/pkg2/package.json:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject/packages/pkg2:
-  {"directoryName":"/user/username/projects/myproject/packages/pkg2"}
+  {}
 /user/username/projects/myproject/packages/pkg1:
-  {"directoryName":"/user/username/projects/myproject/packages/pkg1"}
+  {}
 
 exitCode:: ExitStatus.undefined
 

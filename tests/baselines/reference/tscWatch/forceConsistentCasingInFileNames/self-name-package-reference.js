@@ -66,23 +66,23 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.esnext.full.d.ts (used version)
 /users/name/projects/web/index.ts (computed .d.ts during emit)
 
-WatchedFiles::
-/users/name/projects/web/tsconfig.json:
-  {"fileName":"/Users/name/projects/web/tsconfig.json","pollingInterval":250}
-/users/name/projects/web/index.ts:
-  {"fileName":"/Users/name/projects/web/index.ts","pollingInterval":250}
-/a/lib/lib.esnext.full.d.ts:
-  {"fileName":"/a/lib/lib.esnext.full.d.ts","pollingInterval":250}
-/users/name/projects/web/package.json:
-  {"fileName":"/Users/name/projects/web/package.json","pollingInterval":250}
+PolledWatches::
 /users/name/projects/web/node_modules/@types:
-  {"fileName":"/Users/name/projects/web/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
+/users/name/projects/web/tsconfig.json:
+  {}
+/users/name/projects/web/index.ts:
+  {}
+/a/lib/lib.esnext.full.d.ts:
+  {}
+/users/name/projects/web/package.json:
+  {}
 
 FsWatchesRecursive::
 /users/name/projects/web:
-  {"directoryName":"/users/name/projects/web"}
+  {}
 
 exitCode:: ExitStatus.undefined
 

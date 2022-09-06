@@ -29,17 +29,17 @@ Project '/dev/null/inferredProject1*' (Inferred)
 Open files: 
 	FileName: c:/myprojects/project/x.js ProjectRootPath: undefined
 		Projects: /dev/null/inferredProject1*
-WatchedFiles::
+PolledWatches::
 c:/myprojects/project/tsconfig.json:
-  {"fileName":"c:/myprojects/project/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":2000}
 c:/myprojects/project/jsconfig.json:
-  {"fileName":"c:/myprojects/project/jsconfig.json","pollingInterval":250}
-c:/a/lib/lib.d.ts:
-  {"fileName":"c:/a/lib/lib.d.ts","pollingInterval":250}
+  {"pollingInterval":2000}
 c:/myprojects/project/node_modules/@types:
-  {"fileName":"c:/myprojects/project/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
+c:/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 
@@ -74,17 +74,17 @@ Project '/dev/null/inferredProject1*' (Inferred)
 Open files: 
 	FileName: //vda1cs4850/myprojects/project/x.js ProjectRootPath: undefined
 		Projects: /dev/null/inferredProject1*
-WatchedFiles::
+PolledWatches::
 //vda1cs4850/myprojects/project/tsconfig.json:
-  {"fileName":"//vda1cs4850/myprojects/project/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":2000}
 //vda1cs4850/myprojects/project/jsconfig.json:
-  {"fileName":"//vda1cs4850/myprojects/project/jsconfig.json","pollingInterval":250}
-//vda1cs4850/a/lib/lib.d.ts:
-  {"fileName":"//vda1cs4850/a/lib/lib.d.ts","pollingInterval":250}
+  {"pollingInterval":2000}
 //vda1cs4850/myprojects/project/node_modules/@types:
-  {"fileName":"//vda1cs4850/myprojects/project/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
+//vda1cs4850/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 
@@ -119,17 +119,17 @@ Project '/dev/null/inferredProject1*' (Inferred)
 Open files: 
 	FileName: //vda1cs4850/c$/myprojects/project/x.js ProjectRootPath: undefined
 		Projects: /dev/null/inferredProject1*
-WatchedFiles::
+PolledWatches::
 //vda1cs4850/c$/myprojects/project/tsconfig.json:
-  {"fileName":"//vda1cs4850/c$/myprojects/project/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":2000}
 //vda1cs4850/c$/myprojects/project/jsconfig.json:
-  {"fileName":"//vda1cs4850/c$/myprojects/project/jsconfig.json","pollingInterval":250}
-//vda1cs4850/a/lib/lib.d.ts:
-  {"fileName":"//vda1cs4850/a/lib/lib.d.ts","pollingInterval":250}
+  {"pollingInterval":2000}
 //vda1cs4850/c$/myprojects/project/node_modules/@types:
-  {"fileName":"//vda1cs4850/c$/myprojects/project/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
+//vda1cs4850/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 
@@ -164,17 +164,17 @@ Project '/dev/null/inferredProject1*' (Inferred)
 Open files: 
 	FileName: c:/users/username/myprojects/project/x.js ProjectRootPath: undefined
 		Projects: /dev/null/inferredProject1*
-WatchedFiles::
+PolledWatches::
 c:/users/username/myprojects/project/tsconfig.json:
-  {"fileName":"c:/users/username/myprojects/project/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":2000}
 c:/users/username/myprojects/project/jsconfig.json:
-  {"fileName":"c:/users/username/myprojects/project/jsconfig.json","pollingInterval":250}
-c:/a/lib/lib.d.ts:
-  {"fileName":"c:/a/lib/lib.d.ts","pollingInterval":250}
+  {"pollingInterval":2000}
 c:/users/username/myprojects/project/node_modules/@types:
-  {"fileName":"c:/users/username/myprojects/project/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
+c:/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 
@@ -209,16 +209,16 @@ Project '/dev/null/inferredProject1*' (Inferred)
 Open files: 
 	FileName: //vda1cs4850/c$/users/username/myprojects/project/x.js ProjectRootPath: undefined
 		Projects: /dev/null/inferredProject1*
-WatchedFiles::
+PolledWatches::
 //vda1cs4850/c$/users/username/myprojects/project/tsconfig.json:
-  {"fileName":"//vda1cs4850/c$/users/username/myprojects/project/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":2000}
 //vda1cs4850/c$/users/username/myprojects/project/jsconfig.json:
-  {"fileName":"//vda1cs4850/c$/users/username/myprojects/project/jsconfig.json","pollingInterval":250}
-//vda1cs4850/a/lib/lib.d.ts:
-  {"fileName":"//vda1cs4850/a/lib/lib.d.ts","pollingInterval":250}
+  {"pollingInterval":2000}
 //vda1cs4850/c$/users/username/myprojects/project/node_modules/@types:
-  {"fileName":"//vda1cs4850/c$/users/username/myprojects/project/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
+//vda1cs4850/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::

@@ -52,21 +52,21 @@ Open files:
 	FileName: /a/username/project/src/index.ts ProjectRootPath: undefined
 		Projects: /a/username/project/tsconfig.json
 Completion Entries:: ["file1"]
-WatchedFiles::
-/a/username/project/tsconfig.json:
-  {"fileName":"/a/username/project/tsconfig.json","pollingInterval":250}
+PolledWatches::
 /a/username/project:
-  {"fileName":"/a/username/project","pollingInterval":500}
+  {"pollingInterval":500}
 /a/username/project/src:
-  {"fileName":"/a/username/project/src","pollingInterval":500}
-/a/username/project/src/file1.ts:
-  {"fileName":"/a/username/project/src/file1.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+  {"pollingInterval":500}
 /a/username/project/node_modules/@types:
-  {"fileName":"/a/username/project/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
+/a/username/project/tsconfig.json:
+  {}
+/a/username/project/src/file1.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 
@@ -102,22 +102,22 @@ Project '/a/username/project/tsconfig.json' (Configured)
 
 -----------------------------------------------
 Completion Entries:: ["file1","file2"]
-WatchedFiles::
-/a/username/project/tsconfig.json:
-  {"fileName":"/a/username/project/tsconfig.json","pollingInterval":250}
+PolledWatches::
 /a/username/project:
-  {"fileName":"/a/username/project","pollingInterval":500}
+  {"pollingInterval":500}
 /a/username/project/src:
-  {"fileName":"/a/username/project/src","pollingInterval":500}
-/a/username/project/src/file1.ts:
-  {"fileName":"/a/username/project/src/file1.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+  {"pollingInterval":500}
 /a/username/project/node_modules/@types:
-  {"fileName":"/a/username/project/node_modules/@types","pollingInterval":500}
-/a/username/project/src/file2.ts:
-  {"fileName":"/a/username/project/src/file2.ts","pollingInterval":250}
+  {"pollingInterval":500}
 
 FsWatches::
+/a/username/project/tsconfig.json:
+  {}
+/a/username/project/src/file1.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/a/username/project/src/file2.ts:
+  {}
 
 FsWatchesRecursive::
