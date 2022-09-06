@@ -123,7 +123,7 @@ async function runConsoleTests(runJs, defaultReporter, runInParallel, watchMode)
             errorStatus = exitCode;
             error = new Error(`Process exited with status code ${errorStatus}.`);
         }
-        else if (process.env.CI === "true") {
+        else if (cmdLineOptions.ci) {
             // finally, do a sanity check and build the compiler with the built version of itself
             log.info("Starting sanity check build...");
             // Cleanup everything except lint rules (we'll need those later and would rather not waste time rebuilding them)

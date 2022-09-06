@@ -46,7 +46,7 @@ jobs:
     - run:  npm ci
 
     - name: Linter
-      run:  npm run lint:ci
+      run:  npm run lint
 
   browser-integration:
     runs-on: ubuntu-latest

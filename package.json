@@ -109,7 +109,6 @@
         "clean": "gulp clean",
         "gulp": "gulp",
         "lint": "gulp lint",
-        "lint:ci": "gulp lint --ci",
         "setup-hooks": "node scripts/link-hooks.js"
     },
     "browser": {
