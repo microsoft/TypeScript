@@ -99,7 +99,7 @@ describe("unittests:: programApi:: Program.getMissingFilePaths", () => {
             // From no-extension reference
             "d:/pretend/nonexistent4.d.ts",
             "d:/pretend/nonexistent4.ts",
-            "d:/pretend/nonexistent4.tsx"
+            "d:/pretend/nonexistent4.tsx",
         ]);
     });
 
@@ -217,7 +217,7 @@ describe("unittests:: programApi:: CompilerOptions relative paths", () => {
 
         const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ false, { documents: [main, mod], cwd: "/" });
         const program = ts.createProgram(["./main.ts"], {
-            paths: { "*": ["./lib/*"] }
+            paths: { "*": ["./lib/*"] },
         }, new fakes.CompilerHost(fs, { newLine: ts.NewLineKind.LineFeed }));
 
         assert.isEmpty(program.getConfigFileParsingDiagnostics());

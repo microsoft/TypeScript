@@ -80,10 +80,10 @@ registerRefactor(refactorName, {
     kinds: [
         toAnonymousFunctionAction.kind,
         toNamedFunctionAction.kind,
-        toArrowFunctionAction.kind
+        toArrowFunctionAction.kind,
     ],
     getEditsForAction: getRefactorEditsToConvertFunctionExpressions,
-    getAvailableActions: getRefactorActionsToConvertFunctionExpressions
+    getAvailableActions: getRefactorActionsToConvertFunctionExpressions,
 });
 
 interface FunctionInfo {
@@ -142,7 +142,7 @@ function getRefactorActionsToConvertFunctionExpressions(context: RefactorContext
         name: refactorName,
         description: refactorDescription,
         actions: possibleActions.length === 0 && context.preferences.provideRefactorNotApplicableReason ?
-            errors : possibleActions
+            errors : possibleActions,
     }];
 }
 

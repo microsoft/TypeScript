@@ -160,7 +160,7 @@ export type AddNode = PropertyDeclaration | GetAccessorDeclaration | SetAccessor
 export const enum PreserveOptionalFlags {
     Method  = 1 << 0,
     Property = 1 << 1,
-    All     = Method | Property
+    All     = Method | Property,
 }
 
 /**

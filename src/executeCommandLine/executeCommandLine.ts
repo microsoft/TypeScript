@@ -185,7 +185,7 @@ function createColors(sys: System) {
             bold: (str: string) => str,
             blue: (str: string) => str,
             blueBackground: (str: string) => str,
-            brightWhite: (str: string) => str
+            brightWhite: (str: string) => str,
         };
     }
 
@@ -226,7 +226,7 @@ function createColors(sys: System) {
         bold,
         blue,
         brightWhite,
-        blueBackground
+        blueBackground,
     };
 }
 
@@ -361,7 +361,7 @@ function generateOptionOutput(sys: System, option: CommandLineOption, rightAlign
 
         return {
             valueType: getValueType(option),
-            possibleValues: getPossibleValues(option)
+            possibleValues: getPossibleValues(option),
         };
 
         function getValueType(option: CommandLineOption) {
@@ -486,7 +486,7 @@ function printEasyHelp(sys: System, simpleOptions: readonly CommandLineOption[])
     output = [
         ...output,
         ...generateSectionOptionsOutput(sys, getDiagnosticText(Diagnostics.COMMAND_LINE_FLAGS), cliCommands, /*subCategory*/ false, /*beforeOptionsDescription*/ undefined, /*afterOptionsDescription*/ undefined),
-        ...generateSectionOptionsOutput(sys, getDiagnosticText(Diagnostics.COMMON_COMPILER_OPTIONS), configOpts, /*subCategory*/ false, /*beforeOptionsDescription*/ undefined, formatMessage(Diagnostics.You_can_learn_about_all_of_the_compiler_options_at_0, "https://aka.ms/tsc"))
+        ...generateSectionOptionsOutput(sys, getDiagnosticText(Diagnostics.COMMON_COMPILER_OPTIONS), configOpts, /*subCategory*/ false, /*beforeOptionsDescription*/ undefined, formatMessage(Diagnostics.You_can_learn_about_all_of_the_compiler_options_at_0, "https://aka.ms/tsc")),
     ];
 
     for (const line of output) {
@@ -901,7 +901,7 @@ function performCompilation(
         options,
         projectReferences,
         host,
-        configFileParsingDiagnostics: getConfigFileParsingDiagnostics(config)
+        configFileParsingDiagnostics: getConfigFileParsingDiagnostics(config),
     };
     const program = createProgram(programOptions);
     const exitStatus = emitFilesAndReportErrorsAndGetExitStatus(
@@ -936,7 +936,7 @@ function performIncrementalCompilation(
         afterProgramEmitAndDiagnostics: builderProgram => {
             reportStatistics(sys, builderProgram.getProgram(), /*solutionPerformance*/ undefined);
             cb(builderProgram);
-        }
+        },
     });
     return sys.exit(exitStatus);
 }
@@ -1003,7 +1003,7 @@ function createWatchOfConfigFile(
         watchOptionsToExtend,
         system,
         reportDiagnostic,
-        reportWatchStatus: createWatchStatusReporter(system, configParseResult.options)
+        reportWatchStatus: createWatchStatusReporter(system, configParseResult.options),
     });
     updateWatchCompilationHost(system, cb, watchCompilerHost);
     watchCompilerHost.configFileParsingResult = configParseResult;
@@ -1025,7 +1025,7 @@ function createWatchOfFilesAndCompilerOptions(
         watchOptions,
         system,
         reportDiagnostic,
-        reportWatchStatus: createWatchStatusReporter(system, options)
+        reportWatchStatus: createWatchStatusReporter(system, options),
     });
     updateWatchCompilationHost(system, cb, watchCompilerHost);
     return createWatchProgram(watchCompilerHost);

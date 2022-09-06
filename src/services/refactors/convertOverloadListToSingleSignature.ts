@@ -53,7 +53,7 @@ const functionOverloadAction = {
 registerRefactor(refactorName, {
     kinds: [functionOverloadAction.kind],
     getEditsForAction: getRefactorEditsToConvertOverloadsToOneSignature,
-    getAvailableActions: getRefactorActionsToConvertOverloadsToOneSignature
+    getAvailableActions: getRefactorActionsToConvertOverloadsToOneSignature,
 });
 
 function getRefactorActionsToConvertOverloadsToOneSignature(context: RefactorContext): readonly ApplicableRefactorInfo[] {
@@ -64,7 +64,7 @@ function getRefactorActionsToConvertOverloadsToOneSignature(context: RefactorCon
     return [{
         name: refactorName,
         description: refactorDescription,
-        actions: [functionOverloadAction]
+        actions: [functionOverloadAction],
     }];
 }
 
@@ -170,7 +170,7 @@ function getRefactorEditsToConvertOverloadsToOneSignature(context: RefactorConte
                 "args",
                 /*questionToken*/ undefined,
                 factory.createUnionTypeNode(map(signatureDeclarations, convertSignatureParametersToTuple))
-            )
+            ),
         ]);
     }
 

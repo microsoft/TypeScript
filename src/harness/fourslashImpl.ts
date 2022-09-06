@@ -12,7 +12,7 @@ export const enum FourSlashTestType {
     Native,
     Shims,
     ShimsWithPreprocess,
-    Server
+    Server,
 }
 
 // Represents a parsed source file with metadata
@@ -199,7 +199,7 @@ function createScriptSnapShot(sourceText: string): ts.IScriptSnapshot {
 const enum CallHierarchyItemDirection {
     Root,
     Incoming,
-    Outgoing
+    Outgoing,
 }
 
 export class TestState {
@@ -860,7 +860,7 @@ export class TestState {
                 return {
                     andApplyCodeAction: () => {
                         this.raiseError(`Cannot apply code action when multiple markers are specified.`);
-                    }
+                    },
                 };
             }
             this.goToMarker(options.marker);
@@ -982,7 +982,7 @@ export class TestState {
                     this.raiseError(`No completion entry found for '${options.name}' from '${options.source}'`);
                 }
                 this.applyCodeActionFromCompletion(/*markerName*/ undefined, { name, source, data, description, newFileContent, newRangeContent, preferences });
-            }
+            },
         };
     }
 
@@ -1738,7 +1738,7 @@ export class TestState {
                 code: e.code,
                 ...ts.createTextSpanFromRange(range),
                 reportsUnnecessary: e.reportsUnnecessary,
-                reportsDeprecated: e.reportsDeprecated
+                reportsDeprecated: e.reportsDeprecated,
             };
         }));
     }
@@ -1825,7 +1825,7 @@ export class TestState {
             findInStrings = false,
             findInComments = false,
             providePrefixAndSuffixTextForRename = true,
-            quotePreference = "double"
+            quotePreference = "double",
         } = options || {};
         const locations = this.languageService.findRenameLocations(
             fileName,
@@ -1963,7 +1963,7 @@ export class TestState {
             "isVariadic",
             "tags",
             "argumentCount",
-            "overrideSelectedItemIndex"
+            "overrideSelectedItemIndex",
         ];
         for (const key in options) {
             if (!ts.contains(allKeys, key)) {
@@ -2254,7 +2254,7 @@ export class TestState {
 
     private getCompilerTestFiles() {
         return ts.map(this.testData.files, ({ content, fileName }) => ({
-            content, unitName: fileName
+            content, unitName: fileName,
         }));
     }
 
@@ -2291,7 +2291,7 @@ export class TestState {
         const baselineFile = this.getBaselineFileNameForContainingTestFile();
         const result = ts.arrayFrom(this.testData.markerPositions.entries(), ([name, marker]) => ({
             marker: { ...marker, name },
-            item: this.languageService.getQuickInfoAtPosition(marker.fileName, marker.position)
+            item: this.languageService.getQuickInfoAtPosition(marker.fileName, marker.position),
         }));
         const annotations = this.annotateContentWithTooltips(
             result,
@@ -2300,7 +2300,7 @@ export class TestState {
             ({ displayParts, documentation, tags }) => [
                 ...(displayParts ? displayParts.map(p => p.text).join("").split("\n") : []),
                 ...(documentation?.length ? documentation.map(p => p.text).join("").split("\n") : []),
-                ...(tags?.length ? tags.map(p => `@${p.name} ${p.text?.map(dp => dp.text).join("") ?? ""}`).join("\n").split("\n") : [])
+                ...(tags?.length ? tags.map(p => `@${p.name} ${p.text?.map(dp => dp.text).join("") ?? ""}`).join("\n").split("\n") : []),
             ]);
         Harness.Baseline.runBaseline(baselineFile, annotations + "\n\n" + stringify(result));
     }
@@ -2309,7 +2309,7 @@ export class TestState {
         const baselineFile = this.getBaselineFileNameForContainingTestFile();
         const result = ts.arrayFrom(this.testData.markerPositions.entries(), ([name, marker]) => ({
             marker: { ...marker, name },
-            item: this.languageService.getSignatureHelpItems(marker.fileName, marker.position, /*options*/ undefined)
+            item: this.languageService.getSignatureHelpItems(marker.fileName, marker.position, /*options*/ undefined),
         }));
         const annotations = this.annotateContentWithTooltips(
             result,
@@ -2351,9 +2351,9 @@ export class TestState {
                     ...completions,
                     entries: completions?.entries.map(entry => ({
                         ...entry,
-                        ...this.getCompletionEntryDetails(entry.name, entry.source, entry.data, preferences)
+                        ...this.getCompletionEntryDetails(entry.name, entry.source, entry.data, preferences),
                     })),
-                }
+                },
             };
         });
         const annotations = this.annotateContentWithTooltips(
@@ -2531,7 +2531,7 @@ export class TestState {
 
     private getSignatureHelp({ triggerReason }: FourSlashInterface.VerifySignatureHelpOptions): ts.SignatureHelpItems | undefined {
         return this.languageService.getSignatureHelpItems(this.activeFile.fileName, this.currentCaretPosition, {
-            triggerReason
+            triggerReason,
         });
     }
 
@@ -2645,8 +2645,8 @@ export class TestState {
                     this.languageService.getSignatureHelpItems(this.activeFile.fileName, offset, {
                         triggerReason: {
                             kind: "characterTyped",
-                            triggerCharacter: ch
-                        }
+                            triggerCharacter: ch,
+                        },
                     });
                 }
                 else if (prevChar === " " && /A-Za-z_/.test(ch)) {
@@ -3361,7 +3361,7 @@ export class TestState {
         const diagnosticsForCodeFix = this.getDiagnostics(fileName, /*includeSuggestions*/ true).map(diagnostic => ({
             start: diagnostic.start,
             length: diagnostic.length,
-            code: diagnostic.code
+            code: diagnostic.code,
         }));
 
         return ts.flatMap(ts.deduplicate(diagnosticsForCodeFix, ts.equalOwnProperties), diagnostic => {
@@ -3485,7 +3485,7 @@ export class TestState {
             "'": ts.CharacterCodes.singleQuote,
             '"': ts.CharacterCodes.doubleQuote,
             "`": ts.CharacterCodes.backtick,
-            "<": ts.CharacterCodes.lessThan
+            "<": ts.CharacterCodes.lessThan,
         }));
 
         const charCode = openBraceMap.get(openingBrace);
@@ -3514,7 +3514,7 @@ export class TestState {
             includeCompletionsWithInsertText: true,
             allowIncompleteCompletions: true,
             includeCompletionsWithSnippetText: true,
-            ...preferences
+            ...preferences,
         };
 
         this.goToMarker(marker);
@@ -3851,7 +3851,7 @@ export class TestState {
     private getSelection(): ts.TextRange {
         return {
             pos: this.currentCaretPosition,
-            end: this.selectionEnd === -1 ? this.currentCaretPosition : this.selectionEnd
+            end: this.selectionEnd === -1 ? this.currentCaretPosition : this.selectionEnd,
         };
     }
 
@@ -4458,7 +4458,7 @@ function runCode(code: string, state: TestState, fileName: string): void {
         retrieveFile: path => {
             return path === generatedFile ? wrappedCode :
                 undefined!;
-        }
+        },
     });
 
     try {
@@ -4614,7 +4614,7 @@ function parseTestData(basePath: string, contents: string, fileName: string): Fo
         globalOptions,
         files,
         symlinks,
-        ranges
+        ranges,
     };
 }
 
@@ -4643,7 +4643,7 @@ function getNonFileNameOptionInObject(optionObject: { [s: string]: string }): st
 const enum State {
     none,
     inSlashStarMarker,
-    inObjectMarker
+    inObjectMarker,
 }
 
 function reportError(fileName: string, line: number, col: number, message: string): never {
@@ -4668,7 +4668,7 @@ function recordObjectMarker(fileName: string, location: LocationInformation, tex
     const marker: Marker = {
         fileName,
         position: location.position,
-        data: markerValue
+        data: markerValue,
     };
 
     // Object markers can be anonymous
@@ -4684,7 +4684,7 @@ function recordObjectMarker(fileName: string, location: LocationInformation, tex
 function recordMarker(fileName: string, location: LocationInformation, name: string, markerMap: Map<string, Marker>, markers: Marker[]): Marker | undefined {
     const marker: Marker = {
         fileName,
-        position: location.position
+        position: location.position,
     };
 
     // Verify markers for uniqueness
@@ -4764,7 +4764,7 @@ function parseFileContent(content: string, fileName: string, markerMap: Map<stri
                             fileName,
                             pos: rangeStart.position,
                             end: (i - 1) - difference,
-                            marker: rangeStart.marker
+                            marker: rangeStart.marker,
                         };
                         localRanges.push(range);
 

@@ -20,9 +20,9 @@ describe("unittests:: tsc-watch:: nodeNextWatch:: emit when module emit is speci
                         target: "es2020",
                         module: "nodenext",
                         moduleResolution: "nodenext",
-                        outDir: "../dist"
-                    }
-                })
+                        outDir: "../dist",
+                    },
+                }),
             };
             const packageFile: File = {
                 path: "/project/package.json",
@@ -32,18 +32,18 @@ describe("unittests:: tsc-watch:: nodeNextWatch:: emit when module emit is speci
                     description: "",
                     type: "module",
                     main: "index.js",
-                })
+                }),
             };
             const file1: File = {
                 path: "/project/src/index.ts",
                 content: Utils.dedent`
                         import * as Thing from "thing";
 
-                        Thing.fn();`
+                        Thing.fn();`,
             };
             const declFile: File = {
                 path: "/project/src/deps.d.ts",
-                content: `declare module "thing";`
+                content: `declare module "thing";`,
             };
             return createWatchedSystem([configFile, file1, declFile, packageFile, { ...libFile, path: "/a/lib/lib.es2020.full.d.ts" }]);
         },
@@ -58,7 +58,7 @@ describe("unittests:: tsc-watch:: nodeNextWatch:: emit when module emit is speci
                     {},
                 ),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
-            }
+            },
         ],
     });
 });

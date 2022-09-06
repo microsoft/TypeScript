@@ -200,7 +200,7 @@ export function createDocumentRegistryInternal(useCaseSensitiveFileNames?: boole
                     sourceFiles.push({
                         name,
                         scriptKind: entry.sourceFile.scriptKind,
-                        refCount: entry.languageServiceRefCount
+                        refCount: entry.languageServiceRefCount,
                     });
                 }
                 else {
@@ -210,7 +210,7 @@ export function createDocumentRegistryInternal(useCaseSensitiveFileNames?: boole
             sourceFiles.sort((x, y) => y.refCount - x.refCount);
             return {
                 bucket: name,
-                sourceFiles
+                sourceFiles,
             };
         });
         return JSON.stringify(bucketInfoArray, undefined, 2);
@@ -269,7 +269,7 @@ export function createDocumentRegistryInternal(useCaseSensitiveFileNames?: boole
             {
                 languageVersion: scriptTarget,
                 impliedNodeFormat: host && getImpliedNodeFormatForFile(path, host.getCompilerHost?.()?.getModuleResolutionCache?.()?.getPackageJsonInfoCache(), host, compilationSettings),
-                setExternalModuleIndicator: getSetExternalModuleIndicator(compilationSettings)
+                setExternalModuleIndicator: getSetExternalModuleIndicator(compilationSettings),
             };
         sourceFileOptions.languageVersion = scriptTarget;
         const oldBucketCount = buckets.size;
@@ -301,7 +301,7 @@ export function createDocumentRegistryInternal(useCaseSensitiveFileNames?: boole
                 Debug.assert(acquiring);
                 entry = {
                     sourceFile,
-                    languageServiceRefCount: 0
+                    languageServiceRefCount: 0,
                 };
                 setBucketEntry();
             }

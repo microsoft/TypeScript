@@ -86,7 +86,7 @@ import {
     TransformationContext,
     unorderedRemoveItem,
     VariableDeclaration,
-    VariableStatement
+    VariableStatement,
 } from "../_namespaces/ts";
 
 /** @internal */
@@ -642,7 +642,7 @@ export function getAllDecoratorsOfClass(node: ClassLikeDeclaration): AllDecorato
 
     return {
         decorators,
-        parameters
+        parameters,
     };
 }
 
@@ -705,7 +705,7 @@ function getAllDecoratorsOfAccessors(accessor: AccessorDeclaration, parent: Clas
         decorators,
         parameters,
         getDecorators: getAccessor && getDecorators(getAccessor),
-        setDecorators: setAccessor && getDecorators(setAccessor)
+        setDecorators: setAccessor && getDecorators(setAccessor),
     };
 }
 

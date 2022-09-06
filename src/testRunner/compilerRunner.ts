@@ -355,7 +355,7 @@ class CompilerTest {
         return {
             unitName: unit.name,
             content: unit.content,
-            fileOptions: unit.fileOptions
+            fileOptions: unit.fileOptions,
         };
     }
 }

@@ -180,7 +180,7 @@ const extractFunctionAction = {
 registerRefactor(refactorName, {
     kinds: [
         extractConstantAction.kind,
-        extractFunctionAction.kind
+        extractFunctionAction.kind,
     ],
     getEditsForAction: getRefactorEditsToExtractSymbol,
     getAvailableActions: getRefactorActionsToExtractSymbol,
@@ -207,14 +207,14 @@ export function getRefactorActionsToExtractSymbol(context: RefactorContext): rea
             errors.push({
                 name: refactorName,
                 description: extractFunctionAction.description,
-                actions: [{ ...extractFunctionAction, notApplicableReason: getStringError(rangeToExtract.errors) }]
+                actions: [{ ...extractFunctionAction, notApplicableReason: getStringError(rangeToExtract.errors) }],
             });
         }
         if (refactorKindBeginsWith(extractConstantAction.kind, requestedRefactor)) {
             errors.push({
                 name: refactorName,
                 description: extractConstantAction.description,
-                actions: [{ ...extractConstantAction, notApplicableReason: getStringError(rangeToExtract.errors) }]
+                actions: [{ ...extractConstantAction, notApplicableReason: getStringError(rangeToExtract.errors) }],
             });
         }
         return errors;
@@ -247,7 +247,7 @@ export function getRefactorActionsToExtractSymbol(context: RefactorContext): rea
                     functionActions.push({
                         description,
                         name: `function_scope_${i}`,
-                        kind: extractFunctionAction.kind
+                        kind: extractFunctionAction.kind,
                     });
                 }
             }
@@ -256,7 +256,7 @@ export function getRefactorActionsToExtractSymbol(context: RefactorContext): rea
                     description,
                     name: `function_scope_${i}`,
                     notApplicableReason: getStringError(functionExtraction.errors),
-                    kind: extractFunctionAction.kind
+                    kind: extractFunctionAction.kind,
                 };
             }
         }
@@ -272,7 +272,7 @@ export function getRefactorActionsToExtractSymbol(context: RefactorContext): rea
                     constantActions.push({
                         description,
                         name: `constant_scope_${i}`,
-                        kind: extractConstantAction.kind
+                        kind: extractConstantAction.kind,
                     });
                 }
             }
@@ -281,7 +281,7 @@ export function getRefactorActionsToExtractSymbol(context: RefactorContext): rea
                     description,
                     name: `constant_scope_${i}`,
                     notApplicableReason: getStringError(constantExtraction.errors),
-                    kind: extractConstantAction.kind
+                    kind: extractConstantAction.kind,
                 };
             }
         }
@@ -304,7 +304,7 @@ export function getRefactorActionsToExtractSymbol(context: RefactorContext): rea
         infos.push({
             name: refactorName,
             description: getLocaleSpecificMessage(Diagnostics.Extract_function),
-            actions: [ innermostErrorFunctionAction ]
+            actions: [ innermostErrorFunctionAction ],
         });
     }
 
@@ -312,14 +312,14 @@ export function getRefactorActionsToExtractSymbol(context: RefactorContext): rea
         infos.push({
             name: refactorName,
             description: getLocaleSpecificMessage(Diagnostics.Extract_constant),
-            actions: constantActions
+            actions: constantActions,
         });
     }
     else if (context.preferences.provideRefactorNotApplicableReason && innermostErrorConstantAction) {
         infos.push({
             name: refactorName,
             description: getLocaleSpecificMessage(Diagnostics.Extract_constant),
-            actions: [ innermostErrorConstantAction ]
+            actions: [ innermostErrorConstantAction ],
         });
     }
 
@@ -604,7 +604,7 @@ export function getRangeToExtract(sourceFile: SourceFile, span: TextSpan, invoke
             None = 0,
             Break = 1 << 0,
             Continue = 1 << 1,
-            Return = 1 << 2
+            Return = 1 << 2,
         }
 
         // We believe it's true because the node is from the (unmodified) tree.
@@ -1779,7 +1779,7 @@ const enum Usage {
     // value should be passed to extracted method
     Read = 1,
     // value should be passed to extracted method and propagated back
-    Write = 2
+    Write = 2,
 }
 
 interface UsageEntry {

@@ -53,7 +53,7 @@ module.exports = createRule({
 
                             return fixer
                                 .replaceTextRange([rangeStart, rangeEnd], whitespace.replace(TAB_REGEX, " ".repeat(TAB_SIZE)));
-                        }
+                        },
                     });
                 }
 

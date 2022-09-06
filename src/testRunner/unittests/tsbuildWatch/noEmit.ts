@@ -33,6 +33,6 @@ describe("unittests:: tsbuildWatch:: watchMode:: with noEmit", () => {
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],
-        baselineIncremental: true
+        baselineIncremental: true,
     });
 });

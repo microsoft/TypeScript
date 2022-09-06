@@ -102,13 +102,13 @@ type SuperContainer = ClassDeclaration | MethodDeclaration | GetAccessorDeclarat
 
 const enum ES2017SubstitutionFlags {
     /** Enables substitutions for async methods with `super` calls. */
-    AsyncMethodsWithSuper = 1 << 0
+    AsyncMethodsWithSuper = 1 << 0,
 }
 
 const enum ContextFlags {
     None = 0,
     NonTopLevel = 1 << 0,
-    HasLexicalThis = 1 << 1
+    HasLexicalThis = 1 << 1,
 }
 
 /** @internal */
@@ -118,7 +118,7 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
         getEmitHelperFactory: emitHelpers,
         resumeLexicalEnvironment,
         endLexicalEnvironment,
-        hoistVariableDeclaration
+        hoistVariableDeclaration,
     } = context;
 
     const resolver = context.getEmitResolver();
@@ -858,7 +858,7 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
                 /*typeArguments*/ undefined,
                 [
                     factory.createThis(),
-                    ...node.arguments
+                    ...node.arguments,
                 ]
             );
         }
@@ -949,7 +949,7 @@ export function createSuperAccessVariableStatement(factory: NodeFactory, resolve
                                 /*questionToken*/ undefined,
                                 /*type*/ undefined,
                                 /*initializer*/ undefined
-                            )
+                            ),
                         ],
                         /*type*/ undefined,
                         /*equalsGreaterThanToken*/ undefined,
@@ -993,10 +993,10 @@ export function createSuperAccessVariableStatement(factory: NodeFactory, resolve
                         /*typeArguments*/ undefined,
                         [
                             factory.createNull(),
-                            factory.createObjectLiteralExpression(accessors, /*multiLine*/ true)
+                            factory.createObjectLiteralExpression(accessors, /*multiLine*/ true),
                         ]
                     )
-                )
+                ),
             ],
             NodeFlags.Const));
 }

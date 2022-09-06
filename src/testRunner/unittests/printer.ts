@@ -101,8 +101,8 @@ describe("unittests:: PrinterAPI", () => {
         it("without statements", () => {
             const host = new fakes.CompilerHost(new vfs.FileSystem(/*ignoreCase*/ true, {
                 files: {
-                    "/test.d.ts": `/// <reference types="node" />\n/// <reference path="./src/test.d.ts />\n`
-                }
+                    "/test.d.ts": `/// <reference types="node" />\n/// <reference path="./src/test.d.ts />\n`,
+                },
             }));
             const program = ts.createProgram(["/test.d.ts"], { }, host);
             const file = program.getSourceFile("/test.d.ts")!;
@@ -113,8 +113,8 @@ describe("unittests:: PrinterAPI", () => {
         it("with statements", () => {
             const host = new fakes.CompilerHost(new vfs.FileSystem(/*ignoreCase*/ true, {
                 files: {
-                    "/test.d.ts": `/// <reference types="node" />\n/// <reference path="./src/test.d.ts />\nvar a: number;\n`
-                }
+                    "/test.d.ts": `/// <reference types="node" />\n/// <reference path="./src/test.d.ts />\nvar a: number;\n`,
+                },
             }));
             const program = ts.createProgram(["/test.d.ts"], { }, host);
             const file = program.getSourceFile("/test.d.ts")!;
@@ -140,7 +140,7 @@ describe("unittests:: PrinterAPI", () => {
 
                         // comment1
                         const b = 2;
-                    `, ts.ScriptTarget.ES2015)
+                    `, ts.ScriptTarget.ES2015),
             ]);
         });
         printsCorrectly("default", {}, printer => printer.printBundle(bundle));

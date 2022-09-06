@@ -147,7 +147,7 @@ export class TypeWriterWalker {
                 line: lineAndCharacter.line,
                 syntaxKind: node.kind,
                 sourceText,
-                type: typeString
+                type: typeString,
             };
         }
         const symbol = this.checker.getSymbolAtLocation(node);
@@ -182,7 +182,7 @@ export class TypeWriterWalker {
             line: lineAndCharacter.line,
             syntaxKind: node.kind,
             sourceText,
-            symbol: symbolString
+            symbol: symbolString,
         };
     }
 }

@@ -37,7 +37,7 @@ export const enum CharRangeSection {
     Entire,
     Mid,
     End,
-    PostEnd
+    PostEnd,
 }
 
 /** @internal */
@@ -462,7 +462,7 @@ export class LineIndex {
                 done: false,
                 leaf: (relativeStart: number, relativeLength: number, ll: LineLeaf) => {
                     accum = accum.concat(ll.text.substring(relativeStart, relativeStart + relativeLength));
-                }
+                },
             });
         }
         return accum;
@@ -483,7 +483,7 @@ export class LineIndex {
                 if (!f(ll, relativeStart, relativeLength)) {
                     this.done = true;
                 }
-            }
+            },
         };
         this.walk(rangeStart, rangeEnd - rangeStart, walkFns);
         return !walkFns.done;

@@ -229,7 +229,7 @@ const enum OpCode {
     YieldStar,              // A completion instruction for the `yield*` keyword (not implemented, but reserved for future use)
     Return,                 // A completion instruction for the `return` keyword
     Throw,                  // A completion instruction for the `throw` keyword
-    Endfinally              // Marks the end of a `finally` block
+    Endfinally,              // Marks the end of a `finally` block
 }
 
 type OperationArguments = [Label] | [Label, Expression] | [Statement] | [Expression | undefined] | [Expression, Expression];
@@ -246,7 +246,7 @@ const enum CodeBlockKind {
     With,
     Switch,
     Loop,
-    Labeled
+    Labeled,
 }
 
 // the state for a generated code exception block
@@ -254,7 +254,7 @@ const enum ExceptionBlockState {
     Try,
     Catch,
     Finally,
-    Done
+    Done,
 }
 
 // A generated code block
@@ -333,7 +333,7 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
         resumeLexicalEnvironment,
         endLexicalEnvironment,
         hoistFunctionDeclaration,
-        hoistVariableDeclaration
+        hoistVariableDeclaration,
     } = context;
 
     const compilerOptions = context.getCompilerOptions();
@@ -1889,7 +1889,7 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
                             factory.createCaseClause(
                                 Debug.checkDefined(visitNode(clause.expression, visitor, isExpression)),
                                 [
-                                    createInlineBreak(clauseLabels[i], /*location*/ clause.expression)
+                                    createInlineBreak(clauseLabels[i], /*location*/ clause.expression),
                                 ]
                             )
                         );
@@ -2192,7 +2192,7 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
             kind: CodeBlockKind.With,
             expression,
             startLabel,
-            endLabel
+            endLabel,
         });
     }
 
@@ -2216,7 +2216,7 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
             kind: CodeBlockKind.Exception,
             state: ExceptionBlockState.Try,
             startLabel,
-            endLabel
+            endLabel,
         });
         emitNop();
         return endLabel;
@@ -2313,7 +2313,7 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
             kind: CodeBlockKind.Loop,
             isScript: true,
             breakLabel: -1,
-            continueLabel: -1
+            continueLabel: -1,
         });
     }
 
@@ -2358,7 +2358,7 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
         beginBlock({
             kind: CodeBlockKind.Switch,
             isScript: true,
-            breakLabel: -1
+            breakLabel: -1,
         });
     }
 
@@ -2394,7 +2394,7 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
             kind: CodeBlockKind.Labeled,
             isScript: true,
             labelText,
-            breakLabel: -1
+            breakLabel: -1,
         });
     }
 
@@ -2404,7 +2404,7 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
             kind: CodeBlockKind.Labeled,
             isScript: false,
             labelText,
-            breakLabel
+            breakLabel,
         });
     }
 
@@ -2563,7 +2563,7 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
             factory.createReturnStatement(
                 factory.createArrayLiteralExpression([
                     createInstruction(Instruction.Break),
-                    createLabel(label)
+                    createLabel(label),
                 ])
             ),
             location
@@ -2899,8 +2899,8 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
                                     createLabel(startLabel),
                                     createLabel(catchLabel),
                                     createLabel(finallyLabel),
-                                    createLabel(endLabel)
-                                ])
+                                    createLabel(endLabel),
+                                ]),
                             ]
                         )
                     )
@@ -3151,7 +3151,7 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
                     factory.createReturnStatement(
                         factory.createArrayLiteralExpression([
                             createInstruction(Instruction.Break),
-                            createLabel(label)
+                            createLabel(label),
                         ])
                     ),
                     operationLocation
@@ -3178,7 +3178,7 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
                             factory.createReturnStatement(
                                 factory.createArrayLiteralExpression([
                                     createInstruction(Instruction.Break),
-                                    createLabel(label)
+                                    createLabel(label),
                                 ])
                             ),
                             operationLocation
@@ -3208,7 +3208,7 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
                             factory.createReturnStatement(
                                 factory.createArrayLiteralExpression([
                                     createInstruction(Instruction.Break),
-                                    createLabel(label)
+                                    createLabel(label),
                                 ])
                             ),
                             operationLocation
@@ -3260,7 +3260,7 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
                     factory.createReturnStatement(
                         factory.createArrayLiteralExpression([
                             createInstruction(Instruction.YieldStar),
-                            expression
+                            expression,
                         ])
                     ),
                     operationLocation
@@ -3278,7 +3278,7 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
         writeStatement(
             factory.createReturnStatement(
                 factory.createArrayLiteralExpression([
-                    createInstruction(Instruction.Endfinally)
+                    createInstruction(Instruction.Endfinally),
                 ])
             )
         );

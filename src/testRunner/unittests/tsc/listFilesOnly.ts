@@ -13,7 +13,7 @@ describe("unittests:: tsc:: listFilesOnly::", () => {
             "/src/test.ts": Utils.dedent`
                         export const x = 1;`,
         }),
-        commandLineArgs: ["/src/test.ts", "--watch", "--listFilesOnly"]
+        commandLineArgs: ["/src/test.ts", "--watch", "--listFilesOnly"],
     });
 
     verifyTsc({
@@ -23,7 +23,7 @@ describe("unittests:: tsc:: listFilesOnly::", () => {
             "/src/test.ts": Utils.dedent`
                         export const x = 1;`,
         }),
-        commandLineArgs: ["/src/test.ts", "--listFilesOnly"]
+        commandLineArgs: ["/src/test.ts", "--listFilesOnly"],
     });
 
     verifyTsc({
@@ -31,7 +31,7 @@ describe("unittests:: tsc:: listFilesOnly::", () => {
         subScenario: "combined with incremental",
         fs: () => loadProjectFromFiles({
             "/src/test.ts": `export const x = 1;`,
-            "/src/tsconfig.json": "{}"
+            "/src/tsconfig.json": "{}",
         }),
         commandLineArgs: ["-p", "/src", "--incremental", "--listFilesOnly"],
         edits: [
@@ -43,7 +43,7 @@ describe("unittests:: tsc:: listFilesOnly::", () => {
             {
                 ...noChangeRun,
                 commandLineArgs: ["-p", "/src", "--incremental"],
-            }
-        ]
+            },
+        ],
     });
 });

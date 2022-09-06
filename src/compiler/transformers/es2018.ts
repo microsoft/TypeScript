@@ -114,7 +114,7 @@ import {
 
 const enum ESNextSubstitutionFlags {
     /** Enables substitutions for async methods with `super` calls. */
-    AsyncMethodsWithSuper = 1 << 0
+    AsyncMethodsWithSuper = 1 << 0,
 }
 
 // Facts we track as we traverse the tree
@@ -156,7 +156,7 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
         getEmitHelperFactory: emitHelpers,
         resumeLexicalEnvironment,
         endLexicalEnvironment,
-        hoistVariableDeclaration
+        hoistVariableDeclaration,
     } = context;
 
     const resolver = context.getEmitResolver();
@@ -552,7 +552,7 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
         const visited = visitEachChild(node, visitor, context);
         const statement = concatenate(visited.statements, taggedTemplateStringDeclarations && [
             factory.createVariableStatement(/*modifiers*/ undefined,
-                factory.createVariableDeclarationList(taggedTemplateStringDeclarations))
+                factory.createVariableDeclarationList(taggedTemplateStringDeclarations)),
         ]);
         const result = factory.updateSourceFile(visited, setTextRange(factory.createNodeArray(statement), node.statements));
         exitSubtree(ancestorFacts);
@@ -738,7 +738,7 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
                 setTextRange(
                     factory.createVariableDeclarationList(
                         [
-                            setTextRange(factory.createVariableDeclaration(temp), node.initializer)
+                            setTextRange(factory.createVariableDeclaration(temp), node.initializer),
                         ],
                         NodeFlags.Let
                     ),
@@ -829,7 +829,7 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
                             factory.createVariableDeclarationList([
                                 factory.createVariableDeclaration(nonUserCode, /*exclamationToken*/ undefined, /*type*/ undefined, factory.createTrue()),
                                 setTextRange(factory.createVariableDeclaration(iterator, /*exclamationToken*/ undefined, /*type*/ undefined, initializer), node.expression),
-                                factory.createVariableDeclaration(result)
+                                factory.createVariableDeclaration(result),
                             ]),
                             node.expression
                         ),
@@ -838,7 +838,7 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
                     /*condition*/ factory.inlineExpressions([
                         factory.createAssignment(result, createDownlevelAwait(callNext)),
                         factory.createAssignment(done, getDone),
-                        factory.createLogicalNot(done)
+                        factory.createLogicalNot(done),
                     ]),
                     /*incrementor*/ factory.createAssignment(nonUserCode, factory.createTrue()),
                     /*statement*/ convertForOfStatementHead(node, getValue, nonUserCode)
@@ -854,7 +854,7 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
                 factory.restoreEnclosingLabel(
                     forStatement,
                     outermostLabeledStatement
-                )
+                ),
             ]),
             factory.createCatchClause(
                 factory.createVariableDeclaration(catchVariable),
@@ -864,10 +864,10 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
                             factory.createAssignment(
                                 errorRecord,
                                 factory.createObjectLiteralExpression([
-                                    factory.createPropertyAssignment("error", catchVariable)
+                                    factory.createPropertyAssignment("error", catchVariable),
                                 ])
                             )
-                        )
+                        ),
                     ]),
                     EmitFlags.SingleLine
                 )
@@ -890,7 +890,7 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
                                 factory.createExpressionStatement(createDownlevelAwait(callReturn))
                             ),
                             EmitFlags.SingleLine
-                        )
+                        ),
                     ]),
                     /*catchClause*/ undefined,
                     /*finallyBlock*/ setEmitFlags(
@@ -903,11 +903,11 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
                                     )
                                 ),
                                 EmitFlags.SingleLine
-                            )
+                            ),
                         ]),
                         EmitFlags.SingleLine
                     )
-                )
+                ),
             ])
         );
     }
@@ -1390,7 +1390,7 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
                 /*typeArguments*/ undefined,
                 [
                     factory.createThis(),
-                    ...node.arguments
+                    ...node.arguments,
                 ]
             );
         }

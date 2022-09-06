@@ -785,7 +785,7 @@ export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFi
             buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(buildInfoPath, host.getCurrentDirectory()));
             bundleBuildInfo = {
                 commonSourceDirectory: relativeToBuildInfo(host.getCommonSourceDirectory()),
-                sourceFiles: sourceFileOrBundle.sourceFiles.map(file => relativeToBuildInfo(getNormalizedAbsolutePath(file.fileName, host.getCurrentDirectory())))
+                sourceFiles: sourceFileOrBundle.sourceFiles.map(file => relativeToBuildInfo(getNormalizedAbsolutePath(file.fileName, host.getCurrentDirectory()))),
             };
         }
         tracing?.push(tracing.Phase.Emit, "emitJsFileOrBundle", { jsFilePath });
@@ -867,7 +867,7 @@ export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFi
             inlineSources: compilerOptions.inlineSources,
             extendedDiagnostics: compilerOptions.extendedDiagnostics,
             writeBundleFileInfo: !!bundleBuildInfo,
-            relativeToBuildInfo
+            relativeToBuildInfo,
         };
 
         // Create a printer to print the nodes
@@ -927,7 +927,7 @@ export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFi
             onlyPrintJsDocStyle: true,
             writeBundleFileInfo: !!bundleBuildInfo,
             recordInternalSection: !!bundleBuildInfo,
-            relativeToBuildInfo
+            relativeToBuildInfo,
         };
 
         const declarationPrinter = createPrinter(printerOptions, {
@@ -1003,7 +1003,7 @@ export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFi
             if (sourceMapDataList) {
                 sourceMapDataList.push({
                     inputSourceFileNames: sourceMapGenerator.getSources(),
-                    sourceMap: sourceMapGenerator.toJSON()
+                    sourceMap: sourceMapGenerator.toJSON(),
                 });
             }
 
@@ -1381,7 +1381,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         onBeforeEmitNodeArray,
         onAfterEmitNodeArray,
         onBeforeEmitToken,
-        onAfterEmitToken
+        onAfterEmitToken,
     } = handlers;
 
     var extendedDiagnostics = !!printerOptions.extendedDiagnostics;
@@ -1438,7 +1438,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     var { enter: enterComment, exit: exitComment } = performance.createTimerIf(extendedDiagnostics, "commentTime", "beforeComment", "afterComment");
     var parenthesizer = factory.parenthesizer;
     var typeArgumentParenthesizerRuleSelector: OrdinalParentheizerRuleSelector<TypeNode> = {
-        select: index => index === 0 ? parenthesizer.parenthesizeLeadingTypeArgument : undefined
+        select: index => index === 0 ? parenthesizer.parenthesizeLeadingTypeArgument : undefined,
     };
     var emitBinaryExpression = createEmitBinaryExpression();
     /* eslint-enable no-var */
@@ -1456,7 +1456,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         writeList,
         writeFile,
         writeBundle,
-        bundleFileInfo
+        bundleFileInfo,
     };
 
     function printNode(hint: EmitHint, node: Node, sourceFile: SourceFile): string {
@@ -1596,7 +1596,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
                         end: writer.getTextPos(),
                         kind: BundleFileSectionKind.Prepend,
                         data: relativeToBuildInfo!((prepend as UnparsedSource).fileName),
-                        texts: newSections as BundleFileTextLike[]
+                        texts: newSections as BundleFileTextLike[],
                     });
                 }
             }
@@ -4720,8 +4720,8 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
                     expression: {
                         pos: statement.expression.pos,
                         end: statement.expression.end,
-                        text: statement.expression.text
-                    }
+                        text: statement.expression.text,
+                    },
                 });
                 end = end < statement.end ? statement.end : end;
             }

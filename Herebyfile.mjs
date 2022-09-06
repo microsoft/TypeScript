@@ -32,7 +32,7 @@ const copyright = memoize(async () => {
 export const buildScripts = task({
     name: "scripts",
     description: "Builds files in the 'scripts' folder.",
-    run: () => buildProject("scripts")
+    run: () => buildProject("scripts"),
 });
 
 const libs = memoize(() => {
@@ -77,7 +77,7 @@ export const generateDiagnostics = task({
     description: "Generates a diagnostic file in TypeScript based on an input JSON file",
     run: async () => {
         await exec(process.execPath, ["scripts/processDiagnosticMessages.mjs", diagnosticMessagesJson]);
-    }
+    },
 });
 
 const cleanDiagnostics = task({
@@ -113,7 +113,7 @@ const localize = task({
         if (needsUpdate(diagnosticMessagesGeneratedJson, generatedLCGFile)) {
             await exec(process.execPath, ["scripts/generateLocalizedDiagnosticMessages.mjs", "src/loc/lcl", "built/local", diagnosticMessagesGeneratedJson], { ignoreExitCode: true });
         }
-    }
+    },
 });
 
 export const buildSrc = task({
@@ -210,7 +210,7 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
                             await fs.promises.writeFile(outfile, contents);
                         });
                     },
-                }
+                },
             ];
         }
 
@@ -236,7 +236,7 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
                                 onRebuild();
                             }
                         });
-                    }
+                    },
                 }]);
             }
 
@@ -331,7 +331,7 @@ function entrypointBuildTask(options) {
                 return watchProject(options.project);
             }
             return bundler.watch();
-        }
+        },
     });
 
     return { build, bundle, shim, main, watch };
@@ -438,7 +438,7 @@ const lssl = task({
     dependencies: [services],
     run: async () => {
         await fs.promises.writeFile("./built/local/tsserverlibrary.js", await fileContentsWithCopyright(lsslJs));
-    }
+    },
 });
 
 export const dtsLssl = task({
@@ -448,7 +448,7 @@ export const dtsLssl = task({
     run: async () => {
         await fs.promises.writeFile("./built/local/tsserverlibrary.d.ts", await fileContentsWithCopyright(lsslDts));
         await fs.promises.writeFile("./built/local/tsserverlibrary.internal.d.ts", await fileContentsWithCopyright(lsslDtsInternal));
-    }
+    },
 });
 
 export const dts = task({
@@ -473,7 +473,7 @@ const { main: tests, watch: watchTests } = entrypointBuildTask({
         treeShaking: false,
         onWatchRebuild() {
             watchTestsEmitter.emit("rebuild");
-        }
+        },
     },
 });
 export { tests, watchTests };
@@ -506,7 +506,7 @@ export const lint = task({
 
         console.log(`Linting: ${args.join(" ")}`);
         return exec(process.execPath, args);
-    }
+    },
 });
 
 const { main: cancellationToken, watch: watchCancellationToken } = entrypointBuildTask({
@@ -543,7 +543,7 @@ export const generateTypesMap = task({
         const contents = await fs.promises.readFile(source, "utf-8");
         JSON.parse(contents); // Validates that the JSON parses.
         await fs.promises.writeFile(target, contents);
-    }
+    },
 });
 
 
@@ -558,7 +558,7 @@ const copyBuiltLocalDiagnosticMessages = task({
         const contents = await fs.promises.readFile(diagnosticMessagesGeneratedJson, "utf-8");
         JSON.parse(contents); // Validates that the JSON parses.
         await fs.promises.writeFile(builtLocalDiagnosticMessagesGeneratedJson, contents);
-    }
+    },
 });
 
 
@@ -636,7 +636,7 @@ export const runTestsAndWatch = task({
             "tests/projects/**/*.*",
         ], {
             ignorePermissionErrors: true,
-            alwaysStat: true
+            alwaysStat: true,
         });
 
         process.on("SIGINT", endWatchMode);
@@ -807,7 +807,7 @@ export const updateSublime = task({
         for (const file of ["built/local/tsserver.js", "built/local/tsserver.js.map"]) {
             await fs.promises.copyFile(file, path.resolve("../TypeScript-Sublime-Plugin/tsserver/", path.basename(file)));
         }
-    }
+    },
 });
 
 
@@ -839,7 +839,7 @@ export const produceLKG = task({
         }
 
         await exec(process.execPath, ["scripts/produceLKG.mjs"]);
-    }
+    },
 });
 
 export const lkg = task({

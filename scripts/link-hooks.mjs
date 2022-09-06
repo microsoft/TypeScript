@@ -8,7 +8,7 @@ const __filename = url.fileURLToPath(new URL(import.meta.url));
 const __dirname = path.dirname(__filename);
 
 const hooks = [
-    "post-checkout"
+    "post-checkout",
 ];
 
 hooks.forEach((hook) => {

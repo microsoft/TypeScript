@@ -185,7 +185,7 @@ enum BuildResultFlags {
     DeclarationEmitErrors = 1 << 5,
     EmitErrors = 1 << 6,
 
-    AnyErrors = ConfigFileErrors | SyntaxErrors | TypeErrors | DeclarationEmitErrors | EmitErrors
+    AnyErrors = ConfigFileErrors | SyntaxErrors | TypeErrors | DeclarationEmitErrors | EmitErrors,
 }
 
 /** @internal */
@@ -745,7 +745,7 @@ function enableCache<T extends BuilderProgram>(state: SolutionBuilderState<T>) {
     const {
         originalReadFile, originalFileExists, originalDirectoryExists,
         originalCreateDirectory, originalWriteFile,
-        getSourceFileWithCache, readFileWithCache
+        getSourceFileWithCache, readFileWithCache,
     } = changeCompilerHostLikeToUseCache(
         host,
         fileName => toPath(state, fileName),
@@ -821,7 +821,7 @@ function setupInitialBuild<T extends BuilderProgram>(state: SolutionBuilderState
 export enum InvalidatedProjectKind {
     Build,
     /** @deprecated */ UpdateBundle,
-    UpdateOutputFileStamps
+    UpdateOutputFileStamps,
 }
 
 export interface InvalidatedProjectBase {
@@ -915,7 +915,7 @@ function createUpdateOutputFileStampsProject<T extends BuilderProgram>(
             }
             performance.mark("SolutionBuilder::Timestamps only updates");
             return doneInvalidatedProject(state, projectPath);
-        }
+        },
     };
 }
 
@@ -928,7 +928,7 @@ enum BuildStep {
     EmitBuildInfo,
     /** @deprecated */ BuildInvalidatedProjectOfBundle,
     QueueReferencingProjects,
-    Done
+    Done,
 }
 
 function createBuildOrUpdateInvalidedProject<T extends BuilderProgram>(
@@ -1009,7 +1009,7 @@ function createBuildOrUpdateInvalidedProject<T extends BuilderProgram>(
                 if (step !== BuildStep.Emit) return undefined;
                 return emit(writeFile, cancellationToken, customTransformers);
             },
-            done
+            done,
         } :
         {
             kind,
@@ -1111,7 +1111,7 @@ function createBuildOrUpdateInvalidedProject<T extends BuilderProgram>(
                 ...program.getConfigFileParsingDiagnostics(),
                 ...program.getOptionsDiagnostics(cancellationToken),
                 ...program.getGlobalDiagnostics(cancellationToken),
-                ...program.getSyntacticDiagnostics(/*sourceFile*/ undefined, cancellationToken)
+                ...program.getSyntacticDiagnostics(/*sourceFile*/ undefined, cancellationToken),
             ],
             BuildResultFlags.SyntaxErrors,
             "Syntactic"
@@ -1158,7 +1158,7 @@ function createBuildOrUpdateInvalidedProject<T extends BuilderProgram>(
             ));
             return {
                 emitSkipped: true,
-                diagnostics: emitResult.diagnostics
+                diagnostics: emitResult.diagnostics,
             };
         }
 
@@ -1244,7 +1244,7 @@ function createBuildOrUpdateInvalidedProject<T extends BuilderProgram>(
         state.diagnostics.delete(projectPath);
         state.projectStatus.set(projectPath, {
             type: UpToDateStatusType.UpToDate,
-            oldestOutputFileName
+            oldestOutputFileName,
         });
         afterProgramDone(state, program, config);
         step = BuildStep.QueueReferencingProjects;
@@ -1446,7 +1446,7 @@ function getNextInvalidatedProjectCreateInfo<T extends BuilderProgram>(
                     project,
                     projectPath,
                     projectIndex,
-                    config
+                    config,
                 };
             }
         }
@@ -1632,7 +1632,7 @@ function watchFile<T extends BuilderProgram>(state: SolutionBuilderState<T>, fil
             else {
                 unorderedRemoveItem(existing.callbacks, callback);
             }
-        }
+        },
     };
 }
 
@@ -1694,7 +1694,7 @@ function checkConfigFileUpToDateStatus<T extends BuilderProgram>(state: Solution
         return {
             type: UpToDateStatusType.OutOfDateWithSelf,
             outOfDateOutputFileName: oldestOutputFileName,
-            newerInputFileName: configFile
+            newerInputFileName: configFile,
         };
     }
 }
@@ -1703,7 +1703,7 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
     // Container if no files are specified in the project
     if (!project.fileNames.length && !canJsonReportNoInputFiles(project.raw)) {
         return {
-            type: UpToDateStatusType.ContainerOnly
+            type: UpToDateStatusType.ContainerOnly,
         };
     }
 
@@ -1730,7 +1730,7 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
                 return {
                     type: UpToDateStatusType.UpstreamBlocked,
                     upstreamProjectName: ref.path,
-                    upstreamProjectBlocked: refStatus.type === UpToDateStatusType.UpstreamBlocked
+                    upstreamProjectBlocked: refStatus.type === UpToDateStatusType.UpstreamBlocked,
                 };
             }
 
@@ -1738,7 +1738,7 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
             if (refStatus.type !== UpToDateStatusType.UpToDate) {
                 return {
                     type: UpToDateStatusType.UpstreamOutOfDate,
-                    upstreamProjectName: ref.path
+                    upstreamProjectName: ref.path,
                 };
             }
 
@@ -1763,12 +1763,12 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
                 state.buildInfoCache.set(resolvedPath, {
                     path: toPath(state, buildInfoPath),
                     buildInfo: false,
-                    modifiedTime: buildInfoTime
+                    modifiedTime: buildInfoTime,
                 });
             }
             return {
                 type: UpToDateStatusType.OutputMissing,
-                missingOutputFileName: buildInfoPath
+                missingOutputFileName: buildInfoPath,
             };
         }
 
@@ -1777,13 +1777,13 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
             // Error reading buildInfo
             return {
                 type: UpToDateStatusType.ErrorReadingFile,
-                fileName: buildInfoPath
+                fileName: buildInfoPath,
             };
         }
         if ((buildInfo.bundle || buildInfo.program) && buildInfo.version !== version) {
             return {
                 type: UpToDateStatusType.TsVersionOutputOfDate,
-                version: buildInfo.version
+                version: buildInfo.version,
             };
         }
 
@@ -1801,14 +1801,14 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
             ) {
                 return {
                     type: UpToDateStatusType.OutOfDateBuildInfo,
-                    buildInfoFile: buildInfoPath
+                    buildInfoFile: buildInfoPath,
                 };
             }
 
             if (!project.options.noEmit && getPendingEmitKind(project.options, buildInfo.program.options || {})) {
                 return {
                     type: UpToDateStatusType.OutOfDateOptions,
-                    buildInfoFile: buildInfoPath
+                    buildInfoFile: buildInfoPath,
                 };
             }
             buildInfoProgram = buildInfo.program;
@@ -1830,7 +1830,7 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
         if (inputTime === missingFileModifiedTime) {
             return {
                 type: UpToDateStatusType.Unbuildable,
-                reason: `${inputFile} does not exist`
+                reason: `${inputFile} does not exist`,
             };
         }
 
@@ -1851,7 +1851,7 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
                 return {
                     type: UpToDateStatusType.OutOfDateWithSelf,
                     outOfDateOutputFileName: buildInfoPath!,
-                    newerInputFileName: inputFile
+                    newerInputFileName: inputFile,
                 };
             }
         }
@@ -1896,7 +1896,7 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
             if (outputTime === missingFileModifiedTime) {
                 return {
                     type: UpToDateStatusType.OutputMissing,
-                    missingOutputFileName: output
+                    missingOutputFileName: output,
                 };
             }
 
@@ -1905,7 +1905,7 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
                 return {
                     type: UpToDateStatusType.OutOfDateWithSelf,
                     outOfDateOutputFileName: output,
-                    newerInputFileName: newestInputFileName
+                    newerInputFileName: newestInputFileName,
                 };
             }
 
@@ -1937,7 +1937,7 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
                 return {
                     type: UpToDateStatusType.OutOfDateWithUpstream,
                     outOfDateOutputFileName: buildInfoPath!,
-                    newerProjectName: ref.path
+                    newerProjectName: ref.path,
                 };
             }
 
@@ -1955,7 +1955,7 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
             return {
                 type: UpToDateStatusType.OutOfDateWithUpstream,
                 outOfDateOutputFileName: oldestOutputFileName,
-                newerProjectName: ref.path
+                newerProjectName: ref.path,
             };
         }
     }
@@ -1979,7 +1979,7 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
         return {
             type: UpToDateStatusType.OutOfDateWithPrepend,
             outOfDateOutputFileName: oldestOutputFileName!,
-            newerProjectName: upstreamChangedProject!
+            newerProjectName: upstreamChangedProject!,
         };
     }
 
@@ -1992,7 +1992,7 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
                 UpToDateStatusType.UpToDate,
         newestInputFileTime,
         newestInputFileName,
-        oldestOutputFileName: oldestOutputFileName!
+        oldestOutputFileName: oldestOutputFileName!,
     };
 }
 
@@ -2087,7 +2087,7 @@ function updateOutputTimestamps<T extends BuilderProgram>(state: SolutionBuilder
     updateOutputTimestampsWorker(state, proj, resolvedPath, Diagnostics.Updating_output_timestamps_of_project_0);
     state.projectStatus.set(resolvedPath, {
         type: UpToDateStatusType.UpToDate,
-        oldestOutputFileName: getFirstProjectOutput(proj, !state.host.useCaseSensitiveFileNames())
+        oldestOutputFileName: getFirstProjectOutput(proj, !state.host.useCaseSensitiveFileNames()),
     });
 }
 
@@ -2127,7 +2127,7 @@ function queueReferencingProjects<T extends BuilderProgram>(
                                 state.projectStatus.set(nextProjectPath, {
                                     type: UpToDateStatusType.OutOfDateWithPrepend,
                                     outOfDateOutputFileName: status.oldestOutputFileName,
-                                    newerProjectName: project
+                                    newerProjectName: project,
                                 });
                             }
                             else {
@@ -2144,7 +2144,7 @@ function queueReferencingProjects<T extends BuilderProgram>(
                             state.projectStatus.set(nextProjectPath, {
                                 type: UpToDateStatusType.OutOfDateWithUpstream,
                                 outOfDateOutputFileName: status.type === UpToDateStatusType.OutOfDateWithPrepend ? status.outOfDateOutputFileName : status.oldestOutputFileName,
-                                newerProjectName: project
+                                newerProjectName: project,
                             });
                         }
                         break;
@@ -2373,7 +2373,7 @@ function watchWildCardDirectories<T extends BuilderProgram>(state: SolutionBuild
                     program: state.builderPrograms.get(resolvedPath) || getCachedParsedConfigFile(state, resolvedPath)?.fileNames,
                     useCaseSensitiveFileNames: state.parseConfigFileHost.useCaseSensitiveFileNames,
                     writeLog: s => state.writeLog(s),
-                    toPath: fileName => toPath(state, fileName)
+                    toPath: fileName => toPath(state, fileName),
                 })) return;
 
                 invalidateProjectAndScheduleBuilds(state, resolvedPath, ConfigFileProgramReloadLevel.Partial);

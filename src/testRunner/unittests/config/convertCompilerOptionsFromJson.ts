@@ -25,7 +25,7 @@ describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
                             [`/apath/${configFileName}`]: jsonText,
                             "/apath/a.ts": "",
                             "/apath/b.js": "",
-                        }
+                        },
                     },
                 )),
                 jsonText,
@@ -44,8 +44,8 @@ describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
             target: "es5",
             noImplicitAny: false,
             sourceMap: false,
-            lib: ["es5", "es2015.core", "es2015.symbol"]
-        }
+            lib: ["es5", "es2015.core", "es2015.symbol"],
+        },
     }, "tsconfig.json");
 
     baselineCompilerOptions("Convert correctly format tsconfig.json with allowJs is false to compiler-options", {
@@ -55,8 +55,8 @@ describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
             noImplicitAny: false,
             sourceMap: false,
             allowJs: false,
-            lib: ["es5", "es2015.core", "es2015.symbol"]
-        }
+            lib: ["es5", "es2015.core", "es2015.symbol"],
+        },
     }, "tsconfig.json");
 
     baselineCompilerOptions("Convert incorrect option of jsx to compiler-options", {
@@ -65,8 +65,8 @@ describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
             target: "es5",
             noImplicitAny: false,
             sourceMap: false,
-            jsx: ""
-        }
+            jsx: "",
+        },
     }, "tsconfig.json");
 
     baselineCompilerOptions("Convert incorrect option of module to compiler-options", {
@@ -75,7 +75,7 @@ describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
             target: "es5",
             noImplicitAny: false,
             sourceMap: false,
-        }
+        },
     }, "tsconfig.json");
 
     baselineCompilerOptions("Convert incorrect option of newLine to compiler-options", {
@@ -84,7 +84,7 @@ describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
             target: "es5",
             noImplicitAny: false,
             sourceMap: false,
-        }
+        },
     }, "tsconfig.json");
 
     baselineCompilerOptions("Convert incorrect option of target to compiler-options", {
@@ -92,7 +92,7 @@ describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
             target: "",
             noImplicitAny: false,
             sourceMap: false,
-        }
+        },
     }, "tsconfig.json");
 
     baselineCompilerOptions("Convert incorrect option of module-resolution to compiler-options", {
@@ -100,7 +100,7 @@ describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
             moduleResolution: "",
             noImplicitAny: false,
             sourceMap: false,
-        }
+        },
     }, "tsconfig.json");
 
     baselineCompilerOptions("Convert incorrect option of libs to compiler-options", {
@@ -109,8 +109,8 @@ describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
             target: "es5",
             noImplicitAny: false,
             sourceMap: false,
-            lib: ["es5", "es2015.core", "incorrectLib"]
-        }
+            lib: ["es5", "es2015.core", "incorrectLib"],
+        },
     }, "tsconfig.json");
 
     baselineCompilerOptions("Convert empty string option of libs to compiler-options", {
@@ -119,8 +119,8 @@ describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
             target: "es5",
             noImplicitAny: false,
             sourceMap: false,
-            lib: ["es5", ""]
-        }
+            lib: ["es5", ""],
+        },
     }, "tsconfig.json");
 
     baselineCompilerOptions("Convert empty string option of libs array to compiler-options", {
@@ -129,8 +129,8 @@ describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
             target: "es5",
             noImplicitAny: false,
             sourceMap: false,
-            lib: [""]
-        }
+            lib: [""],
+        },
     }, "tsconfig.json");
 
     baselineCompilerOptions("Convert trailing-whitespace string option of libs to compiler-options", {
@@ -139,8 +139,8 @@ describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
             target: "es5",
             noImplicitAny: false,
             sourceMap: false,
-            lib: ["   "]
-        }
+            lib: ["   "],
+        },
     }, "tsconfig.json");
 
     baselineCompilerOptions("Convert empty option of libs to compiler-options", {
@@ -149,38 +149,38 @@ describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
             target: "es5",
             noImplicitAny: false,
             sourceMap: false,
-            lib: []
-        }
+            lib: [],
+        },
     }, "tsconfig.json");
 
     baselineCompilerOptions("Convert empty string option of moduleSuffixes to compiler-options", {
         compilerOptions: {
-            moduleSuffixes: [".ios", ""]
-        }
+            moduleSuffixes: [".ios", ""],
+        },
     }, "tsconfig.json");
 
     baselineCompilerOptions("Convert empty string option of moduleSuffixes single to compiler-options", {
         compilerOptions: {
-            moduleSuffixes: [""]
-        }
+            moduleSuffixes: [""],
+        },
     }, "tsconfig.json");
 
     baselineCompilerOptions("Convert trailing-whitespace string option of moduleSuffixes to compiler-options", {
         compilerOptions: {
-            moduleSuffixes: ["   "]
-        }
+            moduleSuffixes: ["   "],
+        },
     }, "tsconfig.json");
 
     baselineCompilerOptions("Convert empty option of moduleSuffixes to compiler-options", {
         compilerOptions: {
-            moduleSuffixes: []
-        }
+            moduleSuffixes: [],
+        },
     }, "tsconfig.json");
 
     baselineCompilerOptions("Convert incorrectly format tsconfig.json to compiler-options", {
         compilerOptions: {
             modu: "commonjs",
-        }
+        },
     }, "tsconfig.json");
 
     baselineCompilerOptions("Convert default tsconfig.json to compiler-options", {}, "tsconfig.json");
@@ -188,8 +188,8 @@ describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
     baselineCompilerOptions("Convert negative numbers in tsconfig.json", {
         compilerOptions: {
             allowJs: true,
-            maxNodeModuleJsDepth: -1
-        }
+            maxNodeModuleJsDepth: -1,
+        },
     }, "tsconfig.json");
 
     // jsconfig.json
@@ -199,8 +199,8 @@ describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
             target: "es5",
             noImplicitAny: false,
             sourceMap: false,
-            lib: ["es5", "es2015.core", "es2015.symbol"]
-        }
+            lib: ["es5", "es2015.core", "es2015.symbol"],
+        },
     }, "jsconfig.json");
 
     baselineCompilerOptions("Convert correctly format jsconfig.json with allowJs is false to compiler-options", {
@@ -210,14 +210,14 @@ describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
             noImplicitAny: false,
             sourceMap: false,
             allowJs: false,
-            lib: ["es5", "es2015.core", "es2015.symbol"]
-        }
+            lib: ["es5", "es2015.core", "es2015.symbol"],
+        },
     }, "jsconfig.json");
 
     baselineCompilerOptions("Convert incorrectly format jsconfig.json to compiler-options", {
         compilerOptions: {
             modu: "commonjs",
-        }
+        },
     }, "jsconfig.json");
 
     baselineCompilerOptions("Convert default jsconfig.json to compiler-options", {}, "jsconfig.json");

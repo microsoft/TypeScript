@@ -72,7 +72,7 @@ import {
     transformNodeModule,
     transformSystemModule,
     transformTypeScript,
-    VariableDeclaration
+    VariableDeclaration,
 } from "./_namespaces/ts";
 import * as performance from "./_namespaces/ts.performance";
 
@@ -97,7 +97,7 @@ const enum TransformationState {
     Uninitialized,
     Initialized,
     Completed,
-    Disposed
+    Disposed,
 }
 
 const enum SyntaxKindFeatureFlags {
@@ -304,7 +304,7 @@ export function transformNodes<T extends Node>(resolver: EmitResolver | undefine
         },
         addDiagnostic(diag) {
             diagnostics.push(diag);
-        }
+        },
     };
 
     // Ensure the parse tree is clean before applying transformations
@@ -346,7 +346,7 @@ export function transformNodes<T extends Node>(resolver: EmitResolver | undefine
         emitNodeWithNotification,
         isEmitNotificationEnabled,
         dispose,
-        diagnostics
+        diagnostics,
     };
 
     function transformRoot(node: T) {
@@ -600,7 +600,7 @@ export function transformNodes<T extends Node>(resolver: EmitResolver | undefine
                         blockScopedVariableDeclarations.map(identifier => factory.createVariableDeclaration(identifier)),
                         NodeFlags.Let
                     )
-                )
+                ),
             ] : undefined;
         blockScopeStackOffset--;
         blockScopedVariableDeclarations = blockScopedVariableDeclarationsStack[blockScopeStackOffset];

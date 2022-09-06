@@ -2,7 +2,7 @@ import { getCommandLineArgsForLibResolution, getSysForLibResolution } from "../h
 import {
     TscWatchCompileChange,
     TscWatchSystem,
-    verifyTscWatch
+    verifyTscWatch,
 } from "../helpers/tscWatch";
 
 describe("unittests:: tsc-watch:: libraryResolution", () => {
@@ -38,7 +38,7 @@ describe("unittests:: tsc-watch:: libraryResolution", () => {
                     changeLib(sys);
                 },
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
-            }
+            },
         ];
     }
     function verify(withoutConfig?: true) {
@@ -54,7 +54,7 @@ describe("unittests:: tsc-watch:: libraryResolution", () => {
                     timeouts: sys => {
                         sys.runQueuedTimeoutCallbacks();
                         sys.runQueuedTimeoutCallbacks();
-                    }
+                    },
                 },
                 {
                     caption: "edit index",
@@ -78,14 +78,14 @@ describe("unittests:: tsc-watch:: libraryResolution", () => {
                     timeouts: sys => {
                         sys.runQueuedTimeoutCallbacks();
                         sys.runQueuedTimeoutCallbacks();
-                    }
+                    },
                 },
                 {
                     caption: "delete redirect file webworker",
                     edit: sys => sys.deleteFile("/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts"),
                     timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                 },
-            ]
+            ],
         });
 
         verifyTscWatch({
@@ -115,7 +115,7 @@ describe("unittests:: tsc-watch:: libraryResolution", () => {
                     timeouts: sys => {
                         sys.runQueuedTimeoutCallbacks();
                         sys.runQueuedTimeoutCallbacks();
-                    }
+                    },
                 },
                 ...editOptions(withoutConfig, sys => sys.deleteFile("/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts")),
                 {
@@ -129,9 +129,9 @@ describe("unittests:: tsc-watch:: libraryResolution", () => {
                     timeouts: sys => {
                         sys.runQueuedTimeoutCallbacks();
                         sys.runQueuedTimeoutCallbacks();
-                    }
+                    },
                 },
-            ]
+            ],
         });
     }
     verify();

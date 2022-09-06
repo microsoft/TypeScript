@@ -22,7 +22,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: program updates", () => {
         core = "core",
         logic = "logic",
         tests = "tests",
-        ui = "ui"
+        ui = "ui",
     }
     type ReadonlyFile = Readonly<File>;
     /** [tsconfig, index] | [tsconfig, index, anotherModule, someDecl] */
@@ -100,7 +100,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: program updates", () => {
             baseline,
             oldSnap,
             getPrograms,
-            watchOrSolution: solutionBuilder
+            watchOrSolution: solutionBuilder,
         });
     });
 
@@ -108,7 +108,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: program updates", () => {
         const newFileWithoutExtension = "newFile";
         const newFile: File = {
             path: projectFilePath(SubProject.core, `${newFileWithoutExtension}.ts`),
-            content: `export const newFileConst = 30;`
+            content: `export const newFileConst = 30;`,
         };
 
         function verifyProjectChanges(subScenario: string, allFilesGetter: () => readonly File[]) {
@@ -147,7 +147,7 @@ export class someClass2 { }`);
                         timeouts: sys => sys.runQueuedTimeoutCallbacks(), // Builds core
                     },
                     buildLogicAndTests,
-                ]
+                ],
             });
 
             verifyTscWatch({
@@ -161,7 +161,7 @@ export class someClass2 { }`);
                 edits: [
                     changeCore(() => `${core[1].content}
 function foo() { }`, "Make local change to core"),
-                ]
+                ],
             });
 
             function changeNewFile(newFileContent: string) {
@@ -181,7 +181,7 @@ function foo() { }`, "Make local change to core"),
                     changeNewFile(`${newFile.content}
 export class someClass2 { }`),
                     buildLogicAndTests,
-                ]
+                ],
             });
         }
 
@@ -201,8 +201,8 @@ export class someClass2 { }`),
                         path: coreTsconfig.path,
                         content: JSON.stringify({
                             compilerOptions: { composite: true, declaration: true },
-                            references: [{ path: "../tests", circular: true }]
-                        })
+                            references: [{ path: "../tests", circular: true }],
+                        }),
                     };
                     return [libFile, circularCoreConfig, ...otherCoreFiles, ...logic, ...tests];
                 }
@@ -229,8 +229,8 @@ export class someClass2 { }`),
                 edit: ts.noop,
                 // Build tests
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
-            }
-        ]
+            },
+        ],
     });
 
     describe("when referenced using prepend, builds referencing project even for non local change", () => {
@@ -238,7 +238,7 @@ export class someClass2 { }`),
         before(() => {
             coreIndex = {
                 path: core[1].path,
-                content: `function foo() { return 10; }`
+                content: `function foo() { return 10; }`,
             };
         });
         after(() => {
@@ -258,19 +258,19 @@ export class someClass2 { }`),
                 const coreTsConfig: File = {
                     path: core[0].path,
                     content: JSON.stringify({
-                        compilerOptions: { composite: true, declaration: true, outFile: "index.js" }
-                    })
+                        compilerOptions: { composite: true, declaration: true, outFile: "index.js" },
+                    }),
                 };
                 const logicTsConfig: File = {
                     path: logic[0].path,
                     content: JSON.stringify({
                         compilerOptions: { ignoreDeprecations: "5.0", composite: true, declaration: true, outFile: "index.js" },
-                        references: [{ path: "../core", prepend: true }]
-                    })
+                        references: [{ path: "../core", prepend: true }],
+                    }),
                 };
                 const logicIndex: File = {
                     path: logic[1].path,
-                    content: `function bar() { return foo() + 1 };`
+                    content: `function bar() { return foo() + 1 };`,
                 };
                 return createWatchedSystem([libFile, coreTsConfig, coreIndex, logicTsConfig, logicIndex], { currentDirectory: "/user/username/projects" });
             },
@@ -281,7 +281,7 @@ function myFunc() { return 10; }`, "Make non local change and build core"),
                 changeCore(() => `${coreIndex.content}
 function myFunc() { return 100; }`, "Make local change and build core"),
                 buildLogic,
-            ]
+            ],
         });
     });
 
@@ -300,7 +300,7 @@ export function createSomeObject(): SomeObject
     return {
         message: "new Object"
     };
-}`
+}`,
         };
         verifyTscWatch({
             scenario: "programUpdates",
@@ -309,17 +309,17 @@ export function createSomeObject(): SomeObject
             sys: () => {
                 const libraryTsconfig: File = {
                     path: `${subProjectLibrary}/tsconfig.json`,
-                    content: JSON.stringify({ compilerOptions: { composite: true } })
+                    content: JSON.stringify({ compilerOptions: { composite: true } }),
                 };
                 const subProjectApp = `${"/user/username/projects"}/sample1/App`;
                 const appTs: File = {
                     path: `${subProjectApp}/app.ts`,
                     content: `import { createSomeObject } from "../Library/library";
-createSomeObject().message;`
+createSomeObject().message;`,
                 };
                 const appTsconfig: File = {
                     path: `${subProjectApp}/tsconfig.json`,
-                    content: JSON.stringify({ references: [{ path: "../Library" }] })
+                    content: JSON.stringify({ references: [{ path: "../Library" }] }),
                 };
 
                 const files = [libFile, libraryTs, libraryTsconfig, appTs, appTsconfig];
@@ -344,7 +344,7 @@ createSomeObject().message;`
                         sys.runQueuedTimeoutCallbacks(); // Build App
                     },
                 },
-            ]
+            ],
         });
 
     });
@@ -370,8 +370,8 @@ let y: string = 10;`),
 let x: string = 10;`),
                         // Builds core
                         timeouts: sys => sys.runQueuedTimeoutCallbacks(),
-                    }
-                ]
+                    },
+                ],
             });
         }
         verifyIncrementalErrors("when preserveWatchOutput is not used", ts.emptyArray);
@@ -386,19 +386,19 @@ let x: string = 10;`),
                 content: `export var myClassWithError = class {
         tags() { }
         private p = 12
-    };`
+    };`,
             };
             const fileWithFixedError: File = {
                 path: fileWithError.path,
-                content: fileWithError.content.replace("private p = 12", "")
+                content: fileWithError.content.replace("private p = 12", ""),
             };
             const fileWithoutError: File = {
                 path: `${subProjectLocation}/fileWithoutError.ts`,
-                content: `export class myClass { }`
+                content: `export class myClass { }`,
             };
             const tsconfig: File = {
                 path: `${subProjectLocation}/tsconfig.json`,
-                content: JSON.stringify({ compilerOptions: { composite: true } })
+                content: JSON.stringify({ compilerOptions: { composite: true } }),
             };
 
             const fixError: TscWatchCompileChange = {
@@ -423,8 +423,8 @@ let x: string = 10;`),
                     { currentDirectory: `${"/user/username/projects"}/${solution}` }
                 ),
                 edits: [
-                    fixError
-                ]
+                    fixError,
+                ],
             });
 
             verifyTscWatch({
@@ -436,8 +436,8 @@ let x: string = 10;`),
                     { currentDirectory: `${"/user/username/projects"}/${solution}` }
                 ),
                 edits: [
-                    changeFileWithoutError
-                ]
+                    changeFileWithoutError,
+                ],
             });
 
             describe("when reporting errors on introducing error", () => {
@@ -457,8 +457,8 @@ let x: string = 10;`),
                     ),
                     edits: [
                         introduceError,
-                        fixError
-                    ]
+                        fixError,
+                    ],
                 });
 
                 verifyTscWatch({
@@ -471,8 +471,8 @@ let x: string = 10;`),
                     ),
                     edits: [
                         introduceError,
-                        changeFileWithoutError
-                    ]
+                        changeFileWithoutError,
+                    ],
                 });
             });
         });
@@ -498,7 +498,7 @@ export function someFn() { }`),
                     sys.runQueuedTimeoutCallbacks(); // build logic
                     sys.runQueuedTimeoutCallbacks(); // build tests
                 },
-            }
+            },
         ],
     });
 
@@ -509,15 +509,15 @@ export function someFn() { }`),
         sys: () => {
             const index: File = {
                 path: `/user/username/projects/myproject/index.ts`,
-                content: `const fn = (a: string, b: string) => b;`
+                content: `const fn = (a: string, b: string) => b;`,
             };
             const configFile: File = {
                 path: `/user/username/projects/myproject/tsconfig.json`,
                 content: JSON.stringify({
                     compilerOptions: {
-                        noUnusedParameters: true
-                    }
-                })
+                        noUnusedParameters: true,
+                    },
+                }),
             };
             return createWatchedSystem([index, configFile, libFile], { currentDirectory: "/user/username/projects/myproject" });
         },
@@ -526,12 +526,12 @@ export function someFn() { }`),
                 caption: "Change tsconfig to set noUnusedParameters to false",
                 edit: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, JSON.stringify({
                     compilerOptions: {
-                        noUnusedParameters: false
-                    }
+                        noUnusedParameters: false,
+                    },
                 })),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
-        ]
+        ],
     });
 
     verifyTscWatch({
@@ -544,10 +544,10 @@ export function someFn() { }`),
             {
                 caption: "Add new file",
                 edit: sys => sys.writeFile(`sample1/${SubProject.core}/file3.ts`, `export const y = 10;`),
-                timeouts: sys => sys.runQueuedTimeoutCallbacks()
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
             noopChange,
-        ]
+        ],
     });
 
     verifyTscWatch({
@@ -564,10 +564,10 @@ export function someFn() { }`),
             {
                 caption: "Add new file",
                 edit: sys => sys.writeFile(`sample1/${SubProject.core}/file3.ts`, `export const y = 10;`),
-                timeouts: sys => sys.runQueuedTimeoutCallbacks()
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
-            noopChange
-        ]
+            noopChange,
+        ],
     });
 
     verifyTscWatch({
@@ -577,7 +577,7 @@ export function someFn() { }`),
         sys: () => {
             const alphaExtendedConfigFile: File = {
                 path: "/a/b/alpha.tsconfig.json",
-                content: "{}"
+                content: "{}",
             };
             const project1Config: File = {
                 path: "/a/b/project1.tsconfig.json",
@@ -586,14 +586,14 @@ export function someFn() { }`),
                     compilerOptions: {
                         composite: true,
                     },
-                    files: [commonFile1.path, commonFile2.path]
-                })
+                    files: [commonFile1.path, commonFile2.path],
+                }),
             };
             const bravoExtendedConfigFile: File = {
                 path: "/a/b/bravo.tsconfig.json",
                 content: JSON.stringify({
-                    extends: "./alpha.tsconfig.json"
-                })
+                    extends: "./alpha.tsconfig.json",
+                }),
             };
             const otherFile: File = {
                 path: "/a/b/other.ts",
@@ -606,8 +606,8 @@ export function someFn() { }`),
                     compilerOptions: {
                         composite: true,
                     },
-                    files: [otherFile.path]
-                })
+                    files: [otherFile.path],
+                }),
             };
             const otherFile2: File = {
                 path: "/a/b/other2.ts",
@@ -618,24 +618,24 @@ export function someFn() { }`),
                 content: JSON.stringify({
                     compilerOptions: {
                         composite: true,
-                    }
-                })
+                    },
+                }),
             };
             const extendsConfigFile2: File = {
                 path: "/a/b/extendsConfig2.tsconfig.json",
                 content: JSON.stringify({
                     compilerOptions: {
                         strictNullChecks: false,
-                    }
-                })
+                    },
+                }),
             };
             const extendsConfigFile3: File = {
                 path: "/a/b/extendsConfig3.tsconfig.json",
                 content: JSON.stringify({
                     compilerOptions: {
                         noImplicitAny: true,
-                    }
-                })
+                    },
+                }),
             };
             const project3Config: File = {
                 path: "/a/b/project3.tsconfig.json",
@@ -644,23 +644,23 @@ export function someFn() { }`),
                     compilerOptions: {
                         composite: false,
                     },
-                    files: [otherFile2.path]
-                })
+                    files: [otherFile2.path],
+                }),
             };
             return createWatchedSystem([
                 libFile,
                 alphaExtendedConfigFile, project1Config, commonFile1, commonFile2,
                 bravoExtendedConfigFile, project2Config, otherFile, otherFile2,
-                    extendsConfigFile1, extendsConfigFile2, extendsConfigFile3, project3Config
+                    extendsConfigFile1, extendsConfigFile2, extendsConfigFile3, project3Config,
             ], { currentDirectory: "/a/b" });
         },
         edits: [
             {
                 caption: "Modify alpha config",
                 edit: sys => sys.writeFile("/a/b/alpha.tsconfig.json", JSON.stringify({
-                    compilerOptions: { strict: true }
+                    compilerOptions: { strict: true },
                 })),
-                timeouts: sys => sys.runQueuedTimeoutCallbacks() // Build project1
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(), // Build project1
             },
             {
                 caption: "Build project 2",
@@ -671,7 +671,7 @@ export function someFn() { }`),
                 caption: "change bravo config",
                 edit: sys => sys.writeFile("/a/b/bravo.tsconfig.json", JSON.stringify({
                     extends: "./alpha.tsconfig.json",
-                    compilerOptions: { strict: false }
+                    compilerOptions: { strict: false },
                 })),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(), // Build project2
             },
@@ -695,7 +695,7 @@ export function someFn() { }`),
             {
                 caption: "Modify extendsConfigFile2",
                 edit: sys => sys.writeFile("/a/b/extendsConfig2.tsconfig.json", JSON.stringify({
-                    compilerOptions: { strictNullChecks: true }
+                    compilerOptions: { strictNullChecks: true },
                 })),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(), // Build project3
             },
@@ -704,7 +704,7 @@ export function someFn() { }`),
                 edit: sys => sys.writeFile("/a/b/project3.tsconfig.json", JSON.stringify({
                     extends: ["./extendsConfig1.tsconfig.json", "./extendsConfig2.tsconfig.json"],
                     compilerOptions: { composite: false },
-                    files: ["/a/b/other2.ts"]
+                    files: ["/a/b/other2.ts"],
                 })),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(), // Build project3
             },
@@ -712,7 +712,7 @@ export function someFn() { }`),
                 caption: "Delete extendedConfigFile2 and report error",
                 edit: sys => sys.deleteFile("./extendsConfig2.tsconfig.json"),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(), // Build project3
-            }
+            },
         ],
     });
 
@@ -725,9 +725,9 @@ export function someFn() { }`),
                 path: "/a/b/alpha.tsconfig.json",
                 content: JSON.stringify({
                     compilerOptions: {
-                        strict: true
-                    }
-                })
+                        strict: true,
+                    },
+                }),
             };
             const project1Config: File = {
                 path: "/a/b/project1.tsconfig.json",
@@ -736,16 +736,16 @@ export function someFn() { }`),
                     compilerOptions: {
                         composite: true,
                     },
-                    files: [commonFile1.path, commonFile2.path]
-                })
+                    files: [commonFile1.path, commonFile2.path],
+                }),
             };
             const bravoExtendedConfigFile: File = {
                 path: "/a/b/bravo.tsconfig.json",
                 content: JSON.stringify({
                     compilerOptions: {
-                        strict: true
-                    }
-                })
+                        strict: true,
+                    },
+                }),
             };
             const otherFile: File = {
                 path: "/a/b/other.ts",
@@ -758,8 +758,8 @@ export function someFn() { }`),
                     compilerOptions: {
                         composite: true,
                     },
-                    files: [otherFile.path]
-                })
+                    files: [otherFile.path],
+                }),
             };
             const configFile: File = {
                 path: "/a/b/tsconfig.json",
@@ -773,12 +773,12 @@ export function someFn() { }`),
                         },
                     ],
                     files: [],
-                })
+                }),
             };
             return createWatchedSystem([
                 libFile, configFile,
                 alphaExtendedConfigFile, project1Config, commonFile1, commonFile2,
-                bravoExtendedConfigFile, project2Config, otherFile
+                bravoExtendedConfigFile, project2Config, otherFile,
             ], { currentDirectory: "/a/b" });
         },
         edits: [
@@ -793,8 +793,8 @@ export function someFn() { }`),
                     files: [],
                 })),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
-            }
-        ]
+            },
+        ],
     });
 
     verifyTscWatch({

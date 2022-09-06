@@ -26,7 +26,7 @@ export function loadProjectFromDisk(
 ): vfs.FileSystem {
     const resolver = vfs.createResolver(Harness.IO);
     return loadProjectFromFiles({
-        ["/src"]: new vfs.Mount(vpath.resolve(Harness.IO.getWorkspaceRoot(), root), resolver)
+        ["/src"]: new vfs.Mount(vpath.resolve(Harness.IO.getWorkspaceRoot(), root), resolver),
     }, options);
 }
 

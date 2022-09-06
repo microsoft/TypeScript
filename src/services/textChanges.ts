@@ -703,7 +703,7 @@ export class ChangeTracker {
             for (const jsdoc of node.jsDoc) {
                 this.deleteRange(sourceFile, {
                     pos: getLineStartPositionForPosition(jsdoc.getStart(sourceFile), sourceFile),
-                    end: getAdjustedEndPosition(sourceFile, jsdoc, /*options*/ {})
+                    end: getAdjustedEndPosition(sourceFile, jsdoc, /*options*/ {}),
                 });
             }
         }
@@ -835,7 +835,7 @@ export class ChangeTracker {
         const pos = getAdjustedStartPosition(sourceFile, scope.getLastToken()!, {});
         this.insertNodeAt(sourceFile, pos, newNode, {
             prefix: isLineBreak(sourceFile.text.charCodeAt(scope.getLastToken()!.pos)) ? this.newLineCharacter : this.newLineCharacter + this.newLineCharacter,
-            suffix: this.newLineCharacter
+            suffix: this.newLineCharacter,
         });
     }
 
@@ -903,7 +903,7 @@ export class ChangeTracker {
         return {
             indentation,
             prefix: (insertLeadingComma ? "," : "") + this.newLineCharacter,
-            suffix: insertTrailingComma ? "," : isInterfaceDeclaration(node) && isEmpty ? ";" : ""
+            suffix: insertTrailingComma ? "," : isInterfaceDeclaration(node) && isEmpty ? ";" : "",
         };
     }
 
@@ -1329,7 +1329,7 @@ namespace changesToText {
             text,
             getLineAndCharacterOfPosition(pos) {
                 return getLineAndCharacterOfPosition(this, pos);
-            }
+            },
         };
         const changes = formatting.formatNodeGivenIndentation(node, file, targetSourceFile.languageVariant, initialIndentation, delta, { ...formatContext, options: formatOptions });
         return applyChanges(text, changes);
@@ -1343,7 +1343,7 @@ namespace changesToText {
             newLine,
             neverAsciiEscape: true,
             preserveSourceNewlines: true,
-            terminateUnterminatedLiterals: true
+            terminateUnterminatedLiterals: true,
         }, writer).writeNode(EmitHint.Unspecified, node, sourceFile, writer);
         return { text: writer.getText(), node: assignPositionsToNode(node) };
     }
@@ -1563,7 +1563,7 @@ export function createWriter(newLine: string): TextChangesWriter {
         isAtStartOfLine,
         hasTrailingComment: () => writer.hasTrailingComment(),
         hasTrailingWhitespace: () => writer.hasTrailingWhitespace(),
-        clear
+        clear,
     };
 }
 

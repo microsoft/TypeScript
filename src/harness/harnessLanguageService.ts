@@ -59,7 +59,7 @@ export class ScriptInfo {
         this.editRanges.push({
             length: this.content.length,
             textChangeRange: ts.createTextChangeRange(
-                ts.createTextSpanFromBounds(start, end), newText.length)
+                ts.createTextSpanFromBounds(start, end), newText.length),
         });
 
         // Update version #
@@ -356,7 +356,7 @@ class ShimLanguageServiceHost extends LanguageServiceAdapterHost implements ts.L
                     const scriptInfo = this.getScriptInfo(fileName);
                     return scriptInfo && scriptInfo.content;
                 },
-                useCaseSensitiveFileNames: this.useCaseSensitiveFileNames()
+                useCaseSensitiveFileNames: this.useCaseSensitiveFileNames(),
             };
             this.getModuleResolutionsForFile = (fileName) => {
                 const scriptInfo = this.getScriptInfo(fileName)!;
@@ -443,7 +443,7 @@ class ClassifierShimProxy implements ts.Classifier {
         for (; i < result.length - 1; i += 2) {
             const t = entries[i / 2] = {
                 length: parseInt(result[i]),
-                classification: parseInt(result[i + 1])
+                classification: parseInt(result[i + 1]),
             };
 
             assert.isTrue(t.length > 0, "Result length should be greater than 0, got :" + t.length);
@@ -455,7 +455,7 @@ class ClassifierShimProxy implements ts.Classifier {
 
         return {
             finalLexState,
-            entries
+            entries,
         };
     }
 }
@@ -706,14 +706,14 @@ export class ShimLanguageServiceAdapter implements LanguageServiceAdapter {
             ambientExternalModules: [],
             isLibFile: shimResult.isLibFile,
             typeReferenceDirectives: [],
-            libReferenceDirectives: []
+            libReferenceDirectives: [],
         };
 
         ts.forEach(shimResult.referencedFiles, refFile => {
             convertResult.referencedFiles.push({
                 fileName: refFile.path,
                 pos: refFile.position,
-                end: refFile.position + refFile.length
+                end: refFile.position + refFile.length,
             });
         });
 
@@ -721,7 +721,7 @@ export class ShimLanguageServiceAdapter implements LanguageServiceAdapter {
             convertResult.importedFiles.push({
                 fileName: importedFile.path,
                 pos: importedFile.position,
-                end: importedFile.position + importedFile.length
+                end: importedFile.position + importedFile.length,
             });
         });
 
@@ -729,7 +729,7 @@ export class ShimLanguageServiceAdapter implements LanguageServiceAdapter {
             convertResult.importedFiles.push({
                 fileName: typeRefDirective.path,
                 pos: typeRefDirective.position,
-                end: typeRefDirective.position + typeRefDirective.length
+                end: typeRefDirective.position + typeRefDirective.length,
             });
         });
         return convertResult;
@@ -912,9 +912,9 @@ class SessionServerHost implements ts.server.ServerHost, ts.server.Logger {
                             };
 
                             return proxy;
-                        }
+                        },
                     }),
-                    error: undefined
+                    error: undefined,
                 };
 
             // Throws during initialization
@@ -923,9 +923,9 @@ class SessionServerHost implements ts.server.ServerHost, ts.server.Logger {
                     module: () => ({
                         create() {
                             throw new Error("I am not a well-behaved plugin");
-                        }
+                        },
                     }),
-                    error: undefined
+                    error: undefined,
                 };
 
             // Adds another diagnostic
@@ -943,14 +943,14 @@ class SessionServerHost implements ts.server.ServerHost, ts.server.Logger {
                                     code: 9999,
                                     length: 3,
                                     messageText: `Plugin diagnostic`,
-                                    start: 0
+                                    start: 0,
                                 });
                                 return prev;
                             };
                             return proxy;
-                        }
+                        },
                     }),
-                    error: undefined
+                    error: undefined,
                 };
 
             // Accepts configurations
@@ -970,7 +970,7 @@ class SessionServerHost implements ts.server.ServerHost, ts.server.Logger {
                                     code: 9999,
                                     length: 3,
                                     messageText: customMessage,
-                                    start: 0
+                                    start: 0,
                                 });
                                 return prev;
                             };
@@ -978,15 +978,15 @@ class SessionServerHost implements ts.server.ServerHost, ts.server.Logger {
                         },
                         onConfigurationChanged(config: any) {
                             customMessage = config.message;
-                        }
+                        },
                     }),
-                    error: undefined
+                    error: undefined,
                 };
 
             default:
                 return {
                     module: undefined,
-                    error: new Error("Could not resolve module")
+                    error: new Error("Could not resolve module"),
                 };
         }
     }
@@ -1053,7 +1053,7 @@ export class ServerLanguageServiceAdapter implements LanguageServiceAdapter {
             "\x1b[1mClient\x1b[0m\x1b[31m:",
             clientText,
             "",
-            "This probably means something is wrong with the fourslash infrastructure, not with the test."
+            "This probably means something is wrong with the fourslash infrastructure, not with the test.",
         ].join(ts.sys.newLine));
     }
 }

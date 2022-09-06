@@ -47,7 +47,7 @@ registerCodeFix({
     getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
         const info = getInfo(diag.file, diag.start);
         if (info) doChange(changes, diag.file, info);
-    })
+    }),
 });
 
 interface Info { readonly indexSignature: IndexSignatureDeclaration; readonly container: FixableDeclaration; }

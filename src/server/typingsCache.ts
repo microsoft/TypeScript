@@ -41,7 +41,7 @@ export const nullTypingsInstaller: ITypingsInstaller = {
     enqueueInstallTypingsRequest: noop,
     attach: noop,
     onProjectClosed: noop,
-    globalTypingsCacheLocation: undefined! // TODO: GH#18217
+    globalTypingsCacheLocation: undefined!, // TODO: GH#18217
 };
 
 interface TypingsCacheEntry {
@@ -135,7 +135,7 @@ export class TypingsCache {
                 typeAcquisition,
                 typings: entry ? entry.typings : emptyArray,
                 unresolvedImports,
-                poisoned: true
+                poisoned: true,
             });
             // something has been changed, issue a request to update typings
             this.installer.enqueueInstallTypingsRequest(project, typeAcquisition, unresolvedImports);
@@ -149,7 +149,7 @@ export class TypingsCache {
             typeAcquisition,
             typings,
             unresolvedImports,
-            poisoned: false
+            poisoned: false,
         });
         return !typeAcquisition || !typeAcquisition.enable ? emptyArray : typings;
     }

@@ -809,7 +809,7 @@ describe("unittests:: evaluation:: esDecorators", () => {
                     `;
                     assert.isTrue(context.access.has(C));
                     assert.isTrue(context.access.has({
-                        get x() { return 2; }
+                        get x() { return 2; },
                     }));
                     assert.isFalse(context.access.has({ }));
                 });
@@ -2249,7 +2249,7 @@ describe("unittests:: evaluation:: esDecorators", () => {
                 "post-super constructor evaluation",
 
                 // and now evaluation has completed:
-                "done"
+                "done",
             ]);
         });
 

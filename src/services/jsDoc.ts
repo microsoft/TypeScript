@@ -173,7 +173,7 @@ const jsDocTagNames = [
     "variation",
     "version",
     "virtual",
-    "yields"
+    "yields",
 ];
 let jsDocTagNameCompletionEntries: CompletionEntry[];
 let jsDocTagCompletionEntries: CompletionEntry[];
@@ -368,7 +368,7 @@ export function getJSDocTagCompletions(): CompletionEntry[] {
             name: `@${tagName}`,
             kind: ScriptElementKind.keyword,
             kindModifiers: "",
-            sortText: Completions.SortText.LocationPriority
+            sortText: Completions.SortText.LocationPriority,
         };
     }));
 }

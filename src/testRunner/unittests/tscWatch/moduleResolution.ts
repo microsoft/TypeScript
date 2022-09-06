@@ -18,13 +18,13 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                     name: "pkg1",
                     version: "1.0.0",
                     main: "build/index.js",
-                })
+                }),
             },
             {
                 path: `/user/username/projects/myproject/packages/pkg1/index.ts`,
                 content: Utils.dedent`
             import type { TheNum } from 'pkg2'
-            export const theNum: TheNum = 42;`
+            export const theNum: TheNum = 42;`,
             },
             {
                 path: `/user/username/projects/myproject/packages/pkg1/tsconfig.json`,
@@ -32,19 +32,19 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                     compilerOptions: {
                         outDir: "build",
                     },
-                })
+                }),
             },
             {
                 path: `/user/username/projects/myproject/packages/pkg2/build/const.d.ts`,
-                content: `export type TheNum = 42;`
+                content: `export type TheNum = 42;`,
             },
             {
                 path: `/user/username/projects/myproject/packages/pkg2/build/index.d.ts`,
-                content: `export type { TheNum } from './const.js';`
+                content: `export type { TheNum } from './const.js';`,
             },
             {
                 path: `/user/username/projects/myproject/packages/pkg2/build/other.d.ts`,
-                content: `export type TheStr = string;`
+                content: `export type TheStr = string;`,
             },
             {
                 path: `/user/username/projects/myproject/packages/pkg2/package.json`,
@@ -52,13 +52,13 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                     name: "pkg2",
                     version: "1.0.0",
                     main: "build/index.js",
-                })
+                }),
             },
             {
                 path: `/user/username/projects/myproject/node_modules/pkg2`,
                 symLink: `/user/username/projects/myproject/packages/pkg2`,
             },
-            libFile
+            libFile,
         ], { currentDirectory: "/user/username/projects/myproject" }),
         commandLineArgs: ["--project", "./packages/pkg1/tsconfig.json", "-w", "--traceResolution"],
         edits: [
@@ -78,7 +78,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                     sys.runQueuedTimeoutCallbacks(); // actual update
                 },
             },
-        ]
+        ],
     });
 
     verifyTscWatch({
@@ -92,9 +92,9 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                         moduleResolution: "nodenext",
                         outDir: "./dist",
                         declaration: true,
-                        declarationDir: "./types"
+                        declarationDir: "./types",
                     },
-                })
+                }),
             },
             {
                 path: `/user/username/projects/myproject/package.json`,
@@ -104,10 +104,10 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                     exports: {
                         ".": {
                             default: "./dist/index.js",
-                            types: "./types/index.d.ts"
-                        }
-                    }
-                })
+                            types: "./types/index.d.ts",
+                        },
+                    },
+                }),
             },
             {
                 path: `/user/username/projects/myproject/index.ts`,
@@ -115,22 +115,22 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                         import * as me from "@this/package";
                         me.thing()
                         export function thing(): void {}
-                    `
+                    `,
             },
             {
                 path: `/user/username/projects/myproject/index2.ts`,
                 content: Utils.dedent`
                         export function thing(): void {}
-                    `
+                    `,
             },
-            libFile
+            libFile,
         ], { currentDirectory: "/user/username/projects/myproject" }),
         commandLineArgs: ["-w", "--traceResolution"],
         edits: [{
             caption: "Add import to index2",
             edit: sys => sys.prependFile(`/user/username/projects/myproject/index2.ts`, `import * as me from "./index.js";`),
             timeouts: sys => sys.runQueuedTimeoutCallbacks(),
-        }]
+        }],
     });
 
     describe("package json file is edited", () => {
@@ -141,27 +141,27 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                     compilerOptions: {
                         target: "es2016",
                         module: "Node16",
-                        outDir: "../out"
-                    }
-                })
+                        outDir: "../out",
+                    },
+                }),
             };
             const packageFile: File = {
                 path: `/user/username/projects/myproject/package.json`,
-                content: packageFileContents
+                content: packageFileContents,
             };
             const fileA: File = {
                 path: `/user/username/projects/myproject/src/fileA.ts`,
                 content: Utils.dedent`
                         import { foo } from "./fileB.mjs";
                         foo();
-                    `
+                    `,
             };
             const fileB: File = {
                 path: `/user/username/projects/myproject/project/src/fileB.mts`,
                 content: Utils.dedent`
                         export function foo() {
                         }
-                    `
+                    `,
             };
             return createWatchedSystem(
                 [configFile, fileA, fileB, packageFile, { ...libFile, path: "/a/lib/lib.es2016.full.d.ts" }],
@@ -283,7 +283,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                 path: `/user/username/projects/myproject/tsconfig.json`,
                 content: JSON.stringify({
                     compilerOptions: { moduleResolution: "node16" },
-                })
+                }),
             },
             {
                 path: `/user/username/projects/myproject/index.ts`,
@@ -291,13 +291,13 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                         import type { ImportInterface } from "pkg" assert { "resolution-mode": "import" };
                         import type { RequireInterface } from "pkg1" assert { "resolution-mode": "require" };
                         import {x} from "./a";
-                    `
+                    `,
             },
             {
                 path: `/user/username/projects/myproject/a.ts`,
                 content: Utils.dedent`
                         export const x = 10;
-                    `
+                    `,
             },
             {
                 path: `/user/username/projects/myproject/node_modules/pkg/package.json`,
@@ -306,17 +306,17 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                     version: "0.0.1",
                     exports: {
                         import: "./import.js",
-                        require: "./require.js"
-                    }
-                })
+                        require: "./require.js",
+                    },
+                }),
             },
             {
                 path: `/user/username/projects/myproject/node_modules/pkg/import.d.ts`,
-                content: `export interface ImportInterface {}`
+                content: `export interface ImportInterface {}`,
             },
             {
                 path: `/user/username/projects/myproject/node_modules/pkg/require.d.ts`,
-                content: `export interface RequireInterface {}`
+                content: `export interface RequireInterface {}`,
             },
             {
                 path: `/user/username/projects/myproject/node_modules/pkg1/package.json`,
@@ -325,15 +325,15 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                     version: "0.0.1",
                     exports: {
                         import: "./import.js",
-                        require: "./require.js"
-                    }
-                })
+                        require: "./require.js",
+                    },
+                }),
             },
             {
                 path: `/user/username/projects/myproject/node_modules/pkg1/import.d.ts`,
-                content: `export interface ImportInterface {}`
+                content: `export interface ImportInterface {}`,
             },
-            libFile
+            libFile,
         ], { currentDirectory: "/user/username/projects/myproject" }),
         commandLineArgs: ["-w", "--traceResolution"],
         edits: [
@@ -341,8 +341,8 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                 caption: "modify aFile by adding import",
                 edit: sys => sys.appendFile(`/user/username/projects/myproject/a.ts`, `import type { ImportInterface } from "pkg" assert { "resolution-mode": "import" }`),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
-            }
-        ]
+            },
+        ],
     });
 
     verifyTscWatch({
@@ -353,7 +353,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                 path: `/user/username/projects/myproject/tsconfig.json`,
                 content: JSON.stringify({
                     compilerOptions: { moduleResolution: "node16" },
-                })
+                }),
             },
             {
                 path: `/user/username/projects/myproject/index.ts`,
@@ -361,13 +361,13 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                     /// <reference types="pkg" resolution-mode="import"/>
                     /// <reference types="pkg1" resolution-mode="require"/>
                     export interface LocalInterface extends RequireInterface {}
-                `
+                `,
             },
             {
                 path: `/user/username/projects/myproject/a.ts`,
                 content: Utils.dedent`
                     export const x = 10;
-                `
+                `,
             },
             {
                 path: `/user/username/projects/myproject/node_modules/pkg/package.json`,
@@ -376,9 +376,9 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                     version: "0.0.1",
                     exports: {
                         import: "./import.js",
-                        require: "./require.js"
-                    }
-                })
+                        require: "./require.js",
+                    },
+                }),
             },
             {
                 path: `/user/username/projects/myproject/node_modules/pkg/import.d.ts`,
@@ -387,7 +387,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                     declare global {
                         interface ImportInterface {}
                     }
-                `
+                `,
             },
             {
                 path: `/user/username/projects/myproject/node_modules/pkg/require.d.ts`,
@@ -396,7 +396,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                     declare global {
                         interface RequireInterface {}
                     }
-                `
+                `,
             },
             {
                 path: `/user/username/projects/myproject/node_modules/pkg1/package.json`,
@@ -405,9 +405,9 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                     version: "0.0.1",
                     exports: {
                         import: "./import.js",
-                        require: "./require.js"
-                    }
-                })
+                        require: "./require.js",
+                    },
+                }),
             },
             {
                 path: `/user/username/projects/myproject/node_modules/pkg1/import.d.ts`,
@@ -416,13 +416,13 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                     declare global {
                         interface ImportInterface {}
                     }
-                `
+                `,
             },
             {
                 path: `/user/username/projects/myproject/node_modules/@types/pkg2/index.d.ts`,
-                content: `export const x = 10;`
+                content: `export const x = 10;`,
             },
-            libFile
+            libFile,
         ], { currentDirectory: "/user/username/projects/myproject" }),
         commandLineArgs: ["-w", "--traceResolution"],
         edits: [
@@ -430,8 +430,8 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                 caption: "modify aFile by adding import",
                 edit: sys => sys.prependFile(`/user/username/projects/myproject/a.ts`, `/// <reference types="pkg" resolution-mode="import"/>\n`),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
-            }
-        ]
+            },
+        ],
     });
 
     verifyTscWatch({
@@ -536,6 +536,6 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                     sys.runQueuedTimeoutCallbacks();
                 },
             },
-        ]
+        ],
     });
 });

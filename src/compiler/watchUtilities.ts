@@ -129,7 +129,7 @@ export function createCachedDirectoryStructureHost(host: DirectoryStructureHost,
         addOrDeleteFileOrDirectory,
         addOrDeleteFile,
         clearCache,
-        realpath: host.realpath && realpath
+        realpath: host.realpath && realpath,
     };
 
     function toPath(fileName: string) {
@@ -162,7 +162,7 @@ export function createCachedDirectoryStructureHost(host: DirectoryStructureHost,
         if (!host.realpath || ensureTrailingDirectorySeparator(toPath(host.realpath(rootDir))) === rootDirPath) {
             const resultFromHost: MutableFileSystemEntries = {
                 files: map(host.readDirectory!(rootDir, /*extensions*/ undefined, /*exclude*/ undefined, /*include*/["*.*"]), getBaseNameOfFileName) || [],
-                directories: host.getDirectories!(rootDir) || []
+                directories: host.getDirectories!(rootDir) || [],
             };
 
             cachedReadDirectoryResult.set(ensureTrailingDirectorySeparator(rootDirPath), resultFromHost);
@@ -276,7 +276,7 @@ export function createCachedDirectoryStructureHost(host: DirectoryStructureHost,
             if (rootSymLinkResult && path === rootDirPath) return rootSymLinkResult;
             const result: FileSystemEntries = {
                 files: map(host.readDirectory!(dir, /*extensions*/ undefined, /*exclude*/ undefined, /*include*/["*.*"]), getBaseNameOfFileName) || emptyArray,
-                directories: host.getDirectories!(dir) || emptyArray
+                directories: host.getDirectories!(dir) || emptyArray,
             };
             if (path === rootDirPath) rootSymLinkResult = result;
             return result;
@@ -313,7 +313,7 @@ export function createCachedDirectoryStructureHost(host: DirectoryStructureHost,
         const baseName = getBaseNameOfFileName(fileOrDirectory);
         const fsQueryResult: FileAndDirectoryExistence = {
             fileExists: host.fileExists(fileOrDirectoryPath),
-            directoryExists: host.directoryExists(fileOrDirectoryPath)
+            directoryExists: host.directoryExists(fileOrDirectoryPath),
         };
         if (fsQueryResult.directoryExists || hasEntry(parentResult.sortedAndCanonicalizedDirectories, getCanonicalFileName(baseName))) {
             // Folder added or removed, clear the cache instead of updating the folder and its structure
@@ -369,7 +369,7 @@ export enum ConfigFileProgramReloadLevel {
     /** Update the file name list from the disk */
     Partial,
     /** Reload completely by re-reading contents of config file from disk and updating program */
-    Full
+    Full,
 }
 
 /** @internal */
@@ -468,7 +468,7 @@ export function updatePackageJsonWatch(
         newMap,
         {
             createNewValue: createPackageJsonWatch,
-            onDeleteValue: closeFileWatcher
+            onDeleteValue: closeFileWatcher,
         }
     );
 }
@@ -495,7 +495,7 @@ export function updateMissingFilePathsWatch(
             createNewValue: createMissingFileWatch,
             // Files that are no longer missing (e.g. because they are no longer required)
             // should no longer be watched.
-            onDeleteValue: closeFileWatcher
+            onDeleteValue: closeFileWatcher,
         }
     );
 }
@@ -528,7 +528,7 @@ export function updateWatchingWildcardDirectories(
             // Close existing watch thats not needed any more
             onDeleteValue: closeFileWatcherOf,
             // Close existing watch that doesnt match in the flags
-            onExistingValue: updateWildcardDirectoryWatcher
+            onExistingValue: updateWildcardDirectoryWatcher,
         }
     );
 
@@ -536,7 +536,7 @@ export function updateWatchingWildcardDirectories(
         // Create new watch and recursive info
         return {
             watcher: watchDirectory(directory, flags),
-            flags
+            flags,
         };
     }
 
@@ -645,7 +645,7 @@ export function isEmittedFileOfProgram(program: Program | undefined, file: strin
 export enum WatchLogLevel {
     None,
     TriggerOnly,
-    Verbose
+    Verbose,
 }
 
 /** @internal */
@@ -674,13 +674,13 @@ export function getWatchFactory<X, Y = undefined>(host: WatchFactoryHost, watchL
     const triggerInvokingFactory: WatchFactory<X, Y> | undefined = watchLogLevel !== WatchLogLevel.None ?
         {
             watchFile: createTriggerLoggingAddWatch("watchFile"),
-            watchDirectory: createTriggerLoggingAddWatch("watchDirectory")
+            watchDirectory: createTriggerLoggingAddWatch("watchDirectory"),
         } :
         undefined;
     const factory = watchLogLevel === WatchLogLevel.Verbose ?
         {
             watchFile: createFileWatcherWithLogging,
-            watchDirectory: createDirectoryWatcherWithLogging
+            watchDirectory: createDirectoryWatcherWithLogging,
         } :
         triggerInvokingFactory || plainInvokeFactory;
     const excludeWatcherFactory = watchLogLevel === WatchLogLevel.Verbose ?
@@ -689,7 +689,7 @@ export function getWatchFactory<X, Y = undefined>(host: WatchFactoryHost, watchL
 
     return {
         watchFile: createExcludeHandlingAddWatch("watchFile"),
-        watchDirectory: createExcludeHandlingAddWatch("watchDirectory")
+        watchDirectory: createExcludeHandlingAddWatch("watchDirectory"),
     };
 
     function createExcludeHandlingAddWatch<T extends keyof WatchFactory<X, Y>>(key: T): WatchFactory<X, Y>[T] {
@@ -720,7 +720,7 @@ export function getWatchFactory<X, Y = undefined>(host: WatchFactoryHost, watchL
     ) {
         log(`ExcludeWatcher:: Added:: ${getWatchInfo(file, flags, options, detailInfo1, detailInfo2, getDetailWatchInfo)}`);
         return {
-            close: () => log(`ExcludeWatcher:: Close:: ${getWatchInfo(file, flags, options, detailInfo1, detailInfo2, getDetailWatchInfo)}`)
+            close: () => log(`ExcludeWatcher:: Close:: ${getWatchInfo(file, flags, options, detailInfo1, detailInfo2, getDetailWatchInfo)}`),
         };
     }
 
@@ -738,7 +738,7 @@ export function getWatchFactory<X, Y = undefined>(host: WatchFactoryHost, watchL
             close: () => {
                 log(`FileWatcher:: Close:: ${getWatchInfo(file, flags, options, detailInfo1, detailInfo2, getDetailWatchInfo)}`);
                 watcher.close();
-            }
+            },
         };
     }
 
@@ -764,7 +764,7 @@ export function getWatchFactory<X, Y = undefined>(host: WatchFactoryHost, watchL
                 watcher.close();
                 const elapsed = timestamp() - start;
                 log(`Elapsed:: ${elapsed}ms ${watchInfo}`);
-            }
+            },
         };
     }
 
@@ -797,7 +797,7 @@ export function getFallbackOptions(options: WatchOptions | undefined): WatchOpti
     return {
         watchFile: fallbackPolling !== undefined ?
             fallbackPolling as unknown as WatchFileKind :
-            WatchFileKind.PriorityPollingInterval
+            WatchFileKind.PriorityPollingInterval,
     };
 }
 

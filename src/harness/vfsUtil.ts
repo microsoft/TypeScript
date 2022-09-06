@@ -871,7 +871,7 @@ export class FileSystem {
             mtimeMs: time,
             ctimeMs: time,
             birthtimeMs: time,
-            nlink: 0
+            nlink: 0,
         };
     }
 
@@ -964,7 +964,7 @@ export class FileSystem {
                 ctimeMs: root.ctimeMs,
                 birthtimeMs: root.birthtimeMs,
                 nlink: root.nlink,
-                shadowRoot: root
+                shadowRoot: root,
             };
 
             if (isSymlink(root)) (shadow as SymlinkInode).symlink = root.symlink;
@@ -1218,7 +1218,7 @@ export function createResolver(host: FileSystemResolverHost): FileSystemResolver
         },
         readFileSync(path: string): Buffer {
             return ts.sys.bufferFrom!(host.readFile(path)!, "utf8") as Buffer; // TODO: GH#18217
-        }
+        },
     };
 }
 
@@ -1330,7 +1330,7 @@ export const IOErrorMessages = Object.freeze({
     EINVAL: "invalid value",
     ENOTEMPTY: "directory not empty",
     EPERM: "operation not permitted",
-    EROFS: "file system is read-only"
+    EROFS: "file system is read-only",
 });
 
 export function createIOError(code: keyof typeof IOErrorMessages, details = "") {
@@ -1519,10 +1519,10 @@ function getBuiltLocal(host: FileSystemResolverHost, ignoreCase: boolean): FileS
                 [builtFolder]: new Mount(vpath.resolve(host.getWorkspaceRoot(), "built/local"), resolver),
                 [testLibFolder]: new Mount(vpath.resolve(host.getWorkspaceRoot(), "tests/lib"), resolver),
                 [projectsFolder]: new Mount(vpath.resolve(host.getWorkspaceRoot(), "tests/projects"), resolver),
-                [srcFolder]: {}
+                [srcFolder]: {},
             },
             cwd: srcFolder,
-            meta: { defaultLibLocation: builtFolder }
+            meta: { defaultLibLocation: builtFolder },
         });
         builtLocalCI.makeReadonly();
     }

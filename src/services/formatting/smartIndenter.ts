@@ -62,7 +62,7 @@ import {
 export namespace SmartIndenter {
 
     const enum Value {
-        Unknown = -1
+        Unknown = -1,
     }
 
     /**
@@ -368,7 +368,7 @@ export namespace SmartIndenter {
     const enum NextTokenKind {
         Unknown,
         OpenBrace,
-        CloseBrace
+        CloseBrace,
     }
 
     function nextTokenIsCurlyBraceOnSameLineAsCursor(precedingToken: Node, current: Node, lineAtPosition: number, sourceFile: SourceFile): NextTokenKind {

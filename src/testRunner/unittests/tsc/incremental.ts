@@ -3,7 +3,7 @@ import * as Utils from "../../_namespaces/Utils";
 import * as vfs from "../../_namespaces/vfs";
 import {
     compilerOptionsToConfigJson,
-    libContent
+    libContent,
 } from "../helpers/contents";
 import {
     noChangeOnlyRuns,
@@ -15,7 +15,7 @@ import {
     appendText,
     loadProjectFromDisk,
     loadProjectFromFiles, prependText,
-    replaceText
+    replaceText,
 } from "../helpers/vfs";
 
 describe("unittests:: tsc:: incremental::", () => {
@@ -36,7 +36,7 @@ describe("unittests:: tsc:: incremental::", () => {
                     }`,
         }),
         commandLineArgs: ["--incremental", "--p", "src/project", "--tsBuildInfoFile", "src/project/.tsbuildinfo", "--explainFiles"],
-        edits: noChangeOnlyRuns
+        edits: noChangeOnlyRuns,
     });
 
     verifyTsc({
@@ -53,7 +53,7 @@ describe("unittests:: tsc:: incremental::", () => {
                     }`,
         }),
         commandLineArgs: ["--p", "src/project", "--rootDir", "src/project/src"],
-        edits: noChangeOnlyRuns
+        edits: noChangeOnlyRuns,
     });
 
     verifyTsc({
@@ -69,9 +69,9 @@ describe("unittests:: tsc:: incremental::", () => {
             noChangeRun,
             {
                 caption: "incremental-declaration-doesnt-change",
-                edit: fs => appendText(fs, "/src/project/src/main.d.ts", "export const xy = 100;")
-            }
-        ]
+                edit: fs => appendText(fs, "/src/project/src/main.d.ts", "export const xy = 100;"),
+            },
+        ],
     });
 
     verifyTsc({
@@ -89,7 +89,7 @@ describe("unittests:: tsc:: incremental::", () => {
                     }`,
         }),
         commandLineArgs: ["--p", "src/project"],
-        edits: noChangeOnlyRuns
+        edits: noChangeOnlyRuns,
     });
 
     verifyTsc({
@@ -104,7 +104,7 @@ describe("unittests:: tsc:: incremental::", () => {
         edits: [{
             caption: "tsbuildinfo written has error",
             edit: fs => prependText(fs, "/src/project/tsconfig.tsbuildinfo", "Some random string"),
-        }]
+        }],
     });
 
     describe("with noEmitOnError", () => {
@@ -127,11 +127,11 @@ describe("unittests:: tsc:: incremental::", () => {
                     noChangeRun,
                     {
                         caption: "incremental-declaration-doesnt-change",
-                        edit: fixModifyFs
+                        edit: fixModifyFs,
                     },
                     noChangeRun,
                 ],
-                baselinePrograms: true
+                baselinePrograms: true,
             });
         }
         verifyNoEmitOnError(
@@ -296,8 +296,8 @@ const a: string = 10;`, "utf-8"),
                 `,
             "/src/project/src/filePresent.ts": `function something() { return 10; }`,
             "/src/project/tsconfig.json": JSON.stringify({
-                compilerOptions: { composite: true, },
-                include: ["src/**/*.ts"]
+                compilerOptions: { composite: true },
+                include: ["src/**/*.ts"],
             }),
         }),
         commandLineArgs: ["--p", "src/project"],
@@ -355,9 +355,9 @@ declare global {
                 "/src/project/node_modules/react/jsx-runtime.js": "export {}", // js needs to be present so there's a resolution result
                 "/src/project/node_modules/@types/react/index.d.ts": getJsxLibraryContent(), // doesn't contain a jsx-runtime definition
                 "/src/project/src/index.tsx": `export const App = () => <div propA={true}></div>;`,
-                "/src/project/tsconfig.json": JSON.stringify({ compilerOptions: { module: "commonjs", jsx: "react-jsx", incremental: true, jsxImportSource: "react" } })
+                "/src/project/tsconfig.json": JSON.stringify({ compilerOptions: { module: "commonjs", jsx: "react-jsx", incremental: true, jsxImportSource: "react" } }),
             }),
-            commandLineArgs: ["--p", "src/project"]
+            commandLineArgs: ["--p", "src/project"],
         });
 
         verifyTsc({
@@ -367,9 +367,9 @@ declare global {
                 "/src/project/node_modules/react/jsx-runtime.js": "export {}", // js needs to be present so there's a resolution result
                 "/src/project/node_modules/@types/react/index.d.ts": getJsxLibraryContent(), // doesn't contain a jsx-runtime definition
                 "/src/project/src/index.tsx": `export const App = () => <div propA={true}></div>;`,
-                "/src/project/tsconfig.json": JSON.stringify({ compilerOptions: { module: "commonjs", jsx: "react-jsx", incremental: true, jsxImportSource: "react" } })
+                "/src/project/tsconfig.json": JSON.stringify({ compilerOptions: { module: "commonjs", jsx: "react-jsx", incremental: true, jsxImportSource: "react" } }),
             }),
-            commandLineArgs: ["--p", "src/project", "--strict"]
+            commandLineArgs: ["--p", "src/project", "--strict"],
         });
     });
 
@@ -381,20 +381,20 @@ declare global {
             "/src/projects/project1/tsconfig.json": JSON.stringify({
                 compilerOptions: {
                     module: "none",
-                    composite: true
+                    composite: true,
                 },
-                exclude: ["temp"]
+                exclude: ["temp"],
             }),
             "/src/projects/project1/class1.ts": `class class1 {}`,
             "/src/projects/project1/class1.d.ts": `declare class class1 {}`,
             "/src/projects/project2/tsconfig.json": JSON.stringify({
                 compilerOptions: {
                     module: "none",
-                    composite: true
+                    composite: true,
                 },
                 references: [
-                    { path: "../project1" }
-                ]
+                    { path: "../project1" },
+                ],
             }),
             "/src/projects/project2/class2.ts": `class class2 {}`,
         }),
@@ -430,7 +430,7 @@ declare global {
                 caption: "Create output for class3",
                 edit: fs => fs.writeFileSync("/src/projects/project1/class3.d.ts", `declare class class3 {}`, "utf-8"),
             },
-        ]
+        ],
     });
 
     verifyTsc({
@@ -447,7 +447,7 @@ declare global {
             "/src/project/class1.ts": `export class class1 {}`,
         }),
         edits: noChangeOnlyRuns,
-        baselinePrograms: true
+        baselinePrograms: true,
     });
 
     verifyTsc({
@@ -476,7 +476,7 @@ declare global {
                     (<Component>
                         <div />
                         <div />
-                    </Component>)`
+                    </Component>)`,
         }, `\ninterface ReadonlyArray<T> { readonly length: number }`),
         edits: noChangeOnlyRuns,
     });
@@ -509,7 +509,7 @@ declare global {
         commandLineArgs: ["--p", "src/project", "--rootDir", "src/project/src"],
         modifyFs: (fs) => {
             fs.writeFileSync("/lib/lib.esnext.d.ts", libContent);
-        }
+        },
     });
 
     verifyTsc({
@@ -517,7 +517,7 @@ declare global {
         subScenario: "change to type that gets used as global through export in another file",
         commandLineArgs: ["-p", `src/project`],
         fs: () => loadProjectFromFiles({
-            "/src/project/tsconfig.json": JSON.stringify({ compilerOptions: { composite: true }, }),
+            "/src/project/tsconfig.json": JSON.stringify({ compilerOptions: { composite: true } }),
             "/src/project/class1.ts": `const a: MagicNumber = 1;
 console.log(a);`,
             "/src/project/constants.ts": "export default 1;",
@@ -534,7 +534,7 @@ console.log(a);`,
         subScenario: "change to type that gets used as global through export in another file through indirect import",
         commandLineArgs: ["-p", `src/project`],
         fs: () => loadProjectFromFiles({
-            "/src/project/tsconfig.json": JSON.stringify({ compilerOptions: { composite: true }, }),
+            "/src/project/tsconfig.json": JSON.stringify({ compilerOptions: { composite: true } }),
             "/src/project/class1.ts": `const a: MagicNumber = 1;
 console.log(a);`,
             "/src/project/constants.ts": "export default 1;",
@@ -597,10 +597,10 @@ console.log(a);`,
                     noEmitOnError: true,
                     declaration: true,
                     composite: true,
-                }
+                },
             }),
             "/src/project/a.ts": "const x = 10;",
-            "/src/project/b.ts": "const y = 10;"
+            "/src/project/b.ts": "const y = 10;",
         }),
         commandLineArgs: ["--p", "/src/project"],
         edits: [
@@ -612,14 +612,14 @@ console.log(a);`,
                     `Clean build does not emit any file so will have emitSignatures with all files since they are not emitted`,
                     `Incremental build has emitSignatures from before, so it will have a.ts with signature since file.version isnt same`,
                     `Incremental build will also have emitSignatureDtsMapDiffers for both files since the emitSignatures were without declarationMap but currentOptions have declrationMap`,
-                ]
+                ],
             },
             {
                 caption: "fix error declarationMap",
                 edit: fs => replaceText(fs, "/src/project/a.ts", "x: 20", "x"),
                 commandLineArgs: ["--p", "/src/project", "--declarationMap"],
             },
-        ]
+        ],
     });
 
     verifyTsc({
@@ -632,10 +632,10 @@ console.log(a);`,
                     declaration: true,
                     composite: true,
                     outFile: "../outFile.js",
-                }
+                },
             }),
             "/src/project/a.ts": "const x = 10;",
-            "/src/project/b.ts": "const y = 10;"
+            "/src/project/b.ts": "const y = 10;",
         }),
         commandLineArgs: ["--p", "/src/project"],
         edits: [
@@ -649,7 +649,7 @@ console.log(a);`,
                 edit: fs => replaceText(fs, "/src/project/a.ts", "x: 20", "x"),
                 commandLineArgs: ["--p", "/src/project", "--declarationMap"],
             },
-        ]
+        ],
     });
 
     describe("different options::", () => {
@@ -669,7 +669,7 @@ console.log(a);`,
                 discrepancyExplanation: () => [
                     `Clean build tsbuildinfo will have compilerOptions with composite and ${option.replace(/-/g, "")}`,
                     `Incremental build will detect that it doesnt need to rebuild so tsbuild info is from before which has option composite only`,
-                ]
+                ],
             };
         }
         function withEmitDeclarationOnlyChangeAndDiscrepancyExplanation(caption: string): TestTscEdit {
@@ -678,7 +678,7 @@ console.log(a);`,
             edit.discrepancyExplanation = () => [
                 ...discrepancyExplanation(),
                 `Clean build info does not have js section because its fresh build`,
-                `Incremental build info has js section from old build`
+                `Incremental build info has js section from old build`,
             ];
             return edit;
         }
@@ -837,7 +837,7 @@ console.log(a);`,
                 caption: "delete file with imports",
                 edit: fs => fs.unlinkSync("/src/project/file2.ts"),
             },
-        ]
+        ],
     });
 
     verifyTsc({

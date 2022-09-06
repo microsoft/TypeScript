@@ -107,7 +107,7 @@ function getSourceTarget(errorNode: Node | undefined, checker: TypeChecker): { s
         if (!declaration) return undefined;
         return {
             source: isPropertyAssignment(errorNode.parent) ? errorNode.parent.initializer : errorNode.parent.name,
-            target: declaration
+            target: declaration,
         };
     }
     return undefined;
@@ -119,7 +119,7 @@ function addUndefinedToOptionalProperty(changes: textChanges.ChangeTracker, toAd
         if (d && (isPropertySignature(d) || isPropertyDeclaration(d)) && d.type) {
             const t = factory.createUnionTypeNode([
                 ...d.type.kind === SyntaxKind.UnionType ? (d.type as UnionTypeNode).types : [d.type],
-                factory.createTypeReferenceNode("undefined")
+                factory.createTypeReferenceNode("undefined"),
             ]);
             changes.replaceNode(d.getSourceFile(), d.type, t);
         }

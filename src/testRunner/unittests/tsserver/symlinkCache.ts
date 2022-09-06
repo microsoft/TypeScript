@@ -22,17 +22,17 @@ const appTsconfigJson: File = {
                 "baseUrl": "."
             }
             "references": [{ "path": "../dep" }]
-        }`
+        }`,
 };
 
 const appSrcIndexTs: File = {
     path: "/packages/app/src/index.ts",
-    content: `import "dep/does/not/exist";`
+    content: `import "dep/does/not/exist";`,
 };
 
 const depPackageJson: File = {
     path: "/packages/dep/package.json",
-    content: `{ "name": "dep", "main": "dist/index.js", "types": "dist/index.d.ts" }`
+    content: `{ "name": "dep", "main": "dist/index.js", "types": "dist/index.d.ts" }`,
 };
 
 const depTsconfigJson: File = {
@@ -40,18 +40,18 @@ const depTsconfigJson: File = {
     content: `
         {
             "compilerOptions": { "outDir": "dist", "rootDir": "src", "module": "commonjs" }
-        }`
+        }`,
 };
 
 const depSrcIndexTs: File = {
     path: "/packages/dep/src/index.ts",
     content: `
-        import "./sub/folder";`
+        import "./sub/folder";`,
 };
 
 const depSrcSubFolderIndexTs: File = {
     path: "/packages/dep/src/sub/folder/index.ts",
-    content: `export const dep = 0;`
+    content: `export const dep = 0;`,
 };
 
 const link: SymLink = {
@@ -80,7 +80,7 @@ describe("unittests:: tsserver:: symlinkCache", () => {
                 primary: true,
                 originalPath: "/foo",
                 resolvedFileName: "/one/two/foo",
-            }
+            },
         });
         cache.setSymlinksFromResolutions([], map);
     });

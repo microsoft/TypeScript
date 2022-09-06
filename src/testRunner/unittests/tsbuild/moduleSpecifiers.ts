@@ -90,9 +90,9 @@ describe("unittests:: tsbuild:: moduleSpecifiers:: synthesized module specifiers
                         { "path": "./solution" }
                     ],
                     "include": []
-                }`
+                }`,
         }, symbolLibContent),
-        commandLineArgs: ["-b", "/src", "--verbose"]
+        commandLineArgs: ["-b", "/src", "--verbose"],
     });
 });
 
@@ -189,6 +189,6 @@ describe("unittests:: tsbuild:: moduleSpecifiers:: synthesized module specifiers
             fs.symlinkSync("/src", "/src/src-types/node_modules");
             fs.symlinkSync("/src", "/src/src-dogs/node_modules");
         },
-        commandLineArgs: ["-b", "src/src-types", "src/src-dogs", "--verbose"]
+        commandLineArgs: ["-b", "src/src-types", "src/src-dogs", "--verbose"],
     });
 });

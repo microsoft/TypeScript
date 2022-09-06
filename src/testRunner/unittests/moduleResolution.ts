@@ -41,7 +41,7 @@ function createModuleResolutionHost(baselines: string[], hasDirectoryExists: boo
                 assert.isTrue(directories.has(ts.getDirectoryPath(path)), `'fileExists' '${path}' request in non-existing directory`);
                 return map.has(path);
             },
-            useCaseSensitiveFileNames: true
+            useCaseSensitiveFileNames: true,
         };
     }
     else {
@@ -334,7 +334,7 @@ describe("unittests:: moduleResolution:: Node module resolution - non-relative p
             },
             {
                 name: "/sub/node_modules/a/package.json",
-                content: '{"version": "0.0.0", "main": "./index"}'
+                content: '{"version": "0.0.0", "main": "./index"}',
             }
         );
         const compilerOptions: ts.CompilerOptions = { moduleResolution: ts.ModuleResolutionKind.Node10 };
@@ -438,17 +438,17 @@ export = B;`,
 import Shared = require('../first/shared');
 class C {}
 export = C;
-                `
+                `,
     }, "/a/b/c/first/second", ["class_a.ts"], ["../../../c/third/class_c.ts"]);
 
     test("should find modules in node_modules", {
         "/parent/node_modules/mod/index.d.ts": "export var x",
-        "/parent/app/myapp.ts": `import {x} from "mod"`
+        "/parent/app/myapp.ts": `import {x} from "mod"`,
     }, "/parent/app", ["myapp.ts"], []);
 
     test("should find file referenced via absolute and relative names", {
         "/a/b/c.ts": `/// <reference path="b.ts"/>`,
-        "/a/b/b.ts": "var x"
+        "/a/b/b.ts": "var x",
     }, "/a/b", ["c.ts", "/a/b/b.ts"], []);
 });
 
@@ -512,7 +512,7 @@ describe("unittests:: moduleResolution:: Files with different casing with forceC
         "same file is referenced using absolute and relative names",
         {
             "/a/b/c.ts": `/// <reference path="d.ts"/>`,
-            "/a/b/d.ts": "var x"
+            "/a/b/d.ts": "var x",
         },
         { module: ts.ModuleKind.AMD },
         "/a/b",
@@ -523,7 +523,7 @@ describe("unittests:: moduleResolution:: Files with different casing with forceC
         "two files used in program differ only in casing (tripleslash references)",
         {
             "/a/b/c.ts": `/// <reference path="D.ts"/>`,
-            "/a/b/d.ts": "var x"
+            "/a/b/d.ts": "var x",
         },
         { module: ts.ModuleKind.AMD, forceConsistentCasingInFileNames: true },
         "/a/b",
@@ -534,7 +534,7 @@ describe("unittests:: moduleResolution:: Files with different casing with forceC
         "two files used in program differ only in casing (imports)",
         {
             "/a/b/c.ts": `import {x} from "D"`,
-            "/a/b/d.ts": "export var x"
+            "/a/b/d.ts": "export var x",
         },
         { module: ts.ModuleKind.AMD, forceConsistentCasingInFileNames: true },
         "/a/b",
@@ -545,7 +545,7 @@ describe("unittests:: moduleResolution:: Files with different casing with forceC
         "two files used in program differ only in casing (imports, relative module names)",
         {
             "moduleA.ts": `import {x} from "./ModuleB"`,
-            "moduleB.ts": "export var x"
+            "moduleB.ts": "export var x",
         },
         { module: ts.ModuleKind.CommonJS, forceConsistentCasingInFileNames: true },
         "",
@@ -557,7 +557,7 @@ describe("unittests:: moduleResolution:: Files with different casing with forceC
         {
             "/a/b/c.ts": `import {x} from "D"`,
             "/a/b/D.ts": "export var x",
-            "/a/b/d.ts": "export var y"
+            "/a/b/d.ts": "export var y",
         },
         { module: ts.ModuleKind.AMD },
         "/a/b",
@@ -569,7 +569,7 @@ describe("unittests:: moduleResolution:: Files with different casing with forceC
         {
             "moduleA.ts": `import a = require("./ModuleC")`,
             "moduleB.ts": `import a = require("./moduleC")`,
-            "moduleC.ts": "export var x"
+            "moduleC.ts": "export var x",
         },
         { module: ts.ModuleKind.CommonJS, forceConsistentCasingInFileNames: true },
         "",
@@ -585,7 +585,7 @@ describe("unittests:: moduleResolution:: Files with different casing with forceC
             "/a/B/c/moduleD.ts": `
 import a = require("./moduleA");
 import b = require("./moduleB");
-                `
+                `,
         },
         { module: ts.ModuleKind.CommonJS, forceConsistentCasingInFileNames: true },
         "/a/B/c",
@@ -601,7 +601,7 @@ import b = require("./moduleB");
             "/a/B/c/moduleD.ts": `
 import a = require("./moduleA");
 import b = require("./moduleB");
-                `
+                `,
         },
         { module: ts.ModuleKind.CommonJS, forceConsistentCasingInFileNames: true },
         "/a/B/c",
@@ -742,15 +742,15 @@ describe("unittests:: moduleResolution:: baseUrl augmented module resolution", (
                 paths: {
                     "*": [
                         "*",
-                        "generated/*"
+                        "generated/*",
                     ],
                     "somefolder/*": [
-                        "someanotherfolder/*"
+                        "someanotherfolder/*",
                     ],
                     "/rooted/*": [
-                        "generated/*"
-                    ]
-                }
+                        "generated/*",
+                    ],
+                },
             };
             check("folder1/file1");
             check("folder1/file2");
@@ -790,15 +790,15 @@ describe("unittests:: moduleResolution:: baseUrl augmented module resolution", (
                 paths: {
                     "*": [
                         "*",
-                        "generated/*"
+                        "generated/*",
                     ],
                     "somefolder/*": [
-                        "someanotherfolder/*"
+                        "someanotherfolder/*",
                     ],
                     "/rooted/*": [
-                        "generated/*"
-                    ]
-                }
+                        "generated/*",
+                    ],
+                },
             };
             check("folder1/file1");
             check("folder1/file2");
@@ -830,8 +830,8 @@ describe("unittests:: moduleResolution:: baseUrl augmented module resolution", (
                 moduleResolution: ts.ModuleResolutionKind.Node10,
                 rootDirs: [
                     "/root",
-                    "/root/generated/"
-                ]
+                    "/root/generated/",
+                ],
             };
             check("./file2", file1);
             check("../folder1/file1", file3);
@@ -862,8 +862,8 @@ describe("unittests:: moduleResolution:: baseUrl augmented module resolution", (
                 jsx: ts.JsxEmit.React,
                 rootDirs: [
                     "/root",
-                    "/root/generated/"
-                ]
+                    "/root/generated/",
+                ],
             };
             check("./file2", file1);
             check("../folder1/file1", file3);
@@ -893,8 +893,8 @@ describe("unittests:: moduleResolution:: baseUrl augmented module resolution", (
                 moduleResolution: ts.ModuleResolutionKind.Node10,
                 baseUrl: "/root",
                 paths: {
-                    "libs/guid": [ "src/libs/guid" ]
-                }
+                    "libs/guid": [ "src/libs/guid" ],
+                },
             };
             baselines.push(`Resolving "libs/guid" from ${app.name}${hasDirectoryExists ? "" : " with host that doesnt have directoryExists"}`);
             const result = ts.resolveModuleName("libs/guid", app.name, options, host);
@@ -909,7 +909,7 @@ describe("unittests:: moduleResolution:: ModuleResolutionHost.directoryExists", 
         const host: ts.ModuleResolutionHost = {
             readFile: ts.notImplemented,
             fileExists: ts.notImplemented,
-            directoryExists: _ => false
+            directoryExists: _ => false,
         };
 
         const result = ts.resolveModuleName("someName", "/a/b/c/d", { moduleResolution: ts.ModuleResolutionKind.Node10 }, host);
@@ -1053,7 +1053,7 @@ describe("unittests:: moduleResolution:: Type reference directive resolution: ",
                 declare module "fs-client" {
                     import { Stat } from "fs";
                     export function foo(): Stat;
-                }`
+                }`,
         };
         const file = ts.createSourceFile(f.name, f.content, ts.ScriptTarget.ES2015);
         const compilerHost: ts.CompilerHost = {
@@ -1082,7 +1082,7 @@ describe("unittests:: moduleResolution:: Type reference directive resolution: ",
                 declare module "fs-client" {
                     import { Stat } from "fs";
                     export function foo(): Stat;
-                }`
+                }`,
         };
         const file = ts.createSourceFile(f.name, f.content, ts.ScriptTarget.ES2015);
         const compilerHost: ts.CompilerHost = {
@@ -1099,7 +1099,7 @@ describe("unittests:: moduleResolution:: Type reference directive resolution: ",
             resolveModuleNames(moduleNames: string[], _containingFile: string) {
                 assert.deepEqual(moduleNames, ["fs"]);
                 return [undefined!]; // TODO: GH#18217
-            }
+            },
         };
         ts.createProgram([f.name], {}, compilerHost);
     });

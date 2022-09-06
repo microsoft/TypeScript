@@ -5,7 +5,7 @@ import {
 } from "../helpers/tsc";
 import {
     loadProjectFromFiles,
-    replaceText
+    replaceText,
 } from "../helpers/vfs";
 
 describe("unittests:: tsbuild:: javascriptProjectEmit::", () => {
@@ -94,7 +94,7 @@ describe("unittests:: tsbuild:: javascriptProjectEmit::", () => {
                         }
                     }`,
         }, symbolLibContent),
-        commandLineArgs: ["-b", "/src"]
+        commandLineArgs: ["-b", "/src"],
     });
 
     verifyTsc({
@@ -190,8 +190,8 @@ describe("unittests:: tsbuild:: javascriptProjectEmit::", () => {
         commandLineArgs: ["-b", "/src"],
         edits: [{
             caption: "incremental-declaration-doesnt-change",
-            edit: fs => replaceText(fs, "/src/sub-project/index.js", "null", "undefined")
-        }]
+            edit: fs => replaceText(fs, "/src/sub-project/index.js", "null", "undefined"),
+        }],
     });
 
     verifyTsc({
@@ -278,6 +278,6 @@ describe("unittests:: tsbuild:: javascriptProjectEmit::", () => {
                         }
                     }`,
         }, symbolLibContent),
-        commandLineArgs: ["-b", "/src"]
+        commandLineArgs: ["-b", "/src"],
     });
 });

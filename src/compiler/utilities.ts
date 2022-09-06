@@ -1287,21 +1287,21 @@ export function getScriptTargetFeatures(): ScriptTargetFeatures {
                 "copyWithin",
                 "entries",
                 "keys",
-                "values"
+                "values",
             ],
             es2016: [
-                "includes"
+                "includes",
             ],
             es2019: [
                 "flat",
-                "flatMap"
+                "flatMap",
             ],
             es2022: [
-                "at"
+                "at",
             ],
             es2023: [
                 "findLastIndex",
-                "findLast"
+                "findLast",
             ],
         })),
         Iterator: new Map(Object.entries({
@@ -1332,11 +1332,11 @@ export function getScriptTargetFeatures(): ScriptTargetFeatures {
             es2015: [
                 "flags",
                 "sticky",
-                "unicode"
+                "unicode",
             ],
             es2018: [
-                "dotAll"
-            ]
+                "dotAll",
+            ],
         })),
         Reflect: new Map(Object.entries({
             es2015: [
@@ -1352,14 +1352,14 @@ export function getScriptTargetFeatures(): ScriptTargetFeatures {
                 "ownKeys",
                 "preventExtensions",
                 "set",
-                "setPrototypeOf"
-            ]
+                "setPrototypeOf",
+            ],
         })),
         ArrayConstructor: new Map(Object.entries({
             es2015: [
                 "from",
-                "of"
-            ]
+                "of",
+            ],
         })),
         ObjectConstructor: new Map(Object.entries({
             es2015: [
@@ -1367,19 +1367,19 @@ export function getScriptTargetFeatures(): ScriptTargetFeatures {
                 "getOwnPropertySymbols",
                 "keys",
                 "is",
-                "setPrototypeOf"
+                "setPrototypeOf",
             ],
             es2017: [
                 "values",
                 "entries",
-                "getOwnPropertyDescriptors"
+                "getOwnPropertyDescriptors",
             ],
             es2019: [
-                "fromEntries"
+                "fromEntries",
             ],
             es2022: [
-                "hasOwn"
-            ]
+                "hasOwn",
+            ],
         })),
         NumberConstructor: new Map(Object.entries({
             es2015: [
@@ -1388,8 +1388,8 @@ export function getScriptTargetFeatures(): ScriptTargetFeatures {
                 "isNaN",
                 "isSafeInteger",
                 "parseFloat",
-                "parseInt"
-            ]
+                "parseInt",
+            ],
         })),
         Math: new Map(Object.entries({
             es2015: [
@@ -1409,59 +1409,59 @@ export function getScriptTargetFeatures(): ScriptTargetFeatures {
                 "hypot",
                 "trunc",
                 "fround",
-                "cbrt"
-            ]
+                "cbrt",
+            ],
         })),
         Map: new Map(Object.entries({
             es2015: [
                 "entries",
                 "keys",
-                "values"
-            ]
+                "values",
+            ],
         })),
         Set: new Map(Object.entries({
             es2015: [
                 "entries",
                 "keys",
-                "values"
-            ]
+                "values",
+            ],
         })),
         PromiseConstructor: new Map(Object.entries({
             es2015: [
                 "all",
                 "race",
                 "reject",
-                "resolve"
+                "resolve",
             ],
             es2020: [
-                "allSettled"
+                "allSettled",
             ],
             es2021: [
-                "any"
-            ]
+                "any",
+            ],
         })),
         Symbol: new Map(Object.entries({
             es2015: [
                 "for",
-                "keyFor"
+                "keyFor",
             ],
             es2019: [
-                "description"
-            ]
+                "description",
+            ],
         })),
         WeakMap: new Map(Object.entries({
             es2015: [
                 "entries",
                 "keys",
-                "values"
-            ]
+                "values",
+            ],
         })),
         WeakSet: new Map(Object.entries({
             es2015: [
                 "entries",
                 "keys",
-                "values"
-            ]
+                "values",
+            ],
         })),
         String: new Map(Object.entries({
             es2015: [
@@ -1483,193 +1483,193 @@ export function getScriptTargetFeatures(): ScriptTargetFeatures {
                 "small",
                 "strike",
                 "sub",
-                "sup"
+                "sup",
             ],
             es2017: [
                 "padStart",
-                "padEnd"
+                "padEnd",
             ],
             es2019: [
                 "trimStart",
                 "trimEnd",
                 "trimLeft",
-                "trimRight"
+                "trimRight",
             ],
             es2020: [
-                "matchAll"
+                "matchAll",
             ],
             es2021: [
-                "replaceAll"
+                "replaceAll",
             ],
             es2022: [
-                "at"
-            ]
+                "at",
+            ],
         })),
         StringConstructor: new Map(Object.entries({
             es2015: [
                 "fromCodePoint",
-                "raw"
-            ]
+                "raw",
+            ],
         })),
         DateTimeFormat: new Map(Object.entries({
             es2017: [
-                "formatToParts"
-            ]
+                "formatToParts",
+            ],
         })),
         Promise: new Map(Object.entries({
             es2015: emptyArray,
             es2018: [
-                "finally"
-            ]
+                "finally",
+            ],
         })),
         RegExpMatchArray: new Map(Object.entries({
             es2018: [
-                "groups"
-            ]
+                "groups",
+            ],
         })),
         RegExpExecArray: new Map(Object.entries({
             es2018: [
-                "groups"
-            ]
+                "groups",
+            ],
         })),
         Intl: new Map(Object.entries({
             es2018: [
-                "PluralRules"
-            ]
+                "PluralRules",
+            ],
         })),
         NumberFormat: new Map(Object.entries({
             es2018: [
-                "formatToParts"
-            ]
+                "formatToParts",
+            ],
         })),
         SymbolConstructor: new Map(Object.entries({
             es2020: [
-                "matchAll"
-            ]
+                "matchAll",
+            ],
         })),
         DataView: new Map(Object.entries({
             es2020: [
                 "setBigInt64",
                 "setBigUint64",
                 "getBigInt64",
-                "getBigUint64"
-            ]
+                "getBigUint64",
+            ],
         })),
         BigInt: new Map(Object.entries({
-            es2020: emptyArray
+            es2020: emptyArray,
         })),
         RelativeTimeFormat: new Map(Object.entries({
             es2020: [
                 "format",
                 "formatToParts",
-                "resolvedOptions"
-            ]
+                "resolvedOptions",
+            ],
         })),
         Int8Array: new Map(Object.entries({
             es2022: [
-                "at"
+                "at",
             ],
             es2023: [
                 "findLastIndex",
-                "findLast"
+                "findLast",
             ],
         })),
         Uint8Array: new Map(Object.entries({
             es2022: [
-                "at"
+                "at",
             ],
             es2023: [
                 "findLastIndex",
-                "findLast"
+                "findLast",
             ],
         })),
         Uint8ClampedArray: new Map(Object.entries({
             es2022: [
-                "at"
+                "at",
             ],
             es2023: [
                 "findLastIndex",
-                "findLast"
+                "findLast",
             ],
         })),
         Int16Array: new Map(Object.entries({
             es2022: [
-                "at"
+                "at",
             ],
             es2023: [
                 "findLastIndex",
-                "findLast"
+                "findLast",
             ],
         })),
         Uint16Array: new Map(Object.entries({
             es2022: [
-                "at"
+                "at",
             ],
             es2023: [
                 "findLastIndex",
-                "findLast"
+                "findLast",
             ],
         })),
         Int32Array: new Map(Object.entries({
             es2022: [
-                "at"
+                "at",
             ],
             es2023: [
                 "findLastIndex",
-                "findLast"
+                "findLast",
             ],
         })),
         Uint32Array: new Map(Object.entries({
             es2022: [
-                "at"
+                "at",
             ],
             es2023: [
                 "findLastIndex",
-                "findLast"
+                "findLast",
             ],
         })),
         Float32Array: new Map(Object.entries({
             es2022: [
-                "at"
+                "at",
             ],
             es2023: [
                 "findLastIndex",
-                "findLast"
+                "findLast",
             ],
         })),
         Float64Array: new Map(Object.entries({
             es2022: [
-                "at"
+                "at",
             ],
             es2023: [
                 "findLastIndex",
-                "findLast"
+                "findLast",
             ],
         })),
         BigInt64Array: new Map(Object.entries({
             es2020: emptyArray,
             es2022: [
-                "at"
+                "at",
             ],
             es2023: [
                 "findLastIndex",
-                "findLast"
+                "findLast",
             ],
         })),
         BigUint64Array: new Map(Object.entries({
             es2020: emptyArray,
             es2022: [
-                "at"
+                "at",
             ],
             es2023: [
                 "findLastIndex",
-                "findLast"
+                "findLast",
             ],
         })),
         Error: new Map(Object.entries({
             es2022: [
-                "cause"
-            ]
+                "cause",
+            ],
         })),
     }));
 }
@@ -1680,7 +1680,7 @@ export const enum GetLiteralTextFlags {
     NeverAsciiEscape = 1 << 0,
     JsxAttributeEscape = 1 << 1,
     TerminateUnterminatedLiterals = 1 << 2,
-    AllowNumericSeparator = 1 << 3
+    AllowNumericSeparator = 1 << 3,
 }
 
 /** @internal */
@@ -2166,7 +2166,7 @@ export function createFileDiagnosticFromMessageChain(file: SourceFile, start: nu
         code: messageChain.code,
         category: messageChain.category,
         messageText: messageChain.next ? messageChain : messageChain.messageText,
-        relatedInformation
+        relatedInformation,
     };
 }
 
@@ -2179,7 +2179,7 @@ export function createDiagnosticForFileFromMessageChain(sourceFile: SourceFile, 
         code: messageChain.code,
         category: messageChain.category,
         messageText: messageChain.next ? messageChain : messageChain.messageText,
-        relatedInformation
+        relatedInformation,
     };
 }
 
@@ -4464,7 +4464,7 @@ export function hasTypeArguments(node: Node): node is HasTypeArguments {
 
 /** @internal */
 export const enum AssignmentKind {
-    None, Definite, Compound
+    None, Definite, Compound,
 }
 
 type AssignmentTarget =
@@ -5326,7 +5326,7 @@ export function getOriginalSourceFile(sourceFile: SourceFile) {
 /** @internal */
 export const enum Associativity {
     Left,
-    Right
+    Right,
 }
 
 /** @internal */
@@ -5925,7 +5925,7 @@ const jsxDoubleQuoteEscapedCharsRegExp = /["\u0000-\u001f\u2028\u2029\u0085]/g;
 const jsxSingleQuoteEscapedCharsRegExp = /['\u0000-\u001f\u2028\u2029\u0085]/g;
 const jsxEscapedCharsMap = new Map(Object.entries({
     "\"": "&quot;",
-    "'": "&apos;"
+    "'": "&apos;",
 }));
 
 function encodeJsxCharacterEntity(charCode: number): string {
@@ -6107,7 +6107,7 @@ export function createTextWriter(newLine: string): EmitTextWriter {
         writeSymbol: (s, _) => write(s),
         writeTrailingSemicolon: write,
         writeComment,
-        getTextPosWithWriteLine
+        getTextPosWithWriteLine,
     };
 }
 
@@ -6542,7 +6542,7 @@ export function getAllAccessorDeclarations(declarations: readonly Declaration[],
         firstAccessor,
         secondAccessor,
         getAccessor,
-        setAccessor
+        setAccessor,
     };
 }
 
@@ -7684,7 +7684,7 @@ const enum AccessKind {
     /** Only writes to a variable without ever reading it. E.g.: `x=1;`. */
     Write,
     /** Reads from and writes to a variable. E.g.: `f(x++);`, `x/=1`. */
-    ReadWrite
+    ReadWrite,
 }
 function accessKind(node: Node): AccessKind {
     const { parent } = node;
@@ -8230,7 +8230,7 @@ function attachFileToDiagnostic(diagnostic: DiagnosticWithDetachedLocation, file
         messageText: diagnostic.messageText,
         category: diagnostic.category,
         code: diagnostic.code,
-        reportsUnnecessary: diagnostic.reportsUnnecessary
+        reportsUnnecessary: diagnostic.reportsUnnecessary,
     };
     if (diagnostic.relatedInformation) {
         diagnosticWithLocation.relatedInformation = [];
@@ -8276,7 +8276,7 @@ export function createFileDiagnostic(file: SourceFile, start: number, length: nu
         category: message.category,
         code: message.code,
         reportsUnnecessary: message.reportsUnnecessary,
-        reportsDeprecated: message.reportsDeprecated
+        reportsDeprecated: message.reportsDeprecated,
     };
 }
 
@@ -8308,7 +8308,7 @@ export function createCompilerDiagnostic(message: DiagnosticMessage, ...args: Di
         category: message.category,
         code: message.code,
         reportsUnnecessary: message.reportsUnnecessary,
-        reportsDeprecated: message.reportsDeprecated
+        reportsDeprecated: message.reportsDeprecated,
     };
 }
 
@@ -8322,7 +8322,7 @@ export function createCompilerDiagnosticFromMessageChain(chain: DiagnosticMessag
         code: chain.code,
         category: chain.category,
         messageText: chain.next ? chain : chain.messageText,
-        relatedInformation
+        relatedInformation,
     };
 }
 
@@ -8338,7 +8338,7 @@ export function chainDiagnosticMessages(details: DiagnosticMessageChain | Diagno
         category: message.category,
         code: message.code,
 
-        next: details === undefined || Array.isArray(details) ? details : [details]
+        next: details === undefined || Array.isArray(details) ? details : [details],
     };
 }
 
@@ -8917,7 +8917,7 @@ const filesMatcher: WildcardMatcher = {
      * files or directories, does not match subdirectories that start with a . character
      */
     doubleAsteriskRegexFragment: `(/${implicitExcludePathRegexPattern}[^/.][^/]*)*?`,
-    replaceWildcardCharacter: match => replaceWildcardCharacter(match, filesMatcher.singleAsteriskRegexFragment)
+    replaceWildcardCharacter: match => replaceWildcardCharacter(match, filesMatcher.singleAsteriskRegexFragment),
 };
 
 const directoriesMatcher: WildcardMatcher = {
@@ -8927,19 +8927,19 @@ const directoriesMatcher: WildcardMatcher = {
      * files or directories, does not match subdirectories that start with a . character
      */
     doubleAsteriskRegexFragment: `(/${implicitExcludePathRegexPattern}[^/.][^/]*)*?`,
-    replaceWildcardCharacter: match => replaceWildcardCharacter(match, directoriesMatcher.singleAsteriskRegexFragment)
+    replaceWildcardCharacter: match => replaceWildcardCharacter(match, directoriesMatcher.singleAsteriskRegexFragment),
 };
 
 const excludeMatcher: WildcardMatcher = {
     singleAsteriskRegexFragment: "[^/]*",
     doubleAsteriskRegexFragment: "(/.+?)?",
-    replaceWildcardCharacter: match => replaceWildcardCharacter(match, excludeMatcher.singleAsteriskRegexFragment)
+    replaceWildcardCharacter: match => replaceWildcardCharacter(match, excludeMatcher.singleAsteriskRegexFragment),
 };
 
 const wildcardMatchers = {
     files: filesMatcher,
     directories: directoriesMatcher,
-    exclude: excludeMatcher
+    exclude: excludeMatcher,
 };
 
 /** @internal */
@@ -9093,7 +9093,7 @@ export function getFileMatcherPatterns(path: string, excludes: readonly string[]
         includeFilePattern: getRegularExpressionForWildcard(includes, absolutePath, "files"),
         includeDirectoryPattern: getRegularExpressionForWildcard(includes, absolutePath, "directories"),
         excludePattern: getRegularExpressionForWildcard(excludes, absolutePath, "exclude"),
-        basePaths: getBasePaths(path, includes, useCaseSensitiveFileNames)
+        basePaths: getBasePaths(path, includes, useCaseSensitiveFileNames),
     };
 }
 
@@ -9286,7 +9286,7 @@ export function getSupportedExtensions(options?: CompilerOptions, extraFileExten
     const flatBuiltins = flatten(builtins);
     const extensions = [
         ...builtins,
-        ...mapDefined(extraFileExtensions, x => x.scriptKind === ScriptKind.Deferred || needJsExtensions && isJSLike(x.scriptKind) && flatBuiltins.indexOf(x.extension as Extension) === -1 ? [x.extension] : undefined)
+        ...mapDefined(extraFileExtensions, x => x.scriptKind === ScriptKind.Deferred || needJsExtensions && isJSLike(x.scriptKind) && flatBuiltins.indexOf(x.extension as Extension) === -1 ? [x.extension] : undefined),
     ];
 
     return extensions;
@@ -9478,7 +9478,7 @@ export function tryParsePattern(pattern: string): string | Pattern | undefined {
         ? undefined
         : {
             prefix: pattern.substr(0, indexOfStar),
-            suffix: pattern.substr(indexOfStar + 1)
+            suffix: pattern.substr(indexOfStar + 1),
         };
 }
 
@@ -9537,7 +9537,7 @@ export function isCheckJsEnabledForFile(sourceFile: SourceFile, compilerOptions:
 /** @internal */
 export const emptyFileSystemEntries: FileSystemEntries = {
     files: emptyArray,
-    directories: emptyArray
+    directories: emptyArray,
 };
 
 
@@ -10181,7 +10181,7 @@ export function getNodeModulePathParts(fullPath: string): NodeModulePathParts | 
         BeforeNodeModules,
         NodeModules,
         Scope,
-        PackageContent
+        PackageContent,
     }
 
     let partStart = 0;

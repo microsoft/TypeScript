@@ -47,7 +47,7 @@ export interface Log {
 
 const nullLog: Log = {
     isEnabled: () => false,
-    writeLine: noop
+    writeLine: noop,
 };
 
 function typingToFileName(cachePath: string, packageName: string, installTypingHost: InstallTypingHost, log: Log): string | undefined {
@@ -343,7 +343,7 @@ export abstract class TypingsInstaller {
             kind: EventBeginInstallTypes,
             eventId: requestId,
             typingsInstallerVersion: version,
-            projectName: req.projectName
+            projectName: req.projectName,
         } as BeginInstallTypes);
 
         const scopedTypings = filteredTypings.map(typingsName);
@@ -391,7 +391,7 @@ export abstract class TypingsInstaller {
                     projectName: req.projectName,
                     packagesToInstall: scopedTypings,
                     installSuccess: ok,
-                    typingsInstallerVersion: version
+                    typingsInstallerVersion: version,
                 };
                 this.sendResponse(response);
             }
@@ -434,7 +434,7 @@ export abstract class TypingsInstaller {
             compilerOptions: request.compilerOptions,
             typings,
             unresolvedImports: request.unresolvedImports,
-            kind: ActionSet
+            kind: ActionSet,
         };
     }
 

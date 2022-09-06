@@ -24,7 +24,7 @@ describe("unittests:: tsbuild - output file paths", () => {
         verifyTsc({
             scenario: "outputPaths",
             commandLineArgs: ["--b", "/src/tsconfig.json", "-v"],
-            ...input
+            ...input,
         });
 
         it("verify getOutputFileNames", () => {
@@ -47,9 +47,9 @@ describe("unittests:: tsbuild - output file paths", () => {
             "/src/src/index.ts": "export const x = 10;",
             "/src/tsconfig.json": JSON.stringify({
                 compilerOptions: {
-                    outDir: "dist"
-                }
-            })
+                    outDir: "dist",
+                },
+            }),
         }),
         edits,
     }, ["/src/dist/index.js"]);
@@ -61,9 +61,9 @@ describe("unittests:: tsbuild - output file paths", () => {
             "/src/tsconfig.json": JSON.stringify({
                 compilerOptions: {
                     outDir: "dist",
-                    composite: true
-                }
-            })
+                    composite: true,
+                },
+            }),
         }),
         edits,
     }, ["/src/dist/src/index.js", "/src/dist/src/index.d.ts"]);
@@ -75,9 +75,9 @@ describe("unittests:: tsbuild - output file paths", () => {
             "/src/tsconfig.json": JSON.stringify({
                 compilerOptions: {
                     outDir: "dist",
-                    rootDir: "src"
-                }
-            })
+                    rootDir: "src",
+                },
+            }),
         }),
         edits,
     }, ["/src/dist/index.js"]);
@@ -90,9 +90,9 @@ describe("unittests:: tsbuild - output file paths", () => {
             "/src/tsconfig.json": JSON.stringify({
                 compilerOptions: {
                     outDir: "dist",
-                    rootDir: "src"
-                }
-            })
+                    rootDir: "src",
+                },
+            }),
         }),
         edits,
     }, ["/src/dist/index.js"]);
@@ -106,9 +106,9 @@ describe("unittests:: tsbuild - output file paths", () => {
                 compilerOptions: {
                     outDir: "dist",
                     rootDir: "src",
-                    composite: true
-                }
-            })
+                    composite: true,
+                },
+            }),
         }),
         edits,
     }, ["/src/dist/index.js", "/src/dist/index.d.ts"]);

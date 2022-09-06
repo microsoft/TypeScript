@@ -313,7 +313,7 @@ import {
     unusedLabelIsError,
     VariableDeclaration,
     WhileStatement,
-    WithStatement
+    WithStatement,
 } from "./_namespaces/ts";
 import * as performance from "./_namespaces/ts.performance";
 
@@ -321,7 +321,7 @@ import * as performance from "./_namespaces/ts.performance";
 export const enum ModuleInstanceState {
     NonInstantiated = 0,
     Instantiated = 1,
-    ConstEnumOnly = 2
+    ConstEnumOnly = 2,
 }
 
 interface ActiveLabel {
@@ -1724,7 +1724,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             name: node.label.escapedText,
             breakTarget: postStatementLabel,
             continueTarget: undefined,
-            referenced: false
+            referenced: false,
         };
         bind(node.label);
         bind(node.statement);
@@ -1868,7 +1868,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                     stackIndex: 0,
                     skip: false,
                     inStrictModeStack: [undefined],
-                    parentStack: [undefined]
+                    parentStack: [undefined],
                 };
             }
             // TODO: bindLogicalExpression is recursive - if we want to handle deeply nested `&&` expressions

@@ -335,7 +335,7 @@ export namespace BuilderState {
                 signature,
                 // No need to calculate affectsGlobalScope with --out since its not used at all
                 affectsGlobalScope: !isOutFile ? isFileAffectingGlobalScope(sourceFile) || undefined : undefined,
-                impliedFormat: sourceFile.impliedNodeFormat
+                impliedFormat: sourceFile.impliedNodeFormat,
             });
         }
 
@@ -343,7 +343,7 @@ export namespace BuilderState {
             fileInfos,
             referencedMap,
             exportedModulesMap,
-            useFileVersionAsSignature: !disableUseFileVersionAsSignature && !useOldState
+            useFileVersionAsSignature: !disableUseFileVersionAsSignature && !useOldState,
         };
     }
 

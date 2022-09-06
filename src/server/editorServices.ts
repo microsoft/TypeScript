@@ -358,7 +358,7 @@ const watchOptionsConverters = prepareConvertersForEnumLikeCompilerOptions(optio
 const indentStyle = new Map(Object.entries({
     none: IndentStyle.None,
     block: IndentStyle.Block,
-    smart: IndentStyle.Smart
+    smart: IndentStyle.Smart,
 }));
 
 export interface TypesMapFile {
@@ -388,30 +388,30 @@ const defaultTypeSafeList: SafeList = {
     "jquery": {
         // jquery files can have names like "jquery-1.10.2.min.js" (or "jquery.intellisense.js")
         match: /jquery(-[\d.]+)?(\.intellisense)?(\.min)?\.js$/i,
-        types: ["jquery"]
+        types: ["jquery"],
     },
     "WinJS": {
         // e.g. c:/temp/UWApp1/lib/winjs-4.0.1/js/base.js
         match: /^(.*\/winjs-[.\d]+)\/js\/base\.js$/i,        // If the winjs/base.js file is found..
         exclude: [["^", 1, "/.*"]],                // ..then exclude all files under the winjs folder
-        types: ["winjs"]                           // And fetch the @types package for WinJS
+        types: ["winjs"],                           // And fetch the @types package for WinJS
     },
     "Kendo": {
         // e.g. /Kendo3/wwwroot/lib/kendo/kendo.all.min.js
         match: /^(.*\/kendo(-ui)?)\/kendo\.all(\.min)?\.js$/i,
         exclude: [["^", 1, "/.*"]],
-        types: ["kendo-ui"]
+        types: ["kendo-ui"],
     },
     "Office Nuget": {
         // e.g. /scripts/Office/1/excel-15.debug.js
         match: /^(.*\/office\/1)\/excel-\d+\.debug\.js$/i, // Office NuGet package is installed under a "1/office" folder
         exclude: [["^", 1, "/.*"]],                     // Exclude that whole folder if the file indicated above is found in it
-        types: ["office"]                               // @types package to fetch instead
+        types: ["office"],                               // @types package to fetch instead
     },
     "References": {
         match: /^(.*\/_references\.js)$/i,
-        exclude: [["^", 1, "$"]]
-    }
+        exclude: [["^", 1, "$"]],
+    },
 };
 
 export function convertFormatOptions(protocolOptions: protocol.FormatCodeSettings): FormatCodeSettings {
@@ -623,7 +623,7 @@ export enum ProjectReferenceProjectLoadKind {
     /** Find existing project or create one for the project reference */
     FindCreate,
     /** Find existing project or create and load it for the project reference */
-    FindCreateLoad
+    FindCreateLoad,
 }
 
 /** @internal */
@@ -1105,7 +1105,7 @@ export class ProjectService {
         }
         const event: ProjectLanguageServiceStateEvent = {
             eventName: ProjectLanguageServiceStateEvent,
-            data: { project, languageServiceEnabled }
+            data: { project, languageServiceEnabled },
         };
         this.eventHandler(event);
     }
@@ -1209,8 +1209,8 @@ export class ProjectService {
         const event: ProjectsUpdatedInBackgroundEvent = {
             eventName: ProjectsUpdatedInBackgroundEvent,
             data: {
-                openFiles: arrayFrom(this.openFiles.keys(), path => this.getScriptInfoForPath(path as Path)!.fileName)
-            }
+                openFiles: arrayFrom(this.openFiles.keys(), path => this.getScriptInfoForPath(path as Path)!.fileName),
+            },
         };
         this.eventHandler(event);
     }
@@ -1223,7 +1223,7 @@ export class ProjectService {
 
         const event: LargeFileReferencedEvent = {
             eventName: LargeFileReferencedEvent,
-            data: { file, fileSize, maxFileSize }
+            data: { file, fileSize, maxFileSize },
         };
         this.eventHandler(event);
     }
@@ -1236,7 +1236,7 @@ export class ProjectService {
         project.sendLoadingProjectFinish = true;
         const event: ProjectLoadingStartEvent = {
             eventName: ProjectLoadingStartEvent,
-            data: { project, reason }
+            data: { project, reason },
         };
         this.eventHandler(event);
     }
@@ -1250,7 +1250,7 @@ export class ProjectService {
         project.sendLoadingProjectFinish = false;
         const event: ProjectLoadingFinishEvent = {
             eventName: ProjectLoadingFinishEvent,
-            data: { project }
+            data: { project },
         };
         this.eventHandler(event);
     }
@@ -1520,7 +1520,7 @@ export class ProjectService {
                     program: configuredProjectForConfig?.getCurrentProgram() || config.parsedCommandLine!.fileNames,
                     useCaseSensitiveFileNames: this.host.useCaseSensitiveFileNames,
                     writeLog: s => this.logger.info(s),
-                    toPath: s => this.toPath(s)
+                    toPath: s => this.toPath(s),
                 })) return;
 
                 // Reload is pending, do the reload
@@ -1647,7 +1647,7 @@ export class ProjectService {
                                 {
                                     fileName: info.fileName,
                                     projects: info.containingProjects.map(p => p.projectName),
-                                    hasMixedContent: info.hasMixedContent
+                                    hasMixedContent: info.hasMixedContent,
                                 } : undefined
                         )
                     ),
@@ -2280,7 +2280,7 @@ export class ProjectService {
             configFileExistenceInfo.config = {
                 cachedDirectoryStructureHost: createCachedDirectoryStructureHost(this.host, this.host.getCurrentDirectory(), this.host.useCaseSensitiveFileNames)!,
                 projects: new Map(),
-                reloadLevel: ConfigFileProgramReloadLevel.Full
+                reloadLevel: ConfigFileProgramReloadLevel.Full,
             };
         }
 
@@ -2344,7 +2344,7 @@ export class ProjectService {
                 configHasExtendsProperty: parsedCommandLine.raw.extends !== undefined,
                 configHasFilesProperty: parsedCommandLine.raw.files !== undefined,
                 configHasIncludeProperty: parsedCommandLine.raw.include !== undefined,
-                configHasExcludeProperty: parsedCommandLine.raw.exclude !== undefined
+                configHasExcludeProperty: parsedCommandLine.raw.exclude !== undefined,
             };
         }
         project.canConfigFileJsonReportNoInputFiles = canJsonReportNoInputFiles(parsedCommandLine.raw);
@@ -2406,7 +2406,7 @@ export class ProjectService {
             rootNames: parsedCommandLine.fileNames,
             options: parsedCommandLine.options,
             watchOptions: parsedCommandLine.watchOptions,
-            projectReferences: parsedCommandLine.projectReferences
+            projectReferences: parsedCommandLine.projectReferences,
         }, /*replacer*/ undefined, " ")}`);
 
         const oldCommandLine = configFileExistenceInfo.config?.parsedCommandLine;
@@ -2656,7 +2656,7 @@ export class ProjectService {
 
         this.eventHandler({
             eventName: ConfigFileDiagEvent,
-            data: { configFileName: project.getConfigFilePath(), diagnostics, triggerFile }
+            data: { configFileName: project.getConfigFilePath(), diagnostics, triggerFile },
         } satisfies ConfigFileDiagEvent);
     }
 
@@ -3102,7 +3102,7 @@ export class ProjectService {
                         getNormalizedAbsolutePath(mapFileNameFromDeclarationInfo, project.currentDirectory),
                     declarationInfo.path
                 ),
-                sourceInfos: this.addSourceInfoToSourceMap(sourceFileName, project)
+                sourceInfos: this.addSourceInfoToSourceMap(sourceFileName, project),
             };
         }
         else {
@@ -3174,7 +3174,7 @@ export class ProjectService {
                     const lineOffset = info.positionToLineOffset(pos);
                     return { line: lineOffset.line - 1, character: lineOffset.offset - 1 };
                 },
-                getPositionOfLineAndCharacter: (line, character, allowEdits) => info.lineOffsetToPosition(line + 1, character + 1, allowEdits)
+                getPositionOfLineAndCharacter: (line, character, allowEdits) => info.lineOffsetToPosition(line + 1, character + 1, allowEdits),
             };
         }
         return info.sourceFileLike;
@@ -3649,7 +3649,7 @@ export class ProjectService {
             const configFileName = this.getConfigFileNameForFile({
                 fileName: project.getConfigFilePath(),
                 path: info.path,
-                configFileInfo: true
+                configFileInfo: true,
             });
             if (!configFileName) return;
 
@@ -4524,7 +4524,7 @@ function createIncompleteCompletionsCache(): IncompleteCompletionsCache {
         },
         clear() {
             info = undefined;
-        }
+        },
     };
 }
 

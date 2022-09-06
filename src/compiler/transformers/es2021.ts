@@ -25,7 +25,7 @@ import {
 export function transformES2021(context: TransformationContext): (x: SourceFile | Bundle) => SourceFile | Bundle {
     const {
         hoistVariableDeclaration,
-        factory
+        factory,
     } = context;
     return chainBundle(context, transformSourceFile);
 

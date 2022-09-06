@@ -585,7 +585,7 @@ const enum KeywordCompletionFilters {
     TypeAssertionKeywords,
     TypeKeywords,
     TypeKeyword,                    // Literally just `type`
-    Last = TypeKeyword
+    Last = TypeKeyword,
 }
 
 const enum GlobalsSearch { Continue, Success, Fail }
@@ -1000,7 +1000,7 @@ function generateJSDocParamTagsForDestructuring(
                 checker,
                 options,
                 preferences,
-                { tabstop: 1 })
+                { tabstop: 1 }),
         ];
     }
     return patternWorker(path, pattern, initializer, dotDotDotToken, { tabstop: 1 });
@@ -1053,7 +1053,7 @@ function generateJSDocParamTagsForDestructuring(
                 checker,
                 options,
                 preferences,
-                counter)
+                counter),
             ];
     }
 
@@ -1136,7 +1136,7 @@ function getJSDocParamAnnotation(
                             : createPrinter({
                                 removeComments: true,
                                 module: options.module,
-                                target: options.target
+                                target: options.target,
                             });
                         setEmitFlags(typeNode, EmitFlags.SingleLine);
                         type = printer.printNode(EmitHint.Unspecified, typeNode, sourceFile);
@@ -1422,7 +1422,7 @@ function getExhaustiveCaseSnippets(
             removeComments: true,
             module: options.module,
             target: options.target,
-            newLine: getNewLineKind(newLineChar)
+            newLine: getNewLineKind(newLineChar),
         });
         const printNode = formatContext
             ? (node: Node) => printer.printAndFormatNode(EmitHint.Unspecified, node, sourceFile, formatContext)
@@ -1579,7 +1579,7 @@ function getJSCompletionEntries(
                 kind: ScriptElementKind.warning,
                 kindModifiers: "",
                 sortText: SortText.JavascriptIdentifiers,
-                isFromUncheckedFile: true
+                isFromUncheckedFile: true,
             }, compareCompletionEntries);
         }
     });
@@ -1812,7 +1812,7 @@ function createCompletionEntry(
         isPackageJsonImport: originIsPackageJsonImport(origin) || undefined,
         isImportStatementCompletion: !!importStatementCompletion || undefined,
         data,
-        ...includeSymbol ? { symbol } : undefined
+        ...includeSymbol ? { symbol } : undefined,
     };
 }
 
@@ -2631,7 +2631,7 @@ function getLabelStatementCompletions(node: Node): CompletionEntry[] {
                     name,
                     kindModifiers: ScriptElementKindModifier.none,
                     kind: ScriptElementKind.label,
-                    sortText: SortText.LocationPriority
+                    sortText: SortText.LocationPriority,
                 });
             }
         }
@@ -5080,7 +5080,7 @@ const allKeywordsCompletions: () => readonly CompletionEntry[] = memoize(() => {
             name: tokenToString(i)!,
             kind: ScriptElementKind.keyword,
             kindModifiers: ScriptElementKindModifier.none,
-            sortText: SortText.GlobalsOrKeywords
+            sortText: SortText.GlobalsOrKeywords,
         });
     }
     return res;

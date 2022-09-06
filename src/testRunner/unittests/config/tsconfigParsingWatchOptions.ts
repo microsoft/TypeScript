@@ -26,7 +26,7 @@ describe("unittests:: config:: tsconfigParsingWatchOptions:: parseConfigFileText
                                     "/a.ts": "",
                                     ...additionalFiles,
                                     "/tsconfig.json": jsonText,
-                                }
+                                },
                             }
                         )
                     ),
@@ -54,14 +54,14 @@ describe("unittests:: config:: tsconfigParsingWatchOptions:: parseConfigFileText
         {
             json: {
                 extends: "./base.json",
-                watchOptions: { watchFile: "UseFsEvents" }
+                watchOptions: { watchFile: "UseFsEvents" },
             },
-            additionalFiles: { "/base.json": "{}" }
+            additionalFiles: { "/base.json": "{}" },
         },
         {
-            json: { extends: "./base.json", },
-            additionalFiles: { "/base.json": "{}" }
-        }
+            json: { extends: "./base.json" },
+            additionalFiles: { "/base.json": "{}" },
+        },
     ]);
 
     verifyWatchOptions("when extending config file with watchOptions", () => [
@@ -70,16 +70,16 @@ describe("unittests:: config:: tsconfigParsingWatchOptions:: parseConfigFileText
                 extends: "./base.json",
                 watchOptions: {
                     watchFile: "UseFsEvents",
-                }
+                },
             },
             additionalFiles: {
                 "/base.json": JSON.stringify({
                     watchOptions: {
                         watchFile: "UseFsEventsOnParentDirectory",
-                        watchDirectory: "FixedPollingInterval"
-                    }
-                })
-            }
+                        watchDirectory: "FixedPollingInterval",
+                    },
+                }),
+            },
         },
         {
             json: {
@@ -89,11 +89,11 @@ describe("unittests:: config:: tsconfigParsingWatchOptions:: parseConfigFileText
                 "/base.json": JSON.stringify({
                     watchOptions: {
                         watchFile: "UseFsEventsOnParentDirectory",
-                        watchDirectory: "FixedPollingInterval"
-                    }
-                })
-            }
-        }
+                        watchDirectory: "FixedPollingInterval",
+                    },
+                }),
+            },
+        },
     ]);
 
     verifyWatchOptions("different options", () => [

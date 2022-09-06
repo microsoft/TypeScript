@@ -85,7 +85,7 @@ registerRefactor(refactorName, {
             return getOwnValues(actions).map(action => ({
                 name: refactorName,
                 description: action.description,
-                actions: [{ ...action, notApplicableReason: info.error }]
+                actions: [{ ...action, notApplicableReason: info.error }],
             }));
         }
 
@@ -97,7 +97,7 @@ registerRefactor(refactorName, {
         Debug.assert(info && !isRefactorErrorInfo(info), "Expected applicable refactor info");
         const edits = textChanges.ChangeTracker.with(context, t => doChange(context.file, context.program, t, info));
         return { edits, renameFilename: undefined, renameLocation: undefined };
-    }
+    },
 });
 
 // Can convert imports of the form `import * as m from "m";` or `import d, { x, y } from "m";`.

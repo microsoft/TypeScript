@@ -81,7 +81,7 @@ export function createSourceMapGenerator(host: EmitHost, file: string, sourceRoo
         addMapping,
         appendSourceMap,
         toJSON,
-        toString: () => JSON.stringify(toJSON())
+        toString: () => JSON.stringify(toJSON()),
     };
 
     function addSource(fileName: string) {
@@ -373,7 +373,7 @@ export interface LineInfo {
 export function getLineInfo(text: string, lineStarts: readonly number[]): LineInfo {
     return {
         getLineCount: () => lineStarts.length,
-        getLineText: line => text.substring(lineStarts[line], lineStarts[line + 1])
+        getLineText: line => text.substring(lineStarts[line], lineStarts[line + 1]),
     };
 }
 
@@ -529,7 +529,7 @@ export function decodeMappings(mappings: string): MappingsDecoder {
         },
         [Symbol.iterator]() {
             return this;
-        }
+        },
     };
 
     function captureMapping(hasSource: true, hasName: true): Required<Mapping>;
@@ -541,7 +541,7 @@ export function decodeMappings(mappings: string): MappingsDecoder {
             sourceIndex: hasSource ? sourceIndex : undefined,
             sourceLine: hasSource ? sourceLine : undefined,
             sourceCharacter: hasSource ? sourceCharacter : undefined,
-            nameIndex: hasName ? nameIndex : undefined
+            nameIndex: hasName ? nameIndex : undefined,
         };
     }
 
@@ -700,7 +700,7 @@ export function createDocumentPositionMapper(host: DocumentPositionMapperHost, m
 
     return {
         getSourcePosition,
-        getGeneratedPosition
+        getGeneratedPosition,
     };
 
     function processMapping(mapping: Mapping): MappedPosition {
@@ -721,7 +721,7 @@ export function createDocumentPositionMapper(host: DocumentPositionMapperHost, m
             source,
             sourceIndex: mapping.sourceIndex,
             sourcePosition,
-            nameIndex: mapping.nameIndex
+            nameIndex: mapping.nameIndex,
         };
     }
 
@@ -810,5 +810,5 @@ export function createDocumentPositionMapper(host: DocumentPositionMapperHost, m
 /** @internal */
 export const identitySourceMapConsumer: DocumentPositionMapper = {
     getSourcePosition: identity,
-    getGeneratedPosition: identity
+    getGeneratedPosition: identity,
 };

@@ -177,19 +177,19 @@ export function getAccessorConvertiblePropertyAtPosition(file: SourceFile, progr
 
     if (!declaration || (!(nodeOverlapsWithStartEnd(declaration.name, file, start, end) || cursorRequest))) {
         return {
-            error: getLocaleSpecificMessage(Diagnostics.Could_not_find_property_for_which_to_generate_accessor)
+            error: getLocaleSpecificMessage(Diagnostics.Could_not_find_property_for_which_to_generate_accessor),
         };
     }
 
     if (!isConvertibleName(declaration.name)) {
         return {
-            error: getLocaleSpecificMessage(Diagnostics.Name_is_not_valid)
+            error: getLocaleSpecificMessage(Diagnostics.Name_is_not_valid),
         };
     }
 
     if (((getEffectiveModifierFlags(declaration) & ModifierFlags.Modifier) | meaning) !== meaning) {
         return {
-            error: getLocaleSpecificMessage(Diagnostics.Can_only_convert_property_with_modifier)
+            error: getLocaleSpecificMessage(Diagnostics.Can_only_convert_property_with_modifier),
         };
     }
 
@@ -206,7 +206,7 @@ export function getAccessorConvertiblePropertyAtPosition(file: SourceFile, progr
         declaration,
         fieldName,
         accessorName,
-        renameAccessor: startWithUnderscore
+        renameAccessor: startWithUnderscore,
     };
 }
 
@@ -219,7 +219,7 @@ function generateGetAccessor(fieldName: AcceptedNameType, accessorName: Accepted
         factory.createBlock([
             factory.createReturnStatement(
                 createAccessorAccessExpression(fieldName, isStatic, container)
-            )
+            ),
         ], /*multiLine*/ true)
     );
 }
@@ -241,7 +241,7 @@ function generateSetAccessor(fieldName: AcceptedNameType, accessorName: Accepted
                     createAccessorAccessExpression(fieldName, isStatic, container),
                     factory.createIdentifier("value")
                 )
-            )
+            ),
         ], /*multiLine*/ true)
     );
 }

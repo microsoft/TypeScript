@@ -36,7 +36,7 @@ export function commandLineCallbacks(
             const result = programs || ts.emptyArray;
             programs = undefined;
             return result;
-        }
+        },
     };
 }
 
@@ -221,7 +221,7 @@ function generateBuildInfoProgramBaseline(sys: ts.System, buildInfoPath: string,
                 undefined :
                 [
                     toReadableBuilderFileEmit(ts.toProgramEmitPending(pendingEmit, buildInfo.program.options)),
-                    pendingEmit
+                    pendingEmit,
                 ],
         };
     }

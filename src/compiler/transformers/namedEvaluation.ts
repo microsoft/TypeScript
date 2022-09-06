@@ -47,7 +47,7 @@ import {
     SyntaxKind,
     TransformationContext,
     VariableDeclaration,
-    WrappedExpression
+    WrappedExpression,
 } from "../_namespaces/ts";
 
 /**
@@ -124,7 +124,7 @@ export type ClassNamedEvaluationHelperBlock = ClassStaticBlockDeclaration & {
                 readonly expression: CallExpression & {
                     readonly expression: Identifier;
                 };
-            }
+            },
         ];
     };
 };

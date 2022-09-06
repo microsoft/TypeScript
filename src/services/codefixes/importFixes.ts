@@ -327,7 +327,7 @@ function createImportAdderWorker(sourceFile: SourceFile, program: Program, useAu
                 defaultImport: undefined,
                 namedImports: undefined,
                 namespaceLikeImport: undefined,
-                useRequire
+                useRequire,
             };
             if (importKind === ImportKind.Default && addAsTypeOnly === AddAsTypeOnly.Required) {
                 if (typeOnlyEntry) return typeOnlyEntry;
@@ -543,7 +543,7 @@ export function getImportCompletionAction(
             fix,
             /*includeSymbolNameInDescription*/ false,
             compilerOptions,
-            preferences))
+            preferences)),
     };
 }
 
@@ -794,7 +794,7 @@ function createExistingImportMap(checker: TypeChecker, importingFile: SourceFile
             if (!matchingDeclarations) return emptyArray;
             const importKind = getImportKind(importingFile, exportKind, compilerOptions);
             return matchingDeclarations.map(declaration => ({ declaration, importKind, symbol, targetFlags }));
-        }
+        },
     };
 }
 

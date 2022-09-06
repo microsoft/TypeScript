@@ -122,7 +122,7 @@ function baselineMatches(subScenario: string, json: any, host: fakes.ParseConfig
                     errors: undefined,
                     wildcardDirectories,
                 }, undefined, " "));
-            }
+            },
         }],
         header: baseline => baseline.push("config:", jsonText),
     });
@@ -134,23 +134,23 @@ describe("unittests:: config:: matchFiles", () => {
         baselineMatches("without exclusions with literal file list", {
             files: [
                 "a.ts",
-                "b.ts"
-            ]
+                "b.ts",
+            ],
         }, caseInsensitiveHost, caseInsensitiveBasePath);
         baselineMatches("missing files are still present", {
             files: [
                 "z.ts",
-                "x.ts"
-            ]
+                "x.ts",
+            ],
         }, caseInsensitiveHost, caseInsensitiveBasePath);
         baselineMatches("are not removed due to excludes", {
             files: [
                 "a.ts",
-                "b.ts"
+                "b.ts",
             ],
             exclude: [
-                "b.ts"
-            ]
+                "b.ts",
+            ],
         }, caseInsensitiveHost, caseInsensitiveBasePath);
     });
 
@@ -158,29 +158,29 @@ describe("unittests:: config:: matchFiles", () => {
         baselineMatches("without exclusions with literal include list", {
             include: [
                 "a.ts",
-                "b.ts"
-            ]
+                "b.ts",
+            ],
         }, caseInsensitiveHost, caseInsensitiveBasePath);
         baselineMatches("with non .ts file extensions are excluded", {
             include: [
                 "a.js",
-                "b.js"
-            ]
+                "b.js",
+            ],
         }, caseInsensitiveHost, caseInsensitiveBasePath);
         baselineMatches("with missing files are excluded with literal include list", {
             include: [
                 "z.ts",
-                "x.ts"
-            ]
+                "x.ts",
+            ],
         }, caseInsensitiveHost, caseInsensitiveBasePath);
         baselineMatches("with literal excludes", {
             include: [
                 "a.ts",
-                "b.ts"
+                "b.ts",
             ],
             exclude: [
-                "b.ts"
-            ]
+                "b.ts",
+            ],
         }, caseInsensitiveHost, caseInsensitiveBasePath);
         baselineMatches("with wildcard excludes", {
             include: [
@@ -189,13 +189,13 @@ describe("unittests:: config:: matchFiles", () => {
                 "z/a.ts",
                 "z/abz.ts",
                 "z/aba.ts",
-                "x/b.ts"
+                "x/b.ts",
             ],
             exclude: [
                 "*.ts",
                 "z/??z.ts",
-                "*/b.ts"
-            ]
+                "*/b.ts",
+            ],
         }, caseInsensitiveHost, caseInsensitiveBasePath);
         baselineMatches("with recursive excludes", {
             include: [
@@ -204,19 +204,19 @@ describe("unittests:: config:: matchFiles", () => {
                 "x/a.ts",
                 "x/b.ts",
                 "x/y/a.ts",
-                "x/y/b.ts"
+                "x/y/b.ts",
             ],
             exclude: [
-                "**/b.ts"
-            ]
+                "**/b.ts",
+            ],
         }, caseInsensitiveHost, caseInsensitiveBasePath);
         baselineMatches("with case sensitive exclude", {
             include: [
-                "B.ts"
+                "B.ts",
             ],
             exclude: [
-                "**/b.ts"
-            ]
+                "**/b.ts",
+            ],
         }, caseSensitiveHost, caseSensitiveBasePath);
         baselineMatches("with common package folders and no exclusions", {
             include: [
@@ -224,8 +224,8 @@ describe("unittests:: config:: matchFiles", () => {
                 "b.ts",
                 "node_modules/a.ts",
                 "bower_components/a.ts",
-                "jspm_packages/a.ts"
-            ]
+                "jspm_packages/a.ts",
+            ],
         }, caseInsensitiveCommonFoldersHost, caseInsensitiveBasePath);
         baselineMatches("with common package folders and exclusions", {
             include: [
@@ -233,12 +233,12 @@ describe("unittests:: config:: matchFiles", () => {
                 "b.ts",
                 "node_modules/a.ts",
                 "bower_components/a.ts",
-                "jspm_packages/a.ts"
+                "jspm_packages/a.ts",
             ],
             exclude: [
                 "a.ts",
-                "b.ts"
-            ]
+                "b.ts",
+            ],
         }, caseInsensitiveCommonFoldersHost, caseInsensitiveBasePath);
         baselineMatches("with common package folders and empty exclude", {
             include: [
@@ -246,8 +246,8 @@ describe("unittests:: config:: matchFiles", () => {
                 "b.ts",
                 "node_modules/a.ts",
                 "bower_components/a.ts",
-                "jspm_packages/a.ts"
-            ]
+                "jspm_packages/a.ts",
+            ],
         }, caseInsensitiveCommonFoldersHost, caseInsensitiveBasePath);
     });
 
@@ -255,279 +255,279 @@ describe("unittests:: config:: matchFiles", () => {
         baselineMatches("is sorted in include order, then in alphabetical order", {
             include: [
                 "z/*.ts",
-                "x/*.ts"
-            ]
+                "x/*.ts",
+            ],
         }, caseInsensitiveHost, caseInsensitiveBasePath);
         baselineMatches("same named declarations are excluded", {
             include: [
-                "*.ts"
-            ]
+                "*.ts",
+            ],
         }, caseInsensitiveHost, caseInsensitiveBasePath);
         baselineMatches("star matches only ts files", {
             include: [
-                "*"
-            ]
+                "*",
+            ],
         }, caseInsensitiveHost, caseInsensitiveBasePath);
         baselineMatches("question matches only a single character", {
             include: [
-                "x/?.ts"
-            ]
+                "x/?.ts",
+            ],
         }, caseInsensitiveHost, caseInsensitiveBasePath);
         baselineMatches("with recursive directory", {
             include: [
-                "**/a.ts"
-            ]
+                "**/a.ts",
+            ],
         }, caseInsensitiveHost, caseInsensitiveBasePath);
         baselineMatches("with multiple recursive directories", {
             include: [
                 "x/y/**/a.ts",
                 "x/**/a.ts",
-                "z/**/a.ts"
-            ]
+                "z/**/a.ts",
+            ],
         }, caseInsensitiveHost, caseInsensitiveBasePath);
         baselineMatches("case sensitive", {
             include: [
-                "**/A.ts"
-            ]
+                "**/A.ts",
+            ],
         }, caseSensitiveHost, caseSensitiveBasePath);
         baselineMatches("with missing files are excluded with wildcard include list", {
             include: [
-                "*/z.ts"
-            ]
+                "*/z.ts",
+            ],
         }, caseInsensitiveHost, caseInsensitiveBasePath);
         baselineMatches("always include literal files", {
             files: [
-                "a.ts"
+                "a.ts",
             ],
             include: [
-                "*/z.ts"
+                "*/z.ts",
             ],
             exclude: [
-                "**/a.ts"
-            ]
+                "**/a.ts",
+            ],
         }, caseInsensitiveHost, caseInsensitiveBasePath);
         baselineMatches("exclude folders", {
             include: [
-                "**/*"
+                "**/*",
             ],
             exclude: [
                 "z",
-                "x"
-            ]
+                "x",
+            ],
         }, caseInsensitiveHost, caseInsensitiveBasePath);
         describe("with common package folders", () => {
             baselineMatches("and no exclusions", {
                 include: [
-                    "**/a.ts"
-                ]
+                    "**/a.ts",
+                ],
             }, caseInsensitiveCommonFoldersHost, caseInsensitiveBasePath);
             baselineMatches("and exclusions", {
                 include: [
-                    "**/?.ts"
+                    "**/?.ts",
                 ],
                 exclude: [
-                    "a.ts"
-                ]
+                    "a.ts",
+                ],
             }, caseInsensitiveCommonFoldersHost, caseInsensitiveBasePath);
             baselineMatches("and empty exclude", {
                 include: [
-                    "**/a.ts"
+                    "**/a.ts",
                 ],
-                exclude: [] as string[]
+                exclude: [] as string[],
             }, caseInsensitiveCommonFoldersHost, caseInsensitiveBasePath);
             baselineMatches("and explicit recursive include", {
                 include: [
                     "**/a.ts",
-                    "**/node_modules/a.ts"
-                ]
+                    "**/node_modules/a.ts",
+                ],
             }, caseInsensitiveCommonFoldersHost, caseInsensitiveBasePath);
             baselineMatches("and wildcard include", {
                 include: [
-                    "*/a.ts"
-                ]
+                    "*/a.ts",
+                ],
             }, caseInsensitiveCommonFoldersHost, caseInsensitiveBasePath);
             baselineMatches("and explicit wildcard include", {
                 include: [
                     "*/a.ts",
-                    "node_modules/a.ts"
-                ]
+                    "node_modules/a.ts",
+                ],
             }, caseInsensitiveCommonFoldersHost, caseInsensitiveBasePath);
         });
         baselineMatches("exclude .js files when allowJs=false", {
             compilerOptions: {
-                allowJs: false
+                allowJs: false,
             },
             include: [
-                "js/*"
-            ]
+                "js/*",
+            ],
         }, caseInsensitiveHost, caseInsensitiveBasePath);
         baselineMatches("include .js files when allowJs=true", {
             compilerOptions: {
-                allowJs: true
+                allowJs: true,
             },
             include: [
-                "js/*"
-            ]
+                "js/*",
+            ],
         }, caseInsensitiveHost, caseInsensitiveBasePath);
         baselineMatches("include explicitly listed .min.js files when allowJs=true", {
             compilerOptions: {
-                allowJs: true
+                allowJs: true,
             },
             include: [
-                "js/*.min.js"
-            ]
+                "js/*.min.js",
+            ],
         }, caseInsensitiveHost, caseInsensitiveBasePath);
         baselineMatches("include paths outside of the project", {
             include: [
                 "*",
-                "c:/ext/*"
-            ]
+                "c:/ext/*",
+            ],
         }, caseInsensitiveHost, caseInsensitiveBasePath);
         baselineMatches("include paths outside of the project using relative paths", {
             include: [
                 "*",
-                "../ext/*"
+                "../ext/*",
             ],
             exclude: [
-                "**"
-            ]
+                "**",
+            ],
         }, caseInsensitiveHost, caseInsensitiveBasePath);
         baselineMatches("exclude paths outside of the project using relative paths", {
             include: [
-                "c:/**/*"
+                "c:/**/*",
             ],
             exclude: [
-                "../**"
-            ]
+                "../**",
+            ],
         }, caseInsensitiveHost, caseInsensitiveBasePath);
         baselineMatches("include files with .. in their name", {
             include: [
-                "c:/ext/b/a..b.ts"
+                "c:/ext/b/a..b.ts",
             ],
             exclude: [
-                "**"
-            ]
+                "**",
+            ],
         }, caseInsensitiveHost, caseInsensitiveBasePath);
         baselineMatches("exclude files with .. in their name", {
             include: [
-                "c:/ext/**/*"
+                "c:/ext/**/*",
             ],
             exclude: [
-                "c:/ext/b/a..b.ts"
-            ]
+                "c:/ext/b/a..b.ts",
+            ],
         }, caseInsensitiveHost, caseInsensitiveBasePath);
         baselineMatches("with jsx=none, allowJs=false", {
             compilerOptions: {
-                allowJs: false
-            }
+                allowJs: false,
+            },
         }, caseInsensitiveMixedExtensionHost, caseInsensitiveBasePath);
         baselineMatches("with jsx=preserve, allowJs=false", {
             compilerOptions: {
                 jsx: "preserve",
-                allowJs: false
-            }
+                allowJs: false,
+            },
         }, caseInsensitiveMixedExtensionHost, caseInsensitiveBasePath);
         baselineMatches("with jsx=react-native, allowJs=false", {
             compilerOptions: {
                 jsx: "react-native",
-                allowJs: false
-            }
+                allowJs: false,
+            },
         }, caseInsensitiveMixedExtensionHost, caseInsensitiveBasePath);
         baselineMatches("with jsx=none, allowJs=true", {
             compilerOptions: {
-                allowJs: true
-            }
+                allowJs: true,
+            },
         }, caseInsensitiveMixedExtensionHost, caseInsensitiveBasePath);
         baselineMatches("with jsx=preserve, allowJs=true", {
             compilerOptions: {
                 jsx: "preserve",
-                allowJs: true
-            }
+                allowJs: true,
+            },
         }, caseInsensitiveMixedExtensionHost, caseInsensitiveBasePath);
         baselineMatches("with jsx=react-native, allowJs=true", {
             compilerOptions: {
                 jsx: "react-native",
-                allowJs: true
-            }
+                allowJs: true,
+            },
         }, caseInsensitiveMixedExtensionHost, caseInsensitiveBasePath);
         baselineMatches("exclude .min.js files using wildcards", {
             compilerOptions: {
-                allowJs: true
+                allowJs: true,
             },
             include: [
-                "js/*.min.js"
+                "js/*.min.js",
             ],
             exclude: [
-                "js/a*"
-            ]
+                "js/a*",
+            ],
         }, caseInsensitiveHost, caseInsensitiveBasePath);
 
         describe("with trailing recursive directory", () => {
             baselineMatches("in includes with trailing recursive directory", {
                 include: [
-                    "**"
-                ]
+                    "**",
+                ],
             }, caseInsensitiveHost, caseInsensitiveBasePath);
             baselineMatches("in excludes with trailing recursive directory", {
                 include: [
-                    "**/*"
+                    "**/*",
                 ],
                 exclude: [
-                    "**"
-                ]
+                    "**",
+                ],
             }, caseInsensitiveHost, caseInsensitiveBasePath);
         });
         describe("with multiple recursive directory patterns", () => {
             baselineMatches("in includes with multiple recursive directory patterns", {
                 include: [
-                    "**/x/**/*"
-                ]
+                    "**/x/**/*",
+                ],
             }, caseInsensitiveHost, caseInsensitiveBasePath);
         });
         baselineMatches("in excludes", {
             include: [
-                "**/a.ts"
+                "**/a.ts",
             ],
             exclude: [
-                "**/x/**"
-            ]
+                "**/x/**",
+            ],
         }, caseInsensitiveHost, caseInsensitiveBasePath);
 
         describe("with parent directory symbols after a recursive directory pattern", () => {
             baselineMatches("in includes immediately after", {
                 include: [
-                    "**/../*"
-                ]
+                    "**/../*",
+                ],
             }, caseInsensitiveHost, caseInsensitiveBasePath);
 
             baselineMatches("in includes after a subdirectory", {
                 include: [
-                    "**/y/../*"
-                ]
+                    "**/y/../*",
+                ],
             }, caseInsensitiveHost, caseInsensitiveBasePath);
 
             baselineMatches("in excludes immediately after", {
                 include: [
-                    "**/a.ts"
+                    "**/a.ts",
                 ],
                 exclude: [
-                    "**/.."
-                ]
+                    "**/..",
+                ],
             }, caseInsensitiveHost, caseInsensitiveBasePath);
 
             baselineMatches("in excludes after a subdirectory", {
                 include: [
-                    "**/a.ts"
+                    "**/a.ts",
                 ],
                 exclude: [
-                    "**/y/.."
-                ]
+                    "**/y/..",
+                ],
             }, caseInsensitiveHost, caseInsensitiveBasePath);
         });
 
         describe("with implicit globbification", () => {
             baselineMatches("Expands z to z/starstart/star", {
-                include: ["z"]
+                include: ["z"],
             }, caseInsensitiveHost, caseInsensitiveBasePath);
         });
     });
@@ -536,34 +536,34 @@ describe("unittests:: config:: matchFiles", () => {
         baselineMatches("that are not explicitly included", {
             include: [
                 "x/**/*",
-                "w/*/*"
-            ]
+                "w/*/*",
+            ],
         }, caseInsensitiveDottedFoldersHost, caseInsensitiveBasePath);
         describe("that are explicitly included", () => {
             baselineMatches("without wildcards", {
                 include: [
                     "x/.y/a.ts",
-                    "c:/dev/.z/.b.ts"
-                ]
+                    "c:/dev/.z/.b.ts",
+                ],
             }, caseInsensitiveDottedFoldersHost, caseInsensitiveBasePath);
             baselineMatches("with recursive wildcards that match directories", {
                 include: [
-                    "**/.*/*"
-                ]
+                    "**/.*/*",
+                ],
             }, caseInsensitiveDottedFoldersHost, caseInsensitiveBasePath);
             baselineMatches("with recursive wildcards that match nothing", {
                 include: [
                     "x/**/.y/*",
-                    ".z/**/.*"
-                ]
+                    ".z/**/.*",
+                ],
             }, caseInsensitiveDottedFoldersHost, caseInsensitiveBasePath);
             baselineMatches("with wildcard excludes that implicitly exclude dotted files", {
                 include: [
-                    "**/.*/*"
+                    "**/.*/*",
                 ],
                 exclude: [
-                    "**/*"
-                ]
+                    "**/*",
+                ],
             }, caseInsensitiveDottedFoldersHost, caseInsensitiveBasePath);
         });
     });
@@ -571,14 +571,14 @@ describe("unittests:: config:: matchFiles", () => {
     describe("exclude or include patterns which start with **", () => {
         baselineMatches("can exclude dirs whose pattern starts with starstar", {
             exclude: [
-                "**/x"
-            ]
+                "**/x",
+            ],
         }, caseSensitiveHost, caseSensitiveBasePath);
         baselineMatches("can include dirs whose pattern starts with starstart", {
             include: [
                 "**/x",
-                "**/a/**/b"
-            ]
+                "**/a/**/b",
+            ],
         }, caseSensitiveHost, caseSensitiveBasePath);
     });
 
@@ -588,8 +588,8 @@ describe("unittests:: config:: matchFiles", () => {
     describe("when recursive symlinked directories are present", () => {
         const fs = new vfs.FileSystem(/*ignoreCase*/ true, {
             cwd: caseInsensitiveBasePath, files: {
-                "c:/dev/index.ts": ""
-            }
+                "c:/dev/index.ts": "",
+            },
         });
         fs.mkdirpSync("c:/dev/a/b/c");
         fs.symlinkSync("c:/dev/A", "c:/dev/a/self");

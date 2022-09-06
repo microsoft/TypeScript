@@ -79,7 +79,7 @@ function getInfo(sourceFile: SourceFile, program: Program, pos: number): Info | 
             defaultImportName,
             namedImports,
             statement: cast(decl.parent.parent, isVariableStatement),
-            required: first(parent.arguments)
+            required: first(parent.arguments),
         };
     }
 }

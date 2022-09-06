@@ -21,7 +21,7 @@ class Carousel<T> extends Vue {
         "variables.ts": `export const vueTemplateHtml = \`<div></div>\`;`,
         "vue.d.ts": `export namespace Vue { export type Config = { template: string }; }`,
         "vue-class-component.d.ts": `import Vue from "./vue";
-export function Component(x: Config): any;`
+export function Component(x: Config): any;`,
     };
 
     function createLanguageService() {
@@ -46,7 +46,7 @@ export function Component(x: Config): any;`
                 return ts.getDefaultLibFilePath(options);
             },
             fileExists: name => !!files[name],
-            readFile: name => files[name]
+            readFile: name => files[name],
         });
     }
     // Regression test for GH #18245 - bug in single line comment writer caused a debug assertion when attempting
@@ -83,7 +83,7 @@ export function Component(x: Config): any;`
                 outputFiles: [{
                     name: "foo.d.ts",
                     text: "export {};\n",
-                    writeByteOrderMark: false
+                    writeByteOrderMark: false,
                 }],
             }
         );
@@ -109,7 +109,7 @@ export function Component(x: Config): any;`
                     return text ? ts.ScriptSnapshot.fromString(text) : undefined;
                 },
                 getCurrentDirectory: () => "/project",
-                getDefaultLibFileName: () => "/lib/lib.d.ts"
+                getDefaultLibFileName: () => "/lib/lib.d.ts",
             };
             const ls = ts.createLanguageService(host);
             const program1 = ls.getProgram()!;
@@ -153,34 +153,34 @@ export function Component(x: Config): any;`
                 content: JSON.stringify({
                     compilerOptions: {
                         module: "none",
-                        composite: true
+                        composite: true,
                     },
-                    exclude: ["temp"]
-                })
+                    exclude: ["temp"],
+                }),
             };
             const class1: File = {
                 path: `/user/username/projects/myproject/projects/project1/class1.ts`,
-                content: `class class1 {}`
+                content: `class class1 {}`,
             };
             const class1Dts: File = {
                 path: `/user/username/projects/myproject/projects/project1/class1.d.ts`,
-                content: `declare class class1 {}`
+                content: `declare class class1 {}`,
             };
             const config2: File = {
                 path: `/user/username/projects/myproject/projects/project2/tsconfig.json`,
                 content: JSON.stringify({
                     compilerOptions: {
                         module: "none",
-                        composite: true
+                        composite: true,
                     },
                     references: [
-                        { path: "../project1" }
-                    ]
-                })
+                        { path: "../project1" },
+                    ],
+                }),
             };
             const class2: File = {
                 path: `/user/username/projects/myproject/projects/project2/class2.ts`,
-                content: `class class2 {}`
+                content: `class class2 {}`,
             };
             const system = createServerHost([config1, class1, class1Dts, config2, class2, libFile]);
             const result = ts.getParsedCommandLineOfConfigFile(`/user/username/projects/myproject/projects/project2/tsconfig.json`, /*optionsToExtend*/ undefined, {

@@ -112,11 +112,11 @@ registerCodeFix({
                 const elements = token.parent.elements;
                 const diagnostic: [DiagnosticMessage, string] = [
                     elements.length > 1 ? Diagnostics.Remove_unused_declarations_for_Colon_0 : Diagnostics.Remove_unused_declaration_for_Colon_0,
-                    map(elements, e => e.getText(sourceFile)).join(", ")
+                    map(elements, e => e.getText(sourceFile)).join(", "),
                 ];
                 return [
                     createDeleteFix(textChanges.ChangeTracker.with(context, t =>
-                        deleteDestructuringElements(t, sourceFile, token.parent as ObjectBindingPattern | ArrayBindingPattern)), diagnostic)
+                        deleteDestructuringElements(t, sourceFile, token.parent as ObjectBindingPattern | ArrayBindingPattern)), diagnostic),
                 ];
             }
             return [
@@ -128,7 +128,7 @@ registerCodeFix({
         if (canDeleteEntireVariableStatement(sourceFile, token)) {
             return [
                 createDeleteFix(textChanges.ChangeTracker.with(context, t =>
-                    deleteEntireVariableStatement(t, sourceFile, token.parent as VariableDeclarationList)), Diagnostics.Remove_variable_statement)
+                    deleteEntireVariableStatement(t, sourceFile, token.parent as VariableDeclarationList)), Diagnostics.Remove_variable_statement),
             ];
         }
 

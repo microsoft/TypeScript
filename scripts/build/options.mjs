@@ -16,7 +16,7 @@ const parsed = minimist(process.argv.slice(2), {
         "c": ["colors", "color"],
         "skippercent": "skipPercent",
         "w": "workers",
-        "f": "fix"
+        "f": "fix",
         /* eslint-enable quote-props */
     },
     default: {
@@ -43,7 +43,7 @@ const parsed = minimist(process.argv.slice(2), {
         typecheck: true,
         lint: true,
         coverage: false,
-    }
+    },
 });
 
 /** @type {CommandLineOptions} */

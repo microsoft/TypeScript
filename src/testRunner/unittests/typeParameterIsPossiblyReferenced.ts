@@ -14,7 +14,7 @@ describe("unittests :: internalApi :: typeParameterIsPossiblyReferenced", () => 
                 /*ignoreCase*/ true,
                 {
                     documents: [
-                        new documents.TextDocument("/file.ts", content)
+                        new documents.TextDocument("/file.ts", content),
                     ],
                     cwd: "/",
                 }

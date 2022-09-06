@@ -26,7 +26,7 @@ ruleTester.run("object-literal-surrounding-space", rule, {
             code: `const prop = {x: 1}`,
             errors: [
                 { messageId: "leadingStringError" },
-                { messageId: "trailingStringError" }
+                { messageId: "trailingStringError" },
             ],
         },
         {

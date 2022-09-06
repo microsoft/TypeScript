@@ -10,12 +10,12 @@ describe("unittests:: tsc:: redirect::", () => {
         fs: () => loadProjectFromFiles({
             "/src/project/tsconfig.json": JSON.stringify({
                 compilerOptions: {
-                    outDir: "out"
+                    outDir: "out",
                 },
                 include: [
                     "copy1/node_modules/target/*",
                     "copy2/node_modules/target/*",
-                ]
+                ],
             }),
             "/src/project/copy1/node_modules/target/index.ts": "export const a = 1;",
             "/src/project/copy1/node_modules/target/import.ts": `import {} from "./";`,

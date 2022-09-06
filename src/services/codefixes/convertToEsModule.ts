@@ -678,6 +678,6 @@ interface ConvertedImports {
 function convertedImports(newImports: readonly Node[], useSitesToUnqualify?: Map<Node, Node>): ConvertedImports {
     return {
         newImports,
-        useSitesToUnqualify
+        useSitesToUnqualify,
     };
 }

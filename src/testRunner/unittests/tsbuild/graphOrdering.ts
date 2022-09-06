@@ -15,7 +15,7 @@ describe("unittests:: tsbuild - graph-ordering", () => {
         ["H", "I"],
         ["I", "J"],
         ["J", "H"],
-        ["J", "E"]
+        ["J", "E"],
     ];
 
     before(() => {
@@ -83,7 +83,7 @@ describe("unittests:: tsbuild - graph-ordering", () => {
             const configContent = JSON.stringify({
                 compilerOptions: { composite: true },
                 files: [`./${proj}.ts`],
-                references: deps.filter(d => d[0] === proj).map(d => ({ path: `../${d[1]}` }))
+                references: deps.filter(d => d[0] === proj).map(d => ({ path: `../${d[1]}` })),
             }, undefined, 2);
             fileSystem.writeFileSync(configFileName, configContent);
             projFileNames.push(configFileName);

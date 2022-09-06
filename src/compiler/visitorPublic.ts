@@ -492,7 +492,7 @@ function addDefaultValueAssignmentForInitializer(parameter: ParameterDeclaration
                                 ),
                                 EmitFlags.NoComments
                             )
-                        )
+                        ),
                     ]),
                     parameter
                 ),

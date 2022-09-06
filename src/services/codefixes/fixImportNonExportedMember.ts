@@ -91,7 +91,7 @@ registerCodeFix({
                 }
             });
         }));
-    }
+    },
 });
 
 interface ModuleExports {

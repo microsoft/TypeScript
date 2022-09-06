@@ -58,8 +58,8 @@ describe("unittests:: tsbuildWatch:: watchMode:: with demo project", () => {
                     sys.runQueuedTimeoutCallbacks(); // build core
                     sys.runQueuedTimeoutCallbacks(); // build animals, zoo and solution
                 },
-            }
-        ]
+            },
+        ],
     });
 
     verifyTscWatch({
@@ -80,8 +80,8 @@ import * as A from '../animals';
 ${coreFiles[1].content}`),
                 // build core
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
-            }
-        ]
+            },
+        ],
     });
 
     function subProjectFiles(subProject: string, fileNames: readonly string[]): File[] {

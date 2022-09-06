@@ -9,6 +9,6 @@ describe("unittests:: tsbuild:: exitCodeOnBogusFile:: test exit code", () => {
         scenario: "exitCodeOnBogusFile",
         subScenario: `test exit code`,
         fs: () => loadProjectFromFiles({}),
-        commandLineArgs: ["-b", "bogus.json"]
+        commandLineArgs: ["-b", "bogus.json"],
     });
 });

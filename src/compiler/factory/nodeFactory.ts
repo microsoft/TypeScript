@@ -1179,7 +1179,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             flags: autoGenerateFlags,
             id: nextAutoGenerateId,
             prefix,
-            suffix
+            suffix,
         });
         nextAutoGenerateId++;
         return node;
@@ -6378,7 +6378,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             /*modifiers*/ undefined,
             /*isTypeOnly*/ false,
             createNamedExports([
-                createExportSpecifier(/*isTypeOnly*/ false, /*propertyName*/ undefined, exportName)
+                createExportSpecifier(/*isTypeOnly*/ false, /*propertyName*/ undefined, exportName),
             ])
         );
     }
@@ -6649,9 +6649,9 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
                             /*initializer*/ undefined
                         )],
                         createBlock([
-                            createExpressionStatement(expression)
+                            createExpressionStatement(expression),
                         ])
-                    )
+                    ),
                 ])
             ),
             "value"

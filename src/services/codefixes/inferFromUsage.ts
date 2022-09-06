@@ -509,7 +509,7 @@ function inferTypeForParametersFromUsage(func: SignatureDeclaration, sourceFile:
     return references && inferTypeFromReferences(program, references, cancellationToken).parameters(func) ||
         func.parameters.map<ParameterInference>(p => ({
             declaration: p,
-            type: isIdentifier(p.name) ? inferTypeForVariableFromUsage(p.name, program, cancellationToken) : program.getTypeChecker().getAnyType()
+            type: isIdentifier(p.name) ? inferTypeForVariableFromUsage(p.name, program, cancellationToken) : program.getTypeChecker().getAnyType(),
         }));
 }
 
@@ -676,7 +676,7 @@ function inferTypeFromReferences(program: Program, references: readonly Identifi
             return {
                 type: isRest ? checker.createArrayType(type) : type,
                 isOptional: isOptional && !isRest,
-                declaration: parameter
+                declaration: parameter,
             };
         });
     }
@@ -907,7 +907,7 @@ function inferTypeFromReferences(program: Program, references: readonly Identifi
     function inferTypeFromCallExpression(parent: CallExpression | NewExpression, usage: Usage): void {
         const call: CallUsage = {
             argumentTypes: [],
-            return_: createEmptyUsage()
+            return_: createEmptyUsage(),
         };
 
         if (parent.arguments) {
@@ -996,15 +996,15 @@ function inferTypeFromReferences(program: Program, references: readonly Identifi
         const priorities: Priority[] = [
             {
                 high: t => t === checker.getStringType() || t === checker.getNumberType(),
-                low: t => t === stringNumber
+                low: t => t === stringNumber,
             },
             {
                 high: t => !(t.flags & (TypeFlags.Any | TypeFlags.Void)),
-                low: t => !!(t.flags & (TypeFlags.Any | TypeFlags.Void))
+                low: t => !!(t.flags & (TypeFlags.Any | TypeFlags.Void)),
             },
             {
                 high: t => !(t.flags & (TypeFlags.Nullable | TypeFlags.Any | TypeFlags.Void)) && !(getObjectFlags(t) & ObjectFlags.Anonymous),
-                low: t => !!(getObjectFlags(t) & ObjectFlags.Anonymous)
+                low: t => !!(getObjectFlags(t) & ObjectFlags.Anonymous),
             }];
         let good = removeLowPriorityInferences(inferences, priorities);
         const anons = good.filter(i => getObjectFlags(i) & ObjectFlags.Anonymous) as AnonymousType[];

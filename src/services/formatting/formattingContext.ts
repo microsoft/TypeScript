@@ -15,7 +15,7 @@ export const enum FormattingRequestKind {
     FormatOnEnter,
     FormatOnSemicolon,
     FormatOnOpeningCurlyBrace,
-    FormatOnClosingCurlyBrace
+    FormatOnClosingCurlyBrace,
 }
 
 /** @internal */

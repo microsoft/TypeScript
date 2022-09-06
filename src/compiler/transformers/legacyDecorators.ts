@@ -189,7 +189,7 @@ export function transformLegacyDecorators(context: TransformationContext): (x: S
                 ...members,
                 factory.createClassStaticBlockDeclaration(
                     factory.createBlock(decorationStatements, /*multiLine*/ true)
-                )
+                ),
             ]), members);
             decorationStatements = undefined;
         }
@@ -353,10 +353,10 @@ export function transformLegacyDecorators(context: TransformationContext): (x: S
                     factory.createBlock([
                         factory.createExpressionStatement(
                             factory.createAssignment(classAlias, factory.createThis())
-                        )
+                        ),
                     ])
                 ),
-                ...members
+                ...members,
             ]), members);
         }
 

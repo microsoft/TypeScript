@@ -227,6 +227,6 @@ function createSourceFileLike(text: string, lineMap?: SourceFileLike["lineMap"])
         lineMap,
         getLineAndCharacterOfPosition(pos: number) {
             return computeLineAndCharacterOfPosition(getLineStarts(this), pos);
-        }
+        },
     };
 }

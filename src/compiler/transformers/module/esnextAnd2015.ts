@@ -154,7 +154,7 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
                     /*isTypeOnly*/ false,
                     /*name*/ undefined,
                     factory.createNamedImports([
-                        factory.createImportSpecifier(/*isTypeOnly*/ false, factory.createIdentifier("createRequire"), createRequireName)
+                        factory.createImportSpecifier(/*isTypeOnly*/ false, factory.createIdentifier("createRequire"), createRequireName),
                     ])
                 ),
                 factory.createStringLiteral("module")
@@ -169,9 +169,9 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
                             /*exclamationToken*/ undefined,
                             /*type*/ undefined,
                             factory.createCallExpression(factory.cloneNode(createRequireName), /*typeArguments*/ undefined, [
-                                factory.createPropertyAccessExpression(factory.createMetaProperty(SyntaxKind.ImportKeyword, factory.createIdentifier("meta")), factory.createIdentifier("url"))
+                                factory.createPropertyAccessExpression(factory.createMetaProperty(SyntaxKind.ImportKeyword, factory.createIdentifier("meta")), factory.createIdentifier("url")),
                             ])
-                        )
+                        ),
                     ],
                     /*flags*/ languageVersion >= ScriptTarget.ES2015 ? NodeFlags.Const : NodeFlags.None
                 )
@@ -206,7 +206,7 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
                                     /*exclamationToken*/ undefined,
                                     /*type*/ undefined,
                                     createRequireCall(node)
-                                )
+                                ),
                             ],
                             /*flags*/ languageVersion >= ScriptTarget.ES2015 ? NodeFlags.Const : NodeFlags.None
                         )

@@ -46,7 +46,7 @@ const refactorDescription = getLocaleSpecificMessage(Diagnostics.Inline_variable
 const inlineVariableAction = {
     name: refactorName,
     description: refactorDescription,
-    kind: "refactor.inline.variable"
+    kind: "refactor.inline.variable",
 };
 
 interface InliningInfo {
@@ -64,7 +64,7 @@ registerRefactor(refactorName, {
             program,
             preferences,
             startPosition,
-            triggerReason
+            triggerReason,
         } = context;
 
         // tryWithReferenceToken is true below when triggerReason === "invoked", since we want to
@@ -79,7 +79,7 @@ registerRefactor(refactorName, {
             return [{
                 name: refactorName,
                 description: refactorDescription,
-                actions: [inlineVariableAction]
+                actions: [inlineVariableAction],
             }];
         }
 
@@ -89,8 +89,8 @@ registerRefactor(refactorName, {
                 description: refactorDescription,
                 actions: [{
                     ...inlineVariableAction,
-                    notApplicableReason: info.error
-                }]
+                    notApplicableReason: info.error,
+                }],
             }];
         }
 
@@ -118,7 +118,7 @@ registerRefactor(refactorName, {
         });
 
         return { edits };
-    }
+    },
 });
 
 function getInliningInfo(file: SourceFile, startPosition: number, tryWithReferenceToken: boolean, program: Program): InliningInfo | RefactorErrorInfo | undefined {

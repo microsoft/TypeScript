@@ -58,7 +58,7 @@ interface Number { toExponential: any; }
 interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }`
+interface Array<T> { length: number; [n: number]: T; }`,
 };
 
 function getExecutingFilePathFromLibFile(): string {
@@ -258,7 +258,7 @@ export enum Tsc_WatchFile {
 export enum Tsc_WatchDirectory {
     WatchFile = "RecursiveDirectoryUsingFsWatchFile",
     NonRecursiveWatchDirectory = "RecursiveDirectoryUsingNonRecursiveWatchDirectory",
-    DynamicPolling = "RecursiveDirectoryUsingDynamicPriorityPolling"
+    DynamicPolling = "RecursiveDirectoryUsingDynamicPriorityPolling",
 }
 
 export interface TestServerHostOptions {
@@ -623,7 +623,7 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
                 map.remove(path, callback);
                 this.hasWatchChanges = true;
                 closed = true;
-            }
+            },
         };
     }
 
@@ -649,7 +649,7 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
             path,
             {
                 cb,
-                inode: this.inodes?.get(path)
+                inode: this.inodes?.get(path),
             }
         ) as FsWatchWorkerWatcher;
         result.on = noop;
@@ -708,7 +708,7 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         return {
             path: this.toPath(fullPath),
             fullPath,
-            modifiedTime: this.now()
+            modifiedTime: this.now(),
         };
     }
 
@@ -1184,6 +1184,6 @@ export function getTsBuildProjectFilePath(project: string, file: string) {
 export function getTsBuildProjectFile(project: string, file: string): File {
     return {
         path: getTsBuildProjectFilePath(project, file),
-        content: Harness.IO.readFile(`${Harness.IO.getWorkspaceRoot()}/tests/projects/${project}/${file}`)!
+        content: Harness.IO.readFile(`${Harness.IO.getWorkspaceRoot()}/tests/projects/${project}/${file}`)!,
     };
 }

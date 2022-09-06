@@ -182,7 +182,7 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
                             /*exclamationToken*/ undefined,
                             /*type*/ undefined,
                             factory.createCallExpression(factory.createIdentifier("require"), /*typeArguments*/ undefined, [factory.createStringLiteral(importSource)])
-                        )
+                        ),
                     ], NodeFlags.Const));
                     setParentRecursive(requireStatement, /*incremental*/ false);
                     statements = insertStatementAfterCustomPrologue(statements.slice(), requireStatement);
@@ -352,7 +352,7 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
                 args.push(factory.createObjectLiteralExpression([
                     factory.createPropertyAssignment("fileName", getCurrentFileNameExpression()),
                     factory.createPropertyAssignment("lineNumber", factory.createNumericLiteral(lineCol.line + 1)),
-                    factory.createPropertyAssignment("columnNumber", factory.createNumericLiteral(lineCol.character + 1))
+                    factory.createPropertyAssignment("columnNumber", factory.createNumericLiteral(lineCol.character + 1)),
                 ]));
                 // __self development flag
                 args.push(factory.createThis());
@@ -926,5 +926,5 @@ const entities = new Map(Object.entries({
     spades: 0x2660,
     clubs: 0x2663,
     hearts: 0x2665,
-    diams: 0x2666
+    diams: 0x2666,
 }));

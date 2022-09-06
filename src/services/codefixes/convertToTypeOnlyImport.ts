@@ -52,7 +52,7 @@ registerCodeFix({
             if (some(importDeclarationChanges)) {
                 return [
                     createCodeFixActionWithoutFixAll(fixId, importDeclarationChanges, Diagnostics.Use_import_type),
-                    mainAction
+                    mainAction,
                 ];
             }
             return [mainAction];
@@ -79,7 +79,7 @@ registerCodeFix({
                 doChange(changes, diag.file, errorDeclaration);
             }
         });
-    }
+    },
 });
 
 function getDeclaration(sourceFile: SourceFile, pos: number) {

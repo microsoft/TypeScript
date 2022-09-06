@@ -329,7 +329,7 @@ export class TextStorage {
         if (svc) {
             return {
                 getLineCount: () => svc.getLineCount(),
-                getLineText: line => svc.getAbsolutePositionAndLineText(line + 1).lineText!
+                getLineText: line => svc.getAbsolutePositionAndLineText(line + 1).lineText!,
             };
         }
         const lineMap = this.getLineMap();

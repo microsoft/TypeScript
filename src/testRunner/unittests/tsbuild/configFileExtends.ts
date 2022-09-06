@@ -9,12 +9,12 @@ describe("unittests:: tsbuild:: configFileExtends:: when tsconfig extends anothe
             "/src/tsconfig.json": JSON.stringify({
                 references: [
                     { path: "./shared/tsconfig.json" },
-                    { path: "./webpack/tsconfig.json" }
+                    { path: "./webpack/tsconfig.json" },
                 ],
-                files: []
+                files: [],
             }),
             "/src/shared/tsconfig-base.json": JSON.stringify({
-                include: ["./typings-base/"]
+                include: ["./typings-base/"],
             }),
             "/src/shared/typings-base/globals.d.ts": `type Unrestricted = any;`,
             "/src/shared/tsconfig.json": JSON.stringify({
@@ -22,9 +22,9 @@ describe("unittests:: tsbuild:: configFileExtends:: when tsconfig extends anothe
                 compilerOptions: {
                     composite: true,
                     outDir: "../target-tsc-build/",
-                    rootDir: ".."
+                    rootDir: "..",
                 },
-                files: ["./index.ts"]
+                files: ["./index.ts"],
             }),
             "/src/shared/index.ts": `export const a: Unrestricted = 1;`,
             "/src/webpack/tsconfig.json": JSON.stringify({
@@ -32,10 +32,10 @@ describe("unittests:: tsbuild:: configFileExtends:: when tsconfig extends anothe
                 compilerOptions: {
                     composite: true,
                     outDir: "../target-tsc-build/",
-                    rootDir: ".."
+                    rootDir: "..",
                 },
                 files: ["./index.ts"],
-                references: [{ path: "../shared/tsconfig.json" }]
+                references: [{ path: "../shared/tsconfig.json" }],
             }),
             "/src/webpack/index.ts": `export const b: Unrestricted = 1;`,
         });

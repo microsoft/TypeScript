@@ -137,7 +137,7 @@ export interface RuntimeTypeSerializer {
 export function createRuntimeTypeSerializer(context: TransformationContext): RuntimeTypeSerializer {
     const {
         factory,
-        hoistVariableDeclaration
+        hoistVariableDeclaration,
     } = context;
 
     const resolver = context.getEmitResolver();

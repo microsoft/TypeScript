@@ -137,7 +137,7 @@ export interface IncrementalProgramOptions<T extends BuilderProgram> {
 }
 
 export function createIncrementalProgram<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>({
-    rootNames, options, configFileParsingDiagnostics, projectReferences, host, createProgram
+    rootNames, options, configFileParsingDiagnostics, projectReferences, host, createProgram,
 }: IncrementalProgramOptions<T>): T {
     host = host || createIncrementalCompilerHost(options);
     createProgram = createProgram || createEmitAndSemanticDiagnosticsBuilderProgram as any as CreateProgram<T>;
@@ -611,7 +611,7 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
         const { hasInvalidatedResolutions, hasInvalidatedLibResolutions } = resolutionCache.createHasInvalidatedResolutions(customHasInvalidatedResolutions, customHasInvalidLibResolutions);
         const {
             originalReadFile, originalFileExists, originalDirectoryExists,
-            originalCreateDirectory, originalWriteFile, readFileWithCache
+            originalCreateDirectory, originalWriteFile, readFileWithCache,
         } = changeCompilerHostLikeToUseCache(compilerHost, toPath);
         if (isProgramUptoDate(getCurrentProgram(), rootFileNames, compilerOptions, path => getSourceVersion(path, readFileWithCache), fileName => compilerHost.fileExists(fileName), hasInvalidatedResolutions, hasInvalidatedLibResolutions, hasChangedAutomaticTypeDirectiveNames, getParsedCommandLine, projectReferences)) {
             if (hasChangedConfigFileParsingErrors) {

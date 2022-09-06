@@ -23,7 +23,7 @@ export function preProcessFile(sourceText: string, readImportFiles = true, detec
         libReferenceDirectives: [],
         amdDependencies: [],
         hasNoDefaultLib: undefined,
-        moduleName: undefined
+        moduleName: undefined,
     };
     const importedFiles: FileReference[] = [];
     let ambientExternalModules: { ref: FileReference, depth: number }[] | undefined;

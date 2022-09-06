@@ -12,7 +12,7 @@ export function getSymlinkedExtendsSys(forTsserver?: true): TestServerHost {
             extends: "@something/tsconfig-base/tsconfig.json",
             compilerOptions: {
                 removeComments: true,
-            }
+            },
         }),
         "/users/user/projects/myconfigs/node_modules/@something/tsconfig-base/tsconfig.json": JSON.stringify({
             compilerOptions: { composite: true },

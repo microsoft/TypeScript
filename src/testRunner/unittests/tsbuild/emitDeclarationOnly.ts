@@ -4,7 +4,7 @@ import {
 } from "../helpers/tsc";
 import {
     loadProjectFromDisk,
-    replaceText
+    replaceText,
 } from "../helpers/vfs";
 
 describe("unittests:: tsbuild:: on project with emitDeclarationOnly set to true", () => {

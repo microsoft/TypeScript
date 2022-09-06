@@ -295,7 +295,7 @@ export interface EmitResult {
 
 const enum TypingWatcherType {
     FileWatcher = "FileWatcher",
-    DirectoryWatcher = "DirectoryWatcher"
+    DirectoryWatcher = "DirectoryWatcher",
 }
 
 type TypingWatchers = Map<Path, FileWatcher> & { isInvoked?: boolean; };
@@ -1185,7 +1185,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     getFileNamesWithRedirectInfo(includeProjectReferenceRedirectInfo: boolean) {
         return this.getFileNames().map((fileName): protocol.FileWithProjectReferenceRedirectInfo => ({
             fileName,
-            isSourceOfProjectReferenceRedirect: includeProjectReferenceRedirectInfo && this.isSourceOfProjectReferenceRedirect(fileName)
+            isSourceOfProjectReferenceRedirect: includeProjectReferenceRedirectInfo && this.isSourceOfProjectReferenceRedirect(fileName),
         }));
     }
 
@@ -1734,7 +1734,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
                 this.projectService.getWatchOptions(this),
                 WatchType.MissingGeneratedFile,
                 this
-            )
+            ),
         };
     }
 
@@ -1846,7 +1846,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             includeProjectReferenceRedirectInfo
                 ? (files: Map<string, boolean>) => arrayFrom(files.entries(), ([fileName, isSourceOfProjectReferenceRedirect]): protocol.FileWithProjectReferenceRedirectInfo => ({
                     fileName,
-                    isSourceOfProjectReferenceRedirect
+                    isSourceOfProjectReferenceRedirect,
                 }))
                 : (files: Map<string, boolean>) => arrayFrom(files.keys());
 
@@ -1861,7 +1861,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             isInferred: isInferredProject(this),
             options: this.getCompilationSettings(),
             languageServiceDisabled: !this.languageServiceEnabled,
-            lastFileExceededProgramSize: this.lastFileExceededProgramSize
+            lastFileExceededProgramSize: this.lastFileExceededProgramSize,
         };
         const updatedFileNames = this.updatedFileNames;
         this.updatedFileNames = undefined;
@@ -1875,7 +1875,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             const lastReportedFileNames = this.lastReportedFileNames;
             const externalFiles = this.getExternalFiles().map((f): protocol.FileWithProjectReferenceRedirectInfo => ({
                 fileName: toNormalizedPath(f),
-                isSourceOfProjectReferenceRedirect: false
+                isSourceOfProjectReferenceRedirect: false,
             }));
             const currentFiles = arrayToMap(
                 this.getFileNamesWithRedirectInfo(!!includeProjectReferenceRedirectInfo).concat(externalFiles),
@@ -1896,7 +1896,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
                 else if (includeProjectReferenceRedirectInfo && isSourceOfProjectReferenceRedirect !== lastReportedFileNames.get(fileName)) {
                     updatedRedirects.push({
                         fileName,
-                        isSourceOfProjectReferenceRedirect
+                        isSourceOfProjectReferenceRedirect,
                     });
                 }
             });
@@ -1915,12 +1915,12 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
                     updated: includeProjectReferenceRedirectInfo
                         ? updated.map((fileName): protocol.FileWithProjectReferenceRedirectInfo => ({
                             fileName,
-                            isSourceOfProjectReferenceRedirect: this.isSourceOfProjectReferenceRedirect(fileName)
+                            isSourceOfProjectReferenceRedirect: this.isSourceOfProjectReferenceRedirect(fileName),
                         }))
                         : updated,
-                    updatedRedirects: includeProjectReferenceRedirectInfo ? updatedRedirects : undefined
+                    updatedRedirects: includeProjectReferenceRedirectInfo ? updatedRedirects : undefined,
                 },
-                projectErrors: this.getGlobalProjectErrors()
+                projectErrors: this.getGlobalProjectErrors(),
             };
         }
         else {
@@ -1928,7 +1928,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             const projectFileNames = this.getFileNamesWithRedirectInfo(!!includeProjectReferenceRedirectInfo);
             const externalFiles = this.getExternalFiles().map((f): protocol.FileWithProjectReferenceRedirectInfo => ({
                 fileName: toNormalizedPath(f),
-                isSourceOfProjectReferenceRedirect: false
+                isSourceOfProjectReferenceRedirect: false,
             }));
             const allFiles = projectFileNames.concat(externalFiles);
             this.lastReportedFileNames = arrayToMap(
@@ -1940,7 +1940,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             return {
                 info,
                 files: includeProjectReferenceRedirectInfo ? allFiles : allFiles.map(f => f.fileName),
-                projectErrors: this.getGlobalProjectErrors()
+                projectErrors: this.getGlobalProjectErrors(),
             };
         }
     }
@@ -2009,7 +2009,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
                 languageService: this.languageService,
                 languageServiceHost: this,
                 serverHost: this.projectService.host,
-                session: this.projectService.session
+                session: this.projectService.session,
             };
 
             const pluginModule = pluginModuleFactory({ typescript: ts });
@@ -2350,7 +2350,7 @@ export class InferredProject extends Project {
         return this.typeAcquisition || {
             enable: allRootFilesAreJsOrDts(this),
             include: ts.emptyArray,
-            exclude: ts.emptyArray
+            exclude: ts.emptyArray,
         };
     }
 }

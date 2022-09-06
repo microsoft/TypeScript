@@ -484,7 +484,7 @@ export function transformDeclarations(context: TransformationContext) {
             diagnosticMessage: s.errorModuleName
                 ? Diagnostics.Declaration_emit_for_this_file_requires_using_private_name_0_from_module_1_An_explicit_type_annotation_may_unblock_declaration_emit
                 : Diagnostics.Declaration_emit_for_this_file_requires_using_private_name_0_An_explicit_type_annotation_may_unblock_declaration_emit,
-            errorNode: s.errorNode || sourceFile
+            errorNode: s.errorNode || sourceFile,
         }));
         const result = resolver.getDeclarationStatementsForSourceFile(sourceFile, declarationEmitNodeBuilderFlags, symbolTracker, bundled);
         getSymbolAccessibilityDiagnostic = oldDiag;
@@ -1394,7 +1394,7 @@ export function transformDeclarations(context: TransformationContext) {
                     const newId = factory.createUniqueName("_default", GeneratedIdentifierFlags.Optimistic);
                     getSymbolAccessibilityDiagnostic = () => ({
                         diagnosticMessage: Diagnostics.Default_export_of_the_module_has_or_is_using_private_name_0,
-                        errorNode: input
+                        errorNode: input,
                     });
                     errorFallbackNode = input;
                     const varDecl = factory.createVariableDeclaration(newId, /*exclamationToken*/ undefined, resolver.createTypeOfExpression(input.expression, input, declarationEmitNodeBuilderFlags, symbolTracker), /*initializer*/ undefined);
@@ -1708,7 +1708,7 @@ export function transformDeclarations(context: TransformationContext) {
                         /*questionOrExclamationToken*/ undefined,
                         /*type*/ undefined,
                         /*initializer*/ undefined
-                    )
+                    ),
                 ] : undefined;
                 const memberNodes = concatenate(concatenate(privateIdentifier, parameterProperties), visitNodes(input.members, visitDeclarationSubtree, isClassElement));
                 const members = factory.createNodeArray(memberNodes);
@@ -1722,7 +1722,7 @@ export function transformDeclarations(context: TransformationContext) {
                     getSymbolAccessibilityDiagnostic = () => ({
                         diagnosticMessage: Diagnostics.extends_clause_of_exported_class_0_has_or_is_using_private_name_1,
                         errorNode: extendsClause,
-                        typeName: input.name
+                        typeName: input.name,
                     });
                     const varDecl = factory.createVariableDeclaration(newId, /*exclamationToken*/ undefined, resolver.createTypeOfExpression(extendsClause.expression, input, declarationEmitNodeBuilderFlags, symbolTracker), /*initializer*/ undefined);
                     const statement = factory.createVariableStatement(needsDeclare ? [factory.createModifier(SyntaxKind.DeclareKeyword)] : [], factory.createVariableDeclarationList([varDecl], NodeFlags.Const));

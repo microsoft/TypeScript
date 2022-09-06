@@ -5,7 +5,7 @@ import {
 import {
     loadProjectFromDisk,
     prependText,
-    replaceText
+    replaceText,
 } from "../helpers/vfs";
 
 describe("unittests:: tsbuild:: on demo project", () => {
@@ -22,7 +22,7 @@ describe("unittests:: tsbuild:: on demo project", () => {
         scenario: "demo",
         subScenario: "in master branch with everything setup correctly and reports no error",
         fs: () => projFs,
-        commandLineArgs: ["--b", "/src/tsconfig.json", "--verbose"]
+        commandLineArgs: ["--b", "/src/tsconfig.json", "--verbose"],
     });
 
     verifyTsc({
@@ -40,7 +40,7 @@ describe("unittests:: tsbuild:: on demo project", () => {
       "path": "../zoo"
     }
   ]`
-        )
+        ),
     });
     verifyTsc({
         scenario: "demo",
@@ -52,6 +52,6 @@ describe("unittests:: tsbuild:: on demo project", () => {
             "/src/core/utilities.ts",
             `import * as A from '../animals';
 `
-        )
+        ),
     });
 });

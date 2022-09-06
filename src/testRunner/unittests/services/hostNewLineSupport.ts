@@ -31,7 +31,7 @@ describe("unittests:: services:: hostNewLineSupport", () => {
         const ls = testLSWithFiles(options, [{
             content,
             fileOptions: {},
-            unitName: "input.ts"
+            unitName: "input.ts",
         }]);
         const result = ls.getEmitOutput("input.ts");
         assert(!result.emitSkipped, "emit was skipped");
@@ -50,7 +50,7 @@ describe("unittests:: services:: hostNewLineSupport", () => {
         const ls = testLSWithFiles(options, [{
             content,
             fileOptions: {},
-            unitName: "input.ts"
+            unitName: "input.ts",
         }]);
         const span = ls.getOutliningSpans("input.ts")[0];
         const textAfterSpanCollapse = content.substring(span.textSpan.start + span.textSpan.length);

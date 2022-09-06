@@ -500,7 +500,7 @@ export function createCompilerHostWorker(options: CompilerOptions, setParentNode
         realpath,
         readDirectory: (path, extensions, include, exclude, depth) => system.readDirectory(path, extensions, include, exclude, depth),
         createDirectory: d => system.createDirectory(d),
-        createHash: maybeBind(system, system.createHash)
+        createHash: maybeBind(system, system.createHash),
     };
     return compilerHost;
 }
@@ -625,7 +625,7 @@ export function changeCompilerHostLikeToUseCache(
         originalCreateDirectory,
         originalWriteFile,
         getSourceFileWithCache,
-        readFileWithCache
+        readFileWithCache,
     };
 }
 
@@ -680,7 +680,7 @@ export enum ForegroundColorEscapeSequences {
     Red = "\u001b[91m",
     Yellow = "\u001b[93m",
     Blue = "\u001b[94m",
-    Cyan = "\u001b[96m"
+    Cyan = "\u001b[96m",
 }
 const gutterStyleSequence = "\u001b[7m";
 const gutterSeparator = " ";
@@ -1689,7 +1689,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         toPath,
         getResolvedProjectReferences,
         getSourceOfProjectReferenceRedirect,
-        forEachResolvedProjectReference
+        forEachResolvedProjectReference,
     });
     const readFile = host.readFile.bind(host) as typeof host.readFile;
 
@@ -1952,7 +1952,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         if (!resolution.resolutionDiagnostics?.length) return;
         (fileProcessingDiagnostics ??= []).push({
             kind: FilePreprocessingDiagnosticsKind.ResolutionDiagnostics,
-            diagnostics: resolution.resolutionDiagnostics
+            diagnostics: resolution.resolutionDiagnostics,
         });
     }
 
@@ -3810,7 +3810,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                 isDefaultLib,
                 /*ignoreNoDefaultLib*/ false,
                 /*packageId*/ undefined,
-                { kind: FileIncludeKind.ReferenceFile, file: file.path, index, }
+                { kind: FileIncludeKind.ReferenceFile, file: file.path, index }
             );
         });
     }
@@ -3834,11 +3834,11 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                 (fileProcessingDiagnostics ??= []).push({
                     kind: FilePreprocessingDiagnosticsKind.ResolutionDiagnostics,
                     diagnostics: [
-                        createDiagnosticForRange(file, ref, Diagnostics.resolution_mode_assertions_are_only_supported_when_moduleResolution_is_node16_or_nodenext)
-                    ]
+                        createDiagnosticForRange(file, ref, Diagnostics.resolution_mode_assertions_are_only_supported_when_moduleResolution_is_node16_or_nodenext),
+                    ],
                 });
             }
-            processTypeReferenceDirective(fileName, mode, resolvedTypeReferenceDirective, { kind: FileIncludeKind.TypeReferenceDirective, file: file.path, index, });
+            processTypeReferenceDirective(fileName, mode, resolvedTypeReferenceDirective, { kind: FileIncludeKind.TypeReferenceDirective, file: file.path, index });
         }
     }
 
@@ -3958,7 +3958,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             resolution,
             actual: resolution.resolvedModule ?
                 resolution.resolvedModule.resolvedFileName :
-                combinePaths(defaultLibraryPath, libFileName)
+                combinePaths(defaultLibraryPath, libFileName),
         };
         (resolvedLibProcessing ??= new Map()).set(libFileName, result);
         return result;
@@ -3969,7 +3969,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             const { libName, libFileName } = getLibFileNameFromLibReference(libReference);
             if (libFileName) {
                 // we ignore any 'no-default-lib' reference set on this file.
-                processRootFile(pathForLibFile(libFileName), /*isDefaultLib*/ true, /*ignoreNoDefaultLib*/ true, { kind: FileIncludeKind.LibReferenceDirective, file: file.path, index, });
+                processRootFile(pathForLibFile(libFileName), /*isDefaultLib*/ true, /*ignoreNoDefaultLib*/ true, { kind: FileIncludeKind.LibReferenceDirective, file: file.path, index });
             }
             else {
                 const unqualifiedLibName = removeSuffix(removePrefix(libName, "lib."), ".d.ts");
@@ -3978,7 +3978,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                 const args = suggestion ? [libName, suggestion] : [libName];
                 (fileProcessingDiagnostics ||= []).push({
                     kind: FilePreprocessingDiagnosticsKind.FilePreprocessingReferencedDiagnostic,
-                    reason: { kind: FileIncludeKind.LibReferenceDirective, file: file.path, index, },
+                    reason: { kind: FileIncludeKind.LibReferenceDirective, file: file.path, index },
                     diagnostic,
                     args,
                 });
@@ -4042,7 +4042,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                         resolvedFileName,
                         /*isDefaultLib*/ false,
                         /*ignoreNoDefaultLib*/ false,
-                        { kind: FileIncludeKind.Import, file: file.path, index, },
+                        { kind: FileIncludeKind.Import, file: file.path, index },
                         resolution.packageId,
                     );
                 }
@@ -4621,7 +4621,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             file: file && file.path,
             fileProcessingReason,
             diagnostic,
-            args
+            args,
         });
     }
 
@@ -5085,7 +5085,7 @@ function updateHostForUseSourceOfProjectReferenceRedirect(host: HostForUseSource
 
         symlinkCache.setSymlinkedDirectory(directory, {
             real: ensureTrailingDirectorySeparator(real),
-            realPath
+            realPath,
         });
     }
 
@@ -5151,7 +5151,7 @@ export function handleNoEmitOptions<T extends BuilderProgram>(
         ...program.getOptionsDiagnostics(cancellationToken),
         ...program.getSyntacticDiagnostics(sourceFile, cancellationToken),
         ...program.getGlobalDiagnostics(cancellationToken),
-        ...program.getSemanticDiagnostics(sourceFile, cancellationToken)
+        ...program.getSemanticDiagnostics(sourceFile, cancellationToken),
     ];
 
     if (diagnostics.length === 0 && getEmitDeclarations(program.getCompilerOptions())) {

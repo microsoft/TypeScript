@@ -12,10 +12,10 @@ describe("unittests:: evaluation:: updateExpressionInModule", () => {
                 let a = 1;
                 export { a };
                 export const b = ++a;
-                `
+                `,
             },
             rootFiles: ["/.src/main.ts"],
-            main: "/.src/main.ts"
+            main: "/.src/main.ts",
         }, { module: ts.ModuleKind.CommonJS });
         assert.equal(result.a, 2);
         assert.equal(result.b, 2);
@@ -27,10 +27,10 @@ describe("unittests:: evaluation:: updateExpressionInModule", () => {
                 let a = 1;
                 export { a };
                 export const b = ++a;
-                `
+                `,
             },
             rootFiles: ["/.src/main.ts"],
-            main: "/.src/main.ts"
+            main: "/.src/main.ts",
         }, { module: ts.ModuleKind.System });
         assert.equal(result.a, 2);
         assert.equal(result.b, 2);
@@ -42,10 +42,10 @@ describe("unittests:: evaluation:: updateExpressionInModule", () => {
                 let a = BigInt(1);
                 export { a };
                 export const b = ++a;
-                `
+                `,
             },
             rootFiles: ["/.src/main.ts"],
-            main: "/.src/main.ts"
+            main: "/.src/main.ts",
         }, { module: ts.ModuleKind.CommonJS }, { BigInt });
         assert.equal(result.a, BigInt(2));
         assert.equal(result.b, BigInt(2));
@@ -57,10 +57,10 @@ describe("unittests:: evaluation:: updateExpressionInModule", () => {
                 let a = BigInt(1);
                 export { a };
                 export const b = ++a;
-                `
+                `,
             },
             rootFiles: ["/.src/main.ts"],
-            main: "/.src/main.ts"
+            main: "/.src/main.ts",
         }, { module: ts.ModuleKind.System }, { BigInt });
         assert.equal(result.a, BigInt(2));
         assert.equal(result.b, BigInt(2));
@@ -72,10 +72,10 @@ describe("unittests:: evaluation:: updateExpressionInModule", () => {
                 let a = 1;
                 export { a };
                 export const b = a++;
-                `
+                `,
             },
             rootFiles: ["/.src/main.ts"],
-            main: "/.src/main.ts"
+            main: "/.src/main.ts",
         }, { module: ts.ModuleKind.CommonJS });
         assert.equal(result.a, 2);
         assert.equal(result.b, 1);
@@ -87,10 +87,10 @@ describe("unittests:: evaluation:: updateExpressionInModule", () => {
                 let a = 1;
                 export { a };
                 export const b = a++;
-                `
+                `,
             },
             rootFiles: ["/.src/main.ts"],
-            main: "/.src/main.ts"
+            main: "/.src/main.ts",
         }, { module: ts.ModuleKind.System });
         assert.equal(result.a, 2);
         assert.equal(result.b, 1);
@@ -102,10 +102,10 @@ describe("unittests:: evaluation:: updateExpressionInModule", () => {
                 let a = BigInt(1);
                 export { a };
                 export const b = a++;
-                `
+                `,
             },
             rootFiles: ["/.src/main.ts"],
-            main: "/.src/main.ts"
+            main: "/.src/main.ts",
         }, { module: ts.ModuleKind.CommonJS }, { BigInt });
         assert.equal(result.a, BigInt(2));
         assert.equal(result.b, BigInt(1));
@@ -117,10 +117,10 @@ describe("unittests:: evaluation:: updateExpressionInModule", () => {
                 let a = BigInt(1);
                 export { a };
                 export const b = a++;
-                `
+                `,
             },
             rootFiles: ["/.src/main.ts"],
-            main: "/.src/main.ts"
+            main: "/.src/main.ts",
         }, { module: ts.ModuleKind.System }, { BigInt });
         assert.equal(result.a, BigInt(2));
         assert.equal(result.b, BigInt(1));

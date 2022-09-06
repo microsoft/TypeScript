@@ -1115,7 +1115,7 @@ function getBuildInfo(state: BuilderProgramState, bundle: BundleBuildInfo | unde
     if (state.referencedMap) {
         referencedMap = arrayFrom(state.referencedMap.keys()).sort(compareStringsCaseSensitive).map(key => [
             toFileId(key),
-            toFileIdListId(state.referencedMap!.getValues(key)!)
+            toFileIdListId(state.referencedMap!.getValues(key)!),
         ]);
     }
 
@@ -1138,7 +1138,7 @@ function getBuildInfo(state: BuilderProgramState, bundle: BundleBuildInfo | unde
                 value.length ?
                     [
                         toFileId(key),
-                        convertToReusableDiagnostics(value, relativeToBuildInfo)
+                        convertToReusableDiagnostics(value, relativeToBuildInfo),
                     ] :
                     toFileId(key)
             );
@@ -1326,7 +1326,7 @@ function convertToReusableDiagnosticMessageChainArray(array: DiagnosticMessageCh
 /** @internal */
 export enum BuilderProgramKind {
     SemanticDiagnosticsBuilderProgram,
-    EmitAndSemanticDiagnosticsBuilderProgram
+    EmitAndSemanticDiagnosticsBuilderProgram,
 }
 
 /** @internal */
@@ -1357,7 +1357,7 @@ export function getBuilderCreationParameters(newProgramOrRootNames: Program | re
             host: oldProgramOrHost as CompilerHost,
             oldProgram: oldProgram && oldProgram.getProgramOrUndefined(),
             configFileParsingDiagnostics,
-            projectReferences
+            projectReferences,
         });
         host = oldProgramOrHost as CompilerHost;
     }
@@ -1669,7 +1669,7 @@ export function createBuilderProgram(kind: BuilderProgramKind, { newProgram, hos
                     emitSkipped,
                     diagnostics: diagnostics || emptyArray,
                     emittedFiles,
-                    sourceMaps
+                    sourceMaps,
                 };
             }
             // In non Emit builder, clear affected files pending emit

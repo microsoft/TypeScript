@@ -111,7 +111,7 @@ import {
 const sysFormatDiagnosticsHost: FormatDiagnosticsHost | undefined = sys ? {
     getCurrentDirectory: () => sys.getCurrentDirectory(),
     getNewLine: () => sys.newLine,
-    getCanonicalFileName: createGetCanonicalFileName(sys.useCaseSensitiveFileNames)
+    getCanonicalFileName: createGetCanonicalFileName(sys.useCaseSensitiveFileNames),
 } : undefined;
 
 /**
@@ -665,7 +665,7 @@ export function createWatchHost(system = sys, reportWatchStatus?: WatchStatusRep
         watchFile: maybeBind(system, system.watchFile) || returnNoopFileWatcher,
         watchDirectory: maybeBind(system, system.watchDirectory) || returnNoopFileWatcher,
         setTimeout: maybeBind(system, system.setTimeout) || noop,
-        clearTimeout: maybeBind(system, system.clearTimeout) || noop
+        clearTimeout: maybeBind(system, system.clearTimeout) || noop,
     };
 }
 
@@ -908,7 +908,7 @@ export interface CreateWatchCompilerHostOfConfigFileInput<T extends BuilderProgr
  */
 export function createWatchCompilerHostOfConfigFile<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>({
     configFileName, optionsToExtend, watchOptionsToExtend, extraFileExtensions,
-    system, createProgram, reportDiagnostic, reportWatchStatus
+    system, createProgram, reportDiagnostic, reportWatchStatus,
 }: CreateWatchCompilerHostOfConfigFileInput<T>): WatchCompilerHostOfConfigFile<T> {
     const diagnosticReporter = reportDiagnostic || createDiagnosticReporter(system);
     const host = createWatchCompilerHost(system, createProgram, diagnosticReporter, reportWatchStatus) as WatchCompilerHostOfConfigFile<T>;
@@ -934,7 +934,7 @@ export interface CreateWatchCompilerHostOfFilesAndCompilerOptionsInput<T extends
  */
 export function createWatchCompilerHostOfFilesAndCompilerOptions<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>({
     rootFiles, options, watchOptions, projectReferences,
-    system, createProgram, reportDiagnostic, reportWatchStatus
+    system, createProgram, reportDiagnostic, reportWatchStatus,
 }: CreateWatchCompilerHostOfFilesAndCompilerOptionsInput<T>): WatchCompilerHostOfFilesAndCompilerOptions<T> {
     const host = createWatchCompilerHost(system, createProgram, reportDiagnostic || createDiagnosticReporter(system), reportWatchStatus) as WatchCompilerHostOfFilesAndCompilerOptions<T>;
     host.rootFiles = rootFiles;

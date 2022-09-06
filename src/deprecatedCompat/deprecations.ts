@@ -145,9 +145,9 @@ export function buildOverload(name: string): OverloadBuilder {
             bind: binder => ({
                 finish: () => createOverload(name, overloads, binder),
                 deprecate: deprecations => ({
-                    finish: () => createOverload(name, overloads, binder, deprecations)
-                })
-            })
-        })
+                    finish: () => createOverload(name, overloads, binder, deprecations),
+                }),
+            }),
+        }),
     };
 }

@@ -12,25 +12,25 @@ import {
 
 const tsConfig: File = {
     path: "/tsconfig.json",
-    content: "{}"
+    content: "{}",
 };
 const packageJsonContent = {
     dependencies: {
-        redux: "*"
+        redux: "*",
     },
     peerDependencies: {
-        react: "*"
+        react: "*",
     },
     optionalDependencies: {
-        typescript: "*"
+        typescript: "*",
     },
     devDependencies: {
-        webpack: "*"
-    }
+        webpack: "*",
+    },
 };
 const packageJson: File = {
     path: "/package.json",
-    content: JSON.stringify(packageJsonContent, undefined, 2)
+    content: JSON.stringify(packageJsonContent, undefined, 2),
 };
 
 describe("unittests:: tsserver:: packageJsonInfo::", () => {
@@ -52,7 +52,7 @@ describe("unittests:: tsserver:: packageJsonInfo::", () => {
         // Edit package.json
         host.writeFile(packageJson.path, JSON.stringify({
             ...packageJsonContent,
-            dependencies: undefined
+            dependencies: undefined,
         }));
         session.testhost.baselineHost("Edit package.json");
         packageJsonInfo = projectService.packageJsonCache.getInDirectory("/" as ts.Path)!;

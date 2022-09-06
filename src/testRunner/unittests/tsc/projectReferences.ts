@@ -12,11 +12,11 @@ describe("unittests:: tsc:: projectReferences::", () => {
             "/src/project/tsconfig.json": JSON.stringify({
                 compilerOptions: {
                     module: "amd",
-                    outFile: "theApp.js"
+                    outFile: "theApp.js",
                 },
                 references: [
-                    { path: "../Util/Dates" }
-                ]
+                    { path: "../Util/Dates" },
+                ],
             }),
         }),
         commandLineArgs: ["--p", "src/project"],
@@ -31,15 +31,15 @@ describe("unittests:: tsc:: projectReferences::", () => {
                 compilerOptions: {
                     composite: true,
                     noEmit: true,
-                }
+                },
             }),
             "/src/project/index.ts": `import { x } from "../utils";`,
             "/src/project/tsconfig.json": JSON.stringify({
                 references: [
-                    { path: "../utils" }
-                ]
+                    { path: "../utils" },
+                ],
             }),
         }),
-        commandLineArgs: ["--p", "src/project"]
+        commandLineArgs: ["--p", "src/project"],
     });
 });

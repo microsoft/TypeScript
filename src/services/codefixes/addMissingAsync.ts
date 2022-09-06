@@ -40,7 +40,7 @@ const fixId = "addMissingAsync";
 const errorCodes = [
     Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1.code,
     Diagnostics.Type_0_is_not_assignable_to_type_1.code,
-    Diagnostics.Type_0_is_not_comparable_to_type_1.code
+    Diagnostics.Type_0_is_not_comparable_to_type_1.code,
 ];
 
 registerCodeFix({

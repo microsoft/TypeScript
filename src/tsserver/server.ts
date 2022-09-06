@@ -59,7 +59,7 @@ function start({ args, logger, cancellationToken, serverMode, unknownServerMode,
             useInferredProjectPerProjectRoot: hasArgument("--useInferredProjectPerProjectRoot"),
             suppressDiagnosticEvents: hasArgument("--suppressDiagnosticEvents"),
             noGetErrOnBackgroundUpdate: hasArgument("--noGetErrOnBackgroundUpdate"),
-            serverMode
+            serverMode,
         },
         logger,
         cancellationToken

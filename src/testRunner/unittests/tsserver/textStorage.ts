@@ -10,7 +10,7 @@ describe("unittests:: tsserver:: Text storage", () => {
                 let y = 2;
                 function bar(a: number) {
                     return a + 1;
-                }`
+                }`,
     };
 
     function getDummyScriptInfo(fileName: string) {
@@ -103,7 +103,7 @@ describe("unittests:: tsserver:: Text storage", () => {
     it("should be able to return the file size when a JS file is too large to load into text", () => {
         const largeFile = {
             path: "/a/large.js",
-            content: " ".repeat(ts.server.maxFileSize + 1)
+            content: " ".repeat(ts.server.maxFileSize + 1),
         };
 
         const host = createServerHost([largeFile]);
@@ -128,7 +128,7 @@ describe("unittests:: tsserver:: Text storage", () => {
 
         const changingFile = {
             path: "/a/changing.ts",
-            content: oldText
+            content: oldText,
         };
 
         const host = createServerHost([changingFile]);

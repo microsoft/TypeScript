@@ -4,7 +4,7 @@ import {
 } from "../helpers/tsc";
 import {
     loadProjectFromFiles,
-    replaceText
+    replaceText,
 } from "../helpers/vfs";
 
 describe("unittests:: tsc:: composite::", () => {
@@ -107,7 +107,7 @@ describe("unittests:: tsc:: composite::", () => {
             {
                 caption: "convert to modules",
                 edit: fs => replaceText(fs, "/src/project/tsconfig.json", "none", "es2015"),
-            }
-        ]
+            },
+        ],
     });
 });

@@ -24,9 +24,9 @@ describe("unittests:: tsbuildWatch:: watchMode:: configFileErrors:: reports synt
         "a.ts"
         "b.ts"
     ]
-}`
+}`,
                 },
-                libFile
+                libFile,
             ],
             { currentDirectory: "/user/username/projects/myproject" }
         ),
@@ -52,10 +52,10 @@ describe("unittests:: tsbuildWatch:: watchMode:: configFileErrors:: reports synt
                 caption: "builds after fixing config file errors",
                 edit: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, JSON.stringify({
                     compilerOptions: { composite: true, declaration: true },
-                    files: ["a.ts", "b.ts"]
+                    files: ["a.ts", "b.ts"],
                 })),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(), // build the project
-            }
-        ]
+            },
+        ],
     });
 });

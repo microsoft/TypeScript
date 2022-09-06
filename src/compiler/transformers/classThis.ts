@@ -20,7 +20,7 @@ import {
     some,
     Statement,
     SyntaxKind,
-    ThisExpression
+    ThisExpression,
 } from "../_namespaces/ts";
 
 /**
@@ -58,7 +58,7 @@ export type ClassThisAssignmentBlock = ClassStaticBlockDeclaration & {
                     readonly left: Identifier;
                     readonly right: ThisExpression;
                 };
-            }
+            },
         ];
     };
 };

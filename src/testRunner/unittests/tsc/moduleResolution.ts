@@ -58,6 +58,6 @@ describe("unittests:: tsc:: moduleResolution::", () => {
                 caption: "add the ndoe10Result in package/types",
                 edit: fs => fs.writeFileSync("/home/src/projects/project/node_modules/foo2/index.d.ts", getFsContentsForNode10ResultDts("foo2")),
             },
-        ]
+        ],
     });
 });

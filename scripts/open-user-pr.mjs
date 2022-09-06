@@ -20,11 +20,11 @@ runSequence([
     ["git", ["checkout", "-b", branchName]], // create a branch
     ["git", ["add", "."]], // Add all changes
     ["git", ["commit", "-m", `"Update user baselines${+(process.env.SOURCE_ISSUE ?? 0) === 33716 ? " +cc @sandersn" : ""}"`]], // Commit all changes (ping nathan if we would post to CI thread)
-    ["git", ["push", "--set-upstream", "fork", branchName, "-f"]] // push the branch
+    ["git", ["push", "--set-upstream", "fork", branchName, "-f"]], // push the branch
 ]);
 
 const gh = new Octokit({
-    auth: process.argv[2]
+    auth: process.argv[2],
 });
 const prOwner = branchName === masterBranchname ? "microsoft" : userName;
 gh.pulls.create({
@@ -55,7 +55,7 @@ cc ${reviewers.map(r => "@" + r).join(" ")}`,
             issue_number: +process.env.SOURCE_ISSUE,
             owner: "microsoft",
             repo: "TypeScript",
-            body: `The user suite test run you requested has finished and _failed_. I've opened a [PR with the baseline diff from master](${r.data.html_url}).`
+            body: `The user suite test run you requested has finished and _failed_. I've opened a [PR with the baseline diff from master](${r.data.html_url}).`,
         });
     }
 }).then(() => {

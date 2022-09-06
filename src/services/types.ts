@@ -436,7 +436,7 @@ export type WithMetadata<T> = T & { metadata?: unknown; };
 
 export const enum SemanticClassificationFormat {
     Original = "original",
-    TwentyTwenty = "2020"
+    TwentyTwenty = "2020",
 }
 
 //
@@ -1181,7 +1181,7 @@ export function getDefaultFormatCodeSettings(newLineCharacter?: string): FormatC
         placeOpenBraceOnNewLineForControlBlocks: false,
         semicolons: SemicolonPreference.Ignore,
         trimTrailingWhitespace: true,
-        indentSwitchCase: true
+        indentSwitchCase: true,
     };
 }
 
@@ -1499,13 +1499,13 @@ export const enum OutliningSpanKind {
     Code = "code",
 
     /** Contiguous blocks of import declarations */
-    Imports = "imports"
+    Imports = "imports",
 }
 
 export const enum OutputFileType {
     JavaScript,
     SourceMap,
-    Declaration
+    Declaration,
 }
 
 export const enum EndOfLineState {

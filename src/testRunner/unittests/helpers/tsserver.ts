@@ -34,7 +34,7 @@ export const customTypesMap = {
                 "react": "react",
                 "lodash": "lodash"
             }
-        }`
+        }`,
 };
 
 function replaceAll(source: string, searchValue: string, replaceValue: string): string {
@@ -275,7 +275,7 @@ export class TestTypingsInstallerWorker extends ts.server.typingsInstaller.Typin
                 ),
                 undefined,
                 " ",
-            )
+            ),
         });
         if (this.log.isEnabled()) {
             this.log.writeLine(`TI:: Updated ${typesRegistryPackageName} npm package`);
@@ -333,7 +333,7 @@ export class TestTypingsInstallerWorker extends ts.server.typingsInstaller.Typin
             success: !!out,
             requestId,
             packageNames,
-            callback: cb
+            callback: cb,
         };
         this.postExecActions.push(action);
     }
@@ -395,7 +395,7 @@ function createTypesRegistryFileContent(list: readonly string[]): TypesRegistryF
         "ts2.4": "1.3.0",
         "ts2.5": "1.3.0",
         "ts2.6": "1.3.0",
-        "ts2.7": "1.3.0"
+        "ts2.7": "1.3.0",
     };
     const entries: ts.MapLike<ts.MapLike<string>> = {};
     for (const l of list) {
@@ -609,7 +609,7 @@ export class TestProjectService extends ts.server.ProjectService {
             typingsInstaller,
             typesMapLocation: customTypesMap.path,
             incrementalVerifier,
-            ...opts
+            ...opts,
         });
         ts.Debug.assert(opts.allowNonBaseliningLogger || this.logger.hasLevel(ts.server.LogLevel.verbose), "Use Baselining logger and baseline tsserver log or create using allowNonBaseliningLogger");
         this.testhost = patchHostTimeouts(
@@ -735,7 +735,7 @@ export function openFilesForSession(files: readonly (string | File | {
                         fileContent: file.content,
                         scriptKindName: file.scriptKindName,
                     } :
-                    { file: file.path }
+                    { file: file.path },
         });
     }
 }
@@ -744,7 +744,7 @@ export function closeFilesForSession(files: readonly (File | string)[], session:
     for (const file of files) {
         session.executeCommandSeq<ts.server.protocol.CloseRequest>({
             command: ts.server.protocol.CommandTypes.Close,
-            arguments: { file: ts.isString(file) ? file : file.path }
+            arguments: { file: ts.isString(file) ? file : file.path },
         });
     }
 }
@@ -752,14 +752,14 @@ export function closeFilesForSession(files: readonly (File | string)[], session:
 export function openExternalProjectForSession(project: ts.server.protocol.ExternalProject, session: TestSession) {
     session.executeCommandSeq<ts.server.protocol.OpenExternalProjectRequest>({
         command: ts.server.protocol.CommandTypes.OpenExternalProject,
-        arguments: project
+        arguments: project,
     });
 }
 
 export function openExternalProjectsForSession(projects: ts.server.protocol.ExternalProject[], session: TestSession) {
     session.executeCommandSeq<ts.server.protocol.OpenExternalProjectsRequest>({
         command: ts.server.protocol.CommandTypes.OpenExternalProjects,
-        arguments: { projects }
+        arguments: { projects },
     });
 }
 
@@ -771,7 +771,7 @@ export function setCompilerOptionsForInferredProjectsRequestForSession(
         command: ts.server.protocol.CommandTypes.CompilerOptionsForInferredProjects,
         arguments: "options" in options ? // eslint-disable-line local/no-in-operator
             options as ts.server.protocol.SetCompilerOptionsForInferredProjectsArgs :
-            { options }
+            { options },
     });
 }
 
@@ -791,7 +791,7 @@ export function verifyGetErrRequest(request: VerifyGetErrRequest) {
     const { session, files } = request;
     session.executeCommandSeq<ts.server.protocol.GeterrRequest>({
         command: ts.server.protocol.CommandTypes.Geterr,
-        arguments: { delay: 0, files: files.map(filePath) }
+        arguments: { delay: 0, files: files.map(filePath) },
     });
     checkAllErrors(request);
 }
@@ -834,7 +834,7 @@ function verifyErrorsUsingGeterrForProject({ scenario, subScenario, allFiles, op
         for (const expected of getErrForProjectRequest()) {
             session.executeCommandSeq<ts.server.protocol.GeterrForProjectRequest>({
                 command: ts.server.protocol.CommandTypes.GeterrForProject,
-                arguments: { delay: 0, file: filePath(expected.project) }
+                arguments: { delay: 0, file: filePath(expected.project) },
             });
             checkAllErrors({ session, files: expected.files });
         }
@@ -851,15 +851,15 @@ function verifyErrorsUsingSyncMethods({ scenario, subScenario, allFiles, openFil
             const reqArgs = { file: filePath(file), projectFileName: project && filePath(project) };
             session.executeCommandSeq<ts.server.protocol.SyntacticDiagnosticsSyncRequest>({
                 command: ts.server.protocol.CommandTypes.SyntacticDiagnosticsSync,
-                arguments: reqArgs
+                arguments: reqArgs,
             });
             session.executeCommandSeq<ts.server.protocol.SemanticDiagnosticsSyncRequest>({
                 command: ts.server.protocol.CommandTypes.SemanticDiagnosticsSync,
-                arguments: reqArgs
+                arguments: reqArgs,
             });
             session.executeCommandSeq<ts.server.protocol.SuggestionDiagnosticsSyncRequest>({
                 command: ts.server.protocol.CommandTypes.SuggestionDiagnosticsSync,
-                arguments: reqArgs
+                arguments: reqArgs,
             });
         }
         baselineTsserverLogs(scenario, `${subScenario} gerErr with sync commands`, session);

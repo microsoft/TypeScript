@@ -186,7 +186,7 @@ import {
     visitNodes,
     Visitor,
     VisitResult,
-    WrappedExpression
+    WrappedExpression,
 } from "../_namespaces/ts";
 
 // Class/Decorator evaluation order, as it pertains to this transformer:
@@ -1274,7 +1274,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
                     // 2. If _kind_ is ~field~, ~method~, ~accessor~, or ~getter~, then ...
                     get: isPropertyDeclaration(member) || isGetAccessorDeclaration(member) || isMethodDeclaration(member),
                     // 3. If _kind_ is ~field~, ~accessor~, or ~setter~, then ...
-                    set: isPropertyDeclaration(member) || isSetAccessorDeclaration(member)
+                    set: isPropertyDeclaration(member) || isSetAccessorDeclaration(member),
                 },
                 metadata: classInfo.metadataReference,
             };
@@ -1475,7 +1475,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
         if (some(declarations)) {
             initializer = factory.createImmediatelyInvokedArrowFunction([
                 ...declarations,
-                factory.createReturnStatement(initializer)
+                factory.createReturnStatement(initializer),
             ]);
         }
 
@@ -2199,7 +2199,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
                 node.asteriskToken,
                 "value",
                 visitNodes(node.parameters, visitor, isParameter),
-                visitNode(node.body, visitor, isBlock))
+                visitNode(node.body, visitor, isBlock)),
         ]);
     }
 
@@ -2215,7 +2215,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
                 /*asteriskToken*/ undefined,
                 "get",
                 [],
-                visitNode(node.body, visitor, isBlock))
+                visitNode(node.body, visitor, isBlock)),
         ]);
     }
 
@@ -2231,7 +2231,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
                 /*asteriskToken*/ undefined,
                 "set",
                 visitNodes(node.parameters, visitor, isParameter),
-                visitNode(node.body, visitor, isBlock))
+                visitNode(node.body, visitor, isBlock)),
         ]);
     }
 
@@ -2258,7 +2258,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
                             factory.createThis(),
                             factory.getGeneratedPrivateNameForNode(node.name)
                         )
-                    )
+                    ),
                 ])
             ),
             createDescriptorMethod(
@@ -2281,9 +2281,9 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
                             ),
                             factory.createIdentifier("value")
                         )
-                    )
+                    ),
                 ])
-            )
+            ),
         ]);
     }
 
@@ -2307,7 +2307,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
                         descriptorName,
                         factory.createIdentifier("value")
                     )
-                )
+                ),
             ])
         );
     }
@@ -2336,7 +2336,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
                         factory.createThis(),
                         []
                     )
-                )
+                ),
             ])
         );
     }
@@ -2368,7 +2368,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
                         factory.createThis(),
                         [factory.createIdentifier("value")]
                     )
-                )
+                ),
             ])
         );
     }

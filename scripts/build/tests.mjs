@@ -201,7 +201,7 @@ export function writeTestConfigFile(tests, runners, light, taskConfigsFolder, wo
         timeout,
         keepFailed,
         shards,
-        shardId
+        shardId,
     });
     console.info("Running tests with config: " + testConfigContents);
     fs.writeFileSync("test.config", testConfigContents);

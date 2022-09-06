@@ -128,7 +128,7 @@ export function flattenDestructuringAssignment(
         createArrayBindingOrAssignmentPattern: elements => makeArrayAssignmentPattern(context.factory, elements),
         createObjectBindingOrAssignmentPattern: elements => makeObjectAssignmentPattern(context.factory, elements),
         createArrayBindingOrAssignmentElement: makeAssignmentElement,
-        visitor
+        visitor,
     };
 
     if (value) {
@@ -258,7 +258,7 @@ export function flattenDestructuringBinding(
         createArrayBindingOrAssignmentPattern: elements => makeArrayBindingPattern(context.factory, elements),
         createObjectBindingOrAssignmentPattern: elements => makeObjectBindingPattern(context.factory, elements),
         createArrayBindingOrAssignmentElement: name => makeBindingElement(context.factory, name),
-        visitor
+        visitor,
     };
 
     if (isVariableDeclaration(node)) {

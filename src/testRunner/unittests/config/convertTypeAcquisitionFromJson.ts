@@ -18,7 +18,7 @@ describe("unittests:: config:: convertTypeAcquisitionFromJson", () => {
                                 [`/apath/${configFileName}`]: jsonText,
                                 "/apath/a.ts": "",
                                 "/apath/b.js": "",
-                            }
+                            },
                         },
                     )),
                     jsonText,
@@ -36,8 +36,8 @@ describe("unittests:: config:: convertTypeAcquisitionFromJson", () => {
             {
                 enable: true,
                 include: ["0.d.ts", "1.d.ts"],
-                exclude: ["0.js", "1.js"]
-            }
+                exclude: ["0.js", "1.js"],
+            },
         },
         "tsconfig.json"
     );
@@ -47,7 +47,7 @@ describe("unittests:: config:: convertTypeAcquisitionFromJson", () => {
             typeAcquisition:
             {
                 enableAutoDiscovy: true,
-            }
+            },
         }, "tsconfig.json",
     );
 
@@ -57,8 +57,8 @@ describe("unittests:: config:: convertTypeAcquisitionFromJson", () => {
         {
             typeAcquisition:
             {
-                enable: true
-            }
+                enable: true,
+            },
         }, "tsconfig.json",
     );
 
@@ -69,8 +69,8 @@ describe("unittests:: config:: convertTypeAcquisitionFromJson", () => {
             {
                 enable: false,
                 include: ["0.d.ts"],
-                exclude: ["0.js"]
-            }
+                exclude: ["0.js"],
+            },
         }, "jsconfig.json",
     );
 
@@ -81,7 +81,7 @@ describe("unittests:: config:: convertTypeAcquisitionFromJson", () => {
             typeAcquisition:
             {
                 enableAutoDiscovy: true,
-            }
+            },
         }, "jsconfig.json",
     );
 
@@ -89,8 +89,8 @@ describe("unittests:: config:: convertTypeAcquisitionFromJson", () => {
         {
             typeAcquisition:
             {
-                enable: false
-            }
+                enable: false,
+            },
         }, "jsconfig.json",
     );
 });

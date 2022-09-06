@@ -79,7 +79,7 @@ describe("unittests:: evaluation:: autoAccessors", () => {
                 `, { target, experimentalDecorators: true });
 
                 assert.deepEqual(actions, [
-                    { kind: "decorate", target: C.prototype, key: "x" }
+                    { kind: "decorate", target: C.prototype, key: "x" },
                 ]);
                 const obj = new C();
                 obj.x = 1;

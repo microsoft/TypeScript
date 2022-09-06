@@ -15,7 +15,7 @@ if (typeof console !== "undefined") {
                 case LogLevel.Info: return console.log(s);
                 case LogLevel.Verbose: return console.log(s);
             }
-        }
+        },
     };
 }
 

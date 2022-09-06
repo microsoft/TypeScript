@@ -70,7 +70,7 @@ function verifyOperationCancelledAfter<T>(content: string, cancelAfter: number, 
                 checks = -Infinity; // Cancel just once, then disable cancellation, effectively
             }
             return result;
-        }
+        },
     };
     const adapter = new Harness.LanguageService.NativeLanguageServiceAdapter(token, options);
     const host = adapter.getHost();

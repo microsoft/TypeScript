@@ -85,14 +85,14 @@ const extractToInterfaceAction = {
 const extractToTypeDefAction = {
     name: "Extract to typedef",
     description: getLocaleSpecificMessage(Diagnostics.Extract_to_typedef),
-    kind: "refactor.extract.typedef"
+    kind: "refactor.extract.typedef",
 };
 
 registerRefactor(refactorName, {
     kinds: [
         extractToTypeAliasAction.kind,
         extractToInterfaceAction.kind,
-        extractToTypeDefAction.kind
+        extractToTypeDefAction.kind,
     ],
     getAvailableActions: function getRefactorActionsToExtractType(context): readonly ApplicableRefactorInfo[] {
         const info = getRangeToExtract(context, context.triggerReason === "invoked");
@@ -103,7 +103,7 @@ registerRefactor(refactorName, {
                 name: refactorName,
                 description: getLocaleSpecificMessage(Diagnostics.Extract_type),
                 actions: info.isJS ?
-                    [extractToTypeDefAction] : append([extractToTypeAliasAction], info.typeElements && extractToInterfaceAction)
+                    [extractToTypeDefAction] : append([extractToTypeAliasAction], info.typeElements && extractToInterfaceAction),
             }];
         }
 
@@ -115,7 +115,7 @@ registerRefactor(refactorName, {
                     { ...extractToTypeDefAction, notApplicableReason: info.error },
                     { ...extractToTypeAliasAction, notApplicableReason: info.error },
                     { ...extractToInterfaceAction, notApplicableReason: info.error },
-                ]
+                ],
             }];
         }
 
@@ -146,7 +146,7 @@ registerRefactor(refactorName, {
         const renameFilename = file.fileName;
         const renameLocation = getRenameLocation(edits, renameFilename, name, /*preferLastLocation*/ false);
         return { edits, renameFilename, renameLocation };
-    }
+    },
 });
 
 interface TypeAliasInfo {
@@ -323,7 +323,7 @@ function doTypedefChange(changes: textChanges.ChangeTracker, context: RefactorCo
         const pos = enclosingNode.getStart(file);
         const newLineCharacter = getNewLineOrDefaultFromHost(context.host, context.formatContext?.options);
         changes.insertNodeAt(file, enclosingNode.getStart(file), jsDoc, {
-            suffix: newLineCharacter + newLineCharacter + file.text.slice(getPrecedingNonSpaceCharacterPosition(file.text, pos - 1), pos)
+            suffix: newLineCharacter + newLineCharacter + file.text.slice(getPrecedingNonSpaceCharacterPosition(file.text, pos - 1), pos),
         });
     }
     else {

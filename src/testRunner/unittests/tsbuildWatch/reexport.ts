@@ -16,10 +16,10 @@ describe("unittests:: tsbuildWatch:: watchMode:: with reexport when referenced p
                 ...[
                     "src/tsconfig.json",
                     "src/main/tsconfig.json", "src/main/index.ts",
-                    "src/pure/tsconfig.json", "src/pure/index.ts", "src/pure/session.ts"
+                    "src/pure/tsconfig.json", "src/pure/index.ts", "src/pure/session.ts",
                 ]
                     .map(f => getTsBuildProjectFile("reexport", f)),
-                { path: libFile.path, content: libContent }
+                { path: libFile.path, content: libContent },
             ],
             { currentDirectory: `/user/username/projects/reexport` }
         ),
@@ -39,7 +39,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: with reexport when referenced p
                     sys.runQueuedTimeoutCallbacks(); // build src/pure
                     sys.runQueuedTimeoutCallbacks(); // build src/main and src
                 },
-            }
-        ]
+            },
+        ],
     });
 });

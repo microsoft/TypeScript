@@ -185,7 +185,7 @@ var a = 4; // comment 7
     function createTestClass() {
         return ts.factory.createClassDeclaration(
             [
-                ts.factory.createToken(ts.SyntaxKind.PublicKeyword)
+                ts.factory.createToken(ts.SyntaxKind.PublicKeyword),
             ],
             "class1",
             /*typeParameters*/ undefined,
@@ -193,9 +193,9 @@ var a = 4; // comment 7
                 ts.factory.createHeritageClause(
                     ts.SyntaxKind.ImplementsKeyword,
                     [
-                        ts.factory.createExpressionWithTypeArguments(ts.factory.createIdentifier("interface1"), /*typeArguments*/ undefined)
+                        ts.factory.createExpressionWithTypeArguments(ts.factory.createIdentifier("interface1"), /*typeArguments*/ undefined),
                     ]
-                )
+                ),
             ],
             [
                 ts.factory.createPropertyDeclaration(
@@ -204,7 +204,7 @@ var a = 4; // comment 7
                     /*questionOrExclamationToken*/ undefined,
                     ts.factory.createKeywordTypeNode(ts.SyntaxKind.BooleanKeyword),
                     /*initializer*/ undefined
-                )
+                ),
             ]
         );
     }

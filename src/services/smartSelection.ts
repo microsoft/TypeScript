@@ -51,7 +51,7 @@ import {
 /** @internal */
 export function getSmartSelectionRange(pos: number, sourceFile: SourceFile): SelectionRange {
     let selectionRange: SelectionRange = {
-        textSpan: createTextSpanFromBounds(sourceFile.getFullStart(), sourceFile.getEnd())
+        textSpan: createTextSpanFromBounds(sourceFile.getFullStart(), sourceFile.getEnd()),
     };
 
     let parentNode: Node = sourceFile;

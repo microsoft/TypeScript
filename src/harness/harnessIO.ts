@@ -174,7 +174,7 @@ function createNodeIO(): IO {
         tryEnableSourceMapsForHost: () => ts.sys.tryEnableSourceMapsForHost && ts.sys.tryEnableSourceMapsForHost(),
         getMemoryUsage: () => ts.sys.getMemoryUsage && ts.sys.getMemoryUsage(),
         getEnvironmentVariable: name => ts.sys.getEnvironmentVariable(name),
-        joinPath
+        joinPath,
     };
 }
 
@@ -270,7 +270,7 @@ export namespace Compiler {
 
         if (!libFileNameSourceFileMap) {
             libFileNameSourceFileMap = new Map(Object.entries({
-                [defaultLibFileName]: createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + "lib.es5.d.ts")!, /*languageVersion*/ ts.ScriptTarget.Latest)
+                [defaultLibFileName]: createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + "lib.es5.d.ts")!, /*languageVersion*/ ts.ScriptTarget.Latest),
             }));
         }
 
@@ -503,7 +503,7 @@ export namespace Compiler {
                 if (declFile && !findUnit(declFile.file, declInputFiles) && !findUnit(declFile.file, declOtherFiles)) {
                     dtsFiles.push({
                         unitName: declFile.file,
-                        content: Utils.removeByteOrderMark(declFile.text)
+                        content: Utils.removeByteOrderMark(declFile.text),
                     });
                 }
             }
@@ -1110,7 +1110,7 @@ function getVaryByStarSettingValues(varyBy: string): ReadonlyMap<string, string 
         if (option.type === "boolean") {
             return booleanVaryByStarSettingValues || (booleanVaryByStarSettingValues = new Map(Object.entries({
                 true: 1,
-                false: 0
+                false: 0,
             })));
         }
     }
@@ -1242,7 +1242,7 @@ export namespace TestCaseParser {
                         name: currentFileName,
                         fileOptions: currentFileOptions,
                         originalFilePath: fileName,
-                        references: refs
+                        references: refs,
                     };
                     testUnitData.push(newTestFile);
 
@@ -1280,7 +1280,7 @@ export namespace TestCaseParser {
             name: currentFileName,
             fileOptions: currentFileOptions,
             originalFilePath: fileName,
-            references: refs
+            references: refs,
         };
         testUnitData.push(newTestFile2);
 
@@ -1312,7 +1312,7 @@ export namespace TestCaseParser {
                 }, ts.identity);
             },
             fileExists: fileName => testUnitData.some(data => data.name.toLowerCase() === fileName.toLowerCase()),
-            readFile: (name) => ts.forEach(testUnitData, data => data.name.toLowerCase() === name.toLowerCase() ? data.content : undefined)
+            readFile: (name) => ts.forEach(testUnitData, data => data.name.toLowerCase() === name.toLowerCase() ? data.content : undefined),
         };
 
         // check if project has tsconfig.json in the list of files

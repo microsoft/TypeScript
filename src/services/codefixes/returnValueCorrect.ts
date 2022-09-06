@@ -53,12 +53,12 @@ const fixIdWrapTheBlockWithParen = "fixWrapTheBlockWithParen";
 const errorCodes = [
     Diagnostics.A_function_whose_declared_type_is_neither_undefined_void_nor_any_must_return_a_value.code,
     Diagnostics.Type_0_is_not_assignable_to_type_1.code,
-    Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1.code
+    Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1.code,
 ];
 
 enum ProblemKind {
     MissingReturnStatement,
-    MissingParentheses
+    MissingParentheses,
 }
 
 interface MissingReturnInfo {
@@ -135,7 +135,7 @@ function getFixInfo(checker: TypeChecker, declaration: FunctionLikeDeclaration, 
             kind: ProblemKind.MissingReturnStatement,
             expression: firstStatement.expression,
             statement: firstStatement,
-            commentSource: firstStatement.expression
+            commentSource: firstStatement.expression,
         };
     }
     else if (isLabeledStatement(firstStatement) && isExpressionStatement(firstStatement.statement)) {
@@ -147,13 +147,13 @@ function getFixInfo(checker: TypeChecker, declaration: FunctionLikeDeclaration, 
                 kind: ProblemKind.MissingParentheses,
                 expression: node,
                 statement: firstStatement,
-                commentSource: firstStatement.statement.expression
+                commentSource: firstStatement.statement.expression,
             } : {
                     declaration,
                     kind: ProblemKind.MissingReturnStatement,
                     expression: node,
                     statement: firstStatement,
-                    commentSource: firstStatement.statement.expression
+                    commentSource: firstStatement.statement.expression,
                 };
         }
     }
@@ -168,7 +168,7 @@ function getFixInfo(checker: TypeChecker, declaration: FunctionLikeDeclaration, 
                     kind: ProblemKind.MissingReturnStatement,
                     expression: node,
                     statement: firstStatement,
-                    commentSource: firstBlockStatement
+                    commentSource: firstBlockStatement,
                 };
             }
         }
@@ -257,7 +257,7 @@ function addReturnStatement(changes: textChanges.ChangeTracker, sourceFile: Sour
     changes.replaceNode(sourceFile, statement, factory.createReturnStatement(expression), {
         leadingTriviaOption: textChanges.LeadingTriviaOption.Exclude,
         trailingTriviaOption: textChanges.TrailingTriviaOption.Exclude,
-        suffix: probablyNeedSemi ? ";" : undefined
+        suffix: probablyNeedSemi ? ";" : undefined,
     });
 }
 

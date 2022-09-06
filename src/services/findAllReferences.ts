@@ -308,7 +308,7 @@ export function nodeEntry(node: Node, kind: NodeEntryKind = EntryKind.Node): Nod
     return {
         kind,
         node: (node as NamedDeclaration).name || node,
-        context: getContextNodeForNodeEntry(node)
+        context: getContextNodeForNodeEntry(node),
     };
 }
 
@@ -419,7 +419,7 @@ export function getContextNode(node: NamedDeclaration | BinaryExpression | ForIn
         case SyntaxKind.ForInStatement:
             return {
                 start: (node as ForInOrOfStatement).initializer,
-                end: (node as ForInOrOfStatement).expression
+                end: (node as ForInOrOfStatement).expression,
             };
 
         case SyntaxKind.PropertyAssignment:
@@ -494,7 +494,7 @@ export function findReferencedSymbols(program: Program, cancellationToken: Cance
         // Only include referenced symbols that have a valid definition.
         definition && {
             definition: checker.runWithCancellationToken(cancellationToken, checker => definitionToReferencedSymbolDefinitionInfo(definition, checker, node)),
-            references: references.map(r => toReferencedSymbolEntry(r, symbol))
+            references: references.map(r => toReferencedSymbolEntry(r, symbol)),
         });
 }
 
@@ -605,7 +605,7 @@ function definitionToReferencedSymbolDefinitionInfo(def: Definition, checker: Ty
                     name,
                     kind,
                     displayParts,
-                    context: getContextNode(declaration)
+                    context: getContextNode(declaration),
                 };
             }
             case DefinitionKind.Label: {
@@ -630,7 +630,7 @@ function definitionToReferencedSymbolDefinitionInfo(def: Definition, checker: Ty
                     ...getFileAndTextSpanFromNode(node),
                     name: node.text,
                     kind: ScriptElementKind.variableElement,
-                    displayParts: [displayPart(getTextOfNode(node), SymbolDisplayPartKind.stringLiteral)]
+                    displayParts: [displayPart(getTextOfNode(node), SymbolDisplayPartKind.stringLiteral)],
                 };
             }
             case DefinitionKind.TripleSlashReference: {
@@ -639,7 +639,7 @@ function definitionToReferencedSymbolDefinitionInfo(def: Definition, checker: Ty
                     sourceFile: def.file,
                     name: def.reference.fileName,
                     kind: ScriptElementKind.string,
-                    displayParts: [displayPart(`"${def.reference.fileName}"`, SymbolDisplayPartKind.stringLiteral)]
+                    displayParts: [displayPart(`"${def.reference.fileName}"`, SymbolDisplayPartKind.stringLiteral)],
                 };
             }
             default:
@@ -656,7 +656,7 @@ function definitionToReferencedSymbolDefinitionInfo(def: Definition, checker: Ty
         name,
         textSpan,
         displayParts,
-        ...toContextSpan(textSpan, sourceFile, context)
+        ...toContextSpan(textSpan, sourceFile, context),
     };
 }
 
@@ -664,7 +664,7 @@ function getFileAndTextSpanFromNode(node: Node) {
     const sourceFile = node.getSourceFile();
     return {
         sourceFile,
-        textSpan: getTextSpan(isComputedPropertyName(node) ? node.expression : node, sourceFile)
+        textSpan: getTextSpan(isComputedPropertyName(node) ? node.expression : node, sourceFile),
     };
 }
 
@@ -686,7 +686,7 @@ function toReferencedSymbolEntry(entry: Entry, symbol: Symbol | undefined): Refe
     if (!symbol) return referenceEntry;
     return {
         ...referenceEntry,
-        isDefinition: entry.kind !== EntryKind.Span && isDeclarationOfSymbol(entry.node, symbol)
+        isDefinition: entry.kind !== EntryKind.Span && isDeclarationOfSymbol(entry.node, symbol),
     };
 }
 
@@ -714,7 +714,7 @@ function entryToDocumentSpan(entry: Entry): DocumentSpan {
         return {
             textSpan,
             fileName: sourceFile.fileName,
-            ...toContextSpan(textSpan, sourceFile, entry.context)
+            ...toContextSpan(textSpan, sourceFile, entry.context),
         };
     }
 }
@@ -779,7 +779,7 @@ function toImplementationLocation(entry: Entry, checker: TypeChecker): Implement
         const { node } = entry;
         return {
             ...documentSpan,
-            ...implementationKindDisplayParts(node, checker)
+            ...implementationKindDisplayParts(node, checker),
         };
     }
     else {
@@ -795,13 +795,13 @@ function implementationKindDisplayParts(node: Node, checker: TypeChecker): { kin
     else if (node.kind === SyntaxKind.ObjectLiteralExpression) {
         return {
             kind: ScriptElementKind.interfaceElement,
-            displayParts: [punctuationPart(SyntaxKind.OpenParenToken), textPart("object literal"), punctuationPart(SyntaxKind.CloseParenToken)]
+            displayParts: [punctuationPart(SyntaxKind.OpenParenToken), textPart("object literal"), punctuationPart(SyntaxKind.CloseParenToken)],
         };
     }
     else if (node.kind === SyntaxKind.ClassExpression) {
         return {
             kind: ScriptElementKind.localClassElement,
-            displayParts: [punctuationPart(SyntaxKind.OpenParenToken), textPart("anonymous local class"), punctuationPart(SyntaxKind.CloseParenToken)]
+            displayParts: [punctuationPart(SyntaxKind.OpenParenToken), textPart("anonymous local class"), punctuationPart(SyntaxKind.CloseParenToken)],
         };
     }
     else {
@@ -817,8 +817,8 @@ export function toHighlightSpan(entry: Entry): { fileName: string, span: Highlig
             fileName: documentSpan.fileName,
             span: {
                 textSpan: documentSpan.textSpan,
-                kind: HighlightSpanKind.reference
-            }
+                kind: HighlightSpanKind.reference,
+            },
         };
     }
 
@@ -827,7 +827,7 @@ export function toHighlightSpan(entry: Entry): { fileName: string, span: Highlig
         textSpan: documentSpan.textSpan,
         kind: writeAccess ? HighlightSpanKind.writtenReference : HighlightSpanKind.reference,
         isInString: entry.kind === EntryKind.StringLiteral ? true : undefined,
-        ...documentSpan.contextSpan && { contextSpan: documentSpan.contextSpan }
+        ...documentSpan.contextSpan && { contextSpan: documentSpan.contextSpan },
     };
     return { fileName: documentSpan.fileName, span };
 }
@@ -960,7 +960,7 @@ export namespace Core {
             }
             return [{
                 definition: { type: DefinitionKind.TripleSlashReference, reference: resolvedRef.reference, file: node },
-                references: getReferencesForNonModule(resolvedRef.file, fileIncludeReasons, program) || emptyArray
+                references: getReferencesForNonModule(resolvedRef.file, fileIncludeReasons, program) || emptyArray,
             }];
         }
 
@@ -1043,7 +1043,7 @@ export namespace Core {
                     entries = append(entries, {
                         kind: EntryKind.Span,
                         fileName: referencingFile.fileName,
-                        textSpan: createTextSpanFromRange(location)
+                        textSpan: createTextSpanFromRange(location),
                     });
                 }
             }
@@ -1115,7 +1115,7 @@ export namespace Core {
                         return entry1Span.start !== entry2Span.start ?
                             compareValues(entry1Span.start, entry2Span.start) :
                             compareValues(entry1Span.length, entry2Span.length);
-                    })
+                    }),
                 };
             }
         }
@@ -1454,7 +1454,7 @@ export namespace Core {
         addStringOrCommentReference(fileName: string, textSpan: TextSpan): void {
             this.result.push({
                 definition: undefined,
-                references: [{ kind: EntryKind.Span, fileName, textSpan }]
+                references: [{ kind: EntryKind.Span, fileName, textSpan }],
             });
         }
 
@@ -2396,7 +2396,7 @@ export namespace Core {
         const thisParameter = firstDefined(references, r => isParameter(r.node.parent) ? r.node : undefined);
         return [{
             definition: { type: DefinitionKind.This, node: thisParameter || thisOrSuperKeyword },
-            references
+            references,
         }];
     }
 
@@ -2422,7 +2422,7 @@ export namespace Core {
 
         return [{
             definition: { type: DefinitionKind.String, node },
-            references
+            references,
         }];
     }
 

@@ -81,7 +81,7 @@ export function setStackTraceLimit() {
 export enum FileWatcherEventKind {
     Created,
     Changed,
-    Deleted
+    Deleted,
 }
 
 export type FileWatcherCallback = (fileName: string, eventKind: FileWatcherEventKind, modifiedTime?: Date) => void;
@@ -96,7 +96,7 @@ interface WatchedFile {
 export enum PollingInterval {
     High = 2000,
     Medium = 500,
-    Low = 250
+    Low = 250,
 }
 
 /** @internal */
@@ -122,7 +122,7 @@ function createPollingIntervalBasedLevels(levels: Levels) {
     return {
         [PollingInterval.Low]: levels.Low,
         [PollingInterval.Medium]: levels.Medium,
-        [PollingInterval.High]: levels.High
+        [PollingInterval.High]: levels.High,
     };
 }
 
@@ -263,7 +263,7 @@ function createDynamicPriorityPollingWatchFile(host: {
             fileName,
             callback,
             unchangedPolls: 0,
-            mtime: getModifiedTime(host, fileName)
+            mtime: getModifiedTime(host, fileName),
         };
         watchedFiles.push(file);
 
@@ -274,7 +274,7 @@ function createDynamicPriorityPollingWatchFile(host: {
                 // Remove from watchedFiles
                 unorderedRemoveItem(watchedFiles, file);
                 // Do not update polling interval queue since that will happen as part of polling
-            }
+            },
         };
     }
 
@@ -402,7 +402,7 @@ function createUseFsEventsOnParentDirectoryWatchFile(fsWatch: FsWatch, useCaseSe
                     watcher.referenceCount--;
                 }
                 fileWatcherCallbacks.remove(filePath, callback);
-            }
+            },
         };
     }
 
@@ -445,7 +445,7 @@ function createFixedChunkSizePollingWatchFile(host: {
         const file: WatchedFileWithIsClosed = {
             fileName,
             callback,
-            mtime: getModifiedTime(host, fileName)
+            mtime: getModifiedTime(host, fileName),
         };
         watchedFiles.push(file);
         scheduleNextPoll();
@@ -453,7 +453,7 @@ function createFixedChunkSizePollingWatchFile(host: {
             close: () => {
                 file.isClosed = true;
                 unorderedRemoveItem(watchedFiles, file);
-            }
+            },
         };
     }
 
@@ -492,7 +492,7 @@ function createSingleWatcherPerName<T extends FileWatcherCallback | FsWatchCallb
                 // Cant infer types correctly so lets satisfy checker
                 (param1: any, param2: never, param3: any) => cache.get(path)?.callbacks.slice().forEach(cb => cb(param1, param2, param3))
             ) as T),
-            callbacks: [callback]
+            callbacks: [callback],
         });
     }
 
@@ -505,7 +505,7 @@ function createSingleWatcherPerName<T extends FileWatcherCallback | FsWatchCallb
             if (!orderedRemoveItem(watcher.callbacks, callback) || watcher.callbacks.length) return;
             cache.delete(path);
             closeFileWatcherOf(watcher);
-        }
+        },
     };
 }
 
@@ -573,7 +573,7 @@ function createDirectoryWatcherSupportingRecursive({
     fileSystemEntryExists,
     realpath,
     setTimeout,
-    clearTimeout
+    clearTimeout,
 }: RecursiveDirectoryWatcherHost): HostWatchDirectory {
     interface ChildDirectoryWatcher extends FileWatcher {
         dirName: string;
@@ -623,7 +623,7 @@ function createDirectoryWatcherSupportingRecursive({
                     }
                 }, /*recursive*/ false, options),
                 refCount: 1,
-                childWatches: emptyArray
+                childWatches: emptyArray,
             };
             cache.set(dirPath, directoryWatcher);
             updateChildWatches(dirName, dirPath, options);
@@ -646,7 +646,7 @@ function createDirectoryWatcherSupportingRecursive({
                 cache.delete(dirPath);
                 closeFileWatcherOf(directoryWatcher);
                 directoryWatcher.childWatches.forEach(closeFileWatcher);
-            }
+            },
         };
     }
 
@@ -938,7 +938,7 @@ export function createSystemWatchFunctions({
     let hitSystemWatcherLimit = false;
     return {
         watchFile,
-        watchDirectory
+        watchDirectory,
     };
 
     function watchFile(fileName: string, callback: FileWatcherCallback, pollingInterval: PollingInterval, options: WatchOptions | undefined): FileWatcher {
@@ -1017,7 +1017,7 @@ export function createSystemWatchFunctions({
             watchFile,
             fallbackPolling: defaultFallbackPolling === undefined ?
                 fallbackPolling :
-                defaultFallbackPolling
+                defaultFallbackPolling,
         };
     }
 
@@ -1042,7 +1042,7 @@ export function createSystemWatchFunctions({
                 watchDirectory: nonRecursiveWatchDirectory,
                 realpath,
                 setTimeout,
-                clearTimeout
+                clearTimeout,
             });
         }
         return hostRecursiveDirectoryWatcher(directoryName, callback, recursive, options);
@@ -1103,7 +1103,7 @@ export function createSystemWatchFunctions({
                     watchDirectory: WatchDirectoryKind.UseFsEvents,
                     fallbackPolling: defaultFallbackPolling !== undefined ?
                         defaultFallbackPolling :
-                        undefined
+                        undefined,
                 };
         }
     }
@@ -1159,7 +1159,7 @@ export function createSystemWatchFunctions({
                     watcher.close();
                     watcher = undefined;
                 }
-            }
+            },
         };
 
         function updateWatcher(createWatcher: () => FileWatcher) {
@@ -1609,7 +1609,7 @@ export let sys: System = (() => {
                 catch (error) {
                     return { module: undefined, modulePath: undefined, error };
                 }
-            }
+            },
         };
         return nodeSystem;
 
@@ -1737,7 +1737,7 @@ export let sys: System = (() => {
             _fs.watchFile(fileName, { persistent: true, interval: pollingInterval }, fileChanged);
             let eventKind: FileWatcherEventKind;
             return {
-                close: () => _fs.unwatchFile(fileName, fileChanged)
+                close: () => _fs.unwatchFile(fileName, fileChanged),
             };
 
             function fileChanged(curr: import("fs").Stats, prev: import("fs").Stats) {

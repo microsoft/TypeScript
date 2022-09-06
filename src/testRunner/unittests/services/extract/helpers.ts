@@ -80,7 +80,7 @@ export const notImplementedHost: ts.LanguageServiceHost = {
     getDefaultLibFileName: ts.notImplemented,
     getCurrentDirectory: ts.notImplemented,
     readFile: ts.notImplemented,
-    fileExists: ts.notImplemented
+    fileExists: ts.notImplemented,
 };
 
 export function testExtractSymbol(caption: string, text: string, baselineFolder: string, description: ts.DiagnosticMessage, includeLib?: boolean) {
@@ -160,7 +160,7 @@ export function testExtractSymbolFailed(caption: string, text: string, descripti
         }
         const f = {
             path: "/a.ts",
-            content: t.source
+            content: t.source,
         };
         const host = createServerHost([f, libFile]);
         const projectService = createProjectService(host, { allowNonBaseliningLogger: true });

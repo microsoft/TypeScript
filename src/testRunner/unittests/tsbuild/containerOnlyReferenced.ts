@@ -4,7 +4,7 @@ import {
 } from "../helpers/tsc";
 import {
     loadProjectFromDisk,
-    loadProjectFromFiles, replaceText
+    loadProjectFromFiles, replaceText,
 } from "../helpers/vfs";
 
 describe("unittests:: tsbuild:: when containerOnly project is referenced", () => {
@@ -13,7 +13,7 @@ describe("unittests:: tsbuild:: when containerOnly project is referenced", () =>
         subScenario: "verify that subsequent builds after initial build doesnt build anything",
         fs: () => loadProjectFromDisk("tests/projects/containerOnlyReferenced"),
         commandLineArgs: ["--b", "/src", "--verbose"],
-        edits: noChangeOnlyRuns
+        edits: noChangeOnlyRuns,
     });
 
     verifyTsc({
@@ -31,12 +31,12 @@ describe("unittests:: tsbuild:: when containerOnly project is referenced", () =>
             "/src/project2/src/b.ts": "export const b = 10;",
             "/src/project3/tsconfig.json": JSON.stringify({
                 compilerOptions: { composite: true },
-                references: [{ path: "../project1", }, { path: "../project2" }],
+                references: [{ path: "../project1" }, { path: "../project2" }],
             }),
             "/src/project3/src/c.ts": "export const c = 10;",
             "/src/project4/tsconfig.json": JSON.stringify({
                 compilerOptions: { composite: true },
-                references: [{ path: "../project3" }]
+                references: [{ path: "../project3" }],
             }),
             "/src/project4/src/d.ts": "export const d = 10;",
         }),

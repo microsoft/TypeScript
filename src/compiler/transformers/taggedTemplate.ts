@@ -28,7 +28,7 @@ import {
 /** @internal */
 export enum ProcessLevel {
     LiftRestriction,
-    All
+    All,
 }
 
 /** @internal */

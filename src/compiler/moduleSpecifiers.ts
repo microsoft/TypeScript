@@ -759,7 +759,7 @@ function tryGetModuleNameFromPaths(relativeToBaseUrl: string, paths: MapLike<rea
             // sorted among the others for a particular value of `importModuleSpecifierEnding`.
             const candidates: { ending: ModuleSpecifierEnding | undefined, value: string }[] = allowedEndings.map(ending => ({
                 ending,
-                value: processEnding(relativeToBaseUrl, [ending], compilerOptions)
+                value: processEnding(relativeToBaseUrl, [ending], compilerOptions),
             }));
             if (tryGetExtensionFromPath(pattern)) {
                 candidates.push({ ending: undefined, value: relativeToBaseUrl });
@@ -805,7 +805,7 @@ function tryGetModuleNameFromPaths(relativeToBaseUrl: string, paths: MapLike<rea
 const enum MatchingMode {
     Exact,
     Directory,
-    Pattern
+    Pattern,
 }
 
 function tryGetModuleNameFromExports(options: CompilerOptions, targetFilePath: string, packageDirectory: string, packageName: string, exports: unknown, conditions: string[], mode = MatchingMode.Exact): { moduleFileToTry: string } | undefined {

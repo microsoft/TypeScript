@@ -121,14 +121,14 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
                             category: ts.Diagnostics.Backwards_Compatibility,
                             description: ts.Diagnostics.Enable_project_compilation,
                             defaultValueDescription: undefined,
-                        }
+                        },
                     ];
                     return {
                         ...ts.compilerOptionsDidYouMeanDiagnostics,
                         optionDeclarations,
-                        getOptionsNameMap: () => ts.createOptionNameMap(optionDeclarations)
+                        getOptionsNameMap: () => ts.createOptionNameMap(optionDeclarations),
                     };
-                }
+                },
             });
         }
 
@@ -158,13 +158,13 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
         verifyNullNonIncludedOption({
             subScenario: "option of type string",
             type: () => "string",
-            nonNullValue: "hello"
+            nonNullValue: "hello",
         });
 
         verifyNullNonIncludedOption({
             subScenario: "option of type number",
             type: () => "number",
-            nonNullValue: "10"
+            nonNullValue: "10",
         });
 
         verifyNullNonIncludedOption({
@@ -173,7 +173,7 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
                 node: ts.ModuleResolutionKind.Node10,
                 classic: ts.ModuleResolutionKind.Classic,
             })),
-            nonNullValue: "node"
+            nonNullValue: "node",
         });
     });
 

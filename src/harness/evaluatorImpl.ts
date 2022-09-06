@@ -40,7 +40,7 @@ export function evaluateTypeScript(source: string | { files: vfs.FileSet, rootFi
         target: ts.ScriptTarget.ES5,
         module: ts.ModuleKind.CommonJS,
         lib: ["lib.esnext.d.ts", "lib.dom.d.ts"],
-        ...options
+        ...options,
     };
     const host = new fakes.CompilerHost(fs, compilerOptions);
     const result = compiler.compileFiles(host, source.rootFiles, compilerOptions);
@@ -48,7 +48,7 @@ export function evaluateTypeScript(source: string | { files: vfs.FileSet, rootFi
         assert.ok(/*value*/ false, "Syntax error in evaluation source text:\n" + ts.formatDiagnostics(result.diagnostics, {
             getCanonicalFileName: file => file,
             getCurrentDirectory: () => "",
-            getNewLine: () => "\n"
+            getNewLine: () => "\n",
         }));
     }
 
@@ -256,7 +256,7 @@ class SystemLoader extends Loader<SystemModule> {
             dependers: [],
             setters: [],
             hasExports: false,
-            state: SystemModuleState.Uninstantiated
+            state: SystemModuleState.Uninstantiated,
         };
     }
 
@@ -294,7 +294,7 @@ class SystemLoader extends Loader<SystemModule> {
             }
         }
         const localSystem: SystemGlobal = {
-            register: (dependencies, declare) => this.instantiateModule(module, dependencies, declare)
+            register: (dependencies, declare) => this.instantiateModule(module, dependencies, declare),
         };
         const evaluateText = `(function (System, ${globalNames.join(", ")}) { ${text}\n})`;
         try {
@@ -332,8 +332,8 @@ class SystemLoader extends Loader<SystemModule> {
         const context: SystemModuleContext = {
             import: (_id) => { throw new Error("Dynamic import not implemented."); },
             meta: {
-                url: ts.isUrl(module.file) ? module.file : `file:///${ts.normalizeSlashes(module.file).replace(/^\//, "").split("/").map(encodeURIComponent).join("/")}`
-            }
+                url: ts.isUrl(module.file) ? module.file : `file:///${ts.normalizeSlashes(module.file).replace(/^\//, "").split("/").map(encodeURIComponent).join("/")}`,
+            },
         };
 
         module.requestedDependencies = dependencies;

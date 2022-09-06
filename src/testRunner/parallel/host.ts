@@ -118,7 +118,7 @@ export function start() {
                 incomplete,
                 close,
                 width,
-                noColors: options.noColors || false
+                noColors: options.noColors || false,
             };
 
             this._progressBars = [];
@@ -283,7 +283,7 @@ export function start() {
                 process: fork(process.argv[1], [`--config="${configPath}"`], { stdio: ["pipe", "pipe", "pipe", "ipc"] }),
                 accumulatedOutput: "",
                 currentTasks: undefined,
-                timer: undefined
+                timer: undefined,
             };
             const appendOutput = (d: Buffer) => {
                 worker.accumulatedOutput += d.toString();
@@ -487,18 +487,18 @@ export function start() {
                     start: {
                         configurable: true, enumerable: true,
                         get() { return startDate; },
-                        set(_: Date) { /*do nothing*/ }
+                        set(_: Date) { /*do nothing*/ },
                     },
                     end: {
                         configurable: true, enumerable: true,
                         get() { return endDate; },
-                        set(_: Date) { /*do nothing*/ }
+                        set(_: Date) { /*do nothing*/ },
                     },
                     duration: {
                         configurable: true, enumerable: true,
                         get() { return duration; },
-                        set(_: number) { /*do nothing*/ }
-                    }
+                        set(_: number) { /*do nothing*/ },
+                    },
                 });
             }
 
@@ -563,8 +563,8 @@ export function start() {
                 xunitReporter = new Mocha.reporters.XUnit(replayRunner, {
                     reporterOptions: {
                         suiteName: "Tests",
-                        output: "./TEST-results.xml"
-                    }
+                        output: "./TEST-results.xml",
+                    },
                 });
                 patchStats(xunitReporter.stats);
                 xunitReporter.write(`<?xml version="1.0" encoding="UTF-8"?>\n`);
@@ -574,7 +574,7 @@ export function start() {
                     reporterOptions: {
                         file: path.resolve(".failed-tests"),
                         keepFailed,
-                    }
+                    },
                 });
             }
 

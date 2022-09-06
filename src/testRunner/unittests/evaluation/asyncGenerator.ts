@@ -13,7 +13,7 @@ describe("unittests:: evaluation:: asyncGeneratorEvaluation", () => {
         }`);
         await result.main();
         assert.deepEqual(result.output, [
-            { value: 0, done: true }
+            { value: 0, done: true },
         ]);
     });
     it("return (es2015)", async () => {
@@ -27,7 +27,7 @@ describe("unittests:: evaluation:: asyncGeneratorEvaluation", () => {
         }`, { target: ts.ScriptTarget.ES2015 });
         await result.main();
         assert.deepEqual(result.output, [
-            { value: 0, done: true }
+            { value: 0, done: true },
         ]);
     });
     it("yields in finally block with async delegator (es2017)", async () => {
@@ -53,7 +53,7 @@ describe("unittests:: evaluation:: asyncGeneratorEvaluation", () => {
         assert.deepEqual(result.output, [
             { done: false, value: 1 },
             { done: false, value: 2 },
-            { done: true, value: undefined }
+            { done: true, value: undefined },
         ]);
     });
 });

@@ -178,7 +178,7 @@ import {
     Token,
     TransformFlags,
     TypeNode,
-    WrappedExpression
+    WrappedExpression,
 } from "../_namespaces/ts";
 
 // Compound nodes
@@ -412,7 +412,7 @@ function createExpressionForAccessorDeclaration(factory: NodeFactory, properties
                             setAccessor
                         ),
                         setAccessor
-                    )
+                    ),
                 }, !multiLine)
             ),
             firstAccessor
@@ -1658,7 +1658,7 @@ export function createAccessorPropertyGetRedirector(factory: NodeFactory, node: 
                     receiver,
                     factory.getGeneratedPrivateNameForNode(node.name, /*prefix*/ undefined, "_accessor_storage")
                 )
-            )
+            ),
         ])
     );
 }
@@ -1686,7 +1686,7 @@ export function createAccessorPropertySetRedirector(factory: NodeFactory, node: 
                     ),
                     factory.createIdentifier("value")
                 )
-            )
+            ),
         ])
     );
 }

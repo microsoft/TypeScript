@@ -43,7 +43,7 @@ registerCodeFix({
                 fixSingleExportDeclaration(changes, exportSpecifier, context);
             }
         });
-    }
+    },
 });
 
 function getExportSpecifierForDiagnosticSpan(span: TextSpan, sourceFile: SourceFile) {
@@ -80,7 +80,7 @@ function fixSingleExportDeclaration(changes: textChanges.ChangeTracker, exportSp
 
         changes.replaceNode(context.sourceFile, exportDeclaration, valueExportDeclaration, {
             leadingTriviaOption: textChanges.LeadingTriviaOption.IncludeAll,
-            trailingTriviaOption: textChanges.TrailingTriviaOption.Exclude
+            trailingTriviaOption: textChanges.TrailingTriviaOption.Exclude,
         });
         changes.insertNodeAfter(context.sourceFile, exportDeclaration, typeExportDeclaration);
     }

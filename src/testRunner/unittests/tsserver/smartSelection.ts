@@ -33,8 +33,8 @@ class Foo {
             arguments: {
                 file: file.path, locations: [
                     { line: 4, offset: 13 }, // a === b
-                ]
-            }
+                ],
+            },
         });
         baselineTsserverLogs("smartSelection", "works for simple JavaScript", session);
     });

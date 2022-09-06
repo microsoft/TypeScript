@@ -122,7 +122,7 @@ export class Version {
             minor = this.minor,
             patch = this.patch,
             prerelease = this.prerelease,
-            build = this.build
+            build = this.build,
         } = fields;
         return new Version(major, minor, patch, prerelease, build);
     }
@@ -147,7 +147,7 @@ function tryParseComponents(text: string) {
         minor: parseInt(minor, 10),
         patch: parseInt(patch, 10),
         prerelease,
-        build
+        build,
     };
 }
 

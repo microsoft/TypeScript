@@ -46,7 +46,7 @@ registerCodeFix({
                 doChange(changes, diag.file, info.arg, info.expression);
             }
         });
-    }
+    },
 });
 
 interface Info {

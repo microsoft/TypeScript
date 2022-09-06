@@ -28,7 +28,7 @@ describe("unittests:: tsserver:: pluginsAsync:: async loaded plugins", () => {
                     pluginInvoked = true;
                     return { create: info => info.languageService };
                 }) as ts.server.PluginModuleFactory,
-                error: undefined
+                error: undefined,
             };
         };
 
@@ -67,7 +67,7 @@ describe("unittests:: tsserver:: pluginsAsync:: async loaded plugins", () => {
                     session.logger.log(`invoke plugin ${moduleName}`);
                     return { create: info => info.languageService };
                 }) as ts.server.PluginModuleFactory,
-                error: undefined
+                error: undefined,
             };
         };
 
@@ -93,7 +93,7 @@ describe("unittests:: tsserver:: pluginsAsync:: async loaded plugins", () => {
             await Promise.resolve(); // simulate at least a single turn delay
             return {
                 module: (() => ({ create: info => info.languageService })) as ts.server.PluginModuleFactory,
-                error: undefined
+                error: undefined,
             };
         };
 
@@ -118,7 +118,7 @@ describe("unittests:: tsserver:: pluginsAsync:: async loaded plugins", () => {
                     create: info => info.languageService,
                     getExternalFiles: () => ["external.txt"],
                 })) as ts.server.PluginModuleFactory,
-                error: undefined
+                error: undefined,
             };
         };
 
@@ -152,7 +152,7 @@ describe("unittests:: tsserver:: pluginsAsync:: async loaded plugins", () => {
             await projectClosed.promise;
             return {
                 module: (() => ({ create: info => info.languageService })) as ts.server.PluginModuleFactory,
-                error: undefined
+                error: undefined,
             };
         };
 

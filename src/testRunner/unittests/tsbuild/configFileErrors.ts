@@ -6,7 +6,7 @@ import {
 import {
     appendText,
     loadProjectFromDisk,
-    loadProjectFromFiles, replaceText
+    loadProjectFromFiles, replaceText,
 } from "../helpers/vfs";
 
 describe("unittests:: tsbuild:: configFileErrors:: when tsconfig extends the missing file", () => {
@@ -34,7 +34,7 @@ describe("unittests:: tsbuild:: configFileErrors:: reports syntax errors in conf
         "a.ts"
         "b.ts"
     ]
-}`
+}`,
         }),
         commandLineArgs: ["--b", "/src/tsconfig.json"],
         edits: [
@@ -57,11 +57,11 @@ describe("unittests:: tsbuild:: configFileErrors:: reports syntax errors in conf
                     "/src/tsconfig.json",
                     JSON.stringify({
                         compilerOptions: { composite: true, declaration: true },
-                        files: ["a.ts", "b.ts"]
+                        files: ["a.ts", "b.ts"],
                     })
                 ),
-                caption: "builds after fixing config file errors"
+                caption: "builds after fixing config file errors",
             },
-        ]
+        ],
     });
 });

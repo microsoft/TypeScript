@@ -22,6 +22,6 @@ describe("unittests:: tsc-watch:: resolveJsonModuleWithIncremental:: emit file -
             caption: "Change json setting",
             edit: sys => sys.writeFile("/src/project/tsconfig.json", JSON.stringify({ compilerOptions: { resolveJsonModule: false } }, null, 4)), // eslint-disable-line no-null/no-null
             timeouts: sys => sys.runQueuedTimeoutCallbacks(),
-        }]
+        }],
     });
 });

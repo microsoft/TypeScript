@@ -62,18 +62,18 @@ const refactorName = "Convert export";
 const defaultToNamedAction = {
     name: "Convert default export to named export",
     description: getLocaleSpecificMessage(Diagnostics.Convert_default_export_to_named_export),
-    kind: "refactor.rewrite.export.named"
+    kind: "refactor.rewrite.export.named",
 };
 const namedToDefaultAction = {
     name: "Convert named export to default export",
     description: getLocaleSpecificMessage(Diagnostics.Convert_named_export_to_default_export),
-    kind: "refactor.rewrite.export.default"
+    kind: "refactor.rewrite.export.default",
 };
 
 registerRefactor(refactorName, {
     kinds: [
         defaultToNamedAction.kind,
-        namedToDefaultAction.kind
+        namedToDefaultAction.kind,
     ],
     getAvailableActions: function getRefactorActionsToConvertBetweenNamedAndDefaultExports(context): readonly ApplicableRefactorInfo[] {
         const info = getInfo(context, context.triggerReason === "invoked");
@@ -89,7 +89,7 @@ registerRefactor(refactorName, {
                 { name: refactorName, description: getLocaleSpecificMessage(Diagnostics.Convert_default_export_to_named_export), actions: [
                     { ...defaultToNamedAction, notApplicableReason: info.error },
                     { ...namedToDefaultAction, notApplicableReason: info.error },
-                ]}
+                ]},
             ];
         }
 

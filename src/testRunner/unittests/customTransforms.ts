@@ -40,7 +40,7 @@ describe("unittests:: customTransforms", () => {
             enum e { }
             // leading
             function f2() { } // trailing
-            `
+            `,
     }];
 
     const before: ts.TransformerFactory<ts.SourceFile> = context => {
@@ -86,17 +86,17 @@ describe("unittests:: customTransforms", () => {
                 class B {}
                 @dec export class C { constructor(b: B) { } }
                 'change'
-            `
+            `,
     }], {before: [
         context => node => ts.visitNode(node, function visitor(node: ts.Node): ts.Node {
             if (ts.isStringLiteral(node) && node.text === "change") return ts.factory.createStringLiteral("changed");
             return ts.visitEachChild(node, visitor, context);
-        }, ts.isSourceFile)
+        }, ts.isSourceFile),
     ]}, {
         target: ts.ScriptTarget.ES5,
         module: ts.ModuleKind.ES2015,
         emitDecoratorMetadata: true,
-        experimentalDecorators: true
+        experimentalDecorators: true,
     });
 
     emitsCorrectly("sourceMapExternalSourceFiles",
@@ -106,7 +106,7 @@ describe("unittests:: customTransforms", () => {
                 // The text of length 'changed' is made to be on two lines so we know the line map change
                 text: `\`multi
                     line\`
-'change'`
+'change'`,
             },
         ],
         {
@@ -120,14 +120,14 @@ describe("unittests:: customTransforms", () => {
                                 text,
                                 fileName: "another.html",
                                 lineMap,
-                                getLineAndCharacterOfPosition: pos => ts.computeLineAndCharacterOfPosition(lineMap, pos)
-                            }
+                                getLineAndCharacterOfPosition: pos => ts.computeLineAndCharacterOfPosition(lineMap, pos),
+                            },
                         });
                         return node;
                     }
                     return ts.visitEachChild(node, visitor, context);
-                }, ts.isSourceFile)
-            ]
+                }, ts.isSourceFile),
+            ],
         },
         { sourceMap: true }
     );
@@ -137,7 +137,7 @@ describe("unittests:: customTransforms", () => {
             {
                 file: "source.ts",
                 // The source file contains preceding trivia (e.g. whitespace) to try to confuse the `skipSourceTrivia` function.
-                text: "         original;"
+                text: "         original;",
             },
         ],
         {
@@ -150,7 +150,7 @@ describe("unittests:: customTransforms", () => {
                                 pos: 0,
                                 end: 7,
                                 // Do not provide a custom skipTrivia function for `source`.
-                                source: ts.createSourceMapSource("another.html", "changed;")
+                                source: ts.createSourceMapSource("another.html", "changed;"),
                             });
                             return newNode;
                         }
@@ -160,8 +160,8 @@ describe("unittests:: customTransforms", () => {
                         transformSourceFile,
                         transformBundle: node => ts.factory.createBundle(ts.map(node.sourceFiles, transformSourceFile), node.prepends),
                     };
-                }
-            ]
+                },
+            ],
         },
         { sourceMap: true, outFile: "source.js" }
     );

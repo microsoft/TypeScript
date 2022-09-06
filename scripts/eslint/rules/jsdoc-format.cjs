@@ -130,7 +130,7 @@ module.exports = createRule({
                                 end: {
                                     line,
                                     column: actual - 1,
-                                }
+                                },
                             },
                             fix: (fixer) => {
                                 if (diff > 0) {

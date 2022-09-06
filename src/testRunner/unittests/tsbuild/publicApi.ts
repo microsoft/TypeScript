@@ -19,9 +19,9 @@ describe("unittests:: tsbuild:: Public API with custom transformers when passed 
             "/src/tsconfig.json": JSON.stringify({
                 references: [
                     { path: "./shared/tsconfig.json" },
-                    { path: "./webpack/tsconfig.json" }
+                    { path: "./webpack/tsconfig.json" },
                 ],
-                files: []
+                files: [],
             }),
             "/src/shared/tsconfig.json": JSON.stringify({
                 compilerOptions: { composite: true },
@@ -35,7 +35,7 @@ export function f2() { } // trailing`,
                 compilerOptions: {
                     composite: true,
                 },
-                references: [{ path: "../shared/tsconfig.json" }]
+                references: [{ path: "../shared/tsconfig.json" }],
             }),
             "/src/webpack/index.ts": `export function f2() { }
 export class c2 { }
@@ -88,7 +88,7 @@ ${baseFsPatch ? vfs.formatPatch(baseFsPatch) : ""}
 Output::
 ${sys.output.join("")}
 
-${patch ? vfs.formatPatch(patch) : ""}`
+${patch ? vfs.formatPatch(patch) : ""}`,
             };
         };
 

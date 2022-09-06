@@ -44,12 +44,12 @@ const refactorDescription = getLocaleSpecificMessage(Diagnostics.Convert_to_temp
 const convertStringAction = {
     name: refactorName,
     description: refactorDescription,
-    kind: "refactor.rewrite.string"
+    kind: "refactor.rewrite.string",
 };
 registerRefactor(refactorName, {
     kinds: [convertStringAction.kind],
     getEditsForAction: getRefactorEditsToConvertToTemplateString,
-    getAvailableActions: getRefactorActionsToConvertToTemplateString
+    getAvailableActions: getRefactorActionsToConvertToTemplateString,
 });
 
 function getRefactorActionsToConvertToTemplateString(context: RefactorContext): readonly ApplicableRefactorInfo[] {
@@ -64,7 +64,7 @@ function getRefactorActionsToConvertToTemplateString(context: RefactorContext): 
     }
     else if (context.preferences.provideRefactorNotApplicableReason) {
         refactorInfo.actions.push({ ...convertStringAction,
-            notApplicableReason: getLocaleSpecificMessage(Diagnostics.Can_only_convert_string_concatenation)
+            notApplicableReason: getLocaleSpecificMessage(Diagnostics.Can_only_convert_string_concatenation),
         });
         return [refactorInfo];
     }

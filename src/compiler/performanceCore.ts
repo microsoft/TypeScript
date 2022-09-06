@@ -75,7 +75,7 @@ function tryGetWebPerformanceHooks(): PerformanceHooks | undefined {
             // in the browser also slow down compilation.
             shouldWriteNativeEvents: true,
             performance,
-            PerformanceObserver
+            PerformanceObserver,
         };
     }
 }
@@ -89,7 +89,7 @@ function tryGetNodePerformanceHooks(): PerformanceHooks | undefined {
                     // By default, only write native events when generating a cpu profile or using the v8 profiler.
                     shouldWriteNativeEvents: false,
                     performance,
-                    PerformanceObserver
+                    PerformanceObserver,
                 };
             }
         }

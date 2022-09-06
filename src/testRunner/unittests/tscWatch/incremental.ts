@@ -21,7 +21,7 @@ describe("unittests:: tsc-watch:: emit file --incremental", () => {
 
     const configFile: File = {
         path: `${project}/tsconfig.json`,
-        content: JSON.stringify({ compilerOptions: { incremental: true } })
+        content: JSON.stringify({ compilerOptions: { incremental: true } }),
     };
 
     interface VerifyIncrementalWatchEmitInput {
@@ -70,7 +70,7 @@ describe("unittests:: tsc-watch:: emit file --incremental", () => {
                 getPrograms,
                 oldPrograms,
                 sys,
-                oldSnap
+                oldSnap,
             });
             if (closer) closer.close();
         }
@@ -79,11 +79,11 @@ describe("unittests:: tsc-watch:: emit file --incremental", () => {
     describe("non module compilation", () => {
         const file1: File = {
             path: `${project}/file1.ts`,
-            content: "const x = 10;"
+            content: "const x = 10;",
         };
         const file2: File = {
             path: `${project}/file2.ts`,
-            content: "const y = 20;"
+            content: "const y = 20;",
         };
         describe("own file emit without errors", () => {
             function verify(subScenario: string, optionsToExtend?: readonly string[]) {
@@ -102,7 +102,7 @@ describe("unittests:: tsc-watch:: emit file --incremental", () => {
         verifyIncrementalWatchEmit({
             files: () => [libFile, file1, configFile, {
                 path: file2.path,
-                content: `const y: string = 20;`
+                content: `const y: string = 20;`,
             }],
             subScenario: "own file emit with errors",
             modifyFs: host => host.writeFile(file1.path, file1.content.replace("x", "z")),
@@ -111,7 +111,7 @@ describe("unittests:: tsc-watch:: emit file --incremental", () => {
         verifyIncrementalWatchEmit({
             files: () => [libFile, file1, file2, {
                 path: configFile.path,
-                content: JSON.stringify({ compilerOptions: { incremental: true, outFile: "out.js" } })
+                content: JSON.stringify({ compilerOptions: { incremental: true, outFile: "out.js" } }),
             }],
             subScenario: "with --out",
         });
@@ -120,15 +120,15 @@ describe("unittests:: tsc-watch:: emit file --incremental", () => {
     describe("module compilation", () => {
         const file1: File = {
             path: `${project}/file1.ts`,
-            content: "export const x = 10;"
+            content: "export const x = 10;",
         };
         const file2: File = {
             path: `${project}/file2.ts`,
-            content: "export const y = 20;"
+            content: "export const y = 20;",
         };
         const config: File = {
             path: configFile.path,
-            content: JSON.stringify({ compilerOptions: { incremental: true, module: "amd" } })
+            content: JSON.stringify({ compilerOptions: { incremental: true, module: "amd" } }),
         };
 
         verifyIncrementalWatchEmit({
@@ -140,7 +140,7 @@ describe("unittests:: tsc-watch:: emit file --incremental", () => {
         describe("own file emit with errors", () => {
             const fileModified: File = {
                 path: file2.path,
-                content: `export const y: string = 20;`
+                content: `export const y: string = 20;`,
             };
 
             verifyIncrementalWatchEmit({
@@ -159,7 +159,7 @@ describe("unittests:: tsc-watch:: emit file --incremental", () => {
                     projectReferences: parsedConfig.projectReferences,
                     configFileParsingDiagnostics: ts.getConfigFileParsingDiagnostics(parsedConfig),
                     reportDiagnostic,
-                    system
+                    system,
                 });
 
                 const command = ts.parseConfigFileWithSystem("tsconfig.json", {}, /*extendedConfigCache*/ undefined, /*watchOptionsToExtend*/ undefined, system, ts.noop)!;
@@ -168,7 +168,7 @@ describe("unittests:: tsc-watch:: emit file --incremental", () => {
                     options: command.options,
                     projectReferences: command.projectReferences,
                     configFileParsingDiagnostics: ts.getConfigFileParsingDiagnostics(command),
-                    host: ts.createIncrementalCompilerHost(command.options, system)
+                    host: ts.createIncrementalCompilerHost(command.options, system),
                 });
 
                 const state = builderProgram.getState();
@@ -197,7 +197,7 @@ describe("unittests:: tsc-watch:: emit file --incremental", () => {
                 assert.deepEqual(state.compilerOptions, {
                     incremental: true,
                     module: ts.ModuleKind.AMD,
-                    configFilePath: config.path
+                    configFilePath: config.path,
                 });
 
                 assert.equal(ts.arrayFrom(state.referencedMap!.keys()).length, 0);
@@ -225,7 +225,7 @@ describe("unittests:: tsc-watch:: emit file --incremental", () => {
         verifyIncrementalWatchEmit({
             files: () => [libFile, file1, file2, {
                 path: configFile.path,
-                content: JSON.stringify({ compilerOptions: { incremental: true, module: "amd", outFile: "out.js" } })
+                content: JSON.stringify({ compilerOptions: { incremental: true, module: "amd", outFile: "out.js" } }),
             }],
             subScenario: "module compilation/with --out",
         });
@@ -241,9 +241,9 @@ describe("unittests:: tsc-watch:: emit file --incremental", () => {
                         target: "es5",
                         module: "commonjs",
                         declaration: true,
-                        emitDeclarationOnly: true
-                    }
-                })
+                        emitDeclarationOnly: true,
+                    },
+                }),
             };
             const aTs: File = {
                 path: `${project}/a.ts`,
@@ -251,7 +251,7 @@ describe("unittests:: tsc-watch:: emit file --incremental", () => {
 export interface A {
     b: B;
 }
-`
+`,
             };
             const bTs: File = {
                 path: `${project}/b.ts`,
@@ -259,7 +259,7 @@ export interface A {
 export interface B {
     b: C;
 }
-`
+`,
             };
             const cTs: File = {
                 path: `${project}/c.ts`,
@@ -267,14 +267,14 @@ export interface B {
 export interface C {
     a: A;
 }
-`
+`,
             };
             const indexTs: File = {
                 path: `${project}/index.ts`,
                 content: `export { A } from "./a";
 export { B } from "./b";
 export { C } from "./c";
-`
+`,
             };
             return [libFile, aTs, bTs, cTs, indexTs, config];
         },
@@ -284,7 +284,7 @@ export interface A {
     b: B;
     foo: any;
 }
-`)
+`),
     });
 
     verifyIncrementalWatchEmit({
@@ -293,9 +293,9 @@ export interface A {
             { path: libFile.path, content: libContent },
             { path: `${project}/globals.d.ts`, content: `declare namespace Config { const value: string;} ` },
             { path: `${project}/index.ts`, content: `console.log(Config.value);` },
-            { path: configFile.path, content: JSON.stringify({ compilerOptions: { incremental: true, } }) }
+            { path: configFile.path, content: JSON.stringify({ compilerOptions: { incremental: true } }) },
         ],
-        modifyFs: host => host.deleteFile(`${project}/globals.d.ts`)
+        modifyFs: host => host.deleteFile(`${project}/globals.d.ts`),
     });
 
     describe("with option jsxImportSource", () => {
@@ -322,10 +322,10 @@ export const Fragment: unique symbol;
                 { path: `${project}/node_modules/preact/jsx-runtime/index.d.ts`, content: jsxLibraryContent.replace("propA", "propB") },
                 { path: `${project}/node_modules/preact/package.json`, content: JSON.stringify({ name: "preact", version: "0.0.1" }) },
                 { path: `${project}/index.tsx`, content: `export const App = () => <div propA={true}></div>;` },
-                { path: configFile.path, content: JSON.stringify({ compilerOptions: jsxImportSourceOptions }) }
+                { path: configFile.path, content: JSON.stringify({ compilerOptions: jsxImportSourceOptions }) },
             ],
             modifyFs: host => host.writeFile(configFile.path, JSON.stringify({ compilerOptions: { ...jsxImportSourceOptions, jsxImportSource: "preact" } })),
-            optionsToExtend: ["--explainFiles"]
+            optionsToExtend: ["--explainFiles"],
         });
 
         verifyIncrementalWatchEmit({
@@ -333,7 +333,7 @@ export const Fragment: unique symbol;
             files: () => [
                 { path: libFile.path, content: libContent },
                 { path: `${project}/index.tsx`, content: `export const App = () => <div propA={true}></div>;` },
-                { path: configFile.path, content: JSON.stringify({ compilerOptions: jsxImportSourceOptions }) }
+                { path: configFile.path, content: JSON.stringify({ compilerOptions: jsxImportSourceOptions }) },
             ],
             modifyFs: host => {
                 host.createDirectory(`${project}/node_modules`);
@@ -341,7 +341,7 @@ export const Fragment: unique symbol;
                 host.createDirectory(`${project}/node_modules/react/jsx-runtime`);
                 host.writeFile(`${project}/node_modules/react/jsx-runtime/index.d.ts`, jsxLibraryContent);
                 host.writeFile(`${project}/node_modules/react/package.json`, JSON.stringify({ name: "react", version: "0.0.1" }));
-            }
+            },
         });
 
         verifyIncrementalWatchEmit({
@@ -351,12 +351,12 @@ export const Fragment: unique symbol;
                 { path: `${project}/node_modules/react/jsx-runtime/index.d.ts`, content: jsxLibraryContent },
                 { path: `${project}/node_modules/react/package.json`, content: JSON.stringify({ name: "react", version: "0.0.1" }) },
                 { path: `${project}/index.tsx`, content: `export const App = () => <div propA={true}></div>;` },
-                { path: configFile.path, content: JSON.stringify({ compilerOptions: jsxImportSourceOptions }) }
+                { path: configFile.path, content: JSON.stringify({ compilerOptions: jsxImportSourceOptions }) },
             ],
             modifyFs: host => {
                 host.deleteFile(`${project}/node_modules/react/jsx-runtime/index.d.ts`);
                 host.deleteFile(`${project}/node_modules/react/package.json`);
-            }
+            },
         });
 
         verifyIncrementalWatchEmit({
@@ -366,12 +366,12 @@ export const Fragment: unique symbol;
                 { path: `${project}/node_modules/tslib/index.d.ts`, content: "export function __assign(...args: any[]): any;" },
                 { path: `${project}/node_modules/tslib/package.json`, content: JSON.stringify({ name: "tslib", version: "0.0.1" }) },
                 { path: `${project}/index.tsx`, content: `export const x = {...{}};` },
-                { path: configFile.path, content: JSON.stringify({ compilerOptions: { importHelpers: true } }) }
+                { path: configFile.path, content: JSON.stringify({ compilerOptions: { importHelpers: true } }) },
             ],
             modifyFs: host => {
                 host.deleteFile(`${project}/node_modules/tslib/index.d.ts`);
                 host.deleteFile(`${project}/node_modules/tslib/package.json`);
-            }
+            },
         });
     });
 

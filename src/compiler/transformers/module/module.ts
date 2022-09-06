@@ -184,7 +184,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
         getEmitHelperFactory: emitHelpers,
         startLexicalEnvironment,
         endLexicalEnvironment,
-        hoistVariableDeclaration
+        hoistVariableDeclaration,
     } = context;
 
     const compilerOptions = context.getCompilerOptions();
@@ -341,7 +341,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                                     factory.createStringLiteral("require"),
                                     factory.createStringLiteral("exports"),
                                     ...aliasedModuleNames,
-                                    ...unaliasedModuleNames
+                                    ...unaliasedModuleNames,
                                 ]),
 
                                 // Add the module body function argument:
@@ -357,14 +357,14 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                                         [
                                             factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "require"),
                                             factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "exports"),
-                                            ...importAliasNames
+                                            ...importAliasNames,
                                         ],
                                         /*type*/ undefined,
                                         transformAsynchronousModuleBody(node)
-                                    )
+                                    ),
                             ]
                         )
-                    )
+                    ),
                 ]),
                 /*location*/ node.statements
             )
@@ -410,10 +410,10 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                                                 /*typeArguments*/ undefined,
                                                 [
                                                     factory.createIdentifier("require"),
-                                                    factory.createIdentifier("exports")
+                                                    factory.createIdentifier("exports"),
                                                 ]
                                             )
-                                        )
+                                        ),
                                     ]
                                 ),
                                 setEmitFlags(
@@ -430,7 +430,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                                         )
                                     ),
                                     EmitFlags.SingleLine
-                                )
+                                ),
                             ]),
                             factory.createIfStatement(
                                 factory.createLogicalAnd(
@@ -449,15 +449,15 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                                                     factory.createStringLiteral("require"),
                                                     factory.createStringLiteral("exports"),
                                                     ...aliasedModuleNames,
-                                                    ...unaliasedModuleNames
+                                                    ...unaliasedModuleNames,
                                                 ]),
-                                                factory.createIdentifier("factory")
+                                                factory.createIdentifier("factory"),
                                             ]
                                         )
-                                    )
+                                    ),
                                 ])
                             )
-                        )
+                        ),
                     ],
                     /*multiLine*/ true
                 ),
@@ -497,14 +497,14 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                                     [
                                         factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "require"),
                                         factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "exports"),
-                                        ...importAliasNames
+                                        ...importAliasNames,
                                     ],
                                     /*type*/ undefined,
                                     transformAsynchronousModuleBody(node)
-                                )
+                                ),
                             ]
                         )
-                    )
+                    ),
                 ]),
                 /*location*/ node.statements
             )
@@ -1205,7 +1205,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
         const reject = factory.createUniqueName("reject");
         const parameters = [
             factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, /*name*/ resolve),
-            factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, /*name*/ reject)
+            factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, /*name*/ reject),
         ];
         const body = factory.createBlock([
             factory.createExpressionStatement(
@@ -1214,7 +1214,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                     /*typeArguments*/ undefined,
                     [factory.createArrayLiteralExpression([arg || factory.createOmittedExpression()]), resolve, reject]
                 )
-            )
+            ),
         ]);
 
         let func: FunctionExpression | ArrowFunction;
@@ -1434,7 +1434,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                                     ),
                                     /*location*/ node),
                                 /*original*/ node
-                            )
+                            ),
                         ],
                         languageVersion >= ScriptTarget.ES2015 ? NodeFlags.Const : NodeFlags.None
                     )
@@ -1499,7 +1499,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                                             /*exclamationToken*/ undefined,
                                             /*type*/ undefined,
                                             createRequireCall(node)
-                                        )
+                                        ),
                                     ],
                                     /*flags*/ languageVersion >= ScriptTarget.ES2015 ? NodeFlags.Const : NodeFlags.None
                                 )
@@ -1558,7 +1558,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                                         /*exclamationToken*/ undefined,
                                         /*type*/ undefined,
                                         createRequireCall(node)
-                                    )
+                                    ),
                                 ])
                             ),
                             /*location*/ node),
@@ -2062,8 +2062,8 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                         factory.createIdentifier("exports"),
                         factory.createStringLiteral("__esModule"),
                         factory.createObjectLiteralExpression([
-                            factory.createPropertyAssignment("value", factory.createTrue())
-                        ])
+                            factory.createPropertyAssignment("value", factory.createTrue()),
+                        ]),
                     ]
                 )
             );
@@ -2118,8 +2118,8 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                             /*parameters*/ [],
                             /*type*/ undefined,
                             factory.createBlock([factory.createReturnStatement(value)])
-                        ))
-                    ])
+                        )),
+                    ]),
                 ]
             ) : factory.createAssignment(
                 factory.createPropertyAccessExpression(
@@ -2414,5 +2414,5 @@ const dynamicImportUMDHelper: EmitHelper = {
     name: "typescript:dynamicimport-sync-require",
     scoped: true,
     text: `
-            var __syncRequire = typeof module === "object" && typeof module.exports === "object";`
+            var __syncRequire = typeof module === "object" && typeof module.exports === "object";`,
 };

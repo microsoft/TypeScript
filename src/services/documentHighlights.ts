@@ -107,7 +107,7 @@ export namespace DocumentHighlights {
         return {
             fileName: sourceFile.fileName,
             textSpan: createTextSpanFromNode(node, sourceFile),
-            kind: HighlightSpanKind.none
+            kind: HighlightSpanKind.none,
         };
     }
 
@@ -550,7 +550,7 @@ export namespace DocumentHighlights {
                     result.push({
                         fileName: sourceFile.fileName,
                         textSpan: createTextSpanFromBounds(elseKeyword.getStart(), ifKeyword.end),
-                        kind: HighlightSpanKind.reference
+                        kind: HighlightSpanKind.reference,
                     });
                     i++; // skip the next keyword
                     continue;

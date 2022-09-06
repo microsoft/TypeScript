@@ -6,7 +6,7 @@ describe("unittests:: services:: extract:: Symbol Walker", () => {
         it(description, () => {
             const result = Harness.Compiler.compileFiles([{
                 unitName: "main.ts",
-                content: source
+                content: source,
             }], [], {}, {}, "/");
             const file = result.program!.getSourceFile("main.ts")!;
             const checker = result.program!.getTypeChecker();

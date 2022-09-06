@@ -23,7 +23,7 @@ function getConfig({ references, options, config }: {
         compilerOptions: {
             composite: true,
             outDir: "bin",
-            ...options
+            ...options,
         },
         references: references?.map(r => {
             if (typeof r === "string") {
@@ -43,11 +43,11 @@ describe("unittests:: config:: project-references meta check", () => {
             "/primary/tsconfig.json": getConfig(),
             "/primary/a.ts": emptyModule(),
             "/secondary/tsconfig.json": getConfig({
-                references: ["../primary"]
+                references: ["../primary"],
             }),
             "/secondary/b.ts": moduleImporting("../primary/a"),
         }),
-        commandLineArgs: ["--p", "/primary/tsconfig.json"]
+        commandLineArgs: ["--p", "/primary/tsconfig.json"],
     });
 });
 
@@ -61,12 +61,12 @@ describe("unittests:: config:: project-references constraint checking for settin
         fs: () => loadProjectFromFiles({
             "/primary/tsconfig.json": getConfig({
                 options: {
-                    declaration: false
-                }
+                    declaration: false,
+                },
             }),
             "/primary/a.ts": emptyModule(),
         }),
-        commandLineArgs: ["--p", "/primary/tsconfig.json"]
+        commandLineArgs: ["--p", "/primary/tsconfig.json"],
     });
 
     verifyTsc({
@@ -75,19 +75,19 @@ describe("unittests:: config:: project-references constraint checking for settin
         fs: () => loadProjectFromFiles({
             "/primary/tsconfig.json": getConfig({
                 options: {
-                    composite: false
-                }
+                    composite: false,
+                },
             }),
             "/primary/a.ts": emptyModule(),
             "/reference/tsconfig.json": getConfig({
                 references: ["../primary"],
                 config: {
-                    files: ["b.ts"]
-                }
+                    files: ["b.ts"],
+                },
             }),
             "/reference/b.ts": moduleImporting("../primary/a"),
         }),
-        commandLineArgs: ["--p", "/reference/tsconfig.json"]
+        commandLineArgs: ["--p", "/reference/tsconfig.json"],
     });
 
     verifyTsc({
@@ -96,19 +96,19 @@ describe("unittests:: config:: project-references constraint checking for settin
         fs: () => loadProjectFromFiles({
             "/primary/tsconfig.json": getConfig({
                 options: {
-                    composite: false
-                }
+                    composite: false,
+                },
             }),
             "/primary/a.ts": emptyModule(),
             "/reference/tsconfig.json": getConfig({
                 references: ["../primary"],
                 config: {
-                    files: []
-                }
+                    files: [],
+                },
             }),
             "/reference/b.ts": moduleImporting("../primary/a"),
         }),
-        commandLineArgs: ["--p", "/reference/tsconfig.json"]
+        commandLineArgs: ["--p", "/reference/tsconfig.json"],
     });
 
     verifyTsc({
@@ -117,13 +117,13 @@ describe("unittests:: config:: project-references constraint checking for settin
         fs: () => loadProjectFromFiles({
             "/primary/tsconfig.json": getConfig({
                 config: {
-                    files: ["a.ts"]
-                }
+                    files: ["a.ts"],
+                },
             }),
             "/primary/a.ts": "import * as b from './b'",
             "/primary/b.ts": "export {}",
         }),
-        commandLineArgs: ["--p", "/primary/tsconfig.json"]
+        commandLineArgs: ["--p", "/primary/tsconfig.json"],
     });
 
     verifyTsc({
@@ -131,11 +131,11 @@ describe("unittests:: config:: project-references constraint checking for settin
         subScenario: "errors when the referenced project doesnt exist",
         fs: () => loadProjectFromFiles({
             "/primary/tsconfig.json": getConfig({
-                references: ["../foo"]
+                references: ["../foo"],
             }),
             "/primary/a.ts": emptyModule(),
         }),
-        commandLineArgs: ["--p", "/primary/tsconfig.json"]
+        commandLineArgs: ["--p", "/primary/tsconfig.json"],
     });
 
     verifyTsc({
@@ -149,7 +149,7 @@ describe("unittests:: config:: project-references constraint checking for settin
             "/someProj/tsconfig.json": getConfig(),
             "/someProj/b.ts": "const x = 100;",
         }),
-        commandLineArgs: ["--p", "/primary/tsconfig.json", "--ignoreDeprecations", "5.0"]
+        commandLineArgs: ["--p", "/primary/tsconfig.json", "--ignoreDeprecations", "5.0"],
     });
 
     verifyTsc({
@@ -161,11 +161,11 @@ describe("unittests:: config:: project-references constraint checking for settin
             }),
             "/primary/a.ts": "const y = x;",
             "/someProj/tsconfig.json": getConfig({
-                options: { outFile: "foo.js" }
+                options: { outFile: "foo.js" },
             }),
             "/someProj/b.ts": "const x = 100;",
         }),
-        commandLineArgs: ["--p", "/primary/tsconfig.json", "--ignoreDeprecations", "5.0"]
+        commandLineArgs: ["--p", "/primary/tsconfig.json", "--ignoreDeprecations", "5.0"],
     });
 });
 
@@ -181,11 +181,11 @@ describe("unittests:: config:: project-references path mapping", () => {
             "/alpha/a.ts": "export const m: number = 3;",
             "/alpha/bin/a.d.ts": emptyModule(),
             "/beta/tsconfig.json": getConfig({
-                references: ["../alpha"]
+                references: ["../alpha"],
             }),
             "/beta/b.ts": "import { m } from '../alpha/a'",
         }),
-        commandLineArgs: ["--p", "/beta/tsconfig.json", "--explainFiles"]
+        commandLineArgs: ["--p", "/beta/tsconfig.json", "--explainFiles"],
     });
 });
 
@@ -197,11 +197,11 @@ describe("unittests:: config:: project-references nice-behavior", () => {
             "/alpha/tsconfig.json": getConfig(),
             "/alpha/a.ts": "export const m: number = 3;",
             "/beta/tsconfig.json": getConfig({
-                references: ["../alpha"]
+                references: ["../alpha"],
             }),
             "/beta/b.ts": "import { m } from '../alpha/a'",
         }),
-        commandLineArgs: ["--p", "/beta/tsconfig.json"]
+        commandLineArgs: ["--p", "/beta/tsconfig.json"],
     });
 
     verifyTsc({
@@ -215,13 +215,13 @@ describe("unittests:: config:: project-references nice-behavior", () => {
                 options: {
                     baseUrl: "./",
                     paths: {
-                        "@alpha/*": ["/alpha/*"]
-                    }
-                }
+                        "@alpha/*": ["/alpha/*"],
+                    },
+                },
             }),
             "/beta/b.ts": "import { m } from '@alpha/a'",
         }),
-        commandLineArgs: ["--p", "/beta/tsconfig.json"]
+        commandLineArgs: ["--p", "/beta/tsconfig.json"],
     });
 });
 
@@ -236,7 +236,7 @@ describe("unittests:: config:: project-references behavior changes under composi
             "/alpha/tsconfig.json": getConfig(),
             "/alpha/src/a.ts": "export const m: number = 3;",
         }),
-        commandLineArgs: ["--p", "/alpha/tsconfig.json"]
+        commandLineArgs: ["--p", "/alpha/tsconfig.json"],
     });
 });
 
@@ -249,6 +249,6 @@ describe("unittests:: config:: project-references errors when a file in a compos
             "/alpha/src/a.ts": "import * as b from '../../beta/b'",
             "/beta/b.ts": "export { }",
         }),
-        commandLineArgs: ["--p", "/alpha/tsconfig.json"]
+        commandLineArgs: ["--p", "/alpha/tsconfig.json"],
     });
 });

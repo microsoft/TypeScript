@@ -40,7 +40,7 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
             "body",
             "exit block",
             "disposed",
-            "after block"
+            "after block",
         ]);
     });
 
@@ -82,7 +82,7 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
             "body",
             "disposed",
             "error",
-            "after try"
+            "after try",
         ]);
     });
 
@@ -125,7 +125,7 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
             "exit try",
             "disposed",
             "error",
-            "after try"
+            "after try",
         ]);
     });
 
@@ -169,9 +169,9 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
             "disposed",
             {
                 error: "dispose error",
-                suppressed: "body error"
+                suppressed: "body error",
             },
-            "after try"
+            "after try",
         ]);
     });
 
@@ -218,7 +218,7 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
         assert.strictEqual(output[4].error, "dispose error");
         assert.strictEqual(output[4].suppressed, "body error");
         assert.deepEqual(output.slice(5), [
-            "after try"
+            "after try",
         ]);
     });
 
@@ -254,7 +254,7 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
             "before block",
             "enter block",
             "body",
-            "disposed"
+            "disposed",
         ]);
     });
 
@@ -291,7 +291,7 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
             "enter block",
             "body",
             "disposed",
-            "after block"
+            "after block",
         ]);
     });
 
@@ -331,7 +331,7 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
             "enter block",
             "body",
             "disposed",
-            "after block"
+            "after block",
         ]);
     });
 
@@ -372,7 +372,7 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
             "body",
             "exit loop",
             "disposed",
-            "after loop"
+            "after loop",
         ]);
     });
 
@@ -415,7 +415,7 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
             "body",
             "disposed",
             "error",
-            "after loop"
+            "after loop",
         ]);
     });
 
@@ -462,7 +462,7 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
             "exit loop",
             "disposed",
             "error",
-            "after loop"
+            "after loop",
         ]);
     });
 
@@ -507,9 +507,9 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
             "disposed",
             {
                 error: "dispose error",
-                suppressed: "body error"
+                suppressed: "body error",
             },
-            "after loop"
+            "after loop",
         ]);
     });
 
@@ -545,7 +545,7 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
             "before loop",
             "enter loop",
             "body",
-            "disposed"
+            "disposed",
         ]);
     });
 
@@ -582,7 +582,7 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
             "enter loop",
             "body",
             "disposed",
-            "after loop"
+            "after loop",
         ]);
     });
 
@@ -621,7 +621,7 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
             "enter loop",
             "body",
             "disposed",
-            "after loop"
+            "after loop",
         ]);
     });
 
@@ -662,7 +662,7 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
             "body",
             "exit loop",
             "disposed",
-            "after loop"
+            "after loop",
         ]);
     });
 
@@ -710,7 +710,7 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
             "body",
             "exit loop",
             "b disposed",
-            "after loop"
+            "after loop",
         ]);
     });
 
@@ -863,7 +863,7 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
             "a disposed",
             {
                 error: "dispose error",
-                suppressed: "body error"
+                suppressed: "body error",
             },
             "after loop",
         ]);
@@ -950,7 +950,7 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
             "enter loop",
             "body",
             "a disposed",
-            "after loop"
+            "after loop",
         ]);
     });
 
@@ -996,7 +996,7 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
             "enter loop",
             "body",
             "b disposed",
-            "after loop"
+            "after loop",
         ]);
     });
 
@@ -1044,7 +1044,7 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
             "body",
             "exit loop",
             "b disposed",
-            "after loop"
+            "after loop",
         ]);
     });
 
@@ -1197,7 +1197,7 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
             "a disposed",
             {
                 error: "dispose error",
-                suppressed: "body error"
+                suppressed: "body error",
             },
             "after loop",
         ]);
@@ -1284,7 +1284,7 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
             "enter loop",
             "body",
             "a disposed",
-            "after loop"
+            "after loop",
         ]);
     });
 
@@ -1330,7 +1330,7 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
             "enter loop",
             "body",
             "b disposed",
-            "after loop"
+            "after loop",
         ]);
     });
 
@@ -1357,7 +1357,7 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
             "before using",
             "after using",
             "after export y",
-            "disposed"
+            "disposed",
         ]);
     });
 
@@ -1388,7 +1388,7 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
             "enter block",
             "body",
             "exit block",
-            "after block"
+            "after block",
         ]);
     });
 
@@ -1419,7 +1419,7 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
             "enter block",
             "body",
             "exit block",
-            "after block"
+            "after block",
         ]);
     });
 
@@ -1457,7 +1457,7 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
             "body",
             "exit block",
             "disposed",
-            "after block"
+            "after block",
         ]);
     });
 
@@ -1535,7 +1535,7 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
             "exit block",
             "disposed_2",
             "disposed_1",
-            "after block"
+            "after block",
         ]);
     });
 
@@ -1581,7 +1581,7 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
             "exit block",
             "disposed_2",
             "disposed_1",
-            "after block"
+            "after block",
         ]);
     });
 
@@ -1624,7 +1624,7 @@ describe("unittests:: evaluation:: awaitUsingDeclarations", () => {
             "body",
             "exit block",
             "interleave",
-            "after block"
+            "after block",
         ]);
     });
 

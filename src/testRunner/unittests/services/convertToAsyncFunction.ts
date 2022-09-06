@@ -271,7 +271,7 @@ interface PromiseConstructor {
 declare var Promise: PromiseConstructor;
 interface RegExp {}
 interface String { charAt: any; }
-interface Array<T> {}`
+interface Array<T> {}`,
 };
 
 const moduleFile: File = {
@@ -279,7 +279,7 @@ const moduleFile: File = {
     content:
 `export function fn(res: any): any {
     return res;
-}`
+}`,
 };
 
 type WithSkipAndOnly<T extends any[]> = ((...args: T) => void) & {
@@ -344,7 +344,7 @@ function testConvertToAsyncFunction(it: Mocha.PendingTestFunction, caption: stri
 
         const f = {
             path,
-            content: t.source
+            content: t.source,
         };
 
         const sourceFile = program.getSourceFile(path)!;
@@ -356,7 +356,7 @@ function testConvertToAsyncFunction(it: Mocha.PendingTestFunction, caption: stri
             cancellationToken: { throwIfCancellationRequested: ts.noop, isCancellationRequested: ts.returnFalse },
             preferences: ts.emptyOptions,
             host: notImplementedHost,
-            formatContext: ts.formatting.getFormatContext(ts.testFormatSettings, notImplementedHost)
+            formatContext: ts.formatting.getFormatContext(ts.testFormatSettings, notImplementedHost),
         };
 
         const diagnostics = languageService.getSuggestionDiagnostics(f.path);

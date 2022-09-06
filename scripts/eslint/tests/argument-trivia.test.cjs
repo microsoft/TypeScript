@@ -80,7 +80,7 @@ fn(/* boolean arg */false);
             output:`
 const fn = (prop: boolean) => {};
 fn(/* boolean arg */ false);
-            `
+            `,
         },
     ],
 });

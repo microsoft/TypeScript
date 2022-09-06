@@ -60,7 +60,7 @@ import {
     visitEachChild,
     visitNode,
     visitNodes,
-    VisitResult
+    VisitResult,
 } from "../_namespaces/ts";
 
 const enum UsingKind {
@@ -243,7 +243,7 @@ export function transformESNext(context: TransformationContext): (x: SourceFile 
                         transformUsingDeclarations(node.statements, prologueCount, node.statements.length, envBinding, /*topLevelStatements*/ undefined),
                         envBinding,
                         usingKind === UsingKind.Async,
-                    )
+                    ),
                 ]
             );
         }
@@ -273,7 +273,7 @@ export function transformESNext(context: TransformationContext): (x: SourceFile 
                         node.condition,
                         node.incrementor,
                         node.statement
-                    )
+                    ),
                 ]),
                 visitor,
                 isStatement
@@ -314,17 +314,17 @@ export function transformESNext(context: TransformationContext): (x: SourceFile 
                     node,
                     node.awaitModifier,
                     factory.createVariableDeclarationList([
-                        factory.createVariableDeclaration(temp)
+                        factory.createVariableDeclaration(temp),
                     ], NodeFlags.Const),
                     node.expression,
                     isBlock(node.statement) ?
                         factory.updateBlock(node.statement, [
                             usingVarStatement,
-                            ...node.statement.statements
+                            ...node.statement.statements,
                         ]) :
                         factory.createBlock([
                             usingVarStatement,
-                            node.statement
+                            node.statement,
                         ], /*multiLine*/ true)
                 ),
                 visitor,
@@ -390,7 +390,7 @@ export function transformESNext(context: TransformationContext): (x: SourceFile 
                             node.caseBlock,
                             node.caseBlock.clauses.map(clause => visitCaseOrDefaultClause(clause, envBinding))
                         )
-                    )
+                    ),
                 ],
                 envBinding,
                 usingKind === UsingKind.Async,
@@ -738,7 +738,7 @@ export function transformESNext(context: TransformationContext): (x: SourceFile 
         const envObject = factory.createObjectLiteralExpression([
             factory.createPropertyAssignment("stack", factory.createArrayLiteralExpression()),
             factory.createPropertyAssignment("error", factory.createVoidZero()),
-            factory.createPropertyAssignment("hasError", factory.createFalse())
+            factory.createPropertyAssignment("hasError", factory.createFalse()),
         ]);
         const envVar = factory.createVariableDeclaration(envBinding, /*exclamationToken*/ undefined, /*type*/ undefined, envObject);
         const envVarList = factory.createVariableDeclarationList([envVar], NodeFlags.Const);
@@ -806,17 +806,17 @@ export function transformESNext(context: TransformationContext): (x: SourceFile 
                             /*exclamationToken*/ undefined,
                             /*type*/ undefined,
                             emitHelpers().createDisposeResourcesHelper(envBinding)
-                        )
+                        ),
                     ], NodeFlags.Const)
                 ),
-                factory.createIfStatement(result, factory.createExpressionStatement(factory.createAwaitExpression(result)))
+                factory.createIfStatement(result, factory.createExpressionStatement(factory.createAwaitExpression(result))),
             ], /*multiLine*/ true);
         }
         else {
             finallyBlock = factory.createBlock([
                 factory.createExpressionStatement(
                     emitHelpers().createDisposeResourcesHelper(envBinding)
-                )
+                ),
             ], /*multiLine*/ true);
         }
 

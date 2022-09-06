@@ -40,7 +40,7 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             "body",
             "exit block",
             "disposed",
-            "after block"
+            "after block",
         ]);
     });
 
@@ -82,7 +82,7 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             "body",
             "disposed",
             "error",
-            "after try"
+            "after try",
         ]);
     });
 
@@ -125,7 +125,7 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             "exit try",
             "disposed",
             "error",
-            "after try"
+            "after try",
         ]);
     });
 
@@ -177,9 +177,9 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             "disposed 1",
             {
                 error: "error 1",
-                suppressed: "error 2"
+                suppressed: "error 2",
             },
-            "after try"
+            "after try",
         ]);
     });
 
@@ -223,9 +223,9 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             "disposed",
             {
                 error: "dispose error",
-                suppressed: "body error"
+                suppressed: "body error",
             },
-            "after try"
+            "after try",
         ]);
     });
 
@@ -279,10 +279,10 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
                 error: "dispose error 1",
                 suppressed: {
                     error: "dispose error 2",
-                    suppressed: "body error"
-                }
+                    suppressed: "body error",
+                },
             },
-            "after try"
+            "after try",
         ]);
     });
 
@@ -329,7 +329,7 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
         assert.strictEqual(output[4].error, "dispose error");
         assert.strictEqual(output[4].suppressed, "body error");
         assert.deepEqual(output.slice(5), [
-            "after try"
+            "after try",
         ]);
     });
 
@@ -365,7 +365,7 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             "before block",
             "enter block",
             "body",
-            "disposed"
+            "disposed",
         ]);
     });
 
@@ -402,7 +402,7 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             "enter block",
             "body",
             "disposed",
-            "after block"
+            "after block",
         ]);
     });
 
@@ -442,7 +442,7 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             "enter block",
             "body",
             "disposed",
-            "after block"
+            "after block",
         ]);
     });
 
@@ -483,7 +483,7 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             "body",
             "exit loop",
             "disposed",
-            "after loop"
+            "after loop",
         ]);
     });
 
@@ -526,7 +526,7 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             "body",
             "disposed",
             "error",
-            "after loop"
+            "after loop",
         ]);
     });
 
@@ -573,7 +573,7 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             "exit loop",
             "disposed",
             "error",
-            "after loop"
+            "after loop",
         ]);
     });
 
@@ -618,9 +618,9 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             "disposed",
             {
                 error: "dispose error",
-                suppressed: "body error"
+                suppressed: "body error",
             },
-            "after loop"
+            "after loop",
         ]);
     });
 
@@ -656,7 +656,7 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             "before loop",
             "enter loop",
             "body",
-            "disposed"
+            "disposed",
         ]);
     });
 
@@ -693,7 +693,7 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             "enter loop",
             "body",
             "disposed",
-            "after loop"
+            "after loop",
         ]);
     });
 
@@ -732,7 +732,7 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             "enter loop",
             "body",
             "disposed",
-            "after loop"
+            "after loop",
         ]);
     });
 
@@ -773,7 +773,7 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             "body",
             "exit loop",
             "disposed",
-            "after loop"
+            "after loop",
         ]);
     });
 
@@ -821,7 +821,7 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             "body",
             "exit loop",
             "b disposed",
-            "after loop"
+            "after loop",
         ]);
     });
 
@@ -974,7 +974,7 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             "a disposed",
             {
                 error: "dispose error",
-                suppressed: "body error"
+                suppressed: "body error",
             },
             "after loop",
         ]);
@@ -1061,7 +1061,7 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             "enter loop",
             "body",
             "a disposed",
-            "after loop"
+            "after loop",
         ]);
     });
 
@@ -1107,7 +1107,7 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             "enter loop",
             "body",
             "b disposed",
-            "after loop"
+            "after loop",
         ]);
     });
 
@@ -1155,7 +1155,7 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             "body",
             "exit loop",
             "b disposed",
-            "after loop"
+            "after loop",
         ]);
     });
 
@@ -1308,7 +1308,7 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             "a disposed",
             {
                 error: "dispose error",
-                suppressed: "body error"
+                suppressed: "body error",
             },
             "after loop",
         ]);
@@ -1395,7 +1395,7 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             "enter loop",
             "body",
             "a disposed",
-            "after loop"
+            "after loop",
         ]);
     });
 
@@ -1441,7 +1441,7 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             "enter loop",
             "body",
             "b disposed",
-            "after loop"
+            "after loop",
         ]);
     });
 
@@ -1468,7 +1468,7 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             "before using",
             "after using",
             "after export y",
-            "disposed"
+            "disposed",
         ]);
     });
 
@@ -1495,7 +1495,7 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             "before using",
             "after using",
             "after export y",
-            "disposed"
+            "disposed",
         ]);
     });
 
@@ -1522,7 +1522,7 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             "before using",
             "after using",
             "after export y",
-            "disposed"
+            "disposed",
         ]);
     });
 
@@ -1553,7 +1553,7 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             "enter block",
             "body",
             "exit block",
-            "after block"
+            "after block",
         ]);
     });
 
@@ -1584,7 +1584,7 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             "enter block",
             "body",
             "exit block",
-            "after block"
+            "after block",
         ]);
     });
 
@@ -1655,7 +1655,7 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
             "exit block",
             "disposed 2",
             "disposed 1",
-            "after block"
+            "after block",
         ]);
     });
 

@@ -27,7 +27,7 @@ describe("unittests:: tsc:: builder cancellationToken", () => {
                     import {B} from './b';
                     declare var console: any;
                     let b = new B();
-                    console.log(b.c.d);`
+                    console.log(b.c.d);`,
             };
             const bFile: File = {
                 path: `/user/username/projects/myproject/b.ts`,
@@ -35,22 +35,22 @@ describe("unittests:: tsc:: builder cancellationToken", () => {
                     import {C} from './c';
                     export class B {
                         c = new C();
-                    }`
+                    }`,
             };
             const cFile: File = {
                 path: `/user/username/projects/myproject/c.ts`,
                 content: Utils.dedent`
                     export class C {
                         d = 1;
-                    }`
+                    }`,
             };
             const dFile: File = {
                 path: `/user/username/projects/myproject/d.ts`,
-                content: "export class D { }"
+                content: "export class D { }",
             };
             const config: File = {
                 path: `/user/username/projects/myproject/tsconfig.json`,
-                content: JSON.stringify({ compilerOptions: { incremental: true, declaration: true } })
+                content: JSON.stringify({ compilerOptions: { incremental: true, declaration: true } }),
             };
             const { sys, baseline, oldSnap: originalSnap } = createBaseline(createWatchedSystem(
                 [aFile, bFile, cFile, dFile, config, libFile],

@@ -38,7 +38,7 @@ registerCodeFix({
         if (info) {
             doChange(changes, diag.file, info);
         }
-    })
+    }),
 });
 
 interface Info {

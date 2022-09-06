@@ -30,7 +30,7 @@ export type TscCompileSystem = fakes.System & {
 
 export const noChangeRun: TestTscEdit = {
     caption: "no-change-run",
-    edit: ts.noop
+    edit: ts.noop,
 };
 export const noChangeOnlyRuns = [noChangeRun];
 
@@ -90,7 +90,7 @@ ${baseFsPatch ? vfs.formatPatch(baseFsPatch) : ""}
 Output::
 ${sys.output.join("")}
 
-${patch ? vfs.formatPatch(patch) : ""}`
+${patch ? vfs.formatPatch(patch) : ""}`,
         };
     };
     return sys;
@@ -125,7 +125,7 @@ export function testTscCompile(input: TestTscCompile) {
     return testTscCompileLike({
         ...input,
         compile: commandLineCompile,
-        additionalBaseline
+        additionalBaseline,
     });
 
     function commandLineCompile(sys: TscCompileSystem) {
@@ -223,7 +223,7 @@ export function verifyTscCompileLike<T extends VerifyTscCompileLike>(verifier: (
             describe(input.subScenario, () => {
                 verifyTscBaseline(() => verifier({
                     ...input,
-                    fs: () => input.fs().makeReadonly()
+                    fs: () => input.fs().makeReadonly(),
                 }));
             });
         });
@@ -244,7 +244,7 @@ interface VerifyTscEditDiscrepanciesInput {
 function verifyTscEditDiscrepancies({
     index, edits, scenario, commandLineArgs, environmentVariables,
     baselines,
-    modifyFs, baseFs, newSys
+    modifyFs, baseFs, newSys,
 }: VerifyTscEditDiscrepanciesInput): string[] | undefined {
     const { caption, discrepancyExplanation } = edits[index];
     const sys = testTscCompile({
@@ -291,7 +291,7 @@ function verifyTscEditDiscrepancies({
                             `Incremental signature is neither dts signature nor file version for File:: ${key}`,
                             `Incremental:: ${JSON.stringify(incrementalFileInfo, /*replacer*/ undefined, 2)}`,
                             `Clean:: ${JSON.stringify(cleanFileInfo, /*replacer*/ undefined, 2)}`,
-                            `Dts Signature:: $${JSON.stringify(dtsForKey?.signature)}`
+                            `Dts Signature:: $${JSON.stringify(dtsForKey?.signature)}`,
                         ];
                     }
                 },
@@ -311,7 +311,7 @@ function verifyTscEditDiscrepancies({
                                 `Incremental Reference set is neither from dts nor files reference map for File:: ${key}::`,
                                 `Incremental:: ${JSON.stringify(incrementalReferenceSet, /*replacer*/ undefined, 2)}`,
                                 `Clean:: ${JSON.stringify(cleanReferenceSet, /*replacer*/ undefined, 2)}`,
-                                `DtsExportsMap:: ${JSON.stringify(dtsForKey?.exportedModules, /*replacer*/ undefined, 2)}`
+                                `DtsExportsMap:: ${JSON.stringify(dtsForKey?.exportedModules, /*replacer*/ undefined, 2)}`,
                             ];
                         }
                     },
@@ -459,7 +459,7 @@ export interface VerifyTscWithEditsInput extends TestTscCompile {
 export function verifyTsc({
     subScenario, fs, scenario, commandLineArgs, environmentVariables,
     baselineSourceMap, modifyFs, baselineReadFileCalls, baselinePrograms,
-    edits
+    edits,
 }: VerifyTscWithEditsInput) {
     describe(`tsc ${commandLineArgs.join(" ")} ${scenario}:: ${subScenario}`, () => {
         let sys: TscCompileSystem;
@@ -516,7 +516,7 @@ export function verifyTsc({
                     text: `currentDirectory:: ${sys.getCurrentDirectory()} useCaseSensitiveFileNames: ${sys.useCaseSensitiveFileNames}\r\n` +
                         texts.join("\r\n"),
                 };
-            }
+            },
         }));
         if (edits?.length) {
             it("tsc invocation after edit and clean build correctness", () => {

@@ -20,7 +20,7 @@ describe("unittests:: services:: goToDefinition", () => {
     },
     "include": ["src"],
 }
-`
+`,
             },
             {
                 path: "/packages/babel-loader/src/index.ts",
@@ -32,7 +32,7 @@ declare class Stuff {
 
     checkFooIs(value: object): void;
 }
-`
+`,
             },
         ];
         const host = createServerHost(files);
@@ -45,9 +45,9 @@ declare class Stuff {
                     {
                         file: files[1].path, // babel-loader/src/index.ts
                         fileContent: files[1].content,
-                    }
-                ]
-            }
+                    },
+                ],
+            },
         });
         session.executeCommandSeq<protocol.DefinitionRequest>({
             command: protocol.CommandTypes.Definition,
@@ -62,7 +62,7 @@ declare class Stuff {
             command: protocol.CommandTypes.SemanticDiagnosticsSync,
             arguments: {
                 file: "/packages/babel-loader/src/index.ts",
-            }
+            },
         });
         baselineTsserverLogs("goToDefinition", "does not issue errors on jsdoc in TS", session);
 
@@ -84,7 +84,7 @@ declare class Stuff {
     },
     "include": ["src"],
 }
-`
+`,
             },
             {
                 path: "/packages/babel-loader/src/index.ts",
@@ -102,7 +102,7 @@ declare class Stuff {
    */
   on_init(f: (() => void) | undefined): void
 }
-`
+`,
             },
         ];
         const host = createServerHost(files);
@@ -115,9 +115,9 @@ declare class Stuff {
                     {
                         file: files[1].path, // babel-loader/src/index.ts
                         fileContent: files[1].content,
-                    }
-                ]
-            }
+                    },
+                ],
+            },
         });
         session.executeCommandSeq<protocol.DefinitionRequest>({
             command: protocol.CommandTypes.Definition,
@@ -132,7 +132,7 @@ declare class Stuff {
             command: protocol.CommandTypes.SemanticDiagnosticsSync,
             arguments: {
                 file: "/packages/babel-loader/src/index.ts",
-            }
+            },
         });
         baselineTsserverLogs("goToDefinition", "does not issue errors on jsdoc in TS2", session);
 

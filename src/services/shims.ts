@@ -711,7 +711,7 @@ function realizeDiagnostic(diagnostic: Diagnostic, newLine: string): RealizedDia
         category: diagnosticCategoryName(diagnostic),
         code: diagnostic.code,
         reportsUnnecessary: diagnostic.reportsUnnecessary,
-        reportsDeprecated: diagnostic.reportsDeprecated
+        reportsDeprecated: diagnostic.reportsDeprecated,
     };
 }
 
@@ -1269,7 +1269,7 @@ class CoreServicesShimObject extends ShimBase implements CoreServicesShim {
             return {
                 resolvedFileName: result.resolvedTypeReferenceDirective ? result.resolvedTypeReferenceDirective.resolvedFileName : undefined,
                 primary: result.resolvedTypeReferenceDirective ? result.resolvedTypeReferenceDirective.primary : true,
-                failedLookupLocations: result.failedLookupLocations
+                failedLookupLocations: result.failedLookupLocations,
             };
         });
     }
@@ -1286,7 +1286,7 @@ class CoreServicesShimObject extends ShimBase implements CoreServicesShim {
                     ambientExternalModules: result.ambientExternalModules,
                     isLibFile: result.isLibFile,
                     typeReferenceDirectives: this.convertFileReferences(result.typeReferenceDirectives),
-                    libReferenceDirectives: this.convertFileReferences(result.libReferenceDirectives)
+                    libReferenceDirectives: this.convertFileReferences(result.libReferenceDirectives),
                 };
             });
     }
@@ -1310,7 +1310,7 @@ class CoreServicesShimObject extends ShimBase implements CoreServicesShim {
             result.push({
                 path: normalizeSlashes(ref.fileName),
                 position: ref.pos,
-                length: ref.end - ref.pos
+                length: ref.end - ref.pos,
             });
         }
         return result;
@@ -1329,7 +1329,7 @@ class CoreServicesShimObject extends ShimBase implements CoreServicesShim {
                     typeAcquisition: configFile.typeAcquisition,
                     files: configFile.fileNames,
                     raw: configFile.raw,
-                    errors: realizeDiagnostics([...result.parseDiagnostics, ...configFile.errors], "\r\n")
+                    errors: realizeDiagnostics([...result.parseDiagnostics, ...configFile.errors], "\r\n"),
                 };
             });
     }

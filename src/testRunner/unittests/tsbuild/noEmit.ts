@@ -12,8 +12,8 @@ describe("unittests:: tsbuild:: noEmit", () => {
             fs: () => loadProjectFromFiles({
                 "/src/a.ts": aTsContent,
                 "/src/tsconfig.json": JSON.stringify({
-                    compilerOptions: { noEmit: true }
-                })
+                    compilerOptions: { noEmit: true },
+                }),
             }),
             commandLineArgs,
             edits: [

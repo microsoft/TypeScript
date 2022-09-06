@@ -837,7 +837,7 @@ module m3 { }\
     for (const tsIgnoreComment of [
         "// @ts-ignore",
         "/* @ts-ignore */",
-        "/*\n  @ts-ignore */"
+        "/*\n  @ts-ignore */",
     ]) {
         describe(`${tsIgnoreComment} comment directives`, () => {
             const textWithIgnoreComment = `const x = 10;

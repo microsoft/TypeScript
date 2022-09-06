@@ -160,7 +160,7 @@ function convertDiagnostic(diagnostic: ts.Diagnostic) {
         length: diagnostic.length,
         messageText: ts.flattenDiagnosticMessageText(diagnostic.messageText, Harness.IO.newLine()),
         category: ts.diagnosticCategoryName(diagnostic, /*lowerCase*/ false),
-        code: diagnostic.code
+        code: diagnostic.code,
     };
 }
 

@@ -64,7 +64,7 @@ registerCodeFix({
         Diagnostics.This_expression_is_not_callable.code,
         Diagnostics.This_expression_is_not_constructable.code,
     ],
-    getCodeActions: getActionsForUsageOfInvalidImport
+    getCodeActions: getActionsForUsageOfInvalidImport,
 });
 
 function getActionsForUsageOfInvalidImport(context: CodeFixContext): CodeFixAction[] | undefined {
@@ -93,7 +93,7 @@ registerCodeFix({
         Diagnostics.Property_0_of_JSX_spread_attribute_is_not_assignable_to_target_property.code,
         Diagnostics.The_this_context_of_type_0_is_not_assignable_to_method_s_this_of_type_1.code,
     ],
-    getCodeActions: getActionsForInvalidImportLocation
+    getCodeActions: getActionsForInvalidImportLocation,
 });
 
 function getActionsForInvalidImportLocation(context: CodeFixContext): CodeFixAction[] | undefined {

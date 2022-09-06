@@ -172,7 +172,7 @@ export const enum CommandTypes {
     PrepareCallHierarchy = "prepareCallHierarchy",
     ProvideCallHierarchyIncomingCalls = "provideCallHierarchyIncomingCalls",
     ProvideCallHierarchyOutgoingCalls = "provideCallHierarchyOutgoingCalls",
-    ProvideInlayHints = "provideInlayHints"
+    ProvideInlayHints = "provideInlayHints",
 }
 
 /**
@@ -3695,7 +3695,7 @@ export const enum ModuleKind {
     System = "System",
     ES6 = "ES6",
     ES2015 = "ES2015",
-    ESNext = "ESNext"
+    ESNext = "ESNext",
 }
 
 export const enum ModuleResolutionKind {
@@ -3720,7 +3720,7 @@ export const enum ScriptTarget {
     ES2020 = "ES2020",
     ES2021 = "ES2021",
     ES2022 = "ES2022",
-    ESNext = "ESNext"
+    ESNext = "ESNext",
 }
 
 export const enum ClassificationType {

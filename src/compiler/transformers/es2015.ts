@@ -208,7 +208,7 @@ import {
     VisitResult,
     VoidExpression,
     WhileStatement,
-    YieldExpression
+    YieldExpression,
 } from "../_namespaces/ts";
 
 const enum ES2015SubstitutionFlags {
@@ -270,13 +270,13 @@ const enum LoopOutParameterFlags {
 
 const enum CopyDirection {
     ToOriginal,
-    ToOutParameter
+    ToOutParameter,
 }
 
 const enum Jump {
     Break       = 1 << 1,
     Continue    = 1 << 2,
-    Return      = 1 << 3
+    Return      = 1 << 3,
 }
 
 interface ConvertedLoopState {
@@ -825,7 +825,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
                             node.expression
                                 ? Debug.checkDefined(visitNode(node.expression, visitor, isExpression))
                                 : factory.createVoidZero()
-                        )
+                        ),
                     ]
                 )
             );
@@ -1447,7 +1447,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
                 factory.createNodeArray(
                     [
                         ...prologue,
-                        ...statements
+                        ...statements,
                     ]
                 ),
                 /*location*/ constructor.body.statements
@@ -1675,7 +1675,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
                                 ),
                                 EmitFlags.NoComments
                             )
-                        )
+                        ),
                     ]),
                     parameter
                 ),
@@ -1739,7 +1739,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
                                 /*exclamationToken*/ undefined,
                                 /*type*/ undefined,
                                 factory.createArrayLiteralExpression([])
-                            )
+                            ),
                         ])
                     ),
                     /*location*/ parameter
@@ -1754,7 +1754,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
         const forStatement = factory.createForStatement(
             setTextRange(
                 factory.createVariableDeclarationList([
-                    factory.createVariableDeclaration(temp, /*exclamationToken*/ undefined, /*type*/ undefined, factory.createNumericLiteral(restIndex))
+                    factory.createVariableDeclaration(temp, /*exclamationToken*/ undefined, /*type*/ undefined, factory.createNumericLiteral(restIndex)),
                 ]),
                 parameter
             ),
@@ -1782,7 +1782,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
                         ),
                         /*location*/ parameter
                     )
-                )
+                ),
             ])
         );
 
@@ -1856,7 +1856,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
                     /*exclamationToken*/ undefined,
                     /*type*/ undefined,
                     initializer
-                )
+                ),
             ])
         );
         setEmitFlags(captureThisStatement, EmitFlags.NoComments | EmitFlags.CustomPrologue);
@@ -1923,7 +1923,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
                         /*exclamationToken*/ undefined,
                         /*type*/ undefined,
                         newTarget
-                    )
+                    ),
                 ])
             );
 
@@ -2088,7 +2088,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
             [
                 target,
                 propertyName,
-                factory.createObjectLiteralExpression(properties, /*multiLine*/ true)
+                factory.createObjectLiteralExpression(properties, /*multiLine*/ true),
             ]
         );
         if (startsOnNewLine) {
@@ -2749,7 +2749,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
                                             /*exclamationToken*/ undefined,
                                             /*type*/ undefined,
                                             boundValue
-                                        )
+                                        ),
                                     ]),
                                     moveRangePos(initializer, -1)
                                 ),
@@ -2842,7 +2842,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
                     setTextRange(
                         factory.createVariableDeclarationList([
                             setTextRange(factory.createVariableDeclaration(counter, /*exclamationToken*/ undefined, /*type*/ undefined, factory.createNumericLiteral(0)), moveRangePos(node.expression, -1)),
-                            setTextRange(factory.createVariableDeclaration(rhsReference, /*exclamationToken*/ undefined, /*type*/ undefined, expression), node.expression)
+                            setTextRange(factory.createVariableDeclaration(rhsReference, /*exclamationToken*/ undefined, /*type*/ undefined, expression), node.expression),
                         ]),
                         node.expression
                     ),
@@ -2897,7 +2897,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
                         setTextRange(
                             factory.createVariableDeclarationList([
                                 setTextRange(factory.createVariableDeclaration(iterator, /*exclamationToken*/ undefined, /*type*/ undefined, initializer), node.expression),
-                                factory.createVariableDeclaration(result, /*exclamationToken*/ undefined, /*type*/ undefined, next)
+                                factory.createVariableDeclaration(result, /*exclamationToken*/ undefined, /*type*/ undefined, next),
                             ]),
                             node.expression
                         ),
@@ -2922,7 +2922,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
                     forStatement,
                     outermostLabeledStatement,
                     convertedLoopState && resetLabel
-                )
+                ),
             ]),
             factory.createCatchClause(factory.createVariableDeclaration(catchVariable),
                 setEmitFlags(
@@ -2931,10 +2931,10 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
                             factory.createAssignment(
                                 errorRecord,
                                 factory.createObjectLiteralExpression([
-                                    factory.createPropertyAssignment("error", catchVariable)
+                                    factory.createPropertyAssignment("error", catchVariable),
                                 ])
                             )
-                        )
+                        ),
                     ]),
                     EmitFlags.SingleLine
                 )
@@ -2974,11 +2974,11 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
                                     )
                                 ),
                                 EmitFlags.SingleLine
-                            )
+                            ),
                         ]),
                         EmitFlags.SingleLine
                     )
-                )
+                ),
             ])
         );
     }
@@ -3426,7 +3426,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
                             ),
                             emitFlags
                         )
-                    )
+                    ),
                 ]),
                 EmitFlags.NoHoisting
             )
@@ -3568,7 +3568,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
                                     ),
                                     emitFlags
                                 )
-                            )
+                            ),
                         ]
                     ),
                     EmitFlags.NoHoisting

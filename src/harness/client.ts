@@ -149,7 +149,7 @@ export class SessionClient implements LanguageService {
         const lineOffset = computeLineAndCharacterOfPosition(this.getLineMap(fileName), position);
         return {
             line: lineOffset.line + 1,
-            offset: lineOffset.character + 1
+            offset: lineOffset.character + 1,
         };
     }
 
@@ -162,7 +162,7 @@ export class SessionClient implements LanguageService {
             seq: this.sequence,
             type: "request",
             arguments: args,
-            command
+            command,
         };
         this.sequence++;
 
@@ -263,7 +263,7 @@ export class SessionClient implements LanguageService {
             textSpan: this.decodeSpan(body, fileName),
             displayParts: [{ kind: "text", text: body.displayString }],
             documentation: typeof body.documentation === "string" ? [{ kind: "text", text: body.documentation }] : body.documentation,
-            tags: this.decodeLinkDisplayParts(body.tags)
+            tags: this.decodeLinkDisplayParts(body.tags),
         };
     }
 
@@ -275,7 +275,7 @@ export class SessionClient implements LanguageService {
 
         return {
             configFileName: response.body!.configFileName, // TODO: GH#18217
-            fileNames: response.body!.fileNames
+            fileNames: response.body!.fileNames,
         };
     }
 
@@ -297,7 +297,7 @@ export class SessionClient implements LanguageService {
                 }
 
                 return entry as { name: string, kind: ScriptElementKind, kindModifiers: string, sortText: string }; // TODO: GH#18217
-            })
+            }),
         };
     }
 
@@ -317,7 +317,7 @@ export class SessionClient implements LanguageService {
     getNavigateToItems(searchValue: string): NavigateToItem[] {
         const args: protocol.NavtoRequestArgs = {
             searchValue,
-            file: this.host.getScriptFileNames()[0]
+            file: this.host.getScriptFileNames()[0],
         };
 
         const request = this.processRequest<protocol.NavtoRequest>(protocol.CommandTypes.Navto, args);
@@ -373,7 +373,7 @@ export class SessionClient implements LanguageService {
             fileName: entry.file,
             textSpan: this.decodeSpan(entry),
             kind: ScriptElementKind.unknown,
-            name: ""
+            name: "",
         }));
     }
 
@@ -394,7 +394,7 @@ export class SessionClient implements LanguageService {
                 name: "",
                 unverified: entry.unverified,
             })),
-            textSpan: this.decodeSpan(body.textSpan, request.arguments.file)
+            textSpan: this.decodeSpan(body.textSpan, request.arguments.file),
         };
     }
 
@@ -410,7 +410,7 @@ export class SessionClient implements LanguageService {
             fileName: entry.file,
             textSpan: this.decodeSpan(entry),
             kind: ScriptElementKind.unknown,
-            name: ""
+            name: "",
         }));
     }
 
@@ -441,7 +441,7 @@ export class SessionClient implements LanguageService {
             fileName: entry.file,
             textSpan: this.decodeSpan(entry),
             kind: ScriptElementKind.unknown,
-            displayParts: []
+            displayParts: [],
         }));
     }
 
@@ -537,7 +537,7 @@ export class SessionClient implements LanguageService {
                     ...(contextStart !== undefined ?
                         { contextSpan: this.decodeSpan({ start: contextStart, end: contextEnd! }, fileName) } :
                         undefined),
-                    ...prefixSuffixText
+                    ...prefixSuffixText,
                 });
             }
         }
@@ -609,7 +609,7 @@ export class SessionClient implements LanguageService {
             childItems: this.decodeNavigationBarItems(item.childItems, fileName, lineMap),
             indent: item.indent,
             bolded: false,
-            grayed: false
+            grayed: false,
         }));
     }
 
@@ -628,7 +628,7 @@ export class SessionClient implements LanguageService {
             kindModifiers: tree.kindModifiers,
             spans: tree.spans.map(span => this.decodeSpan(span, fileName, lineMap)),
             nameSpan: tree.nameSpan && this.decodeSpan(tree.nameSpan, fileName, lineMap),
-            childItems: map(tree.childItems, item => this.decodeNavigationTree(item, fileName, lineMap))
+            childItems: map(tree.childItems, item => this.decodeNavigationTree(item, fileName, lineMap)),
         };
     }
 
@@ -656,7 +656,7 @@ export class SessionClient implements LanguageService {
     private decodeLinkDisplayParts(tags: (protocol.JSDocTagInfo | JSDocTagInfo)[]): JSDocTagInfo[] {
         return tags.map(tag => typeof tag.text === "string" ? {
             ...tag,
-            text: [textPart(tag.text)]
+            text: [textPart(tag.text)],
         } : (tag as JSDocTagInfo));
     }
 
@@ -696,7 +696,7 @@ export class SessionClient implements LanguageService {
             fileName: item.file,
             highlightSpans: item.highlightSpans.map(span => ({
                 textSpan: this.decodeSpan(span, item.file),
-                kind: span.kind
+                kind: span.kind,
             })),
         }));
     }
@@ -710,7 +710,7 @@ export class SessionClient implements LanguageService {
             hintSpan: this.decodeSpan(item.hintSpan, file),
             bannerText: item.bannerText,
             autoCollapse: item.autoCollapse,
-            kind: item.kind
+            kind: item.kind,
         }));
     }
 
@@ -772,7 +772,7 @@ export class SessionClient implements LanguageService {
                         start: this.lineOffsetToPosition(span.file, span.start),
                         length: this.lineOffsetToPosition(span.file, span.end) - this.lineOffsetToPosition(span.file, span.start),
                     },
-                    file: span && span.file
+                    file: span && span.file,
                 })),
             });
         });
@@ -888,7 +888,7 @@ export class SessionClient implements LanguageService {
             const fileName = edit.fileName;
             return {
                 fileName,
-                textChanges: edit.textChanges.map(t => this.convertTextChangeToCodeEdit(t, fileName))
+                textChanges: edit.textChanges.map(t => this.convertTextChangeToCodeEdit(t, fileName)),
             };
         });
     }
@@ -896,14 +896,14 @@ export class SessionClient implements LanguageService {
     private convertChanges(changes: protocol.FileCodeEdits[], fileName: string): FileTextChanges[] {
         return changes.map(change => ({
             fileName: change.fileName,
-            textChanges: change.textChanges.map(textChange => this.convertTextChangeToCodeEdit(textChange, fileName))
+            textChanges: change.textChanges.map(textChange => this.convertTextChangeToCodeEdit(textChange, fileName)),
         }));
     }
 
     convertTextChangeToCodeEdit(change: protocol.CodeEdit, fileName: string): TextChange {
         return {
             span: this.decodeSpan(change, fileName),
-            newText: change.newText ? change.newText : ""
+            newText: change.newText ? change.newText : "",
         };
     }
 
@@ -951,7 +951,7 @@ export class SessionClient implements LanguageService {
             kindModifiers: item.kindModifiers,
             containerName: item.containerName,
             span: this.decodeSpan(item.span, item.file),
-            selectionSpan: this.decodeSpan(item.selectionSpan, item.file)
+            selectionSpan: this.decodeSpan(item.selectionSpan, item.file),
         };
     }
 
@@ -965,7 +965,7 @@ export class SessionClient implements LanguageService {
     private convertCallHierarchyIncomingCall(item: protocol.CallHierarchyIncomingCall): CallHierarchyIncomingCall {
         return {
             from: this.convertCallHierarchyItem(item.from),
-            fromSpans: item.fromSpans.map(span => this.decodeSpan(span, item.from.file))
+            fromSpans: item.fromSpans.map(span => this.decodeSpan(span, item.from.file)),
         };
     }
 
@@ -979,7 +979,7 @@ export class SessionClient implements LanguageService {
     private convertCallHierarchyOutgoingCall(file: string, item: protocol.CallHierarchyOutgoingCall): CallHierarchyOutgoingCall {
         return {
             to: this.convertCallHierarchyItem(item.to),
-            fromSpans: item.fromSpans.map(span => this.decodeSpan(span, file))
+            fromSpans: item.fromSpans.map(span => this.decodeSpan(span, file)),
         };
     }
 

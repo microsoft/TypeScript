@@ -425,7 +425,7 @@ export interface ExpectedDiagnosticRelatedInformation extends ExpectedDiagnostic
 
 export enum DiagnosticKind {
     Error = "Error",
-    Status = "Status"
+    Status = "Status",
 }
 export interface ExpectedErrorDiagnostic extends ExpectedDiagnosticRelatedInformation {
     relatedInformation?: ExpectedDiagnosticRelatedInformation[];

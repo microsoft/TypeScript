@@ -110,7 +110,7 @@ enum RulesPosition {
     ContextRulesSpecific = maskBitSize * 2,
     ContextRulesAny = maskBitSize * 3,
     NoContextRulesSpecific = maskBitSize * 4,
-    NoContextRulesAny = maskBitSize * 5
+    NoContextRulesAny = maskBitSize * 5,
 }
 
 // The Rules list contains all the inserted rules into a rulebucket in the following order:

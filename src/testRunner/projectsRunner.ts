@@ -208,7 +208,7 @@ class ProjectTestCase {
 
         return [
             { name: `@module: commonjs`, payload: { testCase, moduleKind: ts.ModuleKind.CommonJS, vfs: fs } },
-            { name: `@module: amd`, payload: { testCase, moduleKind: ts.ModuleKind.AMD, vfs: fs } }
+            { name: `@module: amd`, payload: { testCase, moduleKind: ts.ModuleKind.AMD, vfs: fs } },
         ];
     }
 
@@ -334,7 +334,7 @@ class ProjectTestCase {
                 data.sourceMap = {
                     ...data.sourceMap,
                     sources: data.sourceMap.sources.map(source => this.cleanProjectUrl(source)),
-                    sourceRoot: data.sourceMap.sourceRoot && this.cleanProjectUrl(data.sourceMap.sourceRoot)
+                    sourceRoot: data.sourceMap.sourceRoot && this.cleanProjectUrl(data.sourceMap.sourceRoot),
                 };
             }
         }
@@ -344,7 +344,7 @@ class ProjectTestCase {
             moduleKind,
             program,
             errors: ts.concatenate(errors, emitDiagnostics),
-            sourceMapData
+            sourceMapData,
         };
     }
 
@@ -393,7 +393,7 @@ class ProjectTestCase {
 
         const _vfs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ false, {
             documents: allInputFiles,
-            cwd: vpath.combine(vfs.srcFolder, this.testCase.projectRoot)
+            cwd: vpath.combine(vfs.srcFolder, this.testCase.projectRoot),
         });
 
         // Dont allow config files since we are compiling existing source options
@@ -425,7 +425,7 @@ function getErrorsBaseline(compilerResult: CompileProjectFilesResult) {
         unitName: ts.isRootedDiskPath(sourceFile.fileName) ?
             Harness.RunnerBase.removeFullPaths(sourceFile.fileName) :
             sourceFile.fileName,
-        content: sourceFile.text
+        content: sourceFile.text,
     }));
 
     return Harness.Compiler.getErrorBaseline(inputFiles, compilerResult.errors);
@@ -445,7 +445,7 @@ function createCompilerOptions(testCase: ProjectRunnerTestCase & ts.CompilerOpti
 
         sourceRoot: testCase.resolveSourceRoot && testCase.sourceRoot
             ? vpath.resolve(vfs.srcFolder, testCase.sourceRoot)
-            : testCase.sourceRoot
+            : testCase.sourceRoot,
     };
 
     // Set the values specified using json

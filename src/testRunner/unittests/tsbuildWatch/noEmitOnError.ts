@@ -33,7 +33,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: with noEmitOnError", () => {
             [
                 ...["tsconfig.json", "shared/types/db.ts", "src/main.ts", "src/other.ts"]
                     .map(f => getTsBuildProjectFile("noEmitOnError", f)),
-                { path: libFile.path, content: libContent }
+                { path: libFile.path, content: libContent },
             ],
             { currentDirectory: `/user/username/projects/noEmitOnError` }
         ),
@@ -50,6 +50,6 @@ const a: string = 10;`),
 const a: string = "hello";`),
             noChange,
         ],
-        baselineIncremental: true
+        baselineIncremental: true,
     });
 });

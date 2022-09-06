@@ -52,7 +52,7 @@ registerCodeFix({
         if (info) {
             doChange(changes, diag.file, info.returnTypeNode, info.promisedTypeNode);
         }
-    })
+    }),
 });
 
 function getInfo(sourceFile: SourceFile, checker: TypeChecker, pos: number): Info | undefined {

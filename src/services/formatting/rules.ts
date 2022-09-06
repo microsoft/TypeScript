@@ -246,7 +246,7 @@ export function getAllRules(): RuleSpec[] {
             isNonJsxSameLineTokenContext,
             isTypeArgumentOrParameterOrAssertionContext,
             isNotFunctionDeclContext /*To prevent an interference with the SpaceBeforeOpenParenInFuncDecl rule*/,
-            isNonTypeAssertionContext
+            isNonTypeAssertionContext,
         ], RuleAction.DeleteSpace),
 
         // decorators

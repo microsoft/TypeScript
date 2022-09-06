@@ -24,26 +24,26 @@ describe("unittests:: tsserver:: moduleResolution", () => {
                         module: "Node16",
                         outDir: "../out",
                         traceResolution: true,
-                    }
-                })
+                    },
+                }),
             };
             const packageFile: File = {
                 path: `/user/username/projects/myproject/package.json`,
-                content: packageFileContents
+                content: packageFileContents,
             };
             const fileA: File = {
                 path: `/user/username/projects/myproject/src/fileA.ts`,
                 content: Utils.dedent`
                         import { foo } from "./fileB.mjs";
                         foo();
-                    `
+                    `,
             };
             const fileB: File = {
                 path: `/user/username/projects/myproject/src/fileB.mts`,
                 content: Utils.dedent`
                         export function foo() {
                         }
-                    `
+                    `,
             };
             const host = createServerHost([configFile, fileA, fileB, packageFile, { ...libFile, path: "/a/lib/lib.es2016.full.d.ts" }]);
             const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });

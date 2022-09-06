@@ -224,7 +224,7 @@ import {
     visitNodes,
     Visitor,
     visitParameterList,
-    VisitResult
+    VisitResult,
 } from "../_namespaces/ts";
 
 const enum ClassPropertySubstitutionFlags {
@@ -358,7 +358,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
         endLexicalEnvironment,
         startLexicalEnvironment,
         resumeLexicalEnvironment,
-        addBlockScopedVariable
+        addBlockScopedVariable,
     } = context;
     const resolver = context.getEmitResolver();
     const compilerOptions = context.getCompilerOptions();
@@ -3285,7 +3285,7 @@ function createPrivateStaticFieldInitializer(factory: NodeFactory, variableName:
     return factory.createAssignment(
         variableName,
         factory.createObjectLiteralExpression([
-            factory.createPropertyAssignment("value", initializer || factory.createVoidZero())
+            factory.createPropertyAssignment("value", initializer || factory.createVoidZero()),
         ])
     );
 }

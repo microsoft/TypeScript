@@ -164,7 +164,7 @@ registerRefactor(refactorNameForMoveToFile, {
         }
         if (context.preferences.provideRefactorNotApplicableReason) {
             return [{ name: refactorNameForMoveToFile, description, actions:
-                [{ ...moveToFileAction, notApplicableReason: getLocaleSpecificMessage(Diagnostics.Selection_is_not_a_valid_statement_or_statements) }]
+                [{ ...moveToFileAction, notApplicableReason: getLocaleSpecificMessage(Diagnostics.Selection_is_not_a_valid_statement_or_statements) }],
             }];
         }
         return emptyArray;
@@ -183,7 +183,7 @@ registerRefactor(refactorNameForMoveToFile, {
             return { edits, renameFilename: undefined, renameLocation: undefined };
         }
         return error(getLocaleSpecificMessage(Diagnostics.Cannot_move_to_file_selected_file_is_invalid));
-    }
+    },
 });
 
 function error(notApplicableReason: string) {
@@ -258,7 +258,7 @@ function getNewStatementsAndRemoveFromOldFile(
             ...prologueDirectives,
             ...imports,
             SyntaxKind.NewLineTrivia as const,
-            ...body
+            ...body,
         ];
     }
 
@@ -936,7 +936,7 @@ function getRangeToMove(context: RefactorContext): RangeToMove | undefined {
 
     return {
         toMove: statements.slice(startNodeIndex, endNodeIndex === -1 ? statements.length : endNodeIndex + 1),
-        afterLast: endNodeIndex === -1 ? undefined : statements[endNodeIndex + 1]
+        afterLast: endNodeIndex === -1 ? undefined : statements[endNodeIndex + 1],
     };
 }
 

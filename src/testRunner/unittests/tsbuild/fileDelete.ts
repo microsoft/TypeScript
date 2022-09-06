@@ -1,6 +1,6 @@
 import * as ts from "../../_namespaces/ts";
 import {
-    dedent
+    dedent,
 } from "../../_namespaces/Utils";
 import { compilerOptionsToConfigJson } from "../helpers/contents";
 import {
@@ -54,7 +54,7 @@ describe("unittests:: tsbuild:: fileDelete::", () => {
             discrepancyExplanation: () => [
                 "Clean build will not have latestChangedDtsFile as there was no emit and emitSignatures as undefined for files",
                 "Incremental will store the past latestChangedDtsFile and emitSignatures",
-            ]
+            ],
         }],
     });
 
@@ -65,7 +65,7 @@ describe("unittests:: tsbuild:: fileDelete::", () => {
         fs: () => fs({ composite: true, outFile: "../childResult.js", module: ts.ModuleKind.AMD }, { composite: true, outFile: "../mainResult.js", module: ts.ModuleKind.AMD }),
         edits: [{
             caption: "delete child2 file",
-            edit: fs => fs.rimrafSync("/src/child/child2.ts")
+            edit: fs => fs.rimrafSync("/src/child/child2.ts"),
         }],
     });
 
@@ -79,7 +79,7 @@ describe("unittests:: tsbuild:: fileDelete::", () => {
             edit: fs => {
                 fs.rimrafSync("/src/child/child2.ts");
                 fs.rimrafSync("/src/child/child2.js");
-            }
+            },
         }],
     });
 

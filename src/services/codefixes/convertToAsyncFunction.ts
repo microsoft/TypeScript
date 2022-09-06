@@ -606,7 +606,7 @@ function maybeAnnotateAndReturn(expressionToReturn: Expression | undefined, type
         const name = factory.createUniqueName("result", GeneratedIdentifierFlags.Optimistic);
         return [
             ...createVariableOrAssignmentOrExpressionStatement(createSynthIdentifier(name), expressionToReturn, typeAnnotation),
-            factory.createReturnStatement(name)
+            factory.createReturnStatement(name),
         ];
     }
     return [factory.createReturnStatement(expressionToReturn)];

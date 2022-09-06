@@ -100,7 +100,7 @@ export enum LogLevel {
     Error,
     Warning,
     Info,
-    Verbose
+    Verbose,
 }
 
 /** @internal */
@@ -522,10 +522,10 @@ export namespace Debug {
                             "UnknownFlow";
                         const remainingFlags = this.flags & ~(FlowFlags.Referenced - 1);
                         return `${flowHeader}${remainingFlags ? ` (${formatFlowFlags(remainingFlags)})`: ""}`;
-                    }
+                    },
                 },
                 __debugFlowFlags: { get(this: FlowNodeBase) { return formatEnum(this.flags, (ts as any).FlowFlags, /*isFlags*/ true); } },
-                __debugToString: { value(this: FlowNodeBase) { return formatControlFlowGraph(this); } }
+                __debugToString: { value(this: FlowNodeBase) { return formatControlFlowGraph(this); } },
             });
         }
     }
@@ -563,8 +563,8 @@ export namespace Debug {
                         // we're just taking note of it for anyone checking regex performance in the future.
                         defaultValue = String(defaultValue).replace(/(?:,[\s\w\d_]+:[^,]+)+\]$/, "]");
                         return `NodeArray ${defaultValue}`;
-                    }
-                }
+                    },
+                },
             });
         }
     }
@@ -607,9 +607,9 @@ export namespace Debug {
                         "Symbol";
                     const remainingSymbolFlags = this.flags & ~SymbolFlags.Transient;
                     return `${symbolHeader} '${symbolName(this)}'${remainingSymbolFlags ? ` (${formatSymbolFlags(remainingSymbolFlags)})` : ""}`;
-                }
+                },
             },
-            __debugFlags: { get(this: Symbol) { return formatSymbolFlags(this.flags); } }
+            __debugFlags: { get(this: Symbol) { return formatSymbolFlags(this.flags); } },
         });
 
         Object.defineProperties(objectAllocator.getTypeConstructor().prototype, {
@@ -642,7 +642,7 @@ export namespace Debug {
                         "Type";
                     const remainingObjectFlags = this.flags & TypeFlags.Object ? (this as ObjectType).objectFlags & ~ObjectFlags.ObjectTypeKindMask : 0;
                     return `${typeHeader}${this.symbol ? ` '${symbolName(this.symbol)}'` : ""}${remainingObjectFlags ? ` (${formatObjectFlags(remainingObjectFlags)})` : ""}`;
-                }
+                },
             },
             __debugFlags: { get(this: Type) { return formatTypeFlags(this.flags); } },
             __debugObjectFlags: { get(this: Type) { return this.flags & TypeFlags.Object ? formatObjectFlags((this as ObjectType).objectFlags) : ""; } },
@@ -655,20 +655,20 @@ export namespace Debug {
                         weakTypeTextMap.set(this, text);
                     }
                     return text;
-                }
+                },
             },
         });
 
         Object.defineProperties(objectAllocator.getSignatureConstructor().prototype, {
             __debugFlags: { get(this: Signature) { return formatSignatureFlags(this.flags); } },
-            __debugSignatureToString: { value(this: Signature) { return this.checker?.signatureToString(this); } }
+            __debugSignatureToString: { value(this: Signature) { return this.checker?.signatureToString(this); } },
         });
 
         const nodeConstructors = [
             objectAllocator.getNodeConstructor(),
             objectAllocator.getIdentifierConstructor(),
             objectAllocator.getTokenConstructor(),
-            objectAllocator.getSourceFileConstructor()
+            objectAllocator.getSourceFileConstructor(),
         ];
 
         for (const ctor of nodeConstructors) {
@@ -716,7 +716,7 @@ export namespace Debug {
                                 isImportTypeNode(this) ? "ImportTypeNode" :
                                 formatSyntaxKind(this.kind);
                             return `${nodeHeader}${this.flags ? ` (${formatNodeFlags(this.flags)})` : ""}`;
-                        }
+                        },
                     },
                     __debugKind: { get(this: Node) { return formatSyntaxKind(this.kind); } },
                     __debugNodeFlags: { get(this: Node) { return formatNodeFlags(this.flags); } },
@@ -736,8 +736,8 @@ export namespace Debug {
                                 weakNodeTextMap.set(this, text);
                             }
                             return text;
-                        }
-                    }
+                        },
+                    },
                 });
             }
         }
@@ -938,7 +938,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                     lane: -1,
                     endLane: -1,
                     level: -1,
-                    circular: "circularity"
+                    circular: "circularity",
                 };
                 nodes.push(graphNode);
                 return graphNode;

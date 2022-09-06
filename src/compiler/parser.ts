@@ -411,7 +411,7 @@ const enum SignatureFlags {
 const enum SpeculationKind {
     TryParse,
     Lookahead,
-    Reparse
+    Reparse,
 }
 
 let NodeConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
@@ -1336,7 +1336,7 @@ export function createSourceFile(fileName: string, sourceText: string, languageV
     const {
         languageVersion,
         setExternalModuleIndicator: overrideSetExternalModuleIndicator,
-        impliedNodeFormat: format
+        impliedNodeFormat: format,
     } = typeof languageVersionOrOptions === "object" ? languageVersionOrOptions : ({ languageVersion: languageVersionOrOptions } as CreateSourceFileOptions);
     if (languageVersion === ScriptTarget.JSON) {
         result = Parser.parseSourceFile(fileName, sourceText, languageVersion, /*syntaxCursor*/ undefined, setParentNodes, ScriptKind.JSON, noop);
@@ -1442,7 +1442,7 @@ namespace Parser {
         createBaseIdentifierNode: kind => countNode(new IdentifierConstructor(kind, /*pos*/ 0, /*end*/ 0)),
         createBasePrivateIdentifierNode: kind => countNode(new PrivateIdentifierConstructor(kind, /*pos*/ 0, /*end*/ 0)),
         createBaseTokenNode: kind => countNode(new TokenConstructor(kind, /*pos*/ 0, /*end*/ 0)),
-        createBaseNode: kind => countNode(new NodeConstructor(kind, /*pos*/ 0, /*end*/ 0))
+        createBaseNode: kind => countNode(new NodeConstructor(kind, /*pos*/ 0, /*end*/ 0)),
     };
 
     var factory = createNodeFactory(NodeFactoryFlags.NoParenthesizerRules | NodeFactoryFlags.NoNodeConverters | NodeFactoryFlags.NoOriginalNode, baseNodeFactory);
@@ -8608,13 +8608,13 @@ namespace Parser {
         ImportOrExportSpecifiers,  // Named import clause's import specifier list,
         AssertEntries,             // Import entries list.
         JSDocComment,              // Parsing via JSDocParser
-        Count                      // Number of parsing contexts
+        Count,                      // Number of parsing contexts
     }
 
     const enum Tristate {
         False,
         True,
-        Unknown
+        Unknown,
     }
 
     export namespace JSDocParser {
@@ -9834,7 +9834,7 @@ namespace IncrementalParser {
                 // end, forward or backward appropriately.
                 const updatedDirective: CommentDirective = {
                     range: { pos: range.pos + delta, end: range.end + delta },
-                    type
+                    type,
                 };
                 commentDirectives = append(commentDirectives, updatedDirective);
                 if (aggressiveChecks) {
@@ -10280,7 +10280,7 @@ namespace IncrementalParser {
                 // Either we don'd have a node, or we have a node at the position being asked for.
                 Debug.assert(!current || current.pos === position);
                 return current as IncrementalNode;
-            }
+            },
         };
 
         // Finds the highest element in the tree we can find that starts at the provided position.
@@ -10342,7 +10342,7 @@ namespace IncrementalParser {
     }
 
     const enum InvalidPosition {
-        Value = -1
+        Value = -1,
     }
 }
 
@@ -10459,7 +10459,7 @@ export function processPragmasIntoFields(context: PragmaContext, reportDiagnosti
                         context.checkJsDirective = {
                             enabled: key === "ts-check",
                             end: entry.range.end,
-                            pos: entry.range.pos
+                            pos: entry.range.pos,
                         };
                     }
                 });
@@ -10510,7 +10510,7 @@ function extractPragmas(pragmas: PragmaPseudoMapEntry[], range: CommentRange, te
                         argument[arg.name] = {
                             value,
                             pos: startPos,
-                            end: startPos + value.length
+                            end: startPos + value.length,
                         };
                     }
                     else {

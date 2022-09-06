@@ -365,7 +365,7 @@ function getImmediatelyContainingArgumentInfo(node: Node, position: number, sour
             invocation: { kind: InvocationKind.Call, node: parent },
             argumentsSpan: createTextSpan(attributeSpanStart, attributeSpanEnd - attributeSpanStart),
             argumentIndex: 0,
-            argumentCount: 1
+            argumentCount: 1,
         };
     }
     else {
@@ -539,7 +539,7 @@ function getArgumentListInfoForTemplate(tagExpression: TaggedTemplateExpression,
         invocation: { kind: InvocationKind.Call, node: tagExpression },
         argumentsSpan: getApplicableSpanForTaggedTemplate(tagExpression, sourceFile),
         argumentIndex,
-        argumentCount
+        argumentCount,
     };
 }
 
@@ -748,7 +748,7 @@ function itemInfoForParameters(candidateSignature: Signature, checker: TypeCheck
         isVariadic: isVariadic(parameterList),
         parameters: parameterList.map(p => createSignatureHelpParameterForParameter(p, checker, enclosingDeclaration, sourceFile, printer)),
         prefix: [...typeParameterParts, punctuationPart(SyntaxKind.OpenParenToken)],
-        suffix: [punctuationPart(SyntaxKind.CloseParenToken)]
+        suffix: [punctuationPart(SyntaxKind.CloseParenToken)],
     }));
 }
 

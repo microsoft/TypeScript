@@ -92,7 +92,7 @@ describe("unittests:: Public APIs:: getTypeAtLocation", () => {
         const program = ts.createProgram({
             host,
             rootNames: ["/file.ts"],
-            options: { noLib: true }
+            options: { noLib: true },
         });
 
         const checker = program.getTypeChecker();
@@ -114,7 +114,7 @@ describe("unittests:: Public APIs:: getTypeAtLocation", () => {
         const program = ts.createProgram({
             host,
             rootNames: ["/file.ts"],
-            options: { noLib: true }
+            options: { noLib: true },
         });
 
         const checker = program.getTypeChecker();
@@ -138,7 +138,7 @@ describe("unittests:: Public APIs:: getTypeAtLocation", () => {
         const program = ts.createProgram({
             host,
             rootNames: ["/file.ts"],
-            options: { noLib: true }
+            options: { noLib: true },
         });
 
         const checker = program.getTypeChecker();
@@ -158,7 +158,7 @@ describe("unittests:: Public APIs:: getTypeAtLocation", () => {
         const program = ts.createProgram({
             host,
             rootNames: ["/file.ts"],
-            options: { noLib: true }
+            options: { noLib: true },
         });
 
         const checker = program.getTypeChecker();
@@ -187,7 +187,7 @@ describe("unittests:: Public APIs:: validateLocaleAndSetLanguage", () => {
                     assert.isTrue(expectedToReadFile, `Locale : ${locale} ${expectedToReadFile ? "should" : "should not"} read ${fileName}.`);
                     // Throw error here so that actual change to localized diagnostics messages doesnt take place
                     throw new Error("cannot read file");
-                }
+                },
             }, errors);
         });
     }

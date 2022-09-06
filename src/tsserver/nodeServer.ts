@@ -312,7 +312,7 @@ export function initializeNodeSystem(): StartInput {
                 case ts.LogLevel.Verbose:
                     return logger.msg(s, Msg.Info);
             }
-        }
+        },
     };
 
     const pending = createQueue<Buffer>();
@@ -407,7 +407,7 @@ export function initializeNodeSystem(): StartInput {
         cancellationToken,
         serverMode,
         unknownServerMode,
-        startSession: startNodeSession
+        startSession: startNodeSession,
     };
 
     // TSS_LOG "{ level: "normal | verbose | terse", file?: string}"
@@ -697,7 +697,7 @@ function startNodeSession(options: StartSessionOptions, logger: Logger, cancella
                 }
                 case EventInitializationFailed: {
                     const body: protocol.TypesInstallerInitializationFailedEventBody = {
-                        message: response.message
+                        message: response.message,
                     };
                     const eventName: protocol.TypesInstallerInitializationFailedEventName = "typesInstallerInitializationFailed";
                     this.event(body, eventName);
@@ -719,8 +719,8 @@ function startNodeSession(options: StartSessionOptions, logger: Logger, cancella
                             payload: {
                                 installedPackages: response.packagesToInstall.join(","),
                                 installSuccess: response.installSuccess,
-                                typingsInstallerVersion: response.typingsInstallerVersion
-                            }
+                                typingsInstallerVersion: response.typingsInstallerVersion,
+                            },
                         };
                         const eventName: protocol.TelemetryEventName = "telemetry";
                         this.event(body, eventName);

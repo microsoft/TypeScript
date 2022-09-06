@@ -138,7 +138,7 @@ const errorCodes = [
     Diagnostics.Type_0_is_missing_the_following_properties_from_type_1_Colon_2.code,
     Diagnostics.Type_0_is_missing_the_following_properties_from_type_1_Colon_2_and_3_more.code,
     Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1.code,
-    Diagnostics.Cannot_find_name_0.code
+    Diagnostics.Cannot_find_name_0.code,
 ];
 
 enum InfoKind {
@@ -588,7 +588,7 @@ function addEnumMemberDeclaration(changes: textChanges.ChangeTracker, checker: T
         concatenate(parentDeclaration.members, singleElementArray(enumMember))
     ), {
         leadingTriviaOption: textChanges.LeadingTriviaOption.IncludeAll,
-        trailingTriviaOption: textChanges.TrailingTriviaOption.Exclude
+        trailingTriviaOption: textChanges.TrailingTriviaOption.Exclude,
     });
 }
 
@@ -640,7 +640,7 @@ function addObjectLiteralProperties(changes: textChanges.ChangeTracker, context:
     const options = {
         leadingTriviaOption: textChanges.LeadingTriviaOption.Exclude,
         trailingTriviaOption: textChanges.TrailingTriviaOption.Exclude,
-        indentation: info.indentation
+        indentation: info.indentation,
     };
     changes.replaceNode(context.sourceFile, info.parentDeclaration, factory.createObjectLiteralExpression([...info.parentDeclaration.properties, ...props], /*multiLine*/ true), options);
     importAdder.writeFixes(changes);

@@ -14,8 +14,8 @@ describe("unittests:: tsbuild:: roots::", () => {
             "/src/file2.ts": `export const y = "world";`,
             "/src/tsconfig.json": JSON.stringify({
                 compilerOptions: { composite: true },
-                include: ["*.ts"]
-            })
+                include: ["*.ts"],
+            }),
         }),
         edits: [{
             caption: "delete file1",
@@ -38,8 +38,8 @@ describe("unittests:: tsbuild:: roots::", () => {
             "/src/file4.ts": `export const y = "world";`,
             "/src/tsconfig.json": JSON.stringify({
                 compilerOptions: { composite: true },
-                include: ["*.ts"]
-            })
+                include: ["*.ts"],
+            }),
         }),
         edits: [{
             caption: "delete file1",
@@ -64,8 +64,8 @@ describe("unittests:: tsbuild:: roots::", () => {
             `,
             "/src/tsconfig.json": JSON.stringify({
                 compilerOptions: { composite: true },
-                include: ["file*.ts"]
-            })
+                include: ["file*.ts"],
+            }),
         }),
         edits: [{
             caption: "delete file1",
@@ -103,8 +103,8 @@ describe("unittests:: tsbuild:: roots::", () => {
             `,
             "/src/tsconfig.json": JSON.stringify({
                 compilerOptions: { composite: true },
-                include: ["file*.ts", "nonconsecutive*.ts", "asArray*.ts", "anotherNonConsecutive.ts"]
-            })
+                include: ["file*.ts", "nonconsecutive*.ts", "asArray*.ts", "anotherNonConsecutive.ts"],
+            }),
         }),
         edits: [{
             caption: "delete file1",

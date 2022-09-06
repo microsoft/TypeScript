@@ -62,7 +62,7 @@ registerCodeFix({
             const fixAll = true;
             if (node) doChange(changes, node, diag.file, newLineCharacter, fixAll);
         }
-    )
+    ),
 });
 
 function doChange(

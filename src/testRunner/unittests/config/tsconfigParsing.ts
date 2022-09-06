@@ -46,7 +46,7 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
                         /*ignoreCase*/ false,
                         {
                             cwd: basePath,
-                            files: { "/": {}, ...files }
+                            files: { "/": {}, ...files },
                         }));
                 },
                 jsonText,
@@ -57,7 +57,7 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
                     baseline.push(parsed.fileNames.join());
                 },
             })),
-            skipJson
+            skipJson,
         });
     }
 
@@ -72,7 +72,7 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
     ]);
 
     baselineParseResult("returns empty config when config is empty object", () => [
-        "{}"
+        "{}",
     ]);
 
     baselineParseResult("returns config object without comments", () => [
@@ -322,9 +322,9 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
             files: [{
                 compilerOptions: {
                     experimentalDecorators: true,
-                    allowJs: true
-                }
-            }]
+                    allowJs: true,
+                },
+            }],
         }),
         configFileName: "/apath/tsconfig.json",
         basePath: "tests/cases/unittests",
@@ -334,8 +334,8 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
     baselinedParsed("generates errors when include is not string", () => [{
         jsonText: JSON.stringify({
             include: [
-                ["./**/*.ts"]
-            ]
+                ["./**/*.ts"],
+            ],
         }),
         configFileName: "/apath/tsconfig.json",
         basePath: "tests/cases/unittests",
@@ -346,7 +346,7 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
         jsonText: JSON.stringify({
             compilerOptions: {
                 help: true,
-            }
+            },
         }),
         configFileName: "/apath/tsconfig.json",
         basePath: "tests/cases/unittests",
@@ -360,7 +360,7 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
             input: () => scenario().map(({ jsonText, configFileName, basePath }) => ({
                 createHost: () => new fakes.ParseConfigHost(new vfs.FileSystem(/*ignoreCase*/ false, {
                     cwd: basePath,
-                    files: { [configFileName]: jsonText }
+                    files: { [configFileName]: jsonText },
                 })),
                 jsonText,
                 configFileName,
@@ -379,7 +379,7 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
     baselineWildcards("parses wildcard directories even when parent directories have dots", () => [{
         configFileName: "/foo.bar/tsconfig.json",
         jsonText: JSON.stringify({
-            include: ["src"]
+            include: ["src"],
         }),
         basePath: "/foo.bar",
     }]);
@@ -387,7 +387,7 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
     baselineWildcards("correctly parses wild card directories from implicit glob when two keys differ only in directory seperator", () => [{
         configFileName: "/foo.bar/tsconfig.json",
         jsonText: JSON.stringify({
-            include: ["./", "./**/*.json"]
+            include: ["./", "./**/*.json"],
         }),
         basePath: "/foo",
     }]);

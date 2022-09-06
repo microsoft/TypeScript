@@ -342,7 +342,7 @@ export function getReferenceAtPosition(sourceFile: SourceFile, position: number,
                 reference: {
                     pos: node.getStart(),
                     end: node.getEnd(),
-                    fileName: node.text
+                    fileName: node.text,
                 },
                 unverified: !verifiedFileName,
             };

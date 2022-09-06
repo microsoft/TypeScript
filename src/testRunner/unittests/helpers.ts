@@ -4,7 +4,7 @@ const enum ChangedPart {
     none = 0,
     references = 1 << 0,
     importsAndExports = 1 << 1,
-    program = 1 << 2
+    program = 1 << 2,
 }
 
 export const newLine = "\r\n";

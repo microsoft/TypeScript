@@ -33,7 +33,7 @@ describe("unittests:: services:: PreProcessFile:", () => {
                     typeReferenceDirectives: [],
                     libReferenceDirectives: [],
                     ambientExternalModules: undefined,
-                    isLibFile: false
+                    isLibFile: false,
                 });
         });
 
@@ -47,7 +47,7 @@ describe("unittests:: services:: PreProcessFile:", () => {
                     typeReferenceDirectives: [],
                     libReferenceDirectives: [],
                     ambientExternalModules: undefined,
-                    isLibFile: false
+                    isLibFile: false,
                 });
         });
 
@@ -61,7 +61,7 @@ describe("unittests:: services:: PreProcessFile:", () => {
                     typeReferenceDirectives: [],
                     libReferenceDirectives: [],
                     ambientExternalModules: undefined,
-                    isLibFile: false
+                    isLibFile: false,
                 });
         });
 
@@ -75,7 +75,7 @@ describe("unittests:: services:: PreProcessFile:", () => {
                     typeReferenceDirectives: [],
                     libReferenceDirectives: [],
                     ambientExternalModules: undefined,
-                    isLibFile: false
+                    isLibFile: false,
                 });
         });
 
@@ -90,7 +90,7 @@ describe("unittests:: services:: PreProcessFile:", () => {
                     importedFiles: [{ fileName: "r1.ts", pos: 20, end: 25 }, { fileName: "r2.ts", pos: 49, end: 54 }, { fileName: "r3.ts", pos: 78, end: 83 },
                         { fileName: "r4.ts", pos: 106, end: 111 }, { fileName: "r5.ts", pos: 138, end: 143 }],
                     ambientExternalModules: undefined,
-                    isLibFile: false
+                    isLibFile: false,
                 });
         });
 
@@ -104,7 +104,7 @@ describe("unittests:: services:: PreProcessFile:", () => {
                     libReferenceDirectives: [],
                     importedFiles: [] as ts.FileReference[],
                     ambientExternalModules: undefined,
-                    isLibFile: false
+                    isLibFile: false,
                 });
         });
 
@@ -118,7 +118,7 @@ describe("unittests:: services:: PreProcessFile:", () => {
                     libReferenceDirectives: [],
                     importedFiles: [{ fileName: "r3.ts", pos: 73, end: 78 }],
                     ambientExternalModules: undefined,
-                    isLibFile: false
+                    isLibFile: false,
                 });
         });
 
@@ -132,7 +132,7 @@ describe("unittests:: services:: PreProcessFile:", () => {
                     libReferenceDirectives: [],
                     importedFiles: [{ fileName: "r1.ts", pos: 92, end: 97 }, { fileName: "r2.ts", pos: 121, end: 126 }],
                     ambientExternalModules: undefined,
-                    isLibFile: false
+                    isLibFile: false,
                 });
         });
 
@@ -146,7 +146,7 @@ describe("unittests:: services:: PreProcessFile:", () => {
                     libReferenceDirectives: [],
                     importedFiles: [{ fileName: "r1.ts", pos: 91, end: 96 }, { fileName: "r3.ts", pos: 148, end: 153 }],
                     ambientExternalModules: undefined,
-                    isLibFile: false
+                    isLibFile: false,
                 });
         });
 
@@ -171,10 +171,10 @@ describe("unittests:: services:: PreProcessFile:", () => {
                     { fileName: "m4", pos: 95, end: 97 },
                     { fileName: "m5", pos: 122, end: 124 },
                     { fileName: "m6", pos: 160, end: 162 },
-                    { fileName: "m7", pos: 199, end: 201 }
+                    { fileName: "m7", pos: 199, end: 201 },
                 ],
                 ambientExternalModules: undefined,
-                isLibFile: false
+                isLibFile: false,
             });
         });
 
@@ -202,7 +202,7 @@ describe("unittests:: services:: PreProcessFile:", () => {
                 libReferenceDirectives: [],
                 importedFiles: [],
                 ambientExternalModules: undefined,
-                isLibFile: false
+                isLibFile: false,
             });
             /* eslint-enable no-template-curly-in-string */
         });
@@ -218,7 +218,7 @@ describe("unittests:: services:: PreProcessFile:", () => {
                 libReferenceDirectives: [],
                 importedFiles: [],
                 ambientExternalModules: undefined,
-                isLibFile: false
+                isLibFile: false,
             });
             /* eslint-enable no-template-curly-in-string */
         });
@@ -233,10 +233,10 @@ describe("unittests:: services:: PreProcessFile:", () => {
                 typeReferenceDirectives: [],
                 libReferenceDirectives: [],
                 importedFiles: [
-                    { fileName: "./foo", pos: 17, end: 22 }
+                    { fileName: "./foo", pos: 17, end: 22 },
                 ],
                 ambientExternalModules: undefined,
-                isLibFile: false
+                isLibFile: false,
             });
             /* eslint-enable no-template-curly-in-string */
         });
@@ -254,10 +254,10 @@ describe("unittests:: services:: PreProcessFile:", () => {
                 libReferenceDirectives: [],
                 importedFiles: [
                     { fileName: "a", pos: 39, end: 40 },
-                    { fileName: "b", pos: 53, end: 54 }
+                    { fileName: "b", pos: 53, end: 54 },
                 ],
                 ambientExternalModules: undefined,
-                isLibFile: false
+                isLibFile: false,
             });
             /* eslint-enable no-template-curly-in-string */
         });
@@ -278,7 +278,7 @@ describe("unittests:: services:: PreProcessFile:", () => {
                     { fileName: "d", pos: 78, end: 79 },
                 ],
                 ambientExternalModules: undefined,
-                isLibFile: false
+                isLibFile: false,
             });
             /* eslint-enable no-template-curly-in-string */
         });
@@ -300,7 +300,7 @@ describe("unittests:: services:: PreProcessFile:", () => {
                     { fileName: "e", pos: 95, end: 96 },
                 ],
                 ambientExternalModules: undefined,
-                isLibFile: false
+                isLibFile: false,
             });
             /* eslint-enable no-template-curly-in-string */
         });
@@ -320,7 +320,7 @@ describe("unittests:: services:: PreProcessFile:", () => {
                     { fileName: "b", pos: 67, end: 68 },
                 ],
                 ambientExternalModules: undefined,
-                isLibFile: false
+                isLibFile: false,
             });
             /* eslint-enable no-template-curly-in-string */
         });
@@ -344,7 +344,7 @@ describe("unittests:: services:: PreProcessFile:", () => {
                     { fileName: "d", pos: 117, end: 118 },
                 ],
                 ambientExternalModules: undefined,
-                isLibFile: false
+                isLibFile: false,
             });
             /* eslint-enable no-template-curly-in-string */
         });
@@ -359,7 +359,7 @@ describe("unittests:: services:: PreProcessFile:", () => {
                 libReferenceDirectives: [],
                 importedFiles: [],
                 ambientExternalModules: undefined,
-                isLibFile: false
+                isLibFile: false,
             });
         });
 
@@ -381,7 +381,7 @@ describe("unittests:: services:: PreProcessFile:", () => {
                     { fileName: "m4", pos: 101, end: 103 },
                 ],
                 ambientExternalModules: undefined,
-                isLibFile: false
+                isLibFile: false,
             });
         });
 
@@ -419,7 +419,7 @@ describe("unittests:: services:: PreProcessFile:", () => {
                     { fileName: "m12", pos: 392, end: 395 },
                 ],
                 ambientExternalModules: undefined,
-                isLibFile: false
+                isLibFile: false,
             });
         });
 
@@ -441,7 +441,7 @@ describe("unittests:: services:: PreProcessFile:", () => {
                     { fileName: "m4", pos: 121, end: 123 },
                 ],
                 ambientExternalModules: undefined,
-                isLibFile: false
+                isLibFile: false,
             });
         });
 
@@ -461,7 +461,7 @@ describe("unittests:: services:: PreProcessFile:", () => {
                     { fileName: "m3", pos: 109, end: 111 },
                 ],
                 ambientExternalModules: undefined,
-                isLibFile: false
+                isLibFile: false,
             });
         });
 
@@ -480,7 +480,7 @@ describe("unittests:: services:: PreProcessFile:", () => {
                 libReferenceDirectives: [],
                 importedFiles: [],
                 ambientExternalModules: ["B"],
-                isLibFile: false
+                isLibFile: false,
             });
         });
 
@@ -493,10 +493,10 @@ describe("unittests:: services:: PreProcessFile:", () => {
                     typeReferenceDirectives: [],
                     libReferenceDirectives: [],
                     importedFiles: [
-                        { fileName: "m1", pos: 26, end: 28 }
+                        { fileName: "m1", pos: 26, end: 28 },
                     ],
                     ambientExternalModules: undefined,
-                    isLibFile: false
+                    isLibFile: false,
                 });
         });
         it("Correctly handles export require calls in JavaScript files", () => {
@@ -519,7 +519,7 @@ describe("unittests:: services:: PreProcessFile:", () => {
                     { fileName: "m4", pos: 146, end: 148 },
                 ],
                 ambientExternalModules: undefined,
-                isLibFile: false
+                isLibFile: false,
             });
         });
         it("Correctly handles dependency lists in define([deplist]) calls in JavaScript files", () => {
@@ -538,7 +538,7 @@ describe("unittests:: services:: PreProcessFile:", () => {
                     { fileName: "mod2", pos: 29, end: 33 },
                 ],
                 ambientExternalModules: undefined,
-                isLibFile: false
+                isLibFile: false,
             });
         });
 
@@ -558,7 +558,7 @@ describe("unittests:: services:: PreProcessFile:", () => {
                     { fileName: "mod2", pos: 36, end: 40 },
                 ],
                 ambientExternalModules: undefined,
-                isLibFile: false
+                isLibFile: false,
             });
         });
 
@@ -577,10 +577,10 @@ describe("unittests:: services:: PreProcessFile:", () => {
                 typeReferenceDirectives: [],
                 libReferenceDirectives: [],
                 importedFiles: [
-                    { fileName: "../Observable", pos: 28, end: 41 }
+                    { fileName: "../Observable", pos: 28, end: 41 },
                 ],
                 ambientExternalModules: undefined,
-                isLibFile: false
+                isLibFile: false,
             });
         });
         it("correctly handles augmentations in external modules - 2", () => {
@@ -599,10 +599,10 @@ describe("unittests:: services:: PreProcessFile:", () => {
                 libReferenceDirectives: [],
                 importedFiles: [
                     { fileName: "m", pos: 123, end: 124 },
-                    { fileName: "../Observable", pos: 28, end: 41 }
+                    { fileName: "../Observable", pos: 28, end: 41 },
                 ],
                 ambientExternalModules: undefined,
-                isLibFile: false
+                isLibFile: false,
             });
         });
         it("correctly handles augmentations in external modules - 3", () => {
@@ -621,10 +621,10 @@ describe("unittests:: services:: PreProcessFile:", () => {
                 libReferenceDirectives: [],
                 importedFiles: [
                     { fileName: "m", pos: 123, end: 124 },
-                    { fileName: "../Observable", pos: 28, end: 41 }
+                    { fileName: "../Observable", pos: 28, end: 41 },
                 ],
                 ambientExternalModules: undefined,
-                isLibFile: false
+                isLibFile: false,
             });
         });
         it("correctly handles augmentations in external modules - 4", () => {
@@ -642,10 +642,10 @@ describe("unittests:: services:: PreProcessFile:", () => {
                 typeReferenceDirectives: [],
                 libReferenceDirectives: [],
                 importedFiles: [
-                    { fileName: "../Observable", pos: 28, end: 41 }
+                    { fileName: "../Observable", pos: 28, end: 41 },
                 ],
                 ambientExternalModules: undefined,
-                isLibFile: false
+                isLibFile: false,
             });
         });
         it("correctly handles augmentations in external modules - 5", () => {
@@ -663,10 +663,10 @@ describe("unittests:: services:: PreProcessFile:", () => {
                 typeReferenceDirectives: [],
                 libReferenceDirectives: [],
                 importedFiles: [
-                    { fileName: "../Observable", pos: 28, end: 41 }
+                    { fileName: "../Observable", pos: 28, end: 41 },
                 ],
                 ambientExternalModules: undefined,
-                isLibFile: false
+                isLibFile: false,
             });
         });
         it("correctly handles augmentations in external modules - 6", () => {
@@ -683,10 +683,10 @@ describe("unittests:: services:: PreProcessFile:", () => {
                 typeReferenceDirectives: [],
                 libReferenceDirectives: [],
                 importedFiles: [
-                    { fileName: "../Observable", pos: 28, end: 41 }
+                    { fileName: "../Observable", pos: 28, end: 41 },
                 ],
                 ambientExternalModules: undefined,
-                isLibFile: false
+                isLibFile: false,
             });
         });
         it ("correctly handles augmentations in ambient external modules - 1", () => {
@@ -706,10 +706,10 @@ describe("unittests:: services:: PreProcessFile:", () => {
                 libReferenceDirectives: [],
                 importedFiles: [
                     { fileName: "m2", pos: 65, end: 67 },
-                    { fileName: "augmentation", pos: 102, end: 114 }
+                    { fileName: "augmentation", pos: 102, end: 114 },
                 ],
                 ambientExternalModules: ["m1"],
-                isLibFile: false
+                isLibFile: false,
             });
         });
         it ("correctly handles augmentations in ambient external modules - 2", () => {
@@ -731,10 +731,10 @@ describe("unittests:: services:: PreProcessFile:", () => {
                 libReferenceDirectives: [],
                 importedFiles: [
                     { fileName: "m2", pos: 127, end: 129 },
-                    { fileName: "augmentation", pos: 164, end: 176 }
+                    { fileName: "augmentation", pos: 164, end: 176 },
                 ],
                 ambientExternalModules: ["m1"],
-                isLibFile: false
+                isLibFile: false,
             });
         });
         it ("correctly recognizes type reference directives", () => {
@@ -749,16 +749,16 @@ describe("unittests:: services:: PreProcessFile:", () => {
             {
                 referencedFiles: [
                     { pos: 34, end: 35, fileName: "a" },
-                    { pos: 112, end: 114, fileName: "a2" }
+                    { pos: 112, end: 114, fileName: "a2" },
                 ],
                 typeReferenceDirectives: [
                     { pos: 73, end: 75, fileName: "a1" },
-                    { pos: 152, end: 154, fileName: "a3" }
+                    { pos: 152, end: 154, fileName: "a3" },
                 ],
                 libReferenceDirectives: [],
                 importedFiles: [],
                 ambientExternalModules: undefined,
-                isLibFile: false
+                isLibFile: false,
             });
         });
         it ("correctly recognizes lib reference directives", () => {
@@ -773,17 +773,17 @@ describe("unittests:: services:: PreProcessFile:", () => {
             {
                 referencedFiles: [
                     { pos: 34, end: 35, fileName: "a" },
-                    { pos: 110, end: 112, fileName: "a2" }
+                    { pos: 110, end: 112, fileName: "a2" },
                 ],
                 typeReferenceDirectives: [
                 ],
                 libReferenceDirectives: [
                     { pos: 71, end: 73, fileName: "a1" },
-                    { pos: 148, end: 150, fileName: "a3" }
+                    { pos: 148, end: 150, fileName: "a3" },
                 ],
                 importedFiles: [],
                 ambientExternalModules: undefined,
-                isLibFile: false
+                isLibFile: false,
             });
         });
 
@@ -803,10 +803,10 @@ describe("unittests:: services:: PreProcessFile:", () => {
                     { fileName: "mod2", pos: 45, end: 49 },
                     { fileName: "mod3", pos: 74, end: 78 },
                     { fileName: "mod4", pos: 90, end: 94 },
-                    { fileName: "mod5", pos: 142, end: 146 }
+                    { fileName: "mod5", pos: 142, end: 146 },
                 ],
                 ambientExternalModules: undefined,
-                isLibFile: false
+                isLibFile: false,
             });
         });
 
@@ -823,10 +823,10 @@ describe("unittests:: services:: PreProcessFile:", () => {
                 importedFiles: [
                     { fileName: "mod1", pos: 19, end: 23 },
                     { fileName: "mod2", pos: 38, end: 42 },
-                    { fileName: "mod3", pos: 71, end: 75 }
+                    { fileName: "mod3", pos: 71, end: 75 },
                 ],
                 ambientExternalModules: undefined,
-                isLibFile: false
+                isLibFile: false,
             });
         });
 
@@ -843,7 +843,7 @@ describe("unittests:: services:: PreProcessFile:", () => {
                     { fileName: "mod2", pos: 23, end: 27 },
                 ],
                 ambientExternalModules: undefined,
-                isLibFile: false
+                isLibFile: false,
             });
         });
     });

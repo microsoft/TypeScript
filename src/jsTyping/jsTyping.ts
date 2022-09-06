@@ -107,7 +107,7 @@ const unprefixedNodeCoreModuleList = [
     "vm",
     "wasi",
     "worker_threads",
-    "zlib"
+    "zlib",
 ];
 
 /** @internal */
@@ -383,7 +383,7 @@ export const enum NameValidationResult {
     NameTooLong,
     NameStartsWithDot,
     NameStartsWithUnderscore,
-    NameContainsNonURISafeCharacters
+    NameContainsNonURISafeCharacters,
 }
 
 const maxPackageNameLength = 214;

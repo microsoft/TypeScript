@@ -68,7 +68,7 @@ registerCodeFix({
                 }
             });
         }));
-    }
+    },
 });
 
 function getDeleteAction(context: CodeFixContext, { name, jsDocHost, jsDocParameterTag }: Info) {

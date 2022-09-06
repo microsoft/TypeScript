@@ -15,7 +15,7 @@ ruleTester.run("simple-indent", rule, {
 /**
  *			Comment
  */
-            `
+            `,
         },
         {
             code: `
@@ -167,7 +167,7 @@ var obj = {
                 { messageId: "simpleIndentError", line: 3, column: 2 },
                 { messageId: "simpleIndentError", line: 4, column: 2 },
                 { messageId: "simpleIndentError", line: 5, column: 2 },
-            ]
+            ],
         },
         {
             code: `
@@ -220,7 +220,7 @@ switch (integerValue) {
                 { messageId: "simpleIndentError", line: 9, column: 2 },
                 { messageId: "simpleIndentError", line: 10, column: 3 },
                 { messageId: "simpleIndentError", line: 11, column: 3 },
-            ]
+            ],
         },
         {
             code: `
@@ -250,7 +250,7 @@ while (i < 1) {
             `,
             errors: [
                 { messageId: "simpleIndentError", line: 3, column: 2 },
-            ]
+            ],
         },
         {
             code: `
@@ -265,7 +265,7 @@ do {
             `,
             errors: [
                 { messageId: "simpleIndentError", line: 3, column: 2 },
-            ]
+            ],
         },
         {
             code: `
@@ -280,7 +280,7 @@ if (i < 1) {
             `,
             errors: [
                 { messageId: "simpleIndentError", line: 3, column: 2 },
-            ]
+            ],
         },
         {
             code: `
@@ -297,7 +297,7 @@ var arr = [
             `,
             errors: [
                 { messageId: "simpleIndentError", line: 3, column: 2 },
-            ]
+            ],
         },
         {
             code: `
@@ -327,7 +327,7 @@ var arr2 = [
             errors: [
                 { messageId: "simpleIndentError", line: 4, column: 3 },
                 { messageId: "simpleIndentError", line: 9, column: 3 },
-            ]
-        }
+            ],
+        },
     ],
 });

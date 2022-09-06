@@ -64,14 +64,14 @@ describe("unittests:: config:: showConfig", () => {
         },
         compileOnSave: true,
         exclude: [
-            "dist"
+            "dist",
         ],
         files: [],
         include: [
-            "src/*"
+            "src/*",
         ],
         references: [
-            { path: "./test" }
+            { path: "./test" },
         ],
     });
 
@@ -92,25 +92,25 @@ describe("unittests:: config:: showConfig", () => {
                 "@common/*": ["src/common/*"],
                 "*": [
                     "node_modules/*",
-                    "src/types/*"
-                ]
+                    "src/types/*",
+                ],
             },
             experimentalDecorators: true,
             emitDecoratorMetadata: true,
-            resolveJsonModule: true
+            resolveJsonModule: true,
         },
         include: [
-            "./src/**/*"
-        ]
+            "./src/**/*",
+        ],
     });
 
     showTSConfigCorrectly("Show TSConfig with watch options", ["-p", "tsconfig.json"], {
         watchOptions: {
-            watchFile: "DynamicPriorityPolling"
+            watchFile: "DynamicPriorityPolling",
         },
         include: [
-            "./src/**/*"
-        ]
+            "./src/**/*",
+        ],
     });
 
     // Bulk validation of all option declarations

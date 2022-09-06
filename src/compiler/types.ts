@@ -887,7 +887,7 @@ export const enum ModifierFlags {
     TypeScriptModifier = Ambient | Public | Private | Protected | Readonly | Abstract | Const | Override | In | Out,
     ExportDefault = Export | Default,
     All = Export | Ambient | Public | Private | Protected | Static | Readonly | Abstract | Accessor | Async | Default | Const | Deprecated | Override | In | Out | Decorator,
-    Modifier = All & ~Decorator
+    Modifier = All & ~Decorator,
 }
 
 export const enum JsxFlags {
@@ -908,7 +908,7 @@ export const enum RelationComparisonResult {
 
     ReportsUnmeasurable = 1 << 3,
     ReportsUnreliable   = 1 << 4,
-    ReportsMask         = ReportsUnmeasurable | ReportsUnreliable
+    ReportsMask         = ReportsUnmeasurable | ReportsUnreliable,
 }
 
 /** @internal */
@@ -4618,7 +4618,7 @@ export enum FileIncludeKind {
     TypeReferenceDirective,
     LibFile,
     LibReferenceDirective,
-    AutomaticTypeDirectiveFile
+    AutomaticTypeDirectiveFile,
 }
 
 /** @internal */
@@ -5313,7 +5313,7 @@ export interface TypeChecker {
 export const enum MemberOverrideStatus {
     Ok,
     NeedsOverride,
-    HasInvalidOverride
+    HasInvalidOverride,
 }
 
 /** @internal */
@@ -5416,7 +5416,7 @@ export const enum TypeFormatFlags {
     NodeBuilderFlagsMask = NoTruncation | WriteArrayAsGenericType | UseStructuralFallback | WriteTypeArgumentsOfSignature |
         UseFullyQualifiedType | SuppressAnyReturnType | MultilineObjectLiterals | WriteClassExpressionAsTypeLiteral |
         UseTypeOfFunction | OmitParameterModifiers | UseAliasDefinedOutsideCurrentScope | AllowUniqueESSymbolType | InTypeAlias |
-        UseSingleQuotesForStringLiteralType | NoTypeReduction | OmitThisParameter
+        UseSingleQuotesForStringLiteralType | NoTypeReduction | OmitThisParameter,
 }
 
 export const enum SymbolFormatFlags {
@@ -5475,20 +5475,20 @@ export interface SymbolWriter {
 export const enum SymbolAccessibility {
     Accessible,
     NotAccessible,
-    CannotBeNamed
+    CannotBeNamed,
 }
 
 /** @internal */
 export const enum SyntheticSymbolKind {
     UnionOrIntersection,
-    Spread
+    Spread,
 }
 
 export const enum TypePredicateKind {
     This,
     Identifier,
     AssertsThis,
-    AssertsIdentifier
+    AssertsIdentifier,
 }
 
 export interface TypePredicateBase {
@@ -5889,7 +5889,7 @@ export interface SymbolLinks {
 /** @internal */
 export const enum EnumKind {
     Numeric,                            // Numeric enum (each member has a TypeFlags.Enum type)
-    Literal                             // Literal enum (each member has a TypeFlags.EnumLiteral type)
+    Literal,                             // Literal enum (each member has a TypeFlags.EnumLiteral type)
 }
 
 /** @internal */
@@ -5918,7 +5918,7 @@ export const enum CheckFlags {
     Unresolved        = 1 << 20,        // Unresolved type alias symbol
     Synthetic = SyntheticProperty | SyntheticMethod,
     Discriminant = HasNonUniformType | HasLiteralType,
-    Partial = ReadPartial | WritePartial
+    Partial = ReadPartial | WritePartial,
 }
 
 /** @internal */
@@ -6700,7 +6700,7 @@ export interface SubstitutionType extends InstantiableType {
 export const enum JsxReferenceKind {
     Component,
     Function,
-    Mixed
+    Mixed,
 }
 
 export const enum SignatureKind {
@@ -6857,7 +6857,7 @@ export const enum Ternary {
     False = 0,
     Unknown = 1,
     Maybe = 3,
-    True = -1
+    True = -1,
 }
 
 /** @internal */
@@ -7002,7 +7002,7 @@ export enum DiagnosticCategory {
     Warning,
     Error,
     Suggestion,
-    Message
+    Message,
 }
 /** @internal */
 export function diagnosticCategoryName(d: { category: DiagnosticCategory }, lowerCase = true): string {
@@ -7289,7 +7289,7 @@ export const enum ImportsNotUsedAsValues {
 
 export const enum NewLineKind {
     CarriageReturnLineFeed = 0,
-    LineFeed = 1
+    LineFeed = 1,
 }
 
 export interface LineAndCharacter {
@@ -7313,7 +7313,7 @@ export const enum ScriptKind {
      * Used on extensions that doesn't define the ScriptKind but the content defines it.
      * Deferred extensions are going to be included in all project contexts.
      */
-    Deferred = 7
+    Deferred = 7,
 }
 
 export const enum ScriptTarget {
@@ -7334,7 +7334,7 @@ export const enum ScriptTarget {
 
 export const enum LanguageVariant {
     Standard,
-    JSX
+    JSX,
 }
 
 /** Either a parsed command line or a parsed tsconfig.json */
@@ -9078,7 +9078,7 @@ export interface NodeFactory {
 export const enum LexicalEnvironmentFlags {
     None = 0,
     InParameters = 1 << 0, // currently visiting a parameter list
-    VariablesHoistedInParameters = 1 << 1 // a temp variable was hoisted while visiting a parameter list
+    VariablesHoistedInParameters = 1 << 1, // a temp variable was hoisted while visiting a parameter list
 }
 
 export interface CoreTransformationContext {
@@ -9858,39 +9858,39 @@ export const commentPragmas = {
             { name: "lib", optional: true, captureSpan: true },
             { name: "path", optional: true, captureSpan: true },
             { name: "no-default-lib", optional: true },
-            { name: "resolution-mode", optional: true }
+            { name: "resolution-mode", optional: true },
         ],
-        kind: PragmaKindFlags.TripleSlashXML
+        kind: PragmaKindFlags.TripleSlashXML,
     },
     "amd-dependency": {
         args: [{ name: "path" }, { name: "name", optional: true }],
-        kind: PragmaKindFlags.TripleSlashXML
+        kind: PragmaKindFlags.TripleSlashXML,
     },
     "amd-module": {
         args: [{ name: "name" }],
-        kind: PragmaKindFlags.TripleSlashXML
+        kind: PragmaKindFlags.TripleSlashXML,
     },
     "ts-check": {
-        kind: PragmaKindFlags.SingleLine
+        kind: PragmaKindFlags.SingleLine,
     },
     "ts-nocheck": {
-        kind: PragmaKindFlags.SingleLine
+        kind: PragmaKindFlags.SingleLine,
     },
     "jsx": {
         args: [{ name: "factory" }],
-        kind: PragmaKindFlags.MultiLine
+        kind: PragmaKindFlags.MultiLine,
     },
     "jsxfrag": {
         args: [{ name: "factory" }],
-        kind: PragmaKindFlags.MultiLine
+        kind: PragmaKindFlags.MultiLine,
     },
     "jsximportsource": {
         args: [{ name: "factory" }],
-        kind: PragmaKindFlags.MultiLine
+        kind: PragmaKindFlags.MultiLine,
     },
     "jsxruntime": {
         args: [{ name: "factory" }],
-        kind: PragmaKindFlags.MultiLine
+        kind: PragmaKindFlags.MultiLine,
     },
 } as const;
 

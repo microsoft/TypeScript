@@ -828,13 +828,13 @@ export function classification(format: ts.SemanticClassificationFormat) {
     function semanticToken(identifier: string, text: string, _position: number): Classification {
         return {
             classificationType: identifier,
-            text
+            text,
          };
     }
 
     if (format === ts.SemanticClassificationFormat.TwentyTwenty) {
         return {
-            semanticToken
+            semanticToken,
         };
     }
 
@@ -961,7 +961,7 @@ export function classification(format: ts.SemanticClassificationFormat) {
         jsxAttribute,
         jsxText,
         jsxAttributeStringLiteralValue,
-        getClassification
+        getClassification,
     };
 }
 
@@ -1000,7 +1000,7 @@ export namespace Completion {
         name,
         kind: "function",
         kindModifiers: "declare",
-        sortText: SortText.GlobalsOrKeywords
+        sortText: SortText.GlobalsOrKeywords,
     });
     const deprecatedFunctionEntry = (name: string): ExpectedCompletionEntryObject => ({
         name,
@@ -1012,24 +1012,24 @@ export namespace Completion {
         name,
         kind: "var",
         kindModifiers: "declare",
-        sortText: SortText.GlobalsOrKeywords
+        sortText: SortText.GlobalsOrKeywords,
     });
     const moduleEntry = (name: string): ExpectedCompletionEntryObject => ({
         name,
         kind: "module",
         kindModifiers: "declare",
-        sortText: SortText.GlobalsOrKeywords
+        sortText: SortText.GlobalsOrKeywords,
     });
     const keywordEntry = (name: string): ExpectedCompletionEntryObject => ({
         name,
         kind: "keyword",
-        sortText: SortText.GlobalsOrKeywords
+        sortText: SortText.GlobalsOrKeywords,
     });
     const methodEntry = (name: string): ExpectedCompletionEntryObject => ({
         name,
         kind: "method",
         kindModifiers: "declare",
-        sortText: SortText.LocationPriority
+        sortText: SortText.LocationPriority,
     });
     const deprecatedMethodEntry = (name: string): ExpectedCompletionEntryObject => ({
         name,
@@ -1041,19 +1041,19 @@ export namespace Completion {
         name,
         kind: "property",
         kindModifiers: "declare",
-        sortText: SortText.LocationPriority
+        sortText: SortText.LocationPriority,
     });
     const interfaceEntry = (name: string): ExpectedCompletionEntryObject => ({
         name,
         kind: "interface",
         kindModifiers: "declare",
-        sortText: SortText.GlobalsOrKeywords
+        sortText: SortText.GlobalsOrKeywords,
     });
     const typeEntry = (name: string): ExpectedCompletionEntryObject => ({
         name,
         kind: "type",
         kindModifiers: "declare",
-        sortText: SortText.GlobalsOrKeywords
+        sortText: SortText.GlobalsOrKeywords,
     });
 
     const res: ExpectedCompletionEntryObject[] = [];
@@ -1061,7 +1061,7 @@ export namespace Completion {
         res.push({
             name: ts.Debug.checkDefined(ts.tokenToString(i)),
             kind: "keyword",
-            sortText: SortText.GlobalsOrKeywords
+            sortText: SortText.GlobalsOrKeywords,
         });
     }
     export const keywordsWithUndefined: readonly ExpectedCompletionEntryObject[] = res;
@@ -1234,7 +1234,7 @@ export namespace Completion {
     export const globalThisEntry: ExpectedCompletionEntry = {
         name: "globalThis",
         kind: "module",
-        sortText: SortText.GlobalsOrKeywords
+        sortText: SortText.GlobalsOrKeywords,
     };
     export const globalTypes = globalTypesPlus([]);
     export function globalTypesPlus(plus: readonly ExpectedCompletionEntry[]) {
@@ -1307,7 +1307,7 @@ export namespace Completion {
         ["override", "private", "protected", "public", "readonly"].map((name): ExpectedCompletionEntryObject => ({
             name,
             kind: "keyword",
-            sortText: SortText.GlobalsOrKeywords
+            sortText: SortText.GlobalsOrKeywords,
         }));
 
     export const functionMembers: readonly ExpectedCompletionEntryObject[] = [
@@ -1548,7 +1548,7 @@ export namespace Completion {
     export const undefinedVarEntry: ExpectedCompletionEntryObject = {
         name: "undefined",
         kind: "var",
-        sortText: SortText.GlobalsOrKeywords
+        sortText: SortText.GlobalsOrKeywords,
     };
     // TODO: many of these are inappropriate to always provide
     export const globalsInsideFunction = (plus: readonly ExpectedCompletionEntry[], options?: { noLib?: boolean }): readonly ExpectedCompletionEntry[] => [
@@ -1697,14 +1697,14 @@ export namespace Completion {
         globalThisEntry,
         ...globalsVars,
         undefinedVarEntry,
-        ...globalKeywords
+        ...globalKeywords,
     ].sort(compareExpectedCompletionEntries);
 
     export const globalsInJs: readonly ExpectedCompletionEntryObject[] = [
         globalThisEntry,
         ...globalsVars,
         undefinedVarEntry,
-        ...globalInJsKeywords
+        ...globalInJsKeywords,
     ].sort(compareExpectedCompletionEntries);
 
     export function globalsPlus(plus: readonly ExpectedCompletionEntry[], options?: { noLib?: boolean }) {

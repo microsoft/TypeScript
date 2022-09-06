@@ -667,7 +667,7 @@ function convertClassificationsToSpans(classifications: Classifications): Classi
     for (let i = 0; i < dense.length; i += 3) {
         result.push({
             textSpan: createTextSpan(dense[i], dense[i + 1]),
-            classificationType: getClassificationTypeName(dense[i + 2])
+            classificationType: getClassificationTypeName(dense[i + 2]),
         });
     }
 

@@ -45,7 +45,7 @@ function getFsContentsForLibResolution(libRedirection?: boolean): FsContents {
             "/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts": "interface DOMInterface { }",
             "/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts": "interface WebworkerInterface { }",
             "/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts": "interface ScriptHostInterface { }",
-        } : undefined
+        } : undefined,
     };
 }
 

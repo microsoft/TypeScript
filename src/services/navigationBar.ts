@@ -234,7 +234,7 @@ function emptyNavigationBarNode(node: Node, name?: DeclarationName): NavigationB
         additionalNodes: undefined,
         parent,
         children: undefined,
-        indent: parent.indent + 1
+        indent: parent.indent + 1,
     };
 }
 
@@ -936,7 +936,7 @@ function convertToTree(n: NavigationBarNode): NavigationTree {
         kindModifiers: getModifiers(n.node),
         spans: getSpans(n),
         nameSpan: n.name && getNodeSpan(n.name),
-        childItems: map(n.children, convertToTree)
+        childItems: map(n.children, convertToTree),
     };
 }
 
@@ -949,7 +949,7 @@ function convertToPrimaryNavBarMenuItem(n: NavigationBarNode): NavigationBarItem
         childItems: map(n.children, convertToSecondaryNavBarMenuItem) || emptyChildItemArray,
         indent: n.indent,
         bolded: false,
-        grayed: false
+        grayed: false,
     };
 
     function convertToSecondaryNavBarMenuItem(n: NavigationBarNode): NavigationBarItem {
@@ -961,7 +961,7 @@ function convertToPrimaryNavBarMenuItem(n: NavigationBarNode): NavigationBarItem
             childItems: emptyChildItemArray,
             indent: 0,
             bolded: false,
-            grayed: false
+            grayed: false,
         };
     }
 }

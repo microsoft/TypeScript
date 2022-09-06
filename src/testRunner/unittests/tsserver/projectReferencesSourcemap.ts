@@ -27,11 +27,11 @@ export function fn2() { }
 export function fn3() { }
 export function fn4() { }
 export function fn5() { }
-`
+`,
     };
     const dependencyConfig: File = {
         path: `${dependecyLocation}/tsconfig.json`,
-        content: JSON.stringify({ compilerOptions: { composite: true, declarationMap: true, declarationDir: "../decls" } })
+        content: JSON.stringify({ compilerOptions: { composite: true, declarationMap: true, declarationDir: "../decls" } }),
     };
 
     const mainTs: File = {
@@ -49,23 +49,23 @@ fn2();
 fn3();
 fn4();
 fn5();
-`
+`,
     };
     const mainConfig: File = {
         path: `${mainLocation}/tsconfig.json`,
         content: JSON.stringify({
             compilerOptions: { composite: true, declarationMap: true },
-            references: [{ path: "../dependency" }]
-        })
+            references: [{ path: "../dependency" }],
+        }),
     };
 
     const randomFile: File = {
         path: `/user/username/projects/myproject/random/random.ts`,
-        content: "let a = 10;"
+        content: "let a = 10;",
     };
     const randomConfig: File = {
         path: `/user/username/projects/myproject/random/tsconfig.json`,
-        content: "{}"
+        content: "{}",
     };
     const dtsLocation = `${dependecyDeclsLocation}/FnS.d.ts`;
     const dtsPath = dtsLocation.toLowerCase() as ts.Path;
@@ -95,14 +95,14 @@ fn5();
     function goToDefFromMainTs(fn: number): TestSessionRequest<ts.server.protocol.DefinitionAndBoundSpanRequest> {
         return {
             command: ts.server.protocol.CommandTypes.DefinitionAndBoundSpan,
-            arguments: { file: mainTs.path, line: fn + 8, offset: 1 }
+            arguments: { file: mainTs.path, line: fn + 8, offset: 1 },
         };
     }
 
     function renameFromDependencyTs(fn: number): TestSessionRequest<ts.server.protocol.RenameRequest> {
         return {
             command: ts.server.protocol.CommandTypes.Rename,
-            arguments: { file: dependencyTs.path, line: fn, offset: 17 }
+            arguments: { file: dependencyTs.path, line: fn, offset: 17 },
         };
     }
 
@@ -230,7 +230,7 @@ fn5();
         const host = createHostWithSolutionBuild(files, [mainConfig.path]);
         // Erase project reference
         host.writeFile(mainConfig.path, JSON.stringify({
-            compilerOptions: { composite: true, declarationMap: true }
+            compilerOptions: { composite: true, declarationMap: true },
         }));
         onHostCreate?.(host);
         const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
@@ -251,9 +251,9 @@ fn5();
             compilerOptions: {
                 composite: true,
                 declarationMap: true,
-                disableSourceOfProjectReferenceRedirect: true
+                disableSourceOfProjectReferenceRedirect: true,
             },
-            references: [{ path: "../dependency" }]
+            references: [{ path: "../dependency" }],
         }));
         onHostCreate?.(host);
         const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
@@ -275,8 +275,8 @@ fn5();
                 offset: 1,
                 endLine: 14,
                 endOffset: 1,
-                insertString: "const x = 10;"
-            }
+                insertString: "const x = 10;",
+            },
         });
     }
 
@@ -289,8 +289,8 @@ fn5();
                 offset: 1,
                 endLine: 6,
                 endOffset: 1,
-                insertString: "const x = 10;"
-            }
+                insertString: "const x = 10;",
+            },
         });
     }
 
@@ -1593,7 +1593,7 @@ ${dependencyTs.content}`);
                     command: ts.server.protocol.CommandTypes.Change,
                     arguments: {
                         file: dependencyTs.path, line: 1, offset: 1, endLine: 1, endOffset: 1, insertString: `function fooBar() { }
-`}
+`},
                 });
                 host.runQueuedTimeoutCallbacks();
                 verifyDocumentPositionMapperEqual(session, dependencyMap, documentPositionMapper);
@@ -1619,7 +1619,7 @@ ${dependencyTs.content}`);
                     command: ts.server.protocol.CommandTypes.Change,
                     arguments: {
                         file: dependencyTs.path, line: 1, offset: 1, endLine: 1, endOffset: 1, insertString: `function fooBar() { }
-`}
+`},
                 });
 
                 // action
@@ -2617,7 +2617,7 @@ ${dependencyTs.content}`);
                     command: ts.server.protocol.CommandTypes.Change,
                     arguments: {
                         file: dependencyTs.path, line: 1, offset: 1, endLine: 1, endOffset: 1, insertString: `function fooBar() { }
-`}
+`},
                 });
                 host.runQueuedTimeoutCallbacks();
                 verifyDocumentPositionMapperEqual(session, dependencyMap, documentPositionMapper);
@@ -2651,7 +2651,7 @@ ${dependencyTs.content}`);
                     command: ts.server.protocol.CommandTypes.Change,
                     arguments: {
                         file: dependencyTs.path, line: 1, offset: 1, endLine: 1, endOffset: 1, insertString: `function fooBar() { }
- `}
+ `},
                 });
 
                 // action

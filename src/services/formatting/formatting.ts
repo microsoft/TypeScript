@@ -112,7 +112,7 @@ export function createTextRangeWithKind<T extends SyntaxKind>(pos: number, end: 
 }
 
 const enum Constants {
-    Unknown = -1
+    Unknown = -1,
 }
 
 /*
@@ -182,7 +182,7 @@ export function formatOnEnter(position: number, sourceFile: SourceFile, formatCo
         // get start position for the previous line
         pos: getStartPositionOfLine(line - 1, sourceFile),
         // end value is exclusive so add 1 to the result
-        end: endOfFormatSpan + 1
+        end: endOfFormatSpan + 1,
     };
     return formatSpan(span, sourceFile, formatContext, FormattingRequestKind.FormatOnEnter);
 }
@@ -216,7 +216,7 @@ export function formatOnOpeningCurly(position: number, sourceFile: SourceFile, f
      */
     const textRange: TextRange = {
         pos: getLineStartPositionForPosition(outermostNode!.getStart(sourceFile), sourceFile), // TODO: GH#18217
-        end: position
+        end: position,
     };
 
     return formatSpan(textRange, sourceFile, formatContext, FormattingRequestKind.FormatOnOpeningCurlyBrace);
@@ -232,7 +232,7 @@ export function formatOnClosingCurly(position: number, sourceFile: SourceFile, f
 export function formatDocument(sourceFile: SourceFile, formatContext: FormatContext): TextChange[] {
     const span = {
         pos: 0,
-        end: sourceFile.text.length
+        end: sourceFile.text.length,
     };
     return formatSpan(span, sourceFile, formatContext, FormattingRequestKind.FormatDocument);
 }
@@ -454,7 +454,7 @@ function formatNodeLines(node: Node | undefined, sourceFile: SourceFile, formatC
 
     const span = {
         pos: getLineStartPositionForPosition(node.getStart(sourceFile), sourceFile),
-        end: node.end
+        end: node.end,
     };
 
     return formatSpan(span, sourceFile, formatContext, requestKind);
@@ -629,7 +629,7 @@ function formatSpanWorker(
             // - push children if either parent of node itself has non-zero delta
             return {
                 indentation: startLine === lastIndentedLine ? indentationOnLastIndentedLine : parentDynamicIndentation.getIndentation(),
-                delta: Math.min(options.indentSize!, parentDynamicIndentation.getDelta(node) + delta)
+                delta: Math.min(options.indentSize!, parentDynamicIndentation.getDelta(node) + delta),
             };
         }
         else if (inheritedIndentation === Constants.Unknown) {
@@ -716,7 +716,7 @@ function formatSpanWorker(
                     indentation += lineAdded ? options.indentSize! : -options.indentSize!;
                     delta = SmartIndenter.shouldIndentChildNode(options, node) ? options.indentSize! : 0;
                 }
-            }
+            },
         };
 
         function shouldAddDelta(line: number, kind: SyntaxKind, container: Node): boolean {

@@ -10,7 +10,7 @@ describe("unittests:: jsonParserRecovery", () => {
                 `jsonParserRecovery/${name.replace(/[^a-z0-9_-]/ig, "_")}.errors.txt`,
                 Harness.Compiler.getErrorBaseline([{
                     content: text,
-                    unitName: name
+                    unitName: name,
                 }], file.parseDiagnostics));
 
             // Will throw if parse tree does not cover full input text

@@ -206,7 +206,7 @@ function getRenameInfoSuccess(displayName: string, fullDisplayName: string, kind
         displayName,
         fullDisplayName,
         kindModifiers,
-        triggerSpan: createTriggerSpanForNode(node, sourceFile)
+        triggerSpan: createTriggerSpanForNode(node, sourceFile),
     };
 }
 

@@ -18,7 +18,7 @@ export enum PatternMatchKind {
     exact,
     prefix,
     substring,
-    camelCase
+    camelCase,
 }
 
 // Information about a match made by the pattern matcher between a candidate and the
@@ -108,7 +108,7 @@ interface TextChunk {
 function createPatternMatch(kind: PatternMatchKind, isCaseSensitive: boolean): PatternMatch {
     return {
         kind,
-        isCaseSensitive
+        isCaseSensitive,
     };
 }
 
@@ -127,7 +127,7 @@ export function createPatternMatcher(pattern: string): PatternMatcher | undefine
     return {
         getFullMatch: (containers, candidate) => getFullMatch(containers, candidate, dotSeparatedSegments, stringToWordSpans),
         getMatchForLastSegmentOfPattern: candidate => matchSegment(candidate, last(dotSeparatedSegments), stringToWordSpans),
-        patternContainsDots: dotSeparatedSegments.length > 1
+        patternContainsDots: dotSeparatedSegments.length > 1,
     };
 }
 
@@ -366,7 +366,7 @@ function tryCamelCaseMatch(candidate: string, candidateParts: TextSpan[], chunk:
 function createSegment(text: string): Segment {
     return {
         totalTextChunk: createTextChunk(text),
-        subWordTextChunks: breakPatternIntoTextChunks(text)
+        subWordTextChunks: breakPatternIntoTextChunks(text),
     };
 }
 
@@ -473,7 +473,7 @@ function createTextChunk(text: string): TextChunk {
         text,
         textLowerCase,
         isLowerCase: text === textLowerCase,
-        characterSpans: breakIntoCharacterSpans(text)
+        characterSpans: breakIntoCharacterSpans(text),
     };
 }
 

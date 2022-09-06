@@ -10,9 +10,9 @@ export function getFsConentsForNode10ResultAtTypesPackageJson(packageName: strin
         exports: {
             ".": {
                 ...(addTypesCondition ? { types: "./index.d.ts" } : {}),
-                require: "./index.d.ts"
-            }
-        }
+                require: "./index.d.ts",
+            },
+        },
     }, undefined, " ");
 }
 
@@ -26,9 +26,9 @@ export function getFsContentsForNode10ResultPackageJson(packageName: string, add
             ".": {
                 ...(addTypesCondition ? { types: "./index.d.ts" } : {}),
                 import: "./index.mjs",
-                require: "./index.js"
-            }
-        }
+                require: "./index.js",
+            },
+        },
     }, undefined, " ");
 }
 
@@ -78,7 +78,7 @@ export function getFsContentsForNode10Result(): FsContents {
                 strict: true,
                 types: [],
             },
-            files: ["index.mts"]
+            files: ["index.mts"],
         }),
         [libFile.path]: libFile.content,
     };

@@ -35,7 +35,7 @@ export class TextDocument {
             unitName: this.file,
             content: this.text,
             fileOptions: ts.arrayFrom(this.meta)
-                .reduce((obj, [key, value]) => (obj[key] = value, obj), {} as Record<string, string>)
+                .reduce((obj, [key, value]) => (obj[key] = value, obj), {} as Record<string, string>),
         });
     }
 }

@@ -386,7 +386,7 @@ export const enum SemanticMeaning {
     Value = 0x1,
     Type = 0x2,
     Namespace = 0x4,
-    All = Value | Type | Namespace
+    All = Value | Type | Namespace,
 }
 
 /** @internal */
@@ -1117,7 +1117,7 @@ export function findListItemInfo(node: Node): ListItemInfo | undefined {
 
     return {
         listItemIndex,
-        list
+        list,
     };
 }
 
@@ -2684,7 +2684,7 @@ export function getMappedDocumentSpan(documentSpan: DocumentSpan, sourceMapper: 
         originalFileName: documentSpan.fileName,
         originalTextSpan: documentSpan.textSpan,
         contextSpan: getMappedContextSpan(documentSpan, sourceMapper, fileExists),
-        originalContextSpan: documentSpan.contextSpan
+        originalContextSpan: documentSpan.contextSpan,
     };
 }
 
@@ -3399,7 +3399,7 @@ export function getTypeNodeIfAccessible(type: Type, enclosingScope: Node, progra
         reportInaccessibleThisError: notAccessible,
         reportPrivateInBaseOfClassExpression: notAccessible,
         reportInaccessibleUniqueSymbolError: notAccessible,
-        moduleResolverHost: getModuleSpecifierResolverHost(program, host)
+        moduleResolverHost: getModuleSpecifierResolverHost(program, host),
     });
     return typeIsAccessible ? res : undefined;
 }

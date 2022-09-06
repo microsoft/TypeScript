@@ -43,12 +43,12 @@ function createNodeModulesPackage(packageName: string, fileCount: number, export
 
 const indexFile: File = {
     path: "/index.ts",
-    content: ""
+    content: "",
 };
 
 const tsconfigFile: File = {
     path: "/tsconfig.json",
-    content: `{ "compilerOptions": { "module": "commonjs" } }`
+    content: `{ "compilerOptions": { "module": "commonjs" } }`,
 };
 
 const packageJsonFile: File = {
@@ -176,8 +176,8 @@ function setup(files: File[]) {
                 includeCompletionsWithInsertText: true,
                 includeCompletionsForImportStatements: true,
                 includePackageJsonAutoImports: "auto",
-            }
-        }
+            },
+        },
     });
 
     return { host, session, projectService, typeToTriggerCompletions, assertCompletionDetailsOk };
@@ -213,7 +213,7 @@ function setup(files: File[]) {
                     triggerKind: isIncompleteContinuation
                         ? ts.server.protocol.CompletionTriggerKind.TriggerForIncompleteCompletions
                         : undefined,
-                }
+                },
             }).response as ts.server.protocol.CompletionInfo;
 
             cb?.(ts.Debug.checkDefined(response));
@@ -268,8 +268,8 @@ function setup(files: File[]) {
                     name: entry.name,
                     source: entry.source,
                     data: entry.data,
-                }]
-            }
+                }],
+            },
         }).response as ts.server.protocol.CompletionEntryDetails[];
 
         assert(details[0]);

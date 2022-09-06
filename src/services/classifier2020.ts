@@ -48,17 +48,17 @@ import {
 /** @internal */
 export const enum TokenEncodingConsts {
     typeOffset = 8,
-    modifierMask = (1 << typeOffset) - 1
+    modifierMask = (1 << typeOffset) - 1,
 }
 
 /** @internal */
 export const enum TokenType {
-    class, enum, interface, namespace, typeParameter, type, parameter, variable, enumMember, property, function, member
+    class, enum, interface, namespace, typeParameter, type, parameter, variable, enumMember, property, function, member,
 }
 
 /** @internal */
 export const enum TokenModifier {
-    declaration, static, async, readonly, defaultLibrary, local
+    declaration, static, async, readonly, defaultLibrary, local,
 }
 
 /**
@@ -75,7 +75,7 @@ export function getSemanticClassifications(program: Program, cancellationToken: 
     for (let i = 0; i < dense.length; i += 3) {
         result.push({
             textSpan: createTextSpan(dense[i], dense[i + 1]),
-            classificationType: dense[i + 2]
+            classificationType: dense[i + 2],
         });
     }
 
@@ -86,7 +86,7 @@ export function getSemanticClassifications(program: Program, cancellationToken: 
 export function getEncodedSemanticClassifications(program: Program, cancellationToken: CancellationToken, sourceFile: SourceFile, span: TextSpan): Classifications {
     return {
         spans: getSemanticTokens(program, sourceFile, span, cancellationToken),
-        endOfLineState: EndOfLineState.None
+        endOfLineState: EndOfLineState.None,
     };
 }
 
@@ -296,5 +296,5 @@ const tokenFromDeclarationMapping = new Map<SyntaxKind, TokenType>([
     [SyntaxKind.TypeAliasDeclaration, TokenType.type],
     [SyntaxKind.TypeParameter, TokenType.typeParameter],
     [SyntaxKind.PropertyAssignment, TokenType.property],
-    [SyntaxKind.ShorthandPropertyAssignment, TokenType.property]
+    [SyntaxKind.ShorthandPropertyAssignment, TokenType.property],
 ]);

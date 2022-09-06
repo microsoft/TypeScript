@@ -34,7 +34,7 @@ registerCodeFix({
     getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
         const callName = getCallName(diag.file, diag.start);
         if (callName) doChange(changes, diag.file, callName);
-    })
+    }),
 });
 
 function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, name: Identifier | PrivateIdentifier): void {

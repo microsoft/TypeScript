@@ -113,12 +113,12 @@ const refactorDescription = getLocaleSpecificMessage(Diagnostics.Convert_paramet
 const toDestructuredAction = {
     name: refactorName,
     description: refactorDescription,
-    kind: "refactor.rewrite.parameters.toDestructured"
+    kind: "refactor.rewrite.parameters.toDestructured",
 };
 registerRefactor(refactorName, {
     kinds: [toDestructuredAction.kind],
     getEditsForAction: getRefactorEditsToConvertParametersToDestructuredObject,
-    getAvailableActions: getRefactorActionsToConvertParametersToDestructuredObject
+    getAvailableActions: getRefactorActionsToConvertParametersToDestructuredObject,
 });
 
 function getRefactorActionsToConvertParametersToDestructuredObject(context: RefactorContext): readonly ApplicableRefactorInfo[] {
@@ -131,7 +131,7 @@ function getRefactorActionsToConvertParametersToDestructuredObject(context: Refa
     return [{
         name: refactorName,
         description: refactorDescription,
-        actions: [toDestructuredAction]
+        actions: [toDestructuredAction],
     }];
 }
 
@@ -190,7 +190,7 @@ function doChange(
                 // indentation is set to 0 because otherwise the object parameter will be indented if there is a `this` parameter
                 indentation: 0,
                 leadingTriviaOption: textChanges.LeadingTriviaOption.IncludeAll,
-                trailingTriviaOption: textChanges.TrailingTriviaOption.Include
+                trailingTriviaOption: textChanges.TrailingTriviaOption.Include,
             });
     }
 }

@@ -346,7 +346,7 @@ export const Other = 1;
         it("doesn't return any changes when the text would be identical", () => {
             const testFile = {
                 path: "/a.ts",
-                content: `import { f } from 'foo';\nf();`
+                content: `import { f } from 'foo';\nf();`,
             };
             const languageService = makeLanguageService(testFile);
             const changes = languageService.organizeImports({ type: "file", fileName: testFile.path }, ts.testFormatSettings, ts.emptyOptions);
@@ -462,7 +462,7 @@ D;
             it("doesn't return any changes when the text would be identical", () => {
                 const testFile = {
                     path: "/a.ts",
-                    content: `import { f } from 'foo';\nf();`
+                    content: `import { f } from 'foo';\nf();`,
                 };
                 const languageService = makeLanguageService(testFile);
                 const changes = languageService.organizeImports({ type: "file", fileName: testFile.path }, ts.testFormatSettings, ts.emptyOptions);
@@ -506,7 +506,7 @@ declare module 'caseless' {
     interface Caseless {
         test(name: KeyType): boolean;
     }
-}`
+}`,
             });
 
         testOrganizeImports("Unused_preserve_imports_for_module_augmentation_in_non_declaration_file",
@@ -522,7 +522,7 @@ declare module 'caseless' {
     interface Caseless {
         test(name: KeyType): boolean;
     }
-}`
+}`,
         });
 
         it("Unused_false_positive_shorthand_assignment", () => {
@@ -531,7 +531,7 @@ declare module 'caseless' {
                 content: `
 import { x } from "a";
 const o = { x };
-`
+`,
             };
             const languageService = makeLanguageService(testFile);
             const changes = languageService.organizeImports({ type: "file", fileName: testFile.path }, ts.testFormatSettings, ts.emptyOptions);
@@ -544,7 +544,7 @@ const o = { x };
                 content: `
 import { x } from "a";
 export { x };
-`
+`,
             };
             const languageService = makeLanguageService(testFile);
             const changes = languageService.organizeImports({ type: "file", fileName: testFile.path }, ts.testFormatSettings, ts.emptyOptions);
@@ -597,7 +597,7 @@ import type Y from "lib";
 import { Z } from "lib";
 import type { A, B } from "lib";
 
-export { A, B, X, Y, Z };`
+export { A, B, X, Y, Z };`,
             });
 
         testOrganizeImports("CoalesceMultipleModules",
@@ -834,7 +834,7 @@ export const App: React.FunctionComponent = _ => <Global><h1>Hello!</h1></Global
                 path: "/@emotion/core/index.d.ts",
                 content: `import {  createElement } from 'react'
 export const jsx: typeof createElement;
-export function Global(props: any): ReactElement<any>;`
+export function Global(props: any): ReactElement<any>;`,
             },
             {
                 path: reactLibFile.path,
@@ -843,7 +843,7 @@ export namespace React {
     interface FunctionComponent {
     }
 }
-`
+`,
             }
         );
 
@@ -862,7 +862,7 @@ const elem = <><div>Foo</div></>;
                 path: "/@foo/core/index.d.ts",
                 content: `export function h(): void;
 export function frag(): void;
-`
+`,
             }
         );
 

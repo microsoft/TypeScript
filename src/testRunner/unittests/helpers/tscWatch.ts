@@ -18,11 +18,11 @@ import {
 
 export const commonFile1: File = {
     path: "/a/b/commonFile1.ts",
-    content: "let x = 1"
+    content: "let x = 1",
 };
 export const commonFile2: File = {
     path: "/a/b/commonFile2.ts",
-    content: "let y = 1"
+    content: "let y = 1",
 };
 
 export type WatchOrSolution<T extends ts.BuilderProgram> = void | ts.SolutionBuilder<T> | ts.WatchOfConfigFile<T> | ts.WatchOfFilesAndCompilerOptions<T>;
@@ -62,7 +62,7 @@ function tscWatchCompile(input: TscWatchCompile) {
         const {
             scenario, subScenario,
             commandLineArgs, edits,
-            baselineSourceMap, baselineDependencies
+            baselineSourceMap, baselineDependencies,
         } = input;
 
         if (!isWatch(commandLineArgs)) sys.exit = exitCode => sys.exitCode = exitCode;
@@ -83,7 +83,7 @@ function tscWatchCompile(input: TscWatchCompile) {
             baselineSourceMap,
             baselineDependencies,
             edits,
-            watchOrSolution
+            watchOrSolution,
         });
     });
 }
@@ -217,7 +217,7 @@ export function runWatchBaseline<T extends ts.BuilderProgram = ts.EmitAndSemanti
     scenario, subScenario, commandLineArgs,
     getPrograms, sys, baseline, oldSnap,
     baselineSourceMap, baselineDependencies,
-    edits, watchOrSolution
+    edits, watchOrSolution,
 }: RunWatchBaseline<T>) {
     baseline.push(`${sys.getExecutingFilePath()} ${commandLineArgs.join(" ")}`);
     let programs = watchBaseline({

@@ -3,7 +3,7 @@ import {
     baselineTsserverLogs,
     createLoggerWithInMemoryLogs,
     createSession,
-    openFilesForSession
+    openFilesForSession,
 } from "../helpers/tsserver";
 
 describe("unittests:: tsserver:: libraryResolution", () => {

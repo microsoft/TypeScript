@@ -301,7 +301,7 @@ export const optionsForWatch: CommandLineOption[] = [
             name: "excludeDirectory",
             type: "string",
             isFilePath: true,
-            extraValidation: specToDiagnostic
+            extraValidation: specToDiagnostic,
         },
         category: Diagnostics.Watch_and_Build_Modes,
         description: Diagnostics.Remove_a_list_of_directories_from_the_watch_process,
@@ -313,7 +313,7 @@ export const optionsForWatch: CommandLineOption[] = [
             name: "excludeFile",
             type: "string",
             isFilePath: true,
-            extraValidation: specToDiagnostic
+            extraValidation: specToDiagnostic,
         },
         category: Diagnostics.Watch_and_Build_Modes,
         description: Diagnostics.Remove_a_list_of_files_from_the_watch_mode_s_processing,
@@ -415,7 +415,7 @@ export const commonOptionsWithBuild: CommandLineOption[] = [
         paramType: Diagnostics.FILE_OR_DIRECTORY,
         category: Diagnostics.Compiler_Diagnostics,
         description: Diagnostics.Emit_a_v8_CPU_profile_of_the_compiler_run_for_debugging,
-        defaultValueDescription: "profile.cpuprofile"
+        defaultValueDescription: "profile.cpuprofile",
     },
     {
         name: "generateTrace",
@@ -424,7 +424,7 @@ export const commonOptionsWithBuild: CommandLineOption[] = [
         isCommandLineOnly: true,
         paramType: Diagnostics.DIRECTORY,
         category: Diagnostics.Compiler_Diagnostics,
-        description: Diagnostics.Generates_an_event_trace_and_a_list_of_types
+        description: Diagnostics.Generates_an_event_trace_and_a_list_of_types,
     },
     {
         name: "incremental",
@@ -433,7 +433,7 @@ export const commonOptionsWithBuild: CommandLineOption[] = [
         category: Diagnostics.Projects,
         description: Diagnostics.Save_tsbuildinfo_files_to_allow_for_incremental_compilation_of_projects,
         transpileOptionValue: undefined,
-        defaultValueDescription: Diagnostics.false_unless_composite_is_set
+        defaultValueDescription: Diagnostics.false_unless_composite_is_set,
     },
     {
         name: "declaration",
@@ -456,7 +456,7 @@ export const commonOptionsWithBuild: CommandLineOption[] = [
         category: Diagnostics.Emit,
         transpileOptionValue: undefined,
         defaultValueDescription: false,
-        description: Diagnostics.Create_sourcemaps_for_d_ts_files
+        description: Diagnostics.Create_sourcemaps_for_d_ts_files,
     },
     {
         name: "emitDeclarationOnly",
@@ -504,7 +504,7 @@ export const commonOptionsWithBuild: CommandLineOption[] = [
         category: Diagnostics.Command_line_Options,
         isCommandLineOnly: true,
         description: Diagnostics.Set_the_language_of_the_messaging_from_TypeScript_This_does_not_affect_emit,
-        defaultValueDescription: Diagnostics.Platform_specific
+        defaultValueDescription: Diagnostics.Platform_specific,
     },
 ];
 
@@ -644,7 +644,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         showInSimplifiedHelpView: true,
         category: Diagnostics.Language_and_Environment,
         description: Diagnostics.Specify_a_set_of_bundled_library_declaration_files_that_describe_the_target_runtime_environment,
-        transpileOptionValue: undefined
+        transpileOptionValue: undefined,
     },
     {
         name: "allowJs",
@@ -712,7 +712,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         paramType: Diagnostics.LOCATION,
         category: Diagnostics.Modules,
         description: Diagnostics.Specify_the_root_folder_within_your_source_files,
-        defaultValueDescription: Diagnostics.Computed_from_the_list_of_input_files
+        defaultValueDescription: Diagnostics.Computed_from_the_list_of_input_files,
     },
     {
         name: "composite",
@@ -826,7 +826,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         strictFlag: true,
         category: Diagnostics.Type_Checking,
         description: Diagnostics.Enable_error_reporting_for_expressions_and_declarations_with_an_implied_any_type,
-        defaultValueDescription: Diagnostics.false_unless_strict_is_set
+        defaultValueDescription: Diagnostics.false_unless_strict_is_set,
     },
     {
         name: "strictNullChecks",
@@ -836,7 +836,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         strictFlag: true,
         category: Diagnostics.Type_Checking,
         description: Diagnostics.When_type_checking_take_into_account_null_and_undefined,
-        defaultValueDescription: Diagnostics.false_unless_strict_is_set
+        defaultValueDescription: Diagnostics.false_unless_strict_is_set,
     },
     {
         name: "strictFunctionTypes",
@@ -846,7 +846,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         strictFlag: true,
         category: Diagnostics.Type_Checking,
         description: Diagnostics.When_assigning_functions_check_to_ensure_parameters_and_the_return_values_are_subtype_compatible,
-        defaultValueDescription: Diagnostics.false_unless_strict_is_set
+        defaultValueDescription: Diagnostics.false_unless_strict_is_set,
     },
     {
         name: "strictBindCallApply",
@@ -856,7 +856,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         strictFlag: true,
         category: Diagnostics.Type_Checking,
         description: Diagnostics.Check_that_the_arguments_for_bind_call_and_apply_methods_match_the_original_function,
-        defaultValueDescription: Diagnostics.false_unless_strict_is_set
+        defaultValueDescription: Diagnostics.false_unless_strict_is_set,
     },
     {
         name: "strictPropertyInitialization",
@@ -866,7 +866,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         strictFlag: true,
         category: Diagnostics.Type_Checking,
         description: Diagnostics.Check_for_class_properties_that_are_declared_but_not_set_in_the_constructor,
-        defaultValueDescription: Diagnostics.false_unless_strict_is_set
+        defaultValueDescription: Diagnostics.false_unless_strict_is_set,
     },
     {
         name: "noImplicitThis",
@@ -876,7 +876,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         strictFlag: true,
         category: Diagnostics.Type_Checking,
         description: Diagnostics.Enable_error_reporting_when_this_is_given_the_type_any,
-        defaultValueDescription: Diagnostics.false_unless_strict_is_set
+        defaultValueDescription: Diagnostics.false_unless_strict_is_set,
     },
     {
         name: "useUnknownInCatchVariables",
@@ -897,7 +897,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         strictFlag: true,
         category: Diagnostics.Type_Checking,
         description: Diagnostics.Ensure_use_strict_is_always_emitted,
-        defaultValueDescription: Diagnostics.false_unless_strict_is_set
+        defaultValueDescription: Diagnostics.false_unless_strict_is_set,
     },
 
     // Additional Checks
@@ -993,7 +993,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         paramType: Diagnostics.STRATEGY,
         category: Diagnostics.Modules,
         description: Diagnostics.Specify_how_TypeScript_looks_up_a_file_from_a_given_module_specifier,
-        defaultValueDescription: Diagnostics.module_AMD_or_UMD_or_System_or_ES6_then_Classic_Otherwise_Node
+        defaultValueDescription: Diagnostics.module_AMD_or_UMD_or_System_or_ES6_then_Classic_Otherwise_Node,
     },
     {
         name: "baseUrl",
@@ -1001,7 +1001,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         affectsModuleResolution: true,
         isFilePath: true,
         category: Diagnostics.Modules,
-        description: Diagnostics.Specify_the_base_directory_to_resolve_non_relative_module_names
+        description: Diagnostics.Specify_the_base_directory_to_resolve_non_relative_module_names,
     },
     {
         // this option can only be specified in tsconfig.json
@@ -1012,7 +1012,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         isTSConfigOnly: true,
         category: Diagnostics.Modules,
         description: Diagnostics.Specify_a_set_of_entries_that_re_map_imports_to_additional_lookup_locations,
-        transpileOptionValue: undefined
+        transpileOptionValue: undefined,
     },
     {
         // this option can only be specified in tsconfig.json
@@ -1023,13 +1023,13 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         element: {
             name: "rootDirs",
             type: "string",
-            isFilePath: true
+            isFilePath: true,
         },
         affectsModuleResolution: true,
         category: Diagnostics.Modules,
         description: Diagnostics.Allow_multiple_folders_to_be_treated_as_one_when_resolving_modules,
         transpileOptionValue: undefined,
-        defaultValueDescription: Diagnostics.Computed_from_the_list_of_input_files
+        defaultValueDescription: Diagnostics.Computed_from_the_list_of_input_files,
     },
     {
         name: "typeRoots",
@@ -1037,24 +1037,24 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         element: {
             name: "typeRoots",
             type: "string",
-            isFilePath: true
+            isFilePath: true,
         },
         affectsModuleResolution: true,
         category: Diagnostics.Modules,
-        description: Diagnostics.Specify_multiple_folders_that_act_like_Slashnode_modules_Slash_types
+        description: Diagnostics.Specify_multiple_folders_that_act_like_Slashnode_modules_Slash_types,
     },
     {
         name: "types",
         type: "list",
         element: {
             name: "types",
-            type: "string"
+            type: "string",
         },
         affectsProgramStructure: true,
         showInSimplifiedHelpView: true,
         category: Diagnostics.Modules,
         description: Diagnostics.Specify_type_package_names_to_be_included_without_being_referenced_in_a_source_file,
-        transpileOptionValue: undefined
+        transpileOptionValue: undefined,
     },
     {
         name: "allowSyntheticDefaultImports",
@@ -1063,7 +1063,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         affectsBuildInfo: true,
         category: Diagnostics.Interop_Constraints,
         description: Diagnostics.Allow_import_x_from_y_when_a_module_doesn_t_have_a_default_export,
-        defaultValueDescription: Diagnostics.module_system_or_esModuleInterop
+        defaultValueDescription: Diagnostics.module_system_or_esModuleInterop,
     },
     {
         name: "esModuleInterop",
@@ -1199,7 +1199,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         type: "string",
         category: Diagnostics.Language_and_Environment,
         description: Diagnostics.Specify_the_JSX_factory_function_used_when_targeting_React_JSX_emit_e_g_React_createElement_or_h,
-        defaultValueDescription: "`React.createElement`"
+        defaultValueDescription: "`React.createElement`",
     },
     {
         name: "jsxFragmentFactory",
@@ -1217,7 +1217,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         affectsModuleResolution: true,
         category: Diagnostics.Language_and_Environment,
         description: Diagnostics.Specify_module_specifier_used_to_import_the_JSX_factory_functions_when_using_jsx_Colon_react_jsx_Asterisk,
-        defaultValueDescription: "react"
+        defaultValueDescription: "react",
     },
     {
         name: "resolveJsonModule",
@@ -1272,7 +1272,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         type: "string",
         category: Diagnostics.Backwards_Compatibility,
         description: Diagnostics.No_longer_supported_In_early_versions_manually_set_the_text_encoding_for_reading_files,
-        defaultValueDescription: "utf8"
+        defaultValueDescription: "utf8",
     },
     {
         name: "emitBOM",
@@ -1287,14 +1287,14 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         name: "newLine",
         type: new Map(Object.entries({
             crlf: NewLineKind.CarriageReturnLineFeed,
-            lf: NewLineKind.LineFeed
+            lf: NewLineKind.LineFeed,
         })),
         affectsEmit: true,
         affectsBuildInfo: true,
         paramType: Diagnostics.NEWLINE,
         category: Diagnostics.Emit,
         description: Diagnostics.Set_the_newline_character_for_emitting_files,
-        defaultValueDescription: "lf"
+        defaultValueDescription: "lf",
     },
     {
         name: "noErrorTruncation",
@@ -1497,7 +1497,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         affectsBuildInfo: true,
         category: Diagnostics.Language_and_Environment,
         description: Diagnostics.Emit_ECMAScript_standard_compliant_class_fields,
-        defaultValueDescription: Diagnostics.true_for_ES2022_and_above_including_ESNext
+        defaultValueDescription: Diagnostics.true_for_ES2022_and_above_including_ESNext,
     },
     {
         name: "preserveValueImports",
@@ -1523,7 +1523,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         isTSConfigOnly: true,
         element: {
             name: "plugin",
-            type: "object"
+            type: "object",
         },
         description: Diagnostics.Specify_a_list_of_language_service_plugins_to_include,
         category: Diagnostics.Editor_Support,
@@ -1615,13 +1615,13 @@ export const optionsForBuild: CommandLineOption[] = [
         description: Diagnostics.Delete_the_outputs_of_all_projects,
         type: "boolean",
         defaultValueDescription: false,
-    }
+    },
 ];
 
 /** @internal */
 export const buildOpts: CommandLineOption[] = [
     ...commonOptionsWithBuild,
-    ...optionsForBuild
+    ...optionsForBuild,
 ];
 
 /** @internal */
@@ -1636,16 +1636,16 @@ export const typeAcquisitionDeclarations: CommandLineOption[] = [
         type: "list",
         element: {
             name: "include",
-            type: "string"
-        }
+            type: "string",
+        },
     },
     {
         name: "exclude",
         type: "list",
         element: {
             name: "exclude",
-            type: "string"
-        }
+            type: "string",
+        },
     },
     {
         name: "disableFilenameBasedTypeAcquisition",
@@ -1683,7 +1683,7 @@ export function getOptionsNameMap(): OptionsNameMap {
 
 const compilerOptionsAlternateMode: AlternateModeDiagnostics = {
     diagnostic: Diagnostics.Compiler_option_0_may_only_be_used_with_build,
-    getOptionsNameMap: getBuildOptionsNameMap
+    getOptionsNameMap: getBuildOptionsNameMap,
 };
 
 /** @internal */
@@ -1693,7 +1693,7 @@ export const defaultInitCompilerOptions: CompilerOptions = {
     strict: true,
     esModuleInterop: true,
     forceConsistentCasingInFileNames: true,
-    skipLibCheck: true
+    skipLibCheck: true,
 };
 
 /** @internal */
@@ -1785,7 +1785,7 @@ export function parseCommandLineWorker(
         options,
         watchOptions,
         fileNames,
-        errors
+        errors,
     };
 
     function parseStrings(args: readonly string[]) {
@@ -1937,7 +1937,7 @@ export const compilerOptionsDidYouMeanDiagnostics: ParseCommandLineWorkerDiagnos
     optionDeclarations,
     unknownOptionDiagnostic: Diagnostics.Unknown_compiler_option_0,
     unknownDidYouMeanDiagnostic: Diagnostics.Unknown_compiler_option_0_Did_you_mean_1,
-    optionTypeMismatchDiagnostic: Diagnostics.Compiler_option_0_expects_an_argument
+    optionTypeMismatchDiagnostic: Diagnostics.Compiler_option_0_expects_an_argument,
 };
 export function parseCommandLine(commandLine: readonly string[], readFile?: (path: string) => string | undefined): ParsedCommandLine {
     return parseCommandLineWorker(compilerOptionsDidYouMeanDiagnostics, commandLine, readFile);
@@ -1976,7 +1976,7 @@ function getBuildOptionsNameMap(): OptionsNameMap {
 
 const buildOptionsAlternateMode: AlternateModeDiagnostics = {
     diagnostic: Diagnostics.Compiler_option_0_may_not_be_used_with_build,
-    getOptionsNameMap
+    getOptionsNameMap,
 };
 
 const buildOptionsDidYouMeanDiagnostics: ParseCommandLineWorkerDiagnostics = {
@@ -1985,7 +1985,7 @@ const buildOptionsDidYouMeanDiagnostics: ParseCommandLineWorkerDiagnostics = {
     optionDeclarations: buildOpts,
     unknownOptionDiagnostic: Diagnostics.Unknown_build_option_0,
     unknownDidYouMeanDiagnostic: Diagnostics.Unknown_build_option_0_Did_you_mean_1,
-    optionTypeMismatchDiagnostic: Diagnostics.Build_option_0_requires_a_value_of_type_1
+    optionTypeMismatchDiagnostic: Diagnostics.Build_option_0_requires_a_value_of_type_1,
 };
 
 /** @internal */
@@ -2094,7 +2094,7 @@ export function parseConfigFileTextToJson(fileName: string, jsonText: string): {
     const jsonSourceFile = parseJsonText(fileName, jsonText);
     return {
         config: convertConfigFileToObject(jsonSourceFile, jsonSourceFile.parseDiagnostics, /*jsonConversionNotifier*/ undefined),
-        error: jsonSourceFile.parseDiagnostics.length ? jsonSourceFile.parseDiagnostics[0] : undefined
+        error: jsonSourceFile.parseDiagnostics.length ? jsonSourceFile.parseDiagnostics[0] : undefined,
     };
 }
 
@@ -2138,7 +2138,7 @@ const watchOptionsDidYouMeanDiagnostics: ParseCommandLineWorkerDiagnostics = {
     optionDeclarations: optionsForWatch,
     unknownOptionDiagnostic: Diagnostics.Unknown_watch_option_0,
     unknownDidYouMeanDiagnostic: Diagnostics.Unknown_watch_option_0_Did_you_mean_1,
-    optionTypeMismatchDiagnostic: Diagnostics.Watch_option_0_requires_a_value_of_type_1
+    optionTypeMismatchDiagnostic: Diagnostics.Watch_option_0_requires_a_value_of_type_1,
 };
 
 let commandLineCompilerOptionsMapCache: Map<string, CommandLineOption>;
@@ -2159,7 +2159,7 @@ const extendsOptionDeclaration: CommandLineOptionOfListType = {
     type: "listOrElement",
     element: {
         name: "extends",
-        type: "string"
+        type: "string",
     },
     category: Diagnostics.File_Management,
     disallowNullOrUndefined: true,
@@ -2180,7 +2180,7 @@ const typeAcquisitionDeclaration: TsConfigOnlyOption = {
     name: "typeAcquisition",
     type: "object",
     elementOptions: getCommandLineTypeAcquisitionMap(),
-    extraKeyDiagnostics: typeAcquisitionDidYouMeanDiagnostics
+    extraKeyDiagnostics: typeAcquisitionDidYouMeanDiagnostics,
 };
 let _tsconfigRootOptions: TsConfigOnlyOption;
 function getTsconfigRootOptionsMap() {
@@ -2198,7 +2198,7 @@ function getTsconfigRootOptionsMap() {
                     type: "list",
                     element: {
                         name: "references",
-                        type: "object"
+                        type: "object",
                     },
                     category: Diagnostics.Projects,
                 },
@@ -2207,7 +2207,7 @@ function getTsconfigRootOptionsMap() {
                     type: "list",
                     element: {
                         name: "files",
-                        type: "string"
+                        type: "string",
                     },
                     category: Diagnostics.File_Management,
                 },
@@ -2216,23 +2216,23 @@ function getTsconfigRootOptionsMap() {
                     type: "list",
                     element: {
                         name: "include",
-                        type: "string"
+                        type: "string",
                     },
                     category: Diagnostics.File_Management,
-                    defaultValueDescription: Diagnostics.if_files_is_specified_otherwise_Asterisk_Asterisk_Slash_Asterisk
+                    defaultValueDescription: Diagnostics.if_files_is_specified_otherwise_Asterisk_Asterisk_Slash_Asterisk,
                 },
                 {
                     name: "exclude",
                     type: "list",
                     element: {
                         name: "exclude",
-                        type: "string"
+                        type: "string",
                     },
                     category: Diagnostics.File_Management,
-                    defaultValueDescription: Diagnostics.node_modules_bower_components_jspm_packages_plus_the_value_of_outDir_if_one_is_specified
+                    defaultValueDescription: Diagnostics.node_modules_bower_components_jspm_packages_plus_the_value_of_outDir_if_one_is_specified,
                 },
-                compileOnSaveCommandLineOption
-            ])
+                compileOnSaveCommandLineOption,
+            ]),
         };
     }
     return _tsconfigRootOptions;
@@ -2492,9 +2492,9 @@ export function convertToTSConfig(configParseResult: ParsedCommandLine, configFi
         files: length(files) ? files : undefined,
         ...(configParseResult.options.configFile?.configFileSpecs ? {
             include: filterSameAsDefaultInclude(configParseResult.options.configFile.configFileSpecs.validatedIncludeSpecs),
-            exclude: configParseResult.options.configFile.configFileSpecs.validatedExcludeSpecs
+            exclude: configParseResult.options.configFile.configFileSpecs.validatedExcludeSpecs,
         } : {}),
-        compileOnSave: !!configParseResult.compileOnSave ? true : undefined
+        compileOnSave: !!configParseResult.compileOnSave ? true : undefined,
     };
     return config;
 }
@@ -2714,7 +2714,7 @@ export function generateTSConfig(options: CompilerOptions, fileNames: readonly s
                 }
                 entries.push({
                     value: optionName,
-                    description: `/* ${option.description && getLocaleSpecificMessage(option.description) || option.name} */`
+                    description: `/* ${option.description && getLocaleSpecificMessage(option.description) || option.name} */`,
                 });
                 marginLength = Math.max(optionName.length, marginLength);
             }
@@ -2968,7 +2968,7 @@ function parseJsonConfigFileContentWorker(
                         path: getNormalizedAbsolutePath(ref.path, basePath),
                         originalPath: ref.path,
                         prepend: ref.prepend,
-                        circular: ref.circular
+                        circular: ref.circular,
                     });
                 }
             }
@@ -3838,13 +3838,13 @@ function getWildcardDirectoryFromSpec(spec: string, useCaseSensitiveFileNames: b
             key: useCaseSensitiveFileNames ? match[0] : toFileNameLowerCase(match[0]),
             flags: (questionWildcardIndex !== -1 && questionWildcardIndex < lastDirectorySeperatorIndex)
                 || (starWildcardIndex !== -1 && starWildcardIndex < lastDirectorySeperatorIndex)
-                ? WatchDirectoryFlags.Recursive : WatchDirectoryFlags.None
+                ? WatchDirectoryFlags.Recursive : WatchDirectoryFlags.None,
         };
     }
     if (isImplicitGlob(spec.substring(spec.lastIndexOf(directorySeparator) + 1))) {
         return {
             key: removeTrailingDirectorySeparator(useCaseSensitiveFileNames ? spec : toFileNameLowerCase(spec)),
-            flags: WatchDirectoryFlags.Recursive
+            flags: WatchDirectoryFlags.Recursive,
         };
     }
     return undefined;

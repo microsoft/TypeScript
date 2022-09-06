@@ -63,7 +63,7 @@ describe("unittests:: TransformAPI", () => {
                 ts.factory.createTaggedTemplateExpression(
                     ts.factory.createIdentifier("$tpl"),
                     /*typeArguments*/ undefined,
-                    ts.factory.createNoSubstitutionTemplateLiteral("foo", "foo")))
+                    ts.factory.createNoSubstitutionTemplateLiteral("foo", "foo"))),
         ]);
     }
 
@@ -71,7 +71,7 @@ describe("unittests:: TransformAPI", () => {
         const transformed = ts.transform(ts.createSourceFile("source.ts", sourceText, ts.ScriptTarget.ES2015), transformers);
         const printer = ts.createPrinter({ newLine: ts.NewLineKind.CarriageReturnLineFeed }, {
             onEmitNode: transformed.emitNodeWithNotification,
-            substituteNode: transformed.substituteNode
+            substituteNode: transformed.substituteNode,
         });
         const result = printer.printBundle(ts.factory.createBundle(transformed.transformed));
         transformed.dispose();
@@ -110,7 +110,7 @@ describe("unittests:: TransformAPI", () => {
         return transformSourceFile(`let a: () => void`, [
             context => file => ts.visitNode(file, function visitor(node: ts.Node): ts.VisitResult<ts.Node> {
                 return ts.visitEachChild(node, visitor, context);
-            }, ts.isSourceFile)
+            }, ts.isSourceFile),
         ]);
     });
 
@@ -121,7 +121,7 @@ describe("unittests:: TransformAPI", () => {
                     return ts.factory.createKeywordTypeNode(ts.SyntaxKind.UndefinedKeyword);
                 }
                 return ts.visitEachChild(node, visitor, context);
-            }, ts.isSourceFile)
+            }, ts.isSourceFile),
         ]);
     });
 
@@ -129,11 +129,11 @@ describe("unittests:: TransformAPI", () => {
         return ts.transpileModule(`var oldName = undefined;`, {
             transformers: {
                 before: [replaceUndefinedWithVoid0],
-                after: [replaceIdentifiersNamedOldNameWithNewName]
+                after: [replaceIdentifiersNamedOldNameWithNewName],
             },
             compilerOptions: {
-                newLine: ts.NewLineKind.CarriageReturnLineFeed
-            }
+                newLine: ts.NewLineKind.CarriageReturnLineFeed,
+            },
         }).outputText;
     });
 
@@ -144,20 +144,20 @@ describe("unittests:: TransformAPI", () => {
             },
             compilerOptions: {
                 target: ts.ScriptTarget.ES5,
-                newLine: ts.NewLineKind.CarriageReturnLineFeed
-            }
+                newLine: ts.NewLineKind.CarriageReturnLineFeed,
+            },
         }).outputText;
     });
 
     testBaseline("issue27854", () => {
         return ts.transpileModule(`oldName<{ a: string; }>\` ... \`;`, {
             transformers: {
-                before: [replaceIdentifiersNamedOldNameWithNewName2]
+                before: [replaceIdentifiersNamedOldNameWithNewName2],
             },
             compilerOptions: {
                 newLine: ts.NewLineKind.CarriageReturnLineFeed,
-                target: ts.ScriptTarget.Latest
-            }
+                target: ts.ScriptTarget.Latest,
+            },
         }).outputText;
     });
 
@@ -177,7 +177,7 @@ describe("unittests:: TransformAPI", () => {
                         context.factory.createArrayLiteralExpression([firstVarName, secondVarName])
                     ),
                 ]));
-            }
+            },
         ]);
     });
 
@@ -188,7 +188,7 @@ describe("unittests:: TransformAPI", () => {
             },
             compilerOptions: {
                 newLine: ts.NewLineKind.CarriageReturnLineFeed,
-            }
+            },
         }).outputText;
     });
 
@@ -204,7 +204,7 @@ describe("unittests:: TransformAPI", () => {
                 target: ts.ScriptTarget.ESNext,
                 newLine: ts.NewLineKind.CarriageReturnLineFeed,
                 useDefineForClassFields: false,
-            }
+            },
         }).outputText;
     });
 
@@ -218,7 +218,7 @@ describe("unittests:: TransformAPI", () => {
             compilerOptions: {
                 target: ts.ScriptTarget.ESNext,
                 newLine: ts.NewLineKind.CarriageReturnLineFeed,
-            }
+            },
         }).outputText;
     });
 
@@ -230,7 +230,7 @@ describe("unittests:: TransformAPI", () => {
             compilerOptions: {
                 target: ts.ScriptTarget.ESNext,
                 newLine: ts.NewLineKind.CarriageReturnLineFeed,
-            }
+            },
         }).outputText;
 
         function replaceWithClassAndNamespace() {
@@ -240,7 +240,7 @@ describe("unittests:: TransformAPI", () => {
                     sourceFile,
                     ts.factory.createNodeArray([
                         ts.factory.createClassDeclaration(/*modifiers*/ undefined, "Foo", /*typeParameters*/ undefined, /*heritageClauses*/ undefined, /*members*/ undefined!), // TODO: GH#18217
-                        ts.factory.createModuleDeclaration(/*modifiers*/ undefined, ts.factory.createIdentifier("Foo"), ts.factory.createModuleBlock([ts.factory.createEmptyStatement()]))
+                        ts.factory.createModuleDeclaration(/*modifiers*/ undefined, ts.factory.createIdentifier("Foo"), ts.factory.createModuleBlock([ts.factory.createEmptyStatement()])),
                     ])
                 );
                 return result;
@@ -271,7 +271,7 @@ describe("unittests:: TransformAPI", () => {
             compilerOptions: {
                 target: ts.ScriptTarget.ESNext,
                 newLine: ts.NewLineKind.CarriageReturnLineFeed,
-            }
+            },
         }).outputText;
 
         function expandExportStar(context: ts.TransformationContext) {
@@ -305,7 +305,7 @@ describe("unittests:: TransformAPI", () => {
                 module: ts.ModuleKind.System,
                 newLine: ts.NewLineKind.CarriageReturnLineFeed,
                 moduleDetection: ts.ModuleDetectionKind.Force,
-            }
+            },
         }).outputText;
 
         function transformAddImportStar(_context: ts.TransformationContext) {
@@ -338,7 +338,7 @@ describe("unittests:: TransformAPI", () => {
                 target: ScriptTarget.ES5,
                 experimentalDecorators: true,
                 newLine: NewLineKind.CarriageReturnLineFeed,
-            }
+            },
         }).outputText;
 
         function transformAddDecoratedNode(_context: ts.TransformationContext) {
@@ -348,7 +348,7 @@ describe("unittests:: TransformAPI", () => {
             function visitNode(sf: ts.SourceFile) {
                 // produce `class Foo { @Bar baz() {} }`;
                 const classDecl = ts.factory.createClassDeclaration(/*modifiers*/ undefined, "Foo", /*typeParameters*/ undefined, /*heritageClauses*/ undefined, [
-                    ts.factory.createMethodDeclaration([ts.factory.createDecorator(ts.factory.createIdentifier("Bar"))], /*asteriskToken*/ undefined, "baz", /*questionToken*/ undefined, /*typeParameters*/ undefined, [], /*type*/ undefined, ts.factory.createBlock([]))
+                    ts.factory.createMethodDeclaration([ts.factory.createDecorator(ts.factory.createIdentifier("Bar"))], /*asteriskToken*/ undefined, "baz", /*questionToken*/ undefined, /*typeParameters*/ undefined, [], /*type*/ undefined, ts.factory.createBlock([])),
                 ]);
                 return ts.factory.updateSourceFile(sf, [classDecl]);
             }
@@ -358,12 +358,12 @@ describe("unittests:: TransformAPI", () => {
     testBaseline("transformDeclarationFile", () => {
         return baselineDeclarationTransform(`var oldName = undefined;`, {
             transformers: {
-                afterDeclarations: [replaceIdentifiersNamedOldNameWithNewName]
+                afterDeclarations: [replaceIdentifiersNamedOldNameWithNewName],
             },
             compilerOptions: {
                 newLine: ts.NewLineKind.CarriageReturnLineFeed,
-                declaration: true
-            }
+                declaration: true,
+            },
         });
     });
 
@@ -377,7 +377,7 @@ describe("unittests:: TransformAPI", () => {
                 target: ScriptTarget.ES5,
                 newLine: NewLineKind.CarriageReturnLineFeed,
                 experimentalDecorators: true,
-            }
+            },
         }).outputText;
 
         function transformAddParameterProperty(_context: ts.TransformationContext) {
@@ -389,7 +389,7 @@ describe("unittests:: TransformAPI", () => {
                 // The decorator is required to trigger ts.ts transformations.
                 const classDecl = ts.factory.createClassDeclaration([], "Foo", /*typeParameters*/ undefined, /*heritageClauses*/ undefined, [
                     ts.factory.createConstructorDeclaration(/*modifiers*/ undefined, [
-                        ts.factory.createParameterDeclaration([ts.factory.createDecorator(ts.factory.createIdentifier("Dec")), ts.factory.createModifier(ts.SyntaxKind.PrivateKeyword)], /*dotDotDotToken*/ undefined, "x")], ts.factory.createBlock([]))
+                        ts.factory.createParameterDeclaration([ts.factory.createDecorator(ts.factory.createIdentifier("Dec")), ts.factory.createModifier(ts.SyntaxKind.PrivateKeyword)], /*dotDotDotToken*/ undefined, "x")], ts.factory.createBlock([])),
                 ]);
                 return ts.factory.updateSourceFile(sf, [classDecl]);
             }
@@ -430,7 +430,7 @@ describe("unittests:: TransformAPI", () => {
             compilerOptions: {
                 target: ts.ScriptTarget.ES5,
                 newLine: ts.NewLineKind.CarriageReturnLineFeed,
-            }
+            },
         }).outputText;
     });
 
@@ -446,7 +446,7 @@ export {exportedSeparately};
             compilerOptions: {
                 target: ts.ScriptTarget.ES5,
                 newLine: ts.NewLineKind.CarriageReturnLineFeed,
-            }
+            },
         }).outputText;
     });
 
@@ -467,7 +467,7 @@ export {Value};
             compilerOptions: {
                 target: ts.ScriptTarget.ES5,
                 newLine: ts.NewLineKind.CarriageReturnLineFeed,
-            }
+            },
         }).outputText;
     });
 
@@ -490,7 +490,7 @@ class Clazz {
             compilerOptions: {
                 target: ts.ScriptTarget.ES2015,
                 newLine: ts.NewLineKind.CarriageReturnLineFeed,
-            }
+            },
         }).outputText;
     });
 
@@ -511,7 +511,7 @@ namespace Foo {
             compilerOptions: {
                 target: ts.ScriptTarget.ES2015,
                 newLine: ts.NewLineKind.CarriageReturnLineFeed,
-            }
+            },
         }).outputText;
     });
 
@@ -528,7 +528,7 @@ module MyModule {
             compilerOptions: {
                 target: ts.ScriptTarget.ES2015,
                 newLine: ts.NewLineKind.CarriageReturnLineFeed,
-            }
+            },
         }).outputText;
 
         function renameVariable(context: ts.TransformationContext) {
@@ -555,7 +555,7 @@ module MyModule {
         const program = ts.createProgram(["source.ts"], {
             target: ts.ScriptTarget.ES3,
             module: ts.ModuleKind.None,
-            noLib: true
+            noLib: true,
         }, host);
         program.emit(transformedSourceFile, (_p, s, b) => host.writeFile("source.js", s, b));
         return host.readFile("source.js")!.toString();
@@ -589,8 +589,8 @@ module MyModule {
                 newLine: ts.NewLineKind.CarriageReturnLineFeed,
             },
             transformers: {
-                before: [transformSourceFile]
-            }
+                before: [transformSourceFile],
+            },
         }).outputText;
 
         function transformSourceFile(context: ts.TransformationContext): ts.Transformer<ts.SourceFile> {
@@ -650,7 +650,7 @@ class MyClass {
                 target: ScriptTarget.ES2015,
                 experimentalDecorators: true,
                 newLine: NewLineKind.CarriageReturnLineFeed,
-            }
+            },
         }).outputText;
     });
 
@@ -666,7 +666,7 @@ const MyClass = class {
                 target: ScriptTarget.ES2015,
                 experimentalDecorators: true,
                 newLine: NewLineKind.CarriageReturnLineFeed,
-            }
+            },
         }).outputText;
     });
 
@@ -693,7 +693,7 @@ function test () {
                 target: ScriptTarget.ES2015,
                 experimentalDecorators: true,
                 newLine: NewLineKind.CarriageReturnLineFeed,
-            }
+            },
         }).outputText;
     });
 });
