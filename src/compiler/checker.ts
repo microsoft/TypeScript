@@ -43076,7 +43076,7 @@ namespace ts {
             }
             const node = getParseTreeNode(nodeIn, isIdentifier);
             if (node) {
-                const symbol = getReferencedSymbol(node, /*startInDeclarationContainer*/ undefined);
+                const symbol = getReferencedValueOrAliasSymbol(node);
 
                 // We should only get the declaration of an alias if there isn't a local value
                 // declaration for the symbol
@@ -43488,24 +43488,14 @@ namespace ts {
          * This is because when caching the resolved symbol, we only consider value symbols, but here
          * we want to also get an alias symbol if one exists.
          */
-        function getReferencedSymbol(reference: Identifier, startInDeclarationContainer?: boolean): Symbol | undefined {
+        function getReferencedValueOrAliasSymbol(reference: Identifier): Symbol | undefined {
             const resolvedSymbol = getNodeLinks(reference).resolvedSymbol;
             if (resolvedSymbol && resolvedSymbol !== unknownSymbol) {
                 return resolvedSymbol;
             }
 
-            let location: Node = reference;
-            if (startInDeclarationContainer) {
-                // When resolving the name of a declaration as a value, we need to start resolution
-                // at a point outside of the declaration.
-                const parent = reference.parent;
-                if (isDeclaration(parent) && reference === parent.name) {
-                    location = getDeclarationContainer(parent);
-                }
-            }
-
             return resolveName(
-                location,
+                reference,
                 reference.escapedText,
                 SymbolFlags.Value | SymbolFlags.ExportValue | SymbolFlags.Alias,
                 /*nodeNotFoundMessage*/ undefined,
