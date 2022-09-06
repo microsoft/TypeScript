@@ -1100,7 +1100,7 @@
         "category": "Error",
         "code": 1359
     },
-    "Class constructor may not be a generator.": {
+    "Type '{0}' does not satisfy the expected type '{1}'.": {
         "category": "Error",
         "code": 1360
     },
@@ -1131,6 +1131,10 @@
     "Split all invalid type-only imports": {
         "category": "Message",
         "code": 1367
+    },
+    "Class constructor may not be a generator.": {
+        "category": "Error",
+        "code": 1368
     },
     "Did you mean '{0}'?": {
         "category": "Message",
@@ -1860,7 +1864,7 @@
         "category": "Error",
         "code": 2366
     },
-    "This condition will always return '{0}' since the types '{1}' and '{2}' have no overlap.": {
+    "This comparison appears to be unintentional because the types '{0}' and '{1}' have no overlap.": {
         "category": "Error",
         "code": 2367
     },
@@ -6376,6 +6380,10 @@
         "category": "Error",
         "code": 8036
     },
+    "Type satisfaction expressions can only be used in TypeScript files.": {
+        "category": "Error",
+        "code": 8037
+    },
 
     "Declaration emit for this file requires using private name '{0}'. An explicit type annotation may unblock declaration emit.": {
         "category": "Error",
@@ -7063,6 +7071,10 @@
     "Convert all invalid characters to HTML entity code": {
         "category": "Message",
         "code": 95101
+    },
+    "Convert all 'const' to 'let'": {
+        "category": "Message",
+        "code": 95102
     },
     "Convert function expression '{0}' to arrow function": {
         "category": "Message",

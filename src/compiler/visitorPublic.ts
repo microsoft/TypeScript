@@ -403,7 +403,7 @@ namespace ts {
     //  }
     //
     // This is then used as the expected type for `visitEachChildTable`.
-    type VisitEachChildTable = { [TNode in HasChildren as TNode["kind"]]: VisitEachChildFunction<TNode> };
+    type VisitEachChildTable = { [TNode in VisitEachChildNodes as TNode["kind"]]: VisitEachChildFunction<TNode> };
 
     // NOTE: Before you can add a new method to `visitEachChildTable`, you must first ensure the `Node` subtype you
     //       wish to add is defined in the `HasChildren` union in types.ts.
@@ -888,13 +888,19 @@ namespace ts {
                 nodeVisitor(node.type, visitor, isTypeNode));
         },
 
+        [SyntaxKind.SatisfiesExpression]: function visitEachChildOfSatisfiesExpression(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
+            return context.factory.updateSatisfiesExpression(node,
+                nodeVisitor(node.expression, visitor, isExpression),
+                nodeVisitor(node.type, visitor, isTypeNode));
+        },
+
         [SyntaxKind.NonNullExpression]: function visitEachChildOfNonNullExpression(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
             return isOptionalChain(node) ?
                 context.factory.updateNonNullChain(node,
                     nodeVisitor(node.expression, visitor, isExpression)) :
                 context.factory.updateNonNullExpression(node,
                     nodeVisitor(node.expression, visitor, isExpression));
-            },
+        },
 
         [SyntaxKind.MetaProperty]: function visitEachChildOfMetaProperty(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
             return context.factory.updateMetaProperty(node,
