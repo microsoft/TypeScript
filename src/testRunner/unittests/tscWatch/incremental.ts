@@ -374,5 +374,18 @@ export const Fragment: unique symbol;
                 },
             });
         });
+
+        verifyTscWatch({
+            scenario: "incremental",
+            subScenario: "tsbuildinfo has error",
+            sys: () => createWatchedSystem({
+                "/src/project/main.ts": "export const x = 10;",
+                "/src/project/tsconfig.json": "{}",
+                "/src/project/tsconfig.tsbuildinfo": "Some random string",
+                [libFile.path]: libFile.content,
+            }),
+            commandLineArgs: ["--p", "src/project", "-i", "-w"],
+            changes: emptyArray
+        });
     });
 }

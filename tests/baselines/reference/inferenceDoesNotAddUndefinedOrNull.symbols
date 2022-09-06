@@ -1,0 +1,127 @@
+=== tests/cases/compiler/inferenceDoesNotAddUndefinedOrNull.ts ===
+interface NodeArray<T extends Node> extends ReadonlyArray<T> {}
+>NodeArray : Symbol(NodeArray, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 0, 0))
+>T : Symbol(T, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 0, 20))
+>Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(inferenceDoesNotAddUndefinedOrNull.ts, 0, 63))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 0, 20))
+
+interface Node {
+>Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(inferenceDoesNotAddUndefinedOrNull.ts, 0, 63))
+
+    forEachChild<T>(cbNode: (node: Node) => T | undefined, cbNodeArray?: (nodes: NodeArray<Node>) => T | undefined): T | undefined;
+>forEachChild : Symbol(Node.forEachChild, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 2, 16))
+>T : Symbol(T, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 3, 17))
+>cbNode : Symbol(cbNode, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 3, 20))
+>node : Symbol(node, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 3, 29))
+>Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(inferenceDoesNotAddUndefinedOrNull.ts, 0, 63))
+>T : Symbol(T, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 3, 17))
+>cbNodeArray : Symbol(cbNodeArray, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 3, 58))
+>nodes : Symbol(nodes, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 3, 74))
+>NodeArray : Symbol(NodeArray, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 0, 0))
+>Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(inferenceDoesNotAddUndefinedOrNull.ts, 0, 63))
+>T : Symbol(T, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 3, 17))
+>T : Symbol(T, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 3, 17))
+}
+
+declare function toArray<T>(value: T | T[]): T[];
+>toArray : Symbol(toArray, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 4, 1), Decl(inferenceDoesNotAddUndefinedOrNull.ts, 6, 49))
+>T : Symbol(T, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 6, 25))
+>value : Symbol(value, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 6, 28))
+>T : Symbol(T, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 6, 25))
+>T : Symbol(T, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 6, 25))
+>T : Symbol(T, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 6, 25))
+
+declare function toArray<T>(value: T | readonly T[]): readonly T[];
+>toArray : Symbol(toArray, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 4, 1), Decl(inferenceDoesNotAddUndefinedOrNull.ts, 6, 49))
+>T : Symbol(T, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 7, 25))
+>value : Symbol(value, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 7, 28))
+>T : Symbol(T, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 7, 25))
+>T : Symbol(T, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 7, 25))
+>T : Symbol(T, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 7, 25))
+
+function flatMapChildren<T>(node: Node, cb: (child: Node) => readonly T[] | T | undefined): readonly T[] {
+>flatMapChildren : Symbol(flatMapChildren, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 7, 67))
+>T : Symbol(T, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 9, 25))
+>node : Symbol(node, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 9, 28))
+>Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(inferenceDoesNotAddUndefinedOrNull.ts, 0, 63))
+>cb : Symbol(cb, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 9, 39))
+>child : Symbol(child, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 9, 45))
+>Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(inferenceDoesNotAddUndefinedOrNull.ts, 0, 63))
+>T : Symbol(T, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 9, 25))
+>T : Symbol(T, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 9, 25))
+>T : Symbol(T, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 9, 25))
+
+    const result: T[] = [];
+>result : Symbol(result, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 10, 9))
+>T : Symbol(T, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 9, 25))
+
+    node.forEachChild(child => {
+>node.forEachChild : Symbol(Node.forEachChild, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 2, 16))
+>node : Symbol(node, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 9, 28))
+>forEachChild : Symbol(Node.forEachChild, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 2, 16))
+>child : Symbol(child, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 11, 22))
+
+        const value = cb(child);
+>value : Symbol(value, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 12, 13))
+>cb : Symbol(cb, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 9, 39))
+>child : Symbol(child, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 11, 22))
+
+        if (value !== undefined) {
+>value : Symbol(value, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 12, 13))
+>undefined : Symbol(undefined)
+
+            result.push(...toArray(value));
+>result.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>result : Symbol(result, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 10, 9))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>toArray : Symbol(toArray, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 4, 1), Decl(inferenceDoesNotAddUndefinedOrNull.ts, 6, 49))
+>value : Symbol(value, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 12, 13))
+        }
+    });
+    return result;
+>result : Symbol(result, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 10, 9))
+}
+
+function flatMapChildren2<T>(node: Node, cb: (child: Node) => readonly T[] | T | null): readonly T[] {
+>flatMapChildren2 : Symbol(flatMapChildren2, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 18, 1))
+>T : Symbol(T, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 20, 26))
+>node : Symbol(node, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 20, 29))
+>Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(inferenceDoesNotAddUndefinedOrNull.ts, 0, 63))
+>cb : Symbol(cb, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 20, 40))
+>child : Symbol(child, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 20, 46))
+>Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(inferenceDoesNotAddUndefinedOrNull.ts, 0, 63))
+>T : Symbol(T, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 20, 26))
+>T : Symbol(T, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 20, 26))
+>T : Symbol(T, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 20, 26))
+
+    const result: T[] = [];
+>result : Symbol(result, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 21, 9))
+>T : Symbol(T, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 20, 26))
+
+    node.forEachChild(child => {
+>node.forEachChild : Symbol(Node.forEachChild, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 2, 16))
+>node : Symbol(node, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 20, 29))
+>forEachChild : Symbol(Node.forEachChild, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 2, 16))
+>child : Symbol(child, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 22, 22))
+
+        const value = cb(child);
+>value : Symbol(value, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 23, 13))
+>cb : Symbol(cb, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 20, 40))
+>child : Symbol(child, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 22, 22))
+
+        if (value !== null) {
+>value : Symbol(value, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 23, 13))
+
+            result.push(...toArray(value));
+>result.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>result : Symbol(result, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 21, 9))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>toArray : Symbol(toArray, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 4, 1), Decl(inferenceDoesNotAddUndefinedOrNull.ts, 6, 49))
+>value : Symbol(value, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 23, 13))
+        }
+    });
+    return result;
+>result : Symbol(result, Decl(inferenceDoesNotAddUndefinedOrNull.ts, 21, 9))
+}
+

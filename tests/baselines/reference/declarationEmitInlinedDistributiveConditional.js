@@ -47,8 +47,8 @@ export declare function excludePrivateKeys1<Obj>(obj: Obj): {
 export declare function excludePrivateKeys2<Obj>(obj: Obj): {
     [K in PublicKeys2<keyof Obj>]: Obj[K];
 };
-export declare type PublicKeys1<T> = T extends `_${string}` ? never : T;
-declare type PublicKeys2<T> = T extends `_${string}` ? never : T;
+export type PublicKeys1<T> = T extends `_${string}` ? never : T;
+type PublicKeys2<T> = T extends `_${string}` ? never : T;
 export {};
 //// [api.d.ts]
 export declare const dropPrivateProps1: <Obj>(obj: Obj) => { [K in import("./internal").PublicKeys1<keyof Obj>]: Obj[K]; };

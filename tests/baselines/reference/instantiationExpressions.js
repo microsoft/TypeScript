@@ -275,14 +275,14 @@ declare function fx<T>(x: T): T;
 declare function fx<T>(x: T, n: number): T;
 declare function fx<T, U>(t: [T, U]): [T, U];
 declare function f1(): void;
-declare type T10 = typeof fx;
-declare type T11 = typeof fx<string>;
-declare type T12 = typeof fx<string, number>;
-declare type T13 = typeof fx<string, number, boolean>;
+type T10 = typeof fx;
+type T11 = typeof fx<string>;
+type T12 = typeof fx<string, number>;
+type T13 = typeof fx<string, number, boolean>;
 declare function f2(): void;
-declare type T20 = typeof Array;
-declare type T21 = typeof Array<string>;
-declare type T22 = typeof Array<string, number>;
+type T20 = typeof Array;
+type T21 = typeof Array<string>;
+type T22 = typeof Array<string, number>;
 declare class C<T> {
     constructor(x: T);
     static f<U>(x: U): U[];
@@ -352,11 +352,11 @@ declare function f38<T extends (<A>(x: A) => A) | (<B>(x: B) => B[]), U>(f: T | 
 declare function makeBox<T>(value: T): {
     value: T;
 };
-declare type BoxFunc<T> = typeof makeBox<T>;
-declare type StringBoxFunc = BoxFunc<string>;
-declare type Box<T> = ReturnType<typeof makeBox<T>>;
-declare type StringBox = Box<string>;
-declare type A<U> = InstanceType<typeof Array<U>>;
+type BoxFunc<T> = typeof makeBox<T>;
+type StringBoxFunc = BoxFunc<string>;
+type Box<T> = ReturnType<typeof makeBox<T>>;
+type StringBox = Box<string>;
+type A<U> = InstanceType<typeof Array<U>>;
 declare const g1: {
     <T>(a: T): {
         a: T;
@@ -365,18 +365,18 @@ declare const g1: {
         b: U;
     };
 };
-declare type T30<V> = typeof g1<V>;
-declare type T31<A> = ReturnType<T30<A>>;
-declare type T32<B> = InstanceType<T30<B>>;
+type T30<V> = typeof g1<V>;
+type T31<A> = ReturnType<T30<A>>;
+type T32<B> = InstanceType<T30<B>>;
 declare const g2: {
     <T extends string>(a: T): T;
     new <T extends number>(b: T): T;
 };
-declare type T40<U extends string> = typeof g2<U>;
-declare type T41<U extends number> = typeof g2<U>;
+type T40<U extends string> = typeof g2<U>;
+type T41<U extends number> = typeof g2<U>;
 declare const g3: {
     <T extends string>(a: T): T;
     new <T extends number, Q>(b: T): T;
 };
-declare type T50<U extends string> = typeof g3<U>;
-declare type T51<U extends number> = typeof g3<U, any>;
+type T50<U extends string> = typeof g3<U>;
+type T51<U extends number> = typeof g3<U, any>;
