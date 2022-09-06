@@ -131,6 +131,7 @@
         "simple-import-sort/exports": "error",
 
         // Formatting rules; remove once a formatter enforces these.
+        "@typescript-eslint/comma-dangle": ["error", "always-multiline"],
         "curly": ["error", "multi-line"],
         "linebreak-style": ["error", "windows"],
         "max-statements-per-line": ["error", { "max": 1 }],
