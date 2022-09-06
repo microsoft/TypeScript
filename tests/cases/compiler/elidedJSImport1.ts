@@ -1,7 +1,7 @@
 // @allowJs: true
-// @checkJs: false
-// @module: ES2020, commonjs
+// @checkJs: true
 // @moduleResolution: node
+// @module: ES2020
 // @outDir: out
 
 // @Filename: caller.js
@@ -13,7 +13,6 @@ console.log('TruffleContract is ', typeof TruffleContract, TruffleContract); // 
 
 // @Filename: node_modules/@truffle/contract/index.d.ts
 declare module "@truffle/contract" {
-    // import { ContractObject } from "@truffle/contract-schema";
     interface ContractObject {
         foo: number;
     }

@@ -1,7 +1,11 @@
 // @allowJs: true
 // @checkJs: false
-// @module: node16
+// @module: ES2022, commonjs
+// @moduleResolution: node16
+// @esModuleInterop: true
+// @isolatedModules: true
 // @outDir: out
+
 
 // @Filename: index.js
 import { Foo } from "./other.js";
