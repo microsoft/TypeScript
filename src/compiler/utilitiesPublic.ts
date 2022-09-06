@@ -1927,6 +1927,13 @@ namespace ts {
     }
 
     /* @internal */
+    export function isJsxAttributeName(node: Node): node is JsxAttributeName {
+        const kind = node.kind;
+        return kind === SyntaxKind.Identifier
+            || kind === SyntaxKind.JsxNamespacedName;
+    }
+
+    /* @internal */
     export function isStringLiteralOrJsxExpression(node: Node): node is StringLiteral | JsxExpression {
         const kind = node.kind;
         return kind === SyntaxKind.StringLiteral

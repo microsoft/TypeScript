@@ -5006,7 +5006,7 @@ namespace ts {
         }
 
         // @api
-        function createJsxAttribute(name: Identifier, initializer: JsxAttributeValue | undefined) {
+        function createJsxAttribute(name: JsxAttributeName, initializer: JsxAttributeValue | undefined) {
             const node = createBaseNode<JsxAttribute>(SyntaxKind.JsxAttribute);
             node.name = name;
             node.initializer = initializer;
@@ -5018,7 +5018,7 @@ namespace ts {
         }
 
         // @api
-        function updateJsxAttribute(node: JsxAttribute, name: Identifier, initializer: JsxAttributeValue | undefined) {
+        function updateJsxAttribute(node: JsxAttribute, name: JsxAttributeName, initializer: JsxAttributeValue | undefined) {
             return node.name !== name
                 || node.initializer !== initializer
                 ? update(createJsxAttribute(name, initializer), node)

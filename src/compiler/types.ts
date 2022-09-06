@@ -2874,6 +2874,11 @@ namespace ts {
         | JsxSpreadAttribute
         ;
 
+    export type JsxAttributeName =
+        | Identifier
+        | JsxNamespacedName
+        ;
+
     export type JsxTagNameExpression =
         | Identifier
         | ThisExpression
@@ -2937,7 +2942,7 @@ namespace ts {
     export interface JsxAttribute extends Declaration {
         readonly kind: SyntaxKind.JsxAttribute;
         readonly parent: JsxAttributes;
-        readonly name: Identifier | JsxNamespacedName;
+        readonly name: JsxAttributeName;
         /// JSX attribute initializers are optional; <X y /> is sugar for <X y={true} />
         readonly initializer?: JsxAttributeValue;
     }
@@ -8087,8 +8092,8 @@ namespace ts {
         createJsxOpeningFragment(): JsxOpeningFragment;
         createJsxJsxClosingFragment(): JsxClosingFragment;
         updateJsxFragment(node: JsxFragment, openingFragment: JsxOpeningFragment, children: readonly JsxChild[], closingFragment: JsxClosingFragment): JsxFragment;
-        createJsxAttribute(name: Identifier | JsxNamespacedName, initializer: JsxAttributeValue | undefined): JsxAttribute;
-        updateJsxAttribute(node: JsxAttribute, name: Identifier | JsxNamespacedName, initializer: JsxAttributeValue | undefined): JsxAttribute;
+        createJsxAttribute(name: JsxAttributeName, initializer: JsxAttributeValue | undefined): JsxAttribute;
+        updateJsxAttribute(node: JsxAttribute, name: JsxAttributeName, initializer: JsxAttributeValue | undefined): JsxAttribute;
         createJsxAttributes(properties: readonly JsxAttributeLike[]): JsxAttributes;
         updateJsxAttributes(node: JsxAttributes, properties: readonly JsxAttributeLike[]): JsxAttributes;
         createJsxSpreadAttribute(expression: Expression): JsxSpreadAttribute;

@@ -1369,6 +1369,7 @@ declare namespace ts {
     }
     export type JsxOpeningLikeElement = JsxSelfClosingElement | JsxOpeningElement;
     export type JsxAttributeLike = JsxAttribute | JsxSpreadAttribute;
+    export type JsxAttributeName = Identifier | JsxNamespacedName;
     export type JsxTagNameExpression = Identifier | ThisExpression | JsxTagNamePropertyAccess | JsxNamespacedName;
     export interface JsxTagNamePropertyAccess extends PropertyAccessExpression {
         readonly expression: JsxTagNameExpression;
@@ -1413,7 +1414,7 @@ declare namespace ts {
     export interface JsxAttribute extends Declaration {
         readonly kind: SyntaxKind.JsxAttribute;
         readonly parent: JsxAttributes;
-        readonly name: Identifier | JsxNamespacedName;
+        readonly name: JsxAttributeName;
         readonly initializer?: JsxAttributeValue;
     }
     export type JsxAttributeValue = StringLiteral | JsxExpression | JsxElement | JsxSelfClosingElement | JsxFragment;
@@ -3786,8 +3787,8 @@ declare namespace ts {
         createJsxOpeningFragment(): JsxOpeningFragment;
         createJsxJsxClosingFragment(): JsxClosingFragment;
         updateJsxFragment(node: JsxFragment, openingFragment: JsxOpeningFragment, children: readonly JsxChild[], closingFragment: JsxClosingFragment): JsxFragment;
-        createJsxAttribute(name: Identifier | JsxNamespacedName, initializer: JsxAttributeValue | undefined): JsxAttribute;
-        updateJsxAttribute(node: JsxAttribute, name: Identifier | JsxNamespacedName, initializer: JsxAttributeValue | undefined): JsxAttribute;
+        createJsxAttribute(name: JsxAttributeName, initializer: JsxAttributeValue | undefined): JsxAttribute;
+        updateJsxAttribute(node: JsxAttribute, name: JsxAttributeName, initializer: JsxAttributeValue | undefined): JsxAttribute;
         createJsxAttributes(properties: readonly JsxAttributeLike[]): JsxAttributes;
         updateJsxAttributes(node: JsxAttributes, properties: readonly JsxAttributeLike[]): JsxAttributes;
         createJsxSpreadAttribute(expression: Expression): JsxSpreadAttribute;
@@ -7672,9 +7673,9 @@ declare namespace ts {
     /** @deprecated Use `factory.updateJsxFragment` or the factory supplied by your transformation context instead. */
     const updateJsxFragment: (node: JsxFragment, openingFragment: JsxOpeningFragment, children: readonly JsxChild[], closingFragment: JsxClosingFragment) => JsxFragment;
     /** @deprecated Use `factory.createJsxAttribute` or the factory supplied by your transformation context instead. */
-    const createJsxAttribute: (name: Identifier | JsxNamespacedName, initializer: JsxAttributeValue | undefined) => JsxAttribute;
+    const createJsxAttribute: (name: JsxAttributeName, initializer: JsxAttributeValue | undefined) => JsxAttribute;
     /** @deprecated Use `factory.updateJsxAttribute` or the factory supplied by your transformation context instead. */
-    const updateJsxAttribute: (node: JsxAttribute, name: Identifier | JsxNamespacedName, initializer: JsxAttributeValue | undefined) => JsxAttribute;
+    const updateJsxAttribute: (node: JsxAttribute, name: JsxAttributeName, initializer: JsxAttributeValue | undefined) => JsxAttribute;
     /** @deprecated Use `factory.createJsxAttributes` or the factory supplied by your transformation context instead. */
     const createJsxAttributes: (properties: readonly JsxAttributeLike[]) => JsxAttributes;
     /** @deprecated Use `factory.updateJsxAttributes` or the factory supplied by your transformation context instead. */

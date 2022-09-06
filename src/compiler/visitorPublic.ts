@@ -1216,8 +1216,8 @@ namespace ts {
 
         [SyntaxKind.JsxNamespacedName]: function forEachChildInJsxNamespacedName(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
             return context.factory.updateJsxNamespacedName(node,
-                nodeVisitor(node.name, visitor, isIdentifier),
-                nodeVisitor(node.namespace, visitor, isIdentifier));
+                nodeVisitor(node.namespace, visitor, isIdentifier),
+                nodeVisitor(node.name, visitor, isIdentifier));
         },
 
         [SyntaxKind.JsxFragment]: function visitEachChildOfJsxFragment(node, visitor, context, nodesVisitor, nodeVisitor, _tokenVisitor) {
@@ -1229,7 +1229,7 @@ namespace ts {
 
         [SyntaxKind.JsxAttribute]: function visitEachChildOfJsxAttribute(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
             return context.factory.updateJsxAttribute(node,
-                nodeVisitor(node.name, visitor, isIdentifier),
+                nodeVisitor(node.name, visitor, isJsxAttributeName),
                 nodeVisitor(node.initializer, visitor, isStringLiteralOrJsxExpression));
         },
 
