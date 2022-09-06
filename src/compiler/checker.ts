@@ -43041,7 +43041,7 @@ namespace ts {
                 // declaration, we need to start resolution at the declaration's container.
                 // Otherwise, we could incorrectly resolve the export container as the
                 // declaration if it contains an exported member with the same name.
-                let symbol = getReferencedSymbol(node, /*startInDeclarationContainer*/ isNameOfModuleOrEnumDeclaration(node)); // >> change here
+                let symbol = getReferencedValueSymbol(node, /*startInDeclarationContainer*/ isNameOfModuleOrEnumDeclaration(node));
                 if (symbol) {
                     if (symbol.flags & SymbolFlags.ExportValue) {
                         // If we reference an exported entity within the same module declaration, then whether
@@ -43077,6 +43077,7 @@ namespace ts {
             const node = getParseTreeNode(nodeIn, isIdentifier);
             if (node) {
                 const symbol = getReferencedSymbol(node, /*startInDeclarationContainer*/ undefined);
+
                 // We should only get the declaration of an alias if there isn't a local value
                 // declaration for the symbol
                 if (isNonLocalAlias(symbol, /*excludes*/ SymbolFlags.Value) && !getTypeOnlyAliasDeclaration(symbol)) {
@@ -43461,12 +43462,10 @@ namespace ts {
             return globals.has(escapeLeadingUnderscores(name));
         }
 
-        function getReferencedValueSymbol(reference: Identifier, startInDeclarationContainer?: boolean, useCache = true): Symbol | undefined { // >> TODO: if we change this to return any kind of symbol, then rename it
-            if (useCache) {
-                const resolvedSymbol = getNodeLinks(reference).resolvedSymbol;
-                if (resolvedSymbol) {
-                    return resolvedSymbol;
-                }
+        function getReferencedValueSymbol(reference: Identifier, startInDeclarationContainer?: boolean): Symbol | undefined {
+            const resolvedSymbol = getNodeLinks(reference).resolvedSymbol;
+            if (resolvedSymbol) {
+                return resolvedSymbol;
             }
 
             let location: Node = reference;
@@ -43482,7 +43481,14 @@ namespace ts {
             return resolveName(location, reference.escapedText, SymbolFlags.Value | SymbolFlags.ExportValue | SymbolFlags.Alias, /*nodeNotFoundMessage*/ undefined, /*nameArg*/ undefined, /*isUse*/ true);
         }
 
-        function getReferencedSymbol(reference: Identifier, startInDeclarationContainer?: boolean): Symbol | undefined { // >> TODO
+        /**
+         * Get either a value-meaning symbol or an alias symbol.
+         * Unlike `getReferencedValueSymbol`, if the cached resolved symbol is the unknown symbol,
+         * we call `resolveName` to find a symbol.
+         * This is because when caching the resolved symbol, we only consider value symbols, but here
+         * we want to also get an alias symbol if one exists.
+         */
+        function getReferencedSymbol(reference: Identifier, startInDeclarationContainer?: boolean): Symbol | undefined {
             const resolvedSymbol = getNodeLinks(reference).resolvedSymbol;
             if (resolvedSymbol && resolvedSymbol !== unknownSymbol) {
                 return resolvedSymbol;
@@ -43498,10 +43504,6 @@ namespace ts {
                 }
             }
 
-            // >> TODO: this comment is only valid for the use of 'getReferencedSymbol' in 'getReferencedImportDeclaration'.
-            // We get the symbol that has a value meaning, or is an alias.
-            // We'll only ever want a symbol that doesn't have a value meaning if it is also an import,
-            // and therefore if it has an alias meaning (because those type-resolving imports are not always elided e.g. in JS).
             return resolveName(
                 location,
                 reference.escapedText,
