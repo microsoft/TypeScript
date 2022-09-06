@@ -98,7 +98,9 @@
         "xml2js": "^0.4.23"
     },
     "overrides": {
-        "es5-ext": "0.10.53"
+        "es5-ext": "0.10.53",
+        "@esfx/cancelable": "1.0.0-pre.30",
+        "@esfx/disposable": "1.0.0-pre.30"
     },
     "scripts": {
         "test": "gulp runtests-parallel --light=false",
