@@ -25101,7 +25101,7 @@ namespace ts {
                 const narrowedPropType = narrowType(propType);
                 return filterType(type, t => {
                     const discriminantType = getTypeOfPropertyOrIndexSignature(t, propName);
-                    return !(narrowedPropType.flags & TypeFlags.Never) && isTypeComparableTo(narrowedPropType, discriminantType);
+                    return !(narrowedPropType.flags & TypeFlags.Never) && areTypesComparable(narrowedPropType, discriminantType);
                 });
             }
 
@@ -25301,14 +25301,19 @@ namespace ts {
                     assumeTrue = !assumeTrue;
                 }
                 const valueType = getTypeOfExpression(value);
-                if ((type.flags & TypeFlags.Unknown) && assumeTrue && (operator === SyntaxKind.EqualsEqualsEqualsToken || operator === SyntaxKind.ExclamationEqualsEqualsToken)) {
+                if (((type.flags & TypeFlags.Unknown) || isEmptyAnonymousObjectType(type) && !(valueType.flags & TypeFlags.Nullable)) &&
+                    assumeTrue &&
+                    (operator === SyntaxKind.EqualsEqualsEqualsToken || operator === SyntaxKind.ExclamationEqualsEqualsToken)
+                ) {
                     if (valueType.flags & (TypeFlags.Primitive | TypeFlags.NonPrimitive)) {
                         return valueType;
                     }
                     if (valueType.flags & TypeFlags.Object) {
                         return nonPrimitiveType;
                     }
-                    return type;
+                    if (type.flags & TypeFlags.Unknown) {
+                        return type;
+                    }
                 }
                 if (valueType.flags & TypeFlags.Nullable) {
                     if (!strictNullChecks) {
@@ -28388,6 +28393,7 @@ namespace ts {
          */
         function createJsxAttributesTypeFromAttributesProperty(openingLikeElement: JsxOpeningLikeElement, checkMode: CheckMode | undefined) {
             const attributes = openingLikeElement.attributes;
+            const attributesType = getContextualType(attributes, ContextFlags.None);
             const allAttributesTable = strictNullChecks ? createSymbolTable() : undefined;
             let attributesTable = createSymbolTable();
             let spread: Type = emptyJsxObjectType;
@@ -28415,6 +28421,12 @@ namespace ts {
                     allAttributesTable?.set(attributeSymbol.escapedName, attributeSymbol);
                     if (attributeDecl.name.escapedText === jsxChildrenPropertyName) {
                         explicitlySpecifyChildrenAttribute = true;
+                    }
+                    if (attributesType) {
+                        const prop = getPropertyOfType(attributesType, member.escapedName);
+                        if (prop && prop.declarations && isDeprecatedSymbol(prop)) {
+                            addDeprecatedSuggestion(attributeDecl.name, prop.declarations, attributeDecl.name.escapedText as string);
+                        }
                     }
                 }
                 else {

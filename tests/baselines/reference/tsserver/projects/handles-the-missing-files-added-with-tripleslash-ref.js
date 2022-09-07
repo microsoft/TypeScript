@@ -31,11 +31,11 @@ Open files:
 response:{"responseRequired":false}
 request:{"seq":0,"type":"request","command":"semanticDiagnosticsSync","arguments":{"file":"/a/b/commonFile1.ts"}}
 response:{"response":[{"start":{"line":2,"offset":29},"end":{"line":2,"offset":30},"text":"Cannot find name 'y'.","code":2304,"category":"error"},{"start":{"line":1,"offset":22},"end":{"line":1,"offset":36},"text":"File '/a/b/commonFile2.ts' not found.","code":6053,"category":"error"}],"responseRequired":true}
-FileWatcher:: Triggered with /a/b/commonFile2.ts 0:: WatchInfo: /a/b/commonfile2.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
+FileWatcher:: Triggered with /a/b/commonfile2.ts 0:: WatchInfo: /a/b/commonfile2.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
 FileWatcher:: Close:: WatchInfo: /a/b/commonfile2.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
 Scheduled: /dev/null/inferredProject1*
 Scheduled: *ensureProjectForOpenFiles*
-Elapsed:: *ms FileWatcher:: Triggered with /a/b/commonFile2.ts 0:: WatchInfo: /a/b/commonfile2.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
+Elapsed:: *ms FileWatcher:: Triggered with /a/b/commonfile2.ts 0:: WatchInfo: /a/b/commonfile2.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
 Running: /dev/null/inferredProject1*
 Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 FileWatcher:: Added:: WatchInfo: /a/b/commonFile2.ts 500 undefined WatchType: Closed Script info

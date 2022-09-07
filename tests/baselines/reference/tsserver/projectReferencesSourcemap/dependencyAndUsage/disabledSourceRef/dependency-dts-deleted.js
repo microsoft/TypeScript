@@ -173,13 +173,13 @@ request:{"command":"rename","arguments":{"file":"/user/username/projects/myproje
 Search path: /user/username/projects/myproject/dependency
 For info: /user/username/projects/myproject/dependency/FnS.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
 response:{"response":{"info":{"canRename":true,"displayName":"fn1","fullDisplayName":"\"/user/username/projects/myproject/dependency/FnS\".fn1","kind":"function","kindModifiers":"export","triggerSpan":{"start":{"line":1,"offset":17},"end":{"line":1,"offset":20}}},"locs":[{"file":"/user/username/projects/myproject/dependency/FnS.ts","locs":[{"start":{"line":1,"offset":17},"end":{"line":1,"offset":20},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":1,"offset":26}}]},{"file":"/user/username/projects/myproject/main/main.ts","locs":[{"start":{"line":2,"offset":5},"end":{"line":2,"offset":8},"contextStart":{"line":1,"offset":1},"contextEnd":{"line":7,"offset":22}},{"start":{"line":9,"offset":1},"end":{"line":9,"offset":4}}]}]},"responseRequired":true}
-FileWatcher:: Triggered with /user/username/projects/myproject/decls/FnS.d.ts 2:: WatchInfo: /user/username/projects/myproject/decls/fns.d.ts 500 undefined WatchType: Closed Script info
+FileWatcher:: Triggered with /user/username/projects/myproject/decls/fns.d.ts 2:: WatchInfo: /user/username/projects/myproject/decls/fns.d.ts 500 undefined WatchType: Closed Script info
 FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/decls/fns.d.ts 500 undefined WatchType: Closed Script info
 Scheduled: /user/username/projects/myproject/main/tsconfig.json
 Scheduled: *ensureProjectForOpenFiles*
 Scheduled: /user/username/projects/myproject/dependency/tsconfig.json
 Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
-Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/decls/FnS.d.ts 2:: WatchInfo: /user/username/projects/myproject/decls/fns.d.ts 500 undefined WatchType: Closed Script info
+Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/decls/fns.d.ts 2:: WatchInfo: /user/username/projects/myproject/decls/fns.d.ts 500 undefined WatchType: Closed Script info
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/decls/FnS.d.ts :: WatchInfo: /user/username/projects/myproject/decls 1 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Failed Lookup Locations
 Scheduled: /user/username/projects/myproject/main/tsconfig.jsonFailedLookupInvalidation
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/decls/FnS.d.ts :: WatchInfo: /user/username/projects/myproject/decls 1 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Failed Lookup Locations

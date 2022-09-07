@@ -77,25 +77,25 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/node_modules/react/jsx-runtime/index.d.ts (used version)
 /user/username/projects/myproject/index.tsx (used version)
 
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/node_modules/react/jsx-runtime/index.d.ts:
-  {"fileName":"/user/username/projects/myproject/node_modules/react/Jsx-Runtime/index.d.ts","pollingInterval":250}
-/user/username/projects/myproject/index.tsx:
-  {"fileName":"/user/username/projects/myproject/index.tsx","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/user/username/projects/myproject/node_modules/react/package.json:
-  {"fileName":"/user/username/projects/myproject/node_modules/react/package.json","pollingInterval":250}
+PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
-  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/node_modules/react/jsx-runtime/index.d.ts:
+  {}
+/user/username/projects/myproject/index.tsx:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/node_modules/react/package.json:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject/node_modules:
-  {"directoryName":"/user/username/projects/myproject/node_modules"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
