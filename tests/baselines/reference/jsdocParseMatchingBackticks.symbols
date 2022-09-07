@@ -2,7 +2,7 @@
 /**
  * `@param` initial at-param is OK in title comment
  * @param {string} x hi there `@param`
- * @param {string} y hi there `@ * param
+ * @param {string} y hi there @ * param
  *                   this is the margin
  *                   so we'll drop everything before it
  `@param` @param {string} z hello???
@@ -26,5 +26,21 @@ export function f(x, y, z, alpha, beta, gamma) {
 >alpha : Symbol(alpha, Decl(jsdocParseMatchingBackticks.js, 11, 26))
 >beta : Symbol(beta, Decl(jsdocParseMatchingBackticks.js, 11, 33))
 >gamma : Symbol(gamma, Decl(jsdocParseMatchingBackticks.js, 11, 39))
+}
+/**
+ * Unmatched backticks keep going past newlines
+ * @param {string} y hi there `@ * param
+ *                   this is the margin
+ *                   so we'll drop everything before it
+ * @param {string} gamma
+ */
+export function g(y, gamma) {
+>g : Symbol(g, Decl(jsdocParseMatchingBackticks.js, 13, 1))
+>y : Symbol(y, Decl(jsdocParseMatchingBackticks.js, 21, 18))
+>gamma : Symbol(gamma, Decl(jsdocParseMatchingBackticks.js, 21, 20))
+
+    return y + gamma
+>y : Symbol(y, Decl(jsdocParseMatchingBackticks.js, 21, 18))
+>gamma : Symbol(gamma, Decl(jsdocParseMatchingBackticks.js, 21, 20))
 }
 

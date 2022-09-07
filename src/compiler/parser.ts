@@ -8123,6 +8123,8 @@ namespace ts {
                 SawAsterisk,
                 SavingComments,
                 SavingBackticks, // NOTE: Only used when parsing tag comments
+                SavingBackticksBeginningOfLine,
+                SavingBackticksSawAsterisk,
             }
 
             const enum PropertyLikeParse {
@@ -8433,13 +8435,13 @@ namespace ts {
                     loop: while (true) {
                         switch (tok) {
                             case SyntaxKind.NewLineTrivia:
-                                state = JSDocState.BeginningOfLine;
+                                state = (state as JSDocState) === JSDocState.SavingBackticks || (state as JSDocState) === JSDocState.SavingBackticksBeginningOfLine || (state as JSDocState) === JSDocState.SavingBackticksSawAsterisk ? JSDocState.SavingBackticksBeginningOfLine : JSDocState.BeginningOfLine;
                                 // don't use pushComment here because we want to keep the margin unchanged
                                 comments.push(scanner.getTokenText());
                                 indent = 0;
                                 break;
                             case SyntaxKind.AtToken:
-                                if (state === JSDocState.SavingBackticks
+                                if (state === JSDocState.SavingBackticks || state === JSDocState.SavingBackticksBeginningOfLine || state === JSDocState.SavingBackticksSawAsterisk
                                     || state === JSDocState.SavingComments && (!previousWhitespace || lookAhead(isNextJSDocTokenWhitespace))) {
                                     // @ doesn't start a new tag inside ``, and inside a comment, only after whitespace or not before whitespace
                                     comments.push(scanner.getTokenText());
@@ -8464,7 +8466,7 @@ namespace ts {
                                 }
                                 break;
                             case SyntaxKind.OpenBraceToken:
-                                state = JSDocState.SavingComments;
+                                state = (state as JSDocState) === JSDocState.SavingBackticks || (state as JSDocState) === JSDocState.SavingBackticksBeginningOfLine || (state as JSDocState) === JSDocState.SavingBackticksSawAsterisk ? JSDocState.SavingBackticks : JSDocState.SavingComments;
                                 const commentEnd = scanner.getStartPos();
                                 const linkStart = scanner.getTextPos() - 1;
                                 const link = parseJSDocLink(linkStart);
@@ -8479,7 +8481,7 @@ namespace ts {
                                 }
                                 break;
                             case SyntaxKind.BacktickToken:
-                                if (state === JSDocState.SavingBackticks) {
+                                if (state === JSDocState.SavingBackticks || state === JSDocState.SavingBackticksBeginningOfLine || state === JSDocState.SavingBackticksSawAsterisk) {
                                     state = JSDocState.SavingComments;
                                 }
                                 else {
@@ -8494,11 +8496,22 @@ namespace ts {
                                     indent += 1;
                                     break;
                                 }
+                                if (state === JSDocState.SavingBackticksBeginningOfLine) {
+                                    // leading asterisks start recording on the *next* (non-whitespace) token
+                                    state = JSDocState.SavingBackticksSawAsterisk;
+                                    indent += 1;
+                                    break;
+                                }
                                 // record the * as a comment
                                 // falls through
                             default:
                                 if (state !== JSDocState.SavingBackticks) {
-                                    state = JSDocState.SavingComments; // leading identifiers start recording as well
+                                    if (state === JSDocState.SavingBackticksBeginningOfLine || state === JSDocState.SavingBackticksSawAsterisk) {
+                                        state = JSDocState.SavingBackticks
+                                    }
+                                    else {
+                                        state = JSDocState.SavingComments; // leading identifiers start recording as well
+                                    }
                                 }
                                 pushComment(scanner.getTokenText());
                                 break;

@@ -7,7 +7,7 @@
 /**
  * `@param` initial at-param is OK in title comment
  * @param {string} x hi there `@param`
- * @param {string} y hi there `@ * param
+ * @param {string} y hi there @ * param
  *                   this is the margin
  *                   so we'll drop everything before it
  `@param` @param {string} z hello???
@@ -17,4 +17,14 @@
  */
 export function f(x, y, z, alpha, beta, gamma) {
     return x + y + z + alpha + beta + gamma
+}
+/**
+ * Unmatched backticks keep going past newlines
+ * @param {string} y hi there `@ * param
+ *                   this is the margin
+ *                   so we'll drop everything before it
+ * @param {string} gamma
+ */
+export function g(y, gamma) {
+    return y + gamma
 }
