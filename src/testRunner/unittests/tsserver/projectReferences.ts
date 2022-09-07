@@ -979,10 +979,10 @@ export function bar() {}`
                 const { session, service, host } = setup(input);
 
                 const info = service.getScriptInfoForPath(main.path as Path)!;
-                session.logger.logs.push("");
-                session.logger.logs.push(`getDefaultProject for ${main.path}: ${info.getDefaultProject().projectName}`);
-                session.logger.logs.push(`findDefaultConfiguredProject for ${main.path}: ${service.findDefaultConfiguredProject(info)!.projectName}`);
-                session.logger.logs.push("");
+                session.logger.startGroup();
+                session.logger.info(`getDefaultProject for ${main.path}: ${info.getDefaultProject().projectName}`);
+                session.logger.info(`findDefaultConfiguredProject for ${main.path}: ${service.findDefaultConfiguredProject(info)!.projectName}`);
+                session.logger.endGroup();
 
                 // Verify errors
                 verifyGetErrRequest({ session, host, files: [main] });
@@ -1046,10 +1046,10 @@ export function bar() {}`
                 const { session, service } = setup(input);
 
                 const info = service.getScriptInfoForPath(main.path as Path)!;
-                session.logger.logs.push("");
-                session.logger.logs.push(`getDefaultProject for ${main.path}: ${info.getDefaultProject().projectName}`);
-                session.logger.logs.push(`findDefaultConfiguredProject for ${main.path}: ${service.findDefaultConfiguredProject(info)?.projectName}`);
-                session.logger.logs.push("");
+                session.logger.startGroup();
+                session.logger.info(`getDefaultProject for ${main.path}: ${info.getDefaultProject().projectName}`);
+                session.logger.info(`findDefaultConfiguredProject for ${main.path}: ${service.findDefaultConfiguredProject(info)?.projectName}`);
+                session.logger.endGroup();
 
                 // Verify collection of script infos
                 service.openClientFile(dummyFilePath);

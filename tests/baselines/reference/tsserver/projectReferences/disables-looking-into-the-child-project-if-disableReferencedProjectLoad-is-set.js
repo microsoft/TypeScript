@@ -83,19 +83,17 @@ Info 38   [16:01:36.000] -----------------------------------------------
 Info 38   [16:01:37.000] Open files: 
 Info 38   [16:01:38.000] 	FileName: /user/username/projects/myproject/src/main.ts ProjectRootPath: undefined
 Info 38   [16:01:39.000] 		Projects: /dev/null/inferredProject1*
-
-getDefaultProject for /user/username/projects/myproject/src/main.ts: /dev/null/inferredProject1*
-findDefaultConfiguredProject for /user/username/projects/myproject/src/main.ts: undefined
-
-Info 38   [16:01:40.000] Search path: /dummy
-Info 39   [16:01:41.000] For info: /dummy/dummy.ts :: No config files found.
-Info 40   [16:01:42.000] Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
-Info 41   [16:01:43.000] Starting updateGraphWorker: Project: /dev/null/inferredProject2*
-Info 42   [16:01:44.000] DirectoryWatcher:: Added:: WatchInfo: /dummy/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
-Info 43   [16:01:45.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /dummy/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
-Info 44   [16:01:46.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject2* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 45   [16:01:47.000] Project '/dev/null/inferredProject2*' (Inferred)
-Info 46   [16:01:48.000] 	Files (2)
+Info 38   [16:01:40.000] getDefaultProject for /user/username/projects/myproject/src/main.ts: /dev/null/inferredProject1*
+Info 38   [16:01:41.000] findDefaultConfiguredProject for /user/username/projects/myproject/src/main.ts: undefined
+Info 38   [16:01:42.000] Search path: /dummy
+Info 39   [16:01:43.000] For info: /dummy/dummy.ts :: No config files found.
+Info 40   [16:01:44.000] Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
+Info 41   [16:01:45.000] Starting updateGraphWorker: Project: /dev/null/inferredProject2*
+Info 42   [16:01:46.000] DirectoryWatcher:: Added:: WatchInfo: /dummy/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
+Info 43   [16:01:47.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /dummy/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
+Info 44   [16:01:48.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject2* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 45   [16:01:49.000] Project '/dev/null/inferredProject2*' (Inferred)
+Info 46   [16:01:50.000] 	Files (2)
 	/a/lib/lib.d.ts
 	/dummy/dummy.ts
 
@@ -105,65 +103,65 @@ Info 46   [16:01:48.000] 	Files (2)
 	dummy.ts
 	  Root file specified for compilation
 
-Info 47   [16:01:49.000] -----------------------------------------------
-Info 48   [16:01:50.000] `remove Project::
-Info 49   [16:01:51.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
-Info 50   [16:01:52.000] 	Files (0)
+Info 47   [16:01:51.000] -----------------------------------------------
+Info 48   [16:01:52.000] `remove Project::
+Info 49   [16:01:53.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
+Info 50   [16:01:54.000] 	Files (0)
 
 
 
-Info 51   [16:01:53.000] -----------------------------------------------
-Info 52   [16:01:54.000] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/src 1 undefined Config: /user/username/projects/myproject/tsconfig-src.json WatchType: Wild card directory
-Info 53   [16:01:55.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/src 1 undefined Config: /user/username/projects/myproject/tsconfig-src.json WatchType: Wild card directory
-Info 54   [16:01:56.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/tsconfig-src.json 2000 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Config file
-Info 55   [16:01:57.000] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
-Info 56   [16:01:58.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
-Info 57   [16:01:59.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 57   [16:02:00.000] 	Files (2)
+Info 51   [16:01:55.000] -----------------------------------------------
+Info 52   [16:01:56.000] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/src 1 undefined Config: /user/username/projects/myproject/tsconfig-src.json WatchType: Wild card directory
+Info 53   [16:01:57.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/src 1 undefined Config: /user/username/projects/myproject/tsconfig-src.json WatchType: Wild card directory
+Info 54   [16:01:58.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/tsconfig-src.json 2000 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Config file
+Info 55   [16:01:59.000] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
+Info 56   [16:02:00.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
+Info 57   [16:02:01.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 57   [16:02:02.000] 	Files (2)
 
-Info 57   [16:02:01.000] -----------------------------------------------
-Info 57   [16:02:02.000] Project '/dev/null/inferredProject2*' (Inferred)
-Info 57   [16:02:03.000] 	Files (2)
+Info 57   [16:02:03.000] -----------------------------------------------
+Info 57   [16:02:04.000] Project '/dev/null/inferredProject2*' (Inferred)
+Info 57   [16:02:05.000] 	Files (2)
 
-Info 57   [16:02:04.000] -----------------------------------------------
-Info 57   [16:02:05.000] Open files: 
-Info 57   [16:02:06.000] 	FileName: /user/username/projects/myproject/src/main.ts ProjectRootPath: undefined
-Info 57   [16:02:07.000] 		Projects: /dev/null/inferredProject1*
-Info 57   [16:02:08.000] 	FileName: /dummy/dummy.ts ProjectRootPath: undefined
-Info 57   [16:02:09.000] 		Projects: /dev/null/inferredProject2*
-Info 57   [16:02:10.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/src/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
-Info 58   [16:02:11.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/src/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
-Info 59   [16:02:12.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Config file
-Info 60   [16:02:13.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
-Info 61   [16:02:14.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/main.ts 500 undefined WatchType: Closed Script info
-Info 62   [16:02:15.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 62   [16:02:16.000] 	Files (2)
+Info 57   [16:02:06.000] -----------------------------------------------
+Info 57   [16:02:07.000] Open files: 
+Info 57   [16:02:08.000] 	FileName: /user/username/projects/myproject/src/main.ts ProjectRootPath: undefined
+Info 57   [16:02:09.000] 		Projects: /dev/null/inferredProject1*
+Info 57   [16:02:10.000] 	FileName: /dummy/dummy.ts ProjectRootPath: undefined
+Info 57   [16:02:11.000] 		Projects: /dev/null/inferredProject2*
+Info 57   [16:02:12.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/src/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info 58   [16:02:13.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/src/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info 59   [16:02:14.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Config file
+Info 60   [16:02:15.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info 61   [16:02:16.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/main.ts 500 undefined WatchType: Closed Script info
+Info 62   [16:02:17.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 62   [16:02:18.000] 	Files (2)
 
-Info 62   [16:02:17.000] -----------------------------------------------
-Info 62   [16:02:18.000] Project '/dev/null/inferredProject2*' (Inferred)
-Info 62   [16:02:19.000] 	Files (2)
+Info 62   [16:02:19.000] -----------------------------------------------
+Info 62   [16:02:20.000] Project '/dev/null/inferredProject2*' (Inferred)
+Info 62   [16:02:21.000] 	Files (2)
 
-Info 62   [16:02:20.000] -----------------------------------------------
-Info 62   [16:02:21.000] Open files: 
-Info 62   [16:02:22.000] 	FileName: /dummy/dummy.ts ProjectRootPath: undefined
-Info 62   [16:02:23.000] 		Projects: /dev/null/inferredProject2*
-Info 62   [16:02:24.000] FileWatcher:: Added:: WatchInfo: /dummy/dummy.ts 500 undefined WatchType: Closed Script info
-Info 63   [16:02:25.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 63   [16:02:26.000] 	Files (2)
+Info 62   [16:02:22.000] -----------------------------------------------
+Info 62   [16:02:23.000] Open files: 
+Info 62   [16:02:24.000] 	FileName: /dummy/dummy.ts ProjectRootPath: undefined
+Info 62   [16:02:25.000] 		Projects: /dev/null/inferredProject2*
+Info 62   [16:02:26.000] FileWatcher:: Added:: WatchInfo: /dummy/dummy.ts 500 undefined WatchType: Closed Script info
+Info 63   [16:02:27.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 63   [16:02:28.000] 	Files (2)
 
-Info 63   [16:02:27.000] -----------------------------------------------
-Info 63   [16:02:28.000] Project '/dev/null/inferredProject2*' (Inferred)
-Info 63   [16:02:29.000] 	Files (2)
+Info 63   [16:02:29.000] -----------------------------------------------
+Info 63   [16:02:30.000] Project '/dev/null/inferredProject2*' (Inferred)
+Info 63   [16:02:31.000] 	Files (2)
 
-Info 63   [16:02:30.000] -----------------------------------------------
-Info 63   [16:02:31.000] Open files: 
-Info 63   [16:02:32.000] FileWatcher:: Close:: WatchInfo: /dummy/dummy.ts 500 undefined WatchType: Closed Script info
-Info 64   [16:02:33.000] Search path: /dummy
-Info 65   [16:02:34.000] For info: /dummy/dummy.ts :: No config files found.
-Info 66   [16:02:35.000] Starting updateGraphWorker: Project: /dev/null/inferredProject2*
-Info 67   [16:02:36.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject2* Version: 2 structureChanged: false structureIsReused:: Not Elapsed:: *ms
-Info 68   [16:02:37.000] Project '/dev/null/inferredProject2*' (Inferred)
-Info 69   [16:02:38.000] 	Files (2)
+Info 63   [16:02:32.000] -----------------------------------------------
+Info 63   [16:02:33.000] Open files: 
+Info 63   [16:02:34.000] FileWatcher:: Close:: WatchInfo: /dummy/dummy.ts 500 undefined WatchType: Closed Script info
+Info 64   [16:02:35.000] Search path: /dummy
+Info 65   [16:02:36.000] For info: /dummy/dummy.ts :: No config files found.
+Info 66   [16:02:37.000] Starting updateGraphWorker: Project: /dev/null/inferredProject2*
+Info 67   [16:02:38.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject2* Version: 2 structureChanged: false structureIsReused:: Not Elapsed:: *ms
+Info 68   [16:02:39.000] Project '/dev/null/inferredProject2*' (Inferred)
+Info 69   [16:02:40.000] 	Files (2)
 	/a/lib/lib.d.ts
 	/dummy/dummy.ts
 
@@ -173,10 +171,10 @@ Info 69   [16:02:38.000] 	Files (2)
 	dummy.ts
 	  Root file specified for compilation
 
-Info 70   [16:02:39.000] -----------------------------------------------
-Info 71   [16:02:40.000] `remove Project::
-Info 72   [16:02:41.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 73   [16:02:42.000] 	Files (2)
+Info 70   [16:02:41.000] -----------------------------------------------
+Info 71   [16:02:42.000] `remove Project::
+Info 72   [16:02:43.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 73   [16:02:44.000] 	Files (2)
 	/a/lib/lib.d.ts
 	/user/username/projects/myproject/src/main.ts
 
@@ -186,30 +184,30 @@ Info 73   [16:02:42.000] 	Files (2)
 	main.ts
 	  Root file specified for compilation
 
-Info 74   [16:02:43.000] -----------------------------------------------
-Info 75   [16:02:44.000] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/src/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info 76   [16:02:45.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/src/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info 77   [16:02:46.000] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info 78   [16:02:47.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info 79   [16:02:48.000] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/src/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info 80   [16:02:49.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/src/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info 81   [16:02:50.000] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info 82   [16:02:51.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info 83   [16:02:52.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/src/main.ts 500 undefined WatchType: Closed Script info
-Info 84   [16:02:53.000] Project '/dev/null/inferredProject2*' (Inferred)
-Info 84   [16:02:54.000] 	Files (2)
+Info 74   [16:02:45.000] -----------------------------------------------
+Info 75   [16:02:46.000] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/src/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info 76   [16:02:47.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/src/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info 77   [16:02:48.000] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info 78   [16:02:49.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info 79   [16:02:50.000] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/src/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info 80   [16:02:51.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/src/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info 81   [16:02:52.000] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info 82   [16:02:53.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info 83   [16:02:54.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/src/main.ts 500 undefined WatchType: Closed Script info
+Info 84   [16:02:55.000] Project '/dev/null/inferredProject2*' (Inferred)
+Info 84   [16:02:56.000] 	Files (2)
 
-Info 84   [16:02:55.000] -----------------------------------------------
-Info 84   [16:02:56.000] Open files: 
-Info 84   [16:02:57.000] 	FileName: /dummy/dummy.ts ProjectRootPath: undefined
-Info 84   [16:02:58.000] 		Projects: /dev/null/inferredProject2*
-Info 84   [16:02:59.000] Search path: /user/username/projects/myproject/src
-Info 85   [16:03:00.000] For info: /user/username/projects/myproject/src/main.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
-Info 86   [16:03:01.000] Creating configuration project /user/username/projects/myproject/tsconfig.json
-Info 87   [16:03:02.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Config file
-Info 88   [16:03:03.000] event:
+Info 84   [16:02:57.000] -----------------------------------------------
+Info 84   [16:02:58.000] Open files: 
+Info 84   [16:02:59.000] 	FileName: /dummy/dummy.ts ProjectRootPath: undefined
+Info 84   [16:03:00.000] 		Projects: /dev/null/inferredProject2*
+Info 84   [16:03:01.000] Search path: /user/username/projects/myproject/src
+Info 85   [16:03:02.000] For info: /user/username/projects/myproject/src/main.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
+Info 86   [16:03:03.000] Creating configuration project /user/username/projects/myproject/tsconfig.json
+Info 87   [16:03:04.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Config file
+Info 88   [16:03:05.000] event:
     {"seq":0,"type":"event","event":"projectLoadingStart","body":{"projectName":"/user/username/projects/myproject/tsconfig.json","reason":"Creating possible configured project for /user/username/projects/myproject/src/main.ts to open"}}
-Info 89   [16:03:04.000] Config: /user/username/projects/myproject/tsconfig.json : {
+Info 89   [16:03:06.000] Config: /user/username/projects/myproject/tsconfig.json : {
  "rootNames": [],
  "options": {
   "disableReferencedProjectLoad": true,
@@ -222,9 +220,9 @@ Info 89   [16:03:04.000] Config: /user/username/projects/myproject/tsconfig.json
   }
  ]
 }
-Info 90   [16:03:05.000] Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
-Info 91   [16:03:06.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
-Info 92   [16:03:07.000] Config: /user/username/projects/myproject/tsconfig-src.json : {
+Info 90   [16:03:07.000] Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
+Info 91   [16:03:08.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
+Info 92   [16:03:09.000] Config: /user/username/projects/myproject/tsconfig-src.json : {
  "rootNames": [
   "/user/username/projects/myproject/src/main.ts",
   "/user/username/projects/myproject/src/helpers/functions.ts"
@@ -236,33 +234,33 @@ Info 92   [16:03:07.000] Config: /user/username/projects/myproject/tsconfig-src.
   "configFilePath": "/user/username/projects/myproject/tsconfig-src.json"
  }
 }
-Info 93   [16:03:08.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig-src.json 2000 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Config file
-Info 94   [16:03:09.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 undefined Config: /user/username/projects/myproject/tsconfig-src.json WatchType: Wild card directory
-Info 95   [16:03:10.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 undefined Config: /user/username/projects/myproject/tsconfig-src.json WatchType: Wild card directory
-Info 96   [16:03:11.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
-Info 97   [16:03:12.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
-Info 98   [16:03:13.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 99   [16:03:14.000] Different program with same set of files
-Info 100  [16:03:15.000] event:
+Info 93   [16:03:10.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig-src.json 2000 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Config file
+Info 94   [16:03:11.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 undefined Config: /user/username/projects/myproject/tsconfig-src.json WatchType: Wild card directory
+Info 95   [16:03:12.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 undefined Config: /user/username/projects/myproject/tsconfig-src.json WatchType: Wild card directory
+Info 96   [16:03:13.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
+Info 97   [16:03:14.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
+Info 98   [16:03:15.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 99   [16:03:16.000] Different program with same set of files
+Info 100  [16:03:17.000] event:
     {"seq":0,"type":"event","event":"projectLoadingFinish","body":{"projectName":"/user/username/projects/myproject/tsconfig.json"}}
-Info 101  [16:03:16.000] event:
+Info 101  [16:03:18.000] event:
     {"seq":0,"type":"event","event":"configFileDiag","body":{"triggerFile":"/user/username/projects/myproject/src/main.ts","configFile":"/user/username/projects/myproject/tsconfig.json","diagnostics":[]}}
-Info 102  [16:03:17.000] Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
-Info 103  [16:03:18.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
-Info 104  [16:03:19.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
-Info 105  [16:03:20.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
-Info 106  [16:03:21.000] Starting updateGraphWorker: Project: /dev/null/inferredProject3*
-Info 107  [16:03:22.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/node_modules 1 undefined Project: /dev/null/inferredProject3* WatchType: Failed Lookup Locations
-Info 108  [16:03:23.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/node_modules 1 undefined Project: /dev/null/inferredProject3* WatchType: Failed Lookup Locations
-Info 109  [16:03:24.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Project: /dev/null/inferredProject3* WatchType: Failed Lookup Locations
-Info 110  [16:03:25.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Project: /dev/null/inferredProject3* WatchType: Failed Lookup Locations
-Info 111  [16:03:26.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/node_modules/@types 1 undefined Project: /dev/null/inferredProject3* WatchType: Type roots
-Info 112  [16:03:27.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/node_modules/@types 1 undefined Project: /dev/null/inferredProject3* WatchType: Type roots
-Info 113  [16:03:28.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /dev/null/inferredProject3* WatchType: Type roots
-Info 114  [16:03:29.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /dev/null/inferredProject3* WatchType: Type roots
-Info 115  [16:03:30.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject3* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 116  [16:03:31.000] Project '/dev/null/inferredProject3*' (Inferred)
-Info 117  [16:03:32.000] 	Files (2)
+Info 102  [16:03:19.000] Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
+Info 103  [16:03:20.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info 104  [16:03:21.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info 105  [16:03:22.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Info 106  [16:03:23.000] Starting updateGraphWorker: Project: /dev/null/inferredProject3*
+Info 107  [16:03:24.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/node_modules 1 undefined Project: /dev/null/inferredProject3* WatchType: Failed Lookup Locations
+Info 108  [16:03:25.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/node_modules 1 undefined Project: /dev/null/inferredProject3* WatchType: Failed Lookup Locations
+Info 109  [16:03:26.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Project: /dev/null/inferredProject3* WatchType: Failed Lookup Locations
+Info 110  [16:03:27.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Project: /dev/null/inferredProject3* WatchType: Failed Lookup Locations
+Info 111  [16:03:28.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/node_modules/@types 1 undefined Project: /dev/null/inferredProject3* WatchType: Type roots
+Info 112  [16:03:29.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/node_modules/@types 1 undefined Project: /dev/null/inferredProject3* WatchType: Type roots
+Info 113  [16:03:30.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /dev/null/inferredProject3* WatchType: Type roots
+Info 114  [16:03:31.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /dev/null/inferredProject3* WatchType: Type roots
+Info 115  [16:03:32.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject3* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 116  [16:03:33.000] Project '/dev/null/inferredProject3*' (Inferred)
+Info 117  [16:03:34.000] 	Files (2)
 	/a/lib/lib.d.ts
 	/user/username/projects/myproject/src/main.ts
 
@@ -272,38 +270,38 @@ Info 117  [16:03:32.000] 	Files (2)
 	main.ts
 	  Root file specified for compilation
 
-Info 118  [16:03:33.000] -----------------------------------------------
-Info 119  [16:03:34.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
-Info 119  [16:03:35.000] 	Files (0)
+Info 118  [16:03:35.000] -----------------------------------------------
+Info 119  [16:03:36.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
+Info 119  [16:03:37.000] 	Files (0)
 
-Info 119  [16:03:36.000] -----------------------------------------------
-Info 119  [16:03:37.000] Project '/dev/null/inferredProject2*' (Inferred)
-Info 119  [16:03:38.000] 	Files (2)
+Info 119  [16:03:38.000] -----------------------------------------------
+Info 119  [16:03:39.000] Project '/dev/null/inferredProject2*' (Inferred)
+Info 119  [16:03:40.000] 	Files (2)
 
-Info 119  [16:03:39.000] -----------------------------------------------
-Info 119  [16:03:40.000] Project '/dev/null/inferredProject3*' (Inferred)
-Info 119  [16:03:41.000] 	Files (2)
+Info 119  [16:03:41.000] -----------------------------------------------
+Info 119  [16:03:42.000] Project '/dev/null/inferredProject3*' (Inferred)
+Info 119  [16:03:43.000] 	Files (2)
 
-Info 119  [16:03:42.000] -----------------------------------------------
-Info 119  [16:03:43.000] Open files: 
-Info 119  [16:03:44.000] 	FileName: /dummy/dummy.ts ProjectRootPath: undefined
-Info 119  [16:03:45.000] 		Projects: /dev/null/inferredProject2*
-Info 119  [16:03:46.000] 	FileName: /user/username/projects/myproject/src/main.ts ProjectRootPath: undefined
-Info 119  [16:03:47.000] 		Projects: /dev/null/inferredProject3*
-Info 119  [16:03:48.000] reload projects.
-Info 120  [16:03:49.000] Scheduled: /dev/null/inferredProject2*
-Info 121  [16:03:50.000] Scheduled: /dev/null/inferredProject3*
-Info 122  [16:03:51.000] Scheduled: *ensureProjectForOpenFiles*
-Info 123  [16:03:52.000] Search path: /dummy
-Info 124  [16:03:53.000] For info: /dummy/dummy.ts :: No config files found.
-Info 125  [16:03:54.000] Search path: /user/username/projects/myproject/src
-Info 126  [16:03:55.000] For info: /user/username/projects/myproject/src/main.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
-Info 127  [16:03:56.000] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
-Info 128  [16:03:57.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
-Info 129  [16:03:58.000] Reloading configured project /user/username/projects/myproject/tsconfig.json
-Info 130  [16:03:59.000] event:
+Info 119  [16:03:44.000] -----------------------------------------------
+Info 119  [16:03:45.000] Open files: 
+Info 119  [16:03:46.000] 	FileName: /dummy/dummy.ts ProjectRootPath: undefined
+Info 119  [16:03:47.000] 		Projects: /dev/null/inferredProject2*
+Info 119  [16:03:48.000] 	FileName: /user/username/projects/myproject/src/main.ts ProjectRootPath: undefined
+Info 119  [16:03:49.000] 		Projects: /dev/null/inferredProject3*
+Info 119  [16:03:50.000] reload projects.
+Info 120  [16:03:51.000] Scheduled: /dev/null/inferredProject2*
+Info 121  [16:03:52.000] Scheduled: /dev/null/inferredProject3*
+Info 122  [16:03:53.000] Scheduled: *ensureProjectForOpenFiles*
+Info 123  [16:03:54.000] Search path: /dummy
+Info 124  [16:03:55.000] For info: /dummy/dummy.ts :: No config files found.
+Info 125  [16:03:56.000] Search path: /user/username/projects/myproject/src
+Info 126  [16:03:57.000] For info: /user/username/projects/myproject/src/main.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
+Info 127  [16:03:58.000] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
+Info 128  [16:03:59.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
+Info 129  [16:04:00.000] Reloading configured project /user/username/projects/myproject/tsconfig.json
+Info 130  [16:04:01.000] event:
     {"seq":0,"type":"event","event":"projectLoadingStart","body":{"projectName":"/user/username/projects/myproject/tsconfig.json","reason":"User requested reload projects"}}
-Info 131  [16:04:00.000] Config: /user/username/projects/myproject/tsconfig.json : {
+Info 131  [16:04:02.000] Config: /user/username/projects/myproject/tsconfig.json : {
  "rootNames": [],
  "options": {
   "disableReferencedProjectLoad": true,
@@ -316,9 +314,9 @@ Info 131  [16:04:00.000] Config: /user/username/projects/myproject/tsconfig.json
   }
  ]
 }
-Info 132  [16:04:01.000] Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
-Info 133  [16:04:02.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
-Info 134  [16:04:03.000] Config: /user/username/projects/myproject/tsconfig-src.json : {
+Info 132  [16:04:03.000] Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
+Info 133  [16:04:04.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
+Info 134  [16:04:05.000] Config: /user/username/projects/myproject/tsconfig-src.json : {
  "rootNames": [
   "/user/username/projects/myproject/src/main.ts",
   "/user/username/projects/myproject/src/helpers/functions.ts"
@@ -330,73 +328,73 @@ Info 134  [16:04:03.000] Config: /user/username/projects/myproject/tsconfig-src.
   "configFilePath": "/user/username/projects/myproject/tsconfig-src.json"
  }
 }
-Info 135  [16:04:04.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
-Info 136  [16:04:05.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
-Info 137  [16:04:06.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 138  [16:04:07.000] Different program with same set of files
-Info 139  [16:04:08.000] event:
+Info 135  [16:04:06.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
+Info 136  [16:04:07.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
+Info 137  [16:04:08.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 138  [16:04:09.000] Different program with same set of files
+Info 139  [16:04:10.000] event:
     {"seq":0,"type":"event","event":"projectLoadingFinish","body":{"projectName":"/user/username/projects/myproject/tsconfig.json"}}
-Info 140  [16:04:09.000] event:
+Info 140  [16:04:11.000] event:
     {"seq":0,"type":"event","event":"configFileDiag","body":{"triggerFile":"/user/username/projects/myproject/tsconfig.json","configFile":"/user/username/projects/myproject/tsconfig.json","diagnostics":[]}}
-Info 141  [16:04:10.000] DirectoryWatcher:: Close:: WatchInfo: /dummy/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
-Info 142  [16:04:11.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /dummy/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
-Info 143  [16:04:12.000] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/src/node_modules 1 undefined Project: /dev/null/inferredProject3* WatchType: Failed Lookup Locations
-Info 144  [16:04:13.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/src/node_modules 1 undefined Project: /dev/null/inferredProject3* WatchType: Failed Lookup Locations
-Info 145  [16:04:14.000] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Project: /dev/null/inferredProject3* WatchType: Failed Lookup Locations
-Info 146  [16:04:15.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Project: /dev/null/inferredProject3* WatchType: Failed Lookup Locations
-Info 147  [16:04:16.000] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/src/node_modules/@types 1 undefined Project: /dev/null/inferredProject3* WatchType: Type roots
-Info 148  [16:04:17.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/src/node_modules/@types 1 undefined Project: /dev/null/inferredProject3* WatchType: Type roots
-Info 149  [16:04:18.000] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /dev/null/inferredProject3* WatchType: Type roots
-Info 150  [16:04:19.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /dev/null/inferredProject3* WatchType: Type roots
-Info 151  [16:04:20.000] Before ensureProjectForOpenFiles:
-Info 152  [16:04:21.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
-Info 152  [16:04:22.000] 	Files (0)
+Info 141  [16:04:12.000] DirectoryWatcher:: Close:: WatchInfo: /dummy/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
+Info 142  [16:04:13.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /dummy/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
+Info 143  [16:04:14.000] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/src/node_modules 1 undefined Project: /dev/null/inferredProject3* WatchType: Failed Lookup Locations
+Info 144  [16:04:15.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/src/node_modules 1 undefined Project: /dev/null/inferredProject3* WatchType: Failed Lookup Locations
+Info 145  [16:04:16.000] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Project: /dev/null/inferredProject3* WatchType: Failed Lookup Locations
+Info 146  [16:04:17.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Project: /dev/null/inferredProject3* WatchType: Failed Lookup Locations
+Info 147  [16:04:18.000] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/src/node_modules/@types 1 undefined Project: /dev/null/inferredProject3* WatchType: Type roots
+Info 148  [16:04:19.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/src/node_modules/@types 1 undefined Project: /dev/null/inferredProject3* WatchType: Type roots
+Info 149  [16:04:20.000] DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /dev/null/inferredProject3* WatchType: Type roots
+Info 150  [16:04:21.000] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /dev/null/inferredProject3* WatchType: Type roots
+Info 151  [16:04:22.000] Before ensureProjectForOpenFiles:
+Info 152  [16:04:23.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
+Info 152  [16:04:24.000] 	Files (0)
 
-Info 152  [16:04:23.000] -----------------------------------------------
-Info 152  [16:04:24.000] Project '/dev/null/inferredProject2*' (Inferred)
-Info 152  [16:04:25.000] 	Files (2)
+Info 152  [16:04:25.000] -----------------------------------------------
+Info 152  [16:04:26.000] Project '/dev/null/inferredProject2*' (Inferred)
+Info 152  [16:04:27.000] 	Files (2)
 
-Info 152  [16:04:26.000] -----------------------------------------------
-Info 152  [16:04:27.000] Project '/dev/null/inferredProject3*' (Inferred)
-Info 152  [16:04:28.000] 	Files (2)
+Info 152  [16:04:28.000] -----------------------------------------------
+Info 152  [16:04:29.000] Project '/dev/null/inferredProject3*' (Inferred)
+Info 152  [16:04:30.000] 	Files (2)
 
-Info 152  [16:04:29.000] -----------------------------------------------
-Info 152  [16:04:30.000] Open files: 
-Info 152  [16:04:31.000] 	FileName: /dummy/dummy.ts ProjectRootPath: undefined
-Info 152  [16:04:32.000] 		Projects: /dev/null/inferredProject2*
-Info 152  [16:04:33.000] 	FileName: /user/username/projects/myproject/src/main.ts ProjectRootPath: undefined
-Info 152  [16:04:34.000] 		Projects: /dev/null/inferredProject3*
-Info 152  [16:04:35.000] Starting updateGraphWorker: Project: /dev/null/inferredProject2*
-Info 153  [16:04:36.000] DirectoryWatcher:: Added:: WatchInfo: /dummy/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
-Info 154  [16:04:37.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /dummy/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
-Info 155  [16:04:38.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject2* Version: 3 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 156  [16:04:39.000] Different program with same set of files
-Info 157  [16:04:40.000] Starting updateGraphWorker: Project: /dev/null/inferredProject3*
-Info 158  [16:04:41.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/node_modules 1 undefined Project: /dev/null/inferredProject3* WatchType: Failed Lookup Locations
-Info 159  [16:04:42.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/node_modules 1 undefined Project: /dev/null/inferredProject3* WatchType: Failed Lookup Locations
-Info 160  [16:04:43.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Project: /dev/null/inferredProject3* WatchType: Failed Lookup Locations
-Info 161  [16:04:44.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Project: /dev/null/inferredProject3* WatchType: Failed Lookup Locations
-Info 162  [16:04:45.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/node_modules/@types 1 undefined Project: /dev/null/inferredProject3* WatchType: Type roots
-Info 163  [16:04:46.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/node_modules/@types 1 undefined Project: /dev/null/inferredProject3* WatchType: Type roots
-Info 164  [16:04:47.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /dev/null/inferredProject3* WatchType: Type roots
-Info 165  [16:04:48.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /dev/null/inferredProject3* WatchType: Type roots
-Info 166  [16:04:49.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject3* Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 167  [16:04:50.000] Different program with same set of files
-Info 168  [16:04:51.000] After ensureProjectForOpenFiles:
-Info 169  [16:04:52.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
-Info 169  [16:04:53.000] 	Files (0)
+Info 152  [16:04:31.000] -----------------------------------------------
+Info 152  [16:04:32.000] Open files: 
+Info 152  [16:04:33.000] 	FileName: /dummy/dummy.ts ProjectRootPath: undefined
+Info 152  [16:04:34.000] 		Projects: /dev/null/inferredProject2*
+Info 152  [16:04:35.000] 	FileName: /user/username/projects/myproject/src/main.ts ProjectRootPath: undefined
+Info 152  [16:04:36.000] 		Projects: /dev/null/inferredProject3*
+Info 152  [16:04:37.000] Starting updateGraphWorker: Project: /dev/null/inferredProject2*
+Info 153  [16:04:38.000] DirectoryWatcher:: Added:: WatchInfo: /dummy/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
+Info 154  [16:04:39.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /dummy/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
+Info 155  [16:04:40.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject2* Version: 3 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 156  [16:04:41.000] Different program with same set of files
+Info 157  [16:04:42.000] Starting updateGraphWorker: Project: /dev/null/inferredProject3*
+Info 158  [16:04:43.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/node_modules 1 undefined Project: /dev/null/inferredProject3* WatchType: Failed Lookup Locations
+Info 159  [16:04:44.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/node_modules 1 undefined Project: /dev/null/inferredProject3* WatchType: Failed Lookup Locations
+Info 160  [16:04:45.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Project: /dev/null/inferredProject3* WatchType: Failed Lookup Locations
+Info 161  [16:04:46.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Project: /dev/null/inferredProject3* WatchType: Failed Lookup Locations
+Info 162  [16:04:47.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/node_modules/@types 1 undefined Project: /dev/null/inferredProject3* WatchType: Type roots
+Info 163  [16:04:48.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/node_modules/@types 1 undefined Project: /dev/null/inferredProject3* WatchType: Type roots
+Info 164  [16:04:49.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /dev/null/inferredProject3* WatchType: Type roots
+Info 165  [16:04:50.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /dev/null/inferredProject3* WatchType: Type roots
+Info 166  [16:04:51.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject3* Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 167  [16:04:52.000] Different program with same set of files
+Info 168  [16:04:53.000] After ensureProjectForOpenFiles:
+Info 169  [16:04:54.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
+Info 169  [16:04:55.000] 	Files (0)
 
-Info 169  [16:04:54.000] -----------------------------------------------
-Info 169  [16:04:55.000] Project '/dev/null/inferredProject2*' (Inferred)
-Info 169  [16:04:56.000] 	Files (2)
+Info 169  [16:04:56.000] -----------------------------------------------
+Info 169  [16:04:57.000] Project '/dev/null/inferredProject2*' (Inferred)
+Info 169  [16:04:58.000] 	Files (2)
 
-Info 169  [16:04:57.000] -----------------------------------------------
-Info 169  [16:04:58.000] Project '/dev/null/inferredProject3*' (Inferred)
-Info 169  [16:04:59.000] 	Files (2)
+Info 169  [16:04:59.000] -----------------------------------------------
+Info 169  [16:05:00.000] Project '/dev/null/inferredProject3*' (Inferred)
+Info 169  [16:05:01.000] 	Files (2)
 
-Info 169  [16:05:00.000] -----------------------------------------------
-Info 169  [16:05:01.000] Open files: 
-Info 169  [16:05:02.000] 	FileName: /dummy/dummy.ts ProjectRootPath: undefined
-Info 169  [16:05:03.000] 		Projects: /dev/null/inferredProject2*
-Info 169  [16:05:04.000] 	FileName: /user/username/projects/myproject/src/main.ts ProjectRootPath: undefined
-Info 169  [16:05:05.000] 		Projects: /dev/null/inferredProject3*
+Info 169  [16:05:02.000] -----------------------------------------------
+Info 169  [16:05:03.000] Open files: 
+Info 169  [16:05:04.000] 	FileName: /dummy/dummy.ts ProjectRootPath: undefined
+Info 169  [16:05:05.000] 		Projects: /dev/null/inferredProject2*
+Info 169  [16:05:06.000] 	FileName: /user/username/projects/myproject/src/main.ts ProjectRootPath: undefined
+Info 169  [16:05:07.000] 		Projects: /dev/null/inferredProject3*

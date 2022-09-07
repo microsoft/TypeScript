@@ -45,5 +45,5 @@ Info 16   [16:00:35.000] -----------------------------------------------
 Info 16   [16:00:36.000] Open files: 
 Info 16   [16:00:37.000] 	FileName: /a/app.js ProjectRootPath: undefined
 Info 16   [16:00:38.000] 		Projects: /a/jsconfig.json
-languageServiceEnabled: false
-lastFileExceededProgramSize: /a/largefile.js
+Info 16   [16:00:39.000] languageServiceEnabled: false
+Info 17   [16:00:40.000] lastFileExceededProgramSize: /a/largefile.js
