@@ -14,8 +14,9 @@ declare function clearTimeout(handle: any): void;
 /**
  * djb2 hashing algorithm
  * http://www.cse.yorku.ca/~oz/hash.html
+ *
+ * @internal
  */
-/* @internal */
 export function generateDjb2Hash(data: string): string {
     let acc = 5381;
     for (let i = 0; i < data.length; i++) {
@@ -28,8 +29,9 @@ export function generateDjb2Hash(data: string): string {
  * Set a high stack trace limit to provide more information in case of an error.
  * Called for command-line and server use cases.
  * Not called if TypeScript is used as a library.
+ *
+ * @internal
  */
-/* @internal */
 export function setStackTraceLimit() {
     if ((Error as any).stackTraceLimit < 100) { // Also tests that we won't set the property if it doesn't exist.
         (Error as any).stackTraceLimit = 100;
@@ -50,22 +52,22 @@ interface WatchedFile {
     mtime: Date;
 }
 
-/* @internal */
+/** @internal */
 export enum PollingInterval {
     High = 2000,
     Medium = 500,
     Low = 250
 }
 
-/* @internal */
+/** @internal */
 export type HostWatchFile = (fileName: string, callback: FileWatcherCallback, pollingInterval: PollingInterval, options: WatchOptions | undefined) => FileWatcher;
-/* @internal */
+/** @internal */
 export type HostWatchDirectory = (fileName: string, callback: DirectoryWatcherCallback, recursive: boolean, options: WatchOptions | undefined) => FileWatcher;
 
-/* @internal */
+/** @internal */
 export const missingFileModifiedTime = new Date(0); // Any subsequent modification will occur after this time
 
-/* @internal */
+/** @internal */
 export function getModifiedTime(host: { getModifiedTime: NonNullable<System["getModifiedTime"]>; }, fileName: string) {
     return host.getModifiedTime(fileName) || missingFileModifiedTime;
 }
@@ -86,7 +88,7 @@ function createPollingIntervalBasedLevels(levels: Levels) {
 
 const defaultChunkLevels: Levels = { Low: 32, Medium: 64, High: 256 };
 let pollingChunkSize = createPollingIntervalBasedLevels(defaultChunkLevels);
-/* @internal */
+/** @internal */
 export let unchangedPollThresholds = createPollingIntervalBasedLevels(defaultChunkLevels);
 
 function setCustomPollingValues(system: System) {
@@ -483,7 +485,7 @@ function onWatchedFileStat(watchedFile: WatchedFile, modifiedTime: Date): boolea
     return false;
 }
 
-/*@internal*/
+/** @internal */
 export function getFileWatcherEventKind(oldTime: number, newTime: number) {
     return oldTime === 0
         ? FileWatcherEventKind.Created
@@ -492,17 +494,17 @@ export function getFileWatcherEventKind(oldTime: number, newTime: number) {
             : FileWatcherEventKind.Changed;
 }
 
-/*@internal*/
+/** @internal */
 export const ignoredPaths = ["/node_modules/.", "/.git", "/.#"];
 
 let curSysLog: (s: string) => void = noop; // eslint-disable-line prefer-const
 
-/*@internal*/
+/** @internal */
 export function sysLog(s: string) {
     return curSysLog(s);
 }
 
-/*@internal*/
+/** @internal */
 export function setSysLog(logger: typeof sysLog) {
     curSysLog = logger;
 }
@@ -769,17 +771,17 @@ function createDirectoryWatcherSupportingRecursive({
     }
 }
 
-/*@internal*/
+/** @internal */
 export type FsWatchCallback = (eventName: "rename" | "change", relativeFileName: string | undefined, modifiedTime?: Date) => void;
-/*@internal*/
+/** @internal */
 export type FsWatch = (fileOrDirectory: string, entryKind: FileSystemEntryKind, callback: FsWatchCallback, recursive: boolean, fallbackPollingInterval: PollingInterval, fallbackOptions: WatchOptions | undefined) => FileWatcher;
-/*@internal*/
+/** @internal */
 export interface FsWatchWorkerWatcher extends FileWatcher {
     on(eventName: string, listener: () => void): void;
 }
-/*@internal*/
+/** @internal */
 export type FsWatchWorker = (fileOrDirectory: string, recursive: boolean, callback: FsWatchCallback) => FsWatchWorkerWatcher;
-/*@internal*/
+/** @internal */
 export const enum FileSystemEntryKind {
     File,
     Directory,
@@ -840,10 +842,10 @@ function createFsWatchCallbackForDirectoryWatcherCallback(
     };
 }
 
-/*@internal*/
+/** @internal */
 export type FileSystemEntryExists = (fileorDirectrory: string, entryKind: FileSystemEntryKind) => boolean;
 
-/*@internal*/
+/** @internal */
 export interface CreateSystemWatchFunctions {
     // Polling watch file
     pollingWatchFileWorker: HostWatchFile;
@@ -867,7 +869,7 @@ export interface CreateSystemWatchFunctions {
     sysLog: (s: string) => void;
 }
 
-/*@internal*/
+/** @internal */
 export function createSystemWatchFunctions({
     pollingWatchFileWorker,
     getModifiedTime,
@@ -1238,8 +1240,9 @@ export function createSystemWatchFunctions({
 
 /**
  * patch writefile to create folder before writing the file
+ *
+ * @internal
  */
-/*@internal*/
 export function patchWriteFileEnsuringDirectory(sys: System) {
     // patch writefile to create folder before writing the file
     const originalWriteFile = sys.writeFile;
@@ -1253,10 +1256,10 @@ export function patchWriteFileEnsuringDirectory(sys: System) {
             path => sys.directoryExists(path));
 }
 
-/*@internal*/
+/** @internal */
 export type BufferEncoding = "ascii" | "utf8" | "utf-8" | "utf16le" | "ucs2" | "ucs-2" | "base64" | "latin1" | "binary" | "hex";
 
-/*@internal*/
+/** @internal */
 interface NodeBuffer extends Uint8Array {
     constructor: any;
     write(str: string, encoding?: BufferEncoding): number;
@@ -1332,7 +1335,7 @@ interface NodeBuffer extends Uint8Array {
     values(): IterableIterator<number>;
 }
 
-/*@internal*/
+/** @internal */
 interface Buffer extends NodeBuffer { }
 
 // TODO: GH#18217 Methods on System are often used as if they are certainly defined
@@ -1372,26 +1375,26 @@ export interface System {
     createSHA256Hash?(data: string): string;
     getMemoryUsage?(): number;
     exit(exitCode?: number): void;
-    /*@internal*/ enableCPUProfiler?(path: string, continuation: () => void): boolean;
-    /*@internal*/ disableCPUProfiler?(continuation: () => void): boolean;
-    /*@internal*/ cpuProfilingEnabled?(): boolean;
+    /** @internal */ enableCPUProfiler?(path: string, continuation: () => void): boolean;
+    /** @internal */ disableCPUProfiler?(continuation: () => void): boolean;
+    /** @internal */ cpuProfilingEnabled?(): boolean;
     realpath?(path: string): string;
-    /*@internal*/ getEnvironmentVariable(name: string): string;
-    /*@internal*/ tryEnableSourceMapsForHost?(): void;
-    /*@internal*/ debugMode?: boolean;
+    /** @internal */ getEnvironmentVariable(name: string): string;
+    /** @internal */ tryEnableSourceMapsForHost?(): void;
+    /** @internal */ debugMode?: boolean;
     setTimeout?(callback: (...args: any[]) => void, ms: number, ...args: any[]): any;
     clearTimeout?(timeoutId: any): void;
     clearScreen?(): void;
-    /*@internal*/ setBlocking?(): void;
+    /** @internal */ setBlocking?(): void;
     base64decode?(input: string): string;
     base64encode?(input: string): string;
-    /*@internal*/ bufferFrom?(input: string, encoding?: string): Buffer;
-    /*@internal*/ require?(baseDir: string, moduleName: string): RequireResult;
+    /** @internal */ bufferFrom?(input: string, encoding?: string): Buffer;
+    /** @internal */ require?(baseDir: string, moduleName: string): RequireResult;
 
     // For testing
-    /*@internal*/ now?(): Date;
-    /*@internal*/ disableUseFileVersionAsSignature?: boolean;
-    /*@internal*/ storeFilesChangingSignatureDuringEmit?: boolean;
+    /** @internal */ now?(): Date;
+    /** @internal */ disableUseFileVersionAsSignature?: boolean;
+    /** @internal */ storeFilesChangingSignatureDuringEmit?: boolean;
 }
 
 export interface FileWatcher {
@@ -1973,7 +1976,7 @@ export let sys: System = (() => {
     return sys!;
 })();
 
-/*@internal*/
+/** @internal */
 export function setSys(s: System) {
     sys = s;
 }

@@ -27,9 +27,10 @@ const sysFormatDiagnosticsHost: FormatDiagnosticsHost | undefined = sys ? {
     getCanonicalFileName: createGetCanonicalFileName(sys.useCaseSensitiveFileNames)
 } : undefined;
 
-/** @internal */
 /**
  * Create a function that reports error by writing to the system and handles the formatting of the diagnostic
+ *
+ * @internal
  */
 export function createDiagnosticReporter(system: System, pretty?: boolean): DiagnosticReporter {
     const host: FormatDiagnosticsHost = system === sys && sysFormatDiagnosticsHost ? sysFormatDiagnosticsHost : {
@@ -77,9 +78,10 @@ function getPlainDiagnosticFollowingNewLines(diagnostic: Diagnostic, newLine: st
         : newLine;
 }
 
-/** @internal */
 /**
  * Get locale specific time based on whether we are in test mode
+ *
+ * @internal
  */
 export function getLocaleTimeString(system: System) {
     return !system.now ?
@@ -87,9 +89,10 @@ export function getLocaleTimeString(system: System) {
         system.now().toLocaleTimeString("en-US", { timeZone: "UTC" });
 }
 
-/** @internal */
 /**
  * Create a function that reports watch status by writing to the system and handles the formatting of the diagnostic
+ *
+ * @internal
  */
 export function createWatchStatusReporter(system: System, pretty?: boolean): WatchStatusReporter {
     return pretty ?
@@ -113,8 +116,11 @@ export function createWatchStatusReporter(system: System, pretty?: boolean): Wat
         };
 }
 
-/** @internal */
-/** Parses config file using System interface */
+/**
+ * Parses config file using System interface
+ *
+ * @internal
+ */
 export function parseConfigFileWithSystem(configFileName: string, optionsToExtend: CompilerOptions, extendedConfigCache: Map<ExtendedConfigCacheEntry> | undefined, watchOptionsToExtend: WatchOptions | undefined, system: System, reportDiagnostic: DiagnosticReporter) {
     const host: ParseConfigFileHost = system as any;
     host.onUnRecoverableConfigFileDiagnostic = diagnostic => reportUnrecoverableDiagnostic(system, reportDiagnostic, diagnostic);
@@ -461,9 +467,10 @@ function toFileName(file: SourceFile | string, fileNameConvertor?: (fileName: st
     return fileNameConvertor ? fileNameConvertor(fileName) : fileName;
 }
 
-/** @internal */
 /**
  * Helper that emit files, report diagnostics and lists emitted and/or source files depending on compiler options
+ *
+ * @internal
  */
 export function emitFilesAndReportErrors<T extends BuilderProgram>(
     program: Program | T,
@@ -719,9 +726,10 @@ export function setGetSourceFileAsHashVersioned(compilerHost: CompilerHost, host
     };
 }
 
-/** @internal */
 /**
  * Creates the watch compiler host that can be extended with config file or root file names and options host
+ *
+ * @internal
  */
 export function createProgramHost<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>(system: System, createProgram: CreateProgram<T> | undefined): ProgramHost<T> {
     const getDefaultLibLocation = memoize(() => getDirectoryPath(normalizePath(system.getExecutingFilePath())));
@@ -798,9 +806,10 @@ export interface CreateWatchCompilerHostOfConfigFileInput<T extends BuilderProgr
     watchOptionsToExtend?: WatchOptions;
     extraFileExtensions?: readonly FileExtensionInfo[];
 }
-/** @internal */
 /**
  * Creates the watch compiler host from system for config file in watch mode
+ *
+ * @internal
  */
 export function createWatchCompilerHostOfConfigFile<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>({
     configFileName, optionsToExtend, watchOptionsToExtend, extraFileExtensions,
@@ -823,9 +832,10 @@ export interface CreateWatchCompilerHostOfFilesAndCompilerOptionsInput<T extends
     watchOptions: WatchOptions | undefined;
     projectReferences?: readonly ProjectReference[];
 }
-/** @internal */
 /**
  * Creates the watch compiler host from system for compiling root files and options in watch mode
+ *
+ * @internal
  */
 export function createWatchCompilerHostOfFilesAndCompilerOptions<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>({
     rootFiles, options, watchOptions, projectReferences,

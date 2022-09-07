@@ -142,10 +142,11 @@ export function getSourceMapper(host: SourceMapperHost): SourceMapper {
     }
 }
 
-/** @internal */
 /**
  * string | undefined to contents of map file to create DocumentPositionMapper from it
  * DocumentPositionMapper | false to give back cached DocumentPositionMapper
+ *
+ * @internal
  */
 export type ReadMapFile = (mapFileName: string, mapFileNameFromDts: string | undefined) => string | undefined | DocumentPositionMapper | false;
 

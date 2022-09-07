@@ -21,7 +21,7 @@ import {
     unescapeLeadingUnderscores, WatchDirectoryFlags, WatchDirectoryKind, WatchFileKind, WatchOptions,
 } from "./_namespaces/ts";
 
-/* @internal */
+/** @internal */
 export const compileOnSaveCommandLineOption: CommandLineOption = {
     name: "compileOnSave",
     type: "boolean",
@@ -36,7 +36,7 @@ const jsxOptionMap = new Map(getEntries({
     "react-jsxdev": JsxEmit.ReactJSXDev,
 }));
 
-/* @internal */
+/** @internal */
 export const inverseJsxOptionMap = new Map(arrayFrom(mapIterator(jsxOptionMap.entries(), ([key, value]: [string, JsxEmit]) => ["" + value, key] as const)));
 
 // NOTE: The order here is important to default lib ordering as entries will have the same
@@ -122,19 +122,21 @@ const libEntries: [string, string][] = [
  * An array of supported "lib" reference file names used to determine the order for inclusion
  * when referenced, as well as for spelling suggestions. This ensures the correct ordering for
  * overload resolution when a type declared in one lib is extended by another.
+ *
+ * @internal
  */
-/* @internal */
 export const libs = libEntries.map(entry => entry[0]);
 
 /**
  * A map of lib names to lib files. This map is used both for parsing the "lib" command line
  * option as well as for resolving lib reference directives.
+ *
+ * @internal
  */
-/* @internal */
 export const libMap = new Map(libEntries);
 
 // Watch related options
-/* @internal */
+/** @internal */
 export const optionsForWatch: CommandLineOption[] = [
     {
         name: "watchFile",
@@ -207,7 +209,7 @@ export const optionsForWatch: CommandLineOption[] = [
     },
 ];
 
-/* @internal */
+/** @internal */
 export const commonOptionsWithBuild: CommandLineOption[] = [
     {
         name: "help",
@@ -342,7 +344,7 @@ export const commonOptionsWithBuild: CommandLineOption[] = [
     },
 ];
 
-/* @internal */
+/** @internal */
 export const targetOptionDeclaration: CommandLineOptionOfCustomType = {
     name: "target",
     shortName: "t",
@@ -371,7 +373,7 @@ export const targetOptionDeclaration: CommandLineOptionOfCustomType = {
     defaultValueDescription: ScriptTarget.ES3,
 };
 
-/*@internal*/
+/** @internal */
 export const moduleOptionDeclaration: CommandLineOptionOfCustomType = {
     name: "module",
     shortName: "m",
@@ -1380,42 +1382,42 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
     }
 ];
 
-/* @internal */
+/** @internal */
 export const optionDeclarations: CommandLineOption[] = [
     ...commonOptionsWithBuild,
     ...commandOptionsWithoutBuild,
 ];
 
-/* @internal */
+/** @internal */
 export const semanticDiagnosticsOptionDeclarations: readonly CommandLineOption[] =
     optionDeclarations.filter(option => !!option.affectsSemanticDiagnostics);
 
-/* @internal */
+/** @internal */
 export const affectsEmitOptionDeclarations: readonly CommandLineOption[] =
     optionDeclarations.filter(option => !!option.affectsEmit);
 
-/* @internal */
+/** @internal */
 export const affectsDeclarationPathOptionDeclarations: readonly CommandLineOption[] =
     optionDeclarations.filter(option => !!option.affectsDeclarationPath);
 
-/* @internal */
+/** @internal */
 export const moduleResolutionOptionDeclarations: readonly CommandLineOption[] =
     optionDeclarations.filter(option => !!option.affectsModuleResolution);
 
-/* @internal */
+/** @internal */
 export const sourceFileAffectingCompilerOptions: readonly CommandLineOption[] = optionDeclarations.filter(option =>
     !!option.affectsSourceFile || !!option.affectsModuleResolution || !!option.affectsBindDiagnostics);
 
-/* @internal */
+/** @internal */
 export const optionsAffectingProgramStructure: readonly CommandLineOption[] =
     optionDeclarations.filter(option => !!option.affectsProgramStructure);
 
-/* @internal */
+/** @internal */
 export const transpileOptionValueCompilerOptions: readonly CommandLineOption[] = optionDeclarations.filter(option =>
     hasProperty(option, "transpileOptionValue"));
 
 // Build related options
-/* @internal */
+/** @internal */
 export const optionsForBuild: CommandLineOption[] = [
     {
         name: "verbose",
@@ -1450,13 +1452,13 @@ export const optionsForBuild: CommandLineOption[] = [
     }
 ];
 
-/* @internal */
+/** @internal */
 export const buildOpts: CommandLineOption[] = [
     ...commonOptionsWithBuild,
     ...optionsForBuild
 ];
 
-/* @internal */
+/** @internal */
 export const typeAcquisitionDeclarations: CommandLineOption[] = [
     {
         /* @deprecated typingOptions.enableAutoDiscovery
@@ -1494,13 +1496,13 @@ export const typeAcquisitionDeclarations: CommandLineOption[] = [
     },
 ];
 
-/* @internal */
+/** @internal */
 export interface OptionsNameMap {
     optionsNameMap: ESMap<string, CommandLineOption>;
     shortOptionNames: ESMap<string, string>;
 }
 
-/*@internal*/
+/** @internal */
 export function createOptionNameMap(optionDeclarations: readonly CommandLineOption[]): OptionsNameMap {
     const optionsNameMap = new Map<string, CommandLineOption>();
     const shortOptionNames = new Map<string, string>();
@@ -1516,7 +1518,7 @@ export function createOptionNameMap(optionDeclarations: readonly CommandLineOpti
 
 let optionsNameMapCache: OptionsNameMap;
 
-/* @internal */
+/** @internal */
 export function getOptionsNameMap(): OptionsNameMap {
     return optionsNameMapCache ||= createOptionNameMap(optionDeclarations);
 }
@@ -1526,7 +1528,7 @@ const compilerOptionsAlternateMode: AlternateModeDiagnostics = {
     getOptionsNameMap: getBuildOptionsNameMap
 };
 
-/* @internal */
+/** @internal */
 export const defaultInitCompilerOptions: CompilerOptions = {
     module: ModuleKind.CommonJS,
     target: ScriptTarget.ES2016,
@@ -1536,7 +1538,7 @@ export const defaultInitCompilerOptions: CompilerOptions = {
     skipLibCheck: true
 };
 
-/* @internal */
+/** @internal */
 export function convertEnableAutoDiscoveryToEnable(typeAcquisition: TypeAcquisition): TypeAcquisition {
     // Convert deprecated typingOptions.enableAutoDiscovery to typeAcquisition.enable
     if (typeAcquisition && typeAcquisition.enableAutoDiscovery !== undefined && typeAcquisition.enable === undefined) {
@@ -1549,7 +1551,7 @@ export function convertEnableAutoDiscoveryToEnable(typeAcquisition: TypeAcquisit
     return typeAcquisition;
 }
 
-/* @internal */
+/** @internal */
 export function createCompilerDiagnosticForInvalidCustomType(opt: CommandLineOptionOfCustomType): Diagnostic {
     return createDiagnosticForInvalidCustomType(opt, createCompilerDiagnostic);
 }
@@ -1559,12 +1561,12 @@ function createDiagnosticForInvalidCustomType(opt: CommandLineOptionOfCustomType
     return createDiagnostic(Diagnostics.Argument_for_0_option_must_be_Colon_1, `--${opt.name}`, namesOfType);
 }
 
-/* @internal */
+/** @internal */
 export function parseCustomTypeOption(opt: CommandLineOptionOfCustomType, value: string, errors: Push<Diagnostic>) {
     return convertJsonOptionOfCustomType(opt, trimString(value || ""), errors);
 }
 
-/* @internal */
+/** @internal */
 export function parseListTypeOption(opt: CommandLineOptionOfListType, value = "", errors: Push<Diagnostic>): (string | number)[] | undefined {
     value = trimString(value);
     if (startsWith(value, "-")) {
@@ -1584,12 +1586,12 @@ export function parseListTypeOption(opt: CommandLineOptionOfListType, value = ""
     }
 }
 
-/*@internal*/
+/** @internal */
 export interface OptionsBase {
     [option: string]: CompilerOptionsValue | TsConfigSourceFile | undefined;
 }
 
-/*@internal*/
+/** @internal */
 export interface ParseCommandLineWorkerDiagnostics extends DidYouMeanOptionsDiagnostics {
     getOptionsNameMap: () => OptionsNameMap;
     optionTypeMismatchDiagnostic: DiagnosticMessage;
@@ -1615,7 +1617,7 @@ function createUnknownOptionError(
         createDiagnostics(diagnostics.unknownOptionDiagnostic, unknownOptionErrorText || unknownOption);
 }
 
-/*@internal*/
+/** @internal */
 export function parseCommandLineWorker(
     diagnostics: ParseCommandLineWorkerDiagnostics,
     commandLine: readonly string[],
@@ -1772,7 +1774,7 @@ function parseOptionValue(
     return i;
 }
 
-/*@internal*/
+/** @internal */
 export const compilerOptionsDidYouMeanDiagnostics: ParseCommandLineWorkerDiagnostics = {
     alternateMode: compilerOptionsAlternateMode,
     getOptionsNameMap,
@@ -1803,7 +1805,7 @@ function getOptionDeclarationFromName(getOptionNameMap: () => OptionsNameMap, op
     return optionsNameMap.get(optionName);
 }
 
-/*@internal*/
+/** @internal */
 export interface ParsedBuildCommand {
     buildOptions: BuildOptions;
     watchOptions: WatchOptions | undefined;
@@ -1830,7 +1832,7 @@ const buildOptionsDidYouMeanDiagnostics: ParseCommandLineWorkerDiagnostics = {
     optionTypeMismatchDiagnostic: Diagnostics.Build_option_0_requires_a_value_of_type_1
 };
 
-/*@internal*/
+/** @internal */
 export function parseBuildCommand(args: readonly string[]): ParsedBuildCommand {
     const { options, watchOptions, fileNames: projects, errors } = parseCommandLineWorker(
         buildOptionsDidYouMeanDiagnostics,
@@ -1860,7 +1862,7 @@ export function parseBuildCommand(args: readonly string[]): ParsedBuildCommand {
     return { buildOptions, watchOptions, projects, errors };
 }
 
-/* @internal */
+/** @internal */
 export function getDiagnosticText(_message: DiagnosticMessage, ..._args: any[]): string {
     const diagnostic = createCompilerDiagnostic.apply(undefined, arguments);
     return diagnostic.messageText as string;
@@ -1950,7 +1952,7 @@ export function readJsonConfigFile(fileName: string, readFile: (path: string) =>
     return isString(textOrDiagnostic) ? parseJsonText(fileName, textOrDiagnostic) : { fileName, parseDiagnostics: [textOrDiagnostic] } as TsConfigSourceFile;
 }
 
-/*@internal*/
+/** @internal */
 export function tryReadFile(fileName: string, readFile: (path: string) => string | undefined): string | Diagnostic {
     let text: string | undefined;
     try {
@@ -2078,7 +2080,7 @@ function getTsconfigRootOptionsMap() {
     return _tsconfigRootOptions;
 }
 
-/*@internal*/
+/** @internal */
 interface JsonConversionNotifier {
     /**
      * Notifies parent option object is being set with the optionKey and a valid optionValue
@@ -2142,8 +2144,9 @@ export function convertToObject(sourceFile: JsonSourceFile, errors: Push<Diagnos
  * Convert the json syntax tree into the json value and report errors
  * This returns the json value (apart from checking errors) only if returnValue provided is true.
  * Otherwise it just checks the errors and returns undefined
+ *
+ * @internal
  */
-/*@internal*/
 export function convertToObjectWorker(
     sourceFile: JsonSourceFile,
     rootExpression: Expression | undefined,
@@ -2389,8 +2392,9 @@ export interface ConvertToTSConfigHost {
  * @param configParseResult options to be generated into tsconfig.json
  * @param configFileName name of the parsed config file - output paths will be generated relative to this
  * @param host provides current directory and case sensitivity services
+ *
+ * @internal
  */
-/** @internal */
 export function convertToTSConfig(configParseResult: ParsedCommandLine, configFileName: string, host: ConvertToTSConfigHost): TSConfig {
     const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames);
     const files = map(
@@ -2476,7 +2480,7 @@ function getCustomTypeMapOfCommandLineOption(optionDefinition: CommandLineOption
     }
 }
 
-/* @internal */
+/** @internal */
 export function getNameOfCompilerOptionValue(value: CompilerOptionsValue, customTypeMap: ESMap<string, string | number>): string | undefined {
     // There is a typeMap associated with this command-line option so use it to map value back to its name
     return forEachEntry(customTypeMap, (mapValue, key) => {
@@ -2586,8 +2590,9 @@ function getSerializedCompilerOption(options: CompilerOptions): ESMap<string, Co
  * Generate tsconfig configuration when running command line "--init"
  * @param options commandlineOptions to be generated into tsconfig.json
  * @param fileNames array of filenames to be generated into tsconfig.json
+ *
+ * @internal
  */
-/* @internal */
 export function generateTSConfig(options: CompilerOptions, fileNames: readonly string[], newLine: string): string {
     const compilerOptionsMap = getSerializedCompilerOption(options);
     return writeConfigurations();
@@ -2667,7 +2672,7 @@ export function generateTSConfig(options: CompilerOptions, fileNames: readonly s
     }
 }
 
-/* @internal */
+/** @internal */
 export function convertToOptionsWithAbsolutePaths(options: CompilerOptions, toAbsolutePath: (path: string) => string) {
     const result: CompilerOptions = {};
     const optionsNameMap = getOptionsNameMap().optionsNameMap;
@@ -2727,7 +2732,7 @@ export function parseJsonSourceFileConfigFileContent(sourceFile: TsConfigSourceF
     return result;
 }
 
-/*@internal*/
+/** @internal */
 export function setConfigFileInOptions(options: CompilerOptions, configFile: TsConfigSourceFile | undefined) {
     if (configFile) {
         Object.defineProperty(options, "configFile", { enumerable: false, writable: false, value: configFile });
@@ -2744,7 +2749,7 @@ function directoryOfCombinedPath(fileName: string, basePath: string) {
     return getDirectoryPath(getNormalizedAbsolutePath(fileName, basePath));
 }
 
-/*@internal*/
+/** @internal */
 export const defaultIncludeSpec = "**/*";
 
 /**
@@ -2944,12 +2949,12 @@ function shouldReportNoInputFiles(fileNames: string[], canJsonReportNoInutFiles:
     return fileNames.length === 0 && canJsonReportNoInutFiles && (!resolutionStack || resolutionStack.length === 0);
 }
 
-/*@internal*/
+/** @internal */
 export function canJsonReportNoInputFiles(raw: any) {
     return !hasProperty(raw, "files") && !hasProperty(raw, "references");
 }
 
-/*@internal*/
+/** @internal */
 export function updateErrorForNoInputFiles(fileNames: string[], configFileName: string, configFileSpecs: ConfigFileSpecs, configParseDiagnostics: Diagnostic[], canJsonReportNoInutFiles: boolean) {
     const existingErrors = configParseDiagnostics.length;
     if (shouldReportNoInputFiles(fileNames, canJsonReportNoInutFiles)) {
@@ -3305,7 +3310,7 @@ function convertOptionsFromJson(optionsNameMap: ESMap<string, CommandLineOption>
     return defaultOptions;
 }
 
-/*@internal*/
+/** @internal */
 export function convertJsonOption(opt: CommandLineOption, value: any, basePath: string, errors: Push<Diagnostic>): CompilerOptionsValue {
     if (isCompilerOptionsValue(opt, value)) {
         const optType = opt.type;
@@ -3407,8 +3412,9 @@ const wildcardDirectoryPattern = /^[^*?]*(?=\/[^/]*[*?])/;
  * @param options Compiler options.
  * @param host The host used to resolve files and directories.
  * @param extraFileExtensions optionaly file extra file extension information from host
+ *
+ * @internal
  */
-/* @internal */
 export function getFileNamesFromConfigSpecs(
     configFileSpecs: ConfigFileSpecs,
     basePath: string,
@@ -3498,7 +3504,7 @@ export function getFileNamesFromConfigSpecs(
     return literalFiles.concat(wildcardFiles, arrayFrom(wildCardJsonFileMap.values()));
 }
 
-/* @internal */
+/** @internal */
 export function isExcludedFile(
     pathToCheck: string,
     spec: ConfigFileSpecs,
@@ -3535,7 +3541,7 @@ function invalidDotDotAfterRecursiveWildcard(s: string) {
     return lastDotIndex > wildcardIndex;
 }
 
-/* @internal */
+/** @internal */
 export function matchesExclude(
     pathToCheck: string,
     excludeSpecs: readonly string[] | undefined,
@@ -3726,8 +3732,9 @@ function removeWildcardFilesWithLowerPriorityExtension(file: string, wildcardFil
 /**
  * Produces a cleaned version of compiler options with personally identifying info (aka, paths) removed.
  * Also converts enum values back to strings.
+ *
+ * @internal
  */
-/* @internal */
 export function convertCompilerOptionsForTelemetry(opts: CompilerOptions): CompilerOptions {
     const out: CompilerOptions = {};
     for (const key in opts) {

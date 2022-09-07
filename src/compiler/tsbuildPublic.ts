@@ -37,24 +37,24 @@ export interface BuildOptions {
     force?: boolean;
     verbose?: boolean;
 
-    /*@internal*/ clean?: boolean;
-    /*@internal*/ watch?: boolean;
-    /*@internal*/ help?: boolean;
+    /** @internal */ clean?: boolean;
+    /** @internal */ watch?: boolean;
+    /** @internal */ help?: boolean;
 
-    /*@internal*/ preserveWatchOutput?: boolean;
-    /*@internal*/ listEmittedFiles?: boolean;
-    /*@internal*/ listFiles?: boolean;
-    /*@internal*/ explainFiles?: boolean;
-    /*@internal*/ pretty?: boolean;
+    /** @internal */ preserveWatchOutput?: boolean;
+    /** @internal */ listEmittedFiles?: boolean;
+    /** @internal */ listFiles?: boolean;
+    /** @internal */ explainFiles?: boolean;
+    /** @internal */ pretty?: boolean;
     incremental?: boolean;
     assumeChangesOnlyAffectDirectDependencies?: boolean;
 
     traceResolution?: boolean;
-    /* @internal */ diagnostics?: boolean;
-    /* @internal */ extendedDiagnostics?: boolean;
-    /* @internal */ locale?: string;
-    /* @internal */ generateCpuProfile?: string;
-    /* @internal */ generateTrace?: string;
+    /** @internal */ diagnostics?: boolean;
+    /** @internal */ extendedDiagnostics?: boolean;
+    /** @internal */ locale?: string;
+    /** @internal */ generateCpuProfile?: string;
+    /** @internal */ generateTrace?: string;
 
     [option: string]: CompilerOptionsValue | undefined;
 }
@@ -81,7 +81,7 @@ enum BuildResultFlags {
     AnyErrors = ConfigFileErrors | SyntaxErrors | TypeErrors | DeclarationEmitErrors | EmitErrors
 }
 
-/*@internal*/
+/** @internal */
 export type ResolvedConfigFilePath = ResolvedConfigFileName & Path;
 
 function getOrCreateValueFromConfigFileMap<T>(configFileMap: ESMap<ResolvedConfigFilePath, T>, resolved: ResolvedConfigFilePath, createT: () => T): T {
@@ -98,8 +98,11 @@ function getOrCreateValueMapFromConfigFileMap<K extends string, V>(configFileMap
     return getOrCreateValueFromConfigFileMap(configFileMap, resolved, () => new Map());
 }
 
-/*@internal*/
-/** Helper to use now method instead of current date for testing purposes to get consistent baselines */
+/**
+ * Helper to use now method instead of current date for testing purposes to get consistent baselines
+ *
+ * @internal
+ */
 export function getCurrentTime(host: { now?(): Date; }) {
     return host.now ? host.now() : new Date();
 }
@@ -131,10 +134,10 @@ export interface SolutionBuilderHostBase<T extends BuilderProgram> extends Progr
     // TODO: To do better with watch mode and normal build mode api that creates program and emits files
     // This currently helps enable --diagnostics and --extendedDiagnostics
     afterProgramEmitAndDiagnostics?(program: T): void;
-    /*@internal*/ afterEmitBundle?(config: ParsedCommandLine): void;
+    /** @internal */ afterEmitBundle?(config: ParsedCommandLine): void;
 
     // For testing
-    /*@internal*/ now?(): Date;
+    /** @internal */ now?(): Date;
 }
 
 export interface SolutionBuilderHost<T extends BuilderProgram> extends SolutionBuilderHostBase<T> {
@@ -144,22 +147,22 @@ export interface SolutionBuilderHost<T extends BuilderProgram> extends SolutionB
 export interface SolutionBuilderWithWatchHost<T extends BuilderProgram> extends SolutionBuilderHostBase<T>, WatchHost {
 }
 
-/*@internal*/
+/** @internal */
 export type BuildOrder = readonly ResolvedConfigFileName[];
-/*@internal*/
+/** @internal */
 export interface CircularBuildOrder {
     buildOrder: BuildOrder;
     circularDiagnostics: readonly Diagnostic[];
 }
-/*@internal*/
+/** @internal */
 export type AnyBuildOrder = BuildOrder | CircularBuildOrder;
 
-/*@internal*/
+/** @internal */
 export function isCircularBuildOrder(buildOrder: AnyBuildOrder): buildOrder is CircularBuildOrder {
     return !!buildOrder && !!(buildOrder as CircularBuildOrder).buildOrder;
 }
 
-/*@internal*/
+/** @internal */
 export function getBuildOrderFromAnyBuildOrder(anyBuildOrder: AnyBuildOrder): BuildOrder {
     return isCircularBuildOrder(anyBuildOrder) ? anyBuildOrder.buildOrder : anyBuildOrder;
 }
@@ -172,12 +175,12 @@ export interface SolutionBuilder<T extends BuilderProgram> {
     getNextInvalidatedProject(cancellationToken?: CancellationToken): InvalidatedProject<T> | undefined;
 
     // Currently used for testing but can be made public if needed:
-    /*@internal*/ getBuildOrder(): AnyBuildOrder;
+    /** @internal */ getBuildOrder(): AnyBuildOrder;
 
     // Testing only
-    /*@internal*/ getUpToDateStatusOfProject(project: string): UpToDateStatus;
-    /*@internal*/ invalidateProject(configFilePath: ResolvedConfigFilePath, reloadLevel?: ConfigFileProgramReloadLevel): void;
-    /*@internal*/ close(): void;
+    /** @internal */ getUpToDateStatusOfProject(project: string): UpToDateStatus;
+    /** @internal */ invalidateProject(configFilePath: ResolvedConfigFilePath, reloadLevel?: ConfigFileProgramReloadLevel): void;
+    /** @internal */ close(): void;
 }
 
 /**
@@ -682,8 +685,8 @@ export enum InvalidatedProjectKind {
 export interface InvalidatedProjectBase {
     readonly kind: InvalidatedProjectKind;
     readonly project: ResolvedConfigFileName;
-    /*@internal*/ readonly projectPath: ResolvedConfigFilePath;
-    /*@internal*/ readonly buildOrder: readonly ResolvedConfigFileName[];
+    /** @internal */ readonly projectPath: ResolvedConfigFilePath;
+    /** @internal */ readonly buildOrder: readonly ResolvedConfigFileName[];
     /**
      *  To dispose this project and ensure that all the necessary actions are taken and state is updated accordingly
      */

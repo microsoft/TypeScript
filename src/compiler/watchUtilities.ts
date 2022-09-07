@@ -11,9 +11,10 @@ import {
     timestamp, WatchDirectoryFlags, WatchFileKind, WatchOptions,
 } from "./_namespaces/ts";
 
-/** @internal */
 /**
  * Partial interface of the System thats needed to support the caching of directory structure
+ *
+ * @internal
  */
 export interface DirectoryStructureHost {
     fileExists(path: string): boolean;
@@ -332,9 +333,10 @@ export interface SharedExtendedConfigFileWatcher<T> extends FileWatcher {
     projects: Set<T>;
 }
 
-/** @internal */
 /**
  * Updates the map of shared extended config file watches with a new set of extended config files from a base config file of the project
+ *
+ * @internal
  */
 export function updateSharedExtendedConfigFileWatcher<T>(
     projectPath: T,
@@ -373,9 +375,10 @@ export function updateSharedExtendedConfigFileWatcher<T>(
     });
 }
 
-/** @internal */
 /**
  * Remove the project from the extended config file watchers and close not needed watches
+ *
+ * @internal
  */
 export function clearSharedExtendedConfigFileWatcher<T>(
     projectPath: T,
@@ -386,9 +389,10 @@ export function clearSharedExtendedConfigFileWatcher<T>(
     });
 }
 
-/** @internal */
 /**
  * Clean the extendsConfigCache when extended config file has changed
+ *
+ * @internal
  */
 export function cleanExtendedConfigCache(
     extendedConfigCache: ESMap<string, ExtendedConfigCacheEntry>,
@@ -403,9 +407,10 @@ export function cleanExtendedConfigCache(
     });
 }
 
-/** @internal */
 /**
  * Updates watchers based on the package json files used in module resolution
+ *
+ * @internal
  */
 export function updatePackageJsonWatch(
     lookups: readonly (readonly [Path, object | boolean])[],
@@ -423,9 +428,10 @@ export function updatePackageJsonWatch(
     );
 }
 
-/** @internal */
 /**
  * Updates the existing missing file watches with the new set of missing files after new program is created
+ *
+ * @internal
  */
 export function updateMissingFilePathsWatch(
     program: Program,
@@ -455,12 +461,13 @@ export interface WildcardDirectoryWatcher {
     flags: WatchDirectoryFlags;
 }
 
-/** @internal */
 /**
  * Updates the existing wild card directory watches with the new set of wild card directories from the config file
  * after new program is created because the config file was reloaded or program was created first time from the config file
  * Note that there is no need to call this function when the program is updated with additional files without reloading config files,
  * as wildcard directories wont change unless reloading config file
+ *
+ * @internal
  */
 export function updateWatchingWildcardDirectories(
     existingWatchedForWildcards: ESMap<string, WildcardDirectoryWatcher>,
@@ -513,7 +520,7 @@ export interface IsIgnoredFileFromWildCardWatchingInput {
     writeLog: (s: string) => void;
     toPath: (fileName: string) => Path;
 }
-/* @internal */
+/** @internal */
 export function isIgnoredFileFromWildCardWatching({
     watchedDirPath, fileOrDirectory, fileOrDirectoryPath,
     configFileName, options, program, extraFileExtensions,

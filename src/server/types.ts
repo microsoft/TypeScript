@@ -21,6 +21,6 @@ export interface ServerHost extends System {
     gc?(): void;
     trace?(s: string): void;
     require?(initialPath: string, moduleName: string): ModuleImportResult;
-    /*@internal*/
+    /** @internal */
     importPlugin?(root: string, moduleName: string): Promise<ModuleImportResult>;
 }

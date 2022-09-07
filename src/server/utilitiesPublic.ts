@@ -102,7 +102,7 @@ export function createNormalizedPathMap<T>(): NormalizedPathMap<T> {
     };
 }
 
-/*@internal*/
+/** @internal */
 export interface ProjectOptions {
     configHasExtendsProperty: boolean;
     /**
@@ -122,12 +122,12 @@ export function makeInferredProjectName(counter: number): string {
     return `/dev/null/inferredProject${counter}*`;
 }
 
-/*@internal*/
+/** @internal */
 export function makeAutoImportProviderProjectName(counter: number): string {
     return `/dev/null/autoImportProviderProject${counter}*`;
 }
 
-/*@internal*/
+/** @internal */
 export function makeAuxiliaryProjectName(counter: number): string {
     return `/dev/null/auxiliaryProject${counter}*`;
 }

@@ -3,12 +3,12 @@ import { BuildInfo, Diagnostic } from "./_namespaces/ts";
 export interface EmitOutput {
     outputFiles: OutputFile[];
     emitSkipped: boolean;
-    /* @internal */ diagnostics: readonly Diagnostic[];
+    /** @internal */ diagnostics: readonly Diagnostic[];
 }
 
 export interface OutputFile {
     name: string;
     writeByteOrderMark: boolean;
     text: string;
-    /* @internal */ buildInfo?: BuildInfo
+    /** @internal */ buildInfo?: BuildInfo
 }

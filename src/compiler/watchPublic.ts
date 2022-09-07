@@ -25,7 +25,7 @@ export interface ReadBuildProgramHost {
     useCaseSensitiveFileNames(): boolean;
     getCurrentDirectory(): string;
     readFile(fileName: string): string | undefined;
-    /*@internal*/
+    /** @internal */
     getBuildInfo?(fileName: string, configFilePath: string | undefined): BuildInfo | undefined;
 }
 export function readBuilderProgram(compilerOptions: CompilerOptions, host: ReadBuildProgramHost) {
@@ -141,9 +141,11 @@ export interface ProgramHost<T extends BuilderProgram> {
      */
     getModuleResolutionCache?(): ModuleResolutionCache | undefined;
 }
-/** Internal interface used to wire emit through same host */
-
-/*@internal*/
+/**
+ * Internal interface used to wire emit through same host
+ *
+ * @internal
+ */
 export interface ProgramHost<T extends BuilderProgram> {
     // TODO: GH#18217 Optional methods are frequently asserted
     createDirectory?(path: string): void;
@@ -204,8 +206,9 @@ export interface WatchCompilerHostOfConfigFile<T extends BuilderProgram> extends
 
 /**
  * Host to create watch with config file that is already parsed (from tsc)
+ *
+ * @internal
  */
-/*@internal*/
 export interface WatchCompilerHostOfConfigFile<T extends BuilderProgram> extends WatchCompilerHost<T> {
     configFileParsingResult?: ParsedCommandLine;
     extendedConfigCache?: Map<ExtendedConfigCacheEntry>;
@@ -214,8 +217,11 @@ export interface WatchCompilerHostOfConfigFile<T extends BuilderProgram> extends
 export interface Watch<T> {
     /** Synchronize with host and get updated program */
     getProgram(): T;
-    /** Gets the existing program without synchronizing with changes on host */
-    /*@internal*/
+    /**
+     * Gets the existing program without synchronizing with changes on host
+     *
+     * @internal
+     */
     getCurrentProgram(): T;
     /** Closes the watch */
     close(): void;

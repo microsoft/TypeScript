@@ -18,7 +18,7 @@ export interface DocumentHighlights {
     highlightSpans: HighlightSpan[];
 }
 
-/* @internal */
+/** @internal */
 export namespace DocumentHighlights {
     export function getDocumentHighlights(program: Program, cancellationToken: CancellationToken, sourceFile: SourceFile, position: number, sourceFilesToSearch: readonly SourceFile[]): DocumentHighlights[] | undefined {
         const node = getTouchingPropertyName(sourceFile, position);
