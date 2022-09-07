@@ -1,5 +1,4 @@
 import * as fs from "fs";
-import * as async from "async";
 import * as glob from "glob";
 
 fs.readFile("src/compiler/diagnosticMessages.json", "utf-8", (err, data) => {
@@ -20,8 +19,8 @@ fs.readFile("src/compiler/diagnosticMessages.json", "utf-8", (err, data) => {
 
     fs.readdir(baseDir, (err, files) => {
         files = files.filter(f => f.indexOf(".errors.txt") > 0);
-        const tasks: ((callback: () => void) => void)[] = [];
-        files.forEach(f => tasks.push(done => {
+
+        files.forEach(f => {
             fs.readFile(baseDir + f, "utf-8", (err, baseline) => {
                 if (err) throw err;
 
@@ -31,22 +30,18 @@ fs.readFile("src/compiler/diagnosticMessages.json", "utf-8", (err, data) => {
                     const msg = keys.filter(k => messages[k].code === errCode)[0];
                     messages[msg].seen = true;
                 }
-
-                done();
             });
-        }));
-
-        async.parallelLimit(tasks, 25, done => {
-            console.log("== List of errors not present in baselines ==");
-            let count = 0;
-            for (const k of keys) {
-                if (messages[k].seen !== true) {
-                    console.log(k);
-                    count++;
-                }
-            }
-            console.log(count + " of " + keys.length + " errors are not in baselines");
         });
+
+        console.log("== List of errors not present in baselines ==");
+        let count = 0;
+        for (const k of keys) {
+            if (messages[k].seen !== true) {
+                console.log(k);
+                count++;
+            }
+        }
+        console.log(count + " of " + keys.length + " errors are not in baselines");
     });
 });
 
