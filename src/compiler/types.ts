@@ -1326,6 +1326,7 @@ namespace ts {
     export type AssertsKeyword = KeywordToken<SyntaxKind.AssertsKeyword>;
     export type AssertKeyword = KeywordToken<SyntaxKind.AssertKeyword>;
     export type AwaitKeyword = KeywordToken<SyntaxKind.AwaitKeyword>;
+    export type CaseKeyword = KeywordToken<SyntaxKind.CaseKeyword>;
 
     /** @deprecated Use `AwaitKeyword` instead. */
     export type AwaitKeywordToken = AwaitKeyword;

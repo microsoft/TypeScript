@@ -264,12 +264,13 @@ namespace ts.Completions {
         }
 
         if (triggerCharacter === " ") {
-            // `isValidTrigger` ensures we are at `import |`
-            if (preferences.includeCompletionsForImportStatements && preferences.includeCompletionsWithInsertText) {
-                return { isGlobalCompletion: true, isMemberCompletion: false, isNewIdentifierLocation: true, isIncomplete: true, entries: [] };
+            // `isValidTrigger` ensures we are at `import |` or `case |`.
+            if (previousToken && isImportKeyword(previousToken)) {
+                if (preferences.includeCompletionsForImportStatements && preferences.includeCompletionsWithInsertText) {
+                    return { isGlobalCompletion: true, isMemberCompletion: false, isNewIdentifierLocation: true, isIncomplete: true, entries: [] };
+                }
+                return undefined;
             }
-            return undefined;
-
         }
 
         // If the request is a continuation of an earlier `isIncomplete` response,
@@ -564,6 +565,14 @@ namespace ts.Completions {
             getJSCompletionEntries(sourceFile, location.pos, uniqueNames, getEmitScriptTarget(compilerOptions), entries);
         }
 
+        // >> TODO: prototype remaining cases here
+        if (contextToken && isCaseKeyword(contextToken) && preferences.includeCompletionsWithInsertText) {
+            const casesEntry = getExhaustiveCaseSnippets(contextToken, sourceFile, preferences, compilerOptions, host, program.getTypeChecker(), formatContext);
+            if (casesEntry) {
+                entries.push(casesEntry);
+            }
+        }
+
         return {
             flags: completionData.flags,
             isGlobalCompletion: isInSnippetScope,
@@ -577,6 +586,90 @@ namespace ts.Completions {
 
     function isCheckedFile(sourceFile: SourceFile, compilerOptions: CompilerOptions): boolean {
         return !isSourceFileJS(sourceFile) || !!isCheckJsEnabledForFile(sourceFile, compilerOptions);
+    }
+
+    function getExhaustiveCaseSnippets(
+        contextToken: Token<SyntaxKind.CaseKeyword>,
+        sourceFile: SourceFile,
+        preferences: UserPreferences,
+        options: CompilerOptions,
+        host: LanguageServiceHost,
+        checker: TypeChecker,
+        formatContext: formatting.FormatContext | undefined): CompletionEntry | undefined {
+        const caseClause = tryCast(contextToken.parent, isCaseClause);
+        if (caseClause) {
+            const switchType = getSwitchedType(caseClause, checker);
+            if (switchType && switchType.isUnion() && every(switchType.types, type => type.isLiteral())) { // >> TODO: does this work for enum members?
+                const elements: [string, Expression][] = mapDefined(switchType.types as LiteralType[], type => {
+                    if (type.flags & TypeFlags.EnumLiteral) {
+                        Debug.assert(type.symbol, "TODO: should this hold always?");
+                        Debug.assert(type.symbol.parent, "TODO: should this hold always too?");
+                        const target = getEmitScriptTarget(options);
+                        // >> TODO: figure out if need an import action
+                        const memberInfo = getCompletionEntryDisplayNameForSymbol(
+                            type.symbol,
+                            target,
+                            /*origin*/ undefined,
+                            CompletionKind.None, /*jsxIdentifierExpected*/ false);
+                        const enumInfo = getCompletionEntryDisplayNameForSymbol(
+                            type.symbol.parent,
+                            target,
+                            /*origin*/ undefined,
+                            CompletionKind.None, /*jsxIdentifierExpected*/ false);
+                        if (memberInfo && enumInfo) {
+                            const enumExp = factory.createIdentifier(enumInfo.name); // >> TODO: have to properly get the exp
+                            const access: Expression = factory.createPropertyAccessExpression(enumExp, memberInfo.name); // >> TODO: we might need to use [] to access this member
+                            // >> TODO: convert access to text properly
+                            return [`${enumInfo.name}.${memberInfo.name}`, access]; // >> TODO: this looks hacky, do it some other way
+                        }
+                    }
+                    else {
+                        const text = completionNameForLiteral(sourceFile, preferences, type.value);
+                        const literal: Expression = typeof type.value === "object"
+                            ? factory.createBigIntLiteral(type.value)
+                            : typeof type.value === "number"
+                                ? factory.createNumericLiteral(type.value)
+                                : factory.createStringLiteral(type.value);
+                        return [text, literal];
+                    }
+                    return undefined; // >> TODO: actually only do this if every return is defined,
+                    // >> otherwise won't really be exhaustive
+                });
+
+                const clauses = map(elements, element => {
+                    return factory.createCaseClause(element[1], []);
+                });
+                const printer = createSnippetPrinter({
+                    removeComments: true,
+                    module: options.module,
+                    target: options.target,
+                    newLine: getNewLineKind(getNewLineCharacter(options, maybeBind(host, host.getNewLine))),
+                });
+                // >> TODO: get format context and format before printing, if possible
+                const insertText = formatContext
+                    ? printer.printAndFormatSnippetList(
+                        ListFormat.MultiLine | ListFormat.NoTrailingNewLine,
+                        factory.createNodeArray(clauses),
+                        sourceFile,
+                        formatContext)
+                    : printer.printSnippetList(
+                        ListFormat.MultiLine | ListFormat.NoTrailingNewLine,
+                        factory.createNodeArray(clauses),
+                        sourceFile);
+
+                return {
+                    name: elements[0][0],
+                    isRecommended: true, // >> I assume that is ok because if there's another recommended, it will be sorted after this one
+                    kind: ScriptElementKind.unknown, // >> TODO: what should this be?
+                    sortText: SortText.LocalDeclarationPriority,
+                    insertText,
+                    replacementSpan: getReplacementSpanForContextToken(contextToken),
+                }
+                // >> TODO: filter cases that are already there
+            }
+        }
+
+        return undefined;
     }
 
     function isMemberCompletionKind(kind: CompletionKind): boolean {
@@ -4191,7 +4284,9 @@ namespace ts.Completions {
                     ? !!tryGetImportFromModuleSpecifier(contextToken)
                     : contextToken.kind === SyntaxKind.SlashToken && isJsxClosingElement(contextToken.parent));
             case " ":
-                return !!contextToken && isImportKeyword(contextToken) && contextToken.parent.kind === SyntaxKind.SourceFile;
+                return !!contextToken && (
+                    isImportKeyword(contextToken) && contextToken.parent.kind === SyntaxKind.SourceFile ||
+                    contextToken.kind === SyntaxKind.CaseKeyword);
             default:
                 return Debug.assertNever(triggerCharacter);
         }

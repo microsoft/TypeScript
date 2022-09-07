@@ -154,6 +154,11 @@ namespace ts {
         return node.kind === SyntaxKind.ImportKeyword;
     }
 
+    /*@internal*/
+    export function isCaseKeyword(node: Node): node is CaseKeyword {
+        return node.kind === SyntaxKind.CaseKeyword;
+    }
+
     // Names
 
     export function isQualifiedName(node: Node): node is QualifiedName {
