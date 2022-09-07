@@ -7,14 +7,13 @@ import {
 
 /* Tracing events for the compiler. */
 
-// eslint-disable-line local/one-namespace-per-file
 // should be used as tracing?.___
 /** @internal */
 export let tracing: typeof tracingEnabled | undefined;
 // enable the above using startTracing()
 
 // `tracingEnabled` should never be used directly, only through the above
-namespace tracingEnabled { // eslint-disable-line local/one-namespace-per-file
+namespace tracingEnabled {
     type Mode = "project" | "build" | "server";
 
     let fs: typeof import("fs");
