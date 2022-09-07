@@ -372,9 +372,6 @@ const lint = eslint(".");
 lint.displayName = "lint";
 task("lint", lint);
 task("lint").description = "Runs eslint on the compiler and scripts sources.";
-task("lint").flags = {
-    "   --ci": "Runs eslint additional rules",
-};
 
 const buildCancellationToken = () => buildProject("src/cancellationToken");
 const cleanCancellationToken = () => cleanProject("src/cancellationToken");
