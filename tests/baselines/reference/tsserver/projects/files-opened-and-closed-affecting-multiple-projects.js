@@ -8,6 +8,7 @@ Info 1    [16:00:26.000] request:
       "seq": 1,
       "type": "request"
     }
+Before request
 //// [/a/b/projects/config/tsconfig.json]
 
 
@@ -83,6 +84,7 @@ Info 19   [16:00:46.000] -----------------------------------------------
 Info 19   [16:00:47.000] Open files: 
 Info 19   [16:00:48.000] 	FileName: /a/b/projects/config/file.ts ProjectRootPath: undefined
 Info 19   [16:00:49.000] 		Projects: /a/b/projects/config/tsconfig.json
+After request
 
 PolledWatches::
 /a/b/projects/config/node_modules/@types:
@@ -113,6 +115,7 @@ Info 20   [16:00:51.000] request:
       "seq": 2,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /a/b/projects/config/node_modules/@types:
@@ -142,6 +145,7 @@ Info 24   [16:00:59.000] 	FileName: /a/b/projects/config/file.ts ProjectRootPath
 Info 24   [16:01:00.000] 		Projects: /a/b/projects/config/tsconfig.json
 Info 24   [16:01:01.000] 	FileName: /a/b/projects/files/file1.ts ProjectRootPath: undefined
 Info 24   [16:01:02.000] 		Projects: /a/b/projects/config/tsconfig.json
+After request
 
 PolledWatches::
 /a/b/projects/config/node_modules/@types:
@@ -170,6 +174,7 @@ Info 25   [16:01:04.000] request:
       "seq": 3,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /a/b/projects/config/node_modules/@types:
@@ -193,6 +198,7 @@ Info 27   [16:01:08.000] -----------------------------------------------
 Info 27   [16:01:09.000] Open files: 
 Info 27   [16:01:10.000] 	FileName: /a/b/projects/files/file1.ts ProjectRootPath: undefined
 Info 27   [16:01:11.000] 		Projects: /a/b/projects/config/tsconfig.json
+After request
 
 PolledWatches::
 /a/b/projects/config/node_modules/@types:
@@ -223,6 +229,7 @@ Info 28   [16:01:13.000] request:
       "seq": 4,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /a/b/projects/config/node_modules/@types:
@@ -292,6 +299,7 @@ Info 51   [16:01:40.000] 	FileName: /a/b/projects/files/file1.ts ProjectRootPath
 Info 51   [16:01:41.000] 		Projects: 
 Info 51   [16:01:42.000] 	FileName: /a/b/projects/files/file2.ts ProjectRootPath: undefined
 Info 51   [16:01:43.000] 		Projects: /dev/null/inferredProject1*
+After request
 
 PolledWatches::
 /a/b/projects/files/tsconfig.json:
@@ -322,6 +330,7 @@ Info 52   [16:01:45.000] request:
       "seq": 5,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /a/b/projects/files/tsconfig.json:
@@ -378,6 +387,7 @@ Info 63   [16:02:11.000] 	FileName: /a/b/projects/files/file1.ts ProjectRootPath
 Info 63   [16:02:12.000] 		Projects: /dev/null/inferredProject2*
 Info 63   [16:02:13.000] 	FileName: /a/b/projects/files/file2.ts ProjectRootPath: undefined
 Info 63   [16:02:14.000] 		Projects: /dev/null/inferredProject1*
+After request
 
 PolledWatches::
 /a/b/projects/files/tsconfig.json:

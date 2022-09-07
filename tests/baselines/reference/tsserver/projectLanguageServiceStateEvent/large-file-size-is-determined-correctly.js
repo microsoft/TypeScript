@@ -1,4 +1,37 @@
 Info 0    [16:00:17.000] Provided types map file "/typesMap.json" doesn't exist
+Creating project service
+//// [/a/app.js]
+let x = 1;
+
+//// [/a/largefile.js]
+
+
+//// [/a/extremlylarge.d.ts]
+
+
+//// [/a/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+
+//// [/a/jsconfig.json]
+{}
+
+
+PolledWatches::
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 1    [16:00:18.000] Search path: /a
 Info 2    [16:00:19.000] For info: /a/app.js :: Config file name: /a/jsconfig.json
 Info 3    [16:00:20.000] Creating configuration project /a/jsconfig.json

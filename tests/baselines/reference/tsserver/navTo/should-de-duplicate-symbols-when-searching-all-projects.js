@@ -8,6 +8,7 @@ Info 1    [16:00:18.000] request:
         "file": "/a/index.ts"
       }
     }
+Before request
 //// [/a/tsconfig.json]
 {
     "compilerOptions": {
@@ -89,6 +90,7 @@ Info 24   [16:00:46.000] -----------------------------------------------
 Info 24   [16:00:47.000] Open files: 
 Info 24   [16:00:48.000] 	FileName: /a/index.ts ProjectRootPath: undefined
 Info 24   [16:00:49.000] 		Projects: /a/tsconfig.json
+After request
 
 PolledWatches::
 /a/lib/lib.d.ts:
@@ -119,6 +121,7 @@ Info 25   [16:00:51.000] request:
         "searchValue": "abcdef"
       }
     }
+Before request
 
 PolledWatches::
 /a/lib/lib.d.ts:
@@ -195,6 +198,7 @@ Info 45   [16:01:11.000] 	Files (2)
 	  Matched by default include pattern '**/*'
 
 Info 46   [16:01:12.000] -----------------------------------------------
+After request
 
 PolledWatches::
 /a/lib/lib.d.ts:

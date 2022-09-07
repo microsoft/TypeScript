@@ -8,6 +8,7 @@ Info 1    [16:01:18.000] request:
         "file": "/user/username/projects/project/src/common/input/keyboard.ts"
       }
     }
+Before request
 //// [/user/username/projects/project/src/common/tsconfig.json]
 {"compilerOptions":{"composite":true,"declarationMap":true,"outDir":"../../out","baseUrl":"..","disableSourceOfProjectReferenceRedirect":false},"include":["./**/*"]}
 
@@ -296,6 +297,7 @@ Info 29   [16:01:51.000] -----------------------------------------------
 Info 29   [16:01:52.000] Open files: 
 Info 29   [16:01:53.000] 	FileName: /user/username/projects/project/src/common/input/keyboard.ts ProjectRootPath: undefined
 Info 29   [16:01:54.000] 		Projects: /user/username/projects/project/src/common/tsconfig.json
+After request
 
 PolledWatches::
 /user/username/projects/project/src/common/node_modules/@types:
@@ -332,6 +334,7 @@ Info 30   [16:01:56.000] request:
         "file": "/user/username/projects/project/src/terminal.ts"
       }
     }
+Before request
 
 PolledWatches::
 /user/username/projects/project/src/common/node_modules/@types:
@@ -430,6 +433,7 @@ Info 49   [16:02:22.000] 	FileName: /user/username/projects/project/src/common/i
 Info 49   [16:02:23.000] 		Projects: /user/username/projects/project/src/common/tsconfig.json,/user/username/projects/project/src/tsconfig.json
 Info 49   [16:02:24.000] 	FileName: /user/username/projects/project/src/terminal.ts ProjectRootPath: undefined
 Info 49   [16:02:25.000] 		Projects: /user/username/projects/project/src/tsconfig.json
+After request
 
 PolledWatches::
 /user/username/projects/project/src/common/node_modules/@types:
@@ -470,6 +474,7 @@ Info 50   [16:02:27.000] request:
       "seq": 1,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /user/username/projects/project/src/common/node_modules/@types:
@@ -507,6 +512,7 @@ Info 59   [16:02:36.000] Search path: /user/username/projects/project/src/common
 Info 60   [16:02:37.000] For info: /user/username/projects/project/src/common/input/keyboard.test.ts :: Config file name: /user/username/projects/project/src/common/tsconfig.json
 Info 61   [16:02:38.000] Search path: /user/username/projects/project/src/common/input
 Info 62   [16:02:39.000] For info: /user/username/projects/project/src/common/input/keyboard.test.ts :: Config file name: /user/username/projects/project/src/common/tsconfig.json
+After request
 
 PolledWatches::
 /user/username/projects/project/src/common/node_modules/@types:

@@ -10,6 +10,7 @@ Info 1    [16:00:26.000] request:
       "seq": 1,
       "type": "request"
     }
+Before request
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -63,6 +64,7 @@ Info 13   [16:00:40.000] -----------------------------------------------
 Info 13   [16:00:41.000] Open files: 
 Info 13   [16:00:42.000] 	FileName: untitled:Untitled-1 ProjectRootPath: undefined
 Info 13   [16:00:43.000] 		Projects: /dev/null/inferredProject1*
+After request
 
 PolledWatches::
 /typings/@epic/core.d.ts:
@@ -97,6 +99,7 @@ Info 14   [16:00:45.000] request:
       "seq": 2,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /typings/@epic/core.d.ts:
@@ -110,6 +113,7 @@ FsWatches::
 
 FsWatchesRecursive::
 
+After request
 
 PolledWatches::
 /typings/@epic/core.d.ts:
@@ -127,11 +131,94 @@ Info 15   [16:00:46.000] response:
     {
       "responseRequired": false
     }
+Before checking timeout queue length (1) and running
+
+PolledWatches::
+/typings/@epic/core.d.ts:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/src/somefile.d.ts:
+  {}
+
+FsWatchesRecursive::
+
 Info 16   [16:00:47.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"untitled:Untitled-1","diagnostics":[]}}
+After checking timeout queue length (1) and running
+
+PolledWatches::
+/typings/@epic/core.d.ts:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/src/somefile.d.ts:
+  {}
+
+FsWatchesRecursive::
+
+Before running immediate callbacks and checking length (1)
+
+PolledWatches::
+/typings/@epic/core.d.ts:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/src/somefile.d.ts:
+  {}
+
+FsWatchesRecursive::
+
 Info 17   [16:00:48.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"untitled:Untitled-1","diagnostics":[{"start":{"line":1,"offset":22},"end":{"line":1,"offset":63},"text":"File '../../../../../../typings/@epic/Core.d.ts' not found.","code":6053,"category":"error"},{"start":{"line":2,"offset":22},"end":{"line":2,"offset":41},"text":"File 'src/somefile.d.ts' not found.","code":6053,"category":"error"}]}}
+Before running immediate callbacks and checking length (1)
+
+PolledWatches::
+/typings/@epic/core.d.ts:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/src/somefile.d.ts:
+  {}
+
+FsWatchesRecursive::
+
+Before running immediate callbacks and checking length (1)
+
+PolledWatches::
+/typings/@epic/core.d.ts:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/src/somefile.d.ts:
+  {}
+
+FsWatchesRecursive::
+
 Info 18   [16:00:49.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"untitled:Untitled-1","diagnostics":[]}}
 Info 19   [16:00:50.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":2}}
+Before running immediate callbacks and checking length (1)
+
+PolledWatches::
+/typings/@epic/core.d.ts:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/src/somefile.d.ts:
+  {}
+
+FsWatchesRecursive::

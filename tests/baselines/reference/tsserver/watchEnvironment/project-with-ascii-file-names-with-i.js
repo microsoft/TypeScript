@@ -9,6 +9,7 @@ Info 1    [16:00:20.000] request:
         "projectRootPath": "/User/userName/Projects/i"
       }
     }
+Before request
 //// [/User/userName/Projects/i/foo.ts]
 import { foo } from "bar"
 
@@ -63,6 +64,7 @@ Info 17   [16:00:38.000] -----------------------------------------------
 Info 17   [16:00:39.000] Open files: 
 Info 17   [16:00:40.000] 	FileName: /User/userName/Projects/i/foo.ts ProjectRootPath: /User/userName/Projects/i
 Info 17   [16:00:41.000] 		Projects: /dev/null/inferredProject1*
+After request
 
 PolledWatches::
 /user/username/projects/i/tsconfig.json:

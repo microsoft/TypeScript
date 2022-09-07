@@ -8,6 +8,7 @@ Info 1    [16:01:11.000] request:
         "file": "/user/username/projects/container/compositeExec/index.ts"
       }
     }
+Before request
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -420,6 +421,7 @@ Info 27   [16:01:42.000] -----------------------------------------------
 Info 27   [16:01:43.000] Open files: 
 Info 27   [16:01:44.000] 	FileName: /user/username/projects/container/compositeExec/index.ts ProjectRootPath: undefined
 Info 27   [16:01:45.000] 		Projects: /user/username/projects/container/compositeExec/tsconfig.json
+After request
 
 PolledWatches::
 /user/username/projects/container/compositeexec/node_modules/@types:
@@ -456,6 +458,7 @@ Info 28   [16:01:47.000] request:
       "seq": 1,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /user/username/projects/container/compositeexec/node_modules/@types:
@@ -565,6 +568,7 @@ Info 62   [16:02:21.000] 	Files (3)
 Info 63   [16:02:22.000] -----------------------------------------------
 Info 64   [16:02:23.000] Search path: /user/username/projects/container/lib
 Info 65   [16:02:24.000] For info: /user/username/projects/container/lib/index.ts :: Config file name: /user/username/projects/container/lib/tsconfig.json
+After request
 
 PolledWatches::
 /user/username/projects/container/compositeexec/node_modules/@types:

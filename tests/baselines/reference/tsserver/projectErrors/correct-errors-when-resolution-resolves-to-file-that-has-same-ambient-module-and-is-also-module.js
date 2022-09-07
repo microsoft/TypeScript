@@ -8,6 +8,7 @@ Info 1    [16:00:34.000] request:
         "file": "/users/username/projects/myproject/src/a.ts"
       }
     }
+Before request
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -105,6 +106,7 @@ Info 26   [16:01:01.000] -----------------------------------------------
 Info 26   [16:01:02.000] Open files: 
 Info 26   [16:01:03.000] 	FileName: /users/username/projects/myproject/src/a.ts ProjectRootPath: undefined
 Info 26   [16:01:04.000] 		Projects: /users/username/projects/myproject/tsconfig.json
+After request
 
 PolledWatches::
 /users/username/projects/myproject/node_modules/@types:
@@ -138,6 +140,7 @@ Info 27   [16:01:06.000] request:
       "seq": 1,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /users/username/projects/myproject/node_modules/@types:
@@ -155,6 +158,7 @@ FsWatchesRecursive::
 /users/username/projects/myproject/node_modules:
   {}
 
+After request
 
 PolledWatches::
 /users/username/projects/myproject/node_modules/@types:
@@ -176,28 +180,7 @@ Info 28   [16:01:07.000] response:
     {
       "responseRequired": false
     }
-Info 29   [16:01:08.000] event:
-    {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/users/username/projects/myproject/src/a.ts","diagnostics":[]}}
-Info 30   [16:01:09.000] event:
-    {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/users/username/projects/myproject/src/a.ts","diagnostics":[]}}
-Info 31   [16:01:10.000] event:
-    {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/users/username/projects/myproject/src/a.ts","diagnostics":[{"start":{"line":1,"offset":1},"end":{"line":1,"offset":44},"text":"'myModule' is declared but its value is never read.","code":6133,"category":"suggestion","reportsUnnecessary":true},{"start":{"line":2,"offset":10},"end":{"line":2,"offset":13},"text":"'foo' is declared but its value is never read.","code":6133,"category":"suggestion","reportsUnnecessary":true}]}}
-Info 32   [16:01:11.000] event:
-    {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":1}}
-Info 33   [16:01:12.000] request:
-    {
-      "command": "change",
-      "arguments": {
-        "file": "/users/username/projects/myproject/src/a.ts",
-        "line": 3,
-        "offset": 8,
-        "endLine": 3,
-        "endOffset": 8,
-        "insertString": "o"
-      },
-      "seq": 2,
-      "type": "request"
-    }
+Before checking timeout queue length (1) and running
 
 PolledWatches::
 /users/username/projects/myproject/node_modules/@types:
@@ -215,6 +198,137 @@ FsWatchesRecursive::
 /users/username/projects/myproject/node_modules:
   {}
 
+Info 29   [16:01:08.000] event:
+    {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/users/username/projects/myproject/src/a.ts","diagnostics":[]}}
+After checking timeout queue length (1) and running
+
+PolledWatches::
+/users/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/users/username/projects/myproject/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/myproject/src:
+  {}
+/users/username/projects/myproject/node_modules:
+  {}
+
+Before running immediate callbacks and checking length (1)
+
+PolledWatches::
+/users/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/users/username/projects/myproject/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/myproject/src:
+  {}
+/users/username/projects/myproject/node_modules:
+  {}
+
+Info 30   [16:01:09.000] event:
+    {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/users/username/projects/myproject/src/a.ts","diagnostics":[]}}
+Before running immediate callbacks and checking length (1)
+
+PolledWatches::
+/users/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/users/username/projects/myproject/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/myproject/src:
+  {}
+/users/username/projects/myproject/node_modules:
+  {}
+
+Before running immediate callbacks and checking length (1)
+
+PolledWatches::
+/users/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/users/username/projects/myproject/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/myproject/src:
+  {}
+/users/username/projects/myproject/node_modules:
+  {}
+
+Info 31   [16:01:10.000] event:
+    {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/users/username/projects/myproject/src/a.ts","diagnostics":[{"start":{"line":1,"offset":1},"end":{"line":1,"offset":44},"text":"'myModule' is declared but its value is never read.","code":6133,"category":"suggestion","reportsUnnecessary":true},{"start":{"line":2,"offset":10},"end":{"line":2,"offset":13},"text":"'foo' is declared but its value is never read.","code":6133,"category":"suggestion","reportsUnnecessary":true}]}}
+Info 32   [16:01:11.000] event:
+    {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":1}}
+Before running immediate callbacks and checking length (1)
+
+PolledWatches::
+/users/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/users/username/projects/myproject/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/myproject/src:
+  {}
+/users/username/projects/myproject/node_modules:
+  {}
+
+Info 33   [16:01:12.000] request:
+    {
+      "command": "change",
+      "arguments": {
+        "file": "/users/username/projects/myproject/src/a.ts",
+        "line": 3,
+        "offset": 8,
+        "endLine": 3,
+        "endOffset": 8,
+        "insertString": "o"
+      },
+      "seq": 2,
+      "type": "request"
+    }
+Before request
+
+PolledWatches::
+/users/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/users/username/projects/myproject/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/myproject/src:
+  {}
+/users/username/projects/myproject/node_modules:
+  {}
+
+After request
 
 PolledWatches::
 /users/username/projects/myproject/node_modules/@types:
@@ -248,6 +362,7 @@ Info 35   [16:01:14.000] request:
       "seq": 3,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /users/username/projects/myproject/node_modules/@types:
@@ -265,6 +380,7 @@ FsWatchesRecursive::
 /users/username/projects/myproject/node_modules:
   {}
 
+After request
 
 PolledWatches::
 /users/username/projects/myproject/node_modules/@types:
@@ -286,14 +402,121 @@ Info 36   [16:01:15.000] response:
     {
       "responseRequired": false
     }
+Before checking timeout queue length (1) and running
+
+PolledWatches::
+/users/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/users/username/projects/myproject/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/myproject/src:
+  {}
+/users/username/projects/myproject/node_modules:
+  {}
+
 Info 37   [16:01:16.000] Starting updateGraphWorker: Project: /users/username/projects/myproject/tsconfig.json
 Info 38   [16:01:17.000] Finishing updateGraphWorker: Project: /users/username/projects/myproject/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info 39   [16:01:18.000] Different program with same set of files
 Info 40   [16:01:19.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/users/username/projects/myproject/src/a.ts","diagnostics":[]}}
+After checking timeout queue length (1) and running
+
+PolledWatches::
+/users/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/users/username/projects/myproject/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/myproject/src:
+  {}
+/users/username/projects/myproject/node_modules:
+  {}
+
+Before running immediate callbacks and checking length (1)
+
+PolledWatches::
+/users/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/users/username/projects/myproject/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/myproject/src:
+  {}
+/users/username/projects/myproject/node_modules:
+  {}
+
 Info 41   [16:01:20.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/users/username/projects/myproject/src/a.ts","diagnostics":[]}}
+Before running immediate callbacks and checking length (1)
+
+PolledWatches::
+/users/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/users/username/projects/myproject/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/myproject/src:
+  {}
+/users/username/projects/myproject/node_modules:
+  {}
+
+Before running immediate callbacks and checking length (1)
+
+PolledWatches::
+/users/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/users/username/projects/myproject/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/myproject/src:
+  {}
+/users/username/projects/myproject/node_modules:
+  {}
+
 Info 42   [16:01:21.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/users/username/projects/myproject/src/a.ts","diagnostics":[{"start":{"line":1,"offset":1},"end":{"line":1,"offset":44},"text":"'myModule' is declared but its value is never read.","code":6133,"category":"suggestion","reportsUnnecessary":true},{"start":{"line":2,"offset":10},"end":{"line":2,"offset":13},"text":"'foo' is declared but its value is never read.","code":6133,"category":"suggestion","reportsUnnecessary":true}]}}
 Info 43   [16:01:22.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":3}}
+Before running immediate callbacks and checking length (1)
+
+PolledWatches::
+/users/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/users/username/projects/myproject/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/myproject/src:
+  {}
+/users/username/projects/myproject/node_modules:
+  {}

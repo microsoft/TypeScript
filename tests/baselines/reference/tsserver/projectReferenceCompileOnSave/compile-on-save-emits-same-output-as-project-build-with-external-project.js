@@ -8,6 +8,7 @@ Info 1    [16:00:54.000] request:
         "file": "/user/username/projects/myproject/SiblingClass/Source.ts"
       }
     }
+Before request
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -322,6 +323,7 @@ Info 24   [16:01:19.000] -----------------------------------------------
 Info 24   [16:01:20.000] Open files: 
 Info 24   [16:01:21.000] 	FileName: /user/username/projects/myproject/SiblingClass/Source.ts ProjectRootPath: undefined
 Info 24   [16:01:22.000] 		Projects: /user/username/projects/myproject/SiblingClass/tsconfig.json
+After request
 
 PolledWatches::
 /user/username/projects/myproject/SiblingClass/node_modules/@types:
@@ -357,6 +359,7 @@ Info 25   [16:01:24.000] request:
       "seq": 1,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /user/username/projects/myproject/SiblingClass/node_modules/@types:
@@ -378,6 +381,7 @@ FsWatches::
 
 FsWatchesRecursive::
 
+After request
 //// [/user/username/projects/myproject/SiblingClass/Source.js] file written with same contents
 //// [/user/username/projects/myproject/SiblingClass/Source.d.ts] file written with same contents
 

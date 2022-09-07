@@ -1,4 +1,28 @@
 Info 0    [16:00:23.000] Provided types map file "/typesMap.json" doesn't exist
+Creating project service
+//// [/a/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+
+//// [/root/teams/VSCode68/Shared Documents/General/jt-ts-test-workspace/x.js]
+const x = 10
+
+
+PolledWatches::
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 1    [16:00:24.000] Search path: /root/teams/VSCode68/Shared Documents/General/jt-ts-test-workspace
 Info 2    [16:00:25.000] For info: /root/teams/VSCode68/Shared Documents/General/jt-ts-test-workspace/x.js :: No config files found.
 Info 3    [16:00:26.000] Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded

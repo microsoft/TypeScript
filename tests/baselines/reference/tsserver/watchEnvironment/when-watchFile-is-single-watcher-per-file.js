@@ -8,6 +8,7 @@ Info 1    [16:00:22.000] request:
         "file": "/user/username/projects/myproject/index.ts"
       }
     }
+Before request
 //// [/user/username/projects/myproject/tsconfig.json]
 {"compilerOptions":{"composite":true,"resolveJsonModule":true}}
 
@@ -85,6 +86,7 @@ Info 25   [16:00:48.000] -----------------------------------------------
 Info 25   [16:00:49.000] Open files: 
 Info 25   [16:00:50.000] 	FileName: /user/username/projects/myproject/index.ts ProjectRootPath: undefined
 Info 25   [16:00:51.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+After request
 
 PolledWatches::
 /user/username/projects/myproject/tsconfig.json:

@@ -8,6 +8,7 @@ Info 1    [16:00:12.000] request:
         "file": "/a/b/file1.ts"
       }
     }
+Before request
 //// [/a/b/moduleFile.ts]
 export function bar() { };
 
@@ -49,6 +50,7 @@ Info 14   [16:00:27.000] -----------------------------------------------
 Info 14   [16:00:28.000] Open files: 
 Info 14   [16:00:29.000] 	FileName: /a/b/file1.ts ProjectRootPath: undefined
 Info 14   [16:00:30.000] 		Projects: /dev/null/inferredProject1*
+After request
 
 PolledWatches::
 /a/lib/lib.d.ts:
@@ -75,6 +77,7 @@ Info 15   [16:00:32.000] request:
         "file": "/a/b/file1.ts"
       }
     }
+Before request
 
 PolledWatches::
 /a/lib/lib.d.ts:
@@ -88,6 +91,7 @@ FsWatches::
 
 FsWatchesRecursive::
 
+After request
 
 PolledWatches::
 /a/lib/lib.d.ts:
@@ -111,6 +115,22 @@ Info 18   [16:00:36.000] FileWatcher:: Close:: WatchInfo: /a/b/moduleFile.ts 500
 Info 19   [16:00:37.000] Scheduled: /dev/null/inferredProject1*
 Info 20   [16:00:38.000] Scheduled: *ensureProjectForOpenFiles*
 Info 21   [16:00:39.000] Elapsed:: *ms FileWatcher:: Triggered with /a/b/moduleFile.ts 2:: WatchInfo: /a/b/moduleFile.ts 500 undefined WatchType: Closed Script info
+Before running timeout callbacks
+//// [/a/b/moduleFile1.ts]
+export function bar() { };
+
+//// [/a/b/moduleFile.ts] deleted
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 22   [16:00:42.000] Running: /dev/null/inferredProject1*
 Info 23   [16:00:43.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info 24   [16:00:44.000] DirectoryWatcher:: Added:: WatchInfo: /a/b/moduleFile 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
@@ -144,19 +164,7 @@ Info 35   [16:01:03.000] -----------------------------------------------
 Info 35   [16:01:04.000] Open files: 
 Info 35   [16:01:05.000] 	FileName: /a/b/file1.ts ProjectRootPath: undefined
 Info 35   [16:01:06.000] 		Projects: /dev/null/inferredProject1*
-Info 35   [16:01:07.000] request:
-    {
-      "seq": 0,
-      "type": "request",
-      "command": "semanticDiagnosticsSync",
-      "arguments": {
-        "file": "/a/b/file1.ts"
-      }
-    }
-//// [/a/b/moduleFile1.ts]
-export function bar() { };
-
-//// [/a/b/moduleFile.ts] deleted
+After running timeout callbacks
 
 PolledWatches::
 /a/lib/lib.d.ts:
@@ -172,6 +180,32 @@ FsWatches::
 
 FsWatchesRecursive::
 
+Info 35   [16:01:07.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "semanticDiagnosticsSync",
+      "arguments": {
+        "file": "/a/b/file1.ts"
+      }
+    }
+Before request
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+/a/b/modulefile:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b:
+  {}
+
+FsWatchesRecursive::
+
+After request
 
 PolledWatches::
 /a/lib/lib.d.ts:
@@ -212,23 +246,7 @@ Info 39   [16:01:12.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/mo
 Info 40   [16:01:15.000] DirectoryWatcher:: Triggered with /a/b/moduleFile.ts :: WatchInfo: /a/b 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info 41   [16:01:16.000] Scheduled: /dev/null/inferredProject1*FailedLookupInvalidation, Cancelled earlier one
 Info 42   [16:01:17.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/moduleFile.ts :: WatchInfo: /a/b 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info 43   [16:01:18.000] Running: /dev/null/inferredProject1*FailedLookupInvalidation
-Info 44   [16:01:19.000] Scheduled: /dev/null/inferredProject1*
-Info 45   [16:01:20.000] Scheduled: *ensureProjectForOpenFiles*
-Info 46   [16:01:21.000] request:
-    {
-      "seq": 0,
-      "type": "request",
-      "command": "change",
-      "arguments": {
-        "file": "/a/b/file1.ts",
-        "line": 1,
-        "offset": 44,
-        "endLine": 1,
-        "endOffset": 44,
-        "insertString": "\n"
-      }
-    }
+Before running timeout callbacks
 //// [/a/b/moduleFile.ts]
 export function bar() { };
 
@@ -248,6 +266,56 @@ FsWatches::
 
 FsWatchesRecursive::
 
+Info 43   [16:01:18.000] Running: /dev/null/inferredProject1*FailedLookupInvalidation
+Info 44   [16:01:19.000] Scheduled: /dev/null/inferredProject1*
+Info 45   [16:01:20.000] Scheduled: *ensureProjectForOpenFiles*
+After running timeout callbacks
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+/a/b/modulefile:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b:
+  {}
+
+FsWatchesRecursive::
+
+Info 46   [16:01:21.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "change",
+      "arguments": {
+        "file": "/a/b/file1.ts",
+        "line": 1,
+        "offset": 44,
+        "endLine": 1,
+        "endOffset": 44,
+        "insertString": "\n"
+      }
+    }
+Before request
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+/a/b/modulefile:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b:
+  {}
+
+FsWatchesRecursive::
+
+After request
 
 PolledWatches::
 /a/lib/lib.d.ts:
@@ -267,6 +335,22 @@ Info 47   [16:01:22.000] response:
     {
       "responseRequired": false
     }
+Before running timeout callbacks
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+/a/b/modulefile:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b:
+  {}
+
+FsWatchesRecursive::
+
 Info 48   [16:01:23.000] Running: /dev/null/inferredProject1*
 Info 49   [16:01:24.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info 50   [16:01:25.000] FileWatcher:: Added:: WatchInfo: /a/b/moduleFile.ts 500 undefined WatchType: Closed Script info
@@ -304,15 +388,7 @@ Info 62   [16:01:45.000] -----------------------------------------------
 Info 62   [16:01:46.000] Open files: 
 Info 62   [16:01:47.000] 	FileName: /a/b/file1.ts ProjectRootPath: undefined
 Info 62   [16:01:48.000] 		Projects: /dev/null/inferredProject1*
-Info 62   [16:01:49.000] request:
-    {
-      "seq": 0,
-      "type": "request",
-      "command": "semanticDiagnosticsSync",
-      "arguments": {
-        "file": "/a/b/file1.ts"
-      }
-    }
+After running timeout callbacks
 
 PolledWatches::
 /a/lib/lib.d.ts:
@@ -326,6 +402,30 @@ FsWatches::
 
 FsWatchesRecursive::
 
+Info 62   [16:01:49.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "semanticDiagnosticsSync",
+      "arguments": {
+        "file": "/a/b/file1.ts"
+      }
+    }
+Before request
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/modulefile.ts:
+  {}
+
+FsWatchesRecursive::
+
+After request
 
 PolledWatches::
 /a/lib/lib.d.ts:

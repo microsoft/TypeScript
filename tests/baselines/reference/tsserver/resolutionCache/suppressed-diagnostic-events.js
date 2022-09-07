@@ -9,6 +9,7 @@ Info 1    [16:00:06.000] request:
       "seq": 1,
       "type": "request"
     }
+Before request
 //// [/a.ts]
 1 = 2;
 
@@ -41,6 +42,7 @@ Info 11   [16:00:18.000] -----------------------------------------------
 Info 11   [16:00:19.000] Open files: 
 Info 11   [16:00:20.000] 	FileName: /a.ts ProjectRootPath: undefined
 Info 11   [16:00:21.000] 		Projects: /dev/null/inferredProject1*
+After request
 
 PolledWatches::
 /a/lib/lib.d.ts:
@@ -66,6 +68,7 @@ Info 12   [16:00:23.000] request:
       "seq": 2,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /a/lib/lib.d.ts:
@@ -77,6 +80,7 @@ FsWatchesRecursive::
 
 Info 13   [16:00:24.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":2}}
+After request
 
 PolledWatches::
 /a/lib/lib.d.ts:
@@ -100,6 +104,7 @@ Info 15   [16:00:26.000] request:
       "seq": 3,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /a/lib/lib.d.ts:
@@ -111,6 +116,7 @@ FsWatchesRecursive::
 
 Info 16   [16:00:27.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":3}}
+After request
 
 PolledWatches::
 /a/lib/lib.d.ts:
@@ -124,3 +130,12 @@ Info 17   [16:00:28.000] response:
     {
       "responseRequired": false
     }
+Checking timeout queue length: 0
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+
+FsWatches::
+
+FsWatchesRecursive::

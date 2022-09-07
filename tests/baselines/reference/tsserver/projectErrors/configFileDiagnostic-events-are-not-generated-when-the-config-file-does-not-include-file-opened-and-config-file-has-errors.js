@@ -8,6 +8,7 @@ Info 1    [16:00:16.000] request:
         "file": "/a/b/test.ts"
       }
     }
+Before request
 //// [/a/b/app.ts]
 let x = 10
 
@@ -107,6 +108,7 @@ Info 29   [16:00:49.000] -----------------------------------------------
 Info 29   [16:00:50.000] Open files: 
 Info 29   [16:00:51.000] 	FileName: /a/b/test.ts ProjectRootPath: undefined
 Info 29   [16:00:52.000] 		Projects: /dev/null/inferredProject1*
+After request
 
 PolledWatches::
 /a/b/node_modules/@types:
@@ -135,6 +137,7 @@ Info 30   [16:00:54.000] request:
         "file": "/a/b/app.ts"
       }
     }
+Before request
 
 PolledWatches::
 /a/b/node_modules/@types:
@@ -166,6 +169,7 @@ Info 34   [16:01:05.000] 	FileName: /a/b/test.ts ProjectRootPath: undefined
 Info 34   [16:01:06.000] 		Projects: /dev/null/inferredProject1*
 Info 34   [16:01:07.000] 	FileName: /a/b/app.ts ProjectRootPath: undefined
 Info 34   [16:01:08.000] 		Projects: /a/b/tsconfig.json
+After request
 
 PolledWatches::
 /a/b/node_modules/@types:
@@ -192,6 +196,7 @@ Info 35   [16:01:10.000] request:
         "file": "/a/b/test2.ts"
       }
     }
+Before request
 
 PolledWatches::
 /a/b/node_modules/@types:
@@ -245,6 +250,7 @@ Info 47   [16:01:34.000] 	FileName: /a/b/app.ts ProjectRootPath: undefined
 Info 47   [16:01:35.000] 		Projects: /a/b/tsconfig.json
 Info 47   [16:01:36.000] 	FileName: /a/b/test2.ts ProjectRootPath: undefined
 Info 47   [16:01:37.000] 		Projects: /dev/null/inferredProject2*
+After request
 
 PolledWatches::
 /a/b/node_modules/@types:

@@ -1,4 +1,43 @@
 Info 0    [16:00:47.000] Provided types map file "/typesMap.json" doesn't exist
+Creating project service
+//// [/user/username/projects/myproject/product/node_modules/module1/index.ts]
+export function module1() {}
+
+//// [/user/username/projects/myproject/node_modules/module2/index.ts]
+export function module2() {}
+
+//// [/user/username/projects/myproject/product/src/file1.ts]
+import "./feature/file2"; import "../test/file4"; import "../test/src/file3"; import { module1 } from "module1";import { module2 } from "module2";
+
+//// [/user/username/projects/myproject/product/src/feature/file2.ts]
+import { module1 } from "module1";import { module2 } from "module2";
+
+//// [/user/username/projects/myproject/product/test/src/file3.ts]
+import { module1 } from "module1";import { module2 } from "module2";
+
+//// [/user/username/projects/myproject/product/test/file4.ts]
+import { module1 } from "module1";import { module2 } from "module2";
+
+//// [/a/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+
+
+PolledWatches::
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 1    [16:00:48.000] Search path: /user/username/projects/myproject/product/src
 Info 2    [16:00:49.000] For info: /user/username/projects/myproject/product/src/file1.ts :: No config files found.
 Info 3    [16:00:50.000] Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
@@ -165,6 +204,64 @@ Info 126  [16:03:11.000] FileWatcher:: Triggered with /user/username/projects/my
 Info 127  [16:03:12.000] Scheduled: /dev/null/inferredProject1*, Cancelled earlier one
 Info 128  [16:03:13.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info 129  [16:03:14.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/product/test/file4.ts 1:: WatchInfo: /user/username/projects/myproject/product/test/file4.ts 500 undefined WatchType: Closed Script info
+Before running timeout callbacks
+//// [/user/username/projects/myproject/product/src/file1.ts]
+import "./feature/file2"; import "../test/file4"; import "../test/src/file3"; import { module1 } from "module1";import { module2 } from "module2";import { module1 } from "module1";import { module2 } from "module2";
+
+//// [/user/username/projects/myproject/product/src/feature/file2.ts]
+import { module1 } from "module1";import { module2 } from "module2";import { module1 } from "module1";import { module2 } from "module2";
+
+//// [/user/username/projects/myproject/product/test/src/file3.ts]
+import { module1 } from "module1";import { module2 } from "module2";import { module1 } from "module1";import { module2 } from "module2";
+
+//// [/user/username/projects/myproject/product/test/file4.ts]
+import { module1 } from "module1";import { module2 } from "module2";import { module1 } from "module1";import { module2 } from "module2";
+
+
+PolledWatches::
+/user/username/projects/myproject/product/src/tsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/product/src/jsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/product/tsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/product/jsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/tsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/jsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/product/src/node_modules:
+  {"pollingInterval":500}
+/user/username/projects/myproject/product/test/node_modules:
+  {"pollingInterval":500}
+/user/username/projects/myproject/product/test/src/node_modules:
+  {"pollingInterval":500}
+/user/username/projects/myproject/product/src/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/product/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/product/src/feature/file2.ts:
+  {}
+/user/username/projects/myproject/product/test/file4.ts:
+  {}
+/user/username/projects/myproject/product/test/src/file3.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/product/node_modules:
+  {}
+/user/username/projects/myproject/node_modules:
+  {}
+/user/username/projects/myproject/product/src/feature:
+  {}
+
 Info 130  [16:03:15.000] Running: /dev/null/inferredProject1*
 Info 131  [16:03:16.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info 132  [16:03:17.000] Reusing resolution of module './feature/file2' from '/user/username/projects/myproject/product/src/file1.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/product/src/feature/file2.ts'.
@@ -197,3 +294,48 @@ Info 148  [16:03:41.000] -----------------------------------------------
 Info 148  [16:03:42.000] Open files: 
 Info 148  [16:03:43.000] 	FileName: /user/username/projects/myproject/product/src/file1.ts ProjectRootPath: undefined
 Info 148  [16:03:44.000] 		Projects: /dev/null/inferredProject1*
+After running timeout callbacks
+
+PolledWatches::
+/user/username/projects/myproject/product/src/tsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/product/src/jsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/product/tsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/product/jsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/tsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/jsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/product/src/node_modules:
+  {"pollingInterval":500}
+/user/username/projects/myproject/product/test/node_modules:
+  {"pollingInterval":500}
+/user/username/projects/myproject/product/test/src/node_modules:
+  {"pollingInterval":500}
+/user/username/projects/myproject/product/src/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/product/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/product/src/feature/file2.ts:
+  {}
+/user/username/projects/myproject/product/test/file4.ts:
+  {}
+/user/username/projects/myproject/product/test/src/file3.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/product/node_modules:
+  {}
+/user/username/projects/myproject/node_modules:
+  {}
+/user/username/projects/myproject/product/src/feature:
+  {}

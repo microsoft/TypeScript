@@ -8,6 +8,7 @@ Info 1    [16:00:34.000] request:
         "file": "/user/username/projects/myproject/projects/project2/class2.ts"
       }
     }
+Before request
 //// [/user/username/projects/myproject/projects/project1/tsconfig.json]
 {"compilerOptions":{"module":"none","composite":true},"exclude":["temp"]}
 
@@ -114,6 +115,7 @@ Info 29   [16:01:04.000] -----------------------------------------------
 Info 29   [16:01:05.000] Open files: 
 Info 29   [16:01:06.000] 	FileName: /user/username/projects/myproject/projects/project2/class2.ts ProjectRootPath: undefined
 Info 29   [16:01:07.000] 		Projects: /user/username/projects/myproject/projects/project2/tsconfig.json
+After request
 
 PolledWatches::
 /user/username/projects/myproject/projects/project2/node_modules/@types:
@@ -147,6 +149,35 @@ Info 30   [16:01:11.000] DirectoryWatcher:: Triggered with /user/username/projec
 Info 31   [16:01:12.000] Scheduled: /user/username/projects/myproject/projects/project2/tsconfig.json
 Info 32   [16:01:13.000] Scheduled: *ensureProjectForOpenFiles*
 Info 33   [16:01:14.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Config: /user/username/projects/myproject/projects/project1/tsconfig.json WatchType: Wild card directory
+Before checking timeout queue length (2) and running
+//// [/user/username/projects/myproject/projects/project1/class3.ts]
+class class3 {}
+
+
+PolledWatches::
+/user/username/projects/myproject/projects/project2/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/projects/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/projects/project2/tsconfig.json:
+  {}
+/user/username/projects/myproject/projects/project1/tsconfig.json:
+  {}
+/user/username/projects/myproject/projects/project1/class1.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/projects/project2:
+  {}
+/user/username/projects/myproject/projects/project1:
+  {}
+
 Info 34   [16:01:15.000] Running: /user/username/projects/myproject/projects/project2/tsconfig.json
 Info 35   [16:01:16.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/projects/project2/tsconfig.json
 Info 36   [16:01:17.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined Project: /user/username/projects/myproject/projects/project2/tsconfig.json WatchType: Missing file
@@ -169,6 +200,34 @@ Info 42   [16:01:31.000] -----------------------------------------------
 Info 42   [16:01:32.000] Open files: 
 Info 42   [16:01:33.000] 	FileName: /user/username/projects/myproject/projects/project2/class2.ts ProjectRootPath: undefined
 Info 42   [16:01:34.000] 		Projects: /user/username/projects/myproject/projects/project2/tsconfig.json
+After checking timeout queue length (2) and running
+
+PolledWatches::
+/user/username/projects/myproject/projects/project2/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/projects/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/projects/project1/class3.d.ts:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/projects/project2/tsconfig.json:
+  {}
+/user/username/projects/myproject/projects/project1/tsconfig.json:
+  {}
+/user/username/projects/myproject/projects/project1/class1.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/projects/project2:
+  {}
+/user/username/projects/myproject/projects/project1:
+  {}
+
 Info 42   [16:01:37.000] FileWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts 0:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined Project: /user/username/projects/myproject/projects/project2/tsconfig.json WatchType: Missing file
 Info 43   [16:01:38.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined Project: /user/username/projects/myproject/projects/project2/tsconfig.json WatchType: Missing file
 Info 44   [16:01:39.000] Scheduled: /user/username/projects/myproject/projects/project2/tsconfig.json
@@ -177,6 +236,35 @@ Info 46   [16:01:41.000] Elapsed:: *ms FileWatcher:: Triggered with /user/userna
 Info 47   [16:01:42.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Config: /user/username/projects/myproject/projects/project1/tsconfig.json WatchType: Wild card directory
 Info 48   [16:01:43.000] Project: /user/username/projects/myproject/projects/project1/tsconfig.json Detected output file: /user/username/projects/myproject/projects/project1/class3.d.ts
 Info 49   [16:01:44.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Config: /user/username/projects/myproject/projects/project1/tsconfig.json WatchType: Wild card directory
+Before checking timeout queue length (2) and running
+//// [/user/username/projects/myproject/projects/project1/class3.d.ts]
+declare class class3 {}
+
+
+PolledWatches::
+/user/username/projects/myproject/projects/project2/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/projects/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/projects/project2/tsconfig.json:
+  {}
+/user/username/projects/myproject/projects/project1/tsconfig.json:
+  {}
+/user/username/projects/myproject/projects/project1/class1.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/projects/project2:
+  {}
+/user/username/projects/myproject/projects/project1:
+  {}
+
 Info 50   [16:01:45.000] Running: /user/username/projects/myproject/projects/project2/tsconfig.json
 Info 51   [16:01:46.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/projects/project2/tsconfig.json
 Info 52   [16:01:47.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined WatchType: Closed Script info
@@ -216,12 +304,99 @@ Info 60   [16:02:03.000] -----------------------------------------------
 Info 60   [16:02:04.000] Open files: 
 Info 60   [16:02:05.000] 	FileName: /user/username/projects/myproject/projects/project2/class2.ts ProjectRootPath: undefined
 Info 60   [16:02:06.000] 		Projects: /user/username/projects/myproject/projects/project2/tsconfig.json
+After checking timeout queue length (2) and running
+
+PolledWatches::
+/user/username/projects/myproject/projects/project2/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/projects/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/projects/project2/tsconfig.json:
+  {}
+/user/username/projects/myproject/projects/project1/tsconfig.json:
+  {}
+/user/username/projects/myproject/projects/project1/class1.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/projects/project1/class3.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/projects/project2:
+  {}
+/user/username/projects/myproject/projects/project1:
+  {}
+
 Info 60   [16:02:10.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/temp :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Config: /user/username/projects/myproject/projects/project1/tsconfig.json WatchType: Wild card directory
 Info 61   [16:02:11.000] Project: /user/username/projects/myproject/projects/project1/tsconfig.json Detected excluded file: /user/username/projects/myproject/projects/project1/temp
 Info 62   [16:02:12.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/temp :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Config: /user/username/projects/myproject/projects/project1/tsconfig.json WatchType: Wild card directory
 Info 63   [16:02:14.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/temp/file.d.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Config: /user/username/projects/myproject/projects/project1/tsconfig.json WatchType: Wild card directory
 Info 64   [16:02:15.000] Project: /user/username/projects/myproject/projects/project1/tsconfig.json Detected excluded file: /user/username/projects/myproject/projects/project1/temp/file.d.ts
 Info 65   [16:02:16.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/temp/file.d.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Config: /user/username/projects/myproject/projects/project1/tsconfig.json WatchType: Wild card directory
+Before checking timeout queue length (0) and running
+//// [/user/username/projects/myproject/projects/project1/temp/file.d.ts]
+declare class file {}
+
+
+PolledWatches::
+/user/username/projects/myproject/projects/project2/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/projects/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/projects/project2/tsconfig.json:
+  {}
+/user/username/projects/myproject/projects/project1/tsconfig.json:
+  {}
+/user/username/projects/myproject/projects/project1/class1.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/projects/project1/class3.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/projects/project2:
+  {}
+/user/username/projects/myproject/projects/project1:
+  {}
+
+After checking timeout queue length (0) and running
+
+PolledWatches::
+/user/username/projects/myproject/projects/project2/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/projects/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/projects/project2/tsconfig.json:
+  {}
+/user/username/projects/myproject/projects/project1/tsconfig.json:
+  {}
+/user/username/projects/myproject/projects/project1/class1.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/projects/project1/class3.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/projects/project2:
+  {}
+/user/username/projects/myproject/projects/project1:
+  {}
+
 Info 66   [16:02:18.000] FileWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts 2:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined WatchType: Closed Script info
 Info 67   [16:02:19.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined WatchType: Closed Script info
 Info 68   [16:02:20.000] Scheduled: /user/username/projects/myproject/projects/project2/tsconfig.json
@@ -230,6 +405,33 @@ Info 70   [16:02:22.000] Elapsed:: *ms FileWatcher:: Triggered with /user/userna
 Info 71   [16:02:23.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Config: /user/username/projects/myproject/projects/project1/tsconfig.json WatchType: Wild card directory
 Info 72   [16:02:24.000] Project: /user/username/projects/myproject/projects/project1/tsconfig.json Detected output file: /user/username/projects/myproject/projects/project1/class3.d.ts
 Info 73   [16:02:25.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Config: /user/username/projects/myproject/projects/project1/tsconfig.json WatchType: Wild card directory
+Before checking timeout queue length (2) and running
+//// [/user/username/projects/myproject/projects/project1/class3.d.ts] deleted
+
+PolledWatches::
+/user/username/projects/myproject/projects/project2/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/projects/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/projects/project2/tsconfig.json:
+  {}
+/user/username/projects/myproject/projects/project1/tsconfig.json:
+  {}
+/user/username/projects/myproject/projects/project1/class1.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/projects/project2:
+  {}
+/user/username/projects/myproject/projects/project1:
+  {}
+
 Info 74   [16:02:26.000] Running: /user/username/projects/myproject/projects/project2/tsconfig.json
 Info 75   [16:02:27.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/projects/project2/tsconfig.json
 Info 76   [16:02:28.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined Project: /user/username/projects/myproject/projects/project2/tsconfig.json WatchType: Missing file
@@ -266,6 +468,34 @@ Info 84   [16:02:44.000] -----------------------------------------------
 Info 84   [16:02:45.000] Open files: 
 Info 84   [16:02:46.000] 	FileName: /user/username/projects/myproject/projects/project2/class2.ts ProjectRootPath: undefined
 Info 84   [16:02:47.000] 		Projects: /user/username/projects/myproject/projects/project2/tsconfig.json
+After checking timeout queue length (2) and running
+
+PolledWatches::
+/user/username/projects/myproject/projects/project2/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/projects/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/projects/project1/class3.d.ts:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/projects/project2/tsconfig.json:
+  {}
+/user/username/projects/myproject/projects/project1/tsconfig.json:
+  {}
+/user/username/projects/myproject/projects/project1/class1.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/projects/project2:
+  {}
+/user/username/projects/myproject/projects/project1:
+  {}
+
 Info 84   [16:02:50.000] FileWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts 0:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined Project: /user/username/projects/myproject/projects/project2/tsconfig.json WatchType: Missing file
 Info 85   [16:02:51.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined Project: /user/username/projects/myproject/projects/project2/tsconfig.json WatchType: Missing file
 Info 86   [16:02:52.000] Scheduled: /user/username/projects/myproject/projects/project2/tsconfig.json
@@ -274,6 +504,35 @@ Info 88   [16:02:54.000] Elapsed:: *ms FileWatcher:: Triggered with /user/userna
 Info 89   [16:02:55.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Config: /user/username/projects/myproject/projects/project1/tsconfig.json WatchType: Wild card directory
 Info 90   [16:02:56.000] Project: /user/username/projects/myproject/projects/project1/tsconfig.json Detected output file: /user/username/projects/myproject/projects/project1/class3.d.ts
 Info 91   [16:02:57.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/projects/project1/class3.d.ts :: WatchInfo: /user/username/projects/myproject/projects/project1 1 undefined Config: /user/username/projects/myproject/projects/project1/tsconfig.json WatchType: Wild card directory
+Before checking timeout queue length (2) and running
+//// [/user/username/projects/myproject/projects/project1/class3.d.ts]
+declare class class3 {}
+
+
+PolledWatches::
+/user/username/projects/myproject/projects/project2/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/projects/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/projects/project2/tsconfig.json:
+  {}
+/user/username/projects/myproject/projects/project1/tsconfig.json:
+  {}
+/user/username/projects/myproject/projects/project1/class1.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/projects/project2:
+  {}
+/user/username/projects/myproject/projects/project1:
+  {}
+
 Info 92   [16:02:58.000] Running: /user/username/projects/myproject/projects/project2/tsconfig.json
 Info 93   [16:02:59.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/projects/project2/tsconfig.json
 Info 94   [16:03:00.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/project1/class3.d.ts 500 undefined WatchType: Closed Script info
@@ -313,3 +572,30 @@ Info 102  [16:03:16.000] -----------------------------------------------
 Info 102  [16:03:17.000] Open files: 
 Info 102  [16:03:18.000] 	FileName: /user/username/projects/myproject/projects/project2/class2.ts ProjectRootPath: undefined
 Info 102  [16:03:19.000] 		Projects: /user/username/projects/myproject/projects/project2/tsconfig.json
+After checking timeout queue length (2) and running
+
+PolledWatches::
+/user/username/projects/myproject/projects/project2/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/projects/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/projects/project2/tsconfig.json:
+  {}
+/user/username/projects/myproject/projects/project1/tsconfig.json:
+  {}
+/user/username/projects/myproject/projects/project1/class1.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/projects/project1/class3.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/projects/project2:
+  {}
+/user/username/projects/myproject/projects/project1:
+  {}

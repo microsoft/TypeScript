@@ -1,4 +1,21 @@
 Info 0    [16:00:13.000] Provided types map file "/typesMap.json" doesn't exist
+Creating project service
+//// [/a/b/app.js]
+
+
+//// [/a/b/tsconfig.json]
+{"compilerOptions":{"allowJs":true},"typeAcquisition":{"enable":true}}
+
+//// [/a/b/package.json]
+{"name":"test","dependencies":{"jquery":"^3.1.0"}}
+
+
+PolledWatches::
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 1    [16:00:14.000] Search path: /a/b
 Info 2    [16:00:15.000] For info: /a/b/app.js :: Config file name: /a/b/tsconfig.json
 Info 3    [16:00:16.000] Creating configuration project /a/b/tsconfig.json
@@ -38,6 +55,34 @@ Info 17   [16:00:38.000] 	FileName: /a/b/app.js ProjectRootPath: undefined
 Info 17   [16:00:39.000] 		Projects: /a/b/tsconfig.json
 Info 17   [16:00:48.000] Scheduled: /a/b/tsconfig.json
 Info 18   [16:00:49.000] Scheduled: *ensureProjectForOpenFiles*
+Before checking timeout queue length (2) and running
+//// [/a/data/package.json]
+{ "private": true }
+
+//// [/a/data/node_modules/@types/jquery/index.d.ts]
+declare const $: { x: number }
+
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+/a/b/bower_components:
+  {"pollingInterval":500}
+/a/b/node_modules:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/tsconfig.json:
+  {}
+/a/b/package.json:
+  {}
+
+FsWatchesRecursive::
+/a/b:
+  {}
+
 Info 19   [16:00:50.000] Running: /a/b/tsconfig.json
 Info 20   [16:00:51.000] Starting updateGraphWorker: Project: /a/b/tsconfig.json
 Info 21   [16:00:52.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
@@ -70,3 +115,24 @@ Info 28   [16:01:07.000] -----------------------------------------------
 Info 28   [16:01:08.000] Open files: 
 Info 28   [16:01:09.000] 	FileName: /a/b/app.js ProjectRootPath: undefined
 Info 28   [16:01:10.000] 		Projects: /a/b/tsconfig.json
+After checking timeout queue length (2) and running
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+/a/b/bower_components:
+  {"pollingInterval":500}
+/a/b/node_modules:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/tsconfig.json:
+  {}
+/a/b/package.json:
+  {}
+
+FsWatchesRecursive::
+/a/b:
+  {}

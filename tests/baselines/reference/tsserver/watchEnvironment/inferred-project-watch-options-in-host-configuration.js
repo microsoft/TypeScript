@@ -12,6 +12,7 @@ Info 1    [16:00:30.000] request:
       "seq": 1,
       "type": "request"
     }
+Before request
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -44,6 +45,7 @@ FsWatchesRecursive::
 Info 2    [16:00:31.000] Host watch options changed to {"excludeDirectories":["node_modules"]}, it will be take effect for next watches.
 Info 3    [16:00:32.000] response:
     {"seq":0,"type":"response","command":"configure","request_seq":1,"success":true}
+After request
 
 PolledWatches::
 
@@ -69,6 +71,7 @@ Info 5    [16:00:34.000] request:
       "seq": 2,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 
@@ -76,6 +79,7 @@ FsWatches::
 
 FsWatchesRecursive::
 
+After request
 
 PolledWatches::
 
@@ -98,6 +102,7 @@ Info 7    [16:00:36.000] request:
         "projectRootPath": "/user/username/projects/myproject"
       }
     }
+Before request
 
 PolledWatches::
 
@@ -145,6 +150,7 @@ Info 26   [16:00:57.000] -----------------------------------------------
 Info 26   [16:00:58.000] Open files: 
 Info 26   [16:00:59.000] 	FileName: /user/username/projects/myproject/src/main.ts ProjectRootPath: /user/username/projects/myproject
 Info 26   [16:01:00.000] 		Projects: /dev/null/inferredProject1*
+After request
 
 PolledWatches::
 /user/username/projects/myproject/src/tsconfig.json:

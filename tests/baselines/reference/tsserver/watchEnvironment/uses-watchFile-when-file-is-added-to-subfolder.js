@@ -8,6 +8,7 @@ Info 1    [16:00:22.000] request:
         "file": "/a/username/project/src/index.ts"
       }
     }
+Before request
 //// [/a/username/project/src/index.ts]
 import {} from "./"
 
@@ -89,6 +90,7 @@ Info 23   [16:00:46.000] -----------------------------------------------
 Info 23   [16:00:47.000] Open files: 
 Info 23   [16:00:48.000] 	FileName: /a/username/project/src/index.ts ProjectRootPath: undefined
 Info 23   [16:00:49.000] 		Projects: /a/username/project/tsconfig.json
+After request
 
 PolledWatches::
 /a/username/project:
@@ -123,6 +125,7 @@ Info 24   [16:00:51.000] request:
       "seq": 1,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /a/username/project:
@@ -142,6 +145,7 @@ FsWatches::
 
 FsWatchesRecursive::
 
+After request
 
 PolledWatches::
 /a/username/project:
@@ -185,6 +189,29 @@ Info 29   [16:00:58.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/user
 Info 30   [16:00:59.000] DirectoryWatcher:: Triggered with /a/username/project/src :: WatchInfo: /a/username/project/src 1 {"synchronousWatchDirectory":true} Project: /a/username/project/tsconfig.json WatchType: Failed Lookup Locations
 Info 31   [16:01:00.000] Scheduled: /a/username/project/tsconfig.jsonFailedLookupInvalidation
 Info 32   [16:01:01.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/username/project/src :: WatchInfo: /a/username/project/src 1 {"synchronousWatchDirectory":true} Project: /a/username/project/tsconfig.json WatchType: Failed Lookup Locations
+Before running timeout callbacks
+//// [/a/username/project/src/file2.ts]
+
+
+
+PolledWatches::
+/a/username/project:
+  {"pollingInterval":500}
+/a/username/project/src:
+  {"pollingInterval":500}
+/a/username/project/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/username/project/tsconfig.json:
+  {}
+/a/username/project/src/file1.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+
 Info 33   [16:01:02.000] Running: /a/username/project/tsconfig.json
 Info 34   [16:01:03.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info 35   [16:01:04.000] FileWatcher:: Added:: WatchInfo: /a/username/project/src/file2.ts 500 undefined WatchType: Closed Script info
@@ -209,20 +236,7 @@ Info 39   [16:01:08.000] 	Files (4)
 	  Matched by default include pattern '**/*'
 
 Info 40   [16:01:09.000] -----------------------------------------------
-Info 41   [16:01:10.000] request:
-    {
-      "command": "completionInfo",
-      "arguments": {
-        "file": "/a/username/project/src/index.ts",
-        "line": 1,
-        "offset": 19
-      },
-      "seq": 2,
-      "type": "request"
-    }
-//// [/a/username/project/src/file2.ts]
-
-
+After running timeout callbacks
 
 PolledWatches::
 /a/username/project:
@@ -244,6 +258,40 @@ FsWatches::
 
 FsWatchesRecursive::
 
+Info 41   [16:01:10.000] request:
+    {
+      "command": "completionInfo",
+      "arguments": {
+        "file": "/a/username/project/src/index.ts",
+        "line": 1,
+        "offset": 19
+      },
+      "seq": 2,
+      "type": "request"
+    }
+Before request
+
+PolledWatches::
+/a/username/project:
+  {"pollingInterval":500}
+/a/username/project/src:
+  {"pollingInterval":500}
+/a/username/project/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/username/project/tsconfig.json:
+  {}
+/a/username/project/src/file1.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/a/username/project/src/file2.ts:
+  {}
+
+FsWatchesRecursive::
+
+After request
 
 PolledWatches::
 /a/username/project:

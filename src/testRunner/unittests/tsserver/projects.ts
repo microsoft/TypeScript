@@ -19,7 +19,7 @@ namespace ts.projectSystem {
             session.executeCommand(getErrRequest);
 
             host.writeFile(commonFile2.path, commonFile2.content);
-            host.runQueuedTimeoutCallbacks();
+            session.runQueuedTimeoutCallbacks();
             session.executeCommand(getErrRequest);
             baselineTsserverLogs("projects", "handles the missing files added with tripleslash ref", session);
         });
@@ -1520,24 +1520,24 @@ namespace ts.projectSystem {
             openFile(fileB);
             openFile(fileSubA);
 
-            host.checkTimeoutQueueLengthAndRun(0);
+            session.checkTimeoutQueueLengthAndRun(0);
 
             // This should schedule 2 timeouts for ensuring project structure and ensuring projects for open file
             host.deleteFile(fileSubA.path);
             host.deleteFolder(getDirectoryPath(fileSubA.path));
             host.writeFile(fileA.path, fileA.content);
-            host.checkTimeoutQueueLength(2);
+            session.checkTimeoutQueueLength(2);
 
             closeFilesForSession([fileSubA], session);
             // This should cancel existing updates and schedule new ones
-            host.checkTimeoutQueueLength(2);
+            session.checkTimeoutQueueLength(2);
 
             // Open the fileA (as if rename)
             // config project is updated to check if fileA is present in it
             openFile(fileA);
 
             // Run the timeout for updating configured project and ensuring projects for open file
-            host.checkTimeoutQueueLengthAndRun(2);
+            session.checkTimeoutQueueLengthAndRun(2);
 
             // file is deleted but watches are not yet invoked
             const originalFileExists = host.fileExists;
@@ -1548,13 +1548,13 @@ namespace ts.projectSystem {
             // This should create inferred project since fileSubA not on the disk
             openFile(fileSubA);
 
-            host.checkTimeoutQueueLengthAndRun(2); // Update configured project and projects for open file
+            session.checkTimeoutQueueLengthAndRun(2); // Update configured project and projects for open file
             host.fileExists = originalFileExists;
 
             // Actually trigger the file move
             host.deleteFile(fileA.path);
             host.ensureFileOrFolder(fileSubA);
-            host.checkTimeoutQueueLength(2);
+            session.checkTimeoutQueueLength(2);
 
             verifyGetErrRequest({ session, host, files: [fileB, fileSubA], existingTimeouts: 2 });
             baselineTsserverLogs("projects", "handles delayed directory watch invoke on file creation", session);

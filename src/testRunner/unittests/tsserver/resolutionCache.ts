@@ -87,7 +87,7 @@ namespace ts.projectSystem {
             session.executeCommand(getErrRequest);
 
             host.writeFile(moduleFile.path, moduleFile.content);
-            host.runQueuedTimeoutCallbacks();
+            session.runQueuedTimeoutCallbacks();
 
             // Make a change to trigger the program rebuild
             const changeRequest = makeSessionRequest<server.protocol.ChangeRequestArgs>(
@@ -126,10 +126,10 @@ namespace ts.projectSystem {
                 content: "export = pad;declare function pad(length: number, text: string, char ?: string): string;"
             };
             host.ensureFileOrFolder(padIndex, /*ignoreWatchInvokedWithTriggerAsFileCreate*/ true);
-            host.runQueuedTimeoutCallbacks(); // Scheduled invalidation of resolutions
-            host.runQueuedTimeoutCallbacks(); // Actual update
-            host.runQueuedTimeoutCallbacks();
-            host.runQueuedImmediateCallbacks();
+            session.runQueuedTimeoutCallbacks(); // Scheduled invalidation of resolutions
+            session.runQueuedTimeoutCallbacks(); // Actual update
+            session.runQueuedTimeoutCallbacks();
+            session.runQueuedImmediateCallbacks();
             baselineTsserverLogs("resolutionCache", `npm install @types works`, session);
         });
 
@@ -210,7 +210,7 @@ namespace ts.projectSystem {
                 }
             });
 
-            host.checkTimeoutQueueLength(0);
+            session.checkTimeoutQueueLength(0);
             baselineTsserverLogs("resolutionCache", "suppressed diagnostic events", session);
         });
     });
@@ -237,11 +237,11 @@ namespace ts.projectSystem {
 
             const moduleFileNewPath = "/a/b/moduleFile1.ts";
             host.renameFile(moduleFile.path, moduleFileNewPath);
-            host.runQueuedTimeoutCallbacks();
+            session.runQueuedTimeoutCallbacks();
             session.executeCommand(getErrRequest);
 
             host.renameFile(moduleFileNewPath, moduleFile.path);
-            host.runQueuedTimeoutCallbacks();
+            session.runQueuedTimeoutCallbacks();
 
             // Make a change to trigger the program rebuild
             const changeRequest = makeSessionRequest<server.protocol.ChangeRequestArgs>(
@@ -249,7 +249,7 @@ namespace ts.projectSystem {
                 { file: file1.path, line: 1, offset: 44, endLine: 1, endOffset: 44, insertString: "\n" }
             );
             session.executeCommand(changeRequest);
-            host.runQueuedTimeoutCallbacks();
+            session.runQueuedTimeoutCallbacks();
 
             session.executeCommand(getErrRequest);
             baselineTsserverLogs("resolutionCache", "renaming module should restore the states for inferred projects", session);
@@ -280,11 +280,11 @@ namespace ts.projectSystem {
 
             const moduleFileNewPath = "/a/b/moduleFile1.ts";
             host.renameFile(moduleFile.path, moduleFileNewPath);
-            host.runQueuedTimeoutCallbacks();
+            session.runQueuedTimeoutCallbacks();
             session.executeCommand(getErrRequest);
 
             host.renameFile(moduleFileNewPath, moduleFile.path);
-            host.runQueuedTimeoutCallbacks();
+            session.runQueuedTimeoutCallbacks();
             session.executeCommand(getErrRequest);
             baselineTsserverLogs("resolutionCache", "renaming module should restore the states for configured projects", session);
         });
@@ -377,7 +377,7 @@ namespace ts.projectSystem {
 
                 host.writeFile(file1.path, file1.content + fileContent);
                 host.writeFile(file2.path, file2.content + fileContent);
-                host.runQueuedTimeoutCallbacks();
+                service.runQueuedTimeoutCallbacks();
 
                 baselineTsserverLogs("resolutionCache", "relative module name from files in same folder", service);
             });
@@ -393,7 +393,7 @@ namespace ts.projectSystem {
 
                 host.writeFile(file1.path, file1.content + fileContent);
                 host.writeFile(file2.path, file2.content + fileContent);
-                host.runQueuedTimeoutCallbacks();
+                service.runQueuedTimeoutCallbacks();
                 baselineTsserverLogs("resolutionCache", "non relative module name from files in same folder", service);
             });
         });
@@ -435,7 +435,7 @@ namespace ts.projectSystem {
                 host.writeFile(file2.path, file2.content + fileContent2);
                 host.writeFile(file3.path, file3.content + fileContent3);
                 host.writeFile(file4.path, file4.content + fileContent4);
-                host.runQueuedTimeoutCallbacks();
+                service.runQueuedTimeoutCallbacks();
                 baselineTsserverLogs("resolutionCache", "relative module name from files in different folders", service);
             });
 
@@ -452,7 +452,7 @@ namespace ts.projectSystem {
                 host.writeFile(file2.path, file2.content + fileContent);
                 host.writeFile(file3.path, file3.content + fileContent);
                 host.writeFile(file4.path, file4.content + fileContent);
-                host.runQueuedTimeoutCallbacks();
+                service.runQueuedTimeoutCallbacks();
                 baselineTsserverLogs("resolutionCache", "non relative module name from files in different folders", service);
             });
 
@@ -474,7 +474,7 @@ namespace ts.projectSystem {
                 host.writeFile(file2.path, file2.content + importModuleContent);
                 host.writeFile(file3.path, file3.content + importModuleContent);
                 host.writeFile(file4.path, file4.content + importModuleContent);
-                host.runQueuedTimeoutCallbacks();
+                service.runQueuedTimeoutCallbacks();
                 baselineTsserverLogs("resolutionCache", "non relative module name from inferred project", service);
             });
         });
@@ -595,7 +595,7 @@ export const x = 10;`
 
                 // invoke callback to simulate saving
                 host.modifyFile(file1.path, file1.content, { invokeFileDeleteCreateAsPartInsteadOfChange: true });
-                host.checkTimeoutQueueLengthAndRun(0);
+                service.checkTimeoutQueueLengthAndRun(0);
                 baselineTsserverLogs("resolutionCache", "avoid unnecessary lookup invalidation on save", service);
             });
         });

@@ -1,4 +1,15 @@
 Info 0    [16:00:07.000] Provided types map file "/typesMap.json" doesn't exist
+Creating project service
+//// [/c/foo.ts]
+import {y} from "bar"
+
+
+PolledWatches::
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 1    [16:00:08.000] Search path: /c
 Info 2    [16:00:09.000] For info: /c/foo.ts :: No config files found.
 Info 3    [16:00:10.000] Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
@@ -37,9 +48,40 @@ Info 21   [16:00:34.000] readDirectory:: []
 Info 22   [16:00:37.000] DirectoryWatcher:: Triggered with /c/bar.d.ts :: WatchInfo: /c 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info 23   [16:00:38.000] Scheduled: /dev/null/inferredProject1*FailedLookupInvalidation
 Info 24   [16:00:39.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /c/bar.d.ts :: WatchInfo: /c 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Before running timeout callbacks
+//// [/c/bar.d.ts]
+export var y = 1
+
+
+PolledWatches::
+/c/node_modules:
+  {"pollingInterval":500}
+/c/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/c:
+  {}
+
+FsWatchesRecursive::
+
 Info 25   [16:00:40.000] Running: /dev/null/inferredProject1*FailedLookupInvalidation
 Info 26   [16:00:41.000] Scheduled: /dev/null/inferredProject1*
 Info 27   [16:00:42.000] Scheduled: *ensureProjectForOpenFiles*
+After running timeout callbacks
+
+PolledWatches::
+/c/node_modules:
+  {"pollingInterval":500}
+/c/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/c:
+  {}
+
+FsWatchesRecursive::
+
 Info 28   [16:00:43.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info 29   [16:00:44.000] FileWatcher:: Added:: WatchInfo: /c/bar.d.ts 500 undefined WatchType: Closed Script info
 Info 30   [16:00:45.000] DirectoryWatcher:: Close:: WatchInfo: /c/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations

@@ -12,6 +12,7 @@ Info 1    [16:00:30.000] request:
       "seq": 1,
       "type": "request"
     }
+Before request
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -44,6 +45,7 @@ FsWatchesRecursive::
 Info 2    [16:00:31.000] Host watch options changed to {"excludeDirectories":["node_modules"]}, it will be take effect for next watches.
 Info 3    [16:00:32.000] response:
     {"seq":0,"type":"response","command":"configure","request_seq":1,"success":true}
+After request
 
 PolledWatches::
 
@@ -80,6 +82,7 @@ Info 5    [16:00:34.000] request:
       "seq": 2,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 
@@ -118,6 +121,7 @@ Info 17   [16:00:46.000] 	Files (4)
 	  Root file specified for compilation
 
 Info 18   [16:00:47.000] -----------------------------------------------
+After request
 
 PolledWatches::
 
@@ -145,6 +149,7 @@ Info 20   [16:00:49.000] request:
         "file": "/user/username/projects/myproject/src/main.ts"
       }
     }
+Before request
 
 PolledWatches::
 
@@ -166,6 +171,7 @@ Info 22   [16:00:53.000] -----------------------------------------------
 Info 22   [16:00:54.000] Open files: 
 Info 22   [16:00:55.000] 	FileName: /user/username/projects/myproject/src/main.ts ProjectRootPath: undefined
 Info 22   [16:00:56.000] 		Projects: /user/username/projects/myproject/project.csproj
+After request
 
 PolledWatches::
 

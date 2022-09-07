@@ -1,4 +1,19 @@
 Info 0    [16:00:21.000] Provided types map file "/typesMap.json" doesn't exist
+Creating project service
+//// [/user/username/projects/a/b/app.js]
+
+                import * as commander from "commander";
+
+//// [/user/username/projects/node_modules/commander/index.js]
+module.exports = 0
+
+
+PolledWatches::
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 1    [16:00:22.000] Search path: /user/username/projects/a/b
 Info 2    [16:00:23.000] For info: /user/username/projects/a/b/app.js :: No config files found.
 Info 3    [16:00:24.000] Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
@@ -40,6 +55,42 @@ Info 24   [16:00:53.000] 	FileName: /user/username/projects/a/b/app.js ProjectRo
 Info 24   [16:00:54.000] 		Projects: /dev/null/inferredProject1*
 Info 24   [16:01:03.000] Scheduled: /dev/null/inferredProject1*
 Info 25   [16:01:04.000] Scheduled: *ensureProjectForOpenFiles*
+Before checking timeout queue length (2) and running
+//// [/user/username/projects/a/cache/package.json]
+{ "private": true }
+
+//// [/user/username/projects/a/cache/node_modules/@types/commander/index.d.ts]
+
+
+
+PolledWatches::
+/user/username/projects/a/b/tsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/a/b/jsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/a/tsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/a/jsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/a/b/node_modules:
+  {"pollingInterval":500}
+/user/username/projects/a/node_modules:
+  {"pollingInterval":500}
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/user/username/projects/a/b/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/a/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/a/b/bower_components:
+  {"pollingInterval":500}
+
+FsWatches::
+
+FsWatchesRecursive::
+/user/username/projects/node_modules:
+  {}
+
 Info 26   [16:01:05.000] Running: /dev/null/inferredProject1*
 Info 27   [16:01:06.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info 28   [16:01:07.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/a/cache/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
@@ -60,3 +111,34 @@ Info 32   [16:01:11.000] 	Files (2)
 Info 33   [16:01:12.000] -----------------------------------------------
 Info 34   [16:01:13.000] Scheduled: /dev/null/inferredProject1*
 Info 35   [16:01:14.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
+After checking timeout queue length (2) and running
+
+PolledWatches::
+/user/username/projects/a/b/tsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/a/b/jsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/a/tsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/a/jsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/a/b/node_modules:
+  {"pollingInterval":500}
+/user/username/projects/a/node_modules:
+  {"pollingInterval":500}
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/user/username/projects/a/b/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/a/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/a/b/bower_components:
+  {"pollingInterval":500}
+
+FsWatches::
+
+FsWatchesRecursive::
+/user/username/projects/node_modules:
+  {}
+/user/username/projects/a/cache/node_modules:
+  {}

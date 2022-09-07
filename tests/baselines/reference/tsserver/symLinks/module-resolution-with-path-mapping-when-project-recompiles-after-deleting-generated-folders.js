@@ -9,6 +9,7 @@ Info 1    [16:00:52.000] request:
       "seq": 1,
       "type": "request"
     }
+Before request
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -114,6 +115,7 @@ Info 32   [16:01:25.000] -----------------------------------------------
 Info 32   [16:01:26.000] Open files: 
 Info 32   [16:01:27.000] 	FileName: /users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts ProjectRootPath: /users/username/projects/myproject
 Info 32   [16:01:28.000] 		Projects: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json
+After request
 
 PolledWatches::
 /users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules/@types:
@@ -157,6 +159,7 @@ Info 33   [16:01:30.000] request:
       "seq": 2,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules/@types:
@@ -184,6 +187,7 @@ FsWatchesRecursive::
 /users/username/projects/myproject/javascript/packages/recognizers-date-time/src:
   {}
 
+After request
 
 PolledWatches::
 /users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules/@types:
@@ -215,19 +219,214 @@ Info 34   [16:01:31.000] response:
     {
       "responseRequired": false
     }
+Before checking timeout queue length (1) and running
+
+PolledWatches::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/packages/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-text/dist/types/recognizers-text.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/users/username/projects/myproject/javascript/packages:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-text/package.json:
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/src:
+  {}
+
 Info 35   [16:01:32.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts","diagnostics":[]}}
+After checking timeout queue length (1) and running
+
+PolledWatches::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/packages/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-text/dist/types/recognizers-text.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/users/username/projects/myproject/javascript/packages:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-text/package.json:
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/src:
+  {}
+
+Before running immediate callbacks and checking length (1)
+
+PolledWatches::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/packages/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-text/dist/types/recognizers-text.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/users/username/projects/myproject/javascript/packages:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-text/package.json:
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/src:
+  {}
+
 Info 36   [16:01:33.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts","diagnostics":[]}}
+Before running immediate callbacks and checking length (1)
+
+PolledWatches::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/packages/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-text/dist/types/recognizers-text.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/users/username/projects/myproject/javascript/packages:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-text/package.json:
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/src:
+  {}
+
+Before running immediate callbacks and checking length (1)
+
+PolledWatches::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/packages/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-text/dist/types/recognizers-text.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/users/username/projects/myproject/javascript/packages:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-text/package.json:
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/src:
+  {}
+
 Info 37   [16:01:34.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts","diagnostics":[]}}
 Info 38   [16:01:35.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":2}}
+Before running immediate callbacks and checking length (1)
+
+PolledWatches::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/packages/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-text/dist/types/recognizers-text.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/users/username/projects/myproject/javascript/packages:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-text/package.json:
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/src:
+  {}
+
 Info 39   [16:01:37.000] FileWatcher:: Triggered with /users/username/projects/myproject/javascript/packages/recognizers-text/dist/types/recognizers-text.d.ts 2:: WatchInfo: /users/username/projects/myproject/javascript/packages/recognizers-text/dist/types/recognizers-text.d.ts 500 undefined WatchType: Closed Script info
 Info 40   [16:01:38.000] FileWatcher:: Close:: WatchInfo: /users/username/projects/myproject/javascript/packages/recognizers-text/dist/types/recognizers-text.d.ts 500 undefined WatchType: Closed Script info
 Info 41   [16:01:39.000] Scheduled: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json
 Info 42   [16:01:40.000] Scheduled: *ensureProjectForOpenFiles*
 Info 43   [16:01:41.000] Elapsed:: *ms FileWatcher:: Triggered with /users/username/projects/myproject/javascript/packages/recognizers-text/dist/types/recognizers-text.d.ts 2:: WatchInfo: /users/username/projects/myproject/javascript/packages/recognizers-text/dist/types/recognizers-text.d.ts 500 undefined WatchType: Closed Script info
+Before running timeout callbacks
+//// [/users/username/projects/myproject/javascript/packages/recognizers-text/dist/types/recognizers-text.d.ts] deleted
+
+PolledWatches::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/packages/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/users/username/projects/myproject/javascript/packages:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-text/package.json:
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/src:
+  {}
+
 Info 44   [16:01:44.000] Running: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json
 Info 45   [16:01:45.000] Starting updateGraphWorker: Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json
 Info 46   [16:01:46.000] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/myproject/javascript/packages/recognizers-text 1 undefined Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json WatchType: Failed Lookup Locations
@@ -275,21 +474,7 @@ Info 65   [16:02:16.000] 		Projects: /users/username/projects/myproject/javascri
 Info 65   [16:02:17.000] got projects updated in background, updating diagnostics for /users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts
 Info 66   [16:02:18.000] event:
     {"seq":0,"type":"event","event":"projectsUpdatedInBackground","body":{"openFiles":["/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts"]}}
-Info 67   [16:02:19.000] event:
-    {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts","diagnostics":[]}}
-Info 68   [16:02:20.000] request:
-    {
-      "command": "geterr",
-      "arguments": {
-        "delay": 0,
-        "files": [
-          "/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts"
-        ]
-      },
-      "seq": 3,
-      "type": "request"
-    }
-//// [/users/username/projects/myproject/javascript/packages/recognizers-text/dist/types/recognizers-text.d.ts] deleted
+After running timeout callbacks
 
 PolledWatches::
 /users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules/@types:
@@ -325,6 +510,129 @@ FsWatchesRecursive::
 /users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules:
   {}
 
+Before running timeout callbacks
+
+PolledWatches::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/packages/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/packages/node_modules:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/node_modules:
+  {"pollingInterval":500}
+/users/username/projects/myproject/node_modules:
+  {"pollingInterval":500}
+
+FsWatches::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/users/username/projects/myproject/javascript/packages:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-text/package.json:
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/src:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-text:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules:
+  {}
+
+Info 67   [16:02:19.000] event:
+    {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts","diagnostics":[]}}
+After running timeout callbacks
+
+PolledWatches::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/packages/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/packages/node_modules:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/node_modules:
+  {"pollingInterval":500}
+/users/username/projects/myproject/node_modules:
+  {"pollingInterval":500}
+
+FsWatches::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/users/username/projects/myproject/javascript/packages:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-text/package.json:
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/src:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-text:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules:
+  {}
+
+Info 68   [16:02:20.000] request:
+    {
+      "command": "geterr",
+      "arguments": {
+        "delay": 0,
+        "files": [
+          "/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts"
+        ]
+      },
+      "seq": 3,
+      "type": "request"
+    }
+Before request
+
+PolledWatches::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/packages/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/packages/node_modules:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/node_modules:
+  {"pollingInterval":500}
+/users/username/projects/myproject/node_modules:
+  {"pollingInterval":500}
+
+FsWatches::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/users/username/projects/myproject/javascript/packages:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-text/package.json:
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/src:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-text:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules:
+  {}
+
+After request
 
 PolledWatches::
 /users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules/@types:
@@ -364,14 +672,230 @@ Info 69   [16:02:21.000] response:
     {
       "responseRequired": false
     }
+Before checking timeout queue length (1) and running
+
+PolledWatches::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/packages/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/packages/node_modules:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/node_modules:
+  {"pollingInterval":500}
+/users/username/projects/myproject/node_modules:
+  {"pollingInterval":500}
+
+FsWatches::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/users/username/projects/myproject/javascript/packages:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-text/package.json:
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/src:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-text:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules:
+  {}
+
 Info 70   [16:02:22.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts","diagnostics":[]}}
+After checking timeout queue length (1) and running
+
+PolledWatches::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/packages/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/packages/node_modules:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/node_modules:
+  {"pollingInterval":500}
+/users/username/projects/myproject/node_modules:
+  {"pollingInterval":500}
+
+FsWatches::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/users/username/projects/myproject/javascript/packages:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-text/package.json:
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/src:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-text:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules:
+  {}
+
+Before running immediate callbacks and checking length (1)
+
+PolledWatches::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/packages/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/packages/node_modules:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/node_modules:
+  {"pollingInterval":500}
+/users/username/projects/myproject/node_modules:
+  {"pollingInterval":500}
+
+FsWatches::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/users/username/projects/myproject/javascript/packages:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-text/package.json:
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/src:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-text:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules:
+  {}
+
 Info 71   [16:02:23.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts","diagnostics":[{"start":{"line":1,"offset":17},"end":{"line":1,"offset":46},"text":"Cannot find module '@microsoft/recognizers-text' or its corresponding type declarations.","code":2307,"category":"error"}]}}
+Before running immediate callbacks and checking length (1)
+
+PolledWatches::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/packages/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/packages/node_modules:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/node_modules:
+  {"pollingInterval":500}
+/users/username/projects/myproject/node_modules:
+  {"pollingInterval":500}
+
+FsWatches::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/users/username/projects/myproject/javascript/packages:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-text/package.json:
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/src:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-text:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules:
+  {}
+
+Before running immediate callbacks and checking length (1)
+
+PolledWatches::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/packages/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/packages/node_modules:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/node_modules:
+  {"pollingInterval":500}
+/users/username/projects/myproject/node_modules:
+  {"pollingInterval":500}
+
+FsWatches::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/users/username/projects/myproject/javascript/packages:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-text/package.json:
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/src:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-text:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules:
+  {}
+
 Info 72   [16:02:24.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts","diagnostics":[]}}
 Info 73   [16:02:25.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":3}}
+Before running immediate callbacks and checking length (1)
+
+PolledWatches::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/packages/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/packages/node_modules:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/node_modules:
+  {"pollingInterval":500}
+/users/username/projects/myproject/node_modules:
+  {"pollingInterval":500}
+
+FsWatches::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/users/username/projects/myproject/javascript/packages:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-text/package.json:
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/src:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-text:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules:
+  {}
+
 Info 74   [16:02:30.000] DirectoryWatcher:: Triggered with /users/username/projects/myproject/javascript/packages/recognizers-text/dist :: WatchInfo: /users/username/projects/myproject/javascript/packages/recognizers-text 1 undefined Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json WatchType: Failed Lookup Locations
 Info 75   [16:02:31.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /users/username/projects/myproject/javascript/packages/recognizers-text/dist :: WatchInfo: /users/username/projects/myproject/javascript/packages/recognizers-text 1 undefined Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json WatchType: Failed Lookup Locations
 Info 76   [16:02:33.000] DirectoryWatcher:: Triggered with /users/username/projects/myproject/javascript/packages/recognizers-text/dist/types :: WatchInfo: /users/username/projects/myproject/javascript/packages/recognizers-text 1 undefined Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json WatchType: Failed Lookup Locations
@@ -379,9 +903,120 @@ Info 77   [16:02:34.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /users/
 Info 78   [16:02:36.000] DirectoryWatcher:: Triggered with /users/username/projects/myproject/javascript/packages/recognizers-text/dist/types/recognizers-text.d.ts :: WatchInfo: /users/username/projects/myproject/javascript/packages/recognizers-text 1 undefined Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json WatchType: Failed Lookup Locations
 Info 79   [16:02:37.000] Scheduled: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.jsonFailedLookupInvalidation
 Info 80   [16:02:38.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /users/username/projects/myproject/javascript/packages/recognizers-text/dist/types/recognizers-text.d.ts :: WatchInfo: /users/username/projects/myproject/javascript/packages/recognizers-text 1 undefined Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json WatchType: Failed Lookup Locations
+Before running timeout callbacks
+//// [/users/username/projects/myproject/javascript/packages/recognizers-text/dist/types/recognizers-text.d.ts]
+export class C { method(): number; }
+
+
+PolledWatches::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/packages/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/packages/node_modules:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/node_modules:
+  {"pollingInterval":500}
+/users/username/projects/myproject/node_modules:
+  {"pollingInterval":500}
+
+FsWatches::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/users/username/projects/myproject/javascript/packages:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-text/package.json:
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/src:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-text:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules:
+  {}
+
 Info 81   [16:02:39.000] Running: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.jsonFailedLookupInvalidation
 Info 82   [16:02:40.000] Scheduled: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json
 Info 83   [16:02:41.000] Scheduled: *ensureProjectForOpenFiles*
+After running timeout callbacks
+
+PolledWatches::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/packages/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/packages/node_modules:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/node_modules:
+  {"pollingInterval":500}
+/users/username/projects/myproject/node_modules:
+  {"pollingInterval":500}
+
+FsWatches::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/users/username/projects/myproject/javascript/packages:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-text/package.json:
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/src:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-text:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules:
+  {}
+
+Before running timeout callbacks
+
+PolledWatches::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/packages/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/packages/node_modules:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/node_modules:
+  {"pollingInterval":500}
+/users/username/projects/myproject/node_modules:
+  {"pollingInterval":500}
+
+FsWatches::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/users/username/projects/myproject/javascript/packages:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-text/package.json:
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/src:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-text:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules:
+  {}
+
 Info 84   [16:02:42.000] Running: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json
 Info 85   [16:02:43.000] Starting updateGraphWorker: Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json
 Info 86   [16:02:44.000] FileWatcher:: Added:: WatchInfo: /users/username/projects/myproject/javascript/packages/recognizers-text/dist/types/recognizers-text.d.ts 500 undefined WatchType: Closed Script info
@@ -433,21 +1068,7 @@ Info 106  [16:03:15.000] 		Projects: /users/username/projects/myproject/javascri
 Info 106  [16:03:16.000] got projects updated in background, updating diagnostics for /users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts
 Info 107  [16:03:17.000] event:
     {"seq":0,"type":"event","event":"projectsUpdatedInBackground","body":{"openFiles":["/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts"]}}
-Info 108  [16:03:18.000] request:
-    {
-      "command": "geterr",
-      "arguments": {
-        "delay": 0,
-        "files": [
-          "/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts"
-        ]
-      },
-      "seq": 4,
-      "type": "request"
-    }
-//// [/users/username/projects/myproject/javascript/packages/recognizers-text/dist/types/recognizers-text.d.ts]
-export class C { method(): number; }
-
+After running timeout callbacks
 
 PolledWatches::
 /users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules/@types:
@@ -475,6 +1096,47 @@ FsWatchesRecursive::
 /users/username/projects/myproject/javascript/packages/recognizers-date-time/src:
   {}
 
+Info 108  [16:03:18.000] request:
+    {
+      "command": "geterr",
+      "arguments": {
+        "delay": 0,
+        "files": [
+          "/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts"
+        ]
+      },
+      "seq": 4,
+      "type": "request"
+    }
+Before request
+
+PolledWatches::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/packages/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/users/username/projects/myproject/javascript/packages:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-text/package.json:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-text/dist/types/recognizers-text.d.ts:
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/src:
+  {}
+
+After request
 
 PolledWatches::
 /users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules/@types:
@@ -506,11 +1168,178 @@ Info 109  [16:03:19.000] response:
     {
       "responseRequired": false
     }
+Before checking timeout queue length (1) and running
+
+PolledWatches::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/packages/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/users/username/projects/myproject/javascript/packages:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-text/package.json:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-text/dist/types/recognizers-text.d.ts:
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/src:
+  {}
+
 Info 110  [16:03:20.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts","diagnostics":[]}}
+After checking timeout queue length (1) and running
+
+PolledWatches::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/packages/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/users/username/projects/myproject/javascript/packages:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-text/package.json:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-text/dist/types/recognizers-text.d.ts:
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/src:
+  {}
+
+Before running immediate callbacks and checking length (1)
+
+PolledWatches::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/packages/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/users/username/projects/myproject/javascript/packages:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-text/package.json:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-text/dist/types/recognizers-text.d.ts:
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/src:
+  {}
+
 Info 111  [16:03:21.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts","diagnostics":[]}}
+Before running immediate callbacks and checking length (1)
+
+PolledWatches::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/packages/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/users/username/projects/myproject/javascript/packages:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-text/package.json:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-text/dist/types/recognizers-text.d.ts:
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/src:
+  {}
+
+Before running immediate callbacks and checking length (1)
+
+PolledWatches::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/packages/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/users/username/projects/myproject/javascript/packages:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-text/package.json:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-text/dist/types/recognizers-text.d.ts:
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/src:
+  {}
+
 Info 112  [16:03:22.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts","diagnostics":[]}}
 Info 113  [16:03:23.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":4}}
+Before running immediate callbacks and checking length (1)
+
+PolledWatches::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/packages/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/javascript/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/users/username/projects/myproject/javascript/packages:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-text/package.json:
+  {}
+/users/username/projects/myproject/javascript/packages/recognizers-text/dist/types/recognizers-text.d.ts:
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/myproject/javascript/packages/recognizers-date-time/src:
+  {}

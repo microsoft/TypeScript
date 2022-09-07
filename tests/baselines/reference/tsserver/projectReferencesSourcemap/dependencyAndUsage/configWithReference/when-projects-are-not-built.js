@@ -8,6 +8,7 @@ Info 1    [16:00:36.000] request:
         "file": "/user/username/projects/myproject/main/main.ts"
       }
     }
+Before request
 //// [/user/username/projects/myproject/dependency/FnS.ts]
 export function fn1() { }
 export function fn2() { }
@@ -135,6 +136,7 @@ Info 29   [16:01:06.000] -----------------------------------------------
 Info 29   [16:01:07.000] Open files: 
 Info 29   [16:01:08.000] 	FileName: /user/username/projects/myproject/main/main.ts ProjectRootPath: undefined
 Info 29   [16:01:09.000] 		Projects: /user/username/projects/myproject/main/tsconfig.json
+After request
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -173,6 +175,7 @@ Info 30   [16:01:11.000] request:
         "file": "/user/username/projects/myproject/dependency/FnS.ts"
       }
     }
+Before request
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -236,6 +239,7 @@ Info 47   [16:01:35.000] 	FileName: /user/username/projects/myproject/main/main.
 Info 47   [16:01:36.000] 		Projects: /user/username/projects/myproject/main/tsconfig.json
 Info 47   [16:01:37.000] 	FileName: /user/username/projects/myproject/dependency/FnS.ts ProjectRootPath: undefined
 Info 47   [16:01:38.000] 		Projects: /user/username/projects/myproject/main/tsconfig.json,/user/username/projects/myproject/dependency/tsconfig.json
+After request
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -274,6 +278,7 @@ Info 48   [16:01:40.000] request:
         "file": "/user/username/projects/myproject/random/random.ts"
       }
     }
+Before request
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -351,6 +356,7 @@ Info 66   [16:02:10.000] 	FileName: /user/username/projects/myproject/dependency
 Info 66   [16:02:11.000] 		Projects: /user/username/projects/myproject/main/tsconfig.json,/user/username/projects/myproject/dependency/tsconfig.json
 Info 66   [16:02:12.000] 	FileName: /user/username/projects/myproject/random/random.ts ProjectRootPath: undefined
 Info 66   [16:02:13.000] 		Projects: /user/username/projects/myproject/random/tsconfig.json
+After request
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -397,6 +403,7 @@ Info 67   [16:02:15.000] request:
       "seq": 1,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -428,6 +435,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
+After request
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -507,6 +515,7 @@ Info 69   [16:02:17.000] request:
       "seq": 2,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -538,6 +547,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
+After request
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -617,6 +627,7 @@ Info 71   [16:02:19.000] request:
       "seq": 3,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -648,6 +659,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
+After request
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -727,6 +739,7 @@ Info 73   [16:02:21.000] request:
       "seq": 4,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -758,6 +771,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
+After request
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -837,6 +851,7 @@ Info 75   [16:02:23.000] request:
       "seq": 5,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -868,6 +883,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
+After request
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -947,6 +963,7 @@ Info 77   [16:02:25.000] request:
       "seq": 6,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -981,6 +998,7 @@ FsWatchesRecursive::
 Info 78   [16:02:26.000] Search path: /user/username/projects/myproject/dependency
 Info 79   [16:02:27.000] For info: /user/username/projects/myproject/dependency/FnS.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
 Info 80   [16:02:28.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/decls/FnS.d.ts 2000 undefined Project: /user/username/projects/myproject/dependency/tsconfig.json WatchType: Missing generated file
+After request
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -1106,6 +1124,7 @@ Info 82   [16:02:30.000] request:
       "seq": 7,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -1141,6 +1160,7 @@ FsWatchesRecursive::
 
 Info 83   [16:02:31.000] Search path: /user/username/projects/myproject/dependency
 Info 84   [16:02:32.000] For info: /user/username/projects/myproject/dependency/FnS.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
+After request
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -1266,6 +1286,7 @@ Info 86   [16:02:34.000] request:
       "seq": 8,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -1301,6 +1322,7 @@ FsWatchesRecursive::
 
 Info 87   [16:02:35.000] Search path: /user/username/projects/myproject/dependency
 Info 88   [16:02:36.000] For info: /user/username/projects/myproject/dependency/FnS.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
+After request
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -1426,6 +1448,7 @@ Info 90   [16:02:38.000] request:
       "seq": 9,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -1461,6 +1484,7 @@ FsWatchesRecursive::
 
 Info 91   [16:02:39.000] Search path: /user/username/projects/myproject/dependency
 Info 92   [16:02:40.000] For info: /user/username/projects/myproject/dependency/FnS.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
+After request
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -1586,6 +1610,7 @@ Info 94   [16:02:42.000] request:
       "seq": 10,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -1621,6 +1646,7 @@ FsWatchesRecursive::
 
 Info 95   [16:02:43.000] Search path: /user/username/projects/myproject/dependency
 Info 96   [16:02:44.000] For info: /user/username/projects/myproject/dependency/FnS.ts :: Config file name: /user/username/projects/myproject/dependency/tsconfig.json
+After request
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -1744,6 +1770,7 @@ Info 98   [16:02:46.000] request:
         "file": "/user/username/projects/myproject/random/random.ts"
       }
     }
+Before request
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -1795,6 +1822,7 @@ Info 100  [16:02:58.000] 	FileName: /user/username/projects/myproject/main/main.
 Info 100  [16:02:59.000] 		Projects: /user/username/projects/myproject/main/tsconfig.json
 Info 100  [16:03:00.000] 	FileName: /user/username/projects/myproject/dependency/FnS.ts ProjectRootPath: undefined
 Info 100  [16:03:01.000] 		Projects: /user/username/projects/myproject/main/tsconfig.json,/user/username/projects/myproject/dependency/tsconfig.json
+After request
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -1843,6 +1871,7 @@ Info 101  [16:03:03.000] request:
         "file": "/user/username/projects/myproject/random/random.ts"
       }
     }
+Before request
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -1900,6 +1929,7 @@ Info 105  [16:03:19.000] 	FileName: /user/username/projects/myproject/dependency
 Info 105  [16:03:20.000] 		Projects: /user/username/projects/myproject/main/tsconfig.json,/user/username/projects/myproject/dependency/tsconfig.json
 Info 105  [16:03:21.000] 	FileName: /user/username/projects/myproject/random/random.ts ProjectRootPath: undefined
 Info 105  [16:03:22.000] 		Projects: /user/username/projects/myproject/random/tsconfig.json
+After request
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -1946,6 +1976,7 @@ Info 106  [16:03:24.000] request:
         "file": "/user/username/projects/myproject/main/main.ts"
       }
     }
+Before request
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -1997,6 +2028,7 @@ Info 108  [16:03:36.000] 	FileName: /user/username/projects/myproject/dependency
 Info 108  [16:03:37.000] 		Projects: /user/username/projects/myproject/main/tsconfig.json,/user/username/projects/myproject/dependency/tsconfig.json
 Info 108  [16:03:38.000] 	FileName: /user/username/projects/myproject/random/random.ts ProjectRootPath: undefined
 Info 108  [16:03:39.000] 		Projects: /user/username/projects/myproject/random/tsconfig.json
+After request
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -2045,6 +2077,7 @@ Info 109  [16:03:41.000] request:
         "file": "/user/username/projects/myproject/dependency/FnS.ts"
       }
     }
+Before request
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -2096,6 +2129,7 @@ Info 111  [16:03:51.000] -----------------------------------------------
 Info 111  [16:03:52.000] Open files: 
 Info 111  [16:03:53.000] 	FileName: /user/username/projects/myproject/random/random.ts ProjectRootPath: undefined
 Info 111  [16:03:54.000] 		Projects: /user/username/projects/myproject/random/tsconfig.json
+After request
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -2146,6 +2180,7 @@ Info 112  [16:03:56.000] request:
         "file": "/user/username/projects/myproject/random/random.ts"
       }
     }
+Before request
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -2197,6 +2232,7 @@ Info 114  [16:04:05.000] 	Files (2)
 
 Info 114  [16:04:06.000] -----------------------------------------------
 Info 114  [16:04:07.000] Open files: 
+After request
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -2249,6 +2285,7 @@ Info 115  [16:04:09.000] request:
         "file": "/user/username/projects/myproject/random/random.ts"
       }
     }
+Before request
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -2346,6 +2383,7 @@ Info 146  [16:04:42.000] -----------------------------------------------
 Info 146  [16:04:43.000] Open files: 
 Info 146  [16:04:44.000] 	FileName: /user/username/projects/myproject/random/random.ts ProjectRootPath: undefined
 Info 146  [16:04:45.000] 		Projects: /user/username/projects/myproject/random/tsconfig.json
+After request
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:

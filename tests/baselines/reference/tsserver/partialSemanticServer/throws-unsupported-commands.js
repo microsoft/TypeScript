@@ -8,6 +8,7 @@ Info 1    [16:00:32.000] request:
         "file": "/user/username/projects/myproject/a.ts"
       }
     }
+Before request
 //// [/user/username/projects/myproject/a.ts]
 import { y, cc } from "./b";
 import { something } from "something";
@@ -69,6 +70,7 @@ Info 8    [16:00:41.000] -----------------------------------------------
 Info 8    [16:00:42.000] Open files: 
 Info 8    [16:00:43.000] 	FileName: /user/username/projects/myproject/a.ts ProjectRootPath: undefined
 Info 8    [16:00:44.000] 		Projects: /dev/null/inferredProject1*
+After request
 
 PolledWatches::
 
@@ -89,6 +91,7 @@ Info 9    [16:00:46.000] request:
         "file": "/user/username/projects/myproject/a.ts"
       }
     }
+Before request
 
 PolledWatches::
 

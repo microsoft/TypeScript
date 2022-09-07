@@ -8,6 +8,7 @@ Info 1    [16:00:26.000] request:
         "file": "/user/username/projects/myproject/src/test.ts"
       }
     }
+Before request
 //// [/user/username/projects/myproject/src/test.ts]
 import * as blabla from "./blabla.json";
 declare var console: any;
@@ -98,6 +99,7 @@ Info 27   [16:00:54.000] -----------------------------------------------
 Info 27   [16:00:55.000] Open files: 
 Info 27   [16:00:56.000] 	FileName: /user/username/projects/myproject/src/test.ts ProjectRootPath: undefined
 Info 27   [16:00:57.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+After request
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
@@ -133,6 +135,7 @@ Info 28   [16:00:59.000] request:
       "seq": 1,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
@@ -152,6 +155,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/src:
   {}
 
+After request
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
@@ -175,11 +179,130 @@ Info 29   [16:01:00.000] response:
     {
       "responseRequired": false
     }
+Before checking timeout queue length (1) and running
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/src:
+  {}
+/user/username/projects/myproject/src/blabla.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}
+
 Info 30   [16:01:01.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/src/test.ts","diagnostics":[]}}
+After checking timeout queue length (1) and running
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/src:
+  {}
+/user/username/projects/myproject/src/blabla.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}
+
+Before running immediate callbacks and checking length (1)
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/src:
+  {}
+/user/username/projects/myproject/src/blabla.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}
+
 Info 31   [16:01:02.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/user/username/projects/myproject/src/test.ts","diagnostics":[]}}
+Before running immediate callbacks and checking length (1)
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/src:
+  {}
+/user/username/projects/myproject/src/blabla.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}
+
+Before running immediate callbacks and checking length (1)
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/src:
+  {}
+/user/username/projects/myproject/src/blabla.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}
+
 Info 32   [16:01:03.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/src/test.ts","diagnostics":[]}}
 Info 33   [16:01:04.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":1}}
+Before running immediate callbacks and checking length (1)
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/src:
+  {}
+/user/username/projects/myproject/src/blabla.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}

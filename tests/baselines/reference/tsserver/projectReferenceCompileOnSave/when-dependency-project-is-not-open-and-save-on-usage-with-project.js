@@ -8,6 +8,7 @@ Info 1    [16:00:30.000] request:
         "file": "/user/username/projects/myproject/usage/usage.ts"
       }
     }
+Before request
 //// [/user/username/projects/myproject/dependency/fns.ts]
 export function fn1() { }
 export function fn2() { }
@@ -114,6 +115,7 @@ Info 27   [16:00:58.000] -----------------------------------------------
 Info 27   [16:00:59.000] Open files: 
 Info 27   [16:01:00.000] 	FileName: /user/username/projects/myproject/usage/usage.ts ProjectRootPath: undefined
 Info 27   [16:01:01.000] 		Projects: /user/username/projects/myproject/usage/tsconfig.json
+After request
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -153,6 +155,7 @@ Info 28   [16:01:03.000] request:
       "seq": 1,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -178,6 +181,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/dependency:
   {}
 
+After request
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -226,6 +230,7 @@ Info 30   [16:01:05.000] request:
       "seq": 2,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -254,6 +259,7 @@ FsWatchesRecursive::
 Info 31   [16:01:08.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/usage/usage.js :: WatchInfo: /user/username/projects/myproject/usage 1 undefined Config: /user/username/projects/myproject/usage/tsconfig.json WatchType: Wild card directory
 Info 32   [16:01:09.000] Project: /user/username/projects/myproject/usage/tsconfig.json Detected file add/remove of non supported extension: /user/username/projects/myproject/usage/usage.js
 Info 33   [16:01:10.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/usage/usage.js :: WatchInfo: /user/username/projects/myproject/usage 1 undefined Config: /user/username/projects/myproject/usage/tsconfig.json WatchType: Wild card directory
+After request
 //// [/user/username/projects/myproject/usage/usage.js]
 "use strict";
 exports.__esModule = true;
@@ -302,6 +308,7 @@ Info 35   [16:01:12.000] request:
       "seq": 3,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -327,6 +334,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/dependency:
   {}
 
+After request
 
 PolledWatches::
 /user/username/projects/myproject/decls:

@@ -1,4 +1,51 @@
 Info 0    [16:00:39.000] Provided types map file "/typesMap.json" doesn't exist
+Creating project service
+//// [/a/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+
+//// [/user/username/projects/myproject/a/tsconfig.json]
+{"compilerOptions":{"composite":true}}
+
+//// [/user/username/projects/myproject/b/tsconfig.json]
+{"compilerOptions":{"composite":true,"baseUrl":"./","paths":{"@ref/*":["../*"]}},"references":[{"path":"../a"}]}
+
+//// [/user/username/projects/myproject/c/tsconfig.json]
+{"compilerOptions":{"baseUrl":"./","paths":{"@ref/*":["../refs/*"]}},"references":[{"path":"../b"}]}
+
+//// [/user/username/projects/myproject/a/index.ts]
+export class A {}
+
+//// [/user/username/projects/myproject/b/index.ts]
+import {A} from '@ref/a';
+export const b = new A();
+
+//// [/user/username/projects/myproject/c/index.ts]
+import {b} from '../b';
+import {X} from "@ref/a";
+b;
+X;
+
+//// [/user/username/projects/myproject/refs/a.d.ts]
+export class X {}
+export class A {}
+
+
+PolledWatches::
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 1    [16:00:40.000] Search path: /user/username/projects/myproject/c
 Info 2    [16:00:41.000] For info: /user/username/projects/myproject/c/index.ts :: Config file name: /user/username/projects/myproject/c/tsconfig.json
 Info 3    [16:00:42.000] Creating configuration project /user/username/projects/myproject/c/tsconfig.json
@@ -114,6 +161,46 @@ Info 38   [16:01:25.000] FileWatcher:: Triggered with /user/username/projects/my
 Info 39   [16:01:26.000] Scheduled: /user/username/projects/myproject/c/tsconfig.json
 Info 40   [16:01:27.000] Scheduled: *ensureProjectForOpenFiles*
 Info 41   [16:01:28.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/b/index.ts 1:: WatchInfo: /user/username/projects/myproject/b/index.ts 500 undefined WatchType: Closed Script info
+Before checking timeout queue length (2) and running
+//// [/user/username/projects/myproject/b/index.ts]
+import {A} from '@ref/a';
+export const b = new A();export function gFoo() { }
+
+
+PolledWatches::
+/user/username/projects/myproject/c/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/c/tsconfig.json:
+  {}
+/user/username/projects/myproject/b/tsconfig.json:
+  {}
+/user/username/projects/myproject/a/tsconfig.json:
+  {}
+/user/username/projects/myproject:
+  {}
+/user/username/projects/myproject/b/index.ts:
+  {}
+/user/username/projects/myproject/a/index.ts:
+  {}
+/user/username/projects/myproject/refs/a.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/c:
+  {}
+/user/username/projects/myproject/b:
+  {}
+/user/username/projects/myproject/a:
+  {}
+/user/username/projects/myproject/refs:
+  {}
+
 Info 42   [16:01:29.000] Running: /user/username/projects/myproject/c/tsconfig.json
 Info 43   [16:01:30.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/c/tsconfig.json
 Info 44   [16:01:31.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/c/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
@@ -135,3 +222,38 @@ Info 49   [16:01:44.000] -----------------------------------------------
 Info 49   [16:01:45.000] Open files: 
 Info 49   [16:01:46.000] 	FileName: /user/username/projects/myproject/c/index.ts ProjectRootPath: undefined
 Info 49   [16:01:47.000] 		Projects: /user/username/projects/myproject/c/tsconfig.json
+After checking timeout queue length (2) and running
+
+PolledWatches::
+/user/username/projects/myproject/c/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/c/tsconfig.json:
+  {}
+/user/username/projects/myproject/b/tsconfig.json:
+  {}
+/user/username/projects/myproject/a/tsconfig.json:
+  {}
+/user/username/projects/myproject:
+  {}
+/user/username/projects/myproject/b/index.ts:
+  {}
+/user/username/projects/myproject/a/index.ts:
+  {}
+/user/username/projects/myproject/refs/a.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/c:
+  {}
+/user/username/projects/myproject/b:
+  {}
+/user/username/projects/myproject/a:
+  {}
+/user/username/projects/myproject/refs:
+  {}

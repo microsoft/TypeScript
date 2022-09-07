@@ -8,6 +8,7 @@ Info 1    [16:00:32.000] request:
         "file": "/user/username/projects/myproject/a.ts"
       }
     }
+Before request
 //// [/user/username/projects/myproject/a.ts]
 import { y, cc } from "./b";
 import { something } from "something";
@@ -69,6 +70,7 @@ Info 8    [16:00:41.000] -----------------------------------------------
 Info 8    [16:00:42.000] Open files: 
 Info 8    [16:00:43.000] 	FileName: /user/username/projects/myproject/a.ts ProjectRootPath: undefined
 Info 8    [16:00:44.000] 		Projects: /dev/null/inferredProject1*
+After request
 
 PolledWatches::
 
@@ -91,6 +93,7 @@ Info 9    [16:00:46.000] request:
       "seq": 1,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 
@@ -104,6 +107,7 @@ Info 12   [16:00:49.000] getCompletionData: Get previous token: *
 Info 13   [16:00:50.000] getCompletionsAtPosition: isCompletionListBlocker: *
 Info 14   [16:00:51.000] getCompletionData: Semantic work: *
 Info 15   [16:00:52.000] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
+After request
 
 PolledWatches::
 
@@ -138,6 +142,7 @@ Info 17   [16:00:54.000] request:
         "file": "/user/username/projects/myproject/b.ts"
       }
     }
+Before request
 
 PolledWatches::
 
@@ -171,6 +176,7 @@ Info 23   [16:01:04.000] 	FileName: /user/username/projects/myproject/a.ts Proje
 Info 23   [16:01:05.000] 		Projects: /dev/null/inferredProject1*
 Info 23   [16:01:06.000] 	FileName: /user/username/projects/myproject/b.ts ProjectRootPath: undefined
 Info 23   [16:01:07.000] 		Projects: /dev/null/inferredProject1*
+After request
 
 PolledWatches::
 
@@ -193,6 +199,7 @@ Info 24   [16:01:09.000] request:
       "seq": 2,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 
@@ -206,6 +213,7 @@ Info 27   [16:01:12.000] getCompletionData: Get previous token: *
 Info 28   [16:01:13.000] getCompletionsAtPosition: isCompletionListBlocker: *
 Info 29   [16:01:14.000] getCompletionData: Semantic work: *
 Info 30   [16:01:15.000] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
+After request
 
 PolledWatches::
 

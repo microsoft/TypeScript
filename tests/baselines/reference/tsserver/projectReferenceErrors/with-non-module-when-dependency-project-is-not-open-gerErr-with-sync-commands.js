@@ -8,6 +8,7 @@ Info 1    [16:00:30.000] request:
         "file": "/user/username/projects/myproject/usage/usage.ts"
       }
     }
+Before request
 //// [/user/username/projects/myproject/dependency/fns.ts]
 function fn1() { }
 function fn2() { }
@@ -116,6 +117,7 @@ Info 27   [16:00:58.000] -----------------------------------------------
 Info 27   [16:00:59.000] Open files: 
 Info 27   [16:01:00.000] 	FileName: /user/username/projects/myproject/usage/usage.ts ProjectRootPath: undefined
 Info 27   [16:01:01.000] 		Projects: /user/username/projects/myproject/usage/tsconfig.json
+After request
 
 PolledWatches::
 /user/username/projects/myproject/usage/node_modules/@types:
@@ -152,6 +154,7 @@ Info 28   [16:01:03.000] request:
       "seq": 1,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /user/username/projects/myproject/usage/node_modules/@types:
@@ -175,6 +178,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/dependency:
   {}
 
+After request
 
 PolledWatches::
 /user/username/projects/myproject/usage/node_modules/@types:
@@ -212,6 +216,7 @@ Info 30   [16:01:05.000] request:
       "seq": 2,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /user/username/projects/myproject/usage/node_modules/@types:
@@ -235,6 +240,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/dependency:
   {}
 
+After request
 
 PolledWatches::
 /user/username/projects/myproject/usage/node_modules/@types:
@@ -286,6 +292,7 @@ Info 32   [16:01:07.000] request:
       "seq": 3,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /user/username/projects/myproject/usage/node_modules/@types:
@@ -309,6 +316,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/dependency:
   {}
 
+After request
 
 PolledWatches::
 /user/username/projects/myproject/usage/node_modules/@types:
@@ -346,6 +354,7 @@ Info 34   [16:01:09.000] request:
       "seq": 4,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /user/username/projects/myproject/usage/node_modules/@types:
@@ -369,6 +378,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/dependency:
   {}
 
+After request
 
 PolledWatches::
 /user/username/projects/myproject/usage/node_modules/@types:
@@ -406,6 +416,7 @@ Info 36   [16:01:11.000] request:
       "seq": 5,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /user/username/projects/myproject/usage/node_modules/@types:
@@ -429,6 +440,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/dependency:
   {}
 
+After request
 
 PolledWatches::
 /user/username/projects/myproject/usage/node_modules/@types:
@@ -466,6 +478,7 @@ Info 38   [16:01:13.000] request:
       "seq": 6,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /user/username/projects/myproject/usage/node_modules/@types:
@@ -489,6 +502,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/dependency:
   {}
 
+After request
 
 PolledWatches::
 /user/username/projects/myproject/usage/node_modules/@types:
@@ -527,6 +541,7 @@ Info 40   [16:01:15.000] request:
       "seq": 7,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /user/username/projects/myproject/usage/node_modules/@types:
@@ -550,6 +565,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/dependency:
   {}
 
+After request
 
 PolledWatches::
 /user/username/projects/myproject/usage/node_modules/@types:
@@ -588,6 +604,7 @@ Info 42   [16:01:17.000] request:
       "seq": 8,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /user/username/projects/myproject/usage/node_modules/@types:
@@ -611,6 +628,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/dependency:
   {}
 
+After request
 
 PolledWatches::
 /user/username/projects/myproject/usage/node_modules/@types:
@@ -663,6 +681,7 @@ Info 44   [16:01:19.000] request:
       "seq": 9,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /user/username/projects/myproject/usage/node_modules/@types:
@@ -686,6 +705,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/dependency:
   {}
 
+After request
 
 PolledWatches::
 /user/username/projects/myproject/usage/node_modules/@types:
@@ -724,6 +744,7 @@ Info 46   [16:01:21.000] request:
       "seq": 10,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /user/username/projects/myproject/usage/node_modules/@types:
@@ -747,6 +768,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/dependency:
   {}
 
+After request
 
 PolledWatches::
 /user/username/projects/myproject/usage/node_modules/@types:
@@ -785,6 +807,7 @@ Info 48   [16:01:23.000] request:
       "seq": 11,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /user/username/projects/myproject/usage/node_modules/@types:
@@ -808,6 +831,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/dependency:
   {}
 
+After request
 
 PolledWatches::
 /user/username/projects/myproject/usage/node_modules/@types:
@@ -846,6 +870,7 @@ Info 50   [16:01:25.000] request:
       "seq": 12,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /user/username/projects/myproject/usage/node_modules/@types:
@@ -869,6 +894,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/dependency:
   {}
 
+After request
 
 PolledWatches::
 /user/username/projects/myproject/usage/node_modules/@types:

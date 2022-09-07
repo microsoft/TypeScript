@@ -8,6 +8,7 @@ Info 1    [16:01:04.000] request:
         "file": "/user/username/projects/myproject/dependency/FnS.ts"
       }
     }
+Before request
 //// [/user/username/projects/myproject/dependency/FnS.ts]
 export function fn1() { }
 export function fn2() { }
@@ -245,6 +246,7 @@ Info 22   [16:01:27.000] -----------------------------------------------
 Info 22   [16:01:28.000] Open files: 
 Info 22   [16:01:29.000] 	FileName: /user/username/projects/myproject/dependency/FnS.ts ProjectRootPath: undefined
 Info 22   [16:01:30.000] 		Projects: /user/username/projects/myproject/dependency/tsconfig.json
+After request
 
 PolledWatches::
 /user/username/projects/myproject/dependency/node_modules/@types:
@@ -275,6 +277,7 @@ Info 23   [16:01:32.000] request:
         "file": "/user/username/projects/myproject/random/random.ts"
       }
     }
+Before request
 
 PolledWatches::
 /user/username/projects/myproject/dependency/node_modules/@types:
@@ -338,6 +341,7 @@ Info 41   [16:01:57.000] 	FileName: /user/username/projects/myproject/dependency
 Info 41   [16:01:58.000] 		Projects: /user/username/projects/myproject/dependency/tsconfig.json
 Info 41   [16:01:59.000] 	FileName: /user/username/projects/myproject/random/random.ts ProjectRootPath: undefined
 Info 41   [16:02:00.000] 		Projects: /user/username/projects/myproject/random/tsconfig.json
+After request
 
 PolledWatches::
 /user/username/projects/myproject/dependency/node_modules/@types:
@@ -376,6 +380,7 @@ Info 42   [16:02:02.000] request:
       "seq": 1,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /user/username/projects/myproject/dependency/node_modules/@types:
@@ -401,6 +406,7 @@ FsWatchesRecursive::
 
 Info 43   [16:02:03.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/decls/FnS.d.ts 500 undefined WatchType: Closed Script info
 Info 44   [16:02:04.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/decls/FnS.d.ts.map 500 undefined WatchType: Closed Script info
+After request
 
 PolledWatches::
 /user/username/projects/myproject/dependency/node_modules/@types:
@@ -491,6 +497,7 @@ Info 50   [16:02:13.000] request:
       "seq": 2,
       "type": "request"
     }
+Before request
 //// [/user/username/projects/myproject/decls/FnS.d.ts]
 export declare function fn1(): void;
 export declare function fn2(): void;
@@ -529,6 +536,7 @@ FsWatchesRecursive::
 
 Info 51   [16:02:14.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/dependency/tsconfig.json
 Info 52   [16:02:15.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/dependency/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Not Elapsed:: *ms
+After request
 
 PolledWatches::
 /user/username/projects/myproject/dependency/node_modules/@types:
@@ -615,6 +623,7 @@ Info 54   [16:02:17.000] request:
       "seq": 3,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /user/username/projects/myproject/dependency/node_modules/@types:
@@ -642,6 +651,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
+After request
 
 PolledWatches::
 /user/username/projects/myproject/dependency/node_modules/@types:
@@ -728,6 +738,7 @@ Info 56   [16:02:19.000] request:
       "seq": 4,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /user/username/projects/myproject/dependency/node_modules/@types:
@@ -755,6 +766,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
+After request
 
 PolledWatches::
 /user/username/projects/myproject/dependency/node_modules/@types:
@@ -841,6 +853,7 @@ Info 58   [16:02:21.000] request:
       "seq": 5,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /user/username/projects/myproject/dependency/node_modules/@types:
@@ -868,6 +881,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
+After request
 
 PolledWatches::
 /user/username/projects/myproject/dependency/node_modules/@types:
@@ -954,6 +968,7 @@ Info 60   [16:02:23.000] request:
       "seq": 6,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /user/username/projects/myproject/dependency/node_modules/@types:
@@ -981,6 +996,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
+After request
 
 PolledWatches::
 /user/username/projects/myproject/dependency/node_modules/@types:

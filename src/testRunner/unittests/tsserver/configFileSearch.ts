@@ -43,7 +43,7 @@ namespace ts.projectSystem {
 
             // Delete config file - should create inferred project and not configured project
             host.deleteFile(configFile.path);
-            host.runQueuedTimeoutCallbacks();
+            service.runQueuedTimeoutCallbacks();
             checkNumberOfProjects(service, { inferredProjects: 1 });
             baselineTsserverLogs("configFileSearch", "should use projectRootPath when searching for inferred project again", service);
         });
@@ -73,7 +73,7 @@ namespace ts.projectSystem {
 
             // Delete config file - should create inferred project with project root path set
             host.deleteFile(configFile.path);
-            host.runQueuedTimeoutCallbacks();
+            service.runQueuedTimeoutCallbacks();
             baselineTsserverLogs("configFileSearch", "should use projectRootPath when searching for inferred project again 2", service);
         });
 
@@ -98,10 +98,10 @@ namespace ts.projectSystem {
                 const { host, projectService } = openClientFile([file, libFile, tsconfig]);
 
                 host.deleteFile(tsconfig.path);
-                host.runQueuedTimeoutCallbacks();
+                projectService.runQueuedTimeoutCallbacks();
 
                 host.writeFile(tsconfig.path, tsconfig.content);
-                host.runQueuedTimeoutCallbacks();
+                projectService.runQueuedTimeoutCallbacks();
 
                 baselineTsserverLogs("configFileSearch", "tsconfig for the file exists", projectService);
             });
@@ -110,10 +110,10 @@ namespace ts.projectSystem {
                 const { host, projectService } = openClientFile([file, libFile]);
 
                 host.writeFile(tsconfig.path, tsconfig.content);
-                host.runQueuedTimeoutCallbacks();
+                projectService.runQueuedTimeoutCallbacks();
 
                 host.deleteFile(tsconfig.path);
-                host.runQueuedTimeoutCallbacks();
+                projectService.runQueuedTimeoutCallbacks();
 
                 baselineTsserverLogs("configFileSearch", "tsconfig for the file does not exist", projectService);
             });

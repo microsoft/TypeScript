@@ -8,6 +8,7 @@ Info 1    [16:00:32.000] request:
         "file": "/user/username/projects/myproject/src/main.ts"
       }
     }
+Before request
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -96,6 +97,7 @@ Info 24   [16:00:57.000] -----------------------------------------------
 Info 24   [16:00:58.000] Open files: 
 Info 24   [16:00:59.000] 	FileName: /user/username/projects/myproject/src/main.ts ProjectRootPath: undefined
 Info 24   [16:01:00.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+After request
 
 PolledWatches::
 

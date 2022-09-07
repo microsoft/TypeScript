@@ -8,6 +8,7 @@ Info 1    [16:00:36.000] request:
         "file": "/user/username/projects/myproject/playground/tests.ts"
       }
     }
+Before request
 //// [/user/username/projects/myproject/playground/tsconfig.json]
 {}
 
@@ -94,6 +95,7 @@ Info 22   [16:00:59.000] -----------------------------------------------
 Info 22   [16:01:00.000] Open files: 
 Info 22   [16:01:01.000] 	FileName: /user/username/projects/myproject/playground/tests.ts ProjectRootPath: undefined
 Info 22   [16:01:02.000] 		Projects: /user/username/projects/myproject/playground/tsconfig.json
+After request
 
 PolledWatches::
 /user/username/projects/myproject/playground/node_modules/@types:
@@ -128,6 +130,7 @@ Info 23   [16:01:04.000] request:
         "file": "/user/username/projects/myproject/playground/tests.ts"
       }
     }
+Before request
 
 PolledWatches::
 /user/username/projects/myproject/playground/node_modules/@types:
@@ -155,6 +158,7 @@ Info 25   [16:01:07.000] 	Files (4)
 
 Info 25   [16:01:08.000] -----------------------------------------------
 Info 25   [16:01:09.000] Open files: 
+After request
 
 PolledWatches::
 /user/username/projects/myproject/playground/node_modules/@types:
@@ -191,6 +195,7 @@ Info 26   [16:01:11.000] request:
         "file": "/user/username/projects/myproject/playground/tsconfig-json/tests/spec.ts"
       }
     }
+Before request
 
 PolledWatches::
 /user/username/projects/myproject/playground/node_modules/@types:
@@ -284,6 +289,7 @@ Info 59   [16:01:46.000] -----------------------------------------------
 Info 59   [16:01:47.000] Open files: 
 Info 59   [16:01:48.000] 	FileName: /user/username/projects/myproject/playground/tsconfig-json/tests/spec.ts ProjectRootPath: undefined
 Info 59   [16:01:49.000] 		Projects: 
+After request
 
 PolledWatches::
 /user/username/projects/myproject/playground/node_modules/@types:
@@ -318,6 +324,7 @@ Info 60   [16:01:51.000] request:
       "seq": 1,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /user/username/projects/myproject/playground/node_modules/@types:
@@ -389,6 +396,7 @@ Info 84   [16:02:26.000] -----------------------------------------------
 Info 84   [16:02:27.000] Open files: 
 Info 84   [16:02:28.000] 	FileName: /user/username/projects/myproject/playground/tsconfig-json/tests/spec.ts ProjectRootPath: undefined
 Info 84   [16:02:29.000] 		Projects: /dev/null/inferredProject1*
+After request
 
 PolledWatches::
 /user/username/projects/myproject/playground/node_modules/@types:

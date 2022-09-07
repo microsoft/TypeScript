@@ -9,6 +9,7 @@ Info 2    [16:00:17.000] request:
         "file": "c:/myprojects/project/x.js"
       }
     }
+Before request
 //// [c:/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -61,6 +62,7 @@ Info 16   [16:00:33.000] -----------------------------------------------
 Info 16   [16:00:34.000] Open files: 
 Info 16   [16:00:35.000] 	FileName: c:/myprojects/project/x.js ProjectRootPath: undefined
 Info 16   [16:00:36.000] 		Projects: /dev/null/inferredProject1*
+After request
 
 PolledWatches::
 c:/myprojects/project/tsconfig.json:
@@ -95,6 +97,7 @@ Info 19   [16:00:19.000] request:
         "file": "//vda1cs4850/myprojects/project/x.js"
       }
     }
+Before request
 //// [//vda1cs4850/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -147,6 +150,7 @@ Info 33   [16:00:35.000] -----------------------------------------------
 Info 33   [16:00:36.000] Open files: 
 Info 33   [16:00:37.000] 	FileName: //vda1cs4850/myprojects/project/x.js ProjectRootPath: undefined
 Info 33   [16:00:38.000] 		Projects: /dev/null/inferredProject1*
+After request
 
 PolledWatches::
 //vda1cs4850/myprojects/project/tsconfig.json:
@@ -181,6 +185,7 @@ Info 36   [16:00:21.000] request:
         "file": "//vda1cs4850/c$/myprojects/project/x.js"
       }
     }
+Before request
 //// [//vda1cs4850/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -233,6 +238,7 @@ Info 50   [16:00:37.000] -----------------------------------------------
 Info 50   [16:00:38.000] Open files: 
 Info 50   [16:00:39.000] 	FileName: //vda1cs4850/c$/myprojects/project/x.js ProjectRootPath: undefined
 Info 50   [16:00:40.000] 		Projects: /dev/null/inferredProject1*
+After request
 
 PolledWatches::
 //vda1cs4850/c$/myprojects/project/tsconfig.json:
@@ -267,6 +273,7 @@ Info 53   [16:00:21.000] request:
         "file": "c:/users/username/myprojects/project/x.js"
       }
     }
+Before request
 //// [c:/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -319,6 +326,7 @@ Info 67   [16:00:37.000] -----------------------------------------------
 Info 67   [16:00:38.000] Open files: 
 Info 67   [16:00:39.000] 	FileName: c:/users/username/myprojects/project/x.js ProjectRootPath: undefined
 Info 67   [16:00:40.000] 		Projects: /dev/null/inferredProject1*
+After request
 
 PolledWatches::
 c:/users/username/myprojects/project/tsconfig.json:
@@ -353,6 +361,7 @@ Info 70   [16:00:25.000] request:
         "file": "//vda1cs4850/c$/users/username/myprojects/project/x.js"
       }
     }
+Before request
 //// [//vda1cs4850/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -405,6 +414,7 @@ Info 84   [16:00:41.000] -----------------------------------------------
 Info 84   [16:00:42.000] Open files: 
 Info 84   [16:00:43.000] 	FileName: //vda1cs4850/c$/users/username/myprojects/project/x.js ProjectRootPath: undefined
 Info 84   [16:00:44.000] 		Projects: /dev/null/inferredProject1*
+After request
 
 PolledWatches::
 //vda1cs4850/c$/users/username/myprojects/project/tsconfig.json:

@@ -1,4 +1,99 @@
 Info 0    [16:00:39.000] Provided types map file "/typesMap.json" doesn't exist
+Creating project service
+//// [/a/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+
+//// [/user/username/projects/sample1/core/tsconfig.json]
+{
+    "compilerOptions": {
+        "composite": true,
+        "declaration": true,
+        "declarationMap": true,
+        "skipDefaultLibCheck": true
+    }
+}
+
+//// [/user/username/projects/sample1/core/index.ts]
+export const someString: string = "HELLO WORLD";
+export function leftPad(s: string, n: number) { return s + n; }
+export function multiply(a: number, b: number) { return a * b; }
+
+
+//// [/user/username/projects/sample1/core/anotherModule.ts]
+export const World = "hello";
+
+
+//// [/user/username/projects/sample1/core/some_decl.d.ts]
+declare const dts: any;
+
+
+//// [/user/username/projects/sample1/logic/tsconfig.json]
+{
+    "compilerOptions": {
+        "composite": true,
+        "declaration": true,
+        "sourceMap": true,
+        "forceConsistentCasingInFileNames": true,
+        "skipDefaultLibCheck": true
+    },
+    "references": [
+        { "path": "../core" }
+    ]
+}
+
+
+//// [/user/username/projects/sample1/logic/index.ts]
+import * as c from '../core/index';
+export function getSecondsInDay() {
+    return c.multiply(10, 15);
+}
+import * as mod from '../core/anotherModule';
+export const m = mod;
+
+
+//// [/user/username/projects/sample1/tests/tsconfig.json]
+{
+    "references": [
+        { "path": "../core" },
+        { "path": "../logic" }
+    ],
+    "files": ["index.ts"],
+    "compilerOptions": {
+        "composite": true,
+        "declaration": true,
+        "forceConsistentCasingInFileNames": true,
+        "skipDefaultLibCheck": true
+    }
+}
+
+//// [/user/username/projects/sample1/tests/index.ts]
+import * as c from '../core/index';
+import * as logic from '../logic/index';
+
+c.leftPad("", 10);
+logic.getSecondsInDay();
+
+import * as mod from '../core/anotherModule';
+export const m = mod;
+
+
+
+PolledWatches::
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 1    [16:00:40.000] Search path: /user/username/projects/sample1/tests
 Info 2    [16:00:41.000] For info: /user/username/projects/sample1/tests/index.ts :: Config file name: /user/username/projects/sample1/tests/tsconfig.json
 Info 3    [16:00:42.000] Creating configuration project /user/username/projects/sample1/tests/tsconfig.json
@@ -111,6 +206,45 @@ Info 30   [16:01:17.000] FileWatcher:: Triggered with /user/username/projects/sa
 Info 31   [16:01:18.000] Scheduled: /user/username/projects/sample1/tests/tsconfig.json
 Info 32   [16:01:19.000] Scheduled: *ensureProjectForOpenFiles*
 Info 33   [16:01:20.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/sample1/logic/index.ts 1:: WatchInfo: /user/username/projects/sample1/logic/index.ts 500 undefined WatchType: Closed Script info
+Before checking timeout queue length (2) and running
+//// [/user/username/projects/sample1/logic/index.ts]
+import * as c from '../core/index';
+export function getSecondsInDay() {
+    return c.multiply(10, 15);
+}
+import * as mod from '../core/anotherModule';
+export const m = mod;
+function foo() {}
+
+
+PolledWatches::
+/user/username/projects/sample1/tests/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/sample1/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/sample1/tests/tsconfig.json:
+  {}
+/user/username/projects/sample1/core/tsconfig.json:
+  {}
+/user/username/projects/sample1/logic/tsconfig.json:
+  {}
+/user/username/projects/sample1/core/index.ts:
+  {}
+/user/username/projects/sample1/logic/index.ts:
+  {}
+/user/username/projects/sample1/core/anothermodule.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/sample1/core:
+  {}
+/user/username/projects/sample1/logic:
+  {}
+
 Info 34   [16:01:21.000] Running: /user/username/projects/sample1/tests/tsconfig.json
 Info 35   [16:01:22.000] Starting updateGraphWorker: Project: /user/username/projects/sample1/tests/tsconfig.json
 Info 36   [16:01:23.000] Finishing updateGraphWorker: Project: /user/username/projects/sample1/tests/tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
@@ -132,10 +266,79 @@ Info 41   [16:01:36.000] -----------------------------------------------
 Info 41   [16:01:37.000] Open files: 
 Info 41   [16:01:38.000] 	FileName: /user/username/projects/sample1/tests/index.ts ProjectRootPath: undefined
 Info 41   [16:01:39.000] 		Projects: /user/username/projects/sample1/tests/tsconfig.json
+After checking timeout queue length (2) and running
+
+PolledWatches::
+/user/username/projects/sample1/tests/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/sample1/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/sample1/tests/tsconfig.json:
+  {}
+/user/username/projects/sample1/core/tsconfig.json:
+  {}
+/user/username/projects/sample1/logic/tsconfig.json:
+  {}
+/user/username/projects/sample1/core/index.ts:
+  {}
+/user/username/projects/sample1/logic/index.ts:
+  {}
+/user/username/projects/sample1/core/anothermodule.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/sample1/core:
+  {}
+/user/username/projects/sample1/logic:
+  {}
+
 Info 41   [16:01:42.000] FileWatcher:: Triggered with /user/username/projects/sample1/logic/index.ts 1:: WatchInfo: /user/username/projects/sample1/logic/index.ts 500 undefined WatchType: Closed Script info
 Info 42   [16:01:43.000] Scheduled: /user/username/projects/sample1/tests/tsconfig.json
 Info 43   [16:01:44.000] Scheduled: *ensureProjectForOpenFiles*
 Info 44   [16:01:45.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/sample1/logic/index.ts 1:: WatchInfo: /user/username/projects/sample1/logic/index.ts 500 undefined WatchType: Closed Script info
+Before checking timeout queue length (2) and running
+//// [/user/username/projects/sample1/logic/index.ts]
+import * as c from '../core/index';
+export function getSecondsInDay() {
+    return c.multiply(10, 15);
+}
+import * as mod from '../core/anotherModule';
+export const m = mod;
+function foo() {}export function gfoo() {}
+
+
+PolledWatches::
+/user/username/projects/sample1/tests/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/sample1/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/sample1/tests/tsconfig.json:
+  {}
+/user/username/projects/sample1/core/tsconfig.json:
+  {}
+/user/username/projects/sample1/logic/tsconfig.json:
+  {}
+/user/username/projects/sample1/core/index.ts:
+  {}
+/user/username/projects/sample1/logic/index.ts:
+  {}
+/user/username/projects/sample1/core/anothermodule.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/sample1/core:
+  {}
+/user/username/projects/sample1/logic:
+  {}
+
 Info 45   [16:01:46.000] Running: /user/username/projects/sample1/tests/tsconfig.json
 Info 46   [16:01:47.000] Starting updateGraphWorker: Project: /user/username/projects/sample1/tests/tsconfig.json
 Info 47   [16:01:48.000] Finishing updateGraphWorker: Project: /user/username/projects/sample1/tests/tsconfig.json Version: 3 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
@@ -157,10 +360,73 @@ Info 52   [16:02:01.000] -----------------------------------------------
 Info 52   [16:02:02.000] Open files: 
 Info 52   [16:02:03.000] 	FileName: /user/username/projects/sample1/tests/index.ts ProjectRootPath: undefined
 Info 52   [16:02:04.000] 		Projects: /user/username/projects/sample1/tests/tsconfig.json
+After checking timeout queue length (2) and running
+
+PolledWatches::
+/user/username/projects/sample1/tests/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/sample1/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/sample1/tests/tsconfig.json:
+  {}
+/user/username/projects/sample1/core/tsconfig.json:
+  {}
+/user/username/projects/sample1/logic/tsconfig.json:
+  {}
+/user/username/projects/sample1/core/index.ts:
+  {}
+/user/username/projects/sample1/logic/index.ts:
+  {}
+/user/username/projects/sample1/core/anothermodule.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/sample1/core:
+  {}
+/user/username/projects/sample1/logic:
+  {}
+
 Info 52   [16:02:08.000] FileWatcher:: Triggered with /user/username/projects/sample1/logic/tsconfig.json 1:: WatchInfo: /user/username/projects/sample1/logic/tsconfig.json 2000 undefined Project: /user/username/projects/sample1/tests/tsconfig.json WatchType: Config file
 Info 53   [16:02:09.000] Scheduled: /user/username/projects/sample1/tests/tsconfig.json
 Info 54   [16:02:10.000] Scheduled: *ensureProjectForOpenFiles*
 Info 55   [16:02:11.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/sample1/logic/tsconfig.json 1:: WatchInfo: /user/username/projects/sample1/logic/tsconfig.json 2000 undefined Project: /user/username/projects/sample1/tests/tsconfig.json WatchType: Config file
+Before checking timeout queue length (2) and running
+//// [/user/username/projects/sample1/logic/tsconfig.json]
+{"compilerOptions":{"composite":true,"declaration":true,"declarationDir":"decls"},"references":[{"path":"../core"}]}
+
+
+PolledWatches::
+/user/username/projects/sample1/tests/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/sample1/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/sample1/tests/tsconfig.json:
+  {}
+/user/username/projects/sample1/core/tsconfig.json:
+  {}
+/user/username/projects/sample1/logic/tsconfig.json:
+  {}
+/user/username/projects/sample1/core/index.ts:
+  {}
+/user/username/projects/sample1/logic/index.ts:
+  {}
+/user/username/projects/sample1/core/anothermodule.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/sample1/core:
+  {}
+/user/username/projects/sample1/logic:
+  {}
+
 Info 56   [16:02:12.000] Running: /user/username/projects/sample1/tests/tsconfig.json
 Info 57   [16:02:13.000] Starting updateGraphWorker: Project: /user/username/projects/sample1/tests/tsconfig.json
 Info 58   [16:02:14.000] Config: /user/username/projects/sample1/logic/tsconfig.json : {
@@ -199,3 +465,32 @@ Info 64   [16:02:28.000] -----------------------------------------------
 Info 64   [16:02:29.000] Open files: 
 Info 64   [16:02:30.000] 	FileName: /user/username/projects/sample1/tests/index.ts ProjectRootPath: undefined
 Info 64   [16:02:31.000] 		Projects: /user/username/projects/sample1/tests/tsconfig.json
+After checking timeout queue length (2) and running
+
+PolledWatches::
+/user/username/projects/sample1/tests/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/sample1/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/sample1/tests/tsconfig.json:
+  {}
+/user/username/projects/sample1/core/tsconfig.json:
+  {}
+/user/username/projects/sample1/logic/tsconfig.json:
+  {}
+/user/username/projects/sample1/core/index.ts:
+  {}
+/user/username/projects/sample1/logic/index.ts:
+  {}
+/user/username/projects/sample1/core/anothermodule.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/sample1/core:
+  {}
+/user/username/projects/sample1/logic:
+  {}

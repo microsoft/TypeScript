@@ -9,6 +9,7 @@ Info 1    [16:00:36.000] request:
         "projectRootPath": "/users/username/projects/a"
       }
     }
+Before request
 //// [/users/username/projects/c/fc.ts]
 export const C = 8
 
@@ -92,6 +93,7 @@ Info 19   [16:00:56.000] -----------------------------------------------
 Info 19   [16:00:57.000] Open files: 
 Info 19   [16:00:58.000] 	FileName: /users/username/projects/a/a.ts ProjectRootPath: /users/username/projects/a
 Info 19   [16:00:59.000] 		Projects: /users/username/projects/a/tsconfig.json
+After request
 
 PolledWatches::
 /users/username/projects/a/node_modules/@types:
@@ -123,6 +125,7 @@ Info 20   [16:01:01.000] request:
         "projectRootPath": "/users/username/projects/b"
       }
     }
+Before request
 
 PolledWatches::
 /users/username/projects/a/node_modules/@types:
@@ -191,6 +194,7 @@ Info 37   [16:01:25.000] 	FileName: /users/username/projects/a/a.ts ProjectRootP
 Info 37   [16:01:26.000] 		Projects: /users/username/projects/a/tsconfig.json
 Info 37   [16:01:27.000] 	FileName: /users/username/projects/b/b.ts ProjectRootPath: /users/username/projects/b
 Info 37   [16:01:28.000] 		Projects: /users/username/projects/b/tsconfig.json
+After request
 
 PolledWatches::
 /users/username/projects/a/node_modules/@types:
@@ -230,6 +234,7 @@ Info 38   [16:01:30.000] request:
         "projectRootPath": "/users/username/projects/a"
       }
     }
+Before request
 
 PolledWatches::
 /users/username/projects/a/node_modules/@types:
@@ -273,6 +278,7 @@ Info 42   [16:01:43.000] 	FileName: /users/username/projects/b/b.ts ProjectRootP
 Info 42   [16:01:44.000] 		Projects: /users/username/projects/b/tsconfig.json
 Info 42   [16:01:45.000] 	FileName: /users/username/projects/a/c/fc.ts ProjectRootPath: /users/username/projects/a
 Info 42   [16:01:46.000] 		Projects: /users/username/projects/a/tsconfig.json
+After request
 
 PolledWatches::
 /users/username/projects/a/node_modules/@types:
@@ -310,6 +316,7 @@ Info 43   [16:01:48.000] request:
         "projectRootPath": "/users/username/projects/b"
       }
     }
+Before request
 
 PolledWatches::
 /users/username/projects/a/node_modules/@types:
@@ -353,6 +360,7 @@ Info 47   [16:02:03.000] 	FileName: /users/username/projects/a/c/fc.ts ProjectRo
 Info 47   [16:02:04.000] 		Projects: /users/username/projects/a/tsconfig.json
 Info 47   [16:02:05.000] 	FileName: /users/username/projects/b/c/fc.ts ProjectRootPath: /users/username/projects/b
 Info 47   [16:02:06.000] 		Projects: /users/username/projects/b/tsconfig.json
+After request
 
 PolledWatches::
 /users/username/projects/a/node_modules/@types:
@@ -389,6 +397,7 @@ Info 48   [16:02:08.000] request:
         "offset": 14
       }
     }
+Before request
 
 PolledWatches::
 /users/username/projects/a/node_modules/@types:
@@ -410,6 +419,7 @@ FsWatchesRecursive::
 /users/username/projects/b:
   {}
 
+After request
 
 PolledWatches::
 /users/username/projects/a/node_modules/@types:

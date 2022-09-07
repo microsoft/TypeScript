@@ -1,4 +1,46 @@
 Info 0    [16:00:41.000] Provided types map file "/typesMap.json" doesn't exist
+Creating project service
+//// [/user/username/projects/myproject/product/src/module1.ts]
+export function module1() {}
+
+//// [/user/username/projects/myproject/product/module2.ts]
+export function module2() {}
+
+//// [/user/username/projects/myproject/product/src/file1.ts]
+import { module1 } from "./module1";import { module2 } from "../module2";
+
+//// [/user/username/projects/myproject/product/src/feature/file2.ts]
+import { module1 } from "../module1";import { module2 } from "../../module2";
+
+//// [/user/username/projects/myproject/product/test/src/file3.ts]
+import { module1 } from "../../src/module1";import { module2 } from "../../module2";
+
+//// [/user/username/projects/myproject/product/test/file4.ts]
+import { module1 } from "../src/module1}";import { module2 } from "../module2";
+
+//// [/user/username/projects/myproject/tsconfig.json]
+{"compilerOptions":{"traceResolution":true}}
+
+//// [/a/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+
+
+PolledWatches::
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 1    [16:00:42.000] Search path: /user/username/projects/myproject/product/src
 Info 2    [16:00:43.000] For info: /user/username/projects/myproject/product/src/file1.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
 Info 3    [16:00:44.000] Creating configuration project /user/username/projects/myproject/tsconfig.json
@@ -132,6 +174,46 @@ Info 79   [16:02:18.000] FileWatcher:: Triggered with /user/username/projects/my
 Info 80   [16:02:19.000] Scheduled: /user/username/projects/myproject/tsconfig.json, Cancelled earlier one
 Info 81   [16:02:20.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info 82   [16:02:21.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/product/test/file4.ts 1:: WatchInfo: /user/username/projects/myproject/product/test/file4.ts 500 undefined WatchType: Closed Script info
+Before running timeout callbacks
+//// [/user/username/projects/myproject/product/src/file1.ts]
+import { module1 } from "./module1";import { module2 } from "../module2";import { module1 } from "./module1";import { module2 } from "../module2";
+
+//// [/user/username/projects/myproject/product/src/feature/file2.ts]
+import { module1 } from "../module1";import { module2 } from "../../module2";import { module1 } from "../module1";import { module2 } from "../../module2";
+
+//// [/user/username/projects/myproject/product/test/src/file3.ts]
+import { module1 } from "../../src/module1";import { module2 } from "../../module2";import { module1 } from "../../src/module1";import { module2 } from "../../module2";
+
+//// [/user/username/projects/myproject/product/test/file4.ts]
+import { module1 } from "../src/module1}";import { module2 } from "../module2";import { module1 } from "../src/module1}";import { module2 } from "../module2";
+
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/product/module2.ts:
+  {}
+/user/username/projects/myproject/product/src/module1.ts:
+  {}
+/user/username/projects/myproject/product/src/feature/file2.ts:
+  {}
+/user/username/projects/myproject/product/test/file4.ts:
+  {}
+/user/username/projects/myproject/product/test/src/file3.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject:
+  {}
+/user/username/projects/myproject/product:
+  {}
+
 Info 83   [16:02:22.000] Running: /user/username/projects/myproject/tsconfig.json
 Info 84   [16:02:23.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
 Info 85   [16:02:24.000] Reusing resolution of module './module1' from '/user/username/projects/myproject/product/src/file1.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/product/src/module1.ts'.
@@ -161,3 +243,30 @@ Info 98   [16:02:45.000] -----------------------------------------------
 Info 98   [16:02:46.000] Open files: 
 Info 98   [16:02:47.000] 	FileName: /user/username/projects/myproject/product/src/file1.ts ProjectRootPath: undefined
 Info 98   [16:02:48.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+After running timeout callbacks
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/product/module2.ts:
+  {}
+/user/username/projects/myproject/product/src/module1.ts:
+  {}
+/user/username/projects/myproject/product/src/feature/file2.ts:
+  {}
+/user/username/projects/myproject/product/test/file4.ts:
+  {}
+/user/username/projects/myproject/product/test/src/file3.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject:
+  {}
+/user/username/projects/myproject/product:
+  {}

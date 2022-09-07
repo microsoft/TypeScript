@@ -8,6 +8,7 @@ Info 1    [16:00:28.000] request:
         "file": "/user/username/projects/myproject/src/fileA.ts"
       }
     }
+Before request
 //// [/user/username/projects/myproject/src/tsconfig.json]
 {"compilerOptions":{"target":"es2016","module":"Node16","outDir":"../out","traceResolution":true}}
 
@@ -124,6 +125,7 @@ Info 45   [16:01:14.000] -----------------------------------------------
 Info 45   [16:01:15.000] Open files: 
 Info 45   [16:01:16.000] 	FileName: /user/username/projects/myproject/src/fileA.ts ProjectRootPath: undefined
 Info 45   [16:01:17.000] 		Projects: /user/username/projects/myproject/src/tsconfig.json
+After request
 
 PolledWatches::
 /user/username/projects/myproject/src/package.json:
@@ -159,9 +161,90 @@ Info 48   [16:01:24.000] Scheduled: /user/username/projects/myproject/src/tsconf
 Info 49   [16:01:25.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/package.json 1:: WatchInfo: /user/username/projects/myproject/package.json 2000 undefined Project: /user/username/projects/myproject/src/tsconfig.json WatchType: File location affecting resolution
 Info 50   [16:01:26.000] FileWatcher:: Triggered with /user/username/projects/myproject/package.json 1:: WatchInfo: /user/username/projects/myproject/package.json 250 undefined WatchType: package.json file
 Info 51   [16:01:27.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/package.json 1:: WatchInfo: /user/username/projects/myproject/package.json 250 undefined WatchType: package.json file
+Before running timeout callbacks
+//// [/user/username/projects/myproject/package.json]
+{"name":"app","version":"1.0.0","type":"module"}
+
+
+PolledWatches::
+/user/username/projects/myproject/src/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/src/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/fileb.mts:
+  {}
+/user/username/projects/myproject/src:
+  {}
+/a/lib/lib.es2016.full.d.ts:
+  {}
+/user/username/projects/myproject/package.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}
+
 Info 52   [16:01:28.000] Running: /user/username/projects/myproject/src/tsconfig.jsonFailedLookupInvalidation
 Info 53   [16:01:29.000] Scheduled: /user/username/projects/myproject/src/tsconfig.json
 Info 54   [16:01:30.000] Scheduled: *ensureProjectForOpenFiles*
+After running timeout callbacks
+
+PolledWatches::
+/user/username/projects/myproject/src/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/src/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/fileb.mts:
+  {}
+/user/username/projects/myproject/src:
+  {}
+/a/lib/lib.es2016.full.d.ts:
+  {}
+/user/username/projects/myproject/package.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}
+
+Before running timeout callbacks
+
+PolledWatches::
+/user/username/projects/myproject/src/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/src/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/fileb.mts:
+  {}
+/user/username/projects/myproject/src:
+  {}
+/a/lib/lib.es2016.full.d.ts:
+  {}
+/user/username/projects/myproject/package.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}
+
 Info 55   [16:01:31.000] Running: /user/username/projects/myproject/src/tsconfig.json
 Info 56   [16:01:32.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/src/tsconfig.json
 Info 57   [16:01:33.000] File '/a/lib/package.json' does not exist according to earlier cached lookups.
@@ -205,21 +288,7 @@ Info 81   [16:02:08.000] 		Projects: /user/username/projects/myproject/src/tscon
 Info 81   [16:02:09.000] got projects updated in background, updating diagnostics for /user/username/projects/myproject/src/fileA.ts
 Info 82   [16:02:10.000] event:
     {"seq":0,"type":"event","event":"projectsUpdatedInBackground","body":{"openFiles":["/user/username/projects/myproject/src/fileA.ts"]}}
-Info 83   [16:02:11.000] request:
-    {
-      "command": "geterr",
-      "arguments": {
-        "delay": 0,
-        "files": [
-          "/user/username/projects/myproject/src/fileA.ts"
-        ]
-      },
-      "seq": 1,
-      "type": "request"
-    }
-//// [/user/username/projects/myproject/package.json]
-{"name":"app","version":"1.0.0","type":"module"}
-
+After running timeout callbacks
 
 PolledWatches::
 /user/username/projects/myproject/src/package.json:
@@ -243,6 +312,43 @@ FsWatchesRecursive::
 /user/username/projects/myproject/src:
   {}
 
+Info 83   [16:02:11.000] request:
+    {
+      "command": "geterr",
+      "arguments": {
+        "delay": 0,
+        "files": [
+          "/user/username/projects/myproject/src/fileA.ts"
+        ]
+      },
+      "seq": 1,
+      "type": "request"
+    }
+Before request
+
+PolledWatches::
+/user/username/projects/myproject/src/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/src/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/fileb.mts:
+  {}
+/a/lib/lib.es2016.full.d.ts:
+  {}
+/user/username/projects/myproject/package.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}
+
+After request
 
 PolledWatches::
 /user/username/projects/myproject/src/package.json:
@@ -270,23 +376,242 @@ Info 84   [16:02:12.000] response:
     {
       "responseRequired": false
     }
+Before checking timeout queue length (1) and running
+
+PolledWatches::
+/user/username/projects/myproject/src/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/src/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/fileb.mts:
+  {}
+/a/lib/lib.es2016.full.d.ts:
+  {}
+/user/username/projects/myproject/package.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}
+
 Info 85   [16:02:13.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/src/fileA.ts","diagnostics":[]}}
+After checking timeout queue length (1) and running
+
+PolledWatches::
+/user/username/projects/myproject/src/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/src/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/fileb.mts:
+  {}
+/a/lib/lib.es2016.full.d.ts:
+  {}
+/user/username/projects/myproject/package.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}
+
+Before running immediate callbacks and checking length (1)
+
+PolledWatches::
+/user/username/projects/myproject/src/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/src/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/fileb.mts:
+  {}
+/a/lib/lib.es2016.full.d.ts:
+  {}
+/user/username/projects/myproject/package.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}
+
 Info 86   [16:02:14.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/user/username/projects/myproject/src/fileA.ts","diagnostics":[]}}
+Before running immediate callbacks and checking length (1)
+
+PolledWatches::
+/user/username/projects/myproject/src/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/src/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/fileb.mts:
+  {}
+/a/lib/lib.es2016.full.d.ts:
+  {}
+/user/username/projects/myproject/package.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}
+
+Before running immediate callbacks and checking length (1)
+
+PolledWatches::
+/user/username/projects/myproject/src/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/src/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/fileb.mts:
+  {}
+/a/lib/lib.es2016.full.d.ts:
+  {}
+/user/username/projects/myproject/package.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}
+
 Info 87   [16:02:15.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/src/fileA.ts","diagnostics":[]}}
 Info 88   [16:02:16.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":1}}
+Before running immediate callbacks and checking length (1)
+
+PolledWatches::
+/user/username/projects/myproject/src/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/src/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/fileb.mts:
+  {}
+/a/lib/lib.es2016.full.d.ts:
+  {}
+/user/username/projects/myproject/package.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}
+
 Info 89   [16:02:17.000] Modify package json file to remove type module
 Info 90   [16:02:21.000] FileWatcher:: Triggered with /user/username/projects/myproject/package.json 1:: WatchInfo: /user/username/projects/myproject/package.json 2000 undefined Project: /user/username/projects/myproject/src/tsconfig.json WatchType: File location affecting resolution
 Info 91   [16:02:22.000] Scheduled: /user/username/projects/myproject/src/tsconfig.jsonFailedLookupInvalidation
 Info 92   [16:02:23.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/package.json 1:: WatchInfo: /user/username/projects/myproject/package.json 2000 undefined Project: /user/username/projects/myproject/src/tsconfig.json WatchType: File location affecting resolution
 Info 93   [16:02:24.000] FileWatcher:: Triggered with /user/username/projects/myproject/package.json 1:: WatchInfo: /user/username/projects/myproject/package.json 250 undefined WatchType: package.json file
 Info 94   [16:02:25.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/package.json 1:: WatchInfo: /user/username/projects/myproject/package.json 250 undefined WatchType: package.json file
+Before running timeout callbacks
+//// [/user/username/projects/myproject/package.json]
+{"name":"app","version":"1.0.0"}
+
+
+PolledWatches::
+/user/username/projects/myproject/src/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/src/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/fileb.mts:
+  {}
+/a/lib/lib.es2016.full.d.ts:
+  {}
+/user/username/projects/myproject/package.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}
+
 Info 95   [16:02:26.000] Running: /user/username/projects/myproject/src/tsconfig.jsonFailedLookupInvalidation
 Info 96   [16:02:27.000] Scheduled: /user/username/projects/myproject/src/tsconfig.json
 Info 97   [16:02:28.000] Scheduled: *ensureProjectForOpenFiles*
+After running timeout callbacks
+
+PolledWatches::
+/user/username/projects/myproject/src/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/src/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/fileb.mts:
+  {}
+/a/lib/lib.es2016.full.d.ts:
+  {}
+/user/username/projects/myproject/package.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}
+
+Before running timeout callbacks
+
+PolledWatches::
+/user/username/projects/myproject/src/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/src/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/fileb.mts:
+  {}
+/a/lib/lib.es2016.full.d.ts:
+  {}
+/user/username/projects/myproject/package.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}
+
 Info 98   [16:02:29.000] Running: /user/username/projects/myproject/src/tsconfig.json
 Info 99   [16:02:30.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/src/tsconfig.json
 Info 100  [16:02:31.000] File '/a/lib/package.json' does not exist according to earlier cached lookups.
@@ -333,21 +658,7 @@ Info 127  [16:03:09.000] 		Projects: /user/username/projects/myproject/src/tscon
 Info 127  [16:03:10.000] got projects updated in background, updating diagnostics for /user/username/projects/myproject/src/fileA.ts
 Info 128  [16:03:11.000] event:
     {"seq":0,"type":"event","event":"projectsUpdatedInBackground","body":{"openFiles":["/user/username/projects/myproject/src/fileA.ts"]}}
-Info 129  [16:03:12.000] request:
-    {
-      "command": "geterr",
-      "arguments": {
-        "delay": 0,
-        "files": [
-          "/user/username/projects/myproject/src/fileA.ts"
-        ]
-      },
-      "seq": 2,
-      "type": "request"
-    }
-//// [/user/username/projects/myproject/package.json]
-{"name":"app","version":"1.0.0"}
-
+After running timeout callbacks
 
 PolledWatches::
 /user/username/projects/myproject/src/package.json:
@@ -373,6 +684,45 @@ FsWatchesRecursive::
 /user/username/projects/myproject/src:
   {}
 
+Info 129  [16:03:12.000] request:
+    {
+      "command": "geterr",
+      "arguments": {
+        "delay": 0,
+        "files": [
+          "/user/username/projects/myproject/src/fileA.ts"
+        ]
+      },
+      "seq": 2,
+      "type": "request"
+    }
+Before request
+
+PolledWatches::
+/user/username/projects/myproject/src/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/src/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/fileb.mts:
+  {}
+/a/lib/lib.es2016.full.d.ts:
+  {}
+/user/username/projects/myproject/package.json:
+  {}
+/user/username/projects/myproject/src:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}
+
+After request
 
 PolledWatches::
 /user/username/projects/myproject/src/package.json:
@@ -402,14 +752,170 @@ Info 130  [16:03:13.000] response:
     {
       "responseRequired": false
     }
+Before checking timeout queue length (1) and running
+
+PolledWatches::
+/user/username/projects/myproject/src/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/src/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/fileb.mts:
+  {}
+/a/lib/lib.es2016.full.d.ts:
+  {}
+/user/username/projects/myproject/package.json:
+  {}
+/user/username/projects/myproject/src:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}
+
 Info 131  [16:03:14.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/src/fileA.ts","diagnostics":[]}}
+After checking timeout queue length (1) and running
+
+PolledWatches::
+/user/username/projects/myproject/src/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/src/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/fileb.mts:
+  {}
+/a/lib/lib.es2016.full.d.ts:
+  {}
+/user/username/projects/myproject/package.json:
+  {}
+/user/username/projects/myproject/src:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}
+
+Before running immediate callbacks and checking length (1)
+
+PolledWatches::
+/user/username/projects/myproject/src/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/src/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/fileb.mts:
+  {}
+/a/lib/lib.es2016.full.d.ts:
+  {}
+/user/username/projects/myproject/package.json:
+  {}
+/user/username/projects/myproject/src:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}
+
 Info 132  [16:03:15.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/user/username/projects/myproject/src/fileA.ts","diagnostics":[{"start":{"line":1,"offset":21},"end":{"line":1,"offset":34},"text":"The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import(\"./fileB.mjs\")' call instead.\n  To convert this file to an ECMAScript module, change its file extension to '.mts', or add the field `\"type\": \"module\"` to '/user/username/projects/myproject/package.json'.","code":1479,"category":"error"}]}}
+Before running immediate callbacks and checking length (1)
+
+PolledWatches::
+/user/username/projects/myproject/src/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/src/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/fileb.mts:
+  {}
+/a/lib/lib.es2016.full.d.ts:
+  {}
+/user/username/projects/myproject/package.json:
+  {}
+/user/username/projects/myproject/src:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}
+
+Before running immediate callbacks and checking length (1)
+
+PolledWatches::
+/user/username/projects/myproject/src/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/src/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/fileb.mts:
+  {}
+/a/lib/lib.es2016.full.d.ts:
+  {}
+/user/username/projects/myproject/package.json:
+  {}
+/user/username/projects/myproject/src:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}
+
 Info 133  [16:03:16.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/src/fileA.ts","diagnostics":[]}}
 Info 134  [16:03:17.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":2}}
+Before running immediate callbacks and checking length (1)
+
+PolledWatches::
+/user/username/projects/myproject/src/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/src/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/fileb.mts:
+  {}
+/a/lib/lib.es2016.full.d.ts:
+  {}
+/user/username/projects/myproject/package.json:
+  {}
+/user/username/projects/myproject/src:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}
+
 Info 135  [16:03:18.000] Delete package.json
 Info 136  [16:03:20.000] FileWatcher:: Triggered with /user/username/projects/myproject/package.json 2:: WatchInfo: /user/username/projects/myproject/package.json 2000 undefined Project: /user/username/projects/myproject/src/tsconfig.json WatchType: File location affecting resolution
 Info 137  [16:03:21.000] Scheduled: /user/username/projects/myproject/src/tsconfig.jsonFailedLookupInvalidation
@@ -417,9 +923,88 @@ Info 138  [16:03:22.000] Elapsed:: *ms FileWatcher:: Triggered with /user/userna
 Info 139  [16:03:23.000] FileWatcher:: Triggered with /user/username/projects/myproject/package.json 2:: WatchInfo: /user/username/projects/myproject/package.json 250 undefined WatchType: package.json file
 Info 140  [16:03:24.000] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/package.json 250 undefined WatchType: package.json file
 Info 141  [16:03:25.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/package.json 2:: WatchInfo: /user/username/projects/myproject/package.json 250 undefined WatchType: package.json file
+Before running timeout callbacks
+//// [/user/username/projects/myproject/package.json] deleted
+
+PolledWatches::
+/user/username/projects/myproject/src/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/src/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/fileb.mts:
+  {}
+/a/lib/lib.es2016.full.d.ts:
+  {}
+/user/username/projects/myproject/package.json:
+  {}
+/user/username/projects/myproject/src:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}
+
 Info 142  [16:03:26.000] Running: /user/username/projects/myproject/src/tsconfig.jsonFailedLookupInvalidation
 Info 143  [16:03:27.000] Scheduled: /user/username/projects/myproject/src/tsconfig.json
 Info 144  [16:03:28.000] Scheduled: *ensureProjectForOpenFiles*
+After running timeout callbacks
+
+PolledWatches::
+/user/username/projects/myproject/src/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/src/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/fileb.mts:
+  {}
+/a/lib/lib.es2016.full.d.ts:
+  {}
+/user/username/projects/myproject/package.json:
+  {}
+/user/username/projects/myproject/src:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}
+
+Before running timeout callbacks
+
+PolledWatches::
+/user/username/projects/myproject/src/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/src/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/fileb.mts:
+  {}
+/a/lib/lib.es2016.full.d.ts:
+  {}
+/user/username/projects/myproject/package.json:
+  {}
+/user/username/projects/myproject/src:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}
+
 Info 145  [16:03:29.000] Running: /user/username/projects/myproject/src/tsconfig.json
 Info 146  [16:03:30.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/src/tsconfig.json
 Info 147  [16:03:31.000] File '/a/lib/package.json' does not exist according to earlier cached lookups.
@@ -464,19 +1049,7 @@ Info 172  [16:04:07.000] 		Projects: /user/username/projects/myproject/src/tscon
 Info 172  [16:04:08.000] got projects updated in background, updating diagnostics for /user/username/projects/myproject/src/fileA.ts
 Info 173  [16:04:09.000] event:
     {"seq":0,"type":"event","event":"projectsUpdatedInBackground","body":{"openFiles":["/user/username/projects/myproject/src/fileA.ts"]}}
-Info 174  [16:04:10.000] request:
-    {
-      "command": "geterr",
-      "arguments": {
-        "delay": 0,
-        "files": [
-          "/user/username/projects/myproject/src/fileA.ts"
-        ]
-      },
-      "seq": 3,
-      "type": "request"
-    }
-//// [/user/username/projects/myproject/package.json] deleted
+After running timeout callbacks
 
 PolledWatches::
 /user/username/projects/myproject/src/package.json:
@@ -504,6 +1077,47 @@ FsWatchesRecursive::
 /user/username/projects/myproject/src:
   {}
 
+Info 174  [16:04:10.000] request:
+    {
+      "command": "geterr",
+      "arguments": {
+        "delay": 0,
+        "files": [
+          "/user/username/projects/myproject/src/fileA.ts"
+        ]
+      },
+      "seq": 3,
+      "type": "request"
+    }
+Before request
+
+PolledWatches::
+/user/username/projects/myproject/src/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/package.json:
+  {"pollingInterval":2000}
+
+FsWatches::
+/user/username/projects/myproject/src/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/fileb.mts:
+  {}
+/a/lib/lib.es2016.full.d.ts:
+  {}
+/user/username/projects/myproject/package.json:
+  {}
+/user/username/projects/myproject/src:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}
+
+After request
 
 PolledWatches::
 /user/username/projects/myproject/src/package.json:
@@ -535,21 +1149,276 @@ Info 175  [16:04:11.000] response:
     {
       "responseRequired": false
     }
+Before checking timeout queue length (1) and running
+
+PolledWatches::
+/user/username/projects/myproject/src/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/package.json:
+  {"pollingInterval":2000}
+
+FsWatches::
+/user/username/projects/myproject/src/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/fileb.mts:
+  {}
+/a/lib/lib.es2016.full.d.ts:
+  {}
+/user/username/projects/myproject/package.json:
+  {}
+/user/username/projects/myproject/src:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}
+
 Info 176  [16:04:12.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/src/fileA.ts","diagnostics":[]}}
+After checking timeout queue length (1) and running
+
+PolledWatches::
+/user/username/projects/myproject/src/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/package.json:
+  {"pollingInterval":2000}
+
+FsWatches::
+/user/username/projects/myproject/src/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/fileb.mts:
+  {}
+/a/lib/lib.es2016.full.d.ts:
+  {}
+/user/username/projects/myproject/package.json:
+  {}
+/user/username/projects/myproject/src:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}
+
+Before running immediate callbacks and checking length (1)
+
+PolledWatches::
+/user/username/projects/myproject/src/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/package.json:
+  {"pollingInterval":2000}
+
+FsWatches::
+/user/username/projects/myproject/src/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/fileb.mts:
+  {}
+/a/lib/lib.es2016.full.d.ts:
+  {}
+/user/username/projects/myproject/package.json:
+  {}
+/user/username/projects/myproject/src:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}
+
 Info 177  [16:04:13.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/user/username/projects/myproject/src/fileA.ts","diagnostics":[{"start":{"line":1,"offset":21},"end":{"line":1,"offset":34},"text":"The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import(\"./fileB.mjs\")' call instead.\n  To convert this file to an ECMAScript module, change its file extension to '.mts' or create a local package.json file with `{ \"type\": \"module\" }`.","code":1479,"category":"error"}]}}
+Before running immediate callbacks and checking length (1)
+
+PolledWatches::
+/user/username/projects/myproject/src/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/package.json:
+  {"pollingInterval":2000}
+
+FsWatches::
+/user/username/projects/myproject/src/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/fileb.mts:
+  {}
+/a/lib/lib.es2016.full.d.ts:
+  {}
+/user/username/projects/myproject/package.json:
+  {}
+/user/username/projects/myproject/src:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}
+
+Before running immediate callbacks and checking length (1)
+
+PolledWatches::
+/user/username/projects/myproject/src/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/package.json:
+  {"pollingInterval":2000}
+
+FsWatches::
+/user/username/projects/myproject/src/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/fileb.mts:
+  {}
+/a/lib/lib.es2016.full.d.ts:
+  {}
+/user/username/projects/myproject/package.json:
+  {}
+/user/username/projects/myproject/src:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}
+
 Info 178  [16:04:14.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/src/fileA.ts","diagnostics":[]}}
 Info 179  [16:04:15.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":3}}
+Before running immediate callbacks and checking length (1)
+
+PolledWatches::
+/user/username/projects/myproject/src/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/package.json:
+  {"pollingInterval":2000}
+
+FsWatches::
+/user/username/projects/myproject/src/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/fileb.mts:
+  {}
+/a/lib/lib.es2016.full.d.ts:
+  {}
+/user/username/projects/myproject/package.json:
+  {}
+/user/username/projects/myproject/src:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}
+
 Info 180  [16:04:16.000] Modify package json file to add type module
 Info 181  [16:04:19.000] FileWatcher:: Triggered with /user/username/projects/myproject/package.json 0:: WatchInfo: /user/username/projects/myproject/package.json 2000 undefined Project: /user/username/projects/myproject/src/tsconfig.json WatchType: File location affecting resolution
 Info 182  [16:04:20.000] Scheduled: /user/username/projects/myproject/src/tsconfig.jsonFailedLookupInvalidation
 Info 183  [16:04:21.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/package.json 0:: WatchInfo: /user/username/projects/myproject/package.json 2000 undefined Project: /user/username/projects/myproject/src/tsconfig.json WatchType: File location affecting resolution
+Before running timeout callbacks
+//// [/user/username/projects/myproject/package.json]
+{"name":"app","version":"1.0.0","type":"module"}
+
+
+PolledWatches::
+/user/username/projects/myproject/src/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/package.json:
+  {"pollingInterval":2000}
+
+FsWatches::
+/user/username/projects/myproject/src/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/fileb.mts:
+  {}
+/a/lib/lib.es2016.full.d.ts:
+  {}
+/user/username/projects/myproject/package.json:
+  {}
+/user/username/projects/myproject/src:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}
+
 Info 184  [16:04:22.000] Running: /user/username/projects/myproject/src/tsconfig.jsonFailedLookupInvalidation
 Info 185  [16:04:23.000] Scheduled: /user/username/projects/myproject/src/tsconfig.json
 Info 186  [16:04:24.000] Scheduled: *ensureProjectForOpenFiles*
+After running timeout callbacks
+
+PolledWatches::
+/user/username/projects/myproject/src/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/package.json:
+  {"pollingInterval":2000}
+
+FsWatches::
+/user/username/projects/myproject/src/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/fileb.mts:
+  {}
+/a/lib/lib.es2016.full.d.ts:
+  {}
+/user/username/projects/myproject/package.json:
+  {}
+/user/username/projects/myproject/src:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}
+
+Before running timeout callbacks
+
+PolledWatches::
+/user/username/projects/myproject/src/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/package.json:
+  {"pollingInterval":2000}
+
+FsWatches::
+/user/username/projects/myproject/src/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/fileb.mts:
+  {}
+/a/lib/lib.es2016.full.d.ts:
+  {}
+/user/username/projects/myproject/package.json:
+  {}
+/user/username/projects/myproject/src:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}
+
 Info 187  [16:04:25.000] Running: /user/username/projects/myproject/src/tsconfig.json
 Info 188  [16:04:26.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/src/tsconfig.json
 Info 189  [16:04:27.000] File '/a/lib/package.json' does not exist according to earlier cached lookups.
@@ -586,21 +1455,7 @@ Info 206  [16:04:55.000] 		Projects: /user/username/projects/myproject/src/tscon
 Info 206  [16:04:56.000] got projects updated in background, updating diagnostics for /user/username/projects/myproject/src/fileA.ts
 Info 207  [16:04:57.000] event:
     {"seq":0,"type":"event","event":"projectsUpdatedInBackground","body":{"openFiles":["/user/username/projects/myproject/src/fileA.ts"]}}
-Info 208  [16:04:58.000] request:
-    {
-      "command": "geterr",
-      "arguments": {
-        "delay": 0,
-        "files": [
-          "/user/username/projects/myproject/src/fileA.ts"
-        ]
-      },
-      "seq": 4,
-      "type": "request"
-    }
-//// [/user/username/projects/myproject/package.json]
-{"name":"app","version":"1.0.0","type":"module"}
-
+After running timeout callbacks
 
 PolledWatches::
 /user/username/projects/myproject/src/package.json:
@@ -626,6 +1481,45 @@ FsWatchesRecursive::
 /user/username/projects/myproject/src:
   {}
 
+Info 208  [16:04:58.000] request:
+    {
+      "command": "geterr",
+      "arguments": {
+        "delay": 0,
+        "files": [
+          "/user/username/projects/myproject/src/fileA.ts"
+        ]
+      },
+      "seq": 4,
+      "type": "request"
+    }
+Before request
+
+PolledWatches::
+/user/username/projects/myproject/src/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/src/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/fileb.mts:
+  {}
+/a/lib/lib.es2016.full.d.ts:
+  {}
+/user/username/projects/myproject/package.json:
+  {}
+/user/username/projects/myproject/src:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}
+
+After request
 
 PolledWatches::
 /user/username/projects/myproject/src/package.json:
@@ -655,21 +1549,256 @@ Info 209  [16:04:59.000] response:
     {
       "responseRequired": false
     }
+Before checking timeout queue length (1) and running
+
+PolledWatches::
+/user/username/projects/myproject/src/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/src/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/fileb.mts:
+  {}
+/a/lib/lib.es2016.full.d.ts:
+  {}
+/user/username/projects/myproject/package.json:
+  {}
+/user/username/projects/myproject/src:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}
+
 Info 210  [16:05:00.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/src/fileA.ts","diagnostics":[]}}
+After checking timeout queue length (1) and running
+
+PolledWatches::
+/user/username/projects/myproject/src/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/src/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/fileb.mts:
+  {}
+/a/lib/lib.es2016.full.d.ts:
+  {}
+/user/username/projects/myproject/package.json:
+  {}
+/user/username/projects/myproject/src:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}
+
+Before running immediate callbacks and checking length (1)
+
+PolledWatches::
+/user/username/projects/myproject/src/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/src/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/fileb.mts:
+  {}
+/a/lib/lib.es2016.full.d.ts:
+  {}
+/user/username/projects/myproject/package.json:
+  {}
+/user/username/projects/myproject/src:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}
+
 Info 211  [16:05:01.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/user/username/projects/myproject/src/fileA.ts","diagnostics":[]}}
+Before running immediate callbacks and checking length (1)
+
+PolledWatches::
+/user/username/projects/myproject/src/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/src/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/fileb.mts:
+  {}
+/a/lib/lib.es2016.full.d.ts:
+  {}
+/user/username/projects/myproject/package.json:
+  {}
+/user/username/projects/myproject/src:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}
+
+Before running immediate callbacks and checking length (1)
+
+PolledWatches::
+/user/username/projects/myproject/src/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/src/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/fileb.mts:
+  {}
+/a/lib/lib.es2016.full.d.ts:
+  {}
+/user/username/projects/myproject/package.json:
+  {}
+/user/username/projects/myproject/src:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}
+
 Info 212  [16:05:02.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/src/fileA.ts","diagnostics":[]}}
 Info 213  [16:05:03.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":4}}
+Before running immediate callbacks and checking length (1)
+
+PolledWatches::
+/user/username/projects/myproject/src/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/src/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/fileb.mts:
+  {}
+/a/lib/lib.es2016.full.d.ts:
+  {}
+/user/username/projects/myproject/package.json:
+  {}
+/user/username/projects/myproject/src:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}
+
 Info 214  [16:05:04.000] Delete package.json
 Info 215  [16:05:06.000] FileWatcher:: Triggered with /user/username/projects/myproject/package.json 2:: WatchInfo: /user/username/projects/myproject/package.json 2000 undefined Project: /user/username/projects/myproject/src/tsconfig.json WatchType: File location affecting resolution
 Info 216  [16:05:07.000] Scheduled: /user/username/projects/myproject/src/tsconfig.jsonFailedLookupInvalidation
 Info 217  [16:05:08.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/package.json 2:: WatchInfo: /user/username/projects/myproject/package.json 2000 undefined Project: /user/username/projects/myproject/src/tsconfig.json WatchType: File location affecting resolution
+Before running timeout callbacks
+//// [/user/username/projects/myproject/package.json] deleted
+
+PolledWatches::
+/user/username/projects/myproject/src/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/src/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/fileb.mts:
+  {}
+/a/lib/lib.es2016.full.d.ts:
+  {}
+/user/username/projects/myproject/package.json:
+  {}
+/user/username/projects/myproject/src:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}
+
 Info 218  [16:05:09.000] Running: /user/username/projects/myproject/src/tsconfig.jsonFailedLookupInvalidation
 Info 219  [16:05:10.000] Scheduled: /user/username/projects/myproject/src/tsconfig.json
 Info 220  [16:05:11.000] Scheduled: *ensureProjectForOpenFiles*
+After running timeout callbacks
+
+PolledWatches::
+/user/username/projects/myproject/src/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/src/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/fileb.mts:
+  {}
+/a/lib/lib.es2016.full.d.ts:
+  {}
+/user/username/projects/myproject/package.json:
+  {}
+/user/username/projects/myproject/src:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}
+
+Before running timeout callbacks
+
+PolledWatches::
+/user/username/projects/myproject/src/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/src/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/fileb.mts:
+  {}
+/a/lib/lib.es2016.full.d.ts:
+  {}
+/user/username/projects/myproject/package.json:
+  {}
+/user/username/projects/myproject/src:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}
+
 Info 221  [16:05:12.000] Running: /user/username/projects/myproject/src/tsconfig.json
 Info 222  [16:05:13.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/src/tsconfig.json
 Info 223  [16:05:14.000] File '/a/lib/package.json' does not exist according to earlier cached lookups.
@@ -713,19 +1842,7 @@ Info 247  [16:05:49.000] 		Projects: /user/username/projects/myproject/src/tscon
 Info 247  [16:05:50.000] got projects updated in background, updating diagnostics for /user/username/projects/myproject/src/fileA.ts
 Info 248  [16:05:51.000] event:
     {"seq":0,"type":"event","event":"projectsUpdatedInBackground","body":{"openFiles":["/user/username/projects/myproject/src/fileA.ts"]}}
-Info 249  [16:05:52.000] request:
-    {
-      "command": "geterr",
-      "arguments": {
-        "delay": 0,
-        "files": [
-          "/user/username/projects/myproject/src/fileA.ts"
-        ]
-      },
-      "seq": 5,
-      "type": "request"
-    }
-//// [/user/username/projects/myproject/package.json] deleted
+After running timeout callbacks
 
 PolledWatches::
 /user/username/projects/myproject/src/package.json:
@@ -753,6 +1870,47 @@ FsWatchesRecursive::
 /user/username/projects/myproject/src:
   {}
 
+Info 249  [16:05:52.000] request:
+    {
+      "command": "geterr",
+      "arguments": {
+        "delay": 0,
+        "files": [
+          "/user/username/projects/myproject/src/fileA.ts"
+        ]
+      },
+      "seq": 5,
+      "type": "request"
+    }
+Before request
+
+PolledWatches::
+/user/username/projects/myproject/src/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/package.json:
+  {"pollingInterval":2000}
+
+FsWatches::
+/user/username/projects/myproject/src/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/fileb.mts:
+  {}
+/a/lib/lib.es2016.full.d.ts:
+  {}
+/user/username/projects/myproject/package.json:
+  {}
+/user/username/projects/myproject/src:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}
+
+After request
 
 PolledWatches::
 /user/username/projects/myproject/src/package.json:
@@ -784,11 +1942,178 @@ Info 250  [16:05:53.000] response:
     {
       "responseRequired": false
     }
+Before checking timeout queue length (1) and running
+
+PolledWatches::
+/user/username/projects/myproject/src/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/package.json:
+  {"pollingInterval":2000}
+
+FsWatches::
+/user/username/projects/myproject/src/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/fileb.mts:
+  {}
+/a/lib/lib.es2016.full.d.ts:
+  {}
+/user/username/projects/myproject/package.json:
+  {}
+/user/username/projects/myproject/src:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}
+
 Info 251  [16:05:54.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/src/fileA.ts","diagnostics":[]}}
+After checking timeout queue length (1) and running
+
+PolledWatches::
+/user/username/projects/myproject/src/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/package.json:
+  {"pollingInterval":2000}
+
+FsWatches::
+/user/username/projects/myproject/src/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/fileb.mts:
+  {}
+/a/lib/lib.es2016.full.d.ts:
+  {}
+/user/username/projects/myproject/package.json:
+  {}
+/user/username/projects/myproject/src:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}
+
+Before running immediate callbacks and checking length (1)
+
+PolledWatches::
+/user/username/projects/myproject/src/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/package.json:
+  {"pollingInterval":2000}
+
+FsWatches::
+/user/username/projects/myproject/src/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/fileb.mts:
+  {}
+/a/lib/lib.es2016.full.d.ts:
+  {}
+/user/username/projects/myproject/package.json:
+  {}
+/user/username/projects/myproject/src:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}
+
 Info 252  [16:05:55.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/user/username/projects/myproject/src/fileA.ts","diagnostics":[{"start":{"line":1,"offset":21},"end":{"line":1,"offset":34},"text":"The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import(\"./fileB.mjs\")' call instead.\n  To convert this file to an ECMAScript module, change its file extension to '.mts' or create a local package.json file with `{ \"type\": \"module\" }`.","code":1479,"category":"error"}]}}
+Before running immediate callbacks and checking length (1)
+
+PolledWatches::
+/user/username/projects/myproject/src/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/package.json:
+  {"pollingInterval":2000}
+
+FsWatches::
+/user/username/projects/myproject/src/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/fileb.mts:
+  {}
+/a/lib/lib.es2016.full.d.ts:
+  {}
+/user/username/projects/myproject/package.json:
+  {}
+/user/username/projects/myproject/src:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}
+
+Before running immediate callbacks and checking length (1)
+
+PolledWatches::
+/user/username/projects/myproject/src/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/package.json:
+  {"pollingInterval":2000}
+
+FsWatches::
+/user/username/projects/myproject/src/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/fileb.mts:
+  {}
+/a/lib/lib.es2016.full.d.ts:
+  {}
+/user/username/projects/myproject/package.json:
+  {}
+/user/username/projects/myproject/src:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}
+
 Info 253  [16:05:56.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/src/fileA.ts","diagnostics":[]}}
 Info 254  [16:05:57.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":5}}
+Before running immediate callbacks and checking length (1)
+
+PolledWatches::
+/user/username/projects/myproject/src/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/package.json:
+  {"pollingInterval":2000}
+
+FsWatches::
+/user/username/projects/myproject/src/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/fileb.mts:
+  {}
+/a/lib/lib.es2016.full.d.ts:
+  {}
+/user/username/projects/myproject/package.json:
+  {}
+/user/username/projects/myproject/src:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/src:
+  {}

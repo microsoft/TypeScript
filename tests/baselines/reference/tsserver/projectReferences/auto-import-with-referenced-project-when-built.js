@@ -8,6 +8,7 @@ Info 1    [16:01:12.000] request:
         "file": "/user/username/projects/myproject/app/src/program/index.ts"
       }
     }
+Before request
 //// [/user/username/projects/myproject/tsconfig.json]
 {"files":[],"references":[{"path":"shared/src/library"},{"path":"app/src/program"}]}
 
@@ -285,6 +286,7 @@ Info 45   [16:02:01.000] -----------------------------------------------
 Info 45   [16:02:02.000] Open files: 
 Info 45   [16:02:03.000] 	FileName: /user/username/projects/myproject/app/src/program/index.ts ProjectRootPath: undefined
 Info 45   [16:02:04.000] 		Projects: /user/username/projects/myproject/app/src/program/tsconfig.json
+After request
 
 PolledWatches::
 /user/username/projects/myproject/app/src/program/node_modules:
@@ -346,6 +348,7 @@ Info 46   [16:02:06.000] request:
       "seq": 1,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /user/username/projects/myproject/app/src/program/node_modules:
@@ -389,6 +392,7 @@ FsWatchesRecursive::
 
 Info 47   [16:02:07.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info 48   [16:02:08.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
+After request
 
 PolledWatches::
 /user/username/projects/myproject/app/src/program/node_modules:

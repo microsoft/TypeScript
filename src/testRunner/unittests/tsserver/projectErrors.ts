@@ -289,8 +289,8 @@ namespace ts.projectSystem {
             verifyGetErrRequest({ session, host, files: [app] });
 
             host.renameFolder(`${projectDir}/foo`, `${projectDir}/foo2`);
-            host.runQueuedTimeoutCallbacks();
-            host.runQueuedTimeoutCallbacks();
+            session.runQueuedTimeoutCallbacks();
+            session.runQueuedTimeoutCallbacks();
             verifyGetErrRequest({ session, host, files: [app] });
             baselineTsserverLogs("projectErrors", `folder rename updates project structure and reports no errors`, session);
         });
@@ -310,7 +310,7 @@ namespace ts.projectSystem {
                 }
             });
 
-            host.checkTimeoutQueueLengthAndRun(1);
+            session.checkTimeoutQueueLengthAndRun(1);
             baselineTsserverLogs("projectErrors", "getting errors before opening file", session);
         });
 
@@ -474,13 +474,13 @@ declare module '@custom/plugin' {
                 }
             }`;
             host.writeFile(configFile.path, configFile.content);
-            host.runQueuedTimeoutCallbacks();
+            session.runQueuedTimeoutCallbacks();
 
             configFile.content = `{
                 "compilerOptions": {}
             }`;
             host.writeFile(configFile.path, configFile.content);
-            host.runQueuedTimeoutCallbacks();
+            session.runQueuedTimeoutCallbacks();
             baselineTsserverLogs("projectErrors", "configFileDiagnostic events are generated when the config file changes", session);
         });
 
@@ -868,13 +868,13 @@ console.log(blabla);`
             function verifyWhileNpmInstall(timeouts: number) {
                 filesAndFoldersToAdd.forEach(f => host.ensureFileOrFolder(f));
                 if (npmInstallComplete || timeoutDuringPartialInstallation) {
-                    host.checkTimeoutQueueLengthAndRun(timeouts); // Invalidation of failed lookups
+                    session.checkTimeoutQueueLengthAndRun(timeouts); // Invalidation of failed lookups
                     if (timeouts) {
-                        host.checkTimeoutQueueLengthAndRun(timeouts - 1); // Actual update
+                        session.checkTimeoutQueueLengthAndRun(timeouts - 1); // Actual update
                     }
                 }
                 else {
-                    host.checkTimeoutQueueLength(timeouts ? 3 : 2);
+                    session.checkTimeoutQueueLength(timeouts ? 3 : 2);
                 }
                 verifyGetErrRequest({ session, host, files: [main], existingTimeouts: !npmInstallComplete && !timeoutDuringPartialInstallation ? timeouts ? 3 : 2 : undefined });
             }

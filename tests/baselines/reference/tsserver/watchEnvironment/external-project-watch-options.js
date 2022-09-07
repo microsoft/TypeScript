@@ -24,6 +24,7 @@ Info 1    [16:00:30.000] request:
       "seq": 1,
       "type": "request"
     }
+Before request
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -85,6 +86,7 @@ Info 14   [16:00:43.000] 	Files (4)
 	  Root file specified for compilation
 
 Info 15   [16:00:44.000] -----------------------------------------------
+After request
 
 PolledWatches::
 
@@ -114,6 +116,7 @@ Info 17   [16:00:46.000] request:
         "file": "/user/username/projects/myproject/src/main.ts"
       }
     }
+Before request
 
 PolledWatches::
 
@@ -137,6 +140,7 @@ Info 19   [16:00:50.000] -----------------------------------------------
 Info 19   [16:00:51.000] Open files: 
 Info 19   [16:00:52.000] 	FileName: /user/username/projects/myproject/src/main.ts ProjectRootPath: undefined
 Info 19   [16:00:53.000] 		Projects: /user/username/projects/myproject/project.csproj
+After request
 
 PolledWatches::
 

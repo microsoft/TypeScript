@@ -46,34 +46,34 @@ namespace ts.projectSystem {
                 host.writeFile(packageFile.path, JSON.stringify({
                     name: "app", version: "1.0.0", type: "module",
                 }));
-                host.runQueuedTimeoutCallbacks(); // Failed lookup updates
-                host.runQueuedTimeoutCallbacks(); // Actual update
+                session.runQueuedTimeoutCallbacks(); // Failed lookup updates
+                session.runQueuedTimeoutCallbacks(); // Actual update
                 verifyErr();
 
                 session.logger.info("Modify package json file to remove type module");
                 host.writeFile(packageFile.path, packageFile.content);
-                host.runQueuedTimeoutCallbacks(); // Failed lookup updates
-                host.runQueuedTimeoutCallbacks(); // Actual update
+                session.runQueuedTimeoutCallbacks(); // Failed lookup updates
+                session.runQueuedTimeoutCallbacks(); // Actual update
                 verifyErr();
 
                 session.logger.info("Delete package.json");
                 host.deleteFile(packageFile.path);
-                host.runQueuedTimeoutCallbacks(); // Failed lookup updates
-                host.runQueuedTimeoutCallbacks(); // Actual update
+                session.runQueuedTimeoutCallbacks(); // Failed lookup updates
+                session.runQueuedTimeoutCallbacks(); // Actual update
                 verifyErr();
 
                 session.logger.info("Modify package json file to add type module");
                 host.writeFile(packageFile.path, JSON.stringify({
                     name: "app", version: "1.0.0", type: "module",
                 }));
-                host.runQueuedTimeoutCallbacks(); // Failed lookup updates
-                host.runQueuedTimeoutCallbacks(); // Actual update
+                session.runQueuedTimeoutCallbacks(); // Failed lookup updates
+                session.runQueuedTimeoutCallbacks(); // Actual update
                 verifyErr();
 
                 session.logger.info("Delete package.json");
                 host.deleteFile(packageFile.path);
-                host.runQueuedTimeoutCallbacks(); // Failed lookup updates
-                host.runQueuedTimeoutCallbacks(); // Actual update
+                session.runQueuedTimeoutCallbacks(); // Failed lookup updates
+                session.runQueuedTimeoutCallbacks(); // Actual update
                 verifyErr();
 
                 baselineTsserverLogs("moduleResolution", "package json file is edited", session);
@@ -86,32 +86,32 @@ namespace ts.projectSystem {
 
                 session.logger.info("Modify package json file to remove type module");
                 host.writeFile(packageFile.path, JSON.stringify({ name: "app", version: "1.0.0" }));
-                host.runQueuedTimeoutCallbacks(); // Failed lookup updates
-                host.runQueuedTimeoutCallbacks(); // Actual update
+                session.runQueuedTimeoutCallbacks(); // Failed lookup updates
+                session.runQueuedTimeoutCallbacks(); // Actual update
                 verifyErr();
 
                 session.logger.info("Modify package json file to add type module");
                 host.writeFile(packageFile.path, packageFile.content);
-                host.runQueuedTimeoutCallbacks(); // Failed lookup updates
-                host.runQueuedTimeoutCallbacks(); // Actual update
+                session.runQueuedTimeoutCallbacks(); // Failed lookup updates
+                session.runQueuedTimeoutCallbacks(); // Actual update
                 verifyErr();
 
                 session.logger.info("Delete package.json");
                 host.deleteFile(packageFile.path);
-                host.runQueuedTimeoutCallbacks(); // Failed lookup updates
-                host.runQueuedTimeoutCallbacks(); // Actual update
+                session.runQueuedTimeoutCallbacks(); // Failed lookup updates
+                session.runQueuedTimeoutCallbacks(); // Actual update
                 verifyErr();
 
                 session.logger.info("Modify package json file to without type module");
                 host.writeFile(packageFile.path, JSON.stringify({ name: "app", version: "1.0.0" }));
-                host.runQueuedTimeoutCallbacks(); // Failed lookup updates
-                host.runQueuedTimeoutCallbacks(); // Actual update
+                session.runQueuedTimeoutCallbacks(); // Failed lookup updates
+                session.runQueuedTimeoutCallbacks(); // Actual update
                 verifyErr();
 
                 session.logger.info("Delete package.json");
                 host.deleteFile(packageFile.path);
-                host.runQueuedTimeoutCallbacks(); // Failed lookup updates
-                host.runQueuedTimeoutCallbacks(); // Actual update
+                session.runQueuedTimeoutCallbacks(); // Failed lookup updates
+                session.runQueuedTimeoutCallbacks(); // Actual update
                 verifyErr();
 
                 baselineTsserverLogs("moduleResolution", "package json file is edited when package json with type module exists", session);

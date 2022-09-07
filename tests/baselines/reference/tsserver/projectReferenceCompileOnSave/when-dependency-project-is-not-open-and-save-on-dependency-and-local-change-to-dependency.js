@@ -8,6 +8,7 @@ Info 1    [16:00:30.000] request:
         "file": "/user/username/projects/myproject/usage/usage.ts"
       }
     }
+Before request
 //// [/user/username/projects/myproject/dependency/fns.ts]
 export function fn1() { }
 export function fn2() { }
@@ -114,6 +115,7 @@ Info 27   [16:00:58.000] -----------------------------------------------
 Info 27   [16:00:59.000] Open files: 
 Info 27   [16:01:00.000] 	FileName: /user/username/projects/myproject/usage/usage.ts ProjectRootPath: undefined
 Info 27   [16:01:01.000] 		Projects: /user/username/projects/myproject/usage/tsconfig.json
+After request
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -152,6 +154,7 @@ Info 28   [16:01:03.000] request:
       "seq": 1,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -193,6 +196,7 @@ Info 31   [16:01:14.000] -----------------------------------------------
 Info 31   [16:01:15.000] Open files: 
 Info 31   [16:01:16.000] 	FileName: /user/username/projects/myproject/usage/usage.ts ProjectRootPath: undefined
 Info 31   [16:01:17.000] 		Projects: /user/username/projects/myproject/usage/tsconfig.json
+After request
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -244,6 +248,7 @@ Info 36   [16:01:26.000] request:
       "seq": 2,
       "type": "request"
     }
+Before request
 //// [/user/username/projects/myproject/dependency/fns.ts]
 export function fn1() { }
 export function fn2() { }
@@ -293,6 +298,7 @@ Info 42   [16:01:40.000] -----------------------------------------------
 Info 42   [16:01:41.000] Open files: 
 Info 42   [16:01:42.000] 	FileName: /user/username/projects/myproject/usage/usage.ts ProjectRootPath: undefined
 Info 42   [16:01:43.000] 		Projects: /user/username/projects/myproject/usage/tsconfig.json
+After request
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -338,6 +344,7 @@ Info 43   [16:01:45.000] request:
       "seq": 3,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -363,6 +370,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/dependency:
   {}
 
+After request
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -402,6 +410,7 @@ Info 45   [16:01:47.000] request:
       "seq": 4,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -427,6 +436,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/dependency:
   {}
 
+After request
 
 PolledWatches::
 /user/username/projects/myproject/decls:

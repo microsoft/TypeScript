@@ -8,6 +8,7 @@ Info 1    [16:00:45.000] request:
         "file": "/user/username/projects/solution/api/src/server.ts"
       }
     }
+Before request
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -133,6 +134,7 @@ Info 33   [16:01:22.000] -----------------------------------------------
 Info 33   [16:01:23.000] Open files: 
 Info 33   [16:01:24.000] 	FileName: /user/username/projects/solution/api/src/server.ts ProjectRootPath: undefined
 Info 33   [16:01:25.000] 		Projects: /user/username/projects/solution/api/tsconfig.json
+After request
 
 PolledWatches::
 /user/username/projects/solution/api/node_modules/@types:
@@ -175,6 +177,7 @@ Info 34   [16:01:27.000] request:
       "seq": 1,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /user/username/projects/solution/api/node_modules/@types:
@@ -302,6 +305,7 @@ Info 79   [16:02:12.000] Search path: /user/username/projects/solution/shared/sr
 Info 80   [16:02:13.000] For info: /user/username/projects/solution/shared/src/index.ts :: Config file name: /user/username/projects/solution/shared/tsconfig.json
 Info 81   [16:02:14.000] Search path: /user/username/projects/solution/shared/src
 Info 82   [16:02:15.000] For info: /user/username/projects/solution/shared/src/index.ts :: Config file name: /user/username/projects/solution/shared/tsconfig.json
+After request
 
 PolledWatches::
 /user/username/projects/solution/api/node_modules/@types:

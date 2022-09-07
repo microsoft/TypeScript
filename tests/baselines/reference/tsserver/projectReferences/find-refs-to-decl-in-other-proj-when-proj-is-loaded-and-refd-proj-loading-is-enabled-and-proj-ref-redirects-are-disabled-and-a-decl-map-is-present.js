@@ -8,6 +8,7 @@ Info 1    [16:00:32.000] request:
         "file": "/user/username/projects/myproject/a/index.ts"
       }
     }
+Before request
 //// [/user/username/projects/myproject/a/tsconfig.json]
 {
         "compilerOptions": {"disableReferencedProjectLoad":false,"disableSourceOfProjectReferenceRedirect":true,"composite":true},
@@ -124,6 +125,7 @@ Info 29   [16:01:02.000] -----------------------------------------------
 Info 29   [16:01:03.000] Open files: 
 Info 29   [16:01:04.000] 	FileName: /user/username/projects/myproject/a/index.ts ProjectRootPath: undefined
 Info 29   [16:01:05.000] 		Projects: /user/username/projects/myproject/a/tsconfig.json
+After request
 
 PolledWatches::
 /a/lib/lib.d.ts:
@@ -160,6 +162,7 @@ Info 30   [16:01:07.000] request:
         "file": "/user/username/projects/myproject/b/helper.ts"
       }
     }
+Before request
 
 PolledWatches::
 /a/lib/lib.d.ts:
@@ -225,6 +228,7 @@ Info 50   [16:01:34.000] 	FileName: /user/username/projects/myproject/a/index.ts
 Info 50   [16:01:35.000] 		Projects: /user/username/projects/myproject/a/tsconfig.json
 Info 50   [16:01:36.000] 	FileName: /user/username/projects/myproject/b/helper.ts ProjectRootPath: undefined
 Info 50   [16:01:37.000] 		Projects: /user/username/projects/myproject/b/tsconfig.json
+After request
 
 PolledWatches::
 /a/lib/lib.d.ts:
@@ -269,6 +273,7 @@ Info 51   [16:01:39.000] request:
       "seq": 1,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /a/lib/lib.d.ts:
@@ -305,6 +310,7 @@ Info 55   [16:01:43.000] For info: /user/username/projects/myproject/b/index.ts 
 Info 56   [16:01:44.000] Search path: /user/username/projects/myproject/b
 Info 57   [16:01:45.000] For info: /user/username/projects/myproject/b/index.ts :: Config file name: /user/username/projects/myproject/b/tsconfig.json
 Info 58   [16:01:46.000] Finding references to /user/username/projects/myproject/b/index.ts position 13 in project /user/username/projects/myproject/b/tsconfig.json
+After request
 
 PolledWatches::
 /a/lib/lib.d.ts:

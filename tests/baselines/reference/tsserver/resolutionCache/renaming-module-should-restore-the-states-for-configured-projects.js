@@ -8,6 +8,7 @@ Info 1    [16:00:14.000] request:
         "file": "/a/b/file1.ts"
       }
     }
+Before request
 //// [/a/b/moduleFile.ts]
 export function bar() { };
 
@@ -66,6 +67,7 @@ Info 19   [16:00:34.000] -----------------------------------------------
 Info 19   [16:00:35.000] Open files: 
 Info 19   [16:00:36.000] 	FileName: /a/b/file1.ts ProjectRootPath: undefined
 Info 19   [16:00:37.000] 		Projects: /a/b/tsconfig.json
+After request
 
 PolledWatches::
 /a/lib/lib.d.ts:
@@ -96,6 +98,7 @@ Info 20   [16:00:39.000] request:
         "file": "/a/b/file1.ts"
       }
     }
+Before request
 
 PolledWatches::
 /a/lib/lib.d.ts:
@@ -113,6 +116,7 @@ FsWatchesRecursive::
 /a/b:
   {}
 
+After request
 
 PolledWatches::
 /a/lib/lib.d.ts:
@@ -148,6 +152,26 @@ Info 31   [16:00:53.000] DirectoryWatcher:: Triggered with /a/b/moduleFile1.ts :
 Info 32   [16:00:54.000] Scheduled: /a/b/tsconfig.json, Cancelled earlier one
 Info 33   [16:00:55.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info 34   [16:00:56.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/moduleFile1.ts :: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
+Before running timeout callbacks
+//// [/a/b/moduleFile1.ts]
+export function bar() { };
+
+//// [/a/b/moduleFile.ts] deleted
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/a/b:
+  {}
+
 Info 35   [16:00:57.000] Running: /a/b/tsconfig.json
 Info 36   [16:00:58.000] FileWatcher:: Added:: WatchInfo: /a/b/moduleFile1.ts 500 undefined WatchType: Closed Script info
 Info 37   [16:00:59.000] Starting updateGraphWorker: Project: /a/b/tsconfig.json
@@ -185,19 +209,7 @@ Info 49   [16:01:19.000] -----------------------------------------------
 Info 49   [16:01:20.000] Open files: 
 Info 49   [16:01:21.000] 	FileName: /a/b/file1.ts ProjectRootPath: undefined
 Info 49   [16:01:22.000] 		Projects: /a/b/tsconfig.json
-Info 49   [16:01:23.000] request:
-    {
-      "seq": 0,
-      "type": "request",
-      "command": "semanticDiagnosticsSync",
-      "arguments": {
-        "file": "/a/b/file1.ts"
-      }
-    }
-//// [/a/b/moduleFile1.ts]
-export function bar() { };
-
-//// [/a/b/moduleFile.ts] deleted
+After running timeout callbacks
 
 PolledWatches::
 /a/lib/lib.d.ts:
@@ -219,6 +231,38 @@ FsWatchesRecursive::
 /a/b:
   {}
 
+Info 49   [16:01:23.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "semanticDiagnosticsSync",
+      "arguments": {
+        "file": "/a/b/file1.ts"
+      }
+    }
+Before request
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+/a/b/modulefile:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/tsconfig.json:
+  {}
+/a/b/modulefile1.ts:
+  {}
+/a/b:
+  {}
+
+FsWatchesRecursive::
+/a/b:
+  {}
+
+After request
 
 PolledWatches::
 /a/lib/lib.d.ts:
@@ -278,9 +322,53 @@ Info 66   [16:01:43.000] DirectoryWatcher:: Triggered with /a/b/moduleFile.ts ::
 Info 67   [16:01:44.000] Scheduled: /a/b/tsconfig.json, Cancelled earlier one
 Info 68   [16:01:45.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info 69   [16:01:46.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/moduleFile.ts :: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
+Before running timeout callbacks
+//// [/a/b/moduleFile.ts]
+export function bar() { };
+
+//// [/a/b/moduleFile1.ts] deleted
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+/a/b/modulefile:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/tsconfig.json:
+  {}
+/a/b:
+  {}
+
+FsWatchesRecursive::
+/a/b:
+  {}
+
 Info 70   [16:01:47.000] Running: /a/b/tsconfig.jsonFailedLookupInvalidation
 Info 71   [16:01:48.000] Scheduled: /a/b/tsconfig.json, Cancelled earlier one
 Info 72   [16:01:49.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
+After running timeout callbacks
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+/a/b/modulefile:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/tsconfig.json:
+  {}
+/a/b:
+  {}
+
+FsWatchesRecursive::
+/a/b:
+  {}
+
 Info 73   [16:01:50.000] request:
     {
       "seq": 0,
@@ -290,10 +378,7 @@ Info 73   [16:01:50.000] request:
         "file": "/a/b/file1.ts"
       }
     }
-//// [/a/b/moduleFile.ts]
-export function bar() { };
-
-//// [/a/b/moduleFile1.ts] deleted
+Before request
 
 PolledWatches::
 /a/lib/lib.d.ts:
@@ -333,6 +418,7 @@ Info 82   [16:01:59.000] 	Files (2)
 	  Matched by default include pattern '**/*'
 
 Info 83   [16:02:00.000] -----------------------------------------------
+After request
 
 PolledWatches::
 /a/lib/lib.d.ts:

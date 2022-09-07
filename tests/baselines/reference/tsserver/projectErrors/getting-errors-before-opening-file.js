@@ -11,6 +11,7 @@ Info 1    [16:00:16.000] request:
       "seq": 1,
       "type": "request"
     }
+Before request
 //// [/a/b/project/file.ts]
 let x: number = false;
 
@@ -34,6 +35,7 @@ FsWatches::
 
 FsWatchesRecursive::
 
+After request
 
 PolledWatches::
 
@@ -45,5 +47,20 @@ Info 2    [16:00:17.000] response:
     {
       "responseRequired": false
     }
+Before checking timeout queue length (1) and running
+
+PolledWatches::
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 3    [16:00:18.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":1}}
+After checking timeout queue length (1) and running
+
+PolledWatches::
+
+FsWatches::
+
+FsWatchesRecursive::

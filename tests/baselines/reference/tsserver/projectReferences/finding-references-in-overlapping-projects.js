@@ -8,6 +8,7 @@ Info 1    [16:00:45.000] request:
         "file": "/user/username/projects/solution/b/index.ts"
       }
     }
+Before request
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -149,6 +150,7 @@ Info 31   [16:01:20.000] -----------------------------------------------
 Info 31   [16:01:21.000] Open files: 
 Info 31   [16:01:22.000] 	FileName: /user/username/projects/solution/b/index.ts ProjectRootPath: undefined
 Info 31   [16:01:23.000] 		Projects: /user/username/projects/solution/b/tsconfig.json
+After request
 
 PolledWatches::
 /user/username/projects/solution/b/node_modules/@types:
@@ -189,6 +191,7 @@ Info 32   [16:01:25.000] request:
       "seq": 1,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /user/username/projects/solution/b/node_modules/@types:
@@ -405,6 +408,7 @@ Info 124  [16:02:57.000] Search path: /user/username/projects/solution/c
 Info 125  [16:02:58.000] For info: /user/username/projects/solution/c/index.ts :: Config file name: /user/username/projects/solution/c/tsconfig.json
 Info 126  [16:02:59.000] Search path: /user/username/projects/solution/c
 Info 127  [16:03:00.000] For info: /user/username/projects/solution/c/index.ts :: Config file name: /user/username/projects/solution/c/tsconfig.json
+After request
 
 PolledWatches::
 /user/username/projects/solution/b/node_modules/@types:
@@ -593,6 +597,7 @@ Info 129  [16:03:02.000] request:
       "seq": 2,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /user/username/projects/solution/b/node_modules/@types:
@@ -670,6 +675,7 @@ Info 160  [16:03:33.000] For info: /user/username/projects/solution/c/index.ts :
 Info 161  [16:03:34.000] Search path: /user/username/projects/solution/c
 Info 162  [16:03:35.000] For info: /user/username/projects/solution/c/index.ts :: Config file name: /user/username/projects/solution/c/tsconfig.json
 Info 163  [16:03:36.000] Finding references to /user/username/projects/solution/a/index.ts position 34 in project /user/username/projects/solution/a/tsconfig.json
+After request
 
 PolledWatches::
 /user/username/projects/solution/b/node_modules/@types:

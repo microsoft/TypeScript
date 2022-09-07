@@ -1,4 +1,37 @@
 Info 0    [16:00:35.000] Provided types map file "/typesMap.json" doesn't exist
+Creating project service
+//// [/user/username/projects/myproject/src/node_modules/module1/index.ts]
+export function module1() {}
+
+//// [/user/username/projects/myproject/node_modules/module2/index.ts]
+export function module2() {}
+
+//// [/user/username/projects/myproject/src/file1.ts]
+import { module1 } from "module1";import { module2 } from "module2";
+
+//// [/user/username/projects/myproject/tsconfig.json]
+{"compilerOptions":{"traceResolution":true}}
+
+//// [/a/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+
+
+PolledWatches::
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 1    [16:00:36.000] Search path: /user/username/projects/myproject/src
 Info 2    [16:00:37.000] For info: /user/username/projects/myproject/src/file1.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
 Info 3    [16:00:38.000] Creating configuration project /user/username/projects/myproject/tsconfig.json
@@ -85,3 +118,47 @@ Info 53   [16:01:37.000] DirectoryWatcher:: Triggered with /user/username/projec
 Info 54   [16:01:38.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/file1.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
 Info 55   [16:01:39.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/file1.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
 Info 56   [16:01:40.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/file1.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
+Before checking timeout queue length (0) and running
+//// [/user/username/projects/myproject/src/file1.ts] file changed its modified time
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject:
+  {}
+/user/username/projects/myproject/src/node_modules:
+  {}
+/user/username/projects/myproject/node_modules:
+  {}
+/user/username/projects/myproject/src:
+  {}
+
+After checking timeout queue length (0) and running
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject:
+  {}
+/user/username/projects/myproject/src/node_modules:
+  {}
+/user/username/projects/myproject/node_modules:
+  {}
+/user/username/projects/myproject/src:
+  {}

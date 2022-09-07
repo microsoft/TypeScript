@@ -1,4 +1,43 @@
 Info 0    [16:00:25.000] Provided types map file "/typesMap.json" doesn't exist
+Creating project service
+//// [/a/b/tsconfig.json]
+
+                {
+                    "compilerOptions": {},
+                    "exclude": [
+                        "e"
+                    ]
+                }
+
+//// [/a/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+
+//// [/a/b/c/f1.ts]
+let x = 1
+
+//// [/a/b/d/f2.ts]
+let y = 1
+
+//// [/a/b/e/f3.ts]
+let z = 1
+
+
+PolledWatches::
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 1    [16:00:26.000] Search path: /a/b/c
 Info 2    [16:00:27.000] For info: /a/b/c/f1.ts :: Config file name: /a/b/tsconfig.json
 Info 3    [16:00:28.000] Creating configuration project /a/b/tsconfig.json

@@ -10,6 +10,7 @@ Info 1    [16:00:18.000] request:
       "seq": 1,
       "type": "request"
     }
+Before request
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -42,6 +43,7 @@ FsWatchesRecursive::
 Info 2    [16:00:19.000] Host watch options changed to {"fallbackPolling":1}, it will be take effect for next watches.
 Info 3    [16:00:20.000] response:
     {"seq":0,"type":"response","command":"configure","request_seq":1,"success":true}
+After request
 
 PolledWatches::
 
@@ -63,6 +65,7 @@ Info 5    [16:00:22.000] request:
         "projectRootPath": "/a/b"
       }
     }
+Before request
 
 PolledWatches::
 
@@ -114,6 +117,7 @@ Info 23   [16:00:42.000] -----------------------------------------------
 Info 23   [16:00:43.000] Open files: 
 Info 23   [16:00:44.000] 	FileName: /a/b/commonFile1.ts ProjectRootPath: /a/b
 Info 23   [16:00:45.000] 		Projects: /a/b/tsconfig.json
+After request
 
 PolledWatches::
 /a/b/tsconfig.json:

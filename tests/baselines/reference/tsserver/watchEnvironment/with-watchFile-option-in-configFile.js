@@ -9,6 +9,7 @@ Info 1    [16:00:18.000] request:
         "projectRootPath": "/a/b"
       }
     }
+Before request
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -87,6 +88,7 @@ Info 21   [16:00:40.000] -----------------------------------------------
 Info 21   [16:00:41.000] Open files: 
 Info 21   [16:00:42.000] 	FileName: /a/b/commonFile1.ts ProjectRootPath: /a/b
 Info 21   [16:00:43.000] 		Projects: /a/b/tsconfig.json
+After request
 
 PolledWatches::
 /a/b/node_modules/@types:

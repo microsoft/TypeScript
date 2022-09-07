@@ -8,6 +8,7 @@ Info 1    [16:00:16.000] request:
         "file": "/a/b/app.ts"
       }
     }
+Before request
 //// [/a/b/app.ts]
 let x = 10
 
@@ -84,6 +85,7 @@ Info 21   [16:00:38.000] -----------------------------------------------
 Info 21   [16:00:39.000] Open files: 
 Info 21   [16:00:40.000] 	FileName: /a/b/app.ts ProjectRootPath: undefined
 Info 21   [16:00:41.000] 		Projects: /a/b/tsconfig.json
+After request
 
 PolledWatches::
 /a/b/node_modules/@types:

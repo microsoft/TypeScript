@@ -8,6 +8,7 @@ Info 1    [16:00:23.000] request:
         "file": "/user/username/projects/myproject/ui.ts"
       }
     }
+Before request
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -74,6 +75,7 @@ Info 18   [16:00:42.000] -----------------------------------------------
 Info 18   [16:00:43.000] Open files: 
 Info 18   [16:00:44.000] 	FileName: /user/username/projects/myproject/ui.ts ProjectRootPath: undefined
 Info 18   [16:00:45.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+After request
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
@@ -103,6 +105,7 @@ Info 19   [16:00:47.000] request:
       "seq": 1,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
@@ -118,6 +121,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject:
   {}
 
+After request
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
@@ -148,6 +152,7 @@ Info 21   [16:00:49.000] request:
       "seq": 2,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
@@ -163,6 +168,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject:
   {}
 
+After request
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
@@ -207,6 +213,7 @@ Info 23   [16:00:51.000] request:
       "seq": 3,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
@@ -222,6 +229,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject:
   {}
 
+After request
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:

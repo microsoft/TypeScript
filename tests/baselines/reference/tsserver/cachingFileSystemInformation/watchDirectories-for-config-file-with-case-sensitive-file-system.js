@@ -1,4 +1,34 @@
 Info 0    [16:00:33.000] Provided types map file "/typesMap.json" doesn't exist
+Creating project service
+//// [/Users/someuser/work/applications/frontend/src/app/utils/Analytic.ts]
+export class SomeClass { };
+
+//// [/Users/someuser/work/applications/frontend/src/app/redux/configureStore.ts]
+export class configureStore { }
+
+//// [/a/lib/lib.es2016.full.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+
+//// [/Users/someuser/work/applications/frontend/tsconfig.json]
+{"compilerOptions":{"strict":true,"strictNullChecks":true,"target":"es2016","module":"commonjs","moduleResolution":"node","sourceMap":true,"noEmitOnError":true,"experimentalDecorators":true,"emitDecoratorMetadata":true,"types":["node","jest"],"noUnusedLocals":true,"outDir":"./compiled","typeRoots":["types","node_modules/@types"],"baseUrl":".","paths":{"*":["types/*"]}},"include":["src/**/*"],"exclude":["node_modules","compiled"]}
+
+
+PolledWatches::
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 1    [16:00:34.000] Search path: /Users/someuser/work/applications/frontend/src/app/utils
 Info 2    [16:00:35.000] For info: /Users/someuser/work/applications/frontend/src/app/utils/Analytic.ts :: Config file name: /Users/someuser/work/applications/frontend/tsconfig.json
 Info 3    [16:00:36.000] Creating configuration project /Users/someuser/work/applications/frontend/tsconfig.json
@@ -77,6 +107,31 @@ Info 22   [16:01:03.000] DirectoryWatcher:: Triggered with /Users/someuser/work/
 Info 23   [16:01:04.000] Scheduled: /Users/someuser/work/applications/frontend/tsconfig.json
 Info 24   [16:01:05.000] Scheduled: *ensureProjectForOpenFiles*
 Info 25   [16:01:06.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /Users/someuser/work/applications/frontend/src/app/utils/Cookie.ts :: WatchInfo: /Users/someuser/work/applications/frontend/src 1 undefined Config: /Users/someuser/work/applications/frontend/tsconfig.json WatchType: Wild card directory
+Before running timeout callbacks
+//// [/Users/someuser/work/applications/frontend/src/app/utils/Cookie.ts]
+export class Cookie { }
+
+
+PolledWatches::
+/Users/someuser/work/applications/frontend/types:
+  {"pollingInterval":500}
+/Users/someuser/work/applications/frontend/node_modules:
+  {"pollingInterval":500}
+/Users/someuser/work/applications/node_modules:
+  {"pollingInterval":500}
+
+FsWatches::
+/Users/someuser/work/applications/frontend/tsconfig.json:
+  {}
+/Users/someuser/work/applications/frontend/src/app/redux/configureStore.ts:
+  {}
+/a/lib/lib.es2016.full.d.ts:
+  {}
+
+FsWatchesRecursive::
+/Users/someuser/work/applications/frontend/src:
+  {}
+
 Info 26   [16:01:07.000] Running: /Users/someuser/work/applications/frontend/tsconfig.json
 Info 27   [16:01:08.000] FileWatcher:: Added:: WatchInfo: /Users/someuser/work/applications/frontend/src/app/utils/Cookie.ts 500 undefined WatchType: Closed Script info
 Info 28   [16:01:09.000] Starting updateGraphWorker: Project: /Users/someuser/work/applications/frontend/tsconfig.json
@@ -116,6 +171,30 @@ Info 36   [16:01:25.000] -----------------------------------------------
 Info 36   [16:01:26.000] Open files: 
 Info 36   [16:01:27.000] 	FileName: /Users/someuser/work/applications/frontend/src/app/utils/Analytic.ts ProjectRootPath: undefined
 Info 36   [16:01:28.000] 		Projects: /Users/someuser/work/applications/frontend/tsconfig.json
+After running timeout callbacks
+
+PolledWatches::
+/Users/someuser/work/applications/frontend/types:
+  {"pollingInterval":500}
+/Users/someuser/work/applications/frontend/node_modules:
+  {"pollingInterval":500}
+/Users/someuser/work/applications/node_modules:
+  {"pollingInterval":500}
+
+FsWatches::
+/Users/someuser/work/applications/frontend/tsconfig.json:
+  {}
+/Users/someuser/work/applications/frontend/src/app/redux/configureStore.ts:
+  {}
+/a/lib/lib.es2016.full.d.ts:
+  {}
+/Users/someuser/work/applications/frontend/src/app/utils/Cookie.ts:
+  {}
+
+FsWatchesRecursive::
+/Users/someuser/work/applications/frontend/src:
+  {}
+
 Info 36   [16:01:29.000] fileExists:: [{"key":"/Users/someuser/work/applications/frontend/src/app/utils/Cookie.ts","count":2}]
 Info 37   [16:01:30.000] directoryExists:: [{"key":"/Users/someuser/work/applications/frontend/src/app/utils/Cookie.ts","count":1}]
 Info 38   [16:01:31.000] getDirectories:: []

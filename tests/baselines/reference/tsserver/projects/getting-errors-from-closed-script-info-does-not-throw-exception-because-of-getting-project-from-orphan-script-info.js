@@ -8,6 +8,7 @@ Info 1    [16:00:16.000] request:
       "seq": 1,
       "type": "request"
     }
+Before request
 //// [/a/b/app.ts]
 let x = 1;
 
@@ -73,6 +74,7 @@ Info 18   [16:00:35.000] -----------------------------------------------
 Info 18   [16:00:36.000] Open files: 
 Info 18   [16:00:37.000] 	FileName: /a/b/app.ts ProjectRootPath: undefined
 Info 18   [16:00:38.000] 		Projects: /a/b/tsconfig.json
+After request
 
 PolledWatches::
 /a/b/node_modules/@types:
@@ -101,6 +103,7 @@ Info 19   [16:00:40.000] request:
       "seq": 2,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /a/b/node_modules/@types:
@@ -122,6 +125,7 @@ Info 21   [16:00:43.000] 	Files (2)
 
 Info 21   [16:00:44.000] -----------------------------------------------
 Info 21   [16:00:45.000] Open files: 
+After request
 
 PolledWatches::
 /a/b/node_modules/@types:
@@ -155,6 +159,7 @@ Info 22   [16:00:47.000] request:
       "seq": 3,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /a/b/node_modules/@types:
@@ -172,6 +177,7 @@ FsWatchesRecursive::
 /a/b:
   {}
 
+After request
 
 PolledWatches::
 /a/b/node_modules/@types:

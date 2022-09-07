@@ -8,6 +8,7 @@ Info 1    [16:00:35.000] request:
         "file": "/user/username/projects/solution/compiler/program.ts"
       }
     }
+Before request
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -107,6 +108,7 @@ Info 19   [16:00:55.000] -----------------------------------------------
 Info 19   [16:00:56.000] Open files: 
 Info 19   [16:00:57.000] 	FileName: /user/username/projects/solution/compiler/program.ts ProjectRootPath: undefined
 Info 19   [16:00:58.000] 		Projects: /user/username/projects/solution/compiler/tsconfig.json
+After request
 
 PolledWatches::
 /user/username/projects/solution/compiler/node_modules/@types:
@@ -139,6 +141,7 @@ Info 20   [16:01:00.000] request:
       "seq": 1,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /user/username/projects/solution/compiler/node_modules/@types:
@@ -157,6 +160,7 @@ FsWatches::
 FsWatchesRecursive::
 
 Info 21   [16:01:01.000] Finding references to /user/username/projects/solution/compiler/program.ts position 110 in project /user/username/projects/solution/compiler/tsconfig.json
+After request
 
 PolledWatches::
 /user/username/projects/solution/compiler/node_modules/@types:

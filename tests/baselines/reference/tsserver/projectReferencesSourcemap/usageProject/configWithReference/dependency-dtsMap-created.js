@@ -8,6 +8,7 @@ Info 1    [16:01:02.000] request:
         "file": "/user/username/projects/myproject/main/main.ts"
       }
     }
+Before request
 //// [/user/username/projects/myproject/dependency/FnS.ts]
 export function fn1() { }
 export function fn2() { }
@@ -267,6 +268,7 @@ Info 29   [16:01:32.000] -----------------------------------------------
 Info 29   [16:01:33.000] Open files: 
 Info 29   [16:01:34.000] 	FileName: /user/username/projects/myproject/main/main.ts ProjectRootPath: undefined
 Info 29   [16:01:35.000] 		Projects: /user/username/projects/myproject/main/tsconfig.json
+After request
 
 PolledWatches::
 /user/username/projects/myproject/main/node_modules/@types:
@@ -305,6 +307,7 @@ Info 30   [16:01:37.000] request:
         "file": "/user/username/projects/myproject/random/random.ts"
       }
     }
+Before request
 
 PolledWatches::
 /user/username/projects/myproject/main/node_modules/@types:
@@ -376,6 +379,7 @@ Info 48   [16:02:02.000] 	FileName: /user/username/projects/myproject/main/main.
 Info 48   [16:02:03.000] 		Projects: /user/username/projects/myproject/main/tsconfig.json
 Info 48   [16:02:04.000] 	FileName: /user/username/projects/myproject/random/random.ts ProjectRootPath: undefined
 Info 48   [16:02:05.000] 		Projects: /user/username/projects/myproject/random/tsconfig.json
+After request
 
 PolledWatches::
 /user/username/projects/myproject/main/node_modules/@types:
@@ -422,6 +426,7 @@ Info 49   [16:02:07.000] request:
       "seq": 1,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /user/username/projects/myproject/main/node_modules/@types:
@@ -453,6 +458,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
+After request
 
 PolledWatches::
 /user/username/projects/myproject/main/node_modules/@types:
@@ -534,6 +540,7 @@ Info 53   [16:02:13.000] request:
       "seq": 2,
       "type": "request"
     }
+Before request
 //// [/user/username/projects/myproject/decls/FnS.d.ts.map]
 {"version":3,"file":"FnS.d.ts","sourceRoot":"","sources":["../dependency/FnS.ts"],"names":[],"mappings":"AAAA,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM;AACzB,wBAAgB,GAAG,SAAM"}
 
@@ -568,6 +575,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
+After request
 
 PolledWatches::
 /user/username/projects/myproject/main/node_modules/@types:
@@ -647,6 +655,7 @@ Info 55   [16:02:15.000] request:
       "seq": 3,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /user/username/projects/myproject/main/node_modules/@types:
@@ -678,6 +687,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
+After request
 
 PolledWatches::
 /user/username/projects/myproject/main/node_modules/@types:
@@ -757,6 +767,7 @@ Info 57   [16:02:17.000] request:
       "seq": 4,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /user/username/projects/myproject/main/node_modules/@types:
@@ -788,6 +799,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
+After request
 
 PolledWatches::
 /user/username/projects/myproject/main/node_modules/@types:
@@ -867,6 +879,7 @@ Info 59   [16:02:19.000] request:
       "seq": 5,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /user/username/projects/myproject/main/node_modules/@types:
@@ -898,6 +911,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
+After request
 
 PolledWatches::
 /user/username/projects/myproject/main/node_modules/@types:
@@ -977,6 +991,7 @@ Info 61   [16:02:21.000] request:
       "seq": 6,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /user/username/projects/myproject/main/node_modules/@types:
@@ -1008,6 +1023,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/random:
   {}
 
+After request
 
 PolledWatches::
 /user/username/projects/myproject/main/node_modules/@types:
@@ -1085,6 +1101,7 @@ Info 63   [16:02:23.000] request:
         "file": "/user/username/projects/myproject/random/random.ts"
       }
     }
+Before request
 
 PolledWatches::
 /user/username/projects/myproject/main/node_modules/@types:
@@ -1128,6 +1145,7 @@ Info 65   [16:02:30.000] -----------------------------------------------
 Info 65   [16:02:31.000] Open files: 
 Info 65   [16:02:32.000] 	FileName: /user/username/projects/myproject/main/main.ts ProjectRootPath: undefined
 Info 65   [16:02:33.000] 		Projects: /user/username/projects/myproject/main/tsconfig.json
+After request
 
 PolledWatches::
 /user/username/projects/myproject/main/node_modules/@types:
@@ -1174,6 +1192,7 @@ Info 66   [16:02:35.000] request:
         "file": "/user/username/projects/myproject/random/random.ts"
       }
     }
+Before request
 
 PolledWatches::
 /user/username/projects/myproject/main/node_modules/@types:
@@ -1223,6 +1242,7 @@ Info 70   [16:02:46.000] 	FileName: /user/username/projects/myproject/main/main.
 Info 70   [16:02:47.000] 		Projects: /user/username/projects/myproject/main/tsconfig.json
 Info 70   [16:02:48.000] 	FileName: /user/username/projects/myproject/random/random.ts ProjectRootPath: undefined
 Info 70   [16:02:49.000] 		Projects: /user/username/projects/myproject/random/tsconfig.json
+After request
 
 PolledWatches::
 /user/username/projects/myproject/main/node_modules/@types:
@@ -1267,6 +1287,7 @@ Info 71   [16:02:51.000] request:
         "file": "/user/username/projects/myproject/main/main.ts"
       }
     }
+Before request
 
 PolledWatches::
 /user/username/projects/myproject/main/node_modules/@types:
@@ -1310,6 +1331,7 @@ Info 73   [16:02:58.000] -----------------------------------------------
 Info 73   [16:02:59.000] Open files: 
 Info 73   [16:03:00.000] 	FileName: /user/username/projects/myproject/random/random.ts ProjectRootPath: undefined
 Info 73   [16:03:01.000] 		Projects: /user/username/projects/myproject/random/tsconfig.json
+After request
 
 PolledWatches::
 /user/username/projects/myproject/main/node_modules/@types:
@@ -1356,6 +1378,7 @@ Info 74   [16:03:03.000] request:
         "file": "/user/username/projects/myproject/random/random.ts"
       }
     }
+Before request
 
 PolledWatches::
 /user/username/projects/myproject/main/node_modules/@types:
@@ -1399,6 +1422,7 @@ Info 76   [16:03:09.000] 	Files (2)
 
 Info 76   [16:03:10.000] -----------------------------------------------
 Info 76   [16:03:11.000] Open files: 
+After request
 
 PolledWatches::
 /user/username/projects/myproject/main/node_modules/@types:
@@ -1447,6 +1471,7 @@ Info 77   [16:03:13.000] request:
         "file": "/user/username/projects/myproject/random/random.ts"
       }
     }
+Before request
 
 PolledWatches::
 /user/username/projects/myproject/main/node_modules/@types:
@@ -1522,6 +1547,7 @@ Info 99   [16:03:37.000] -----------------------------------------------
 Info 99   [16:03:38.000] Open files: 
 Info 99   [16:03:39.000] 	FileName: /user/username/projects/myproject/random/random.ts ProjectRootPath: undefined
 Info 99   [16:03:40.000] 		Projects: /user/username/projects/myproject/random/tsconfig.json
+After request
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:

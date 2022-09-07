@@ -8,6 +8,7 @@ Info 1    [16:00:32.000] request:
         "file": "/user/username/projects/myproject/a/index.ts"
       }
     }
+Before request
 //// [/user/username/projects/myproject/a/tsconfig.json]
 {
         "compilerOptions": {"disableReferencedProjectLoad":true,"disableSourceOfProjectReferenceRedirect":false,"composite":true},
@@ -124,6 +125,7 @@ Info 29   [16:01:02.000] -----------------------------------------------
 Info 29   [16:01:03.000] Open files: 
 Info 29   [16:01:04.000] 	FileName: /user/username/projects/myproject/a/index.ts ProjectRootPath: undefined
 Info 29   [16:01:05.000] 		Projects: /user/username/projects/myproject/a/tsconfig.json
+After request
 
 PolledWatches::
 /a/lib/lib.d.ts:
@@ -162,6 +164,7 @@ Info 30   [16:01:07.000] request:
       "seq": 1,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /a/lib/lib.d.ts:
@@ -190,6 +193,7 @@ Info 32   [16:01:09.000] Search path: /user/username/projects/myproject/b
 Info 33   [16:01:10.000] For info: /user/username/projects/myproject/b/index.ts :: Config file name: /user/username/projects/myproject/b/tsconfig.json
 Info 34   [16:01:11.000] Search path: /user/username/projects/myproject/b
 Info 35   [16:01:12.000] For info: /user/username/projects/myproject/b/index.ts :: Config file name: /user/username/projects/myproject/b/tsconfig.json
+After request
 
 PolledWatches::
 /a/lib/lib.d.ts:

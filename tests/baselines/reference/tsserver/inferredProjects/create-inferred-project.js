@@ -1,4 +1,34 @@
 Info 0    [16:00:21.000] Provided types map file "/typesMap.json" doesn't exist
+Creating project service
+//// [/user/username/projects/myproject/app.ts]
+
+                import {f} from "./module"
+                console.log(f)
+                
+
+//// [/user/username/projects/myproject/module.d.ts]
+export let x: number
+
+//// [/a/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+
+
+PolledWatches::
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 1    [16:00:22.000] Search path: /user/username/projects/myproject
 Info 2    [16:00:23.000] For info: /user/username/projects/myproject/app.ts :: No config files found.
 Info 3    [16:00:24.000] Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded

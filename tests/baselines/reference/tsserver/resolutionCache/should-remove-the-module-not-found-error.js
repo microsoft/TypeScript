@@ -8,6 +8,7 @@ Info 1    [16:00:10.000] request:
         "file": "/a/b/file1.ts"
       }
     }
+Before request
 //// [/a/b/file1.ts]
 import * as T from './moduleFile'; T.bar();
 
@@ -46,6 +47,7 @@ Info 17   [16:00:28.000] -----------------------------------------------
 Info 17   [16:00:29.000] Open files: 
 Info 17   [16:00:30.000] 	FileName: /a/b/file1.ts ProjectRootPath: undefined
 Info 17   [16:00:31.000] 		Projects: /dev/null/inferredProject1*
+After request
 
 PolledWatches::
 /a/b/modulefile:
@@ -74,6 +76,7 @@ Info 18   [16:00:33.000] request:
         "file": "/a/b/file1.ts"
       }
     }
+Before request
 
 PolledWatches::
 /a/b/modulefile:
@@ -89,6 +92,7 @@ FsWatches::
 
 FsWatchesRecursive::
 
+After request
 
 PolledWatches::
 /a/b/modulefile:
@@ -126,23 +130,7 @@ Info 19   [16:00:34.000] response:
 Info 20   [16:00:37.000] DirectoryWatcher:: Triggered with /a/b/moduleFile.ts :: WatchInfo: /a/b 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info 21   [16:00:38.000] Scheduled: /dev/null/inferredProject1*FailedLookupInvalidation
 Info 22   [16:00:39.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/moduleFile.ts :: WatchInfo: /a/b 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info 23   [16:00:40.000] Running: /dev/null/inferredProject1*FailedLookupInvalidation
-Info 24   [16:00:41.000] Scheduled: /dev/null/inferredProject1*
-Info 25   [16:00:42.000] Scheduled: *ensureProjectForOpenFiles*
-Info 26   [16:00:43.000] request:
-    {
-      "seq": 0,
-      "type": "request",
-      "command": "change",
-      "arguments": {
-        "file": "/a/b/file1.ts",
-        "line": 1,
-        "offset": 44,
-        "endLine": 1,
-        "endOffset": 44,
-        "insertString": "\n"
-      }
-    }
+Before running timeout callbacks
 //// [/a/b/moduleFile.ts]
 export function bar() { };
 
@@ -161,6 +149,56 @@ FsWatches::
 
 FsWatchesRecursive::
 
+Info 23   [16:00:40.000] Running: /dev/null/inferredProject1*FailedLookupInvalidation
+Info 24   [16:00:41.000] Scheduled: /dev/null/inferredProject1*
+Info 25   [16:00:42.000] Scheduled: *ensureProjectForOpenFiles*
+After running timeout callbacks
+
+PolledWatches::
+/a/b/modulefile:
+  {"pollingInterval":500}
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b:
+  {}
+
+FsWatchesRecursive::
+
+Info 26   [16:00:43.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "change",
+      "arguments": {
+        "file": "/a/b/file1.ts",
+        "line": 1,
+        "offset": 44,
+        "endLine": 1,
+        "endOffset": 44,
+        "insertString": "\n"
+      }
+    }
+Before request
+
+PolledWatches::
+/a/b/modulefile:
+  {"pollingInterval":500}
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b:
+  {}
+
+FsWatchesRecursive::
+
+After request
 
 PolledWatches::
 /a/b/modulefile:
@@ -189,6 +227,7 @@ Info 28   [16:00:45.000] request:
         "file": "/a/b/file1.ts"
       }
     }
+Before request
 
 PolledWatches::
 /a/b/modulefile:
@@ -223,6 +262,7 @@ Info 37   [16:00:54.000] 	Files (2)
 	  Root file specified for compilation
 
 Info 38   [16:00:55.000] -----------------------------------------------
+After request
 
 PolledWatches::
 /a/lib/lib.d.ts:

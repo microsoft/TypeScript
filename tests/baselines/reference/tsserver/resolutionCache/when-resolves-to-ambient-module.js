@@ -1,4 +1,52 @@
 Info 0    [16:00:33.000] Provided types map file "/typesMap.json" doesn't exist
+Creating project service
+//// [/user/username/projects/myproject/src/typings/node.d.ts]
+
+declare module "fs" {
+    export interface something {
+    }
+}
+
+//// [/user/username/projects/myproject/src/typings/electron.d.ts]
+
+declare module 'original-fs' {
+    import * as fs from 'fs';
+    export = fs;
+}
+
+//// [/user/username/projects/myproject/src/somefolder/srcfile.ts]
+
+import { x } from "somefolder/module1";
+import { x } from "somefolder/module2";
+const y = x;
+
+//// [/user/username/projects/myproject/src/somefolder/module1.ts]
+
+export const x = 10;
+
+//// [/user/username/projects/myproject/src/tsconfig.json]
+{"compilerOptions":{"module":"amd","moduleResolution":"classic","target":"es5","outDir":"../out","baseUrl":"./","typeRoots":["typings"]}}
+
+//// [/a/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+
+
+PolledWatches::
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 1    [16:00:34.000] Search path: /user/username/projects/myproject/src/somefolder
 Info 2    [16:00:35.000] For info: /user/username/projects/myproject/src/somefolder/srcfile.ts :: Config file name: /user/username/projects/myproject/src/tsconfig.json
 Info 3    [16:00:36.000] Creating configuration project /user/username/projects/myproject/src/tsconfig.json

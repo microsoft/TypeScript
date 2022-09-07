@@ -8,6 +8,7 @@ Info 1    [16:00:14.000] request:
         "file": "/a/b/commonFile1.ts"
       }
     }
+Before request
 //// [/a/b/commonFile1.ts]
 /// <reference path="commonFile2.ts"/>
                     let x = y
@@ -60,6 +61,7 @@ Info 14   [16:00:29.000] -----------------------------------------------
 Info 14   [16:00:30.000] Open files: 
 Info 14   [16:00:31.000] 	FileName: /a/b/commonFile1.ts ProjectRootPath: undefined
 Info 14   [16:00:32.000] 		Projects: /dev/null/inferredProject1*
+After request
 
 PolledWatches::
 /a/b/commonfile2.ts:
@@ -86,6 +88,7 @@ Info 15   [16:00:34.000] request:
         "file": "/a/b/commonFile1.ts"
       }
     }
+Before request
 
 PolledWatches::
 /a/b/commonfile2.ts:
@@ -99,6 +102,7 @@ FsWatches::
 
 FsWatchesRecursive::
 
+After request
 
 PolledWatches::
 /a/b/commonfile2.ts:
@@ -149,6 +153,21 @@ Info 18   [16:00:39.000] FileWatcher:: Close:: WatchInfo: /a/b/commonfile2.ts 50
 Info 19   [16:00:40.000] Scheduled: /dev/null/inferredProject1*
 Info 20   [16:00:41.000] Scheduled: *ensureProjectForOpenFiles*
 Info 21   [16:00:42.000] Elapsed:: *ms FileWatcher:: Triggered with /a/b/commonfile2.ts 0:: WatchInfo: /a/b/commonfile2.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
+Before running timeout callbacks
+//// [/a/b/commonFile2.ts]
+let y = 1
+
+
+PolledWatches::
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+
 Info 22   [16:00:43.000] Running: /dev/null/inferredProject1*
 Info 23   [16:00:44.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info 24   [16:00:45.000] FileWatcher:: Added:: WatchInfo: /a/b/commonFile2.ts 500 undefined WatchType: Closed Script info
@@ -185,18 +204,7 @@ Info 32   [16:01:01.000] -----------------------------------------------
 Info 32   [16:01:02.000] Open files: 
 Info 32   [16:01:03.000] 	FileName: /a/b/commonFile1.ts ProjectRootPath: undefined
 Info 32   [16:01:04.000] 		Projects: /dev/null/inferredProject1*
-Info 32   [16:01:05.000] request:
-    {
-      "seq": 0,
-      "type": "request",
-      "command": "semanticDiagnosticsSync",
-      "arguments": {
-        "file": "/a/b/commonFile1.ts"
-      }
-    }
-//// [/a/b/commonFile2.ts]
-let y = 1
-
+After running timeout callbacks
 
 PolledWatches::
 /a/b/node_modules/@types:
@@ -210,6 +218,30 @@ FsWatches::
 
 FsWatchesRecursive::
 
+Info 32   [16:01:05.000] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "command": "semanticDiagnosticsSync",
+      "arguments": {
+        "file": "/a/b/commonFile1.ts"
+      }
+    }
+Before request
+
+PolledWatches::
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/a/b/commonfile2.ts:
+  {}
+
+FsWatchesRecursive::
+
+After request
 
 PolledWatches::
 /a/b/node_modules/@types:

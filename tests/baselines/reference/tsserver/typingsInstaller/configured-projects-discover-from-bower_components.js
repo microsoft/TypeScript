@@ -1,4 +1,24 @@
 Info 0    [16:00:15.000] Provided types map file "/typesMap.json" doesn't exist
+Creating project service
+//// [/app.js]
+
+
+//// [/jsconfig.json]
+{}
+
+//// [/bower_components/jquery/index.js]
+
+
+//// [/bower_components/jquery/bower.json]
+{"name":"jquery"}
+
+
+PolledWatches::
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 1    [16:00:16.000] Search path: /
 Info 2    [16:00:17.000] For info: /app.js :: Config file name: /jsconfig.json
 Info 3    [16:00:18.000] Creating configuration project /jsconfig.json
@@ -67,6 +87,32 @@ Info 40   [16:01:13.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earli
 Info 41   [16:01:14.000] Elapsed:: *ms DirectoryWatcher:: Triggered with tmp/node_modules/@types/jquery/index.d.ts :: WatchInfo:  1 undefined Config: /jsconfig.json WatchType: Wild card directory
 Info 42   [16:01:15.000] Scheduled: /jsconfig.json, Cancelled earlier one
 Info 43   [16:01:16.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
+Before checking timeout queue length (2) and running
+//// [/tmp/package.json]
+{ "private": true }
+
+//// [/tmp/node_modules/@types/jquery/index.d.ts]
+
+
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/node_modules:
+  {"pollingInterval":500}
+
+FsWatches::
+/jsconfig.json:
+  {}
+/tmp/package.json:
+  {}
+
+FsWatchesRecursive::
+/:
+  {}
+/bower_components:
+  {}
+
 Info 44   [16:01:17.000] Running: /jsconfig.json
 Info 45   [16:01:18.000] Starting updateGraphWorker: Project: /jsconfig.json
 Info 46   [16:01:19.000] Finishing updateGraphWorker: Project: /jsconfig.json Version: 3 structureChanged: true structureIsReused:: Not Elapsed:: *ms
@@ -99,3 +145,22 @@ Info 53   [16:01:34.000] -----------------------------------------------
 Info 53   [16:01:35.000] Open files: 
 Info 53   [16:01:36.000] 	FileName: /app.js ProjectRootPath: undefined
 Info 53   [16:01:37.000] 		Projects: /jsconfig.json
+After checking timeout queue length (2) and running
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/node_modules:
+  {"pollingInterval":500}
+
+FsWatches::
+/jsconfig.json:
+  {}
+/tmp/package.json:
+  {}
+
+FsWatchesRecursive::
+/:
+  {}
+/bower_components:
+  {}

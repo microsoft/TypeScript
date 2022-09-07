@@ -8,6 +8,7 @@ Info 1    [16:00:35.000] request:
         "file": "/user/username/projects/solution/compiler/program.ts"
       }
     }
+Before request
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -116,6 +117,7 @@ Info 25   [16:01:04.000] -----------------------------------------------
 Info 25   [16:01:05.000] Open files: 
 Info 25   [16:01:06.000] 	FileName: /user/username/projects/solution/compiler/program.ts ProjectRootPath: undefined
 Info 25   [16:01:07.000] 		Projects: /user/username/projects/solution/compiler/tsconfig.json
+After request
 
 PolledWatches::
 /user/username/projects/solution/compiler/node_modules/@types:
@@ -150,6 +152,7 @@ Info 26   [16:01:09.000] request:
       "seq": 1,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /user/username/projects/solution/compiler/node_modules/@types:
@@ -170,6 +173,7 @@ FsWatches::
 FsWatchesRecursive::
 
 Info 27   [16:01:10.000] Finding references to /user/username/projects/solution/compiler/program.ts position 133 in project /user/username/projects/solution/compiler/tsconfig.json
+After request
 
 PolledWatches::
 /user/username/projects/solution/compiler/node_modules/@types:
@@ -245,6 +249,7 @@ Info 29   [16:01:12.000] request:
       "seq": 2,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /user/username/projects/solution/compiler/node_modules/@types:
@@ -339,6 +344,7 @@ Info 57   [16:01:40.000] Search path: /user/username/projects/solution/compiler
 Info 58   [16:01:41.000] For info: /user/username/projects/solution/compiler/types.ts :: Config file name: /user/username/projects/solution/compiler/tsconfig.json
 Info 59   [16:01:42.000] Search path: /user/username/projects/solution/compiler
 Info 60   [16:01:43.000] For info: /user/username/projects/solution/compiler/program.ts :: Config file name: /user/username/projects/solution/compiler/tsconfig.json
+After request
 
 PolledWatches::
 /user/username/projects/solution/compiler/node_modules/@types:

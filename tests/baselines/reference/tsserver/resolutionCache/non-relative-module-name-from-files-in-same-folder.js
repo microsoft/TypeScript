@@ -1,4 +1,40 @@
 Info 0    [16:00:37.000] Provided types map file "/typesMap.json" doesn't exist
+Creating project service
+//// [/user/username/projects/myproject/src/node_modules/module1/index.ts]
+export function module1() {}
+
+//// [/user/username/projects/myproject/node_modules/module2/index.ts]
+export function module2() {}
+
+//// [/user/username/projects/myproject/src/file1.ts]
+import { module1 } from "module1";import { module2 } from "module2";
+
+//// [/user/username/projects/myproject/src/file2.ts]
+import { module1 } from "module1";import { module2 } from "module2";
+
+//// [/user/username/projects/myproject/tsconfig.json]
+{"compilerOptions":{"traceResolution":true}}
+
+//// [/a/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+
+
+PolledWatches::
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 1    [16:00:38.000] Search path: /user/username/projects/myproject/src
 Info 2    [16:00:39.000] For info: /user/username/projects/myproject/src/file1.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
 Info 3    [16:00:40.000] Creating configuration project /user/username/projects/myproject/tsconfig.json
@@ -90,6 +126,36 @@ Info 52   [16:01:41.000] FileWatcher:: Triggered with /user/username/projects/my
 Info 53   [16:01:42.000] Scheduled: /user/username/projects/myproject/tsconfig.json
 Info 54   [16:01:43.000] Scheduled: *ensureProjectForOpenFiles*
 Info 55   [16:01:44.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/src/file2.ts 1:: WatchInfo: /user/username/projects/myproject/src/file2.ts 500 undefined WatchType: Closed Script info
+Before running timeout callbacks
+//// [/user/username/projects/myproject/src/file1.ts]
+import { module1 } from "module1";import { module2 } from "module2";import { module1 } from "module1";import { module2 } from "module2";
+
+//// [/user/username/projects/myproject/src/file2.ts]
+import { module1 } from "module1";import { module2 } from "module2";import { module1 } from "module1";import { module2 } from "module2";
+
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/file2.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject:
+  {}
+/user/username/projects/myproject/src/node_modules:
+  {}
+/user/username/projects/myproject/node_modules:
+  {}
+/user/username/projects/myproject/src:
+  {}
+
 Info 56   [16:01:45.000] Running: /user/username/projects/myproject/tsconfig.json
 Info 57   [16:01:46.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
 Info 58   [16:01:47.000] Reusing resolution of module 'module1' from '/user/username/projects/myproject/src/file1.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/src/node_modules/module1/index.ts'.
@@ -115,3 +181,26 @@ Info 67   [16:02:04.000] -----------------------------------------------
 Info 67   [16:02:05.000] Open files: 
 Info 67   [16:02:06.000] 	FileName: /user/username/projects/myproject/src/file1.ts ProjectRootPath: undefined
 Info 67   [16:02:07.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+After running timeout callbacks
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/file2.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject:
+  {}
+/user/username/projects/myproject/src/node_modules:
+  {}
+/user/username/projects/myproject/node_modules:
+  {}
+/user/username/projects/myproject/src:
+  {}

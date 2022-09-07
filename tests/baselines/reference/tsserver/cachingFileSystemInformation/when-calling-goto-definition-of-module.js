@@ -8,6 +8,7 @@ Info 1    [16:00:24.000] request:
         "file": "/a/b/controllers/vessels/client.ts"
       }
     }
+Before request
 //// [/a/b/controllers/vessels/client.ts]
 
                     import { Vessel } from '~/models/vessel';
@@ -90,6 +91,7 @@ Info 20   [16:00:45.000] -----------------------------------------------
 Info 20   [16:00:46.000] Open files: 
 Info 20   [16:00:47.000] 	FileName: /a/b/controllers/vessels/client.ts ProjectRootPath: undefined
 Info 20   [16:00:48.000] 		Projects: /a/b/tsconfig.json
+After request
 
 PolledWatches::
 /a/lib/lib.es6.d.ts:
@@ -123,6 +125,7 @@ Info 21   [16:00:50.000] request:
         "position": 54
       }
     }
+Before request
 
 PolledWatches::
 /a/lib/lib.es6.d.ts:
@@ -142,6 +145,7 @@ FsWatchesRecursive::
 /a/b:
   {}
 
+After request
 
 PolledWatches::
 /a/lib/lib.es6.d.ts:
@@ -192,6 +196,7 @@ Info 28   [16:00:57.000] request:
         "file": "/a/b/models/vessel.ts"
       }
     }
+Before request
 
 PolledWatches::
 /a/lib/lib.es6.d.ts:
@@ -223,6 +228,7 @@ Info 32   [16:01:05.000] 	FileName: /a/b/controllers/vessels/client.ts ProjectRo
 Info 32   [16:01:06.000] 		Projects: /a/b/tsconfig.json
 Info 32   [16:01:07.000] 	FileName: /a/b/models/vessel.ts ProjectRootPath: undefined
 Info 32   [16:01:08.000] 		Projects: /a/b/tsconfig.json
+After request
 
 PolledWatches::
 /a/lib/lib.es6.d.ts:

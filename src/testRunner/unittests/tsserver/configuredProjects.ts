@@ -90,11 +90,11 @@ namespace ts.projectSystem {
 
             // Add a tsconfig file
             host.writeFile(configFile.path, configFile.content);
-            host.checkTimeoutQueueLengthAndRun(2); // load configured project from disk + ensureProjectsForOpenFiles
+            projectService.checkTimeoutQueueLengthAndRun(2); // load configured project from disk + ensureProjectsForOpenFiles
 
             // remove the tsconfig file
             host.deleteFile(configFile.path);
-            host.checkTimeoutQueueLengthAndRun(1); // Refresh inferred projects
+            projectService.checkTimeoutQueueLengthAndRun(1); // Refresh inferred projects
 
             baselineTsserverLogs("configuredProjects", "add and then remove a config file in a folder with loose files", projectService);
         });
@@ -110,7 +110,7 @@ namespace ts.projectSystem {
 
             // add a new ts file
             host.writeFile(commonFile2.path, commonFile2.content);
-            host.checkTimeoutQueueLengthAndRun(2);
+            projectService.checkTimeoutQueueLengthAndRun(2);
             baselineTsserverLogs("configuredProjects", "add new files to a configured project without file list", projectService);
         });
 
@@ -548,7 +548,7 @@ namespace ts.projectSystem {
             assert.isTrue(configProject1.hasOpenRef()); // file1 and file3
 
             host.writeFile(configFile.path, "{}");
-            host.runQueuedTimeoutCallbacks();
+            projectService.runQueuedTimeoutCallbacks();
 
             assert.isTrue(configProject1.hasOpenRef()); // file1, file2, file3
             assert.isTrue(projectService.inferredProjects[0].isOrphan());
@@ -577,6 +577,7 @@ namespace ts.projectSystem {
                 content: "let zz = 1;"
             };
             host.writeFile(file5.path, file5.content);
+            projectService.baselineHost("File5 written");
             projectService.openClientFile(file5.path);
 
             baselineTsserverLogs("configuredProjects", "Open ref of configured project when open file gets added to the project as part of configured file update", projectService);
@@ -1032,7 +1033,7 @@ foo();`
                         strict: true
                     }
                 }));
-                host.checkTimeoutQueueLengthAndRun(3);
+                projectService.checkTimeoutQueueLengthAndRun(3);
 
                 host.writeFile(bravoExtendedConfig.path, JSON.stringify({
                     extends: "./alpha.tsconfig.json",
@@ -1040,15 +1041,15 @@ foo();`
                         strict: false
                     }
                 }));
-                host.checkTimeoutQueueLengthAndRun(2);
+                projectService.checkTimeoutQueueLengthAndRun(2);
 
                 host.writeFile(bConfig.path, JSON.stringify({
                     extends: "../extended/alpha.tsconfig.json",
                 }));
-                host.checkTimeoutQueueLengthAndRun(2);
+                projectService.checkTimeoutQueueLengthAndRun(2);
 
                 host.writeFile(alphaExtendedConfig.path, "{}");
-                host.checkTimeoutQueueLengthAndRun(3);
+                projectService.checkTimeoutQueueLengthAndRun(3);
                 baselineTsserverLogs("configuredProjects", "should watch the extended configs of multiple projects", projectService);
             });
 
@@ -1182,8 +1183,8 @@ foo();`
             projectService.openClientFile(file1.path);
 
             host.writeFile(file2.path, file2.content);
-            host.runQueuedTimeoutCallbacks(); // Scheduled invalidation of resolutions
-            host.runQueuedTimeoutCallbacks(); // Actual update
+            projectService.runQueuedTimeoutCallbacks(); // Scheduled invalidation of resolutions
+            projectService.runQueuedTimeoutCallbacks(); // Actual update
 
             // On next file open the files file2a should be closed and not watched any more
             projectService.openClientFile(file2.path);

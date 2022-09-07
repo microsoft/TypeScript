@@ -1,4 +1,51 @@
 Info 0    [16:00:39.000] Provided types map file "/typesMap.json" doesn't exist
+Creating project service
+//// [/a/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+
+//// [/user/username/projects/myproject/a/tsconfig.json]
+{"compilerOptions":{"composite":true}}
+
+//// [/user/username/projects/myproject/b/tsconfig.json]
+{"compilerOptions":{"composite":true,"baseUrl":"./","paths":{"@ref/*":["../*"]}},"references":[{"path":"../a"}]}
+
+//// [/user/username/projects/myproject/c/tsconfig.json]
+{"compilerOptions":{"baseUrl":"./","paths":{"@ref/*":["../refs/*"]}},"references":[{"path":"../b"}]}
+
+//// [/user/username/projects/myproject/a/index.ts]
+export class A {}
+
+//// [/user/username/projects/myproject/b/index.ts]
+import {A} from '@ref/a';
+export const b = new A();
+
+//// [/user/username/projects/myproject/c/index.ts]
+import {b} from '../b';
+import {X} from "@ref/a";
+b;
+X;
+
+//// [/user/username/projects/myproject/refs/a.d.ts]
+export class X {}
+export class A {}
+
+
+PolledWatches::
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 1    [16:00:40.000] Search path: /user/username/projects/myproject/c
 Info 2    [16:00:41.000] For info: /user/username/projects/myproject/c/index.ts :: Config file name: /user/username/projects/myproject/c/tsconfig.json
 Info 3    [16:00:42.000] Creating configuration project /user/username/projects/myproject/c/tsconfig.json
@@ -116,6 +163,49 @@ Info 40   [16:01:32.000] FileWatcher:: Triggered with /user/username/projects/my
 Info 41   [16:01:33.000] Scheduled: /user/username/projects/myproject/c/tsconfig.json
 Info 42   [16:01:34.000] Scheduled: *ensureProjectForOpenFiles*
 Info 43   [16:01:35.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/b/tsconfig.json 1:: WatchInfo: /user/username/projects/myproject/b/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Config file
+Before checking timeout queue length (2) and running
+//// [/user/username/projects/myproject/b/tsconfig.json]
+{"compilerOptions":{"composite":true,"baseUrl":"./","paths":{"@ref/*":["../nrefs/*"]}},"references":[{"path":"../a"}]}
+
+//// [/user/username/projects/myproject/nrefs/a.d.ts]
+export class X {}
+export class A {}
+
+
+PolledWatches::
+/user/username/projects/myproject/c/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/c/tsconfig.json:
+  {}
+/user/username/projects/myproject/b/tsconfig.json:
+  {}
+/user/username/projects/myproject/a/tsconfig.json:
+  {}
+/user/username/projects/myproject:
+  {}
+/user/username/projects/myproject/b/index.ts:
+  {}
+/user/username/projects/myproject/a/index.ts:
+  {}
+/user/username/projects/myproject/refs/a.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/c:
+  {}
+/user/username/projects/myproject/b:
+  {}
+/user/username/projects/myproject/a:
+  {}
+/user/username/projects/myproject/refs:
+  {}
+
 Info 44   [16:01:36.000] Running: /user/username/projects/myproject/c/tsconfig.json
 Info 45   [16:01:37.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/c/tsconfig.json
 Info 46   [16:01:38.000] Config: /user/username/projects/myproject/b/tsconfig.json : {
@@ -184,10 +274,93 @@ Info 59   [16:01:59.000] -----------------------------------------------
 Info 59   [16:02:00.000] Open files: 
 Info 59   [16:02:01.000] 	FileName: /user/username/projects/myproject/c/index.ts ProjectRootPath: undefined
 Info 59   [16:02:02.000] 		Projects: /user/username/projects/myproject/c/tsconfig.json
+After checking timeout queue length (2) and running
+
+PolledWatches::
+/user/username/projects/myproject/c/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/c/tsconfig.json:
+  {}
+/user/username/projects/myproject/b/tsconfig.json:
+  {}
+/user/username/projects/myproject/a/tsconfig.json:
+  {}
+/user/username/projects/myproject:
+  {}
+/user/username/projects/myproject/b/index.ts:
+  {}
+/user/username/projects/myproject/a/index.ts:
+  {}
+/user/username/projects/myproject/refs/a.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/nrefs/a.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/c:
+  {}
+/user/username/projects/myproject/b:
+  {}
+/user/username/projects/myproject/a:
+  {}
+/user/username/projects/myproject/refs:
+  {}
+/user/username/projects/myproject/nrefs:
+  {}
+
 Info 59   [16:02:06.000] FileWatcher:: Triggered with /user/username/projects/myproject/b/tsconfig.json 1:: WatchInfo: /user/username/projects/myproject/b/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Config file
 Info 60   [16:02:07.000] Scheduled: /user/username/projects/myproject/c/tsconfig.json
 Info 61   [16:02:08.000] Scheduled: *ensureProjectForOpenFiles*
 Info 62   [16:02:09.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/b/tsconfig.json 1:: WatchInfo: /user/username/projects/myproject/b/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Config file
+Before checking timeout queue length (2) and running
+//// [/user/username/projects/myproject/b/tsconfig.json]
+{"compilerOptions":{"composite":true,"baseUrl":"./","paths":{"@ref/*":["../*"]}},"references":[{"path":"../a"}]}
+
+
+PolledWatches::
+/user/username/projects/myproject/c/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/c/tsconfig.json:
+  {}
+/user/username/projects/myproject/b/tsconfig.json:
+  {}
+/user/username/projects/myproject/a/tsconfig.json:
+  {}
+/user/username/projects/myproject:
+  {}
+/user/username/projects/myproject/b/index.ts:
+  {}
+/user/username/projects/myproject/a/index.ts:
+  {}
+/user/username/projects/myproject/refs/a.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/nrefs/a.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/c:
+  {}
+/user/username/projects/myproject/b:
+  {}
+/user/username/projects/myproject/a:
+  {}
+/user/username/projects/myproject/refs:
+  {}
+/user/username/projects/myproject/nrefs:
+  {}
+
 Info 63   [16:02:10.000] Running: /user/username/projects/myproject/c/tsconfig.json
 Info 64   [16:02:11.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/c/tsconfig.json
 Info 65   [16:02:12.000] Config: /user/username/projects/myproject/b/tsconfig.json : {
@@ -255,3 +428,40 @@ Info 77   [16:02:32.000] -----------------------------------------------
 Info 77   [16:02:33.000] Open files: 
 Info 77   [16:02:34.000] 	FileName: /user/username/projects/myproject/c/index.ts ProjectRootPath: undefined
 Info 77   [16:02:35.000] 		Projects: /user/username/projects/myproject/c/tsconfig.json
+After checking timeout queue length (2) and running
+
+PolledWatches::
+/user/username/projects/myproject/c/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/user/username/projects/myproject/c/tsconfig.json:
+  {}
+/user/username/projects/myproject/b/tsconfig.json:
+  {}
+/user/username/projects/myproject/a/tsconfig.json:
+  {}
+/user/username/projects/myproject:
+  {}
+/user/username/projects/myproject/b/index.ts:
+  {}
+/user/username/projects/myproject/a/index.ts:
+  {}
+/user/username/projects/myproject/refs/a.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/nrefs/a.d.ts:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/c:
+  {}
+/user/username/projects/myproject/b:
+  {}
+/user/username/projects/myproject/a:
+  {}
+/user/username/projects/myproject/refs:
+  {}

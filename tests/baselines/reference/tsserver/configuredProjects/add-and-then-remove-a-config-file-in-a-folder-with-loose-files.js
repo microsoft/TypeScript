@@ -1,4 +1,31 @@
 Info 0    [16:00:21.000] Provided types map file "/typesMap.json" doesn't exist
+Creating project service
+//// [/a/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+
+//// [/user/username/projects/myproject/commonFile1.ts]
+let x = 1
+
+//// [/user/username/projects/myproject/commonFile2.ts]
+let y = 1
+
+
+PolledWatches::
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 1    [16:00:22.000] Search path: /user/username/projects/myproject
 Info 2    [16:00:23.000] For info: /user/username/projects/myproject/commonFile1.ts :: No config files found.
 Info 3    [16:00:24.000] Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
@@ -77,6 +104,27 @@ Info 37   [16:01:17.000] Search path: /user/username/projects/myproject
 Info 38   [16:01:18.000] For info: /user/username/projects/myproject/commonFile2.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
 Info 39   [16:01:19.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info 40   [16:01:20.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/tsconfig.json 0:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Before checking timeout queue length (2) and running
+//// [/user/username/projects/myproject/tsconfig.json]
+{
+                    "files": ["commonFile1.ts"]
+                }
+
+
+PolledWatches::
+/user/username/projects/myproject/jsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+
 Info 41   [16:01:21.000] Running: /user/username/projects/myproject/tsconfig.json
 Info 42   [16:01:22.000] Loading configured project /user/username/projects/myproject/tsconfig.json
 Info 43   [16:01:23.000] Config: /user/username/projects/myproject/tsconfig.json : {
@@ -149,6 +197,22 @@ Info 60   [16:02:04.000] 	FileName: /user/username/projects/myproject/commonFile
 Info 60   [16:02:05.000] 		Projects: /user/username/projects/myproject/tsconfig.json
 Info 60   [16:02:06.000] 	FileName: /user/username/projects/myproject/commonFile2.ts ProjectRootPath: undefined
 Info 60   [16:02:07.000] 		Projects: /dev/null/inferredProject2*
+After checking timeout queue length (2) and running
+
+PolledWatches::
+/user/username/projects/myproject/jsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+
 Info 60   [16:02:09.000] FileWatcher:: Triggered with /user/username/projects/myproject/tsconfig.json 2:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info 61   [16:02:10.000] `remove Project::
 Info 62   [16:02:11.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
@@ -171,6 +235,23 @@ Info 69   [16:02:18.000] Search path: /user/username/projects/myproject
 Info 70   [16:02:19.000] For info: /user/username/projects/myproject/commonFile2.ts :: No config files found.
 Info 71   [16:02:20.000] Scheduled: *ensureProjectForOpenFiles*
 Info 72   [16:02:21.000] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/tsconfig.json 2:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Before checking timeout queue length (1) and running
+//// [/user/username/projects/myproject/tsconfig.json] deleted
+
+PolledWatches::
+/user/username/projects/myproject/jsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+
 Info 73   [16:02:22.500] Running: *ensureProjectForOpenFiles*
 Info 74   [16:02:23.500] Before ensureProjectForOpenFiles:
 Info 75   [16:02:24.500] Project '/dev/null/inferredProject1*' (Inferred)
@@ -214,3 +295,18 @@ Info 81   [16:02:48.500] 	FileName: /user/username/projects/myproject/commonFile
 Info 81   [16:02:49.500] 		Projects: /dev/null/inferredProject1*
 Info 81   [16:02:50.500] 	FileName: /user/username/projects/myproject/commonFile2.ts ProjectRootPath: undefined
 Info 81   [16:02:51.500] 		Projects: /dev/null/inferredProject2*
+After checking timeout queue length (1) and running
+
+PolledWatches::
+/user/username/projects/myproject/jsconfig.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/tsconfig.json:
+  {}
+
+FsWatchesRecursive::

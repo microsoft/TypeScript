@@ -8,6 +8,7 @@ Info 1    [16:00:30.000] request:
         "file": "/user/username/projects/myproject/usage/usage.ts"
       }
     }
+Before request
 //// [/user/username/projects/myproject/dependency/fns.ts]
 export function fn1() { }
 export function fn2() { }
@@ -114,6 +115,7 @@ Info 27   [16:00:58.000] -----------------------------------------------
 Info 27   [16:00:59.000] Open files: 
 Info 27   [16:01:00.000] 	FileName: /user/username/projects/myproject/usage/usage.ts ProjectRootPath: undefined
 Info 27   [16:01:01.000] 		Projects: /user/username/projects/myproject/usage/tsconfig.json
+After request
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -152,6 +154,7 @@ Info 28   [16:01:03.000] request:
         "file": "/user/username/projects/myproject/dependency/fns.ts"
       }
     }
+Before request
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -215,6 +218,7 @@ Info 45   [16:01:27.000] 	FileName: /user/username/projects/myproject/usage/usag
 Info 45   [16:01:28.000] 		Projects: /user/username/projects/myproject/usage/tsconfig.json
 Info 45   [16:01:29.000] 	FileName: /user/username/projects/myproject/dependency/fns.ts ProjectRootPath: undefined
 Info 45   [16:01:30.000] 		Projects: /user/username/projects/myproject/usage/tsconfig.json,/user/username/projects/myproject/dependency/tsconfig.json
+After request
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -253,6 +257,7 @@ Info 46   [16:01:32.000] request:
       "seq": 1,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -306,6 +311,7 @@ Info 49   [16:01:53.000] 	FileName: /user/username/projects/myproject/usage/usag
 Info 49   [16:01:54.000] 		Projects: /user/username/projects/myproject/usage/tsconfig.json
 Info 49   [16:01:55.000] 	FileName: /user/username/projects/myproject/dependency/fns.ts ProjectRootPath: undefined
 Info 49   [16:01:56.000] 		Projects: /user/username/projects/myproject/usage/tsconfig.json,/user/username/projects/myproject/dependency/tsconfig.json
+After request
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -365,6 +371,7 @@ Info 50   [16:01:58.000] request:
       "seq": 2,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -390,6 +397,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/dependency:
   {}
 
+After request
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -429,6 +437,7 @@ Info 52   [16:02:00.000] request:
       "seq": 3,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -454,6 +463,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/dependency:
   {}
 
+After request
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -502,6 +512,7 @@ Info 54   [16:02:02.000] request:
       "seq": 4,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /user/username/projects/myproject/decls:
@@ -539,6 +550,7 @@ Info 63   [16:02:16.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/u
 Info 64   [16:02:19.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/decls/fns.d.ts :: WatchInfo: /user/username/projects/myproject/decls 1 undefined Project: /user/username/projects/myproject/usage/tsconfig.json WatchType: Failed Lookup Locations
 Info 65   [16:02:20.000] Scheduled: /user/username/projects/myproject/usage/tsconfig.jsonFailedLookupInvalidation, Cancelled earlier one
 Info 66   [16:02:21.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/decls/fns.d.ts :: WatchInfo: /user/username/projects/myproject/decls 1 undefined Project: /user/username/projects/myproject/usage/tsconfig.json WatchType: Failed Lookup Locations
+After request
 //// [/user/username/projects/myproject/dependency/fns.js]
 "use strict";
 exports.__esModule = true;
@@ -594,6 +606,7 @@ Info 68   [16:02:23.000] request:
       "seq": 5,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /user/username/projects/myproject/usage/node_modules/@types:
@@ -619,6 +632,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/decls:
   {}
 
+After request
 
 PolledWatches::
 /user/username/projects/myproject/usage/node_modules/@types:

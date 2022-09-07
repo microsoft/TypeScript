@@ -8,6 +8,7 @@ Info 1    [16:00:22.000] request:
         "file": "/user/username/projects/myproject/a.ts"
       }
     }
+Before request
 //// [/user/username/projects/myproject/a.ts]
 if (a < (b + c) { }
 
@@ -56,6 +57,7 @@ Info 8    [16:00:31.000] -----------------------------------------------
 Info 8    [16:00:32.000] Open files: 
 Info 8    [16:00:33.000] 	FileName: /user/username/projects/myproject/a.ts ProjectRootPath: undefined
 Info 8    [16:00:34.000] 		Projects: /dev/null/inferredProject1*
+After request
 
 PolledWatches::
 
@@ -76,6 +78,7 @@ Info 9    [16:00:36.000] request:
         "file": "/user/username/projects/myproject/a.ts"
       }
     }
+Before request
 
 PolledWatches::
 
@@ -83,6 +86,7 @@ FsWatches::
 
 FsWatchesRecursive::
 
+After request
 
 PolledWatches::
 
@@ -139,6 +143,7 @@ Info 11   [16:00:38.000] request:
       "seq": 2,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 
@@ -146,6 +151,7 @@ FsWatches::
 
 FsWatchesRecursive::
 
+After request
 
 PolledWatches::
 
@@ -157,5 +163,20 @@ Info 12   [16:00:39.000] response:
     {
       "responseRequired": false
     }
+Before checking timeout queue length (1) and running
+
+PolledWatches::
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 13   [16:00:40.000] Session does not support events: ignored event: {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/a.ts","diagnostics":[{"start":{"line":1,"offset":17},"end":{"line":1,"offset":18},"text":"')' expected.","code":1005,"category":"error","relatedInformation":[{"span":{"start":{"line":1,"offset":4},"end":{"line":1,"offset":5},"file":"/user/username/projects/myproject/a.ts"},"message":"The parser expected to find a ')' to match the '(' token here.","category":"error","code":1007}]}]}}
 Info 14   [16:00:41.000] Session does not support events: ignored event: {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":2}}
+After checking timeout queue length (1) and running
+
+PolledWatches::
+
+FsWatches::
+
+FsWatchesRecursive::

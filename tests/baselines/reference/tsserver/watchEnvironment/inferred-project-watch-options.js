@@ -13,6 +13,7 @@ Info 1    [16:00:30.000] request:
       "seq": 1,
       "type": "request"
     }
+Before request
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -42,6 +43,7 @@ FsWatches::
 
 FsWatchesRecursive::
 
+After request
 
 PolledWatches::
 
@@ -64,6 +66,7 @@ Info 3    [16:00:32.000] request:
         "projectRootPath": "/user/username/projects/myproject"
       }
     }
+Before request
 
 PolledWatches::
 
@@ -112,6 +115,7 @@ Info 23   [16:00:54.000] -----------------------------------------------
 Info 23   [16:00:55.000] Open files: 
 Info 23   [16:00:56.000] 	FileName: /user/username/projects/myproject/src/main.ts ProjectRootPath: /user/username/projects/myproject
 Info 23   [16:00:57.000] 		Projects: /dev/null/inferredProject1*
+After request
 
 PolledWatches::
 /user/username/projects/myproject/src/tsconfig.json:

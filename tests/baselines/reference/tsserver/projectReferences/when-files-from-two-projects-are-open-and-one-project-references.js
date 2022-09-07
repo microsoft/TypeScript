@@ -8,6 +8,7 @@ Info 1    [16:01:54.000] request:
         "file": "/user/username/projects/myproject/main/src/file1.ts"
       }
     }
+Before request
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -356,6 +357,7 @@ Info 66   [16:03:01.000] -----------------------------------------------
 Info 66   [16:03:02.000] Open files: 
 Info 66   [16:03:03.000] 	FileName: /user/username/projects/myproject/main/src/file1.ts ProjectRootPath: undefined
 Info 66   [16:03:04.000] 		Projects: /user/username/projects/myproject/main/tsconfig.json
+After request
 
 PolledWatches::
 /user/username/projects/myproject/main/node_modules/@types:
@@ -430,6 +432,7 @@ Info 67   [16:03:06.000] request:
         "file": "/user/username/projects/myproject/core/src/file1.ts"
       }
     }
+Before request
 
 PolledWatches::
 /user/username/projects/myproject/main/node_modules/@types:
@@ -528,6 +531,7 @@ Info 83   [16:03:29.000] 	FileName: /user/username/projects/myproject/main/src/f
 Info 83   [16:03:30.000] 		Projects: /user/username/projects/myproject/main/tsconfig.json
 Info 83   [16:03:31.000] 	FileName: /user/username/projects/myproject/core/src/file1.ts ProjectRootPath: undefined
 Info 83   [16:03:32.000] 		Projects: /user/username/projects/myproject/core/tsconfig.json
+After request
 
 PolledWatches::
 /user/username/projects/myproject/main/node_modules/@types:
@@ -606,6 +610,7 @@ Info 84   [16:03:34.000] request:
       "seq": 1,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /user/username/projects/myproject/main/node_modules/@types:
@@ -797,6 +802,7 @@ Info 156  [16:04:46.000] 	Files (2)
 
 Info 157  [16:04:47.000] -----------------------------------------------
 Info 158  [16:04:48.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/core/src/file1.d.ts 2000 undefined Project: /user/username/projects/myproject/core/tsconfig.json WatchType: Missing generated file
+After request
 
 PolledWatches::
 /user/username/projects/myproject/main/node_modules/@types:

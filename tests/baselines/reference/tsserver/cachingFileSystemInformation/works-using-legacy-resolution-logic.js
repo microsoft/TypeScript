@@ -1,4 +1,18 @@
 Info 0    [16:00:11.000] Provided types map file "/typesMap.json" doesn't exist
+Creating project service
+//// [/c/d/f0.ts]
+import {x} from "f1"
+
+//// [/c/f1.ts]
+foo()
+
+
+PolledWatches::
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 1    [16:00:12.000] Search path: /c/d
 Info 2    [16:00:13.000] For info: /c/d/f0.ts :: No config files found.
 Info 3    [16:00:14.000] Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded

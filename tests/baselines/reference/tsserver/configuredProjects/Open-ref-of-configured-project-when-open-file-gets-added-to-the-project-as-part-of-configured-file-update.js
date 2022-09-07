@@ -1,4 +1,27 @@
 Info 0    [16:00:19.000] Provided types map file "/typesMap.json" doesn't exist
+Creating project service
+//// [/a/b/src/file1.ts]
+let x = 1;
+
+//// [/a/b/src/file2.ts]
+let y = 1;
+
+//// [/a/b/file3.ts]
+let z = 1;
+
+//// [/a/file4.ts]
+let z = 1;
+
+//// [/a/b/tsconfig.json]
+{"files":["src/file1.ts","file3.ts"]}
+
+
+PolledWatches::
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 1    [16:00:20.000] Search path: /a/b/src
 Info 2    [16:00:21.000] For info: /a/b/src/file1.ts :: Config file name: /a/b/tsconfig.json
 Info 3    [16:00:22.000] Creating configuration project /a/b/tsconfig.json
@@ -131,6 +154,27 @@ Info 44   [16:01:54.000] For info: /a/b/src/file2.ts :: Config file name: /a/b/t
 Info 45   [16:01:55.000] Scheduled: /a/b/tsconfig.json, Cancelled earlier one
 Info 46   [16:01:56.000] Scheduled: *ensureProjectForOpenFiles*
 Info 47   [16:01:57.000] Elapsed:: *ms FileWatcher:: Triggered with /a/b/tsconfig.json 1:: WatchInfo: /a/b/tsconfig.json 2000 undefined Project: /a/b/tsconfig.json WatchType: Config file
+Before running timeout callbacks
+//// [/a/b/tsconfig.json]
+{}
+
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+/a/b/src/node_modules/@types:
+  {"pollingInterval":500}
+/a/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+
 Info 48   [16:01:58.000] Running: /a/b/tsconfig.json
 Info 49   [16:01:59.000] Reloading configured project /a/b/tsconfig.json
 Info 50   [16:02:00.000] Config: /a/b/tsconfig.json : {
@@ -217,6 +261,26 @@ Info 68   [16:02:50.000] 	FileName: /a/b/file3.ts ProjectRootPath: undefined
 Info 68   [16:02:51.000] 		Projects: /a/b/tsconfig.json
 Info 68   [16:02:52.000] 	FileName: /a/file4.ts ProjectRootPath: undefined
 Info 68   [16:02:53.000] 		Projects: /dev/null/inferredProject2*
+After running timeout callbacks
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+/a/b/src/node_modules/@types:
+  {"pollingInterval":500}
+/a/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/a/b:
+  {}
+
 Info 68   [16:02:54.000] FileWatcher:: Added:: WatchInfo: /a/b/src/file1.ts 500 undefined WatchType: Closed Script info
 Info 69   [16:02:55.000] Project '/a/b/tsconfig.json' (Configured)
 Info 69   [16:02:56.000] 	Files (3)
@@ -319,6 +383,33 @@ Info 86   [16:04:10.000] -----------------------------------------------
 Info 86   [16:04:11.000] Open files: 
 Info 86   [16:04:12.000] 	FileName: /a/file4.ts ProjectRootPath: undefined
 Info 86   [16:04:13.000] 		Projects: /dev/null/inferredProject2*
+File5 written
+//// [/file5.ts]
+let zz = 1;
+
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+/a/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/tsconfig.json:
+  {}
+/a/b/src/file1.ts:
+  {}
+/a/b/src/file2.ts:
+  {}
+/a/b/file3.ts:
+  {}
+
+FsWatchesRecursive::
+/a/b:
+  {}
+
 Info 86   [16:04:16.000] Search path: /
 Info 87   [16:04:17.000] For info: /file5.ts :: No config files found.
 Info 88   [16:04:18.000] Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded

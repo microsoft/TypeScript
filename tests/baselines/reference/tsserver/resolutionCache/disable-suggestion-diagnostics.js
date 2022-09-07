@@ -9,6 +9,7 @@ Info 1    [16:00:06.000] request:
       "seq": 1,
       "type": "request"
     }
+Before request
 //// [/a.js]
 require("b")
 
@@ -43,6 +44,7 @@ Info 13   [16:00:20.000] -----------------------------------------------
 Info 13   [16:00:21.000] Open files: 
 Info 13   [16:00:22.000] 	FileName: /a.js ProjectRootPath: undefined
 Info 13   [16:00:23.000] 		Projects: /dev/null/inferredProject1*
+After request
 
 PolledWatches::
 /node_modules:
@@ -71,6 +73,7 @@ Info 14   [16:00:25.000] request:
       "seq": 2,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /node_modules:
@@ -86,6 +89,7 @@ FsWatchesRecursive::
 
 Info 15   [16:00:26.000] response:
     {"seq":0,"type":"response","command":"configure","request_seq":2,"success":true,"performanceData":{"updateGraphDurationMs":*}}
+After request
 
 PolledWatches::
 /node_modules:
@@ -115,6 +119,7 @@ Info 17   [16:00:28.000] request:
       "seq": 3,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /node_modules:
@@ -128,6 +133,7 @@ FsWatches::
 
 FsWatchesRecursive::
 
+After request
 
 PolledWatches::
 /node_modules:
@@ -145,9 +151,64 @@ Info 18   [16:00:29.000] response:
     {
       "responseRequired": false
     }
+Before checking timeout queue length (1) and running
+
+PolledWatches::
+/node_modules:
+  {"pollingInterval":500}
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/bower_components:
+  {"pollingInterval":500}
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 19   [16:00:30.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/a.js","diagnostics":[]}}
+After checking timeout queue length (1) and running
+
+PolledWatches::
+/node_modules:
+  {"pollingInterval":500}
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/bower_components:
+  {"pollingInterval":500}
+
+FsWatches::
+
+FsWatchesRecursive::
+
+Before running immediate callbacks and checking length (1)
+
+PolledWatches::
+/node_modules:
+  {"pollingInterval":500}
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/bower_components:
+  {"pollingInterval":500}
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 20   [16:00:31.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/a.js","diagnostics":[]}}
 Info 21   [16:00:32.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":3}}
+Before running immediate callbacks and checking length (1)
+
+PolledWatches::
+/node_modules:
+  {"pollingInterval":500}
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/bower_components:
+  {"pollingInterval":500}
+
+FsWatches::
+
+FsWatchesRecursive::

@@ -8,6 +8,7 @@ Info 1    [16:00:18.000] request:
         "file": "c:/project/file1.ts"
       }
     }
+Before request
 //// [c:/project/tsconfig.json]
 {}
 
@@ -81,6 +82,7 @@ Info 19   [16:00:38.000] -----------------------------------------------
 Info 19   [16:00:39.000] Open files: 
 Info 19   [16:00:40.000] 	FileName: c:/project/file1.ts ProjectRootPath: undefined
 Info 19   [16:00:41.000] 		Projects: c:/project/tsconfig.json
+After request
 
 PolledWatches::
 c:/project/node_modules/@types:

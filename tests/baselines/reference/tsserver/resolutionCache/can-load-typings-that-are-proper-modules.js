@@ -1,4 +1,18 @@
 Info 0    [16:00:19.000] Provided types map file "/typesMap.json" doesn't exist
+Creating project service
+//// [/a/b/app.js]
+var x = require("lib")
+
+//// [/a/cache/node_modules/@types/lib/index.d.ts]
+export let x = 1
+
+
+PolledWatches::
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 1    [16:00:20.000] Search path: /a/b
 Info 2    [16:00:21.000] For info: /a/b/app.js :: No config files found.
 Info 3    [16:00:22.000] Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded

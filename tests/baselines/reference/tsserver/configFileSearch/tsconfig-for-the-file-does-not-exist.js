@@ -1,4 +1,28 @@
 Info 0    [16:00:19.000] Provided types map file "/typesMap.json" doesn't exist
+Creating project service
+//// [/a/b/projects/project/src/index.ts]
+let y = 10
+
+//// [/a/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+
+
+PolledWatches::
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 1    [16:00:20.000] Search path: /a/b/projects/project/src
 Info 2    [16:00:21.000] For info: /a/b/projects/project/src/index.ts :: No config files found.
 Info 3    [16:00:22.000] Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
@@ -45,6 +69,31 @@ Info 27   [16:00:54.000] For info: /a/b/projects/project/src/index.ts :: Config 
 Info 28   [16:00:55.000] Scheduled: /a/b/projects/project/tsconfig.json, Cancelled earlier one
 Info 29   [16:00:56.000] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info 30   [16:00:57.000] Elapsed:: *ms FileWatcher:: Triggered with /a/b/projects/project/tsconfig.json 0:: WatchInfo: /a/b/projects/project/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Before running timeout callbacks
+//// [/a/b/projects/project/tsconfig.json]
+{}
+
+
+PolledWatches::
+/a/b/projects/project/src/tsconfig.json:
+  {"pollingInterval":2000}
+/a/b/projects/project/src/jsconfig.json:
+  {"pollingInterval":2000}
+/a/b/projects/project/jsconfig.json:
+  {"pollingInterval":2000}
+/a/b/projects/project/src/node_modules/@types:
+  {"pollingInterval":500}
+/a/b/projects/project/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/a/b/projects/project/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+
 Info 31   [16:00:58.000] Running: /a/b/projects/project/tsconfig.json
 Info 32   [16:00:59.000] Loading configured project /a/b/projects/project/tsconfig.json
 Info 33   [16:01:00.000] Config: /a/b/projects/project/tsconfig.json : {
@@ -110,6 +159,24 @@ Info 55   [16:01:36.000] -----------------------------------------------
 Info 55   [16:01:37.000] Open files: 
 Info 55   [16:01:38.000] 	FileName: /a/b/projects/project/src/index.ts ProjectRootPath: /a/b/projects/proj
 Info 55   [16:01:39.000] 		Projects: /a/b/projects/project/tsconfig.json
+After running timeout callbacks
+
+PolledWatches::
+/a/b/projects/project/src/node_modules/@types:
+  {"pollingInterval":500}
+/a/b/projects/project/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/a/b/projects/project/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/a/b/projects/project:
+  {}
+
 Info 55   [16:01:41.000] FileWatcher:: Triggered with /a/b/projects/project/tsconfig.json 2:: WatchInfo: /a/b/projects/project/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info 56   [16:01:42.000] `remove Project::
 Info 57   [16:01:43.000] Project '/a/b/projects/project/tsconfig.json' (Configured)
@@ -133,6 +200,21 @@ Info 65   [16:01:51.000] Search path: /a/b/projects/project/src
 Info 66   [16:01:52.000] For info: /a/b/projects/project/src/index.ts :: No config files found.
 Info 67   [16:01:53.000] Scheduled: *ensureProjectForOpenFiles*
 Info 68   [16:01:54.000] Elapsed:: *ms FileWatcher:: Triggered with /a/b/projects/project/tsconfig.json 2:: WatchInfo: /a/b/projects/project/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
+Before running timeout callbacks
+//// [/a/b/projects/project/tsconfig.json] deleted
+
+PolledWatches::
+/a/b/projects/project/src/node_modules/@types:
+  {"pollingInterval":500}
+/a/b/projects/project/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+
 Info 69   [16:01:55.500] Running: *ensureProjectForOpenFiles*
 Info 70   [16:01:56.500] Before ensureProjectForOpenFiles:
 Info 71   [16:01:57.500] Project '/dev/null/inferredProject1*' (Inferred)
@@ -168,3 +250,24 @@ Info 81   [16:02:15.500] -----------------------------------------------
 Info 81   [16:02:16.500] Open files: 
 Info 81   [16:02:17.500] 	FileName: /a/b/projects/project/src/index.ts ProjectRootPath: /a/b/projects/proj
 Info 81   [16:02:18.500] 		Projects: /dev/null/inferredProject1*
+After running timeout callbacks
+
+PolledWatches::
+/a/b/projects/project/src/node_modules/@types:
+  {"pollingInterval":500}
+/a/b/projects/project/node_modules/@types:
+  {"pollingInterval":500}
+/a/b/projects/project/src/tsconfig.json:
+  {"pollingInterval":2000}
+/a/b/projects/project/src/jsconfig.json:
+  {"pollingInterval":2000}
+/a/b/projects/project/tsconfig.json:
+  {"pollingInterval":2000}
+/a/b/projects/project/jsconfig.json:
+  {"pollingInterval":2000}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::

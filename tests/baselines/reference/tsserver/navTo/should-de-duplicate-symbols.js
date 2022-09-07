@@ -8,6 +8,7 @@ Info 1    [16:00:16.000] request:
         "file": "/a/index.ts"
       }
     }
+Before request
 //// [/a/tsconfig.json]
 {
     "compilerOptions": {
@@ -78,6 +79,7 @@ Info 20   [16:00:37.000] -----------------------------------------------
 Info 20   [16:00:38.000] Open files: 
 Info 20   [16:00:39.000] 	FileName: /a/index.ts ProjectRootPath: undefined
 Info 20   [16:00:40.000] 		Projects: /a/tsconfig.json
+After request
 
 PolledWatches::
 /a/lib/lib.d.ts:
@@ -106,6 +108,7 @@ Info 21   [16:00:42.000] request:
         "file": "/b/index.ts"
       }
     }
+Before request
 
 PolledWatches::
 /a/lib/lib.d.ts:
@@ -175,6 +178,7 @@ Info 40   [16:01:08.000] 	FileName: /a/index.ts ProjectRootPath: undefined
 Info 40   [16:01:09.000] 		Projects: /a/tsconfig.json,/b/tsconfig.json
 Info 40   [16:01:10.000] 	FileName: /b/index.ts ProjectRootPath: undefined
 Info 40   [16:01:11.000] 		Projects: /b/tsconfig.json
+After request
 
 PolledWatches::
 /a/lib/lib.d.ts:
@@ -210,6 +214,7 @@ Info 41   [16:01:13.000] request:
         "file": "/a/index.ts"
       }
     }
+Before request
 
 PolledWatches::
 /a/lib/lib.d.ts:
@@ -231,6 +236,7 @@ FsWatchesRecursive::
 /b:
   {}
 
+After request
 
 PolledWatches::
 /a/lib/lib.d.ts:

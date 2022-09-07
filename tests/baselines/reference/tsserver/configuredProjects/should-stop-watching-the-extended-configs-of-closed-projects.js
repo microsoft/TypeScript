@@ -1,4 +1,36 @@
 Info 0    [16:00:35.000] Provided types map file "/typesMap.json" doesn't exist
+Creating project service
+//// [/user/username/projects/myproject/extended/alpha.tsconfig.json]
+{}
+
+//// [/user/username/projects/myproject/a/tsconfig.json]
+{"extends":"../extended/alpha.tsconfig.json","files":["a.ts"]}
+
+//// [/user/username/projects/myproject/a/a.ts]
+let a = 1;
+
+//// [/user/username/projects/myproject/extended/bravo.tsconfig.json]
+{"extends":"./alpha.tsconfig.json"}
+
+//// [/user/username/projects/myproject/b/tsconfig.json]
+{"extends":"../extended/bravo.tsconfig.json","files":["b.ts"]}
+
+//// [/user/username/projects/myproject/b/b.ts]
+let b = 1;
+
+//// [/user/username/projects/myproject/dummy/dummy.ts]
+let dummy = 1;
+
+//// [/user/username/projects/myproject/dummy/tsconfig.json]
+{}
+
+
+PolledWatches::
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 1    [16:00:36.000] Search path: /user/username/projects/myproject/a
 Info 2    [16:00:37.000] For info: /user/username/projects/myproject/a/a.ts :: Config file name: /user/username/projects/myproject/a/tsconfig.json
 Info 3    [16:00:38.000] Creating configuration project /user/username/projects/myproject/a/tsconfig.json

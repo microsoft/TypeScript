@@ -8,6 +8,7 @@ Info 1    [16:00:32.000] request:
         "file": "/user/username/projects/myproject/a.ts"
       }
     }
+Before request
 //// [/user/username/projects/myproject/a.ts]
 import { y, cc } from "./b";
 import { something } from "something";
@@ -69,6 +70,7 @@ Info 8    [16:00:41.000] -----------------------------------------------
 Info 8    [16:00:42.000] Open files: 
 Info 8    [16:00:43.000] 	FileName: /user/username/projects/myproject/a.ts ProjectRootPath: undefined
 Info 8    [16:00:44.000] 		Projects: /dev/null/inferredProject1*
+After request
 
 PolledWatches::
 
@@ -89,6 +91,7 @@ Info 9    [16:00:46.000] request:
         "file": "/user/username/projects/myproject/a.ts"
       }
     }
+Before request
 
 PolledWatches::
 
@@ -101,6 +104,7 @@ Info 10   [16:00:48.000] 	Files (2)
 
 Info 10   [16:00:49.000] -----------------------------------------------
 Info 10   [16:00:50.000] Open files: 
+After request
 
 PolledWatches::
 
@@ -121,6 +125,7 @@ Info 11   [16:00:52.000] request:
         "file": "/user/username/projects/myproject/c.ts"
       }
     }
+Before request
 
 PolledWatches::
 
@@ -149,6 +154,7 @@ Info 17   [16:01:00.000] -----------------------------------------------
 Info 17   [16:01:01.000] Open files: 
 Info 17   [16:01:02.000] 	FileName: /user/username/projects/myproject/c.ts ProjectRootPath: undefined
 Info 17   [16:01:03.000] 		Projects: /dev/null/inferredProject1*
+After request
 
 PolledWatches::
 
@@ -169,6 +175,7 @@ Info 18   [16:01:05.000] request:
         "file": "/user/username/projects/myproject/b.ts"
       }
     }
+Before request
 
 PolledWatches::
 
@@ -202,6 +209,7 @@ Info 24   [16:01:15.000] 	FileName: /user/username/projects/myproject/c.ts Proje
 Info 24   [16:01:16.000] 		Projects: /dev/null/inferredProject1*
 Info 24   [16:01:17.000] 	FileName: /user/username/projects/myproject/b.ts ProjectRootPath: undefined
 Info 24   [16:01:18.000] 		Projects: /dev/null/inferredProject1*
+After request
 
 PolledWatches::
 

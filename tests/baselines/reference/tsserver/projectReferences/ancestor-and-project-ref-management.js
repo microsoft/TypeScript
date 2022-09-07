@@ -8,6 +8,7 @@ Info 1    [16:01:15.000] request:
         "file": "/user/username/projects/container/compositeExec/index.ts"
       }
     }
+Before request
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -423,6 +424,7 @@ Info 27   [16:01:46.000] -----------------------------------------------
 Info 27   [16:01:47.000] Open files: 
 Info 27   [16:01:48.000] 	FileName: /user/username/projects/container/compositeExec/index.ts ProjectRootPath: undefined
 Info 27   [16:01:49.000] 		Projects: /user/username/projects/container/compositeExec/tsconfig.json
+After request
 
 PolledWatches::
 /user/username/projects/container/compositeexec/node_modules/@types:
@@ -457,6 +459,7 @@ Info 28   [16:01:51.000] request:
         "file": "/user/username/projects/temp/temp.ts"
       }
     }
+Before request
 
 PolledWatches::
 /user/username/projects/container/compositeexec/node_modules/@types:
@@ -516,6 +519,7 @@ Info 41   [16:02:14.000] 	FileName: /user/username/projects/container/compositeE
 Info 41   [16:02:15.000] 		Projects: /user/username/projects/container/compositeExec/tsconfig.json
 Info 41   [16:02:16.000] 	FileName: /user/username/projects/temp/temp.ts ProjectRootPath: undefined
 Info 41   [16:02:17.000] 		Projects: /dev/null/inferredProject1*
+After request
 
 PolledWatches::
 /user/username/projects/container/compositeexec/node_modules/@types:
@@ -558,6 +562,7 @@ Info 42   [16:02:19.000] request:
       "seq": 1,
       "type": "request"
     }
+Before request
 
 PolledWatches::
 /user/username/projects/container/compositeexec/node_modules/@types:
@@ -673,6 +678,7 @@ Info 76   [16:02:53.000] 	Files (3)
 Info 77   [16:02:54.000] -----------------------------------------------
 Info 78   [16:02:55.000] Search path: /user/username/projects/container/lib
 Info 79   [16:02:56.000] For info: /user/username/projects/container/lib/index.ts :: Config file name: /user/username/projects/container/lib/tsconfig.json
+After request
 
 PolledWatches::
 /user/username/projects/container/compositeexec/node_modules/@types:
@@ -821,6 +827,7 @@ Info 84   [16:03:19.000] request:
         "file": "/user/username/projects/temp/temp.ts"
       }
     }
+Before request
 
 PolledWatches::
 /user/username/projects/container/compositeexec/node_modules/@types:
@@ -898,6 +905,7 @@ Info 95   [16:03:46.000] 	FileName: /user/username/projects/container/compositeE
 Info 95   [16:03:47.000] 		Projects: /user/username/projects/container/compositeExec/tsconfig.json
 Info 95   [16:03:48.000] 	FileName: /user/username/projects/temp/temp.ts ProjectRootPath: undefined
 Info 95   [16:03:49.000] 		Projects: /dev/null/inferredProject1*
+After request
 
 PolledWatches::
 /user/username/projects/container/compositeexec/node_modules/@types:
@@ -994,6 +1002,7 @@ Info 100  [16:04:29.000] request:
         "file": "/user/username/projects/temp/temp.ts"
       }
     }
+Before request
 
 PolledWatches::
 /user/username/projects/container/compositeexec/node_modules/@types:
@@ -1128,6 +1137,7 @@ Info 148  [16:05:19.000] -----------------------------------------------
 Info 148  [16:05:20.000] Open files: 
 Info 148  [16:05:21.000] 	FileName: /user/username/projects/temp/temp.ts ProjectRootPath: undefined
 Info 148  [16:05:22.000] 		Projects: /dev/null/inferredProject1*
+After request
 
 PolledWatches::
 /user/username/projects/temp/node_modules/@types:

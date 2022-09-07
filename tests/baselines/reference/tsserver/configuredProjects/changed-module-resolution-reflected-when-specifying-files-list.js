@@ -1,4 +1,34 @@
 Info 0    [16:00:17.000] Provided types map file "/typesMap.json" doesn't exist
+Creating project service
+//// [/a/b/file1.ts]
+import classc from "file2"
+
+//// [/a/file2.ts]
+export classc { method2a() { return 10; } }
+
+//// [/a/b/tsconfig.json]
+{"files":["/a/b/file1.ts"],"compilerOptions":{"module":"amd"}}
+
+//// [/a/lib/lib.d.ts]
+/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+
+
+PolledWatches::
+
+FsWatches::
+
+FsWatchesRecursive::
+
 Info 1    [16:00:18.000] Search path: /a/b
 Info 2    [16:00:19.000] For info: /a/b/file1.ts :: Config file name: /a/b/tsconfig.json
 Info 3    [16:00:20.000] Creating configuration project /a/b/tsconfig.json
@@ -46,9 +76,66 @@ Info 18   [16:00:40.000] 		Projects: /a/b/tsconfig.json
 Info 18   [16:00:43.000] DirectoryWatcher:: Triggered with /a/b/file2.ts :: WatchInfo: /a/b 0 undefined Project: /a/b/tsconfig.json WatchType: Failed Lookup Locations
 Info 19   [16:00:44.000] Scheduled: /a/b/tsconfig.jsonFailedLookupInvalidation
 Info 20   [16:00:45.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/file2.ts :: WatchInfo: /a/b 0 undefined Project: /a/b/tsconfig.json WatchType: Failed Lookup Locations
+Before running timeout callbacks
+//// [/a/b/file2.ts]
+export classc { method2() { return 10; } }
+
+
+PolledWatches::
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/tsconfig.json:
+  {}
+/a/file2.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/a/b:
+  {}
+
+FsWatchesRecursive::
+
 Info 21   [16:00:46.000] Running: /a/b/tsconfig.jsonFailedLookupInvalidation
 Info 22   [16:00:47.000] Scheduled: /a/b/tsconfig.json
 Info 23   [16:00:48.000] Scheduled: *ensureProjectForOpenFiles*
+After running timeout callbacks
+
+PolledWatches::
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/tsconfig.json:
+  {}
+/a/file2.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/a/b:
+  {}
+
+FsWatchesRecursive::
+
+Before running timeout callbacks
+
+PolledWatches::
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/tsconfig.json:
+  {}
+/a/file2.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/a/b:
+  {}
+
+FsWatchesRecursive::
+
 Info 24   [16:00:49.000] Running: /a/b/tsconfig.json
 Info 25   [16:00:50.000] Starting updateGraphWorker: Project: /a/b/tsconfig.json
 Info 26   [16:00:51.000] FileWatcher:: Added:: WatchInfo: /a/b/file2.ts 500 undefined WatchType: Closed Script info
@@ -87,6 +174,24 @@ Info 36   [16:01:09.000] -----------------------------------------------
 Info 36   [16:01:10.000] Open files: 
 Info 36   [16:01:11.000] 	FileName: /a/b/file1.ts ProjectRootPath: undefined
 Info 36   [16:01:12.000] 		Projects: /a/b/tsconfig.json
+After running timeout callbacks
+
+PolledWatches::
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/b/tsconfig.json:
+  {}
+/a/file2.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/a/b/file2.ts:
+  {}
+
+FsWatchesRecursive::
+
 Info 36   [16:01:13.000] FileWatcher:: Close:: WatchInfo: /a/b/file2.ts 500 undefined WatchType: Closed Script info
 Info 37   [16:01:14.000] Search path: /a/b
 Info 38   [16:01:15.000] For info: /a/b/file2.ts :: Config file name: /a/b/tsconfig.json

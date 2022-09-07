@@ -39,7 +39,7 @@ namespace ts.projectSystem {
                     content: ""
                 };
                 host.writeFile(file2.path, file2.content);
-                host.runQueuedTimeoutCallbacks();
+                session.runQueuedTimeoutCallbacks();
                 session.executeCommandSeq<protocol.CompletionsRequest>({
                     command: protocol.CommandTypes.CompletionInfo,
                     arguments: protocolFileLocationFromSubstring(index, '"', { index: 1 })
@@ -149,8 +149,7 @@ namespace ts.projectSystem {
             emacsIgnoredFileFromIgnoreDirectory
         ].forEach(ignoredEntity => {
             host.ensureFileOrFolder(ignoredEntity);
-            host.checkTimeoutQueueLength(0);
-            session.baselineHost();
+            session.checkTimeoutQueueLength(0);
         });
 
         baselineTsserverLogs("watchEnvironment", `recursive directory does not watch files starting with dot in node_modules`, session);
@@ -385,7 +384,7 @@ namespace ts.projectSystem {
                 const { main, bar, foo } = setupFiles();
                 const files = [libFile, main, bar, foo];
                 const host = createServerHost(files, { currentDirectory: tscWatch.projectRoot });
-                const service = createProjectService(host);
+                const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
                 service.openExternalProject({
                     projectFileName: `${tscWatch.projectRoot}/project.csproj`,
                     rootFiles: toExternalFiles([main.path, bar.path, foo.path]),
@@ -393,18 +392,8 @@ namespace ts.projectSystem {
                 } as protocol.ExternalProject);
                 service.openClientFile(main.path);
                 const project = service.externalProjects[0];
-                assert.deepEqual(project.getAllProjectErrors(), [
-                    {
-                        messageText: `File specification cannot contain a parent directory ('..') that appears after a recursive directory wildcard ('**'): '**/../*'.`,
-                        category: Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0.category,
-                        code: Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0.code,
-                        file: undefined,
-                        start: undefined,
-                        length: undefined,
-                        reportsDeprecated: undefined,
-                        reportsUnnecessary: undefined,
-                    }
-                ]);
+                service.logger.info(JSON.stringify(project.getAllProjectErrors(), undefined, 2));
+                baselineTsserverLogs("watchEnvironment", `external project watch options errors`, service);
             });
 
             function setupInferredProject(configureHost?: boolean) {
@@ -438,22 +427,12 @@ namespace ts.projectSystem {
                 const { main, bar, foo } = setupFiles();
                 const files = [libFile, main, bar, foo];
                 const host = createServerHost(files, { currentDirectory: tscWatch.projectRoot });
-                const service = createProjectService(host, { useInferredProjectPerProjectRoot: true });
+                const service = createProjectService(host, { useInferredProjectPerProjectRoot: true, logger: createLoggerWithInMemoryLogs(host) });
                 service.setCompilerOptionsForInferredProjects({ excludeDirectories: ["**/../*"] }, tscWatch.projectRoot);
                 service.openClientFile(main.path, main.content, ScriptKind.TS, tscWatch.projectRoot);
                 const project = service.inferredProjects[0];
-                assert.deepEqual(project.getAllProjectErrors(), [
-                    {
-                        messageText: `File specification cannot contain a parent directory ('..') that appears after a recursive directory wildcard ('**'): '**/../*'.`,
-                        category: Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0.category,
-                        code: Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0.code,
-                        file: undefined,
-                        start: undefined,
-                        length: undefined,
-                        reportsDeprecated: undefined,
-                        reportsUnnecessary: undefined,
-                    }
-                ]);
+                service.logger.info(JSON.stringify(project.getAllProjectErrors(), undefined, 2));
+                baselineTsserverLogs("watchEnvironment", `inferred project watch options errors`, service);
             });
         });
     });
