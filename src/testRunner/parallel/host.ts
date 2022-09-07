@@ -249,7 +249,7 @@ export function start() {
         let totalPassing = 0;
         const startDate = new Date();
 
-        const progressBars = new ProgressBars({ noColors: noColors }); // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
+        const progressBars = new ProgressBars({ noColors });
         const progressUpdateInterval = 1 / progressBars._options.width;
         let nextProgress = progressUpdateInterval;
 
@@ -259,7 +259,7 @@ export function start() {
         let closedWorkers = 0;
         for (let i = 0; i < workerCount; i++) {
             // TODO: Just send the config over the IPC channel or in the command line arguments
-            const config: TestConfig = { light: lightMode, listenForWork: true, runUnitTests: runUnitTests, stackTraceLimit: stackTraceLimit, timeout: globalTimeout }; // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
+            const config: TestConfig = { light: lightMode, listenForWork: true, runUnitTests, stackTraceLimit, timeout: globalTimeout };
             const configPath = ts.combinePaths(taskConfigsFolder, `task-config${i}.json`);
             IO.writeFile(configPath, JSON.stringify(config));
             const worker: Worker = {
@@ -558,8 +558,7 @@ export function start() {
                 failedTestReporter = new FailedTestReporter(replayRunner, {
                     reporterOptions: {
                         file: path.resolve(".failed-tests"),
-                        keepFailed: keepFailed // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
- // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
+                        keepFailed,
                     }
                 });
             }
