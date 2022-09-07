@@ -43,18 +43,18 @@ Project 'c:/project/tsconfig.json' (Configured)
 Open files: 
 	FileName: c:/project/file1.ts ProjectRootPath: undefined
 		Projects: c:/project/tsconfig.json
-WatchedFiles::
-c:/project/tsconfig.json:
-  {"fileName":"c:/project/tsconfig.json","pollingInterval":250}
-c:/project/file2.ts:
-  {"fileName":"c:/project/file2.ts","pollingInterval":250}
-c:/a/lib/lib.d.ts:
-  {"fileName":"c:/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
 c:/project/node_modules/@types:
-  {"fileName":"c:/project/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
+c:/project/tsconfig.json:
+  {}
+c:/project/file2.ts:
+  {}
+c:/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 c:/project:
-  {"directoryName":"c:/project"}
+  {}

@@ -134,37 +134,37 @@ Shape signatures in builder refreshed for::
 /user/username/projects/demo/core/utilities.ts (used version)
 /user/username/projects/demo/animals/dog.ts (computed .d.ts during emit)
 
-WatchedFiles::
-/user/username/projects/demo/animals/tsconfig.json:
-  {"fileName":"/user/username/projects/demo/animals/tsconfig.json","pollingInterval":250}
-/user/username/projects/demo/core/tsconfig.json:
-  {"fileName":"/user/username/projects/demo/core/tsconfig.json","pollingInterval":250}
-/user/username/projects/demo/tsconfig-base.json:
-  {"fileName":"/user/username/projects/demo/tsconfig-base.json","pollingInterval":250}
-/user/username/projects/demo/animals/animal.ts:
-  {"fileName":"/user/username/projects/demo/animals/animal.ts","pollingInterval":250}
-/user/username/projects/demo/animals/dog.ts:
-  {"fileName":"/user/username/projects/demo/animals/dog.ts","pollingInterval":250}
-/user/username/projects/demo/animals/index.ts:
-  {"fileName":"/user/username/projects/demo/animals/index.ts","pollingInterval":250}
-/user/username/projects/demo/core/utilities.ts:
-  {"fileName":"/user/username/projects/demo/core/utilities.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
 /user/username/projects/demo/animals/node_modules/@types:
-  {"fileName":"/user/username/projects/demo/animals/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 /user/username/projects/demo/node_modules/@types:
-  {"fileName":"/user/username/projects/demo/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/demo/animals/tsconfig.json:
+  {}
+/user/username/projects/demo/core/tsconfig.json:
+  {}
+/user/username/projects/demo/tsconfig-base.json:
+  {}
+/user/username/projects/demo/animals/animal.ts:
+  {}
+/user/username/projects/demo/animals/dog.ts:
+  {}
 /user/username/projects/demo/animals:
-  {"directoryName":"/user/username/projects/demo/animals"}
+  {}
+/user/username/projects/demo/animals/index.ts:
+  {}
+/user/username/projects/demo/core/utilities.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/demo/core:
-  {"directoryName":"/user/username/projects/demo/core"}
+  {}
 /user/username/projects/demo/animals:
-  {"directoryName":"/user/username/projects/demo/animals"}
+  {}
 
 exitCode:: ExitStatus.undefined
 

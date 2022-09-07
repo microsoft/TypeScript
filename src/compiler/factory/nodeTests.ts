@@ -438,6 +438,10 @@ namespace ts {
         return node.kind === SyntaxKind.AsExpression;
     }
 
+    export function isSatisfiesExpression(node: Node): node is SatisfiesExpression {
+        return node.kind === SyntaxKind.SatisfiesExpression;
+    }
+
     export function isNonNullExpression(node: Node): node is NonNullExpression {
         return node.kind === SyntaxKind.NonNullExpression;
     }

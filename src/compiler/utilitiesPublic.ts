@@ -1642,6 +1642,7 @@ namespace ts {
             case SyntaxKind.OmittedExpression:
             case SyntaxKind.CommaListExpression:
             case SyntaxKind.PartiallyEmittedExpression:
+            case SyntaxKind.SatisfiesExpression:
                 return true;
             default:
                 return isUnaryExpressionKind(kind);
